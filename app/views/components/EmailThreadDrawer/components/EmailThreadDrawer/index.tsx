@@ -5,7 +5,7 @@ import { EmailThread } from '../../../EmailThread'
 import { DrawerProps } from '../../../OverlayDrawer'
 
 interface Props extends DrawerProps {
-  thread: IEmailThread
+  thread: IEmailThread<'messages'>
 }
 
 /**

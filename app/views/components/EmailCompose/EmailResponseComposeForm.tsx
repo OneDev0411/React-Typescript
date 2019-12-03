@@ -1,26 +1,30 @@
-import React, { useCallback, useMemo } from 'react'
+import { OAuthProvider } from 'constants/contacts'
 
+import React, { useCallback, useMemo } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
+import { IAppState } from 'reducers'
 
-import { EmailThreadFormValues } from './types'
-import { getReplyRecipients } from './helpers/get-reply-recipients'
+import {
+  getReplyAllRecipients,
+  getReplyRecipients
+} from './helpers/get-reply-recipients'
 import { getReplyHtml } from './helpers/get-reply-html'
 import { getForwardHtml } from './helpers/get-forward-html'
-import { attachmentToFile } from '../EmailThread/helpers/attachment-to-file'
 import { getReplySubject } from './helpers/get-reply-subject'
-import EmailThreadComposeForm from './EmailThreadComposeForm'
 import { EmailResponseType } from '../EmailThread/types'
 import { encodeContentIds } from '../EmailThread/helpers/encode-content-ids'
-import { getAccountTypeFromOrigin } from './helpers/get-account-type-from-origin'
 import { convertToAbsoluteAttachmentUrl } from '../EmailThread/helpers/convert-to-absolute-attachment-url'
-import { oAuthAccountTypeToProvider } from '../../../components/Pages/Dashboard/Account/ConnectedAccounts/constants'
+import { SingleEmailComposeForm } from './SingleEmailComposeForm'
+import { EmailFormValues } from './types'
+import { isGoogleMessage, isMicrosoftMessage } from './helpers/type-guards'
 
 interface Props {
   responseType: EmailResponseType
   email: IEmailThreadEmail
-  defaultFrom?: string
+  fallbackCredential?: string
   onCancel: () => void
   onSent: (email: IEmailThreadEmail) => void
 }
@@ -44,28 +48,33 @@ const useStyles = makeStyles(
 export function EmailResponseComposeForm({
   responseType,
   email,
-  defaultFrom,
+  fallbackCredential,
   onCancel,
   onSent
 }: Props) {
   const classes = useStyles()
 
-  const initialValue = useMemo<EmailThreadFormValues>(() => {
+  const user = useSelector((state: IAppState) => state.user as IUser)
+
+  const googleCredential = isGoogleMessage(email)
+    ? email.google_credential
+    : undefined
+  const microsoftCredential = isMicrosoftMessage(email)
+    ? email.microsoft_credential
+    : undefined
+
+  const initialValue = useMemo<EmailFormValues>((): EmailFormValues => {
     const { to, cc } =
       responseType === 'forward'
         ? { to: [], cc: [] }
-        : getReplyRecipients(email, responseType === 'replyAll')
-
-    const owner = email.owner || defaultFrom
-    const from = owner
-      ? {
-          label: '',
-          value: owner
-        }
-      : undefined
+        : responseType === 'replyAll'
+        ? getReplyAllRecipients(email, '' /* FIXME(current) */)
+        : getReplyRecipients(email)
 
     return {
-      from,
+      from: user,
+      microsoft_credential: microsoftCredential,
+      google_credential: googleCredential,
       to,
       cc,
       bcc: [],
@@ -76,19 +85,38 @@ export function EmailResponseComposeForm({
       due_at: null,
       attachments:
         responseType === 'forward'
-          ? email.attachments.map(attachmentToFile)
+          ? email.attachments.map(attachment => ({
+              url: attachment.url,
+              name: attachment.name
+            }))
           : [],
       subject: getReplySubject(responseType, email)
     }
-  }, [defaultFrom, email, responseType])
+  }, [email, googleCredential, microsoftCredential, responseType, user])
 
+  const getHeaders = (emailInput: EmailFormValues) => {
+    const fromType: OAuthProvider | null =
+      (emailInput.google_credential && OAuthProvider.Google) ||
+      (emailInput.microsoft_credential && OAuthProvider.Outlook) ||
+      null
+
+    const originType: OAuthProvider | null = googleCredential
+      ? OAuthProvider.Google
+      : microsoftCredential
+      ? OAuthProvider.Outlook
+      : null
+    const originMatchesFrom = !originType || originType === fromType
+
+    return {
+      thread_id: originMatchesFrom ? email.thread_id : undefined,
+      message_id: originMatchesFrom ? email.message_id : undefined,
+      in_reply_to: email.internet_message_id
+    }
+  }
   const getEmail = useCallback(
-    (emailInput: IEmailThreadEmailInput, fromAccount: IOAuthAccount) => {
-      const originType = getAccountTypeFromOrigin(email.origin)
-      const originMatchesFrom =
-        !originType ||
-        originType === oAuthAccountTypeToProvider[fromAccount.type]
-
+    (emailInput: IEmailCampaignInput): IEmailCampaignInput => {
+      // TODO maybe this can be moved to EmailComposeForm as a next step
+      //  refactoring
       const html = encodeContentIds(email.attachments, emailInput.html)
 
       const inlineAttachments: IEmailAttachmentInput[] = email.attachments
@@ -96,48 +124,51 @@ export function EmailResponseComposeForm({
           attachment => attachment.cid && html.includes(`cid:${attachment.cid}`)
         )
         .map(({ cid, contentType: type, isInline, name: filename, url }) => ({
-          filename,
-          isInline,
-          link: convertToAbsoluteAttachmentUrl(url),
-          cid,
-          type
+          is_inline: isInline,
+          url: convertToAbsoluteAttachmentUrl(url),
+          content_id: cid
         }))
 
-      const attachments = emailInput.attachments
+      const attachments = (emailInput.attachments || [])
         // filter out inline attachments
         .filter(
           attachment =>
-            !inlineAttachments.some(item => item.link === attachment.link)
+            !inlineAttachments.some(item => item.url === attachment.url)
         )
 
       return {
         ...emailInput,
         html,
-        attachments: attachments.concat(inlineAttachments),
-        threadId: originMatchesFrom ? email.thread_id : undefined,
-        messageId: originMatchesFrom ? email.message_id : undefined,
-        inReplyTo: email.internet_message_id
+        attachments: attachments.concat(inlineAttachments)
       }
     },
-    [
-      email.attachments,
-      email.internet_message_id,
-      email.message_id,
-      email.origin,
-      email.thread_id
-    ]
+    [email.attachments]
   )
 
   const shouldRender = useRerenderOnChange(responseType)
 
+  // This filter is added in response to Saeed's request. Right now
+  // we have some issues in replying with an account other than
+  // the one by which the thread is started. We should remove
+  // this filtering when this issue is resolved.
+  // Note that if the thread is started from a rechat email (sent with Mailgun),
+  // and we are replying to that starting email, it doesn't have owner,
+  // and we use fallbackCredential which comes from the first non-rechat email
+  // in that thread
+  const forcedSender =
+    googleCredential || microsoftCredential || fallbackCredential
+
   return (
     shouldRender && (
-      <EmailThreadComposeForm
+      <SingleEmailComposeForm
         onCancel={onCancel}
         onSent={onSent}
         classes={{ footer: classes.footer, root: classes.root }}
         initialValues={initialValue}
+        preferredAccountId={fallbackCredential}
         getEmail={getEmail}
+        headers={getHeaders}
+        filterAccounts={account => !forcedSender || account.id === forcedSender}
         hasSignatureByDefault={false}
       />
     )

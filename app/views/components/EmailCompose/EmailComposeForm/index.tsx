@@ -35,6 +35,7 @@ import { TextEditorRef } from '../../TextEditor/types'
 import { Callout } from '../../Callout'
 import { DangerButton } from '../../Button/DangerButton'
 import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
+import { isFileAttachment } from '../helpers/is-file-attachment'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
 
@@ -67,7 +68,6 @@ function EmailComposeForm<T>({
     attachments: []
   },
   dispatch,
-  enableSchedule = true,
   evaluateTemplateExpressions = false,
   onCancel,
   onDelete,
@@ -332,9 +332,10 @@ function EmailComposeForm<T>({
                       : isSubmitDisabled
                   }
                   uploadAttachment={uploadAttachment}
-                  initialAttachments={initialValues.attachments || []}
+                  initialAttachments={(initialValues.attachments || []).filter(
+                    isFileAttachment
+                  )}
                   deal={props.deal}
-                  enableSchedule={enableSchedule}
                   onCancel={onCancel}
                   onDelete={onDelete}
                   onChanged={scrollToEnd}

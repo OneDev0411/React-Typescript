@@ -1,42 +1,56 @@
 import { parseEmailRecipient } from '../../../EmailRecipientsChipsInput/helpers/parse-email-recipient'
 
 /**
- * Given an email thread, returns to and cc recipient arrays. The logic is
- * captured from Gmail
- * @param email
- * @param replyAll
+ * Given an email, returns to and cc recipient arrays for Reply action.
+ * The logic is captured from Gmail
  */
 export function getReplyRecipients(
-  email: IEmailThreadEmail,
-  replyAll = false
+  email: IEmailThreadEmail
 ): {
   to: IDenormalizedEmailRecipientEmailInput[]
   cc: IDenormalizedEmailRecipientEmailInput[]
 } {
-  const emailAddressToRecipient: (
-    email: string
-  ) => IDenormalizedEmailRecipientEmailInput = email => ({
-    recipient_type: 'Email',
-    email
-  })
-
   if (email.in_bound) {
     return {
       to: [emailAddressToRecipient(email.from)],
-      cc: replyAll
-        ? [...email.to, ...email.cc]
-            .filter(
-              recipient =>
-                parseEmailRecipient(recipient).emailAddress !==
-                email.owner_email
-            )
-            .map(emailAddressToRecipient)
-        : []
+      cc: []
     }
   }
 
   return {
     to: email.to.map(emailAddressToRecipient),
-    cc: replyAll ? email.cc.map(emailAddressToRecipient) : []
+    cc: []
   }
 }
+
+/**
+ * Given an email, returns to and cc recipient arrays for Reply All action.
+ * The logic is captured from Gmail
+ */
+export function getReplyAllRecipients(
+  email: IEmailThreadEmail,
+  ownEmail: string
+) {
+  if (email.in_bound) {
+    return {
+      to: [emailAddressToRecipient(email.from)],
+      cc: [...email.to, ...email.cc]
+        .filter(
+          recipient => parseEmailRecipient(recipient).emailAddress !== ownEmail
+        )
+        .map(emailAddressToRecipient)
+    }
+  }
+
+  return {
+    to: email.to.map(emailAddressToRecipient),
+    cc: email.cc.map(emailAddressToRecipient)
+  }
+}
+
+const emailAddressToRecipient: (
+  email: string
+) => IDenormalizedEmailRecipientEmailInput = email => ({
+  recipient_type: 'Email',
+  email
+})

@@ -8,55 +8,70 @@ declare interface IEmailAttachment {
   url: string
 }
 
-declare interface IEmailAttachmentInput {
-  type: string
-  isInline: boolean
-  filename: string
-  cid?: string
-  link: string
+declare interface IRawEmailRecipient {
+  name: string
+  address: string
 }
 
-declare interface IEmailThreadEmail {
+declare interface IEmailThreadEmailBase<T> {
   attachments: IEmailAttachment[]
   bcc: string[]
+  bcc_raw: IRawEmailRecipient[]
   cc: string[]
+  cc_raw: IRawEmailRecipient[]
+  created_at: number
   from: string
+  from_raw: IRawEmailRecipient
   has_attachments: boolean
   html_body: string | null
   id: UUID
   in_bound: boolean
-  message_date: string
-  message_id: string
+  in_reply_to: string | null
   internet_message_id: string
-  origin: 'outlook' | 'gmail' | 'rechat_email'
-  owner: UUID | null
-  owner_name: string | null
-  owner_email: string | null
+  message_date: number
+  message_id: string
+  recipients: string[]
   snippet: string
   subject: string | null
-  text_body: null | string
+  text_body: string
   thread_id: string
   thread_key: string
   to: string[]
+  to_raw: IRawEmailRecipient[]
   unique_body: string
+  type: T
 }
+
+declare interface IGoogleMessage
+  extends IEmailThreadEmailBase<'google_message'> {
+  google_credential: UUID
+}
+declare interface IMicrosoftMessage
+  extends IEmailThreadEmailBase<'microsoft_message'> {
+  microsoft_credential: UUID
+}
+declare interface IEmail extends IEmailThreadEmailBase<'email'> {
+  // FIXME(current)
+}
+declare type IEmailThreadEmail = IGoogleMessage | IMicrosoftMessage | IEmail
 
 declare interface IEmailThreadRecipient {
   name: string
   address: string
 }
 
-declare interface IEmailThreadEmailInput {
-  subject: string
-  to: IEmailThreadRecipient[]
-  cc: IEmailThreadRecipient[]
-  bcc: IEmailThreadRecipient[]
-  html: string
-  text?: string
-  attachments: IEmailAttachmentInput[]
-  threadId?: string
-  messageId?: string
-  inReplyTo?: string
-}
+type IEmailThreadAssociations = 'messages'
 
-declare type IEmailThread = IEmailThreadEmail[]
+declare type IEmailThread<
+  Associations extends IEmailThreadAssociations = ''
+> = {
+  subject: string
+  first_message_date: number
+  last_message_date: number
+  recipients: string[]
+  message_count: number
+  has_attachments: boolean
+  brand: UUID
+  google_credential: UUID | undefined
+  microsoft_credential: UUID | undefined
+} & Association<'messages', IEmailThreadEmail[], Associations>

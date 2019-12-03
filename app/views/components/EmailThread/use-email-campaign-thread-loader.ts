@@ -9,7 +9,7 @@ import { emailCampaignToThread } from 'models/email/helpers/email-campaign-to-th
  */
 export function useEmailCampaignThreadLoader(emailCampaignId) {
   const [setThreadsPromise, thread, loading, error] = useAsyncValue<
-    IEmailThread
+    IEmailThread<'messages'>
   >()
 
   const fetchThread = useCallback(() => {

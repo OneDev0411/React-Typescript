@@ -18,48 +18,54 @@ export function emailCampaignToThread(
     IEmailCampaignAssociation,
     IEmailCampaignRecipientAssociation
   >
-): IEmailThread {
+): IEmailThread<'messages'> {
   const to = getRecipientsFromRecipientsEntity('To', campaign.recipients)
   const cc = getRecipientsFromRecipientsEntity('CC', campaign.recipients)
   const bcc = getRecipientsFromRecipientsEntity('BCC', campaign.recipients)
 
   const attachments = campaign.attachments
 
-  return [
-    {
-      /**
-       * The following section are properties that doesn't have a correspondence
-       * in email threads. Instead of setting them to empty strings, a better
-       * approach is to add another type, say EmailThreadLike, which omits
-       * these fields from IEmailThread from it and then use that type in
-       * email thread components. But it's not done because we agreed to unify
-       * email campaigns and email threads and probably any effort on this
-       * stuff will be removed later and is a waste of time.
-       */
-      thread_id: '',
-      message_id: '',
-      internet_message_id: '',
-      snippet: '',
-      thread_key: '',
-      id: '',
-      unique_body: '',
-      // ///////////////////////////////////////////////////////////////////////
+  return {
+    message_count: 1,
+    recipients: [...to, ...cc, ...bcc].map(recipientToString),
+    subject: campaign.subject,
+    brand: campaign.brand,
+    first_message_date: campaign.due_at,
+    last_message_date: campaign.due_at,
+    google_credential: undefined,
+    microsoft_credential: undefined,
+    messages: [
+      {
+        /**
+         * The following section are properties that doesn't have a correspondence
+         * in email threads. Instead of setting them to empty strings, a better
+         * approach is to add another type, say EmailThreadLike, which omits
+         * these fields from IEmailThread from it and then use that type in
+         * email thread components. But it's not done because we agreed to unify
+         * email campaigns and email threads and probably any effort on this
+         * stuff will be removed later and is a waste of time.
+         */
+        thread_id: '',
+        message_id: '',
+        internet_message_id: '',
+        snippet: '',
+        thread_key: '',
+        id: '',
+        unique_body: '',
+        // ///////////////////////////////////////////////////////////////////////
 
-      has_attachments: !!attachments && attachments.length > 0,
-      origin: 'rechat_email',
-      attachments: (attachments || []).map(fileToEmailAttachment),
-      html_body: campaign.html,
-      owner: null,
-      owner_email: null,
-      owner_name: null,
-      subject: campaign.subject,
-      in_bound: false,
-      message_date: new Date(campaign.due_at).toISOString(),
-      text_body: '',
-      from: `${campaign.from.display_name} <${campaign.from.email}>`,
-      to: to.map(recipientToString),
-      cc: cc.map(recipientToString),
-      bcc: bcc.map(recipientToString)
-    }
-  ]
+        has_attachments: !!attachments && attachments.length > 0,
+        attachments: (attachments || []).map(fileToEmailAttachment),
+        html_body: campaign.html,
+        subject: campaign.subject,
+        in_bound: false,
+        message_date: campaign.due_at,
+        text_body: '',
+        from: `${campaign.from.display_name} <${campaign.from.email}>`,
+        to: to.map(recipientToString),
+        cc: cc.map(recipientToString),
+        bcc: bcc.map(recipientToString)
+      }
+    ]
+  }
 }

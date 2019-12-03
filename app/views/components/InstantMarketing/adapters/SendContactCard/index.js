@@ -18,8 +18,6 @@ import { SearchContactDrawer } from 'components/SearchContactDrawer'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
-
 import SocialDrawer from '../../components/SocialDrawer'
 
 class SendContactCard extends React.Component {
@@ -278,7 +276,7 @@ class SendContactCard extends React.Component {
           // contact to email compose when it's on editmode.
           // disableAddNewRecipient
           initialValues={{
-            from: normalizeUserForEmailFrom(this.state.owner),
+            from: this.state.owner,
             to: this.Recipients,
             body: this.state.emailBody
           }}

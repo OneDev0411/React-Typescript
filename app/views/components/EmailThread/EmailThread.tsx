@@ -7,7 +7,7 @@ import { DialogTitle } from '../DialogTitle'
 import { EmailThreadEmails } from './EmailThreadEmails'
 
 interface Props {
-  thread: IEmailThread
+  thread: IEmailThread<'messages'>
   onClose?: ModalProps['onClose']
 }
 
@@ -41,9 +41,9 @@ export function EmailThread(props: Props) {
             // to do.
             if (
               email &&
-              email.thread_key === thread[thread.length - 1].thread_key
+              email.thread_key === thread[thread.messages.length - 1].thread_key
             ) {
-              setThread([...thread, email])
+              setThread({ ...thread, messages: [...thread.messages, email] })
             } else if (props.onClose) {
               props.onClose({}, 'escapeKeyDown')
             }

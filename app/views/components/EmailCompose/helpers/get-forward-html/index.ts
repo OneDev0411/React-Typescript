@@ -22,7 +22,7 @@ export function getForwardHtml(email: IEmailThreadEmail) {
         displayName ? `&lt;${emailAddress}&gt;` : emailAddress
       }</span>
   <br />
-  Date: ${fecha.format(new Date(email.message_date), 'default')}
+  Date: ${fecha.format(new Date(email.message_date * 1000), 'default')}
   <br />
   Subject: ${email.subject || ''}
   <br />

@@ -54,7 +54,7 @@ interface Props {
    * via mailgun), and therefore default `from` may not be extracted based
    * on email in these cases. So it's passed from the thread.
    */
-  defaultFrom?: string
+  fallbackCredential?: string
 }
 
 const styles = (theme: Theme) =>
@@ -83,7 +83,7 @@ export function EmailThreadItem({
   email,
   onToggleCollapsed,
   showBottomButtons = false,
-  defaultFrom,
+  fallbackCredential,
   onEmailSent = () => {},
   ...props
 }: Props) {
@@ -135,7 +135,10 @@ export function EmailThreadItem({
             )}
             <Typography color="textSecondary" variant="caption">
               {/* I think we should conditionally show year, if it's not current year. fecha doesn't support such formatting I guess */}
-              {fecha.format(new Date(email.message_date), 'MMM DD, hh:mm A')}
+              {fecha.format(
+                new Date(email.message_date * 1000),
+                'MMM DD, hh:mm A'
+              )}
             </Typography>
             {collapsed || !email.thread_id ? null : (
               <EmailItemHeaderActions
@@ -216,7 +219,7 @@ export function EmailThreadItem({
                   onCancel={() => {
                     setIsResponseOpen(false)
                   }}
-                  defaultFrom={defaultFrom}
+                  fallbackCredential={fallbackCredential}
                   onSent={email => {
                     setIsResponseOpen(false)
                     onEmailSent(email)

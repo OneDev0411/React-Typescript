@@ -13,7 +13,7 @@ export function getReplyHtml(email: IEmailThreadEmail) {
   <div class="rechat-quote">
     <div dir="ltr">
     On ${fecha.format(
-      new Date(email.message_date),
+      new Date(email.message_date * 1000),
       'ddd, MMM D, YYYY at h:mm A'
     )} ${escape(email.from)} wrote:
     </div>

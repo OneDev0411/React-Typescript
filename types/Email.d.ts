@@ -70,6 +70,15 @@ declare type IEmailRecipient<
   Association<'brand', IBrand, Associations> &
   Association<'agent', IAgent, Associations>
 
+interface IEmailAttachmentInput {
+  // either file id or url should be passed
+  // TODO(current): check final API contract for url
+  file?: UUID
+  url?: string
+  is_inline: boolean
+  content_id?: string
+}
+
 declare interface IEmailCampaignInputBase {
   due_at: Date | null
   from: UUID
@@ -77,7 +86,7 @@ declare interface IEmailCampaignInputBase {
   subject: string
   html: string
   text?: string
-  attachments?: UUID[]
+  attachments?: IEmailAttachmentInput[]
   template?: UUID
   /**
    * @deprecated, This is not used in practice and is added in initial
@@ -92,6 +101,13 @@ declare interface IIndividualEmailCampaignInput
 declare interface IEmailCampaignInput extends IEmailCampaignInputBase {
   cc?: IEmailRecipientInput[]
   bcc?: IEmailRecipientInput[]
+  headers: {
+    message_id?: string
+    in_reply_to?: string
+    thread_id?: string
+  }
+  google_credential?: string
+  microsoft_credential?: string
 }
 
 declare type IEmailCampaignAssociation =
@@ -129,6 +145,9 @@ declare type IEmailCampaign<
   text: string
   type: 'email_campaign'
   sent: number
+  microsoft_credential: UUID
+  google_credential: UUID
+  headers: IEmailCampaignInput['headers']
 } & Association<
   'recipients',
   IEmailRecipient<RecipientAssociations>[],
@@ -138,16 +157,6 @@ declare type IEmailCampaign<
   Association<'template', IMarketingTemplateInstance | null, Associations> &
   Association<'emails', IEmailCampaignEmail[] | null, Associations> &
   Association<'attachments', IFile[] | null, Associations>
-
-declare interface IEmail {
-  domain?: string
-  to: string
-  from: string
-  subject: string
-  html: string
-  text?: string
-  headers?: any
-}
 
 declare interface IEmailCampaignEmail {
   id: string

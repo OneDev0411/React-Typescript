@@ -9,8 +9,6 @@ import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers
 import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
-
 import SocialDrawer from '../../components/SocialDrawer'
 
 class General extends React.Component {
@@ -160,7 +158,7 @@ class General extends React.Component {
             isOpen
             hasStaticBody
             initialValues={{
-              from: normalizeUserForEmailFrom(this.state.owner),
+              from: this.state.owner,
               body: this.state.emailBody
             }}
             onClose={this.toggleComposeEmail}

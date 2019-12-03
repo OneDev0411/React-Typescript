@@ -4,8 +4,6 @@ import { connect } from 'react-redux'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
 
-import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
-
 import SocialDrawer from '../../components/SocialDrawer'
 import hasMarketingAccess from '../../helpers/has-marketing-access'
 
@@ -115,7 +113,7 @@ class ShareInstance extends React.Component {
             isOpen
             hasStaticBody
             initialValues={{
-              from: normalizeUserForEmailFrom(props.user),
+              from: props.user,
               body: getTemplateInstancePreviewImage(props.instance)
             }}
             getEmail={this.getEmail}
