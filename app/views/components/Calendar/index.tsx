@@ -45,6 +45,7 @@ import List from './components/List'
 interface Props {
   viewAsUsers?: UUID[]
   filter?: object
+  contact?: IContact
   associations?: string[]
   calendarRef?: RefObject<CalendarRef>
   user?: IUser
@@ -67,6 +68,7 @@ export function Calendar({
   viewAsUsers,
   initialRange,
   user,
+  contact,
   directions = [LoadingDirection.Top, LoadingDirection.Bottom],
   placeholders = [Placeholder.Month, Placeholder.Day],
   filter = {},
@@ -364,11 +366,11 @@ export function Calendar({
    */
   const handleCrmEventChange = useCallback(
     (event: IEvent, type: string) => {
-      const nextEvents = upsertCrmEvents(events, event, type)
+      const nextEvents = upsertCrmEvents(events, event, type, contact)
 
       createListFromEvents(nextEvents)
     },
-    [createListFromEvents, events]
+    [contact, createListFromEvents, events]
   )
 
   /**
