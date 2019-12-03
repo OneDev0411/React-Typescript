@@ -19,7 +19,7 @@ import { TextFieldProps } from '@material-ui/core/TextField'
 
 import classNames from 'classnames'
 
-import { useOnToggledOn } from '../../TextEditor/components/LinkEditorPopover/hooks/use-on-toggled'
+import { useOnToggledOn } from '../../TextEditor/features/RichText/LinkEditorPopover/hooks/use-on-toggled'
 import EditIcon from '../../SvgIcons/Edit/EditIcon'
 
 interface Props {

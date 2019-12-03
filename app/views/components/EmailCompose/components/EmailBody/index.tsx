@@ -1,6 +1,4 @@
 import React, {
-  ComponentProps,
-  forwardRef,
   Fragment,
   ReactNode,
   RefObject,
@@ -8,7 +6,7 @@ import React, {
   useState
 } from 'react'
 import { Field, FieldProps } from 'react-final-form'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { TextEditor } from 'components/TextEditor'
 import Loading from 'components/LoadingContainer'
@@ -18,8 +16,8 @@ import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 import { UploadAttachment } from 'components/EmailCompose/fields/UploadAttachment'
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
-import { defaultTemplateVariableSuggestions } from '../../default-template-variable-suggestions'
 import { TextEditorProps, TextEditorRef } from '../../../TextEditor/types'
+import { EmailEditorFeatures } from './EmailEditorFeatures'
 
 interface Props {
   content?: string
@@ -28,7 +26,6 @@ interface Props {
   hasTemplateVariables?: boolean
   autofocus?: boolean
   FieldProps?: Partial<FieldProps<any>>
-  signature: string
   DraftEditorProps?: TextEditorProps['DraftEditorProps']
   editorRef?: RefObject<TextEditorRef>
   /**
@@ -41,7 +38,6 @@ interface Props {
 
 const EmailBody = ({
   content,
-  signature,
   hasSignatureByDefault,
   hasTemplateVariables,
   hasStaticBody = false,
@@ -53,6 +49,10 @@ const EmailBody = ({
   editorRef
 }: Props) => {
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
+
+  const signature = useSelector<IAppState, string>(
+    state => state.user.email_signature
+  )
 
   const uploadImage = useCallback(
     async file => {
@@ -74,23 +74,21 @@ const EmailBody = ({
               {...FieldProps || {}}
               render={({ input, meta }) => (
                 <TextEditor
-                  enableImage
                   autofocus={autofocus}
-                  uploadImage={uploadImage}
-                  enableSignature
                   onAttachmentDropped={upload}
                   DraftEditorProps={DraftEditorProps}
-                  hasSignatureByDefault={hasSignatureByDefault}
-                  enableTemplateVariables={hasTemplateVariables}
-                  templateVariableSuggestionGroups={
-                    defaultTemplateVariableSuggestions
-                  }
-                  onEditSignature={() => setSignatureEditorVisible(true)}
-                  signature={signature}
                   appendix={attachments}
                   input={input}
                   ref={editorRef}
-                />
+                >
+                  <EmailEditorFeatures
+                    uploadImage={uploadImage}
+                    hasTemplateVariables={hasTemplateVariables}
+                    signature={signature}
+                    hasSignatureByDefault={hasSignatureByDefault}
+                    onEditSignature={() => setSignatureEditorVisible(true)}
+                  />
+                </TextEditor>
               )}
             />
           )}
@@ -117,24 +115,11 @@ const EmailBody = ({
           <EditEmailSignatureDrawer
             isOpen={signatureEditorVisible}
             onClose={() => setSignatureEditorVisible(false)}
-          />{' '}
+          />
         </>
       )}
     </UploadAttachment>
   )
 }
 
-// TODO(after-redux-update): replace this workaround for forwarding ref
-// with { forwardRef: true } option in new react-redux
-const ConnectedBody = connect(({ user }: IAppState) => ({
-  signature: user.email_signature
-}))(EmailBody)
-
-export default forwardRef(
-  (
-    props: ComponentProps<typeof ConnectedBody>,
-    ref: RefObject<TextEditorRef>
-  ) => {
-    return <ConnectedBody {...props} editorRef={ref} />
-  }
-)
+export default EmailBody

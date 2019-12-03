@@ -5,6 +5,7 @@ import { TextEditor } from '..'
 import * as React from 'react'
 
 import { TestBed } from '../../../../../tests/unit/TestBed'
+import { ImageFeature } from '../features/Image'
 
 // https://gitlab.com/rechat/web/issues/2948
 describe('TextEditor', () => {
@@ -29,10 +30,12 @@ describe('TextEditor', () => {
     })
   })
 
-  it('should show image picker button if enableImage is true, and it should open image picker dialog', done => {
+  it('should show image picker button if ImageFeature is used, and it should open image picker dialog', done => {
     const { getByTestId, container } = render(
       <TestBed>
-        <TextEditor enableImage />
+        <TextEditor>
+          <ImageFeature />
+        </TextEditor>
       </TestBed>
     )
 
@@ -70,7 +73,7 @@ describe('TextEditor', () => {
     // }, 100)
   })
 
-  it('should not show image picker button if enableImage is false', () => {
+  it('should not show image picker button if ImageFeature is used', () => {
     const { queryByTestId } = render(
       <TestBed>
         <TextEditor />

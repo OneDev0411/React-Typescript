@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { Field } from 'react-final-form'
 import { TextField } from 'final-form-material-ui'
 import { connect } from 'react-redux'
@@ -41,7 +41,6 @@ export function AddOrEditEmailTemplateDrawer({
   addNotification,
   activeTeamId
 }: Props) {
-  const emailBodyRef = useRef(null)
   const [formData, setFormData] = useState<IBrandEmailTemplateInput>({
     name: '',
     subject: '',
@@ -142,7 +141,6 @@ export function AddOrEditEmailTemplateDrawer({
             }}
           />
           <EmailBody
-            ref={emailBodyRef}
             hasSignatureByDefault
             hasTemplateVariables
             hasStaticBody={!editable}

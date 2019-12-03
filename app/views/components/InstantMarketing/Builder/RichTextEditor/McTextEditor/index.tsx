@@ -3,9 +3,12 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import React, { CSSProperties, forwardRef } from 'react'
 
 import { TextEditor } from 'components/TextEditor'
-import { RichTextFeature, TextEditorProps } from 'components/TextEditor/types'
+import { TextEditorProps } from 'components/TextEditor/types'
 import { defaultTemplateVariableSuggestions } from 'components/EmailCompose/default-template-variable-suggestions'
 import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
+
+import { TemplateExpressionsFeature } from '../../../../TextEditor/features/TemplateExpressions'
+import { RichTextFeature } from '../../../../TextEditor/features/RichText'
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -56,13 +59,15 @@ export const McTextEditor = forwardRef(function McTextEditor(
     <TextEditor
       ref={ref}
       toolbarRef={nativelyStopEventPropagationOfEventViaRef('mousedown', true)}
-      enableTemplateVariables
-      richText={[RichTextFeature.INLINE_FORMATTING, RichTextFeature.LINK]}
-      templateVariableSuggestionGroups={defaultTemplateVariableSuggestions}
       minHeight={false}
       autofocus
       classes={classes}
       {...textEditorProps}
-    />
+    >
+      <RichTextFeature lists={false} textSize={false} />
+      <TemplateExpressionsFeature
+        templateVariableSuggestionGroups={defaultTemplateVariableSuggestions}
+      />
+    </TextEditor>
   )
 })
