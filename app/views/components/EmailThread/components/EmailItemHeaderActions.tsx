@@ -21,6 +21,7 @@ import IconReplyAll from '../../SvgIcons/ReplyAll/IconReplyAll'
 import IconForward from '../../SvgIcons/Forward/IconForward'
 import IconVerticalDocs from '../../SvgIcons/VeriticalDots/VerticalDotsIcon'
 import { iconSizes } from '../../SvgIcons/icon-sizes'
+import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
 
 interface Props {
   email: IEmailThreadEmail
@@ -82,12 +83,14 @@ export function EmailItemHeaderActions(
           </ListItemIcon>
           <ListItemText>Reply</ListItemText>
         </MenuItem>
-        <MenuItem dense onClick={select(props.onReplyAll)}>
-          <ListItemIcon>
-            <IconReplyAll size={iconSizes.small} />
-          </ListItemIcon>
-          <ListItemText>Reply All</ListItemText>
-        </MenuItem>
+        {hasReplyAll(props.email) && (
+          <MenuItem dense onClick={select(props.onReplyAll)}>
+            <ListItemIcon>
+              <IconReplyAll size={iconSizes.small} />
+            </ListItemIcon>
+            <ListItemText>Reply All</ListItemText>
+          </MenuItem>
+        )}
         <MenuItem dense onClick={select(props.onForward)}>
           <ListItemIcon>
             <IconForward size={iconSizes.small} />

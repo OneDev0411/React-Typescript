@@ -100,6 +100,7 @@ export function AddOrEditEmailTemplateDrawer({
   return (
     <FinalFormDrawer
       formId="email-template-form"
+      width="auto"
       disableSubmitByEnter
       isOpen={isOpen}
       initialValues={formData}

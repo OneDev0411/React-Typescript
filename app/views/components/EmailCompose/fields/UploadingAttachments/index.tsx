@@ -34,10 +34,13 @@ function UploadingAttachmentsList({ input, addNotification, ...props }: Props) {
     // Elvis!
     const message = e ? (e.response ? e.response.body.message : null) : null
 
-    addNotification({
-      message: message || 'Could not upload file',
-      status: 'error'
-    })
+    if (e && e.code !== 'ABORTED') {
+      addNotification({
+        message: message || 'Could not upload file',
+        status: 'error'
+      })
+    }
+
     console.log('error in uploading attachment', e)
   }
 

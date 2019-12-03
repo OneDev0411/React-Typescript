@@ -141,7 +141,7 @@ export function EmailThreadItem({
               <EmailItemHeaderActions
                 email={email}
                 onReply={() => openResponse('reply')}
-                onReplyAll={() => () => openResponse('replyAll')}
+                onReplyAll={() => openResponse('replyAll')}
                 onForward={() => openResponse('forward')}
               />
             )}
