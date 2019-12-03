@@ -1,11 +1,26 @@
+import { CrmEventType } from 'components/Calendar/types'
+
 import { convertTaskToCalendarEvent } from '../convert-task-to-calendar'
 
 export function upsertCrmEvents(
   events: ICalendarEvent[],
   event: IEvent,
-  type: string
+  type: CrmEventType,
+  contact?: IContact
 ): ICalendarEvent[] {
   const calendarEvent: ICalendarEvent = convertTaskToCalendarEvent(event)
+
+  // delete event from events list when user deletes related assocation of that contact inside contact profile timeline
+  if (
+    contact &&
+    (event.associations || []).some(
+      association =>
+        association.association_type === 'contact' &&
+        (association.contact as IContact).id === contact.id
+    ) === false
+  ) {
+    type = 'deleted'
+  }
 
   if (type === 'created') {
     return events.concat(calendarEvent)
