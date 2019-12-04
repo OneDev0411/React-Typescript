@@ -1,4 +1,4 @@
-import React, { createRef, CSSProperties } from 'react'
+import React, { createRef, CSSProperties, useState } from 'react'
 import ReactDom from 'react-dom'
 
 import { Editor } from 'grapesjs'
@@ -23,7 +23,7 @@ const styles = `
 .selected-editable-block *::selection {
   background: transparent;
 }
-.selected-editable-block  * {
+.selected-editable-block, .selected-editable-block  * {
   color: transparent;
 }
 `
@@ -72,8 +72,6 @@ export function createRichTextEditor(editor: Editor) {
       return
     }
 
-    grapeBlockEl.classList.add('selected-editable-block')
-
     outlineOffset = parseInt(getComputedStyle(grapeBlockEl).outlineOffset, 10)
 
     const computedStyle = getComputedStyle(el)
@@ -87,10 +85,19 @@ export function createRichTextEditor(editor: Editor) {
       color: computedStyle.color || undefined
     }
 
+    // it's important to add class after getting computed style to prevent
+    // affecting it
+    grapeBlockEl.classList.add('selected-editable-block')
+
     const defaultValue = el.innerHTML
 
-    const updateHeight = value => {
-      el.innerHTML = value
+    const updateHeight = () => {
+      // we intentionally don't use setEditorContent to keep the inner 'div'
+      // element for better UI while editing
+      if (editorRef.current) {
+        el.innerHTML = editorRef.current.getHtml()
+      }
+
       richTextEditor.updatePosition()
     }
 
@@ -102,9 +109,17 @@ export function createRichTextEditor(editor: Editor) {
       'center'
     ]
 
-    const canvasStyleStr = [...el.closest('body')!.querySelectorAll('style')]
+    const body = el.closest('body')!
+    const canvasStyleStr = [...body.querySelectorAll('style')]
       .map(item => item.innerHTML)
       .join('\n')
+
+    const fontLinks = [
+      ...body.querySelectorAll('link[rel="stylesheet"]')
+    ].filter(
+      (linkEl: HTMLLinkElement): linkEl is HTMLLinkElement =>
+        linkEl.href.includes('font')
+    )
 
     // Pure hack! we extract the font size css rules by a regexp,
     // we don't wanna inject other rules which may mess up the dom outside
@@ -113,27 +128,39 @@ export function createRichTextEditor(editor: Editor) {
       canvasStyleStr.match(/@font-face(.|\s)*?}/gm) || []
     ).join('\n')
 
-    ReactDom.render(
-      <AppTheme>
-        <div>
-          <McTextEditor
-            ref={editorRef}
-            defaultValue={defaultValue}
-            onChange={updateHeight}
-            textAlignment={alignments.find(
-              alignment => alignment === computedStyle.textAlign
-            )}
-            targetStyle={{
-              width: Math.ceil(el.getBoundingClientRect().width),
-              padding,
-              ...inheritedStyles
-            }}
-          />
-          <style>{fontFaceRulesStr}</style>
-        </div>
-      </AppTheme>,
-      $toolbar
-    )
+    const getWidth = () => Math.ceil(el.getBoundingClientRect().width)
+    const CustomEditor = () => {
+      const [width, setWidth] = useState(getWidth)
+
+      return (
+        <AppTheme>
+          <div>
+            <McTextEditor
+              ref={editorRef}
+              defaultValue={defaultValue}
+              onChange={() => {
+                setWidth(getWidth())
+                updateHeight()
+              }}
+              textAlignment={alignments.find(
+                alignment => alignment === computedStyle.textAlign
+              )}
+              targetStyle={{
+                width,
+                padding,
+                ...inheritedStyles
+              }}
+            />
+            <style>{fontFaceRulesStr}</style>
+            {fontLinks.map((link, index) => (
+              <link key={index} href={link.href} rel="stylesheet" />
+            ))}
+          </div>
+        </AppTheme>
+      )
+    }
+
+    ReactDom.render(<CustomEditor />, $toolbar)
   }
 
   const disable = (el: HTMLElement) => {
@@ -148,14 +175,7 @@ export function createRichTextEditor(editor: Editor) {
     }
 
     if (editorRef && editorRef.current) {
-      el.innerHTML = editorRef.current.getHtml()
-
-      if (
-        el.firstChild === el.lastChild &&
-        el.firstElementChild instanceof HTMLDivElement
-      ) {
-        el.innerHTML = el.firstElementChild.innerHTML
-      }
+      setEditorContent(el, editorRef.current.getHtml())
     }
 
     ReactDom.unmountComponentAtNode($toolbar)
@@ -167,6 +187,16 @@ export function createRichTextEditor(editor: Editor) {
   }
 }
 
+function setEditorContent(el: HTMLElement, content: string) {
+  el.innerHTML = content
+
+  if (
+    el.firstChild === el.lastChild &&
+    el.firstElementChild instanceof HTMLDivElement
+  ) {
+    el.innerHTML = el.firstElementChild.innerHTML
+  }
+}
 /**
  * Sometimes the el passed in `enable` method of custom RTE, is a child of
  * a grape block. So we may need to navigate up to find the grape block
