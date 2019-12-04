@@ -244,37 +244,6 @@ class Builder extends React.Component {
     })
   }
 
-  customizeRTE = () => {
-    const rte = this.editor.RichTextEditor
-    const items = rte.getAll()
-
-    items.map(i => i.name).forEach(rte.remove.bind(rte))
-
-    if (!this.isEmailTemplate) {
-      return
-    }
-
-    const icon = `<select>
-      <option>Insert Placeholder</option>
-      <option value="{{recipient.first_name or 'there'}}">Recipient First Name</option>
-      <option value="{{recipient.last_name or 'there'}}">Recipient Last Name</option>
-    </select>`
-
-    rte.add('first_name', {
-      icon,
-      event: 'change',
-      result: (rte, action) => {
-        const { value } = action.btn.firstChild
-
-        if (!value) {
-          return
-        }
-
-        rte.insertHTML(value)
-      }
-    })
-  }
-
   registerEmailBlocks = () => {
     const { brand } = getActiveTeam(this.props.user)
     const renderData = getTemplateRenderData(brand)
@@ -572,7 +541,6 @@ class Builder extends React.Component {
     this.setEditorTemplateId(selectedTemplate.id)
     this.editor.setComponents(html)
     this.lockIn()
-    this.customizeRTE()
     this.setState({
       templateHtmlCss: this.getTemplateHtmlCss()
     })
