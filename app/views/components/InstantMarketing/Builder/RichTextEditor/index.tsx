@@ -23,7 +23,7 @@ const styles = `
 .selected-editable-block *::selection {
   background: transparent;
 }
-.selected-editable-block  * {
+.selected-editable-block, .selected-editable-block  * {
   color: transparent;
 }
 `
@@ -72,8 +72,6 @@ export function createRichTextEditor(editor: Editor) {
       return
     }
 
-    grapeBlockEl.classList.add('selected-editable-block')
-
     outlineOffset = parseInt(getComputedStyle(grapeBlockEl).outlineOffset, 10)
 
     const computedStyle = getComputedStyle(el)
@@ -87,10 +85,19 @@ export function createRichTextEditor(editor: Editor) {
       color: computedStyle.color || undefined
     }
 
+    // it's important to add class after getting computed style to prevent
+    // affecting it
+    grapeBlockEl.classList.add('selected-editable-block')
+
     const defaultValue = el.innerHTML
 
-    const updateHeight = value => {
-      el.innerHTML = value
+    const updateHeight = () => {
+      // we intentionally don't use setEditorContent to keep the inner 'div'
+      // element for better UI while editing
+      if (editorRef.current) {
+        el.innerHTML = editorRef.current.getHtml()
+      }
+
       richTextEditor.updatePosition()
     }
 
@@ -123,9 +130,9 @@ export function createRichTextEditor(editor: Editor) {
             <McTextEditor
               ref={editorRef}
               defaultValue={defaultValue}
-              onChange={value => {
+              onChange={() => {
                 setWidth(getWidth())
-                updateHeight(value)
+                updateHeight()
               }}
               textAlignment={alignments.find(
                 alignment => alignment === computedStyle.textAlign
@@ -157,14 +164,7 @@ export function createRichTextEditor(editor: Editor) {
     }
 
     if (editorRef && editorRef.current) {
-      el.innerHTML = editorRef.current.getHtml()
-
-      if (
-        el.firstChild === el.lastChild &&
-        el.firstElementChild instanceof HTMLDivElement
-      ) {
-        el.innerHTML = el.firstElementChild.innerHTML
-      }
+      setEditorContent(el, editorRef.current.getHtml())
     }
 
     ReactDom.unmountComponentAtNode($toolbar)
@@ -176,6 +176,16 @@ export function createRichTextEditor(editor: Editor) {
   }
 }
 
+function setEditorContent(el: HTMLElement, content: string) {
+  el.innerHTML = content
+
+  if (
+    el.firstChild === el.lastChild &&
+    el.firstElementChild instanceof HTMLDivElement
+  ) {
+    el.innerHTML = el.firstElementChild.innerHTML
+  }
+}
 /**
  * Sometimes the el passed in `enable` method of custom RTE, is a child of
  * a grape block. So we may need to navigate up to find the grape block
