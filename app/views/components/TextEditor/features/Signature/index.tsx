@@ -4,6 +4,8 @@ import { Box } from '@material-ui/core'
 
 import React, { useContext, useLayoutEffect } from 'react'
 
+import { useLatestValueRef } from 'hooks/use-latest-value-ref'
+
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 import createSignaturePlugin from './draft-js-signature-plugin'
 import { useEditor } from '../../hooks/use-editor'
@@ -38,14 +40,16 @@ export function SignatureFeature({
   const confirmation = useContext(ConfirmationModalContext)
   const { stateFromHtmlOptions, editorState, setEditorState } = useEditor()
 
+  const signatureRef = useLatestValueRef(signature)
+
   const { signaturePlugin } = useEditorPlugins(
     () => ({
       signaturePlugin: createSignaturePlugin({
-        signatureContent: signature || '',
+        signatureContent: () => signatureRef.current || '',
         stateFromHtmlOptions
       })
     }),
-    [signature, stateFromHtmlOptions]
+    [stateFromHtmlOptions]
   )
 
   useLayoutEffect(() => {
