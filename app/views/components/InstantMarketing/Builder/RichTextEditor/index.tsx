@@ -1,4 +1,4 @@
-import React, { createRef, CSSProperties } from 'react'
+import React, { createRef, CSSProperties, useState } from 'react'
 import ReactDom from 'react-dom'
 
 import { Editor } from 'grapesjs'
@@ -113,27 +113,36 @@ export function createRichTextEditor(editor: Editor) {
       canvasStyleStr.match(/@font-face(.|\s)*?}/gm) || []
     ).join('\n')
 
-    ReactDom.render(
-      <AppTheme>
-        <div>
-          <McTextEditor
-            ref={editorRef}
-            defaultValue={defaultValue}
-            onChange={updateHeight}
-            textAlignment={alignments.find(
-              alignment => alignment === computedStyle.textAlign
-            )}
-            targetStyle={{
-              width: Math.ceil(el.getBoundingClientRect().width),
-              padding,
-              ...inheritedStyles
-            }}
-          />
-          <style>{fontFaceRulesStr}</style>
-        </div>
-      </AppTheme>,
-      $toolbar
-    )
+    const getWidth = () => Math.ceil(el.getBoundingClientRect().width)
+    const CustomEditor = () => {
+      const [width, setWidth] = useState(getWidth)
+
+      return (
+        <AppTheme>
+          <div>
+            <McTextEditor
+              ref={editorRef}
+              defaultValue={defaultValue}
+              onChange={value => {
+                setWidth(getWidth())
+                updateHeight(value)
+              }}
+              textAlignment={alignments.find(
+                alignment => alignment === computedStyle.textAlign
+              )}
+              targetStyle={{
+                width,
+                padding,
+                ...inheritedStyles
+              }}
+            />
+            <style>{fontFaceRulesStr}</style>
+          </div>
+        </AppTheme>
+      )
+    }
+
+    ReactDom.render(<CustomEditor />, $toolbar)
   }
 
   const disable = (el: HTMLElement) => {
