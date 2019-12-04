@@ -239,10 +239,6 @@ class Builder extends React.Component {
       this.registerEmailBlocks()
     }
 
-    if (!this.isEmailTemplate) {
-      this.registerSocialBlocks()
-    }
-
     this.props.onBuilderLoad({
       regenerateTemplate: this.regenerateTemplate
     })
