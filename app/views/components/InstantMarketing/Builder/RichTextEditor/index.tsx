@@ -109,9 +109,17 @@ export function createRichTextEditor(editor: Editor) {
       'center'
     ]
 
-    const canvasStyleStr = [...el.closest('body')!.querySelectorAll('style')]
+    const body = el.closest('body')!
+    const canvasStyleStr = [...body.querySelectorAll('style')]
       .map(item => item.innerHTML)
       .join('\n')
+
+    const fontLinks = [
+      ...body.querySelectorAll('link[rel="stylesheet"]')
+    ].filter(
+      (linkEl: HTMLLinkElement): linkEl is HTMLLinkElement =>
+        linkEl.href.includes('font')
+    )
 
     // Pure hack! we extract the font size css rules by a regexp,
     // we don't wanna inject other rules which may mess up the dom outside
@@ -144,6 +152,9 @@ export function createRichTextEditor(editor: Editor) {
               }}
             />
             <style>{fontFaceRulesStr}</style>
+            {fontLinks.map((link, index) => (
+              <link key={index} href={link.href} rel="stylesheet" />
+            ))}
           </div>
         </AppTheme>
       )
