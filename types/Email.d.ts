@@ -70,14 +70,21 @@ declare type IEmailRecipient<
   Association<'brand', IBrand, Associations> &
   Association<'agent', IAgent, Associations>
 
-interface IEmailAttachmentInput {
-  // either file id or url should be passed
-  // TODO(current): check final API contract for url
-  file?: UUID
-  url?: string
+abstract interface IEmailAttachmentInputBase {
   is_inline: boolean
   content_id?: string
 }
+
+interface IEmailAttachmentFileInput extends IEmailAttachmentInputBase {
+  file: UUID
+}
+interface IEmailAttachmentUrlInput extends IEmailAttachmentInputBase {
+  url: string
+  name: string
+}
+type IEmailAttachmentInput =
+  | IEmailAttachmentFileInput
+  | IEmailAttachmentUrlInput
 
 declare interface IEmailCampaignInputBase {
   due_at: Date | null

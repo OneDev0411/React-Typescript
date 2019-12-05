@@ -26,7 +26,6 @@ import IconForward from '../../SvgIcons/Forward/IconForward'
 import { Attachment } from '../../EmailCompose/components/Attachment'
 import { EmailResponseType, EmailThreadEmail } from '../types'
 import { decodeContentIds } from '../helpers/decode-content-ids'
-import { convertToAbsoluteAttachmentUrl } from '../helpers/convert-to-absolute-attachment-url'
 import { EmailResponseComposeForm } from '../../EmailCompose/EmailResponseComposeForm'
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
 
@@ -151,10 +150,7 @@ export function EmailThreadItem({
 
             {email.attachments.map(attachment => (
               <Attachment key={attachment.id} fullWidth={false}>
-                <Link
-                  target="_blank"
-                  href={convertToAbsoluteAttachmentUrl(attachment.url)}
-                >
+                <Link target="_blank" href={attachment.url}>
                   {attachment.name}
                 </Link>
               </Attachment>

@@ -16,7 +16,6 @@ import { getForwardHtml } from './helpers/get-forward-html'
 import { getReplySubject } from './helpers/get-reply-subject'
 import { EmailResponseType, EmailThreadEmail } from '../EmailThread/types'
 import { encodeContentIds } from '../EmailThread/helpers/encode-content-ids'
-import { convertToAbsoluteAttachmentUrl } from '../EmailThread/helpers/convert-to-absolute-attachment-url'
 import { SingleEmailComposeForm } from './SingleEmailComposeForm'
 import { EmailFormValues } from './types'
 
@@ -114,9 +113,10 @@ export function EmailResponseComposeForm({
         .filter(
           attachment => attachment.cid && html.includes(`cid:${attachment.cid}`)
         )
-        .map(({ cid, contentType: type, isInline, name: filename, url }) => ({
+        .map(({ cid, isInline, name, url }) => ({
           is_inline: isInline,
-          url: convertToAbsoluteAttachmentUrl(url),
+          url,
+          name,
           content_id: cid
         }))
 
@@ -124,7 +124,12 @@ export function EmailResponseComposeForm({
         // filter out inline attachments
         .filter(
           attachment =>
-            !inlineAttachments.some(item => item.url === attachment.url)
+            !inlineAttachments.some(
+              item =>
+                'url' in item &&
+                'url' in attachment &&
+                item.url === attachment.url
+            )
         )
 
       return {
