@@ -6,6 +6,7 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data/inde
 
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import registerBlock from '../../registerBlock'
+import adapt from '../../adapt'
 
 import Headline1 from './headline-1.mjml'
 import Headline2 from './headline-2.mjml'
@@ -135,23 +136,16 @@ export default function registerStaticBlocks(
       return
     }
 
-    const template = templates[model.attributes.attributes['data-block']]
+    const parent = model.parent()
 
-    let mjml = nunjucks.renderString(template, {
+    const template = templates[model.attributes.attributes['data-block']]
+    const adapted = adapt(parent, template)
+
+    const mjml = nunjucks.renderString(adapted, {
       ...renderData
     })
 
-    const parentType = model.parent().get('type')
-
-    if (parentType === 'mj-section') {
-      mjml = `<mj-column>${mjml}</mj-column>`
-    }
-
-    if (parentType === 'mj-wrapper') {
-      mjml = `<mj-section><mj-column>${mjml}</mj-column></mj-section>`
-    }
-
-    model.parent().append(mjml, { at: model.opt.at })
+    parent.append(mjml, { at: model.opt.at })
 
     model.remove()
   })
