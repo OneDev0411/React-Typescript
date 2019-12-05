@@ -5,6 +5,7 @@ import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { Image } from 'components/ImageDrawer/types'
 
 import registerBlock from '../../registerBlock'
+import adapt from '../../adapt'
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 
 import template from './template.mjml'
@@ -27,7 +28,8 @@ export default function registerImageBlock(
     label: 'Image Library',
     category: BASICS_BLOCK_CATEGORY,
     blockName,
-    template
+    template,
+    adaptive: true
   })
 
   let modelHandle: any
@@ -37,12 +39,14 @@ export default function registerImageBlock(
       return
     }
 
+    const parent = modelHandle.parent()
+
     if (selectedImage) {
-      const mjml = nunjucks.renderString(template, {
+      const mjml = nunjucks.renderString(adapt(parent, template), {
         image: selectedImage.url
       })
 
-      modelHandle.parent().append(mjml, { at: modelHandle.opt.at })
+      parent.append(mjml, { at: modelHandle.opt.at })
     }
 
     modelHandle.remove()

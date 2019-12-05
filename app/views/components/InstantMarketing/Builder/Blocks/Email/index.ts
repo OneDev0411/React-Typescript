@@ -26,15 +26,18 @@ export function registerEmailBlocks(
   renderData: TemplateRenderData,
   { listing, agent, image, gif, video, article }: Options
 ) {
-  const domComponents = editor.DomComponents
+  const draggable =
+    '[data-gjs-type=mj-column],[data-gjs-type=mj-wrapper],[data-gjs-type=mj-section]'
 
-  const component = {
-    tagName: 'mjml-adaptive',
-    droppable: true,
-    draggable: true
-  }
-
-  domComponents.addComponents([component])
+  editor.DomComponents.addType('mj-adaptive', {
+    isComponent: el => el.tagName === 'MJ-ADAPTIVE',
+    model: {
+      defaults: {
+        draggable,
+        droppable: false
+      }
+    }
+  })
 
   registerStaticBlocks(editor, renderData)
 

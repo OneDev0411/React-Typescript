@@ -18,7 +18,7 @@ declare module 'grapesjs' {
   export interface Editor {
     $: Function
     editor: object
-    DomComponents: object
+    DomComponents: DomComponents
     LayerManager: object
     CssComposer: object
     StorageManager: object
@@ -196,6 +196,10 @@ declare module 'grapesjs' {
 
   export interface GrapesScrollIntoViewOptions extends ScrollIntoViewOptions {
     force?: boolean
+  }
+
+  export interface DomComponents {
+    addType(type: string, methods: object): object
   }
 
   export interface AssetManager {
