@@ -98,9 +98,7 @@ export function From({ accounts, children, user }: Props) {
                 const selectedAccount = getSelectedAccount(value)
 
                 if (selectedAccount) {
-                  return `${selectedAccount.display_name} <${
-                    selectedAccount.email
-                  }>`
+                  return accountToString(selectedAccount)
                 }
 
                 return <Typography color="error">Unknown Address</Typography>
@@ -110,7 +108,7 @@ export function From({ accounts, children, user }: Props) {
               {accounts &&
                 accounts.map(account => (
                   <MenuItem key={account.id} value={account.id}>
-                    {account.display_name}
+                    {accountToString(account)}
                   </MenuItem>
                 ))}
             </Select>
@@ -144,4 +142,8 @@ export function From({ accounts, children, user }: Props) {
       )}
     />
   )
+}
+
+function accountToString(account: IOAuthAccount): string {
+  return `${account.display_name} <${account.email}>`
 }
