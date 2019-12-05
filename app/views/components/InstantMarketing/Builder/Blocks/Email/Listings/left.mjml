@@ -20,8 +20,8 @@
       {% if listing.property.bathroom_count %}
       <span>{{listing.property.bathroom_count}} Baths,</span>
       {% endif %}
-      {% if listing.property.lot_square_meters %}
-      <span>{{listing.property.lot_square_meters | area}} Sqft,</span>
+      {% if listing.property.square_meters %}
+      <span>{{listing.property.square_meters | area}} Sqft,</span>
       {% endif %}
       {% if listing.property.year_built %}
       <span>Built in {{listing.property.year_built}}</span>
