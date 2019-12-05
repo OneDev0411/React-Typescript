@@ -13,7 +13,13 @@ export function getReplyRecipients(
 } {
   if (email.inBound) {
     return {
-      to: [emailAddressToRecipient(email.from)],
+      to: [
+        // see this conversation for the reason we only use email address
+        // and not "Name <email-address>" format:
+        // https://rechathq.slack.com/archives/DJ1EYKXCM/p1575560233091300
+        // It's DM between Abbas and Alireza though :D
+        emailAddressToRecipient(parseEmailRecipient(email.from).emailAddress)
+      ],
       cc: []
     }
   }
@@ -34,7 +40,9 @@ export function getReplyAllRecipients(
 ) {
   if (email.inBound) {
     return {
-      to: [emailAddressToRecipient(email.from)],
+      to: [
+        emailAddressToRecipient(parseEmailRecipient(email.from).emailAddress)
+      ],
       cc: [...email.to, ...email.cc]
         .filter(
           recipient => parseEmailRecipient(recipient).emailAddress !== ownEmail
