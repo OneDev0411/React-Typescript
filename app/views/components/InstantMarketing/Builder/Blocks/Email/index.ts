@@ -26,6 +26,16 @@ export function registerEmailBlocks(
   renderData: TemplateRenderData,
   { listing, agent, image, gif, video, article }: Options
 ) {
+  const domComponents = editor.DomComponents
+
+  const component = {
+    tagName: 'mjml-adaptive',
+    droppable: true,
+    draggable: true
+  }
+
+  domComponents.addComponents([component])
+
   registerStaticBlocks(editor, renderData)
 
   const dynamicBlocks = {

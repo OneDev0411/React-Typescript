@@ -4,4 +4,5 @@ export interface BlockOptions {
   category: string
   blockName: string
   template: string
+  adaptive?: boolean
 }
