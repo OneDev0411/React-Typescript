@@ -22,7 +22,11 @@ export function EmailCampaignThreadDrawer({ campaign, ...drawerProps }: Props) {
   return (
     <Drawer {...drawerProps}>
       {drawerProps.open && (
-        <EmailThread thread={thread} onClose={drawerProps.onClose} />
+        <EmailThread
+          messages={thread.messages}
+          subject={thread.subject}
+          onClose={drawerProps.onClose}
+        />
       )}
     </Drawer>
   )

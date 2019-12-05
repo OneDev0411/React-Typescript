@@ -50,15 +50,35 @@ declare interface IMicrosoftMessage
   extends IEmailThreadEmailBase<'microsoft_message'> {
   microsoft_credential: UUID
 }
-declare interface IEmail extends IEmailThreadEmailBase<'email'> {
-  // FIXME(current)
+declare interface IEmail {
+  id: UUID
+  created_at: number
+  from: string
+  to: string[]
+  subject: string
+  headers: IEmailCampaignInput['headers'] // ask
+  mailgun_id: string
+  domain: 'Marketing' // ask
+  campaign: UUID
+  cc: string[] // ask
+  bcc: string[] // ask
+  accepted: number
+  rejected: number
+  delivered: number
+  failed: number
+  opened: number
+  clicked: number
+  unsubscribed: number
+  complained: number
+  stored: number
+  tags: UUID[] // ask. what is this?
+  google_id: null | string
+  microsoft_id: null | string
+  tracking_id: UUID
+  attachments: undefined // TEMPORARY FIX. FIXME
+  type: 'email'
 }
-declare type IEmailThreadEmail = IGoogleMessage | IMicrosoftMessage | IEmail
-
-declare interface IEmailThreadRecipient {
-  name: string
-  address: string
-}
+declare type IEmailThreadMessage = IGoogleMessage | IMicrosoftMessage | IEmail
 
 type IEmailThreadAssociations = 'messages'
 
@@ -74,4 +94,4 @@ declare type IEmailThread<
   brand: UUID
   google_credential: UUID | undefined
   microsoft_credential: UUID | undefined
-} & Association<'messages', IEmailThreadEmail[], Associations>
+} & Association<'messages', IEmailThreadMessage[], Associations>

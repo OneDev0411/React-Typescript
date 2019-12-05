@@ -1,16 +1,17 @@
 import { parseEmailRecipient } from '../../../EmailRecipientsChipsInput/helpers/parse-email-recipient'
+import { EmailThreadEmail } from '../../../EmailThread/types'
 
 /**
  * Given an email, returns to and cc recipient arrays for Reply action.
  * The logic is captured from Gmail
  */
 export function getReplyRecipients(
-  email: IEmailThreadEmail
+  email: EmailThreadEmail
 ): {
   to: IDenormalizedEmailRecipientEmailInput[]
   cc: IDenormalizedEmailRecipientEmailInput[]
 } {
-  if (email.in_bound) {
+  if (email.inBound) {
     return {
       to: [emailAddressToRecipient(email.from)],
       cc: []
@@ -28,10 +29,10 @@ export function getReplyRecipients(
  * The logic is captured from Gmail
  */
 export function getReplyAllRecipients(
-  email: IEmailThreadEmail,
+  email: EmailThreadEmail,
   ownEmail: string
 ) {
-  if (email.in_bound) {
+  if (email.inBound) {
     return {
       to: [emailAddressToRecipient(email.from)],
       cc: [...email.to, ...email.cc]

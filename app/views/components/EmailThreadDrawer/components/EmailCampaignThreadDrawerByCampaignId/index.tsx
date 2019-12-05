@@ -41,7 +41,11 @@ export function EmailCampaignThreadByCampaignId({
           }
         >
           {thread && (
-            <EmailThread thread={thread} onClose={drawerProps.onClose} />
+            <EmailThread
+              messages={thread.messages}
+              subject={thread.subject}
+              onClose={drawerProps.onClose}
+            />
           )}
         </AsyncValueContainer>
       )}

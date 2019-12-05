@@ -98,14 +98,16 @@ declare interface IEmailCampaignInputBase {
 declare interface IIndividualEmailCampaignInput
   extends IEmailCampaignInputBase {}
 
+interface IEmailHeaders {
+  message_id?: string
+  in_reply_to?: string
+  thread_id?: string
+}
+
 declare interface IEmailCampaignInput extends IEmailCampaignInputBase {
   cc?: IEmailRecipientInput[]
   bcc?: IEmailRecipientInput[]
-  headers: {
-    message_id?: string
-    in_reply_to?: string
-    thread_id?: string
-  }
+  headers: IEmailHeaders
   google_credential?: string
   microsoft_credential?: string
 }

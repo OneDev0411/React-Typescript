@@ -106,7 +106,13 @@ function Insight(props: InsightPropsType) {
           onClose={closeEmailView}
           open={isOpenViewEmail}
         >
-          {thread && <EmailThread thread={thread} onClose={closeEmailView} />}
+          {thread && (
+            <EmailThread
+              messages={thread.messages}
+              subject={thread.subject}
+              onClose={closeEmailView}
+            />
+          )}
         </Dialog>
         <InsightContainer>
           <aside className="sidebar">

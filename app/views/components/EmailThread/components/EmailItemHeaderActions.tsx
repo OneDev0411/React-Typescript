@@ -22,9 +22,10 @@ import IconForward from '../../SvgIcons/Forward/IconForward'
 import IconVerticalDocs from '../../SvgIcons/VeriticalDots/VerticalDotsIcon'
 import { iconSizes } from '../../SvgIcons/icon-sizes'
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
+import { EmailThreadEmail } from '../types'
 
 interface Props {
-  email: IEmailThreadEmail
+  email: EmailThreadEmail
   onReply: () => void
   onReplyAll: () => void
   onForward: () => void

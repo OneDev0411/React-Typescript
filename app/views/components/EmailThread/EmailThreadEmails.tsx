@@ -5,47 +5,26 @@ import useMap from 'react-use/lib/useMap'
 
 import { EmailThreadItem } from './components/EmailThreadItem'
 import { ShowAllToggle } from './components/ShowAllToggle'
-import {
-  isGoogleMessage,
-  isMicrosoftMessage
-} from '../EmailCompose/helpers/type-guards'
+import { EmailThreadEmail } from './types'
 
 interface Props {
-  thread: IEmailThread<'messages'>
+  emails: EmailThreadEmail[]
   style?: CSSProperties
 
   /**
    * Callback to be called when an email in the thread is replied/forwarded
    */
-  onEmailSent?: (email: IEmailThreadEmail) => void
+  onEmailSent?: (email: IEmailCampaign) => void
 }
 
-export function EmailThreadEmails({ thread, style = {}, onEmailSent }: Props) {
+export function EmailThreadEmails({ emails, style = {}, onEmailSent }: Props) {
   const [showAll, setShowAll] = useState(false)
 
   const [openedThreads, { set: setOpen }] = useMap()
 
   const visibleItems = showAll
-    ? thread.messages
-    : thread.messages.filter(
-        (item, index) => index === 0 || index >= thread.messages.length - 2
-      )
-
-  let fallbackCredential = ''
-
-  thread.messages.some(email => {
-    if (isGoogleMessage(email)) {
-      fallbackCredential = email.google_credential
-
-      return true
-    }
-
-    if (isMicrosoftMessage(email)) {
-      fallbackCredential = email.microsoft_credential
-
-      return true
-    }
-  })
+    ? emails
+    : emails.filter((item, index) => index === 0 || index >= emails.length - 2)
 
   return (
     <div style={style}>
@@ -58,7 +37,7 @@ export function EmailThreadEmails({ thread, style = {}, onEmailSent }: Props) {
 
         const collapsed = last ? false : !openedThreads[email.id]
 
-        const numHidden = thread.messages.length - visibleItems.length
+        const numHidden = emails.length - visibleItems.length
         const showAllToggle =
           index === 0 && !showAll && numHidden > 0 ? (
             <ShowAllToggle
@@ -74,7 +53,6 @@ export function EmailThreadEmails({ thread, style = {}, onEmailSent }: Props) {
               onToggleCollapsed={onToggleCollapsed}
               showBottomButtons={last}
               collapsed={collapsed}
-              fallbackCredential={fallbackCredential || undefined}
               onEmailSent={onEmailSent}
             />
             {!last && !showAllToggle ? <Divider /> : null}

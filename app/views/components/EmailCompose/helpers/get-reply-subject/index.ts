@@ -2,11 +2,11 @@ import { EmailResponseType } from '../../../EmailThread/types'
 
 export function getReplySubject(
   responseType: EmailResponseType,
-  email: IEmailThreadEmail
+  subject: string
 ) {
   const prefix = responseType === 'forward' ? 'Fwd' : 'Re'
 
-  return email.subject && !email.subject.startsWith(prefix)
-    ? `${prefix}: ${email.subject || ''}`
-    : email.subject || ''
+  return subject && !subject.startsWith(prefix)
+    ? `${prefix}: ${subject || ''}`
+    : subject || ''
 }

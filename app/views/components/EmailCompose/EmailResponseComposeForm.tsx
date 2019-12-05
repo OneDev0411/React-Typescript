@@ -14,19 +14,18 @@ import {
 import { getReplyHtml } from './helpers/get-reply-html'
 import { getForwardHtml } from './helpers/get-forward-html'
 import { getReplySubject } from './helpers/get-reply-subject'
-import { EmailResponseType } from '../EmailThread/types'
+import { EmailResponseType, EmailThreadEmail } from '../EmailThread/types'
 import { encodeContentIds } from '../EmailThread/helpers/encode-content-ids'
 import { convertToAbsoluteAttachmentUrl } from '../EmailThread/helpers/convert-to-absolute-attachment-url'
 import { SingleEmailComposeForm } from './SingleEmailComposeForm'
 import { EmailFormValues } from './types'
-import { isGoogleMessage, isMicrosoftMessage } from './helpers/type-guards'
 
 interface Props {
   responseType: EmailResponseType
-  email: IEmailThreadEmail
+  email: EmailThreadEmail
   fallbackCredential?: string
   onCancel: () => void
-  onSent: (email: IEmailThreadEmail) => void
+  onSent: (email: IEmailCampaign) => void
 }
 
 const useStyles = makeStyles(
@@ -48,20 +47,12 @@ const useStyles = makeStyles(
 export function EmailResponseComposeForm({
   responseType,
   email,
-  fallbackCredential,
   onCancel,
   onSent
 }: Props) {
   const classes = useStyles()
 
   const user = useSelector((state: IAppState) => state.user as IUser)
-
-  const googleCredential = isGoogleMessage(email)
-    ? email.google_credential
-    : undefined
-  const microsoftCredential = isMicrosoftMessage(email)
-    ? email.microsoft_credential
-    : undefined
 
   const initialValue = useMemo<EmailFormValues>((): EmailFormValues => {
     const { to, cc } =
@@ -73,8 +64,8 @@ export function EmailResponseComposeForm({
 
     return {
       from: user,
-      microsoft_credential: microsoftCredential,
-      google_credential: googleCredential,
+      microsoft_credential: email.microsoftId,
+      google_credential: email.googleId,
       to,
       cc,
       bcc: [],
@@ -90,9 +81,9 @@ export function EmailResponseComposeForm({
               name: attachment.name
             }))
           : [],
-      subject: getReplySubject(responseType, email)
+      subject: getReplySubject(responseType, email.subject)
     }
-  }, [email, googleCredential, microsoftCredential, responseType, user])
+  }, [email, responseType, user])
 
   const getHeaders = (emailInput: EmailFormValues) => {
     const fromType: OAuthProvider | null =
@@ -100,17 +91,17 @@ export function EmailResponseComposeForm({
       (emailInput.microsoft_credential && OAuthProvider.Outlook) ||
       null
 
-    const originType: OAuthProvider | null = googleCredential
+    const originType: OAuthProvider | null = email.googleId
       ? OAuthProvider.Google
-      : microsoftCredential
+      : email.microsoftId
       ? OAuthProvider.Outlook
       : null
     const originMatchesFrom = !originType || originType === fromType
 
     return {
-      thread_id: originMatchesFrom ? email.thread_id : undefined,
-      message_id: originMatchesFrom ? email.message_id : undefined,
-      in_reply_to: email.internet_message_id
+      thread_id: originMatchesFrom ? email.threadId : undefined,
+      message_id: originMatchesFrom ? email.messageId : undefined,
+      in_reply_to: email.internetMessageId
     }
   }
   const getEmail = useCallback(
@@ -151,12 +142,7 @@ export function EmailResponseComposeForm({
   // we have some issues in replying with an account other than
   // the one by which the thread is started. We should remove
   // this filtering when this issue is resolved.
-  // Note that if the thread is started from a rechat email (sent with Mailgun),
-  // and we are replying to that starting email, it doesn't have owner,
-  // and we use fallbackCredential which comes from the first non-rechat email
-  // in that thread
-  const forcedSender =
-    googleCredential || microsoftCredential || fallbackCredential
+  const forcedSender = email.googleId || email.microsoftId
 
   return (
     shouldRender && (
@@ -165,7 +151,6 @@ export function EmailResponseComposeForm({
         onSent={onSent}
         classes={{ footer: classes.footer, root: classes.root }}
         initialValues={initialValue}
-        preferredAccountId={fallbackCredential}
         getEmail={getEmail}
         headers={getHeaders}
         filterAccounts={account => !forcedSender || account.id === forcedSender}
