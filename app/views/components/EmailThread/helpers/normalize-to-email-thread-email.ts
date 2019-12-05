@@ -1,3 +1,5 @@
+import clip from 'text-clipper'
+
 import { EmailThreadEmail } from '../types'
 import {
   isGoogleMessage,
@@ -33,14 +35,16 @@ export function normalizeThreadMessageToThreadEmail(
       }
 }
 
-function normalizeEmailToThreadEmail(email: IEmail): EmailThreadEmail {
+function normalizeEmailToThreadEmail(
+  email: IEmail<'html' | 'text'>
+): EmailThreadEmail {
   return {
     id: email.id,
     from: email.from,
     to: email.to,
     cc: email.cc,
     bcc: email.bcc,
-    htmlBody: '', // FIXME
+    htmlBody: email.html,
     messageId: email.headers.message_id,
     date: new Date(email.created_at * 1000),
     // FIXME: Abbas said it has some problems in API and hopefully
@@ -48,7 +52,7 @@ function normalizeEmailToThreadEmail(email: IEmail): EmailThreadEmail {
     attachments: [],
     inBound: false,
     subject: email.subject,
-    snippet: '', // FIXME,
+    snippet: clip(email.text, 50, { indicator: '' }),
     microsoftId: email.microsoft_id || undefined,
     googleId: email.google_id || undefined
   }

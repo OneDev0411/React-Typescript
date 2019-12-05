@@ -11,11 +11,12 @@ export async function getEmailThread<A1 extends IEmailThreadAssociations>(
 ): Promise<IEmailThread<A1>> {
   const response = await new Fetch().get(`/emails/threads/${threadKey}`).query({
     associations: [...associations.map(toEntityAssociation('email_thread'))],
-    association_condition: {
-      'email_thread.messages': {
-        body: true
-      }
-    }
+    select: [
+      'google_message.html_body',
+      'microsoft_message.html_body',
+      'email.html',
+      'email.text'
+    ]
   })
 
   return response.body.data

@@ -1,19 +1,20 @@
 import React from 'react'
 
+import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
+
 import { Drawer } from '../Drawer'
 import { EmailThread } from '../../../EmailThread'
 import { DrawerProps } from '../../../OverlayDrawer'
 
 interface Props extends DrawerProps {
-  campaign: IEmailCampaign<'emails', any, 'email'>
+  campaign: IEmailCampaign<'emails', any, 'email', 'html' | 'text'>
 }
 
 /**
  * A drawer for showing an email thread UI for an email campaign.
  */
 export function EmailCampaignThreadDrawer({ campaign, ...drawerProps }: Props) {
-  const emailCampaignEmail = campaign.emails && campaign.emails[0]
-  const email = emailCampaignEmail && emailCampaignEmail.email
+  const email = getEmailCampaignEmail<'html' | 'text'>(campaign)
 
   return (
     <Drawer {...drawerProps}>
