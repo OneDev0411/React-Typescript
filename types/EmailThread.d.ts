@@ -60,8 +60,8 @@ declare interface IEmail {
   mailgun_id: string
   domain: 'Marketing' // ask
   campaign: UUID
-  cc: string[] // ask
-  bcc: string[] // ask
+  cc: string[]
+  bcc: string[]
   accepted: number
   rejected: number
   delivered: number
@@ -71,11 +71,9 @@ declare interface IEmail {
   unsubscribed: number
   complained: number
   stored: number
-  tags: UUID[] // ask. what is this?
   google_id: null | string
   microsoft_id: null | string
   tracking_id: UUID
-  attachments: undefined // TEMPORARY FIX. FIXME
   type: 'email'
 }
 declare type IEmailThreadMessage = IGoogleMessage | IMicrosoftMessage | IEmail

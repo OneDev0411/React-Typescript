@@ -43,7 +43,9 @@ function normalizeEmailToThreadEmail(email: IEmail): EmailThreadEmail {
     htmlBody: '', // FIXME
     messageId: email.headers.message_id,
     date: new Date(email.created_at * 1000),
-    attachments: [], // FIXME,
+    // FIXME: Abbas said it has some problems in API and hopefully
+    //  will be fixed in future. Now we set attachments to an empty array!
+    attachments: [],
     inBound: false,
     subject: email.subject,
     snippet: '', // FIXME,

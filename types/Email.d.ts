@@ -119,9 +119,12 @@ declare type IEmailCampaignAssociation =
   | 'recipients'
   | 'attachments'
 
+declare type IEmailCampaignEmailAssociation = 'email'
+
 declare type IEmailCampaign<
   Associations extends IEmailCampaignAssociation = '',
-  RecipientAssociations extends IEmailCampaignRecipientAssociation = ''
+  RecipientAssociations extends IEmailCampaignRecipientAssociation = '',
+  EmailCampaignEmailAssociation extends IEmailCampaignEmailAssociation = ''
 > = {
   id: UUID
   created_at: number
@@ -157,13 +160,18 @@ declare type IEmailCampaign<
 > &
   Association<'from', IUser, Associations> &
   Association<'template', IMarketingTemplateInstance | null, Associations> &
-  Association<'emails', IEmailCampaignEmail[] | null, Associations> &
+  Association<
+    'emails',
+    IEmailCampaignEmail<EmailCampaignEmailAssociation>[] | null,
+    Associations
+  > &
   Association<'attachments', IFile[] | null, Associations>
 
-declare interface IEmailCampaignEmail {
+declare type IEmailCampaignEmail<
+  Associations extends IEmailCampaignEmailAssociation = ''
+> = {
   id: string
   campaign: string
-  email: string
   contact: UUID | null
   accepted: number
   rejected: number
@@ -178,7 +186,7 @@ declare interface IEmailCampaignEmail {
   type: 'email_campaign_email'
   full_name: string
   profile_image_url: string | null
-}
+} & Association<'email', IEmail, Associations>
 
 /**
  * This is corresponding to {@link IEmailRecipientInput}, but fields like

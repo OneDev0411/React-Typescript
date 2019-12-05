@@ -1,30 +1,26 @@
-import React, { useMemo } from 'react'
-
-import { emailCampaignToThread } from 'models/email/helpers/email-campaign-to-thread'
+import React from 'react'
 
 import { Drawer } from '../Drawer'
 import { EmailThread } from '../../../EmailThread'
 import { DrawerProps } from '../../../OverlayDrawer'
 
 interface Props extends DrawerProps {
-  campaign: IEmailCampaign<
-    IEmailCampaignAssociation,
-    IEmailCampaignRecipientAssociation
-  >
+  campaign: IEmailCampaign<'emails', any, 'email'>
 }
 
 /**
  * A drawer for showing an email thread UI for an email campaign.
  */
 export function EmailCampaignThreadDrawer({ campaign, ...drawerProps }: Props) {
-  const thread = useMemo(() => emailCampaignToThread(campaign), [campaign])
+  const emailCampaignEmail = campaign.emails && campaign.emails[0]
+  const email = emailCampaignEmail && emailCampaignEmail.email
 
   return (
     <Drawer {...drawerProps}>
       {drawerProps.open && (
         <EmailThread
-          messages={thread.messages}
-          subject={thread.subject}
+          messages={email ? [email] : []}
+          subject={(email && email.subject) || ''}
           onClose={drawerProps.onClose}
         />
       )}

@@ -16,22 +16,31 @@ const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[]
   'agent'
 ]
 
+const DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS: IEmailCampaignEmailAssociation[] = [
+  'email'
+]
+
 export async function getEmailCampaign<
   A1 extends IEmailCampaignAssociation,
-  A2 extends IEmailCampaignRecipientAssociation
+  A2 extends IEmailCampaignRecipientAssociation,
+  A3 extends IEmailCampaignEmailAssociation
 >(
   id,
   associations: A1[] = DEFAULT_EMAIL_ASSOCIATIONS as A1[],
-  recipientAssociations: A2[] = DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS as A2[]
-): Promise<IEmailCampaign<A1, A2>> {
+  recipientAssociations: A2[] = DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS as A2[],
+  emailCampaignEmailAssociation: A3[] = DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS as A3[]
+): Promise<IEmailCampaign<A1, A2, A3>> {
   const response = await new Fetch().get(`/emails/${id}`).query({
     associations: [
       ...associations.map(toEntityAssociation('email_campaign')),
       ...recipientAssociations.map(
         toEntityAssociation('email_campaign_recipient')
+      ),
+      ...emailCampaignEmailAssociation.map(
+        toEntityAssociation('email_campaign_email')
       )
     ]
   })
 
-  return response.body.data as IEmailCampaign<A1, A2>
+  return response.body.data as IEmailCampaign<A1, A2, A3>
 }

@@ -7,7 +7,8 @@ function useItemData(id) {
   const [hasError, setError] = useState<boolean>(false)
   const [item, setItem] = useState<IEmailCampaign<
     IEmailCampaignAssociation,
-    IEmailCampaignRecipientAssociation
+    IEmailCampaignRecipientAssociation,
+    IEmailCampaignEmailAssociation
   > | null>(null)
 
   useEffect(() => {
