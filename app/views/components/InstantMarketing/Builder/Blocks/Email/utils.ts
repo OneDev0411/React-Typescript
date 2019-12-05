@@ -72,7 +72,6 @@ const BLOCK_BUTTON_ICONS = {
   'mj-image': ImageIcon,
   'mj-button': ButtonIcon,
   'mj-social-group': ShareIcon,
-  'mj-social-element': ShareIcon,
 
   [articleTopBlockName]: ArticleImageTopIcon,
   [articleDualBlockName]: ArticleImageDualIcon,
@@ -104,7 +103,6 @@ const BLOCK_BUTTONS_ORDER = [
   'mj-spacer',
   'mj-button',
   'mj-social-group',
-  'mj-social-element',
 
   articleTopBlockName,
   articleDualBlockName,

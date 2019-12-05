@@ -17,7 +17,6 @@ import Image from './image.mjml'
 import Button from './button.mjml'
 import Text from './text.mjml'
 import SocialGroup from './social-group.mjml'
-import SocialGroupElement from './social-group-element.mjml'
 
 export const headline1BlockName = 'headline-1'
 export const headline2BlockName = 'headline-2'
@@ -28,7 +27,6 @@ export const textElementBlockName = 'text'
 export const imageBlockName = 'mj-image'
 export const buttonBlockName = 'mj-button'
 export const socialGroupBlockName = 'mj-social-group'
-export const socialGroupElementBlockName = 'mj-social-element'
 
 const templates = {}
 
@@ -44,7 +42,6 @@ templates[textElementBlockName] = Text
 templates[imageBlockName] = Image
 templates[buttonBlockName] = Button
 templates[socialGroupBlockName] = SocialGroup
-templates[socialGroupElementBlockName] = SocialGroupElement
 
 export default function registerStaticBlocks(
   editor: Editor,
@@ -87,14 +84,6 @@ export default function registerStaticBlocks(
     category: BASICS_BLOCK_CATEGORY,
     blockName: socialGroupBlockName,
     template: templates[socialGroupBlockName],
-    adaptive: true
-  })
-
-  registerBlock(editor, {
-    label: 'Social Group Element',
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: socialGroupElementBlockName,
-    template: templates[socialGroupElementBlockName],
     adaptive: true
   })
 
