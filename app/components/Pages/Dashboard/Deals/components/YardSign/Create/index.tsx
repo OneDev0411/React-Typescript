@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, ChangeEvent } from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 
 import {
   Button,
+  TextField,
   Checkbox,
   createStyles,
   makeStyles,
@@ -12,6 +13,7 @@ import {
 } from '@material-ui/core'
 
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
+import { createTaskComment } from 'deals/utils/create-task-comment'
 
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
@@ -43,6 +45,9 @@ const useStyles = makeStyles((theme: Theme) => {
     buttonContainer: {
       margin: theme.spacing(1)
     },
+    input: {
+      margin: theme.spacing(1)
+    },
     buttonLabel: {
       justifyContent: 'flex-start'
     }
@@ -54,6 +59,10 @@ function Form(props: Props & StateProps & DispatchProps) {
 
   const [selectedItems, setSelectedItems] = useState<number[]>([])
   const [isCreatingTask, setIsCreatingTask] = useState<boolean>(false)
+  const [comment, setComment] = useState<string>('')
+
+  const onChangeComment = (e: ChangeEvent<HTMLInputElement>) =>
+    setComment(e.target.value)
 
   const toggleItem = (index: number): void => {
     if (selectedItems.includes(index)) {
@@ -86,6 +95,10 @@ function Form(props: Props & StateProps & DispatchProps) {
       notifyMessage: 'Back office has been notified'
     })
 
+    if (task && comment) {
+      createTaskComment(task, props.user.id, comment)
+    }
+
     setIsCreatingTask(false)
 
     if (task) {
@@ -109,6 +122,17 @@ function Form(props: Props & StateProps & DispatchProps) {
           </Button>
         </div>
       ))}
+
+      <TextField
+        label="Special Instructions"
+        margin="normal"
+        variant="outlined"
+        multiline
+        rowsMax="2"
+        value={comment}
+        onChange={onChangeComment}
+        className={classes.input}
+      />
 
       <div className={classes.buttonContainer}>
         <Button
