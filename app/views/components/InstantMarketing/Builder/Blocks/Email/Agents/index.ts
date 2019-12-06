@@ -5,6 +5,8 @@ import { AgentItem } from 'components/TeamAgents/types'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
+import { getNameInitialsPlaceholderImage } from 'utils/helpers'
+
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import { AGENTS_BLOCK_CATEGORY } from '../../../constants'
 import registerBlock from '../../registerBlock'
@@ -41,7 +43,16 @@ const selectHandler = (agents?: AgentItem[]) => {
   if (agents) {
     const mjml = nunjucks.renderString(template, {
       ...renderData,
-      users: agents.map(item => item.agent)
+      users: agents.map(item => {
+        const profileImageUrl =
+          item.agent.profile_image_url ||
+          getNameInitialsPlaceholderImage(item.agent.display_name)
+
+        return {
+          ...item.agent,
+          profile_image_url: profileImageUrl
+        }
+      })
     })
 
     modelHandle.parent().append(mjml, { at: modelHandle.opt.at })

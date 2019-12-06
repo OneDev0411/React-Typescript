@@ -42,6 +42,21 @@ export function getNameInitials(name) {
     .substring(0, 2)
 }
 
+export function getPlaceholderImage(text, options = {
+  size: '160x160',
+  format: 'jpg',
+  color: 'ffffff',
+  backgroundColor: 'd4d4d4'
+}) {
+  return `https://via.placeholder.com/${options.size}.${options.format}/${options.backgroundColor}/${options.color}?text=${encodeURIComponent(text)}`
+}
+
+export function getNameInitialsPlaceholderImage(name = 'Rechat User') {
+  const initials = getNameInitials(name)
+
+  return getPlaceholderImage(initials)
+}
+
 export async function getPhoneNumberUtil() {
   const {
     PhoneNumberUtil,
