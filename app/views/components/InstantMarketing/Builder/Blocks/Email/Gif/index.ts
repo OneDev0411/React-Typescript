@@ -5,6 +5,7 @@ import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { GifItem } from 'components/GifDrawer/types'
 
 import registerBlock from '../../registerBlock'
+import adapt from '../../adapt'
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 
 import template from './template.mjml'
@@ -27,7 +28,8 @@ export default function registerGifBlock(
     label: 'GIF Animation',
     category: BASICS_BLOCK_CATEGORY,
     blockName,
-    template
+    template,
+    adaptive: true
   })
 
   let modelHandle: any
@@ -37,12 +39,14 @@ export default function registerGifBlock(
       return
     }
 
+    const parent = modelHandle.parent()
+
     if (selectedGif) {
-      const mjml = nunjucks.renderString(template, {
+      const mjml = nunjucks.renderString(adapt(parent, template), {
         url: selectedGif.url
       })
 
-      modelHandle.parent().append(mjml, { at: modelHandle.opt.at })
+      parent.append(mjml, { at: modelHandle.opt.at })
     }
 
     modelHandle.remove()

@@ -6,6 +6,7 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data/inde
 
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import registerBlock from '../../registerBlock'
+import adapt from '../../adapt'
 
 import Headline1 from './headline-1.mjml'
 import Headline2 from './headline-2.mjml'
@@ -16,7 +17,6 @@ import Image from './image.mjml'
 import Button from './button.mjml'
 import Text from './text.mjml'
 import SocialGroup from './social-group.mjml'
-import SocialGroupElement from './social-group-element.mjml'
 
 export const headline1BlockName = 'headline-1'
 export const headline2BlockName = 'headline-2'
@@ -27,7 +27,6 @@ export const textElementBlockName = 'text'
 export const imageBlockName = 'mj-image'
 export const buttonBlockName = 'mj-button'
 export const socialGroupBlockName = 'mj-social-group'
-export const socialGroupElementBlockName = 'mj-social-element'
 
 const templates = {}
 
@@ -43,7 +42,6 @@ templates[textElementBlockName] = Text
 templates[imageBlockName] = Image
 templates[buttonBlockName] = Button
 templates[socialGroupBlockName] = SocialGroup
-templates[socialGroupElementBlockName] = SocialGroupElement
 
 export default function registerStaticBlocks(
   editor: Editor,
@@ -53,42 +51,40 @@ export default function registerStaticBlocks(
     label: 'Headline 1',
     category: BASICS_BLOCK_CATEGORY,
     blockName: headline1BlockName,
-    template: templates[headline1BlockName]
+    template: templates[headline1BlockName],
+    adaptive: true
   })
 
   registerBlock(editor, {
     label: 'Headline 2',
     category: BASICS_BLOCK_CATEGORY,
     blockName: headline2BlockName,
-    template: templates[headline2BlockName]
+    template: templates[headline2BlockName],
+    adaptive: true
   })
 
   registerBlock(editor, {
     label: 'Upload Image',
     category: BASICS_BLOCK_CATEGORY,
     blockName: imageBlockName,
-    template: templates[imageBlockName]
+    template: templates[imageBlockName],
+    adaptive: true
   })
 
   registerBlock(editor, {
     label: 'Button',
     category: BASICS_BLOCK_CATEGORY,
     blockName: buttonBlockName,
-    template: templates[buttonBlockName]
+    template: templates[buttonBlockName],
+    adaptive: true
   })
 
   registerBlock(editor, {
     label: 'Social Group',
     category: BASICS_BLOCK_CATEGORY,
     blockName: socialGroupBlockName,
-    template: templates[socialGroupBlockName]
-  })
-
-  registerBlock(editor, {
-    label: 'Social Group Element',
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: socialGroupElementBlockName,
-    template: templates[socialGroupElementBlockName]
+    template: templates[socialGroupBlockName],
+    adaptive: true
   })
 
   registerBlock(editor, {
@@ -116,7 +112,8 @@ export default function registerStaticBlocks(
     label: 'Text',
     category: BASICS_BLOCK_CATEGORY,
     blockName: textElementBlockName,
-    template: templates[textElementBlockName]
+    template: templates[textElementBlockName],
+    adaptive: true
   })
 
   editor.on('block:drag:stop', (model: any, block: any) => {
@@ -128,13 +125,16 @@ export default function registerStaticBlocks(
       return
     }
 
-    const template = templates[model.attributes.attributes['data-block']]
+    const parent = model.parent()
 
-    const mjml = nunjucks.renderString(template, {
+    const template = templates[model.attributes.attributes['data-block']]
+    const adapted = adapt(parent, template)
+
+    const mjml = nunjucks.renderString(adapted, {
       ...renderData
     })
 
-    model.parent().append(mjml, { at: model.opt.at })
+    parent.append(mjml, { at: model.opt.at })
 
     model.remove()
   })

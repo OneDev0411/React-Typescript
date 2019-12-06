@@ -98,13 +98,13 @@ class Builder extends React.Component {
           label: 'Icon',
           name: 'name',
           options: [
+            { value: 'linkedin', name: 'Linkedin' },
             { value: 'facebook', name: 'Facebook' },
             { value: 'instagram', name: 'Instagram' },
             { value: 'twitter', name: 'Twitter' },
             { value: 'web', name: 'Web' },
             { value: 'youtube', name: 'Youtube' },
             { value: 'pinterest', name: 'Pinterest' },
-            { value: 'linkedin', name: 'Linkedin' },
             { value: 'snapchat', name: 'Snapchat' },
             { value: 'vimeo', name: 'Vimeo' },
             { value: 'tumblr', name: 'Tumblr' },
@@ -239,43 +239,8 @@ class Builder extends React.Component {
       this.registerEmailBlocks()
     }
 
-    if (!this.isEmailTemplate) {
-      this.registerSocialBlocks()
-    }
-
     this.props.onBuilderLoad({
       regenerateTemplate: this.regenerateTemplate
-    })
-  }
-
-  customizeRTE = () => {
-    const rte = this.editor.RichTextEditor
-    const items = rte.getAll()
-
-    items.map(i => i.name).forEach(rte.remove.bind(rte))
-
-    if (!this.isEmailTemplate) {
-      return
-    }
-
-    const icon = `<select>
-      <option>Insert Placeholder</option>
-      <option value="{{recipient.first_name or 'there'}}">Recipient First Name</option>
-      <option value="{{recipient.last_name or 'there'}}">Recipient Last Name</option>
-    </select>`
-
-    rte.add('first_name', {
-      icon,
-      event: 'change',
-      result: (rte, action) => {
-        const { value } = action.btn.firstChild
-
-        if (!value) {
-          return
-        }
-
-        rte.insertHTML(value)
-      }
     })
   }
 
@@ -576,7 +541,6 @@ class Builder extends React.Component {
     this.setEditorTemplateId(selectedTemplate.id)
     this.editor.setComponents(html)
     this.lockIn()
-    this.customizeRTE()
     this.setState({
       templateHtmlCss: this.getTemplateHtmlCss()
     })

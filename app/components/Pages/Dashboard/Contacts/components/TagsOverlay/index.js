@@ -399,7 +399,7 @@ class TagsOverlay extends React.Component {
     const drawerHeader = this.getDrawerHeader()
 
     return (
-      <OverlayDrawer open={isOpen} width={50}>
+      <OverlayDrawer open={isOpen}>
         <OverlayDrawer.Header>
           <Header title={drawerHeader} onClose={closeOverlay} />
         </OverlayDrawer.Header>
