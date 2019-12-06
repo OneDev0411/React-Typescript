@@ -8,7 +8,12 @@ import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-e
  * Loads an email campaign and normalizes it into an email thread
  */
 export function useEmailCampaignThreadLoader(
-  emailCampaignId: string | undefined
+  emailCampaignId: string | undefined,
+  /**
+   * contactId: if provided, the only EmailCampaignEmails that are associated
+   * to this contact will be fetched under `emails`
+   */
+  contactId?: string
 ) {
   const [setThreadsPromise, thread, loading, error] = useAsyncValue<{
     messages: IEmail<'html' | 'text'>[]
@@ -19,7 +24,8 @@ export function useEmailCampaignThreadLoader(
     if (emailCampaignId) {
       setThreadsPromise(
         getEmailCampaign(emailCampaignId, {
-          emailFields: ['text', 'html']
+          emailFields: ['text', 'html'],
+          contactId
         }).then(emailCampaign => {
           const email = getEmailCampaignEmail(emailCampaign)
 
@@ -30,7 +36,7 @@ export function useEmailCampaignThreadLoader(
         })
       )
     }
-  }, [setThreadsPromise, emailCampaignId])
+  }, [emailCampaignId, setThreadsPromise, contactId])
 
   useEffect(fetchThread, [fetchThread])
 

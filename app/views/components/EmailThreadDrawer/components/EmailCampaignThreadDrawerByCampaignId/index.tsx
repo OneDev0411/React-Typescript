@@ -10,6 +10,7 @@ import { useEmailCampaignThreadLoader } from '../../../EmailThread/use-email-cam
 
 interface Props extends DrawerProps {
   campaignId: string | undefined
+  contactId: string | undefined
 }
 
 /**
@@ -18,10 +19,12 @@ interface Props extends DrawerProps {
  */
 export function EmailCampaignThreadByCampaignId({
   campaignId,
+  contactId,
   ...drawerProps
 }: Props) {
   const { fetchThread, thread, loading, error } = useEmailCampaignThreadLoader(
-    campaignId
+    campaignId,
+    contactId
   )
 
   return (

@@ -30,6 +30,13 @@ interface GetEmailCampaignParams<
   emailRecipientsAssociations?: A2[]
   emailCampaignEmailsAssociation?: A3[]
   emailFields?: E[]
+  /**
+   * if passed and `emails` exists in emailCampaignAssociations, association
+   * condition to {'email_campaign.emails': {contact: contactId}} will be sent
+   * in association_condition which means only emails that are associated with
+   * the given contact will be returned under `emails`.
+   */
+  contactId?: string
 }
 
 export async function getEmailCampaign<
@@ -43,9 +50,13 @@ export async function getEmailCampaign<
     emailCampaignAssociations = DEFAULT_EMAIL_ASSOCIATIONS as A1[],
     emailRecipientsAssociations = DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS as A2[],
     emailCampaignEmailsAssociation = DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS as A3[],
-    emailFields = [] as E[]
+    emailFields = [] as E[],
+    contactId
   }: GetEmailCampaignParams<A1, A2, A3, E> = {}
 ): Promise<IEmailCampaign<A1, A2, A3, E>> {
+  const associationCondition = contactId
+    ? { 'email_campaign.emails': { contact: contactId } }
+    : undefined
   const response = await new Fetch().get(`/emails/${id}`).query({
     associations: [
       ...emailCampaignAssociations.map(toEntityAssociation('email_campaign')),
@@ -56,7 +67,8 @@ export async function getEmailCampaign<
         toEntityAssociation('email_campaign_email')
       )
     ],
-    select: emailFields.map(toEntityAssociation('email'))
+    select: emailFields.map(toEntityAssociation('email')),
+    association_condition: associationCondition
   })
 
   return response.body.data as IEmailCampaign<A1, A2, A3, E>
