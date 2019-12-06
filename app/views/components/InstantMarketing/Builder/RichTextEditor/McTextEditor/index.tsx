@@ -61,6 +61,7 @@ export const McTextEditor = forwardRef(function McTextEditor(
       toolbarRef={nativelyStopEventPropagationOfEventViaRef('mousedown', true)}
       minHeight={false}
       autofocus
+      placeholder=""
       classes={classes}
       {...textEditorProps}
     >
