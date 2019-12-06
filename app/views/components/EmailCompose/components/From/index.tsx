@@ -1,7 +1,14 @@
 import { Field, FieldRenderProps } from 'react-final-form'
 import * as React from 'react'
 import { ReactNode } from 'react'
-import { Box, FormLabel, MenuItem, Select, Typography } from '@material-ui/core'
+import {
+  Box,
+  FormHelperText,
+  FormLabel,
+  MenuItem,
+  Select,
+  Typography
+} from '@material-ui/core'
 
 /**
  * NOTE: The API for sending email is somehow not intuitive.
@@ -58,60 +65,70 @@ export function From({ accounts, children, user }: Props) {
   }
 
   const render = ({
-    microsoftProps,
-    googleProps
+    microsoft,
+    google
   }: {
-    microsoftProps: FieldRenderProps<any>
-    googleProps: FieldRenderProps<any>
+    microsoft: FieldRenderProps<any>
+    google: FieldRenderProps<any>
   }) => {
-    const value = googleProps.input.value || microsoftProps.input.value
+    const value = google.input.value || microsoft.input.value
     const handleChange = (event: React.ChangeEvent<{ value: string }>) => {
       const selectedAccount = getSelectedAccount(event.target.value)
 
-      googleProps.input.onChange(
+      google.input.onChange(
         selectedAccount && selectedAccount.type === 'google_credential'
           ? (selectedAccount.id as any)
           : undefined
       )
-      microsoftProps.input.onChange(
+      microsoft.input.onChange(
         selectedAccount && selectedAccount.type === 'microsoft_credential'
           ? (selectedAccount.id as any)
           : undefined
       )
     }
 
+    const error = google.meta.error || microsoft.meta.error
+
     return (
       <Box display="flex" alignItems="center" my={1}>
         <FormLabel style={{ marginBottom: 0 }}>From</FormLabel>
         <Box flex="1" px={2}>
           {hasAccounts ? (
-            <Select
-              required
-              value={value}
-              onChange={handleChange}
-              displayEmpty
-              renderValue={(value: string) => {
-                if (!value) {
-                  return '-- select --'
-                }
+            <>
+              <Select
+                required
+                value={value}
+                error={error}
+                onChange={handleChange}
+                displayEmpty
+                renderValue={(value: string) => {
+                  if (!value) {
+                    return '-- select --'
+                  }
 
-                const selectedAccount = getSelectedAccount(value)
+                  const selectedAccount = getSelectedAccount(value)
 
-                if (selectedAccount) {
-                  return accountToString(selectedAccount)
-                }
+                  if (selectedAccount) {
+                    return accountToString(selectedAccount)
+                  }
 
-                return <Typography color="error">Unknown Address</Typography>
-              }}
-              disableUnderline
-            >
-              {accounts &&
-                accounts.map(account => (
-                  <MenuItem key={account.id} value={account.id}>
-                    {accountToString(account)}
-                  </MenuItem>
-                ))}
-            </Select>
+                  return <Typography color="error">Unknown Address</Typography>
+                }}
+                disableUnderline
+              >
+                {accounts &&
+                  accounts.map(account => (
+                    <MenuItem key={account.id} value={account.id}>
+                      {accountToString(account)}
+                    </MenuItem>
+                  ))}
+              </Select>
+              {error && (
+                <FormHelperText error style={{ marginTop: 0 }}>
+                  {error}
+                </FormHelperText>
+              )}
+            </>
           ) : (
             // Right now we don't offer options for user
             // but we can easily add it. we need to accept
@@ -125,7 +142,6 @@ export function From({ accounts, children, user }: Props) {
   }
 
   return (
-    // TODO(current): handle validating and showing validation errors
     // It would be more simpler with useField if react-final-form was updated
     <Field
       name="google_credential"
@@ -134,8 +150,8 @@ export function From({ accounts, children, user }: Props) {
           name="microsoft_credential"
           render={microsoftProps =>
             render({
-              microsoftProps,
-              googleProps
+              microsoft: microsoftProps,
+              google: googleProps
             })
           }
         />

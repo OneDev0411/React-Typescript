@@ -1,5 +1,6 @@
 import { Field, Form } from 'react-final-form'
 import React, {
+  ReactNode,
   useCallback,
   useContext,
   useMemo,
@@ -7,21 +8,26 @@ import React, {
   useState
 } from 'react'
 import arrayMutators from 'final-form-arrays'
-import createDecorator from 'final-form-focus'
+import createFocusDecorator from 'final-form-focus'
+import { Link as RouterLink } from 'react-router'
 
-import { isEqual } from 'lodash'
+import { flow, isEqual } from 'lodash'
 
 import { TextField } from 'final-form-material-ui'
 
 import { addNotification as notify } from 'reapop'
 
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 
-import { Box, makeStyles } from '@material-ui/core'
+import { Box, Link, makeStyles } from '@material-ui/core'
 
 import { ClassesProps } from 'utils/ts-utils'
 
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+
+import { IAppState } from 'reducers/index'
+
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { EmailComposeFormProps, EmailFormValues } from '../types'
 import EmailBody from '../components/EmailBody'
@@ -194,22 +200,63 @@ function EmailComposeForm<T>({
     return handleSendEmail(form)
   }
 
-  const validate = useCallback(values => {
-    const errors: { [key in keyof EmailFormValues]?: string } = {}
-    const { to } = values
+  const allConnectedAccounts = useSelector(
+    flow(
+      (state: IAppState) => state.contacts.oAuthAccounts,
+      selectAllConnectedAccounts
+    )
+  )
 
-    if (!to || to.length === 0) {
-      errors.to = 'You should provide at least one recipient'
-    } else {
-      const recipientErrors = to.map(validateRecipient).filter(i => i)
+  const validate = useCallback(
+    (values: EmailFormValues) => {
+      const errors: { [key in keyof EmailFormValues]?: string | ReactNode } = {}
+      const { to } = values
 
-      if (recipientErrors.length > 0) {
-        errors.to = recipientErrors[0]
+      if (!to || to.length === 0) {
+        errors.to = 'You should provide at least one recipient'
+      } else {
+        const recipientErrors = to.map(validateRecipient).filter(i => i)
+
+        if (recipientErrors.length > 0) {
+          errors.to = recipientErrors[0]
+        }
       }
-    }
 
-    return errors
-  }, [])
+      const invalidAccountMsg = (type: string) => (
+        <>
+          Selected {type} account is removed or no longer connected.{' '}
+          <Link
+            component={RouterLink}
+            target="_blank"
+            to="/dashboard/account/connected-accounts"
+          >
+            Connected Accounts
+          </Link>
+          .
+        </>
+      )
+
+      const accountExists = (accountId: string) =>
+        allConnectedAccounts.some(account => account.id === accountId)
+
+      if (
+        values.microsoft_credential &&
+        !accountExists(values.microsoft_credential)
+      ) {
+        errors.microsoft_credential = invalidAccountMsg('Outlook')
+      }
+
+      if (
+        values.google_credential &&
+        !accountExists(values.google_credential)
+      ) {
+        errors.google_credential = invalidAccountMsg('Google')
+      }
+
+      return errors
+    },
+    [allConnectedAccounts]
+  )
 
   const scrollToEnd = () => {
     if (emailBodyEditorRef.current) {
@@ -217,23 +264,32 @@ function EmailComposeForm<T>({
     }
   }
 
-  const decorators = useMemo(
-    () => [
-      createDecorator(() => {
+  const decorators = useMemo(() => {
+    return [
+      // we use this decorator to expand to if form is submitted
+      // while it has error
+      createFocusDecorator(() => {
+        const expandTolFields = () => {
+          setTopFieldsCollapsed(false)
+        }
+
         return [
           {
-            // we use this decorator to expand to if form is submitted
-            // while it has error
             name: 'to',
-            focus: () => {
-              setTopFieldsCollapsed(false)
-            }
+            focus: expandTolFields
+          },
+          {
+            name: 'microsoft_credential',
+            focus: expandTolFields
+          },
+          {
+            name: 'google_credential',
+            focus: expandTolFields
           }
         ]
       })
-    ],
-    []
-  )
+    ]
+  }, [])
 
   return (
     <Form
