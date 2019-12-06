@@ -70,6 +70,13 @@ declare type IEmailRecipient<
   Association<'brand', IBrand, Associations> &
   Association<'agent', IAgent, Associations>
 
+declare interface IEmailCampaignAttachment
+  extends IModel<'email_campaign_attachment'> {
+  campaign: UUID
+  content_id: string | undefined
+  file: IFile
+  is_inline: boolean
+}
 abstract interface IEmailAttachmentInputBase {
   is_inline: boolean
   content_id?: string
@@ -173,7 +180,7 @@ declare type IEmailCampaign<
     IEmailCampaignEmail<EmailCampaignEmailAssociation>[] | null,
     Associations
   > &
-  Association<'attachments', IFile[] | null, Associations>
+  Association<'attachments', IEmailCampaignAttachment[] | null, Associations>
 
 declare type IEmailCampaignEmail<
   Associations extends IEmailCampaignEmailAssociation = '',

@@ -93,7 +93,7 @@ export function EditEmailDrawer({
 
   if (data) {
     const initialValues: Partial<EmailFormValues> = {
-      attachments: data.attachments || [],
+      attachments: (data.attachments || []).map(attachment => attachment.file),
       from: data.from,
       microsoft_credential: data.microsoft_credential,
       google_credential: data.google_credential,

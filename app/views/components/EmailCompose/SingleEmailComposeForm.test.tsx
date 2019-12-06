@@ -33,6 +33,14 @@ describe('BulkEmailComposeForm', () => {
     const $ = render(
       <TestBed
         reduxState={{
+          contacts: {
+            oAuthAccounts: {
+              loading: {
+                microsoft: false,
+                google: false
+              }
+            }
+          },
           deals: {
             list: { [deal.id]: deal },
             roles: keyBy([role], 'id'),
