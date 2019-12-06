@@ -36,6 +36,14 @@ export function getReplyRecipients(
  */
 export function getReplyAllRecipients(
   email: EmailThreadEmail,
+  /**
+   * ownEmail: the email address of the owner of the inbox.
+   * if an email is send from x to a,b and c, and we are using "Reply All"
+   * action as b, x will be in `to` while a and c will be in `cc`.
+   * In other words, when replying (all) an inbound email, all to and cc
+   * recipients will be in cc, except for the owner which obviously doesn't
+   * want to email themselves when replying.
+   */
   ownEmail: string
 ) {
   if (email.inBound) {

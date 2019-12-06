@@ -137,11 +137,13 @@ export function SingleEmailComposeForm({
           This is kind of a hack for a behavior in react-final-form.
           When `initialValues` are changed, it updates `values` but only
           those fields that have a corresponding field rendered at that
-          moment. `google_credential` and `microsoft_credential` may be updated
-          in initialValues while top fields are collapsed and therefore,
-          the changes are never reflected to `values` in this case. we
-          render two dummy fields to prevent this issue.
+          moment. `to`, `cc`, `google_credential` and `microsoft_credential` may
+          be updated in initialValues while top fields are collapsed and
+          therefore, the changes are never reflected to `values` in this case.
+          we render two dummy fields to prevent this issue.
           */}
+          <Field name="cc" render={() => null} />
+          <Field name="to" render={() => null} />
           <Field name="google_credential" render={() => null} />
           <Field name="microsoft_credential" render={() => null} />
 

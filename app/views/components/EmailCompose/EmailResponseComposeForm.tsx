@@ -3,9 +3,13 @@ import { OAuthProvider } from 'constants/contacts'
 import React, { useCallback, useMemo } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import { useSelector } from 'react-redux'
+import { flow } from 'lodash'
+import { shallowEqual } from 'recompose'
 
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 import { IAppState } from 'reducers'
+
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import {
   getReplyAllRecipients,
@@ -52,13 +56,22 @@ export function EmailResponseComposeForm({
   const classes = useStyles()
 
   const user = useSelector((state: IAppState) => state.user as IUser)
-
+  const allConnectedAccounts = useSelector<IAppState, IOAuthAccount[]>(
+    flow(
+      state => state.contacts.oAuthAccounts,
+      selectAllConnectedAccounts
+    ),
+    shallowEqual
+  )
   const initialValue = useMemo<EmailFormValues>((): EmailFormValues => {
+    const ownerAccount = allConnectedAccounts.find(
+      account => account.id === (email.microsoftId || email.googleId)
+    )
     const { to, cc } =
       responseType === 'forward'
         ? { to: [], cc: [] }
         : responseType === 'replyAll'
-        ? getReplyAllRecipients(email, '' /* FIXME(current) */)
+        ? getReplyAllRecipients(email, ownerAccount ? ownerAccount.email : '')
         : getReplyRecipients(email)
 
     return {
@@ -82,7 +95,7 @@ export function EmailResponseComposeForm({
           : [],
       subject: getReplySubject(responseType, email.subject)
     }
-  }, [email, responseType, user])
+  }, [allConnectedAccounts, email, responseType, user])
 
   const getHeaders = (emailInput: EmailFormValues) => {
     const fromType: OAuthProvider | null =
