@@ -18,10 +18,9 @@ export function useEmailCampaignThreadLoader(
   const fetchThread = useCallback(() => {
     if (emailCampaignId) {
       setThreadsPromise(
-        getEmailCampaign(emailCampaignId, undefined, undefined, undefined, [
-          'text',
-          'html'
-        ]).then(emailCampaign => {
+        getEmailCampaign(emailCampaignId, {
+          emailFields: ['text', 'html']
+        }).then(emailCampaign => {
           const email = getEmailCampaignEmail(emailCampaign)
 
           return {
