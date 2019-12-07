@@ -34,7 +34,6 @@ interface Props {
   onChanged: () => void
   initialAttachments: IFile[]
   isSubmitting: boolean
-  enableSchedule: boolean
   hasStaticBody?: boolean
   onEmailTemplateSelected: (template: IBrandEmailTemplate) => void
   onMarketingTemplateSelected: (template: IMarketingTemplateInstance) => void
@@ -118,35 +117,33 @@ export function Footer({
             data-test="compose-send-email"
             type="submit"
             disabled={busy || props.isSubmitDisabled}
-            leftRounded={props.enableSchedule}
+            leftRounded
           >
             {textForSubmitButton({
               isSubmitting: props.isSubmitting,
               isDateSet: isScheduled
             })}
           </ActionButton>
-          {props.enableSchedule ? (
-            <Field
-              name="due_at"
-              render={fieldProps => (
-                <DateTimePicker
-                  popUpButton={buttonProps => (
-                    <SchedulerButton
-                      onOpen={buttonProps.toggleOpen}
-                      isScheduled={isScheduled}
-                    />
-                  )}
-                  disabledDays={{
-                    before: new Date()
-                  }}
-                  popUpPosition="top-right"
-                  saveButtonText="Schedule"
-                  initialSelectedDate={fieldProps.input.value}
-                  onDone={fieldProps.input.onChange}
-                />
-              )}
-            />
-          ) : null}
+          <Field
+            name="due_at"
+            render={fieldProps => (
+              <DateTimePicker
+                popUpButton={buttonProps => (
+                  <SchedulerButton
+                    onOpen={buttonProps.toggleOpen}
+                    isScheduled={isScheduled}
+                  />
+                )}
+                disabledDays={{
+                  before: new Date()
+                }}
+                popUpPosition="top-right"
+                saveButtonText="Schedule"
+                initialSelectedDate={fieldProps.input.value}
+                onDone={fieldProps.input.onChange}
+              />
+            )}
+          />
 
           {onDelete && (
             <IconButton

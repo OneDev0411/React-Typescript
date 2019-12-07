@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import { Box } from '@material-ui/core'
 
 import { ModalProps } from '@material-ui/core/Modal'
 
 import { DialogTitle } from '../DialogTitle'
 import { EmailThreadEmails } from './EmailThreadEmails'
+import { normalizeThreadMessageToThreadEmail } from './helpers/normalize-to-email-thread-email'
 
 interface Props {
-  thread: IEmailThread
+  messages: IEmailThreadMessage[]
+  subject: string
   onClose?: ModalProps['onClose']
 }
 
@@ -15,37 +17,32 @@ interface Props {
  * A component to show an email thread, which is basically a title on top and
  * a list of email items.
  */
-export function EmailThread(props: Props) {
-  const [thread, setThread] = useState(props.thread)
-
-  useEffect(() => {
-    setThread(props.thread)
-  }, [props.thread])
+export function EmailThread({ messages, subject, onClose }: Props) {
+  const emails = useMemo(
+    () => messages.map(normalizeThreadMessageToThreadEmail),
+    [messages]
+  )
 
   return (
     <>
       <DialogTitle
         onClose={event => {
-          props.onClose && props.onClose(event, 'escapeKeyDown')
+          onClose && onClose(event, 'escapeKeyDown')
         }}
       >
-        {(thread[0] && thread[0].subject) || 'No Subject'}
+        {subject || 'No Subject'}
       </DialogTitle>
       <Box overflow="auto">
         <EmailThreadEmails
-          thread={thread}
-          onEmailSent={email => {
-            // Right now, outlook doesn't return the sent email. So
-            // we check if the email is undefined, we just close the
-            // thread dialog as it seems the most reasonable thing
-            // to do.
-            if (
-              email &&
-              email.thread_key === thread[thread.length - 1].thread_key
-            ) {
-              setThread([...thread, email])
-            } else if (props.onClose) {
-              props.onClose({}, 'escapeKeyDown')
+          emails={emails}
+          onEmailSent={() => {
+            // we can't append the email to the thread anymore because
+            // the result of sending email is an email campaign now.
+            // We can fetch the thread again and update it if we decided
+            // it's necessary to append the new email to the thread instead
+            // of closing th thread
+            if (onClose) {
+              onClose({}, 'escapeKeyDown')
             }
           }}
         />

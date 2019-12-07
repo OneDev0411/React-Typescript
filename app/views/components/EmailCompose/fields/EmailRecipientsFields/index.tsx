@@ -6,7 +6,7 @@ import { TextFieldProps } from '@material-ui/core/TextField'
 
 import { EmailFormValues } from '../../types'
 
-import { From } from '../From'
+import { From } from '../../components/From'
 import { CcBccButtons } from '../../components/CcBccButtons'
 
 import EmailRecipientsChipsInput from '../../../EmailRecipientsChipsInput'
@@ -16,7 +16,7 @@ interface Props {
   disableAddNewRecipient?: boolean
   includeQuickSuggestions?: boolean
   deal?: IDeal
-  fromOptions?: EmailFormValues['from'][]
+  senderAccounts?: IOAuthAccount[]
   EmailRecipientsChipsInputProps?: Partial<
     ComponentProps<typeof EmailRecipientsChipsInput>
   >
@@ -26,7 +26,7 @@ export function EmailRecipientsFields({
   values,
   disableAddNewRecipient = false,
   includeQuickSuggestions = true,
-  fromOptions,
+  senderAccounts,
   deal,
   EmailRecipientsChipsInputProps = {}
 }: Props) {
@@ -43,14 +43,19 @@ export function EmailRecipientsFields({
 
   return (
     <>
-      <Field component={From} name="from" options={fromOptions}>
-        <CcBccButtons
-          showCc={!isCcShown}
-          showBcc={!isBccShown}
-          onCcAdded={() => setCc(true)}
-          onBccAdded={() => setBcc(true)}
-        />
-      </Field>
+      <Field
+        name="from"
+        render={({ input }) => (
+          <From user={input.value as IUser} accounts={senderAccounts}>
+            <CcBccButtons
+              showCc={!isCcShown}
+              showBcc={!isBccShown}
+              onCcAdded={() => setCc(true)}
+              onBccAdded={() => setBcc(true)}
+            />
+          </From>
+        )}
+      />
 
       <Field
         name="bcc"

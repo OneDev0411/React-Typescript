@@ -467,6 +467,7 @@ export function Calendar({
       ref={listRef}
       rows={listRows}
       user={user as IUser}
+      contact={contact}
       isLoading={isLoading}
       loadingPosition={loadingPosition}
       onReachEnd={handleLoadNextEvents}

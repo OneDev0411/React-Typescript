@@ -1,5 +1,3 @@
-import { convertToAbsoluteAttachmentUrl } from './convert-to-absolute-attachment-url'
-
 /**
  * Decodes all "cid:[cid]" into real urls, based on attachments.
  * More information: https://tools.ietf.org/html/rfc2392
@@ -14,10 +12,7 @@ export function decodeContentIds(
     .filter(attachment => attachment.cid)
     .reduce(
       (body, attachment) =>
-        body.replace(
-          `cid:${attachment.cid}`,
-          convertToAbsoluteAttachmentUrl(attachment.url)
-        ),
+        body.replace(`cid:${attachment.cid}`, attachment.url),
       content || ''
     )
 }

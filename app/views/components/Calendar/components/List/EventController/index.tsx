@@ -23,7 +23,9 @@ export function EventController({
   onEventChange,
   onScheduledEmailChange
 }: Props) {
-  const { selectedEvent: event, setSelectedEvent } = useContext(ListContext)
+  const { selectedEvent: event, setSelectedEvent, contact } = useContext(
+    ListContext
+  )
 
   const eventDrawer =
     event && ['crm_task', 'crm_association'].includes(event.object_type) ? (
@@ -67,6 +69,7 @@ export function EventController({
     <EmailCampaignThreadByCampaignId
       open={!!isExecutedEmail}
       onClose={() => setSelectedEvent(null)}
+      contactId={contact && contact.id}
       campaignId={(event && event.campaign) || undefined}
     />
   )

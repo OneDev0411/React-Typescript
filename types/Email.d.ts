@@ -70,6 +70,29 @@ declare type IEmailRecipient<
   Association<'brand', IBrand, Associations> &
   Association<'agent', IAgent, Associations>
 
+declare interface IEmailCampaignAttachment
+  extends IModel<'email_campaign_attachment'> {
+  campaign: UUID
+  content_id: string | undefined
+  file: IFile
+  is_inline: boolean
+}
+abstract interface IEmailAttachmentInputBase {
+  is_inline: boolean
+  content_id?: string
+}
+
+interface IEmailAttachmentFileInput extends IEmailAttachmentInputBase {
+  file: UUID
+}
+interface IEmailAttachmentUrlInput extends IEmailAttachmentInputBase {
+  url: string
+  name: string
+}
+type IEmailAttachmentInput =
+  | IEmailAttachmentFileInput
+  | IEmailAttachmentUrlInput
+
 declare interface IEmailCampaignInputBase {
   due_at: Date | null
   from: UUID
@@ -77,7 +100,7 @@ declare interface IEmailCampaignInputBase {
   subject: string
   html: string
   text?: string
-  attachments?: UUID[]
+  attachments?: IEmailAttachmentInput[]
   template?: UUID
   /**
    * @deprecated, This is not used in practice and is added in initial
@@ -89,9 +112,18 @@ declare interface IEmailCampaignInputBase {
 declare interface IIndividualEmailCampaignInput
   extends IEmailCampaignInputBase {}
 
+interface IEmailHeaders {
+  message_id?: string
+  in_reply_to?: string
+  thread_id?: string
+}
+
 declare interface IEmailCampaignInput extends IEmailCampaignInputBase {
   cc?: IEmailRecipientInput[]
   bcc?: IEmailRecipientInput[]
+  headers: IEmailHeaders
+  google_credential?: string
+  microsoft_credential?: string
 }
 
 declare type IEmailCampaignAssociation =
@@ -101,9 +133,13 @@ declare type IEmailCampaignAssociation =
   | 'recipients'
   | 'attachments'
 
+declare type IEmailCampaignEmailAssociation = 'email'
+
 declare type IEmailCampaign<
   Associations extends IEmailCampaignAssociation = '',
-  RecipientAssociations extends IEmailCampaignRecipientAssociation = ''
+  RecipientAssociations extends IEmailCampaignRecipientAssociation = '',
+  EmailCampaignEmailAssociation extends IEmailCampaignEmailAssociation = '',
+  EmailFields extends IEmailOptionalFields = ''
 > = {
   id: UUID
   created_at: number
@@ -129,6 +165,9 @@ declare type IEmailCampaign<
   text: string
   type: 'email_campaign'
   sent: number
+  microsoft_credential: UUID
+  google_credential: UUID
+  headers: IEmailCampaignInput['headers']
 } & Association<
   'recipients',
   IEmailRecipient<RecipientAssociations>[],
@@ -136,23 +175,19 @@ declare type IEmailCampaign<
 > &
   Association<'from', IUser, Associations> &
   Association<'template', IMarketingTemplateInstance | null, Associations> &
-  Association<'emails', IEmailCampaignEmail[] | null, Associations> &
-  Association<'attachments', IFile[] | null, Associations>
+  Association<
+    'emails',
+    IEmailCampaignEmail<EmailCampaignEmailAssociation>[] | null,
+    Associations
+  > &
+  Association<'attachments', IEmailCampaignAttachment[] | null, Associations>
 
-declare interface IEmail {
-  domain?: string
-  to: string
-  from: string
-  subject: string
-  html: string
-  text?: string
-  headers?: any
-}
-
-declare interface IEmailCampaignEmail {
+declare type IEmailCampaignEmail<
+  Associations extends IEmailCampaignEmailAssociation = '',
+  EmailFields extends EmailFields = ''
+> = {
   id: string
   campaign: string
-  email: string
   contact: UUID | null
   accepted: number
   rejected: number
@@ -167,7 +202,37 @@ declare interface IEmailCampaignEmail {
   type: 'email_campaign_email'
   full_name: string
   profile_image_url: string | null
-}
+} & Association<'email', IEmail<EmailFields>, Associations>
+
+type IEmailOptionalFields = 'html' | 'text'
+
+declare type IEmail<Fields extends IEmailOptionalFields = ''> = {
+  id: UUID
+  created_at: number
+  from: string
+  to: string[]
+  subject: string
+  headers: IEmailCampaignInput['headers'] // ask
+  mailgun_id: string
+  domain: 'Marketing' // ask
+  campaign: UUID
+  cc: string[]
+  bcc: string[]
+  accepted: number
+  rejected: number
+  delivered: number
+  failed: number
+  opened: number
+  clicked: number
+  unsubscribed: number
+  complained: number
+  stored: number
+  google_id: null | string
+  microsoft_id: null | string
+  tracking_id: UUID
+  type: 'email'
+} & Association<'html', string, Fields> &
+  Association<'text', string, Fields>
 
 /**
  * This is corresponding to {@link IEmailRecipientInput}, but fields like

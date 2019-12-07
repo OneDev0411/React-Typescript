@@ -36,7 +36,7 @@ export const iFrameCustomBlockFn = (className: string) => (
   element: HTMLElement
 ) => {
   if (element.classList.contains(className)) {
-    const srcDoc = element.innerHTML
+    const srcDoc = `${element.outerHTML}`
 
     // To prevent being removed in stateFromHtml
     element.innerHTML = '\u200B'

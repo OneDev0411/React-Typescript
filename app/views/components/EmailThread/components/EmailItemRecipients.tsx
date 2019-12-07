@@ -1,8 +1,10 @@
 import * as React from 'react'
 import { Typography } from '@material-ui/core'
 
+import { EmailThreadEmail } from '../types'
+
 interface Props {
-  email: IEmailThreadEmail
+  email: EmailThreadEmail
 }
 
 export function EmailItemRecipients({ email }: Props) {
