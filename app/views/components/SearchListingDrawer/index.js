@@ -64,7 +64,20 @@ class SearchListingDrawer extends React.Component {
   })
 
   searchListing = async value => {
-    const response = await searchListings(value)
+    let response = await searchListings(value)
+
+    if (/^[0-9]{5,8}$/.test(value)) {
+      response = [
+        {
+          ...response.property,
+          is_mls_search: true,
+          id: response.id,
+          price: response.price,
+          status: response.status,
+          cover_image_url: response.cover_image_url
+        }
+      ]
+    }
 
     return response.filter(item => {
       if (item.is_mls_search || !this.props.allowedStatuses.length) {
