@@ -16,6 +16,8 @@ import Column3 from './column-3.mjml'
 import Image from './image.mjml'
 import Button from './button.mjml'
 import Text from './text.mjml'
+import Divider from './divider.mjml'
+import Spacer from './spacer.mjml'
 import SocialGroup from './social-group.mjml'
 
 export const headline1BlockName = 'headline-1'
@@ -24,6 +26,8 @@ export const column1ElementBlockName = 'column-1'
 export const column2ElementBlockName = 'column-2'
 export const column3ElementBlockName = 'column-3'
 export const textElementBlockName = 'text'
+export const dividerBlockName = 'divider'
+export const spacerBlockName = 'spacer'
 export const imageBlockName = 'mj-image'
 export const buttonBlockName = 'mj-button'
 export const socialGroupBlockName = 'mj-social-group'
@@ -38,6 +42,8 @@ templates[column2ElementBlockName] = Column2
 templates[column3ElementBlockName] = Column3
 
 templates[textElementBlockName] = Text
+templates[dividerBlockName] = Divider
+templates[spacerBlockName] = Spacer
 
 templates[imageBlockName] = Image
 templates[buttonBlockName] = Button
@@ -113,6 +119,22 @@ export default function registerStaticBlocks(
     category: BASICS_BLOCK_CATEGORY,
     blockName: textElementBlockName,
     template: templates[textElementBlockName],
+    adaptive: true
+  })
+
+  registerBlock(editor, {
+    label: 'Divider',
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: dividerBlockName,
+    template: templates[dividerBlockName],
+    adaptive: true
+  })
+
+  registerBlock(editor, {
+    label: 'Spacer',
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: spacerBlockName,
+    template: templates[spacerBlockName],
     adaptive: true
   })
 
