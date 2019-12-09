@@ -50,7 +50,8 @@ const config = {
       FB_APP_ID: JSON.stringify(process.env.FB_APP_ID),
       RECHAT_SPLITTER_URL: JSON.stringify(process.env.RECHAT_SPLITTER_URL),
       TENOR_API_KEY: JSON.stringify(process.env.TENOR_API_KEY),
-      UNSPLASH_API_KEY: JSON.stringify(process.env.UNSPLASH_API_KEY)
+      UNSPLASH_API_KEY: JSON.stringify(process.env.UNSPLASH_API_KEY),
+      DROPBOX_APP_KEY: JSON.stringify(process.env.DROP_BOX_APP_KEY)
     },
     __DEV__: __DEV__,
     NODE_ENV: env,
