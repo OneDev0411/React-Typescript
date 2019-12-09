@@ -1,10 +1,12 @@
 import { List, ListItem } from '@material-ui/core'
+import { useDropboxChooser } from 'use-dropbox-chooser'
 import * as React from 'react'
 
 import { Field } from 'react-final-form'
 
 import IconUpload from 'components/SvgIcons/Upload/IconUpload'
 import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
+import IconDropbox from 'components/SvgIcons/Dropbox/IconDropbox'
 
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
@@ -14,6 +16,7 @@ import { FilePicker } from '../../../FilePicker'
 import AddDealFile from '../AddDealFile'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
 import { UploadAttachment } from '../../fields/UploadAttachment'
+import config from '../../../../../../config/public'
 
 interface Props {
   deal?: IDeal
@@ -34,6 +37,14 @@ export function EmailAttachmentsDropdown({
   onChanged = () => {}
 }: Props) {
   const iconClasses = useIconStyles()
+
+  const dropboxChooser = useDropboxChooser({
+    appKey: config.dropbox.app_key,
+    chooserOptions: {
+      multiselect: true,
+      linkType: 'direct'
+    }
+  })
 
   return (
     <BaseDropdown
@@ -56,6 +67,42 @@ export function EmailAttachmentsDropdown({
             component={AddDealFile}
             onChanged={onChanged}
             onClick={close}
+          />
+          <Field
+            name="attachments"
+            render={({ input }) => (
+              <ListItem
+                button
+                disabled={dropboxChooser.isOpen}
+                onClick={async () => {
+                  try {
+                    const files = await dropboxChooser.open()
+
+                    if (input) {
+                      input.onChange([
+                        ...(input.value || []),
+                        ...files.map(
+                          ({ name, link }) =>
+                            ({
+                              name,
+                              is_inline: false,
+                              url: link
+                            } as IEmailAttachmentUrlInput)
+                        )
+                      ] as any)
+                    }
+                  } catch (e) {}
+
+                  close()
+                }}
+              >
+                <IconDropbox
+                  size={iconSizes.small}
+                  className={iconClasses.rightMargin}
+                />
+                Attach from dropbox
+              </ListItem>
+            )}
           />
           <UploadAttachment uploadAttachment={uploadAttachment}>
             {({ upload }) => {

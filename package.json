@@ -243,6 +243,7 @@
     "unused-files-webpack-plugin": "^3.4.0",
     "use-debounce": "^2.0.1",
     "use-deep-compare-effect": "^1.2.0",
+    "use-dropbox-chooser": "0.0.4",
     "use-resize-observer": "^4.0.0",
     "validator": "^9.2.0",
     "webpack": "^4.28.4",
