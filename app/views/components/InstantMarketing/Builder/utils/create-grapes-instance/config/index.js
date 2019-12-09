@@ -1,5 +1,9 @@
 export default {
   canvasCss: `
+  html {
+    background-color: rgb(243, 243, 243);
+  }
+
   .gjs-comp-selected[data-gjs-type=text] {
     outline-offset: 5px;
   }
