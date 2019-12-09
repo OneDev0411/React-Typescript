@@ -29,5 +29,8 @@ export default {
   },
   unsplash: {
     api_key: process.env.UNSPLASH_API_KEY
+  },
+  dropbox: {
+    api_key: process.env.DROPBOX_APP_KEY
   }
 }
