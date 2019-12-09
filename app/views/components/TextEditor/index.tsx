@@ -104,19 +104,6 @@ export const TextEditor = forwardRef(
 
     editorStateRef.current = editorState
 
-    useEffect(() => {
-      const pluginsEditor = editorRef.current
-
-      if (autofocus && pluginsEditor) {
-        // draft-js-plugins-editor uses UNSAFE_componentWillMount to create
-        // the editor state with proper decorator. If we don't delay running
-        // this, it causes decorator to not being set correctly which has
-        // serious consequences. e.g. links don't render properly.
-        setImmediate(() => pluginsEditor.editor && pluginsEditor.focus())
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
     const handleChange = (newState: EditorState) => {
       if (!newState) {
         return false
@@ -176,6 +163,29 @@ export const TextEditor = forwardRef(
     const allPlugins = [...defaultPlugins, ...plugins]
 
     const rerenderEditor = useRerenderOnChange(allPlugins, shallowEqual)
+
+    const autoFocusRef = useRef(false)
+
+    useEffect(() => {
+      const pluginsEditor = editorRef.current
+
+      if (
+        !autoFocusRef.current &&
+        autofocus &&
+        pluginsEditor &&
+        rerenderEditor
+      ) {
+        // draft-js-plugins-editor uses UNSAFE_componentWillMount to create
+        // the editor state with proper decorator. If we don't delay running
+        // this, it causes decorator to not being set correctly which has
+        // serious consequences. e.g. links don't render properly.
+        setTimeout(() => {
+          autoFocusRef.current = true
+          pluginsEditor.editor && pluginsEditor.focus()
+        })
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rerenderEditor])
 
     const dropzoneProps: Partial<
       ComponentType<typeof Dropzone>
