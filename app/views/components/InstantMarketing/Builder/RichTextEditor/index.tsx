@@ -32,8 +32,6 @@ export function createRichTextEditor(editor: Editor) {
   const richTextEditor: any = editor.RichTextEditor
   const $toolbar = richTextEditor.getToolbarEl()
 
-  const toolbarOffset = 41
-
   $toolbar.innerHTML = ''
   $toolbar.style.backgroundColor = 'transparent'
   $toolbar.style.border = 'none'
@@ -57,7 +55,7 @@ export function createRichTextEditor(editor: Editor) {
     // possible to handle it with `pos.top`
     const topOffsetFix = pos.canvasTop >= pos.elementTop ? pos.elementHeight : 0
 
-    $toolbar.style.marginTop = `${-(toolbarOffset + topOffsetFix)}px`
+    $toolbar.style.marginTop = `${-topOffsetFix}px`
     pos.top = pos.elementTop - borderWidth - outlineOffset
   })
 

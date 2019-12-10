@@ -32,6 +32,18 @@ const useStyles = makeStyles(
         border: 'none'
       },
       toolbar: {
+        /**
+         * with `position: fixed`:
+         *  - it will stay on top of the header.
+         *  - it will occupy only the required width to fit all toolbar content
+         * without `position: fixed`:
+         *  - It will not overflow the canvas, and therefore it will go behind
+         *    the header
+         *  - It will occupy the full available width (block display).
+         */
+        position: 'fixed',
+        zIndex: 1,
+        marginTop: '-41px!important',
         pointerEvents: 'initial',
         background: '#fff',
         boxShadow: theme.shadows[5],
