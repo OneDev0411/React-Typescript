@@ -4,7 +4,6 @@ import { ComponentProps, useCallback, useEffect, useState } from 'react'
 import { useContext } from 'react'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
-import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
 
 import { deleteEmailCampaign } from 'models/email/delete-email-campaign'
 
@@ -94,8 +93,10 @@ export function EditEmailDrawer({
 
   if (data) {
     const initialValues: Partial<EmailFormValues> = {
-      attachments: data.attachments || [],
-      from: normalizeUserForEmailFrom(data.from),
+      attachments: (data.attachments || []).map(attachment => attachment.file),
+      from: data.from,
+      microsoft_credential: data.microsoft_credential,
+      google_credential: data.google_credential,
       subject: data.subject,
       body: data.template
         ? getTemplateInstancePreviewImage(data.template)
@@ -136,7 +137,7 @@ export function EditEmailDrawer({
     return data.individual ? (
       <BulkEmailComposeDrawer {...commonProps} />
     ) : (
-      <SingleEmailComposeDrawer {...commonProps} />
+      <SingleEmailComposeDrawer {...commonProps} headers={data.headers || {}} />
     )
   }
 

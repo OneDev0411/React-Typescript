@@ -22,7 +22,7 @@ export function SingleEmailComposeDrawer({
   ...otherProps
 }: Props) {
   return (
-    <OverlayDrawer open={isOpen} onClose={onClose}>
+    <OverlayDrawer open={isOpen} onClose={onClose} width="43rem">
       <OverlayDrawer.Header title={emailId ? 'Edit Email' : 'New Email'} />
       <SingleEmailComposeForm {...otherProps} emailId={emailId} />
     </OverlayDrawer>

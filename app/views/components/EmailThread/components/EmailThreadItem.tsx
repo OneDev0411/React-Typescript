@@ -24,14 +24,13 @@ import IconReply from '../../SvgIcons/Reply/IconReply'
 import IconReplyAll from '../../SvgIcons/ReplyAll/IconReplyAll'
 import IconForward from '../../SvgIcons/Forward/IconForward'
 import { Attachment } from '../../EmailCompose/components/Attachment'
-import { EmailResponseType } from '../types'
+import { EmailResponseType, EmailThreadEmail } from '../types'
 import { decodeContentIds } from '../helpers/decode-content-ids'
-import { convertToAbsoluteAttachmentUrl } from '../helpers/convert-to-absolute-attachment-url'
 import { EmailResponseComposeForm } from '../../EmailCompose/EmailResponseComposeForm'
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
 
 interface Props {
-  email: IEmailThreadEmail
+  email: EmailThreadEmail
   collapsed: boolean
 
   /**
@@ -42,19 +41,12 @@ interface Props {
   /**
    * callback to be called when replied or forwarded
    */
-  onEmailSent?: (email: IEmailThreadEmail) => void
+  onEmailSent?: (email: IEmailCampaign) => void
 
   /**
    * If true, will show 'reply' and 'forward' buttons under email content
    */
   showBottomButtons?: boolean
-
-  /**
-   * Default value of the email `from`. owner is null in rechat emails (send
-   * via mailgun), and therefore default `from` may not be extracted based
-   * on email in these cases. So it's passed from the thread.
-   */
-  defaultFrom?: string
 }
 
 const styles = (theme: Theme) =>
@@ -83,7 +75,6 @@ export function EmailThreadItem({
   email,
   onToggleCollapsed,
   showBottomButtons = false,
-  defaultFrom,
   onEmailSent = () => {},
   ...props
 }: Props) {
@@ -101,9 +92,12 @@ export function EmailThreadItem({
   const iconClassName = classNames(iconClasses.rightMargin, iconClasses.small)
 
   const emailBody = useMemo(
-    () => decodeContentIds(email.attachments, email.html_body || ''),
+    () => decodeContentIds(email.attachments, email.htmlBody || ''),
     [email]
   )
+
+  const hasNonInlineAttachments =
+    email.attachments.filter(attachment => !attachment.isInline).length > 0
 
   return (
     <div className={classes.root}>
@@ -124,7 +118,7 @@ export function EmailThreadItem({
         </Box>
         <Box alignSelf="start">
           <Box display="flex" alignItems="center" height="1.25rem">
-            {email.has_attachments && (
+            {hasNonInlineAttachments && (
               <IconAttachment
                 style={{ transform: 'rotate(90deg)' }}
                 className={classNames(
@@ -135,9 +129,9 @@ export function EmailThreadItem({
             )}
             <Typography color="textSecondary" variant="caption">
               {/* I think we should conditionally show year, if it's not current year. fecha doesn't support such formatting I guess */}
-              {fecha.format(new Date(email.message_date), 'MMM DD, hh:mm A')}
+              {fecha.format(email.date, 'MMM DD, hh:mm A')}
             </Typography>
-            {collapsed || !email.thread_id ? null : (
+            {collapsed || !email.threadId ? null : (
               <EmailItemHeaderActions
                 email={email}
                 onReply={() => openResponse('reply')}
@@ -156,16 +150,13 @@ export function EmailThreadItem({
 
             {email.attachments.map(attachment => (
               <Attachment key={attachment.id} fullWidth={false}>
-                <Link
-                  target="_blank"
-                  href={convertToAbsoluteAttachmentUrl(attachment.url)}
-                >
+                <Link target="_blank" href={attachment.url}>
                   {attachment.name}
                 </Link>
               </Attachment>
             ))}
 
-            {(showBottomButtons || isResponseOpen) && email.thread_id && (
+            {(showBottomButtons || isResponseOpen) && email.threadId && (
               <Box my={1}>
                 <Button
                   className={classes.actionButton}
@@ -216,7 +207,6 @@ export function EmailThreadItem({
                   onCancel={() => {
                     setIsResponseOpen(false)
                   }}
-                  defaultFrom={defaultFrom}
                   onSent={email => {
                     setIsResponseOpen(false)
                     onEmailSent(email)

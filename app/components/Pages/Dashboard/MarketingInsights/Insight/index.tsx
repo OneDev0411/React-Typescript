@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Helmet } from 'react-helmet'
 import Dialog from '@material-ui/core/Dialog'
 
@@ -7,7 +7,7 @@ import ContactInfo from 'components/ContactInfo'
 
 import { EmailThread } from 'components/EmailThread'
 
-import { emailCampaignToThread } from 'models/email/helpers/email-campaign-to-thread'
+import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
 
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
@@ -33,7 +33,7 @@ function Insight(props: InsightPropsType) {
 
   const [isOpenViewEmail, setOpenViewEmail] = React.useState(false)
   const { item, isLoading } = useItemData(id)
-  const thread = useMemo(() => item && emailCampaignToThread(item), [item])
+  const email = item && getEmailCampaignEmail(item)
 
   if (isLoading) {
     return (
@@ -106,7 +106,13 @@ function Insight(props: InsightPropsType) {
           onClose={closeEmailView}
           open={isOpenViewEmail}
         >
-          {thread && <EmailThread thread={thread} onClose={closeEmailView} />}
+          {email && (
+            <EmailThread
+              messages={[email]}
+              subject={email.subject}
+              onClose={closeEmailView}
+            />
+          )}
         </Dialog>
         <InsightContainer>
           <aside className="sidebar">

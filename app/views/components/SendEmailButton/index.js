@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import ActionButton from 'components/Button/ActionButton'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import MissingEmailModal from 'components/MissingEmailModal'
-import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
 
 function SendEmailButton(props) {
   const { deal } = props
@@ -68,7 +67,7 @@ function SendEmailButton(props) {
           initialValues={{
             attachments: [],
             to: props.recipients,
-            from: normalizeUserForEmailFrom(props.user)
+            from: props.user
           }}
           deal={deal}
           onClose={() => setIsOpen(false)}

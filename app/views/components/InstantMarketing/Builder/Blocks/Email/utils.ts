@@ -39,7 +39,11 @@ import {
   listingRightBlockName
 } from './Listings'
 
-import { headline1BlockName } from './Statics'
+import {
+  headline1BlockName,
+  dividerBlockName,
+  spacerBlockName
+} from './Statics'
 import { headline2BlockName } from './Statics'
 import { agentLeftBlockName, agentGridBlockName } from './Agents'
 import { blockName as rechatImageBlockName } from './Image'
@@ -54,7 +58,9 @@ const BLOCK_IDS_TO_REMOVE = [
   'mj-1-column',
   'mj-2-columns',
   'mj-3-columns',
-  'mj-text'
+  'mj-text',
+  'mj-divider',
+  'mj-spacer'
 ]
 
 const BLOCK_BUTTON_ICONS = {
@@ -67,8 +73,8 @@ const BLOCK_BUTTON_ICONS = {
   [headline1BlockName]: Headline1Icon,
   [headline2BlockName]: Headline2Icon,
   text: TextIcon,
-  'mj-divider': DividerIcon,
-  'mj-spacer': SpacerIcon,
+  [dividerBlockName]: DividerIcon,
+  [spacerBlockName]: SpacerIcon,
   'mj-image': ImageIcon,
   'mj-button': ButtonIcon,
   'mj-social-group': ShareIcon,
@@ -99,8 +105,8 @@ const BLOCK_BUTTONS_ORDER = [
   headline1BlockName,
   headline2BlockName,
   'text',
-  'mj-divider',
-  'mj-spacer',
+  dividerBlockName,
+  spacerBlockName,
   'mj-button',
   'mj-social-group',
 

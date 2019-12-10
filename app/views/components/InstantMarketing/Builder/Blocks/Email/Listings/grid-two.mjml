@@ -12,13 +12,13 @@ align="right"
   <mj-column width="50%" padding="24px">
     <mj-image rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
 
-    <mj-text font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="13px" color="#000" {{ alignment(loop.index0) }}>
+    <mj-text font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="13px" color="#000" padding-bottom="0" padding-top="0" {{ alignment(loop.index0) }}>
       {{listing.property.address.street_address}}
       <span> | </span>
-      <strong>{{ listing.price | currency }}</strong>
+      <strong>{{ listing.price | currency }}{% if listing.is_lease %}/mo{% endif %}</strong>
     </mj-text>
 
-    <mj-button inner-padding="0" text-decoration="underline" background-color="#fff" color="#000" font-size="18px" font-weight="500" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" href="{{getListingUrl(listing)}}" {{ alignment(loop.index0) }}>
+    <mj-button inner-padding="0" text-decoration="underline" background-color="#fff" color="#000" font-size="15px" font-weight="600" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" href="{{getListingUrl(listing)}}" {{ alignment(loop.index0) }}>
       Additional Information
     </mj-button>
 

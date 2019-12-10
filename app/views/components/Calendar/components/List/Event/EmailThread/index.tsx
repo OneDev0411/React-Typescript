@@ -16,18 +16,18 @@ import { EventBadge } from '../components/EventBadge'
 
 interface Props {
   style: React.CSSProperties
-  event: ICalendarEvent
+  event: ICalendarEvent<'full_thread'>
   nextItem: ICalendarListRow
 }
 
 export function EmailThread({ style, event, nextItem }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
-  const thread = event.full_thread! // FIXME(NOW)
+  const thread = event.full_thread
 
   const handleContainerClick = () => setSelectedEvent(event)
 
   const { visibleItems: recipients, othersText } = getTrimmedArrayAndOthersText(
-    thread.to
+    thread.recipients
   )
 
   return (
@@ -83,8 +83,8 @@ export function EmailThread({ style, event, nextItem }: Props) {
               &nbsp;and&nbsp;<span>{othersText}</span>
             </>
           )}
-          {thread.email_count > 1 && (
-            <EventBadge>{thread.email_count}</EventBadge>
+          {thread.message_count > 1 && (
+            <EventBadge>{thread.message_count}</EventBadge>
           )}
           {thread.has_attachments && (
             <EventBadge padding="dense">

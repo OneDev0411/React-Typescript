@@ -16,22 +16,60 @@ const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[]
   'agent'
 ]
 
+const DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS: IEmailCampaignEmailAssociation[] = [
+  'email'
+]
+
+interface GetEmailCampaignParams<
+  A1 extends IEmailCampaignAssociation,
+  A2 extends IEmailCampaignRecipientAssociation,
+  A3 extends IEmailCampaignEmailAssociation,
+  E extends IEmailOptionalFields
+> {
+  emailCampaignAssociations?: A1[]
+  emailRecipientsAssociations?: A2[]
+  emailCampaignEmailsAssociation?: A3[]
+  emailFields?: E[]
+  /**
+   * if passed and `emails` exists in emailCampaignAssociations, association
+   * condition to {'email_campaign.emails': {contact: contactId}} will be sent
+   * in association_condition which means only emails that are associated with
+   * the given contact will be returned under `emails`.
+   */
+  contactId?: string
+}
+
 export async function getEmailCampaign<
   A1 extends IEmailCampaignAssociation,
-  A2 extends IEmailCampaignRecipientAssociation
+  A2 extends IEmailCampaignRecipientAssociation,
+  A3 extends IEmailCampaignEmailAssociation,
+  E extends IEmailOptionalFields
 >(
-  id,
-  associations: A1[] = DEFAULT_EMAIL_ASSOCIATIONS as A1[],
-  recipientAssociations: A2[] = DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS as A2[]
-): Promise<IEmailCampaign<A1, A2>> {
+  id: string,
+  {
+    emailCampaignAssociations = DEFAULT_EMAIL_ASSOCIATIONS as A1[],
+    emailRecipientsAssociations = DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS as A2[],
+    emailCampaignEmailsAssociation = DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS as A3[],
+    emailFields = [] as E[],
+    contactId
+  }: GetEmailCampaignParams<A1, A2, A3, E> = {}
+): Promise<IEmailCampaign<A1, A2, A3, E>> {
+  const associationCondition = contactId
+    ? { 'email_campaign.emails': { contact: contactId } }
+    : undefined
   const response = await new Fetch().get(`/emails/${id}`).query({
     associations: [
-      ...associations.map(toEntityAssociation('email_campaign')),
-      ...recipientAssociations.map(
+      ...emailCampaignAssociations.map(toEntityAssociation('email_campaign')),
+      ...emailRecipientsAssociations.map(
         toEntityAssociation('email_campaign_recipient')
+      ),
+      ...emailCampaignEmailsAssociation.map(
+        toEntityAssociation('email_campaign_email')
       )
-    ]
+    ],
+    select: emailFields.map(toEntityAssociation('email')),
+    association_condition: associationCondition
   })
 
-  return response.body.data as IEmailCampaign<A1, A2>
+  return response.body.data as IEmailCampaign<A1, A2, A3, E>
 }

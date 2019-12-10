@@ -12,8 +12,6 @@ import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 
-import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
-
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
 import { getTemplateTypes } from '../../helpers/get-template-types'
 import SocialDrawer from '../../components/SocialDrawer'
@@ -348,7 +346,7 @@ class SendMlsListingCard extends React.Component {
             isOpen
             hasStaticBody
             initialValues={{
-              from: normalizeUserForEmailFrom(this.state.owner),
+              from: this.state.owner,
               to: this.Recipients,
               body: this.state.emailBody
             }}

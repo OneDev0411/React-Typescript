@@ -21,6 +21,7 @@ import { Row } from './Row'
 
 interface Props {
   user: IUser
+  contact: IContact | undefined
   rows: ICalendarListRow[]
   isLoading: boolean
   loadingPosition: LoadingPosition
@@ -99,10 +100,13 @@ const CalendarList: React.FC<Props> = props => {
     }
   }
 
+  const { contact } = props
+
   return (
     <ListContext.Provider
       value={{
         selectedEvent,
+        contact,
         setSelectedEvent
       }}
     >

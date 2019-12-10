@@ -1,6 +1,8 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
+import { isLeaseProperty } from 'utils/listing'
+
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { LISTINGS_BLOCK_CATEGORY } from '../../../constants'
@@ -38,7 +40,7 @@ interface ListingBlock {
 let modelHandle: any
 let renderData: TemplateRenderData
 
-const selectHandler = (listings?: IListing[]) => {
+const selectHandler = (listings?: (IListing & { is_lease?: boolean })[]) => {
   if (!modelHandle) {
     return
   }
@@ -48,7 +50,10 @@ const selectHandler = (listings?: IListing[]) => {
   if (listings && listings.length) {
     const mjml = nunjucks.renderString(template, {
       ...renderData,
-      listings
+      listings: listings.map(listing => ({
+        ...listing,
+        is_lease: isLeaseProperty(listing)
+      }))
     })
 
     modelHandle.parent().append(mjml, { at: modelHandle.opt.at })

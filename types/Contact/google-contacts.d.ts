@@ -4,7 +4,7 @@ declare interface IOAuthAccountImport {
   type: string
 }
 
-declare interface IOAuthAccount {
+declare interface IOAuthAccountBase {
   brand: UUID
   contacts_last_sync_at: string
   created_at: string
@@ -33,8 +33,14 @@ declare interface IOAuthAccount {
   user: UUID
 }
 
-declare interface IGoogleAccount extends IOAuthAccount {}
-declare interface IMicrosoftAccount extends IOAuthAccount {}
+declare interface IGoogleAccount extends IOAuthAccountBase {
+  type: 'google_credential'
+}
+declare interface IMicrosoftAccount extends IOAuthAccountBase {
+  type: 'microsoft_credential'
+}
+
+declare type IOAuthAccount = IGoogleAccount | IMicrosoftAccount
 
 declare type IGoogleScope =
   | 'contacts.readonly'

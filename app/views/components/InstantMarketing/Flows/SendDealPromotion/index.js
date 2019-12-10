@@ -13,8 +13,6 @@ import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import { attachDealDataToListing } from 'components/SearchListingDrawer/helpers/attach-deal-to-listing'
 
-import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
-
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplateTypes } from '../../helpers/get-template-types'
 
@@ -204,7 +202,7 @@ class SendDealPromotion extends React.Component {
             isOpen
             hasStaticBody
             initialValues={{
-              from: normalizeUserForEmailFrom(this.state.owner),
+              from: this.state.owner,
               to: this.props.recipients,
               body: this.state.emailBody
             }}
