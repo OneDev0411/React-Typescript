@@ -17,7 +17,6 @@ import { EmailFormValues } from './types'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import EmailComposeForm from './EmailComposeForm'
 import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
-import { useExpressionEvaluator } from './EmailComposeForm/use-expression-evaluator'
 import { attachmentFormValueToEmailAttachmentInput } from './helpers/attachment-form-value-to-email-attachment-input'
 
 interface Props
@@ -53,7 +52,6 @@ export function SingleEmailComposeForm({
   headers = {},
   ...otherProps
 }: Props) {
-  const { evaluate } = useExpressionEvaluator()
   const oAuthAccounts = useSelector(
     (state: IAppState) => state.contacts.oAuthAccounts
   )
@@ -91,10 +89,6 @@ export function SingleEmailComposeForm({
   const handleSendEmail = async (
     formValue: EmailFormValues & { template: string }
   ) => {
-    if (!formValue.due_at || formValue.due_at.getTime() <= Date.now()) {
-      formValue.body = await evaluate(formValue.body || '', formValue)
-    }
-
     const emailData = getEmail({
       from: (formValue.from && formValue.from.id) || '',
       microsoft_credential: formValue.microsoft_credential,
