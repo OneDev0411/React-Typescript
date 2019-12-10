@@ -2,12 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import Drawer from 'components/OverlayDrawer'
+import { Callout } from 'components/Callout'
 
 import { setSelectedTask } from 'actions/deals'
 
 import Header from './Header'
 import Comments from './Comments'
-import DraftBanner from './DraftBanner'
 
 function TaskView(props) {
   const { task } = props
@@ -36,7 +36,18 @@ function TaskView(props) {
           padding: '2rem 1.5rem'
         }}
       >
-        <DraftBanner isDraftDeal={props.deal.is_draft} />
+        {props.deal.is_draft && (
+          <Callout type="warn" style={{ margin: '1rem 0' }}>
+            Once your deal goes live, admin can read the messages.
+          </Callout>
+        )}
+
+        {task && task.task_type === 'YardSign' && (
+          <Callout type="info" style={{ margin: '1rem 0' }}>
+            Please add any special instructions for the yard sign in the
+            comments.
+          </Callout>
+        )}
 
         <Comments
           deal={props.deal}
