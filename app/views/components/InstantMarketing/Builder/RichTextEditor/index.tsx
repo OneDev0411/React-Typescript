@@ -3,10 +3,12 @@ import ReactDom from 'react-dom'
 
 import { Editor } from 'grapesjs'
 
+import { TextEditorProps } from 'components/TextEditor/types'
+import { useEditor } from 'components/TextEditor/hooks/use-editor'
+
 import { AppTheme } from '../../../../../AppTheme'
 import { McTextEditor } from './McTextEditor'
 import { getTotalGrapeBlockContentPadding } from './utils/get-total-grape-block-content-padding'
-import { TextEditorProps } from '../../../TextEditor/types'
 
 const RTE_BLOCK_TYPE_BLACKLIST = ['mj-button', 'link']
 
@@ -153,16 +155,7 @@ export function createRichTextEditor(editor: Editor) {
 
     const defaultValue = el.innerHTML
 
-    const updateHeight = () => {
-      setEditorContent(el, editorRef.current.getHtml())
-
-      richTextEditor.updatePosition()
-    }
-
-    const padding = getTotalGrapeBlockContentPadding(
-      originalFirstChild || el,
-      outlineOffset
-    )
+    const padding = getTotalGrapeBlockContentPadding(el, outlineOffset)
 
     const alignments: TextEditorProps['textAlignment'][] = [
       'left',
@@ -192,6 +185,13 @@ export function createRichTextEditor(editor: Editor) {
     const getWidth = () => Math.ceil(el.getBoundingClientRect().width)
     const CustomEditor = () => {
       const [width, setWidth] = useState(getWidth)
+      const editor = useEditor(defaultValue)
+
+      const updateHeight = () => {
+        setEditorContent(el, editor.getHtml())
+
+        richTextEditor.updatePosition()
+      }
 
       return (
         <AppTheme>
@@ -199,7 +199,8 @@ export function createRichTextEditor(editor: Editor) {
             <McTextEditor
               ref={editorRef}
               defaultValue={defaultValue}
-              onChange={() => {
+              onChange={state => {
+                editor.setEditorState(state)
                 setWidth(getWidth())
                 updateHeight()
               }}
@@ -211,6 +212,9 @@ export function createRichTextEditor(editor: Editor) {
                 padding,
                 ...inheritedStyles
               }}
+              editorState={editor.editorState}
+              stateToHtmlOptions={editor.stateToHtmlOptions}
+              stateFromHtmlOptions={editor.stateFromHtmlOptions}
             />
             <style>{fontFaceRulesStr}</style>
             {fontLinks.map((link, index) => (
@@ -236,9 +240,7 @@ export function createRichTextEditor(editor: Editor) {
       return
     }
 
-    if (editorRef && editorRef.current) {
-      setEditorContent(el, editorRef.current.getHtml())
-    }
+    setEditorContent(el, el.innerHTML)
 
     ReactDom.unmountComponentAtNode($toolbar)
   }
