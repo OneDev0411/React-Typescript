@@ -12,6 +12,14 @@ export const Container = styled.div`
   bottom: 0;
   z-index: 100;
   background-color: #fff;
+
+  ${props =>
+    props.hideBlocks &&
+    `
+    .gjs-blocks-cs {
+      display: none
+    }
+  `}
 `
 
 export const TemplatesContainer = styled.div`

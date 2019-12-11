@@ -680,6 +680,10 @@ class Builder extends React.Component {
     return false
   }
 
+  get isOpenHouseMedium() {
+    return this.props.templateTypes.includes('CrmOpenHouse')
+  }
+
   get userAssets() {
     return ['profile_image_url', 'cover_image_url']
       .filter(attr => this.props.user[attr])
@@ -741,6 +745,7 @@ class Builder extends React.Component {
     return (
       <Portal root="marketing-center">
         <Container
+          hideBlocks={this.isOpenHouseMedium || this.isSocialMedium}
           className="template-builder"
           style={this.props.containerStyle}
         >
