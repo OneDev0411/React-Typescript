@@ -9,7 +9,7 @@ align="right"
 <mj-section rechat-editable="tree" background-color="#fff">
   {% for listing in listings %}
 
-  <mj-column width="50%" padding="24px">
+  <mj-column width="50%">
     <mj-image rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
 
     <mj-text font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="13px" color="#000" padding-bottom="0" padding-top="0" {{ alignment(loop.index0) }}>
