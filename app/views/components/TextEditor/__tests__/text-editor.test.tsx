@@ -14,14 +14,13 @@ const TE = ({ children }: { children?: ReactNode }) => {
   const [
     editorState,
     setEditorState,
-    { stateToHtmlOptions, stateFromHtmlOptions }
+    { stateFromHtmlOptions }
   ] = useEditorState('')
 
   return (
     <TextEditor
       onChange={setEditorState}
       editorState={editorState}
-      stateToHtmlOptions={stateToHtmlOptions}
       stateFromHtmlOptions={stateFromHtmlOptions}
     >
       {children}

@@ -158,7 +158,6 @@ export function AddOrEditEmailTemplateDrawer({
             content={emailTemplate ? emailTemplate.body : ''}
             editorState={editorState}
             onChangeEditor={setEditorState}
-            stateToHtmlOptions={bodyEditor.stateToHtmlOptions}
             stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
           />
         </div>

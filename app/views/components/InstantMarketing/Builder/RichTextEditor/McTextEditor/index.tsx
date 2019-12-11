@@ -59,7 +59,6 @@ interface Props
     | 'defaultValue'
     | 'textAlignment'
     | 'editorState'
-    | 'stateToHtmlOptions'
     | 'stateFromHtmlOptions'
   > {
   targetStyle: CSSProperties

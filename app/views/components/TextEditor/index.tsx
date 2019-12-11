@@ -58,7 +58,6 @@ export const TextEditor = forwardRef(
       toolbarRef,
       style,
       editorState,
-      stateToHtmlOptions,
       stateFromHtmlOptions,
       ...props
     }: TextEditorProps,
@@ -91,8 +90,7 @@ export const TextEditor = forwardRef(
       ref,
       createEditorRef({
         editorElementRef
-      }),
-      [stateToHtmlOptions]
+      })
     )
 
     const {

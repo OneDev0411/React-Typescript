@@ -1,7 +1,6 @@
 import React, { ReactNode, RefObject, useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { EditorState } from 'draft-js'
-import { Options as ExportOptions } from 'draft-js-export-html'
 import { Options as ImportOptions } from 'draft-js-import-html'
 
 import { TextEditor } from 'components/TextEditor'
@@ -25,7 +24,6 @@ interface Props {
   emailBodyEditorRef?: RefObject<TextEditorRef>
   onChangeEditor: (state: EditorState) => void
   editorState: EditorState
-  stateToHtmlOptions: ExportOptions
   stateFromHtmlOptions: ImportOptions
   /**
    * we receive attachments as a prop, instead of rendering it after the email
@@ -47,7 +45,6 @@ const EmailBody = ({
   emailBodyEditorRef,
   onChangeEditor,
   editorState,
-  stateToHtmlOptions,
   stateFromHtmlOptions
 }: Props) => {
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
@@ -98,7 +95,6 @@ const EmailBody = ({
               ref={emailBodyEditorRef}
               onChange={onChangeEditor}
               editorState={editorState}
-              stateToHtmlOptions={stateToHtmlOptions}
               stateFromHtmlOptions={stateFromHtmlOptions}
             >
               <EmailEditorFeatures

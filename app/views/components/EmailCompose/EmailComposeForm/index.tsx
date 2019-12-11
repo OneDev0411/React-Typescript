@@ -298,7 +298,6 @@ function EmailComposeForm<T>({
                 }
                 editorState={editorState}
                 onChangeEditor={setEditorState}
-                stateToHtmlOptions={bodyEditor.stateToHtmlOptions}
                 stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
               />
               {marketingTemplate && (

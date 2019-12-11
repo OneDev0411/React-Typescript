@@ -9,7 +9,6 @@ import {
 import Dropzone from 'react-dropzone'
 
 import { ContentBlock, ContentState, EditorProps, EditorState } from 'draft-js'
-import { Options as ExportOptions } from 'draft-js-export-html'
 import { Options as ImportOptions } from 'draft-js-import-html'
 
 import { DraftJsPlugin } from 'draft-js-plugins-editor'
@@ -41,7 +40,6 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
   placeholder?: string
 
   editorState: EditorState
-  stateToHtmlOptions: ExportOptions
   stateFromHtmlOptions: ImportOptions
 
   /**

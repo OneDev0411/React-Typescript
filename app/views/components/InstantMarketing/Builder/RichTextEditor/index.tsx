@@ -213,7 +213,6 @@ export function createRichTextEditor(editor: Editor) {
                 ...inheritedStyles
               }}
               editorState={editorState}
-              stateToHtmlOptions={editor.stateToHtmlOptions}
               stateFromHtmlOptions={editor.stateFromHtmlOptions}
             />
             <style>{fontFaceRulesStr}</style>
