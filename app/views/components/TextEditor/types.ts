@@ -1,4 +1,3 @@
-import { FieldProps } from 'react-final-form'
 import {
   ComponentProps,
   CSSProperties,
@@ -10,6 +9,8 @@ import {
 import Dropzone from 'react-dropzone'
 
 import { ContentBlock, ContentState, EditorProps, EditorState } from 'draft-js'
+import { Options as ExportOptions } from 'draft-js-export-html'
+import { Options as ImportOptions } from 'draft-js-import-html'
 
 import { DraftJsPlugin } from 'draft-js-plugins-editor'
 
@@ -35,10 +36,13 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
   children?: ReactNode
   className?: string
   defaultValue?: string
-  input?: FieldProps<any>['input']
-  onChange?: (value: string) => void
+  onChange?: (state: EditorState) => void
   disabled?: boolean
   placeholder?: string
+
+  editorState: EditorState
+  stateToHtmlOptions: ExportOptions
+  stateFromHtmlOptions: ImportOptions
 
   /**
    * DraftJS [textAlignment](https://draftjs.org/docs/advanced-topics-text-direction#text-alignment)
