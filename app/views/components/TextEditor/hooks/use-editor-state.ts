@@ -8,19 +8,21 @@ import { useLatestValueRef } from 'hooks/use-latest-value-ref'
 
 import { getHtmlConversionOptions } from '../utils/get-html-conversion-options'
 
-export interface UseEditor {
-  editorState: EditorState
-  setEditorState: (state: EditorState) => void
-  stateToHtmlOptions: ExportOptions
-  stateFromHtmlOptions: ImportOptions
-  reset: (html: string) => void
-  update: (html: string) => void
-  getPlainText: () => string
-  getHtml: () => string
-  hasUploadingImage: () => boolean
-}
+export type UseEditorState = [
+  EditorState,
+  (state: EditorState) => void,
+  {
+    stateToHtmlOptions: ExportOptions
+    stateFromHtmlOptions: ImportOptions
+    hasUploadingImage: () => boolean
+    getPlainText: () => string
+    getHtml: () => string
+    reset: (html?: string) => void
+    update: (html?: string) => void
+  }
+]
 
-export function useEditor(HTML: string = ''): UseEditor {
+export function useEditorState(HTML: string = ''): UseEditorState {
   const { stateToHtmlOptions, stateFromHtmlOptions } = useMemo(
     () => getHtmlConversionOptions(() => editorStateRef.current),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,15 +83,17 @@ export function useEditor(HTML: string = ''): UseEditor {
     )
   }
 
-  return {
+  return [
     editorState,
     setEditorState,
-    stateToHtmlOptions,
-    stateFromHtmlOptions,
-    reset,
-    update,
-    getPlainText,
-    getHtml,
-    hasUploadingImage
-  }
+    {
+      stateToHtmlOptions,
+      stateFromHtmlOptions,
+      reset,
+      update,
+      getPlainText,
+      getHtml,
+      hasUploadingImage
+    }
+  ]
 }

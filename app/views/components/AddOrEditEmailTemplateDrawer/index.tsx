@@ -12,7 +12,7 @@ import { updateEmailTemplate } from 'actions/email-templates/update-email-templa
 import { createEmailTemplate } from 'actions/email-templates/create-email-template'
 import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
-import { useEditor } from 'components/TextEditor/hooks/use-editor'
+import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
 
 import { InlineInputLabel } from '../InlineInputLabel'
 import EmailBody from '../EmailCompose/components/EmailBody'
@@ -49,7 +49,10 @@ export function AddOrEditEmailTemplateDrawer({
     goal: '',
     include_signature: false
   })
-  const bodyEditor = useEditor(formData.body)
+
+  const [editorState, setEditorState, bodyEditor] = useEditorState(
+    formData.body
+  )
 
   useDeepCompareEffect(() => {
     const template: Partial<IBrandEmailTemplateInput> = emailTemplate || {}
@@ -153,8 +156,8 @@ export function AddOrEditEmailTemplateDrawer({
             hasTemplateVariables
             hasStaticBody={!editable}
             content={emailTemplate ? emailTemplate.body : ''}
-            editorState={bodyEditor.editorState}
-            onChangeEditor={bodyEditor.setEditorState}
+            editorState={editorState}
+            onChangeEditor={setEditorState}
             stateToHtmlOptions={bodyEditor.stateToHtmlOptions}
             stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
           />

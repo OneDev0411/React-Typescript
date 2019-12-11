@@ -4,7 +4,7 @@ import ReactDom from 'react-dom'
 import { Editor } from 'grapesjs'
 
 import { TextEditorProps } from 'components/TextEditor/types'
-import { useEditor } from 'components/TextEditor/hooks/use-editor'
+import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
 
 import { AppTheme } from '../../../../../AppTheme'
 import { McTextEditor } from './McTextEditor'
@@ -185,7 +185,7 @@ export function createRichTextEditor(editor: Editor) {
     const getWidth = () => Math.ceil(el.getBoundingClientRect().width)
     const CustomEditor = () => {
       const [width, setWidth] = useState(getWidth)
-      const editor = useEditor(defaultValue)
+      const [editorState, setEditorState, editor] = useEditorState(defaultValue)
 
       const updateHeight = () => {
         setEditorContent(el, editor.getHtml())
@@ -200,7 +200,7 @@ export function createRichTextEditor(editor: Editor) {
               ref={editorRef}
               defaultValue={defaultValue}
               onChange={state => {
-                editor.setEditorState(state)
+                setEditorState(state)
                 setWidth(getWidth())
                 updateHeight()
               }}
@@ -212,7 +212,7 @@ export function createRichTextEditor(editor: Editor) {
                 padding,
                 ...inheritedStyles
               }}
-              editorState={editor.editorState}
+              editorState={editorState}
               stateToHtmlOptions={editor.stateToHtmlOptions}
               stateFromHtmlOptions={editor.stateFromHtmlOptions}
             />

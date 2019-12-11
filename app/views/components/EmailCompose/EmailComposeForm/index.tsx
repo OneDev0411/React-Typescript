@@ -33,7 +33,7 @@ import { Callout } from '../../Callout'
 import { DangerButton } from '../../Button/DangerButton'
 import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
 import { isFileAttachment } from '../helpers/is-file-attachment'
-import { useEditor } from '../../TextEditor/hooks/use-editor'
+import { useEditorState } from '../../TextEditor/hooks/use-editor-state'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
 
@@ -100,7 +100,9 @@ function EmailComposeForm<T>({
 
   const classes = useEmailFormStyles(props)
 
-  const bodyEditor = useEditor(initialValues.body)
+  const [editorState, setEditorState, bodyEditor] = useEditorState(
+    initialValues.body
+  )
 
   const handleSendEmail = async (formData: EmailFormValues) => {
     const { successMessage, errorMessage } = getSendEmailResultMessages(
@@ -294,8 +296,8 @@ function EmailComposeForm<T>({
                 attachments={
                   <Field name="attachments" component={AttachmentsList} />
                 }
-                editorState={bodyEditor.editorState}
-                onChangeEditor={bodyEditor.setEditorState}
+                editorState={editorState}
+                onChangeEditor={setEditorState}
                 stateToHtmlOptions={bodyEditor.stateToHtmlOptions}
                 stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
               />

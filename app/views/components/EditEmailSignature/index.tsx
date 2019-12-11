@@ -12,7 +12,7 @@ import { TextEditor } from '../TextEditor'
 import { ImageFeature } from '../TextEditor/features/Image'
 import { RichTextFeature } from '../TextEditor/features/RichText'
 import { EmojiFeature } from '../TextEditor/features/Emoji'
-import { useEditor } from '../TextEditor/hooks/use-editor'
+import { useEditorState } from '../TextEditor/hooks/use-editor-state'
 
 interface Props {
   onSaved?: () => void
@@ -32,14 +32,14 @@ export default function EditEmailSignature({
   const user = useSelector((state: IAppState) => state.user)
 
   const [isSaving, setIsSaving] = useState<boolean>(false)
-  const bodyEditor = useEditor(
+  const [editorState, setEditorState, signatureEditor] = useEditorState(
     user.email_signature != null ? user.email_signature : ''
   )
 
   const onSave = async () => {
     try {
       setIsSaving(true)
-      await dispatch(editUser({ email_signature: bodyEditor.getHtml() }))
+      await dispatch(editUser({ email_signature: signatureEditor.getHtml() }))
       setIsSaving(false)
       dispatch(
         addNotification({
@@ -71,10 +71,10 @@ export default function EditEmailSignature({
       <Box mb={2}>
         <StyledTextEditor
           autofocus
-          editorState={bodyEditor.editorState}
-          onChange={bodyEditor.setEditorState}
-          stateToHtmlOptions={bodyEditor.stateToHtmlOptions}
-          stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
+          editorState={editorState}
+          onChange={setEditorState}
+          stateToHtmlOptions={signatureEditor.stateToHtmlOptions}
+          stateFromHtmlOptions={signatureEditor.stateFromHtmlOptions}
         >
           <RichTextFeature />
           <ImageFeature uploadImage={uploadImage} />
