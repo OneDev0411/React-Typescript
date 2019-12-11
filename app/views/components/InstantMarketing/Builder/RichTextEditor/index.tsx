@@ -20,11 +20,20 @@ const styles = `
 .selected-editable-block {
   outline: none!important;
 }
+.selected-editable-block--originallyInline {
+  /* for inline elements inside lists (https://gitlab.com/rechat/web/issues/3607#note_249285730) */
+  display: block;
+  
+  /* there are sloppy templates that have vertical margin on inline elements :| so when we make it block, the margins become problematic */
+  margin-top: 0!important;
+  margin-bottom: 0!important;
+}
+
 .selected-editable-block *::selection {
   background: transparent;
 }
 .selected-editable-block, .selected-editable-block  * {
-  color: transparent;
+  color: transparent!important;
 }
 `
 
@@ -41,6 +50,7 @@ export function createRichTextEditor(editor: Editor) {
   const editorRef = createRef<any>()
   let outlineOffset = 0
   const borderWidth = 3
+  let originalFirstChild: HTMLElement | null = null
 
   const doc = editor.Canvas.getFrameEl().contentDocument!
   const styleEl = doc.createElement('style')
@@ -83,23 +93,29 @@ export function createRichTextEditor(editor: Editor) {
       color: computedStyle.color || undefined
     }
 
+    originalFirstChild =
+      el.firstElementChild instanceof HTMLElement ? el.firstElementChild : null
+
     // it's important to add class after getting computed style to prevent
     // affecting it
     grapeBlockEl.classList.add('selected-editable-block')
 
+    if (grapeBlockEl && getComputedStyle(grapeBlockEl).display === 'inline') {
+      grapeBlockEl.classList.add('selected-editable-block--originallyInline')
+    }
+
     const defaultValue = el.innerHTML
 
     const updateHeight = () => {
-      // we intentionally don't use setEditorContent to keep the inner 'div'
-      // element for better UI while editing
-      if (editorRef.current) {
-        el.innerHTML = editorRef.current.getHtml()
-      }
+      setEditorContent(el, editorRef.current.getHtml())
 
       richTextEditor.updatePosition()
     }
 
-    const padding = getTotalGrapeBlockContentPadding(el, outlineOffset)
+    const padding = getTotalGrapeBlockContentPadding(
+      originalFirstChild || el,
+      outlineOffset
+    )
 
     const alignments: TextEditorProps['textAlignment'][] = [
       'left',
@@ -183,18 +199,25 @@ export function createRichTextEditor(editor: Editor) {
     enable,
     disable
   }
-}
 
-function setEditorContent(el: HTMLElement, content: string) {
-  el.innerHTML = content
+  function setEditorContent(el: HTMLElement, content: string) {
+    el.innerHTML = content
 
-  if (
-    el.firstChild === el.lastChild &&
-    el.firstElementChild instanceof HTMLDivElement
-  ) {
-    el.innerHTML = el.firstElementChild.innerHTML
+    if (
+      el.firstChild === el.lastChild &&
+      el.firstElementChild instanceof HTMLDivElement
+    ) {
+      el.innerHTML = el.firstElementChild.innerHTML
+    }
+
+    if (originalFirstChild) {
+      originalFirstChild.innerHTML = el.innerHTML
+      el.innerHTML = originalFirstChild.outerHTML
+      // Please don't be  WAT 😂! there is some logic going on here!
+    }
   }
 }
+
 /**
  * Sometimes the el passed in `enable` method of custom RTE, is a child of
  * a grape block. So we may need to navigate up to find the grape block

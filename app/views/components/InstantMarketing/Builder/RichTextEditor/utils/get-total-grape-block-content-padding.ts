@@ -12,10 +12,17 @@ export function getTotalGrapeBlockContentPadding(
   do {
     const styles = getComputedStyle(currentEl)
 
-    paddingLeft += parseFloat(styles.paddingLeft || '0')
-    paddingRight += parseFloat(styles.paddingRight || '0')
-    paddingTop += parseFloat(styles.paddingTop || '0')
-    paddingBottom += parseFloat(styles.paddingBottom || '0')
+    paddingLeft +=
+      parseFloat(styles.paddingLeft || '0') +
+      parseFloat(styles.marginLeft || '0')
+    paddingRight +=
+      parseFloat(styles.paddingRight || '0') +
+      parseFloat(styles.marginRight || '0')
+    paddingTop +=
+      parseFloat(styles.paddingTop || '0') + parseFloat(styles.marginTop || '0')
+    paddingBottom +=
+      parseFloat(styles.paddingBottom || '0') +
+      parseFloat(styles.marginBottom || '0')
     currentEl = currentEl.parentElement
   } while (currentEl && !currentEl.matches('[data-gjs-type]'))
 
