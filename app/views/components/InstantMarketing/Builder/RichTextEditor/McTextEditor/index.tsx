@@ -43,7 +43,7 @@ const useStyles = makeStyles(
          */
         position: 'fixed',
         zIndex: 1,
-        marginTop: '-41px!important',
+        marginTop: '-41px !important',
         pointerEvents: 'initial',
         background: '#fff',
         boxShadow: theme.shadows[5],
