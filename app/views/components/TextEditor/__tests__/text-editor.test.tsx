@@ -1,18 +1,40 @@
+import { ReactNode } from 'react'
 import { fireEvent, render } from '@testing-library/react'
 
 import { TextEditor } from '..'
 
 import * as React from 'react'
 
+import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
+
 import { TestBed } from '../../../../../tests/unit/TestBed'
 import { ImageFeature } from '../features/Image'
+
+const TE = ({ children }: { children?: ReactNode }) => {
+  const [
+    editorState,
+    setEditorState,
+    { stateToHtmlOptions, stateFromHtmlOptions }
+  ] = useEditorState('')
+
+  return (
+    <TextEditor
+      onChange={setEditorState}
+      editorState={editorState}
+      stateToHtmlOptions={stateToHtmlOptions}
+      stateFromHtmlOptions={stateFromHtmlOptions}
+    >
+      {children}
+    </TextEditor>
+  )
+}
 
 // https://gitlab.com/rechat/web/issues/2948
 describe('TextEditor', () => {
   it('should render', () => {
     render(
       <TestBed>
-        <TextEditor />
+        <TE />
       </TestBed>
     )
   })
@@ -33,9 +55,9 @@ describe('TextEditor', () => {
   it('should show image picker button if ImageFeature is used, and it should open image picker dialog', done => {
     const { getByTestId, container } = render(
       <TestBed>
-        <TextEditor>
+        <TE>
           <ImageFeature />
-        </TextEditor>
+        </TE>
       </TestBed>
     )
 
@@ -76,7 +98,7 @@ describe('TextEditor', () => {
   it('should not show image picker button if ImageFeature is used', () => {
     const { queryByTestId } = render(
       <TestBed>
-        <TextEditor />
+        <TE />
       </TestBed>
     )
 
