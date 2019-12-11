@@ -541,10 +541,15 @@ class Builder extends React.Component {
     this.setEditorTemplateId(selectedTemplate.id)
     this.editor.setComponents(html)
     this.lockIn()
+    this.deselectAll()
     this.setState({
       templateHtmlCss: this.getTemplateHtmlCss()
     })
     this.resize()
+  }
+
+  deselectAll = () => {
+    this.editor.selectRemove(this.editor.getSelectedAll())
   }
 
   resize = () => {

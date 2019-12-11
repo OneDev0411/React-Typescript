@@ -121,6 +121,26 @@ export const load = async colors => {
       }
     })
 
+    editor.on('component:deselected', () => {
+      if (editor.getSelectedAll().length > 0) {
+        return
+      }
+
+      const containers = [
+        fontSizePickerContainer,
+        fontWeightPickerContainer,
+        textAlignPickerContainer,
+        colorPickerContainer,
+        backgroundColorPickerContainer
+      ]
+
+      containers.forEach(container => {
+        if (container) {
+          ReactDOM.unmountComponentAtNode(container)
+        }
+      })
+    })
+
     editor.on('component:selected', selected => {
       if (!selected) {
         return
