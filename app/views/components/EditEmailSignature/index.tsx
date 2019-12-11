@@ -73,7 +73,6 @@ export default function EditEmailSignature({
           autofocus
           editorState={editorState}
           onChange={setEditorState}
-          stateFromHtmlOptions={signatureEditor.stateFromHtmlOptions}
         >
           <RichTextFeature />
           <ImageFeature uploadImage={uploadImage} />

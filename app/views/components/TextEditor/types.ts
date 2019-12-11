@@ -7,13 +7,8 @@ import {
   RefObject
 } from 'react'
 import Dropzone from 'react-dropzone'
-
 import { ContentBlock, ContentState, EditorProps, EditorState } from 'draft-js'
-import { Options as ImportOptions } from 'draft-js-import-html'
-
 import { DraftJsPlugin } from 'draft-js-plugins-editor'
-
-import { Options } from 'draft-js-import-html'
 
 import { ClassesProps } from 'utils/ts-utils'
 
@@ -40,7 +35,6 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
   placeholder?: string
 
   editorState: EditorState
-  stateFromHtmlOptions: ImportOptions
 
   /**
    * DraftJS [textAlignment](https://draftjs.org/docs/advanced-topics-text-direction#text-alignment)
@@ -97,7 +91,6 @@ export interface DraftPluginEditorInlineDecoratorProps {
 export interface EditorContextApi {
   editorState: EditorState
   setEditorState: (newState: EditorState) => void
-  stateFromHtmlOptions: Options
   editorRef: RefObject<DraftJsPlugin>
   /**
    * Adds a plugin and return a function which will remove this plugin.

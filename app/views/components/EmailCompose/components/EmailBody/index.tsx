@@ -95,13 +95,13 @@ const EmailBody = ({
               ref={emailBodyEditorRef}
               onChange={onChangeEditor}
               editorState={editorState}
-              stateFromHtmlOptions={stateFromHtmlOptions}
             >
               <EmailEditorFeatures
                 uploadImage={uploadImage}
                 hasTemplateVariables={hasTemplateVariables}
                 signature={signature}
                 hasSignatureByDefault={hasSignatureByDefault}
+                stateFromHtmlOptions={stateFromHtmlOptions}
                 onEditSignature={() => setSignatureEditorVisible(true)}
               />
             </TextEditor>

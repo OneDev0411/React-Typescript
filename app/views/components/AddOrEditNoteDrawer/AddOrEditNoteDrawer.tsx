@@ -85,7 +85,6 @@ export default function AddOrEditNoteDrawer({ note, ...props }: Props) {
             disabled={isSaving}
             editorState={editorState}
             onChange={setEditorState}
-            stateFromHtmlOptions={editor.stateFromHtmlOptions}
           />
           {error && (
             <>

@@ -58,7 +58,6 @@ export const TextEditor = forwardRef(
       toolbarRef,
       style,
       editorState,
-      stateFromHtmlOptions,
       ...props
     }: TextEditorProps,
     ref
@@ -99,7 +98,6 @@ export const TextEditor = forwardRef(
       getDropzoneProps
     } = useCreateEditorContext({
       editorState,
-      stateFromHtmlOptions,
       onChange: handleChange,
       editorRef
     })

@@ -11,18 +11,10 @@ import { TestBed } from '../../../../../tests/unit/TestBed'
 import { ImageFeature } from '../features/Image'
 
 const TE = ({ children }: { children?: ReactNode }) => {
-  const [
-    editorState,
-    setEditorState,
-    { stateFromHtmlOptions }
-  ] = useEditorState('')
+  const [editorState, setEditorState] = useEditorState('')
 
   return (
-    <TextEditor
-      onChange={setEditorState}
-      editorState={editorState}
-      stateFromHtmlOptions={stateFromHtmlOptions}
-    >
+    <TextEditor onChange={setEditorState} editorState={editorState}>
       {children}
     </TextEditor>
   )

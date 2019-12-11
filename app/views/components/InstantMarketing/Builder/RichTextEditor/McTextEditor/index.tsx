@@ -55,11 +55,7 @@ const useStyles = makeStyles(
 interface Props
   extends Pick<
     TextEditorProps,
-    | 'onChange'
-    | 'defaultValue'
-    | 'textAlignment'
-    | 'editorState'
-    | 'stateFromHtmlOptions'
+    'onChange' | 'defaultValue' | 'textAlignment' | 'editorState'
   > {
   targetStyle: CSSProperties
 }
