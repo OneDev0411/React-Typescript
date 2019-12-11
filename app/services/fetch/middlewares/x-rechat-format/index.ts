@@ -19,7 +19,7 @@ function deepReplace(data: object, references: StringMap<StringMap<object>>) {
     data = references[data.object_type][data.id]
   }
 
-  Object.entries(data).forEach(([key, value]: any) => {
+  Object.entries(data || {}).forEach(([key, value]: any) => {
     if (Array.isArray(value)) {
       data[key] = value.map(item => deepReplace(item, references))
     }
