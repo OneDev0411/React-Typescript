@@ -65,7 +65,6 @@ export const TemplateExpression = ({
   setEditorState,
   getEditorState,
   offsetKey,
-  contentState,
   ...props
 }: Props) => {
   const classes = useTemplateExpressionStyles()
@@ -100,7 +99,7 @@ export const TemplateExpression = ({
     const { block, start } = props.children[0].props
 
     const newContentState = Modifier.replaceText(
-      contentState,
+      getEditorState().getCurrentContent(),
       SelectionState.createEmpty(block.getKey()).merge({
         anchorOffset: start,
         focusOffset: start + decoratedText.length
