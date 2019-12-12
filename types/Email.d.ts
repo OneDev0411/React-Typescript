@@ -165,8 +165,8 @@ declare type IEmailCampaign<
   text: string
   type: 'email_campaign'
   sent: number
-  microsoft_credential: UUID
-  google_credential: UUID
+  microsoft_credential: UUID | null
+  google_credential: UUID | null
   headers: IEmailCampaignInput['headers']
 } & Association<
   'recipients',

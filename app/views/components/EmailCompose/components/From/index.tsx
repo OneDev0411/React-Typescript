@@ -78,22 +78,30 @@ export function From({ accounts, children, user }: Props) {
       google.input.onChange(
         selectedAccount && selectedAccount.type === 'google_credential'
           ? (selectedAccount.id as any)
-          : undefined
+          : null
       )
       microsoft.input.onChange(
         selectedAccount && selectedAccount.type === 'microsoft_credential'
           ? (selectedAccount.id as any)
-          : undefined
+          : null
       )
     }
 
     const error = google.meta.error || microsoft.meta.error
 
+    const isUsingConnectedAccount = !!(
+      microsoft.input.value || google.input.value
+    )
+
     return (
       <Box display="flex" alignItems="center" my={1}>
         <FormLabel style={{ marginBottom: 0 }}>From</FormLabel>
         <Box flex="1" px={2}>
-          {hasAccounts ? (
+          {hasAccounts || isUsingConnectedAccount ? (
+            /*
+             NOTE: we can remove this ternary and always render  a combo-box
+             if it's ok product-wise.
+             */
             <>
               <Select
                 required
@@ -103,7 +111,11 @@ export function From({ accounts, children, user }: Props) {
                 displayEmpty
                 renderValue={(value: string) => {
                   if (!value) {
-                    return '-- select --'
+                    if (accounts && accounts.length > 0) {
+                      return '-- select --'
+                    }
+
+                    return userToEmailAddress(user)
                   }
 
                   const selectedAccount = getSelectedAccount(value)
@@ -116,6 +128,9 @@ export function From({ accounts, children, user }: Props) {
                 }}
                 disableUnderline
               >
+                {!hasAccounts && (
+                  <MenuItem value="">{userToEmailAddress(user)}</MenuItem>
+                )}
                 {accounts &&
                   accounts.map(account => (
                     <MenuItem key={account.id} value={account.id}>
@@ -133,7 +148,7 @@ export function From({ accounts, children, user }: Props) {
             // Right now we don't offer options for user
             // but we can easily add it. we need to accept
             // it as a form input instead of `user` prop
-            (user && `${user.display_name} <${user.email}>`) || ' - '
+            (user && userToEmailAddress(user)) || ' - '
           )}
         </Box>
         {children}
@@ -158,6 +173,10 @@ export function From({ accounts, children, user }: Props) {
       )}
     />
   )
+}
+
+function userToEmailAddress(user: IUser) {
+  return user.display_name ? `${user.display_name} <${user.email}>` : user.email
 }
 
 function accountToString(account: IOAuthAccount): string {
