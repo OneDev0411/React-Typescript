@@ -20,14 +20,70 @@ const styles = `
 .selected-editable-block {
   outline: none!important;
 }
+.selected-editable-block--originallyInline {
+  /* for inline elements inside lists (https://gitlab.com/rechat/web/issues/3607#note_249285730) */
+  display: block;
+  
+  /* there are sloppy templates that have vertical margin on inline elements :| so when we make it block, the margins become problematic */
+  margin-top: 0!important;
+  margin-bottom: 0!important;
+}
+
 .selected-editable-block *::selection {
   background: transparent;
 }
 .selected-editable-block, .selected-editable-block  * {
-  color: transparent;
+  color: transparent!important;
 }
 `
 
+/**
+ * Welcome to the hacky land of our custom rich text editor! :D
+ * You will see hacky stuff here a lot as we are gluing two
+ * completely different technologies together: Grape.js and React
+ * With spit of course! and with a hacky approach!
+ *
+ * ## What we do here?
+ * Whenever a block is clicked (which is not in our
+ * {@link RTE_BLOCK_TYPE_BLACKLIST black list}, grape.js calls our enable
+ * function, which gives us a chance to setup our custom rich text editor.
+ * What we do then is to instantiate a react root which renders our own
+ * {@link TextEditor rich text editor component} ** within rte toolbar**.
+ *
+ * ### Why do we instantiate our editor component within rte toolbar?!
+ * well rte toolbar is a thing which is created by grape and is
+ * attached/detached by grape when editing should be enabled/disabled.
+ * And more importantly, **it's positioned by grape.js on top of the
+ * currently editing block**.
+ * So the idea is to instantiate the editor in the toolbar and manipulate
+ * its positioning in a way that our editor's toolbar places exactly where
+ * the toolbar should be and the rest of the editor places on top of the
+ * real content. We hide the real content while editing is enabled because
+ * our editor will be placed exactly in place of the original content,
+ * so that it resembles an in-place editing experience.
+ *
+ * We capture a bunch of styles from the original element and apply them
+ * in the editor wrapper. For accurate sizing, we update the original
+ * underlying content (which is invisible) as it's edited. Then we capture
+ * the height and width changes and apply it to the editor, in order to make
+ * sure the editor is always with the same size of the original element.
+ *
+ *
+ *
+ * ## Why not instantiating our editor component into the editing element?
+ * because the original element is within the grape.js iframe and
+ * instantiating Draft.js within an iframe is a huge nightmare! It's
+ * practically impossible I would say!
+ *
+ *
+ * # Assumptions
+ * Please also consider these assumptions if working with this code:
+ *
+ * 1. The element which is going to be edited has either a single text node in
+ * it or it has at most one Element children which directly has only a text
+ * node. So don't expect complex html structure to be handled.
+ * In latter case, the child element is preserved as is, across edits.
+ */
 export function createRichTextEditor(editor: Editor) {
   const richTextEditor: any = editor.RichTextEditor
   const $toolbar = richTextEditor.getToolbarEl()
@@ -41,6 +97,7 @@ export function createRichTextEditor(editor: Editor) {
   const editorRef = createRef<any>()
   let outlineOffset = 0
   const borderWidth = 3
+  let originalFirstChild: HTMLElement | null = null
 
   const doc = editor.Canvas.getFrameEl().contentDocument!
   const styleEl = doc.createElement('style')
@@ -83,23 +140,29 @@ export function createRichTextEditor(editor: Editor) {
       color: computedStyle.color || undefined
     }
 
+    originalFirstChild =
+      el.firstElementChild instanceof HTMLElement ? el.firstElementChild : null
+
     // it's important to add class after getting computed style to prevent
     // affecting it
     grapeBlockEl.classList.add('selected-editable-block')
 
+    if (grapeBlockEl && getComputedStyle(grapeBlockEl).display === 'inline') {
+      grapeBlockEl.classList.add('selected-editable-block--originallyInline')
+    }
+
     const defaultValue = el.innerHTML
 
     const updateHeight = () => {
-      // we intentionally don't use setEditorContent to keep the inner 'div'
-      // element for better UI while editing
-      if (editorRef.current) {
-        el.innerHTML = editorRef.current.getHtml()
-      }
+      setEditorContent(el, editorRef.current.getHtml())
 
       richTextEditor.updatePosition()
     }
 
-    const padding = getTotalGrapeBlockContentPadding(el, outlineOffset)
+    const padding = getTotalGrapeBlockContentPadding(
+      originalFirstChild || el,
+      outlineOffset
+    )
 
     const alignments: TextEditorProps['textAlignment'][] = [
       'left',
@@ -183,18 +246,25 @@ export function createRichTextEditor(editor: Editor) {
     enable,
     disable
   }
-}
 
-function setEditorContent(el: HTMLElement, content: string) {
-  el.innerHTML = content
+  function setEditorContent(el: HTMLElement, content: string) {
+    el.innerHTML = content
 
-  if (
-    el.firstChild === el.lastChild &&
-    el.firstElementChild instanceof HTMLDivElement
-  ) {
-    el.innerHTML = el.firstElementChild.innerHTML
+    if (
+      el.firstChild === el.lastChild &&
+      el.firstElementChild instanceof HTMLDivElement
+    ) {
+      el.innerHTML = el.firstElementChild.innerHTML
+    }
+
+    if (originalFirstChild) {
+      originalFirstChild.innerHTML = el.innerHTML
+      el.innerHTML = originalFirstChild.outerHTML
+      // Please don't be  WAT 😂! there is some logic going on here!
+    }
   }
 }
+
 /**
  * Sometimes the el passed in `enable` method of custom RTE, is a child of
  * a grape block. So we may need to navigate up to find the grape block
