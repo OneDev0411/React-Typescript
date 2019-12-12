@@ -18,13 +18,17 @@ export const styles = (theme: Theme) =>
       }
     },
     noFallback: {
-      color: theme.palette.warning.dark,
-      background: fade(theme.palette.warning.main, 0.12)
+      color: theme.palette.error.main,
+      background: fade(theme.palette.error.main, 0.12)
     },
     icon: {
       width: '0.7rem!important', // to overcome default icon size specificity
       height: '0.7rem!important',
       fill: 'currentColor',
       margin: theme.spacing(0, 0.5, -0.1, 0.5)
+    },
+    tooltip: {
+      padding: theme.spacing(0.5, 1),
+      fontSize: theme.typography.caption.fontSize
     }
   })

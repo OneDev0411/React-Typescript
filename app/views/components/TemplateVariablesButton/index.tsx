@@ -16,7 +16,7 @@ import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-e
 import {
   ITemplateVariableSuggestion,
   ITemplateVariableSuggestionGroup
-} from './types'
+} from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/types'
 import { DropdownToggleButton } from '../DropdownToggleButton'
 
 interface Props {
@@ -90,4 +90,4 @@ export function TemplateVariablesButton({
     </>
   )
 }
-export * from './types'
+export * from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/types'

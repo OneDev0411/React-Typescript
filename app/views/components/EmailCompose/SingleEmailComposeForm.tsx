@@ -1,9 +1,9 @@
 import { OAuthProvider } from 'constants/contacts'
 
-import React, { ComponentProps, useMemo } from 'react'
+import React, { ComponentProps, useCallback, useMemo, useState } from 'react'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { useDispatch, useSelector } from 'react-redux'
-
+import { OnChange } from 'react-final-form-listeners'
 import { Field } from 'react-final-form'
 
 import { createEmailCampaign } from 'models/email/create-email-campaign'
@@ -17,8 +17,8 @@ import { EmailFormValues } from './types'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import EmailComposeForm from './EmailComposeForm'
 import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
-import { useExpressionEvaluator } from './EmailComposeForm/use-expression-evaluator'
 import { attachmentFormValueToEmailAttachmentInput } from './helpers/attachment-form-value-to-email-attachment-input'
+import { TemplateExpressionContext } from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/template-expression-context'
 
 interface Props
   extends Omit<
@@ -53,7 +53,6 @@ export function SingleEmailComposeForm({
   headers = {},
   ...otherProps
 }: Props) {
-  const { evaluate } = useExpressionEvaluator()
   const oAuthAccounts = useSelector(
     (state: IAppState) => state.contacts.oAuthAccounts
   )
@@ -91,10 +90,6 @@ export function SingleEmailComposeForm({
   const handleSendEmail = async (
     formValue: EmailFormValues & { template: string }
   ) => {
-    if (!formValue.due_at || formValue.due_at.getTime() <= Date.now()) {
-      formValue.body = await evaluate(formValue.body || '', formValue)
-    }
-
     const emailData = getEmail({
       from: (formValue.from && formValue.from.id) || '',
       microsoft_credential: formValue.microsoft_credential,
@@ -123,46 +118,80 @@ export function SingleEmailComposeForm({
     i => i !== false
   )
 
-  return (
-    <EmailComposeForm
-      hasSignatureByDefault
-      {...otherProps}
-      initialValues={initialValues}
-      deal={deal}
-      isSubmitDisabled={isLoadingAccounts}
-      sendEmail={handleSendEmail}
-      renderCollapsedFields={(values: EmailFormValues) => (
-        <>
-          {/*
-          This is kind of a hack for a behavior in react-final-form.
-          When `initialValues` are changed, it updates `values` but only
-          those fields that have a corresponding field rendered at that
-          moment. `to`, `cc`, `google_credential` and `microsoft_credential` may
-          be updated in initialValues while top fields are collapsed and
-          therefore, the changes are never reflected to `values` in this case.
-          we render two dummy fields to prevent this issue.
-          */}
-          <Field name="cc" render={() => null} />
-          <Field name="to" render={() => null} />
-          <Field name="google_credential" render={() => null} />
-          <Field name="microsoft_credential" render={() => null} />
+  const getExpressionsContext = useCallback(
+    (to: IDenormalizedEmailRecipientInput[] | undefined) => {
+      const firstRecipient = (to || [])[0]
 
-          <CollapsedEmailRecipients
-            to={values.to || []}
-            cc={values.cc || []}
-            bcc={values.bcc || []}
-          />
-        </>
-      )}
-      renderFields={values => (
-        <EmailRecipientsFields
-          deal={deal}
-          senderAccounts={allAccounts.filter(filterAccounts)}
-          disableAddNewRecipient={disableAddNewRecipient}
-          values={values}
-        />
-      )}
-    />
+      if (firstRecipient && firstRecipient.recipient_type === 'Email') {
+        return {
+          recipient: firstRecipient.contact || {
+            email: firstRecipient.email
+          }
+        }
+      }
+
+      return firstRecipient ? { recipient: {} } : null
+    },
+    []
+  )
+
+  const [expressionContext, setExpressionContext] = useState<object | null>(
+    getExpressionsContext(initialValues && initialValues.to)
+  )
+
+  const updateExpressionContext = (
+    to: IDenormalizedEmailRecipientInput[] | undefined
+  ) => setExpressionContext(getExpressionsContext(to))
+
+  return (
+    // NOTE: if we decided to show the result of the `sender` expressions
+    // to we can move this context provider into the EmailComposeForm and
+    // add the recipient context by a prop to it.
+    <TemplateExpressionContext.Provider value={expressionContext}>
+      <EmailComposeForm
+        hasSignatureByDefault
+        {...otherProps}
+        initialValues={initialValues}
+        deal={deal}
+        isSubmitDisabled={isLoadingAccounts}
+        sendEmail={handleSendEmail}
+        renderCollapsedFields={(values: EmailFormValues) => (
+          <>
+            {/*
+            This is kind of a hack for a behavior in react-final-form.
+            When `initialValues` are changed, it updates `values` but only
+            those fields that have a corresponding field rendered at that
+            moment. `to`, `cc`, `google_credential` and `microsoft_credential` may
+            be updated in initialValues while top fields are collapsed and
+            therefore, the changes are never reflected to `values` in this case.
+            we render two dummy fields to prevent this issue.
+            */}
+            <Field name="cc" render={() => null} />
+            <Field name="to" render={() => null} />
+            <Field name="google_credential" render={() => null} />
+            <Field name="microsoft_credential" render={() => null} />
+            <OnChange name="to">{updateExpressionContext}</OnChange>
+
+            <CollapsedEmailRecipients
+              to={values.to || []}
+              cc={values.cc || []}
+              bcc={values.bcc || []}
+            />
+          </>
+        )}
+        renderFields={values => (
+          <>
+            <EmailRecipientsFields
+              deal={deal}
+              senderAccounts={allAccounts.filter(filterAccounts)}
+              disableAddNewRecipient={disableAddNewRecipient}
+              values={values}
+            />
+            <OnChange name="to">{updateExpressionContext}</OnChange>
+          </>
+        )}
+      />
+    </TemplateExpressionContext.Provider>
   )
 }
 

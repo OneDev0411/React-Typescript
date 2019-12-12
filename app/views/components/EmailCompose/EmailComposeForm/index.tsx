@@ -74,7 +74,6 @@ function EmailComposeForm<T>({
     attachments: []
   },
   dispatch,
-  evaluateTemplateExpressions = false,
   onCancel,
   onDelete,
   uploadAttachment = uploadEmailAttachment,
