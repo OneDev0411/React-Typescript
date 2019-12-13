@@ -1,5 +1,5 @@
-import React, { useRef } from 'react'
-import { Tooltip } from '@material-ui/core'
+import React, { useMemo, useRef } from 'react'
+import { Popper, Tooltip } from '@material-ui/core'
 import createEmojiPlugin from 'draft-js-emoji-plugin'
 import EmojiSelectPopover from 'draft-js-emoji-plugin/lib/components/EmojiSelect/Popover'
 import defaultEmojiGroups from 'draft-js-emoji-plugin/lib/constants/defaultEmojiGroups'
@@ -14,7 +14,6 @@ import IconEmoji from 'components/SvgIcons/Emoji/IconEmoji'
 import { ToolbarFragment } from '../../components/ToolbarFragment'
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 import { defaultTheme } from './default-emoji-theme'
-import { getEmojiSuggestionsPosition } from '../../utils/get-emoji-suggestions-position'
 import { useEmojiStyles } from './use-emoji-styles'
 /**
  * NOTE: v2.1.2 works while v2.1.3 has breaking changes and is only compatible
@@ -26,11 +25,12 @@ import { ToolbarIconButton } from '../../components/ToolbarIconButton'
 import { useEditor } from '../../hooks/use-editor'
 
 import { BaseDropdown } from '../../../BaseDropdown'
+import { usePopperizedEmojiSuggestions } from './use-popperized-emoji-suggestions'
 
 const emojis = createEmojisFromStrategy(strategy)
-const imagePath = '//cdn.jsdelivr.net/emojione/assets/svg/'
+const imagePath = '//cdn.jsdelivr.net/emojione/assets/svg/' // google: 'https://ssl.gstatic.com/mail/emoji/v7/png48/emoji_u'
+const imageType = 'svg' // google: 'png'
 const cacheBustParam = '?v=2.2.7'
-const imageType = 'svg'
 const toneSelectOpenDelay = 500
 
 interface Props {
@@ -42,31 +42,37 @@ interface Props {
 }
 
 export function EmojiFeature({ closeOnSelection = true }: Props) {
-  const emojiTheme = useEmojiStyles()
-
   const { setEditorState, editorState } = useEditor()
   const editorStateRef = useLatestValueRef(editorState)
   const storeRef = useRef({
     setEditorState,
     getEditorState: () => editorStateRef.current
   })
+  const {
+    EmojiSuggestionProps,
+    PopperProps,
+    positionSuggestions
+  } = usePopperizedEmojiSuggestions()
 
-  const theme = mergeWith(
-    defaultTheme,
-    emojiTheme,
-    {
-      emojiSelectPopoverGroups: 'emoji-group' // for closing on click
-    },
-    (value1, value2, value3) =>
-      [value1, value2, value3].filter(i => i).join(' ')
+  const emojiTheme = useEmojiStyles()
+  const theme = useMemo(
+    () =>
+      mergeWith(
+        {
+          emojiSelectPopoverGroups: 'emoji-group' // for closing on click
+        },
+        defaultTheme,
+        emojiTheme,
+        (value1, value2, value3) =>
+          [value1, value2, value3].filter(i => i).join(' ')
+      ),
+    [emojiTheme]
   )
   const { emojiPlugin } = useEditorPlugins(
     () => ({
       emojiPlugin: createEmojiPlugin({
         theme,
-        positionSuggestions: getEmojiSuggestionsPosition
-        // imagePath: 'https://ssl.gstatic.com/mail/emoji/v7/png48/emoji_u',
-        // imageType: 'png'
+        positionSuggestions
       })
     }),
     []
@@ -115,7 +121,9 @@ export function EmojiFeature({ closeOnSelection = true }: Props) {
           )}
         />
       </ToolbarFragment>
-      <EmojiSuggestions />
+      <Popper {...PopperProps}>
+        <EmojiSuggestions {...EmojiSuggestionProps} />
+      </Popper>
     </>
   )
 }

@@ -11,6 +11,11 @@ export const useEmojiStyles = makeStyles(
     return createStyles({
       emojiSelectPopover: {
         position: 'static!important'
+      },
+      emojiSuggestions: {
+        transform: 'none !important',
+        position: 'static!important',
+        marginTop: '0 !important'
       }
     } as Record<keyof EmojiPluginTheme, any>)
   },
