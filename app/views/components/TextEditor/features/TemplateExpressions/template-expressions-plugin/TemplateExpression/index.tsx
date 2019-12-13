@@ -153,7 +153,7 @@ export const TemplateExpression = ({
 
   return (
     <Tooltip
-      title={value}
+      title={value || ''}
       placement="top"
       open={tooltipOpen && value && !fallbackPopover.open}
       classes={{ tooltip: classes.tooltip }}
