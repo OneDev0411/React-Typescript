@@ -1,11 +1,10 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
-import React, { CSSProperties, forwardRef, useEffect } from 'react'
+import React, { CSSProperties, forwardRef, useEffect, useRef } from 'react'
 
 import { TextEditor } from 'components/TextEditor'
 import { TextEditorProps } from 'components/TextEditor/types'
 import { defaultTemplateVariableSuggestions } from 'components/EmailCompose/default-template-variable-suggestions'
-import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
 
 import { TemplateExpressionsFeature } from '../../../../TextEditor/features/TemplateExpressions'
 import { RichTextFeature } from '../../../../TextEditor/features/RichText'
@@ -63,13 +62,24 @@ export const McTextEditor = forwardRef(function McTextEditor(
   ref
 ) {
   const classes = useStyles({ targetStyle })
+  const editorToolbarRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (editorToolbarRef.current) {
+      editorToolbarRef.current.addEventListener('mousedown', e => {
+        // To prevent formatting buttons like "Bold" button from blurring the
+        // editor
+        e.preventDefault()
+      })
+    }
+  }, [])
 
   useOverlayCloseBugFix()
 
   return (
     <TextEditor
       ref={ref}
-      toolbarRef={nativelyStopEventPropagationOfEventViaRef('mousedown', true)}
+      toolbarRef={editorToolbarRef}
       minHeight={false}
       autofocus
       placeholder=""

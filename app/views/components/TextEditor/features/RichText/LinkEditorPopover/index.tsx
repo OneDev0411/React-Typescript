@@ -3,8 +3,6 @@ import { ClickAwayListener, Popper, useTheme } from '@material-ui/core'
 import * as React from 'react'
 import { RefObject, useState } from 'react'
 
-import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
-
 import { useEditorSelectionAnchor } from './hooks/use-editor-selection-anchor'
 import { useOnToggledOn } from './hooks/use-on-toggled'
 import { createLink } from '../../../utils/create-link'
@@ -108,7 +106,6 @@ export function LinkEditorPopover({
         - Don't want to show validation status and message an fields.
       */}
         <LinkEditorForm
-          innerRef={nativelyStopEventPropagationOfEventViaRef('mousedown')}
           onKeyUp={e => {
             e.key === 'Escape' && onClose()
           }}
