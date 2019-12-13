@@ -31,6 +31,7 @@ import { ToolbarFragments } from './components/ToolbarFragments'
 import { useCreateEditorContext } from './hooks/use-create-editor-context'
 import { DEFAULT_EDITOR_FEATURES } from './default-editor-features'
 import { EditorContext, EditorToolbarContext } from './editor-context'
+import { moveSelectionToStart } from './modifiers/move-selection-to-start'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
@@ -164,28 +165,32 @@ export const TextEditor = forwardRef(
 
     const rerenderEditor = useRerenderOnChange(allPlugins, shallowEqual)
 
-    const autoFocusRef = useRef(false)
+    const firstRenderFlagRef = useRef(true)
 
     useEffect(() => {
       const pluginsEditor = editorRef.current
 
-      if (
-        !autoFocusRef.current &&
-        autofocus &&
-        pluginsEditor &&
-        rerenderEditor
-      ) {
+      if (firstRenderFlagRef.current && pluginsEditor && rerenderEditor) {
         // draft-js-plugins-editor uses UNSAFE_componentWillMount to create
         // the editor state with proper decorator. If we don't delay running
         // this, it causes decorator to not being set correctly which has
         // serious consequences. e.g. links don't render properly.
         setTimeout(() => {
-          autoFocusRef.current = true
-          pluginsEditor.editor && pluginsEditor.focus()
+          firstRenderFlagRef.current = false
+
+          if (editorStateRef.current) {
+            setEditorState(moveSelectionToStart(editorStateRef.current))
+          }
+
+          if (autofocus) {
+            pluginsEditor.editor && pluginsEditor.focus()
+          }
         })
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rerenderEditor])
+
+    useEffect(() => {}, [])
 
     const dropzoneProps: Partial<
       ComponentType<typeof Dropzone>
