@@ -228,6 +228,7 @@ export function createRichTextEditor(editor: Editor) {
     const grapeBlockEl = getGrapeBlock(el)
 
     grapeBlockEl.classList.remove('selected-editable-block')
+    grapeBlockEl.classList.remove('selected-editable-block--originallyInline')
 
     if (!shouldOfferRTE(grapeBlockEl)) {
       el.contentEditable = 'false'
