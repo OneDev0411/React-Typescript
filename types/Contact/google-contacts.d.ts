@@ -83,4 +83,5 @@ declare type OAuthAccountScope =
   | 'contacts.read'
   | 'mail.read'
   | 'mail.send'
+  | 'mail.modify'
   | 'calendar'

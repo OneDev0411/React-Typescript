@@ -2,10 +2,14 @@ export function canUpdateThreadReadStatus(
   accounts: IOAuthAccount[],
   thread: IEmailThread
 ): boolean {
-  const credentialType = ['google_credential', 'microsoft_credential'].find(
+  const credentialName = ['google_credential', 'microsoft_credential'].find(
     cred => !!thread[cred]
   )
-  const account = accounts.find(account => account.type === credentialType)
+  const account = accounts.find(account => account.type === credentialName)
 
-  return Array.isArray(account) && account.includes('mail.modify')
+  return !!(
+    account &&
+    Array.isArray(account.scope_summary) &&
+    account.scope_summary.includes('mail.modify')
+  )
 }
