@@ -7,7 +7,7 @@ import { ContactAttribute } from './ContactAttribute'
 import { DealContext } from './DealContext'
 import { NextTouch } from './NextTouch'
 import { EmailCampaign } from './EmailCampaign'
-import { EmailThread } from './EmailThread'
+import EmailThread from './EmailThread'
 
 import emptyStateEvent from '../../../helpers/get-event-empty-state'
 

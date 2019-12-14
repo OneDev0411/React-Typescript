@@ -76,7 +76,7 @@ export function EventContainer({
                 </div>
               )}
 
-              {title}
+              <div style={inlineStyles.title}>{title}</div>
             </div>
           </div>
 
