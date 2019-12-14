@@ -15,8 +15,6 @@ import { EditorState, Modifier, SelectionState } from 'draft-js'
 
 import { useMenu } from 'hooks/use-menu'
 
-import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
-
 import { defaultTemplateVariableSuggestions } from 'components/EmailCompose/default-template-variable-suggestions'
 import IconWarning from 'components/SvgIcons/Warning/IconWarning'
 import { ITemplateVariableSuggestion } from 'components/TemplateVariablesButton'
@@ -153,7 +151,7 @@ export const TemplateExpression = ({
 
   return (
     <Tooltip
-      title={value}
+      title={value || ''}
       placement="top"
       open={tooltipOpen && value && !fallbackPopover.open}
       classes={{ tooltip: classes.tooltip }}
@@ -189,7 +187,6 @@ export const TemplateExpression = ({
               onSubmit={onSubmit}
               onFallbackChange={setFallback}
               expressionText={expressionText}
-              innerRef={nativelyStopEventPropagationOfEventViaRef('mousedown')}
             />
           </Popper>
         </ClickAwayListener>

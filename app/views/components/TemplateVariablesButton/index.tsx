@@ -11,8 +11,6 @@ import {
   useTheme
 } from '@material-ui/core'
 
-import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
-
 import {
   ITemplateVariableSuggestion,
   ITemplateVariableSuggestionGroup
@@ -57,9 +55,7 @@ export function TemplateVariablesButton({
         style={{ zIndex: theme.zIndex.modal }}
         placement="bottom-start"
       >
-        <Paper
-          innerRef={nativelyStopEventPropagationOfEventViaRef('mousedown')}
-        >
+        <Paper>
           <ClickAwayListener onClickAway={close}>
             <List
               style={{
