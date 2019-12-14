@@ -37,6 +37,7 @@ declare interface IEmailThreadEmailBase<T> {
   text_body?: string
   thread_id: string
   thread_key: string
+  is_read: boolean
   to: string[]
   to_raw: IRawEmailRecipient[]
   unique_body?: string

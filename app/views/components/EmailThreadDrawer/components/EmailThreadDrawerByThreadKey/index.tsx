@@ -1,6 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
 
 import { Button } from '@material-ui/core'
+
+import { IAppState } from 'reducers'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+
+import { markThreadAsRead } from 'components/EmailThread/helpers/mark-thread-as-read'
+
+import { canUpdateThreadReadStatus } from 'components/EmailThread/helpers/can-update-thread-read-status'
 
 import { useEmailThreadLoader } from '../../../EmailThread/use-email-thread-loader'
 import { Drawer } from '../Drawer'
@@ -15,16 +23,27 @@ interface Props extends DrawerProps {
   threadKey: string | undefined
 }
 
+interface StateProps {
+  accounts: IOAuthAccount[]
+}
+
 /**
  * A drawer for loading an email thead by it's key and showing it
  */
-export function EmailThreadDrawerByThreadKey({
+function EmailThreadDrawerByThreadKey({
   threadKey,
+  accounts,
   ...drawerProps
-}: Props) {
+}: Props & StateProps) {
   const { fetchThread, thread, loading, error } = useEmailThreadLoader(
     threadKey
   )
+
+  useEffect(() => {
+    if (thread && !loading && canUpdateThreadReadStatus(accounts, thread)) {
+      markThreadAsRead(thread)
+    }
+  }, [accounts, loading, thread])
 
   return (
     <Drawer {...drawerProps}>
@@ -54,3 +73,11 @@ export function EmailThreadDrawerByThreadKey({
     </Drawer>
   )
 }
+
+function mapStateToProps(state: IAppState) {
+  return {
+    accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
+  }
+}
+
+export default connect(mapStateToProps)(EmailThreadDrawerByThreadKey)

@@ -1,14 +1,18 @@
 import React, { useContext } from 'react'
+import { connect } from 'react-redux'
 import { Box, makeStyles } from '@material-ui/core'
+
+import { IAppState } from 'reducers'
 
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
-import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
-import { iconSizes } from 'components/SvgIcons/icon-sizes'
-
 import { findInPeopleByEmail } from 'utils/find-in-people-by-email'
 import { getPersonDisplayName } from 'utils/get-person-display-name'
+import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
+import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import { canUpdateThreadReadStatus } from 'components/EmailThread/helpers/can-update-thread-read-status'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { ListContext } from '../../context'
 import { EventContainer } from '../components/EventContainer'
@@ -22,9 +26,14 @@ interface Props {
 
 const useStyles = makeStyles(sharedStyles)
 
-export function EmailThread({ style, event }: Props) {
+interface StateProps {
+  accounts: IOAuthAccount[]
+}
+
+function EmailThread({ style, event, accounts }: Props & StateProps) {
   const classes = useStyles({})
   const { setSelectedEvent } = useContext(ListContext)
+
   const thread = event.full_thread
 
   const handleContainerClick = () => setSelectedEvent(event)
@@ -33,6 +42,10 @@ export function EmailThread({ style, event }: Props) {
     thread.recipients
   )
 
+  const isThreadRead = canUpdateThreadReadStatus(accounts, thread)
+    ? thread.is_read
+    : true
+
   return (
     <EventContainer
       style={style}
@@ -40,7 +53,13 @@ export function EmailThread({ style, event }: Props) {
       Icon={eventIcons.Email.icon}
       editable={false}
       title={
-        <Box display="flex" alignItems="center">
+        <Box
+          display="flex"
+          alignItems="center"
+          style={{
+            fontWeight: isThreadRead ? 400 : 600
+          }}
+        >
           <a
             className={classes.link}
             onClick={e => {
@@ -89,3 +108,11 @@ export function EmailThread({ style, event }: Props) {
     />
   )
 }
+
+function mapStateToProps(state: IAppState) {
+  return {
+    accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
+  }
+}
+
+export default connect(mapStateToProps)(EmailThread)
