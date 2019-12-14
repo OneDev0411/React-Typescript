@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Box, makeStyles } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
@@ -11,8 +11,8 @@ import { getPersonDisplayName } from 'utils/get-person-display-name'
 import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
 import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-import { canUpdateThreadReadStatus } from 'components/EmailThread/helpers/can-update-thread-read-status'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { hasOAuthAccess } from 'components/EmailThread/helpers/has-oauth-access'
 
 import { ListContext } from '../../context'
 import { EventContainer } from '../components/EventContainer'
@@ -26,14 +26,12 @@ interface Props {
 
 const useStyles = makeStyles(sharedStyles)
 
-interface StateProps {
-  accounts: IOAuthAccount[]
-}
-
-function EmailThread({ style, event, accounts }: Props & StateProps) {
+export function EmailThread({ style, event }: Props) {
   const classes = useStyles({})
   const { setSelectedEvent } = useContext(ListContext)
-
+  const accounts: IOAuthAccount[] = useSelector((state: IAppState) =>
+    selectAllConnectedAccounts(state.contacts.oAuthAccounts)
+  )
   const thread = event.full_thread
 
   const handleContainerClick = () => setSelectedEvent(event)
@@ -42,7 +40,11 @@ function EmailThread({ style, event, accounts }: Props & StateProps) {
     thread.recipients
   )
 
-  const isThreadRead = canUpdateThreadReadStatus(accounts, thread)
+  const isThreadRead = hasOAuthAccess(
+    accounts,
+    thread.google_credential || thread.microsoft_credential,
+    'mail.modify'
+  )
     ? thread.is_read
     : true
 
@@ -108,11 +110,3 @@ function EmailThread({ style, event, accounts }: Props & StateProps) {
     />
   )
 }
-
-function mapStateToProps(state: IAppState) {
-  return {
-    accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
-  }
-}
-
-export default connect(mapStateToProps)(EmailThread)

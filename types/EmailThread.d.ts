@@ -78,8 +78,12 @@ declare type IEmailThread<
   is_read: boolean
   brand: UUID
   user: UUID
-  google_credential: UUID | null
-  microsoft_credential: UUID | null
+  google_credential: UUID | undefined
+  microsoft_credential: UUID | undefined
   type: 'email_thread'
 } & Association<'messages', IEmailThreadMessage[], Associations> &
   Association<'contacts', (IContact & IContactSummary)[] | null, Associations>
+
+declare type IThreadCredentialKeys =
+  | 'google_credential'
+  | 'microsoft_credential'

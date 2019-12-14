@@ -8,5 +8,5 @@ export {
 } from './components/EmailCampaignThreadDrawerByCampaignId'
 
 export {
-  default as EmailThreadDrawerByThreadKey
+  EmailThreadDrawerByThreadKey
 } from './components/EmailThreadDrawerByThreadKey'

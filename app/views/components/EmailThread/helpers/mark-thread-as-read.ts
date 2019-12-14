@@ -1,3 +1,5 @@
+import { OAuthProvider } from 'constants/contacts'
+
 import { updateMessageIsRead } from 'models/email/update-is-read'
 
 export function markThreadAsRead(thread: IEmailThread<'messages'>) {
@@ -6,23 +8,19 @@ export function markThreadAsRead(thread: IEmailThread<'messages'>) {
   )
 
   unreadMessages.forEach(message => {
-    let mailServerName
-    let credentialId
+    let name
+    const id = thread.google_credential || thread.microsoft_credential
 
     if (thread.google_credential) {
-      mailServerName = 'google'
-      credentialId = thread.google_credential
+      name = OAuthProvider.Google
+    } else if (thread.microsoft_credential) {
+      name = OAuthProvider.Outlook
     }
 
-    if (thread.microsoft_credential) {
-      mailServerName = 'microsoft'
-      credentialId = thread.microsoft_credential
-    }
-
-    if (!credentialId) {
+    if (!id) {
       return
     }
 
-    updateMessageIsRead(mailServerName, credentialId, message.id, true)
+    updateMessageIsRead(name, id, message.id, true)
   })
 }

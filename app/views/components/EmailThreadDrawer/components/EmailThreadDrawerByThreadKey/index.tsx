@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { Button } from '@material-ui/core'
 
@@ -8,7 +8,7 @@ import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { markThreadAsRead } from 'components/EmailThread/helpers/mark-thread-as-read'
 
-import { canUpdateThreadReadStatus } from 'components/EmailThread/helpers/can-update-thread-read-status'
+import { hasOAuthAccess } from 'components/EmailThread/helpers/has-oauth-access'
 
 import { useEmailThreadLoader } from '../../../EmailThread/use-email-thread-loader'
 import { Drawer } from '../Drawer'
@@ -23,24 +23,30 @@ interface Props extends DrawerProps {
   threadKey: string | undefined
 }
 
-interface StateProps {
-  accounts: IOAuthAccount[]
-}
-
 /**
  * A drawer for loading an email thead by it's key and showing it
  */
-function EmailThreadDrawerByThreadKey({
+export function EmailThreadDrawerByThreadKey({
   threadKey,
-  accounts,
   ...drawerProps
-}: Props & StateProps) {
+}: Props) {
   const { fetchThread, thread, loading, error } = useEmailThreadLoader(
     threadKey
   )
+  const accounts: IOAuthAccount[] = useSelector((state: IAppState) =>
+    selectAllConnectedAccounts(state.contacts.oAuthAccounts)
+  )
 
   useEffect(() => {
-    if (thread && !loading && canUpdateThreadReadStatus(accounts, thread)) {
+    if (
+      thread &&
+      !loading &&
+      hasOAuthAccess(
+        accounts,
+        thread.google_credential || thread.microsoft_credential,
+        'mail.modify'
+      )
+    ) {
       markThreadAsRead(thread)
     }
   }, [accounts, loading, thread])
@@ -73,11 +79,3 @@ function EmailThreadDrawerByThreadKey({
     </Drawer>
   )
 }
-
-function mapStateToProps(state: IAppState) {
-  return {
-    accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
-  }
-}
-
-export default connect(mapStateToProps)(EmailThreadDrawerByThreadKey)

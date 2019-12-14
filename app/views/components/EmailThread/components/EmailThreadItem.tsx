@@ -32,9 +32,9 @@ import { decodeContentIds } from '../helpers/decode-content-ids'
 import { EmailResponseComposeForm } from '../../EmailCompose/EmailResponseComposeForm'
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
 import { EmailRecipient } from '../../EmailRecipient'
-
 import { ThreeDotsButton } from '../../ThreeDotsButton'
 import { trimEmailQuotedContent } from '../helpers/trimEmailQuotedContent'
+import { updateEmailReadStatus } from '../helpers/update-email-read-status'
 
 interface Props {
   email: EmailThreadEmail
@@ -89,7 +89,7 @@ export function EmailThreadItem({
   email,
   onToggleCollapsed,
   showBottomButtons = false,
-  onEmailSent = () => {},
+  onEmailSent = () => { },
   ...props
 }: Props) {
   const iconClasses = useIconStyles()
@@ -167,6 +167,9 @@ export function EmailThreadItem({
                 onReply={() => openResponse('reply')}
                 onReplyAll={() => openResponse('replyAll')}
                 onForward={() => openResponse('forward')}
+                onChangeReadStatus={() =>
+                  updateEmailReadStatus(email, !email.isRead)
+                }
               />
             )}
           </Box>

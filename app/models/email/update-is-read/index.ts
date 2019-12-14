@@ -1,19 +1,17 @@
+import { OAuthProvider } from 'constants/contacts'
+
 import Fetch from '../../../services/fetch'
 
-type MailServerNames = 'google' | 'microsoft'
-
 export async function updateMessageIsRead(
-  mailServerName: MailServerNames,
-  credentialId: string,
+  name: OAuthProvider,
+  id: string,
   messageId: string,
   status: boolean
 ): Promise<void> {
   try {
-    await new Fetch()
-      .put(`/emails/${mailServerName}/${credentialId}/messages/${messageId}`)
-      .send({
-        status
-      })
+    await new Fetch().put(`/emails/${name}/${id}/messages/${messageId}`).send({
+      status
+    })
   } catch (e) {
     console.log(e)
     throw e
