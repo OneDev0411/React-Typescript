@@ -3,16 +3,16 @@ import { Box } from '@material-ui/core'
 
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
-import { getRecipientNameByEmail } from 'utils/get-recipient-name-by-email'
-import { parseEmailRecipient } from 'components/EmailRecipientsChipsInput/helpers/parse-email-recipient'
-import MiniContactProfile from 'components/MiniContact/MiniContactProfile'
 import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
 import { iconSizes } from 'components/SvgIcons/icon-sizes'
+
+import { findInPeopleByEmail } from 'utils/find-in-people-by-email'
 
 import { ListContext } from '../../context'
 import { EventContainer } from '../components/EventContainer'
 import styles from '../styles'
 import { EventBadge } from '../components/EventBadge'
+import { EmailRecipient } from '../../../../../EmailRecipient'
 
 interface Props {
   style: React.CSSProperties
@@ -52,29 +52,13 @@ export function EmailThread({ style, event, nextItem }: Props) {
           </a>
           &nbsp;
           {recipients.map((recipient, index) => {
-            let { displayName, emailAddress } = parseEmailRecipient(recipient)
-
-            if (!displayName) {
-              displayName =
-                getRecipientNameByEmail(event.people, emailAddress) || ''
-            }
-
             return (
               <React.Fragment key={index}>
                 {index !== 0 && <>,&nbsp;</>}
-                <MiniContactProfile
-                  as="span"
-                  data={{
-                    email_address: emailAddress,
-                    display_name:
-                      displayName !== emailAddress ? displayName : undefined
-                  }}
-                  type="insight"
-                >
-                  <span style={{ position: 'relative', zIndex: 1 }}>
-                    {displayName || emailAddress}
-                  </span>
-                </MiniContactProfile>
+                <EmailRecipient
+                  recipient={recipient}
+                  person={findInPeopleByEmail(event.people, recipient)}
+                />
               </React.Fragment>
             )
           })}
