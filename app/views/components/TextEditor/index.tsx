@@ -76,7 +76,6 @@ export const TextEditor = forwardRef(
      */
     const { ...otherPlugins } = useMemo(() => createPlugins(), [])
 
-
     const handleChange = (newState: EditorState) => {
       if (!newState) {
         return false
@@ -126,8 +125,8 @@ export const TextEditor = forwardRef(
         setTimeout(() => {
           firstRenderFlagRef.current = false
 
-          if (editorStateRef.current) {
-            setEditorState(moveSelectionToStart(editorStateRef.current))
+          if (editorState) {
+            onChange(moveSelectionToStart(editorState))
           }
 
           if (autofocus) {
