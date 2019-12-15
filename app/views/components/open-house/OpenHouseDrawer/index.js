@@ -300,7 +300,7 @@ class OpenHouseDrawerInternal extends React.Component {
       await this.props.submitCallback(newTour, action)
 
       if (this.props.dealNotifyOffice && action === 'created') {
-        this.createDealOpenHouse(openHouse)
+        this.bookDealOpenHouse(openHouse)
       }
     } catch (error) {
       console.log(error)
@@ -366,7 +366,7 @@ class OpenHouseDrawerInternal extends React.Component {
     return assets
   }
 
-  createDealOpenHouse = openHouse => {
+  bookDealOpenHouse = openHouse => {
     if (hasUserAccess(this.props.user, ACL.BETA) === false) {
       return
     }
@@ -380,12 +380,9 @@ class OpenHouseDrawerInternal extends React.Component {
     }
 
     const options = {
-      createOpenHouse: true,
-      startTime: openHouse.due_date
-    }
-
-    if (openHouse.end_date) {
-      options.endTime = openHouse.end_date
+      autoBookOpenHouse: true,
+      startTime: openHouse.due_date,
+      endTime: openHouse.end_date || undefined
     }
 
     this.props.dispatch(
@@ -394,7 +391,7 @@ class OpenHouseDrawerInternal extends React.Component {
           'Would you also like to notify your office so they book this on the MLS for you?',
         confirmLabel: 'Notify',
         onConfirm: () => {
-          goTo(`/dashboard/deals/${dealAssociation.deal}`, '', options)
+          goTo(`/dashboard/deals/${dealAssociation.deal}`, '', {}, options)
         }
       })
     )

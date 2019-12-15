@@ -32,7 +32,7 @@ export const Menu = withRouter(props => {
             <OpenHouse
               deal={deal}
               style={{ marginLeft: '0.5rem' }}
-              defaultOpen={(props.location.state || {}).bookOpenHouse}
+              defaultOpen={(props.location.state || {}).autoBookOpenHouse}
             />
           )}
 
