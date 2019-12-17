@@ -8,6 +8,37 @@
   height: 100%;
   z-index: 100;
 
+  .gjs-rte-actionbar {
+    background: #fff;
+    color: #000;
+    font-size: 1rem;
+    padding: 0 0.2rem;
+
+    .gjs-rte-action {
+      border: none;
+      padding: 0.3rem 0.5rem;
+      border-radius: 50%;
+      width: 2rem;
+      height: 2rem;
+
+      &[title=Link] {
+        display: none;
+      }
+
+      &:nth-last-child(2) {
+        border-right: none;
+      }
+      
+      &:hover {
+        background-color: rgba(0,0,0,0.05);
+      }
+    }
+
+    .gjs-rte-active {
+      background-color: rgba(0,0,0,0.1);
+    }
+  }
+
   .gjs-sm-header {
     padding: 0;
   }
