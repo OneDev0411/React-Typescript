@@ -35,8 +35,6 @@ export const load = async colors => {
     } = options
 
     const isElementAllowed = (target, conditions) => {
-      console.log('TARGET', target)
-
       if (!conditions.allowedTags.includes(target.attributes.tagName)) {
         return false
       }
@@ -69,7 +67,6 @@ export const load = async colors => {
     const setStyle = (target, prop, value) => {
       const selectedTargetStyles = Object.assign({}, target.get('style'))
 
-      console.log({ selectedTargetStyles, prop, value })
       selectedTargetStyles[prop] = value
       target.set('style', selectedTargetStyles)
     }
@@ -174,7 +171,13 @@ export const load = async colors => {
                   : getStyle(selected).textAlign
               }
               onChange={textAlign => {
-                setStyle(selected, 'align', textAlign)
+                if (isMjmlElement(selected)) {
+                  setStyle(selected, 'align', textAlign)
+
+                  return
+                }
+
+                setStyle(selected, 'text-align', textAlign)
               }}
             />,
             textAlignPickerContainer
