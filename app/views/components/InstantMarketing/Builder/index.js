@@ -750,7 +750,11 @@ class Builder extends React.Component {
     return (
       <Portal root="marketing-center">
         <Container
-          hideBlocks={this.isOpenHouseMedium || this.isSocialMedium}
+          hideBlocks={
+            !this.isMjmlTemplate ||
+            this.isOpenHouseMedium ||
+            this.isSocialMedium
+          }
           className="template-builder"
           style={this.props.containerStyle}
         >
