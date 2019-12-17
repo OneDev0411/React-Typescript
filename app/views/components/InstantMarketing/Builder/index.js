@@ -48,6 +48,8 @@ import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
 import getTemplateRenderData from './utils/get-template-render-data'
 
+const ENABLE_CUSTOM_RTE = false
+
 class Builder extends React.Component {
   constructor(props) {
     super(props)
@@ -233,7 +235,10 @@ class Builder extends React.Component {
     this.removeTextStylesOnPaste()
     this.disableDefaultDeviceManager()
     this.scrollSidebarToTopOnComponentSelect()
-    this.setRte()
+
+    if (ENABLE_CUSTOM_RTE) {
+      this.setRte()
+    }
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       this.registerEmailBlocks()
