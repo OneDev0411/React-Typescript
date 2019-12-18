@@ -10,5 +10,8 @@
   "search.exclude": {
     "**/*.sql": true,
     "**/__snapshots__": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
   }
 }
