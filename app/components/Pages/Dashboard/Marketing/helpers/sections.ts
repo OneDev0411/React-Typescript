@@ -21,10 +21,10 @@ export const SECTIONS = [
     type: SectionsEnum.LINK,
     title: 'Life',
     items: [
-      {
-        title: 'Life Layouts',
-        link: urlGenerator('/Layout')
-      },
+      // {
+      //   title: 'Blank Layouts',
+      //   link: urlGenerator('/Layout')
+      // },
       {
         title: 'Newsletter',
         link: urlGenerator('/Newsletter')
@@ -53,10 +53,10 @@ export const SECTIONS = [
     type: SectionsEnum.LINK,
     title: 'Properties',
     items: [
-      {
-        title: 'Properties Layout',
-        link: urlGenerator('/ListingLayout')
-      },
+      // {
+      //   title: 'Blank Layout',
+      //   link: urlGenerator('/ListingLayout')
+      // },
       {
         title: 'As Seen In',
         link: urlGenerator('/AsSeenIn')
