@@ -26,6 +26,10 @@ export const SECTIONS = [
         link: urlGenerator('/Layout')
       },
       {
+        title: 'Newsletter',
+        link: urlGenerator('/Newsletter')
+      },
+      {
         title: 'Occasions',
         link: urlGenerator('/Birthday')
       },
