@@ -29,6 +29,7 @@ import getRequiredFields from './helpers/get-required-fields'
 import getVisibleFields from './helpers/get-visible-fields'
 import { getFormValidators } from './validators'
 import { getCommissionAttributes } from './helpers/get-commission-attributes'
+import { LEGAL_PREFIXES } from './constants/legal_prefixes'
 
 const propTypes = {
   isOpen: PropTypes.bool.isRequired,
@@ -342,7 +343,9 @@ export class DealRole extends React.Component {
     changeValue(state, 'agent', () => (user.mlsid ? user.id : null))
     changeValue(state, 'future_address', () => user.future_address || {})
     changeValue(state, 'current_address', () => user.current_address || {})
-    changeValue(state, 'legal_prefix', () => user.title || null)
+    changeValue(state, 'legal_prefix', () =>
+      user.title && LEGAL_PREFIXES.includes(user.title) ? user.title : null
+    )
     changeValue(
       state,
       'phone_number',
