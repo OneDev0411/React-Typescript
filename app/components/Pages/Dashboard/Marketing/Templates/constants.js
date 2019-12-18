@@ -5,6 +5,7 @@ export const TYPES_TITLE = {
   Birthday: 'Occasions',
   Brand: 'Brand Campaigns',
   ComingSoon: 'Coming Soon',
+  Newsletter: 'Newsletter',
   'Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday': 'Holiday',
   JustListed: 'Just Listed',
   UnderContract: 'Under Contract',
