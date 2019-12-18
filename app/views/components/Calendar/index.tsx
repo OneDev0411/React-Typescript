@@ -424,7 +424,7 @@ export function Calendar({
       previousProps &&
       JSON.stringify(previousProps.filter) !== JSON.stringify(filter)
     ) {
-      handleLoadEvents(activeDate)
+      handleLoadEvents(new Date())
     }
     // eslint-disable-next-line
   }, [filter])
