@@ -464,21 +464,10 @@ class Builder extends React.Component {
         </body>
       </html>`
 
-    /*
-     * Email clients are far better at rendering inline css.
-     * Therefore, we use Juice to inline them.
-     *
-     * However, inlining has some issues. Pseudo elements, media queries
-     * and such are not really inline-able.
-     *
-     * Therefore, we do the inlining when necessary: Only on Emails.
-     *
-     * There's no reason to go through that fragile process on social templates
-     */
-
-    const shouldInline = this.isEmailTemplate
-
-    const result = shouldInline ? juice(assembled) : assembled
+    // We should always inlinify templates to prevent future conflicts between props in edit mode.
+    // An example case is this issue: https://gitlab.com/rechat/web/issues/3769
+    // The reason was we set 2 bg images for the element. An inline one and another with selector.
+    const result = juice(assembled)
 
     return {
       ...this.state.selectedTemplate,
