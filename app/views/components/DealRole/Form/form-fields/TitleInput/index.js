@@ -2,7 +2,9 @@ import React from 'react'
 
 import { SelectInput } from 'components/Forms/SelectInput'
 
-const items = [null, 'Mr.', 'Ms.', 'Mrs.', 'Miss', 'Dr.'].map(value => ({
+import { LEGAL_PREFIXES } from '../../../constants/legal_prefixes'
+
+const items = [null, ...LEGAL_PREFIXES].map(value => ({
   value,
   label: value || 'Select Title'
 }))
