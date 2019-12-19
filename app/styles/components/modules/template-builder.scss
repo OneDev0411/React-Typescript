@@ -8,6 +8,10 @@
   height: 100%;
   z-index: 100;
 
+  .gjs-sm-header {
+    display: none !important;
+  }
+
   .gjs-rte-actionbar {
     background: #fff;
     color: #000;
