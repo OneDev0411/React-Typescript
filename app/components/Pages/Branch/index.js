@@ -151,6 +151,20 @@ const redirectHandler = async (
 
     if (listing) {
       redirect = `/dashboard/mls/${listing}?token=${token}`
+    } else if (actionType === 'UserActivation') {
+      const { first_name, last_name } = receivingUser
+
+      if (
+        first_name &&
+        first_name !== decodeURIComponent(email) &&
+        first_name !== encodeURIComponent(phone_number)
+      ) {
+        redirect += `&firstName=${first_name}`
+      }
+
+      if (last_name) {
+        redirect += `&lastName=${last_name}`
+      }
     }
 
     if (phone_number) {
