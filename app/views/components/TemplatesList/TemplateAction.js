@@ -22,6 +22,7 @@ const HOLIDAY_TYPES = [
 const GENERAL_FLOW_TYPES = [
   'Brand',
   'NewAgent',
+  'Newsletter',
   HOLIDAY_TYPES.join(','),
   ...HOLIDAY_TYPES
 ]
@@ -60,6 +61,9 @@ function TemplateAction(props) {
 
   sharedProps.selectedTemplate = convertToTemplate(props.selectedTemplate)
 
+  // TODO: Refactor this logic as it's not right and it's fragile!
+  // There's a "inputs" (inputs: string[]) key inside the template which we should check it for deciding about the flow!
+  // We should check that inputs and use it for showing the proper flow based on template needs.
   if (templateType === 'Birthday' && !isBirthdaySocial) {
     return <ContactFlow {...sharedProps} />
   }
