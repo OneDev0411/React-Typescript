@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react'
+import React, { useState } from 'react'
 import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
 
@@ -10,49 +10,35 @@ import {
   Content as PageContent
 } from 'components/SlideMenu'
 
-import { SECTIONS } from './helpers/sections'
+import { useSections } from './hooks/use-sections'
 
-class Marketing extends Component {
-  state = {
-    isSideMenuOpen: true
-  }
+export function Marketing(props) {
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(true)
+  const sections = useSections()
 
-  onboardingRef = createRef()
+  const toggleSideMenu = () => setIsSideMenuOpen(!isSideMenuOpen)
 
-  toggleSideMenu = () =>
-    this.setState(state => ({
-      isSideMenuOpen: !state.isSideMenuOpen
-    }))
+  return (
+    <Acl.Marketing fallbackUrl="/dashboard/mls">
+      <PageContainer isOpen={isSideMenuOpen}>
+        <Helmet>
+          <title>Marketing | Rechat</title>
+        </Helmet>
 
-  handleShowIntro = () => {
-    this.onboardingRef.current.show()
-  }
+        <PageSideNav isOpen={isSideMenuOpen} sections={sections} />
 
-  render() {
-    const { isSideMenuOpen } = this.state
-
-    return (
-      <Acl.Marketing fallbackUrl="/dashboard/mls">
-        <PageContainer isOpen={isSideMenuOpen}>
-          <Helmet>
-            <title>Marketing | Rechat</title>
-          </Helmet>
-
-          <PageSideNav isOpen={isSideMenuOpen} sections={SECTIONS} />
-
-          <PageContent isSideMenuOpen={isSideMenuOpen}>
-            {React.Children.map(this.props.children, child =>
-              React.cloneElement(child, {
-                ...this.props.params,
-                isSideMenuOpen,
-                toggleSideMenu: this.toggleSideMenu
-              })
-            )}
-          </PageContent>
-        </PageContainer>
-      </Acl.Marketing>
-    )
-  }
+        <PageContent isSideMenuOpen={isSideMenuOpen}>
+          {React.Children.map(props.children, child =>
+            React.cloneElement(child, {
+              ...props.params,
+              isSideMenuOpen,
+              toggleSideMenu
+            })
+          )}
+        </PageContent>
+      </PageContainer>
+    </Acl.Marketing>
+  )
 }
 
 export default withRouter(Marketing)

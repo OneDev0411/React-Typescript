@@ -1,10 +1,21 @@
-import { SectionsEnum } from 'components/PageSideNav/types'
+import { useSelector } from 'react-redux'
+
+import { IAppState } from 'reducers'
+import { hasUserAccess } from 'utils/user-teams'
+
+import {
+  SectionsEnum,
+  Section,
+  SectionItem
+} from 'components/PageSideNav/types'
 
 import MyDesignsIcon from '../components/IconMyDesigns/IconMyDesigns'
 
-const urlGenerator = (url: string): string => `/dashboard/marketing${url}`
+function urlGenerator(url: string): string {
+  return `/dashboard/marketing${url}`
+}
 
-export const SECTIONS = [
+const ALL_SECTIONS: Section[] = [
   {
     type: SectionsEnum.LINK,
     title: 'Marketing Center',
@@ -21,13 +32,10 @@ export const SECTIONS = [
     type: SectionsEnum.LINK,
     title: 'Life',
     items: [
-      // {
-      //   title: 'Blank Layouts',
-      //   link: urlGenerator('/Layout')
-      // },
       {
-        title: 'Newsletter',
-        link: urlGenerator('/Newsletter')
+        title: 'Newsletters',
+        link: urlGenerator('/Newsletter'),
+        access: ['BetaFeatures']
       },
       {
         title: 'Occasions',
@@ -53,10 +61,6 @@ export const SECTIONS = [
     type: SectionsEnum.LINK,
     title: 'Properties',
     items: [
-      // {
-      //   title: 'Blank Layout',
-      //   link: urlGenerator('/ListingLayout')
-      // },
       {
         title: 'As Seen In',
         link: urlGenerator('/AsSeenIn')
@@ -92,3 +96,43 @@ export const SECTIONS = [
     ]
   }
 ]
+
+function getPrivilegedSectionItems(
+  user: IUser,
+  section: Section
+): SectionItem[] {
+  return section.items.filter(item => {
+    const hasAccessToItem = (item.access || []).every(access =>
+      hasUserAccess(user, access)
+    )
+
+    return hasAccessToItem
+  })
+}
+
+export function useSections(): Section[] {
+  const user = useSelector<IAppState, IUser>(state => state.user)
+
+  const newSections: Section[] = []
+
+  ALL_SECTIONS.forEach(section => {
+    const hasAccessToSection = (section.access || []).every(access =>
+      hasUserAccess(user, access)
+    )
+
+    // No section access!
+    // No section items access!
+    if (!hasAccessToSection) {
+      return
+    }
+
+    const newSection: Section = {
+      ...section,
+      items: getPrivilegedSectionItems(user, section)
+    }
+
+    newSections.push(newSection)
+  })
+
+  return newSections
+}
