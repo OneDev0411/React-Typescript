@@ -1,7 +1,8 @@
 import React from 'react'
 
 import RedirectModal from '../RedirectModal'
-import Button from '../../../../../views/components/Button/LinkButton'
+import LinkButton from '../../../../../views/components/Button/LinkButton'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
 import { SigninButton } from '../SigninButton'
 
 const ConflictModal = ({ params, brandInfo }) => {
@@ -31,12 +32,20 @@ const ConflictModal = ({ params, brandInfo }) => {
           {messageText}
         </p>
         <div>
-          <Button appearance="outline" to="/dashboard/mls">
+          <LinkButton
+            appearance="outline"
+            to="/dashboard/mls"
+            style={{ marginRight: '1rem' }}
+          >
             Cancel
-          </Button>
-          <SigninButton href={actionButton.href}>
-            {actionButton.text}
-          </SigninButton>
+          </LinkButton>
+          {actionButton.href ? (
+            <SigninButton href={actionButton.href}>
+              {actionButton.text}
+            </SigninButton>
+          ) : (
+            <ActionButton {...actionButton}>{actionButton.text}</ActionButton>
+          )}
         </div>
       </div>
     </RedirectModal>
