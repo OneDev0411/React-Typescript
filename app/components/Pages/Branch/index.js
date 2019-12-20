@@ -7,7 +7,6 @@ import withState from 'recompose/withState'
 import { browserHistory } from 'react-router'
 
 import publicConfig from '../../../../config/public'
-import privateConfig from '../../../../config/private'
 
 import signin from '../../../store_actions/auth/signin'
 
@@ -182,8 +181,7 @@ const redirectHandler = async (
           {
             refresh_token: branchData.refresh_token.token,
             grant_type: 'refresh_token',
-            client_id: privateConfig.api.client_id,
-            client_secret: privateConfig.api.client_secret
+            client_id: branchData.refresh_token.client
           },
           undefined,
           branchData.refresh_token.user
