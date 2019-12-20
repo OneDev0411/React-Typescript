@@ -5,10 +5,12 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import LazyLoad from 'react-lazy-load'
 
+import { isLeaseProperty } from 'utils/listing'
+import { setMapHoveredMarkerId } from 'store_actions/listings/map'
+
 import './style.scss'
 
 import FavoriteHeart from '../FavoriteHeart'
-import { setMapHoveredMarkerId } from '../../../../../../store_actions/listings/map'
 
 const ListingCard = ({
   user,
@@ -43,6 +45,7 @@ const ListingCard = ({
           <h4 className="c-listing-card__title">{listing.address}</h4>
           <div className="c-listing-card__price">
             $ {listing.price.toLocaleString()}
+            {isLeaseProperty(listing) ? '/mo' : ''}
           </div>
           <div className="c-listing-card__details">
             <span>{listing.beds} Beds</span>

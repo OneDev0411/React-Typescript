@@ -3,6 +3,7 @@ import { Box } from '@material-ui/core'
 
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
+import { getRecipientNameByEmail } from 'utils/get-recipient-name-by-email'
 import { parseEmailRecipient } from 'components/EmailRecipientsChipsInput/helpers/parse-email-recipient'
 import MiniContactProfile from 'components/MiniContact/MiniContactProfile'
 import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
@@ -15,18 +16,18 @@ import { EventBadge } from '../components/EventBadge'
 
 interface Props {
   style: React.CSSProperties
-  event: ICalendarEvent
+  event: ICalendarEvent<'full_thread'>
   nextItem: ICalendarListRow
 }
 
 export function EmailThread({ style, event, nextItem }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
-  const thread = event.full_thread! // FIXME(NOW)
+  const thread = event.full_thread
 
   const handleContainerClick = () => setSelectedEvent(event)
 
   const { visibleItems: recipients, othersText } = getTrimmedArrayAndOthersText(
-    thread.to
+    thread.recipients
   )
 
   return (
@@ -49,9 +50,14 @@ export function EmailThread({ style, event, nextItem }: Props) {
           >
             Email
           </a>
-          &nbsp;to&nbsp;
+          &nbsp;
           {recipients.map((recipient, index) => {
-            const { displayName, emailAddress } = parseEmailRecipient(recipient)
+            let { displayName, emailAddress } = parseEmailRecipient(recipient)
+
+            if (!displayName) {
+              displayName =
+                getRecipientNameByEmail(event.people, emailAddress) || ''
+            }
 
             return (
               <React.Fragment key={index}>
@@ -74,11 +80,11 @@ export function EmailThread({ style, event, nextItem }: Props) {
           })}
           {othersText && (
             <>
-              &nbsp;and <span>{othersText}</span>
+              &nbsp;and&nbsp;<span>{othersText}</span>
             </>
           )}
-          {thread.email_count > 1 && (
-            <EventBadge>{thread.email_count}</EventBadge>
+          {thread.message_count > 1 && (
+            <EventBadge>{thread.message_count}</EventBadge>
           )}
           {thread.has_attachments && (
             <EventBadge padding="dense">

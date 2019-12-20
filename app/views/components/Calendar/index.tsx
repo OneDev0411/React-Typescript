@@ -30,7 +30,8 @@ import {
   ApiOptions,
   FetchOptions,
   Placeholder,
-  LoadingDirection
+  LoadingDirection,
+  CrmEventType
 } from './types'
 
 import { getDateRange, Format } from './helpers/get-date-range'
@@ -45,6 +46,7 @@ import List from './components/List'
 interface Props {
   viewAsUsers?: UUID[]
   filter?: object
+  contact?: IContact
   associations?: string[]
   calendarRef?: RefObject<CalendarRef>
   user?: IUser
@@ -67,6 +69,7 @@ export function Calendar({
   viewAsUsers,
   initialRange,
   user,
+  contact,
   directions = [LoadingDirection.Top, LoadingDirection.Bottom],
   placeholders = [Placeholder.Month, Placeholder.Day],
   filter = {},
@@ -363,12 +366,12 @@ export function Calendar({
    * triggers when a crm events update or delete
    */
   const handleCrmEventChange = useCallback(
-    (event: IEvent, type: string) => {
-      const nextEvents = upsertCrmEvents(events, event, type)
+    (event: IEvent, type: CrmEventType) => {
+      const nextEvents = upsertCrmEvents(events, event, type, contact)
 
       createListFromEvents(nextEvents)
     },
-    [createListFromEvents, events]
+    [contact, createListFromEvents, events]
   )
 
   /**
@@ -421,7 +424,7 @@ export function Calendar({
       previousProps &&
       JSON.stringify(previousProps.filter) !== JSON.stringify(filter)
     ) {
-      handleLoadEvents(activeDate)
+      handleLoadEvents(new Date())
     }
     // eslint-disable-next-line
   }, [filter])
@@ -464,6 +467,7 @@ export function Calendar({
       ref={listRef}
       rows={listRows}
       user={user as IUser}
+      contact={contact}
       isLoading={isLoading}
       loadingPosition={loadingPosition}
       onReachEnd={handleLoadNextEvents}

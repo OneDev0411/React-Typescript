@@ -1,6 +1,7 @@
 import Enzyme, { ShallowWrapper } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 
+import 'whatwg-fetch'
 import '@testing-library/react/cleanup-after-each'
 import { configure } from '@testing-library/react'
 

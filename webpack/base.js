@@ -116,6 +116,22 @@ module.exports = {
             loader: 'file-loader'
           }
         ]
+      },
+      {
+        test: /\.(mjml)$/,
+        use: [
+          {
+            loader: 'raw-loader'
+          }
+        ]
+      },
+      {
+        test: /\.(html)$/,
+        use: [
+          {
+            loader: 'raw-loader'
+          }
+        ]
       }
     ]
   }

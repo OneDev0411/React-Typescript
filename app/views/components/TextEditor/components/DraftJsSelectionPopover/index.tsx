@@ -15,7 +15,7 @@ import PopperJs from 'popper.js'
 
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
 
-import { getSelectionAnchorElement } from '../LinkEditorPopover/utils'
+import { getSelectionAnchorElement } from '../../features/RichText/LinkEditorPopover/utils'
 import { Entity } from '../../types'
 import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
 import { getAtomicBlockEntityData } from '../../utils/get-atomic-block-entity-data'

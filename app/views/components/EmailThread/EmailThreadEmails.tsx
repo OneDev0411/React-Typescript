@@ -5,28 +5,26 @@ import useMap from 'react-use/lib/useMap'
 
 import { EmailThreadItem } from './components/EmailThreadItem'
 import { ShowAllToggle } from './components/ShowAllToggle'
+import { EmailThreadEmail } from './types'
 
 interface Props {
-  thread: IEmailThread
+  emails: EmailThreadEmail[]
   style?: CSSProperties
 
   /**
    * Callback to be called when an email in the thread is replied/forwarded
    */
-  onEmailSent?: (email: IEmailThreadEmail) => void
+  onEmailSent?: (email: IEmailCampaign) => void
 }
 
-export function EmailThreadEmails({ thread, style = {}, onEmailSent }: Props) {
+export function EmailThreadEmails({ emails, style = {}, onEmailSent }: Props) {
   const [showAll, setShowAll] = useState(false)
 
   const [openedThreads, { set: setOpen }] = useMap()
 
   const visibleItems = showAll
-    ? thread
-    : thread.filter((item, index) => index === 0 || index >= thread.length - 2)
-
-  const firstNonRechatEmail = thread.find(email => email.owner)
-  const fallbackOwner = firstNonRechatEmail ? firstNonRechatEmail.owner : null
+    ? emails
+    : emails.filter((item, index) => index === 0 || index >= emails.length - 2)
 
   return (
     <div style={style}>
@@ -39,7 +37,7 @@ export function EmailThreadEmails({ thread, style = {}, onEmailSent }: Props) {
 
         const collapsed = last ? false : !openedThreads[email.id]
 
-        const numHidden = thread.length - visibleItems.length
+        const numHidden = emails.length - visibleItems.length
         const showAllToggle =
           index === 0 && !showAll && numHidden > 0 ? (
             <ShowAllToggle
@@ -55,7 +53,6 @@ export function EmailThreadEmails({ thread, style = {}, onEmailSent }: Props) {
               onToggleCollapsed={onToggleCollapsed}
               showBottomButtons={last}
               collapsed={collapsed}
-              defaultFrom={fallbackOwner || undefined}
               onEmailSent={onEmailSent}
             />
             {!last && !showAllToggle ? <Divider /> : null}

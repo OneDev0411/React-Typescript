@@ -3,8 +3,10 @@ import { ComponentProps } from 'react'
 
 import { Attachment } from '..'
 
+import { EmailFormValues } from '../../../types'
+
 interface Props extends Omit<ComponentProps<typeof Attachment>, 'children'> {
-  file: IFile
+  file: EmailFormValues['attachments'][number]
 }
 
 export function FileAttachment({ file, ...props }: Props) {

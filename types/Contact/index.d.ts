@@ -87,6 +87,7 @@ declare interface IContact extends IContactBase {
   summary?: IContactSummary
   created_by?: IUser
   updated_by?: IUser
+  type: string
 }
 
 declare interface INormalizedContact extends IContact {

@@ -35,5 +35,11 @@ export default {
   },
   tenor: {
     api_key: process.env.TENOR_API_KEY
+  },
+  unsplash: {
+    api_key: process.env.UNSPLASH_API_KEY
+  },
+  dropbox: {
+    app_key: process.env.DROPBOX_APP_KEY
   }
 }

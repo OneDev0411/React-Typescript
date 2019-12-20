@@ -1,10 +1,8 @@
 import React, { useCallback, useMemo } from 'react'
-import { Drawer, makeStyles } from '@material-ui/core'
+import { createStyles, Drawer, makeStyles } from '@material-ui/core'
 import { DrawerProps as OriginalDrawerProps } from '@material-ui/core/Drawer'
 
-import { mergeClasses } from '@material-ui/styles'
-
-import { Classes } from '@material-ui/styles/mergeClasses/mergeClasses'
+import { mergeWith } from 'lodash'
 
 import Body from './Body'
 import Header from './Header'
@@ -15,17 +13,16 @@ import { DrawerContextType, DrawerProps } from './types'
 export { useDrawerContext } from './drawer-context'
 export * from './types'
 
-const useStyles = makeStyles(
-  {
-    root: {
-      width: '100%', // fullwidth on small devices
-      '@media (min-width: 48em)': {
-        width: '38rem'
-      }
+const styles = createStyles({
+  root: ({ width }: { width: number | string }) => ({
+    width: '100%', // fullwidth on small devices
+    '@media (min-width: 48em)': {
+      width
     }
-  },
-  { name: 'OverlayDrawer' }
-)
+  })
+})
+
+const useStyles = makeStyles(styles, { name: 'OverlayDrawer' })
 
 const OverlayDrawer = ({
   children,
@@ -37,9 +34,10 @@ const OverlayDrawer = ({
   // drawer being closed by escape while the modal on top is kept open
   closeOnEscape = false,
   anchor = 'right',
+  width = '38rem',
   ...rest
 }: DrawerProps) => {
-  const classes = useStyles()
+  const classes = useStyles({ width })
   const parentDrawerContext = useDrawerContext()
 
   const handleOnClose: OriginalDrawerProps['onClose'] = useCallback(
@@ -65,6 +63,15 @@ const OverlayDrawer = ({
     [level, onClose]
   )
 
+  const mergedClasses = mergeWith<
+    DrawerProps['classes'],
+    DrawerProps['classes']
+  >(
+    { paper: classes.root },
+    rest.classes,
+    (value1, value2) => `${value1 || ''} ${value2 || ''}`
+  )
+
   return (
     <Drawer
       /* It causes problems in focusing poppers (and possibly other kind of modals). We can check this after fully migrating to MUI  */
@@ -73,11 +80,7 @@ const OverlayDrawer = ({
       open={open}
       onClose={handleOnClose}
       anchor={anchor}
-      classes={mergeClasses({
-        baseClasses: { paper: classes.root },
-        newClasses: rest.classes as Classes,
-        Component: Drawer
-      })}
+      classes={mergedClasses}
       data-test={`drawer-${level}`}
     >
       <DrawerContext.Provider value={context}>

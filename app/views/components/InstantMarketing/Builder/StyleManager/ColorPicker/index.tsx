@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function ColorPicker({
-  title = 'Font Color',
+  title = 'Color',
   color,
   colors,
   onChange
@@ -22,8 +22,8 @@ export default function ColorPicker({
     <ColorPickerContainer>
       <ItemTitle>{title}</ItemTitle>
       <CirclePicker
-        circleSize={38}
-        circleSpacing={24}
+        circleSize={24}
+        circleSpacing={11}
         colors={colors}
         color={color}
         onChangeComplete={onChange}

@@ -1,6 +1,6 @@
 import React, {
+  ComponentType,
   forwardRef,
-  useContext,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -8,48 +8,30 @@ import React, {
   useState
 } from 'react'
 import Dropzone from 'react-dropzone'
-import { ContentBlock, Editor as DraftEditor, EditorState } from 'draft-js'
+import { EditorState } from 'draft-js'
 import PluginsEditor from 'draft-js-plugins-editor'
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
-import { Box, makeStyles, Tooltip } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
+import { shallowEqual } from 'recompose'
 
-import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
-import { isImageFile } from 'utils/file-utils/is-image-file'
-import IconLink from 'components/SvgIcons/Link/IconLink'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 
-import { getShortcutTooltip } from 'utils/get-shortcut-tooltip'
-
-import { LinkEditorPopover } from './components/LinkEditorPopover'
-
-import { EditorContainer, EditorWrapper, Separator, Toolbar } from './styled'
+import { EditorContainer, EditorWrapper, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
-import { AddImageButton } from './buttons/AddImageButton'
-import { RichTextButtons } from './buttons/RichTextButtons'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
-import { updateEntityData } from './modifiers/update-entity-data'
-import {
-  DraftJsSelectionPopover,
-  SelectionPopoverRenderProps
-} from './components/DraftJsSelectionPopover'
-import { LinkPreview } from './components/LinkPreview'
-import { Checkbox } from '../Checkbox'
 import { TextEditorProps } from './types'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
-import { TemplateVariablesButton } from '../TemplateVariablesButton'
-import { ITemplateVariableSuggestion } from '../TemplateVariablesButton/types'
-import { insertTemplateVariable } from './modifiers/insert-template-expression'
-import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted-empty-block-before-atomic'
-import { ToolbarIconButton } from './buttons/ToolbarIconButton'
-import { getSelectedAtomicBlock } from './utils/get-selected-atomic-block'
 import { styles } from './styles'
-import { getImageDimensions } from './utils/get-image-dimensions'
-import { getImageSizeOptions } from './utils/get-image-size-options'
-import { InlineImageToolbar } from './components/ImageInlineToolbar'
+import { useCreateToolbarContext } from './hooks/use-create-toolbar-context'
+import { ToolbarFragments } from './components/ToolbarFragments'
+import { useCreateEditorContext } from './hooks/use-create-editor-context'
+import { DEFAULT_EDITOR_FEATURES } from './default-editor-features'
+import { EditorContext, EditorToolbarContext } from './editor-context'
+import { moveSelectionToStart } from './modifiers/move-selection-to-start'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
@@ -60,49 +42,35 @@ const useStyles = makeStyles(styles, { name: 'TextEditor' })
  * prop is only for being notified of changes. However it's possible
  * to reset html content imperatively via ref.
  *
- * NOTE: this component is growing and needs some structural refactorings
- * for better encapsulation of different features like image, link,
- * signature, etc.
- *
- * This refactoring is intentionally delayed to get more insight about
- * how it should be done, as these features are added.
- * So please don't panic if you see this large component!
  */
 export const TextEditor = forwardRef(
   (
     {
+      children = DEFAULT_EDITOR_FEATURES,
       className = '',
       defaultValue = '',
       disabled = false,
       autofocus = false,
+      minHeight = true,
       input = null,
       onChange = () => {},
       placeholder = 'Type something…',
       plugins = [],
       DraftEditorProps = {},
-      uploadImage,
-      signature,
-      hasSignatureByDefault = false,
-      onEditSignature = () => {},
-      enableImage = false,
-      enableRichText = true,
-      enableSignature = false,
-      enableTemplateVariables = false,
-      templateVariableSuggestionGroups,
       onAttachmentDropped,
-      appendix = null
+      textAlignment,
+      appendix = null,
+      toolbarRef,
+      style,
+      ...props
     }: TextEditorProps,
     ref
   ) => {
-    const signatureRef = useRef<TextEditorProps['signature']>(undefined)
     const editorElementRef = useRef<HTMLDivElement>(null)
     const editorRef = useRef<PluginsEditor>(null)
     const editorStateRef = useRef<EditorState | null>(null)
-    const originalEditorRef = useRef<DraftEditor | null>(null)
-    const [linkEditorOpen, setLinkEditorOpen] = useState(false)
-    const confirmation = useContext(ConfirmationModalContext)
 
-    const classes = useStyles()
+    const classes = useStyles(props)
 
     /**
      * Images are not rendered appropriately without this option.
@@ -117,73 +85,25 @@ export const TextEditor = forwardRef(
       []
     )
 
-    signatureRef.current = signature
-
     /**
      * NOTE 1: We don't use top level plugin definition to prevent bugs when
      * more than one instance of Editor is rendered simultaneously
      * (which is used in contacts profile page right now).
      * See this for more info:
      * https://github.com/draft-js-plugins/draft-js-plugins/blob/master/FAQ.md#can-i-use-the-same-plugin-for-multiple-plugin-editors
-     *
-     * NOTE 2: We always create all plugins because hooks can't be called
-     * conditionally. We could have conditionally create real plugins or
-     * undefined, based on enableXXX props but it adds lots of undefined checks
-     * later in code which is not worth it.
      */
-    const {
-      imagePlugin,
-      focusPlugin,
-      alignmentPlugin,
-      blockDndPlugin,
-      resizeablePlugin,
-      linkPlugins,
-      signaturePlugin,
-      templateExpressionPlugin,
-      richButtonsPlugin,
-      ...otherPlugins
-    } = useMemo(
-      () =>
-        createPlugins(
-          setLinkEditorOpen,
-          () => signatureRef.current || '',
-          stateFromHtmlOptions
-        ),
-      [stateFromHtmlOptions]
-    )
-
-    if (editorRef.current) {
-      originalEditorRef.current = editorRef.current.editor
-    }
+    const { ...otherPlugins } = useMemo(() => createPlugins(), [])
 
     const getInitialState = () => {
       const initialValue = (input && input.value) || defaultValue
-      const initialState = EditorState.createWithContent(
+
+      return EditorState.createWithContent(
         stateFromHTML(initialValue, stateFromHtmlOptions)
       )
-
-      return hasSignatureByDefault &&
-      !initialValue /* If there is some initial value, we don't want to mess with it */ &&
-        signature
-        ? signaturePlugin.modifiers.appendSignature(initialState)
-        : initialState
     }
     const [editorState, setEditorState] = useState(getInitialState)
 
     editorStateRef.current = editorState
-
-    useEffect(() => {
-      const pluginsEditor = editorRef.current
-
-      if (autofocus && pluginsEditor) {
-        // draft-js-plugins-editor uses UNSAFE_componentWillMount to create
-        // the editor state with proper decorator. If we don't delay running
-        // this, it causes decorator to not being set correctly which has
-        // serious consequences. e.g. links don't render properly.
-        setImmediate(() => pluginsEditor.editor && pluginsEditor.focus())
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
     const handleChange = (newState: EditorState) => {
       if (!newState) {
@@ -223,120 +143,66 @@ export const TextEditor = forwardRef(
       [stateToHtmlOptions]
     )
 
-    /**
-     * Adds an image to the editor from a URL or dataURL. if it's a dataUrl
-     * and `uploadImage` prop is provided, it will be called with a Blob
-     * object to upload the image. `uploadImage` should return a promise
-     * which is resolved to the url of the uploaded image. when it's resolved
-     * the url of the image will be replaced with that.
-     *
-     * Note that it's not necessarily required to pass `uploadImage`, if
-     * data urls in the output are accepted. It's not the case for emails
-     * for example as data urls are not well supported in emails.
-     *
-     * This function can be called either when an image is dropped into the
-     * editor or it's selected via an image picker UI (created by
-     * AddImageButton)
-     * @param file
-     */
-    const addImage = async (file: File) => {
-      if (!isImageFile(file)) {
-        return
-      }
+    const {
+      editorContext,
+      plugins: contextPlugins,
+      getDropzoneProps
+    } = useCreateEditorContext({
+      editorState,
+      stateFromHtmlOptions,
+      onChange: handleChange,
+      editorRef
+    })
 
-      // We first convert image to data url and show it.
-      const dataUrl = await readFileAsDataUrl(file)
-
-      const { bestFit } = getImageSizeOptions(await getImageDimensions(dataUrl))
-
-      handleChange(
-        removeUnwantedEmptyLineBeforeAtomic(
-          imagePlugin.addImage(
-            editorState,
-            dataUrl,
-            uploadImage ? { uploading: true, ...bestFit } : bestFit
-          )
-        )
-      )
-
-      // Then we try to upload it if the uploadImage function is provided.
-      // When the upload is finished, we replace the image src with the uploaded
-      // file's url.
-      if (uploadImage) {
-        // TODO: handle errors and remove the image in this case.
-        const uploadedImageUrl = await uploadImage(file)
-
-        if (editorRef.current) {
-          const latestState = editorRef.current.getEditorState()
-
-          handleChange(
-            updateEntityData(
-              imagePlugin,
-              latestState,
-              data => data.src === dataUrl,
-              { src: uploadedImageUrl, uploading: false }
-            )
-          )
-        }
-      } else {
-        console.warn(
-          '[Editor]: dataURL image is inserted by no uploadImage passed. data urls will be preserved in the output'
-        )
-      }
-    }
-
-    const showNoSignatureModal = () => {
-      confirmation!.setConfirmationModal({
-        message:
-          'You don’t have an email signature yet. Would you like to create one?',
-        confirmLabel: 'Set signature',
-        onConfirm: onEditSignature
-      })
-    }
+    const { toolbarContext, toolbarFragments } = useCreateToolbarContext()
 
     const defaultPlugins = [
-      ...Object.values(otherPlugins),
-      ...(enableRichText ? [richButtonsPlugin, ...linkPlugins] : []),
-      ...(enableImage
-        ? [
-            blockDndPlugin,
-            focusPlugin,
-            alignmentPlugin,
-            resizeablePlugin,
-            imagePlugin
-          ]
-        : []),
-      templateExpressionPlugin,
-      ...(enableSignature ? [signaturePlugin] : [])
+      ...Object.values(contextPlugins),
+      ...Object.values(otherPlugins)
     ]
 
     const allPlugins = [...defaultPlugins, ...plugins]
 
-    const insertVariable = (suggestion: ITemplateVariableSuggestion) => {
-      setEditorState(
-        insertTemplateVariable(
-          editorState,
-          suggestion.expression,
-          suggestion.defaultFallback
-        )
-      )
-    }
+    const rerenderEditor = useRerenderOnChange(allPlugins, shallowEqual)
 
-    const isFileDropEnabled = enableImage || onAttachmentDropped
-    const fileAccept =
-      !onAttachmentDropped && enableImage ? 'image/*' : undefined
+    const firstRenderFlagRef = useRef(true)
 
-    const onDrop = (files: File[]) => {
-      if (!files || !files[0]) {
-        return
+    useEffect(() => {
+      const pluginsEditor = editorRef.current
+
+      if (firstRenderFlagRef.current && pluginsEditor && rerenderEditor) {
+        // draft-js-plugins-editor uses UNSAFE_componentWillMount to create
+        // the editor state with proper decorator. If we don't delay running
+        // this, it causes decorator to not being set correctly which has
+        // serious consequences. e.g. links don't render properly.
+        setTimeout(() => {
+          firstRenderFlagRef.current = false
+
+          if (editorStateRef.current) {
+            setEditorState(moveSelectionToStart(editorStateRef.current))
+          }
+
+          if (autofocus) {
+            pluginsEditor.editor && pluginsEditor.focus()
+          }
+        })
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rerenderEditor])
 
-      if (isImageFile(files[0])) {
-        addImage(files[0])
-      } else if (onAttachmentDropped) {
-        onAttachmentDropped(files)
+    useEffect(() => {}, [])
+
+    const dropzoneProps: Partial<
+      ComponentType<typeof Dropzone>
+    > = getDropzoneProps({
+      disabled: !onAttachmentDropped,
+      accept: onAttachmentDropped ? '*/*' : undefined,
+      onDrop: (files: File[]) => {
+        if (files && files[0] && onAttachmentDropped) {
+          onAttachmentDropped(files)
+        }
       }
-    }
+    })
 
     const handlerWrapperClick = e => {
       // It's important to check if it's the wrapper which is clicked
@@ -353,140 +219,56 @@ export const TextEditor = forwardRef(
     }
 
     return (
-      <EditorContainer className={className}>
+      <EditorContainer
+        className={cn(className, classes.root)}
+        style={style}
+        minHeight={minHeight}
+      >
         <EditorWrapper
           ref={editorElementRef}
-          className={cn({
-            'hide-placeholder': shouldHidePlaceholder(editorState)
-          })}
+          className={cn(
+            {
+              'hide-placeholder': shouldHidePlaceholder(editorState)
+            },
+            classes.content
+          )}
           onClick={handlerWrapperClick}
           data-test="text-editor-wrapper"
         >
           {/* I wish we had upgraded Dropzone to use the hook version :( */}
           <Dropzone
-            disabled={!isFileDropEnabled}
+            {...dropzoneProps}
             className={classes.dropzone}
             activeClassName={classes.dropzoneActive}
             rejectClassName={classes.dropzoneReject}
-            onDrop={onDrop}
-            accept={fileAccept}
             disableClick
           >
-            <PluginsEditor
-              spellCheck
-              readOnly={disabled}
-              editorState={editorState}
-              onChange={handleChange}
-              plugins={allPlugins}
-              placeholder={placeholder}
-              ref={editorRef}
-              {...DraftEditorProps}
-            />
-            <LinkEditorPopover
-              editorRef={originalEditorRef}
-              editorState={editorState}
-              setEditorState={handleChange}
-              open={linkEditorOpen}
-              onClose={() => {
-                setLinkEditorOpen(false)
-
-                const selectedBlock = getSelectedAtomicBlock(editorState)
-
-                if (!selectedBlock || selectedBlock.getType() !== 'atomic') {
-                  // atomic block selection is not preserved after focus
-                  // so we don't focus if an atomic block is selected
-                  setTimeout(() => {
-                    editorRef.current!.focus()
-                  })
-                }
-              }}
-            />
-            {!linkEditorOpen && (
-              <DraftJsSelectionPopover
+            {rerenderEditor && (
+              <PluginsEditor
+                spellCheck
+                readOnly={disabled}
                 editorState={editorState}
-                inlineEntityFilter="LINK"
-                blockFilter={isBlockLinked}
-              >
-                {({ entity, close, block }: SelectionPopoverRenderProps) => (
-                  <LinkPreview
-                    editorState={editorState}
-                    setEditorState={handleChange}
-                    onClose={close}
-                    url={
-                      (entity && entity.getData().url) ||
-                      (block && block.getData().get('href')) ||
-                      ''
-                    }
-                    onEdit={() => setLinkEditorOpen(true)}
-                  />
-                )}
-              </DraftJsSelectionPopover>
-            )}
-            {imagePlugin && (
-              <InlineImageToolbar
-                editorState={editorState}
-                setEditorState={handleChange}
+                onChange={handleChange}
+                plugins={allPlugins}
+                placeholder={placeholder}
+                textAlignment={textAlignment}
+                ref={editorRef}
+                {...DraftEditorProps}
               />
             )}
+            <EditorContext.Provider value={editorContext}>
+              <EditorToolbarContext.Provider value={toolbarContext}>
+                {children}
+              </EditorToolbarContext.Provider>
+            </EditorContext.Provider>
             {appendix}
           </Dropzone>
         </EditorWrapper>
-        <Toolbar>
-          {enableRichText && (
-            <>
-              <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
-              <Tooltip title={getShortcutTooltip('Insert Link', 'K')}>
-                <ToolbarIconButton
-                  onClick={event => {
-                    setLinkEditorOpen(true)
-                    event.preventDefault()
-                    event.stopPropagation()
-                  }}
-                >
-                  <IconLink />
-                </ToolbarIconButton>
-              </Tooltip>
-              <Separator />
-            </>
-          )}
-
-          {enableImage && (
-            <>
-              <AddImageButton onImageSelected={addImage} />
-              <Separator />
-            </>
-          )}
-
-          {enableTemplateVariables && (
-            <>
-              <TemplateVariablesButton
-                suggestions={templateVariableSuggestionGroups || []}
-                onSuggestionSelected={suggestion => insertVariable(suggestion)}
-              />
-              <Separator />
-            </>
-          )}
-
-          {enableSignature && (
-            <Box pl={0.5}>
-              <Checkbox
-                inputProps={{ tabIndex: 1 }}
-                checked={signaturePlugin.hasSignature()}
-                onChange={() =>
-                  signature
-                    ? signaturePlugin.toggleSignature()
-                    : showNoSignatureModal()
-                }
-              >
-                Signature
-              </Checkbox>
-            </Box>
-          )}
+        <Toolbar ref={toolbarRef} className={classes.toolbar}>
+          <ToolbarFragments segments={toolbarFragments} />
         </Toolbar>
         {input && <FieldError name={input.name} />}
       </EditorContainer>
     )
   }
 )
-
-const isBlockLinked = (block: ContentBlock) => !!block.getData().get('href')

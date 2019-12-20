@@ -15,7 +15,6 @@ import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
 import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
 import { getEsignAttachments } from 'views/utils/deal-files/get-esign-attachments'
 import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
-import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
 
 import {
   selectActions,
@@ -476,7 +475,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
           <SingleEmailComposeDrawer
             isOpen
             initialValues={{
-              from: normalizeUserForEmailFrom(this.props.user),
+              from: this.props.user,
               attachments: this.getEmailComposeFiles()
             }}
             deal={this.props.deal}

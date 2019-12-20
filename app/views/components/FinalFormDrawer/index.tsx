@@ -33,6 +33,7 @@ interface Props<T> {
   validate?: (data: any) => any
   formId: string
   decorators?: any[]
+  width?: string | number
   footerRenderer?: (footerRendererProps: FooterRenderProps) => ReactNode
   render?: (formProps: FormRenderProps & { values: T }) => ReactNode
 }
@@ -114,6 +115,7 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
     return (
       <Drawer
         open={this.props.isOpen}
+        width={this.props.width}
         onClose={e => this.handleOnClose(e, this.formProps)}
         // Better to accept DrawerProps instead
         closeOnBackdropClick={this.props.closeDrawerOnBackdropClick}

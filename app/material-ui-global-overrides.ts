@@ -27,9 +27,19 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
     '.MuiListSubheader-root': {
       textTransform: 'uppercase'
     },
+
+    '@media(min-width: 960px)': {
+      '.MuiTab-root': {
+        fontSize: '0.875rem'
+      }
+    },
     '.MuiTab-root': {
       minWidth: '7rem'
     },
+    '.MuiTabs-indicator': {
+      height: 3
+    },
+
     '.MuiInputBase-root label, .MuiFormControlLabel-root': {
       // neutralize bootstrap styles!
       marginBottom: 'initial'
@@ -68,6 +78,12 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
       fontWeight: theme.typography.body1.fontWeight,
       padding: theme.spacing(1, 1.5),
       position: 'relative',
+
+      // TODO: remove all arrow related styles (from here to end of this rule)
+      //  when upgraded to [4.7.0](https://github.com/mui-org/material-ui/blob/master/CHANGELOG.md#470)
+      //  or above that has built-in support for arrows. we can enable arrows
+      //  for all tooltip by default with a default prop in theme definition
+      //  like what we did for disabling ink ripple for buttons globally
       '&::before': {
         content: '""',
         position: 'absolute'
@@ -126,6 +142,9 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
           direction: 'left'
         })
       }
+    },
+    '.MuiButton-outlined:not(.MuiButton-outlinedPrimary, .MuiButton-outlinedSecondary)': {
+      borderColor: theme.palette.common.black
     }
   }
 }))(() => null)

@@ -1,6 +1,10 @@
 declare type NumberRange = [number, number]
 
-declare interface ICalendarEvent {
+declare type ICalendarEventAssociations = 'full_thread'
+
+declare type ICalendarEvent<
+  Associations extends ICalendarEventAssociations = ''
+> = {
   id: UUID
   timestamp: number
   recurring: boolean
@@ -34,14 +38,7 @@ declare interface ICalendarEvent {
   people: (IContact | IAgent)[] | null
   people_len: number | null
   full_deal?: IDeal
-  full_thread: {
-    type: 'thread'
-    id: UUID
-    to: string[]
-    email_count: number
-    has_attachments: boolean
-  } | null // // TODO: fix association type
-}
+} & Association<'full_thread', IEmailThread, Associations>
 
 declare interface ICalendarEventHeader {
   date: string

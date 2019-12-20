@@ -101,12 +101,13 @@ class OpenHouseDrawerInternal extends React.Component {
       listing: null,
       template: '',
       rawTemplate: '',
-      openHouse: props.openHouse
+      openHouse: props.openHouse,
+      isLoadingTemplate: false
     }
 
     this.isNew =
       (!props.openHouse && !props.openHouseId) ||
-      Object(props.initialValues).length > 0
+      Object.keys(props.initialValues).length > 0
   }
 
   get dealAassociation() {
@@ -137,6 +138,8 @@ class OpenHouseDrawerInternal extends React.Component {
       this.setState({ isDisabled: true })
 
       if (this.isNew) {
+        this.setState({ isLoadingTemplate: true })
+
         let fullListing = null
         const activeTeamId = getActiveTeamId(this.props.user)
         const list = await getTemplates(activeTeamId, ['CrmOpenHouse'])
@@ -164,7 +167,12 @@ class OpenHouseDrawerInternal extends React.Component {
         }
 
         this.setState(
-          { listing: fullListing, rawTemplate, isDisabled: false },
+          {
+            isDisabled: false,
+            isLoadingTemplate: false,
+            listing: fullListing,
+            rawTemplate
+          },
           this.loadRegistrationTemplate
         )
 
@@ -371,20 +379,37 @@ class OpenHouseDrawerInternal extends React.Component {
       return
     }
 
+    const options = {
+      createOpenHouse: true,
+      startTime: openHouse.due_date
+    }
+
+    if (openHouse.end_date) {
+      options.endTime = openHouse.end_date
+    }
+
     this.props.dispatch(
       confirmation({
         message:
           'Would you also like to notify your office so they book this on the MLS for you?',
         confirmLabel: 'Notify',
         onConfirm: () => {
-          goTo(`/dashboard/deals/${dealAssociation.deal}`, '', {
-            createOpenHouse: true,
-            startTime: openHouse.due_date,
-            endTime: openHouse.end_date
-          })
+          goTo(`/dashboard/deals/${dealAssociation.deal}`, '', options)
         }
       })
     )
+  }
+
+  getSaveButtonText = () => {
+    let saveButtonText = 'Save'
+
+    if (this.state.isLoadingTemplate) {
+      saveButtonText = 'Loading template...'
+    } else if (this.state.isSaving) {
+      saveButtonText = 'Saving...'
+    }
+
+    return saveButtonText
   }
 
   render() {
@@ -548,16 +573,17 @@ class OpenHouseDrawerInternal extends React.Component {
                               : 'Edit Guest Registration Page'}
                           </ActionButton>
 
-                          {(this.state.template || this.state.rawTemplate) && (
-                            <ActionButton
-                              type="button"
-                              disabled={isDisabled}
-                              onClick={this.handleSubmit}
-                              style={{ marginLeft: '0.5em' }}
-                            >
-                              {this.state.isSaving ? 'Saving...' : 'Save'}
-                            </ActionButton>
-                          )}
+                          <ActionButton
+                            type="button"
+                            disabled={
+                              isDisabled ||
+                              (!this.state.template && !this.state.rawTemplate)
+                            }
+                            onClick={this.handleSubmit}
+                            style={{ marginLeft: '0.5em' }}
+                          >
+                            {this.getSaveButtonText()}
+                          </ActionButton>
                         </Flex>
                       </Footer>
                     </div>

@@ -5,8 +5,13 @@ app/utils/
 app/styles/vendor
 
 **/*.test.js
+**/*.mjml
+**/*.html
+**/*.ejs
 
 app/views/components/SvgIcons/**/*.*
 *.json
 *.sql
 *.scss
+*.svg
+*.png

@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 
@@ -7,6 +7,9 @@ import { TestBed } from '../../../../tests/unit/TestBed'
 import { BulkEmailComposeForm } from './BulkEmailComposeForm'
 
 jest.mock('models/email/update-email-campaign')
+jest.mock('models/contacts/search-contacts')
+jest.mock('models/contacts/get-contacts-tags')
+jest.mock('models/filter-segments/get-segments')
 
 describe('BulkEmailComposeForm', () => {
   /**

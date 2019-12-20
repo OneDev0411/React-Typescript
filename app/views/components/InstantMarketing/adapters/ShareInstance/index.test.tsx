@@ -18,6 +18,9 @@ const user = userJson as IUser
 import ShareInstance from '.'
 
 jest.mock('models/email/create-bulk-email-campaign')
+jest.mock('models/contacts/search-contacts')
+jest.mock('models/contacts/get-contacts-tags')
+jest.mock('models/filter-segments/get-segments')
 
 describe('ShareInstance', () => {
   test('it renders', () => {

@@ -37,7 +37,8 @@ const templateItemStyle = css`
   max-height: 400px;
   box-shadow: 0px 5px 10px #c3c3c3;
   margin: 1.5%;
-  box-shadow: 0px 5px 10px #c3c3c3;
+  user-drag: none;
+  -webkit-user-drag: none;
 `
 
 export const Image = styled.img`

@@ -5,6 +5,8 @@ import { ReactNode } from 'react'
 
 import { merge } from 'lodash'
 
+import { DeepPartial } from 'redux'
+
 import user from 'fixtures/users/agent.json'
 
 import { IAppState } from '../../app/reducers'
@@ -12,7 +14,10 @@ import store from '../../app/stores'
 import { AppTheme } from '../../app/AppTheme'
 
 interface Props {
-  reduxState?: Partial<IAppState>
+  reduxState?: Partial<Omit<IAppState, 'deals' | 'contacts'>> & {
+    deals?: Partial<IAppState['deals']>
+    contacts?: DeepPartial<IAppState['contacts']>
+  }
   children: ReactNode
 }
 

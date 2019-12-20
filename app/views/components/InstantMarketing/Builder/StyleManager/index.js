@@ -2,11 +2,18 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import ReactDOMServer from 'react-dom/server'
 
+import { AppTheme } from '../../../../../AppTheme'
+
 import { Container } from './styled'
 import FontSizePicker from './FontSizePicker'
 import FontWeightPicker from './FontWeightPicker'
 import ColorPicker from './ColorPicker'
+import TextAlignPicker from './TextAlignPicker'
 import { loadGrapesjs } from '../utils/load-grapes'
+
+function renderWithTheme(node, container) {
+  ReactDOM.render(<AppTheme>{node}</AppTheme>, container)
+}
 
 export const load = async colors => {
   const { Grapesjs } = await loadGrapesjs()
@@ -15,12 +22,16 @@ export const load = async colors => {
     let styleManagerContainer
     let fontSizePickerContainer
     let fontWeightPickerContainer
+    let textAlignPickerContainer
     let colorPickerContainer
+    let backgroundColorPickerContainer
 
     const {
       fontSizePicker: fontSizePickerOptions = {},
       fontWeightPicker: fontWeightPickerOptions = {},
-      colorPicker: colorPickerOptions = {}
+      textAlignPicker: textAlignPickerOptions = {},
+      colorPicker: colorPickerOptions = {},
+      backgroundColorPicker: backgroundColorPickerOptions = {}
     } = options
 
     const isElementAllowed = (target, conditions) => {
@@ -40,6 +51,15 @@ export const load = async colors => {
       }
 
       return true
+    }
+
+    const isMjmlElement = target => {
+      return (
+        target &&
+        target.attributes &&
+        target.attributes.tagName &&
+        target.attributes.tagName.startsWith('mj-')
+      )
     }
 
     const getStyle = target => getComputedStyle(target.view.el)
@@ -79,11 +99,43 @@ export const load = async colors => {
         styleManagerContainer.appendChild(fontWeightPickerContainer)
       }
 
+      if (!textAlignPickerOptions.disabled) {
+        textAlignPickerContainer = document.createElement('div')
+        textAlignPickerContainer.id = 'mc-editor-text-align-picker'
+        styleManagerContainer.appendChild(textAlignPickerContainer)
+      }
+
       if (!colorPickerOptions.disabled) {
         colorPickerContainer = document.createElement('div')
         colorPickerContainer.id = 'mc-editor-color-picker'
         styleManagerContainer.appendChild(colorPickerContainer)
       }
+
+      if (!backgroundColorPickerOptions.disabled) {
+        backgroundColorPickerContainer = document.createElement('div')
+        backgroundColorPickerContainer.id = 'mc-editor-background-color-picker'
+        styleManagerContainer.appendChild(backgroundColorPickerContainer)
+      }
+    })
+
+    editor.on('component:deselected', () => {
+      if (editor.getSelectedAll().length > 0) {
+        return
+      }
+
+      const containers = [
+        fontSizePickerContainer,
+        fontWeightPickerContainer,
+        textAlignPickerContainer,
+        colorPickerContainer,
+        backgroundColorPickerContainer
+      ]
+
+      containers.forEach(container => {
+        if (container) {
+          ReactDOM.unmountComponentAtNode(container)
+        }
+      })
     })
 
     editor.on('component:selected', selected => {
@@ -91,29 +143,11 @@ export const load = async colors => {
         return
       }
 
-      if (!fontSizePickerOptions.disabled) {
-        if (fontSizePickerContainer) {
-          ReactDOM.unmountComponentAtNode(fontSizePickerContainer)
-        }
-
-        if (isElementAllowed(selected, fontSizePickerOptions.conditions)) {
-          ReactDOM.render(
-            <FontSizePicker
-              value={getStyle(selected).fontSize}
-              onChange={fontSize => {
-                setStyle(selected, 'font-size', fontSize)
-              }}
-            />,
-            fontSizePickerContainer
-          )
-        }
-      }
-
       if (!fontWeightPickerOptions.disabled) {
         ReactDOM.unmountComponentAtNode(fontWeightPickerContainer)
 
         if (isElementAllowed(selected, fontWeightPickerOptions.conditions)) {
-          ReactDOM.render(
+          renderWithTheme(
             <FontWeightPicker
               value={getStyle(selected).fontWeight}
               onChange={fontWeight => {
@@ -125,11 +159,60 @@ export const load = async colors => {
         }
       }
 
+      if (!textAlignPickerOptions.disabled) {
+        ReactDOM.unmountComponentAtNode(textAlignPickerContainer)
+
+        if (isElementAllowed(selected, textAlignPickerOptions.conditions)) {
+          renderWithTheme(
+            <TextAlignPicker
+              value={
+                isMjmlElement(selected)
+                  ? selected.attributes.attributes.align
+                  : getStyle(selected).textAlign
+              }
+              onChange={textAlign => {
+                if (isMjmlElement(selected)) {
+                  setStyle(selected, 'align', textAlign)
+
+                  return
+                }
+
+                setStyle(selected, 'text-align', textAlign)
+              }}
+            />,
+            textAlignPickerContainer
+          )
+        }
+      }
+
+      if (!fontSizePickerOptions.disabled) {
+        if (fontSizePickerContainer) {
+          ReactDOM.unmountComponentAtNode(fontSizePickerContainer)
+        }
+
+        if (isElementAllowed(selected, fontSizePickerOptions.conditions)) {
+          renderWithTheme(
+            <FontSizePicker
+              value={
+                isMjmlElement(selected)
+                  ? selected.attributes.attributes['font-size']
+                  : getStyle(selected).fontSize
+              }
+              onChange={fontSize => {
+                editor.getSelected().trigger('sync:content') // in order to sync changed text and keep the changes
+                setStyle(selected, 'font-size', fontSize)
+              }}
+            />,
+            fontSizePickerContainer
+          )
+        }
+      }
+
       if (!colorPickerOptions.disabled) {
         ReactDOM.unmountComponentAtNode(colorPickerContainer)
 
         if (isElementAllowed(selected, colorPickerOptions.conditions)) {
-          ReactDOM.render(
+          renderWithTheme(
             <ColorPicker
               colors={colors}
               color={getStyle(selected).color}
@@ -138,6 +221,26 @@ export const load = async colors => {
               }}
             />,
             colorPickerContainer
+          )
+        }
+      }
+
+      if (!backgroundColorPickerOptions.disabled) {
+        ReactDOM.unmountComponentAtNode(backgroundColorPickerContainer)
+
+        if (
+          isElementAllowed(selected, backgroundColorPickerOptions.conditions)
+        ) {
+          renderWithTheme(
+            <ColorPicker
+              title="Background Color"
+              colors={colors}
+              color={getStyle(selected).backgroundColor}
+              onChange={color => {
+                setStyle(selected, 'background-color', color.hex)
+              }}
+            />,
+            backgroundColorPickerContainer
           )
         }
       }

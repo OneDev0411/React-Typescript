@@ -13,6 +13,12 @@ import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
 import flattenBrand from 'utils/flatten-brand'
 
+import { getPrice, getFormattedPrice } from 'models/Deal/helpers/context'
+
+import CriticalDate, {
+  getCriticalDateNextValue
+} from '../../components/table-columns/CriticalDate'
+
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
 
@@ -63,6 +69,25 @@ class Grid extends React.Component {
         accessor: 'attention_requested_at',
         render: ({ rowData: deal }) =>
           this.getSubmitTime(deal.attention_requested_at)
+      },
+      {
+        id: 'critical-dates',
+        header: 'Critical Dates',
+        accessor: deal => getCriticalDateNextValue(deal),
+        render: ({ rowData: deal, totalRows, rowIndex }) => (
+          <CriticalDate
+            deal={deal}
+            user={this.props.user}
+            rowId={rowIndex + 1}
+            rowsCount={totalRows}
+          />
+        )
+      },
+      {
+        id: 'contract-price',
+        header: 'Contract Price',
+        accessor: deal => getPrice(deal),
+        render: ({ rowData: deal }) => getFormattedPrice(getPrice(deal))
       },
       {
         id: 'notification',

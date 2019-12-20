@@ -59,7 +59,7 @@ let PersonalInfoForm = ({
           type="tel"
           label="Mobile Number"
           component={PhoneNumberField}
-          normalize={value => value.replace(/[^+\d]*/g, '')}
+          format={value => value.replace(/\+1|[^+\d]*/g, '')}
         />
         <VerifyMobileNumber />
         {submitError && (

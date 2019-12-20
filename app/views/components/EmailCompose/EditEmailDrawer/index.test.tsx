@@ -13,7 +13,10 @@ import { EditEmailDrawer } from '.'
 const noop = () => {}
 
 jest.mock('models/email/update-email-campaign')
+jest.mock('models/contacts/search-contacts')
 jest.mock('models/email/get-email-campaign')
+jest.mock('models/contacts/get-contacts-tags')
+jest.mock('models/filter-segments/get-segments')
 
 describe('EditEmailDrawer', () => {
   test('it renders', () => {

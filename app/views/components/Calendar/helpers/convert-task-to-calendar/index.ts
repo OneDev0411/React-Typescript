@@ -8,7 +8,6 @@ export function convertTaskToCalendarEvent(event: IEvent): ICalendarEvent {
     created_by: '',
     date: '',
     deal: null,
-    full_thread: null,
     metadata: { is_partner: false, status: '' },
     next_occurence: '',
     recurring: false,

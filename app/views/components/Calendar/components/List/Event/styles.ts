@@ -24,14 +24,14 @@ export default {
     fontSize: '1rem',
     fontWeight: 400,
     letterSpacing: '0.25px',
-    paddingLeft: theme.spacing(24),
+    paddingLeft: theme.spacing(16),
     color: grey.A900,
     overflow: 'hidden',
     whiteSpace: 'nowrap' as 'nowrap',
     textOverflow: 'ellipsis'
   },
   time: {
-    width: '9rem',
+    width: '5rem',
     fontSize: '0.875rem',
     letterSpacing: '0.25px',
     color: grey.A900

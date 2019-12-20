@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, ChangeEvent } from 'react'
 import { connect } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
 
 import {
   Button,
+  TextField,
   Checkbox,
   createStyles,
   makeStyles,
@@ -10,6 +13,7 @@ import {
 } from '@material-ui/core'
 
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
+import { createTaskComment } from 'deals/utils/create-task-comment'
 
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
@@ -27,34 +31,21 @@ interface StateProps {
   checklists: IDealChecklist[]
 }
 
-interface DispatchProps {
-  createRequestTask({
-    checklist,
-    userId,
-    dealId,
-    taskType,
-    taskTitle,
-    taskComment,
-    notifyMessage
-  }: {
-    checklist: IDealChecklist
-    userId: UUID
-    dealId: UUID
-    taskType: string
-    taskTitle: string
-    taskComment: string
-    notifyMessage: string
-  }): (dispatch: any) => Promise<IDealTask | null>
-}
-
 interface Props {
   deal: IDeal
   onCreateTask(task: IDealTask): void
 }
 
+interface DispatchProps {
+  createRequestTask: IAsyncActionProp<typeof createRequestTask>
+}
+
 const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
     buttonContainer: {
+      margin: theme.spacing(1)
+    },
+    input: {
       margin: theme.spacing(1)
     },
     buttonLabel: {
@@ -68,6 +59,10 @@ function Form(props: Props & StateProps & DispatchProps) {
 
   const [selectedItems, setSelectedItems] = useState<number[]>([])
   const [isCreatingTask, setIsCreatingTask] = useState<boolean>(false)
+  const [comment, setComment] = useState<string>('')
+
+  const onChangeComment = (e: ChangeEvent<HTMLInputElement>) =>
+    setComment(e.target.value)
 
   const toggleItem = (index: number): void => {
     if (selectedItems.includes(index)) {
@@ -100,6 +95,10 @@ function Form(props: Props & StateProps & DispatchProps) {
       notifyMessage: 'Back office has been notified'
     })
 
+    if (task && comment) {
+      createTaskComment(task, props.user.id, comment)
+    }
+
     setIsCreatingTask(false)
 
     if (task) {
@@ -123,6 +122,17 @@ function Form(props: Props & StateProps & DispatchProps) {
           </Button>
         </div>
       ))}
+
+      <TextField
+        label="Special Instructions"
+        margin="normal"
+        variant="outlined"
+        multiline
+        rowsMax="2"
+        value={comment}
+        onChange={onChangeComment}
+        className={classes.input}
+      />
 
       <div className={classes.buttonContainer}>
         <Button
@@ -149,7 +159,14 @@ function mapStateToProps(
   }
 }
 
-export default connect<StateProps, DispatchProps, Props>(
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    createRequestTask: (...args: Parameters<typeof createRequestTask>) =>
+      dispatch(createRequestTask(...args))
+  }
+}
+
+export default connect(
   mapStateToProps,
-  { createRequestTask }
+  mapDispatchToProps
 )(Form)

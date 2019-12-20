@@ -16,7 +16,7 @@ import { selectDealRoles } from 'reducers/deals/roles'
 
 import DealRole from 'components/DealRole'
 
-import TeamAgents from './AgentIntegration/TeamAgents'
+import TeamAgents from 'components/TeamAgents'
 
 import { roleName, getLegalFullName, isPrimaryAgent } from '../../utils/roles'
 import { getAvatarTitle } from '../../utils/get-avatar-title'
@@ -97,7 +97,11 @@ class Roles extends React.Component {
       isReplaceAgentDrawerOpen: !state.isReplaceAgentDrawerOpen
     }))
 
-  handleReplaceAgent = async user => {
+  handleReplaceAgent = async agents => {
+    const { agent: user } = agents[0]
+
+    this.toggleReplaceAgentDrawer()
+
     const { office, work_phone } = user.agent || {}
     const currentRole = this.state.user
 
@@ -116,8 +120,6 @@ class Roles extends React.Component {
     try {
       await this.props.deleteRole(this.props.deal.id, this.state.user.id)
       await this.props.createRoles(this.props.deal.id, [role])
-
-      this.toggleReplaceAgentDrawer()
 
       this.props.notify({
         message: 'Primary Agent replaced',
@@ -236,8 +238,10 @@ class Roles extends React.Component {
         {this.state.isReplaceAgentDrawerOpen && (
           <TeamAgents
             isPrimaryAgent
+            withRelatedContacts={false}
+            user={this.props.user}
             title="Select New Primary Agent"
-            onSelectAgent={this.handleReplaceAgent}
+            onSelectAgents={this.handleReplaceAgent}
             onClose={this.toggleReplaceAgentDrawer}
           />
         )}
@@ -249,8 +253,9 @@ class Roles extends React.Component {
 Roles.propTypes = propTypes
 Roles.defaultProps = defaultProps
 
-function mapStateToProps({ deals }, props) {
+function mapStateToProps({ user, deals }, props) {
   return {
+    user,
     roles: selectDealRoles(deals.roles, props.deal)
   }
 }

@@ -9,6 +9,8 @@ import VirtualList, {
   VirtualListRef
 } from 'components/VirtualList'
 
+import { CrmEventType } from 'components/Calendar/types'
+
 import { ListContext } from './context'
 import { EmptyState } from './EmptyState'
 
@@ -19,6 +21,7 @@ import { Row } from './Row'
 
 interface Props {
   user: IUser
+  contact: IContact | undefined
   rows: ICalendarListRow[]
   isLoading: boolean
   loadingPosition: LoadingPosition
@@ -26,7 +29,7 @@ interface Props {
   onReachStart?(): void
   onReachEnd?(): void
   onChangeActiveDate(date: Date): void
-  onCrmEventChange: (event: IEvent, type: string) => void
+  onCrmEventChange: (event: IEvent, type: CrmEventType) => void
   onScheduledEmailChange: (
     event: ICalendarEvent,
     emailCampaign: IEmailCampaign
@@ -51,7 +54,7 @@ const CalendarList: React.FC<Props> = props => {
    * @param event - the event
    * @param type - type of action
    */
-  const handleEventChange = (event: IEvent, type: string) => {
+  const handleEventChange = (event: IEvent, type: CrmEventType) => {
     props.onCrmEventChange(event, type)
     setSelectedEvent(null)
   }
@@ -97,10 +100,13 @@ const CalendarList: React.FC<Props> = props => {
     }
   }
 
+  const { contact } = props
+
   return (
     <ListContext.Provider
       value={{
         selectedEvent,
+        contact,
         setSelectedEvent
       }}
     >

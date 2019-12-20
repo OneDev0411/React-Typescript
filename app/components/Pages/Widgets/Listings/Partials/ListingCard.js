@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import S from 'shorti'
 import styled from 'styled-components'
 
-import listing_util from '../../../../../utils/listing'
+import listingUtils from '../../../../../utils/listing'
 import { numberWithCommas } from '../../../../../utils/helpers'
 import FavoriteHeart from '../../../Dashboard/Listings/components/FavoriteHeart'
 import AgentImage from './AgentImage'
@@ -88,14 +88,14 @@ export default class ListingCard extends Component {
     }
 
     const square_feet = numberWithCommas(
-      Math.floor(listing_util.metersToFeet(property.square_meters))
+      Math.floor(listingUtils.metersToFeet(property.square_meters))
     )
     let listing_card_style = S(
       'w-380 h-360 mr-10 ml-10 mb-20 pull-left br-3 pointer relative'
     )
     const listing_image_style = {
       ...S(
-        `bg-cover bg-url(${listing_util.getResizeUrl(
+        `bg-cover bg-url(${listingUtils.getResizeUrl(
           listing.cover_image_url
         )}?w=800) bg-center w-380 h-260 relative`
       )
@@ -136,7 +136,7 @@ export default class ListingCard extends Component {
       borderBottomRightRadius: '3px',
       backgroundColor: this.props.brandColor
     }
-    const status_color = listing_util.getStatusColor(listing.status)
+    const status_color = listingUtils.getStatusColor(listing.status)
     let year_built_area
 
     if (property.year_built) {
@@ -158,14 +158,11 @@ export default class ListingCard extends Component {
           <div style={overlay_style} />
           <div style={price_tag_style}>
             ${price}
-            {listing.compact_property &&
-            listing.compact_property.property_type === 'Residential Lease'
-              ? '/mo'
-              : ''}
+            {listingUtils.isLeaseProperty(listing) ? '/mo' : ''}
           </div>
         </div>
         <div style={S('absolute b-0 h-100 p-10 pl-15 color-000')}>
-          <div style={S('font-14')}>{listing_util.addressTitle(address)}</div>
+          <div style={S('font-14')}>{listingUtils.addressTitle(address)}</div>
           <div style={S('font-14')}>
             <div style={S('mt-8')}>
               <span>{property.bedroom_count} Beds</span>

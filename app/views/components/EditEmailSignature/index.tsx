@@ -5,15 +5,22 @@ import { Field, Form } from 'react-final-form'
 import * as React from 'react'
 import styled, { ThemeProps } from 'styled-components'
 
+import { ThunkDispatch } from 'redux-thunk'
+
+import { AnyAction } from 'redux'
+
 import { IAppState } from 'reducers'
 import editUser from 'actions/user/edit'
 import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
 
 import { TextEditor } from '../TextEditor'
+import { ImageFeature } from '../TextEditor/features/Image'
+import { RichTextFeature } from '../TextEditor/features/RichText'
+import { EmojiFeature } from '../TextEditor/features/Emoji'
 
 interface Props {
   user: IUser
-  editUser: (updates: IUserInput) => (dispatch) => Promise<any>
+  editUser: IAsyncActionProp<typeof editUser>
   addNotification: typeof addNotification
   onSaved?: () => void
   showActions?: boolean
@@ -67,12 +74,11 @@ function EditEmailSignature({
             <Field
               name="signature"
               render={({ input }) => (
-                <StyledTextEditor
-                  autofocus
-                  input={input}
-                  enableImage
-                  uploadImage={uploadImage}
-                />
+                <StyledTextEditor autofocus input={input}>
+                  <RichTextFeature />
+                  <ImageFeature uploadImage={uploadImage} />
+                  <EmojiFeature />
+                </StyledTextEditor>
               )}
             />
           </Box>
@@ -95,7 +101,15 @@ function EditEmailSignature({
   )
 }
 
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    editUser: (...args: Parameters<typeof editUser>) =>
+      dispatch(editUser(...args)),
+    addNotification
+  }
+}
+
 export default connect(
   ({ user }: IAppState) => ({ user }),
-  { editUser, addNotification }
+  mapDispatchToProps
 )(EditEmailSignature)

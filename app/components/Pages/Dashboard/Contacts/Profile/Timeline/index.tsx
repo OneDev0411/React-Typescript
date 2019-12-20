@@ -107,6 +107,7 @@ function Timeline(props: Props) {
           // display calendar events vice versa
           contrariwise={activeFilter === Filters.All}
           ref={timelineRef}
+          contact={props.contact}
           filter={filter}
           initialRange={getCalendarRange(activeFilter)}
           associations={associations}

@@ -15,10 +15,11 @@ export interface IContactReduxState {
   attributeDefs: IAttributeDefsState
   tags: any // TODO(type): add type definitions
   list: IContactReduxListState
+  spinner: boolean
   filterSegments: IContactReduxFilterSegmentState
 }
 
-export default combineReducers<IContactReduxState>({
+export default combineReducers({
   attributeDefs,
   list,
   tags,

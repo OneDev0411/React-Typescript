@@ -1,27 +1,32 @@
-const SHARED_COLORS = ['#fff', '#ccc', '#999', '#666', '#333', '#000']
+import flattenBrand from 'utils/flatten-brand'
+
+const SHARED_COLORS = ['#fff', '#000']
+const DEFAULT_COLORS = ['#fff', '#ccc', '#999', '#666', '#333', '#000']
 
 export function getBrandColors(brand: IBrand): string[] {
-  if (!brand.palette) {
-    return SHARED_COLORS
+  const flattedBrand = flattenBrand(brand) as IBrand
+
+  if (!flattedBrand.palette) {
+    return DEFAULT_COLORS
   }
 
   const colors: string[] = []
 
-  if (brand.palette.primary) {
-    colors.push(brand.palette.primary)
+  if (flattedBrand.palette.primary) {
+    colors.push(flattedBrand.palette.primary)
   }
 
-  if (brand.palette.marketing) {
-    if (brand.palette.marketing.alpha) {
-      colors.push(...Object.values(brand.palette.marketing.alpha))
+  if (flattedBrand.palette.marketing) {
+    if (flattedBrand.palette.marketing.alpha) {
+      colors.push(...Object.values(flattedBrand.palette.marketing.alpha))
     }
 
-    if (brand.palette.marketing.beta) {
-      colors.push(...Object.values(brand.palette.marketing.beta))
+    if (flattedBrand.palette.marketing.beta) {
+      colors.push(...Object.values(flattedBrand.palette.marketing.beta))
     }
 
-    if (brand.palette.marketing.theta) {
-      colors.push(...Object.values(brand.palette.marketing.theta))
+    if (flattedBrand.palette.marketing.theta) {
+      colors.push(...Object.values(flattedBrand.palette.marketing.theta))
     }
   }
 

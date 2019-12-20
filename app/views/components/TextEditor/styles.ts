@@ -3,6 +3,9 @@ import { fade } from '@material-ui/core/styles'
 
 export const styles = (theme: Theme) =>
   createStyles({
+    root: {
+      overflow: 'auto'
+    },
     dropzone: {
       border: '4px dashed transparent',
       width: 'auto',
@@ -34,5 +37,9 @@ export const styles = (theme: Theme) =>
     },
     dropzoneReject: {
       borderColor: fade(theme.palette.warning.main, 0.7)
+    },
+    toolbar: {},
+    content: {
+      paddingTop: `${theme.spacing(0.5)}px`
     }
   })

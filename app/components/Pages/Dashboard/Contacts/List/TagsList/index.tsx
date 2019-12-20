@@ -41,10 +41,7 @@ interface Props {
     filter: any
   ) => void
   resetActiveFilters: (segmentName: string) => void
-  changeActiveFilterSegment: (
-    nameId: string,
-    segmentId: string
-  ) => Promise<void>
+  changeActiveFilterSegment: (nameId: string, segmentId: string) => void
 }
 
 export class TagsList extends React.Component<Props> {

@@ -17,12 +17,17 @@ import { useMenu } from 'hooks/use-menu'
 import { ClassesProps } from 'utils/ts-utils'
 
 import IconReply from '../../SvgIcons/Reply/IconReply'
+import IconReplyAll from '../../SvgIcons/ReplyAll/IconReplyAll'
 import IconForward from '../../SvgIcons/Forward/IconForward'
 import IconVerticalDocs from '../../SvgIcons/VeriticalDots/VerticalDotsIcon'
 import { iconSizes } from '../../SvgIcons/icon-sizes'
+import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
+import { EmailThreadEmail } from '../types'
 
 interface Props {
+  email: EmailThreadEmail
   onReply: () => void
+  onReplyAll: () => void
   onForward: () => void
 }
 
@@ -79,6 +84,14 @@ export function EmailItemHeaderActions(
           </ListItemIcon>
           <ListItemText>Reply</ListItemText>
         </MenuItem>
+        {hasReplyAll(props.email) && (
+          <MenuItem dense onClick={select(props.onReplyAll)}>
+            <ListItemIcon>
+              <IconReplyAll size={iconSizes.small} />
+            </ListItemIcon>
+            <ListItemText>Reply All</ListItemText>
+          </MenuItem>
+        )}
         <MenuItem dense onClick={select(props.onForward)}>
           <ListItemIcon>
             <IconForward size={iconSizes.small} />

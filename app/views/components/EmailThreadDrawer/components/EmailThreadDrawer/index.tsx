@@ -5,7 +5,7 @@ import { EmailThread } from '../../../EmailThread'
 import { DrawerProps } from '../../../OverlayDrawer'
 
 interface Props extends DrawerProps {
-  thread: IEmailThread
+  thread: IEmailThread<'messages'>
 }
 
 /**
@@ -15,7 +15,11 @@ export function EmailThreadDrawer({ thread, ...drawerProps }: Props) {
   return (
     <Drawer {...drawerProps}>
       {drawerProps.open && thread && (
-        <EmailThread thread={thread} onClose={drawerProps.onClose} />
+        <EmailThread
+          messages={thread.messages}
+          subject={thread.subject}
+          onClose={drawerProps.onClose}
+        />
       )}
     </Drawer>
   )

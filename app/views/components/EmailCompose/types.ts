@@ -9,23 +9,33 @@ export interface IUploadingAttachment {
 }
 
 export interface EmailFormValues {
-  attachments: IFile[]
+  attachments: (IFile | UrlBasedEmailAttachmentInput)[]
   to: IDenormalizedEmailRecipientInput[] | undefined
   cc?: IDenormalizedEmailRecipientInput[] | undefined
   bcc?: IDenormalizedEmailRecipientInput[] | undefined
   subject: string
-  from: { value: string; label: string } | undefined
+  from: IUser
+  google_credential?: string
+  microsoft_credential?: string
   due_at: Date | null
   body: string | undefined
 }
 
-export type EmailThreadFormValues = Omit<EmailFormValues, 'attachments'> & {
-  attachments: Pick<IFile, 'url' | 'name' | 'preview_url' | 'mime' | 'type'>[]
+export interface UrlBasedEmailAttachmentInput {
+  url: string
+  name: string
 }
 
 export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   initialValues?: Partial<EmailFormValues>
-  sendEmail: (values: EmailFormValues) => Promise<EmailType>
+  /**
+   * TODO: refactor values type to {@link IEmailCampaignInput}, when #3435
+   * (mering API for sending email) is done
+   * @param values
+   */
+  sendEmail: (
+    values: EmailFormValues & { template?: UUID }
+  ) => Promise<EmailType>
   onSent?: (result: EmailType) => void
   /**
    * A deal to suggest attachments from it
@@ -35,7 +45,6 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   hasStaticBody?: boolean
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
-  evaluateTemplateExpressions?: boolean
 
   renderCollapsedFields: (values: EmailFormValues) => ReactNode
   renderFields: (values: EmailFormValues) => ReactNode
@@ -45,16 +54,6 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
    */
   uploadAttachment?: typeof uploadEmailAttachment
 
-  /**
-   * If passed, a dropdown will be shown in from, which allows user to select
-   * `from`, from this predefined set of options
-   */
-  fromOptions?: EmailFormValues['from'][]
-  /**
-   * If false, schedule button will not be shown in footer.
-   * Defaults to true
-   */
-  enableSchedule?: boolean
   /**
    * If passed, cancel button will be shown and onCancel will be called upon
    * clicking it.

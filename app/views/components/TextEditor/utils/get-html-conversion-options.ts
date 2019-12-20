@@ -8,7 +8,7 @@ import {
 import { wrap } from 'lodash'
 
 import { createAtomicBlockEntityData } from './create-atomic-block-entity-data'
-import { signatureCustomBlockFn } from '../plugins/draft-js-signature-plugin'
+import { signatureCustomBlockFn } from '../features/Signature/draft-js-signature-plugin'
 import {
   iFrameCustomBlockFn,
   renderIFrame

@@ -33,14 +33,14 @@ export function TabsFilter(props: Props) {
     >
       <Tab
         value={Filters.All}
-        label="All Events"
+        label="Past Events"
         classes={{
           root: classes.root
         }}
       />
       <Tab
         value={Filters.Upcoming}
-        label="Upcoming Events"
+        label="Upcoming Events (Three months)"
         classes={{
           root: classes.root
         }}

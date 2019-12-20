@@ -1,33 +1,42 @@
-import React, { useCallback, useMemo } from 'react'
+import { OAuthProvider } from 'constants/contacts'
 
+import React, { useCallback, useMemo } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { useSelector } from 'react-redux'
+import { flow } from 'lodash'
+import { shallowEqual } from 'recompose'
 
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
+import { IAppState } from 'reducers'
 
-import { EmailThreadFormValues } from './types'
-import { getReplyRecipients } from './helpers/get-reply-recipients'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+
+import {
+  getReplyAllRecipients,
+  getReplyRecipients
+} from './helpers/get-reply-recipients'
 import { getReplyHtml } from './helpers/get-reply-html'
 import { getForwardHtml } from './helpers/get-forward-html'
-import { attachmentToFile } from '../EmailThread/helpers/attachment-to-file'
 import { getReplySubject } from './helpers/get-reply-subject'
-import EmailThreadComposeForm from './EmailThreadComposeForm'
-import { EmailResponseType } from '../EmailThread/types'
+import { EmailResponseType, EmailThreadEmail } from '../EmailThread/types'
 import { encodeContentIds } from '../EmailThread/helpers/encode-content-ids'
-import { getAccountTypeFromOrigin } from './helpers/get-account-type-from-origin'
-import { convertToAbsoluteAttachmentUrl } from '../EmailThread/helpers/convert-to-absolute-attachment-url'
-import { oAuthAccountTypeToProvider } from '../../../components/Pages/Dashboard/Account/ConnectedAccounts/constants'
+import { SingleEmailComposeForm } from './SingleEmailComposeForm'
+import { EmailFormValues } from './types'
 
 interface Props {
   responseType: EmailResponseType
-  email: IEmailThreadEmail
-  defaultFrom?: string
+  email: EmailThreadEmail
+  fallbackCredential?: string
   onCancel: () => void
-  onSent: (email: IEmailThreadEmail) => void
+  onSent: (email: IEmailCampaign) => void
 }
 
 const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
+      root: {
+        minHeight: '24.5rem'
+      },
       footer: {
         position: 'sticky',
         bottom: 0,
@@ -41,96 +50,128 @@ const useStyles = makeStyles(
 export function EmailResponseComposeForm({
   responseType,
   email,
-  defaultFrom,
   onCancel,
   onSent
 }: Props) {
   const classes = useStyles()
 
-  const initialValue = useMemo<EmailThreadFormValues>(() => {
+  const user = useSelector((state: IAppState) => state.user as IUser)
+  const allConnectedAccounts = useSelector<IAppState, IOAuthAccount[]>(
+    flow(
+      state => state.contacts.oAuthAccounts,
+      selectAllConnectedAccounts
+    ),
+    shallowEqual
+  )
+  const initialValue = useMemo<EmailFormValues>((): EmailFormValues => {
+    const ownerAccount = allConnectedAccounts.find(
+      account => account.id === (email.microsoftId || email.googleId)
+    )
     const { to, cc } =
-      responseType === 'reply' ? getReplyRecipients(email) : { to: [], cc: [] }
-
-    const owner = email.owner || defaultFrom
-    const from = owner
-      ? {
-          label: '',
-          value: owner
-        }
-      : undefined
+      responseType === 'forward'
+        ? { to: [], cc: [] }
+        : responseType === 'replyAll'
+        ? getReplyAllRecipients(email, ownerAccount ? ownerAccount.email : '')
+        : getReplyRecipients(email)
 
     return {
-      from,
+      from: user,
+      microsoft_credential: email.microsoftId,
+      google_credential: email.googleId,
       to,
       cc,
       bcc: [],
       body:
-        responseType === 'reply' ? getReplyHtml(email) : getForwardHtml(email),
+        responseType === 'forward'
+          ? getForwardHtml(email)
+          : getReplyHtml(email),
       due_at: null,
       attachments:
         responseType === 'forward'
-          ? email.attachments.map(attachmentToFile)
+          ? email.attachments.map(attachment => ({
+              url: attachment.url,
+              name: attachment.name
+            }))
           : [],
-      subject: getReplySubject(responseType, email)
+      subject: getReplySubject(responseType, email.subject)
     }
-  }, [defaultFrom, email, responseType])
+  }, [allConnectedAccounts, email, responseType, user])
 
+  const getHeaders = (emailInput: EmailFormValues) => {
+    const fromType: OAuthProvider | null =
+      (emailInput.google_credential && OAuthProvider.Google) ||
+      (emailInput.microsoft_credential && OAuthProvider.Outlook) ||
+      null
+
+    const originType: OAuthProvider | null = email.googleId
+      ? OAuthProvider.Google
+      : email.microsoftId
+      ? OAuthProvider.Outlook
+      : null
+    const originMatchesFrom = !originType || originType === fromType
+
+    return {
+      thread_id: originMatchesFrom ? email.threadId : undefined,
+      message_id: originMatchesFrom ? email.messageId : undefined,
+      in_reply_to: email.internetMessageId
+    }
+  }
   const getEmail = useCallback(
-    (emailInput: IEmailThreadEmailInput, fromAccount: IOAuthAccount) => {
-      const originType = getAccountTypeFromOrigin(email.origin)
-      const originMatchesFrom =
-        !originType ||
-        originType === oAuthAccountTypeToProvider[fromAccount.type]
-
+    (emailInput: IEmailCampaignInput): IEmailCampaignInput => {
+      // TODO maybe this can be moved to EmailComposeForm as a next step
+      //  refactoring
       const html = encodeContentIds(email.attachments, emailInput.html)
 
       const inlineAttachments: IEmailAttachmentInput[] = email.attachments
         .filter(
           attachment => attachment.cid && html.includes(`cid:${attachment.cid}`)
         )
-        .map(({ cid, contentType: type, isInline, name: filename, url }) => ({
-          filename,
-          isInline,
-          link: convertToAbsoluteAttachmentUrl(url),
-          cid,
-          type
+        .map(({ cid, isInline, name, url }) => ({
+          is_inline: isInline,
+          url,
+          name,
+          content_id: cid
         }))
 
-      const attachments = emailInput.attachments
+      const attachments = (emailInput.attachments || [])
         // filter out inline attachments
         .filter(
           attachment =>
-            !inlineAttachments.some(item => item.link === attachment.link)
+            !inlineAttachments.some(
+              item =>
+                'url' in item &&
+                'url' in attachment &&
+                item.url === attachment.url
+            )
         )
 
       return {
         ...emailInput,
         html,
-        attachments: attachments.concat(inlineAttachments),
-        threadId: originMatchesFrom ? email.thread_id : undefined,
-        messageId: originMatchesFrom ? email.message_id : undefined,
-        inReplyTo: email.internet_message_id
+        attachments: attachments.concat(inlineAttachments)
       }
     },
-    [
-      email.attachments,
-      email.internet_message_id,
-      email.message_id,
-      email.origin,
-      email.thread_id
-    ]
+    [email.attachments]
   )
 
   const shouldRender = useRerenderOnChange(responseType)
 
+  // This filter is added in response to Saeed's request. Right now
+  // we have some issues in replying with an account other than
+  // the one by which the thread is started. We should remove
+  // this filtering when this issue is resolved.
+  const forcedSender = email.googleId || email.microsoftId
+
   return (
     shouldRender && (
-      <EmailThreadComposeForm
+      <SingleEmailComposeForm
         onCancel={onCancel}
         onSent={onSent}
-        classes={{ footer: classes.footer }}
+        classes={{ footer: classes.footer, root: classes.root }}
         initialValues={initialValue}
         getEmail={getEmail}
+        headers={getHeaders}
+        filterAccounts={account => !forcedSender || account.id === forcedSender}
         hasSignatureByDefault={false}
       />
     )

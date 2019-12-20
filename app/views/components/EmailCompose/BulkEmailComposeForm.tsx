@@ -15,12 +15,13 @@ import { createBulkEmailCampaign } from 'models/email/create-bulk-email-campaign
 import { EmailFormValues } from './types'
 import { normalizeRecipients } from './helpers/normalize-recepients'
 
-import { From } from './fields/From'
+import { From } from './components/From'
 import EmailRecipientsChipsInput from '../EmailRecipientsChipsInput'
 
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import IconLock from '../SvgIcons/Lock/IconLock'
 import EmailComposeForm from './EmailComposeForm'
+import { attachmentFormValueToEmailAttachmentInput } from './helpers/attachment-form-value-to-email-attachment-input'
 
 const LockIcon = styled(IconLock)`
   vertical-align: text-bottom;
@@ -46,16 +47,18 @@ export function BulkEmailComposeForm({
   getEmail = email => email,
   disableAddNewRecipient = false,
   emailId,
-  fromOptions,
   ...otherProps
 }: Props) {
-  const sendEmail = (formValue: EmailFormValues) => {
-    const emailData = getEmail({
-      from: (formValue.from && formValue.from.value) || '',
+  const sendEmail = (formValue: EmailFormValues & { template: string }) => {
+    const emailData: IIndividualEmailCampaignInput = getEmail({
+      from: (formValue.from && formValue.from.id) || '',
       to: normalizeRecipients(formValue.to || []),
       subject: (formValue.subject || '').trim(),
       html: formValue.body || '',
-      attachments: (formValue.attachments || []).map(item => item.id),
+      template: formValue.template,
+      attachments: (formValue.attachments || []).map(
+        attachmentFormValueToEmailAttachmentInput
+      ),
       due_at: formValue.due_at || new Date()
     })
 
@@ -74,7 +77,10 @@ export function BulkEmailComposeForm({
   )
   const renderFields = () => (
     <>
-      <Field component={From} name="from" options={fromOptions} />
+      <Field
+        render={({ input }) => <From user={input.value as IUser} />}
+        name="from"
+      />
 
       <Field
         label={label}

@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
+import { isLeaseProperty } from 'utils/listing'
+
 import './styles/index.scss'
 
 import FavoriteHeart from './FavoriteHeart'
@@ -25,7 +27,10 @@ const ListingCard = ({ user, listing }) => {
             </div>
           )}
           <h4 className="listing-card__title">{props.address}</h4>
-          <h5 className="listing-card__price">$ {props.price}</h5>
+          <h5 className="listing-card__price">
+            $ {props.price}
+            {isLeaseProperty(listing) ? '/mo' : ''}
+          </h5>
           <div className="listing-card__details">
             <span>{props.beds} Beds</span>
             &nbsp;&nbsp;&middot;&nbsp;&nbsp;

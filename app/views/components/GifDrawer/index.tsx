@@ -17,7 +17,7 @@ interface Props {
   onSelect: (value: GifItem | null) => void
 }
 
-function GifDrawer({ isOpen, onClose = () => {}, onSelect = () => {} }: Props) {
+function GifDrawer({ isOpen, onClose = () => {}, onSelect }: Props) {
   const trends = useTrendsGifs()
   const { results, setSearch, isSearching, searchFor } = useSearchGif()
 
@@ -25,11 +25,11 @@ function GifDrawer({ isOpen, onClose = () => {}, onSelect = () => {} }: Props) {
 
   return (
     <OverlayDrawer open={isOpen} onClose={onClose}>
-      <OverlayDrawer.Header title="Select GIF" />
+      <OverlayDrawer.Header title="Select a GIF animation" />
       <OverlayDrawer.Body>
         <Search
           onChange={value => setSearch(value)}
-          placeholder="Search for GIF"
+          placeholder="Search for a GIF"
           isSearching={isSearching}
           debounceTime={345}
           style={{
@@ -38,7 +38,14 @@ function GifDrawer({ isOpen, onClose = () => {}, onSelect = () => {} }: Props) {
         />
 
         {isSearching ? (
-          <CircularProgress />
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center'
+            }}
+          >
+            <CircularProgress />
+          </div>
         ) : (
           <GifLayout>
             <Masonry

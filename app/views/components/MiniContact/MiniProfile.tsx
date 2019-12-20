@@ -8,7 +8,6 @@ import CopyButton from 'components/CopyButton'
 import { EmailComposeFormProps } from 'components/EmailCompose'
 import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
-import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
 
 import Activity from './Activity'
 import {
@@ -39,7 +38,7 @@ function MiniProfile(props: MiniProfilePropsType) {
     type: ActionSettingsNamesType.EMAIL,
     data: {
       initialValues: {
-        from: normalizeUserForEmailFrom(props.user),
+        from: props.user,
         to: [
           {
             recipient_type: 'Email',

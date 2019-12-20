@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react'
 
-import getCampaign from '../../../../../models/insights/emails/get-campaign-by-id'
+import { getEmailCampaign } from 'models/email/get-email-campaign'
 
 function useItemData(id) {
   const [isLoading, setLoading] = useState<boolean>(true)
   const [hasError, setError] = useState<boolean>(false)
-  const [item, setItem] = useState<IInsight | null>(null)
+  const [item, setItem] = useState<IEmailCampaign<
+    IEmailCampaignAssociation,
+    IEmailCampaignRecipientAssociation,
+    IEmailCampaignEmailAssociation
+  > | null>(null)
 
   useEffect(() => {
-    getCampaign(id)
+    getEmailCampaign(id, {
+      emailFields: ['html', 'text']
+    })
       .then(data => {
         setError(false)
         setLoading(false)

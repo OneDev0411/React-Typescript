@@ -23,7 +23,7 @@ import { iconSizes } from '../../../SvgIcons/icon-sizes'
 import { DropdownToggleButton } from '../../../DropdownToggleButton'
 import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { FooterBottomDrawer } from './FooterBottomDrawer'
-import TemplateSelector from './TemplateSelector'
+import { TemplateSelector } from './TemplateSelector'
 
 interface Props {
   isSubmitDisabled: boolean
@@ -34,9 +34,9 @@ interface Props {
   onChanged: () => void
   initialAttachments: IFile[]
   isSubmitting: boolean
-  enableSchedule: boolean
   hasStaticBody?: boolean
-  onTemplateSelected: (template: IBrandEmailTemplate) => void
+  onEmailTemplateSelected: (template: IBrandEmailTemplate) => void
+  onMarketingTemplateSelected: (template: IMarketingTemplateInstance) => void
   onCancel?: () => void
   onDelete?: (values: EmailFormValues) => void | Promise<any>
   className?: string
@@ -45,7 +45,8 @@ interface Props {
 
 export function Footer({
   onDelete,
-  onTemplateSelected,
+  onEmailTemplateSelected,
+  onMarketingTemplateSelected,
   hasStaticBody,
   ...props
 }: Props) {
@@ -60,15 +61,22 @@ export function Footer({
 
   const busy = isDeleting || props.isSubmitting
 
-  const handleSelectedTemplate = template => {
+  const selectEmailTemplate = (template: IBrandEmailTemplate) => {
     setTemplateDrawerOpen(false)
-    onTemplateSelected(template)
+    onEmailTemplateSelected(template)
+  }
+  const selectMarketingTemplate = (template: IMarketingTemplateInstance) => {
+    setTemplateDrawerOpen(false)
+    onMarketingTemplateSelected(template)
   }
 
   return (
     <FooterContainer>
       <FooterBottomDrawer isOpen={isTemplateDrawerOpen}>
-        <TemplateSelector onTemplateSelected={handleSelectedTemplate} />
+        <TemplateSelector
+          onEmailTemplateSelected={selectEmailTemplate}
+          onMarketingTemplateSelected={selectMarketingTemplate}
+        />
       </FooterBottomDrawer>
       <FooterInnerContainer className={props.className}>
         <div className="features-list">
@@ -109,35 +117,33 @@ export function Footer({
             data-test="compose-send-email"
             type="submit"
             disabled={busy || props.isSubmitDisabled}
-            leftRounded={props.enableSchedule}
+            leftRounded
           >
             {textForSubmitButton({
               isSubmitting: props.isSubmitting,
               isDateSet: isScheduled
             })}
           </ActionButton>
-          {props.enableSchedule ? (
-            <Field
-              name="due_at"
-              render={fieldProps => (
-                <DateTimePicker
-                  popUpButton={buttonProps => (
-                    <SchedulerButton
-                      onOpen={buttonProps.toggleOpen}
-                      isScheduled={isScheduled}
-                    />
-                  )}
-                  disabledDays={{
-                    before: new Date()
-                  }}
-                  popUpPosition="top-right"
-                  saveButtonText="Schedule"
-                  initialSelectedDate={fieldProps.input.value}
-                  onDone={fieldProps.input.onChange}
-                />
-              )}
-            />
-          ) : null}
+          <Field
+            name="due_at"
+            render={fieldProps => (
+              <DateTimePicker
+                popUpButton={buttonProps => (
+                  <SchedulerButton
+                    onOpen={buttonProps.toggleOpen}
+                    isScheduled={isScheduled}
+                  />
+                )}
+                disabledDays={{
+                  before: new Date()
+                }}
+                popUpPosition="top-right"
+                saveButtonText="Schedule"
+                initialSelectedDate={fieldProps.input.value}
+                onDone={fieldProps.input.onChange}
+              />
+            )}
+          />
 
           {onDelete && (
             <IconButton

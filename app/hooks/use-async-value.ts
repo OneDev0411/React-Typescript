@@ -12,6 +12,7 @@ export function useAsyncValue<T, E = any>() {
   const setValueAsync = useCallback(async (promise: Promise<T>) => {
     lastPromiseRef.current = promise
     setLoading(true)
+    setError(null)
 
     try {
       const value = await promise

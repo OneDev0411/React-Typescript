@@ -1,11 +1,13 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
 import ContactInfo from 'components/ContactInfo'
-import { Iframe } from 'components/Iframe'
+
+import { EmailThread } from 'components/EmailThread'
+
+import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
 
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
@@ -14,12 +16,7 @@ import Loading from '../../../../Partials/Loading'
 
 import { percent } from '../List/helpers'
 
-import {
-  PageContainer,
-  InsightContainer,
-  SummaryCard,
-  NoContent
-} from './styled'
+import { InsightContainer, PageContainer, SummaryCard } from './styled'
 import useItemData from './useItemData'
 import Summary from './Summary'
 import ContactsTable from './ContactsTable'
@@ -36,6 +33,7 @@ function Insight(props: InsightPropsType) {
 
   const [isOpenViewEmail, setOpenViewEmail] = React.useState(false)
   const { item, isLoading } = useItemData(id)
+  const email = item && getEmailCampaignEmail(item)
 
   if (isLoading) {
     return (
@@ -52,7 +50,7 @@ function Insight(props: InsightPropsType) {
 
   const totalSent = item.sent
   const summaryItems = [
-    { name: 'Date', value: formatDate(item.executed_at * 1000) },
+    { name: 'Date', value: formatDate(item.executed_at! * 1000) },
     { name: 'Total Sent', value: totalSent },
     {
       name: 'Successful Deliveries',
@@ -87,6 +85,8 @@ function Insight(props: InsightPropsType) {
 
   const { subject } = item
 
+  const closeEmailView = () => setOpenViewEmail(false)
+
   return (
     <PageWrapper>
       <Helmet>
@@ -98,19 +98,20 @@ function Insight(props: InsightPropsType) {
         <Header
           backUrl="/dashboard/insights"
           title={subject}
-          onCloseEmail={() => setOpenViewEmail(true)}
+          onViewEmail={() => setOpenViewEmail(true)}
         />
         <Dialog
           maxWidth="lg"
           fullWidth
-          onClose={() => setOpenViewEmail(false)}
+          onClose={closeEmailView}
           open={isOpenViewEmail}
         >
-          <DialogTitle>{subject || 'No Title'}</DialogTitle>
-          {item.html ? (
-            <Iframe title="email preview" srcDoc={item.html} />
-          ) : (
-            <NoContent>The email doesn’t have any content</NoContent>
+          {email && (
+            <EmailThread
+              messages={[email]}
+              subject={email.subject}
+              onClose={closeEmailView}
+            />
           )}
         </Dialog>
         <InsightContainer>

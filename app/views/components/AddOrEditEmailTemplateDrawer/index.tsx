@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { Field } from 'react-final-form'
 import { TextField } from 'final-form-material-ui'
 import { connect } from 'react-redux'
@@ -28,7 +28,7 @@ interface Props {
   emailTemplate?: IBrandEmailTemplate | null
   updateEmailTemplate: IAsyncActionProp<typeof updateEmailTemplate>
   createEmailTemplate: IAsyncActionProp<typeof createEmailTemplate>
-  addNotification: typeof addNotification
+  addNotification: IAsyncActionProp<typeof addNotification>
 }
 
 export function AddOrEditEmailTemplateDrawer({
@@ -41,7 +41,6 @@ export function AddOrEditEmailTemplateDrawer({
   addNotification,
   activeTeamId
 }: Props) {
-  const emailBodyRef = useRef(null)
   const [formData, setFormData] = useState<IBrandEmailTemplateInput>({
     name: '',
     subject: '',
@@ -101,6 +100,7 @@ export function AddOrEditEmailTemplateDrawer({
   return (
     <FinalFormDrawer
       formId="email-template-form"
+      width="43rem"
       disableSubmitByEnter
       isOpen={isOpen}
       initialValues={formData}
@@ -142,7 +142,6 @@ export function AddOrEditEmailTemplateDrawer({
             }}
           />
           <EmailBody
-            ref={emailBodyRef}
             hasSignatureByDefault
             hasTemplateVariables
             hasStaticBody={!editable}
@@ -163,7 +162,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
       dispatch(updateEmailTemplate(...args)),
     createEmailTemplate: (...args: Parameters<typeof createEmailTemplate>) =>
       dispatch(createEmailTemplate(...args)),
-    addNotification
+    addNotification: (...args: Parameters<typeof addNotification>) =>
+      dispatch(addNotification(...args))
   }
 }
 

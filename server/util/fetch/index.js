@@ -27,25 +27,28 @@ const requestMiddleware = async (ctx, next) => {
 
   const api_url = config.api.url
   const { app_name } = config
-  const { access_token } = ctx.request.query
-  const user_agent = ctx.headers['user-agent']
-  const host_name = ctx.request.query.hostname
+  const { access_token: accessToken } = ctx.request.query
+  const userAgent = ctx.headers['user-agent']
+  const hostName = ctx.request.query.hostname
 
   ctx.fetch = (url, method = 'get', contentType = 'application/json') => {
     ctx.log('Fetch Start')
 
     const headers = {
       'User-Agent': app_name,
-      'x-real-agent': user_agent,
       'Content-Type': contentType
     }
 
-    if (access_token) {
-      headers.authorization = `Bearer ${access_token}`
+    if (userAgent) {
+      headers['x-real-agent'] = userAgent
     }
 
-    if (host_name != null) {
-      url = `${url}?hostname=${host_name}`
+    if (accessToken) {
+      headers.authorization = `Bearer ${accessToken}`
+    }
+
+    if (hostName != null) {
+      url = `${url}?hostname=${hostName}`
     }
 
     // log

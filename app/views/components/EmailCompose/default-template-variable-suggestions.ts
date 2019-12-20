@@ -1,4 +1,4 @@
-import { ITemplateVariableSuggestionGroup } from '../TemplateVariablesButton/types'
+import { ITemplateVariableSuggestionGroup } from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/types'
 
 export const defaultTemplateVariableSuggestions: ITemplateVariableSuggestionGroup[] = [
   {

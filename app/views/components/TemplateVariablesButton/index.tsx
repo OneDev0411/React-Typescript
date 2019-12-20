@@ -2,19 +2,19 @@ import * as React from 'react'
 
 import {
   ClickAwayListener,
+  Divider,
   List,
   ListItem,
   ListSubheader,
   Paper,
   Popper,
-  useTheme,
-  Divider
+  useTheme
 } from '@material-ui/core'
 
 import {
   ITemplateVariableSuggestion,
   ITemplateVariableSuggestionGroup
-} from './types'
+} from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/types'
 import { DropdownToggleButton } from '../DropdownToggleButton'
 
 interface Props {
@@ -86,4 +86,4 @@ export function TemplateVariablesButton({
     </>
   )
 }
-export * from './types'
+export * from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/types'

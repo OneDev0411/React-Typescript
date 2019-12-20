@@ -6,7 +6,15 @@ interface Props {
 }
 
 export function DateTime({ event }: Props) {
-  if (['crm_association', 'crm_task'].includes(event.object_type) === false) {
+  if (
+    ![
+      'crm_association',
+      'crm_task',
+      'email_campaign',
+      'email_campaign_recipient',
+      'email_thread_recipient'
+    ].includes(event.object_type)
+  ) {
     return <span>All day</span>
   }
 
@@ -15,7 +23,7 @@ export function DateTime({ event }: Props) {
   if (event.end_date) {
     return (
       <span>
-        {dueDate} - {formatDate(event.end_date)}
+        {dueDate} {formatDate(event.end_date)}
       </span>
     )
   }
