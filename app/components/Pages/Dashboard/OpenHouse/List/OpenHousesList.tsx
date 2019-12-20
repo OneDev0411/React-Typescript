@@ -1,3 +1,5 @@
+import { ACL } from 'constants/acl'
+
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
@@ -66,13 +68,13 @@ function OpenHousesList(props: Props) {
       }: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
-        <Info
-          dueDate={rowData.due_date}
-          description={rowData.description}
-          onClick={() => handleEdit(rowData)}
-          title={rowData.title}
-        />
-      )
+          <Info
+            dueDate={rowData.due_date}
+            description={rowData.description}
+            onClick={() => handleEdit(rowData)}
+            title={rowData.title}
+          />
+        )
     },
     {
       header: 'Registrants',
@@ -84,16 +86,16 @@ function OpenHousesList(props: Props) {
       }: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
-        <Registrants
-          registrants={
-            rowData.associations
-              ? rowData.associations.filter(
+          <Registrants
+            registrants={
+              rowData.associations
+                ? rowData.associations.filter(
                   a => a.association_type === 'contact'
                 )
-              : []
-          }
-        />
-      )
+                : []
+            }
+          />
+        )
     },
     {
       id: 'actions',
@@ -104,13 +106,13 @@ function OpenHousesList(props: Props) {
       }: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
-        <Actions
-          activeBrandId={props.activeBrandId}
-          openHouse={rowData}
-          onEdit={() => handleEdit(rowData)}
-          reloadList={reloadList}
-        />
-      )
+          <Actions
+            activeBrandId={props.activeBrandId}
+            openHouse={rowData}
+            onEdit={() => handleEdit(rowData)}
+            reloadList={reloadList}
+          />
+        )
     }
   ]
 
@@ -178,8 +180,8 @@ function OpenHousesList(props: Props) {
         </PageHeader.Menu>
       </PageHeader>
 
-      <Acl.Deals>
-        <div style={{ padding: theme.spacing(0, 3, 9) }}>
+      <div style={{ padding: theme.spacing(0, 3, 9) }}>
+        <Acl access={[ACL.DEALS, ACL.BETA]}>
           <Callout type="info" style={{ margin: theme.spacing(1.5, 0) }}>
             To Notify your Office to Book an Open House on the MLS please find
             the button inside of your{' '}
@@ -190,10 +192,10 @@ function OpenHousesList(props: Props) {
             events for your listings or other agents listings that you are
             holding an open house for.
           </Callout>
+        </Acl>
+        {renderContent()}
+      </div>
 
-          {renderContent()}
-        </div>
-      </Acl.Deals>
 
       {isDrawerOpen && (
         // @ts-ignore js component
