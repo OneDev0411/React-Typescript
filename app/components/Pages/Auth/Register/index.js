@@ -188,14 +188,18 @@ export default compose(
   connect(
     ({ brand }, { location: { query } }) => ({
       brand,
-      paramsFromURI: query
+      paramsFromURI: query,
+      initialValues: {
+        first_name: query.firstName,
+        last_name: query.lastName,
+        user_type: 'Client'
+      }
     }),
     { submitSigninForm, editUser }
   ),
   reduxForm({
     form: 'register',
-    validate,
-    initialValues: { user_type: 'Client' }
+    validate
   }),
   withState('submitError', 'setSubmitError', false),
   withState('isSubmitting', 'setIsSubmitting', false),
