@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+
 import Provider from './provider'
 
 const rootEl = document.getElementById('app')

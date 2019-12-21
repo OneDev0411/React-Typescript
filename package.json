@@ -8,6 +8,7 @@
     "develop": "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node --extensions \".js,.ts,.tsx\"",
     "developClient": "NODE_ENV=development notify=true npx babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "proxy": "ts-node -P ./proxy-server/tsconfig.json ./proxy-server",
+    "dev-app": "webpack-dev-server --config webpack.config.babel.js --host 0.0.0.0 --inline --hot",
     "debug": "ndb npm run develop",
     "icons": "babel-node ./icon-manager",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build.js",
@@ -255,6 +256,7 @@
     "validator": "^9.2.0",
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-merge": "^4.2.2",
     "webpack-s3-plugin": "^1.0.3",
     "xml2js": "^0.4.22"
   },
@@ -356,6 +358,8 @@
     "ts-jest": "^24.0.2",
     "typescript": "^3.6.2",
     "webpack-cli": "^3.2.1",
+    "webpack-dev-middleware": "^3.7.2",
+    "webpack-dev-server": "^3.10.1",
     "webpack-notifier": "^1.7.0",
     "webpackbar": "^3.1.5",
     "whatwg-fetch": "^3.0.0"
