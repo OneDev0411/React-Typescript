@@ -22,6 +22,7 @@ import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import IconLock from '../SvgIcons/Lock/IconLock'
 import EmailComposeForm from './EmailComposeForm'
 import { attachmentFormValueToEmailAttachmentInput } from './helpers/attachment-form-value-to-email-attachment-input'
+import { EmailRecipientQuickSuggestions } from '../EmailRecipientQuickSuggestions'
 
 const LockIcon = styled(IconLock)`
   vertical-align: text-bottom;
@@ -47,6 +48,7 @@ export function BulkEmailComposeForm({
   getEmail = email => email,
   disableAddNewRecipient = false,
   emailId,
+  deal,
   ...otherProps
 }: Props) {
   const sendEmail = (formValue: EmailFormValues & { template: string }) => {
@@ -84,17 +86,32 @@ export function BulkEmailComposeForm({
 
       <Field
         label={label}
-        readOnly={disableAddNewRecipient}
         name="to"
-        component={EmailRecipientsChipsInput as any}
-        includeQuickSuggestions
-        TextFieldProps={
-          {
-            inputProps: {
-              autoFocus: true
-            } as HTMLProps<HTMLInputElement>
-          } as TextFieldProps
-        }
+        render={toFieldProps => (
+          <>
+            <EmailRecipientsChipsInput
+              {...toFieldProps}
+              readOnly={disableAddNewRecipient}
+              TextFieldProps={
+                {
+                  inputProps: {
+                    autoFocus: true
+                  } as HTMLProps<HTMLInputElement>
+                } as TextFieldProps
+              }
+            />
+            <EmailRecipientQuickSuggestions
+              deal={deal}
+              currentRecipients={[...(toFieldProps.input.value || [])]}
+              onSelect={recipient => {
+                toFieldProps.input.onChange([
+                  ...(toFieldProps.input.value || []),
+                  recipient
+                ] as any)
+              }}
+            />
+          </>
+        )}
       />
     </>
   )

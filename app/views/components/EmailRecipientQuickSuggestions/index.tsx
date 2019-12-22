@@ -6,27 +6,37 @@ import { IAppState } from 'reducers'
 import { getBrandByType } from 'utils/user-teams'
 import { selectDealRoles } from 'reducers/deals/roles'
 
-import { RecipientQuickSuggestion } from '../RecipientQuickSuggestion'
-import { recipientToString } from '../helpers/recipient-to-string'
-import { areRecipientsEqual } from '../helpers/are-recipients-equal'
-import { dealRoleToSuggestion } from '../helpers/deal-role-to-suggestion'
-import { QuickSuggestion } from '../types'
+import { RecipientQuickSuggestion } from './RecipientQuickSuggestion'
+import { recipientToString } from '../EmailRecipientsChipsInput/helpers/recipient-to-string'
+import { areRecipientsEqual } from './helpers/are-recipients-equal'
+import { dealRoleToSuggestion } from './helpers/deal-role-to-suggestion'
+import { QuickSuggestion } from '../EmailRecipientsChipsInput/types'
 
 interface StateProps {
   user: IUser
   dealRoles: IDealRole[]
 }
-interface OwnProps extends StateProps {
+interface OwnProps {
   deal?: IDeal
   currentRecipients?: IDenormalizedEmailRecipientInput[]
+  /**
+   * Callback to be called when a quick suggestion in selected.
+   * The selected suggestion may have a forced
+   * {@link IEmailRecipientSendType send type}. Right now the type is
+   * forced to `Bcc` for some suggestions like "All contacts" and "All Agents"
+   * @param recipient: the recipient associated with this quick suggestion
+   * @param sendType: the {@link IEmailRecipientSendType send type} associated
+   * with this suggestion. It can be undefined and in this case, the recipient
+   * is to be added to the currently (or lastly) focused input.
+   */
   onSelect: (
     recipient: IDenormalizedEmailRecipientInput,
-    sendType?: IEmailRecipientSendType
+    sendType: IEmailRecipientSendType | undefined
   ) => void
 }
 type Props = OwnProps & StateProps
 
-export const RecipientQuickSuggestions = connect<StateProps, OwnProps>(
+export const EmailRecipientQuickSuggestions = connect<StateProps, OwnProps>(
   ({ user, deals }: IAppState, props: OwnProps) => ({
     user,
     dealRoles: selectDealRoles(deals.roles, props.deal)
@@ -65,7 +75,14 @@ export const RecipientQuickSuggestions = connect<StateProps, OwnProps>(
   )
 
   return unusedSuggestions.length > 0 ? (
-    <Box py={1} flexGrow={0} flexShrink={0} flexBasis="100%" lineHeight={1.5}>
+    <Box
+      pb={1}
+      pt={0.5}
+      flexGrow={0}
+      flexShrink={0}
+      flexBasis="100%"
+      lineHeight={1.5}
+    >
       <Box display="inline-block" color="text.secondary" mr={1}>
         Suggestions
       </Box>

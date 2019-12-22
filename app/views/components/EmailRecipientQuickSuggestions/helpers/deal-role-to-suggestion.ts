@@ -1,6 +1,6 @@
-import { getLegalFullName, roleName } from 'deals/utils/roles'
+import { getLegalFullName, roleName } from 'deals/utils/roles/index'
 
-import { QuickSuggestion } from '../types'
+import { QuickSuggestion } from '../../EmailRecipientsChipsInput/types'
 
 export function dealRoleToSuggestion(dealRole: IDealRole): QuickSuggestion {
   return {
