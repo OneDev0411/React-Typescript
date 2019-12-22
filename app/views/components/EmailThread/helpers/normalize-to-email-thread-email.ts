@@ -45,7 +45,7 @@ function normalizeEmailToThreadEmail(
     cc: email.cc,
     bcc: email.bcc,
     htmlBody: email.html,
-    messageId: email.headers.message_id,
+    messageId: email.headers && email.headers.message_id,
     date: new Date(email.created_at * 1000),
     // FIXME: Abbas said it has some problems in API and hopefully
     //  will be fixed in future. Now we set attachments to an empty array!
