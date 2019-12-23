@@ -1,6 +1,6 @@
 export const CATEGORIES = [
   {
-    name: 'Select Category',
+    name: 'Select a Category',
     value: 'none'
   },
   {
@@ -20,3 +20,5 @@ export const CATEGORIES = [
     value: 'NewAgent'
   }
 ]
+
+export const SAVED_TEMPLATE_VARIANT = 'SAVED_TEMPLATE'

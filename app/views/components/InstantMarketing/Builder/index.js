@@ -16,7 +16,6 @@ import ImageDrawer from 'components/ImageDrawer'
 import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
-// import SaveTemplateDropdown from './SaveTemplateDropdown'
 
 import { getActiveTeam, hasUserAccess } from 'utils/user-teams'
 
@@ -27,6 +26,7 @@ import { loadGrapesjs } from './utils/load-grapes'
 import { createGrapesInstance } from './utils/create-grapes-instance'
 
 import Templates from '../Templates'
+import AddToMarketingCenter from './AddToMarketingCenter'
 import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
@@ -476,6 +476,10 @@ class Builder extends React.Component {
     }
   }
 
+  getTemplateMarkup() {
+    return this.getSavedTemplate().result
+  }
+
   // We should always make sure the markup is rendered before doing any save
   // We are doing this hack as GrapesJS load event is not useful to make sure the template markup is loaded
   isTemplateMarkupRendered = () => {
@@ -866,12 +870,12 @@ class Builder extends React.Component {
             )}
 
             <Actions>
-              {/* This is disabled due some server issues */}
-              {/* <SaveTemplateDropdown
+              <AddToMarketingCenter
                 medium={this.state.selectedTemplate.medium}
                 inputs={this.state.selectedTemplate.inputs}
                 user={this.props.user}
-              /> */}
+                getTemplate={this.getTemplateMarkup.bind(this)}
+              />
 
               {this.ShowEditListingsButton && !this.props.isEdit && (
                 <Button
