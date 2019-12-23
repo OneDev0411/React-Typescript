@@ -2,25 +2,31 @@ import Fetch from '../../../services/fetch'
 
 interface SaveTemplateArguments {
   name: string
-  brandId: string | null
-  type: string
+  variant: string
+  templateType: string
   medium: string
-  inputs: string[]
+  html: string
+  brands: UUID[]
+  inputs?: string[]
 }
 
-export async function saveTemplate({
+export async function createTemplate({
   name,
-  brandId,
-  type,
+  variant,
+  templateType,
   medium,
+  html,
+  brands,
   inputs = []
-}: SaveTemplateArguments) {
+}: SaveTemplateArguments): Promise<ApiResponseBody<IMarketingTemplate>> {
   try {
     const response = await new Fetch().post('/templates').send({
       name,
+      variant,
+      template_type: templateType,
       medium,
-      template_type: type,
-      brands: [brandId],
+      html,
+      brands,
       inputs
     })
 
