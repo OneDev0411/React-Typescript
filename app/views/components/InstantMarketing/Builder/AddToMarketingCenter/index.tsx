@@ -11,8 +11,9 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import uuidv4 from 'uuid/v4'
-
 import { connect } from 'react-redux'
+
+import { useMarketingCenterCategories } from 'hooks/use-marketing-center-categories'
 
 import ActionButton from 'components/Button/ActionButton'
 import { Icon } from 'components/Dropdown'
@@ -21,7 +22,7 @@ import { BaseDropdown } from 'components/BaseDropdown'
 import { createTemplate } from 'models/instant-marketing/create-template'
 import { getActiveTeamId } from 'utils/user-teams'
 
-import { CATEGORIES, SAVED_TEMPLATE_VARIANT } from './constants'
+import { SAVED_TEMPLATE_VARIANT } from './constants'
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -46,7 +47,8 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   medium: string
   user: IUser
-  getTemplate: () => string
+  mjml: boolean
+  getTemplateMarkup: () => string
 }
 
 interface ConnectedProps {
@@ -56,19 +58,21 @@ interface ConnectedProps {
 export function AddToMarketingCenter({
   medium,
   user,
-  getTemplate,
+  mjml,
+  getTemplateMarkup,
   notify
 }: Props & ConnectedProps) {
   const [selectedTemplateType, setSelectedTemplateType] = useState('none')
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const categories = useMarketingCenterCategories()
   const classes = useStyles()
   const name = uuidv4()
   const variant = SAVED_TEMPLATE_VARIANT
   const activeTeamId = getActiveTeamId(user)
   const brands = activeTeamId ? [activeTeamId] : []
-  const html = getTemplate()
 
   async function save() {
+    const html = getTemplateMarkup()
+
     try {
       const templateData = {
         name,
@@ -76,18 +80,18 @@ export function AddToMarketingCenter({
         templateType: selectedTemplateType,
         medium,
         html,
-        brands
+        brands,
+        mjml
       }
 
-      const result = await createTemplate(templateData)
-
-      console.log(result)
+      await createTemplate(templateData)
 
       notify({
         status: 'success',
         message: 'Template saved successfully.'
       })
-      setIsDropdownOpen(false)
+
+      // window.location.reload() // Because we have no reload in react-router!
     } catch (err) {
       notify({
         status: 'error',
@@ -102,8 +106,6 @@ export function AddToMarketingCenter({
   return (
     <div className={classes.container}>
       <BaseDropdown
-        onIsOpenChange={isOpen => isOpen && setIsDropdownOpen(isOpen)}
-        isOpen={isDropdownOpen}
         PopperProps={{ keepMounted: true }}
         renderDropdownButton={buttonProps => (
           <ActionButton
@@ -137,15 +139,23 @@ export function AddToMarketingCenter({
                           e.preventDefault()
                         }}
                       >
-                        {CATEGORIES.map((cat, index) => (
-                          <MenuItem
-                            key={cat.value}
-                            value={cat.value}
-                            id={`cat-${index}`}
-                          >
-                            {cat.name}
-                          </MenuItem>
-                        ))}
+                        <MenuItem value="none">Select a Category</MenuItem>
+                        {categories.map(cat => {
+                          if (!cat.value) {
+                            return null
+                          }
+
+                          const value =
+                            typeof cat.value === 'string'
+                              ? cat.value
+                              : cat.value[cat.value.length - 1]
+
+                          return (
+                            <MenuItem key={value} value={value}>
+                              {cat.title}
+                            </MenuItem>
+                          )
+                        })}
                       </Select>
                     </FormControl>
                   </Grid>

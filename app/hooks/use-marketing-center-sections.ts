@@ -1,5 +1,7 @@
 import { useSelector } from 'react-redux'
 
+import MyDesignsIcon from 'components/SvgIcons/IconMyDesigns/IconMyDesigns'
+
 import { IAppState } from 'reducers'
 import { hasUserAccess } from 'utils/user-teams'
 
@@ -9,10 +11,10 @@ import {
   SectionItem
 } from 'components/PageSideNav/types'
 
-import MyDesignsIcon from '../components/IconMyDesigns/IconMyDesigns'
-
-function urlGenerator(url: string): string {
-  return `/dashboard/marketing${url}`
+function urlGenerator(url: string | string[]): string {
+  return `/dashboard/marketing${
+    typeof url === 'string' ? url : `/${url.join(',')}`
+  }`
 }
 
 const ALL_SECTIONS: Section[] = [
@@ -34,25 +36,42 @@ const ALL_SECTIONS: Section[] = [
     items: [
       {
         title: 'Newsletters',
+        value: 'Newsletter',
         link: urlGenerator('/Newsletter'),
         access: ['BetaFeatures']
       },
       {
         title: 'Occasions',
+        value: 'Birthday',
         link: urlGenerator('/Birthday')
       },
       {
         title: 'Brand Campaigns',
+        value: 'Brand',
         link: urlGenerator('/Brand')
       },
       {
         title: 'Holiday',
-        link: urlGenerator(
-          '/Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday'
-        )
+        value: [
+          'Christmas',
+          'NewYear',
+          'Valentines',
+          'StPatrick',
+          'Easter',
+          'OtherHoliday'
+        ],
+        link: urlGenerator([
+          'Christmas',
+          'NewYear',
+          'Valentines',
+          'StPatrick',
+          'Easter',
+          'OtherHoliday'
+        ])
       },
       {
         title: 'New Agent',
+        value: 'NewAgent',
         link: urlGenerator('/NewAgent')
       }
     ]
@@ -63,34 +82,42 @@ const ALL_SECTIONS: Section[] = [
     items: [
       {
         title: 'As Seen In',
+        value: 'AsSeenIn',
         link: urlGenerator('/AsSeenIn')
       },
       {
         title: 'Open House',
+        value: 'OpenHouse',
         link: urlGenerator('/OpenHouse')
       },
       {
         title: 'Coming Soon',
+        value: 'ComingSoon',
         link: urlGenerator('/ComingSoon')
       },
       {
         title: 'Just Listed',
+        value: 'JustListed',
         link: urlGenerator('/JustListed')
       },
       {
         title: 'New Price',
+        value: 'PriceImprovement',
         link: urlGenerator('/PriceImprovement')
       },
       {
         title: 'Under Contract',
+        value: 'UnderContract',
         link: urlGenerator('/UnderContract')
       },
       {
         title: 'Just Sold',
+        value: 'JustSold',
         link: urlGenerator('/JustSold')
       },
       {
         title: 'Multi Properties',
+        value: 'Listings',
         link: urlGenerator('/Listings')
       }
     ]
@@ -110,7 +137,7 @@ function getPrivilegedSectionItems(
   })
 }
 
-export function useSections(): Section[] {
+export function useMarketingCenterSections(): Section[] {
   const user = useSelector<IAppState, IUser>(state => state.user)
 
   const newSections: Section[] = []
