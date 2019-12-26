@@ -14,13 +14,12 @@ import uuidv4 from 'uuid/v4'
 import { connect } from 'react-redux'
 
 import { useMarketingCenterCategories } from 'hooks/use-marketing-center-categories'
+import { createTemplate } from 'models/instant-marketing/create-template'
 
 import ActionButton from 'components/Button/ActionButton'
 import { Icon } from 'components/Dropdown'
 import { BaseDropdown } from 'components/BaseDropdown'
-
-import { createTemplate } from 'models/instant-marketing/create-template'
-import { getActiveTeamId } from 'utils/user-teams'
+import UserTeams from 'components/UserTeams'
 
 import { SAVED_TEMPLATE_VARIANT } from './constants'
 
@@ -67,10 +66,11 @@ export function AddToMarketingCenter({
   const classes = useStyles()
   const name = uuidv4()
   const variant = SAVED_TEMPLATE_VARIANT
-  const activeTeamId = getActiveTeamId(user)
-  const brands = activeTeamId ? [activeTeamId] : []
+  const [isUserTeamsDrawerOpen, setIsUserTeamsDrawerOpen] = useState(false)
 
-  async function save() {
+  async function handleSelectTeams(teams: UUID[]) {
+    setIsUserTeamsDrawerOpen(false)
+
     const html = getTemplateMarkup()
 
     try {
@@ -80,7 +80,7 @@ export function AddToMarketingCenter({
         templateType: selectedTemplateType,
         medium,
         html,
-        brands,
+        brands: teams,
         mjml
       }
 
@@ -91,7 +91,7 @@ export function AddToMarketingCenter({
         message: 'Template saved successfully.'
       })
 
-      // window.location.reload() // Because we have no reload in react-router!
+      setTimeout(window.location.reload, 100)
     } catch (err) {
       notify({
         status: 'error',
@@ -104,77 +104,87 @@ export function AddToMarketingCenter({
   }
 
   return (
-    <div className={classes.container}>
-      <BaseDropdown
-        PopperProps={{ keepMounted: true }}
-        renderDropdownButton={buttonProps => (
-          <ActionButton
-            appearance="outline"
-            size="medium"
-            inverse
-            {...buttonProps}
-          >
-            <span>Add To Marketing Center</span>
-            <Icon isOpen={buttonProps.isActive} />
-          </ActionButton>
-        )}
-        renderMenu={() => (
-          <Card>
-            <CardContent>
-              <Box p={2}>
-                <Grid container>
-                  <Grid item xs={12} classes={{ root: classes.grid }}>
-                    <FormControl
-                      classes={{ root: classes.formControl }}
-                      fullWidth
-                    >
-                      <Select
-                        disableUnderline
-                        classes={{ select: classes.input }}
-                        value={selectedTemplateType}
-                        onChange={e => {
-                          setSelectedTemplateType(e.target.value as string)
-                        }}
-                        onClick={e => {
-                          e.preventDefault()
-                        }}
+    <>
+      {isUserTeamsDrawerOpen && (
+        <UserTeams
+          title="Save Template For ..."
+          user={user}
+          onClose={() => setIsUserTeamsDrawerOpen(false)}
+          onSelectTeams={handleSelectTeams}
+        />
+      )}
+      <div className={classes.container}>
+        <BaseDropdown
+          PopperProps={{ keepMounted: true }}
+          renderDropdownButton={buttonProps => (
+            <ActionButton
+              appearance="outline"
+              size="medium"
+              inverse
+              {...buttonProps}
+            >
+              <span>Add To Marketing Center</span>
+              <Icon isOpen={buttonProps.isActive} />
+            </ActionButton>
+          )}
+          renderMenu={() => (
+            <Card>
+              <CardContent>
+                <Box p={2}>
+                  <Grid container>
+                    <Grid item xs={12} classes={{ root: classes.grid }}>
+                      <FormControl
+                        classes={{ root: classes.formControl }}
+                        fullWidth
                       >
-                        <MenuItem value="none">Select a Category</MenuItem>
-                        {categories.map(cat => {
-                          if (!cat.value) {
-                            return null
-                          }
+                        <Select
+                          disableUnderline
+                          classes={{ select: classes.input }}
+                          value={selectedTemplateType}
+                          onChange={e => {
+                            setSelectedTemplateType(e.target.value as string)
+                          }}
+                          onClick={e => {
+                            e.preventDefault()
+                          }}
+                        >
+                          <MenuItem value="none">Select a Category</MenuItem>
+                          {categories.map(cat => {
+                            if (!cat.value) {
+                              return null
+                            }
 
-                          const value =
-                            typeof cat.value === 'string'
-                              ? cat.value
-                              : cat.value[cat.value.length - 1]
+                            const value =
+                              typeof cat.value === 'string'
+                                ? cat.value
+                                : cat.value[cat.value.length - 1]
 
-                          return (
-                            <MenuItem key={value} value={value}>
-                              {cat.title}
-                            </MenuItem>
-                          )
-                        })}
-                      </Select>
-                    </FormControl>
+                            return (
+                              <MenuItem key={value} value={value}>
+                                {cat.title}
+                              </MenuItem>
+                            )
+                          })}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid container item xs={12} justify="flex-end">
+                      <ActionButton
+                        appearance="primary"
+                        onClick={() => setIsUserTeamsDrawerOpen(true)}
+                        disabled={selectedTemplateType === 'none' || !name}
+                      >
+                        Next
+                      </ActionButton>
+                    </Grid>
                   </Grid>
-                  <Grid container item xs={12} justify="flex-end">
-                    <ActionButton
-                      appearance="primary"
-                      onClick={save}
-                      disabled={selectedTemplateType === 'none' || !name}
-                    >
-                      Next
-                    </ActionButton>
-                  </Grid>
-                </Grid>
-              </Box>
-            </CardContent>
-          </Card>
-        )}
-      />
-    </div>
+                </Box>
+              </CardContent>
+            </Card>
+          )}
+        />
+      </div>
+    </>
   )
 }
 
