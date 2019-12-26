@@ -7,6 +7,7 @@ interface SaveTemplateArguments {
   medium: string
   html: string
   brands: UUID[]
+  mjml?: boolean
   inputs?: string[]
 }
 
@@ -17,6 +18,7 @@ export async function createTemplate({
   medium,
   html,
   brands,
+  mjml = false,
   inputs = []
 }: SaveTemplateArguments): Promise<ApiResponseBody<IMarketingTemplate>> {
   try {
@@ -27,6 +29,7 @@ export async function createTemplate({
       medium,
       html,
       brands,
+      mjml,
       inputs
     })
 
