@@ -1,33 +1,21 @@
 import { Field, Form } from 'react-final-form'
-import React, {
-  ReactNode,
-  useCallback,
-  useContext,
-  useMemo,
-  useRef,
-  useState
-} from 'react'
+import React, { useContext, useMemo, useRef, useState } from 'react'
 import arrayMutators from 'final-form-arrays'
 import createFocusDecorator from 'final-form-focus'
-import { Link as RouterLink } from 'react-router'
 
-import { flow, isEqual } from 'lodash'
+import { isEqual } from 'lodash'
 
 import { TextField } from 'final-form-material-ui'
 
 import { addNotification as notify } from 'reapop'
 
-import { connect, useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 
-import { Box, Link, makeStyles } from '@material-ui/core'
+import { Box, makeStyles } from '@material-ui/core'
 
 import { ClassesProps } from 'utils/ts-utils'
 
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
-
-import { IAppState } from 'reducers/index'
-
-import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { EmailComposeFormProps, EmailFormValues } from '../types'
 import EmailBody from '../components/EmailBody'
@@ -35,13 +23,13 @@ import { AttachmentsList } from '../fields/Attachments'
 import { styles } from './styles'
 import { Footer } from '../components/Footer'
 import ConfirmationModalContext from '../../ConfirmationModal/context'
-import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/validate-recipient'
 import { getSendEmailResultMessages } from '../helpers/email-result-messages'
 import { TextEditorRef } from '../../TextEditor/types'
 import { Callout } from '../../Callout'
 import { DangerButton } from '../../Button/DangerButton'
 import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
 import { isFileAttachment } from '../helpers/is-file-attachment'
+import { useEmailFormValidator } from './use-email-form-validator'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
 
@@ -103,6 +91,7 @@ function EmailComposeForm<T>({
     [marketingTemplate]
   )
   const confirmationModal = useContext(ConfirmationModalContext)
+  const validate = useEmailFormValidator()
 
   const classes = useEmailFormStyles(props)
 
@@ -198,64 +187,6 @@ function EmailComposeForm<T>({
 
     return handleSendEmail(form)
   }
-
-  const allConnectedAccounts = useSelector(
-    flow(
-      (state: IAppState) => state.contacts.oAuthAccounts,
-      selectAllConnectedAccounts
-    )
-  )
-
-  const validate = useCallback(
-    (values: EmailFormValues) => {
-      const errors: { [key in keyof EmailFormValues]?: string | ReactNode } = {}
-      const { to } = values
-
-      if (!to || to.length === 0) {
-        errors.to = 'You should provide at least one recipient'
-      } else {
-        const recipientErrors = to.map(validateRecipient).filter(i => i)
-
-        if (recipientErrors.length > 0) {
-          errors.to = recipientErrors[0]
-        }
-      }
-
-      const invalidAccountMsg = (type: string) => (
-        <>
-          Selected {type} account is removed or no longer connected.{' '}
-          <Link
-            component={RouterLink}
-            target="_blank"
-            to="/dashboard/account/connected-accounts"
-          >
-            Connected Accounts
-          </Link>
-          .
-        </>
-      )
-
-      const accountExists = (accountId: string) =>
-        allConnectedAccounts.some(account => account.id === accountId)
-
-      if (
-        values.microsoft_credential &&
-        !accountExists(values.microsoft_credential)
-      ) {
-        errors.microsoft_credential = invalidAccountMsg('Outlook')
-      }
-
-      if (
-        values.google_credential &&
-        !accountExists(values.google_credential)
-      ) {
-        errors.google_credential = invalidAccountMsg('Google')
-      }
-
-      return errors
-    },
-    [allConnectedAccounts]
-  )
 
   const scrollToEnd = () => {
     if (emailBodyEditorRef.current) {
