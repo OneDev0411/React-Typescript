@@ -58,12 +58,13 @@ export function AddToMarketingCenter({
   notify
 }: Props & ConnectedProps) {
   const [selectedTemplateType, setSelectedTemplateType] = useState('none')
+  const [isUserTeamsDrawerOpen, setIsUserTeamsDrawerOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const categories = useMarketingCenterCategories()
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
   const classes = useStyles()
   const name = uuidv4()
+
   const variant = SAVED_TEMPLATE_VARIANT
-  const [isUserTeamsDrawerOpen, setIsUserTeamsDrawerOpen] = useState(false)
 
   const handleClickButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
