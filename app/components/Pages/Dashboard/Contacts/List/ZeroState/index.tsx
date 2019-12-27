@@ -1,3 +1,5 @@
+import { OAuthProvider } from 'constants/contacts'
+
 import * as React from 'react'
 
 import ActionButton from 'components/Button/ActionButton'
@@ -6,11 +8,13 @@ import IconCsv from 'components/SvgIcons/Csv/IconCsv'
 import { Divider } from 'components/Divider'
 import { CreateContact } from 'components/CreateContact'
 
-import ConnectGoogleButton from '../ImportContactsButton/ConnectGoogleButton'
-import ConnectOutlookButton from '../ImportContactsButton/ConnectOutlookButton'
 import { GoogleIcon, OutlookIcon, ZeroStateContainer } from './styled'
+import { useConnectOAuthAccount } from '../ImportContactsButton/use-connect-oauth-account'
 
 export function ZeroState() {
+  const google = useConnectOAuthAccount(OAuthProvider.Google)
+  const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
+
   return (
     <ZeroStateContainer column alignCenter justifyCenter>
       <img src="/static/images/contacts/zero-state.svg" alt="" />
@@ -20,31 +24,23 @@ export function ZeroState() {
         your referral network in Rechat by importing or creating a contact now.
       </p>
 
-      <ConnectGoogleButton>
-        {({ connecting, connect }) => (
-          <ActionButton
-            disabled={connecting}
-            onClick={connect}
-            appearance="primary"
-          >
-            <GoogleIcon />
-            Import Google Contacts
-          </ActionButton>
-        )}
-      </ConnectGoogleButton>
+      <ActionButton
+        disabled={google.connecting}
+        onClick={google.connect}
+        appearance="primary"
+      >
+        <GoogleIcon />
+        Import Google Contacts
+      </ActionButton>
 
-      <ConnectOutlookButton>
-        {({ connecting, connect }) => (
-          <ActionButton
-            disabled={connecting}
-            onClick={connect}
-            appearance="primary"
-          >
-            <OutlookIcon />
-            Import Outlook Contacts
-          </ActionButton>
-        )}
-      </ConnectOutlookButton>
+      <ActionButton
+        disabled={outlook.connecting}
+        onClick={outlook.connect}
+        appearance="primary"
+      >
+        <OutlookIcon />
+        Import Outlook Contacts
+      </ActionButton>
 
       <Divider text="OR" />
 
