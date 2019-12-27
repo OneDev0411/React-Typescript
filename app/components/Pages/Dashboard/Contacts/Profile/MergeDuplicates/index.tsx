@@ -44,7 +44,7 @@ export default function MergeDuplicates({ contact }: Props) {
       <CallOutContentContainer>
         <span>
           We’ve found {duplicateContacts.length} other contacts similar to{' '}
-          {contact.display_name}, Do you want to merge them?
+          <b>{contact.display_name}</b>. Do you want to merge them?
         </span>
         <Button color="primary" variant="text" onClick={handleReviewClick}>
           Review
