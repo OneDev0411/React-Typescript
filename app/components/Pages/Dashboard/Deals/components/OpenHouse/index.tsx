@@ -16,6 +16,7 @@ import { setSelectedTask, updateTask } from 'actions/deals'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 import { IAppState } from 'reducers'
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { getActiveTeamId } from 'utils/user-teams'
 
@@ -36,6 +37,7 @@ interface DispatchProps {
 interface StateProps {
   user: IUser
   activeTeamId: UUID | null
+  checklists: IDealChecklist[]
 }
 
 interface Props {
@@ -60,6 +62,7 @@ function OpenHouses({
   deal,
   style,
   location,
+  checklists,
   defaultOpen = false,
   updateTask,
   setSelectedTask
@@ -108,6 +111,10 @@ function OpenHouses({
     setShowForm(false)
     setSelectedTask(task)
     toggleMenu()
+
+    if (location.state && location.state.autoBookOpenHouse) {
+      location.state = {}
+    }
   }
 
   const handleClickEdit = (task: IDealTask): void => {
@@ -141,46 +148,50 @@ function OpenHouses({
         size="small"
         className={classes.button}
         style={style}
+        disabled={checklists.length === 0}
         onClick={toggleMenu}
       >
         <OpenHouseIcon className={iconClasses.rightMargin} /> Open House
       </DropdownToggleButton>
-      <Popover
-        id={anchorEl ? 'openhouse-popover' : undefined}
-        action={popoverActions}
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={() => toggleMenu()}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left'
-        }}
-        style={{ zIndex: 10 }}
-      >
-        {showForm ? (
-          <Form
-            deal={deal}
-            task={selectedItem}
-            createRegistrationPage={!location.query.createOpenHouse}
-            defaultStartTime={location.query.startTime}
-            defaultEndTime={location.query.endTime}
-            onUpsertTask={handleUpsertTask}
-          />
-        ) : (
-          <List
-            deal={deal}
-            activeTeamId={activeTeamId}
-            onClickNewItem={() => setShowForm(true)}
-            onSelectItem={setSelectedTask}
-            onClickEdit={handleClickEdit}
-            onClickDelete={handleDelete}
-          />
-        )}
-      </Popover>
+
+      {checklists.length > 0 && (
+        <Popover
+          id={anchorEl ? 'openhouse-popover' : undefined}
+          action={popoverActions}
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={() => toggleMenu()}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left'
+          }}
+          style={{ zIndex: 10 }}
+        >
+          {showForm ? (
+            <Form
+              deal={deal}
+              task={selectedItem}
+              autoBookOpenHouse={location.state.autoBookOpenHouse === true}
+              defaultStartTime={location.state.startTime}
+              defaultEndTime={location.state.endTime}
+              onUpsertTask={handleUpsertTask}
+            />
+          ) : (
+            <List
+              deal={deal}
+              activeTeamId={activeTeamId}
+              onClickNewItem={() => setShowForm(true)}
+              onSelectItem={setSelectedTask}
+              onClickEdit={handleClickEdit}
+              onClickDelete={handleDelete}
+            />
+          )}
+        </Popover>
+      )}
     </>
   )
 }
@@ -194,10 +205,14 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   }
 }
 
-function mapStateToProps({ user }: IAppState): StateProps {
+function mapStateToProps(
+  { deals, user }: IAppState,
+  ownProps: Props
+): StateProps {
   return {
     user,
-    activeTeamId: getActiveTeamId(user)
+    activeTeamId: getActiveTeamId(user),
+    checklists: getDealChecklists(ownProps.deal, deals.checklists)
   }
 }
 

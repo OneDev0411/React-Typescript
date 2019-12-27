@@ -1,6 +1,8 @@
 import { useState, useMemo } from 'react'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { useSelector } from 'react-redux'
+
 import { getDeal, getContextsByDeal, getForms } from 'actions/deals'
 import { selectContextsByDeal } from 'reducers/deals/contexts'
 import { IAppState } from 'reducers'
@@ -13,14 +15,14 @@ import store from '../stores'
  * @param deal - the minimal version of the deal
  */
 export function useLoadFullDeal(id: string, deal: IDeal) {
-  const { contexts, forms } = useMemo(() => {
-    const deals = (store.getState() as IAppState).deals
+  const deals = useSelector((state: IAppState) => state.deals)
 
+  const { contexts, forms } = useMemo(() => {
     return {
       contexts: selectContextsByDeal(deals.contexts, id),
       forms: deals.forms
     }
-  }, [id])
+  }, [deals.contexts, deals.forms, id])
 
   const [dealWithChecklists, setDeal] = useState<IDeal>(deal)
   const [isFetchingCompleted, setIsFetchingCompleted] = useState<boolean>(false)
