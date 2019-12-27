@@ -1,5 +1,4 @@
 import * as React from 'react'
-import debounce from 'lodash/debounce'
 
 import { Tooltip } from '@material-ui/core'
 
@@ -24,12 +23,12 @@ interface Props {
 export function AddGifButton(props: Props) {
   const [gifDrawerOpen, toggleGifDrawerOpen] = useToggle(false)
 
-  const onSelect = debounce((item: GifItem) => {
-    if (item) {
+  const onSelect = (item: GifItem) => {
+    if (item && gifDrawerOpen) {
       toggleGifDrawerOpen(false)
       props.onImageSelected(item.url, item.dims[0])
     }
-  }, 1000)
+  }
 
   return (
     <>
