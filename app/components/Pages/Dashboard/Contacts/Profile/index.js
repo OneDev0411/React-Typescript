@@ -38,6 +38,7 @@ import { PageContainer, SideColumn, MainColumn, PageWrapper } from './styled'
 import Header from './Header/Header'
 import Divider from './Divider'
 import Timeline from './Timeline'
+import MergeDuplicates from './MergeDuplicates'
 
 class ContactProfile extends React.Component {
   state = {
@@ -304,6 +305,7 @@ class ContactProfile extends React.Component {
             />
           </SideColumn>
           <MainColumn>
+            <MergeDuplicates contact={this.state.contact} />
             <Timeline
               ref={this.timelineRef}
               contact={this.state.contact}
