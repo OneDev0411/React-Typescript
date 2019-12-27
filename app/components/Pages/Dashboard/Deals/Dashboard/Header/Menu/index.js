@@ -2,7 +2,7 @@ import { ACL } from 'constants/acl'
 
 import React from 'react'
 import Flex from 'styled-flex-component'
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router'
 
 import Acl from 'components/Acl'
 
@@ -19,7 +19,7 @@ import DealStatus from '../../../components/DealStatus'
 
 import { Divider } from '../../styled'
 
-export function Menu(props) {
+export const Menu = withRouter(props => {
   const { deal } = props
 
   return (
@@ -32,9 +32,7 @@ export function Menu(props) {
             <OpenHouse
               deal={deal}
               style={{ marginLeft: '0.5rem' }}
-              defaultOpen={
-                browserHistory.getCurrentLocation().query.createOpenHouse
-              }
+              defaultOpen={(props.location.state || {}).autoBookOpenHouse}
             />
           )}
 
@@ -73,4 +71,4 @@ export function Menu(props) {
       </Flex>
     </Flex>
   )
-}
+})

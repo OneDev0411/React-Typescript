@@ -7,6 +7,8 @@ import DayPicker from 'react-day-picker'
 import Flex from 'styled-flex-component'
 import fecha from 'fecha'
 
+import useEffectOnce from 'react-use/lib/useEffectOnce'
+
 import { createTaskComment } from 'deals/utils/create-task-comment'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 import { updateTask } from 'actions/deals'
@@ -38,8 +40,8 @@ interface DispatchProps {
 
 interface Props {
   deal: IDeal
-  createRegistrationPage: boolean
   task: IDealTask | null
+  autoBookOpenHouse: boolean
   defaultStartTime: number | null
   defaultEndTime: number | null
   onUpsertTask(task: IDealTask): void
@@ -97,6 +99,10 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
 
     fetchLisitng()
   }, [listing, listingId])
+
+  useEffectOnce(() => {
+    props.autoBookOpenHouse && handleSave()
+  })
 
   const handleSetStartDate = (date: Date) => {
     const datetime = new Date(date)
@@ -186,7 +192,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
 
     setCreatedTask(task)
 
-    if (!props.createRegistrationPage) {
+    if (props.autoBookOpenHouse) {
       props.onUpsertTask(task)
 
       return
@@ -231,6 +237,10 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
         title: (listing && addressTitle(listing.property.address)) || ''
       }
     }
+  }
+
+  if (props.autoBookOpenHouse && isSaving) {
+    return <div className={classes.root}>Creating Open House Request ...</div>
   }
 
   return (
