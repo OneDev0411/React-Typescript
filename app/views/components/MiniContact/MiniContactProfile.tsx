@@ -1,7 +1,8 @@
 import React from 'react'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 import Paper from '@material-ui/core/Paper'
-// import Fade from '@material-ui/core/Fade'
+
+import { useTheme } from '@material-ui/core'
 
 import { EventDrawer } from 'components/EventDrawer'
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
@@ -11,9 +12,9 @@ import ContentSizeAwarePopper from 'components/ContentSizeAwarePopper'
 import MiniProfile from './MiniProfile'
 import ComponentRenderer from './MiniContactComponenetRenderer'
 import {
+  ActionSettingsNamesType,
   ActionSettingsType,
-  MiniContactType,
-  ActionSettingsNamesType
+  MiniContactType
 } from './types'
 
 interface MiniContactPropsType {
@@ -30,6 +31,7 @@ function MiniContact(props: MiniContactPropsType) {
     ActionSettingsType
   >({})
   const [anchorEl, setAnchorEl] = React.useState(null)
+  const theme = useTheme()
 
   function handleHovered(currentTarget) {
     setAnchorEl(anchorEl ? null : currentTarget)
@@ -61,7 +63,7 @@ function MiniContact(props: MiniContactPropsType) {
             anchorEl={anchorEl}
             transition
             placement="bottom-start"
-            style={{ zIndex: 99 }}
+            style={{ zIndex: theme.zIndex.modal }}
           >
             {/* Disable the animation temporarily  */}
             {/* {({ TransitionProps }) => (
