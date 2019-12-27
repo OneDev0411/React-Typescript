@@ -4,12 +4,13 @@ import pluralize from 'pluralize'
 
 import Drawer from 'components/OverlayDrawer'
 
-import { getTeamAvailableMembers } from 'utils/user-teams'
+import { getAgents } from 'models/Deal/agent'
+import { getBrandUsers, isBackOffice, getActiveTeam } from 'utils/user-teams'
 
 import Team from './Team'
 
-interface TeamWithMembers {
-  team: IUserTeam
+interface BrandWithMembers {
+  brand: IBrand
   members: IUser[]
 }
 
@@ -26,60 +27,92 @@ export default function UserTeams({
   onClose,
   onSelectTeams
 }: Props) {
-  const [teamsWithMembers, setTeamsWithMembers] = useState<TeamWithMembers[]>(
-    []
-  )
-  const [selectedTeams, setSelectedTeams] = useState<UUID[]>([])
+  const [brandsWithMembers, setBrandsWithMembers] = useState<
+    BrandWithMembers[]
+  >([])
+  const [selectedBrands, setSelectedBrands] = useState<UUID[]>([])
 
   useEffect(() => {
-    function getteamsWithMembers(): TeamWithMembers[] {
+    async function fetchBrandsWithMembers() {
       if (!user.teams) {
-        return []
-      }
-
-      return user.teams.map(team => {
-        return {
-          team,
-          members: getTeamAvailableMembers(team)
-        }
-      })
-    }
-
-    setTeamsWithMembers(getteamsWithMembers())
-  }, [user.teams])
-
-  const handleSelectChange = useCallback(
-    (team: IUserTeam) => {
-      if (selectedTeams.includes(team.brand.id)) {
-        setSelectedTeams(selectedTeams.filter(id => id !== team.brand.id))
+        setBrandsWithMembers([])
 
         return
       }
 
-      setSelectedTeams([...selectedTeams, team.brand.id])
+      // We should send a req and get all child brands if the user is BO
+      if (isBackOffice(user)) {
+        const activeTeam = getActiveTeam(user)
+
+        if (!activeTeam) {
+          setBrandsWithMembers([])
+
+          return
+        }
+
+        const allAccessibleBrands: IBrand[] = await getAgents(
+          activeTeam.brand.id
+        )
+
+        setBrandsWithMembers(
+          allAccessibleBrands.map(brand => {
+            return {
+              brand,
+              members: getBrandUsers(brand)
+            }
+          })
+        )
+
+        return
+      }
+
+      setBrandsWithMembers(
+        user.teams.map(team => {
+          const brand = team.brand
+
+          return {
+            brand,
+            members: getBrandUsers(brand)
+          }
+        })
+      )
+    }
+
+    fetchBrandsWithMembers()
+  }, [user, user.teams])
+
+  const handleSelectChange = useCallback(
+    (brand: IBrand) => {
+      if (selectedBrands.includes(brand.id)) {
+        setSelectedBrands(selectedBrands.filter(id => id !== brand.id))
+
+        return
+      }
+
+      setSelectedBrands([...selectedBrands, brand.id])
     },
-    [selectedTeams]
+    [selectedBrands]
   )
 
   const getActionButtonCopy = useCallback(() => {
-    if (selectedTeams.length === 0) {
+    if (selectedBrands.length === 0) {
       return 'No teams selected'
     }
 
-    return `Save for ${pluralize('team', selectedTeams.length, true)}`
-  }, [selectedTeams.length])
+    return `Save for ${pluralize('team', selectedBrands.length, true)}`
+  }, [selectedBrands.length])
 
   return (
     <Drawer open onClose={onClose}>
       <Drawer.Header title={title} />
       <Drawer.Body>
-        {teamsWithMembers.map(({ team, members }) => {
-          const isSelected = selectedTeams.includes(team.brand.id)
+        {brandsWithMembers.map(({ brand, members }) => {
+          const isSelected = selectedBrands.includes(brand.id)
 
           return (
             <Team
-              key={`${team.brand.id}-${isSelected}`}
-              team={team}
+              key={`${brand.id}-${isSelected}`}
+              brand={brand}
               members={members}
               isSelected={isSelected}
               onSelectChange={handleSelectChange}
@@ -91,8 +124,8 @@ export default function UserTeams({
         <Button
           variant="contained"
           color="primary"
-          disabled={selectedTeams.length === 0}
-          onClick={() => onSelectTeams(selectedTeams)}
+          disabled={selectedBrands.length === 0}
+          onClick={() => onSelectTeams(selectedBrands)}
         >
           {getActionButtonCopy()}
         </Button>
