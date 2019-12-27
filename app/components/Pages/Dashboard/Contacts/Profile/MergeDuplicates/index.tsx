@@ -23,7 +23,7 @@ export default function MergeDuplicates({ contact }: Props) {
     }
 
     fetchDuplicates()
-  })
+  }, [contact.id])
 
   if (duplicateContacts.length === 0 || !isOpen) {
     return null
