@@ -5,14 +5,14 @@ import Member from './Member'
 import { Container } from './styled'
 
 interface Props {
-  team: IUserTeam
+  brand: IBrand
   members: IUser[]
   isSelected: boolean
-  onSelectChange: (team: IUserTeam) => void
+  onSelectChange: (brand: IBrand) => void
 }
 
 export default function Team({
-  team,
+  brand,
   members,
   onSelectChange,
   isSelected
@@ -20,7 +20,7 @@ export default function Team({
   return (
     <Container>
       <Header
-        team={team}
+        brand={brand}
         membersCount={members.length}
         isSelected={isSelected}
         onSelectChange={onSelectChange}

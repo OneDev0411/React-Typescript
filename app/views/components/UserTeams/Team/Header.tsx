@@ -7,27 +7,27 @@ import { Checkbox } from 'components/Checkbox'
 import { HeaderContainer, ItemDetailsContainer } from './styled'
 
 interface Props {
-  team: IUserTeam
+  brand: IBrand
   membersCount: number
   isSelected: boolean
-  onSelectChange: (team: IUserTeam) => void
+  onSelectChange: (brand: IBrand) => void
 }
 
 export default function Header({
-  team,
+  brand,
   membersCount,
   onSelectChange,
   isSelected
 }: Props) {
   return (
-    <HeaderContainer onClick={() => onSelectChange(team)}>
+    <HeaderContainer onClick={() => onSelectChange(brand)}>
       <ItemDetailsContainer>
         <Checkbox checked={isSelected} />
       </ItemDetailsContainer>
       <ItemDetailsContainer>
-        <Typography variant="body1">{team.brand.name}</Typography>
+        <Typography variant="body1">{brand.name}</Typography>
         <Typography variant="body2">
-          {pluralize('members', membersCount, true)}
+          {pluralize('member', membersCount, true)}
         </Typography>
       </ItemDetailsContainer>
     </HeaderContainer>
