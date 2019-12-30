@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
 
+import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
+
 import Acl from 'components/Acl'
 import PageSideNav from 'components/PageSideNav'
 
@@ -10,11 +12,9 @@ import {
   Content as PageContent
 } from 'components/SlideMenu'
 
-import { useSections } from './hooks/use-sections'
-
 export function Marketing(props) {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(true)
-  const sections = useSections()
+  const sections = useMarketingCenterSections()
 
   const toggleSideMenu = () => setIsSideMenuOpen(!isSideMenuOpen)
 

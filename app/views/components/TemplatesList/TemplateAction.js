@@ -11,6 +11,8 @@ import {
   getTemplateType
 } from 'utils/marketing-center/helpers'
 
+import { SAVED_TEMPLATE_VARIANT } from '../InstantMarketing/Builder/AddToMarketingCenter/constants'
+
 const HOLIDAY_TYPES = [
   'Christmas',
   'NewYear',
@@ -64,6 +66,19 @@ function TemplateAction(props) {
   // TODO: Refactor this logic as it's not right and it's fragile!
   // There's a "inputs" (inputs: string[]) key inside the template which we should check it for deciding about the flow!
   // We should check that inputs and use it for showing the proper flow based on template needs.
+  if (
+    props.selectedTemplate &&
+    props.selectedTemplate.variant === SAVED_TEMPLATE_VARIANT
+  ) {
+    return (
+      <GeneralFlow
+        {...sharedProps}
+        hasExternalTrigger
+        types={templateType.split(',')}
+      />
+    )
+  }
+
   if (templateType === 'Birthday' && !isBirthdaySocial) {
     return <ContactFlow {...sharedProps} />
   }

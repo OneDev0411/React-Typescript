@@ -7,6 +7,7 @@ export enum SectionsEnum {
 
 export interface SectionItem {
   title: string
+  value?: string | string[]
   link: string
   isIndex?: boolean
   icon?: React.ComponentType

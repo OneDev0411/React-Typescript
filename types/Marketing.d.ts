@@ -1,6 +1,4 @@
-declare type IMarketingTemplate = {
-  id: UUID
-  created_at: number
+declare interface IMarketingTemplate extends IModel<'template'> {
   name: string
   brand: null
   template_type: string
@@ -10,8 +8,6 @@ declare type IMarketingTemplate = {
   url: string
   variant: string
   inputs: string[]
-  type: 'template'
-  updated_at: number
 }
 
 declare type IMarketingTemplateInstance<
