@@ -11,7 +11,7 @@ export interface AvatarProps {
   isOnline?: boolean
   size?: number
   title?: string
-  image?: string
+  image?: string | null
   borderRadius?: number
   placeHolderImage?: string
   initials?: string
