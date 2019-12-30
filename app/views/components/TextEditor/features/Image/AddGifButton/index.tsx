@@ -24,7 +24,7 @@ export function AddGifButton(props: Props) {
   const [gifDrawerOpen, toggleGifDrawerOpen] = useToggle(false)
 
   const onSelect = (item: GifItem) => {
-    if (item) {
+    if (item && gifDrawerOpen) {
       toggleGifDrawerOpen(false)
       props.onImageSelected(item.url, item.dims[0])
     }
