@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 import { Helmet } from 'react-helmet'
 
+import { goTo } from 'utils/go-to'
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
@@ -228,6 +229,17 @@ class ContactProfile extends React.Component {
     this.fetchTimeline()
   }
 
+  mergeCallback = async masterContactId => {
+    if (masterContactId === this.state.contact.id) {
+      await this.fetchContact()
+      this.fetchTimeline()
+
+      return
+    }
+
+    goTo(`/dashboard/contacts/${masterContactId}`)
+  }
+
   handleUpdateContactInfo = attribute => {
     if (attribute.name === 'email') {
       this.fetchTimeline()
@@ -305,7 +317,10 @@ class ContactProfile extends React.Component {
             />
           </SideColumn>
           <MainColumn>
-            <MergeDuplicates contact={this.state.contact} />
+            <MergeDuplicates
+              contact={this.state.contact}
+              mergeCallback={this.mergeCallback}
+            />
             <Timeline
               ref={this.timelineRef}
               contact={this.state.contact}
