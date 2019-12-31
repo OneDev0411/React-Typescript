@@ -109,5 +109,7 @@ function getInitialDate(deal: IDeal, field: ContextField): Date {
     return new Date()
   }
 
-  return new Date(timestamp * 1000)
+  const now = new Date()
+
+  return new Date(timestamp * 1000 + now.getTimezoneOffset() * 60000)
 }
