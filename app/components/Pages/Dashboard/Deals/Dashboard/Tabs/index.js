@@ -7,6 +7,7 @@ import { Container, NavBar, NavItem, TabContent } from './styled'
 import FoldersPane from './Panes/Folders'
 import EventsPane from './Panes/Events'
 import MarketingPane from './Panes/Marketing'
+import MediaManagerPane from './Panes/MediaManager'
 
 import Notifications from '../Notifications'
 
@@ -23,6 +24,12 @@ export default class Tabs extends React.Component {
       label: 'Events',
       isDisabled: () => false,
       render: props => <EventsPane {...props} />
+    },
+    {
+      id: 'media',
+      label: 'Media',
+      isDisabled: () => false,
+      render: props => <MediaManagerPane {...props} />
     },
     {
       id: 'marketing',
