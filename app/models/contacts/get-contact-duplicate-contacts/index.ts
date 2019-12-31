@@ -7,11 +7,11 @@ export interface DuplicateContacts {
 
 export async function getContactDuplicateContacts(
   contactId: UUID
-): Promise<DuplicateContacts> {
+): Promise<ApiResponseBody<DuplicateContacts>> {
   try {
     const response = await new Fetch().get(`/contacts/${contactId}/duplicates`)
 
-    return response.body.data
+    return response.body
   } catch (error) {
     throw error
   }

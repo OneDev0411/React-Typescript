@@ -27,9 +27,15 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
   const [duplicateContacts, setDuplicateContacts] = useState<IContact[]>([])
 
   const fetchDuplicates = useCallback(async () => {
-    const duplicates = await getContactDuplicateContacts(contact.id)
+    try {
+      const response = await getContactDuplicateContacts(contact.id)
 
-    setDuplicateContacts(duplicates.contacts)
+      setDuplicateContacts(response.data.contacts)
+    } catch (err) {
+      if (err.status === 404) {
+        setDuplicateContacts([])
+      }
+    }
   }, [contact.id])
 
   useEffect(() => {
