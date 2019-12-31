@@ -42,7 +42,7 @@ export const Label = styled.div`
 
   &.Required {
     background-color: #fff;
-    border: 1px solid #262626;
-    color: #262626;
+    border: 1px solid ${props => props.theme.palette.common.black};
+    color: ${props => props.theme.palette.common.black};
   }
 `
