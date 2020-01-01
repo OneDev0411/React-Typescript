@@ -40,9 +40,7 @@ export function createGrapesInstance(
 ): Editor {
   return Grapesjs.init({
     ...config,
-    avoidInlineStyle: false,
     keepUnusedStyles: true,
-    forceClass: false,
     container: '#grapesjs-canvas',
     components: null,
     assetManager: {

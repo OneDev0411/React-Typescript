@@ -519,6 +519,11 @@ class Builder extends React.Component {
   }
 
   refreshEditor = selectedTemplate => {
+    const config = this.editor.getConfig()
+
+    config.avoidInlineStyle = !this.isMjmlTemplate
+    config.forceClass = !this.isMjmlTemplate
+
     const components = this.editor.DomComponents
     let html = selectedTemplate.template
 
