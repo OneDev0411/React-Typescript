@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { red } from 'views/utils/colors'
-
 export const Label = styled.div`
   display: flex;
   align-items: center;
@@ -43,6 +41,8 @@ export const Label = styled.div`
   }
 
   &.Required {
-    background-color: ${red.A100};
+    background-color: #fff;
+    border: 1px solid ${props => props.theme.palette.common.black};
+    color: ${props => props.theme.palette.common.black};
   }
 `
