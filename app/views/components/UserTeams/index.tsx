@@ -3,11 +3,13 @@ import { Button } from '@material-ui/core'
 import pluralize from 'pluralize'
 
 import Drawer from 'components/OverlayDrawer'
+import { SearchContext } from 'components/TextWithHighlights'
 
 import { getAgents } from 'models/Deal/agent'
 import { getBrandUsers, isBackOffice, getActiveTeam } from 'utils/user-teams'
 
 import Team from './Team'
+import Search from './Search'
 
 interface BrandWithMembers {
   brand: IBrand
@@ -30,7 +32,11 @@ export default function UserTeams({
   const [brandsWithMembers, setBrandsWithMembers] = useState<
     BrandWithMembers[]
   >([])
+  const [filteredBrandsWithMembers, setFilteredBrandsWithMembers] = useState<
+    BrandWithMembers[]
+  >([])
   const [selectedBrands, setSelectedBrands] = useState<UUID[]>([])
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
   useEffect(() => {
     async function fetchBrandsWithMembers() {
@@ -81,6 +87,36 @@ export default function UserTeams({
     fetchBrandsWithMembers()
   }, [user, user.teams])
 
+  useEffect(() => {
+    if (!searchQuery) {
+      setFilteredBrandsWithMembers(brandsWithMembers)
+
+      return
+    }
+
+    const formattedQuery = searchQuery.toLowerCase()
+
+    setFilteredBrandsWithMembers(
+      brandsWithMembers.filter(item => {
+        if (item.brand.name.toLowerCase().includes(searchQuery)) {
+          return true
+        }
+
+        return item.members.some(member => {
+          const searchFields = [member.display_name, member.email]
+
+          return searchFields.some(field =>
+            field.toLowerCase().includes(formattedQuery)
+          )
+        })
+      })
+    )
+  }, [brandsWithMembers, searchQuery])
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
+  }
+
   const handleSelectChange = useCallback(
     (brand: IBrand) => {
       if (selectedBrands.includes(brand.id)) {
@@ -103,33 +139,37 @@ export default function UserTeams({
   }, [selectedBrands.length])
 
   return (
-    <Drawer open onClose={onClose}>
-      <Drawer.Header title={title} />
-      <Drawer.Body>
-        {brandsWithMembers.map(({ brand, members }) => {
-          const isSelected = selectedBrands.includes(brand.id)
+    <SearchContext.Provider value={searchQuery}>
+      <Drawer open onClose={onClose}>
+        <Drawer.Header title={title} />
+        <Drawer.Body>
+          <Search onChange={handleSearch} />
+          {filteredBrandsWithMembers.map(({ brand, members }) => {
+            const isSelected = selectedBrands.includes(brand.id)
 
-          return (
-            <Team
-              key={`${brand.id}-${isSelected}`}
-              brand={brand}
-              members={members}
-              isSelected={isSelected}
-              onSelectChange={handleSelectChange}
-            />
-          )
-        })}
-      </Drawer.Body>
-      <Drawer.Footer style={{ flexDirection: 'row-reverse' }}>
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={selectedBrands.length === 0}
-          onClick={() => onSelectTeams(selectedBrands)}
-        >
-          {getActionButtonCopy()}
-        </Button>
-      </Drawer.Footer>
-    </Drawer>
+            return (
+              <Team
+                key={`${brand.id}-${isSelected}`}
+                brand={brand}
+                members={members}
+                isSelected={isSelected}
+                searchQuery={searchQuery}
+                onSelectChange={handleSelectChange}
+              />
+            )
+          })}
+        </Drawer.Body>
+        <Drawer.Footer style={{ flexDirection: 'row-reverse' }}>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={selectedBrands.length === 0}
+            onClick={() => onSelectTeams(selectedBrands)}
+          >
+            {getActionButtonCopy()}
+          </Button>
+        </Drawer.Footer>
+      </Drawer>
+    </SearchContext.Provider>
   )
 }

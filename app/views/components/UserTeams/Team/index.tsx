@@ -8,14 +8,16 @@ interface Props {
   brand: IBrand
   members: IUser[]
   isSelected: boolean
+  searchQuery: string
   onSelectChange: (brand: IBrand) => void
 }
 
 export default function Team({
   brand,
   members,
-  onSelectChange,
-  isSelected
+  isSelected,
+  searchQuery,
+  onSelectChange
 }: Props) {
   return (
     <Container>
@@ -23,10 +25,11 @@ export default function Team({
         brand={brand}
         membersCount={members.length}
         isSelected={isSelected}
+        searchQuery={searchQuery}
         onSelectChange={onSelectChange}
       />
       {members.map(user => (
-        <Member key={user.id} user={user} />
+        <Member key={user.id} user={user} searchQuery={searchQuery} />
       ))}
     </Container>
   )
