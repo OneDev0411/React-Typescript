@@ -19,7 +19,7 @@ interface BrandWithMembers {
 interface Props {
   user: IUser
   title?: string
-  onSelectTeams(teams: UUID[]): void
+  onSelectTeams(teams: UUID[]): Promise<void>
   onClose(): void
 }
 
@@ -37,6 +37,7 @@ export default function UserTeams({
   >([])
   const [selectedBrands, setSelectedBrands] = useState<UUID[]>([])
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     async function fetchBrandsWithMembers() {
@@ -117,6 +118,12 @@ export default function UserTeams({
     setSearchQuery(query)
   }
 
+  const handleSelectTeams = async () => {
+    setIsSaving(true)
+    await onSelectTeams(selectedBrands)
+    setIsSaving(false)
+  }
+
   const handleSelectChange = useCallback(
     (brand: IBrand) => {
       if (selectedBrands.includes(brand.id)) {
@@ -131,12 +138,16 @@ export default function UserTeams({
   )
 
   const getActionButtonCopy = useCallback(() => {
+    if (isSaving) {
+      return 'Saving...'
+    }
+
     if (selectedBrands.length === 0) {
       return 'No teams selected'
     }
 
     return `Save for ${pluralize('team', selectedBrands.length, true)}`
-  }, [selectedBrands.length])
+  }, [isSaving, selectedBrands.length])
 
   return (
     <SearchContext.Provider value={searchQuery}>
@@ -163,8 +174,8 @@ export default function UserTeams({
           <Button
             variant="contained"
             color="primary"
-            disabled={selectedBrands.length === 0}
-            onClick={() => onSelectTeams(selectedBrands)}
+            disabled={selectedBrands.length === 0 || isSaving}
+            onClick={handleSelectTeams}
           >
             {getActionButtonCopy()}
           </Button>

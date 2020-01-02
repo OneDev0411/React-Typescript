@@ -81,8 +81,6 @@ export function AddToMarketingCenter({
   }
 
   async function handleSelectTeams(teams: UUID[]) {
-    setIsUserTeamsDrawerOpen(false)
-
     const html = getTemplateMarkup()
 
     try {
@@ -103,7 +101,9 @@ export function AddToMarketingCenter({
         message: 'Template saved successfully.'
       })
 
-      setTimeout(() => window.location.reload(), 100)
+      setIsUserTeamsDrawerOpen(false)
+
+      setTimeout(() => window.location.reload(), 200)
     } catch (err) {
       notify({
         status: 'error',
