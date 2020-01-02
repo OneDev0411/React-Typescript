@@ -875,13 +875,15 @@ class Builder extends React.Component {
             )}
 
             <Actions>
-              <AddToMarketingCenter
-                medium={this.state.selectedTemplate.medium}
-                inputs={this.state.selectedTemplate.inputs}
-                mjml={this.state.selectedTemplate.mjml}
-                user={this.props.user}
-                getTemplateMarkup={this.getTemplateMarkup.bind(this)}
-              />
+              {this.state.selectedTemplate && (
+                <AddToMarketingCenter
+                  medium={this.state.selectedTemplate.medium}
+                  inputs={this.state.selectedTemplate.inputs}
+                  mjml={this.state.selectedTemplate.mjml}
+                  user={this.props.user}
+                  getTemplateMarkup={this.getTemplateMarkup.bind(this)}
+                />
+              )}
 
               {this.ShowEditListingsButton && !this.props.isEdit && (
                 <Button
