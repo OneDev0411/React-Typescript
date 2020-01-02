@@ -8,10 +8,9 @@ import { ItemContainer, ItemDetailsContainer } from './styled'
 
 interface Props {
   user: IUser
-  searchQuery: string
 }
 
-export default function Member({ user, searchQuery }: Props) {
+export default function Member({ user }: Props) {
   return (
     <ItemContainer>
       <ItemDetailsContainer>

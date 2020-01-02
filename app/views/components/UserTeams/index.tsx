@@ -164,7 +164,6 @@ export default function UserTeams({
                 brand={brand}
                 members={members}
                 isSelected={isSelected}
-                searchQuery={searchQuery}
                 onSelectChange={handleSelectChange}
               />
             )

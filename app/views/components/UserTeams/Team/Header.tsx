@@ -11,7 +11,6 @@ interface Props {
   brand: IBrand
   membersCount: number
   isSelected: boolean
-  searchQuery: string
   onSelectChange: (brand: IBrand) => void
 }
 
@@ -19,7 +18,6 @@ export default function Header({
   brand,
   membersCount,
   isSelected,
-  searchQuery,
   onSelectChange
 }: Props) {
   return (
