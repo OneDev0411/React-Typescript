@@ -736,6 +736,10 @@ class Builder extends React.Component {
     }))
   }
 
+  shouldShowSaveAsTemplateButton = () => {
+    return this.state.selectedTemplate && !this.isOpenHouseMedium
+  }
+
   render() {
     const { isLoading } = this.state
 
@@ -875,7 +879,7 @@ class Builder extends React.Component {
             )}
 
             <Actions>
-              {this.state.selectedTemplate && (
+              {this.shouldShowSaveAsTemplateButton() && (
                 <AddToMarketingCenter
                   medium={this.state.selectedTemplate.medium}
                   inputs={this.state.selectedTemplate.inputs}
