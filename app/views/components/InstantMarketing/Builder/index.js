@@ -17,7 +17,7 @@ import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 
-import { getActiveTeam, hasUserAccess } from 'utils/user-teams'
+import { getActiveTeam, hasUserAccess, isBackOffice } from 'utils/user-teams'
 
 import nunjucks from '../helpers/nunjucks'
 import { getBrandColors } from '../helpers/get-brand-colors'
@@ -737,7 +737,12 @@ class Builder extends React.Component {
   }
 
   shouldShowSaveAsTemplateButton = () => {
-    return this.state.selectedTemplate && !this.isOpenHouseMedium
+    // Only Backoffice users should see this for now
+    const isBackofficeUser = isBackOffice(this.props.user)
+
+    return (
+      isBackofficeUser && this.state.selectedTemplate && !this.isOpenHouseMedium
+    )
   }
 
   render() {
