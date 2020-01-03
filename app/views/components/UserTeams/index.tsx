@@ -98,7 +98,7 @@ export default function UserTeams({
 
     setFilteredBrandsWithMembers(
       brandsWithMembers.filter(item => {
-        if (item.brand.name.toLowerCase().includes(searchQuery)) {
+        if (item.brand.name.toLowerCase().includes(formattedQuery)) {
           return true
         }
 
