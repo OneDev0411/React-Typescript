@@ -103,7 +103,7 @@ export function AddToMarketingCenter({
 
       setIsUserTeamsDrawerOpen(false)
 
-      setTimeout(() => window.location.reload(), 200)
+      setTimeout(() => window.location.reload(), 1000)
     } catch (err) {
       notify({
         status: 'error',
