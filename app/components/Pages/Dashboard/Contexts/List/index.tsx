@@ -10,7 +10,7 @@ interface Props {}
 function DealContext(props: Props) {
   const theme = useTheme<Theme>()
   const renderContent = () => {
-    return <h1>Deal Context</h1>
+    return <h1>context list</h1>
   }
 
   return (
