@@ -28,6 +28,7 @@ import { EmailResponseType, EmailThreadEmail } from '../types'
 import { decodeContentIds } from '../helpers/decode-content-ids'
 import { EmailResponseComposeForm } from '../../EmailCompose/EmailResponseComposeForm'
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
+import { EmailRecipient } from '../../EmailRecipient'
 
 interface Props {
   email: EmailThreadEmail
@@ -111,7 +112,9 @@ export function EmailThreadItem({
           <Avatar title={email.from} />
         </Box>
         <Box flex={1} mr={2} overflow="hidden">
-          <Typography style={{ lineHeight: 1.3 }}>{email.from}</Typography>
+          <Typography style={{ lineHeight: 1.3 }} noWrap>
+            <EmailRecipient recipient={email.from} />
+          </Typography>
           <Typography color="textSecondary" noWrap>
             {collapsed ? email.snippet : <EmailItemRecipients email={email} />}
           </Typography>

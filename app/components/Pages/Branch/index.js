@@ -6,7 +6,9 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import { browserHistory } from 'react-router'
 
-import config from '../../../../config/public'
+import publicConfig from '../../../../config/public'
+
+import signin from '../../../store_actions/auth/signin'
 
 import Loading from '../../Partials/Loading'
 import { getBrandInfo } from '../Auth/SignIn'
@@ -16,7 +18,10 @@ import NeedsToLoginModal from './components/NeedsToLoginModal'
 import VerifyRedirectModal from './components/VerifyRedirectModal'
 
 const OOPS_PAGE = '/oops'
-const branchKey = config.branch.key
+const branchKey = publicConfig.branch.key
+
+const getConfilictMessageText = email =>
+  `You are currently logged in a different user.  Please sign out and sign in using ${email}.`
 
 const getActionRedirectURL = params => {
   const { action, room, alert, listing, crm_task } = params
@@ -77,11 +82,12 @@ const generateVerificationActionRedirectUrl = params => {
   return url
 }
 
-const redirectHandler = (
+const redirectHandler = async (
   actionType,
   branchData,
   loggedInUser,
-  setActiveModal
+  setActiveModal,
+  dispatch
 ) => {
   let redirect
 
@@ -145,6 +151,20 @@ const redirectHandler = (
 
     if (listing) {
       redirect = `/dashboard/mls/${listing}?token=${token}`
+    } else if (actionType === 'UserActivation') {
+      const { first_name, last_name } = receivingUser
+
+      if (
+        first_name &&
+        first_name !== decodeURIComponent(email) &&
+        first_name !== encodeURIComponent(phone_number)
+      ) {
+        redirect += `&firstName=${first_name}`
+      }
+
+      if (last_name) {
+        redirect += `&lastName=${last_name}`
+      }
     }
 
     if (phone_number) {
@@ -168,6 +188,39 @@ const redirectHandler = (
 
       return
     }
+  } else if (actionType === 'UserLogin') {
+    const loginHandler = () =>
+      dispatch(
+        signin(
+          {
+            refresh_token: branchData.refresh_token.token,
+            grant_type: 'refresh_token',
+            client_id: branchData.refresh_token.client
+          },
+          undefined,
+          branchData.refresh_token.user
+        )
+      )
+
+    if (hasConflict()) {
+      setActiveModal({
+        name: 'CONFLICT',
+        params: {
+          ...params,
+          messageText: getConfilictMessageText(receivingUser.email),
+          actionButtonProps: {
+            onClick: loginHandler,
+            text: 'Sign in'
+          }
+        }
+      })
+
+      return
+    }
+
+    await loginHandler()
+
+    return
   } else if (loggedInUser) {
     // console.log('loggedIn')
     redirect = getActionRedirectURL(branchData)
@@ -175,10 +228,7 @@ const redirectHandler = (
     if (hasConflict()) {
       // console.log('you logged with deferent user')
       params.redirectTo = encodeURIComponent(redirect)
-
-      params.messageText = `You are currently logged in a different user.  Please sign out and sign in using ${
-        receivingUser.email
-      }.`
+      params.messageText = getConfilictMessageText(receivingUser.email)
       setActiveModal({ name: 'CONFLICT', params })
 
       return
@@ -204,6 +254,7 @@ const branch = ({
   setActiveModal,
   branchData,
   setBranchData,
+  dispatch,
   waitingForRedirect
 }) => {
   if (!branchData) {
@@ -268,7 +319,13 @@ const branch = ({
               return
             }
 
-            redirectHandler('OTHER', branchData, loggedInUser, setActiveModal)
+            redirectHandler(
+              branchData.action || 'OTHER',
+              branchData,
+              loggedInUser,
+              setActiveModal,
+              dispatch
+            )
           })
           // eslint-disable-next-line
           .catch(error => {

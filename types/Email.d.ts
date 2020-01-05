@@ -212,7 +212,7 @@ declare type IEmail<Fields extends IEmailOptionalFields = ''> = {
   from: string
   to: string[]
   subject: string
-  headers: IEmailCampaignInput['headers'] // ask
+  headers?: IEmailCampaignInput['headers'] // ask
   mailgun_id: string
   domain: 'Marketing' // ask
   campaign: UUID

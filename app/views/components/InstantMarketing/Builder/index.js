@@ -16,9 +16,8 @@ import ImageDrawer from 'components/ImageDrawer'
 import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
-// import SaveTemplateDropdown from './SaveTemplateDropdown'
 
-import { getActiveTeam, hasUserAccess } from 'utils/user-teams'
+import { getActiveTeam, hasUserAccess, isBackOffice } from 'utils/user-teams'
 
 import nunjucks from '../helpers/nunjucks'
 import { getBrandColors } from '../helpers/get-brand-colors'
@@ -27,6 +26,7 @@ import { loadGrapesjs } from './utils/load-grapes'
 import { createGrapesInstance } from './utils/create-grapes-instance'
 
 import Templates from '../Templates'
+import AddToMarketingCenter from './AddToMarketingCenter'
 import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
@@ -476,6 +476,10 @@ class Builder extends React.Component {
     }
   }
 
+  getTemplateMarkup() {
+    return this.getSavedTemplate().result
+  }
+
   // We should always make sure the markup is rendered before doing any save
   // We are doing this hack as GrapesJS load event is not useful to make sure the template markup is loaded
   isTemplateMarkupRendered = () => {
@@ -515,6 +519,11 @@ class Builder extends React.Component {
   }
 
   refreshEditor = selectedTemplate => {
+    const config = this.editor.getConfig()
+
+    config.avoidInlineStyle = !this.isMjmlTemplate
+    config.forceClass = !this.isMjmlTemplate
+
     const components = this.editor.DomComponents
     let html = selectedTemplate.template
 
@@ -727,6 +736,15 @@ class Builder extends React.Component {
     }))
   }
 
+  shouldShowSaveAsTemplateButton = () => {
+    // Only Backoffice users should see this for now
+    const isBackofficeUser = isBackOffice(this.props.user)
+
+    return (
+      isBackofficeUser && this.state.selectedTemplate && !this.isOpenHouseMedium
+    )
+  }
+
   render() {
     const { isLoading } = this.state
 
@@ -866,12 +884,15 @@ class Builder extends React.Component {
             )}
 
             <Actions>
-              {/* This is disabled due some server issues */}
-              {/* <SaveTemplateDropdown
-                medium={this.state.selectedTemplate.medium}
-                inputs={this.state.selectedTemplate.inputs}
-                user={this.props.user}
-              /> */}
+              {this.shouldShowSaveAsTemplateButton() && (
+                <AddToMarketingCenter
+                  medium={this.state.selectedTemplate.medium}
+                  inputs={this.state.selectedTemplate.inputs}
+                  mjml={this.state.selectedTemplate.mjml}
+                  user={this.props.user}
+                  getTemplateMarkup={this.getTemplateMarkup.bind(this)}
+                />
+              )}
 
               {this.ShowEditListingsButton && !this.props.isEdit && (
                 <Button

@@ -135,7 +135,7 @@ export function ChipsInput<T>({
       event.preventDefault()
     }
   }
-  const handleFocus = (
+  const handleBlur = (
     event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     if (TextFieldProps.inputProps && TextFieldProps.inputProps.onBlur) {
@@ -239,7 +239,7 @@ export function ChipsInput<T>({
         const { onBlur, onChange, onFocus, ...inputProps } = getInputProps({
           ...(TextFieldProps.inputProps || {}),
           onKeyDown,
-          onBlur: handleFocus,
+          onBlur: handleBlur,
           onChange: onInputChange
         })
 

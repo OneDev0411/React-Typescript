@@ -20,13 +20,13 @@ import Loading from 'partials/Loading'
 import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
 import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import ConnectGoogleButton from 'crm/List/ImportContactsButton/ConnectGoogleButton'
-import ConnectOutlookButton from 'crm/List/ImportContactsButton/ConnectOutlookButton'
 import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
 
 import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
 
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+
+import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
 
 import { ConnectedAccount } from './ConnectedAccount'
 
@@ -52,6 +52,8 @@ function ConnectedAccounts({
   }, [fetchOAuthAccounts])
 
   const confirmation = useContext(ConfirmationModalContext)
+  const google = useConnectOAuthAccount(OAuthProvider.Google)
+  const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
 
   const onDelete = (provider: OAuthProvider, accountId: string) => {
     confirmation.setConfirmationModal({
@@ -73,31 +75,23 @@ function ConnectedAccounts({
           <PageHeader.Heading>Connected Accounts</PageHeader.Heading>
         </PageHeader.Title>
         <PageHeader.Menu>
-          <ConnectOutlookButton>
-            {({ connect, connecting }) => (
-              <Button
-                variant="outlined"
-                disabled={connecting}
-                onClick={connect}
-              >
-                <IconOutlook size={iconSize} />
-                <Box pl={1}>Connect Outlook</Box>
-              </Button>
-            )}
-          </ConnectOutlookButton>
+          <Button
+            variant="outlined"
+            disabled={outlook.connecting}
+            onClick={outlook.connect}
+          >
+            <IconOutlook size={iconSize} />
+            <Box pl={1}>Connect Outlook</Box>
+          </Button>
           <Box mr={1} />
-          <ConnectGoogleButton>
-            {({ connect, connecting }) => (
-              <Button
-                variant="outlined"
-                disabled={connecting}
-                onClick={connect}
-              >
-                <IconGoogle size={iconSize} />
-                <Box pl={1}>Connect Google</Box>
-              </Button>
-            )}
-          </ConnectGoogleButton>
+          <Button
+            variant="outlined"
+            disabled={google.connecting}
+            onClick={google.connect}
+          >
+            <IconGoogle size={iconSize} />
+            <Box pl={1}>Connect Google</Box>
+          </Button>
         </PageHeader.Menu>
       </PageHeader>
 
