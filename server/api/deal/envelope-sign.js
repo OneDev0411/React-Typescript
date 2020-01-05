@@ -5,7 +5,7 @@ const app = new Koa()
 
 const urlPattern = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi
 
-router.get('/deals/envelope/:id/sign/:recipientId', async (ctx, next) => {
+router.get('/deals/envelope/:id/sign/:recipientId', async ctx => {
   const { id, recipientId } = ctx.params
 
   try {
@@ -14,7 +14,7 @@ router.get('/deals/envelope/:id/sign/:recipientId', async (ctx, next) => {
     ctx.body = ''
   } catch (e) {
     if (e.status === 302) {
-      const link = e.response.text.match(urlPattern)
+      const link = e.response.text.match(urlPattern).map(url => url.trim())
 
       ctx.redirect(link)
     }
