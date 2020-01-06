@@ -317,20 +317,10 @@ class ContactProfile extends React.Component {
             />
           </SideColumn>
           <MainColumn>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> feat(contacts): implement inner contact profile merge duplicates (#2988)
             <MergeDuplicates
               contact={this.state.contact}
               mergeCallback={this.mergeCallback}
             />
-<<<<<<< HEAD
-=======
-            <MergeDuplicates contact={this.state.contact} />
->>>>>>> wip_feat(contact): init merge contact callout component (#2988)
-=======
->>>>>>> feat(contacts): implement inner contact profile merge duplicates (#2988)
             <Timeline
               ref={this.timelineRef}
               contact={this.state.contact}
