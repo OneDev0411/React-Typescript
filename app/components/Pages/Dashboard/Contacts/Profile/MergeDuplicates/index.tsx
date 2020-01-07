@@ -51,6 +51,18 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
   }
 
   const handleDismissClick = (contactId: UUID) => {
+    // Minimum number of contacts to merge is 2
+    if (duplicateContacts.length === 2) {
+      dispatch(
+        addNotification({
+          status: 'warning',
+          message: 'You need to have at least 2 contacts to merge.'
+        })
+      )
+
+      return
+    }
+
     setDuplicateContacts(
       duplicateContacts.filter(item => item.id !== contactId)
     )

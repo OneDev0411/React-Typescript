@@ -5,11 +5,9 @@ interface ContactsMergeCluster {
   sub_contacts: UUID[]
 }
 
-export async function mergeContactsBatch({
-  clusters
-}: {
+export async function mergeContactsBatch(
   clusters: ContactsMergeCluster[]
-}): Promise<unknown> {
+): Promise<unknown> {
   try {
     const response = await new Fetch().post('/contacts/merge').send({
       clusters

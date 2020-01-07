@@ -10,7 +10,8 @@ import { isDeletedOrRevoked } from 'reducers/contacts/oAuthAccounts'
 import { getOrganizeSyncedContactsList } from '../OrganizeSyncedContactsButton/helpers'
 import {
   SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
-  SYNCED_CONTACTS_LIST_ID
+  SYNCED_CONTACTS_LIST_ID,
+  DUPLICATE_CONTACTS_LIST_ID
 } from '../constants'
 import { getNumOfSyncedContacts } from '../ImportContactsButton/helpers'
 import { oAuthAccountTypeToProvider } from '../../../Account/ConnectedAccounts/constants'
@@ -54,6 +55,12 @@ export const getPredefinedContactLists = (
             .filter(i => i)
         )
       )
+    }
+
+    predefinedLists.duplicates = {
+      id: DUPLICATE_CONTACTS_LIST_ID,
+      name: 'Duplicates',
+      is_editable: false
     }
   }
 

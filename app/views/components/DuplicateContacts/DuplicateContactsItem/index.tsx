@@ -9,6 +9,9 @@ import {
 } from '@material-ui/core'
 import fecha from 'fecha'
 
+import { getContactSource } from 'models/contacts/helpers'
+import { grey } from 'views/utils/colors'
+
 import Avatar from 'components/Avatar'
 import MiniContact from 'components/MiniContact'
 
@@ -16,7 +19,14 @@ import Dismiss from './Dismiss'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    listContainer: {
+    listItem: {
+      '&:hover': {
+        '& $setAsMasterButton': {
+          visibility: 'visible'
+        }
+      }
+    },
+    listItemContainer: {
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
@@ -30,6 +40,12 @@ const useStyles = makeStyles((theme: Theme) =>
     column: {
       display: 'flex',
       flexDirection: 'column'
+    },
+    setAsMasterButton: {
+      visibility: 'hidden'
+    },
+    contactSource: {
+      color: grey.A900
     }
   })
 )
@@ -58,18 +74,21 @@ export default function DuplicateContactsListItem({
   }
 
   return (
-    <ListItem key={contact.id} button>
-      <div className={classes.listContainer}>
+    <ListItem key={contact.id} className={classes.listItem} button>
+      <div className={classes.listItemContainer}>
         <MiniContact type="contact" data={contact}>
           <div className={classes.row}>
             <Avatar
               image={contact.profile_image_url}
               style={{ marginRight: '0.5rem' }}
+              title={contact.display_name}
             />
             <div className={classes.column}>
-              <Typography variant="body1">{contact.display_name}</Typography>
-              <Typography variant="caption">
-                Created at{' '}
+              <Typography variant="subtitle1">
+                {contact.display_name}
+              </Typography>
+              <Typography className={classes.contactSource} variant="caption">
+                {getContactSource(contact)} at{' '}
                 {fecha.format(contact.created_at * 1000, 'MMMM D, YYYY')}
               </Typography>
             </div>
@@ -87,6 +106,7 @@ export default function DuplicateContactsListItem({
                 onClick={handleSetAsMaster}
                 variant="text"
                 color="primary"
+                className={classes.setAsMasterButton}
               >
                 Set As Master
               </Button>

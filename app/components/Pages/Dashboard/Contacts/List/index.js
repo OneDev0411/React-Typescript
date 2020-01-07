@@ -52,7 +52,8 @@ import {
   OPEN_HOUSE_FILTER_ID,
   SORT_FIELD_SETTING_KEY,
   SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
-  SYNCED_CONTACTS_LIST_ID
+  SYNCED_CONTACTS_LIST_ID,
+  DUPLICATE_CONTACTS_LIST_ID
 } from './constants'
 import { CalloutSpinner, Container, SearchWrapper } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
@@ -63,6 +64,7 @@ import {
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
+import Duplicates from './Duplicates'
 
 const DEFAULT_QUERY = {
   associations: CRM_LIST_DEFAULT_ASSOCIATIONS
@@ -73,12 +75,14 @@ class ContactsList extends React.Component {
     super(props)
     this.state = {
       selectedSidebarFilter: null,
-      firstLetter: this.props.location.query.letter || null,
+      firstLetter: props.location.query.letter || null,
       isSideMenuOpen: true,
+      isShowingDuplicatesList:
+        props.activeSegment.id === DUPLICATE_CONTACTS_LIST_ID,
       isFetchingMoreContacts: false,
       isFetchingMoreContactsBefore: false,
       isRowsUpdating: false,
-      searchInputValue: this.props.list.textFilter,
+      searchInputValue: props.list.textFilter,
       loadedRanges: []
     }
 
@@ -291,7 +295,10 @@ class ContactsList extends React.Component {
    * @param {ISavedSegment} savedSegment
    */
   handleChangeSavedSegment = savedSegment => {
-    this.setState({ selectedSidebarFilter: null })
+    this.setState({
+      selectedSidebarFilter: null,
+      isShowingDuplicatesList: savedSegment.id === DUPLICATE_CONTACTS_LIST_ID
+    })
     this.handleFilterChange({}, true)
 
     if (savedSegment.id === SYNCED_CONTACTS_LIST_ID) {
@@ -311,6 +318,10 @@ class ContactsList extends React.Component {
     resetLoadedRanges = false,
     newOrder = this.order
   ) => {
+    if (this.state.isShowingDuplicatesList) {
+      return
+    }
+
     const {
       filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
@@ -382,6 +393,10 @@ class ContactsList extends React.Component {
     }))
 
   handleLoadMore = async () => {
+    if (this.state.isShowingDuplicatesList) {
+      return
+    }
+
     const { total } = this.props.listInfo
     const totalLoadedCount = this.props.list.ids.length
     const prevStart = parseInt(this.getQueryParam('s'), 10) || 0
@@ -624,7 +639,14 @@ class ContactsList extends React.Component {
             onFilterChange={selectedSegment => {
               this.setState({ selectedSidebarFilter: null })
 
-              // Synced contacts selected
+              this.setState({
+                isShowingDuplicatesList:
+                  selectedSegment &&
+                  selectedSegment.id === DUPLICATE_CONTACTS_LIST_ID &&
+                  !!selectedSegment.filters // A bad hack to cover switching lists :(
+              })
+
+              // Synced contacts or duplicates selected
               if (selectedSegment) {
                 this.handleChangeSavedSegment(selectedSegment)
 
@@ -637,14 +659,20 @@ class ContactsList extends React.Component {
           />
           <TagsList
             onFilterChange={filters => {
-              this.setState({ selectedSidebarFilter: filters.filters })
+              this.setState({
+                selectedSidebarFilter: filters.filters,
+                isShowingDuplicatesList: false
+              })
               this.handleFilterChange({ ...filters, flows: [] }, true)
             }}
             isActive={this.state.selectedSidebarFilter !== null}
           />
           <FlowsList
             onChange={_.debounce(() => {
-              this.setState({ selectedSidebarFilter: this.props.flows })
+              this.setState({
+                selectedSidebarFilter: this.props.flows,
+                isShowingDuplicatesList: false
+              })
               this.handleFilterChange({}, true)
             }, 300)}
             isActive={this.state.selectedSidebarFilter !== null}
@@ -684,71 +712,78 @@ class ContactsList extends React.Component {
               }}
             />
           )}
-          <Header
-            title={title}
-            activeSegment={activeSegment}
-            activeTag={this.getActiveTag()}
-            onListTouchReminderUpdate={this.handleListTouchReminderUpdate}
-            onTagTouchReminderUpdate={this.handleTagTouchReminderUpdate}
-            showActions={!isZeroState}
-            showImportAction={this.shouldShowImportAndCreateActions()}
-            showCreateAction={this.shouldShowImportAndCreateActions()}
-            isSideMenuOpen={state.isSideMenuOpen}
-            user={user}
-            onMenuTriggerChange={this.toggleSideMenu}
-          />
-          {isZeroState ? (
-            <ZeroState />
-          ) : (
-            <Container>
-              {this.shouldShowFilters() && (
-                <ContactFilters
-                  onFilterChange={() => this.handleFilterChange({}, true)}
-                  users={viewAsUsers}
-                />
-              )}
-              <SearchWrapper row alignCenter>
-                <FlexItem basis="100%">
-                  <SearchContacts
-                    onSearch={this.handleSearch}
-                    isSearching={isFetchingContacts}
-                  />
-                </FlexItem>
-                <AlphabetFilter
-                  value={state.firstLetter}
-                  onChange={this.handleFirstLetterChange}
-                />
-              </SearchWrapper>
-              <Table
-                data={contacts}
-                order={this.order}
-                listInfo={props.listInfo}
-                isFetching={isFetchingContacts}
-                isFetchingMore={state.isFetchingMoreContacts}
-                isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
-                isRowsUpdating={state.isRowsUpdating}
-                onRequestLoadMore={this.handleLoadMore}
-                onRequestLoadMoreBefore={this.handleLoadMoreBefore}
-                rowsUpdating={this.rowsUpdating}
-                onChangeSelectedRows={this.onChangeSelectedRows}
-                onRequestDelete={this.handleOnDelete}
-                tableContainerId={this.tableContainerId}
-                reloadContacts={this.reloadContacts}
-                handleChangeOrder={this.handleChangeOrder}
-                handleChangeContactsAttributes={() =>
-                  this.handleFilterChange({}, true)
-                }
-                filters={{
-                  alphabet: state.firstLetter,
-                  attributeFilters: props.filters,
-                  crm_tasks: props.crmTasks,
-                  filter_type: props.conditionOperator,
-                  flows: props.flows,
-                  text: state.searchInputValue,
-                  users: viewAsUsers
-                }}
+          {isZeroState && <ZeroState />}
+          {!isZeroState && this.state.isShowingDuplicatesList && (
+            <Duplicates
+              isSideMenuOpen={this.state.isSideMenuOpen}
+              onSideMenuTriggerClick={this.toggleSideMenu}
+            />
+          )}
+          {!isZeroState && !this.state.isShowingDuplicatesList && (
+            <>
+              <Header
+                title={title}
+                activeSegment={activeSegment}
+                activeTag={this.getActiveTag()}
+                onListTouchReminderUpdate={this.handleListTouchReminderUpdate}
+                onTagTouchReminderUpdate={this.handleTagTouchReminderUpdate}
+                showActions={!isZeroState}
+                showImportAction={this.shouldShowImportAndCreateActions()}
+                showCreateAction={this.shouldShowImportAndCreateActions()}
+                isSideMenuOpen={state.isSideMenuOpen}
+                user={user}
+                onMenuTriggerChange={this.toggleSideMenu}
               />
-            </Container>
+              <Container>
+                {this.shouldShowFilters() && (
+                  <ContactFilters
+                    onFilterChange={() => this.handleFilterChange({}, true)}
+                    users={viewAsUsers}
+                  />
+                )}
+                <SearchWrapper row alignCenter>
+                  <FlexItem basis="100%">
+                    <SearchContacts
+                      onSearch={this.handleSearch}
+                      isSearching={isFetchingContacts}
+                    />
+                  </FlexItem>
+                  <AlphabetFilter
+                    value={state.firstLetter}
+                    onChange={this.handleFirstLetterChange}
+                  />
+                </SearchWrapper>
+                <Table
+                  data={contacts}
+                  order={this.order}
+                  listInfo={props.listInfo}
+                  isFetching={isFetchingContacts}
+                  isFetchingMore={state.isFetchingMoreContacts}
+                  isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
+                  isRowsUpdating={state.isRowsUpdating}
+                  onRequestLoadMore={this.handleLoadMore}
+                  onRequestLoadMoreBefore={this.handleLoadMoreBefore}
+                  rowsUpdating={this.rowsUpdating}
+                  onChangeSelectedRows={this.onChangeSelectedRows}
+                  onRequestDelete={this.handleOnDelete}
+                  tableContainerId={this.tableContainerId}
+                  reloadContacts={this.reloadContacts}
+                  handleChangeOrder={this.handleChangeOrder}
+                  handleChangeContactsAttributes={() =>
+                    this.handleFilterChange({}, true)
+                  }
+                  filters={{
+                    alphabet: state.firstLetter,
+                    attributeFilters: props.filters,
+                    crm_tasks: props.crmTasks,
+                    filter_type: props.conditionOperator,
+                    flows: props.flows,
+                    text: state.searchInputValue,
+                    users: viewAsUsers
+                  }}
+                />
+              </Container>
+            </>
           )}
         </PageContent>
       </PageContainer>
