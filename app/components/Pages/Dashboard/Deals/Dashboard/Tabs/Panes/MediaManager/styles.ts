@@ -12,29 +12,36 @@ export const useStyles = makeStyles(
         top: 0,
         left: 0,
         background: '#fff',
-        zIndex: 1
+        zIndex: 1,
+        borderBottom: '1px solid #ccc'
       },
       gallery: {
         padding: `${theme.spacing(4)}px ${theme.spacing(3)}px`,
         justifyContent: 'flex-start'
       },
       mediaCard: {
-        maxWidth: 300,
+        maxWidth: 287,
         padding: theme.spacing(1),
         marginBottom: theme.spacing(2),
         borderRadius: 4,
 
         '&:hover': {
-          backgroundColor: theme.palette.action.hover
+          backgroundColor: theme.palette.action.hover,
+
+          '& $actions': {
+            opacity: 1
+          },
+          '& $selectCheckbox': {
+            opacity: 1
+          },
+          '& $mediaThumbnail': {
+            opacity: 0.9
+          }
         },
-        '&:hover .MuiMediaManager-actions': {
-          opacity: 1
-        },
-        '&:hover .MuiMediaManager-selectCheckbox': {
-          opacity: 1
-        },
-        '&:hover .MuiMediaManager-mediaThumbnail': {
-          opacity: 0.9
+        '&.selected': {
+          '& $selectCheckbox': {
+            opacity: 1
+          }
         }
       },
       mediaThumbnailContainer: {
@@ -113,7 +120,9 @@ export const useStyles = makeStyles(
         bottom: 0,
         left: 0,
         height: 80,
-        background: '#fff'
+        background: '#fff',
+        borderTop: '1px solid #ccc',
+        boxShadow: '0px -2px 5px 0px rgba(0,0,0,0.10)'
       }
     }),
   // Making the class names deterministic by setting theme name starting with `Mui`

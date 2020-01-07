@@ -6,12 +6,15 @@ import IconUpload from 'components/SvgIcons/Upload/IconUpload'
 import IconDropbox from 'components/SvgIcons/Dropbox/IconDropbox'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
-
 import { useStyles } from '../../styles'
 
-interface Props {}
+import { IMediaItem } from '../../types'
 
-export default function Header() {
+interface Props {
+  mediaGallery: IMediaItem[]
+}
+
+export default function Header({ mediaGallery }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
@@ -19,7 +22,7 @@ export default function Header() {
     <Box display="flex" width={1} className={classes.header}>
       <Box flexGrow={1}>
         <Typography variant="h6" className={classes.bold}>
-          4 Photos
+          {mediaGallery.length} Photos
           <Typography
             component="span"
             variant="h6"

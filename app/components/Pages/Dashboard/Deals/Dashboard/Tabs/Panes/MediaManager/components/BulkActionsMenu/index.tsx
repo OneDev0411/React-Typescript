@@ -1,35 +1,55 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Typography, Box, Button, Checkbox, Link } from '@material-ui/core'
 
 import { useStyles } from '../../styles'
+import { MediaManagerAPI } from '../../context'
+import { IMediaItem } from '../../types'
 
-interface Props {}
+interface Props {
+  mediaGallery: IMediaItem[]
+}
 
-export default function BulkActionsMenu() {
+export default function BulkActionsMenu({ mediaGallery }: Props) {
   const classes = useStyles()
+  const selectedGalleryItems = mediaGallery.filter(media => media.selected)
+  const api = useContext(MediaManagerAPI)
+
+  const handleSelectAll = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault()
+    api && api.toggleGallerySelection(true)
+  }
+  const handleSelectNone = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    api && api.toggleGallerySelection(false)
+  }
 
   return (
     <Box
       display="flex"
       width={1}
       className={classes.bulkActionsMenu}
-      border={1}
       p={2}
       borderColor="#d4d4d4"
     >
       <Box flexGrow={1}>
         <Checkbox
-          defaultChecked
-          value="indeterminate"
-          indeterminate
           color="primary"
-          inputProps={{ 'aria-label': 'indeterminate checkbox' }}
+          onChange={handleSelectNone}
+          checked={selectedGalleryItems.length === mediaGallery.length}
+          indeterminate={
+            selectedGalleryItems.length > 0 &&
+            selectedGalleryItems.length !== mediaGallery.length
+          }
         />
         <Typography display="inline" className={classes.bold}>
-          2 Photos selected
+          {selectedGalleryItems.length} Photos selected
         </Typography>
-        {' -  '}
-        <Link href="#">Select all 32 photos</Link>
+        <Typography display="inline" variant="body2" color="textSecondary">
+          &nbsp;&#9679;&nbsp;
+        </Typography>
+        <Link href="#" onClick={handleSelectAll}>
+          Select all {mediaGallery.length} photos
+        </Link>
       </Box>
       <Box
         flexGrow={1}
@@ -42,7 +62,7 @@ export default function BulkActionsMenu() {
           disableElevation
           className={classes.lowerCaseButton}
         >
-          Download 2 Photos
+          Download {selectedGalleryItems.length} Photos
         </Button>
         <Button
           variant="outlined"
@@ -50,7 +70,7 @@ export default function BulkActionsMenu() {
           disableElevation
           className={classes.lowerCaseButton}
         >
-          Delete 2 Photos
+          Delete {selectedGalleryItems.length} Photos
         </Button>
       </Box>
     </Box>

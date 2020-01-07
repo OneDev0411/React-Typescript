@@ -1,25 +1,22 @@
-import React, { useState } from "react";
-import { Typography, Box } from "@material-ui/core";
+import React from 'react'
+import { Typography, Box } from '@material-ui/core'
+import cn from 'classnames'
 
-import ActionsMenu from "./ActionsMenu";
-import SelectCheckbox from "./SelectCheckbox";
+import ActionsMenu from './ActionsMenu'
+import SelectCheckbox from './SelectCheckbox'
 
-import { useStyles } from "../../styles";
+import { useStyles } from '../../styles'
+import { IMediaItem } from '../../types'
 
-interface Props {}
-
-export default function MediaItem() {
-  const classes = useStyles();
+export default function MediaItem(props: IMediaItem) {
+  const classes = useStyles()
+  const { src, selected } = props
 
   return (
-    <Box className={classes.mediaCard}>
+    <Box className={cn(classes.mediaCard, {'selected': selected})}>
       <Box className={classes.mediaThumbnailContainer}>
-        <img
-          src="https://placeimg.com/300/250/arch"
-          className={classes.mediaThumbnail}
-          alt=""
-        />
-        <SelectCheckbox />
+        <img src={src} className={classes.mediaThumbnail} alt="" />
+        <SelectCheckbox {...props} />
         <ActionsMenu />
       </Box>
       <Typography variant="body1" className={classes.trimmedText}>
@@ -27,5 +24,5 @@ export default function MediaItem() {
         conventions. But it also invites endless debates.
       </Typography>
     </Box>
-  );
+  )
 }
