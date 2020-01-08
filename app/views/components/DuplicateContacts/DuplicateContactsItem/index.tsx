@@ -46,6 +46,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     contactSource: {
       color: grey.A900
+    },
+    masterText: {
+      color: theme.palette.success.main
     }
   })
 )
@@ -96,7 +99,7 @@ export default function DuplicateContactsListItem({
         </MiniContact>
         <div>
           {isMaster && (
-            <Typography variant="button" color="primary">
+            <Typography variant="button" className={classes.masterText}>
               Master
             </Typography>
           )}
