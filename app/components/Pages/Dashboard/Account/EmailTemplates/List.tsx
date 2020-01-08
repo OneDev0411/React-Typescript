@@ -89,7 +89,7 @@ function EmailTemplatesList({
       width: '35%',
       accessor: (template: IBrandEmailTemplate) => template.name,
       render: ({ rowData }: CellProps) => (
-        <Typography noWrap component="div" variant="body1">
+        <Typography noWrap variant="body1">
           {rowData.name}
         </Typography>
       )
@@ -100,15 +100,10 @@ function EmailTemplatesList({
       sortable: false,
       render: ({ rowData }: CellProps) => (
         <div>
-          <Typography noWrap component="div" variant="body1">
+          <Typography noWrap variant="body1">
             {rowData.subject}
           </Typography>
-          <Typography
-            noWrap
-            component="div"
-            variant="body2"
-            className={classes.body2}
-          >
+          <Typography noWrap variant="body2" className={classes.body2}>
             {rowData.text}
           </Typography>
         </div>
