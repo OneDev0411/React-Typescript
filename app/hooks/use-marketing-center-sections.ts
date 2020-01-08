@@ -35,6 +35,12 @@ const ALL_SECTIONS: Section[] = [
     title: 'Life',
     items: [
       {
+        title: '‌Blank Layouts',
+        value: 'Layout',
+        link: urlGenerator('/Layout'),
+        access: ['BackOffice']
+      },
+      {
         title: 'Newsletters',
         value: 'Newsletter',
         link: urlGenerator('/Newsletter'),
@@ -80,6 +86,12 @@ const ALL_SECTIONS: Section[] = [
     type: SectionsEnum.LINK,
     title: 'Properties',
     items: [
+      {
+        title: '‌Blank Layouts',
+        value: 'ListingLayout',
+        link: urlGenerator('/ListingLayout'),
+        access: ['BackOffice']
+      },
       {
         title: 'As Seen In',
         value: 'AsSeenIn',
