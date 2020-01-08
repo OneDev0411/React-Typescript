@@ -13,6 +13,7 @@ import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { normalizeRecipients } from './helpers/normalize-recepients'
+import { hasAccountSendPermission } from './helpers/has-account-send-permission'
 import { EmailFormValues } from './types'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import EmailComposeForm from './EmailComposeForm'
@@ -47,7 +48,7 @@ export function SingleEmailComposeForm({
   getEmail = email => email,
   disableAddNewRecipient = false,
   emailId,
-  filterAccounts = () => true,
+  filterAccounts = hasAccountSendPermission,
   preferredAccountId,
   deal,
   headers = {},
