@@ -59,7 +59,9 @@ export function SingleEmailComposeForm({
   )
 
   const dispatch = useDispatch()
-  const allAccounts = selectAllConnectedAccounts(oAuthAccounts)
+  const allAccounts = selectAllConnectedAccounts(oAuthAccounts).filter(
+    filterAccounts
+  )
 
   useEffectOnce(() => {
     Object.entries(oAuthAccounts.loading).forEach(
@@ -184,7 +186,7 @@ export function SingleEmailComposeForm({
           <>
             <EmailRecipientsFields
               deal={deal}
-              senderAccounts={allAccounts.filter(filterAccounts)}
+              senderAccounts={allAccounts}
               disableAddNewRecipient={disableAddNewRecipient}
               values={values}
             />
