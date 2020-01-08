@@ -28,6 +28,11 @@ const theme = createMuiTheme({
       disabled: 'rgba(0, 0, 0, 0.26)',
       disabledBackground: 'rgba(0, 0, 0, 0.12)'
     },
+    warning: {
+      main: orange.primary,
+      dark: orange.dark,
+      light: orange.light
+    },
     grey: {
       '100': '#F2F2F2'
     },
@@ -37,6 +42,9 @@ const theme = createMuiTheme({
       main: '#F43B38',
       dark: '#b90010',
       contrastText: white
+    },
+    success: {
+      main: '#27AE60'
     },
     text: {
       secondary: disabledColor
@@ -72,16 +80,9 @@ const theme = createMuiTheme({
   }
 })
 
-// For extending theme, you need to add the typings in `/types/@material-ui/core.d.ts`
-theme.palette.warning = {
-  main: orange.primary,
-  dark: orange.dark,
-  light: orange.light
-}
-
 if (process.env.NODE_ENV === 'development') {
   // eslint-disable-next-line
-  ;(window as any).theme = theme
+  ; (window as any).theme = theme
 }
 
 export { theme }

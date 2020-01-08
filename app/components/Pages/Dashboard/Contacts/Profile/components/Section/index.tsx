@@ -55,12 +55,7 @@ export const Section: FunctionComponent<Props> = ({
         {titleRenderer ? (
           titleRenderer()
         ) : (
-          <Typography
-            id={title}
-            variant="body1"
-            component="h3"
-            className={classes.title}
-          >
+          <Typography id={title} variant="body1" className={classes.title}>
             {title}
           </Typography>
         )}

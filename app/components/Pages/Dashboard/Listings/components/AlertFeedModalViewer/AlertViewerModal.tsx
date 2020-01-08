@@ -60,9 +60,7 @@ export default function AlertViewerModal(props: Props) {
 
     return (
       <Box display="flex" alignItems="center" justifyContent="center">
-        <Typography variant="h3" component="p">
-          No Listings
-        </Typography>
+        <Typography variant="h3">No Listings</Typography>
       </Box>
     )
   }

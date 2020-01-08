@@ -48,9 +48,7 @@ function SideNavItem(props: SideNavItemProps) {
               <Icon style={{ width: '1em', height: '1em' }} />
             </Box>
           )}
-          <Typography variant="body2" component="span">
-            {title}
-          </Typography>
+          <Typography variant="body2">{title}</Typography>
           {onDelete && (
             <div
               className="section-item__delete"
