@@ -10,6 +10,8 @@ export const SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY =
 
 export const SYNCED_CONTACTS_LIST_ID = 'synced'
 
+export const DUPLICATE_CONTACTS_LIST_ID = 'duplicates'
+
 export const ORIGINS = [
   {
     label: 'Brokerage widget',
