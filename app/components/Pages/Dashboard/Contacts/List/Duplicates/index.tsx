@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 import pluralize from 'pluralize'
 
-import { DuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts'
+import { DuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts/types'
 import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
 import { mergeContact } from 'models/contacts/merge-contact'
 import { mergeContactsBatch } from 'models/contacts/merge-contacts-batch'

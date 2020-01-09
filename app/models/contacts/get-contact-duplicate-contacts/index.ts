@@ -1,10 +1,7 @@
 import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
 
-export interface DuplicateContacts {
-  id: number
-  contacts: IContact[]
-}
+import { DuplicateContacts } from './types'
 
 export async function getContactDuplicateContacts(
   contactId: UUID
