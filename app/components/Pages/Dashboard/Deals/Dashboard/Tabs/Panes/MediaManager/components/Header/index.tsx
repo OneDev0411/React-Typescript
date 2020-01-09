@@ -6,6 +6,7 @@ import IconUpload from 'components/SvgIcons/Upload/IconUpload'
 import IconDropbox from 'components/SvgIcons/Dropbox/IconDropbox'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
+
 import { useStyles } from '../../styles'
 
 import { IMediaItem } from '../../types'
@@ -21,17 +22,17 @@ export default function Header({ mediaGallery }: Props) {
   return (
     <Box display="flex" width={1} className={classes.header}>
       <Box flexGrow={1}>
-        <Typography variant="h6" className={classes.bold}>
+        <Typography variant="h6" className={classes.bold} display="inline">
           {mediaGallery.length} Photos
-          <Typography
-            component="span"
-            variant="h6"
-            className={classes.bold}
-            color="textSecondary"
-          >
-            (Max 50)
-          </Typography>
         </Typography>{' '}
+        <Typography
+          variant="h6"
+          className={classes.bold}
+          color="textSecondary"
+          display="inline"
+        >
+          (Max 50)
+        </Typography>
       </Box>
       <Box
         flexGrow={1}

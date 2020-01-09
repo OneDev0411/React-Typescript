@@ -11,9 +11,8 @@ import {
 import MoreVertIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
 import IconDownload from 'components/SvgIcons/Download/IconDownload'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
-
 import { useStyles } from '../../../styles'
+import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 export default function ActionsMenu() {
   const classes = useStyles()

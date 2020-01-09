@@ -24,11 +24,23 @@ export default function MediaManager(props: Props) {
     fetchData()
   }, [])
 
-  const toggleMediaSelection = (id: string) => {
+  const toggleMediaSelection = (file: string) => {
     const newState = mediaGallery.map(media => {
-      if (media.id === id) {
+      if (media.file === file) {
         let selected = media.selected
         return { ...media, selected: !selected }
+      } else {
+        return media
+      }
+    })
+
+    return setMediaGallery(newState)
+  }
+
+  const setMediaName = (file: string, name: string) => {
+    const newState = mediaGallery.map(media => {
+      if (media.file === file) {
+        return { ...media, name }
       } else {
         return media
       }
@@ -48,13 +60,14 @@ export default function MediaManager(props: Props) {
   const getSelectedItems = () => {
     return mediaGallery.filter(item => item.selected)
   }
-  const logId = (id: string) => {
-    console.log(id)
+  const logId = (file: string) => {
+    console.log(file)
   }
   const api = {
     toggleMediaSelection,
     getSelectedItems,
     toggleGallerySelection,
+    setMediaName,
     logId
   }
 
@@ -72,7 +85,7 @@ export default function MediaManager(props: Props) {
             <Box display="flex" flexWrap="wrap" className={classes.gallery}>
               <UploadPlaceholderItem />
               {mediaGallery.map(media => (
-                <MediaItem key={media.id} {...media} />
+                <MediaItem key={media.file} {...media} />
               ))}
             </Box>
             {mediaGallery.filter(media => media.selected).length ? (

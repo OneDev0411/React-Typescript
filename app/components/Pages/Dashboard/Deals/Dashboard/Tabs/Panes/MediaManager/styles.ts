@@ -80,8 +80,8 @@ export const useStyles = makeStyles(
         alignItems: 'center',
         border: '1px dashed #D4D4D4',
         background: '#FAFAFA',
-        maxHeight: 240,
-        width: 285,
+        maxHeight: 228,
+        width: 270,
         margin: theme.spacing(1),
         marginBottom: theme.spacing(2),
         borderRadius: 4,
@@ -123,6 +123,25 @@ export const useStyles = makeStyles(
         background: '#fff',
         borderTop: '1px solid #ccc',
         boxShadow: '0px -2px 5px 0px rgba(0,0,0,0.10)'
+      },
+      mediaLabel: {
+        postion: 'relative',
+        justifyContent: 'left',
+        textAlign: 'left',
+        textTransform: 'none',
+        '&:hover': {
+          background: 'none',
+
+          '& $editButton': {
+            opacity: 1
+          }
+        }
+      },
+      editButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        opacity: 0
       }
     }),
   // Making the class names deterministic by setting theme name starting with `Mui`

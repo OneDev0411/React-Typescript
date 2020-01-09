@@ -44,12 +44,17 @@ export default function BulkActionsMenu({ mediaGallery }: Props) {
         <Typography display="inline" className={classes.bold}>
           {selectedGalleryItems.length} Photos selected
         </Typography>
+
+        {selectedGalleryItems.length !== mediaGallery.length && (
+          <>
         <Typography display="inline" variant="body2" color="textSecondary">
           &nbsp;&#9679;&nbsp;
         </Typography>
         <Link href="#" onClick={handleSelectAll}>
           Select all {mediaGallery.length} photos
         </Link>
+          </>
+        )}
       </Box>
       <Box
         flexGrow={1}
@@ -62,7 +67,7 @@ export default function BulkActionsMenu({ mediaGallery }: Props) {
           disableElevation
           className={classes.lowerCaseButton}
         >
-          Download {selectedGalleryItems.length} Photos
+          Download {selectedGalleryItems.length} photo(s)
         </Button>
         <Button
           variant="outlined"
@@ -70,7 +75,7 @@ export default function BulkActionsMenu({ mediaGallery }: Props) {
           disableElevation
           className={classes.lowerCaseButton}
         >
-          Delete {selectedGalleryItems.length} Photos
+          Delete {selectedGalleryItems.length} photo(s)
         </Button>
       </Box>
     </Box>

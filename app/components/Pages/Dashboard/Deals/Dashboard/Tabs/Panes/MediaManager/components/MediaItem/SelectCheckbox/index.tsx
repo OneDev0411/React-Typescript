@@ -8,10 +8,10 @@ import { IMediaItem } from '../../../types'
 export default function SelectCheckbox(props: IMediaItem) {
   const classes = useStyles()
   const api = useContext(MediaManagerAPI)
-  const { id } = props
+  const { file } = props
 
   const handleChange = () => {
-    api && api.toggleMediaSelection(id)
+    api && api.toggleMediaSelection(file)
   }
 
   return (

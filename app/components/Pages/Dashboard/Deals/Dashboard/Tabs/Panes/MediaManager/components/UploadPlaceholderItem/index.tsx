@@ -1,10 +1,9 @@
 import React from 'react'
 import { Box, Typography, Link } from '@material-ui/core'
 
+import { useStyles } from '../../styles'
 import IconUpload from 'components/SvgIcons/Upload/IconUpload'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
-
-import { useStyles } from '../../styles'
 
 export default function UploadPlaceholderItem() {
   const classes = useStyles()
