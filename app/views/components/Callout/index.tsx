@@ -1,23 +1,9 @@
-import * as React from 'react'
-import { ReactNode, CSSProperties } from 'react'
-import { Tooltip } from '@material-ui/core'
+import React, { ReactNode, CSSProperties } from 'react'
 
-import CloseIcon from '../SvgIcons/Close/CloseIcon'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
+import RenderWithTooltip from './RenderWithTooltip'
 import { CalloutCloseButton, CalloutContainer, CalloutContent } from './styled'
-
-interface RenderWithTooltipProps {
-  children: ReactNode
-  title?: string
-}
-
-function RenderWithTooltip({ children, title }: RenderWithTooltipProps) {
-  if (title) {
-    return <Tooltip title={title}>{children}</Tooltip>
-  }
-
-  return <>{children}</>
-}
 
 interface Props {
   onClose?: (event: React.MouseEvent) => void

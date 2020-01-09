@@ -42,7 +42,8 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column'
     },
     setAsMasterButton: {
-      visibility: 'hidden'
+      visibility: 'hidden',
+      margin: theme.spacing(0, 0.5)
     },
     contactSource: {
       color: grey.A900

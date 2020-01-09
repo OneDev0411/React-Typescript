@@ -1,13 +1,13 @@
 import Fetch from '../../../services/fetch'
 
-interface ContactsMergeCluster {
+interface ContactsMergeClusterInput {
   parent: UUID
   sub_contacts: UUID[]
 }
 
 export async function mergeContactsBatch(
-  clusters: ContactsMergeCluster[]
-): Promise<unknown> {
+  clusters: ContactsMergeClusterInput[]
+): Promise<ApiResponseBody<unknown>> {
   try {
     const response = await new Fetch().post('/contacts/merge').send({
       clusters
