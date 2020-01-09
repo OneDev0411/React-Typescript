@@ -100,8 +100,6 @@ export function EmailRecipientsFields({
                   label="To"
                   name="to"
                   render={toFieldProps => {
-                    console.log('cc', ccFieldProps.meta)
-
                     return (
                       <>
                         <OnFocus name="to">

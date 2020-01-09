@@ -26,7 +26,7 @@ declare interface IOAuthAccountBase {
   histories?: IGoogleSyncHistory[]
   sync_status: 'success' | 'pending' | null
   scope: string[]
-  scope_summary: OAuthAccountScope[] | null
+  scope_summary: OAuthAccountScope[]
   threads_total: null | number
   type: string
   updated_at: string
