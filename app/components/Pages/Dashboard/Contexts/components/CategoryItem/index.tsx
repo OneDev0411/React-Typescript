@@ -47,9 +47,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   title: String
+  items: Array<IDealBrandContext>
 }
 
-function CategoryItem({ title }: Props) {
+function CategoryItem({ title, items }: Props) {
   const classes = useStyles()
 
   return (
@@ -67,7 +68,9 @@ function CategoryItem({ title }: Props) {
         </Grid>
       </Box>
       <List disablePadding className={classes.list}>
-        <ContextItem name="test" />
+        {items.map(c => (
+          <ContextItem key={c.id} name={c.label} data={c} />
+        ))}
       </List>
     </div>
   )

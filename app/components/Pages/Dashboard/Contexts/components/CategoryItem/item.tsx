@@ -8,6 +8,7 @@ import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutli
 
 interface Props {
   name: String
+  data: IDealBrandContext
 }
 
 function ContextItem({ name }: Props) {
