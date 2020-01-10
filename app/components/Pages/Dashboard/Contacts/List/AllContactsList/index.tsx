@@ -22,7 +22,7 @@ import {
 import { getSyncedContacts, SyncedContacts } from '../utils/get-synced-contacts'
 
 interface Props {
-  onFilterChange: (selectedSegment?: unknown) => void
+  onFilterChange: (selectedSegment: unknown, type: string) => void
   resetActiveFilters: (segmentName: string) => void
   activeFilters: StringMap<IActiveFilter>
   changeActiveFilterSegment: typeof changeActiveFilterSegmentAction
@@ -71,7 +71,7 @@ function AllContactsList({
       }
     }
 
-    onFilterChange(selectedSegment)
+    onFilterChange(selectedSegment, type)
   }
 
   return (
