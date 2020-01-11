@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
@@ -15,6 +15,7 @@ import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
 
 import CategoryItem from '../components/CategoryItem'
+import NewCategoryModal from '../components/NewCategory'
 
 interface Props {
   brandId: UUID
@@ -28,6 +29,12 @@ function DealContext({ brandId, list, getContextsByBrand }: Props) {
   }, [getContextsByBrand, brandId])
 
   const theme = useTheme<Theme>()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [
+    selectedContext,
+    setSelectedContext
+  ] = useState<IDealBrandContext | null>(null)
+
   const renderContent = () => {
     if (!list) {
       return <LoadingContainer style={{ padding: '30vh 0 0' }} />
@@ -49,7 +56,14 @@ function DealContext({ brandId, list, getContextsByBrand }: Props) {
           <PageHeader.Heading>Deal Context</PageHeader.Heading>
         </PageHeader.Title>
       </PageHeader>
-
+      <NewCategoryModal
+        isOpen={isModalOpen}
+        context={selectedContext}
+        onClose={() => {
+          setIsModalOpen(false)
+          setSelectedContext(null)
+        }}
+      />
       <div style={{ padding: theme.spacing(0, 3, 9) }}>{renderContent()}</div>
     </>
   )
