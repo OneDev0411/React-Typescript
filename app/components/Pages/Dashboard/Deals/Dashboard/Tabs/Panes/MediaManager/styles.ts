@@ -44,11 +44,17 @@ export const useStyles = makeStyles(
           }
         }
       },
+      mediaCardUploading: {
+        '& $mediaThumbnail': {
+          opacity: 0.5
+        }
+      },
       mediaThumbnailContainer: {
         position: 'relative'
       },
       mediaThumbnail: {
         width: '100%',
+        minHeight: 250,
         marginBottom: theme.spacing(1),
         boxShadow: [
           '0px 1px 5px rgba(0, 0, 0, 0.2)',
@@ -80,7 +86,7 @@ export const useStyles = makeStyles(
         alignItems: 'center',
         border: '1px dashed #D4D4D4',
         background: '#FAFAFA',
-        maxHeight: 228,
+        maxHeight: 250,
         width: 270,
         margin: theme.spacing(1),
         marginBottom: theme.spacing(2),
@@ -142,6 +148,33 @@ export const useStyles = makeStyles(
         top: 10,
         right: 10,
         opacity: 0
+      },
+      uploadPlaceholder: {
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        top: 0,
+        background: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 1002
+      },
+      uploadArea: {
+        position: 'absolute',
+        left: '25%',
+        top: '30vh',
+        width: 700,
+        height: 250,
+        borderRadius: 10,
+        backgroundColor: '#ffffff',
+        border: '2px dotted #979797',
+        textAlign: 'center',
+        paddingTop: 70
+      },
+      uploadProgressbar: {
+        position: 'absolute',
+        width: '80%',
+        top: '80%',
+        left: '10%'
       }
     }),
   // Making the class names deterministic by setting theme name starting with `Mui`

@@ -12,6 +12,7 @@ interface Props {
 export default function BulkActionsMenu({ mediaGallery }: Props) {
   const classes = useStyles()
   const selectedGalleryItems = mediaGallery.filter(media => media.selected)
+  const uploadedGalleryItems = mediaGallery.filter(media => !media.isNew)
   const api = useContext(MediaManagerAPI)
 
   const handleSelectAll = (e: React.MouseEvent<HTMLElement>) => {
@@ -35,24 +36,24 @@ export default function BulkActionsMenu({ mediaGallery }: Props) {
         <Checkbox
           color="primary"
           onChange={handleSelectNone}
-          checked={selectedGalleryItems.length === mediaGallery.length}
+          checked={selectedGalleryItems.length === uploadedGalleryItems.length}
           indeterminate={
             selectedGalleryItems.length > 0 &&
-            selectedGalleryItems.length !== mediaGallery.length
+            selectedGalleryItems.length !== uploadedGalleryItems.length
           }
         />
         <Typography display="inline" className={classes.bold}>
           {selectedGalleryItems.length} Photos selected
         </Typography>
 
-        {selectedGalleryItems.length !== mediaGallery.length && (
+        {selectedGalleryItems.length !== uploadedGalleryItems.length && (
           <>
-        <Typography display="inline" variant="body2" color="textSecondary">
-          &nbsp;&#9679;&nbsp;
-        </Typography>
-        <Link href="#" onClick={handleSelectAll}>
-          Select all {mediaGallery.length} photos
-        </Link>
+            <Typography display="inline" variant="body2" color="textSecondary">
+              &nbsp;&#9679;&nbsp;
+            </Typography>
+            <Link href="#" onClick={handleSelectAll}>
+              Select all {uploadedGalleryItems.length} photos
+            </Link>
           </>
         )}
       </Box>

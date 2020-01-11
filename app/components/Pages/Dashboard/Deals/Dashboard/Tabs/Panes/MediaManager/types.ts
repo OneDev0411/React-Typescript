@@ -4,6 +4,7 @@ export interface IMediaItem {
   name: string
   selected: boolean
   order: number
+  isNew?: boolean
 }
 
 export interface IMediaManagerAPI {

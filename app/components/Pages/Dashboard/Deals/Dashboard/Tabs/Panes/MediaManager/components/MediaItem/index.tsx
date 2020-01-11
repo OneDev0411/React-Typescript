@@ -10,6 +10,8 @@ import { useIconStyles } from 'views/../styles/use-icon-styles'
 import { useStyles } from '../../styles'
 import ActionsMenu from './ActionsMenu'
 import SelectCheckbox from './SelectCheckbox'
+import UploadProgessBar from './UploadProgessBar'
+
 import { MediaManagerAPI } from '../../context'
 import { IMediaItem } from '../../types'
 
@@ -17,21 +19,47 @@ export default function MediaItem(props: IMediaItem) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const inputRef = useRef<HTMLInputElement>(null)
-  const { file, src, selected, name, order } = props
+  const { file, src, selected, name, order, isNew } = props
 
-  const [editMode, setEditMode] = useState(false)
-  const api = useContext(MediaManagerAPI)
+  const [uploadPercentage, setUploadPercentage] = useState<number>(0)
+  const [fileIsNew, setFileIsNew] = useState<boolean | undefined>(isNew)
 
-  // const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { value } = e.target
-  //   api && api.setMediaName(file, value)
-  // }
+  const fakeUpload = (cb: any) => {
+    let timerId: any
+    let percent: any
+
+    percent = 0
+    timerId = setInterval(function fakeUploader() {
+      percent += 5
+      setUploadPercentage(percent)
+
+      // complete
+      if (percent >= 100) {
+        clearInterval(timerId)
+
+        return cb()
+      }
+    }, 100)
+  }
+
+  useEffect(() => {
+    if (fileIsNew) {
+      fakeUpload(() => {
+        setFileIsNew(false)
+        console.log('Fake upload completed!')
+      })
+    }
+  }, [fileIsNew])
+
+  const [editMode, setEditMode] = useState<boolean>(false)
 
   useEffect(() => {
     if (editMode && inputRef && inputRef.current) {
       inputRef.current.focus()
     }
   }, [editMode, inputRef])
+
+  const api = useContext(MediaManagerAPI)
 
   const handleOnBlur = () => {
     setTimeout(() => {
@@ -50,6 +78,23 @@ export default function MediaItem(props: IMediaItem) {
   const cancelEdit = (e: React.MouseEvent) => {
     e.preventDefault()
     setEditMode(false)
+  }
+
+  if (fileIsNew) {
+    return (
+      <Box
+        className={cn(classes.mediaCard, classes.mediaCardUploading)}
+        order={order}
+      >
+        <Box className={classes.mediaThumbnailContainer}>
+          <img src={src} className={classes.mediaThumbnail} alt="" />
+          <UploadProgessBar value={uploadPercentage} />
+        </Box>
+        <Button className={classes.mediaLabel} fullWidth>
+          Uploading in progress...
+        </Button>
+      </Box>
+    )
   }
 
   return (
