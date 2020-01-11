@@ -48,9 +48,16 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   title: String
   items: Array<IDealBrandContext>
+  setIsModalOpen: (state: boolean) => void
+  setSelectedContext: (context: IDealBrandContext) => void
 }
 
-function CategoryItem({ title, items }: Props) {
+function CategoryItem({
+  title,
+  items,
+  setIsModalOpen,
+  setSelectedContext
+}: Props) {
   const classes = useStyles()
 
   return (
@@ -61,7 +68,11 @@ function CategoryItem({ title, items }: Props) {
             <Box fontWeight="fontWeightBold">{title}</Box>
           </Grid>
           <Grid item xs={12} sm={6} className={classes.tright}>
-            <Button variant="outlined" size="small">
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={e => setIsModalOpen(true)}
+            >
               <Box fontWeight="fontWeightBold">Add New Context</Box>
             </Button>
           </Grid>
@@ -69,7 +80,15 @@ function CategoryItem({ title, items }: Props) {
       </Box>
       <List disablePadding className={classes.list}>
         {items.map(c => (
-          <ContextItem key={c.id} name={c.label} data={c} />
+          <ContextItem
+            key={c.id}
+            name={c.label}
+            context={c}
+            onSelect={() => {
+              setIsModalOpen(true)
+              setSelectedContext(c)
+            }}
+          />
         ))}
       </List>
     </div>

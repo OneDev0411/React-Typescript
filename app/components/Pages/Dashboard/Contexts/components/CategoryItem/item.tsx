@@ -8,13 +8,14 @@ import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutli
 
 interface Props {
   name: String
-  data: IDealBrandContext
+  context: IDealBrandContext
+  onSelect: () => void
 }
 
-function ContextItem({ name }: Props) {
+function ContextItem({ name, onSelect }: Props) {
   return (
     <ListItem>
-      <ListItemText primary={name} />
+      <ListItemText primary={name} onClick={onSelect} />
       <ListItemSecondaryAction>
         <IconButton size="small" aria-label="delete">
           <IconDeleteOutline

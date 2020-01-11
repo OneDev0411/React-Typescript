@@ -6,8 +6,10 @@ import { Helmet } from 'react-helmet'
 import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
 import _ from 'lodash'
+import { addNotification as notify } from 'reapop'
 
 import { IAppState } from 'reducers'
+import createNewContext from 'models/Deal/context/create-context'
 import { selectContextsByBrand } from 'reducers/deals/contexts'
 import { getContextsByBrand } from 'actions/deals'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -21,9 +23,10 @@ interface Props {
   brandId: UUID
   list: Array<{ section: string; items: Array<IDealBrandContext> }>
   getContextsByBrand: IAsyncActionProp<typeof getContextsByBrand>
+  notify: IAsyncActionProp<typeof notify>
 }
 
-function DealContext({ brandId, list, getContextsByBrand }: Props) {
+function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
   useEffect(() => {
     getContextsByBrand(brandId)
   }, [getContextsByBrand, brandId])
@@ -35,13 +38,42 @@ function DealContext({ brandId, list, getContextsByBrand }: Props) {
     setSelectedContext
   ] = useState<IDealBrandContext | null>(null)
 
+  async function newContextHandler(contextData: IDealBrandContext) {
+    try {
+      const context = await createNewContext(brandId, contextData)
+
+      if (context) {
+        notify({
+          message: 'New Context is Saved!',
+          status: 'success'
+        })
+        getContextsByBrand(brandId)
+        setIsModalOpen(false)
+      }
+    } catch (err) {
+      console.error(err)
+      notify({
+        message: 'Unexpected error happened',
+        status: 'error'
+      })
+      setIsModalOpen(false)
+      setSelectedContext(null)
+    }
+  }
+
   const renderContent = () => {
     if (!list) {
       return <LoadingContainer style={{ padding: '30vh 0 0' }} />
     }
 
     return list.map(({ section, items }) => (
-      <CategoryItem key={section} title={section} items={items} />
+      <CategoryItem
+        key={section}
+        title={section}
+        items={items}
+        setIsModalOpen={setIsModalOpen}
+        setSelectedContext={setSelectedContext}
+      />
     ))
   }
 
@@ -63,6 +95,7 @@ function DealContext({ brandId, list, getContextsByBrand }: Props) {
           setIsModalOpen(false)
           setSelectedContext(null)
         }}
+        onSubmit={newContextHandler}
       />
       <div style={{ padding: theme.spacing(0, 3, 9) }}>{renderContent()}</div>
     </>
@@ -85,7 +118,8 @@ const mapStateToProps = ({ deals, user }: IAppState) => {
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
-  getContextsByBrand: brandId => dispatch(getContextsByBrand(brandId))
+  getContextsByBrand: brandId => dispatch(getContextsByBrand(brandId)),
+  notify: (...args: Parameters<typeof notify>) => dispatch(notify(...args))
 })
 
 export default connect(

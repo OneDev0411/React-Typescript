@@ -60,7 +60,6 @@ function DetailsFields(props: Props) {
                 name="default_value"
                 label="Default Value"
                 variant="filled"
-                defaultValue={0}
                 InputLabelProps={{
                   shrink: true
                 }}

@@ -59,7 +59,7 @@ function DetailsFields(props: Props) {
             </Grid>
             <Grid item xs={6}>
               <Field
-                name="type"
+                name="data_type"
                 label="Context Type"
                 component={MUITextInput}
                 {...sharedFieldProps()}

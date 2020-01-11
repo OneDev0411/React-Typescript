@@ -12,19 +12,22 @@ import AvailabilityFields from './Fields/Availability'
 interface Props {
   isOpen: boolean
   onClose: () => void
-  onSubmit?: (values: any) => void
+  onSubmit: (contextData: IDealBrandContext) => Promise<any>
   context: IDealBrandContext | null
 }
 
-function NewContextModal({ isOpen, onClose, onSubmit }: Props) {
+function NewContextModal({ isOpen, onClose, onSubmit, context }: Props) {
   const classes = useStyles()
-  const su = v => console.log(v)
 
   return (
     <Modal isOpen={isOpen} onRequestClose={onClose} autoHeight large>
-      <ModalHeader closeHandler={onClose} title="New Context" />
+      <ModalHeader
+        closeHandler={onClose}
+        title={context && context.label ? context.label : 'New Context'}
+      />
       <Form
-        onSubmit={su}
+        onSubmit={values => onSubmit(values as IDealBrandContext)}
+        initialValues={{ default_value: 0, ...context }}
         render={({ handleSubmit, submitting }) => {
           return (
             <form onSubmit={handleSubmit} noValidate>
@@ -52,8 +55,13 @@ function NewContextModal({ isOpen, onClose, onSubmit }: Props) {
               <Box className={classes.modalFooter}>
                 <Box className={classes.actions}>
                   <Box>
-                    <Button type="submit" variant="contained" color="primary">
-                      Save
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      disabled={submitting}
+                    >
+                      {!submitting ? 'Save' : 'Saving...'}
                     </Button>
                   </Box>
                   <Box mr={0.5}>
