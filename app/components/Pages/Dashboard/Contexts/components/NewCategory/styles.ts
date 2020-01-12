@@ -21,7 +21,8 @@ export default makeStyles((theme: Theme) =>
         display: 'inline-block'
       },
       '& button': {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        direction: 'ltr'
       }
     },
     detailsTextField: {

@@ -50,13 +50,15 @@ interface Props {
   items: Array<IDealBrandContext>
   setIsModalOpen: (state: boolean) => void
   setSelectedContext: (context: IDealBrandContext) => void
+  onDelete: (contextId: UUID) => void
 }
 
 function CategoryItem({
   title,
   items,
   setIsModalOpen,
-  setSelectedContext
+  setSelectedContext,
+  onDelete
 }: Props) {
   const classes = useStyles()
 
@@ -88,6 +90,7 @@ function CategoryItem({
               setIsModalOpen(true)
               setSelectedContext(c)
             }}
+            onDelete={() => onDelete(c.id)}
           />
         ))}
       </List>

@@ -10,6 +10,7 @@ import { addNotification as notify } from 'reapop'
 
 import { IAppState } from 'reducers'
 import createNewContext from 'models/Deal/context/create-context'
+import deleteContext from 'models/Deal/context/delete-context'
 import { selectContextsByBrand } from 'reducers/deals/contexts'
 import { getContextsByBrand } from 'actions/deals'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -60,6 +61,25 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
       setSelectedContext(null)
     }
   }
+  async function deleteContextHandler(contextId: UUID) {
+    try {
+      const res = await deleteContext(brandId, contextId)
+
+      if (res) {
+        notify({
+          message: 'Context is Deleted!',
+          status: 'success'
+        })
+        getContextsByBrand(brandId)
+      }
+    } catch (err) {
+      console.error(err)
+      notify({
+        message: 'Unexpected error happened',
+        status: 'error'
+      })
+    }
+  }
 
   const renderContent = () => {
     if (!list) {
@@ -73,6 +93,7 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
         items={items}
         setIsModalOpen={setIsModalOpen}
         setSelectedContext={setSelectedContext}
+        onDelete={deleteContextHandler}
       />
     ))
   }
