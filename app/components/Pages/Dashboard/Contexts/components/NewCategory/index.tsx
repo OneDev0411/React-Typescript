@@ -31,7 +31,7 @@ function NewContextModal({ isOpen, onClose, onSubmit, context }: Props) {
         render={({ handleSubmit, submitting }) => {
           return (
             <form onSubmit={handleSubmit} noValidate>
-              <Box p={2}>
+              <Box p={2} className={classes.modalContainer}>
                 <DetailsFiels />
                 <Box my={4}>
                   <Divider />

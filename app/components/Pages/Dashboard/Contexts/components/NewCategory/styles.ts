@@ -10,6 +10,10 @@ export default makeStyles((theme: Theme) =>
       borderRadius: 4,
       padding: theme.spacing(1.5)
     },
+    modalContainer: {
+      maxHeight: 610,
+      overflow: 'auto'
+    },
     modalFooter: {
       padding: theme.spacing(2, 3.5),
       background: '#F2F2F2',
