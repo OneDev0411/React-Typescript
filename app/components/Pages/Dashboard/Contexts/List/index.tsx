@@ -10,6 +10,7 @@ import { addNotification as notify } from 'reapop'
 
 import { IAppState } from 'reducers'
 import createNewContext from 'models/Deal/context/create-context'
+import editContext from 'models/Deal/context/edit-context'
 import deleteContext from 'models/Deal/context/delete-context'
 import { selectContextsByBrand } from 'reducers/deals/contexts'
 import { getContextsByBrand } from 'actions/deals'
@@ -39,17 +40,31 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
     setSelectedContext
   ] = useState<IDealBrandContext | null>(null)
 
-  async function newContextHandler(contextData: IDealBrandContext) {
+  async function contextFormHandler(
+    contextData: IDealBrandContext,
+    contextId?: UUID
+  ) {
     try {
-      const context = await createNewContext(brandId, contextData)
+      const editMode: boolean = !!(contextId && selectedContext)
+      let context: IDealBrandContext
+
+      if (editMode) {
+        context = await editContext(brandId, contextId, contextData)
+      } else {
+        context = await createNewContext(brandId, contextData)
+      }
 
       if (context) {
         notify({
-          message: 'New Context is Saved!',
+          message: !editMode ? 'New Context is Saved!' : 'Context is Edited!',
           status: 'success'
         })
         getContextsByBrand(brandId)
         setIsModalOpen(false)
+
+        if (editMode) {
+          setSelectedContext(null)
+        }
       }
     } catch (err) {
       console.error(err)
@@ -116,7 +131,7 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
           setIsModalOpen(false)
           setSelectedContext(null)
         }}
-        onSubmit={newContextHandler}
+        onSubmit={contextFormHandler}
       />
       <div style={{ padding: theme.spacing(0, 3, 9) }}>{renderContent()}</div>
     </>
