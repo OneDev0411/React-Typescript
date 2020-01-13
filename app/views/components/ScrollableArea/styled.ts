@@ -37,7 +37,9 @@ export const Wrapper = styled.div<ScrollableWrapperProps>`
     }
   }
   ${({ shadowColor = 'grey' }) => {
-    const color = colorToRbg[shadowColor]
+    const color = Object.keys(colorToRbg).includes(shadowColor)
+      ? colorToRbg[shadowColor]
+      : shadowColor
 
     return css`
       &.has-bottom-shadow {
