@@ -296,8 +296,7 @@ class ContactsList extends React.Component {
    */
   handleChangeSavedSegment = savedSegment => {
     this.setState({
-      selectedSidebarFilter: null,
-      isShowingDuplicatesList: savedSegment.id === DUPLICATE_CONTACTS_LIST_ID
+      selectedSidebarFilter: null
     })
     this.handleFilterChange({}, true)
 
@@ -636,17 +635,14 @@ class ContactsList extends React.Component {
         <SideMenu isOpen={isSideMenuOpen} width="13rem">
           <AllContactsList
             activeSegment={activeSegment}
-            onFilterChange={selectedSegment => {
+            onFilterChange={(selectedSegment, type) => {
               this.setState({ selectedSidebarFilter: null })
 
               this.setState({
-                isShowingDuplicatesList:
-                  selectedSegment &&
-                  selectedSegment.id === DUPLICATE_CONTACTS_LIST_ID &&
-                  !!selectedSegment.filters // A bad hack to cover switching lists :(
+                isShowingDuplicatesList: type === DUPLICATE_CONTACTS_LIST_ID
               })
 
-              // Synced contacts or duplicates selected
+              // Synced contacts
               if (selectedSegment) {
                 this.handleChangeSavedSegment(selectedSegment)
 
@@ -681,7 +677,10 @@ class ContactsList extends React.Component {
             name={CONTACTS_SEGMENT_NAME}
             associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
             getPredefinedLists={() => ({})}
-            onChange={this.handleChangeSavedSegment}
+            onChange={segment => {
+              this.setState({ isShowingDuplicatesList: false })
+              this.handleChangeSavedSegment(segment)
+            }}
           />
         </SideMenu>
 
