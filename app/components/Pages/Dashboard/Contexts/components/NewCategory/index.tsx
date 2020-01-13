@@ -27,7 +27,7 @@ function NewContextModal({ isOpen, onClose, onSubmit, context }: Props) {
       />
       <Form
         onSubmit={values => onSubmit(values as IDealBrandContext)}
-        initialValues={{ default_value: 0, ...context }}
+        initialValues={{ data_type: 'Text', default_value: 0, ...context }}
         render={({ handleSubmit, submitting }) => {
           return (
             <form onSubmit={handleSubmit} noValidate>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field } from 'react-final-form'
-import { Grid, Box } from '@material-ui/core'
+import { Grid, Box, FormControl, Select, InputLabel } from '@material-ui/core'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 
@@ -20,7 +20,6 @@ function sharedFieldProps(isRequired: boolean = true) {
 
   return {
     ...validate,
-    // autoFocus: true,
     variant: 'filled',
     InputLabelProps: {
       shrink: true
@@ -61,8 +60,33 @@ function DetailsFields(props: Props) {
               <Field
                 name="data_type"
                 label="Context Type"
-                component={MUITextInput}
-                {...sharedFieldProps()}
+                render={({
+                  input: { onChange, value, ...restInput },
+                  ...rest
+                }) => {
+                  return (
+                    <FormControl
+                      variant="filled"
+                      margin="dense"
+                      fullWidth
+                      required
+                    >
+                      <InputLabel id="data_type_lable" shrink>
+                        Context Type
+                      </InputLabel>
+                      <Select
+                        native
+                        labelId="data_type_lable"
+                        value={value}
+                        onChange={onChange}
+                      >
+                        <option value="Text">Text</option>
+                        <option value="Number">Number</option>
+                        <option value="Date">Date</option>
+                      </Select>
+                    </FormControl>
+                  )
+                }}
               />
             </Grid>
           </Grid>
