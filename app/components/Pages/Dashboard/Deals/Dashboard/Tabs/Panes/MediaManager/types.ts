@@ -7,10 +7,9 @@ export interface IMediaItem {
   isNew?: boolean
 }
 
+export interface IMediaGallery extends Array<IMediaItem> {}
+
 export interface IMediaManagerAPI {
-  toggleMediaSelection(id: string): void
-  toggleGallerySelection(state: boolean): void
-  getSelectedItems(): IMediaItem[]
-  setMediaName(file: string, name: string): void
-  logId(id: string): void
+  state: IMediaGallery
+  dispatch: React.Dispatch<any>
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useReducer, useEffect } from 'react'
 import { Box } from '@material-ui/core'
 
 // @ts-ignore
@@ -10,95 +10,33 @@ import UploadPlaceholderItem from './components/UploadPlaceholderItem'
 import BulkActionsMenu from './components/BulkActionsMenu'
 
 import { useStyles } from './styles'
-import { IMediaItem } from './types'
 import { MediaManagerAPI } from './context'
+import { reducer, initialState } from './reducers'
 import sampleData from './data-sample'
+import { addMedia, setGalleryItems } from './reducers/actions'
 
 interface Props {}
 
 export default function MediaManager(props: Props) {
   const classes = useStyles()
 
-  const [mediaGallery, setMediaGallery] = useState<IMediaItem[]>([])
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {
     const fetchData = async () => {
-      setMediaGallery(sampleData)
+      dispatch(setGalleryItems(sampleData))
     }
 
     fetchData()
   }, [])
 
-  const toggleMediaSelection = (file: string) => {
-    const newState = mediaGallery.map(media => {
-      if (media.file === file) {
-        let selected = media.selected
-
-        return { ...media, selected: !selected }
-      }
-
-      return media
-    })
-
-    return setMediaGallery(newState)
-  }
-
-  const setMediaName = (file: string, name: string) => {
-    const newState = mediaGallery.map(media => {
-      if (media.file === file) {
-        return { ...media, name }
-      }
-
-      return media
-    })
-
-    return setMediaGallery(newState)
-  }
-
-  const toggleGallerySelection = (selected: boolean) => {
-    const newState = mediaGallery.map(media => {
-      return { ...media, selected }
-    })
-
-    return setMediaGallery(newState)
-  }
-
-  const getSelectedItems = () => {
-    return mediaGallery.filter(item => item.selected)
-  }
-  const logId = (file: string) => {
-    console.log(file)
-  }
-  const api = {
-    toggleMediaSelection,
-    getSelectedItems,
-    toggleGallerySelection,
-    setMediaName,
-    logId
-  }
-
-  const onDrop = (files: any[], rejectedFiles: any[]) => {
-    console.log(files)
-
-    const newMedia = files.map((file, index) => {
-      let formattedFile = {
-        file: `${index}`,
-        src: file.preview,
-        name: 'Description',
-        order: 1,
-        selected: false,
-        isNew: true
-      }
-
-      return formattedFile
-    })
-
-    setMediaGallery([...newMedia, ...mediaGallery])
+  const onDrop = (files: [], rejectedFiles: []) => {
+    dispatch(addMedia(files))
   }
 
   return (
     <Uploader onDrop={onDrop} disableClick>
-      <MediaManagerAPI.Provider value={api}>
+          <MediaManagerAPI.Provider value={{ state, dispatch }}>
         <Box
           className={classes.container}
           border={1}
@@ -107,15 +45,15 @@ export default function MediaManager(props: Props) {
           borderColor="#d4d4d4"
           width={1}
         >
-          <Header mediaGallery={mediaGallery} />
+              <Header mediaGallery={state} />
           <Box display="flex" flexWrap="wrap" className={classes.gallery}>
             <UploadPlaceholderItem />
-            {mediaGallery.map(media => (
+                {state.map(media => (
               <MediaItem key={media.file} {...media} />
             ))}
           </Box>
-          {mediaGallery.filter(media => media.selected).length ? (
-            <BulkActionsMenu mediaGallery={mediaGallery} />
+              {state.filter(media => media.selected).length ? (
+                <BulkActionsMenu mediaGallery={state} />
           ) : null}
         </Box>
       </MediaManagerAPI.Provider>

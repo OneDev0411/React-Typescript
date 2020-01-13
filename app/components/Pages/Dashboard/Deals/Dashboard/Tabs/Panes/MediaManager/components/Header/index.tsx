@@ -18,13 +18,12 @@ interface Props {
 export default function Header({ mediaGallery }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
-  const uploadedGalleryItems = mediaGallery.filter(media => !media.isNew)
 
   return (
     <Box display="flex" width={1} className={classes.header}>
       <Box flexGrow={1}>
         <Typography variant="h6" className={classes.bold} display="inline">
-          {uploadedGalleryItems.length} Photos
+          {mediaGallery.length} Photos
         </Typography>{' '}
         <Typography
           variant="h6"

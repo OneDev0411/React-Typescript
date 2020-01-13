@@ -4,14 +4,15 @@ import { Box, Checkbox } from '@material-ui/core'
 import { useStyles } from '../../../styles'
 import { MediaManagerAPI } from '../../../context'
 import { IMediaItem } from '../../../types'
+import { toggleMediaSelection } from '../../../reducers/actions'
 
 export default function SelectCheckbox(props: IMediaItem) {
   const classes = useStyles()
-  const api = useContext(MediaManagerAPI)
+  const { dispatch } = useContext(MediaManagerAPI)
   const { file } = props
 
   const handleChange = () => {
-    api && api.toggleMediaSelection(file)
+    dispatch(toggleMediaSelection(file))
   }
 
   return (

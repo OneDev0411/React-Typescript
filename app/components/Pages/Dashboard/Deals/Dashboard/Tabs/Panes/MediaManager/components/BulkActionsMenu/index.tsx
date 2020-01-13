@@ -1,9 +1,11 @@
 import React, { useContext } from 'react'
 import { Typography, Box, Button, Checkbox, Link } from '@material-ui/core'
+import pluralize from 'pluralize'
 
 import { useStyles } from '../../styles'
 import { MediaManagerAPI } from '../../context'
 import { IMediaItem } from '../../types'
+import { toggleGallerySelection } from '../../reducers/actions'
 
 interface Props {
   mediaGallery: IMediaItem[]
@@ -12,16 +14,15 @@ interface Props {
 export default function BulkActionsMenu({ mediaGallery }: Props) {
   const classes = useStyles()
   const selectedGalleryItems = mediaGallery.filter(media => media.selected)
-  const uploadedGalleryItems = mediaGallery.filter(media => !media.isNew)
-  const api = useContext(MediaManagerAPI)
+  const { dispatch } = useContext(MediaManagerAPI)
 
   const handleSelectAll = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
-    api && api.toggleGallerySelection(true)
+    dispatch(toggleGallerySelection(true))
   }
   const handleSelectNone = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
-    api && api.toggleGallerySelection(false)
+    dispatch(toggleGallerySelection(false))
   }
 
   return (
@@ -36,23 +37,23 @@ export default function BulkActionsMenu({ mediaGallery }: Props) {
         <Checkbox
           color="primary"
           onChange={handleSelectNone}
-          checked={selectedGalleryItems.length === uploadedGalleryItems.length}
+          checked={selectedGalleryItems.length === mediaGallery.length}
           indeterminate={
             selectedGalleryItems.length > 0 &&
-            selectedGalleryItems.length !== uploadedGalleryItems.length
+            selectedGalleryItems.length !== mediaGallery.length
           }
         />
         <Typography display="inline" className={classes.bold}>
           {selectedGalleryItems.length} Photos selected
         </Typography>
 
-        {selectedGalleryItems.length !== uploadedGalleryItems.length && (
+        {selectedGalleryItems.length !== mediaGallery.length && (
           <>
             <Typography display="inline" variant="body2" color="textSecondary">
               &nbsp;&#9679;&nbsp;
             </Typography>
             <Link href="#" onClick={handleSelectAll}>
-              Select all {uploadedGalleryItems.length} photos
+              Select all {mediaGallery.length} photos
             </Link>
           </>
         )}
@@ -68,7 +69,7 @@ export default function BulkActionsMenu({ mediaGallery }: Props) {
           disableElevation
           className={classes.lowerCaseButton}
         >
-          Download {selectedGalleryItems.length} photo(s)
+          Download {pluralize('photo', selectedGalleryItems.length, true)}
         </Button>
         <Button
           variant="outlined"
@@ -76,7 +77,7 @@ export default function BulkActionsMenu({ mediaGallery }: Props) {
           disableElevation
           className={classes.lowerCaseButton}
         >
-          Delete {selectedGalleryItems.length} photo(s)
+          Delete {pluralize('photo', selectedGalleryItems.length, true)}
         </Button>
       </Box>
     </Box>

@@ -14,6 +14,7 @@ import UploadProgessBar from './UploadProgessBar'
 
 import { MediaManagerAPI } from '../../context'
 import { IMediaItem } from '../../types'
+import { setMediaName } from '../../reducers/actions'
 
 export default function MediaItem(props: IMediaItem) {
   const classes = useStyles()
@@ -23,6 +24,7 @@ export default function MediaItem(props: IMediaItem) {
 
   const [uploadPercentage, setUploadPercentage] = useState<number>(0)
   const [fileIsNew, setFileIsNew] = useState<boolean | undefined>(isNew)
+  const { dispatch } = useContext(MediaManagerAPI)
 
   const fakeUpload = (cb: any) => {
     let timerId: any
@@ -59,8 +61,6 @@ export default function MediaItem(props: IMediaItem) {
     }
   }, [editMode, inputRef])
 
-  const api = useContext(MediaManagerAPI)
-
   const handleOnBlur = () => {
     setTimeout(() => {
       setEditMode(false)
@@ -71,7 +71,7 @@ export default function MediaItem(props: IMediaItem) {
     if (inputRef && inputRef.current) {
       const name = inputRef.current.value
 
-      api && api.setMediaName(file, name)
+      dispatch(setMediaName(file, name))
     }
   }
 
