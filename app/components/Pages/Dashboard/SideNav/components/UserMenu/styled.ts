@@ -2,8 +2,6 @@ import styled, { ThemeProps } from 'styled-components'
 
 import { Theme } from '@material-ui/core'
 
-import { grey, primary } from '../../../../../../views/utils/colors'
-import VerticalDotsIcon from '../../../../../../views/components/SvgIcons/VeriticalDots/VerticalDotsIcon'
 import { headerHeight } from '../../variables'
 
 export const SideMenuList = styled.ul`
@@ -24,7 +22,8 @@ export const SideMenuList = styled.ul`
 
     &:hover {
       color: #fff;
-      background-color: ${primary};
+      background-color: ${({ theme }: ThemeProps<Theme>) =>
+        theme.palette.primary.main};
     }
   }
 `
@@ -39,31 +38,12 @@ export const SubTitle = styled.li`
 `
 
 export const SideMenuContainer = styled.div`
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-  background-clip: padding-box;
-
   display: flex;
   flex-direction: column;
-
-  position: absolute;
-  z-index: 1000;
-  left: 1rem;
-  top: 80%;
-  bottom: auto;
-
   width: 250px;
   height: min-content;
   // we set a max height to prevent menu from being clipped when it's longer
   // than viewport height.
   max-height: calc(100vh - ${headerHeight}px);
   overflow: auto;
-  border-radius: 5px;
-  background-color: #fff;
-  border: 1px solid ${grey.A300};
-`
-
-export const DropdownDots = styled(VerticalDotsIcon)`
-  width: 1rem !important;
-  fill: ${grey.A500}!important;
-  margin: 0 -0.11rem;
 `

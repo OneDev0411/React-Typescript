@@ -8,7 +8,7 @@ export interface ScrollableWrapperProps {
   /**
    * defaults to grey
    * */
-  shadowColor?: 'white' | 'grey'
+  shadowColor?: 'white' | 'grey' | string
 }
 
 const colorToRbg: {
