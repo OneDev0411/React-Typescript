@@ -1,15 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+// import { browserHistory } from 'react-router'
 
 import PageHeader from 'components/PageHeader'
 import { Trigger as MenuTrigger } from 'components/SlideMenu'
-import ActionButton from 'components/Button/ActionButton'
+// import ActionButton from 'components/Button/ActionButton'
+import GlobalActionsButton from 'components/GlobalActionsButton'
 
-import ExportDeals from './ExportDeals'
+// import ExportDeals from './ExportDeals'
 
 export const Header = ({
-  user,
+  // user,
   title,
   isSideMenuOpen,
   onMenuTriggerChange
@@ -21,15 +22,16 @@ export const Header = ({
     </PageHeader.Title>
 
     <PageHeader.Menu>
-      <ExportDeals user={user} />
+      {/* <ExportDeals user={user} /> */}
 
-      <ActionButton
+      {/* <ActionButton
         data-test="create-deal-button"
         style={{ marginLeft: '1rem' }}
         onClick={() => browserHistory.push('/dashboard/deals/create')}
       >
         Create New Deal
-      </ActionButton>
+      </ActionButton> */}
+      <GlobalActionsButton />
     </PageHeader.Menu>
   </PageHeader>
 )
