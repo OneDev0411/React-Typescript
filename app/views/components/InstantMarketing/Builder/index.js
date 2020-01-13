@@ -1,5 +1,3 @@
-import { ACL } from 'constants/acl'
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -17,7 +15,7 @@ import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 
-import { getActiveTeam, hasUserAccess, isBackOffice } from 'utils/user-teams'
+import { getActiveTeam, isBackOffice } from 'utils/user-teams'
 
 import nunjucks from '../helpers/nunjucks'
 import { getBrandColors } from '../helpers/get-brand-colors'
@@ -392,9 +390,7 @@ class Builder extends React.Component {
       const attributes = model.get('attributes')
 
       const editable = attributes['rechat-editable']
-      // const draggable = attributes.hasOwnProperty('rechat-draggable')
       const draggable = this.isMjmlTemplate && this.isEmailTemplate
-      // const droppable = attributes.hasOwnProperty('rechat-dropable')
       const droppable = this.isMjmlTemplate && this.isEmailTemplate
 
       const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
@@ -761,8 +757,7 @@ class Builder extends React.Component {
           hideBlocks={
             !this.isMjmlTemplate ||
             this.isOpenHouseMedium ||
-            this.isSocialMedium ||
-            hasUserAccess(this.props.user, ACL.BETA) === false
+            this.isSocialMedium
           }
           className="template-builder"
           style={this.props.containerStyle}
