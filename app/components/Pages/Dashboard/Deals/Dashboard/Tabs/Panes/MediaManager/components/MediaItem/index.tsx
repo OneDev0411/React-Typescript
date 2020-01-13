@@ -14,7 +14,7 @@ import UploadProgessBar from './UploadProgessBar'
 
 import { MediaManagerAPI } from '../../context'
 import { IMediaItem } from '../../types'
-import { setMediaName } from '../../reducers/actions'
+import { setMediaName, setMediaAsUploaded } from '../../context/actions'
 
 export default function MediaItem(props: IMediaItem) {
   const classes = useStyles()
@@ -23,10 +23,10 @@ export default function MediaItem(props: IMediaItem) {
   const { file, src, selected, name, order, isNew } = props
 
   const [uploadPercentage, setUploadPercentage] = useState<number>(0)
-  const [fileIsNew, setFileIsNew] = useState<boolean | undefined>(isNew)
+  const [isUploading, setIsUploading] = useState<boolean>(false)
   const { dispatch } = useContext(MediaManagerAPI)
 
-  const fakeUpload = (cb: any) => {
+  const fakeUpload = (cb: () => void) => {
     let timerId: any
     let percent: any
 
@@ -45,13 +45,14 @@ export default function MediaItem(props: IMediaItem) {
   }
 
   useEffect(() => {
-    if (fileIsNew) {
+    if (isNew && !isUploading) {
       fakeUpload(() => {
-        setFileIsNew(false)
+        setIsUploading(false)
+        dispatch(setMediaAsUploaded(file))
         console.log('Fake upload completed!')
       })
     }
-  }, [fileIsNew])
+  }, [])
 
   const [editMode, setEditMode] = useState<boolean>(false)
 
@@ -80,7 +81,7 @@ export default function MediaItem(props: IMediaItem) {
     setEditMode(false)
   }
 
-  if (fileIsNew) {
+  if (isNew) {
     return (
       <Box
         className={cn(classes.mediaCard, classes.mediaCardUploading)}
@@ -91,7 +92,7 @@ export default function MediaItem(props: IMediaItem) {
           <UploadProgessBar value={uploadPercentage} />
         </Box>
         <Button className={classes.mediaLabel} fullWidth>
-          Uploading in progress...
+          Uploading...
         </Button>
       </Box>
     )

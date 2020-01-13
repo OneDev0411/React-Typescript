@@ -11,9 +11,9 @@ import BulkActionsMenu from './components/BulkActionsMenu'
 
 import { useStyles } from './styles'
 import { MediaManagerAPI } from './context'
-import { reducer, initialState } from './reducers'
+import { reducer, initialState } from './context/reducers'
 import sampleData from './data-sample'
-import { addMedia, setGalleryItems } from './reducers/actions'
+import { addMedia, setGalleryItems } from './context/actions'
 
 interface Props {}
 
@@ -21,6 +21,10 @@ export default function MediaManager(props: Props) {
   const classes = useStyles()
 
   const [state, dispatch] = useReducer(reducer, initialState)
+  const onDrop = (files: [], rejectedFiles: []) => {
+    // TODO: Do something with rejected files. Show some alert maybe?
+    files.map(file => dispatch(addMedia(file)))
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,10 +33,6 @@ export default function MediaManager(props: Props) {
 
     fetchData()
   }, [])
-
-  const onDrop = (files: [], rejectedFiles: []) => {
-    dispatch(addMedia(files))
-  }
 
   return (
     <Uploader onDrop={onDrop} disableClick>

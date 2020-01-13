@@ -5,7 +5,8 @@ import pluralize from 'pluralize'
 import { useStyles } from '../../styles'
 import { MediaManagerAPI } from '../../context'
 import { IMediaItem } from '../../types'
-import { toggleGallerySelection } from '../../reducers/actions'
+import { toggleGallerySelection } from '../../context/actions'
+import { getSelectedMedia } from '../../context/helpers/selectors'
 
 interface Props {
   mediaGallery: IMediaItem[]
@@ -13,7 +14,7 @@ interface Props {
 
 export default function BulkActionsMenu({ mediaGallery }: Props) {
   const classes = useStyles()
-  const selectedGalleryItems = mediaGallery.filter(media => media.selected)
+  const selectedGalleryItems = getSelectedMedia(mediaGallery)
   const { dispatch } = useContext(MediaManagerAPI)
 
   const handleSelectAll = (e: React.MouseEvent<HTMLElement>) => {

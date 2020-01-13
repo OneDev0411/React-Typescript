@@ -4,7 +4,7 @@ import { Box, Checkbox } from '@material-ui/core'
 import { useStyles } from '../../../styles'
 import { MediaManagerAPI } from '../../../context'
 import { IMediaItem } from '../../../types'
-import { toggleMediaSelection } from '../../../reducers/actions'
+import { toggleMediaSelection } from '../../../context/actions'
 
 export default function SelectCheckbox(props: IMediaItem) {
   const classes = useStyles()

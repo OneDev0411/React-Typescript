@@ -10,6 +10,7 @@ import { useIconStyles } from 'views/../styles/use-icon-styles'
 import { useStyles } from '../../styles'
 
 import { IMediaItem } from '../../types'
+import { getUploadedMedia } from '../../context/helpers/selectors'
 
 interface Props {
   mediaGallery: IMediaItem[]
@@ -23,7 +24,7 @@ export default function Header({ mediaGallery }: Props) {
     <Box display="flex" width={1} className={classes.header}>
       <Box flexGrow={1}>
         <Typography variant="h6" className={classes.bold} display="inline">
-          {mediaGallery.length} Photos
+          {getUploadedMedia(mediaGallery).length} Photos
         </Typography>{' '}
         <Typography
           variant="h6"
