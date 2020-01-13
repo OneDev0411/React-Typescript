@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import cn from 'classnames'
 import {
   Tooltip,
   Button,
@@ -44,7 +45,10 @@ export default function ActionsMenu() {
             size="small"
             className={classes.menuButton}
           >
-            <IconDownload fill="#fff" className={iconClasses.medium} />
+            <IconDownload
+              fill="#fff"
+              className={(iconClasses.medium, classes.iconButton)}
+            />
           </Button>
         </Tooltip>
         <Button
@@ -56,7 +60,10 @@ export default function ActionsMenu() {
           aria-haspopup="true"
           onClick={handleClick}
         >
-          <MoreVertIcon fill="#fff" className={iconClasses.medium} />
+          <MoreVertIcon
+            fill="#fff"
+            className={(iconClasses.medium, classes.iconButton)}
+          />
         </Button>
         <Menu
           id="simple-menu"

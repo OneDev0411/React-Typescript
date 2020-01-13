@@ -149,6 +149,9 @@ export const useStyles = makeStyles(
         right: 10,
         opacity: 0
       },
+      iconButton: {
+        padding: 5
+      },
       uploadPlaceholder: {
         position: 'fixed',
         left: 0,
