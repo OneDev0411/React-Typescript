@@ -18,6 +18,12 @@ import { mergeContactsBatch } from 'models/contacts/merge-contacts-batch'
 import LoadingContainer from 'components/LoadingContainer'
 import DuplicateContactsList from 'components/DuplicateContacts/DuplicateContactsList'
 
+import { dismissAllMergeClusters } from 'models/contacts/dismiss-all-merge-clusters'
+
+import { dismissMergeCluster } from 'models/contacts/dismiss-merge-cluster'
+
+import { dismissMergeContact } from 'models/contacts/dismiss-merge-contact'
+
 import { Container } from '../styled'
 
 import Header from './Header'
@@ -90,6 +96,30 @@ export default function Duplicates({
     return clusters.find(item => item.duplicates.id === clusterId)
   }
 
+  const removeCluster = (clusterId: number) => {
+    setClusters(clusters.filter(item => item.duplicates.id !== clusterId))
+  }
+
+  const removeContactFromCluster = (clusterId: number, contactId: UUID) => {
+    setClusters(
+      clusters.map(item => {
+        if (item.duplicates.id === clusterId) {
+          return {
+            ...item,
+            duplicates: {
+              ...item.duplicates,
+              contacts: item.duplicates.contacts.filter(
+                contact => contact.id !== contactId
+              )
+            }
+          }
+        }
+
+        return item
+      })
+    )
+  }
+
   const getClusterMasterContact = (clusterId: number) => {
     const cluster = getCluster(clusterId)
 
@@ -147,6 +177,16 @@ export default function Duplicates({
     )
   }
 
+  const notifyUnsuccessfulDismiss = () => {
+    dispatch(
+      addNotification({
+        status: 'error',
+        message:
+          'Something went wrong while dismissing duplicate contacts. Please try again.'
+      })
+    )
+  }
+
   const handleSetMasterIdClick = (clusterId: number, masterId: UUID) => {
     setClusters(
       clusters.map(item => {
@@ -162,7 +202,10 @@ export default function Duplicates({
     )
   }
 
-  const handleDismissContactClick = (clusterId: number, contactId: UUID) => {
+  const handleDismissContactClick = async (
+    clusterId: number,
+    contactId: UUID
+  ) => {
     const cluster = getCluster(clusterId)
 
     if (!cluster) {
@@ -181,31 +224,33 @@ export default function Duplicates({
       return
     }
 
-    setClusters(
-      clusters.map(item => {
-        if (item.duplicates.id === clusterId) {
-          return {
-            ...item,
-            duplicates: {
-              ...item.duplicates,
-              contacts: item.duplicates.contacts.filter(
-                contact => contact.id !== contactId
-              )
-            }
-          }
-        }
-
-        return item
-      })
-    )
+    try {
+      await dismissMergeContact(clusterId, contactId)
+      removeContactFromCluster(clusterId, contactId)
+    } catch (err) {
+      notifyUnsuccessfulDismiss()
+      console.error(err)
+    }
   }
 
-  const removeCluster = (clusterId: number) => {
-    setClusters(clusters.filter(item => item.duplicates.id !== clusterId))
-  }
+  const handleDismissClusterClick = async (clusterId: number) => {
+    setIsLoading(true)
 
-  const handleDismissClusterClick = (clusterId: number) => {
-    removeCluster(clusterId)
+    try {
+      await dismissMergeCluster(clusterId)
+      removeCluster(clusterId)
+      dispatch(
+        addNotification({
+          status: 'success',
+          message: 'Duplicate contacts list dismissed successfully.'
+        })
+      )
+    } catch (err) {
+      notifyUnsuccessfulDismiss()
+      console.error(err)
+    }
+
+    setIsLoading(false)
   }
 
   const handleMergeClusterClick = async (clusterId: number) => {
@@ -255,6 +300,7 @@ export default function Duplicates({
       })
 
       await mergeContactsBatch(normalizedClusters)
+      setClusters([])
       dispatch(
         addNotification({
           status: 'success',
@@ -273,12 +319,34 @@ export default function Duplicates({
     setIsLoading(false)
   }
 
+  const handleDismissAllClustersClick = async () => {
+    setIsLoading(true)
+
+    try {
+      await dismissAllMergeClusters()
+      dispatch(
+        addNotification({
+          status: 'success',
+          message:
+            'All current duplicate contacts lists will be dismissed. It may take a few minutes.'
+        })
+      )
+      setClusters([])
+    } catch (err) {
+      notifyUnsuccessfulDismiss()
+      console.error(err)
+    }
+
+    setIsLoading(false)
+  }
+
   const renderHeader = () => {
     return (
       <Header
         listsLength={clusters.length}
         isSideMenuOpen={isSideMenuOpen}
         onSideMenuTriggerClick={onSideMenuTriggerClick}
+        onDismissAllClick={handleDismissAllClustersClick}
         onMergeAllClick={handleMergeAllClustersClick}
       />
     )
