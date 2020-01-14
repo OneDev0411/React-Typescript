@@ -5,8 +5,8 @@ import { ThunkDispatch } from 'redux-thunk'
 import { Helmet } from 'react-helmet'
 import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
-import _ from 'lodash'
 import { addNotification as notify } from 'reapop'
+import groupBy from 'lodash/groupBy'
 
 import { IAppState } from 'reducers'
 import createNewContext from 'models/Deal/context/create-context'
@@ -23,7 +23,7 @@ import NewCategoryModal from '../components/NewCategory'
 
 interface Props {
   brandId: UUID
-  list: Array<{ section: string; items: Array<IDealBrandContext> }>
+  list: { [key: string]: Array<IDealBrandContext> }
   getContextsByBrand: IAsyncActionProp<typeof getContextsByBrand>
   notify: IAsyncActionProp<typeof notify>
 }
@@ -34,7 +34,8 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
   }, [getContextsByBrand, brandId])
 
   const theme = useTheme<Theme>()
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [selectedSection, setSelectedSection] = useState<string | null>(null)
   const [
     selectedContext,
     setSelectedContext
@@ -101,16 +102,21 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
       return <LoadingContainer style={{ padding: '30vh 0 0' }} />
     }
 
-    return list.map(({ section, items }) => (
-      <CategoryItem
-        key={section}
-        title={section}
-        items={items}
-        setIsModalOpen={setIsModalOpen}
-        setSelectedContext={setSelectedContext}
-        onDelete={deleteContextHandler}
-      />
-    ))
+    return Object.keys(list)
+      .sort()
+      .map(key => (
+        <CategoryItem
+          key={key}
+          title={key}
+          items={list[key]}
+          setIsModalOpen={() => {
+            setSelectedSection(key)
+            setIsModalOpen(true)
+          }}
+          setSelectedContext={setSelectedContext}
+          onDelete={deleteContextHandler}
+        />
+      ))
   }
 
   return (
@@ -126,10 +132,12 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
       </PageHeader>
       <NewCategoryModal
         isOpen={isModalOpen}
+        section={selectedSection}
         context={selectedContext}
         onClose={() => {
           setIsModalOpen(false)
           setSelectedContext(null)
+          setSelectedSection(null)
         }}
         onSubmit={contextFormHandler}
       />
@@ -143,13 +151,7 @@ const mapStateToProps = ({ deals, user }: IAppState) => {
 
   return {
     brandId,
-    list: _.chain(selectContextsByBrand(deals.contexts, brandId))
-      .groupBy('section')
-      .map((value, key) => ({
-        section: key !== 'null' ? key : 'Unorganized',
-        items: value
-      }))
-      .value()
+    list: groupBy(selectContextsByBrand(deals.contexts, brandId), 'section')
   }
 }
 

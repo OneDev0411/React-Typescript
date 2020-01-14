@@ -46,9 +46,9 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Props {
-  title: String
+  title: string | null
   items: Array<IDealBrandContext>
-  setIsModalOpen: (state: boolean) => void
+  setIsModalOpen: () => void
   setSelectedContext: (context: IDealBrandContext) => void
   onDelete: (contextId: UUID) => void
 }
@@ -67,13 +67,15 @@ function CategoryItem({
       <Box className={classes.root}>
         <Grid container justify="space-between" alignItems="center">
           <Grid item xs={12} sm={6} className={classes.tleft}>
-            <Box fontWeight="fontWeightBold">{title}</Box>
+            <Box fontWeight="fontWeightBold">
+              {title !== 'null' ? title : 'Unorganized'}
+            </Box>
           </Grid>
           <Grid item xs={12} sm={6} className={classes.tright}>
             <Button
               variant="outlined"
               size="small"
-              onClick={e => setIsModalOpen(true)}
+              onClick={e => setIsModalOpen()}
             >
               <Box fontWeight="fontWeightBold">Add New Context</Box>
             </Button>
@@ -87,7 +89,7 @@ function CategoryItem({
             name={c.label}
             context={c}
             onSelect={() => {
-              setIsModalOpen(true)
+              setIsModalOpen()
               setSelectedContext(c)
             }}
             onDelete={() => onDelete(c.id)}

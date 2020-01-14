@@ -14,11 +14,22 @@ interface Props {
   onClose: () => void
   onSubmit: (contextData: IDealBrandContext, contextId?: UUID) => Promise<any>
   context: IDealBrandContext | null
+  section: string | null
 }
 
-function NewContextModal({ isOpen, onClose, onSubmit, context }: Props) {
+function NewContextModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  context,
+  section
+}: Props) {
   const classes = useStyles()
-  const baseInitialValues: object = { data_type: 'Text', default_value: 0 }
+  const baseInitialValues: object = {
+    data_type: 'Text',
+    default_value: 0,
+    section: section !== 'null' ? section : null
+  }
   const initialValues: object = context
     ? { ...baseInitialValues, ...context }
     : baseInitialValues
