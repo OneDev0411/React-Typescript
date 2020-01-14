@@ -1,14 +1,21 @@
 import React, { useState } from 'react'
-import { Button } from '@material-ui/core'
+import { Button, makeStyles, Theme } from '@material-ui/core'
 import pluralize from 'pluralize'
 
 import PageHeader from 'components/PageHeader'
 import { Trigger as MenuTrigger } from 'components/SlideMenu'
 
+const useStyles = makeStyles((theme: Theme) => ({
+  dismissAllButton: {
+    margin: theme.spacing(0, 1)
+  }
+}))
+
 interface Props {
   listsLength: number
   isSideMenuOpen: boolean
   onSideMenuTriggerClick: () => void
+  onDismissAllClick: () => Promise<void>
   onMergeAllClick: () => Promise<void>
 }
 
@@ -16,9 +23,20 @@ export default function Header({
   listsLength,
   isSideMenuOpen,
   onSideMenuTriggerClick,
+  onDismissAllClick,
   onMergeAllClick
 }: Props) {
+  const classes = useStyles()
   const [isMerging, setIsMerging] = useState(false)
+  const [isDismissing, setIsDismissing] = useState(false)
+
+  const getDismissAllButtonCopy = () => {
+    if (isDismissing) {
+      return 'Dismissing'
+    }
+
+    return 'Dismiss All'
+  }
 
   const getMergeAllButtonCopy = () => {
     const possiblePluralizedList = pluralize('contacts list', listsLength, true)
@@ -28,6 +46,14 @@ export default function Header({
     }
 
     return `Merge ${possiblePluralizedList}`
+  }
+
+  const handleDismissAll = async () => {
+    setIsDismissing(true)
+
+    await onDismissAllClick()
+
+    setIsDismissing(false)
   }
 
   const handleMergeAll = async () => {
@@ -47,9 +73,18 @@ export default function Header({
       {listsLength > 0 && (
         <PageHeader.Menu>
           <Button
+            variant="text"
+            color="primary"
+            disabled={isMerging || isDismissing}
+            onClick={handleDismissAll}
+            className={classes.dismissAllButton}
+          >
+            {getDismissAllButtonCopy()}
+          </Button>
+          <Button
             variant="contained"
             color="primary"
-            disabled={isMerging}
+            disabled={isMerging || isDismissing}
             onClick={handleMergeAll}
           >
             {getMergeAllButtonCopy()}
