@@ -124,6 +124,16 @@ export default function UserTeams({
     setIsSaving(false)
   }
 
+  const handleToggleSelectAll = useCallback(() => {
+    if (selectedBrands.length === brandsWithMembers.length) {
+      setSelectedBrands([])
+
+      return
+    }
+
+    setSelectedBrands(brandsWithMembers.map(item => item.brand.id))
+  }, [brandsWithMembers, selectedBrands.length])
+
   const handleSelectChange = useCallback(
     (brand: IBrand) => {
       if (selectedBrands.includes(brand.id)) {
@@ -149,6 +159,14 @@ export default function UserTeams({
     return `Save for ${pluralize('team', selectedBrands.length, true)}`
   }, [isSaving, selectedBrands.length])
 
+  const getToggleSelectAllButtonCopy = useCallback(() => {
+    if (selectedBrands.length === brandsWithMembers.length) {
+      return 'Deselect all'
+    }
+
+    return `Select all ${pluralize('team', brandsWithMembers.length, true)}`
+  }, [brandsWithMembers.length, selectedBrands.length])
+
   return (
     <SearchContext.Provider value={searchQuery}>
       <Drawer open onClose={onClose}>
@@ -169,7 +187,15 @@ export default function UserTeams({
             )
           })}
         </Drawer.Body>
-        <Drawer.Footer style={{ flexDirection: 'row-reverse' }}>
+        <Drawer.Footer>
+          <Button
+            variant="text"
+            color="primary"
+            disabled={isSaving}
+            onClick={handleToggleSelectAll}
+          >
+            {getToggleSelectAllButtonCopy()}
+          </Button>
           <Button
             variant="contained"
             color="primary"
