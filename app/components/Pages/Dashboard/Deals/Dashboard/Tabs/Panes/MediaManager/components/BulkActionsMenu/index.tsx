@@ -4,12 +4,15 @@ import pluralize from 'pluralize'
 
 import { useStyles } from '../../styles'
 import { MediaManagerAPI } from '../../context'
-import { IMediaItem } from '../../types'
-import { toggleGallerySelection } from '../../context/actions'
-import { getSelectedMedia } from '../../context/helpers/selectors'
+import { IMediaGallery } from '../../types'
+import { toggleGallerySelection, deleteMedias } from '../../context/actions'
+import {
+  getSelectedMedia,
+  getSelectedMediaIds
+} from '../../context/helpers/selectors'
 
 interface Props {
-  mediaGallery: IMediaItem[]
+  mediaGallery: IMediaGallery
 }
 
 export default function BulkActionsMenu({ mediaGallery }: Props) {
@@ -24,6 +27,14 @@ export default function BulkActionsMenu({ mediaGallery }: Props) {
   const handleSelectNone = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     dispatch(toggleGallerySelection(false))
+  }
+
+  const handleDeleteAll = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault()
+    let confirm = window.confirm('This action can not be undone. Are you sure?')
+    if (confirm) {
+      dispatch(deleteMedias(getSelectedMediaIds(selectedGalleryItems)))
+    }
   }
 
   return (
@@ -77,6 +88,7 @@ export default function BulkActionsMenu({ mediaGallery }: Props) {
           color="secondary"
           disableElevation
           className={classes.lowerCaseButton}
+          onClick={handleDeleteAll}
         >
           Delete {pluralize('photo', selectedGalleryItems.length, true)}
         </Button>

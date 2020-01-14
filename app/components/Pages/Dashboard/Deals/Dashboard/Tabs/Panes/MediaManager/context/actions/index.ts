@@ -43,3 +43,17 @@ export const setMediaAsUploaded = (file: string) => ({
     file
   }
 })
+
+export const deleteMedia = (file: string) => ({
+  type: actionTypes.DELETE_MEDIA,
+  payload: {
+    file
+  }
+})
+
+export const deleteMedias = (files: string[]) => ({
+  type: actionTypes.DELETE_MEDIAS,
+  payload: {
+    files
+  }
+})

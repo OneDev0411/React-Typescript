@@ -98,6 +98,26 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
       return newState
     }
 
+    case actionTypes.DELETE_MEDIA: {
+      const { file } = action.payload
+
+      const newState = state.filter(media => {
+        return media.file !== file
+      })
+
+      return newState
+    }
+
+    case actionTypes.DELETE_MEDIAS: {
+      const { files } = action.payload
+
+      const newState = state.filter(media => {
+        return files.indexOf(media.file) === -1
+      })
+
+      return newState
+    }
+
     default:
       return state
   }

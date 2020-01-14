@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import cn from 'classnames'
+import React, { useState, useContext } from 'react'
 import {
   Tooltip,
   Button,
@@ -15,11 +14,17 @@ import IconDownload from 'components/SvgIcons/Download/IconDownload'
 import { useStyles } from '../../../styles'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
-export default function ActionsMenu() {
+import { MediaManagerAPI } from '../../../context'
+import { IMediaItem } from '../../../types'
+import { deleteMedia } from '../../../context/actions'
+
+export default function ActionsMenu(props: IMediaItem) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
   const [anchorEl, setAnchorEl] = useState(null)
+  const { dispatch } = useContext(MediaManagerAPI)
+  const { file } = props
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget)
@@ -27,6 +32,16 @@ export default function ActionsMenu() {
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleDelete = () => {
+    let confirm = window.confirm('This action can not be undone. Are you sure?')
+    if (confirm) {
+      dispatch(deleteMedia(file))
+      handleClose()
+    } else {
+      handleClose()
+    }
   }
 
   return (
@@ -73,7 +88,7 @@ export default function ActionsMenu() {
           onClose={handleClose}
         >
           <MenuItem onClick={handleClose}>Crop</MenuItem>
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={handleDelete}>
             <Typography color="error">Delete</Typography>
           </MenuItem>
         </Menu>

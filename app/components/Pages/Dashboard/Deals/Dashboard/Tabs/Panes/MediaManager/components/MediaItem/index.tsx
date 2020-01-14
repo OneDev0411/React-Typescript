@@ -103,7 +103,7 @@ export default function MediaItem(props: IMediaItem) {
       <Box className={classes.mediaThumbnailContainer}>
         <img src={src} className={classes.mediaThumbnail} alt="" />
         <SelectCheckbox {...props} />
-        <ActionsMenu />
+        <ActionsMenu {...props} />
       </Box>
 
       {!editMode && (

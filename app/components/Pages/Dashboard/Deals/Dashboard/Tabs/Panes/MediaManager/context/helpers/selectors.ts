@@ -11,3 +11,7 @@ export const getSelectedMedia = (
 ): IMediaGallery => {
   return mediaGallery.filter(media => media.selected)
 }
+
+export const getSelectedMediaIds = (mediaGallery: IMediaGallery): string[] => {
+  return mediaGallery.map(media => media.file)
+}
