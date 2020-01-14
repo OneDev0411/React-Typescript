@@ -56,12 +56,13 @@ export const getPredefinedContactLists = (
         )
       )
     }
+  }
 
-    predefinedLists.duplicates = {
-      id: DUPLICATE_CONTACTS_LIST_ID,
-      name: 'Duplicates',
-      is_editable: false
-    }
+  predefinedLists.duplicates = {
+    id: DUPLICATE_CONTACTS_LIST_ID,
+    name: 'Duplicates',
+    is_editable: false,
+    filters: []
   }
 
   return predefinedLists
