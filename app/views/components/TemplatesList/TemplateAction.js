@@ -25,6 +25,7 @@ const GENERAL_FLOW_TYPES = [
   'Brand',
   'NewAgent',
   'Newsletter',
+  'Layout',
   HOLIDAY_TYPES.join(','),
   ...HOLIDAY_TYPES
 ]
