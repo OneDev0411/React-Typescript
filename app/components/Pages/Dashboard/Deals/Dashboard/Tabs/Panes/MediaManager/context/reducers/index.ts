@@ -77,7 +77,7 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
           file: file.name,
           src: file.preview,
           name: 'Description',
-          order: 1,
+          order: 0,
           selected: false,
           isNew: true,
           uploadProgress: 0

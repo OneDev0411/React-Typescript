@@ -85,7 +85,7 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
             ))}
           </Box>
           {state.filter(media => media.selected).length ? (
-            <BulkActionsMenu mediaGallery={state} />
+            <BulkActionsMenu mediaGallery={state} deal={deal} />
           ) : null}
         </Box>
       </MediaManagerAPI.Provider>

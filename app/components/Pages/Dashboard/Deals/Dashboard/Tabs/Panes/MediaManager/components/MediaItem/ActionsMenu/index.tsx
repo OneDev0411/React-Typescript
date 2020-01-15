@@ -8,7 +8,7 @@ import {
   MenuItem
 } from '@material-ui/core'
 
-import { deleteMedia } from 'models/media-manager'
+import { deleteMedias } from 'models/media-manager'
 
 import MoreVertIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
 import IconDownload from 'components/SvgIcons/Download/IconDownload'
@@ -47,7 +47,7 @@ export default function ActionsMenu({
     let confirm = window.confirm('This action can not be undone. Are you sure?')
 
     if (confirm) {
-      deleteMedia(deal.id, media)
+      deleteMedias(deal.id, [file])
       dispatch(deleteMediaAction(file))
       handleClose()
     } else {

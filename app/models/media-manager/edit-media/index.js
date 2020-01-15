@@ -1,10 +1,10 @@
 import Fetch from '../../../services/fetch'
 
-export async function editMedia(dealId, mediaId) {
+export async function editMedia(dealId, mediaId, name) {
   try {
-    const response = await new Fetch().put(
-      `/deals/${dealId}/gallery/items/${mediaId}`
-    )
+    const response = await new Fetch()
+      .put(`/deals/${dealId}/gallery/items/${mediaId}`)
+      .send({ name })
 
     console.log(response)
     // const files = response.body

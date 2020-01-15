@@ -2,13 +2,13 @@ export interface IMediaItem {
   file: string
   src: string
   name: string
-  selected: boolean
   order: number
+  selected?: boolean
   uploadProgress?: number | undefined
   isNew?: boolean
 }
 
-export interface IMediaGallery extends Array<IMediaItem> {}
+export type IMediaGallery = IMediaItem[]
 
 export interface IMediaManagerAPI {
   state: IMediaGallery

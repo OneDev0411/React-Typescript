@@ -2,10 +2,15 @@ import React, { useContext } from 'react'
 import { Typography, Box, Button, Checkbox, Link } from '@material-ui/core'
 import pluralize from 'pluralize'
 
+import { deleteMedias } from 'models/media-manager'
+
 import { useStyles } from '../../styles'
 import { MediaManagerAPI } from '../../context'
 import { IMediaGallery } from '../../types'
-import { toggleGallerySelection, deleteMedias } from '../../context/actions'
+import {
+  toggleGallerySelection,
+  deleteMedias as deleteMediasAction
+} from '../../context/actions'
 import {
   getSelectedMedia,
   getSelectedMediaIds
@@ -13,9 +18,10 @@ import {
 
 interface Props {
   mediaGallery: IMediaGallery
+  deal: IDeal
 }
 
-export default function BulkActionsMenu({ mediaGallery }: Props) {
+export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
   const classes = useStyles()
   const selectedGalleryItems = getSelectedMedia(mediaGallery)
   const { dispatch } = useContext(MediaManagerAPI)
@@ -35,7 +41,8 @@ export default function BulkActionsMenu({ mediaGallery }: Props) {
     let confirm = window.confirm('This action can not be undone. Are you sure?')
 
     if (confirm) {
-      dispatch(deleteMedias(getSelectedMediaIds(selectedGalleryItems)))
+      deleteMedias(deal.id, getSelectedMediaIds(selectedGalleryItems))
+      dispatch(deleteMediasAction(getSelectedMediaIds(selectedGalleryItems)))
     }
   }
 
