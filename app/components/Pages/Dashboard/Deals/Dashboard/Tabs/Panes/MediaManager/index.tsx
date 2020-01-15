@@ -1,8 +1,8 @@
-import React, { useReducer, useEffect } from 'react'
+import React from 'react'
 import { Box } from '@material-ui/core'
 
 // @ts-ignore
-import Model from 'models/media-manager'
+import { uploadMedia } from 'models/media-manager'
 
 import Uploader from './components/MediaUploader'
 
@@ -13,11 +13,10 @@ import BulkActionsMenu from './components/BulkActionsMenu'
 
 import { useStyles } from './styles'
 import { MediaManagerAPI } from './context'
-import { reducer, initialState } from './context/reducers'
-import sampleData from './data-sample'
+import useFetchGallery from './hooks/useFetchGallery'
+
 import {
   addMedia,
-  setGalleryItems,
   setMediaUploadProgress,
   setMediaAsUploaded,
   setNewlyUploadedMediaFields
@@ -30,10 +29,14 @@ interface Props {
 export default function MediaManager({ deal }: Props) {
   const classes = useStyles()
 
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const { isLoading, state, dispatch } = useFetchGallery(deal.id)
+
+  if (isLoading) {
+    return 'loading...'
+  }
 
   const upload = async fileObject => {
-    const response = await Model.uploadFile(
+    const response = await uploadMedia(
       deal.id,
       fileObject,
       '',
@@ -48,7 +51,11 @@ export default function MediaManager({ deal }: Props) {
       }
     )
 
-    const { id: file, preview_url: src, name } = response.body.data
+    const uploadedFileObject = response.body.references.file
+
+    // I know this is ugly! That's the format of data returned from server!
+    const fileKey = Object.keys(uploadedFileObject)[0]
+    const { id: file, preview_url: src, name } = uploadedFileObject[fileKey]
 
     dispatch(setNewlyUploadedMediaFields(fileObject.name, file, src, name))
   }
@@ -62,14 +69,6 @@ export default function MediaManager({ deal }: Props) {
       upload(file)
     })
   }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      dispatch(setGalleryItems(sampleData))
-    }
-
-    fetchData()
-  }, [])
 
   return (
     <Uploader onDrop={onDrop} disableClick>

@@ -1,6 +1,6 @@
 import Fetch from '../../../services/fetch'
 
-export async function uploadFile(
+export async function uploadMedia(
   dealId,
   file,
   fileName = null,
@@ -10,7 +10,7 @@ export async function uploadFile(
     return await new Fetch({
       progress: uploadProgressCallback
     })
-      .upload(`/deals/${dealId}/gallery/attach`)
+      .upload(`/deals/${dealId}/gallery/items`)
       .attach('file', file, fileName)
   } catch (e) {
     return null

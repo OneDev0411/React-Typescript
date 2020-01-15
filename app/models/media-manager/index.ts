@@ -1,5 +1,2 @@
-import * as upload from './upload-media'
-
-export default {
-  ...upload
-}
+export * from './upload-media'
+export * from './get-media-gallery'

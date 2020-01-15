@@ -86,7 +86,7 @@ export const useStyles = makeStyles(
         alignItems: 'center',
         border: '1px dashed #D4D4D4',
         background: '#FAFAFA',
-        maxHeight: 250,
+        height: 250,
         width: 270,
         margin: theme.spacing(1),
         marginBottom: theme.spacing(2),
