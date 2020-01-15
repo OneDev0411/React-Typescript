@@ -22,11 +22,7 @@ import {
   setNewlyUploadedMediaFields
 } from './context/actions'
 
-interface Props {
-  deal: IDeal
-}
-
-export default function MediaManager({ deal }: Props) {
+export default function MediaManager({ deal }: { deal: IDeal }) {
   const classes = useStyles()
 
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
@@ -85,7 +81,7 @@ export default function MediaManager({ deal }: Props) {
           <Box display="flex" flexWrap="wrap" className={classes.gallery}>
             <UploadPlaceholderItem />
             {state.map(media => (
-              <MediaItem key={media.file} {...media} />
+              <MediaItem key={media.file} media={media} deal={deal} />
             ))}
           </Box>
           {state.filter(media => media.selected).length ? (

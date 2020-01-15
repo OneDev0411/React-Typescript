@@ -6,10 +6,10 @@ import { MediaManagerAPI } from '../../../context'
 import { IMediaItem } from '../../../types'
 import { toggleMediaSelection } from '../../../context/actions'
 
-export default function SelectCheckbox(props: IMediaItem) {
+export default function SelectCheckbox({ media }: { media: IMediaItem }) {
   const classes = useStyles()
   const { dispatch } = useContext(MediaManagerAPI)
-  const { file } = props
+  const { file, selected } = media
 
   const handleChange = () => {
     dispatch(toggleMediaSelection(file))
@@ -20,7 +20,7 @@ export default function SelectCheckbox(props: IMediaItem) {
       <Checkbox
         color="primary"
         inputProps={{ 'aria-label': 'checkbox with default color' }}
-        checked={props.selected ? true : false}
+        checked={!!selected}
         onChange={handleChange}
       />
     </Box>

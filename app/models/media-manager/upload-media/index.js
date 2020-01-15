@@ -7,11 +7,16 @@ export async function uploadMedia(
   uploadProgressCallback
 ) {
   try {
-    return await new Fetch({
-      progress: uploadProgressCallback
+    const result = await new Fetch({
+      progress: uploadProgressCallback,
+      useReferencedFormat: true
     })
       .upload(`/deals/${dealId}/gallery/items`)
       .attach('file', file, fileName)
+
+    console.log(result)
+
+    return result
   } catch (e) {
     return null
   }

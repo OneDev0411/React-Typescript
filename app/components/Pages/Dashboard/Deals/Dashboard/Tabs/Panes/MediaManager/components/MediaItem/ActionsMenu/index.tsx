@@ -8,23 +8,32 @@ import {
   MenuItem
 } from '@material-ui/core'
 
+import { deleteMedia } from 'models/media-manager'
+
 import MoreVertIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
 import IconDownload from 'components/SvgIcons/Download/IconDownload'
 
-import { useStyles } from '../../../styles'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
+
+import { useStyles } from '../../../styles'
 
 import { MediaManagerAPI } from '../../../context'
 import { IMediaItem } from '../../../types'
-import { deleteMedia } from '../../../context/actions'
+import { deleteMedia as deleteMediaAction } from '../../../context/actions'
 
-export default function ActionsMenu(props: IMediaItem) {
+export default function ActionsMenu({
+  media,
+  deal
+}: {
+  media: IMediaItem
+  deal: IDeal
+}) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
   const [anchorEl, setAnchorEl] = useState(null)
   const { dispatch } = useContext(MediaManagerAPI)
-  const { file } = props
+  const { file } = media
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget)
@@ -36,8 +45,10 @@ export default function ActionsMenu(props: IMediaItem) {
 
   const handleDelete = () => {
     let confirm = window.confirm('This action can not be undone. Are you sure?')
+
     if (confirm) {
-      dispatch(deleteMedia(file))
+      deleteMedia(deal.id, media)
+      dispatch(deleteMediaAction(file))
       handleClose()
     } else {
       handleClose()

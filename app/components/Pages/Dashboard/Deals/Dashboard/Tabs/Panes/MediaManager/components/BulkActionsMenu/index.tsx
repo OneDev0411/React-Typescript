@@ -31,7 +31,9 @@ export default function BulkActionsMenu({ mediaGallery }: Props) {
 
   const handleDeleteAll = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
+
     let confirm = window.confirm('This action can not be undone. Are you sure?')
+
     if (confirm) {
       dispatch(deleteMedias(getSelectedMediaIds(selectedGalleryItems)))
     }

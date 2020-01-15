@@ -36,6 +36,7 @@ export default function useFetchData(dealId: string) {
 
       const results = await getMediaGallery(dealId)
 
+      // @ts-ignore
       dispatch(setGalleryItems(results))
       setIsLoading(false)
 

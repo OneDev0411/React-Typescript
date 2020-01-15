@@ -7,6 +7,8 @@ import IconCircleClose from 'components/SvgIcons/CircleClose/IconCircleClose'
 import IconEdit from 'components/SvgIcons/Edit/EditIcon'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
+import { editMedia } from 'models/media-manager'
+
 import { useStyles } from '../../styles'
 import ActionsMenu from './ActionsMenu'
 import SelectCheckbox from './SelectCheckbox'
@@ -16,11 +18,18 @@ import { MediaManagerAPI } from '../../context'
 import { IMediaItem } from '../../types'
 import { setMediaName } from '../../context/actions'
 
-export default function MediaItem(props: IMediaItem) {
+export default function MediaItem({
+  media,
+  deal
+}: {
+  media: IMediaItem
+  deal: IDeal
+}) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const inputRef = useRef<HTMLInputElement>(null)
-  const { file, src, selected, name, order, isNew, uploadProgress } = props
+
+  const { file, src, selected, name, order, isNew, uploadProgress } = media
 
   const { dispatch } = useContext(MediaManagerAPI)
 
@@ -42,6 +51,7 @@ export default function MediaItem(props: IMediaItem) {
     if (inputRef && inputRef.current) {
       const name = inputRef.current.value
 
+      editMedia(deal.id, file)
       dispatch(setMediaName(file, name))
     }
   }
@@ -72,8 +82,8 @@ export default function MediaItem(props: IMediaItem) {
     <Box className={cn(classes.mediaCard, { selected })} order={order}>
       <Box className={classes.mediaThumbnailContainer}>
         <img src={src} className={classes.mediaThumbnail} alt="" />
-        <SelectCheckbox {...props} />
-        <ActionsMenu {...props} />
+        <SelectCheckbox media={media} />
+        <ActionsMenu media={media} deal={deal} />
       </Box>
 
       {!editMode && (

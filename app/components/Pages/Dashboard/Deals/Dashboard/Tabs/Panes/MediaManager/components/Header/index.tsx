@@ -9,11 +9,11 @@ import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import { useStyles } from '../../styles'
 
-import { IMediaItem } from '../../types'
+import { IMediaGallery } from '../../types'
 import { getUploadedMedia } from '../../context/helpers/selectors'
 
 interface Props {
-  mediaGallery: IMediaItem[]
+  mediaGallery: IMediaGallery
 }
 
 export default function Header({ mediaGallery }: Props) {
