@@ -4,7 +4,7 @@ import { Box, LinearProgress } from '@material-ui/core'
 import { useStyles } from '../../../styles'
 
 interface Props {
-  value: number
+  value: number | undefined
 }
 
 export default function UploadProgessBar({ value }: Props) {

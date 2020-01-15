@@ -7,7 +7,7 @@ export const useStyles = makeStyles(
         position: 'relative'
       },
       header: {
-        padding: `${theme.spacing(4)}px ${theme.spacing(3)}px`,
+        padding: theme.spacing(4, 3),
         position: 'sticky',
         top: 0,
         left: 0,
@@ -16,11 +16,11 @@ export const useStyles = makeStyles(
         borderBottom: '1px solid #ccc'
       },
       gallery: {
-        padding: `${theme.spacing(4)}px ${theme.spacing(3)}px`,
+        padding: theme.spacing(4, 3),
         justifyContent: 'flex-start'
       },
       mediaCard: {
-        maxWidth: 287,
+        width: 287,
         padding: theme.spacing(1),
         marginBottom: theme.spacing(2),
         borderRadius: 4,

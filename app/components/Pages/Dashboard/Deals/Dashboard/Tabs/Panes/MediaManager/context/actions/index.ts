@@ -57,3 +57,26 @@ export const deleteMedias = (files: string[]) => ({
     files
   }
 })
+
+export const setMediaUploadProgress = (file: string, progress: number) => ({
+  type: actionTypes.SET_MEDIA_UPLOAD_PROGRESS,
+  payload: {
+    file,
+    progress
+  }
+})
+
+export const setNewlyUploadedMediaFields = (
+  file: string,
+  newId: string,
+  src: string,
+  name: string
+) => ({
+  type: actionTypes.SET_NEWLY_UPLOADED_MEDIA_FIELDS,
+  payload: {
+    file,
+    newId,
+    src,
+    name
+  }
+})

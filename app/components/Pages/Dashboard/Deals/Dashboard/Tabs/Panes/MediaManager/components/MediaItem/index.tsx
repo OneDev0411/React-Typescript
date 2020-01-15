@@ -14,45 +14,15 @@ import UploadProgessBar from './UploadProgessBar'
 
 import { MediaManagerAPI } from '../../context'
 import { IMediaItem } from '../../types'
-import { setMediaName, setMediaAsUploaded } from '../../context/actions'
+import { setMediaName } from '../../context/actions'
 
 export default function MediaItem(props: IMediaItem) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const inputRef = useRef<HTMLInputElement>(null)
-  const { file, src, selected, name, order, isNew } = props
+  const { file, src, selected, name, order, isNew, uploadProgress } = props
 
-  const [uploadPercentage, setUploadPercentage] = useState<number>(0)
-  const [isUploading, setIsUploading] = useState<boolean>(false)
   const { dispatch } = useContext(MediaManagerAPI)
-
-  const fakeUpload = (cb: () => void) => {
-    let timerId: any
-    let percent: any
-
-    percent = 0
-    timerId = setInterval(function fakeUploader() {
-      percent += 5
-      setUploadPercentage(percent)
-
-      // complete
-      if (percent >= 100) {
-        clearInterval(timerId)
-
-        return cb()
-      }
-    }, 100)
-  }
-
-  useEffect(() => {
-    if (isNew && !isUploading) {
-      fakeUpload(() => {
-        setIsUploading(false)
-        dispatch(setMediaAsUploaded(file))
-        console.log('Fake upload completed!')
-      })
-    }
-  }, [])
 
   const [editMode, setEditMode] = useState<boolean>(false)
 
@@ -89,7 +59,7 @@ export default function MediaItem(props: IMediaItem) {
       >
         <Box className={classes.mediaThumbnailContainer}>
           <img src={src} className={classes.mediaThumbnail} alt="" />
-          <UploadProgessBar value={uploadPercentage} />
+          <UploadProgessBar value={uploadProgress} />
         </Box>
         <Button className={classes.mediaLabel} fullWidth>
           Uploading...

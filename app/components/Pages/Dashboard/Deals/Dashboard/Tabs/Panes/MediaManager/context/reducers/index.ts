@@ -25,6 +25,7 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
   switch (action.type) {
     case actionTypes.SET_GALLERY_ITEMS: {
       const { gallery } = action.payload
+
       return gallery
     }
 
@@ -78,7 +79,8 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
           name: 'Description',
           order: 1,
           selected: false,
-          isNew: true
+          isNew: true,
+          uploadProgress: 0
         },
         ...state
       ]
@@ -113,6 +115,34 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
 
       const newState = state.filter(media => {
         return files.indexOf(media.file) === -1
+      })
+
+      return newState
+    }
+
+    case actionTypes.SET_MEDIA_UPLOAD_PROGRESS: {
+      const { file, progress } = action.payload
+
+      const newState = state.map(media => {
+        if (media.file === file) {
+          return { ...media, uploadProgress: progress }
+        }
+
+        return media
+      })
+
+      return newState
+    }
+
+    case actionTypes.SET_NEWLY_UPLOADED_MEDIA_FIELDS: {
+      const { file, newId, src, name } = action.payload
+
+      const newState = state.map(media => {
+        if (media.file === file) {
+          return { ...media, file: newId, src, name }
+        }
+
+        return media
       })
 
       return newState

@@ -4,6 +4,7 @@ export interface IMediaItem {
   name: string
   selected: boolean
   order: number
+  uploadProgress?: number | undefined
   isNew?: boolean
 }
 
