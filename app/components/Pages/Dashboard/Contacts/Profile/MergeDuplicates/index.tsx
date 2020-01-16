@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import { Button } from '@material-ui/core'
 import { addNotification } from 'reapop'
@@ -6,9 +6,12 @@ import pluralize from 'pluralize'
 
 import { getContactDuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts'
 import { mergeContact } from 'models/contacts/merge-contact'
+import { DuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts/types'
+import { dismissMergeContact } from 'models/contacts/dismiss-merge-contact'
 
 import { Callout } from 'components/Callout'
 import DuplicateContactsDrawer from 'components/DuplicateContacts/DuplicateContactsDrawer'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { CallOutContentContainer } from './styled'
 
@@ -19,21 +22,25 @@ interface Props {
 
 export default function MergeDuplicates({ contact, mergeCallback }: Props) {
   const dispatch = useDispatch()
+  const confirmation = useContext(ConfirmationModalContext)
   const [isOpen, setIsOpen] = useState(true)
   const [masterId, setMasterId] = useState(contact.id)
   const [isContactsListDrawerOpen, setIsContactsListDrawerOpen] = useState(
     false
   )
-  const [duplicateContacts, setDuplicateContacts] = useState<IContact[]>([])
+  const [
+    duplicateContacts,
+    setDuplicateContacts
+  ] = useState<DuplicateContacts | null>(null)
 
   const fetchDuplicates = useCallback(async () => {
     try {
       const response = await getContactDuplicateContacts(contact.id)
 
-      setDuplicateContacts(response.data.contacts)
+      setDuplicateContacts(response.data)
     } catch (err) {
       if (err.status === 404) {
-        setDuplicateContacts([])
+        setDuplicateContacts(null)
       }
     }
   }, [contact.id])
@@ -46,13 +53,23 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
     setIsContactsListDrawerOpen(true)
   }
 
-  const handleCloseDrawerClick = () => {
+  const handleCloseDrawerClick = async () => {
     setIsContactsListDrawerOpen(false)
   }
 
-  const handleDismissClick = (contactId: UUID) => {
+  const handleDismissClick = async (
+    contactId: UUID,
+    checkMinumumDuplicatesCount = true
+  ) => {
+    if (!duplicateContacts) {
+      return
+    }
+
     // Minimum number of contacts to merge is 2
-    if (duplicateContacts.length === 2) {
+    if (
+      checkMinumumDuplicatesCount &&
+      duplicateContacts.contacts.length === 2
+    ) {
       dispatch(
         addNotification({
           status: 'warning',
@@ -63,9 +80,35 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
       return
     }
 
-    setDuplicateContacts(
-      duplicateContacts.filter(item => item.id !== contactId)
-    )
+    confirmation.setConfirmationModal({
+      message: 'Are you sure about dismissing this contact?',
+      onConfirm: async () => {
+        try {
+          await dismissMergeContact(duplicateContacts.id, contactId)
+
+          setDuplicateContacts({
+            ...duplicateContacts,
+            contacts: duplicateContacts.contacts.filter(
+              item => item.id !== contactId
+            )
+          })
+        } catch (err) {
+          dispatch(
+            addNotification({
+              status: 'error',
+              message:
+                'Something went wrong while dismissing the contact. Please try again.'
+            })
+          )
+          console.error(err)
+        }
+      }
+    })
+  }
+
+  const handleDismissMergeCallout = async (contactId: UUID) => {
+    await handleDismissClick(contactId, false)
+    setIsOpen(false)
   }
 
   const handleSetMasterClick = (contactId: UUID) => {
@@ -73,34 +116,48 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
   }
 
   const handleMergeClick = async () => {
-    try {
-      await mergeContact(masterId, duplicateContacts.map(item => item.id))
-      dispatch(
-        addNotification({
-          status: 'success',
-          message: `${duplicateContacts.length} contacts merged successfully.`
-        })
-      )
-      setIsContactsListDrawerOpen(false)
-      await mergeCallback(masterId)
-
-      // Refetch the duplicates if we are in the master contact page
-      if (masterId === contact.id) {
-        fetchDuplicates()
-      }
-    } catch (err) {
-      dispatch(
-        addNotification({
-          status: 'error',
-          message:
-            'Something went wrong while merging the contacts. Please try again.'
-        })
-      )
-      console.error(err)
+    if (!duplicateContacts) {
+      return
     }
+
+    confirmation.setConfirmationModal({
+      message: 'Are you sure about merging this duplicate contacts list?',
+      onConfirm: async () => {
+        try {
+          await mergeContact(
+            masterId,
+            duplicateContacts.contacts.map(item => item.id)
+          )
+          dispatch(
+            addNotification({
+              status: 'success',
+              message: `${
+                duplicateContacts.contacts.length
+              } contacts merged successfully.`
+            })
+          )
+          setIsContactsListDrawerOpen(false)
+          await mergeCallback(masterId)
+
+          // Refetch the duplicates if we are in the master contact page
+          if (masterId === contact.id) {
+            fetchDuplicates()
+          }
+        } catch (err) {
+          dispatch(
+            addNotification({
+              status: 'error',
+              message:
+                'Something went wrong while merging the contacts. Please try again.'
+            })
+          )
+          console.error(err)
+        }
+      }
+    })
   }
 
-  if (duplicateContacts.length === 0 || !isOpen) {
+  if (!duplicateContacts || !isOpen) {
     return null
   }
 
@@ -111,13 +168,15 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
         type="warn"
         closeButtonTooltip="Dismiss"
         style={{ padding: '0.5rem 1rem', margin: '1rem' }}
-        onClose={() => setIsOpen(false)}
+        onClose={async () => {
+          await handleDismissMergeCallout(contact.id)
+        }}
       >
         <CallOutContentContainer>
           <span>
-            We’ve found {duplicateContacts.length - 1} other{' '}
-            {pluralize('contact', duplicateContacts.length - 1)} similar to{' '}
-            <b>{contact.display_name}</b>. Do you want to merge them?
+            We’ve found {duplicateContacts.contacts.length - 1} other{' '}
+            {pluralize('contact', duplicateContacts.contacts.length - 1)}{' '}
+            similar to <b>{contact.display_name}</b>. Do you want to merge them?
           </span>
           <Button color="primary" variant="text" onClick={handleReviewClick}>
             Review
@@ -128,7 +187,7 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
       {isContactsListDrawerOpen && (
         <DuplicateContactsDrawer
           title="Merge Contacts"
-          contacts={duplicateContacts}
+          contacts={duplicateContacts.contacts}
           masterId={masterId}
           onDismissClick={handleDismissClick}
           onSetMasterClick={handleSetMasterClick}
