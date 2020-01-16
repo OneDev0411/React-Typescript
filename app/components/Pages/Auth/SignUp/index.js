@@ -7,7 +7,7 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import { validateEmail } from '../Password/Forgot'
-import { getBrandInfo } from '../SignIn'
+import { getBrandInfo } from '../SignIn/get-brand-info'
 import signup from '../../../../models/auth/signup'
 import Button from '../../../../views/components/Button/ActionButton'
 import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'

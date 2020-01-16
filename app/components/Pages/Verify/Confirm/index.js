@@ -7,7 +7,7 @@ import lifecycle from 'recompose/lifecycle'
 import withHandlers from 'recompose/withHandlers'
 
 import Alert from '../../Dashboard/Partials/Alert'
-import { getBrandInfo } from '../../Auth/SignIn'
+import { getBrandInfo } from '../../Auth/SignIn/get-brand-info'
 import verify from '../../../../models/verify'
 import { Spinner } from '../../../Partials/Loading'
 import { updateUser } from '../../../../store_actions/user'
@@ -122,7 +122,7 @@ export default compose(
 
       verify
         .request(verifyType)
-        .then(statusCode => {
+        .then(() => {
           setIsSubmitting(false)
           setUserMessage({
             type: 'success',
