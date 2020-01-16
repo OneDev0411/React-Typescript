@@ -14,15 +14,12 @@ import { DuplicateContacts } from 'models/contacts/get-contact-duplicate-contact
 import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
 import { mergeContact } from 'models/contacts/merge-contact'
 import { mergeContactsBatch } from 'models/contacts/merge-contacts-batch'
+import { dismissAllMergeClusters } from 'models/contacts/dismiss-all-merge-clusters'
+import { dismissMergeCluster } from 'models/contacts/dismiss-merge-cluster'
+import { dismissMergeContact } from 'models/contacts/dismiss-merge-contact'
 
 import LoadingContainer from 'components/LoadingContainer'
 import DuplicateContactsList from 'components/DuplicateContacts/DuplicateContactsList'
-
-import { dismissAllMergeClusters } from 'models/contacts/dismiss-all-merge-clusters'
-
-import { dismissMergeCluster } from 'models/contacts/dismiss-merge-cluster'
-
-import { dismissMergeContact } from 'models/contacts/dismiss-merge-contact'
 
 import { Container } from '../styled'
 

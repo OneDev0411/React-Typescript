@@ -7,13 +7,10 @@ import pluralize from 'pluralize'
 import { getContactDuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts'
 import { mergeContact } from 'models/contacts/merge-contact'
 import { DuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts/types'
+import { dismissMergeContact } from 'models/contacts/dismiss-merge-contact'
 
 import { Callout } from 'components/Callout'
 import DuplicateContactsDrawer from 'components/DuplicateContacts/DuplicateContactsDrawer'
-
-import { dismissMergeCluster } from 'models/contacts/dismiss-merge-cluster'
-
-import { dismissMergeContact } from 'models/contacts/dismiss-merge-contact'
 
 import { CallOutContentContainer } from './styled'
 
@@ -55,32 +52,22 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
   }
 
   const handleCloseDrawerClick = async () => {
-    if (!duplicateContacts) {
-      return
-    }
-
-    try {
-      await dismissMergeCluster(duplicateContacts.id)
-      setIsContactsListDrawerOpen(false)
-    } catch (err) {
-      dispatch(
-        addNotification({
-          status: 'error',
-          message:
-            'Something went wrong while dismissing merge duplicate contacts. Please try again.'
-        })
-      )
-      console.error(err)
-    }
+    setIsContactsListDrawerOpen(false)
   }
 
-  const handleDismissClick = async (contactId: UUID) => {
+  const handleDismissClick = async (
+    contactId: UUID,
+    checkMinumumDuplicatesCount = true
+  ) => {
     if (!duplicateContacts) {
       return
     }
 
     // Minimum number of contacts to merge is 2
-    if (duplicateContacts.contacts.length === 2) {
+    if (
+      checkMinumumDuplicatesCount &&
+      duplicateContacts.contacts.length === 2
+    ) {
       dispatch(
         addNotification({
           status: 'warning',
@@ -110,6 +97,11 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
       )
       console.error(err)
     }
+  }
+
+  const handleDismissMergeCallout = async (contactId: UUID) => {
+    await handleDismissClick(contactId, false)
+    setIsOpen(false)
   }
 
   const handleSetMasterClick = (contactId: UUID) => {
@@ -164,7 +156,9 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
         type="warn"
         closeButtonTooltip="Dismiss"
         style={{ padding: '0.5rem 1rem', margin: '1rem' }}
-        onClose={() => setIsOpen(false)}
+        onClose={async () => {
+          await handleDismissMergeCallout(contact.id)
+        }}
       >
         <CallOutContentContainer>
           <span>
