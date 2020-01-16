@@ -6,7 +6,7 @@ export async function getMediaGallery(dealId) {
       .get(`/deals/${dealId}`)
       .query({ 'associations[]': ['deal.gallery'] })
 
-    console.log(response)
+    // console.log(response)
 
     const rawGalleryItems = response.body.data.gallery.items
 

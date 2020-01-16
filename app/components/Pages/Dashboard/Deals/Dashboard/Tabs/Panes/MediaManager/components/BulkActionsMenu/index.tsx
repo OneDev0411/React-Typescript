@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { Typography, Box, Button, Checkbox, Link } from '@material-ui/core'
 import pluralize from 'pluralize'
 
-import { deleteMedias } from 'models/media-manager'
+import { deleteMedias, downloadMedias } from 'models/media-manager'
 
 import { useStyles } from '../../styles'
 import { MediaManagerAPI } from '../../context'
@@ -35,7 +35,19 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
     dispatch(toggleGallerySelection(false))
   }
 
-  const handleDeleteAll = (e: React.MouseEvent<HTMLElement>) => {
+  const handleDownloadSelected = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault()
+
+    const url = await downloadMedias(
+      deal.id,
+      getSelectedMediaIds(selectedGalleryItems)
+    )
+
+    // TODO: Make the popup for download link
+    // window.location = url
+  }
+
+  const handleDeleteSelected = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
 
     let confirm = window.confirm('This action can not be undone. Are you sure?')
@@ -89,6 +101,7 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
           variant="outlined"
           disableElevation
           className={classes.lowerCaseButton}
+          onClick={handleDownloadSelected}
         >
           Download {pluralize('photo', selectedGalleryItems.length, true)}
         </Button>
@@ -97,7 +110,7 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
           color="secondary"
           disableElevation
           className={classes.lowerCaseButton}
-          onClick={handleDeleteAll}
+          onClick={handleDeleteSelected}
         >
           Delete {pluralize('photo', selectedGalleryItems.length, true)}
         </Button>

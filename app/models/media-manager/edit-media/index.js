@@ -6,7 +6,7 @@ export async function editMedia(dealId, mediaId, name) {
       .put(`/deals/${dealId}/gallery/items/${mediaId}`)
       .send({ name })
 
-    console.log(response)
+    // console.log(response)
     // const files = response.body
 
     // return Object.keys(files)
