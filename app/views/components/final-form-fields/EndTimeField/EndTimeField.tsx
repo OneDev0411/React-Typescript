@@ -70,11 +70,7 @@ export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
 
         return (
           <Box display="flex" alignItems="center" pr={1}>
-            {value && (
-              <Typography variant="body2" component="span">
-                End Time:
-              </Typography>
-            )}
+            {value && <Typography variant="body2">End Time:</Typography>}
             <Button
               aria-describedby={id}
               color="primary"

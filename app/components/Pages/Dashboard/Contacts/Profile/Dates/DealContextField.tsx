@@ -43,7 +43,7 @@ export default function DealContextField({ title, value, deal }: Props) {
           {title}
         </Link>
       </Tooltip>
-      <Typography component="span" className={classes.value}>
+      <Typography className={classes.value}>
         {fecha.format(new Date(value * 1000), 'MMM DD, YYYY')}
       </Typography>
     </Box>

@@ -29,7 +29,7 @@ export async function mergeContact(
     const response = await new Fetch()
       .post(`/contacts/${contactId}/merge`)
       .send({
-        sub_contacts
+        sub_contacts: sub_contacts.filter(item => item !== contactId)
       })
       .query(query)
 
