@@ -3,8 +3,9 @@ import { ComponentProps, ReactNode } from 'react'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import { EventDrawer } from 'components/EventDrawer'
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
-import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
+
+import CreateOpenHouse from './OpenHouse'
 
 type ItemType = 'email' | 'event' | 'contact' | 'deal' | 'openhouse' | 'tour'
 
@@ -31,7 +32,7 @@ interface DealItem extends BaseItem<'deal'> {
 }
 
 interface OpenHouseItem extends BaseItem<'openhouse'> {
-  render(props: ComponentProps<typeof OpenHouseDrawer>): ReactNode
+  render(props: ComponentProps<typeof CreateOpenHouse>): ReactNode
 }
 
 interface TourItem extends BaseItem<'tour'> {

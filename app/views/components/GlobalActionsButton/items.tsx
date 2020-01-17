@@ -13,11 +13,12 @@ import IconContacts from 'components/SvgIcons/Contacts/IconContacts'
 
 import IconDeal from 'components/SvgIcons/Deals/IconDeal'
 
-import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import IconOpenHouseOutline from 'components/SvgIcons/OpenHouseOutline/IconOpenHouseOutline'
 
 import { TourDrawer } from 'components/tour/TourDrawer'
 import IconTourOutline from 'components/SvgIcons/TourOutline/IconTourOutline'
+
+import CreateOpenHouse from './OpenHouse'
 
 import { Item } from './types'
 
@@ -59,7 +60,7 @@ const items: Item[] = [
     type: 'openhouse',
     Icon: IconOpenHouseOutline,
     render: props => {
-      return <OpenHouseDrawer {...props} />
+      return <CreateOpenHouse {...props} />
     }
   },
   {
