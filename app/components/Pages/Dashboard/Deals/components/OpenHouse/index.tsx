@@ -175,9 +175,11 @@ function OpenHouses({
             <Form
               deal={deal}
               task={selectedItem}
-              autoBookOpenHouse={location.state.autoBookOpenHouse === true}
-              defaultStartTime={location.state.startTime}
-              defaultEndTime={location.state.endTime}
+              autoBookOpenHouse={
+                location.state && location.state.autoBookOpenHouse === true
+              }
+              defaultStartTime={location.state && location.state.startTime}
+              defaultEndTime={location.state && location.state.endTime}
               onUpsertTask={handleUpsertTask}
             />
           ) : (
