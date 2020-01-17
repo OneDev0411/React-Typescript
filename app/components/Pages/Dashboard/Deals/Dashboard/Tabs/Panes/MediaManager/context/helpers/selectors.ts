@@ -15,3 +15,12 @@ export const getSelectedMedia = (
 export const getSelectedMediaIds = (mediaGallery: IMediaGallery): string[] => {
   return mediaGallery.map(media => media.file)
 }
+
+export const getMediaSorts = (mediaGallery: IMediaGallery) => {
+  return mediaGallery.map(media => {
+    return {
+      id: media.file,
+      order: media.order
+    }
+  })
+}

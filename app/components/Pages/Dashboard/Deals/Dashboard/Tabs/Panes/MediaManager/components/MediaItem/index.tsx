@@ -51,7 +51,6 @@ export default function MediaItem({
     if (inputRef && inputRef.current) {
       const name = inputRef.current.value
 
-      console.log(name)
       editMedia(deal.id, file, name)
       dispatch(setMediaName(file, name))
     }

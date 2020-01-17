@@ -6,7 +6,7 @@ export async function downloadMedias(dealId, mediaIds) {
       .post(`/deals/${dealId}/gallery.zip`)
       .send({ items: mediaIds })
 
-    // console.log(response)
+    console.log(response)
 
     return response.body.info.url
   } catch (e) {

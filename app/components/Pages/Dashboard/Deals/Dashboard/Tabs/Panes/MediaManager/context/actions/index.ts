@@ -66,6 +66,14 @@ export const setMediaUploadProgress = (file: string, progress: number) => ({
   }
 })
 
+export const reorderGallery = (oldIndex: number, newIndex: number) => ({
+  type: actionTypes.REORDER_GALLERY,
+  payload: {
+    oldIndex,
+    newIndex
+  }
+})
+
 export const setNewlyUploadedMediaFields = (
   file: string,
   newId: string,

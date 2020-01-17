@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/action-types'
+import arrayMove from 'array-move'
 
 import { IMediaGallery } from '../../types'
 
@@ -132,6 +133,19 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
       })
 
       return newState
+    }
+
+    case actionTypes.REORDER_GALLERY: {
+      const { oldIndex, newIndex } = action.payload
+
+      const newState = arrayMove(state, oldIndex, newIndex)
+
+      return newState.map((media, index) => {
+        return {
+          ...media,
+          order: index
+        }
+      })
     }
 
     case actionTypes.SET_NEWLY_UPLOADED_MEDIA_FIELDS: {
