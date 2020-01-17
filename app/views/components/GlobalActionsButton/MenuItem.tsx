@@ -1,4 +1,5 @@
 import React from 'react'
+import cn from 'classnames'
 import {
   Theme,
   makeStyles,
@@ -8,22 +9,35 @@ import {
   ListItemText
 } from '@material-ui/core'
 
+import AddIcon from 'components/SvgIcons/Add/AddIcon'
+
+import { useIconStyles } from '../../../styles/use-icon-styles'
 import { Item } from './types'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     itemButton: {
+      borderRadius: theme.shape.borderRadius,
+      padding: theme.spacing(1),
+      height: theme.spacing(5),
+
       '&:hover': {
         color: theme.palette.primary.main,
-        background: theme.palette.common.white,
 
-        '& $icon': {
+        '& $icon, $addIcon': {
           fill: theme.palette.primary.main
+        },
+
+        '& $addIcon': {
+          visibility: 'visible'
         }
       }
     },
     icon: {
-      minWidth: `${theme.spacing(4)}px`
+      minWidth: `${theme.spacing(3)}px !important`
+    },
+    addIcon: {
+      visibility: 'hidden'
     }
   })
 )
@@ -35,6 +49,7 @@ interface Props {
 
 export default function MenuItem({ item, onClick }: Props) {
   const classes = useStyles()
+  const iconClasses = useIconStyles()
 
   const handleClick = () => {
     onClick(item)
@@ -48,10 +63,22 @@ export default function MenuItem({ item, onClick }: Props) {
       classes={{ button: classes.itemButton }}
       onClick={handleClick}
     >
-      <ListItemIcon className={classes.icon}>
+      <ListItemIcon
+        className={cn(iconClasses.small, iconClasses.rightMargin, classes.icon)}
+      >
         <item.Icon />
       </ListItemIcon>
       <ListItemText primary={item.title} />
+      <ListItemIcon
+        className={cn(
+          iconClasses.small,
+          iconClasses.leftMargin,
+          classes.icon,
+          classes.addIcon
+        )}
+      >
+        <AddIcon />
+      </ListItemIcon>
     </ListItem>
   )
 }

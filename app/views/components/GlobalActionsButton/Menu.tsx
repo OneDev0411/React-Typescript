@@ -18,8 +18,8 @@ import MenuItem from './MenuItem'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    popoverPaper: {
-      padding: theme.spacing(0, 2)
+    itemsWrapper: {
+      margin: theme.spacing(0, 1)
     },
     closeIconButtonLabel: {
       width: `${theme.spacing(2)}px`,
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: theme.spacing(1, 0)
+      padding: theme.spacing(1, 2)
     }
   })
 )
@@ -51,12 +51,7 @@ export default function Menu({ items, anchorEl, onItemClick, onClose }: Props) {
   }
 
   return (
-    <Popover
-      classes={{ paper: classes.popoverPaper }}
-      open={open}
-      anchorEl={anchorEl}
-      onClose={onClose}
-    >
+    <Popover open={open} anchorEl={anchorEl} onClose={onClose}>
       <List
         dense
         subheader={
@@ -75,9 +70,11 @@ export default function Menu({ items, anchorEl, onItemClick, onClose }: Props) {
           </>
         }
       >
-        {items.map((item, index) => (
-          <MenuItem key={index} item={item} onClick={handleItemClick} />
-        ))}
+        <div className={classes.itemsWrapper}>
+          {items.map((item, index) => (
+            <MenuItem key={index} item={item} onClick={handleItemClick} />
+          ))}
+        </div>
       </List>
     </Popover>
   )

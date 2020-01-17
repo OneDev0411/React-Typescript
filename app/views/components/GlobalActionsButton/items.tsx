@@ -55,7 +55,7 @@ const items: Item[] = [
     }
   },
   {
-    title: 'Create open house registration page',
+    title: 'Create registration page',
     type: 'openhouse',
     Icon: IconOpenHouseOutline,
     render: props => {
