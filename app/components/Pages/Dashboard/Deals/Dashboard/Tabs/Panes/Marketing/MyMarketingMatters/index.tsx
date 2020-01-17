@@ -70,7 +70,11 @@ function MyMarketingMatters({
         location.pathname
       )
 
-      result.response && window.location.replace(result.response.url)
+      if (result.response) {
+        const newWindow = window.open(result.response.url, '_blank')
+
+        newWindow && newWindow.focus()
+      }
     } catch (err) {
       notify({
         status: 'error',
