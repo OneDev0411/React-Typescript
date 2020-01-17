@@ -20,16 +20,16 @@ export default class Tabs extends React.Component {
       render: props => <FoldersPane {...props} />
     },
     {
-      id: 'events',
-      label: 'Events',
-      isDisabled: () => false,
-      render: props => <EventsPane {...props} />
-    },
-    {
       id: 'media',
       label: 'Media',
       isDisabled: () => false,
       render: props => <MediaManagerPane {...props} />
+    },
+    {
+      id: 'events',
+      label: 'Events',
+      isDisabled: () => false,
+      render: props => <EventsPane {...props} />
     },
     {
       id: 'marketing',

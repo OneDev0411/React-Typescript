@@ -68,7 +68,10 @@ export default function MediaItem({
         order={order}
       >
         <Box className={classes.mediaThumbnailContainer}>
-          <img src={src} className={classes.mediaThumbnail} alt="" />
+          <div
+            className={classes.mediaThumbnail}
+            style={{ backgroundImage: `url(${src})` }}
+          />
           <UploadProgessBar value={uploadProgress} />
         </Box>
         <Button className={classes.mediaLabel} fullWidth>
@@ -81,7 +84,10 @@ export default function MediaItem({
   return (
     <Box className={cn(classes.mediaCard, { selected })} order={order}>
       <Box className={classes.mediaThumbnailContainer}>
-        <img src={src} className={classes.mediaThumbnail} alt="" />
+       <div
+          className={classes.mediaThumbnail}
+          style={{ backgroundImage: `url(${src})` }}
+        />
         <SelectCheckbox media={media} />
         <ActionsMenu media={media} deal={deal} />
       </Box>

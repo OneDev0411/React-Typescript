@@ -53,8 +53,7 @@ export const useStyles = makeStyles(
         position: 'relative'
       },
       mediaThumbnail: {
-        width: '100%',
-        minHeight: 250,
+        height: 250,
         marginBottom: theme.spacing(1),
         boxShadow: [
           '0px 1px 5px rgba(0, 0, 0, 0.2)',
@@ -62,7 +61,10 @@ export const useStyles = makeStyles(
           '0px 2px 0px rgba(0, 0, 0, 0.14)'
         ].join(' ,'),
         borderRadius: 4,
-        transition: '0.2s ease-in opacity'
+        transition: '0.2s ease-in opacity',
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat'
       },
       actions: {
         position: 'absolute',
