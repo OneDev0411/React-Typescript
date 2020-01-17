@@ -70,7 +70,11 @@ function MyMarketingMatters({
         location.pathname
       )
 
-      result.response && window.location.replace(result.response.url)
+      if (result.response) {
+        const newWindow = window.open(result.response.url, '_blank')
+
+        newWindow && newWindow.focus()
+      }
     } catch (err) {
       notify({
         status: 'error',
@@ -91,7 +95,7 @@ function MyMarketingMatters({
   return (
     <Container style={{ marginBottom: '1.5rem' }}>
       <LeftColumn>
-        <Title>Direct Mail Marketing made Easier</Title>
+        <Title>Print Marketing, Postcards and Brochures</Title>
         <Description>
           Increase your marketing reach with direct mail postcards, newsletters,
           brochures, and more when you integrate with

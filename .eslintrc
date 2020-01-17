@@ -91,7 +91,7 @@
       }
     ],
     "max-line-length": [
-      true,
+      "warn",
       {
         "limit": 85,
         "ignore-pattern": "^import [^,]+ from"
@@ -322,8 +322,12 @@
       ],
       "rules": {
         /* seems it doesn't work!*/
-        "react/jsx-no-duplicate-props": [2, { "ignoreCase": false }],
-
+        "react/jsx-no-duplicate-props": [
+          2,
+          {
+            "ignoreCase": false
+          }
+        ],
         "react/no-multi-comp": [
           "off"
         ]
