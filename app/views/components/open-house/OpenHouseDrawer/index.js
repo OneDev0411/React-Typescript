@@ -1,5 +1,3 @@
-import { ACL } from 'constants/acl'
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -18,11 +16,7 @@ import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import getListing from 'models/listings/listing/get-listing'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
-import {
-  isSoloActiveTeam,
-  getActiveTeamId,
-  hasUserAccess
-} from 'utils/user-teams'
+import { isSoloActiveTeam, getActiveTeamId } from 'utils/user-teams'
 
 import LoadingContainer from 'components/LoadingContainer'
 
@@ -367,10 +361,6 @@ class OpenHouseDrawerInternal extends React.Component {
   }
 
   bookDealOpenHouse = openHouse => {
-    if (hasUserAccess(this.props.user, ACL.BETA) === false) {
-      return
-    }
-
     const dealAssociation = (openHouse.associations || []).find(
       association => association.association_type === 'deal'
     )
