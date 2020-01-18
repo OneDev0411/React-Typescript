@@ -397,7 +397,6 @@ class Builder extends React.Component {
           editable: false,
           resizable: false,
           draggable: false,
-          droppable: false,
           hoverable: isRechatAsset,
           selectable: isRechatAsset
         })
