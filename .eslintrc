@@ -90,11 +90,11 @@
         "allowShortCircuit": true
       }
     ],
-    "max-line-length": [
+    "max-len": [
       "warn",
       {
-        "limit": 85,
-        "ignore-pattern": "^import [^,]+ from"
+        "code": 85,
+        "ignorePattern": "^import [^,]+ from"
       }
     ],
     "comma-dangle": [
