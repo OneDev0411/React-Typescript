@@ -89,45 +89,50 @@ async function sendPunchoutRequest(user, deal, costCenter, callbackUrl) {
   return response
 }
 
-router.post('/my-marketing-matters/punchout', bodyParser(), async ctx => {
-  const { user: userSession } = ctx.session
+router.post(
+  '/my-marketing-matters/punchout',
+  bodyParser({ jsonLimit: '10mb' }),
+  async ctx => {
+    const { user: userSession } = ctx.session
 
-  if (!userSession) {
-    ctx.status = 401
-    ctx.body = 'Unauthorized'
+    if (!userSession) {
+      ctx.status = 401
+      ctx.body = 'Unauthorized'
 
-    return
+      return
+    }
+
+    try {
+      const { user, deal, costCenter, redirectUrl } = ctx.request.body
+
+      const punchoutResponse = await sendPunchoutRequest(
+        user,
+        deal,
+        costCenter,
+        redirectUrl
+      )
+      const parsedResponse = await xml2js.parseStringPromise(
+        punchoutResponse.text
+      )
+
+      const response = {
+        url:
+          parsedResponse.cXML.Response[0].PunchOutSetupResponse[0].StartPage[0]
+            .URL[0]
+      }
+
+      ctx.status = 200
+      ctx.body = {
+        response
+      }
+    } catch (err) {
+      console.error('MyMarketingMatters Punchout Error', err)
+      ctx.status = 500
+      ctx.body = {
+        error: err
+      }
+    }
   }
-
-  try {
-    const { user, deal, costCenter, redirectUrl } = ctx.request.body
-
-    const punchoutResponse = await sendPunchoutRequest(
-      user,
-      deal,
-      costCenter,
-      redirectUrl
-    )
-    const parsedResponse = await xml2js.parseStringPromise(
-      punchoutResponse.text
-    )
-
-    const response = {
-      url:
-        parsedResponse.cXML.Response[0].PunchOutSetupResponse[0].StartPage[0]
-          .URL[0]
-    }
-
-    ctx.status = 200
-    ctx.body = {
-      response
-    }
-  } catch (err) {
-    ctx.status = 500
-    ctx.body = {
-      error: err
-    }
-  }
-})
+)
 
 module.exports = app.use(router.routes())
