@@ -46,6 +46,7 @@ declare interface IBrandMessage {
   office_title?: string
   site_title?: string
   mmm_cost_center?: string
+  search_headline?: string
 }
 
 declare interface IBrandUser {
