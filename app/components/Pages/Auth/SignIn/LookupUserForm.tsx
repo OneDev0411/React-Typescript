@@ -1,17 +1,32 @@
 import React from 'react'
+import { Link } from 'react-router'
 import { Form, Field } from 'react-final-form'
 
 import SubmitButton from './SubmitButton'
 import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
+import { Callout } from '../../../../views/components/Callout'
+
+import { SubmitMessage } from './types'
+
+interface InitialValues {
+  username: string
+}
 
 interface Props {
   brandColor: string
   isLoading: boolean
-  error: string
+  initialValues?: InitialValues
+  submitMessage: SubmitMessage | null
   onSubmit: (values) => void
 }
 
-export default function LookupForm(props: Props) {
+export default function LookUpForm({
+  brandColor,
+  isLoading,
+  initialValues = { username: '' },
+  submitMessage,
+  onSubmit
+}: Props) {
   const validate = values => {
     const errors: { username?: string } = {}
 
@@ -28,7 +43,8 @@ export default function LookupForm(props: Props) {
 
   return (
     <Form
-      onSubmit={props.onSubmit}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
       validate={validate}
       render={({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
@@ -39,15 +55,22 @@ export default function LookupForm(props: Props) {
             tabIndex={0}
             component={SimpleField}
           />
-
-          <SubmitButton
-            isDisabled={props.isLoading}
-            color={props.brandColor}
-            text={props.isLoading ? 'Looking...' : 'Next'}
-          />
-          {props.error && (
-            <div className="c-auth__submit-error-alert">{props.error}</div>
+          {submitMessage && (
+            <Callout style={{ margin: '1.5rem 0' }} type={submitMessage.type}>
+              {submitMessage.text}
+            </Callout>
           )}
+          <SubmitButton
+            isDisabled={isLoading}
+            color={brandColor}
+            text={isLoading ? 'Looking up...' : 'Next'}
+          />
+
+          <p style={{ textAlign: 'center' }}>
+            <small>Don't have an account?</small>
+            &nbsp;&nbsp;
+            <Link to="/signup">Sign up</Link>
+          </p>
         </form>
       )}
     />

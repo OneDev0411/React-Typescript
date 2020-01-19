@@ -6,7 +6,7 @@ interface UserLookup {
   sso_url?: string
 }
 
-export async function lookupUserByEmail(email: string): Promise<UserLookup> {
+export async function lookUpUserByEmail(email: string): Promise<UserLookup> {
   const response = await new Fetch({ proxy: true })
     .post('/users/lookup')
     .set({ 'x-auth-mode': 'client_id' })

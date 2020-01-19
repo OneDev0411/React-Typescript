@@ -1,19 +1,29 @@
 import React from 'react'
+import { Link } from 'react-router'
 import { Form, Field } from 'react-final-form'
+import { Button } from '@material-ui/core'
 
 import SubmitButton from './SubmitButton'
-import Button from '../../../../views/components/Button/ActionButton'
+import { Callout } from '../../../../views/components/Callout'
 import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
+
+import { SubmitMessage } from './types'
 
 interface Props {
   brandColor: string
   isLoading: boolean
-  error: string
+  submitMessage: SubmitMessage | null
   onSubmit: (values) => void
   handleBackToLookupForm: () => void
 }
 
-export default function SigninForm(props: Props) {
+export default function SignInForm({
+  brandColor,
+  isLoading,
+  submitMessage,
+  onSubmit,
+  handleBackToLookupForm
+}: Props) {
   const validate = values => {
     let errors: { password?: string } = {}
 
@@ -28,7 +38,7 @@ export default function SigninForm(props: Props) {
 
   return (
     <Form
-      onSubmit={props.onSubmit}
+      onSubmit={onSubmit}
       validate={validate}
       render={({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
@@ -38,29 +48,30 @@ export default function SigninForm(props: Props) {
             label="Password"
             component={SimpleField}
           />
-
-          {props.error && (
-            <div
-              className="c-auth__submit-error-alert"
-              style={{ display: 'flex' }}
-            >
-              <span>
-                The password is incorrect. Try it again with another password or{' '}
-              </span>
-              <Button
-                type="button"
-                appearance="link"
-                onClick={props.handleBackToLookupForm}
-              >
-                account
-              </Button>
-            </div>
+          {submitMessage && (
+            <Callout style={{ margin: '1.5rem 0' }} type={submitMessage.type}>
+              {submitMessage.text}
+            </Callout>
           )}
           <SubmitButton
-            isDisabled={props.isLoading}
-            color={props.brandColor}
-            text={props.isLoading ? 'Signing in...' : 'Sign in'}
+            isDisabled={isLoading}
+            color={brandColor}
+            text={isLoading ? 'Signing in...' : 'Sign in'}
           />
+          <p style={{ textAlign: 'center' }}>
+            <Button
+              onClick={handleBackToLookupForm}
+              variant="text"
+              color="primary"
+            >
+              Back
+            </Button>
+          </p>
+          <p style={{ textAlign: 'center' }}>
+            <small>Forgot your password?</small>
+            &nbsp;&nbsp;
+            <Link to="/password/forgot">Reset it</Link>
+          </p>
         </form>
       )}
     />

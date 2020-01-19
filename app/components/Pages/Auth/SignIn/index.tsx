@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, browserHistory } from 'react-router'
+import { browserHistory } from 'react-router'
 import { Location } from 'history'
 
 import { IAppState } from '../../../../reducers'
@@ -10,70 +10,85 @@ import { getUserTeams } from '../../../../store_actions/user/teams'
 import * as actionsType from '../../../../constants/auth/signin'
 
 import signin from '../../../../models/auth/signin'
-import { lookupUserByEmail } from '../../../../models/user/lookup-user-by-email'
+import signup from '../../../../models/auth/signup'
+import { lookUpUserByEmail } from '../../../../models/user/lookup-user-by-email'
 
 import getDefaultHomePage from '../../../../utils/get-default-home-page'
 
-import { grey } from '../../../../views/utils/colors'
-
 import { getBrandInfo } from './get-brand-info'
-import SigninForm from './SiginForm'
-import LookupUserForm from './LookupUserForm'
+import SignInForm from './SigInForm'
+import LookUpUserForm from './LookUpUserForm'
+
+import { SubmitMessage } from './types'
 
 interface Props {
   location: Location
 }
 
-export default function Signin(props) {
+export default function Signin(props: Props) {
   const dispatch = useDispatch()
   const brand = useSelector((state: IAppState) => state.brand)
+
+  const [username, setUsername] = useState<string>(
+    window.decodeURIComponent(props.location.query.username || '')
+  )
   const { siteLogo, siteTitle, siteColor } = getBrandInfo(brand)
   const { redirectTo } = props.location.state || props.location.query
 
-  const [username, setUsername] = useState<string>('')
-  const [isLooking, setIsLooking] = useState<boolean>(false)
-  const [isLoadingSignin, setIsLoadingSignin] = useState<boolean>(false)
-  const [isHideLookUpForm, setIsHideLookUpForm] = useState<boolean>(false)
-  const [signinError, setSigninError] = useState<string>('')
-  const [lookUpFormError, setLookUpFormError] = useState<string>('')
+  const [isLookinUp, setIsLookingUp] = useState<boolean>(false)
+  const [
+    lookUpFormSubmitMsg,
+    setLookUpFormSubmitMsg
+  ] = useState<SubmitMessage | null>(null)
 
-  if (props.location.query.username) {
-    setUsername(props.location.query.username)
-  }
+  const [isLogging, setIsLogging] = useState<boolean>(false)
+  const [
+    signInFormSubmitMsg,
+    setSignInFormSubmitMsg
+  ] = useState<SubmitMessage | null>(null)
+  const [isHiddenLookUpForm, setIsHiddenLookUpForm] = useState<boolean>(false)
 
-  const handleLookup = async ({ username }) => {
+  const handleLookUp = async ({ username }) => {
     try {
-      setIsLooking(true)
+      setIsLookingUp(true)
+      setLookUpFormSubmitMsg(null)
 
-      const response = await lookupUserByEmail(username)
+      const response = await lookUpUserByEmail(username)
 
       if (response.sso_url) {
         window.location.replace(response.sso_url)
       } else {
         setUsername(username)
 
-        if (response.password) {
-          setIsHideLookUpForm(true)
-        }
-
         if (response.is_shadow) {
-          setLookUpFormError('This is shadow')
+          await signup(username)
+          setLookUpFormSubmitMsg({
+            type: 'info',
+            text:
+              "Your email already has been signed up in Rechat. But you didn't complete the registration. We resent a new activation email. Please check your inbox."
+          })
+        } else if (response.password) {
+          setIsHiddenLookUpForm(true)
         }
       }
 
-      setIsLooking(false)
+      setIsLookingUp(false)
     } catch (error) {
-      setIsLooking(false)
+      setIsLookingUp(false)
 
       if (error && error.response && error.response.body) {
-        setLookUpFormError(error.response.body.message)
+        setLookUpFormSubmitMsg({
+          type: 'error',
+          text: error.response.body.message
+        })
       }
     }
   }
 
   const handleSignin = async values => {
     try {
-      setIsLoadingSignin(true)
+      setIsLogging(true)
+      setSignInFormSubmitMsg(null)
 
       const user: IUser = await signin({ ...values, username })
 
@@ -87,7 +102,7 @@ export default function Signin(props) {
       }
 
       // set user data for sentry
-      // @ts-ignore
+      // @ts-ignore we have to add '@sentry/browser'
       if (window.Raven) {
         const { email, id } = user
 
@@ -100,7 +115,7 @@ export default function Signin(props) {
           }
         }
 
-        // @ts-ignore
+        // @ts-ignore we have to add '@sentry/browser'
         window.Raven.setUserContext(userData)
       }
 
@@ -114,9 +129,15 @@ export default function Signin(props) {
       }
 
       browserHistory.push(redirectTo || defaultHomePage)
-    } catch (error) {
-      setSigninError(error.response.body.message)
-      setIsLoadingSignin(false)
+    } catch (errorCode) {
+      if (errorCode === 403) {
+        setSignInFormSubmitMsg({
+          type: 'error',
+          text: 'Invalid resource owner credentials!'
+        })
+      }
+
+      setIsLogging(false)
     }
   }
 
@@ -137,27 +158,23 @@ export default function Signin(props) {
           <p className="c-auth__subtitle">Hi, welcome back!</p>
         </header>
         <main className="c-auth__main">
-          {isHideLookUpForm ? (
-            <SigninForm
+          {isHiddenLookUpForm ? (
+            <SignInForm
               brandColor={siteColor}
-              isLoading={isLoadingSignin}
+              isLoading={isLogging}
               onSubmit={handleSignin}
-              error={signinError}
-              handleBackToLookupForm={() => setIsHideLookUpForm(false)}
+              submitMessage={signInFormSubmitMsg}
+              handleBackToLookupForm={() => setIsHiddenLookUpForm(false)}
             />
           ) : (
-            <LookupUserForm
+            <LookUpUserForm
               brandColor={siteColor}
-              isLoading={isLooking}
-              onSubmit={handleLookup}
-              error={lookUpFormError}
+              initialValues={{ username }}
+              isLoading={isLookinUp}
+              onSubmit={handleLookUp}
+              submitMessage={lookUpFormSubmitMsg}
             />
           )}
-          <p style={{ textAlign: 'center', color: grey.A600 }}>
-            <small>Don't have an account?</small>
-            &nbsp;&nbsp;
-            <Link to="/signup">Sign up</Link>
-          </p>
         </main>
       </article>
     </div>
