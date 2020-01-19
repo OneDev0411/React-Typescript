@@ -1,10 +1,11 @@
 import { Component } from 'react'
 
 import config from '../../../../../config/public'
+import Brand from '../../../../controllers/Brand'
 
 interface Props {
   id: string
-  brand: IBrand
+  brand?: IBrand
 }
 
 export default class MlsSearchAutocomplete extends Component<Props> {
@@ -50,11 +51,12 @@ export default class MlsSearchAutocomplete extends Component<Props> {
 
   submitHandler = q => {
     const { brand } = this.props
+    const mapUrl = Brand.asset('map_url', '', brand)
 
     // Send to search map
     if (q) {
-      if (brand && brand.assets.map_url) {
-        window.top.location.href = `${brand.assets.map_url}?q=${q}`
+      if (mapUrl) {
+        window.top.location.href = `${mapUrl}?q=${q}`
       } else {
         window.top.location.href = `https://rechat.com/dashboard/mls/?q=${q}`
       }

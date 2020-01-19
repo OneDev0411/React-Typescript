@@ -94,7 +94,7 @@ export default function HeroSearchSection({ brand }: Props) {
         {brandSearchHeadline && (
           <h2 className={classes.title}>{brandSearchHeadline}</h2>
         )}
-        <MlsSearchAutocomplete id="google_search">
+        <MlsSearchAutocomplete id="google_search" brand={brand}>
           <div className={classes.searchBox}>
             <SearchIcon className={classes.searchBox__icon} />
             <input
