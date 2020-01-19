@@ -138,24 +138,15 @@ export default compose(
       setIsSubmitting(true)
 
       try {
-        await signup(email)
+        const statusCode = await signup(email)
+
         setIsSubmitting(false)
         setSubmitSuccessfully({
           email,
-          isShadow: false
+          isShadow: statusCode === 202
         })
       } catch (errorCode) {
         setIsSubmitting(false)
-
-        // shadow user
-        if (errorCode === 202) {
-          setSubmitSuccessfully({
-            email,
-            isShadow: true
-          })
-
-          return
-        }
 
         setSubmitError({
           email,
