@@ -35,7 +35,7 @@ export const useStyles = makeStyles(
             opacity: 1
           },
           '& $sortHandle': {
-            opacity: 1
+            opacity: 0.8
           },
           '& $mediaThumbnail': {
             opacity: 0.9,

@@ -5,6 +5,8 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 // @ts-ignore
 import { uploadMedia, reorderGallery } from 'models/media-manager'
 
+import Spinner from 'components/Spinner'
+
 import Uploader from './components/MediaUploader'
 import { getMediaSorts } from './context/helpers/selectors'
 
@@ -32,7 +34,18 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
 
   if (isLoading) {
-    return 'loading...'
+    return (
+      <Box
+        className={classes.container}
+        border={1}
+        bgcolor="#fff"
+        borderRadius="4px"
+        borderColor="#d4d4d4"
+        width={1}
+      >
+        <Spinner />
+      </Box>
+    )
   }
 
   const upload = async fileObject => {
@@ -119,11 +132,11 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
         >
           <Header mediaGallery={state} />
           <SortableGallery
-                axis="xy"
-                medias={state}
-                onSortEnd={onSortEnd}
-                useDragHandle={true}
-              />
+            axis="xy"
+            medias={state}
+            onSortEnd={onSortEnd}
+            useDragHandle
+          />
           {state.filter(media => media.selected).length ? (
             <BulkActionsMenu mediaGallery={state} deal={deal} />
           ) : null}
