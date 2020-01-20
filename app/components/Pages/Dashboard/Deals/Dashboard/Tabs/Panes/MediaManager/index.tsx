@@ -118,7 +118,12 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
           width={1}
         >
           <Header mediaGallery={state} />
-          <SortableGallery axis="xy" medias={state} onSortEnd={onSortEnd} />
+          <SortableGallery
+                axis="xy"
+                medias={state}
+                onSortEnd={onSortEnd}
+                useDragHandle={true}
+              />
           {state.filter(media => media.selected).length ? (
             <BulkActionsMenu mediaGallery={state} deal={deal} />
           ) : null}

@@ -34,8 +34,16 @@ export const useStyles = makeStyles(
           '& $selectCheckbox': {
             opacity: 1
           },
+          '& $sortHandle': {
+            opacity: 1
+          },
           '& $mediaThumbnail': {
-            opacity: 0.9
+            opacity: 0.9,
+            boxShadow: [
+              '0px 1px 5px rgba(0, 0, 0, 0.2)',
+              '0px 3px 4px rgba(0, 0, 0, 0.12)',
+              '0px 2px 0px rgba(0, 0, 0, 0.14)'
+            ].join(' ,')
           }
         },
         '&.selected': {
@@ -55,11 +63,6 @@ export const useStyles = makeStyles(
       mediaThumbnail: {
         height: 250,
         marginBottom: theme.spacing(1),
-        boxShadow: [
-          '0px 1px 5px rgba(0, 0, 0, 0.2)',
-          '0px 3px 4px rgba(0, 0, 0, 0.12)',
-          '0px 2px 0px rgba(0, 0, 0, 0.14)'
-        ].join(' ,'),
         borderRadius: 4,
         transition: '0.2s ease-in opacity',
         backgroundPosition: 'center',
@@ -81,7 +84,22 @@ export const useStyles = makeStyles(
         left: 0,
         opacity: 0,
         padding: theme.spacing(1),
+        width: 30,
+        height: 30,
         transition: '0.2s ease-in opacity'
+      },
+
+      sortHandle: {
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        opacity: 0,
+        background: '#fff',
+        width: 30,
+        height: 30,
+        cursor: 'move',
+        padding: theme.spacing(0.7, 1),
+        borderRadius: 4
       },
       placeholderCard: {
         display: 'flex',

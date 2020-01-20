@@ -13,6 +13,8 @@ import { useStyles } from '../../styles'
 import ActionsMenu from './ActionsMenu'
 import SelectCheckbox from './SelectCheckbox'
 import UploadProgessBar from './UploadProgessBar'
+import SortHandle from './SortHandle'
+import { SortableHandle } from 'react-sortable-hoc'
 
 import { MediaManagerAPI } from '../../context'
 import { IMediaItem } from '../../types'
@@ -61,6 +63,12 @@ export default function MediaItem({
     setEditMode(false)
   }
 
+  const DragHandle = SortableHandle(() => (
+    <Box>
+      <SortHandle />
+    </Box>
+  ))
+
   if (isNew) {
     return (
       <Box
@@ -88,6 +96,7 @@ export default function MediaItem({
           className={classes.mediaThumbnail}
           style={{ backgroundImage: `url(${src})` }}
         />
+        <DragHandle />
         <SelectCheckbox media={media} />
         <ActionsMenu media={media} deal={deal} />
       </Box>
