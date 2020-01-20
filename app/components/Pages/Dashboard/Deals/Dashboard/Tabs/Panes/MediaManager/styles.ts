@@ -198,6 +198,16 @@ export const useStyles = makeStyles(
         width: '80%',
         top: '80%',
         left: '10%'
+      },
+      downloadModal: {
+        textAlign: 'center'
+      },
+      modalCloseButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        width: 20,
+        height: 20
       }
     }),
   // Making the class names deterministic by setting theme name starting with `Mui`

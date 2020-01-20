@@ -33,21 +33,6 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
 
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
 
-  if (isLoading) {
-    return (
-      <Box
-        className={classes.container}
-        border={1}
-        bgcolor="#fff"
-        borderRadius="4px"
-        borderColor="#d4d4d4"
-        width={1}
-      >
-        <Spinner />
-      </Box>
-    )
-  }
-
   const upload = async fileObject => {
     const response = await uploadMedia(
       deal.id,
@@ -117,6 +102,21 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
     const reorderRequestObject = getMediaSorts(state)
 
     reorderGallery(deal.id, reorderRequestObject)
+  }
+
+  if (isLoading) {
+    return (
+      <Box
+        className={classes.container}
+        border={1}
+        bgcolor="#fff"
+        borderRadius="4px"
+        borderColor="#d4d4d4"
+        width={1}
+      >
+        <Spinner />
+      </Box>
+    )
   }
 
   return (

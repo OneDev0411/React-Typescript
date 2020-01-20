@@ -2,6 +2,8 @@ import React, { useContext, useState, useRef, useEffect } from 'react'
 import { Box, Link, Button, TextField } from '@material-ui/core'
 import cn from 'classnames'
 
+import { SortableHandle } from 'react-sortable-hoc'
+
 import IconCircleCheck from 'components/SvgIcons/CircleCheck/IconCircleCheck'
 import IconCircleClose from 'components/SvgIcons/CircleClose/IconCircleClose'
 import IconEdit from 'components/SvgIcons/Edit/EditIcon'
@@ -14,7 +16,6 @@ import ActionsMenu from './ActionsMenu'
 import SelectCheckbox from './SelectCheckbox'
 import UploadProgessBar from './UploadProgessBar'
 import SortHandle from './SortHandle'
-import { SortableHandle } from 'react-sortable-hoc'
 
 import { MediaManagerAPI } from '../../context'
 import { IMediaItem } from '../../types'
@@ -92,7 +93,7 @@ export default function MediaItem({
   return (
     <Box className={cn(classes.mediaCard, { selected })} order={order}>
       <Box className={classes.mediaThumbnailContainer}>
-       <div
+        <div
           className={classes.mediaThumbnail}
           style={{ backgroundImage: `url(${src})` }}
         />
