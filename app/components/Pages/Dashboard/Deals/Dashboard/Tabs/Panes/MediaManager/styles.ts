@@ -91,8 +91,8 @@ export const useStyles = makeStyles(
 
       sortHandle: {
         position: 'absolute',
-        top: 5,
-        right: 5,
+        top: 15,
+        right: 15,
         opacity: 0,
         background: '#fff',
         width: 30,

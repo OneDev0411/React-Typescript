@@ -10,6 +10,8 @@ import {
 
 import { deleteMedias } from 'models/media-manager'
 
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
 import MoreVertIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
 import IconDownload from 'components/SvgIcons/Download/IconDownload'
 
@@ -33,6 +35,7 @@ export default function ActionsMenu({
 
   const [anchorEl, setAnchorEl] = useState(null)
   const { dispatch } = useContext(MediaManagerAPI)
+  const confirmationModal = useContext(ConfirmationModalContext)
   const { file } = media
 
   const handleClick = (event: any) => {
@@ -44,15 +47,16 @@ export default function ActionsMenu({
   }
 
   const handleDelete = () => {
-    let confirm = window.confirm('This action can not be undone. Are you sure?')
-
-    if (confirm) {
-      deleteMedias(deal.id, [file])
-      dispatch(deleteMediaAction(file))
-      handleClose()
-    } else {
-      handleClose()
-    }
+    confirmationModal.setConfirmationModal({
+      message: 'Remove Image?',
+      description: 'This action can not be undone. Are you sure?',
+      confirmLabel: 'Yes, Please',
+      onConfirm: async () => {
+        deleteMedias(deal.id, [file])
+        dispatch(deleteMediaAction(file))
+        handleClose()
+      }
+    })
   }
 
   return (

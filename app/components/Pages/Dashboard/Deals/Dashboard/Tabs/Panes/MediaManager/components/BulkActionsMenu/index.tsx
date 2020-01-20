@@ -4,6 +4,8 @@ import pluralize from 'pluralize'
 
 import { deleteMedias, downloadMedias } from 'models/media-manager'
 
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
 import DownloadModal from './DownloadModal'
 
 import { useStyles } from '../../styles'
@@ -29,6 +31,7 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
   const [downloadUrl, setDownloadUrl] = useState('')
   const selectedGalleryItems = getSelectedMedia(mediaGallery)
   const { dispatch } = useContext(MediaManagerAPI)
+  const confirmationModal = useContext(ConfirmationModalContext)
 
   const handleModalClose = () => {
     setModalIsOpen(false)
@@ -58,12 +61,19 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
   const handleDeleteSelected = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
 
-    let confirm = window.confirm('This action can not be undone. Are you sure?')
-
-    if (confirm) {
-      deleteMedias(deal.id, getSelectedMediaIds(selectedGalleryItems))
-      dispatch(deleteMediasAction(getSelectedMediaIds(selectedGalleryItems)))
-    }
+    confirmationModal.setConfirmationModal({
+      message: `Delete ${pluralize(
+        'photo',
+        selectedGalleryItems.length,
+        true
+      )}?`,
+      description: 'This action can not be undone. Are you sure?',
+      confirmLabel: 'Yes, Please',
+      onConfirm: async () => {
+        deleteMedias(deal.id, getSelectedMediaIds(selectedGalleryItems))
+        dispatch(deleteMediasAction(getSelectedMediaIds(selectedGalleryItems)))
+      }
+    })
   }
 
   return (
