@@ -51,31 +51,34 @@ async function getRequestBody(user, deal, costCenter, callbackUrl) {
   const state = getListingAddressField(listing, 'state')
   const zip = getListingAddressField(listing, 'postal_code')
 
-  return nunjucks.renderString(REQUEST_BODY_TEMPLATE, {
-    duns: DUNS,
-    networkUserIdSharedSecret: SHARED_SECRET,
-    callbackUrl,
-    user: {
-      costCenter,
-      id: user.id,
-      email: user.email,
-      uniqueName: user.email,
-      firstName: user.first_name,
-      lastName: user.last_name
-    },
-    properties: [
-      {
-        id: deal.id,
-        price,
-        address,
-        description,
-        pictures,
-        city,
-        state,
-        zip
-      }
-    ]
-  })
+  return nunjucks
+    .renderString(REQUEST_BODY_TEMPLATE, {
+      duns: DUNS,
+      networkUserIdSharedSecret: SHARED_SECRET,
+      callbackUrl,
+      user: {
+        costCenter,
+        id: user.id,
+        email: user.email,
+        uniqueName: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name
+      },
+      properties: [
+        {
+          id: deal.id,
+          price,
+          address,
+          description,
+          pictures,
+          city,
+          state,
+          zip
+        }
+      ]
+    })
+    .split('’')
+    .join("'") // Cause MMM API breaks with ’ character! :/
 }
 
 async function sendPunchoutRequest(user, deal, costCenter, callbackUrl) {
