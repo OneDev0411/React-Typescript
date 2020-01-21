@@ -12,42 +12,42 @@ export class GridView extends React.Component {
       header: 'Address',
       id: 'address',
       width: '30%',
-      render: ({ rowData: listing }) => <Address listing={listing} />
+      render: ({ row: listing }) => <Address listing={listing} />
     },
     {
       header: 'Price',
       id: 'price',
       sortType: 'number',
       accessor: listing => listing.price,
-      render: ({ rowData: listing }) => `$${listing.price.toLocaleString()}`
+      render: ({ row: listing }) => `$${listing.price.toLocaleString()}`
     },
     {
       header: 'Beds',
       id: 'beds',
       sortType: 'number',
       accessor: listing => listing.beds,
-      render: ({ rowData: listing }) => listing.beds
+      render: ({ row: listing }) => listing.beds
     },
     {
       header: 'Baths',
       id: 'baths',
       sortType: 'number',
       accessor: listing => listing.baths,
-      render: ({ rowData: listing }) => listing.baths
+      render: ({ row: listing }) => listing.baths
     },
     {
       header: 'sqft',
       id: 'sqft',
       sortType: 'number',
       accessor: listing => listing.sqft,
-      render: ({ rowData: listing }) => listing.sqft.toLocaleString()
+      render: ({ row: listing }) => listing.sqft.toLocaleString()
     },
     {
       header: '$/Sqft',
       sortType: 'number',
       id: 'pricePerSquareFoot',
       accessor: listing => listing.pricePerSquareFoot,
-      render: ({ rowData: listing }) =>
+      render: ({ row: listing }) =>
         `$${listing.pricePerSquareFoot.toLocaleString()}`
     },
     {
@@ -55,14 +55,14 @@ export class GridView extends React.Component {
       id: 'year',
       sortType: 'number',
       accessor: listing => listing.builtYear,
-      render: ({ rowData: listing }) => listing.builtYear
+      render: ({ row: listing }) => listing.builtYear
     },
     {
       header: 'Zip Code',
       id: 'zipcode',
       sortType: 'number',
       accessor: listing => listing.zipCode,
-      render: ({ rowData: listing }) => listing.zipCode
+      render: ({ row: listing }) => listing.zipCode
     }
   ]
 
@@ -73,18 +73,11 @@ export class GridView extends React.Component {
       <div style={{ padding: ' 0 1.5em 1.5em' }}>
         <Table
           columns={this.columns}
-          data={this.props.listings.data.map(this.format)}
-          isFetching={this.props.isFetching}
+          rows={this.props.listings.data.map(this.format)}
+          totalRows={this.props.listings.info.total}
+          loading={this.props.isFetching ? 'middle' : null}
+          summary={total => `${total} Listings`}
           LoadingState={LoadingComponent}
-          summary={{
-            entityName: 'Listings',
-            style: { color: '#000' },
-            total: this.props.listings.info.total
-          }}
-          plugins={{
-            sortable: {},
-            ...this.props.plugins
-          }}
         />
       </div>
     )
