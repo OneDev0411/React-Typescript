@@ -32,13 +32,15 @@ const useStyles = makeStyles((theme: Theme) =>
       }
     },
     row: ({ selection }: { selection: GridSelectionOptions<any> | null }) => {
+      const br = theme.shape.borderRadius
+
       let styles = {
         '& td:first-child': {
           paddingLeft: theme.spacing(1),
-          borderRadius: `${theme.shape.borderRadius}px 0 0 ${theme.shape.borderRadius}px`
+          borderRadius: `${br}px 0 0 ${br}px`
         },
         '& td:last-child': {
-          borderRadius: `0 ${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0`
+          borderRadius: `0 ${br}px ${br}px 0`
         },
         '&:hover .primary': {
           color: theme.palette.primary.main,

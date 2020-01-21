@@ -66,7 +66,7 @@ export function ToggleEntireRows<Row>({ rows, totalRows }: Props<Row>) {
       <DropdownToggleButton
         onClick={handleToggleMenu}
         className={classes.button}
-      ></DropdownToggleButton>
+      />
 
       <Popover
         id={anchorEl ? 'entire-row-popover' : undefined}
