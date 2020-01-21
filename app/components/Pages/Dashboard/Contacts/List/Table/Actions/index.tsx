@@ -1,5 +1,5 @@
 import React from 'react'
-import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core'
+import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
@@ -34,7 +34,7 @@ interface Props {
   dispatch: DispatchContext
   totalRowsCount: number
   reloadContacts: () => void
-  onRequestDelete: (e: any, state: StateContext) => void
+  onRequestDelete: () => void
   filters: any
   isFetching: boolean
   handleChangeContactsAttributes: any
@@ -169,7 +169,7 @@ export function TableActions({
           disabled={!isAnyRowsSelected}
           size="small"
           appearance="outline"
-          onClick={e => onRequestDelete(e, state)}
+          onClick={onRequestDelete}
         >
           <IconDeleteOutline />
         </IconButton>

@@ -6,7 +6,7 @@ import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
 
-import Table from 'components/Grid/Table'
+import { Table } from 'components/Grid/Table'
 
 import Tooltip from 'components/tooltip'
 
@@ -147,6 +147,10 @@ class ContactsList extends React.Component {
     }
   }
 
+  getDefaultSort = () => {
+    return this.sortableColumns.find(item => item.value === this.props.order)
+  }
+
   render() {
     const { props, state } = this
 
@@ -161,11 +165,9 @@ class ContactsList extends React.Component {
           LoadingState={LoadingComponent}
           sorting={{
             columns: this.sortableColumns,
-            defaultIndex: this.sortableColumns.find(
-              item => item.value === props.order
-            ),
+            defaultSort: this.getDefaultSort(),
             onChange: async item => {
-              props.handleChangeOrder()
+              props.handleChangeOrder(item)
 
               await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
               props.dispatch(getUserTeams(props.user))
