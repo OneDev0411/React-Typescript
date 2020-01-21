@@ -16,7 +16,7 @@ import UploadPlaceholderItem from './components/UploadPlaceholderItem'
 import BulkActionsMenu from './components/BulkActionsMenu'
 
 import { useStyles } from './styles'
-import { MediaManagerAPI } from './context'
+import { MediaManagerContext } from './context'
 import useFetchGallery from './hooks/useFetchGallery'
 import { IMediaItem, IMediaGallery } from './types'
 
@@ -121,7 +121,7 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
 
   return (
     <Uploader onDrop={onDrop} disableClick>
-      <MediaManagerAPI.Provider value={{ state, dispatch }}>
+      <MediaManagerContext.Provider value={{ state, dispatch }}>
         <Box
           className={classes.container}
           border={1}
@@ -141,7 +141,7 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
             <BulkActionsMenu mediaGallery={state} deal={deal} />
           ) : null}
         </Box>
-      </MediaManagerAPI.Provider>
+      </MediaManagerContext.Provider>
     </Uploader>
   )
 }

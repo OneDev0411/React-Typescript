@@ -10,7 +10,7 @@ export interface IMediaItem {
 
 export type IMediaGallery = IMediaItem[]
 
-export interface IMediaManagerAPI {
+export interface IMediaManagerContext {
   state: IMediaGallery
   dispatch: React.Dispatch<any>
 }

@@ -10,7 +10,7 @@ import { DangerButton } from 'components/Button/DangerButton'
 import DownloadModal from './DownloadModal'
 
 import { useStyles } from '../../styles'
-import { MediaManagerAPI } from '../../context'
+import useMediaManagerContext from '../../hooks/useMediaManagerContext'
 import { IMediaGallery } from '../../types'
 import {
   toggleGallerySelection,
@@ -31,7 +31,7 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [downloadUrl, setDownloadUrl] = useState('')
   const selectedGalleryItems = getSelectedMedia(mediaGallery)
-  const { dispatch } = useContext(MediaManagerAPI)
+  const { dispatch } = useMediaManagerContext()
   const confirmationModal = useContext(ConfirmationModalContext)
 
   const handleModalClose = () => {

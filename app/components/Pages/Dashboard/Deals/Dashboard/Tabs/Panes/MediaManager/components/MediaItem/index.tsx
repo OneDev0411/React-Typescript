@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Box, Link, Button, TextField } from '@material-ui/core'
 import cn from 'classnames'
 
@@ -17,7 +17,7 @@ import SelectCheckbox from './SelectCheckbox'
 import UploadProgessBar from './UploadProgessBar'
 import SortHandle from './SortHandle'
 
-import { MediaManagerAPI } from '../../context'
+import useMediaManagerContext from '../../hooks/useMediaManagerContext'
 import { IMediaItem } from '../../types'
 import { setMediaName } from '../../context/actions'
 
@@ -34,7 +34,7 @@ export default function MediaItem({
 
   const { file, src, selected, name, order, isNew, uploadProgress } = media
 
-  const { dispatch } = useContext(MediaManagerAPI)
+  const { dispatch } = useMediaManagerContext()
 
   const [editMode, setEditMode] = useState<boolean>(false)
 

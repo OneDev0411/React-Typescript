@@ -19,7 +19,7 @@ import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import { useStyles } from '../../../styles'
 
-import { MediaManagerAPI } from '../../../context'
+import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
 import { IMediaItem } from '../../../types'
 import { deleteMedia as deleteMediaAction } from '../../../context/actions'
 
@@ -34,7 +34,7 @@ export default function ActionsMenu({
   const iconClasses = useIconStyles()
 
   const [anchorEl, setAnchorEl] = useState(null)
-  const { dispatch } = useContext(MediaManagerAPI)
+  const { dispatch } = useMediaManagerContext()
   const confirmationModal = useContext(ConfirmationModalContext)
   const { file } = media
 

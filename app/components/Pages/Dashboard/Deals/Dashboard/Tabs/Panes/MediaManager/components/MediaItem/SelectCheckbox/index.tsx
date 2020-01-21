@@ -1,14 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Box, Checkbox } from '@material-ui/core'
 
 import { useStyles } from '../../../styles'
-import { MediaManagerAPI } from '../../../context'
+import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
 import { IMediaItem } from '../../../types'
 import { toggleMediaSelection } from '../../../context/actions'
 
 export default function SelectCheckbox({ media }: { media: IMediaItem }) {
   const classes = useStyles()
-  const { dispatch } = useContext(MediaManagerAPI)
+  const { dispatch } = useMediaManagerContext()
   const { file, selected } = media
 
   const handleChange = () => {

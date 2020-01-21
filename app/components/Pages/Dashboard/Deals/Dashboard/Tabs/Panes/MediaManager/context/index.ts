@@ -1,7 +1,8 @@
 import { createContext } from 'react'
-import { IMediaManagerAPI } from '../types'
 
-export const MediaManagerAPI = createContext<IMediaManagerAPI>({
+import { IMediaManagerContext } from '../types'
+
+export const MediaManagerContext = createContext<IMediaManagerContext>({
   state: [],
   dispatch: () => {}
 })
