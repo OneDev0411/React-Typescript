@@ -5,7 +5,7 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 // @ts-ignore
 import { uploadMedia, reorderGallery } from 'models/media-manager'
 
-import Spinner from 'components/Spinner'
+import LoadingContainer from 'components/LoadingContainer'
 
 import Uploader from './components/MediaUploader'
 import { getMediaSorts } from './context/helpers/selectors'
@@ -114,7 +114,11 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
         borderColor="#d4d4d4"
         width={1}
       >
-        <Spinner />
+        <LoadingContainer
+          style={{
+            height: '50vh'
+          }}
+        />
       </Box>
     )
   }
