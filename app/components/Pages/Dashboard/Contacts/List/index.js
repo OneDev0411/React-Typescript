@@ -30,7 +30,7 @@ import {
   Menu as SideMenu
 } from 'components/SlideMenu'
 import SavedSegments from 'components/Grid/SavedSegments/List'
-import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable'
+// import { resetGridSelectedItems } from 'components/Grid/Table-old/Plugins/Selectable'
 import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
@@ -519,7 +519,7 @@ class ContactsList extends React.Component {
 
   resetSelectedRows = () => {
     console.log('reset rows')
-    resetGridSelectedItems('contacts')
+    // resetGridSelectedItems('contacts')
   }
 
   reloadContacts = async (start = 0) => {
