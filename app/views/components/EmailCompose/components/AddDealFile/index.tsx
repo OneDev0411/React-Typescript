@@ -1,5 +1,5 @@
 import React, { MouseEventHandler, useState } from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { ListItem } from '@material-ui/core'
 
@@ -41,13 +41,17 @@ interface Props extends FieldRenderProps<any> {
 
 export function AddDealFile({
   initialAttachments,
-  tasks,
-  checklists,
-  envelopes,
-  deals,
   onChanged = () => {},
   ...props
-}: Props & StateProps) {
+}: Props) {
+  const { deals, checklists, tasks, envelopes }: StateProps = useSelector(
+    ({ deals: { list, checklists, tasks, envelopes } }: IAppState) => ({
+      deals: list,
+      checklists,
+      tasks,
+      envelopes
+    })
+  )
   const [isDealsListOpen, setDealsListOpen] = useState(false)
   const [isDealFilesOpen, setDealFilesOpen] = useState(false)
   const [selectedDealId, setSelectedDealId] = useState<UUID | null>(
@@ -171,11 +175,4 @@ export function AddDealFile({
   )
 }
 
-export default connect(
-  ({ deals: { list, checklists, tasks, envelopes } }: IAppState) => ({
-    deals: list,
-    checklists,
-    tasks,
-    envelopes
-  })
-)(AddDealFile)
+export default AddDealFile
