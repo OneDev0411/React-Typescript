@@ -5,6 +5,7 @@ import pluralize from 'pluralize'
 import { deleteMedias, downloadMedias } from 'models/media-manager'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { DangerButton } from 'components/Button/DangerButton'
 
 import DownloadModal from './DownloadModal'
 
@@ -96,7 +97,7 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
             }
           />
           <Typography display="inline" className={classes.bold}>
-            {selectedGalleryItems.length} Photos selected
+            {pluralize('photo', selectedGalleryItems.length, true)} selected
           </Typography>
 
           {selectedGalleryItems.length !== mediaGallery.length && (
@@ -109,7 +110,7 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
                 &nbsp;&#9679;&nbsp;
               </Typography>
               <Link href="#" onClick={handleSelectAll}>
-                Select all {mediaGallery.length} photos
+                Select all {pluralize('photo', mediaGallery.length, true)}
               </Link>
             </>
           )}
@@ -128,15 +129,14 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
           >
             Download {pluralize('photo', selectedGalleryItems.length, true)}
           </Button>
-          <Button
+          <DangerButton
             variant="outlined"
-            color="secondary"
             disableElevation
             className={classes.lowerCaseButton}
             onClick={handleDeleteSelected}
           >
             Delete {pluralize('photo', selectedGalleryItems.length, true)}
-          </Button>
+          </DangerButton>
         </Box>
       </Box>
       <DownloadModal
