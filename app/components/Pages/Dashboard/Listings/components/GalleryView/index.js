@@ -6,78 +6,36 @@ import LoadingComponent from '../../../../../../views/components/Spinner'
 import ListingCard from '../ListingCard'
 import { formatListing } from '../../helpers/format-listing'
 import { sortOptions } from '../../helpers/sort-plugin-options'
-import { bodyStyle, rowStyle } from './styled'
+// import { bodyStyle, rowStyle } from './styled'
 
-export class GalleryView extends React.Component {
-  state = {
-    sortBy: {
-      index: 'price',
-      isDescending: true
-    }
-  }
-
-  columns = [
-    {
-      id: 'price',
-      accessor: listing => listing.price,
-      render: ({ rowData: listing }) => (
-        <ListingCard isShowOnMap listing={listing} key={listing.id} />
-      )
-    }
-  ]
-
-  format = listing => formatListing(listing, this.props.user)
-
-  onChangeSort = ({ value: index }) => {
-    const isDescending = index.charAt(0) === '-'
-
-    if (isDescending) {
-      index = index.slice(1)
-    }
-
-    this.setState({
-      sortBy: {
-        index,
-        isDescending
-      }
-    })
-  }
-
-  sort = (a, b) => {
-    const { index } = this.state.sortBy
-
-    return this.state.sortBy.isDescending
-      ? a[index] - b[index]
-      : b[index] - a[index]
-  }
-
-  render() {
-    const { listings } = this.props
-
-    return (
-      <div style={{ padding: ' 0 1.5em 1.5em' }}>
-        <Table
-          columns={this.columns}
-          data={listings.data.map(this.format).sort(this.sort)}
-          isFetching={this.props.isFetching}
-          LoadingState={LoadingComponent}
-          showTableHeader={false}
-          summary={{
-            entityName: 'Listings',
-            style: { color: '#000' },
-            total: this.props.listings.info.total
-          }}
-          getBodyProps={() => ({ style: bodyStyle })}
-          getTrProps={() => ({ css: rowStyle })}
-          getTdProps={() => ({ style: { padding: 0 } })}
-          plugins={{
-            sortable: {
-              ...sortOptions,
-              onChange: this.onChangeSort
-            }
-          }}
-        />
-      </div>
+const columns = [
+  {
+    id: 'price',
+    accessor: listing => listing.price,
+    render: ({ row: listing }) => (
+      <ListingCard isShowOnMap listing={listing} key={listing.id} />
     )
   }
+]
+
+export function GalleryView(props) {
+  const format = listing => formatListing(listing, props.user)
+
+  return (
+    <div style={{ padding: ' 0 1.5em 1.5em' }}>
+      <Table
+        columns={columns}
+        rows={props.listings.data.map(format)}
+        loading={props.isFetching ? 'middle' : null}
+        LoadingState={LoadingComponent}
+        totalRows={props.listings.info.total}
+        summary={total => `${total} Listings`}
+        sorting={sortOptions}
+        hoverable={false}
+        getTdProps={() => ({
+          padding: 0
+        })}
+      />
+    </div>
+  )
 }
