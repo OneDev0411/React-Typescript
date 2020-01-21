@@ -97,7 +97,7 @@ export function GridTable<Row>({
   return (
     <>
       <div className={classes.headerContainer}>
-        <div></div>
+        <div>--- Filters ---</div>
 
         {rows && rows.length > 0 && (
           <div>

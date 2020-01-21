@@ -18,6 +18,5 @@ export interface StateContext {
 }
 
 export type DispatchContext = React.Dispatch<any>
-
 export const StateContext = createContext<StateContext>(initialState)
 export const DispatchContext = createContext<DispatchContext>(() => null)
