@@ -18,13 +18,6 @@ import { TableActions } from './Actions'
 
 import { IDealAgent } from '../types'
 
-const buttonStyle = {
-  padding: '0.25rem 0 1rem',
-  height: 'auto',
-  lineHeight: 1,
-  width: '100%'
-}
-
 interface State {
   selectedAgent: null | any
 }

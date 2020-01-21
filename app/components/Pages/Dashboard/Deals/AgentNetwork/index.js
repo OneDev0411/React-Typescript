@@ -44,7 +44,9 @@ class AgentNetwork extends React.Component {
   componentDidMount() {
     window.initializeAgentNetworkList = this.initialize
     loadJS(
-      `https://maps.googleapis.com/maps/api/js?key=${config.google.api_key}&libraries=geometry&callback=initializeAgentNetworkList`
+      `https://maps.googleapis.com/maps/api/js?key=${
+        config.google.api_key
+      }&libraries=geometry&callback=initializeAgentNetworkList`
     )
   }
 
