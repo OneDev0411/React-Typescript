@@ -1,5 +1,4 @@
 import React, { useReducer } from 'react'
-import produce from 'immer'
 
 import { reducer, initialState } from '../reducers'
 
@@ -13,13 +12,7 @@ interface Props<Row> {
 }
 
 export function GridContextProvider<Row>({ children, sorting }: Props<Row>) {
-  const [state, dispatch] = useReducer(
-    reducer,
-    produce(initialState, draft => {
-      draft.sorting.activeSort =
-        sorting && sorting.defaultSort ? sorting.defaultSort : null
-    })
-  )
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   return (
     <StateContext.Provider value={state}>
