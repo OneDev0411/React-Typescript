@@ -7,7 +7,7 @@ import Deal from 'models/Deal'
 
 import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
-import Table from 'components/Grid/Table'
+import Grid from 'components/Grid/Table'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
@@ -29,52 +29,46 @@ import { getPrimaryAgentName } from '../../../utils/roles'
 
 const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field_bo'
 
-class Grid extends React.Component {
-  order =
-    getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ||
-    'address'
-
-  get Columns() {
-    const { roles } = this.props
-
+class BackOfficeGrid extends React.Component {
+  get columns() {
     return [
       {
         id: 'status',
         header: 'Status',
-        accessor: deal => Deal.get.status(deal)
+        accessor: Deal.get.status
       },
       {
         id: 'address',
         header: 'Address',
         width: '25%',
         verticalAlign: 'center',
-        accessor: deal => Deal.get.address(deal, roles),
-        render: ({ rowData: deal }) => <Address deal={deal} />
+        accessor: deal => Deal.get.address(deal, this.props.roles),
+        render: ({ row: deal }) => <Address deal={deal} />
       },
       {
         id: 'agent-name',
         header: 'Agent Name',
-        accessor: deal => getPrimaryAgentName(deal, roles),
-        render: ({ rowData: deal }) => getPrimaryAgentName(deal, roles)
+        accessor: deal => getPrimaryAgentName(deal, this.props.roles),
+        render: ({ row: deal }) => getPrimaryAgentName(deal, this.props.roles)
       },
       {
         id: 'office',
         header: 'Office',
-        accessor: deal => this.getOffice(deal),
-        render: ({ rowData: deal }) => this.getOffice(deal)
+        accessor: this.getOffice,
+        render: ({ row: deal }) => this.getOffice(deal)
       },
       {
         id: 'submitted-at',
         header: 'Submitted At',
         accessor: 'attention_requested_at',
-        render: ({ rowData: deal }) =>
+        render: ({ row: deal }) =>
           this.getSubmitTime(deal.attention_requested_at)
       },
       {
         id: 'critical-dates',
         header: 'Critical Dates',
-        accessor: deal => getCriticalDateNextValue(deal),
-        render: ({ rowData: deal, totalRows, rowIndex }) => (
+        accessor: getCriticalDateNextValue,
+        render: ({ row: deal, totalRows, rowIndex }) => (
           <CriticalDate
             deal={deal}
             user={this.props.user}
@@ -86,15 +80,24 @@ class Grid extends React.Component {
       {
         id: 'contract-price',
         header: 'Contract Price',
-        accessor: deal => getPrice(deal),
-        render: ({ rowData: deal }) => getFormattedPrice(getPrice(deal))
+        align: 'right',
+        accessor: getPrice,
+        render: ({ row: deal }) => (
+          <div
+            style={{
+              paddingRight: '1rem'
+            }}
+          >
+            {getFormattedPrice(getPrice(deal))}
+          </div>
+        )
       },
       {
         id: 'notification',
         header: '',
         width: '50px',
         verticalAlign: 'center',
-        render: ({ rowData: deal }) => (
+        render: ({ row: deal }) => (
           <Notifications
             count={deal.attention_requests}
             caption="$count tasks need your attention"
@@ -104,7 +107,7 @@ class Grid extends React.Component {
     ]
   }
 
-  get Data() {
+  get data() {
     const { deals, searchQuery } = this.props
 
     if (!deals) {
@@ -150,65 +153,49 @@ class Grid extends React.Component {
     return ''
   }
 
-  getTdProps = (_, { column }) => {
-    if (column.id === 'notification') {
-      return {
-        style: {
-          alignSelf: 'center'
-        }
-      }
-    }
-
-    return {}
-  }
-
-  getDefaultIndex = () =>
-    getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ||
-    'address'
-
   getDefaultSort = () => {
+    let id = sortSetting
+    let ascending = true
+
     const sortSetting =
       getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ||
       'address'
-    let id = sortSetting
-    let ascending = true
 
     if (sortSetting.startsWith('-')) {
       id = sortSetting.slice(1)
       ascending = false
     }
 
-    const column = this.Columns.find(col => col.id === id)
+    const column = this.columns.find(col => col.id === id)
+
+    if (!column) {
+      return null
+    }
 
     return {
-      column,
+      column: column.id,
       ascending
     }
   }
 
-  render() {
-    const { isFetchingDeals } = this.props
-    const columns = this.Columns
-    const data = this.Data
+  handleChangeSort = async item => {
+    await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
 
+    this.props.dispatch(getUserTeams(this.props.user))
+  }
+
+  render() {
     return (
-      <Table
-        plugins={{
-          sortable: {
-            defaultSort: this.getDefaultSort(),
-            defaultIndex: this.getDefaultIndex(),
-            onPostChange: async item => {
-              await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
-              await this.props.dispatch(getUserTeams(this.props.user))
-            }
-          }
+      <Grid
+        sorting={{
+          defaultSort: this.getDefaultSort(),
+          onChange: this.handleChangeSort
         }}
-        getTdProps={this.getTdProps}
-        isFetching={isFetchingDeals}
-        columns={columns}
-        data={data}
-        EmptyState={EmptyState}
+        columns={this.columns}
+        rows={this.data}
         LoadingState={LoadingState}
+        EmptyState={EmptyState}
+        loading={this.props.isFetchingDeals ? 'middle' : null}
       />
     )
   }
@@ -225,4 +212,4 @@ function mapStateToProps({ user, deals }) {
   }
 }
 
-export default connect(mapStateToProps)(Grid)
+export default connect(mapStateToProps)(BackOfficeGrid)

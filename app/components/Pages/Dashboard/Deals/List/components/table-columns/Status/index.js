@@ -27,7 +27,7 @@ const Status = ({ deal }) => {
   )
 }
 
-export const statusSortMethod = ({ accessor }) => {
+export const statusSortMethod = accessor => {
   const list = [
     'Active',
     'Lease',
