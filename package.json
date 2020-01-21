@@ -33,7 +33,9 @@
     "test:update-snapshots": "npm run test:unit -- -u",
     "test:ci": "npm run test:unit",
     "test": "jest --watch",
-    "jest": "jest"
+    "jest": "jest",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "engines": {
     "node": "10.x"
@@ -222,7 +224,7 @@
     "rimraf": "^2.6.3",
     "rxjs": "^5.5.11",
     "sanitize-html": "^1.20.0",
-    "sass-loader": "^6.0.6",
+    "sass-loader": "^7.2.0",
     "shorti": "^1.2.6",
     "simplebar": "github:izadmehr/simplebar#35b9bf51a13adf85e705c972a3d4a5e6e0df5fbd",
     "smoothscroll-polyfill": "^0.4.4",
@@ -250,7 +252,8 @@
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-s3-plugin": "^1.0.3",
-    "xml2js": "^0.4.22"
+    "xml2js": "^0.4.22",
+    "snyk": "^1.279.0"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.4.4",
@@ -365,5 +368,6 @@
       "pre-commit": "npm run lint:staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`"
     }
-  }
+  },
+  "snyk": true
 }
