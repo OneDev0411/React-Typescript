@@ -1,10 +1,10 @@
+import { ACL } from 'constants/acl'
+
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
-
-import { ACL } from 'constants/acl'
 
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -16,6 +16,8 @@ import LoadingContainer from 'components/LoadingContainer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
 import { Callout } from 'components/Callout'
+
+import { RenderProps } from 'components/Grid/Table/types'
 
 import EmptyState from './EmptyState'
 import CreateNewOpenHouse from './CreateNewOpenHouse'
@@ -31,6 +33,8 @@ interface Associations {
 interface Props {
   activeBrandId: UUID
 }
+
+type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
 function OpenHousesList(props: Props) {
   const theme = useTheme<Theme>()
@@ -61,37 +65,24 @@ function OpenHousesList(props: Props) {
     {
       header: 'Info',
       id: 'info',
-      width: '50%',
-      verticalAlign: 'center',
-      render: ({
-        rowData
-      }: {
-        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-      }) => (
+      primary: true,
+      render: ({ row }: RenderProps<TableRow>) => (
         <Info
-          dueDate={rowData.due_date}
-          description={rowData.description}
-          onClick={() => handleEdit(rowData)}
-          title={rowData.title}
+          dueDate={row.due_date}
+          description={row.description}
+          onClick={() => handleEdit(row)}
+          title={row.title}
         />
       )
     },
     {
       header: 'Registrants',
       id: 'registrants',
-      width: '10%',
-      verticalAlign: 'center',
-      render: ({
-        rowData
-      }: {
-        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-      }) => (
+      render: ({ row }: RenderProps<TableRow>) => (
         <Registrants
           registrants={
-            rowData.associations
-              ? rowData.associations.filter(
-                  a => a.association_type === 'contact'
-                )
+            row.associations
+              ? row.associations.filter(a => a.association_type === 'contact')
               : []
           }
         />
@@ -99,17 +90,11 @@ function OpenHousesList(props: Props) {
     },
     {
       id: 'actions',
-      width: '40%',
-      verticalAlign: 'center',
-      render: ({
-        rowData
-      }: {
-        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-      }) => (
+      render: ({ row }: RenderProps<TableRow>) => (
         <Actions
           activeBrandId={props.activeBrandId}
-          openHouse={rowData}
-          onEdit={() => handleEdit(rowData)}
+          openHouse={row}
+          onEdit={() => handleEdit(row)}
           reloadList={reloadList}
         />
       )
@@ -154,12 +139,12 @@ function OpenHousesList(props: Props) {
     }
 
     return (
-      <Table
+      <Table<TableRow>
         columns={columns}
-        data={list}
-        isFetching={isFetching}
+        rows={list}
+        totalRows={(list || []).length}
+        loading={isFetching ? 'middle' : null}
         LoadingState={LoadingContainer}
-        showToolbar={false}
       />
     )
   }
