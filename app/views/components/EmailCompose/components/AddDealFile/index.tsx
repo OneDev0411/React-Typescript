@@ -53,8 +53,7 @@ export function AddDealFile({
   const [selectedDealId, setSelectedDealId] = useState<UUID | null>(
     props.deal ? props.deal.id : null
   )
-
-  const deal = selectDealById(deals, selectedDealId)
+  const [deal, setDeal] = useState<IDeal>(selectDealById(deals, selectedDealId))
 
   const handleClick = event => {
     setDealsListOpen(!selectedDealId)
@@ -74,6 +73,7 @@ export function AddDealFile({
   }
 
   const handleSelectDeal = (deal: IDeal) => {
+    setDeal(deal)
     setSelectedDealId(deal.id)
     setDealsListOpen(false)
     setDealFilesOpen(true)
