@@ -90,4 +90,7 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { getFavorites })(Favorites)
+export default connect(
+  mapStateToProps,
+  { getFavorites }
+)(Favorites)
