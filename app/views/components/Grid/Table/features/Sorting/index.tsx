@@ -40,15 +40,17 @@ export function Sorting<Row>({ columns, options }: Props<Row>) {
   const handleChangeSort = (item: SortableColumn) => {
     setAnchorEl(null)
 
-    dispatch(
-      setActiveSort({
-        value: item.value,
-        label: item.label,
-        ascending: item.ascending
-      })
-    )
+    setTimeout(() => {
+      dispatch(
+        setActiveSort({
+          value: item.value,
+          label: item.label,
+          ascending: item.ascending
+        })
+      )
 
-    options.onChange && options.onChange(item)
+      options.onChange && options.onChange(item)
+    }, 0)
   }
 
   return (

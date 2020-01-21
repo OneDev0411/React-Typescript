@@ -2,6 +2,8 @@ import React from 'react'
 
 import { Table, makeStyles, createStyles, Theme } from '@material-ui/core'
 
+import useEffectOnce from 'react-use/lib/useEffectOnce'
+
 import { Sorting } from '../features/Sorting'
 import { Actions } from '../features/Actions'
 
@@ -18,6 +20,8 @@ import { GridHookPlugin, LoadingPosition } from '../types'
 import { useGridContext } from '../hooks/use-grid-context'
 
 import { Props } from '..'
+
+import { setActiveSort } from '../context/actions/sorting/set-active-sort'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,7 +80,13 @@ export function GridTable<Row>({
   useInfiniteScroll(infiniteScrolling)
 
   const classes = useStyles({ loading })
-  const [state] = useGridContext()
+  const [state, dispatch] = useGridContext()
+
+  useEffectOnce(() => {
+    if (sorting && sorting.defaultSort) {
+      dispatch(setActiveSort(sorting.defaultSort))
+    }
+  })
 
   const plugins: [GridHookPlugin<Row, object>, object][] = []
 
@@ -108,7 +118,7 @@ export function GridTable<Row>({
 
       {rows && rows.length === 0 && !loading && EmptyState && <EmptyState />}
 
-      {summary && (
+      {summary && !loading && (
         <div className={classes.summary}>{summary(totalRows, state)}</div>
       )}
 
