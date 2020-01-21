@@ -2,7 +2,11 @@ import {
   getField as getDealField,
   getStatus as getDealStatus
 } from 'models/Deal/helpers/context'
-import { getListingAddress, getStatusColor } from 'utils/listing'
+import {
+  getListingAddress,
+  getStatusColor,
+  isLeaseProperty
+} from 'utils/listing'
 
 /**
  * Normalizing associations
@@ -102,7 +106,8 @@ export const normalizeListing = (listing, showStatus = true) => {
       statusColor: `#${getStatusColor(listing.status)}`,
       placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
-    details: `${listing.status}, $${listing.price.toLocaleString()}`,
+    details: `${listing.status}, 
+    $${listing.price.toLocaleString()}${isLeaseProperty(listing) ? '/mo' : ''}`,
     id: listing.id,
     location: listing.location || listing.property.address.location,
     original: listing,
