@@ -16,8 +16,8 @@ import { lookUpUserByEmail } from '../../../../models/user/lookup-user-by-email'
 import getDefaultHomePage from '../../../../utils/get-default-home-page'
 
 import { getBrandInfo } from './get-brand-info'
-import SignInForm from './SigInForm'
-import LookUpUserForm from './LookUpUserForm'
+import SignInForm from './SiginForm'
+import LookUpUserForm from './LookupUserForm'
 
 import { SubmitMessage } from './types'
 
@@ -70,9 +70,9 @@ export default function Signin(props: Props) {
         } else if (response.password) {
           setIsHiddenLookUpForm(true)
         }
-      }
 
-      setIsLookingUp(false)
+        setIsLookingUp(false)
+      }
     } catch (error) {
       setIsLookingUp(false)
 
