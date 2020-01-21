@@ -107,7 +107,9 @@ class SavedSearch extends React.Component {
 
     this.setState({ activeView }, () => {
       browserHistory.push(
-        `/dashboard/mls/saved-searches/${this.props.savedSearch.id}?view=${activeView}`
+        `/dashboard/mls/saved-searches/${
+          this.props.savedSearch.id
+        }?view=${activeView}`
       )
     })
   }
