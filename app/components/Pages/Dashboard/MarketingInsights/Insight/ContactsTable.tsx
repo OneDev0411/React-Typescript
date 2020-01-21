@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import Table from 'components/Grid/Table'
 import ContactInfo from 'components/ContactInfo'
 import MiniContact from 'components/MiniContact'
 
+import { RenderProps } from 'components/Grid/Table/types'
+
 import RowBadges from './RowBadges'
 import { ContactColumn } from './styled'
-import { contactsList, SortValues, doSort } from './helpers'
+import { contactsList, SortValues } from './helpers'
 import { ContactsListType } from './types'
-
-const defaultSort = SortValues.MOST_OPENED
 
 interface TableColumnProps {
   rowData: ContactsListType
@@ -18,69 +18,68 @@ interface ContactsPropsType {
   item: IEmailCampaign<IEmailCampaignAssociation>
 }
 
+const sortableColumns = [
+  { label: 'Name A-Z', value: SortValues.ALPHABETICAL, ascending: true },
+  { label: 'Name Z-A', value: SortValues.ALPHABETICAL, ascending: false },
+  { label: 'Bounced', value: SortValues.BOUNCED, ascending: true },
+  { label: 'Unsubscribed', value: SortValues.UNSUBSCRIBED, ascending: true },
+  { label: 'Most Clicked', value: SortValues.MOST_CLICKED, ascending: false },
+  { label: 'Less Clicked', value: SortValues.MOST_CLICKED, ascending: true },
+  { label: 'Most Opened', value: SortValues.MOST_OPENED, ascending: false },
+  { label: 'Less Opened', value: SortValues.MOST_OPENED, ascending: true }
+]
+
+const columns = [
+  {
+    header: 'Contact',
+    id: 'contact',
+    primary: true,
+    render: ({ row }: RenderProps<ContactsListType>) => (
+      <ContactColumn>
+        <div>
+          <MiniContact data={row.original_data} type="insight">
+            <ContactInfo data={row} />
+          </MiniContact>
+        </div>
+        <div className="labels-container">
+          <RowBadges data={row} />
+        </div>
+      </ContactColumn>
+    )
+  },
+  {
+    header: 'Opened',
+    id: 'opened',
+    render: ({ row }: RenderProps<ContactsListType>) => (
+      <span>{row.opened}</span>
+    )
+  },
+  {
+    header: 'Clicked',
+    id: 'clicked',
+    render: ({ row }: RenderProps<ContactsListType>) => (
+      <span>{row.clicked}</span>
+    )
+  }
+]
+
 function ContactsTable(props: ContactsPropsType) {
-  const [itemData, setItemData] = useState<ContactsListType[]>([])
-  const [sort, setSort] = useState(defaultSort)
+  const rows = contactsList(props.item)
 
-  // This is weird? For sure. Seems we have a bug on Grid plugins which
-  // doesn't work properly on first mount, so this is a workaround :(
-  useEffect(() => {
-    const list = doSort(contactsList(props.item), sort)
-
-    setItemData(list)
-  }, [sort, props.item])
-
-  const columns = [
-    {
-      header: 'Contact',
-      id: 'contact',
-      width: '75%',
-      verticalAlign: 'center',
-      render: (props: TableColumnProps) => (
-        <ContactColumn>
-          <div>
-            <MiniContact data={props.rowData.original_data} type="insight">
-              <ContactInfo data={props.rowData} />
-            </MiniContact>
-          </div>
-          <div className="labels-container">
-            <RowBadges data={props.rowData} />
-          </div>
-        </ContactColumn>
-      )
-    },
-    {
-      header: 'Opened',
-      id: 'opened',
-      verticalAlign: 'center',
-      render: props => <span>{props.rowData.opened}</span>
-    },
-    {
-      header: 'Clicked',
-      id: 'clicked',
-      verticalAlign: 'center',
-      render: props => <span>{props.rowData.clicked}</span>
-    }
-  ]
-
-  const sortableColumns = [
-    { label: 'Name A-Z', value: SortValues.ALPHABETICAL },
-    { label: 'Bounced', value: SortValues.BOUNCED },
-    { label: 'Unsubscribed', value: SortValues.UNSUBSCRIBED },
-    { label: 'Most Clicked', value: SortValues.MOST_CLICKED },
-    { label: 'Most Opened', value: SortValues.MOST_OPENED }
-  ]
+  console.log(rows)
 
   return (
-    <Table
-      data={itemData}
+    <Table<ContactsListType>
+      rows={rows}
+      totalRows={(rows || []).length}
       columns={columns}
-      plugins={{
-        sortable: {
-          columns: sortableColumns,
-          defaultIndex: sort,
-          onChange: ({ value }) => setSort(value)
-        }
+      sorting={{
+        defaultSort: {
+          label: 'Most Opened',
+          value: SortValues.MOST_OPENED,
+          ascending: false
+        },
+        columns: sortableColumns
       }}
     />
   )
