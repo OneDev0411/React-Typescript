@@ -109,11 +109,11 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
           key={key}
           title={key}
           items={list[key]}
-          setIsModalOpen={() => {
+          onSetIsModalOpen={() => {
             setSelectedSection(key)
             setIsModalOpen(true)
           }}
-          setSelectedContext={setSelectedContext}
+          onSetSelectedContext={setSelectedContext}
           onDelete={deleteContextHandler}
         />
       ))

@@ -48,16 +48,16 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   title: string | null
   items: Array<IDealBrandContext>
-  setIsModalOpen: () => void
-  setSelectedContext: (context: IDealBrandContext) => void
+  onSetIsModalOpen: () => void
+  onSetSelectedContext: (context: IDealBrandContext) => void
   onDelete: (contextId: UUID) => void
 }
 
 function CategoryItem({
   title,
   items,
-  setIsModalOpen,
-  setSelectedContext,
+  onSetIsModalOpen,
+  onSetSelectedContext,
   onDelete
 }: Props) {
   const classes = useStyles()
@@ -75,7 +75,7 @@ function CategoryItem({
             <Button
               variant="outlined"
               size="small"
-              onClick={e => setIsModalOpen()}
+              onClick={e => onSetIsModalOpen()}
             >
               <Box fontWeight="fontWeightBold">Add New Context</Box>
             </Button>
@@ -89,8 +89,8 @@ function CategoryItem({
             name={c.label}
             context={c}
             onSelect={() => {
-              setIsModalOpen()
-              setSelectedContext(c)
+              onSetIsModalOpen()
+              onSetSelectedContext(c)
             }}
             onDelete={() => onDelete(c.id)}
           />
