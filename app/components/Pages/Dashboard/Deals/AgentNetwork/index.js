@@ -13,7 +13,7 @@ import { loadJS } from 'utils/load-js'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 
 import Header from 'components/PageHeader'
-import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable'
+import { resetGridSelectedItems } from 'components/Grid/Table-old/Plugins/Selectable'
 
 import config from '../../../../../../config/public'
 
@@ -44,9 +44,7 @@ class AgentNetwork extends React.Component {
   componentDidMount() {
     window.initializeAgentNetworkList = this.initialize
     loadJS(
-      `https://maps.googleapis.com/maps/api/js?key=${
-        config.google.api_key
-      }&libraries=geometry&callback=initializeAgentNetworkList`
+      `https://maps.googleapis.com/maps/api/js?key=${config.google.api_key}&libraries=geometry&callback=initializeAgentNetworkList`
     )
   }
 
