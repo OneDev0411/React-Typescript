@@ -41,12 +41,12 @@ function NewContextModal({
         title={context && context.label ? context.label : 'New Context'}
       />
       <Form
-        onSubmit={values => {
+        onSubmit={(values: IDealBrandContext) => {
           if (context) {
-            return onSubmit(values as IDealBrandContext, context.id as UUID)
+            return onSubmit(values, context.id as UUID)
           }
 
-          return onSubmit(values as IDealBrandContext)
+          return onSubmit(values)
         }}
         initialValues={initialValues}
         render={({ handleSubmit, submitting }) => {
@@ -62,15 +62,15 @@ function NewContextModal({
                   <Divider />
                 </Box>
                 <AvailabilityFields
-                  field_title="Mandatory in ..."
-                  field_name="required"
+                  fieldTitle="Mandatory in ..."
+                  fieldName="required"
                 />
                 <Box my={4}>
                   <Divider />
                 </Box>
                 <AvailabilityFields
-                  field_title="Optional in ..."
-                  field_name="optional"
+                  fieldTitle="Optional in ..."
+                  fieldName="optional"
                 />
               </Box>
               <Box className={classes.modalFooter}>

@@ -4,14 +4,12 @@ import { Grid, Box } from '@material-ui/core'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 
-// import useStyles from "../style";
-
 interface Props {
-  field_title: string
-  field_name: string
+  fieldTitle: string
+  fieldName: string
 }
 
-function AvailabilityFields({ field_title, field_name }: Props) {
+function AvailabilityFields({ fieldTitle, fieldName }: Props) {
   const items = [
     'Buying',
     'Selling',
@@ -27,7 +25,7 @@ function AvailabilityFields({ field_title, field_name }: Props) {
   return (
     <Grid container alignItems="flex-start" spacing={1}>
       <Grid item xs={3}>
-        <Box fontWeight={500}>{field_title}</Box>
+        <Box fontWeight={500}>{fieldTitle}</Box>
       </Grid>
       <Grid item xs={9}>
         <Grid container spacing={1}>
@@ -35,7 +33,7 @@ function AvailabilityFields({ field_title, field_name }: Props) {
             {items.map(i => (
               <Grid item xs={4} key={i}>
                 <Field
-                  name={field_name}
+                  name={fieldName}
                   type="checkbox"
                   value={i}
                   render={({ input }) => (

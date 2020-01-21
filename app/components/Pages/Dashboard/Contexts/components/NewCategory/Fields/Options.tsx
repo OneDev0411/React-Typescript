@@ -6,12 +6,9 @@ import Checkbox from '@material-ui/core/Checkbox'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 
-// import useStyles from "../style";
-
 interface Props {}
 
 function DetailsFields(props: Props) {
-  // const classes = useStyles();
   const options = [
     {
       name: 'needs_approval',

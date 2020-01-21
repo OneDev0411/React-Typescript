@@ -6,8 +6,6 @@ import { MUITextInput } from 'components/Forms/MUITextInput'
 
 import useStyles from '../styles'
 
-interface Props {}
-
 function validateInput(value: string = ''): string | null {
   if (value.trim() === '') {
     return 'This field can’t be empty.'
@@ -31,7 +29,7 @@ function sharedFieldProps(isRequired: boolean = true) {
   }
 }
 
-function DetailsFields(props: Props) {
+function DetailsFields(props) {
   const classes = useStyles()
 
   return (

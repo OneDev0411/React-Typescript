@@ -29,24 +29,8 @@ export default makeStyles((theme: Theme) =>
         direction: 'ltr'
       }
     },
-    detailsTextField: {
-      '& label': {
-        marginBottom: 0,
-        fontSize: 13,
-        color: theme.palette.common.black,
-        '& span.MuiFormLabel-asterisk': {
-          color: theme.palette.error.main
-        }
-      }
-    },
     detailsFieldsRow: {
       marginBottom: theme.spacing(0.5)
-    },
-    formRow: {
-      '&>div:nth-last-child(2)': {
-        // background: "red",
-        // marginBottom: theme.spacing(2)
-      }
     }
   })
 )
