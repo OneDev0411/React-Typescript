@@ -105,7 +105,9 @@ function EmailTemplatesList({
     {
       id: 'delete',
       sortable: false,
-      render: ({ row: { id, editable, name } }: RenderProps<IBrandEmailTemplate>) => (
+      render: ({
+        row: { id, editable, name }
+      }: RenderProps<IBrandEmailTemplate>) => (
         <div className={classes.deleteButtonWrapper}>
           <Tooltip
             caption={
@@ -144,7 +146,7 @@ function EmailTemplatesList({
       columns={columns}
       loading={isFetching ? 'middle' : null}
       LoadingState={() => <LoadingContainer style={{ padding: '20% 0' }} />}
-      getTrProps={( {rowIndex: number, row: template }) => {
+      getTrProps={({ rowIndex: number, row: template }) => {
         return {
           onClick: isTemplateDeleting(template.id)
             ? () => {}
