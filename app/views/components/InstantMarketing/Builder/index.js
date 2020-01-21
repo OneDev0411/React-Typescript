@@ -390,24 +390,17 @@ class Builder extends React.Component {
       const attributes = model.get('attributes')
 
       const editable = attributes['rechat-editable']
-      const draggable = this.isMjmlTemplate && this.isEmailTemplate
-      const droppable = this.isMjmlTemplate && this.isEmailTemplate
-
       const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
 
       if (!editable) {
         model.set({
           editable: false,
-          selectable: isRechatAsset,
-          hoverable: isRechatAsset
+          resizable: false,
+          draggable: false,
+          hoverable: isRechatAsset,
+          selectable: isRechatAsset
         })
       }
-
-      model.set({
-        resizable: false,
-        draggable,
-        droppable
-      })
 
       if (
         shouldSelectImage &&
