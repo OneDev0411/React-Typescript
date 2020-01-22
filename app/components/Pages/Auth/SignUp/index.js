@@ -7,7 +7,7 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import { validateEmail } from '../Password/Forgot'
-import { getBrandInfo } from '../SignIn'
+import { getBrandInfo } from '../SignIn/get-brand-info'
 import signup from '../../../../models/auth/signup'
 import Button from '../../../../views/components/Button/ActionButton'
 import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
@@ -138,24 +138,15 @@ export default compose(
       setIsSubmitting(true)
 
       try {
-        await signup(email)
+        const statusCode = await signup(email)
+
         setIsSubmitting(false)
         setSubmitSuccessfully({
           email,
-          isShadow: false
+          isShadow: statusCode === 202
         })
       } catch (errorCode) {
         setIsSubmitting(false)
-
-        // shadow user
-        if (errorCode === 202) {
-          setSubmitSuccessfully({
-            email,
-            isShadow: true
-          })
-
-          return
-        }
 
         setSubmitError({
           email,
