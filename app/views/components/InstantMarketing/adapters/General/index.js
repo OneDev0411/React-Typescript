@@ -10,6 +10,7 @@ import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
 import SocialDrawer from '../../components/SocialDrawer'
+import { SAVED_TEMPLATE_VARIANT } from '../../Builder/AddToMarketingCenter/constants'
 
 class General extends React.Component {
   state = {
@@ -149,6 +150,9 @@ class General extends React.Component {
           templateData={{ user }}
           templateTypes={this.props.types}
           mediums={this.props.mediums}
+          showTemplatesColumn={
+            selectedTemplate.variant !== SAVED_TEMPLATE_VARIANT
+          }
           defaultTemplate={selectedTemplate}
           isEdit={this.props.isEdit}
         />
