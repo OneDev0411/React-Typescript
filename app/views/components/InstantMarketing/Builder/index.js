@@ -718,7 +718,7 @@ class Builder extends React.Component {
     )
   }
 
-  toggeleTemplatesColumnVisibility = () => {
+  toggleTemplatesColumnVisibility = () => {
     this.setState(prevState => ({
       ...prevState,
       isTemplatesColumnHidden: !prevState.isTemplatesColumnHidden
@@ -835,19 +835,23 @@ class Builder extends React.Component {
             }}
           />
           <Header>
-            <Tooltip
-              title={
-                this.state.isTemplatesColumnHidden
-                  ? 'Change Template'
-                  : 'Hide Templates'
-              }
-            >
-              <IconButton onClick={this.toggeleTemplatesColumnVisibility}>
-                <IconMenu />
-              </IconButton>
-            </Tooltip>
+            {this.props.showTemplatesColumn !== false && (
+              <>
+                <Tooltip
+                  title={
+                    this.state.isTemplatesColumnHidden
+                      ? 'Change Template'
+                      : 'Hide Templates'
+                  }
+                >
+                  <IconButton onClick={this.toggleTemplatesColumnVisibility}>
+                    <IconMenu />
+                  </IconButton>
+                </Tooltip>
 
-            <Divider orientation="vertical" />
+                <Divider orientation="vertical" />
+              </>
+            )}
 
             {this.editor && (
               <>
