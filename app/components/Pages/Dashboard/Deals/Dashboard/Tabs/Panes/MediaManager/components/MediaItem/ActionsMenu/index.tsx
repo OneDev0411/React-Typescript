@@ -8,6 +8,10 @@ import {
   MenuItem
 } from '@material-ui/core'
 
+import { uploadCroppedMedia } from 'models/media-manager'
+
+import { ImageUploader } from 'components/ImageUploader'
+
 import { deleteMedias } from 'models/media-manager'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -20,23 +24,30 @@ import { useIconStyles } from 'views/../styles/use-icon-styles'
 import { useStyles } from '../../../styles'
 
 import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
-import { IMediaItem } from '../../../types'
-import { deleteMedia as deleteMediaAction } from '../../../context/actions'
 
-export default function ActionsMenu({
-  media,
-  deal
-}: {
+import { IMediaItem } from '../../../types'
+import {
+  setMediaUploadProgress,
+  deleteMedia as deleteMediaAction,
+  setNewlyUploadedMediaFields,
+  setMediaAsUploaded
+} from '../../../context/actions'
+
+interface Props {
   media: IMediaItem
   deal: IDeal
-}) {
+}
+
+export default function ActionsMenu({ media, deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
   const [anchorEl, setAnchorEl] = useState(null)
+  const [isCropperOpen, setIsCropperOpen] = useState(false)
   const { dispatch } = useMediaManagerContext()
   const confirmationModal = useContext(ConfirmationModalContext)
-  const { file } = media
+  const { file, src, name } = media
+  const fileExtension = src.substr(src.lastIndexOf('.'), 4)
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget)
@@ -47,6 +58,7 @@ export default function ActionsMenu({
   }
 
   const handleDelete = () => {
+    handleClose()
     confirmationModal.setConfirmationModal({
       message: 'Remove Image?',
       description: 'This action can not be undone. Are you sure?',
@@ -54,9 +66,49 @@ export default function ActionsMenu({
       onConfirm: async () => {
         deleteMedias(deal.id, [file])
         dispatch(deleteMediaAction(file))
-        handleClose()
       }
     })
+  }
+
+  const showCropper = () => {
+    handleClose()
+    setIsCropperOpen(true)
+  }
+
+  const hideCropper = () => {
+    setIsCropperOpen(false)
+  }
+
+  const onCrop = ({ files }) => {
+    const fileName = files.originalFile
+      .split('?')[0]
+      .split('/')
+      .pop()
+    const croppedFile = new File([files.file], fileName)
+
+    upload(croppedFile)
+  }
+
+  const upload = async fileObject => {
+    const response = await uploadCroppedMedia(
+      deal.id,
+      media.file,
+      fileObject,
+      `${media.name}.${fileExtension}`,
+      progressEvent => {
+        if (progressEvent.percent) {
+          dispatch(setMediaUploadProgress(file, progressEvent.percent))
+        } else {
+          dispatch(setMediaAsUploaded(file))
+        }
+      }
+    )
+
+    const uploadedFileObject = response.body.data.file
+
+    const { preview_url: src } = uploadedFileObject
+
+    dispatch(setNewlyUploadedMediaFields(file, file, src, name))
   }
 
   return (
@@ -102,12 +154,23 @@ export default function ActionsMenu({
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Crop</MenuItem>
+          <MenuItem onClick={showCropper}>Crop</MenuItem>
           <MenuItem onClick={handleDelete}>
             <Typography color="error">Delete</Typography>
           </MenuItem>
         </Menu>
       </div>
+      {isCropperOpen && (
+        <ImageUploader
+          disableChangePhoto
+          disableRotate
+          file={src}
+          width={287}
+          height={287}
+          saveHandler={onCrop}
+          closeHandler={hideCropper}
+        />
+      )}
     </Box>
   )
 }
