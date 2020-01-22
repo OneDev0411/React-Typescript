@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Checkbox } from '@material-ui/core'
+// import { Checkbox } from '@material-ui/core'
 
 import { TableColumn, RenderProps, GridSelectionOptions } from '../../types'
 import { useGridContext } from '../../hooks/use-grid-context'
@@ -8,6 +8,8 @@ import { useGridContext } from '../../hooks/use-grid-context'
 import { SELECTION__TOGGLE_ROW } from '../../context/constants'
 import { getRowId } from '../../helpers/get-row-id'
 import { isRowSelected } from './helpers/is-row-selected'
+
+import Checkbox from './Checkbox'
 
 export function useRowsSelection<Row>(
   columns: TableColumn<Row>[],
@@ -56,7 +58,6 @@ export function useRowsSelection<Row>(
               style={{ display: showDefaultValue ? 'none' : 'block' }}
             >
               <Checkbox
-                color="primary"
                 checked={isRowSelected<Row>(
                   state,
                   rowItem.row,

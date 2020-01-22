@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Tooltip, createStyles, makeStyles, Theme } from '@material-ui/core'
 
-import { Checkbox } from '@material-ui/core'
+import Checkbox from '../Selection/Checkbox'
 
 import { ToggleEntireRows } from '../Selection/ToggleEntireRows'
 
@@ -29,7 +29,8 @@ const useStyles = makeStyles((theme: Theme) =>
       height: theme.spacing(10),
       width: '100%',
       justifyContent: 'space-between',
-      padding: theme.spacing(0, 1)
+      padding: theme.spacing(0, 1),
+      zIndex: 99
     },
     summary: {
       color: theme.palette.primary.main,
@@ -86,7 +87,6 @@ export function Actions<Row>({ rows, TableActions, totalRows }: Props<Row>) {
       >
         <div>
           <Checkbox
-            color="primary"
             checked={isAllRowsSelected}
             indeterminate={isSomeRowsSelected}
             onChange={toggleAll}
