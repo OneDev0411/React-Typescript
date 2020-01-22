@@ -105,7 +105,7 @@ function AppSideNav(props) {
             </SideNavLinkItem>
           </Acl>
 
-          <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
+          <Acl access={[ACL.CRM, ACL.MARKETING]}>
             <SideNavLinkItem
               tooltip="Open House Registration Pages"
               to="/dashboard/open-house"
