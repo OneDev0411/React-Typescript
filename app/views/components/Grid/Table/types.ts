@@ -77,7 +77,7 @@ export interface ActiveSort {
 export interface GridInfiniteScrolling {
   accuracy?: number
   debounceTime?: number
-  container?: React.RefObject<HTMLElement>
+  container?: string | React.RefObject<HTMLElement>
   containerStyle?: React.CSSProperties
   onScrollBottom?: () => void
   onScrollTop?: () => void

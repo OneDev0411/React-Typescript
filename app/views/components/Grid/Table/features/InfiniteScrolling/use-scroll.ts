@@ -8,14 +8,24 @@ import { GridInfiniteScrolling } from '../../types'
 export function useInfiniteScroll(options: GridInfiniteScrolling | null) {
   const [lastScrollTop, setLastScrollTop] = useState(0)
 
-  const container = options ? options.container : null
-
   useEffect(() => {
     if (!options) {
       return
     }
 
-    const element = container && container.current ? container.current : window
+    const getElement = container => {
+      if (!container) {
+        return window
+      }
+
+      if (typeof container === 'string') {
+        return document.getElementById(container)
+      }
+
+      return container.current
+    }
+
+    const element = getElement(options.container)
 
     const update = (el: Event): void => {
       if (!options) {
