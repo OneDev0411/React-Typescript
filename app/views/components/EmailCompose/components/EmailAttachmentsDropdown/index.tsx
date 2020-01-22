@@ -62,7 +62,7 @@ export function EmailAttachmentsDropdown({
         <List>
           <Field
             name="attachments"
-            deal={deal}
+            deafultSelectedDeal={deal}
             initialAttachments={initialAttachments}
             component={AddDealFile}
             onChanged={onChanged}
