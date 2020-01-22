@@ -155,7 +155,7 @@ class ContactsList extends React.Component {
     const { props, state } = this
 
     return (
-      <div>
+      <>
         <Table
           rows={props.data}
           totalRows={props.listInfo.total || 0}
@@ -176,10 +176,10 @@ class ContactsList extends React.Component {
           selection={{
             defaultRender: ({ row }) => <Avatar contact={row} />
           }}
-          infiniteScroll={{
+          infiniteScrolling={{
             accuracy: 300, // px
             debounceTime: 300, // ms
-            container: props.tableContainerId,
+            container: this.props.tableContainerId,
             onScrollBottom: props.onRequestLoadMore,
             onScrollTop: props.onRequestLoadMoreBefore
           }}
@@ -208,7 +208,7 @@ class ContactsList extends React.Component {
           selectedContactsIds={state.selectedTagContact}
           handleChangeContactsAttributes={props.handleChangeContactsAttributes}
         />
-      </div>
+      </>
     )
   }
 }
