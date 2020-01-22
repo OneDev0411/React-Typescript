@@ -38,16 +38,27 @@ export function UserMenuContent({
             </Link>
           </li>
         </Acl.Admin>
-        {showChecklists && (
-          <Acl.Admin>
-            <li>
-              <Link noStyle to="/dashboard/checklists" onClick={onClose}>
-                Checklists
-              </Link>
-            </li>
-          </Acl.Admin>
-        )}
         <ListItemDivider role="separator" />
+        <Acl.Admin>
+          <li>
+            <Link noStyle to="/dashboard/contexts" onClick={onClose}>
+              Contexts
+            </Link>
+          </li>
+        </Acl.Admin>
+        <ListItemDivider role="separator" />
+        {showChecklists && (
+          <>
+            <Acl.Admin>
+              <li>
+                <Link noStyle to="/dashboard/checklists" onClick={onClose}>
+                  Checklists
+                </Link>
+              </li>
+            </Acl.Admin>
+            <ListItemDivider role="separator" />
+          </>
+        )}
         <li>
           <a
             href="/signout"

@@ -370,6 +370,15 @@ const AsyncOops = Load({
     import('../components/Pages/Oops' /* webpackChunkName: "Oops" */)
 })
 
+/* ==================================== */
+//  CRM Deal Context
+/* ==================================== */
+
+const AsyncContexts = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Contexts/List' /* webpackChunkName: "deal_context" */)
+})
+
 function authenticate(nextState, replace) {
   const { user } = store.getState()
   const isLoggedIn = user && user.access_token
@@ -537,6 +546,10 @@ export default (
 
       <Route path="/dashboard/checklists">
         <IndexRoute component={AsyncChecklists} />
+      </Route>
+
+      <Route path="/dashboard/contexts">
+        <IndexRoute component={AsyncContexts} />
       </Route>
 
       <Route path="/dashboard/websites">
