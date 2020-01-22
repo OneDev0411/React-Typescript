@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router'
 import { Form, Field } from 'react-final-form'
+import { Theme } from '@material-ui/core/styles'
+import { useTheme } from '@material-ui/styles'
 
 import SubmitButton from './SubmitButton'
 import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
@@ -8,16 +10,16 @@ import { Callout } from '../../../../views/components/Callout'
 
 import { SubmitMessage } from './types'
 
-interface InitialValues {
+interface FormValues {
   username: string
 }
 
 interface Props {
   brandColor: string
   isLoading: boolean
-  initialValues?: InitialValues
+  initialValues?: FormValues
   submitMessage: SubmitMessage | null
-  onSubmit: (values) => void
+  onSubmit: (values: FormValues) => void
 }
 
 export default function LookUpForm({
@@ -27,7 +29,9 @@ export default function LookUpForm({
   submitMessage,
   onSubmit
 }: Props) {
-  const validate = values => {
+  const theme = useTheme<Theme>()
+
+  const validate = (values: FormValues) => {
     const errors: { username?: string } = {}
 
     if (!values.username) {
@@ -56,7 +60,10 @@ export default function LookUpForm({
             component={SimpleField}
           />
           {submitMessage && (
-            <Callout style={{ margin: '1.5rem 0' }} type={submitMessage.type}>
+            <Callout
+              style={{ margin: theme.spacing(1.5, 0) }}
+              type={submitMessage.type}
+            >
               {submitMessage.text}
             </Callout>
           )}
