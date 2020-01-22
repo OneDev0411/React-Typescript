@@ -1,7 +1,5 @@
 import { createMuiTheme } from '@material-ui/core'
 
-import { borderColor, disabledColor, orange } from 'views/utils/colors'
-
 const white = '#fff'
 
 const theme = createMuiTheme({
@@ -9,49 +7,91 @@ const theme = createMuiTheme({
   palette: {
     type: 'light',
     primary: {
-      main: '#0945eb',
-      light: '#6971ff',
-      dark: '#001eb7',
+      main: '#00B286',
+      light: '#33CCAA',
+      dark: '#008060',
       contrastText: white
     },
     secondary: {
-      main: '#01040D',
-      light: '#0F121A',
+      main: '#0945EB',
+      light: '#6971FF',
+      dark: '#001EB7',
+      contrastText: white
+    },
+    tertiary: {
+      main: '#061126',
+      light: '#2E3033',
       dark: '#000000',
       contrastText: white
     },
-    action: {
-      active: 'rgba(0, 0, 0, 0.54)',
-      hover: 'rgba(0, 0, 0, 0.08)',
-      hoverOpacity: 0.08,
-      selected: 'rgba(0, 0, 0, 0.14)',
-      disabled: 'rgba(0, 0, 0, 0.26)',
-      disabledBackground: 'rgba(0, 0, 0, 0.12)'
+    error: {
+      ultralight: '#FAEDEB',
+      light: '#E57373',
+      main: '#F44336',
+      dark: '#D32F2F',
+      contrastText: white
     },
     warning: {
-      main: orange.primary,
-      dark: orange.dark,
-      light: orange.light
+      ultralight: '#FDF4E7',
+      main: '#FF9900',
+      dark: '#F57C00',
+      light: '#FFB74D',
+      contrastText: 'rgba(0, 0, 0, 0.87)'
     },
-    grey: {
-      '100': '#F2F2F2'
-    },
-    divider: borderColor,
-    error: {
-      light: '#ff7363',
-      main: '#F43B38',
-      dark: '#b90010',
+    info: {
+      ultralight: '#EAF4FC',
+      light: '#64B5F6',
+      main: '#2196F3',
+      dark: '#1976D2',
       contrastText: white
     },
     success: {
-      main: '#27AE60'
+      ultralight: '#EFF7EE',
+      main: '#4CAF50',
+      light: '#81C784',
+      dark: '#388E3C',
+      contrastText: 'rgba(0, 0, 0, 0.87)'
     },
+    grey: {
+      '50': '#F9FAFC',
+      '100': '#F0F2F5',
+      '200': '#E7E9EC',
+      '300': '#D7D9DC',
+      '400': '#B4B5B8',
+      '500': '#949598',
+      '600': '#6C6D70',
+      '700': '#58595C',
+      '800': '#3A3B3E',
+      '900': '#1A1B1D',
+      A100: '#d5d5d5',
+      A200: '#aaaaaa',
+      A400: '#303030',
+      A700: '#616161'
+    },
+    contrastThreshold: 3,
+    tonalOffset: 0.2,
     text: {
-      secondary: disabledColor
+      primary: 'rgba(0, 0, 0, 0.87)',
+      secondary: '#7F7F7F',
+      disabled: 'rgba(0, 0, 0, 0.38)',
+      hint: 'rgba(0, 0, 0, 0.38)'
+    },
+    divider: '#d4d4d4',
+    background: {
+      paper: white,
+      default: '#fafafa'
+    },
+    action: {
+      active: 'rgba(107, 131, 178, 0.54)',
+      hover: 'rgba(107, 131, 178, 0.08)',
+      hoverOpacity: 0.08,
+      selected: 'rgba(107, 131, 178, 0.14)',
+      disabled: 'rgba(107, 131, 178, 0.26)',
+      disabledBackground: 'rgba(107, 131, 178, 0.12)'
     }
   },
   shape: {
-    borderRadius: 3
+    borderRadius: 8
   },
   typography: {
     fontFamily: ['Barlow'].join(','),
