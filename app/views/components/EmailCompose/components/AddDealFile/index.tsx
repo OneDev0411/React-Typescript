@@ -31,7 +31,7 @@ interface StateProps {
 }
 
 interface Props extends FieldRenderProps<any> {
-  deal?: IDeal
+  deafultSelectedDeal?: IDeal
   initialAttachments: IFile[]
   onClick?: MouseEventHandler
   onChanged?: () => void
@@ -39,7 +39,7 @@ interface Props extends FieldRenderProps<any> {
 
 export function AddDealFile({
   initialAttachments,
-  deal: deafultSelectedDeal,
+  deafultSelectedDeal,
   onChanged = () => {},
   ...props
 }: Props) {
