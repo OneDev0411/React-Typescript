@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {
   Popover,
   FormControlLabel,
-  Checkbox,
   createStyles,
   makeStyles,
   Theme
@@ -13,6 +12,8 @@ import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { SELECTION__TOGGLE_ENTIRE_ROWS } from '../../../context/constants'
 
 import { useGridContext } from '../../../hooks/use-grid-context'
+
+import Checkbox from '../Checkbox'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -93,7 +94,6 @@ export function ToggleEntireRows<Row>({ rows, totalRows }: Props<Row>) {
                 state.selection.isEntireRowsSelected &&
                 state.selection.excludedRows.length > 0
               }
-              color="primary"
             />
           }
           label={`select all ${totalRows} rows`}
