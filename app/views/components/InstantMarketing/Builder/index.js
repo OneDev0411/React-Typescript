@@ -25,6 +25,7 @@ import { createGrapesInstance } from './utils/create-grapes-instance'
 
 import Templates from '../Templates'
 import AddToMarketingCenter from './AddToMarketingCenter'
+import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenter/constants'
 import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
@@ -734,6 +735,21 @@ class Builder extends React.Component {
     )
   }
 
+  isTemplatesListEnabled = () => {
+    if (this.props.showTemplatesColumn === false) {
+      return false
+    }
+
+    if (
+      this.state.selectedTemplate &&
+      this.state.selectedTemplate.variant === SAVED_TEMPLATE_VARIANT
+    ) {
+      return false
+    }
+
+    return true
+  }
+
   render() {
     const { isLoading } = this.state
 
@@ -835,7 +851,7 @@ class Builder extends React.Component {
             }}
           />
           <Header>
-            {this.props.showTemplatesColumn !== false && (
+            {this.isTemplatesListEnabled() && (
               <>
                 <Tooltip
                   title={
@@ -929,7 +945,7 @@ class Builder extends React.Component {
           <BuilderContainer>
             <TemplatesContainer
               isInvisible={
-                this.props.showTemplatesColumn === false ||
+                !this.isTemplatesListEnabled() ||
                 this.state.isTemplatesColumnHidden
               }
             >
