@@ -35,7 +35,7 @@ export const ItemValue = styled(H4)`
 export const ItemActions = styled.div`
   position: absolute;
   right: 0;
-  opacity: 0;
+  visibility: hidden;
 `
 
 export const Editable = styled.div`
@@ -78,7 +78,7 @@ export const Item = styled.div<{
   }
 
   :hover ${ItemActions} {
-    opacity: 1;
+    visibility: visible;
   }
 
   ${props =>
