@@ -90,7 +90,13 @@ class Builder extends React.Component {
         }
       ],
 
-      'mj-image': [],
+      'mj-image': [
+        {
+          type: 'text',
+          label: 'Link',
+          name: 'href'
+        }
+      ],
 
       'mj-wrapper': [],
 
