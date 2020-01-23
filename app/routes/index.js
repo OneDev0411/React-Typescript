@@ -313,9 +313,14 @@ const AsyncMapWidget = Load({
     import('../components/Pages/Widgets/Map' /* webpackChunkName: "map_w" */)
 })
 
-const AsyncSearchWidget = Load({
+const AsyncMlsSearchFieldWidget = Load({
   loader: () =>
-    import('../components/Pages/Widgets/Search' /* webpackChunkName: "search_w" */)
+    import('../components/Pages/Widgets/MlsSearchField' /* webpackChunkName: "search_field" */)
+})
+
+const AsyncHeroSearchSectionWidget = Load({
+  loader: () =>
+    import('../components/Pages/Widgets/HeroSearchSection' /* webpackChunkName: "search_field" */)
 })
 
 /* ==================================== */
@@ -435,8 +440,15 @@ export default (
 
       <Route path="/wdigets" component={WidgetsContainer}>
         <Route path="/widgets/map" component={AsyncMapWidget} />
-        <Route path="/widgets/search" component={AsyncSearchWidget} />
         <Route path="/widgets/listings" component={AsyncListingsWidget} />
+        <Route
+          path="/widgets/hero-search-section"
+          component={AsyncHeroSearchSectionWidget}
+        />
+        <Route
+          path="/widgets/mls-search-field"
+          component={AsyncMlsSearchFieldWidget}
+        />
       </Route>
     </Route>
 
