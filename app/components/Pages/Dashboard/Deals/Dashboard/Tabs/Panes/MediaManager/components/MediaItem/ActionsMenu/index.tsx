@@ -42,14 +42,14 @@ export default function ActionsMenu({ media, deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [isCropperOpen, setIsCropperOpen] = useState(false)
   const { dispatch } = useMediaManagerContext()
   const confirmationModal = useContext(ConfirmationModalContext)
   const { file, src, name } = media
   const fileExtension = src.substr(src.lastIndexOf('.'), 4)
 
-  const handleClick = (event: any) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
 
@@ -63,7 +63,7 @@ export default function ActionsMenu({ media, deal }: Props) {
       message: 'Remove Image?',
       description: 'This action can not be undone. Are you sure?',
       confirmLabel: 'Yes, Please',
-      onConfirm: async () => {
+      onConfirm: () => {
         deleteMedias(deal.id, [file])
         dispatch(deleteMediaAction(file))
       }

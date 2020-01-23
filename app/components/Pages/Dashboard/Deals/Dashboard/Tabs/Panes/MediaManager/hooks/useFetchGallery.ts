@@ -11,7 +11,7 @@ export default function useFetchData(dealId: string) {
   let initialData: IMediaGallery = []
 
   const [isLoading, setIsLoading] = useState(false)
-  // @ts-ignore
+
   const [state, dispatch] = useReducer(reducer, initialData)
 
   useEffectOnce(() => {
@@ -20,11 +20,8 @@ export default function useFetchData(dealId: string) {
 
       const results = await getMediaGallery(dealId)
 
-      // @ts-ignore
       dispatch(setGalleryItems(results))
       setIsLoading(false)
-
-      return results
     }
     fetchGallery()
   })

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Typography, Box, Button, Checkbox, Link } from '@material-ui/core'
+import { Typography, Box, Button, Checkbox } from '@material-ui/core'
 import pluralize from 'pluralize'
 
 import { deleteMedias, downloadMedias } from 'models/media-manager'
@@ -70,7 +70,7 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
       )}?`,
       description: 'This action can not be undone. Are you sure?',
       confirmLabel: 'Yes, Please',
-      onConfirm: async () => {
+      onConfirm: () => {
         deleteMedias(deal.id, getSelectedMediaIds(selectedGalleryItems))
         dispatch(deleteMediasAction(getSelectedMediaIds(selectedGalleryItems)))
       }
@@ -109,9 +109,9 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
               >
                 &nbsp;&#9679;&nbsp;
               </Typography>
-              <Link href="#" onClick={handleSelectAll}>
+              <Button href="#" onClick={handleSelectAll}>
                 Select all {pluralize('photo', mediaGallery.length, true)}
-              </Link>
+              </Button>
             </>
           )}
         </Box>

@@ -30,10 +30,10 @@ export const toggleGallerySelection = (selected: boolean) => ({
   }
 })
 
-export const addMedia = (file: {}) => ({
+export const addMedia = (fileObject: {}) => ({
   type: actionTypes.ADD_MEDIA,
   payload: {
-    file
+    fileObject
   }
 })
 

@@ -2,13 +2,16 @@ import React from 'react'
 import { Box } from '@material-ui/core'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 
-// @ts-ignore
 import { uploadMedia, reorderGallery } from 'models/media-manager'
 
 import LoadingContainer from 'components/LoadingContainer'
 
 import Uploader from './components/MediaUploader'
-import { getMediaSorts } from './context/helpers/selectors'
+import {
+  getMediaSorts,
+  getUploadedMedia,
+  getSelectedMedia
+} from './context/helpers/selectors'
 
 import Header from './components/Header'
 import MediaItem from './components/MediaItem'
@@ -61,8 +64,6 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
   const onDrop = (files: any[], rejectedFiles: []) => {
     // TODO: Do something with rejected files. Show some alert maybe?
     files.forEach(file => {
-      let fileId = file.name ? file.name : ''
-
       dispatch(addMedia(file))
       upload(file)
     })
@@ -134,16 +135,16 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
           borderColor="#d4d4d4"
           width={1}
         >
-          <Header mediaGallery={state} />
+          <Header mediasCount={getUploadedMedia(state).length} />
           <SortableGallery
             axis="xy"
             medias={state}
             onSortEnd={onSortEnd}
             useDragHandle
           />
-          {state.filter(media => media.selected).length ? (
+          {getSelectedMedia(state).length > 0 && (
             <BulkActionsMenu mediaGallery={state} deal={deal} />
-          ) : null}
+          )}
         </Box>
       </MediaManagerContext.Provider>
     </Uploader>

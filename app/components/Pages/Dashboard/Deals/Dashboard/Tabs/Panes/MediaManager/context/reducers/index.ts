@@ -1,5 +1,6 @@
-import * as actionTypes from '../actions/action-types'
 import arrayMove from 'array-move'
+
+import * as actionTypes from '../actions/action-types'
 
 import { IMediaGallery } from '../../types'
 
@@ -35,9 +36,7 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
 
       const newState = state.map(media => {
         if (media.file === file) {
-          let selected = media.selected
-
-          return { ...media, selected: !selected }
+          return { ...media, selected: !media.selected }
         }
 
         return media
@@ -71,12 +70,12 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
     }
 
     case actionTypes.ADD_MEDIA: {
-      const { file } = action.payload
+      const { fileObject } = action.payload
 
       return [
         {
-          file: file.name,
-          src: file.preview,
+          file: fileObject.name,
+          src: fileObject.preview,
           name: 'Description',
           order: 0,
           selected: false,
@@ -115,7 +114,7 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
       const { files } = action.payload
 
       const newState = state.filter(media => {
-        return files.indexOf(media.file) === -1
+        return !files.includes(media.file)
       })
 
       return newState

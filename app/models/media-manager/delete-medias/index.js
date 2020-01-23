@@ -6,8 +6,6 @@ export async function deleteMedias(dealId, mediaIds) {
       .delete(`/deals/${dealId}/gallery/items`)
       .send({ items: mediaIds })
 
-    // console.log(response)
-
     return true
   } catch (e) {
     return []

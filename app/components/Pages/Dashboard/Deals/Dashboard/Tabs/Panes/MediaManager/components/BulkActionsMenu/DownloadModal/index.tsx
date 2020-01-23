@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Box, Button, Checkbox, Link } from '@material-ui/core'
+import { Typography, Box, Button, IconButton } from '@material-ui/core'
 
 import BareModal from 'components/BareModal'
 
@@ -22,7 +22,6 @@ export default function DownloadModal({
 
   return (
     <BareModal
-      className="media-manager"
       isOpen={isOpen}
       style={{
         content: { top: '40%', height: 'auto', overflow: 'initial' }
@@ -30,16 +29,15 @@ export default function DownloadModal({
     >
       <Box padding={6} className={classes.downloadModal}>
         <Box className={classes.modalCloseButton}>
-          <Link href="#" onClick={onClose}>
+          <IconButton onClick={onClose}>
             <CloseIcon className={iconClasses.small} />
-          </Link>
+          </IconButton>
         </Box>
         <Typography variant="h3" gutterBottom>
           Your download is ready!
         </Typography>
         <Button
           variant="outlined"
-          disableElevation
           className={classes.lowerCaseButton}
           href={link}
         >

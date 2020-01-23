@@ -6,7 +6,11 @@ import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
 import { IMediaItem } from '../../../types'
 import { toggleMediaSelection } from '../../../context/actions'
 
-export default function SelectCheckbox({ media }: { media: IMediaItem }) {
+interface Props {
+  media: IMediaItem
+}
+
+export default function SelectCheckbox({ media }: Props) {
   const classes = useStyles()
   const { dispatch } = useMediaManagerContext()
   const { file, selected } = media
@@ -17,12 +21,7 @@ export default function SelectCheckbox({ media }: { media: IMediaItem }) {
 
   return (
     <Box className={classes.selectCheckbox}>
-      <Checkbox
-        color="primary"
-        inputProps={{ 'aria-label': 'checkbox with default color' }}
-        checked={!!selected}
-        onChange={handleChange}
-      />
+      <Checkbox color="primary" checked={selected} onChange={handleChange} />
     </Box>
   )
 }

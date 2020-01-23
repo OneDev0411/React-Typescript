@@ -21,13 +21,12 @@ import useMediaManagerContext from '../../hooks/useMediaManagerContext'
 import { IMediaItem } from '../../types'
 import { setMediaName } from '../../context/actions'
 
-export default function MediaItem({
-  media,
-  deal
-}: {
+interface Props {
   media: IMediaItem
   deal: IDeal
-}) {
+}
+
+export default function MediaItem({ media, deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const inputRef = useRef<HTMLInputElement>(null)

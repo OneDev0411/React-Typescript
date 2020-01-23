@@ -6,8 +6,6 @@ export async function getMediaGallery(dealId) {
       .get(`/deals/${dealId}`)
       .query({ 'associations[]': ['deal.gallery'] })
 
-    // console.log(response)
-
     const rawGalleryItems = response.body.data.gallery.items
 
     return rawGalleryItems.map(item => {

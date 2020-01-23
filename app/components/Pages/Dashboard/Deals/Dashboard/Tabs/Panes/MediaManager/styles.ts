@@ -11,9 +11,11 @@ export const useStyles = makeStyles(
         position: 'sticky',
         top: 0,
         left: 0,
-        background: '#fff',
+        background: theme.palette.background.paper,
         zIndex: 1,
-        borderBottom: '1px solid #ccc'
+        borderBottomColor: theme.palette.grey['300'],
+        borderBottomStyle: 'solid',
+        borderBottomWidth: 1
       },
       gallery: {
         padding: theme.spacing(4, 3),
@@ -23,7 +25,7 @@ export const useStyles = makeStyles(
         width: 287,
         padding: theme.spacing(1),
         marginBottom: theme.spacing(2),
-        borderRadius: 4,
+        borderRadius: theme.shape.borderRadius,
 
         '&:hover': {
           backgroundColor: theme.palette.action.hover,
@@ -63,7 +65,7 @@ export const useStyles = makeStyles(
       mediaThumbnail: {
         height: 250,
         marginBottom: theme.spacing(1),
-        borderRadius: 4,
+        borderRadius: theme.shape.borderRadius,
         transition: '0.2s ease-in opacity',
         backgroundPosition: 'center',
         backgroundSize: 'cover',
@@ -94,23 +96,25 @@ export const useStyles = makeStyles(
         top: 15,
         right: 15,
         opacity: 0,
-        background: '#fff',
+        background: theme.palette.background.paper,
         width: 30,
         height: 30,
         cursor: 'move',
         padding: theme.spacing(0.7, 1),
-        borderRadius: 4
+        borderRadius: theme.shape.borderRadius
       },
       placeholderCard: {
         display: 'flex',
         alignItems: 'center',
-        border: '1px dashed #D4D4D4',
-        background: '#FAFAFA',
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: theme.palette.grey['300'],
+        background: theme.palette.grey['100'],
         height: 250,
         width: 270,
         margin: theme.spacing(1),
         marginBottom: theme.spacing(2),
-        borderRadius: 4,
+        borderRadius: theme.shape.borderRadius,
 
         '&:hover': {
           backgroundColor: theme.palette.action.hover
@@ -123,12 +127,6 @@ export const useStyles = makeStyles(
         minWidth: 'auto',
         marginLeft: theme.spacing(1),
         backgroundColor: theme.palette.action.active
-      },
-      trimmedText: {
-        flex: 1,
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
       },
       lowerCaseButton: {
         textTransform: 'none'
@@ -146,8 +144,10 @@ export const useStyles = makeStyles(
         bottom: 0,
         left: 0,
         height: 80,
-        background: '#fff',
-        borderTop: '1px solid #ccc',
+        background: theme.palette.background.paper,
+        borderTopColor: theme.palette.grey['300'],
+        borderTopStyle: 'solid',
+        borderTopWidth: 1,
         boxShadow: '0px -2px 5px 0px rgba(0,0,0,0.10)'
       },
       mediaLabel: {
@@ -188,8 +188,10 @@ export const useStyles = makeStyles(
         width: 700,
         height: 250,
         borderRadius: 10,
-        backgroundColor: '#ffffff',
-        border: '2px dotted #979797',
+        backgroundColor: theme.palette.background.paper,
+        borderWidth: 2,
+        borderStyle: 'dotted',
+        borderColor: theme.palette.grey['500'],
         textAlign: 'center',
         paddingTop: 70
       },
@@ -204,10 +206,8 @@ export const useStyles = makeStyles(
       },
       modalCloseButton: {
         position: 'absolute',
-        top: 10,
-        right: 10,
-        width: 20,
-        height: 20
+        top: 5,
+        right: 5
       }
     }),
   // Making the class names deterministic by setting theme name starting with `Mui`

@@ -15,8 +15,6 @@ export async function uploadCroppedMedia(
       .patch(`/deals/${dealId}/gallery/items/${fileId}/file`)
       .attach('file', fileObject, fileName)
 
-    console.log(result)
-
     return result
   } catch (e) {
     return null

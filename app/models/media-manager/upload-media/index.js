@@ -14,8 +14,6 @@ export async function uploadMedia(
       .upload(`/deals/${dealId}/gallery/items`)
       .attach('file', file, fileName)
 
-    // console.log(result)
-
     return result
   } catch (e) {
     return null

@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { useState, ReactChild } from 'react'
 import { Box, Typography } from '@material-ui/core'
 // @ts-ignore
 import Dropzone from 'react-dropzone'
@@ -6,7 +6,7 @@ import Dropzone from 'react-dropzone'
 import { useStyles } from '../../styles'
 
 interface Props {
-  children: ReactElement<any>
+  children: ReactChild
   onDrop(files: any, rejectedFiles: any): void
   disableClick: boolean
 }
@@ -24,9 +24,7 @@ export default function Uploader({ onDrop, disableClick, children }: Props) {
     <Dropzone
       style={{ width: '100%' }}
       disableClick={disableClick}
-      onDrop={(files: any[], rejectedFiles: any[]) => {
-        handleOnDrop(files, rejectedFiles)
-      }}
+      onDrop={handleOnDrop}
       onDragEnter={() => setDragZoneActive(true)}
       onDragLeave={() => setDragZoneActive(false)}
       multiple

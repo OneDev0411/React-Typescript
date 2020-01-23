@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography, Box, Button } from '@material-ui/core'
 import cn from 'classnames'
+import pluralize from 'pluralize'
 
 import IconUpload from 'components/SvgIcons/Upload/IconUpload'
 import IconDropbox from 'components/SvgIcons/Dropbox/IconDropbox'
@@ -9,14 +10,11 @@ import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import { useStyles } from '../../styles'
 
-import { IMediaGallery } from '../../types'
-import { getUploadedMedia } from '../../context/helpers/selectors'
-
 interface Props {
-  mediaGallery: IMediaGallery
+  mediasCount: number
 }
 
-export default function Header({ mediaGallery }: Props) {
+export default function Header({ mediasCount }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
@@ -24,7 +22,7 @@ export default function Header({ mediaGallery }: Props) {
     <Box display="flex" width={1} className={classes.header}>
       <Box flexGrow={1}>
         <Typography variant="h6" className={classes.bold} display="inline">
-          {getUploadedMedia(mediaGallery).length} Photos
+          {pluralize('photo', mediasCount, true)}
         </Typography>{' '}
         <Typography
           variant="h6"
