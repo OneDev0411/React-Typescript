@@ -94,15 +94,93 @@ const theme = createMuiTheme({
     borderRadius: 8
   },
   typography: {
-    fontFamily: ['Barlow'].join(','),
-    button: {
-      textTransform: 'none'
-    },
+    htmlFontSize: 16,
+    fontFamily: '"Lato","Helvetica","Arial",sans-serif',
+    fontSize: 14,
+    fontWeightThin: 100,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightBold: 700,
+    fontWeightBlack: 900,
     h1: {
-      fontFamily: 'Merriweather'
+      fontFamily: 'Lato',
+      fontWeight: 300,
+      fontSize: '6rem',
+      lineHeight: 1.167
+    },
+    h2: {
+      fontFamily: 'Lato',
+      fontWeight: 100,
+      fontSize: '3.75rem',
+      lineHeight: 1.2
+    },
+    h3: {
+      fontFamily: 'Lato',
+      fontWeight: 400,
+      fontSize: '3rem',
+      lineHeight: 1.167
+    },
+    h4: {
+      fontFamily: 'Lato',
+      fontWeight: 900,
+      fontSize: '2rem',
+      lineHeight: 1.235
     },
     h5: {
-      fontFamily: 'Merriweather'
+      fontFamily: 'Lato',
+      fontWeight: 400,
+      fontSize: '1.5rem',
+      lineHeight: 1.334
+    },
+    h6: {
+      fontFamily: 'Lato',
+      fontWeight: 900,
+      fontSize: '1.125rem',
+      lineHeight: 1.6
+    },
+    subtitle1: {
+      fontFamily: 'Lato',
+      fontWeight: 400,
+      fontSize: '1rem',
+      lineHeight: 1.75
+    },
+    subtitle2: {
+      fontFamily: 'Lato',
+      fontWeight: 500,
+      fontSize: '0.875rem',
+      lineHeight: 1.57
+    },
+    body1: {
+      fontFamily: 'Lato',
+      fontWeight: 400,
+      fontSize: '1rem',
+      lineHeight: 1.5
+    },
+    body2: {
+      fontFamily: 'Lato',
+      fontWeight: 400,
+      fontSize: '0.875rem',
+      lineHeight: 1.43
+    },
+    button: {
+      fontFamily: 'Lato',
+      fontWeight: 500,
+      fontSize: '0.875rem',
+      lineHeight: 1.75,
+      textTransform: 'none'
+    },
+    caption: {
+      fontFamily: 'Lato',
+      fontWeight: 400,
+      fontSize: '0.75rem',
+      lineHeight: 1.66
+    },
+    overline: {
+      fontFamily: 'Lato',
+      fontWeight: 400,
+      fontSize: '0.75rem',
+      lineHeight: 2.66,
+      textTransform: 'uppercase'
     }
   },
   props: {

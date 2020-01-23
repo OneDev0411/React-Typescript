@@ -1,3 +1,6 @@
+import { CSSProperties } from '@material-ui/core/styles/withStyles'
+import { FontStyle } from '@material-ui/core/styles/createTypography'
+
 import {
   Palette,
   ColorPartial,
@@ -41,4 +44,12 @@ declare module '@material-ui/core/styles/createPalette' {
     info?: PaletteColorOptions
     success?: PaletteColorOptions
   }
+}
+
+declare module '@material-ui/core/styles/createTypography' {
+  interface FontStyle
+    extends Required<{
+      fontWeightThin: CSSProperties['fontWeight']
+      fontWeightBlack: CSSProperties['fontWeight']
+    }> {}
 }
