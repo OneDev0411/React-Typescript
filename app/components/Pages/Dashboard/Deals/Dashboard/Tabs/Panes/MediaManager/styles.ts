@@ -151,8 +151,8 @@ export const useStyles = makeStyles(
         boxShadow: '0px -2px 5px 0px rgba(0,0,0,0.10)'
       },
       mediaLabel: {
+        display: 'block',
         postion: 'relative',
-        justifyContent: 'left',
         textAlign: 'left',
         textTransform: 'none',
         '&:hover': {
@@ -164,10 +164,25 @@ export const useStyles = makeStyles(
         }
       },
       editButton: {
-        position: 'absolute',
-        top: 10,
-        right: 10,
+        float: 'right',
         opacity: 0
+      },
+      editTextArea: {
+        fontFamily: 'inherit',
+        width: '100%',
+        lineHeight: 'inherit',
+        fontSize: 'inherit',
+        padding: theme.spacing(1),
+
+        '&:focus': {
+          outline: 'none',
+          borderTop: 'none',
+          borderLeft: 'none',
+          borderRight: 'none',
+          borderBottomWidth: 1,
+          borderBottomStyle: 'solid',
+          borderBottomColor: '#0000ff'
+        }
       },
       iconButton: {
         padding: 5

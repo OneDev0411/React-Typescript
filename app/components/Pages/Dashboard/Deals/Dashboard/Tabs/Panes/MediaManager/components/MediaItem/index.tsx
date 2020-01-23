@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Box, Link, Button, TextField } from '@material-ui/core'
+import {
+  Box,
+  Link,
+  Button,
+  TextareaAutosize,
+  IconButton
+} from '@material-ui/core'
 import cn from 'classnames'
 
 import { SortableHandle } from 'react-sortable-hoc'
@@ -29,7 +35,7 @@ interface Props {
 export default function MediaItem({ media, deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
-  const inputRef = useRef<HTMLInputElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
   const { file, src, selected, name, order, isNew, uploadProgress } = media
 
@@ -38,10 +44,10 @@ export default function MediaItem({ media, deal }: Props) {
   const [editMode, setEditMode] = useState<boolean>(false)
 
   useEffect(() => {
-    if (editMode && inputRef && inputRef.current) {
-      inputRef.current.focus()
+    if (editMode && textareaRef && textareaRef.current) {
+      textareaRef.current.focus()
     }
-  }, [editMode, inputRef])
+  }, [editMode, textareaRef])
 
   const handleOnBlur = () => {
     setTimeout(() => {
@@ -49,16 +55,18 @@ export default function MediaItem({ media, deal }: Props) {
     }, 100)
   }
 
-  const renameMedia = () => {
-    if (inputRef && inputRef.current) {
-      const name = inputRef.current.value
+  const renameMedia = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+
+    if (textareaRef && textareaRef.current) {
+      const name = textareaRef.current.value
 
       editMedia(deal.id, file, name)
       dispatch(setMediaName(file, name))
     }
   }
 
-  const cancelEdit = (e: React.MouseEvent) => {
+  const cancelEdit = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
     setEditMode(false)
   }
@@ -107,24 +115,20 @@ export default function MediaItem({ media, deal }: Props) {
           fullWidth
           onClick={() => setEditMode(true)}
         >
+          <IconButton className={classes.editButton}>
+            <IconEdit fillColor="#333" className={iconClasses.small} />
+          </IconButton>
           {name}
-          <IconEdit
-            fillColor="#333"
-            className={cn(
-              iconClasses.small,
-              iconClasses.leftMargin,
-              classes.editButton
-            )}
-          />
         </Button>
       )}
 
       {editMode && (
         <form noValidate autoComplete="off">
-          <TextField
+          <TextareaAutosize
             defaultValue={name}
             onBlur={handleOnBlur}
-            inputRef={inputRef}
+            ref={textareaRef}
+            className={classes.editTextArea}
           />
           <Link href="#" onClick={renameMedia}>
             <IconCircleCheck
