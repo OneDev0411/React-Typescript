@@ -8,12 +8,11 @@ import { selectSellingDeals } from './open-house-list-helpers'
 
 interface Props {
   deals: IDeal[]
-  isOpen: boolean
   onOpenDrawer: (item: IDeal | ICompactListing) => void
 }
 
 function CreateNewOpenHouse(props: Props) {
-  const [isSearchDrawerOpen, setIsSearchDrawerOpen] = useState(props.isOpen)
+  const [isSearchDrawerOpen, setIsSearchDrawerOpen] = useState(false)
 
   return (
     <>
