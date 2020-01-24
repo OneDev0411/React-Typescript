@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { ScrollableArea } from '../../../../../../views/components/ScrollableArea'
+import Acl from '../../../../../../views/components/Acl'
 import Link from '../../../../../../views/components/ALink'
+import { ScrollableArea } from '../../../../../../views/components/ScrollableArea'
 
-import { SideMenuContainer, SideMenuList, SubTitle } from './styled'
 import TeamSwitcher from './TeamSwitcher'
 import { ListItemDivider } from '../../styled'
-import Acl from '../../../../../../views/components/Acl'
+import { SideMenuContainer, SideMenuList, SubTitle } from './styled'
 
 interface Props {
   user: IUser
@@ -17,7 +17,7 @@ interface Props {
 export function UserMenuContent({
   user,
   showChecklists,
-  onClose = () => {}
+  onClose = () => { }
 }: Props) {
   return (
     <SideMenuContainer>
@@ -28,37 +28,37 @@ export function UserMenuContent({
       </ScrollableArea>
 
       <SideMenuList>
-        {user.teams && user.teams.length > 1 && (
-          <SubTitle>Team Settings</SubTitle>
-        )}
         <Acl.Admin>
+          {user.teams && user.teams.length > 1 && (
+            <SubTitle>Team Settings</SubTitle>
+          )}
           <li>
             <Link noStyle to="/dashboard/teams" onClick={onClose}>
               Members
             </Link>
           </li>
+          <Acl.Admin>
+            <li>
+              <Link noStyle to="/dashboard/contexts" onClick={onClose}>
+                Contexts
+              </Link>
+            </li>
+          </Acl.Admin>
+          {showChecklists && (
+            <li>
+              <Link noStyle to="/dashboard/checklists" onClick={onClose}>
+                Checklists
+              </Link>
+            </li>
+          )}
+          <ListItemDivider role="separator" />
         </Acl.Admin>
+        <li>
+          <Link noStyle to="/dashboard/account" onClick={onClose}>
+            Account settings
+          </Link>
+        </li>
         <ListItemDivider role="separator" />
-        <Acl.Admin>
-          <li>
-            <Link noStyle to="/dashboard/contexts" onClick={onClose}>
-              Contexts
-            </Link>
-          </li>
-        </Acl.Admin>
-        <ListItemDivider role="separator" />
-        {showChecklists && (
-          <>
-            <Acl.Admin>
-              <li>
-                <Link noStyle to="/dashboard/checklists" onClick={onClose}>
-                  Checklists
-                </Link>
-              </li>
-            </Acl.Admin>
-            <ListItemDivider role="separator" />
-          </>
-        )}
         <li>
           <a
             href="/signout"
