@@ -2,7 +2,7 @@
 
 exports[`Deal address component renders with address 1`] = `
 <div
-  class="styled__TitleContainer-xmjc75-0 cuhPTb"
+  class="styled__TitleContainer-xmjc75-0 dNWvUq"
 >
   <h2
     class="headings__H2-sc-15tq5ag-2 jNRgRN"
@@ -18,7 +18,7 @@ exports[`Deal address component renders with address 1`] = `
 
 exports[`Deal address component renders without address 1`] = `
 <div
-  class="styled__TitleContainer-xmjc75-0 cuhPTb"
+  class="styled__TitleContainer-xmjc75-0 dNWvUq"
 >
   <h2
     class="headings__H2-sc-15tq5ag-2 jNRgRN"

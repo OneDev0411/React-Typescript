@@ -83,7 +83,6 @@ class AgentTable extends React.Component {
             isSideMenuOpen={isSideMenuOpen}
             onMenuTriggerChange={this.toggleSideMenu}
           />
-
           <GridContainer>
             <Search
               disableOnSearch

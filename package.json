@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "65.0.0",
+  "version": "66.0.7",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -71,7 +71,7 @@
     "balloon-css": "^0.5.0",
     "bluebird": "^3.5.3",
     "bowser": "^2.0.0-alpha.4",
-    "branch-sdk": "^2.48.0",
+    "branch-sdk": "^2.52.3",
     "chromath": "^0.0.7",
     "classnames": "^2.2.6",
     "cleave.js": "^1.4.10",
@@ -116,7 +116,7 @@
     "google-map-react": "^1.1.2",
     "google-maps": "^3.3.0",
     "grapesjs": "^0.15.10",
-    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#cc4ae66",
+    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#067743d",
     "history": "^3.3.0",
     "hogan.js": "^3.0.2",
     "html-webpack-plugin": "^4.0.0-beta.5",

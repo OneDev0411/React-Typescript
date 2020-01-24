@@ -51,31 +51,34 @@ async function getRequestBody(user, deal, costCenter, callbackUrl) {
   const state = getListingAddressField(listing, 'state')
   const zip = getListingAddressField(listing, 'postal_code')
 
-  return nunjucks.renderString(REQUEST_BODY_TEMPLATE, {
-    duns: DUNS,
-    networkUserIdSharedSecret: SHARED_SECRET,
-    callbackUrl,
-    user: {
-      costCenter,
-      id: user.id,
-      email: user.email,
-      uniqueName: user.email,
-      firstName: user.first_name,
-      lastName: user.last_name
-    },
-    properties: [
-      {
-        id: deal.id,
-        price,
-        address,
-        description,
-        pictures,
-        city,
-        state,
-        zip
-      }
-    ]
-  })
+  return nunjucks
+    .renderString(REQUEST_BODY_TEMPLATE, {
+      duns: DUNS,
+      networkUserIdSharedSecret: SHARED_SECRET,
+      callbackUrl,
+      user: {
+        costCenter,
+        id: user.id,
+        email: user.email,
+        uniqueName: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name
+      },
+      properties: [
+        {
+          id: deal.id,
+          price,
+          address,
+          description,
+          pictures,
+          city,
+          state,
+          zip
+        }
+      ]
+    })
+    .split('’')
+    .join("'") // Cause MMM API breaks with ’ character! :/
 }
 
 async function sendPunchoutRequest(user, deal, costCenter, callbackUrl) {
@@ -89,45 +92,50 @@ async function sendPunchoutRequest(user, deal, costCenter, callbackUrl) {
   return response
 }
 
-router.post('/my-marketing-matters/punchout', bodyParser(), async ctx => {
-  const { user: userSession } = ctx.session
+router.post(
+  '/my-marketing-matters/punchout',
+  bodyParser({ jsonLimit: '10mb' }),
+  async ctx => {
+    const { user: userSession } = ctx.session
 
-  if (!userSession) {
-    ctx.status = 401
-    ctx.body = 'Unauthorized'
+    if (!userSession) {
+      ctx.status = 401
+      ctx.body = 'Unauthorized'
 
-    return
+      return
+    }
+
+    try {
+      const { user, deal, costCenter, redirectUrl } = ctx.request.body
+
+      const punchoutResponse = await sendPunchoutRequest(
+        user,
+        deal,
+        costCenter,
+        redirectUrl
+      )
+      const parsedResponse = await xml2js.parseStringPromise(
+        punchoutResponse.text
+      )
+
+      const response = {
+        url:
+          parsedResponse.cXML.Response[0].PunchOutSetupResponse[0].StartPage[0]
+            .URL[0]
+      }
+
+      ctx.status = 200
+      ctx.body = {
+        response
+      }
+    } catch (err) {
+      console.error('MyMarketingMatters Punchout Error', err)
+      ctx.status = 500
+      ctx.body = {
+        error: err
+      }
+    }
   }
-
-  try {
-    const { user, deal, costCenter, redirectUrl } = ctx.request.body
-
-    const punchoutResponse = await sendPunchoutRequest(
-      user,
-      deal,
-      costCenter,
-      redirectUrl
-    )
-    const parsedResponse = await xml2js.parseStringPromise(
-      punchoutResponse.text
-    )
-
-    const response = {
-      url:
-        parsedResponse.cXML.Response[0].PunchOutSetupResponse[0].StartPage[0]
-          .URL[0]
-    }
-
-    ctx.status = 200
-    ctx.body = {
-      response
-    }
-  } catch (err) {
-    ctx.status = 500
-    ctx.body = {
-      error: err
-    }
-  }
-})
+)
 
 module.exports = app.use(router.routes())
