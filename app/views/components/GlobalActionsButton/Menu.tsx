@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(0, 1)
     },
     closeIconButtonLabel: {
-      width: `${theme.spacing(2)}px`,
-      height: `${theme.spacing(2)}px`
+      width: theme.spacing(2),
+      height: theme.spacing(2)
     },
     subheader: {
       display: 'flex',

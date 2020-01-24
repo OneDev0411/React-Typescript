@@ -33,8 +33,8 @@ export default function GlobalHeaderWithSearch({
     throttledSearchHandler.current(searchQueryValue)
   }, [searchQueryValue])
 
-  const handleQueryChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQueryValue(ev.currentTarget.value)
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQueryValue(event.currentTarget.value)
   }
 
   return (
