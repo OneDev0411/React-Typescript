@@ -1,17 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
-import {
-  Box,
-  Link,
-  Button,
-  TextareaAutosize,
-  IconButton
-} from '@material-ui/core'
+import { Box, Button, TextareaAutosize, IconButton } from '@material-ui/core'
 import cn from 'classnames'
 
 import { SortableHandle } from 'react-sortable-hoc'
 
-import IconCircleCheck from 'components/SvgIcons/CircleCheck/IconCircleCheck'
-import IconCircleClose from 'components/SvgIcons/CircleClose/IconCircleClose'
 import IconEdit from 'components/SvgIcons/Edit/EditIcon'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
@@ -55,8 +47,8 @@ export default function MediaItem({ media, deal }: Props) {
     }, 100)
   }
 
-  const renameMedia = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
+  const renameMedia = (e: React.MouseEvent<HTMLButtonElement> | null) => {
+    e && e.preventDefault()
 
     if (textareaRef && textareaRef.current) {
       const name = textareaRef.current.value
@@ -66,9 +58,23 @@ export default function MediaItem({ media, deal }: Props) {
     }
   }
 
-  const cancelEdit = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
+  const cancelEdit = (e: React.MouseEvent<HTMLButtonElement> | null) => {
+    e && e.preventDefault()
+
     setEditMode(false)
+  }
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Escape') {
+      cancelEdit(null)
+    }
+
+    if (e.key === 'Enter') {
+      // If user wants a new line he would probably know he
+      // should press Shift+Enter right?
+      e.preventDefault()
+      renameMedia(null)
+    }
   }
 
   const DragHandle = SortableHandle(() => (
@@ -110,16 +116,15 @@ export default function MediaItem({ media, deal }: Props) {
       </Box>
 
       {!editMode && (
-        <Button
-          className={classes.mediaLabel}
-          fullWidth
-          onClick={() => setEditMode(true)}
-        >
-          <IconButton className={classes.editButton}>
+        <Box className={classes.mediaLabel}>
+          <IconButton
+            className={classes.editButton}
+            onClick={() => setEditMode(true)}
+          >
             <IconEdit fillColor="#333" className={iconClasses.small} />
           </IconButton>
           {name}
-        </Button>
+        </Box>
       )}
 
       {editMode && (
@@ -128,20 +133,19 @@ export default function MediaItem({ media, deal }: Props) {
             defaultValue={name}
             onBlur={handleOnBlur}
             ref={textareaRef}
+            onKeyDown={onKeyDown}
             className={classes.editTextArea}
           />
-          <Link href="#" onClick={renameMedia}>
-            <IconCircleCheck
-              fillColor="#3f51b5"
-              className={cn(iconClasses.medium, iconClasses.rightMargin)}
-            />
-          </Link>
-          <Link href="#" onClick={cancelEdit}>
-            <IconCircleClose
-              fillColor="#000"
-              className={cn(iconClasses.medium)}
-            />
-          </Link>
+          <Button
+            variant="outlined"
+            onClick={renameMedia}
+            className={classes.lowerCaseButton}
+          >
+            Save
+          </Button>{' '}
+          <Button onClick={cancelEdit} className={classes.lowerCaseButton}>
+            Cancel
+          </Button>
         </form>
       )}
     </Box>
