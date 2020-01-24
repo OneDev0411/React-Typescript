@@ -122,7 +122,7 @@ export class Grid extends React.Component<Props, State> {
           rows={this.props.data}
           columns={this.columns}
           totalRows={(this.props.data || []).length}
-          LoadingState={Loading}
+          LoadingStateComponent={Loading}
           loading={this.props.isFetching ? 'middle' : null}
           summary={total => `${total} Agents`}
           selection={{

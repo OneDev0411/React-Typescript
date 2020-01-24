@@ -180,7 +180,7 @@ function List(props: Props) {
             rows={flows}
             totalRows={(flows || []).length}
             loading={isFetching ? 'middle' : null}
-            LoadingState={LoadingComponent}
+            LoadingStateComponent={LoadingComponent}
           />
         )}
         {error && <h4>{error}</h4>}

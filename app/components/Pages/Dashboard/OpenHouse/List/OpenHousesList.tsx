@@ -144,7 +144,7 @@ function OpenHousesList(props: Props) {
         rows={list}
         totalRows={(list || []).length}
         loading={isFetching ? 'middle' : null}
-        LoadingState={LoadingContainer}
+        LoadingStateComponent={LoadingContainer}
       />
     )
   }

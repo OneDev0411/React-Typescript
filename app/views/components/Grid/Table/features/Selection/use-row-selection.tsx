@@ -1,7 +1,5 @@
 import React from 'react'
 
-// import { Checkbox } from '@material-ui/core'
-
 import { TableColumn, RenderProps, GridSelectionOptions } from '../../types'
 import { useGridContext } from '../../hooks/use-grid-context'
 

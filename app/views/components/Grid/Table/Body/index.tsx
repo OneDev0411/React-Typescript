@@ -7,7 +7,6 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { fade } from '@material-ui/core/styles'
 import cn from 'classnames'
 
 import { resolveAccessor } from '../helpers/resolve-accessor'
@@ -28,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     table: {
       '& tr:nth-child(odd)': {
-        backgroundColor: fade('#f2f3f7', 0.3)
+        backgroundColor: theme.palette.grey[50]
       }
     },
     row: ({ selection }: { selection: GridSelectionOptions<any> | null }) => {
@@ -59,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
               display: 'block !important '
             },
             '& .selected': {
-              backgroundColor: '#f2f3f7'
+              backgroundColor: theme.palette.action.selected
             }
           }
         }

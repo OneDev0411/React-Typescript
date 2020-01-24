@@ -6,7 +6,6 @@ import LoadingComponent from '../../../../../../views/components/Spinner'
 import ListingCard from '../ListingCard'
 import { formatListing } from '../../helpers/format-listing'
 import { sortOptions } from '../../helpers/sort-plugin-options'
-// import { bodyStyle, rowStyle } from './styled'
 
 const columns = [
   {
@@ -27,7 +26,7 @@ export function GalleryView(props) {
         columns={columns}
         rows={props.listings.data.map(format)}
         loading={props.isFetching ? 'middle' : null}
-        LoadingState={LoadingComponent}
+        LoadingStateComponent={LoadingComponent}
         totalRows={props.listings.info.total}
         summary={total => `${total} Listings`}
         sorting={sortOptions}

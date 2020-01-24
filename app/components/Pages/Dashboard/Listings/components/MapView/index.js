@@ -82,7 +82,7 @@ export class MapViewContainer extends React.Component {
             columns={this.columns}
             rows={this.props.data}
             loading={this.props.isFetching ? 'middle' : null}
-            LoadingState={LoadingComponent}
+            LoadingStateComponent={LoadingComponent}
             totalRows={this.props.listings.info.total}
             summary={total => `${total} Listings`}
             getTrProps={() => ({

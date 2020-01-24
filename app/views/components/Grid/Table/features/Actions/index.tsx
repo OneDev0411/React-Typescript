@@ -23,14 +23,14 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       bottom: 0,
-      border: '1px solid #F4F5F9',
-      background: '#fff',
+      borderTop: `1px solid ${theme.palette.divider}`,
+      background: theme.palette.common.white,
       position: 'sticky',
       height: theme.spacing(10),
       width: '100%',
       justifyContent: 'space-between',
       padding: theme.spacing(0, 1),
-      zIndex: 99
+      zIndex: theme.zIndex.appBar
     },
     summary: {
       color: theme.palette.primary.main,

@@ -145,7 +145,9 @@ function EmailTemplatesList({
       totalRows={(templates || []).length}
       columns={columns}
       loading={isFetching ? 'middle' : null}
-      LoadingState={() => <LoadingContainer style={{ padding: '20% 0' }} />}
+      LoadingStateComponent={() => (
+        <LoadingContainer style={{ padding: '20% 0' }} />
+      )}
       getTrProps={({ rowIndex: number, row: template }) => {
         return {
           onClick: isTemplateDeleting(template.id)
