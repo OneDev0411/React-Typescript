@@ -11,7 +11,7 @@ import publicConfig from '../../../../config/public'
 import signin from '../../../store_actions/auth/signin'
 
 import Loading from '../../Partials/Loading'
-import { getBrandInfo } from '../Auth/SignIn'
+import { getBrandInfo } from '../Auth/SignIn/get-brand-info'
 import getUser from '../../../models/user/get-user'
 import ConflictModal from './components/ConflictModal'
 import NeedsToLoginModal from './components/NeedsToLoginModal'

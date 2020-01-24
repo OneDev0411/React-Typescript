@@ -33,8 +33,9 @@ export const ItemValue = styled(H4)`
 `
 
 export const ItemActions = styled.div`
-  display: flex;
-  display: none;
+  position: absolute;
+  right: 0;
+  visibility: hidden;
 `
 
 export const Editable = styled.div`
@@ -56,6 +57,7 @@ export const Item = styled.div<{
   showBorder?: boolean
   isSaving?: boolean
 }>`
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -76,7 +78,7 @@ export const Item = styled.div<{
   }
 
   :hover ${ItemActions} {
-    display: inherit;
+    visibility: visible;
   }
 
   ${props =>

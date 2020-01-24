@@ -53,10 +53,6 @@ function AllContactsList({
     activeSegment.id === DUPLICATE_CONTACTS_LIST_ID
 
   const clickHandler = async (type: string) => {
-    if (type === activeSegment.id) {
-      return
-    }
-
     await resetActiveFilters(CONTACTS_SEGMENT_NAME)
     await changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type)
 

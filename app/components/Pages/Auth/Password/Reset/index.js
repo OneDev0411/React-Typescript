@@ -6,7 +6,7 @@ import { Field, reduxForm } from 'redux-form'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import { getBrandInfo } from '../../SignIn'
+import { getBrandInfo } from '../../SignIn/get-brand-info'
 import ConflictModal from '../../../Branch/components/ConflictModal'
 import updatePassword from '../../../../../models/auth/password/update'
 import Button from '../../../../../views/components/Button/ActionButton'
@@ -144,7 +144,7 @@ const validate = values => {
   if (!values.confirm_password) {
     errors.confirm_password = 'Required'
   } else if (values.confirm_password !== values.password) {
-    errors.confirm_password = 'Your passwords don\'t match'
+    errors.confirm_password = "Your passwords don't match"
   }
 
   return errors
@@ -186,7 +186,7 @@ export default compose(
             setSubmitSuccessfully(email)
           }
         })
-        .catch(error => {
+        .catch(() => {
           setIsSubmitting(false)
           setSubmitError(true)
         })

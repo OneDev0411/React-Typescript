@@ -7,7 +7,7 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Field, reduxForm } from 'redux-form'
 
-import { getBrandInfo } from '../SignIn'
+import { getBrandInfo } from '../SignIn/get-brand-info'
 import Button from '../../../../views/components/Button/ActionButton'
 import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
 

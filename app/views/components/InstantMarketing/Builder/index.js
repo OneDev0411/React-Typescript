@@ -1,5 +1,3 @@
-import { ACL } from 'constants/acl'
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -17,7 +15,7 @@ import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 
-import { getActiveTeam, hasUserAccess, isBackOffice } from 'utils/user-teams'
+import { getActiveTeam, isBackOffice } from 'utils/user-teams'
 
 import nunjucks from '../helpers/nunjucks'
 import { getBrandColors } from '../helpers/get-brand-colors'
@@ -27,6 +25,7 @@ import { createGrapesInstance } from './utils/create-grapes-instance'
 
 import Templates from '../Templates'
 import AddToMarketingCenter from './AddToMarketingCenter'
+import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenter/constants'
 import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
@@ -91,7 +90,13 @@ class Builder extends React.Component {
         }
       ],
 
-      'mj-image': [],
+      'mj-image': [
+        {
+          type: 'text',
+          label: 'Link',
+          name: 'href'
+        }
+      ],
 
       'mj-wrapper': [],
 
@@ -392,26 +397,17 @@ class Builder extends React.Component {
       const attributes = model.get('attributes')
 
       const editable = attributes['rechat-editable']
-      // const draggable = attributes.hasOwnProperty('rechat-draggable')
-      const draggable = this.isMjmlTemplate && this.isEmailTemplate
-      // const droppable = attributes.hasOwnProperty('rechat-dropable')
-      const droppable = this.isMjmlTemplate && this.isEmailTemplate
-
       const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
 
       if (!editable) {
         model.set({
           editable: false,
-          selectable: isRechatAsset,
-          hoverable: isRechatAsset
+          resizable: false,
+          draggable: false,
+          hoverable: isRechatAsset,
+          selectable: isRechatAsset
         })
       }
-
-      model.set({
-        resizable: false,
-        draggable,
-        droppable
-      })
 
       if (
         shouldSelectImage &&
@@ -729,7 +725,7 @@ class Builder extends React.Component {
     )
   }
 
-  toggeleTemplatesColumnVisibility = () => {
+  toggleTemplatesColumnVisibility = () => {
     this.setState(prevState => ({
       ...prevState,
       isTemplatesColumnHidden: !prevState.isTemplatesColumnHidden
@@ -743,6 +739,21 @@ class Builder extends React.Component {
     return (
       isBackofficeUser && this.state.selectedTemplate && !this.isOpenHouseMedium
     )
+  }
+
+  isTemplatesListEnabled = () => {
+    if (this.props.showTemplatesColumn === false) {
+      return false
+    }
+
+    if (
+      this.state.selectedTemplate &&
+      this.state.selectedTemplate.variant === SAVED_TEMPLATE_VARIANT
+    ) {
+      return false
+    }
+
+    return true
   }
 
   render() {
@@ -761,8 +772,7 @@ class Builder extends React.Component {
           hideBlocks={
             !this.isMjmlTemplate ||
             this.isOpenHouseMedium ||
-            this.isSocialMedium ||
-            hasUserAccess(this.props.user, ACL.BETA) === false
+            this.isSocialMedium
           }
           className="template-builder"
           style={this.props.containerStyle}
@@ -847,19 +857,23 @@ class Builder extends React.Component {
             }}
           />
           <Header>
-            <Tooltip
-              title={
-                this.state.isTemplatesColumnHidden
-                  ? 'Change Template'
-                  : 'Hide Templates'
-              }
-            >
-              <IconButton onClick={this.toggeleTemplatesColumnVisibility}>
-                <IconMenu />
-              </IconButton>
-            </Tooltip>
+            {this.isTemplatesListEnabled() && (
+              <>
+                <Tooltip
+                  title={
+                    this.state.isTemplatesColumnHidden
+                      ? 'Change Template'
+                      : 'Hide Templates'
+                  }
+                >
+                  <IconButton onClick={this.toggleTemplatesColumnVisibility}>
+                    <IconMenu />
+                  </IconButton>
+                </Tooltip>
 
-            <Divider orientation="vertical" />
+                <Divider orientation="vertical" />
+              </>
+            )}
 
             {this.editor && (
               <>
@@ -937,7 +951,7 @@ class Builder extends React.Component {
           <BuilderContainer>
             <TemplatesContainer
               isInvisible={
-                this.props.showTemplatesColumn === false ||
+                !this.isTemplatesListEnabled() ||
                 this.state.isTemplatesColumnHidden
               }
             >

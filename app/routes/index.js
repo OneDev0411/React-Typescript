@@ -313,9 +313,14 @@ const AsyncMapWidget = Load({
     import('../components/Pages/Widgets/Map' /* webpackChunkName: "map_w" */)
 })
 
-const AsyncSearchWidget = Load({
+const AsyncMlsSearchFieldWidget = Load({
   loader: () =>
-    import('../components/Pages/Widgets/Search' /* webpackChunkName: "search_w" */)
+    import('../components/Pages/Widgets/MlsSearchField' /* webpackChunkName: "search_field" */)
+})
+
+const AsyncHeroSearchSectionWidget = Load({
+  loader: () =>
+    import('../components/Pages/Widgets/HeroSearchSection' /* webpackChunkName: "search_field" */)
 })
 
 /* ==================================== */
@@ -368,6 +373,15 @@ const Async404 = Load({
 const AsyncOops = Load({
   loader: () =>
     import('../components/Pages/Oops' /* webpackChunkName: "Oops" */)
+})
+
+/* ==================================== */
+//  CRM Deal Context
+/* ==================================== */
+
+const AsyncContexts = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Contexts/List' /* webpackChunkName: "deal_context" */)
 })
 
 function authenticate(nextState, replace) {
@@ -426,8 +440,15 @@ export default (
 
       <Route path="/wdigets" component={WidgetsContainer}>
         <Route path="/widgets/map" component={AsyncMapWidget} />
-        <Route path="/widgets/search" component={AsyncSearchWidget} />
         <Route path="/widgets/listings" component={AsyncListingsWidget} />
+        <Route
+          path="/widgets/hero-search-section"
+          component={AsyncHeroSearchSectionWidget}
+        />
+        <Route
+          path="/widgets/mls-search-field"
+          component={AsyncMlsSearchFieldWidget}
+        />
       </Route>
     </Route>
 
@@ -537,6 +558,10 @@ export default (
 
       <Route path="/dashboard/checklists">
         <IndexRoute component={AsyncChecklists} />
+      </Route>
+
+      <Route path="/dashboard/contexts">
+        <IndexRoute component={AsyncContexts} />
       </Route>
 
       <Route path="/dashboard/websites">
