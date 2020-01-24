@@ -27,20 +27,29 @@ export const blue = {
   A200: '#001EB7'
 }
 
+// Maping of the MUI grey colors to Rechat grey colors
+// 50 = A000, A125, A150, A175
+// 100 = A100
+// 200 = A200, A250
+// 300 = A300
+// 400 = A400, A500, A550
+// 500 = A600
+// 600 = A900
+
 export const grey = {
-  A000: '#fafafa',
-  A100: '#f2f2f2',
-  A125: '#f7f7f7',
-  A150: '#f8f8f8',
-  A175: '#f9f9f9',
-  A200: '#eaeaea',
-  A250: '#e6e6e6',
-  A300: '#d4d4d4',
-  A400: '#c4c4c4',
-  A500: '#b4b4b4',
-  A550: '#b2b2b2',
-  A600: '#a4a4a4',
-  A900: '#7F7F7F'
+  A000: '#F9FAFC',
+  A100: '#F0F2F5',
+  A125: '#F9FAFC',
+  A150: '#F9FAFC',
+  A175: '#F9FAFC',
+  A200: '#E7E9EC',
+  A250: '#E7E9EC',
+  A300: '#D7D9DC',
+  A400: '#B4B5B8',
+  A500: '#B4B5B8',
+  A550: '#B4B5B8',
+  A600: '#949598',
+  A900: '#6C6D70'
 }
 
 export const primary = '#00B286'
