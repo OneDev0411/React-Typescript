@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Box } from '@material-ui/core'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 
 import { uploadMedia, reorderGallery } from 'models/media-manager'
 
 import LoadingContainer from 'components/LoadingContainer'
+
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
+import acceptedDocuments from './constants/acceptedDocuments'
 
 import Uploader from './components/MediaUploader'
 import {
@@ -20,6 +24,7 @@ import BulkActionsMenu from './components/BulkActionsMenu'
 
 import { useStyles } from './styles'
 import { MediaManagerContext } from './context'
+
 import useFetchGallery from './hooks/useFetchGallery'
 import { IMediaItem, IMediaGallery } from './types'
 
@@ -35,6 +40,7 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
   const classes = useStyles()
 
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
+  const confirmationModal = useContext(ConfirmationModalContext)
 
   const upload = async fileObject => {
     const response = await uploadMedia(
@@ -62,7 +68,17 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
   }
 
   const onDrop = (files: any[], rejectedFiles: []) => {
-    // TODO: Do something with rejected files. Show some alert maybe?
+    if (rejectedFiles.length > 0) {
+      confirmationModal.setConfirmationModal({
+        message: 'Unsupported Files dropped',
+        description: `Some of your files are not supported.
+        You should only drop files with the following formats:
+        ${acceptedDocuments}`,
+        confirmLabel: 'Got it',
+        needsCancel: false
+      })
+    }
+
     files.forEach(file => {
       dispatch(addMedia(file))
       upload(file)

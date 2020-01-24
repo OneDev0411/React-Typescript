@@ -3,6 +3,8 @@ import { Box, Typography } from '@material-ui/core'
 // @ts-ignore
 import Dropzone from 'react-dropzone'
 
+import acceptedDocuments from '../../constants/acceptedDocuments'
+
 import { useStyles } from '../../styles'
 
 interface Props {
@@ -27,6 +29,7 @@ export default function Uploader({ onDrop, disableClick, children }: Props) {
       onDrop={handleOnDrop}
       onDragEnter={() => setDragZoneActive(true)}
       onDragLeave={() => setDragZoneActive(false)}
+      accept={acceptedDocuments}
       multiple
     >
       {dragzoneActive && (
