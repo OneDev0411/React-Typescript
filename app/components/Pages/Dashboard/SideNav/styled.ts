@@ -22,7 +22,7 @@ export const Sidenav = styled.aside`
 `
 
 export const SidenavListGroup = styled.ul`
-  margin: 0 0 1rem 0;
+  margin: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 0, 2, 0)};
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -34,25 +34,25 @@ export const SideNavItem = styled.li`
 `
 
 const itemStyle = css`
-  padding-left: calc(2rem - 4px);
+  padding-left: ${(props: ThemeProps<Theme>) =>
+    `calc(${props.theme.spacing(4)}px - ${props.theme.spacing(0.5)}px)`};
   border-radius: 0;
   border-left: 4px solid transparent;
   color: ${(props: ThemeProps<Theme>) =>
-    props.theme.palette.secondary.contrastText};
+    props.theme.palette.primary.contrastText};
 
   &:hover,
   &:focus {
     text-decoration: none;
-    color: ${(props: ThemeProps<Theme>) => props.theme.palette.secondary.main};
+    color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
   }
 
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>
     active &&
     css`
-      color: ${(props: ThemeProps<Theme>) =>
-        props.theme.palette.secondary.main};
+      color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
       border-left-color: ${(props: ThemeProps<Theme>) =>
-        props.theme.palette.secondary.main};
+        props.theme.palette.primary.main};
     `}
 `
 
@@ -62,7 +62,8 @@ interface SidenavLinkPorps extends LinkProps {
 
 export const SidenavLink = styled(Link)<SidenavLinkPorps>`
   display: inline-block;
-  font-size: 1.125rem;
+  font-size: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.h6.fontSize};
   line-height: 2;
   ${itemStyle}
 `
@@ -79,10 +80,11 @@ export const SidenavButton = styled(Button)`
 export const Avatar = styled.div`
   display: inline-block;
   text-align: center;
-  color: #fff;
+  color: ${(props: ThemeProps<Theme>) => props.theme.palette.common.white};
   border-radius: 100%;
   background: #000;
-  font-weight: 700;
+  font-weight: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.fontWeightBold};
   img {
     width: 100%;
     height: 100%;
@@ -101,10 +103,10 @@ export const Divider = styled.div`
 `
 export const ListItemDivider = Divider.withComponent('li')
 
-export const AppNavbarBadge = withStyles(() => ({
+export const AppNavbarBadge = withStyles((theme: Theme) => ({
   anchorOriginTopRightRectangle: {
     right: 'auto',
-    left: 'calc(100% + 0.5rem)',
+    left: `calc(100% + ${theme.spacing(1)}px)`,
     transform: 'scale(1) translateY(50%)'
   }
 }))(Badge)

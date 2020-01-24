@@ -54,7 +54,7 @@ export function UserMenuContent({
           <ListItemDivider role="separator" />
         </Acl.Admin>
         <li>
-          <Link noStyle to="/dashboard/accounts" onClick={onClose}>
+          <Link noStyle to="/dashboard/account" onClick={onClose}>
             Account settings
           </Link>
         </li>

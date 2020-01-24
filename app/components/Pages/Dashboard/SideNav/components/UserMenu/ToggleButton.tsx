@@ -8,23 +8,23 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     dropdownToggleButton: {
       maxWidth: '100%',
-      margin: '0 1rem',
-      padding: '1rem 0 0.75rem',
+      margin: theme.spacing(0, 2),
+      padding: theme.spacing(2, 0, 1.75),
       justifyContent: 'space-between',
       borderTop: `1px solid ${theme.palette.grey[800]}`
     },
     wrapper: {
       display: 'flex',
-      width: 'calc(100% - 1.5rem)',
+      width: `calc(100% - ${theme.spacing(3)}px)`,
       color: theme.palette.secondary.contrastText
     },
     userDetails: {
       textAlign: 'left',
-      marginLeft: '0.5rem',
-      width: 'calc(100% - 3rem)'
+      marginLeft: theme.spacing(1),
+      width: `calc(100% - ${theme.spacing(6)}px)`
     },
     arrowIcon: {
-      fill: '#fff',
+      fill: theme.palette.common.white,
       transform: 'rotateX(180deg)'
     },
     arrowIconRotated: {

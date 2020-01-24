@@ -9,29 +9,29 @@ const useStyles = makeStyles((theme: Theme) => ({
   box: {
     width: WIDTH,
     height: HEIGHT,
-    margin: '3rem 0 3rem 2rem'
+    margin: theme.spacing(6, 0, 6, 4)
   },
   image: {
     maxWidth: '100%',
-    borderRadius: '100%'
+    borderRadius: '50%'
   },
   fallback: {
     display: 'block',
-    fontSize: '2rem',
+    fontSize: theme.spacing(4),
     textAlign: 'center',
     lineHeight: 2,
-    fontWeight: 600,
-    borderRadius: '100%',
-    color: theme.palette.secondary.contrastText,
-    backgroundColor: theme.palette.secondary.main
+    fontWeight: theme.typography.fontWeightBlack,
+    borderRadius: '50%',
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main
   }
 }))
 
-interface Porps {
+interface Props {
   src?: string
 }
 
-export default function Logo({ src }: Porps) {
+export default function Logo({ src }: Props) {
   const classes = useStyles()
 
   return (

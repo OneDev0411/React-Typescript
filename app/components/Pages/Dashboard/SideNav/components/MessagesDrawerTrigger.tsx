@@ -7,12 +7,12 @@ import { toggleChatbar } from '../../../../../store_actions/chatroom'
 const useStyles = makeStyles((theme: Theme) => ({
   button: {
     lineHeight: 2,
-    fontSize: '1.125rem',
-    paddingLeft: '2rem',
-    color: theme.palette.secondary.contrastText,
+    fontSize: theme.typography.h6.fontSize,
+    paddingLeft: theme.spacing(4),
+    color: theme.palette.primary.contrastText,
 
     '&:hover': {
-      color: theme.palette.secondary.main
+      color: theme.palette.primary.main
     }
   }
 }))
@@ -22,11 +22,9 @@ export default function MessageDrawerTrigger() {
   const classes = useStyles()
 
   const openDrawer = () => {
-    if (window.location.pathname.includes('/recents/')) {
-      return false
+    if (!window.location.pathname.includes('/recents/')) {
+      dispatch(toggleChatbar())
     }
-
-    dispatch(toggleChatbar())
   }
 
   return (

@@ -73,7 +73,7 @@ export default function AppSideNav() {
 
           {user && (
             <SideNavLinkItem to="/dashboard/notifications">
-              <AppNavbarBadge badgeContent={appNotifications} color="secondary">
+              <AppNavbarBadge badgeContent={appNotifications} color="primary">
                 Notifications
               </AppNavbarBadge>
             </SideNavLinkItem>
