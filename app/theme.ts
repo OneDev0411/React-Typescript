@@ -198,6 +198,16 @@ const theme = createMuiTheme({
   }
 })
 
+theme.typography.subtitle3 = {
+  ...theme.typography.subtitle2,
+  fontSize: '0.8125rem'
+}
+
+theme.typography.body3 = {
+  ...theme.typography.body2,
+  fontSize: '0.8125rem'
+}
+
 if (process.env.NODE_ENV === 'development') {
   // eslint-disable-next-line
   ; (window as any).theme = theme
