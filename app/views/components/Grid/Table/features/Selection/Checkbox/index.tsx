@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Checkbox } from '@material-ui/core'
+import { Checkbox as MUICheckbox } from '@material-ui/core'
 
 interface Props {
   checked: boolean
@@ -7,11 +7,7 @@ interface Props {
   onChange: () => void
 }
 
-export default function CheckboxWithState({
-  checked,
-  indeterminate,
-  onChange
-}: Props) {
+export default function Checkbox({ checked, indeterminate, onChange }: Props) {
   const [isChecked, setIsChecked] = useState<boolean>(checked)
 
   useEffect(() => {
@@ -24,7 +20,7 @@ export default function CheckboxWithState({
   }
 
   return (
-    <Checkbox
+    <MUICheckbox
       color="primary"
       checked={isChecked}
       indeterminate={indeterminate}
