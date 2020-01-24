@@ -54,6 +54,7 @@ export default function Header({ mediasCount }: Props) {
         <Button
           variant="outlined"
           disableElevation
+          disabled
           className={classes.lowerCaseButton}
         >
           <IconDropbox
