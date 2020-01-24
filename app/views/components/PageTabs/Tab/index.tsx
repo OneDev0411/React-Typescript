@@ -10,4 +10,4 @@ export const Tab = withStyles(theme => ({
     }
   },
   selected: {}
-}))(props => <BaseTab disableRipple {...props} />)
+}))(props => <BaseTab {...props} />)
