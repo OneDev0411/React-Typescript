@@ -15,7 +15,7 @@ import IconArrowDropDown from '../SvgIcons/ArrowDropDown/IconArrowDropDown'
 
 interface Props extends ButtonProps {
   isActive?: boolean
-  children: ReactNode
+  children?: ReactNode
 }
 
 const styles = (theme: Theme) => {
