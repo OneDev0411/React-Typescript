@@ -116,7 +116,7 @@
     "google-map-react": "^1.1.2",
     "google-maps": "^3.3.0",
     "grapesjs": "^0.15.10",
-    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#ec720ac936f91389102ac09b402b8c734611e0f5",
+    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#63af7fa",
     "history": "^3.3.0",
     "hogan.js": "^3.0.2",
     "html-webpack-plugin": "^4.0.0-beta.5",
