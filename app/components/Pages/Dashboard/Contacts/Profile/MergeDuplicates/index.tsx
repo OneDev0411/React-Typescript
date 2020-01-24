@@ -59,7 +59,8 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
 
   const handleDismissClick = async (
     contactId: UUID,
-    checkMinumumDuplicatesCount = true
+    checkMinumumDuplicatesCount = true,
+    closeOnDismiss = false
   ) => {
     if (!duplicateContacts) {
       return
@@ -92,6 +93,10 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
               item => item.id !== contactId
             )
           })
+
+          if (closeOnDismiss) {
+            setIsOpen(false)
+          }
         } catch (err) {
           dispatch(
             addNotification({
@@ -107,8 +112,7 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
   }
 
   const handleDismissMergeCallout = async (contactId: UUID) => {
-    await handleDismissClick(contactId, false)
-    setIsOpen(false)
+    await handleDismissClick(contactId, false, true)
   }
 
   const handleSetMasterClick = (contactId: UUID) => {

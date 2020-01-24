@@ -3,7 +3,6 @@ import { withRouter, WithRouterProps } from 'react-router'
 import { connect } from 'react-redux'
 import { addNotification, Notification } from 'reapop'
 
-import { isSelling } from 'models/Deal/helpers/context/get-side'
 import { getActiveTeam } from 'utils/user-teams'
 
 import ActionButton from 'components/Button/ActionButton'
@@ -87,8 +86,8 @@ function MyMarketingMatters({
     setIsLoading(false)
   }
 
-  // Only selling deal types for brands with mmm cost centers are supported
-  if (!isSelling(deal) || !costCenter) {
+  // Only brands with mmm cost center are supported
+  if (!costCenter) {
     return null
   }
 

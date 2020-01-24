@@ -43,8 +43,7 @@ const ALL_SECTIONS: Section[] = [
       {
         title: 'Newsletters',
         value: 'Newsletter',
-        link: urlGenerator('/Newsletter'),
-        access: ['BetaFeatures']
+        link: urlGenerator('/Newsletter')
       },
       {
         title: 'Occasions',

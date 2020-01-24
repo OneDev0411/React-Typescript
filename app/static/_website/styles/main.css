@@ -284,7 +284,7 @@ h1,h2,h3,h4,h5,h6{
 .faq-hero .desc h2{
 
   margin: auto;
-  max-width: 600px;
+  max-width: 720px;
 }
 
 .faq-support-hero{
@@ -694,6 +694,23 @@ footer{
 
 .faq ul p{
   margin: 0;
+}
+
+/* content-page */
+.faq h4 {
+  margin-bottom: 1rem;
+}
+
+.content-page-container ul {
+  padding: 0;
+  list-style: initial;
+  list-style-type: disc;
+  margin: 0 0 1.5rem 0;
+}
+
+.content-page-container ul li {
+  margin-bottom: 0;
+  margin-left: 2.5rem;
 }
 
 

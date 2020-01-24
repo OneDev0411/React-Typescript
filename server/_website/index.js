@@ -94,6 +94,13 @@ router.get('/privacy', async ctx =>
   })
 )
 
+router.get('/vulnerability', async ctx =>
+  ctx.render(template_path('vulnerability.ejs'), {
+    title: 'Vulnerability Disclosure Program | Rechat',
+    isLoggedIn: isLoggedIn(ctx)
+  })
+)
+
 // TODO: creating routing dynamically for job board.
 // We only have one open position so it works for now.
 router.get('/about/outbound-sales-development-representative', async ctx =>
