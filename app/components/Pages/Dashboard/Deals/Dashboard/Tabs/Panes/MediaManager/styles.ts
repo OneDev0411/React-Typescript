@@ -4,7 +4,12 @@ export const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       container: {
-        position: 'relative'
+        position: 'relative',
+        borderStyle: 'Solid',
+        borderWidth: 1,
+        borderColor: theme.palette.grey['300'],
+        borderRadius: theme.shape.borderRadius,
+        background: theme.palette.background.paper
       },
       header: {
         padding: theme.spacing(4, 3),

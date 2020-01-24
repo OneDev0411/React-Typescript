@@ -80,14 +80,7 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
 
   if (isLoading) {
     return (
-      <Box
-        className={classes.container}
-        border={1}
-        bgcolor="#fff"
-        borderRadius="4px"
-        borderColor="#d4d4d4"
-        width={1}
-      >
+      <Box className={classes.container} width={1}>
         <LoadingContainer
           style={{
             height: '50vh'
@@ -100,14 +93,7 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
   return (
     <Uploader onDrop={onDrop} disableClick>
       <MediaManagerContext.Provider value={{ state, dispatch }}>
-        <Box
-          className={classes.container}
-          border={1}
-          bgcolor="#fff"
-          borderRadius="4px"
-          borderColor="#d4d4d4"
-          width={1}
-        >
+        <Box className={classes.container} width={1}>
           <Header mediasCount={getUploadedMedia(state).length} />
           <Gallery medias={state} deal={deal} />
           {getSelectedMedia(state).length > 0 && (
