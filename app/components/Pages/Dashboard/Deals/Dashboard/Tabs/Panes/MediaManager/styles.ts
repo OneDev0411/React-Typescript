@@ -9,7 +9,8 @@ export const useStyles = makeStyles(
         borderWidth: 1,
         borderColor: theme.palette.grey['300'],
         borderRadius: theme.shape.borderRadius,
-        background: theme.palette.background.paper
+        background: theme.palette.background.paper,
+        marginBottom: theme.spacing(2)
       },
       header: {
         padding: theme.spacing(4, 3),
@@ -178,6 +179,7 @@ export const useStyles = makeStyles(
         lineHeight: 'inherit',
         fontSize: 'inherit',
         padding: theme.spacing(1),
+        resize: 'vertical',
 
         '&:focus': {
           outline: 'none',

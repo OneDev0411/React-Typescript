@@ -137,13 +137,18 @@ export default function MediaItem({ media, deal }: Props) {
             className={classes.editTextArea}
           />
           <Button
-            variant="outlined"
+            variant="contained"
+            color="primary"
             onClick={renameMedia}
             className={classes.lowerCaseButton}
           >
             Save
           </Button>{' '}
-          <Button onClick={cancelEdit} className={classes.lowerCaseButton}>
+          <Button
+            onClick={cancelEdit}
+            className={classes.lowerCaseButton}
+            variant="outlined"
+          >
             Cancel
           </Button>
         </form>
