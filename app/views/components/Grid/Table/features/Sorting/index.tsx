@@ -140,7 +140,7 @@ function getSortableColumns<Row>(
 
   columns.forEach(column => {
     if (column.sortable === false || !column.accessor) {
-      return false
+      return
     }
 
     list.push(

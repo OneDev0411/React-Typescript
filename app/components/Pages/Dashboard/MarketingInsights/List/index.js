@@ -131,11 +131,11 @@ function List(props) {
             rows={filteredList}
             totalRows={(filteredList || []).length}
             columns={columns}
-            EmptyState={() => (
+            EmptyStateComponent={() => (
               <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
             )}
             loading={isLoading ? 'middle' : null}
-            LoadingState={LoadingComponent}
+            LoadingStateComponent={LoadingComponent}
             sorting={{
               columns: sortableColumns
             }}

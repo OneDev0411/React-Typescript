@@ -193,8 +193,8 @@ class BackOfficeGrid extends React.Component {
         }}
         columns={this.columns}
         rows={this.data}
-        LoadingState={LoadingState}
-        EmptyState={EmptyState}
+        LoadingStateComponent={LoadingState}
+        EmptyStateComponent={EmptyState}
         loading={this.props.isFetchingDeals ? 'middle' : null}
       />
     )

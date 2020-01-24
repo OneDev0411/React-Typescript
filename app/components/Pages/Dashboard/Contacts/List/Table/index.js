@@ -162,7 +162,7 @@ class ContactsList extends React.Component {
           summary={total => `${total} Contacts`}
           loading={this.getLoading()}
           columns={this.columns}
-          LoadingState={LoadingComponent}
+          LoadingStateComponent={LoadingComponent}
           sorting={{
             columns: this.sortableColumns,
             defaultSort: this.getDefaultSort(),
@@ -197,7 +197,7 @@ class ContactsList extends React.Component {
               }
             />
           )}
-          EmptyState={() => (
+          EmptyStateComponent={() => (
             <NoSearchResults description="Try typing another name, email, phone or tag." />
           )}
         />

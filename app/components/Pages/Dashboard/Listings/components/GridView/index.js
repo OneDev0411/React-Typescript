@@ -77,7 +77,7 @@ export class GridView extends React.Component {
           totalRows={this.props.listings.info.total}
           loading={this.props.isFetching ? 'middle' : null}
           summary={total => `${total} Listings`}
-          LoadingState={LoadingComponent}
+          LoadingStateComponent={LoadingComponent}
         />
       </div>
     )

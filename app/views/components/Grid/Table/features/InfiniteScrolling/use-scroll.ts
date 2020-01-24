@@ -1,19 +1,21 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import debounce from 'lodash/debounce'
+
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { GridInfiniteScrolling } from '../../types'
 
 export function useInfiniteScroll(options: GridInfiniteScrolling | null) {
   const [lastScrollTop, setLastScrollTop] = useState(0)
 
-  useEffect(() => {
+  useEffectOnce(() => {
     if (!options) {
       return
     }
 
-    const getElement = container => {
+    const getElement = (
+      container: React.RefObject<HTMLElement> | string | undefined
+    ) => {
       if (!container) {
         return window
       }
@@ -60,12 +62,12 @@ export function useInfiniteScroll(options: GridInfiniteScrolling | null) {
       ? debounce(update, options.debounceTime)
       : update
 
-    element.addEventListener('scroll', listener, { passive: true })
+    element && element.addEventListener('scroll', listener, { passive: true })
     window.addEventListener('resize', listener, { passive: true })
 
     return () => {
-      element.removeEventListener('scroll', listener)
+      element && element.removeEventListener('scroll', listener)
       window.removeEventListener('resize', listener)
     }
-  }, [])
+  })
 }

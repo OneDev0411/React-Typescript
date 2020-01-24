@@ -63,12 +63,12 @@ function getSortColumn<Row>(
 }
 
 function defaultSortMethod(accessor: string | number): string | number {
-  if (typeof accessor === 'number') {
-    return accessor
-  }
-
   if (!accessor) {
     return typeof accessor === 'string' ? '' : -Infinity
+  }
+
+  if (typeof accessor === 'number') {
+    return accessor
   }
 
   return accessor

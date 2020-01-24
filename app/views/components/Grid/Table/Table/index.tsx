@@ -63,6 +63,8 @@ export function GridTable<Row>({
   columns,
   rows,
   totalRows,
+  getTdProps,
+  getTrProps,
   hoverable = true,
   summary = null,
   loading = null,
@@ -70,12 +72,11 @@ export function GridTable<Row>({
   sorting = null,
   infiniteScrolling = null,
   hasHeader = false,
-  getTdProps,
-  getTrProps,
   stickyHeader = false,
   TableActions = null,
-  LoadingState = null,
-  EmptyState = null
+  ToolbarComponent = null,
+  LoadingStateComponent = null,
+  EmptyStateComponent = null
 }: Props<Row>) {
   useInfiniteScroll(infiniteScrolling)
 
@@ -107,7 +108,7 @@ export function GridTable<Row>({
   return (
     <>
       <div className={classes.headerContainer}>
-        <div>--- Filters ---</div>
+        <div>{ToolbarComponent}</div>
 
         {rows && rows.length > 0 && (
           <div>
@@ -116,7 +117,9 @@ export function GridTable<Row>({
         )}
       </div>
 
-      {rows && rows.length === 0 && !loading && EmptyState && <EmptyState />}
+      {rows && rows.length === 0 && !loading && EmptyStateComponent && (
+        <EmptyStateComponent />
+      )}
 
       {summary && !loading && (
         <div className={classes.summary}>{summary(totalRows, state)}</div>
@@ -137,9 +140,9 @@ export function GridTable<Row>({
           </Table>
         )}
 
-        {loading && LoadingState && (
+        {loading && LoadingStateComponent && (
           <div className={classes.loading}>
-            <LoadingState />
+            <LoadingStateComponent />
           </div>
         )}
       </div>
