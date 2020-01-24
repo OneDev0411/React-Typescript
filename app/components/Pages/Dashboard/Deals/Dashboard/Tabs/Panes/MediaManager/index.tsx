@@ -1,21 +1,22 @@
 import React, { useContext } from 'react'
 import { Box } from '@material-ui/core'
 
+import { useDispatch } from 'react-redux'
+import { addNotification } from 'reapop'
+
 import { uploadMedia } from 'models/media-manager'
 
-import LoadingContainer from 'components/LoadingContainer'
-
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import LoadingContainer from 'components/LoadingContainer'
 
 import acceptedDocuments from './constants/acceptedDocuments'
 
 import Uploader from './components/MediaUploader'
-import { getUploadedMedia, getSelectedMedia } from './context/helpers/selectors'
-
 import Header from './components/Header'
-
 import BulkActionsMenu from './components/BulkActionsMenu'
 import Gallery from './components/Gallery'
+
+import { getUploadedMedia, getSelectedMedia } from './context/helpers/selectors'
 
 import { useStyles } from './styles'
 import { MediaManagerContext } from './context'
@@ -31,39 +32,47 @@ import {
 
 export default function MediaManager({ deal }: { deal: IDeal }) {
   const classes = useStyles()
+  const ReduxDispatch = useDispatch()
 
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
   const confirmationModal = useContext(ConfirmationModalContext)
 
   const upload = async fileObject => {
-    const response = await uploadMedia(
-      deal.id,
-      fileObject,
-      '',
-      progressEvent => {
-        if (progressEvent.percent) {
-          dispatch(
-            setMediaUploadProgress(fileObject.name, progressEvent.percent)
-          )
-        } else {
-          dispatch(setMediaAsUploaded(fileObject.name))
+    try {
+      const response = await uploadMedia(
+        deal.id,
+        fileObject,
+        '',
+        progressEvent => {
+          if (progressEvent.percent) {
+            dispatch(
+              setMediaUploadProgress(fileObject.name, progressEvent.percent)
+            )
+          } else {
+            dispatch(setMediaAsUploaded(fileObject.name))
+          }
         }
-      }
-    )
+      )
 
-    const uploadedFileObject = response.body.references.file
+      const { id: file, preview_url: src, name } = response
 
-    // I know this is ugly! That's the format of data returned from server!
-    const fileKey = Object.keys(uploadedFileObject)[0]
-    const { id: file, preview_url: src, name } = uploadedFileObject[fileKey]
-
-    dispatch(setNewlyUploadedMediaFields(fileObject.name, file, src, name))
+      dispatch(setNewlyUploadedMediaFields(fileObject.name, file, src, name))
+    } catch (err) {
+      console.log(err)
+      ReduxDispatch(
+        addNotification({
+          status: 'error',
+          message:
+            'Something went wrong while uploading your photo. Please try again.'
+        })
+      )
+    }
   }
 
   const onDrop = (files: any[], rejectedFiles: []) => {
     if (rejectedFiles.length > 0) {
       confirmationModal.setConfirmationModal({
-        message: 'Unsupported Files dropped',
+        message: `${rejectedFiles.length} unsupported files dropped!`,
         description: `Some of your files are not supported.
         You should only drop files with the following formats:
         ${acceptedDocuments}`,
@@ -81,11 +90,7 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
   if (isLoading) {
     return (
       <Box className={classes.container} width={1}>
-        <LoadingContainer
-          style={{
-            height: '50vh'
-          }}
-        />
+        <LoadingContainer style={{ height: '50vh' }} />
       </Box>
     )
   }

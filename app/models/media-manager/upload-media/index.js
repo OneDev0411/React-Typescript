@@ -14,8 +14,8 @@ export async function uploadMedia(
       .upload(`/deals/${dealId}/gallery/items`)
       .attach('file', file, fileName)
 
-    return result
-  } catch (e) {
-    return null
+    return result.body.data.file
+  } catch (error) {
+    throw error
   }
 }

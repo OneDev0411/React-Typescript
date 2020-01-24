@@ -8,6 +8,10 @@ import {
   MenuItem
 } from '@material-ui/core'
 
+import { useDispatch } from 'react-redux'
+
+import { addNotification } from 'reapop'
+
 import { uploadCroppedMedia } from 'models/media-manager'
 import { downloadMedias } from 'models/media-manager'
 
@@ -44,6 +48,7 @@ interface Props {
 export default function ActionsMenu({ media, deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
+  const ReduxDispatch = useDispatch()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [isCropperOpen, setIsCropperOpen] = useState(false)
@@ -107,25 +112,34 @@ export default function ActionsMenu({ media, deal }: Props) {
   }
 
   const upload = async fileObject => {
-    const response = await uploadCroppedMedia(
-      deal.id,
-      media.file,
-      fileObject,
-      `${media.name}.${fileExtension}`,
-      progressEvent => {
-        if (progressEvent.percent) {
-          dispatch(setMediaUploadProgress(file, progressEvent.percent))
-        } else {
-          dispatch(setMediaAsUploaded(file))
+    try {
+      const response = await uploadCroppedMedia(
+        deal.id,
+        media.file,
+        fileObject,
+        `${media.name}.${fileExtension}`,
+        progressEvent => {
+          if (progressEvent.percent) {
+            dispatch(setMediaUploadProgress(file, progressEvent.percent))
+          } else {
+            dispatch(setMediaAsUploaded(file))
+          }
         }
-      }
-    )
+      )
 
-    const uploadedFileObject = response.body.data.file
+      const { preview_url: src } = response
 
-    const { preview_url: src } = uploadedFileObject
-
-    dispatch(setNewlyUploadedMediaFields(file, file, src, name))
+      dispatch(setNewlyUploadedMediaFields(file, file, src, name))
+    } catch (err) {
+      console.log(err)
+      ReduxDispatch(
+        addNotification({
+          status: 'error',
+          message:
+            'Something went wrong while uploading your photo. Please try again.'
+        })
+      )
+    }
   }
 
   return (
