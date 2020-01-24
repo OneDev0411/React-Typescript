@@ -3,7 +3,7 @@ import { Tabs, createStyles, makeStyles, Theme } from '@material-ui/core'
 import { TabProps } from '@material-ui/core/Tab'
 
 export * from './Tab'
-export * from './DropDownTab'
+export * from './DropdownTab'
 
 type SelectedTab = string | number | null
 
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
         key={2}
         value={2}
         label={
-          <DropDownTab title="Menu">
+          <DropdownTab title="Menu">
             {({ toggleMenu }) => (
               <>
                 <MenuItem key={0} onClick={toggleMenu}>
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 </MenuItem>
               </>
             )}
-          </DropDownTab>
+          </DropdownTab>
         }
       />
     ]}

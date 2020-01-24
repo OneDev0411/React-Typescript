@@ -15,7 +15,7 @@ interface RenderProps {
 
 interface Props {
   title: string
-  popoverOption?: PopoverProps
+  popoverOptions?: PopoverProps
   children: (renderProps: RenderProps) => React.ReactNode
 }
 
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export function DropDownTab({ title, children, popoverOption }: Props) {
+export function DropdownTab({ title, children, popoverOptions }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const classes = useStyles({
     isOpen: Boolean(anchorEl)
@@ -78,7 +78,7 @@ export function DropDownTab({ title, children, popoverOption }: Props) {
           horizontal: 'left'
         }}
         style={{ zIndex: 10 }}
-        {...popoverOption}
+        {...popoverOptions}
       >
         {children({
           toggleMenu
