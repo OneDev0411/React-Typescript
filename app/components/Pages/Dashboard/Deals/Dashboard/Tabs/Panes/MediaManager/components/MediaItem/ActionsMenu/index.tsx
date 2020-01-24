@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 
 import { uploadCroppedMedia } from 'models/media-manager'
+import { downloadMedias } from 'models/media-manager'
 
 import { ImageUploader } from 'components/ImageUploader'
 
@@ -20,6 +21,8 @@ import MoreVertIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
 import IconDownload from 'components/SvgIcons/Download/IconDownload'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
+
+import DownloadModal from '../../DownloadModal'
 
 import { useStyles } from '../../../styles'
 
@@ -44,17 +47,31 @@ export default function ActionsMenu({ media, deal }: Props) {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [isCropperOpen, setIsCropperOpen] = useState(false)
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [downloadUrl, setDownloadUrl] = useState('')
   const { dispatch } = useMediaManagerContext()
   const confirmationModal = useContext(ConfirmationModalContext)
   const { file, src, name } = media
   const fileExtension = src.substr(src.lastIndexOf('.'), 4)
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleModalClose = () => {
+    setModalIsOpen(false)
+  }
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleDownload = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
+    const url = await downloadMedias(deal.id, [media.file])
+
+    setDownloadUrl(url)
+    setModalIsOpen(true)
   }
 
   const handleDelete = () => {
@@ -112,65 +129,73 @@ export default function ActionsMenu({ media, deal }: Props) {
   }
 
   return (
-    <Box
-      display="flex"
-      flexDirection="row-reverse"
-      flexWrap="nowrap"
-      justifyContent="space-between"
-      className={classes.actions}
-    >
-      <div>
-        <Tooltip title="Download Image">
+    <>
+      <Box
+        display="flex"
+        flexDirection="row-reverse"
+        flexWrap="nowrap"
+        justifyContent="space-between"
+        className={classes.actions}
+      >
+        <div>
+          <Tooltip title="Download Image">
+            <Button
+              color="secondary"
+              variant="contained"
+              size="small"
+              className={classes.menuButton}
+              onClick={handleDownload}
+            >
+              <IconDownload
+                fill="#fff"
+                className={(iconClasses.medium, classes.iconButton)}
+              />
+            </Button>
+          </Tooltip>
           <Button
             color="secondary"
             variant="contained"
             size="small"
             className={classes.menuButton}
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleMenuClick}
           >
-            <IconDownload
+            <MoreVertIcon
               fill="#fff"
               className={(iconClasses.medium, classes.iconButton)}
             />
           </Button>
-        </Tooltip>
-        <Button
-          color="secondary"
-          variant="contained"
-          size="small"
-          className={classes.menuButton}
-          aria-controls="simple-menu"
-          aria-haspopup="true"
-          onClick={handleClick}
-        >
-          <MoreVertIcon
-            fill="#fff"
-            className={(iconClasses.medium, classes.iconButton)}
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={showCropper}>Crop</MenuItem>
+            <MenuItem onClick={handleDelete}>
+              <Typography color="error">Delete</Typography>
+            </MenuItem>
+          </Menu>
+        </div>
+        {isCropperOpen && (
+          <ImageUploader
+            disableChangePhoto
+            disableRotate
+            file={src}
+            width={287}
+            height={287}
+            saveHandler={onCrop}
+            closeHandler={hideCropper}
           />
-        </Button>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={showCropper}>Crop</MenuItem>
-          <MenuItem onClick={handleDelete}>
-            <Typography color="error">Delete</Typography>
-          </MenuItem>
-        </Menu>
-      </div>
-      {isCropperOpen && (
-        <ImageUploader
-          disableChangePhoto
-          disableRotate
-          file={src}
-          width={287}
-          height={287}
-          saveHandler={onCrop}
-          closeHandler={hideCropper}
-        />
-      )}
-    </Box>
+        )}
+      </Box>
+      <DownloadModal
+        isOpen={modalIsOpen}
+        link={downloadUrl}
+        onClose={handleModalClose}
+      />
+    </>
   )
 }

@@ -6,7 +6,7 @@ import BareModal from 'components/BareModal'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
-import { useStyles } from '../../../styles'
+import { useStyles } from '../../styles'
 
 export default function DownloadModal({
   isOpen,

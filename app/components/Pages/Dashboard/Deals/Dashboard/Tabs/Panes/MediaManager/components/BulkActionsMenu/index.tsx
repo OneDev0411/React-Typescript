@@ -7,7 +7,7 @@ import { deleteMedias, downloadMedias } from 'models/media-manager'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { DangerButton } from 'components/Button/DangerButton'
 
-import DownloadModal from './DownloadModal'
+import DownloadModal from '../DownloadModal'
 
 import { useStyles } from '../../styles'
 import useMediaManagerContext from '../../hooks/useMediaManagerContext'
@@ -47,7 +47,9 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
     dispatch(toggleGallerySelection(false))
   }
 
-  const handleDownloadSelected = async (e: React.MouseEvent<HTMLElement>) => {
+  const handleDownloadSelected = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
     e.preventDefault()
 
     const url = await downloadMedias(
