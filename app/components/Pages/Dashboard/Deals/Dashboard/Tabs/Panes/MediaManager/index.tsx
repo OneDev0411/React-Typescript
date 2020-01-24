@@ -1,8 +1,7 @@
 import React, { useContext } from 'react'
 import { Box } from '@material-ui/core'
-import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 
-import { uploadMedia, reorderGallery } from 'models/media-manager'
+import { uploadMedia } from 'models/media-manager'
 
 import LoadingContainer from 'components/LoadingContainer'
 
@@ -11,28 +10,22 @@ import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import acceptedDocuments from './constants/acceptedDocuments'
 
 import Uploader from './components/MediaUploader'
-import {
-  getMediaSorts,
-  getUploadedMedia,
-  getSelectedMedia
-} from './context/helpers/selectors'
+import { getUploadedMedia, getSelectedMedia } from './context/helpers/selectors'
 
 import Header from './components/Header'
-import MediaItem from './components/MediaItem'
-import UploadPlaceholderItem from './components/UploadPlaceholderItem'
+
 import BulkActionsMenu from './components/BulkActionsMenu'
+import Gallery from './components/Gallery'
 
 import { useStyles } from './styles'
 import { MediaManagerContext } from './context'
 
 import useFetchGallery from './hooks/useFetchGallery'
-import { IMediaItem, IMediaGallery } from './types'
 
 import {
   addMedia,
   setMediaUploadProgress,
   setMediaAsUploaded,
-  reorderGallery as reorderGalleryAction,
   setNewlyUploadedMediaFields
 } from './context/actions'
 
@@ -85,42 +78,6 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
     })
   }
 
-  const SortableMediaItem = SortableElement(
-    ({ media, deal }: { media: IMediaItem; deal: IDeal }) => {
-      return <MediaItem media={media} deal={deal} />
-    }
-  )
-
-  const SortableGallery = SortableContainer(
-    ({ medias }: { medias: IMediaGallery }) => (
-      <Box display="flex" flexWrap="wrap" className={classes.gallery}>
-        <UploadPlaceholderItem />
-        {medias.map((media, index) => (
-          <SortableMediaItem
-            key={media.file}
-            index={index}
-            media={media}
-            deal={deal}
-          />
-        ))}
-      </Box>
-    )
-  )
-
-  const onSortEnd = ({
-    oldIndex,
-    newIndex
-  }: {
-    oldIndex: number
-    newIndex: number
-  }) => {
-    dispatch(reorderGalleryAction(oldIndex, newIndex))
-
-    const reorderRequestObject = getMediaSorts(state)
-
-    reorderGallery(deal.id, reorderRequestObject)
-  }
-
   if (isLoading) {
     return (
       <Box
@@ -152,12 +109,7 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
           width={1}
         >
           <Header mediasCount={getUploadedMedia(state).length} />
-          <SortableGallery
-            axis="xy"
-            medias={state}
-            onSortEnd={onSortEnd}
-            useDragHandle
-          />
+          <Gallery medias={state} deal={deal} />
           {getSelectedMedia(state).length > 0 && (
             <BulkActionsMenu mediaGallery={state} deal={deal} />
           )}
