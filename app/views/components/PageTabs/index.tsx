@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     tabContainer: {
       margin: theme.spacing(1, 0),
-      borderBottom: '2px solid #F4F5F9'
+      borderBottom: `2px solid ${theme.palette.divider}`
     },
     indicator: {
       display: 'flex',
