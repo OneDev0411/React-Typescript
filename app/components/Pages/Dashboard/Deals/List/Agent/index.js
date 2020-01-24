@@ -2,9 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import { MenuItem } from '@material-ui/core'
+
 import PageSideNav from 'components/PageSideNav'
 import { Content } from 'components/SlideMenu'
 import Search from 'components/Grid/Search'
+import { PageTabs, Tab, DropDownTab } from 'components/PageTabs'
 
 import { searchDeals, getDeals } from 'actions/deals'
 import { viewAsEveryoneOnTeam, viewAs } from 'utils/user-teams'
@@ -83,7 +86,6 @@ class AgentTable extends React.Component {
             isSideMenuOpen={isSideMenuOpen}
             onMenuTriggerChange={this.toggleSideMenu}
           />
-
           <GridContainer>
             <Search
               disableOnSearch
@@ -95,6 +97,37 @@ class AgentTable extends React.Component {
               onClearSearch={this.handleSearch}
               debounceTime={700}
               minimumLength={4}
+            />
+
+            <PageTabs
+              tabs={[
+                <Tab key={0} label="All" value={0} />,
+                <Tab key={2} label="Drafts" value={1} />,
+                <Tab key={3} label="Listing" value={2} />,
+                <Tab key={4} label="Pending" value={3} />,
+                <Tab key={5} label="Archive" value={4} />,
+                <Tab
+                  key={6}
+                  value={6}
+                  label={
+                    <DropDownTab title="Menu">
+                      {({ toggleMenu }) => (
+                        <>
+                          <MenuItem key={0} onClick={toggleMenu}>
+                            Menu 1
+                          </MenuItem>
+                          <MenuItem key={1} onClick={toggleMenu}>
+                            Menu 2
+                          </MenuItem>
+                          <MenuItem key={2} onClick={toggleMenu}>
+                            Menu 3
+                          </MenuItem>
+                        </>
+                      )}
+                    </DropDownTab>
+                  }
+                />
+              ]}
             />
 
             <Grid activeFilter={params.filter} />
