@@ -18,6 +18,8 @@ import { useGetBrandFlows } from 'hooks/use-get-brand-flows'
 
 import { deleteBrandFlow } from 'models/flows/delete-brand-flow'
 
+import { RenderProps } from 'components/Grid/Table/types'
+
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import { getFlowEditUrl, createFlow } from '../helpers'
@@ -81,30 +83,22 @@ function List(props: Props) {
     {
       header: 'Name',
       id: 'name',
-      width: '70%',
-      verticalAlign: 'center',
-      render: (props: { rowData: IBrandFlow }) => (
-        <Name
-          id={props.rowData.id}
-          name={props.rowData.name}
-          description={props.rowData.description}
-        />
+      primary: true,
+      render: ({ row }: RenderProps<IBrandFlow>) => (
+        <Name id={row.id} name={row.name} description={row.description} />
       )
     },
     {
       header: 'Enrolled Contacts',
       id: 'cotnacts',
-      verticalAlign: 'center',
-      render: (props: { rowData: IBrandFlow }) => (
-        <EnrolledContacts activeFlows={props.rowData.active_flows} />
+      render: ({ row }: RenderProps<IBrandFlow>) => (
+        <EnrolledContacts activeFlows={row.active_flows} />
       )
     },
     {
-      header: '',
       id: 'actions',
-      verticalAlign: 'center',
-      render: (renderProps: { rowData: IBrandFlow }) => {
-        const actions = getFlowActions(renderProps.rowData)
+      render: ({ row }: RenderProps<IBrandFlow>) => {
+        const actions = getFlowActions(row)
 
         return (
           <Actions
@@ -112,13 +106,13 @@ function List(props: Props) {
             onSelect={action => {
               switch (action.value) {
                 case 'duplicate':
-                  setSelectedFlow(renderProps.rowData)
+                  setSelectedFlow(row)
                   setIsModalOpen(true)
 
                   return
                 case 'delete':
                   confirmation.setConfirmationModal({
-                    message: `Delete "${renderProps.rowData.name}" Flow?`,
+                    message: `Delete "${row.name}" Flow?`,
                     description:
                       'This Flow will be deleted and you can not use it anymore. Are you sure?',
                     onConfirm: async () => {
@@ -126,10 +120,10 @@ function List(props: Props) {
                         return
                       }
 
-                      await deleteBrandFlow(brand, renderProps.rowData.id)
+                      await deleteBrandFlow(brand, row.id)
                       await reloadFlows()
                       props.notify({
-                        message: `"${renderProps.rowData.name}" Flow deleted.`,
+                        message: `"${row.name}" Flow deleted.`,
                         status: 'success'
                       })
                     }
@@ -138,7 +132,7 @@ function List(props: Props) {
                   return
                 case 'edit':
                 case 'view':
-                  goTo(getFlowEditUrl(renderProps.rowData.id))
+                  goTo(getFlowEditUrl(row.id))
               }
             }}
           />
@@ -181,12 +175,12 @@ function List(props: Props) {
       <PageContainer>
         {isFetching && !error && <LoadingComponent />}
         {!isFetching && !error && (
-          <Table
-            data={flows}
+          <Table<IBrandFlow>
             columns={columns}
-            showToolbar={false}
-            isFetching={isFetching}
-            LoadingState={LoadingComponent}
+            rows={flows}
+            totalRows={(flows || []).length}
+            loading={isFetching ? 'middle' : null}
+            LoadingStateComponent={LoadingComponent}
           />
         )}
         {error && <h4>{error}</h4>}

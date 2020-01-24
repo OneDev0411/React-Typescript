@@ -13,11 +13,15 @@ import LoadingContainer from 'components/LoadingContainer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 import { TourSheets } from 'components/tour/TourSheets'
 
+import { RenderProps } from 'components/Grid/Table/types'
+
 import EmptyState from './EmptyState'
 import CreateNewTour from './CreateNewTour'
 import Info from './columns/Info'
 import Actions from './columns/Actions'
 import Participants from './columns/Participants'
+
+type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
 function ToursList(props: { user: IUser }) {
   const theme = useTheme<Theme>()
@@ -52,16 +56,12 @@ function ToursList(props: { user: IUser }) {
       id: 'info',
       width: '50%',
       verticalAlign: 'center',
-      render: ({
-        rowData
-      }: {
-        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-      }) => (
+      render: ({ row }: RenderProps<TableRow>) => (
         <Info
-          dueDate={rowData.due_date}
-          description={rowData.description}
-          onClick={() => handleEdit(rowData)}
-          title={rowData.title}
+          dueDate={row.due_date}
+          description={row.description}
+          onClick={() => handleEdit(row)}
+          title={row.title}
         />
       )
     },
@@ -70,17 +70,11 @@ function ToursList(props: { user: IUser }) {
       id: 'participants',
       width: '10%',
       verticalAlign: 'center',
-      render: ({
-        rowData
-      }: {
-        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-      }) => (
+      render: ({ row }: RenderProps<TableRow>) => (
         <Participants
           participants={
-            rowData.associations
-              ? rowData.associations.filter(
-                  a => a.association_type === 'contact'
-                )
+            row.associations
+              ? row.associations.filter(a => a.association_type === 'contact')
               : []
           }
         />
@@ -90,19 +84,15 @@ function ToursList(props: { user: IUser }) {
       id: 'actions',
       width: '40%',
       verticalAlign: 'center',
-      render: ({
-        rowData
-      }: {
-        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-      }) => (
+      render: ({ row }: RenderProps<TableRow>) => (
         <Actions
-          onEdit={() => handleEdit(rowData)}
+          onEdit={() => handleEdit(row)}
           onViewToursheet={() => {
-            setSelectedTour(rowData)
+            setSelectedTour(row)
             setIsOpenToursheetViewer(true)
           }}
           reloadList={reloadList}
-          tour={rowData}
+          tour={row}
         />
       )
     }
@@ -136,12 +126,12 @@ function ToursList(props: { user: IUser }) {
     }
 
     return (
-      <Table
+      <Table<TableRow>
         columns={columns}
-        data={list}
-        isFetching={isFetching}
-        LoadingState={LoadingContainer}
-        showToolbar={false}
+        rows={list}
+        totalRows={(list || []).length}
+        loading={isFetching ? 'middle' : null}
+        LoadingStateComponent={LoadingContainer}
       />
     )
   }

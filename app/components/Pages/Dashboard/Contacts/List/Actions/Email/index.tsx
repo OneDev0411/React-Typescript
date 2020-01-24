@@ -31,9 +31,9 @@ function mapStateToProps(
   { contacts },
   { selectedRows }: { selectedRows: UUID[] }
 ) {
-  const rawContacts: IContact[] = selectedRows.map(id =>
-    selectContact(contacts.list, id)
-  )
+  const rawContacts: IContact[] = selectedRows
+    .map(id => selectContact(contacts.list, id))
+    .filter(id => !!id)
 
   const normalizedContacts = rawContacts.map(normalizeContact)
 

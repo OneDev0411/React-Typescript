@@ -20,12 +20,13 @@ export default function ExportButton({ disabled, onExportClick }) {
       buttonIcon={Xlsx}
       onChange={async item => onExportClick(item.type)}
       buttonText="Export Contacts"
+      upsideDown
       disabled={disabled}
-      menuStyle={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: 'max-content',
-        overflow: 'hidden'
+      style={{
+        display: 'inline'
+      }}
+      buttonStyle={{
+        width: 'inherit'
       }}
       itemRenderer={({ item, ...rest }) => (
         <Item

@@ -41,6 +41,11 @@ exports[`ExportContactsButton inner button component renders 1`] = `
     }
   }
   buttonSize="small"
+  buttonStyle={
+    Object {
+      "width": "inherit",
+    }
+  }
   buttonText="Export Contacts"
   disabled={false}
   itemRenderer={[Function]}
@@ -186,15 +191,13 @@ exports[`ExportContactsButton inner button component renders 1`] = `
       },
     ]
   }
-  menuStyle={
-    Object {
-      "display": "flex",
-      "flexDirection": "column",
-      "overflow": "hidden",
-      "width": "max-content",
-    }
-  }
   onChange={[Function]}
   selectedItem={null}
+  style={
+    Object {
+      "display": "inline",
+    }
+  }
+  upsideDown={true}
 />
 `;

@@ -21,14 +21,7 @@ import Tooltip from 'components/tooltip'
 import ActionButton from 'components/Button/ActionButton'
 import LoadingContainer from 'components/LoadingContainer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-interface CellProps {
-  rowData: IBrandEmailTemplate
-}
-
-interface GetTrProps {
-  original: IBrandEmailTemplate
-}
+import { RenderProps } from 'components/Grid/Table/types'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -86,11 +79,11 @@ function EmailTemplatesList({
     {
       header: 'Name',
       id: 'name',
-      width: '35%',
+      primary: true,
       accessor: (template: IBrandEmailTemplate) => template.name,
-      render: ({ rowData }: CellProps) => (
+      render: ({ row }: RenderProps<IBrandEmailTemplate>) => (
         <Typography noWrap variant="body1">
-          {rowData.name}
+          {row.name}
         </Typography>
       )
     },
@@ -98,13 +91,13 @@ function EmailTemplatesList({
       header: 'Content',
       id: 'content',
       sortable: false,
-      render: ({ rowData }: CellProps) => (
+      render: ({ row }: RenderProps<IBrandEmailTemplate>) => (
         <div>
           <Typography noWrap variant="body1">
-            {rowData.subject}
+            {row.subject}
           </Typography>
           <Typography noWrap variant="body2" className={classes.body2}>
-            {rowData.text}
+            {row.text}
           </Typography>
         </div>
       )
@@ -112,7 +105,9 @@ function EmailTemplatesList({
     {
       id: 'delete',
       sortable: false,
-      render: ({ rowData: { id, editable, name } }: CellProps) => (
+      render: ({
+        row: { id, editable, name }
+      }: RenderProps<IBrandEmailTemplate>) => (
         <div className={classes.deleteButtonWrapper}>
           <Tooltip
             caption={
@@ -145,13 +140,15 @@ function EmailTemplatesList({
   ]
 
   return (
-    <Table
-      data={templates}
+    <Table<IBrandEmailTemplate>
+      rows={templates}
+      totalRows={(templates || []).length}
       columns={columns}
-      isFetching={isFetching}
-      plugins={{ sortable: {} }}
-      LoadingState={() => <LoadingContainer style={{ padding: '20% 0' }} />}
-      getTrProps={(index: number, { original: template }: GetTrProps) => {
+      loading={isFetching ? 'middle' : null}
+      LoadingStateComponent={() => (
+        <LoadingContainer style={{ padding: '20% 0' }} />
+      )}
+      getTrProps={({ rowIndex: number, row: template }) => {
         return {
           onClick: isTemplateDeleting(template.id)
             ? () => {}

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import Deal from 'models/Deal'
 
-import Table from 'components/Grid/Table'
+import Grid from 'components/Grid/Table'
 
 import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
@@ -26,8 +26,8 @@ import { statusSortMethod } from '../../components/table-columns/Status'
 
 const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field'
 
-class Grid extends React.Component {
-  get Columns() {
+class AgentGrid extends React.Component {
+  get columns() {
     const { roles } = this.props
 
     return [
@@ -40,9 +40,8 @@ class Grid extends React.Component {
       {
         id: 'address',
         header: 'Address',
-        width: '50%',
         accessor: deal => Deal.get.address(deal, roles),
-        render: ({ rowData: deal, totalRows, rowIndex }) => (
+        render: ({ row: deal, totalRows, rowIndex }) => (
           <Address
             deal={deal}
             roles={roles}
@@ -55,15 +54,16 @@ class Grid extends React.Component {
         id: 'price',
         header: '$ Price',
         sortType: 'number',
+        align: 'right',
         accessor: deal => this.getPriceValue(deal),
-        render: ({ rowData: deal }) =>
+        render: ({ row: deal }) =>
           Deal.get.formattedPrice(this.getPriceValue(deal), 'currency', 0)
       },
       {
         id: 'critical-dates',
         header: 'Critical Dates',
         accessor: deal => getCriticalDateNextValue(deal),
-        render: ({ rowData: deal, totalRows, rowIndex }) => (
+        render: ({ row: deal, totalRows, rowIndex }) => (
           <CriticalDate
             deal={deal}
             user={this.props.user}
@@ -75,18 +75,15 @@ class Grid extends React.Component {
       {
         id: 'agent-name',
         header: 'Agent',
-        width: '100px',
         accessor: deal => getPrimaryAgentName(deal, roles),
-        render: ({ rowData: deal }) => (
-          <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
-        )
+        render: ({ row: deal }) => {
+          return <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
+        }
       },
       {
         id: 'notification',
         header: '',
-        width: '50px',
-
-        render: ({ rowData: deal }) => (
+        render: ({ row: deal }) => (
           <Notification
             count={deal.new_notifications ? deal.new_notifications.length : 0}
             caption="You have $count unread messages in this deal"
@@ -107,7 +104,7 @@ class Grid extends React.Component {
     return Deal.get.field(deal, field)
   }
 
-  get Data() {
+  get data() {
     const { deals, activeFilter } = this.props
 
     if (!deals) {
@@ -122,18 +119,6 @@ class Grid extends React.Component {
     return Object.values(deals).filter(deal => filterFn(deal))
   }
 
-  getTdProps = (colIndex, { column }) => {
-    if (['address', 'agent-name', 'notification'].includes(column.id)) {
-      return {
-        style: {
-          alignSelf: 'center'
-        }
-      }
-    }
-
-    return {}
-  }
-
   getDefaultSort = () => {
     const sortSetting =
       getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ||
@@ -146,44 +131,32 @@ class Grid extends React.Component {
       ascending = false
     }
 
-    const column = this.Columns.find(col => col.id === id)
+    const column = this.columns.find(col => col.id === id)
 
     return {
-      column,
+      columnId: column.id,
       ascending
     }
   }
 
-  getDefaultIndex = () =>
-    getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ||
-    'status'
+  handleChangeSort = async item => {
+    await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
+
+    this.props.dispatch(getUserTeams(this.props.user))
+  }
 
   render() {
-    const { isFetchingDeals } = this.props
-    const columns = this.Columns
-    const data = this.Data
-
-    const defaultSort = this.getDefaultSort()
-    const defaultIndex = this.getDefaultIndex()
-
     return (
-      <Table
-        plugins={{
-          sortable: {
-            defaultSort,
-            defaultIndex,
-            onPostChange: async item => {
-              await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
-              await this.props.dispatch(getUserTeams(this.props.user))
-            }
-          }
+      <Grid
+        sorting={{
+          defaultSort: this.getDefaultSort(),
+          onChange: this.handleChangeSort
         }}
-        isFetching={isFetchingDeals}
-        columns={columns}
-        data={data}
-        EmptyState={EmptyState}
-        LoadingState={LoadingState}
-        getTdProps={this.getTdProps}
+        columns={this.columns}
+        rows={this.data}
+        LoadingStateComponent={LoadingState}
+        EmptyStateComponent={EmptyState}
+        loading={this.props.isFetchingDeals ? 'middle' : null}
       />
     )
   }
@@ -201,4 +174,4 @@ function mapStateToProps({ user, deals }) {
   }
 }
 
-export default connect(mapStateToProps)(Grid)
+export default connect(mapStateToProps)(AgentGrid)

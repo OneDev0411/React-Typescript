@@ -92,23 +92,6 @@ export function doFilterOnInsightList(
   return output
 }
 
-export function doFilterOnColumns(
-  columns: any,
-  filterType: InsightFiltersType
-) {
-  if (filterType === InsightFiltersType.SCHEDULED) {
-    return [
-      {
-        ...columns[0],
-        width: undefined
-      },
-      columns[columns.length - 1]
-    ]
-  }
-
-  return columns
-}
-
 export enum SortValues {
   Newest = 'Newest',
   Oldest = 'Oldest'

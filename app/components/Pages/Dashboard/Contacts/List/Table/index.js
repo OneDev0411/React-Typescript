@@ -3,31 +3,25 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 
 import { getAttributeFromSummary } from 'models/contacts/helpers'
-import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
+
 import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
 
+import { Table } from 'components/Grid/Table'
+
 import Tooltip from 'components/tooltip'
-import Table from 'components/Grid/Table'
-import IconButton from 'components/Button/IconButton'
-import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
 
+import { TableActions } from './Actions'
+
 import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 
-import Email from '../Actions/Email'
-import MergeContacts from '../Actions/MergeContacts'
-import ExportContacts from '../Actions/ExportContactsButton'
-import TagContacts from '../Actions/TagContacts'
-import CreateEvent from '../Actions/CreateEvent'
-import AddToFlowAction from '../Actions/AddToFlow'
-
-import { ActionWrapper } from './components/ActionWrapper'
 import { LoadingComponent } from './components/LoadingComponent'
 
 import Menu from './columns/Menu'
+import Avatar from './columns/Avatar'
 import Name from './columns/Name'
 import TagsString from './columns/Tags'
 import FlowCell from './columns/Flows'
@@ -59,20 +53,20 @@ class ContactsList extends React.Component {
     {
       header: 'Name',
       id: 'name',
-      verticalAlign: 'center',
+      primary: true,
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
-      render: ({ rowData: contact }) => <Name contact={contact} />
+      render: ({ row: contact }) => <Name contact={contact} />
     },
     {
       header: 'Contact',
       id: 'contact',
       accessor: contact => getAttributeFromSummary(contact, 'email'),
-      render: ({ rowData: contact }) => <Contact contact={contact} />
+      render: ({ row: contact }) => <Contact contact={contact} />
     },
     {
       header: 'Tags',
       id: 'tag',
-      render: ({ rowData: contact }) => (
+      render: ({ row: contact }) => (
         <TagsString
           contact={contact}
           onSelectTagContact={this.onSelectTagContact}
@@ -81,7 +75,7 @@ class ContactsList extends React.Component {
     },
     {
       header: () => (
-        <React.Fragment>
+        <>
           Last Touch
           <Tooltip
             placement="bottom"
@@ -89,17 +83,17 @@ class ContactsList extends React.Component {
           >
             <IconLastTouch />
           </Tooltip>
-        </React.Fragment>
+        </>
       ),
       id: 'last_touched',
       sortable: false,
-      render: ({ rowData: contact }) => <LastTouched contact={contact} />
+      render: ({ row: contact }) => <LastTouched contact={contact} />
     },
     {
       header: 'Flows',
       id: 'flows',
       sortable: false,
-      render: ({ rowData: contact }) => (
+      render: ({ row: contact }) => (
         <FlowCell
           callback={async () => {
             await this.props.reloadContacts()
@@ -111,13 +105,8 @@ class ContactsList extends React.Component {
     },
     {
       id: 'delete-contact',
-      header: '',
-      accessor: '',
-      className: 'td--dropdown-container',
       sortable: false,
-      verticalAlign: 'center',
-      width: '24px',
-      render: ({ rowData: contact }) => (
+      render: ({ row: contact }) => (
         <Menu
           contactId={contact.id}
           handleOnDelete={this.props.onRequestDelete}
@@ -126,241 +115,89 @@ class ContactsList extends React.Component {
     }
   ]
 
-  actions = [
-    {
-      render: ({ excludedRows, selectedRows }) => {
-        const { filters } = this.props
-
-        return (
-          <ExportContacts
-            excludedRows={excludedRows}
-            exportIds={selectedRows}
-            filters={filters.attributeFilters}
-            flows={filters.flows}
-            crmTasks={filters.crm_tasks}
-            searchText={filters.text}
-            conditionOperator={filters.filter_type}
-            users={filters.users}
-            disabled={this.props.isFetching}
-          />
-        )
-      }
-    },
-    {
-      render: ({ entireMode, selectedRows }) => {
-        const disabled = entireMode ? true : selectedRows.length === 0
-
-        return (
-          <ActionWrapper
-            bulkMode={entireMode}
-            action="sending an email"
-            disabled={disabled}
-          >
-            <Email disabled={disabled} selectedRows={selectedRows} />
-          </ActionWrapper>
-        )
-      }
-    },
-    {
-      render: ({ entireMode, selectedRows }) => {
-        const disabled = entireMode ? true : selectedRows.length === 0
-
-        return (
-          <ActionWrapper
-            bulkMode={entireMode}
-            action="marketing"
-            disabled={disabled}
-          >
-            <SendMlsListingCard disabled={disabled} selectedRows={selectedRows}>
-              Marketing
-            </SendMlsListingCard>
-          </ActionWrapper>
-        )
-      }
-    },
-    {
-      render: ({
-        entireMode,
-        totalRowsCount,
-        excludedRows,
-        selectedRows,
-        resetSelectedRows
-      }) => {
-        const { filters } = this.props
-        const disabled = entireMode ? false : selectedRows.length === 0
-
-        return (
-          <ActionWrapper action="tagging" disabled={disabled}>
-            <TagContacts
-              disabled={disabled}
-              entireMode={entireMode}
-              totalRowsCount={totalRowsCount}
-              excludedRows={excludedRows}
-              selectedRows={selectedRows}
-              filters={filters.attributeFilters}
-              searchText={filters.query}
-              conditionOperator={filters.filter_type}
-              users={filters.users}
-              resetSelectedRows={resetSelectedRows}
-              handleChangeContactsAttributes={
-                this.props.handleChangeContactsAttributes
-              }
-            />
-          </ActionWrapper>
-        )
-      }
-    },
-    {
-      render: ({ entireMode, selectedRows, resetSelectedRows }) => {
-        const disabled = entireMode ? true : selectedRows.length === 0
-
-        return (
-          <ActionWrapper
-            bulkMode={entireMode}
-            action="creating an event"
-            disabled={disabled}
-          >
-            <CreateEvent
-              disabled={disabled}
-              selectedRows={selectedRows}
-              submitCallback={async () => {
-                resetSelectedRows()
-                await this.props.reloadContacts()
-              }}
-            />
-          </ActionWrapper>
-        )
-      }
-    },
-    {
-      render: ({
-        entireMode,
-        selectedRows,
-        excludedRows,
-        resetSelectedRows
-      }) => (
-        <AddToFlowAction
-          entireMode={entireMode}
-          excludedRows={excludedRows}
-          selectedRows={selectedRows}
-          filters={this.props.filters}
-          resetSelectedRows={resetSelectedRows}
-          reloadContacts={this.props.reloadContacts}
-        />
-      )
-    },
-    {
-      render: ({ entireMode, selectedRows, resetSelectedRows }) => {
-        const disabled = entireMode ? true : selectedRows.length < 2
-
-        return (
-          <ActionWrapper
-            bulkMode={entireMode}
-            action="merging"
-            atLeast="two"
-            disabled={disabled}
-          >
-            <MergeContacts
-              disabled={disabled}
-              selectedRows={selectedRows}
-              submitCallback={async () => {
-                resetSelectedRows()
-                await this.props.reloadContacts()
-              }}
-            />
-          </ActionWrapper>
-        )
-      }
-    },
-    {
-      render: data => {
-        const disabled = data.entireMode
-          ? false
-          : data.selectedRows.length === 0
-
-        return (
-          <ActionWrapper action="delete" disabled={disabled}>
-            <IconButton
-              disabled={disabled}
-              size="small"
-              appearance="outline"
-              onClick={e => this.props.onRequestDelete(e, data)}
-            >
-              <IconDeleteOutline size={24} />
-            </IconButton>
-          </ActionWrapper>
-        )
-      }
-    }
-  ]
-
   sortableColumns = [
-    { label: 'Most Recent', value: '-updated_at' },
-    { label: 'Last Touch', value: '-last_touch' },
-    { label: 'First name A-Z', value: 'display_name' },
-    { label: 'First name Z-A', value: '-display_name' },
-    { label: 'Last name A-Z', value: 'sort_field' },
-    { label: 'Last name Z-A', value: '-sort_field' },
-    { label: 'Created At', value: 'created_at' }
+    { label: 'Most Recent', value: 'updated_at', ascending: false },
+    { label: 'Last Touch', value: 'last_touch', ascending: false },
+    { label: 'First name A-Z', value: 'display_name', ascending: true },
+    { label: 'First name Z-A', value: 'display_name', ascending: false },
+    { label: 'Last name A-Z', value: 'sort_field', ascending: true },
+    { label: 'Last name Z-A', value: 'sort_field', ascending: false },
+    { label: 'Created At', value: 'created_at', ascending: true }
   ]
 
-  getGridTrProps = (rowIndex, { isSelected }) => {
-    if (this.props.isRowsUpdating && isSelected) {
-      return {
-        style: {
-          opacity: 0.5,
-          pointerEvents: 'none'
-        }
-      }
+  getLoading = () => {
+    if (
+      !this.props.isFetching &&
+      !this.props.isFetchingMore &&
+      !this.props.isFetchingMoreBefore
+    ) {
+      return null
     }
+
+    if (this.props.isFetching) {
+      return 'middle'
+    }
+
+    if (this.props.isFetchingMore) {
+      return 'bottom'
+    }
+
+    if (this.props.isFetchingMoreBefore) {
+      return 'top'
+    }
+  }
+
+  getDefaultSort = () => {
+    return this.sortableColumns.find(item => item.value === this.props.order)
   }
 
   render() {
     const { props, state } = this
 
     return (
-      <div>
+      <>
         <Table
-          plugins={{
-            selectable: {
-              persistent: true,
-              allowSelectEntireList: true,
-              storageKey: 'contacts',
-              entityName: 'Contacts'
-            },
-            loadable: {
-              accuracy: 300, // px
-              accuracyTop: 600, // px
-              debounceTime: 300, // ms
-              container: props.tableContainerId,
-              onScrollBottom: props.onRequestLoadMore,
-              onScrollTop: props.onRequestLoadMoreBefore
-            },
-            actionable: {
-              actions: this.actions
-            },
-            sortable: {
-              columns: this.sortableColumns,
-              defaultIndex: props.order,
-              onChange: props.handleChangeOrder,
-              onPostChange: async item => {
-                await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
-                await props.dispatch(getUserTeams(props.user))
-              }
+          rows={props.data}
+          totalRows={props.listInfo.total || 0}
+          summary={total => `${total} Contacts`}
+          loading={this.getLoading()}
+          columns={this.columns}
+          LoadingStateComponent={LoadingComponent}
+          sorting={{
+            columns: this.sortableColumns,
+            defaultSort: this.getDefaultSort(),
+            onChange: async item => {
+              props.handleChangeOrder(item)
+
+              await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
+              props.dispatch(getUserTeams(props.user))
             }
           }}
-          data={props.data}
-          summary={{
-            entityName: 'Contacts',
-            total: props.listInfo.total || 0
+          selection={{
+            defaultRender: ({ row }) => <Avatar contact={row} />
           }}
-          isFetching={props.isFetching}
-          isFetchingMore={props.isFetchingMore}
-          isFetchingMoreBefore={props.isFetchingMoreBefore}
-          columns={this.columns}
-          LoadingState={LoadingComponent}
-          getTrProps={this.getGridTrProps}
-          EmptyState={() => (
+          infiniteScrolling={{
+            accuracy: 300, // px
+            debounceTime: 300, // ms
+            container: this.props.tableContainerId,
+            onScrollBottom: props.onRequestLoadMore,
+            onScrollTop: props.onRequestLoadMoreBefore
+          }}
+          TableActions={({ state, dispatch }) => (
+            <TableActions
+              state={state}
+              dispatch={dispatch}
+              filters={props.filters}
+              isFetching={props.isFetching}
+              totalRowsCount={props.listInfo.total}
+              reloadContacts={this.props.reloadContacts}
+              onRequestDelete={this.props.onRequestDelete}
+              handleChangeContactsAttributes={
+                props.handleChangeContactsAttributes
+              }
+            />
+          )}
+          EmptyStateComponent={() => (
             <NoSearchResults description="Try typing another name, email, phone or tag." />
           )}
         />
@@ -371,7 +208,7 @@ class ContactsList extends React.Component {
           selectedContactsIds={state.selectedTagContact}
           handleChangeContactsAttributes={props.handleChangeContactsAttributes}
         />
-      </div>
+      </>
     )
   }
 }

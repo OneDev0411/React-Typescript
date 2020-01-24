@@ -49,7 +49,7 @@ export class MapViewContainer extends React.Component {
     {
       id: 'price',
       accessor: listing => listing.price,
-      render: ({ rowData: listing }) => (
+      render: ({ row: listing }) => (
         <ListingCard
           isShowOnMap
           key={listing.id}
@@ -80,15 +80,11 @@ export class MapViewContainer extends React.Component {
         <TableContainer>
           <Table
             columns={this.columns}
-            data={this.props.data}
-            isFetching={this.props.isFetching}
-            LoadingState={LoadingComponent}
-            showTableHeader={false}
-            summary={{
-              entityName: 'Listings',
-              style: { color: '#000' },
-              total: this.props.listings.info.total
-            }}
+            rows={this.props.data}
+            loading={this.props.isFetching ? 'middle' : null}
+            LoadingStateComponent={LoadingComponent}
+            totalRows={this.props.listings.info.total}
+            summary={total => `${total} Listings`}
             getTrProps={() => ({
               style: {
                 padding: 0,
@@ -96,16 +92,22 @@ export class MapViewContainer extends React.Component {
               }
             })}
             getTdProps={() => ({ style: { padding: 0 } })}
-            plugins={{
-              sortable: {
-                columns: [
-                  ...sortOptions.columns,
-                  { label: 'Distance (High-Low)', value: 'distanceFromCenter' },
-                  { label: 'Distance (Low-High)', value: '-distanceFromCenter' }
-                ],
-                defaultIndex: sortOptions.defaultIndex,
-                onChange: this.onChangeSort
-              }
+            sorting={{
+              defaultSort: sortOptions.defaultSort,
+              columns: [
+                ...sortOptions.columns,
+                {
+                  label: 'Distance (High-Low)',
+                  value: 'distanceFromCenter',
+                  ascending: true
+                },
+                {
+                  label: 'Distance (Low-High)',
+                  value: 'distanceFromCenter',
+                  ascending: false
+                }
+              ],
+              onChange: this.onChangeSort
             }}
           />
         </TableContainer>

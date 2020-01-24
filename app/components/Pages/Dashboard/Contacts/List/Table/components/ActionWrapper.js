@@ -29,7 +29,7 @@ export function ActionWrapper({
   bulkMode
 }) {
   return disabled ? (
-    <Tooltip placement="bottom" caption={getCaption(action, atLeast, bulkMode)}>
+    <Tooltip placement="top" caption={getCaption(action, atLeast, bulkMode)}>
       <DisabledActionContainer>{children}</DisabledActionContainer>
     </Tooltip>
   ) : (
