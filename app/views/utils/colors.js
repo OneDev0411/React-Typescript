@@ -1,5 +1,5 @@
 const newRed = '#F44336'
-const lightYellow = '#FFB74D'
+const lightOrange = '#FFB74D'
 
 export const red = {
   A100: newRed,
@@ -9,7 +9,7 @@ export const red = {
 }
 
 export const yellow = {
-  A100: lightYellow
+  A100: lightOrange
 }
 
 export const green = {
@@ -17,7 +17,7 @@ export const green = {
   primary: '#5cb85c'
 }
 export const orange = {
-  light: lightYellow,
+  light: lightOrange,
   primary: '#FF9900',
   dark: '#F57C00'
 }
