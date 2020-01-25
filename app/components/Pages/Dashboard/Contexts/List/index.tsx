@@ -7,12 +7,13 @@ import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
 import { addNotification as notify } from 'reapop'
 import groupBy from 'lodash/groupBy'
+import isEmpty from 'lodash/isEmpty'
 
 import { IAppState } from 'reducers'
 import createNewContext from 'models/Deal/context/create-context'
 import editContext from 'models/Deal/context/edit-context'
 import deleteContext from 'models/Deal/context/delete-context'
-import { selectContextsByBrand } from 'reducers/deals/contexts'
+import { selectExactContextsByBrand } from 'reducers/deals/contexts'
 import { getContextsByBrand } from 'actions/deals'
 import { getActiveTeamId } from 'utils/user-teams'
 import PageHeader from 'components/PageHeader'
@@ -20,15 +21,23 @@ import LoadingContainer from 'components/LoadingContainer'
 
 import CategoryItem from '../components/CategoryItem'
 import NewCategoryModal from '../components/NewCategory'
+import EmptyState from '../components/EmptyState'
 
 interface Props {
   brandId: UUID
+  isFetching: boolean
   list: { [key: string]: Array<IDealBrandContext> }
   getContextsByBrand: IAsyncActionProp<typeof getContextsByBrand>
   notify: IAsyncActionProp<typeof notify>
 }
 
-function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
+function DealContext({
+  brandId,
+  isFetching,
+  list,
+  getContextsByBrand,
+  notify
+}: Props) {
   useEffect(() => {
     getContextsByBrand(brandId)
   }, [getContextsByBrand, brandId])
@@ -98,8 +107,12 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
   }
 
   const renderContent = () => {
-    if (!list) {
+    if (isFetching) {
       return <LoadingContainer style={{ padding: '30vh 0 0' }} />
+    }
+
+    if (list.isEmpty) {
+      return <EmptyState onOpenNewContext={() => setIsModalOpen(true)} />
     }
 
     return Object.keys(list)
@@ -148,10 +161,14 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
 
 const mapStateToProps = ({ deals, user }: IAppState) => {
   const brandId = getActiveTeamId(user)
+  const exactContexts = selectExactContextsByBrand(deals.contexts, brandId)
 
   return {
     brandId,
-    list: groupBy(selectContextsByBrand(deals.contexts, brandId), 'section')
+    isFetching: isEmpty(deals.contexts.byBrand),
+    list: !isEmpty(exactContexts)
+      ? groupBy(exactContexts, 'section')
+      : { isEmpty: true }
   }
 }
 
