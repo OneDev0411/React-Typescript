@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   title?: string
   noGlobalActionsButton?: boolean
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export default function GlobalHeader({
@@ -37,7 +37,7 @@ export default function GlobalHeader({
           <Typography variant="h3">{title}</Typography>
         </div>
       )}
-      <div className={classes.content}>{children}</div>
+      {children && <div className={classes.content}>{children}</div>}
       {!noGlobalActionsButton && (
         <div>
           <GlobalActionsButton />
