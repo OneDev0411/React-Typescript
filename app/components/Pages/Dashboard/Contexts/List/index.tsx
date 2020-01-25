@@ -7,12 +7,13 @@ import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
 import { addNotification as notify } from 'reapop'
 import groupBy from 'lodash/groupBy'
+import isEmpty from 'lodash/isEmpty'
 
 import { IAppState } from 'reducers'
 import createNewContext from 'models/Deal/context/create-context'
 import editContext from 'models/Deal/context/edit-context'
 import deleteContext from 'models/Deal/context/delete-context'
-import { selectContextsByBrand } from 'reducers/deals/contexts'
+import { selectExactContextsByBrand } from 'reducers/deals/contexts'
 import { getContextsByBrand } from 'actions/deals'
 import { getActiveTeamId } from 'utils/user-teams'
 import PageHeader from 'components/PageHeader'
@@ -98,7 +99,7 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
   }
 
   const renderContent = () => {
-    if (!list) {
+    if (isEmpty(list)) {
       return <LoadingContainer style={{ padding: '30vh 0 0' }} />
     }
 
@@ -151,7 +152,10 @@ const mapStateToProps = ({ deals, user }: IAppState) => {
 
   return {
     brandId,
-    list: groupBy(selectContextsByBrand(deals.contexts, brandId), 'section')
+    list: groupBy(
+      selectExactContextsByBrand(deals.contexts, brandId),
+      'section'
+    )
   }
 }
 

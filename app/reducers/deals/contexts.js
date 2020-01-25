@@ -33,3 +33,8 @@ export default (
 
 export const selectContextsByBrand = (state, brandId) => state.byBrand[brandId]
 export const selectContextsByDeal = (state, dealId) => state.byDeal[dealId]
+export const selectExactContextsByBrand = (state, brandId) => {
+  return state.byBrand[brandId]
+    ? state.byBrand[brandId].filter(context => context.brand === brandId)
+    : []
+}
