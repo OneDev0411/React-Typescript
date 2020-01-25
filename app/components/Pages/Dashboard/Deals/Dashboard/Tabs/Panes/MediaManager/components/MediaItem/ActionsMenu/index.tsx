@@ -61,6 +61,7 @@ export default function ActionsMenu({ media, deal }: Props) {
 
   const handleModalClose = () => {
     setModalIsOpen(false)
+    setDownloadUrl('')
   }
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)

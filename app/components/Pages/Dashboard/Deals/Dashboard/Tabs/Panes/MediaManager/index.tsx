@@ -32,7 +32,7 @@ import {
 
 export default function MediaManager({ deal }: { deal: IDeal }) {
   const classes = useStyles()
-  const ReduxDispatch = useDispatch()
+  const reduxDispatch = useDispatch()
 
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
   const confirmationModal = useContext(ConfirmationModalContext)
@@ -59,7 +59,7 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
       dispatch(setNewlyUploadedMediaFields(fileObject.name, file, src, name))
     } catch (err) {
       console.log(err)
-      ReduxDispatch(
+      reduxDispatch(
         addNotification({
           status: 'error',
           message:
