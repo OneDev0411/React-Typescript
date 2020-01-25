@@ -21,15 +21,23 @@ import LoadingContainer from 'components/LoadingContainer'
 
 import CategoryItem from '../components/CategoryItem'
 import NewCategoryModal from '../components/NewCategory'
+import EmptyState from '../components/EmptyState'
 
 interface Props {
   brandId: UUID
+  isFetching: boolean
   list: { [key: string]: Array<IDealBrandContext> }
   getContextsByBrand: IAsyncActionProp<typeof getContextsByBrand>
   notify: IAsyncActionProp<typeof notify>
 }
 
-function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
+function DealContext({
+  brandId,
+  isFetching,
+  list,
+  getContextsByBrand,
+  notify
+}: Props) {
   useEffect(() => {
     getContextsByBrand(brandId)
   }, [getContextsByBrand, brandId])
@@ -99,8 +107,12 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
   }
 
   const renderContent = () => {
-    if (isEmpty(list)) {
+    if (isFetching) {
       return <LoadingContainer style={{ padding: '30vh 0 0' }} />
+    }
+
+    if (list.isEmpty) {
+      return <EmptyState onOpenNewContext={() => setIsModalOpen(true)} />
     }
 
     return Object.keys(list)
@@ -149,13 +161,14 @@ function DealContext({ brandId, list, getContextsByBrand, notify }: Props) {
 
 const mapStateToProps = ({ deals, user }: IAppState) => {
   const brandId = getActiveTeamId(user)
+  const exactContexts = selectExactContextsByBrand(deals.contexts, brandId)
 
   return {
     brandId,
-    list: groupBy(
-      selectExactContextsByBrand(deals.contexts, brandId),
-      'section'
-    )
+    isFetching: isEmpty(deals.contexts.byBrand),
+    list: !isEmpty(exactContexts)
+      ? groupBy(exactContexts, 'section')
+      : { isEmpty: true }
   }
 }
 
