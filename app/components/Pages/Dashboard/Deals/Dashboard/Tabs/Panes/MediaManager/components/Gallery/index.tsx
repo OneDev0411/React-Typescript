@@ -2,13 +2,10 @@ import React from 'react'
 import { Box } from '@material-ui/core'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 
-import { reorderGallery } from 'models/media-manager'
-
 import { IMediaItem, IMediaGallery } from '../../types'
 
 import { useStyles } from '../../styles'
-import { getMediaSorts } from '../../context/helpers/selectors'
-import { reorderGallery as reorderGalleryAction } from '../../context/actions'
+import { reorderGallery } from '../../context/actions'
 
 import useMediaManagerContext from '../../hooks/useMediaManagerContext'
 
@@ -53,11 +50,7 @@ export default function Gallery({ medias, deal }: Props) {
     oldIndex: number
     newIndex: number
   }) => {
-    dispatch(reorderGalleryAction(oldIndex, newIndex))
-
-    const reorderRequestObject = getMediaSorts(medias)
-
-    reorderGallery(deal.id, reorderRequestObject)
+    dispatch(reorderGallery(oldIndex, newIndex, deal.id))
   }
 
   return (

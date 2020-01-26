@@ -1,5 +1,8 @@
+import { reorderGallery as reorderGalleryModel } from 'models/media-manager'
+
 import * as actionTypes from './action-types'
 import { IMediaGallery } from '../../types'
+import { getMediaSorts } from '../helpers/selectors'
 
 export const setGalleryItems = (gallery: IMediaGallery) => ({
   type: actionTypes.SET_GALLERY_ITEMS,
@@ -66,13 +69,20 @@ export const setMediaUploadProgress = (file: string, progress: number) => ({
   }
 })
 
-export const reorderGallery = (oldIndex: number, newIndex: number) => ({
-  type: actionTypes.REORDER_GALLERY,
-  payload: {
-    oldIndex,
-    newIndex
-  }
-})
+export const reorderGallery = (
+  oldIndex: number,
+  newIndex: number,
+  dealId: IDeal['id']
+) => async (dispatch: React.Dispatch<any>, getState: () => IMediaGallery) => {
+  dispatch({
+    type: actionTypes.REORDER_GALLERY,
+    payload: {
+      oldIndex,
+      newIndex
+    }
+  })
+  reorderGalleryModel(dealId, getMediaSorts(getState()))
+}
 
 export const setNewlyUploadedMediaFields = (
   file: string,

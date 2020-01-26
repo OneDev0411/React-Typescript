@@ -1,5 +1,6 @@
-import { useState, useReducer } from 'react'
+import { useState } from 'react'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
+import useThunkReducer from 'react-hook-thunk-reducer'
 
 import { getMediaGallery } from 'models/media-manager'
 
@@ -12,7 +13,8 @@ export default function useFetchData(dealId: string) {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const [state, dispatch] = useReducer(reducer, initialData)
+  // Instead of using `useReducer` which doesn't support thunks
+  const [state, dispatch] = useThunkReducer(reducer, initialData)
 
   useEffectOnce(() => {
     async function fetchGallery() {
