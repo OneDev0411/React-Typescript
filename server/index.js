@@ -109,10 +109,7 @@ app.use(
       gzip: true,
       overwrite: true,
       httpOnly: true,
-      signed: true,
-      domain: __DEV__
-        ? 'localhost'
-        : config.api_host_local.replace('https://', '*.')
+      signed: true
     },
     app
   )
