@@ -77,7 +77,13 @@ function DealContext({
         }
       }
     } catch (err) {
-      console.error(err)
+      if (err.status === 409) {
+        return notify({
+          message: 'Context id has already taken!',
+          status: 'error'
+        })
+      }
+
       notify({
         message: 'Unexpected error happened',
         status: 'error'
