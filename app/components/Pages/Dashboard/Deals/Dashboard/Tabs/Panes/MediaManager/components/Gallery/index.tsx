@@ -15,9 +15,10 @@ import UploadPlaceholderItem from '../UploadPlaceholderItem'
 interface Props {
   medias: IMediaGallery
   deal: IDeal
+  uploaderRef: React.RefObject<any>
 }
 
-export default function Gallery({ medias, deal }: Props) {
+export default function Gallery({ medias, deal, uploaderRef }: Props) {
   const classes = useStyles()
   const { dispatch } = useMediaManagerContext()
 
@@ -30,7 +31,7 @@ export default function Gallery({ medias, deal }: Props) {
   const SortableGallery = SortableContainer(
     ({ medias }: { medias: IMediaGallery }) => (
       <Box display="flex" flexWrap="wrap" className={classes.gallery}>
-        <UploadPlaceholderItem />
+        <UploadPlaceholderItem uploaderRef={uploaderRef} />
         {medias.map((media, index) => (
           <SortableMediaItem
             key={media.file}

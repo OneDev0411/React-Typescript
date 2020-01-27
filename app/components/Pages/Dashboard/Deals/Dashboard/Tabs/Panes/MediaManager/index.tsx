@@ -1,28 +1,22 @@
-import React, { useContext, createRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import { Box } from '@material-ui/core'
-
 import { useDispatch } from 'react-redux'
+
 import { addNotification } from 'reapop'
 
 import { uploadMedia } from 'models/media-manager'
-
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import LoadingContainer from 'components/LoadingContainer'
 
 import acceptedDocuments from './constants/acceptedDocuments'
-
 import Uploader, { DropzoneRef } from './components/MediaUploader'
 import Header from './components/Header'
 import BulkActionsMenu from './components/BulkActionsMenu'
 import Gallery from './components/Gallery'
-
 import { getUploadedMedia, getSelectedMedia } from './context/helpers/selectors'
-
 import { useStyles } from './styles'
 import { MediaManagerContext } from './context'
-
 import useFetchGallery from './hooks/useFetchGallery'
-
 import {
   addMedia,
   setMediaUploadProgress,
@@ -33,11 +27,12 @@ import {
 export default function MediaManager({ deal }: { deal: IDeal }) {
   const classes = useStyles()
   const reduxDispatch = useDispatch()
-  const ref = createRef<DropzoneRef>()
+  const uploaderRef = useRef<DropzoneRef>(null)
+
+  console.log('>>>>>', uploaderRef)
 
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
   const confirmationModal = useContext(ConfirmationModalContext)
-
   const upload = async fileObject => {
     try {
       const response = await uploadMedia(
@@ -54,7 +49,6 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
           }
         }
       )
-
       const { id: file, preview_url: src, name } = response
 
       dispatch(setNewlyUploadedMediaFields(fileObject.name, file, src, name))
@@ -69,7 +63,6 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
       )
     }
   }
-
   const onDrop = (files: any[], rejectedFiles: []) => {
     if (rejectedFiles.length > 0) {
       confirmationModal.setConfirmationModal({
@@ -97,14 +90,14 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
   }
 
   return (
-    <Uploader onDrop={onDrop} disableClick ref={ref}>
+    <Uploader onDrop={onDrop} disableClick ref={uploaderRef}>
       <MediaManagerContext.Provider value={{ state, dispatch }}>
         <Box className={classes.container} width={1}>
           <Header
             mediasCount={getUploadedMedia(state).length}
-            uploaderRef={ref}
+            uploaderRef={uploaderRef}
           />
-          <Gallery medias={state} deal={deal} />
+          <Gallery medias={state} deal={deal} uploaderRef={uploaderRef} />
           {getSelectedMedia(state).length > 0 && (
             <BulkActionsMenu mediaGallery={state} deal={deal} />
           )}

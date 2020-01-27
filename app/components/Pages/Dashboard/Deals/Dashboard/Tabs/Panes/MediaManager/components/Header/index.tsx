@@ -19,7 +19,9 @@ export default function Header({ mediasCount, uploaderRef }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
-  console.log(uploaderRef)
+  const openBrowse = () => {
+    uploaderRef.current.open()
+  }
 
   return (
     <Box display="flex" width={1} className={classes.header}>
@@ -47,6 +49,7 @@ export default function Header({ mediasCount, uploaderRef }: Props) {
           color="primary"
           disableElevation
           className={classes.lowerCaseButton}
+          onClick={openBrowse}
         >
           <IconUpload
             fillColor="#fff"

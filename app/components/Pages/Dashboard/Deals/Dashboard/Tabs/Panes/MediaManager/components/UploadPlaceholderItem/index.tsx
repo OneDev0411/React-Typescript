@@ -1,13 +1,22 @@
 import React from 'react'
 import { Box, Typography, Link } from '@material-ui/core'
 
-import { useStyles } from '../../styles'
 import IconUpload from 'components/SvgIcons/Upload/IconUpload'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
-export default function UploadPlaceholderItem() {
+import { useStyles } from '../../styles'
+
+interface Props {
+  uploaderRef: React.RefObject<any>
+}
+
+export default function UploadPlaceholderItem({ uploaderRef }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
+
+  const openBrowse = () => {
+    uploaderRef.current.open()
+  }
 
   return (
     <Box className={classes.placeholderCard}>
@@ -17,7 +26,10 @@ export default function UploadPlaceholderItem() {
         </Box>
 
         <Typography variant="body1">
-          Drag &amp; Drop or <Link href="#">Upload</Link>
+          Drag &amp; Drop or{' '}
+          <Link href="#" onClick={openBrowse}>
+            Upload
+          </Link>
         </Typography>
       </Box>
     </Box>
