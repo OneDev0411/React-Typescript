@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, createRef } from 'react'
 import { Box } from '@material-ui/core'
 
 import { useDispatch } from 'react-redux'
@@ -11,7 +11,7 @@ import LoadingContainer from 'components/LoadingContainer'
 
 import acceptedDocuments from './constants/acceptedDocuments'
 
-import Uploader from './components/MediaUploader'
+import Uploader, { DropzoneRef } from './components/MediaUploader'
 import Header from './components/Header'
 import BulkActionsMenu from './components/BulkActionsMenu'
 import Gallery from './components/Gallery'
@@ -33,6 +33,7 @@ import {
 export default function MediaManager({ deal }: { deal: IDeal }) {
   const classes = useStyles()
   const reduxDispatch = useDispatch()
+  const ref = createRef<DropzoneRef>()
 
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
   const confirmationModal = useContext(ConfirmationModalContext)
@@ -96,10 +97,13 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
   }
 
   return (
-    <Uploader onDrop={onDrop} disableClick>
+    <Uploader onDrop={onDrop} disableClick ref={ref}>
       <MediaManagerContext.Provider value={{ state, dispatch }}>
         <Box className={classes.container} width={1}>
-          <Header mediasCount={getUploadedMedia(state).length} />
+          <Header
+            mediasCount={getUploadedMedia(state).length}
+            uploaderRef={ref}
+          />
           <Gallery medias={state} deal={deal} />
           {getSelectedMedia(state).length > 0 && (
             <BulkActionsMenu mediaGallery={state} deal={deal} />

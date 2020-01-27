@@ -12,11 +12,14 @@ import { useStyles } from '../../styles'
 
 interface Props {
   mediasCount: number
+  uploaderRef: React.RefObject<any>
 }
 
-export default function Header({ mediasCount }: Props) {
+export default function Header({ mediasCount, uploaderRef }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
+
+  console.log(uploaderRef)
 
   return (
     <Box display="flex" width={1} className={classes.header}>

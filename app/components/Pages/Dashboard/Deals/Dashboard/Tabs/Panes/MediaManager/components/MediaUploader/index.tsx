@@ -8,14 +8,17 @@ import acceptedDocuments from '../../constants/acceptedDocuments'
 import { useStyles } from '../../styles'
 
 interface Props {
-  children: ReactChild
+  children: React.ReactChild
   onDrop(files: any, rejectedFiles: any): void
   disableClick: boolean
 }
 
-export default function Uploader({ onDrop, disableClick, children }: Props) {
+export type DropzoneRef = React.Ref<any>
+
+const Uploader = React.forwardRef((props: Props, forwardedRef: DropzoneRef) => {
   const classes = useStyles()
   const [dragzoneActive, setDragZoneActive] = useState<boolean>(false)
+  const { onDrop, disableClick, children } = props
 
   const handleOnDrop = (files: any[], rejectedFiles: any[]) => {
     setDragZoneActive(false)
@@ -30,6 +33,7 @@ export default function Uploader({ onDrop, disableClick, children }: Props) {
       onDragEnter={() => setDragZoneActive(true)}
       onDragLeave={() => setDragZoneActive(false)}
       accept={acceptedDocuments}
+      ref={ref => (forwardedRef = ref)}
       multiple
     >
       {dragzoneActive && (
@@ -47,4 +51,6 @@ export default function Uploader({ onDrop, disableClick, children }: Props) {
       {children}
     </Dropzone>
   )
-}
+})
+
+export default Uploader
