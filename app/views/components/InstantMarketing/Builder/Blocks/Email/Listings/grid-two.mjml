@@ -6,10 +6,10 @@ align="right"
 {% endif %}
 {% endmacro %}
 
+{% for listingsBatch in listings | batch(2) %}
 <mj-section rechat-editable="tree" background-color="#fff">
-  {% for listing in listings %}
-
-  <mj-column width="50%">
+  {% for listing in listingsBatch %}
+  <mj-column>
     <mj-image rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
 
     <mj-text font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="13px" color="#000" padding-bottom="0" padding-top="0" {{ alignment(loop.index0) }}>
@@ -26,3 +26,4 @@ align="right"
   </mj-column>
   {% endfor %}
 </mj-section>
+{% endfor %}
