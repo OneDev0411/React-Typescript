@@ -1,5 +1,6 @@
+{% for usersBatch in users | batch(2) %}
 <mj-section background-color="#fff" padding-top="0" padding-bottom="5px">
-  {% for user in users %}
+  {% for user in usersBatch %}
   <mj-column width="25%">
     <mj-image border-radius="6px" width="80px" padding="0px" rechat-assets="avatar" align="center" src="{{ user.profile_image_url }}"></mj-image>
   </mj-column>
@@ -17,3 +18,4 @@
   </mj-column>
   {% endfor %}
 </mj-section>
+{% endfor %}
