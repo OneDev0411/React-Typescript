@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
   padding: 0 1rem;
-  font-family: Barlow;
+  font-family: Lato;
   background: #fff;
 
   > div:not(:empty) {

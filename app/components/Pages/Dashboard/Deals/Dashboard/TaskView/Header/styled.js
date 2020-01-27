@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { primary } from 'views/utils/colors'
-import { merriweatherFamilyStyle } from 'components/Typography/styles'
+import { LatoFamilyStyle } from 'components/Typography/styles'
 
 export const Container = styled.div`
   padding: 0 1.25rem;
@@ -39,7 +39,7 @@ export const TitleContainer = styled.div`
 `
 
 export const Title = styled.div`
-  ${merriweatherFamilyStyle};
+  ${LatoFamilyStyle};
   display: flex;
   align-items: center;
   font-size: 1rem;
