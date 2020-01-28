@@ -3,11 +3,11 @@ import { Box, Button, TextareaAutosize, IconButton } from '@material-ui/core'
 import cn from 'classnames'
 
 import { SortableHandle } from 'react-sortable-hoc'
+import { useDispatch } from 'react-redux'
+import { addNotification } from 'reapop'
 
 import IconEdit from 'components/SvgIcons/Edit/EditIcon'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
-
-import { editMedia } from 'models/media-manager'
 
 import { useStyles } from '../../styles'
 import ActionsMenu from './ActionsMenu'
@@ -17,7 +17,7 @@ import SortHandle from './SortHandle'
 
 import useMediaManagerContext from '../../hooks/useMediaManagerContext'
 import { IMediaItem } from '../../types'
-import { setMediaName } from '../../context/actions'
+import { renameMedia } from '../../context/actions'
 
 interface Props {
   media: IMediaItem
@@ -28,6 +28,7 @@ export default function MediaItem({ media, deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+  const reduxDispatch = useDispatch()
 
   const { file, src, selected, name, order, isNew, uploadProgress } = media
 
@@ -47,14 +48,24 @@ export default function MediaItem({ media, deal }: Props) {
     }, 100)
   }
 
-  const renameMedia = (e: React.MouseEvent<HTMLButtonElement> | null) => {
+  const handleRename = async (
+    e: React.MouseEvent<HTMLButtonElement> | null
+  ) => {
     e && e.preventDefault()
 
     if (textareaRef && textareaRef.current) {
       const name = textareaRef.current.value
 
-      editMedia(deal.id, file, name)
-      dispatch(setMediaName(file, name))
+      try {
+        dispatch(renameMedia(file, name, deal.id))
+      } catch (e) {
+        reduxDispatch(
+          addNotification({
+            status: 'error',
+            message: e.message
+          })
+        )
+      }
     }
   }
 
@@ -73,7 +84,7 @@ export default function MediaItem({ media, deal }: Props) {
       // If user wants a new line he would probably know he
       // should press Shift+Enter right?
       e.preventDefault()
-      renameMedia(null)
+      handleRename(null)
     }
   }
 
@@ -139,7 +150,7 @@ export default function MediaItem({ media, deal }: Props) {
           <Button
             variant="contained"
             color="primary"
-            onClick={renameMedia}
+            onClick={handleRename}
             className={classes.lowerCaseButton}
           >
             Save

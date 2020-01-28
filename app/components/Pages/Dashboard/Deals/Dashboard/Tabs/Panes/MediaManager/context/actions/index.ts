@@ -1,4 +1,7 @@
-import { reorderGallery as reorderGalleryModel } from 'models/media-manager'
+import {
+  reorderGallery as reorderGalleryModel,
+  renameMedia as renameMediaModel
+} from 'models/media-manager'
 
 import * as actionTypes from './action-types'
 import { IMediaGallery } from '../../types'
@@ -18,13 +21,25 @@ export const toggleMediaSelection = (file: string) => ({
   }
 })
 
-export const setMediaName = (file: string, name: string) => ({
-  type: actionTypes.SET_MEDIA_NAME,
-  payload: {
-    file,
-    name
+export const renameMedia = (
+  file: string,
+  name: string,
+  dealId: IDeal['id']
+) => async (dispatch: React.Dispatch<any>) => {
+  try {
+    const newName = await renameMediaModel(dealId, file, name)
+
+    dispatch({
+      type: actionTypes.SET_MEDIA_NAME,
+      payload: {
+        file,
+        name: newName
+      }
+    })
+  } catch (err) {
+    throw err
   }
-})
+}
 
 export const toggleGallerySelection = (selected: boolean) => ({
   type: actionTypes.TOGGLE_GALLERY_SELECTION,
