@@ -3,6 +3,7 @@ import { Tabs, createStyles, makeStyles, Theme } from '@material-ui/core'
 import { TabProps } from '@material-ui/core/Tab'
 
 export * from './Tab'
+export * from './TabLink'
 export * from './DropdownTab'
 
 type SelectedTab = string | number | null
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * <PageTabs
     tabs={[
       <Tab key={0} label="All" value={0} />,
-      <Tab key={1} label="Drafts" value={1} />,
+      <TabLink key={1} label="Drafts" value={1} to="link" />,
       <Tab
         key={2}
         value={2}

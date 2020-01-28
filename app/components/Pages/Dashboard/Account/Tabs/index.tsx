@@ -2,20 +2,15 @@
 import { ACL } from 'constants/acl'
 
 import React from 'react'
-import { Link } from 'react-router'
 
 import Acl from 'components/Acl'
-import { PageTabs, Tab } from 'components/PageTabs'
+import { PageTabs, TabLink } from 'components/PageTabs'
 
 interface Props {
   user: IUser
 }
 
-const CrmAccess = props => (
-  <Acl.Crm>
-    <Link {...props} />
-  </Acl.Crm>
-)
+const CrmAccess = ({ children }) => <Acl.Crm>{children}</Acl.Crm>
 
 const Items: Array<object> = [
   {
@@ -51,10 +46,8 @@ const Items: Array<object> = [
   {
     label: 'Reminder Notifications',
     to: '/dashboard/account/reminder-notifications',
-    component: props => (
-      <Acl access={{ oneOf: [ACL.CRM, ACL.DEALS] }}>
-        <Link {...props} />
-      </Acl>
+    component: ({ children }) => (
+      <Acl access={{ oneOf: [ACL.CRM, ACL.DEALS] }}>{children}</Acl>
     )
   },
   {
@@ -71,10 +64,10 @@ export const SettingsTabs = ({ user }: Props) => {
     <PageTabs
       defaultValue={currentUrl}
       tabs={Items.map(({ label, to, component = false }, i) => {
-        const Component = component || Link
+        const hasComponent = component ? { component } : {}
 
         return (
-          <Tab key={i} component={Component} label={label} to={to} value={to} />
+          <TabLink key={i} {...hasComponent} label={label} to={to} value={to} />
         )
       })}
     />
