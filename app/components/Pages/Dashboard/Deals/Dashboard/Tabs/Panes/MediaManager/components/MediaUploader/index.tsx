@@ -48,7 +48,7 @@ const Uploader = (props: Props) => {
               Drop to upload
             </Typography>
             <Typography className="desc">
-              You can drag and drop file with fomrat: JPG, PNG and TIFF
+              You can drag and drop file with extensions: {acceptedDocuments}
             </Typography>
           </Box>
         </Box>

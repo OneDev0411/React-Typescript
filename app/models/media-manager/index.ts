@@ -1,6 +1,6 @@
 export * from './upload-media'
 export * from './get-media-gallery'
-export * from './edit-media'
+export * from './rename-media'
 export * from './delete-medias'
 export * from './download-medias'
 export * from './reorder-gallery'

@@ -47,7 +47,8 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
           }
         }
       )
-      const { id: file, preview_url: src, name } = response
+      const { id: file, name } = response
+      const { preview_url: src } = response.file
 
       dispatch(setNewlyUploadedMediaFields(fileObject.name, file, src, name))
     } catch (err) {
