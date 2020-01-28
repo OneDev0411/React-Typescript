@@ -64,6 +64,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export function PageTabs({ defaultValue = null, tabs }: Props) {
   const classes = useStyles()
   const [selectedTab, setSelectedTab] = useState<SelectedTab>(defaultValue)
+  const activeTab =
+    defaultValue && selectedTab !== defaultValue ? defaultValue : selectedTab
 
   const handleChange = (e: React.MouseEvent<{}>, value: SelectedTab) => {
     setSelectedTab(value)
@@ -71,7 +73,7 @@ export function PageTabs({ defaultValue = null, tabs }: Props) {
 
   return (
     <Tabs
-      value={selectedTab}
+      value={activeTab}
       indicatorColor="primary"
       textColor="primary"
       variant="scrollable"
