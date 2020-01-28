@@ -115,6 +115,21 @@ app.use(
   )
 )
 
+app.use(
+  session(
+    {
+      key: 'rechat-webapp-app:session',
+      maxAge: 60 * 86400 * 1000, // 60 days
+      gzip: true,
+      overwrite: true,
+      httpOnly: true,
+      signed: true,
+      domain: 'app.rechat.com'
+    },
+    app
+  )
+)
+
 /**
  * middleware for global variables
  */
