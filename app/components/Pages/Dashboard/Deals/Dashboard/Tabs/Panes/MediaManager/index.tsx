@@ -29,8 +29,6 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
   const reduxDispatch = useDispatch()
   const uploaderRef = useRef<DropzoneRef>(null)
 
-  console.log('>>>>>', uploaderRef)
-
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
   const confirmationModal = useContext(ConfirmationModalContext)
   const upload = async fileObject => {

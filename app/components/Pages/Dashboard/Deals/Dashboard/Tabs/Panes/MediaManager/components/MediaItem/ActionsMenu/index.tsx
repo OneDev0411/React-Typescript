@@ -48,7 +48,7 @@ interface Props {
 export default function ActionsMenu({ media, deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
-  const ReduxDispatch = useDispatch()
+  const reduxDispatch = useDispatch()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [isCropperOpen, setIsCropperOpen] = useState(false)
@@ -133,7 +133,7 @@ export default function ActionsMenu({ media, deal }: Props) {
       dispatch(setNewlyUploadedMediaFields(file, file, src, name))
     } catch (err) {
       console.log(err)
-      ReduxDispatch(
+      reduxDispatch(
         addNotification({
           status: 'error',
           message:
