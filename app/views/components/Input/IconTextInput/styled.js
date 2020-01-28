@@ -32,14 +32,14 @@ export const TextInput = styled.input`
     font-size: 1rem;
     font-weight: 500;
     color: ${grey.A900};
-    font-family: Barlow, sans-serif;
+    font-family: Lato, sans-serif;
   }
 
   ::placeholder {
     font-size: 1rem;
     font-weight: normal;
     color: ${grey.A900};
-    font-family: Barlow, sans-serif;
+    font-family: Lato, sans-serif;
   }
 
   :focus {

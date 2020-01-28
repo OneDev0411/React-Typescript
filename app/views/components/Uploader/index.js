@@ -79,7 +79,7 @@ export class Uploader extends Component {
           fontSize: '14px',
           textTransform: 'uppercase',
           color: '#b2b2b2',
-          fontFamily: 'Barlow',
+          fontFamily: 'Lato',
           fontWeight: '600',
           outline: 'none'
         }}

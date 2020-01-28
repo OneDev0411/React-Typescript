@@ -2,7 +2,7 @@ import styled, { ThemeProps } from 'styled-components'
 
 import { Theme } from '@material-ui/core'
 
-import { merriweatherFamilyStyle } from '../../Typography/styles'
+import { LatoFamilyStyle } from '../../Typography/styles'
 
 export const Container = styled.div`
   height: 4.5rem;
@@ -28,7 +28,7 @@ export const Container = styled.div`
 `
 
 export const Title = styled.h2`
-  ${merriweatherFamilyStyle};
+  ${LatoFamilyStyle};
   font-weight: 700;
   font-size: 1.25rem;
 `

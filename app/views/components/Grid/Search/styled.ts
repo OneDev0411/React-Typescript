@@ -22,7 +22,7 @@ export const TextInput = styled.input`
   border: none;
   font-size: 1rem;
   padding: 0 5px;
-  font-family: Barlow, sans-serif;
+  font-family: Lato, sans-serif;
   background-color: transparent;
   caret-color: ${primary};
 
@@ -34,14 +34,14 @@ export const TextInput = styled.input`
     font-size: 1rem;
     font-weight: 500;
     color: ${grey.A900};
-    font-family: Barlow, sans-serif;
+    font-family: Lato, sans-serif;
   }
 
   ::placeholder {
     font-size: 1rem;
     font-weight: 500;
     color: ${grey.A900};
-    font-family: Barlow, sans-serif;
+    font-family: Lato, sans-serif;
   }
   :focus {
     outline: none;

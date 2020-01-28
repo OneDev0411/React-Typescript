@@ -45,8 +45,8 @@ $link-hover-decoration: underline !default;
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-$font-family-sans-serif:  Merriweather, "San Francisco", Helvetica, Arial, sans-serif !default;
-$font-family-serif:       Barlow, Georgia, "Times New Roman", Times, serif !default;
+$font-family-sans-serif:  "San Francisco", Helvetica, Arial, sans-serif !default;
+$font-family-serif:       Lato, Georgia, "Times New Roman", Times, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
 $font-family-base:        $font-family-serif !default;

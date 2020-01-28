@@ -38,7 +38,7 @@ export const buttonBaseStyle = css<ActionButtonProps>`
   vertical-align: middle;
   margin: 0;
 
-  font-family: Barlow;
+  font-family: Lato;
   font-weight: normal;
   text-decoration: none;
   white-space: nowrap;

@@ -1,36 +1,43 @@
-import styled from 'styled-components'
+import { Theme } from '@material-ui/core'
+import styled, { ThemeProps } from 'styled-components'
 
-import { barlowFamilyStyle, merriweatherFamilyStyle } from './styles'
-
-export const Jumbo = styled.div`
-  ${merriweatherFamilyStyle};
-  font-size: 2.5rem;
-  line-height: 1.2;
-`
+import { LatoFamilyStyle } from './styles'
 
 export const H1 = styled.h1`
-  ${merriweatherFamilyStyle};
-  font-size: 2rem;
-  line-height: 1;
+  ${LatoFamilyStyle};
+  font-size: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.h4.fontSize};
+  line-height: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.h4.lineHeight};
+  font-weight: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.h4.fontWeight};
 `
 
 export const H2 = styled.h2`
-  ${barlowFamilyStyle};
-  font-size: 2rem;
-  line-height: 1;
-  font-weight: bold;
+  ${LatoFamilyStyle};
+  font-size: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.h5.fontSize};
+  line-height: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.h5.lineHeight};
+  font-weight: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.h5.fontWeight};
 `
 
 export const H3 = styled.h3`
-  ${barlowFamilyStyle};
-  font-size: 1.25rem; /* 20px */
-  font-weight: 500;
-  line-height: 1.2;
+  ${LatoFamilyStyle};
+  font-size: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.h6.fontSize};
+  line-height: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.h6.lineHeight};
+  font-weight: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.h6.fontWeight};
 `
 
 export const H4 = styled.h4`
-  ${barlowFamilyStyle};
-  font-size: 1rem;
-  line-height: 1.5;
-  font-weight: 600;
+  ${LatoFamilyStyle};
+  font-size: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.subtitle1.fontSize};
+  line-height: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.subtitle1.lineHeight};
+  font-weight: 500;
 `

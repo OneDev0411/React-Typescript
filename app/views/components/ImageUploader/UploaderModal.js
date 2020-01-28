@@ -61,7 +61,7 @@ export default function UploaderModal({
           />
           <h3
             style={{
-              fontFamily: 'Barlow',
+              fontFamily: 'Lato',
               fontSize: '20px',
               fontWeight: 'normal',
               margin: '0'
@@ -82,7 +82,7 @@ export default function UploaderModal({
             <span
               style={{
                 opacity: '0.5',
-                fontFamily: 'Barlow',
+                fontFamily: 'Lato',
                 fontWeight: 'normal',
                 width: '20px'
               }}
@@ -96,7 +96,7 @@ export default function UploaderModal({
               width: '182px',
               height: '40px',
               lineHeight: '40px',
-              fontFamily: 'Barlow',
+              fontFamily: 'Lato',
               fontSize: '16px',
               fontWeight: '500',
               fontStyle: 'normal',

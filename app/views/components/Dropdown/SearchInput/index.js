@@ -36,7 +36,7 @@ const Input = styled.input`
     font-size: 1rem;
     font-weight: 500;
     color: ${grey.A900};
-    font-family: Barlow, sans-serif;
+    font-family: Lato, sans-serif;
   }
   :focus {
     outline: none;
