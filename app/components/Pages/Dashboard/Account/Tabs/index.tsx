@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { ACL } from 'constants/acl'
 
 import React from 'react'
@@ -12,7 +11,11 @@ interface Props {
 
 const CrmAccess = ({ children }) => <Acl.Crm>{children}</Acl.Crm>
 
-const Items: Array<object> = [
+const Items: Array<{
+  label: string
+  to: string
+  component?: React.ReactNode
+}> = [
   {
     label: 'Profile',
     to: '/dashboard/account'

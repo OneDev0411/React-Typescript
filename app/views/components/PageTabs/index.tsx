@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Tabs, createStyles, makeStyles, Theme } from '@material-ui/core'
-import { TabProps } from '@material-ui/core/Tab'
 
 export * from './Tab'
 export * from './TabLink'
@@ -9,7 +8,7 @@ export * from './DropdownTab'
 type SelectedTab = string | number | null
 
 interface Props {
-  tabs: React.ComponentType<TabProps>[]
+  tabs: React.ReactNode[]
   defaultValue?: SelectedTab
 }
 
