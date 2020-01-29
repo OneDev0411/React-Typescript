@@ -8,14 +8,15 @@ import { PageTabs, TabLink } from 'components/PageTabs'
 interface Props {
   user: IUser
 }
-
-const CrmAccess = ({ children }) => <Acl.Crm>{children}</Acl.Crm>
-
-const Items: Array<{
+interface ItemsShape {
   label: string
   to: string
   component?: React.ReactNode
-}> = [
+}
+
+const CrmAccess = ({ children }) => <Acl.Crm>{children}</Acl.Crm>
+
+const Items: ItemsShape[] = [
   {
     label: 'Profile',
     to: '/dashboard/account'
