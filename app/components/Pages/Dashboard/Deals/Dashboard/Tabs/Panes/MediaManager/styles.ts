@@ -161,6 +161,8 @@ export const useStyles = makeStyles(
         postion: 'relative',
         textAlign: 'left',
         textTransform: 'none',
+        wordWrap: 'break-word',
+
         '&:hover': {
           background: 'none',
 
