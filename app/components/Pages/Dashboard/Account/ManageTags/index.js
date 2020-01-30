@@ -12,8 +12,6 @@ import { createContactsTags } from 'models/contacts/create-contacts-tags'
 import { updateContactsTags } from 'models/contacts/update-contacts-tags'
 import { deleteContactsTags } from 'models/contacts/delete-contacts-tags'
 
-import PageHeader from 'components/PageHeader'
-
 import Loading from '../../../../Partials/Loading'
 import Row from './Row'
 import { Input } from './Input'
@@ -218,8 +216,8 @@ class ManageTags extends Component {
         show: true,
         confirmLabel: 'Yes, I am sure',
         message: 'Delete tag from Rechat?',
-        description:
-          'Deleting a tag will remove it from the system and remove it from any contacts with this tag.',
+        description: `Deleting a tag will remove it from the system 
+        and remove it from any contacts with this tag.`,
         onConfirm: async () => {
           await deleteContactsTags(text)
           await this.reloadStoreTags()
@@ -255,11 +253,6 @@ class ManageTags extends Component {
         <Helmet>
           <title>Manage Tags | Settings | Rechat</title>
         </Helmet>
-        <PageHeader style={{ marginBottom: '1rem', marginTop: '1.5rem' }}>
-          <PageHeader.Title showBackButton={false}>
-            <PageHeader.Heading>Manage Tags</PageHeader.Heading>
-          </PageHeader.Title>
-        </PageHeader>
         <Container>
           {this.state.loading ? (
             <Loading />

@@ -4,7 +4,6 @@ import { addNotification as notify } from 'reapop'
 import omit from 'lodash/omit'
 import { Helmet } from 'react-helmet'
 
-import PageHeader from 'components/PageHeader'
 import getCalenderFeedSetting from 'models/user/calendar-feed-setting'
 import { getTeamAvailableMembers } from 'utils/user-teams'
 
@@ -190,17 +189,6 @@ class DealTemplates extends React.Component {
         <Helmet>
           <title>Calendar Export | Settings | Rechat</title>
         </Helmet>
-        <PageHeader
-          isFlat
-          style={{
-            marginBottom: '1.5em',
-            marginTop: '1.5rem'
-          }}
-        >
-          <PageHeader.Title showBackButton={false}>
-            <PageHeader.Heading>Calendar Export</PageHeader.Heading>
-          </PageHeader.Title>
-        </PageHeader>
         <ICalContainer>
           <PageDescription>
             With calendar export, you can transfer any date based information on

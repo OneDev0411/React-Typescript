@@ -2,14 +2,13 @@ import React, { useContext, useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { addNotification as notify } from 'reapop'
-import { Button } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import { ThunkDispatch } from 'redux-thunk'
 
 import { AnyAction } from 'redux'
 
 import Table from 'components/Grid/Table'
-import PageHeader from 'components/PageHeader'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { getActiveTeamId } from 'utils/user-teams'
@@ -113,8 +112,8 @@ function List(props: Props) {
                 case 'delete':
                   confirmation.setConfirmationModal({
                     message: `Delete "${row.name}" Flow?`,
-                    description:
-                      'This Flow will be deleted and you can not use it anymore. Are you sure?',
+                    description: `This Flow will be deleted 
+                    and you can not use it anymore. Are you sure?`,
                     onConfirm: async () => {
                       if (!brand) {
                         return
@@ -156,21 +155,15 @@ function List(props: Props) {
           flow={selectedFlow}
         />
       )}
-      <PageHeader style={{ marginBottom: 0, marginTop: '1.5rem' }}>
-        <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Flows</PageHeader.Heading>
-        </PageHeader.Title>
-
-        <PageHeader.Menu>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setIsModalOpen(true)}
-          >
-            Create Flow
-          </Button>
-        </PageHeader.Menu>
-      </PageHeader>
+      <Box p={2} my={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setIsModalOpen(true)}
+        >
+          Create Flow
+        </Button>
+      </Box>
 
       <PageContainer>
         {isFetching && !error && <LoadingComponent />}

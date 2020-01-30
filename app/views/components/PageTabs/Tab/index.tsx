@@ -8,6 +8,5 @@ export const Tab = withStyles(theme => ({
     '&$selected': {
       fontWeight: 'bold'
     }
-  },
-  selected: {}
+  }
 }))(props => <BaseTab {...props} />)
