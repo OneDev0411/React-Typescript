@@ -12,7 +12,7 @@ import Menu from './Menu'
 const useStyles = makeStyles(theme =>
   createStyles({
     wrapper: {
-      margin: theme.spacing(0, 2)
+      marginLeft: theme.spacing(2)
     }
   })
 )
