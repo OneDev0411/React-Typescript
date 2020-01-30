@@ -25,15 +25,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-<<<<<<< HEAD
-interface Props {
-  title?: string
-  noGlobalActionsButton?: boolean
-  children?: React.ReactNode
-}
-
-=======
->>>>>>> chore: add a page layout for chris project (#3910)
 export default function GlobalHeader({
   title,
   noPadding = false,
