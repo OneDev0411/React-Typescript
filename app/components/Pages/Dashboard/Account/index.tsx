@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       padding: theme.spacing(2),
       margin: theme.spacing(3, 0),
-      border: '2px solid #F4F5F9',
+      border: `2px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius
     }
   })
