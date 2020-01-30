@@ -57,7 +57,7 @@ export default function Header({ mediasCount, uploaderRef }: Props) {
           />{' '}
           Upload
         </Button>
-        <Button
+        {/* <Button
           variant="outlined"
           disableElevation
           disabled
@@ -68,7 +68,7 @@ export default function Header({ mediasCount, uploaderRef }: Props) {
             className={cn(iconClasses.small, iconClasses.rightMargin)}
           />{' '}
           Dropbox Import
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   )
