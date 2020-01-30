@@ -188,7 +188,7 @@ export default function ActionsMenu({ media, deal }: Props) {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={showCropper}>Crop</MenuItem>
+            {/* <MenuItem onClick={showCropper}>Crop</MenuItem> */}
             <MenuItem onClick={handleDelete}>
               <Typography color="error">Delete</Typography>
             </MenuItem>
