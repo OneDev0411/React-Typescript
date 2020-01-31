@@ -155,7 +155,7 @@ const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
 }
 
 export const getActiveTeamSettings = getSettingsFromActiveTeam(
-  team => team.brand_settings
+  team => team.brand.settings
 )
 
 export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(

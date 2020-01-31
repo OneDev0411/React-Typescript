@@ -23,6 +23,7 @@ declare interface IBrand extends IModel<'brand'> {
   hostnames: string[] | null
   member_count: number
   messages: IBrandMessage
+  settings: StringMap<any> | null
   name: string
   offices: string[]
   palette?: {
