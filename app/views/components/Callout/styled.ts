@@ -1,10 +1,6 @@
-import styled, { ThemeProps } from 'styled-components'
-
 import { ComponentProps } from 'react'
-
 import { Theme } from '@material-ui/core'
-
-import { green } from 'views/utils/colors'
+import styled, { ThemeProps } from 'styled-components'
 
 import IconButton from '../Button/IconButton'
 
@@ -15,12 +11,14 @@ type Props = Required<Pick<ComponentProps<typeof Callout>, 'type' | 'dense'>> &
 
 const bgColor = ({ theme, type }: Props) => {
   switch (type) {
+    case 'error':
+      return theme.palette.error.light
     case 'info':
-      return '#d8e6ff'
+      return theme.palette.info.light
     case 'warn':
-      return '#f8eab3'
+      return theme.palette.warning.light
     case 'success':
-      return green.primary
+      return theme.palette.success.light
     default:
       return theme.palette.grey['100']
   }
@@ -33,9 +31,11 @@ export const CalloutContainer = styled.div<Props>`
   border-radius: 6px;
   padding: ${padding};
   margin: ${margin};
+  color: ${({ theme, type }: Props) => theme.palette.info.contrastText};
   background-color: ${bgColor};
   display: flex;
   align-items: center;
+  line-height: 1.5;
 `
 export const CalloutContent = styled.div`
   flex: 1;

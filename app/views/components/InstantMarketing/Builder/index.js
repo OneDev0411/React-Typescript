@@ -25,6 +25,7 @@ import { createGrapesInstance } from './utils/create-grapes-instance'
 
 import Templates from '../Templates'
 import AddToMarketingCenter from './AddToMarketingCenter'
+import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenter/constants'
 import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
@@ -89,7 +90,13 @@ class Builder extends React.Component {
         }
       ],
 
-      'mj-image': [],
+      'mj-image': [
+        {
+          type: 'text',
+          label: 'Link',
+          name: 'href'
+        }
+      ],
 
       'mj-wrapper': [],
 
@@ -718,7 +725,7 @@ class Builder extends React.Component {
     )
   }
 
-  toggeleTemplatesColumnVisibility = () => {
+  toggleTemplatesColumnVisibility = () => {
     this.setState(prevState => ({
       ...prevState,
       isTemplatesColumnHidden: !prevState.isTemplatesColumnHidden
@@ -732,6 +739,21 @@ class Builder extends React.Component {
     return (
       isBackofficeUser && this.state.selectedTemplate && !this.isOpenHouseMedium
     )
+  }
+
+  isTemplatesListEnabled = () => {
+    if (this.props.showTemplatesColumn === false) {
+      return false
+    }
+
+    if (
+      this.state.selectedTemplate &&
+      this.state.selectedTemplate.variant === SAVED_TEMPLATE_VARIANT
+    ) {
+      return false
+    }
+
+    return true
   }
 
   render() {
@@ -835,19 +857,23 @@ class Builder extends React.Component {
             }}
           />
           <Header>
-            <Tooltip
-              title={
-                this.state.isTemplatesColumnHidden
-                  ? 'Change Template'
-                  : 'Hide Templates'
-              }
-            >
-              <IconButton onClick={this.toggeleTemplatesColumnVisibility}>
-                <IconMenu />
-              </IconButton>
-            </Tooltip>
+            {this.isTemplatesListEnabled() && (
+              <>
+                <Tooltip
+                  title={
+                    this.state.isTemplatesColumnHidden
+                      ? 'Change Template'
+                      : 'Hide Templates'
+                  }
+                >
+                  <IconButton onClick={this.toggleTemplatesColumnVisibility}>
+                    <IconMenu />
+                  </IconButton>
+                </Tooltip>
 
-            <Divider orientation="vertical" />
+                <Divider orientation="vertical" />
+              </>
+            )}
 
             {this.editor && (
               <>
@@ -925,7 +951,7 @@ class Builder extends React.Component {
           <BuilderContainer>
             <TemplatesContainer
               isInvisible={
-                this.props.showTemplatesColumn === false ||
+                !this.isTemplatesListEnabled() ||
                 this.state.isTemplatesColumnHidden
               }
             >
