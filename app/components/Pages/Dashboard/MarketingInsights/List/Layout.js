@@ -1,9 +1,9 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { Link } from 'react-router'
 
-import Header from 'components/GlobalHeader'
-import { PageTabs, Tab } from 'components/PageTabs'
+import PageLayout from 'components/GlobalPageLayout'
+
+import { PageTabs, TabLink } from 'components/PageTabs'
 
 const urlGenerator = url => `/dashboard/insights${url}`
 
@@ -25,17 +25,19 @@ function InsightsLayout({ sentCount, scheduledCount, children }) {
       <Helmet>
         <title>Insights | Rechat</title>
       </Helmet>
-      <Header title="Email Insight" />
-      <PageTabs
-        defaultValue={currentUrl}
-        tabs={Items.map(({ label, to }, i) => {
-          return (
-            <Tab key={i} component={Link} label={label} to={to} value={to} />
-          )
-        })}
-      />
+      <PageLayout>
+        <PageLayout.Header title="Email Insight" />
+        <PageLayout.Main>
+          <PageTabs
+            defaultValue={currentUrl}
+            tabs={Items.map(({ label, to }, i) => {
+              return <TabLink key={i} label={label} to={to} value={to} />
+            })}
+          />
 
-      <div>{children}</div>
+          <div>{children}</div>
+        </PageLayout.Main>
+      </PageLayout>
     </React.Fragment>
   )
 }
