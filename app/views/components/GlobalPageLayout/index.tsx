@@ -6,13 +6,13 @@ import GlobalHeaderWithSearch, {
   GlobalHeaderWithSearchProps
 } from 'components/GlobalHeaderWithSearch'
 
-interface Props {
+interface Props extends BoxProps {
   gutter?: number
   children: React.ReactNode
 }
 
-const GlobalPageLayout = ({ gutter = 5, children }: Props & BoxProps) => {
-  return <Box p={gutter}>{children}</Box>
+const GlobalPageLayout = ({ gutter = 5, ...props }: Props) => {
+  return <Box p={gutter} {...props} />
 }
 
 GlobalPageLayout.Header = (props: GlobalHeaderProps) => (
@@ -22,7 +22,7 @@ GlobalPageLayout.HeaderWithSearch = (props: GlobalHeaderWithSearchProps) => (
   <GlobalHeaderWithSearch {...props} noPadding />
 )
 
-GlobalPageLayout.Main = ({ gutter = 0, ...props }: Props & BoxProps) => (
+GlobalPageLayout.Main = ({ gutter = 0, ...props }: Props) => (
   <Box p={gutter} mt={5} {...props} />
 )
 

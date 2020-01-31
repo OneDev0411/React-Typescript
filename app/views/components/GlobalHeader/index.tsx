@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function GlobalHeader({
   title,
-  noPadding = false,
+  noPadding,
   noGlobalActionsButton,
   children
 }: GlobalHeaderProps) {
