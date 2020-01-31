@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import Box from '@material-ui/core/Box'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
-import Header from 'components/GlobalHeader'
+import PageLayout from 'components/GlobalPageLayout'
 import { IAppState } from 'reducers'
 
 import SettingsTabs from './Tabs'
@@ -33,10 +33,13 @@ const AccountLayout = ({ user, children }: Props) => {
       <Helmet>
         <title>Account | Rechat</title>
       </Helmet>
-
-      <Header title="Account Settings" />
-      <SettingsTabs user={user} />
-      <Box className={classes.content}>{children}</Box>
+      <PageLayout>
+        <PageLayout.Header title="Account Settings" />
+        <PageLayout.Main>
+          <SettingsTabs user={user} />
+          <Box className={classes.content}>{children}</Box>
+        </PageLayout.Main>
+      </PageLayout>
     </>
   )
 }
