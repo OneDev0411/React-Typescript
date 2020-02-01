@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
 import { FlexItem } from 'styled-flex-component'
+import { Box } from '@material-ui/core'
+
+import PageLayout from 'components/GlobalPageLayout'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
@@ -26,7 +29,6 @@ import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-q
 import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
 import {
   Container as PageContainer,
-  Content as PageContent,
   Menu as SideMenu
 } from 'components/SlideMenu'
 import SavedSegments from 'components/Grid/SavedSegments/List'
@@ -43,11 +45,12 @@ import { resetRows } from 'components/Grid/Table/context/actions/selection/reset
 
 import Table from './Table'
 import { SearchContacts } from './Search'
-import Header from './Header'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
 import AllContactsList from './AllContactsList'
 import FlowsList from './FlowsList'
+import ImportContactsButton from './ImportContactsButton'
+import TouchReminder from './TouchReminder'
 
 import {
   FLOW_FILTER_ID,
@@ -57,7 +60,7 @@ import {
   SYNCED_CONTACTS_LIST_ID,
   DUPLICATE_CONTACTS_LIST_ID
 } from './constants'
-import { CalloutSpinner, Container, SearchWrapper } from './styled'
+import { CalloutSpinner, SearchWrapper } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 import {
   clearImportingGoogleContacts,
@@ -78,7 +81,6 @@ class ContactsList extends React.Component {
     this.state = {
       selectedSidebarFilter: null,
       firstLetter: props.location.query.letter || null,
-      isSideMenuOpen: true,
       isShowingDuplicatesList:
         props.activeSegment.id === DUPLICATE_CONTACTS_LIST_ID,
       isFetchingMoreContacts: false,
@@ -388,11 +390,6 @@ class ContactsList extends React.Component {
     this.handleFilterChange({}, true)
   }
 
-  toggleSideMenu = () =>
-    this.setState(state => ({
-      isSideMenuOpen: !state.isSideMenuOpen
-    }))
-
   handleLoadMore = async () => {
     if (this.state.isShowingDuplicatesList) {
       return
@@ -587,14 +584,7 @@ class ContactsList extends React.Component {
 
   render() {
     const { props, state } = this
-    const { isSideMenuOpen } = state
-    const {
-      user,
-      list,
-      viewAsUsers,
-      isFetchingContacts,
-      activeSegment
-    } = this.props
+    const { list, viewAsUsers, isFetchingContacts, activeSegment } = this.props
     const contacts = selectContacts(list)
 
     const syncing = Object.values(this.props.oAuthAccounts)
@@ -616,163 +606,172 @@ class ContactsList extends React.Component {
         activeSegment.filters.length === 0)
 
     const title = this.getHeaderTitle()
+    const showImportAction = this.shouldShowImportAndCreateActions()
+    const activeTag = this.getActiveTag()
 
     return (
-      <PageContainer isOpen={isSideMenuOpen}>
-        <SideMenu isOpen={isSideMenuOpen} width="13rem">
-          <AllContactsList
-            activeSegment={activeSegment}
-            onFilterChange={(selectedSegment, type) => {
-              this.setState({ selectedSidebarFilter: null })
-
-              this.setState({
-                isShowingDuplicatesList: type === DUPLICATE_CONTACTS_LIST_ID
-              })
-
-              // Synced contacts
-              if (selectedSegment) {
-                this.handleChangeSavedSegment(selectedSegment)
-
-                return
-              }
-
-              // All contacts selected
-              this.handleFilterChange({ filters: [], flows: [] }, true)
-            }}
-          />
-          <TagsList
-            onFilterChange={filters => {
-              this.setState({
-                selectedSidebarFilter: filters.filters,
-                isShowingDuplicatesList: false
-              })
-              this.handleFilterChange({ ...filters, flows: [] }, true)
-            }}
-            isActive={this.state.selectedSidebarFilter !== null}
-          />
-          <FlowsList
-            onChange={_.debounce(() => {
-              this.setState({
-                selectedSidebarFilter: this.props.flows,
-                isShowingDuplicatesList: false
-              })
-              this.handleFilterChange({}, true)
-            }, 300)}
-            isActive={this.state.selectedSidebarFilter !== null}
-          />
-          <SavedSegments
-            name={CONTACTS_SEGMENT_NAME}
-            associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
-            getPredefinedLists={() => ({})}
-            onChange={segment => {
-              this.setState({ isShowingDuplicatesList: false })
-              this.handleChangeSavedSegment(segment)
-            }}
-          />
-        </SideMenu>
-
-        <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
-          {this.state.syncStatus === 'pending' && (
-            <Callout
-              type="info"
-              onClose={() => this.setState({ syncStatus: null })}
-            >
-              <CalloutSpinner viewBox="20 20 60 60" />
-              Doing Science! Just a moment for Rechat to complete establishing
-              connections and importing your contacts.
-            </Callout>
-          )}
-          {this.state.syncStatus === 'finished' && (
-            <SyncSuccessfulModal
-              provider={this.state.syncedAccountProvider}
-              close={() => {
-                this.setState({ syncStatus: null })
-                this.reloadContacts()
-                this.props.getContactsTags()
-              }}
-              handleFilterChange={filters => {
-                this.setState({ syncStatus: null })
-                this.props.getContactsTags()
-                this.updateSyncedContactsSeenDate()
-                this.handleFilterChange({ filters }, true, '-updated_at')
-              }}
-            />
-          )}
-          {isZeroState && <ZeroState />}
-          {!isZeroState && this.state.isShowingDuplicatesList && (
-            <Duplicates
-              isSideMenuOpen={this.state.isSideMenuOpen}
-              onSideMenuTriggerClick={this.toggleSideMenu}
-            />
-          )}
-          {!isZeroState && !this.state.isShowingDuplicatesList && (
-            <>
-              <Header
-                title={title}
-                activeSegment={activeSegment}
-                activeTag={this.getActiveTag()}
-                onListTouchReminderUpdate={this.handleListTouchReminderUpdate}
-                onTagTouchReminderUpdate={this.handleTagTouchReminderUpdate}
-                showActions={!isZeroState}
-                showImportAction={this.shouldShowImportAndCreateActions()}
-                showCreateAction={this.shouldShowImportAndCreateActions()}
-                isSideMenuOpen={state.isSideMenuOpen}
-                user={user}
-                onMenuTriggerChange={this.toggleSideMenu}
+      <>
+        <PageLayout>
+          <PageLayout.Header title={title} />
+          <PageLayout.Main>
+            {this.state.syncStatus === 'pending' && (
+              <Callout
+                type="info"
+                onClose={() => this.setState({ syncStatus: null })}
+              >
+                <CalloutSpinner viewBox="20 20 60 60" />
+                Doing Science! Just a moment for Rechat to complete establishing
+                connections and importing your contacts.
+              </Callout>
+            )}
+            {this.state.syncStatus === 'finished' && (
+              <SyncSuccessfulModal
+                provider={this.state.syncedAccountProvider}
+                close={() => {
+                  this.setState({ syncStatus: null })
+                  this.reloadContacts()
+                  this.props.getContactsTags()
+                }}
+                handleFilterChange={filters => {
+                  this.setState({ syncStatus: null })
+                  this.props.getContactsTags()
+                  this.updateSyncedContactsSeenDate()
+                  this.handleFilterChange({ filters }, true, '-updated_at')
+                }}
               />
-              <Container>
-                {this.shouldShowFilters() && (
-                  <ContactFilters
-                    onFilterChange={() => this.handleFilterChange({}, true)}
-                    users={viewAsUsers}
-                  />
-                )}
-                <SearchWrapper row alignCenter>
-                  <FlexItem basis="100%">
-                    <SearchContacts
-                      onSearch={this.handleSearch}
-                      isSearching={isFetchingContacts}
+            )}
+            {isZeroState && <ZeroState />}
+            {!isZeroState && this.state.isShowingDuplicatesList && (
+              <Duplicates isSideMenuOpen={false} />
+            )}
+            {!isZeroState && !this.state.isShowingDuplicatesList && (
+              <React.Fragment>
+                <Box>
+                  {/* show action btn */}
+                  {!isZeroState && (
+                    <React.Fragment>
+                      {activeSegment && activeSegment.is_editable && (
+                        <TouchReminder
+                          value={activeSegment.touch_freq}
+                          onChange={this.handleListTouchReminderUpdate}
+                        />
+                      )}
+                      {activeTag && activeTag.id && (
+                        <TouchReminder
+                          value={activeTag.touch_freq}
+                          onChange={this.handleTagTouchReminderUpdate}
+                        />
+                      )}
+                      {showImportAction && <ImportContactsButton />}
+                    </React.Fragment>
+                  )}
+                  {/* end show action btn */}
+                  {this.shouldShowFilters() && (
+                    <ContactFilters
+                      onFilterChange={() => this.handleFilterChange({}, true)}
+                      users={viewAsUsers}
                     />
-                  </FlexItem>
-                  <AlphabetFilter
-                    value={state.firstLetter}
-                    onChange={this.handleFirstLetterChange}
+                  )}
+                  <SearchWrapper row alignCenter>
+                    <FlexItem basis="100%">
+                      <SearchContacts
+                        onSearch={this.handleSearch}
+                        isSearching={isFetchingContacts}
+                      />
+                    </FlexItem>
+                    <AlphabetFilter
+                      value={state.firstLetter}
+                      onChange={this.handleFirstLetterChange}
+                    />
+                  </SearchWrapper>
+                  <Table
+                    data={contacts}
+                    order={this.order}
+                    listInfo={props.listInfo}
+                    isFetching={isFetchingContacts}
+                    isFetchingMore={state.isFetchingMoreContacts}
+                    isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
+                    isRowsUpdating={state.isRowsUpdating}
+                    onRequestLoadMore={this.handleLoadMore}
+                    onRequestLoadMoreBefore={this.handleLoadMoreBefore}
+                    rowsUpdating={this.rowsUpdating}
+                    onChangeSelectedRows={this.onChangeSelectedRows}
+                    onRequestDelete={this.handleOnDelete}
+                    tableContainerId={this.tableContainerId}
+                    reloadContacts={this.reloadContacts}
+                    handleChangeOrder={this.handleChangeOrder}
+                    handleChangeContactsAttributes={() =>
+                      this.handleFilterChange({}, true)
+                    }
+                    filters={{
+                      alphabet: state.firstLetter,
+                      attributeFilters: props.filters,
+                      crm_tasks: props.crmTasks,
+                      filter_type: props.conditionOperator,
+                      flows: props.flows,
+                      text: state.searchInputValue,
+                      users: viewAsUsers
+                    }}
                   />
-                </SearchWrapper>
-                <Table
-                  data={contacts}
-                  order={this.order}
-                  listInfo={props.listInfo}
-                  isFetching={isFetchingContacts}
-                  isFetchingMore={state.isFetchingMoreContacts}
-                  isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
-                  isRowsUpdating={state.isRowsUpdating}
-                  onRequestLoadMore={this.handleLoadMore}
-                  onRequestLoadMoreBefore={this.handleLoadMoreBefore}
-                  rowsUpdating={this.rowsUpdating}
-                  onChangeSelectedRows={this.onChangeSelectedRows}
-                  onRequestDelete={this.handleOnDelete}
-                  tableContainerId={this.tableContainerId}
-                  reloadContacts={this.reloadContacts}
-                  handleChangeOrder={this.handleChangeOrder}
-                  handleChangeContactsAttributes={() =>
-                    this.handleFilterChange({}, true)
-                  }
-                  filters={{
-                    alphabet: state.firstLetter,
-                    attributeFilters: props.filters,
-                    crm_tasks: props.crmTasks,
-                    filter_type: props.conditionOperator,
-                    flows: props.flows,
-                    text: state.searchInputValue,
-                    users: viewAsUsers
-                  }}
-                />
-              </Container>
-            </>
-          )}
-        </PageContent>
-      </PageContainer>
+                </Box>
+              </React.Fragment>
+            )}
+          </PageLayout.Main>
+        </PageLayout>
+        <PageContainer isOpen={false}>
+          <SideMenu isOpen={false} width="13rem">
+            <AllContactsList
+              activeSegment={activeSegment}
+              onFilterChange={(selectedSegment, type) => {
+                this.setState({ selectedSidebarFilter: null })
+
+                this.setState({
+                  isShowingDuplicatesList: type === DUPLICATE_CONTACTS_LIST_ID
+                })
+
+                // Synced contacts
+                if (selectedSegment) {
+                  this.handleChangeSavedSegment(selectedSegment)
+
+                  return
+                }
+
+                // All contacts selected
+                this.handleFilterChange({ filters: [], flows: [] }, true)
+              }}
+            />
+            <TagsList
+              onFilterChange={filters => {
+                this.setState({
+                  selectedSidebarFilter: filters.filters,
+                  isShowingDuplicatesList: false
+                })
+                this.handleFilterChange({ ...filters, flows: [] }, true)
+              }}
+              isActive={this.state.selectedSidebarFilter !== null}
+            />
+            <FlowsList
+              onChange={_.debounce(() => {
+                this.setState({
+                  selectedSidebarFilter: this.props.flows,
+                  isShowingDuplicatesList: false
+                })
+                this.handleFilterChange({}, true)
+              }, 300)}
+              isActive={this.state.selectedSidebarFilter !== null}
+            />
+            <SavedSegments
+              name={CONTACTS_SEGMENT_NAME}
+              associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
+              getPredefinedLists={() => ({})}
+              onChange={segment => {
+                this.setState({ isShowingDuplicatesList: false })
+                this.handleChangeSavedSegment(segment)
+              }}
+            />
+          </SideMenu>
+        </PageContainer>
+      </>
     )
   }
 }
