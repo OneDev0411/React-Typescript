@@ -21,9 +21,11 @@ import { RenderProps } from 'components/Grid/Table/types'
 
 import EmptyState from './EmptyState'
 import CreateNewOpenHouse from './CreateNewOpenHouse'
-import Info from './columns/Info'
-import Actions from './columns/Actions'
+import Title from './columns/Title'
+import Date from './columns/Date'
 import Registrants from './columns/Registrants'
+import GuestRegistration from './columns/GuestRegistration'
+import Actions from './columns/Actions'
 
 interface Associations {
   deal?: IDeal
@@ -67,12 +69,18 @@ function OpenHousesList(props: Props) {
       id: 'info',
       primary: true,
       render: ({ row }: RenderProps<TableRow>) => (
-        <Info
-          dueDate={row.due_date}
+        <Title
           description={row.description}
           onClick={() => handleEdit(row)}
           title={row.title}
         />
+      )
+    },
+    {
+      header: 'Date',
+      id: 'date',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Date dueDate={row.due_date} />
       )
     },
     {
@@ -89,10 +97,18 @@ function OpenHousesList(props: Props) {
       )
     },
     {
+      id: 'guest-registration',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <GuestRegistration
+          activeBrandId={props.activeBrandId}
+          openHouse={row}
+        />
+      )
+    },
+    {
       id: 'actions',
       render: ({ row }: RenderProps<TableRow>) => (
         <Actions
-          activeBrandId={props.activeBrandId}
           openHouse={row}
           onEdit={() => handleEdit(row)}
           reloadList={reloadList}
