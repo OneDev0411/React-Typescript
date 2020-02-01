@@ -38,27 +38,35 @@ export default function MediaItem({ media, deal }: Props) {
 
   useEffect(() => {
     if (editMode && textareaRef && textareaRef.current) {
-      textareaRef.current.focus()
+      let textarea = textareaRef.current
+
+      textarea.focus()
+      // put cursor at the end of string
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length)
     }
   }, [editMode, textareaRef])
 
-  const handleOnBlur = () => {
-    setTimeout(() => {
-      setEditMode(false)
-    }, 100)
+  const handleOnBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    let relatedTarget = e.relatedTarget as HTMLButtonElement
+
+    if (relatedTarget && relatedTarget.classList.contains('save-btn')) {
+      return
+    }
+
+    setEditMode(false)
   }
 
-  const handleRename = async (
-    e: React.MouseEvent<HTMLButtonElement> | null
-  ) => {
+  const saveEdit = (e: React.MouseEvent<HTMLButtonElement> | null) => {
     e && e.preventDefault()
 
     if (textareaRef && textareaRef.current) {
-      const name = textareaRef.current.value
+      const newName = textareaRef.current.value
 
       try {
-        dispatch(renameMedia(file, name, deal.id))
+        dispatch(renameMedia(file, newName, deal.id))
+        setEditMode(false)
       } catch (e) {
+        setEditMode(false)
         reduxDispatch(
           addNotification({
             status: 'error',
@@ -84,7 +92,7 @@ export default function MediaItem({ media, deal }: Props) {
       // If user wants a new line he would probably know he
       // should press Shift+Enter right?
       e.preventDefault()
-      handleRename(null)
+      saveEdit(null)
     }
   }
 
@@ -142,16 +150,16 @@ export default function MediaItem({ media, deal }: Props) {
         <form noValidate autoComplete="off">
           <TextareaAutosize
             defaultValue={name}
-            onBlur={handleOnBlur}
             ref={textareaRef}
             onKeyDown={onKeyDown}
+            onBlur={handleOnBlur}
             className={classes.editTextArea}
           />
           <Button
             variant="contained"
             color="primary"
-            onClick={handleRename}
-            className={classes.lowerCaseButton}
+            onClick={saveEdit}
+            className={cn(classes.lowerCaseButton, 'save-btn')}
           >
             Save
           </Button>{' '}
