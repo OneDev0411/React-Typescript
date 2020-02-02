@@ -1,22 +1,31 @@
-import * as React from 'react'
-import { connect } from 'react-redux'
-import { Box } from '@material-ui/core'
+import React, { useState, useMemo } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Box, List, ListItem, ListItemText } from '@material-ui/core'
+import { addNotification } from 'reapop'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { IAppState } from 'reducers'
-import { getBrandByType } from 'utils/user-teams'
 import { selectDealRoles } from 'reducers/deals/roles'
 
-import { RecipientQuickSuggestion } from './RecipientQuickSuggestion'
-import { recipientToString } from '../EmailRecipientsChipsInput/helpers/recipient-to-string'
+import { getRootBrand } from 'utils/user-teams'
+import { getBrands } from 'models/BrandConsole/Brands'
+
+import Loading from 'partials/Loading'
+import { QuickSuggestion } from 'components/EmailRecipientsChipsInput/types'
+import { BaseDropdown } from 'components/BaseDropdown'
+
 import { areRecipientsEqual } from './helpers/are-recipients-equal'
 import { dealRoleToSuggestion } from './helpers/deal-role-to-suggestion'
-import { QuickSuggestion } from '../EmailRecipientsChipsInput/types'
+import extractMoreQuickSuggestions, {
+  MoreQuickSuggestion
+} from './helpers/extract-more-quick-suggestions'
+import RecipientQuickSuggestions from './components/RecipientQuickSuggestions'
 
 interface StateProps {
   user: IUser
   dealRoles: IDealRole[]
 }
-interface OwnProps {
+interface Props {
   deal?: IDeal
   currentRecipients?: IDenormalizedEmailRecipientInput[]
   /**
@@ -34,23 +43,26 @@ interface OwnProps {
     sendType: IEmailRecipientSendType | undefined
   ) => void
 }
-type Props = OwnProps & StateProps
 
-export const EmailRecipientQuickSuggestions = connect<StateProps, OwnProps>(
-  ({ user, deals }: IAppState, props: OwnProps) => ({
-    user,
-    dealRoles: selectDealRoles(deals.roles, props.deal)
-  })
-)(function RecipientSuggestions({
-  user,
-  onSelect,
-  dealRoles,
-  currentRecipients = []
+export function EmailRecipientQuickSuggestions({
+  deal,
+  currentRecipients = [],
+  onSelect
 }: Props) {
-  const firstValidBrand = getBrandByType(user, 'Brokerage')
+  const user = useSelector<IAppState, IUser>(({ user }) => user)
+  const dealRoles = useSelector<IAppState, IDealRole[]>(
+    ({ deals: { roles } }) => selectDealRoles(roles, deal)
+  )
 
-  const suggestions: QuickSuggestion[] = [
-    ...dealRoles.filter(hasEmail).map(dealRoleToSuggestion),
+  const [brandTreeStatus, setBrandTreeStatus] = useState<
+    'empty' | 'fetching' | 'error' | 'fetched'
+  >('empty')
+  const [brandTree, setBrandTree] = useState<IBrand | null>(null)
+
+  const dispatch = useDispatch()
+
+  const quickSuggestions: QuickSuggestion[] = [
+    ...dealRoles.filter(({ email }) => !!email).map(dealRoleToSuggestion),
     {
       recipient: {
         recipient_type: 'AllContacts'
@@ -58,23 +70,61 @@ export const EmailRecipientQuickSuggestions = connect<StateProps, OwnProps>(
       sendType: 'BCC'
     }
   ]
-
-  if (firstValidBrand) {
-    suggestions.push({
-      recipient: {
-        recipient_type: 'Brand',
-        brand: firstValidBrand
-      },
-      sendType: 'BCC'
-    })
-  }
-
-  const unusedSuggestions = suggestions.filter(
+  const unusedQuickSuggestions = quickSuggestions.filter(
     suggestion =>
       !currentRecipients.find(areRecipientsEqual(suggestion.recipient))
   )
+  const showQuickSuggestions = unusedQuickSuggestions.length > 0
 
-  return unusedSuggestions.length > 0 ? (
+  useEffectOnce(() => {
+    fetchBrandTree()
+  })
+
+  async function fetchBrandTree() {
+    const rootBrand = getRootBrand(user)
+
+    if (!rootBrand) {
+      return
+    }
+
+    setBrandTreeStatus('fetching')
+
+    try {
+      const { data: brandTree } = await getBrands(rootBrand.id, true)
+
+      setBrandTree(brandTree)
+      setBrandTreeStatus('fetched')
+    } catch (reason) {
+      console.error(reason)
+      dispatch(
+        addNotification({
+          status: 'error',
+          message: 'Something went wrong when fetching offices information.'
+        })
+      )
+      setBrandTreeStatus('error')
+    }
+  }
+
+  const visibleMoreQuickSuggestions = useMemo<MoreQuickSuggestion[] | null>(
+    () =>
+      brandTreeStatus === 'fetched'
+        ? extractMoreQuickSuggestions(brandTree!, currentRecipients).filter(
+            ({ visible }) => visible
+          )
+        : null,
+    [brandTreeStatus, brandTree, currentRecipients]
+  )
+  const showMoreQuickSuggestions =
+    brandTreeStatus === 'fetching' ||
+    brandTreeStatus === 'error' ||
+    (visibleMoreQuickSuggestions && visibleMoreQuickSuggestions.length > 0)
+
+  if (!showQuickSuggestions && !showMoreQuickSuggestions) {
+    return null
+  }
+
+  return (
     <Box
       pb={1}
       pt={0.5}
@@ -86,21 +136,81 @@ export const EmailRecipientQuickSuggestions = connect<StateProps, OwnProps>(
       <Box display="inline-block" color="text.secondary" mr={1}>
         Suggestions
       </Box>
-      {unusedSuggestions.map((suggestion, index) => (
-        <React.Fragment key={index}>
-          <RecipientQuickSuggestion
-            recipient={suggestion.recipient}
-            onSelect={() => onSelect(suggestion.recipient, suggestion.sendType)}
-          >
-            {suggestion.text || recipientToString(suggestion.recipient)}
-          </RecipientQuickSuggestion>
-          <>{index < unusedSuggestions.length - 1 ? ', ' : ''}</>
-        </React.Fragment>
-      ))}
-    </Box>
-  ) : null
-})
 
-function hasEmail(dealRole: IDealRole): boolean {
-  return !!dealRole.email
+      <RecipientQuickSuggestions
+        quickSuggestions={quickSuggestions}
+        onSelect={({ recipient, sendType }) => onSelect(recipient, sendType)}
+      />
+
+      {showQuickSuggestions && showMoreQuickSuggestions && ','}
+
+      {showMoreQuickSuggestions && (
+        <BaseDropdown
+          buttonLabel="More"
+          PopperProps={{ keepMounted: true }}
+          renderMenu={({ close }) => {
+            if (brandTreeStatus === 'error') {
+              return (
+                <List>
+                  <ListItem button>
+                    <Box width="8em">
+                      <ListItemText
+                        primary="No Offices"
+                        secondary="Click to retry"
+                        secondaryTypographyProps={{ color: 'primary' }}
+                        onClick={() => fetchBrandTree()}
+                      />
+                    </Box>
+                  </ListItem>
+                </List>
+              )
+            }
+
+            if (
+              brandTreeStatus === 'fetching' ||
+              !visibleMoreQuickSuggestions
+            ) {
+              return (
+                <List>
+                  <ListItem disabled>
+                    <Box width="8em">
+                      <Loading />
+                    </Box>
+                  </ListItem>
+                </List>
+              )
+            }
+
+            return (
+              <List>
+                {visibleMoreQuickSuggestions.map(
+                  (
+                    { quickSuggestion: { recipient, text, sendType }, enabled },
+                    index
+                  ) => (
+                    <ListItem
+                      key={index}
+                      button
+                      disabled={!enabled}
+                      onClick={() => {
+                        onSelect(recipient, sendType)
+                        close()
+                      }}
+                    >
+                      <ListItemText
+                        primary={
+                          text ||
+                          (recipient as IDenormalizedEmailRecipientBrandInput).brand.name.trim()
+                        }
+                      />
+                    </ListItem>
+                  )
+                )}
+              </List>
+            )
+          }}
+        />
+      )}
+    </Box>
+  )
 }
