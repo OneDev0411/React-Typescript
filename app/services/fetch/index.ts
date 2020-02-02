@@ -140,7 +140,12 @@ export default class Fetch {
       errorMessage === 'Invalid answer to secret question'
 
     // handle session expiration
-    if (!this._isServerSide && this._isLoggedIn && !isUpgradeToAgentRequest) {
+    if (
+      window &&
+      !this._isServerSide &&
+      this._isLoggedIn &&
+      !isUpgradeToAgentRequest
+    ) {
       window.location.href = '/signout'
     }
   }
