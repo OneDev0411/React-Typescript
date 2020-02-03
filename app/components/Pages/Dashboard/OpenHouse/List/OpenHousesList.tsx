@@ -3,8 +3,15 @@ import { ACL } from 'constants/acl'
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
-import { Theme } from '@material-ui/core/styles'
+
 import { useTheme } from '@material-ui/styles'
+import { Alert } from '@material-ui/lab'
+import { Link, IconButton } from '@material-ui/core'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+
+import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -15,12 +22,11 @@ import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
-import { Callout } from 'components/Callout'
-
 import { RenderProps } from 'components/Grid/Table/types'
 
 import EmptyState from './EmptyState'
 import CreateNewOpenHouse from './CreateNewOpenHouse'
+import Photo from './columns/Photo'
 import Title from './columns/Title'
 import Date from './columns/Date'
 import Registrants from './columns/Registrants'
@@ -39,6 +45,17 @@ interface Props {
 type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
 function OpenHousesList(props: Props) {
+  const useStyles = makeStyles(
+    (theme: Theme) =>
+      createStyles({
+        message: {
+          display: 'inline'
+        }
+      }),
+    { name: 'MuiAlert' }
+  )
+  const iconClasses = useIconStyles()
+  const classes = useStyles()
   const theme = useTheme<Theme>()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
@@ -49,7 +66,9 @@ function OpenHousesList(props: Props) {
       isFetching: true
     }
   )
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isAlertOpen, setAlertToOpen] = useState(true)
   const [selectedOH, setSelectedOH] = useState<ICRMTask<
     CRMTaskAssociation,
     CRMTaskAssociationType
@@ -65,7 +84,20 @@ function OpenHousesList(props: Props) {
 
   const columns = [
     {
-      header: 'Info',
+      header: 'Photo',
+      id: 'photo',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Photo
+          listings={
+            row.associations
+              ? row.associations.filter(a => a.association_type === 'listing')
+              : []
+          }
+        />
+      )
+    },
+    {
+      header: 'Infos',
       id: 'info',
       primary: true,
       render: ({ row }: RenderProps<TableRow>) => (
@@ -183,16 +215,28 @@ function OpenHousesList(props: Props) {
 
       <div style={{ padding: theme.spacing(0, 3, 9) }}>
         <Acl access={ACL.DEALS}>
-          <Callout type="info" style={{ margin: theme.spacing(1.5, 0) }}>
-            To Notify your Office to Book an Open House on the MLS please find
-            the button inside of your{' '}
-            <a href="/dashboard/deals" target="_blank">
-              deals
-            </a>
-            . This page is only for creating Open House Registration pages and
-            events for your listings or other agents listings that you are
-            holding an open house for.
-          </Callout>
+          {isAlertOpen && (
+            <Alert
+              classes={classes}
+              severity="info"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setAlertToOpen(false)
+                  }}
+                >
+                  <CloseIcon className={iconClasses.medium} />
+                </IconButton>
+              }
+            >
+              Visit <Link href="/dashboard/deals">deals</Link> to Notify your
+              Office to Book an Open House on the MLS. This page is only for
+              creating Open House Registration pages and events.
+            </Alert>
+          )}
         </Acl>
         {renderContent()}
       </div>
