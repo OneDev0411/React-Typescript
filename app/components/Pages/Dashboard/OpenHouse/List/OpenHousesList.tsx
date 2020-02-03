@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet'
 
 import { useTheme } from '@material-ui/styles'
 import { Alert } from '@material-ui/lab'
-import { Link, IconButton } from '@material-ui/core'
+import { Box, Link, IconButton } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
@@ -18,14 +18,14 @@ import { getActiveTeamId } from 'utils/user-teams'
 
 import Acl from 'components/Acl'
 import Table from 'components/Grid/Table'
-import PageHeader from 'components/PageHeader'
+import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
 import { RenderProps } from 'components/Grid/Table/types'
 
 import EmptyState from './EmptyState'
-import CreateNewOpenHouse from './CreateNewOpenHouse'
+// import CreateNewOpenHouse from './CreateNewOpenHouse'
 import Photo from './columns/Photo'
 import Title from './columns/Title'
 import Date from './columns/Date'
@@ -203,55 +203,52 @@ function OpenHousesList(props: Props) {
         <title>Open House Registration Pages | Rechat</title>
       </Helmet>
 
-      <PageHeader>
-        <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Open House Registration Pages</PageHeader.Heading>
-        </PageHeader.Title>
+      <PageLayout>
+        <PageLayout.Header title="Open House Registration Pages" />
+        <PageLayout.Main>
+          <Box>
+            <div style={{ padding: theme.spacing(0, 3, 9) }}>
+              <Acl access={ACL.DEALS}>
+                {isAlertOpen && (
+                  <Alert
+                    classes={classes}
+                    severity="info"
+                    action={
+                      <IconButton
+                        aria-label="close"
+                        color="inherit"
+                        size="small"
+                        onClick={() => {
+                          setAlertToOpen(false)
+                        }}
+                      >
+                        <CloseIcon className={iconClasses.medium} />
+                      </IconButton>
+                    }
+                  >
+                    Visit <Link href="/dashboard/deals">deals</Link> to Notify
+                    your Office to Book an Open House on the MLS. This page is
+                    only for creating Open House Registration pages and events.
+                  </Alert>
+                )}
+              </Acl>
+              {renderContent()}
+            </div>
 
-        <PageHeader.Menu>
-          <CreateNewOpenHouse onOpenDrawer={onOpenOHDrawer} />
-        </PageHeader.Menu>
-      </PageHeader>
-
-      <div style={{ padding: theme.spacing(0, 3, 9) }}>
-        <Acl access={ACL.DEALS}>
-          {isAlertOpen && (
-            <Alert
-              classes={classes}
-              severity="info"
-              action={
-                <IconButton
-                  aria-label="close"
-                  color="inherit"
-                  size="small"
-                  onClick={() => {
-                    setAlertToOpen(false)
-                  }}
-                >
-                  <CloseIcon className={iconClasses.medium} />
-                </IconButton>
-              }
-            >
-              Visit <Link href="/dashboard/deals">deals</Link> to Notify your
-              Office to Book an Open House on the MLS. This page is only for
-              creating Open House Registration pages and events.
-            </Alert>
-          )}
-        </Acl>
-        {renderContent()}
-      </div>
-
-      {isDrawerOpen && (
-        // @ts-ignore js component
-        <OpenHouseDrawer
-          deleteCallback={drawerCallback}
-          isOpen
-          onClose={onCloseOHDrawer}
-          openHouse={selectedOH}
-          submitCallback={drawerCallback}
-          associations={associations}
-        />
-      )}
+            {isDrawerOpen && (
+              // @ts-ignore js component
+              <OpenHouseDrawer
+                deleteCallback={drawerCallback}
+                isOpen
+                onClose={onCloseOHDrawer}
+                openHouse={selectedOH}
+                submitCallback={drawerCallback}
+                associations={associations}
+              />
+            )}
+          </Box>
+        </PageLayout.Main>
+      </PageLayout>
     </>
   )
 }
