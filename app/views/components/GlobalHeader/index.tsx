@@ -37,7 +37,7 @@ export default function GlobalHeader({
     <div className={classes.wrapper}>
       {title && (
         <div>
-          <Typography variant="h3">{title}</Typography>
+          <Typography variant="h4">{title}</Typography>
         </div>
       )}
       {children && <div className={classes.content}>{children}</div>}

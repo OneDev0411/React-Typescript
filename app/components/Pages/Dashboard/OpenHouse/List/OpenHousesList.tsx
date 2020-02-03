@@ -204,36 +204,38 @@ function OpenHousesList(props: Props) {
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header title="Open House Registration Pages" />
+        <PageLayout.HeaderWithSearch
+          title="Open House Registration Pages"
+          placeholder="Search registration pages"
+          onSearch={() => {}}
+        />
         <PageLayout.Main>
           <Box>
-            <div style={{ padding: theme.spacing(0, 3, 9) }}>
-              <Acl access={ACL.DEALS}>
-                {isAlertOpen && (
-                  <Alert
-                    classes={classes}
-                    severity="info"
-                    action={
-                      <IconButton
-                        aria-label="close"
-                        color="inherit"
-                        size="small"
-                        onClick={() => {
-                          setAlertToOpen(false)
-                        }}
-                      >
-                        <CloseIcon className={iconClasses.medium} />
-                      </IconButton>
-                    }
-                  >
-                    Visit <Link href="/dashboard/deals">deals</Link> to Notify
-                    your Office to Book an Open House on the MLS. This page is
-                    only for creating Open House Registration pages and events.
-                  </Alert>
-                )}
-              </Acl>
-              {renderContent()}
-            </div>
+            <Acl access={ACL.DEALS}>
+              {isAlertOpen && (
+                <Alert
+                  classes={classes}
+                  severity="info"
+                  action={
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                        setAlertToOpen(false)
+                      }}
+                    >
+                      <CloseIcon className={iconClasses.medium} />
+                    </IconButton>
+                  }
+                >
+                  Visit <Link href="/dashboard/deals">deals</Link> to Notify
+                  your Office to Book an Open House on the MLS. This page is
+                  only for creating Open House Registration pages and events.
+                </Alert>
+              )}
+            </Acl>
+            {renderContent()}
 
             {isDrawerOpen && (
               // @ts-ignore js component
