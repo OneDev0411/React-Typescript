@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'flex-end'
   }
 }))
 
