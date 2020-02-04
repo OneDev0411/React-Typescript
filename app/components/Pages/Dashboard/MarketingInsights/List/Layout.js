@@ -1,9 +1,14 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
+import { browserHistory } from 'react-router'
+
+import { Box } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
 import { PageTabs, TabLink } from 'components/PageTabs'
+import Tooltip from 'components/tooltip'
+import ActionButton from 'components/Button/ActionButton'
 
 const urlGenerator = url => `/dashboard/insights${url}`
 
@@ -26,7 +31,18 @@ function InsightsLayout({ sentCount, scheduledCount, children }) {
         <title>Insights | Rechat</title>
       </Helmet>
       <PageLayout>
-        <PageLayout.Header title="Email Insight" />
+        <PageLayout.Header title="Email Insight">
+          <Box textAlign="right">
+            <Tooltip placement="bottom">
+              <ActionButton
+                appearance="outline"
+                onClick={() => browserHistory.push('/dashboard/marketing')}
+              >
+                Visit Marketing Center
+              </ActionButton>
+            </Tooltip>
+          </Box>
+        </PageLayout.Header>
         <PageLayout.Main>
           <PageTabs
             defaultValue={currentUrl}

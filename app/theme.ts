@@ -91,7 +91,7 @@ const theme = createMuiTheme({
     }
   },
   shape: {
-    borderRadius: 8
+    borderRadius: 4
   },
   typography: {
     htmlFontSize: 16,
@@ -210,7 +210,7 @@ theme.typography.body3 = {
 
 if (process.env.NODE_ENV === 'development') {
   // eslint-disable-next-line
-  ; (window as any).theme = theme
+  ;(window as any).theme = theme
 }
 
 export { theme }
