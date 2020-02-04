@@ -28,7 +28,7 @@ export const buttonBaseStyle = css<ActionButtonProps>`
 
   border: none;
   outline: none;
-  border-radius: 3px;
+  border-radius: 4px;
 
   position: relative;
   display: inline-flex;

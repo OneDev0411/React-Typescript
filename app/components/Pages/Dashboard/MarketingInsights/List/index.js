@@ -1,11 +1,7 @@
 import React, { useMemo, useState } from 'react'
-import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 
 import Table from 'components/Grid/Table'
-import Tooltip from 'components/tooltip'
-import SendEmailButton from 'components/SendEmailButton'
-import ActionButton from 'components/Button/ActionButton'
 
 import Layout from './Layout'
 import StatColumn from './StatColumn'
@@ -116,24 +112,6 @@ function List(props) {
   return (
     <Layout sentCount={stats.sent} scheduledCount={stats.scheduled}>
       <InsightContainer>
-        <div>
-          <Tooltip placement="bottom">
-            <ActionButton
-              appearance="outline"
-              style={{ marginRight: '1em' }}
-              onClick={() => browserHistory.push('/dashboard/marketing')}
-            >
-              Visit Marketing Center
-            </ActionButton>
-          </Tooltip>
-
-          <SendEmailButton
-            appearance="primary"
-            title="Send New Email"
-            onSent={() => setQueue(queue => queue + 1)}
-          />
-        </div>
-
         {isLoading && <LoadingComponent />}
         <div className={tableClassName.join(' ')}>
           <Table
