@@ -31,7 +31,8 @@ const theme = createMuiTheme({
     warning: {
       main: orange.primary,
       dark: orange.dark,
-      light: orange.light
+      light: orange.light,
+      contrastText: 'rgba(0, 0, 0, 0.87)'
     },
     grey: {
       '100': '#F2F2F2'
@@ -82,7 +83,7 @@ const theme = createMuiTheme({
 
 if (process.env.NODE_ENV === 'development') {
   // eslint-disable-next-line
-  ; (window as any).theme = theme
+  ;(window as any).theme = theme
 }
 
 export { theme }

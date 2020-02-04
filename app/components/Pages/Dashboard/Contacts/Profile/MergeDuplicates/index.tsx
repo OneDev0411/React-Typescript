@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import { Button } from '@material-ui/core'
+import { useTheme } from '@material-ui/core/styles'
 import { addNotification } from 'reapop'
 import pluralize from 'pluralize'
 
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export default function MergeDuplicates({ contact, mergeCallback }: Props) {
+  const theme = useTheme()
   const dispatch = useDispatch()
   const confirmation = useContext(ConfirmationModalContext)
   const [isOpen, setIsOpen] = useState(true)
@@ -177,7 +179,7 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
         }}
       >
         <CallOutContentContainer>
-          <span>
+          <span style={{ color: theme.palette.warning.contrastText }}>
             We’ve found {duplicateContacts.contacts.length - 1} other{' '}
             {pluralize('contact', duplicateContacts.contacts.length - 1)}{' '}
             similar to <b>{contact.display_name}</b>. Do you want to merge them?
