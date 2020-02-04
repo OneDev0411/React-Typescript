@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { Tabs, createStyles, makeStyles, Theme } from '@material-ui/core'
-import { TabProps } from '@material-ui/core/Tab'
 
 export * from './Tab'
+export * from './TabLink'
 export * from './DropdownTab'
 
 type SelectedTab = string | number | null
 
 interface Props {
-  tabs: React.ComponentType<TabProps>[]
+  tabs: React.ReactNode[]
   defaultValue?: SelectedTab
 }
 
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * <PageTabs
     tabs={[
       <Tab key={0} label="All" value={0} />,
-      <Tab key={1} label="Drafts" value={1} />,
+      <TabLink key={1} label="Drafts" value={1} to="link" />,
       <Tab
         key={2}
         value={2}
@@ -64,6 +64,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export function PageTabs({ defaultValue = null, tabs }: Props) {
   const classes = useStyles()
   const [selectedTab, setSelectedTab] = useState<SelectedTab>(defaultValue)
+  const activeTab =
+    defaultValue && selectedTab !== defaultValue ? defaultValue : selectedTab
 
   const handleChange = (e: React.MouseEvent<{}>, value: SelectedTab) => {
     setSelectedTab(value)
@@ -71,7 +73,7 @@ export function PageTabs({ defaultValue = null, tabs }: Props) {
 
   return (
     <Tabs
-      value={selectedTab}
+      value={activeTab}
       indicatorColor="primary"
       textColor="primary"
       variant="scrollable"

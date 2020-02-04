@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { throttle } from 'lodash'
 import { TextField, makeStyles, Theme } from '@material-ui/core'
 
-import GlobalHeader from 'components/GlobalHeader'
+import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'
 
 const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-interface Props {
+export interface GlobalHeaderWithSearchProps extends GlobalHeaderProps {
   placeholder: string
   onSearch: (query: string) => void
 }
@@ -22,7 +22,7 @@ export default function GlobalHeaderWithSearch({
   onSearch,
   children,
   ...globalHeaderProps
-}: Props & React.ComponentProps<typeof GlobalHeader>) {
+}: GlobalHeaderWithSearchProps) {
   const classes = useStyles()
   const [searchQueryValue, setSearchQueryValue] = useState('')
   const throttledSearchHandler = useRef(

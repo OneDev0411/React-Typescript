@@ -13,7 +13,6 @@ import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { IAppState } from 'reducers'
-import PageHeader from 'components/PageHeader'
 
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import Loading from 'partials/Loading'
@@ -57,8 +56,8 @@ function ConnectedAccounts({
 
   const onDelete = (provider: OAuthProvider, accountId: string) => {
     confirmation.setConfirmationModal({
-      message:
-        'Your account will be disconnected and removed but imported contacts and emails will be preserved.',
+      message: `Your account will be disconnected and 
+        removed but imported contacts and emails will be preserved.`,
       onConfirm: () => {
         disconnectOAuthAccount(provider, accountId)
       }
@@ -70,30 +69,25 @@ function ConnectedAccounts({
       <Helmet>
         <title>Connected Accounts | Settings | Rechat</title>
       </Helmet>
-      <PageHeader style={{ marginBottom: 0, marginTop: '1.5rem' }}>
-        <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Connected Accounts</PageHeader.Heading>
-        </PageHeader.Title>
-        <PageHeader.Menu>
-          <Button
-            variant="outlined"
-            disabled={outlook.connecting}
-            onClick={outlook.connect}
-          >
-            <IconOutlook size={iconSize} />
-            <Box pl={1}>Connect Outlook</Box>
-          </Button>
-          <Box mr={1} />
-          <Button
-            variant="outlined"
-            disabled={google.connecting}
-            onClick={google.connect}
-          >
-            <IconGoogle size={iconSize} />
-            <Box pl={1}>Connect Google</Box>
-          </Button>
-        </PageHeader.Menu>
-      </PageHeader>
+      <Box p={2} my={2}>
+        <Button
+          variant="outlined"
+          disabled={outlook.connecting}
+          onClick={outlook.connect}
+        >
+          <IconOutlook size={iconSize} />
+          <Box pl={1}>Connect Outlook</Box>
+        </Button>
+        <Box mr={1} />
+        <Button
+          variant="outlined"
+          disabled={google.connecting}
+          onClick={google.connect}
+        >
+          <IconGoogle size={iconSize} />
+          <Box pl={1}>Connect Google</Box>
+        </Button>
+      </Box>
 
       <Box paddingX={3}>
         {loading && accounts.length === 0 ? (

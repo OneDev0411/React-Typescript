@@ -1,9 +1,12 @@
 import React, { useMemo, useState } from 'react'
+import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 
 import Table from 'components/Grid/Table'
+import Tooltip from 'components/tooltip'
+import SendEmailButton from 'components/SendEmailButton'
+import ActionButton from 'components/Button/ActionButton'
 
-import Header from './Header'
 import Layout from './Layout'
 import StatColumn from './StatColumn'
 import { percent } from './helpers'
@@ -25,7 +28,6 @@ const sortableColumns = [
 ]
 
 function List(props) {
-  const [isSideMenuOpen, setSideMenuOpen] = useState(true)
   const [queue, setQueue] = useState(0)
   const { list, isLoading } = useListData(props.user, queue)
   const isScheduled = props.route && props.route.path === 'scheduled'
@@ -112,18 +114,25 @@ function List(props) {
   }
 
   return (
-    <Layout
-      isSideMenuOpen={isSideMenuOpen}
-      sentCount={stats.sent}
-      scheduledCount={stats.scheduled}
-    >
+    <Layout sentCount={stats.sent} scheduledCount={stats.scheduled}>
       <InsightContainer>
-        <Header
-          title={isScheduled ? 'Scheduled Emails' : 'Sent Emails'}
-          isSideMenuOpen={isSideMenuOpen}
-          onMenuTriggerChange={() => setSideMenuOpen(!isSideMenuOpen)}
-          onSent={() => setQueue(queue => queue + 1)}
-        />
+        <div>
+          <Tooltip placement="bottom">
+            <ActionButton
+              appearance="outline"
+              style={{ marginRight: '1em' }}
+              onClick={() => browserHistory.push('/dashboard/marketing')}
+            >
+              Visit Marketing Center
+            </ActionButton>
+          </Tooltip>
+
+          <SendEmailButton
+            appearance="primary"
+            title="Send New Email"
+            onSent={() => setQueue(queue => queue + 1)}
+          />
+        </div>
 
         {isLoading && <LoadingComponent />}
         <div className={tableClassName.join(' ')}>

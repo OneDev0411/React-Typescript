@@ -2,12 +2,11 @@ import * as React from 'react'
 import { useState } from 'react'
 import { Helmet } from 'react-helmet'
 
-import { Box } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import Drawer from 'components/AddOrEditEmailTemplateDrawer'
 
 import List from './List'
-import Header from './Header'
 
 function EmailTemplatesSettings() {
   const [isOpen, setIsOpen] = useState(false)
@@ -21,12 +20,18 @@ function EmailTemplatesSettings() {
       <Helmet>
         <title>Email Templates | Settings | Rechat</title>
       </Helmet>
-      <Header
-        handleCreateTemplate={() => {
-          setSelectedTemplate(null)
-          setIsOpen(true)
-        }}
-      />
+      <Box p={2} my={2}>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={() => {
+            setSelectedTemplate(null)
+            setIsOpen(true)
+          }}
+        >
+          Create New Template
+        </Button>
+      </Box>
       <Box p={3} pt={0}>
         <List
           onItemClick={(template: IBrandEmailTemplate) => {

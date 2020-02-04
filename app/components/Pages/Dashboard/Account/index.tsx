@@ -1,34 +1,47 @@
 import React, { ReactElement } from 'react'
 import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
+import Box from '@material-ui/core/Box'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
-import PageSideNav from 'components/PageSideNav'
-import SideNavSection from 'components/PageSideNav/SideNavSection'
-import SideNavTitle from 'components/PageSideNav/SideNavTitle'
+import PageLayout from 'components/GlobalPageLayout'
 import { IAppState } from 'reducers'
 
-import { ProfileTabs } from './components/Tabs'
+import SettingsTabs from './Tabs'
 
 interface Props {
   user: IUser
   children: ReactElement<any>
 }
 
-const AccountLayout = ({ user, children }: Props) => (
-  <React.Fragment>
-    <Helmet>
-      <title>Account | Rechat</title>
-    </Helmet>
-    <div className="l-account">
-      <PageSideNav width="15rem">
-        <SideNavSection>
-          <SideNavTitle>Account Settings</SideNavTitle>
-          <ProfileTabs user={user} />
-        </SideNavSection>
-      </PageSideNav>
-      <main className="l-account__main">{children}</main>
-    </div>
-  </React.Fragment>
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    content: {
+      padding: theme.spacing(2),
+      margin: theme.spacing(3, 0),
+      border: `2px solid ${theme.palette.divider}`,
+      borderRadius: theme.shape.borderRadius
+    }
+  })
 )
+
+const AccountLayout = ({ user, children }: Props) => {
+  const classes = useStyles()
+
+  return (
+    <>
+      <Helmet>
+        <title>Account | Rechat</title>
+      </Helmet>
+      <PageLayout>
+        <PageLayout.Header title="Account Settings" />
+        <PageLayout.Main>
+          <SettingsTabs user={user} />
+          <Box className={classes.content}>{children}</Box>
+        </PageLayout.Main>
+      </PageLayout>
+    </>
+  )
+}
 
 export default connect(({ user }: IAppState) => ({ user }))(AccountLayout)

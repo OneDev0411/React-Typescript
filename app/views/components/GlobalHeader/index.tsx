@@ -3,13 +3,21 @@ import { Typography, makeStyles, Theme } from '@material-ui/core'
 
 import GlobalActionsButton from 'components/GlobalActionsButton'
 
+export interface GlobalHeaderProps {
+  title?: string
+  noPadding?: boolean
+  noGlobalActionsButton?: boolean
+  children?: React.ReactNode
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: theme.spacing(3),
+    padding: ({ noPadding }: GlobalHeaderProps) =>
+      !noPadding ? theme.spacing(3) : 0,
     width: '100%'
   },
   content: {
@@ -17,18 +25,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-interface Props {
-  title?: string
-  noGlobalActionsButton?: boolean
-  children: React.ReactNode
-}
-
 export default function GlobalHeader({
   title,
+  noPadding,
   noGlobalActionsButton,
   children
-}: Props) {
-  const classes = useStyles()
+}: GlobalHeaderProps) {
+  const classes = useStyles({ noPadding })
 
   return (
     <div className={classes.wrapper}>
@@ -37,7 +40,7 @@ export default function GlobalHeader({
           <Typography variant="h3">{title}</Typography>
         </div>
       )}
-      <div className={classes.content}>{children}</div>
+      {children && <div className={classes.content}>{children}</div>}
       {!noGlobalActionsButton && (
         <div>
           <GlobalActionsButton />
