@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
-import { FlexItem } from 'styled-flex-component'
 import { Box } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
@@ -37,14 +36,12 @@ import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
-import { AlphabetFilter } from 'components/AlphabetFilter'
 import { updateTeamSetting } from 'actions/user/update-team-setting'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
 import Table from './Table'
-import { SearchContacts } from './Search'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
 import AllContactsList from './AllContactsList'
@@ -60,7 +57,7 @@ import {
   SYNCED_CONTACTS_LIST_ID,
   DUPLICATE_CONTACTS_LIST_ID
 } from './constants'
-import { CalloutSpinner, SearchWrapper } from './styled'
+import { CalloutSpinner } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 import {
   clearImportingGoogleContacts,
@@ -676,18 +673,6 @@ class ContactsList extends React.Component {
                       users={viewAsUsers}
                     />
                   )}
-                  <SearchWrapper row alignCenter>
-                    <FlexItem basis="100%">
-                      <SearchContacts
-                        onSearch={this.handleSearch}
-                        isSearching={isFetchingContacts}
-                      />
-                    </FlexItem>
-                    <AlphabetFilter
-                      value={state.firstLetter}
-                      onChange={this.handleFirstLetterChange}
-                    />
-                  </SearchWrapper>
                   <Table
                     data={contacts}
                     order={this.order}
