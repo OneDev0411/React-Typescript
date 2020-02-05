@@ -4,10 +4,8 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
-import { useTheme } from '@material-ui/styles'
 import { Alert } from '@material-ui/lab'
 import { Box, Link, IconButton } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
@@ -42,16 +40,10 @@ interface Props {
   activeBrandId: UUID
 }
 
-const useStyles = makeStyles((theme: Theme) => createStyles({}), {
-  name: 'MuiAlert'
-})
-
 type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
 function OpenHousesList(props: Props) {
   const iconClasses = useIconStyles()
-  const classes = useStyles()
-  const theme = useTheme<Theme>()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
       order: '-due_date',
@@ -205,7 +197,6 @@ function OpenHousesList(props: Props) {
             <Acl access={ACL.DEALS}>
               {isAlertOpen && (
                 <Alert
-                  classes={classes}
                   severity="info"
                   action={
                     <IconButton
