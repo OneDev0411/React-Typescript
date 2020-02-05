@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     padding: ({ noPadding }: GlobalHeaderProps) =>
       !noPadding ? theme.spacing(3) : 0,
     width: '100%'
