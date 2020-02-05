@@ -1,21 +1,24 @@
 {% for usersBatch in users | batch(2) %}
 <mj-section background-color="#fff" padding-top="0" padding-bottom="5px">
   {% for user in usersBatch %}
-  <mj-column width="25%">
+  <mj-column width="15%">
     <mj-image border-radius="6px" width="80px" padding="0px" rechat-assets="avatar" align="center" src="{{ user.profile_image_url }}"></mj-image>
   </mj-column>
-  <mj-column width="25%">
-    <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="bold">
-      {{user.display_name}}
-    </mj-text>
-    <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="lighter">
-      {{user.email}}
-    </mj-text>
-    <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="normal">
-      {{user.phone_number}}
-    </mj-text>
-    <mj-spacer height="16px"></mj-spacer>
-  </mj-column>
-  {% endfor %}
+  {% if usersBatch.length === 2 %}
+  <mj-column width="35%">
+    {% else %}
+    <mj-column width="85%">
+      {% endif %}
+      <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="bold">
+        {{user.display_name}}
+      </mj-text>
+      <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="lighter">
+        {{user.email}}
+      </mj-text>
+      <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="normal">
+        {{user.phone_number}}
+      </mj-text>
+    </mj-column>
+    {% endfor %}
 </mj-section>
 {% endfor %}
