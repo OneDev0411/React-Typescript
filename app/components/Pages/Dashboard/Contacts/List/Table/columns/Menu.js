@@ -4,7 +4,7 @@ import { Dropdown, MenuItem } from 'react-bootstrap'
 import styled from 'styled-components'
 
 import IconButtonBase from '../../../../../../../views/components/Button/IconButton'
-import VerticalDotsIcon from '../../../../../../../views/components/SvgIcons/VeriticalDots/VerticalDotsIcon'
+import IconHorizontalDots from '../../../../../../../views/components/SvgIcons/HorizontalDots/IconHorizontalDots'
 import { grey } from '../../../../../../../views/utils/colors'
 
 const IconButton = styled(IconButtonBase)`
@@ -22,11 +22,12 @@ const Menu = ({ contactId, handleOnDelete }) => (
     <IconButton
       data-test="contact-menu"
       bsRole="toggle"
+      iconSize="large"
       inverse
       isFit
-      onClick={e => console.dir(e.target) || e.stopPropagation()}
+      onClick={e => e.stopPropagation()}
     >
-      <VerticalDotsIcon />
+      <IconHorizontalDots />
     </IconButton>
 
     <Dropdown.Menu bsRole="menu">
