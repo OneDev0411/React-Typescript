@@ -32,7 +32,10 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(2, 0)
     },
     tableContainer: {
-      position: 'relative'
+      position: 'relative',
+      '& table': {
+        tableLayout: 'fixed'
+      }
     },
     summary: {
       margin: theme.spacing(1, 0),

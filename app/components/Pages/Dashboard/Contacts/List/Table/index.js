@@ -1,14 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
 import { connect } from 'react-redux'
 
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 
-import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
-
 import { Table } from 'components/Grid/Table'
-
-import Tooltip from 'components/tooltip'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
@@ -25,21 +20,9 @@ import Avatar from './columns/Avatar'
 import Name from './columns/Name'
 import TagsString from './columns/Tags'
 import FlowCell from './columns/Flows'
-import { Contact } from './columns/Contact'
 import LastTouched from './columns/LastTouched'
 
 import { SORT_FIELD_SETTING_KEY } from '../constants'
-
-const IconLastTouch = styled(IconInfoOutline)`
-  margin-left: 0.5rem;
-  width: 1.25rem;
-  height: 1.25rem;
-  transition: 0.2s ease-in all;
-
-  &:hover {
-    opacity: 0.5;
-  }
-`
 
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
@@ -51,21 +34,32 @@ class ContactsList extends React.Component {
 
   columns = [
     {
-      header: 'Name',
       id: 'name',
       primary: true,
+      width: '32%',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       render: ({ row: contact }) => <Name contact={contact} />
     },
     {
-      header: 'Contact',
-      id: 'contact',
-      accessor: contact => getAttributeFromSummary(contact, 'email'),
-      render: ({ row: contact }) => <Contact contact={contact} />
+      id: 'last_touched',
+      sortable: false,
+      width: '20%',
+      render: ({ row: contact }) => <LastTouched contact={contact} />
     },
     {
-      header: 'Tags',
+      id: 'flows',
+      sortable: false,
+      width: '8%',
+      render: ({ row: contact }) => (
+        <FlowCell
+          contactId={contact.id}
+          flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
+        />
+      )
+    },
+    {
       id: 'tag',
+      width: '30%',
       render: ({ row: contact }) => (
         <TagsString
           contact={contact}
@@ -74,38 +68,9 @@ class ContactsList extends React.Component {
       )
     },
     {
-      header: () => (
-        <>
-          Last Touch
-          <Tooltip
-            placement="bottom"
-            caption="This shows the last time you were in touch with a contact. Save events to keep it updated."
-          >
-            <IconLastTouch />
-          </Tooltip>
-        </>
-      ),
-      id: 'last_touched',
-      sortable: false,
-      render: ({ row: contact }) => <LastTouched contact={contact} />
-    },
-    {
-      header: 'Flows',
-      id: 'flows',
-      sortable: false,
-      render: ({ row: contact }) => (
-        <FlowCell
-          callback={async () => {
-            await this.props.reloadContacts()
-          }}
-          contactId={contact.id}
-          flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
-        />
-      )
-    },
-    {
       id: 'delete-contact',
       sortable: false,
+      width: '5%',
       render: ({ row: contact }) => (
         <Menu
           contactId={contact.id}

@@ -34,12 +34,12 @@ export default function LastTouched({ contact }: Props) {
           }
         >
           <span>
-            Last Touch was <b>{formattedLastTouch}</b>
+            Last Touch: <b>{formattedLastTouch}</b>
           </span>
         </Tooltip>
       ) : (
         <span>
-          Last Touch was <b>{formattedLastTouch}</b>
+          Last Touch: <b>{formattedLastTouch}</b>
         </span>
       )}
     </div>
