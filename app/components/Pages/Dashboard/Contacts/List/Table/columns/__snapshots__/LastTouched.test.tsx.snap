@@ -3,7 +3,7 @@
 exports[`Contacts list last touched component renders for contacts with last touch 1`] = `
 <div>
   <span>
-    Last Touch was 
+    Last Touch: 
     <b>
       just now
     </b>
