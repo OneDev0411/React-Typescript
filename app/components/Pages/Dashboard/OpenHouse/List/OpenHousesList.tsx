@@ -42,18 +42,13 @@ interface Props {
   activeBrandId: UUID
 }
 
+const useStyles = makeStyles((theme: Theme) => createStyles({}), {
+  name: 'MuiAlert'
+})
+
 type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
 function OpenHousesList(props: Props) {
-  const useStyles = makeStyles(
-    (theme: Theme) =>
-      createStyles({
-        message: {
-          display: 'inline'
-        }
-      }),
-    { name: 'MuiAlert' }
-  )
   const iconClasses = useIconStyles()
   const classes = useStyles()
   const theme = useTheme<Theme>()
@@ -204,11 +199,7 @@ function OpenHousesList(props: Props) {
       </Helmet>
 
       <PageLayout>
-        <PageLayout.HeaderWithSearch
-          title="Open House Registration Pages"
-          placeholder="Search registration pages"
-          onSearch={() => {}}
-        />
+        <PageLayout.Header title="Open House Registration Pages" />
         <PageLayout.Main>
           <Box>
             <Acl access={ACL.DEALS}>
@@ -229,9 +220,11 @@ function OpenHousesList(props: Props) {
                     </IconButton>
                   }
                 >
-                  Visit <Link href="/dashboard/deals">deals</Link> to Notify
-                  your Office to Book an Open House on the MLS. This page is
-                  only for creating Open House Registration pages and events.
+                  <Box>
+                    Visit <Link href="/dashboard/deals">deals</Link> to Notify
+                    your Office to Book an Open House on the MLS. This page is
+                    only for creating Open House Registration pages and events.
+                  </Box>
                 </Alert>
               )}
             </Acl>
