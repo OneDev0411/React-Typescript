@@ -138,7 +138,7 @@ export function EmailRecipientQuickSuggestions({
       </Box>
 
       <RecipientQuickSuggestions
-        quickSuggestions={quickSuggestions}
+        quickSuggestions={unusedQuickSuggestions}
         onSelect={({ recipient, sendType }) => onSelect(recipient, sendType)}
       />
 
