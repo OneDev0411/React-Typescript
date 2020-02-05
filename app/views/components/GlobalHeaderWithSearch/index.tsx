@@ -1,16 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { throttle } from 'lodash'
-import { TextField, makeStyles, Theme } from '@material-ui/core'
+import { TextField, makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'
 
-const useStyles = makeStyles((theme: Theme) => ({
-  wrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  }
-}))
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    wrapper: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+    },
+    searchContainer: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      flexGrow: 1
+    }
+  })
+)
 
 export interface GlobalHeaderWithSearchProps extends GlobalHeaderProps {
   placeholder: string
@@ -41,13 +48,15 @@ export default function GlobalHeaderWithSearch({
     <GlobalHeader {...globalHeaderProps}>
       <div className={classes.wrapper}>
         {children}
-        <TextField
-          value={searchQueryValue}
-          size="small"
-          variant="outlined"
-          placeholder={placeholder}
-          onChange={handleQueryChange}
-        />
+        <div className={classes.searchContainer}>
+          <TextField
+            value={searchQueryValue}
+            size="small"
+            variant="outlined"
+            placeholder={placeholder}
+            onChange={handleQueryChange}
+          />
+        </div>
       </div>
     </GlobalHeader>
   )

@@ -612,7 +612,11 @@ class ContactsList extends React.Component {
     return (
       <>
         <PageLayout>
-          <PageLayout.Header title={title} />
+          <PageLayout.HeaderWithSearch
+            placeholder="Search Contacts"
+            onSearch={this.handleSearch}
+            title={title}
+          />
           <PageLayout.Main>
             {this.state.syncStatus === 'pending' && (
               <Callout
