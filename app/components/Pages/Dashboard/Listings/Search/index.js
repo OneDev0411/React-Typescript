@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 
+import Tabs from '../components/Tabs'
+
 import { loadJS } from '../../../../../utils/load-js'
 import { getBounds, isLocationInTX } from '../../../../../utils/map'
 import getPlace from '../../../../../models/listings/search/get-place'
@@ -26,6 +28,7 @@ import CreateAlertModal from '../components/modals/CreateAlertModal'
 import { Header } from './Header'
 import CreateTourAction from './components/CreateTourAction'
 
+// Golden ratio
 const RADIUS = 1.61803398875 / 2
 
 class Search extends React.Component {
@@ -352,6 +355,11 @@ class Search extends React.Component {
           onClickFilter={this.onClickFilter}
           onChangeView={this.onChangeView}
           hasData={this.props.listings.data.length > 0}
+        />
+        <Tabs
+          onChangeView={this.onChangeView}
+          activeView={this.state.activeView}
+          isWidget={this.props.isWidget}
         />
         {this.renderMain()}
         <CreateAlertModal

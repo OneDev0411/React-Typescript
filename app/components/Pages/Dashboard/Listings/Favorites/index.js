@@ -8,6 +8,7 @@ import { selectListings } from '../../../../../reducers/listings'
 
 import Map from './Map'
 import { Header } from '../components/PageHeader'
+import Tabs from '../components/Tabs'
 import { MapView } from '../components/MapView'
 import { GridView } from '../components/GridView'
 import { GalleryView } from '../components/GalleryView'
@@ -33,7 +34,7 @@ class Favorites extends React.Component {
     const activeView = e.currentTarget.dataset.view
 
     this.setState({ activeView }, () => {
-      browserHistory.push(`/dashboard/mls/following?view=${activeView}`)
+      browserHistory.push(`/dashboard/mls/favorites?view=${activeView}`)
     })
   }
 
@@ -62,14 +63,12 @@ class Favorites extends React.Component {
     return (
       <React.Fragment>
         <Helmet>
-          <title>Following | Properties | Rechat</title>
+          <title>Favorites | Properties | Rechat</title>
         </Helmet>
-        <Header
-          title="Following"
+        <Header title="Favorites" />
+        <Tabs
           onChangeView={this.onChangeView}
           activeView={this.state.activeView}
-          isSideMenuOpen={this.props.isSideMenuOpen}
-          toggleSideMenu={this.props.toggleSideMenu}
         />
         {this.renderMain()}
       </React.Fragment>
