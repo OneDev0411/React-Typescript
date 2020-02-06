@@ -213,6 +213,15 @@ const AsyncMarketingHistory = Load({
 })
 
 /* ==================================== */
+//  Inbox
+/* ==================================== */
+
+const AsyncInbox = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Inbox' /* webpackChunkName: "inbox" */)
+})
+
+/* ==================================== */
 //  Insights
 /* ==================================== */
 
@@ -526,6 +535,8 @@ export default (
         <IndexRoute component={AsyncMarketingHistory} />
         <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
       </Route>
+
+      <Route path="/dashboard/inbox(/:emailThreadId)" component={AsyncInbox} />
 
       <Route path="/dashboard/insights">
         <IndexRoute component={AsyncMarketingInsightsList} />

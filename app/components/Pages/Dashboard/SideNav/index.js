@@ -125,6 +125,15 @@ function AppSideNav(props) {
 
           <Acl.Marketing>
             <SideNavLinkItem
+              tooltip="Emails"
+              to="/dashboard/inbox"
+              Icon={MarketingInsightsIcon}
+              ActiveIcon={MarketingInsightsIconActive}
+            />
+          </Acl.Marketing>
+
+          <Acl.Marketing>
+            <SideNavLinkItem
               tooltip="Email Insights"
               to="/dashboard/insights"
               Icon={MarketingInsightsIcon}
