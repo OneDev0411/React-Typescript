@@ -1,10 +1,4 @@
-import React, {
-  ReactNode,
-  useState,
-  Ref,
-  useImperativeHandle,
-  useRef
-} from 'react'
+import React, { ReactNode, useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { makeStyles } from '@material-ui/styles'
 import { Theme, Grid, Box, Button } from '@material-ui/core'
@@ -40,15 +34,10 @@ interface ItemBase {
   id: Id
 }
 
-export interface InfiniteScrollListHandles<T extends ItemBase> {
-  updateItem: (id: Id, errorMessage?: string) => Promise<void>
-}
-
 interface Props<T extends ItemBase> {
   fetchMoreItems: (from: number, count: number) => Promise<ReadonlyArray<T>>
   fetchItem: (id: Id) => Promise<T>
   renderItem: (item: T, index: number, items: ReadonlyArray<T>) => ReactNode
-  innerRef: Ref<InfiniteScrollListHandles<T>>
   emptyListMessage?: string
   fetchErrorMessage?: string
 }
@@ -57,7 +46,6 @@ export default function InfiniteScrollList<T extends ItemBase>({
   fetchMoreItems,
   fetchItem,
   renderItem,
-  innerRef,
   emptyListMessage = 'No Items',
   fetchErrorMessage = 'Something went wrong while fetching more items. Please try again.'
 }: Props<T>) {
@@ -67,33 +55,6 @@ export default function InfiniteScrollList<T extends ItemBase>({
   const [items, setItems] = useState<ReadonlyArray<T>>([])
 
   const dispatch = useDispatch()
-
-  useImperativeHandle(innerRef, () => ({
-    updateItem: async (
-      id: Id,
-      errorMessage: string = 'Something went wrong while updating the item in the list.'
-    ): Promise<void> => {
-      const index = items.findIndex(item => item.id === id)
-
-      if (index < 0) {
-        return
-      }
-
-      try {
-        const newItem = await fetchItem(id)
-
-        setItems([...items.slice(0, index), newItem, ...items.slice(index + 1)])
-      } catch (reason) {
-        console.error(reason)
-        dispatch(
-          addNotification({
-            status: 'error',
-            message: errorMessage
-          })
-        )
-      }
-    }
-  }))
 
   const listWrapperRef = useRef<HTMLDivElement>(null)
 
@@ -165,50 +126,34 @@ export default function InfiniteScrollList<T extends ItemBase>({
         direction="column"
         classes={{ root: classes.list }}
       >
-        {renderList()}
+        {items.length === 0 && status === 'finished' ? (
+          <NoContentMessage>{emptyListMessage}</NoContentMessage>
+        ) : (
+          <>
+            {items.map((item, index, items) => (
+              <Grid key={item.id} item classes={{ root: classes.itemWrapper }}>
+                {renderItem(item, index, items)}
+              </Grid>
+            ))}
+            <Grid item xs classes={{ root: classes.status }}>
+              {status === 'fetching' || status === 'fetched' ? (
+                <Loading />
+              ) : status === 'error' ? (
+                <Box paddingTop={2}>
+                  <Button
+                    variant="text"
+                    color="primary"
+                    fullWidth
+                    onClick={() => fetchMoreItemsManaged(true)}
+                  >
+                    Retry
+                  </Button>
+                </Box>
+              ) : null}
+            </Grid>
+          </>
+        )}
       </Grid>
     </div>
   )
-
-  function renderList() {
-    if (items.length === 0 && status === 'finished') {
-      return <NoContentMessage>{emptyListMessage}</NoContentMessage>
-    }
-
-    return (
-      <>
-        {items.map((item, index, items) => (
-          <Grid key={item.id} item classes={{ root: classes.itemWrapper }}>
-            {renderItem(item, index, items)}
-          </Grid>
-        ))}
-        <Grid item xs classes={{ root: classes.status }}>
-          {renderFooter()}
-        </Grid>
-      </>
-    )
-
-    function renderFooter() {
-      if (status === 'fetching' || status === 'fetched') {
-        return <Loading />
-      }
-
-      if (status === 'error') {
-        return (
-          <Box paddingTop={2}>
-            <Button
-              variant="text"
-              color="primary"
-              fullWidth
-              onClick={() => fetchMoreItemsManaged(true)}
-            >
-              Retry
-            </Button>
-          </Box>
-        )
-      }
-
-      return null
-    }
-  }
 }

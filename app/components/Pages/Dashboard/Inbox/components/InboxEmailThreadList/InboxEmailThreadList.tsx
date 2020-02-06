@@ -1,39 +1,19 @@
-import React, { Ref, useImperativeHandle, useRef } from 'react'
+import React from 'react'
 
 import {
-  IGetEmailThreadsFilters,
-  getEmailThreads
+  getEmailThreads,
+  IGetEmailThreadsFilters
 } from 'models/email/get-email-threads'
 import { getEmailThread } from 'models/email/get-email-thread'
 
 import InboxEmailThreadListItem from './components/InboxEmailThreadListItem'
-import InfiniteScrollList, {
-  InfiniteScrollListHandles
-} from '../InfiniteScrollList/InfiniteScrollList'
-
-export interface InboxEmailThreadListHandles {
-  updateEmailThread: (emailThreadId: UUID) => Promise<void>
-}
+import InfiniteScrollList from '../InfiniteScrollList/InfiniteScrollList'
 
 interface Props {
   category: 'all' | 'unread' | 'has attachments'
-  innerRef: Ref<InboxEmailThreadListHandles>
 }
 
-export default function InboxEmailThreadList({ category, innerRef }: Props) {
-  const infiniteScrollListInnerRef = useRef<
-    InfiniteScrollListHandles<IEmailThread<'messages' | 'contacts'>>
-  >(null)
-
-  useImperativeHandle(innerRef, () => ({
-    updateEmailThread: async (emailThreadId: UUID): Promise<void> => {
-      await infiniteScrollListInnerRef.current!.updateItem(
-        emailThreadId,
-        'Something went wrong while updating the email in the list. Please reload the page.'
-      )
-    }
-  }))
-
+export default function InboxEmailThreadList({ category }: Props) {
   return (
     <InfiniteScrollList<IEmailThread<'messages' | 'contacts'>>
       key={category}
@@ -57,7 +37,6 @@ export default function InboxEmailThreadList({ category, innerRef }: Props) {
         return getEmailThread(id as UUID)
       }}
       renderItem={item => <InboxEmailThreadListItem emailThread={item} />}
-      innerRef={infiniteScrollListInnerRef}
       emptyListMessage={
         category === 'all'
           ? 'No Emails'

@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect, useCallback } from 'react'
 import { WithRouterProps } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { Box, IconButton, Typography } from '@material-ui/core'
@@ -16,14 +16,9 @@ import NoContentMessage from '../NoContentMessage'
 import setSelectedEmailThreadId from '../../helpers/set-selected-email-thread-id'
 import markEmailThreadAsRead from '../../helpers/mark-email-thread-as-read'
 
-interface Props {
-  onUpdate?(): void
-}
+interface Props {}
 
-export default function InboxEmailThread({
-  params,
-  onUpdate
-}: Props & WithRouterProps) {
+export default function InboxEmailThread({ params }: Props & WithRouterProps) {
   const selectedEmailThreadId: UUID | undefined = params.emailThreadId
 
   const [status, setStatus] = useState<
@@ -35,7 +30,7 @@ export default function InboxEmailThread({
 
   const dispatch = useDispatch()
 
-  async function fetchEmailThread() {
+  const fetchEmailThread = useCallback(async () => {
     if (selectedEmailThreadId) {
       setStatus('fetching')
 
@@ -47,7 +42,6 @@ export default function InboxEmailThread({
 
         try {
           await markEmailThreadAsRead(emailThread)
-          onUpdate && onUpdate()
         } catch (reason) {
           console.error(reason)
           dispatch(
@@ -72,11 +66,11 @@ export default function InboxEmailThread({
     } else {
       setStatus('empty')
     }
-  }
+  }, [dispatch, selectedEmailThreadId])
 
   useEffect(() => {
     fetchEmailThread()
-  }, [selectedEmailThreadId]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fetchEmailThread])
 
   const emails = useMemo(
     () =>
@@ -141,14 +135,7 @@ export default function InboxEmailThread({
         </IconButton>
       </Box>
       <Box overflow="auto">
-        <EmailThreadEmails
-          emails={emails}
-          onEmailSent={() => {
-            setTimeout(() => {
-              fetchEmailThread()
-            }, 5000) // TODO: A gap to let the API settle things there. What else we could do?
-          }}
-        />
+        <EmailThreadEmails emails={emails} />
       </Box>
     </Box>
   )
