@@ -256,7 +256,7 @@
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-s3-plugin": "^1.0.3",
     "xml2js": "^0.4.22",
-    "snyk": "^1.279.0"
+    "snyk": "^1.290.2"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.4.4",
