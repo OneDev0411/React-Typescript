@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
       '& > div': {
         maxWidth: 30,
         width: '100%',
+        borderRadius: '2px 2px 0 0',
         backgroundColor: theme.palette.primary.main
       }
     }
