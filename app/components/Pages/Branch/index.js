@@ -146,7 +146,7 @@ const redirectHandler = async (
       return
     }
   } else if (isShadow) {
-    // console.log('isShadow:')
+    console.log('isShadow:', branchData)
     redirect = `register?token=${token}`
 
     if (listing) {
@@ -180,7 +180,7 @@ const redirectHandler = async (
     )}`
 
     if (hasConflict()) {
-      // console.log('you logged with different user')
+      console.log('you logged with different user')
       params.redirectTo = encodeURIComponent(redirect)
       params.messageText =
         'You are currently logged in a different user. Please sign out and sign up your new account.'
@@ -189,6 +189,8 @@ const redirectHandler = async (
       return
     }
   } else if (actionType === 'UserLogin') {
+    console.log('UserLogin', branchData)
+
     const loginHandler = () =>
       dispatch(
         signin(
@@ -203,6 +205,8 @@ const redirectHandler = async (
       )
 
     if (hasConflict()) {
+      console.log('UserLogin - CONFLICT')
+
       setActiveModal({
         name: 'CONFLICT',
         params: {
@@ -222,11 +226,11 @@ const redirectHandler = async (
 
     return
   } else if (loggedInUser) {
-    // console.log('loggedIn')
+    console.log('loggedIn', branchData)
     redirect = getActionRedirectURL(branchData)
 
     if (hasConflict()) {
-      // console.log('you logged with deferent user')
+      console.log('you logged with deferent user')
       params.redirectTo = encodeURIComponent(redirect)
       params.messageText = getConfilictMessageText(receivingUser.email)
       setActiveModal({ name: 'CONFLICT', params })
@@ -234,7 +238,7 @@ const redirectHandler = async (
       return
     }
   } else {
-    // console.log('you registered before with this email')
+    console.log('you registered before with this email', branchData)
 
     const username = `username=${encodeURIComponent(receivingUser.email)}`
 
@@ -260,10 +264,11 @@ const branch = ({
   if (!branchData) {
     Branch.init(branchKey, (err, { data_parsed }) => {
       if (err) {
-        // console.log(err)
+        console.log('Init - error', err, data_parsed)
         browserHistory.push(OOPS_PAGE)
       }
 
+      console.log('Init - success', data_parsed)
       setBranchData(data_parsed)
     })
   } else if (!waitingForRedirect) {
@@ -329,12 +334,12 @@ const branch = ({
           })
           // eslint-disable-next-line
           .catch(error => {
-            // console.log(err)
+            console.log('receiving_user', error, branchData)
             browserHistory.push(OOPS_PAGE)
           })
       }
     } else {
-      // console.log('last oops in last else')
+      console.log('last oops in last else', branchData)
       browserHistory.push(OOPS_PAGE)
     }
   }
