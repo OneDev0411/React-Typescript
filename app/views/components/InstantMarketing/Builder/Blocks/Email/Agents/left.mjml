@@ -1,13 +1,13 @@
 {% for usersBatch in users | batch(2) %}
 <mj-section background-color="#fff" padding-top="0" padding-bottom="5px">
   {% for user in usersBatch %}
-  <mj-column width="15%">
+  <mj-column width="15%" padding="0">
     <mj-image padding="0 0 0 16px" border-radius="6px" width="80px" rechat-assets="avatar" align="center" src="{{ user.profile_image_url }}"></mj-image>
   </mj-column>
   {% if usersBatch.length === 2 %}
-  <mj-column width="35%">
+  <mj-column width="35%" padding="0">
     {% else %}
-    <mj-column width="85%">
+    <mj-column width="85%" padding="0">
       {% endif %}
       <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="bold">
         {{user.display_name}}
