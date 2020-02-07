@@ -41,6 +41,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {}
 
 export default function Inbox({ params }: Props & WithRouterProps) {
+  const selectedEmailThreadId: UUID | undefined = params.emailThreadId
+
   const accounts = useSelector<IAppState, IOAuthAccount[]>(
     ({ contacts: { oAuthAccounts } }) =>
       selectAllConnectedAccounts(oAuthAccounts)
@@ -106,7 +108,10 @@ export default function Inbox({ params }: Props & WithRouterProps) {
                 )
               }}
             >
-              <InboxEmailThread />
+              <InboxEmailThread
+                key={selectedEmailThreadId}
+                emailThreadId={selectedEmailThreadId}
+              />
             </Grid>
           </Grid>
         )}

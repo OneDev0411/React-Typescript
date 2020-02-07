@@ -1,5 +1,4 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react'
-import { WithRouterProps } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { Box, IconButton, Typography } from '@material-ui/core'
 import { addNotification } from 'reapop'
@@ -16,11 +15,11 @@ import NoContentMessage from '../NoContentMessage'
 import setSelectedEmailThreadId from '../../helpers/set-selected-email-thread-id'
 import markEmailThreadAsRead from '../../helpers/mark-email-thread-as-read'
 
-interface Props {}
+interface Props {
+  emailThreadId?: UUID
+}
 
-export default function InboxEmailThread({ params }: Props & WithRouterProps) {
-  const selectedEmailThreadId: UUID | undefined = params.emailThreadId
-
+export default function InboxEmailThread({ emailThreadId }: Props) {
   const [status, setStatus] = useState<
     'empty' | 'fetching' | 'error' | 'fetched'
   >('empty')
@@ -31,11 +30,11 @@ export default function InboxEmailThread({ params }: Props & WithRouterProps) {
   const dispatch = useDispatch()
 
   const fetchEmailThread = useCallback(async () => {
-    if (selectedEmailThreadId) {
+    if (emailThreadId) {
       setStatus('fetching')
 
       try {
-        const emailThread = await getEmailThread(selectedEmailThreadId)
+        const emailThread = await getEmailThread(emailThreadId)
 
         setEmailThread(emailThread)
         setStatus('fetched')
@@ -58,7 +57,7 @@ export default function InboxEmailThread({ params }: Props & WithRouterProps) {
           addNotification({
             status: 'error',
             message:
-              'Something went wrong while opening the email. Please, reload the page.'
+              'Something went wrong while fetching the email. Please, reload the page.'
           })
         )
         setStatus('error')
@@ -66,11 +65,39 @@ export default function InboxEmailThread({ params }: Props & WithRouterProps) {
     } else {
       setStatus('empty')
     }
-  }, [dispatch, selectedEmailThreadId])
+  }, [dispatch, emailThreadId])
 
   useEffect(() => {
     fetchEmailThread()
   }, [fetchEmailThread])
+
+  useEffect(() => {
+    const socket: SocketIOClient.Socket = (window as any).socket
+
+    async function handleDeleteEmailThreads(emailThreadIds: UUID[]) {
+      if (emailThreadId && emailThreadIds.includes(emailThreadId)) {
+        setSelectedEmailThreadId(undefined)
+      }
+
+      if (emailThread && emailThreadIds.includes(emailThread.id)) {
+        setEmailThread(null)
+        setStatus('empty')
+      }
+    }
+    async function handleUpdateEmailThreads(emailThreadIds: UUID[]) {
+      if (emailThreadId && emailThreadIds.includes(emailThreadId)) {
+        fetchEmailThread()
+      }
+    }
+
+    socket.on('email_thread:delete', handleDeleteEmailThreads)
+    socket.on('email_thread:update', handleUpdateEmailThreads)
+
+    return () => {
+      socket.off('email_thread:delete', handleDeleteEmailThreads)
+      socket.off('email_thread:update', handleUpdateEmailThreads)
+    }
+  }, [emailThreadId, emailThread, fetchEmailThread])
 
   const emails = useMemo(
     () =>
@@ -82,7 +109,7 @@ export default function InboxEmailThread({ params }: Props & WithRouterProps) {
 
   if (
     status === 'fetching' &&
-    (!emailThread || emailThread.id !== selectedEmailThreadId)
+    (!emailThread || emailThread.id !== emailThreadId)
   ) {
     return (
       <Box paddingTop={2}>
@@ -129,6 +156,7 @@ export default function InboxEmailThread({ params }: Props & WithRouterProps) {
           onClick={() => {
             setSelectedEmailThreadId(undefined)
             setEmailThread(null)
+            setStatus('empty')
           }}
         >
           <CloseIcon />
