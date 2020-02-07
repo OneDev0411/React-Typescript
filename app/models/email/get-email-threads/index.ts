@@ -10,8 +10,9 @@ export const defaultEmailThreadAssociations: IEmailThreadAssociations[] = [
 export interface IGetEmailThreadsFilters {
   start: number
   limit?: number
-  is_read?: boolean
-  has_attachments?: boolean
+  isRead?: boolean
+  hasAttachments?: boolean
+  ids?: UUID[]
 }
 
 export async function getEmailThreads<
@@ -31,12 +32,28 @@ export async function getEmailThreads<
     start: filters.start
   }
 
-  'limit' in filters && (query.limit = filters.limit)
-  'is_read' in filters && (query.is_read = filters.is_read)
-  'has_attachments' in filters &&
-    (query.has_attachments = filters.has_attachments)
+  if (filters.limit !== undefined) {
+    query.limit = filters.limit
+  }
 
-  const response = await new Fetch().get('/emails/threads').query(query)
+  if (filters.isRead !== undefined) {
+    query.is_read = filters.isRead
+  }
+
+  if (filters.hasAttachments !== undefined) {
+    query.has_attachments = filters.hasAttachments
+  }
+
+  const body: any = {}
+
+  if (filters.ids !== undefined) {
+    body.ids = filters.ids
+  }
+
+  const response = await new Fetch()
+    .get('/emails/threads')
+    .query(query)
+    .send(body)
 
   return response.body.data
 }
