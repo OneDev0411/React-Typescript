@@ -1,34 +1,35 @@
 import { OAuthProvider } from 'constants/contacts'
 
-import { setEmailReadStatus } from 'models/email/set-email-read-status'
+import { setEmailThreadStatus } from 'models/email/set-email-thread-status'
 
 export default async function markEmailThreadAsRead(
   emailThread: IEmailThread<'messages'>
 ): Promise<void> {
-  await Promise.all(
-    emailThread.messages
-      .filter(
-        m => m.type !== 'email' && !(m as IEmailThreadEmailBase<any>).is_read
-      )
-      .map(m => {
-        switch (m.type) {
-          case 'google_message':
-            return setEmailReadStatus(
-              OAuthProvider.Google,
-              m.google_credential,
-              m.id
-            )
+  const unreadMessageIds = emailThread.messages
+    .filter(
+      m => m.type !== 'email' && !(m as IEmailThreadEmailBase<any>).is_read
+    )
+    .map(({ id }) => id)
 
-          case 'microsoft_message':
-            return setEmailReadStatus(
-              OAuthProvider.Outlook,
-              m.microsoft_credential,
-              m.id
-            )
+  if (unreadMessageIds.length === 0) {
+    return
+  }
 
-          default:
-            throw new Error('Invalid message.')
-        }
-      })
-  )
+  if (emailThread.google_credential) {
+    await setEmailThreadStatus(
+      OAuthProvider.Google,
+      emailThread.google_credential,
+      unreadMessageIds,
+      true
+    )
+  }
+
+  if (emailThread.microsoft_credential) {
+    await setEmailThreadStatus(
+      OAuthProvider.Outlook,
+      emailThread.microsoft_credential,
+      unreadMessageIds,
+      true
+    )
+  }
 }
