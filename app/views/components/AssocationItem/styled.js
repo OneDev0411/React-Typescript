@@ -9,6 +9,12 @@ export const RemoveButton = styled(Button)`
   margin-left: 0.75em;
 `
 
+export const DetailsContainer = styled.div`
+  width: calc(100% - 1.5rem);
+  display: flex;
+  flex-grow: 1;
+`
+
 export const Container = styled.div`
   position: relative;
   display: flex;

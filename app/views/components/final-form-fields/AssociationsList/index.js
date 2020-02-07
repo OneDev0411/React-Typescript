@@ -125,8 +125,10 @@ class List extends React.Component {
         {this.state.isOpenMoreDrawer && (
           <AssociationsDrawer
             isOpen
+            isRemovable
             associations={otherAssociations}
             onClose={this.closeMoreDrawer}
+            onDelete={this.removeHandler}
           />
         )}
       </React.Fragment>
