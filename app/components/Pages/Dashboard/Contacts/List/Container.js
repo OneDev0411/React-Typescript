@@ -26,12 +26,7 @@ import {
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
-import {
-  Container as PageContainer,
-  Menu as SideMenu
-} from 'components/SlideMenu'
-import SavedSegments from 'components/Grid/SavedSegments/List'
-// import { resetGridSelectedItems } from 'components/Grid/Table-old/Plugins/Selectable'
+// import SavedSegments from 'components/Grid/SavedSegments/List'
 import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
@@ -41,13 +36,14 @@ import { selectActiveSavedSegment } from 'reducers/filter-segments'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
+import ContactsTabs from './Tabs'
 import Table from './Table'
 import ContactFilters from './Filters'
-import TagsList from './TagsList'
-import AllContactsList from './AllContactsList'
-import FlowsList from './FlowsList'
-import ImportContactsButton from './ImportContactsButton'
-import TouchReminder from './TouchReminder'
+// import TagsList from './TagsList'
+// import AllContactsList from './AllContactsList'
+// import FlowsList from './FlowsList'
+// import ImportContactsButton from './ImportContactsButton'
+// import TouchReminder from './TouchReminder'
 
 import {
   FLOW_FILTER_ID,
@@ -603,8 +599,8 @@ class ContactsList extends React.Component {
         activeSegment.filters.length === 0)
 
     const title = this.getHeaderTitle()
-    const showImportAction = this.shouldShowImportAndCreateActions()
-    const activeTag = this.getActiveTag()
+    // const showImportAction = this.shouldShowImportAndCreateActions()
+    // const activeTag = this.getActiveTag()
 
     return (
       <>
@@ -648,8 +644,10 @@ class ContactsList extends React.Component {
             {!isZeroState && !this.state.isShowingDuplicatesList && (
               <React.Fragment>
                 <Box>
+                  <ContactsTabs />
                   {/* show action btn */}
-                  {!isZeroState && (
+                  {/*
+                  !isZeroState && (
                     <React.Fragment>
                       {activeSegment && activeSegment.is_editable && (
                         <TouchReminder
@@ -665,7 +663,8 @@ class ContactsList extends React.Component {
                       )}
                       {showImportAction && <ImportContactsButton />}
                     </React.Fragment>
-                  )}
+                      )
+                  */}
                   {/* end show action btn */}
                   {this.shouldShowFilters() && (
                     <ContactFilters
@@ -707,59 +706,6 @@ class ContactsList extends React.Component {
             )}
           </PageLayout.Main>
         </PageLayout>
-        <PageContainer isOpen={false}>
-          <SideMenu isOpen={false} width="13rem">
-            <AllContactsList
-              activeSegment={activeSegment}
-              onFilterChange={(selectedSegment, type) => {
-                this.setState({ selectedSidebarFilter: null })
-
-                this.setState({
-                  isShowingDuplicatesList: type === DUPLICATE_CONTACTS_LIST_ID
-                })
-
-                // Synced contacts
-                if (selectedSegment) {
-                  this.handleChangeSavedSegment(selectedSegment)
-
-                  return
-                }
-
-                // All contacts selected
-                this.handleFilterChange({ filters: [], flows: [] }, true)
-              }}
-            />
-            <TagsList
-              onFilterChange={filters => {
-                this.setState({
-                  selectedSidebarFilter: filters.filters,
-                  isShowingDuplicatesList: false
-                })
-                this.handleFilterChange({ ...filters, flows: [] }, true)
-              }}
-              isActive={this.state.selectedSidebarFilter !== null}
-            />
-            <FlowsList
-              onChange={_.debounce(() => {
-                this.setState({
-                  selectedSidebarFilter: this.props.flows,
-                  isShowingDuplicatesList: false
-                })
-                this.handleFilterChange({}, true)
-              }, 300)}
-              isActive={this.state.selectedSidebarFilter !== null}
-            />
-            <SavedSegments
-              name={CONTACTS_SEGMENT_NAME}
-              associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
-              getPredefinedLists={() => ({})}
-              onChange={segment => {
-                this.setState({ isShowingDuplicatesList: false })
-                this.handleChangeSavedSegment(segment)
-              }}
-            />
-          </SideMenu>
-        </PageContainer>
       </>
     )
   }

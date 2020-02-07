@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import MUIButton from '@material-ui/core/Button'
+
 import {
   createFilterSegment,
   updateFilterSegment,
@@ -11,6 +13,7 @@ import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-q
 
 import Modal from 'components/BasicModal'
 import Button from 'components/Button/ActionButton'
+
 import RadioButton from 'components/RadioButton'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
@@ -150,13 +153,14 @@ class SaveSegment extends React.Component {
     return (
       <div>
         {hasFilters && (
-          <Button
+          <MUIButton
+            variant="outlined"
             data-test="save-list-button"
             onClick={this.toggleShowModal}
             disabled={!areFiltersValid}
           >
             Save List
-          </Button>
+          </MUIButton>
         )}
 
         {state.showModal && hasFilters && (
