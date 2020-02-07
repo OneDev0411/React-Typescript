@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   Tab as BaseTab,
+  TabProps,
   createStyles,
   makeStyles,
   Theme
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export const Tab = props => {
+export const Tab = (props: TabProps) => {
   const classes = useStyles()
 
   return <BaseTab {...props} className={classes.root} />
