@@ -1,5 +1,4 @@
 import React from 'react'
-import { WithRouterProps } from 'react-router'
 import { Paper, Grid, Typography, Box } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
@@ -10,19 +9,16 @@ import { IAppState } from 'reducers'
 
 import { useInboxEmailThreadListItemStyles } from './styles'
 import getContactInfoFromEmailThread from './helpers/get-contact-info-from-email-thread'
-import setSelectedEmailThreadId from '../../../../helpers/set-selected-email-thread-id'
 
 interface Props {
   emailThread: IEmailThread<'messages' | 'contacts'>
+  selected?: boolean
 }
 
 export default function InboxEmailThreadListItem({
-  params,
-  emailThread
-}: Props & WithRouterProps) {
-  const selectedEmailThreadId: UUID | undefined = params.emailThreadId
-  const selected = selectedEmailThreadId === emailThread.id
-
+  emailThread,
+  selected
+}: Props) {
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
   const contactInfo = getContactInfoFromEmailThread(user, emailThread)
@@ -55,7 +51,6 @@ export default function InboxEmailThreadListItem({
     <Paper
       elevation={0}
       square
-      onClick={() => setSelectedEmailThreadId(emailThread.id)}
       classes={{
         root: classNames(classes.root, selected && classes.selected)
       }}

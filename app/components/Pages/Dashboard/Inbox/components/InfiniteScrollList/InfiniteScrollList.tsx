@@ -37,7 +37,14 @@ interface ItemBase {
 interface Props<T extends ItemBase> {
   fetchMoreItems: (from: number, count: number) => Promise<ReadonlyArray<T>>
   fetchItem: (id: Id) => Promise<T>
-  renderItem: (item: T, index: number, items: ReadonlyArray<T>) => ReactNode
+  renderItem: (
+    item: T,
+    selected: boolean,
+    index: number,
+    items: ReadonlyArray<T>
+  ) => ReactNode
+  selectedItemId?: Id
+  onSelectItem?: (item: T) => void
   emptyListMessage?: string
   fetchErrorMessage?: string
 }
@@ -46,6 +53,8 @@ export default function InfiniteScrollList<T extends ItemBase>({
   fetchMoreItems,
   fetchItem,
   renderItem,
+  selectedItemId,
+  onSelectItem,
   emptyListMessage = 'No Items',
   fetchErrorMessage = 'Something went wrong while fetching more items. Please try again.'
 }: Props<T>) {
@@ -131,8 +140,13 @@ export default function InfiniteScrollList<T extends ItemBase>({
         ) : (
           <>
             {items.map((item, index, items) => (
-              <Grid key={item.id} item classes={{ root: classes.itemWrapper }}>
-                {renderItem(item, index, items)}
+              <Grid
+                key={item.id}
+                item
+                onClick={() => onSelectItem && onSelectItem(item)}
+                classes={{ root: classes.itemWrapper }}
+              >
+                {renderItem(item, item.id === selectedItemId, index, items)}
               </Grid>
             ))}
             <Grid item xs classes={{ root: classes.status }}>

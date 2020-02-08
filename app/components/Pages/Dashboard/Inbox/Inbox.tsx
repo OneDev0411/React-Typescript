@@ -95,6 +95,8 @@ export default function Inbox({ params }: Props & WithRouterProps) {
                     ? 'has attachments'
                     : 'all'
                 }
+                selectedEmailThreadId={selectedEmailThreadId}
+                onSelectEmailThread={setSelectedEmailThreadId}
               />
             </Grid>
             <Grid

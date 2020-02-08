@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import {
   getEmailThreads,
@@ -11,9 +11,34 @@ import InfiniteScrollList from '../InfiniteScrollList/InfiniteScrollList'
 
 interface Props {
   category: 'all' | 'unread' | 'has attachments'
+  selectedEmailThreadId?: UUID
+  onSelectEmailThread: (emailThreadId: UUID) => void
 }
 
-export default function InboxEmailThreadList({ category }: Props) {
+export default function InboxEmailThreadList({
+  category,
+  selectedEmailThreadId,
+  onSelectEmailThread
+}: Props) {
+  useEffect(() => {
+    const socket: SocketIOClient.Socket = (window as any).socket
+
+    async function handleDeleteEmailThreads(deletedEmailThreadIds: UUID[]) {
+      // ...
+    }
+    async function handleUpdateEmailThreads(updatedEmailThreadIds: UUID[]) {
+      // ...
+    }
+
+    socket.on('email_thread:delete', handleDeleteEmailThreads)
+    socket.on('email_thread:update', handleUpdateEmailThreads)
+
+    return () => {
+      socket.off('email_thread:delete', handleDeleteEmailThreads)
+      socket.off('email_thread:update', handleUpdateEmailThreads)
+    }
+  }, [])
+
   return (
     <InfiniteScrollList<IEmailThread<'messages' | 'contacts'>>
       key={category}
@@ -24,11 +49,11 @@ export default function InboxEmailThreadList({ category }: Props) {
         }
 
         if (category === 'unread') {
-          filters.is_read = false
+          filters.isRead = false
         }
 
         if (category === 'has attachments') {
-          filters.has_attachments = true
+          filters.hasAttachments = true
         }
 
         return getEmailThreads(filters)
@@ -37,6 +62,8 @@ export default function InboxEmailThreadList({ category }: Props) {
         return getEmailThread(id as UUID)
       }}
       renderItem={item => <InboxEmailThreadListItem emailThread={item} />}
+      selectedItemId={selectedEmailThreadId}
+      onSelectItem={({ id }) => onSelectEmailThread(id)}
       emptyListMessage={
         category === 'all'
           ? 'No Emails'
