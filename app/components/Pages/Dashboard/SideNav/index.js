@@ -16,6 +16,7 @@ import ContactsIconActive from '../../../../views/components/SvgIcons/Contacts/I
 import NotificationsIcon from '../../../../views/components/SvgIcons/Notifications/IconNotifications'
 import NotificationsIconActive from '../../../../views/components/SvgIcons/Notifications/IconNotificationsActive'
 import SupportIcon from '../../../../views/components/SvgIcons/Support/IconSupport'
+import IconEmailOutline from '../../../../views/components/SvgIcons/EmailOutline/IconEmailOutline'
 import MarketingInsightsIcon from '../../../../views/components/SvgIcons/MarketingInsights/IconMarketingInsights'
 import MarketingInsightsIconActive from '../../../../views/components/SvgIcons/MarketingInsights/IconMarketingInsightsActive'
 import PropertiesIcon from '../../../../views/components/SvgIcons/Properties/IconProperties'
@@ -127,8 +128,8 @@ function AppSideNav(props) {
             <SideNavLinkItem
               tooltip="Emails"
               to="/dashboard/inbox"
-              Icon={MarketingInsightsIcon}
-              ActiveIcon={MarketingInsightsIconActive}
+              Icon={IconEmailOutline}
+              ActiveIcon={IconEmailOutline}
             />
           </Acl.Crm>
 
