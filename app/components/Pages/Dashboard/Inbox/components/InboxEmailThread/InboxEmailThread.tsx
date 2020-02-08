@@ -39,17 +39,19 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
         setEmailThread(emailThread)
         setStatus('fetched')
 
-        try {
-          await markEmailThreadAsRead(emailThread)
-        } catch (reason) {
-          console.error(reason)
-          dispatch(
-            addNotification({
-              status: 'error',
-              message:
-                'Something went wrong while marking the email as read. Please reload the page.'
-            })
-          )
+        if (!emailThread.is_read) {
+          try {
+            await markEmailThreadAsRead(emailThread)
+          } catch (reason) {
+            console.error(reason)
+            dispatch(
+              addNotification({
+                status: 'error',
+                message:
+                  'Something went wrong while marking the email as read. Please reload the page.'
+              })
+            )
+          }
         }
       } catch (reason) {
         console.error(reason)
