@@ -35,6 +35,7 @@ interface ItemBase {
 }
 
 interface Props<T extends ItemBase> {
+  itemCountPerFetch?: number
   fetchMoreItems: (from: number, count: number) => Promise<ReadonlyArray<T>>
   fetchItem: (id: Id) => Promise<T>
   renderItem: (
@@ -50,6 +51,7 @@ interface Props<T extends ItemBase> {
 }
 
 export default function InfiniteScrollList<T extends ItemBase>({
+  itemCountPerFetch = 50,
   fetchMoreItems,
   fetchItem,
   renderItem,
@@ -81,8 +83,6 @@ export default function InfiniteScrollList<T extends ItemBase>({
     )
   }
   function fetchMoreItemsManaged(forced?: boolean): void {
-    const itemCountPerFetch = 50
-
     setStatus(status => {
       if (status !== 'fetched' && !forced) {
         return status // Bypass this fetch.
