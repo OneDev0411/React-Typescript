@@ -61,7 +61,9 @@ export default function InboxEmailThreadList({
       fetchItem={async id => {
         return getEmailThread(id as UUID)
       }}
-      renderItem={item => <InboxEmailThreadListItem emailThread={item} />}
+      renderItem={(item, selected) => (
+        <InboxEmailThreadListItem emailThread={item} selected={selected} />
+      )}
       selectedItemId={selectedEmailThreadId}
       onSelectItem={({ id }) => onSelectEmailThread(id)}
       emptyListMessage={
