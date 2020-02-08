@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/styles'
 import { Theme, Grid, Box, Button } from '@material-ui/core'
 import { addNotification } from 'reapop'
 
-import Loading from 'partials/Loading'
+import LoadingContainer from 'components/LoadingContainer'
 
 import NoContentMessage from '../NoContentMessage'
 
@@ -19,9 +19,6 @@ const useStyles = makeStyles(
       width: '100%',
       minHeight: '100%',
       borderRight: '1px solid #d4d4d4'
-    },
-    status: {
-      padding: theme.spacing(2)
     },
     itemWrapper: {
       width: '100%',
@@ -152,11 +149,13 @@ export default function InfiniteScrollList<T extends ItemBase>({
                 {renderItem(item, item.id === selectedItemId, index, items)}
               </Grid>
             ))}
-            <Grid item xs classes={{ root: classes.status }}>
+            <Grid item xs>
               {status === 'fetching' || status === 'fetched' ? (
-                <Loading />
+                <Box padding={10}>
+                  <LoadingContainer style={{}} />
+                </Box>
               ) : status === 'error' ? (
-                <Box paddingTop={2}>
+                <Box padding={4}>
                   <Button
                     variant="text"
                     color="primary"
