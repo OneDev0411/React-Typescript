@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { WithRouterProps } from 'react-router'
+import { WithRouterProps, browserHistory } from 'react-router'
 import { Grid, Theme, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
@@ -12,7 +12,6 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import Loading from 'partials/Loading'
 
-import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
 import InboxHeader, { InboxFilterTabCode } from './components/InboxHeader'
 import InboxConnectAccount from './components/InboxConnectAccount'
 import InboxEmailThreadList from './components/InboxEmailThreadList'
@@ -42,6 +41,14 @@ interface Props {}
 
 export default function Inbox({ params }: Props & WithRouterProps) {
   const selectedEmailThreadId: UUID | undefined = params.emailThreadId
+
+  function setSelectedEmailThreadId(selectedEmailThreadId: UUID | undefined) {
+    const basePath = '/dashboard/inbox'
+
+    browserHistory.push(
+      selectedEmailThreadId ? `${basePath}/${selectedEmailThreadId}` : basePath
+    )
+  }
 
   const accounts = useSelector<IAppState, IOAuthAccount[]>(
     ({ contacts: { oAuthAccounts } }) =>
@@ -113,6 +120,7 @@ export default function Inbox({ params }: Props & WithRouterProps) {
               <InboxEmailThread
                 key={selectedEmailThreadId}
                 emailThreadId={selectedEmailThreadId}
+                onClose={() => setSelectedEmailThreadId(undefined)}
               />
             </Grid>
           </Grid>

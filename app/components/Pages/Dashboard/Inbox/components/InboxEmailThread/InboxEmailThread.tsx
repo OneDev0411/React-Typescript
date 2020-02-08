@@ -12,14 +12,14 @@ import { EmailThreadEmails } from 'components/EmailThread'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 import NoContentMessage from '../NoContentMessage'
-import setSelectedEmailThreadId from '../../helpers/set-selected-email-thread-id'
 import markEmailThreadAsRead from '../../helpers/mark-email-thread-as-read'
 
 interface Props {
   emailThreadId?: UUID
+  onClose: () => void
 }
 
-export default function InboxEmailThread({ emailThreadId }: Props) {
+export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   const [status, setStatus] = useState<
     'empty' | 'fetching' | 'error' | 'fetched'
   >('empty')
@@ -74,18 +74,18 @@ export default function InboxEmailThread({ emailThreadId }: Props) {
   useEffect(() => {
     const socket: SocketIOClient.Socket = (window as any).socket
 
-    async function handleDeleteEmailThreads(emailThreadIds: UUID[]) {
-      if (emailThreadId && emailThreadIds.includes(emailThreadId)) {
-        setSelectedEmailThreadId(undefined)
+    async function handleDeleteEmailThreads(deletedEmailThreadIds: UUID[]) {
+      if (emailThreadId && deletedEmailThreadIds.includes(emailThreadId)) {
+        onClose()
       }
 
-      if (emailThread && emailThreadIds.includes(emailThread.id)) {
+      if (emailThread && deletedEmailThreadIds.includes(emailThread.id)) {
         setEmailThread(null)
         setStatus('empty')
       }
     }
-    async function handleUpdateEmailThreads(emailThreadIds: UUID[]) {
-      if (emailThreadId && emailThreadIds.includes(emailThreadId)) {
+    async function handleUpdateEmailThreads(updatedEmailThreadIds: UUID[]) {
+      if (emailThreadId && updatedEmailThreadIds.includes(emailThreadId)) {
         fetchEmailThread()
       }
     }
@@ -97,7 +97,7 @@ export default function InboxEmailThread({ emailThreadId }: Props) {
       socket.off('email_thread:delete', handleDeleteEmailThreads)
       socket.off('email_thread:update', handleUpdateEmailThreads)
     }
-  }, [emailThreadId, emailThread, fetchEmailThread])
+  }, [emailThreadId, emailThread, fetchEmailThread, onClose])
 
   const emails = useMemo(
     () =>
@@ -154,9 +154,9 @@ export default function InboxEmailThread({ emailThreadId }: Props) {
         <IconButton
           size="small"
           onClick={() => {
-            setSelectedEmailThreadId(undefined)
             setEmailThread(null)
             setStatus('empty')
+            onClose()
           }}
         >
           <CloseIcon />
