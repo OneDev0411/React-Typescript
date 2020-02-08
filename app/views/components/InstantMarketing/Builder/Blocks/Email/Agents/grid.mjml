@@ -13,7 +13,7 @@
     </mj-text>
 
     <mj-text rechat-editable="true" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-weight="400" font-size="13px" align="center" color="#262626" padding="4px 12px">
-      {{user.phone_number}}
+      {{user.phone_number | phone}}
     </mj-text>
   </mj-column>
   {% endfor %}

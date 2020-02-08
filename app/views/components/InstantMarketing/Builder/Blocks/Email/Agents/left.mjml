@@ -16,7 +16,7 @@
         {{user.email}}
       </mj-text>
       <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="normal">
-        {{user.phone_number}}
+        {{user.phone_number | phone}}
       </mj-text>
     </mj-column>
     {% endfor %}
