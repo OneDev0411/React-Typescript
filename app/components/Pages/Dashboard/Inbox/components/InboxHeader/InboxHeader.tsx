@@ -7,24 +7,27 @@ import PageHeader from 'components/PageHeader'
 import { InboxFilterTabCode } from './types'
 import { filterTabs } from './constants'
 
-const useStyles = makeStyles((theme: Theme) => ({
-  filterTabs: {
-    borderBottom: '1px solid #d4d4d4'
-  },
-  filterTabsIndicator: {
-    maxWidth: 28,
-    marginLeft: 32
-  },
-  filterTab: {
-    minWidth: 90,
-    paddingLeft: 0,
-    paddingRight: 0
-  },
-  filterTabSelected: {
-    fontWeight: 'bold',
-    color: theme.palette.primary.main
-  }
-}))
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    filterTabs: {
+      borderBottom: '1px solid #d4d4d4'
+    },
+    filterTabsIndicator: {
+      maxWidth: 28,
+      marginLeft: 32
+    },
+    filterTab: {
+      minWidth: 90,
+      paddingLeft: 0,
+      paddingRight: 0
+    },
+    filterTabSelected: {
+      fontWeight: 'bold',
+      color: theme.palette.primary.main
+    }
+  }),
+  { name: 'InboxHeader' }
+)
 
 interface Props {
   filterTabsDisabled?: boolean

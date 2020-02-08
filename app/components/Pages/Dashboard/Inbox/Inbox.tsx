@@ -17,25 +17,28 @@ import InboxConnectAccount from './components/InboxConnectAccount'
 import InboxEmailThreadList from './components/InboxEmailThreadList'
 import InboxEmailThread from './components/InboxEmailThread'
 
-const useStyles = makeStyles((theme: Theme) => ({
-  body: {
-    height: 'calc(100% - 109px - 49px)'
-  },
-  fullHeight: {
-    height: '100%'
-  },
-  list: {
-    width: theme.spacing(46) + 1 /* right border */ + 8 /* scroll bar */
-  },
-  conversation: {
-    overflowX: 'hidden',
-    overflowY: 'auto',
-    borderLeft: '1px solid #d4d4d4'
-  },
-  conversationNoBorder: {
-    borderLeft: 0
-  }
-}))
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    body: {
+      height: 'calc(100% - 109px - 49px)'
+    },
+    fullHeight: {
+      height: '100%'
+    },
+    list: {
+      width: theme.spacing(46) + 1 /* right border */ + 8 /* scroll bar */
+    },
+    conversation: {
+      overflowX: 'hidden',
+      overflowY: 'auto',
+      borderLeft: '1px solid #d4d4d4'
+    },
+    conversationNoBorder: {
+      borderLeft: 0
+    }
+  }),
+  { name: 'Inbox' }
+)
 
 interface Props {}
 

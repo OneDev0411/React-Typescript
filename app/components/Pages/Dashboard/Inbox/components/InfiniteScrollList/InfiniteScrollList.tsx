@@ -8,26 +8,29 @@ import Loading from 'partials/Loading'
 
 import NoContentMessage from '../NoContentMessage'
 
-const useStyles = makeStyles((theme: Theme) => ({
-  listWrapper: {
-    height: '100%',
-    overflowX: 'hidden',
-    overflowY: 'scroll'
-  },
-  list: {
-    width: '100%',
-    minHeight: '100%',
-    borderRight: '1px solid #d4d4d4'
-  },
-  status: {
-    padding: theme.spacing(2)
-  },
-  itemWrapper: {
-    width: '100%',
-    cursor: 'pointer',
-    borderBottom: '1px solid #d4d4d4'
-  }
-}))
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    listWrapper: {
+      height: '100%',
+      overflowX: 'hidden',
+      overflowY: 'scroll'
+    },
+    list: {
+      width: '100%',
+      minHeight: '100%',
+      borderRight: '1px solid #d4d4d4'
+    },
+    status: {
+      padding: theme.spacing(2)
+    },
+    itemWrapper: {
+      width: '100%',
+      cursor: 'pointer',
+      borderBottom: '1px solid #d4d4d4'
+    }
+  }),
+  { name: 'InfiniteScrollList' }
+)
 
 type Id = string | number
 interface ItemBase {

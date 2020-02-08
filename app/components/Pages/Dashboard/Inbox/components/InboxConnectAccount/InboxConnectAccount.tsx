@@ -10,21 +10,24 @@ import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connec
 import importEmailsSvg from './images/import-emails.svg'
 import { GoogleIcon, OutlookIcon } from './icons'
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%,-50%)',
-    textAlign: 'center',
-    width: 477
-  },
-  button: {
-    height: 'unset !important',
-    padding: '12px 16px !important',
-    lineHeight: '16px !important'
-  }
-}))
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    root: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%,-50%)',
+      textAlign: 'center',
+      width: 477
+    },
+    button: {
+      height: 'unset !important',
+      padding: '12px 16px !important',
+      lineHeight: '16px !important'
+    }
+  }),
+  { name: 'InboxConnectAccount' }
+)
 
 export default function InboxConnectAccount() {
   const google = useConnectOAuthAccount(OAuthProvider.Google)
