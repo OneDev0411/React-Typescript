@@ -15,7 +15,7 @@ const emailThreadFetchCount = 30
 interface Props {
   category: 'all' | 'unread' | 'has attachments'
   selectedEmailThreadId?: UUID
-  onSelectEmailThread: (emailThreadId: UUID) => void
+  onSelectEmailThread: (emailThreadId: UUID | undefined) => void
 }
 
 export default function InboxEmailThreadList({
@@ -64,24 +64,42 @@ export default function InboxEmailThreadList({
     })
   }
 
-  // useEffect(() => {
-  //   const socket: SocketIOClient.Socket = (window as any).socket
+  useEffect(() => {
+    const socket: SocketIOClient.Socket = (window as any).socket
 
-  //   async function handleUpdateEmailThreads(updatedEmailThreadIds: UUID[]) {
-  //     infiniteScrollListInnerRef.current!.updateItems(updatedEmailThreadIds)
-  //   }
-  //   async function handleDeleteEmailThreads(deletedEmailThreadIds: UUID[]) {
-  //     infiniteScrollListInnerRef.current!.deleteItems(deletedEmailThreadIds)
-  //   }
+    async function handleUpdateEmailThreads(updatedEmailThreadIds: UUID[]) {
+      try {
+        const updatedEmailThreads = await getEmailThreads({
+          start: 0,
+          limit: updatedEmailThreadIds.length,
+          ids: updatedEmailThreadIds
+        })
 
-  //   socket.on('email_thread:update', handleUpdateEmailThreads)
-  //   socket.on('email_thread:delete', handleDeleteEmailThreads)
+        joinEmailThreads(updatedEmailThreads, 'update')
+      } catch (reason) {
+        console.error(reason)
+        dispatch(
+          addNotification({
+            status: 'error',
+            message: 'Something went wrong while updating email list.'
+          })
+        )
+      }
+    }
+    function handleDeleteEmailThreads(deletedEmailThreadIds: UUID[]) {
+      setEmailThreads(emailThreads =>
+        emailThreads.filter(({ id }) => !deletedEmailThreadIds.includes(id))
+      )
+    }
 
-  //   return () => {
-  //     socket.off('email_thread:update', handleUpdateEmailThreads)
-  //     socket.off('email_thread:delete', handleDeleteEmailThreads)
-  //   }
-  // }, [])
+    socket.on('email_thread:update', handleUpdateEmailThreads)
+    socket.on('email_thread:delete', handleDeleteEmailThreads)
+
+    return () => {
+      socket.off('email_thread:update', handleUpdateEmailThreads)
+      socket.off('email_thread:delete', handleDeleteEmailThreads)
+    }
+  }, [dispatch, joinEmailThreads])
 
   return (
     <InfiniteScrollList

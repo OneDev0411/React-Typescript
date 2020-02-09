@@ -76,12 +76,12 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   useEffect(() => {
     const socket: SocketIOClient.Socket = (window as any).socket
 
-    async function handleUpdateEmailThreads(updatedEmailThreadIds: UUID[]) {
+    function handleUpdateEmailThreads(updatedEmailThreadIds: UUID[]) {
       if (emailThreadId && updatedEmailThreadIds.includes(emailThreadId)) {
         fetchEmailThread()
       }
     }
-    async function handleDeleteEmailThreads(deletedEmailThreadIds: UUID[]) {
+    function handleDeleteEmailThreads(deletedEmailThreadIds: UUID[]) {
       if (emailThreadId && deletedEmailThreadIds.includes(emailThreadId)) {
         onClose()
       }
