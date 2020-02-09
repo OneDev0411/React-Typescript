@@ -104,20 +104,28 @@ class Builder extends React.Component {
         {
           type: 'select',
           label: 'Icon',
-          name: 'name',
+          name: 'src',
           options: [
-            { value: 'linkedin', name: 'Linkedin' },
-            { value: 'facebook', name: 'Facebook' },
-            { value: 'instagram', name: 'Instagram' },
-            { value: 'twitter', name: 'Twitter' },
-            { value: 'web', name: 'Web' },
-            { value: 'youtube', name: 'Youtube' },
-            { value: 'pinterest', name: 'Pinterest' },
-            { value: 'snapchat', name: 'Snapchat' },
-            { value: 'vimeo', name: 'Vimeo' },
-            { value: 'tumblr', name: 'Tumblr' },
-            { value: 'soundcloud', name: 'SoundCloud' },
-            { value: 'medium', name: 'Medium' }
+            {
+              value: 'https://i.ibb.co/qr5rZym/facebook.png',
+              name: 'Facebook'
+            },
+            {
+              value: 'https://i.ibb.co/HC5KTG1/instagram.png',
+              name: 'Instagram'
+            },
+            {
+              value: 'https://i.ibb.co/kxjXJ5B/linkedin.png',
+              name: 'Linkedin'
+            },
+            {
+              value: 'https://i.ibb.co/7WkrhZV/twitter.png',
+              name: 'Twitter'
+            },
+            {
+              value: 'https://i.ibb.co/8jd2Jyc/youtube.png',
+              name: 'Youtube'
+            }
           ]
         },
         {
