@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { addNotification } from 'reapop'
 
 import {
   getEmailThreads,
   IGetEmailThreadsFilters
 } from 'models/email/get-email-threads'
-import { getEmailThread } from 'models/email/get-email-thread'
 
+import InfiniteScrollList from '../InfiniteScrollList'
 import InboxEmailThreadListItem from './components/InboxEmailThreadListItem'
-import InfiniteScrollList from '../InfiniteScrollList/InfiniteScrollList'
+
+const emailThreadFetchCount = 30
 
 interface Props {
   category: 'all' | 'unread' | 'has attachments'
@@ -20,32 +23,73 @@ export default function InboxEmailThreadList({
   selectedEmailThreadId,
   onSelectEmailThread
 }: Props) {
+  const [emailThreads, setEmailThreads] = useState<
+    IEmailThread<'messages' | 'contacts'>[]
+  >([])
+
+  const selectedEmailThread = useMemo(
+    () => emailThreads.find(({ id }) => id === selectedEmailThreadId),
+    [emailThreads, selectedEmailThreadId]
+  )
+
   useEffect(() => {
-    const socket: SocketIOClient.Socket = (window as any).socket
+    setEmailThreads(emailThreads =>
+      emailThreads.length === 0 ? emailThreads : []
+    )
+  }, [category])
 
-    async function handleDeleteEmailThreads(deletedEmailThreadIds: UUID[]) {
-      // ...
-    }
-    async function handleUpdateEmailThreads(updatedEmailThreadIds: UUID[]) {
-      // ...
-    }
+  const dispatch = useDispatch()
 
-    socket.on('email_thread:delete', handleDeleteEmailThreads)
-    socket.on('email_thread:update', handleUpdateEmailThreads)
+  function joinEmailThreads(
+    updatedEmailThreads: typeof emailThreads,
+    mode: 'expand' | 'update'
+  ) {
+    setEmailThreads(emailThreads => {
+      const lastEmailThread = emailThreads[emailThreads.length - 1]
+      const filteredUpdatedEmailThreads = updatedEmailThreads.filter(
+        t =>
+          (mode !== 'update' ||
+            !lastEmailThread ||
+            lastEmailThread.last_message_date <= t.last_message_date) &&
+          (category === 'all' ||
+            (category === 'unread' && !t.is_read) ||
+            (category === 'has attachments' && t.has_attachments))
+      )
+      const newEmailThreads = emailThreads
+        .filter(({ id }) => !filteredUpdatedEmailThreads.some(t => t.id === id))
+        .concat(filteredUpdatedEmailThreads)
+        .sort((a, b) => b.last_message_date - a.last_message_date)
 
-    return () => {
-      socket.off('email_thread:delete', handleDeleteEmailThreads)
-      socket.off('email_thread:update', handleUpdateEmailThreads)
-    }
-  }, [])
+      return newEmailThreads
+    })
+  }
+
+  // useEffect(() => {
+  //   const socket: SocketIOClient.Socket = (window as any).socket
+
+  //   async function handleUpdateEmailThreads(updatedEmailThreadIds: UUID[]) {
+  //     infiniteScrollListInnerRef.current!.updateItems(updatedEmailThreadIds)
+  //   }
+  //   async function handleDeleteEmailThreads(deletedEmailThreadIds: UUID[]) {
+  //     infiniteScrollListInnerRef.current!.deleteItems(deletedEmailThreadIds)
+  //   }
+
+  //   socket.on('email_thread:update', handleUpdateEmailThreads)
+  //   socket.on('email_thread:delete', handleDeleteEmailThreads)
+
+  //   return () => {
+  //     socket.off('email_thread:update', handleUpdateEmailThreads)
+  //     socket.off('email_thread:delete', handleDeleteEmailThreads)
+  //   }
+  // }, [])
 
   return (
-    <InfiniteScrollList<IEmailThread<'messages' | 'contacts'>>
-      key={category}
-      fetchMoreItems={async (from, count) => {
+    <InfiniteScrollList
+      items={emailThreads}
+      onNeedMoreItems={async () => {
         const filters: IGetEmailThreadsFilters = {
-          start: from,
-          limit: count
+          start: emailThreads.length,
+          limit: emailThreadFetchCount
         }
 
         if (category === 'unread') {
@@ -56,16 +100,28 @@ export default function InboxEmailThreadList({
           filters.hasAttachments = true
         }
 
-        return getEmailThreads(filters)
+        try {
+          const moreEmailThreads = await getEmailThreads(filters)
+
+          joinEmailThreads(moreEmailThreads, 'expand')
+
+          return moreEmailThreads.length < emailThreadFetchCount
+        } catch (reason) {
+          console.error(reason)
+          dispatch(
+            addNotification({
+              status: 'error',
+              message:
+                'Something went wrong while fetching more emails. Please try again.'
+            })
+          )
+          throw reason
+        }
       }}
-      fetchItem={async id => {
-        return getEmailThread(id as UUID)
-      }}
-      renderItem={(item, selected) => (
-        <InboxEmailThreadListItem emailThread={item} selected={selected} />
-      )}
-      selectedItemId={selectedEmailThreadId}
-      onSelectItem={({ id }) => onSelectEmailThread(id)}
+      selectedItem={selectedEmailThread}
+      onSelectItem={emailThread =>
+        emailThread && onSelectEmailThread(emailThread.id)
+      }
       emptyListMessage={
         category === 'all'
           ? 'No Emails'
@@ -75,7 +131,13 @@ export default function InboxEmailThreadList({
           ? 'No Emails With Attachments'
           : 'No Emails'
       }
-      fetchErrorMessage="Something went wrong while fetching more emails. Please try again."
+      itemKey={(emailThread, index) => emailThread.id}
+      renderItem={(emailThread, selected) => (
+        <InboxEmailThreadListItem
+          emailThread={emailThread}
+          selected={selected}
+        />
+      )}
     />
   )
 }

@@ -96,6 +96,7 @@ export default function Inbox({ params }: Props & WithRouterProps) {
               classes={{ root: classNames(classes.list, classes.fullHeight) }}
             >
               <InboxEmailThreadList
+                key={filterTabCode}
                 category={
                   filterTabCode === 'all_emails'
                     ? 'all'

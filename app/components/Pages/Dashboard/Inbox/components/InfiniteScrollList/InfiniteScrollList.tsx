@@ -1,8 +1,6 @@
 import React, { ReactNode, useState, useRef } from 'react'
-import { useDispatch } from 'react-redux'
 import { makeStyles } from '@material-ui/styles'
 import { Theme, Grid, Box, Button } from '@material-ui/core'
-import { addNotification } from 'reapop'
 
 import LoadingContainer from 'components/LoadingContainer'
 
@@ -29,57 +27,42 @@ const useStyles = makeStyles(
   { name: 'InfiniteScrollList' }
 )
 
-type Id = string | number
-interface ItemBase {
-  id: Id
-}
-
-interface Props<T extends ItemBase> {
-  itemCountPerFetch?: number
-  fetchMoreItems: (from: number, count: number) => Promise<ReadonlyArray<T>>
-  fetchItem: (id: Id) => Promise<T>
-  renderItem: (
-    item: T,
-    selected: boolean,
-    index: number,
-    items: ReadonlyArray<T>
-  ) => ReactNode
-  selectedItemId?: Id
-  onSelectItem?: (item: T) => void
+interface Props<Item> {
+  items: ReadonlyArray<Item>
+  onNeedMoreItems: () => Promise<boolean>
+  selectedItem?: Item
+  onSelectItem?: (item: Item | undefined) => void
   emptyListMessage?: string
-  fetchErrorMessage?: string
+  itemKey: (item: Item, index: number) => string | number
+  renderItem: (item: Item, selected: boolean) => ReactNode
 }
 
-export default function InfiniteScrollList<T extends ItemBase>({
-  itemCountPerFetch = 50,
-  fetchMoreItems,
-  fetchItem,
-  renderItem,
-  selectedItemId,
+export default function InfiniteScrollList<Item>({
+  items,
+  onNeedMoreItems,
+  selectedItem,
   onSelectItem,
   emptyListMessage = 'No Items',
-  fetchErrorMessage = 'Something went wrong while fetching more items. Please try again.'
-}: Props<T>) {
+  itemKey,
+  renderItem
+}: Props<Item>) {
   const [status, setStatus] = useState<
     'fetched' | 'fetching' | 'error' | 'finished'
   >('fetched')
-  const [items, setItems] = useState<ReadonlyArray<T>>([])
-
-  const dispatch = useDispatch()
 
   const listWrapperRef = useRef<HTMLDivElement>(null)
 
   function checkListReachedEnd(): boolean {
     const listWrapperElement = listWrapperRef.current
 
-    if (!listWrapperElement) {
-      return false
+    if (!listWrapperElement || items.length === 0) {
+      return true
     }
 
     return (
       listWrapperElement.scrollTop + listWrapperElement.offsetHeight >=
       listWrapperElement.scrollHeight -
-        Math.max(listWrapperElement.offsetHeight / 2, 200)
+        Math.max(listWrapperElement.offsetHeight / 2, 1000)
     )
   }
   function fetchMoreItemsManaged(forced?: boolean): void {
@@ -88,35 +71,18 @@ export default function InfiniteScrollList<T extends ItemBase>({
         return status // Bypass this fetch.
       }
 
-      fetchMoreItems(items.length, itemCountPerFetch).then(
-        newItems => {
-          setItems(items.concat(newItems))
-          setStatus(
-            newItems.length < itemCountPerFetch ? 'finished' : 'fetched'
-          )
-          fetchMoreItemsManagedIfRequired()
-        },
-        reason => {
-          console.error(reason)
-          dispatch(
-            addNotification({
-              status: 'error',
-              message: fetchErrorMessage
-            })
-          )
-          setStatus('error')
-        }
+      onNeedMoreItems().then(
+        finished => setStatus(finished ? 'finished' : 'fetched'),
+        () => setStatus('error')
       )
 
       return 'fetching'
     })
   }
   function fetchMoreItemsManagedIfRequired(): void {
-    setTimeout(() => {
-      if (checkListReachedEnd() && status === 'fetched') {
-        fetchMoreItemsManaged()
-      }
-    })
+    if (checkListReachedEnd() && status === 'fetched') {
+      fetchMoreItemsManaged()
+    }
   }
 
   fetchMoreItemsManagedIfRequired()
@@ -139,14 +105,14 @@ export default function InfiniteScrollList<T extends ItemBase>({
           <NoContentMessage>{emptyListMessage}</NoContentMessage>
         ) : (
           <>
-            {items.map((item, index, items) => (
+            {items.map((item, index) => (
               <Grid
-                key={item.id}
+                key={itemKey(item, index)}
                 item
                 onClick={() => onSelectItem && onSelectItem(item)}
                 classes={{ root: classes.itemWrapper }}
               >
-                {renderItem(item, item.id === selectedItemId, index, items)}
+                {renderItem(item, item === selectedItem)}
               </Grid>
             ))}
             <Grid item xs>
