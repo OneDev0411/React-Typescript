@@ -79,6 +79,15 @@ function AppSideNav(props) {
         <SidenavList data-test="side-nav-list">
           <Acl.Crm>
             <SideNavLinkItem
+              tooltip="Inbox"
+              to="/dashboard/inbox"
+              Icon={IconEmailOutline}
+              ActiveIcon={IconEmailOutline}
+            />
+          </Acl.Crm>
+
+          <Acl.Crm>
+            <SideNavLinkItem
               tooltip="Calendar"
               to="/dashboard/calendar"
               Icon={CalendarIcon}
@@ -123,15 +132,6 @@ function AppSideNav(props) {
               ActiveIcon={MarketingIconActive}
             />
           </Acl.Marketing>
-
-          <Acl.Crm>
-            <SideNavLinkItem
-              tooltip="Emails"
-              to="/dashboard/inbox"
-              Icon={IconEmailOutline}
-              ActiveIcon={IconEmailOutline}
-            />
-          </Acl.Crm>
 
           <Acl.Marketing>
             <SideNavLinkItem
