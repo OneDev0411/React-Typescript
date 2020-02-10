@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Paper, Grid, Typography, Box } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { IAppState } from 'reducers'
 
 import { useInboxEmailThreadListItemStyles } from './styles'
-import getContactInfoFromEmailThread from './helpers/get-contact-info-from-email-thread'
+import getContactInfoFromEmailThread from '../../../../helpers/get-contact-info-from-email-thread'
 
 interface Props {
   emailThread: IEmailThread<'messages' | 'contacts'>
@@ -21,10 +21,11 @@ export default function InboxEmailThreadListItem({
 }: Props) {
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
-  const contactInfo = getContactInfoFromEmailThread(user, emailThread)
-  const contactInfoText = contactInfo
-    .map(i => (i.me ? 'Me' : i.name || i.address))
-    .join(', ')
+  const contactInfoText = useMemo(() => {
+    const contactInfo = getContactInfoFromEmailThread(user, emailThread)
+
+    return contactInfo.map(i => (i.me ? 'Me' : i.name || i.address)).join(', ')
+  }, [user, emailThread])
 
   const messageDate = new Date(emailThread.last_message_date * 1000)
   const messageDateText = fecha.format(messageDate, 'MMMM D, YYYY - h:mm A')

@@ -1,7 +1,9 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Box, IconButton, Typography } from '@material-ui/core'
 import { addNotification } from 'reapop'
+
+import { IAppState } from 'reducers'
 
 import { getEmailThread } from 'models/email/get-email-thread'
 
@@ -13,6 +15,7 @@ import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 import NoContentMessage from '../NoContentMessage'
 import markEmailThreadAsRead from '../../helpers/mark-email-thread-as-read'
+import getContactInfoFromEmailThread from '../../helpers/get-contact-info-from-email-thread'
 
 interface Props {
   emailThreadId?: UUID
@@ -28,6 +31,12 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   > | null>(null)
 
   const dispatch = useDispatch()
+  const user = useSelector<IAppState, IUser>(({ user }) => user)
+
+  const contactInfo = useMemo(
+    () => emailThread && getContactInfoFromEmailThread(user, emailThread),
+    [user, emailThread]
+  )
 
   const fetchEmailThread = useCallback(async () => {
     if (emailThreadId) {
@@ -48,7 +57,8 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
               addNotification({
                 status: 'error',
                 message:
-                  'Something went wrong while marking the email as read. Please reload the page.'
+                  'Something went wrong while marking the email as read.' +
+                  ' Please reload the page.'
               })
             )
           }
@@ -59,7 +69,8 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
           addNotification({
             status: 'error',
             message:
-              'Something went wrong while fetching the email. Please, reload the page.'
+              'Something went wrong while fetching the email.' +
+              ' Please reload the page.'
           })
         )
         setStatus('error')
@@ -127,6 +138,8 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   if (status === 'empty' || !emailThread) {
     return <NoContentMessage>No Conversation Selected</NoContentMessage>
   }
+
+  console.log(contactInfo)
 
   return (
     <Box padding={2.5} paddingTop={2.5}>
