@@ -13,9 +13,10 @@ import { normalizeThreadMessageToThreadEmail } from 'components/EmailThread/help
 import { EmailThreadEmails } from 'components/EmailThread'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
-import NoContentMessage from '../NoContentMessage'
 import markEmailThreadAsRead from '../../helpers/mark-email-thread-as-read'
 import getContactInfoFromEmailThread from '../../helpers/get-contact-info-from-email-thread'
+import useEmailThreadEvents from '../../helpers/use-email-thread-events'
+import NoContentMessage from '../NoContentMessage'
 
 interface Props {
   emailThreadId?: UUID
@@ -32,6 +33,8 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
 
   const dispatch = useDispatch()
   const user = useSelector<IAppState, IUser>(({ user }) => user)
+
+  console.log(user)
 
   const contactInfo = useMemo(
     () => emailThread && getContactInfoFromEmailThread(user, emailThread),
@@ -84,15 +87,16 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
     fetchEmailThread()
   }, [fetchEmailThread])
 
-  useEffect(() => {
-    const socket: SocketIOClient.Socket = (window as any).socket
-
-    function handleUpdateEmailThreads(updatedEmailThreadIds: UUID[]) {
+  const handleUpdateEmailThreads = useCallback(
+    (updatedEmailThreadIds: UUID[]) => {
       if (emailThreadId && updatedEmailThreadIds.includes(emailThreadId)) {
         fetchEmailThread()
       }
-    }
-    function handleDeleteEmailThreads(deletedEmailThreadIds: UUID[]) {
+    },
+    [emailThreadId, fetchEmailThread]
+  )
+  const handleDeleteEmailThreads = useCallback(
+    (deletedEmailThreadIds: UUID[]) => {
       if (emailThreadId && deletedEmailThreadIds.includes(emailThreadId)) {
         onClose()
       }
@@ -101,16 +105,11 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
         setEmailThread(null)
         setStatus('empty')
       }
-    }
+    },
+    [emailThread, emailThreadId, onClose]
+  )
 
-    socket.on('email_thread:update', handleUpdateEmailThreads)
-    socket.on('email_thread:delete', handleDeleteEmailThreads)
-
-    return () => {
-      socket.off('email_thread:update', handleUpdateEmailThreads)
-      socket.off('email_thread:delete', handleDeleteEmailThreads)
-    }
-  }, [emailThreadId, emailThread, fetchEmailThread, onClose])
+  useEmailThreadEvents(handleUpdateEmailThreads, handleDeleteEmailThreads)
 
   const emails = useMemo(
     () =>
