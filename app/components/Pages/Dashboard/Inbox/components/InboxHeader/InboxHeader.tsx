@@ -46,7 +46,7 @@ export default function InboxHeader({
     <>
       <PageHeader>
         <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Emails</PageHeader.Heading>
+          <PageHeader.Heading>Inbox</PageHeader.Heading>
         </PageHeader.Title>
         <PageHeader.Menu>
           <Grid container spacing={3}>
