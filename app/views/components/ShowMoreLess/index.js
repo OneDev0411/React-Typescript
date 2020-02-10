@@ -5,7 +5,7 @@ import { ShowMoreLessText, ArrowDown, ArrowUp } from './styled'
 
 export class ShowMoreLess extends Component {
   static defaultProps = {
-    defaultIsOpen: false,
+    defaultOpen: false,
     row: false,
     column: true,
     count: 7,
@@ -15,7 +15,7 @@ export class ShowMoreLess extends Component {
   }
 
   state = {
-    isOpen: this.props.defaultIsOpen
+    isOpen: this.props.defaultOpen
   }
 
   toggleState = () => {
