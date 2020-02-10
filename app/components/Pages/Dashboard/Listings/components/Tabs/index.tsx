@@ -6,6 +6,7 @@ import { Theme } from '@material-ui/core/styles'
 import { PageTabs, TabLink } from 'components/PageTabs'
 
 import ViewSwitcher from '../GridControllers/ViewSwitcher'
+import SortDrowndown from '../GridControllers/SortDropdown'
 
 interface Props {
   onChangeView: () => void
@@ -62,6 +63,7 @@ export const Tabs = ({ onChangeView, activeView, isWidget }: Props) => {
         padding={theme.spacing(0, 1)}
         justifyContent="flex-end"
       >
+        <SortDrowndown />
         {!isWidget && (
           <ViewSwitcher onChangeView={onChangeView} activeView={activeView} />
         )}
