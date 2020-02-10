@@ -24,7 +24,7 @@ interface RenderToggleButtonProps {
   'aria-haspopup': 'true'
 }
 
-interface Props {
+export interface Props {
   /**
    * for optional control over isOpen state. If passed, you need to pass
    * onIsOpenChange too.
