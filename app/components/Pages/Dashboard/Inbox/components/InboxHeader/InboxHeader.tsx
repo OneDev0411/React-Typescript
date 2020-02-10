@@ -10,7 +10,7 @@ import { filterTabs } from './constants'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     filterTabs: {
-      borderBottom: '1px solid #d4d4d4'
+      borderBottom: `1px solid ${theme.palette.grey.A100}`
     },
     filterTabsIndicator: {
       maxWidth: 28,

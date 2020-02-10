@@ -16,12 +16,12 @@ const useStyles = makeStyles(
     list: {
       width: '100%',
       minHeight: '100%',
-      borderRight: '1px solid #d4d4d4'
+      borderRight: `1px solid ${theme.palette.grey.A100}`
     },
     itemWrapper: {
       width: '100%',
       cursor: 'pointer',
-      borderBottom: '1px solid #d4d4d4'
+      borderBottom: `1px solid ${theme.palette.grey.A100}`
     }
   }),
   { name: 'InfiniteScrollList' }

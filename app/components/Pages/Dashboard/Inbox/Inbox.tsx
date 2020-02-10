@@ -20,7 +20,7 @@ import InboxEmailThread from './components/InboxEmailThread'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     body: {
-      height: 'calc(100% - 109px - 49px)'
+      height: 'calc(100% - 109px - 49px)' /* page header, filter tabs */
     },
     fullHeight: {
       height: '100%'
@@ -31,7 +31,7 @@ const useStyles = makeStyles(
     conversation: {
       overflowX: 'hidden',
       overflowY: 'auto',
-      borderLeft: '1px solid #d4d4d4'
+      borderLeft: `1px solid ${theme.palette.grey.A100}`
     },
     conversationNoBorder: {
       borderLeft: 0
