@@ -20,7 +20,7 @@ import InboxEmailThread from './components/InboxEmailThread'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     body: {
-      height: 'calc(100% - 109px - 49px)' /* page header, filter tabs */
+      height: 'calc(100% - 110px - 49px)' /* page header, filter tabs */
     },
     fullHeight: {
       height: '100%'

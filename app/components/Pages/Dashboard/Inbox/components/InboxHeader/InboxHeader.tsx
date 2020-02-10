@@ -1,8 +1,9 @@
 import React from 'react'
-import { Theme, Grid, Input, Button, Tabs, Tab } from '@material-ui/core'
+import { Theme, Tabs, Tab } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
 import PageHeader from 'components/PageHeader'
+import SendEmailButton from 'components/SendEmailButton'
 
 import { InboxFilterTabCode } from './types'
 import { filterTabs } from './constants'
@@ -44,21 +45,12 @@ export default function InboxHeader({
 
   return (
     <>
-      <PageHeader>
+      <PageHeader isFlat>
         <PageHeader.Title showBackButton={false}>
           <PageHeader.Heading>Inbox</PageHeader.Heading>
         </PageHeader.Title>
         <PageHeader.Menu>
-          <Grid container spacing={3}>
-            <Grid item>
-              <Input margin="dense" placeholder="Search Emails" />
-            </Grid>
-            <Grid item>
-              <Button color="primary" variant="contained">
-                Actions
-              </Button>
-            </Grid>
-          </Grid>
+          <SendEmailButton appearance="primary" title="Send New Email" />
         </PageHeader.Menu>
       </PageHeader>
       <Tabs
@@ -67,9 +59,9 @@ export default function InboxHeader({
           root: classes.filterTabs,
           indicator: classes.filterTabsIndicator
         }}
-        disabled={filterTabsDisabled}
         value={filterTabCode}
         onChange={(e, value) => onFilterTabChange(value)}
+        disabled={filterTabsDisabled}
       >
         {filterTabs
           .filter(({ visible }) => visible)
@@ -78,6 +70,7 @@ export default function InboxHeader({
               key={code}
               value={code}
               label={title}
+              disabled={filterTabsDisabled}
               classes={{
                 root: classes.filterTab,
                 selected: classes.filterTabSelected
