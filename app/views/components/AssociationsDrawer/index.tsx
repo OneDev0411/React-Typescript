@@ -8,7 +8,7 @@ interface Props {
   isOpen: boolean
   onClose: () => void
   onDelete?: () => void
-  isRemovable: boolean
+  isRemovable?: boolean
   title?: string
 }
 
