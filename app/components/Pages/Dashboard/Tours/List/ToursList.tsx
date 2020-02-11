@@ -154,7 +154,9 @@ function ToursList(props: { user: IUser }) {
 
       <PageLayout>
         <PageLayout.Header title="Toursheets">
-          <CreateNewTour onOpenDrawer={onOpenTourDrawer} />
+          <Box textAlign="right">
+            <CreateNewTour onOpenDrawer={onOpenTourDrawer} />
+          </Box>
         </PageLayout.Header>
 
         <PageLayout.Main>
