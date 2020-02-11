@@ -106,8 +106,6 @@ export const styles = (theme: Theme) =>
     },
     searchBox__icon: {
       marginLeft: theme.spacing(2),
-      width: `${theme.spacing(3)} !important`,
-      height: `${theme.spacing(3)} !important`,
       opacity: 0.3
     }
   })
