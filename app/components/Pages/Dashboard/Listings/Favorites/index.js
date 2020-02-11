@@ -9,9 +9,9 @@ import { selectListings } from '../../../../../reducers/listings'
 import Map from './Map'
 import { Header } from '../components/PageHeader'
 import Tabs from '../components/Tabs'
-import { MapView } from '../components/MapView'
-import { GridView } from '../components/GridView'
-import { GalleryView } from '../components/GalleryView'
+import MapView from '../components/MapView'
+import ListView from '../components/ListView'
+import GridView from '../components/GridView'
 
 class Favorites extends React.Component {
   constructor(props) {
@@ -51,11 +51,11 @@ class Favorites extends React.Component {
           />
         )
 
-      case 'gallery':
-        return <GalleryView isFetching={isFetching} listings={listings} />
+      case 'grid':
+        return <GridView isFetching={isFetching} listings={listings} />
 
       default:
-        return <GridView isFetching={isFetching} listings={listings} />
+        return <ListView isFetching={isFetching} listings={listings} />
     }
   }
 

@@ -32,8 +32,11 @@ const ViewSwitcher = ({ onChangeView, activeView }) => {
   const theme = useTheme()
   const iconClasses = useIconStyles()
 
+  const initialSelectedIndex = listingViewOptions.findIndex(
+    ({ value }) => value === activeView
+  )
   const [viewSwitcherAnchorEl, setViewSwitcherAnchorEl] = useState(null)
-  const [selectedIndex, setSelectedIndex] = useState(1)
+  const [selectedIndex, setSelectedIndex] = useState(initialSelectedIndex)
 
   const handleViewSwitcherToggle = event => {
     if (viewSwitcherAnchorEl) {

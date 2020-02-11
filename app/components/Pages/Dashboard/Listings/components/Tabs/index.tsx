@@ -10,6 +10,7 @@ import SortDrowndown from '../GridControllers/SortDropdown'
 
 interface Props {
   onChangeView: () => void
+  onChangeSort: () => void
   activeView: 'map' | 'grid' | 'list'
   isWidget?: boolean
 }
@@ -31,7 +32,12 @@ const tabs: TabsShape[] = [
   }
 ]
 
-export const Tabs = ({ onChangeView, activeView, isWidget }: Props) => {
+export const Tabs = ({
+  onChangeView,
+  activeView,
+  isWidget,
+  onChangeSort
+}: Props) => {
   const currentUrl = window.location.pathname
   const theme = useTheme<Theme>()
 
@@ -63,7 +69,7 @@ export const Tabs = ({ onChangeView, activeView, isWidget }: Props) => {
         padding={theme.spacing(0, 1)}
         justifyContent="flex-end"
       >
-        <SortDrowndown />
+        <SortDrowndown onChangeSort={onChangeSort} />
         {!isWidget && (
           <ViewSwitcher onChangeView={onChangeView} activeView={activeView} />
         )}

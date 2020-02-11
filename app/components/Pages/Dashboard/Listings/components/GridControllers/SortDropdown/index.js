@@ -19,7 +19,7 @@ const sortOptions = [
   }
 ]
 
-const SortDropdown = () => {
+const SortDropdown = ({ onChangeSort }) => {
   const [sortDropdownAnchorEl, setSortDropdownAnchorEl] = useState(null)
   const [selectedIndex, setSelectedIndex] = useState(1)
 
@@ -33,6 +33,7 @@ const SortDropdown = () => {
     event && setSortDropdownAnchorEl(event.currentTarget)
   }
   const handleSortDropdownItemClick = (event, index) => {
+    onChangeSort(event)
     setSelectedIndex(index)
     setSortDropdownAnchorEl(null)
   }
@@ -64,7 +65,9 @@ const SortDropdown = () => {
         {sortOptions.map((sortOption, index) => (
           <MenuItem
             key={sortOption.label}
-            data-view={sortOption.value}
+            data-sort={
+              sortOption.ascending ? sortOption.value : `-${sortOption.value}`
+            }
             selected={index === selectedIndex}
             onClick={event => handleSortDropdownItemClick(event, index)}
           >
