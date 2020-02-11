@@ -4,16 +4,6 @@ import flattenBrand from 'utils/flatten-brand'
 
 import config from '../../../../../../config/public'
 
-export const getAsset = (activeBrand: IBrand, name: string) => {
-  const brand = flattenBrand(activeBrand)
-
-  if (brand && brand.assets && brand.assets.marketing) {
-    return lodashGet(brand.assets.marketing, name)
-  }
-
-  return ''
-}
-
 export function getListingUrl(activeBrand: IBrand, listing: IListing) {
   const brand = flattenBrand(activeBrand)
   const listing_url = brand && brand.messages ? brand.messages.listing_url : ''
@@ -23,12 +13,45 @@ export function getListingUrl(activeBrand: IBrand, listing: IListing) {
     : `${config.app.url}/dashboard/mls/${listing.id}`
 }
 
-export function getColor(activeBrand: IBrand, color: string) {
+const default_palette = {
+  'body-bg-color': '#f3f3f3',
+  'body-text-color': '#7f7f7f',
+  'body-font-family': 'Barlow',
+  'body-font-weight': 'normal',
+  'body-font-size': '14px',
+  'container-bg-color': '#fff',
+  'container-text-color': '#000',
+  'container-font-family': 'Barlow',
+  'container-font-weight': 'normal',
+  'container-font-size': '14px',
+  'button-text-color': '#000',
+  'button-bg-color': 'white',
+  'button-border': '2px solid #000',
+  'button-font-family': 'Ubuntu',
+  'button-font-weight': 'normal',
+  'button-font-size': '14px',
+  'light-font-family': 'Barlow',
+  'light-font-weight': 'normal',
+  'light-text-color': '#808080',
+  'light-font-size': '17px',
+  'h1-font-family': 'Barlow',
+  'h1-font-weight': 'bold',
+  'h1-text-color': '#000',
+  'h1-font-size': '60px',
+  'h2-font-weight': 'bold',
+  'h2-text-color': '#000',
+  'h2-font-size': '40px',
+  'h2-font-family': 'Barlow'
+}
+
+export function get(activeBrand: IBrand, name: string) {
   const brand = flattenBrand(activeBrand)
 
-  if (brand && brand.palette && brand.palette.marketing) {
-    return lodashGet(brand.palette.marketing, color, '')
-  }
+  const defaultValue = lodashGet(default_palette, name)
 
-  return ''
+  const v = lodashGet(brand, `settings.palette.palette.${name}`, defaultValue)
+
+  console.log(name, v, defaultValue)
+
+  return v
 }

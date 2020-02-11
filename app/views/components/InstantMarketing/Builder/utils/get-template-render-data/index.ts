@@ -1,27 +1,21 @@
 import { getBrandStyles } from 'utils/marketing-center/templates'
 
-import {
-  getAsset,
-  getListingUrl,
-  getColor
-} from '../../../helpers/nunjucks-functions'
+import { getListingUrl, get } from '../../../helpers/nunjucks-functions'
 
 export interface TemplateRenderData {
   palette: string
-  getAsset: (assetName: string) => string
   getListingUrl: (listing: IListing) => string
-  getColor: (color: string) => string
+  get: (name: string) => string
 }
 
 export default function getTemplateRenderData(
   brand: IUserTeam
 ): TemplateRenderData {
-  const palette = getBrandStyles(brand)
+  const palette = getBrandStyles(brand, get.bind(null, brand))
 
   return {
     palette,
-    getAsset: getAsset.bind(null, brand),
     getListingUrl: getListingUrl.bind(null, brand),
-    getColor: getColor.bind(null, brand)
+    get: get.bind(null, brand)
   }
 }
