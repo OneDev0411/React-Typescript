@@ -5,11 +5,11 @@ import _ from 'underscore'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 import { getActiveTeamId } from 'utils/user-teams'
+import { getBrandByType } from 'utils/user-teams'
 
 import Spinner from 'components/Spinner'
 
-import { getBrandByType } from 'utils/user-teams'
-
+import { SAVED_TEMPLATE_VARIANT } from '../Builder/AddToMarketingCenter/constants'
 import { Container, TemplateItem, Video, Image } from './styled'
 
 class Templates extends React.Component {
@@ -59,6 +59,16 @@ class Templates extends React.Component {
             defaultTemplate,
             ...templates.filter(t => t.id !== defaultTemplate.id)
           ]
+        } else {
+          const savedTemplates = templates.filter(
+            template => template.variant === SAVED_TEMPLATE_VARIANT
+          )
+
+          const otherTemplates = templates.filter(
+            template => template.variant !== SAVED_TEMPLATE_VARIANT
+          )
+
+          templates = [...otherTemplates, ...savedTemplates]
         }
 
         this.setState(
