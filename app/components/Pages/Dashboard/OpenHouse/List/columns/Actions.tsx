@@ -5,7 +5,7 @@ import { deleteTask } from 'models/tasks/delete-task'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import IconMenuRounded from 'components/SvgIcons/MenuRounded/IconMenuRounded'
+import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
@@ -60,7 +60,7 @@ export default function Actions({ onEdit, openHouse, reloadList }: Props) {
   return (
     <>
       <IconButton onClick={handleMenuClick}>
-        <IconMenuRounded fill="#000" className={iconClasses.medium} />
+        <IconHorizontalDots fill="#000" className={iconClasses.medium} />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
