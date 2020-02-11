@@ -1,44 +1,49 @@
 import React from 'react'
 
-import { MenuItem } from '@material-ui/core'
+import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 
-import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
+import ContactFilters from '../Filters'
+import TagsList from '../TagsList'
 
 interface Props {
-  user: IUser
+  showContactFilters: boolean
+  tagActiveStatus: boolean
+  contactFiltersHandler: () => void
+  tagFilterHandler: ({ filters: any }) => void
+  users: any
 }
 
-export const ContactsTabs = ({ user }: Props) => {
+export const ContactsTabs = ({
+  showContactFilters,
+  contactFiltersHandler,
+  tagActiveStatus,
+  tagFilterHandler,
+  users
+}: Props) => {
   // const currentUrl = window.location.pathname
 
   return (
-    <PageTabs
-      tabs={[
-        <Tab
-          key={2}
-          value={2}
-          label={
-            <DropdownTab title="Contacts">
-              {({ toggleMenu }) => (
-                <>
-                  <MenuItem key={0} onClick={toggleMenu}>
-                    Menu 1
-                  </MenuItem>
-                  <MenuItem key={1} onClick={toggleMenu}>
-                    Menu 2
-                  </MenuItem>
-                  <MenuItem key={2} onClick={toggleMenu}>
-                    Menu 3
-                  </MenuItem>
-                </>
-              )}
-            </DropdownTab>
-          }
-        />,
-        <Tab key={0} label="All" value={0} />,
-        <TabLink key={1} label="Drafts" value={1} to="link" />
-      ]}
-    />
+    <>
+      {showContactFilters && (
+        <ContactFilters onFilterChange={contactFiltersHandler} users={users} />
+      )}
+      <PageTabs
+        tabs={[
+          <Tab
+            key={2}
+            value={2}
+            label={
+              <TagsList
+                onFilterChange={tagFilterHandler}
+                isActive={tagActiveStatus}
+              />
+            }
+          />,
+          <Tab key={0} label="All" value={0} />,
+          <TabLink key={1} label="Drafts" value={1} to="link" />
+        ]}
+      />
+    </>
   )
 }
 

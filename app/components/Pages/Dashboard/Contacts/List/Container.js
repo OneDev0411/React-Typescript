@@ -38,7 +38,6 @@ import { resetRows } from 'components/Grid/Table/context/actions/selection/reset
 
 import ContactsTabs from './Tabs'
 import Table from './Table'
-import ContactFilters from './Filters'
 // import TagsList from './TagsList'
 // import AllContactsList from './AllContactsList'
 // import FlowsList from './FlowsList'
@@ -644,7 +643,21 @@ class ContactsList extends React.Component {
             {!isZeroState && !this.state.isShowingDuplicatesList && (
               <React.Fragment>
                 <Box>
-                  <ContactsTabs />
+                  <ContactsTabs
+                    showContactFilters={this.shouldShowFilters()}
+                    contactFiltersHandler={() =>
+                      this.handleFilterChange({}, true)
+                    }
+                    tagFilterHandler={filters => {
+                      this.setState({
+                        selectedSidebarFilter: filters.filters,
+                        isShowingDuplicatesList: false
+                      })
+                      this.handleFilterChange({ ...filters, flows: [] }, true)
+                    }}
+                    tagActiveStatus={this.state.selectedSidebarFilter !== null}
+                    users={viewAsUsers}
+                  />
                   {/* show action btn */}
                   {/*
                   !isZeroState && (
@@ -666,12 +679,6 @@ class ContactsList extends React.Component {
                       )
                   */}
                   {/* end show action btn */}
-                  {this.shouldShowFilters() && (
-                    <ContactFilters
-                      onFilterChange={() => this.handleFilterChange({}, true)}
-                      users={viewAsUsers}
-                    />
-                  )}
                   <Table
                     data={contacts}
                     order={this.order}
