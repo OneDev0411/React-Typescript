@@ -1,10 +1,11 @@
 import { Theme } from '@material-ui/core/styles'
-import { createStyles } from '@material-ui/styles'
+import { createStyles, fade } from '@material-ui/core/styles'
 
 import { ClassesProps } from 'utils/ts-utils'
 
 interface StyleProps extends ClassesProps<typeof styles> {
   clickable: boolean
+  evenRow: boolean
 }
 
 export const styles = (theme: Theme) =>
@@ -15,6 +16,8 @@ export const styles = (theme: Theme) =>
       alignItems: 'flex-start',
       justifyContent: 'center',
       height: '100%',
+      backgroundColor: (props: StyleProps) =>
+        props.evenRow ? fade('#F2F3F7', 0.3) : theme.palette.common.white,
       cursor: (props: StyleProps) => (props.clickable ? 'pointer' : 'auto'),
       '& button, a.MuiButtonBase-root': {
         display: 'none'
