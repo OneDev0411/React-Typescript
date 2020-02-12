@@ -26,8 +26,9 @@ export default function CalendarPage(props: WithRouterProps) {
 
   return (
     <div className={classes.container}>
+      <GlobalHeader title="Calendar" />
+
       <div className={classes.topSide}>
-        <GlobalHeader title="Calendar" />
         <Filters onChange={setFilter} />
         <DatePicker onChange={handleChangeDate} style={{ margin: '1rem 0' }} />
       </div>
