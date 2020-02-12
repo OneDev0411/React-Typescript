@@ -9,7 +9,7 @@ interface Props {
   event: ICalendarEvent
 }
 
-export function DealContext({ style, event, item, nextItem }: Props) {
+export function DealContext({ style, event }: Props) {
   const icon = eventIcons['Task Critical']
 
   return (

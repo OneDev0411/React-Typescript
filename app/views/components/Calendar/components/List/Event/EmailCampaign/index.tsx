@@ -26,7 +26,7 @@ const useStyles = makeStyles(
   { name: 'EmailCampaign' }
 )
 
-export function EmailCampaign({ style, event, item, nextItem }: Props) {
+export function EmailCampaign({ style, event }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
   const handleContainerClick = () => setSelectedEvent(event)
 
