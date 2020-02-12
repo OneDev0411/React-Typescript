@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       display: 'flex',
       alignItems: 'flex-end',
-      padding: '0 1rem',
+      padding: theme.spacing(0.5, 0),
       borderRadius: '4px',
       width: '100%',
       height: '100%'
@@ -25,6 +25,17 @@ const useStyles = makeStyles((theme: Theme) =>
     date: {
       color: '#6A7589',
       fontSize: theme.typography.h6.fontSize
+    },
+    dateAlias: {
+      color: theme.palette.common.black,
+      fontSize: theme.typography.h6.fontSize
+    },
+    splitter: {
+      width: '3px',
+      height: '3px',
+      borderRadius: '100%',
+      backgroundColor: theme.palette.grey[400],
+      margin: theme.spacing(0, 1)
     }
   })
 )
@@ -40,7 +51,18 @@ export function EventHeader(props: IProps) {
     <div style={props.style}>
       <div className={classes.container}>
         <div className={classes.flex}>
-          {props.item.isToday && 'Today - '}
+          {props.item.isToday && (
+            <>
+              <span className={classes.dateAlias}>Today</span>
+              <span className={classes.splitter} />
+            </>
+          )}
+          {props.item.isTomorrow && (
+            <>
+              <span className={classes.dateAlias}>Tomorrow</span>
+              <span className={classes.splitter} />
+            </>
+          )}
           <span className={classes.date}>{props.item.title}</span>
         </div>
       </div>
