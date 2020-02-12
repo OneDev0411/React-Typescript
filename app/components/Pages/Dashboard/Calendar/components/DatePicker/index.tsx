@@ -7,10 +7,11 @@ import { Month } from './components/Month'
 import { Week } from './components/Week'
 
 interface Props {
+  style?: React.CSSProperties
   onChange: (date: Date) => void
 }
 
-export function DatePicker({ onChange }: Props) {
+export function DatePicker({ style, onChange }: Props) {
   const [date, setDate] = useState(new Date())
 
   /**
@@ -73,7 +74,7 @@ export function DatePicker({ onChange }: Props) {
   }
 
   return (
-    <Flex>
+    <Flex style={style}>
       <Month date={date} onChange={handleChangeMonth} />
       <Year date={date} onChange={handleChangeYear} />
       <Week
