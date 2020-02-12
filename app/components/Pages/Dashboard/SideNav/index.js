@@ -16,11 +16,12 @@ import ContactsIconActive from '../../../../views/components/SvgIcons/Contacts/I
 import NotificationsIcon from '../../../../views/components/SvgIcons/Notifications/IconNotifications'
 import NotificationsIconActive from '../../../../views/components/SvgIcons/Notifications/IconNotificationsActive'
 import SupportIcon from '../../../../views/components/SvgIcons/Support/IconSupport'
-import IconEmailOutline from '../../../../views/components/SvgIcons/EmailOutline/IconEmailOutline'
 import MarketingInsightsIcon from '../../../../views/components/SvgIcons/MarketingInsights/IconMarketingInsights'
 import MarketingInsightsIconActive from '../../../../views/components/SvgIcons/MarketingInsights/IconMarketingInsightsActive'
 import PropertiesIcon from '../../../../views/components/SvgIcons/Properties/IconProperties'
 import PropertiesIconActive from '../../../../views/components/SvgIcons/Properties/IconPropertiesActive'
+import InboxIcon from '../../../../views/components/SvgIcons/Inbox/IconInbox.js'
+import InboxIconActive from '../../../../views/components/SvgIcons/InboxActive/IconInboxActive.js'
 import CalendarIcon from '../../../../views/components/SvgIcons/Calendar2/IconCalendar'
 import CalendarIconActive from '../../../../views/components/SvgIcons/Calendar2/IconCalendarActive'
 import IconCog from '../../../../views/components/SvgIcons/CogOutline/IconCogOutline'
@@ -81,8 +82,8 @@ function AppSideNav(props) {
             <SideNavLinkItem
               tooltip="Inbox"
               to="/dashboard/inbox"
-              Icon={IconEmailOutline}
-              ActiveIcon={IconEmailOutline}
+              Icon={InboxIcon}
+              ActiveIcon={InboxIconActive}
             />
           </Acl.Crm>
 
