@@ -1,5 +1,9 @@
 import React from 'react'
 
+import pluralize from 'pluralize'
+
+import { Box } from '@material-ui/core'
+
 import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
 
@@ -14,6 +18,12 @@ class ListView extends React.Component {
       render: ({ row: listing }) => <Address listing={listing} />
     },
     {
+      header: 'Status',
+      id: 'status',
+      width: '20%',
+      render: ({ row: listing }) => `${listing.status}`
+    },
+    {
       header: 'Price',
       id: 'price',
       sortType: 'number',
@@ -25,49 +35,49 @@ class ListView extends React.Component {
       id: 'beds',
       sortType: 'number',
       accessor: listing => listing.beds,
-      render: ({ row: listing }) => listing.beds
+      render: ({ row: listing }) => `${pluralize('bed', listing.beds, true)}`
     },
     {
       header: 'Baths',
       id: 'baths',
       sortType: 'number',
       accessor: listing => listing.baths,
-      render: ({ row: listing }) => listing.baths
+      render: ({ row: listing }) => `${pluralize('bath', listing.baths, true)}`
     },
     {
       header: 'sqft',
       id: 'sqft',
       sortType: 'number',
       accessor: listing => listing.sqft,
-      render: ({ row: listing }) => listing.sqft.toLocaleString()
+      render: ({ row: listing }) => `${listing.sqft.toLocaleString()} sqft`
     },
-    {
-      header: '$/Sqft',
-      sortType: 'number',
-      id: 'pricePerSquareFoot',
-      accessor: listing => listing.pricePerSquareFoot,
-      render: ({ row: listing }) =>
-        `$${listing.pricePerSquareFoot.toLocaleString()}`
-    },
+    // {
+    //   header: '$/Sqft',
+    //   sortType: 'number',
+    //   id: 'pricePerSquareFoot',
+    //   accessor: listing => listing.pricePerSquareFoot,
+    //   render: ({ row: listing }) =>
+    //     `$${listing.pricePerSquareFoot.toLocaleString()}`
+    // },
     {
       header: 'Built Year',
       id: 'year',
       sortType: 'number',
       accessor: listing => listing.builtYear,
-      render: ({ row: listing }) => listing.builtYear
+      render: ({ row: listing }) => `Built: ${listing.builtYear}`
     },
     {
       header: 'Zip Code',
       id: 'zipcode',
       sortType: 'number',
       accessor: listing => listing.zipCode,
-      render: ({ row: listing }) => listing.zipCode
+      render: ({ row: listing }) => `Zip: ${listing.zipCode}`
     }
   ]
 
   render() {
     return (
-      <div style={{ padding: ' 0 1.5em 1.5em' }}>
+      <Box p={theme.spacing(0, 1, 1)}>
         <Table
           columns={this.columns}
           rows={this.props.sortedListings}
@@ -75,10 +85,8 @@ class ListView extends React.Component {
           loading={this.props.isFetching ? 'middle' : null}
           summary={total => `${total} Listings`}
           LoadingStateComponent={LoadingComponent}
-          hasHeader
-          stickyHeader
         />
-      </div>
+      </Box>
     )
   }
 }

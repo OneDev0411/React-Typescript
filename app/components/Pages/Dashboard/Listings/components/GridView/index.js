@@ -1,35 +1,42 @@
 import React from 'react'
+import { Box } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 
-import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
 
 import ListingCard from '../ListingCard'
 
-const columns = [
-  {
-    id: 'price',
-    accessor: listing => listing.price,
-    render: ({ row: listing }) => (
-      <ListingCard isShowOnMap listing={listing} key={listing.id} />
-    )
+const useStyles = makeStyles(theme => ({
+  listingContainer: {
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: theme.palette.grey[200],
+    width: 336,
+    marginRight: theme.spacing(2),
+    marginBottom: theme.spacing(2)
   }
-]
+}))
 
-export default function GridView(props) {
+export default function GridView({ isFetching, sortedListings }) {
+  const theme = useTheme()
+  const classes = useStyles()
+
+  const renderContent = () => {
+    if (isFetching) {
+      return <LoadingComponent />
+    }
+
+    return sortedListings.map(listing => (
+      <Box key={listing.id} className={classes.listingContainer}>
+        <ListingCard listing={listing} isShowOnMap />
+      </Box>
+    ))
+  }
+
   return (
-    <div style={{ padding: ' 0 1.5em 1.5em' }}>
-      <Table
-        columns={columns}
-        rows={props.sortedListings}
-        loading={props.isFetching ? 'middle' : null}
-        LoadingStateComponent={LoadingComponent}
-        totalRows={props.totalRows}
-        summary={total => `${total} Listings`}
-        hoverable={false}
-        getTdProps={() => ({
-          padding: 0
-        })}
-      />
-    </div>
+    <Box display="flex" flexWrap="wrap" p={theme.spacing(0, 1, 1)}>
+      {renderContent()}
+    </Box>
   )
 }

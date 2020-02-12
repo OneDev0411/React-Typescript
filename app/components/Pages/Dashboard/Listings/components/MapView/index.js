@@ -1,28 +1,12 @@
 import React from 'react'
 
-import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
 
 import ListingCard from '../ListingCard'
 import { MainContainer, MapContainer, TableContainer } from './styled'
 
 class MapView extends React.Component {
-  columns = [
-    {
-      id: 'price',
-      accessor: listing => listing.price,
-      render: ({ row: listing }) => (
-        <ListingCard
-          isShowOnMap
-          key={listing.id}
-          listing={listing}
-          tabName={this.props.tabName}
-        />
-      )
-    }
-  ]
-
-  renderMain() {
+  renderContent() {
     if (this.props.isFetching) {
       return <LoadingComponent />
     }
@@ -41,7 +25,7 @@ class MapView extends React.Component {
     return (
       <MainContainer>
         <MapContainer>{this.props.Map}</MapContainer>
-        <TableContainer>{this.renderMain()}</TableContainer>
+        <TableContainer>{this.renderContent()}</TableContainer>
       </MainContainer>
     )
   }
