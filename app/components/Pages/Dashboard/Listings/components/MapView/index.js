@@ -22,27 +22,26 @@ class MapView extends React.Component {
     }
   ]
 
+  renderMain() {
+    if (this.props.isFetching) {
+      return <LoadingComponent />
+    }
+
+    return this.props.sortedListings.map(listing => (
+      <ListingCard
+        isShowOnMap
+        key={listing.id}
+        listing={listing}
+        tabName={this.props.tabName}
+      />
+    ))
+  }
+
   render() {
     return (
       <MainContainer>
         <MapContainer>{this.props.Map}</MapContainer>
-        <TableContainer>
-          <Table
-            columns={this.columns}
-            rows={this.props.sortedListings}
-            loading={this.props.isFetching ? 'middle' : null}
-            LoadingStateComponent={LoadingComponent}
-            totalRows={this.props.listings.info.total}
-            summary={total => `${total} Listings`}
-            getTrProps={() => ({
-              style: {
-                padding: 0,
-                border: 'none'
-              }
-            })}
-            getTdProps={() => ({ style: { padding: 0 } })}
-          />
-        </TableContainer>
+        <TableContainer>{this.renderMain()}</TableContainer>
       </MainContainer>
     )
   }
