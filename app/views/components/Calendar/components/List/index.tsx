@@ -23,7 +23,7 @@ import { Row } from './Row'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      height: 'calc(100vh - 4.5rem)'
+      height: '100%'
     }
   })
 )

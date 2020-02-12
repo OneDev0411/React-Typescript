@@ -21,10 +21,11 @@ export default function CalendarPage() {
 
   return (
     <div className={classes.container}>
-      <GlobalHeader title="Calendar" />
-
-      <Tabs />
-      <DatePicker onChange={handleChangeDate} />
+      <div className={classes.topSide}>
+        <GlobalHeader title="Calendar" />
+        <Tabs />
+        <DatePicker onChange={handleChangeDate} style={{ margin: '1rem 0' }} />
+      </div>
 
       <div className={classes.listContainer}>
         <List
