@@ -2,24 +2,11 @@ import React from 'react'
 import { MenuItem } from '@material-ui/core'
 import cn from 'classnames'
 
+import { months } from 'utils/date-times/months'
+
 import { BaseDropdown } from 'components/BaseDropdown'
 
 import { useStyles } from '../use-styles'
-
-const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-]
 
 interface Props {
   date: Date
@@ -31,7 +18,7 @@ export function Month({ date, onChange }: Props) {
 
   return (
     <BaseDropdown
-      buttonLabel={MONTHS[date.getMonth()]}
+      buttonLabel={months[date.getMonth()]}
       DropdownToggleButtonProps={{
         className: cn(
           classes.dropdownButton,
@@ -41,7 +28,7 @@ export function Month({ date, onChange }: Props) {
       }}
       renderMenu={({ close }) => (
         <div>
-          {MONTHS.map((name, index) => (
+          {months.map((name, index) => (
             <MenuItem
               key={index}
               value={index}
@@ -57,14 +44,4 @@ export function Month({ date, onChange }: Props) {
       )}
     />
   )
-
-  // return (
-  //   <Select value={date.getMonth()} onChange={handleChange}>
-  //     {MONTHS.map((name, index) => (
-  //       <MenuItem key={index} value={index}>
-  //         {name}
-  //       </MenuItem>
-  //     ))}
-  //   </Select>
-  // )
 }

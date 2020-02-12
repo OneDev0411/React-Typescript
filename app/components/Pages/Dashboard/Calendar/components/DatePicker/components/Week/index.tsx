@@ -4,6 +4,8 @@ import fecha from 'fecha'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import cn from 'classnames'
 
+import { getDaysOfWeek } from 'utils/date-times/days-of-week'
+
 import IconArrowLeft from 'components/SvgIcons/ArrowLeftMui/IconArrowLeft'
 import IconArrowRight from 'components/SvgIcons/ArrowRightMui/IconArrowRight'
 
@@ -104,16 +106,4 @@ export function Week({
       </Button>
     </>
   )
-}
-
-function getDaysOfWeek(date: Date): Date[] {
-  const firstDayOfWeek = date.getDate() - date.getDay()
-
-  return new Array(7).fill(null).map((_, index) => {
-    const weekDay = new Date(date)
-
-    weekDay.setDate(firstDayOfWeek + index)
-
-    return weekDay
-  })
 }

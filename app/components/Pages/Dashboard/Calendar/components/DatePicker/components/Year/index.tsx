@@ -3,6 +3,7 @@ import React from 'react'
 import { MenuItem } from '@material-ui/core'
 import cn from 'classnames'
 
+import { getYearsRange } from 'utils/date-times/years-range'
 import { BaseDropdown } from 'components/BaseDropdown'
 
 import { useStyles } from '../use-styles'
@@ -39,10 +40,4 @@ export function Year({ date, onChange }: Props) {
       )}
     />
   )
-}
-
-function getYearsRange() {
-  const startYear = new Date().getFullYear() + 1
-
-  return new Array(4).fill(null).map((_, index) => startYear - index)
 }
