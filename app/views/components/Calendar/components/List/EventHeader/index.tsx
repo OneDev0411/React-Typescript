@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'flex-end',
       padding: theme.spacing(0.5, 0),
-      borderRadius: '4px',
+      borderRadius: theme.shape.borderRadius,
       width: '100%',
       height: '100%'
     },
