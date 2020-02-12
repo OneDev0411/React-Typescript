@@ -12,7 +12,7 @@ interface Props {
   event: ICalendarEvent
 }
 
-export function ContactAttribute({ style, event, item, nextItem }: Props) {
+export function ContactAttribute({ style, event }: Props) {
   const icon = useMemo(() => {
     if (contactIcons[event.type_label]) {
       return contactIcons[event.type_label]

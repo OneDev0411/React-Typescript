@@ -12,7 +12,7 @@ interface Props {
   event: ICalendarEvent
 }
 
-export function NextTouch({ style, event, item, nextItem }: Props) {
+export function NextTouch({ style, event }: Props) {
   if (!event.people) {
     return null
   }
