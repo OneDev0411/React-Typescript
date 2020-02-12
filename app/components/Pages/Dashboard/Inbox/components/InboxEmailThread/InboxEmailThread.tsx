@@ -39,7 +39,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
     [user, emailThread]
   )
 
-  console.log(contactInfo) // TODO: Remove this line.
+  contactInfo && console.log('contactInfo', contactInfo) // TODO: Remove this line.
 
   const fetchEmailThread = useCallback(async () => {
     if (emailThreadId) {
