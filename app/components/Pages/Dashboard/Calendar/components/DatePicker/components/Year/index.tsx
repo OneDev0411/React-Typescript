@@ -1,26 +1,48 @@
-import React, { useState } from 'react'
-import { Select, MenuItem } from '@material-ui/core'
+import React from 'react'
 
-export function Year() {
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
+import { MenuItem } from '@material-ui/core'
+import cn from 'classnames'
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedYear(event.target.value as number)
-  }
+import { BaseDropdown } from 'components/BaseDropdown'
+
+import { useStyles } from '../use-styles'
+
+interface Props {
+  date: Date
+  onChange: (year: number) => void
+}
+
+export function Year({ date, onChange }: Props) {
+  const classes = useStyles()
 
   return (
-    <Select value={selectedYear} onChange={handleChange}>
-      {getYearsRange().map((value, index) => (
-        <MenuItem key={index} value={value}>
-          {value}
-        </MenuItem>
-      ))}
-    </Select>
+    <BaseDropdown
+      buttonLabel={date.getFullYear()}
+      DropdownToggleButtonProps={{
+        className: cn(classes.dropdownButton, classes.button)
+      }}
+      renderMenu={({ close }) => (
+        <div>
+          {getYearsRange().map((value, index) => (
+            <MenuItem
+              key={index}
+              value={value}
+              onClick={() => {
+                close()
+                onChange(value)
+              }}
+            >
+              {value}
+            </MenuItem>
+          ))}
+        </div>
+      )}
+    />
   )
 }
 
 function getYearsRange() {
-  const startYear = new Date().getFullYear() + 5
+  const startYear = new Date().getFullYear() + 1
 
-  return new Array(20).fill(null).map((_, index) => startYear - index)
+  return new Array(4).fill(null).map((_, index) => startYear - index)
 }

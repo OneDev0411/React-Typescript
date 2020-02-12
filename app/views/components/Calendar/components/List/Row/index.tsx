@@ -26,6 +26,7 @@ export const Row = memo(
         <Event
           key={(rows[index] as ICalendarEvent).id}
           event={rows[index] as ICalendarEvent}
+          item={rows[index]}
           nextItem={rows[index + 1]}
           style={style}
           onEventChange={onEventChange}

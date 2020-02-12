@@ -43,6 +43,7 @@ declare type ICalendarEvent<
 declare interface ICalendarEventHeader {
   date: string
   headerType: string
+  isTomorrow: boolean
   isToday: boolean
   isEventHeader: boolean
   title: string

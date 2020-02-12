@@ -14,6 +14,7 @@ import { EmailThread } from './EmailThread'
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
+  item: ICalendarListRow
   nextItem: ICalendarListRow
   onEventChange(event: IEvent, type: string): void
 }
@@ -68,17 +69,18 @@ const events: {
 /**
  * renders the given calendar event
  */
-export function Event({ event, nextItem, style, onEventChange }: Props) {
-  const item = events.find(item => item.condition(event) === true)
+export function Event({ event, item, nextItem, style, onEventChange }: Props) {
+  const eventItem = events.find(item => item.condition(event) === true)
 
-  if (!item) {
+  if (!eventItem) {
     return null
   }
 
   return (
-    <item.component
+    <eventItem.component
       style={style}
       event={event}
+      item={item}
       nextItem={nextItem}
       onEventChange={onEventChange}
     />
