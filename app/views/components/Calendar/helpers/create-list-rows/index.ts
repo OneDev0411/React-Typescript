@@ -65,7 +65,7 @@ function getMonthEvents(
         (isToday(day) || day === activeDayId)
       )
     })
-    .flatMap(([day, events], index) => {
+    .flatMap(([day, events]) => {
       return [
         {
           isEventHeader: true,
@@ -76,7 +76,12 @@ function getMonthEvents(
           date: day
         },
         ...(events.length > 0
-          ? events
+          ? (events as ICalendarEvent[]).map(
+              (event: ICalendarEvent, index: number) => ({
+                ...event,
+                rowIndex: index
+              })
+            )
           : [
               {
                 ...eventEmptyState,

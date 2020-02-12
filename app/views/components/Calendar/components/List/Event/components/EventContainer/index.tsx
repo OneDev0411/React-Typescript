@@ -14,7 +14,7 @@ const useStyles = makeStyles(styles)
 
 interface Props {
   style: React.CSSProperties
-  event: ICalendarEvent
+  event: ICalendarEvent & { rowIndex: number }
   Icon?: any
   title: React.ReactNode
   subtitle?: React.ReactNode
@@ -35,6 +35,7 @@ export function EventContainer({
   const sharedClasses = useSharedStyles()
   const classes = useStyles({
     classes: inputClasses,
+    evenRow: event.rowIndex % 2 === 0,
     clickable: typeof onClick === 'function'
   })
 

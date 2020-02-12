@@ -38,7 +38,11 @@ declare type ICalendarEvent<
   people: (IContact | IAgent)[] | null
   people_len: number | null
   full_deal?: IDeal
-} & Association<'full_thread', IEmailThread, Associations>
+} & { rowIndex: number } & Association<
+    'full_thread',
+    IEmailThread,
+    Associations
+  >
 
 declare interface ICalendarEventHeader {
   date: string
