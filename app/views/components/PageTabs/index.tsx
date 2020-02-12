@@ -10,6 +10,7 @@ type SelectedTab = string | number | null
 interface Props {
   tabs: React.ReactNode[]
   defaultValue?: SelectedTab
+  onChange?: (value: SelectedTab) => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -62,7 +63,11 @@ const useStyles = makeStyles((theme: Theme) =>
     ]}
   />
  */
-export function PageTabs({ defaultValue = null, tabs }: Props) {
+export function PageTabs({
+  defaultValue = null,
+  onChange = () => {},
+  tabs
+}: Props) {
   const classes = useStyles()
   const [selectedTab, setSelectedTab] = useState<SelectedTab>(defaultValue)
   const activeTab =
@@ -70,6 +75,8 @@ export function PageTabs({ defaultValue = null, tabs }: Props) {
 
   const handleChange = (e: React.MouseEvent<{}>, value: SelectedTab) => {
     setSelectedTab(value)
+
+    onChange(value)
   }
 
   return (
