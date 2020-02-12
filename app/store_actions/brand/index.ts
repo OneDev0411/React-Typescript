@@ -1,8 +1,9 @@
 import * as actionsType from '../../constants/brand'
+import { getBrandById } from '../../models/brand/get-brand-by-id'
 import { getBrandByHostname } from '../../models/brand/get-brand-by-hostname'
 
-const getBrand = () => (dispatch, getState) => {
-  const { brand } = getState()
+const getBrand = brandId => async (dispatch, getState) => {
+  let brand = getState().brand
 
   if (brand) {
     return Promise.resolve()
@@ -12,19 +13,22 @@ const getBrand = () => (dispatch, getState) => {
     type: actionsType.BRAND_REQUEST
   })
 
-  return getBrandByHostname(window.location.hostname).then(
-    brand => {
-      dispatch({
-        brand,
-        type: actionsType.BRAND_SUCCESS
-      })
-    },
-    () => {
-      dispatch({
-        type: actionsType.BRAND_FAILURE
-      })
+  try {
+    if (brandId) {
+      brand = await getBrandById(brandId)
+    } else {
+      brand = await getBrandByHostname(window.location.hostname)
     }
-  )
+
+    dispatch({
+      brand,
+      type: actionsType.BRAND_SUCCESS
+    })
+  } catch (error) {
+    dispatch({
+      type: actionsType.BRAND_FAILURE
+    })
+  }
 }
 
 export default getBrand
