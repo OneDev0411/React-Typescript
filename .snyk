@@ -6,3 +6,14 @@ patch:
   SNYK-JS-HTTPSPROXYAGENT-469131:
     - grapesjs-mjml > diff-dom > updates > make-fetch-happen > https-proxy-agent:
         patched: '2020-01-21T21:06:41.081Z'
+  SNYK-JS-LODASH-450202:
+    - snyk > @snyk/dep-graph > lodash:
+        patched: '2020-02-06T21:10:02.600Z'
+    - snyk > inquirer > lodash:
+        patched: '2020-02-06T21:10:02.600Z'
+    - snyk > @snyk/snyk-cocoapods-plugin > @snyk/dep-graph > lodash:
+        patched: '2020-02-06T21:10:02.600Z'
+    - snyk > snyk-nuget-plugin > dotnet-deps-parser > lodash:
+        patched: '2020-02-06T21:10:02.600Z'
+    - snyk > @snyk/snyk-cocoapods-plugin > @snyk/cocoapods-lockfile-parser > @snyk/dep-graph > lodash:
+        patched: '2020-02-06T21:10:02.600Z'
