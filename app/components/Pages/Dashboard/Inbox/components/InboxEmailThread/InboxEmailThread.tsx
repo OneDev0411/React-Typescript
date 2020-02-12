@@ -34,12 +34,12 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   const dispatch = useDispatch()
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
-  console.log(user)
-
   const contactInfo = useMemo(
     () => emailThread && getContactInfoFromEmailThread(user, emailThread),
     [user, emailThread]
   )
+
+  console.log(contactInfo) // TODO: Remove this line.
 
   const fetchEmailThread = useCallback(async () => {
     if (emailThreadId) {
@@ -137,8 +137,6 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   if (status === 'empty' || !emailThread) {
     return <NoContentMessage>No Conversation Selected</NoContentMessage>
   }
-
-  console.log(contactInfo)
 
   return (
     <Box padding={2.5} paddingTop={2.5}>

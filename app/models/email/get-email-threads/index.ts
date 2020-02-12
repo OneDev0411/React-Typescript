@@ -21,39 +21,20 @@ export async function getEmailThreads<
   filters: IGetEmailThreadsFilters,
   associations: SelectedEmailThreadAssociations[] = defaultEmailThreadAssociations as SelectedEmailThreadAssociations[]
 ): Promise<IEmailThread<SelectedEmailThreadAssociations>[]> {
-  const query: any = {
-    associations: [...associations.map(toEntityAssociation('email_thread'))],
-    select: [
+  const response = await new Fetch().get('/emails/threads').query({
+    'associations[]': associations.map(toEntityAssociation('email_thread')),
+    'select[]': [
       'google_message.html_body',
       'microsoft_message.html_body',
       'email.html',
       'email.text'
     ],
-    start: filters.start
-  }
-
-  if (filters.limit !== undefined) {
-    query.limit = filters.limit
-  }
-
-  if (filters.isRead !== undefined) {
-    query.is_read = filters.isRead
-  }
-
-  if (filters.hasAttachments !== undefined) {
-    query.has_attachments = filters.hasAttachments
-  }
-
-  const body: any = {}
-
-  if (filters.ids !== undefined) {
-    body.ids = filters.ids
-  }
-
-  const response = await new Fetch()
-    .get('/emails/threads')
-    .query(query)
-    .send(body)
+    start: filters.start,
+    limit: filters.limit,
+    is_read: filters.isRead,
+    has_attachments: filters.hasAttachments,
+    'ids[]': filters.ids
+  })
 
   return response.body.data
 }

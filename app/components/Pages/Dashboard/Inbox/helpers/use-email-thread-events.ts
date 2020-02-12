@@ -29,6 +29,10 @@ export default function useEmailThreadEvents(
     const socket: SocketIOClient.Socket = (window as any).socket
 
     function filterEvent(event: Event): boolean {
+      if (event.threads.length === 0) {
+        return false
+      }
+
       if ('google_credential' in event) {
         return allAccounts.some(({ id }) => id === event.google_credential)
       }
@@ -41,9 +45,11 @@ export default function useEmailThreadEvents(
     }
 
     function handleFilteredUpdateEmailThreads(event: Event) {
+      console.log('update', event) // TODO: Remove this line.
       filterEvent(event) && handleUpdateEmailThreads(event.threads)
     }
     function handleFilteredDeleteEmailThreads(event: Event) {
+      console.log('delete', event) // TODO: Remove this line.
       filterEvent(event) && handleDeleteEmailThreads(event.threads)
     }
 
