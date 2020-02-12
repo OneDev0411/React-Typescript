@@ -1,25 +1,23 @@
 import React from 'react'
-
 import { makeStyles } from '@material-ui/styles'
-import { fade } from '@material-ui/core/styles'
+import cn from 'classnames'
 
 import { ClassesProps } from 'utils/ts-utils'
 
 import { DateTime } from './DateTime'
 
-import inlineStyles from '../../styles'
+import { sharedStyles } from '../../styles'
 import { styles } from './styles'
 
+const useSharedStyles = makeStyles(sharedStyles)
 const useStyles = makeStyles(styles)
 
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
+  item: ICalendarListRow
   nextItem: ICalendarListRow
-  icon?: {
-    color: string
-    element: any
-  }
+  Icon?: any
   title: React.ReactNode
   subtitle?: React.ReactNode
   actions?: React.ReactNode
@@ -29,18 +27,17 @@ interface Props {
 export function EventContainer({
   style,
   event,
-  nextItem,
-  icon,
+  item,
+  Icon,
   title,
   subtitle,
   actions,
   onClick,
   classes: inputClasses
 }: Props & ClassesProps<typeof styles>) {
-  const hasBorderBottom = nextItem && !nextItem.hasOwnProperty('isEventHeader')
+  const sharedClasses = useSharedStyles()
   const classes = useStyles({
     classes: inputClasses,
-    hasBorderBottom,
     clickable: typeof onClick === 'function'
   })
 
@@ -49,30 +46,20 @@ export function EventContainer({
       <div className={classes.root}>
         <button
           type="button"
-          style={inlineStyles.buttonContainer}
+          className={sharedClasses.buttonContainer}
           onClick={onClick}
         />
 
-        <div style={inlineStyles.row}>
-          <div style={inlineStyles.container}>
-            <div style={inlineStyles.time}>
+        <div className={sharedClasses.row}>
+          <div className={sharedClasses.container}>
+            <div className={sharedClasses.time}>
               <DateTime event={event} />
             </div>
-            <div
-              style={{
-                ...inlineStyles.container,
-                ...inlineStyles.title
-              }}
-            >
-              {icon && (
-                <div
-                  style={{
-                    ...inlineStyles.icon,
-                    backgroundColor: fade(icon.color, 0.2)
-                  }}
-                >
-                  <icon.element
-                    fill={icon.color}
+            <div className={cn(sharedClasses.container, sharedClasses.title)}>
+              {Icon && (
+                <div className={sharedClasses.icon}>
+                  <Icon
+                    fill="#6A7589"
                     style={{ width: '24px', height: '24px' }}
                   />
                 </div>
@@ -85,8 +72,8 @@ export function EventContainer({
           <div>{actions}</div>
         </div>
 
-        <div style={inlineStyles.row}>
-          <div style={inlineStyles.subtitle}>{subtitle}</div>
+        <div className={sharedClasses.row}>
+          <div className={sharedClasses.subtitle}>{subtitle}</div>
         </div>
       </div>
     </div>

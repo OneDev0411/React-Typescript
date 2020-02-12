@@ -1,4 +1,6 @@
 import React, { ComponentProps, forwardRef, RefObject, useState } from 'react'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+
 import { ListOnItemsRenderedProps } from 'react-window'
 import useResizeObserver from 'use-resize-observer'
 
@@ -16,8 +18,15 @@ import { EmptyState } from './EmptyState'
 
 import { EventController } from './EventController'
 
-import { Container } from './styled'
 import { Row } from './Row'
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      height: 'calc(100vh - 4.5rem)'
+    }
+  })
+)
 
 interface Props {
   user: IUser
@@ -43,6 +52,7 @@ const defaultProps = {
 }
 
 const CalendarList: React.FC<Props> = props => {
+  const classes = useStyles()
   const [containerRef, listWidth, listHeight] = useResizeObserver()
   const [activeDate, setActiveDate] = useState<Date | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<ICalendarEvent | null>(
@@ -110,7 +120,7 @@ const CalendarList: React.FC<Props> = props => {
         setSelectedEvent
       }}
     >
-      <Container ref={containerRef}>
+      <div className={classes.container} ref={containerRef}>
         {props.rows.length === 0 && !props.isLoading && <EmptyState />}
 
         <VirtualList
@@ -143,14 +153,14 @@ const CalendarList: React.FC<Props> = props => {
           onEventChange={handleEventChange}
           onScheduledEmailChange={handleScheduledEmailChange}
         />
-      </Container>
+      </div>
     </ListContext.Provider>
   )
 }
 
 function getRowHeight(row: ICalendarListRow): number {
   if (row.hasOwnProperty('isEventHeader')) {
-    return 26
+    return 64
   }
 
   const event = row as ICalendarEvent

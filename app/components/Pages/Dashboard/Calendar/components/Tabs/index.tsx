@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 
-// import { MenuItem } from '@material-ui/core'
-
 import { PageTabs, Tab } from 'components/PageTabs'
 
 export const defaultFilter = {

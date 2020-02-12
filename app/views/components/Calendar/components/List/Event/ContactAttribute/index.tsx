@@ -10,10 +10,11 @@ import { SendBirthdayCard } from './actions/SendBirthdayCard'
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
+  item: ICalendarListRow
   nextItem: ICalendarListRow
 }
 
-export function ContactAttribute({ style, event, nextItem }: Props) {
+export function ContactAttribute({ style, event, item, nextItem }: Props) {
   const icon = useMemo(() => {
     if (contactIcons[event.type_label]) {
       return contactIcons[event.type_label]
@@ -36,11 +37,9 @@ export function ContactAttribute({ style, event, nextItem }: Props) {
     <EventContainer
       style={style}
       event={event}
+      item={item}
       nextItem={nextItem}
-      icon={{
-        color: icon.color,
-        element: icon.icon
-      }}
+      Icon={icon.icon}
       title={
         <div>
           <MiniContactProfile type="event" data={contact} as="span">

@@ -1,5 +1,10 @@
-import React, { useState } from 'react'
-import { Select, MenuItem } from '@material-ui/core'
+import React from 'react'
+import { MenuItem } from '@material-ui/core'
+import cn from 'classnames'
+
+import { BaseDropdown } from 'components/BaseDropdown'
+
+import { useStyles } from '../use-styles'
 
 const MONTHS = [
   'January',
@@ -16,20 +21,50 @@ const MONTHS = [
   'December'
 ]
 
-export function Month() {
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth())
+interface Props {
+  date: Date
+  onChange: (value: number) => void
+}
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedMonth(event.target.value as number)
-  }
+export function Month({ date, onChange }: Props) {
+  const classes = useStyles()
 
   return (
-    <Select value={selectedMonth} onChange={handleChange}>
-      {MONTHS.map((name, index) => (
-        <MenuItem key={index} value={index}>
-          {name}
-        </MenuItem>
-      ))}
-    </Select>
+    <BaseDropdown
+      buttonLabel={MONTHS[date.getMonth()]}
+      DropdownToggleButtonProps={{
+        className: cn(
+          classes.dropdownButton,
+          classes.button,
+          classes.leftRounded
+        )
+      }}
+      renderMenu={({ close }) => (
+        <div>
+          {MONTHS.map((name, index) => (
+            <MenuItem
+              key={index}
+              value={index}
+              onClick={() => {
+                close()
+                onChange(index)
+              }}
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </div>
+      )}
+    />
   )
+
+  // return (
+  //   <Select value={date.getMonth()} onChange={handleChange}>
+  //     {MONTHS.map((name, index) => (
+  //       <MenuItem key={index} value={index}>
+  //         {name}
+  //       </MenuItem>
+  //     ))}
+  //   </Select>
+  // )
 }

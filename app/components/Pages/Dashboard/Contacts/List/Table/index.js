@@ -154,6 +154,15 @@ class ContactsList extends React.Component {
   render() {
     const { props, state } = this
 
+    const [dispatch, state] = useGridContext()
+
+    dispatch(
+      sort({
+        field: '',
+        ascending: ''
+      })
+    )
+
     return (
       <>
         <Table
