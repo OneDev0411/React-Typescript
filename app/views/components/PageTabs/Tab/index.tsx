@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tab as BaseTab, withStyles } from '@material-ui/core'
+import { Tab as BaseTab, TabProps, withStyles } from '@material-ui/core'
 
 export const Tab = withStyles(theme => ({
   root: {
@@ -9,4 +9,4 @@ export const Tab = withStyles(theme => ({
       fontWeight: 'bold'
     }
   }
-}))(props => <BaseTab {...props} />)
+}))((props: TabProps) => <BaseTab {...props} />)

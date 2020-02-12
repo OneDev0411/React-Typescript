@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Box } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 import { Theme } from '@material-ui/core/styles'
 
-import { PageTabs, TabLink } from 'components/PageTabs'
+import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 
+import SavedSearchesList from '../../SavedSearchesList'
 import ViewSwitcher from '../GridControllers/ViewSwitcher'
 import SortDrowndown from '../GridControllers/SortDropdown'
 
@@ -18,7 +19,7 @@ interface Props {
 interface TabsShape {
   label: string
   to: string
-  component?: React.ReactNode
+  component?: ReactNode
 }
 
 const tabs: TabsShape[] = [
@@ -40,33 +41,27 @@ export const Tabs = ({
 }: Props) => {
   const currentUrl = window.location.pathname
   const theme = useTheme<Theme>()
+  const linkTabs = tabs.map(({ label, to }, i) => {
+    return <TabLink key={i} label={label} to={to} value={to} />
+  })
 
   return (
     <Box display="flex">
       <Box flexGrow="1">
         <PageTabs
           defaultValue={currentUrl}
-          tabs={tabs.map(({ label, to, component = false }, i) => {
-            const hasComponent = component ? { component } : {}
-
-            return (
-              <TabLink
-                key={i}
-                {...hasComponent}
-                label={label}
-                to={to}
-                value={to}
-              />
-            )
-          })}
+          tabs={[
+            ...linkTabs,
+            <Tab key="saved" label={<SavedSearchesList />} />
+          ]}
         />
       </Box>
       <Box
         display="flex"
         flexGrow="1"
         borderBottom={`2px solid ${theme.palette.divider}`}
-        margin={theme.spacing(1, 0)}
-        padding={theme.spacing(0, 1)}
+        mx={1}
+        py={1}
         justifyContent="flex-end"
       >
         <SortDrowndown onChangeSort={onChangeSort} />
