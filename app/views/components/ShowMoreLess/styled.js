@@ -1,18 +1,18 @@
 import styled from 'styled-components'
 
-import { blue } from 'views/utils/colors'
+import { green } from 'views/utils/colors'
 import Arrow from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 export const ShowMoreLessText = styled.div`
   display: flex;
   align-items: center;
-  color: ${blue.A100};
+  color: ${green.primary};
   font-weight: 400;
   cursor: pointer;
 `
 
 export const ArrowDown = styled(Arrow)`
-  fill: ${blue.A100};
+  fill: ${green.primary};
   width: 1.25rem;
   height: 1.25rem;
   margin-top: 0.2rem;
