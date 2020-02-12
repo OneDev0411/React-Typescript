@@ -15,20 +15,12 @@ import { sharedStyles } from '../styles'
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
-  item: ICalendarListRow
-  nextItem: ICalendarListRow
   user: IUser
   onEventChange(event: IEvent, type: string): void
 }
 
 const useStyles = makeStyles(sharedStyles)
-export function CrmTask({
-  style,
-  event,
-  item,
-  nextItem,
-  onEventChange
-}: Props) {
+export function CrmTask({ style, event, onEventChange }: Props) {
   const classes = useStyles()
   const { setSelectedEvent } = useContext(ListContext)
 
@@ -55,8 +47,6 @@ export function CrmTask({
     <EventContainer
       style={style}
       event={event}
-      item={item}
-      nextItem={nextItem}
       Icon={icon.icon}
       title={
         <div className={classes.title}>

@@ -7,15 +7,13 @@ import { ContactAttribute } from './ContactAttribute'
 import { DealContext } from './DealContext'
 import { NextTouch } from './NextTouch'
 import { EmailCampaign } from './EmailCampaign'
+import { EmailThread } from './EmailThread'
 
 import emptyStateEvent from '../../../helpers/get-event-empty-state'
-import { EmailThread } from './EmailThread'
 
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
-  item: ICalendarListRow
-  nextItem: ICalendarListRow
   onEventChange(event: IEvent, type: string): void
 }
 
@@ -23,7 +21,6 @@ const events: {
   component({
     event,
     style,
-    nextItem,
     onEventChange
   }: Props): React.ReactElement<any> | null
   condition(event: ICalendarEvent): boolean
@@ -69,7 +66,7 @@ const events: {
 /**
  * renders the given calendar event
  */
-export function Event({ event, item, nextItem, style, onEventChange }: Props) {
+export function Event({ event, style, onEventChange }: Props) {
   const eventItem = events.find(item => item.condition(event) === true)
 
   if (!eventItem) {
@@ -80,8 +77,6 @@ export function Event({ event, item, nextItem, style, onEventChange }: Props) {
     <eventItem.component
       style={style}
       event={event}
-      item={item}
-      nextItem={nextItem}
       onEventChange={onEventChange}
     />
   )

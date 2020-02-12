@@ -7,8 +7,6 @@ import { EventContainer } from '../components/EventContainer'
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
-  item: ICalendarListRow
-  nextItem: ICalendarListRow
 }
 
 export function DealContext({ style, event, item, nextItem }: Props) {
@@ -18,8 +16,6 @@ export function DealContext({ style, event, item, nextItem }: Props) {
     <EventContainer
       style={style}
       event={event}
-      item={item}
-      nextItem={nextItem}
       Icon={icon.icon}
       title={
         <div>

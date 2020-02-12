@@ -15,8 +15,6 @@ const useStyles = makeStyles(styles)
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
-  item: ICalendarListRow
-  nextItem: ICalendarListRow
   Icon?: any
   title: React.ReactNode
   subtitle?: React.ReactNode
@@ -27,7 +25,6 @@ interface Props {
 export function EventContainer({
   style,
   event,
-  item,
   Icon,
   title,
   subtitle,
