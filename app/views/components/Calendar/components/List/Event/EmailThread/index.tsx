@@ -17,8 +17,6 @@ import { EmailRecipient } from '../../../../../EmailRecipient'
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent<'full_thread'>
-  item: ICalendarListRow
-  nextItem: ICalendarListRow
 }
 
 const useStyles = makeStyles(sharedStyles)
@@ -38,8 +36,6 @@ export function EmailThread({ style, event, item, nextItem }: Props) {
     <EventContainer
       style={style}
       event={event}
-      item={item}
-      nextItem={nextItem}
       Icon={eventIcons.Email.icon}
       title={
         <Box display="flex" alignItems="center">

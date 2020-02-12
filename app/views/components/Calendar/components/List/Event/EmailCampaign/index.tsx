@@ -13,8 +13,6 @@ import { sharedStyles } from '../styles'
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
-  item: ICalendarEvent
-  nextItem: ICalendarListRow
 }
 
 const useSharedStyles = makeStyles(sharedStyles)
@@ -44,8 +42,6 @@ export function EmailCampaign({ style, event, item, nextItem }: Props) {
       style={style}
       classes={{ root: sending ? classes.sending : '' }}
       event={event}
-      item={item}
-      nextItem={nextItem}
       Icon={eventIcons.Email.icon}
       title={
         <div>
