@@ -38,7 +38,7 @@ declare type ICalendarEvent<
   people: (IContact | IAgent)[] | null
   people_len: number | null
   full_deal?: IDeal
-} & { rowIndex: number } & Association<
+} & { rowIndex?: number } & Association<
     'full_thread',
     IEmailThread,
     Associations
