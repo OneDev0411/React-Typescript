@@ -3,7 +3,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     dropdownButton: {
-      backgroundColor: '#F2F3F7', // TODO: change
+      backgroundColor: theme.palette.grey[100],
       borderRadius: 0,
       margin: theme.spacing(0, 0, 0, 0.5),
       color: theme.palette.common.black

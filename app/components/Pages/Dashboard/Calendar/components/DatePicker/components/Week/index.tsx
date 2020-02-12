@@ -4,6 +4,11 @@ import fecha from 'fecha'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import cn from 'classnames'
 
+import IconArrowLeft from 'components/SvgIcons/ArrowLeftMui/IconArrowLeft'
+import IconArrowRight from 'components/SvgIcons/ArrowRightMui/IconArrowRight'
+
+import { useIconStyles } from 'views/../styles/use-icon-styles'
+
 import { useStyles as useCommonStyles } from '../use-styles'
 
 interface Props {
@@ -16,9 +21,9 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     weekNavigationButton: {
-      backgroundColor: '#F2F3F7', // TODO: change
+      backgroundColor: theme.palette.grey[100],
       margin: theme.spacing(0, 0.5),
-      color: theme.palette.common.black
+      color: '#606974'
     },
     weekDay: {
       display: 'flex',
@@ -28,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0.5, 0),
       width: '3.5rem',
       color: '#606974', // TODO: change
-      backgroundColor: '#F2F3F7', // TODO: change
+      backgroundColor: theme.palette.grey[100],
       cursor: 'pointer',
       '&.active': {
         backgroundColor: theme.palette.common.black,
@@ -54,6 +59,7 @@ export function Week({
 }: Props) {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
+  const iconClasses = useIconStyles()
 
   const isToday = (dt: Date) =>
     fecha.format(dt, 'yyyymmdd') === fecha.format(date, 'yyyymmdd')
@@ -69,6 +75,7 @@ export function Week({
         )}
         onClick={onClickPastWeek}
       >
+        <IconArrowLeft className={iconClasses.rightMargin} />
         Last Week
       </Button>
 
@@ -93,6 +100,7 @@ export function Week({
         onClick={onClickNextWeek}
       >
         Next Week
+        <IconArrowRight className={iconClasses.leftMargin} />
       </Button>
     </>
   )
