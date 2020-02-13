@@ -15,11 +15,13 @@ import {
   selectActiveSavedSegment
 } from 'reducers/filter-segments'
 
-import { ShowMoreLess } from 'components/ShowMoreLess'
+import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
+import ArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
+import ArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import LoadingIcon from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Item from './Item'
-import { ListTitle, ListItem } from './styled'
+import { ListItem } from './styled'
 
 class SegmentsList extends React.Component {
   state = {
@@ -77,11 +79,31 @@ class SegmentsList extends React.Component {
     const { props } = this
 
     return (
-      <div data-test="lists-list" style={{ marginBottom: '2rem' }}>
-        <ListTitle>Lists</ListTitle>
+      <BaseDropdownWithMore
+        renderDropdownButton={props => (
+          <span {...props}>
+            Saved List{' '}
+            {props.isActive ? (
+              <ArrowUp style={{ verticalAlign: 'middle' }} />
+            ) : (
+              <ArrowDown style={{ verticalAlign: 'middle' }} />
+            )}
+          </span>
+        )}
+        listPlugin={{
+          disablePadding: true,
+          style: { padding: 10, width: 220 }
+        }}
+        renderMenu={() => {
+          if (props.isFetching) {
+            return [
+              <ListItem key="loading">
+                <LoadingIcon />
+              </ListItem>
+            ]
+          }
 
-        <ShowMoreLess moreText="More lists" lessText="Less lists">
-          {props.list.map(item => {
+          return props.list.map(item => {
             const { id } = item
 
             return (
@@ -94,15 +116,9 @@ class SegmentsList extends React.Component {
                 selected={this.isSelected(id)}
               />
             )
-          })}
-        </ShowMoreLess>
-
-        {props.isFetching && (
-          <ListItem>
-            <LoadingIcon />
-          </ListItem>
-        )}
-      </div>
+          })
+        }}
+      />
     )
   }
 }

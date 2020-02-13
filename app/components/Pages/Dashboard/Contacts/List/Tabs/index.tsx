@@ -1,48 +1,39 @@
 import React from 'react'
 
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
+import SavedSegments from 'components/Grid/SavedSegments/List'
 
 import ContactFilters from '../Filters'
-import TagsList from '../TagsList'
 
 interface Props {
-  showContactFilters: boolean
-  tagActiveStatus: boolean
-  contactFiltersHandler: () => void
-  tagFilterHandler: ({ filters: any }) => void
+  filter: {
+    show: boolean
+    handler: () => void
+  }
+  savedListProps: {
+    name: string
+    associations: string
+    getPredefinedLists: () => void
+    onChange: (segment) => void
+  }
   users: any
 }
 
-export const ContactsTabs = ({
-  showContactFilters,
-  contactFiltersHandler,
-  tagActiveStatus,
-  tagFilterHandler,
-  users
-}: Props) => {
+export const ContactsTabs = ({ filter, savedListProps, users }: Props) => {
   // const currentUrl = window.location.pathname
 
   return (
     <>
-      {showContactFilters && (
-        <ContactFilters onFilterChange={contactFiltersHandler} users={users} />
-      )}
       <PageTabs
         tabs={[
-          <Tab
-            key={2}
-            value={2}
-            label={
-              <TagsList
-                onFilterChange={tagFilterHandler}
-                isActive={tagActiveStatus}
-              />
-            }
-          />,
           <Tab key={0} label="All" value={0} />,
-          <TabLink key={1} label="Drafts" value={1} to="link" />
+          <TabLink key={1} label="Drafts" value={1} to="link" />,
+          <Tab key="saved" label={<SavedSegments {...savedListProps} />} />
         ]}
       />
+      {filter.show && (
+        <ContactFilters onFilterChange={filter.handler} users={users} />
+      )}
     </>
   )
 }

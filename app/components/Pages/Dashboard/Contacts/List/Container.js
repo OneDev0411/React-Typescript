@@ -26,7 +26,6 @@ import {
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
-// import SavedSegments from 'components/Grid/SavedSegments/List'
 import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
@@ -662,18 +661,19 @@ class ContactsList extends React.Component {
               <React.Fragment>
                 <Box>
                   <ContactsTabs
-                    showContactFilters={this.shouldShowFilters()}
-                    contactFiltersHandler={() =>
-                      this.handleFilterChange({}, true)
-                    }
-                    tagFilterHandler={filters => {
-                      this.setState({
-                        selectedSidebarFilter: filters.filters,
-                        isShowingDuplicatesList: false
-                      })
-                      this.handleFilterChange({ ...filters, flows: [] }, true)
+                    filter={{
+                      show: this.shouldShowFilters(),
+                      handler: () => this.handleFilterChange({}, true)
                     }}
-                    tagActiveStatus={this.state.selectedSidebarFilter !== null}
+                    savedListProps={{
+                      name: CONTACTS_SEGMENT_NAME,
+                      associations: CRM_LIST_DEFAULT_ASSOCIATIONS,
+                      getPredefinedLists: () => ({}),
+                      onChange: segment => {
+                        this.setState({ isShowingDuplicatesList: false })
+                        this.handleChangeSavedSegment(segment)
+                      }
+                    }}
                     users={viewAsUsers}
                   />
                   <Table
