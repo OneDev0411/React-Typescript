@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import { browserHistory } from 'react-router'
+import idx from 'idx'
 
 import publicConfig from '../../../../config/public'
 
@@ -262,15 +263,26 @@ const branch = ({
   waitingForRedirect
 }) => {
   if (!branchData) {
-    Branch.init(branchKey, (err, { data_parsed }) => {
-      if (err) {
-        console.log('Init - error', err, data_parsed)
-        browserHistory.push(OOPS_PAGE)
-      }
+    Branch.init(
+      branchKey,
+      {
+        retries: 30,
+        retry_delay: 3000
+      },
+      (err, data) => {
+        if (err) {
+          console.log('Init - error', err, data)
+          browserHistory.push(OOPS_PAGE)
+        }
 
-      console.log('Init - success', data_parsed)
-      setBranchData(data_parsed)
-    })
+        if (idx(data, d => d.data_parsed.action)) {
+          console.log('Init - success', data)
+          setBranchData(data.data_parsed)
+        } else {
+          console.log('Init - success but with corrupted data', data)
+        }
+      }
+    )
   } else if (!waitingForRedirect) {
     const { receiving_user, action } = branchData
 
