@@ -1,149 +1,88 @@
-import React, {
-  useState,
-  ChangeEvent,
-  useCallback,
-  forwardRef,
-  RefObject,
-  useImperativeHandle
-} from 'react'
-import { Tabs, Tab } from '@material-ui/core'
+import React from 'react'
 
-import { eventTypesIcons, EventTypeIcon } from 'views/utils/event-types-icons'
-import { importantDatesIcons } from 'views/utils/important-dates-icons'
+import { withRouter, WithRouterProps } from 'react-router'
 
-import { Container, TabTitle, TabItem } from './styled'
+import { PageTabs, TabLink } from 'components/PageTabs'
 
-export const defaultFilter = {
-  'object_types[]': [
-    'contact',
-    'contact_attribute',
-    'crm_task',
-    'email_campaign',
-    'deal_context'
-  ]
-}
+const BASE_URL = '/dashboard/calendar/'
 
 interface TabItem {
   label: string
-  value: number
-  Icon: EventTypeIcon | null
   filter: object
+  link: string
 }
 
-export interface FiltersRef {
-  changeFilter(tabId: number): void
-}
-
-interface Props {
-  onChange(filter: object): void
-  filterRef?: RefObject<FiltersRef>
-}
-
-const TAB_ITEMS: TabItem[] = [
+export const TAB_ITEMS: TabItem[] = [
   {
     label: 'All Events',
-    value: 0,
-    Icon: null,
-    filter: defaultFilter
+    filter: {
+      'object_types[]': [
+        'contact',
+        'contact_attribute',
+        'crm_task',
+        'email_campaign',
+        'deal_context'
+      ]
+    },
+    link: ''
   },
   {
     label: 'Touches',
-    value: 2,
-    Icon: eventTypesIcons.ListingAppointment,
     filter: {
       'object_types[]': ['contact']
-    }
+    },
+    link: 'touches'
   },
   {
     label: 'Calls',
-    value: 1,
-    Icon: eventTypesIcons.Call,
     filter: {
       'event_types[]': ['Call']
-    }
+    },
+    link: 'calls'
   },
   {
     label: 'Celebrations',
-    value: 3,
-    Icon: importantDatesIcons.Birthday,
     filter: {
       'object_types[]': ['contact_attribute']
-    }
+    },
+    link: 'celebrations'
   },
   {
     label: 'Critical Dates',
-    value: 4,
-    Icon: eventTypesIcons['Task Critical'],
     filter: {
       'object_types[]': ['deal_context']
-    }
+    },
+    link: 'critical-dates'
   },
   {
     label: 'Scheduled Emails',
-    value: 5,
-    Icon: eventTypesIcons.Email,
     filter: {
       'object_types[]': ['email_campaign']
-    }
+    },
+    link: 'emails'
   }
 ]
 
-function Filters({ filterRef, onChange }: Props) {
-  const [selectedTab, setSelectedTab] = useState(TAB_ITEMS[0].value)
-
-  const handleFilterChange = useCallback(
-    (e: ChangeEvent<{}> | null, value: number) => {
-      if (selectedTab === value) {
-        return
-      }
-
-      setSelectedTab(value)
-
-      const tab = TAB_ITEMS.find(tab => tab.value === value)
-
-      if (tab) {
-        onChange(tab.filter)
-      }
-    },
-    [onChange, selectedTab]
-  )
-
-  useImperativeHandle(filterRef, () => ({
-    changeFilter: (tabId: number) => handleFilterChange(null, tabId)
-  }))
-
-  return (
-    <Container>
-      <Tabs
-        value={selectedTab}
-        onChange={handleFilterChange}
-        indicatorColor="primary"
-        textColor="primary"
-        variant="scrollable"
-        scrollButtons="auto"
-      >
-        {TAB_ITEMS.map(({ label, value, Icon }, index: number) => (
-          <Tab
-            key={index}
-            value={value}
-            label={
-              <TabItem>
-                {Icon && (
-                  <Icon.icon
-                    fill={selectedTab === value ? Icon.color : '#3c4b6e'}
-                    style={{ width: '1.2rem' }}
-                  />
-                )}
-                <TabTitle>{label}</TabTitle>
-              </TabItem>
-            }
-          />
-        ))}
-      </Tabs>
-    </Container>
-  )
+interface Props {
+  onChange: (filter: object) => void
 }
 
-export default forwardRef((props: Props, ref: RefObject<FiltersRef>) => (
-  <Filters {...props} filterRef={ref} />
-))
+export const Filters = withRouter((props: Props & WithRouterProps) => {
+  const handleChangeTab = (value: string) => {
+    const item = TAB_ITEMS.find(({ link }) => link === value) || TAB_ITEMS[0]
+
+    props.onChange(item.filter)
+  }
+
+  return (
+    <PageTabs
+      defaultValue={props.params.id || 0}
+      onChange={handleChangeTab}
+      tabs={TAB_ITEMS.map(({ label, link }, index: number) => {
+        const url = `${BASE_URL}${link}`
+
+        return <TabLink key={index} value={link || 0} label={label} to={url} />
+      })}
+    />
+  )
+})

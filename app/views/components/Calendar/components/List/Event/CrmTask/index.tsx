@@ -1,4 +1,5 @@
 import React, { useContext, useMemo, MouseEvent } from 'react'
+import { makeStyles } from '@material-ui/styles'
 
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 
@@ -9,17 +10,18 @@ import { Associations } from './Associations'
 import { CrmStatus } from './Status'
 import OpenHouseRegistration from './actions/OpenHouseRegistration'
 
-import styles from '../styles'
+import { sharedStyles } from '../styles'
 
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
-  nextItem: ICalendarListRow
   user: IUser
   onEventChange(event: IEvent, type: string): void
 }
 
-export function CrmTask({ style, event, nextItem, onEventChange }: Props) {
+const useStyles = makeStyles(sharedStyles)
+export function CrmTask({ style, event, onEventChange }: Props) {
+  const classes = useStyles()
   const { setSelectedEvent } = useContext(ListContext)
 
   const handleSelectEvent = (e: MouseEvent<HTMLElement>) => {
@@ -45,13 +47,9 @@ export function CrmTask({ style, event, nextItem, onEventChange }: Props) {
     <EventContainer
       style={style}
       event={event}
-      nextItem={nextItem}
-      icon={{
-        color: icon.color,
-        element: icon.icon
-      }}
+      Icon={icon.icon}
       title={
-        <div style={styles.title}>
+        <div className={classes.title}>
           <CrmStatus event={event} onChange={onEventChange} />
           <a
             onClick={handleSelectEvent}

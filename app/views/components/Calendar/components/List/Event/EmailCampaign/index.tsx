@@ -8,14 +8,14 @@ import { ListContext } from '../../context'
 
 import { EventContainer } from '../components/EventContainer'
 
-import styles from '../styles'
+import { sharedStyles } from '../styles'
 
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
-  nextItem: ICalendarListRow
 }
 
+const useSharedStyles = makeStyles(sharedStyles)
 const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
@@ -26,11 +26,13 @@ const useStyles = makeStyles(
   { name: 'EmailCampaign' }
 )
 
-export function EmailCampaign({ style, event, nextItem }: Props) {
+export function EmailCampaign({ style, event }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
   const handleContainerClick = () => setSelectedEvent(event)
 
   const classes = useStyles()
+  const sharedClasses = useSharedStyles()
+
   const sending =
     event.event_type === 'scheduled_email' &&
     event.timestamp * 1000 < Date.now()
@@ -40,15 +42,11 @@ export function EmailCampaign({ style, event, nextItem }: Props) {
       style={style}
       classes={{ root: sending ? classes.sending : '' }}
       event={event}
-      nextItem={nextItem}
-      icon={{
-        color: eventIcons.Email.color,
-        element: eventIcons.Email.icon
-      }}
+      Icon={eventIcons.Email.icon}
       title={
         <div>
           <a
-            style={styles.link}
+            className={sharedClasses.link}
             onClick={e => {
               e.preventDefault()
               setSelectedEvent(event)
