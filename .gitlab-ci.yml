@@ -30,22 +30,21 @@ test_unit:
     - npm i
     - npm run test:ci -- --coverage
 
-deploy_alpha:
-  stage: deploy
-  image: timbru31/ruby-node:latest
-  before_script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-  script:
-    - dpl --provider=heroku --app=rechat-web-alpha --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
-    - node ./scripts/update-gl-issue-labels.js "$LABELS_TO_REMOVE" "$LABELS_TO_ADD_FOR_CHAPPAR"
-  environment:
-    name: alpha
-    url: https://alpha.rechat.com
-  when: manual
-  only:
-    - alpha
+# deploy_alpha:
+#   stage: deploy
+#   image: timbru31/ruby-node:latest
+#   before_script:
+#     - apt-get update -qy
+#     - apt-get install -y ruby-dev
+#     - gem install dpl
+#   script:
+#     - dpl --provider=heroku --app=rechat-web-alpha --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
+#     - node ./scripts/update-gl-issue-labels.js "$LABELS_TO_REMOVE" "$LABELS_TO_ADD_FOR_CHAPPAR"
+#   environment:
+#     name: alpha
+#     url: https://alpha.rechat.com
+#   only:
+#     - alpha
 
 deploy_irish:
   stage: deploy
