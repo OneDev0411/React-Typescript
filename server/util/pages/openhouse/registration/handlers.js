@@ -53,7 +53,7 @@ export function onlineSubmitHandler(data) {
       const rawAttrDefData = attributeDefsBody.data
       const neededKeys = Object.keys(data.data.registration)
 
-      neededKeys.push('source_type', 'tag')
+      neededKeys.push('source_type', 'tag', 'note')
 
       const attrDefData = {}
 
@@ -101,6 +101,20 @@ export function onlineSubmitHandler(data) {
             ]
           }
         ]
+      }
+
+      const agentName = data.data.registration.agent_name
+
+      if (agentName) {
+        createContactRequestBody.contacts[0].attributes.push({
+          text: `Open house agent's name: ${agentName}`,
+          attribute_def: attrDefData.note
+        })
+      } else {
+        createContactRequestBody.contacts[0].attributes.push({
+          text: 'Lead',
+          attribute_def: attrDefData.tag
+        })
       }
 
       return fetch(createContactApiUrl, {
