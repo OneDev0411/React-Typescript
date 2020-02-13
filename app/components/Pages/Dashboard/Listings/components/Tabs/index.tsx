@@ -60,8 +60,7 @@ export const Tabs = ({
         display="flex"
         flexGrow="1"
         borderBottom={`2px solid ${theme.palette.divider}`}
-        mx={1}
-        py={1}
+        my={1}
         justifyContent="flex-end"
       >
         <SortDrowndown onChangeSort={onChangeSort} />
