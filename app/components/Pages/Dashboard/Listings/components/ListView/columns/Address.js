@@ -28,12 +28,6 @@ const IconContainer = styled(Flex)`
   }
 `
 
-const SubAddress = styled.div`
-  color: ${grey.A550};
-  display: flex;
-  font-size: 0.875rem;
-`
-
 const Title = styled.div`
   overflow: hidden;
   white-space: nowrap;
@@ -69,7 +63,6 @@ export const Address = ({ listing }) => (
       <Title>
         <Link to={`/dashboard/mls/${listing.id}`}>{listing.address}</Link>
       </Title>
-      <SubAddress className="hover-color--black">{listing.status}</SubAddress>
     </Flex>
   </Flex>
 )
