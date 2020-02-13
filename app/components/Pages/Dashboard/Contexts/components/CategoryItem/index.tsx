@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
           background: '#FAFAFA'
         },
         '&:hover': {
-          background: '#F2F3F7',
+          background: theme.palette.grey[50],
           color: theme.palette.primary.main,
           '& .MuiIconButton-root': {
             display: 'block'

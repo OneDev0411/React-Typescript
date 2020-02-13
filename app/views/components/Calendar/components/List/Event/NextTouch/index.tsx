@@ -10,10 +10,9 @@ import { TouchDateSubtitle } from './Subtitle'
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
-  nextItem: ICalendarListRow
 }
 
-export function NextTouch({ style, event, nextItem }: Props) {
+export function NextTouch({ style, event }: Props) {
   if (!event.people) {
     return null
   }
@@ -24,11 +23,7 @@ export function NextTouch({ style, event, nextItem }: Props) {
     <EventContainer
       style={style}
       event={event}
-      nextItem={nextItem}
-      icon={{
-        color: eventIcons.TouchDate.color,
-        element: eventIcons.TouchDate.icon
-      }}
+      Icon={eventIcons.TouchDate.icon}
       title={
         <div>
           Contact{' '}
