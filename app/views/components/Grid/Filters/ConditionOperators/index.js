@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { BasicDropdown } from 'components/BasicDropdown'
-import { grey } from 'views/utils/colors'
 
 import Item from './item'
 
@@ -34,9 +33,6 @@ export function ConditionOperators(props) {
       style={{
         marginRight: '0.5rem',
         width: '10.7rem'
-      }}
-      buttonStyle={{
-        backgroundColor: `${grey.A150}`
       }}
       itemRenderer={({ item, ...rest }) => (
         <Item key={item.value} title={item.title} {...rest} />

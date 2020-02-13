@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import Flex from 'styled-flex-component'
 
 import Card from 'components/Card'
 import { grey, red } from 'views/utils/colors'
@@ -16,7 +15,7 @@ function getItemColor(props) {
 }
 
 export const RemoveButton = styled(IconButton)`
-  visibility: hidden;
+  height: 1.5em;
   margin-left: 0.5em;
   padding: 0;
 `
@@ -25,15 +24,14 @@ export const ItemTitle = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 13px;
 `
 
-export const Container = styled(Flex)`
+export const Container = styled.div`
+  display: inline-flex;
   position: relative;
-  height: 40px;
   margin-right: 0.5em;
-  line-height: 38px;
-  border-radius: 3px;
-  background-color: ${props => (props.isActive ? '#fff' : grey.A100)};
+  border-radius: 100px;
   border: solid 1px ${props => (props.isActive ? '#000' : grey.A100)};
   cursor: pointer;
 
@@ -46,8 +44,8 @@ export const Container = styled(Flex)`
     border: solid 1px ${props => getItemColor(props)};
   }
 
-  &:hover ${RemoveButton} {
-    visibility: visible;
+  &:hover ${RemoveButton} svg {
+    fill: ${grey.A900};
   }
 `
 

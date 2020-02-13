@@ -28,7 +28,14 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 1.5em;
+`
+const FiltersContainer = styled.div`
+  flex-grow: 1;
+`
+const FiltersOptions = styled.div`
+  > * {
+    display: inline-flex;
+  }
 `
 
 class Filters extends React.Component {
@@ -151,47 +158,45 @@ class Filters extends React.Component {
 
     return (
       <Container>
-        {this.props.disableConditionOperators || (
-          <ConditionOperators
-            selectedItem={this.props.conditionOperator}
-            onChange={this.onConditionChange}
+        <FiltersContainer>
+          {Object.keys(activeFilters).map(id => {
+            const filter = activeFilters[id]
+
+            return (
+              <FilterItem
+                key={id}
+                {...filter}
+                isIncomplete={!isFilterValid(filter)}
+                filterConfig={this.findFilterById(filter.id)}
+                onToggleFilterActive={() => this.toggleFilterActive(id)}
+                onRemove={() => this.removeFilter(id)}
+                onFilterChange={(values, operator) =>
+                  this.onFilterChange(id, values, operator)
+                }
+              />
+            )
+          })}
+
+          <AddFilter
+            config={props.config}
+            disabled={!Object.values(activeFilters).every(isFilterValid)}
+            onNewFilter={this.createFilter}
           />
-        )}
-
-        {Object.keys(activeFilters).map(id => {
-          const filter = activeFilters[id]
-
-          return (
-            <FilterItem
-              key={id}
-              {...filter}
-              isIncomplete={!isFilterValid(filter)}
-              filterConfig={this.findFilterById(filter.id)}
-              onToggleFilterActive={() => this.toggleFilterActive(id)}
-              onRemove={() => this.removeFilter(id)}
-              onFilterChange={(values, operator) =>
-                this.onFilterChange(id, values, operator)
-              }
+        </FiltersContainer>
+        <FiltersOptions>
+          {this.props.disableConditionOperators || (
+            <ConditionOperators
+              selectedItem={this.props.conditionOperator}
+              onChange={this.onConditionChange}
             />
-          )
-        })}
-
-        <AddFilter
-          config={props.config}
-          disabled={!Object.values(activeFilters).every(isFilterValid)}
-          onNewFilter={this.createFilter}
-        />
-
-        {/*
-        TODO: don't pass all props to the child. Refactor SaveSegment component
-        to read required stuff from redux state instead
-        */}
-        {React.Children.map(children, child =>
-          React.cloneElement(child, {
-            filters: activeFilters,
-            ...props
-          })
-        )}
+          )}
+          {React.Children.map(children, child =>
+            React.cloneElement(child, {
+              filters: activeFilters,
+              ...props
+            })
+          )}
+        </FiltersOptions>
       </Container>
     )
   }

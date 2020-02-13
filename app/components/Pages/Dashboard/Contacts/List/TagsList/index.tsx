@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
 
 import {
   updateActiveFilter,
@@ -16,14 +15,11 @@ import {
 } from 'reducers/contacts/attributeDefs'
 import { selectActiveFilters } from 'reducers/filter-segments'
 
-import ToolTip from 'components/tooltip'
 import {
-  ListTitle,
   ListItem,
   ListItemName
 } from 'components/Grid/SavedSegments/List/styled'
-import { ShowMoreLess } from 'components/ShowMoreLess'
-import IconCog from 'components/SvgIcons/Cog/IconCog'
+import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
 
 import { normalizeAttributeFilters } from '../utils'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
@@ -97,44 +93,33 @@ export class TagsList extends React.Component<Props> {
     const { existingTags, isFetching } = this.props
 
     return (
-      <div style={{ marginTop: '1rem' }} data-test="tags-list">
-        <ListTitle>
-          <span>Tags</span>
-          <Link to="/dashboard/account/manage-tags">
-            <ToolTip caption="Manage tags">
-              <IconCog />
-            </ToolTip>
-          </Link>
-        </ListTitle>
+      <BaseDropdownWithMore
+        buttonLabel="Tags"
+        renderMenu={({ close }) => {
+          if (isFetching) {
+            return [
+              <ListItem key="loading">
+                <i className="fa fa-spin fa-spinner" />
+              </ListItem>
+            ]
+          }
 
-        <ShowMoreLess
-          moreText="More tags"
-          lessText="Less tags"
-          style={{ marginBottom: '2rem' }}
-        >
-          {existingTags.map((item, index) => {
+          return existingTags.map((item, index) => {
             const isSelected = this.isSelected(item.text)
 
             return (
-              <ToolTip key={index} caption={item.text} placement="right">
-                <ListItem
-                  data-test={`tag-item-${item.text}`}
-                  isSelected={isSelected}
-                  onClick={() => this.onSelectList(item)}
-                >
-                  <ListItemName>{item.text}</ListItemName>
-                </ListItem>
-              </ToolTip>
+              <ListItem
+                key={index}
+                data-test={`tag-item-${item.text}`}
+                isSelected={isSelected}
+                onClick={() => this.onSelectList(item)}
+              >
+                <ListItemName>{item.text}</ListItemName>
+              </ListItem>
             )
-          })}
-        </ShowMoreLess>
-
-        {isFetching && (
-          <ListItem>
-            <i className="fa fa-spin fa-spinner" />
-          </ListItem>
-        )}
-      </div>
+          })
+        }}
+      />
     )
   }
 }
