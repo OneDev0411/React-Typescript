@@ -466,7 +466,7 @@ export default (
 
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
-        <Route path="following" component={AsyncListingsFavorites} />
+        <Route path="favorites" component={AsyncListingsFavorites} />
         <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
       </Route>
 

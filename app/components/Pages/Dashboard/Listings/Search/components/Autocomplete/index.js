@@ -308,7 +308,7 @@ class MlsAutocompleteSearch extends Component {
                   onKeyDown={this.handleKeyDownInput}
                   onFocus={this.handleInputFocus}
                   onBlur={this.handleInputBlur}
-                  placeholder="Search location or MLS#"
+                  placeholder="Search location or MLS number..."
                 />
                 {isOpen && (
                   <ListContainer>

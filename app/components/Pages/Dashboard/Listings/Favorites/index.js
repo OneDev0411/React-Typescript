@@ -8,9 +8,10 @@ import { selectListings } from '../../../../../reducers/listings'
 
 import Map from './Map'
 import { Header } from '../components/PageHeader'
-import { MapView } from '../components/MapView'
-import { GridView } from '../components/GridView'
-import { GalleryView } from '../components/GalleryView'
+import Tabs from '../components/Tabs'
+import MapView from '../components/MapView'
+import ListView from '../components/ListView'
+import GridView from '../components/GridView'
 
 class Favorites extends React.Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class Favorites extends React.Component {
     const activeView = e.currentTarget.dataset.view
 
     this.setState({ activeView }, () => {
-      browserHistory.push(`/dashboard/mls/following?view=${activeView}`)
+      browserHistory.push(`/dashboard/mls/favorites?view=${activeView}`)
     })
   }
 
@@ -50,11 +51,11 @@ class Favorites extends React.Component {
           />
         )
 
-      case 'gallery':
-        return <GalleryView isFetching={isFetching} listings={listings} />
+      case 'grid':
+        return <GridView isFetching={isFetching} listings={listings} />
 
       default:
-        return <GridView isFetching={isFetching} listings={listings} />
+        return <ListView isFetching={isFetching} listings={listings} />
     }
   }
 
@@ -62,14 +63,12 @@ class Favorites extends React.Component {
     return (
       <React.Fragment>
         <Helmet>
-          <title>Following | Properties | Rechat</title>
+          <title>Favorites | Properties | Rechat</title>
         </Helmet>
-        <Header
-          title="Following"
+        <Header title="Favorites" />
+        <Tabs
           onChangeView={this.onChangeView}
           activeView={this.state.activeView}
-          isSideMenuOpen={this.props.isSideMenuOpen}
-          toggleSideMenu={this.props.toggleSideMenu}
         />
         {this.renderMain()}
       </React.Fragment>

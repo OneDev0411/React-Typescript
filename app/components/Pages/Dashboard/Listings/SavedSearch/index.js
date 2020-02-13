@@ -9,9 +9,9 @@ import { selectAlert } from '../../../../../reducers/listings/alerts/list'
 
 import Map from './Map'
 import { Header } from '../components/PageHeader'
-import { MapView } from '../components/MapView'
-import { GridView } from '../components/GridView'
-import { GalleryView } from '../components/GalleryView'
+import MapView from '../components/MapView'
+import ListView from '../components/ListView'
+import GridView from '../components/GridView'
 import Avatars from '../../../../../views/components/Avatars'
 
 const mappingStatus = status => {
@@ -133,11 +133,11 @@ class SavedSearch extends React.Component {
           />
         )
 
-      case 'gallery':
-        return <GalleryView isFetching={isFetching} listings={listings} />
+      case 'grid':
+        return <GridView isFetching={isFetching} listings={listings} />
 
       default:
-        return <GridView isFetching={isFetching} listings={listings} />
+        return <ListView isFetching={isFetching} listings={listings} />
     }
   }
 
