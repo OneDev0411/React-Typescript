@@ -56,11 +56,10 @@ export function ImportContactsButton({ accounts, user }: Props) {
   return (
     <SplitButton
       color="primary"
-      variant="contained"
       popperPlacement="bottom-end"
       disabled={google.connecting || syncing}
       onClick={google.connect}
-      style={{ marginRight: '1rem', zIndex: 2 }}
+      style={{ zIndex: 2 }}
       renderMenu={() => (
         <>
           <MenuItem onClick={outlook.connect} disabled={outlook.connecting}>

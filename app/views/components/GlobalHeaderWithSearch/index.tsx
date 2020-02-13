@@ -8,8 +8,9 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     wrapper: {
       display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between'
+      flexDirection: 'row-reverse',
+      justifyContent: 'space-between',
+      alignItems: 'center'
     },
     searchContainer: {
       display: 'flex',

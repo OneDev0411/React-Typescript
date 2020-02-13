@@ -41,8 +41,8 @@ import Table from './Table'
 // import TagsList from './TagsList'
 // import AllContactsList from './AllContactsList'
 // import FlowsList from './FlowsList'
-// import ImportContactsButton from './ImportContactsButton'
-// import TouchReminder from './TouchReminder'
+import ImportContactsButton from './ImportContactsButton'
+import TouchReminder from './TouchReminder'
 
 import {
   FLOW_FILTER_ID,
@@ -598,8 +598,8 @@ class ContactsList extends React.Component {
         activeSegment.filters.length === 0)
 
     const title = this.getHeaderTitle()
-    // const showImportAction = this.shouldShowImportAndCreateActions()
-    // const activeTag = this.getActiveTag()
+    const showImportAction = this.shouldShowImportAndCreateActions()
+    const activeTag = this.getActiveTag()
 
     return (
       <>
@@ -608,7 +608,25 @@ class ContactsList extends React.Component {
             placeholder="Search Contacts"
             onSearch={this.handleSearch}
             title={title}
-          />
+          >
+            {!isZeroState && (
+              <Box ml={2}>
+                {activeSegment && activeSegment.is_editable && (
+                  <TouchReminder
+                    value={activeSegment.touch_freq}
+                    onChange={this.handleListTouchReminderUpdate}
+                  />
+                )}
+                {activeTag && activeTag.id && (
+                  <TouchReminder
+                    value={activeTag.touch_freq}
+                    onChange={this.handleTagTouchReminderUpdate}
+                  />
+                )}
+                {showImportAction && <ImportContactsButton />}
+              </Box>
+            )}
+          </PageLayout.HeaderWithSearch>
           <PageLayout.Main>
             {this.state.syncStatus === 'pending' && (
               <Callout
@@ -658,27 +676,6 @@ class ContactsList extends React.Component {
                     tagActiveStatus={this.state.selectedSidebarFilter !== null}
                     users={viewAsUsers}
                   />
-                  {/* show action btn */}
-                  {/*
-                  !isZeroState && (
-                    <React.Fragment>
-                      {activeSegment && activeSegment.is_editable && (
-                        <TouchReminder
-                          value={activeSegment.touch_freq}
-                          onChange={this.handleListTouchReminderUpdate}
-                        />
-                      )}
-                      {activeTag && activeTag.id && (
-                        <TouchReminder
-                          value={activeTag.touch_freq}
-                          onChange={this.handleTagTouchReminderUpdate}
-                        />
-                      )}
-                      {showImportAction && <ImportContactsButton />}
-                    </React.Fragment>
-                      )
-                  */}
-                  {/* end show action btn */}
                   <Table
                     data={contacts}
                     order={this.order}
