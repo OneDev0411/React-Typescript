@@ -3,18 +3,21 @@ import React from 'react'
 import pluralize from 'pluralize'
 
 import { Box } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
 
 import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
 
 import { Address } from './columns/Address'
 
-class ListView extends React.Component {
-  columns = [
+const ListView = ({ sortedListings, listings, isFetching }) => {
+  const theme = useTheme()
+
+  const columns = [
     {
       header: 'Address',
       id: 'address',
-      width: '30%',
+      width: '15%',
       render: ({ row: listing }) => <Address listing={listing} />
     },
     {
@@ -75,20 +78,18 @@ class ListView extends React.Component {
     }
   ]
 
-  render() {
-    return (
-      <Box p={theme.spacing(0, 1, 1)}>
-        <Table
-          columns={this.columns}
-          rows={this.props.sortedListings}
-          totalRows={this.props.listings.info.total}
-          loading={this.props.isFetching ? 'middle' : null}
-          summary={total => `${total} Listings`}
-          LoadingStateComponent={LoadingComponent}
-        />
-      </Box>
-    )
-  }
+  return (
+    <Box p={theme.spacing(0, 1, 1)}>
+      <Table
+        columns={columns}
+        rows={sortedListings}
+        totalRows={listings.info.total}
+        loading={isFetching ? 'middle' : null}
+        // summary={total => `${total} Listings`}
+        LoadingStateComponent={LoadingComponent}
+      />
+    </Box>
+  )
 }
 
 export default ListView
