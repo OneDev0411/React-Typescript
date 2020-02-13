@@ -49,9 +49,5 @@ export function get(activeBrand: IBrand, name: string) {
 
   const defaultValue = lodashGet(default_palette, name)
 
-  const v = lodashGet(brand, `settings.palette.palette.${name}`, defaultValue)
-
-  console.log(name, v, defaultValue)
-
-  return v
+  return lodashGet(brand, `settings.palette.palette.${name}`, defaultValue)
 }
