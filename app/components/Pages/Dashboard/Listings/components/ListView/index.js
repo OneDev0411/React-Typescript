@@ -17,13 +17,12 @@ const ListView = ({ sortedListings, listings, isFetching }) => {
     {
       header: 'Address',
       id: 'address',
-      width: '15%',
+      width: '20%',
       render: ({ row: listing }) => <Address listing={listing} />
     },
     {
       header: 'Status',
       id: 'status',
-      width: '20%',
       render: ({ row: listing }) => `${listing.status}`
     },
     {
