@@ -60,7 +60,9 @@ const BLOCK_IDS_TO_REMOVE = [
   'mj-3-columns',
   'mj-text',
   'mj-divider',
-  'mj-spacer'
+  'mj-spacer',
+  'mj-carousel',
+  'mj-carousel-image'
 ]
 
 const BLOCK_BUTTON_ICONS = {
