@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
+import idx from 'idx'
 
 import { getSavedSearchListings } from '../../../../../models/listings/alerts/get-alert-listings'
 import { selectAlert } from '../../../../../reducers/listings/alerts/list'
@@ -13,6 +14,9 @@ import MapView from '../components/MapView'
 import ListView from '../components/ListView'
 import GridView from '../components/GridView'
 import Avatars from '../../../../../views/components/Avatars'
+
+import { formatListing } from '../helpers/format-listing'
+import { normalizeListingLocation } from '../../../../../utils/map'
 
 const mappingStatus = status => {
   switch (status) {
@@ -62,6 +66,10 @@ class SavedSearch extends React.Component {
       listings: {
         data: [],
         info: { total: 0 }
+      },
+      activeSort: {
+        index: 'price',
+        isDescending: true
       },
       isFetching: false,
       activeView: props.location.query.view || 'map'
@@ -114,15 +122,63 @@ class SavedSearch extends React.Component {
     })
   }
 
+  addListingsDistanceFromCenter = (listing, center) => {
+    if (!center || !idx(window, w => w.google.maps.geometry)) {
+      return listing
+    }
+
+    const { google } = window
+
+    const centerLatLng = new google.maps.LatLng(center.lat, center.lng)
+
+    const listingLocation = new google.maps.LatLng(listing.lat, listing.lng)
+
+    const distanceFromCenter = google.maps.geometry.spherical.computeDistanceBetween(
+      centerLatLng,
+      listingLocation
+    )
+
+    return {
+      ...listing,
+      distanceFromCenter
+    }
+  }
+
+  format = (listing, center, user) =>
+    this.addListingsDistanceFromCenter(
+      formatListing(normalizeListingLocation(listing), user),
+      center
+    )
+
+  sortBy = (a, b, index, isDescending) =>
+    isDescending ? a[index] - b[index] : b[index] - a[index]
+
+  sortListings = listings => {
+    const formattedListings = listings.data.map(listing =>
+      this.format(listing, this.props.mapCenter, this.props.user)
+    )
+
+    return formattedListings.sort((a, b) =>
+      this.sortBy(
+        a,
+        b,
+        this.state.activeSort.index,
+        this.state.activeSort.isDescending
+      )
+    )
+  }
+
   renderMain() {
     const { listings, isFetching } = this.state
+
+    const sortedListings = this.sortListings(listings)
 
     switch (this.state.activeView) {
       case 'map':
         return (
           <MapView
             tabName="alerts"
-            listings={listings}
+            sortedListings={sortedListings}
             Map={
               <Map
                 savedSearch={this.props.savedSearch}
