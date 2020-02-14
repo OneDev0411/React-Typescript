@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import { browserHistory } from 'react-router'
+import idx from 'idx'
 
 import publicConfig from '../../../../config/public'
 
@@ -146,7 +147,7 @@ const redirectHandler = async (
       return
     }
   } else if (isShadow) {
-    // console.log('isShadow:')
+    console.log('isShadow:', branchData)
     redirect = `register?token=${token}`
 
     if (listing) {
@@ -180,7 +181,7 @@ const redirectHandler = async (
     )}`
 
     if (hasConflict()) {
-      // console.log('you logged with different user')
+      console.log('you logged with different user')
       params.redirectTo = encodeURIComponent(redirect)
       params.messageText =
         'You are currently logged in a different user. Please sign out and sign up your new account.'
@@ -189,6 +190,8 @@ const redirectHandler = async (
       return
     }
   } else if (actionType === 'UserLogin') {
+    console.log('UserLogin', branchData)
+
     const loginHandler = () =>
       dispatch(
         signin(
@@ -203,6 +206,8 @@ const redirectHandler = async (
       )
 
     if (hasConflict()) {
+      console.log('UserLogin - CONFLICT')
+
       setActiveModal({
         name: 'CONFLICT',
         params: {
@@ -222,11 +227,11 @@ const redirectHandler = async (
 
     return
   } else if (loggedInUser) {
-    // console.log('loggedIn')
+    console.log('loggedIn', branchData)
     redirect = getActionRedirectURL(branchData)
 
     if (hasConflict()) {
-      // console.log('you logged with deferent user')
+      console.log('you logged with deferent user')
       params.redirectTo = encodeURIComponent(redirect)
       params.messageText = getConfilictMessageText(receivingUser.email)
       setActiveModal({ name: 'CONFLICT', params })
@@ -234,7 +239,7 @@ const redirectHandler = async (
       return
     }
   } else {
-    // console.log('you registered before with this email')
+    console.log('you registered before with this email', branchData)
 
     const username = `username=${encodeURIComponent(receivingUser.email)}`
 
@@ -258,14 +263,26 @@ const branch = ({
   waitingForRedirect
 }) => {
   if (!branchData) {
-    Branch.init(branchKey, (err, { data_parsed }) => {
-      if (err) {
-        // console.log(err)
-        browserHistory.push(OOPS_PAGE)
-      }
+    Branch.init(
+      branchKey,
+      {
+        retries: 30,
+        retry_delay: 3000
+      },
+      (err, data) => {
+        if (err) {
+          console.log('Init - error', err, data)
+          browserHistory.push(OOPS_PAGE)
+        }
 
-      setBranchData(data_parsed)
-    })
+        if (idx(data, d => d.data_parsed.action)) {
+          console.log('Init - success', data)
+          setBranchData(data.data_parsed)
+        } else {
+          console.log('Init - success but with corrupted data', data)
+        }
+      }
+    )
   } else if (!waitingForRedirect) {
     const { receiving_user, action } = branchData
 
@@ -329,12 +346,12 @@ const branch = ({
           })
           // eslint-disable-next-line
           .catch(error => {
-            // console.log(err)
+            console.log('receiving_user', error, branchData)
             browserHistory.push(OOPS_PAGE)
           })
       }
     } else {
-      // console.log('last oops in last else')
+      console.log('last oops in last else', branchData)
       browserHistory.push(OOPS_PAGE)
     }
   }
