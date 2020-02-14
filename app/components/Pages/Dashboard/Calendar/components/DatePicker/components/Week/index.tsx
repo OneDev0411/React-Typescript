@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
     weekNavigationButton: {
       backgroundColor: theme.palette.grey[100],
       margin: theme.spacing(0, 0.5),
-      color: '#606974'
+      color: theme.palette.grey[600]
     },
     weekDay: {
       display: 'flex',
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
       padding: theme.spacing(0.5, 0),
       width: '3.5rem',
-      color: '#606974', // TODO: change
+      color: theme.palette.grey[600],
       backgroundColor: theme.palette.grey[100],
       cursor: 'pointer',
       '&.active': {
