@@ -1,13 +1,11 @@
 import { ACL } from 'constants/acl'
 
 import React from 'react'
+import { withRouter, WithRouterProps } from 'react-router'
 
 import Acl from 'components/Acl'
 import { PageTabs, TabLink } from 'components/PageTabs'
 
-interface Props {
-  user: IUser
-}
 interface ItemsShape {
   label: string
   to: string
@@ -61,8 +59,8 @@ const Items: ItemsShape[] = [
   }
 ]
 
-export const SettingsTabs = ({ user }: Props) => {
-  const currentUrl = window.location.pathname
+export const SettingsTabs = withRouter(({ location }: WithRouterProps) => {
+  const currentUrl = location.pathname
 
   return (
     <PageTabs
@@ -76,6 +74,6 @@ export const SettingsTabs = ({ user }: Props) => {
       })}
     />
   )
-}
+})
 
 export default SettingsTabs
