@@ -112,12 +112,15 @@ export function onlineSubmitHandler(data) {
         })
       }
 
+      const now = new Date()
       const contactNote = `
 <div>Source: Open House Registration Page</div>
-<div>Registered at: ${new Date().toLocaleTimeString('en-US', {
-        dateStyle: 'full',
-        timeStyle: 'short'
-      })}</div>
+<div>Registered at: ${now.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })} ${now.toLocaleTimeString('en-US', { timeStyle: 'short' })}</div>
 <div>Open House: ${data.title}</div>
 <div>Realtor: ${realtorName || 'N/A'}</div>
 `
