@@ -13,8 +13,9 @@ export function useRowsSorting<Row>(
   rows: Row[]
 } {
   const [state] = useGridContext()
+  const activeSort = options.sortBy || state.sorting.activeSort
 
-  if (!state.sorting.activeSort) {
+  if (!activeSort) {
     return {
       columns,
       rows
@@ -23,7 +24,7 @@ export function useRowsSorting<Row>(
 
   return {
     columns,
-    rows: getSortedData<Row>(rows, columns, state.sorting.activeSort)
+    rows: getSortedData<Row>(rows, columns, activeSort)
   }
 }
 
