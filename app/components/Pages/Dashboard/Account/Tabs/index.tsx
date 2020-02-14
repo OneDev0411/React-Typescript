@@ -59,7 +59,7 @@ const Items: ItemsShape[] = [
   }
 ]
 
-export const SettingsTabs = withRouter(({ location }: WithRouterProps) => {
+export const SettingsTabs = ({ location }: WithRouterProps) => {
   const currentUrl = location.pathname
 
   return (
@@ -74,6 +74,6 @@ export const SettingsTabs = withRouter(({ location }: WithRouterProps) => {
       })}
     />
   )
-})
+}
 
-export default SettingsTabs
+export default withRouter(SettingsTabs)
