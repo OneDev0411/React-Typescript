@@ -19,7 +19,7 @@ export function Sorting<Row>({ columns, options }: Props<Row>) {
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
-  if (!options) {
+  if (!options || options.sortBy) {
     return null
   }
 
