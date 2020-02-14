@@ -38,10 +38,6 @@ import { resetRows } from 'components/Grid/Table/context/actions/selection/reset
 
 import ContactsTabs from './Tabs'
 import Table from './Table'
-<<<<<<< HEAD
-=======
-import ContactFilters from './Filters'
->>>>>>> chore(contact): adapt filter with chris design
 // import TagsList from './TagsList'
 // import AllContactsList from './AllContactsList'
 // import FlowsList from './FlowsList'
@@ -647,7 +643,6 @@ class ContactsList extends React.Component {
             {!isZeroState && !this.state.isShowingDuplicatesList && (
               <React.Fragment>
                 <Box>
-<<<<<<< HEAD
                   <ContactsTabs
                     showContactFilters={this.shouldShowFilters()}
                     contactFiltersHandler={() =>
@@ -663,9 +658,6 @@ class ContactsList extends React.Component {
                     tagActiveStatus={this.state.selectedSidebarFilter !== null}
                     users={viewAsUsers}
                   />
-=======
-                  <ContactsTabs />
->>>>>>> chore(contact): adapt filter with chris design
                   {/* show action btn */}
                   {/*
                   !isZeroState && (
