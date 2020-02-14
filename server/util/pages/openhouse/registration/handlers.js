@@ -91,16 +91,19 @@ export function onlineSubmitHandler(data) {
                 label: 'Other',
                 text: contact.email,
                 attribute_def: attrDefData.email
-              },
-              {
-                is_primary: true,
-                label: 'Other',
-                text: contact.phone_number,
-                attribute_def: attrDefData.phone_number
               }
             ]
           }
         ]
+      }
+
+      if (contact.phone_number) {
+        createContactRequestBody.contacts[0].attributes.push({
+          is_primary: true,
+          label: 'Other',
+          text: contact.phone_number,
+          attribute_def: attrDefData.phone_number
+        })
       }
 
       const realtorName = data.data.registration.realtor_name
