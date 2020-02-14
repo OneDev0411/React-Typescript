@@ -26,14 +26,15 @@ export const renameMedia = (
   name: string,
   dealId: IDeal['id']
 ) => async (dispatch: React.Dispatch<any>) => {
+  dispatch({
+    type: actionTypes.SET_MEDIA_NAME,
+    payload: {
+      file,
+      name
+    }
+  })
+
   try {
-    dispatch({
-      type: actionTypes.SET_MEDIA_NAME,
-      payload: {
-        file,
-        name
-      }
-    })
     await renameMediaModel(dealId, file, name)
   } catch (err) {
     throw err

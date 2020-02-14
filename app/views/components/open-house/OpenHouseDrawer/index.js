@@ -584,7 +584,7 @@ class OpenHouseDrawerInternal extends React.Component {
                       }}
                       headerTitle="Edit Guest Registration Page"
                       closeConfirmation={false}
-                      showTemplatesColumn={false}
+                      hideTemplatesColumn
                       saveButtonLabel="Save"
                       onClose={this.toggleTemplateBuilder}
                       handleSave={this.handleSaveTemplate}

@@ -750,7 +750,7 @@ class Builder extends React.Component {
   }
 
   isTemplatesListEnabled = () => {
-    if (this.props.showTemplatesColumn === false) {
+    if (this.props.hideTemplatesColumn) {
       return false
     }
 
