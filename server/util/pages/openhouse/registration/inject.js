@@ -45,10 +45,10 @@ export function getRegisterationScript({
           const email = document.querySelector('#email').value;
           const phone_number = document.querySelector('#phone').value;
           
-          let agent_name = ''
-          const agentNameInput = document.querySelector('#agent-name')
-          if (agentNameInput) {
-            agent_name = agentNameInput.value.trim()
+          let realtor_name = ''
+          const realtorNameInput = document.querySelector('#realtor-name')
+          if (realtorNameInput) {
+            realtor_name = realtorNameInput.value.trim()
           }
 
           const openHouseData = {
@@ -58,7 +58,7 @@ export function getRegisterationScript({
               last_name,
               email,
               phone_number,
-              agent_name
+              realtor_name
             }
           };
 
