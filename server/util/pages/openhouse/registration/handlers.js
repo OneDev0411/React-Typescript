@@ -103,11 +103,11 @@ export function onlineSubmitHandler(data) {
         ]
       }
 
-      const agentName = data.data.registration.agent_name
+      const realtorName = data.data.registration.realtor_name
 
-      if (agentName) {
+      if (realtorName) {
         createContactRequestBody.contacts[0].attributes.push({
-          text: `Open house agent's name: ${agentName}`,
+          text: `Open house agent's name: ${realtorName}`,
           attribute_def: attrDefData.note
         })
       } else {
