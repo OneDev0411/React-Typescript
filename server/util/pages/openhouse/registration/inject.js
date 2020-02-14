@@ -43,7 +43,7 @@ export function getRegisterationScript({
           const first_name = document.querySelector('#firstname').value;
           const last_name = document.querySelector('#lastname').value;
           const email = document.querySelector('#email').value;
-          const phone_number = document.querySelector('#phone').value;
+          const phone_number = document.querySelector('#phone').value.trim();
           
           let realtor_name = ''
           const realtorNameInput = document.querySelector('#realtor-name')
