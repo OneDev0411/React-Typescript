@@ -420,13 +420,11 @@ class Search extends React.Component {
       <React.Fragment>
         <Header
           user={user}
-          isWidget={this.props.isWidget}
           isFetching={this.props.isFetching}
           filtersIsOpen={this.props.filtersIsOpen}
           activeView={this.state.activeView}
           isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
-          saveSearchHandler={this.handleSaveSearch}
           onClickFilter={this.onClickFilter}
           onChangeView={this.onChangeView}
           hasData={this.props.listings.data.length > 0}
@@ -434,8 +432,11 @@ class Search extends React.Component {
         <Tabs
           onChangeView={this.onChangeView}
           onChangeSort={this.onChangeSort}
+          saveSearchHandler={this.handleSaveSearch}
           activeView={this.state.activeView}
           isWidget={this.props.isWidget}
+          isFetching={this.props.isFetching}
+          user={user}
         />
         {this.renderMain()}
         <CreateAlertModal
