@@ -44,6 +44,12 @@ export function getRegisterationScript({
           const last_name = document.querySelector('#lastname').value;
           const email = document.querySelector('#email').value;
           const phone_number = document.querySelector('#phone').value;
+          
+          let realtor_name = ''
+          const realtorNameInput = document.querySelector('#realtor-name')
+          if (realtorNameInput) {
+            realtor_name = realtorNameInput.value.trim()
+          }
 
           const openHouseData = {
             brandId,
@@ -51,7 +57,8 @@ export function getRegisterationScript({
               first_name,
               last_name,
               email,
-              phone_number
+              phone_number,
+              realtor_name
             }
           };
 
