@@ -4,6 +4,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
+import idx from 'idx'
+
+import Tabs from '../components/Tabs'
 
 import { loadJS } from '../../../../../utils/load-js'
 import { getBounds, isLocationInTX } from '../../../../../utils/map'
@@ -17,15 +20,18 @@ import { toggleFilterArea } from '../../../../../store_actions/listings/search/f
 import { confirmation } from '../../../../../store_actions/confirmation'
 
 import Map from './components/Map'
-import { MapView } from '../components/MapView'
 import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
-import { GridView } from '../components/GridView'
-import { GalleryView } from '../components/GalleryView'
+import MapView from '../components/MapView'
+import ListView from '../components/ListView'
+import GridView from '../components/GridView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
+import { formatListing } from '../helpers/format-listing'
+import { normalizeListingLocation } from '../../../../../utils/map'
 
 import { Header } from './Header'
 import CreateTourAction from './components/CreateTourAction'
 
+// Golden ratio
 const RADIUS = 1.61803398875 / 2
 
 class Search extends React.Component {
@@ -44,6 +50,10 @@ class Search extends React.Component {
 
     this.state = {
       activeView,
+      activeSort: {
+        index: 'price',
+        isDescending: true
+      },
       isCalculatingLocation: false,
       isMapInitialized: false,
       shareModalIsActive: false
@@ -286,12 +296,80 @@ class Search extends React.Component {
     }
   ]
 
+  addListingsDistanceFromCenter = (listing, center) => {
+    if (!center || !idx(window, w => w.google.maps.geometry)) {
+      return listing
+    }
+
+    const { google } = window
+
+    const centerLatLng = new google.maps.LatLng(center.lat, center.lng)
+
+    const listingLocation = new google.maps.LatLng(listing.lat, listing.lng)
+
+    const distanceFromCenter = google.maps.geometry.spherical.computeDistanceBetween(
+      centerLatLng,
+      listingLocation
+    )
+
+    return {
+      ...listing,
+      distanceFromCenter
+    }
+  }
+
+  format = (listing, center, user) =>
+    this.addListingsDistanceFromCenter(
+      formatListing(normalizeListingLocation(listing), user),
+      center
+    )
+
+  sortBy = (a, b, index, isDescending) =>
+    isDescending ? a[index] - b[index] : b[index] - a[index]
+
+  onChangeSort = e => {
+    console.log('onchangeSort')
+
+    let index = e.currentTarget.dataset.sort
+    const isDescending = index.charAt(0) === '-'
+
+    if (isDescending) {
+      index = index.slice(1)
+    }
+
+    this.setState({
+      activeSort: {
+        index,
+        isDescending
+      }
+    })
+  }
+
+  sortListings = listings => {
+    const formattedListings = listings.data.map(listing =>
+      this.format(listing, this.props.mapCenter, this.props.user)
+    )
+
+    return formattedListings.sort((a, b) =>
+      this.sortBy(
+        a,
+        b,
+        this.state.activeSort.index,
+        this.state.activeSort.isDescending
+      )
+    )
+  }
+
   renderMain() {
+    console.log('rendering main.')
+
     const { isCalculatingLocation } = this.state
     const _props = {
       user: this.props.user,
       listings: this.props.listings,
-      isFetching: this.props.isFetching || isCalculatingLocation
+      sortedListings: this.sortListings(this.props.listings),
+      isFetching: this.props.isFetching || isCalculatingLocation,
+      totalRows: this.props.listings.info.total
     }
 
     switch (this.state.activeView) {
@@ -309,12 +387,12 @@ class Search extends React.Component {
           />
         )
 
-      case 'gallery':
-        return <GalleryView {..._props} />
+      case 'grid':
+        return <GridView {..._props} />
 
       default:
         return (
-          <GridView
+          <ListView
             {..._props}
             plugins={
               _props.user && {
@@ -352,6 +430,12 @@ class Search extends React.Component {
           onClickFilter={this.onClickFilter}
           onChangeView={this.onChangeView}
           hasData={this.props.listings.data.length > 0}
+        />
+        <Tabs
+          onChangeView={this.onChangeView}
+          onChangeSort={this.onChangeSort}
+          activeView={this.state.activeView}
+          isWidget={this.props.isWidget}
         />
         {this.renderMain()}
         <CreateAlertModal

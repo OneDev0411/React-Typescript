@@ -2,15 +2,21 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter, browserHistory } from 'react-router'
 
-import SideNavSection from 'components/PageSideNav/SideNavSection'
-import SideNavItem from 'components/PageSideNav/SideNavItem'
-import SideNavTitle from 'components/PageSideNav/SideNavTitle'
+import {
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton
+} from '@material-ui/core'
+
+import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
+import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import ArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
+import ArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import { uppercaseFirstLetter } from '../../../../../utils/helpers'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import Loading from '../../../../../views/components/Spinner'
-// import AlertsList from './components/AlertsList'
-// import DeleteAlertModal from './components/DeleteAlertModal'
 
 import getAlerts from '../../../../../store_actions/listings/alerts/get-alerts'
 import deleteAlert from '../../../../../store_actions/listings/alerts/delete-alert'
@@ -19,10 +25,6 @@ import { selectListings as selectAlerts } from '../../../../../reducers/listings
 class SavedSearchesList extends Component {
   state = {
     isDeleting: null
-  }
-
-  componentDidMount() {
-    this.props.dispatch(getAlerts())
   }
 
   onSelectList = item => {
@@ -62,29 +64,70 @@ class SavedSearchesList extends Component {
     }
   }
 
+  navigateToSavedItem = id => {
+    browserHistory.push(`/dashboard/mls/saved-searches/${id}`)
+  }
+
   render() {
     const { isDeleting } = this.state
 
     return (
-      <SideNavSection>
-        <SideNavTitle>Saved Searches</SideNavTitle>
-        {this.props.isFetching || isDeleting ? (
-          <Loading size="small" />
-        ) : (
-          this.props.list.data.map((item, index) => {
+      <BaseDropdownWithMore
+        renderDropdownButton={props => (
+          <span {...props}>
+            Saved Searches{' '}
+            {props.isActive ? (
+              <ArrowUp style={{ verticalAlign: 'middle' }} />
+            ) : (
+              <ArrowDown style={{ verticalAlign: 'middle' }} />
+            )}
+          </span>
+        )}
+        listPlugin={{
+          dense: true,
+          style: { width: 220 }
+        }}
+        onIsOpenChange={open => {
+          if (open) {
+            this.props.dispatch(getAlerts())
+          }
+        }}
+        renderMenu={({ close }) => {
+          if (this.props.isFetching || isDeleting) {
+            return [
+              <ListItem key="loading">
+                <Loading size="small" />
+              </ListItem>
+            ]
+          }
+
+          return this.props.list.data.map((item, index) => {
             const id = item.id
 
             return (
-              <SideNavItem
-                key={`SSL-${index}`}
-                link={`/dashboard/mls/saved-searches/${id}`}
-                title={uppercaseFirstLetter(item.title || '')}
-                onDelete={() => this.onRequestDelete(item)}
-              />
+              <ListItem key={`SSL-${index}`}>
+                <ListItemText
+                  primary={uppercaseFirstLetter(item.title || '')}
+                  style={{ overflow: 'hidden', cursor: 'pointer' }}
+                  onClick={() => this.navigateToSavedItem(id)}
+                />
+                <ListItemSecondaryAction>
+                  <IconButton
+                    size="small"
+                    onClick={() => this.onRequestDelete(item)}
+                    edge="end"
+                    aria-label="delete"
+                  >
+                    <IconDeleteOutline
+                      style={{ fill: 'currentColor', width: 16, height: 16 }}
+                    />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
             )
           })
-        )}
-      </SideNavSection>
+        }}
+      />
     )
   }
 }
@@ -99,5 +142,3 @@ const mapStateToProps = state => {
 }
 
 export default withRouter(connect(mapStateToProps)(SavedSearchesList))
-
-// to new items badge

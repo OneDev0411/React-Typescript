@@ -457,11 +457,11 @@ export default (
       <Route path="/branch" component={AsyncBranch} />
       <Route path="/share" component={AsyncShare} />
 
-      <Route path="/dashboard/calendar" component={AsyncCalendar} />
+      <Route path="/dashboard/calendar(/:id)" component={AsyncCalendar} />
 
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
-        <Route path="following" component={AsyncListingsFavorites} />
+        <Route path="favorites" component={AsyncListingsFavorites} />
         <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
       </Route>
 

@@ -4,6 +4,7 @@ import Card from 'components/Card'
 import { blue } from 'views/utils/colors'
 
 export const Container = styled.div`
+  display: inline-flex;
   position: relative;
 `
 

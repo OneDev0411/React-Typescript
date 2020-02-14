@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 
 import Table from 'components/Grid/Table'
 
-import Header from './Header'
 import Layout from './Layout'
 import StatColumn from './StatColumn'
 import { percent } from './helpers'
@@ -25,7 +24,6 @@ const sortableColumns = [
 ]
 
 function List(props) {
-  const [isSideMenuOpen, setSideMenuOpen] = useState(true)
   const [queue, setQueue] = useState(0)
   const { list, isLoading } = useListData(props.user, queue)
   const isScheduled = props.route && props.route.path === 'scheduled'
@@ -112,19 +110,8 @@ function List(props) {
   }
 
   return (
-    <Layout
-      isSideMenuOpen={isSideMenuOpen}
-      sentCount={stats.sent}
-      scheduledCount={stats.scheduled}
-    >
+    <Layout sentCount={stats.sent} scheduledCount={stats.scheduled}>
       <InsightContainer>
-        <Header
-          title={isScheduled ? 'Scheduled Emails' : 'Sent Emails'}
-          isSideMenuOpen={isSideMenuOpen}
-          onMenuTriggerChange={() => setSideMenuOpen(!isSideMenuOpen)}
-          onSent={() => setQueue(queue => queue + 1)}
-        />
-
         {isLoading && <LoadingComponent />}
         <div className={tableClassName.join(' ')}>
           <Table

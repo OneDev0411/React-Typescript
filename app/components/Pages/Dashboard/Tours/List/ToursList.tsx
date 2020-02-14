@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
-import { Theme } from '@material-ui/core/styles'
-import { useTheme } from '@material-ui/styles'
+
+import { Box } from '@material-ui/core'
 
 import { IAppState } from 'reducers/index'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 
 import Table from 'components/Grid/Table'
-import PageHeader from 'components/PageHeader'
+import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 import { TourSheets } from 'components/tour/TourSheets'
@@ -17,14 +17,16 @@ import { RenderProps } from 'components/Grid/Table/types'
 
 import EmptyState from './EmptyState'
 import CreateNewTour from './CreateNewTour'
+
+import DueDate from './columns/DueDate'
 import Info from './columns/Info'
-import Actions from './columns/Actions'
 import Participants from './columns/Participants'
+import ViewToursheet from './columns/ViewToursheet'
+import Actions from './columns/Actions'
 
 type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
 function ToursList(props: { user: IUser }) {
-  const theme = useTheme<Theme>()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
       order: '-due_date',
@@ -52,23 +54,24 @@ function ToursList(props: { user: IUser }) {
 
   const columns = [
     {
-      header: 'Info',
-      id: 'info',
-      width: '50%',
+      header: 'Date',
+      id: 'date',
       verticalAlign: 'center',
       render: ({ row }: RenderProps<TableRow>) => (
-        <Info
-          dueDate={row.due_date}
-          description={row.description}
-          onClick={() => handleEdit(row)}
-          title={row.title}
-        />
+        <DueDate dueDate={row.due_date} onClick={() => handleEdit(row)} />
+      )
+    },
+    {
+      header: 'Info',
+      id: 'info',
+      verticalAlign: 'center',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Info description={row.description} title={row.title} />
       )
     },
     {
       header: 'Participants',
       id: 'participants',
-      width: '10%',
       verticalAlign: 'center',
       render: ({ row }: RenderProps<TableRow>) => (
         <Participants
@@ -81,16 +84,23 @@ function ToursList(props: { user: IUser }) {
       )
     },
     {
-      id: 'actions',
-      width: '40%',
+      id: 'view-toursheet',
       verticalAlign: 'center',
       render: ({ row }: RenderProps<TableRow>) => (
-        <Actions
-          onEdit={() => handleEdit(row)}
+        <ViewToursheet
           onViewToursheet={() => {
             setSelectedTour(row)
             setIsOpenToursheetViewer(true)
           }}
+        />
+      )
+    },
+    {
+      id: 'actions',
+      verticalAlign: 'center',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Actions
+          onEdit={() => handleEdit(row)}
           reloadList={reloadList}
           tour={row}
         />
@@ -142,47 +152,49 @@ function ToursList(props: { user: IUser }) {
         <title>Toursheets | Rechat</title>
       </Helmet>
 
-      <PageHeader>
-        <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Toursheets</PageHeader.Heading>
-        </PageHeader.Title>
+      <PageLayout>
+        <PageLayout.Header title="Toursheets">
+          <Box textAlign="right">
+            <CreateNewTour onOpenDrawer={onOpenTourDrawer} />
+          </Box>
+        </PageLayout.Header>
 
-        <PageHeader.Menu>
-          <CreateNewTour onOpenDrawer={onOpenTourDrawer} />
-        </PageHeader.Menu>
-      </PageHeader>
+        <PageLayout.Main>
+          <Box>
+            {renderContent()}
 
-      <div style={{ padding: theme.spacing(0, 3, 9) }}>{renderContent()}</div>
+            {isDrawerOpen && (
+              <TourDrawer
+                deleteCallback={drawerCallback}
+                isOpen
+                onClose={onCloseTourDrawer}
+                tour={selectedTour}
+                submitCallback={drawerCallback}
+                user={props.user}
+              />
+            )}
 
-      {isDrawerOpen && (
-        <TourDrawer
-          deleteCallback={drawerCallback}
-          isOpen
-          onClose={onCloseTourDrawer}
-          tour={selectedTour}
-          submitCallback={drawerCallback}
-          user={props.user}
-        />
-      )}
-
-      {isOpenToursheetViewer && (
-        <TourSheets
-          agent={props.user}
-          isOpen
-          handleClose={() => {
-            setSelectedTour(null)
-            setIsOpenToursheetViewer(false)
-          }}
-          tour={selectedTour}
-          listings={
-            selectedTour && selectedTour.associations
-              ? selectedTour.associations
-                  .filter(a => a.association_type === 'listing')
-                  .map(a => a.listing)
-              : []
-          }
-        />
-      )}
+            {isOpenToursheetViewer && (
+              <TourSheets
+                agent={props.user}
+                isOpen
+                handleClose={() => {
+                  setSelectedTour(null)
+                  setIsOpenToursheetViewer(false)
+                }}
+                tour={selectedTour}
+                listings={
+                  selectedTour && selectedTour.associations
+                    ? selectedTour.associations
+                        .filter(a => a.association_type === 'listing')
+                        .map(a => a.listing)
+                    : []
+                }
+              />
+            )}
+          </Box>
+        </PageLayout.Main>
+      </PageLayout>
     </>
   )
 }

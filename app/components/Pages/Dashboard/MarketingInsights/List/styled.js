@@ -6,7 +6,6 @@ import { grey } from 'views/utils/colors'
 
 export const InsightContainer = styled.div`
   & .insight-table-container {
-    padding: 0 1.5rem;
     opacity: 0;
     transform: translateY(3rem);
     transition: all 0.5s 0.2s;

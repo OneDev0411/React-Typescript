@@ -10,7 +10,7 @@ import IconButton from '../../../../../../../views/components/Button/IconButton'
 import IconSearch from '../../../../../../../views/components/SvgIcons/Search/IconSearch'
 
 export const Input = styled.input`
-  width: 28em;
+  width: 40em;
   height: 3em;
   padding: 0.5em 2.75em 0.5em 2.5em;
   border-radius: 3px;
