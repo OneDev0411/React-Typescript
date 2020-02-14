@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Box, Button, TextareaAutosize, IconButton } from '@material-ui/core'
 import cn from 'classnames'
+import ClickOutside from 'react-click-outside'
 
 import { SortableHandle } from 'react-sortable-hoc'
 import { useDispatch } from 'react-redux'
@@ -46,13 +47,7 @@ export default function MediaItem({ media, deal }: Props) {
     }
   }, [editMode, textareaRef])
 
-  const handleOnBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
-    let relatedTarget = e.relatedTarget as HTMLButtonElement
-
-    if (relatedTarget && relatedTarget.classList.contains('save-btn')) {
-      return
-    }
-
+  const handleOnClickOutsideEdit = () => {
     setEditMode(false)
   }
 
@@ -147,30 +142,31 @@ export default function MediaItem({ media, deal }: Props) {
       )}
 
       {editMode && (
-        <form noValidate autoComplete="off">
-          <TextareaAutosize
-            defaultValue={name}
-            ref={textareaRef}
-            onKeyDown={onKeyDown}
-            onBlur={handleOnBlur}
-            className={classes.editTextArea}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={saveEdit}
-            className={cn(classes.lowerCaseButton, 'save-btn')}
-          >
-            Save
-          </Button>{' '}
-          <Button
-            onClick={cancelEdit}
-            className={classes.lowerCaseButton}
-            variant="outlined"
-          >
-            Cancel
-          </Button>
-        </form>
+        <ClickOutside onClickOutside={handleOnClickOutsideEdit}>
+          <form noValidate autoComplete="off">
+            <TextareaAutosize
+              defaultValue={name}
+              ref={textareaRef}
+              onKeyDown={onKeyDown}
+              className={classes.editTextArea}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={saveEdit}
+              className={cn(classes.lowerCaseButton, 'save-btn')}
+            >
+              Save
+            </Button>{' '}
+            <Button
+              onClick={cancelEdit}
+              className={classes.lowerCaseButton}
+              variant="outlined"
+            >
+              Cancel
+            </Button>
+          </form>
+        </ClickOutside>
       )}
     </Box>
   )
