@@ -1,5 +1,3 @@
-import { ACL } from 'constants/acl'
-
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
 
@@ -14,7 +12,6 @@ import {
   ListItem,
   ListItemName
 } from 'components/Grid/SavedSegments/List/styled'
-import Acl from 'components/Acl'
 
 import { changeActiveFilterSegment as changeActiveFilterSegmentAction } from 'actions/filter-segments/change-active-segment'
 
@@ -103,14 +100,12 @@ function AllContactsList({
           </ListItemName>
         </ListItem>
       )}
-      <Acl access={ACL.BETA}>
-        <ListItem
-          isSelected={isDuplicatesListSelected}
-          onClick={() => clickHandler(DUPLICATE_CONTACTS_LIST_ID)}
-        >
-          <ListItemName>Duplicates</ListItemName>
-        </ListItem>
-      </Acl>
+      <ListItem
+        isSelected={isDuplicatesListSelected}
+        onClick={() => clickHandler(DUPLICATE_CONTACTS_LIST_ID)}
+      >
+        <ListItemName>Duplicates</ListItemName>
+      </ListItem>
     </div>
   )
 }
