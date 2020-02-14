@@ -105,17 +105,27 @@ export function onlineSubmitHandler(data) {
 
       const realtorName = data.data.registration.realtor_name
 
-      if (realtorName) {
-        createContactRequestBody.contacts[0].attributes.push({
-          text: `Open house agent's name: ${realtorName}`,
-          attribute_def: attrDefData.note
-        })
-      } else {
+      if (!realtorName) {
         createContactRequestBody.contacts[0].attributes.push({
           text: 'Lead',
           attribute_def: attrDefData.tag
         })
       }
+
+      const contactNote = `
+<div>Source: Open House Registration Page</div>
+<div>Registered at: ${new Date().toLocaleTimeString('en-US', {
+        dateStyle: 'full',
+        timeStyle: 'short'
+      })}</div>
+<div>Open House: ${data.title}</div>
+<div>Realtor: ${realtorName || 'N/A'}</div>
+`
+
+      createContactRequestBody.contacts[0].attributes.push({
+        text: contactNote,
+        attribute_def: attrDefData.note
+      })
 
       return fetch(createContactApiUrl, {
         method: 'POST',
