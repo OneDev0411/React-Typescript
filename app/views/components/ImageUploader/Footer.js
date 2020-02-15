@@ -6,7 +6,6 @@ import ActionButton from '../Button/ActionButton'
 
 export default function Footer({
   scale,
-  disableRotate,
   disableScale,
   disableChangePhoto,
   onScaleChange,
@@ -68,22 +67,20 @@ export default function Footer({
             />
           </div>
         )}
-        {disableRotate || (
-          <div>
-            <button
-              title="rotate"
-              type="button"
-              style={{ background: 'none', border: 'none', outline: 'none' }}
-              onClick={onRotateClick}
-            >
-              <img
-                src="/static/icons/rotate-icon.svg"
-                alt="+"
-                style={{ width: '24px', height: '24px' }}
-              />
-            </button>
-          </div>
-        )}
+        <div>
+          <button
+            title="rotate"
+            type="button"
+            style={{ background: 'none', border: 'none', outline: 'none' }}
+            onClick={onRotateClick}
+          >
+            <img
+              src="/static/icons/rotate-icon.svg"
+              alt="+"
+              style={{ width: '24px', height: '24px' }}
+            />
+          </button>
+        </div>
       </div>
       <div>
         {disableChangePhoto || (

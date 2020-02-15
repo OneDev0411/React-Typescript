@@ -93,11 +93,6 @@ export default function ActionsMenu({ media, deal }: Props) {
     })
   }
 
-  const showCropper = () => {
-    handleClose()
-    setIsCropperOpen(true)
-  }
-
   const hideCropper = () => {
     setIsCropperOpen(false)
   }
@@ -188,7 +183,6 @@ export default function ActionsMenu({ media, deal }: Props) {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            {/* <MenuItem onClick={showCropper}>Crop</MenuItem> */}
             <MenuItem onClick={handleDelete}>
               <Typography color="error">Delete</Typography>
             </MenuItem>
@@ -197,7 +191,6 @@ export default function ActionsMenu({ media, deal }: Props) {
         {isCropperOpen && (
           <ImageUploader
             disableChangePhoto
-            disableRotate
             file={src}
             width={287}
             height={287}
