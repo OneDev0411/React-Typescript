@@ -71,6 +71,8 @@ class Builder extends React.Component {
       isArticleDrawerOpen: false
     }
 
+    this.emailBlocksRegistered = false
+
     this.keyframe = 0
 
     this.traits = {
@@ -264,6 +266,13 @@ class Builder extends React.Component {
   }
 
   registerEmailBlocks = () => {
+    // We should not reregister blocks if it's already done!
+    if (this.emailBlocksRegistered) {
+      return
+    }
+
+    this.emailBlocksRegistered = true
+
     const { brand } = getActiveTeam(this.props.user)
     const renderData = getTemplateRenderData(brand)
 
@@ -554,6 +563,10 @@ class Builder extends React.Component {
       templateHtmlCss: this.getTemplateHtmlCss()
     })
     this.resize()
+
+    if (this.isEmailTemplate && this.isMjmlTemplate) {
+      this.registerEmailBlocks()
+    }
   }
 
   deselectAll = () => {
