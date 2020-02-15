@@ -24,6 +24,7 @@ export function NextTouch({ style, event }: Props) {
       style={style}
       event={event}
       Icon={eventIcons.TouchDate.icon}
+      editable={false}
       title={
         <div>
           Contact{' '}

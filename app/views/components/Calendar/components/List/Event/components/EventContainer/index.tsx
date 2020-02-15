@@ -2,7 +2,11 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import cn from 'classnames'
 
+import Flex from 'styled-flex-component'
+
 import { ClassesProps } from 'utils/ts-utils'
+
+import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 
 import { DateTime } from './DateTime'
 
@@ -14,9 +18,10 @@ const useStyles = makeStyles(styles)
 
 interface Props {
   style: React.CSSProperties
-  event: ICalendarEvent & { rowIndex?: number }
-  Icon?: any
   title: React.ReactNode
+  event: ICalendarEvent & { rowIndex?: number }
+  editable: boolean
+  Icon?: any
   subtitle?: React.ReactNode
   actions?: React.ReactNode
   onClick?(): void
@@ -27,7 +32,7 @@ export function EventContainer({
   event,
   Icon,
   title,
-  subtitle,
+  editable,
   actions,
   onClick,
   classes: inputClasses
@@ -35,7 +40,7 @@ export function EventContainer({
   const sharedClasses = useSharedStyles()
   const classes = useStyles({
     classes: inputClasses,
-    evenRow: event.rowIndex ? event.rowIndex % 2 === 0 : false,
+    evenRow: event.rowIndex ? event.rowIndex % 2 === 0 : true,
     clickable: typeof onClick === 'function'
   })
 
@@ -67,11 +72,10 @@ export function EventContainer({
             </div>
           </div>
 
-          <div>{actions}</div>
-        </div>
-
-        <div className={sharedClasses.row}>
-          <div className={sharedClasses.subtitle}>{subtitle}</div>
+          <Flex alignCenter>
+            {editable && <EditIcon className={classes.iconEdit} />}
+            {actions}
+          </Flex>
         </div>
       </div>
     </div>

@@ -37,6 +37,7 @@ export function EmailThread({ style, event }: Props) {
       style={style}
       event={event}
       Icon={eventIcons.Email.icon}
+      editable
       title={
         <Box display="flex" alignItems="center">
           <a

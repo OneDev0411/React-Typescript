@@ -42,5 +42,10 @@ export const styles = (theme: Theme) =>
         color: theme.palette.primary.main,
         textDecoration: 'underline'
       }
+    },
+    iconEdit: {
+      marginRight: theme.spacing(2),
+      fill: theme.palette.grey[400],
+      height: '16px !important'
     }
   })

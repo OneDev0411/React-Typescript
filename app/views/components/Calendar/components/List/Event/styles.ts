@@ -19,16 +19,6 @@ export const sharedStyles = (theme: Theme) =>
       fontWeight: 500,
       color: '#1D1F26' // TODO: use palette
     },
-    subtitle: {
-      fontSize: '0.875rem',
-      fontWeight: 400,
-      letterSpacing: '0.25px',
-      paddingLeft: theme.spacing(16),
-      color: theme.palette.grey[400],
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis'
-    },
     time: {
       width: '5rem',
       fontSize: '0.875rem',
