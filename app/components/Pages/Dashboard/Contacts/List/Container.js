@@ -11,6 +11,7 @@ import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
 import { updateFilterSegment } from 'actions/filter-segments'
+import { getUserTeams } from 'actions/user/teams'
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import {
@@ -377,8 +378,11 @@ class ContactsList extends React.Component {
   }
 
   handleChangeOrder = ({ value: order }) => {
+    const { user, getUserTeams } = this.props
+
     this.order = order
     this.handleFilterChange({}, true)
+    getUserTeams(user)
   }
 
   handleLoadMore = async () => {
@@ -674,6 +678,9 @@ class ContactsList extends React.Component {
                         this.handleChangeSavedSegment(segment)
                       }
                     }}
+                    sortProps={{
+                      onChange: this.handleChangeOrder
+                    }}
                     users={viewAsUsers}
                   />
                   <Table
@@ -691,7 +698,6 @@ class ContactsList extends React.Component {
                     onRequestDelete={this.handleOnDelete}
                     tableContainerId={this.tableContainerId}
                     reloadContacts={this.reloadContacts}
-                    handleChangeOrder={this.handleChangeOrder}
                     handleChangeContactsAttributes={() =>
                       this.handleFilterChange({}, true)
                     }
@@ -772,6 +778,7 @@ export default withRouter(
       setContactsListTextFilter,
       getContactsTags,
       updateTeamSetting,
+      getUserTeams,
       updateSegment: updateFilterSegment
     }
   )(ContactsList)
