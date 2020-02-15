@@ -1,31 +1,25 @@
 import { OAuthProvider } from 'constants/contacts'
 
-import * as React from 'react'
-import { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
+import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
-
+import { ThunkDispatch } from 'redux-thunk'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
+import { Box, Button, List } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 
-import { Box, Button, List } from '@material-ui/core'
-
-import { AnyAction } from 'redux'
-
-import { ThunkDispatch } from 'redux-thunk'
+import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
 
 import { IAppState } from 'reducers'
-
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
+import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
+
 import Loading from 'partials/Loading'
 import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
 import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
-
-import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
-
-import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-
-import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
 
 import { ConnectedAccount } from './ConnectedAccount'
 
@@ -46,13 +40,13 @@ function ConnectedAccounts({
   syncOAuthAccount,
   disconnectOAuthAccount
 }: Props) {
-  useEffect(() => {
+  useEffectOnce(() => {
     fetchOAuthAccounts()
-  }, [fetchOAuthAccounts])
+  })
 
   const confirmation = useContext(ConfirmationModalContext)
-  const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
+  const google = useConnectOAuthAccount(OAuthProvider.Google)
 
   const onDelete = (provider: OAuthProvider, accountId: string) => {
     confirmation.setConfirmationModal({
@@ -69,6 +63,7 @@ function ConnectedAccounts({
       <Helmet>
         <title>Connected Accounts | Settings | Rechat</title>
       </Helmet>
+
       <Box p={2} my={2}>
         <Button
           variant="outlined"
@@ -78,7 +73,7 @@ function ConnectedAccounts({
           <IconOutlook size={iconSize} />
           <Box pl={1}>Connect Outlook</Box>
         </Button>
-        <Box mr={1} />
+        <Box display="inline-block" mr={1} />
         <Button
           variant="outlined"
           disabled={google.connecting}
@@ -89,22 +84,20 @@ function ConnectedAccounts({
         </Button>
       </Box>
 
-      <Box paddingX={3}>
-        {loading && accounts.length === 0 ? (
-          <Loading />
-        ) : (
-          <List disablePadding>
-            {accounts.map(account => (
-              <ConnectedAccount
-                account={account}
-                key={account.id}
-                onSync={syncOAuthAccount}
-                onDelete={onDelete}
-              />
-            ))}
-          </List>
-        )}
-      </Box>
+      {loading && accounts.length === 0 ? (
+        <Loading />
+      ) : (
+        <List disablePadding>
+          {accounts.map(account => (
+            <ConnectedAccount
+              account={account}
+              key={account.id}
+              onSync={syncOAuthAccount}
+              onDelete={onDelete}
+            />
+          ))}
+        </List>
+      )}
     </>
   )
 }
