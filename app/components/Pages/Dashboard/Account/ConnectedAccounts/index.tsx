@@ -1,14 +1,10 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import React, { useContext } from 'react'
 import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
-import { Box, Button, List } from '@material-ui/core'
+import { List } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
-
-import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
 
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
@@ -17,10 +13,9 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
 
 import Loading from 'partials/Loading'
-import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
-import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
+import ConnectAccounts from './ConnectAccounts'
 import { ConnectedAccount } from './ConnectedAccount'
 
 interface Props {
@@ -30,8 +25,6 @@ interface Props {
   syncOAuthAccount: IAsyncActionProp<typeof syncOAuthAccount>
   disconnectOAuthAccount: IAsyncActionProp<typeof disconnectOAuthAccount>
 }
-
-const iconSize = { width: 16, height: 16 }
 
 function ConnectedAccounts({
   accounts,
@@ -45,18 +38,6 @@ function ConnectedAccounts({
   })
 
   const confirmation = useContext(ConfirmationModalContext)
-  const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
-  const google = useConnectOAuthAccount(OAuthProvider.Google)
-
-  const onDelete = (provider: OAuthProvider, accountId: string) => {
-    confirmation.setConfirmationModal({
-      message: `Your account will be disconnected and 
-        removed but imported contacts and emails will be preserved.`,
-      onConfirm: () => {
-        disconnectOAuthAccount(provider, accountId)
-      }
-    })
-  }
 
   return (
     <>
@@ -64,28 +45,10 @@ function ConnectedAccounts({
         <title>Connected Accounts | Settings | Rechat</title>
       </Helmet>
 
-      <Box p={2} my={2}>
-        <Button
-          variant="outlined"
-          disabled={outlook.connecting}
-          onClick={outlook.connect}
-        >
-          <IconOutlook size={iconSize} />
-          <Box pl={1}>Connect Outlook</Box>
-        </Button>
-        <Box display="inline-block" mr={1} />
-        <Button
-          variant="outlined"
-          disabled={google.connecting}
-          onClick={google.connect}
-        >
-          <IconGoogle size={iconSize} />
-          <Box pl={1}>Connect Google</Box>
-        </Button>
-      </Box>
-
-      {loading && accounts.length === 0 ? (
+      {loading ? (
         <Loading />
+      ) : accounts.length === 0 ? (
+        <ConnectAccounts />
       ) : (
         <List disablePadding>
           {accounts.map(account => (
@@ -93,7 +56,15 @@ function ConnectedAccounts({
               account={account}
               key={account.id}
               onSync={syncOAuthAccount}
-              onDelete={onDelete}
+              onDelete={(provider, accountId) => {
+                confirmation.setConfirmationModal({
+                  message: `Your account will be disconnected and 
+                        removed but imported contacts and emails will be preserved.`,
+                  onConfirm: () => {
+                    disconnectOAuthAccount(provider, accountId)
+                  }
+                })
+              }}
             />
           ))}
         </List>
