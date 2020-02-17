@@ -33,9 +33,7 @@
     "test:update-snapshots": "npm run test:unit -- -u",
     "test:ci": "npm run test:unit",
     "test": "jest --watch",
-    "jest": "jest",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "jest": "jest"
   },
   "engines": {
     "node": "10.x"
@@ -255,8 +253,7 @@
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-s3-plugin": "^1.0.3",
-    "xml2js": "^0.4.22",
-    "snyk": "^1.290.2"
+    "xml2js": "^0.4.22"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.4.4",
@@ -371,6 +368,5 @@
       "pre-commit": "npm run lint:staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`"
     }
-  },
-  "snyk": true
+  }
 }
