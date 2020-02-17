@@ -1,14 +1,12 @@
 import React, { useContext, useState } from 'react'
-import { connect } from 'react-redux'
-import { Helmet } from 'react-helmet'
-import { addNotification as notify } from 'reapop'
-import { Box, Button } from '@material-ui/core'
-
-import { ThunkDispatch } from 'redux-thunk'
-
 import { AnyAction } from 'redux'
+import { connect } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
+import { addNotification as notify } from 'reapop'
+import { Helmet } from 'react-helmet'
 
 import Table from 'components/Grid/Table'
+import { RenderProps } from 'components/Grid/Table/types'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { getActiveTeamId } from 'utils/user-teams'
@@ -17,19 +15,16 @@ import { useGetBrandFlows } from 'hooks/use-get-brand-flows'
 
 import { deleteBrandFlow } from 'models/flows/delete-brand-flow'
 
-import { RenderProps } from 'components/Grid/Table/types'
-
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import { getFlowEditUrl, createFlow } from '../helpers'
 import New from '../New'
+import CtaBar from '../../Account/components/CtaBar'
 
 import { getFlowActions } from './helpers'
-
 import Name from './columns/Name'
 import EnrolledContacts from './columns/EnrolledContacts'
 import Actions from './columns/Actions'
-
 import { PageContainer } from './styled'
 
 interface Props {
@@ -145,6 +140,7 @@ function List(props: Props) {
       <Helmet>
         <title>Flows | Rechat</title>
       </Helmet>
+
       {isModalOpen && (
         <New
           onClose={() => {
@@ -155,15 +151,12 @@ function List(props: Props) {
           flow={selectedFlow}
         />
       )}
-      <Box p={2} my={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Create Flow
-        </Button>
-      </Box>
+
+      <CtaBar
+        label="Create new flow"
+        description="Create a custom flow for your specific needs – We’ll take care of the rest!"
+        onClick={() => setIsModalOpen(true)}
+      />
 
       <PageContainer>
         {isFetching && !error && <LoadingComponent />}
