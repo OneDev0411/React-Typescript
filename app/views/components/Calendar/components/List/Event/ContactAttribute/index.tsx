@@ -36,6 +36,7 @@ export function ContactAttribute({ style, event }: Props) {
       style={style}
       event={event}
       Icon={icon.icon}
+      editable={false}
       title={
         <div>
           <MiniContactProfile type="event" data={contact} as="span">
