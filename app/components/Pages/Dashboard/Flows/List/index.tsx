@@ -4,10 +4,14 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { addNotification as notify } from 'reapop'
 import { Helmet } from 'react-helmet'
+import { Box } from '@material-ui/core'
 
 import Table from 'components/Grid/Table'
-import { RenderProps } from 'components/Grid/Table/types'
+import { TableColumn } from 'components/Grid/Table/types'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import Link from 'components/ALink'
+import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
+import { BasicDropdown } from 'components/BasicDropdown'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
@@ -22,10 +26,6 @@ import New from '../New'
 import CtaBar from '../../Account/components/CtaBar'
 
 import { getFlowActions } from './helpers'
-import Name from './columns/Name'
-import EnrolledContacts from './columns/EnrolledContacts'
-import Actions from './columns/Actions'
-import { PageContainer } from './styled'
 
 interface Props {
   user: IUser
@@ -73,63 +73,83 @@ function List(props: Props) {
     }
   }
 
-  const columns = [
+  const columns: TableColumn<IBrandFlow>[] = [
     {
       header: 'Name',
       id: 'name',
       primary: true,
-      render: ({ row }: RenderProps<IBrandFlow>) => (
-        <Name id={row.id} name={row.name} description={row.description} />
+      width: '33%',
+      render: ({ row }) => (
+        <Link
+          to={`/dashboard/account/flows/${row.id}`}
+          style={{ fontWeight: 'bold' }}
+        >
+          {row.name}
+        </Link>
       )
+    },
+    {
+      header: 'Description',
+      id: 'description',
+      render: ({ row }) => <div>{row.description}</div>
     },
     {
       header: 'Enrolled Contacts',
       id: 'cotnacts',
-      render: ({ row }: RenderProps<IBrandFlow>) => (
-        <EnrolledContacts activeFlows={row.active_flows} />
-      )
+      width: '160px',
+      render: ({ row }) => <div>{row.active_flows} Enrolled</div>
     },
     {
       id: 'actions',
-      render: ({ row }: RenderProps<IBrandFlow>) => {
+      width: '32px',
+      render: ({ row }) => {
         const actions = getFlowActions(row)
 
         return (
-          <Actions
-            actions={actions}
-            onSelect={action => {
-              switch (action.value) {
-                case 'duplicate':
-                  setSelectedFlow(row)
-                  setIsModalOpen(true)
+          <Box display="flex" justifyContent="flex-end">
+            <BasicDropdown
+              fullHeight
+              pullTo="right"
+              selectedItem={null}
+              buttonRenderer={(btnProps: any) => (
+                <VerticalDotsIcon {...btnProps} />
+              )}
+              items={actions}
+              onSelect={(action: typeof actions[number]) => {
+                switch (action.value) {
+                  case 'duplicate':
+                    setSelectedFlow(row)
+                    setIsModalOpen(true)
+                    break
 
-                  return
-                case 'delete':
-                  confirmation.setConfirmationModal({
-                    message: `Delete "${row.name}" Flow?`,
-                    description: `This Flow will be deleted 
-                    and you can not use it anymore. Are you sure?`,
-                    onConfirm: async () => {
-                      if (!brand) {
-                        return
+                  case 'delete':
+                    confirmation.setConfirmationModal({
+                      message: `Delete "${row.name}" Flow?`,
+                      description: `This Flow will be deleted 
+                      and you can not use it anymore. Are you sure?`,
+                      onConfirm: async () => {
+                        if (!brand) {
+                          return
+                        }
+
+                        await deleteBrandFlow(brand, row.id)
+                        await reloadFlows()
+                        props.notify({
+                          message: `"${row.name}" Flow deleted.`,
+                          status: 'success'
+                        })
                       }
+                    })
+                    break
 
-                      await deleteBrandFlow(brand, row.id)
-                      await reloadFlows()
-                      props.notify({
-                        message: `"${row.name}" Flow deleted.`,
-                        status: 'success'
-                      })
-                    }
-                  })
-
-                  return
-                case 'edit':
-                case 'view':
-                  goTo(getFlowEditUrl(row.id))
-              }
-            }}
-          />
+                  case 'edit':
+                  case 'view':
+                    goTo(getFlowEditUrl(row.id))
+                    break
+                }
+              }}
+            />
+          </Box>
         )
       }
     }
@@ -158,19 +178,19 @@ function List(props: Props) {
         onClick={() => setIsModalOpen(true)}
       />
 
-      <PageContainer>
-        {isFetching && !error && <LoadingComponent />}
-        {!isFetching && !error && (
-          <Table<IBrandFlow>
-            columns={columns}
-            rows={flows}
-            totalRows={(flows || []).length}
-            loading={isFetching ? 'middle' : null}
-            LoadingStateComponent={LoadingComponent}
-          />
-        )}
-        {error && <h4>{error}</h4>}
-      </PageContainer>
+      {error ? (
+        <h4>{error}</h4>
+      ) : isFetching ? (
+        <LoadingComponent />
+      ) : (
+        <Table
+          columns={columns}
+          rows={flows}
+          totalRows={(flows || []).length}
+          loading={isFetching ? 'middle' : null}
+          LoadingStateComponent={LoadingComponent}
+        />
+      )}
     </>
   )
 }
