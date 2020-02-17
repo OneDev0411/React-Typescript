@@ -20,6 +20,7 @@ declare interface IEmailThreadEmailBase<T> {
   cc: string[]
   cc_raw: IRawEmailRecipient[]
   created_at: number
+  updated_at: number
   from: string
   from_raw: IRawEmailRecipient
   has_attachments: boolean
@@ -39,6 +40,7 @@ declare interface IEmailThreadEmailBase<T> {
   to: string[]
   to_raw: IRawEmailRecipient[]
   unique_body: string
+  is_read: boolean
   type: T
 }
 
@@ -55,18 +57,25 @@ declare type IEmailThreadMessage =
   | IMicrosoftMessage
   | IEmail<'html' | 'text'>
 
-type IEmailThreadAssociations = 'messages'
+type IEmailThreadAssociations = 'messages' | 'contacts'
 
 declare type IEmailThread<
   Associations extends IEmailThreadAssociations = ''
 > = {
+  id: UUID
   subject: string
+  created_at: number
+  updated_at: number
   first_message_date: number
   last_message_date: number
   recipients: string[]
   message_count: number
   has_attachments: boolean
+  is_read: boolean
   brand: UUID
+  user: UUID
   google_credential: UUID | undefined
   microsoft_credential: UUID | undefined
-} & Association<'messages', IEmailThreadMessage[], Associations>
+  type: 'email_thread'
+} & Association<'messages', IEmailThreadMessage[], Associations> &
+  Association<'contacts', (IContact & IContactSummary)[] | null, Associations>

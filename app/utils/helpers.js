@@ -17,11 +17,11 @@ export function compareNumbers(a, b) {
   return a - b;
 }
 
-export function joinItemsWithString(items = [], string = ', ') { 
+export function joinItemsWithString(items = [], string = ', ') {
   return items.filter(i => typeof i === 'string').join(string)
 }
 
-export function onlyUnique(value, index, self) { 
+export function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
 
@@ -34,12 +34,20 @@ export function getNameInitials(name) {
     return
   }
 
-  return name
-    .split(' ')
+  const nameInitials = name
+    .split(/[\s\n]/)
     .map(word => /^[A-Za-z\s]+$/.test(word) ? word.charAt(0).toUpperCase() : '')
     .join('')
     .trim()
     .substring(0, 2)
+
+  if (nameInitials) return nameInitials
+
+  // Otherwise, return first letter occurrence,
+  // for cases that only the email address is available:
+  const match = name.match(/[a-zA-Z]/)
+
+  return match ? match[0].toUpperCase() : '\u00A0'
 }
 
 export function getPlaceholderImage(text, options = {
@@ -188,7 +196,7 @@ export async function isValidPhoneNumber(phone_number) {
 
   try {
     return phoneUtil.isValidNumber(phoneUtil.parse(phone_number, 'US'))
-  } catch(e) {
+  } catch (e) {
     return false
   }
 }
@@ -298,12 +306,12 @@ export const toNumber = (value, formated = false) => {
 //  This proposed solution avoids the floating-number arithmetic issue
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round#A_better_solution
 export function round(number, precision) {
-  const shift = function(number, precision) {
+  const shift = function (number, precision) {
     const numArray = `${number}`.split('e')
 
     return +`${numArray[0]}e${
       numArray[1] ? +numArray[1] + precision : precision
-    }`
+      }`
   }
 
   return shift(Math.round(shift(number, +precision)), -precision)
@@ -317,4 +325,4 @@ export function getIndexLabel(index) {
   return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')[index]
 }
 
-export function noop() {}
+export function noop() { }
