@@ -4,6 +4,8 @@ import cn from 'classnames'
 
 import Flex from 'styled-flex-component'
 
+import { useIconStyles } from 'views/../styles/use-icon-styles'
+
 import { ClassesProps } from 'utils/ts-utils'
 
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
@@ -38,6 +40,7 @@ export function EventContainer({
   classes: inputClasses
 }: Props & ClassesProps<typeof styles>) {
   const sharedClasses = useSharedStyles()
+  const iconStyles = useIconStyles()
   const classes = useStyles({
     classes: inputClasses,
     evenRow: event.rowIndex ? event.rowIndex % 2 === 0 : true,
@@ -73,7 +76,9 @@ export function EventContainer({
           </div>
 
           <Flex alignCenter>
-            {editable && <EditIcon className={classes.iconEdit} />}
+            {editable && (
+              <EditIcon className={cn(iconStyles.small, classes.iconEdit)} />
+            )}
             {actions}
           </Flex>
         </div>

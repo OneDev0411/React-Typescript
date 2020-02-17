@@ -45,7 +45,6 @@ export const styles = (theme: Theme) =>
     },
     iconEdit: {
       marginRight: theme.spacing(2),
-      fill: theme.palette.grey[400],
-      height: '16px !important'
+      fill: theme.palette.grey[400]
     }
   })
