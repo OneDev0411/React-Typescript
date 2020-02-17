@@ -61,7 +61,6 @@ import {
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
-import Duplicates from './Duplicates'
 
 const DEFAULT_QUERY = {
   associations: CRM_LIST_DEFAULT_ASSOCIATIONS
@@ -577,6 +576,33 @@ class ContactsList extends React.Component {
     })
   }
 
+  renderTabs = (props = {}) => {
+    const { viewAsUsers } = this.props
+
+    return (
+      <ContactsTabs
+        filter={{
+          show: this.shouldShowFilters(),
+          handler: () => this.handleFilterChange({}, true)
+        }}
+        savedListProps={{
+          name: CONTACTS_SEGMENT_NAME,
+          associations: CRM_LIST_DEFAULT_ASSOCIATIONS,
+          getPredefinedLists: () => ({}),
+          onChange: segment => {
+            this.setState({ isShowingDuplicatesList: false })
+            this.handleChangeSavedSegment(segment)
+          }
+        }}
+        sortProps={{
+          onChange: this.handleChangeOrder
+        }}
+        users={viewAsUsers}
+        {...props}
+      />
+    )
+  }
+
   render() {
     const { props, state } = this
     const { list, viewAsUsers, isFetchingContacts, activeSegment } = this.props
@@ -605,118 +631,95 @@ class ContactsList extends React.Component {
     const activeTag = this.getActiveTag()
 
     return (
-      <>
-        <PageLayout>
-          <PageLayout.HeaderWithSearch
-            placeholder="Search Contacts"
-            onSearch={this.handleSearch}
-            title={title}
-          >
-            {!isZeroState && (
-              <Box ml={2}>
-                {activeSegment && activeSegment.is_editable && (
-                  <TouchReminder
-                    value={activeSegment.touch_freq}
-                    onChange={this.handleListTouchReminderUpdate}
-                  />
-                )}
-                {activeTag && activeTag.id && (
-                  <TouchReminder
-                    value={activeTag.touch_freq}
-                    onChange={this.handleTagTouchReminderUpdate}
-                  />
-                )}
-                {showImportAction && <ImportContactsButton />}
+      <PageLayout>
+        <PageLayout.HeaderWithSearch
+          placeholder="Search Contacts"
+          onSearch={this.handleSearch}
+          title={title}
+        >
+          {!isZeroState && (
+            <Box ml={2}>
+              {activeSegment && activeSegment.is_editable && (
+                <TouchReminder
+                  value={activeSegment.touch_freq}
+                  onChange={this.handleListTouchReminderUpdate}
+                />
+              )}
+              {activeTag && activeTag.id && (
+                <TouchReminder
+                  value={activeTag.touch_freq}
+                  onChange={this.handleTagTouchReminderUpdate}
+                />
+              )}
+              {showImportAction && <ImportContactsButton />}
+            </Box>
+          )}
+        </PageLayout.HeaderWithSearch>
+        <PageLayout.Main>
+          {this.state.syncStatus === 'pending' && (
+            <Callout
+              type="info"
+              onClose={() => this.setState({ syncStatus: null })}
+            >
+              <CalloutSpinner viewBox="20 20 60 60" />
+              Doing Science! Just a moment for Rechat to complete establishing
+              connections and importing your contacts.
+            </Callout>
+          )}
+          {this.state.syncStatus === 'finished' && (
+            <SyncSuccessfulModal
+              provider={this.state.syncedAccountProvider}
+              close={() => {
+                this.setState({ syncStatus: null })
+                this.reloadContacts()
+                this.props.getContactsTags()
+              }}
+              handleFilterChange={filters => {
+                this.setState({ syncStatus: null })
+                this.props.getContactsTags()
+                this.updateSyncedContactsSeenDate()
+                this.handleFilterChange({ filters }, true, '-updated_at')
+              }}
+            />
+          )}
+          {isZeroState && <ZeroState />}
+          {!isZeroState && !this.state.isShowingDuplicatesList && (
+            <React.Fragment>
+              <Box>
+                {this.renderTabs()}
+                <Table
+                  data={contacts}
+                  order={this.order}
+                  listInfo={props.listInfo}
+                  isFetching={isFetchingContacts}
+                  isFetchingMore={state.isFetchingMoreContacts}
+                  isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
+                  isRowsUpdating={state.isRowsUpdating}
+                  onRequestLoadMore={this.handleLoadMore}
+                  onRequestLoadMoreBefore={this.handleLoadMoreBefore}
+                  rowsUpdating={this.rowsUpdating}
+                  onChangeSelectedRows={this.onChangeSelectedRows}
+                  onRequestDelete={this.handleOnDelete}
+                  tableContainerId={this.tableContainerId}
+                  reloadContacts={this.reloadContacts}
+                  handleChangeContactsAttributes={() =>
+                    this.handleFilterChange({}, true)
+                  }
+                  filters={{
+                    alphabet: state.firstLetter,
+                    attributeFilters: props.filters,
+                    crm_tasks: props.crmTasks,
+                    filter_type: props.conditionOperator,
+                    flows: props.flows,
+                    text: state.searchInputValue,
+                    users: viewAsUsers
+                  }}
+                />
               </Box>
-            )}
-          </PageLayout.HeaderWithSearch>
-          <PageLayout.Main>
-            {this.state.syncStatus === 'pending' && (
-              <Callout
-                type="info"
-                onClose={() => this.setState({ syncStatus: null })}
-              >
-                <CalloutSpinner viewBox="20 20 60 60" />
-                Doing Science! Just a moment for Rechat to complete establishing
-                connections and importing your contacts.
-              </Callout>
-            )}
-            {this.state.syncStatus === 'finished' && (
-              <SyncSuccessfulModal
-                provider={this.state.syncedAccountProvider}
-                close={() => {
-                  this.setState({ syncStatus: null })
-                  this.reloadContacts()
-                  this.props.getContactsTags()
-                }}
-                handleFilterChange={filters => {
-                  this.setState({ syncStatus: null })
-                  this.props.getContactsTags()
-                  this.updateSyncedContactsSeenDate()
-                  this.handleFilterChange({ filters }, true, '-updated_at')
-                }}
-              />
-            )}
-            {isZeroState && <ZeroState />}
-            {!isZeroState && this.state.isShowingDuplicatesList && (
-              <Duplicates isSideMenuOpen={false} />
-            )}
-            {!isZeroState && !this.state.isShowingDuplicatesList && (
-              <React.Fragment>
-                <Box>
-                  <ContactsTabs
-                    filter={{
-                      show: this.shouldShowFilters(),
-                      handler: () => this.handleFilterChange({}, true)
-                    }}
-                    savedListProps={{
-                      name: CONTACTS_SEGMENT_NAME,
-                      associations: CRM_LIST_DEFAULT_ASSOCIATIONS,
-                      getPredefinedLists: () => ({}),
-                      onChange: segment => {
-                        this.setState({ isShowingDuplicatesList: false })
-                        this.handleChangeSavedSegment(segment)
-                      }
-                    }}
-                    sortProps={{
-                      onChange: this.handleChangeOrder
-                    }}
-                    users={viewAsUsers}
-                  />
-                  <Table
-                    data={contacts}
-                    order={this.order}
-                    listInfo={props.listInfo}
-                    isFetching={isFetchingContacts}
-                    isFetchingMore={state.isFetchingMoreContacts}
-                    isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
-                    isRowsUpdating={state.isRowsUpdating}
-                    onRequestLoadMore={this.handleLoadMore}
-                    onRequestLoadMoreBefore={this.handleLoadMoreBefore}
-                    rowsUpdating={this.rowsUpdating}
-                    onChangeSelectedRows={this.onChangeSelectedRows}
-                    onRequestDelete={this.handleOnDelete}
-                    tableContainerId={this.tableContainerId}
-                    reloadContacts={this.reloadContacts}
-                    handleChangeContactsAttributes={() =>
-                      this.handleFilterChange({}, true)
-                    }
-                    filters={{
-                      alphabet: state.firstLetter,
-                      attributeFilters: props.filters,
-                      crm_tasks: props.crmTasks,
-                      filter_type: props.conditionOperator,
-                      flows: props.flows,
-                      text: state.searchInputValue,
-                      users: viewAsUsers
-                    }}
-                  />
-                </Box>
-              </React.Fragment>
-            )}
-          </PageLayout.Main>
-        </PageLayout>
-      </>
+            </React.Fragment>
+          )}
+        </PageLayout.Main>
+      </PageLayout>
     )
   }
 }
