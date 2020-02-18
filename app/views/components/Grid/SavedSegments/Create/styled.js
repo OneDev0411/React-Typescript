@@ -2,6 +2,11 @@ import styled from 'styled-components'
 
 import { primary, borderColor } from '../../../../utils/colors'
 
+export const Container = styled.div`
+  display: inline-flex;
+  margin-left: 0.5rem;
+`
+
 export const ItemRow = styled.div`
   display: flex;
   align-items: center;

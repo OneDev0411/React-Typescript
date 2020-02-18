@@ -17,7 +17,7 @@ import Button from 'components/Button/ActionButton'
 import RadioButton from 'components/RadioButton'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
-import { ItemRow, ItemTitle, TextInput } from './styled'
+import { Container, ItemRow, ItemTitle, TextInput } from './styled'
 
 const DEFAULT_QUERY = {
   associations: CRM_LIST_DEFAULT_ASSOCIATIONS
@@ -151,10 +151,11 @@ class SaveSegment extends React.Component {
     }
 
     return (
-      <div>
+      <Container>
         {hasFilters && (
           <MUIButton
             variant="outlined"
+            size="small"
             data-test="save-list-button"
             onClick={this.toggleShowModal}
             disabled={!areFiltersValid}
@@ -218,7 +219,7 @@ class SaveSegment extends React.Component {
             </Modal.Footer>
           </Modal>
         )}
-      </div>
+      </Container>
     )
   }
 }

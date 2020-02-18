@@ -158,6 +158,14 @@ class Filters extends React.Component {
 
     return (
       <Container>
+        <FiltersOptions>
+          {this.props.disableConditionOperators || (
+            <ConditionOperators
+              selectedItem={this.props.conditionOperator}
+              onChange={this.onConditionChange}
+            />
+          )}
+        </FiltersOptions>
         <FiltersContainer>
           {Object.keys(activeFilters).map(id => {
             const filter = activeFilters[id]
@@ -182,21 +190,13 @@ class Filters extends React.Component {
             disabled={!Object.values(activeFilters).every(isFilterValid)}
             onNewFilter={this.createFilter}
           />
-        </FiltersContainer>
-        <FiltersOptions>
-          {this.props.disableConditionOperators || (
-            <ConditionOperators
-              selectedItem={this.props.conditionOperator}
-              onChange={this.onConditionChange}
-            />
-          )}
           {React.Children.map(children, child =>
             React.cloneElement(child, {
               filters: activeFilters,
               ...props
             })
           )}
-        </FiltersOptions>
+        </FiltersContainer>
       </Container>
     )
   }
