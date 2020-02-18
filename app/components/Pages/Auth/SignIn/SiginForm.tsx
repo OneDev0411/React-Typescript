@@ -67,10 +67,9 @@ export default function SignInForm({
               Back
             </Button>
           </p>
-          <p style={{ textAlign: 'center' }}>
-            <small>Forgot your password?</small>
+          <p className="c-auth__subtitle">
             &nbsp;&nbsp;
-            <Link to="/password/forgot">Reset it</Link>
+            <Link to="/password/forgot">Forgot Password?</Link>
           </p>
         </form>
       )}
