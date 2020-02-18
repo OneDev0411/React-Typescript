@@ -60,7 +60,7 @@ export default function CtaBar({ label, description, onClick }: Props) {
               fillColor={theme.palette.primary.main}
               className={classes.buttonIcon}
             />
-            {label}
+            <Typography variant="subtitle2">{label}</Typography>
           </Button>
         </Grid>
         <Grid item xs={8} classes={{ root: classes.descriptionContainer }}>
