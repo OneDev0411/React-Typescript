@@ -14,6 +14,7 @@ interface Props {
   onChangeSort: () => void
   activeView: 'map' | 'grid' | 'list'
   isWidget?: boolean
+  activeSort: string
 }
 
 interface TabsShape {
@@ -37,7 +38,8 @@ export const Tabs = ({
   onChangeView,
   activeView,
   isWidget,
-  onChangeSort
+  onChangeSort,
+  activeSort
 }: Props) => {
   const currentUrl = window.location.pathname
   const theme = useTheme<Theme>()
@@ -63,7 +65,7 @@ export const Tabs = ({
         my={1}
         justifyContent="flex-end"
       >
-        <SortDrowndown onChangeSort={onChangeSort} />
+        <SortDrowndown onChangeSort={onChangeSort} activeSort={activeSort} />
         {!isWidget && (
           <ViewSwitcher onChangeView={onChangeView} activeView={activeView} />
         )}

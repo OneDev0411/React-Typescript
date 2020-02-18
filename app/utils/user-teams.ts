@@ -151,6 +151,10 @@ const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
 ) => {
   const team = getActiveTeam(user)
   const settings = (team && getSettings(team)) || {}
+
+  // console.log('team', team)
+  // console.log('teamsettings', getSettings(team))
+
   return key ? settings[key] : settings
 }
 

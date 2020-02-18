@@ -5,11 +5,18 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 import idx from 'idx'
+import memoize from 'lodash/memoize'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+import { getUserTeams } from 'actions/user/teams'
+
+import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
 import Tabs from '../components/Tabs'
 
 import { loadJS } from '../../../../../utils/load-js'
 import { getBounds, isLocationInTX } from '../../../../../utils/map'
+
 import getPlace from '../../../../../models/listings/search/get-place'
 import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points'
 import { selectListings } from '../../../../../reducers/listings'
@@ -33,6 +40,7 @@ import CreateTourAction from './components/CreateTourAction'
 
 // Golden ratio
 const RADIUS = 1.61803398875 / 2
+const SORT_FIELD_SETTING_KEY = 'mls_sort_field'
 
 class Search extends React.Component {
   constructor(props) {
@@ -52,7 +60,7 @@ class Search extends React.Component {
       activeView,
       activeSort: {
         index: 'price',
-        isDescending: true
+        ascending: true
       },
       isCalculatingLocation: false,
       isMapInitialized: false,
@@ -61,6 +69,8 @@ class Search extends React.Component {
   }
 
   componentDidMount() {
+    const { index, ascending } = this.parsSortIndex(this.getDefaultSort())
+
     window.initialize = this.initialize
 
     if (!window.google) {
@@ -95,6 +105,20 @@ class Search extends React.Component {
     }
 
     this.setState({ isMapInitialized: true })
+  }
+
+  parsSortIndex = sort => {
+    let index = sort
+    const isDescending = index.charAt(0) === '-'
+
+    if (isDescending) {
+      index = index.slice(1)
+    }
+
+    return {
+      index,
+      ascending: !isDescending
+    }
   }
 
   fetchDefaultLocationListings = () => {
@@ -324,50 +348,55 @@ class Search extends React.Component {
       center
     )
 
-  sortBy = (a, b, index, isDescending) =>
-    isDescending ? a[index] - b[index] : b[index] - a[index]
+  sortBy = (a, b, index, ascending) =>
+    ascending ? a[index] - b[index] : b[index] - a[index]
 
-  onChangeSort = e => {
-    console.log('onchangeSort')
-
-    let index = e.currentTarget.dataset.sort
-    const isDescending = index.charAt(0) === '-'
-
-    if (isDescending) {
-      index = index.slice(1)
-    }
+  onChangeSort = async e => {
+    let sort = e.currentTarget.dataset.sort
+    const { index, ascending } = this.parsSortIndex(sort)
 
     this.setState({
       activeSort: {
         index,
-        isDescending
+        ascending
       }
     })
+    await putUserSetting(SORT_FIELD_SETTING_KEY, sort)
+    this.props.dispatch(getUserTeams(this.props.user))
   }
 
-  sortListings = listings => {
+  getDefaultSort = () => {
+    return (
+      getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ||
+      'price'
+    )
+  }
+
+  sortListings = memoize((listings, index, ascending) => {
     const formattedListings = listings.data.map(listing =>
       this.format(listing, this.props.mapCenter, this.props.user)
     )
 
-    return formattedListings.sort((a, b) =>
-      this.sortBy(
-        a,
-        b,
-        this.state.activeSort.index,
-        this.state.activeSort.isDescending
-      )
-    )
-  }
+    return formattedListings.sort((a, b) => this.sortBy(a, b, index, ascending))
+  })
 
   renderMain() {
-    console.log('rendering main.')
+    const temp = getUserSettingsInActiveTeam(
+      this.props.user,
+      SORT_FIELD_SETTING_KEY
+    )
+
+    const sortedListings = this.sortListings(
+      this.props.listings,
+      this.state.activeSort.index,
+      this.state.activeSort.ascending
+    )
 
     const { isCalculatingLocation } = this.state
     const _props = {
       user: this.props.user,
       listings: this.props.listings,
-      sortedListings: this.sortListings(this.props.listings),
+      sortedListings,
       isFetching: this.props.isFetching || isCalculatingLocation,
       totalRows: this.props.listings.info.total
     }
@@ -436,6 +465,7 @@ class Search extends React.Component {
           onChangeSort={this.onChangeSort}
           activeView={this.state.activeView}
           isWidget={this.props.isWidget}
+          activeSort={this.state.activeSort}
         />
         {this.renderMain()}
         <CreateAlertModal
