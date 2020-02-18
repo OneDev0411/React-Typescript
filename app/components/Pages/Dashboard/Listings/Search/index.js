@@ -361,8 +361,6 @@ class Search extends React.Component {
   }
 
   renderMain() {
-    console.log('rendering main.')
-
     const { isCalculatingLocation } = this.state
     const _props = {
       user: this.props.user,

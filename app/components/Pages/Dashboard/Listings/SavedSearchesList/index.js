@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 
 import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
+import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import ArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
 import ArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
@@ -92,7 +92,7 @@ class SavedSearchesList extends Component {
             this.props.dispatch(getAlerts())
           }
         }}
-        renderMenu={() => {
+        renderMenu={({ close }) => {
           if (this.props.isFetching || isDeleting) {
             return [
               <ListItem key="loading">
@@ -118,7 +118,7 @@ class SavedSearchesList extends Component {
                     edge="end"
                     aria-label="delete"
                   >
-                    <IconClose
+                    <IconDeleteOutline
                       style={{ fill: 'currentColor', width: 16, height: 16 }}
                     />
                   </IconButton>

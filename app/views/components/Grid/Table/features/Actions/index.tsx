@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       justifyContent: 'space-between',
       padding: theme.spacing(0, 1),
-      zIndex: theme.zIndex.appBar
+      zIndex: theme.zIndex.modal
     },
     summary: {
       color: theme.palette.primary.main,

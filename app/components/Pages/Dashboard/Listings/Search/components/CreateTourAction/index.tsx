@@ -16,9 +16,9 @@ export default function CreateTourAction(props: Props) {
   return (
     <>
       <Button
+        variant="contained"
         disabled={props.disabled}
-        variant="outlined"
-        size="small"
+        color="primary"
         onClick={() => setIsOpen(true)}
       >
         Create Tour
