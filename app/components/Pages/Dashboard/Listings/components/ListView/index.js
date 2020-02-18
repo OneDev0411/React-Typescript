@@ -7,10 +7,12 @@ import { useTheme } from '@material-ui/styles'
 
 import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
+import TableActions from '../../Search/components/BulkActions'
 
 import { Address } from './columns/Address'
+import { Avatar } from './columns/Avatar'
 
-const ListView = ({ sortedListings, listings, isFetching }) => {
+const ListView = ({ sortedListings, listings, isFetching, user }) => {
   const theme = useTheme()
 
   const columns = [
@@ -86,6 +88,19 @@ const ListView = ({ sortedListings, listings, isFetching }) => {
         loading={isFetching ? 'middle' : null}
         // summary={total => `${total} Listings`}
         LoadingStateComponent={LoadingComponent}
+        selection={{
+          defaultRender: ({ row: listing }) => <Avatar listing={listing} />
+        }}
+        TableActions={({ state, dispatch }) => (
+          <TableActions
+            state={state}
+            dispatch={dispatch}
+            isFetching={isFetching}
+            totalRowsCount={listings.info.total}
+            listings={sortedListings}
+            user={user}
+          />
+        )}
       />
     </Box>
   )
