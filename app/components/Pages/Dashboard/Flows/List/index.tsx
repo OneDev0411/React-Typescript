@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { addNotification as notify } from 'reapop'
 import { Helmet } from 'react-helmet'
-import { Box } from '@material-ui/core'
+import { Box, Typography, Theme } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
 
 import Table from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
@@ -26,6 +27,17 @@ import New from '../New'
 import CtaBar from '../../Account/components/CtaBar'
 
 import { getFlowActions } from './helpers'
+
+const useStyles = makeStyles((theme: Theme) => ({
+  flowName: {
+    '&:not(:hover)': {
+      color: theme.palette.common.black
+    }
+  },
+  flowDescription: {
+    color: theme.palette.grey[500]
+  }
+}))
 
 interface Props {
   user: IUser
@@ -73,6 +85,8 @@ function List(props: Props) {
     }
   }
 
+  const classes = useStyles()
+
   const columns: TableColumn<IBrandFlow>[] = [
     {
       header: 'Name',
@@ -80,24 +94,29 @@ function List(props: Props) {
       primary: true,
       width: '33%',
       render: ({ row }) => (
-        <Link
-          to={`/dashboard/account/flows/${row.id}`}
-          style={{ fontWeight: 'bold' }}
-        >
-          {row.name}
+        <Link to={`/dashboard/account/flows/${row.id}`}>
+          <Typography variant="body1" classes={{ root: classes.flowName }}>
+            {row.name}
+          </Typography>
         </Link>
       )
     },
     {
       header: 'Description',
       id: 'description',
-      render: ({ row }) => <div>{row.description}</div>
+      render: ({ row }) => (
+        <Typography variant="body2" classes={{ root: classes.flowDescription }}>
+          {row.description}
+        </Typography>
+      )
     },
     {
       header: 'Enrolled Contacts',
       id: 'cotnacts',
       width: '160px',
-      render: ({ row }) => <div>{row.active_flows} Enrolled</div>
+      render: ({ row }) => (
+        <Typography variant="body2">{row.active_flows} Enrolled</Typography>
+      )
     },
     {
       id: 'actions',
