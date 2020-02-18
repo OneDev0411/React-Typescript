@@ -602,7 +602,7 @@ const ListingMobileView = ({
             alt="Rechat"
             width={36}
             height={36}
-            src="/static/images/appicon.png"
+            src="/static/images/logo.svg"
           />
         )}
       </a>
