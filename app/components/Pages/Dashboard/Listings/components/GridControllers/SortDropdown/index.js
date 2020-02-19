@@ -19,9 +19,15 @@ const sortOptions = [
   }
 ]
 
-const SortDropdown = ({ onChangeSort }) => {
+const SortDropdown = ({ onChangeSort, activeSort }) => {
   const [sortDropdownAnchorEl, setSortDropdownAnchorEl] = useState(null)
-  const [selectedIndex, setSelectedIndex] = useState(1)
+  const activeSortIndex = sortOptions.findIndex(
+    item =>
+      item.value === activeSort.index && item.ascending === activeSort.ascending
+  )
+  const [selectedSortIndex, setSelectedSortIndex] = useState(
+    activeSortIndex || 0
+  )
 
   const handleViewSwitcherToggle = event => {
     if (sortDropdownAnchorEl) {
@@ -34,7 +40,7 @@ const SortDropdown = ({ onChangeSort }) => {
   }
   const handleSortDropdownItemClick = (event, index) => {
     onChangeSort(event)
-    setSelectedIndex(index)
+    setSelectedSortIndex(index)
     setSortDropdownAnchorEl(null)
   }
 
@@ -44,7 +50,7 @@ const SortDropdown = ({ onChangeSort }) => {
         isActive={Boolean(sortDropdownAnchorEl)}
         onClick={handleViewSwitcherToggle}
       >
-        {sortOptions[selectedIndex].label}
+        {sortOptions[selectedSortIndex].label}
       </DropdownToggleButton>
 
       <Popover
@@ -68,7 +74,7 @@ const SortDropdown = ({ onChangeSort }) => {
             data-sort={
               sortOption.ascending ? sortOption.value : `-${sortOption.value}`
             }
-            selected={index === selectedIndex}
+            selected={index === selectedSortIndex}
             onClick={event => handleSortDropdownItemClick(event, index)}
           >
             {sortOption.label}

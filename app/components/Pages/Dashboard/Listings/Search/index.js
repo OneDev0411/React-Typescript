@@ -4,12 +4,23 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
-import idx from 'idx'
+import memoize from 'lodash/memoize'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+import { getUserTeams } from 'actions/user/teams'
+
+import {
+  parsSortIndex,
+  getDefaultSort,
+  sortByIndex,
+  SORT_FIELD_SETTING_KEY
+} from '../helpers/sort-utils'
 
 import Tabs from '../components/Tabs'
 
 import { loadJS } from '../../../../../utils/load-js'
 import { getBounds, isLocationInTX } from '../../../../../utils/map'
+
 import getPlace from '../../../../../models/listings/search/get-place'
 import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points'
 import { selectListings } from '../../../../../reducers/listings'
@@ -25,7 +36,10 @@ import MapView from '../components/MapView'
 import ListView from '../components/ListView'
 import GridView from '../components/GridView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
-import { formatListing } from '../helpers/format-listing'
+import {
+  addDistanceFromCenterToListing,
+  formatListing
+} from '../helpers/format-listing'
 import { normalizeListingLocation } from '../../../../../utils/map'
 
 import { Header } from './Header'
@@ -48,11 +62,13 @@ class Search extends React.Component {
       activeView = 'map'
     }
 
+    const { index, ascending } = parsSortIndex(getDefaultSort(this.props.user))
+
     this.state = {
       activeView,
       activeSort: {
-        index: 'price',
-        isDescending: true
+        index,
+        ascending
       },
       isCalculatingLocation: false,
       isMapInitialized: false,
@@ -296,76 +312,46 @@ class Search extends React.Component {
     }
   ]
 
-  addListingsDistanceFromCenter = (listing, center) => {
-    if (!center || !idx(window, w => w.google.maps.geometry)) {
-      return listing
-    }
-
-    const { google } = window
-
-    const centerLatLng = new google.maps.LatLng(center.lat, center.lng)
-
-    const listingLocation = new google.maps.LatLng(listing.lat, listing.lng)
-
-    const distanceFromCenter = google.maps.geometry.spherical.computeDistanceBetween(
-      centerLatLng,
-      listingLocation
-    )
-
-    return {
-      ...listing,
-      distanceFromCenter
-    }
-  }
-
-  format = (listing, center, user) =>
-    this.addListingsDistanceFromCenter(
+  formatAndAddDistance = (listing, center, user) =>
+    addDistanceFromCenterToListing(
       formatListing(normalizeListingLocation(listing), user),
       center
     )
 
-  sortBy = (a, b, index, isDescending) =>
-    isDescending ? a[index] - b[index] : b[index] - a[index]
-
-  onChangeSort = e => {
-    console.log('onchangeSort')
-
-    let index = e.currentTarget.dataset.sort
-    const isDescending = index.charAt(0) === '-'
-
-    if (isDescending) {
-      index = index.slice(1)
-    }
+  onChangeSort = async e => {
+    let sort = e.currentTarget.dataset.sort
+    const { index, ascending } = parsSortIndex(sort)
 
     this.setState({
       activeSort: {
         index,
-        isDescending
+        ascending
       }
     })
+    await putUserSetting(SORT_FIELD_SETTING_KEY, sort)
+    this.props.dispatch(getUserTeams(this.props.user))
   }
 
-  sortListings = listings => {
+  sortListings = memoize((listings, index, ascending) => {
     const formattedListings = listings.data.map(listing =>
-      this.format(listing, this.props.mapCenter, this.props.user)
+      this.formatAndAddDistance(listing, this.props.mapCenter, this.props.user)
     )
 
-    return formattedListings.sort((a, b) =>
-      this.sortBy(
-        a,
-        b,
-        this.state.activeSort.index,
-        this.state.activeSort.isDescending
-      )
-    )
-  }
+    return formattedListings.sort((a, b) => sortByIndex(a, b, index, ascending))
+  })
 
   renderMain() {
+    const sortedListings = this.sortListings(
+      this.props.listings,
+      this.state.activeSort.index,
+      this.state.activeSort.ascending
+    )
+
     const { isCalculatingLocation } = this.state
     const _props = {
       user: this.props.user,
       listings: this.props.listings,
-      sortedListings: this.sortListings(this.props.listings),
+      sortedListings,
       isFetching: this.props.isFetching || isCalculatingLocation,
       totalRows: this.props.listings.info.total
     }
@@ -418,11 +404,13 @@ class Search extends React.Component {
       <React.Fragment>
         <Header
           user={user}
+          isWidget={this.props.isWidget}
           isFetching={this.props.isFetching}
           filtersIsOpen={this.props.filtersIsOpen}
           activeView={this.state.activeView}
           isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
+          saveSearchHandler={this.handleSaveSearch}
           onClickFilter={this.onClickFilter}
           onChangeView={this.onChangeView}
           hasData={this.props.listings.data.length > 0}
@@ -430,11 +418,9 @@ class Search extends React.Component {
         <Tabs
           onChangeView={this.onChangeView}
           onChangeSort={this.onChangeSort}
-          saveSearchHandler={this.handleSaveSearch}
           activeView={this.state.activeView}
           isWidget={this.props.isWidget}
-          isFetching={this.props.isFetching}
-          user={user}
+          activeSort={this.state.activeSort}
         />
         {this.renderMain()}
         <CreateAlertModal
