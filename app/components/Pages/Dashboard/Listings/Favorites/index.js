@@ -2,9 +2,26 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Helmet } from 'react-helmet'
+import memoize from 'lodash/memoize'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+import { getUserTeams } from 'actions/user/teams'
 
 import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
 import { selectListings } from '../../../../../reducers/listings'
+
+import {
+  formatListing,
+  addDistanceFromCenterToListing
+} from '../helpers/format-listing'
+import { normalizeListingLocation } from '../../../../../utils/map'
+
+import {
+  parsSortIndex,
+  getDefaultSort,
+  sortByIndex,
+  SORT_FIELD_SETTING_KEY
+} from '../helpers/sort-utils'
 
 import Map from './Map'
 import { Header } from '../components/PageHeader'
@@ -17,8 +34,14 @@ class Favorites extends React.Component {
   constructor(props) {
     super(props)
 
+    const { index, ascending } = parsSortIndex(getDefaultSort(this.props.user))
+
     this.state = {
-      activeView: props.location.query.view || 'map'
+      activeView: props.location.query.view || 'map',
+      activeSort: {
+        index,
+        ascending
+      }
     }
   }
 
@@ -38,24 +61,66 @@ class Favorites extends React.Component {
     })
   }
 
+  formatAndAddDistance = (listing, center, user) =>
+    addDistanceFromCenterToListing(
+      formatListing(normalizeListingLocation(listing), user),
+      center
+    )
+
+  sortListings = memoize((listings, index, ascending) => {
+    const formattedListings = listings.data.map(listing =>
+      this.formatAndAddDistance(listing, this.props.mapCenter, this.props.user)
+    )
+
+    return formattedListings.sort((a, b) => sortByIndex(a, b, index, ascending))
+  })
+
+  onChangeSort = async e => {
+    let sort = e.currentTarget.dataset.sort
+    const { index, ascending } = parsSortIndex(sort)
+
+    this.setState({
+      activeSort: {
+        index,
+        ascending
+      }
+    })
+    await putUserSetting(SORT_FIELD_SETTING_KEY, sort)
+    this.props.getUserTeams(this.props.user)
+  }
+
   renderMain() {
     const { listings, isFetching } = this.props
+
+    const sortedListings = this.sortListings(
+      listings,
+      this.state.activeSort.index,
+      this.state.activeSort.ascending
+    )
 
     switch (this.state.activeView) {
       case 'map':
         return (
           <MapView
             tabName="favorites"
-            listings={listings}
+            sortedListings={sortedListings}
             Map={<Map markers={listings.data} isFetching={isFetching} />}
           />
         )
 
       case 'grid':
-        return <GridView isFetching={isFetching} listings={listings} />
+        return (
+          <GridView isFetching={isFetching} sortedListings={sortedListings} />
+        )
 
       default:
-        return <ListView isFetching={isFetching} listings={listings} />
+        return (
+          <ListView
+            isFetching={isFetching}
+            sortedListings={sortedListings}
+            listings={listings}
+          />
+        )
     }
   }
 
@@ -69,6 +134,8 @@ class Favorites extends React.Component {
         <Tabs
           onChangeView={this.onChangeView}
           activeView={this.state.activeView}
+          onChangeSort={this.onChangeSort}
+          activeSort={this.state.activeSort}
         />
         {this.renderMain()}
       </React.Fragment>
@@ -91,5 +158,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { getFavorites }
+  { getFavorites, getUserTeams }
 )(Favorites)

@@ -3,10 +3,16 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
-import idx from 'idx'
 
 import { getSavedSearchListings } from '../../../../../models/listings/alerts/get-alert-listings'
 import { selectAlert } from '../../../../../reducers/listings/alerts/list'
+
+import {
+  parsSortIndex,
+  getDefaultSort,
+  sortByIndex,
+  SORT_FIELD_SETTING_KEY
+} from '../helpers/sort-utils'
 
 import Map from './Map'
 import { Header } from '../components/PageHeader'
@@ -15,7 +21,10 @@ import ListView from '../components/ListView'
 import GridView from '../components/GridView'
 import Avatars from '../../../../../views/components/Avatars'
 
-import { formatListing } from '../helpers/format-listing'
+import {
+  formatListing,
+  addDistanceFromCenterToListing
+} from '../helpers/format-listing'
 import { normalizeListingLocation } from '../../../../../utils/map'
 
 const mappingStatus = status => {
@@ -122,36 +131,11 @@ class SavedSearch extends React.Component {
     })
   }
 
-  addListingsDistanceFromCenter = (listing, center) => {
-    if (!center || !idx(window, w => w.google.maps.geometry)) {
-      return listing
-    }
-
-    const { google } = window
-
-    const centerLatLng = new google.maps.LatLng(center.lat, center.lng)
-
-    const listingLocation = new google.maps.LatLng(listing.lat, listing.lng)
-
-    const distanceFromCenter = google.maps.geometry.spherical.computeDistanceBetween(
-      centerLatLng,
-      listingLocation
-    )
-
-    return {
-      ...listing,
-      distanceFromCenter
-    }
-  }
-
   format = (listing, center, user) =>
-    this.addListingsDistanceFromCenter(
+    addDistanceFromCenterToListing(
       formatListing(normalizeListingLocation(listing), user),
       center
     )
-
-  sortBy = (a, b, index, isDescending) =>
-    isDescending ? a[index] - b[index] : b[index] - a[index]
 
   sortListings = listings => {
     const formattedListings = listings.data.map(listing =>
@@ -159,7 +143,7 @@ class SavedSearch extends React.Component {
     )
 
     return formattedListings.sort((a, b) =>
-      this.sortBy(
+      sortByIndex(
         a,
         b,
         this.state.activeSort.index,
@@ -190,10 +174,18 @@ class SavedSearch extends React.Component {
         )
 
       case 'grid':
-        return <GridView isFetching={isFetching} listings={listings} />
+        return (
+          <GridView isFetching={isFetching} sortedListings={sortedListings} />
+        )
 
       default:
-        return <ListView isFetching={isFetching} listings={listings} />
+        return (
+          <ListView
+            isFetching={isFetching}
+            sortedListings={sortedListings}
+            listings={listings}
+          />
+        )
     }
   }
 

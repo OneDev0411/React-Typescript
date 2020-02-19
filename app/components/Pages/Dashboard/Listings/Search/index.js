@@ -4,13 +4,17 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
-import idx from 'idx'
 import memoize from 'lodash/memoize'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
 
-import { getUserSettingsInActiveTeam } from 'utils/user-teams'
+import {
+  parsSortIndex,
+  getDefaultSort,
+  sortByIndex,
+  SORT_FIELD_SETTING_KEY
+} from '../helpers/sort-utils'
 
 import Tabs from '../components/Tabs'
 
@@ -32,7 +36,10 @@ import MapView from '../components/MapView'
 import ListView from '../components/ListView'
 import GridView from '../components/GridView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
-import { formatListing } from '../helpers/format-listing'
+import {
+  addDistanceFromCenterToListing,
+  formatListing
+} from '../helpers/format-listing'
 import { normalizeListingLocation } from '../../../../../utils/map'
 
 import { Header } from './Header'
@@ -40,7 +47,6 @@ import CreateTourAction from './components/CreateTourAction'
 
 // Golden ratio
 const RADIUS = 1.61803398875 / 2
-const SORT_FIELD_SETTING_KEY = 'mls_sort_field'
 
 class Search extends React.Component {
   constructor(props) {
@@ -56,11 +62,13 @@ class Search extends React.Component {
       activeView = 'map'
     }
 
+    const { index, ascending } = parsSortIndex(getDefaultSort(this.props.user))
+
     this.state = {
       activeView,
       activeSort: {
-        index: 'price',
-        ascending: true
+        index,
+        ascending
       },
       isCalculatingLocation: false,
       isMapInitialized: false,
@@ -69,8 +77,6 @@ class Search extends React.Component {
   }
 
   componentDidMount() {
-    const { index, ascending } = this.parsSortIndex(this.getDefaultSort())
-
     window.initialize = this.initialize
 
     if (!window.google) {
@@ -105,20 +111,6 @@ class Search extends React.Component {
     }
 
     this.setState({ isMapInitialized: true })
-  }
-
-  parsSortIndex = sort => {
-    let index = sort
-    const isDescending = index.charAt(0) === '-'
-
-    if (isDescending) {
-      index = index.slice(1)
-    }
-
-    return {
-      index,
-      ascending: !isDescending
-    }
   }
 
   fetchDefaultLocationListings = () => {
@@ -320,40 +312,15 @@ class Search extends React.Component {
     }
   ]
 
-  addListingsDistanceFromCenter = (listing, center) => {
-    if (!center || !idx(window, w => w.google.maps.geometry)) {
-      return listing
-    }
-
-    const { google } = window
-
-    const centerLatLng = new google.maps.LatLng(center.lat, center.lng)
-
-    const listingLocation = new google.maps.LatLng(listing.lat, listing.lng)
-
-    const distanceFromCenter = google.maps.geometry.spherical.computeDistanceBetween(
-      centerLatLng,
-      listingLocation
-    )
-
-    return {
-      ...listing,
-      distanceFromCenter
-    }
-  }
-
-  format = (listing, center, user) =>
-    this.addListingsDistanceFromCenter(
+  formatAndAddDistance = (listing, center, user) =>
+    addDistanceFromCenterToListing(
       formatListing(normalizeListingLocation(listing), user),
       center
     )
 
-  sortBy = (a, b, index, ascending) =>
-    ascending ? a[index] - b[index] : b[index] - a[index]
-
   onChangeSort = async e => {
     let sort = e.currentTarget.dataset.sort
-    const { index, ascending } = this.parsSortIndex(sort)
+    const { index, ascending } = parsSortIndex(sort)
 
     this.setState({
       activeSort: {
@@ -365,27 +332,15 @@ class Search extends React.Component {
     this.props.dispatch(getUserTeams(this.props.user))
   }
 
-  getDefaultSort = () => {
-    return (
-      getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ||
-      'price'
-    )
-  }
-
   sortListings = memoize((listings, index, ascending) => {
     const formattedListings = listings.data.map(listing =>
-      this.format(listing, this.props.mapCenter, this.props.user)
+      this.formatAndAddDistance(listing, this.props.mapCenter, this.props.user)
     )
 
-    return formattedListings.sort((a, b) => this.sortBy(a, b, index, ascending))
+    return formattedListings.sort((a, b) => sortByIndex(a, b, index, ascending))
   })
 
   renderMain() {
-    const temp = getUserSettingsInActiveTeam(
-      this.props.user,
-      SORT_FIELD_SETTING_KEY
-    )
-
     const sortedListings = this.sortListings(
       this.props.listings,
       this.state.activeSort.index,
