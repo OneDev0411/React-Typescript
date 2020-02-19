@@ -61,7 +61,7 @@ const Signup = ({
               />
             </a>
           )}
-          <h1 className="c-auth__title">{`${siteTitle}`}</h1>
+          <h1 className="c-auth__title">Sign Up</h1>
           {!submitSuccessfully ? (
             <p className="c-auth__subtitle">Hello, lets get started.</p>
           ) : (
