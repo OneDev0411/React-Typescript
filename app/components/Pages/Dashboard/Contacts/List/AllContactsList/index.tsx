@@ -45,9 +45,10 @@ function AllContactsList({
       (!activeSegment || activeSegment.id === 'default')
     )
   }, [activeFilters, activeSegment])
-  const isSyncedListSelected = activeSegment.id === SYNCED_CONTACTS_LIST_ID
+  const isSyncedListSelected =
+    activeSegment && activeSegment.id === SYNCED_CONTACTS_LIST_ID
   const isDuplicatesListSelected =
-    activeSegment.id === DUPLICATE_CONTACTS_LIST_ID
+    activeSegment && activeSegment.id === DUPLICATE_CONTACTS_LIST_ID
 
   const clickHandler = async (type: string) => {
     await resetActiveFilters(CONTACTS_SEGMENT_NAME)

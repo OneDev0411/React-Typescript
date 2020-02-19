@@ -78,6 +78,7 @@ class ContactsList extends React.Component {
       firstLetter: props.location.query.letter || null,
       isSideMenuOpen: true,
       isShowingDuplicatesList:
+        props.activeSegment &&
         props.activeSegment.id === DUPLICATE_CONTACTS_LIST_ID,
       isFetchingMoreContacts: false,
       isFetchingMoreContactsBefore: false,
