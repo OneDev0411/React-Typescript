@@ -11,8 +11,8 @@ export const Container = styled.div`
 `
 
 export const Name = styled.div`
-  width: calc(100% - 40px - 1.5rem);
-  margin-left: 1rem;
+  display: flex;
+  align-items: center;
 `
 
 export const SubAddress = styled.div`

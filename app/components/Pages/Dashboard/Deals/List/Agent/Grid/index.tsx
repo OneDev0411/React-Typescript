@@ -55,14 +55,9 @@ function AgentGrid(props: Props & WithRouterProps) {
   const columns = useMemo(() => {
     return [
       {
-        id: 'status',
-        header: 'Status',
-        accessor: (deal: IDeal) => getStatus(deal),
-        sortMethod: statusSortMethod
-      },
-      {
         id: 'address',
         header: 'Address',
+        width: '50%',
         accessor: (deal: IDeal) => getAddress(deal, roles),
         render: ({ row: deal, totalRows, rowIndex }) => (
           <Address
@@ -74,10 +69,15 @@ function AgentGrid(props: Props & WithRouterProps) {
         )
       },
       {
+        id: 'status',
+        header: 'Status',
+        accessor: (deal: IDeal) => getStatus(deal),
+        sortMethod: statusSortMethod
+      },
+      {
         id: 'price',
         header: '$ Price',
         sortType: 'number',
-        align: 'right',
         accessor: (deal: IDeal) => getPriceValue(deal),
         render: ({ row: deal }) =>
           getFormattedPrice(getPriceValue(deal), 'currency', 0)
@@ -102,16 +102,6 @@ function AgentGrid(props: Props & WithRouterProps) {
         render: ({ row: deal }) => {
           return <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
         }
-      },
-      {
-        id: 'notification',
-        header: '',
-        render: ({ row: deal }: { row: IDeal }) => (
-          <Notification
-            count={deal.new_notifications ? deal.new_notifications.length : 0}
-            caption="You have $count unread messages in this deal"
-          />
-        )
       }
     ]
   }, [roles, user])
@@ -149,6 +139,10 @@ function AgentGrid(props: Props & WithRouterProps) {
     }
 
     const column = columns.find(col => col.id === id)!
+
+    if (!column) {
+      return null
+    }
 
     return {
       value: column.id,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
-
+import useDebouncedCallback from 'use-debounce/lib/callback'
 import { TextField, makeStyles, createStyles, Theme } from '@material-ui/core'
 
 // import PageSideNav from 'components/PageSideNav'
@@ -62,7 +62,7 @@ export default function AgentTable(props: WithRouterProps) {
     const { value } = e.target
 
     setSearchCriteria(value)
-    fetch(user, value)
+    debouncedFetch(user, value)
   }
 
   const fetch = useCallback(
@@ -76,16 +76,17 @@ export default function AgentTable(props: WithRouterProps) {
     [dispatch]
   )
 
-  useEffect(() => {
+  const [debouncedFetch] = useDebouncedCallback(fetch, 500)
+
+  useDeepCompareEffect(() => {
     fetch(user, searchCriteria)
-  }, [fetch, searchCriteria, user, viewAsUsers])
+  }, [viewAsUsers])
 
   return (
     <>
       <GlobalHeader title="My deals">
         <div className={classes.headerContainer}>
           <TextField
-            value={searchCriteria}
             className={classes.searchInput}
             size="small"
             variant="outlined"
