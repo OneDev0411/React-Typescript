@@ -105,13 +105,15 @@ const Signup = ({
                 <br />
                 Please check <b>{submitSuccessfully.email}</b>
               </p>
-              <Link
-                to={`/signin?username=${encodeURIComponent(
-                  submitSuccessfully.email
-                )}`}
-              >
-                Sign in
-              </Link>
+              <div className="c-auth__subtitle">
+                <Link
+                  to={`/signin?username=${encodeURIComponent(
+                    submitSuccessfully.email
+                  )}`}
+                >
+                  Sign in
+                </Link>
+              </div>
             </div>
           )}
         </main>
