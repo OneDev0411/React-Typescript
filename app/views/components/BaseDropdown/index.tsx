@@ -16,7 +16,7 @@ import { PopperProps } from '@material-ui/core/Popper'
 
 import { DropdownToggleButton } from '../DropdownToggleButton'
 
-interface RenderToggleButtonProps {
+export interface RenderToggleButtonProps {
   isActive: boolean
   ref: RefObject<any>
   onClick: () => void
