@@ -67,7 +67,7 @@ export interface SortableColumn {
 export interface GridSortingOption {
   columns?: SortableColumn[]
   defaultSort?: ActiveSort
-  sortBy?: ActiveSort
+  sortBy?: ActiveSort | null
   onChange?: (item: SortableColumn) => void
 }
 

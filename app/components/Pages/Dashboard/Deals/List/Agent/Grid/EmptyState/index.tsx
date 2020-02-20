@@ -37,7 +37,10 @@ export default function EmptyState() {
       </div>
 
       <div>
-        <Button onClick={() => browserHistory.push('/dashboard/deals/create')}>
+        <Button
+          variant="outlined"
+          onClick={() => browserHistory.push('/dashboard/deals/create')}
+        >
           Create New Deal
         </Button>
       </div>

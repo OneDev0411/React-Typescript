@@ -33,7 +33,6 @@ const Address = ({ deal, roles, rowIndex, totalRows }) => {
           {deal.title}
         </Link>
         <SubAddress className="hover-color--black">
-          {status || '-'}
           {roles && (
             <React.Fragment>
               <Dot>.</Dot>
