@@ -6,13 +6,19 @@ import ActionButton from '../../../../../views/components/Button/ActionButton'
 import { SigninButton } from '../SigninButton'
 
 const ConflictModal = ({ params, brandInfo }) => {
-  const { receivingUser, redirectTo, messageText, actionButtonProps } = params
-  const { is_shadow } = receivingUser
+  let { email, userInfo, redirectTo, messageText, actionButtonProps } = params
+  let is_shadow
+
+  if (userInfo) {
+    is_shadow = userInfo.is_shadow
+  }
+
+  email = email || (userInfo && userInfo.email)
 
   const actionButton = actionButtonProps || {
     text: 'Sign in',
     href: `/signout?username=${encodeURIComponent(
-      receivingUser.email
+      email
     )}&redirectTo=${redirectTo}`
   }
 

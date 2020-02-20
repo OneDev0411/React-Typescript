@@ -4,9 +4,13 @@ import RedirectModal from '../RedirectModal'
 import { SigninButton } from '../SigninButton'
 
 const NeedsToLoginModal = ({ params, brandInfo }) => {
-  const { receivingUser, email, branchUrl } = params
+  const { userInfo, email, branchUrl } = params
+  let queryStrings = `?redirectTo=${branchUrl}`
+  const username = email || (userInfo && userInfo.email)
 
-  const username = encodeURIComponent(email || receivingUser.email)
+  if (username) {
+    queryStrings = `${queryStrings}&username=${username}`
+  }
 
   return (
     <RedirectModal brandInfo={brandInfo}>
@@ -14,11 +18,7 @@ const NeedsToLoginModal = ({ params, brandInfo }) => {
         <h3 className="c-confirm-modal__title">Needs To Login</h3>
         <p className="c-confirm-modal__message">Please login first.</p>
         <div>
-          <SigninButton
-            href={`/signin?username=${username}&redirectTo=${branchUrl}`}
-          >
-            Sign In
-          </SigninButton>
+          <SigninButton href={`/signin${queryStrings}`}>Sign In</SigninButton>
         </div>
       </div>
     </RedirectModal>

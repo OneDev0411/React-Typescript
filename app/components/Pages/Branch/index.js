@@ -13,7 +13,7 @@ import signin from '../../../store_actions/auth/signin'
 
 import Loading from '../../Partials/Loading'
 import { getBrandInfo } from '../Auth/SignIn/get-brand-info'
-import getUser from '../../../models/user/get-user'
+import { lookUpUserByEmail } from '../../../models/user/lookup-user-by-email'
 import ConflictModal from './components/ConflictModal'
 import NeedsToLoginModal from './components/NeedsToLoginModal'
 import VerifyRedirectModal from './components/VerifyRedirectModal'
@@ -56,14 +56,7 @@ const getActionRedirectURL = params => {
 
 const generateVerificationActionRedirectUrl = params => {
   let url = '/verify/confirm/'
-  const {
-    action,
-    email,
-    email_code,
-    phone_number,
-    phone_code,
-    receivingUser
-  } = params
+  const { action, email, email_code, phone_number, phone_code } = params
 
   switch (action) {
     case 'EmailVerification':
@@ -71,9 +64,7 @@ const generateVerificationActionRedirectUrl = params => {
       break
     case 'PhoneVerification':
       // eslint-disable-next-line
-      url += `phone?phone_number=${phone_number}&phone_code=${phone_code}&receivingUserEmail=${
-        receivingUser.email
-      }`
+      url += `phone?phone_number=${phone_number}&phone_code=${phone_code}`
       break
     default:
       url = OOPS_PAGE
@@ -98,25 +89,30 @@ const redirectHandler = async (
     }
   })
 
-  const {
+  let {
     token,
     email,
     action,
     listing,
-    isShadow,
     phone_number,
-    receivingUser
+    receiving_user,
+    userInfo
   } = branchData
+
+  email = email || (userInfo && userInfo.email)
 
   const branchUrl = branchData['~referring_link']
 
   const params = {
     action,
     loggedInUser,
-    receivingUser,
+    userInfo,
     branchUrl
   }
-  const hasConflict = () => loggedInUser && receivingUser.id !== loggedInUser.id
+  const hasConflict = () =>
+    loggedInUser &&
+    ((receiving_user && receiving_user !== loggedInUser.id) ||
+      (email && decodeURIComponent(email) !== loggedInUser.email))
 
   if (actionType === 'VERIFY') {
     // console.log('verify')
@@ -146,26 +142,12 @@ const redirectHandler = async (
 
       return
     }
-  } else if (isShadow) {
+  } else if (userInfo && userInfo.is_shadow) {
     console.log('isShadow:', branchData)
     redirect = `register?token=${token}`
 
     if (listing) {
       redirect = `/dashboard/mls/${listing}?token=${token}`
-    } else if (actionType === 'UserActivation') {
-      const { first_name, last_name } = receivingUser
-
-      if (
-        first_name &&
-        first_name !== decodeURIComponent(email) &&
-        first_name !== encodeURIComponent(phone_number)
-      ) {
-        redirect += `&firstName=${first_name}`
-      }
-
-      if (last_name) {
-        redirect += `&lastName=${last_name}`
-      }
     }
 
     if (phone_number) {
@@ -212,7 +194,7 @@ const redirectHandler = async (
         name: 'CONFLICT',
         params: {
           ...params,
-          messageText: getConfilictMessageText(receivingUser.email),
+          messageText: getConfilictMessageText(encodeURIComponent(email)),
           actionButtonProps: {
             onClick: loginHandler,
             text: 'Sign in'
@@ -233,7 +215,7 @@ const redirectHandler = async (
     if (hasConflict()) {
       console.log('you logged with deferent user')
       params.redirectTo = encodeURIComponent(redirect)
-      params.messageText = getConfilictMessageText(receivingUser.email)
+      params.messageText = getConfilictMessageText(encodeURIComponent(email))
       setActiveModal({ name: 'CONFLICT', params })
 
       return
@@ -241,7 +223,11 @@ const redirectHandler = async (
   } else {
     console.log('you registered before with this email', branchData)
 
-    const username = `username=${encodeURIComponent(receivingUser.email)}`
+    let username = ''
+
+    if (email) {
+      username = `username=${email}`
+    }
 
     redirect = !listing
       ? `/signin?${username}&redirectTo=`
@@ -262,100 +248,6 @@ const branch = ({
   dispatch,
   waitingForRedirect
 }) => {
-  if (!branchData) {
-    Branch.init(
-      branchKey,
-      {
-        retries: 30,
-        retry_delay: 3000
-      },
-      (err, data) => {
-        if (err) {
-          console.log('Init - error', err, data)
-          browserHistory.push(OOPS_PAGE)
-        }
-
-        if (idx(data, d => d.data_parsed.action)) {
-          console.log('Init - success', data)
-          setBranchData(data.data_parsed)
-        } else {
-          console.log('Init - success but with corrupted data', data)
-        }
-      }
-    )
-  } else if (!waitingForRedirect) {
-    const { receiving_user, action } = branchData
-
-    if (action) {
-      if (action === 'ShareTemplateInstance') {
-        browserHistory.push({ pathname: '/share', state: branchData })
-      } else if (receiving_user) {
-        getUser(receiving_user)
-          .then(receivingUser => {
-            const {
-              email_confirmed,
-              phone_confirmed,
-              is_shadow: isShadow
-            } = receivingUser
-
-            delete branchData.receiving_user
-
-            branchData = {
-              ...branchData,
-              isShadow,
-              receivingUser
-            }
-
-            if (action.includes('Verification')) {
-              const { email_code, phone_code } = branchData
-
-              if (
-                (email_code && !email_confirmed) ||
-                (phone_code && !phone_confirmed)
-              ) {
-                redirectHandler(
-                  'VERIFY',
-                  branchData,
-                  loggedInUser,
-                  setActiveModal
-                )
-
-                return
-              }
-
-              setActiveModal({
-                name: 'VERIFIED',
-                params: {
-                  receivingUser,
-                  verificationType: phone_code
-                    ? 'phone number'
-                    : 'email address'
-                }
-              })
-
-              return
-            }
-
-            redirectHandler(
-              branchData.action || 'OTHER',
-              branchData,
-              loggedInUser,
-              setActiveModal,
-              dispatch
-            )
-          })
-          // eslint-disable-next-line
-          .catch(error => {
-            console.log('receiving_user', error, branchData)
-            browserHistory.push(OOPS_PAGE)
-          })
-      }
-    } else {
-      console.log('last oops in last else', branchData)
-      browserHistory.push(OOPS_PAGE)
-    }
-  }
-
   let content = <Loading />
 
   if (activeModal) {
@@ -383,6 +275,85 @@ const branch = ({
         break
       default:
         break
+    }
+  } else if (!branchData) {
+    Branch.init(
+      branchKey,
+      {
+        retries: 30,
+        retry_delay: 3000
+      },
+      async (err, data) => {
+        if (err) {
+          console.log('Init - error', err, data)
+          browserHistory.push('/oops')
+        }
+
+        if (idx(data, d => d.data_parsed.action)) {
+          let userInfo = null
+
+          console.log('Init - success', data)
+
+          if (data.data_parsed.email) {
+            try {
+              userInfo = await lookUpUserByEmail(data.data_parsed.email)
+            } catch (error) {
+              console.log(error)
+            }
+          }
+
+          setBranchData({
+            ...data.data_parsed,
+            userInfo
+          })
+        } else {
+          console.log('Init - success but with corrupted data', data)
+        }
+      }
+    )
+  } else if (!waitingForRedirect) {
+    const { userInfo, action } = branchData
+
+    if (action) {
+      if (action === 'ShareTemplateInstance') {
+        browserHistory.push({ pathname: '/share', state: branchData })
+      } else if (action.includes('Verification')) {
+        let email_confirmed
+        let phone_confirmed
+
+        if (userInfo) {
+          email_confirmed = userInfo.email_confirmed
+          phone_confirmed = userInfo.phone_confirmed
+        }
+
+        const { email_code, phone_code } = branchData
+
+        if (
+          (email_code && !email_confirmed) ||
+          (phone_code && !phone_confirmed)
+        ) {
+          redirectHandler('VERIFY', branchData, loggedInUser, setActiveModal)
+        } else {
+          setActiveModal({
+            name: 'VERIFIED',
+            params: {
+              userInfo,
+              verificationType: phone_code ? 'phone number' : 'email address'
+            }
+          })
+        }
+      } else {
+        redirectHandler(
+          branchData.action || 'OTHER',
+          branchData,
+          loggedInUser,
+          setActiveModal,
+          dispatch
+        )
+      }
+    } else {
+      console.log('last oops in last else', branchData)
+      browserHistory.push(OOPS_PAGE)
     }
   }
 
