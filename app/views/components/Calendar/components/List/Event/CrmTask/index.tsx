@@ -48,9 +48,9 @@ export function CrmTask({ style, event, onEventChange }: Props) {
       style={style}
       event={event}
       Icon={icon.icon}
+      editable
       title={
         <div className={classes.title}>
-          <CrmStatus event={event} onChange={onEventChange} />
           <a
             onClick={handleSelectEvent}
             style={{
@@ -66,6 +66,7 @@ export function CrmTask({ style, event, onEventChange }: Props) {
       actions={
         <>
           <OpenHouseRegistration event={event} />
+          <CrmStatus event={event} onChange={onEventChange} />
         </>
       }
       onClick={handleContainerClick}
