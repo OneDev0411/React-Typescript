@@ -25,7 +25,7 @@ export default function CriticalDate(props) {
   const nextDate = getNextDate(deal, activeTeamId)
 
   if (!nextDate) {
-    return 'No closing date'
+    return <span>No closing date</span>
   }
 
   return (

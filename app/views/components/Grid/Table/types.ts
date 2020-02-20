@@ -2,6 +2,8 @@ import { TableCellProps } from '@material-ui/core/TableCell'
 
 import { StateContext, DispatchContext } from './context'
 
+type StringOrNumber = string | number
+
 export interface RenderProps<Row> {
   row: Row
   totalRows: number
@@ -38,8 +40,8 @@ export interface TableColumn<Row> {
   sortable?: boolean
   sortType?: 'number' | 'string'
   sortTitle?: string
-  sortMethod?: () => string
-  accessor?: (row: Row) => string | number
+  sortMethod?: (accessor: StringOrNumber) => StringOrNumber
+  accessor?: (row: Row) => StringOrNumber
   render?: (data: RenderProps<Row>) => React.ReactNode
 }
 

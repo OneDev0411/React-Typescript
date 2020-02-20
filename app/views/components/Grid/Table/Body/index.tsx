@@ -81,7 +81,7 @@ export function Body<Row>({
   hoverable,
   getTdProps = () => ({}),
   getTrProps = () => ({})
-}: Props<Row>) {
+}: Props<Row & { id?: string }>) {
   const [state] = useGridContext()
 
   const classes = useStyles({
@@ -104,7 +104,7 @@ export function Body<Row>({
 
           return (
             <TableRow
-              key={rowIndex}
+              key={row.id || rowIndex}
               className={classes.row}
               hover={hoverable}
               {...getTrProps({

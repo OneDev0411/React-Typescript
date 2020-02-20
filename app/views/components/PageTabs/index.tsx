@@ -9,15 +9,25 @@ type SelectedTab = string | number | null
 
 interface Props {
   tabs: React.ReactNode[]
+  actions: React.ReactNode[]
   defaultValue?: SelectedTab
   onChange?: (value: SelectedTab) => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    container: {
+      display: 'flex',
+      width: '100%'
+    },
     tabContainer: {
+      width: '100%',
       margin: theme.spacing(1, 0),
       borderBottom: `2px solid ${theme.palette.divider}`
+    },
+    actionTabsContainer: {
+      // display: 'flex',
+      // justifyContent: 'flex-end'
     },
     indicator: {
       display: 'flex',
@@ -71,6 +81,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export function PageTabs({
   defaultValue = null,
   onChange = () => {},
+  actions,
   tabs
 }: Props) {
   const classes = useStyles()
@@ -85,20 +96,35 @@ export function PageTabs({
   }
 
   return (
-    <Tabs
-      value={activeTab}
-      indicatorColor="primary"
-      textColor="primary"
-      variant="scrollable"
-      scrollButtons="auto"
-      onChange={handleChange}
-      classes={{
-        root: classes.tabContainer,
-        indicator: classes.indicator
-      }}
-      TabIndicatorProps={{ children: <div /> }}
-    >
-      {tabs.map(tab => tab)}
-    </Tabs>
+    <div className={classes.container}>
+      <Tabs
+        value={activeTab}
+        indicatorColor="primary"
+        textColor="primary"
+        variant="scrollable"
+        scrollButtons="auto"
+        onChange={handleChange}
+        classes={{
+          root: classes.tabContainer,
+          indicator: classes.indicator
+        }}
+        TabIndicatorProps={{ children: <div /> }}
+      >
+        {tabs.map(tab => tab)}
+      </Tabs>
+
+      {actions && (
+        <div>
+          <Tabs
+            value={false}
+            classes={{
+              root: classes.tabContainer
+            }}
+          >
+            {actions.map(tab => tab)}
+          </Tabs>
+        </div>
+      )}
+    </div>
   )
 }
