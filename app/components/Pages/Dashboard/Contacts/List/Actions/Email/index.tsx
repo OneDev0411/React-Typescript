@@ -19,6 +19,7 @@ export function Email({ contacts, disabled }: Props) {
     // TODO: refactor SendEmailButton with TS
     <SendEmailButton
       disabled={disabled}
+      size="small"
       recipients={normalizeContactsForEmailCompose(contacts)}
       style={{
         fontSize: '0.875rem'
