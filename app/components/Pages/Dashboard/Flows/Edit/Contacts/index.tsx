@@ -94,7 +94,7 @@ export default function Contacts({ flowId, onStop, onContactClick }: Props) {
           alt="no-contacts"
           style={{ marginBottom: '1rem' }}
         />
-        <Typography variant="h5">Houston, we have no contacts here.</Typography>
+        <Typography variant="h5">You have no contacts yet!</Typography>
       </Grid>
     )
   }

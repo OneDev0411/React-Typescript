@@ -7,6 +7,10 @@ export default function getUserDefaultHomepage(user) {
     return defaultHomepage
   }
 
+  if (hasUserAccess(user, 'Marketing')) {
+    return '/dashboard/marketing'
+  }
+
   if (hasUserAccess(user, 'CRM')) {
     return '/dashboard/contacts'
   }
