@@ -18,7 +18,7 @@ export function ZeroState() {
   return (
     <ZeroStateContainer column alignCenter justifyCenter>
       <img src="/static/images/contacts/zero-state.svg" alt="" />
-      <h2>Houston, we have zero contacts.</h2>
+      <h2>No contact! Import now with one click :)</h2>
       <p>
         People and relationships are central to your business. Start building
         your referral network in Rechat by importing or creating a contact now.
