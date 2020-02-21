@@ -240,7 +240,6 @@ class SendContactCard extends React.Component {
 
         {this.props.contact || this.props.contactId ? (
           <Button
-            color="secondary"
             variant="outlined"
             onClick={this.showBuilder}
             disabled={this.state.isFetchingContact}
