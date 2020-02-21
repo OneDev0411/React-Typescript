@@ -17,9 +17,7 @@ export default function ZeroState() {
         alt="houston"
         style={{ marginBottom: '1rem' }}
       />
-      <Typography variant="h5">
-        Houston, we have no duplicate contacts here.
-      </Typography>
+      <Typography variant="h5">You have no duplicate contacts here.</Typography>
     </Grid>
   )
 }
