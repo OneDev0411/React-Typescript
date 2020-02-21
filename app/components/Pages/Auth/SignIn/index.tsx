@@ -5,7 +5,8 @@ import { Location } from 'history'
 
 import { IAppState } from '../../../../reducers'
 
-import { getUserTeams } from '../../../../store_actions/user/teams'
+import { FETCH_USER_TEAMS_SUCCESS } from '../../../../constants/user'
+import { getTeams } from '../../../../models/user/get-teams'
 
 import * as actionsType from '../../../../constants/auth/signin'
 
@@ -90,7 +91,7 @@ export default function Signin(props: Props) {
       setIsLogging(true)
       setSignInFormSubmitMsg(null)
 
-      const user: IUser = await signin({ ...values, username })
+      let user: IUser = await signin({ ...values, username })
 
       dispatch({
         user,
@@ -98,7 +99,17 @@ export default function Signin(props: Props) {
       })
 
       if (!user.teams) {
-        await dispatch(getUserTeams(user))
+        const teams = await getTeams(user)
+
+        dispatch({
+          type: FETCH_USER_TEAMS_SUCCESS,
+          teams
+        })
+
+        user = {
+          ...user,
+          teams
+        }
       }
 
       // set user data for sentry
