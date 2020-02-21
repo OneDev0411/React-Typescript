@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography } from '@material-ui/core'
+import { Box, Link, Typography } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 import { LastTouched } from 'components/LastTouched'
@@ -15,9 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 'calc(100% - 56px)'
     },
     editButton: {
-      fontFamily: theme.typography.fontFamily,
-      fontSize: '0.875rem',
-      marginLeft: `${theme.spacing(1)}px`
+      marginLeft: theme.spacing(1)
     },
     touch: {
       color: theme.palette.grey['900']
@@ -38,9 +36,13 @@ export default function Catalog({ contact }: Props) {
         <Avatar contact={contact} />
         <Typography variant="h1" className={classes.title}>
           {contact.display_name}
-          <a href="#Details" className={classes.editButton}>
+          <Link
+            href="#Details"
+            variant="caption"
+            className={classes.editButton}
+          >
             Edit
-          </a>
+          </Link>
         </Typography>
       </Box>
       <div className={classes.touch}>
