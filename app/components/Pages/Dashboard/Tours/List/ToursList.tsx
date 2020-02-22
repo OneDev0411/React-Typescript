@@ -98,6 +98,7 @@ function ToursList(props: { user: IUser }) {
     {
       id: 'actions',
       verticalAlign: 'center',
+      width: '60px',
       render: ({ row }: RenderProps<TableRow>) => (
         <Actions
           onEdit={() => handleEdit(row)}
