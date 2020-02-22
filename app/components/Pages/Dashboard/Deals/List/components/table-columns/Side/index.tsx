@@ -2,19 +2,26 @@ import React from 'react'
 
 import PopOver from 'components/Popover'
 
-import Deal from 'models/Deal'
-
 import Avatar from 'components/Avatar'
+
+import { getSide } from 'models/Deal/helpers/context/get-side'
 
 import { roleName, getLegalFullName } from '../../../../utils/roles'
 
-const Side = ({ deal, roles, rowId, rowsCount }) => {
-  const sideName = Deal.get.side(deal)
+interface Props {
+  deal: IDeal
+  roles: Record<UUID, IDealRole>
+  rowId: number
+  rowsCount: number
+}
+
+export function Side({ deal, roles, rowId, rowsCount }: Props) {
+  const sideName = getSide(deal)
   const relatedRole =
     deal.roles && deal.roles.find(id => roles[id].role === sideName)
 
   if (!deal.roles) {
-    return <span>{Deal.get.side(deal)}</span>
+    return <span>{getSide(deal)}</span>
   }
 
   let relatedRoleUser
@@ -72,5 +79,3 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
     </PopOver>
   )
 }
-
-export default Side

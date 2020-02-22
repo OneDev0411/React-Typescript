@@ -114,7 +114,9 @@ export function Body<Row>({
               })}
             >
               {columns
-                .filter((column: TableColumn<Row>) => column.render)
+                .filter(
+                  (column: TableColumn<Row>) => column.render || column.accessor
+                )
                 .map((column: TableColumn<Row>, columnIndex: number) => (
                   <TableCell
                     key={columnIndex}
