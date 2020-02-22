@@ -28,6 +28,8 @@ export type ColumnHeaderFunction<Row> = (
   data: ColumnHeaderProps<Row>
 ) => string | React.ReactNode
 
+export type ColumnSortType = 'number' | 'string'
+
 export interface TableColumn<Row> {
   id: string
   header?: string | ColumnHeaderFunction<Row>
@@ -38,7 +40,7 @@ export interface TableColumn<Row> {
   headerStyle?: React.CSSProperties
   rowStyle?: React.CSSProperties
   sortable?: boolean
-  sortType?: 'number' | 'string'
+  sortType?: ColumnSortType
   sortTitle?: string
   sortMethod?: (accessor: StringOrNumber) => StringOrNumber
   accessor?: (row: Row) => StringOrNumber

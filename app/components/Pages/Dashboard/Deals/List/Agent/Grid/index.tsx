@@ -3,8 +3,10 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { TableCellProps } from '@material-ui/core'
+
 import Grid from 'components/Grid/Table'
-import { SortableColumn } from 'components/Grid/Table/types'
+import { SortableColumn, ColumnSortType } from 'components/Grid/Table/types'
 
 import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
@@ -24,15 +26,15 @@ import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
 
 import AgentAvatars from '../../components/table-columns/AgentAvatars'
-import Address from '../../components/table-columns/Address'
+import { Address } from '../../components/table-columns/Address'
 import CriticalDate, {
   getCriticalDateNextValue
 } from '../../components/table-columns/CriticalDate'
-import Notification from '../../components/table-columns/NotificationBadge'
+// import Notification from '../../components/table-columns/NotificationBadge'
 
 import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
 import { Filters } from '../Filters'
-import { statusSortMethod } from '../../components/table-columns/Status'
+import { statusSortMethod } from '../../components/table-columns/Status/helpers/sort-method'
 
 const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field'
 
@@ -57,7 +59,7 @@ function AgentGrid(props: Props & WithRouterProps) {
       {
         id: 'address',
         header: 'Address',
-        width: '50%',
+        width: '45%',
         accessor: (deal: IDeal) => getAddress(deal, roles),
         render: ({ row: deal, totalRows, rowIndex }) => (
           <Address
@@ -71,20 +73,23 @@ function AgentGrid(props: Props & WithRouterProps) {
       {
         id: 'status',
         header: 'Status',
+        width: '15%',
         accessor: (deal: IDeal) => getStatus(deal),
         sortMethod: statusSortMethod
       },
       {
         id: 'price',
         header: '$ Price',
-        sortType: 'number',
+        sortType: 'number' as ColumnSortType,
+        width: '10%',
         accessor: (deal: IDeal) => getPriceValue(deal),
-        render: ({ row: deal }) =>
+        render: ({ row: deal }: { row: IDeal }) =>
           getFormattedPrice(getPriceValue(deal), 'currency', 0)
       },
       {
         id: 'critical-dates',
         header: 'Critical Dates',
+        width: '20%',
         accessor: (deal: IDeal) => getCriticalDateNextValue(deal),
         render: ({ row: deal, totalRows, rowIndex }) => (
           <CriticalDate
@@ -98,8 +103,10 @@ function AgentGrid(props: Props & WithRouterProps) {
       {
         id: 'agent-name',
         header: 'Agent',
+        width: '10%',
+        align: 'right' as TableCellProps['align'],
         accessor: (deal: IDeal) => getPrimaryAgentName(deal, roles),
-        render: ({ row: deal }) => {
+        render: ({ row: deal }: { row: IDeal }) => {
           return <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
         }
       }

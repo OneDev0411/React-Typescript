@@ -9,11 +9,17 @@ import { getActiveTeamId } from 'utils/user-teams'
 
 import { getNextDate, getNextDateValue } from '../../../../utils/critical-dates'
 
-export const getCriticalDateNextValue = deal => getNextDateValue(deal)
+export const getCriticalDateNextValue = (deal: IDeal) => getNextDateValue(deal)
 
-export default function CriticalDate(props) {
-  const { deal, rowId, rowsCount } = props
-  const activeTeamId = getActiveTeamId(props.user)
+interface Props {
+  deal: IDeal
+  user: IUser
+  rowId: number
+  rowCount: number
+}
+
+export default function CriticalDate({ deal, user, rowId, rowsCount }: Props) {
+  const activeTeamId = getActiveTeamId(user)
 
   const definitions = DealContext.getFactsheetSection(
     activeTeamId,
@@ -25,7 +31,7 @@ export default function CriticalDate(props) {
   const nextDate = getNextDate(deal, activeTeamId)
 
   if (!nextDate) {
-    return <span>No closing date</span>
+    return <>No closing date</>
   }
 
   return (
@@ -42,7 +48,7 @@ export default function CriticalDate(props) {
               style={{ marginBottom: '0.5rem' }}
             >
               <div>{field.label}</div>
-              <div>{DealContext.getValue(deal, field).value}</div>
+              <div>{DealContext.getValue(deal, field)!.value}</div>
             </Flex>
           ))}
         </div>
