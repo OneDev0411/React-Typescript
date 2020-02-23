@@ -147,9 +147,9 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
           </Typography>
         </Box>
         {!!emailThread.contacts && emailThread.contacts.length > 0 && (
-          <Box marginRight={3}>
+          <Box marginRight={3} display="flex">
             {emailThread.contacts.map(c => (
-              <Box key={c.id} display="inline-block" marginLeft={0.5}>
+              <Box key={c.id} marginLeft={0.5}>
                 <Avatar
                   size={32}
                   image={c.profile_image_url}
