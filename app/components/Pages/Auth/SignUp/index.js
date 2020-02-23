@@ -61,7 +61,7 @@ const Signup = ({
               />
             </a>
           )}
-          <h1 className="c-auth__title">{`${siteTitle}`}</h1>
+          <h1 className="c-auth__title">Sign Up</h1>
           {!submitSuccessfully ? (
             <p className="c-auth__subtitle">Hello, lets get started.</p>
           ) : (
@@ -105,13 +105,15 @@ const Signup = ({
                 <br />
                 Please check <b>{submitSuccessfully.email}</b>
               </p>
-              <Link
-                to={`/signin?username=${encodeURIComponent(
-                  submitSuccessfully.email
-                )}`}
-              >
-                Sign in
-              </Link>
+              <div className="c-auth__subtitle">
+                <Link
+                  to={`/signin?username=${encodeURIComponent(
+                    submitSuccessfully.email
+                  )}`}
+                >
+                  Sign in
+                </Link>
+              </div>
             </div>
           )}
         </main>
