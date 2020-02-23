@@ -9,7 +9,7 @@ interface Props {
 export default function Info({ dueDate }: Props) {
   const date = fecha.format(
     new Date(dueDate * 1000),
-    'ddd, MMM DD YYYY hh:mm a'
+    'ddd, MMM DD, YYYY. hh:mma'
   )
 
   return (

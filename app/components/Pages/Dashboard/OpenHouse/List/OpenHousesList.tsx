@@ -8,6 +8,7 @@ import { Alert } from '@material-ui/lab'
 import { Box, Link, IconButton } from '@material-ui/core'
 
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import InfoIcon from 'components/SvgIcons/InfoFilled/IconInfoFilledActive'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
@@ -24,7 +25,7 @@ import { RenderProps } from 'components/Grid/Table/types'
 
 import EmptyState from './EmptyState'
 import CreateNewOpenHouse from './CreateNewOpenHouse'
-import Photo from './columns/Photo'
+import Avatar from './columns/Avatar'
 import Title from './columns/Title'
 import Date from './columns/Date'
 import Registrants from './columns/Registrants'
@@ -71,10 +72,11 @@ function OpenHousesList(props: Props) {
 
   const columns = [
     {
-      header: 'Photo',
-      id: 'photo',
+      header: 'Avatar',
+      id: 'Avatar',
+      width: '60px',
       render: ({ row }: RenderProps<TableRow>) => (
-        <Photo
+        <Avatar
           listings={
             row.associations
               ? row.associations.filter(a => a.association_type === 'listing')
@@ -87,6 +89,7 @@ function OpenHousesList(props: Props) {
       header: 'Infos',
       id: 'info',
       primary: true,
+      width: '25%',
       render: ({ row }: RenderProps<TableRow>) => (
         <Title
           description={row.description}
@@ -98,6 +101,7 @@ function OpenHousesList(props: Props) {
     {
       header: 'Date',
       id: 'date',
+      width: '20%',
       render: ({ row }: RenderProps<TableRow>) => (
         <Date dueDate={row.due_date} />
       )
@@ -105,6 +109,7 @@ function OpenHousesList(props: Props) {
     {
       header: 'Registrants',
       id: 'registrants',
+      width: '20%',
       render: ({ row }: RenderProps<TableRow>) => (
         <Registrants
           registrants={
@@ -117,6 +122,7 @@ function OpenHousesList(props: Props) {
     },
     {
       id: 'guest-registration',
+      width: '20%',
       render: ({ row }: RenderProps<TableRow>) => (
         <GuestRegistration
           activeBrandId={props.activeBrandId}
@@ -126,6 +132,7 @@ function OpenHousesList(props: Props) {
     },
     {
       id: 'actions',
+      width: '5%',
       render: ({ row }: RenderProps<TableRow>) => (
         <Actions
           openHouse={row}
@@ -201,6 +208,7 @@ function OpenHousesList(props: Props) {
             <Acl access={ACL.DEALS}>
               {isAlertOpen && (
                 <Alert
+                  icon={<InfoIcon />}
                   severity="info"
                   action={
                     <IconButton
