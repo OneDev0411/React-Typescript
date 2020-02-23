@@ -10,13 +10,13 @@ interface Props {
 export default function DueDate({ dueDate, onClick }: Props) {
   const date = fecha.format(
     new Date(dueDate * 1000),
-    'dddd, MMM DD YYYY hh:mma'
+    'dddd MMM DD, YYYY hh:mma'
   )
 
   return (
     <>
       <Typography variant="button" noWrap>
-        <Link role="button" onClick={onClick} color="inherit">
+        <Link role="button" onClick={onClick}>
           {date}
         </Link>
       </Typography>
