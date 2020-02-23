@@ -1,12 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 import { TextField, makeStyles, createStyles, Theme } from '@material-ui/core'
-
-// import PageSideNav from 'components/PageSideNav'
-// import { Content } from 'components/SlideMenu'
-// import Search from 'components/Grid/Search'
 
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
 
@@ -114,114 +110,3 @@ export default function AgentTable(props: WithRouterProps) {
     </>
   )
 }
-
-// let persistentSearchInput = ''
-
-// class AgentTable extends React.Component {
-//   state = {
-//     isSideMenuOpen: true,
-//     searchCriteria: persistentSearchInput
-//   }
-
-//   UNSAFE_componentWillReceiveProps(nextProps) {
-//     if (
-//       nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
-//       !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
-//     ) {
-//       this.fetch(nextProps.user, this.state.searchCriteria)
-//     }
-//   }
-
-//   toggleSideMenu = () =>
-//     this.setState(state => ({
-//       isSideMenuOpen: !state.isSideMenuOpen
-//     }))
-
-//   fetch = (user, searchCriteria) => {
-//     if (searchCriteria.length === 0 && viewAsEveryoneOnTeam(user)) {
-//       this.props.getDeals(user)
-//     } else {
-//       this.props.searchDeals(user, searchCriteria)
-//     }
-//   }
-
-//   handleSearch = _.debounce(value => {
-//     if (this.props.isFetchingDeals) {
-//       return false
-//     }
-
-//     this.setState(
-//       {
-//         searchCriteria: value
-//       },
-//       () => {
-//         // set persistent search input
-//         persistentSearchInput = value
-
-//         this.fetch(this.props.user, value)
-//       }
-//     )
-//   }, 300)
-
-//   render() {
-//     const { isSideMenuOpen } = this.state
-//     const { params, isFetchingDeals } = this.props
-
-//     return (
-//       <>
-//         <GlobalHeader title="My Deals">
-//           <div style={{ width: '100%', textAlign: 'right' }}>test</div>
-//         </GlobalHeader>
-//         <Grid activeFilter={params.filter} />
-//       </>
-//     )
-
-//     return (
-//       <PageContainer isOpen={isSideMenuOpen}>
-//         <PageSideNav isOpen={isSideMenuOpen}>
-//           <AgentFilters
-//             activeFilter={params.filter}
-//             searchCriteria={this.state.searchCriteria}
-//           />
-//         </PageSideNav>
-
-//         <Content isSideMenuOpen={isSideMenuOpen}>
-//           <PageHeader
-//             title={params.filter || 'All'}
-//             showBackButton={false}
-//             isSideMenuOpen={isSideMenuOpen}
-//             onMenuTriggerChange={this.toggleSideMenu}
-//           />
-//           <GridContainer>
-//             <Search
-//               disableOnSearch
-//               showLoadingOnSearch
-//               defaultValue={persistentSearchInput}
-//               isSearching={isFetchingDeals}
-//               placeholder="Search deals by address, MLS # or agent name…"
-//               onChange={this.handleSearch}
-//               onClearSearch={this.handleSearch}
-//               debounceTime={700}
-//               minimumLength={4}
-//             />
-
-//             <Grid activeFilter={params.filter} />
-//           </GridContainer>
-//         </Content>
-//       </PageContainer>
-//     )
-//   }
-// }
-
-// function mapStateToProps({ user, deals }) {
-// return {
-//   user,
-//   isFetchingDeals: deals.properties.isFetchingDeals,
-//   viewAsUsers: viewAs(user)
-// }
-// }
-
-// export default connect(
-//   mapStateToProps,
-//   { getDeals, searchDeals }
-// )(AgentTable)

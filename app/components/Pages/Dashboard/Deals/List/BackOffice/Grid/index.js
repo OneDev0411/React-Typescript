@@ -33,17 +33,17 @@ class BackOfficeGrid extends React.Component {
   get columns() {
     return [
       {
-        id: 'status',
-        header: 'Status',
-        accessor: Deal.get.status
-      },
-      {
         id: 'address',
         header: 'Address',
         width: '25%',
         verticalAlign: 'center',
         accessor: deal => Deal.get.address(deal, this.props.roles),
         render: ({ row: deal }) => <Address deal={deal} />
+      },
+      {
+        id: 'status',
+        header: 'Status',
+        accessor: Deal.get.status
       },
       {
         id: 'agent-name',
@@ -91,19 +91,19 @@ class BackOfficeGrid extends React.Component {
             {getFormattedPrice(getPrice(deal))}
           </div>
         )
-      },
-      {
-        id: 'notification',
-        header: '',
-        width: '50px',
-        verticalAlign: 'center',
-        render: ({ row: deal }) => (
-          <Notifications
-            count={deal.attention_requests}
-            caption="$count tasks need your attention"
-          />
-        )
       }
+      // {
+      //   id: 'notification',
+      //   header: '',
+      //   width: '50px',
+      //   verticalAlign: 'center',
+      //   render: ({ row: deal }) => (
+      //     <Notifications
+      //       count={deal.attention_requests}
+      //       caption="$count tasks need your attention"
+      //     />
+      //   )
+      // }
     ]
   }
 
