@@ -33,11 +33,7 @@ function Tags(props: Props) {
         {hasTags ? (
           <TagsList tags={props.tags} />
         ) : (
-          <Button
-            color="secondary"
-            variant="outlined"
-            onClick={() => setIsDrawerOpen(true)}
-          >
+          <Button variant="outlined" onClick={() => setIsDrawerOpen(true)}>
             Add Tag
           </Button>
         )}
