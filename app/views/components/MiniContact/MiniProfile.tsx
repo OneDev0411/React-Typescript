@@ -75,12 +75,14 @@ function MiniProfile(props: MiniProfilePropsType) {
         {!!data.name && (
           <div className="person-name">
             <span>{data.name}</span>
-            <Link
-              target="blank"
-              to={`/dashboard/contacts/${output.contact_id}`}
-            >
-              <Button color="primary">View Profile</Button>
-            </Link>
+            {!!output.contact_id && (
+              <Link
+                target="blank"
+                to={`/dashboard/contacts/${output.contact_id}`}
+              >
+                <Button color="primary">View Profile</Button>
+              </Link>
+            )}
           </div>
         )}
         {data.phone && (
