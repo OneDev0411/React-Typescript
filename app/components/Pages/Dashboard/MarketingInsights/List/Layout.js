@@ -28,10 +28,10 @@ function InsightsLayout({ sentCount, scheduledCount, children }) {
   return (
     <React.Fragment>
       <Helmet>
-        <title>Insights | Rechat</title>
+        <title>Email | Rechat</title>
       </Helmet>
       <PageLayout>
-        <PageLayout.Header title="Email Insight">
+        <PageLayout.Header title="My Email">
           <Box textAlign="right">
             <Tooltip placement="bottom">
               <ActionButton

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { recipientsList } from './helpers'
+import { recipientsList } from '../helpers'
 
-function Recipients(props) {
+function RecipientsColumn(props) {
   if (!Array.isArray(props.data)) {
     return null
   }
@@ -40,4 +40,4 @@ function Recipients(props) {
   return <span>{items.join(', ')}</span>
 }
 
-export default Recipients
+export default RecipientsColumn

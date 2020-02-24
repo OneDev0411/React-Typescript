@@ -4,14 +4,15 @@ import { connect } from 'react-redux'
 import Table from 'components/Grid/Table'
 
 import Layout from './Layout'
-import StatColumn from './StatColumn'
-import { percent } from './helpers'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import NoSearchResults from '../../../../Partials/no-search-results'
 
 import Actions from './MarketingInsightsActions'
-import InfoColumn from './InfoColumn'
+import TitleColumn from './Column/Title'
+import DateColumn from './Column/Date'
+import RecipientsColumn from './Column/Recipients'
+import StatsColumn from './Column/Stats'
 import { InsightContainer } from './styled'
 import useListData from './useListData'
 import useFilterList from './useFilterList'
@@ -41,52 +42,37 @@ function List(props) {
   const columns = useMemo(
     () => [
       {
-        header: 'Details',
-        id: 'details',
-        width: '50%',
+        header: 'Title',
+        id: 'title',
+        width: '25%',
         verticalAlign: 'center',
         render: ({ row }) => (
-          <InfoColumn
+          <TitleColumn
             data={row}
             reloadList={() => setQueue(queue => queue + 1)}
           />
         )
       },
       {
-        header: 'Delivered',
-        id: 'delivered',
+        header: 'Recipients',
+        id: 'recipients',
+        width: '25%',
         verticalAlign: 'center',
-        render: ({ row }) =>
-          row.executed_at ? (
-            <StatColumn
-              content={`${percent(row.delivered, row.sent)}%`}
-              tooltipTitle={`${percent(row.failed, row.sent)}% Bounced`}
-            />
-          ) : null
+        render: ({ row }) => <RecipientsColumn data={row.recipients} />
       },
       {
-        header: 'Open Rate',
-        id: 'open-rate',
+        header: 'Date',
+        id: 'date',
+        width: '25%',
         verticalAlign: 'center',
-        render: ({ row }) =>
-          row.executed_at ? (
-            <StatColumn
-              content={`${percent(row.opened, row.sent)}%`}
-              tooltipTitle={`${row.opened} Recipients`}
-            />
-          ) : null
+        render: ({ row }) => <DateColumn data={row} />
       },
       {
-        header: 'Click Rate',
-        id: 'click-rate',
+        header: 'Stats',
+        id: 'stats',
+        width: '7%',
         verticalAlign: 'center',
-        render: ({ row }) =>
-          row.executed_at ? (
-            <StatColumn
-              content={`${percent(row.clicked, row.sent)}%`}
-              tooltipTitle={`${row.clicked} Times`}
-            />
-          ) : null
+        render: ({ row }) => <StatsColumn data={row} />
       },
       {
         header: '',
