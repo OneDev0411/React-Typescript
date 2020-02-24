@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 
-import { blue } from '../../../utils/colors'
-import IconButton from '../../Button/IconButton'
 import { CSSProperties } from 'react'
+
+import { green } from '../../../utils/colors'
+import IconButton from '../../Button/IconButton'
 
 interface ContainerProps {
   isOpen?: boolean
@@ -43,12 +44,12 @@ export const ListItem = styled.div<ItemListProps>`
   justify-content: space-between;
   margin-bottom: 0.5em;
 
-  color: ${props => (props.isSelected ? blue.A100 : '#000')};
+  color: ${props => (props.isSelected ? green.primary : '#000')};
   font-weight: ${props => (props.isSelected ? 500 : 400)};
   cursor: ${props => (props.isSelected ? 'initial' : 'pointer')};
 
   &:hover {
-    color: ${blue.A100};
+    color: ${green.primary};
 
     ${DeleteButton} {
       opacity: 1;

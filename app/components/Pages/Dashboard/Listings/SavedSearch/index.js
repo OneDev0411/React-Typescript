@@ -7,12 +7,25 @@ import { Helmet } from 'react-helmet'
 import { getSavedSearchListings } from '../../../../../models/listings/alerts/get-alert-listings'
 import { selectAlert } from '../../../../../reducers/listings/alerts/list'
 
+import {
+  parsSortIndex,
+  getDefaultSort,
+  sortByIndex,
+  SORT_FIELD_SETTING_KEY
+} from '../helpers/sort-utils'
+
 import Map from './Map'
 import { Header } from '../components/PageHeader'
-import { MapView } from '../components/MapView'
-import { GridView } from '../components/GridView'
-import { GalleryView } from '../components/GalleryView'
+import MapView from '../components/MapView'
+import ListView from '../components/ListView'
+import GridView from '../components/GridView'
 import Avatars from '../../../../../views/components/Avatars'
+
+import {
+  formatListing,
+  addDistanceFromCenterToListing
+} from '../helpers/format-listing'
+import { normalizeListingLocation } from '../../../../../utils/map'
 
 const mappingStatus = status => {
   switch (status) {
@@ -62,6 +75,10 @@ class SavedSearch extends React.Component {
       listings: {
         data: [],
         info: { total: 0 }
+      },
+      activeSort: {
+        index: 'price',
+        isDescending: true
       },
       isFetching: false,
       activeView: props.location.query.view || 'map'
@@ -114,15 +131,38 @@ class SavedSearch extends React.Component {
     })
   }
 
+  format = (listing, center, user) =>
+    addDistanceFromCenterToListing(
+      formatListing(normalizeListingLocation(listing), user),
+      center
+    )
+
+  sortListings = listings => {
+    const formattedListings = listings.data.map(listing =>
+      this.format(listing, this.props.mapCenter, this.props.user)
+    )
+
+    return formattedListings.sort((a, b) =>
+      sortByIndex(
+        a,
+        b,
+        this.state.activeSort.index,
+        this.state.activeSort.isDescending
+      )
+    )
+  }
+
   renderMain() {
     const { listings, isFetching } = this.state
+
+    const sortedListings = this.sortListings(listings)
 
     switch (this.state.activeView) {
       case 'map':
         return (
           <MapView
             tabName="alerts"
-            listings={listings}
+            sortedListings={sortedListings}
             Map={
               <Map
                 savedSearch={this.props.savedSearch}
@@ -133,11 +173,19 @@ class SavedSearch extends React.Component {
           />
         )
 
-      case 'gallery':
-        return <GalleryView isFetching={isFetching} listings={listings} />
+      case 'grid':
+        return (
+          <GridView isFetching={isFetching} sortedListings={sortedListings} />
+        )
 
       default:
-        return <GridView isFetching={isFetching} listings={listings} />
+        return (
+          <ListView
+            isFetching={isFetching}
+            sortedListings={sortedListings}
+            listings={listings}
+          />
+        )
     }
   }
 

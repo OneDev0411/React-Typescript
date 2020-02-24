@@ -1,12 +1,8 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import { Table } from 'components/Grid/Table'
-
-import { putUserSetting } from 'models/user/put-user-setting'
-import { getUserTeams } from 'actions/user/teams'
 
 import { TableActions } from './Actions'
 
@@ -21,8 +17,6 @@ import Name from './columns/Name'
 import TagsString from './columns/Tags'
 import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
-
-import { SORT_FIELD_SETTING_KEY } from '../constants'
 
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
@@ -80,16 +74,6 @@ class ContactsList extends React.Component {
     }
   ]
 
-  sortableColumns = [
-    { label: 'Most Recent', value: 'updated_at', ascending: false },
-    { label: 'Last Touch', value: 'last_touch', ascending: false },
-    { label: 'First name A-Z', value: 'display_name', ascending: true },
-    { label: 'First name Z-A', value: 'display_name', ascending: false },
-    { label: 'Last name A-Z', value: 'sort_field', ascending: true },
-    { label: 'Last name Z-A', value: 'sort_field', ascending: false },
-    { label: 'Created At', value: 'created_at', ascending: true }
-  ]
-
   getLoading = () => {
     if (
       !this.props.isFetching &&
@@ -128,16 +112,6 @@ class ContactsList extends React.Component {
           loading={this.getLoading()}
           columns={this.columns}
           LoadingStateComponent={LoadingComponent}
-          sorting={{
-            columns: this.sortableColumns,
-            defaultSort: this.getDefaultSort(),
-            onChange: async item => {
-              props.handleChangeOrder(item)
-
-              await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
-              props.dispatch(getUserTeams(props.user))
-            }
-          }}
           selection={{
             defaultRender: ({ row }) => <Avatar contact={row} />
           }}
@@ -178,4 +152,4 @@ class ContactsList extends React.Component {
   }
 }
 
-export default connect(({ user }) => ({ user }))(ContactsList)
+export default ContactsList

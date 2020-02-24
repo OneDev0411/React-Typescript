@@ -1,16 +1,8 @@
 import React, { Fragment } from 'react'
-import styled from 'styled-components'
 
-import ActionButton from 'components/Button/ActionButton'
-import TagIcon from 'components/SvgIcons/Tag/TagIcon'
+import { Button } from '@material-ui/core'
 
 import TagsOverlay from '../../components/TagsOverlay'
-
-const Tag = styled(TagIcon)`
-  margin-right: 0.5rem;
-  width: 16px;
-  height: 16px;
-`
 
 export default class TagContacts extends React.Component {
   state = {
@@ -24,15 +16,14 @@ export default class TagContacts extends React.Component {
   render() {
     return (
       <Fragment>
-        <ActionButton
+        <Button
           disabled={this.props.disabled}
-          appearance="outline"
+          variant="outlined"
           size="small"
           onClick={this.openOverLay}
         >
-          <Tag />
           Tag
-        </ActionButton>
+        </Button>
 
         <TagsOverlay
           entireMode={this.props.entireMode}
