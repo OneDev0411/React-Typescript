@@ -17,17 +17,17 @@ import ShareIcon from 'assets/images/marketing/editor/blocks/share.png'
 
 // Article & Listing
 import ArticleImageTopIcon from 'assets/images/marketing/editor/blocks/image-top.png'
-import ArticleImageDualIcon from 'assets/images/marketing/editor/blocks/dual.png'
 import ArticleImageLeftIcon from 'assets/images/marketing/editor/blocks/image-left.png'
 import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/image-right.png'
 
 // Agent
 import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
-import AgentGridIcon from 'assets/images/marketing/editor/blocks/dual.png'
+
+// Common
+import DualIcon from 'assets/images/marketing/editor/blocks/dual.png'
 
 import {
   articleTopBlockName,
-  articleDualBlockName,
   articleLeftBlockName,
   articleRightBlockName
 } from './Article/constants'
@@ -82,18 +82,17 @@ const BLOCK_BUTTON_ICONS = {
   'mj-social-group': ShareIcon,
 
   [articleTopBlockName]: ArticleImageTopIcon,
-  [articleDualBlockName]: ArticleImageDualIcon,
   [articleLeftBlockName]: ArticleImageLeftIcon,
   [articleRightBlockName]: ArticleImageRightIcon,
 
   [listingTopBlockName]: ArticleImageTopIcon,
-  [listingGridBlockName]: ArticleImageDualIcon,
-  [listingGridTwoBlockName]: ArticleImageDualIcon,
+  [listingGridBlockName]: DualIcon,
+  [listingGridTwoBlockName]: DualIcon,
   [listingLeftBlockName]: ArticleImageLeftIcon,
   [listingRightBlockName]: ArticleImageRightIcon,
 
   [agentLeftBlockName]: AgentLeftIcon,
-  [agentGridBlockName]: AgentGridIcon
+  [agentGridBlockName]: DualIcon
 }
 
 const BLOCK_BUTTONS_ORDER = [
@@ -113,7 +112,6 @@ const BLOCK_BUTTONS_ORDER = [
   'mj-social-group',
 
   articleTopBlockName,
-  articleDualBlockName,
   articleLeftBlockName,
   articleRightBlockName,
 
