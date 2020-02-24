@@ -47,10 +47,10 @@ export default function CtaBar({ label, description, onClick }: Props) {
     <Paper variant="outlined" classes={{ root: classes.paper }}>
       <Grid container>
         <Grid item xs={4}>
+          {/* TODO: It could be `fullWidth` or even fill the entire bar, check with product team. */}
           <Button
             variant="text"
             color="primary"
-            // fullWidth
             onClick={onClick}
             classes={{ root: classes.button, label: classes.buttonLabel }}
           >
