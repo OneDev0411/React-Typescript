@@ -23,6 +23,7 @@ export function BaseDropdownWithMore({
   renderMenu,
   listPlugin,
   morePlugin,
+  listPlugin,
   ...props
 }: Props) {
   const basicShowMoreStyle = { maxHeight: 350, overflow: 'auto' }

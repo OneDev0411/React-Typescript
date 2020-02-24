@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { PageTabs, Tab, TabLink, TabSpacer } from 'components/PageTabs'
+import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import SavedSegments from 'components/Grid/SavedSegments/List'
 
 import { SortFields } from '../SortFields'
@@ -36,7 +36,6 @@ export const ContactsTabs = ({
           <Tab key={0} label="All" value={0} />,
           <TabLink key={1} label="Drafts" value={1} to="link" />,
           <Tab key="saved" label={<SavedSegments {...savedListProps} />} />,
-          <TabSpacer key="spacer" />,
           <Tab key="sort" label={<SortFields {...sortProps} />} />
         ]}
       />
