@@ -15,7 +15,6 @@ const useStyles = makeStyles(
       borderBottomRightRadius: 0
     },
     buttonLabel: {
-      lineHeight: '8px',
       paddingRight: theme.spacing(0.75)
     },
     buttonIcon: {
