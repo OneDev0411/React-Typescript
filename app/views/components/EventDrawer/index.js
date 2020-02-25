@@ -8,8 +8,6 @@ import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import { ScrollableArea } from '../ScrollableArea'
-
 import Drawer from '../OverlayDrawer'
 import { Divider } from '../Divider'
 import IconButton from '../Button/IconButton'
@@ -255,12 +253,11 @@ export class EventDrawer extends Component {
                           </Fragment>
                         )}
                       </Flex>
-                      <ScrollableArea hasThinnerScrollbar>
-                        <Description
-                          style={{ padding: this.isNew ? 0 : '0 0 0 2.5rem' }}
-                          placeholder="Add a description about this event"
-                        />
-                      </ScrollableArea>
+
+                      <Description
+                        style={{ padding: this.isNew ? 0 : '0 0 0 2.5rem' }}
+                        placeholder="Add a description about this event"
+                      />
 
                       <EventType />
 
