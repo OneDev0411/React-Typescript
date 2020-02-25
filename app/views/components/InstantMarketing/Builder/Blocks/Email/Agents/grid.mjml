@@ -1,5 +1,5 @@
 {% for usersBatch in users | batch(4) %}
-<mj-section padding="5px 20px">
+<mj-section padding="5px 20px" background-color="#fff">
   {% for user in usersBatch %}
   <mj-column>
     <mj-image padding="0" width="100px" rechat-assets="avatar" src="{{ user.profile_image_url }}"></mj-image>
