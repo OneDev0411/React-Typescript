@@ -5,7 +5,7 @@ import { H3 } from 'components/Typography/headings'
 export const Container = styled.div`
   position: fixed;
   top: 0;
-  left: 0;
+  left: 3.5rem;
   right: 0;
   bottom: 0;
   background-color: #fff;
