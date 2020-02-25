@@ -141,13 +141,13 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   return (
     <Box padding={2.5} paddingTop={2.5}>
       <Box display="flex" padding={2.5}>
-        <Box flexGrow={1}>
+        <Box flexGrow={1} width={0}>
           <Typography variant="h6" noWrap>
             {emailThread.subject || '(No Subject)'}
           </Typography>
         </Box>
         {!!emailThread.contacts && emailThread.contacts.length > 0 && (
-          <Box marginRight={3} display="flex">
+          <Box marginX={3} display="flex">
             {emailThread.contacts.map(c => (
               <Box key={c.id} marginLeft={0.5}>
                 <Avatar
