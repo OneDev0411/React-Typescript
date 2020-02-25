@@ -62,7 +62,8 @@ const BLOCK_IDS_TO_REMOVE = [
   'mj-divider',
   'mj-spacer',
   'mj-carousel',
-  'mj-carousel-image'
+  'mj-carousel-image',
+  'mj-hero'
 ]
 
 const BLOCK_BUTTON_ICONS = {
