@@ -1,4 +1,4 @@
-<mj-section rechat-editable="tree">
+<mj-section padding="0 20px" rechat-editable="tree">
   <mj-column>
     <mj-text>Content 1</mj-text>
   </mj-column>
