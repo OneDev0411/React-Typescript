@@ -10,11 +10,9 @@ interface Props {
 export default function Title({ title, description, onClick }: Props) {
   return (
     <>
-      <Typography variant="button" noWrap>
-        <Link role="button" onClick={onClick} color="inherit">
-          {title}
-        </Link>
-      </Typography>
+      <Link role="button" onClick={onClick} color="inherit">
+        {title}
+      </Link>
       <Typography variant="body2" color="textSecondary" noWrap>
         {description && (
           <Typography variant="inherit" color="inherit">
