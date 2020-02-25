@@ -1,9 +1,13 @@
 <mj-section padding="0 20px" rechat-editable="tree">
   <mj-column>
-    <mj-text>Content 1</mj-text>
+    <mj-text font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5">
+      Content 1
+    </mj-text>
   </mj-column>
 
   <mj-column>
-    <mj-text>Content 2</mj-text>
+    <mj-text font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5">
+      Content 2
+    </mj-text>
   </mj-column>
 </mj-section>
