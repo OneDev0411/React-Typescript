@@ -3,11 +3,14 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Field } from 'react-final-form'
 
+import TextareaAutosize from 'react-textarea-autosize'
+
 import { grey } from '../../../../utils/colors'
 
-const TextArea = styled.textarea`
+const TextArea = styled(TextareaAutosize)`
   width: 100%;
-  height: 4rem;
+  min-height: 6rem;
+  max-height: 10rem;
   display: block;
   margin-bottom: 1rem;
   border: none;
