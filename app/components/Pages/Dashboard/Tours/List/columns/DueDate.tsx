@@ -15,11 +15,9 @@ export default function DueDate({ dueDate, onClick }: Props) {
 
   return (
     <>
-      <Typography variant="button" noWrap>
-        <Link role="button" onClick={onClick}>
-          {date}
-        </Link>
-      </Typography>
+      <Link role="button" onClick={onClick}>
+        {date}
+      </Link>
     </>
   )
 }
