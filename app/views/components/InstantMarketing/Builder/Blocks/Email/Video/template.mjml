@@ -1,7 +1,7 @@
 <mj-section padding="5px 20px" rechat-editable="tree" background-color="#fff">
   <mj-column>
     <mj-image padding="0" src="{{image}}"></mj-image>
-    <mj-button rechat-editable="tree" padding="0" inner-padding="4px 16px" border-radius="4px" font-family="Helvetica, Arial, sans-serif" font-size="14px" line-height="1.5" color="#0945EB" border="1px solid #0945EB" background-color="#fff" align="center">
+    <mj-button href="{{url}}" rechat-editable="tree" padding="10px 0" inner-padding="4px 16px" border-radius="4px" font-family="Helvetica, Arial, sans-serif" font-size="14px" line-height="1.5" color="#0945EB" border="1px solid #0945EB" background-color="#fff" align="center">
       ► WATCH VIDEO
     </mj-button>
   </mj-column>
