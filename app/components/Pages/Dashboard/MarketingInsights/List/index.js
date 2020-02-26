@@ -18,12 +18,6 @@ import { InsightContainer } from './styled'
 import useListData from './useListData'
 import useFilterList from './useFilterList'
 import { InsightFiltersType } from './types'
-import { SortValues } from './helpers'
-
-const sortableColumns = [
-  { label: 'Newest', value: SortValues.Newest, ascending: true },
-  { label: 'Oldest', value: SortValues.Oldest, ascending: false }
-]
 
 function List(props) {
   const [queue, setQueue] = useState(0)
@@ -33,6 +27,8 @@ function List(props) {
     ? InsightFiltersType.SCHEDULED
     : InsightFiltersType.SENT
   const { filteredList, stats } = useFilterList(list, filterType)
+
+  console.log('from List', props)
 
   React.useEffect(() => {
     window.socket.on('email_campaign:send', () => setQueue(queue => queue + 1))
@@ -104,26 +100,34 @@ function List(props) {
   }
 
   return (
-    <Layout sentCount={stats.sent} scheduledCount={stats.scheduled}>
-      <InsightContainer>
-        {isLoading && <LoadingComponent />}
-        <div className={tableClassName.join(' ')}>
-          <Table
-            rows={filteredList}
-            totalRows={(filteredList || []).length}
-            columns={columns}
-            EmptyStateComponent={() => (
-              <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
-            )}
-            loading={isLoading ? 'middle' : null}
-            LoadingStateComponent={LoadingComponent}
-            sorting={{
-              columns: sortableColumns
-            }}
-          />
-        </div>
-      </InsightContainer>
-    </Layout>
+    <Layout
+      sentCount={stats.sent}
+      scheduledCount={stats.scheduled}
+      renderContent={({ sortBy, onChangeSort }) => (
+        <InsightContainer>
+          {isLoading && <LoadingComponent />}
+          <div className={tableClassName.join(' ')}>
+            <Table
+              rows={filteredList}
+              totalRows={(filteredList || []).length}
+              columns={columns}
+              EmptyStateComponent={() => (
+                <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
+              )}
+              loading={isLoading ? 'middle' : null}
+              LoadingStateComponent={LoadingComponent}
+              sorting={{
+                sortBy: {
+                  value: sortBy.value,
+                  ascending: sortBy.ascending
+                },
+                onChange: onChangeSort
+              }}
+            />
+          </div>
+        </InsightContainer>
+      )}
+    />
   )
 }
 

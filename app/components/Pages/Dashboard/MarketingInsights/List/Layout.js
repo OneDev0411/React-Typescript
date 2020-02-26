@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { browserHistory } from 'react-router'
 
@@ -6,13 +6,21 @@ import { Box } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
-import { PageTabs, TabLink } from 'components/PageTabs'
+import { PageTabs, Tab, TabLink, TabSpacer } from 'components/PageTabs'
 import Tooltip from 'components/tooltip'
 import ActionButton from 'components/Button/ActionButton'
 
+import { SortValues } from './helpers'
+import SortField from './SortField'
+
 const urlGenerator = url => `/dashboard/insights${url}`
 
-function InsightsLayout({ sentCount, scheduledCount, children }) {
+function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
+  const [sortField, setSortField] = useState({
+    label: 'Newest',
+    value: SortValues.Newest,
+    ascending: true
+  })
   const currentUrl = window.location.pathname
   const Items = [
     {
@@ -46,12 +54,24 @@ function InsightsLayout({ sentCount, scheduledCount, children }) {
         <PageLayout.Main>
           <PageTabs
             defaultValue={currentUrl}
-            tabs={Items.map(({ label, to }, i) => {
-              return <TabLink key={i} label={label} to={to} value={to} />
-            })}
+            tabs={[
+              ...Items.map(({ label, to }, i) => {
+                return <TabLink key={i} label={label} to={to} value={to} />
+              }),
+              <TabSpacer key="spacer" />,
+              <Tab
+                key="sort-field"
+                label={<SortField onChange={setSortField} />}
+              />
+            ]}
           />
 
-          <div>{children}</div>
+          <div>
+            {renderContent({
+              sortBy: sortField,
+              onChangeSort: setSortField
+            })}
+          </div>
         </PageLayout.Main>
       </PageLayout>
     </React.Fragment>
