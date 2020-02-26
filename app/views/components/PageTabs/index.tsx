@@ -26,10 +26,6 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1, 0),
       borderBottom: `2px solid ${theme.palette.divider}`
     },
-    actionTabsContainer: {
-      // display: 'flex',
-      // justifyContent: 'flex-end'
-    },
     indicator: {
       display: 'flex',
       justifyContent: 'center',

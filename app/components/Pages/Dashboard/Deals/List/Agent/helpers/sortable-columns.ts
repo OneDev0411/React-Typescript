@@ -22,12 +22,12 @@ export const SORTABLE_COLUMNS: SortableColumn[] = [
     ascending: false
   },
   {
-    label: 'Price (A-Z)',
+    label: 'Price (Low-High)',
     value: 'price',
     ascending: true
   },
   {
-    label: 'Price (Z-A)',
+    label: 'Price (High-Low)',
     value: 'price',
     ascending: false
   },

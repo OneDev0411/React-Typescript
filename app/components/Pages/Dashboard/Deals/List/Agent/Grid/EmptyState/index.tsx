@@ -12,16 +12,16 @@ const useStyles = makeStyles((theme: Theme) =>
       minHeight: '60vh'
     },
     title: {
-      fontSize: '17px',
+      fontSize: theme.typography.h6.fontSize,
       fontWeight: 600,
-      color: '#62778c',
-      marginBottom: '10px'
+      color: theme.palette.grey[600],
+      marginBottom: theme.spacing(1)
     },
     description: {
-      fontSize: '14px',
+      fontSize: theme.typography.subtitle1.fontSize,
       fontWeight: 500,
-      color: '#8da2b5',
-      marginBottom: '20px'
+      color: theme.palette.grey[600],
+      marginBottom: theme.spacing(2)
     }
   })
 )
