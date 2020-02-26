@@ -22,7 +22,7 @@ export default function InboxEmailThreadListItem({
 
   const contactInfoText = useMemo(
     () =>
-      emailThread.recipients_raw
+      (emailThread.recipients_raw || [])
         .map(({ name, address }) => {
           const contact =
             emailThread.contacts &&
