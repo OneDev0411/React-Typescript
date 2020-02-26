@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 
 import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
-import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import IconDelete from 'components/SvgIcons/Close/CloseIcon'
 import ArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
 import ArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
@@ -118,7 +118,7 @@ class SavedSearchesList extends Component {
                     edge="end"
                     aria-label="delete"
                   >
-                    <IconDeleteOutline
+                    <IconDelete
                       style={{ fill: 'currentColor', width: 16, height: 16 }}
                     />
                   </IconButton>

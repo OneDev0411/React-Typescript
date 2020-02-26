@@ -2,8 +2,6 @@ import React from 'react'
 import { Box } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 
-import Button from '@material-ui/core/Button'
-
 import PageLayout from 'components/GlobalPageLayout'
 
 import FilterButton from '../../../../../../views/components/Button/DropButton'
@@ -30,8 +28,7 @@ export function Header(props) {
     filtersIsOpen,
     onClickFilter,
     isSideMenuOpen,
-    activeView,
-    isWidget
+    activeView
   } = props
 
   return (
@@ -40,12 +37,12 @@ export function Header(props) {
         <Box display="flex" alignItems="center">
           <Autocomplete activeView={activeView} />
           <FilterButton
-            style={{ marginLeft: '0.5em' }}
+            style={{ marginLeft: '0.5em', borderColor: '#BAC2CE' }}
             onClick={onClickFilter}
             isOpen={filtersIsOpen}
             disabled={isFetching}
             text="Filter Search"
-            size="large"
+            size="medium"
             appearance="outline"
           />
           <Filters
@@ -54,18 +51,6 @@ export function Header(props) {
             isSideMenuOpen={isSideMenuOpen}
             handleClose={onClickFilter}
           />
-          {!isWidget && props.user && (
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              disabled={isFetching}
-              onClick={props.saveSearchHandler}
-              style={{ marginLeft: '0.5em' }}
-            >
-              Save Search
-            </Button>
-          )}
         </Box>
       </PageLayout.Header>
     </Box>

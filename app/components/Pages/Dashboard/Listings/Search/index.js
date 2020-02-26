@@ -403,24 +403,24 @@ class Search extends React.Component {
     return (
       <React.Fragment>
         <Header
-          user={user}
           isWidget={this.props.isWidget}
           isFetching={this.props.isFetching}
           filtersIsOpen={this.props.filtersIsOpen}
           activeView={this.state.activeView}
           isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
-          saveSearchHandler={this.handleSaveSearch}
           onClickFilter={this.onClickFilter}
           onChangeView={this.onChangeView}
           hasData={this.props.listings.data.length > 0}
         />
         <Tabs
+          user={user}
           onChangeView={this.onChangeView}
           onChangeSort={this.onChangeSort}
           activeView={this.state.activeView}
           isWidget={this.props.isWidget}
           activeSort={this.state.activeSort}
+          saveSearchHandler={this.handleSaveSearch}
         />
         {this.renderMain()}
         <CreateAlertModal
