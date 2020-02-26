@@ -44,7 +44,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export function Address({ deal, roles, rowIndex, totalRows }) {
+interface Props {
+  deal: IDeal
+  roles?: Record<UUID, IDealRole>
+  rowIndex?: number
+  totalRows?: number
+}
+
+export function Address({ deal, roles, rowIndex, totalRows }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const photo = getField(deal, 'photo')
