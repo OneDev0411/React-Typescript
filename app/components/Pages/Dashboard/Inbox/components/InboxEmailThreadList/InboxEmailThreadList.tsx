@@ -24,9 +24,9 @@ export default function InboxEmailThreadList({
   selectedEmailThreadId,
   onSelectEmailThread
 }: Props) {
-  const [emailThreads, setEmailThreads] = useState<
-    IEmailThread<'messages' | 'contacts'>[]
-  >([])
+  const [emailThreads, setEmailThreads] = useState<IEmailThread<'contacts'>[]>(
+    []
+  )
 
   const selectedEmailThread = useMemo(
     () => emailThreads.find(({ id }) => id === selectedEmailThreadId),
@@ -43,7 +43,7 @@ export default function InboxEmailThreadList({
 
   const joinEmailThreads = useCallback(
     (
-      updatedEmailThreads: IEmailThread<'messages' | 'contacts'>[],
+      updatedEmailThreads: IEmailThread<'contacts'>[],
       mode: 'expand' | 'update'
     ) => {
       setEmailThreads(emailThreads => {
@@ -73,11 +73,15 @@ export default function InboxEmailThreadList({
   const handleUpdateEmailThreads = useCallback(
     async (updatedEmailThreadIds: UUID[]) => {
       try {
-        const updatedEmailThreads = await getEmailThreads({
-          start: 0,
-          limit: updatedEmailThreadIds.length,
-          ids: updatedEmailThreadIds
-        })
+        const updatedEmailThreads = await getEmailThreads(
+          {
+            selection: ['email_thread.snippet'],
+            start: 0,
+            limit: updatedEmailThreadIds.length,
+            ids: updatedEmailThreadIds
+          },
+          ['contacts']
+        )
 
         joinEmailThreads(updatedEmailThreads, 'update')
       } catch (reason) {
@@ -108,6 +112,7 @@ export default function InboxEmailThreadList({
       items={emailThreads}
       onNeedMoreItems={async () => {
         const filters: IGetEmailThreadsFilters = {
+          selection: ['email_thread.snippet'],
           start: emailThreads.length,
           limit: emailThreadFetchCount
         }
@@ -121,7 +126,7 @@ export default function InboxEmailThreadList({
         }
 
         try {
-          const moreEmailThreads = await getEmailThreads(filters)
+          const moreEmailThreads = await getEmailThreads(filters, ['contacts'])
 
           joinEmailThreads(moreEmailThreads, 'expand')
 

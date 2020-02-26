@@ -69,7 +69,9 @@ declare type IEmailThread<
   first_message_date: number
   last_message_date: number
   recipients: string[]
+  recipients_raw: IRawEmailRecipient[]
   message_count: number
+  snippet?: string
   has_attachments: boolean
   is_read: boolean
   brand: UUID

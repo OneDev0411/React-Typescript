@@ -8,10 +8,9 @@ import { useSelector } from 'react-redux'
 import { IAppState } from 'reducers'
 
 import { useInboxEmailThreadListItemStyles } from './styles'
-import getContactInfoFromEmailThread from '../../../../helpers/get-contact-info-from-email-thread'
 
 interface Props {
-  emailThread: IEmailThread<'messages' | 'contacts'>
+  emailThread: IEmailThread<'contacts'>
   selected?: boolean
 }
 
@@ -21,11 +20,27 @@ export default function InboxEmailThreadListItem({
 }: Props) {
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
-  const contactInfoText = useMemo(() => {
-    const contactInfo = getContactInfoFromEmailThread(user, emailThread)
+  const contactInfoText = useMemo(
+    () =>
+      emailThread.recipients_raw
+        .map(({ name, address }) => {
+          const contact =
+            emailThread.contacts &&
+            emailThread.contacts.find(
+              c =>
+                c.email === address || (c.emails && c.emails.includes(address))
+            )
+          const me = (contact
+            ? (contact.emails || []).concat(contact.email)
+            : [address]
+          ).includes(user.email)
+          const derivedName = contact ? contact.display_name : name
 
-    return contactInfo.map(i => (i.me ? 'Me' : i.name || i.address)).join(', ')
-  }, [user, emailThread])
+          return me ? 'Me' : derivedName || address
+        })
+        .join(', '),
+    [user, emailThread]
+  )
 
   const messageDate = new Date(emailThread.last_message_date * 1000)
   const messageDateText = fecha.format(messageDate, 'MMMM D, YYYY - h:mm A')
@@ -37,14 +52,6 @@ export default function InboxEmailThreadListItem({
     messageDate,
     messageDate < today ? 'D\u00A0MMM' : 'h:mm\u00A0A'
   )
-
-  const lastMessage = emailThread.messages[emailThread.message_count - 1]
-  const snippet =
-    lastMessage.type === 'google_message'
-      ? lastMessage.snippet
-      : lastMessage.type === 'microsoft_message'
-      ? lastMessage.snippet
-      : lastMessage.text
 
   const classes = useInboxEmailThreadListItemStyles()
 
@@ -124,7 +131,7 @@ export default function InboxEmailThreadListItem({
                 root: classNames(classes.infoText, classes.message)
               }}
             >
-              {snippet}
+              {emailThread.snippet}
             </Typography>
           </Grid>
         </Grid>
