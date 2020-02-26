@@ -39,9 +39,11 @@ const PATTERN = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'
 const Badge = withStyles((theme: Theme) =>
   createStyles({
     badge: (props: CBadgeProps) => ({
-      backgroundColor: props.isOnline ? '#32b86d' : '#c3c3c3',
-      color: props.isOnline ? '#32b86d' : '#c3c3c3',
-      boxShadow: `0 0 0 2px ${theme.palette.background.paper}`
+      backgroundColor: props.isOnline ? theme.palette.success.light : 'inherit',
+      color: props.isOnline ? theme.palette.success.light : 'inherit',
+      boxShadow: props.isOnline
+        ? `0 0 0 2px ${theme.palette.background.paper}`
+        : '0'
     })
   })
 )(BaseBadge)
@@ -59,8 +61,6 @@ const useStyles = makeStyles((theme: Theme) =>
 function ContactAvatar({ contact, attributeDefs }: Props & StateProps) {
   const classes = useStyles()
   const name = getAttributeFromSummary(contact, 'display_name')
-
-  // const statusColor = getContactOnlineStatus(contact) ? '#32b86d' : '#c3c3c3'
 
   return (
     <Badge

@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 import Card from 'components/Card'
-import { primary } from 'views/utils/colors'
 
 export const Container = styled.div`
   display: inline-flex;
@@ -25,7 +24,7 @@ export const ListItem = styled.div`
   cursor: pointer;
 
   :hover {
-    background-color: ${primary};
+    background-color: ${props => props.theme.primary.main};
     color: #fff;
   }
 `

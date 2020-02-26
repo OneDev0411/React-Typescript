@@ -1,7 +1,5 @@
 import { css } from 'styled-components'
 
-import { green } from '../../../utils/colors'
-
 export const iconAims = {
   none: null,
   top: '0deg',
@@ -27,7 +25,7 @@ export function getIconStatesStyle(props) {
       &:hover > div,
       &:hover {
         > svg {
-          fill: ${green.A100};
+          fill: ${props => props.theme.palette.grey['100']};
         }
       }
     `
