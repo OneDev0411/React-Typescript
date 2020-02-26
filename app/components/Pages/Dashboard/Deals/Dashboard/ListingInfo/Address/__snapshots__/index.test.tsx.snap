@@ -5,7 +5,7 @@ exports[`Deal address component renders with address 1`] = `
   class="styled__TitleContainer-xmjc75-0 dNWvUq"
 >
   <h2
-    class="headings__H2-sc-15tq5ag-1 kWAOoQ"
+    class="headings__H2-sc-15tq5ag-1 FLsXG"
     style="line-height:1.5"
   >
     1200 Main St
@@ -21,7 +21,7 @@ exports[`Deal address component renders without address 1`] = `
   class="styled__TitleContainer-xmjc75-0 dNWvUq"
 >
   <h2
-    class="headings__H2-sc-15tq5ag-1 kWAOoQ"
+    class="headings__H2-sc-15tq5ag-1 FLsXG"
     style="line-height:1.5"
   >
     Some title for a deal without address
