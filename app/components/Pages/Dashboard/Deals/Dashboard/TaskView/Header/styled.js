@@ -43,7 +43,7 @@ export const Title = styled.div`
   display: flex;
   align-items: center;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 400;
   padding: 0.825rem 2px;
   border: 1px dashed transparent;
 

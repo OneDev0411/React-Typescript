@@ -42,8 +42,10 @@ $link-hover-decoration: underline !default;
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-$font-family-sans-serif: 'San Francisco', Helvetica, Arial, sans-serif !default;
-$font-family-serif: Lato, Georgia, 'Times New Roman', Times, serif !default;
+$system-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue";
+
+$font-family-sans-serif: "LatoRegular", #{$system-font-family}, sans-serif !default;
+$font-family-serif: "LatoRegular", #{$system-font-family}, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace !default;
 $font-family-base: $font-family-serif !default;

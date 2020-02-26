@@ -30,16 +30,16 @@ export const TextInput = styled.input`
 
   ::-webkit-input-placeholder {
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 400;
     color: ${grey.A900};
-    font-family: Lato, sans-serif;
+    font-family: LatoRegular, sans-serif;
   }
 
   ::placeholder {
     font-size: 1rem;
     font-weight: normal;
     color: ${grey.A900};
-    font-family: Lato, sans-serif;
+    font-family: LatoRegular, sans-serif;
   }
 
   :focus {
