@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
 import { TextField, makeStyles, createStyles, Theme } from '@material-ui/core'
@@ -8,10 +8,12 @@ import { IAppState } from 'reducers/index'
 
 import GlobalHeader from 'components/GlobalHeader'
 
+import { searchDeals, getDeals } from 'actions/deals'
+
+import TabFilters from './Filters'
 // import PageSideNav from 'components/PageSideNav'
 // import { Content } from 'components/SlideMenu'
 // import Search from 'components/Grid/Search'
-import { searchDeals, getDeals } from 'actions/deals'
 
 import { SORTABLE_COLUMNS } from './helpers/sortable-columns'
 // import { PageContainer, GridContainer } from '../styles/page-container/styled'
@@ -51,11 +53,16 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-function BackofficeTable(props: WithRouterProps & StateProps) {
+export default function BackofficeTable(props: WithRouterProps & StateProps) {
   const classes = useStyles()
 
-  const [searchCriteria, setSearchCriteria] = useState<string>('')
+  const dispatch = useDispatch()
+  const { user, deals } = useSelector(({ user, deals }: IAppState) => ({
+    user,
+    deals: deals.list
+  }))
 
+  const [searchCriteria, setSearchCriteria] = useState('')
   const searchQuery: SearchQuery = {
     filter: props.params.filter,
     type: props.location.query.type || 'inbox',
@@ -68,21 +75,23 @@ function BackofficeTable(props: WithRouterProps & StateProps) {
     setSearchCriteria(value)
 
     if (value.length === 0) {
-      return props.getDeals(props.user)
+      dispatch(getDeals(user))
+
+      return
     }
 
-    props.searchDeals(props.user, value)
+    dispatch(searchDeals(user, value))
   }
 
   useDeepCompareEffect(() => {
     if (searchQuery.type === 'query') {
-      props.searchDeals(props.user, getStaticFilterQuery(searchQuery))
+      dispatch(searchDeals(user, getStaticFilterQuery(searchQuery)))
     }
   }, [searchQuery])
 
   return (
     <>
-      <GlobalHeader title="My deals">
+      <GlobalHeader title="Deals admin">
         <div className={classes.headerContainer}>
           <TextField
             className={classes.searchInput}
@@ -97,65 +106,15 @@ function BackofficeTable(props: WithRouterProps & StateProps) {
       </GlobalHeader>
 
       <div className={classes.container}>
-        {/* <TabFilters
+        <TabFilters
           deals={deals}
           activeFilter={props.params.filter}
-          searchCriteria={searchCriteria}
-          sortableColumns={SORTABLE_COLUMNS}
-        /> */}
-
-        <Grid
-          activeFilter={props.params.filter}
+          searchQuery={searchQuery}
           sortableColumns={SORTABLE_COLUMNS}
         />
+
+        <Grid searchQuery={searchQuery} />
       </div>
     </>
   )
-  // return (
-  //   <PageContainer isOpen={isSideMenuOpen}>
-  //     <PageSideNav isOpen={isSideMenuOpen}>
-  //       <BackofficeFilters
-  //         searchQuery={searchQuery}
-  //         isFetchingDeals={props.isFetchingDeals}
-  //         onBackToInboxes={() => handleSearch('')}
-  //       />
-  //     </PageSideNav>
-
-  //     <Content isSideMenuOpen={isSideMenuOpen}>
-  //       <PageHeader
-  //         title={getPageTitle(searchQuery)}
-  //         isSideMenuOpen={isSideMenuOpen}
-  //         onMenuTriggerChange={toggleSideMenu}
-  //       />
-
-  //       <GridContainer>
-  //         <Search
-  //           disableOnSearch
-  //           showLoadingOnSearch
-  //           defaultValue={persistentSearchInput}
-  //           isSearching={props.isFetchingDeals}
-  //           placeholder="Search deals by address, MLS # or agent name…"
-  //           onChange={handleSearch}
-  //           onClearSearch={handleSearch}
-  //           debounceTime={600}
-  //           minimumLength={4}
-  //         />
-
-  //         <Grid searchQuery={searchQuery} />
-  //       </GridContainer>
-  //     </Content>
-  //   </PageContainer>
-  // )
 }
-
-function mapStateToProps({ user, deals }: IAppState) {
-  return {
-    user,
-    isFetchingDeals: deals.properties.isFetchingDeals
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  { searchDeals, getDeals }
-)(BackofficeTable)

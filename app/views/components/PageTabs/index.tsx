@@ -12,6 +12,7 @@ interface Props {
   tabs: React.ReactNode[]
   actions: React.ReactNode[]
   defaultValue?: SelectedTab
+  value?: SelectedTab
   onChange?: (value: SelectedTab) => void
 }
 
@@ -81,6 +82,7 @@ const useStyles = makeStyles((theme: Theme) =>
  */
 export function PageTabs({
   defaultValue = null,
+  value,
   onChange = () => {},
   actions,
   tabs
@@ -90,16 +92,16 @@ export function PageTabs({
   const activeTab =
     defaultValue && selectedTab !== defaultValue ? defaultValue : selectedTab
 
-  const handleChange = (e: React.MouseEvent<{}>, value: SelectedTab) => {
-    setSelectedTab(value)
+  const handleChange = (e: React.MouseEvent<{}>, tab: SelectedTab) => {
+    setSelectedTab(tab)
 
-    onChange(value)
+    onChange(tab)
   }
 
   return (
     <div className={classes.container}>
       <Tabs
-        value={activeTab}
+        value={value || activeTab}
         indicatorColor="primary"
         textColor="primary"
         variant="scrollable"

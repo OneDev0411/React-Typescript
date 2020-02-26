@@ -30,7 +30,6 @@ import { Address } from '../../components/table-columns/Address'
 import CriticalDate, {
   getCriticalDateNextValue
 } from '../../components/table-columns/CriticalDate'
-// import Notification from '../../components/table-columns/NotificationBadge'
 
 import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
 import { Filters } from '../Filters'

@@ -15,7 +15,7 @@ interface Props {
   deal: IDeal
   user: IUser
   rowId: number
-  rowCount: number
+  rowsCount: number
 }
 
 export default function CriticalDate({ deal, user, rowId, rowsCount }: Props) {
