@@ -2,19 +2,29 @@ import React from 'react'
 
 import PopOver from 'components/Popover'
 
-import Deal from 'models/Deal'
-
 import Avatar from 'components/Avatar'
+
+import { getSide } from 'models/Deal/helpers/context/get-side'
 
 import { roleName, getLegalFullName } from '../../../../utils/roles'
 
-const Side = ({ deal, roles, rowId, rowsCount }) => {
-  const sideName = Deal.get.side(deal)
-  const relatedRole =
-    deal.roles && deal.roles.find(id => roles[id].role === sideName)
+interface Props {
+  deal: IDeal
+  roles: Record<UUID, IDealRole>
+  rowId: number
+  rowsCount: number
+}
+
+export function Side({ deal, roles, rowId, rowsCount }: Props) {
+  const sideName = getSide(deal)
+  const dealRoles = (deal.roles || []) as unknown[]
+
+  const relatedRole: UUID = dealRoles.find(
+    (id: UUID) => roles[id].role === sideName
+  ) as UUID
 
   if (!deal.roles) {
-    return <span>{Deal.get.side(deal)}</span>
+    return <span>{getSide(deal)}</span>
   }
 
   let relatedRoleUser
@@ -30,7 +40,7 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
       id={`popover-trigger-sides-${deal.id}`}
       caption={
         <div className="roles">
-          {deal.roles.map(id => {
+          {dealRoles.map((id: UUID) => {
             const role = roles[id]
 
             return (
@@ -72,5 +82,3 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
     </PopOver>
   )
 }
-
-export default Side

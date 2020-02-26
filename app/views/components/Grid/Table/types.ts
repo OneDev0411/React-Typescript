@@ -2,6 +2,8 @@ import { TableCellProps } from '@material-ui/core/TableCell'
 
 import { StateContext, DispatchContext } from './context'
 
+type StringOrNumber = string | number
+
 export interface RenderProps<Row> {
   row: Row
   totalRows: number
@@ -26,6 +28,8 @@ export type ColumnHeaderFunction<Row> = (
   data: ColumnHeaderProps<Row>
 ) => string | React.ReactNode
 
+export type ColumnSortType = 'number' | 'string'
+
 export interface TableColumn<Row> {
   id: string
   header?: string | ColumnHeaderFunction<Row>
@@ -36,11 +40,11 @@ export interface TableColumn<Row> {
   headerStyle?: React.CSSProperties
   rowStyle?: React.CSSProperties
   sortable?: boolean
-  sortType?: 'number' | 'string'
+  sortType?: ColumnSortType
   sortTitle?: string
-  sortMethod?: () => string
-  accessor?: (row: Row) => string | number
-  render?: (data: RenderProps<Row>) => React.ReactNode
+  sortMethod?: (accessor: StringOrNumber) => StringOrNumber
+  accessor?: (row: Row) => StringOrNumber | null | undefined
+  render?: (data: RenderProps<Row>) => React.ReactNode | string
 }
 
 export type GridHookPlugin<Row, Options> = (
@@ -65,7 +69,7 @@ export interface SortableColumn {
 export interface GridSortingOption {
   columns?: SortableColumn[]
   defaultSort?: ActiveSort
-  sortBy?: ActiveSort
+  sortBy?: ActiveSort | null
   onChange?: (item: SortableColumn) => void
 }
 
