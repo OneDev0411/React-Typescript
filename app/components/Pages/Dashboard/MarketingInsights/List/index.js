@@ -28,8 +28,6 @@ function List(props) {
     : InsightFiltersType.SENT
   const { filteredList, stats } = useFilterList(list, filterType)
 
-  console.log('from List', props)
-
   React.useEffect(() => {
     window.socket.on('email_campaign:send', () => setQueue(queue => queue + 1))
   }, [])
