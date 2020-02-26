@@ -82,8 +82,8 @@ export function Address({ deal, roles, rowIndex, totalRows }: Props) {
             <Side
               deal={deal}
               roles={roles}
-              rowId={rowIndex + 1}
-              rowsCount={totalRows}
+              rowId={rowIndex! + 1}
+              rowsCount={totalRows!}
             />
           </div>
         </>

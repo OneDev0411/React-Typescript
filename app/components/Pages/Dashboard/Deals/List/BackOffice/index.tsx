@@ -11,23 +11,16 @@ import GlobalHeader from 'components/GlobalHeader'
 import { searchDeals, getDeals } from 'actions/deals'
 
 import TabFilters from './Filters'
-// import PageSideNav from 'components/PageSideNav'
-// import { Content } from 'components/SlideMenu'
-// import Search from 'components/Grid/Search'
 
 import { SORTABLE_COLUMNS } from './helpers/sortable-columns'
-// import { PageContainer, GridContainer } from '../styles/page-container/styled'
 
 import { ExportDeals } from '../components/ExportDeals'
 
 import { SearchQuery } from './types'
 
-// import { getPageTitle } from './utils/get-page-title'
 import { getStaticFilterQuery } from './utils/get-static-filter-query'
 
-// import PageHeader from '../components/PageHeader'
 import Grid from './Grid'
-// import BackofficeFilters from './Filters'
 
 interface StateProps {
   user: IUser

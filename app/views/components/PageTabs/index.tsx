@@ -9,7 +9,7 @@ type SelectedTab = string | number | null
 
 interface Props {
   tabs: React.ReactNode[]
-  actions: React.ReactNode[]
+  actions?: React.ReactNode[]
   defaultValue?: SelectedTab
   value?: SelectedTab
   onChange?: (value: SelectedTab) => void
