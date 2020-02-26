@@ -11,6 +11,7 @@ interface Props {
 interface ItemsShape {
   label: string
   to: string
+  isHidden?: (user: IUser) => boolean
   component?: React.ReactNode
 }
 
@@ -23,7 +24,8 @@ const Items: ItemsShape[] = [
   },
   {
     label: 'Upgrade to agent',
-    to: '/dashboard/account/upgrade'
+    to: '/dashboard/account/upgrade',
+    isHidden: user => user.user_type === 'Agent'
   },
   {
     label: 'Manage Tags',
@@ -67,13 +69,21 @@ export const SettingsTabs = ({ user }: Props) => {
   return (
     <PageTabs
       defaultValue={currentUrl}
-      tabs={Items.map(({ label, to, component = false }, i) => {
-        const hasComponent = component ? { component } : {}
+      tabs={Items.filter(({ isHidden }) => !isHidden || !isHidden(user)).map(
+        ({ label, to, component = false }, i) => {
+          const hasComponent = component ? { component } : {}
 
-        return (
-          <TabLink key={i} {...hasComponent} label={label} to={to} value={to} />
-        )
-      })}
+          return (
+            <TabLink
+              key={i}
+              {...hasComponent}
+              label={label}
+              to={to}
+              value={to}
+            />
+          )
+        }
+      )}
     />
   )
 }

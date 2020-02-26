@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { BasicDropdown } from 'components/BasicDropdown'
-import { grey } from 'views/utils/colors'
 
 import Item from './item'
 
@@ -31,12 +30,13 @@ export function ConditionOperators(props) {
       buttonText={
         MENU_OPTIONS.find(item => item.value === props.selectedItem).title
       }
-      style={{
-        marginRight: '0.5rem',
-        width: '10.7rem'
-      }}
       buttonStyle={{
-        backgroundColor: `${grey.A150}`
+        padding: '0 0.5rem',
+        fontSize: '0.9rem',
+        fontWeight: 'bold'
+      }}
+      style={{
+        marginRight: '0.5rem'
       }}
       itemRenderer={({ item, ...rest }) => (
         <Item key={item.value} title={item.title} {...rest} />

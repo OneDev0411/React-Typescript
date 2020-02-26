@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { blue } from '../../../utils/colors'
+import { green } from '../../../utils/colors'
 
 import Button, { ActionButtonProps } from '../ActionButton'
 import { getIconSize, getIconStatesStyle } from '../helpers'
@@ -37,7 +37,7 @@ const getColor = props => {
     return '#000'
   }
 
-  return blue.A100
+  return green.primary
 }
 
 const checkFit = props => {

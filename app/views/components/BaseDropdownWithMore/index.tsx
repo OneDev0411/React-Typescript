@@ -20,6 +20,7 @@ interface Props extends BaseProps {
 
 export function BaseDropdownWithMore({
   renderMenu,
+  listPlugin,
   morePlugin,
   ...props
 }: Props) {
@@ -27,7 +28,7 @@ export function BaseDropdownWithMore({
     <BaseDropdown
       {...props}
       renderMenu={props => (
-        <List>
+        <List {...listPlugin}>
           <ShowMoreLess
             {...morePlugin}
             style={{ maxHeight: 350, overflow: 'auto' }}

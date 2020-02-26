@@ -1,60 +1,32 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
+import { Box } from '@material-ui/core'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
 
-import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
-import PageHeader from '../../../../../../views/components/PageHeader'
+import PageLayout from 'components/GlobalPageLayout'
 
-import { ViewSwitcher } from '../../components/ViewSwitcher'
-
-Header.propTypes = {
-  showMenu: PropTypes.bool
-}
-
-Header.defaultProps = {
-  showMenu: true
-}
+const useStyles = makeStyles(theme =>
+  createStyles({
+    container: {
+      height: '6em',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      margin: theme.spacing(0, 1.5)
+    }
+  })
+)
 
 export function Header(props) {
-  const { subtitle, RightComponent } = props
+  const classes = useStyles(props)
+  const { subtitle, title } = props
 
+  // {props.title}
+  // {subtitle}
+  // {props.activeView}
+  // {props.onChangeView}
   return (
-    <PageHeader
-      style={{
-        margin: 0,
-        width: '100%',
-        minHeight: '6rem',
-        borderBottom: '1px solid #d4d4d4',
-        padding: subtitle ? '1.5em 1.5em 1em' : '1.5em'
-      }}
-    >
-      <Flex>
-        <MenuTrigger
-          onClick={props.toggleSideMenu}
-          isExpended={props.isSideMenuOpen}
-          style={{ width: '1.5em', height: '1.5em', marginRight: '0.5em' }}
-        />
-        <Flex column>
-          <PageHeader.Heading style={{ fontSize: '1.5rem', lineHeight: 1 }}>
-            {props.title}
-          </PageHeader.Heading>
-          {subtitle && (
-            <PageHeader.Subtitle style={{ marginTop: '0.5em' }}>
-              {subtitle}
-            </PageHeader.Subtitle>
-          )}
-        </Flex>
-      </Flex>
-
-      {props.showMenu && (
-        <PageHeader.Menu>
-          {RightComponent && <RightComponent />}
-          <ViewSwitcher
-            activeView={props.activeView}
-            onChange={props.onChangeView}
-          />
-        </PageHeader.Menu>
-      )}
-    </PageHeader>
+    <Box className={classes.container}>
+      <PageLayout.Header title={title} />
+    </Box>
   )
 }

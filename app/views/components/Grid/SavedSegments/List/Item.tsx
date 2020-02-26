@@ -2,7 +2,6 @@ import React, { useContext, useCallback } from 'react'
 
 import { uppercaseFirstLetter } from 'utils/helpers'
 
-import ToolTip from 'components/tooltip'
 import Badge from 'components/Badge'
 import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -44,27 +43,25 @@ function Item(props: Props) {
   }, [selected, selectHandler, item])
 
   return (
-    <ToolTip caption={name} placement="right">
-      <ListItem
-        isSelected={selected}
-        onClick={onSelect}
-        data-test={`contact-list-${item.name}`}
-      >
-        <ListItemName>
-          {uppercaseFirstLetter(name)}
-          {item.badge && (
-            <Badge large style={{ marginLeft: '0.5rem' }}>
-              {item.badge}
-            </Badge>
-          )}
-        </ListItemName>
-        {item.is_editable && (
-          <DeleteButton data-test="delete-list" onClick={onDelete} isFit>
-            <IconClose />
-          </DeleteButton>
+    <ListItem
+      isSelected={selected}
+      onClick={onSelect}
+      data-test={`contact-list-${item.name}`}
+    >
+      <ListItemName>
+        {uppercaseFirstLetter(name)}
+        {item.badge && (
+          <Badge large style={{ marginLeft: '0.5rem' }}>
+            {item.badge}
+          </Badge>
         )}
-      </ListItem>
-    </ToolTip>
+      </ListItemName>
+      {item.is_editable && (
+        <DeleteButton data-test="delete-list" onClick={onDelete} isFit>
+          <IconClose />
+        </DeleteButton>
+      )}
+    </ListItem>
   )
 }
 

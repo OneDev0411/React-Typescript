@@ -1,9 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import { grey, primary } from '../../../../../../../views/utils/colors'
 import IconHome from '../../../../../../../views/components/SvgIcons/NewHome/IconHome'
 import ImageStatus from '../../../../../../../views/components/ImageStatus'
 
@@ -28,28 +26,7 @@ const IconContainer = styled(Flex)`
   }
 `
 
-const SubAddress = styled.div`
-  color: ${grey.A550};
-  display: flex;
-  font-size: 0.875rem;
-`
-
-const Title = styled.div`
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-weight: 500;
-
-  > a {
-    color: #000;
-
-    :hover {
-      color: ${primary};
-    }
-  }
-`
-
-export const Address = ({ listing }) => (
+export const Avatar = ({ listing }) => (
   <Flex>
     <Container>
       {listing.cover_image_url ? (
@@ -61,15 +38,5 @@ export const Address = ({ listing }) => (
       )}
       <ImageStatus statusColor={`#${listing.statusColor}`} />
     </Container>
-    <Flex
-      column
-      justifyBetween
-      style={{ width: 'calc(100% - 3.5rem)', marginLeft: '1rem' }}
-    >
-      <Title>
-        <Link to={`/dashboard/mls/${listing.id}`}>{listing.address}</Link>
-      </Title>
-      <SubAddress className="hover-color--black">{listing.status}</SubAddress>
-    </Flex>
   </Flex>
 )

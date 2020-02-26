@@ -1,10 +1,10 @@
 import React from 'react'
 
+import { Button } from '@material-ui/core'
+
 import preSearchFormat from 'models/contacts/helpers/pre-search-format'
 
 import AddToFlowButton from 'components/AddToFlowButton'
-import TextIconButton from 'components/Button/TextIconButton'
-import IconThunderboltOutline from 'components/SvgIcons/ThunderboltOutline/IconThunderboltOutline'
 
 import { ActionWrapper } from '../Table/components/ActionWrapper'
 
@@ -59,14 +59,14 @@ function AddToFlow(props) {
           action="add to Flow"
           disabled={disabled}
         >
-          <TextIconButton
-            text="Add to Flow"
-            iconLeft={IconThunderboltOutline}
+          <Button
+            variant="outlined"
             size="small"
             disabled={disabled}
-            iconSize="large"
             {...buttonProps}
-          />
+          >
+            Add to Flow
+          </Button>
         </ActionWrapper>
       )}
     />

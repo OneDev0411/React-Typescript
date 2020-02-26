@@ -7,9 +7,8 @@ import { Button } from '@material-ui/core'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
 
-import { TemplatesContainer, TemplatesListContainer } from './styled'
+import { TemplatesListContainer } from './styled'
 import MarketingTemplateCard from '../MarketingTemplateCard'
-import Title from './Title'
 import Fallback from './Fallback'
 import TemplateAction from './TemplateAction'
 import MarketingTemplatePreviewModal from '../MarketingTemplatePreviewModal'
@@ -63,13 +62,7 @@ function TemplatesList(props) {
   }
 
   return (
-    <TemplatesContainer>
-      {props.titleRenderer ? (
-        props.titleRenderer()
-      ) : (
-        <Title count={props.items.length} />
-      )}
-
+    <div>
       <TemplatesListContainer>
         <MarketingTemplateMasonry
           breakpointCols={{
@@ -152,7 +145,7 @@ function TemplatesList(props) {
         setEditActionTriggered={setEditActionTriggered}
         selectedTemplate={selectedTemplate}
       />
-    </TemplatesContainer>
+    </div>
   )
 }
 

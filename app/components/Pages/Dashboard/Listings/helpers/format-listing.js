@@ -1,3 +1,5 @@
+import idx from 'idx'
+
 import {
   getStatusColor,
   addressTitle as getAddressTitle,
@@ -51,5 +53,27 @@ export const formatListing = (listing, user) => {
     pricePerSquareFoot,
     builtYear,
     lotSizeArea
+  }
+}
+
+export const addDistanceFromCenterToListing = (listing, center) => {
+  if (!center || !idx(window, w => w.google.maps.geometry)) {
+    return listing
+  }
+
+  const { google } = window
+
+  const centerLatLng = new google.maps.LatLng(center.lat, center.lng)
+
+  const listingLocation = new google.maps.LatLng(listing.lat, listing.lng)
+
+  const distanceFromCenter = google.maps.geometry.spherical.computeDistanceBetween(
+    centerLatLng,
+    listingLocation
+  )
+
+  return {
+    ...listing,
+    distanceFromCenter
   }
 }

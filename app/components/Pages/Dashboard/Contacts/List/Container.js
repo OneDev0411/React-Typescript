@@ -2,13 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
-import { FlexItem } from 'styled-flex-component'
+import { Box } from '@material-ui/core'
+
+import PageLayout from 'components/GlobalPageLayout'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
 import { updateFilterSegment } from 'actions/filter-segments'
+import { getUserTeams } from 'actions/user/teams'
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import {
@@ -24,30 +27,22 @@ import {
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
-import {
-  Container as PageContainer,
-  Content as PageContent,
-  Menu as SideMenu
-} from 'components/SlideMenu'
-import SavedSegments from 'components/Grid/SavedSegments/List'
-// import { resetGridSelectedItems } from 'components/Grid/Table-old/Plugins/Selectable'
 import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
-import { AlphabetFilter } from 'components/AlphabetFilter'
 import { updateTeamSetting } from 'actions/user/update-team-setting'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
+import ContactsTabs from './Tabs'
 import Table from './Table'
-import { SearchContacts } from './Search'
-import Header from './Header'
-import ContactFilters from './Filters'
-import TagsList from './TagsList'
-import AllContactsList from './AllContactsList'
-import FlowsList from './FlowsList'
+// import TagsList from './TagsList'
+// import AllContactsList from './AllContactsList'
+// import FlowsList from './FlowsList'
+import ImportContactsButton from './ImportContactsButton'
+import TouchReminder from './TouchReminder'
 
 import {
   FLOW_FILTER_ID,
@@ -57,7 +52,7 @@ import {
   SYNCED_CONTACTS_LIST_ID,
   DUPLICATE_CONTACTS_LIST_ID
 } from './constants'
-import { CalloutSpinner, Container, SearchWrapper } from './styled'
+import { CalloutSpinner } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 import {
   clearImportingGoogleContacts,
@@ -66,7 +61,6 @@ import {
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
-import Duplicates from './Duplicates'
 
 const DEFAULT_QUERY = {
   associations: CRM_LIST_DEFAULT_ASSOCIATIONS
@@ -78,7 +72,6 @@ class ContactsList extends React.Component {
     this.state = {
       selectedSidebarFilter: null,
       firstLetter: props.location.query.letter || null,
-      isSideMenuOpen: true,
       isShowingDuplicatesList:
         props.activeSegment.id === DUPLICATE_CONTACTS_LIST_ID,
       isFetchingMoreContacts: false,
@@ -384,14 +377,12 @@ class ContactsList extends React.Component {
   }
 
   handleChangeOrder = ({ value: order }) => {
+    const { user, getUserTeams } = this.props
+
     this.order = order
     this.handleFilterChange({}, true)
+    getUserTeams(user)
   }
-
-  toggleSideMenu = () =>
-    this.setState(state => ({
-      isSideMenuOpen: !state.isSideMenuOpen
-    }))
 
   handleLoadMore = async () => {
     if (this.state.isShowingDuplicatesList) {
@@ -585,16 +576,36 @@ class ContactsList extends React.Component {
     })
   }
 
+  renderTabs = (props = {}) => {
+    const { viewAsUsers } = this.props
+
+    return (
+      <ContactsTabs
+        filter={{
+          show: this.shouldShowFilters(),
+          handler: () => this.handleFilterChange({}, true)
+        }}
+        savedListProps={{
+          name: CONTACTS_SEGMENT_NAME,
+          associations: CRM_LIST_DEFAULT_ASSOCIATIONS,
+          getPredefinedLists: () => ({}),
+          onChange: segment => {
+            this.setState({ isShowingDuplicatesList: false })
+            this.handleChangeSavedSegment(segment)
+          }
+        }}
+        sortProps={{
+          onChange: this.handleChangeOrder
+        }}
+        users={viewAsUsers}
+        {...props}
+      />
+    )
+  }
+
   render() {
     const { props, state } = this
-    const { isSideMenuOpen } = state
-    const {
-      user,
-      list,
-      viewAsUsers,
-      isFetchingContacts,
-      activeSegment
-    } = this.props
+    const { list, viewAsUsers, isFetchingContacts, activeSegment } = this.props
     const contacts = selectContacts(list)
 
     const syncing = Object.values(this.props.oAuthAccounts)
@@ -616,62 +627,35 @@ class ContactsList extends React.Component {
         activeSegment.filters.length === 0)
 
     const title = this.getHeaderTitle()
+    const showImportAction = this.shouldShowImportAndCreateActions()
+    const activeTag = this.getActiveTag()
 
     return (
-      <PageContainer isOpen={isSideMenuOpen}>
-        <SideMenu isOpen={isSideMenuOpen} width="13rem">
-          <AllContactsList
-            activeSegment={activeSegment}
-            onFilterChange={(selectedSegment, type) => {
-              this.setState({ selectedSidebarFilter: null })
-
-              this.setState({
-                isShowingDuplicatesList: type === DUPLICATE_CONTACTS_LIST_ID
-              })
-
-              // Synced contacts
-              if (selectedSegment) {
-                this.handleChangeSavedSegment(selectedSegment)
-
-                return
-              }
-
-              // All contacts selected
-              this.handleFilterChange({ filters: [], flows: [] }, true)
-            }}
-          />
-          <TagsList
-            onFilterChange={filters => {
-              this.setState({
-                selectedSidebarFilter: filters.filters,
-                isShowingDuplicatesList: false
-              })
-              this.handleFilterChange({ ...filters, flows: [] }, true)
-            }}
-            isActive={this.state.selectedSidebarFilter !== null}
-          />
-          <FlowsList
-            onChange={_.debounce(() => {
-              this.setState({
-                selectedSidebarFilter: this.props.flows,
-                isShowingDuplicatesList: false
-              })
-              this.handleFilterChange({}, true)
-            }, 300)}
-            isActive={this.state.selectedSidebarFilter !== null}
-          />
-          <SavedSegments
-            name={CONTACTS_SEGMENT_NAME}
-            associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
-            getPredefinedLists={() => ({})}
-            onChange={segment => {
-              this.setState({ isShowingDuplicatesList: false })
-              this.handleChangeSavedSegment(segment)
-            }}
-          />
-        </SideMenu>
-
-        <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
+      <PageLayout>
+        <PageLayout.HeaderWithSearch
+          placeholder="Search Contacts"
+          onSearch={this.handleSearch}
+          title={title}
+        >
+          {!isZeroState && (
+            <Box ml={2}>
+              {activeSegment && activeSegment.is_editable && (
+                <TouchReminder
+                  value={activeSegment.touch_freq}
+                  onChange={this.handleListTouchReminderUpdate}
+                />
+              )}
+              {activeTag && activeTag.id && (
+                <TouchReminder
+                  value={activeTag.touch_freq}
+                  onChange={this.handleTagTouchReminderUpdate}
+                />
+              )}
+              {showImportAction && <ImportContactsButton />}
+            </Box>
+          )}
+        </PageLayout.HeaderWithSearch>
+        <PageLayout.Main>
           {this.state.syncStatus === 'pending' && (
             <Callout
               type="info"
@@ -699,46 +683,10 @@ class ContactsList extends React.Component {
             />
           )}
           {isZeroState && <ZeroState />}
-          {!isZeroState && this.state.isShowingDuplicatesList && (
-            <Duplicates
-              isSideMenuOpen={this.state.isSideMenuOpen}
-              onSideMenuTriggerClick={this.toggleSideMenu}
-            />
-          )}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
-            <>
-              <Header
-                title={title}
-                activeSegment={activeSegment}
-                activeTag={this.getActiveTag()}
-                onListTouchReminderUpdate={this.handleListTouchReminderUpdate}
-                onTagTouchReminderUpdate={this.handleTagTouchReminderUpdate}
-                showActions={!isZeroState}
-                showImportAction={this.shouldShowImportAndCreateActions()}
-                showCreateAction={this.shouldShowImportAndCreateActions()}
-                isSideMenuOpen={state.isSideMenuOpen}
-                user={user}
-                onMenuTriggerChange={this.toggleSideMenu}
-              />
-              <Container>
-                {this.shouldShowFilters() && (
-                  <ContactFilters
-                    onFilterChange={() => this.handleFilterChange({}, true)}
-                    users={viewAsUsers}
-                  />
-                )}
-                <SearchWrapper row alignCenter>
-                  <FlexItem basis="100%">
-                    <SearchContacts
-                      onSearch={this.handleSearch}
-                      isSearching={isFetchingContacts}
-                    />
-                  </FlexItem>
-                  <AlphabetFilter
-                    value={state.firstLetter}
-                    onChange={this.handleFirstLetterChange}
-                  />
-                </SearchWrapper>
+            <React.Fragment>
+              <Box>
+                {this.renderTabs()}
                 <Table
                   data={contacts}
                   order={this.order}
@@ -754,7 +702,6 @@ class ContactsList extends React.Component {
                   onRequestDelete={this.handleOnDelete}
                   tableContainerId={this.tableContainerId}
                   reloadContacts={this.reloadContacts}
-                  handleChangeOrder={this.handleChangeOrder}
                   handleChangeContactsAttributes={() =>
                     this.handleFilterChange({}, true)
                   }
@@ -768,11 +715,11 @@ class ContactsList extends React.Component {
                     users: viewAsUsers
                   }}
                 />
-              </Container>
-            </>
+              </Box>
+            </React.Fragment>
           )}
-        </PageContent>
-      </PageContainer>
+        </PageLayout.Main>
+      </PageLayout>
     )
   }
 }
@@ -834,6 +781,7 @@ export default withRouter(
       setContactsListTextFilter,
       getContactsTags,
       updateTeamSetting,
+      getUserTeams,
       updateSegment: updateFilterSegment
     }
   )(ContactsList)

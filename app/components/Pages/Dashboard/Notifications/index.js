@@ -5,6 +5,8 @@ import S from 'shorti'
 import timeago from 'timeago.js'
 import { Helmet } from 'react-helmet'
 
+import PageLayout from 'components/GlobalPageLayout'
+
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
 
 import {
@@ -359,28 +361,25 @@ class Notifications extends Component {
 
   render() {
     return (
-      <div
-        style={{
-          height: '100vh',
-          overflowY: 'scroll'
-        }}
-      >
+      <PageLayout>
         <Helmet>
           <title>{this.documentTitle}</title>
         </Helmet>
         <Header />
-        {this.getNotifications()}
-        {this.state.selectedEvent && (
-          <CrmEvents
-            isOpen
-            deleteCallback={this.closeCRMTaskDrawer}
-            onClose={this.closeCRMTaskDrawer}
-            selectedEvent={this.state.selectedEvent}
-            submitCallback={this.closeCRMTaskDrawer}
-            user={this.props.user}
-          />
-        )}
-      </div>
+        <PageLayout.Main>
+          {this.getNotifications()}
+          {this.state.selectedEvent && (
+            <CrmEvents
+              isOpen
+              deleteCallback={this.closeCRMTaskDrawer}
+              onClose={this.closeCRMTaskDrawer}
+              selectedEvent={this.state.selectedEvent}
+              submitCallback={this.closeCRMTaskDrawer}
+              user={this.props.user}
+            />
+          )}
+        </PageLayout.Main>
+      </PageLayout>
     )
   }
 }

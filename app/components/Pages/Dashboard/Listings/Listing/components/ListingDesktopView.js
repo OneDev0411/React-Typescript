@@ -39,6 +39,8 @@ import ListingMapMarker from '../../../Partials/ListingMapMarker'
 
 import ShareModal from '../../components/modals/ShareListingModal'
 
+import { appSidenavWidth } from '../../../SideNav/variables'
+
 export const renderFeatures = (title, value) => {
   if (!value) {
     return null
@@ -100,7 +102,7 @@ const ListingDesktopView = ({
     viewer_width = window.innerWidth
 
     if (!data.is_widget && container !== 'modal') {
-      viewer_width -= 56
+      viewer_width -= appSidenavWidth
     }
   }
 
@@ -750,7 +752,7 @@ const ListingDesktopView = ({
   }
 
   let viewer_wrap_style = S(
-    `absolute h-100p bg-fff t-0 l-0 z-10 ml-56 w-${viewer_width}`
+    `absolute h-100p bg-fff t-0 l-0 z-10 ml-${appSidenavWidth} w-${viewer_width}`
   )
 
   if (data.is_widget) {

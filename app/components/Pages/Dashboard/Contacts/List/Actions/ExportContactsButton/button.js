@@ -1,33 +1,43 @@
 import React from 'react'
-import styled from 'styled-components'
+
+import { Button } from '@material-ui/core'
 
 import { BasicDropdown } from 'components/BasicDropdown'
-import XlsxIcon from 'components/SvgIcons/Xlsx/XlsxIcon'
+import ArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
+import ArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import Item from './item'
 import { DOWNLOAD_TYPES_DROPDOWN_ITEMS } from './constants'
-
-const Xlsx = styled(XlsxIcon)`
-  margin-right: 0.5rem;
-`
 
 export default function ExportButton({ disabled, onExportClick }) {
   return (
     <BasicDropdown
       selectedItem={null}
-      buttonSize="small"
       items={DOWNLOAD_TYPES_DROPDOWN_ITEMS}
-      buttonIcon={Xlsx}
       onChange={async item => onExportClick(item.type)}
-      buttonText="Export Contacts"
+      buttonText="Export"
       upsideDown
       disabled={disabled}
-      style={{
-        display: 'inline'
-      }}
-      buttonStyle={{
-        width: 'inherit'
-      }}
+      style={{ display: 'inline' }}
+      buttonRenderer={({ text, isOpen, disabled, onClick }) => (
+        <Button
+          variant="outlined"
+          size="small"
+          disabled={disabled}
+          onClick={onClick}
+        >
+          {text}
+          {isOpen ? (
+            <ArrowUp
+              style={{ width: 16, height: 16, verticalAlign: 'middle' }}
+            />
+          ) : (
+            <ArrowDown
+              style={{ width: 16, height: 16, verticalAlign: 'middle' }}
+            />
+          )}
+        </Button>
+      )}
       itemRenderer={({ item, ...rest }) => (
         <Item
           key={item.type}

@@ -154,8 +154,12 @@ export default function Signin(props: Props) {
               />
             </a>
           )}
-          <h1 className="c-auth__title">{siteTitle}</h1>
-          <p className="c-auth__subtitle">Hi, welcome back!</p>
+          <h1 className="c-auth__title">
+            {isHiddenLookUpForm ? 'Welcome' : 'Sign In'}
+          </h1>
+          <p className="c-auth__subtitle">
+            {isHiddenLookUpForm ? username : 'Enter your Email to continue'}
+          </p>
         </header>
         <main className="c-auth__main">
           {isHiddenLookUpForm ? (

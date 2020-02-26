@@ -32,6 +32,7 @@ import {
 } from '../../../../../../../constants/listings/search'
 
 import {
+  SearchContainer,
   ListContainer,
   Input,
   ListTitle,
@@ -289,7 +290,7 @@ class MlsAutocompleteSearch extends Component {
 
   render() {
     return (
-      <div style={{ position: 'relative' }}>
+      <SearchContainer>
         <SearchIcon />
         <Downshift
           isOpen={this.state.isOpen}
@@ -308,7 +309,7 @@ class MlsAutocompleteSearch extends Component {
                   onKeyDown={this.handleKeyDownInput}
                   onFocus={this.handleInputFocus}
                   onBlur={this.handleInputBlur}
-                  placeholder="Search location or MLS#"
+                  placeholder="Search location or MLS number..."
                 />
                 {isOpen && (
                   <ListContainer>
@@ -366,7 +367,7 @@ class MlsAutocompleteSearch extends Component {
             <Loading />
           </LoadingContainer>
         )}
-      </div>
+      </SearchContainer>
     )
   }
 }

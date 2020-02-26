@@ -4,6 +4,7 @@ import { Tabs, createStyles, makeStyles, Theme } from '@material-ui/core'
 export * from './Tab'
 export * from './TabLink'
 export * from './DropdownTab'
+export * from './TabSpacer'
 
 type SelectedTab = string | number | null
 

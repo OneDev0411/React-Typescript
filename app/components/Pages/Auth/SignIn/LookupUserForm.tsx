@@ -73,7 +73,7 @@ export default function LookUpForm({
             text={isLoading ? 'Looking up...' : 'Next'}
           />
 
-          <p style={{ textAlign: 'center' }}>
+          <p className="c-auth__subtitle">
             <small>Don't have an account?</small>
             &nbsp;&nbsp;
             <Link to="/signup">Sign up</Link>

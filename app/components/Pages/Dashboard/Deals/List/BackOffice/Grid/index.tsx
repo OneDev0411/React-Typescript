@@ -32,13 +32,20 @@ import CriticalDate, {
 
 import { SORTABLE_COLUMNS } from '../helpers/sortable-columns'
 
+<<<<<<< HEAD
 const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field_bo'
 
+=======
+>>>>>>> fe9f60efbe2697edf5e002e41347987ebc7c31db
 interface Props {
   searchQuery: SearchQuery
 }
 
+<<<<<<< HEAD
 function BackOfficeGrid(props: Props & WithRouterProps) {
+=======
+export default function BackOfficeGrid(props: Props & WithRouterProps) {
+>>>>>>> fe9f60efbe2697edf5e002e41347987ebc7c31db
   const dispatch = useDispatch()
 
   const { isFetchingDeals, deals, user, roles } = useSelector(
