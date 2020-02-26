@@ -17,8 +17,11 @@ interface Props {
 
 export function Side({ deal, roles, rowId, rowsCount }: Props) {
   const sideName = getSide(deal)
-  const relatedRole =
-    deal.roles && deal.roles.find(id => roles[id].role === sideName)
+  const dealRoles = (deal.roles || []) as unknown[]
+
+  const relatedRole: UUID = dealRoles.find(
+    (id: UUID) => roles[id].role === sideName
+  ) as UUID
 
   if (!deal.roles) {
     return <span>{getSide(deal)}</span>
@@ -37,7 +40,7 @@ export function Side({ deal, roles, rowId, rowsCount }: Props) {
       id={`popover-trigger-sides-${deal.id}`}
       caption={
         <div className="roles">
-          {deal.roles.map(id => {
+          {dealRoles.map((id: UUID) => {
             const role = roles[id]
 
             return (

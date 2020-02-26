@@ -3,6 +3,8 @@ import { WithRouterProps, withRouter } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 
+import { TableCellProps } from '@material-ui/core'
+
 import Grid from 'components/Grid/Table'
 
 import { IAppState } from 'reducers'
@@ -32,20 +34,13 @@ import CriticalDate, {
 
 import { SORTABLE_COLUMNS } from '../helpers/sortable-columns'
 
-<<<<<<< HEAD
 const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field_bo'
 
-=======
->>>>>>> fe9f60efbe2697edf5e002e41347987ebc7c31db
 interface Props {
   searchQuery: SearchQuery
 }
 
-<<<<<<< HEAD
 function BackOfficeGrid(props: Props & WithRouterProps) {
-=======
-export default function BackOfficeGrid(props: Props & WithRouterProps) {
->>>>>>> fe9f60efbe2697edf5e002e41347987ebc7c31db
   const dispatch = useDispatch()
 
   const { isFetchingDeals, deals, user, roles } = useSelector(
@@ -63,7 +58,7 @@ export default function BackOfficeGrid(props: Props & WithRouterProps) {
     return brand && brand.messages ? brand.messages.branch_title : 'N/A'
   }
 
-  const getSubmitTime = (attention_requested_at: number) => {
+  const getSubmitTime = (attention_requested_at: number): string => {
     if (attention_requested_at) {
       const dateTime = moment.unix(attention_requested_at).local()
 
@@ -83,7 +78,6 @@ export default function BackOfficeGrid(props: Props & WithRouterProps) {
         id: 'address',
         header: 'Address',
         width: '25%',
-        verticalAlign: 'center',
         accessor: (deal: IDeal) => getAddress(deal, roles),
         render: ({ row: deal }) => <Address deal={deal} />
       },
@@ -108,7 +102,7 @@ export default function BackOfficeGrid(props: Props & WithRouterProps) {
       {
         id: 'submitted-at',
         header: 'Submitted At',
-        accessor: 'attention_requested_at',
+        accessor: (deal: IDeal) => deal.attention_requested_at,
         render: ({ row: deal }: { row: IDeal }) =>
           getSubmitTime(deal.attention_requested_at)
       },
@@ -128,7 +122,7 @@ export default function BackOfficeGrid(props: Props & WithRouterProps) {
       {
         id: 'contract-price',
         header: 'Contract Price',
-        align: 'right',
+        align: 'right' as TableCellProps['align'],
         accessor: getPrice,
         render: ({ row: deal }: { row: IDeal }) => (
           <div>{getFormattedPrice(getPrice(deal))}</div>
@@ -137,7 +131,7 @@ export default function BackOfficeGrid(props: Props & WithRouterProps) {
     ]
   }, [roles, user])
 
-  const getData = () => {
+  const getData = (): IDeal[] => {
     if (!deals) {
       return []
     }
@@ -145,13 +139,13 @@ export default function BackOfficeGrid(props: Props & WithRouterProps) {
     // when user searching something in backoffice, we should show all
     // deals except draft items
     if (props.searchQuery.term.length > 0) {
-      return Object.values(deals).filter(
+      return (Object.values(deals) as IDeal[]).filter(
         (deal: IDeal) => deal.is_draft === false
       )
     }
 
     if (props.searchQuery.type === 'inbox') {
-      return Object.values(deals).filter(
+      return (Object.values(deals) as IDeal[]).filter(
         (deal: IDeal) =>
           deal.attention_requests > 0 &&
           deal.is_draft === false &&
@@ -199,15 +193,18 @@ export default function BackOfficeGrid(props: Props & WithRouterProps) {
     dispatch(getUserTeams(user))
   }
 
+  const data = getData()
+
   return (
-    <Grid
+    <Grid<IDeal>
       sorting={{
         columns: SORTABLE_COLUMNS,
         onChange: handleChangeSort,
         sortBy: getSort()
       }}
       columns={columns}
-      rows={getData()}
+      rows={data}
+      totalRows={data.length}
       LoadingStateComponent={LoadingState}
       EmptyStateComponent={EmptyState}
       loading={isFetchingDeals ? 'middle' : null}

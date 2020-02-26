@@ -43,8 +43,8 @@ export interface TableColumn<Row> {
   sortType?: ColumnSortType
   sortTitle?: string
   sortMethod?: (accessor: StringOrNumber) => StringOrNumber
-  accessor?: (row: Row) => StringOrNumber
-  render?: (data: RenderProps<Row>) => React.ReactNode
+  accessor?: (row: Row) => StringOrNumber | null | undefined
+  render?: (data: RenderProps<Row>) => React.ReactNode | string
 }
 
 export type GridHookPlugin<Row, Options> = (
