@@ -31,7 +31,7 @@ export const Container = styled.div`
   margin-right: 0.5em;
   border-radius: 100px;
   border: solid 1px
-    ${props => (props.isActive ? '#000' : props.theme.grey['100'])};
+    ${props => (props.isActive ? '#000' : props.theme.palette.grey['100'])};
   cursor: pointer;
 
   ${ItemTitle} {
@@ -44,7 +44,7 @@ export const Container = styled.div`
   }
 
   &:hover ${RemoveButton} svg {
-    fill: ${props => props.theme.grey['600']};
+    fill: ${props => props.theme.palette.grey['600']};
   }
 `
 
@@ -69,5 +69,5 @@ export const DoneButton = styled(Button)`
   display: block;
   width: 100%;
   text-align: center;
-  border-top: 1px solid ${props => props.theme.grey['300']};
+  border-top: 1px solid ${props => props.theme.palette.grey['300']};
 `

@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { withStyles } from '@material-ui/core/styles'
 
 import {
   // eslint-disable-next-line import/named
@@ -16,12 +17,17 @@ import {
 } from 'reducers/filter-segments'
 
 import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
-import ArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
-import ArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import LoadingIcon from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Item from './Item'
 import { ListItem } from './styled'
+
+const styles = theme => ({
+  root: {
+    fontSize: '1rem',
+    color: theme.palette.text.secondary
+  }
+})
 
 class SegmentsList extends React.Component {
   state = {
@@ -77,19 +83,14 @@ class SegmentsList extends React.Component {
 
   render() {
     const { props } = this
+    const { classes } = props
 
     return (
       <BaseDropdownWithMore
-        renderDropdownButton={props => (
-          <span {...props}>
-            Saved List{' '}
-            {props.isActive ? (
-              <ArrowUp style={{ verticalAlign: 'middle' }} />
-            ) : (
-              <ArrowDown style={{ verticalAlign: 'middle' }} />
-            )}
-          </span>
-        )}
+        buttonLabel="Saved List"
+        DropdownToggleButtonProps={{
+          className: classes.root
+        }}
         listPlugin={{
           disablePadding: true,
           style: { padding: 10, width: 220 }
@@ -149,4 +150,4 @@ ConnectedSegmentsList.defaultProps = {
   getPredefinedLists: name => ({ default: getDefaultList(name) })
 }
 
-export default ConnectedSegmentsList
+export default withStyles(styles)(ConnectedSegmentsList)
