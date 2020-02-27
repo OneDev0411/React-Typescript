@@ -180,7 +180,6 @@ class ContactProfile extends React.Component {
   fetchTimeline = () => setTimeout(this.timelineRef.current.refresh, 500)
 
   setContact = (newContact, fallback) => {
-    console.log('!!!!!', newContact)
     this.setState(
       state => ({ contact: { ...state.contact, ...newContact } }),
       fallback

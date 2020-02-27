@@ -14,8 +14,8 @@ import { getTimelineInitialRange } from './helpers/get-timeline-range'
 
 import { Notes } from './Notes'
 
-// import AddEvent from './AddEvent'
-// import AddNote from './AddNote'
+import AddEvent from './AddEvent'
+import AddNote from './AddNote'
 
 import { Filters, TabsFilter } from './Tabs'
 
@@ -41,7 +41,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       overflow: 'hidden',
       padding: theme.spacing(0, 2)
     },
-    filters: {
+    actions: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      padding: theme.spacing(1, 0),
+      '& button': {
+        marginLeft: theme.spacing(1)
+      }
+    },
+    header: {
       flex: '0 1 auto'
     },
     list: {
@@ -62,6 +70,11 @@ function Timeline(props: Props) {
 
   const handleChangeFilter = (value: number) => {
     setActiveFilter(value)
+  }
+
+  const handleCreateNote = note => {
+    props.onChangeNote(note)
+    setActiveFilter(Filters.Notes)
   }
 
   const getFilter = () => {
@@ -94,8 +107,19 @@ function Timeline(props: Props) {
 
   return (
     <div className={classes.container}>
-      <div className={classes.filters}>
-        <TabsFilter onChangeFilter={handleChangeFilter} />
+      <div className={classes.header}>
+        <div className={classes.actions}>
+          <AddNote
+            contactId={props.contact.id}
+            onCreateNote={handleCreateNote}
+          />
+          <AddEvent contact={props.contact} />
+        </div>
+
+        <TabsFilter
+          activeTab={activeFilter}
+          onChangeFilter={handleChangeFilter}
+        />
       </div>
 
       <div className={classes.list}>

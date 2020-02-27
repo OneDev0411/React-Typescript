@@ -8,12 +8,14 @@ export enum Filters {
 }
 
 interface Props {
+  activeTab: Filters
   onChangeFilter(value: number): void
 }
 
 export function TabsFilter(props: Props) {
   return (
     <PageTabs
+      value={props.activeTab}
       defaultValue={Filters.Events}
       onChange={props.onChangeFilter}
       tabs={[
