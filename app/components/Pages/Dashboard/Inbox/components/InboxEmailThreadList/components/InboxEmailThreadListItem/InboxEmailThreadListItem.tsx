@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { Paper, Grid, Typography, Box } from '@material-ui/core'
 import fecha from 'fecha'
+import { uniq } from 'underscore'
 import classNames from 'classnames'
 
 import { useSelector } from 'react-redux'
@@ -20,23 +21,41 @@ export default function InboxEmailThreadListItem({
 }: Props) {
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
-  const contactInfoText = useMemo(
+  const recipients = useMemo(
     () =>
       (emailThread.recipients_raw || [])
-        .map(({ name, address }) => {
-          const contact =
-            emailThread.contacts &&
-            emailThread.contacts.find(
-              c =>
-                c.email === address || (c.emails && c.emails.includes(address))
-            )
-          const me = (contact
-            ? (contact.emails || []).concat(contact.email)
-            : [address]
-          ).includes(user.email)
-          const derivedName = contact ? contact.display_name : name
+        .map(({ name, address }, index, all) => {
+          const nameNotAddress = name === address ? '' : name
+          const relatedContacts = emailThread.contacts
+            ? emailThread.contacts
+                .filter(c => c.email === address)
+                .concat(
+                  emailThread.contacts.filter(
+                    c => c.emails && c.emails.includes(address)
+                  )
+                )
+            : []
+          const allRelatedAddresses = uniq(
+            relatedContacts
+              .flatMap(({ email, emails }) =>
+                emails ? [email, ...emails] : [email]
+              )
+              .concat(address)
+          )
+          const me = allRelatedAddresses.includes(user.email)
+          const displayName =
+            (all.length > 1 &&
+              relatedContacts
+                .map(({ first_name }) => first_name)
+                .filter(
+                  name => name && !allRelatedAddresses.includes(name)
+                )[0]) ||
+            relatedContacts
+              .map(({ display_name }) => display_name)
+              .filter(name => name && !allRelatedAddresses.includes(name))[0] ||
+            nameNotAddress
 
-          return me ? 'Me' : derivedName || address
+          return me ? 'Me' : displayName || address
         })
         .join(', '),
     [user, emailThread]
@@ -77,7 +96,7 @@ export default function InboxEmailThreadListItem({
             <Typography
               variant="subtitle2"
               display="inline"
-              title={contactInfoText}
+              title={recipients}
               classes={{
                 root: classNames(
                   classes.infoText,
@@ -86,7 +105,7 @@ export default function InboxEmailThreadListItem({
                 )
               }}
             >
-              {contactInfoText}
+              {recipients}
             </Typography>
             {emailThread.message_count > 1 && (
               <Typography
