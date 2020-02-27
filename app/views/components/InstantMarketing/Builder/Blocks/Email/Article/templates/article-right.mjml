@@ -1,12 +1,12 @@
-<mj-section padding="5px 20px" rechat-editable="tree" direction="rtl" background-color="#fff">
+<mj-section padding="20px 20px" rechat-editable="tree" direction="rtl" background-color="#fff">
   <mj-column vertical-align="middle">
     <mj-image padding="0" rechat-assets="static" src={{image}}></mj-image>
   </mj-column>
   <mj-column vertical-align="middle" padding-right="10px">
-    <mj-button href={{url}} inner-padding="0" padding="0" text-decoration="underline" background-color="#fff" color="#000" font-family="Helvetica, Arial, sans-serif" align="center" rechat-editable="tree" font-size="20px" line-height="1.5">
+    <mj-button href={{url}} inner-padding="0" padding="0" background-color="#fff" color="#000" font-family="Helvetica, Arial, sans-serif" align="left" rechat-editable="tree" font-size="20px" line-height="1.5">
       {{title}}
     </mj-button>
-    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" align="center" rechat-editable="tree" font-size="14px" line-height="1.5">
+    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" align="left" rechat-editable="tree" font-size="14px" line-height="1.5">
       {{description}}
     </mj-text>
   </mj-column>

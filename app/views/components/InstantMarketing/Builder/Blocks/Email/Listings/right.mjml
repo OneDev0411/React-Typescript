@@ -1,31 +1,39 @@
 {% for listing in listings %}
-<mj-section direction="rtl" padding="5px 20px" rechat-editable="tree" background-color="#fff">
-  <mj-column vertical-align="middle">
+<mj-section direction="rtl" padding="20px 20px" rechat-editable="tree" background-color="#fff">
+  <mj-column>
     <mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
   </mj-column>
-  <mj-column padding-right="10px" vertical-align="middle">
-    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="20px" line-height="1.5" align="center">
-      {{listing.property.address.full_address}}
+  <mj-column padding-right="10px">
+    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="20px" line-height="1.5" align="left">
+      {{listing.property.address.street_address}}
     </mj-text>
-    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="center">
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px" line-height="1.5" align="left">
       {{ listing.price | currency }}{% if listing.is_lease %}/mo{% endif %}
     </mj-text>
-    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="center">
-      {% if listing.property.bedroom_count %}
-      <span>{{listing.property.bedroom_count}} Beds,</span>
-      {% endif %}
-      {% if listing.property.bathroom_count %}
-      <span>{{listing.property.bathroom_count}} Baths,</span>
-      {% endif %}
-      {% if listing.property.square_meters %}
-      <span>{{listing.property.square_meters | area}} Sqft,</span>
-      {% endif %}
-      {% if listing.property.year_built %}
-      <span>Built in {{listing.property.year_built}}</span>
-      {% endif %}
+    <mj-spacer height="5px"></mj-spacer>
+    {% if listing.property.bedroom_count %}
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+      <span><strong>{{listing.property.bedroom_count}}</strong> Beds</span>
     </mj-text>
-    <mj-button inner-padding="0" padding="0" font-family="Helvetica, Arial, sans-serif" align="center" text-decoration="underline" background-color="#fff" color="#262626" font-size="14px" line-height="1.5" href="{{getListingUrl(listing)}}">
-      Additional Information
+    {% endif %}
+    {% if listing.property.bathroom_count %}
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+      <span><strong>{{listing.property.bathroom_count}}</strong> Baths</span>
+    </mj-text>
+    {% endif %}
+    {% if listing.property.square_meters %}
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+      <span><strong>{{listing.property.square_meters | area}}</strong> Sqft</span>
+    </mj-text>
+    {% endif %}
+    {% if listing.property.year_built %}
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+      <span>Built in <strong>{{listing.property.year_built}}</strong></span>
+    </mj-text>
+    {% endif %}
+    <mj-spacer height="5px"></mj-spacer>
+    <mj-button rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px" font-family="Helvetica, Arial, sans-serif" font-size="14px" line-height="1.5" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}" align="left" href="{{getListingUrl(listing)}}">
+      View Listing
     </mj-button>
   </mj-column>
 </mj-section>
