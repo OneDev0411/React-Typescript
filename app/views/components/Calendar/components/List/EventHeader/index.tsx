@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100%'
     },
     date: {
-      color: '#6A7589',
+      color: theme.palette.grey[700],
       fontSize: theme.typography.h6.fontSize
     },
     dateAlias: {

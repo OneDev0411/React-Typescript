@@ -54,7 +54,6 @@ interface Props {
   contrariwise?: boolean
   placeholders?: Placeholder[]
   directions?: LoadingDirection[]
-  defaultEvents?: ICalendarEvent[] // TODO: this is temporary until we convert notes to events
   onChangeActiveDate?: (activeDate: Date) => void
   onLoadEvents?: (events: ICalendarEventsList, range: NumberRange) => void
 }
@@ -75,7 +74,6 @@ export function Calendar({
   filter = {},
   contrariwise = false,
   associations = [],
-  defaultEvents = [], // TODO: remove when notes converted to events
   onLoadEvents = () => null,
   onChangeActiveDate = () => null
 }: Props) {
@@ -139,7 +137,7 @@ export function Calendar({
         })
 
         const nextEvents: ICalendarEvent[] = options.reset
-          ? [...fetchedEvents, ...defaultEvents]
+          ? fetchedEvents
           : fetchedEvents.concat(events)
 
         // get current range of fetched calendar
@@ -152,7 +150,7 @@ export function Calendar({
         )
 
         // update events list
-        setEvents([...nextEvents, ...defaultEvents])
+        setEvents(nextEvents)
 
         // updates virtual list rows
         setListRows(createListRows(normalizedEvents, activeDate, placeholders))
@@ -168,7 +166,6 @@ export function Calendar({
       viewAsUsers,
       filter,
       associations,
-      defaultEvents,
       events,
       contrariwise,
       activeDate,
