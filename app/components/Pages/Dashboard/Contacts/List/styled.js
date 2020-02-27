@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Link } from '@material-ui/core'
 
 import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
@@ -13,4 +14,11 @@ export const CalloutSpinner = styled(IconCircleSpinner).attrs({
   width: 24px;
   height: 24px;
   vertical-align: middle;
+`
+
+export const NavigateDuplicate = styled(Link)`
+  color: ${props => props.theme.palette.info.dark};
+  &:hover {
+    color: ${props => props.theme.palette.info.dark};
+  }
 `

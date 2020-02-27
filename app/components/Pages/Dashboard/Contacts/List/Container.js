@@ -52,7 +52,7 @@ import {
   SYNCED_CONTACTS_LIST_ID,
   DUPLICATE_CONTACTS_LIST_ID
 } from './constants'
-import { CalloutSpinner } from './styled'
+import { CalloutSpinner, NavigateDuplicate } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 import {
   clearImportingGoogleContacts,
@@ -646,8 +646,12 @@ class ContactsList extends React.Component {
             </IconButton>
           }
         >
-          You currently have {duplicateClusterCount} duplicate contacts, manage
-          them here.
+          <Box>
+            You currently have {duplicateClusterCount} duplicate contacts,{' '}
+            <NavigateDuplicate href="/dashboard/contacts/dublicates">
+              manage them here.
+            </NavigateDuplicate>
+          </Box>
         </Alert>
       </Box>
     )
