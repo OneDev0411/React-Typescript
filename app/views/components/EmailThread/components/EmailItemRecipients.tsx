@@ -15,7 +15,12 @@ export function EmailItemRecipients({ email }: Props) {
     <>
       <Typography noWrap>
         to {[...to, ...cc].map(renderRecipient)}
-        {bcc.length > 0 ? `, bcc: ${bcc.map(renderRecipient)}` : null}
+        {bcc.length > 0 ? (
+          <>
+            {', bcc: '}
+            {bcc.map(renderRecipient)}
+          </>
+        ) : null}
       </Typography>
     </>
   )
