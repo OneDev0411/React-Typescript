@@ -18,12 +18,14 @@ interface Props {
   isFetching: boolean
   user: IUser
   activeSort: string
+  showSavedSearchButton?: false
 }
 
 interface TabsShape {
   label: string
   to: string
   component?: ReactNode
+  allowAnonymousAccess: boolean
 }
 
 const useStyle = makeStyles((theme: Theme) =>
@@ -47,14 +49,16 @@ const useStyle = makeStyles((theme: Theme) =>
   })
 )
 
-const tabs: TabsShape[] = [
+const tabLinks: TabsShape[] = [
   {
     label: 'All properties',
-    to: '/dashboard/mls'
+    to: '/dashboard/mls',
+    allowAnonymousAccess: true
   },
   {
     label: 'Favorites',
-    to: '/dashboard/mls/favorites'
+    to: '/dashboard/mls/favorites',
+    allowAnonymousAccess: false
   }
 ]
 
@@ -66,18 +70,24 @@ export const Tabs = ({
   onChangeSort,
   activeSort,
   isFetching,
-  saveSearchHandler
+  saveSearchHandler,
+  showSavedSearchButton
 }: Props) => {
   const currentUrl = window.location.pathname
   const classes = useStyle()
-  const linkTabs = tabs.map(({ label, to }, i) => {
-    return <TabLink key={i} label={label} to={to} value={to} />
+  let availableTabs: React.ReactNode[]
+
+  availableTabs = tabLinks.map(({ label, to, allowAnonymousAccess }, i) => {
+    return (
+      (user || allowAnonymousAccess) && (
+        <TabLink key={i} label={label} to={to} value={to} />
+      )
+    )
   })
 
-  let availableTabs = [
-    ...linkTabs,
-    <Tab key="saved-list" label={<SavedSearchesList />} />
-  ]
+  if (user) {
+    availableTabs.push(<Tab key="saved-list" label={<SavedSearchesList />} />)
+  }
 
   const saveSearchTab = (
     <Tab
@@ -104,7 +114,7 @@ export const Tabs = ({
     />
   )
 
-  if (!isWidget && user && !isFetching) {
+  if (showSavedSearchButton && !isWidget && user && !isFetching) {
     availableTabs.push(saveSearchTab)
   }
 

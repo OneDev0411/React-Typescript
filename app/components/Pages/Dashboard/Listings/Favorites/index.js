@@ -136,6 +136,7 @@ class Favorites extends React.Component {
           activeView={this.state.activeView}
           onChangeSort={this.onChangeSort}
           activeSort={this.state.activeSort}
+          user={this.props.user}
         />
         {this.renderMain()}
       </React.Fragment>
