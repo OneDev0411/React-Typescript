@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
-import { Box } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
+import { Box, IconButton } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
@@ -24,6 +25,7 @@ import {
   viewAs,
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
+import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
@@ -35,12 +37,10 @@ import { updateTeamSetting } from 'actions/user/update-team-setting'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 import ContactsTabs from './Tabs'
 import Table from './Table'
-// import TagsList from './TagsList'
-// import AllContactsList from './AllContactsList'
-// import FlowsList from './FlowsList'
 import ImportContactsButton from './ImportContactsButton'
 import TouchReminder from './TouchReminder'
 
@@ -78,7 +78,9 @@ class ContactsList extends React.Component {
       isFetchingMoreContactsBefore: false,
       isRowsUpdating: false,
       searchInputValue: props.list.textFilter,
-      loadedRanges: []
+      loadedRanges: [],
+      showDuplicateClusterAlert: false,
+      duplicateClusterCount: 0
     }
 
     this.order = getUserSettingsInActiveTeam(props.user, SORT_FIELD_SETTING_KEY)
@@ -88,6 +90,7 @@ class ContactsList extends React.Component {
   componentDidMount() {
     this.props.fetchOAuthAccounts()
     this.fetchContactsAndJumpToSelected()
+    this.getDuplicateClusterCount()
 
     if (this.props.fetchTags) {
       this.props.getContactsTags()
@@ -221,6 +224,28 @@ class ContactsList extends React.Component {
     this.setState({
       isFetchingMoreContacts: false
     })
+  }
+
+  getDuplicateClusterCount = async () => {
+    try {
+      const res = await getDuplicateContacts({ limit: 1 })
+      const clusterCount = res.info.total
+
+      if (clusterCount > 0) {
+        this.setState(() => ({
+          showDuplicateClusterAlert: true,
+          duplicateClusterCount: clusterCount
+        }))
+      }
+    } catch (e) {
+      console.log('fetch duplicate cluster error: ', e)
+    }
+  }
+
+  closeDupicateAlert = () => {
+    this.setState(() => ({
+      showDuplicateClusterAlert: false
+    }))
   }
 
   scrollToSelector(selector) {
@@ -603,6 +628,31 @@ class ContactsList extends React.Component {
     )
   }
 
+  renderDuplicateAlert = () => {
+    const { duplicateClusterCount } = this.state
+
+    return (
+      <Box my={1.5}>
+        <Alert
+          severity="info"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={this.closeDupicateAlert}
+            >
+              <CloseIcon style={{ width: 16, height: 16 }} />
+            </IconButton>
+          }
+        >
+          You currently have {duplicateClusterCount} duplicate contacts, manage
+          them here.
+        </Alert>
+      </Box>
+    )
+  }
+
   render() {
     const { props, state } = this
     const { list, viewAsUsers, isFetchingContacts, activeSegment } = this.props
@@ -687,6 +737,7 @@ class ContactsList extends React.Component {
             <React.Fragment>
               <Box>
                 {this.renderTabs()}
+                {state.showDuplicateClusterAlert && this.renderDuplicateAlert()}
                 <Table
                   data={contacts}
                   order={this.order}
