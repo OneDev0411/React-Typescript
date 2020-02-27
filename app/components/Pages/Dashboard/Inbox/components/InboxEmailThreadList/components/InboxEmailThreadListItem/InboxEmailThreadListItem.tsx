@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { Paper, Grid, Typography, Box } from '@material-ui/core'
 import fecha from 'fecha'
+import { uniq } from 'underscore'
 import classNames from 'classnames'
 
 import { useSelector } from 'react-redux'
@@ -8,10 +9,9 @@ import { useSelector } from 'react-redux'
 import { IAppState } from 'reducers'
 
 import { useInboxEmailThreadListItemStyles } from './styles'
-import getContactInfoFromEmailThread from '../../../../helpers/get-contact-info-from-email-thread'
 
 interface Props {
-  emailThread: IEmailThread<'messages' | 'contacts'>
+  emailThread: IEmailThread<'contacts'>
   selected?: boolean
 }
 
@@ -21,11 +21,45 @@ export default function InboxEmailThreadListItem({
 }: Props) {
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
-  const contactInfoText = useMemo(() => {
-    const contactInfo = getContactInfoFromEmailThread(user, emailThread)
+  const recipients = useMemo(
+    () =>
+      (emailThread.recipients_raw || [])
+        .map(({ name, address }, index, all) => {
+          const nameNotAddress = name === address ? '' : name
+          const relatedContacts = emailThread.contacts
+            ? emailThread.contacts
+                .filter(c => c.email === address)
+                .concat(
+                  emailThread.contacts.filter(
+                    c => c.emails && c.emails.includes(address)
+                  )
+                )
+            : []
+          const allRelatedAddresses = uniq(
+            relatedContacts
+              .flatMap(({ email, emails }) =>
+                emails ? [email, ...emails] : [email]
+              )
+              .concat(address)
+          )
+          const me = allRelatedAddresses.includes(user.email)
+          const displayName =
+            (all.length > 1 &&
+              relatedContacts
+                .map(({ first_name }) => first_name)
+                .filter(
+                  name => name && !allRelatedAddresses.includes(name)
+                )[0]) ||
+            relatedContacts
+              .map(({ display_name }) => display_name)
+              .filter(name => name && !allRelatedAddresses.includes(name))[0] ||
+            nameNotAddress
 
-    return contactInfo.map(i => (i.me ? 'Me' : i.name || i.address)).join(', ')
-  }, [user, emailThread])
+          return me ? 'Me' : displayName || address
+        })
+        .join(', '),
+    [user, emailThread]
+  )
 
   const messageDate = new Date(emailThread.last_message_date * 1000)
   const messageDateText = fecha.format(messageDate, 'MMMM D, YYYY - h:mm A')
@@ -37,14 +71,6 @@ export default function InboxEmailThreadListItem({
     messageDate,
     messageDate < today ? 'D\u00A0MMM' : 'h:mm\u00A0A'
   )
-
-  const lastMessage = emailThread.messages[emailThread.message_count - 1]
-  const snippet =
-    lastMessage.type === 'google_message'
-      ? lastMessage.snippet
-      : lastMessage.type === 'microsoft_message'
-      ? lastMessage.snippet
-      : lastMessage.text
 
   const classes = useInboxEmailThreadListItemStyles()
 
@@ -70,7 +96,7 @@ export default function InboxEmailThreadListItem({
             <Typography
               variant="subtitle2"
               display="inline"
-              title={contactInfoText}
+              title={recipients}
               classes={{
                 root: classNames(
                   classes.infoText,
@@ -79,7 +105,7 @@ export default function InboxEmailThreadListItem({
                 )
               }}
             >
-              {contactInfoText}
+              {recipients}
             </Typography>
             {emailThread.message_count > 1 && (
               <Typography
@@ -124,7 +150,7 @@ export default function InboxEmailThreadListItem({
                 root: classNames(classes.infoText, classes.message)
               }}
             >
-              {snippet}
+              {emailThread.snippet}
             </Typography>
           </Grid>
         </Grid>

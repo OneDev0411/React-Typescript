@@ -1,11 +1,8 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { addNotification } from 'reapop'
 
-import {
-  getEmailThreads,
-  IGetEmailThreadsFilters
-} from 'models/email/get-email-threads'
+import { getEmailThreads } from 'models/email/get-email-threads'
 
 import InfiniteScrollList from '../InfiniteScrollList'
 import InboxEmailThreadListItem from './components/InboxEmailThreadListItem'
@@ -14,48 +11,37 @@ import useEmailThreadEvents from '../../helpers/use-email-thread-events'
 const emailThreadFetchCount = 30
 
 interface Props {
-  category: 'all' | 'unread' | 'has attachments'
   selectedEmailThreadId?: UUID
   onSelectEmailThread: (emailThreadId: UUID | undefined) => void
 }
 
 export default function InboxEmailThreadList({
-  category,
   selectedEmailThreadId,
   onSelectEmailThread
 }: Props) {
-  const [emailThreads, setEmailThreads] = useState<
-    IEmailThread<'messages' | 'contacts'>[]
-  >([])
+  const [emailThreads, setEmailThreads] = useState<IEmailThread<'contacts'>[]>(
+    []
+  )
 
   const selectedEmailThread = useMemo(
     () => emailThreads.find(({ id }) => id === selectedEmailThreadId),
     [emailThreads, selectedEmailThreadId]
   )
 
-  useEffect(() => {
-    setEmailThreads(emailThreads =>
-      emailThreads.length === 0 ? emailThreads : []
-    )
-  }, [category])
-
   const dispatch = useDispatch()
 
   const joinEmailThreads = useCallback(
     (
-      updatedEmailThreads: IEmailThread<'messages' | 'contacts'>[],
+      updatedEmailThreads: IEmailThread<'contacts'>[],
       mode: 'expand' | 'update'
     ) => {
       setEmailThreads(emailThreads => {
         const lastEmailThread = emailThreads[emailThreads.length - 1]
         const filteredUpdatedEmailThreads = updatedEmailThreads.filter(
           t =>
-            (mode !== 'update' ||
-              !lastEmailThread ||
-              lastEmailThread.last_message_date <= t.last_message_date) &&
-            (category === 'all' ||
-              (category === 'unread' && !t.is_read) ||
-              (category === 'has attachments' && t.has_attachments))
+            mode !== 'update' ||
+            !lastEmailThread ||
+            lastEmailThread.last_message_date <= t.last_message_date
         )
         const newEmailThreads = emailThreads
           .filter(
@@ -67,17 +53,21 @@ export default function InboxEmailThreadList({
         return newEmailThreads
       })
     },
-    [category]
+    []
   )
 
   const handleUpdateEmailThreads = useCallback(
     async (updatedEmailThreadIds: UUID[]) => {
       try {
-        const updatedEmailThreads = await getEmailThreads({
-          start: 0,
-          limit: updatedEmailThreadIds.length,
-          ids: updatedEmailThreadIds
-        })
+        const updatedEmailThreads = await getEmailThreads(
+          {
+            selection: ['email_thread.snippet'],
+            start: 0,
+            limit: updatedEmailThreadIds.length,
+            ids: updatedEmailThreadIds
+          },
+          ['contacts']
+        )
 
         joinEmailThreads(updatedEmailThreads, 'update')
       } catch (reason) {
@@ -107,21 +97,15 @@ export default function InboxEmailThreadList({
     <InfiniteScrollList
       items={emailThreads}
       onNeedMoreItems={async () => {
-        const filters: IGetEmailThreadsFilters = {
-          start: emailThreads.length,
-          limit: emailThreadFetchCount
-        }
-
-        if (category === 'unread') {
-          filters.isRead = false
-        }
-
-        if (category === 'has attachments') {
-          filters.hasAttachments = true
-        }
-
         try {
-          const moreEmailThreads = await getEmailThreads(filters)
+          const moreEmailThreads = await getEmailThreads(
+            {
+              selection: ['email_thread.snippet'],
+              start: emailThreads.length,
+              limit: emailThreadFetchCount
+            },
+            ['contacts']
+          )
 
           joinEmailThreads(moreEmailThreads, 'expand')
 
@@ -142,15 +126,7 @@ export default function InboxEmailThreadList({
       onSelectItem={emailThread =>
         emailThread && onSelectEmailThread(emailThread.id)
       }
-      emptyListMessage={
-        category === 'all'
-          ? 'No Emails'
-          : category === 'unread'
-          ? 'No Unread Emails'
-          : category === 'has attachments'
-          ? 'No Emails With Attachments'
-          : 'No Emails'
-      }
+      emptyListMessage="No Emails"
       itemKey={(emailThread, index) => emailThread.id}
       renderItem={(emailThread, selected) => (
         <InboxEmailThreadListItem

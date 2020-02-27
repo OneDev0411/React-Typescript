@@ -13,7 +13,7 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import LoadingContainer from 'components/LoadingContainer'
 
 import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
-import InboxHeader, { InboxFilterTabCode } from './components/InboxHeader'
+import InboxHeader from './components/InboxHeader'
 import InboxConnectAccount from './components/InboxConnectAccount'
 import InboxEmailThreadList from './components/InboxEmailThreadList'
 import InboxEmailThread from './components/InboxEmailThread'
@@ -21,7 +21,7 @@ import InboxEmailThread from './components/InboxEmailThread'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     body: {
-      height: 'calc(100% - 110px - 49px)' /* page header, filter tabs */
+      height: 'calc(100% - 111px)' /* total height - page header */
     },
     fullHeight: {
       height: '100%'
@@ -53,9 +53,6 @@ export default function Inbox({ params }: Props & WithRouterProps) {
   const noConnectedAccounts = accounts.length === 0
 
   const [initializing, setInitializing] = useState<boolean>(true)
-  const [filterTabCode, setFilterTabCode] = useState<InboxFilterTabCode>(
-    'all_emails'
-  )
 
   const dispatch = useDispatch()
 
@@ -72,14 +69,8 @@ export default function Inbox({ params }: Props & WithRouterProps) {
 
   return (
     <>
-      <InboxHeader
-        filterTabsDisabled={initializing || noConnectedAccounts}
-        filterTabCode={filterTabCode}
-        onFilterTabChange={filterTabCode => {
-          setSelectedEmailThreadId(undefined)
-          setFilterTabCode(filterTabCode)
-        }}
-      />
+      <InboxHeader />
+
       <div className={classes.body}>
         {initializing ? (
           <Box padding={10}>
@@ -94,16 +85,6 @@ export default function Inbox({ params }: Props & WithRouterProps) {
               classes={{ root: classNames(classes.list, classes.fullHeight) }}
             >
               <InboxEmailThreadList
-                key={filterTabCode}
-                category={
-                  filterTabCode === 'all_emails'
-                    ? 'all'
-                    : filterTabCode === 'unread'
-                    ? 'unread'
-                    : filterTabCode === 'has_attachment'
-                    ? 'has attachments'
-                    : 'all'
-                }
                 selectedEmailThreadId={selectedEmailThreadId}
                 onSelectEmailThread={setSelectedEmailThreadId}
               />

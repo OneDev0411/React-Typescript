@@ -1,9 +1,7 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Box, IconButton, Typography } from '@material-ui/core'
 import { addNotification } from 'reapop'
-
-import { IAppState } from 'reducers'
 
 import { getEmailThread } from 'models/email/get-email-thread'
 
@@ -14,7 +12,6 @@ import { EmailThreadEmails } from 'components/EmailThread'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 import markEmailThreadAsRead from '../../helpers/mark-email-thread-as-read'
-import getContactInfoFromEmailThread from '../../helpers/get-contact-info-from-email-thread'
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
 import NoContentMessage from '../NoContentMessage'
 
@@ -32,14 +29,6 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   > | null>(null)
 
   const dispatch = useDispatch()
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
-
-  const contactInfo = useMemo(
-    () => emailThread && getContactInfoFromEmailThread(user, emailThread),
-    [user, emailThread]
-  )
-
-  contactInfo && console.log('contactInfo', contactInfo) // TODO: Remove this line.
 
   const fetchEmailThread = useCallback(async () => {
     if (emailThreadId) {
