@@ -75,8 +75,7 @@ export const Tabs = ({
   showSavedSearchButton,
   location
 }: Props & WithRouterProps) => {
-  // const currentUrl = location.pathname
-  const currentUrl = '/dashboard/mls'
+  const currentUrl = location.pathname
   const classes = useStyle()
   let availableTabs: React.ReactNode[]
 

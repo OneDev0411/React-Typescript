@@ -421,6 +421,7 @@ class Search extends React.Component {
           isWidget={this.props.isWidget}
           activeSort={this.state.activeSort}
           saveSearchHandler={this.handleSaveSearch}
+          showSavedSearchButton
         />
         {this.renderMain()}
         <CreateAlertModal
