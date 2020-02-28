@@ -9,7 +9,7 @@ async function getAll(user) {
     throw new Error('This user does not belong to any brand')
   }
 
-  const endpoint = `/brands/${brandId}/emails/campaigns?associations[]=email_campaign.recipients&associations[]=email_campaign_recipient.list&associations[]=email_campaign_recipient.contact`
+  const endpoint = `/brands/${brandId}/emails/campaigns?associations[]=email_campaign.recipients&associations[]=email_campaign_recipient.list&associations[]=email_campaign_recipient.contact&associations[]=email_campaign.template`
 
   try {
     const fetchCampaigns = new Fetch().get(`${endpoint}`)

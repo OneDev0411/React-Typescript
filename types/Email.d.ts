@@ -163,6 +163,7 @@ declare type IEmailCampaign<
   complained: number
   stored: number
   text: string
+  template?: IMarketingTemplateInstance
   type: 'email_campaign'
   sent: number
   microsoft_credential: UUID | null
