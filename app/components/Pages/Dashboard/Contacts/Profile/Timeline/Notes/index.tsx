@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react'
 import { makeStyles } from '@material-ui/core'
-// import produce from 'immer'
+import produce from 'immer'
 
 import Flex from 'styled-flex-component'
 import cn from 'classnames'
@@ -46,9 +46,21 @@ export function Notes(props: Props) {
 
   const handleDeleteNote = async note => {
     try {
-      const { data: contact } = await deleteAttribute(props.contact.id, note.id)
+      await deleteAttribute(props.contact.id, note.id)
 
-      props.onChange(contact)
+      const newContact = produce(
+        props.contact,
+        (draft: IContact & { sub_contacts: any }) => {
+          Array.isArray(draft.sub_contacts) &&
+            draft.sub_contacts.forEach(subContact => {
+              subContact.sections.Notes = subContact.sections.Notes.filter(
+                item => item.id !== note.id
+              )
+            })
+        }
+      )
+
+      props.onChange(newContact)
     } catch (e) {
       console.log(e)
     }
