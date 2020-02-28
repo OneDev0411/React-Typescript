@@ -9,6 +9,7 @@ import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingCo
 import NoSearchResults from '../../../../Partials/no-search-results'
 
 import Actions from './MarketingInsightsActions'
+import ThumbnailColumn from './Column/Thumbnail'
 import TitleColumn from './Column/Title'
 import DateColumn from './Column/Date'
 import RecipientsColumn from './Column/Recipients'
@@ -41,6 +42,13 @@ function List(props) {
 
   const columns = useMemo(
     () => [
+      {
+        header: 'Thumbnail',
+        id: 'thumbnail',
+        width: 70,
+        verticalAlign: 'center',
+        render: ({ row }) => <ThumbnailColumn data={row} />
+      },
       {
         header: 'Title',
         id: 'title',
