@@ -10,8 +10,6 @@ import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
-import LoadingContainer from 'components/LoadingContainer'
-
 import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
 import InboxHeader from './components/InboxHeader'
 import InboxConnectAccount from './components/InboxConnectAccount'
@@ -74,7 +72,8 @@ export default function Inbox({ params }: Props & WithRouterProps) {
       <div className={classes.body}>
         {initializing ? (
           <Box padding={10}>
-            <LoadingContainer style={{}} />
+            {/* <LoadingContainer style={{}} /> */}
+            &nbsp;
           </Box>
         ) : noConnectedAccounts ? (
           <InboxConnectAccount />
