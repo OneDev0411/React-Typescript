@@ -52,6 +52,10 @@ export default function AppSideNav() {
       >
         <SidenavListGroup data-test="side-nav-list">
           <Acl.Crm>
+            <SideNavLinkItem to="/dashboard/inbox">Inbox</SideNavLinkItem>
+          </Acl.Crm>
+
+          <Acl.Crm>
             <SideNavLinkItem to="/dashboard/calendar">Calendar</SideNavLinkItem>
           </Acl.Crm>
 
