@@ -9,13 +9,11 @@ import { ARTICLES_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
 import ArticleTop from './templates/article-top.mjml'
-// import ArticleDual from './templates/article-dual.mjml'
 import ArticleLeft from './templates/article-left.mjml'
 import ArticleRight from './templates/article-right.mjml'
 
 import {
   articleTopBlockName,
-  // articleDualBlockName,
   articleLeftBlockName,
   articleRightBlockName
 } from './constants'
@@ -23,13 +21,11 @@ import {
 const templates = {}
 
 templates[articleTopBlockName] = ArticleTop
-// templates[articleDualBlockName] = ArticleDual
 templates[articleLeftBlockName] = ArticleLeft
 templates[articleRightBlockName] = ArticleRight
 
 const blocksName = [
   articleTopBlockName,
-  // articleDualBlockName,
   articleLeftBlockName,
   articleRightBlockName
 ]
@@ -53,13 +49,6 @@ export default function registerArticleBlock(
     blockName: articleTopBlockName,
     template: templates[articleTopBlockName]
   })
-
-  // registerBlock(editor, {
-  //   label: 'Image Dual',
-  //   category: ARTICLES_BLOCK_CATEGORY,
-  //   blockName: articleDualBlockName,
-  //   template: templates[articleDualBlockName]
-  // })
 
   registerBlock(editor, {
     label: 'Image Left',

@@ -69,17 +69,10 @@ const confirmVerify = ({
 export default compose(
   connect(
     ({ brand }, { location: { query }, params: { verifyType } }) => {
-      const {
-        email,
-        email_code,
-        phone_code,
-        phone_number,
-        receivingUserEmail
-      } = query
+      const { email, email_code, phone_code, phone_number } = query
 
       const verifyQueryParams = {
-        verifyType,
-        receivingUserEmail
+        verifyType
       }
 
       if (verifyType === 'email') {

@@ -19,12 +19,12 @@ export function ContactAttribute({ style, event, nextItem }: Props) {
       return contactIcons[event.type_label]
     }
 
-    if (event.type === 'birthday' || event.type === 'child_birthday') {
+    if (event.type === 'birthday' || event.event_type === 'child_birthday') {
       return contactIcons.Birthday
     }
 
     return eventIcons.Other
-  }, [event.type, event.type_label])
+  }, [event.event_type, event.type, event.type_label])
 
   if (!event.people) {
     return null

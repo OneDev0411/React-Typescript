@@ -1,24 +1,19 @@
-{% for usersBatch in users | batch(2) %}
-<mj-section background-color="#fff" padding-top="0" padding-bottom="5px">
-  {% for user in usersBatch %}
-  <mj-column width="15%" padding="0">
-    <mj-image padding="0 0 0 16px" border-radius="6px" width="80px" rechat-assets="avatar" align="center" src="{{ user.profile_image_url }}"></mj-image>
+{% for user in users %}
+<mj-section padding="20px 20px" text-align="left" background-color="#fff">
+  <mj-column vertical-align="top" width="150px" padding-right="10px">
+    <mj-image padding="0" width="150px" rechat-assets="avatar" align="left" src="{{ user.profile_image_url }}"></mj-image>
   </mj-column>
-  {% if usersBatch.length === 2 %}
-  <mj-column width="35%" padding="0">
-    {% else %}
-    <mj-column width="85%" padding="0">
-      {% endif %}
-      <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="bold">
-        {{user.display_name}}
-      </mj-text>
-      <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="lighter">
-        {{user.email}}
-      </mj-text>
-      <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="normal">
-        {{user.phone_number | phone}}
-      </mj-text>
-    </mj-column>
-    {% endfor %}
+
+  <mj-column vertical-align="top">
+    <mj-text padding="0" padding-bottom="10px" font-family="Helvetica, Arial, sans-serif" align="left" rechat-editable="tree" font-size="30px" line-height="1.5">
+      {{user.display_name}}
+    </mj-text>
+    <mj-button inner-padding="0" padding="0" href="mailto:{{user.email}}" align="left" text-decoration="underline" background-color="#fff" color="#262626" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5">
+      {{user.email}}
+    </mj-button>
+    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" align="left" rechat-editable="tree" font-size="14px" line-height="1.5" color="#262626">
+      {{user.phone_number | phone}}
+    </mj-text>
+  </mj-column>
 </mj-section>
 {% endfor %}

@@ -115,7 +115,7 @@ const Reset = ({
 
   if (user) {
     const params = {
-      receivingUser: user,
+      userInfo: user,
       actionButtonProps: {
         text: 'Sign out',
         href: `/signout?redirectFromSignout=${encodeURIComponent(

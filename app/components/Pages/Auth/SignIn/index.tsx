@@ -175,7 +175,10 @@ export default function Signin(props: Props) {
               isLoading={isLogging}
               onSubmit={handleSignin}
               submitMessage={signInFormSubmitMsg}
-              handleBackToLookupForm={() => setIsHiddenLookUpForm(false)}
+              handleBackToLookupForm={() => {
+                setIsHiddenLookUpForm(false)
+                setSignInFormSubmitMsg(null)
+              }}
             />
           ) : (
             <LookUpUserForm
