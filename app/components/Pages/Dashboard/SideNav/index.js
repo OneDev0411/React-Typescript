@@ -78,14 +78,14 @@ function AppSideNav(props) {
 
       <ScrollableArea style={{ flex: '1 1' }} hasThinnerScrollbar>
         <SidenavList data-test="side-nav-list">
-          <Acl.Crm>
+          <Acl access={[ACL.CRM, ACL.BETA]}>
             <SideNavLinkItem
               tooltip="Inbox"
               to="/dashboard/inbox"
               Icon={InboxIcon}
               ActiveIcon={InboxIconActive}
             />
-          </Acl.Crm>
+          </Acl>
 
           <Acl.Crm>
             <SideNavLinkItem
