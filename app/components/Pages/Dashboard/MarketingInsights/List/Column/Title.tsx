@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { EditEmailButton } from 'components/EditEmailButton'
 
 import { isEmailInProgress, isEmailScheduled, show_title } from '../helpers'
 import { StyledBadge, StyledLink } from '../styled'
 
-function TitleColumn({ data, reloadList = undefined }) {
-  const isScheduled = isEmailScheduled(data)
-  const isInProgress = isEmailInProgress(data)
-  let titleRenderer
+interface Props {
+  data: IEmailCampaign
+  reloadList: () => void
+}
+
+function TitleColumn({ data, reloadList }) {
+  const isScheduled: boolean = isEmailScheduled(data)
+  const isInProgress: boolean = isEmailInProgress(data)
+  let titleRenderer: ReactNode
 
   const title = (
     <div className="info-title">

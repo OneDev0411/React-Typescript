@@ -5,26 +5,34 @@ import {
   ListItem,
   Tooltip,
   ListItemText,
-  makeStyles
+  makeStyles,
+  createStyles,
+  Theme
 } from '@material-ui/core'
 
 import { percent } from '../helpers'
 
-const useStyles = makeStyles(theme => ({
-  statBtn: {
-    cursor: 'pointer',
-    textDecoration: 'underline'
-    // color: props => (isOpen ? theme.palette.primary.main : 'inherit')
-  },
-  list: {
-    marginTop: theme.spacing(0.5),
-    background: '#fff',
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[1]
-  }
-}))
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    statBtn: {
+      cursor: 'pointer',
+      textDecoration: 'underline'
+      // color: props => (isOpen ? theme.palette.primary.main : 'inherit')
+    },
+    list: {
+      marginTop: theme.spacing(0.5),
+      background: '#fff',
+      borderRadius: theme.shape.borderRadius,
+      boxShadow: theme.shadows[1]
+    }
+  })
+)
 
-function StatsColumn({ data }) {
+interface Props {
+  data: IEmailCampaign
+}
+
+function StatsColumn({ data }: Props) {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
 

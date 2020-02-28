@@ -19,7 +19,7 @@ export const InsightContainer = styled.div`
   & .info-title {
     display: flex;
     justify-content: space-between;
-    font-size: 15px;
+    font-size: 1rem;
   }
 `
 
