@@ -92,11 +92,15 @@ function FoldersTab({ deal, checklists, tasks, isBackOffice }: Props) {
         return checklist.order
       })
       .filter((checklist: IDealChecklist) => {
+        if (checklist.is_terminated) {
+          return showTerminatedFolders
+        }
+
         if (checklist.is_deactivated && !checklist.is_terminated) {
           return showDeactivatedFolders
         }
 
-        return showDeactivatedFolders ? true : checklist.is_terminated === false
+        return true
       })
       .value()
 
@@ -105,7 +109,7 @@ function FoldersTab({ deal, checklists, tasks, isBackOffice }: Props) {
       terminatedChecklistsCount,
       deactivatedChecklistsCount
     }
-  }, [checklists, deal, showDeactivatedFolders])
+  }, [checklists, deal, showDeactivatedFolders, showTerminatedFolders])
 
   return (
     <Container>

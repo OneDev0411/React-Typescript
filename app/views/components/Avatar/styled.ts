@@ -52,7 +52,6 @@ export const Status = styled.div`
   right: 0;
   width: ${(props: StatusProps) => (props.size * 0.295454545) / 16}em;
   height: ${(props: StatusProps) => (props.size * 0.295454545) / 16}em;
-  z-index: 1;
   border-width: ${(props: StatusProps) => props.size * 0.0568181818}px;
   border-style: solid;
   border-color: ${brandBackground};

@@ -2,10 +2,12 @@ import styled from 'styled-components'
 
 import { H3 } from 'components/Typography/headings'
 
+import { appSidenavWidth } from '../../../../components/Pages/Dashboard/SideNav/variables'
+
 export const Container = styled.div`
   position: fixed;
   top: 0;
-  left: 0;
+  left: ${appSidenavWidth}px;
   right: 0;
   bottom: 0;
   background-color: #fff;

@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import DropDown from '../components/DropDown'
+import { BasicDropdown } from 'components/BasicDropdown'
+
 import { isAddressField } from '../helpers/address'
 
 /**
@@ -85,13 +86,27 @@ const FieldLabel = ({
     label: selectedLabel
   }
 
+  const hasValue = Boolean(selectedField.value)
+
+  const buttonStyle = {
+    borderColor: '#d9d9d9',
+    color: hasValue ? '#262626' : '#aaa'
+  }
+
+  const defaultSelectedItem = hasValue
+    ? selectedField
+    : {
+        value: undefined,
+        label: '--Select--'
+      }
+
   return (
-    <DropDown
-      options={options}
-      selectedField={selectedField}
-      showSearchInput={false}
+    <BasicDropdown
+      isBlock
+      items={options}
+      buttonStyle={buttonStyle}
       onChange={handleChangeValue}
-      contentStyle={{ height: '170px' }}
+      defaultSelectedItem={defaultSelectedItem}
     />
   )
 }

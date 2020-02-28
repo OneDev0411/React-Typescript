@@ -10,7 +10,7 @@ import { iconWhiteBgStyle } from 'components/SvgIcons/styles'
 
 export const ZeroStateContainer = styled(Flex)`
   height: calc(100% - 120px);
-  max-width: 505px;
+  max-width: 560px;
   margin: auto;
   text-align: center;
 

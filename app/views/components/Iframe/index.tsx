@@ -58,7 +58,7 @@ export function Iframe({
   onLoad: receivedOnLoad,
   ...props
 }: Props) {
-  const ref = useRef<HTMLIFrameElement | null>(null)
+  const ref = useRef<HTMLIFrameElement>(null)
   const [height, setHeight] = useState<number | undefined>(undefined)
 
   const updateHeight = () => {
@@ -67,7 +67,19 @@ export function Iframe({
       ref.current.contentDocument &&
       ref.current.contentDocument.documentElement
     ) {
-      setHeight(ref.current.contentDocument.documentElement.offsetHeight)
+      const documentElement = ref.current.contentDocument.documentElement
+
+      setHeight(documentElement.offsetHeight)
+
+      // Check if it requires horizontal scroll bars,
+      // and then add its height to the height of the iframe.
+      setTimeout(() => {
+        if (documentElement.offsetHeight > documentElement.clientHeight) {
+          setHeight(
+            documentElement.offsetHeight * 2 - documentElement.clientHeight
+          )
+        }
+      })
     }
   }
 

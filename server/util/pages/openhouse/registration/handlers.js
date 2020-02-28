@@ -53,7 +53,7 @@ export function onlineSubmitHandler(data) {
       const rawAttrDefData = attributeDefsBody.data
       const neededKeys = Object.keys(data.data.registration)
 
-      neededKeys.push('source_type', 'tag')
+      neededKeys.push('source_type', 'tag', 'note')
 
       const attrDefData = {}
 
@@ -91,17 +91,47 @@ export function onlineSubmitHandler(data) {
                 label: 'Other',
                 text: contact.email,
                 attribute_def: attrDefData.email
-              },
-              {
-                is_primary: true,
-                label: 'Other',
-                text: contact.phone_number,
-                attribute_def: attrDefData.phone_number
               }
             ]
           }
         ]
       }
+
+      if (contact.phone_number) {
+        createContactRequestBody.contacts[0].attributes.push({
+          is_primary: true,
+          label: 'Other',
+          text: contact.phone_number,
+          attribute_def: attrDefData.phone_number
+        })
+      }
+
+      const realtorName = data.data.registration.realtor_name
+
+      if (!realtorName) {
+        createContactRequestBody.contacts[0].attributes.push({
+          text: 'Lead',
+          attribute_def: attrDefData.tag
+        })
+      }
+
+      const now = new Date()
+      const contactNote = `
+<div>Source: Open House Registration Page</div>
+<div>Registered at: ${now.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })} ${now.toLocaleTimeString('en-US', { timeStyle: 'short' })}</div>
+<div>Open House: ${data.title}</div>
+<div>Realtor: ${realtorName || 'N/A'}</div>
+`
+
+      createContactRequestBody.contacts[0].attributes.push({
+        text: contactNote,
+        attribute_def: attrDefData.note
+      })
 
       return fetch(createContactApiUrl, {
         method: 'POST',

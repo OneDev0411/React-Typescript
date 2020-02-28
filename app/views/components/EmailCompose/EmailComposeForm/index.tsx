@@ -11,7 +11,7 @@ import { addNotification as notify } from 'reapop'
 
 import { connect } from 'react-redux'
 
-import { Box, makeStyles } from '@material-ui/core'
+import { Box, makeStyles, useTheme } from '@material-ui/core'
 
 import { ClassesProps } from 'utils/ts-utils'
 
@@ -92,6 +92,7 @@ function EmailComposeForm<T>({
   )
   const confirmationModal = useContext(ConfirmationModalContext)
   const validate = useEmailFormValidator()
+  const theme = useTheme()
 
   const classes = useEmailFormStyles(props)
 
@@ -286,7 +287,7 @@ function EmailComposeForm<T>({
               {marketingTemplate && (
                 <Callout dense>
                   <Box display="flex" alignItems="center">
-                    <Box flex={1}>
+                    <Box color={theme.palette.warning.contrastText} flex={1}>
                       You are using a Marketing Center Template
                     </Box>
                     <DangerButton

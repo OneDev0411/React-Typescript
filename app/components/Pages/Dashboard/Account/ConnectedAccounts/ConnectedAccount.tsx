@@ -19,7 +19,9 @@ import {
   oAuthAccountTypeToProvider,
   oAuthAccountTypeToTitle
 } from './constants'
+
 import { SyncButton } from './SyncButton'
+import { ConnectedCalendar } from './ConnectedCalendar'
 
 interface Props {
   account: IOAuthAccount
@@ -56,7 +58,12 @@ export function ConnectedAccount({ account, onSync, onDelete }: Props) {
             secondary={<SyncButton account={account} onSync={onSync} />}
           />
         </Grid>
+
         <ListItemSecondaryAction>
+          {oAuthAccountTypeToProvider[account.type] === 'google' && (
+            <ConnectedCalendar gcid={account.id} />
+          )}
+
           <DangerButton
             variant="outlined"
             size="small"

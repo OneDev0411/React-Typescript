@@ -90,7 +90,7 @@ export default function registerBlocks(
   })
 
   registerBlock(editor, {
-    label: 'GridTwo',
+    label: 'Aligned Grid',
     category: LISTINGS_BLOCK_CATEGORY,
     blockName: listingGridTwoBlockName,
     template: templates[listingGridTwoBlockName]

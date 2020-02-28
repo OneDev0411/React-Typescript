@@ -5,7 +5,13 @@ import Avatar from '../Avatar'
 import { ShadowLink } from '../ShadowLink'
 import CloseIcon from '../SvgIcons/Close/CloseIcon'
 
-import { Container, Title, Details, RemoveButton } from './styled'
+import {
+  Container,
+  Title,
+  Details,
+  RemoveButton,
+  DetailsContainer
+} from './styled'
 import { renderWithMiniContact } from './render-with-mini-contact'
 
 class AssociationItemBase extends Component {
@@ -37,11 +43,13 @@ class AssociationItemBase extends Component {
 
     return (
       <Container style={this.props.style} isReadOnly={isReadOnly}>
-        <Avatar {...record.avatar} />
-        <div style={{ marginLeft: '0.5em' }}>
-          <Title>{record.title}</Title>
-          <Details>{record.details}</Details>
-        </div>
+        <DetailsContainer>
+          <Avatar {...record.avatar} />
+          <div style={{ marginLeft: '0.5em' }}>
+            <Title>{record.title}</Title>
+            <Details>{record.details}</Details>
+          </div>
+        </DetailsContainer>
         {!isReadOnly && <ShadowLink href={record.url} target="_blank" />}
         {this.props.isRemovable && (
           <RemoveButton isFit inverse type="button" onClick={this.onRemove}>

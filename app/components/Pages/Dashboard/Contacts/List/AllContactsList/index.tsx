@@ -1,5 +1,3 @@
-import { ACL } from 'constants/acl'
-
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
 
@@ -14,7 +12,6 @@ import {
   ListItem,
   ListItemName
 } from 'components/Grid/SavedSegments/List/styled'
-import Acl from 'components/Acl'
 
 import { changeActiveFilterSegment as changeActiveFilterSegmentAction } from 'actions/filter-segments/change-active-segment'
 
@@ -48,9 +45,10 @@ function AllContactsList({
       (!activeSegment || activeSegment.id === 'default')
     )
   }, [activeFilters, activeSegment])
-  const isSyncedListSelected = activeSegment.id === SYNCED_CONTACTS_LIST_ID
+  const isSyncedListSelected =
+    activeSegment && activeSegment.id === SYNCED_CONTACTS_LIST_ID
   const isDuplicatesListSelected =
-    activeSegment.id === DUPLICATE_CONTACTS_LIST_ID
+    activeSegment && activeSegment.id === DUPLICATE_CONTACTS_LIST_ID
 
   const clickHandler = async (type: string) => {
     await resetActiveFilters(CONTACTS_SEGMENT_NAME)
@@ -103,14 +101,12 @@ function AllContactsList({
           </ListItemName>
         </ListItem>
       )}
-      <Acl access={ACL.BETA}>
-        <ListItem
-          isSelected={isDuplicatesListSelected}
-          onClick={() => clickHandler(DUPLICATE_CONTACTS_LIST_ID)}
-        >
-          <ListItemName>Duplicates</ListItemName>
-        </ListItem>
-      </Acl>
+      <ListItem
+        isSelected={isDuplicatesListSelected}
+        onClick={() => clickHandler(DUPLICATE_CONTACTS_LIST_ID)}
+      >
+        <ListItemName>Duplicates</ListItemName>
+      </ListItem>
     </div>
   )
 }

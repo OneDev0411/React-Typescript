@@ -162,8 +162,9 @@ class Mapper extends React.Component {
     })
   }
 
-  onChangeLabel = (fieldName, label) =>
-    this.props.updateCsvFieldsMap(fieldName, { label })
+  onChangeLabel = (fieldName, { value }) => {
+    this.props.updateCsvFieldsMap(fieldName, { label: value })
+  }
 
   getMappedField = name => {
     const { attributeDefs: defs, mappedFields } = this.props

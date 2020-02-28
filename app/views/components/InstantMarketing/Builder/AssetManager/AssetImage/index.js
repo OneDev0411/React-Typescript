@@ -90,7 +90,6 @@ export class AssetImage extends React.Component {
         {this.state.isCropperOpen && (
           <ImageUploader
             disableChangePhoto
-            disableRotate
             file={imageWithoutCache}
             width={targetElement.clientWidth * 2}
             height={targetElement.clientHeight * 2}
