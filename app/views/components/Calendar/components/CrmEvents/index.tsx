@@ -5,7 +5,6 @@ import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 
 import { createDueDate } from './helpers/create-date'
-import { Note } from './Note'
 
 interface Props {
   isEventDrawerOpen: boolean
@@ -55,16 +54,6 @@ export function CrmEvents(props: Props) {
 
   if (props.event.event_type === 'Tour') {
     return <TourDrawer {...sharedProps} tourId={id} />
-  }
-
-  if (props.event.event_type === 'Note') {
-    return (
-      <Note
-        event={props.event}
-        onCloseEventDrawer={props.onCloseEventDrawer}
-        onChange={props.onEventChange}
-      />
-    )
   }
 
   return <EventDrawer {...sharedProps} eventId={id} />
