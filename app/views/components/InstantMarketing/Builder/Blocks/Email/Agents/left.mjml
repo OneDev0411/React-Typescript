@@ -4,7 +4,7 @@
     <mj-image padding="0" width="150px" rechat-assets="avatar" align="left" src="{{ user.profile_image_url }}"></mj-image>
   </mj-column>
 
-  <mj-column vertical-align="middle">
+  <mj-column vertical-align="top">
     <mj-text padding="0" padding-bottom="10px" font-family="Helvetica, Arial, sans-serif" align="left" rechat-editable="tree" font-size="30px" line-height="1.5">
       {{user.display_name}}
     </mj-text>
