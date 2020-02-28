@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
   display: inline-flex;
-  margin-left: 0.5rem;
+  margin-left: ${props => props.theme.spacing(1)};
 `
 
 export const ItemRow = styled.div`
