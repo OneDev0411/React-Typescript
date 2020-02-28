@@ -1,50 +1,27 @@
-import React, { ChangeEvent } from 'react'
-import { Tabs, Tab, createStyles, makeStyles, Theme } from '@material-ui/core'
+import React from 'react'
+
+import { PageTabs, Tab } from 'components/PageTabs'
 
 export enum Filters {
-  All = 0,
-  Upcoming = 1
+  Events = 0,
+  Notes = 1
 }
 
 interface Props {
-  activeFilter: Filters
-  onChangeFilter(e: ChangeEvent<{}> | null, value: number): void
+  activeTab: Filters
+  onChangeFilter(value: number): void
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      fontSize: theme.typography.subtitle1.fontSize
-    }
-  })
-)
-
 export function TabsFilter(props: Props) {
-  const classes = useStyles()
-
   return (
-    <Tabs
-      value={props.activeFilter}
+    <PageTabs
+      value={props.activeTab}
+      defaultValue={Filters.Events}
       onChange={props.onChangeFilter}
-      indicatorColor="primary"
-      textColor="primary"
-      variant="scrollable"
-      scrollButtons="auto"
-    >
-      <Tab
-        value={Filters.All}
-        label="Past Events"
-        classes={{
-          root: classes.root
-        }}
-      />
-      <Tab
-        value={Filters.Upcoming}
-        label="Upcoming Events (Three months)"
-        classes={{
-          root: classes.root
-        }}
-      />
-    </Tabs>
+      tabs={[
+        <Tab key={0} value={Filters.Events} label="Events" />,
+        <Tab key={1} value={Filters.Notes} label="Notes" />
+      ]}
+    />
   )
 }
