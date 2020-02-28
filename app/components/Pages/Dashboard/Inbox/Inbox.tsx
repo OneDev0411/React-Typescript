@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
-import { Grid, Theme, Box } from '@material-ui/core'
+import { Grid, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -70,12 +70,7 @@ export default function Inbox({ params }: Props & WithRouterProps) {
       <InboxHeader />
 
       <div className={classes.body}>
-        {initializing ? (
-          <Box padding={10}>
-            {/* <LoadingContainer style={{}} /> */}
-            &nbsp;
-          </Box>
-        ) : noConnectedAccounts ? (
+        {initializing ? null : noConnectedAccounts ? (
           <InboxConnectAccount />
         ) : (
           <Grid container spacing={0} classes={{ root: classes.fullHeight }}>

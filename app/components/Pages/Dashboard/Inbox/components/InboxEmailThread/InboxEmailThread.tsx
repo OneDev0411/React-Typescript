@@ -112,12 +112,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
       (!emailThread || emailThread.id !== emailThreadId)) ||
     (status === 'empty' && emailThreadId)
   ) {
-    return (
-      <Box paddingTop={10}>
-        {/* <LoadingContainer style={{}} /> */}
-        &nbsp;
-      </Box>
-    )
+    return null
   }
 
   if (status === 'error') {

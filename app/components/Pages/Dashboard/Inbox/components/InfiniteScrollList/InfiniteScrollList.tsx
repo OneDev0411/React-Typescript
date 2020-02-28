@@ -114,12 +114,8 @@ export default function InfiniteScrollList<Item>({
               </Grid>
             ))}
             <Grid item xs>
-              {status === 'fetching' || status === 'fetched' ? (
-                <Box padding={10}>
-                  {/* <LoadingContainer style={{}} /> */}
-                  &nbsp;
-                </Box>
-              ) : status === 'error' ? (
+              {status === 'fetching' || status === 'fetched' ? null : status ===
+                'error' ? (
                 <Box padding={4}>
                   <Button
                     variant="text"
