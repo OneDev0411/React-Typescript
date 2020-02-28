@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+import { withRouter, WithRouterProps } from 'react-router'
 import { Box } from '@material-ui/core'
 import { Theme, ButtonBase, makeStyles, createStyles } from '@material-ui/core'
 
@@ -71,9 +72,11 @@ export const Tabs = ({
   activeSort,
   isFetching,
   saveSearchHandler,
-  showSavedSearchButton
-}: Props) => {
-  const currentUrl = window.location.pathname
+  showSavedSearchButton,
+  location
+}: Props & WithRouterProps) => {
+  // const currentUrl = location.pathname
+  const currentUrl = '/dashboard/mls'
   const classes = useStyle()
   let availableTabs: React.ReactNode[]
 
@@ -133,4 +136,4 @@ export const Tabs = ({
   )
 }
 
-export default Tabs
+export default withRouter(Tabs)
