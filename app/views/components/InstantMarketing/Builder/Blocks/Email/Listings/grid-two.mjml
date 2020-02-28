@@ -15,7 +15,7 @@ align="right"
       {{listing.property.address.street_address}}
     </mj-text>
     <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px" line-height="1.5" {{ alignment(loop.index0) }}>
-      {{ listing.price | currency }}{% if listing.is_lease %}/mo{% endif %}
+      <strong>{{ listing.price | currency }}</strong>{% if listing.is_lease %}/mo{% endif %}
     </mj-text>
     <mj-spacer height="10px"></mj-spacer>
     <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" {{ alignment(loop.index0) }}>
