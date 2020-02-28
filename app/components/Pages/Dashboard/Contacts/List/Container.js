@@ -602,13 +602,14 @@ class ContactsList extends React.Component {
   }
 
   renderTabs = (props = {}) => {
-    const { viewAsUsers } = this.props
+    const { viewAsUsers, listInfo, activeSegment } = this.props
 
     return (
       <ContactsTabs
+        handleFilterChange={this.handleFilterChange}
+        handleChangeSavedSegment={this.handleChangeSavedSegment}
         filter={{
-          show: this.shouldShowFilters(),
-          handler: () => this.handleFilterChange({}, true)
+          show: this.shouldShowFilters()
         }}
         savedListProps={{
           name: CONTACTS_SEGMENT_NAME,
@@ -622,7 +623,9 @@ class ContactsList extends React.Component {
         sortProps={{
           onChange: this.handleChangeOrder
         }}
+        contactCount={listInfo.total || 0}
         users={viewAsUsers}
+        activeSegment={activeSegment}
         {...props}
       />
     )

@@ -107,8 +107,6 @@ class ContactsList extends React.Component {
       <>
         <Table
           rows={props.data}
-          totalRows={props.listInfo.total || 0}
-          summary={total => `${total} Contacts`}
           loading={this.getLoading()}
           columns={this.columns}
           LoadingStateComponent={LoadingComponent}

@@ -25,7 +25,7 @@ import { AddFilter } from './Create'
 import { FilterItem } from './Item'
 
 const Container = styled.div`
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
 `
