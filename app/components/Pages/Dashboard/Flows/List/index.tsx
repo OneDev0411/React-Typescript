@@ -30,11 +30,13 @@ import { getFlowActions } from './helpers'
 
 const useStyles = makeStyles((theme: Theme) => ({
   flowName: {
+    paddingRight: theme.spacing(1),
     '&:not(:hover)': {
       color: theme.palette.common.black
     }
   },
   flowDescription: {
+    paddingRight: theme.spacing(1),
     color: theme.palette.grey[500]
   },
   flowEnrolledContacts: {
