@@ -1,8 +1,10 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { Box } from '@material-ui/core'
 
 import { PageTabs, Tab, TabSpacer } from 'components/PageTabs'
 import SavedSegments from 'components/Grid/SavedSegments/List'
-
+import Badge from 'components/Badge'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 
@@ -26,6 +28,7 @@ interface Props {
   }
   sortProps: {
     onChange: (item) => void
+    currentOrder: string
   }
   contactCount: number
   activeSegment: any
@@ -42,9 +45,11 @@ export const ContactsTabs = ({
   activeSegment,
   users
 }: Props) => {
+  const dispatch = useDispatch()
+
   const clickHandler = async (type: string) => {
-    await resetActiveFilters(CONTACTS_SEGMENT_NAME)
-    await changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type)
+    await dispatch(resetActiveFilters(CONTACTS_SEGMENT_NAME))
+    await dispatch(changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type))
 
     if (type === SYNCED_CONTACTS_LIST_ID) {
       handleChangeSavedSegment(activeSegment)
@@ -72,6 +77,11 @@ export const ContactsTabs = ({
             label={
               <span onClick={() => clickHandler(SYNCED_CONTACTS_LIST_ID)}>
                 Synced Contacts
+                <Box display="inline-flex" ml={0.5}>
+                  <Badge large appearance="success">
+                    4
+                  </Badge>
+                </Box>
               </span>
             }
             value="synced-contact"

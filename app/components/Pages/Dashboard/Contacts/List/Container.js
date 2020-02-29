@@ -621,7 +621,8 @@ class ContactsList extends React.Component {
           }
         }}
         sortProps={{
-          onChange: this.handleChangeOrder
+          onChange: this.handleChangeOrder,
+          currentOrder: this.order
         }}
         contactCount={listInfo.total || 0}
         users={viewAsUsers}

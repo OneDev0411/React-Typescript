@@ -1,4 +1,5 @@
 import React from 'react'
+import _findIndex from 'lodash/findIndex'
 import { MenuItem } from '@material-ui/core'
 
 import { putUserSetting } from 'models/user/put-user-setting'
@@ -9,6 +10,7 @@ import { SORT_FIELD_SETTING_KEY } from '../constants'
 
 interface Props {
   onChange: (item) => void
+  currentOrder: string
 }
 interface SortableColumnsType {
   label: string
@@ -26,10 +28,14 @@ const sortableColumns: SortableColumnsType[] = [
   { label: 'Created At', value: 'created_at', ascending: true }
 ]
 
-export const SortFields = ({ onChange }: Props) => {
+export const SortFields = ({ onChange, currentOrder }: Props) => {
+  const activeOrder = _findIndex(sortableColumns, o => o.value === currentOrder)
+  const buttonLabel =
+    activeOrder >= 0 ? sortableColumns[activeOrder].label : 'A - Z'
+
   return (
     <BaseDropdown
-      buttonLabel="A - Z"
+      buttonLabel={buttonLabel}
       renderMenu={({ close }) => (
         <div>
           {sortableColumns.map((c, index) => (
