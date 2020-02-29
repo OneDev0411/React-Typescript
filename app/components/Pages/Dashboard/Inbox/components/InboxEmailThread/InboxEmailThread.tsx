@@ -5,7 +5,6 @@ import { addNotification } from 'reapop'
 
 import { getEmailThread } from 'models/email/get-email-thread'
 
-import LoadingContainer from 'components/LoadingContainer'
 import Avatar from 'components/Avatar'
 import { normalizeThreadMessageToThreadEmail } from 'components/EmailThread/helpers/normalize-to-email-thread-email'
 import { EmailThreadEmails } from 'components/EmailThread'
@@ -109,14 +108,11 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   )
 
   if (
-    status === 'fetching' &&
-    (!emailThread || emailThread.id !== emailThreadId)
+    (status === 'fetching' &&
+      (!emailThread || emailThread.id !== emailThreadId)) ||
+    (status === 'empty' && emailThreadId)
   ) {
-    return (
-      <Box paddingTop={10}>
-        <LoadingContainer style={{}} />
-      </Box>
-    )
+    return null
   }
 
   if (status === 'error') {
