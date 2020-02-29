@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   flowDescription: {
     color: theme.palette.grey[500]
+  },
+  flowEnrolledContacts: {
+    color: theme.palette.grey[500]
   }
 }))
 
@@ -115,7 +118,12 @@ function List(props: Props) {
       id: 'cotnacts',
       width: '160px',
       render: ({ row }) => (
-        <Typography variant="body2">{row.active_flows} Enrolled</Typography>
+        <Typography
+          variant="body2"
+          classes={{ root: classes.flowEnrolledContacts }}
+        >
+          {row.active_flows} Enrolled
+        </Typography>
       )
     },
     {
