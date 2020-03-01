@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 import memoize from 'lodash/memoize'
+import hash from 'object-hash'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
@@ -332,13 +333,22 @@ class Search extends React.Component {
     this.props.dispatch(getUserTeams(this.props.user))
   }
 
-  sortListings = memoize((listings, index, ascending) => {
-    const formattedListings = listings.data.map(listing =>
-      this.formatAndAddDistance(listing, this.props.mapCenter, this.props.user)
-    )
+  sortListings = memoize(
+    (listings, index, ascending) => {
+      const formattedListings = listings.data.map(listing =>
+        this.formatAndAddDistance(
+          listing,
+          this.props.mapCenter,
+          this.props.user
+        )
+      )
 
-    return formattedListings.sort((a, b) => sortByIndex(a, b, index, ascending))
-  })
+      return formattedListings.sort((a, b) =>
+        sortByIndex(a, b, index, ascending)
+      )
+    },
+    (...args) => `${hash(args[0])}_${args[1]}_${args[2]}`
+  )
 
   renderMain() {
     const sortedListings = this.sortListings(
@@ -413,6 +423,7 @@ class Search extends React.Component {
           onChangeView={this.onChangeView}
           hasData={this.props.listings.data.length > 0}
         />
+
         <Tabs
           user={user}
           onChangeView={this.onChangeView}
@@ -423,6 +434,7 @@ class Search extends React.Component {
           saveSearchHandler={this.handleSaveSearch}
           showSavedSearchButton
         />
+
         {this.renderMain()}
         <CreateAlertModal
           user={user}
