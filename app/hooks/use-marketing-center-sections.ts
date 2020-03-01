@@ -148,7 +148,15 @@ function getPrivilegedSectionItems(
   })
 }
 
-export function useMarketingCenterSections(): Section[] {
+function getSerializedValue(value?: string | string[]): string {
+  if (!value) {
+    return ''
+  }
+
+  return Array.isArray(value) ? value.join(',') : value
+}
+
+export function useMarketingCenterSections({ types }): Section[] {
   const user = useSelector<IAppState, IUser>(state => state.user)
 
   const newSections: Section[] = []
@@ -164,9 +172,17 @@ export function useMarketingCenterSections(): Section[] {
       return
     }
 
+    const activeType = section.items.find(
+      item => getSerializedValue(item.value) === types
+    )
+
     const newSection: Section = {
       ...section,
-      items: getPrivilegedSectionItems(user, section)
+      items: getPrivilegedSectionItems(user, section),
+      title: activeType
+        ? `${section.title}: ${activeType.title}`
+        : section.title,
+      value: activeType ? getSerializedValue(activeType.value) : null
     }
 
     newSections.push(newSection)

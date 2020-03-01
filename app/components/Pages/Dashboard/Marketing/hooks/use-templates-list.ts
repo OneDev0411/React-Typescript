@@ -36,7 +36,11 @@ export function useTemplatesList(
       try {
         setLoading(true)
 
-        const templates = await getTemplates(brandId, types.split(','), mediums)
+        const templates = await getTemplates(
+          brandId,
+          Array.isArray(types) ? types.split(',') : [],
+          mediums
+        )
 
         if (!didCancel) {
           setTemplates(templates)
