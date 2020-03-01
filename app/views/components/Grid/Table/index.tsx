@@ -11,6 +11,7 @@ import {
   GridSortingOption,
   GridInfiniteScrolling,
   LoadingPosition,
+  GridClasses,
   TrProps,
   TdProps
 } from './types'
@@ -34,6 +35,7 @@ export interface Props<Row> {
   LoadingStateComponent?: React.ReactType<any> | null
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
+  classes?: GridClasses
 }
 
 export const GridProvider = GridContextProvider

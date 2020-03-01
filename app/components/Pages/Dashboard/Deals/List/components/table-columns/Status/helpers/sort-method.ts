@@ -1,4 +1,4 @@
-export const statusSortMethod = (accessor: string | number) => {
+export const statusSortMethod = (accessor?: string | number | null) => {
   const list = [
     'Active',
     'Lease',
@@ -15,6 +15,10 @@ export const statusSortMethod = (accessor: string | number) => {
     'Withdrawn',
     'Contract Terminated'
   ]
+
+  if (!accessor) {
+    return list.length + 1
+  }
 
   const order = list.indexOf(accessor.toString())
 
