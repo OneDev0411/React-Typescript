@@ -102,7 +102,7 @@ function EmailTemplatesList({
       primary: true,
       accessor: template => template.name,
       render: ({ row }) => (
-        <Typography noWrap variant="body1" classes={{ root: classes.name }}>
+        <Typography noWrap variant="body2" classes={{ root: classes.name }}>
           {row.name}
         </Typography>
       )
@@ -113,7 +113,7 @@ function EmailTemplatesList({
       width: '30%',
       sortable: false,
       render: ({ row }) => (
-        <Typography noWrap variant="body1" classes={{ root: classes.subject }}>
+        <Typography noWrap variant="body2" classes={{ root: classes.subject }}>
           {row.subject}
         </Typography>
       )
