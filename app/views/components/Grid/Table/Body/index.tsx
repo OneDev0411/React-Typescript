@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   TableBody,
   TableCell,
@@ -11,7 +11,13 @@ import cn from 'classnames'
 
 import { resolveAccessor } from '../helpers/resolve-accessor'
 
-import { TableColumn, GridSelectionOptions, TrProps, TdProps } from '../types'
+import {
+  TableColumn,
+  GridSelectionOptions,
+  GridClasses,
+  TrProps,
+  TdProps
+} from '../types'
 import { useGridContext } from '../hooks/use-grid-context'
 
 interface Props<Row> {
@@ -19,6 +25,7 @@ interface Props<Row> {
   rows: Row[]
   selection: GridSelectionOptions<Row> | null
   hoverable: boolean
+  classes: GridClasses
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
 }
@@ -77,14 +84,16 @@ const useStyles = makeStyles((theme: Theme) =>
 export function Body<Row>({
   columns,
   rows,
+  classes,
   selection,
   hoverable,
   getTdProps = () => ({}),
   getTrProps = () => ({})
 }: Props<Row & { id?: string }>) {
   const [state] = useGridContext()
+  const [hoveredRowId, setHoveredRowId] = useState(null)
 
-  const classes = useStyles({
+  const bodyClasses = useStyles({
     selection
   })
 
@@ -96,21 +105,30 @@ export function Body<Row>({
     )
   }
 
+  const onHoverOrFocus = rowId => {
+    setHoveredRowId(rowId)
+  }
+
   return (
     <>
-      <TableBody className={classes.table}>
+      <TableBody className={bodyClasses.table}>
         {rows.map((row, rowIndex: number) => {
           const selected = isRowSelected(row, rowIndex)
+          const rowId = row.id || rowIndex
+          const hovered = rowId === hoveredRowId
 
           return (
             <TableRow
-              key={row.id || rowIndex}
-              className={classes.row}
+              key={rowId}
+              className={cn(bodyClasses.row, classes.row)}
               hover={hoverable}
+              onMouseOver={() => onHoverOrFocus(rowId)}
+              onFocus={() => onHoverOrFocus(rowId)}
               {...getTrProps({
                 rowIndex,
                 row,
-                selected
+                selected,
+                hovered: rowId === hoveredRowId
               })}
             >
               {columns
@@ -122,7 +140,7 @@ export function Body<Row>({
                     key={columnIndex}
                     align={column.align || 'inherit'}
                     classes={{
-                      root: classes.column
+                      root: bodyClasses.column
                     }}
                     className={cn({
                       primary: column.primary === true,
@@ -137,10 +155,18 @@ export function Body<Row>({
                       columnIndex,
                       column,
                       rowIndex,
-                      row
+                      row,
+                      hovered
                     })}
                   >
-                    {getCell(column, row, rowIndex, columnIndex, rows.length)}
+                    {getCell(
+                      column,
+                      row,
+                      rowIndex,
+                      columnIndex,
+                      rows.length,
+                      hovered
+                    )}
                   </TableCell>
                 ))}
             </TableRow>
@@ -156,14 +182,16 @@ function getCell<Row>(
   row: Row,
   rowIndex: number,
   columnIndex: number,
-  totalRows: number
+  totalRows: number,
+  hovered: boolean
 ) {
   if (column.render) {
     return column.render({
       row,
       totalRows,
       rowIndex,
-      columnIndex
+      columnIndex,
+      hovered
     })
   }
 
