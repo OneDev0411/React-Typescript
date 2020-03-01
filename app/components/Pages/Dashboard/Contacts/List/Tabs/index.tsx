@@ -1,5 +1,5 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useMemo } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Box } from '@material-ui/core'
 
 import { PageTabs, Tab, TabSpacer } from 'components/PageTabs'
@@ -7,7 +7,13 @@ import SavedSegments from 'components/Grid/SavedSegments/List'
 import Badge from 'components/Badge'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
+import { IAppState } from 'reducers'
+import { selectActiveFilters } from 'reducers/filter-segments'
 
+import {
+  getSyncedContacts,
+  SyncedContacts as SyncedContactsTypes
+} from '../utils/get-synced-contacts'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
 import { SYNCED_CONTACTS_LIST_ID } from '../constants'
 
@@ -33,19 +39,48 @@ interface Props {
   contactCount: number
   activeSegment: any
   users: any
+  syncedContacts: SyncedContactsTypes
+}
+
+interface ReduxStateType {
+  syncedContacts: SyncedContactsTypes
+  activeFilters: StringMap<IActiveFilter>
+}
+
+const getActiveTab = ({ isAllContactsActive, isSyncedListActive }) => {
+  if (isSyncedListActive) {
+    return 'synced-contact'
+  }
+
+  return 'all-contact'
 }
 
 export const ContactsTabs = ({
-  handleFilterChange,
   handleChangeSavedSegment,
-  filter,
+  handleFilterChange,
   savedListProps,
-  sortProps,
-  contactCount,
   activeSegment,
+  contactCount,
+  sortProps,
+  filter,
   users
 }: Props) => {
   const dispatch = useDispatch()
+  const { syncedContacts, activeFilters }: ReduxStateType = useSelector(
+    (state: IAppState) => ({
+      activeFilters: selectActiveFilters(state.contacts.filterSegments),
+      syncedContacts: getSyncedContacts(state)
+    })
+  )
+  const isAllContactsActive = useMemo(() => {
+    return (
+      Object.values(activeFilters).length === 0 &&
+      (!activeSegment || activeSegment.id === 'default')
+    )
+  }, [activeFilters, activeSegment])
+  const isSyncedListActive =
+    activeSegment && activeSegment.id === SYNCED_CONTACTS_LIST_ID
+  const activeTab = getActiveTab({ isAllContactsActive, isSyncedListActive })
 
   const clickHandler = async (type: string) => {
     await dispatch(resetActiveFilters(CONTACTS_SEGMENT_NAME))
@@ -63,6 +98,7 @@ export const ContactsTabs = ({
   return (
     <>
       <PageTabs
+        defaultValue={activeTab}
         tabs={[
           <Tab
             key="all-contact"
@@ -71,17 +107,23 @@ export const ContactsTabs = ({
             }
             value="all-contact"
           />,
-          <Tab key="saved" label={<SavedSegments {...savedListProps} />} />,
           <Tab
+            key="saved-list"
+            label={<SavedSegments {...savedListProps} />}
+          />,
+          <Tab
+            disabled={syncedContacts.accounts <= 0}
             key="synced-contact"
             label={
               <span onClick={() => clickHandler(SYNCED_CONTACTS_LIST_ID)}>
                 Synced Contacts
-                <Box display="inline-flex" ml={0.5}>
-                  <Badge large appearance="success">
-                    4
-                  </Badge>
-                </Box>
+                {syncedContacts.contactsCount > 0 && (
+                  <Box display="inline-flex" ml={0.5}>
+                    <Badge large appearance="success">
+                      {syncedContacts.contactsCount}
+                    </Badge>
+                  </Box>
+                )}
               </span>
             }
             value="synced-contact"

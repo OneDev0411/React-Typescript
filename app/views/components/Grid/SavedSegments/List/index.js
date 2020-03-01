@@ -104,6 +104,14 @@ class SegmentsList extends React.Component {
             ]
           }
 
+          if (props.list.length === 0) {
+            return [
+              <ListItem key="loading">
+                <span>No Saved List!</span>
+              </ListItem>
+            ]
+          }
+
           return props.list.map(item => {
             const { id } = item
 

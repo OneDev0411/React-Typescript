@@ -616,7 +616,6 @@ class ContactsList extends React.Component {
           associations: CRM_LIST_DEFAULT_ASSOCIATIONS,
           getPredefinedLists: () => ({}),
           onChange: segment => {
-            this.setState({ isShowingDuplicatesList: false })
             this.handleChangeSavedSegment(segment)
           }
         }}
