@@ -16,7 +16,8 @@ const useStyles = makeStyles(theme =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      margin: theme.spacing(0, 1.5)
+      margin: theme.spacing(0, 1.5),
+      paddingTop: theme.spacing(7)
     }
   })
 )
