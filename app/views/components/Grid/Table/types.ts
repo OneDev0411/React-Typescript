@@ -9,7 +9,6 @@ export interface RenderProps<Row> {
   totalRows: number
   rowIndex: number
   columnIndex: number
-  hovered: boolean
 }
 
 export interface TableActionComponent<Row> {
@@ -99,7 +98,6 @@ export interface TrProps<Row> {
   rowIndex: number
   row: Row
   selected: boolean
-  hovered: boolean
 }
 
 export interface TdProps<Row> {
@@ -107,5 +105,4 @@ export interface TdProps<Row> {
   column: TableColumn<Row>
   rowIndex: number
   row: Row
-  hovered: boolean
 }

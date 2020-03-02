@@ -91,7 +91,6 @@ export function Body<Row>({
   getTrProps = () => ({})
 }: Props<Row & { id?: string }>) {
   const [state] = useGridContext()
-  const [hoveredRowId, setHoveredRowId] = useState(null)
 
   const bodyClasses = useStyles({
     selection
@@ -105,17 +104,12 @@ export function Body<Row>({
     )
   }
 
-  const onHoverOrFocus = rowId => {
-    setHoveredRowId(rowId)
-  }
-
   return (
     <>
       <TableBody className={bodyClasses.table}>
         {rows.map((row, rowIndex: number) => {
           const selected = isRowSelected(row, rowIndex)
           const rowId = row.id || rowIndex
-          const hovered = rowId === hoveredRowId
 
           return (
             <TableRow
@@ -127,8 +121,7 @@ export function Body<Row>({
               {...getTrProps({
                 rowIndex,
                 row,
-                selected,
-                hovered: rowId === hoveredRowId
+                selected
               })}
             >
               {columns
@@ -155,18 +148,10 @@ export function Body<Row>({
                       columnIndex,
                       column,
                       rowIndex,
-                      row,
-                      hovered
+                      row
                     })}
                   >
-                    {getCell(
-                      column,
-                      row,
-                      rowIndex,
-                      columnIndex,
-                      rows.length,
-                      hovered
-                    )}
+                    {getCell(column, row, rowIndex, columnIndex, rows.length)}
                   </TableCell>
                 ))}
             </TableRow>
@@ -182,16 +167,14 @@ function getCell<Row>(
   row: Row,
   rowIndex: number,
   columnIndex: number,
-  totalRows: number,
-  hovered: boolean
+  totalRows: number
 ) {
   if (column.render) {
     return column.render({
       row,
       totalRows,
       rowIndex,
-      columnIndex,
-      hovered
+      columnIndex
     })
   }
 
