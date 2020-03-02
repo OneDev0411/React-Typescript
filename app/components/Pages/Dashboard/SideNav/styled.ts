@@ -50,9 +50,9 @@ const itemStyle = css`
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>
     active &&
     css`
-      color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
+      color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.light};
       border-left-color: ${(props: ThemeProps<Theme>) =>
-        props.theme.palette.primary.main};
+        props.theme.palette.primary.light};
     `}
 `
 
@@ -106,6 +106,7 @@ export const ListItemDivider = Divider.withComponent('li')
 
 export const AppNavbarBadge = withStyles((theme: Theme) => ({
   anchorOriginTopRightRectangle: {
+    backgroundColor: `${theme.palette.info.main}`,
     right: 'auto',
     left: `calc(100% + ${theme.spacing(1)}px)`,
     transform: 'scale(1) translateY(50%)'
