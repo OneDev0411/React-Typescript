@@ -24,11 +24,8 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
     info: {
       maxWidth: 'calc(100% - 25px)'
     },
-    infoText: {
-      lineHeight: '24px'
-    },
     message: {
-      maxHeight: '3rem',
+      maxHeight: '2.86em' /* 2x body2 line-height */,
       overflow: 'hidden'
     },
     flex: {
@@ -36,14 +33,6 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
     },
     grow: {
       flexGrow: 1
-    },
-    bold: {
-      fontWeight: 'bold'
-    },
-    oneLineEllipsis: {
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis'
     }
   }),
   { name: 'InboxEmailThreadListItem' }

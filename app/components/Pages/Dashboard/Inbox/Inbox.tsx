@@ -78,7 +78,7 @@ export default function Inbox({ params }: Props & WithRouterProps) {
     <GlobalPageLayout className={classes.layout}>
       <GlobalPageLayout.HeaderWithSearch
         title="Inbox"
-        placeholder="Search Emails"
+        placeholder="Search emails"
         onSearch={query => {
           console.log('query =', query)
         }}
