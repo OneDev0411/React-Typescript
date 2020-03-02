@@ -86,7 +86,6 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
         rows={sortedListings}
         totalRows={listings.info.total}
         loading={isFetching ? 'middle' : null}
-        // summary={total => `${total} Listings`}
         LoadingStateComponent={LoadingComponent}
         selection={{
           defaultRender: ({ row: listing }) => <Avatar listing={listing} />
