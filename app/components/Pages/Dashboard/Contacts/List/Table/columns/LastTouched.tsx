@@ -14,10 +14,10 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: theme.typography.caption.fontSize,
       color: theme.palette.grey['400']
     },
-    ltLabel: {
+    lastTouchLabel: {
       fontSize: theme.typography.caption.fontSize
     },
-    ltValue: {
+    lastTouchValue: {
       fontSize: theme.typography.subtitle2.fontSize
     }
   })
@@ -48,13 +48,15 @@ export default function LastTouched({ contact }: Props) {
             </span>
           }
         >
-          <span className={classes.ltLabel}>
-            Last Touch: <b className={classes.ltValue}>{formattedLastTouch}</b>
+          <span className={classes.lastTouchLabel}>
+            Last Touch:{' '}
+            <b className={classes.lastTouchValue}>{formattedLastTouch}</b>
           </span>
         </Tooltip>
       ) : (
-        <span className={classes.ltLabel}>
-          Last Touch: <b className={classes.ltValue}>{formattedLastTouch}</b>
+        <span className={classes.lastTouchLabel}>
+          Last Touch:{' '}
+          <b className={classes.lastTouchValue}>{formattedLastTouch}</b>
         </span>
       )}
     </div>
