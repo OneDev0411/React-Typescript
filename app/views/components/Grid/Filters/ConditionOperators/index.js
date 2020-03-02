@@ -35,7 +35,7 @@ export function ConditionOperators(props) {
       }
       buttonStyle={{
         padding: theme.spacing(0, 1),
-        fontSize: '0.9rem',
+        fontSize: theme.typography.button.fontSize,
         fontWeight: 'bold'
       }}
       style={{

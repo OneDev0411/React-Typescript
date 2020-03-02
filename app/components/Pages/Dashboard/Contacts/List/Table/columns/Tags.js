@@ -13,7 +13,7 @@ const AddTags = styled.span`
 `
 const useStyles = makeStyles(theme => ({
   tagLabel: {
-    fontSize: 11,
+    fontSize: theme.typography.caption.fontSize,
     marginRight: theme.spacing(0.5)
   },
   chip: {

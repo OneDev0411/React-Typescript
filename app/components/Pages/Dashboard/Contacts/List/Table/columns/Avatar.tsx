@@ -52,8 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     avatar: {
       backgroundColor: theme.palette.divider,
-      color: theme.palette.text.primary,
-      fontSize: 16
+      color: theme.palette.text.primary
     }
   })
 )

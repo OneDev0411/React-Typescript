@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme =>
     totalRow: {
       display: 'inline-flex',
       marginRight: theme.spacing(2),
-      fontSize: '0.8rem',
+      fontSize: theme.typography.overline.fontSize,
       color: theme.palette.grey['500']
     }
   })

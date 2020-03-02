@@ -1,19 +1,34 @@
 import React from 'react'
 import timeago from 'timeago.js'
+import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import Tooltip from 'components/tooltip'
-
-import { NoTouches } from './styled'
 
 interface Props {
   contact: IContact
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    notouch: {
+      fontSize: theme.typography.caption.fontSize,
+      color: theme.palette.grey['400']
+    },
+    ltLabel: {
+      fontSize: theme.typography.caption.fontSize
+    },
+    ltValue: {
+      fontSize: theme.typography.subtitle2.fontSize
+    }
+  })
+)
+
 export default function LastTouched({ contact }: Props) {
+  const classes = useStyles()
   const { last_touch: lastTouch, next_touch: nextTouch } = contact
 
   if (!lastTouch) {
-    return <NoTouches className="hover-color--black">No Touches</NoTouches>
+    return <span className={classes.notouch}>No Touches</span>
   }
 
   const formattedLastTouch = timeago().format(lastTouch * 1000)
@@ -33,13 +48,13 @@ export default function LastTouched({ contact }: Props) {
             </span>
           }
         >
-          <span>
-            Last Touch: <b>{formattedLastTouch}</b>
+          <span className={classes.ltLabel}>
+            Last Touch: <b className={classes.ltValue}>{formattedLastTouch}</b>
           </span>
         </Tooltip>
       ) : (
-        <span>
-          Last Touch: <b>{formattedLastTouch}</b>
+        <span className={classes.ltLabel}>
+          Last Touch: <b className={classes.ltValue}>{formattedLastTouch}</b>
         </span>
       )}
     </div>
