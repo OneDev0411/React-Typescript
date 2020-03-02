@@ -40,7 +40,7 @@ export default function AppSideNav() {
   )
   const dealsNotificationsNumber = useDealsNotificationsNumber()
   const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
-  const logoSrc = Brand.asset('office_logo')
+  const logoSrc = Brand.asset('office_logo', '/static/images/logo.svg')
 
   return (
     <Sidenav>
