@@ -202,7 +202,9 @@ class SearchDrawer extends React.Component {
         </Drawer.Body>
 
         <Footer
-          multipleSelection={this.props.multipleSelection}
+          multipleSelection={
+            this.props.multipleSelection || this.props.forceRenderFooter
+          }
           selectedItemsCount={selectedItemsCount}
           renderAction={this.props.renderAction}
           handleSelectMultipleItems={this.handleSelectMultipleItems}
@@ -217,7 +219,8 @@ SearchDrawer.defaultProps = {
   searchInputOptions: {},
   defaultList: [],
   defaultListTitle: 'Add from list',
-  multipleSelection: false
+  multipleSelection: false,
+  forceRenderFooter: false
 }
 
 SearchDrawer.propTypes = {
@@ -227,7 +230,8 @@ SearchDrawer.propTypes = {
   searchFunction: PropTypes.func.isRequired,
   ItemRow: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   defaultList: PropTypes.array,
-  defaultListTitle: PropTypes.string
+  defaultListTitle: PropTypes.string,
+  forceRenderFooter: PropTypes.bool
 }
 
 export default SearchDrawer
