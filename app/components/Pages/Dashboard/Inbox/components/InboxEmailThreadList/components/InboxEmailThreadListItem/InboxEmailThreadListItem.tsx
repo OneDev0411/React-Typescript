@@ -47,7 +47,7 @@ export default function InboxEmailThreadListItem({
         root: classNames(classes.root, selected && classes.selected)
       }}
     >
-      <Grid container spacing={2}>
+      <Grid container spacing={0}>
         <Grid item>
           <div
             className={classNames(

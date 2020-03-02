@@ -5,18 +5,17 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
   (theme: Theme) => ({
     root: {
       width: '100%',
-      padding: theme.spacing(2, 3, 2, 2.5),
-      borderLeft: `4px solid ${theme.palette.common.white}`
+      padding: theme.spacing(2, 2, 2, 0.75)
     },
     selected: {
-      borderLeftColor: theme.palette.primary.main,
-      backgroundColor: `${theme.palette.primary.main}1F`
+      backgroundColor: `${theme.palette.common.black}2`
     },
     status: {
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      marginTop: 8
+      width: theme.spacing(1),
+      height: theme.spacing(1),
+      borderRadius: theme.spacing(0.5),
+      marginTop: theme.spacing(0.75),
+      marginRight: theme.spacing(0.75)
     },
     unread: {
       backgroundColor: theme.palette.primary.main
