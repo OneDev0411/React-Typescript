@@ -1,16 +1,24 @@
 import React from 'react'
-import { Dropdown, MenuItem } from 'react-bootstrap'
+import { Dropdown } from 'react-bootstrap'
 
 import styled from 'styled-components'
 
 import IconButtonBase from '../../../../../../../views/components/Button/IconButton'
 import IconHorizontalDots from '../../../../../../../views/components/SvgIcons/HorizontalDots/IconHorizontalDots'
-import { grey } from '../../../../../../../views/utils/colors'
 
 const IconButton = styled(IconButtonBase)`
   > svg {
-    fill: ${grey.A550};
+    fill: ${props => props.theme.palette.grey['400']};
+    &:hover {
+      fill: ${props => props.theme.palette.secondary.main};
+    }
   }
+`
+const DeleteAction = styled.span`
+  display: block;
+  padding: ${props => props.theme.spacing(1)}px;
+  color: ${props => props.theme.palette.error.main};
+  cursor: pointer;
 `
 
 const Menu = ({ contactId, handleOnDelete }) => (
@@ -31,11 +39,9 @@ const Menu = ({ contactId, handleOnDelete }) => (
     </IconButton>
 
     <Dropdown.Menu bsRole="menu">
-      <MenuItem
-        data-test="contact-row-delete-action"
+      <DeleteAction
         eventKey="Delete"
         key={`contact_${contactId}__dropdown__item_delete`}
-        style={{ width: '100%', textAlign: 'left' }}
         onClick={e =>
           handleOnDelete(e, {
             selectedRows: [contactId]
@@ -43,7 +49,7 @@ const Menu = ({ contactId, handleOnDelete }) => (
         }
       >
         Delete
-      </MenuItem>
+      </DeleteAction>
     </Dropdown.Menu>
   </Dropdown>
 )

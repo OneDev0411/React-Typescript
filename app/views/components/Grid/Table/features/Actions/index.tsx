@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
       zIndex: theme.zIndex.modal
     },
     summary: {
-      color: theme.palette.primary.main,
+      color: theme.palette.secondary.main,
       cursor: 'pointer'
     }
   })

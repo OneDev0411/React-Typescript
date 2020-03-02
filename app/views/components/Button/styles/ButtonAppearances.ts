@@ -105,12 +105,14 @@ export const ButtonAppearances = {
     }
 
     ${isNotDisableState}hover, ${isNotDisableState}focus {
-      color: ${props => props.brandColor || primary};
-      border-color: ${props => props.brandColor || primary};
+      color: ${props => props.brandColor || props.theme.palette.secondary.main};
+      border-color: ${props =>
+        props.brandColor || props.theme.palette.secondary.main};
       text-decoration: none;
 
       svg {
-        fill: ${props => props.brandColor || primary};
+        fill: ${props =>
+          props.brandColor || props.theme.palette.secondary.main};
       }
     }
 
