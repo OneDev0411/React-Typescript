@@ -259,7 +259,9 @@ class SendMlsListingCard extends React.Component {
           listing.gallery_image_urls &&
           Array.isArray(listing.gallery_image_urls)
         ) {
-          listing.gallery_image_urls.forEach(image => {
+          const uniqueAssets = [...new Set(listing.gallery_image_urls)]
+
+          uniqueAssets.forEach(image => {
             assets.push({
               listing: listing.id,
               image
