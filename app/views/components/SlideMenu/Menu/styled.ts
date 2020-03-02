@@ -1,8 +1,8 @@
-import styled from 'styled-components'
+import { Theme } from '@material-ui/core'
+import styled, { ThemeProps } from 'styled-components'
 
 import { CSSProperties } from 'react'
 
-import { green } from '../../../utils/colors'
 import IconButton from '../../Button/IconButton'
 
 interface ContainerProps {
@@ -44,12 +44,13 @@ export const ListItem = styled.div<ItemListProps>`
   justify-content: space-between;
   margin-bottom: 0.5em;
 
-  color: ${props => (props.isSelected ? green.primary : '#000')};
+  color: ${props =>
+    props.isSelected ? props.theme.palette.primary.main : '#000'};
   font-weight: ${props => (props.isSelected ? 500 : 400)};
   cursor: ${props => (props.isSelected ? 'initial' : 'pointer')};
 
   &:hover {
-    color: ${green.primary};
+    color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
 
     ${DeleteButton} {
       opacity: 1;

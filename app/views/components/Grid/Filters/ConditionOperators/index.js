@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTheme } from '@material-ui/core/styles'
 
 import { BasicDropdown } from 'components/BasicDropdown'
 
@@ -16,6 +17,8 @@ const MENU_OPTIONS = [
 ]
 
 export function ConditionOperators(props) {
+  const theme = useTheme()
+
   return (
     <BasicDropdown
       noBorder
@@ -31,12 +34,12 @@ export function ConditionOperators(props) {
         MENU_OPTIONS.find(item => item.value === props.selectedItem).title
       }
       buttonStyle={{
-        padding: '0 0.5rem',
-        fontSize: '0.9rem',
+        padding: theme.spacing(0, 1),
+        fontSize: theme.typography.button.fontSize,
         fontWeight: 'bold'
       }}
       style={{
-        marginRight: '0.5rem'
+        marginRight: theme.spacing(1)
       }}
       itemRenderer={({ item, ...rest }) => (
         <Item key={item.value} title={item.title} {...rest} />

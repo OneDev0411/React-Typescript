@@ -20,6 +20,7 @@ import {
   ListItemName
 } from 'components/Grid/SavedSegments/List/styled'
 import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
+import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import { normalizeAttributeFilters } from '../utils'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
@@ -99,7 +100,7 @@ export class TagsList extends React.Component<Props> {
           if (isFetching) {
             return [
               <ListItem key="loading">
-                <i className="fa fa-spin fa-spinner" />
+                <IconCircleSpinner />
               </ListItem>
             ]
           }

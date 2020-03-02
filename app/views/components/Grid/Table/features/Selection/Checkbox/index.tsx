@@ -21,7 +21,7 @@ export default function Checkbox({ checked, indeterminate, onChange }: Props) {
 
   return (
     <MUICheckbox
-      color="primary"
+      color="secondary"
       checked={isChecked}
       indeterminate={indeterminate}
       onChange={handleToggleRow}

@@ -78,7 +78,7 @@ export default function Duplicates({
       const duplicates = await getDuplicateContacts()
 
       setClusters(
-        duplicates.map(item => ({
+        duplicates.data.map(item => ({
           masterId: item.contacts[0]!.id,
           duplicates: item
         }))

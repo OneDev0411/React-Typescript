@@ -149,6 +149,7 @@ exports[`ExportContactsButton inner button component renders 1`] = `
     ]
   }
   onChange={[Function]}
+  pullTo="right"
   selectedItem={null}
   style={
     Object {

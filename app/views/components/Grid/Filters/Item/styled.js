@@ -1,14 +1,12 @@
 import styled from 'styled-components'
 
 import Card from 'components/Card'
-import { grey, red } from 'views/utils/colors'
-
 import Button from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
 
 function getItemColor(props) {
   if (props.isIncomplete && !props.isActive) {
-    return red.A100
+    return props.theme.error.main
   }
 
   return '#000'
@@ -24,7 +22,7 @@ export const ItemTitle = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 13px;
+  font-size: 0.8125rem;
 `
 
 export const Container = styled.div`
@@ -32,7 +30,8 @@ export const Container = styled.div`
   position: relative;
   margin-right: 0.5em;
   border-radius: 100px;
-  border: solid 1px ${props => (props.isActive ? '#000' : grey.A100)};
+  border: solid 1px
+    ${props => (props.isActive ? '#000' : props.theme.palette.grey['100'])};
   cursor: pointer;
 
   ${ItemTitle} {
@@ -45,7 +44,7 @@ export const Container = styled.div`
   }
 
   &:hover ${RemoveButton} svg {
-    fill: ${grey.A900};
+    fill: ${props => props.theme.palette.grey['600']};
   }
 `
 
@@ -70,5 +69,5 @@ export const DoneButton = styled(Button)`
   display: block;
   width: 100%;
   text-align: center;
-  border-top: 1px solid ${grey.A300};
+  border-top: 1px solid ${props => props.theme.palette.grey['300']};
 `

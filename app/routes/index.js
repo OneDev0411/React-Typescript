@@ -160,7 +160,10 @@ const AsyncContactsImportCsv = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */)
 })
-
+const AsyncDuplicateContacts = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Contacts/List/Duplicates' /* webpackChunkName: "duplicate_contact" */)
+})
 /* ==================================== */
 //  CRM FLOWS
 /* ==================================== */
@@ -477,6 +480,10 @@ export default (
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
       <Route component={AsyncContacts} path="/dashboard/contacts" />
+      <Route
+        component={AsyncDuplicateContacts}
+        path="/dashboard/contacts/dublicates"
+      />
       <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       <Route
         path="/dashboard/contacts/import/csv"

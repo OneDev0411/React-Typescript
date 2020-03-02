@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { createStyles, makeStyles } from '@material-ui/core'
+
 import { selectTags } from 'reducers/contacts/tags'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
@@ -18,7 +20,20 @@ import getOpenHouseEvents from './helpers/get-open-house-events'
 import getUniqTags from './helpers/get-uniq-tags'
 import { getPredefinedContactLists } from '../utils/get-predefined-contact-lists'
 
+const useStyles = makeStyles(theme =>
+  createStyles({
+    totalRow: {
+      display: 'inline-flex',
+      marginRight: theme.spacing(2),
+      fontSize: theme.typography.overline.fontSize,
+      color: theme.palette.grey['500']
+    }
+  })
+)
+
 function ContactFilters(props) {
+  const classes = useStyles()
+
   const getConfig = () => {
     const { attributeDefs, tags, user } = props
 
@@ -66,21 +81,24 @@ function ContactFilters(props) {
   }
 
   return (
-    <Filters
-      name="contacts"
-      plugins={['segments']}
-      config={getConfig()}
-      createFiltersFromSegment={createFiltersFromSegment}
-      getPredefinedLists={getPredefinedContactLists}
-      onChange={() => props.onFilterChange()}
-      disableConditionOperators={props.disableConditionOperators}
-    >
-      <SaveSegment
-        createSegmentFromFilters={createSegmentFromFilters(
-          props.conditionOperator
-        )}
-      />
-    </Filters>
+    <>
+      <span className={classes.totalRow}>{props.contactCount} CONTACTS</span>
+      <Filters
+        name="contacts"
+        plugins={['segments']}
+        config={getConfig()}
+        createFiltersFromSegment={createFiltersFromSegment}
+        getPredefinedLists={getPredefinedContactLists}
+        onChange={() => props.onFilterChange()}
+        disableConditionOperators={props.disableConditionOperators}
+      >
+        <SaveSegment
+          createSegmentFromFilters={createSegmentFromFilters(
+            props.conditionOperator
+          )}
+        />
+      </Filters>
+    </>
   )
 }
 

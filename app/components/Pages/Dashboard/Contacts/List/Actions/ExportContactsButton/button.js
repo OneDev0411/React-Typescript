@@ -1,10 +1,7 @@
 import React from 'react'
 
-import { Button } from '@material-ui/core'
-
 import { BasicDropdown } from 'components/BasicDropdown'
-import ArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
-import ArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 import Item from './item'
 import { DOWNLOAD_TYPES_DROPDOWN_ITEMS } from './constants'
@@ -16,27 +13,20 @@ export default function ExportButton({ disabled, onExportClick }) {
       items={DOWNLOAD_TYPES_DROPDOWN_ITEMS}
       onChange={async item => onExportClick(item.type)}
       buttonText="Export"
+      pullTo="right"
       upsideDown
       disabled={disabled}
       style={{ display: 'inline' }}
       buttonRenderer={({ text, isOpen, disabled, onClick }) => (
-        <Button
+        <DropdownToggleButton
           variant="outlined"
           size="small"
           disabled={disabled}
           onClick={onClick}
+          isActive={isOpen}
         >
           {text}
-          {isOpen ? (
-            <ArrowUp
-              style={{ width: 16, height: 16, verticalAlign: 'middle' }}
-            />
-          ) : (
-            <ArrowDown
-              style={{ width: 16, height: 16, verticalAlign: 'middle' }}
-            />
-          )}
-        </Button>
+        </DropdownToggleButton>
       )}
       itemRenderer={({ item, ...rest }) => (
         <Item
