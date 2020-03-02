@@ -8,7 +8,7 @@
   "listing_agency_id": null,
   "created_at": 1536079980.33723,
   "updated_at": 1540940955.62579,
-  "cover_image_url": "https://d2j29n432zojb.cloudfront.net/83394464-2.jpg",
+  "cover_image_url": "https://i.ibb.co/cbLzK0v/listing-placeholder-image.png",
   "currency": "USD",
   "price": 10000000,
   "gallery_image_urls": [
@@ -232,67 +232,15 @@
     "accessibility_features": [],
     "commercial_features": [],
     "community_features": [],
-    "energysaving_features": [
-      "Ceiling Fans",
-      "Dehumidifier",
-      "Gas Water Heater",
-      "High Efficiency Water Heater",
-      "Low E Windows",
-      "Programmable Thermostat",
-      "Thermo Windows",
-      "Tinted Windows"
-    ],
-    "exterior_features": [
-      "Lighting System",
-      "Sprinkler System",
-      "Storage Building",
-      "Tennis Court(s)"
-    ],
-    "interior_features": [
-      "Built-in Wine Cooler",
-      "Cable TV Available",
-      "Decorative Lighting",
-      "Electric Shades",
-      "Flat Screen Wiring",
-      "High Speed Internet Available",
-      "Multiple Staircases",
-      "Paneling",
-      "Skylights",
-      "Smart Home System",
-      "Sound System Wiring",
-      "Wet Bar",
-      "Window Coverings"
-    ],
+    "energysaving_features": ["Ceiling Fans"],
+    "exterior_features": ["Lighting System"],
+    "interior_features": ["Built-in Wine Cooler"],
     "farmranch_features": [],
-    "fireplace_features": [
-      "Gas Logs",
-      "Gas Starter",
-      "Masonry Box",
-      "Wood Burning"
-    ],
-    "lot_features": [
-      "Acreage",
-      "Creek",
-      "Heavily Treed",
-      "Interior Lot",
-      "Irregular",
-      "Landscaped",
-      "Lrg. Backyard Grass",
-      "Subdivision"
-    ],
-    "parking_features": [
-      "Attached",
-      "Circle Drive",
-      "Covered",
-      "Individual Carport"
-    ],
+    "fireplace_features": ["Gas Logs"],
+    "lot_features": ["Acreage"],
+    "parking_features": ["Attached"],
     "pool_features": ["Cabana", "Cleaning System", "In Ground Gunite"],
-    "security_features": [
-      "Burglar",
-      "Exterior Security Light(s)",
-      "Owned",
-      "Smoke Detector"
-    ],
+    "security_features": ["Burglar"],
     "bedroom_bathroom_features": [],
     "parking_spaces_covered_total": 4,
     "half_bathroom_count": 4,
