@@ -29,12 +29,18 @@ import CtaBar from '../../Account/components/CtaBar'
 import { getFlowActions } from './helpers'
 
 const useStyles = makeStyles((theme: Theme) => ({
-  flowName: {
+  name: {
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(1.5),
     '&:not(:hover)': {
       color: theme.palette.common.black
     }
   },
-  flowDescription: {
+  description: {
+    paddingRight: theme.spacing(2),
+    color: theme.palette.grey[500]
+  },
+  enrolledContacts: {
     color: theme.palette.grey[500]
   }
 }))
@@ -95,7 +101,7 @@ function List(props: Props) {
       width: '33%',
       render: ({ row }) => (
         <Link to={`/dashboard/account/flows/${row.id}`}>
-          <Typography variant="body1" classes={{ root: classes.flowName }}>
+          <Typography noWrap variant="body1" classes={{ root: classes.name }}>
             {row.name}
           </Typography>
         </Link>
@@ -105,7 +111,11 @@ function List(props: Props) {
       header: 'Description',
       id: 'description',
       render: ({ row }) => (
-        <Typography variant="body2" classes={{ root: classes.flowDescription }}>
+        <Typography
+          noWrap
+          variant="body2"
+          classes={{ root: classes.description }}
+        >
           {row.description}
         </Typography>
       )
@@ -115,7 +125,12 @@ function List(props: Props) {
       id: 'cotnacts',
       width: '160px',
       render: ({ row }) => (
-        <Typography variant="body2">{row.active_flows} Enrolled</Typography>
+        <Typography
+          variant="body2"
+          classes={{ root: classes.enrolledContacts }}
+        >
+          {row.active_flows} Enrolled
+        </Typography>
       )
     },
     {

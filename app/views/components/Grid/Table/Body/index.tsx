@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   TableBody,
   TableCell,
@@ -116,6 +116,8 @@ export function Body<Row>({
               key={rowId}
               className={cn(bodyClasses.row, classes.row)}
               hover={hoverable}
+              onMouseOver={() => onHoverOrFocus(rowId)}
+              onFocus={() => onHoverOrFocus(rowId)}
               {...getTrProps({
                 rowIndex,
                 row,
