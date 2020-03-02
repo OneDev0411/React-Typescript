@@ -12,10 +12,10 @@
   "currency": "USD",
   "price": 10000000,
   "gallery_image_urls": [
-    "https://via.placeholder.com/500/666666/FFFFFF/?text=UPLOAD%20YOUR%20LISTING%20IMAGES",
-    "https://via.placeholder.com/500/555555/FFFFFF/?text=UPLOAD%20YOUR%20LISTING%20IMAGES",
-    "https://via.placeholder.com/500/444444/FFFFFF/?text=UPLOAD%20YOUR%20LISTING%20IMAGES",
-    "https://via.placeholder.com/500/333333/FFFFFF/?text=UPLOAD%20YOUR%20LISTING%20IMAGES"
+    "https://i.ibb.co/cbLzK0v/listing-placeholder-image.png",
+    "https://i.ibb.co/cbLzK0v/listing-placeholder-image.png",
+    "https://i.ibb.co/cbLzK0v/listing-placeholder-image.png",
+    "https://i.ibb.co/cbLzK0v/listing-placeholder-image.png"
   ],
   "matrix_unique_id": 83394419,
   "original_price": 10000000,

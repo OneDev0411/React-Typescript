@@ -154,7 +154,9 @@ class SendDealPromotion extends React.Component {
       return []
     }
 
-    return listing.gallery_image_urls.map(image => ({
+    const uniqueAssets = [...new Set(listing.gallery_image_urls)]
+
+    return uniqueAssets.map(image => ({
       image
     }))
   }
