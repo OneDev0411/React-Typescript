@@ -1,15 +1,20 @@
 import React, { useContext, useCallback } from 'react'
 
+import {
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton,
+  createStyles,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
+
 import { uppercaseFirstLetter } from 'utils/helpers'
 
 import Badge from 'components/Badge'
 import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import {
-  ListItem,
-  ListItemName,
-  DeleteButton
-} from 'components/SlideMenu/Menu/styled'
 
 interface Props {
   item: ISavedSegment
@@ -17,7 +22,22 @@ interface Props {
   selectHandler: (item: ISavedSegment) => void
   selected: boolean
 }
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      '& .MuiListItemSecondaryAction-root': {
+        display: 'none'
+      },
+      '&:hover .MuiListItemSecondaryAction-root': {
+        display: 'block'
+      }
+    }
+  })
+)
+
 function Item(props: Props) {
+  const classes = useStyles()
   const { item, selectHandler, deleteHandler, selected } = props
   const { name } = item
   const modal = useContext(ConfirmationModalContext)
@@ -44,23 +64,29 @@ function Item(props: Props) {
 
   return (
     <ListItem
-      isSelected={selected}
+      dense
+      button
+      classes={{ container: classes.container }}
+      selected={selected}
       onClick={onSelect}
-      data-test={`contact-list-${item.name}`}
     >
-      <ListItemName>
+      <ListItemText>
         {uppercaseFirstLetter(name)}
         {item.badge && (
           <Badge large style={{ marginLeft: '0.5rem' }}>
             {item.badge}
           </Badge>
         )}
-      </ListItemName>
-      {item.is_editable && (
-        <DeleteButton data-test="delete-list" onClick={onDelete} isFit>
-          <IconClose />
-        </DeleteButton>
-      )}
+      </ListItemText>
+      <ListItemSecondaryAction>
+        {item.is_editable && (
+          <IconButton size="small" aria-label="delete" onClick={onDelete}>
+            <IconClose
+              style={{ fill: 'currentColor', width: 16, height: 16 }}
+            />
+          </IconButton>
+        )}
+      </ListItemSecondaryAction>
     </ListItem>
   )
 }

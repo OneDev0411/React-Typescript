@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withStyles } from '@material-ui/core/styles'
+import { ListItem, ListItemText, withStyles } from '@material-ui/core/styles'
 
 import {
   // eslint-disable-next-line import/named
@@ -20,7 +20,6 @@ import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
 import LoadingIcon from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Item from './Item'
-import { ListItem } from './styled'
 
 const styles = theme => ({
   root: {
@@ -93,12 +92,12 @@ class SegmentsList extends React.Component {
         }}
         listPlugin={{
           disablePadding: true,
-          style: { padding: 10, width: 220 }
+          style: { width: 220 }
         }}
         renderMenu={() => {
           if (props.isFetching) {
             return [
-              <ListItem key="loading">
+              <ListItem dense key="loading">
                 <LoadingIcon />
               </ListItem>
             ]
@@ -106,8 +105,8 @@ class SegmentsList extends React.Component {
 
           if (props.list.length === 0) {
             return [
-              <ListItem key="loading">
-                <span>No Saved List!</span>
+              <ListItem dense key="loading">
+                <ListItemText>No Saved List!</ListItemText>
               </ListItem>
             ]
           }
