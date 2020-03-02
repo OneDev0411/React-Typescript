@@ -112,8 +112,6 @@ class SearchListingDrawer extends React.Component {
           this.props.allowSkip
             ? props => (
                 <Flex>
-                  {this.props.multipleSelection &&
-                    this.props.renderAction(props)}
                   <Tooltip
                     placement="left"
                     title="Skip if not able to find it on MLS"
@@ -122,7 +120,7 @@ class SearchListingDrawer extends React.Component {
                       variant="outlined"
                       color="default"
                       style={{
-                        marginLeft: '0.5rem'
+                        marginRight: '0.5rem'
                       }}
                       onClick={async () => {
                         const placeholderListing = await getMockPlaceholderListing()
@@ -133,6 +131,8 @@ class SearchListingDrawer extends React.Component {
                       Skip
                     </Button>
                   </Tooltip>
+                  {this.props.multipleSelection &&
+                    this.props.renderAction(props)}
                 </Flex>
               )
             : this.props.renderAction
