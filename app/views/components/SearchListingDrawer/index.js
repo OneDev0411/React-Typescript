@@ -125,15 +125,6 @@ class SearchListingDrawer extends React.Component {
                       onClick={async () => {
                         const placeholderListing = await getMockPlaceholderListing()
 
-                        if (this.props.multipleSelection) {
-                          this.handleSelectListings([
-                            placeholderListing,
-                            placeholderListing
-                          ])
-
-                          return
-                        }
-
                         this.handleSelectListings([placeholderListing])
                       }}
                     >
