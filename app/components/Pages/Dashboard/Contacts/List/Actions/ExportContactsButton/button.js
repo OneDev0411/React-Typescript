@@ -13,6 +13,7 @@ export default function ExportButton({ disabled, onExportClick }) {
       items={DOWNLOAD_TYPES_DROPDOWN_ITEMS}
       onChange={async item => onExportClick(item.type)}
       buttonText="Export"
+      pullTo="right"
       upsideDown
       disabled={disabled}
       style={{ display: 'inline' }}

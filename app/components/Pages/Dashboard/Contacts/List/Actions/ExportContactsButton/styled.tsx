@@ -16,7 +16,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: row;
   font-family: LatoRegular;
-  width: 100%;
+  width: 300px;
   padding: 0.6rem 1rem;
   cursor: pointer;
 
