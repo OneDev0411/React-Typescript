@@ -12,7 +12,6 @@ import { attachDealDataToListing } from './helpers/attach-deal-to-listing'
 import SearchDrawer from '../SearchDrawer'
 import ListingItem from './ListingItem'
 import getMockListing from './helpers/get-mock-listing'
-import getMockPlaceholderListing from './helpers/get-mock-placeholder-listing'
 
 class SearchListingDrawer extends React.Component {
   state = {
@@ -123,9 +122,9 @@ class SearchListingDrawer extends React.Component {
                         marginRight: '0.5rem'
                       }}
                       onClick={async () => {
-                        const placeholderListing = await getMockPlaceholderListing()
+                        const mockListing = await getMockListing()
 
-                        this.handleSelectListings([placeholderListing])
+                        this.handleSelectListings([mockListing])
                       }}
                     >
                       Skip
