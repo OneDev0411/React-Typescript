@@ -60,6 +60,7 @@ export default function Inbox({ params }: Props & WithRouterProps) {
   const noConnectedAccounts = accounts.length === 0
 
   const [initializing, setInitializing] = useState<boolean>(true)
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
   const dispatch = useDispatch()
 
@@ -76,13 +77,15 @@ export default function Inbox({ params }: Props & WithRouterProps) {
 
   return (
     <GlobalPageLayout className={classes.layout}>
-      <GlobalPageLayout.HeaderWithSearch
-        title="Inbox"
-        placeholder="Search emails"
-        onSearch={query => {
-          console.log('query =', query)
-        }}
-      />
+      {initializing || noConnectedAccounts ? (
+        <GlobalPageLayout.Header title="Inbox" />
+      ) : (
+        <GlobalPageLayout.HeaderWithSearch
+          title="Inbox"
+          placeholder="Search emails"
+          onSearch={query => setSearchQuery(query)}
+        />
+      )}
       <GlobalPageLayout.Main className={classes.main}>
         <Divider />
         {initializing ? (
@@ -100,6 +103,7 @@ export default function Inbox({ params }: Props & WithRouterProps) {
               <InboxEmailThreadList
                 selectedEmailThreadId={selectedEmailThreadId}
                 onSelectEmailThread={setSelectedEmailThreadId}
+                searchQuery={searchQuery}
               />
             </Grid>
             <Grid

@@ -18,6 +18,7 @@ export const defaultEmailThreadSelection = <const>[
 
 export interface IGetEmailThreadsFilters {
   selection?: typeof defaultEmailThreadSelection[number][]
+  searchQuery?: string
   start: number
   limit?: number
   isRead?: boolean
@@ -31,6 +32,8 @@ export async function getEmailThreads<
   filters: IGetEmailThreadsFilters,
   associations: SelectedEmailThreadAssociations[] = defaultEmailThreadAssociations as SelectedEmailThreadAssociations[]
 ): Promise<IEmailThread<SelectedEmailThreadAssociations>[]> {
+  console.log(`query = "${filters.searchQuery || ''}"`)
+
   const response = await new Fetch().get('/emails/threads').query({
     'associations[]': associations.map(toEntityAssociation('email_thread')),
     'select[]': filters.selection
