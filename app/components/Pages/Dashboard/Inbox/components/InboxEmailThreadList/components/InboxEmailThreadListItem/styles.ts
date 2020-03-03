@@ -8,7 +8,7 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
       padding: theme.spacing(2, 2, 2, 0.75)
     },
     selected: {
-      backgroundColor: `${theme.palette.common.black}2`
+      backgroundColor: `${theme.palette.action.selected}`
     },
     status: {
       width: theme.spacing(1),
