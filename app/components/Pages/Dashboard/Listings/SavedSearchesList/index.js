@@ -89,7 +89,7 @@ class SavedSearchesList extends Component {
 
   render() {
     const { isDeleting } = this.state
-    const { classes } = this.props
+    const { classes, theme } = this.props
 
     return (
       <BaseDropdownWithMore
@@ -153,7 +153,7 @@ class SavedSearchesList extends Component {
             )
           })
         }}
-        morePlugin={{ style: { padding: 5 } }}
+        morePlugin={{ textStyle: { padding: theme.spacing(1, 1.5) } }}
       />
     )
   }
