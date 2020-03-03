@@ -27,6 +27,7 @@ const useStyles = makeStyles(
       paddingBottom: 0
     },
     main: {
+      position: 'relative',
       height:
         'calc(100vh - 120px - 1px)' /* total height - page header - divider */
     },
