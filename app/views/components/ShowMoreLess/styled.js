@@ -1,18 +1,17 @@
 import styled from 'styled-components'
 
-import { green } from 'views/utils/colors'
 import Arrow from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 export const ShowMoreLessText = styled.div`
   display: flex;
   align-items: center;
-  color: ${green.primary};
+  color: ${props => props.theme.palette.primary.main};
   font-weight: 400;
   cursor: pointer;
 `
 
 export const ArrowDown = styled(Arrow)`
-  fill: ${green.primary};
+  fill: ${props => props.theme.palette.primary.main};
   width: 1.25rem;
   height: 1.25rem;
   margin-top: 0.2rem;
