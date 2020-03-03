@@ -46,6 +46,7 @@ export interface TableColumn<Row> {
   sortable?: boolean
   sortType?: ColumnSortType
   sortTitle?: string
+  class?: string
   sortMethod?: (accessor: StringOrNumber) => StringOrNumber
   accessor?: (row: Row) => StringOrNumber | null | undefined
   render?: (data: RenderProps<Row>) => React.ReactNode | string

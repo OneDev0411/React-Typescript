@@ -33,6 +33,7 @@ export function useRowsSelection<Row>(
     {
       id: 'row-selection',
       header: '',
+      class: 'opaque',
       render: (rowItem: RenderProps<Row>) => {
         const showDefaultValue =
           options.defaultRender &&
