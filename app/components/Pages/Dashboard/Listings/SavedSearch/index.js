@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
 import memoize from 'lodash/memoize'
+import hash from 'object-hash'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 
@@ -179,7 +180,7 @@ class SavedSearch extends React.Component {
     // resolver function which makes a unique key for a specific saved search id,
     // index and sort direction and returns the previously calculated items once it's
     // called.
-    (...args) => `${this.props.params.id}_${args[1]}_${args[2]}`
+    (...args) => `${hash(args[0])}_${args[1]}_${args[2]}`
   )
 
   renderMain() {
