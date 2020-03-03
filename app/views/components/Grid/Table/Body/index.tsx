@@ -131,7 +131,7 @@ export function Body<Row>({
                     key={columnIndex}
                     align={column.align || 'inherit'}
                     classes={{
-                      root: bodyClasses.column
+                      root: cn(bodyClasses.column, column.class)
                     }}
                     className={cn({
                       primary: column.primary === true,
