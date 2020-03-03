@@ -15,6 +15,7 @@ interface Props extends BaseProps {
     count: number
     moreText?: string
     lessText?: string
+    textStyle?: object
     style?: object
   }
 }

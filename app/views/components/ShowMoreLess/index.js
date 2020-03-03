@@ -11,6 +11,7 @@ export class ShowMoreLess extends Component {
     count: 7,
     moreText: 'Show More',
     lessText: 'Show Less',
+    textStyle: {},
     style: {}
   }
 
@@ -24,19 +25,35 @@ export class ShowMoreLess extends Component {
     }))
   }
 
-  renderShowMore = () => (
-    <ShowMoreLessText data-test="show-more-button" onClick={this.toggleState}>
-      {this.props.moreText}
-      <ArrowDown />
-    </ShowMoreLessText>
-  )
+  renderShowMore = () => {
+    const { textStyle } = this.props
 
-  renderShowLess = () => (
-    <ShowMoreLessText data-test="show-more-button" onClick={this.toggleState}>
-      {this.props.lessText}
-      <ArrowUp />
-    </ShowMoreLessText>
-  )
+    return (
+      <ShowMoreLessText
+        style={textStyle}
+        data-test="show-more-button"
+        onClick={this.toggleState}
+      >
+        {this.props.moreText}
+        <ArrowDown />
+      </ShowMoreLessText>
+    )
+  }
+
+  renderShowLess = () => {
+    const { textStyle } = this.props
+
+    return (
+      <ShowMoreLessText
+        style={textStyle}
+        data-test="show-more-button"
+        onClick={this.toggleState}
+      >
+        {this.props.lessText}
+        <ArrowUp />
+      </ShowMoreLessText>
+    )
+  }
 
   renderAllChildren() {
     return (
