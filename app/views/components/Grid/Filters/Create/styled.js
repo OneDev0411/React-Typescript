@@ -24,7 +24,7 @@ export const ListItem = styled.div`
   cursor: pointer;
 
   :hover {
-    background-color: ${props => props.theme.primary.main};
+    background-color: ${props => props.theme.palette.primary.main};
     color: #fff;
   }
 `
