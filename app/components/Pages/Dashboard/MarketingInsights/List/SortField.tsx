@@ -6,6 +6,7 @@ import { BaseDropdown } from 'components/BaseDropdown'
 import { SortValues } from './helpers'
 
 interface Props {
+  sortLabel: string
   onChange: (item) => void
 }
 interface SortableColumnsType {
@@ -19,10 +20,10 @@ const sortableColumns: SortableColumnsType[] = [
   { label: 'Oldest', value: SortValues.Oldest, ascending: false }
 ]
 
-const SortFields = ({ onChange }: Props) => {
+const SortFields = ({ sortLabel, onChange }: Props) => {
   return (
     <BaseDropdown
-      buttonLabel="A - Z"
+      buttonLabel={sortLabel || 'A - Z'}
       renderMenu={({ close }) => (
         <div>
           {sortableColumns.map((c, index) => (

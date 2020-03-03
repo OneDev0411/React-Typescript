@@ -5,17 +5,6 @@ import Badge from 'components/Badge'
 import { grey } from 'views/utils/colors'
 
 export const InsightContainer = styled.div`
-  & .insight-table-container {
-    opacity: 0;
-    transform: translateY(3rem);
-    transition: all 0.5s 0.2s;
-
-    &.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
   & .info-title {
     display: flex;
     justify-content: space-between;
@@ -48,7 +37,7 @@ export const StyledLink = styled(ALink)`
   display: block;
   font-weight: 500;
   margin-top: -4px;
-  cursor: default;
+  cursor: pointer;
 `
 
 export const StyledBadge = styled(Badge)`

@@ -32,8 +32,6 @@ function List(props) {
     window.socket.on('email_campaign:send', () => setQueue(queue => queue + 1))
   }, [])
 
-  const tableClassName = ['insight-table-container']
-
   const columns = useMemo(
     () => [
       {
@@ -93,37 +91,38 @@ function List(props) {
     []
   )
 
-  if (isLoading === false) {
-    tableClassName.push('show')
+  const renderContent = ({ sortBy, onChangeSort }) => {
+    if (isLoading || filteredList.length == 0) {
+      return <LoadingComponent />
+    }
+
+    return (
+      <Table
+        rows={filteredList}
+        totalRows={filteredList.length}
+        columns={columns}
+        EmptyStateComponent={() => (
+          <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
+        )}
+        loading={isLoading ? 'middle' : null}
+        LoadingStateComponent={LoadingComponent}
+        sorting={{
+          sortBy: {
+            value: sortBy.value,
+            ascending: sortBy.ascending
+          },
+          onChange: onChangeSort
+        }}
+      />
+    )
   }
 
   return (
     <Layout
       sentCount={stats.sent}
       scheduledCount={stats.scheduled}
-      renderContent={({ sortBy, onChangeSort }) => (
-        <InsightContainer>
-          {isLoading && <LoadingComponent />}
-          <div className={tableClassName.join(' ')}>
-            <Table
-              rows={filteredList}
-              totalRows={(filteredList || []).length}
-              columns={columns}
-              EmptyStateComponent={() => (
-                <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
-              )}
-              loading={isLoading ? 'middle' : null}
-              LoadingStateComponent={LoadingComponent}
-              sorting={{
-                sortBy: {
-                  value: sortBy.value,
-                  ascending: sortBy.ascending
-                },
-                onChange: onChangeSort
-              }}
-            />
-          </div>
-        </InsightContainer>
+      renderContent={props => (
+        <InsightContainer>{renderContent(props)}</InsightContainer>
       )}
     />
   )

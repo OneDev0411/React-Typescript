@@ -13,7 +13,7 @@ import ActionButton from 'components/Button/ActionButton'
 import { SortValues } from './helpers'
 import SortField from './SortField'
 
-const urlGenerator = url => `/dashboard/insights${url}`
+const urlGenerator = (url = '') => `/dashboard/insights${url}`
 
 function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
   const [sortField, setSortField] = useState({
@@ -25,7 +25,7 @@ function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
   const Items = [
     {
       label: `Sent (${sentCount})`,
-      to: urlGenerator('/')
+      to: urlGenerator()
     },
     {
       label: `Scheduled (${scheduledCount})`,
@@ -61,7 +61,12 @@ function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
               <TabSpacer key="spacer" />,
               <Tab
                 key="sort-field"
-                label={<SortField onChange={setSortField} />}
+                label={
+                  <SortField
+                    sortLabel={sortField.label}
+                    onChange={setSortField}
+                  />
+                }
               />
             ]}
           />
