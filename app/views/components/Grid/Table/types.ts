@@ -24,6 +24,10 @@ export interface ColumnHeaderProps<Row> {
   totalRows: number
 }
 
+export interface GridClasses {
+  row?: string
+}
+
 export type ColumnHeaderFunction<Row> = (
   data: ColumnHeaderProps<Row>
 ) => string | React.ReactNode
