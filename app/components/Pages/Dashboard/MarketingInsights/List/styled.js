@@ -8,7 +8,7 @@ export const InsightContainer = styled.div`
   & .info-title {
     display: flex;
     justify-content: space-between;
-    font-size: 1rem;
+    font-size: ${props => props.theme.typography.body2.fontSize};
     &:hover {
       color: ${props => props.theme.palette.secondary.main};
     }
@@ -21,7 +21,7 @@ export const Info = styled.div`
 
   & .sub-info {
     color: ${grey.A600};
-    font-size: 0.875rem;
+    font-size: ${props => props.theme.typography.body2.fontSize};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

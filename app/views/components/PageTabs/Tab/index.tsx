@@ -4,7 +4,7 @@ import { Tab as BaseTab, TabProps, withStyles } from '@material-ui/core'
 export const Tab = withStyles(theme => ({
   root: {
     minWidth: theme.spacing(8),
-    fontSize: theme.typography.subtitle1.fontSize,
+    fontSize: theme.typography.body1.fontSize,
     '&$selected': {
       fontWeight: 'bold'
     }
