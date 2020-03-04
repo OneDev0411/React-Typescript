@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
-import { Box } from '@material-ui/core'
+import { Box, Button, IconButton } from '@material-ui/core'
 
 import { confirmation } from 'actions/confirmation'
 
@@ -22,14 +22,14 @@ import LoadingContainer from 'components/LoadingContainer'
 
 import { goTo } from 'utils/go-to'
 
+import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
+
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
 import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
-import IconButton from '../../Button/IconButton'
-import ActionButton from '../../Button/ActionButton'
 import { ItemChangelog } from '../../TeamContact/ItemChangelog'
-import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
+
 import { Title } from '../../EventDrawer/components/Title'
 import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import { Description } from '../../EventDrawer/components/Description'
@@ -522,15 +522,15 @@ class OpenHouseDrawerInternal extends React.Component {
                         <Flex alignCenter>
                           {!this.isNew && (
                             <>
-                              <Tooltip placement="top" caption="Delete">
+                              <Tooltip
+                                placement="top"
+                                caption="Delete Open House"
+                              >
                                 <IconButton
-                                  isFit
-                                  inverse
-                                  type="button"
                                   disabled={isDisabled}
                                   onClick={this.delete}
                                 >
-                                  <IconDelete />
+                                  <IconDelete size="medium" />
                                 </IconButton>
                               </Tooltip>
                               <Divider
@@ -550,18 +550,19 @@ class OpenHouseDrawerInternal extends React.Component {
                           />
                         </Flex>
                         <Flex alignCenter>
-                          <ActionButton
-                            type="button"
-                            appearance="outline"
+                          <Button
+                            variant="outlined"
                             onClick={this.handleEditTemplateClick}
                           >
                             {this.state.openHouse
                               ? 'Redesign Guest Registration Page'
                               : 'Edit Guest Registration Page'}
-                          </ActionButton>
+                          </Button>
 
-                          <ActionButton
-                            type="button"
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            disableElevation
                             disabled={
                               isDisabled ||
                               (!this.state.template && !this.state.rawTemplate)
@@ -570,7 +571,7 @@ class OpenHouseDrawerInternal extends React.Component {
                             style={{ marginLeft: '0.5em' }}
                           >
                             {this.getSaveButtonText()}
-                          </ActionButton>
+                          </Button>
                         </Flex>
                       </Footer>
                     </div>

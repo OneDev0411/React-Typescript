@@ -5,12 +5,15 @@ import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
 import { Alert } from '@material-ui/lab'
-import { Box, Link, IconButton } from '@material-ui/core'
+import { Box, Link, IconButton, Theme } from '@material-ui/core'
+import { useTheme, makeStyles, createStyles } from '@material-ui/styles'
 
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
-import InfoIcon from 'components/SvgIcons/InfoFilled/IconInfoFilledActive'
+import InfoIcon from 'components/SvgIcons/InfoFilled/IconInfoFilled'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
+
+import { useGridStyles } from 'components/Grid/Table/styles'
 
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -43,7 +46,25 @@ interface Props {
 
 type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
+const useAlertStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      message: {
+        '& a, & a:hover': {
+          color: theme.palette.secondary.main
+        }
+      }
+    }),
+  { name: 'MuiAlert' }
+)
+
 function OpenHousesList(props: Props) {
+  const theme = useTheme<Theme>()
+
+  useAlertStyles()
+
+  const gridClasses = useGridStyles()
+
   const iconClasses = useIconStyles()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
@@ -102,6 +123,7 @@ function OpenHousesList(props: Props) {
       header: 'Date',
       id: 'date',
       width: '20%',
+      class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (
         <Date dueDate={row.due_date} />
       )
@@ -110,6 +132,7 @@ function OpenHousesList(props: Props) {
       header: 'Registrants',
       id: 'registrants',
       width: '20%',
+      class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (
         <Registrants
           registrants={
@@ -123,6 +146,7 @@ function OpenHousesList(props: Props) {
     {
       id: 'guest-registration',
       width: '20%',
+      class: 'visible-on-hover',
       render: ({ row }: RenderProps<TableRow>) => (
         <GuestRegistration
           activeBrandId={props.activeBrandId}
@@ -133,6 +157,7 @@ function OpenHousesList(props: Props) {
     {
       id: 'actions',
       width: '5%',
+      class: 'visible-on-hover',
       render: ({ row }: RenderProps<TableRow>) => (
         <Actions
           openHouse={row}
@@ -187,6 +212,9 @@ function OpenHousesList(props: Props) {
         totalRows={(list || []).length}
         loading={isFetching ? 'middle' : null}
         LoadingStateComponent={LoadingContainer}
+        classes={{
+          row: gridClasses.row
+        }}
       />
     )
   }
@@ -208,7 +236,7 @@ function OpenHousesList(props: Props) {
             <Acl access={ACL.DEALS}>
               {isAlertOpen && (
                 <Alert
-                  icon={<InfoIcon />}
+                  icon={<InfoIcon fillColor={theme.palette.secondary.main} />}
                   severity="info"
                   action={
                     <IconButton
@@ -224,9 +252,9 @@ function OpenHousesList(props: Props) {
                   }
                 >
                   <Box>
-                    Visit <Link href="/dashboard/deals">deals</Link> to Notify
-                    your Office to Book an Open House on the MLS. This page is
-                    only for creating Open House Registration pages and events.
+                    Visit <Link href="/dashboard/deals">deals</Link> to notify
+                    your office to book an open house on the MLS. This page is
+                    only for creating open house registration pages and events.
                   </Box>
                 </Alert>
               )}
