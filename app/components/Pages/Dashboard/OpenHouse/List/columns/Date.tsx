@@ -13,7 +13,7 @@ export default function Info({ dueDate }: Props) {
   )
 
   return (
-    <Typography variant="body2" color="textSecondary" noWrap>
+    <Typography variant="body2" noWrap>
       {date}
     </Typography>
   )

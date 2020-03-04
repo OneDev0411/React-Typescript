@@ -1,27 +1,30 @@
-import { createStyles } from '@material-ui/core'
+import { createStyles, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
-export const styles = () =>
+export const styles = (theme: Theme) =>
   createStyles({
     row: {
       '& td': {
-        opacity: 0.5,
-        '&.primary, &.opaque': {
-          opacity: 1
+        '& a': {
+          color: theme.palette.text.primary,
+          textDecoration: 'none'
         },
-        '&.semi-transparent': {
-          opacity: 0.5
+        '&.opaque': {
+          color: theme.palette.grey['500']
         },
-        '&.transparent': {
+        '&.visible-on-hover': {
           opacity: 0
         }
       },
       '&:hover td': {
-        opacity: 1,
-        '&.semi-transparent': {
-          opacity: 1
+        '& a': {
+          color: theme.palette.secondary.main,
+          textDecoration: 'none'
         },
-        '&.transparent': {
+        '&.opaque': {
+          color: theme.palette.text.primary
+        },
+        '&.visible-on-hover': {
           opacity: 1
         }
       }

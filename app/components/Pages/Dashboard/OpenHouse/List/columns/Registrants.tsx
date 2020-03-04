@@ -18,8 +18,8 @@ export default function Registrants({ registrants }: Props) {
   return (
     <>
       <Button
-        color="primary"
         disabled={count === 0}
+        color="inherit"
         onClick={() => setIsDrawerOpen(true)}
         size="small"
       >
