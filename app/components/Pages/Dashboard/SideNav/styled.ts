@@ -45,7 +45,7 @@ const itemStyle = css`
   &:hover,
   &:focus {
     text-decoration: none;
-    color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
+    color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.light};
   }
 
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>
