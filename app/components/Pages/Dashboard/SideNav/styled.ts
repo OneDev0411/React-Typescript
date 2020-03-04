@@ -29,6 +29,7 @@ export const SidenavListGroup = styled.ul`
 `
 
 export const SideNavItem = styled.li`
+  padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0.5, 0)};
   cursor: pointer;
   transition: background-color 0.2s ease-in;
 `
