@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 
 import Table from 'components/Grid/Table'
 
+import { useGridStyles } from 'components/Grid/Table/styles'
+
 import Layout from './Layout'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
@@ -22,6 +24,7 @@ import { InsightFiltersType } from './types'
 function List(props) {
   const [queue, setQueue] = useState(0)
   const { list, isLoading } = useListData(props.user, queue)
+  const gridClasses = useGridStyles()
   const isScheduled = props.route && props.route.path === 'scheduled'
   const filterType = isScheduled
     ? InsightFiltersType.SCHEDULED
@@ -37,6 +40,7 @@ function List(props) {
       {
         header: 'Thumbnail',
         id: 'thumbnail',
+        class: 'opaque',
         width: 70,
         verticalAlign: 'center',
         render: ({ row }) => <ThumbnailColumn data={row} />
@@ -44,6 +48,7 @@ function List(props) {
       {
         header: 'Title',
         id: 'title',
+        primary: true,
         width: '25%',
         verticalAlign: 'center',
         render: ({ row }) => (
@@ -70,6 +75,7 @@ function List(props) {
       {
         header: 'Stats',
         id: 'stats',
+        class: 'transparent',
         width: '7%',
         verticalAlign: 'center',
         render: ({ row }) => <StatsColumn data={row} />
@@ -112,6 +118,9 @@ function List(props) {
             ascending: sortBy.ascending
           },
           onChange: onChangeSort
+        }}
+        classes={{
+          row: gridClasses.row
         }}
       />
     )
