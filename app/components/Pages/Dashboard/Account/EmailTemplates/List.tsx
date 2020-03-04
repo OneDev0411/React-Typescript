@@ -28,7 +28,7 @@ import { TableColumn } from 'components/Grid/Table/types'
 import Tooltip from 'components/tooltip'
 import LoadingContainer from 'components/LoadingContainer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -148,8 +148,7 @@ function EmailTemplatesList({
                 })
               }}
             >
-              {/* TODO: Replace with a proper trach icon. */}
-              <IconDeleteOutline />
+              <TrashIcon />
             </IconButton>
           </Tooltip>
         </Box>
