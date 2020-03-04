@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
     statBtn: {
       display: 'block',
       textAlign: 'center',
-      lineHeight: '30px',
+      lineHeight: theme.typography.button.lineHeight,
       cursor: 'help',
       textDecoration: 'underline',
       '&:hover + $list': {
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: 160,
       position: 'absolute',
       top: 0,
-      left: '-42px',
+      left: theme.spacing(-6.5),
       marginTop: theme.spacing(3.5),
       background: '#fff',
       visibility: 'hidden',
