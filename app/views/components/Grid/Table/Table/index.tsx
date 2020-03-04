@@ -111,15 +111,17 @@ export function GridTable<Row>({
 
   return (
     <>
-      <div className={gridClasses.headerContainer}>
-        <div>{ToolbarComponent}</div>
+      {(ToolbarComponent || (sorting && sorting.columns)) && (
+        <div className={gridClasses.headerContainer}>
+          <div>{ToolbarComponent}</div>
 
-        {rows && rows.length > 0 && (
-          <div>
-            <Sorting<Row> columns={columns} options={sorting} />
-          </div>
-        )}
-      </div>
+          {rows && rows.length > 0 && (
+            <div>
+              <Sorting<Row> columns={columns} options={sorting} />
+            </div>
+          )}
+        </div>
+      )}
 
       {rows && rows.length === 0 && !loading && EmptyStateComponent && (
         <EmptyStateComponent />

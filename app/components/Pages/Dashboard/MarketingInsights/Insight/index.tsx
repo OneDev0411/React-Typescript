@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
-import Dialog from '@material-ui/core/Dialog'
+import { Box, Dialog } from '@material-ui/core'
 
+import { PageTabs, Tab, TabSpacer } from 'components/PageTabs'
 import { formatDate } from 'components/DateTimePicker/helpers'
 import ContactInfo from 'components/ContactInfo'
 
@@ -14,12 +15,14 @@ import { Container } from '../../Contacts/components/Container'
 import Loading from '../../../../Partials/Loading'
 
 import { percent } from '../List/helpers'
+import { SortValues } from './helpers'
 
 import { InsightContainer, PageContainer, SummaryCard } from './styled'
 import useItemData from './useItemData'
 import Summary from './Summary'
 import ContactsTable from './ContactsTable'
 import { ContactsListType } from './types'
+import SortField, { SortableColumnsType as SortFieldType } from './SortField'
 
 interface InsightPropsType {
   params: {
@@ -29,7 +32,11 @@ interface InsightPropsType {
 
 function Insight(props: InsightPropsType) {
   const { id } = props.params
-
+  const [sortField, setSortField] = useState<SortFieldType>({
+    label: 'Most Opened',
+    value: SortValues.MOST_OPENED,
+    ascending: false
+  })
   const [isOpenViewEmail, setOpenViewEmail] = React.useState(false)
   const { item, isLoading } = useItemData(id)
   const email = item && getEmailCampaignEmail(item)
@@ -113,6 +120,22 @@ function Insight(props: InsightPropsType) {
             />
           )}
         </Dialog>
+        <Box px={3} pb={2}>
+          <PageTabs
+            tabs={[
+              <TabSpacer key="spacer" />,
+              <Tab
+                key="sort-field"
+                label={
+                  <SortField
+                    sortLabel={sortField.label}
+                    onChange={setSortField}
+                  />
+                }
+              />
+            ]}
+          />
+        </Box>
         <InsightContainer>
           <aside className="sidebar">
             <SummaryCard>
@@ -126,7 +149,11 @@ function Insight(props: InsightPropsType) {
             </SummaryCard>
           </aside>
           <section className="content">
-            <ContactsTable item={item} />
+            <ContactsTable
+              item={item}
+              sortBy={sortField}
+              onChangeSort={setSortField}
+            />
           </section>
         </InsightContainer>
       </PageContainer>

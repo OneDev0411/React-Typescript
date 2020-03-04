@@ -14,7 +14,7 @@ interface Props {
 
 function Header({ backUrl, onViewEmail, title = '' }: Props) {
   return (
-    <PageHeader isFlat style={{ marginBottom: 0 }}>
+    <PageHeader isFlat style={{ padding: '1.5em 0 0', marginBottom: 0 }}>
       <PageHeader.Title showBackButton={false}>
         <PageHeader.Heading>{show_title(title)}</PageHeader.Heading>
       </PageHeader.Title>

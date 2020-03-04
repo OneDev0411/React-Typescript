@@ -7,28 +7,17 @@ import MiniContact from 'components/MiniContact'
 import { RenderProps } from 'components/Grid/Table/types'
 import { useGridStyles } from 'components/Grid/Table/styles'
 
+import { SortableColumnsType as SortFieldType } from './SortField'
 import RowBadges from './RowBadges'
 import { ContactColumn } from './styled'
-import { contactsList, SortValues } from './helpers'
+import { contactsList } from './helpers'
 import { ContactsListType } from './types'
 
-interface TableColumnProps {
-  rowData: ContactsListType
-}
 interface ContactsPropsType {
   item: IEmailCampaign<IEmailCampaignAssociation>
+  sortBy: SortFieldType
+  onChangeSort: (field: SortFieldType) => void
 }
-
-const sortableColumns = [
-  { label: 'Name A-Z', value: SortValues.ALPHABETICAL, ascending: true },
-  { label: 'Name Z-A', value: SortValues.ALPHABETICAL, ascending: false },
-  { label: 'Bounced', value: SortValues.BOUNCED, ascending: true },
-  { label: 'Unsubscribed', value: SortValues.UNSUBSCRIBED, ascending: true },
-  { label: 'Most Clicked', value: SortValues.MOST_CLICKED, ascending: false },
-  { label: 'Less Clicked', value: SortValues.MOST_CLICKED, ascending: true },
-  { label: 'Most Opened', value: SortValues.MOST_OPENED, ascending: false },
-  { label: 'Less Opened', value: SortValues.MOST_OPENED, ascending: true }
-]
 
 const columns = [
   {
@@ -67,9 +56,9 @@ const columns = [
   }
 ]
 
-function ContactsTable(props: ContactsPropsType) {
+function ContactsTable({ item, sortBy, onChangeSort }: ContactsPropsType) {
   const gridClasses = useGridStyles()
-  const rows = contactsList(props.item)
+  const rows = contactsList(item)
 
   return (
     <Table<ContactsListType>
@@ -80,12 +69,11 @@ function ContactsTable(props: ContactsPropsType) {
         row: gridClasses.row
       }}
       sorting={{
-        defaultSort: {
-          label: 'Most Opened',
-          value: SortValues.MOST_OPENED,
-          ascending: false
+        sortBy: {
+          value: sortBy.value,
+          ascending: sortBy.ascending
         },
-        columns: sortableColumns
+        onChange: onChangeSort
       }}
     />
   )
