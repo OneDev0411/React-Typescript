@@ -17,7 +17,7 @@ export default function Participants({ participants }: Props) {
   return (
     <>
       <Button
-        color="primary"
+        color="inherit"
         disabled={count === 0}
         onClick={() => setIsDrawerOpen(true)}
         size="small"

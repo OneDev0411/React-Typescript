@@ -1,19 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Box } from '@material-ui/core'
+import { Box, Button, IconButton } from '@material-ui/core'
 
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { isSoloActiveTeam } from 'utils/user-teams'
 import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
+import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
+
 import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
-import IconButton from '../../Button/IconButton'
 import ActionButton from '../../Button/ActionButton'
 import { ItemChangelog } from '../../TeamContact/ItemChangelog'
-import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
+
 import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
 import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
@@ -263,13 +264,10 @@ export class TourDrawer extends React.Component {
                         <React.Fragment>
                           <Tooltip placement="top" caption="Delete">
                             <IconButton
-                              isFit
-                              inverse
-                              type="button"
                               disabled={isDisabled}
                               onClick={this.delete}
                             >
-                              <IconDelete />
+                              <IconDelete size="medium" />
                             </IconButton>
                           </Tooltip>
                           <Divider margin="0 1rem" width="1px" height="2rem" />
@@ -301,14 +299,16 @@ export class TourDrawer extends React.Component {
                           tour={prePreviewFormat(values, this.state.tour)}
                         />
                       </Tooltip>
-                      <ActionButton
-                        type="button"
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        disableElevation
                         disabled={isDisabled}
                         onClick={this.handleSubmit}
                         style={{ marginLeft: '0.5em' }}
                       >
                         {this.state.isSaving ? 'Saving...' : 'Save'}
-                      </ActionButton>
+                      </Button>
                     </Flex>
                   </Footer>
                 </div>
