@@ -11,7 +11,6 @@ import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-e
 
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
-import { PageWrapper } from '../../Contacts/Profile/styled'
 import Loading from '../../../../Partials/Loading'
 
 import { percent } from '../List/helpers'
@@ -88,7 +87,7 @@ function Insight(props: InsightPropsType) {
   const closeEmailView = () => setOpenViewEmail(false)
 
   return (
-    <PageWrapper>
+    <>
       <Helmet>
         <title>{`${
           subject ? `${subject} | ` : ''
@@ -126,12 +125,12 @@ function Insight(props: InsightPropsType) {
               )}
             </SummaryCard>
           </aside>
-          <section className="sidebar">
+          <section className="content">
             <ContactsTable item={item} />
           </section>
         </InsightContainer>
       </PageContainer>
-    </PageWrapper>
+    </>
   )
 }
 

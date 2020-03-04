@@ -13,17 +13,13 @@ export const InsightContainer = styled.div`
   padding: 0 1.5rem 3rem 1.5rem;
   min-height: calc(100vh - 7.5rem);
 
-  & > aside {
-    width: 30%;
+  & > .sidebar {
+    width: 25%;
     margin-right: 1rem;
   }
 
-  & > section {
-    width: 70%;
-    background: #fff;
-    border-radius: 0.18rem;
-    border: solid 1px ${grey.A300};
-    padding: 1.5rem;
+  & > .content {
+    flex-grow: 1;
   }
 `
 

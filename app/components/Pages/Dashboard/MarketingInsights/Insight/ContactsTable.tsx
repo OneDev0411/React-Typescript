@@ -5,6 +5,7 @@ import ContactInfo from 'components/ContactInfo'
 import MiniContact from 'components/MiniContact'
 
 import { RenderProps } from 'components/Grid/Table/types'
+import { useGridStyles } from 'components/Grid/Table/styles'
 
 import RowBadges from './RowBadges'
 import { ContactColumn } from './styled'
@@ -34,6 +35,7 @@ const columns = [
     header: 'Contact',
     id: 'contact',
     primary: true,
+    width: '60%',
     render: ({ row }: RenderProps<ContactsListType>) => (
       <ContactColumn>
         <div>
@@ -50,29 +52,33 @@ const columns = [
   {
     header: 'Opened',
     id: 'opened',
+    width: '20%',
     render: ({ row }: RenderProps<ContactsListType>) => (
-      <span>{row.opened}</span>
+      <span>Opened: {row.opened}</span>
     )
   },
   {
     header: 'Clicked',
     id: 'clicked',
+    width: '20%',
     render: ({ row }: RenderProps<ContactsListType>) => (
-      <span>{row.clicked}</span>
+      <span>Clicked: {row.clicked}</span>
     )
   }
 ]
 
 function ContactsTable(props: ContactsPropsType) {
+  const gridClasses = useGridStyles()
   const rows = contactsList(props.item)
-
-  console.log(rows)
 
   return (
     <Table<ContactsListType>
       rows={rows}
       totalRows={(rows || []).length}
       columns={columns}
+      classes={{
+        row: gridClasses.row
+      }}
       sorting={{
         defaultSort: {
           label: 'Most Opened',

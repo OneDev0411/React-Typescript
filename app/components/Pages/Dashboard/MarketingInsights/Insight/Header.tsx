@@ -21,7 +21,6 @@ function Header({ backUrl, onViewEmail, title = '' }: Props) {
       <PageHeader.Menu>
         <Button
           variant="outlined"
-          color="primary"
           style={{ marginRight: '1em' }}
           onClick={onViewEmail}
         >
