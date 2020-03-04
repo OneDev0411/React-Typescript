@@ -87,7 +87,7 @@ export default function AppSideNav() {
             <SideNavItem>
               <AppNavbarBadge
                 badgeContent={chatRoomsNotificationsNumber}
-                color="error"
+                color="primary"
               >
                 <MessagesDrawerTrigger />
               </AppNavbarBadge>
@@ -100,7 +100,7 @@ export default function AppSideNav() {
             <SideNavLinkItem to="/dashboard/deals">
               <AppNavbarBadge
                 badgeContent={dealsNotificationsNumber}
-                color="error"
+                color="primary"
               >
                 Deals
               </AppNavbarBadge>
