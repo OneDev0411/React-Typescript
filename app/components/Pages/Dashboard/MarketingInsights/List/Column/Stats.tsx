@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
-  Popper,
   List,
   ListItem,
-  Tooltip,
   ListItemText,
   makeStyles,
   createStyles,
@@ -14,15 +12,32 @@ import { percent } from '../helpers'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    container: {
+      position: 'relative'
+    },
     statBtn: {
+      display: 'block',
+      textAlign: 'center',
+      lineHeight: '30px',
       cursor: 'help',
-      textDecoration: 'underline'
+      textDecoration: 'underline',
+      '&:hover + $list': {
+        visibility: 'visible'
+      }
     },
     list: {
-      marginTop: theme.spacing(0.5),
+      minWidth: 160,
+      position: 'absolute',
+      top: 0,
+      left: '-42px',
+      marginTop: theme.spacing(3.5),
       background: '#fff',
+      visibility: 'hidden',
       borderRadius: theme.shape.borderRadius,
-      boxShadow: theme.shadows[1]
+      boxShadow: theme.shadows[1],
+      '&:hover': {
+        visibility: 'visible'
+      }
     }
   })
 )
@@ -33,61 +48,39 @@ interface Props {
 
 function StatsColumn({ data }: Props) {
   const classes = useStyles()
-  const [anchorEl, setAnchorEl] = useState(null)
-
-  const handleClick = event => {
-    setAnchorEl(anchorEl ? null : event.currentTarget)
-  }
-
-  const open = Boolean(anchorEl)
-  const id = open ? 'view-stats-popper' : undefined
 
   return (
-    <>
-      <span
-        aria-describedby={id}
-        onClick={handleClick}
-        className={classes.statBtn}
-      >
-        View Stats
-      </span>
-      <Popper id={id} open={open} anchorEl={anchorEl} transition>
-        <List disablePadding className={classes.list}>
-          {data.executed_at ? (
-            <>
-              <Tooltip title={`${percent(data.failed, data.sent)}% Bounced`}>
-                <ListItem divider>
-                  <ListItemText
-                    primary={`Delivered: ${percent(
-                      data.delivered,
-                      data.sent
-                    )}%`}
-                  />
-                </ListItem>
-              </Tooltip>
-              <Tooltip title={`${data.opened} Recipients`}>
-                <ListItem divider>
-                  <ListItemText
-                    primary={`Open Rate: ${percent(data.opened, data.sent)}%`}
-                  />
-                </ListItem>
-              </Tooltip>
-              <Tooltip title={`${data.clicked} Times`}>
-                <ListItem>
-                  <ListItemText
-                    primary={`Click Rate: ${percent(data.clicked, data.sent)}%`}
-                  />
-                </ListItem>
-              </Tooltip>
-            </>
-          ) : (
-            <ListItem>
-              <ListItemText primary="Not Executed" />
+    <div className={classes.container}>
+      <span className={classes.statBtn}>View Stats</span>
+      <List disablePadding className={classes.list}>
+        {data.executed_at ? (
+          <>
+            <ListItem divider>
+              <ListItemText
+                primary={`Delivered: ${percent(data.delivered, data.sent)}%`}
+                secondary={`${percent(data.failed, data.sent)}% Bounced`}
+              />
             </ListItem>
-          )}
-        </List>
-      </Popper>
-    </>
+            <ListItem divider>
+              <ListItemText
+                primary={`Open Rate: ${percent(data.opened, data.sent)}%`}
+                secondary={`${data.opened} Recipients`}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary={`Click Rate: ${percent(data.clicked, data.sent)}%`}
+                secondary={`${data.clicked} Times`}
+              />
+            </ListItem>
+          </>
+        ) : (
+          <ListItem>
+            <ListItemText primary="Not Executed" />
+          </ListItem>
+        )}
+      </List>
+    </div>
   )
 }
 
