@@ -49,7 +49,6 @@ const useStyles = makeStyles((theme: Theme) =>
           borderRadius: `0 ${br}px ${br}px 0`
         },
         '&:hover .primary': {
-          color: theme.palette.primary.main,
           cursor: 'pointer'
         }
       }

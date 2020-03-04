@@ -112,6 +112,7 @@ function List(props) {
         )}
         loading={isLoading ? 'middle' : null}
         LoadingStateComponent={LoadingComponent}
+        hoverable={false}
         sorting={{
           sortBy: {
             value: sortBy.value,

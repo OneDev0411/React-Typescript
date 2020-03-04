@@ -9,6 +9,9 @@ export const InsightContainer = styled.div`
     display: flex;
     justify-content: space-between;
     font-size: 1rem;
+    &:hover {
+      color: ${props => props.theme.palette.secondary.main};
+    }
   }
 `
 
@@ -25,9 +28,6 @@ export const Info = styled.div`
     display: block;
     margin-right: 0.5rem;
   }
-
-  & .main-info {
-  }
 `
 
 export const StyledLink = styled(ALink)`
@@ -38,6 +38,9 @@ export const StyledLink = styled(ALink)`
   font-weight: 500;
   margin-top: -4px;
   cursor: pointer;
+  &:hover {
+    text-decoration-color: ${props => props.theme.palette.secondary.main};
+  }
 `
 
 export const StyledBadge = styled(Badge)`

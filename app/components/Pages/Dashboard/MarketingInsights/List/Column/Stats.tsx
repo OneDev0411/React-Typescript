@@ -15,9 +15,8 @@ import { percent } from '../helpers'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     statBtn: {
-      cursor: 'pointer',
+      cursor: 'help',
       textDecoration: 'underline'
-      // color: props => (isOpen ? theme.palette.primary.main : 'inherit')
     },
     list: {
       marginTop: theme.spacing(0.5),
