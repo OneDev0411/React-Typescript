@@ -1,4 +1,5 @@
-import styled from 'styled-components'
+import styled, { ThemeProps } from 'styled-components'
+import { Theme } from '@material-ui/core/styles'
 
 import Badge from 'components/Badge'
 import { grey } from 'views/utils/colors'
@@ -38,11 +39,18 @@ export const SummaryCard = styled.div`
       margin-bottom: 1rem;
 
       .field-name {
-        color: ${grey.A900};
+        color: ${(props: ThemeProps<Theme>) => props.theme.palette.grey['600']};
+        font-size: ${(props: ThemeProps<Theme>) =>
+          props.theme.typography.subtitle2.fontSize};
+        font-weight: ${(props: ThemeProps<Theme>) =>
+          props.theme.typography.subtitle2.fontWeight};
         margin-bottom: 0.125rem;
       }
       .field-value {
-        font-weight: bold;
+        font-size: ${(props: ThemeProps<Theme>) =>
+          props.theme.typography.body2.fontSize};
+        font-weight: ${(props: ThemeProps<Theme>) =>
+          props.theme.typography.body2.fontWeight};
       }
     }
   }
@@ -53,8 +61,9 @@ export const SummaryCard = styled.div`
     margin-top: 1.5rem;
 
     & .title {
-      font-size: 1.25rem;
-      font-weight: bold;
+      font-size: ${(props: ThemeProps<Theme>) =>
+        props.theme.typography.subtitle1.fontSize};
+      font-weight: 'bold';
       margin-bottom: 1.5rem;
     }
 
