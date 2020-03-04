@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { addNotification as notify } from 'reapop'
 import { Helmet } from 'react-helmet'
-import { Box, Typography, Theme } from '@material-ui/core'
+import { Typography, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
 import Table from 'components/Grid/Table'
@@ -37,11 +37,26 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   description: {
-    paddingRight: theme.spacing(2),
-    color: theme.palette.grey[500]
+    paddingRight: theme.spacing(2)
   },
-  enrolledContacts: {
-    color: theme.palette.grey[500]
+  enrolledContacts: {},
+  actions: {
+    marginRight: theme.spacing(4),
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+  row: {
+    '&:not(:hover)': {
+      '& $description': {
+        color: theme.palette.grey[500]
+      },
+      '& $enrolledContacts': {
+        color: theme.palette.grey[500]
+      },
+      '& $actions': {
+        display: 'none'
+      }
+    }
   }
 }))
 
@@ -140,7 +155,7 @@ function List(props: Props) {
         const actions = getFlowActions(row)
 
         return (
-          <Box display="flex" justifyContent="flex-end">
+          <div className={classes.actions}>
             <BasicDropdown
               fullHeight
               pullTo="right"
@@ -183,7 +198,7 @@ function List(props: Props) {
                 }
               }}
             />
-          </Box>
+          </div>
         )
       }
     }
@@ -223,6 +238,7 @@ function List(props: Props) {
           totalRows={(flows || []).length}
           loading={isFetching ? 'middle' : null}
           LoadingStateComponent={LoadingComponent}
+          classes={{ row: classes.row }}
         />
       )}
     </>

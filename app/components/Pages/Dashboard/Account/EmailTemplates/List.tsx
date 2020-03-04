@@ -174,7 +174,6 @@ function EmailTemplatesList({
       rows={templates}
       totalRows={(templates || []).length}
       columns={columns}
-      classes={{ row: classes.row }}
       loading={isFetching ? 'middle' : null}
       LoadingStateComponent={() => (
         <LoadingContainer style={{ padding: '20% 0' }} />
@@ -183,6 +182,7 @@ function EmailTemplatesList({
         onClick: isTemplateDeleting(row.id) ? () => {} : () => onItemClick(row),
         style: { cursor: 'pointer' }
       })}
+      classes={{ row: classes.row }}
     />
   )
 }
