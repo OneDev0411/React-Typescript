@@ -40,15 +40,27 @@ const useStyles = makeStyles((theme: Theme) =>
       }
     },
     subject: {
-      paddingRight: theme.spacing(2),
-      color: theme.palette.grey[500]
+      paddingRight: theme.spacing(2)
     },
     body: {
-      paddingRight: theme.spacing(2),
-      color: theme.palette.grey[500]
+      paddingRight: theme.spacing(2)
     },
     actions: {
+      flexGrow: 1,
       textAlign: 'right'
+    },
+    row: {
+      '&:not(:hover)': {
+        '& $subject': {
+          color: theme.palette.grey[500]
+        },
+        '& $body': {
+          color: theme.palette.grey[500]
+        },
+        '& $actions': {
+          display: 'none'
+        }
+      }
     }
   })
 )
@@ -127,30 +139,31 @@ function EmailTemplatesList({
           <Typography noWrap variant="body2" classes={{ root: classes.body }}>
             {row.text}
           </Typography>
-          <Box flexGrow={1} />
-          <Tooltip
-            caption={
-              row.editable ? 'Delete' : "You can't delete default templates." // TODO: Tooltip doen't work for disabled buttons.
-            }
-          >
-            <IconButton
-              disabled={!row.editable || isTemplateDeleting(row.id)}
-              onClick={e => {
-                e.stopPropagation()
-
-                modal.setConfirmationModal({
-                  message: 'Delete Email Template!',
-                  description: `Are you sure about deleting "${
-                    row.name
-                  }" template?`,
-                  confirmLabel: 'Yes, I am sure',
-                  onConfirm: () => handleDelete(row.id)
-                })
-              }}
+          <Box className={classes.actions}>
+            <Tooltip
+              caption={
+                row.editable ? 'Delete' : "You can't delete default templates." // TODO: Tooltip doen't work for disabled buttons.
+              }
             >
-              <TrashIcon />
-            </IconButton>
-          </Tooltip>
+              <IconButton
+                disabled={!row.editable || isTemplateDeleting(row.id)}
+                onClick={e => {
+                  e.stopPropagation()
+
+                  modal.setConfirmationModal({
+                    message: 'Delete Email Template!',
+                    description: `Are you sure about deleting "${
+                      row.name
+                    }" template?`,
+                    confirmLabel: 'Yes, I am sure',
+                    onConfirm: () => handleDelete(row.id)
+                  })
+                }}
+              >
+                <TrashIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
         </Box>
       )
     }
@@ -161,6 +174,7 @@ function EmailTemplatesList({
       rows={templates}
       totalRows={(templates || []).length}
       columns={columns}
+      classes={{ row: classes.row }}
       loading={isFetching ? 'middle' : null}
       LoadingStateComponent={() => (
         <LoadingContainer style={{ padding: '20% 0' }} />
