@@ -32,8 +32,6 @@ export async function getEmailThreads<
   filters: IGetEmailThreadsFilters,
   associations: SelectedEmailThreadAssociations[] = defaultEmailThreadAssociations as SelectedEmailThreadAssociations[]
 ): Promise<IEmailThread<SelectedEmailThreadAssociations>[]> {
-  console.log(`query = "${filters.searchQuery || ''}"`)
-
   const response = await new Fetch().get('/emails/threads').query({
     'associations[]': associations.map(toEntityAssociation('email_thread')),
     'select[]': filters.selection
