@@ -11,8 +11,8 @@ import Table from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import Link from 'components/ALink'
-import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 import { BasicDropdown } from 'components/BasicDropdown'
+import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
@@ -161,7 +161,7 @@ function List(props: Props) {
               pullTo="right"
               selectedItem={null}
               buttonRenderer={(btnProps: any) => (
-                <VerticalDotsIcon {...btnProps} />
+                <IconHorizontalDots {...btnProps} />
               )}
               items={actions}
               onSelect={(action: typeof actions[number]) => {

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import {
-  createStyles,
   makeStyles,
   Theme,
   Typography,
@@ -30,46 +29,47 @@ import LoadingContainer from 'components/LoadingContainer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    name: {
-      paddingRight: theme.spacing(2),
-      paddingLeft: theme.spacing(1.5),
-      '&:not(:hover)': {
-        color: theme.palette.common.black
-      }
-    },
-    subject: {
-      paddingRight: theme.spacing(2)
-    },
-    body: {
-      paddingRight: theme.spacing(2)
-    },
-    actions: {
-      flexGrow: 1,
-      textAlign: 'right'
-    },
-    row: {
-      '&:not(:hover)': {
-        '& $subject': {
-          color: theme.palette.grey[500]
-        },
-        '& $body': {
-          color: theme.palette.grey[500]
-        },
-        '& $actions': {
-          display: 'none'
-        }
+const useStyles = makeStyles((theme: Theme) => ({
+  name: {
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(1.5),
+    '&:not(:hover)': {
+      color: theme.palette.common.black
+    }
+  },
+  subject: {
+    paddingRight: theme.spacing(2)
+  },
+  body: {
+    paddingRight: theme.spacing(2)
+  },
+  actions: {
+    flexGrow: 1,
+    textAlign: 'right',
+    '&:hover svg *': {
+      fill: theme.palette.error.main
+    }
+  },
+  row: {
+    '&:not(:hover)': {
+      '& $subject': {
+        color: theme.palette.grey[500]
+      },
+      '& $body': {
+        color: theme.palette.grey[500]
+      },
+      '& $actions': {
+        display: 'none'
       }
     }
-  })
-)
+  }
+}))
 
 interface Props {
   brand: UUID
   isFetching: boolean
   templates: IBrandEmailTemplate[]
-  onItemClick: (IBrandEmailTemplate) => void
+  onItemClick: (item: IBrandEmailTemplate) => void
   deleteEmailTemplate: IAsyncActionProp<typeof deleteEmailTemplate>
   fetchEmailTemplates: IAsyncActionProp<typeof fetchEmailTemplates>
 }
@@ -139,7 +139,7 @@ function EmailTemplatesList({
           <Typography noWrap variant="body2" classes={{ root: classes.body }}>
             {row.text}
           </Typography>
-          <Box className={classes.actions}>
+          <div className={classes.actions}>
             <Tooltip
               caption={
                 row.editable ? 'Delete' : "You can't delete default templates." // TODO: Tooltip doen't work for disabled buttons.
@@ -163,7 +163,7 @@ function EmailTemplatesList({
                 <TrashIcon />
               </IconButton>
             </Tooltip>
-          </Box>
+          </div>
         </Box>
       )
     }
