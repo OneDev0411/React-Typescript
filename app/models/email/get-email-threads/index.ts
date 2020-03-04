@@ -18,6 +18,7 @@ export const defaultEmailThreadSelection = <const>[
 
 export interface IGetEmailThreadsFilters {
   selection?: typeof defaultEmailThreadSelection[number][]
+  searchQuery?: string
   start: number
   limit?: number
   isRead?: boolean

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react'
+import React, { useState, useMemo, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { addNotification } from 'reapop'
 
@@ -13,11 +13,13 @@ const emailThreadFetchCount = 30
 interface Props {
   selectedEmailThreadId?: UUID
   onSelectEmailThread: (emailThreadId: UUID | undefined) => void
+  searchQuery?: string
 }
 
 export default function InboxEmailThreadList({
   selectedEmailThreadId,
-  onSelectEmailThread
+  onSelectEmailThread,
+  searchQuery
 }: Props) {
   const [emailThreads, setEmailThreads] = useState<IEmailThread<'contacts'>[]>(
     []
@@ -27,6 +29,10 @@ export default function InboxEmailThreadList({
     () => emailThreads.find(({ id }) => id === selectedEmailThreadId),
     [emailThreads, selectedEmailThreadId]
   )
+
+  useEffect(() => {
+    setEmailThreads([])
+  }, [searchQuery])
 
   const dispatch = useDispatch()
 
@@ -62,6 +68,7 @@ export default function InboxEmailThreadList({
         const updatedEmailThreads = await getEmailThreads(
           {
             selection: ['email_thread.snippet'],
+            searchQuery,
             start: 0,
             limit: updatedEmailThreadIds.length,
             ids: updatedEmailThreadIds
@@ -80,7 +87,7 @@ export default function InboxEmailThreadList({
         )
       }
     },
-    [dispatch, joinEmailThreads]
+    [dispatch, joinEmailThreads, searchQuery]
   )
   const handleDeleteEmailThreads = useCallback(
     (deletedEmailThreadIds: UUID[]) => {
@@ -101,6 +108,7 @@ export default function InboxEmailThreadList({
           const moreEmailThreads = await getEmailThreads(
             {
               selection: ['email_thread.snippet'],
+              searchQuery,
               start: emailThreads.length,
               limit: emailThreadFetchCount
             },

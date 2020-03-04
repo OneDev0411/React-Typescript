@@ -5,18 +5,17 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
   (theme: Theme) => ({
     root: {
       width: '100%',
-      padding: theme.spacing(2, 3, 2, 2.5),
-      borderLeft: `4px solid ${theme.palette.common.white}`
+      padding: theme.spacing(2, 2, 2, 0.75)
     },
     selected: {
-      borderLeftColor: theme.palette.primary.main,
-      backgroundColor: `${theme.palette.primary.main}1F`
+      backgroundColor: `${theme.palette.action.selected}`
     },
     status: {
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      marginTop: 8
+      width: theme.spacing(1),
+      height: theme.spacing(1),
+      borderRadius: theme.spacing(0.5),
+      marginTop: theme.spacing(0.75),
+      marginRight: theme.spacing(0.75)
     },
     unread: {
       backgroundColor: theme.palette.primary.main
@@ -24,11 +23,8 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
     info: {
       maxWidth: 'calc(100% - 25px)'
     },
-    infoText: {
-      lineHeight: '24px'
-    },
     message: {
-      maxHeight: '3rem',
+      maxHeight: '2.86em' /* 2x body2 line-height */,
       overflow: 'hidden'
     },
     flex: {
@@ -36,14 +32,6 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
     },
     grow: {
       flexGrow: 1
-    },
-    bold: {
-      fontWeight: 'bold'
-    },
-    oneLineEllipsis: {
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis'
     }
   }),
   { name: 'InboxEmailThreadListItem' }

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
-import { Grid, Theme, Box } from '@material-ui/core'
+import { Grid, Theme, Box, Divider } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -10,24 +10,32 @@ import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
+import GlobalPageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 
 import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
-import InboxHeader from './components/InboxHeader'
 import InboxConnectAccount from './components/InboxConnectAccount'
 import InboxEmailThreadList from './components/InboxEmailThreadList'
 import InboxEmailThread from './components/InboxEmailThread'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    body: {
-      height: 'calc(100% - 111px)' /* total height - page header */
+    layout: {
+      height: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      paddingBottom: 0
+    },
+    main: {
+      position: 'relative',
+      height:
+        'calc(100vh - 120px - 1px)' /* total height - page header - divider */
     },
     fullHeight: {
       height: '100%'
     },
     list: {
-      width: theme.spacing(46) + 1 /* right border */ + 8 /* scroll bar */
+      width: theme.spacing(36) + 1 /* right border */ + 8 /* scroll bar */
     },
     conversation: {
       overflowX: 'hidden',
@@ -53,6 +61,7 @@ export default function Inbox({ params }: Props & WithRouterProps) {
   const noConnectedAccounts = accounts.length === 0
 
   const [initializing, setInitializing] = useState<boolean>(true)
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
   const dispatch = useDispatch()
 
@@ -68,10 +77,18 @@ export default function Inbox({ params }: Props & WithRouterProps) {
   const classes = useStyles()
 
   return (
-    <>
-      <InboxHeader />
-
-      <div className={classes.body}>
+    <GlobalPageLayout className={classes.layout}>
+      {initializing || noConnectedAccounts ? (
+        <GlobalPageLayout.Header title="Inbox" />
+      ) : (
+        <GlobalPageLayout.HeaderWithSearch
+          title="Inbox"
+          placeholder="Search emails"
+          onSearch={query => setSearchQuery(query)}
+        />
+      )}
+      <GlobalPageLayout.Main className={classes.main}>
+        <Divider />
         {initializing ? (
           <Box padding={10}>
             <LoadingContainer style={{}} />
@@ -87,6 +104,7 @@ export default function Inbox({ params }: Props & WithRouterProps) {
               <InboxEmailThreadList
                 selectedEmailThreadId={selectedEmailThreadId}
                 onSelectEmailThread={setSelectedEmailThreadId}
+                searchQuery={searchQuery}
               />
             </Grid>
             <Grid
@@ -108,7 +126,7 @@ export default function Inbox({ params }: Props & WithRouterProps) {
             </Grid>
           </Grid>
         )}
-      </div>
-    </>
+      </GlobalPageLayout.Main>
+    </GlobalPageLayout>
   )
 }

@@ -128,8 +128,8 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   }
 
   return (
-    <Box padding={2.5} paddingTop={2.5}>
-      <Box display="flex" padding={2.5}>
+    <Box>
+      <Box display="flex" paddingY={3.75} paddingLeft={2}>
         <Box flexGrow={1} width={0}>
           <Typography variant="h6" noWrap>
             {emailThread.subject || '(No Subject)'}
