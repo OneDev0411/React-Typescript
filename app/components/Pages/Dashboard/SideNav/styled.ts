@@ -29,9 +29,9 @@ export const SidenavListGroup = styled.ul`
 `
 
 export const SideNavItem = styled.li`
-  padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0.5, 0)};
   cursor: pointer;
   transition: background-color 0.2s ease-in;
+  margin-bottom: ${(props: ThemeProps<Theme>) => props.theme.spacing(1)}px;
 `
 
 const itemStyle = css`
@@ -107,7 +107,7 @@ export const ListItemDivider = Divider.withComponent('li')
 
 export const AppNavbarBadge = withStyles((theme: Theme) => ({
   anchorOriginTopRightRectangle: {
-    backgroundColor: `${theme.palette.info.main}`,
+    top: theme.spacing(-1),
     right: 'auto',
     left: `calc(100% + ${theme.spacing(1)}px)`,
     transform: 'scale(1) translateY(50%)'
