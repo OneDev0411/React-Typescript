@@ -7,6 +7,8 @@ import { Box } from '@material-ui/core'
 import { IAppState } from 'reducers/index'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 
+import { useGridStyles } from 'components/Grid/Table/styles'
+
 import Table from 'components/Grid/Table'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
@@ -27,6 +29,7 @@ import Actions from './columns/Actions'
 type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
 function ToursList(props: { user: IUser }) {
+  const gridClasses = useGridStyles()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
       order: '-due_date',
@@ -73,6 +76,7 @@ function ToursList(props: { user: IUser }) {
       header: 'Participants',
       id: 'participants',
       verticalAlign: 'center',
+      class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (
         <Participants
           participants={
@@ -86,6 +90,8 @@ function ToursList(props: { user: IUser }) {
     {
       id: 'view-toursheet',
       verticalAlign: 'center',
+      class: 'visible-on-hover',
+      width: '200px',
       render: ({ row }: RenderProps<TableRow>) => (
         <ViewToursheet
           onViewToursheet={() => {
@@ -99,6 +105,7 @@ function ToursList(props: { user: IUser }) {
       id: 'actions',
       verticalAlign: 'center',
       width: '60px',
+      class: 'visible-on-hover',
       render: ({ row }: RenderProps<TableRow>) => (
         <Actions
           onEdit={() => handleEdit(row)}
@@ -143,6 +150,9 @@ function ToursList(props: { user: IUser }) {
         totalRows={(list || []).length}
         loading={isFetching ? 'middle' : null}
         LoadingStateComponent={LoadingContainer}
+        classes={{
+          row: gridClasses.row
+        }}
       />
     )
   }

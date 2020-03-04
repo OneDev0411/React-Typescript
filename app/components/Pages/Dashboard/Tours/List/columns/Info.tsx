@@ -9,13 +9,13 @@ interface Props {
 export default function Info({ title, description }: Props) {
   return (
     <>
-      <Typography variant="body2" color="textSecondary" noWrap>
+      <Typography variant="body2" noWrap>
         {title}
-        {description && (
+        {/* {description && (
           <Typography variant="inherit" color="inherit">
             {description}
           </Typography>
-        )}
+        )} */}
       </Typography>
     </>
   )
