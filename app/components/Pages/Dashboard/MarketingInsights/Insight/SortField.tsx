@@ -9,15 +9,22 @@ interface Props {
   sortLabel: string
   onChange: (item) => void
 }
-interface SortableColumnsType {
+
+export interface SortableColumnsType {
   label: string
   value: string
   ascending: boolean
 }
 
 const sortableColumns: SortableColumnsType[] = [
-  { label: 'Newest', value: SortValues.Newest, ascending: true },
-  { label: 'Oldest', value: SortValues.Oldest, ascending: false }
+  { label: 'Name A-Z', value: SortValues.ALPHABETICAL, ascending: true },
+  { label: 'Name Z-A', value: SortValues.ALPHABETICAL, ascending: false },
+  { label: 'Bounced', value: SortValues.BOUNCED, ascending: true },
+  { label: 'Unsubscribed', value: SortValues.UNSUBSCRIBED, ascending: true },
+  { label: 'Most Clicked', value: SortValues.MOST_CLICKED, ascending: false },
+  { label: 'Less Clicked', value: SortValues.MOST_CLICKED, ascending: true },
+  { label: 'Most Opened', value: SortValues.MOST_OPENED, ascending: false },
+  { label: 'Less Opened', value: SortValues.MOST_OPENED, ascending: true }
 ]
 
 const SortFields = ({ sortLabel, onChange }: Props) => {

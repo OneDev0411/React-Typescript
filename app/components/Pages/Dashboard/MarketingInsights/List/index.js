@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 
 import Table from 'components/Grid/Table'
 
+import { useGridStyles } from 'components/Grid/Table/styles'
+
 import Layout from './Layout'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
@@ -22,6 +24,7 @@ import { InsightFiltersType } from './types'
 function List(props) {
   const [queue, setQueue] = useState(0)
   const { list, isLoading } = useListData(props.user, queue)
+  const gridClasses = useGridStyles()
   const isScheduled = props.route && props.route.path === 'scheduled'
   const filterType = isScheduled
     ? InsightFiltersType.SCHEDULED
@@ -32,13 +35,12 @@ function List(props) {
     window.socket.on('email_campaign:send', () => setQueue(queue => queue + 1))
   }, [])
 
-  const tableClassName = ['insight-table-container']
-
   const columns = useMemo(
     () => [
       {
         header: 'Thumbnail',
         id: 'thumbnail',
+        class: 'opaque',
         width: 70,
         verticalAlign: 'center',
         render: ({ row }) => <ThumbnailColumn data={row} />
@@ -46,6 +48,7 @@ function List(props) {
       {
         header: 'Title',
         id: 'title',
+        primary: true,
         width: '25%',
         verticalAlign: 'center',
         render: ({ row }) => (
@@ -72,6 +75,7 @@ function List(props) {
       {
         header: 'Stats',
         id: 'stats',
+        class: 'transparent',
         width: '7%',
         verticalAlign: 'center',
         render: ({ row }) => <StatsColumn data={row} />
@@ -93,37 +97,42 @@ function List(props) {
     []
   )
 
-  if (isLoading === false) {
-    tableClassName.push('show')
+  const renderContent = ({ sortBy, onChangeSort }) => {
+    if (isLoading || filteredList.length == 0) {
+      return <LoadingComponent />
+    }
+
+    return (
+      <Table
+        rows={filteredList}
+        totalRows={filteredList.length}
+        columns={columns}
+        EmptyStateComponent={() => (
+          <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
+        )}
+        loading={isLoading ? 'middle' : null}
+        LoadingStateComponent={LoadingComponent}
+        hoverable={false}
+        sorting={{
+          sortBy: {
+            value: sortBy.value,
+            ascending: sortBy.ascending
+          },
+          onChange: onChangeSort
+        }}
+        classes={{
+          row: gridClasses.row
+        }}
+      />
+    )
   }
 
   return (
     <Layout
       sentCount={stats.sent}
       scheduledCount={stats.scheduled}
-      renderContent={({ sortBy, onChangeSort }) => (
-        <InsightContainer>
-          {isLoading && <LoadingComponent />}
-          <div className={tableClassName.join(' ')}>
-            <Table
-              rows={filteredList}
-              totalRows={(filteredList || []).length}
-              columns={columns}
-              EmptyStateComponent={() => (
-                <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
-              )}
-              loading={isLoading ? 'middle' : null}
-              LoadingStateComponent={LoadingComponent}
-              sorting={{
-                sortBy: {
-                  value: sortBy.value,
-                  ascending: sortBy.ascending
-                },
-                onChange: onChangeSort
-              }}
-            />
-          </div>
-        </InsightContainer>
+      renderContent={props => (
+        <InsightContainer>{renderContent(props)}</InsightContainer>
       )}
     />
   )

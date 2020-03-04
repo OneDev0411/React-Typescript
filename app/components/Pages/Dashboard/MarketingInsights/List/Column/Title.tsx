@@ -19,9 +19,7 @@ function TitleColumn({ data, reloadList }) {
     <div className="info-title">
       <div>{show_title(data.subject)}</div>
       {isInProgress && (
-        <div>
-          <StyledBadge appearance="warning">In Progress</StyledBadge>
-        </div>
+        <StyledBadge appearance="warning">In Progress</StyledBadge>
       )}
     </div>
   )
@@ -33,7 +31,7 @@ function TitleColumn({ data, reloadList }) {
         onEmailUpdated={reloadList}
         onDeleted={reloadList}
       >
-        {({ onClick }) => <span onClick={onClick}>{title}</span>}
+        {({ onClick }) => <div onClick={onClick}>{title}</div>}
       </EditEmailButton>
     )
   } else {

@@ -8,12 +8,10 @@ export const ContactInfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     margin-left: 1rem;
-
-    & span:first-child {
-      font-size: 1rem;
+    & span {
+      font-size: ${props => props.theme.typography.body2.fontSize};
     }
     & span:nth-child(2) {
-      font-size: 0.875rem;
       color: #ccc;
     }
   }

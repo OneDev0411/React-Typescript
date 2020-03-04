@@ -2,18 +2,17 @@ import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { browserHistory } from 'react-router'
 
-import { Box } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
 import { PageTabs, Tab, TabLink, TabSpacer } from 'components/PageTabs'
 import Tooltip from 'components/tooltip'
-import ActionButton from 'components/Button/ActionButton'
 
 import { SortValues } from './helpers'
 import SortField from './SortField'
 
-const urlGenerator = url => `/dashboard/insights${url}`
+const urlGenerator = (url = '') => `/dashboard/insights${url}`
 
 function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
   const [sortField, setSortField] = useState({
@@ -25,7 +24,7 @@ function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
   const Items = [
     {
       label: `Sent (${sentCount})`,
-      to: urlGenerator('/')
+      to: urlGenerator()
     },
     {
       label: `Scheduled (${scheduledCount})`,
@@ -42,12 +41,12 @@ function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
         <PageLayout.Header title="My Email">
           <Box textAlign="right">
             <Tooltip placement="bottom">
-              <ActionButton
-                appearance="outline"
+              <Button
+                variant="outlined"
                 onClick={() => browserHistory.push('/dashboard/marketing')}
               >
                 Visit Marketing Center
-              </ActionButton>
+              </Button>
             </Tooltip>
           </Box>
         </PageLayout.Header>
@@ -61,7 +60,12 @@ function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
               <TabSpacer key="spacer" />,
               <Tab
                 key="sort-field"
-                label={<SortField onChange={setSortField} />}
+                label={
+                  <SortField
+                    sortLabel={sortField.label}
+                    onChange={setSortField}
+                  />
+                }
               />
             ]}
           />

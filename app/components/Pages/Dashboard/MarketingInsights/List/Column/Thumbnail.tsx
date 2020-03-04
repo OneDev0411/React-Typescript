@@ -1,12 +1,18 @@
 import React from 'react'
 import { Avatar, Theme, makeStyles, createStyles } from '@material-ui/core'
 
+import EmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: 50,
       height: 45,
-      borderRadius: theme.shape.borderRadius
+      backgroundColor: theme.palette.grey['200'],
+      borderRadius: theme.shape.borderRadius,
+      '& svg': {
+        fill: theme.palette.grey['500']
+      }
     }
   })
 )
@@ -22,12 +28,9 @@ function ThumbnailColumn({ data }: Props) {
     : undefined
 
   return (
-    <Avatar
-      variant="square"
-      sizes="50"
-      src={imageUrl}
-      className={classes.root}
-    />
+    <Avatar variant="square" sizes="50" src={imageUrl} className={classes.root}>
+      <EmailOutline />
+    </Avatar>
   )
 }
 

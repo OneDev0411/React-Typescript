@@ -1,9 +1,10 @@
 import React from 'react'
-import { render, cleanup } from '@testing-library/react'
+import { cleanup } from '@testing-library/react'
 
 import { emailCampaignEmail as emailCampaignEmailObj } from 'fixtures/insights/insight'
 
 import { ContactsListType } from '../../../components/Pages/Dashboard/MarketingInsights/Insight/types'
+import { renderWithTheme } from '../../../../tests/unit/utils/render-with-theme'
 
 import ContactInfo from '.'
 
@@ -28,7 +29,7 @@ describe('ContactInfo tests', () => {
       clicked: 0
     }
 
-    const { queryByText } = render(<ContactInfo data={item} />)
+    const { queryByText } = renderWithTheme(<ContactInfo data={item} />)
     const name_el = queryByText(item.display_name!)
 
     expect(name_el).not.toBeNull()
@@ -52,7 +53,7 @@ describe('ContactInfo tests', () => {
       clicked: 0
     }
 
-    const { queryByText } = render(<ContactInfo data={item} />)
+    const { queryByText } = renderWithTheme(<ContactInfo data={item} />)
     const name_el = queryByText(item.display_name!)
 
     expect(name_el).not.toBeNull()
@@ -75,7 +76,7 @@ describe('ContactInfo tests', () => {
       clicked: 0
     }
 
-    const { container } = render(<ContactInfo data={item} />)
+    const { container } = renderWithTheme(<ContactInfo data={item} />)
     const profile_info_el = container.querySelector('.profile-info')
 
     expect(profile_info_el).not.toBeNull()
