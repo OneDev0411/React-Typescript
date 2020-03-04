@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import {
-  createStyles,
   makeStyles,
   Theme,
   Typography,
@@ -28,36 +27,49 @@ import { TableColumn } from 'components/Grid/Table/types'
 import Tooltip from 'components/tooltip'
 import LoadingContainer from 'components/LoadingContainer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    name: {
-      paddingRight: theme.spacing(2),
-      paddingLeft: theme.spacing(1.5),
-      '&:not(:hover)': {
-        color: theme.palette.common.black
-      }
-    },
-    subject: {
-      paddingRight: theme.spacing(2),
-      color: theme.palette.grey[500]
-    },
-    body: {
-      paddingRight: theme.spacing(2),
-      color: theme.palette.grey[500]
-    },
-    actions: {
-      textAlign: 'right'
+const useStyles = makeStyles((theme: Theme) => ({
+  name: {
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(1.5),
+    '&:not(:hover)': {
+      color: theme.palette.common.black
     }
-  })
-)
+  },
+  subject: {
+    paddingRight: theme.spacing(2)
+  },
+  body: {
+    paddingRight: theme.spacing(2)
+  },
+  actions: {
+    flexGrow: 1,
+    textAlign: 'right',
+    '&:hover svg *': {
+      fill: theme.palette.error.main
+    }
+  },
+  row: {
+    '&:not(:hover)': {
+      '& $subject': {
+        color: theme.palette.grey[500]
+      },
+      '& $body': {
+        color: theme.palette.grey[500]
+      },
+      '& $actions': {
+        display: 'none'
+      }
+    }
+  }
+}))
 
 interface Props {
   brand: UUID
   isFetching: boolean
   templates: IBrandEmailTemplate[]
-  onItemClick: (IBrandEmailTemplate) => void
+  onItemClick: (item: IBrandEmailTemplate) => void
   deleteEmailTemplate: IAsyncActionProp<typeof deleteEmailTemplate>
   fetchEmailTemplates: IAsyncActionProp<typeof fetchEmailTemplates>
 }
@@ -127,31 +139,31 @@ function EmailTemplatesList({
           <Typography noWrap variant="body2" classes={{ root: classes.body }}>
             {row.text}
           </Typography>
-          <Box flexGrow={1} />
-          <Tooltip
-            caption={
-              row.editable ? 'Delete' : "You can't delete default templates." // TODO: Tooltip doen't work for disabled buttons.
-            }
-          >
-            <IconButton
-              disabled={!row.editable || isTemplateDeleting(row.id)}
-              onClick={e => {
-                e.stopPropagation()
-
-                modal.setConfirmationModal({
-                  message: 'Delete Email Template!',
-                  description: `Are you sure about deleting "${
-                    row.name
-                  }" template?`,
-                  confirmLabel: 'Yes, I am sure',
-                  onConfirm: () => handleDelete(row.id)
-                })
-              }}
+          <div className={classes.actions}>
+            <Tooltip
+              caption={
+                row.editable ? 'Delete' : "You can't delete default templates." // TODO: Tooltip doen't work for disabled buttons.
+              }
             >
-              {/* TODO: Replace with a proper trach icon. */}
-              <IconDeleteOutline />
-            </IconButton>
-          </Tooltip>
+              <IconButton
+                disabled={!row.editable || isTemplateDeleting(row.id)}
+                onClick={e => {
+                  e.stopPropagation()
+
+                  modal.setConfirmationModal({
+                    message: 'Delete Email Template!',
+                    description: `Are you sure about deleting "${
+                      row.name
+                    }" template?`,
+                    confirmLabel: 'Yes, I am sure',
+                    onConfirm: () => handleDelete(row.id)
+                  })
+                }}
+              >
+                <TrashIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
         </Box>
       )
     }
@@ -170,6 +182,7 @@ function EmailTemplatesList({
         onClick: isTemplateDeleting(row.id) ? () => {} : () => onItemClick(row),
         style: { cursor: 'pointer' }
       })}
+      classes={{ row: classes.row }}
     />
   )
 }
