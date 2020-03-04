@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     arrowIconRotated: {
       transform: 'rotateX(0)'
+    },
+    userInfo: {
+      opacity: 0.7
     }
   })
 )
@@ -62,7 +65,12 @@ export default function ToggleButton(props: Props) {
           <Typography noWrap variant="body2">
             {props.userName}
           </Typography>
-          <Typography noWrap variant="caption" display="block">
+          <Typography
+            noWrap
+            variant="caption"
+            display="block"
+            className={classes.userInfo}
+          >
             {props.userInfo}
           </Typography>
         </div>

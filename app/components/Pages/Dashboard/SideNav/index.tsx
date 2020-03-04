@@ -40,7 +40,7 @@ export default function AppSideNav() {
   )
   const dealsNotificationsNumber = useDealsNotificationsNumber()
   const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
-  const logoSrc = Brand.asset('office_logo')
+  const logoSrc = Brand.asset('office_logo', '/static/images/logo.svg')
 
   return (
     <Sidenav>
@@ -87,7 +87,7 @@ export default function AppSideNav() {
             <SideNavItem>
               <AppNavbarBadge
                 badgeContent={chatRoomsNotificationsNumber}
-                color="error"
+                color="primary"
               >
                 <MessagesDrawerTrigger />
               </AppNavbarBadge>
@@ -100,7 +100,7 @@ export default function AppSideNav() {
             <SideNavLinkItem to="/dashboard/deals">
               <AppNavbarBadge
                 badgeContent={dealsNotificationsNumber}
-                color="error"
+                color="primary"
               >
                 Deals
               </AppNavbarBadge>

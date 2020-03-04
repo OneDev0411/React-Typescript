@@ -31,6 +31,7 @@ export const SidenavListGroup = styled.ul`
 export const SideNavItem = styled.li`
   cursor: pointer;
   transition: background-color 0.2s ease-in;
+  margin-bottom: ${(props: ThemeProps<Theme>) => props.theme.spacing(1)}px;
 `
 
 const itemStyle = css`
@@ -44,15 +45,15 @@ const itemStyle = css`
   &:hover,
   &:focus {
     text-decoration: none;
-    color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
+    color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.light};
   }
 
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>
     active &&
     css`
-      color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
+      color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.light};
       border-left-color: ${(props: ThemeProps<Theme>) =>
-        props.theme.palette.primary.main};
+        props.theme.palette.primary.light};
     `}
 `
 
@@ -63,8 +64,9 @@ interface SidenavLinkPorps extends LinkProps {
 export const SidenavLink = styled(Link)<SidenavLinkPorps>`
   display: inline-block;
   font-size: ${(props: ThemeProps<Theme>) =>
-    props.theme.typography.h6.fontSize};
-  line-height: 2;
+    props.theme.typography.body1.fontSize};
+  line-height: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.body1.lineHeight};
   ${itemStyle}
 `
 
@@ -105,6 +107,7 @@ export const ListItemDivider = Divider.withComponent('li')
 
 export const AppNavbarBadge = withStyles((theme: Theme) => ({
   anchorOriginTopRightRectangle: {
+    top: theme.spacing(-1),
     right: 'auto',
     left: `calc(100% + ${theme.spacing(1)}px)`,
     transform: 'scale(1) translateY(50%)'

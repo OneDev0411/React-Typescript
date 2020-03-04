@@ -6,10 +6,10 @@ import { toggleChatbar } from '../../../../../store_actions/chatroom'
 
 const useStyles = makeStyles((theme: Theme) => ({
   button: {
-    lineHeight: 2,
-    fontSize: theme.typography.h6.fontSize,
     paddingLeft: theme.spacing(4),
     color: theme.palette.primary.contrastText,
+    fontSize: theme.typography.body1.fontSize,
+    lineHeight: theme.typography.body1.lineHeight,
 
     '&:hover': {
       color: theme.palette.primary.main
