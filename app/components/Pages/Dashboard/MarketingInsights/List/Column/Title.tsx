@@ -17,7 +17,7 @@ function TitleColumn({ data, reloadList }) {
 
   const title = (
     <div className="info-title">
-      <div>{show_title(data.subject)}</div>
+      <div>{show_title(data.subject, 30)}</div>
       {isInProgress && (
         <StyledBadge appearance="warning">In Progress</StyledBadge>
       )}
