@@ -1,5 +1,3 @@
-import { theme } from '../../theme'
-
 const newRed = '#F44336'
 const lightOrange = '#FFB74D'
 
@@ -54,11 +52,11 @@ export const grey = {
   A900: '#6C6D70'
 }
 
-export const primary = theme.palette.primary.main
-export const primaryDark = theme.palette.primary.dark
+export const primary = '#00B286'
+export const primaryDark = '#008060'
 
-export const error = theme.palette.error.main
-export const deleteColor = theme.palette.error.main
+export const error = red.A200
+export const deleteColor = red.A200
 
 export const disabledColor = grey.A900
 export const disabledBgColor = grey.A550
