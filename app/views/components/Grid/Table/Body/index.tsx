@@ -41,6 +41,8 @@ const useStyles = makeStyles((theme: Theme) =>
       const br = theme.shape.borderRadius
 
       let styles = {
+        fontSize: theme.typography.body1.fontSize,
+        fontWeight: theme.typography.body1.fontWeight,
         '& td:first-child': {
           paddingLeft: theme.spacing(1),
           borderRadius: `${br}px 0 0 ${br}px`

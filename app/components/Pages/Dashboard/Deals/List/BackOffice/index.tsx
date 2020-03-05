@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
-import { TextField, makeStyles, createStyles, Theme } from '@material-ui/core'
+import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { IAppState } from 'reducers/index'
 
 import GlobalHeader from 'components/GlobalHeader'
+import { SearchInput } from 'components/GlobalHeaderWithSearch'
 
 import { searchDeals, getDeals } from 'actions/deals'
 
@@ -32,16 +33,15 @@ interface StateProps {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      margin: theme.spacing(0, 3)
+      margin: theme.spacing(5)
     },
     headerContainer: {
       width: '100%',
       display: 'flex',
       justifyContent: 'flex-end'
     },
-    searchInput: {
-      width: '70%',
-      backgroundColor: theme.palette.grey[50]
+    filtersContainer: {
+      margin: theme.spacing(5, 0)
     }
   })
 )
@@ -83,13 +83,10 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
   }, [searchQuery])
 
   return (
-    <>
-      <GlobalHeader title="Deals admin">
+    <div className={classes.container}>
+      <GlobalHeader title="Deals admin" noPadding>
         <div className={classes.headerContainer}>
-          <TextField
-            className={classes.searchInput}
-            size="small"
-            variant="outlined"
+          <SearchInput
             placeholder="Search deals by address, MLS# or agent name..."
             onChange={handleQueryChange}
           />
@@ -98,16 +95,16 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
         </div>
       </GlobalHeader>
 
-      <div className={classes.container}>
+      <div className={classes.filtersContainer}>
         <TabFilters
           deals={deals}
           activeFilter={props.params.filter}
           searchQuery={searchQuery}
           sortableColumns={SORTABLE_COLUMNS}
         />
-
-        <Grid searchQuery={searchQuery} />
       </div>
-    </>
+
+      <Grid searchQuery={searchQuery} />
+    </div>
   )
 }

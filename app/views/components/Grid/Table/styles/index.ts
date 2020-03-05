@@ -17,6 +17,7 @@ export const styles = (theme: Theme) =>
         }
       },
       '&:hover td': {
+        cursor: 'pointer',
         '& a': {
           color: theme.palette.secondary.main,
           textDecoration: 'none'
@@ -26,6 +27,9 @@ export const styles = (theme: Theme) =>
         },
         '&.visible-on-hover': {
           opacity: 1
+        },
+        '& .underline-on-hover': {
+          textDecoration: 'underline'
         }
       }
     }

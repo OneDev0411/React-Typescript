@@ -7,6 +7,9 @@ import { Tab } from '../Tab'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      minWidth: theme.spacing(8),
+      fontSize: theme.typography.body1.fontSize,
+      fontWeight: theme.typography.body1.fontWeight,
       '&:hover': {
         textDecoration: 'none',
         color: theme.palette.primary.main

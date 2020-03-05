@@ -69,6 +69,7 @@ export function Address({ deal, roles, rowIndex, totalRows }: Props) {
       </div>
 
       <ALinkToClosable
+        className="underline-on-hover"
         onClick={onDealOpened}
         to={`/dashboard/deals/${deal.id}`}
       >

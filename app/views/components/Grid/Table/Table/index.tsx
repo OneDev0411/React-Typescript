@@ -7,7 +7,7 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { Sorting } from '../features/Sorting'
 import { Actions } from '../features/Actions'
 
-import { Header } from '../Header'
+// import { Header } from '../Header'
 import { Body } from '../Body'
 import { useTable } from '../hooks/use-table'
 
@@ -28,8 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
     headerContainer: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: theme.spacing(2, 0)
+      justifyContent: 'space-between'
     },
     tableContainer: {
       position: 'relative',
@@ -134,7 +133,7 @@ export function GridTable<Row>({
       <div className={gridClasses.tableContainer}>
         {rows && rows.length > 0 && (
           <Table stickyHeader={stickyHeader}>
-            {hasHeader && <Header<Row> columns={newColumns} rows={newRows} />}
+            {/* {hasHeader && <Header<Row> columns={newColumns} rows={newRows} />} */}
             <Body<Row>
               columns={newColumns}
               rows={newRows}

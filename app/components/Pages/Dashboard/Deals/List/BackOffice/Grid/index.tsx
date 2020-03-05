@@ -6,6 +6,7 @@ import moment from 'moment'
 import { TableCellProps } from '@material-ui/core'
 
 import Grid from 'components/Grid/Table'
+import { useGridStyles } from 'components/Grid/Table/styles'
 
 import { IAppState } from 'reducers'
 
@@ -42,6 +43,7 @@ interface Props {
 
 function BackOfficeGrid(props: Props & WithRouterProps) {
   const dispatch = useDispatch()
+  const gridClasses = useGridStyles()
 
   const { isFetchingDeals, deals, user, roles } = useSelector(
     ({ user, deals }: IAppState) => ({
@@ -76,39 +78,38 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
     return [
       {
         id: 'address',
-        header: 'Address',
         width: '25%',
         accessor: (deal: IDeal) => getAddress(deal, roles),
         render: ({ row: deal }) => <Address deal={deal} />
       },
       {
         id: 'status',
-        header: 'Status',
+        class: 'opaque',
         accessor: getStatus
       },
       {
         id: 'agent-name',
-        header: 'Agent Name',
+        class: 'opaque',
         accessor: (deal: IDeal) => getPrimaryAgentName(deal, roles),
         render: ({ row: deal }: { row: IDeal }) =>
           getPrimaryAgentName(deal, roles)
       },
       {
         id: 'office',
-        header: 'Office',
+        class: 'opaque',
         accessor: getOffice,
         render: ({ row: deal }: { row: IDeal }) => getOffice(deal)
       },
       {
         id: 'submitted-at',
-        header: 'Submitted At',
+        class: 'opaque',
         accessor: (deal: IDeal) => deal.attention_requested_at,
         render: ({ row: deal }: { row: IDeal }) =>
           getSubmitTime(deal.attention_requested_at)
       },
       {
         id: 'critical-dates',
-        header: 'Critical Dates',
+        class: 'opaque',
         accessor: getCriticalDateNextValue,
         render: ({ row: deal, totalRows, rowIndex }) => (
           <CriticalDate
@@ -121,7 +122,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       },
       {
         id: 'contract-price',
-        header: 'Contract Price',
+        class: 'opaque',
         align: 'right' as TableCellProps['align'],
         accessor: getPrice,
         render: ({ row: deal }: { row: IDeal }) => (
@@ -208,6 +209,9 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       LoadingStateComponent={LoadingState}
       EmptyStateComponent={EmptyState}
       loading={isFetchingDeals ? 'middle' : null}
+      classes={{
+        row: gridClasses.row
+      }}
     />
   )
 }
