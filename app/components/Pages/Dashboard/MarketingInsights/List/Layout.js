@@ -70,12 +70,12 @@ function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
             ]}
           />
 
-          <div>
+          <Box mt={1.5}>
             {renderContent({
               sortBy: sortField,
               onChangeSort: setSortField
             })}
-          </div>
+          </Box>
         </PageLayout.Main>
       </PageLayout>
     </React.Fragment>
