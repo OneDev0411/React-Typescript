@@ -34,8 +34,14 @@ export function recipientsList(recipients) {
   }
 }
 
-export function show_title(title) {
-  return title ? title.trim() : 'No Title'
+export function show_title(title, limit = 0) {
+  if (!title) {
+    return 'No Title'
+  }
+
+  const trimedTitle = title.trim()
+
+  return limit > 0 ? `${trimedTitle.substring(0, limit)}...` : trimedTitle
 }
 
 export function isEmailQueued(item) {
