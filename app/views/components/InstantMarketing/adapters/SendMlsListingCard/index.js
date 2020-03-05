@@ -5,6 +5,7 @@ import { Button } from '@material-ui/core'
 
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 import { selectContact } from 'reducers/contacts/list'
+import Button from 'components/Button/ActionButton'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
