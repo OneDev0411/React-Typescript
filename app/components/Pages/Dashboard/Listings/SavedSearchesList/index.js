@@ -9,6 +9,8 @@ import {
   IconButton
 } from '@material-ui/core'
 
+import { withStyles } from '@material-ui/core/styles'
+
 import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
 import IconDelete from 'components/SvgIcons/Close/CloseIcon'
 import ArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
@@ -21,6 +23,23 @@ import Loading from '../../../../../views/components/Spinner'
 import getAlerts from '../../../../../store_actions/listings/alerts/get-alerts'
 import deleteAlert from '../../../../../store_actions/listings/alerts/delete-alert'
 import { selectListings as selectAlerts } from '../../../../../reducers/listings'
+
+const styles = theme => ({
+  savedSearchItem: {
+    padding: theme.spacing(0, 0.5, 0, 1.5),
+
+    '&:hover': {
+      color: theme.palette.primary,
+      backgroundColor: theme.palette.grey['50']
+    },
+    '&:hover $savedSearchText': {
+      color: theme.palette.secondary.main
+    }
+  },
+  savedSearchText: {
+    color: theme.palette.tertiary.dark
+  }
+})
 
 class SavedSearchesList extends Component {
   state = {
@@ -70,12 +89,14 @@ class SavedSearchesList extends Component {
 
   render() {
     const { isDeleting } = this.state
+    const { classes, theme } = this.props
 
     return (
       <BaseDropdownWithMore
+        className={classes.dropdown}
         renderDropdownButton={props => (
           <span {...props}>
-            Saved Searches{' '}
+            My filters{' '}
             {props.isActive ? (
               <ArrowUp style={{ verticalAlign: 'middle' }} />
             ) : (
@@ -105,11 +126,16 @@ class SavedSearchesList extends Component {
             const id = item.id
 
             return (
-              <ListItem key={`SSL-${index}`}>
+              <ListItem
+                key={`SSL-${index}`}
+                disableGutters
+                className={classes.savedSearchItem}
+              >
                 <ListItemText
                   primary={uppercaseFirstLetter(item.title || '')}
                   style={{ overflow: 'hidden', cursor: 'pointer' }}
                   onClick={() => this.navigateToSavedItem(id)}
+                  className={classes.savedSearchText}
                 />
                 <ListItemSecondaryAction>
                   <IconButton
@@ -127,6 +153,7 @@ class SavedSearchesList extends Component {
             )
           })
         }}
+        morePlugin={{ textStyle: { padding: theme.spacing(1, 1.5) } }}
       />
     )
   }
@@ -141,4 +168,6 @@ const mapStateToProps = state => {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(SavedSearchesList))
+export default withStyles(styles, { withTheme: true })(
+  withRouter(connect(mapStateToProps)(SavedSearchesList))
+)

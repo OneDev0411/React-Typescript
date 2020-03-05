@@ -88,7 +88,13 @@ export const Tabs = ({
   })
 
   if (user) {
-    availableTabs.push(<Tab key="saved-list" label={<SavedSearchesList />} />)
+    availableTabs.push(
+      <Tab
+        key="saved-list"
+        value="saved-searches"
+        label={<SavedSearchesList />}
+      />
+    )
   }
 
   const saveSearchTab = (
@@ -123,7 +129,13 @@ export const Tabs = ({
   return (
     <Box display="flex">
       <Box flexGrow="1">
-        <PageTabs defaultValue={currentUrl} tabs={availableTabs} />
+        <PageTabs
+          defaultValue={currentUrl}
+          tabs={availableTabs}
+          value={
+            currentUrl.includes('saved-searches') ? 'saved-searches' : null
+          }
+        />
       </Box>
       <Box className={classes.boxSwitcher}>
         <SortDrowndown onChangeSort={onChangeSort} activeSort={activeSort} />
