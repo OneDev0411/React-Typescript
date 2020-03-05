@@ -71,7 +71,7 @@ export const SummaryCard = styled.div`
       position: absolute;
       top: 0;
       left: 0;
-      width: 3rem;
+      width: 100%;
       height: 1px;
       background: #ccc;
       display: block;

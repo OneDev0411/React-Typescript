@@ -41,6 +41,7 @@ const columns = [
   {
     header: 'Opened',
     id: 'opened',
+    class: 'opaque',
     width: '20%',
     render: ({ row }: RenderProps<ContactsListType>) => (
       <span>Opened: {row.opened}</span>
@@ -49,6 +50,7 @@ const columns = [
   {
     header: 'Clicked',
     id: 'clicked',
+    class: 'opaque',
     width: '20%',
     render: ({ row }: RenderProps<ContactsListType>) => (
       <span>Clicked: {row.clicked}</span>

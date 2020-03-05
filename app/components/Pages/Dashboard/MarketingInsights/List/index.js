@@ -61,6 +61,7 @@ function List(props) {
       {
         header: 'Recipients',
         id: 'recipients',
+        class: 'opaque',
         width: '25%',
         verticalAlign: 'center',
         render: ({ row }) => <RecipientsColumn data={row.recipients} />
@@ -68,6 +69,7 @@ function List(props) {
       {
         header: 'Date',
         id: 'date',
+        class: 'opaque',
         width: '25%',
         verticalAlign: 'center',
         render: ({ row }) => <DateColumn data={row} />
@@ -75,7 +77,7 @@ function List(props) {
       {
         header: 'Stats',
         id: 'stats',
-        class: 'transparent',
+        class: 'visible-on-hover',
         width: '7%',
         verticalAlign: 'center',
         render: ({ row }) => <StatsColumn data={row} />
