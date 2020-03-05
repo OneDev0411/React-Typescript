@@ -12,7 +12,6 @@ import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
 
 import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
-import ActionButton from '../../Button/ActionButton'
 import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 
 import { Title } from '../../EventDrawer/components/Title'

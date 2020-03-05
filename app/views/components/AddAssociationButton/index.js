@@ -50,7 +50,7 @@ class ButtonComponent extends React.Component {
       <IconButton
         onClick={onClick}
         disabled={this.props.disabled}
-        style={{ marginRight: '1rem' }}
+        style={{ marginRight: '0.5rem' }}
       >
         <Icon />
       </IconButton>
