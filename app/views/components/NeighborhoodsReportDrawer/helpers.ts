@@ -22,9 +22,7 @@ function getAggregatedDataOfPastMonths(
 
   let value: number | string = 0
 
-  if (metric.type === 'number') {
-    value = sum(pastMonthsDataList.map(data => Number(data.value)))
-  } else if (metric.type === 'percent') {
+  if (metric.type === 'percent') {
     value = `${avg(
       pastMonthsDataList.map(data => {
         const stringValue = data.value.toString()
@@ -33,6 +31,10 @@ function getAggregatedDataOfPastMonths(
         return Number(percentPart)
       })
     )}%`
+  } else if (metric.type === 'number' && metric.name.includes('Average')) {
+    value = avg(pastMonthsDataList.map(data => Number(data.value)))
+  } else if (metric.type === 'number') {
+    value = sum(pastMonthsDataList.map(data => Number(data.value)))
   }
 
   const labelSuffix = includeMonthRangeInLabel
@@ -52,7 +54,8 @@ function getAggregatedDataOfPastMonths(
 }
 
 export function getFormattedReportWithNeededPeriods(
-  report: NeighborhoodsReport
+  report: NeighborhoodsReport,
+  onlyAggregatedPeriods: boolean = false
 ): NeighborhoodsReport {
   if (!report.metrics.length) {
     return report
@@ -103,9 +106,13 @@ export function getFormattedReportWithNeededPeriods(
         pastThreeMonthsMetricData
       ]
 
+      const data = onlyAggregatedPeriods
+        ? [...additionalMetricData]
+        : [...additionalMetricData, ...metric.data]
+
       return {
         ...metric,
-        data: [...additionalMetricData, ...metric.data]
+        data
       }
     }
   )

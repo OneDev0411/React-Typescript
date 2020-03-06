@@ -262,6 +262,7 @@
     "@commitlint/prompt-cli": "^8.0.0",
     "@testing-library/react": "^8.0.1",
     "@types/backbone": "^1.4.1",
+    "@types/chart.js": "^2.9.15",
     "@types/classnames": "^2.2.7",
     "@types/cleave.js": "^1.4.0",
     "@types/clipboard": "^1.5.36",

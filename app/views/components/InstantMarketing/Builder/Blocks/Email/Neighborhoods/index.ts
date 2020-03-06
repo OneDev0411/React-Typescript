@@ -3,34 +3,104 @@ import { Model } from 'backbone'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { NeighborhoodsReport } from 'components/NeighborhoodsReportDrawer/types'
+import getStaticImageChartUrl from 'utils/charts/get-static-image-chart-url'
 
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
 import adapt from '../../adapt'
 import { MARKET_REPORTS_CATEGORY } from '../../../constants'
 
-import template from './template.mjml'
+import neighborhoodsTemplates from './neighborhoods.mjml'
+import neighborhoodsGraphsTemplates from './neighborhoods-graphs.mjml'
 
-export const blockName = 'rechat-neighborhoods'
+export const neighborhoodsBlockName = 'rechat-neighborhoods'
+export const neighborhoodsGraphsBlockName = 'rechat-neighborhoods-graphs'
 
-export interface Options {
-  onDrop: (model: Model) => void
+const templates = {
+  [neighborhoodsBlockName]: neighborhoodsTemplates,
+  [neighborhoodsGraphsBlockName]: neighborhoodsGraphsTemplates
 }
 
-interface NeighborhoodsBlock {
+export interface Options {
+  onNeighborhoodsDrop: (model: Model) => void
+  onNeighborhoodsGraphsDrop: (model: Model) => void
+}
+
+interface NeighborhoodsBlocks {
   selectHandler: (selectedReport?: NeighborhoodsReport) => void
 }
 
-export default function registerNeighborhoodsBlock(
+function getNeighborhoodsGraphTemplateReport(
+  selectedReport: NeighborhoodsReport,
+  graphBarsBackgroundColor: string = '#4d89f9'
+): any {
+  return {
+    ...selectedReport,
+    metrics: selectedReport.metrics.map(metric => {
+      const metricType = metric.type
+
+      return {
+        ...metric,
+        data: metric.data.map(metricData => {
+          const labels = metricData.aggregateOf!.map(
+            aggregatedItem => aggregatedItem.label
+          )
+
+          const datasets = [
+            {
+              label: `${metric.name} ${metricData.label} in ${
+                selectedReport.neighborhood.label
+              }`,
+              data: metricData.aggregateOf!.map(aggregatedItem => {
+                const rawItemValue = aggregatedItem.value.toString()
+                let itemValue = Number(rawItemValue)
+
+                if (metricType === 'percent') {
+                  itemValue = Number(
+                    rawItemValue.slice(0, rawItemValue.length - 1)
+                  )
+                }
+
+                return itemValue
+              }),
+              backgroundColor: graphBarsBackgroundColor
+            }
+          ]
+
+          return {
+            ...metricData,
+            chartUrl: getStaticImageChartUrl({
+              type: 'bar',
+              data: {
+                labels,
+                datasets
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+}
+
+export default function registerNeighborhoodsBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  { onDrop }: Options
-): NeighborhoodsBlock {
+  { onNeighborhoodsDrop, onNeighborhoodsGraphsDrop }: Options
+): NeighborhoodsBlocks {
   registerBlock(editor, {
     label: 'Neighborhoods',
     category: MARKET_REPORTS_CATEGORY,
-    blockName,
-    template,
+    blockName: neighborhoodsBlockName,
+    template: templates[neighborhoodsBlockName],
+    adaptive: true
+  })
+
+  registerBlock(editor, {
+    label: 'Neighborhoods Graphs',
+    category: MARKET_REPORTS_CATEGORY,
+    blockName: neighborhoodsGraphsBlockName,
+    template: templates[neighborhoodsGraphsBlockName],
     adaptive: true
   })
 
@@ -44,9 +114,21 @@ export default function registerNeighborhoodsBlock(
     const parent = modelHandle.parent()
 
     if (selectedReport) {
+      const droppedBlockName = modelHandle.attributes.attributes['data-block']
+
+      const report =
+        droppedBlockName === neighborhoodsBlockName
+          ? selectedReport
+          : getNeighborhoodsGraphTemplateReport(
+              selectedReport,
+              renderData.getColor('beta.bg')
+            )
+
+      const template = templates[droppedBlockName]
+
       const mjml = nunjucks.renderString(adapt(parent, template), {
         ...renderData,
-        report: selectedReport
+        report
       })
 
       parent.append(mjml, { at: modelHandle.opt.at })
@@ -60,9 +142,14 @@ export default function registerNeighborhoodsBlock(
       return
     }
 
-    if (block.id === blockName) {
+    if (block.id === neighborhoodsBlockName) {
       modelHandle = model
-      onDrop(model)
+      onNeighborhoodsDrop(model)
+    }
+
+    if (block.id === neighborhoodsGraphsBlockName) {
+      modelHandle = model
+      onNeighborhoodsGraphsDrop(model)
     }
   })
 
