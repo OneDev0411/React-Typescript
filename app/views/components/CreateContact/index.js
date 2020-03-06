@@ -20,6 +20,7 @@ export class CreateContact extends React.Component {
           variant="outlined"
           data-test="create-contact-button"
           onClick={this.handleOpen}
+          {...this.props.buttonProps}
         >
           Create Contact
         </Button>
