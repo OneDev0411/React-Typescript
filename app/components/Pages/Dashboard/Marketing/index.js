@@ -10,13 +10,7 @@ import { getActiveTeamId } from 'utils/user-teams'
 
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
-import {
-  PageTabs,
-  Tab,
-  TabLink,
-  TabSpacer,
-  DropdownTab
-} from 'components/PageTabs'
+import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
 
 import TemplatesList from 'components/TemplatesList'
 
@@ -24,7 +18,7 @@ import { useTemplatesList } from './hooks/use-templates-list'
 import { MEDIUMS_COLLECTION } from './constants'
 
 export function Marketing(props) {
-  const sections = useMarketingCenterSections()
+  const sections = useMarketingCenterSections(props.params)
 
   const templateTypes = props.params.types
 
@@ -33,8 +27,8 @@ export function Marketing(props) {
   const mediums = useMarketingCenterMediums(templates)
 
   const currentMedium = props.params.medium
-  const currentMediumTemplates = templates.filter(
-    item => item.medium === currentMedium
+  const currentMediumTemplates = templates.filter(item =>
+    currentMedium ? item.medium === currentMedium : true
   )
 
   useEffect(() => {
@@ -54,48 +48,44 @@ export function Marketing(props) {
         <PageLayout.Main>
           <PageTabs
             defaultValue={props.location.pathname}
-            tabs={[
-              ...sections.map(section => (
-                <Tab
-                  key={section.title}
-                  value={section.title}
-                  label={
-                    <DropdownTab title={section.title}>
-                      {({ toggleMenu }) => (
-                        <>
-                          {section.items.map(sectionItem => (
-                            <MenuItem
-                              key={sectionItem.link}
-                              onClick={() => {
-                                props.router.push(sectionItem.link)
-                                toggleMenu()
-                              }}
-                            >
-                              {sectionItem.title}
-                            </MenuItem>
-                          ))}
-                        </>
-                      )}
-                    </DropdownTab>
-                  }
-                />
-              )),
-              <TabSpacer key="spacer" />,
-              [
-                ...mediums.map(medium => {
-                  const url = `/dashboard/marketing/${templateTypes}/${medium}`
+            value={props.params.types}
+            tabs={sections.map(section => (
+              <Tab
+                key={section.title}
+                value={section.value}
+                label={
+                  <DropdownTab title={section.title}>
+                    {({ toggleMenu }) => (
+                      <>
+                        {section.items.map(sectionItem => (
+                          <MenuItem
+                            key={sectionItem.link}
+                            onClick={() => {
+                              props.router.push(sectionItem.link)
+                              toggleMenu()
+                            }}
+                          >
+                            {sectionItem.title}
+                          </MenuItem>
+                        ))}
+                      </>
+                    )}
+                  </DropdownTab>
+                }
+              />
+            ))}
+            actions={mediums.map(medium => {
+              const url = `/dashboard/marketing/${templateTypes}/${medium}`
 
-                  return (
-                    <TabLink
-                      key={medium}
-                      label={MEDIUMS_COLLECTION[medium] || medium}
-                      value={url}
-                      to={url}
-                    />
-                  )
-                })
-              ]
-            ]}
+              return (
+                <TabLink
+                  key={medium}
+                  label={MEDIUMS_COLLECTION[medium] || medium}
+                  value={medium}
+                  to={url}
+                />
+              )
+            })}
           />
           <TemplatesList
             items={currentMediumTemplates}

@@ -3,7 +3,7 @@ import { SectionItem } from 'components/PageSideNav/types'
 import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
 
 export function useMarketingCenterCategories(): SectionItem[] {
-  const allSections = useMarketingCenterSections()
+  const allSections = useMarketingCenterSections({ types: null })
 
   return allSections.reduce((prev, curr) => {
     // We don't need my designs section

@@ -17,6 +17,7 @@ export interface SectionItem {
 export interface Section {
   type: SectionsEnum
   title: string
+  value?: string | null
   items: SectionItem[]
   access?: IPermission[]
 }

@@ -12,8 +12,11 @@ interface Props {
   tabs: React.ReactNode[]
   actions?: React.ReactNode[]
   defaultValue?: SelectedTab
+  defaultAction?: SelectedTab
   value?: SelectedTab
+  actionValue?: SelectedTab
   onChange?: (value: SelectedTab) => void
+  onChangeAction?: (value: SelectedTab) => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -78,31 +81,49 @@ const useStyles = makeStyles((theme: Theme) =>
  */
 export function PageTabs({
   defaultValue = null,
+  defaultAction = null,
   value,
-  onChange = () => {},
   actions,
-  tabs
+  actionValue,
+  tabs,
+  onChange = () => {},
+  onChangeAction = () => {}
 }: Props) {
   const classes = useStyles()
   const [selectedTab, setSelectedTab] = useState<SelectedTab>(defaultValue)
+  const [selectedAction, setSelectedAction] = useState<SelectedTab>(
+    defaultValue
+  )
+
   const activeTab =
     defaultValue && selectedTab !== defaultValue ? defaultValue : selectedTab
 
-  const handleChange = (e: React.MouseEvent<{}>, tab: SelectedTab) => {
+  const activeAction =
+    defaultAction && selectedAction !== defaultAction
+      ? defaultAction
+      : selectedAction
+
+  const handleChangeTab = (e: React.MouseEvent<{}>, tab: SelectedTab) => {
     setSelectedTab(tab)
 
     onChange(tab)
   }
 
+  const handleChangeAction = (e: React.MouseEvent<{}>, action: SelectedTab) => {
+    setSelectedAction(action)
+
+    onChangeAction(action)
+  }
+
   return (
     <div className={classes.container}>
       <Tabs
-        value={value || activeTab}
+        value={value || activeTab || false}
         indicatorColor="primary"
         textColor="primary"
         variant="scrollable"
         scrollButtons="auto"
-        onChange={handleChange}
+        onChange={handleChangeTab}
         classes={{
           root: classes.tabContainer,
           indicator: classes.indicator
@@ -115,10 +136,15 @@ export function PageTabs({
       {actions && (
         <div>
           <Tabs
-            value={false}
+            value={actionValue || activeAction || false}
+            onChange={handleChangeAction}
+            variant="scrollable"
+            scrollButtons="auto"
             classes={{
-              root: classes.tabContainer
+              root: classes.tabContainer,
+              indicator: classes.indicator
             }}
+            TabIndicatorProps={{ children: <div /> }}
           >
             {actions.map(tab => tab)}
           </Tabs>
