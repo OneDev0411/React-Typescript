@@ -23,6 +23,9 @@ import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/image-r
 // Agent
 import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
 
+// Market Reports
+import NeighborhoodsIcon from 'assets/images/marketing/editor/blocks/neighborhoods.png'
+
 // Common
 import DualIcon from 'assets/images/marketing/editor/blocks/dual.png'
 
@@ -95,7 +98,7 @@ const BLOCK_BUTTON_ICONS = {
 
   [agentLeftBlockName]: AgentLeftIcon,
   [agentGridBlockName]: DualIcon,
-  [neighborhoodsBlockName]: TextIcon
+  [neighborhoodsBlockName]: NeighborhoodsIcon
 }
 
 const BLOCK_BUTTONS_ORDER = [
