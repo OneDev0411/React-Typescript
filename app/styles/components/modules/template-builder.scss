@@ -25,21 +25,21 @@
       width: 2rem;
       height: 2rem;
 
-      &[title=Link] {
+      &[title='Link'] {
         display: none;
       }
 
       &:nth-last-child(2) {
         border-right: none;
       }
-      
+
       &:hover {
-        background-color: rgba(0,0,0,0.05);
+        background-color: rgba(0, 0, 0, 0.05);
       }
     }
 
     .gjs-rte-active {
-      background-color: rgba(0,0,0,0.1);
+      background-color: rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -47,7 +47,8 @@
     padding: 0;
   }
 
-  .gjs-block-category, .gjs-blocks-c {
+  .gjs-block-category,
+  .gjs-blocks-c {
     color: #000;
     margin: 2px 0;
   }
@@ -99,8 +100,15 @@
 
     // Articles
     &:nth-of-type(4) {
-      .gjs-title {        
+      .gjs-title {
         background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAAASwAAAEsAHOI6VIAAAAHdElNRQfjCh0TOSnmkVyQAAACfElEQVRYw+2XPWgUQRTHfzmCJ2ouIYer+AEKBqI2gmg6PzoNiqBeY6EWChamUaxOsNAIaiEqgggWFlaRgHfFdScKNtqIckGIKPhZ+IFJMGL0bi1ubm53b2Z3dnYLi/yn2Dez773/zJu3b2ZhHv8buny9rRxlpYWXGUqM89dE9RxuglZjYTTFpkQULi7no0muJSZxyahdd0tpjXhOMx5zR3o4IL3Nhas+ELM5EXvbV8iVLFArZOL5s0N3yLvNDHh6b3mKmzbJPQ4FRh6z3Y5EF65VHRSwjY3prmS5cnQ1NcChyBIAfnGJ90nCpUeJISkXWOZ71wWdO2eTXUMe2fF5+E2DBi4VdiYleemRZ2koNHZR5W47SjbhGuYyOUFR1God5iun7Uk+KDJPhVPc5I0tiR4HcYE8t0V/D9dtSTLsEGfHHI/443lTFgVyKaMAbLEP1y2OS7nCsELju3jmWrNS47Ny9B2AhwJ2m+SnTuUjdzrGKkwAMOMbNSia+nAd4yprfat4IaR9VOXo/mQkUKOmHH9IRtxyXLPib5fChs6jSfp0h6kHdb4lIdlLyWiSZ8UXEQpddhWjTQG4ELiDxiIxMDXX1JFcMaQYVZb6AHR7ch+HbKR1XVMZDEngi+FaEpGERTvm/Uu3J4NM09C2CfJpkNygJ8RqPSfTIMlF2C1OgyTqe38Sh6S98a0q1Iz2RZ7Rq7X65COpSykrjt98wKfEiPzLcOLMEshKyzMAOLI/0lRop+k6JqU8xk8D523bI1Ka5DkF2RvgddConMJfo7eVO2cDvfyIGahw9DHVFLzZNUW/5/ROhir9LQpV6dhAgUEWWbuf5RVj4l4zDxv8A3MjFh8lLvT/AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE5LTEwLTI5VDE2OjU3OjQxKzAzOjAwJtubYAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOS0xMC0yOVQxNjo1Nzo0MSswMzowMFeGI9wAAAAASUVORK5CYII=');
+      }
+    }
+
+    // Market Reports
+    &:nth-of-type(5) {
+      .gjs-title {
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAAASwAAAEsAHOI6VIAAAJQSURBVFjD7dc7T9tQFMDxv+PbRMSJOiLElqGVMoJUFqZ8ABADoinKx0CIiY2FL8FGC32oBWWDdqkQEh14tZS+xcbWbkWqbpfkcm58r/NyVKRyvNjnnJxfbOfaCtzGTYugy/4HzHKPMzZ4N5gvVOQ12mx18oMgvglCozklGjSROlPkq4PQaE7SYop8EWPXyfEybabIZzHyMSGg0mUKfBLjnhA28ikyPiJFpsC5GLNBCESUeUSZKMYc98IU+ChGbBKiWBKZJVSM6XJ5FjhrIXJctvx8L8mheNUrE1nEU0JgxbFKVqBXJuKD+NgzQmDEsxhHemMi3scIqJjMGmXWzFEFYsxROybiVLQ/RzXyyyY3DAybo+VGvQvGJl4YAmZMdh7FvDmaMR2KrU6YiBPreitRK3nuSUn0KKviZPIctwyQb82APQex19Kjk5k8R7ER9qt51IGMWh1BrH4omSEHoWPv/5L1mDm3LpUb0Rwy1CyvivQPLwIZJlnkLYtMkolVr5HvYt5qs3xgUluJSPMGu0Mi22b/oFmuNRLbqAREMUW9UaszFcMkogxTu26ossMCCrzIhOOKT3gRUCywQ9V90m5kzrNO5rxIYriQMQ+h0YylgwRcWGPfWEcXoq8PZFyMrBAAgXgqa8bbIZl2JvDQ7E2ziwY0u0w76h1H/Ez2TSYr+rImu5/Gmdw3e1cie+Woe6ITpO+4RW4eohJqd2KZrKczS2IkIb87yADc9eRN/KN78jOFqb/aNdTQfW81e6TrPT5L1fpP1V38YZ3NFK7G/xt/AdfrZwD6J8IsAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE5LTEwLTI5VDE2OjU3OjQxKzAzOjAwJtubYAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOS0xMC0yOVQxNjo1Nzo0MSswMzowMFeGI9wAAAAASUVORK5CYII=');
       }
     }
   }
@@ -125,7 +133,7 @@
       background-position-x: 1rem;
 
       .gjs-caret-icon {
-        color: #7F7F7F;
+        color: #7f7f7f;
         order: 1;
       }
     }
@@ -152,8 +160,8 @@
 
   .gjs-pn-panel {
     z-index: 1;
-    
-    &.gjs-pn-views{
+
+    &.gjs-pn-views {
       display: none;
     }
 
@@ -298,11 +306,16 @@
     display: none;
   }
 
-  .gjs-one-bg, .gjs-three-bg {
+  .gjs-one-bg,
+  .gjs-three-bg {
     background: #f2f2f2;
   }
 
-  .gjs-two-color, .gjs-color-warn, .gjs-four-color, .gjs-color-main, .gjs-color-contrast {
+  .gjs-two-color,
+  .gjs-color-warn,
+  .gjs-four-color,
+  .gjs-color-main,
+  .gjs-color-contrast {
     color: #0945eb;
   }
 
@@ -310,11 +323,13 @@
     color: #0945eb;
   }
 
-  .gjs-badge, .gjs-toolbar {
+  .gjs-badge,
+  .gjs-toolbar {
     background-color: #0945eb;
   }
 
-  .gjs-pn-views, .gjs-pn-views-container {
+  .gjs-pn-views,
+  .gjs-pn-views-container {
     width: 17rem;
     border-left: 1px solid #e0e8ed;
   }
@@ -337,7 +352,8 @@
     border-radius: 4px;
 
     &:hover {
-      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
+      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2),
+        0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
     }
   }
 }

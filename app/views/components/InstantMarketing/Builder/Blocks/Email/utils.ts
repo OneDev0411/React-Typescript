@@ -47,6 +47,7 @@ import {
 import { headline2BlockName } from './Statics'
 import { agentLeftBlockName, agentGridBlockName } from './Agents'
 import { blockName as rechatImageBlockName } from './Image'
+import { blockName as neighborhoodsBlockName } from './Neighborhoods'
 
 const BLOCK_IDS_TO_REMOVE = [
   'mj-button',
@@ -93,7 +94,8 @@ const BLOCK_BUTTON_ICONS = {
   [listingRightBlockName]: ArticleImageRightIcon,
 
   [agentLeftBlockName]: AgentLeftIcon,
-  [agentGridBlockName]: DualIcon
+  [agentGridBlockName]: DualIcon,
+  [neighborhoodsBlockName]: TextIcon
 }
 
 const BLOCK_BUTTONS_ORDER = [
@@ -123,7 +125,9 @@ const BLOCK_BUTTONS_ORDER = [
   listingRightBlockName,
 
   agentLeftBlockName,
-  agentGridBlockName
+  agentGridBlockName,
+
+  neighborhoodsBlockName
 ]
 
 export function removeUnusedBlocks(editor: Editor) {
