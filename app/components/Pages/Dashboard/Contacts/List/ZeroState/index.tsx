@@ -1,55 +1,108 @@
 import { OAuthProvider } from 'constants/contacts'
 
-import * as React from 'react'
+import React from 'react'
+import cn from 'classnames'
+import { Box, Button, Typography } from '@material-ui/core'
+import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
-import ActionButton from 'components/Button/ActionButton'
-import LinkButton from 'components/Button/LinkButton'
-import IconCsv from 'components/SvgIcons/Csv/IconCsv'
 import { Divider } from 'components/Divider'
 import { CreateContact } from 'components/CreateContact'
+import IconCsv from 'components/SvgIcons/Csv/IconCsv'
+import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
+import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 
-import { GoogleIcon, OutlookIcon, ZeroStateContainer } from './styled'
 import { useConnectOAuthAccount } from '../ImportContactsButton/use-connect-oauth-account'
 
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      container: {
+        height: 'calc(100% - 120px)',
+        maxWidth: '560px',
+        margin: 'auto'
+      },
+      button: {
+        width: '14.6rem'
+      },
+      marginBottom: {
+        marginBottom: theme.spacing(2)
+      },
+      description: {
+        marginBottom: theme.spacing(4)
+      },
+      buttonText: {
+        marginLeft: theme.spacing(2),
+        fontWeight: 500,
+        fontFamily: "'Roboto', sans-serif",
+        whiteSpace: 'nowrap'
+      }
+    }),
+  { name: 'zeroState' }
+)
+
 export function ZeroState() {
+  const classes = useStyles()
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
 
   return (
-    <ZeroStateContainer column alignCenter justifyCenter>
-      <img src="/static/images/contacts/zero-state.svg" alt="" />
+    <Box
+      className={classes.container}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      flexDirection="column"
+    >
+      <img src="/static/images/contacts/zero-state.svg" alt="zero-state" />
       <h2>No contact! Import now with one click :)</h2>
-      <p>
+      <Typography variant="body1" className={classes.description}>
         People and relationships are central to your business. Start building
         your referral network in Rechat by importing or creating a contact now.
-      </p>
+      </Typography>
 
-      <ActionButton
+      <Button
         disabled={google.connecting}
         onClick={google.connect}
-        appearance="primary"
+        variant="outlined"
+        size="large"
+        className={cn(classes.button, classes.marginBottom)}
       >
-        <GoogleIcon />
-        Import Google Contacts
-      </ActionButton>
+        <IconGoogle />
+        <Typography variant="button" className={classes.buttonText}>
+          Sync with: Google
+        </Typography>
+      </Button>
 
-      <ActionButton
+      <Button
         disabled={outlook.connecting}
         onClick={outlook.connect}
-        appearance="primary"
+        variant="outlined"
+        className={classes.button}
+        size="large"
       >
-        <OutlookIcon />
-        Import Outlook Contacts
-      </ActionButton>
+        <IconOutlook />
+        <Typography variant="button" className={classes.buttonText}>
+          Sync with: Outlook
+        </Typography>
+      </Button>
 
-      <Divider text="OR" />
+      <Divider text="OR" margin="2rem 0" />
 
-      <LinkButton appearance="outline" to="/dashboard/contacts/import/csv">
-        <IconCsv style={{ marginRight: '0.4rem' }} />
-        Import CSV spreadsheet
-      </LinkButton>
+      <Button
+        size="large"
+        variant="outlined"
+        href="/dashboard/contacts/import/csv"
+        className={cn(classes.button, classes.marginBottom)}
+      >
+        <IconCsv />
+        <Typography variant="button" className={classes.buttonText}>
+          Import CSV spreadsheet
+        </Typography>
+      </Button>
 
-      <CreateContact>Create Contact</CreateContact>
-    </ZeroStateContainer>
+      <CreateContact
+        buttonProps={{ className: classes.button, size: 'large' }}
+      />
+    </Box>
   )
 }
