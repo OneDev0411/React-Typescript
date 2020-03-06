@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
 
+import cn from 'classnames'
+import { createStyles, makeStyles } from '@material-ui/core'
+
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import { Table } from 'components/Grid/Table'
+
+import { useGridStyles } from 'components/Grid/Table/styles'
 
 import { TableActions } from './Actions'
 
@@ -18,7 +23,34 @@ import TagsString from './columns/Tags'
 import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
 
+const useCustomGridStyles = makeStyles(theme =>
+  createStyles({
+    row: {
+      '& td': {
+        '&.tags': {
+          '& .MuiChip-root': { opacity: 0.5 }
+        },
+        '&.flows': {
+          '& a': { color: theme.palette.grey['500'] },
+          '& svg': { fill: theme.palette.grey['500'] }
+        }
+      },
+      '&:hover td': {
+        '&.tags': {
+          '& .MuiChip-root': { opacity: 1 }
+        },
+        '&.flows': {
+          '& a': { color: theme.palette.text.primary },
+          '& svg': { fill: theme.palette.text.primary }
+        }
+      }
+    }
+  })
+)
+
 const ContactsList = props => {
+  const gridClasses = useGridStyles()
+  const customGridClasses = useCustomGridStyles()
   const [selectedTagContact, setSelectedTagContact] = useState([])
 
   const onSelectTagContact = selectedTagContact =>
@@ -38,12 +70,14 @@ const ContactsList = props => {
       id: 'last_touched',
       sortable: false,
       width: '20%',
+      class: 'opaque',
       render: ({ row: contact }) => <LastTouched contact={contact} />
     },
     {
       id: 'flows',
       sortable: false,
       width: '8%',
+      class: 'opaque flows',
       render: ({ row: contact }) => (
         <FlowCell
           contactId={contact.id}
@@ -54,6 +88,7 @@ const ContactsList = props => {
     {
       id: 'tag',
       width: '30%',
+      class: 'opaque tags',
       render: ({ row: contact }) => (
         <TagsString contact={contact} onSelectTagContact={onSelectTagContact} />
       )
@@ -62,6 +97,7 @@ const ContactsList = props => {
       id: 'delete-contact',
       sortable: false,
       width: '5%',
+      class: 'visible-on-hover',
       render: ({ row: contact }) => (
         <Menu contactId={contact.id} handleOnDelete={props.onRequestDelete} />
       )
@@ -97,6 +133,9 @@ const ContactsList = props => {
         LoadingStateComponent={LoadingComponent}
         selection={{
           defaultRender: ({ row }) => <Avatar contact={row} />
+        }}
+        classes={{
+          row: cn(gridClasses.row, customGridClasses.row)
         }}
         infiniteScrolling={{
           accuracy: 300, // px

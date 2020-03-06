@@ -18,7 +18,7 @@ export const styles = (theme: Theme) =>
       },
       '&:hover td': {
         cursor: 'pointer',
-        '& a': {
+        '&.primary a': {
           color: theme.palette.secondary.main,
           textDecoration: 'none'
         },

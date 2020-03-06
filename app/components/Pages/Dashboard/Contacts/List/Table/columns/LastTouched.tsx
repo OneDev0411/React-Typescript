@@ -11,8 +11,7 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     notouch: {
-      fontSize: theme.typography.caption.fontSize,
-      color: theme.palette.grey['400']
+      fontSize: theme.typography.caption.fontSize
     },
     lastTouchLabel: {
       fontSize: theme.typography.caption.fontSize

@@ -635,7 +635,7 @@ class ContactsList extends React.Component {
     const { duplicateClusterCount } = this.state
 
     return (
-      <Box my={1.5}>
+      <Box mt={1.5}>
         <Alert
           severity="info"
           action={
@@ -745,34 +745,36 @@ class ContactsList extends React.Component {
               <Box>
                 {this.renderTabs()}
                 {state.showDuplicateClusterAlert && this.renderDuplicateAlert()}
-                <Table
-                  data={contacts}
-                  order={this.order}
-                  listInfo={props.listInfo}
-                  isFetching={isFetchingContacts}
-                  isFetchingMore={state.isFetchingMoreContacts}
-                  isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
-                  isRowsUpdating={state.isRowsUpdating}
-                  onRequestLoadMore={this.handleLoadMore}
-                  onRequestLoadMoreBefore={this.handleLoadMoreBefore}
-                  rowsUpdating={this.rowsUpdating}
-                  onChangeSelectedRows={this.onChangeSelectedRows}
-                  onRequestDelete={this.handleOnDelete}
-                  tableContainerId={this.tableContainerId}
-                  reloadContacts={this.reloadContacts}
-                  handleChangeContactsAttributes={() =>
-                    this.handleFilterChange({}, true)
-                  }
-                  filters={{
-                    alphabet: state.firstLetter,
-                    attributeFilters: props.filters,
-                    crm_tasks: props.crmTasks,
-                    filter_type: props.conditionOperator,
-                    flows: props.flows,
-                    text: state.searchInputValue,
-                    users: viewAsUsers
-                  }}
-                />
+                <Box mt={2}>
+                  <Table
+                    data={contacts}
+                    order={this.order}
+                    listInfo={props.listInfo}
+                    isFetching={isFetchingContacts}
+                    isFetchingMore={state.isFetchingMoreContacts}
+                    isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
+                    isRowsUpdating={state.isRowsUpdating}
+                    onRequestLoadMore={this.handleLoadMore}
+                    onRequestLoadMoreBefore={this.handleLoadMoreBefore}
+                    rowsUpdating={this.rowsUpdating}
+                    onChangeSelectedRows={this.onChangeSelectedRows}
+                    onRequestDelete={this.handleOnDelete}
+                    tableContainerId={this.tableContainerId}
+                    reloadContacts={this.reloadContacts}
+                    handleChangeContactsAttributes={() =>
+                      this.handleFilterChange({}, true)
+                    }
+                    filters={{
+                      alphabet: state.firstLetter,
+                      attributeFilters: props.filters,
+                      crm_tasks: props.crmTasks,
+                      filter_type: props.conditionOperator,
+                      flows: props.flows,
+                      text: state.searchInputValue,
+                      users: viewAsUsers
+                    }}
+                  />
+                </Box>
               </Box>
             </React.Fragment>
           )}

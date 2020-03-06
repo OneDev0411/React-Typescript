@@ -1,26 +1,28 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import styled from 'styled-components'
-import { Chip, makeStyles } from '@material-ui/core'
+import { Box, Chip, makeStyles, createStyles } from '@material-ui/core'
 
 import { getContactTags } from '../../../../../../../models/contacts/helpers'
-import ALink from '../../../../../../../views/components/ALink'
-import { grey } from '../../../../../../../views/utils/colors'
 
-const AddTags = styled.span`
-  color: ${grey.A550};
-`
-const useStyles = makeStyles(theme => ({
-  tagLabel: {
-    fontSize: theme.typography.caption.fontSize,
-    marginRight: theme.spacing(0.5)
-  },
-  chip: {
-    cursor: 'pointer',
-    marginRight: theme.spacing(0.25)
-  }
-}))
+const useStyles = makeStyles(theme =>
+  createStyles({
+    container: {
+      cursor: 'pointer'
+    },
+    noTag: {
+      fontSize: theme.typography.caption.fontSize
+    },
+    tagLabel: {
+      fontSize: theme.typography.caption.fontSize,
+      marginRight: theme.spacing(0.5)
+    },
+    chip: {
+      cursor: 'pointer',
+      marginRight: theme.spacing(0.25)
+    }
+  })
+)
 
 const TagsString = ({ contact, onSelectTagContact }) => {
   const classes = useStyles()
@@ -42,17 +44,15 @@ const TagsString = ({ contact, onSelectTagContact }) => {
   const invisibleTagsCount = tagsCount - showingTags.length
 
   return (
-    <ALink
-      data-test="add-tag"
-      style={{ cursor: 'pointer' }}
-      noStyle
+    <Box
+      className={classes.container}
       onClick={event => {
         event.stopPropagation()
         onSelectTagContact(contact.id)
       }}
     >
       {tagsCount === 0 ? (
-        <AddTags className="primaryHover">Add Tags</AddTags>
+        <span className={classes.noTag}>Add Tags</span>
       ) : (
         <>
           <span className={classes.tagLabel}>TAGS:</span>
@@ -74,7 +74,7 @@ const TagsString = ({ contact, onSelectTagContact }) => {
           label={`+ ${invisibleTagsCount}`}
         />
       )}
-    </ALink>
+    </Box>
   )
 }
 
