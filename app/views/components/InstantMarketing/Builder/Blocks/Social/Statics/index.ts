@@ -2,7 +2,7 @@ import { Editor } from 'grapesjs'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
-import { TemplateRenderData } from '../../../utils/get-template-render-data/index'
+import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import registerBlock from '../../registerBlock'

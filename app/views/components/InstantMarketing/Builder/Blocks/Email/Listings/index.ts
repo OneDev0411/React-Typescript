@@ -6,7 +6,7 @@ import { isLeaseProperty } from 'utils/listing'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { LISTINGS_BLOCK_CATEGORY } from '../../../constants'
-import { TemplateRenderData } from '../../../utils/get-template-render-data/index'
+import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
 
 import Top from './top.mjml'

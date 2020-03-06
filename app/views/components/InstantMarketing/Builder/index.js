@@ -14,6 +14,7 @@ import ImageDrawer from 'components/ImageDrawer'
 import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
+import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 
 import { getActiveTeam, isBackOffice } from 'utils/user-teams'
 
@@ -68,7 +69,8 @@ class Builder extends React.Component {
       isImageDrawerOpen: false,
       isGifDrawerOpen: false,
       isVideoDrawerOpen: false,
-      isArticleDrawerOpen: false
+      isArticleDrawerOpen: false,
+      isNeighborhoodsReportDrawerOpen: false
     }
 
     this.emailBlocksRegistered = false
@@ -306,6 +308,11 @@ class Builder extends React.Component {
       article: {
         onDrop: () => {
           this.setState({ isArticleDrawerOpen: true })
+        }
+      },
+      neighborhoods: {
+        onDrop: () => {
+          this.setState({ isNeighborhoodsReportDrawerOpen: true })
         }
       }
     })
@@ -875,6 +882,16 @@ class Builder extends React.Component {
             onSelect={article => {
               this.blocks.article.selectHandler(article)
               this.setState({ isArticleDrawerOpen: false })
+            }}
+          />
+          <NeighborhoodsReportDrawer
+            isOpen={this.state.isNeighborhoodsReportDrawerOpen}
+            onClose={() => {
+              this.setState({ isNeighborhoodsReportDrawerOpen: false })
+            }}
+            onSelect={report => {
+              this.blocks.neighborhoods.selectHandler(report)
+              this.setState({ isNeighborhoodsReportDrawerOpen: false })
             }}
           />
           <Header>

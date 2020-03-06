@@ -7,6 +7,12 @@ declare interface IModelAssociation {
   model: string
 }
 
+declare type Nullable<T> = T | null
+
+declare type Optional<T> = T | undefined
+
+declare type OptionalNullable<T> = Optional<T> | Nullable<T>
+
 declare interface StringMap<T> {
   [key: string]: T
 }
