@@ -686,10 +686,6 @@ const ListingDesktopView = ({
                   <div>
                     <div style={S('fw-600 font-18 mb-10')}>All Features</div>
                     {renderFeatures(
-                      'Parking/Garage',
-                      property.parking_spaces_garage ? 'Yes' : 'No'
-                    )}
-                    {renderFeatures(
                       'Parking Spaces',
                       property.parking_spaces_covered_total
                     )}
