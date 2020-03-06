@@ -14,12 +14,14 @@ const DEFAULT_TITLE = 'Search for a neighborhood'
 
 interface Props {
   isOpen: boolean
+  onlyAggregatedReports?: boolean
   onClose?: () => void
   onSelect: (report: Nullable<NeighborhoodsReport>) => void
 }
 
 export default function NeighborhoodsReportDrawer({
   isOpen,
+  onlyAggregatedReports = false,
   onClose = () => {},
   onSelect
 }: Props) {
@@ -84,7 +86,8 @@ export default function NeighborhoodsReportDrawer({
 
       const fetchedReport = await getReport(selectedNeighborhood.id)
       const formattedReportWithAggregations = getFormattedReportWithNeededPeriods(
-        fetchedReport
+        fetchedReport,
+        onlyAggregatedReports
       )
 
       setReport(formattedReportWithAggregations)
@@ -92,7 +95,7 @@ export default function NeighborhoodsReportDrawer({
     }
 
     fetchNeighborhoodsReport()
-  }, [selectedNeighborhood])
+  }, [onlyAggregatedReports, selectedNeighborhood])
 
   const handleSearchInputChange = (value: string) => {
     const trimmedValue = value.trim()

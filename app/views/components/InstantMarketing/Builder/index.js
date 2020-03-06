@@ -70,7 +70,8 @@ class Builder extends React.Component {
       isGifDrawerOpen: false,
       isVideoDrawerOpen: false,
       isArticleDrawerOpen: false,
-      isNeighborhoodsReportDrawerOpen: false
+      isNeighborhoodsReportDrawerOpen: false,
+      isNeighborhoodsGraphsReportDrawerOpen: false
     }
 
     this.emailBlocksRegistered = false
@@ -311,8 +312,11 @@ class Builder extends React.Component {
         }
       },
       neighborhoods: {
-        onDrop: () => {
+        onNeighborhoodsDrop: () => {
           this.setState({ isNeighborhoodsReportDrawerOpen: true })
+        },
+        onNeighborhoodsGraphsDrop: () => {
+          this.setState({ isNeighborhoodsGraphsReportDrawerOpen: true })
         }
       }
     })
@@ -885,13 +889,25 @@ class Builder extends React.Component {
             }}
           />
           <NeighborhoodsReportDrawer
-            isOpen={this.state.isNeighborhoodsReportDrawerOpen}
+            isOpen={
+              this.state.isNeighborhoodsReportDrawerOpen ||
+              this.state.isNeighborhoodsGraphsReportDrawerOpen
+            }
+            onlyAggregatedReports={
+              this.state.isNeighborhoodsGraphsReportDrawerOpen
+            }
             onClose={() => {
-              this.setState({ isNeighborhoodsReportDrawerOpen: false })
+              this.setState({
+                isNeighborhoodsReportDrawerOpen: false,
+                isNeighborhoodsGraphsReportDrawerOpen: false
+              })
             }}
             onSelect={report => {
               this.blocks.neighborhoods.selectHandler(report)
-              this.setState({ isNeighborhoodsReportDrawerOpen: false })
+              this.setState({
+                isNeighborhoodsReportDrawerOpen: false,
+                isNeighborhoodsGraphsReportDrawerOpen: false
+              })
             }}
           />
           <Header>

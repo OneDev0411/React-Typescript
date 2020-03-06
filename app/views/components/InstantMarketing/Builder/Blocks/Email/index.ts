@@ -9,7 +9,7 @@ import registerImageBlock, { Options as ImageOptions } from './Image'
 import registerGifBlock, { Options as GifOptions } from './Gif'
 import registerVideoBlock, { Options as ArticleOptions } from './Video'
 import registerArticleBlock, { Options as VideoOptions } from './Article'
-import registerNeighborhoodsBlock, {
+import registerNeighborhoodsBlocks, {
   Options as NeighborhoodsOptions
 } from './Neighborhoods'
 import { reorderBlocksWithCustomLabels, collapseBlockCategories } from './utils'
@@ -52,7 +52,11 @@ export function registerEmailBlocks(
     gif: registerGifBlock(editor, gif),
     video: registerVideoBlock(editor, renderData, video),
     article: registerArticleBlock(editor, renderData, article),
-    neighborhoods: registerNeighborhoodsBlock(editor, renderData, neighborhoods)
+    neighborhoods: registerNeighborhoodsBlocks(
+      editor,
+      renderData,
+      neighborhoods
+    )
   }
 
   reorderBlocksWithCustomLabels(editor)
