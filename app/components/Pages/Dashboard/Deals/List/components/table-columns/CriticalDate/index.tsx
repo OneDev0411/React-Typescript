@@ -54,7 +54,12 @@ export default function CriticalDate({ deal, user, rowId, rowsCount }: Props) {
         </div>
       }
     >
-      <div className="primaryHover">
+      <div
+        className="underline-on-hover"
+        style={{
+          cursor: 'help'
+        }}
+      >
         <span className="hoverable">{nextDate}</span>
       </div>
     </PopOver>

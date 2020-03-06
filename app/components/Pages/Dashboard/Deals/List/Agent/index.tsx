@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import useDebouncedCallback from 'use-debounce/lib/callback'
-import { TextField, makeStyles, createStyles, Theme } from '@material-ui/core'
+import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
 
@@ -10,6 +10,7 @@ import { searchDeals, getDeals } from 'actions/deals'
 import { viewAsEveryoneOnTeam, viewAs } from 'utils/user-teams'
 
 import GlobalHeader from 'components/GlobalHeader'
+import { SearchInput } from 'components/GlobalHeaderWithSearch'
 
 import { IAppState } from 'reducers'
 
@@ -22,16 +23,15 @@ import { ExportDeals } from '../components/ExportDeals'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      margin: theme.spacing(0, 3)
+      margin: theme.spacing(5)
     },
     headerContainer: {
       width: '100%',
       display: 'flex',
       justifyContent: 'flex-end'
     },
-    searchInput: {
-      width: '70%',
-      backgroundColor: theme.palette.grey[50]
+    filtersContainer: {
+      margin: theme.spacing(5, 0)
     }
   })
 )
@@ -79,13 +79,10 @@ export default function AgentTable(props: WithRouterProps) {
   }, [viewAsUsers])
 
   return (
-    <>
-      <GlobalHeader title="My deals">
+    <div className={classes.container}>
+      <GlobalHeader title="My deals" noPadding>
         <div className={classes.headerContainer}>
-          <TextField
-            className={classes.searchInput}
-            size="small"
-            variant="outlined"
+          <SearchInput
             placeholder="Search deals by address, MLS# or agent name..."
             onChange={handleQueryChange}
           />
@@ -94,19 +91,19 @@ export default function AgentTable(props: WithRouterProps) {
         </div>
       </GlobalHeader>
 
-      <div className={classes.container}>
+      <div className={classes.filtersContainer}>
         <TabFilters
           deals={deals}
           activeFilter={props.params.filter}
           searchCriteria={searchCriteria}
           sortableColumns={SORTABLE_COLUMNS}
         />
-
-        <Grid
-          activeFilter={props.params.filter}
-          sortableColumns={SORTABLE_COLUMNS}
-        />
       </div>
-    </>
+
+      <Grid
+        activeFilter={props.params.filter}
+        sortableColumns={SORTABLE_COLUMNS}
+      />
+    </div>
   )
 }

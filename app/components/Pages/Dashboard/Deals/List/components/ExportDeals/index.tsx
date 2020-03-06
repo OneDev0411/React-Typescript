@@ -6,7 +6,9 @@ import {
   createStyles,
   Theme,
   Button,
-  MenuItem
+  List,
+  ListItem,
+  ListItemText
 } from '@material-ui/core'
 
 import { useSelector } from 'react-redux'
@@ -20,14 +22,21 @@ import { getActiveTeamId } from 'utils/user-teams'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     exportButton: {
-      marginLeft: theme.spacing(1)
+      margin: theme.spacing(0, 1),
+      width: theme.spacing(5.5),
+      minWidth: theme.spacing(5.5),
+      height: theme.spacing(5.5)
+    },
+    listItem: {
+      cursor: 'pointer',
+      '&:hover': {
+        backgroundColor: theme.palette.action.hover
+      }
     }
   })
 )
 
-interface Props {}
-
-export function ExportDeals(props: Props) {
+export function ExportDeals(props) {
   const classes = useStyles()
 
   const user = useSelector((state: IAppState) => state.user)
@@ -39,7 +48,8 @@ export function ExportDeals(props: Props) {
         url: `/api/deals/export/${getActiveTeamId(user)}`
       },
       {
-        label: 'New Listings (Past 7 days)',
+        label: 'New Listings',
+        description: 'Past 7 days',
         url: `/api/deals/report/${encodeURIComponent(
           JSON.stringify({
             filter: [
@@ -79,7 +89,8 @@ export function ExportDeals(props: Props) {
         )}`
       },
       {
-        label: 'New Offers (Past 7 days)',
+        label: 'New Offers',
+        description: 'Past 7 days',
         url: `/api/deals/report/${encodeURIComponent(
           JSON.stringify({
             filter: [
@@ -135,19 +146,20 @@ export function ExportDeals(props: Props) {
         </Button>
       )}
       renderMenu={({ close }) => (
-        <div>
+        <List>
           {items.map((item, index) => (
-            <MenuItem
+            <ListItem
               key={index}
+              className={classes.listItem}
               onClick={() => {
                 close()
                 window.location.href = item.url
               }}
             >
-              {item.label}
-            </MenuItem>
+              <ListItemText primary={item.label} secondary={item.description} />
+            </ListItem>
           ))}
-        </div>
+        </List>
       )}
     />
   )

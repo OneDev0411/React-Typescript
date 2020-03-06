@@ -66,7 +66,12 @@ export function Side({ deal, roles, rowId, rowsCount }: Props) {
         </div>
       }
     >
-      <div className="primaryHover">
+      <div
+        className="underline-on-hover"
+        style={{
+          cursor: 'help'
+        }}
+      >
         <span>{sideName}</span>
 
         <span

@@ -6,6 +6,8 @@ import { withRouter, WithRouterProps } from 'react-router'
 import { TableCellProps } from '@material-ui/core'
 
 import Grid from 'components/Grid/Table'
+import { TrProps } from 'components/Grid/Table/types'
+import { useGridStyles } from 'components/Grid/Table/styles'
 import { SortableColumn, ColumnSortType } from 'components/Grid/Table/types'
 
 import { getUserSettingsInActiveTeam } from 'utils/user-teams'
@@ -44,6 +46,8 @@ interface Props {
 
 function AgentGrid(props: Props & WithRouterProps) {
   const dispatch = useDispatch()
+  const gridClasses = useGridStyles()
+
   const { isFetchingDeals, deals, roles, user } = useSelector(
     ({ deals, user }: IAppState) => ({
       isFetchingDeals: deals.properties.isFetchingDeals,
@@ -57,7 +61,6 @@ function AgentGrid(props: Props & WithRouterProps) {
     return [
       {
         id: 'address',
-        header: 'Address',
         width: '45%',
         accessor: (deal: IDeal) => getAddress(deal, roles),
         render: ({ row: deal, totalRows, rowIndex }) => (
@@ -71,24 +74,24 @@ function AgentGrid(props: Props & WithRouterProps) {
       },
       {
         id: 'status',
-        header: 'Status',
         width: '15%',
+        class: 'opaque',
         accessor: (deal: IDeal) => getStatus(deal),
         sortMethod: statusSortMethod
       },
       {
         id: 'price',
-        header: '$ Price',
         sortType: 'number' as ColumnSortType,
         width: '10%',
+        class: 'opaque',
         accessor: (deal: IDeal) => getPriceValue(deal),
         render: ({ row: deal }: { row: IDeal }) =>
           getFormattedPrice(getPriceValue(deal), 'currency', 0)
       },
       {
         id: 'critical-dates',
-        header: 'Critical Dates',
         width: '20%',
+        class: 'opaque',
         accessor: (deal: IDeal) => getCriticalDateNextValue(deal),
         render: ({ row: deal, totalRows, rowIndex }) => (
           <CriticalDate
@@ -101,8 +104,8 @@ function AgentGrid(props: Props & WithRouterProps) {
       },
       {
         id: 'agent-name',
-        header: 'Agent',
         width: '10%',
+        class: 'opaque',
         align: 'right' as TableCellProps['align'],
         accessor: (deal: IDeal) => getPrimaryAgentName(deal, roles),
         render: ({ row: deal }: { row: IDeal }) => {
@@ -161,6 +164,12 @@ function AgentGrid(props: Props & WithRouterProps) {
     dispatch(getUserTeams(user))
   }
 
+  const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
+    return {
+      onClick: () => props.router.push(`/dashboard/deals/${deal.id}`)
+    }
+  }
+
   return (
     <Grid<IDeal>
       sorting={{
@@ -174,6 +183,10 @@ function AgentGrid(props: Props & WithRouterProps) {
       LoadingStateComponent={LoadingState}
       EmptyStateComponent={EmptyState}
       loading={isFetchingDeals ? 'middle' : null}
+      getTrProps={getRowProps}
+      classes={{
+        row: gridClasses.row
+      }}
     />
   )
 }
