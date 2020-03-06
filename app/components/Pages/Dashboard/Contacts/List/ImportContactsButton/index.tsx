@@ -108,7 +108,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
       >
         <Flex alignCenter>
           <GoogleIcon size={iconSizes.small} />
-          <ButtonText>Import contacts from: Google</ButtonText>
+          <ButtonText>Sync with: Google</ButtonText>
         </Flex>
       </PopOver>
     </SplitButton>
