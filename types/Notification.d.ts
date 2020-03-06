@@ -75,7 +75,7 @@ declare interface INotification extends IModel<'notification'> {
   subject: UUID | null
   auxiliary_object_class: TNotificationObjectType
   auxiliary_object: UUID | null
-  recommendation: any //
+  recommendation: any
   auxiliary_subject: UUID | null
   subject_class: TNotificationObjectType
   auxiliary_subject_class: TNotificationObjectType
@@ -86,7 +86,7 @@ declare interface INotification extends IModel<'notification'> {
   data: any
   notification_type: string
   seen: boolean
-  recommendations: any[] | null //
+  recommendations: any[] | null
   objects: any[] | null
   subjects: any[] | null
 }

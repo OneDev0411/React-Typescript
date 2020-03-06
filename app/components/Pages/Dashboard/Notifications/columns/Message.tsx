@@ -20,27 +20,22 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     text: {
       paddingLeft: theme.spacing(5.5)
-    },
-    timeage: {
-      position: 'absolute',
-      right: theme.spacing(3),
-      top: 0
     }
   })
 )
 
 interface Props {
-  seen: boolean
+  isSeen: boolean
   message: string
   onClick: () => void
 }
 
-export default function Message({ seen, message, onClick }: Props) {
+export default function Message({ isSeen, message, onClick }: Props) {
   const classes = useStyles()
 
   return (
     <div className={classes.container} onClick={onClick}>
-      {!seen && <div className={classes.badge} />}
+      {!isSeen && <div className={classes.badge} />}
       <Typography variant="body2" color="textPrimary" className={classes.text}>
         {message}
       </Typography>
