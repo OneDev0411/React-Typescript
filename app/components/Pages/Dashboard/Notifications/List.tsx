@@ -29,7 +29,7 @@ export default function List({
         <Message
           onClick={() => handleNotifClick(row)}
           message={row.message}
-          seen={row.seen}
+          isSeen={row.seen}
         />
       )
     },
