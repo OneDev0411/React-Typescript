@@ -33,7 +33,7 @@ const useStyles = makeStyles(
       buttonText: {
         marginLeft: theme.spacing(2),
         fontWeight: 500,
-        fontFamily: "'Roboto', sans-serif",
+        fontFamily: 'Roboto, sans-serif',
         whiteSpace: 'nowrap'
       }
     }),
