@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       !noPadding ? theme.spacing(3) : 0,
     width: '100%'
   },
+  globalAction: {
+    marginLeft: theme.spacing(1)
+  },
   content: {
     flexGrow: 1
   }
@@ -42,7 +45,7 @@ export default function GlobalHeader({
       )}
       {children && <div className={classes.content}>{children}</div>}
       {!noGlobalActionsButton && (
-        <div>
+        <div className={classes.globalAction}>
           <GlobalActionsButton />
         </div>
       )}

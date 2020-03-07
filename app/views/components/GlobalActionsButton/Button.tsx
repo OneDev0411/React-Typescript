@@ -8,7 +8,7 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      height: theme.spacing(5.5)
+      width: theme.spacing(15)
     }
   })
 )

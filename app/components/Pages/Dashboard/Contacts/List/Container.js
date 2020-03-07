@@ -695,7 +695,7 @@ class ContactsList extends React.Component {
           title={title}
         >
           {!isZeroState && (
-            <Box ml={2}>
+            <Box ml={1}>
               {activeSegment && activeSegment.is_editable && (
                 <TouchReminder
                   value={activeSegment.touch_freq}

@@ -84,7 +84,7 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
 
   return (
     <div className={classes.container}>
-      <GlobalHeader title="Deals admin" noPadding>
+      <GlobalHeader title="Deals Admin" noPadding>
         <div className={classes.headerContainer}>
           <SearchInput
             placeholder="Search deals by address, MLS# or agent name..."
