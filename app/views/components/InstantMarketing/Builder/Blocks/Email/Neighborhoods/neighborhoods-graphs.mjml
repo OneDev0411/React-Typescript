@@ -21,7 +21,7 @@
       <span>{{metric.description}}</span>
     </mj-text>
     {% if loop.last !== true %}
-    <mj-divider rechat-editable="true" padding="10px 0" border-width="2px"></mj-divider>
+    <mj-spacer height="10px"></mj-spacer>
     {% endif %}
     {% endfor %}
 
