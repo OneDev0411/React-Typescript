@@ -25,7 +25,7 @@ export function getIconStatesStyle(props) {
       &:hover > div,
       &:hover {
         > svg {
-          fill: ${props => props.theme.palette.grey['100']};
+          fill: ${props => props.theme.palette.primary.main};
         }
       }
     `
