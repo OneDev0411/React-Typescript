@@ -3,6 +3,7 @@ import superagent from 'superagent'
 import { Neighborhood, NeighborhoodsReport } from './types'
 
 const API_URL = '/api/liveby'
+const REQUEST_TIMEOUT_MS = 60000
 
 export async function getNeighborhoods(
   text: string,
@@ -11,6 +12,7 @@ export async function getNeighborhoods(
 ): Promise<Neighborhood[]> {
   const response = await superagent
     .post(`${API_URL}/neighborhoods`)
+    .timeout(REQUEST_TIMEOUT_MS)
     .send({ text, limit, offset })
 
   return response.body
@@ -21,6 +23,7 @@ export async function getReport(
 ): Promise<NeighborhoodsReport> {
   const response = await superagent
     .post(`${API_URL}/report`)
+    .timeout(REQUEST_TIMEOUT_MS)
     .send({ neighborhood })
 
   return response.body.data

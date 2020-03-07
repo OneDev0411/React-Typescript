@@ -46,11 +46,13 @@ function getNeighborhoodsGraphTemplateReport(
             aggregatedItem => aggregatedItem.label
           )
 
+          const title = `${metric.name} ${metricData.label} in ${
+            selectedReport.neighborhood.label
+          }`
+
           const datasets = [
             {
-              label: `${metric.name} ${metricData.label} in ${
-                selectedReport.neighborhood.label
-              }`,
+              label: title,
               data: metricData.aggregateOf!.map(aggregatedItem => {
                 const rawItemValue = aggregatedItem.value.toString()
                 let itemValue = Number(rawItemValue)
@@ -74,6 +76,30 @@ function getNeighborhoodsGraphTemplateReport(
               data: {
                 labels,
                 datasets
+              },
+              options: {
+                legend: {
+                  display: false
+                },
+                title: {
+                  text: title,
+                  display: true,
+                  fontColor: graphBarsBackgroundColor,
+                  padding: 20
+                },
+                plugins: {
+                  datalabels: {
+                    color: '#fff',
+                    display: true,
+                    anchor: 'end',
+                    align: 90,
+                    rotation: 315,
+                    formatter:
+                      metricType === 'percent'
+                        ? "(value) => value + '%'"
+                        : '(value) => value'
+                  }
+                }
               }
             })
           }

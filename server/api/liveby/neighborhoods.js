@@ -2,7 +2,12 @@ import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import superagent from 'superagent'
 
-import { NEIGHBORHOODS_API_URL, API_CLIENT_ID, API_KEY } from './constants'
+import {
+  NEIGHBORHOODS_API_URL,
+  API_CLIENT_ID,
+  API_KEY,
+  REQUEST_TIMEOUT_MS
+} from './constants'
 
 const router = require('koa-router')()
 const app = new Koa()
@@ -13,6 +18,7 @@ async function sendGetNeighborhoodsRequest(body) {
     .set('Content-Type', 'application/json')
     .set('X-API-CLIENTID', API_CLIENT_ID)
     .set('X-API-KEY', API_KEY)
+    .timeout(REQUEST_TIMEOUT_MS)
     .send(body)
 
   return response
