@@ -13,12 +13,13 @@ import IconSearch from 'components/SvgIcons/Search/IconSearch'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     input: {
-      width: '400px',
-      height: theme.spacing(5.5),
-      border: 'none',
-      backgroundColor: theme.palette.grey[50],
       padding: theme.spacing(0, 2),
+      width: '400px',
+      height: theme.spacing(4.5),
+      backgroundColor: theme.palette.grey['100'],
+      border: 'none',
       borderRadius: theme.shape.borderRadius,
+      lineHeight: theme.spacing(4.5),
       '&&&:before': {
         borderBottom: 'none'
       },

@@ -22,10 +22,10 @@ import { getActiveTeamId } from 'utils/user-teams'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     exportButton: {
-      margin: theme.spacing(0, 1),
+      marginLeft: theme.spacing(1),
       width: theme.spacing(5.5),
       minWidth: theme.spacing(5.5),
-      height: theme.spacing(5.5)
+      height: theme.spacing(4.5)
     },
     listItem: {
       cursor: 'pointer',
