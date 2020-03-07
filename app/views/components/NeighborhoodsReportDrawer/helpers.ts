@@ -72,7 +72,7 @@ export function getFormattedReportWithNeededPeriods(
         data: metric.data.map(metricData => {
           return {
             key: metricData.key,
-            label: `${metricData.label} ${metricData.key.slice(0, 4)}`,
+            label: `${metricData.label} ${metricData.key.slice(2, 4)}`,
             value: metricData.value
           }
         })
