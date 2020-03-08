@@ -123,7 +123,10 @@ function List(props) {
   )
 
   const renderContent = ({ sortBy, onChangeSort }) => {
-    if (isLoading || filteredList.length == 0) {
+    const isFiltering =
+      list.length > 0 && (stats.sent === 0 && stats.scheduled === 0)
+
+    if (isLoading || isFiltering) {
       return <LoadingComponent />
     }
 
