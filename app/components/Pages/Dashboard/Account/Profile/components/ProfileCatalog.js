@@ -4,14 +4,13 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import { Button, IconButton } from '@material-ui/core'
 
 import editUser from 'actions/user/edit'
 import uploadAvatar from 'actions/user/upload-avatar'
 import { confirmation } from 'actions/confirmation'
 
-import Button from 'components/Button/ActionButton'
-import IconButton from 'components/Button/IconButton'
-import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 import { ImageUploader } from 'components/ImageUploader'
 import Tooltip from 'components/tooltip'
 
@@ -96,30 +95,26 @@ class ProfileCatalog extends Component {
     return (
       <React.Fragment>
         <Container>
-          <Avatar
-            user={this.props.user}
-            data-test="profile-avatar-image"
-          />
+          <Avatar user={this.props.user} data-test="profile-avatar-image" />
 
           <ProfileImageActions>
             {this.props.user.profile_image_url && (
               <Tooltip caption="Delete Profile Picture">
                 <IconButton
                   disabled={this.props.isUploading}
-                  appearance="outline"
-                  style={{ marginRight: '1rem', marginBottom: '1rem' }}
-                  data-test="profile-avatar-delete-button"
+                  // style={{ marginRight: '1rem', marginBottom: '1rem' }}
                   onClick={this.onDelete}
+                  data-test="profile-avatar-delete-button"
                 >
-                  <DeleteIcon />
+                  <TrashIcon />
                 </IconButton>
               </Tooltip>
             )}
             <Button
-              data-test="profile-avatar-upload-button"
+              variant="outline"
               disabled={this.props.isUploading}
-              appearance="outline"
               onClick={this.openModal}
+              data-test="profile-avatar-upload-button"
             >
               {`${this.getImageUploadButtonText()} Profile Picture`}
             </Button>
