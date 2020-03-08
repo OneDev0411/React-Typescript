@@ -102,7 +102,6 @@ class ProfileCatalog extends Component {
               <Tooltip caption="Delete Profile Picture">
                 <IconButton
                   disabled={this.props.isUploading}
-                  // style={{ marginRight: '1rem', marginBottom: '1rem' }}
                   onClick={this.onDelete}
                   data-test="profile-avatar-delete-button"
                 >
