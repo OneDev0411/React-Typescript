@@ -34,13 +34,6 @@ export const TAB_ITEMS: TabItem[] = [
     link: 'touches'
   },
   {
-    label: 'Calls',
-    filter: {
-      'event_types[]': ['Call']
-    },
-    link: 'calls'
-  },
-  {
     label: 'Celebrations',
     filter: {
       'object_types[]': ['contact_attribute']
@@ -53,13 +46,6 @@ export const TAB_ITEMS: TabItem[] = [
       'object_types[]': ['deal_context']
     },
     link: 'critical-dates'
-  },
-  {
-    label: 'Scheduled Emails',
-    filter: {
-      'object_types[]': ['email_campaign']
-    },
-    link: 'emails'
   }
 ]
 

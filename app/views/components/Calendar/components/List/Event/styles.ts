@@ -15,15 +15,13 @@ export const sharedStyles = (theme: Theme) =>
       alignItems: 'center'
     },
     title: {
-      fontSize: '1rem',
-      fontWeight: 500,
-      color: '#1D1F26' // TODO: use palette
+      color: '#1D1F26', // TODO: use palette
+      ...theme.typography.body2
     },
     time: {
       width: '5rem',
-      fontSize: '0.875rem',
-      letterSpacing: '0.25px',
-      color: theme.palette.grey[900]
+      color: theme.palette.grey[500],
+      ...theme.typography.caption
     },
     link: {
       cursor: 'pointer'

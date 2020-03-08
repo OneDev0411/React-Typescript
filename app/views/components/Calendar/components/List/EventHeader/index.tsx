@@ -24,11 +24,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     date: {
       color: theme.palette.grey[700],
-      fontSize: theme.typography.h6.fontSize
+      ...theme.typography.body1
     },
     dateAlias: {
       color: theme.palette.common.black,
-      fontSize: theme.typography.h6.fontSize
+      ...theme.typography.subtitle1
     },
     splitter: {
       width: '3px',
