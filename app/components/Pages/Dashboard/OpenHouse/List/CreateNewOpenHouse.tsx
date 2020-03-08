@@ -17,7 +17,7 @@ function CreateNewOpenHouse(props: Props) {
   return (
     <>
       <Button variant="outlined" onClick={() => setIsSearchDrawerOpen(true)}>
-        Create Open House
+        Create Registration Page
       </Button>
 
       <SearchListingDrawer

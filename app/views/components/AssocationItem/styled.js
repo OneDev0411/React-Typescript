@@ -7,6 +7,7 @@ import { LatoFamilyStyle } from '../Typography/styles'
 export const RemoveButton = styled(Button)`
   visibility: hidden;
   margin-left: 0.75em;
+  padding: 0;
 `
 
 export const DetailsContainer = styled.div`
