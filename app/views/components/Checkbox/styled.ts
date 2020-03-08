@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
-import { primary, grey } from '../../utils/colors'
+import { grey } from '../../utils/colors'
+import { theme } from '../../../theme'
 import IconCheck from '../SvgIcons/Checkmark/IconCheckmark'
 
 // visually hidden
@@ -35,11 +36,15 @@ export const CheckMarkBox = styled.div<CheckMarkBoxProps>`
   align-items: center;
   justify-content: center;
   border-radius: 3px;
-  background-color: ${props => (props.checked ? primary : '#fff')};
-  border: solid 1px ${props => (props.checked ? primary : '#000')};
+  background-color: ${props =>
+    props.checked ? theme.palette.primary.main : theme.palette.common.white};
+  border: solid 1px
+    ${props =>
+      props.checked ? theme.palette.primary.main : theme.palette.common.black};
 
   &:hover {
-    background-color: ${props => (props.checked ? primary : grey.A100)};
+    background-color: ${props =>
+      props.checked ? theme.palette.primary.main : grey.A100};
   }
 `
 
