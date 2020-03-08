@@ -85,20 +85,27 @@ function getNeighborhoodsGraphTemplateReport(
                   text: title,
                   display: true,
                   fontColor: graphBarsBackgroundColor,
-                  padding: 20
+                  padding: 10
                 },
-                plugins: {
-                  datalabels: {
-                    color: '#fff',
-                    display: true,
-                    anchor: 'end',
-                    align: 90,
-                    rotation: 315,
-                    formatter:
-                      metricType === 'percent'
-                        ? "(value) => value + '%'"
-                        : '(value) => value'
-                  }
+                scales: {
+                  xAxes: [
+                    {
+                      gridLines: {
+                        color: 'transparent',
+                        zeroLineColor: '#ccc'
+                      }
+                    }
+                  ],
+                  yAxes: [
+                    {
+                      gridLines: {
+                        color: 'transparent'
+                      },
+                      ticks: {
+                        beginAtZero: true
+                      }
+                    }
+                  ]
                 }
               }
             })
