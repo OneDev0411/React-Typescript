@@ -81,12 +81,6 @@ function getNeighborhoodsGraphTemplateReport(
                 legend: {
                   display: false
                 },
-                title: {
-                  text: title,
-                  display: true,
-                  fontColor: graphBarsBackgroundColor,
-                  padding: 10
-                },
                 scales: {
                   xAxes: [
                     {
