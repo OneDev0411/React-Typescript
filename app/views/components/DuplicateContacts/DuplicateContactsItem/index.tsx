@@ -5,14 +5,13 @@ import {
   makeStyles,
   Theme,
   Typography,
-  Button
+  Button,
+  Avatar
 } from '@material-ui/core'
 import fecha from 'fecha'
 
 import { getContactSource } from 'models/contacts/helpers'
-import { grey } from 'views/utils/colors'
 
-import Avatar from 'components/Avatar'
 import MiniContact from 'components/MiniContact'
 
 import Dismiss from './Dismiss'
@@ -46,10 +45,15 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(0, 0.5)
     },
     contactSource: {
-      color: grey.A900
+      color: theme.palette.action.disabled
     },
     masterText: {
       color: theme.palette.success.main
+    },
+    avatar: {
+      marginRight: theme.spacing(1),
+      backgroundColor: theme.palette.divider,
+      color: theme.palette.text.primary
     }
   })
 )
@@ -76,6 +80,10 @@ export default function DuplicateContactsListItem({
   const handleSetAsMaster = () => {
     onSetMasterClick(contact.id)
   }
+  const avatarUrl =
+    contact && contact.profile_image_url ? contact.profile_image_url : ''
+  const displayName =
+    contact && contact.display_name ? contact.display_name : ''
 
   return (
     <ListItem key={contact.id} className={classes.listItem} button>
@@ -83,15 +91,15 @@ export default function DuplicateContactsListItem({
         <MiniContact type="contact" data={contact}>
           <div className={classes.row}>
             <Avatar
-              image={contact.profile_image_url}
-              style={{ marginRight: '0.5rem' }}
-              title={contact.display_name}
-            />
+              className={classes.avatar}
+              alt={displayName}
+              src={avatarUrl}
+            >
+              {displayName.substring(0, 1)}
+            </Avatar>
             <div className={classes.column}>
-              <Typography variant="subtitle1">
-                {contact.display_name}
-              </Typography>
-              <Typography className={classes.contactSource} variant="caption">
+              <Typography variant="body2">{displayName}</Typography>
+              <Typography className={classes.contactSource} variant="body2">
                 {getContactSource(contact)} at{' '}
                 {fecha.format(contact.created_at * 1000, 'MMMM D, YYYY')}
               </Typography>
