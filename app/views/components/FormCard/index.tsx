@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
+import { Typography } from '@material-ui/core'
 
-import { Container, Title, Content } from './styled'
+import { Container, Content } from './styled'
 
 interface Props {
   title?: string
@@ -11,11 +12,7 @@ interface Props {
 export default function FormCard({ title, noBorder, children }: Props) {
   return (
     <Container>
-      {title && (
-        <div>
-          <Title>{title}</Title>
-        </div>
-      )}
+      {title && <Typography variant="h6">{title}</Typography>}
       <Content noBorder={noBorder}>{children}</Content>
     </Container>
   )
