@@ -11,8 +11,6 @@ import { useTheme, makeStyles, createStyles } from '@material-ui/styles'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import InfoIcon from 'components/SvgIcons/InfoFilled/IconInfoFilled'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
-
 import { useGridStyles } from 'components/Grid/Table/styles'
 
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
@@ -30,6 +28,7 @@ import EmptyState from './EmptyState'
 import CreateNewOpenHouse from './CreateNewOpenHouse'
 import Avatar from './columns/Avatar'
 import Title from './columns/Title'
+import Description from './columns/Description'
 import Date from './columns/Date'
 import Registrants from './columns/Registrants'
 import GuestRegistration from './columns/GuestRegistration'
@@ -49,9 +48,13 @@ type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 const useAlertStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
+      root: {
+        marginBottom: theme.spacing(5)
+      },
       message: {
         '& a, & a:hover': {
-          color: theme.palette.secondary.main
+          color: theme.palette.secondary.main,
+          textDecoration: 'none'
         }
       }
     }),
@@ -65,7 +68,6 @@ function OpenHousesList(props: Props) {
 
   const gridClasses = useGridStyles()
 
-  const iconClasses = useIconStyles()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
       order: '-due_date',
@@ -107,16 +109,21 @@ function OpenHousesList(props: Props) {
       )
     },
     {
-      header: 'Infos',
-      id: 'info',
+      header: 'Title',
+      id: 'title',
       primary: true,
-      width: '25%',
+      width: '15%',
       render: ({ row }: RenderProps<TableRow>) => (
-        <Title
-          description={row.description}
-          onClick={() => handleEdit(row)}
-          title={row.title}
-        />
+        <Title title={row.title} onClick={() => handleEdit(row)} />
+      )
+    },
+    {
+      header: 'Description',
+      id: 'description',
+      primary: true,
+      width: '10%',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Description description={row.description} />
       )
     },
     {
@@ -242,12 +249,11 @@ function OpenHousesList(props: Props) {
                     <IconButton
                       aria-label="close"
                       color="inherit"
-                      size="small"
                       onClick={() => {
                         setAlertToOpen(false)
                       }}
                     >
-                      <CloseIcon className={iconClasses.medium} />
+                      <CloseIcon size="small" />
                     </IconButton>
                   }
                 >

@@ -964,7 +964,7 @@ class Builder extends React.Component {
                 onClick={this.props.onClose}
                 style={{ marginLeft: '0.5rem' }}
               >
-                <CloseIcon />
+                <CloseIcon size="small" />
               </IconButton>
             </Actions>
           </Header>

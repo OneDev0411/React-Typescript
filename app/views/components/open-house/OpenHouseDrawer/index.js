@@ -11,6 +11,8 @@ import InstantMarketing from 'components/InstantMarketing'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { formatDate } from 'components/InstantMarketing/helpers/nunjucks-filters'
 
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
 import { getTemplates } from 'models/instant-marketing'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
@@ -103,6 +105,8 @@ class OpenHouseDrawerInternal extends React.Component {
       (!props.openHouse && !props.openHouseId) ||
       Object.keys(props.initialValues).length > 0
   }
+
+  static contextType = ConfirmationModalContext
 
   get dealAassociation() {
     const { openHouse } = this.state
@@ -301,6 +305,17 @@ class OpenHouseDrawerInternal extends React.Component {
       this.setState({ isDisabled: false, isSaving: false })
       throw error
     }
+  }
+
+  onDelete = () => {
+    this.context.setConfirmationModal({
+      message: 'Delete Open House',
+      description: `Are you sure about deleting "${
+        this.props.openHouse.title
+      }"?`,
+      confirmLabel: 'Yes, I am sure',
+      onConfirm: () => this.delete()
+    })
   }
 
   delete = async () => {
@@ -524,11 +539,11 @@ class OpenHouseDrawerInternal extends React.Component {
                             <>
                               <Tooltip
                                 placement="top"
-                                caption="Delete Open House"
+                                caption="Delete Registration Page"
                               >
                                 <IconButton
                                   disabled={isDisabled}
-                                  onClick={this.delete}
+                                  onClick={this.onDelete}
                                 >
                                   <IconDelete size="medium" />
                                 </IconButton>
