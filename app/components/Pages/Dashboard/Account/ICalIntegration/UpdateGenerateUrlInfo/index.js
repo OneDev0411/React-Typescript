@@ -1,8 +1,8 @@
 import React from 'react'
 import Cookies from 'universal-cookie'
+import { IconButton } from '@material-ui/core'
 
 import CloseIcon from '../../../../../../views/components/SvgIcons/Close/CloseIcon'
-import IconButton from '../../../../../../views/components/Button/IconButton'
 import { InfoContainer, InfoLeftSide, InfoText, AlertIcon } from './styled'
 
 export default class UpdateGenerateUrlInfo extends React.Component {
@@ -11,6 +11,7 @@ export default class UpdateGenerateUrlInfo extends React.Component {
     this.cookies = new Cookies()
     this.state = { closeICalInfo: this.cookies.get('closeICalInfo') }
   }
+
   onClose = () => {
     this.cookies.set('closeICalInfo', true)
     this.setState({ closeICalInfo: this.cookies.get('closeICalInfo') })
@@ -32,7 +33,7 @@ export default class UpdateGenerateUrlInfo extends React.Component {
             type selection and copy and paste it into all the calendars you use.
           </InfoText>
         </InfoLeftSide>
-        <IconButton isFit iconSize="large" inverse onClick={this.onClose}>
+        <IconButton onClick={this.onClose}>
           <CloseIcon />
         </IconButton>
       </InfoContainer>
