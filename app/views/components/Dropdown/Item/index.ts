@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components'
 
-import { grey, primary } from 'views/utils/colors'
+import { grey } from 'views/utils/colors'
+
+import { theme } from '../../../../theme'
 
 interface Props {
   isActive?: boolean
@@ -20,8 +22,12 @@ export const Item = styled.div<Props>`
   padding: 0.5em 1em;
   cursor: pointer;
   white-space: nowrap;
-  color: ${props => (props.isActive ? '#fff' : '#000')};
-  background-color: ${props => (props.isActive ? primary : '#fff')};
+  color: ${props =>
+    props.isActive
+      ? theme.palette.primary.contrastText
+      : theme.palette.common.black};
+  background-color: ${props =>
+    props.isActive ? theme.palette.primary.main : theme.palette.common.white};
   font-weight: ${props => (props.isSelected && !props.isDisabled ? 700 : 400)};
 
   ${({ noContrast }) =>
@@ -35,11 +41,11 @@ export const Item = styled.div<Props>`
       : css`
           &:hover,
           &:focus {
-            color: #fff;
-            background-color: ${primary};
+            color: ${theme.palette.primary.contrastText};
+            background-color: ${theme.palette.primary.main};
 
             > svg {
-              fill: #fff;
+              fill: ${theme.palette.primary.contrastText};
             }
           }
         `}
