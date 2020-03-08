@@ -10,7 +10,6 @@ import { makeStyles } from '@material-ui/styles'
 import Table from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import Link from 'components/ALink'
 import { BasicDropdown } from 'components/BasicDropdown'
 import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
 
@@ -32,8 +31,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   name: {
     paddingRight: theme.spacing(2),
     paddingLeft: theme.spacing(1.5),
-    '&:not(:hover)': {
-      color: theme.palette.common.black
+    '& a': {
+      color: 'inherit !important',
+      textDecoration: 'none !important'
     }
   },
   description: {
@@ -46,6 +46,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'flex-end'
   },
   row: {
+    // cursor: 'pointer',
+    '&:hover': {
+      '& $name': {
+        color: theme.palette.secondary.main
+      }
+    },
     '&:not(:hover)': {
       '& $description': {
         color: theme.palette.grey[500]
@@ -115,11 +121,9 @@ function List(props: Props) {
       primary: true,
       width: '33%',
       render: ({ row }) => (
-        <Link to={`/dashboard/account/flows/${row.id}`}>
-          <Typography noWrap variant="body1" classes={{ root: classes.name }}>
-            {row.name}
-          </Typography>
-        </Link>
+        <Typography noWrap variant="body1" classes={{ root: classes.name }}>
+          <a href={`/dashboard/account/flows/${row.id}`}>{row.name}</a>
+        </Typography>
       )
     },
     {
@@ -238,6 +242,9 @@ function List(props: Props) {
           totalRows={(flows || []).length}
           loading={isFetching ? 'middle' : null}
           LoadingStateComponent={LoadingComponent}
+          getTrProps={({ row }) => ({
+            // onClick: () => window.location.pathname = `/dashboard/account/flows/${row.id}`
+          })}
           classes={{ row: classes.row }}
         />
       )}
@@ -246,12 +253,10 @@ function List(props: Props) {
 }
 
 const mapStateToProps = ({ user }) => ({ user })
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
+  notify: (...args: Parameters<typeof notify>) => dispatch(notify(...args))
+})
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    notify: (...args: Parameters<typeof notify>) => dispatch(notify(...args))
-  }
-}
 export default connect(
   mapStateToProps,
   mapDispatchToProps
