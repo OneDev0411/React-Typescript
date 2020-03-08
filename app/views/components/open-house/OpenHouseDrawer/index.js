@@ -365,7 +365,9 @@ class OpenHouseDrawerInternal extends React.Component {
       return []
     }
 
-    this.state.listing.gallery_image_urls.forEach(image => {
+    const uniqueAssets = [...new Set(this.state.listing.gallery_image_urls)]
+
+    uniqueAssets.forEach(image => {
       assets.push({
         listing: this.state.listing.id,
         image

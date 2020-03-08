@@ -23,6 +23,10 @@ import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/image-r
 // Agent
 import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
 
+// Market Reports
+import NeighborhoodsIcon from 'assets/images/marketing/editor/blocks/neighborhoods.png'
+import NeighborhoodsGraphsIcon from 'assets/images/marketing/editor/blocks/neighborhoods-graphs.png'
+
 // Common
 import DualIcon from 'assets/images/marketing/editor/blocks/dual.png'
 
@@ -47,6 +51,10 @@ import {
 import { headline2BlockName } from './Statics'
 import { agentLeftBlockName, agentGridBlockName } from './Agents'
 import { blockName as rechatImageBlockName } from './Image'
+import {
+  neighborhoodsBlockName,
+  neighborhoodsGraphsBlockName
+} from './Neighborhoods'
 
 const BLOCK_IDS_TO_REMOVE = [
   'mj-button',
@@ -93,7 +101,9 @@ const BLOCK_BUTTON_ICONS = {
   [listingRightBlockName]: ArticleImageRightIcon,
 
   [agentLeftBlockName]: AgentLeftIcon,
-  [agentGridBlockName]: DualIcon
+  [agentGridBlockName]: DualIcon,
+  [neighborhoodsBlockName]: NeighborhoodsIcon,
+  [neighborhoodsGraphsBlockName]: NeighborhoodsGraphsIcon
 }
 
 const BLOCK_BUTTONS_ORDER = [
@@ -123,7 +133,10 @@ const BLOCK_BUTTONS_ORDER = [
   listingRightBlockName,
 
   agentLeftBlockName,
-  agentGridBlockName
+  agentGridBlockName,
+
+  neighborhoodsBlockName,
+  neighborhoodsGraphsBlockName
 ]
 
 export function removeUnusedBlocks(editor: Editor) {

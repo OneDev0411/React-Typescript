@@ -49,8 +49,6 @@ const useStyles = makeStyles(
   { name: 'Inbox' }
 )
 
-interface Props {}
-
 export default function Inbox({ params }: Props & WithRouterProps) {
   const selectedEmailThreadId: UUID | undefined = params.emailThreadId
 
