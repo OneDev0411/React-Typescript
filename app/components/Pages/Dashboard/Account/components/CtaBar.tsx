@@ -7,7 +7,8 @@ import IconAddCircleOutline from 'components/SvgIcons/AddCircleOutline/IconAddCi
 const useStyles = makeStyles(
   (theme: Theme) => ({
     paper: {
-      padding: 0
+      padding: 0,
+      margin: theme.spacing(0, 0, 1.5, 0)
     },
     button: {
       padding: theme.spacing(1.25, 2),
