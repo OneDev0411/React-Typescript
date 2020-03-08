@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import ActionButton from '../Button/ActionButton'
+import { Button } from '@material-ui/core'
 
 import NewContactDrawer from './NewContactDrawer'
 
@@ -16,14 +16,14 @@ export class CreateContact extends React.Component {
   render() {
     return (
       <Fragment>
-        <ActionButton
-          appearance="outline"
-          style={{ justifyContent: 'center' }}
+        <Button
+          variant="outlined"
           data-test="create-contact-button"
           onClick={this.handleOpen}
+          {...this.props.buttonProps}
         >
           Create Contact
-        </ActionButton>
+        </Button>
 
         <NewContactDrawer
           isOpen={this.state.isOpen}
