@@ -1,5 +1,8 @@
 import React, { useMemo, useState } from 'react'
 import { connect } from 'react-redux'
+import cn from 'classnames'
+
+import { makeStyles, createStyles } from '@material-ui/core'
 
 import Table from 'components/Grid/Table'
 
@@ -21,7 +24,25 @@ import useListData from './useListData'
 import useFilterList from './useFilterList'
 import { InsightFiltersType } from './types'
 
+const useCustomGridStyles = makeStyles(theme =>
+  createStyles({
+    row: {
+      '& td': {
+        '&.actions svg': {
+          fill: theme.palette.grey['500']
+        }
+      },
+      '&:hover td': {
+        '&.actions svg': {
+          fill: theme.palette.text.primary
+        }
+      }
+    }
+  })
+)
+
 function List(props) {
+  const customGridClasses = useCustomGridStyles()
   const [queue, setQueue] = useState(0)
   const { list, isLoading } = useListData(props.user, queue)
   const gridClasses = useGridStyles()
@@ -80,11 +101,13 @@ function List(props) {
         class: 'visible-on-hover',
         width: '7%',
         verticalAlign: 'center',
-        render: ({ row }) => <StatsColumn data={row} />
+        render: ({ row }) =>
+          row.executed_at ? <StatsColumn data={row} /> : null
       },
       {
         header: '',
         id: 'actions-th',
+        class: 'actions',
         verticalAlign: 'center',
         width: '2rem',
         render: ({ row }) =>
@@ -123,7 +146,7 @@ function List(props) {
           onChange: onChangeSort
         }}
         classes={{
-          row: gridClasses.row
+          row: cn(gridClasses.row, customGridClasses.row)
         }}
       />
     )
