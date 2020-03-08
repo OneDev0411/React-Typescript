@@ -51,6 +51,8 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
+      backgroundColor: theme.palette.common.white,
+      fontSize: '14px',
       fontWeight: 500,
       fontFamily: 'Roboto, sans-serif'
     },
