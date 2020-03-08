@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components'
 
-import { grey, primary } from 'views/utils/colors'
+import { grey } from 'views/utils/colors'
+
+import { theme } from '../../../../../theme'
 
 export const Container = styled.div`
   display: flex;
@@ -56,7 +58,8 @@ export const TextInputSuffix = styled.button`
   font-size: 1rem;
   padding: 0 1rem;
   margin: auto;
-  color: ${({ disabled }) => (disabled ? grey.A900 : primary)};
+  color: ${({ disabled }) =>
+    disabled ? grey.A900 : theme.palette.primary.main};
 `
 
 export const TextInputPrefix = styled.div`

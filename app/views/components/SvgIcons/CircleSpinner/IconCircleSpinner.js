@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { primary } from '../../../utils/colors'
+import { theme } from '../../../../theme'
 
 const width = '48'
 const height = '48'
@@ -19,7 +19,7 @@ const getDimensionsCss = () => css`
 
 const Image = styled.svg`
   ${({ noStyles }) => (!noStyles ? getDimensionsCss() : null)};
-  fill: ${({ color }) => color || primary};
+  fill: ${({ color }) => color || theme.palette.primary.main};
 `
 
 const defaultProps = {

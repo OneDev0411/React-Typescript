@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 
 import ActionButton from 'components/Button/ActionButton'
-import { grey, primary } from 'views/utils/colors'
+import { grey } from 'views/utils/colors'
+
+import { theme } from '../../../../../../../theme'
 
 export const Container = styled.div``
 
@@ -37,5 +39,5 @@ export const InputPlaceholder = styled.div`
 
 export const CancleButton = styled(ActionButton)`
   border: none;
-  color: ${primary};
+  color: ${theme.palette.primary.main};
 `

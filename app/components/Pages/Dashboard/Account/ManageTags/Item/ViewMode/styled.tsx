@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components'
 
-import { grey, primary } from 'views/utils/colors'
+import { grey } from 'views/utils/colors'
+
+import { theme } from '../../../../../../../theme'
 
 interface ContainerProps {
   highlight?: boolean
@@ -23,7 +25,7 @@ export const Container = styled.div<ContainerProps>`
   ${({ highlight }) =>
     highlight &&
     css`
-      box-shadow: 0 0 0 1px ${primary} inset;
+      box-shadow: 0 0 0 1px ${theme.palette.primary.main} inset;
     `}
 `
 

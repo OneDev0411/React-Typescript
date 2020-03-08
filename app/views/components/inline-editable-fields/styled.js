@@ -5,7 +5,9 @@ import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
 import StarIcon from 'components/SvgIcons/Star/StarIcon'
 import ArrowIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import { primary, grey, borderColor } from 'views/utils/colors'
+import { grey, borderColor } from 'views/utils/colors'
+
+import { theme } from '../../../theme'
 
 export const ViewModeContainer = styled.div`
   position: relative;
@@ -83,10 +85,10 @@ export const DropdownButton = styled(LinkButton)`
   padding: 0;
   height: auto;
   line-height: 1.5;
-  color: ${({ isOpen }) => (isOpen ? primary : '#000')};
+  color: ${({ isOpen }) => (isOpen ? theme.palette.primary.main : '#000')};
 
   > svg {
-    fill: ${({ isOpen }) => (isOpen ? primary : '#000')};
+    fill: ${({ isOpen }) => (isOpen ? theme.palette.primary.main : '#000')};
   }
 `
 
@@ -106,7 +108,7 @@ export const Input = styled.input`
   &:focus {
     outline: none;
     border-radius: 3px;
-    border: 1px solid ${primary};
+    border: 1px solid ${theme.palette.primary.main};
   }
 `
 

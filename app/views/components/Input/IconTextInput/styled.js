@@ -1,15 +1,19 @@
 import styled from 'styled-components'
 
-import { primary, grey } from 'views/utils/colors'
+import { grey } from 'views/utils/colors'
+
 import IconSearchBase from 'components/SvgIcons/Search/IconSearch'
 import IconButtonFlex from 'components/Button/IconButton'
+
+import { theme } from '../../../../theme'
 
 export const Container = styled.div`
   display: flex;
   align-items: center;
   border-radius: 0.25rem;
   background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};
-  border: solid 1px ${({ isFocused }) => (isFocused ? primary : '#d4d4d4')};
+  border: solid 1px
+    ${({ isFocused }) => (isFocused ? theme.palette.primary.main : '#d4d4d4')};
   :hover {
     background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A100)};
   }
@@ -22,7 +26,7 @@ export const TextInput = styled.input`
   font-size: 1rem;
   padding: 0 0.3125rem;
   background-color: transparent;
-  caret-color: ${primary};
+  caret-color: ${theme.palette.primary.main};
 
   ::-ms-clear {
     display: none;
