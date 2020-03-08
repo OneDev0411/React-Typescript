@@ -1,8 +1,8 @@
 <mj-section padding="20px 20px" rechat-editable="tree" direction="rtl" background-color="#fff">
-  <mj-column vertical-align="middle">
+  <mj-column vertical-align="top">
     <mj-image padding="0" rechat-assets="static" src={{image}}></mj-image>
   </mj-column>
-  <mj-column vertical-align="middle" padding-right="10px">
+  <mj-column vertical-align="top" padding-right="10px">
     <mj-text padding="0" color="#000" font-family="Helvetica, Arial, sans-serif" align="left" rechat-editable="tree" font-size="20px" line-height="1.5">
       {{title}}
     </mj-text>
