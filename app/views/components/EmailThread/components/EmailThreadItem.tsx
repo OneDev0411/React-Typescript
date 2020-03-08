@@ -8,10 +8,13 @@ import {
   makeStyles,
   Paper,
   Theme,
+  Tooltip,
   Typography
 } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
+
+import useBoolean from 'react-use/lib/useBoolean'
 
 import { Iframe } from 'components/Iframe'
 
@@ -29,6 +32,9 @@ import { decodeContentIds } from '../helpers/decode-content-ids'
 import { EmailResponseComposeForm } from '../../EmailCompose/EmailResponseComposeForm'
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
 import { EmailRecipient } from '../../EmailRecipient'
+
+import { ThreeDotsButton } from '../../ThreeDotsButton'
+import { trimEmailQuotedContent } from '../helpers/trimEmailQuotedContent'
 
 interface Props {
   email: EmailThreadEmail
@@ -83,6 +89,7 @@ export function EmailThreadItem({
   const classes = useStyles(props)
 
   const [isResponseOpen, setIsResponseOpen] = useState(false)
+  const [trimQuotedContent, toggleTrimQuotedContent] = useBoolean(true)
   const [responseType, setResponseType] = useState<EmailResponseType>('reply')
 
   const openResponse = (type: EmailResponseType) => {
@@ -96,6 +103,13 @@ export function EmailThreadItem({
     () => decodeContentIds(email.attachments, email.htmlBody || ''),
     [email]
   )
+
+  const trimmedEmailBody = useMemo(
+    () => emailBody && trimEmailQuotedContent(emailBody),
+    [emailBody]
+  )
+
+  const isToggleQuotedContentVisible = trimmedEmailBody !== emailBody
 
   const hasNonInlineAttachments =
     email.attachments.filter(attachment => !attachment.isInline).length > 0
@@ -149,8 +163,25 @@ export function EmailThreadItem({
       {!collapsed && (
         <>
           <Box p={2} pl={9} overflow="hidden">
-            <Iframe title="Email body" srcDoc={emailBody} />
-
+            <Iframe
+              title="Email body"
+              srcDoc={trimQuotedContent ? trimmedEmailBody : emailBody}
+            />
+            {isToggleQuotedContentVisible && (
+              <>
+                <Tooltip
+                  title={
+                    trimQuotedContent
+                      ? 'Show trimmed content'
+                      : 'Hide expanded content'
+                  }
+                >
+                  <ThreeDotsButton onClick={toggleTrimQuotedContent} />
+                </Tooltip>
+                <br />
+              </>
+            )}
+            <br />
             {email.attachments.map(attachment => (
               <Attachment key={attachment.id} fullWidth={false}>
                 <Link target="_blank" href={attachment.url}>
