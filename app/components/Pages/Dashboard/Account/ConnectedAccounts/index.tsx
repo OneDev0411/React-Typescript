@@ -3,7 +3,6 @@ import { OAuthProvider } from 'constants/contacts'
 import * as React from 'react'
 import { useContext, useEffect } from 'react'
 import { connect } from 'react-redux'
-import cn from 'classnames'
 
 import { Helmet } from 'react-helmet'
 
@@ -23,7 +22,7 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { IAppState } from 'reducers'
 import PageHeader from 'components/PageHeader'
-
+import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import Loading from 'partials/Loading'
 import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
@@ -36,8 +35,6 @@ import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-accou
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import { ConnectedAccount } from './ConnectedAccount'
 
@@ -59,9 +56,6 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 500,
       fontFamily: 'Roboto, sans-serif',
       whiteSpace: 'nowrap'
-    },
-    buttonIcon: {
-      marginRight: theme.spacing(1)
     }
   })
 )
@@ -74,7 +68,6 @@ function ConnectedAccounts({
   disconnectOAuthAccount
 }: Props) {
   const classes = useStyles()
-  const iconClasses = useIconStyles()
 
   useEffect(() => {
     fetchOAuthAccounts()
@@ -110,11 +103,9 @@ function ConnectedAccounts({
             onClick={outlook.connect}
             className={classes.marginRight}
           >
-            <IconOutlook
-              className={cn(iconClasses.small, classes.buttonIcon)}
-            />
+            <IconOutlook size={iconSizes.small} />
             <Typography variant="button" className={classes.buttonText}>
-              Sync with: Outlook
+              Sync with Outlook
             </Typography>
           </Button>
           <Box mr={1} />
@@ -124,7 +115,7 @@ function ConnectedAccounts({
             className={classes.marginRight}
             onClick={google.connect}
           >
-            <IconGoogle className={cn(iconClasses.small, classes.buttonIcon)} />
+            <IconGoogle size={iconSizes.small} />
             <Typography variant="button" className={classes.buttonText}>
               Sync with Google
             </Typography>
