@@ -68,9 +68,11 @@ class Item extends React.Component {
         <Avatar {...avatar} size={40} />
         <Box ml={1} width="calc(100% - 3rem)">
           <Typography variant="body2">
-            {address && <Typography>{address}</Typography>}
+            {address && <Typography variant="body2">{address}</Typography>}
             <Flex alignCenter>
-              {clientTitle && <Typography>{clientTitle}</Typography>}
+              {clientTitle && (
+                <Typography variant="body2">{clientTitle}</Typography>
+              )}
               {contactRoleName && <Role>{contactRoleName}</Role>}
             </Flex>
           </Typography>
