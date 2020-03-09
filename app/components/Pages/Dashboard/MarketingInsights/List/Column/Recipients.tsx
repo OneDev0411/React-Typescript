@@ -1,6 +1,7 @@
 import React from 'react'
+import { Tooltip } from '@material-ui/core'
 
-import { recipientsList } from '../helpers'
+import { recipientsList, truncateString } from '../helpers'
 
 interface Props {
   data: IEmailCampaign
@@ -38,7 +39,11 @@ function RecipientsColumn({ data }: Props) {
     // so maybe it confusing at some point that email isn't include the contact itself.
     const emailAddress = data[0].email
 
-    return <span>{emailAddress}</span>
+    return (
+      <Tooltip title={emailAddress}>
+        <span>{truncateString(emailAddress, 35)}</span>
+      </Tooltip>
+    )
   }
 
   return <span>{items.join(', ')}</span>
