@@ -21,15 +21,26 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    button: (props: ThemeProps) => ({
-      color: props.isOpen
-        ? theme.palette.primary.main
-        : theme.palette.text.secondary,
-      fontSize: theme.spacing(2),
-      '&:hover': {
-        backgroundColor: 'transparent'
+    button: (props: ThemeProps) => {
+      const styles = props.isOpen
+        ? {
+            color: theme.palette.primary.main,
+            ...theme.typography.body1,
+            fontWeight: 'normal' as React.CSSProperties['fontWeight']
+          }
+        : {
+            color: theme.palette.text.secondary,
+            ...theme.typography.subtitle1,
+            fontWeight: 'bold' as React.CSSProperties['fontWeight']
+          }
+
+      return {
+        ...styles,
+        '&:hover': {
+          backgroundColor: 'transparent'
+        }
       }
-    })
+    }
   })
 )
 

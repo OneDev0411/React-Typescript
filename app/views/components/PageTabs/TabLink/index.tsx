@@ -8,8 +8,12 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       minWidth: theme.spacing(8),
-      fontSize: theme.typography.body1.fontSize,
-      fontWeight: theme.typography.body1.fontWeight,
+      color: theme.palette.common.black,
+      ...theme.typography.body1,
+      '&.Mui-selected': {
+        ...theme.typography.subtitle1,
+        fontWeight: 'bold'
+      },
       '&:hover': {
         textDecoration: 'none',
         color: theme.palette.primary.main

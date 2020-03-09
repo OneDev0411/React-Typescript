@@ -2,8 +2,6 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import cn from 'classnames'
 
-import Flex from 'styled-flex-component'
-
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import { ClassesProps } from 'utils/ts-utils'
@@ -75,12 +73,12 @@ export function EventContainer({
             </div>
           </div>
 
-          <Flex alignCenter>
+          <div className={classes.actions}>
             {editable && (
               <EditIcon className={cn(iconStyles.small, classes.iconEdit)} />
             )}
             {actions}
-          </Flex>
+          </div>
         </div>
       </div>
     </div>

@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     weekNavigationButton: {
       backgroundColor: theme.palette.grey[100],
-      margin: theme.spacing(0, 0.5),
+      margin: theme.spacing(0, 0.25),
       color: theme.palette.grey[600]
     },
     weekDay: {
@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.grey[600],
       backgroundColor: theme.palette.grey[100],
       cursor: 'pointer',
+      '&:hover': {
+        backgroundColor: theme.palette.action.hover
+      },
       '&.active': {
         backgroundColor: theme.palette.common.black,
         color: theme.palette.common.white,
