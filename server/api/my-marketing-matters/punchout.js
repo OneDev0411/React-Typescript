@@ -7,7 +7,11 @@ import nunjucks from 'nunjucks'
 import xml2js from 'xml2js'
 
 import getListing from '../../../app/models/listings/listing/get-listing'
-import { getPrice, getField } from '../../../app/models/Deal/helpers/context'
+import {
+  getPrice,
+  getField,
+  getContext
+} from '../../../app/models/Deal/helpers/context'
 
 import {
   API_URL,
@@ -66,7 +70,7 @@ async function getRequestBody(user, deal, costCenter, callbackUrl) {
       },
       properties: [
         {
-          id: deal.id,
+          id: getContext('mls_id') || getContext('file_id') || deal.id,
           price,
           address,
           description,
