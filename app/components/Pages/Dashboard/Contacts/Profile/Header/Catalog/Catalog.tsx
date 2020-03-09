@@ -35,6 +35,7 @@ export default function Catalog({ contact }: Props) {
         <Typography variant="subtitle1" className={classes.title}>
           {contact.display_name}
           <Link
+            color="secondary"
             href="#Details"
             variant="caption"
             className={classes.editButton}
