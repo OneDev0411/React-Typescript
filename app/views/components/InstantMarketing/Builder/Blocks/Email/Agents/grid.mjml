@@ -1,20 +1,18 @@
-{% for usersBatch in users | batch(4) %}
+{% for usersBatch in users | batch(2) %}
 <mj-section padding="20px 20px" background-color="#fff">
   {% for user in usersBatch %}
   <mj-column>
-    <mj-image padding="0" width="100px" rechat-assets="avatar" src="{{ user.profile_image_url }}"></mj-image>
-
-    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" align="center" rechat-editable="tree" font-size="20px" line-height="1.5">
+    <mj-image src="{{ user.profile_image_url }}" width="250px" padding="4px 25px" rechat-assets="avatar">
+    </mj-image>
+    <mj-text text-transform="uppercase" align="center" font-weight="500" font-size="17px" padding="5px 0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree">
       {{user.display_name}}
     </mj-text>
-
-    <mj-button href="mailto:{{user.email}}" inner-padding="0" padding="0" text-decoration="underline" background-color="#fff" color="#262626" font-family="Helvetica, Arial, sans-serif" align="center" rechat-editable="tree" font-size="14px" line-height="1.5">
-      {{user.email}}
-    </mj-button>
-
-    <mj-text font-family="Helvetica, Arial, sans-serif" align="center" rechat-editable="tree" font-size="14px" line-height="1.5" color="#262626">
+    <mj-text padding="5px 0" align="center" font-size="16px" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree">
       {{user.phone_number | phone}}
     </mj-text>
+    <mj-button color="#000" inner-padding="0" padding="5px 0" href="mailto:{{user.email}}" align="center" text-align="center" text-decoration="none" background-color="#fff" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px">
+      {{user.email}}
+    </mj-button>
   </mj-column>
   {% endfor %}
 </mj-section>
