@@ -1,19 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Contact profile last touched component renders 1`] = `
-<div>
-  <span>
+<div
+  class="MuiBox-root MuiBox-root-2"
+>
+  <p
+    class="MuiTypography-root MuiTypography-body2"
+  >
     Last Touch was 
     <b>
       just now
     </b>
-  </span>
-  <span>
+  </p>
+  <p
+    class="MuiTypography-root MuiTypography-body2"
+  >
     , you wanted to be in touch every 
     <b>
       23123
     </b>
      days.
-  </span>
+  </p>
 </div>
 `;

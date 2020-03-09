@@ -51,7 +51,7 @@ export function ViewMode(props: Props) {
     <Box className={classes.container}>
       <Box className={classes.leftSide}>
         <Typography
-          variant="body1"
+          variant="body2"
           className={classes.title}
           data-test={`contact-attribute${title ? `-${title}` : ''}`}
         >
