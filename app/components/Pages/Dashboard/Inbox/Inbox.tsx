@@ -29,7 +29,7 @@ const useStyles = makeStyles(
     main: {
       position: 'relative',
       height:
-        'calc(100vh - 120px - 1px)' /* total height - page header - divider */
+        'calc(100vh - 124px - 1px)' /* total height - page header - divider */
     },
     fullHeight: {
       height: '100%'
