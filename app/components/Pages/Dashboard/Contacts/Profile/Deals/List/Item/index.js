@@ -66,11 +66,11 @@ class Item extends React.Component {
     return (
       <Container onClick={this.handleOnClickItem}>
         <Avatar {...avatar} size={40} />
-        <Box ml="1rem" width="calc(100% - 3rem)">
+        <Box ml={1} width="calc(100% - 3rem)">
           <Typography variant="body2">
-            {address && <div>{address}</div>}
+            {address && <Typography>{address}</Typography>}
             <Flex alignCenter>
-              {clientTitle && <div>{clientTitle}</div>}
+              {clientTitle && <Typography>{clientTitle}</Typography>}
               {contactRoleName && <Role>{contactRoleName}</Role>}
             </Flex>
           </Typography>
