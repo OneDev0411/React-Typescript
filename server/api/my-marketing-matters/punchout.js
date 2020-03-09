@@ -70,7 +70,7 @@ async function getRequestBody(user, deal, costCenter, callbackUrl) {
       },
       properties: [
         {
-          id: getContext('mls_id') || getContext('file_id') || deal.id,
+          id: getContext('mls_id') || deal.id,
           price,
           address,
           description,
