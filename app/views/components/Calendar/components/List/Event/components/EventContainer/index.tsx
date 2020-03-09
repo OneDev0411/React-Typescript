@@ -2,6 +2,8 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import cn from 'classnames'
 
+import { Tooltip } from '@material-ui/core'
+
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import { ClassesProps } from 'utils/ts-utils'
@@ -75,7 +77,9 @@ export function EventContainer({
 
           <div className={classes.actions}>
             {editable && (
-              <EditIcon className={cn(iconStyles.small, classes.iconEdit)} />
+              <Tooltip title="Edit Event" placement="top">
+                <EditIcon className={cn(iconStyles.small, classes.iconEdit)} />
+              </Tooltip>
             )}
             {actions}
           </div>

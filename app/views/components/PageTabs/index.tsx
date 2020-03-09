@@ -6,7 +6,7 @@ export * from './TabLink'
 export * from './DropdownTab'
 export * from './TabSpacer'
 
-type SelectedTab = string | number | null
+type SelectedTab = string | number | boolean | null
 
 interface Props {
   tabs: React.ReactNode[]

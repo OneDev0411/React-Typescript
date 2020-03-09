@@ -1,8 +1,7 @@
 import React, { useState, Fragment } from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Tooltip } from '@material-ui/core'
 import produce from 'immer'
 
-import Flex from 'styled-flex-component'
 import cn from 'classnames'
 import fecha from 'fecha'
 import groupBy from 'lodash/groupBy'
@@ -13,6 +12,7 @@ import { deleteAttribute } from 'models/contacts/delete-attribute'
 import { getNotes } from 'models/contacts/helpers/get-notes'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
+import SanitizedHtml from 'components/SanitizedHtml'
 import { EditNoteDrawer } from 'components/EditNoteDrawer'
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 import IconNote from 'components/SvgIcons/Note/IconNote'
@@ -97,18 +97,20 @@ export function Notes(props: Props) {
                     {fecha.format(new Date(note.created_at * 1000), 'hh:mm A')}
                   </div>
                   <div className={cn(classes.container, classes.title)}>
-                    <div className={classes.icon}>
+                    <div className={classes.iconNote}>
                       <IconNote fill="#6A7589" className={iconClasses.small} />
                     </div>
-                    {note.text.replace(/<\/?[^>]+(>|$)/g, '')}
+                    <SanitizedHtml html={note.text} />
                   </div>
                 </div>
 
-                <Flex alignCenter>
-                  <EditIcon
-                    className={cn(iconClasses.small, classes.iconEdit)}
-                  />
-                </Flex>
+                <div className={classes.actions}>
+                  <Tooltip title="Edit Note" placement="top">
+                    <EditIcon
+                      className={cn(iconClasses.small, classes.iconEdit)}
+                    />
+                  </Tooltip>
+                </div>
               </div>
             </div>
           ))}
