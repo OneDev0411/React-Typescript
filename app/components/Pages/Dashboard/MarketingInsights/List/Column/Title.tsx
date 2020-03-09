@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 
 import { EditEmailButton } from 'components/EditEmailButton'
 
-import { isEmailInProgress, isEmailScheduled, show_title } from '../helpers'
+import { isEmailInProgress, isEmailScheduled, truncateString } from '../helpers'
 import { StyledBadge, StyledLink } from '../styled'
 
 interface Props {
@@ -17,7 +17,7 @@ function TitleColumn({ data, reloadList }) {
 
   const title = (
     <div className="info-title">
-      <div>{show_title(data.subject, 30)}</div>
+      <div>{truncateString(data.subject, 30)}</div>
       {isInProgress && (
         <StyledBadge appearance="warning">In Progress</StyledBadge>
       )}

@@ -58,7 +58,7 @@ export class CloseButton extends React.Component {
 
   render() {
     return (
-      <Button isFit iconSize="large" inverse onClick={this.handleOnClick}>
+      <Button isFit iconSize="medium" inverse onClick={this.handleOnClick}>
         <Icon />
       </Button>
     )

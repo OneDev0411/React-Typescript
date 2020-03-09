@@ -122,6 +122,7 @@ function Insight(props: InsightPropsType) {
         </Dialog>
         <Box px={3} pb={2}>
           <PageTabs
+            defaultValue="unknown"
             tabs={[
               <TabSpacer key="spacer" />,
               <Tab

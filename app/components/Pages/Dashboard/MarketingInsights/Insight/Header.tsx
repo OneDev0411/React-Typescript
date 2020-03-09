@@ -4,7 +4,7 @@ import { Button } from '@material-ui/core'
 import PageHeader from 'components/PageHeader'
 
 import Menu from './Menu'
-import { show_title } from '../List/helpers'
+import { truncateString } from '../List/helpers'
 
 interface Props {
   title: string
@@ -16,7 +16,7 @@ function Header({ backUrl, onViewEmail, title = '' }: Props) {
   return (
     <PageHeader isFlat style={{ padding: '1.5em 0 0', marginBottom: 0 }}>
       <PageHeader.Title showBackButton={false}>
-        <PageHeader.Heading>{show_title(title)}</PageHeader.Heading>
+        <PageHeader.Heading>{truncateString(title)}</PageHeader.Heading>
       </PageHeader.Title>
       <PageHeader.Menu>
         <Button

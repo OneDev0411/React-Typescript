@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import { ReactNode, RefObject, useRef } from 'react'
 import {
   ClickAwayListener,
@@ -66,10 +66,17 @@ export function BaseDropdown({
 }: Props) {
   const anchorRef = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useControllableState(isOpen, onIsOpenChange, false)
+  const [show, setShow] = useState<boolean>(false)
   const theme = useTheme()
 
   const toggle = (value?: boolean) =>
-    setOpen(value !== undefined ? value : open => !open)
+    setOpen(open => {
+      const nextOpen = value !== undefined ? value : !open
+
+      setShow(nextOpen)
+
+      return nextOpen
+    })
 
   const buttonProps: RenderToggleButtonProps = {
     isActive: open,
@@ -100,32 +107,40 @@ export function BaseDropdown({
         placement="bottom-start"
         {...PopperProps}
       >
-        {({ TransitionProps, placement }) => (
-          <Fade
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === 'bottom' ? 'center top' : 'center bottom'
-            }}
-          >
-            <Paper>
-              <ClickAwayListener
-                onClickAway={event => {
-                  if (
-                    anchorRef.current &&
-                    anchorRef.current.contains(event.target as HTMLElement)
-                  ) {
-                    return
-                  }
+        {({ TransitionProps, placement }) =>
+          show && (
+            <Fade
+              {...TransitionProps}
+              onExited={() => {
+                TransitionProps &&
+                  TransitionProps.onExited &&
+                  TransitionProps.onExited()
+                setShow(false)
+              }}
+              style={{
+                transformOrigin:
+                  placement === 'bottom' ? 'center top' : 'center bottom'
+              }}
+            >
+              <Paper>
+                <ClickAwayListener
+                  onClickAway={event => {
+                    if (
+                      anchorRef.current &&
+                      anchorRef.current.contains(event.target as HTMLElement)
+                    ) {
+                      return
+                    }
 
-                  return setOpen(false)
-                }}
-              >
-                {menu}
-              </ClickAwayListener>
-            </Paper>
-          </Fade>
-        )}
+                    return setOpen(false)
+                  }}
+                >
+                  {menu}
+                </ClickAwayListener>
+              </Paper>
+            </Fade>
+          )
+        }
       </Popper>
     </>
   )
