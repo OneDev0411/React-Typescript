@@ -20,6 +20,7 @@ interface Props {
   item: ISavedSegment
   deleteHandler: (item: ISavedSegment) => void
   selectHandler: (item: ISavedSegment) => void
+  closeHandler: () => void
   selected: boolean
 }
 
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function Item(props: Props) {
   const classes = useStyles()
-  const { item, selectHandler, deleteHandler, selected } = props
+  const { item, selectHandler, deleteHandler, closeHandler, selected } = props
   const { name } = item
   const modal = useContext(ConfirmationModalContext)
 
@@ -60,11 +61,11 @@ function Item(props: Props) {
     }
 
     selectHandler(item)
-  }, [selected, selectHandler, item])
+    closeHandler()
+  }, [selected, selectHandler, item, closeHandler])
 
   return (
     <ListItem
-      dense
       button
       classes={{ container: classes.container }}
       selected={selected}
@@ -82,7 +83,7 @@ function Item(props: Props) {
         {item.is_editable && (
           <IconButton size="small" aria-label="delete" onClick={onDelete}>
             <IconClose
-              style={{ fill: 'currentColor', width: 16, height: 16 }}
+              style={{ fill: 'currentColor', width: 10, height: 10 }}
             />
           </IconButton>
         )}

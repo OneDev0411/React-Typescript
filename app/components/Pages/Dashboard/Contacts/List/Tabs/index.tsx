@@ -48,11 +48,15 @@ interface ReduxStateType {
 }
 
 const getActiveTab = ({ isAllContactsActive, isSyncedListActive }) => {
+  if (isAllContactsActive) {
+    return 'all-contact'
+  }
+
   if (isSyncedListActive) {
     return 'synced-contact'
   }
 
-  return 'all-contact'
+  return 'saved-list'
 }
 
 export const ContactsTabs = ({
@@ -102,18 +106,20 @@ export const ContactsTabs = ({
         tabs={[
           <Tab
             key="all-contact"
+            value="all-contact"
             label={
               <span onClick={() => clickHandler('default')}>All Contacts</span>
             }
-            value="all-contact"
           />,
           <Tab
             key="saved-list"
+            value="saved-list"
             label={<SavedSegments {...savedListProps} />}
           />,
           <Tab
             disabled={syncedContacts.accounts <= 0}
             key="synced-contact"
+            value="synced-contact"
             label={
               <span onClick={() => clickHandler(SYNCED_CONTACTS_LIST_ID)}>
                 Synced Contacts
@@ -126,7 +132,6 @@ export const ContactsTabs = ({
                 )}
               </span>
             }
-            value="synced-contact"
           />,
           <TabSpacer key="space" />,
           <Tab key="sort" label={<SortFields {...sortProps} />} />

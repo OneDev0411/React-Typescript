@@ -91,10 +91,9 @@ class SegmentsList extends React.Component {
           className: classes.root
         }}
         listPlugin={{
-          disablePadding: true,
           style: { width: 220 }
         }}
-        renderMenu={() => {
+        renderMenu={({ close }) => {
           if (props.isFetching) {
             return [
               <ListItem dense key="loading">
@@ -121,6 +120,7 @@ class SegmentsList extends React.Component {
                 item={item}
                 deleteHandler={this.deleteItem}
                 selectHandler={this.selectItem}
+                closeHandler={close}
                 selected={this.isSelected(id)}
               />
             )
