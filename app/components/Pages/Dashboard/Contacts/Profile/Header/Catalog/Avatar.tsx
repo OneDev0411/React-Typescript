@@ -92,7 +92,7 @@ function AvatarUploader({ contact, attributeDefs }: Props) {
       avatar={{
         size: 56,
         src: avatar,
-        initials: getContactNameInitials(contact, attributeDefs)
+        initials: getContactNameInitials(contact)
       }}
       handleOnChange={handleOnChange}
       isUploading={isUploading}
