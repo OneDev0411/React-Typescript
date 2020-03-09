@@ -74,6 +74,7 @@ export function EmailItemHeaderActions(
       </Tooltip>
       <Menu
         {...menuProps}
+        disableScrollLock
         classes={{ paper: classes.menu }}
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
