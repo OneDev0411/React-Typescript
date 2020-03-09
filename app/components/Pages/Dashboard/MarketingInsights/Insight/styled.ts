@@ -25,10 +25,12 @@ export const InsightContainer = styled.div`
 `
 
 export const SummaryCard = styled.div`
+  max-width: 100%;
   background: #fff;
   border-radius: 0.18rem;
   border: solid 1px ${grey.A300};
   padding: 1.5rem;
+  overflow: hidden;
 
   ul {
     list-style: none;
