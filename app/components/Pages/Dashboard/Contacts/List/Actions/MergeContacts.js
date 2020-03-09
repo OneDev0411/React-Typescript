@@ -6,7 +6,6 @@ import { ListItem, ListItemText } from '@material-ui/core'
 import { ActionWrapper } from '../Table/components/ActionWrapper'
 import { mergeContact } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
-import Tooltip from '../../../../../../views/components/tooltip'
 
 class MergeContacts extends React.Component {
   onClick = () => {
@@ -26,18 +25,16 @@ class MergeContacts extends React.Component {
 
   render() {
     return (
-      <Tooltip placement="bottom" caption="Merge">
-        <ListItem button disabled={this.props.disabled} onClick={this.onClick}>
-          <ActionWrapper
-            bulkMode={this.props.acEntireMode}
-            action="merging"
-            atLeast="two"
-            disabled={this.props.disabled}
-          >
-            <ListItemText primary="Merge" />
-          </ActionWrapper>
-        </ListItem>
-      </Tooltip>
+      <ListItem button disabled={this.props.disabled} onClick={this.onClick}>
+        <ActionWrapper
+          bulkMode={this.props.acEntireMode}
+          action="merging"
+          atLeast="two"
+          disabled={this.props.disabled}
+        >
+          <ListItemText primary="Merge" />
+        </ActionWrapper>
+      </ListItem>
     )
   }
 }

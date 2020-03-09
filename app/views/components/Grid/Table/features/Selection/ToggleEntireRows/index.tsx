@@ -82,7 +82,7 @@ export function ToggleEntireRows<Row>({ rows, totalRows }: Props<Row>) {
           vertical: 'bottom',
           horizontal: 'left'
         }}
-        style={{ zIndex: 10 }}
+        style={{ zIndex: 1002 }}
       >
         <FormControlLabel
           className={classes.formControl}
