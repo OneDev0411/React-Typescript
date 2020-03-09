@@ -34,7 +34,7 @@ export function recipientsList(recipients) {
   }
 }
 
-export function truncate_string(title, limit = 0) {
+export function truncateString(title, limit = 0) {
   if (!title) {
     return 'No Title'
   }

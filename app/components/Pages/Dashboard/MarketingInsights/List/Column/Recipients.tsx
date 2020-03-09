@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tooltip } from '@material-ui/core'
 
-import { recipientsList, truncate_string } from '../helpers'
+import { recipientsList, truncateString } from '../helpers'
 
 interface Props {
   data: IEmailCampaign
@@ -41,7 +41,7 @@ function RecipientsColumn({ data }: Props) {
 
     return (
       <Tooltip title={emailAddress}>
-        <span>{truncate_string(emailAddress, 35)}</span>
+        <span>{truncateString(emailAddress, 35)}</span>
       </Tooltip>
     )
   }
