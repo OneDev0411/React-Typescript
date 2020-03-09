@@ -6,8 +6,9 @@ export const Tab = withStyles(theme => ({
     minWidth: theme.spacing(8),
     color: theme.palette.common.black,
     ...theme.typography.body1,
-    '&$selected': {
-      ...theme.typography.subtitle1
+    '&.Mui-selected': {
+      ...theme.typography.subtitle1,
+      fontWeight: 'bold'
     }
   }
 }))((props: TabProps) => <BaseTab {...props} />)
