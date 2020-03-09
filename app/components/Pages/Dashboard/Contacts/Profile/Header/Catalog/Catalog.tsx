@@ -9,8 +9,6 @@ import Avatar from './Avatar'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {
-      fontSize: '1.125rem',
-      lineHeight: 1.5,
       marginLeft: `${theme.spacing(1)}px`,
       width: 'calc(100% - 56px)'
     },
@@ -34,7 +32,7 @@ export default function Catalog({ contact }: Props) {
     <Box mb={2}>
       <Box display="flex" alignItems="center" mb={1}>
         <Avatar contact={contact} />
-        <Typography variant="h1" className={classes.title}>
+        <Typography variant="subtitle1" className={classes.title}>
           {contact.display_name}
           <Link
             href="#Details"
