@@ -50,7 +50,7 @@ export default function ImportContactsButton() {
       >
         <GoogleIcon size={iconSizes.small} />
         <Typography variant="button" className={classes.buttonText}>
-          Sign with Google
+          Sync with Google
         </Typography>
       </Button>
       <Button
