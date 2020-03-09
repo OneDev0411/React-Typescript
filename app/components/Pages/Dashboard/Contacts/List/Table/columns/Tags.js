@@ -1,13 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import { Box, Chip, makeStyles, createStyles } from '@material-ui/core'
+import { Box, Tooltip, Chip, makeStyles, createStyles } from '@material-ui/core'
 
 import { getContactTags } from '../../../../../../../models/contacts/helpers'
 
 const useStyles = makeStyles(theme =>
   createStyles({
     container: {
+      display: 'inline-block',
       cursor: 'pointer'
     },
     noTag: {
@@ -44,37 +45,39 @@ const TagsString = ({ contact, onSelectTagContact }) => {
   const invisibleTagsCount = tagsCount - showingTags.length
 
   return (
-    <Box
-      className={classes.container}
-      onClick={event => {
-        event.stopPropagation()
-        onSelectTagContact(contact.id)
-      }}
-    >
-      {tagsCount === 0 ? (
-        <span className={classes.noTag}>Add Tags</span>
-      ) : (
-        <>
-          <span className={classes.tagLabel}>TAGS:</span>
-          {showingTags.map(tag => (
-            <Chip
-              key={tag}
-              variant="outlined"
-              size="small"
-              className={classes.chip}
-              label={tag}
-            />
-          ))}
-        </>
-      )}
-      {invisibleTagsCount > 0 && (
-        <Chip
-          variant="outlined"
-          size="small"
-          label={`+ ${invisibleTagsCount}`}
-        />
-      )}
-    </Box>
+    <Tooltip title="Click to edit">
+      <Box
+        className={classes.container}
+        onClick={event => {
+          event.stopPropagation()
+          onSelectTagContact(contact.id)
+        }}
+      >
+        {tagsCount === 0 ? (
+          <span className={classes.noTag}>Add Tags</span>
+        ) : (
+          <>
+            <span className={classes.tagLabel}>TAGS:</span>
+            {showingTags.map(tag => (
+              <Chip
+                key={tag}
+                variant="outlined"
+                size="small"
+                className={classes.chip}
+                label={tag}
+              />
+            ))}
+          </>
+        )}
+        {invisibleTagsCount > 0 && (
+          <Chip
+            variant="outlined"
+            size="small"
+            label={`+ ${invisibleTagsCount}`}
+          />
+        )}
+      </Box>
+    </Tooltip>
   )
 }
 
