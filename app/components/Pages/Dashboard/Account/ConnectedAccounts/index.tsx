@@ -13,7 +13,8 @@ import {
   List,
   createStyles,
   makeStyles,
-  Theme
+  Theme,
+  Typography
 } from '@material-ui/core'
 
 import { AnyAction } from 'redux'
@@ -50,11 +51,14 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    button: {
-      backgroundColor: theme.palette.common.white,
-      fontSize: '14px',
+    marginRight: {
+      marginRight: theme.spacing(1)
+    },
+    buttonText: {
+      marginLeft: theme.spacing(2),
       fontWeight: 500,
-      fontFamily: 'Roboto, sans-serif'
+      fontFamily: 'Roboto, sans-serif',
+      whiteSpace: 'nowrap'
     },
     buttonIcon: {
       marginRight: theme.spacing(1)
@@ -103,23 +107,27 @@ function ConnectedAccounts({
           <Button
             variant="outlined"
             disabled={outlook.connecting}
-            className={classes.button}
             onClick={outlook.connect}
+            className={classes.marginRight}
           >
             <IconOutlook
               className={cn(iconClasses.small, classes.buttonIcon)}
             />
-            <Box pl={1}>Sync with: Outlook</Box>
+            <Typography variant="button" className={classes.buttonText}>
+              Sync with: Outlook
+            </Typography>
           </Button>
           <Box mr={1} />
           <Button
             variant="outlined"
             disabled={google.connecting}
-            className={classes.button}
+            className={classes.marginRight}
             onClick={google.connect}
           >
             <IconGoogle className={cn(iconClasses.small, classes.buttonIcon)} />
-            <Box pl={1}>Sync with: Google</Box>
+            <Typography variant="button" className={classes.buttonText}>
+              Sync with Google
+            </Typography>
           </Button>
         </PageHeader.Menu>
       </PageHeader>

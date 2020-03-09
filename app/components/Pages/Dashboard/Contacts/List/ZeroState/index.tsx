@@ -69,7 +69,7 @@ export function ZeroState() {
       >
         <IconGoogle />
         <Typography variant="button" className={classes.buttonText}>
-          Sync with: Google
+          Sync with Google
         </Typography>
       </Button>
 
@@ -82,7 +82,7 @@ export function ZeroState() {
       >
         <IconOutlook />
         <Typography variant="button" className={classes.buttonText}>
-          Sync with: Outlook
+          Sync with Outlook
         </Typography>
       </Button>
 
