@@ -3,7 +3,6 @@ import { OAuthProvider } from 'constants/contacts'
 import * as React from 'react'
 import { useContext, useEffect } from 'react'
 import { connect } from 'react-redux'
-import cn from 'classnames'
 
 import { Helmet } from 'react-helmet'
 
@@ -13,7 +12,8 @@ import {
   List,
   createStyles,
   makeStyles,
-  Theme
+  Theme,
+  Typography
 } from '@material-ui/core'
 
 import { AnyAction } from 'redux'
@@ -22,7 +22,7 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { IAppState } from 'reducers'
 import PageHeader from 'components/PageHeader'
-
+import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import Loading from 'partials/Loading'
 import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
@@ -36,8 +36,6 @@ import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
-
 import { ConnectedAccount } from './ConnectedAccount'
 
 interface Props {
@@ -50,14 +48,14 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    button: {
-      backgroundColor: theme.palette.common.white,
-      fontSize: '14px',
-      fontWeight: 500,
-      fontFamily: 'Roboto, sans-serif'
-    },
-    buttonIcon: {
+    marginRight: {
       marginRight: theme.spacing(1)
+    },
+    buttonText: {
+      marginLeft: theme.spacing(2),
+      fontWeight: 500,
+      fontFamily: 'Roboto, sans-serif',
+      whiteSpace: 'nowrap'
     }
   })
 )
@@ -70,7 +68,6 @@ function ConnectedAccounts({
   disconnectOAuthAccount
 }: Props) {
   const classes = useStyles()
-  const iconClasses = useIconStyles()
 
   useEffect(() => {
     fetchOAuthAccounts()
@@ -103,23 +100,25 @@ function ConnectedAccounts({
           <Button
             variant="outlined"
             disabled={outlook.connecting}
-            className={classes.button}
             onClick={outlook.connect}
+            className={classes.marginRight}
           >
-            <IconOutlook
-              className={cn(iconClasses.small, classes.buttonIcon)}
-            />
-            <Box pl={1}>Sync with: Outlook</Box>
+            <IconOutlook size={iconSizes.small} />
+            <Typography variant="button" className={classes.buttonText}>
+              Sync with Outlook
+            </Typography>
           </Button>
           <Box mr={1} />
           <Button
             variant="outlined"
             disabled={google.connecting}
-            className={classes.button}
+            className={classes.marginRight}
             onClick={google.connect}
           >
-            <IconGoogle className={cn(iconClasses.small, classes.buttonIcon)} />
-            <Box pl={1}>Sync with: Google</Box>
+            <IconGoogle size={iconSizes.small} />
+            <Typography variant="button" className={classes.buttonText}>
+              Sync with Google
+            </Typography>
           </Button>
         </PageHeader.Menu>
       </PageHeader>
