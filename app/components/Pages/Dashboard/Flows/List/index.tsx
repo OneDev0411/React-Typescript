@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { addNotification as notify } from 'reapop'
 import { Helmet } from 'react-helmet'
+import { withRouter, WithRouterProps } from 'react-router'
 import { Typography, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
@@ -30,11 +31,7 @@ import { getFlowActions } from './helpers'
 const useStyles = makeStyles((theme: Theme) => ({
   name: {
     paddingRight: theme.spacing(2),
-    paddingLeft: theme.spacing(1.5),
-    '& a': {
-      color: 'inherit !important',
-      textDecoration: 'none !important'
-    }
+    paddingLeft: theme.spacing(1.5)
   },
   description: {
     paddingRight: theme.spacing(2)
@@ -46,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'flex-end'
   },
   row: {
-    // cursor: 'pointer',
+    cursor: 'pointer',
     '&:hover': {
       '& $name': {
         color: theme.palette.secondary.main
@@ -71,7 +68,7 @@ interface Props {
   notify: IAsyncActionProp<typeof notify>
 }
 
-function List(props: Props) {
+function List(props: Props & WithRouterProps) {
   const brand = getActiveTeamId(props.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedFlow, setSelectedFlow] = useState<IBrandFlow | null>(null)
@@ -122,7 +119,7 @@ function List(props: Props) {
       width: '33%',
       render: ({ row }) => (
         <Typography noWrap variant="body1" classes={{ root: classes.name }}>
-          <a href={`/dashboard/account/flows/${row.id}`}>{row.name}</a>
+          {row.name}
         </Typography>
       )
     },
@@ -165,7 +162,13 @@ function List(props: Props) {
               pullTo="right"
               selectedItem={null}
               buttonRenderer={(btnProps: any) => (
-                <IconHorizontalDots {...btnProps} />
+                <IconHorizontalDots
+                  {...btnProps}
+                  onClick={event => {
+                    event.stopPropagation()
+                    btnProps.onClick && btnProps.onClick(event)
+                  }}
+                />
               )}
               items={actions}
               onSelect={(action: typeof actions[number]) => {
@@ -243,7 +246,8 @@ function List(props: Props) {
           loading={isFetching ? 'middle' : null}
           LoadingStateComponent={LoadingComponent}
           getTrProps={({ row }) => ({
-            // onClick: () => window.location.pathname = `/dashboard/account/flows/${row.id}`
+            onClick: () =>
+              props.router.push(`/dashboard/account/flows/${row.id}`)
           })}
           classes={{ row: classes.row }}
         />
@@ -260,4 +264,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(List)
+)(withRouter(List))
