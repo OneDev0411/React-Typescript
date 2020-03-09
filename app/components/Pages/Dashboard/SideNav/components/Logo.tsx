@@ -2,8 +2,8 @@ import React from 'react'
 
 import { Box, makeStyles, Theme } from '@material-ui/core'
 
-const WIDTH = 64
-const HEIGHT = 64
+const WIDTH = 56
+const HEIGHT = 56
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
