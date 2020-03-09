@@ -8,13 +8,17 @@ export const styles = (theme: Theme) =>
       flexDirection: 'column',
       alignItems: 'flex-start',
       justifyContent: 'center',
-      height: theme.spacing(8),
+      width: '100%',
+      minHeight: theme.spacing(8),
       position: 'relative',
       cursor: 'pointer',
       '&:hover': {
         backgroundColor: theme.palette.action.hover
       },
-      '& a, & button': {
+      '&:hover $actions': {
+        opacity: 1
+      },
+      '& a, & button, & svg': {
         zIndex: 1,
         position: 'relative'
       }
@@ -26,8 +30,9 @@ export const styles = (theme: Theme) =>
       display: 'flex',
       alignItems: 'flex-end',
       height: theme.spacing(8),
+      marginBottom: theme.spacing(1),
       color: theme.palette.grey[700],
-      fontSize: theme.typography.h6.fontSize
+      ...theme.typography.body1
     },
     row: {
       display: 'flex',
@@ -42,15 +47,14 @@ export const styles = (theme: Theme) =>
       alignItems: 'center'
     },
     title: {
-      fontSize: '1rem',
-      fontWeight: 500,
-      color: '#1D1F26' // TODO: use palette
+      padding: theme.spacing(0.5, 0),
+      color: '#1D1F26', // TODO: use palette
+      ...theme.typography.body2
     },
     time: {
       width: '5rem',
-      fontSize: '0.875rem',
-      letterSpacing: '0.25px',
-      color: theme.palette.grey[900]
+      color: theme.palette.grey[500],
+      ...theme.typography.caption
     },
     link: {
       cursor: 'pointer'
@@ -65,7 +69,13 @@ export const styles = (theme: Theme) =>
       height: '100%',
       opacity: 0
     },
-    icon: {
+    actions: {
+      display: 'flex',
+      alignItems: 'center',
+      transition: '0.1s ease-in opacity',
+      opacity: 0
+    },
+    iconNote: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -77,6 +87,9 @@ export const styles = (theme: Theme) =>
     },
     iconEdit: {
       marginRight: theme.spacing(2),
-      fill: theme.palette.grey[400]
+      fill: theme.palette.grey[400],
+      '&:hover': {
+        fill: theme.palette.grey[300]
+      }
     }
   })

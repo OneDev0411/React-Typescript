@@ -14,9 +14,6 @@ import { getTimelineInitialRange } from './helpers/get-timeline-range'
 
 import { Notes } from './Notes'
 
-import AddEvent from './AddEvent'
-import AddNote from './AddNote'
-
 import { Filters, TabsFilter } from './Tabs'
 
 export interface TimelineRef {
@@ -41,15 +38,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       overflow: 'hidden',
       padding: theme.spacing(0, 2)
     },
-    actions: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-      padding: theme.spacing(1, 0),
-      '& button': {
-        marginLeft: theme.spacing(1)
-      }
-    },
     header: {
+      marginTop: theme.spacing(6),
       flex: '0 1 auto'
     },
     list: {
@@ -68,12 +58,12 @@ function Timeline(props: Props) {
     timelineRef.current!.refresh(new Date(), getTimelineInitialRange())
   }
 
-  const handleChangeFilter = (value: number) => {
+  const handleChangeFilter = (value: Filters) => {
     setActiveFilter(value)
   }
 
-  const handleCreateNote = note => {
-    props.onChangeNote(note)
+  const handleCreateNote = (contact: IContact) => {
+    props.onChangeNote(contact)
     setActiveFilter(Filters.Notes)
   }
 
@@ -108,17 +98,11 @@ function Timeline(props: Props) {
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <div className={classes.actions}>
-          <AddNote
-            contactId={props.contact.id}
-            onCreateNote={handleCreateNote}
-          />
-          <AddEvent contact={props.contact} />
-        </div>
-
         <TabsFilter
           activeTab={activeFilter}
+          contact={props.contact}
           onChangeFilter={handleChangeFilter}
+          onCreateNote={handleCreateNote}
         />
       </div>
 

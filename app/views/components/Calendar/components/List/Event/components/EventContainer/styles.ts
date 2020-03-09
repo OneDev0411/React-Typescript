@@ -31,7 +31,7 @@ export const styles = (theme: Theme) =>
           color: 'inherit'
         }
       },
-      '& a, & button': {
+      '& a, & button, & svg': {
         zIndex: 1,
         position: 'relative'
       },
@@ -48,7 +48,10 @@ export const styles = (theme: Theme) =>
     },
     iconEdit: {
       marginRight: theme.spacing(2),
-      fill: theme.palette.grey[400]
+      fill: theme.palette.grey[400],
+      '&:hover': {
+        fill: theme.palette.grey[300]
+      }
     },
     actions: {
       display: 'flex',
