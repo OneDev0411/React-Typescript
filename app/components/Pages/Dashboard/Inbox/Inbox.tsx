@@ -49,7 +49,7 @@ const useStyles = makeStyles(
   { name: 'Inbox' }
 )
 
-export default function Inbox({ params }: Props & WithRouterProps) {
+export default function Inbox({ params }: WithRouterProps) {
   const selectedEmailThreadId: UUID | undefined = params.emailThreadId
 
   const accounts = useSelector<IAppState, IOAuthAccount[]>(
