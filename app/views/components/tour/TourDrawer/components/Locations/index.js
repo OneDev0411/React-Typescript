@@ -43,7 +43,7 @@ function LocationsComponent({ locations, input: { onChange } }) {
         <Droppable droppableId="locations-droppable">
           {droppableProvided => (
             <div
-              style={{ zIndex: 3, position: 'relative' }}
+              style={{ zIndex: 1, position: 'relative' }}
               ref={droppableProvided.innerRef}
             >
               {locations.map((location, index) => {

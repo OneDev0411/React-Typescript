@@ -10,6 +10,8 @@ import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
 import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
 
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
 import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
 import { ItemChangelog } from '../../TeamContact/ItemChangelog'
@@ -87,6 +89,8 @@ export class TourDrawer extends React.Component {
       Object(this.props.initialValues).length > 0
   }
 
+  static contextType = ConfirmationModalContext
+
   load = async () => {
     if (this.props.tour) {
       return this.props.tour
@@ -137,7 +141,16 @@ export class TourDrawer extends React.Component {
     }
   }
 
-  delete = async () => {
+  onDelete = () => {
+    this.context.setConfirmationModal({
+      message: 'Delete Toursheet',
+      description: `Are you sure about deleting "${this.props.tour.title}"?`,
+      confirmLabel: 'Yes, I am sure',
+      onConfirm: () => this.handleDelete()
+    })
+  }
+
+  handleDelete = async () => {
     try {
       this.setState({ isDisabled: true })
       await deleteTask(this.state.tour.id)
@@ -264,7 +277,7 @@ export class TourDrawer extends React.Component {
                           <Tooltip placement="top" caption="Delete">
                             <IconButton
                               disabled={isDisabled}
-                              onClick={this.delete}
+                              onClick={this.onDelete}
                             >
                               <IconDelete size="medium" />
                             </IconButton>
