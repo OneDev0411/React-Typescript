@@ -5,12 +5,10 @@ interface Props {
   title: string
 }
 
-export default function Title({ title, description }: Props) {
+export default function Title({ title }: Props) {
   return (
-    <>
-      <Typography variant="body2" noWrap>
-        {title}
-      </Typography>
-    </>
+    <Typography variant="body2" noWrap>
+      {title}
+    </Typography>
   )
 }

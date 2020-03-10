@@ -7,10 +7,8 @@ interface Props {
 
 export default function Description({ description }: Props) {
   return (
-    <>
-      <Typography variant="body2" noWrap>
-        {description}
-      </Typography>
-    </>
+    <Typography variant="body2" noWrap>
+      {description}
+    </Typography>
   )
 }
