@@ -3,6 +3,7 @@ import path from 'path'
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import superagent from 'superagent'
+import superdebug from 'superagent-debugger'
 import nunjucks from 'nunjucks'
 import xml2js from 'xml2js'
 
@@ -91,6 +92,7 @@ async function sendPunchoutRequest(user, deal, costCenter, callbackUrl) {
   const response = await superagent
     .post(API_URL)
     .set('Content-Type', 'application/xml')
+    .use(superdebug(console.info))
     .send(requestBody)
 
   return response
