@@ -54,7 +54,7 @@ export function ViewMode(props: Props) {
   return (
     <Box className={classes.container}>
       <Box className={classes.leftSide}>
-        <Typography variant="body1" className={classes.label}>
+        <Typography variant="body2" className={classes.label}>
           {label}
         </Typography>
         {address.is_primary && address.id && (
@@ -69,7 +69,7 @@ export function ViewMode(props: Props) {
           </Tooltip>
         )}
       </Box>
-      <Typography className={classes.value}>
+      <Typography variant="body2" className={classes.value}>
         {address.full_address || '-'}
       </Typography>
     </Box>
