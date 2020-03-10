@@ -8,9 +8,7 @@ interface Props {
 export default function Description({ description }: Props) {
   return (
     <>
-      <Typography variant="inherit" color="inherit">
-        {description}
-      </Typography>
+      <Typography>{description}</Typography>
     </>
   )
 }
