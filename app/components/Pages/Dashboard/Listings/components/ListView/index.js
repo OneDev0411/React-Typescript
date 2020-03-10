@@ -5,6 +5,8 @@ import pluralize from 'pluralize'
 import { Box } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 
+import { useGridStyles } from 'components/Grid/Table/styles'
+
 import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
 import TableActions from '../../Search/components/BulkActions'
@@ -14,6 +16,7 @@ import { Avatar } from './columns/Avatar'
 
 const ListView = ({ sortedListings, listings, isFetching, user }) => {
   const theme = useTheme()
+  const gridClasses = useGridStyles()
 
   const columns = [
     {
@@ -25,12 +28,14 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
     {
       header: 'Status',
       id: 'status',
+      class: 'opaque',
       render: ({ row: listing }) => `${listing.status}`
     },
     {
       header: 'Price',
       id: 'price',
       sortType: 'number',
+      class: 'opaque',
       accessor: listing => listing.price,
       render: ({ row: listing }) => `$${listing.price.toLocaleString()}`
     },
@@ -38,6 +43,7 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
       header: 'Beds',
       id: 'beds',
       sortType: 'number',
+      class: 'opaque',
       accessor: listing => listing.beds,
       render: ({ row: listing }) => `${pluralize('bed', listing.beds, true)}`
     },
@@ -45,6 +51,7 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
       header: 'Baths',
       id: 'baths',
       sortType: 'number',
+      class: 'opaque',
       accessor: listing => listing.baths,
       render: ({ row: listing }) => `${pluralize('bath', listing.baths, true)}`
     },
@@ -52,21 +59,24 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
       header: 'sqft',
       id: 'sqft',
       sortType: 'number',
+      class: 'opaque',
       accessor: listing => listing.sqft,
       render: ({ row: listing }) => `${listing.sqft.toLocaleString()} sqft`
     },
-    // {
-    //   header: '$/Sqft',
-    //   sortType: 'number',
-    //   id: 'pricePerSquareFoot',
-    //   accessor: listing => listing.pricePerSquareFoot,
-    //   render: ({ row: listing }) =>
-    //     `$${listing.pricePerSquareFoot.toLocaleString()}`
-    // },
+    {
+      header: '$/Sqft',
+      sortType: 'number',
+      id: 'pricePerSquareFoot',
+      class: 'opaque',
+      accessor: listing => listing.pricePerSquareFoot,
+      render: ({ row: listing }) =>
+        `$${listing.pricePerSquareFoot.toLocaleString()}/Sqft`
+    },
     {
       header: 'Built Year',
       id: 'year',
       sortType: 'number',
+      class: 'opaque',
       accessor: listing => listing.builtYear,
       render: ({ row: listing }) => `Built: ${listing.builtYear}`
     },
@@ -74,6 +84,7 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
       header: 'Zip Code',
       id: 'zipcode',
       sortType: 'number',
+      class: 'opaque',
       accessor: listing => listing.zipCode,
       render: ({ row: listing }) => `Zip: ${listing.zipCode}`
     }
@@ -89,6 +100,9 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
         LoadingStateComponent={LoadingComponent}
         selection={{
           defaultRender: ({ row: listing }) => <Avatar listing={listing} />
+        }}
+        classes={{
+          row: gridClasses.row
         }}
         TableActions={({ state, dispatch }) => (
           <TableActions
