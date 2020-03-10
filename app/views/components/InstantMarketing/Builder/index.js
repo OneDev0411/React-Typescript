@@ -222,16 +222,18 @@ class Builder extends React.Component {
   }
 
   addAgentAssets = agents => {
-    this.editor.AssetManager.add(
-      agents.map(({ agent }) => {
-        return ['profile_image_url', 'cover_image_url']
-          .filter(attr => agent[attr])
-          .map(attr => ({
+    const agentImageAttrKeys = ['profile_image_url', 'cover_image_url']
+
+    agents.forEach(({ agent }) => {
+      agentImageAttrKeys
+        .filter(attr => agent[attr])
+        .forEach(attr => {
+          this.editor.AssetManager.add({
             image: agent[attr],
             avatar: true
-          }))
-      })
-    )
+          })
+        })
+    })
   }
 
   setRte = () => {
