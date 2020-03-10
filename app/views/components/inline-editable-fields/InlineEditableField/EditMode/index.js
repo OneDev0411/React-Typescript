@@ -1,12 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import { Button, IconButton, Box } from '@material-ui/core'
 
 import { noop } from 'utils/helpers'
 import Tooltip from 'components/tooltip'
-
-import DeleteIcon from '../../../SvgIcons/Trash/TrashIcon'
+import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 
 import { EditModeActionBar, EditModeContainer } from '../../styled'
 
@@ -56,24 +54,23 @@ export class EditMode extends React.Component {
                 onClick={this.props.handleDelete}
                 data-test="inline-editable-field-delete"
               >
-                <DeleteIcon size="small" />
+                <TrashIcon />
               </IconButton>
             </Tooltip>
           )}
           <Box display="flex" alignItems="center">
-            <Box mr={1}>
-              <Button
-                size="small"
-                disabled={isDisabled}
-                onClick={this.props.handleCancel}
-              >
-                Cancel
-              </Button>
-            </Box>
+            <Button
+              variant="text"
+              size="small"
+              disabled={isDisabled}
+              onClick={this.props.handleCancel}
+            >
+              Cancel
+            </Button>
             <Button
               variant="contained"
+              color="primary"
               size="small"
-              color="secondary"
               disabled={isDisabled}
               onClick={this.props.handleSave}
               data-test="inline-editable-field-save"

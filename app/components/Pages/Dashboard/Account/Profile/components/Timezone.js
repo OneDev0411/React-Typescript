@@ -5,12 +5,11 @@ import { connect } from 'react-redux'
 import { Form, Field } from 'react-final-form'
 import { addNotification as notify } from 'reapop'
 import moment from 'moment-timezone'
+import { Button } from '@material-ui/core'
 
 import FormCard from 'components/FormCard'
 import { Dropdown } from 'components/Dropdown'
 import { setUserTimezone } from 'models/user/set-user-timezone'
-
-import Button from '../../../../../../views/components/Button/ActionButton'
 
 const Timezone = ({ timezone, dispatch }) => {
   let submitError = null
@@ -83,6 +82,8 @@ const Timezone = ({ timezone, dispatch }) => {
             )}
             <div style={{ textAlign: 'right' }}>
               <Button
+                color="secondary"
+                variant="contained"
                 type="submit"
                 disabled={submitting}
                 data-test="timezone-form-submit-button"

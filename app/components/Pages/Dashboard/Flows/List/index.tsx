@@ -4,13 +4,13 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { addNotification as notify } from 'reapop'
 import { Helmet } from 'react-helmet'
-import { Typography, Theme } from '@material-ui/core'
+import { withRouter, WithRouterProps } from 'react-router'
+import { Typography, Theme, IconButton } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
 import Table from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import Link from 'components/ALink'
 import { BasicDropdown } from 'components/BasicDropdown'
 import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
 
@@ -31,10 +31,7 @@ import { getFlowActions } from './helpers'
 const useStyles = makeStyles((theme: Theme) => ({
   name: {
     paddingRight: theme.spacing(2),
-    paddingLeft: theme.spacing(1.5),
-    '&:not(:hover)': {
-      color: theme.palette.common.black
-    }
+    paddingLeft: theme.spacing(1.5)
   },
   description: {
     paddingRight: theme.spacing(2)
@@ -46,6 +43,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'flex-end'
   },
   row: {
+    cursor: 'pointer',
+    '&:hover': {
+      '& $name': {
+        color: theme.palette.secondary.main
+      }
+    },
     '&:not(:hover)': {
       '& $description': {
         color: theme.palette.grey[500]
@@ -65,7 +68,7 @@ interface Props {
   notify: IAsyncActionProp<typeof notify>
 }
 
-function List(props: Props) {
+function List(props: Props & WithRouterProps) {
   const brand = getActiveTeamId(props.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedFlow, setSelectedFlow] = useState<IBrandFlow | null>(null)
@@ -115,11 +118,9 @@ function List(props: Props) {
       primary: true,
       width: '33%',
       render: ({ row }) => (
-        <Link to={`/dashboard/account/flows/${row.id}`}>
-          <Typography noWrap variant="body1" classes={{ root: classes.name }}>
-            {row.name}
-          </Typography>
-        </Link>
+        <Typography noWrap variant="body1" classes={{ root: classes.name }}>
+          {row.name}
+        </Typography>
       )
     },
     {
@@ -161,7 +162,15 @@ function List(props: Props) {
               pullTo="right"
               selectedItem={null}
               buttonRenderer={(btnProps: any) => (
-                <IconHorizontalDots {...btnProps} />
+                <IconButton
+                  {...btnProps}
+                  onClick={event => {
+                    event.stopPropagation()
+                    btnProps.onClick && btnProps.onClick(event)
+                  }}
+                >
+                  <IconHorizontalDots />
+                </IconButton>
               )}
               items={actions}
               onSelect={(action: typeof actions[number]) => {
@@ -238,6 +247,10 @@ function List(props: Props) {
           totalRows={(flows || []).length}
           loading={isFetching ? 'middle' : null}
           LoadingStateComponent={LoadingComponent}
+          getTrProps={({ row }) => ({
+            onClick: () =>
+              props.router.push(`/dashboard/account/flows/${row.id}`)
+          })}
           classes={{ row: classes.row }}
         />
       )}
@@ -246,13 +259,11 @@ function List(props: Props) {
 }
 
 const mapStateToProps = ({ user }) => ({ user })
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
+  notify: (...args: Parameters<typeof notify>) => dispatch(notify(...args))
+})
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    notify: (...args: Parameters<typeof notify>) => dispatch(notify(...args))
-  }
-}
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(List)
+)(withRouter(List))

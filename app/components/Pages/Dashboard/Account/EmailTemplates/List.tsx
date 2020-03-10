@@ -32,10 +32,7 @@ import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 const useStyles = makeStyles((theme: Theme) => ({
   name: {
     paddingRight: theme.spacing(2),
-    paddingLeft: theme.spacing(1.5),
-    '&:not(:hover)': {
-      color: theme.palette.common.black
-    }
+    paddingLeft: theme.spacing(1.5)
   },
   subject: {
     paddingRight: theme.spacing(2)
@@ -51,6 +48,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   row: {
+    cursor: 'pointer',
+    '&:hover': {
+      '& $name': {
+        color: theme.palette.secondary.main
+      }
+    },
     '&:not(:hover)': {
       '& $subject': {
         color: theme.palette.grey[500]
@@ -179,8 +182,7 @@ function EmailTemplatesList({
         <LoadingContainer style={{ padding: '20% 0' }} />
       )}
       getTrProps={({ row }) => ({
-        onClick: isTemplateDeleting(row.id) ? () => {} : () => onItemClick(row),
-        style: { cursor: 'pointer' }
+        onClick: () => isTemplateDeleting(row.id) || onItemClick(row)
       })}
       classes={{ row: classes.row }}
     />

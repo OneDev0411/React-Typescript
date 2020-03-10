@@ -13,12 +13,6 @@ export const Container = styled.div`
   }
 `
 
-export const Title = styled.h3`
-  font-size: 1.25rem;
-  line-height: 1;
-  margin: 0 0 0.5rem;
-`
-
 interface ContentProps {
   noBorder?: boolean
 }

@@ -1,8 +1,8 @@
+import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification } from 'reapop'
 import { Box, Button, Grid, Theme } from '@material-ui/core'
 import { Field, Form } from 'react-final-form'
-import * as React from 'react'
 import styled, { ThemeProps } from 'styled-components'
 
 import { ThunkDispatch } from 'redux-thunk'
