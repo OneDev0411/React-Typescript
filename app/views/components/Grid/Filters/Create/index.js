@@ -9,7 +9,8 @@ import { Container, List, ListItem } from './styled'
 import Icon from '../../../SvgIcons/Add/AddIcon'
 
 const IconAdd = styled(Icon)`
-  fill: #000;
+  fill: ${props =>
+    !props.disabled ? '#000' : props.theme.palette.action.disabled};
   width: 1.3em;
   height: 1.3em;
 `
@@ -60,7 +61,7 @@ export class AddFilter extends React.Component {
                 onClick={this.toggleMenu}
                 disabled={disabled}
               >
-                <IconAdd />
+                <IconAdd disabled={disabled} />
                 <span style={{ fontWight: 500 }}>Add Filter</span>
               </Button>
 

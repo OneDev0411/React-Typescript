@@ -5,6 +5,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Typography,
   createStyles,
   makeStyles,
   Theme
@@ -189,7 +190,9 @@ export function TableActions({
               action="delete"
               disabled={!isAnyRowsSelected}
             >
-              <ListItemText primary="Delete" />
+              <ListItemText>
+                <Typography color="error">Delete</Typography>
+              </ListItemText>
             </ActionWrapper>
           </ListItem>
           <MergeContacts

@@ -14,9 +14,10 @@ export default function ExportButton({ disabled, onExportClick }) {
       onChange={async item => onExportClick(item.type)}
       buttonText="Export"
       pullTo="right"
-      upsideDown
       disabled={disabled}
       style={{ display: 'inline' }}
+      upsideDown
+      fullHeight
       buttonRenderer={({ text, isOpen, disabled, onClick }) => (
         <DropdownToggleButton
           variant="outlined"

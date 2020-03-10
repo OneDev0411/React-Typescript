@@ -36,6 +36,13 @@ const FiltersOptions = styled.div`
   > * {
     display: inline-flex;
   }
+  span.spacer {
+    width: 1px;
+    height: ${props => props.theme.spacing(2.5)}px;
+    margin: ${props => props.theme.spacing(0, 1.5)};
+    background: ${props => props.theme.palette.divider};
+    vertical-align: middle;
+  }
 `
 
 class Filters extends React.Component {
@@ -160,10 +167,13 @@ class Filters extends React.Component {
       <Container>
         <FiltersOptions>
           {this.props.disableConditionOperators || (
-            <ConditionOperators
-              selectedItem={this.props.conditionOperator}
-              onChange={this.onConditionChange}
-            />
+            <>
+              <ConditionOperators
+                selectedItem={this.props.conditionOperator}
+                onChange={this.onConditionChange}
+              />
+              <span className="spacer" />
+            </>
           )}
         </FiltersOptions>
         <FiltersContainer>

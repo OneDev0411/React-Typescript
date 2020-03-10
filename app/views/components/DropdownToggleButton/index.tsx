@@ -26,7 +26,7 @@ const styles = (theme: Theme) => {
     buttonActive: {
       '&, &:hover': {
         background: fade(
-          theme.palette.primary.main,
+          theme.palette.secondary.main,
           theme.palette.action.hoverOpacity
         )
       }

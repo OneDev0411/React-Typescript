@@ -635,7 +635,7 @@ class ContactsList extends React.Component {
     const { duplicateClusterCount } = this.state
 
     return (
-      <Box my={1.5}>
+      <Box mt={1.5}>
         <Alert
           severity="info"
           action={
@@ -742,9 +742,9 @@ class ContactsList extends React.Component {
           {isZeroState && <ZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <React.Fragment>
-              <Box>
-                {this.renderTabs()}
-                {state.showDuplicateClusterAlert && this.renderDuplicateAlert()}
+              {this.renderTabs()}
+              {state.showDuplicateClusterAlert && this.renderDuplicateAlert()}
+              <Box mt={2}>
                 <Table
                   data={contacts}
                   order={this.order}

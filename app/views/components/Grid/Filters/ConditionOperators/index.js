@@ -38,9 +38,6 @@ export function ConditionOperators(props) {
         fontSize: theme.typography.button.fontSize,
         fontWeight: 'bold'
       }}
-      style={{
-        marginRight: theme.spacing(1)
-      }}
       itemRenderer={({ item, ...rest }) => (
         <Item key={item.value} title={item.title} {...rest} />
       )}
