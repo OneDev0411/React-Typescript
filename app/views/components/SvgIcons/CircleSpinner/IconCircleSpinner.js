@@ -1,8 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { theme } from '../../../../theme'
-
 const width = '48'
 const height = '48'
 const viewBox = '0 0 100 100'
@@ -19,7 +17,7 @@ const getDimensionsCss = () => css`
 
 const Image = styled.svg`
   ${({ noStyles }) => (!noStyles ? getDimensionsCss() : null)};
-  fill: ${({ color }) => color || theme.palette.primary.main};
+  fill: ${({ color, theme }) => color || theme.palette.primary.main};
 `
 
 const defaultProps = {

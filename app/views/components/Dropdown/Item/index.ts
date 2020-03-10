@@ -1,6 +1,5 @@
-import styled, { css } from 'styled-components'
-
-import { theme } from '../../../../theme'
+import styled, { css, ThemedStyledProps } from 'styled-components'
+import { Theme } from '@material-ui/core'
 
 interface Props {
   isActive?: boolean
@@ -20,15 +19,14 @@ export const Item = styled.div<Props>`
   padding: 0.5em 1em;
   cursor: pointer;
   white-space: nowrap;
-  color: ${props =>
-    props.isActive
-      ? theme.palette.primary.contrastText
-      : theme.palette.common.black};
-  background-color: ${props =>
-    props.isActive ? theme.palette.primary.main : theme.palette.common.white};
-  font-weight: ${props => (props.isSelected && !props.isDisabled ? 700 : 400)};
+  color: ${({ isActive, theme }: ThemedStyledProps<Props, Theme>) =>
+    isActive ? theme.palette.primary.contrastText : theme.palette.common.black};
+  background-color: ${({ isActive, theme }: ThemedStyledProps<Props, Theme>) =>
+    isActive ? theme.palette.primary.main : theme.palette.common.white};
+  font-weight: ${({ isSelected, isDisabled }) =>
+    isSelected && !isDisabled ? 700 : 400};
 
-  ${({ noContrast }) =>
+  ${({ noContrast, theme }: ThemedStyledProps<Props, Theme>) =>
     noContrast
       ? css`
           &:hover,
@@ -48,12 +46,12 @@ export const Item = styled.div<Props>`
           }
         `}
 
-  ${props =>
-    props.item && props.item.icon && props.item.iconColor
+  ${({ item }) =>
+    item && item.icon && item.iconColor
       ? css`
           > svg {
             margin-right: 0.5em;
-            fill: ${props.item.iconColor};
+            fill: ${item.iconColor};
           }
         `
       : ''};

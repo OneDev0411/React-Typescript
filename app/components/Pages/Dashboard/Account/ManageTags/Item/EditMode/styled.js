@@ -2,8 +2,6 @@ import styled from 'styled-components'
 
 import ActionButton from 'components/Button/ActionButton'
 
-import { theme } from '../../../../../../../theme'
-
 export const Container = styled.div``
 
 export const ActionsContainer = styled.div`
@@ -15,10 +13,10 @@ export const ActionsContainer = styled.div`
   height: 3rem;
   top: calc(100% + 0.125rem);
   left: 0;
-  border: 1px solid ${theme.palette.grey[300]};
+  border: 1px solid ${({ theme }) => theme.palette.grey[300]};
   border-radius: 3px;
-  background-color: ${theme.palette.grey[100]};
-  box-shadow: 0 1px 4px 0 ${theme.palette.grey[100]};
+  background-color: ${({ theme }) => theme.palette.grey[100]};
+  box-shadow: 0 1px 4px 0 ${({ theme }) => theme.palette.grey[100]};
   z-index: 1;
 `
 
@@ -38,5 +36,5 @@ export const InputPlaceholder = styled.div`
 
 export const CancleButton = styled(ActionButton)`
   border: none;
-  color: ${theme.palette.primary.main};
+  color: ${({ theme }) => theme.palette.primary.main};
 `

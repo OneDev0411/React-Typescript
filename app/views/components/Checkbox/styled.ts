@@ -1,7 +1,6 @@
-import styled from 'styled-components'
+import styled, { ThemedStyledProps } from 'styled-components'
+import { Theme } from '@material-ui/core'
 
-import { grey } from '../../utils/colors'
-import { theme } from '../../../theme'
 import IconCheck from '../SvgIcons/Checkmark/IconCheckmark'
 
 // visually hidden
@@ -30,21 +29,27 @@ interface CheckMarkBoxProps {
 }
 
 export const CheckMarkBox = styled.div<CheckMarkBoxProps>`
-  width: ${props => props.size / 16}rem;
-  height: ${props => props.size / 16}rem;
+  width: ${({ size }) => size / 16}rem;
+  height: ${({ size }) => size / 16}rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 3px;
-  background-color: ${props =>
-    props.checked ? theme.palette.primary.main : theme.palette.common.white};
+  background-color: ${({
+    checked,
+    theme
+  }: ThemedStyledProps<CheckMarkBoxProps, Theme>) =>
+    checked ? theme.palette.primary.main : theme.palette.common.white};
   border: solid 1px
-    ${props =>
-      props.checked ? theme.palette.primary.main : theme.palette.common.black};
+    ${({ checked, theme }: ThemedStyledProps<CheckMarkBoxProps, Theme>) =>
+      checked ? theme.palette.primary.main : theme.palette.common.black};
 
   &:hover {
-    background-color: ${props =>
-      props.checked ? theme.palette.primary.main : grey.A100};
+    background-color: ${({
+      checked,
+      theme
+    }: ThemedStyledProps<CheckMarkBoxProps, Theme>) =>
+      checked ? theme.palette.primary.main : theme.palette.grey[100]};
   }
 `
 
