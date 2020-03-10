@@ -97,7 +97,7 @@ export const Input = styled.input`
   padding: 0.25em 0.5em;
   border: none;
   background: transparent;
-  background: #fff;
+  background: ${({ theme }) => theme.palette.common.white};
 
   &:focus {
     outline: none;

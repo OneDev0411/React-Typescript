@@ -1,7 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, IconButton } from '@material-ui/core'
-
 import { Button, IconButton, Box } from '@material-ui/core'
 
 import { noop } from 'utils/helpers'
@@ -73,7 +71,6 @@ export class EditMode extends React.Component {
               variant="contained"
               color="primary"
               size="small"
-              color="secondary"
               disabled={isDisabled}
               onClick={this.props.handleSave}
               data-test="inline-editable-field-save"
