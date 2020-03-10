@@ -67,7 +67,7 @@ const CoverImage = ({
               ref={coverImageInputRef}
             />
             <Button
-              variant="outline"
+              variant="outlined"
               onClick={() => coverImageInputRef.current.click()}
               disabled={isDeleting || isUploading}
               data-test="cover-image-form-delete-button"

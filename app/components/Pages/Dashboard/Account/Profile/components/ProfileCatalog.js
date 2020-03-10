@@ -110,7 +110,7 @@ class ProfileCatalog extends Component {
               </Tooltip>
             )}
             <Button
-              variant="outline"
+              variant="outlined"
               disabled={this.props.isUploading}
               onClick={this.openModal}
               data-test="profile-avatar-upload-button"

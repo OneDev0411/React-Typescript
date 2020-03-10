@@ -5,7 +5,7 @@ import { ThunkDispatch } from 'redux-thunk'
 import { addNotification as notify } from 'reapop'
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
-import { Typography, Theme } from '@material-ui/core'
+import { Typography, Theme, IconButton } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
 import Table from 'components/Grid/Table'
@@ -162,13 +162,15 @@ function List(props: Props & WithRouterProps) {
               pullTo="right"
               selectedItem={null}
               buttonRenderer={(btnProps: any) => (
-                <IconHorizontalDots
+                <IconButton
                   {...btnProps}
                   onClick={event => {
                     event.stopPropagation()
                     btnProps.onClick && btnProps.onClick(event)
                   }}
-                />
+                >
+                  <IconHorizontalDots />
+                </IconButton>
               )}
               items={actions}
               onSelect={(action: typeof actions[number]) => {

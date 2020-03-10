@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { grey } from 'views/utils/colors'
-
 import { theme } from '../../../../../../theme'
 
 export const TextInputSuffix = styled.button`
@@ -12,7 +10,7 @@ export const TextInputSuffix = styled.button`
   padding: 0 1rem;
   margin: auto;
   color: ${({ disabled }) =>
-    disabled ? grey.A900 : theme.palette.primary.main};
+    disabled ? theme.palette.grey[600] : theme.palette.primary.main};
 `
 
 export const TextInputPrefix = styled.div`

@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { grey } from 'views/utils/colors'
-
 import IconSearchBase from 'components/SvgIcons/Search/IconSearch'
 import IconButtonFlex from 'components/Button/IconButton'
 
@@ -11,11 +9,14 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   border-radius: 0.25rem;
-  background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};
+  background-color: ${({ isFocused }) =>
+    isFocused ? theme.palette.common.white : '#f9f9f9'};
   border: solid 1px
-    ${({ isFocused }) => (isFocused ? theme.palette.primary.main : '#d4d4d4')};
+    ${({ isFocused }) =>
+      isFocused ? theme.palette.primary.main : theme.palette.divider};
   :hover {
-    background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A100)};
+    background-color: ${({ isFocused }) =>
+      isFocused ? theme.palette.common.white : theme.palette.grey[100]};
   }
 `
 
@@ -35,14 +36,14 @@ export const TextInput = styled.input`
   ::-webkit-input-placeholder {
     font-size: 1rem;
     font-weight: 400;
-    color: ${grey.A900};
+    color: ${theme.palette.grey[600]};
     font-family: LatoRegular, sans-serif;
   }
 
   ::placeholder {
     font-size: 1rem;
     font-weight: normal;
-    color: ${grey.A900};
+    color: ${theme.palette.grey[600]};
     font-family: LatoRegular, sans-serif;
   }
 
@@ -53,7 +54,7 @@ export const TextInput = styled.input`
 
 export const IconSearch = styled(IconSearchBase)`
   path {
-    fill: ${grey.A900} !important;
+    fill: ${theme.palette.grey[600]} !important;
   }
   ${Container}:hover & path {
     fill: #000000 !important;
@@ -61,7 +62,7 @@ export const IconSearch = styled(IconSearchBase)`
 `
 
 export const Icon = styled.div`
-  color: ${grey.A900};
+  color: ${theme.palette.grey[600]};
   padding-top: 0.25rem;
 `
 

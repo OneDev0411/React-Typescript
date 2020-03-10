@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components'
 
-import { grey } from 'views/utils/colors'
-
 import { theme } from '../../../../theme'
 
 interface Props {
@@ -35,7 +33,7 @@ export const Item = styled.div<Props>`
       ? css`
           &:hover,
           &:focus {
-            background-color: ${grey.A150};
+            background-color: ${theme.palette.grey[50]};
           }
         `
       : css`

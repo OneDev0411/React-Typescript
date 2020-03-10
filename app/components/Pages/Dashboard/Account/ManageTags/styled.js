@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components'
 
-import { grey } from 'views/utils/colors'
-
 import { theme } from '../../../../../theme'
 
 export const Container = styled.div`
@@ -26,7 +24,7 @@ export const RowContainer = styled.div`
   ${({ highlight }) =>
     highlight &&
     css`
-      background-color: ${grey.A150};
+      background-color: ${theme.palette.grey[50]};
     `}
 `
 
@@ -44,7 +42,7 @@ export const ItemsContainer = styled.div`
 `
 
 export const RowTitle = styled.h6`
-  color: ${grey.A900};
+  color: ${theme.palette.grey[600]};
   font-size: 1rem;
   line-height: 1.5rem;
   margin: auto 1.5rem;
@@ -59,7 +57,7 @@ export const TextInputSuffix = styled.button`
   padding: 0 1rem;
   margin: auto;
   color: ${({ disabled }) =>
-    disabled ? grey.A900 : theme.palette.primary.main};
+    disabled ? theme.palette.grey[600] : theme.palette.primary.main};
 `
 
 export const TextInputPrefix = styled.div`

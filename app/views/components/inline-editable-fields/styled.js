@@ -5,7 +5,6 @@ import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
 import StarIcon from 'components/SvgIcons/Star/StarIcon'
 import ArrowIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import { grey, borderColor } from 'views/utils/colors'
 
 import { theme } from '../../../theme'
 
@@ -131,7 +130,7 @@ export const EditModeActionBar = styled.div`
           z-index: 1;
           padding: 0 0.5em;
           border-radius: 0 0 3px 3px;
-          background: ${grey.A100};
-          border: 1px solid ${borderColor};
+          background: ${theme.palette.grey[100]};
+          border: 1px solid ${theme.palette.grey[300]};
         `}
 `

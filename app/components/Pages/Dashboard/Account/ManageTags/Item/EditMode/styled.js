@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 import ActionButton from 'components/Button/ActionButton'
-import { grey } from 'views/utils/colors'
 
 import { theme } from '../../../../../../../theme'
 
@@ -16,10 +15,10 @@ export const ActionsContainer = styled.div`
   height: 3rem;
   top: calc(100% + 0.125rem);
   left: 0;
-  border: 1px solid ${grey.A300};
+  border: 1px solid ${theme.palette.grey[300]};
   border-radius: 3px;
-  background-color: ${grey.A100};
-  box-shadow: 0 1px 4px 0 ${grey.A100};
+  background-color: ${theme.palette.grey[100]};
+  box-shadow: 0 1px 4px 0 ${theme.palette.grey[100]};
   z-index: 1;
 `
 
