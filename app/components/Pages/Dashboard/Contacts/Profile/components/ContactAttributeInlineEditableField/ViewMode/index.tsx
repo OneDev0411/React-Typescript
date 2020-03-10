@@ -69,7 +69,9 @@ export function ViewMode(props: Props) {
           </Tooltip>
         )}
       </Box>
-      <Typography className={classes.value}>{props.value || '-'}</Typography>
+      <Typography variant="body2" className={classes.value}>
+        {props.value || '-'}
+      </Typography>
     </Box>
   )
 }

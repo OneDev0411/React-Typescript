@@ -54,7 +54,7 @@ export class EditMode extends React.Component {
                 onClick={this.props.handleDelete}
                 data-test="inline-editable-field-delete"
               >
-                <TrashIcon />
+                <TrashIcon size="small" />
               </IconButton>
             </Tooltip>
           )}
@@ -69,7 +69,7 @@ export class EditMode extends React.Component {
             </Button>
             <Button
               variant="contained"
-              color="primary"
+              color="secondary"
               size="small"
               disabled={isDisabled}
               onClick={this.props.handleSave}

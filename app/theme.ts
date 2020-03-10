@@ -139,8 +139,8 @@ const theme = createMuiTheme({
       lineHeight: 1.6
     },
     subtitle1: {
-      fontFamily: 'LatoRegular',
-      fontWeight: 400,
+      fontFamily: 'LatoBold',
+      fontWeight: 700,
       fontSize: '1rem',
       lineHeight: 1.75
     },
@@ -210,7 +210,7 @@ theme.typography.body3 = {
 
 if (process.env.NODE_ENV === 'development') {
   // eslint-disable-next-line
-  ; (window as any).theme = theme
+  ;(window as any).theme = theme
 }
 
 export { theme }
