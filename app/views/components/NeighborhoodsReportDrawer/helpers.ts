@@ -25,16 +25,16 @@ function getAggregatedDataOfPastMonths(
   if (metric.type === 'percent') {
     value = `${avg(
       pastMonthsDataList.map(data => {
-        const stringValue = data.value.toString()
+        const stringValue = (data.value || '0%').toString()
         const percentPart = stringValue.slice(0, stringValue.length - 1)
 
         return Number(percentPart)
       })
     )}%`
   } else if (metric.type === 'number' && metric.name.includes('Average')) {
-    value = avg(pastMonthsDataList.map(data => Number(data.value)))
+    value = avg(pastMonthsDataList.map(data => Number(data.value || 0)))
   } else if (metric.type === 'number') {
-    value = sum(pastMonthsDataList.map(data => Number(data.value)))
+    value = sum(pastMonthsDataList.map(data => Number(data.value || 0)))
   }
 
   const labelSuffix = includeMonthRangeInLabel
