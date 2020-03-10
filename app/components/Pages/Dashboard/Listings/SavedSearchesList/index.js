@@ -122,6 +122,14 @@ class SavedSearchesList extends Component {
             ]
           }
 
+          if (!this.props.list.length) {
+            return (
+              <ListItem>
+                <ListItemText primary="No saved filters." />
+              </ListItem>
+            )
+          }
+
           return this.props.list.data.map((item, index) => {
             const id = item.id
 
