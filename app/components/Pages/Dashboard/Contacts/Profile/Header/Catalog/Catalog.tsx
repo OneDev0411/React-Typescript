@@ -10,7 +10,10 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {
       marginLeft: `${theme.spacing(1)}px`,
-      width: 'calc(100% - 56px)'
+      width: 'calc(100% - 64px)'
+    },
+    name: {
+      wordBreak: 'break-all'
     },
     editButton: {
       marginLeft: theme.spacing(1)
@@ -32,8 +35,10 @@ export default function Catalog({ contact }: Props) {
     <Box mt={3} mb={2}>
       <Box display="flex" alignItems="center" mb={1}>
         <Avatar contact={contact} />
-        <Typography variant="subtitle1" className={classes.title}>
-          {contact.display_name}
+        <Box display="flex" alignItems="center" className={classes.title}>
+          <Typography variant="subtitle1" className={classes.name}>
+            {contact.display_name}
+          </Typography>
           <Link
             color="secondary"
             href="#Details"
@@ -42,7 +47,7 @@ export default function Catalog({ contact }: Props) {
           >
             Edit
           </Link>
-        </Typography>
+        </Box>
       </Box>
       <div className={classes.touch}>
         <LastTouched contact={contact} />
