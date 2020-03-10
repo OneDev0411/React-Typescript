@@ -5,13 +5,13 @@
     </mj-image>
   </mj-column>
   <mj-column vertical-align="bottom">
-    <mj-text text-transform="uppercase" font-weight="500" font-size="17px" padding="5px 0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree">
+    <mj-text text-transform="uppercase" font-weight="600" font-size="17px" padding="5px 0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" line-height="1">
       {{user.display_name}}
     </mj-text>
-    <mj-text padding="5px 0" font-size="16px" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree">
+    <mj-text padding="5px 0" font-size="16px" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" line-height="0.7">
       {{user.phone_number | phone}}
     </mj-text>
-    <mj-button color="#000" inner-padding="0" padding="5px 0" href="mailto:{{user.email}}" align="left" text-align="left" text-decoration="none" background-color="#fff" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px">
+    <mj-button color="#000" inner-padding="0" padding="5px 0" href="mailto:{{user.email}}" align="left" text-align="left" text-decoration="none" background-color="#fff" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px"  line-height="0.7">
       {{user.email}}
     </mj-button>
   </mj-column>
