@@ -112,7 +112,7 @@ function OpenHousesList(props: Props) {
       header: 'Title',
       id: 'title',
       primary: true,
-      width: '15%',
+      width: '20%',
       render: ({ row }: RenderProps<TableRow>) => (
         <Title title={row.title} onClick={() => handleEdit(row)} />
       )
@@ -120,8 +120,8 @@ function OpenHousesList(props: Props) {
     {
       header: 'Description',
       id: 'description',
-      primary: true,
-      width: '10%',
+      class: 'opaque',
+      width: '20%',
       render: ({ row }: RenderProps<TableRow>) => (
         <Description description={row.description} />
       )
@@ -138,7 +138,7 @@ function OpenHousesList(props: Props) {
     {
       header: 'Registrants',
       id: 'registrants',
-      width: '20%',
+      width: '10%',
       class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (
         <Registrants
@@ -163,7 +163,7 @@ function OpenHousesList(props: Props) {
     },
     {
       id: 'actions',
-      width: '5%',
+      width: '10%',
       class: 'visible-on-hover',
       render: ({ row }: RenderProps<TableRow>) => (
         <Actions

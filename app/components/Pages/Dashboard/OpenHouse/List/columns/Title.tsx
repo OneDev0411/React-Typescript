@@ -8,10 +8,8 @@ interface Props {
 
 export default function Title({ title, onClick }: Props) {
   return (
-    <>
-      <Link role="button" onClick={onClick} color="inherit">
-        {title}
-      </Link>
-    </>
+    <Link role="button" onClick={onClick} color="inherit">
+      {title}
+    </Link>
   )
 }
