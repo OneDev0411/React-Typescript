@@ -1,5 +1,4 @@
 import React from 'react'
-import { render } from 'enzyme'
 
 import user from 'fixtures/users/agent.json'
 import dealJson from 'fixtures/deal/seller-with-offer.json'
@@ -29,7 +28,7 @@ describe('Test Deal Roles component', () => {
   })
 
   it('Should render Office form', () => {
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={{}}
@@ -76,7 +75,7 @@ describe('Test Deal Roles component', () => {
   })
 
   it('Should show Office form when showBrokerageFields is true', () => {
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={{}}
@@ -103,7 +102,7 @@ describe('Test Deal Roles component', () => {
 
     const office = sellerAgentRole.agent!.office
 
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={sellerAgentRole}
