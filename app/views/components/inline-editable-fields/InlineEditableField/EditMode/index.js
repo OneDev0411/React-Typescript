@@ -59,14 +59,15 @@ export class EditMode extends React.Component {
             </Tooltip>
           )}
           <Box display="flex" alignItems="center">
-            <Button
-              variant="text"
-              size="small"
-              disabled={isDisabled}
-              onClick={this.props.handleCancel}
-            >
-              Cancel
-            </Button>
+            <Box marginRight={1}>
+              <Button
+                size="small"
+                disabled={isDisabled}
+                onClick={this.props.handleCancel}
+              >
+                Cancel
+              </Button>
+            </Box>
             <Button
               variant="contained"
               color="secondary"
