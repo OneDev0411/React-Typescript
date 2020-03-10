@@ -17,7 +17,8 @@ const useStyles = makeStyles(theme =>
       alignItems: 'center',
       justifyContent: 'space-between',
       margin: theme.spacing(0, 1.5),
-      paddingTop: theme.spacing(7)
+      paddingTop: theme.spacing(7),
+      paddingLeft: theme.spacing(5)
     }
   })
 )

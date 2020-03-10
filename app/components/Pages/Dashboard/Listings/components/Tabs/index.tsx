@@ -41,13 +41,23 @@ const useStyle = makeStyles((theme: Theme) =>
       }
     },
     boxSwitcher: {
-      margin: theme.spacing(1, 0),
+      margin: theme.spacing(1, 0, 0),
       display: 'flex',
       flexGrow: 1,
-      borderBottom: `2px solid ${theme.palette.divider}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
       justifyContent: 'flex-end'
     }
   })
+)
+const overrideTabStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      root: {
+        margin: theme.spacing(1, 0, 0),
+        paddingLeft: theme.spacing(5)
+      }
+    }),
+  { name: 'MuiTabs' }
 )
 
 const tabLinks: TabsShape[] = [
@@ -77,6 +87,9 @@ export const Tabs = ({
 }: Props & WithRouterProps) => {
   const currentUrl = location.pathname
   const classes = useStyle()
+
+  overrideTabStyles()
+
   let availableTabs: React.ReactNode[]
 
   availableTabs = tabLinks.map(({ label, to, allowAnonymousAccess }, i) => {

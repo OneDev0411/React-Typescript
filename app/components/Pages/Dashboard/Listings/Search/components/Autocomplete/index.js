@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { IconButton } from '@material-ui/core'
 import { browserHistory } from 'react-router'
 import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
@@ -358,7 +359,9 @@ class MlsAutocompleteSearch extends Component {
 
         {!this.state.isLoading && this.state.input && (
           <ClearButton isFit inverse iconSize="large" onClick={this.onClear}>
-            <IconClose />
+            <IconButton size="small">
+              <IconClose size="small" />
+            </IconButton>
           </ClearButton>
         )}
 

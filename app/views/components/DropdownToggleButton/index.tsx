@@ -11,7 +11,7 @@ import { fade } from '@material-ui/core/styles'
 
 import { ClassesProps } from '../../../utils/ts-utils'
 
-import IconArrowDropDown from '../SvgIcons/ArrowDropDown/IconArrowDropDown'
+import IconArrowDropDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 interface Props extends ButtonProps {
   isActive?: boolean

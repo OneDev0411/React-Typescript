@@ -45,7 +45,7 @@ export const SearchIcon = styled(IconSearch)`
 
 export const ClearButton = styled(IconButton)`
   position: absolute;
-  top: 0.55em;
+  top: 0.54em;
   right: 0.75em;
 `
 export const LoadingContainer = styled.div`

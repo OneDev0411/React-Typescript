@@ -26,7 +26,7 @@ import { selectListings as selectAlerts } from '../../../../../reducers/listings
 
 const styles = theme => ({
   savedSearchItem: {
-    padding: theme.spacing(0, 0.5, 0, 1.5),
+    padding: theme.spacing(0, 4, 0, 1.5),
 
     '&:hover': {
       color: theme.palette.primary,
@@ -122,6 +122,14 @@ class SavedSearchesList extends Component {
             ]
           }
 
+          if (!this.props.list.length) {
+            return (
+              <ListItem>
+                <ListItemText primary="No saved filters." />
+              </ListItem>
+            )
+          }
+
           return this.props.list.data.map((item, index) => {
             const id = item.id
 
@@ -133,7 +141,11 @@ class SavedSearchesList extends Component {
               >
                 <ListItemText
                   primary={uppercaseFirstLetter(item.title || '')}
-                  style={{ overflow: 'hidden', cursor: 'pointer' }}
+                  style={{
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    textOverflow: 'ellipsis'
+                  }}
                   onClick={() => this.navigateToSavedItem(id)}
                   className={classes.savedSearchText}
                 />
