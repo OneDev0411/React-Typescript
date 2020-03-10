@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-import ListingMarker from '../../../Partials/ListingMarker'
+import ListingMarker from '../ListingMarker'
 
 const setMarkerCssPosition = listing => {
   const position = {

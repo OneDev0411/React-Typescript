@@ -34,8 +34,7 @@ import FetchError from './FetchError'
 import MLSNote from './MLSNote'
 import Loading from '../../../../../Partials/Loading'
 import FavoriteHeart from '../../components/FavoriteHeart'
-import ListingMarker from '../../../Partials/ListingMarker'
-import ListingMapMarker from '../../../Partials/ListingMapMarker'
+import ListingMarker from '../../components/ListingMarker'
 
 import ShareModal from '../../components/modals/ShareListingModal'
 
@@ -480,19 +479,14 @@ const ListingDesktopView = ({
           }}
           bootstrapURLKeys={bootstrap_url_keys}
         >
-          <ListingMapMarker
-            style={S('pointer mt-10')}
-            lat={center.lat}
-            lng={center.lng}
+          <div
+            style={{
+              cursor: 'pointer',
+              marginTop: '0.5rem'
+            }}
           >
-            <ListingMarker
-              data={data}
-              listing={listing}
-              property={listing.property}
-              address={listing.property.address}
-              key={`listing-marker${listing.id}`}
-            />
-          </ListingMapMarker>
+            <ListingMarker user={user} brand={brand} listing={listing} />
+          </div>
         </Map>
       )
     }

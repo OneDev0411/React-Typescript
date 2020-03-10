@@ -13,15 +13,15 @@ import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
 import Brand from '../../../../../../controllers/Brand'
 
 import Loading from '../../../../../Partials/Loading'
-import ListingMarker from '../../../Partials/ListingMarker'
-import ListingMapMarker from '../../../Partials/ListingMapMarker'
 
-import { renderFeatures } from './ListingDesktopView'
-import FetchError from './FetchError'
+import ListingMarker from '../../components/ListingMarker'
+
 import MLSNote from './MLSNote'
+import FetchError from './FetchError'
+import { renderFeatures } from './ListingDesktopView'
 
 const ListingMobileView = ({
-  data,
+  brand,
   user,
   listing,
   isFetching,
@@ -317,19 +317,14 @@ const ListingMobileView = ({
               center={{ lat: latitude, lng: longitude }}
               options={{ scrollwheel: false, draggable: false }}
             >
-              <ListingMapMarker
-                lat={latitude}
-                lng={longitude}
-                style={S('pointer mt-10')}
+              <div
+                style={{
+                  cursor: 'pointer',
+                  marginTop: '0.5rem'
+                }}
               >
-                <ListingMarker
-                  data={data}
-                  listing={listing}
-                  property={listing.property}
-                  address={listing.property.address}
-                  key={`listing-marker${listing.id}`}
-                />
-              </ListingMapMarker>
+                <ListingMarker user={user} brand={brand} listing={listing} />
+              </div>
             </Map>
           </div>
         </div>
