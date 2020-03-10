@@ -2,14 +2,14 @@ import React from 'react'
 import { Typography } from '@material-ui/core'
 
 interface Props {
-  description: string
+  title: string
 }
 
-export default function Description({ description }: Props) {
+export default function Title({ title, description }: Props) {
   return (
     <>
       <Typography variant="body2" noWrap>
-        {description}
+        {title}
       </Typography>
     </>
   )

@@ -21,7 +21,8 @@ import EmptyState from './EmptyState'
 import CreateNewTour from './CreateNewTour'
 
 import DueDate from './columns/DueDate'
-import Info from './columns/Info'
+import Title from './columns/Title'
+import Description from './columns/Description'
 import Participants from './columns/Participants'
 import ViewToursheet from './columns/ViewToursheet'
 import Actions from './columns/Actions'
@@ -65,11 +66,16 @@ function ToursList(props: { user: IUser }) {
       )
     },
     {
-      header: 'Info',
-      id: 'info',
-      verticalAlign: 'center',
+      header: 'Title',
+      id: 'title',
+      render: ({ row }: RenderProps<TableRow>) => <Title title={row.title} />
+    },
+    {
+      header: 'Description',
+      id: 'description',
+      class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (
-        <Info description={row.description} title={row.title} />
+        <Description description={row.description} />
       )
     },
     {
