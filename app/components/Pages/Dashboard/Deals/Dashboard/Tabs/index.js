@@ -20,8 +20,8 @@ export default class Tabs extends React.Component {
       render: props => <FoldersPane {...props} />
     },
     {
-      id: 'media',
-      label: 'Media',
+      id: 'photos',
+      label: 'Photos',
       isDisabled: () => false,
       render: props => <MediaManagerPane {...props} />
     },
