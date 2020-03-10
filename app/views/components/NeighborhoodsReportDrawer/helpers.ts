@@ -25,16 +25,16 @@ function getAggregatedDataOfPastMonths(
   if (metric.type === 'percent') {
     value = `${avg(
       pastMonthsDataList.map(data => {
-        const stringValue = (data.value || '0%').toString()
+        const stringValue = data.value.toString()
         const percentPart = stringValue.slice(0, stringValue.length - 1)
 
         return Number(percentPart)
       })
     )}%`
   } else if (metric.type === 'number' && metric.name.includes('Average')) {
-    value = avg(pastMonthsDataList.map(data => Number(data.value || 0)))
+    value = avg(pastMonthsDataList.map(data => Number(data.value)))
   } else if (metric.type === 'number') {
-    value = sum(pastMonthsDataList.map(data => Number(data.value || 0)))
+    value = sum(pastMonthsDataList.map(data => Number(data.value)))
   }
 
   const labelSuffix = includeMonthRangeInLabel
@@ -70,10 +70,16 @@ export function getFormattedReportWithNeededPeriods(
       return {
         ...metric,
         data: metric.data.map(metricData => {
+          let value = metricData.value
+
+          if (value === null || value === undefined) {
+            value = metric.type === 'percent' ? '0%' : 0
+          }
+
           return {
             key: metricData.key,
             label: `${metricData.label} ${metricData.key.slice(2, 4)}`,
-            value: metricData.value
+            value
           }
         })
       }
