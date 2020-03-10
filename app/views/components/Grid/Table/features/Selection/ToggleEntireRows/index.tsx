@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     formControl: {
       padding: theme.spacing(0, 2)
+    },
+    popover: {
+      zIndex: ++theme.zIndex.modal
     }
   })
 )
@@ -82,7 +85,7 @@ export function ToggleEntireRows<Row>({ rows, totalRows }: Props<Row>) {
           vertical: 'bottom',
           horizontal: 'left'
         }}
-        style={{ zIndex: 1002 }}
+        className={classes.popover}
       >
         <FormControlLabel
           className={classes.formControl}

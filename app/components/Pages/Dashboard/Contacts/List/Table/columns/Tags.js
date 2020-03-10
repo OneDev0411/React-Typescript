@@ -19,7 +19,6 @@ const useStyles = makeStyles(theme =>
       marginRight: theme.spacing(0.5)
     },
     chip: {
-      cursor: 'pointer',
       marginRight: theme.spacing(0.25)
     }
   })

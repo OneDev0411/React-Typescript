@@ -10,7 +10,10 @@ import {
 } from '@material-ui/core'
 import fecha from 'fecha'
 
-import { getContactSource } from 'models/contacts/helpers'
+import {
+  getContactSource,
+  getContactNameInitials
+} from 'models/contacts/helpers'
 
 import MiniContact from 'components/MiniContact'
 
@@ -95,7 +98,7 @@ export default function DuplicateContactsListItem({
               alt={displayName}
               src={avatarUrl}
             >
-              {displayName.substring(0, 1)}
+              {getContactNameInitials(contact)}
             </Avatar>
             <div className={classes.column}>
               <Typography variant="body2">{displayName}</Typography>
