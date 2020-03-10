@@ -42,7 +42,7 @@ export function useRowsSelection<Row>(
           !state.selection.isEntireRowsSelected
 
         return (
-          <div style={{ width: '48px' }}>
+          <>
             <div
               className="selection--default-value"
               style={{
@@ -65,7 +65,7 @@ export function useRowsSelection<Row>(
                 onChange={() => handleToggleRow(rowItem)}
               />
             </div>
-          </div>
+          </>
         )
       }
     },
