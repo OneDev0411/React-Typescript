@@ -5,6 +5,7 @@ exports[`ExportContactsButton inner button component renders 1`] = `
   buttonRenderer={[Function]}
   buttonText="Export"
   disabled={false}
+  fullHeight={true}
   itemRenderer={[Function]}
   items={
     Array [
