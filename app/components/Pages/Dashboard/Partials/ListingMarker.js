@@ -1,15 +1,12 @@
-// Partials/ListingMarker.js
-import _ from 'lodash'
 import S from 'shorti'
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+
 import { numberWithCommas, friendlyDate } from '../../../../utils/helpers'
 import Brand from '../../../../controllers/Brand'
 import listing_util from '../../../../utils/listing'
 
-export default function ListingMarker({ data, listing, context, popupIsActive }) {
-  const { user } = data
-  const { listing_map } = data
+export default function ListingMarker({ user, brand, listing, popupIsActive }) {
   const property = listing.compact_property || listing.property
   const address = listing.address || property.address
 
@@ -74,19 +71,6 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
 
   const price_small = listing_util.shortPrice(price)
 
-  let active_class = ''
-
-  if (
-    data.listing_map &&
-    (listing.id === data.listing_map.active_listing || context === 'single')
-  ) {
-    active_class = ' active'
-  }
-
-  // let popup_class = 'hidden'
-  // if (data.listing_map && listing.id === data.listing_map.listing_popup || data.listing_map && listing.id === data.listing_map.active_listing || context === 'single')
-  //   popup_class = ''
-
   const square_feet = numberWithCommas(
     Math.floor(listing_util.metersToFeet(property.square_meters))
   )
@@ -96,7 +80,9 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
   if (listing.close_date) {
     const sold_date_obj = friendlyDate(listing.close_date)
 
-    sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
+    sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${
+      sold_date_obj.year
+    }`
   }
 
   let resize_url
@@ -107,52 +93,20 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
 
   let social_info
 
-  if (listing.shared_by && listing.shared_by.length) {
-    social_info = 'Shared by '
-    listing.shared_by.forEach((shared_user, shared_i) => {
-      if (shared_user.id === user.id) {
-        social_info += `You${shared_i === listing.shared_by.length - 1 ? '' : ', '}`
-      } else {
-        social_info +=
-          (shared_user.first_name.trim()
-            ? shared_user.first_name
-            : shared_user.email) +
-          (shared_i === listing.shared_by.length - 1 ? '' : ', ')
-      }
-    })
-  }
-
-  if (listing.commented_by && listing.commented_by.length) {
-    social_info = 'Commented by '
-    listing.commented_by.forEach((commented_user, comment_i) => {
-      if (commented_user.id === user.id) {
-        social_info += `You${
-          comment_i === listing.commented_by.length - 1 ? '' : ', '
-        }`
-      } else {
-        social_info +=
-          (commented_user.first_name.trim()
-            ? commented_user.first_name
-            : commented_user.email) +
-          (comment_i === listing.commented_by.length - 1 ? '' : ', ')
-      }
-    })
-  }
-
-  const markerPopupClassName =
-    (data.listing_map && data.listing_map.active_listing === listing.id) ||
-    popupIsActive
-      ? ''
-      : 'hidden'
+  const markerPopupClassName = popupIsActive ? '' : 'hidden'
 
   const listing_popup = (
     <div
       className={markerPopupClassName}
-      style={S('absolute w-240 t-110n l-5 t-110n z-3 bg-fff border-1-solid-929292')}
+      style={S(
+        'absolute w-240 t-110n l-5 t-110n z-3 bg-fff border-1-solid-929292'
+      )}
     >
       <div style={S('pull-left mr-10')}>
         <div
-          style={S(`w-80 h-80 bg-url(${`${resize_url}?w=160`}) bg-cover bg-center`)}
+          style={S(
+            `w-80 h-80 bg-url(${`${resize_url}?w=160`}) bg-cover bg-center`
+          )}
         />
       </div>
       <div style={S('pull-left pt-10')}>
@@ -168,7 +122,9 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
           {square_feet} Sqft
         </div>
         <div
-          style={S(`font-11 color-${listing_util.getStatusColor(listing.status)}`)}
+          style={S(
+            `font-11 color-${listing_util.getStatusColor(listing.status)}`
+          )}
         >
           {listing.status} {sold_date}
         </div>
@@ -178,12 +134,11 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
   )
 
   let marker_style = S('relative w-45 h-21 br-3 color-fff')
-  let viewed_class = ''
 
   // Social badge
   let social_badge
 
-  if (isFavorited(listing) || listing.commented_by) {
+  if (isFavorited(listing)) {
     marker_style = {
       ...marker_style,
       ...S('w-65')
@@ -194,7 +149,7 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
   // Brand badge
   let brand_badge
 
-  if (data.brand) {
+  if (brand) {
     const agent =
       listing.proposed_agent && listing.proposed_agent.agent
         ? listing.proposed_agent.agent
@@ -204,8 +159,7 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
       listing &&
       agent &&
       agent.mlsid === listing.list_agent_mls_id &&
-      !isFavorited(listing) &&
-      !listing.commented_by
+      !isFavorited(listing)
     ) {
       brand_badge = (
         <div
@@ -223,27 +177,18 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
     }
   }
 
-  if (
-    listing_map &&
-    listing_map.listings_viewed &&
-    listing_map.listings_viewed.indexOf(listing.id) !== -1 &&
-    !data.current_listing
-  ) {
-    viewed_class = ' viewed'
-  }
-
   let listing_marker = (
     <div
-      className={`map__listing-marker${active_class}${viewed_class} ${
-        status_color_class
-      }`}
+      className={`map__listing-marker ${status_color_class}`}
       style={marker_style}
     >
       {brand_badge}
       {social_badge}
       <div
         style={S(
-          `w-100p text-center pt-4${social_badge || brand_badge ? ' pl-22' : ''}`
+          `w-100p text-center pt-4${
+            social_badge || brand_badge ? ' pl-22' : ''
+          }`
         )}
       >
         {price_small}
@@ -267,7 +212,7 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
 
     marker_style = { ...marker_style, ...S('w-70') }
 
-    if (isFavorited(listing) || listing.commented_by) {
+    if (isFavorited(listing)) {
       marker_style = {
         ...marker_style,
         ...S('w-110')
@@ -275,19 +220,9 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
       social_badge = getSocialBadge(listing)
     }
 
-    if (
-      listing_map &&
-      listing_map.listings_viewed &&
-      listing_map.listings_viewed.indexOf(listing.id) !== -1
-    ) {
-      viewed_class = ' viewed'
-    }
-
     listing_marker = (
       <div
-        className={`map__listing-marker${active_class}${viewed_class} ${
-          status_color_class
-        }`}
+        className={`map__listing-marker ${status_color_class}`}
         style={marker_style}
       >
         <div style={open_style}>OH</div>
@@ -295,7 +230,9 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
         {social_badge}
         <div
           style={S(
-            `w-100p text-center pt-4${social_badge || brand_badge ? ' pl-22' : ''}`
+            `w-100p text-center pt-4${
+              social_badge || brand_badge ? ' pl-22' : ''
+            }`
           )}
         >
           {price_small}
@@ -313,8 +250,8 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
 }
 
 ListingMarker.propTypes = {
-  data: PropTypes.object,
-  listing: PropTypes.object,
-  context: PropTypes.string,
+  user: PropTypes.shape(),
+  brand: PropTypes.shape(),
+  listing: PropTypes.shape(),
   popupIsActive: PropTypes.bool
 }

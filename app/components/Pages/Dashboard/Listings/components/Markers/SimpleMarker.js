@@ -1,36 +1,39 @@
 import React from 'react'
 import { Link } from 'react-router'
+
 import ListingMarker from '../../../Partials/ListingMarker'
 
 const setMarkerCssPosition = listing => {
+  const position = {
+    position,
+    top: 0,
+    left: 0
+  }
+
   if (listing.cssPosition) {
     const { left, top } = listing.cssPosition
+
     return {
-      position: 'absolute',
+      ...position,
       top,
       left
     }
   }
 
-  return {
-    position: 'absolute',
-    top: 0,
-    left: 0
-  }
+  return position
 }
 
 const SimpleMarker = ({
-  data,
   user,
+  brand,
   listing,
   isWidget,
-  onClickHandler,
   markerPopupIsActive,
   onMouseLeaveHandler,
   onMouseEnterHandler
 }) => (
   <Link
-    className={'single-marker'}
+    className="single-marker"
     onMouseLeave={onMouseLeaveHandler}
     onMouseEnter={onMouseEnterHandler}
     to={`/dashboard/mls/${listing.id}`}
@@ -38,8 +41,8 @@ const SimpleMarker = ({
     target={user && !isWidget ? '' : '_blank'}
   >
     <ListingMarker
-      data={data}
-      context={'map'}
+      user={user}
+      brand={brand}
       listing={listing}
       popupIsActive={markerPopupIsActive}
     />
