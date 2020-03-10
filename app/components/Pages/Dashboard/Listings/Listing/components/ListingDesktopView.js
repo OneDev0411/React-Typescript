@@ -88,7 +88,8 @@ const ListingDesktopView = ({
   galleryModalIsActive,
   handleModalGalleryNav,
   galleryModalActiveIndex,
-  galleryModalDirection
+  galleryModalDirection,
+  windowInnerWidth
 }) => {
   const brandColor = Brand.color('primary', primary, brand)
 
@@ -97,7 +98,7 @@ const ListingDesktopView = ({
   let viewer_width = 0
 
   if (typeof window !== 'undefined') {
-    viewer_width = window.innerWidth
+    viewer_width = windowInnerWidth
 
     if (!data.is_widget && container !== 'modal') {
       viewer_width -= 56
