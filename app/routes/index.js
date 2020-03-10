@@ -5,6 +5,8 @@ import GoToDashboard from '../views/components/GoToDashboard'
 
 // Containers
 import AppLayout from '../components/App'
+import Dashboard from '../components/Pages/Dashboard'
+
 // Pages
 import Load from '../loader'
 import store from '../stores'
@@ -415,172 +417,152 @@ export default (
   <Route>
     <Route path="/">
       <IndexRoute component={GoToDashboard} />} />
-      <Route path="/dashboard" component={GoToDashboard} />
+      <Route path="dashboard" component={GoToDashboard} />
     </Route>
 
     <Route path="/" component={AsyncAuthenticationLayout}>
-      <Route path="/branch" component={AsyncBranch} />
-      <Route path="/share" component={AsyncShare} />
+      <Route path="branch" component={AsyncBranch} />
+      <Route path="share" component={AsyncShare} />
 
       <Route
         path="register"
         component={UserIsNotAuthenticated(AsyncRegister)}
       />
 
-      <Route path="/signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
-      <Route path="/signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
+      <Route path="signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
+      <Route path="signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
+
+      <Route path="verify/confirm/:verifyType" component={AsyncVerifyConfirm} />
+      <Route path="verify/request/:verifyType" component={AsyncVerifyRequest} />
 
       <Route
-        path="/verify/confirm/:verifyType"
-        component={AsyncVerifyConfirm}
-      />
-      <Route
-        path="/verify/request/:verifyType"
-        component={AsyncVerifyRequest}
-      />
-
-      <Route
-        path="/password/forgot"
+        path="password/forgot"
         component={UserIsNotAuthenticated(AsyncForgotPassword)}
       />
-      <Route path="/password/reset" component={AsyncResetPassword} />
+      <Route path="password/reset" component={AsyncResetPassword} />
 
-      <Route path="/mobile" component={AsyncMobile} />
+      <Route path="mobile" component={AsyncMobile} />
 
-      <Route path="/wdigets" component={WidgetsContainer}>
-        <Route path="/widgets/map" component={AsyncMapWidget} />
-        <Route path="/widgets/listings" component={AsyncListingsWidget} />
+      <Route path="widgets" component={WidgetsContainer}>
+        <Route path="map" component={AsyncMapWidget} />
+        <Route path="listings" component={AsyncListingsWidget} />
+        <Route path="mls-search-field" component={AsyncMlsSearchFieldWidget} />
         <Route
-          path="/widgets/hero-search-section"
+          path="hero-search-section"
           component={AsyncHeroSearchSectionWidget}
-        />
-        <Route
-          path="/widgets/mls-search-field"
-          component={AsyncMlsSearchFieldWidget}
         />
       </Route>
     </Route>
 
     <Route path="/" component={AppLayout}>
-      <Route path="dashboard/mls" component={AsyncListingsLayout}>
-        <IndexRoute component={AsyncListingsSearch} />
+      <Route path="dashboard" component={Dashboard}>
+        <Route path="mls" component={AsyncListingsLayout}>
+          <IndexRoute component={AsyncListingsSearch} />
+        </Route>
       </Route>
     </Route>
 
     <Route path="/" component={AppLayout} onEnter={authenticate}>
-      <Route path="/branch" component={AsyncBranch} />
-      <Route path="/share" component={AsyncShare} />
+      <Route path="branch" component={AsyncBranch} />
+      <Route path="share" component={AsyncShare} />
 
-      <Route path="/dashboard/calendar" component={AsyncCalendar} />
+      <Route path="dashboard" component={Dashboard}>
+        <Route path="inbox(/:emailThreadId)" component={AsyncInbox} />
 
-      <Route path="dashboard/mls" component={AsyncListingsLayout}>
-        <IndexRoute component={AsyncListingsSearch} />
-        <Route path="following" component={AsyncListingsFavorites} />
-        <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
-      </Route>
+        <Route path="calendar" component={AsyncCalendar} />
 
-      <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
+        <Route component={AsyncContacts} path="contacts" />
+        <Route path="contacts/:id" component={AsyncContactProfile} />
+        <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
 
-      <Route component={AsyncContacts} path="/dashboard/contacts" />
-      <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
-      <Route
-        path="/dashboard/contacts/import/csv"
-        component={AsyncContactsImportCsv}
-      />
+        <Route path="marketing" component={AsyncMarketing}>
+          <IndexRoute component={AsyncMarketingHistory} />
+          <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
+        </Route>
 
-      <Route
-        path="/dashboard/deals(/filter/:filter)"
-        component={AsyncDealsLayout}
-      >
-        <IndexRoute component={AsyncDealsList} />
+        <Route path="insights">
+          <IndexRoute component={AsyncMarketingInsightsList} />
+          <Route path="scheduled" component={AsyncMarketingInsightsList} />
+          <Route path=":id" component={AsyncMarketingInsight} />
+        </Route>
+
+        <Route path="tours" component={AsyncToursList} />
+        <Route path="open-house" component={AsyncOpenHousesList} />
+
+        <Route path="deals(/filter/:filter)" component={AsyncDealsLayout}>
+          <IndexRoute component={AsyncDealsList} />
+        </Route>
+        <Route path="deals/create(/:id)" component={AsyncDealCreate} />
         <Route
-          path="/dashboard/deals/create(/:id)"
-          component={AsyncDealCreate}
-        />
-        <Route
-          path="/dashboard/deals/:id/form-edit/:taskId"
+          path="deals/:id/form-edit/:taskId"
           component={AsyncDealFormEdit}
         />
+        <Route path="deals/:id/create-offer" component={AsyncDealCreateOffer} />
         <Route
-          path="/dashboard/deals/:id/create-offer"
-          component={AsyncDealCreateOffer}
-        />
-        <Route
-          path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"
+          path="deals/:id/view/:taskId(/:entityType/:entityId)"
           component={AsyncDealFileViewer}
         />
         <Route
-          path="/dashboard/deals/:id/marketing/network"
+          path="deals/:id/marketing/network"
           component={AsyncAgentNetwork}
         />
+        <Route path="deals/:id(/:tab)" component={AsyncDealDashboard} />
+
+        <Route path="mls" component={AsyncListingsLayout}>
+          <IndexRoute component={AsyncListingsSearch} />
+          <Route path="following" component={AsyncListingsFavorites} />
+          <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
+        </Route>
+
+        <Route path="mls/:id" component={AsyncListingSinglePage} />
+
+        <Route path="recents(/:roomId)">
+          <IndexRoute component={AsyncRecents} />
+        </Route>
+
         <Route
-          path="/dashboard/deals/:id(/:tab)"
-          component={AsyncDealDashboard}
+          path="notifications(/:type/:id)"
+          component={AsyncNotificationsPage}
         />
+
+        <Route path="account" component={AsyncAccountLayout}>
+          <IndexRoute component={AsyncProfile} />
+          <Route path="upgrade" component={AsyncUpgradeAccount} />
+
+          <Route path="exportCalendar" component={ExportCalendar} />
+          <Route path="manage-tags" component={ManageTags} />
+          <Route
+            path="reminder-notifications"
+            component={ReminderNotifications}
+          />
+          <Route path="email-signature" component={EmailSignature} />
+          <Route path="email-templates" component={EmailTemplatesSettings} />
+          <Route path="connected-accounts" component={ConnectedAccounts} />
+          <Route path="css" component={AsyncCSS} />
+
+          <Route path="flows" component={AsyncFlowsList} />
+          <Route path="flows/:id" component={AsyncFlowEdit} />
+        </Route>
+
+        <Route path="teams(/:id)">
+          <IndexRoute component={AsyncTeams} />
+        </Route>
+
+        <Route path="checklists">
+          <IndexRoute component={AsyncChecklists} />
+        </Route>
+
+        <Route path="contexts">
+          <IndexRoute component={AsyncContexts} />
+        </Route>
+
+        <Route path="websites">
+          <IndexRoute component={AsyncWebsitesList} />
+        </Route>
+
+        <Route path="website" component={AsyncWebsite} />
+        <Route path="forms" component={AsyncForms} />
       </Route>
-
-      <Route path="/dashboard/recents(/:roomId)">
-        <IndexRoute component={AsyncRecents} />
-      </Route>
-
-      <Route
-        path="/dashboard/notifications(/:type/:id)"
-        component={AsyncNotificationsPage}
-      />
-
-      <Route path="/dashboard/tours" component={AsyncToursList} />
-      <Route path="/dashboard/open-house" component={AsyncOpenHousesList} />
-
-      <Route path="/dashboard/marketing" component={AsyncMarketing}>
-        <IndexRoute component={AsyncMarketingHistory} />
-        <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
-      </Route>
-
-      <Route path="/dashboard/inbox(/:emailThreadId)" component={AsyncInbox} />
-
-      <Route path="/dashboard/insights">
-        <IndexRoute component={AsyncMarketingInsightsList} />
-        <Route path="scheduled" component={AsyncMarketingInsightsList} />
-        <Route path=":id" component={AsyncMarketingInsight} />
-      </Route>
-
-      <Route path="dashboard/account" component={AsyncAccountLayout}>
-        <IndexRoute component={AsyncProfile} />
-        <Route path="upgrade" component={AsyncUpgradeAccount} />
-
-        <Route path="exportCalendar" component={ExportCalendar} />
-        <Route path="manage-tags" component={ManageTags} />
-        <Route
-          path="reminder-notifications"
-          component={ReminderNotifications}
-        />
-        <Route path="email-signature" component={EmailSignature} />
-        <Route path="email-templates" component={EmailTemplatesSettings} />
-        <Route path="connected-accounts" component={ConnectedAccounts} />
-        <Route path="css" component={AsyncCSS} />
-
-        <Route path="flows" component={AsyncFlowsList} />
-        <Route path="flows/:id" component={AsyncFlowEdit} />
-      </Route>
-
-      <Route path="/dashboard/teams(/:id)">
-        <IndexRoute component={AsyncTeams} />
-      </Route>
-
-      <Route path="/dashboard/checklists">
-        <IndexRoute component={AsyncChecklists} />
-      </Route>
-
-      <Route path="/dashboard/contexts">
-        <IndexRoute component={AsyncContexts} />
-      </Route>
-
-      <Route path="/dashboard/websites">
-        <IndexRoute component={AsyncWebsitesList} />
-      </Route>
-
-      <Route path="/dashboard/website" component={AsyncWebsite} />
-      <Route path="/dashboard/forms" component={AsyncForms} />
     </Route>
 
     <Route path="/oops" component={AsyncOops} />
