@@ -22,9 +22,9 @@ import LoadingIcon from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import Item from './Item'
 
 const styles = theme => ({
-  root: {
-    fontSize: '1rem',
-    color: theme.palette.text.secondary
+  dropdownBtn: {
+    ...theme.typography.body1,
+    color: theme.palette.common.black
   }
 })
 
@@ -88,7 +88,7 @@ class SegmentsList extends React.Component {
       <BaseDropdownWithMore
         buttonLabel="Saved List"
         DropdownToggleButtonProps={{
-          className: classes.root
+          className: classes.dropdownBtn
         }}
         listPlugin={{
           style: { width: 220 }

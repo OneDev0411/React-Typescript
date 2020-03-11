@@ -482,7 +482,7 @@ export default (
       <Route component={AsyncContacts} path="/dashboard/contacts" />
       <Route
         component={AsyncDuplicateContacts}
-        path="/dashboard/contacts/dublicates"
+        path="/dashboard/contacts/duplicates"
       />
       <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       <Route

@@ -651,7 +651,7 @@ class ContactsList extends React.Component {
         >
           <Box>
             You currently have {duplicateClusterCount} duplicate contacts,{' '}
-            <NavigateDuplicate href="/dashboard/contacts/dublicates">
+            <NavigateDuplicate href="/dashboard/contacts/duplicates">
               manage them here.
             </NavigateDuplicate>
           </Box>

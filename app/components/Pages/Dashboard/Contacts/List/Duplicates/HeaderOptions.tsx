@@ -57,6 +57,10 @@ export default function HeaderOptions({
     setIsMerging(false)
   }
 
+  if (listsLength === 0) {
+    return null
+  }
+
   return (
     <Box textAlign="right">
       <Button
