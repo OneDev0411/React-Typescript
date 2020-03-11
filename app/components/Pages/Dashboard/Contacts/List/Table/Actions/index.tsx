@@ -197,7 +197,9 @@ export function TableActions({
           </ListItem>
           <MergeContacts
             acEntireMode={entireMode}
-            disabled={!isAnyRowsSelected}
+            disabled={
+              !isAnyRowsSelected || state.selection.selectedRowIds.length < 2
+            }
             selectedRows={state.selection.selectedRowIds}
             submitCallback={deselectAndReload}
           />
