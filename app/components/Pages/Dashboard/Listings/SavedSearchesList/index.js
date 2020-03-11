@@ -122,7 +122,7 @@ class SavedSearchesList extends Component {
             ]
           }
 
-          if (!this.props.list.length) {
+          if (!this.props.list.data.length) {
             return (
               <ListItem>
                 <ListItemText primary="No saved filters." />
