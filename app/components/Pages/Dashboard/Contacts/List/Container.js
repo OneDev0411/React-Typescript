@@ -466,7 +466,7 @@ class ContactsList extends React.Component {
     this.setState({ isFetchingMoreContactsBefore: false })
   }
 
-  handleOnDelete = () => {
+  handleOnDelete = (e, { selectedRows = [] }) => {
     const state = this.props.gridStateContext
     const entireMode = state.selection.isEntireRowsSelected
 
@@ -479,7 +479,7 @@ class ContactsList extends React.Component {
       confirmLabel: 'Delete',
       message: `Delete ${isManyContacts ? 'contacts' : 'contact'}?`,
       onConfirm: () => {
-        this.handleDeleteContact()
+        this.handleDeleteContact({ selectedRows })
       },
       description: `Deleting ${
         isManyContacts ? `these ${selectedRowsLength} contacts` : 'this contact'
@@ -491,7 +491,7 @@ class ContactsList extends React.Component {
     })
   }
 
-  handleDeleteContact = async () => {
+  handleDeleteContact = async ({ selectedRows }) => {
     const state = this.props.gridStateContext
 
     try {
@@ -509,7 +509,12 @@ class ContactsList extends React.Component {
         await deleteContactsBulk(bulkDeleteParams)
         await this.reloadContacts()
       } else {
-        await this.props.deleteContacts(state.selection.selectedRowIds)
+        const rows =
+          state.selection.selectedRowIds.length > 0
+            ? state.selection.selectedRowIds
+            : selectedRows
+
+        await this.props.deleteContacts(rows)
       }
 
       this.rowsUpdating(false)
