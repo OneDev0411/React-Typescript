@@ -29,6 +29,9 @@ import { ActionWrapper } from '../components/ActionWrapper'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       '& button': {
         marginLeft: theme.spacing(1)
       }
