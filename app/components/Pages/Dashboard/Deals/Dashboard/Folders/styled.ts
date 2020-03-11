@@ -25,16 +25,20 @@ export const FolderContainer = styled.div`
 `
 
 export const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 3.5rem;
-  background-color: #d4d4d4;
-  padding: 0 calc(1rem + 3px);
+  ${({ theme }) => `
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 3.5rem;
+    padding: 0 calc(1rem + 3px);
+    border-bottom: 1px solid ${theme.palette.divider};
+  `}
 `
 
 export const HeaderTitle = styled(H4)`
   margin-right: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
 `
 
 export const ItemsContainer = styled.div<{
@@ -68,8 +72,17 @@ export const ArrowIcon = styled(ArrowDownIcon)<{
 export const RowContainer = styled.div<{
   isTaskExpanded: boolean
 }>`
-  border-bottom: solid 1px #f2f2f2;
   border-left: 3px solid transparent;
+
+  ${({ theme }) => `
+    :nth-child(odd) {
+      background-color: ${theme.palette.grey['50']};
+    }
+
+    :hover {
+      background-color: ${theme.palette.action.hover};
+    }
+  `}
 
   ${props =>
     props.isTaskExpanded &&
