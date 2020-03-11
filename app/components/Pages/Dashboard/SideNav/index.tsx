@@ -15,6 +15,7 @@ import { ScrollableArea } from '../../../../views/components/ScrollableArea'
 import Brand from '../../../../controllers/Brand'
 
 import Logo from './components/Logo'
+import { SideNavTooltip } from './components/Tooltip'
 import { UserMenu } from './components/UserMenu'
 import { SideNavLinkItem } from './components/SideNavLinkItem'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
@@ -52,60 +53,39 @@ export default function AppSideNav() {
       >
         <SidenavListGroup data-test="side-nav-list">
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/inbox">Inbox</SideNavLinkItem>
+            <SideNavLinkItem tooltip="Incoming Emails" to="/dashboard/inbox">
+              Inbox
+            </SideNavLinkItem>
           </Acl.Crm>
 
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/calendar">Calendar</SideNavLinkItem>
+            <SideNavLinkItem tooltip="Calendar" to="/dashboard/calendar">
+              Calendar
+            </SideNavLinkItem>
           </Acl.Crm>
 
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/contacts">Contacts</SideNavLinkItem>
+            <SideNavLinkItem tooltip="Contacts" to="/dashboard/contacts">
+              Contacts
+            </SideNavLinkItem>
           </Acl.Crm>
         </SidenavListGroup>
 
         <SidenavListGroup>
           <Acl.Marketing>
-            <SideNavLinkItem to="/dashboard/insights">Email</SideNavLinkItem>
-          </Acl.Marketing>
-
-          <Acl.Marketing>
-            <SideNavLinkItem to="/dashboard/marketing">
+            <SideNavLinkItem
+              tooltip="Marketing Center"
+              to="/dashboard/marketing"
+            >
               Marketing
             </SideNavLinkItem>
           </Acl.Marketing>
 
-          {user && (
-            <SideNavLinkItem to="/dashboard/notifications">
-              <AppNavbarBadge badgeContent={appNotifications} color="primary">
-                Notifications
-              </AppNavbarBadge>
+          <Acl.Marketing>
+            <SideNavLinkItem tooltip="Email Insight" to="/dashboard/insights">
+              Email Insight
             </SideNavLinkItem>
-          )}
-
-          {user && (
-            <SideNavItem>
-              <AppNavbarBadge
-                badgeContent={chatRoomsNotificationsNumber}
-                color="primary"
-              >
-                <MessagesDrawerTrigger />
-              </AppNavbarBadge>
-            </SideNavItem>
-          )}
-        </SidenavListGroup>
-
-        <SidenavListGroup>
-          <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
-            <SideNavLinkItem to="/dashboard/deals">
-              <AppNavbarBadge
-                badgeContent={dealsNotificationsNumber}
-                color="primary"
-              >
-                Deals
-              </AppNavbarBadge>
-            </SideNavLinkItem>
-          </Acl>
+          </Acl.Marketing>
 
           <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
             <SideNavLinkItem
@@ -116,13 +96,52 @@ export default function AppSideNav() {
             </SideNavLinkItem>
           </Acl>
 
+          <Acl.Crm>
+            <SideNavLinkItem tooltip="Toursheets" to="/dashboard/tours">
+              Toursheets
+            </SideNavLinkItem>
+          </Acl.Crm>
+
           <SideNavLinkItem tooltip="All MLS® Properties" to="/dashboard/mls">
             Properties
           </SideNavLinkItem>
+        </SidenavListGroup>
 
-          <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/tours">Toursheets</SideNavLinkItem>
-          </Acl.Crm>
+        <SidenavListGroup>
+          <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
+            <SideNavLinkItem to="/dashboard/deals" tooltip="Your Deals">
+              <AppNavbarBadge
+                badgeContent={dealsNotificationsNumber}
+                color="primary"
+              >
+                Deals
+              </AppNavbarBadge>
+            </SideNavLinkItem>
+          </Acl>
+
+          {user && (
+            <SideNavItem>
+              <SideNavTooltip title="Chat">
+                <AppNavbarBadge
+                  badgeContent={chatRoomsNotificationsNumber}
+                  color="primary"
+                >
+                  <MessagesDrawerTrigger />
+                </AppNavbarBadge>
+              </SideNavTooltip>
+            </SideNavItem>
+          )}
+
+          {user && (
+            <SideNavLinkItem
+              tooltip="Notifications"
+              to="/dashboard/notifications"
+            >
+              <AppNavbarBadge badgeContent={appNotifications} color="primary">
+                Notifications
+              </AppNavbarBadge>
+            </SideNavLinkItem>
+          )}
 
           <Acl access={hasWebsitePermission}>
             <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
