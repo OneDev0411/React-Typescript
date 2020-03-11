@@ -110,7 +110,7 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
             dispatch={dispatch}
             isFetching={isFetching}
             totalRowsCount={listings.info.total}
-            listings={sortedListings}
+            listings={listings.data}
             user={user}
           />
         )}
