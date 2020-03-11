@@ -36,7 +36,7 @@ export function recipientsList(recipients) {
 
 export function truncateString(title, limit = 0) {
   if (!title) {
-    return 'No Title'
+    return 'No Subject'
   }
 
   const trimedTitle = title.trim()
