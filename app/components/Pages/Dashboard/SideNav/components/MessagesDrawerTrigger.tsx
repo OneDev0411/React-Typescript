@@ -29,7 +29,7 @@ export default function MessageDrawerTrigger() {
 
   return (
     <ButtonBase className={classes.button} onClick={openDrawer}>
-      Messages
+      Chat
     </ButtonBase>
   )
 }
