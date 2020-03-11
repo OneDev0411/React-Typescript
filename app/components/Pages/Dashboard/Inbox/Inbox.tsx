@@ -34,7 +34,7 @@ const useStyles = makeStyles(
       height: '100%'
     },
     list: {
-      width: theme.spacing(36) + 1 /* right border */ + 8 /* scroll bar */
+      width: `calc(${theme.spacing(36)}px + 0.5em)` /* scroll bar */
     },
     conversation: {
       overflowX: 'hidden',
