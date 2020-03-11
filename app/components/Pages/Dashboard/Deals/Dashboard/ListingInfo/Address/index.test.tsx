@@ -13,7 +13,7 @@ describe('Deal address component', () => {
   it('renders with address', () => {
     const wrapper = render(
       <AppTheme>
-        <Address deal={withAddress} />
+        <Address deal={withAddress as any} />
       </AppTheme>
     )
 
@@ -23,7 +23,7 @@ describe('Deal address component', () => {
   it('renders without address', () => {
     const wrapper = render(
       <AppTheme>
-        <Address deal={withoutAddress} />
+        <Address deal={withoutAddress as any} />
       </AppTheme>
     )
 
@@ -33,7 +33,7 @@ describe('Deal address component', () => {
   it('renders button with "Edit Address" CTA for deals with address', () => {
     const wrapper = render(
       <AppTheme>
-        <Address deal={withAddress} />
+        <Address deal={withAddress as any} />
       </AppTheme>
     )
 
@@ -48,7 +48,7 @@ describe('Deal address component', () => {
   it('renders button with "+ Add Address" CTA for deals without address', () => {
     const wrapper = render(
       <AppTheme>
-        <Address deal={withoutAddress} />
+        <Address deal={withoutAddress as any} />
       </AppTheme>
     )
 
