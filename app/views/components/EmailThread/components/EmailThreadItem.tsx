@@ -164,6 +164,7 @@ export function EmailThreadItem({
                 <Button
                   className={classes.actionButton}
                   onClick={() => openResponse('reply')}
+                  variant="outlined"
                   color={
                     isResponseOpen && responseType === 'reply'
                       ? 'primary'
@@ -177,6 +178,7 @@ export function EmailThreadItem({
                   <Button
                     className={classes.actionButton}
                     onClick={() => openResponse('replyAll')}
+                    variant="outlined"
                     color={
                       isResponseOpen && responseType === 'replyAll'
                         ? 'primary'
@@ -191,6 +193,7 @@ export function EmailThreadItem({
                 <Button
                   className={classes.actionButton}
                   onClick={() => openResponse('forward')}
+                  variant="outlined"
                   color={
                     isResponseOpen && responseType === 'forward'
                       ? 'primary'
