@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { primary } from 'views/utils/colors'
 
@@ -11,61 +11,65 @@ interface MenuItemProps {
 }
 
 export const PrimaryAction = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: 500;
-  height: 100%;
-  width: ${(props: PrimaryActionProps) =>
-    props.hasSecondaryActions ? '10rem' : '12.3rem'};
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 500;
+    height: 100%;
+    width: ${(props: PrimaryActionProps) =>
+      props.hasSecondaryActions ? '10rem' : '12.3rem'};
 
-  :hover {
-    color: ${primary};
-    background-color: #d9d9d9;
-  }
+    :hover {
+      color: ${primary};
+      background-color: ${theme.palette.action.hover};
+    }
 
-  :active {
-    background-color: #bfbfbf;
-  }
+    :active {
+      background-color: ${theme.palette.action.selected};
+    }
+  `}
 `
 
 export const MenuButton = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-left: 1px solid #ccc;
-  background-color: #f2f2f2;
-  border-radius: 0 3px 3px 0;
-  width: 2.3rem;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid ${theme.palette.divider};
+    border-radius: 0 3px 3px 0;
+    width: 2.3rem;
 
-  :hover,
-  :focus {
-    background-color: #d9d9d9;
+    :hover,
+    :focus {
+      background-color: ${theme.palette.action.hover};
 
-    svg {
-      transition: 0.1s ease-in transform;
-      fill: ${primary};
+      svg {
+        transition: 0.1s ease-in transform;
+        fill: ${primary};
+      }
     }
-  }
 
-  :active {
-    background-color: #bfbfbf;
-  }
+    :active {
+      background-color: ${theme.palette.action.selected};
+    }
+  `}
 `
 
 export const Container = styled.div`
-  display: flex;
-  height: 2.3rem;
-  opacity: 0.3;
-  border-radius: 3px;
-  background-color: #e6e6e6;
-  border: 1px solid #e6e6e6;
-  cursor: pointer;
+  ${({ theme }) => css`
+    display: flex;
+    height: 2.3rem;
+    opacity: 0.3;
+    border-radius: 3px;
+    border: 1px solid ${theme.palette.divider};
+    cursor: pointer;
 
-  :hover {
-    border-color: ${primary};
-  }
+    :hover {
+      border-color: ${theme.palette.action.selected};
+    }
+  `}
 `
 
 export const MenuContainer = styled.div`
@@ -82,18 +86,20 @@ export const MenuContainer = styled.div`
 `
 
 export const MenuItem = styled.div`
-  font-size: 1rem;
-  font-weight: 500;
-  color: ${(props: MenuItemProps) => (props.disabled ? 'gray' : '#000')};
-  padding: 0.5rem 1rem;
+  ${({ theme }) => css`
+    font-size: 1rem;
+    font-weight: 500;
+    color: ${(props: MenuItemProps) => (props.disabled ? 'gray' : '#000')};
+    padding: 0.5rem 1rem;
 
-  ${(props: MenuItemProps) =>
-    props.disabled === false &&
-    `
-    :hover {
-      cursor: pointer;
-      background-color: ${primary};
-      color: #fff;
-    }
+    ${(props: MenuItemProps) =>
+      props.disabled === false &&
+      css`
+        :hover {
+          cursor: pointer;
+          background-color: ${theme.palette.action.hover};
+          color: #fff;
+        }
+      `}
   `}
 `
