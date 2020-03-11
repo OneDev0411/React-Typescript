@@ -5,10 +5,11 @@ import cn from 'classnames'
 import { Box, Button, Typography } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
+import GoogleSigninButton from 'components/GoogleSigninButton'
+
 import { Divider } from 'components/Divider'
 import { CreateContact } from 'components/CreateContact'
 import IconCsv from 'components/SvgIcons/Csv/IconCsv'
-import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
 import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 
 import { useConnectOAuthAccount } from '../ImportContactsButton/use-connect-oauth-account'
@@ -31,10 +32,7 @@ const useStyles = makeStyles(
         marginBottom: theme.spacing(4)
       },
       buttonText: {
-        marginLeft: theme.spacing(2),
-        fontWeight: 500,
-        fontFamily: 'Roboto, sans-serif',
-        whiteSpace: 'nowrap'
+        marginLeft: theme.spacing(2)
       }
     }),
   { name: 'zeroState' }
@@ -60,18 +58,14 @@ export function ZeroState() {
         your referral network in Rechat by importing or creating a contact now.
       </Typography>
 
-      <Button
+      <GoogleSigninButton
         disabled={google.connecting}
         onClick={google.connect}
-        variant="outlined"
+        style={{ marginBottom: '1rem' }}
         size="large"
-        className={cn(classes.button, classes.marginBottom)}
       >
-        <IconGoogle />
-        <Typography variant="button" className={classes.buttonText}>
-          Sync with Google
-        </Typography>
-      </Button>
+        Sign in with google
+      </GoogleSigninButton>
 
       <Button
         disabled={outlook.connecting}

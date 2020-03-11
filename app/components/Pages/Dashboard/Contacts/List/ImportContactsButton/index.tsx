@@ -8,8 +8,8 @@ import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
+import GoogleSigninButton from 'components/GoogleSigninButton'
 import { iconSizes } from 'components/SvgIcons/icon-sizes'
-import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
 import CsvIcon from 'components/SvgIcons/Csv/IconCsv'
 import OutlookIcon from 'components/SvgIcons/Outlook/IconOutlook'
 
@@ -22,10 +22,7 @@ const useStyles = makeStyles(
         marginRight: theme.spacing(1)
       },
       buttonText: {
-        marginLeft: theme.spacing(2),
-        fontWeight: 500,
-        fontFamily: 'Roboto, sans-serif',
-        whiteSpace: 'nowrap'
+        marginLeft: theme.spacing(2)
       }
     }),
   { name: 'zeroState' }
@@ -42,17 +39,14 @@ export default function ImportContactsButton() {
 
   return (
     <Box display="flex" alignItems="center" justifyContent="center">
-      <Button
+      <GoogleSigninButton
         disabled={google.connecting || syncing}
         onClick={google.connect}
-        variant="outlined"
         className={classes.marginRight}
       >
-        <GoogleIcon size={iconSizes.small} />
-        <Typography variant="button" className={classes.buttonText}>
-          Sync with Google
-        </Typography>
-      </Button>
+        Sign in with google
+      </GoogleSigninButton>
+
       <Button
         variant="outlined"
         onClick={outlook.connect}

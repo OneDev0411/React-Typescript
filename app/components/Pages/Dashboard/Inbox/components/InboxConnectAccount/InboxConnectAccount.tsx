@@ -7,7 +7,8 @@ import { makeStyles } from '@material-ui/styles'
 import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
 import importEmailsSvg from 'assets/images/dashboard/import-emails.svg'
 
-import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
+import { iconSizes } from 'components/SvgIcons/icon-sizes'
+import GoogleSigninButton from 'components/GoogleSigninButton'
 import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 
 const useStyles = makeStyles(
@@ -21,15 +22,8 @@ const useStyles = makeStyles(
     marginBottom4: {
       marginBottom: theme.spacing(4)
     },
-    button: {
-      width: '14.6rem',
-      marginBottom: theme.spacing(1)
-    },
-    buttonText: {
-      marginLeft: theme.spacing(2),
-      fontWeight: 500,
-      fontFamily: 'Roboto, sans-serif',
-      whiteSpace: 'nowrap'
+    marginRight: {
+      marginRight: theme.spacing(1)
     }
   }),
   { name: 'InboxConnectAccount' }
@@ -52,36 +46,22 @@ export default function InboxConnectAccount() {
         Connect your Google or Outlook account and see your emails here. Rechat
         helps you to be on top of your customers
       </Typography>
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Button
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <GoogleSigninButton
           disabled={google.connecting}
           onClick={google.connect}
-          variant="outlined"
-          size="large"
-          className={classes.button}
+          className={classes.marginRight}
         >
-          <IconGoogle />
-          <Typography variant="button" className={classes.buttonText}>
-            Sync with Google
-          </Typography>
-        </Button>
+          Sign in with google
+        </GoogleSigninButton>
 
         <Button
           disabled={outlook.connecting}
           onClick={outlook.connect}
           variant="outlined"
-          className={classes.button}
-          size="large"
         >
-          <IconOutlook />
-          <Typography variant="button" className={classes.buttonText}>
-            Sync with Outlook
-          </Typography>
+          <IconOutlook size={iconSizes.small} className={classes.marginRight} />
+          <Typography variant="button">Sync with Outlook</Typography>
         </Button>
       </Box>
     </div>
