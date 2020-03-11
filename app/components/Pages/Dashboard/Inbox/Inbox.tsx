@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
-import { Grid, Theme, Box, Divider } from '@material-ui/core'
+import { Grid, Theme, Divider } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -11,7 +11,6 @@ import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import GlobalPageLayout from 'components/GlobalPageLayout'
-import LoadingContainer from 'components/LoadingContainer'
 
 import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
 import InboxConnectAccount from './components/InboxConnectAccount'
@@ -87,11 +86,7 @@ export default function Inbox({ params }: WithRouterProps) {
       )}
       <GlobalPageLayout.Main className={classes.main}>
         <Divider />
-        {initializing ? (
-          <Box padding={10}>
-            <LoadingContainer style={{}} />
-          </Box>
-        ) : noConnectedAccounts ? (
+        {initializing ? null : noConnectedAccounts ? (
           <InboxConnectAccount />
         ) : (
           <Grid container spacing={0} classes={{ root: classes.fullHeight }}>
