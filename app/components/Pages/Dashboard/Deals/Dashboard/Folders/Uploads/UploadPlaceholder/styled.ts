@@ -1,17 +1,19 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { primary } from 'views/utils/colors'
 
 export const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 80px;
-  border-radius: 3px;
-  background-color: #ededed;
-  border: 1px dashed #b2b2b2;
-  margin: 1rem;
-  padding: 0 1rem;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    border-radius: 3px;
+    background-color: ${theme.palette.grey[100]};
+    border: 1px dashed ${theme.palette.divider};
+    margin: 1rem;
+    padding: 0 1rem;
+  `}
 `
 
 export const ItemLink = styled.span`
