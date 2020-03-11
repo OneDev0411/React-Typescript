@@ -22,6 +22,7 @@ import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/image-r
 
 // Agent
 import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
+import AgentMultiIcon from 'assets/images/marketing/editor/blocks/multi-agent.png'
 
 // Market Reports
 import NeighborhoodsIcon from 'assets/images/marketing/editor/blocks/neighborhoods.png'
@@ -49,7 +50,11 @@ import {
   spacerBlockName
 } from './Statics'
 import { headline2BlockName } from './Statics'
-import { agentLeftBlockName, agentGridBlockName } from './Agents'
+import {
+  agentLeftBlockName,
+  agentGridBlockName,
+  agentMultiBlockName
+} from './Agents'
 import { blockName as rechatImageBlockName } from './Image'
 import {
   neighborhoodsBlockName,
@@ -102,6 +107,7 @@ const BLOCK_BUTTON_ICONS = {
 
   [agentLeftBlockName]: AgentLeftIcon,
   [agentGridBlockName]: DualIcon,
+  [agentMultiBlockName]: AgentMultiIcon,
   [neighborhoodsBlockName]: NeighborhoodsIcon,
   [neighborhoodsGraphsBlockName]: NeighborhoodsGraphsIcon
 }
@@ -134,6 +140,7 @@ const BLOCK_BUTTONS_ORDER = [
 
   agentLeftBlockName,
   agentGridBlockName,
+  agentMultiBlockName,
 
   neighborhoodsBlockName,
   neighborhoodsGraphsBlockName
