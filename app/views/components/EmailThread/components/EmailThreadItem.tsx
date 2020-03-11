@@ -65,6 +65,9 @@ const styles = (theme: Theme) =>
       alignItems: 'center',
       padding: theme.spacing(2, 2.5)
     },
+    emailSnippet: {
+      color: theme.palette.grey[500]
+    },
     actionButton: {
       marginRight: `${theme.spacing(1)}px`
     }
@@ -112,10 +115,14 @@ export function EmailThreadItem({
           <Avatar title={email.from} />
         </Box>
         <Box flex={1} mr={2} overflow="hidden">
-          <Typography style={{ lineHeight: 1.3 }} noWrap>
+          <Typography variant="body2" noWrap>
             <EmailRecipient recipient={email.from} />
           </Typography>
-          <Typography color="textSecondary" noWrap>
+          <Typography
+            variant="body2"
+            noWrap
+            classes={{ root: classes.emailSnippet }}
+          >
             {collapsed ? email.snippet : <EmailItemRecipients email={email} />}
           </Typography>
         </Box>
