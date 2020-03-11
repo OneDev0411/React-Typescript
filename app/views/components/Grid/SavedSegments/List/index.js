@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ListItem, ListItemText, withStyles } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
 
 import {
   // eslint-disable-next-line import/named
@@ -17,14 +17,19 @@ import {
 } from 'reducers/filter-segments'
 
 import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
-import LoadingIcon from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Item from './Item'
 
 const styles = theme => ({
   dropdownBtn: {
     ...theme.typography.body1,
-    color: theme.palette.common.black
+    color: theme.palette.common.black,
+    '&.Mui-disabled': {
+      color: theme.palette.text.disabled,
+      '& svg': {
+        fill: theme.palette.text.disabled
+      }
+    }
   }
 })
 
@@ -88,29 +93,14 @@ class SegmentsList extends React.Component {
       <BaseDropdownWithMore
         buttonLabel="Saved List"
         DropdownToggleButtonProps={{
+          disabled: props.isFetching || props.list.length === 0,
           className: classes.dropdownBtn
         }}
         listPlugin={{
           style: { width: 220 }
         }}
-        renderMenu={({ close }) => {
-          if (props.isFetching) {
-            return [
-              <ListItem dense key="loading">
-                <LoadingIcon />
-              </ListItem>
-            ]
-          }
-
-          if (props.list.length === 0) {
-            return [
-              <ListItem dense key="loading">
-                <ListItemText>No Saved List!</ListItemText>
-              </ListItem>
-            ]
-          }
-
-          return props.list.map(item => {
+        renderMenu={({ close }) =>
+          props.list.map(item => {
             const { id } = item
 
             return (
@@ -125,7 +115,7 @@ class SegmentsList extends React.Component {
               />
             )
           })
-        }}
+        }
       />
     )
   }
