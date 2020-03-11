@@ -6,7 +6,7 @@ import IconButton from 'components/Button/IconButton'
 
 function getItemColor(props) {
   if (props.isIncomplete && !props.isActive) {
-    return props.theme.error.main
+    return props.theme.palette.error.main
   }
 
   return '#000'
