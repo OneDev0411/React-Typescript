@@ -19,12 +19,12 @@ interface SortableColumnsType {
 }
 
 const sortableColumns: SortableColumnsType[] = [
-  { label: 'Most Recent', value: 'updated_at', ascending: false },
-  { label: 'Last Touch', value: 'last_touch', ascending: false },
+  { label: 'Most Recent', value: '-updated_at', ascending: false },
+  { label: 'Last Touch', value: '-last_touch', ascending: false },
   { label: 'First name A-Z', value: 'display_name', ascending: true },
-  { label: 'First name Z-A', value: 'display_name', ascending: false },
+  { label: 'First name Z-A', value: '-display_name', ascending: false },
   { label: 'Last name A-Z', value: 'sort_field', ascending: true },
-  { label: 'Last name Z-A', value: 'sort_field', ascending: false },
+  { label: 'Last name Z-A', value: '-sort_field', ascending: false },
   { label: 'Created At', value: 'created_at', ascending: true }
 ]
 
