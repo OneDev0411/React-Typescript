@@ -39,28 +39,37 @@ function getFormattedListingPictures(listing) {
 }
 
 async function getFormattedDealMediaPictures(deal, accessToken) {
-  const response = await new Fetch({ useReferencedFormat: false })
-    .get(`/deals/${deal.id}`)
-    .set('Authorization', `Bearer ${accessToken}`)
-    .query({ 'associations[]': ['deal.gallery'] })
+  try {
+    const response = await new Fetch({ useReferencedFormat: false })
+      .get(`/deals/${deal.id}`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .query({ 'associations[]': ['deal.gallery'] })
 
-  const rawGalleryItems = response.body.data.gallery.items
+    const rawGalleryItems = response.body.data.gallery.items || []
 
-  return rawGalleryItems.map((item, index) => {
-    const url = item.file.preview_url
-    const urlWithoutQuery = url.split('?')[0]
-    const filename = path.basename(
-      urlWithoutQuery,
-      path.extname(urlWithoutQuery)
+    return rawGalleryItems.map((item, index) => {
+      const url = item.file.preview_url
+      const urlWithoutQuery = url.split('?')[0]
+      const filename = path.basename(
+        urlWithoutQuery,
+        path.extname(urlWithoutQuery)
+      )
+
+      return {
+        id: filename,
+        caption: `${deal.id} - Media - ${index}`,
+        filename,
+        url
+      }
+    })
+  } catch (err) {
+    console.error(
+      'Error fetching deal photso for MyMarketingMatters (getFormattedDealMediaPictures):',
+      err
     )
 
-    return {
-      id: filename,
-      caption: `${deal.id} - Media - ${index}`,
-      filename,
-      url
-    }
-  })
+    return []
+  }
 }
 
 function getListingAddressField(listing, field, defaultValue = '') {
