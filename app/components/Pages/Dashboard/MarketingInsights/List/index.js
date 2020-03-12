@@ -98,7 +98,7 @@ function List(props) {
       {
         header: 'Stats',
         id: 'stats',
-        class: 'visible-on-hover',
+        class: 'opaque',
         width: '7%',
         verticalAlign: 'center',
         render: ({ row }) =>
