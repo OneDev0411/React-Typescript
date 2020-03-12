@@ -85,8 +85,6 @@ async function getRequestBody(user, deal, costCenter, callbackUrl) {
     ? [...getFormattedListingPictures(listing), ...dealMediaPictures]
     : dealMediaPictures
 
-  console.log({ pictures })
-
   const city = getListingAddressField(listing, 'city')
   const state = getListingAddressField(listing, 'state')
   const zip = getListingAddressField(listing, 'postal_code')
