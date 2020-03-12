@@ -2,7 +2,6 @@ import React, { ComponentProps } from 'react'
 import { connect } from 'react-redux'
 
 import { ImagePreviewModal } from 'components/ImagePreviewModal'
-import { getBrandByType } from 'utils/user-teams'
 import {
   getTemplateImage,
   navigateBetweenTemplatesUsingKeyboard,
@@ -36,10 +35,8 @@ function PreviewModal(props: Props & StateProps) {
     return null
   }
 
-  const brokerageBrand = getBrandByType(props.user, 'Brokerage')
   const { thumbnail: imgSrcTiny, original: imgSrc } = getTemplateImage(
-    selectedTemplate,
-    brokerageBrand
+    selectedTemplate
   )
 
   let modalProps: ComponentProps<typeof ImagePreviewModal> = {
