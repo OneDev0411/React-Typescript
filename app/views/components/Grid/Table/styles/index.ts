@@ -12,8 +12,8 @@ export const styles = (theme: Theme) =>
         '&.opaque': {
           color: theme.palette.grey['500']
         },
-        '&.visible-on-hover': {
-          opacity: 0
+        '&.visible-on-hover *': {
+          visibility: 'hidden'
         }
       },
       '&:hover td': {
@@ -25,8 +25,8 @@ export const styles = (theme: Theme) =>
         '&.opaque': {
           color: theme.palette.text.primary
         },
-        '&.visible-on-hover': {
-          opacity: 1
+        '&.visible-on-hover *': {
+          visibility: 'visible'
         },
         '& .underline-on-hover': {
           textDecoration: 'underline'
