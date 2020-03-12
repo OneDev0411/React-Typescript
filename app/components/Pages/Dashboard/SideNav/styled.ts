@@ -26,6 +26,7 @@ export const SidenavListGroup = styled.ul`
   padding: 0;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 `
 
 export const SideNavItem = styled.li`
