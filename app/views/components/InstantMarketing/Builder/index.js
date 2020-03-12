@@ -551,7 +551,8 @@ class Builder extends React.Component {
     config.forceClass = !this.isMjmlTemplate
 
     const components = this.editor.DomComponents
-    let html = selectedTemplate.template
+
+    let html = selectedTemplate.markup
 
     // GrapeJS doesn't support for inline style for body tag, we are making our styles
     // Inline using juice. so we need to extract them and put them in <head>
@@ -678,16 +679,21 @@ class Builder extends React.Component {
   get isEmailTemplate() {
     return (
       this.state.selectedTemplate &&
-      this.state.selectedTemplate.medium === 'Email'
+      this.state.selectedTemplate.template &&
+      this.state.selectedTemplate.template.medium === 'Email'
     )
   }
 
   get isMjmlTemplate() {
-    return this.state.selectedTemplate && this.state.selectedTemplate.mjml
+    return (
+      this.state.selectedTemplate &&
+      this.state.selectedTemplate.template &&
+      this.state.selectedTemplate.template.mjml
+    )
   }
 
   get isTemplateLoaded() {
-    return this.state.selectedTemplate && this.state.selectedTemplate.template
+    return this.state.selectedTemplate && this.state.selectedTemplate.markup
   }
 
   get showEditListingsButton() {
@@ -740,12 +746,13 @@ class Builder extends React.Component {
   }
 
   regenerateTemplate = newData => {
+    console.log('regenerateTemplate', { state: this.state })
     this.setState(
       state => ({
         selectedTemplate: {
           ...state.selectedTemplate,
           template: this.generateBrandedTemplate(
-            state.originalTemplate.template,
+            state.originalTemplate.markup,
             {
               ...this.props.templateData,
               ...newData
