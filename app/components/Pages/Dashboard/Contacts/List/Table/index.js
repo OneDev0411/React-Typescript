@@ -143,7 +143,6 @@ const ContactsList = props => {
         infiniteScrolling={{
           accuracy: 300, // px
           debounceTime: 300, // ms
-          container: props.tableContainerId,
           onScrollBottom: props.onRequestLoadMore,
           onScrollTop: props.onRequestLoadMoreBefore
         }}
