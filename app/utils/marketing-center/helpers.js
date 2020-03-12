@@ -1,22 +1,12 @@
 import fecha from 'fecha'
 
-export function getTemplateImage(template, brokerageBrand) {
-  if (template.file) {
-    const URL = template.file.preview_url
-
-    return {
-      original: URL,
-      thumbnail: URL
-    }
-  }
-
-  const brandId = brokerageBrand ? `/${brokerageBrand.id}` : ''
-  const generateURL = type =>
-    `${template.url}${brandId}/${type}.${template.video ? 'mp4' : 'png'}`
-
+export function getTemplateImage(
+  template,
+  fallbackImage = 'https://images.unsplash.com/photo-1453928582365-b6ad33cbcf64'
+) {
   return {
-    original: generateURL('preview'),
-    thumbnail: generateURL('thumbnail')
+    original: template.preview ? template.preview.url : fallbackImage,
+    thumbnail: template.thumbnail ? template.thumbnail.url : fallbackImage
   }
 }
 
