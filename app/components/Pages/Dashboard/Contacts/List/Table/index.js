@@ -131,6 +131,7 @@ const ContactsList = props => {
     <>
       <Table
         rows={props.data}
+        totalRows={props.totalRows}
         loading={getLoading()}
         columns={columns}
         LoadingStateComponent={LoadingComponent}

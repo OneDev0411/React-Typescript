@@ -753,6 +753,7 @@ class ContactsList extends React.Component {
                 <Table
                   data={contacts}
                   order={this.order}
+                  totalRows={props.listInfo.total || 0}
                   listInfo={props.listInfo}
                   isFetching={isFetchingContacts}
                   isFetchingMore={state.isFetchingMoreContacts}
