@@ -208,7 +208,7 @@ function OpenHousesList(props: Props) {
       return <h4>{error}</h4>
     }
 
-    if (list.length === 0) {
+    if (!list.length) {
       return <EmptyState onOpenDrawer={onOpenOHDrawer} />
     }
 
