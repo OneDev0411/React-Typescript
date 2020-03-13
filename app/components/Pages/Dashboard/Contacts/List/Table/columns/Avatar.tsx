@@ -11,7 +11,10 @@ import {
   Theme
 } from '@material-ui/core'
 
-import { getAttributeFromSummary } from 'models/contacts/helpers'
+import {
+  getAttributeFromSummary,
+  getContactNameInitials
+} from 'models/contacts/helpers'
 
 import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
@@ -76,7 +79,7 @@ function ContactAvatar({ contact, attributeDefs }: Props & StateProps) {
         src={getAvatarUrl(contact, attributeDefs)}
         className={classes.avatar}
       >
-        {name.substring(0, 1)}
+        {getContactNameInitials(contact)}
       </Avatar>
     </Badge>
   )

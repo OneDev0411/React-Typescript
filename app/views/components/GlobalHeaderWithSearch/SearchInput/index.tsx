@@ -16,10 +16,11 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 2),
       width: '400px',
       height: theme.spacing(4.5),
+      lineHeight: 'initial',
+      color: theme.palette.text.primary,
       backgroundColor: theme.palette.grey['100'],
       border: 'none',
       borderRadius: theme.shape.borderRadius,
-      lineHeight: theme.spacing(4.5),
       '&&&:before': {
         borderBottom: 'none'
       },

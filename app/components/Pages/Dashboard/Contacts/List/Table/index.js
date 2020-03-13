@@ -81,6 +81,7 @@ const ContactsList = props => {
       render: ({ row: contact }) => (
         <FlowCell
           contactId={contact.id}
+          callback={props.reloadContacts}
           flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
         />
       )
@@ -128,6 +129,7 @@ const ContactsList = props => {
     <>
       <Table
         rows={props.data}
+        totalRows={props.totalRows}
         loading={getLoading()}
         columns={columns}
         LoadingStateComponent={LoadingComponent}
@@ -140,7 +142,6 @@ const ContactsList = props => {
         infiniteScrolling={{
           accuracy: 300, // px
           debounceTime: 300, // ms
-          container: props.tableContainerId,
           onScrollBottom: props.onRequestLoadMore,
           onScrollTop: props.onRequestLoadMoreBefore
         }}

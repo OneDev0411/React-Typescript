@@ -28,6 +28,10 @@ const useStyles = makeStyles(
       marginBottom: {
         marginBottom: theme.spacing(2)
       },
+      title: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis'
+      },
       description: {
         marginBottom: theme.spacing(4)
       },
@@ -52,7 +56,9 @@ export function ZeroState() {
       flexDirection="column"
     >
       <img src="/static/images/contacts/zero-state.svg" alt="zero-state" />
-      <h2>No contact! Import now with one click :)</h2>
+      <h2 className={classes.title}>
+        No contact! Import now with one click :)
+      </h2>
       <Typography variant="body1" className={classes.description}>
         People and relationships are central to your business. Start building
         your referral network in Rechat by importing or creating a contact now.

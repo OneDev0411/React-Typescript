@@ -29,6 +29,9 @@ import { ActionWrapper } from '../components/ActionWrapper'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       '& button': {
         marginLeft: theme.spacing(1)
       }
@@ -197,7 +200,9 @@ export function TableActions({
           </ListItem>
           <MergeContacts
             acEntireMode={entireMode}
-            disabled={!isAnyRowsSelected}
+            disabled={
+              !isAnyRowsSelected || state.selection.selectedRowIds.length < 2
+            }
             selectedRows={state.selection.selectedRowIds}
             submitCallback={deselectAndReload}
           />

@@ -162,22 +162,25 @@ class Filters extends React.Component {
   render() {
     const { children, ...props } = this.props
     const { activeFilters } = props
+    const activeFiltersList = Object.keys(activeFilters)
 
     return (
       <Container>
         <FiltersOptions>
           {this.props.disableConditionOperators || (
             <>
-              <ConditionOperators
-                selectedItem={this.props.conditionOperator}
-                onChange={this.onConditionChange}
-              />
+              {activeFiltersList.length !== 0 && (
+                <ConditionOperators
+                  selectedItem={this.props.conditionOperator}
+                  onChange={this.onConditionChange}
+                />
+              )}
               <span className="spacer" />
             </>
           )}
         </FiltersOptions>
         <FiltersContainer>
-          {Object.keys(activeFilters).map(id => {
+          {activeFiltersList.map(id => {
             const filter = activeFilters[id]
 
             return (

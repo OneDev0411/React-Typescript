@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { ReactNode, RefObject, useRef } from 'react'
 import {
+  ButtonProps,
+  PopperProps,
   ClickAwayListener,
   Fade,
   Paper,
@@ -9,10 +11,6 @@ import {
 } from '@material-ui/core'
 
 import { useControllableState } from 'react-use-controllable-state/dist'
-
-import { ButtonProps } from '@material-ui/core/Button'
-
-import { PopperProps } from '@material-ui/core/Popper'
 
 import { DropdownToggleButton } from '../DropdownToggleButton'
 
