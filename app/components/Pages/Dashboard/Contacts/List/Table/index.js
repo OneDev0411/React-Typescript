@@ -81,9 +81,7 @@ const ContactsList = props => {
       render: ({ row: contact }) => (
         <FlowCell
           contactId={contact.id}
-          callback={async () => {
-            await props.reloadContacts()
-          }}
+          callback={() => props.reloadContacts()}
           flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
         />
       )
