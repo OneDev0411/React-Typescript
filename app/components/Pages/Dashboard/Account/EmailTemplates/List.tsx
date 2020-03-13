@@ -204,11 +204,8 @@ function EmailTemplatesList({
       LoadingStateComponent={() => (
         <LoadingContainer style={{ padding: '20% 0' }} />
       )}
-      getTdProps={({ column, row }) => ({
-        onClick: () =>
-          column.id === 'body-actions' ||
-          isTemplateDeleting(row.id) ||
-          onItemClick(row)
+      getTrProps={({ row }) => ({
+        onClick: () => isTemplateDeleting(row.id) || onItemClick(row)
       })}
       classes={{ row: classes.row }}
     />
