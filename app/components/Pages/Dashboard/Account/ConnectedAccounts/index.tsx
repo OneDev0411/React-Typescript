@@ -26,7 +26,7 @@ import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-accou
 
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
-import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
+import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 
 import { ConnectedAccount } from './ConnectedAccount'
 

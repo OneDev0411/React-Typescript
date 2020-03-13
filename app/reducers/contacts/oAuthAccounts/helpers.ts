@@ -1,12 +1,8 @@
 import { negate } from 'lodash'
 
-import { notDeleted } from '../../../utils/not-deleted'
+import { isDeletedOrRevoked } from '../../../utils/oauth-provider'
 
 import { IOauthAccountsState } from './types'
-
-export function isDeletedOrRevoked(account: IOAuthAccount) {
-  return !notDeleted(account) || account.revoked
-}
 
 export function selectAllConnectedAccounts(state: IOauthAccountsState) {
   return Object.values(state.list)

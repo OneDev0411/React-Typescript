@@ -4,7 +4,7 @@ import React from 'react'
 import { Typography, Theme, Box, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
-import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
+import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 import importEmailsSvg from 'assets/images/dashboard/import-emails.svg'
 
 import { iconSizes } from 'components/SvgIcons/icon-sizes'

@@ -13,7 +13,7 @@ import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import CsvIcon from 'components/SvgIcons/Csv/IconCsv'
 import OutlookIcon from 'components/SvgIcons/Outlook/IconOutlook'
 
-import { useConnectOAuthAccount } from './use-connect-oauth-account'
+import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 
 const useStyles = makeStyles(
   (theme: Theme) =>

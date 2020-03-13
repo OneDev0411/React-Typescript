@@ -39,6 +39,11 @@ import { AlphabetFilter } from 'components/AlphabetFilter'
 import { updateTeamSetting } from 'actions/user/update-team-setting'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 
+import {
+  clearImportingGoogleContacts,
+  getNewConnectedGoogleAccount
+} from 'utils/oauth-provider'
+
 import Table from './Table'
 import { SearchContacts } from './Search'
 import Header from './Header'
@@ -57,10 +62,7 @@ import {
 } from './constants'
 import { CalloutSpinner, Container, SearchWrapper } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
-import {
-  clearImportingGoogleContacts,
-  getNewConnectedGoogleAccount
-} from './ImportContactsButton/helpers'
+
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
