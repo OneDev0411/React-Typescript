@@ -3,18 +3,10 @@ import { OAuthProvider } from 'constants/contacts'
 import * as React from 'react'
 import { useContext, useEffect } from 'react'
 import { connect } from 'react-redux'
-import cn from 'classnames'
 
 import { Helmet } from 'react-helmet'
 
-import {
-  Box,
-  Button,
-  List,
-  createStyles,
-  makeStyles,
-  Theme
-} from '@material-ui/core'
+import { Box, Button, List, Typography } from '@material-ui/core'
 
 import { AnyAction } from 'redux'
 
@@ -22,10 +14,10 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { IAppState } from 'reducers'
 import PageHeader from 'components/PageHeader'
-
+import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import Loading from 'partials/Loading'
-import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
+import GoogleSigninButton from 'components/GoogleSigninButton'
 import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
@@ -35,8 +27,6 @@ import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-accou
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import { ConnectedAccount } from './ConnectedAccount'
 
@@ -48,20 +38,6 @@ interface Props {
   disconnectOAuthAccount: IAsyncActionProp<typeof disconnectOAuthAccount>
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: {
-      backgroundColor: theme.palette.common.white,
-      fontSize: '14px',
-      fontWeight: 500,
-      fontFamily: 'Roboto, sans-serif'
-    },
-    buttonIcon: {
-      marginRight: theme.spacing(1)
-    }
-  })
-)
-
 function ConnectedAccounts({
   accounts,
   loading,
@@ -69,9 +45,6 @@ function ConnectedAccounts({
   syncOAuthAccount,
   disconnectOAuthAccount
 }: Props) {
-  const classes = useStyles()
-  const iconClasses = useIconStyles()
-
   useEffect(() => {
     fetchOAuthAccounts()
   }, [fetchOAuthAccounts])
@@ -100,26 +73,23 @@ function ConnectedAccounts({
           <PageHeader.Heading>Connected Accounts</PageHeader.Heading>
         </PageHeader.Title>
         <PageHeader.Menu>
-          <Button
-            variant="outlined"
-            disabled={outlook.connecting}
-            className={classes.button}
-            onClick={outlook.connect}
+          <GoogleSigninButton
+            disabled={google.connecting}
+            onClick={google.connect}
           >
-            <IconOutlook
-              className={cn(iconClasses.small, classes.buttonIcon)}
-            />
-            <Box pl={1}>Sync with: Outlook</Box>
-          </Button>
+            Sign in with google
+          </GoogleSigninButton>
           <Box mr={1} />
           <Button
             variant="outlined"
-            disabled={google.connecting}
-            className={classes.button}
-            onClick={google.connect}
+            disabled={outlook.connecting}
+            onClick={outlook.connect}
           >
-            <IconGoogle className={cn(iconClasses.small, classes.buttonIcon)} />
-            <Box pl={1}>Sync with: Google</Box>
+            <IconOutlook
+              size={iconSizes.small}
+              style={{ marginRight: '1rem' }}
+            />
+            <Typography variant="button">Sync with Outlook</Typography>
           </Button>
         </PageHeader.Menu>
       </PageHeader>
