@@ -9,6 +9,7 @@ export function EditMode({ value, loading, onChange }) {
       <TextField
         variant="standard"
         fullWidth
+        autoFocus
         disabled={loading}
         value={value}
         onChange={({ target: { value } }) => onChange(value)}
