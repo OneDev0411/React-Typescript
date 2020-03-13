@@ -1,14 +1,16 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
-import { Box, IconButton, Typography } from '@material-ui/core'
+import { Box, IconButton, Typography, Avatar } from '@material-ui/core'
+import { AvatarGroup } from '@material-ui/lab'
 import { addNotification } from 'reapop'
 
 import { getEmailThread } from 'models/email/get-email-thread'
 
-import Avatar from 'components/Avatar'
 import { normalizeThreadMessageToThreadEmail } from 'components/EmailThread/helpers/normalize-to-email-thread-email'
 import { EmailThreadEmails } from 'components/EmailThread'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+
+import { getNameInitials } from 'utils/helpers'
 
 import markEmailThreadAsRead from '../../helpers/mark-email-thread-as-read'
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
@@ -99,6 +101,35 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
 
   useEmailThreadEvents(handleUpdateEmailThreads, handleDeleteEmailThreads)
 
+  const recipients = useMemo(
+    () =>
+      emailThread
+        ? emailThread.recipients_raw.map(r => {
+            const contact = (emailThread.contacts || []).find(
+              c =>
+                c.email === r.address ||
+                (c.emails && c.emails.includes(r.address))
+            )
+            const name =
+              (contact &&
+                (contact.display_name ||
+                  `${contact.first_name} ${contact.middle_name} ${
+                    contact.last_name
+                  }`)) ||
+              r.name ||
+              ''
+
+            return {
+              address: r.address,
+              name,
+              initials: (getNameInitials(name) as string) || '',
+              profileImageUrl: (contact && contact.profile_image_url) || ''
+            }
+          })
+        : [],
+    [emailThread]
+  )
+
   const emails = useMemo(
     () =>
       emailThread
@@ -133,19 +164,19 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
         </Box>
         {!!emailThread.contacts && emailThread.contacts.length > 0 && (
           <Box marginX={3} display="flex">
-            {emailThread.contacts.map(c => (
-              <Box key={c.id} marginLeft={0.5}>
-                <Avatar
-                  size={32}
-                  image={c.profile_image_url}
-                  title={
-                    c.display_name === c.email
-                      ? c.display_name
-                      : `${c.display_name}\n${c.email}`
-                  }
-                />
-              </Box>
-            ))}
+            <AvatarGroup>
+              {(recipients.length <= 3
+                ? recipients
+                : recipients.slice(0, 2)
+              ).map((c, index) => (
+                <Avatar key={index} alt={c.initials} src={c.profileImageUrl}>
+                  {c.initials}
+                </Avatar>
+              ))}
+              {recipients.length > 3 && (
+                <Avatar>+{recipients.length - 2}</Avatar>
+              )}
+            </AvatarGroup>
           </Box>
         )}
         <IconButton
