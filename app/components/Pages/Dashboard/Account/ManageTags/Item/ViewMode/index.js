@@ -29,7 +29,7 @@ export class ViewMode extends React.Component {
         ) : (
           <Tooltip caption="Delete tag">
             <IconButton size="small" onClick={this.onDeleteClick}>
-              <TrashIcon />
+              <TrashIcon size="small" />
             </IconButton>
           </Tooltip>
         )}
