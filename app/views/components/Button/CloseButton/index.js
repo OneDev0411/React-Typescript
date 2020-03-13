@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { browserHistory } from 'react-router'
 
-import { Button } from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
 
 import { goTo } from '../../../../utils/go-to'
 
@@ -62,9 +62,9 @@ export class CloseButton extends React.Component {
 
   render() {
     return (
-      <Button {...this.props.buttonProps} onClick={this.handleOnClick}>
+      <IconButton {...this.props.buttonProps} onClick={this.handleOnClick}>
         <Icon size="medium" {...this.props.iconProps} />
-      </Button>
+      </IconButton>
     )
   }
 }
