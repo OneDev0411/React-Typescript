@@ -70,6 +70,11 @@ const AsyncConfirmAgentId = Load({
     import('../components/Pages/AgentOnboarding/ConfirmAgentId' /* webpackChunkName: "confirm_agent_id" */)
 })
 
+const AsyncOnboardingOAuthAccounts = Load({
+  loader: () =>
+    import('../components/Pages/AgentOnboarding/OAuthAccounts' /* webpackChunkName: "onboarding_oauth_accounts" */)
+})
+
 /* ==================================== */
 //  MLS
 /* ==================================== */
@@ -300,7 +305,7 @@ const EmailTemplatesSettings = Load({
     import('../components/Pages/Dashboard/Account/EmailTemplates/EmailTemplatesSettings' /* webpackChunkName: "email_templates" */)
 })
 
-const ConnectedAccounts = Load({
+const ConnectedAccountsSetting = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/ConnectedAccounts' /* webpackChunkName: "connected_accounts" */)
 })
@@ -476,6 +481,10 @@ export default (
         path="onboarding/confirm-agent-id"
         component={AsyncConfirmAgentId}
       />
+      <Route
+        path="onboarding/oauth-accounts"
+        component={AsyncOnboardingOAuthAccounts}
+      />
 
       <Route path="branch" component={AsyncBranch} />
       <Route path="share" component={AsyncShare} />
@@ -551,7 +560,10 @@ export default (
           />
           <Route path="email-signature" component={EmailSignature} />
           <Route path="email-templates" component={EmailTemplatesSettings} />
-          <Route path="connected-accounts" component={ConnectedAccounts} />
+          <Route
+            path="connected-accounts"
+            component={ConnectedAccountsSetting}
+          />
           <Route path="css" component={AsyncCSS} />
 
           <Route path="flows" component={AsyncFlowsList} />
