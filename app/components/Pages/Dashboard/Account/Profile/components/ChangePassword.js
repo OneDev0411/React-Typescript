@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Field, reduxForm } from 'redux-form'
+import { reduxForm } from 'redux-form'
 import { Button } from '@material-ui/core'
 
 import { updateUser } from 'actions/user'
@@ -12,6 +12,7 @@ import FormCard from 'components/FormCard'
 
 import getUser from '../../../../../../models/user/get-user/index'
 
+import Field from './Field'
 import SimpleField from './SimpleField'
 import changePassword from '../../../../../../models/user/change-password'
 
