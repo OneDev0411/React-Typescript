@@ -2,8 +2,6 @@ import React, { ReactNode, useState, useRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { Theme, Grid, Box, Button } from '@material-ui/core'
 
-import LoadingContainer from 'components/LoadingContainer'
-
 import NoContentMessage from '../NoContentMessage'
 
 const useStyles = makeStyles(
@@ -116,11 +114,8 @@ export default function InfiniteScrollList<Item>({
               </Grid>
             ))}
             <Grid item xs>
-              {status === 'fetching' || status === 'fetched' ? (
-                <Box padding={10}>
-                  <LoadingContainer style={{}} />
-                </Box>
-              ) : status === 'error' ? (
+              {status === 'fetching' || status === 'fetched' ? null : status ===
+                'error' ? (
                 <Box padding={4}>
                   <Button
                     variant="text"

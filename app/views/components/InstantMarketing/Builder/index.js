@@ -14,6 +14,7 @@ import ImageDrawer from 'components/ImageDrawer'
 import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
+import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 
 import { getActiveTeam, isBackOffice } from 'utils/user-teams'
 
@@ -68,7 +69,9 @@ class Builder extends React.Component {
       isImageDrawerOpen: false,
       isGifDrawerOpen: false,
       isVideoDrawerOpen: false,
-      isArticleDrawerOpen: false
+      isArticleDrawerOpen: false,
+      isNeighborhoodsReportDrawerOpen: false,
+      isNeighborhoodsGraphsReportDrawerOpen: false
     }
 
     this.emailBlocksRegistered = false
@@ -219,16 +222,18 @@ class Builder extends React.Component {
   }
 
   addAgentAssets = agents => {
-    this.editor.AssetManager.add(
-      agents.map(({ agent }) => {
-        return ['profile_image_url', 'cover_image_url']
-          .filter(attr => agent[attr])
-          .map(attr => ({
+    const agentImageAttrKeys = ['profile_image_url', 'cover_image_url']
+
+    agents.forEach(({ agent }) => {
+      agentImageAttrKeys
+        .filter(attr => agent[attr])
+        .forEach(attr => {
+          this.editor.AssetManager.add({
             image: agent[attr],
             avatar: true
-          }))
-      })
-    )
+          })
+        })
+    })
   }
 
   setRte = () => {
@@ -306,6 +311,14 @@ class Builder extends React.Component {
       article: {
         onDrop: () => {
           this.setState({ isArticleDrawerOpen: true })
+        }
+      },
+      neighborhoods: {
+        onNeighborhoodsDrop: () => {
+          this.setState({ isNeighborhoodsReportDrawerOpen: true })
+        },
+        onNeighborhoodsGraphsDrop: () => {
+          this.setState({ isNeighborhoodsGraphsReportDrawerOpen: true })
         }
       }
     })
@@ -875,6 +888,28 @@ class Builder extends React.Component {
             onSelect={article => {
               this.blocks.article.selectHandler(article)
               this.setState({ isArticleDrawerOpen: false })
+            }}
+          />
+          <NeighborhoodsReportDrawer
+            isOpen={
+              this.state.isNeighborhoodsReportDrawerOpen ||
+              this.state.isNeighborhoodsGraphsReportDrawerOpen
+            }
+            onlyAggregatedReports={
+              this.state.isNeighborhoodsGraphsReportDrawerOpen
+            }
+            onClose={() => {
+              this.setState({
+                isNeighborhoodsReportDrawerOpen: false,
+                isNeighborhoodsGraphsReportDrawerOpen: false
+              })
+            }}
+            onSelect={report => {
+              this.blocks.neighborhoods.selectHandler(report)
+              this.setState({
+                isNeighborhoodsReportDrawerOpen: false,
+                isNeighborhoodsGraphsReportDrawerOpen: false
+              })
             }}
           />
           <Header>
