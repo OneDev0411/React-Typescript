@@ -22,7 +22,6 @@ import CreateNewTour from './CreateNewTour'
 
 import DueDate from './columns/DueDate'
 import Title from './columns/Title'
-import Description from './columns/Description'
 import Participants from './columns/Participants'
 import ViewToursheet from './columns/ViewToursheet'
 import Actions from './columns/Actions'
@@ -71,16 +70,9 @@ function ToursList(props: { user: IUser }) {
       render: ({ row }: RenderProps<TableRow>) => <Title title={row.title} />
     },
     {
-      header: 'Description',
-      id: 'description',
-      class: 'opaque',
-      render: ({ row }: RenderProps<TableRow>) => (
-        <Description description={row.description} />
-      )
-    },
-    {
       header: 'Participants',
       id: 'participants',
+      width: '120px',
       verticalAlign: 'center',
       class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (
@@ -97,7 +89,7 @@ function ToursList(props: { user: IUser }) {
       id: 'view-toursheet',
       verticalAlign: 'center',
       class: 'visible-on-hover',
-      width: '200px',
+      width: '150px',
       render: ({ row }: RenderProps<TableRow>) => (
         <ViewToursheet
           onViewToursheet={() => {
