@@ -12,7 +12,7 @@ export const styles = (theme: Theme) =>
         '&.opaque': {
           color: theme.palette.grey['500']
         },
-        '&.visible-on-hover *': {
+        '&.visible-on-hover > *': {
           visibility: 'hidden'
         }
       },
@@ -25,7 +25,7 @@ export const styles = (theme: Theme) =>
         '&.opaque': {
           color: theme.palette.text.primary
         },
-        '&.visible-on-hover *': {
+        '&.visible-on-hover > *': {
           visibility: 'visible'
         },
         '& .underline-on-hover': {
