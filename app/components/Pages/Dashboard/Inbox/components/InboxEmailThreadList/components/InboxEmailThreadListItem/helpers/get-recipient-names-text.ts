@@ -4,7 +4,7 @@ export default function getRecipientNamesText(
   user: IUser,
   emailThread: IEmailThread<'contacts'>
 ): string {
-  return (emailThread.recipients_raw || [])
+  return (emailThread.senders_raw || [])
     .map(({ name, address }, index, all) => {
       const nameNotAddress = name === address ? '' : name
       const relatedContacts = emailThread.contacts

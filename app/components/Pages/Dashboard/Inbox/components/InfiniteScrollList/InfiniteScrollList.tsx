@@ -13,8 +13,7 @@ const useStyles = makeStyles(
     },
     list: {
       width: '100%',
-      minHeight: '100%',
-      borderRight: `1px solid ${theme.palette.grey.A100}`
+      minHeight: '100%'
     },
     itemWrapper: {
       width: '100%',

@@ -70,6 +70,7 @@ declare type IEmailThread<
   last_message_date: number
   recipients: string[]
   recipients_raw: IRawEmailRecipient[]
+  senders_raw: IRawEmailRecipient[]
   message_count: number
   snippet?: string
   has_attachments: boolean

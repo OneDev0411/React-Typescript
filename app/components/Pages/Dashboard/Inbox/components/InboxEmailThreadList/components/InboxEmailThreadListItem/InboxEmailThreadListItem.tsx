@@ -52,7 +52,7 @@ export default function InboxEmailThreadListItem({
           <div
             className={classNames(
               classes.status,
-              !emailThread.is_read && classes.unread
+              !emailThread.is_read && classes.statusUnread
             )}
           />
         </Grid>
@@ -63,6 +63,7 @@ export default function InboxEmailThreadListItem({
               display="inline"
               noWrap
               title={recipients}
+              classes={{ root: classes.recipients }}
             >
               {recipients}
             </Typography>
@@ -70,6 +71,7 @@ export default function InboxEmailThreadListItem({
               <Typography
                 variant={emailThread.is_read ? 'body2' : 'subtitle2'}
                 display="inline"
+                classes={{ root: classes.recipients }}
               >
                 &nbsp;({emailThread.message_count})
               </Typography>
@@ -79,6 +81,7 @@ export default function InboxEmailThreadListItem({
               variant="caption"
               display="inline"
               title={messageDateText}
+              classes={{ root: classes.date }}
             >
               &nbsp;&nbsp;{messageDateShortText}
             </Typography>
@@ -86,9 +89,10 @@ export default function InboxEmailThreadListItem({
           <Grid item xs={12}>
             <Box paddingTop="4px">
               <Typography
-                variant="subtitle2"
+                variant={emailThread.is_read ? 'body2' : 'subtitle2'}
                 noWrap
                 title={emailThread.subject || undefined}
+                classes={{ root: classes.subject }}
               >
                 {emailThread.subject || '(No Subject)'}
               </Typography>
@@ -98,7 +102,10 @@ export default function InboxEmailThreadListItem({
             <Typography
               variant="body2"
               classes={{
-                root: classes.message
+                root: classNames(
+                  classes.message,
+                  emailThread.is_read && classes.messageRead
+                )
               }}
             >
               {emailThread.snippet}

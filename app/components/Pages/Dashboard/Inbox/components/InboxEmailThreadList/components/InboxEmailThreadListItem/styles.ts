@@ -17,15 +17,28 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
       marginTop: theme.spacing(0.75),
       marginRight: theme.spacing(0.75)
     },
-    unread: {
-      backgroundColor: theme.palette.primary.main
+    statusUnread: {
+      backgroundColor: theme.palette.secondary.main
     },
     info: {
       maxWidth: 'calc(100% - 25px)'
     },
+    recipients: {
+      color: theme.palette.common.black
+    },
+    date: {
+      color: theme.palette.action.disabled
+    },
+    subject: {
+      color: theme.palette.common.black
+    },
     message: {
       maxHeight: '2.86em' /* 2x body2 line-height */,
-      overflow: 'hidden'
+      overflow: 'hidden',
+      color: theme.palette.common.black
+    },
+    messageRead: {
+      color: theme.palette.grey[500]
     },
     flex: {
       display: 'flex'
