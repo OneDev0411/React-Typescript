@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 2)
     },
     popover: {
-      zIndex: 101
+      zIndex: ++theme.zIndex.gridAction
     }
   })
 )

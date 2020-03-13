@@ -54,3 +54,9 @@ declare module '@material-ui/core/styles/createTypography' {
     body3: TypographyStyle
   }
 }
+
+declare module '@material-ui/core/styles/zIndex' {
+  interface ZIndex {
+    gridAction: number
+  }
+}

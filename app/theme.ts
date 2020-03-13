@@ -194,7 +194,8 @@ const theme = createMuiTheme({
     }
   },
   zIndex: {
-    modal: 1001
+    modal: 1001,
+    gridAction: 100
   }
 })
 
