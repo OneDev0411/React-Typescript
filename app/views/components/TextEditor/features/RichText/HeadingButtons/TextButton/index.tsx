@@ -9,7 +9,10 @@ interface Props {
 
 export function TextButton({ isActive, title, toggleBlockType }: Props) {
   return (
-    <Button color={isActive ? 'primary' : 'inherit'} onClick={toggleBlockType}>
+    <Button
+      color={isActive ? 'secondary' : 'inherit'}
+      onClick={toggleBlockType}
+    >
       {title}
     </Button>
   )
