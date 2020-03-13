@@ -62,6 +62,15 @@ const AsyncResetPassword = Load({
 })
 
 /* ==================================== */
+//  Agent On-boarding Wizard
+/* ==================================== */
+
+const AsyncConfirmAgentId = Load({
+  loader: () =>
+    import('../components/Pages/AgentOnboarding/ConfirmAgentId' /* webpackChunkName: "confirm_agent_id" */)
+})
+
+/* ==================================== */
 //  MLS
 /* ==================================== */
 
@@ -463,6 +472,11 @@ export default (
     </Route>
 
     <Route path="/" component={AppLayout} onEnter={authenticate}>
+      <Route
+        path="onboarding/confirm-agent-id"
+        component={AsyncConfirmAgentId}
+      />
+
       <Route path="branch" component={AsyncBranch} />
       <Route path="share" component={AsyncShare} />
 
