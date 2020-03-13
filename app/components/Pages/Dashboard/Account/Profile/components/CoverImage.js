@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Button, IconButton } from '@material-ui/core'
+import { Button, IconButton, Box } from '@material-ui/core'
 
 import editUser from 'actions/user/edit'
 import uploadCoverImage from 'actions/user/upload-cover-image'
@@ -66,25 +66,32 @@ const CoverImage = ({
               value={value}
               ref={coverImageInputRef}
             />
-            <Button
-              variant="outlined"
-              onClick={() => coverImageInputRef.current.click()}
-              disabled={isDeleting || isUploading}
-              data-test="cover-image-form-delete-button"
-            >
-              {submitLabelText}
-            </Button>
-            {((coverImage && !isUploading) || (!coverImage && isDeleting)) && (
-              <Tooltip caption={isDeleting ? 'Deleting...' : 'Delete Cover'}>
-                <IconButton
-                  onClick={deleteHandler}
-                  disabled={isDeleting || isUploading}
-                  data-test="cover-image-form-delete-button"
-                >
-                  <TrashIcon />
-                </IconButton>
-              </Tooltip>
-            )}
+            <Box display="flex" alignItems="center">
+              {((coverImage && !isUploading) ||
+                (!coverImage && isDeleting)) && (
+                <Box marginRight={2}>
+                  <Tooltip
+                    caption={isDeleting ? 'Deleting...' : 'Delete Cover'}
+                  >
+                    <IconButton
+                      onClick={deleteHandler}
+                      disabled={isDeleting || isUploading}
+                      data-test="cover-image-form-delete-button"
+                    >
+                      <TrashIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              )}
+              <Button
+                variant="outlined"
+                onClick={() => coverImageInputRef.current.click()}
+                disabled={isDeleting || isUploading}
+                data-test="cover-image-form-delete-button"
+              >
+                {submitLabelText}
+              </Button>
+            </Box>
           </div>
         </div>
         {submitError && (

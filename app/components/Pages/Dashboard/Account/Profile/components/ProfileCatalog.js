@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Button, IconButton } from '@material-ui/core'
+import { Button, IconButton, Box } from '@material-ui/core'
 
 import editUser from 'actions/user/edit'
 import uploadAvatar from 'actions/user/upload-avatar'
@@ -27,6 +27,7 @@ const Container = styled.div`
 const ProfileImageActions = styled.div`
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   margin-top: 1rem;
 
   @media (min-width: 50em) {
@@ -99,15 +100,17 @@ class ProfileCatalog extends Component {
 
           <ProfileImageActions>
             {this.props.user.profile_image_url && (
-              <Tooltip caption="Delete Profile Picture">
-                <IconButton
-                  disabled={this.props.isUploading}
-                  onClick={this.onDelete}
-                  data-test="profile-avatar-delete-button"
-                >
-                  <TrashIcon />
-                </IconButton>
-              </Tooltip>
+              <Box marginRight={2}>
+                <Tooltip caption="Delete Profile Picture">
+                  <IconButton
+                    disabled={this.props.isUploading}
+                    onClick={this.onDelete}
+                    data-test="profile-avatar-delete-button"
+                  >
+                    <TrashIcon />
+                  </IconButton>
+                </Tooltip>
+              </Box>
             )}
             <Button
               variant="outlined"
