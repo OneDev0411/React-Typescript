@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ListItem, ListItemText, withStyles } from '@material-ui/core/styles'
+import { ListItem, ListItemText, withStyles } from '@material-ui/core'
 
 import {
   // eslint-disable-next-line import/named

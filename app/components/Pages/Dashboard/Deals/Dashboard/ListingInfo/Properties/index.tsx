@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { Link } from 'react-router'
 import { Divider, createStyles, makeStyles, Theme } from '@material-ui/core'
 
 import { getDealAddress } from 'deals/utils/get-deal-address'
@@ -18,8 +17,7 @@ const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
     root: {
       display: 'flex',
-      alignItems: 'center',
-      paddingLeft: theme.spacing(10)
+      alignItems: 'center'
     },
     divider: {
       margin: theme.spacing(0, 1),
@@ -39,28 +37,15 @@ export function ListingProperties(props: Props) {
         <Divider orientation="vertical" className={classes.divider} />
       )}
 
-      {/* 
-      // @ts-ignore js component */}
       <Side deal={props.deal} isBackOffice={props.isBackOffice} />
 
       <Divider orientation="vertical" className={classes.divider} />
 
-      {/* 
-      // @ts-ignore js component */}
       <PropertyType deal={props.deal} isBackOffice={props.isBackOffice} />
 
       <Divider orientation="vertical" className={classes.divider} />
 
-      {/* 
-      // @ts-ignore js component */}
       <MlsConnect deal={props.deal} />
-
-      {props.deal.listing && (
-        <>
-          <Divider orientation="vertical" className={classes.divider} />
-          <Link to={`/dashboard/mls/${props.deal.listing}`}>View MLS</Link>
-        </>
-      )}
     </div>
   )
 }
