@@ -10,6 +10,7 @@ import {
   Box,
   IconButton
 } from '@material-ui/core'
+import classNames from 'classnames'
 
 import { IAppState } from 'reducers'
 import {
@@ -42,9 +43,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   actions: {
     flexGrow: 1,
-    textAlign: 'right',
+    textAlign: 'right'
+  },
+  deleteAction: {
     '&:hover svg *': {
       fill: theme.palette.error.main
+    }
+  },
+  deleteActionDisabled: {
+    fill: theme.palette.action.disabled,
+    '&:hover svg *': {
+      fill: theme.palette.action.disabled
     }
   },
   row: {
@@ -145,13 +154,27 @@ function EmailTemplatesList({
           <div className={classes.actions}>
             <Tooltip
               caption={
-                row.editable ? 'Delete' : "You can't delete default templates." // TODO: Tooltip doen't work for disabled buttons.
+                !row.editable
+                  ? "You can't delete default templates."
+                  : isTemplateDeleting(row.id)
+                  ? 'Deleting...'
+                  : 'Delete'
               }
             >
               <IconButton
-                disabled={!row.editable || isTemplateDeleting(row.id)}
+                classes={{
+                  root: classNames(
+                    classes.deleteAction,
+                    (!row.editable || isTemplateDeleting(row.id)) &&
+                      classes.deleteActionDisabled
+                  )
+                }}
                 onClick={e => {
                   e.stopPropagation()
+
+                  if (!row.editable || isTemplateDeleting(row.id)) {
+                    return
+                  }
 
                   modal.setConfirmationModal({
                     message: 'Delete Email Template!',
@@ -181,8 +204,11 @@ function EmailTemplatesList({
       LoadingStateComponent={() => (
         <LoadingContainer style={{ padding: '20% 0' }} />
       )}
-      getTrProps={({ row }) => ({
-        onClick: () => isTemplateDeleting(row.id) || onItemClick(row)
+      getTdProps={({ column, row }) => ({
+        onClick: () =>
+          column.id === 'body-actions' ||
+          isTemplateDeleting(row.id) ||
+          onItemClick(row)
       })}
       classes={{ row: classes.row }}
     />
