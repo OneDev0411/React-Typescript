@@ -421,7 +421,11 @@ class OpenHouseDrawerInternal extends React.Component {
     const { isDisabled, openHouse, error } = this.state
 
     return (
-      <Drawer open={this.props.isOpen} onClose={this.props.onClose}>
+      <Drawer
+        open={this.props.isOpen}
+        onClose={this.props.onClose}
+        zIndex={1000} // Because of the MC builder z-index
+      >
         <Drawer.Header
           title={`${this.isNew ? 'New' : 'Edit'} Open House Registration Page`}
         />
@@ -597,9 +601,6 @@ class OpenHouseDrawerInternal extends React.Component {
                   {this.state.isTemplateBuilderOpen && (
                     <InstantMarketing
                       isOpen
-                      containerStyle={{
-                        zIndex: 1003
-                      }}
                       headerTitle="Edit Guest Registration Page"
                       closeConfirmation={false}
                       hideTemplatesColumn

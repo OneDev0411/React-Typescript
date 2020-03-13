@@ -1,6 +1,7 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import superagent from 'superagent'
+import superdebug from 'superagent-debugger'
 
 import {
   NEIGHBORHOODS_API_URL,
@@ -18,6 +19,7 @@ async function sendGetNeighborhoodsRequest(body) {
     .set('Content-Type', 'application/json')
     .set('X-API-CLIENTID', API_CLIENT_ID)
     .set('X-API-KEY', API_KEY)
+    .use(superdebug(console.info))
     .timeout(REQUEST_TIMEOUT_MS)
     .send(body)
 

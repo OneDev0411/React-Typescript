@@ -70,10 +70,16 @@ export function getFormattedReportWithNeededPeriods(
       return {
         ...metric,
         data: metric.data.map(metricData => {
+          let value = metricData.value
+
+          if (value === null || value === undefined) {
+            value = metric.type === 'percent' ? '0%' : 0
+          }
+
           return {
             key: metricData.key,
             label: `${metricData.label} ${metricData.key.slice(2, 4)}`,
-            value: metricData.value
+            value
           }
         })
       }

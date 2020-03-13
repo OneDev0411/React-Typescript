@@ -7,66 +7,62 @@ import { makeStyles } from '@material-ui/styles'
 import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
 import importEmailsSvg from 'assets/images/dashboard/import-emails.svg'
 
-import { GoogleIcon, OutlookIcon } from './icons'
+import { iconSizes } from 'components/SvgIcons/icon-sizes'
+import GoogleSigninButton from 'components/GoogleSigninButton'
+import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%,-50%)',
+      width: 480,
+      margin: '15vh auto 0',
       textAlign: 'center',
-      width: 477
+      padding: theme.spacing(3)
     },
-    button: {
-      height: 'unset !important',
-      padding: '12px 16px !important',
-      lineHeight: '16px !important'
+    marginBottom4: {
+      marginBottom: theme.spacing(4)
+    },
+    marginRight: {
+      marginRight: theme.spacing(1)
     }
   }),
   { name: 'InboxConnectAccount' }
 )
 
 export default function InboxConnectAccount() {
+  const classes = useStyles()
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
 
-  const classes = useStyles()
-
   return (
     <div className={classes.root}>
-      <img src={importEmailsSvg} alt="Import Emails" />
-      <Box paddingTop={3}>
-        <Typography variant="h6">See your emails here!</Typography>
-      </Box>
-      <Box paddingTop={2}>
-        <Typography variant="body2">
-          Connect your Google or Outlook account and see your emails here.
-          Rechat helps you to be on top of your customers
-        </Typography>
-      </Box>
-      <Box paddingTop={5}>
-        <Button
-          variant="outlined"
+      <img
+        className={classes.marginBottom4}
+        src={importEmailsSvg}
+        alt="Import Emails"
+      />
+      <Typography variant="h6">See your emails here!</Typography>
+      <Typography variant="body2" className={classes.marginBottom4}>
+        Connect your Google or Outlook account and see your emails here. Rechat
+        helps you to be on top of your customers
+      </Typography>
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <GoogleSigninButton
           disabled={google.connecting}
           onClick={google.connect}
-          classes={{ root: classes.button }}
+          className={classes.marginRight}
         >
-          <GoogleIcon />
-          Connect Google
+          Sign in with google
+        </GoogleSigninButton>
+
+        <Button
+          disabled={outlook.connecting}
+          onClick={outlook.connect}
+          variant="outlined"
+        >
+          <IconOutlook size={iconSizes.small} className={classes.marginRight} />
+          <Typography variant="button">Sync with Outlook</Typography>
         </Button>
-        <Box marginLeft={2} display="inline">
-          <Button
-            variant="outlined"
-            disabled={outlook.connecting}
-            onClick={outlook.connect}
-            classes={{ root: classes.button }}
-          >
-            <OutlookIcon />
-            Connect Outlook
-          </Button>
-        </Box>
       </Box>
     </div>
   )
