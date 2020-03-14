@@ -118,7 +118,7 @@ function List(props: Props & WithRouterProps) {
       primary: true,
       width: '33%',
       render: ({ row }) => (
-        <Typography noWrap variant="body1" classes={{ root: classes.name }}>
+        <Typography noWrap variant="body2" classes={{ root: classes.name }}>
           {row.name}
         </Typography>
       )
