@@ -24,7 +24,6 @@ interface Props {
   event: ICalendarEvent & { rowIndex?: number }
   editable: boolean
   Icon?: any
-  subtitle?: React.ReactNode
   actions?: React.ReactNode
   onClick?(): void
 }

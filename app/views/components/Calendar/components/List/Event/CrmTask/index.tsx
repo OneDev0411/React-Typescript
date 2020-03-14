@@ -62,7 +62,6 @@ export function CrmTask({ style, event, onEventChange }: Props) {
           <Associations event={event} onEventChange={onEventChange} />
         </div>
       }
-      subtitle={<>{event.title}</>}
       actions={
         <>
           <OpenHouseRegistration event={event} />

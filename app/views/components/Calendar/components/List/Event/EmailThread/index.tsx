@@ -76,7 +76,6 @@ export function EmailThread({ style, event }: Props) {
           )}
         </Box>
       }
-      subtitle={<div>{event.title || 'No Subject'}</div>}
       onClick={handleContainerClick}
     />
   )
