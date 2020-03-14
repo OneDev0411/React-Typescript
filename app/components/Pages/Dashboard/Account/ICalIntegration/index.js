@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import omit from 'lodash/omit'
 import { Helmet } from 'react-helmet'
+import { Typography } from '@material-ui/core'
 
 import getCalenderFeedSetting from 'models/user/calendar-feed-setting'
 import { getTeamAvailableMembers } from 'utils/user-teams'
@@ -191,8 +192,10 @@ class DealTemplates extends React.Component {
         </Helmet>
         <ICalContainer>
           <PageDescription>
-            With calendar export, you can transfer any date based information on
-            Rechat into your local calendar experience.
+            <Typography variant="body2">
+              With calendar export, you can transfer any date based information
+              on Rechat into your local calendar experience.
+            </Typography>
           </PageDescription>
           <TeamType
             userTeams={teams}
