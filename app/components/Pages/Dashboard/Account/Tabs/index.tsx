@@ -17,7 +17,7 @@ interface ItemsShape {
 
 const CrmAccess = ({ children }) => <Acl.Crm>{children}</Acl.Crm>
 
-const Items: ItemsShape[] = [
+const tabs: ItemsShape[] = [
   {
     label: 'Profile',
     to: '/dashboard/account'
@@ -65,12 +65,15 @@ const Items: ItemsShape[] = [
 
 export const SettingsTabs = ({ user }: Props) => {
   const currentUrl = window.location.pathname
+  const matchingTabs = tabs.filter(({ to }) => currentUrl.startsWith(to))
+  const matchingTab = matchingTabs.sort((a, b) => b.to.length - a.to.length)[0]
 
   return (
     <PageTabs
-      defaultValue={currentUrl}
-      tabs={Items.filter(({ isHidden }) => !isHidden || !isHidden(user)).map(
-        ({ label, to, component = false }, i) => {
+      defaultValue={matchingTab.to}
+      tabs={tabs
+        .filter(({ isHidden }) => !isHidden || !isHidden(user))
+        .map(({ label, to, component = false }, i) => {
           const hasComponent = component ? { component } : {}
 
           return (
@@ -82,8 +85,7 @@ export const SettingsTabs = ({ user }: Props) => {
               value={to}
             />
           )
-        }
-      )}
+        })}
     />
   )
 }
