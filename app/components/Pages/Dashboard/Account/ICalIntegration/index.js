@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import omit from 'lodash/omit'
 import { Helmet } from 'react-helmet'
-import { Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 
 import getCalenderFeedSetting from 'models/user/calendar-feed-setting'
 import { getTeamAvailableMembers } from 'utils/user-teams'
@@ -217,7 +217,9 @@ class DealTemplates extends React.Component {
             selectedMembers={selectedMembers}
             feedURl={this.state.feedURl}
           />
-          <UpdateGenerateUrlInfo />
+          <Box marginTop="0.5em">
+            <UpdateGenerateUrlInfo />
+          </Box>
         </ICalContainer>
       </Fragment>
     )
