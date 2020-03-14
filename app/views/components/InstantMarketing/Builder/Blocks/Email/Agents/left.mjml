@@ -1,5 +1,5 @@
 {% for user in users %}
-<mj-section padding="20px 20px" text-align="left" background-color="#fff">
+<mj-section padding="20px 20px" text-align="left" background-color="#fff" rechat-editable="tree">
   <mj-column>
     <mj-image src="{{ user.profile_image_url }}" width="250px" padding="4px 25px" rechat-assets="avatar">
     </mj-image>
@@ -11,7 +11,7 @@
     <mj-text padding="5px 0" font-size="16px" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" line-height="0.7">
       {{user.phone_number | phone}}
     </mj-text>
-    <mj-button color="#000" inner-padding="0" padding="5px 0" href="mailto:{{user.email}}" align="left" text-align="left" text-decoration="none" background-color="#fff" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px"  line-height="0.7">
+    <mj-button color="#000" inner-padding="0" padding="5px 0" href="mailto:{{user.email}}" align="left" text-align="left" text-decoration="none" background-color="#fff" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px" line-height="0.7">
       {{user.email}}
     </mj-button>
   </mj-column>
