@@ -20,7 +20,6 @@ export const TAB_ITEMS: TabItem[] = [
         'contact',
         'contact_attribute',
         'crm_task',
-        'email_campaign',
         'deal_context'
       ]
     },
