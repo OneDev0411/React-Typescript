@@ -21,7 +21,6 @@ import RecipientsColumn from './Column/Recipients'
 import StatsColumn from './Column/Stats'
 import { InsightContainer } from './styled'
 import useListData from './useListData'
-import useFilterList from './useFilterList'
 import { InsightFiltersType } from './types'
 
 const useCustomGridStyles = makeStyles(theme =>
@@ -44,13 +43,12 @@ const useCustomGridStyles = makeStyles(theme =>
 function List(props) {
   const customGridClasses = useCustomGridStyles()
   const [queue, setQueue] = useState(0)
-  const { list, isLoading } = useListData(props.user, queue)
-  const gridClasses = useGridStyles()
   const isScheduled = props.route && props.route.path === 'scheduled'
   const filterType = isScheduled
     ? InsightFiltersType.SCHEDULED
     : InsightFiltersType.SENT
-  const { filteredList, stats } = useFilterList(list, filterType)
+  const { isLoading, list, stats } = useListData(props.user, queue, filterType)
+  const gridClasses = useGridStyles()
 
   React.useEffect(() => {
     window.socket.on('email_campaign:send', () => setQueue(queue => queue + 1))
@@ -123,23 +121,20 @@ function List(props) {
   )
 
   const renderContent = ({ sortBy, onChangeSort }) => {
-    const isFiltering =
-      list.length > 0 && stats.sent === 0 && stats.scheduled === 0
-
-    if (isLoading || isFiltering) {
+    if (isLoading) {
       return <LoadingComponent />
     }
 
     return (
       <Table
-        rows={filteredList}
-        totalRows={filteredList.length}
+        rows={list}
+        totalRows={list.length}
         columns={columns}
         EmptyStateComponent={() => (
           <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
         )}
-        loading={isLoading ? 'middle' : null}
-        LoadingStateComponent={LoadingComponent}
+        // loading={isLoading ? 'middle' : null}
+        // LoadingStateComponent={LoadingComponent}
         hoverable={false}
         sorting={{
           sortBy: {
