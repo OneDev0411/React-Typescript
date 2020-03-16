@@ -9,7 +9,7 @@ async function getAll(user: IUser): Promise<Array<IEmailCampaign>> {
     throw new Error('This user does not belong to any brand')
   }
 
-  const endpoint = `/brands/${brandId}/emails/campaigns?associations[]=email_campaign.recipients&associations[]=email_campaign_recipient.list&associations[]=email_campaign.template`
+  const endpoint = `/brands/${brandId}/emails/campaigns?associations[]=email_campaign.recipients&associations[]=email_campaign_recipient.list&associations[]=email_campaign.template&omit[]=template_instance.html&omit[]=email_campaign.html`
 
   try {
     const response = await new Fetch().get(endpoint)

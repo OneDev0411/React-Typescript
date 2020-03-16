@@ -107,8 +107,6 @@ export function EmailThreadItem({
   const hasNonInlineAttachments =
     email.attachments.filter(attachment => !attachment.isInline).length > 0
 
-  console.log(email)
-
   return (
     <div className={classes.root}>
       {/* header */}
