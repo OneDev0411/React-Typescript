@@ -24,15 +24,11 @@ export default function Photo({ listings }: Props) {
 
   const theme = useTheme<Theme>()
 
-  if (!listings[0]) {
-    return (
-      <Avatar>
-        <IconHome size="small" fillColor={theme.palette.tertiary.dark} />
-      </Avatar>
-    )
-  }
+  const avatar = listings[0] ? listings[0].listing.gallery_image_urls[0] : null
 
-  const avatar = listings[0].listing.gallery_image_urls[0]
-
-  return <Avatar alt="" src={avatar} />
+  return (
+    <Avatar alt="" src={avatar}>
+      <IconHome size="small" fillColor={theme.palette.tertiary.dark} />
+    </Avatar>
+  )
 }
