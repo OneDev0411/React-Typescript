@@ -123,11 +123,15 @@ const Signup = ({
 }
 
 export default compose(
+  connect(({ brand }, ownProps) => {
+    const email = window.decodeURIComponent(ownProps.location.query.email || '')
+
+    return { initialValues: { email }, brand }
+  }),
   reduxForm({
     form: 'signup',
     validate: validateEmail
   }),
-  connect(({ brand }) => ({ brand })),
   withState('submitError', 'setSubmitError', false),
   withState('isSubmitting', 'setIsSubmitting', false),
   withState('submitSuccessfully', 'setSubmitSuccessfully', false),
