@@ -17,6 +17,8 @@ export default function CreateTourAction(props: Props) {
   const modal = useContext(ConfirmationModalContext)
 
   const handleCreateTourDrawer = () => {
+    // Google JS API can't route for more than 25 waypoint along with an start and an end. Resulting 27 points.
+    // Original issue: https://gitlab.com/rechat/web/-/issues/3922#note_303336248
     if (props.listings.length > 27) {
       modal.setConfirmationModal({
         message: 'Error',
