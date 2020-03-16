@@ -28,7 +28,6 @@ import EmptyState from './EmptyState'
 import CreateNewOpenHouse from './CreateNewOpenHouse'
 import Avatar from './columns/Avatar'
 import Title from './columns/Title'
-import Description from './columns/Description'
 import Date from './columns/Date'
 import Registrants from './columns/Registrants'
 import GuestRegistration from './columns/GuestRegistration'
@@ -112,24 +111,13 @@ function OpenHousesList(props: Props) {
       header: 'Title',
       id: 'title',
       primary: true,
-      width: '20%',
       render: ({ row }: RenderProps<TableRow>) => (
         <Title title={row.title} onClick={() => handleEdit(row)} />
       )
     },
     {
-      header: 'Description',
-      id: 'description',
-      class: 'opaque',
-      width: '20%',
-      render: ({ row }: RenderProps<TableRow>) => (
-        <Description description={row.description} />
-      )
-    },
-    {
       header: 'Date',
       id: 'date',
-      width: '20%',
       class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (
         <Date dueDate={row.due_date} />
@@ -138,7 +126,7 @@ function OpenHousesList(props: Props) {
     {
       header: 'Registrants',
       id: 'registrants',
-      width: '10%',
+      width: '100px',
       class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (
         <Registrants
@@ -152,7 +140,7 @@ function OpenHousesList(props: Props) {
     },
     {
       id: 'guest-registration',
-      width: '20%',
+      width: '200px',
       class: 'visible-on-hover',
       render: ({ row }: RenderProps<TableRow>) => (
         <GuestRegistration
@@ -163,7 +151,7 @@ function OpenHousesList(props: Props) {
     },
     {
       id: 'actions',
-      width: '10%',
+      width: '50px',
       class: 'visible-on-hover',
       render: ({ row }: RenderProps<TableRow>) => (
         <Actions
