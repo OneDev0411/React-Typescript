@@ -1,16 +1,25 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useState, ReactNode } from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router'
-import compose from 'recompose/compose'
-import { Field, reduxForm } from 'redux-form'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
+import { Form, Field } from 'react-final-form'
+
+import { IAppState } from 'reducers'
 
 import { validateEmail } from '../Password/Forgot'
 import { getBrandInfo } from '../SignIn/get-brand-info'
 import signup from '../../../../models/auth/signup'
 import Button from '../../../../views/components/Button/ActionButton'
 import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
+
+interface ErrorMessage {
+  email: string
+  message: ReactNode
+}
+
+interface SuccessMessage {
+  isShadow: boolean
+  email: string
+}
 
 const getErrorMessage = (errorCode, email) => {
   if (errorCode === 409) {
@@ -36,17 +45,38 @@ const getErrorMessage = (errorCode, email) => {
   )
 }
 
-const Signup = ({
-  brand,
-  submitError,
-  isSubmitting,
-  handleSubmit,
-  setSubmitError,
-  onSubmitHandler,
-  submitSuccessfully
-}) => {
+export default function Signup(props) {
+  const brand = useSelector((state: IAppState) => state.brand)
+  const email = window.decodeURIComponent(props.location.query.email || '')
+  const [submitError, setSubmitError] = useState<ErrorMessage | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [
+    submitSuccessfully,
+    setSubmitSuccessfully
+  ] = useState<SuccessMessage | null>(null)
+
   const isDisabled = isSubmitting
   const { siteLogo, siteTitle } = getBrandInfo(brand)
+  const onSubmitHandler = async ({ email }) => {
+    setIsSubmitting(true)
+
+    try {
+      const statusCode = await signup(email)
+
+      setIsSubmitting(false)
+      setSubmitSuccessfully({
+        email,
+        isShadow: statusCode === 202
+      })
+    } catch (errorCode) {
+      setIsSubmitting(false)
+
+      setSubmitError({
+        email,
+        message: getErrorMessage(errorCode, email)
+      })
+    }
+  }
 
   return (
     <div className="signin-page-wrapper">
@@ -70,33 +100,35 @@ const Signup = ({
         </header>
         <main className="c-auth__main">
           {!submitSuccessfully ? (
-            <form onSubmit={handleSubmit(onSubmitHandler)}>
-              <Field
-                autoFocus
-                name="email"
-                type="email"
-                label="Email"
-                onChange={(e, value, newValue) => {
-                  if (submitError && newValue) {
-                    setSubmitError(false)
-                  }
-                }}
-                component={SimpleField}
-              />
-              {submitError && submitError.message}
-              <Button
-                type="submit"
-                isBlock
-                disabled={isDisabled}
-                style={{ marginBottom: '2rem' }}
-              >
-                {isSubmitting ? 'Submitting...' : 'Sign up'}
-              </Button>
-              <p className="c-auth__subtitle">
-                <small>Already have an account?</small>&nbsp;&nbsp;
-                <Link to="/signin">Sign in</Link>
-              </p>
-            </form>
+            <Form
+              initialValues={{ email }}
+              onSubmit={onSubmitHandler}
+              validate={validateEmail}
+              render={({ handleSubmit }) => (
+                <form onSubmit={handleSubmit}>
+                  <Field
+                    autoFocus
+                    name="email"
+                    type="email"
+                    label="Email"
+                    component={SimpleField}
+                  />
+                  {submitError && submitError.message}
+                  <Button
+                    type="submit"
+                    isBlock
+                    disabled={isDisabled}
+                    style={{ marginBottom: '2rem' }}
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Sign up'}
+                  </Button>
+                  <p className="c-auth__subtitle">
+                    <small>Already have an account?</small>&nbsp;&nbsp;
+                    <Link to="/signin">Sign in</Link>
+                  </p>
+                </form>
+              )}
+            />
           ) : (
             <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
@@ -121,44 +153,3 @@ const Signup = ({
     </div>
   )
 }
-
-export default compose(
-  connect(({ brand }, ownProps) => {
-    const email = window.decodeURIComponent(ownProps.location.query.email || '')
-
-    return { initialValues: { email }, brand }
-  }),
-  reduxForm({
-    form: 'signup',
-    validate: validateEmail
-  }),
-  withState('submitError', 'setSubmitError', false),
-  withState('isSubmitting', 'setIsSubmitting', false),
-  withState('submitSuccessfully', 'setSubmitSuccessfully', false),
-  withHandlers({
-    onSubmitHandler: ({
-      setSubmitError,
-      setIsSubmitting,
-      setSubmitSuccessfully
-    }) => async ({ email }) => {
-      setIsSubmitting(true)
-
-      try {
-        const statusCode = await signup(email)
-
-        setIsSubmitting(false)
-        setSubmitSuccessfully({
-          email,
-          isShadow: statusCode === 202
-        })
-      } catch (errorCode) {
-        setIsSubmitting(false)
-
-        setSubmitError({
-          email,
-          message: getErrorMessage(errorCode, email)
-        })
-      }
-    }
-  })
-)(Signup)
