@@ -133,8 +133,6 @@ function List(props) {
         EmptyStateComponent={() => (
           <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
         )}
-        // loading={isLoading ? 'middle' : null}
-        // LoadingStateComponent={LoadingComponent}
         hoverable={false}
         sorting={{
           sortBy: {
