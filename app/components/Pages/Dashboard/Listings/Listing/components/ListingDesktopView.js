@@ -102,7 +102,7 @@ const ListingDesktopView = ({
     viewer_width = window.innerWidth
 
     if (!data.is_widget && container !== 'modal') {
-      viewer_width -= appSidenavWidth
+      viewer_width -= appSidenavWidth + 15 // Scrollbar width
     }
   }
 

@@ -15,7 +15,7 @@ export const MapContainer = styled.div`
 
 export const TableContainer = styled.div`
   width: 26em;
-  padding: 0 0.6em;
+  padding: 1em;
   overflow-y: scroll;
   border-left: 1px solid ${borderColor};
 `

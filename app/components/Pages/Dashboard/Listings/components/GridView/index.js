@@ -35,7 +35,7 @@ export default function GridView({ isFetching, sortedListings }) {
   }
 
   return (
-    <Box display="flex" flexWrap="wrap" p={theme.spacing(0, 1, 1)}>
+    <Box display="flex" flexWrap="wrap" p={theme.spacing(2, 2)}>
       {renderContent()}
     </Box>
   )
