@@ -90,7 +90,8 @@ class ContactsList extends React.Component {
   componentDidMount() {
     const { user, fetchOAuthAccounts, fetchTags, getContactsTags } = this.props
 
-    this.order = getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY)
+    this.order =
+      getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) || '-last_touch'
     fetchOAuthAccounts()
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
