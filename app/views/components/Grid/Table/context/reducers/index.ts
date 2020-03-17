@@ -53,13 +53,14 @@ export function reducer(state = initialState, action: Pick<Action, any>) {
 
     case SELECTION__TOGGLE_ENTIRE_ROWS:
       return produce(state, draft => {
-        const { isEntireRowsSelected } = draft.selection
+        const { isEntireRowsSelected } = state.selection
 
         if (!isEntireRowsSelected) {
           draft.selection.excludedRows = []
         }
 
         draft.selection.selectedRowIds = []
+        draft.selection.isAllRowsSelected = false
         draft.selection.isEntireRowsSelected = !isEntireRowsSelected
       })
 

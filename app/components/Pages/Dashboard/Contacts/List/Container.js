@@ -83,17 +83,21 @@ class ContactsList extends React.Component {
       duplicateClusterCount: 0
     }
 
-    this.order = getUserSettingsInActiveTeam(props.user, SORT_FIELD_SETTING_KEY)
+    this.order = null
     this.tableContainerId = 'contacts--page-container'
   }
 
   componentDidMount() {
-    this.props.fetchOAuthAccounts()
+    const { user, fetchOAuthAccounts, fetchTags, getContactsTags } = this.props
+
+    this.order =
+      getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) || '-last_touch'
+    fetchOAuthAccounts()
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
 
-    if (this.props.fetchTags) {
-      this.props.getContactsTags()
+    if (fetchTags) {
+      getContactsTags()
     }
 
     this.setSelectedSidebarFilter()
@@ -466,7 +470,9 @@ class ContactsList extends React.Component {
     this.setState({ isFetchingMoreContactsBefore: false })
   }
 
-  handleOnDelete = (e, { selectedRows = [] }) => {
+  handleOnDelete = (e, options) => {
+    const selectedRows =
+      options && options.selectedRows ? options.selectedRows : []
     const state = this.props.gridStateContext
     const entireMode = state.selection.isEntireRowsSelected
 

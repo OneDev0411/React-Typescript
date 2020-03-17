@@ -19,6 +19,9 @@ const DeleteAction = styled.span`
   padding: ${props => props.theme.spacing(1)}px;
   color: ${props => props.theme.palette.error.main};
   cursor: pointer;
+  &:hover {
+    background: ${props => props.theme.palette.grey[200]};
+  }
 `
 
 const Menu = ({ contactId, handleOnDelete }) => (
