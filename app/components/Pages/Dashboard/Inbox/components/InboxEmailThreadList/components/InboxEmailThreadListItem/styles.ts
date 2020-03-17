@@ -28,7 +28,7 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
       color: theme.palette.common.black
     },
     date: {
-      color: theme.palette.action.disabled
+      color: theme.palette.grey[500]
     },
     subject: {
       color: theme.palette.common.black
