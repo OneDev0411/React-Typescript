@@ -1,18 +1,19 @@
-import styled from "styled-components"
 import React, { Component } from 'react'
+import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+
+import getVerificationCode from '../../../models/verify/request'
+import VerifyPhoneNumber from '../../../models/verify/confirm'
+
+import BareModal from '../BareModal'
+import ActionButton from '../Button/ActionButton'
+import { primary } from '../../utils/colors'
+import IntercomTriger from '../IntercomTrigger'
 
 import { Title } from './components/Title'
 import { Container } from './components/Container'
 import { CloseButton } from './components/CloseButton'
-import BareModal from '../../../views/components/BareModal'
-import ActionButton from '../../../views/components/Button/ActionButton'
-import { primary } from '../../../views/utils/colors'
-import IntercomTriger from '../../../components/Pages/Dashboard/Partials/IntercomTrigger'
-
-import getVerificationCode from '../../../models/verify/request'
-import VerifyPhoneNumber from '../../../models/verify/confirm'
 
 const LinkButton = styled(ActionButton)`
   padding: 0;
@@ -196,18 +197,14 @@ class VerifyPhoneNumberModal extends Component {
           </p>
 
           <div className="c-simple-field">
-            <label
-              htmlFor="phone-code"
-              style={{ cursor: 'pointer', fontWeight: 'normal' }}
-            >
+            <div style={{ cursor: 'pointer', fontWeight: 'normal' }}>
               4-Digit Verification Code
-            </label>
+            </div>
             <div style={{ display: 'flex' }}>
               <input
                 id="phone-code"
                 type="text"
                 value={code}
-                autoFocus
                 disabled={isVerify}
                 placeholder="Enter Code"
                 className="c-simple-field__input"

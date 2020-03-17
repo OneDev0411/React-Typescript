@@ -1,6 +1,6 @@
 import styled, { createGlobalStyle, css } from 'styled-components'
 
-import IconButton from '../../../../../views/components/Button/IconButton'
+import IconButton from '../Button/IconButton'
 
 const buttonVisibilityStyle = css`
   visibility: visible;
@@ -23,7 +23,7 @@ export const Button = styled(IconButton)`
   transform: translateY(1rem);
   transition: all 0.5s;
 
-  ${props => props.isShow && buttonVisibilityStyle}
+  ${props => props.isActive && buttonVisibilityStyle}
 `
 
 export const GlobalIntercomStyles = createGlobalStyle`

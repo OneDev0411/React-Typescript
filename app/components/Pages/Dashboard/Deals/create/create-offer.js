@@ -14,6 +14,7 @@ import { FullPageHeader } from 'components/FullPageHeader'
 import { confirmation } from 'actions/confirmation'
 
 import ActionButton from 'components/Button/ActionButton'
+import IntercomTrigger from 'components/IntercomTrigger'
 
 import { createRoles, createOffer, upsertContexts } from 'actions/deals'
 
@@ -25,7 +26,6 @@ import DealStatus from './deal-status'
 import EscrowOfficers from './escrow-officer'
 import DealReferrals from './deal-referrals'
 import Contexts from './contexts'
-import IntercomTrigger from '../../Partials/IntercomTrigger'
 
 import { getLegalFullName } from '../utils/roles'
 
@@ -590,10 +590,10 @@ class CreateOffer extends React.Component {
                 again.
               </span>
               <IntercomTrigger
-                render={({ activeIntercom, intercomIsActive }) => (
+                render={({ activeIntercom, isIntercomActive }) => (
                   <button
                     type="button"
-                    onClick={!intercomIsActive ? activeIntercom : () => false}
+                    onClick={!isIntercomActive ? activeIntercom : () => false}
                     className="btn btn-primary c-button--link"
                   >
                     Support

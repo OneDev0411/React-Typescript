@@ -1,15 +1,21 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import IntercomSDK from 'react-intercom'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { inactiveIntercom } from '../../../../../store_actions/intercom'
-
-import IconClose from '../../../../../views/components/SvgIcons/Close/CloseIcon'
+import { IAppState } from '../../../reducers'
+import { inactiveIntercom } from '../../../store_actions/intercom'
+import IconClose from '../SvgIcons/Close/CloseIcon'
 
 import { Button, GlobalIntercomStyles } from './styled'
 
-const Intercom = ({ user, intercomIsActive, inactiveIntercom }) => {
-  const getUserInfo =
+export default function Intercom() {
+  const dispatch = useDispatch()
+  const user = useSelector((state: IAppState) => state.user)
+  const { isActive: isIntercomActive } = useSelector(
+    (state: IAppState) => state.intercom
+  )
+
+  const UserInfo =
     user && user.id
       ? {
           user_id: user.id,
@@ -21,33 +27,25 @@ const Intercom = ({ user, intercomIsActive, inactiveIntercom }) => {
   return (
     <div>
       <GlobalIntercomStyles />
-      {window.INTERCOM_ID && (
+      {(window as any).INTERCOM_ID && (
         <IntercomSDK
-          appID={window.INTERCOM_ID}
+          appID={(window as any).INTERCOM_ID}
           alignment="left"
           horizontal_padding={8}
           vertical_padding={0}
           custom_launcher_selector=".open_intercom"
-          {...getUserInfo}
+          {...UserInfo}
         />
       )}
       <Button
         title="Close"
         className="open_intercom"
         appearance="primary"
-        onClick={inactiveIntercom}
-        isShow={intercomIsActive}
+        onClick={() => dispatch(inactiveIntercom(isIntercomActive))}
+        isActive={isIntercomActive}
       >
         <IconClose />
       </Button>
     </div>
   )
 }
-
-export default connect(
-  ({ user, intercom }) => ({
-    user,
-    intercomIsActive: intercom.isActive
-  }),
-  { inactiveIntercom }
-)(Intercom)

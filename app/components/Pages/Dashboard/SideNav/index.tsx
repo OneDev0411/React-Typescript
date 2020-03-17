@@ -19,6 +19,7 @@ import { SideNavTooltip } from './components/Tooltip'
 import { UserMenu } from './components/UserMenu'
 import { SideNavLinkItem } from './components/SideNavLinkItem'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
+import SupportTrigger from './components/SupportTrigger'
 
 import {
   Sidenav,
@@ -87,6 +88,17 @@ export default function AppSideNav() {
             </SideNavLinkItem>
           </Acl.Marketing>
 
+          <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
+            <SideNavLinkItem to="/dashboard/deals" tooltip="Your Deals">
+              <AppNavbarBadge
+                badgeContent={dealsNotificationsNumber}
+                color="primary"
+              >
+                Deals
+              </AppNavbarBadge>
+            </SideNavLinkItem>
+          </Acl>
+
           <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
             <SideNavLinkItem
               tooltip="Open House Registration Pages"
@@ -105,20 +117,13 @@ export default function AppSideNav() {
           <SideNavLinkItem tooltip="All MLS® Properties" to="/dashboard/mls">
             Properties
           </SideNavLinkItem>
+
+          <Acl access={hasWebsitePermission}>
+            <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
+          </Acl>
         </SidenavListGroup>
 
         <SidenavListGroup>
-          <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
-            <SideNavLinkItem to="/dashboard/deals" tooltip="Your Deals">
-              <AppNavbarBadge
-                badgeContent={dealsNotificationsNumber}
-                color="primary"
-              >
-                Deals
-              </AppNavbarBadge>
-            </SideNavLinkItem>
-          </Acl>
-
           {user && (
             <SideNavItem>
               <SideNavTooltip title="Chat">
@@ -143,9 +148,7 @@ export default function AppSideNav() {
             </SideNavLinkItem>
           )}
 
-          <Acl access={hasWebsitePermission}>
-            <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
-          </Acl>
+          <SupportTrigger />
         </SidenavListGroup>
       </ScrollableArea>
 
