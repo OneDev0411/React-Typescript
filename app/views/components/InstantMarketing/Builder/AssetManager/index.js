@@ -19,7 +19,7 @@ export const load = async () => {
         editor.StorageManager.load(key, data => res(data))
       })
 
-    const { templateId } = await getStorageData('templateId')
+    let { templateId } = await getStorageData('templateId')
 
     const AssetView = Backbone.View.extend({
       initialize({ model }) {
@@ -46,6 +46,12 @@ export const load = async () => {
             accept="image/*"
             uploadHandler={async files => {
               try {
+                if (!templateId) {
+                  const storageData = await getStorageData('templateId')
+
+                  templateId = storageData.templateId
+                }
+
                 const uploadResponses = await Promise.all(
                   files.map(file => uploadAsset(file, templateId))
                 )
