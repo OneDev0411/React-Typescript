@@ -22,6 +22,7 @@ import StatsColumn from './Column/Stats'
 import { InsightContainer } from './styled'
 import useListData from './useListData'
 import { InsightFiltersType } from './types'
+import { percent } from './helpers'
 
 const useCustomGridStyles = makeStyles(theme =>
   createStyles({
@@ -72,7 +73,7 @@ function List(props) {
         header: 'Title',
         id: 'title',
         primary: true,
-        width: '25%',
+        width: '27%',
         verticalAlign: 'center',
         render: ({ row }) => (
           <TitleColumn
@@ -85,7 +86,7 @@ function List(props) {
         header: 'Recipients',
         id: 'recipients',
         class: 'opaque',
-        width: '25%',
+        width: '22%',
         verticalAlign: 'center',
         render: ({ row }) => <RecipientsColumn data={row.recipients} />
       },
@@ -93,18 +94,75 @@ function List(props) {
         header: 'Date',
         id: 'date',
         class: 'opaque',
-        width: '25%',
+        width: '21%',
         verticalAlign: 'center',
         render: ({ row }) => <DateColumn data={row} />
       },
       {
-        header: 'Stats',
-        id: 'stats',
+        header: 'Delivered',
+        id: 'delivered',
         class: 'opaque',
-        width: '7%',
+        width: '10%',
         verticalAlign: 'center',
-        render: ({ row }) =>
-          row.executed_at ? <StatsColumn data={row} /> : null
+        render: ({ row: { executed_at, delivered, sent, failed } }) => {
+          if (!executed_at) {
+            return null
+          }
+
+          const value = `${percent(delivered, sent)}%`
+
+          return (
+            <StatsColumn
+              value={value}
+              primaryHint={`Delivered: ${value}`}
+              secondryHint={`${percent(failed, sent)} Bounced`}
+            />
+          )
+        }
+      },
+      {
+        header: 'Open Rate',
+        id: 'open-rate',
+        class: 'opaque',
+        width: '10%',
+        verticalAlign: 'center',
+        render: ({ row: { executed_at, opened, sent } }) => {
+          if (!executed_at) {
+            return null
+          }
+
+          const value = `${percent(opened, sent)}%`
+
+          return (
+            <StatsColumn
+              value={value}
+              primaryHint={`Open Rate: ${value}`}
+              secondryHint={`${opened} Recipients`}
+            />
+          )
+        }
+      },
+      {
+        header: 'Click Rate',
+        id: 'click-rate',
+        class: 'opaque',
+        width: '10%',
+        verticalAlign: 'center',
+        render: ({ row: { executed_at, clicked, sent } }) => {
+          if (!executed_at) {
+            return null
+          }
+
+          const value = `${percent(clicked, sent)}%`
+
+          return (
+            <StatsColumn
+              value={value}
+              primaryHint={`Click Rate: ${value}`}
+              secondryHint={`${clicked} Times`}
+            />
+          )
+        }
       },
       {
         header: '',

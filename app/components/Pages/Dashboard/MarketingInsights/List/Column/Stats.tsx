@@ -8,24 +8,22 @@ import {
   Theme
 } from '@material-ui/core'
 
-import { percent } from '../helpers'
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       position: 'relative'
     },
-    statBtn: {
+    statLabel: {
       display: 'block',
       textAlign: 'center',
       lineHeight: theme.typography.button.lineHeight,
       cursor: 'help',
       textDecoration: 'underline',
-      '&:hover + $list': {
+      '&:hover + $popover': {
         visibility: 'visible'
       }
     },
-    list: {
+    popover: {
       minWidth: 160,
       position: 'absolute',
       top: 0,
@@ -44,42 +42,21 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Props {
-  data: IEmailCampaign
+  value: string
+  primaryHint: string
+  secondryHint: string
 }
 
-function StatsColumn({ data }: Props) {
+function StatsColumn({ value, primaryHint, secondryHint }: Props) {
   const classes = useStyles()
 
   return (
     <div className={classes.container}>
-      <span className={classes.statBtn}>View Stats</span>
-      <List disablePadding className={classes.list}>
-        {data.executed_at ? (
-          <>
-            <ListItem divider>
-              <ListItemText
-                primary={`Delivered: ${percent(data.delivered, data.sent)}%`}
-                secondary={`${percent(data.failed, data.sent)}% Bounced`}
-              />
-            </ListItem>
-            <ListItem divider>
-              <ListItemText
-                primary={`Open Rate: ${percent(data.opened, data.sent)}%`}
-                secondary={`${data.opened} Recipients`}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary={`Click Rate: ${percent(data.clicked, data.sent)}%`}
-                secondary={`${data.clicked} Times`}
-              />
-            </ListItem>
-          </>
-        ) : (
-          <ListItem>
-            <ListItemText primary="Not Executed" />
-          </ListItem>
-        )}
+      <span className={classes.statLabel}>{value}</span>
+      <List disablePadding className={classes.popover}>
+        <ListItem>
+          <ListItemText primary={primaryHint} secondary={secondryHint} />
+        </ListItem>
       </List>
     </div>
   )
