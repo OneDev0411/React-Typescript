@@ -47,7 +47,11 @@ function List(props) {
   const filterType = isScheduled
     ? InsightFiltersType.SCHEDULED
     : InsightFiltersType.SENT
-  const { isLoading, list, stats } = useListData(props.user, queue, filterType)
+  const { isLoading, hasError, list, stats } = useListData(
+    props.user,
+    queue,
+    filterType
+  )
   const gridClasses = useGridStyles()
 
   React.useEffect(() => {
@@ -123,6 +127,12 @@ function List(props) {
   const renderContent = ({ sortBy, onChangeSort }) => {
     if (isLoading) {
       return <LoadingComponent />
+    }
+
+    if (hasError) {
+      return (
+        <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
+      )
     }
 
     return (

@@ -21,14 +21,19 @@ type ActionSuccessPayload = {
     sent: number
   }
 }
+type ActionFailedPayload = {
+  isLoading: boolean
+  hasError: boolean
+}
 
 export interface ActionTypes {
   type: ActionGeneralTypes
-  payload: ActionRequestPayload | ActionSuccessPayload
+  payload: ActionRequestPayload | ActionSuccessPayload | ActionFailedPayload
 }
 
 export interface ListDataTypes {
   isLoading: boolean
+  hasError: boolean
   list: IEmailCampaign[]
   stats: {
     scheduled: number

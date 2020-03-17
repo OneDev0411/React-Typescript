@@ -35,6 +35,13 @@ const useListData = (
           }
         })
       } catch (err) {
+        dispatch({
+          type: ActionType.FETCH_FAILED,
+          payload: {
+            isLoading: false,
+            hasError: true
+          }
+        })
         console.log(err)
       }
     }
