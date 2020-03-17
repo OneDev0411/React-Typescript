@@ -169,7 +169,7 @@ class Filters extends React.Component {
         <FiltersOptions>
           {this.props.disableConditionOperators || (
             <>
-              {activeFiltersList.length !== 0 && (
+              {activeFiltersList.length >= 2 && (
                 <ConditionOperators
                   selectedItem={this.props.conditionOperator}
                   onChange={this.onConditionChange}
