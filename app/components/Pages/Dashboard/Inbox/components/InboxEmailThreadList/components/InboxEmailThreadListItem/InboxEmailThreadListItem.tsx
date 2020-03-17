@@ -103,8 +103,10 @@ export default function InboxEmailThreadListItem({
               variant="body2"
               classes={{
                 root: classNames(
-                  classes.message,
-                  emailThread.is_read && classes.messageRead
+                  classes.snippet,
+                  emailThread.is_read &&
+                    !selected &&
+                    classes.snippetUnselectedRead
                 )
               }}
             >

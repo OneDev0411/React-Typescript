@@ -32,12 +32,12 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
     subject: {
       color: theme.palette.common.black
     },
-    message: {
+    snippet: {
       maxHeight: '2.86em' /* 2x body2 line-height */,
       overflow: 'hidden',
       color: theme.palette.common.black
     },
-    messageRead: {
+    snippetUnselectedRead: {
       color: theme.palette.grey[500]
     },
     flex: {
