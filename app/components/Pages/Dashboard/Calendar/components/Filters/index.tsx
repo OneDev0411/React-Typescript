@@ -61,12 +61,14 @@ export const Filters = withRouter((props: Props & WithRouterProps) => {
 
   return (
     <PageTabs
-      defaultValue={props.params.id || 0}
+      defaultValue={props.params.id || 'All'}
       onChange={handleChangeTab}
       tabs={TAB_ITEMS.map(({ label, link }, index: number) => {
         const url = `${BASE_URL}${link}`
 
-        return <TabLink key={index} value={link || 0} label={label} to={url} />
+        return (
+          <TabLink key={index} value={link || 'All'} label={label} to={url} />
+        )
       })}
     />
   )
