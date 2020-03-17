@@ -49,10 +49,10 @@ import Brand from '../controllers/Brand'
 
 import config from '../../config/public'
 
-import Intercom from './Pages/Dashboard/Partials/Intercom'
 import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
 import { getAllNotifications } from '../store_actions/notifications'
 
+import Intercom from '../views/components/Intercom'
 import CheckBrowser from '../views/components/CheckBrowser'
 
 class App extends Component {

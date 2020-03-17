@@ -19,7 +19,7 @@ import { SideNavTooltip } from './components/Tooltip'
 import { UserMenu } from './components/UserMenu'
 import { SideNavLinkItem } from './components/SideNavLinkItem'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
-import SupportDrawerTrigger from './components/SupportDrawerTrigger'
+import SupportTrigger from './components/SupportTrigger'
 
 import {
   Sidenav,
@@ -117,6 +117,10 @@ export default function AppSideNav() {
           <SideNavLinkItem tooltip="All MLS® Properties" to="/dashboard/mls">
             Properties
           </SideNavLinkItem>
+
+          <Acl access={hasWebsitePermission}>
+            <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
+          </Acl>
         </SidenavListGroup>
 
         <SidenavListGroup>
@@ -144,15 +148,7 @@ export default function AppSideNav() {
             </SideNavLinkItem>
           )}
 
-          <SideNavItem>
-            <SideNavTooltip title="Support">
-              <SupportDrawerTrigger />
-            </SideNavTooltip>
-          </SideNavItem>
-
-          <Acl access={hasWebsitePermission}>
-            <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
-          </Acl>
+          <SupportTrigger />
         </SidenavListGroup>
       </ScrollableArea>
 
