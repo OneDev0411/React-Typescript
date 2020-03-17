@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {
   Popover,
   FormControlLabel,
+  Tooltip,
   createStyles,
   makeStyles,
   Theme
@@ -34,9 +35,14 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props<Row> {
   rows: Row[]
   totalRows: number
+  tooltipTitle: string
 }
 
-export function ToggleEntireRows<Row>({ rows, totalRows }: Props<Row>) {
+export function ToggleEntireRows<Row>({
+  rows,
+  totalRows,
+  tooltipTitle
+}: Props<Row>) {
   const classes = useStyles()
   const [state, dispatch] = useGridContext()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -67,10 +73,12 @@ export function ToggleEntireRows<Row>({ rows, totalRows }: Props<Row>) {
 
   return (
     <>
-      <DropdownToggleButton
-        onClick={handleToggleMenu}
-        className={classes.button}
-      />
+      <Tooltip title={tooltipTitle} placement="top">
+        <DropdownToggleButton
+          onClick={handleToggleMenu}
+          className={classes.button}
+        />
+      </Tooltip>
 
       <Popover
         id={anchorEl ? 'entire-row-popover' : undefined}

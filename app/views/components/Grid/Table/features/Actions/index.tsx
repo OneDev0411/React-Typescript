@@ -78,27 +78,32 @@ export function Actions<Row>({ rows, TableActions, totalRows }: Props<Row>) {
       state.selection.selectedRowIds.length < rows.length) ||
     (state.selection.isEntireRowsSelected &&
       state.selection.excludedRows.length > 0)
+  const tooltipTitle = isAllRowsSelected
+    ? 'Deselect All Rows'
+    : 'Select All Rows'
 
   return (
     <div className={classes.container}>
-      <Tooltip
-        title={isAllRowsSelected ? 'Deselect All Rows' : 'Select All Rows'}
-        placement="top"
-      >
-        <div>
+      <div>
+        <Tooltip title={tooltipTitle} placement="top">
           <Checkbox
             checked={isAllRowsSelected}
+            tooltipTitle={tooltipTitle}
             indeterminate={isSomeRowsSelected}
             onChange={toggleAll}
           />
+        </Tooltip>
 
-          <ToggleEntireRows<Row> rows={rows} totalRows={totalRows} />
+        <ToggleEntireRows<Row>
+          rows={rows}
+          totalRows={totalRows}
+          tooltipTitle={tooltipTitle}
+        />
 
-          <span className={classes.summary} onClick={toggleAll}>
-            {getSelectedCount()} of {totalRows} selected
-          </span>
-        </div>
-      </Tooltip>
+        <span className={classes.summary} onClick={toggleAll}>
+          {getSelectedCount()} of {totalRows} selected
+        </span>
+      </div>
 
       <div>
         {TableActions && (
