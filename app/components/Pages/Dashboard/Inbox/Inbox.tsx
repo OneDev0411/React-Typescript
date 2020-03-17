@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
-import { Grid, Theme, Divider } from '@material-ui/core'
+import { Grid, Theme, Divider, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -23,18 +23,19 @@ const useStyles = makeStyles(
       height: '100vh',
       display: 'flex',
       flexDirection: 'column',
+      paddingLeft: 0,
       paddingBottom: 0
     },
     main: {
       position: 'relative',
       height:
-        'calc(100vh - 124px - 1px)' /* total height - page header - divider */
+        'calc(100vh - 119px - 1px)' /* total height - page header - divider */
     },
     fullHeight: {
       height: '100%'
     },
     list: {
-      width: `calc(${theme.spacing(36)}px + 0.5em)` /* scroll bar */
+      width: `calc(${theme.spacing(47.5)}px + 0.5em)` /* scroll bar */
     },
     conversation: {
       overflowX: 'hidden',
@@ -75,17 +76,21 @@ export default function Inbox({ params }: WithRouterProps) {
 
   return (
     <GlobalPageLayout className={classes.layout}>
-      {initializing || noConnectedAccounts ? (
-        <GlobalPageLayout.Header title="Inbox" />
-      ) : (
-        <GlobalPageLayout.HeaderWithSearch
-          title="Inbox"
-          placeholder="Search emails"
-          onSearch={query => setSearchQuery(query)}
-        />
-      )}
+      <Box paddingLeft={5}>
+        {initializing || noConnectedAccounts ? (
+          <GlobalPageLayout.Header title="Inbox" />
+        ) : (
+          <GlobalPageLayout.HeaderWithSearch
+            title="Inbox"
+            placeholder="Search emails"
+            onSearch={query => setSearchQuery(query)}
+          />
+        )}
+      </Box>
       <GlobalPageLayout.Main className={classes.main}>
-        <Divider />
+        <Box paddingLeft={5}>
+          <Divider />
+        </Box>
         {initializing ? null : noConnectedAccounts ? (
           <InboxConnectAccount />
         ) : (

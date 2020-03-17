@@ -4,8 +4,9 @@ import { makeStyles } from '@material-ui/styles'
 export const useInboxEmailThreadListItemStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      width: '100%',
-      padding: theme.spacing(2, 2, 2, 0.75)
+      width: 'calc(100% + 0.5em)' /* scroll bar */,
+      padding: theme.spacing(2),
+      paddingRight: `calc(${theme.spacing(2)}px + 0.5em)` /* scroll bar */
     },
     selected: {
       backgroundColor: `${theme.palette.action.selected}`
@@ -15,7 +16,7 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
       height: theme.spacing(1),
       borderRadius: theme.spacing(0.5),
       marginTop: theme.spacing(0.75),
-      marginRight: theme.spacing(0.75)
+      marginRight: theme.spacing(2)
     },
     statusUnread: {
       backgroundColor: theme.palette.secondary.main
