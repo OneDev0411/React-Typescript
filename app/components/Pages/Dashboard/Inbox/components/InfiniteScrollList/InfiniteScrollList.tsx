@@ -1,6 +1,6 @@
 import React, { ReactNode, useState, useRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { Theme, Grid, Box, Button } from '@material-ui/core'
+import { Theme, Grid, Box, Button, Divider } from '@material-ui/core'
 
 import NoContentMessage from '../NoContentMessage'
 
@@ -17,8 +17,10 @@ const useStyles = makeStyles(
     },
     itemWrapper: {
       width: '100%',
-      cursor: 'pointer',
-      borderBottom: `1px solid ${theme.palette.grey.A100}`
+      cursor: 'pointer'
+    },
+    itemDivider: {
+      marginLeft: theme.spacing(5)
     }
   }),
   { name: 'InfiniteScrollList' }
@@ -110,6 +112,7 @@ export default function InfiniteScrollList<Item>({
                 classes={{ root: classes.itemWrapper }}
               >
                 {renderItem(item, item === selectedItem)}
+                <Divider classes={{ root: classes.itemDivider }} />
               </Grid>
             ))}
             <Grid item xs>

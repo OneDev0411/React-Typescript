@@ -44,7 +44,11 @@ export default function InboxEmailThreadListItem({
       elevation={0}
       square
       classes={{
-        root: classNames(classes.root, selected && classes.selected)
+        root: classNames(
+          classes.root,
+          emailThread.is_read && classes.read,
+          selected && classes.selected
+        )
       }}
     >
       <Grid container spacing={0}>
@@ -81,7 +85,12 @@ export default function InboxEmailThreadListItem({
               variant="caption"
               display="inline"
               title={messageDateText}
-              classes={{ root: classes.date }}
+              classes={{
+                root: classNames(
+                  classes.date,
+                  !emailThread.is_read && classes.dateUnread
+                )
+              }}
             >
               &nbsp;&nbsp;{messageDateShortText}
             </Typography>
@@ -103,10 +112,11 @@ export default function InboxEmailThreadListItem({
               variant="body2"
               classes={{
                 root: classNames(
-                  classes.message,
-                  emailThread.is_read && classes.messageRead
+                  classes.snippet,
+                  emailThread.is_read && classes.snippetRead
                 )
               }}
+              noWrap
             >
               {emailThread.snippet}
             </Typography>

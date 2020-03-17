@@ -11,6 +11,7 @@ import {
   Theme,
   Tooltip
 } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
 
 import { useMenu } from 'hooks/use-menu'
 
@@ -48,6 +49,7 @@ export function EmailItemHeaderActions(
   const { menuProps, buttonTriggerProps, onClose } = useMenu()
 
   const classes = useStyles(props)
+  const theme = useTheme<Theme>()
 
   const select = action => () => {
     onClose()
@@ -61,14 +63,17 @@ export function EmailItemHeaderActions(
     <Box ml={1} onClick={e => e.stopPropagation()}>
       <Tooltip title="Reply">
         <IconButton onClick={props.onReply}>
-          <IconReply size={iconSizes.small} />
+          <IconReply
+            size={iconSizes.small}
+            color={theme.palette.common.black}
+          />
         </IconButton>
       </Tooltip>
       <Tooltip title="More">
         <IconButton {...buttonTriggerProps}>
           <IconVerticalDocs
             size={iconSizes.small}
-            style={{ fill: 'currentColor' }}
+            color={theme.palette.common.black}
           />
         </IconButton>
       </Tooltip>
@@ -81,21 +86,30 @@ export function EmailItemHeaderActions(
       >
         <MenuItem dense onClick={select(props.onReply)}>
           <ListItemIcon>
-            <IconReply size={iconSizes.small} />
+            <IconReply
+              size={iconSizes.small}
+              color={theme.palette.common.black}
+            />
           </ListItemIcon>
           <ListItemText>Reply</ListItemText>
         </MenuItem>
         {hasReplyAll(props.email) && (
           <MenuItem dense onClick={select(props.onReplyAll)}>
             <ListItemIcon>
-              <IconReplyAll size={iconSizes.small} />
+              <IconReplyAll
+                size={iconSizes.small}
+                color={theme.palette.common.black}
+              />
             </ListItemIcon>
             <ListItemText>Reply All</ListItemText>
           </MenuItem>
         )}
         <MenuItem dense onClick={select(props.onForward)}>
           <ListItemIcon>
-            <IconForward size={iconSizes.small} />
+            <IconForward
+              size={iconSizes.small}
+              color={theme.palette.common.black}
+            />
           </ListItemIcon>
           <ListItemText>Forward</ListItemText>
         </MenuItem>
