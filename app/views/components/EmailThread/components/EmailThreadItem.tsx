@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 import {
   Box,
   Button,
+  Avatar,
   createStyles,
   Link,
   makeStyles,
@@ -15,7 +16,6 @@ import classNames from 'classnames'
 
 import { Iframe } from 'components/Iframe'
 
-import Avatar from '../../Avatar'
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
 import { EmailItemHeaderActions } from './EmailItemHeaderActions'
@@ -70,6 +70,10 @@ const styles = (theme: Theme) =>
     },
     actionButton: {
       marginRight: `${theme.spacing(1)}px`
+    },
+    avatar: {
+      backgroundColor: theme.palette.divider,
+      color: theme.palette.text.primary
     }
   })
 const useStyles = makeStyles(styles, { name: 'EmailThreadItem' })
@@ -112,7 +116,9 @@ export function EmailThreadItem({
         onClick={onToggleCollapsed && (() => onToggleCollapsed(!collapsed))}
       >
         <Box mr={2}>
-          <Avatar title={email.from} />
+          <Avatar alt={email.from} sizes="32" className={classes.avatar}>
+            {email.from.substring(0, 1).toUpperCase()}
+          </Avatar>
         </Box>
         <Box flex={1} mr={2} overflow="hidden">
           <Typography variant="body2" noWrap>

@@ -64,40 +64,25 @@ export function doFilterOnInsightList(
   list,
   type: InsightFiltersType = InsightFiltersType.SENT
 ) {
-  // Defining a muatable const :D
-  const output = {
-    list: [],
-    stats: {
-      scheduled: 0,
-      sent: 0
-    }
-  }
+  const isSentStatus = type === InsightFiltersType.SENT
 
-  // Filtering based on types
-  if (type === InsightFiltersType.SCHEDULED) {
-    output.list = list.filter(function filterInsightList(item) {
-      return isEmailScheduled(item)
-    })
+  const filteredList = list.filter(item => {
+    const isScheduledItem = isEmailScheduled(item)
 
-    output.stats = {
-      sent: list.length - output.list.length,
-      scheduled: output.list.length
-    }
-  }
+    return isSentStatus ? !isScheduledItem : isScheduledItem
+  })
 
-  if (type === InsightFiltersType.SENT) {
-    output.list = list.filter(function filterInsightList(item) {
-      return !isEmailScheduled(item)
-    })
-
-    output.stats = {
-      sent: output.list.length,
-      scheduled: list.length - output.list.length
-    }
-  }
+  const activeFilterStats = filteredList.length
+  const secondFilterStats = list.length - filteredList.length
 
   // Returning final output
-  return output
+  return {
+    list: filteredList,
+    stats: {
+      scheduled: !isSentStatus ? activeFilterStats : secondFilterStats,
+      sent: isSentStatus ? activeFilterStats : secondFilterStats
+    }
+  }
 }
 
 export enum SortValues {

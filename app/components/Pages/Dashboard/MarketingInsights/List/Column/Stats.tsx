@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
       visibility: 'hidden',
       borderRadius: theme.shape.borderRadius,
       boxShadow: theme.shadows[1],
+      zIndex: 1,
       '&:hover': {
         visibility: 'visible'
       }
