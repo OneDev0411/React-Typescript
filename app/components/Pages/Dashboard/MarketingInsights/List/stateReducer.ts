@@ -21,7 +21,7 @@ const reducer = (state: ListDataTypes, action: ActionTypes) => {
         ...action.payload
       }
     default:
-      throw new Error()
+      return state
   }
 }
 
