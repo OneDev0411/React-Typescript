@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'sticky',
       height: theme.spacing(10),
       width: '100%',
-      justifyContent: 'space-between',
+      justifyContent: 'flex-start',
       padding: theme.spacing(0, 1),
       zIndex: theme.zIndex.gridAction
     },
