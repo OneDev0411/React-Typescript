@@ -70,11 +70,12 @@ class SavedSearchesList extends Component {
       this.setState({ isDeleting: true })
       await this.props.dispatch(deleteAlert(Item))
       this.setState({ isDeleting: false }, () => {
-        if (this.props.list.data.length > 0) {
-          browserHistory.push(
-            `/dashboard/mls/saved-searches/${this.props.list.data[0].id}`
-          )
-        } else {
+        const { location } = this.props
+
+        // Based on the discussion at https://gitlab.com/rechat/web/-/issues/3922#note_303236379
+        // if we are on the same saved-search page which we're deleting it, we redirect user to
+        // MLS' default page, otherwise we're staying where we are.
+        if (location.pathname.includes(Item.id)) {
           browserHistory.push('/dashboard/mls')
         }
       })
