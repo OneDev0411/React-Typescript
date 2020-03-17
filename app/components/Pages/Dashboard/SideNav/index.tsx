@@ -88,17 +88,6 @@ export default function AppSideNav() {
             </SideNavLinkItem>
           </Acl.Marketing>
 
-          <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
-            <SideNavLinkItem to="/dashboard/deals" tooltip="Your Deals">
-              <AppNavbarBadge
-                badgeContent={dealsNotificationsNumber}
-                color="primary"
-              >
-                Deals
-              </AppNavbarBadge>
-            </SideNavLinkItem>
-          </Acl>
-
           <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
             <SideNavLinkItem
               tooltip="Open House Registration Pages"
@@ -120,6 +109,17 @@ export default function AppSideNav() {
 
           <Acl access={hasWebsitePermission}>
             <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
+          </Acl>
+
+          <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
+            <SideNavLinkItem to="/dashboard/deals" tooltip="Your Deals">
+              <AppNavbarBadge
+                badgeContent={dealsNotificationsNumber}
+                color="primary"
+              >
+                Deals
+              </AppNavbarBadge>
+            </SideNavLinkItem>
           </Acl>
         </SidenavListGroup>
 
