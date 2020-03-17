@@ -83,17 +83,20 @@ class ContactsList extends React.Component {
       duplicateClusterCount: 0
     }
 
-    this.order = getUserSettingsInActiveTeam(props.user, SORT_FIELD_SETTING_KEY)
+    this.order = null
     this.tableContainerId = 'contacts--page-container'
   }
 
   componentDidMount() {
-    this.props.fetchOAuthAccounts()
+    const { user, fetchOAuthAccounts, fetchTags, getContactsTags } = this.props
+
+    this.order = getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY)
+    fetchOAuthAccounts()
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
 
-    if (this.props.fetchTags) {
-      this.props.getContactsTags()
+    if (fetchTags) {
+      getContactsTags()
     }
 
     this.setSelectedSidebarFilter()
