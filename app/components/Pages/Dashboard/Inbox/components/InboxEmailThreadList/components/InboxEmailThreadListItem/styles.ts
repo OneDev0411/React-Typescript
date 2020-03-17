@@ -5,8 +5,11 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
   (theme: Theme) => ({
     root: {
       width: 'calc(100% + 0.5em)' /* scroll bar */,
-      padding: theme.spacing(2),
+      padding: theme.spacing(1.5, 2),
       paddingRight: `calc(${theme.spacing(2)}px + 0.5em)` /* scroll bar */
+    },
+    read: {
+      backgroundColor: `${theme.palette.grey[50]}`
     },
     selected: {
       backgroundColor: `${theme.palette.action.selected}`
@@ -19,7 +22,7 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
       marginRight: theme.spacing(2)
     },
     statusUnread: {
-      backgroundColor: theme.palette.secondary.main
+      backgroundColor: theme.palette.info.main
     },
     info: {
       maxWidth: 'calc(100% - 25px)'
@@ -30,16 +33,18 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
     date: {
       color: theme.palette.grey[500]
     },
+    dateUnread: {
+      color: theme.palette.common.black,
+      fontWeight: 700
+    },
     subject: {
       color: theme.palette.common.black
     },
     snippet: {
-      maxHeight: '2.86em' /* 2x body2 line-height */,
-      overflow: 'hidden',
       color: theme.palette.common.black
     },
-    snippetUnselectedRead: {
-      color: theme.palette.grey[500]
+    snippetRead: {
+      color: theme.palette.grey[600]
     },
     flex: {
       display: 'flex'
