@@ -469,7 +469,9 @@ class ContactsList extends React.Component {
     this.setState({ isFetchingMoreContactsBefore: false })
   }
 
-  handleOnDelete = (e, { selectedRows = [] }) => {
+  handleOnDelete = (e, options) => {
+    const selectedRows =
+      options && options.selectedRows ? options.selectedRows : []
     const state = this.props.gridStateContext
     const entireMode = state.selection.isEntireRowsSelected
 
