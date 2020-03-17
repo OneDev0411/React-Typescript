@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
     wrapper: {
       display: 'flex',
       alignItems: 'center',
-      width: `calc(100% - ${theme.spacing(3)}px)`
+      width: '100%'
     },
     userDetails: {
       textAlign: 'left',

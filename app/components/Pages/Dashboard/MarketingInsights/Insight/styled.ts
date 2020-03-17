@@ -83,8 +83,7 @@ export const SummaryCard = styled.div`
 `
 
 export const ContactColumn = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: block;
   padding-right: 1rem;
 
   .labels-container {
