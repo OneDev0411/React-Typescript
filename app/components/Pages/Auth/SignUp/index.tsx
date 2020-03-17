@@ -3,77 +3,54 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router'
 import { Form, Field } from 'react-final-form'
 
+import { Button, Typography, Box } from '@material-ui/core'
+
 import { IAppState } from 'reducers'
+
+import { getFailedMessage, getSucceedMessage } from './getMessage'
 
 import { validateEmail } from '../Password/Forgot'
 import { getBrandInfo } from '../SignIn/get-brand-info'
 import signup from '../../../../models/auth/signup'
-import Button from '../../../../views/components/Button/ActionButton'
+
 import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
 
-interface ErrorMessage {
-  email: string
+interface SubmitState {
   message: ReactNode
-}
-
-interface SuccessMessage {
-  isShadow: boolean
-  email: string
-}
-
-const getErrorMessage = (errorCode, email) => {
-  if (errorCode === 409) {
-    return (
-      <div className="c-auth__submit-alert c-auth__submit-alert--warning">
-        An account with this email address exists in our system. Please{' '}
-        <Link to={`/password/forgot?email=${encodeURIComponent(email)}`}>
-          reset your password
-        </Link>{' '}
-        or{' '}
-        <Link to={`/signin?username=${encodeURIComponent(email)}`}>
-          sign in
-        </Link>
-        .
-      </div>
-    )
-  }
-
-  return (
-    <div className="c-auth__submit-error-alert">
-      There was an error with this request. Please try again.
-    </div>
-  )
+  status: 'initial' | 'pending' | 'succeed' | 'failed'
 }
 
 export default function Signup(props) {
   const brand = useSelector((state: IAppState) => state.brand)
-  const email = window.decodeURIComponent(props.location.query.email || '')
-  const [submitError, setSubmitError] = useState<ErrorMessage | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-  const [
-    submitSuccessfully,
-    setSubmitSuccessfully
-  ] = useState<SuccessMessage | null>(null)
-
+  const [email, setEmail] = useState<string>(
+    window.decodeURIComponent(props.location.query.email || '')
+  )
+  const [submitState, setSubmitState] = useState<SubmitState>({
+    status: 'initial',
+    message: null
+  })
+  const isSubmitting = submitState.status === 'pending'
+  const wasSuccessfulSubmit = submitState.status === 'succeed'
   const isDisabled = isSubmitting
   const { siteLogo, siteTitle } = getBrandInfo(brand)
   const onSubmitHandler = async ({ email }) => {
-    setIsSubmitting(true)
+    setEmail(email)
+    setSubmitState({
+      message: null,
+      status: 'pending'
+    })
 
     try {
       const statusCode = await signup(email)
 
-      setIsSubmitting(false)
-      setSubmitSuccessfully({
-        email,
-        isShadow: statusCode === 202
+      setSubmitState({
+        message: getSucceedMessage(statusCode === 202, email),
+        status: 'succeed'
       })
     } catch (errorCode) {
-      setIsSubmitting(false)
-
-      setSubmitError({
-        email,
-        message: getErrorMessage(errorCode, email)
+      setSubmitState({
+        message: getFailedMessage(errorCode, email),
+        status: 'failed'
       })
     }
   }
@@ -92,14 +69,16 @@ export default function Signup(props) {
             </a>
           )}
           <h1 className="c-auth__title">Sign Up</h1>
-          {!submitSuccessfully ? (
-            <p className="c-auth__subtitle">Hello, lets get started.</p>
+          {!wasSuccessfulSubmit ? (
+            <Typography variant="body2">Hello, lets get started.</Typography>
           ) : (
-            <p className="c-auth__subtitle">Check Your Inbox.</p>
+            <Typography variant="body2">Check Your Inbox.</Typography>
           )}
         </header>
         <main className="c-auth__main">
-          {!submitSuccessfully ? (
+          {wasSuccessfulSubmit ? (
+            submitState.message
+          ) : (
             <Form
               initialValues={{ email }}
               onSubmit={onSubmitHandler}
@@ -113,40 +92,27 @@ export default function Signup(props) {
                     label="Email"
                     component={SimpleField}
                   />
-                  {submitError && submitError.message}
-                  <Button
-                    type="submit"
-                    isBlock
-                    disabled={isDisabled}
-                    style={{ marginBottom: '2rem' }}
-                  >
-                    {isSubmitting ? 'Submitting...' : 'Sign up'}
-                  </Button>
-                  <p className="c-auth__subtitle">
-                    <small>Already have an account?</small>&nbsp;&nbsp;
-                    <Link to="/signin">Sign in</Link>
-                  </p>
+                  {submitState.message}
+                  <Box mb={4}>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      disabled={isDisabled}
+                      color="primary"
+                    >
+                      {isSubmitting ? 'Submitting...' : 'Sign up'}
+                    </Button>
+                  </Box>
+                  <Box textAlign="center">
+                    <Typography variant="body2">
+                      <small>Already have an account?</small>&nbsp;&nbsp;
+                      <Link to="/signin">Sign in</Link>
+                    </Typography>
+                  </Box>
                 </form>
               )}
             />
-          ) : (
-            <div style={{ textAlign: 'center' }}>
-              <p className="c-auth__submit-alert--success">
-                We {submitSuccessfully.isShadow ? 'resent a new' : ' sent an'}{' '}
-                activation email.
-                <br />
-                Please check <b>{submitSuccessfully.email}</b>
-              </p>
-              <div className="c-auth__subtitle">
-                <Link
-                  to={`/signin?username=${encodeURIComponent(
-                    submitSuccessfully.email
-                  )}`}
-                >
-                  Sign in
-                </Link>
-              </div>
-            </div>
           )}
         </main>
       </article>
