@@ -140,7 +140,7 @@ const CalendarList: React.FC<Props> = props => {
           isLoading={props.isLoading}
           loadingPosition={props.loadingPosition}
           onVisibleRowChange={debounce(getInViewDate, 50)}
-          itemSize={() => 64}
+          itemSize={index => getRowHeight(props.rows[index])}
           overscanCount={3}
           ref={props.listRef}
         >
@@ -156,6 +156,14 @@ const CalendarList: React.FC<Props> = props => {
       </div>
     </ListContext.Provider>
   )
+}
+
+function getRowHeight(row: ICalendarListRow): number {
+  if (row.hasOwnProperty('isEventHeader')) {
+    return 50
+  }
+
+  return 60
 }
 
 CalendarList.defaultProps = defaultProps
