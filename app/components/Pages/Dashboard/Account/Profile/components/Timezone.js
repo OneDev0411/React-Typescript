@@ -64,7 +64,7 @@ const Timezone = ({ timezone, dispatch }) => {
               name="time_zone"
               render={({ input }) => (
                 <Fragment>
-                  <Box marginBottom="0.5em" style={{ cursor: 'pointer' }}>
+                  <Box marginBottom={1} style={{ cursor: 'pointer' }}>
                     <Typography variant="body2">Timezones</Typography>
                   </Box>
                   <Dropdown

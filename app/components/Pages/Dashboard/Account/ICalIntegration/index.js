@@ -211,15 +211,15 @@ class DealTemplates extends React.Component {
             onChangeSelectAllTypes={this.onChangeSelectAllTypes}
             onSelectOneCategoriesTypes={this.onSelectOneCategoriesTypes}
           />
-          <GenerateUrl
-            userTeams={teams}
-            selectedTypes={selectedTypes}
-            selectedMembers={selectedMembers}
-            feedURl={this.state.feedURl}
-          />
-          <Box marginTop="0.5em">
-            <UpdateGenerateUrlInfo />
+          <Box marginBottom={1}>
+            <GenerateUrl
+              userTeams={teams}
+              selectedTypes={selectedTypes}
+              selectedMembers={selectedMembers}
+              feedURl={this.state.feedURl}
+            />
           </Box>
+          <UpdateGenerateUrlInfo />
         </ICalContainer>
       </Fragment>
     )

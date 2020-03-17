@@ -103,7 +103,7 @@ class GenerateUrl extends React.Component {
     return (
       <React.Fragment>
         {errorMessage && (
-          <Box marginBottom="0.5em">
+          <Box marginBottom={1}>
             <Alert severity="error">{errorMessage}</Alert>
           </Box>
         )}

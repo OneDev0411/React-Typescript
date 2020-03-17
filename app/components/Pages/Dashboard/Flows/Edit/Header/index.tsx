@@ -28,7 +28,7 @@ export default function Header({
   return (
     <Box
       width="100%"
-      padding="1.5em"
+      padding={3}
       style={{ backgroundColor: brandBackground }}
       display="flex"
       alignItems="flex-start"
@@ -36,7 +36,7 @@ export default function Header({
       <Box
         width={0}
         flexGrow={1}
-        marginRight="1.5em"
+        marginRight={3}
         display="flex"
         flexDirection="column"
       >
