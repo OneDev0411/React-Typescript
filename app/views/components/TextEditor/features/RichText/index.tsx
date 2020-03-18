@@ -17,8 +17,8 @@ import { ToolbarToggleButton } from '../../components/ToolbarToggleButton'
 import IconBold from '../../../SvgIcons/Bold/IconBold'
 import IconItalic from '../../../SvgIcons/Italic/IconItalic'
 import IconUnderline from '../../../SvgIcons/Underline/IconUnderline'
-import IconList from '../../../SvgIcons/List/ListIcon'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
+import IconBulletedList from '../../../SvgIcons/BulletedList/IconBulletedList'
 import IconNumberedList from '../../../SvgIcons/NumberedList/IconNumberedList'
 import HeadingButtons from './HeadingButtons'
 import { ToolbarIconButton } from '../../components/ToolbarIconButton'
@@ -140,7 +140,7 @@ export function RichTextFeature({
         <ToolbarFragment group="lists">
           <ULButton>
             <ToolbarToggleButton tooltip="Bulleted List" isBlockButton>
-              <IconList color="inherit" size={iconSizes.small} />
+              <IconBulletedList color="inherit" size={iconSizes.small} />
             </ToolbarToggleButton>
           </ULButton>
 

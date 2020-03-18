@@ -39,17 +39,17 @@ export const CheckMarkBox = styled.div<CheckMarkBoxProps>`
     checked,
     theme
   }: ThemedStyledProps<CheckMarkBoxProps, Theme>) =>
-    checked ? theme.palette.primary.main : theme.palette.common.white};
+    checked ? theme.palette.secondary.main : theme.palette.common.white};
   border: solid 1px
     ${({ checked, theme }: ThemedStyledProps<CheckMarkBoxProps, Theme>) =>
-      checked ? theme.palette.primary.main : theme.palette.common.black};
+      checked ? theme.palette.secondary.main : theme.palette.common.black};
 
   &:hover {
     background-color: ${({
       checked,
       theme
     }: ThemedStyledProps<CheckMarkBoxProps, Theme>) =>
-      checked ? theme.palette.primary.main : theme.palette.grey[100]};
+      checked ? theme.palette.secondary.main : theme.palette.grey[100]};
   }
 `
 

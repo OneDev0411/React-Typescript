@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Checkbox } from 'components/Checkbox'
 
-import { Title } from '../styled'
+import Title from '../Title'
 
 const CategoryTypes = ({
   title,

@@ -118,7 +118,7 @@ function List(props: Props & WithRouterProps) {
       primary: true,
       width: '33%',
       render: ({ row }) => (
-        <Typography noWrap variant="body1" classes={{ root: classes.name }}>
+        <Typography noWrap variant="body2" classes={{ root: classes.name }}>
           {row.name}
         </Typography>
       )
@@ -162,13 +162,7 @@ function List(props: Props & WithRouterProps) {
               pullTo="right"
               selectedItem={null}
               buttonRenderer={(btnProps: any) => (
-                <IconButton
-                  {...btnProps}
-                  onClick={event => {
-                    event.stopPropagation()
-                    btnProps.onClick && btnProps.onClick(event)
-                  }}
-                >
+                <IconButton {...btnProps}>
                   <IconHorizontalDots />
                 </IconButton>
               )}
@@ -247,9 +241,12 @@ function List(props: Props & WithRouterProps) {
           totalRows={(flows || []).length}
           loading={isFetching ? 'middle' : null}
           LoadingStateComponent={LoadingComponent}
-          getTrProps={({ row }) => ({
-            onClick: () =>
-              props.router.push(`/dashboard/account/flows/${row.id}`)
+          getTdProps={({ column, row }) => ({
+            onClick: () => {
+              if (column.id !== 'actions') {
+                props.router.push(`/dashboard/account/flows/${row.id}`)
+              }
+            }
           })}
           classes={{ row: classes.row }}
         />

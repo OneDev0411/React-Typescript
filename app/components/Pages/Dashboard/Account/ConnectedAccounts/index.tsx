@@ -3,7 +3,7 @@ import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
-import { List } from '@material-ui/core'
+import { List, Box } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 
 import { IAppState } from 'reducers'
@@ -12,7 +12,7 @@ import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
 
-import Loading from 'partials/Loading'
+import LoadingContainer from 'components/LoadingContainer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import ConnectAccounts from './ConnectAccounts'
@@ -46,7 +46,9 @@ function ConnectedAccounts({
       </Helmet>
 
       {loading ? (
-        <Loading />
+        <Box margin={2}>
+          <LoadingContainer style={{}} />
+        </Box>
       ) : accounts.length === 0 ? (
         <ConnectAccounts />
       ) : (
