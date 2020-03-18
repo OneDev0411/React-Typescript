@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 
+import { StyledSVGWithProps } from 'utils/ts-utils'
 import LinkButton from 'components/Button/LinkButton'
 import ArrowDropDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import { grey, primary } from 'views/utils/colors'
@@ -21,7 +22,9 @@ interface IconDropProps {
   isOpen?: boolean
 }
 
-export const IconDrop = styled(ArrowDropDown)<IconDropProps>`
+export const IconDrop: StyledSVGWithProps<IconDropProps> = styled(
+  ArrowDropDown
+)<IconDropProps>`
   position: relative;
   margin-left: 1em;
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};

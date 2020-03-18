@@ -4,6 +4,7 @@ import { H4 } from 'components/Typography/headings'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import { primary } from 'views/utils/colors'
+import { StyledSVGWithProps } from 'utils/ts-utils'
 
 import { Container as ActionsButton } from '../../components/ActionsButton/styled'
 
@@ -55,17 +56,22 @@ export const ItemsContainer = styled.div<{
     `};
 `
 
-export const ArrowIcon = styled(ArrowDownIcon)<{
+type ArrowIconProps = {
   isOpen: boolean
   show?: boolean
-}>`
+}
+
+export const ArrowIcon: StyledSVGWithProps<ArrowIconProps> = styled(
+  ArrowDownIcon
+)`
   width: 1.5em;
   height: 1.5em;
   margin-right: 0.5rem;
   cursor: pointer;
   fill: #000 !important;
-  transform: ${props => (props.isOpen ? 'inherit' : 'rotateZ(-90deg)')};
-  opacity: ${props => (props.show ? 1 : 0)};
+  transform: ${(props: ArrowIconProps) =>
+    props.isOpen ? 'inherit' : 'rotateZ(-90deg)'};
+  opacity: ${(props: ArrowIconProps) => (props.show ? 1 : 0)};
 `
 
 /* item rows */
@@ -138,7 +144,7 @@ export const Row = styled.div`
 export const RowArrowIcon = styled(ArrowIcon)`
   align-self: flex-start;
   margin-top: 1px;
-`
+` as typeof ArrowDownIcon
 
 export const RowTitle = styled(H4)<{
   clickable: boolean
