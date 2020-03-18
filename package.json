@@ -214,6 +214,7 @@
     "react-use": "^9.3.0",
     "react-use-controllable-state": "0.0.7",
     "react-use-promise": "^0.2.0",
+    "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
     "reapop": "^1.1.4",
     "reapop-theme-wybo": "^0.4.1",
