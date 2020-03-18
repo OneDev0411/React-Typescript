@@ -31,7 +31,7 @@ export const CalloutContainer = styled.div<Props>`
   border-radius: 6px;
   padding: ${padding};
   margin: ${margin};
-  color: ${({ theme, type }: Props) => theme.palette.info.contrastText};
+  color: ${({ theme }: Props) => theme.palette.info.contrastText};
   background-color: ${bgColor};
   display: flex;
   align-items: center;
@@ -50,5 +50,8 @@ export const CalloutCloseButton = styled(IconButton)`
   svg {
     margin: auto;
     fill: initial;
+  }
+  :hover {
+    background: ${({ theme }: Props) => theme.palette.info.contrastText};
   }
 `

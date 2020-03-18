@@ -23,7 +23,7 @@ export interface TimelineRef {
 interface Props {
   contact: IContact
   timelineRef?: RefObject<TimelineRef>
-  onChangeNote(contact: IContact): void
+  onChangeNote: (contact: IContact) => void
 }
 
 const associations = ['calendar_event.full_thread']
@@ -39,7 +39,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 2)
     },
     header: {
-      marginTop: theme.spacing(6),
       flex: '0 1 auto'
     },
     list: {
