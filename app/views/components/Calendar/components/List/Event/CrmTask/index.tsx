@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/styles'
 
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+
 import { ListContext } from '../../context'
 
 import { EventContainer } from '../components/EventContainer'
@@ -57,12 +59,15 @@ export function CrmTask({ style, event, onEventChange }: Props) {
               cursor: 'pointer'
             }}
           >
-            {event.title || `[No Title ${event.event_type}]`}
+            {event.title ? (
+              <TextMiddleTruncate text={event.title} maxLength={40} />
+            ) : (
+              `[No Title ${event.event_type}]`
+            )}
           </a>{' '}
           <Associations event={event} onEventChange={onEventChange} />
         </div>
       }
-      subtitle={<>{event.title}</>}
       actions={
         <>
           <OpenHouseRegistration event={event} />

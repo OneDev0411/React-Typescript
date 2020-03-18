@@ -20,9 +20,9 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.primary.main,
       cursor: 'pointer'
     },
-    with: {
+    splitter: {
       color: theme.palette.grey[500],
-      margin: theme.spacing(0, 0.5, 0, 1)
+      margin: theme.spacing(0, 0.5)
     }
   })
 )
@@ -42,7 +42,7 @@ export function Associations({ event, onEventChange }: Props) {
 
   return (
     <>
-      <span className={classes.with}>—With</span>
+      <span className={classes.splitter}>—</span>
       <span>
         {contacts.map((item: IContact, index: number) => (
           <React.Fragment key={index}>

@@ -5,7 +5,6 @@ import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import MiniContactProfile from 'components/MiniContact'
 
 import { EventContainer } from '../components/EventContainer'
-import { TouchDateSubtitle } from './Subtitle'
 
 interface Props {
   style: React.CSSProperties
@@ -27,7 +26,7 @@ export function NextTouch({ style, event }: Props) {
       editable={false}
       title={
         <div>
-          Contact{' '}
+          Touch Reminder:{' '}
           <MiniContactProfile type="event" data={contact} as="span">
             <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
               {contact.display_name}
@@ -35,7 +34,6 @@ export function NextTouch({ style, event }: Props) {
           </MiniContactProfile>
         </div>
       }
-      subtitle={<TouchDateSubtitle event={event} contact={contact} />}
     />
   )
 }

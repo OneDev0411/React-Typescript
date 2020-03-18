@@ -76,12 +76,7 @@ export function CrmStatus({ event, onChange }: Props) {
         color="primary"
         disableRipple
         checked={isChecked}
-        onChange={handleChange}
-        // used inline style for the sake of performance in Virtual List
-        style={{
-          padding: 0,
-          margin: '-2px 0.5rem 0 -2px'
-        }}
+        onClick={handleChange}
       />
     </Tooltip>
   )

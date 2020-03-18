@@ -15,10 +15,11 @@ interface Props {
 
 export function Month({ date, onChange }: Props) {
   const classes = useStyles()
+  const selectedMonth = months[date.getMonth()]
 
   return (
     <BaseDropdown
-      buttonLabel={months[date.getMonth()]}
+      buttonLabel={selectedMonth}
       DropdownToggleButtonProps={{
         className: cn(
           classes.dropdownButton,
@@ -37,7 +38,11 @@ export function Month({ date, onChange }: Props) {
                 onChange(index)
               }}
             >
-              {name}
+              {selectedMonth === name ? (
+                <strong>{name}</strong>
+              ) : (
+                <span>{name}</span>
+              )}
             </MenuItem>
           ))}
         </div>

@@ -15,10 +15,11 @@ interface Props {
 
 export function Year({ date, onChange }: Props) {
   const classes = useStyles()
+  const selectedYear = date.getFullYear()
 
   return (
     <BaseDropdown
-      buttonLabel={date.getFullYear()}
+      buttonLabel={selectedYear}
       DropdownToggleButtonProps={{
         className: cn(classes.dropdownButton, classes.button)
       }}
@@ -33,7 +34,11 @@ export function Year({ date, onChange }: Props) {
                 onChange(value)
               }}
             >
-              {value}
+              {selectedYear === value ? (
+                <strong>{value}</strong>
+              ) : (
+                <span>{value}</span>
+              )}
             </MenuItem>
           ))}
         </div>

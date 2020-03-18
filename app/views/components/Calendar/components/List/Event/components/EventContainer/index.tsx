@@ -24,7 +24,6 @@ interface Props {
   event: ICalendarEvent & { rowIndex?: number }
   editable: boolean
   Icon?: any
-  subtitle?: React.ReactNode
   actions?: React.ReactNode
   onClick?(): void
 }
@@ -78,7 +77,10 @@ export function EventContainer({
           <div className={classes.actions}>
             {editable && (
               <Tooltip title="Edit Event" placement="top">
-                <EditIcon className={cn(iconStyles.small, classes.iconEdit)} />
+                <EditIcon
+                  className={cn(iconStyles.small, classes.iconEdit)}
+                  onClick={onClick}
+                />
               </Tooltip>
             )}
             {actions}
