@@ -51,7 +51,7 @@ export function TabsFilter(props: Props) {
           defaultValue={Filters.Events}
           onChange={props.onChangeFilter}
           tabs={[
-            <Tab key={0} value={Filters.Events} label="Events" />,
+            <Tab key={0} value={Filters.Events} label="Relationship" />,
             <Tab key={1} value={Filters.Notes} label="Notes" />
           ]}
         />
