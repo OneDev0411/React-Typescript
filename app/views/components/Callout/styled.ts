@@ -41,7 +41,9 @@ export const CalloutContent = styled.div`
   flex: 1;
 `
 
-export const CalloutCloseButton = styled(IconButton)`
+export const CalloutCloseButton = styled(IconButton)<{
+  theme: Theme
+}>`
   background: rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   padding: 0;
