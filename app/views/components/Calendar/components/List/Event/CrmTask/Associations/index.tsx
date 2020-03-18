@@ -6,6 +6,7 @@ import MiniContactProfile from 'components/MiniContact'
 
 import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
 
+import { sharedStyles } from '../../styles'
 import { ListContext } from '../../../context'
 
 interface Props {
@@ -19,16 +20,15 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 500,
       color: theme.palette.primary.main,
       cursor: 'pointer'
-    },
-    splitter: {
-      color: theme.palette.grey[500],
-      margin: theme.spacing(0, 0.5)
     }
   })
 )
 
+const useSharedStyles = makeStyles(sharedStyles)
+
 export function Associations({ event, onEventChange }: Props) {
   const classes = useStyles()
+  const sharedStyles = useSharedStyles()
   const { setSelectedEvent } = useContext(ListContext)
 
   if (!event.people) {
@@ -42,7 +42,7 @@ export function Associations({ event, onEventChange }: Props) {
 
   return (
     <>
-      <span className={classes.splitter}>—</span>
+      <span className={sharedStyles.splitter}>—</span>
       <span>
         {contacts.map((item: IContact, index: number) => (
           <React.Fragment key={index}>

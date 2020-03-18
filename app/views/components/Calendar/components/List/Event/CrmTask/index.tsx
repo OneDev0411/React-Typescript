@@ -64,7 +64,7 @@ export function CrmTask({ style, event, onEventChange }: Props) {
             ) : (
               `[No Title ${event.event_type}]`
             )}
-          </a>{' '}
+          </a>
           <Associations event={event} onEventChange={onEventChange} />
         </div>
       }

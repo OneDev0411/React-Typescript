@@ -8,6 +8,8 @@ import { iconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { findInPeopleByEmail } from 'utils/find-in-people-by-email'
 
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+
 import { ListContext } from '../../context'
 import { EventContainer } from '../components/EventContainer'
 import { sharedStyles } from '../styles'
@@ -47,9 +49,9 @@ export function EmailThread({ style, event }: Props) {
               setSelectedEvent(event)
             }}
           >
-            Email
+            <TextMiddleTruncate text={event.title} maxLength={40} />
           </a>
-          &nbsp;
+          <span className={classes.splitter}>—</span>
           {recipients.map((recipient, index) => {
             return (
               <React.Fragment key={index}>
