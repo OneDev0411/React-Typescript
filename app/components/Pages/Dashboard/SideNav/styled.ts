@@ -3,10 +3,6 @@ import styled, { ThemeProps, css } from 'styled-components'
 import { Badge } from '@material-ui/core'
 import { Theme, withStyles } from '@material-ui/core/styles'
 
-import { borderColor } from '../../../../views/utils/colors'
-
-import Button from '../../../../views/components/Button/ActionButton'
-
 import { appSidenavWidth, backgroundColor } from './variables'
 
 export const Sidenav = styled.aside`
@@ -71,15 +67,6 @@ export const SidenavLink = styled(Link)<SidenavLinkPorps>`
   ${itemStyle}
 `
 
-export const SidenavButton = styled(Button)`
-  border: none;
-  background: transparent;
-  &:focus {
-    outline-width: 0;
-  }
-  ${itemStyle}
-`
-
 export const Avatar = styled.div`
   display: inline-block;
   text-align: center;
@@ -102,7 +89,8 @@ export const Divider = styled.div`
   height: 1px;
   margin: 0;
   overflow: hidden;
-  background-color: ${borderColor};
+  background-color: ${(props: ThemeProps<Theme>) =>
+    props.theme.palette.divider};
 `
 export const ListItemDivider = Divider.withComponent('li')
 
