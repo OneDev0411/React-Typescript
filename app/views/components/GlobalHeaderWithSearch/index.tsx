@@ -56,8 +56,6 @@ export default function GlobalHeaderWithSearch({
         <div className={classes.searchContainer}>
           <SearchInput
             value={searchQueryValue}
-            size="small"
-            variant="outlined"
             placeholder={placeholder}
             onChange={handleQueryChange}
           />

@@ -16,6 +16,7 @@ const NotificationsHeader = props => (
     <Box textAlign="right">
       <Button
         variant="outlined"
+        size="large"
         disabled={props.isFetching}
         onClick={() => {
           props.dispatch(markAllNotificationsAsSeen())

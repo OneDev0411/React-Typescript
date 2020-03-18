@@ -43,6 +43,7 @@ function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
             <Tooltip placement="bottom">
               <Button
                 variant="outlined"
+                size="large"
                 onClick={() => browserHistory.push('/dashboard/marketing')}
               >
                 Visit Marketing Center

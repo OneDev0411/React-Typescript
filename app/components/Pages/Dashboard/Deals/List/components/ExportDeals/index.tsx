@@ -8,7 +8,8 @@ import {
   Button,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  Tooltip
 } from '@material-ui/core'
 
 import { useSelector } from 'react-redux'
@@ -23,9 +24,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     exportButton: {
       marginLeft: theme.spacing(1),
-      width: theme.spacing(5.5),
       minWidth: theme.spacing(5.5),
-      height: theme.spacing(4.5)
+      padding: theme.spacing(1, 1)
     },
     listItem: {
       cursor: 'pointer',
@@ -137,13 +137,16 @@ export function ExportDeals(props) {
   return (
     <BaseDropdown
       renderDropdownButton={(buttonProps: RenderToggleButtonProps) => (
-        <Button
-          className={classes.exportButton}
-          variant="outlined"
-          {...buttonProps}
-        >
-          <IconArrowDown />
-        </Button>
+        <Tooltip placement="bottom" title="Export Deals">
+          <Button
+            className={classes.exportButton}
+            variant="outlined"
+            size="large"
+            {...buttonProps}
+          >
+            <IconArrowDown />
+          </Button>
+        </Tooltip>
       )}
       renderMenu={({ close }) => (
         <List>
