@@ -20,7 +20,7 @@ declare interface IEmailThreadEmailBase<T> {
   cc: string[]
   cc_raw: IRawEmailRecipient[]
   created_at: number
-  updated_at: numberk
+  updated_at: number
   from: string
   from_raw: IRawEmailRecipient
   has_attachments: boolean
