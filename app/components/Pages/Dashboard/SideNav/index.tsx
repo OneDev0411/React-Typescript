@@ -88,9 +88,7 @@ export default function AppSideNav() {
             <SideNavLinkItem to="/dashboard/tours">Toursheets</SideNavLinkItem>
           </Acl.Crm>
 
-          <SideNavLinkItem tooltip="All MLS® Properties" to="/dashboard/mls">
-            Properties
-          </SideNavLinkItem>
+          <SideNavLinkItem to="/dashboard/mls">Properties</SideNavLinkItem>
 
           <Acl access={hasWebsitePermission}>
             <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
