@@ -8,12 +8,11 @@ import {
   Button,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  Tooltip
 } from '@material-ui/core'
 
 import { useSelector } from 'react-redux'
-
-import Tooltip from 'components/tooltip'
 
 import { IAppState } from 'reducers'
 import IconArrowDown from 'components/SvgIcons/ArrowDown/IconArrowDown'
@@ -138,7 +137,7 @@ export function ExportDeals(props) {
   return (
     <BaseDropdown
       renderDropdownButton={(buttonProps: RenderToggleButtonProps) => (
-        <Tooltip placement="bottom" caption="Export Deals">
+        <Tooltip placement="bottom" title="Export Deals">
           <Button
             className={classes.exportButton}
             variant="outlined"
