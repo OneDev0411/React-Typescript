@@ -24,7 +24,7 @@ import { Item } from './types'
 
 const items: Item[] = [
   {
-    title: 'Send an email',
+    title: 'Email',
     type: 'email',
     Icon: EmailIcon,
     render: props => {
@@ -32,7 +32,7 @@ const items: Item[] = [
     }
   },
   {
-    title: 'Create an event',
+    title: 'Event',
     type: 'event',
     Icon: CalendarIcon,
     render: props => {
@@ -40,7 +40,7 @@ const items: Item[] = [
     }
   },
   {
-    title: 'Create a contact',
+    title: 'Contact',
     type: 'contact',
     Icon: IconContacts,
     render: props => {
@@ -48,7 +48,7 @@ const items: Item[] = [
     }
   },
   {
-    title: 'Create a deal',
+    title: 'Deal',
     type: 'deal',
     Icon: IconDeal,
     redirectTo: url => {
@@ -56,7 +56,7 @@ const items: Item[] = [
     }
   },
   {
-    title: 'Create registration page',
+    title: 'OH Registration Page',
     type: 'openhouse',
     Icon: IconOpenHouseOutline,
     render: props => {
@@ -64,7 +64,7 @@ const items: Item[] = [
     }
   },
   {
-    title: 'Create a toursheet',
+    title: 'Toursheet',
     type: 'tour',
     Icon: IconTourOutline,
     render: props => {

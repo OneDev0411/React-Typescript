@@ -87,7 +87,7 @@ export default function GlobalActionsButton() {
 
   return (
     <>
-      <Button onMouseEnter={handleMenuOpen} />
+      <Button onClick={handleMenuOpen} />
       <Menu
         items={items}
         anchorEl={anchorEl}
