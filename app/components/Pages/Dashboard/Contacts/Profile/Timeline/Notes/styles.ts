@@ -44,7 +44,8 @@ export const styles = (theme: Theme) =>
     },
     container: {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      overflow: 'hidden'
     },
     title: {
       padding: theme.spacing(0.5, 0),
@@ -52,7 +53,7 @@ export const styles = (theme: Theme) =>
       ...theme.typography.body2
     },
     time: {
-      width: '5rem',
+      minWidth: '5rem',
       color: theme.palette.grey[500],
       ...theme.typography.caption
     },
@@ -79,7 +80,7 @@ export const styles = (theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      width: '2rem',
+      minWidth: '2rem',
       height: '2rem',
       borderRadius: '100%',
       marginRight: '1rem',
