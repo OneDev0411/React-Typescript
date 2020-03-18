@@ -15,7 +15,6 @@ import { ScrollableArea } from '../../../../views/components/ScrollableArea'
 import Brand from '../../../../controllers/Brand'
 
 import Logo from './components/Logo'
-import { SideNavTooltip } from './components/Tooltip'
 import { UserMenu } from './components/UserMenu'
 import { SideNavLinkItem } from './components/SideNavLinkItem'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
@@ -54,53 +53,39 @@ export default function AppSideNav() {
       >
         <SidenavListGroup data-test="side-nav-list">
           <Acl.Crm>
-            <SideNavLinkItem tooltip="Incoming Emails" to="/dashboard/inbox">
-              Inbox
-            </SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/inbox">Inbox</SideNavLinkItem>
           </Acl.Crm>
 
           <Acl.Crm>
-            <SideNavLinkItem tooltip="Calendar" to="/dashboard/calendar">
-              Calendar
-            </SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/calendar">Calendar</SideNavLinkItem>
           </Acl.Crm>
 
           <Acl.Crm>
-            <SideNavLinkItem tooltip="Contacts" to="/dashboard/contacts">
-              Contacts
-            </SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/contacts">Contacts</SideNavLinkItem>
           </Acl.Crm>
         </SidenavListGroup>
 
         <SidenavListGroup>
           <Acl.Marketing>
-            <SideNavLinkItem
-              tooltip="Marketing Center"
-              to="/dashboard/marketing"
-            >
+            <SideNavLinkItem to="/dashboard/marketing">
               Marketing
             </SideNavLinkItem>
           </Acl.Marketing>
 
           <Acl.Marketing>
-            <SideNavLinkItem tooltip="Email Insight" to="/dashboard/insights">
+            <SideNavLinkItem to="/dashboard/insights">
               Email Insight
             </SideNavLinkItem>
           </Acl.Marketing>
 
           <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
-            <SideNavLinkItem
-              tooltip="Open House Registration Pages"
-              to="/dashboard/open-house"
-            >
+            <SideNavLinkItem to="/dashboard/open-house">
               Open House
             </SideNavLinkItem>
           </Acl>
 
           <Acl.Crm>
-            <SideNavLinkItem tooltip="Toursheets" to="/dashboard/tours">
-              Toursheets
-            </SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/tours">Toursheets</SideNavLinkItem>
           </Acl.Crm>
 
           <SideNavLinkItem tooltip="All MLS® Properties" to="/dashboard/mls">
@@ -112,7 +97,7 @@ export default function AppSideNav() {
           </Acl>
 
           <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
-            <SideNavLinkItem to="/dashboard/deals" tooltip="Your Deals">
+            <SideNavLinkItem to="/dashboard/deals">
               <AppNavbarBadge
                 badgeContent={dealsNotificationsNumber}
                 color="primary"
@@ -126,22 +111,17 @@ export default function AppSideNav() {
         <SidenavListGroup>
           {user && (
             <SideNavItem>
-              <SideNavTooltip title="Chat">
-                <AppNavbarBadge
-                  badgeContent={chatRoomsNotificationsNumber}
-                  color="primary"
-                >
-                  <MessagesDrawerTrigger />
-                </AppNavbarBadge>
-              </SideNavTooltip>
+              <AppNavbarBadge
+                badgeContent={chatRoomsNotificationsNumber}
+                color="primary"
+              >
+                <MessagesDrawerTrigger />
+              </AppNavbarBadge>
             </SideNavItem>
           )}
 
           {user && (
-            <SideNavLinkItem
-              tooltip="Notifications"
-              to="/dashboard/notifications"
-            >
+            <SideNavLinkItem to="/dashboard/notifications">
               <AppNavbarBadge badgeContent={appNotifications} color="primary">
                 Notifications
               </AppNavbarBadge>
