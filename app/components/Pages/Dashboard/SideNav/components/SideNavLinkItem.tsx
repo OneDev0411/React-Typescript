@@ -8,7 +8,7 @@ interface Props {
   to: string
 }
 
-export const SideNavLinkItem = withRouter((props: Props & WithRouterProps) => {
+function SideNavLinkItem(props: Props & WithRouterProps) {
   const active = props.location.pathname.startsWith(props.to)
 
   return (
@@ -18,4 +18,6 @@ export const SideNavLinkItem = withRouter((props: Props & WithRouterProps) => {
       </SidenavLink>
     </SideNavItem>
   )
-})
+}
+
+export default withRouter(SideNavLinkItem)
