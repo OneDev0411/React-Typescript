@@ -22,6 +22,7 @@ export default function GlobalActionsMenu({ onMouseEnter }: Props) {
       color="primary"
       onClick={onMouseEnter}
       onMouseEnter={onMouseEnter}
+      size="large"
       classes={{
         root: classes.root
       }}

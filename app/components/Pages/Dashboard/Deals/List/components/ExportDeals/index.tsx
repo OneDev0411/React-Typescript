@@ -13,6 +13,8 @@ import {
 
 import { useSelector } from 'react-redux'
 
+import Tooltip from 'components/tooltip'
+
 import { IAppState } from 'reducers'
 import IconArrowDown from 'components/SvgIcons/ArrowDown/IconArrowDown'
 
@@ -23,9 +25,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     exportButton: {
       marginLeft: theme.spacing(1),
-      width: theme.spacing(5.5),
       minWidth: theme.spacing(5.5),
-      height: theme.spacing(4.5)
+      padding: theme.spacing(1, 1)
     },
     listItem: {
       cursor: 'pointer',
@@ -137,13 +138,16 @@ export function ExportDeals(props) {
   return (
     <BaseDropdown
       renderDropdownButton={(buttonProps: RenderToggleButtonProps) => (
-        <Button
-          className={classes.exportButton}
-          variant="outlined"
-          {...buttonProps}
-        >
-          <IconArrowDown />
-        </Button>
+        <Tooltip placement="bottom" caption="Export Deals">
+          <Button
+            className={classes.exportButton}
+            variant="outlined"
+            size="large"
+            {...buttonProps}
+          >
+            <IconArrowDown />
+          </Button>
+        </Tooltip>
       )}
       renderMenu={({ close }) => (
         <List>
