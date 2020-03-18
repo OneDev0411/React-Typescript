@@ -46,7 +46,7 @@ export default function GlobalHeaderWithSearch({
   }, [searchQueryValue])
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQueryValue(event.currentTarget.value)
+    setSearchQueryValue(event.target.value)
   }
 
   return (
