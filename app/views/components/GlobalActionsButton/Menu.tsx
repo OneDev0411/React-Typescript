@@ -7,11 +7,8 @@ import {
   Popover,
   List,
   ListSubheader,
-  Typography,
-  IconButton
+  Typography
 } from '@material-ui/core'
-
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 import { Item } from './types'
 import MenuItem from './MenuItem'
@@ -51,20 +48,25 @@ export default function Menu({ items, anchorEl, onItemClick, onClose }: Props) {
   }
 
   return (
-    <Popover open={open} anchorEl={anchorEl} onClose={onClose}>
+    <Popover
+      open={open}
+      anchorEl={anchorEl}
+      onClose={onClose}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right'
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right'
+      }}
+    >
       <List
         dense
         subheader={
           <>
             <ListSubheader disableGutters className={classes.subheader}>
-              <Typography variant="caption">Actions</Typography>
-              <IconButton
-                size="small"
-                classes={{ label: classes.closeIconButtonLabel }}
-                onClick={onClose}
-              >
-                <CloseIcon />
-              </IconButton>
+              <Typography variant="overline">Create</Typography>
             </ListSubheader>
             <Divider />
           </>
