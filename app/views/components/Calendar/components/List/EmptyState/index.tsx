@@ -13,15 +13,14 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100%'
     },
     title: {
-      fontSize: '1.5rem',
-      fontWeight: 500,
-      marginTop: '1rem',
-      color: theme.palette.grey.A400
+      ...theme.typography.h5,
+      color: theme.palette.grey[500]
     },
     icon: {
-      width: '5rem',
-      height: '5rem',
-      fill: theme.palette.grey.A400
+      width: '40px !important',
+      height: '40px !important',
+      marginBottom: theme.spacing(1),
+      fill: theme.palette.grey['500']
     }
   })
 )
