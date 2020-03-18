@@ -13,9 +13,11 @@ function SideNavLinkItem(props: Props & WithRouterProps) {
 
   return (
     <SideNavItem>
-      <SidenavLink active={active} to={props.to}>
-        {props.children}
-      </SidenavLink>
+      <span style={{ display: 'inline-flex' }}>
+        <SidenavLink active={active} to={props.to}>
+          {props.children}
+        </SidenavLink>
+      </span>
     </SideNavItem>
   )
 }
