@@ -43,10 +43,10 @@ const useStyles = makeStyles((theme: Theme) =>
     removeButton: {
       display: 'none',
       '& svg path': {
-        fill: theme.palette.common.black,
-        '&:hover': {
-          fill: theme.palette.error.main
-        }
+        fill: theme.palette.common.black
+      },
+      '&:hover svg path': {
+        fill: theme.palette.error.main
       }
     }
   })
