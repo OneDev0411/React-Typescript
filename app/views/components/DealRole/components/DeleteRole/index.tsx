@@ -56,7 +56,7 @@ export default function DeleteRole(props: Props) {
           try {
             setIsDeleting(true)
             await dispatch(deleteRole(props.deal.id, props.role.id))
-            dispatch(props.onDeleteRole(props.role))
+            props.onDeleteRole(props.role)
 
             dispatch(
               notify({
