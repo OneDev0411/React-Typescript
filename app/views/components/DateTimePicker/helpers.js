@@ -3,7 +3,7 @@ import fecha from 'fecha'
 import { setTime } from '../../../utils/set-time'
 
 export function formatDate(date) {
-  return date ? fecha.format(date, 'MMM D, YYYY') : ''
+  return date ? fecha.format(date, 'MMM D, YYYY hh:mma') : ''
 }
 
 export function setTimeStringToDate(date, time) {
