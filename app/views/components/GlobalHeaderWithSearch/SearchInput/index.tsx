@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: theme.spacing(5.25),
       lineHeight: 'initial',
       padding: theme.spacing(0, 2.5),
-      width: '400px',
+      width: '360px',
       '&&&:before': {
         borderBottom: 'none'
       },
