@@ -653,10 +653,9 @@ class ContactsList extends React.Component {
             <IconButton
               aria-label="close"
               color="inherit"
-              size="small"
               onClick={this.closeDupicateAlert}
             >
-              <CloseIcon style={{ width: 16, height: 16 }} />
+              <CloseIcon size="small" />
             </IconButton>
           }
         >
