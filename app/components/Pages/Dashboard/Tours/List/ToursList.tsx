@@ -57,17 +57,17 @@ function ToursList(props: { user: IUser }) {
 
   const columns = [
     {
+      header: 'Title',
+      id: 'title',
+      render: ({ row }: RenderProps<TableRow>) => <Title title={row.title} />
+    },
+    {
       header: 'Date',
       id: 'date',
       verticalAlign: 'center',
       render: ({ row }: RenderProps<TableRow>) => (
         <DueDate dueDate={row.due_date} onClick={() => handleEdit(row)} />
       )
-    },
-    {
-      header: 'Title',
-      id: 'title',
-      render: ({ row }: RenderProps<TableRow>) => <Title title={row.title} />
     },
     {
       header: 'Participants',
