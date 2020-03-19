@@ -43,7 +43,10 @@ const useStyles = makeStyles((theme: Theme) =>
     removeButton: {
       display: 'none',
       '& svg path': {
-        fill: theme.palette.error.light
+        fill: theme.palette.common.black,
+        '&:hover': {
+          fill: theme.palette.error.main
+        }
       }
     }
   })
@@ -96,7 +99,7 @@ export function MlsConnect({ deal }: Props) {
           </Button>
 
           <IconButton
-            color="secondary"
+            color="default"
             size="small"
             onClick={removeMlsConnection}
             className={classes.removeButton}
