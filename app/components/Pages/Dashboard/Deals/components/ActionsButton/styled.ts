@@ -98,7 +98,7 @@ export const MenuItem = styled.div`
         :hover {
           cursor: pointer;
           background-color: ${theme.palette.action.hover};
-          color: #fff;
+          color: ${theme.palette.secondary.main};
         }
       `}
   `}
