@@ -2,31 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 
-import { SideNavTooltip } from './Tooltip'
 import { SideNavItem, SidenavLink } from '../styled'
+
+const renderLink = props => {
+  return (
+    <SidenavLink active={props.active} to={props.to}>
+      {props.children}
+    </SidenavLink>
+  )
+}
 
 export const SideNavLinkItem = withRouter(props => {
   const active = props.location.pathname.startsWith(props.to)
 
-  const renderLink = props => {
-    return (
-      <SidenavLink active={active} to={props.to}>
-        {props.children}
-      </SidenavLink>
-    )
-  }
-
-  return (
-    <SideNavItem>
-      {props.tooltip ? (
-        <SideNavTooltip title={props.tooltip}>
-          {renderLink(props)}
-        </SideNavTooltip>
-      ) : (
-        renderLink(props)
-      )}
-    </SideNavItem>
-  )
+  return <SideNavItem>{renderLink({ ...props, active })}</SideNavItem>
 })
 
 SideNavLinkItem.propTypes = {
