@@ -32,12 +32,17 @@ export function reducer(state = initialState, action: Pick<Action, any>) {
   switch (action.type) {
     case SELECTION__TOGGLE_ALL:
       return produce(state, draft => {
-        const { isAllRowsSelected } = draft.selection
+        const { isAllRowsSelected, isEntireRowsSelected } = state.selection
+
+        if (isEntireRowsSelected) {
+          draft.selection.isEntireRowsSelected = false
+
+          return
+        }
 
         draft.selection.isAllRowsSelected = !isAllRowsSelected
 
         // disable entire mode
-        draft.selection.isEntireRowsSelected = false
         draft.selection.selectedRowIds = []
 
         if (isAllRowsSelected) {
