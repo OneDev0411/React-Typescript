@@ -12,13 +12,10 @@ import Autocomplete from '../components/Autocomplete'
 const useStyles = makeStyles(theme =>
   createStyles({
     container: {
-      height: '6em',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      margin: theme.spacing(0, 1.5),
-      paddingTop: theme.spacing(7),
-      paddingLeft: theme.spacing(5)
+      padding: theme.spacing(5, 3)
     }
   })
 )

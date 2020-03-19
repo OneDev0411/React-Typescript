@@ -41,11 +41,12 @@ const useStyle = makeStyles((theme: Theme) =>
       }
     },
     boxSwitcher: {
-      margin: theme.spacing(1, 0, 0),
+      borderBottom: `1px solid ${theme.palette.divider}`,
       display: 'flex',
       flexGrow: 1,
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      justifyContent: 'flex-end'
+      justifyContent: 'flex-end',
+      margin: theme.spacing(1, 0, 0),
+      padding: theme.spacing(0, 3)
     }
   })
 )
@@ -54,7 +55,7 @@ const overrideTabStyles = makeStyles(
     createStyles({
       root: {
         margin: theme.spacing(1, 0, 0),
-        paddingLeft: theme.spacing(5)
+        paddingLeft: theme.spacing(2)
       }
     }),
   { name: 'MuiTabs' }

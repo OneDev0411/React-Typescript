@@ -36,9 +36,9 @@ export default function CreateTourAction(props: Props) {
   return (
     <>
       <Button
-        variant="contained"
+        variant="outlined"
         disabled={props.disabled}
-        color="primary"
+        size="small"
         onClick={handleCreateTourDrawer}
       >
         Create Tour
