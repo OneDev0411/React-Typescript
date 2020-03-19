@@ -97,7 +97,7 @@ class SavedSearchesList extends Component {
         className={classes.dropdown}
         renderDropdownButton={props => (
           <span {...props}>
-            My filters{' '}
+            Saved searches{' '}
             {props.isActive ? (
               <ArrowUp style={{ verticalAlign: 'middle' }} />
             ) : (
