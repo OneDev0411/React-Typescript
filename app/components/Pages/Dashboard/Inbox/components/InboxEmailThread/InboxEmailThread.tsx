@@ -151,7 +151,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   }
 
   if (status === 'empty' || !emailThread) {
-    return <NoContentMessage>No Conversation Selected</NoContentMessage>
+    return <NoContentMessage>No Conversations Selected</NoContentMessage>
   }
 
   return (
