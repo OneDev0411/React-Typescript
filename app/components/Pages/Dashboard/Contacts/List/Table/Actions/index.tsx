@@ -32,8 +32,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      '& button': {
-        marginLeft: theme.spacing(1)
+      '& > *:not(:last-child)': {
+        marginRight: theme.spacing(1)
       }
     },
     moreActionContainer: {

@@ -32,7 +32,15 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 1),
       zIndex: theme.zIndex.gridAction
     },
+    infoContainer: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    actionsContainer: {
+      marginLeft: theme.spacing(5)
+    },
     summary: {
+      fontSize: theme.typography.body2.fontSize,
       color: theme.palette.secondary.main,
       cursor: 'pointer'
     }
@@ -84,7 +92,7 @@ export function Actions<Row>({ rows, TableActions, totalRows }: Props<Row>) {
 
   return (
     <div className={classes.container}>
-      <div>
+      <div className={classes.infoContainer}>
         <Tooltip title={tooltipTitle} placement="top">
           <Checkbox
             checked={isAllRowsSelected}
@@ -105,11 +113,11 @@ export function Actions<Row>({ rows, TableActions, totalRows }: Props<Row>) {
         </span>
       </div>
 
-      <div>
-        {TableActions && (
+      {TableActions && (
+        <div className={classes.actionsContainer}>
           <TableActions state={state} dispatch={dispatch} rows={rows} />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }
