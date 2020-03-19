@@ -8,18 +8,21 @@ import InfiniteScrollList from '../InfiniteScrollList'
 import InboxEmailThreadListItem from './components/InboxEmailThreadListItem'
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
 
-const emailThreadFetchCount = 30
+const emailThreadFetchCountInitial = 10
+const emailThreadFetchCount = 20
 
 interface Props {
   selectedEmailThreadId?: UUID
   onSelectEmailThread: (emailThreadId: UUID | undefined) => void
   searchQuery?: string
+  onEmailThreadsUpdate?: (emailThreads: IEmailThread<'contacts'>[]) => void
 }
 
 export default function InboxEmailThreadList({
   selectedEmailThreadId,
   onSelectEmailThread,
-  searchQuery
+  searchQuery,
+  onEmailThreadsUpdate
 }: Props) {
   const [emailThreads, setEmailThreads] = useState<IEmailThread<'contacts'>[]>(
     []
@@ -31,8 +34,9 @@ export default function InboxEmailThreadList({
   )
 
   useEffect(() => {
+    onEmailThreadsUpdate && onEmailThreadsUpdate([])
     setEmailThreads([])
-  }, [searchQuery])
+  }, [onEmailThreadsUpdate, searchQuery])
 
   const dispatch = useDispatch()
 
@@ -56,10 +60,12 @@ export default function InboxEmailThreadList({
           .concat(filteredUpdatedEmailThreads)
           .sort((a, b) => b.last_message_date - a.last_message_date)
 
+        onEmailThreadsUpdate && onEmailThreadsUpdate(newEmailThreads)
+
         return newEmailThreads
       })
     },
-    []
+    [onEmailThreadsUpdate]
   )
 
   const handleUpdateEmailThreads = useCallback(
@@ -105,19 +111,23 @@ export default function InboxEmailThreadList({
       items={emailThreads}
       onNeedMoreItems={async () => {
         try {
+          const count =
+            emailThreads.length === 0
+              ? emailThreadFetchCountInitial
+              : emailThreadFetchCount
           const moreEmailThreads = await getEmailThreads(
             {
               selection: ['email_thread.snippet'],
               searchQuery,
               start: emailThreads.length,
-              limit: emailThreadFetchCount
+              limit: count
             },
             ['contacts']
           )
 
           joinEmailThreads(moreEmailThreads, 'expand')
 
-          return moreEmailThreads.length < emailThreadFetchCount
+          return moreEmailThreads.length < count
         } catch (reason) {
           console.error(reason)
           dispatch(

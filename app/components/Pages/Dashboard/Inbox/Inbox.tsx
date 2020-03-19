@@ -29,7 +29,7 @@ const useStyles = makeStyles(
     main: {
       position: 'relative',
       height:
-        'calc(100vh - 119px - 1px)' /* total height - page header - divider */
+        'calc(100vh - 122px - 1px)' /* total height - page header - divider */
     },
     fullHeight: {
       height: '100%'
@@ -42,8 +42,8 @@ const useStyles = makeStyles(
       overflowY: 'auto',
       borderLeft: `1px solid ${theme.palette.grey.A100}`
     },
-    conversationNoBorder: {
-      borderLeft: 0
+    conversationHidden: {
+      display: 'none'
     }
   }),
   { name: 'Inbox' }
@@ -58,8 +58,9 @@ export default function Inbox({ params }: WithRouterProps) {
   )
   const noConnectedAccounts = accounts.length === 0
 
-  const [initializing, setInitializing] = useState<boolean>(true)
-  const [searchQuery, setSearchQuery] = useState<string>('')
+  const [initializing, setInitializing] = useState(true)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [emailThreadCount, setEmailThreadCount] = useState(0)
 
   const dispatch = useDispatch()
 
@@ -103,6 +104,9 @@ export default function Inbox({ params }: WithRouterProps) {
                 selectedEmailThreadId={selectedEmailThreadId}
                 onSelectEmailThread={setSelectedEmailThreadId}
                 searchQuery={searchQuery}
+                onEmailThreadsUpdate={emailThreads =>
+                  setEmailThreadCount(emailThreads.length)
+                }
               />
             </Grid>
             <Grid
@@ -111,7 +115,7 @@ export default function Inbox({ params }: WithRouterProps) {
               classes={{
                 root: classNames(
                   classes.conversation,
-                  // (!emailThreadListInnerRef.current || emailThreadListInnerRef.current.emailThreads.length === 0) && classes.conversationNoBorder,
+                  emailThreadCount === 0 && classes.conversationHidden,
                   classes.fullHeight
                 )
               }}

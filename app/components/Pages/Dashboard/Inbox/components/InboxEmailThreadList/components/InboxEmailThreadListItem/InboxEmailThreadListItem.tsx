@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Paper, Grid, Typography, Box } from '@material-ui/core'
+import { Paper, Grid, Typography } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
 
@@ -96,16 +96,14 @@ export default function InboxEmailThreadListItem({
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Box paddingTop="4px">
-              <Typography
-                variant={emailThread.is_read ? 'body2' : 'subtitle2'}
-                noWrap
-                title={emailThread.subject || undefined}
-                classes={{ root: classes.subject }}
-              >
-                {emailThread.subject || '(No Subject)'}
-              </Typography>
-            </Box>
+            <Typography
+              variant={emailThread.is_read ? 'body2' : 'subtitle2'}
+              noWrap
+              title={emailThread.subject || undefined}
+              classes={{ root: classes.subject }}
+            >
+              {emailThread.subject || '(No Subject)'}
+            </Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography
@@ -118,7 +116,7 @@ export default function InboxEmailThreadListItem({
               }}
               noWrap
             >
-              {emailThread.snippet}
+              {emailThread.snippet || <>&nbsp;</>}
             </Typography>
           </Grid>
         </Grid>
