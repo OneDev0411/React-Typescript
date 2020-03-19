@@ -2,7 +2,7 @@ import React from 'react'
 import { Box } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 
-import PageLayout from 'components/GlobalPageLayout'
+import GlobalHeader from 'components/GlobalHeader'
 
 import FilterButton from '../../../../../../views/components/Button/DropButton'
 
@@ -31,27 +31,25 @@ export function Header(props) {
   } = props
 
   return (
-    <Box className={classes.container}>
-      <PageLayout.Header>
-        <Box display="flex" alignItems="center">
-          <Autocomplete activeView={activeView} />
-          <FilterButton
-            style={{ marginLeft: '0.5em', borderColor: '#BAC2CE' }}
-            onClick={onClickFilter}
-            isOpen={filtersIsOpen}
-            disabled={isFetching}
-            text="Filter Search"
-            size="medium"
-            appearance="outline"
-          />
-          <Filters
-            isOpen={filtersIsOpen}
-            isSubmitting={isFetching}
-            isSideMenuOpen={isSideMenuOpen}
-            handleClose={onClickFilter}
-          />
-        </Box>
-      </PageLayout.Header>
-    </Box>
+    <GlobalHeader>
+      <Box display="flex" alignItems="center">
+        <Autocomplete activeView={activeView} />
+        <FilterButton
+          style={{ marginLeft: '0.5em', borderColor: '#BAC2CE' }}
+          onClick={onClickFilter}
+          isOpen={filtersIsOpen}
+          disabled={isFetching}
+          text="Filter Search"
+          size="medium"
+          appearance="outline"
+        />
+        <Filters
+          isOpen={filtersIsOpen}
+          isSubmitting={isFetching}
+          isSideMenuOpen={isSideMenuOpen}
+          handleClose={onClickFilter}
+        />
+      </Box>
+    </GlobalHeader>
   )
 }
