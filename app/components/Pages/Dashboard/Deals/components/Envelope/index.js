@@ -119,7 +119,7 @@ class Envelope extends React.Component {
 
             {isDraft && (
               <LinkButton
-                appearance="primary"
+                appearance="secondary"
                 size="small"
                 href={getEnvelopeEditLink(
                   envelope.id,

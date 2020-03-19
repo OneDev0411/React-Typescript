@@ -21,7 +21,7 @@ export default function SelectCheckbox({ media }: Props) {
 
   return (
     <Box className={classes.selectCheckbox}>
-      <Checkbox color="primary" checked={selected} onChange={handleChange} />
+      <Checkbox color="secondary" checked={selected} onChange={handleChange} />
     </Box>
   )
 }

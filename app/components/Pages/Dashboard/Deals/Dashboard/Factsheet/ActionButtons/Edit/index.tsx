@@ -20,7 +20,7 @@ export function EditButton(props: Props) {
   return (
     <Button
       variant="text"
-      color="primary"
+      color="secondary"
       className={buttonClass}
       onClick={props.onClick}
     >

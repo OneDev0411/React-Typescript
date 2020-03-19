@@ -293,7 +293,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
 
                 <Button
                   variant="text"
-                  color="primary"
+                  color="secondary"
                   size="small"
                   onClick={() => setEndTime(null)}
                 >
@@ -309,7 +309,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
         <Button
           fullWidth
           variant="contained"
-          color="primary"
+          color="secondary"
           disabled={!startTime || isSaving}
           onClick={handleSave}
         >

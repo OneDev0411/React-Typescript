@@ -30,7 +30,7 @@ function RemoveDraft(props: Props & WithRouterProps) {
       <Tooltip title="You can only see this deal">
         <Button
           size="small"
-          color="primary"
+          color="secondary"
           variant="outlined"
           onClick={() =>
             props.router.push(`/dashboard/deals/create/${props.deal.id}`)

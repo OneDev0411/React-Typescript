@@ -7,7 +7,6 @@ import { getStatus } from 'models/Deal/helpers/context'
 
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
-import Badge from 'components/Badge'
 
 const BASE_URL = '/dashboard/deals'
 
@@ -105,21 +104,6 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     return column ? column.label! : defaultValue
   }
 
-  // TODO: Waiting for product's response
-  // const getBadgeCounter = (filterName: string) => {
-  //   if (!props.deals) {
-  //     return 0
-  //   }
-
-  //   if (props.searchCriteria.length === 0) {
-  //     return Object.values(props.deals).filter(deal =>
-  //       Filters[filterName || 'all'](deal)
-  //     ).length
-  //   }
-
-  //   return Object.values(props.deals).length
-  // }
-
   return (
     <PageTabs
       defaultValue={props.params.id || 0}
@@ -131,12 +115,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
           <TabLink
             key={index}
             value={link || 0}
-            label={
-              <span>
-                {label}
-                {/* <Badge appearance="primary">{getBadgeCounter(link)}</Badge> */}
-              </span>
-            }
+            label={<span>{label}</span>}
             to={urlWithQuery}
           />
         )

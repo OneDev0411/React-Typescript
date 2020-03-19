@@ -22,7 +22,7 @@ export default function AgentNetworkPane({ deal }) {
         </Description>
 
         <LinkButton
-          appearance="primary"
+          appearance="secondary"
           to={`/dashboard/deals/${deal.id}/marketing/network`}
         >
           View Network
