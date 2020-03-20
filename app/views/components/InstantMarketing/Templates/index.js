@@ -117,8 +117,6 @@ class Templates extends React.Component {
         {this.state.isLoading && <Spinner />}
 
         {this.state.templates.map(template => {
-          console.log({ template })
-
           return (
             <TemplateItem
               key={template.id}
