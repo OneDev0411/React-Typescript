@@ -13,7 +13,7 @@ export function getListingUrl(activeBrand: IBrand, listing: IListing) {
     : `${config.app.url}/dashboard/mls/${listing.id}`
 }
 
-const default_palette = {
+const DEFAULT_PALETTE = {
   'body-bg-color': '#f3f3f3',
   'body-text-color': '#7f7f7f',
   'body-font-family': 'Barlow',
@@ -44,10 +44,10 @@ const default_palette = {
   'h2-font-family': 'Barlow'
 }
 
-export function get(activeBrand: IBrand, name: string) {
+export function get(activeBrand: IBrand, name: string): string {
   const brand = flattenBrand(activeBrand)
 
-  const defaultValue = lodashGet(default_palette, name)
+  const defaultValue = lodashGet(DEFAULT_PALETTE, name)
 
   return lodashGet(brand, `settings.palette.palette.${name}`, defaultValue)
 }
