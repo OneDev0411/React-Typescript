@@ -148,7 +148,7 @@ export default function registerNeighborhoodsBlocks(
           ? selectedReport
           : getNeighborhoodsGraphTemplateReport(
               selectedReport,
-              renderData.getColor('beta.bg')
+              renderData.get('body-bg-color')
             )
 
       const template = templates[droppedBlockName]
