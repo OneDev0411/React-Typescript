@@ -6,10 +6,9 @@ import { Helmet } from 'react-helmet'
 
 import { Alert } from '@material-ui/lab'
 import { Box, Link, IconButton, Theme } from '@material-ui/core'
-import { useTheme, makeStyles, createStyles } from '@material-ui/styles'
+import { makeStyles, createStyles } from '@material-ui/styles'
 
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
-import InfoIcon from 'components/SvgIcons/InfoFilled/IconInfoFilled'
 
 import { useGridStyles } from 'components/Grid/Table/styles'
 
@@ -48,11 +47,11 @@ const useAlertStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       root: {
-        marginBottom: theme.spacing(5)
+        marginBottom: theme.spacing(2)
       },
       message: {
         '& a, & a:hover': {
-          color: theme.palette.secondary.main,
+          color: theme.palette.info.dark,
           textDecoration: 'none'
         }
       }
@@ -61,8 +60,6 @@ const useAlertStyles = makeStyles(
 )
 
 function OpenHousesList(props: Props) {
-  const theme = useTheme<Theme>()
-
   useAlertStyles()
 
   const gridClasses = useGridStyles()
@@ -231,15 +228,12 @@ function OpenHousesList(props: Props) {
             <Acl access={ACL.DEALS}>
               {isAlertOpen && (
                 <Alert
-                  icon={<InfoIcon fillColor={theme.palette.secondary.main} />}
                   severity="info"
                   action={
                     <IconButton
                       aria-label="close"
                       color="inherit"
-                      onClick={() => {
-                        setAlertToOpen(false)
-                      }}
+                      onClick={() => setAlertToOpen(false)}
                     >
                       <CloseIcon size="small" />
                     </IconButton>
