@@ -18,7 +18,6 @@ import { TourSheets } from 'components/tour/TourSheets'
 import { RenderProps } from 'components/Grid/Table/types'
 
 import EmptyState from './EmptyState'
-import CreateNewTour from './CreateNewTour'
 
 import DueDate from './columns/DueDate'
 import Title from './columns/Title'
@@ -162,11 +161,7 @@ function ToursList(props: { user: IUser }) {
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header title="Toursheets">
-          <Box textAlign="right">
-            <CreateNewTour onOpenDrawer={onOpenTourDrawer} />
-          </Box>
-        </PageLayout.Header>
+        <PageLayout.Header title="Toursheets" />
 
         <PageLayout.Main>
           <Box>
