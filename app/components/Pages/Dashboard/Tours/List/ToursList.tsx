@@ -161,7 +161,7 @@ function ToursList(props: { user: IUser }) {
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header title="Toursheets" />
+        <PageLayout.Header title="Tours" />
 
         <PageLayout.Main>
           <Box>
