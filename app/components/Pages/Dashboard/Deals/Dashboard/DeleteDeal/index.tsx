@@ -76,7 +76,7 @@ export default function DeleteDeal(props: Props) {
 
       dispatch(
         notify({
-          message: 'The deal has deleted.',
+          message: 'The deal is deleted.',
           status: 'success'
         })
       )
