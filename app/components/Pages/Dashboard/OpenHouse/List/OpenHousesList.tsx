@@ -24,7 +24,6 @@ import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import { RenderProps } from 'components/Grid/Table/types'
 
 import EmptyState from './EmptyState'
-import CreateNewOpenHouse from './CreateNewOpenHouse'
 import Avatar from './columns/Avatar'
 import Title from './columns/Title'
 import Date from './columns/Date'
@@ -218,11 +217,7 @@ function OpenHousesList(props: Props) {
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header title="Open House Registration Pages">
-          <Box textAlign="right">
-            <CreateNewOpenHouse onOpenDrawer={onOpenOHDrawer} />
-          </Box>
-        </PageLayout.Header>
+        <PageLayout.Header title="Open House Registration Pages" />
         <PageLayout.Main>
           <Box>
             <Acl access={ACL.DEALS}>
