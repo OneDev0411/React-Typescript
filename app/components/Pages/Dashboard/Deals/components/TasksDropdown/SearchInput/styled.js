@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
 
-export const SearchContainer = styled(ActionButton)`
+export const SearchContainer = styled(Button)`
   &:hover > svg {
     fill: ${({ theme }) => theme.palette.secondary.main};
   }

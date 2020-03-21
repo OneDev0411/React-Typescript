@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
 
 export const Container = styled.div`
   display: block;
@@ -32,7 +32,7 @@ export const RegistrationLink = styled.div`
   align-items: center;
 `
 
-export const AppendButton = styled(ActionButton)`
+export const AppendButton = styled(Button)`
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   margin-left: 0.5rem;

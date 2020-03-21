@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
 
 import { Header } from '.'
 
@@ -30,7 +30,7 @@ describe('Deal list page header', () => {
       />
     )
 
-    expect(wrapper.find(ActionButton)).toHaveLength(1)
+    expect(wrapper.find(Button)).toHaveLength(1)
   })
 
   it('renders create deal button when side bar is closed', () => {
@@ -43,6 +43,6 @@ describe('Deal list page header', () => {
       />
     )
 
-    expect(wrapper.find(ActionButton)).toHaveLength(1)
+    expect(wrapper.find(Button)).toHaveLength(1)
   })
 })

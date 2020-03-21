@@ -7,12 +7,12 @@ import _ from 'underscore'
 
 import Flex from 'styled-flex-component'
 
+import { Button } from '@material-ui/core'
+
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import Loader from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 import importPdfJs from 'utils/import-pdf-js'
-
-import ActionButton from 'components/Button/ActionButton'
 
 import DraggablePage from '../components/DraggablePage'
 
@@ -107,13 +107,14 @@ class PdfList extends React.Component {
     <Flex alignCenter style={{ marginTop: '0.5rem' }}>
       <PageNumber>{props.pageNumber}</PageNumber>
       {this.isPageSelected(documentId, page) === false && (
-        <ActionButton
-          appearance="outline"
+        <Button
+          variant="outlined"
+          color="secondary"
           size="small"
           onClick={() => this.props.onChangeSelectedPages(documentId, page)}
         >
           Add Page
-        </ActionButton>
+        </Button>
       )}
     </Flex>
   )

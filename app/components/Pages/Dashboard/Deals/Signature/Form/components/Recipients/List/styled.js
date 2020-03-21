@@ -1,20 +1,9 @@
 import styled from 'styled-components'
 
-import ActionButton from 'components/Button/ActionButton'
-
 import {
   RoleItem,
   RoleTitle as Title
 } from '../../../../../components/Roles/styled'
-
-export const MenuItem = styled(ActionButton)`
-  color: #000;
-
-  &:hover {
-    color: #fff !important;
-    background-color: ${({ theme }) => theme.palette.secondary.main};
-  }
-`
 
 export const Header = styled.div`
   display: flex;

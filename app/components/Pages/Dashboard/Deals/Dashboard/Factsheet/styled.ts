@@ -3,8 +3,6 @@ import styled, { css } from 'styled-components'
 import { Theme } from '@material-ui/core'
 
 import { H3, H4 } from 'components/Typography/headings'
-import LinkButton from 'components/Button/LinkButton'
-import IconButton from 'components/Button/IconButton'
 import { borderColor } from 'views/utils/colors'
 
 export const FactsheetDivider = styled.div`
@@ -99,20 +97,4 @@ export const Item = styled.div<{
       cursor: auto !important;
     `};
   `}
-`
-
-export const ActionButton = styled(LinkButton)`
-  display: flex;
-  align-items: center;
-  height: auto;
-  padding: 0;
-  margin: 0;
-  line-height: 1;
-`
-
-export const DeleteButton = styled(IconButton)`
-  padding: 0;
-  margin: 0 0 0 1rem;
-  height: auto;
-  line-height: 1;
 `

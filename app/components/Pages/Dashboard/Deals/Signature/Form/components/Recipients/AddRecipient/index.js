@@ -1,12 +1,10 @@
 import React from 'react'
 import Downshift from 'downshift'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
 
 import { primary } from 'views/utils/colors'
 import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
-
-import LinkButton from 'components/Button/LinkButton'
 
 import Roles from 'deals/components/Roles'
 
@@ -39,9 +37,8 @@ export class AddRecipient extends React.Component {
         <Downshift isOpen={this.state.isMenuOpen}>
           {({ isOpen }) => (
             <div>
-              <ActionButton
-                appearance="link"
-                type="button"
+              <Button
+                color="secondary"
                 onClick={this.toggleOpenMenu}
                 style={{
                   justifyContent: 'flex-start',
@@ -51,7 +48,7 @@ export class AddRecipient extends React.Component {
               >
                 <IconAdd style={{ fill: primary, marginRight: '1rem' }} />
                 <span style={{ fontWeight: 500 }}>Add New Recipient</span>
-              </ActionButton>
+              </Button>
 
               {isOpen && (
                 <Menu>
@@ -66,7 +63,8 @@ export class AddRecipient extends React.Component {
                     onUpsertRole={this.handleAddRecipient}
                     onCreateRole={this.handleAddRecipient}
                     addRoleActionRenderer={props => (
-                      <LinkButton
+                      <Button
+                        color="secondary"
                         {...props}
                         style={{
                           padding: 0
@@ -74,7 +72,7 @@ export class AddRecipient extends React.Component {
                       >
                         <span style={{ marginRight: '0.5rem' }}>+</span>
                         Add Contact
-                      </LinkButton>
+                      </Button>
                     )}
                   />
                 </Menu>

@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react'
 import _ from 'underscore'
 
+import { Button, IconButton } from '@material-ui/core'
+
 import { BasicDropdown } from 'components/BasicDropdown'
 import UserAvatar from 'components/Avatar'
 
-import IconButton from 'components/Button/IconButton'
 import IconClose from 'components/SvgIcons/Close/CloseIcon'
 
 import { MenuButton } from './components/MenuButton'
@@ -22,7 +23,6 @@ import {
   ItemContainer,
   Role,
   RoleTitle,
-  MenuItem,
   Header,
   OrderCell,
   RoleCell,
@@ -89,14 +89,14 @@ export class RecipientsList extends React.Component {
                 defaultSelectedItem={this.getSelectedOrder(role)}
                 fullHeight
                 itemRenderer={({ item, ...rest }) => (
-                  <MenuItem
-                    appearance="link"
+                  <Button
+                    fullWidth
                     key={item.label}
                     style={{ width: '100%' }}
                     {...rest}
                   >
                     {item.label}
-                  </MenuItem>
+                  </Button>
                 )}
               />
             </OrderCell>
@@ -134,24 +134,15 @@ export class RecipientsList extends React.Component {
                 defaultSelectedItem={this.getSelectedType(role)}
                 fullHeight
                 itemRenderer={({ item, ...rest }) => (
-                  <MenuItem
-                    appearance="link"
-                    key={item.label}
-                    style={{ width: '100%' }}
-                    {...rest}
-                  >
+                  <Button key={item.label} style={{ width: '100%' }} {...rest}>
                     {item.label}
-                  </MenuItem>
+                  </Button>
                 )}
               />
             </RecipientTypeCell>
 
             <DeleteCell>
-              <IconButton
-                isFit
-                type="button"
-                onClick={() => this.props.onRemoveRecipient(role)}
-              >
+              <IconButton onClick={() => this.props.onRemoveRecipient(role)}>
                 <IconClose
                   style={{
                     width: '1.5rem',

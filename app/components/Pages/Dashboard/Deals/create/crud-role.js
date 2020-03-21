@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
 
 import RoleAgentIntegration from '../components/Roles/AgentIntegration'
 import RoleItem from './role-item'
@@ -33,14 +33,14 @@ class CrudRole extends React.Component {
           />
         ) : (
           <div className="entity-item people new">
-            <ActionButton
-              appearance="link"
+            <Button
+              color="secondary"
               onClick={this.showModal}
               className="add-item"
             >
               <span className="icon test">+</span>
               <span className="text">{ctaTitle}</span>
-            </ActionButton>
+            </Button>
           </div>
         )}
 
