@@ -129,7 +129,7 @@ export const Tabs = ({
                 marginRight: '.3rem'
               }}
             />
-            Save current selection
+            Save search
           </ButtonBase>
         </>
       }

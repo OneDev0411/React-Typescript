@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
 
 import GlobalHeader from 'components/GlobalHeader'
 
@@ -9,19 +8,7 @@ import FilterButton from '../../../../../../views/components/Button/DropButton'
 import Filters from '../components/Filters'
 import Autocomplete from '../components/Autocomplete'
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    container: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: theme.spacing(5, 3)
-    }
-  })
-)
-
 export function Header(props) {
-  const classes = useStyles(props)
   const {
     isFetching,
     filtersIsOpen,
@@ -39,7 +26,7 @@ export function Header(props) {
           onClick={onClickFilter}
           isOpen={filtersIsOpen}
           disabled={isFetching}
-          text="Filter Search"
+          text="Filters"
           size="medium"
           appearance="outline"
         />
