@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { primary } from 'views/utils/colors'
-
 import { LabelItem } from '../../styled'
 
 export const Container = styled(LabelItem)`
@@ -15,7 +13,7 @@ export const Container = styled(LabelItem)`
     `
     :hover {
       cursor: pointer;
-      color: ${primary};
+      color: ${({ theme }) => theme.palette.secondary.main};
       text-decoration: underline;
     }
   `}

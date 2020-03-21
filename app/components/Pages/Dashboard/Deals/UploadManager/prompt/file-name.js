@@ -7,15 +7,18 @@ import styled from 'styled-components'
 
 import { setUploadAttributes } from 'actions/deals'
 import ActionButton from 'components/Button/ActionButton'
-import { primary, grey } from 'views/utils/colors'
+import { grey } from 'views/utils/colors'
 
 const Container = styled(Flex)`
   height: 100%;
   padding-left: 0.5rem;
   background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};
-  border: solid 1px ${({ isFocused }) => (isFocused ? primary : '#d4d4d4')};
+  border: solid 1px
+    ${({ isFocused, theme }) =>
+      isFocused ? theme.palette.secondary.main : '#d4d4d4'};
   :hover {
-    background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A000)};
+    background-color: ${({ isFocused, theme }) =>
+      isFocused ? '#ffffff' : theme.palette.grey.A100};
   }
 `
 
@@ -24,7 +27,7 @@ const Input = styled.input`
   height: 30px;
   padding: 0 5px;
   font-size: 14px;
-  caret-color: ${primary};
+  caret-color: ${({ theme }) => theme.palette.secondary.main};
   background-color: transparent;
   color: ${grey.A900};
   border: none;

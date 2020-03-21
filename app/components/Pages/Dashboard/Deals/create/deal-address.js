@@ -11,12 +11,11 @@ import ActionButton from 'components/Button/ActionButton'
 import SearchListings from 'components/SearchListingDrawer'
 
 import { H2 } from 'components/Typography/headings'
-import { primary } from 'views/utils/colors'
 
 import RequiredIcon from 'components/SvgIcons/Required/IconRequired'
 
 const AddressInput = styled.input`
-  border: 1px dashed ${primary};
+  border: 1px dashed ${({ theme }) => theme.palette.secondary.main};
   border-radius: 3px;
   height: 35px;
   width: 20rem;

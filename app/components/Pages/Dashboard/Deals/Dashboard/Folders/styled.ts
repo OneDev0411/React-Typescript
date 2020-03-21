@@ -3,8 +3,6 @@ import styled, { css } from 'styled-components'
 import { H4 } from 'components/Typography/headings'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
-import { primary } from 'views/utils/colors'
-
 import { Container as ActionsButton } from '../../components/ActionsButton/styled'
 
 import { Container as Notification } from './Checklist/Notification/styled'
@@ -92,7 +90,7 @@ export const RowContainer = styled.div<{
       }
 
       :nth-child(odd) {
-        border-left: 3px solid ${primary};
+        border-left: 3px solid ${({ theme }) => theme.palette.secondary.main};
       }
 
       ${ActionsButton} {

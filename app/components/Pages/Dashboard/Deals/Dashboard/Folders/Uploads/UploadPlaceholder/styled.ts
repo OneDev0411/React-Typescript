@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components'
 
-import { primary } from 'views/utils/colors'
-
 export const Container = styled.div`
   ${({ theme }) => css`
     display: flex;
@@ -21,6 +19,6 @@ export const ItemLink = styled.span`
   font-weight: 600;
   line-height: 1.43;
   margin: 0 0.25rem;
-  color: ${primary};
+  color: ${({ theme }) => theme.palette.secondary.main};
   cursor: pointer;
 `

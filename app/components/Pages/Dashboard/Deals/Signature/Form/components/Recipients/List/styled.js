@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 import ActionButton from 'components/Button/ActionButton'
-import { primary } from 'views/utils/colors'
 
 import {
   RoleItem,
@@ -13,7 +12,7 @@ export const MenuItem = styled(ActionButton)`
 
   &:hover {
     color: #fff !important;
-    background-color: ${primary};
+    background-color: ${({ theme }) => theme.palette.secondary.main};
   }
 `
 

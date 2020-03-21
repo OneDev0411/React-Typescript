@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { primary } from 'views/utils/colors'
-
 import { SectionTitle } from '../../Dashboard/Factsheet/styled'
 
 export const RolesContainer = styled.div`
@@ -68,7 +66,7 @@ export const RoleItem = styled.div`
   }
 
   :hover ${RoleTitle} {
-    color: ${primary};
+    color: ${({ theme }) => theme.palette.secondary.main};
     text-decoration: underline;
   }
 `

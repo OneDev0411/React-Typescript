@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 import ActionButton from 'components/Button/ActionButton'
-import { primary } from 'views/utils/colors'
 
 export const Container = styled.div`
   display: block;
@@ -48,7 +47,7 @@ export const LinkText = styled.div`
   font-size: 1rem;
   font-weight: 500;
   padding: 0 0 0 1rem;
-  color: ${primary};
+  color: ${({ theme }) => theme.palette.secondary.main};
 
   a {
     display: block;
@@ -75,7 +74,7 @@ export const EventItem = styled.div`
   }
 
   :hover ${EventInfoTitle} {
-    color: ${primary};
+    color: ${({ theme }) => theme.palette.secondary.main};
     text-decoration: underline;
   }
 

@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { primary } from 'views/utils/colors'
-
 export const Label = styled.div`
   font-size: 1rem;
   font-weight: 500;
@@ -17,7 +15,7 @@ export const Note = styled.div`
 export const Input = styled.input`
   width: 100%;
   border-radius: 3px;
-  border: 1px solid ${primary};
+  border: 1px solid ${({ theme }) => theme.palette.secondary.main};
   height: 3rem;
   padding: 0 1rem;
 `

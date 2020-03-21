@@ -1,11 +1,10 @@
 import styled from 'styled-components'
 
-import { primary } from 'views/utils/colors'
 import ActionButton from 'components/Button/ActionButton'
 
 export const SearchContainer = styled(ActionButton)`
   &:hover > svg {
-    fill: ${primary};
+    fill: ${({ theme }) => theme.palette.secondary.main};
   }
   line-height: normal;
   height: auto;
