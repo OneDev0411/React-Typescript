@@ -81,6 +81,7 @@ export class RecipientsList extends React.Component {
         {_.map(this.props.items, role => (
           <ItemContainer key={role.id}>
             <OrderCell>
+              {/* TODO: replace with mui dropdown */}
               <BasicDropdown
                 style={{ marginRight: '1rem', width: '10%' }}
                 items={this.Orders}
@@ -126,6 +127,7 @@ export class RecipientsList extends React.Component {
             </RoleCell>
 
             <RecipientTypeCell>
+              {/* TODO: replace with mui dropdown */}
               <BasicDropdown
                 items={this.Types}
                 onChange={item => item.onClick(role)}
@@ -134,7 +136,11 @@ export class RecipientsList extends React.Component {
                 defaultSelectedItem={this.getSelectedType(role)}
                 fullHeight
                 itemRenderer={({ item, ...rest }) => (
-                  <Button key={item.label} style={{ width: '100%' }} {...rest}>
+                  <Button
+                    key={item.label}
+                    style={{ minWidth: '100px' }}
+                    {...rest}
+                  >
                     {item.label}
                   </Button>
                 )}
@@ -142,13 +148,11 @@ export class RecipientsList extends React.Component {
             </RecipientTypeCell>
 
             <DeleteCell>
-              <IconButton onClick={() => this.props.onRemoveRecipient(role)}>
-                <IconClose
-                  style={{
-                    width: '1.5rem',
-                    cursor: 'pointer'
-                  }}
-                />
+              <IconButton
+                size="small"
+                onClick={() => this.props.onRemoveRecipient(role)}
+              >
+                <IconClose style={{ width: '16px' }} />
               </IconButton>
             </DeleteCell>
           </ItemContainer>
