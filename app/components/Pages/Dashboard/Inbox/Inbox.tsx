@@ -62,6 +62,12 @@ export default function Inbox({ params }: WithRouterProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [emailThreadCount, setEmailThreadCount] = useState(0)
 
+  const handleEmailThreadsUpdate = useCallback(
+    (emailThreads: IEmailThread<'contacts'>[]) =>
+      setEmailThreadCount(emailThreads.length),
+    []
+  )
+
   const dispatch = useDispatch()
 
   useEffectOnce(() => {
@@ -104,9 +110,7 @@ export default function Inbox({ params }: WithRouterProps) {
                 selectedEmailThreadId={selectedEmailThreadId}
                 onSelectEmailThread={setSelectedEmailThreadId}
                 searchQuery={searchQuery}
-                onEmailThreadsUpdate={emailThreads =>
-                  setEmailThreadCount(emailThreads.length)
-                }
+                onEmailThreadsUpdate={handleEmailThreadsUpdate}
               />
             </Grid>
             <Grid

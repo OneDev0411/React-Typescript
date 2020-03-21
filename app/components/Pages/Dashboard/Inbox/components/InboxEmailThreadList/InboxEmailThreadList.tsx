@@ -7,6 +7,7 @@ import { getEmailThreads } from 'models/email/get-email-threads'
 import InfiniteScrollList from '../InfiniteScrollList'
 import InboxEmailThreadListItem from './components/InboxEmailThreadListItem'
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
+import useSearchEmailThreads from './helpers/use-search-email-threads'
 
 const emailThreadFetchCountInitial = 10
 const emailThreadFetchCount = 20
@@ -27,6 +28,8 @@ export default function InboxEmailThreadList({
   const [emailThreads, setEmailThreads] = useState<IEmailThread<'contacts'>[]>(
     []
   )
+
+  const searchEmailThreads = useSearchEmailThreads(searchQuery || '')
 
   const selectedEmailThread = useMemo(
     () => emailThreads.find(({ id }) => id === selectedEmailThreadId),
@@ -70,11 +73,14 @@ export default function InboxEmailThreadList({
 
   const handleUpdateEmailThreads = useCallback(
     async (updatedEmailThreadIds: UUID[]) => {
+      if (searchQuery) {
+        return
+      }
+
       try {
         const updatedEmailThreads = await getEmailThreads(
           {
             selection: ['email_thread.snippet'],
-            searchQuery,
             start: 0,
             limit: updatedEmailThreadIds.length,
             ids: updatedEmailThreadIds
@@ -97,37 +103,56 @@ export default function InboxEmailThreadList({
   )
   const handleDeleteEmailThreads = useCallback(
     (deletedEmailThreadIds: UUID[]) => {
+      if (searchQuery) {
+        return
+      }
+
       setEmailThreads(emailThreads =>
         emailThreads.filter(({ id }) => !deletedEmailThreadIds.includes(id))
       )
     },
-    []
+    [searchQuery]
   )
 
   useEmailThreadEvents(handleUpdateEmailThreads, handleDeleteEmailThreads)
+
+  const getMoreEmailThreads = searchQuery
+    ? async () => {
+        const {
+          emailThreads: moreEmailThreads,
+          finished
+        } = await searchEmailThreads(['email_thread.snippet'])
+
+        return { moreEmailThreads, finished }
+      }
+    : async () => {
+        const count =
+          emailThreads.length === 0
+            ? emailThreadFetchCountInitial
+            : emailThreadFetchCount
+        const moreEmailThreads = await getEmailThreads(
+          {
+            selection: ['email_thread.snippet'],
+            start: emailThreads.length,
+            limit: count
+          },
+          ['contacts']
+        )
+        const finished = moreEmailThreads.length < count
+
+        return { moreEmailThreads, finished }
+      }
 
   return (
     <InfiniteScrollList
       items={emailThreads}
       onNeedMoreItems={async () => {
         try {
-          const count =
-            emailThreads.length === 0
-              ? emailThreadFetchCountInitial
-              : emailThreadFetchCount
-          const moreEmailThreads = await getEmailThreads(
-            {
-              selection: ['email_thread.snippet'],
-              searchQuery,
-              start: emailThreads.length,
-              limit: count
-            },
-            ['contacts']
-          )
+          const { moreEmailThreads, finished } = await getMoreEmailThreads()
 
           joinEmailThreads(moreEmailThreads, 'expand')
 
-          return moreEmailThreads.length < count
+          return finished
         } catch (reason) {
           console.error(reason)
           dispatch(
