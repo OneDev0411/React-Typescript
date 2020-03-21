@@ -1,4 +1,6 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+import { Theme } from '@material-ui/core'
 
 import { H3, H4 } from 'components/Typography/headings'
 import LinkButton from 'components/Button/LinkButton'
@@ -32,10 +34,20 @@ export const ItemValue = styled(H4)`
   font-weight: normal;
 `
 
+export const EmptyValue = styled.span`
+  ${({ theme }) => css`
+    color: ${theme.palette.grey['500']};
+  `}
+`
+
 export const ItemActions = styled.div`
-  position: absolute;
-  right: 0;
-  visibility: hidden;
+  ${({ theme }) => css`
+    display: flex;
+    position: absolute;
+    right: 0;
+    visibility: hidden;
+    padding-right: ${theme.spacing(1)}px;
+  `}
 `
 
 export const Editable = styled.div`
@@ -54,40 +66,39 @@ export const Editable = styled.div`
 `
 
 export const Item = styled.div<{
+  theme: Theme
   showBorder?: boolean
   isSaving?: boolean
 }>`
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1px 0.5rem;
-  border-radius: 3px;
-  padding: 0.5rem 1rem;
-  border: dashed 1px ${props => (props.showBorder ? '#0c45e1' : 'transparent')};
-
-  :hover {
+  ${({ theme, showBorder, isSaving }) => css`
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1px 0.5rem;
     border-radius: 3px;
-    border: dashed 1px #0c45e1;
-    cursor: pointer;
-    transition: 0.2s ease-in border;
-  }
+    padding: 0.5rem 1rem;
 
-  :hover ${ItemValue} {
-    display: none;
-  }
+    :hover {
+      background-color: ${theme.palette.action.hover};
+      cursor: pointer;
+    }
 
-  :hover ${ItemActions} {
-    visibility: visible;
-  }
+    :hover ${ItemValue} {
+      display: none;
+    }
 
-  ${props =>
-    props.isSaving &&
-    `
-    border: 1px solid #eee !important;
-    justify-content: center;
-    cursor: auto !important;
-  `};
+    :hover ${ItemActions} {
+      visibility: visible;
+    }
+
+    ${isSaving &&
+      `
+      background-color: ${theme.palette.action.hover};
+      justify-content: center;
+      cursor: auto !important;
+    `};
+  `}
 `
 
 export const ActionButton = styled(LinkButton)`

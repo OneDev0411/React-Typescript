@@ -14,7 +14,7 @@ import { ApproveButton } from '../ActionButtons/Approve'
 
 import { Loading } from '../components/Loading'
 
-import { Item, ItemLabel, ItemValue, ItemActions } from '../styled'
+import { Item, ItemLabel, ItemValue, ItemActions, EmptyValue } from '../styled'
 
 import { ContextField } from '../types'
 
@@ -70,7 +70,9 @@ export function DateField({
       >
         <Item>
           <ItemLabel>{field.label}</ItemLabel>
-          <ItemValue>{field.getFormattedValue(value)}</ItemValue>
+          <ItemValue>
+            {field.getFormattedValue(value) || <EmptyValue>—</EmptyValue>}
+          </ItemValue>
 
           <ItemActions>
             <DateTimePicker
