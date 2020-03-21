@@ -85,7 +85,7 @@ export default function AppSideNav() {
           </Acl>
 
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/tours">Toursheets</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/tours">Tours</SideNavLinkItem>
           </Acl.Crm>
 
           <SideNavLinkItem to="/dashboard/mls">Properties</SideNavLinkItem>

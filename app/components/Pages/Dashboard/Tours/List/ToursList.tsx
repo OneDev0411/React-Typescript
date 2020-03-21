@@ -158,7 +158,7 @@ function ToursList(props: { user: IUser }) {
   return (
     <>
       <Helmet>
-        <title>Toursheets | Rechat</title>
+        <title>Tours | Rechat</title>
       </Helmet>
 
       <PageLayout>
