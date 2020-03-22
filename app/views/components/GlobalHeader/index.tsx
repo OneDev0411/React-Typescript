@@ -38,11 +38,7 @@ export default function GlobalHeader({
 
   return (
     <div className={classes.wrapper}>
-      {title && (
-        <div>
-          <Typography variant="h4">{title}</Typography>
-        </div>
-      )}
+      {title && <Typography variant="h4">{title}&nbsp;</Typography>}
       {children && <div className={classes.content}>{children}</div>}
       {!noGlobalActionsButton && (
         <div className={classes.globalAction}>
