@@ -20,11 +20,15 @@ const useStyles = makeStyles((theme: Theme) => ({
       !noPadding ? theme.spacing(3) : 0,
     width: '100%'
   },
-  globalAction: {
-    marginLeft: theme.spacing(1)
+  title: {
+    position: 'relative',
+    top: '-2px'
   },
   content: {
     flexGrow: 1
+  },
+  globalAction: {
+    marginLeft: theme.spacing(1)
   }
 }))
 
@@ -38,7 +42,11 @@ export default function GlobalHeader({
 
   return (
     <div className={classes.wrapper}>
-      {title && <Typography variant="h4">{title}&nbsp;</Typography>}
+      {title && (
+        <Typography variant="h4" classes={{ root: classes.title }}>
+          {title}&nbsp;
+        </Typography>
+      )}
       {children && <div className={classes.content}>{children}</div>}
       {!noGlobalActionsButton && (
         <div className={classes.globalAction}>
