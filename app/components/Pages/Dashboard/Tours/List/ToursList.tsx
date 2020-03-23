@@ -58,6 +58,7 @@ function ToursList(props: { user: IUser }) {
     {
       header: 'Title',
       id: 'title',
+      class: 'primary',
       render: ({ row }: RenderProps<TableRow>) => (
         <Title title={row.title} onClick={() => handleEdit(row)} />
       )
