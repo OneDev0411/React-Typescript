@@ -417,7 +417,6 @@ class Search extends React.Component {
           isFetching={this.props.isFetching}
           filtersIsOpen={this.props.filtersIsOpen}
           activeView={this.state.activeView}
-          isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
           onClickFilter={this.onClickFilter}
           onChangeView={this.onChangeView}

@@ -63,7 +63,7 @@ const overrideTabStyles = makeStyles(
 
 const tabLinks: TabsShape[] = [
   {
-    label: 'All properties',
+    label: 'All Properties',
     to: '/dashboard/mls',
     allowAnonymousAccess: true
   },
@@ -129,7 +129,7 @@ export const Tabs = ({
                 marginRight: '.3rem'
               }}
             />
-            Save search
+            Save Search
           </ButtonBase>
         </>
       }
