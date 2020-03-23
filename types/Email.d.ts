@@ -110,7 +110,10 @@ declare interface IEmailCampaignInputBase {
 }
 
 declare interface IIndividualEmailCampaignInput
-  extends IEmailCampaignInputBase {}
+  extends IEmailCampaignInputBase {
+  google_credential?: string
+  microsoft_credential?: string
+}
 
 interface IEmailHeaders {
   message_id?: string
