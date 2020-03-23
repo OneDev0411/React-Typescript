@@ -58,7 +58,6 @@ function ToursList(props: { user: IUser }) {
     {
       header: 'Title',
       id: 'title',
-      // width: '300px',
       render: ({ row }: RenderProps<TableRow>) => (
         <Title title={row.title} onClick={() => handleEdit(row)} />
       )
@@ -67,7 +66,6 @@ function ToursList(props: { user: IUser }) {
       header: 'Date',
       id: 'date',
       verticalAlign: 'center',
-      // width: '300px',
       render: ({ row }: RenderProps<TableRow>) => (
         <DueDate dueDate={row.due_date} />
       )
@@ -75,7 +73,6 @@ function ToursList(props: { user: IUser }) {
     {
       header: 'Participants',
       id: 'participants',
-      // width: '120px',
       verticalAlign: 'center',
       class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (
