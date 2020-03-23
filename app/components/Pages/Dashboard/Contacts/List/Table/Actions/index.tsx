@@ -91,8 +91,6 @@ export function TableActions({
   const isEntireModeDisable = isEntireRowsSelected ? true : isAllDisable
   const isMergeDisable = !(isAllRowsSelected || selectedRowIds.length >= 2)
 
-  console.log(isAllDisable, isEntireModeDisable)
-
   const deselectRows = () => dispatch(resetRows())
   const deselectAndReload = () => {
     deselectRows()
