@@ -7,7 +7,7 @@ export async function getImageDimensions(
     fileOrUrl instanceof File ? await readFileAsDataUrl(fileOrUrl) : fileOrUrl
 
   return new Promise((resolve, reject) => {
-    let img = new Image()
+    const img = new Image()
 
     img.onload = () => {
       const { width, height } = img
