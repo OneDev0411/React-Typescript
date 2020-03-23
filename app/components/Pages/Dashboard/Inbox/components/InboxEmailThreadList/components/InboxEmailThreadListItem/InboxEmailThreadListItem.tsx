@@ -66,7 +66,12 @@ export default function InboxEmailThreadListItem({
             display="inline"
             noWrap
             title={recipients}
-            classes={{ root: classes.recipients }}
+            classes={{
+              root: classNames(
+                classes.recipients,
+                emailThread.is_read && classes.recipientsRead
+              )
+            }}
           >
             {recipients || <>&nbsp;</>}
           </Typography>
@@ -74,7 +79,12 @@ export default function InboxEmailThreadListItem({
             <Typography
               variant={emailThread.is_read ? 'body2' : 'subtitle2'}
               display="inline"
-              classes={{ root: classes.recipients }}
+              classes={{
+                root: classNames(
+                  classes.recipients,
+                  emailThread.is_read && classes.recipientsRead
+                )
+              }}
             >
               &nbsp;({emailThread.message_count})
             </Typography>
@@ -98,7 +108,12 @@ export default function InboxEmailThreadListItem({
           variant={emailThread.is_read ? 'body2' : 'subtitle2'}
           noWrap
           title={emailThread.subject || undefined}
-          classes={{ root: classes.subject }}
+          classes={{
+            root: classNames(
+              classes.subject,
+              emailThread.is_read && classes.subjectRead
+            )
+          }}
         >
           {emailThread.subject || '(No Subject)'}
         </Typography>

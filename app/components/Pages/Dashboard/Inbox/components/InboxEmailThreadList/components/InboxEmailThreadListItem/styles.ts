@@ -24,13 +24,16 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
       paddingRight: `calc(${theme.spacing(2)}px + 0.5em)` /* scroll bar */
     },
     infoRead: {
-      backgroundColor: `${theme.palette.grey[50]}`
+      backgroundColor: theme.palette.grey[50]
     },
     infoSelected: {
-      backgroundColor: `${theme.palette.action.selected}`
+      backgroundColor: theme.palette.action.selected
     },
     recipients: {
       color: theme.palette.common.black
+    },
+    recipientsRead: {
+      color: theme.palette.grey[600]
     },
     date: {
       color: theme.palette.grey[500]
@@ -42,11 +45,14 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
     subject: {
       color: theme.palette.common.black
     },
+    subjectRead: {
+      color: theme.palette.grey[600]
+    },
     snippet: {
       color: theme.palette.common.black
     },
     snippetRead: {
-      color: theme.palette.grey[600]
+      color: theme.palette.grey[400]
     },
     flex: {
       display: 'flex'
