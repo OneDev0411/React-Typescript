@@ -11,7 +11,7 @@
     "icons": "babel-node ./icon-manager",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build.js",
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build.js",
-    "build:ci": "NODE_ENV=ci babel-node ./build.js",
+    "build:ci": "NODE_ENV=ci NODE_OPTIONS='--max-old-space-size=8192' babel-node ./build.js",
     "serve": "NODE_ENV=production forever node_modules/@babel/node/bin/babel-node.js --extensions \".js,.ts,.tsx\" ./bin/server ",
     "serve:ci": "NODE_ENV=ci PORT=8081 babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "serve:stage": "NODE_ENV=stage babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
