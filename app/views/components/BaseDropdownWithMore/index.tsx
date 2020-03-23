@@ -13,6 +13,7 @@ interface Props extends BaseProps {
     row: boolean
     column: boolean
     count: number
+    container?: ReactNode
     moreText?: string
     lessText?: string
     textStyle?: object
