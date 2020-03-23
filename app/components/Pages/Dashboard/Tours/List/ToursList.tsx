@@ -58,20 +58,24 @@ function ToursList(props: { user: IUser }) {
     {
       header: 'Title',
       id: 'title',
-      render: ({ row }: RenderProps<TableRow>) => <Title title={row.title} />
+      // width: '300px',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Title title={row.title} onClick={() => handleEdit(row)} />
+      )
     },
     {
       header: 'Date',
       id: 'date',
       verticalAlign: 'center',
+      // width: '300px',
       render: ({ row }: RenderProps<TableRow>) => (
-        <DueDate dueDate={row.due_date} onClick={() => handleEdit(row)} />
+        <DueDate dueDate={row.due_date} />
       )
     },
     {
       header: 'Participants',
       id: 'participants',
-      width: '120px',
+      // width: '120px',
       verticalAlign: 'center',
       class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (

@@ -6,8 +6,7 @@ export const styles = (theme: Theme) =>
     row: {
       '& td': {
         '& a': {
-          color: theme.palette.text.primary,
-          textDecoration: 'none'
+          color: theme.palette.text.primary
         },
         '&.opaque': {
           color: theme.palette.grey['500']
@@ -18,9 +17,9 @@ export const styles = (theme: Theme) =>
       },
       '&:hover td': {
         cursor: 'pointer',
-        '&.primary a': {
+        '& a, &.primary a': {
           color: theme.palette.secondary.main,
-          textDecoration: 'none'
+          textDecoration: 'underline'
         },
         '&.opaque': {
           color: theme.palette.text.primary
