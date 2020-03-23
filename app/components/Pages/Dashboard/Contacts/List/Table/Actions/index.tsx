@@ -83,12 +83,15 @@ export function TableActions({
   const isMoreActionOpen = Boolean(moreActionEl)
   const moreActionID = isMoreActionOpen ? 'more-action-popper' : undefined
 
-  const isAnyRowsSelected =
-    isEntireRowsSelected || isAllRowsSelected || selectedRowIds.length > 0
-  const isMergeDisable =
-    isAllRowsSelected || isEntireRowsSelected
-      ? false
-      : selectedRowIds.length < 2
+  const isAllDisable = !(
+    isEntireRowsSelected ||
+    isAllRowsSelected ||
+    selectedRowIds.length > 0
+  )
+  const isEntireModeDisable = isEntireRowsSelected ? true : isAllDisable
+  const isMergeDisable = !(isAllRowsSelected || selectedRowIds.length >= 2)
+
+  console.log(isAllDisable, isEntireModeDisable)
 
   const deselectRows = () => dispatch(resetRows())
   const deselectAndReload = () => {
@@ -102,19 +105,19 @@ export function TableActions({
         atLeast="one"
         bulkMode={isEntireRowsSelected}
         action="sending an email"
-        disabled={!isAnyRowsSelected}
+        disabled={isEntireModeDisable}
       >
-        <Email disabled={!isAnyRowsSelected} selectedRows={selectedRowIds} />
+        <Email disabled={isEntireModeDisable} selectedRows={selectedRowIds} />
       </ActionWrapper>
 
       <ActionWrapper
         atLeast="one"
         bulkMode={isEntireRowsSelected}
         action="marketing"
-        disabled={!isAnyRowsSelected}
+        disabled={isEntireModeDisable}
       >
         <SendMlsListingCard
-          disabled={!isAnyRowsSelected}
+          disabled={isEntireModeDisable}
           selectedRows={selectedRowIds}
         >
           Marketing
@@ -125,10 +128,10 @@ export function TableActions({
         bulkMode={isEntireRowsSelected}
         atLeast="one"
         action="tagging"
-        disabled={!isAnyRowsSelected}
+        disabled={isAllDisable}
       >
         <TagContacts
-          disabled={!isAnyRowsSelected}
+          disabled={isAllDisable}
           entireMode={isEntireRowsSelected}
           totalRowsCount={totalRowsCount}
           excludedRows={excludedRows}
@@ -146,10 +149,10 @@ export function TableActions({
         atLeast="one"
         bulkMode={isEntireRowsSelected}
         action="creating an event"
-        disabled={!isAnyRowsSelected}
+        disabled={isEntireModeDisable}
       >
         <CreateEvent
-          disabled={!isAnyRowsSelected}
+          disabled={isEntireModeDisable}
           selectedRows={selectedRowIds}
           submitCallback={deselectAndReload}
         />
@@ -188,16 +191,12 @@ export function TableActions({
         className={classes.moreActionContainer}
       >
         <List>
-          <ListItem
-            button
-            disabled={!isAnyRowsSelected}
-            onClick={onRequestDelete}
-          >
+          <ListItem button disabled={isAllDisable} onClick={onRequestDelete}>
             <ActionWrapper
               bulkMode={isEntireRowsSelected}
               atLeast="one"
               action="delete"
-              disabled={!isAnyRowsSelected}
+              disabled={isAllDisable}
             >
               <ListItemText>
                 <Typography color="error">Delete</Typography>
