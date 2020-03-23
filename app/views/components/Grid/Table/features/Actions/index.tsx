@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     summary: {
       fontSize: theme.typography.body2.fontSize,
-      color: theme.palette.secondary.main,
+      color: theme.palette.tertiary.main,
       cursor: 'pointer'
     }
   })
@@ -102,15 +102,10 @@ export function Actions<Row>({ rows, TableActions, totalRows }: Props<Row>) {
           />
         </Tooltip>
 
-        <ToggleEntireRows<Row>
-          rows={rows}
-          totalRows={totalRows}
-          tooltipTitle={tooltipTitle}
-        />
-
         <span className={classes.summary} onClick={toggleAll}>
           {getSelectedCount()} of {totalRows} selected
         </span>
+        <ToggleEntireRows<Row> rows={rows} totalRows={totalRows} />
       </div>
 
       {TableActions && (
