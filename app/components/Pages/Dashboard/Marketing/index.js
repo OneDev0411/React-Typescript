@@ -5,13 +5,12 @@ import { Helmet } from 'react-helmet'
 
 import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
 import { useMarketingCenterMediums } from 'hooks/use-marketing-center-mediums'
-
 import { getActiveTeamId } from 'utils/user-teams'
 
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
 
-import { useTemplatesList } from './hooks/use-templates-list'
+import { useTemplates } from './hooks/use-templates'
 import Tabs from './Tabs'
 
 export function MarketingLayout({ params, router, render }) {
@@ -22,13 +21,20 @@ export function MarketingLayout({ params, router, render }) {
 
   const activeBrand = getActiveTeamId(user)
 
-  const { templates, loading } = useTemplatesList(activeBrand, templateTypes)
+  const { templates, isLoading, deleteTemplate } = useTemplates(activeBrand)
   const mediums = useMarketingCenterMediums(templates)
 
   const currentMedium = params.medium
-  const currentMediumTemplates = templates.filter(item =>
-    currentMedium ? item.medium === currentMedium : true
-  )
+  const currentPageItems = templates.filter(item => {
+    const mediumMatches = currentMedium
+      ? item.template.medium === currentMedium
+      : true
+    const typeMatches = templateTypes
+      ? templateTypes.includes(item.template.template_type)
+      : true
+
+    return mediumMatches && typeMatches
+  })
 
   useEffect(() => {
     if (templateTypes && !currentMedium && mediums.length > 0) {
@@ -52,10 +58,11 @@ export function MarketingLayout({ params, router, render }) {
           />
           {render &&
             render({
-              items: currentMediumTemplates,
-              isLoading: loading,
+              items: currentPageItems,
+              isLoading,
               types: params.types,
-              medium: params.medium
+              medium: params.medium,
+              onDeleteTemplate: deleteTemplate
             })}
         </PageLayout.Main>
       </PageLayout>

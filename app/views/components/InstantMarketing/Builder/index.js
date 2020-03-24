@@ -579,8 +579,6 @@ class Builder extends React.Component {
     this.resize()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
-      console.log('this.state.selectedTemplate 2', this.state.selectedTemplate)
-
       this.registerEmailBlocks()
     }
   }

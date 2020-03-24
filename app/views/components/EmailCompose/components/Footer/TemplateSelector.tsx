@@ -47,7 +47,7 @@ export function TemplateSelector(props: Props & ClassesProps<typeof styles>) {
           indicatorColor="primary"
         >
           <Tab className={classes.tabRoot} label="Email Templates" />
-          <Tab className={classes.tabRoot} label="My designs" />
+          <Tab className={classes.tabRoot} label="All Designs" />
         </Tabs>
       </div>
       {templateTabIndex === 0 && (

@@ -27,10 +27,13 @@ class SocialDrawer extends React.Component {
     }
 
     try {
-      const instance = await getTemplateInstances(this.props.template.id, {
-        ...this.props.templateInstanceData,
-        html: this.props.template.result
-      })
+      const instance = await getTemplateInstances(
+        this.props.template.template.id,
+        {
+          ...this.props.templateInstanceData,
+          html: this.props.template.result
+        }
+      )
 
       this.setState({
         instance

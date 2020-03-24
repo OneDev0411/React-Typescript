@@ -13,7 +13,7 @@ interface Props {
   templateTypes: string
 }
 
-const ContactsTabs = ({ sections, mediums, templateTypes }: Props) => {
+const MarketingCenterTabs = ({ sections, mediums, templateTypes }: Props) => {
   const { marketingCenter, life, properties } = sections
   const keys: string[] = [life.key, properties.key]
 
@@ -69,4 +69,4 @@ const ContactsTabs = ({ sections, mediums, templateTypes }: Props) => {
   )
 }
 
-export default ContactsTabs
+export default MarketingCenterTabs

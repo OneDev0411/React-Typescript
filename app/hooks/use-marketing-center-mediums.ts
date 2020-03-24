@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react'
 import { onlyUnique, sortAlphabetically } from 'utils/helpers'
 
 export function useMarketingCenterMediums(
-  templates: IMarketingTemplate[]
+  templates: IBrandMarketingTemplate[]
 ): string[] {
   const [mediums, setMediums] = useState<string[]>([])
 
   useEffect(() => {
     setMediums(
       templates
-        .map(t => t.medium)
+        .map(brandTemplate => brandTemplate.template.medium)
         .filter(onlyUnique)
         .sort(sortAlphabetically)
         .reverse()
