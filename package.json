@@ -153,7 +153,7 @@
     "nunjucks": "^3.1.7",
     "object-hash": "^2.0.3",
     "offline-js": "^0.7.19",
-    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
     "papaparse": "^4.6.2",
     "parse-address": "^1.1.0",
     "pdfjs-dist": "github:rechat/pdfjs-dist#da7d4a65a2e065b9c9a14562f682467d94e42785",
