@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { IAppState } from 'reducers'
+import { IAppState } from '../../../../reducers'
 
 import { ACL } from '../../../../constants/acl'
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
@@ -16,7 +16,7 @@ import Brand from '../../../../controllers/Brand'
 
 import Logo from './components/Logo'
 import { UserMenu } from './components/UserMenu'
-import { SideNavLinkItem } from './components/SideNavLinkItem'
+import SideNavLinkItem from './components/SideNavLinkItem'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
 import SupportTrigger from './components/SupportTrigger'
 
