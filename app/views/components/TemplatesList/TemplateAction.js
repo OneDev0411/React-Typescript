@@ -1,6 +1,5 @@
 import React from 'react'
 
-import ShareInstance from 'components/InstantMarketing/adapters/ShareInstance'
 import GeneralFlow from 'components/InstantMarketing/adapters/General'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
@@ -47,16 +46,6 @@ function TemplateAction(props) {
 
   if (isEdit && !props.isTriggered) {
     return null
-  }
-
-  if (!isEdit && props.type === 'history') {
-    return (
-      <ShareInstance
-        {...sharedProps}
-        hasExternalTrigger
-        instance={props.selectedTemplate}
-      />
-    )
   }
 
   const templateType = getTemplateType(props.type, props.selectedTemplate)
