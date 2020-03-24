@@ -117,7 +117,7 @@ export default function InboxEmailThreadList({
   useEmailThreadEvents(handleUpdateEmailThreads, handleDeleteEmailThreads)
 
   const getMoreEmailThreads = searchQuery
-    ? async () => {
+    ? async function getMoreEmailThreadsBySearch() {
         const {
           emailThreads: moreEmailThreads,
           finished
@@ -125,7 +125,7 @@ export default function InboxEmailThreadList({
 
         return { moreEmailThreads, finished }
       }
-    : async () => {
+    : async function getMoreEmailThreadsWithoutSearch() {
         const count =
           emailThreads.length === 0
             ? emailThreadFetchCountInitial
