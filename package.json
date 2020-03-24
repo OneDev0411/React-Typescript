@@ -239,7 +239,7 @@
     "styled-flex-component": "^2.2.2",
     "superagent": "^5.1.0",
     "superagent-debugger": "^1.2.9",
-    "terser-webpack-plugin": "^1.2.1",
+    "terser-webpack-plugin": "^2.3.5",
     "text-clipper": "^1.3.0",
     "text-mask-addons": "^3.7.2",
     "timeago.js": "^3.0.2",
