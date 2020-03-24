@@ -13,10 +13,11 @@ const useStyles = makeStyles((theme: Theme) =>
       left: '0 !important' as any,
       borderRadius: 0
     },
-    myCustomClass: {
+    contentContainer: {
+      padding: theme.spacing(2.5),
       left: 0,
       width: '100%',
-      minHeight: 400,
+      minHeight: 250,
       color: theme.palette.text.primary
     }
   })
@@ -27,7 +28,7 @@ interface Props {
   children: ReactNode
 }
 
-const MegaMenu: React.FC = ({ title, children }: Props) => {
+const MegaMenu = ({ title, children }: Props) => {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
@@ -68,7 +69,7 @@ const MegaMenu: React.FC = ({ title, children }: Props) => {
           paper: classes.popoverPaper
         }}
       >
-        <div className={classes.myCustomClass}>{children}</div>
+        <div className={classes.contentContainer}>{children}</div>
       </Popover>
     </div>
   )

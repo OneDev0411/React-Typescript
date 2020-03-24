@@ -1,7 +1,9 @@
 import React from 'react'
 
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
-import { SectionItem } from 'components/PageSideNav/types'
+import { ExtendedSectionTypes } from 'hooks/use-marketing-center-sections'
+
+import LifeTab from './Items/Life'
 
 import { MEDIUMS_COLLECTION } from '../constants'
 
@@ -9,7 +11,7 @@ interface Props {
   defaultValue: string
   currentValue: string
   templateTypes: string
-  sections: SectionItem[]
+  sections: ExtendedSectionTypes
   mediums: string[]
   router: any
 }
@@ -22,10 +24,14 @@ export const ContactsTabs = ({
   mediums,
   router
 }: Props) => {
+  const { life } = sections
+
+  console.log(life)
+
   return (
     <PageTabs
       defaultValue={defaultValue}
-      tabs={[<Tab key={1} value="meg" label="tmp tab" />]}
+      tabs={[<Tab key={1} value="meg" label={<LifeTab data={life} />} />]}
       actions={mediums.map(medium => {
         const url = `/dashboard/marketing/${templateTypes}/${medium}`
 

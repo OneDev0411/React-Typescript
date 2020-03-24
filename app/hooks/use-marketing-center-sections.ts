@@ -11,14 +11,16 @@ import {
   SectionItem
 } from 'components/PageSideNav/types'
 
+export type ExtendedSectionTypes = { [key: string]: Section }
+
 function urlGenerator(url: string | string[]): string {
   return `/dashboard/marketing${
     typeof url === 'string' ? url : `/${url.join(',')}`
   }`
 }
 
-const ALL_SECTIONS: Section[] = [
-  {
+const ALL_SECTIONS: ExtendedSectionTypes = {
+  marketingCenter: {
     type: SectionsEnum.LINK,
     title: 'Marketing Center',
     items: [
@@ -30,7 +32,7 @@ const ALL_SECTIONS: Section[] = [
       }
     ]
   },
-  {
+  life: {
     type: SectionsEnum.LINK,
     title: 'Life',
     items: [
@@ -81,7 +83,7 @@ const ALL_SECTIONS: Section[] = [
       }
     ]
   },
-  {
+  properties: {
     type: SectionsEnum.LINK,
     title: 'Properties',
     items: [
@@ -133,7 +135,7 @@ const ALL_SECTIONS: Section[] = [
       }
     ]
   }
-]
+}
 
 function getPrivilegedSectionItems(
   user: IUser,
@@ -156,12 +158,14 @@ function getSerializedValue(value?: string | string[]): string {
   return Array.isArray(value) ? value.join(',') : value
 }
 
-export function useMarketingCenterSections({ types }): Section[] {
+export function useMarketingCenterSections({ types }): ExtendedSectionTypes {
   const user = useSelector<IAppState, IUser>(state => state.user)
 
-  const newSections: Section[] = []
+  const newSections: ExtendedSectionTypes = {}
+  const sectionKeys = Object.keys(ALL_SECTIONS)
 
-  ALL_SECTIONS.forEach(section => {
+  sectionKeys.forEach(key => {
+    const section = ALL_SECTIONS[key]
     const hasAccessToSection = (section.access || []).every(access =>
       hasUserAccess(user, access)
     )
@@ -185,7 +189,7 @@ export function useMarketingCenterSections({ types }): Section[] {
       value: activeType ? getSerializedValue(activeType.value) : null
     }
 
-    newSections.push(newSection)
+    newSections[key] = newSection
   })
 
   return newSections
