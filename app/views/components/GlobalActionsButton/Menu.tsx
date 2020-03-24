@@ -16,11 +16,7 @@ import MenuItem from './MenuItem'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     itemsWrapper: {
-      margin: theme.spacing(0, 1)
-    },
-    closeIconButtonLabel: {
-      width: theme.spacing(2),
-      height: theme.spacing(2)
+      margin: theme.spacing(1)
     },
     subheader: {
       display: 'flex',
@@ -28,6 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       justifyContent: 'space-between',
       padding: theme.spacing(1, 2)
+    },
+    divider: {
+      margin: theme.spacing(0, 2)
     }
   })
 )
@@ -68,7 +67,7 @@ export default function Menu({ items, anchorEl, onItemClick, onClose }: Props) {
             <ListSubheader disableGutters className={classes.subheader}>
               <Typography variant="overline">Create</Typography>
             </ListSubheader>
-            <Divider />
+            <Divider className={classes.divider} />
           </>
         }
       >
