@@ -184,12 +184,12 @@ class SendMlsListingCard extends React.Component {
     })
   }
 
-  generatePreviewImage = async template => {
+  generatePreviewImage = async brandTemplate => {
     this.setState({ isGettingTemplateInstance: true })
 
-    const instance = await getTemplateInstances(template.id, {
+    const instance = await getTemplateInstances(brandTemplate.template.id, {
       ...this.TemplateInstanceData,
-      html: template.result
+      html: brandTemplate.result
     })
 
     this.setState({

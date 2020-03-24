@@ -5,10 +5,10 @@ import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 
 import TemplatesList from 'components/TemplatesList'
 
-import Layout from '..'
-
-import useTemplatesHistory from './useTemplatesHistory'
+import { useTemplatesHistory } from '../hooks/use-templates-history'
 import EmptyState from './EmptyState'
+
+import Layout from '..'
 
 const PAGE_SIZE = 12
 
@@ -42,7 +42,7 @@ function History() {
             type="history"
             items={loadedTemplates}
             isLoading={isLoading}
-            onDelete={handleDelete}
+            onDeleteInstance={handleDelete}
             emptyState={<EmptyState />}
           />
         )}

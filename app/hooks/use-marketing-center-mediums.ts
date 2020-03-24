@@ -3,43 +3,45 @@ import _groupBy from 'lodash/groupBy'
 
 import { onlyUnique, sortAlphabetically } from 'utils/helpers'
 
-type Response = {
-  [key: string]: string[]
-}
+const HOLIDAY_TEMPLATE_TYPES = [
+  'Christmas',
+  'NewYear',
+  'Valentines',
+  'StPatrick',
+  'Easter',
+  'OtherHoliday'
+]
 
-function sanitizeMediums(templates: IMarketingTemplate[]) {
+function getFormattedUniqueMediums(templates: IBrandMarketingTemplate[]) {
   return templates
-    .map(t => t.medium)
+    .map(t => t.template.medium)
     .filter(onlyUnique)
     .sort(sortAlphabetically)
     .reverse()
 }
 
+type Mediums = {
+  [key: string]: string[]
+}
+
 export function useMarketingCenterMediums(
-  templates: IMarketingTemplate[]
-): Response {
-  const [mediums, setMediums] = useState<Response>({})
+  templates: IBrandMarketingTemplate[]
+): Mediums {
+  const [mediums, setMediums] = useState<Mediums>({})
 
   useEffect(() => {
-    const groupHoliday = [
-      'Christmas',
-      'NewYear',
-      'Valentines',
-      'StPatrick',
-      'Easter',
-      'OtherHoliday'
-    ]
-    const groupByType = _groupBy(templates, i => {
-      if (groupHoliday.includes(i.template_type)) {
+    const groupedTemplatesByType = _groupBy(templates, i => {
+      if (HOLIDAY_TEMPLATE_TYPES.includes(i.template.template_type)) {
         return 'Holiday'
       }
 
-      return i.template_type
+      return i.template.template_type
     })
+
     const mediums = {}
 
-    Object.keys(groupByType).forEach(key => {
-      mediums[key] = sanitizeMediums(groupByType[key])
+    Object.keys(groupedTemplatesByType).forEach(key => {
+      mediums[key] = getFormattedUniqueMediums(groupedTemplatesByType[key])
     })
 
     setMediums(mediums)

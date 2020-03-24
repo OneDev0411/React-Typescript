@@ -12,12 +12,13 @@ export const MarketingList = () => {
         <title>Marketing | Rechat</title>
       </Helmet>
       <Layout
-        render={({ items, isLoading, types, medium }) => (
+        render={({ items, isLoading, types, medium, onDeleteTemplate }) => (
           <TemplatesList
             items={items}
             isLoading={isLoading}
             type={types}
             medium={medium}
+            onDelete={onDeleteTemplate}
           />
         )}
       />
