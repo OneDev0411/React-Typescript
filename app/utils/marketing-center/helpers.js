@@ -21,8 +21,8 @@ export function createdAt(date) {
   return fecha.format(new Date(date * 1000), 'MMM DD, YYYY - hh:mm A')
 }
 
-export function getSelectedMediumTemplates(templates, wantedMedium) {
-  return templates.filter(t => t.medium === wantedMedium)
+export function getSelectedMediumTemplates(brandTemplates, wantedMedium) {
+  return brandTemplates.filter(t => t.template.medium === wantedMedium)
 }
 
 function getTemplateIndex(availableTemplates, selectedTemplate) {
