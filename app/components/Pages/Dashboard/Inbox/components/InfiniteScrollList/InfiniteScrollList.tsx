@@ -94,12 +94,7 @@ export default function InfiniteScrollList<Item>({
       ref={listWrapperRef}
       onScroll={fetchMoreItemsManagedIfRequired}
     >
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        classes={{ root: classes.list }}
-      >
+      <Grid container spacing={0} direction="column" className={classes.list}>
         {items.length === 0 && status === 'finished' ? (
           <NoContentMessage>{emptyListMessage}</NoContentMessage>
         ) : (
@@ -109,10 +104,10 @@ export default function InfiniteScrollList<Item>({
                 key={itemKey(item, index)}
                 item
                 onClick={() => onSelectItem && onSelectItem(item)}
-                classes={{ root: classes.itemWrapper }}
+                className={classes.itemWrapper}
               >
                 {renderItem(item, item === selectedItem)}
-                <Divider classes={{ root: classes.itemDivider }} />
+                <Divider className={classes.itemDivider} />
               </Grid>
             ))}
             <Grid item xs>

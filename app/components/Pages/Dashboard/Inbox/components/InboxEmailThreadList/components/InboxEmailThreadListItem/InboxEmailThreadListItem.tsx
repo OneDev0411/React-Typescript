@@ -40,13 +40,7 @@ export default function InboxEmailThreadListItem({
   const classes = useInboxEmailThreadListItemStyles()
 
   return (
-    <Paper
-      elevation={0}
-      square
-      classes={{
-        root: classes.root
-      }}
-    >
+    <Paper elevation={0} square className={classes.root}>
       <div
         className={classNames(
           classes.status,
@@ -66,12 +60,10 @@ export default function InboxEmailThreadListItem({
             display="inline"
             noWrap
             title={recipients}
-            classes={{
-              root: classNames(
-                classes.recipients,
-                emailThread.is_read && classes.recipientsRead
-              )
-            }}
+            className={classNames(
+              classes.recipients,
+              emailThread.is_read && classes.recipientsRead
+            )}
           >
             {recipients || <>&nbsp;</>}
           </Typography>
@@ -79,12 +71,10 @@ export default function InboxEmailThreadListItem({
             <Typography
               variant={emailThread.is_read ? 'body2' : 'subtitle2'}
               display="inline"
-              classes={{
-                root: classNames(
-                  classes.recipients,
-                  emailThread.is_read && classes.recipientsRead
-                )
-              }}
+              className={classNames(
+                classes.recipients,
+                emailThread.is_read && classes.recipientsRead
+              )}
             >
               &nbsp;({emailThread.message_count})
             </Typography>
@@ -94,12 +84,10 @@ export default function InboxEmailThreadListItem({
             variant="caption"
             display="inline"
             title={messageDateText}
-            classes={{
-              root: classNames(
-                classes.date,
-                !emailThread.is_read && classes.dateUnread
-              )
-            }}
+            className={classNames(
+              classes.date,
+              !emailThread.is_read && classes.dateUnread
+            )}
           >
             &nbsp;&nbsp;{messageDateShortText}
           </Typography>
@@ -108,23 +96,19 @@ export default function InboxEmailThreadListItem({
           variant={emailThread.is_read ? 'body2' : 'subtitle2'}
           noWrap
           title={emailThread.subject || undefined}
-          classes={{
-            root: classNames(
-              classes.subject,
-              emailThread.is_read && classes.subjectRead
-            )
-          }}
+          className={classNames(
+            classes.subject,
+            emailThread.is_read && classes.subjectRead
+          )}
         >
           {emailThread.subject || '(No Subject)'}
         </Typography>
         <Typography
           variant="body2"
-          classes={{
-            root: classNames(
-              classes.snippet,
-              emailThread.is_read && classes.snippetRead
-            )
-          }}
+          className={classNames(
+            classes.snippet,
+            emailThread.is_read && classes.snippetRead
+          )}
           noWrap
         >
           {emailThread.snippet || <>&nbsp;</>}

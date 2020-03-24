@@ -99,11 +99,8 @@ export default function Inbox({ params }: WithRouterProps) {
         {initializing ? null : noConnectedAccounts ? (
           <InboxConnectAccount />
         ) : (
-          <Grid container spacing={0} classes={{ root: classes.body }}>
-            <Grid
-              item
-              classes={{ root: classNames(classes.list, classes.fullHeight) }}
-            >
+          <Grid container spacing={0} className={classes.body}>
+            <Grid item className={classNames(classes.list, classes.fullHeight)}>
               <InboxEmailThreadList
                 selectedEmailThreadId={selectedEmailThreadId}
                 onSelectEmailThread={setSelectedEmailThreadId}
@@ -114,13 +111,11 @@ export default function Inbox({ params }: WithRouterProps) {
             <Grid
               item
               xs
-              classes={{
-                root: classNames(
-                  classes.conversation,
-                  emailThreadCount === 0 && classes.conversationHidden,
-                  classes.fullHeight
-                )
-              }}
+              className={classNames(
+                classes.conversation,
+                emailThreadCount === 0 && classes.conversationHidden,
+                classes.fullHeight
+              )}
             >
               <InboxEmailThread
                 key={selectedEmailThreadId}
