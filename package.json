@@ -358,9 +358,9 @@
     "styled-svg": "^2.3.4",
     "ts-jest": "^24.0.2",
     "typescript": "^3.6.2",
-    "webpack-cli": "^3.2.1",
-    "webpack-notifier": "^1.7.0",
-    "webpackbar": "^3.1.5",
+    "webpack-cli": "^3.3.11",
+    "webpack-notifier": "^1.8.0",
+    "webpackbar": "^4.0.0",
     "whatwg-fetch": "^3.0.0"
   },
   "prettier": {
