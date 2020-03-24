@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%'
   },
   title: {
+    marginRight: theme.spacing(1),
     // According to Shayan, the title looks a little misaligned vertically.
     // This is a fix for it to look better with the actions button and the search box.
     position: 'relative',
@@ -45,8 +46,8 @@ export default function GlobalHeader({
   return (
     <div className={classes.wrapper}>
       {title && (
-        <Typography variant="h4" classes={{ root: classes.title }}>
-          {title}&nbsp;
+        <Typography variant="h4" className={classes.title}>
+          {title}
         </Typography>
       )}
       {children && <div className={classes.content}>{children}</div>}
