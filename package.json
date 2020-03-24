@@ -255,7 +255,7 @@
     "use-resize-observer": "^4.0.0",
     "validator": "^9.2.0",
     "webpack": "^4.42.0",
-    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-bundle-analyzer": "^3.6.1",
     "webpack-s3-plugin": "^1.0.3",
     "xml2js": "^0.4.22"
   },
