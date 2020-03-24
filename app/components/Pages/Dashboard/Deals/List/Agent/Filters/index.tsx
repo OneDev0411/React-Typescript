@@ -106,7 +106,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
 
   return (
     <PageTabs
-      defaultValue={props.params.id || 'All'}
+      defaultValue={props.params.filter || 'all'}
       tabs={TAB_ITEMS.map(({ label, link }, index: number) => {
         const url = link ? `${BASE_URL}/filter/${link}` : BASE_URL
         const urlWithQuery = `${url}${props.location.search}`
@@ -114,7 +114,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
         return (
           <TabLink
             key={index}
-            value={link || 'All'}
+            value={link || 'all'}
             label={<span>{label}</span>}
             to={urlWithQuery}
           />
