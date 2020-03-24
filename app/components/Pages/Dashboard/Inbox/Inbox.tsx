@@ -26,10 +26,8 @@ const useStyles = makeStyles(
       paddingLeft: 0,
       paddingBottom: 0
     },
-    main: {
-      position: 'relative',
-      height:
-        'calc(100vh - 122px - 1px)' /* total height - page header - divider */
+    body: {
+      height: 'calc(100% - 1px)' /* header divider */
     },
     fullHeight: {
       height: '100%'
@@ -83,7 +81,7 @@ export default function Inbox({ params }: WithRouterProps) {
 
   return (
     <GlobalPageLayout className={classes.layout}>
-      <Box paddingLeft={5}>
+      <Box paddingLeft={5} flex="0 1 auto">
         {initializing || noConnectedAccounts ? (
           <GlobalPageLayout.Header title="Inbox" />
         ) : (
@@ -94,14 +92,14 @@ export default function Inbox({ params }: WithRouterProps) {
           />
         )}
       </Box>
-      <GlobalPageLayout.Main className={classes.main}>
+      <GlobalPageLayout.Main height={0} flex="1 1 auto">
         <Box paddingLeft={5}>
           <Divider />
         </Box>
         {initializing ? null : noConnectedAccounts ? (
           <InboxConnectAccount />
         ) : (
-          <Grid container spacing={0} classes={{ root: classes.fullHeight }}>
+          <Grid container spacing={0} classes={{ root: classes.body }}>
             <Grid
               item
               classes={{ root: classNames(classes.list, classes.fullHeight) }}
