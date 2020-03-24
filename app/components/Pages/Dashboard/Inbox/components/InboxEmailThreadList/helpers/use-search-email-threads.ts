@@ -32,9 +32,8 @@ export default function useSearchEmailThreads(searchQuery: string) {
     })
 
     nextRef.current = next
-    console.log('next', next) // TODO: Decide about `finished` here.
 
-    const finished = next === null
+    const finished = next === null // TODO: Decide about `finished` here.
 
     finishedRef.current = finished
 
