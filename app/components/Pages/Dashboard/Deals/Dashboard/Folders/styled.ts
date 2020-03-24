@@ -163,7 +163,7 @@ export const LabelItem = styled.div`
   padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 600;
-  min-width: 5rem;
+  min-width: 6rem;
   border-radius: 0.75rem;
   margin-right: 0.5rem;
   max-height: 1.5rem;
