@@ -92,7 +92,7 @@ export function PageTabs({
   const classes = useStyles()
   const [selectedTab, setSelectedTab] = useState<SelectedTab>(defaultValue)
   const [selectedAction, setSelectedAction] = useState<SelectedTab>(
-    defaultValue
+    defaultAction
   )
 
   const activeTab =
