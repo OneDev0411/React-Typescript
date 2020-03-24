@@ -1,52 +1,11 @@
 import styled from 'styled-components'
 
-import {
-  primary,
-  grey,
-  borderColor
-} from '../../../../../../../views/utils/colors'
+import { grey, borderColor } from '../../../../../../../views/utils/colors'
 import Card from '../../../../../../../views/components/Card'
-import IconButton from '../../../../../../../views/components/Button/IconButton'
-import IconSearch from '../../../../../../../views/components/SvgIcons/Search/IconSearch'
 
 export const SearchContainer = styled.div`
   width: calc(100% - 19em);
   position: relative;
-`
-export const Input = styled.input`
-  width: 100%;
-  height: 2.4em;
-  padding: 0.6em 2.75em 0.5em 2.5em;
-  border-radius: 3px;
-  border: solid 1px ${grey.A400};
-  background-color: ${props => (props.value ? '#fff' : grey.A125)};
-
-  &:focus {
-    outline: none;
-    border: 1px solid ${primary};
-    background-color: #fff;
-  }
-
-  &:disabled {
-    color: ${grey.A550};
-  }
-
-  // remove clear icon on IE and Edge browser
-  &::-ms-clear {
-    display: none;
-  }
-`
-export const SearchIcon = styled(IconSearch)`
-  position: absolute;
-  top: 0.7em;
-  left: 1em;
-  fill: ${grey.A900};
-`
-
-export const ClearButton = styled(IconButton)`
-  position: absolute;
-  top: 0.54em;
-  right: 0.75em;
 `
 export const LoadingContainer = styled.div`
   position: absolute;

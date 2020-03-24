@@ -9,13 +9,7 @@ import Filters from '../components/Filters'
 import Autocomplete from '../components/Autocomplete'
 
 export function Header(props) {
-  const {
-    isFetching,
-    filtersIsOpen,
-    onClickFilter,
-    isSideMenuOpen,
-    activeView
-  } = props
+  const { isFetching, filtersIsOpen, onClickFilter, activeView } = props
 
   return (
     <GlobalHeader>
@@ -27,13 +21,12 @@ export function Header(props) {
           isOpen={filtersIsOpen}
           disabled={isFetching}
           text="Filters"
-          size="medium"
+          size="large"
           appearance="outline"
         />
         <Filters
           isOpen={filtersIsOpen}
           isSubmitting={isFetching}
-          isSideMenuOpen={isSideMenuOpen}
           handleClose={onClickFilter}
         />
       </Box>
