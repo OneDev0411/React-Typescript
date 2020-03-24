@@ -348,7 +348,7 @@
     "fork-ts-checker-notifier-webpack-plugin": "^1.0.2",
     "fork-ts-checker-webpack-plugin": "^1.5.0",
     "husky": "^2.4.1",
-    "jest": "^24.8.0",
+    "jest": "^25.1.0",
     "jest-raw-loader": "^1.0.1",
     "ndb": "^1.0.41",
     "nodemon": "^1.18.9",
