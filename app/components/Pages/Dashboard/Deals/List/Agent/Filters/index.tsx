@@ -1,12 +1,24 @@
 import React from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { MenuItem } from '@material-ui/core'
 
+import { IAppState } from 'reducers'
+
 import { getStatus } from 'models/Deal/helpers/context'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+import { getUserTeams } from 'actions/user/teams'
 
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
+
+import {
+  SORTABLE_COLUMNS,
+  SORT_FIELD_SETTING_KEY
+} from '../helpers/agent-sorting'
+import { getGridSortLabel } from '../../helpers/sorting'
 
 const BASE_URL = '/dashboard/deals'
 
@@ -82,26 +94,20 @@ interface Props {
 }
 
 const TabFilters = withRouter((props: Props & WithRouterProps) => {
-  const handleChangeSort = (column: SortableColumn) => {
+  const dispatch = useDispatch()
+  const user = useSelector(({ user }: IAppState) => user)
+
+  const handleChangeSort = async (column: SortableColumn) => {
     props.router.push(
       `${props.location.pathname}?sortBy=${column.value}&sortType=${
         column.ascending ? 'asc' : 'desc'
       }`
     )
-  }
 
-  const getSortTitle = () => {
-    const defaultValue = 'A - Z'
+    const fieldValue = column.ascending ? column.value : `-${column.value}`
 
-    if (!props.location.search) {
-      return defaultValue
-    }
-
-    const column = props.sortableColumns.find(
-      col => col.value === props.location.query.sortBy
-    )
-
-    return column ? column.label! : defaultValue
+    await putUserSetting(SORT_FIELD_SETTING_KEY, fieldValue)
+    dispatch(getUserTeams(user))
   }
 
   return (
@@ -124,7 +130,14 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
         <Tab
           key={0}
           label={
-            <DropdownTab title={getSortTitle()}>
+            <DropdownTab
+              title={getGridSortLabel(
+                user,
+                SORTABLE_COLUMNS,
+                props.location,
+                SORT_FIELD_SETTING_KEY
+              )}
+            >
               {({ toggleMenu }) => (
                 <>
                   {props.sortableColumns.map((column, index) => (

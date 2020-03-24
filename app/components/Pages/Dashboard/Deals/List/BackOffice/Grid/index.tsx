@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { WithRouterProps, withRouter } from 'react-router'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import moment from 'moment'
 
 import { TableCellProps } from '@material-ui/core'
@@ -17,10 +17,9 @@ import {
   getPrice
 } from 'models/Deal/helpers/context'
 
-import { getUserSettingsInActiveTeam } from 'utils/user-teams'
-import { putUserSetting } from 'models/user/put-user-setting'
-import { getUserTeams } from 'actions/user/teams'
 import flattenBrand from 'utils/flatten-brand'
+
+import { getGridSort } from 'deals/List/helpers/sorting'
 
 import { SearchQuery } from '../types'
 
@@ -33,16 +32,16 @@ import CriticalDate, {
   getCriticalDateNextValue
 } from '../../components/table-columns/CriticalDate'
 
-import { SORTABLE_COLUMNS } from '../helpers/sortable-columns'
-
-const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field_bo'
+import {
+  SORTABLE_COLUMNS,
+  SORT_FIELD_SETTING_KEY
+} from '../helpers/backoffice-sorting'
 
 interface Props {
   searchQuery: SearchQuery
 }
 
 function BackOfficeGrid(props: Props & WithRouterProps) {
-  const dispatch = useDispatch()
   const gridClasses = useGridStyles()
 
   const { isFetchingDeals, deals, user, roles } = useSelector(
@@ -158,50 +157,18 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
     return Object.values(deals)
   }
 
-  const getSort = () => {
-    if (props.location.query.sortBy) {
-      return {
-        value: props.location.query.sortBy,
-        ascending: props.location.query.sortType === 'asc'
-      }
-    }
-
-    const sortSetting =
-      getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) || 'status'
-
-    let id = sortSetting
-    let ascending = true
-
-    if (sortSetting.startsWith('-')) {
-      id = sortSetting.slice(1)
-      ascending = false
-    }
-
-    const column = columns.find(col => col.id === id)!
-
-    if (!column) {
-      return null
-    }
-
-    return {
-      value: column.id,
-      ascending
-    }
-  }
-
-  const handleChangeSort = async item => {
-    await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
-    dispatch(getUserTeams(user))
-  }
-
   const data = getData()
 
   return (
     <Grid<IDeal>
       sorting={{
         columns: SORTABLE_COLUMNS,
-        onChange: handleChangeSort,
-        sortBy: getSort()
+        sortBy: getGridSort(
+          user,
+          columns,
+          props.location,
+          SORT_FIELD_SETTING_KEY
+        )
       }}
       columns={columns}
       rows={data}

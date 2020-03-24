@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
@@ -10,11 +10,6 @@ import { TrProps } from 'components/Grid/Table/types'
 import { useGridStyles } from 'components/Grid/Table/styles'
 import { SortableColumn, ColumnSortType } from 'components/Grid/Table/types'
 
-import { getUserSettingsInActiveTeam } from 'utils/user-teams'
-
-import { putUserSetting } from 'models/user/put-user-setting'
-import { getUserTeams } from 'actions/user/teams'
-
 import { IAppState } from 'reducers'
 
 import {
@@ -23,6 +18,9 @@ import {
   getField,
   getFormattedPrice
 } from 'models/Deal/helpers/context'
+
+import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
+import { getGridSort } from '../../helpers/sorting'
 
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
@@ -37,15 +35,12 @@ import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
 import { Filters } from '../Filters'
 import { statusSortMethod } from '../../components/table-columns/Status/helpers/sort-method'
 
-const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field'
-
 interface Props {
   sortableColumns: SortableColumn[]
   activeFilter: string
 }
 
 function AgentGrid(props: Props & WithRouterProps) {
-  const dispatch = useDispatch()
   const gridClasses = useGridStyles()
 
   const { isFetchingDeals, deals, roles, user } = useSelector(
@@ -128,42 +123,6 @@ function AgentGrid(props: Props & WithRouterProps) {
     return Object.values(deals).filter(deal => filterFn(deal)) as IDeal[]
   }, [deals, props.activeFilter])
 
-  const getSort = () => {
-    if (props.location.search) {
-      return {
-        value: props.location.query.sortBy,
-        ascending: props.location.query.sortType === 'asc'
-      }
-    }
-
-    const sortSetting =
-      getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) || 'status'
-
-    let id = sortSetting
-    let ascending = true
-
-    if (sortSetting.startsWith('-')) {
-      id = sortSetting.slice(1)
-      ascending = false
-    }
-
-    const column = columns.find(col => col.id === id)!
-
-    if (!column) {
-      return null
-    }
-
-    return {
-      value: column.id,
-      ascending
-    }
-  }
-
-  const handleChangeSort = async item => {
-    await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
-    dispatch(getUserTeams(user))
-  }
-
   const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
     return {
       onClick: () => props.router.push(`/dashboard/deals/${deal.id}`)
@@ -174,8 +133,12 @@ function AgentGrid(props: Props & WithRouterProps) {
     <Grid<IDeal>
       sorting={{
         columns: props.sortableColumns,
-        sortBy: getSort(),
-        onChange: handleChangeSort
+        sortBy: getGridSort(
+          user,
+          columns,
+          props.location,
+          SORT_FIELD_SETTING_KEY
+        )
       }}
       columns={columns}
       rows={data}
