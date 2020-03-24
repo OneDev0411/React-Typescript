@@ -1,4 +1,5 @@
 .l-app__main {
-  height: 100vh;
-  margin-left: $app-sidenav-width;
+    position: relative;
+    height: 100vh;
+    margin-left: $app-sidenav-width;
 }

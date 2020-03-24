@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
-import { MenuItem } from '@material-ui/core'
 
 import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
 import { useMarketingCenterMediums } from 'hooks/use-marketing-center-mediums'
@@ -10,12 +9,10 @@ import { getActiveTeamId } from 'utils/user-teams'
 
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
-import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
-
 import TemplatesList from 'components/TemplatesList'
 
 import { useTemplatesList } from './hooks/use-templates-list'
-import { MEDIUMS_COLLECTION } from './constants'
+import Tabs from './Tabs'
 
 export function Marketing(props) {
   const sections = useMarketingCenterSections(props.params)
@@ -46,46 +43,12 @@ export function Marketing(props) {
       <PageLayout>
         <PageLayout.Header title="Marketing Center" />
         <PageLayout.Main>
-          <PageTabs
+          <Tabs
             defaultValue={props.location.pathname}
-            value={props.params.types}
-            tabs={sections.map(section => (
-              <Tab
-                key={section.title}
-                value={section.value}
-                label={
-                  <DropdownTab title={section.title}>
-                    {({ toggleMenu }) => (
-                      <>
-                        {section.items.map(sectionItem => (
-                          <MenuItem
-                            key={sectionItem.link}
-                            onClick={() => {
-                              props.router.push(sectionItem.link)
-                              toggleMenu()
-                            }}
-                          >
-                            {sectionItem.title}
-                          </MenuItem>
-                        ))}
-                      </>
-                    )}
-                  </DropdownTab>
-                }
-              />
-            ))}
-            actions={mediums.map(medium => {
-              const url = `/dashboard/marketing/${templateTypes}/${medium}`
-
-              return (
-                <TabLink
-                  key={medium}
-                  label={MEDIUMS_COLLECTION[medium] || medium}
-                  value={medium}
-                  to={url}
-                />
-              )
-            })}
+            sections={sections}
+            mediums={mediums}
+            templateTypes={templateTypes}
+            router={props.router}
           />
           <TemplatesList
             items={currentMediumTemplates}
