@@ -27,7 +27,8 @@ const useStyles = makeStyles(
       paddingBottom: 0
     },
     body: {
-      height: 'calc(100% - 1px)' /* header divider */
+      height: 0,
+      flex: '1 1 auto'
     },
     fullHeight: {
       height: '100%'
@@ -92,7 +93,12 @@ export default function Inbox({ params }: WithRouterProps) {
           />
         )}
       </Box>
-      <GlobalPageLayout.Main height={0} flex="1 1 auto">
+      <GlobalPageLayout.Main
+        height={0}
+        flex="1 1 auto"
+        display="flex"
+        flexDirection="column"
+      >
         <Box paddingLeft={5}>
           <Divider />
         </Box>
