@@ -4,6 +4,13 @@ export function getTemplateImage(
   template,
   fallbackImage = 'https://images.unsplash.com/photo-1453928582365-b6ad33cbcf64'
 ) {
+  if (template.type === 'template_instance') {
+    return {
+      original: template.file ? template.file.url : fallbackImage,
+      thumbnail: template.file ? template.file.preview_url : fallbackImage
+    }
+  }
+
   return {
     original: template.preview ? template.preview.url : fallbackImage,
     thumbnail: template.thumbnail ? template.thumbnail.url : fallbackImage
