@@ -20,6 +20,5 @@ export const SideNavLinkItem = withRouter(props => {
 
 SideNavLinkItem.propTypes = {
   children: PropTypes.node,
-  to: PropTypes.string.isRequired,
-  tooltip: PropTypes.string
+  to: PropTypes.string.isRequired
 }
