@@ -1,3 +1,11 @@
+declare interface IBrandMarketingTemplate extends IModel<'brand_template'> {
+  template: IMarketingTemplate
+  brand: UUID
+  thumbnail_requested_at: Nullable<number>
+  thumbnail: IFile
+  preview: IFile
+}
+
 declare interface IMarketingTemplate extends IModel<'template'> {
   name: string
   brand: null
