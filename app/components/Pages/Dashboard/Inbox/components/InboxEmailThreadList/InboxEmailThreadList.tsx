@@ -167,7 +167,7 @@ export default function InboxEmailThreadList({
       }}
       selectedItem={selectedEmailThread}
       onSelectItem={emailThread =>
-        emailThread && onSelectEmailThread(emailThread.id)
+        onSelectEmailThread(emailThread && emailThread.id)
       }
       emptyListMessage="No Emails"
       itemKey={(emailThread, index) => emailThread.id}
