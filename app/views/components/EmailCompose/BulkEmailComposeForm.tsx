@@ -22,7 +22,7 @@ import IconLock from '../SvgIcons/Lock/IconLock'
 import EmailComposeForm from './EmailComposeForm'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
-import { useGetInitialValues } from './helpers/use-get-initial-values'
+import { getInitialValues } from './helpers/get-initial-values'
 import { hasAccountSendPermission } from './helpers/has-account-send-permission'
 import { attachmentFormValueToEmailAttachmentInput } from './helpers/attachment-form-value-to-email-attachment-input'
 import { EmailRecipientQuickSuggestions } from '../EmailRecipientQuickSuggestions'
@@ -67,7 +67,7 @@ export function BulkEmailComposeForm({
     filterAccounts
   )
 
-  const initialValues: Partial<EmailFormValues> = useGetInitialValues(
+  const initialValues: Partial<EmailFormValues> = getInitialValues(
     allAccounts,
     preferredAccountId,
     otherProps.initialValues
