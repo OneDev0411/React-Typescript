@@ -40,7 +40,11 @@ export default function Notifications({ deal }: Props) {
   const theme = useTheme<Theme>()
 
   const unreadNotifications = Array.isArray(deal.new_notifications)
-    ? deal.new_notifications.filter(notification => notification.room === null)
+    ? (deal.new_notifications.filter(
+        notification => notification.room === null
+      ) as (IChatMessage & {
+        message: string
+      })[])
     : []
 
   const [isOpen, setIsOpen] = useState(unreadNotifications.length > 0)
