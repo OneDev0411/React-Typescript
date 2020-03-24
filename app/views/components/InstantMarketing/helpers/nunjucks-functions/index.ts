@@ -23,7 +23,7 @@ const DEFAULT_PALETTE = {
   'container-text-color': '#000',
   'container-font-family': 'Barlow',
   'container-font-weight': 'normal',
-  'container-font-size': '14px',
+  'container-font-size': '17px',
   'button-text-color': '#000',
   'button-bg-color': 'white',
   'button-border': '2px solid #000',
@@ -37,11 +37,23 @@ const DEFAULT_PALETTE = {
   'h1-font-family': 'Barlow',
   'h1-font-weight': 'bold',
   'h1-text-color': '#000',
-  'h1-font-size': '60px',
+  'h1-font-size': '48px',
   'h2-font-weight': 'bold',
   'h2-text-color': '#000',
-  'h2-font-size': '40px',
-  'h2-font-family': 'Barlow'
+  'h2-font-size': '30px',
+  'h2-font-family': 'Barlow',
+  'h3-font-weight': 'bold',
+  'h3-text-color': '#000',
+  'h3-font-size': '23px',
+  'h3-font-family': 'Barlow',
+  'inverted-container-bg-color': '#000',
+  'inverted-container-text-color': '#fff',
+  'inverted-button-bg-color': '#000',
+  'inverted-button-text-color': '#fff',
+  'inverted-button-light-color': '#b4b4b4',
+  'inverted-button-h1-color': '#fff',
+  'inverted-button-h2-color': '#fff',
+  'inverted-button-h3-color': '#fff'
 }
 
 export function get(activeBrand: IBrand, name: string): string {
