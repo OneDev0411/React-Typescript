@@ -370,6 +370,7 @@ class UploadModal extends React.Component {
             >
               <Button
                 variant="contained"
+                color="secondary"
                 disabled={!this.isSplitButtonActive}
                 style={{ marginRight: '1rem' }}
                 onClick={this.handleOpenSplitter}
