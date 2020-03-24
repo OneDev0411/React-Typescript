@@ -34,7 +34,6 @@ export const TemplateItem = styled.div`
 
 const templateItemStyle = css`
   max-width: 100%;
-  max-height: 400px;
   box-shadow: 0px 5px 10px #c3c3c3;
   margin: 1.5%;
   user-drag: none;
@@ -43,9 +42,9 @@ const templateItemStyle = css`
 
 export const Image = styled.img`
   ${templateItemStyle};
-  max-height: initial;
 `
 
 export const Video = styled.video`
   ${templateItemStyle};
+  max-height: 400px;
 `
