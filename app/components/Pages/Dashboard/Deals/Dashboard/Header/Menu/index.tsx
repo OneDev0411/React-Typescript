@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
       '& button': {
         color: theme.palette.common.black,
         fontWeight: 'bold',
-        borderColor: theme.palette.divider,
+        borderColor: `${theme.palette.divider} !important`, // fix safari
         marginLeft: theme.spacing(1)
       }
     },

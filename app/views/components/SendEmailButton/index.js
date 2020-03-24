@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -34,7 +34,7 @@ function SendEmailButton(props) {
   }
 
   return (
-    <Fragment>
+    <>
       {props.render ? (
         props.render({ onClick: onSendClick, testId: 'send-email' })
       ) : (
@@ -80,7 +80,7 @@ function SendEmailButton(props) {
           getEmail={getEmail}
         />
       )}
-    </Fragment>
+    </>
   )
 }
 
