@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { InfiniteScrollingOptions } from 'hooks/use-infinite-scroll'
+
 import { GridContextProvider } from './context/provider'
 
 import { GridTable } from './Table'
@@ -9,7 +11,6 @@ import {
   TableActionComponent,
   GridSelectionOptions,
   GridSortingOption,
-  GridInfiniteScrolling,
   LoadingPosition,
   GridClasses,
   TrProps,
@@ -23,7 +24,7 @@ export interface Props<Row> {
   totalRows: number
   selection?: GridSelectionOptions<Row> | null
   sorting?: GridSortingOption | null
-  infiniteScrolling?: GridInfiniteScrolling | null
+  infiniteScrolling?: InfiniteScrollingOptions | null
   hasHeader?: boolean
   stickyHeader?: boolean
   hoverable?: boolean

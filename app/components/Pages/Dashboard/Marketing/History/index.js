@@ -21,7 +21,7 @@ function History() {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Helmet>
         <title>My Designs | Marketing | Rechat</title>
       </Helmet>
@@ -32,7 +32,7 @@ function History() {
         onDelete={handleDelete}
         emptyState={<EmptyState />}
       />
-    </React.Fragment>
+    </>
   )
 }
 
