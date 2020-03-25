@@ -19,7 +19,7 @@ export const Card = styled(AbstractCard)`
 `
 
 export const FactsheetContainer = styled.div`
-  width: 21rem;
+  width: 17rem;
 `
 
 export const MainContainer = styled.div`
