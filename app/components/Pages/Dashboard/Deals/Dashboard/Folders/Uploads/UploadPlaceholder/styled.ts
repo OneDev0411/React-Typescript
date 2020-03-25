@@ -11,14 +11,17 @@ export const Container = styled.div`
     border: 1px dashed ${theme.palette.divider};
     margin: 1rem;
     padding: 0 1rem;
+    white-space: nowrap;
+    overflow: auto;
+    ${theme.typography.body1};
   `}
 `
 
 export const ItemLink = styled.span`
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.43;
-  margin: 0 0.25rem;
-  color: ${({ theme }) => theme.palette.secondary.main};
-  cursor: pointer;
+  ${({ theme }) => css`
+    color: ${theme.palette.secondary.main};
+    margin: ${theme.spacing(0, 0.5)};
+    cursor: pointer;
+    white-space: nowrap;
+  `}
 `
