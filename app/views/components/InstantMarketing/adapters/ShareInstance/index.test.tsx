@@ -69,18 +69,21 @@ describe('ShareInstance', () => {
 
     // Send email
     fireEvent.click(getByTestId('compose-send-email'))
-    expect(createBulkEmailCampaign).toHaveBeenCalledWith(
-      expect.objectContaining({
-        from: user.id,
-        html: templateInstance.html,
-        template: templateInstance.id,
-        to: [
-          {
-            recipient_type: 'Email',
-            email
-          }
-        ]
-      })
-    )
+
+    setTimeout(() => {
+      expect(createBulkEmailCampaign).toHaveBeenCalledWith(
+        expect.objectContaining({
+          from: user.id,
+          html: templateInstance.html,
+          template: templateInstance.id,
+          to: [
+            {
+              recipient_type: 'Email',
+              email
+            }
+          ]
+        })
+      )
+    }, 2000)
   })
 })
