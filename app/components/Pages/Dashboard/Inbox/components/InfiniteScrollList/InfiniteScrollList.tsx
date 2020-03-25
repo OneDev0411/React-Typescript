@@ -1,4 +1,4 @@
-import React, { ReactNode, useState, useRef } from 'react'
+import React, { ReactNode, useState, useRef, useEffect } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { Theme, Grid, Box, Button, Divider } from '@material-ui/core'
 
@@ -48,6 +48,12 @@ export default function InfiniteScrollList<Item>({
   const [status, setStatus] = useState<
     'fetched' | 'fetching' | 'error' | 'finished'
   >('fetched')
+
+  useEffect(() => {
+    setStatus(status =>
+      status === 'error' || status === 'finished' ? 'fetched' : status
+    )
+  }, [items])
 
   const listWrapperRef = useRef<HTMLDivElement>(null)
 

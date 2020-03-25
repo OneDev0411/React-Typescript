@@ -29,7 +29,7 @@ export async function getEmailThreads<
   },
   associations: SelectedEmailThreadAssociations[] = defaultEmailThreadAssociations as SelectedEmailThreadAssociations[]
 ): Promise<IEmailThread<SelectedEmailThreadAssociations>[]> {
-  const response = await new Fetch().get('/emails/threads').query({
+  const response = await new Fetch().post('/emails/threads/filter').query({
     'associations[]': associations.map(toEntityAssociation('email_thread')),
     'select[]': filters.selection
       ? uniq(filters.selection)

@@ -22,7 +22,7 @@ export async function searchEmailThreads<
   next: any
 }> {
   const response = await new Fetch()
-    .get('/emails/threads')
+    .post('/emails/threads/filter')
     .query({
       'associations[]': associations.map(toEntityAssociation('email_thread')),
       'select[]': filters.selection

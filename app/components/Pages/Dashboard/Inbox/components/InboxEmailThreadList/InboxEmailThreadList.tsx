@@ -39,6 +39,7 @@ export default function InboxEmailThreadList({
   useEffect(() => {
     onEmailThreadsUpdate && onEmailThreadsUpdate([])
     setEmailThreads([])
+    searchQuery && onSelectEmailThread(undefined)
   }, [onEmailThreadsUpdate, searchQuery])
 
   const dispatch = useDispatch()

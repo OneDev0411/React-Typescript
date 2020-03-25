@@ -33,7 +33,7 @@ export default function useSearchEmailThreads(searchQuery: string) {
 
     nextRef.current = next
 
-    const finished = next === null // TODO: Decide about `finished` here.
+    const finished = !next
 
     finishedRef.current = finished
 
