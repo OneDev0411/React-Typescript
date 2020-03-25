@@ -39,13 +39,12 @@ export const NavBar = styled.div`
 
 export const NavItem = styled(Link)`
   ${({ theme, isDisabled }) => css`
-    margin: 0 4.25rem;
-    font-size: 1.25rem;
-    padding: 0.6rem 0;
-    font-weight: 500;
+    margin: ${theme.spacing(0, 8)};
+    padding: ${theme.spacing(1, 0)};
     color: #7f7f7f;
     cursor: ${isDisabled ? 'not-allowed' : 'pointer'};
     border-bottom: 2px solid transparent;
+    ${theme.typography.body1};
 
     :hover,
     :focus {

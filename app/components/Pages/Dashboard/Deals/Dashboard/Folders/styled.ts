@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { Theme } from '@material-ui/core'
+
 import { H4 } from 'components/Typography/headings'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
@@ -34,9 +36,10 @@ export const Header = styled.div`
 `
 
 export const HeaderTitle = styled(H4)`
-  margin-right: 0.5rem;
-  font-size: 1rem;
-  font-weight: bold;
+  ${({ theme }) => css`
+    margin-right: ${theme.spacing(1)}px;
+    ${theme.typography.subtitle2};
+  `}
 `
 
 export const ItemsContainer = styled.div<{
@@ -138,20 +141,22 @@ export const RowArrowIcon = styled(ArrowIcon)`
   margin-top: 1px;
 `
 
-export const RowTitle = styled(H4)<{
+export const RowTitle = styled.div<{
   clickable: boolean
+  theme: Theme
 }>`
-  font-weight: 600px;
-  margin-bottom: 0.75rem;
+  ${({ theme, clickable }) => css`
+    margin-bottom: 0.75rem;
+    ${theme.typography.body2};
 
-  ${props =>
-    props.clickable &&
-    css`
-      :hover {
-        cursor: pointer;
-        color: #0945eb;
-      }
-    `}
+    ${clickable &&
+      css`
+        :hover {
+          cursor: pointer;
+          color: #0945eb;
+        }
+      `}
+  `}
 `
 
 export const LabelItem = styled.div`

@@ -1,15 +1,17 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
-  position: relative;
-  margin-right: 0.25rem;
-  cursor: pointer;
+  ${({ theme }) => css`
+    position: relative;
+    margin-right: 0.25rem;
+    cursor: pointer;
 
-  :hover {
-    svg > path {
-      fill: ${({ theme }) => theme.palette.secondary.main};
+    :hover {
+      svg > path {
+        fill: ${theme.palette.secondary.main};
+      }
     }
-  }
+  `}
 `
 
 export const BadgeCounter = styled.div`

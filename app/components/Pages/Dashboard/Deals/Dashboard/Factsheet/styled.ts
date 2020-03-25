@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { Theme } from '@material-ui/core'
 
-import { H3, H4 } from 'components/Typography/headings'
+import { H3 } from 'components/Typography/headings'
 import { borderColor } from 'views/utils/colors'
 
 export const FactsheetDivider = styled.div`
@@ -15,20 +15,25 @@ export const FactsheetDivider = styled.div`
 export const Container = styled.div``
 
 export const SectionTitle = styled(H3)`
-  padding: 0 1.5rem;
-  font-weight: bold;
+  ${({ theme }) => css`
+    padding: ${theme.spacing(0, 3)};
+    ${theme.typography.subtitle1};
+  `}
 `
 
 export const ItemsContainer = styled.div`
   margin-top: 0.75rem;
+  ${({ theme }) => css`
+    ${theme.typography.body2};
+  `}
 `
 
-export const ItemLabel = styled(H4)`
+export const ItemLabel = styled.span`
   color: #7f7f7f;
   font-weight: normal;
 `
 
-export const ItemValue = styled(H4)`
+export const ItemValue = styled.span`
   font-weight: normal;
 `
 

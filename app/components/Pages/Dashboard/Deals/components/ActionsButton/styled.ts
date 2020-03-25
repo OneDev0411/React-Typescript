@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import { Theme } from '@material-ui/core'
 
 interface PrimaryActionProps {
   hasSecondaryActions: boolean
@@ -6,6 +7,7 @@ interface PrimaryActionProps {
 
 interface MenuItemProps {
   disabled: boolean
+  theme: Theme
 }
 
 export const PrimaryAction = styled.div`
@@ -13,9 +15,9 @@ export const PrimaryAction = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
-    font-weight: 500;
     height: 100%;
+    ${theme.typography.body2};
+
     width: ${(props: PrimaryActionProps) =>
       props.hasSecondaryActions ? '7rem' : '9.3rem'};
 
@@ -84,10 +86,11 @@ export const MenuContainer = styled.div`
     0 8px 10px 0 rgba(0, 0, 0, 0.16);
 `
 
-export const MenuItem = styled.div`
-  ${({ theme }) => css`
-    color: ${(props: MenuItemProps) => (props.disabled ? 'gray' : '#000')};
+export const MenuItem = styled.div<MenuItemProps>`
+  ${({ theme, disabled }) => css`
+    color: ${disabled ? theme.palette.grey['900'] : theme.palette.common.black};
     padding: ${theme.spacing(1, 2)};
+    ${theme.typography.body2};
 
     ${(props: MenuItemProps) =>
       props.disabled === false &&
