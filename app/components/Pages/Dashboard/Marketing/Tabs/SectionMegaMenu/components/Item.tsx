@@ -44,16 +44,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-function Item({
-  data,
-  mediums,
-  params,
-  router,
-  onClose
-}: Props & WithRouterProps) {
+function Item({ data, mediums, router, onClose }: Props & WithRouterProps) {
   const classes = useStyles()
   const { title, link } = data
-  const templateTypes = params.types || ''
 
   const navigateTo = (e, link) => {
     e.preventDefault()
@@ -73,7 +66,7 @@ function Item({
       </span>
       <ul className={classes.items}>
         {mediums.map(medium => {
-          const url = `/dashboard/marketing/${templateTypes}/${medium}`
+          const url = `${link}/${medium}`
 
           return (
             <li key={medium} onClick={e => navigateTo(e, url)}>
