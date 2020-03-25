@@ -47,7 +47,6 @@ export function Marketing(props) {
             sections={sections}
             mediums={mediums}
             templateTypes={templateTypes}
-            router={props.router}
           />
           <TemplatesList
             items={currentMediumTemplates}

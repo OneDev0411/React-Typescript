@@ -1,40 +1,26 @@
 import React from 'react'
 
-import { PageTabs, Tab } from 'components/PageTabs'
+import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import { SectionCollectionTypes } from 'hooks/use-marketing-center-sections'
 
-import LifeTab from './Items/Life'
-import PropertiesTab from './Items/Properties'
-
-// import { MEDIUMS_COLLECTION } from '../constants'
+import MegaMenu from './SectionMegaMenu'
 
 interface Props {
-  defaultValue: string
-  currentValue: string
   templateTypes: string
   sections: SectionCollectionTypes
   mediums: string[]
-  router: any
 }
 
-export const ContactsTabs = ({
-  defaultValue,
-  currentValue,
-  templateTypes,
-  sections,
-  mediums,
-  router
-}: Props) => {
-  const keys = Object.keys(sections)
+export const ContactsTabs = ({ templateTypes, sections, mediums }: Props) => {
+  const { marketingCenter, life, properties } = sections
+  const keys: string[] = [life.key, properties.key]
 
-  const { life, properties } = sections
-
-  const renderMegaMenu = state => {
-    switch (state) {
+  const renderMegaMenu = ({ selectedTab, close }) => {
+    switch (selectedTab) {
       case life.key:
-        return <LifeTab data={life} />
+        return <MegaMenu data={life} mediums={mediums} onClose={close} />
       case properties.key:
-        return <PropertiesTab data={properties} />
+        return <MegaMenu data={properties} mediums={mediums} onClose={close} />
       default:
         return null
     }
@@ -43,11 +29,18 @@ export const ContactsTabs = ({
   return (
     <PageTabs
       tabs={[
-        <Tab key={1} value={life.key} label={life.title} />,
-        <Tab key={2} value={properties.key} label={properties.title} />
+        ...marketingCenter.items.map(i => (
+          <TabLink key={i.link} to={i.link} value={i.link} label={i.title} />
+        )),
+        <Tab key={life.key} value={life.key} label={life.title} />,
+        <Tab
+          key={properties.key}
+          value={properties.key}
+          label={properties.title}
+        />
       ]}
       onShowMegamenuStats={keys}
-      megaMenu={({ selectedTab }) => renderMegaMenu(selectedTab)}
+      megaMenu={props => renderMegaMenu(props)}
     />
   )
 }
