@@ -2,7 +2,7 @@ import React, { MouseEvent } from 'react'
 import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 
-import IconArrowDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import IconArrowDown from '../SvgIcons/ArrowDownKeyboard/IconArrowDownKeyboard'
 
 interface Props {
   onClick: (event: MouseEvent<HTMLElement>) => void
@@ -12,9 +12,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: theme.spacing(20)
-    },
-    icon: {
-      marginLeft: theme.spacing(0.5)
     }
   })
 )
@@ -34,10 +31,7 @@ export default function GlobalActionsMenu({ onClick }: Props) {
       }}
     >
       Actions
-      <IconArrowDown
-        fill={theme.palette.primary.contrastText}
-        className={classes.icon}
-      />
+      <IconArrowDown fillColor={theme.palette.primary.contrastText} />
     </Button>
   )
 }

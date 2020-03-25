@@ -3,7 +3,7 @@ import React from 'react'
 import { goTo } from 'utils/go-to'
 
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
-import EmailIcon from 'components/SvgIcons/EmailOutline/IconEmailOutline'
+import EmailIcon from 'components/SvgIcons/EmailOutlined/IconEmailOutlined'
 
 import { EventDrawer } from 'components/EventDrawer'
 import CalendarIcon from 'components/SvgIcons/Calendar2/IconCalendar'

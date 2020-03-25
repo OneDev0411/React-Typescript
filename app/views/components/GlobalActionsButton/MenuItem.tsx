@@ -17,6 +17,7 @@ import { Item } from './types'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     itemButton: {
+      fontSize: theme.typography.body1.fontSize,
       borderRadius: theme.shape.borderRadius,
       padding: theme.spacing(1),
       height: theme.spacing(5),
@@ -35,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     icon: {
       minWidth: `${theme.spacing(3)}px !important`
+    },
+    itemIcon: {
+      marginRight: theme.spacing(3)
     },
     addIcon: {
       visibility: 'hidden'
@@ -64,7 +68,7 @@ export default function MenuItem({ item, onClick }: Props) {
       onClick={handleClick}
     >
       <ListItemIcon
-        className={cn(iconClasses.small, iconClasses.rightMargin, classes.icon)}
+        className={cn(iconClasses.small, classes.icon, classes.itemIcon)}
       >
         <item.Icon />
       </ListItemIcon>
