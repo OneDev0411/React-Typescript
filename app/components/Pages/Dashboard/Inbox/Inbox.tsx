@@ -58,7 +58,7 @@ export default function Inbox({ params }: WithRouterProps) {
   const noConnectedAccounts = accounts.length === 0
 
   const [initializing, setInitializing] = useState(true)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const [emailThreadCount, setEmailThreadCount] = useState(0)
 
   const handleEmailThreadsUpdate = useCallback(
@@ -89,7 +89,11 @@ export default function Inbox({ params }: WithRouterProps) {
           <GlobalPageLayout.HeaderWithSearch
             title="Inbox"
             placeholder="Search emails"
-            onSearch={query => setSearchQuery(query)}
+            onSearch={query =>
+              setSearchQuery(searchQuery =>
+                searchQuery === undefined && !query ? undefined : query
+              )
+            }
           />
         )}
       </Box>
