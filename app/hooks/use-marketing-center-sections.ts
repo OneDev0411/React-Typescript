@@ -11,7 +11,11 @@ import {
   SectionItem
 } from 'components/PageSideNav/types'
 
-export type ExtendedSectionTypes = { [key: string]: Section }
+interface ExtendedSection extends Section {
+  key: string
+}
+
+export type SectionCollectionTypes = { [key: string]: ExtendedSection }
 
 function urlGenerator(url: string | string[]): string {
   return `/dashboard/marketing${
@@ -19,9 +23,10 @@ function urlGenerator(url: string | string[]): string {
   }`
 }
 
-const ALL_SECTIONS: ExtendedSectionTypes = {
+const ALL_SECTIONS: SectionCollectionTypes = {
   marketingCenter: {
     type: SectionsEnum.LINK,
+    key: 'marketingCenter',
     title: 'Marketing Center',
     items: [
       {
@@ -34,6 +39,7 @@ const ALL_SECTIONS: ExtendedSectionTypes = {
   },
   life: {
     type: SectionsEnum.LINK,
+    key: 'life',
     title: 'Life',
     items: [
       {
@@ -85,6 +91,7 @@ const ALL_SECTIONS: ExtendedSectionTypes = {
   },
   properties: {
     type: SectionsEnum.LINK,
+    key: 'properties',
     title: 'Properties',
     items: [
       {
@@ -158,10 +165,10 @@ function getSerializedValue(value?: string | string[]): string {
   return Array.isArray(value) ? value.join(',') : value
 }
 
-export function useMarketingCenterSections({ types }): ExtendedSectionTypes {
+export function useMarketingCenterSections({ types }): SectionCollectionTypes {
   const user = useSelector<IAppState, IUser>(state => state.user)
 
-  const newSections: ExtendedSectionTypes = {}
+  const newSections: SectionCollectionTypes = {}
   const sectionKeys = Object.keys(ALL_SECTIONS)
 
   sectionKeys.forEach(key => {
@@ -180,7 +187,7 @@ export function useMarketingCenterSections({ types }): ExtendedSectionTypes {
       item => getSerializedValue(item.value) === types
     )
 
-    const newSection: Section = {
+    const newSection: ExtendedSection = {
       ...section,
       items: getPrivilegedSectionItems(user, section),
       title: activeType

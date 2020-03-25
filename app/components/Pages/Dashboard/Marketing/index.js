@@ -44,7 +44,6 @@ export function Marketing(props) {
         <PageLayout.Header title="Marketing Center" />
         <PageLayout.Main>
           <Tabs
-            defaultValue={props.location.pathname}
             sections={sections}
             mediums={mediums}
             templateTypes={templateTypes}

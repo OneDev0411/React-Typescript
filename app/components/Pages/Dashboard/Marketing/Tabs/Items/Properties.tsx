@@ -10,7 +10,7 @@ interface Props {
   data: Section
 }
 
-export const LifeTab = ({ data }: Props) => {
+export const PropertiesTab = ({ data }: Props) => {
   const { items } = data
 
   return (
@@ -24,4 +24,4 @@ export const LifeTab = ({ data }: Props) => {
   )
 }
 
-export default LifeTab
+export default PropertiesTab

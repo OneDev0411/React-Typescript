@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, ReactNode } from 'react'
 import { Tabs, createStyles, makeStyles, Theme } from '@material-ui/core'
 
 export * from './Tab'
@@ -7,14 +7,19 @@ export * from './DropdownTab'
 export * from './TabSpacer'
 
 type SelectedTab = string | number | boolean | null
-
+type RenderMegaMenuType = {
+  selectedTab: SelectedTab
+  close: () => void
+}
 interface Props {
-  tabs: React.ReactNode[]
-  actions?: React.ReactNode[]
+  tabs: ReactNode[]
+  actions?: ReactNode[]
   defaultValue?: SelectedTab
   defaultAction?: SelectedTab
   value?: SelectedTab
   actionValue?: SelectedTab
+  onShowMegamenuStats?: SelectedTab[]
+  megaMenu?: (p: RenderMegaMenuType) => ReactNode
   onChange?: (value: SelectedTab) => void
   onChangeAction?: (value: SelectedTab) => void
 }
@@ -22,6 +27,7 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
+      position: 'relative',
       display: 'flex',
       width: '100%'
     },
@@ -45,6 +51,16 @@ const useStyles = makeStyles((theme: Theme) =>
         ),
         backgroundColor: theme.palette.primary.main
       }
+    },
+    megaMenuContainer: {
+      padding: theme.spacing(2.5, 1.5),
+      position: 'absolute',
+      top: 57,
+      left: 0,
+      width: '100%',
+      minHeight: 250,
+      background: '#fff',
+      boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.1)'
     }
   })
 )
@@ -86,6 +102,8 @@ export function PageTabs({
   actions,
   actionValue,
   tabs,
+  onShowMegamenuStats = [],
+  megaMenu,
   onChange = () => {},
   onChangeAction = () => {}
 }: Props) {
@@ -94,6 +112,7 @@ export function PageTabs({
   const [selectedAction, setSelectedAction] = useState<SelectedTab>(
     defaultAction
   )
+  const [showMegaMenu, setShowMegaMenu] = useState<boolean>(false)
 
   const activeTab =
     defaultValue && selectedTab !== defaultValue ? defaultValue : selectedTab
@@ -104,6 +123,12 @@ export function PageTabs({
       : selectedAction
 
   const handleChangeTab = (e: React.MouseEvent<{}>, tab: SelectedTab) => {
+    if (onShowMegamenuStats.indexOf(tab) >= 0) {
+      const nextState = !(tab === selectedTab && showMegaMenu)
+
+      setShowMegaMenu(nextState)
+    }
+
     setSelectedTab(tab)
 
     onChange(tab)
@@ -114,6 +139,7 @@ export function PageTabs({
 
     onChangeAction(action)
   }
+  const closeMegaMenu = () => setShowMegaMenu(false)
 
   return (
     <div className={classes.container}>
@@ -148,6 +174,12 @@ export function PageTabs({
           >
             {actions.map(tab => tab)}
           </Tabs>
+        </div>
+      )}
+
+      {megaMenu && showMegaMenu && (
+        <div className={classes.megaMenuContainer}>
+          {megaMenu({ selectedTab, close: closeMegaMenu })}
         </div>
       )}
     </div>
