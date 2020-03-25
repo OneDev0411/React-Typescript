@@ -50,5 +50,9 @@ export const sharedStyles = (theme: Theme) =>
       alignItems: 'center',
       height: '100%',
       color: theme.palette.grey[600]
+    },
+    splitter: {
+      color: theme.palette.grey[500],
+      margin: theme.spacing(0, 0.5)
     }
   })

@@ -6,7 +6,10 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
   '@global': {
     // You should target [class*="MuiButton-root"] instead if you nest themes.
     '.MuiButtonBase-root': {
-      boxShadow: 'none'
+      boxShadow: 'none',
+      '&:hover': {
+        boxShadow: 'none'
+      }
     },
 
     '.MuiIconButton-root': {

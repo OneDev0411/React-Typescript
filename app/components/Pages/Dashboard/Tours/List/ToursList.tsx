@@ -18,7 +18,6 @@ import { TourSheets } from 'components/tour/TourSheets'
 import { RenderProps } from 'components/Grid/Table/types'
 
 import EmptyState from './EmptyState'
-import CreateNewTour from './CreateNewTour'
 
 import DueDate from './columns/DueDate'
 import Title from './columns/Title'
@@ -57,22 +56,24 @@ function ToursList(props: { user: IUser }) {
 
   const columns = [
     {
+      header: 'Title',
+      id: 'title',
+      class: 'primary',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Title title={row.title} onClick={() => handleEdit(row)} />
+      )
+    },
+    {
       header: 'Date',
       id: 'date',
       verticalAlign: 'center',
       render: ({ row }: RenderProps<TableRow>) => (
-        <DueDate dueDate={row.due_date} onClick={() => handleEdit(row)} />
+        <DueDate dueDate={row.due_date} />
       )
-    },
-    {
-      header: 'Title',
-      id: 'title',
-      render: ({ row }: RenderProps<TableRow>) => <Title title={row.title} />
     },
     {
       header: 'Participants',
       id: 'participants',
-      width: '120px',
       verticalAlign: 'center',
       class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (
@@ -158,15 +159,11 @@ function ToursList(props: { user: IUser }) {
   return (
     <>
       <Helmet>
-        <title>Toursheets | Rechat</title>
+        <title>Tours | Rechat</title>
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header title="Toursheets">
-          <Box textAlign="right">
-            <CreateNewTour onOpenDrawer={onOpenTourDrawer} />
-          </Box>
-        </PageLayout.Header>
+        <PageLayout.Header title="Tours" />
 
         <PageLayout.Main>
           <Box>

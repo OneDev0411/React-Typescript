@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Paper, Grid, Typography, Box } from '@material-ui/core'
+import { Paper, Typography } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
 
@@ -40,89 +40,80 @@ export default function InboxEmailThreadListItem({
   const classes = useInboxEmailThreadListItemStyles()
 
   return (
-    <Paper
-      elevation={0}
-      square
-      classes={{
-        root: classNames(
-          classes.root,
-          emailThread.is_read && classes.read,
-          selected && classes.selected
-        )
-      }}
-    >
-      <Grid container spacing={0}>
-        <Grid item>
-          <div
+    <Paper elevation={0} square className={classes.root}>
+      <div
+        className={classNames(
+          classes.status,
+          !emailThread.is_read && classes.statusUnread
+        )}
+      />
+      <div
+        className={classNames(
+          classes.info,
+          emailThread.is_read && classes.infoRead,
+          selected && classes.infoSelected
+        )}
+      >
+        <div className={classes.flex}>
+          <Typography
+            variant={emailThread.is_read ? 'body2' : 'subtitle2'}
+            display="inline"
+            noWrap
+            title={recipients}
             className={classNames(
-              classes.status,
-              !emailThread.is_read && classes.statusUnread
+              classes.recipients,
+              emailThread.is_read && classes.recipientsRead
             )}
-          />
-        </Grid>
-        <Grid item xs container spacing={0} classes={{ root: classes.info }}>
-          <Grid item xs={12} classes={{ root: classes.flex }}>
+          >
+            {recipients || <>&nbsp;</>}
+          </Typography>
+          {emailThread.message_count > 1 && (
             <Typography
               variant={emailThread.is_read ? 'body2' : 'subtitle2'}
               display="inline"
-              noWrap
-              title={recipients}
-              classes={{ root: classes.recipients }}
+              className={classNames(
+                classes.recipients,
+                emailThread.is_read && classes.recipientsRead
+              )}
             >
-              {recipients}
+              &nbsp;({emailThread.message_count})
             </Typography>
-            {emailThread.message_count > 1 && (
-              <Typography
-                variant={emailThread.is_read ? 'body2' : 'subtitle2'}
-                display="inline"
-                classes={{ root: classes.recipients }}
-              >
-                &nbsp;({emailThread.message_count})
-              </Typography>
+          )}
+          <div className={classes.grow} />
+          <Typography
+            variant="caption"
+            display="inline"
+            title={messageDateText}
+            className={classNames(
+              classes.date,
+              !emailThread.is_read && classes.dateUnread
             )}
-            <div className={classes.grow} />
-            <Typography
-              variant="caption"
-              display="inline"
-              title={messageDateText}
-              classes={{
-                root: classNames(
-                  classes.date,
-                  !emailThread.is_read && classes.dateUnread
-                )
-              }}
-            >
-              &nbsp;&nbsp;{messageDateShortText}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Box paddingTop="4px">
-              <Typography
-                variant={emailThread.is_read ? 'body2' : 'subtitle2'}
-                noWrap
-                title={emailThread.subject || undefined}
-                classes={{ root: classes.subject }}
-              >
-                {emailThread.subject || '(No Subject)'}
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography
-              variant="body2"
-              classes={{
-                root: classNames(
-                  classes.snippet,
-                  emailThread.is_read && classes.snippetRead
-                )
-              }}
-              noWrap
-            >
-              {emailThread.snippet}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
+          >
+            &nbsp;&nbsp;{messageDateShortText}
+          </Typography>
+        </div>
+        <Typography
+          variant={emailThread.is_read ? 'body2' : 'subtitle2'}
+          noWrap
+          title={emailThread.subject || undefined}
+          className={classNames(
+            classes.subject,
+            emailThread.is_read && classes.subjectRead
+          )}
+        >
+          {emailThread.subject || '(No Subject)'}
+        </Typography>
+        <Typography
+          variant="body2"
+          className={classNames(
+            classes.snippet,
+            emailThread.is_read && classes.snippetRead
+          )}
+          noWrap
+        >
+          {emailThread.snippet || <>&nbsp;</>}
+        </Typography>
+      </div>
     </Paper>
   )
 }

@@ -30,7 +30,10 @@ export default function CreateOpenHouse(
         isOpen={isListingsDrawerOpen}
         defaultList={deals}
         defaultListTitle="Select from your selling deals:"
-        onClose={() => setIsListingsDrawerOpen(false)}
+        onClose={() => {
+          props.onClose()
+          setIsListingsDrawerOpen(false)
+        }}
         onSelect={(items: ICompactListing[] | IDeal[]) => {
           setIsListingsDrawerOpen(false)
           handleSelect(items[0])
