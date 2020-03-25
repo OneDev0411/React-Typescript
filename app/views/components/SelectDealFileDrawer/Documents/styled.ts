@@ -38,7 +38,9 @@ export const Title = styled.div`
   font-size: 1rem;
   font-weight: 500;
   color: ${(props: TitleProps) =>
-    props.selectable ? '#000' : props.theme.palette.error.main};
+    props.selectable
+      ? props.theme.palette.common.black
+      : props.theme.palette.error.main};
 
   ${(props: TitleProps) =>
     props.selectable &&
@@ -59,5 +61,7 @@ export const DateTime = styled.div`
 export const ChecklistName = styled.div`
   font-size: 0.875rem;
   color: ${(props: ChecklistNameProps) =>
-    props.error ? props.theme.palette.error.main : '#000'};
+    props.error
+      ? props.theme.palette.error.main
+      : props.theme.palette.common.black};
 `

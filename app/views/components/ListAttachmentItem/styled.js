@@ -7,7 +7,8 @@ export const DeleteIcon = styled(IconClose)`
     fill: ${theme.palette.error.main};
     cursor: pointer;
     opacity: 0;
-    width: 1rem;
+    width: 16px;
+    height: 16px;
     margin-left: ${theme.spacing(1)}px;
 
     :hover {

@@ -80,7 +80,7 @@ export const Item = styled.div<{
     align-items: center;
     margin: 1px 0.5rem;
     border-radius: 3px;
-    padding: 0.5rem 1rem;
+    padding: ${theme.spacing(1, 2)};
 
     :hover {
       background-color: ${theme.palette.action.hover};

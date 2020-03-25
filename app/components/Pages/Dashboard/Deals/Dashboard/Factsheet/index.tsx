@@ -42,7 +42,7 @@ export default function Factsheet(props: Props) {
     return null
   }
 
-  const saveContext = async (field: ContextField, value: unknown) => {
+  const saveContext = (field: ContextField, value: unknown) => {
     try {
       const context = createUpsertObject(
         props.deal,
@@ -51,7 +51,7 @@ export default function Factsheet(props: Props) {
         props.isBackOffice ? true : !field.needs_approval
       )
 
-      await dispatch(upsertContexts(props.deal.id, [context]))
+      dispatch(upsertContexts(props.deal.id, [context]))
     } catch (e) {
       console.log(e)
     }
@@ -60,10 +60,7 @@ export default function Factsheet(props: Props) {
   const handleDeleteContext = async (field: ContextField) =>
     saveContext(field, null)
 
-  const handleChangeContext = async (
-    field: ContextField,
-    value: unknown
-  ): Promise<void> => {
+  const handleChangeContext = (field: ContextField, value: unknown): void => {
     const currentValue = getFieldValue(getValue(props.deal, field))
 
     const isValueChanged = value !== currentValue
@@ -73,7 +70,7 @@ export default function Factsheet(props: Props) {
       return
     }
 
-    await saveContext(field, value)
+    saveContext(field, value)
   }
 
   const handleApproveField = async (field: ContextField): Promise<void> => {
