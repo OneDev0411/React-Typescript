@@ -151,14 +151,20 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   }
 
   if (status === 'empty' || !emailThread) {
-    return <NoContentMessage>No Conversation Selected</NoContentMessage>
+    return <NoContentMessage>No Conversations Selected</NoContentMessage>
   }
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" paddingY={3.5} paddingLeft={2}>
-        <Box flexGrow={1} width={0}>
-          <Typography variant="subtitle1" noWrap>
+      <Box
+        display="flex"
+        alignItems="center"
+        paddingY={3.5}
+        paddingLeft={2}
+        paddingRight={2.5}
+      >
+        <Box width={0} flexGrow={1} paddingLeft={7.5}>
+          <Typography variant="h5" noWrap>
             {emailThread.subject || '(No Subject)'}
           </Typography>
         </Box>

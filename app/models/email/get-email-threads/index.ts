@@ -16,20 +16,17 @@ export const defaultEmailThreadSelection = <const>[
   'email.text'
 ]
 
-export interface IGetEmailThreadsFilters {
-  selection?: typeof defaultEmailThreadSelection[number][]
-  searchQuery?: string
-  start: number
-  limit?: number
-  isRead?: boolean
-  hasAttachments?: boolean
-  ids?: UUID[]
-}
-
 export async function getEmailThreads<
   SelectedEmailThreadAssociations extends IEmailThreadAssociations
 >(
-  filters: IGetEmailThreadsFilters,
+  filters: {
+    selection?: typeof defaultEmailThreadSelection[number][]
+    start: number
+    limit?: number
+    isRead?: boolean
+    hasAttachments?: boolean
+    ids?: UUID[]
+  },
   associations: SelectedEmailThreadAssociations[] = defaultEmailThreadAssociations as SelectedEmailThreadAssociations[]
 ): Promise<IEmailThread<SelectedEmailThreadAssociations>[]> {
   const response = await new Fetch().get('/emails/threads').query({

@@ -26,10 +26,9 @@ const useStyles = makeStyles(
       paddingLeft: 0,
       paddingBottom: 0
     },
-    main: {
-      position: 'relative',
-      height:
-        'calc(100vh - 119px - 1px)' /* total height - page header - divider */
+    body: {
+      height: 0,
+      flex: '1 1 auto'
     },
     fullHeight: {
       height: '100%'
@@ -42,8 +41,8 @@ const useStyles = makeStyles(
       overflowY: 'auto',
       borderLeft: `1px solid ${theme.palette.grey.A100}`
     },
-    conversationNoBorder: {
-      borderLeft: 0
+    conversationHidden: {
+      display: 'none'
     }
   }),
   { name: 'Inbox' }
@@ -58,8 +57,15 @@ export default function Inbox({ params }: WithRouterProps) {
   )
   const noConnectedAccounts = accounts.length === 0
 
-  const [initializing, setInitializing] = useState<boolean>(true)
-  const [searchQuery, setSearchQuery] = useState<string>('')
+  const [initializing, setInitializing] = useState(true)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [emailThreadCount, setEmailThreadCount] = useState(0)
+
+  const handleEmailThreadsUpdate = useCallback(
+    (emailThreads: IEmailThread<'contacts'>[]) =>
+      setEmailThreadCount(emailThreads.length),
+    []
+  )
 
   const dispatch = useDispatch()
 
@@ -76,7 +82,7 @@ export default function Inbox({ params }: WithRouterProps) {
 
   return (
     <GlobalPageLayout className={classes.layout}>
-      <Box paddingLeft={5}>
+      <Box paddingLeft={5} flex="0 1 auto">
         {initializing || noConnectedAccounts ? (
           <GlobalPageLayout.Header title="Inbox" />
         ) : (
@@ -87,34 +93,35 @@ export default function Inbox({ params }: WithRouterProps) {
           />
         )}
       </Box>
-      <GlobalPageLayout.Main className={classes.main}>
+      <GlobalPageLayout.Main
+        height={0}
+        flex="1 1 auto"
+        display="flex"
+        flexDirection="column"
+      >
         <Box paddingLeft={5}>
           <Divider />
         </Box>
         {initializing ? null : noConnectedAccounts ? (
           <InboxConnectAccount />
         ) : (
-          <Grid container spacing={0} classes={{ root: classes.fullHeight }}>
-            <Grid
-              item
-              classes={{ root: classNames(classes.list, classes.fullHeight) }}
-            >
+          <Grid container spacing={0} className={classes.body}>
+            <Grid item className={classNames(classes.list, classes.fullHeight)}>
               <InboxEmailThreadList
                 selectedEmailThreadId={selectedEmailThreadId}
                 onSelectEmailThread={setSelectedEmailThreadId}
                 searchQuery={searchQuery}
+                onEmailThreadsUpdate={handleEmailThreadsUpdate}
               />
             </Grid>
             <Grid
               item
               xs
-              classes={{
-                root: classNames(
-                  classes.conversation,
-                  // (!emailThreadListInnerRef.current || emailThreadListInnerRef.current.emailThreads.length === 0) && classes.conversationNoBorder,
-                  classes.fullHeight
-                )
-              }}
+              className={classNames(
+                classes.conversation,
+                emailThreadCount === 0 && classes.conversationHidden,
+                classes.fullHeight
+              )}
             >
               <InboxEmailThread
                 key={selectedEmailThreadId}
