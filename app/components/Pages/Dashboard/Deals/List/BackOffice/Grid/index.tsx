@@ -79,7 +79,9 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
         id: 'address',
         width: '25%',
         accessor: (deal: IDeal) => getAddress(deal, roles),
-        render: ({ row: deal }) => <Address deal={deal} />
+        render: ({ row: deal }) => (
+          <Address deal={deal} notificationsCount={deal.attention_requests} />
+        )
       },
       {
         id: 'status',

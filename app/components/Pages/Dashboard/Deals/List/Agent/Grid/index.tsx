@@ -64,6 +64,9 @@ function AgentGrid(props: Props & WithRouterProps) {
             roles={roles}
             totalRows={totalRows}
             rowIndex={rowIndex}
+            notificationsCount={
+              deal.new_notifications ? deal.new_notifications.length : 0
+            }
           />
         )
       },
