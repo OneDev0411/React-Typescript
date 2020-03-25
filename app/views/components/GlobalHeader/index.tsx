@@ -24,8 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: theme.spacing(1),
     // According to Shayan, the title looks a little misaligned vertically.
     // This is a fix for it to look better with the actions button and the search box.
-    position: 'relative',
-    top: '-2px'
+    alignSelf: 'flex-start'
   },
   content: {
     flexGrow: 1
