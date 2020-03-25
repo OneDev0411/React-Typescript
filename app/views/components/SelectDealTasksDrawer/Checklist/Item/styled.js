@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { primary } from 'views/utils/colors'
-
 export const NotifyOfficeContainer = styled.div`
   opacity: 0;
 `
@@ -27,7 +25,7 @@ export const Title = styled.div`
   text-overflow: ellipsis;
 
   :hover {
-    color: ${primary};
+    color: ${({ theme }) => theme.palette.secondary.main};
     text-decoration: underline;
     cursor: pointer;
   }

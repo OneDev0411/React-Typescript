@@ -13,7 +13,7 @@ import { searchDeals, getDeals } from 'actions/deals'
 
 import TabFilters from './Filters'
 
-import { SORTABLE_COLUMNS } from './helpers/sortable-columns'
+import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
 
 import { ExportDeals } from '../components/ExportDeals'
 

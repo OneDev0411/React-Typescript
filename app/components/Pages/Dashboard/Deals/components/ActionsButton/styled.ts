@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components'
-
-import { primary } from 'views/utils/colors'
+import { Theme } from '@material-ui/core'
 
 interface PrimaryActionProps {
   hasSecondaryActions: boolean
@@ -8,6 +7,7 @@ interface PrimaryActionProps {
 
 interface MenuItemProps {
   disabled: boolean
+  theme: Theme
 }
 
 export const PrimaryAction = styled.div`
@@ -15,14 +15,14 @@ export const PrimaryAction = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
-    font-weight: 500;
     height: 100%;
+    ${theme.typography.body2};
+
     width: ${(props: PrimaryActionProps) =>
-      props.hasSecondaryActions ? '10rem' : '12.3rem'};
+      props.hasSecondaryActions ? '7rem' : '9.3rem'};
 
     :hover {
-      color: ${primary};
+      color: ${theme.palette.secondary.main};
       background-color: ${theme.palette.action.hover};
     }
 
@@ -43,11 +43,12 @@ export const MenuButton = styled.div`
 
     :hover,
     :focus {
+      color: ${theme.palette.secondary.main};
       background-color: ${theme.palette.action.hover};
 
       svg {
         transition: 0.1s ease-in transform;
-        fill: ${primary};
+        fill: ${theme.palette.secondary.main};
       }
     }
 
@@ -85,12 +86,11 @@ export const MenuContainer = styled.div`
     0 8px 10px 0 rgba(0, 0, 0, 0.16);
 `
 
-export const MenuItem = styled.div`
-  ${({ theme }) => css`
-    font-size: 1rem;
-    font-weight: 500;
-    color: ${(props: MenuItemProps) => (props.disabled ? 'gray' : '#000')};
-    padding: 0.5rem 1rem;
+export const MenuItem = styled.div<MenuItemProps>`
+  ${({ theme, disabled }) => css`
+    color: ${disabled ? theme.palette.grey['900'] : theme.palette.common.black};
+    padding: ${theme.spacing(1, 2)};
+    ${theme.typography.body2};
 
     ${(props: MenuItemProps) =>
       props.disabled === false &&
@@ -98,7 +98,7 @@ export const MenuItem = styled.div`
         :hover {
           cursor: pointer;
           background-color: ${theme.palette.action.hover};
-          color: #fff;
+          color: ${theme.palette.secondary.main};
         }
       `}
   `}

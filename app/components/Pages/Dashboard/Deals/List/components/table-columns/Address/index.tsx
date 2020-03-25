@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 import IconHome from 'components/SvgIcons/NewHome/IconHome'
@@ -9,12 +9,15 @@ import ALinkToClosable from 'components/ALinkToClosable'
 
 import { getField } from 'models/Deal/helpers/context'
 
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+
 import { Side } from '../Side'
 
 import onDealOpened from '../../../../utils/on-deal-opened'
+import { Notification } from '../../Notification'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     homeIcon: {
       display: 'flex',
       alignItems: 'center',
@@ -29,7 +32,8 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center'
     },
     photoContainer: {
-      marginRight: theme.spacing(1)
+      marginRight: theme.spacing(1),
+      position: 'relative'
     },
     circle: {
       width: theme.spacing(0.5),
@@ -41,7 +45,10 @@ const useStyles = makeStyles((theme: Theme) =>
     side: {
       color: theme.palette.grey[600]
     }
-  })
+  }),
+  {
+    name: 'AgentGrid'
+  }
 )
 
 interface Props {
@@ -49,9 +56,16 @@ interface Props {
   roles?: Record<UUID, IDealRole>
   rowIndex?: number
   totalRows?: number
+  notificationsCount: number
 }
 
-export function Address({ deal, roles, rowIndex, totalRows }: Props) {
+export function Address({
+  deal,
+  roles,
+  rowIndex,
+  totalRows,
+  notificationsCount
+}: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const photo = getField(deal, 'photo')
@@ -59,6 +73,8 @@ export function Address({ deal, roles, rowIndex, totalRows }: Props) {
   return (
     <div className={classes.container}>
       <div className={classes.photoContainer}>
+        {notificationsCount > 0 && <Notification count={notificationsCount} />}
+
         {photo ? (
           <Avatar image={photo} size={32} />
         ) : (
@@ -73,7 +89,7 @@ export function Address({ deal, roles, rowIndex, totalRows }: Props) {
         onClick={onDealOpened}
         to={`/dashboard/deals/${deal.id}`}
       >
-        {deal.title}
+        <TextMiddleTruncate text={deal.title} maxLength={40} />
       </ALinkToClosable>
 
       {roles && (

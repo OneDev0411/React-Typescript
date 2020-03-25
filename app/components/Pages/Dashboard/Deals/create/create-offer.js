@@ -6,6 +6,8 @@ import _ from 'underscore'
 import moment from 'moment'
 import { Helmet } from 'react-helmet'
 
+import { Button } from '@material-ui/core'
+
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
 
@@ -13,7 +15,6 @@ import { FullPageHeader } from 'components/FullPageHeader'
 
 import { confirmation } from 'actions/confirmation'
 
-import ActionButton from 'components/Button/ActionButton'
 import IntercomTrigger from 'components/IntercomTrigger'
 
 import { createRoles, createOffer, upsertContexts } from 'actions/deals'
@@ -591,24 +592,25 @@ class CreateOffer extends React.Component {
               </span>
               <IntercomTrigger
                 render={({ activeIntercom, isIntercomActive }) => (
-                  <button
-                    type="button"
+                  <Button
+                    color="secondary"
                     onClick={!isIntercomActive ? activeIntercom : () => false}
-                    className="btn btn-primary c-button--link"
                   >
                     Support
-                  </button>
+                  </Button>
                 )}
               />
             </div>
           )}
 
-          <ActionButton
+          <Button
+            color="secondary"
+            variant="contained"
             disabled={saving || offerType.length === 0}
             onClick={this.createOffer}
           >
             {saving ? 'Creating Offer ...' : 'Create Offer'}
-          </ActionButton>
+          </Button>
 
           <div className="error-summary">
             {this.isFormSubmitted && validationErrors.length > 0 && (

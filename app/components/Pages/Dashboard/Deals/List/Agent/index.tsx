@@ -14,7 +14,7 @@ import { SearchInput } from 'components/GlobalHeaderWithSearch'
 
 import { IAppState } from 'reducers'
 
-import { SORTABLE_COLUMNS } from './helpers/sortable-columns'
+import { SORTABLE_COLUMNS } from './helpers/agent-sorting'
 
 import Grid from './Grid'
 import TabFilters from './Filters'

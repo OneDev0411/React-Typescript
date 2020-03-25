@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
       '& button': {
         color: theme.palette.common.black,
         fontWeight: 'bold',
-        borderColor: theme.palette.divider,
+        borderColor: `${theme.palette.divider} !important`, // important fixes safari
         marginLeft: theme.spacing(1)
       }
     },
@@ -57,7 +57,7 @@ export const Menu = withRouter(
         {deal.deal_type === 'Selling' && !deal.has_active_offer && (
           <Button
             size="small"
-            color="primary"
+            color="secondary"
             variant="outlined"
             onClick={() =>
               router.push(`/dashboard/deals/${deal.id}/create-offer`)

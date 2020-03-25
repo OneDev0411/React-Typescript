@@ -44,7 +44,10 @@ export const ChecklistItemTitle = styled.div`
   white-space: nowrap;
   font-size: 14px;
   padding-right: 10px;
-  color: ${props => props.color || '#000000'};
+  color: ${props =>
+    props.selected
+      ? props.theme.palette.secondary.main
+      : props.theme.palette.common.black};
   font-weight: ${props => (props.bold ? 'bold' : 'normal')};
   width: ${props => (props.fullWidth ? '100%' : '75%')};
 `

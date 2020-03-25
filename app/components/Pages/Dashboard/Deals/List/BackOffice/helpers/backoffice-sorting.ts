@@ -1,5 +1,7 @@
 import { SortableColumn } from 'components/Grid/Table/types'
 
+export const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field_bo'
+
 export const SORTABLE_COLUMNS: SortableColumn[] = [
   {
     label: 'Status (A-Z)',
@@ -22,13 +24,13 @@ export const SORTABLE_COLUMNS: SortableColumn[] = [
     ascending: false
   },
   {
-    label: 'Price (Low-High)',
-    value: 'price',
+    label: 'Contract Price (Low-High)',
+    value: 'contract-price',
     ascending: true
   },
   {
-    label: 'Price (High-Low)',
-    value: 'price',
+    label: 'Contract Price (Hight-Low)',
+    value: 'contract-price',
     ascending: false
   },
   {
@@ -49,6 +51,16 @@ export const SORTABLE_COLUMNS: SortableColumn[] = [
   {
     label: 'Agent (Z-A)',
     value: 'agent-name',
+    ascending: false
+  },
+  {
+    label: 'Submit Time (A-Z)',
+    value: 'submitted-at',
+    ascending: true
+  },
+  {
+    label: 'Submit Time (Z-A)',
+    value: 'submitted-at',
     ascending: false
   }
 ]

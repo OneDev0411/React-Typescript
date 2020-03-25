@@ -1,9 +1,10 @@
 import styled, { css } from 'styled-components'
 
+import { Theme } from '@material-ui/core'
+
 import { H4 } from 'components/Typography/headings'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
-import { primary } from 'views/utils/colors'
 import { StyledSVGWithProps } from 'utils/ts-utils'
 
 import { Container as ActionsButton } from '../../components/ActionsButton/styled'
@@ -37,9 +38,10 @@ export const Header = styled.div`
 `
 
 export const HeaderTitle = styled(H4)`
-  margin-right: 0.5rem;
-  font-size: 1rem;
-  font-weight: bold;
+  ${({ theme }) => css`
+    margin-right: ${theme.spacing(1)}px;
+    ${theme.typography.subtitle2};
+  `}
 `
 
 export const ItemsContainer = styled.div<{
@@ -98,7 +100,7 @@ export const RowContainer = styled.div<{
       }
 
       :nth-child(odd) {
-        border-left: 3px solid ${primary};
+        border-left: 3px solid ${({ theme }) => theme.palette.secondary.main};
       }
 
       ${ActionsButton} {
@@ -146,20 +148,22 @@ export const RowArrowIcon = styled(ArrowIcon)`
   margin-top: 1px;
 ` as typeof ArrowDownIcon
 
-export const RowTitle = styled(H4)<{
+export const RowTitle = styled.div<{
   clickable: boolean
+  theme: Theme
 }>`
-  font-weight: 600px;
-  margin-bottom: 0.75rem;
+  ${({ theme, clickable }) => css`
+    margin-bottom: 0.75rem;
+    ${theme.typography.body2};
 
-  ${props =>
-    props.clickable &&
-    css`
-      :hover {
-        cursor: pointer;
-        color: #0945eb;
-      }
-    `}
+    ${clickable &&
+      css`
+        :hover {
+          cursor: pointer;
+          color: #0945eb;
+        }
+      `}
+  `}
 `
 
 export const LabelItem = styled.div`
@@ -171,7 +175,7 @@ export const LabelItem = styled.div`
   padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 600;
-  min-width: 5rem;
+  min-width: 6rem;
   border-radius: 0.75rem;
   margin-right: 0.5rem;
   max-height: 1.5rem;

@@ -3,7 +3,8 @@ import _ from 'underscore'
 
 import Flex from 'styled-flex-component'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
+
 import RadioButton from 'components/RadioButton'
 
 export class PageSelector extends React.Component {
@@ -146,13 +147,15 @@ export class PageSelector extends React.Component {
           }}
         />
 
-        <ActionButton
+        <Button
           size="small"
+          variant="outlined"
+          color="secondary"
           disabled={isButtonDisabled}
           onClick={this.handleAddPages}
         >
           Add
-        </ActionButton>
+        </Button>
       </Flex>
     )
   }

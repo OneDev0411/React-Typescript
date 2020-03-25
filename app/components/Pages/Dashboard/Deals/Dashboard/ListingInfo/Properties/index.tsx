@@ -2,8 +2,6 @@ import React from 'react'
 
 import { Divider, createStyles, makeStyles, Theme } from '@material-ui/core'
 
-import { getDealAddress } from 'deals/utils/get-deal-address'
-
 import MlsConnect from './MlsConnect'
 import Side from './Side'
 import PropertyType from './PropertyType'
@@ -28,23 +26,13 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export function ListingProperties(props: Props) {
   const classes = useStyles()
-  const address = getDealAddress(props.deal)
 
   return (
     <div className={classes.root}>
-      {address}
-      {address.length > 0 && (
-        <Divider orientation="vertical" className={classes.divider} />
-      )}
-
       <Side deal={props.deal} isBackOffice={props.isBackOffice} />
-
       <Divider orientation="vertical" className={classes.divider} />
-
       <PropertyType deal={props.deal} isBackOffice={props.isBackOffice} />
-
       <Divider orientation="vertical" className={classes.divider} />
-
       <MlsConnect deal={props.deal} />
     </div>
   )

@@ -138,7 +138,7 @@ function Form(props: Props & StateProps & DispatchProps) {
         <Button
           fullWidth
           variant="contained"
-          color="primary"
+          color="secondary"
           disabled={isCreatingTask || selectedItems.length === 0}
           onClick={handleCreateYardSign}
         >

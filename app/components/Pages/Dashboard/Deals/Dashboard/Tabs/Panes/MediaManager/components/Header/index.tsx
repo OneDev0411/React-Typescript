@@ -4,7 +4,6 @@ import cn from 'classnames'
 import pluralize from 'pluralize'
 
 import IconUpload from 'components/SvgIcons/Upload/IconUpload'
-import IconDropbox from 'components/SvgIcons/Dropbox/IconDropbox'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
@@ -46,7 +45,7 @@ export default function Header({ mediasCount, uploaderRef }: Props) {
       >
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
           disableElevation
           className={classes.lowerCaseButton}
           onClick={openBrowse}

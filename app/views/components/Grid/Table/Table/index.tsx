@@ -73,7 +73,7 @@ export function GridTable<Row>({
   selection = null,
   sorting = null,
   infiniteScrolling = null,
-  hasHeader = false,
+  // hasHeader = false,
   stickyHeader = false,
   TableActions = null,
   ToolbarComponent = null,

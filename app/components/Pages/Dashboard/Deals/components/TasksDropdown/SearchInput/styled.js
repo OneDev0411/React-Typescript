@@ -1,11 +1,10 @@
 import styled from 'styled-components'
 
-import { primary } from 'views/utils/colors'
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
 
-export const SearchContainer = styled(ActionButton)`
+export const SearchContainer = styled(Button)`
   &:hover > svg {
-    fill: ${primary};
+    fill: ${({ theme }) => theme.palette.secondary.main};
   }
   line-height: normal;
   height: auto;

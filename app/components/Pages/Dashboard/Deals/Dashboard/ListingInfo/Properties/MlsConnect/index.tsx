@@ -6,6 +6,7 @@ import {
   Button,
   makeStyles,
   createStyles,
+  useTheme,
   Theme
 } from '@material-ui/core'
 
@@ -35,15 +36,10 @@ const useStyles = makeStyles((theme: Theme) =>
         display: 'block'
       }
     },
-    linkButton: {
-      '& svg path': {
-        fill: theme.palette.secondary.main
-      }
-    },
     removeButton: {
       display: 'none',
-      '& svg path': {
-        fill: theme.palette.error.light
+      '&:hover svg path': {
+        fill: theme.palette.error.main
       }
     }
   })
@@ -52,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export function MlsConnect({ deal }: Props) {
   const [isSaving, setIsSaving] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const theme = useTheme<Theme>()
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const dispatch = useDispatch()
@@ -96,12 +93,15 @@ export function MlsConnect({ deal }: Props) {
           </Button>
 
           <IconButton
-            color="secondary"
+            color="default"
             size="small"
             onClick={removeMlsConnection}
             className={classes.removeButton}
           >
-            <TrashIcon className={iconClasses.small} />
+            <TrashIcon
+              className={iconClasses.small}
+              fillColor={theme.palette.common.black}
+            />
           </IconButton>
 
           <IconButton
@@ -109,9 +109,11 @@ export function MlsConnect({ deal }: Props) {
             size="small"
             target="_blank"
             href={`/dashboard/mls/${deal.listing}`}
-            className={classes.linkButton}
           >
-            <SiteLinkIcon className={iconClasses.small} />
+            <SiteLinkIcon
+              className={iconClasses.small}
+              fillColor={theme.palette.common.black}
+            />
           </IconButton>
         </div>
       ) : (

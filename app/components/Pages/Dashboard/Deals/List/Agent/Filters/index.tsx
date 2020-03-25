@@ -1,13 +1,24 @@
 import React from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { MenuItem } from '@material-ui/core'
 
+import { IAppState } from 'reducers'
+
 import { getStatus } from 'models/Deal/helpers/context'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+import { getUserTeams } from 'actions/user/teams'
 
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
-import Badge from 'components/Badge'
+
+import {
+  SORTABLE_COLUMNS,
+  SORT_FIELD_SETTING_KEY
+} from '../helpers/agent-sorting'
+import { getGridSortLabel } from '../../helpers/sorting'
 
 const BASE_URL = '/dashboard/deals'
 
@@ -83,46 +94,25 @@ interface Props {
 }
 
 const TabFilters = withRouter((props: Props & WithRouterProps) => {
-  const handleChangeSort = (column: SortableColumn) => {
+  const dispatch = useDispatch()
+  const user = useSelector(({ user }: IAppState) => user)
+
+  const handleChangeSort = async (column: SortableColumn) => {
     props.router.push(
       `${props.location.pathname}?sortBy=${column.value}&sortType=${
         column.ascending ? 'asc' : 'desc'
       }`
     )
+
+    const fieldValue = column.ascending ? column.value : `-${column.value}`
+
+    await putUserSetting(SORT_FIELD_SETTING_KEY, fieldValue)
+    dispatch(getUserTeams(user))
   }
-
-  const getSortTitle = () => {
-    const defaultValue = 'A - Z'
-
-    if (!props.location.search) {
-      return defaultValue
-    }
-
-    const column = props.sortableColumns.find(
-      col => col.value === props.location.query.sortBy
-    )
-
-    return column ? column.label! : defaultValue
-  }
-
-  // TODO: Waiting for product's response
-  // const getBadgeCounter = (filterName: string) => {
-  //   if (!props.deals) {
-  //     return 0
-  //   }
-
-  //   if (props.searchCriteria.length === 0) {
-  //     return Object.values(props.deals).filter(deal =>
-  //       Filters[filterName || 'all'](deal)
-  //     ).length
-  //   }
-
-  //   return Object.values(props.deals).length
-  // }
 
   return (
     <PageTabs
-      defaultValue={props.params.id || 0}
+      defaultValue={props.params.filter || 'all'}
       tabs={TAB_ITEMS.map(({ label, link }, index: number) => {
         const url = link ? `${BASE_URL}/filter/${link}` : BASE_URL
         const urlWithQuery = `${url}${props.location.search}`
@@ -130,13 +120,8 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
         return (
           <TabLink
             key={index}
-            value={link || 0}
-            label={
-              <span>
-                {label}
-                {/* <Badge appearance="primary">{getBadgeCounter(link)}</Badge> */}
-              </span>
-            }
+            value={link || 'all'}
+            label={<span>{label}</span>}
             to={urlWithQuery}
           />
         )
@@ -145,7 +130,14 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
         <Tab
           key={0}
           label={
-            <DropdownTab title={getSortTitle()}>
+            <DropdownTab
+              title={getGridSortLabel(
+                user,
+                SORTABLE_COLUMNS,
+                props.location,
+                SORT_FIELD_SETTING_KEY
+              )}
+            >
               {({ toggleMenu }) => (
                 <>
                   {props.sortableColumns.map((column, index) => (

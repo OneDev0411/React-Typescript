@@ -1,8 +1,5 @@
 import React, { useMemo } from 'react'
-import { connect } from 'react-redux'
-
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
+import { useDispatch } from 'react-redux'
 
 import { getValue } from 'models/Deal/helpers/dynamic-context'
 import { getContext } from 'models/Deal/helpers/context/get-context'
@@ -25,11 +22,6 @@ import {
   FactsheetDivider
 } from './styled'
 
-interface DispatchProp {
-  upsertContexts: IAsyncActionProp<typeof upsertContexts>
-  approveContext: IAsyncActionProp<typeof approveContext>
-}
-
 interface Props {
   deal: IDeal
   isBackOffice: boolean
@@ -39,7 +31,9 @@ interface Props {
   showDivider: boolean
 }
 
-function Factsheet(props: Props & DispatchProp) {
+export default function Factsheet(props: Props) {
+  const dispatch = useDispatch()
+
   const table = useMemo(() => {
     return getFactsheetSection(props.deal.id, props.deal, props.section)
   }, [props.deal, props.section])
@@ -48,7 +42,7 @@ function Factsheet(props: Props & DispatchProp) {
     return null
   }
 
-  const saveContext = async (field: ContextField, value: unknown) => {
+  const saveContext = (field: ContextField, value: unknown) => {
     try {
       const context = createUpsertObject(
         props.deal,
@@ -57,7 +51,7 @@ function Factsheet(props: Props & DispatchProp) {
         props.isBackOffice ? true : !field.needs_approval
       )
 
-      await props.upsertContexts(props.deal.id, [context])
+      dispatch(upsertContexts(props.deal.id, [context]))
     } catch (e) {
       console.log(e)
     }
@@ -66,10 +60,7 @@ function Factsheet(props: Props & DispatchProp) {
   const handleDeleteContext = async (field: ContextField) =>
     saveContext(field, null)
 
-  const handleChangeContext = async (
-    field: ContextField,
-    value: unknown
-  ): Promise<void> => {
+  const handleChangeContext = (field: ContextField, value: unknown): void => {
     const currentValue = getFieldValue(getValue(props.deal, field))
 
     const isValueChanged = value !== currentValue
@@ -79,7 +70,7 @@ function Factsheet(props: Props & DispatchProp) {
       return
     }
 
-    await saveContext(field, value)
+    saveContext(field, value)
   }
 
   const handleApproveField = async (field: ContextField): Promise<void> => {
@@ -90,7 +81,7 @@ function Factsheet(props: Props & DispatchProp) {
     try {
       const context = getContext(props.deal, field.key)
 
-      await props.approveContext(props.deal.id, context.id)
+      await dispatch(approveContext(props.deal.id, context.id))
     } catch (e) {
       console.log(e)
     }
@@ -140,17 +131,3 @@ function getFieldValue(valueObject) {
 
   return ''
 }
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    upsertContexts: (...args: Parameters<typeof upsertContexts>) =>
-      dispatch(upsertContexts(...args)),
-    approveContext: (...args: Parameters<typeof approveContext>) =>
-      dispatch(approveContext(...args))
-  }
-}
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(Factsheet)

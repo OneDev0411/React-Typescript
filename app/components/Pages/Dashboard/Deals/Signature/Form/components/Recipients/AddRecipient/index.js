@@ -1,12 +1,9 @@
 import React from 'react'
 import Downshift from 'downshift'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
 
-import { primary } from 'views/utils/colors'
 import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
-
-import LinkButton from 'components/Button/LinkButton'
 
 import Roles from 'deals/components/Roles'
 
@@ -39,19 +36,10 @@ export class AddRecipient extends React.Component {
         <Downshift isOpen={this.state.isMenuOpen}>
           {({ isOpen }) => (
             <div>
-              <ActionButton
-                appearance="link"
-                type="button"
-                onClick={this.toggleOpenMenu}
-                style={{
-                  justifyContent: 'flex-start',
-                  padding: 0,
-                  margin: 0
-                }}
-              >
-                <IconAdd style={{ fill: primary, marginRight: '1rem' }} />
-                <span style={{ fontWeight: 500 }}>Add New Recipient</span>
-              </ActionButton>
+              <Button color="secondary" onClick={this.toggleOpenMenu}>
+                <IconAdd style={{ marginRight: '1rem' }} />
+                Add New Recipient
+              </Button>
 
               {isOpen && (
                 <Menu>
@@ -66,15 +54,10 @@ export class AddRecipient extends React.Component {
                     onUpsertRole={this.handleAddRecipient}
                     onCreateRole={this.handleAddRecipient}
                     addRoleActionRenderer={props => (
-                      <LinkButton
-                        {...props}
-                        style={{
-                          padding: 0
-                        }}
-                      >
-                        <span style={{ marginRight: '0.5rem' }}>+</span>
+                      <Button color="secondary" {...props}>
+                        <IconAdd style={{ marginRight: '1rem' }} />
                         Add Contact
-                      </LinkButton>
+                      </Button>
                     )}
                   />
                 </Menu>
