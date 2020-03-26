@@ -202,7 +202,7 @@ const AsyncToursList = Load({
 
 const AsyncMarketing = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Marketing' /* webpackChunkName: "marketing" */)
+    import('../components/Pages/Dashboard/Marketing/List' /* webpackChunkName: "marketing" */)
 })
 
 const AsyncMarketingHistory = Load({
@@ -533,10 +533,11 @@ export default (
       <Route path="/dashboard/tours" component={AsyncToursList} />
       <Route path="/dashboard/open-house" component={AsyncOpenHousesList} />
 
-      <Route path="/dashboard/marketing" component={AsyncMarketing}>
-        <IndexRoute component={AsyncMarketingHistory} />
-        <Route component={AsyncMarketing} path=":types(/:medium)" />
-      </Route>
+      <Route path="/dashboard/marketing" component={AsyncMarketingHistory} />
+      <Route
+        path="/dashboard/marketing/:types(/:medium)"
+        component={AsyncMarketing}
+      />
 
       <Route path="/dashboard/inbox(/:emailThreadId)" component={AsyncInbox} />
 

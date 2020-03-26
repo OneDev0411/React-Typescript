@@ -5,6 +5,8 @@ import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 
 import TemplatesList from 'components/TemplatesList'
 
+import Layout from '../index'
+
 import useTemplatesHistory from './useTemplatesHistory'
 import EmptyState from './EmptyState'
 
@@ -32,13 +34,18 @@ function History() {
       <Helmet>
         <title>My Designs | Marketing | Rechat</title>
       </Helmet>
-      <TemplatesList
-        pageSize={PAGE_SIZE}
-        type="history"
-        items={loadedTemplates}
-        isLoading={isLoading}
-        onDelete={handleDelete}
-        emptyState={<EmptyState />}
+
+      <Layout
+        render={() => (
+          <TemplatesList
+            pageSize={PAGE_SIZE}
+            type="history"
+            items={loadedTemplates}
+            isLoading={isLoading}
+            onDelete={handleDelete}
+            emptyState={<EmptyState />}
+          />
+        )}
       />
     </>
   )
