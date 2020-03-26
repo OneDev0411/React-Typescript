@@ -176,7 +176,7 @@ declare type IEmailCampaign<
   IEmailRecipient<RecipientAssociations>[],
   Associations
 > &
-  Association<'from', IUser, Associations> &
+  Association<'from', IUser | IOAuthAccount, Associations> &
   Association<'template', IMarketingTemplateInstance | null, Associations> &
   Association<
     'emails',

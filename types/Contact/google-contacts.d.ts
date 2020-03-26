@@ -20,7 +20,8 @@ declare interface IOAuthAccountBase {
   last_sync_duration: number
   messages_total: null | number
   ord: string
-  photo: string
+  photo: string | null
+  profile_image_url: string | null
   resource_name: string
   revoked: boolean
   histories?: IGoogleSyncHistory[]
