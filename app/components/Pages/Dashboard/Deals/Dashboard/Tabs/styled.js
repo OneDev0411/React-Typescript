@@ -19,11 +19,11 @@ export const Card = styled(AbstractCard)`
 `
 
 export const FactsheetContainer = styled.div`
-  width: 17rem;
+  width: 19rem;
 `
 
 export const MainContainer = styled.div`
-  width: calc(100% - 22.5rem);
+  width: calc(100% - 20.5rem);
   margin-left: 1.5rem;
 `
 
