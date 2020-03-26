@@ -19,7 +19,7 @@ export const PrimaryAction = styled.div`
     ${theme.typography.body2};
 
     width: ${(props: PrimaryActionProps) =>
-      props.hasSecondaryActions ? '7rem' : '9.3rem'};
+      props.hasSecondaryActions ? '8rem' : '9.3rem'};
 
     :hover {
       color: ${theme.palette.secondary.main};
