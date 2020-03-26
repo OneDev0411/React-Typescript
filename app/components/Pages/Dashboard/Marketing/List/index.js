@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet'
 
 import TemplatesList from 'components/TemplatesList'
 
-import Layout from '../index'
+import Layout from '..'
 
 export const MarketingList = () => {
   return (

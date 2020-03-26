@@ -5,7 +5,7 @@ import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 
 import TemplatesList from 'components/TemplatesList'
 
-import Layout from '../index'
+import Layout from '..'
 
 import useTemplatesHistory from './useTemplatesHistory'
 import EmptyState from './EmptyState'

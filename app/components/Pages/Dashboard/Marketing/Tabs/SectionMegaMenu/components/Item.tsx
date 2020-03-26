@@ -1,7 +1,7 @@
 import React from 'react'
-import { withRouter, WithRouterProps } from 'react-router'
-
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
+
+import { goTo } from 'utils/go-to'
 
 import { SectionItem } from 'components/PageSideNav/types'
 
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-function Item({ data, mediums, router, onClose }: Props & WithRouterProps) {
+function Item({ data, mediums, onClose }: Props) {
   const classes = useStyles()
   const { title, link } = data
 
@@ -56,7 +56,7 @@ function Item({ data, mediums, router, onClose }: Props & WithRouterProps) {
     }
 
     onClose()
-    router.push(link)
+    goTo(link)
   }
 
   return (
@@ -79,4 +79,4 @@ function Item({ data, mediums, router, onClose }: Props & WithRouterProps) {
   )
 }
 
-export default withRouter(Item)
+export default Item

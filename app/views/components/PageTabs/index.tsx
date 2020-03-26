@@ -7,7 +7,7 @@ export * from './DropdownTab'
 export * from './TabSpacer'
 
 type SelectedTab = string | number | boolean | null
-type RenderMegaMenuType = {
+type RenderMegaMenu = {
   selectedTab: SelectedTab
   close: () => void
 }
@@ -19,7 +19,7 @@ interface Props {
   value?: SelectedTab
   actionValue?: SelectedTab
   onShowMegamenuStats?: SelectedTab[]
-  megaMenu?: (p: RenderMegaMenuType) => ReactNode
+  megaMenu?: (p: RenderMegaMenu) => ReactNode
   onChange?: (value: SelectedTab) => void
   onChangeAction?: (value: SelectedTab) => void
 }

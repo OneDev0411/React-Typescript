@@ -15,7 +15,7 @@ interface ExtendedSection extends Section {
   key: string
 }
 
-export type SectionCollectionTypes = { [key: string]: ExtendedSection }
+export type SectionCollection = { [key: string]: ExtendedSection }
 
 function urlGenerator(url: string | string[]): string {
   return `/dashboard/marketing${
@@ -23,7 +23,7 @@ function urlGenerator(url: string | string[]): string {
   }`
 }
 
-const ALL_SECTIONS: SectionCollectionTypes = {
+const ALL_SECTIONS: SectionCollection = {
   marketingCenter: {
     type: SectionsEnum.LINK,
     key: 'marketingCenter',
@@ -165,10 +165,10 @@ function getSerializedValue(value?: string | string[]): string {
   return Array.isArray(value) ? value.join(',') : value
 }
 
-export function useMarketingCenterSections({ types }): SectionCollectionTypes {
+export function useMarketingCenterSections({ types }): SectionCollection {
   const user = useSelector<IAppState, IUser>(state => state.user)
 
-  const newSections: SectionCollectionTypes = {}
+  const newSections: SectionCollection = {}
   const sectionKeys = Object.keys(ALL_SECTIONS)
 
   sectionKeys.forEach(key => {
