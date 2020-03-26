@@ -130,68 +130,12 @@ export default function InboxEmailThreadList({
 
   useEmailThreadEvents(handleUpdateEmailThreads, handleDeleteEmailThreads)
 
-  async function getMoreEmailThreadsBySearch(): Promise<{
-    moreEmailThreads: IEmailThread<'contacts'>[]
-    finished: boolean
-  }> {
-    try {
-      const searchQuery = searchMetaDataRef.current.searchQuery!
-
-      onSearchStatusChange && onSearchStatusChange(true)
-
-      const { emailThreads, next } = await searchEmailThreads({
-        selection: ['email_thread.snippet'],
-        searchQuery,
-        next: searchMetaDataRef.current.next
-      })
-
-      onSearchStatusChange && onSearchStatusChange(false)
-
-      if (searchQuery !== searchMetaDataRef.current.searchQuery) {
-        return {
-          moreEmailThreads: [],
-          finished: false
-        }
-      }
-
-      searchMetaDataRef.current.next = next
-
-      return {
-        moreEmailThreads: emailThreads,
-        finished: !next || Object.values(next).filter(Boolean).length === 0 // TODO: `!next ||` is to cover a bug in server, remove it later.
-      }
-    } catch (reason) {
-      onSearchStatusChange && onSearchStatusChange(false)
-      throw reason
-    }
-  }
-  async function getMoreEmailThreadsWithoutSearch(): Promise<{
-    moreEmailThreads: IEmailThread<'contacts'>[]
-    finished: boolean
-  }> {
-    const count =
-      emailThreads.length === 0
-        ? emailThreadFetchCountInitial
-        : emailThreadFetchCount
-    const moreEmailThreads = await getEmailThreads(
-      {
-        selection: ['email_thread.snippet'],
-        start: emailThreads.length,
-        limit: count
-      },
-      ['contacts']
-    )
-    const finished = moreEmailThreads.length < count
-
-    return { moreEmailThreads, finished }
-  }
-
-  const getMoreEmailThreads = searchQuery
-    ? getMoreEmailThreadsBySearch
-    : getMoreEmailThreadsWithoutSearch
-
   async function handleNeedMoreItems(): Promise<boolean> {
     try {
+      const getMoreEmailThreads = searchQuery
+        ? getMoreEmailThreadsWithSearch
+        : getMoreEmailThreadsWithoutSearch
+
       const { moreEmailThreads, finished } = await getMoreEmailThreads()
 
       joinEmailThreads(moreEmailThreads, 'expand')
@@ -207,6 +151,62 @@ export default function InboxEmailThreadList({
         })
       )
       throw reason
+    }
+
+    async function getMoreEmailThreadsWithSearch(): Promise<{
+      moreEmailThreads: IEmailThread<'contacts'>[]
+      finished: boolean
+    }> {
+      try {
+        const searchQuery = searchMetaDataRef.current.searchQuery!
+
+        onSearchStatusChange && onSearchStatusChange(true)
+
+        const { emailThreads, next } = await searchEmailThreads({
+          selection: ['email_thread.snippet'],
+          searchQuery,
+          next: searchMetaDataRef.current.next
+        })
+
+        onSearchStatusChange && onSearchStatusChange(false)
+
+        if (searchQuery !== searchMetaDataRef.current.searchQuery) {
+          return {
+            moreEmailThreads: [],
+            finished: false
+          }
+        }
+
+        searchMetaDataRef.current.next = next
+
+        return {
+          moreEmailThreads: emailThreads,
+          finished: !next || Object.values(next).filter(Boolean).length === 0 // TODO: `!next ||` is to cover a bug in server, remove it later.
+        }
+      } catch (reason) {
+        onSearchStatusChange && onSearchStatusChange(false)
+        throw reason
+      }
+    }
+    async function getMoreEmailThreadsWithoutSearch(): Promise<{
+      moreEmailThreads: IEmailThread<'contacts'>[]
+      finished: boolean
+    }> {
+      const count =
+        emailThreads.length === 0
+          ? emailThreadFetchCountInitial
+          : emailThreadFetchCount
+      const moreEmailThreads = await getEmailThreads(
+        {
+          selection: ['email_thread.snippet'],
+          start: emailThreads.length,
+          limit: count
+        },
+        ['contacts']
+      )
+      const finished = moreEmailThreads.length < count
+
+      return { moreEmailThreads, finished }
     }
   }
 
