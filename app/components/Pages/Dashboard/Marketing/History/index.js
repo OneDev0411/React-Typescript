@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
 
 import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
-import { deleteTemplateInstance } from 'models/instant-marketing/delete-template-instance'
 
 import TemplatesList from 'components/TemplatesList'
 
@@ -13,12 +12,7 @@ const PAGE_SIZE = 12
 
 function History() {
   const [limit, setLimit] = useState(PAGE_SIZE)
-  const [templates, isLoading] = useTemplatesHistory()
-  const [deletedTemplates, setDeletedTemplates] = useState([])
-  // We are using this for filtering the deleted items
-  const finalTemplates = templates
-    .filter(template => !deletedTemplates.includes(template.id))
-    .slice(0, limit)
+  const { templates, isLoading, deleteTemplate } = useTemplatesHistory()
 
   const loadNextPage = () => setLimit(limit => limit + PAGE_SIZE)
 
@@ -28,9 +22,10 @@ function History() {
   })
 
   async function handleDelete(id) {
-    await deleteTemplateInstance(id)
-    setDeletedTemplates([...deletedTemplates, id])
+    await deleteTemplate(id)
   }
+
+  const loadedTemplates = templates.slice(0, limit)
 
   return (
     <>
@@ -40,7 +35,7 @@ function History() {
       <TemplatesList
         pageSize={PAGE_SIZE}
         type="history"
-        items={finalTemplates}
+        items={loadedTemplates}
         isLoading={isLoading}
         onDelete={handleDelete}
         emptyState={<EmptyState />}

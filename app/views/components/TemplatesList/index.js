@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import { addNotification as notify } from 'reapop'
-import useMap from 'react-use/lib/useMap'
 import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
 import chunk from 'lodash/chunk'
@@ -22,11 +21,9 @@ function TemplatesList(props) {
   const [selectedTemplate, setSelectedTemplate] = useState(null)
   const [isActionTriggered, setActionTriggered] = useState(false)
   const [isEditActionTriggered, setEditActionTriggered] = useState(false)
-  const [deletingTemplates, { set: setDeleting }] = useMap()
   const modal = useContext(ConfirmationModalContext)
   const handleDelete = props.onDelete
     ? template => {
-        setDeleting(template.id, true)
         modal.setConfirmationModal({
           message: 'Delete your design?',
           description: 'Once deleted you would not be able to recover it.',
@@ -34,7 +31,6 @@ function TemplatesList(props) {
           appearance: 'danger',
           onConfirm: () => {
             props.onDelete(template.id).catch(() => {
-              setDeleting(template.id, false)
               props.notify({
                 title:
                   'There is a problem for deleting the template. Please try again.',
@@ -42,9 +38,6 @@ function TemplatesList(props) {
                 dismissible: true
               })
             })
-          },
-          onCancel: () => {
-            setDeleting(template.id, false)
           }
         })
       }
@@ -84,8 +77,6 @@ function TemplatesList(props) {
               <MarketingTemplateCard
                 key={template.id}
                 template={template}
-                isLoading={deletingTemplates[template.id]}
-                suffix={deletingTemplates[template.id] && 'Deleting ...'}
                 handlePreview={() => {
                   setPreviewModalOpen(true)
                   setSelectedTemplate(template)
