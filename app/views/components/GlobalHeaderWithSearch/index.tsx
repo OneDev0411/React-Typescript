@@ -4,7 +4,7 @@ import { makeStyles, Theme } from '@material-ui/core'
 
 import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'
 
-import SearchInput, { SearchInputProps } from './SearchInput'
+import { SearchInput, SearchInputProps } from './SearchInput'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
