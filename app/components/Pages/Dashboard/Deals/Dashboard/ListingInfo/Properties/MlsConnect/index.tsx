@@ -93,24 +93,24 @@ export function MlsConnect({ deal }: Props) {
           </Button>
 
           <IconButton
-            color="default"
-            size="small"
-            onClick={removeMlsConnection}
-            className={classes.removeButton}
-          >
-            <TrashIcon
-              className={iconClasses.small}
-              fillColor={theme.palette.common.black}
-            />
-          </IconButton>
-
-          <IconButton
             color="secondary"
             size="small"
             target="_blank"
             href={`/dashboard/mls/${deal.listing}`}
           >
             <SiteLinkIcon
+              className={iconClasses.small}
+              fillColor={theme.palette.common.black}
+            />
+          </IconButton>
+
+          <IconButton
+            color="default"
+            size="small"
+            onClick={removeMlsConnection}
+            className={classes.removeButton}
+          >
+            <TrashIcon
               className={iconClasses.small}
               fillColor={theme.palette.common.black}
             />
