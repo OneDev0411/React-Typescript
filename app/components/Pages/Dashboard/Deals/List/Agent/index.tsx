@@ -9,7 +9,7 @@ import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
 import { searchDeals, getDeals } from 'actions/deals'
 import { viewAsEveryoneOnTeam, viewAs } from 'utils/user-teams'
 
-import GlobalHeader from 'components/GlobalHeader'
+import PageLayout from 'components/GlobalPageLayout'
 import { SearchInput } from 'components/GlobalHeaderWithSearch'
 
 import { IAppState } from 'reducers'
@@ -79,8 +79,8 @@ export default function AgentTable(props: WithRouterProps) {
   }, [viewAsUsers])
 
   return (
-    <div className={classes.container}>
-      <GlobalHeader title="My deals" noPadding>
+    <PageLayout>
+      <PageLayout.Header title="My deals">
         <div className={classes.headerContainer}>
           <SearchInput
             placeholder="Search deals by address, MLS# or agent name..."
@@ -89,21 +89,22 @@ export default function AgentTable(props: WithRouterProps) {
 
           <ExportDeals />
         </div>
-      </GlobalHeader>
+      </PageLayout.Header>
+      <PageLayout.Main>
+        <div className={classes.filtersContainer}>
+          <TabFilters
+            deals={deals}
+            activeFilter={props.params.filter}
+            searchCriteria={searchCriteria}
+            sortableColumns={SORTABLE_COLUMNS}
+          />
+        </div>
 
-      <div className={classes.filtersContainer}>
-        <TabFilters
-          deals={deals}
+        <Grid
           activeFilter={props.params.filter}
-          searchCriteria={searchCriteria}
           sortableColumns={SORTABLE_COLUMNS}
         />
-      </div>
-
-      <Grid
-        activeFilter={props.params.filter}
-        sortableColumns={SORTABLE_COLUMNS}
-      />
-    </div>
+      </PageLayout.Main>
+    </PageLayout>
   )
 }
