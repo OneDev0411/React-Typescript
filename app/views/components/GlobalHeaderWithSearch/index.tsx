@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { throttle } from 'lodash'
-import { makeStyles, createStyles, Theme } from '@material-ui/core'
+import {
+  makeStyles,
+  createStyles,
+  Theme,
+  TextFieldProps
+} from '@material-ui/core'
 
 import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'
 
@@ -27,6 +32,9 @@ const useStyles = makeStyles(
 export interface GlobalHeaderWithSearchProps extends GlobalHeaderProps {
   placeholder: string
   onSearch: (query: string) => void
+  isLoading?: boolean
+  onClear?: () => void
+  TextFieldProps?: TextFieldProps
 }
 
 export * from './SearchInput'
@@ -34,6 +42,9 @@ export * from './SearchInput'
 export default function GlobalHeaderWithSearch({
   placeholder,
   onSearch,
+  isLoading,
+  onClear,
+  TextFieldProps,
   children,
   ...globalHeaderProps
 }: GlobalHeaderWithSearchProps) {
@@ -60,6 +71,9 @@ export default function GlobalHeaderWithSearch({
             value={searchQueryValue}
             placeholder={placeholder}
             onChange={handleQueryChange}
+            isLoading={isLoading}
+            onClear={onClear}
+            {...TextFieldProps}
           />
         </div>
       </div>

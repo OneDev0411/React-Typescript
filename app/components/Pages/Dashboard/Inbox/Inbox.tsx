@@ -59,6 +59,7 @@ export default function Inbox({ params }: WithRouterProps) {
 
   const [initializing, setInitializing] = useState(true)
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
+  const [searchStatus, setSearchStatus] = useState(false)
   const [emailThreadCount, setEmailThreadCount] = useState(0)
 
   const handleEmailThreadsUpdate = useCallback(
@@ -94,6 +95,7 @@ export default function Inbox({ params }: WithRouterProps) {
                 searchQuery === undefined && !query ? undefined : query
               )
             }
+            isLoading={searchStatus}
           />
         )}
       </Box>
@@ -115,6 +117,7 @@ export default function Inbox({ params }: WithRouterProps) {
                 selectedEmailThreadId={selectedEmailThreadId}
                 onSelectEmailThread={setSelectedEmailThreadId}
                 searchQuery={searchQuery}
+                onSearchStatusChange={setSearchStatus}
                 onEmailThreadsUpdate={handleEmailThreadsUpdate}
               />
             </Grid>

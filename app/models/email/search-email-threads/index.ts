@@ -8,18 +8,22 @@ import {
   defaultEmailThreadAssociations
 } from '../get-email-threads'
 
+export interface SearchEmailThreadsNext {
+  [credentialId: string]: string | null
+}
+
 export async function searchEmailThreads<
   SelectedEmailThreadAssociations extends IEmailThreadAssociations
 >(
   filters: {
     selection?: typeof defaultEmailThreadSelection[number][]
     searchQuery: string
-    next?: any
+    next?: SearchEmailThreadsNext
   },
   associations: SelectedEmailThreadAssociations[] = defaultEmailThreadAssociations as SelectedEmailThreadAssociations[]
 ): Promise<{
   emailThreads: IEmailThread<SelectedEmailThreadAssociations>[]
-  next: any
+  next: SearchEmailThreadsNext
 }> {
   const response = await new Fetch()
     .post('/emails/threads/filter')
