@@ -18,7 +18,7 @@ interface Props {
   defaultAction?: SelectedTab
   value?: SelectedTab
   actionValue?: SelectedTab
-  onShowMegamenuStats?: SelectedTab[]
+  megamenuTabs?: SelectedTab[]
   megaMenu?: (p: RenderMegaMenu) => ReactNode
   onChange?: (value: SelectedTab) => void
   onChangeAction?: (value: SelectedTab) => void
@@ -103,7 +103,7 @@ export function PageTabs({
   actions,
   actionValue,
   tabs,
-  onShowMegamenuStats = [],
+  megamenuTabs = [],
   megaMenu,
   onChange = () => {},
   onChangeAction = () => {}
@@ -124,8 +124,8 @@ export function PageTabs({
       : selectedAction
 
   const handleChangeTab = (e: React.MouseEvent<{}>, tab: SelectedTab) => {
-    if (megaMenu && onShowMegamenuStats) {
-      if (onShowMegamenuStats.includes(tab)) {
+    if (megaMenu && megamenuTabs) {
+      if (megamenuTabs.includes(tab)) {
         const isVisible = !(tab === selectedTab && showMegaMenu)
 
         setShowMegaMenu(isVisible)

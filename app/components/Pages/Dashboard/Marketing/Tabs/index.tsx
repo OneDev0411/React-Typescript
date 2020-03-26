@@ -63,7 +63,7 @@ const ContactsTabs = ({ sections, mediums, templateTypes }: Props) => {
           label={properties.title}
         />
       ]}
-      onShowMegamenuStats={keys}
+      megamenuTabs={keys}
       megaMenu={props => renderMegaMenu(props)}
     />
   )
