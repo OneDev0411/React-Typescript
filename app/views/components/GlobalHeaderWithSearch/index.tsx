@@ -1,40 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { throttle } from 'lodash'
-import {
-  makeStyles,
-  createStyles,
-  Theme,
-  TextFieldProps
-} from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'
 
-import { SearchInput } from './SearchInput'
+import SearchInput, { SearchInputProps } from './SearchInput'
 
 const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      wrapper: {
-        display: 'flex',
-        flexDirection: 'row-reverse',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      },
-      searchContainer: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        flexGrow: 1
-      }
-    }),
+  (theme: Theme) => ({
+    wrapper: {
+      display: 'flex',
+      flexDirection: 'row-reverse',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    searchContainer: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      flexGrow: 1
+    }
+  }),
   { name: 'GlobalHeaderWithSearch' }
 )
 
 export interface GlobalHeaderWithSearchProps extends GlobalHeaderProps {
-  placeholder: string
+  /** @deprecated use `SearchInputProps` instead. */ placeholder?: string
   onSearch: (query: string) => void
-  isLoading?: boolean
-  onClear?: () => void
-  TextFieldProps?: TextFieldProps
+  SearchInputProps?: SearchInputProps
 }
 
 export * from './SearchInput'
@@ -42,14 +34,14 @@ export * from './SearchInput'
 export default function GlobalHeaderWithSearch({
   placeholder,
   onSearch,
-  isLoading,
-  onClear,
-  TextFieldProps,
+  SearchInputProps,
   children,
   ...globalHeaderProps
 }: GlobalHeaderWithSearchProps) {
   const classes = useStyles()
+
   const [searchQueryValue, setSearchQueryValue] = useState('')
+
   const throttledSearchHandler = useRef(
     throttle((value: string) => onSearch(value), 1000)
   )
@@ -57,10 +49,6 @@ export default function GlobalHeaderWithSearch({
   useEffect(() => {
     throttledSearchHandler.current(searchQueryValue)
   }, [searchQueryValue])
-
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQueryValue(event.target.value)
-  }
 
   return (
     <GlobalHeader {...globalHeaderProps}>
@@ -70,10 +58,10 @@ export default function GlobalHeaderWithSearch({
           <SearchInput
             value={searchQueryValue}
             placeholder={placeholder}
-            onChange={handleQueryChange}
-            isLoading={isLoading}
-            onClear={onClear}
-            {...TextFieldProps}
+            onChange={({ target: { value: searchQueryValue } }) =>
+              setSearchQueryValue(searchQueryValue)
+            }
+            {...SearchInputProps}
           />
         </div>
       </div>

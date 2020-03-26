@@ -89,12 +89,14 @@ export default function Inbox({ params }: WithRouterProps) {
         ) : (
           <GlobalPageLayout.HeaderWithSearch
             title="Inbox"
-            placeholder="Search emails"
             onSearch={
               query =>
                 setSearchQuery(searchQuery => query || (searchQuery && query)) // Keep it undefined until there are actually some query.
             }
-            isLoading={searchStatus}
+            SearchInputProps={{
+              placeholder: 'Search emails',
+              isLoading: searchStatus
+            }}
           />
         )}
       </Box>
