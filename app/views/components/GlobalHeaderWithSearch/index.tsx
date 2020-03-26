@@ -6,20 +6,22 @@ import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'
 
 import { SearchInput } from './SearchInput'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    wrapper: {
-      display: 'flex',
-      flexDirection: 'row-reverse',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    },
-    searchContainer: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-      flexGrow: 1
-    }
-  })
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      wrapper: {
+        display: 'flex',
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      },
+      searchContainer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        flexGrow: 1
+      }
+    }),
+  { name: 'GlobalHeaderWithSearch' }
 )
 
 export interface GlobalHeaderWithSearchProps extends GlobalHeaderProps {

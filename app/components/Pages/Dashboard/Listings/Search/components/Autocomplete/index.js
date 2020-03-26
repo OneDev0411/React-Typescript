@@ -260,8 +260,10 @@ class MlsAutocompleteSearch extends Component {
       ])
 
       await dispatch(getListingsByQuery(this.state.input, { limit: 200 }))
+      this.setState({ isLoading: false })
     } catch (error) {
       console.log(error)
+      this.setState({ isLoading: false })
     } finally {
       this.inputRef.current.blur()
     }
@@ -310,7 +312,6 @@ class MlsAutocompleteSearch extends Component {
                   placeholder="Search location or MLS number"
                   onClear={this.onClear}
                   isLoading={this.state.isLoading}
-                  fullWidth
                 />
                 {isOpen && (
                   <ListContainer>

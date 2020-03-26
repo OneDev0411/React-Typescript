@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
 import {
   TextField,
   InputAdornment,
@@ -39,13 +39,23 @@ interface Props {
   onClear?: () => void
 }
 
-export function SearchInput(props: TextFieldProps & Props) {
+export const SearchInput = forwardRef((props: TextFieldProps & Props, ref) => {
   const classes = useStyles()
   const theme = useTheme<Theme>()
   const [nonEmpty, setNonEmpty] = useState(false)
   const inputEl = useRef<HTMLInputElement | null>(null)
   const { onChange, onClear, isLoading, ...propsExceptOnChange } = props
   const widthStyle = props.fullWidth ? {} : { width: '360px' } // default width
+
+  // Exposing some methods for the input el
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      if (inputEl && inputEl.current) inputEl.current.focus()
+    },
+    blur: () => {
+      if (inputEl && inputEl.current) inputEl.current.blur()
+    }
+  }))
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { onChange: passedOnChange } = props
@@ -114,4 +124,4 @@ export function SearchInput(props: TextFieldProps & Props) {
       {...propsExceptOnChange}
     />
   )
-}
+})
