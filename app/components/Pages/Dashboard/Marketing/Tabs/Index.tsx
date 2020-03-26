@@ -11,7 +11,7 @@ interface Props {
   mediums: string[]
 }
 
-export const ContactsTabs = ({ templateTypes, sections, mediums }: Props) => {
+const ContactsTabs = ({ templateTypes, sections, mediums }: Props) => {
   const { marketingCenter, life, properties } = sections
   const keys: string[] = [life.key, properties.key]
 

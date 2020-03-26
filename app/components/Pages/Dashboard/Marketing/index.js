@@ -12,7 +12,7 @@ import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
 
 import { useTemplatesList } from './hooks/use-templates-list'
-import Tabs from './Tabs'
+import Tabs from './Tabs/Index'
 
 export function MarketingLayout({ params, router, render }) {
   const sections = useMarketingCenterSections(params)
