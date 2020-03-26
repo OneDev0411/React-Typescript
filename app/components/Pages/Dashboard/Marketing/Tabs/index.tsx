@@ -1,17 +1,16 @@
 import React from 'react'
 
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
-import { SectionCollectionTypes } from 'hooks/use-marketing-center-sections'
+import { SectionCollection } from 'hooks/use-marketing-center-sections'
 
 import MegaMenu from './SectionMegaMenu'
 
 interface Props {
-  templateTypes: string
-  sections: SectionCollectionTypes
+  sections: SectionCollection
   mediums: string[]
 }
 
-const ContactsTabs = ({ templateTypes, sections, mediums }: Props) => {
+const ContactsTabs = ({ sections, mediums }: Props) => {
   const { marketingCenter, life, properties } = sections
   const keys: string[] = [life.key, properties.key]
 
