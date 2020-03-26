@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       minHeight: 250,
       zIndex: theme.zIndex.gridAction,
-      background: '#fff',
+      background: theme.palette.background.paper,
       boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.1)'
     }
   })
@@ -125,10 +125,10 @@ export function PageTabs({
 
   const handleChangeTab = (e: React.MouseEvent<{}>, tab: SelectedTab) => {
     if (megaMenu && onShowMegamenuStats) {
-      if (onShowMegamenuStats.indexOf(tab) >= 0) {
-        const nextState = !(tab === selectedTab && showMegaMenu)
+      if (onShowMegamenuStats.includes(tab)) {
+        const isVisible = !(tab === selectedTab && showMegaMenu)
 
-        setShowMegaMenu(nextState)
+        setShowMegaMenu(isVisible)
       } else {
         setShowMegaMenu(false)
       }
