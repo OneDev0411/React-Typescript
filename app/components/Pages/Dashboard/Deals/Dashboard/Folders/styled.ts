@@ -155,6 +155,7 @@ export const RowTitle = styled.div<{
   ${({ theme, clickable }) => css`
     margin-bottom: 0.75rem;
     ${theme.typography.body2};
+    font-weight: bold;
 
     ${clickable &&
       css`
@@ -174,7 +175,6 @@ export const LabelItem = styled.div`
   background-color: #e6e6e6;
   padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
-  font-weight: 600;
   min-width: 6rem;
   border-radius: 0.75rem;
   margin-right: 0.5rem;
