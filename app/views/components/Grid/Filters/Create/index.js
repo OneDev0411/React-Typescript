@@ -10,7 +10,9 @@ import Icon from '../../../SvgIcons/Add/AddIcon'
 
 const IconAdd = styled(Icon)`
   fill: ${props =>
-    !props.disabled ? '#000' : props.theme.palette.action.disabled};
+    !props.disabled
+      ? props.theme.palette.secondary.main
+      : props.theme.palette.action.disabled};
   width: 1.3em;
   height: 1.3em;
 `
@@ -55,7 +57,7 @@ export class AddFilter extends React.Component {
           {({ isOpen, getItemProps }) => (
             <div>
               <Button
-                variant="outlined"
+                color="secondary"
                 size="small"
                 data-test="add-filter"
                 onClick={this.toggleMenu}
