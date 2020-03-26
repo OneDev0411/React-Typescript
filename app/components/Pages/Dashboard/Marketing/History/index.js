@@ -1,38 +1,46 @@
 import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
 
-import { deleteTemplateInstance } from 'models/instant-marketing/delete-template-instance'
+import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
+
 import TemplatesList from 'components/TemplatesList'
 
 import useTemplatesHistory from './useTemplatesHistory'
 import EmptyState from './EmptyState'
 
+const PAGE_SIZE = 12
+
 function History() {
-  const [templates, isLoading] = useTemplatesHistory()
-  const [deletedTemplates, setDeletedTemplates] = useState([])
-  // We are using this for filtering the deleted items
-  const finalTemplates = templates.filter(
-    template => !deletedTemplates.includes(template.id)
-  )
+  const [limit, setLimit] = useState(PAGE_SIZE)
+  const { templates, isLoading, deleteTemplate } = useTemplatesHistory()
+
+  const loadNextPage = () => setLimit(limit => limit + PAGE_SIZE)
+
+  useInfiniteScroll({
+    accuracy: 400, // px
+    onScrollBottom: loadNextPage
+  })
 
   async function handleDelete(id) {
-    await deleteTemplateInstance(id)
-    setDeletedTemplates([...deletedTemplates, id])
+    await deleteTemplate(id)
   }
 
+  const loadedTemplates = templates.slice(0, limit)
+
   return (
-    <React.Fragment>
+    <>
       <Helmet>
         <title>My Designs | Marketing | Rechat</title>
       </Helmet>
       <TemplatesList
+        pageSize={PAGE_SIZE}
         type="history"
-        items={finalTemplates}
+        items={loadedTemplates}
         isLoading={isLoading}
         onDelete={handleDelete}
         emptyState={<EmptyState />}
       />
-    </React.Fragment>
+    </>
   )
 }
 

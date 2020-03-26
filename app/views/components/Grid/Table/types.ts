@@ -84,15 +84,6 @@ export interface ActiveSort {
   label?: string
 }
 
-export interface GridInfiniteScrolling {
-  accuracy?: number
-  debounceTime?: number
-  container?: string | React.RefObject<HTMLElement>
-  containerStyle?: React.CSSProperties
-  onScrollBottom?: () => void
-  onScrollTop?: () => void
-}
-
 export type LoadingPosition = 'top' | 'middle' | 'bottom' | null
 
 export interface TrProps<Row> {
