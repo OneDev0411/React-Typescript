@@ -24,7 +24,6 @@ const useStyles = makeStyles(
 )
 
 export interface GlobalHeaderWithSearchProps extends GlobalHeaderProps {
-  /** @deprecated use `SearchInputProps` instead. */ placeholder?: string
   onSearch: (query: string) => void
   SearchInputProps?: SearchInputProps
 }
@@ -32,7 +31,6 @@ export interface GlobalHeaderWithSearchProps extends GlobalHeaderProps {
 export * from './SearchInput'
 
 export default function GlobalHeaderWithSearch({
-  placeholder,
   onSearch,
   SearchInputProps,
   children,
@@ -57,7 +55,6 @@ export default function GlobalHeaderWithSearch({
         <div className={classes.searchContainer}>
           <SearchInput
             value={searchQueryValue}
-            placeholder={placeholder}
             onChange={({ target: { value: searchQueryValue } }) =>
               setSearchQueryValue(searchQueryValue)
             }

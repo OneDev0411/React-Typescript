@@ -700,9 +700,11 @@ class ContactsList extends React.Component {
     return (
       <PageLayout>
         <PageLayout.HeaderWithSearch
-          placeholder="Search Contacts"
-          onSearch={this.handleSearch}
           title={title}
+          onSearch={this.handleSearch}
+          SearchInputProps={{
+            placeholder: 'Search Contacts'
+          }}
         >
           {!isZeroState && (
             <Box ml={1}>
@@ -751,7 +753,7 @@ class ContactsList extends React.Component {
           )}
           {isZeroState && <ZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
-            <React.Fragment>
+            <>
               {this.renderTabs()}
               {state.showDuplicateClusterAlert && this.renderDuplicateAlert()}
               <Box mt={2}>
@@ -785,7 +787,7 @@ class ContactsList extends React.Component {
                   }}
                 />
               </Box>
-            </React.Fragment>
+            </>
           )}
         </PageLayout.Main>
       </PageLayout>
