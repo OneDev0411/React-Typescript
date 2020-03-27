@@ -9,7 +9,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.common.black
     },
     button: {
-      minWidth: '7rem',
+      minWidth: '10rem',
       '&:hover': {
         backgroundColor: theme.palette.action.hover
       }
@@ -18,20 +18,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 0
     },
     leftRounded: {
-      borderRadius: theme.spacing(
-        theme.shape.borderRadius,
-        0,
-        0,
-        theme.shape.borderRadius
-      )
+      borderRadius: theme.spacing(2, 0, 0, 2) // hokme-hokoomati
     },
     rightRounded: {
-      borderRadius: theme.spacing(
-        0,
-        theme.shape.borderRadius,
-        theme.shape.borderRadius,
-        0
-      )
+      borderRadius: theme.spacing(0, 2, 2, 0)
     }
   })
 )
