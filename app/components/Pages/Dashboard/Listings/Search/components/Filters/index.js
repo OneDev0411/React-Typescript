@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import { reduxForm } from 'redux-form'
 import withHandlers from 'recompose/withHandlers'
-import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
 
 import { getStatusColor } from 'utils/listing'

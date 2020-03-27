@@ -29,33 +29,34 @@ interface TabsShape {
   allowAnonymousAccess: boolean
 }
 
-const useStyle = makeStyles((theme: Theme) =>
-  createStyles({
-    saveSearch: {
-      color: theme.palette.secondary.main,
-      '& svg': {
-        fill: theme.palette.secondary.main
+const useStyle = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      saveSearch: {
+        color: theme.palette.secondary.main,
+        '& svg': {
+          fill: theme.palette.secondary.main
+        },
+        '&:disabled': {
+          opacity: 0.6
+        }
       },
-      '&:disabled': {
-        opacity: 0.6
+      boxSwitcher: {
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        display: 'flex',
+        flexGrow: 1,
+        justifyContent: 'flex-end',
+        marginBottom: theme.spacing(1),
+        padding: theme.spacing(0, 5)
       }
-    },
-    boxSwitcher: {
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      display: 'flex',
-      flexGrow: 1,
-      justifyContent: 'flex-end',
-      margin: theme.spacing(1, 0, 0),
-      padding: theme.spacing(0, 3)
-    }
-  })
+    }),
+  { name: 'TabParts' }
 )
 const overrideTabStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       root: {
-        margin: theme.spacing(1, 0, 0),
-        paddingLeft: theme.spacing(2)
+        padding: theme.spacing(0, 0, 0, 4)
       }
     }),
   { name: 'MuiTabs' }

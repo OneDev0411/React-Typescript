@@ -70,7 +70,7 @@ const mapHOC = compose(
     defaultCenter: mapInitialState.center,
     style: {
       position: 'relative',
-      height: 'calc(100vh - 72px)'
+      height: '100%'
     }
   }),
   connect(

@@ -8,7 +8,7 @@ export const SearchContainer = styled.div`
   position: relative;
 `
 export const ListContainer = styled(Card)`
-  width: 100%;
+  width: 133%;
   position: absolute;
   top: calc(100% + 0.5rem);
   left: 0;

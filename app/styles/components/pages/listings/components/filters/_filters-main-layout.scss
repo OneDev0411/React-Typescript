@@ -2,11 +2,9 @@
   width: 25rem;
   height: calc(100vh - 170px);
   overflow: hidden;
-  pointer-events: none;
   border-radius: 5px;
   background-color: #f8f8f8;
   z-index: 2;
-  pointer-events: auto;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.23);
 }
 
@@ -24,6 +22,5 @@
   bottom: 0;
   left: 0;
   overflow-y: scroll;
-  will-change: transform;
   background-color: #f8f8f8;
 }
