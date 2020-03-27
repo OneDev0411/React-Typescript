@@ -34,12 +34,12 @@ declare interface IEmailThreadEmailBase<T> {
   recipients: string[]
   snippet: string
   subject: string | null
-  text_body: string
+  text_body?: string
   thread_id: string
   thread_key: string
   to: string[]
   to_raw: IRawEmailRecipient[]
-  unique_body: string
+  unique_body?: string
   is_read: boolean
   type: T
 }
@@ -76,8 +76,8 @@ declare type IEmailThread<
   is_read: boolean
   brand: UUID
   user: UUID
-  google_credential: UUID | undefined
-  microsoft_credential: UUID | undefined
+  google_credential: UUID | null
+  microsoft_credential: UUID | null
   type: 'email_thread'
 } & Association<'messages', IEmailThreadMessage[], Associations> &
   Association<'contacts', (IContact & IContactSummary)[] | null, Associations>
