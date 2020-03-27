@@ -19,6 +19,7 @@ import { LoadingComponent } from './components/LoadingComponent'
 import Menu from './columns/Menu'
 import Avatar from './columns/Avatar'
 import Name from './columns/Name'
+import CtaAction from './columns/Cta'
 import TagsString from './columns/Tags'
 import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
@@ -62,14 +63,21 @@ const ContactsList = props => {
     {
       id: 'name',
       primary: true,
-      width: '32%',
+      width: '24%',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       render: ({ row: contact }) => <Name contact={contact} />
     },
     {
+      id: 'cta',
+      primary: true,
+      width: '6%',
+      class: 'visible-on-hover',
+      render: ({ row: contact }) => <CtaAction contact={contact} />
+    },
+    {
       id: 'last_touched',
       sortable: false,
-      width: '20%',
+      width: '19%',
       class: 'opaque',
       render: ({ row: contact }) => <LastTouched contact={contact} />
     },
@@ -88,7 +96,7 @@ const ContactsList = props => {
     },
     {
       id: 'tag',
-      width: '30%',
+      width: '34%',
       class: 'opaque tags',
       render: ({ row: contact }) => (
         <TagsString contact={contact} onSelectTagContact={onSelectTagContact} />
