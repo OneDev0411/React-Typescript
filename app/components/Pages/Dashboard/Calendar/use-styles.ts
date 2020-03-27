@@ -7,15 +7,16 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexFlow: 'column',
       height: '100vh',
       maxHeight: '100vh',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      padding: theme.spacing(5),
+      paddingBottom: 0
     },
     topSide: {
       flex: '0 1 auto',
-      padding: theme.spacing(0, 4)
+      marginTop: theme.spacing(4)
     },
     listContainer: {
-      flex: '1 1 auto',
-      padding: theme.spacing(0, 4)
+      flex: '1 1 auto'
     }
   })
 )
