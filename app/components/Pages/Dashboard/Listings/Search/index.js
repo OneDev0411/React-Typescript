@@ -6,6 +6,7 @@ import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 import memoize from 'lodash/memoize'
 import hash from 'object-hash'
+import { Box } from '@material-ui/core'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
@@ -410,27 +411,30 @@ class Search extends React.Component {
   render() {
     const { user } = this.props
 
+    // Layout is made with flex. For the big picture, checkout the sample:
+    // https://codepen.io/mohsentaleb/pen/jOPeVBK
     return (
-      <React.Fragment>
-        <Header
-          isWidget={this.props.isWidget}
-          isFetching={this.props.isFetching}
-          activeView={this.state.activeView}
-          onChangeView={this.onChangeView}
-          hasData={this.props.listings.data.length > 0}
-        />
+      <>
+        <Box flex="0 1 auto">
+          <Header
+            isWidget={this.props.isWidget}
+            isFetching={this.props.isFetching}
+            activeView={this.state.activeView}
+            onChangeView={this.onChangeView}
+            hasData={this.props.listings.data.length > 0}
+          />
 
-        <Tabs
-          user={user}
-          onChangeView={this.onChangeView}
-          onChangeSort={this.onChangeSort}
-          activeView={this.state.activeView}
-          isWidget={this.props.isWidget}
-          activeSort={this.state.activeSort}
-          saveSearchHandler={this.handleSaveSearch}
-          showSavedSearchButton
-        />
-
+          <Tabs
+            user={user}
+            onChangeView={this.onChangeView}
+            onChangeSort={this.onChangeSort}
+            activeView={this.state.activeView}
+            isWidget={this.props.isWidget}
+            activeSort={this.state.activeSort}
+            saveSearchHandler={this.handleSaveSearch}
+            showSavedSearchButton
+          />
+        </Box>
         {this.renderMain()}
         <CreateAlertModal
           user={user}
@@ -438,7 +442,7 @@ class Search extends React.Component {
           isActive={this.state.shareModalIsActive}
           alertProposedTitle={this.props.listings.info.proposed_title}
         />
-      </React.Fragment>
+      </>
     )
   }
 }

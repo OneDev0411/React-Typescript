@@ -2,19 +2,10 @@ import React from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 
-import PageLayout from 'components/GlobalPageLayout'
+import GlobalPageLayout from 'components/GlobalPageLayout'
 
 const useStyles = makeStyles(theme =>
   createStyles({
-    container: {
-      height: '6em',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      margin: theme.spacing(0, 1.5),
-      paddingTop: theme.spacing(7),
-      paddingLeft: theme.spacing(5)
-    },
     subtitle: {
       color: theme.palette.grey['400']
     }
@@ -26,13 +17,13 @@ export function Header(props) {
   const { subtitle, title } = props
 
   return (
-    <Box className={classes.container}>
-      <PageLayout.Header>
+    <Box p={5}>
+      <GlobalPageLayout.Header>
         <Typography variant="h4">{title}</Typography>
         <Typography variant="h6" className={classes.subtitle}>
           {subtitle}
         </Typography>
-      </PageLayout.Header>
+      </GlobalPageLayout.Header>
     </Box>
   )
 }

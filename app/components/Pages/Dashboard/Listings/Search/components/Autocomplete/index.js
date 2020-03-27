@@ -25,7 +25,6 @@ import { goToPlace, setMapProps } from 'actions/listings/map'
 import resetAreasOptions from 'actions/listings/search/reset-areas-options'
 import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
 
-import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
 
 import {
@@ -38,7 +37,6 @@ import {
   ListContainer,
   ListTitle,
   Item,
-  LoadingContainer
 } from './styled'
 
 class MlsAutocompleteSearch extends Component {

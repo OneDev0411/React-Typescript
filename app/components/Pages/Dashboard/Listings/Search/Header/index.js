@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Button, makeStyles } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 
-import GlobalHeader from 'components/GlobalHeader'
+import GlobalPageLayout from 'components/GlobalPageLayout'
 import { BaseDropdown } from 'components/BaseDropdown'
 import IconArrowDown from 'views/components/SvgIcons/ArrowDownKeyboard/IconArrowDownKeyboard'
 
@@ -11,7 +11,7 @@ import Autocomplete from '../components/Autocomplete'
 
 const useStyles = makeStyles(
   theme => ({
-    container: {
+    body: {
       display: 'flex',
       justifyContent: 'flex-end'
     },
@@ -28,27 +28,29 @@ export function Header(props) {
   const { isFetching, activeView } = props
 
   return (
-    <GlobalHeader title="All Properties">
-      <Box className={classes.container}>
-        <Autocomplete activeView={activeView} />
-        <BaseDropdown
-          renderDropdownButton={buttonProps => (
-            <Button
-              className={classes.filtersButton}
-              variant="outlined"
-              size="large"
-              disabled={isFetching}
-              {...buttonProps}
-            >
-              Filters
-              <IconArrowDown fillColor={theme.palette.common.black} />
-            </Button>
-          )}
-          renderMenu={({ close }) => (
-            <Filters isSubmitting={isFetching} handleClose={close} />
-          )}
-        />
-      </Box>
-    </GlobalHeader>
+    <Box p={5}>
+      <GlobalPageLayout.Header title="All Properties">
+        <Box className={classes.body}>
+          <Autocomplete activeView={activeView} />
+          <BaseDropdown
+            renderDropdownButton={buttonProps => (
+              <Button
+                className={classes.filtersButton}
+                variant="outlined"
+                size="large"
+                disabled={isFetching}
+                {...buttonProps}
+              >
+                Filters
+                <IconArrowDown fillColor={theme.palette.common.black} />
+              </Button>
+            )}
+            renderMenu={({ close }) => (
+              <Filters isSubmitting={isFetching} handleClose={close} />
+            )}
+          />
+        </Box>
+      </GlobalPageLayout.Header>
+    </Box>
   )
 }
