@@ -62,7 +62,8 @@ export const sharedStyles = (theme: Theme) =>
     emptyRowStyles: {
       alignItems: 'center',
       height: '100%',
-      color: theme.palette.grey[600]
+      color: theme.palette.grey[600],
+      ...theme.typography.body2
     },
     splitter: {
       color: theme.palette.grey[500],
