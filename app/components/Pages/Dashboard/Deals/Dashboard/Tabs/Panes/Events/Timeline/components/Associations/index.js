@@ -3,7 +3,7 @@ import _ from 'underscore'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import Button from '@material-ui/core'
+import { Button } from '@material-ui/core'
 
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 
