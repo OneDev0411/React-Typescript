@@ -110,13 +110,7 @@ const CalendarList: React.FC<Props> = props => {
     >
       {props.rows.length === 0 && !props.isLoading && <EmptyState />}
 
-      <AutoSizer
-        style={{
-          width: '100%',
-          minHeight: '100%',
-          maxHeight: '100%'
-        }}
-      >
+      <AutoSizer>
         {({ width, height }) => (
           <VirtualList
             width={width}
