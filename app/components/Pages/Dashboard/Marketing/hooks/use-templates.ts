@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { deleteBrandTemplate } from 'models/instant-marketing/delete-brand-template'
