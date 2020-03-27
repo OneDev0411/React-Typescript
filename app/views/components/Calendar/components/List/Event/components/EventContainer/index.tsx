@@ -7,6 +7,7 @@ import { Tooltip } from '@material-ui/core'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import { ClassesProps } from 'utils/ts-utils'
+import { isPastDay } from 'utils/date-times/is-past-day'
 
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 
@@ -38,7 +39,10 @@ export function EventContainer({
   onClick,
   classes: inputClasses
 }: Props & ClassesProps<typeof styles>) {
-  const sharedClasses = useSharedStyles()
+  const sharedClasses = useSharedStyles({
+    pastEvent: isPastDay(new Date(event.timestamp * 1000))
+  })
+
   const iconStyles = useIconStyles()
   const classes = useStyles({
     classes: inputClasses,

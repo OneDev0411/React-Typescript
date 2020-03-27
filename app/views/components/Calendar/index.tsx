@@ -463,7 +463,7 @@ export function Calendar({
     <List
       ref={listRef}
       rows={listRows}
-      user={user as IUser}
+      user={user!}
       contact={contact}
       isLoading={isLoading}
       loadingPosition={loadingPosition}

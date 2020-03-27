@@ -12,7 +12,7 @@ interface Props {
 const useStyles = makeStyles(sharedStyles)
 
 export function EmptyState({ event, style }: Props) {
-  const classes = useStyles()
+  const classes = useStyles({})
 
   return (
     <div style={style}>

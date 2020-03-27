@@ -1,5 +1,11 @@
 import { createStyles, Theme, fade } from '@material-ui/core/styles'
 
+import { ClassesProps } from 'utils/ts-utils'
+
+interface StyleProps extends ClassesProps<typeof sharedStyles> {
+  pastEvent?: boolean
+}
+
 export const sharedStyles = (theme: Theme) =>
   createStyles({
     row: {
@@ -14,10 +20,17 @@ export const sharedStyles = (theme: Theme) =>
       display: 'flex',
       alignItems: 'center'
     },
-    title: {
-      color: '#1D1F26', // TODO: use palette
-      ...theme.typography.body2
-    },
+    title: (props: StyleProps) => ({
+      color: props.pastEvent
+        ? theme.palette.grey[600]
+        : theme.palette.common.black,
+      ...theme.typography.body2,
+      '& a': {
+        color: props.pastEvent
+          ? `${theme.palette.grey[600]} !important`
+          : 'inherit'
+      }
+    }),
     time: {
       width: '5rem',
       color: theme.palette.grey[500],
