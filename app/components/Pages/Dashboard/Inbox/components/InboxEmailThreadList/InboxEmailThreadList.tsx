@@ -181,7 +181,7 @@ export default function InboxEmailThreadList({
 
         return {
           moreEmailThreads: emailThreads,
-          finished: !next || Object.values(next).filter(Boolean).length === 0
+          finished: Object.values(next).filter(Boolean).length === 0
         }
       } catch (reason) {
         onSearchStatusChange && onSearchStatusChange(false)

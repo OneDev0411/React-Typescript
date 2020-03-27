@@ -23,7 +23,7 @@ export async function searchEmailThreads<
   associations: SelectedEmailThreadAssociations[] = defaultEmailThreadAssociations as SelectedEmailThreadAssociations[]
 ): Promise<{
   emailThreads: IEmailThread<SelectedEmailThreadAssociations>[]
-  next?: SearchEmailThreadsNext
+  next: SearchEmailThreadsNext
 }> {
   const response = await new Fetch()
     .post('/emails/threads/filter')
