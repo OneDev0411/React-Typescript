@@ -1,5 +1,5 @@
 import React, { useState, ReactNode } from 'react'
-import { Tabs, createStyles, makeStyles, Theme } from '@material-ui/core'
+import { Tabs, makeStyles, Theme } from '@material-ui/core'
 
 export * from './Tab'
 export * from './TabLink'
@@ -24,8 +24,8 @@ interface Props {
   onChangeAction?: (value: SelectedTab) => void
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     container: {
       position: 'relative',
       display: 'flex',
@@ -36,10 +36,22 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1, 0),
       borderBottom: `1px solid ${theme.palette.divider}`
     },
+    tabsFlexContainer: {
+      '& .MuiTab-root': {
+        paddingLeft: 0,
+        paddingRight: theme.spacing(2)
+      }
+    },
+    actionsFlexContainer: {
+      '& .MuiTab-root': {
+        paddingRight: 0
+      }
+    },
     indicator: {
       display: 'flex',
       justifyContent: 'center',
       backgroundColor: 'transparent',
+      marginLeft: theme.spacing(0.75) * -1, // hack
       '& > div': {
         maxWidth: 30,
         width: '100%',
@@ -63,7 +75,10 @@ const useStyles = makeStyles((theme: Theme) =>
       background: theme.palette.background.paper,
       boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.1)'
     }
-  })
+  }),
+  {
+    name: 'PageTabs'
+  }
 )
 
 /**
@@ -157,7 +172,8 @@ export function PageTabs({
         onChange={handleChangeTab}
         classes={{
           root: classes.tabContainer,
-          indicator: classes.indicator
+          indicator: classes.indicator,
+          flexContainer: classes.tabsFlexContainer
         }}
         TabIndicatorProps={{ children: <div /> }}
       >
@@ -173,7 +189,8 @@ export function PageTabs({
             scrollButtons="auto"
             classes={{
               root: classes.tabContainer,
-              indicator: classes.indicator
+              indicator: classes.indicator,
+              flexContainer: classes.actionsFlexContainer
             }}
             TabIndicatorProps={{ children: <div /> }}
           >
