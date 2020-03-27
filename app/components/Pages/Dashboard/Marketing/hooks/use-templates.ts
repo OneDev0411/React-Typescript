@@ -29,8 +29,8 @@ export function useTemplates(
   useEffect(() => {
     let didCancel = false
 
-    async function loadData() {
-      if (brandId == null) {
+    async function fetchTemplates() {
+      if (!brandId) {
         return
       }
 
@@ -53,7 +53,7 @@ export function useTemplates(
       }
     }
 
-    loadData()
+    fetchTemplates()
 
     return () => {
       didCancel = true
