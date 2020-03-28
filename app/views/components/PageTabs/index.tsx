@@ -53,14 +53,8 @@ const useStyles = makeStyles(
       backgroundColor: 'transparent',
       marginLeft: theme.spacing(-0.75), // hack
       '& > div': {
-        maxWidth: 30,
         width: '100%',
-        borderRadius: theme.spacing(
-          theme.shape.borderRadius,
-          theme.shape.borderRadius,
-          0,
-          0
-        ),
+        marginLeft: theme.spacing(0.75),
         backgroundColor: theme.palette.primary.main
       }
     },
