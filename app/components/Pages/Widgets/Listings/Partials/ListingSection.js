@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 
-import S from 'shorti'
-
 import ActionButton from 'views/components/Button/ActionButton'
 import { primary } from 'views/utils/colors'
 
@@ -16,13 +14,26 @@ import { getOptions } from './get-options'
 
 class Section extends Component {
   componentDidMount() {
+    window.addEventListener('resize', this.handleResize)
     this.props.getListing(this.options, this.params)
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.listings.length !== this.props.listings.length) {
-      this.props.updateHeight()
+    if (
+      prevProps.listings.length !== this.props.listings.length ||
+      (prevProps.isFetching &&
+        !this.props.isFetching &&
+        this.props.listings.length === 0)
+    ) {
+      this.props.updateListingsCount(
+        this.props.type,
+        this.props.listings.length
+      )
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize)
   }
 
   get params() {
@@ -51,6 +62,8 @@ class Section extends Component {
     )
   }
 
+  handleResize = () => this.props.updateHeight()
+
   handleListingClick(listing) {
     window.open(`/dashboard/mls/${listing.id}`, '_blank')
   }
@@ -62,64 +75,98 @@ class Section extends Component {
     })
   }
 
-  render() {
-    let showLoadMore
+  getContent = brandColor => {
     const { user, brand, listings } = this.props
-    const brandColor = Brand.color('primary', primary, brand)
     const defaultAvatar = Brand.asset('default_avatar', '', brand)
 
-    if (this.props.listingsInfo.total > listings.length) {
-      showLoadMore = true
+    if (this.props.isFetching && listings.length === 0) {
+      return (
+        <div style={{ textAlign: 'center' }}>
+          <Loading />
+        </div>
+      )
     }
 
     return (
-      <div style={{ overflow: 'auto', marginBottom: '2em' }}>
-        <div
-          style={{
-            textAlign: 'center',
-            display: 'table',
-            width: '100%',
-            padding: '40px',
-            marginBottom: '40px'
-          }}
-        >
-          <h1 style={S('font-50 color-263445 mb-0')}>{this.props.title}</h1>
-          <span style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')} />
-        </div>
-        {listings.length > 0 &&
-          listings.map(listing => (
-            <ListingCard
-              className="listing-card"
-              key={listing.id}
-              brandColor={brandColor}
-              defaultAvatar={defaultAvatar}
-              user={user}
-              listing={listing}
-            />
-          ))}
+      <div>
+        {listings.map(listing => (
+          <ListingCard
+            className="listing-card"
+            key={listing.id}
+            brandColor={brandColor}
+            defaultAvatar={defaultAvatar}
+            user={user}
+            listing={listing}
+          />
+        ))}
         <div className="clearfix" />
-        {this.props.isFetching && (
-          <div style={S('text-center')}>
-            <Loading />
-          </div>
-        )}
-
-        {showLoadMore && (
-          <div style={S('text-center')}>
-            <ActionButton
-              onClick={this.getNextPage}
-              style={{
-                backgroundColor: brandColor,
-                paddingLeft: '3em',
-                paddingRight: '3em'
-              }}
-            >
-              Load More
-            </ActionButton>
-          </div>
-        )}
       </div>
     )
+  }
+
+  render() {
+    const { brand } = this.props
+    const brandColor = Brand.color('primary', primary, brand)
+    let content = this.getContent(brandColor)
+
+    return content ? (
+      <div style={{ overflow: 'auto', padding: '1.5rem' }}>
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center',
+            padding: '0 1rem'
+          }}
+        >
+          <h2
+            style={{
+              fontSize: '2.5rem',
+              marginTop: 0,
+              marginBottom: '1.rem'
+            }}
+          >
+            {this.props.title}
+          </h2>
+          <div
+            style={{
+              width: 80,
+              height: 1,
+              background: '#e2e2e2',
+              marginBottom: '2rem'
+            }}
+          />
+        </div>
+
+        {content}
+
+        {this.props.listings.length > 0 &&
+          this.props.listingsInfo.total > this.props.listings.length && (
+            <>
+              {this.props.isFetching && (
+                <div style={{ textAlign: 'center' }}>
+                  <Loading />
+                </div>
+              )}
+              <div style={{ textAlign: 'center', padding: '2rem 0' }}>
+                <ActionButton
+                  onClick={this.getNextPage}
+                  style={{
+                    backgroundColor: brandColor,
+                    paddingLeft: '3em',
+                    paddingRight: '3em'
+                  }}
+                >
+                  Load More
+                </ActionButton>
+              </div>
+            </>
+          )}
+      </div>
+    ) : null
   }
 }
 
