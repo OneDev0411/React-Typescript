@@ -1,13 +1,12 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-
-import { IAppState } from '../../../../reducers'
 
 import { ACL } from '../../../../constants/acl'
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
+import { selectUnreadEmailThreadsCount } from '../../../../reducers/inbox'
 
 import { useDealsNotificationsNumber } from '../../../../hooks/use-deals-notifications-number'
 import { useChatRoomsNotificationsNumber } from '../../../../hooks/use-chat-rooms-notifications-number'
+import useTypedSelector from '../../../../hooks/use-typeed-selector'
 
 import Acl from '../../../../views/components/Acl'
 import { ScrollableArea } from '../../../../views/components/ScrollableArea'
@@ -35,9 +34,12 @@ const hasWebsitePermission = user =>
   user.agent.office_mlsid === 'CSTPP01'
 
 export default function AppSideNav() {
-  const user = useSelector((state: IAppState) => state.user)
-  const appNotifications = useSelector((state: IAppState) =>
+  const user = useTypedSelector<IUser>(state => state.user)
+  const appNotifications = useTypedSelector(state =>
     selectNotificationNewCount(state.globalNotifications)
+  )
+  const inboxNotificationNumber = useTypedSelector(state =>
+    selectUnreadEmailThreadsCount(state.inbox)
   )
   const dealsNotificationsNumber = useDealsNotificationsNumber()
   const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
@@ -53,7 +55,14 @@ export default function AppSideNav() {
       >
         <SidenavListGroup data-test="side-nav-list">
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/inbox">Inbox</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/inbox">
+              <AppNavbarBadge
+                badgeContent={inboxNotificationNumber}
+                color="primary"
+              >
+                Inbox ({inboxNotificationNumber})
+              </AppNavbarBadge>
+            </SideNavLinkItem>
           </Acl.Crm>
 
           <Acl.Crm>

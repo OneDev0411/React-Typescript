@@ -44,6 +44,9 @@ import { isLoadedContactAttrDefs } from '../reducers/contacts/attributeDefs'
 import { selectListings } from '../reducers/listings'
 import getFavorites from '../store_actions/listings/favorites/get-favorites'
 
+// inbox
+import { fetchUnreadEmailThreadsCount } from '../store_actions/inbox'
+
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 
@@ -148,6 +151,9 @@ class App extends Component {
 
       // load saved listings
       dispatch(getFavorites(user))
+
+      // fetch the number of unread email threads
+      dispatch(fetchUnreadEmailThreadsCount())
 
       // set user for full story
       this.setFullStoryUser(user)
