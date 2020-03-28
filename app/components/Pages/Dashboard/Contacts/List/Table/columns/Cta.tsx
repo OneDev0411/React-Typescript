@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import { Box, makeStyles, createStyles, Theme } from '@material-ui/core'
+import {
+  Box,
+  IconButton,
+  makeStyles,
+  createStyles,
+  Theme
+} from '@material-ui/core'
 
 import { IAppState } from 'reducers'
 
@@ -9,9 +15,10 @@ import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 
 import EmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
+import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 import Chat from 'components/SvgIcons/Chat/IconChat'
 
-import { toggleChatbar } from '../../../../../../../store_actions/chatroom'
+import ChatButton from '../../../components/ChatButton'
 
 interface Props {
   contact: IContact
@@ -28,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
         marginRight: theme.spacing(0.5)
       },
       '& svg': {
+        width: 'unset',
         height: theme.spacing(2.25)
       },
       '&:hover svg': {
@@ -38,13 +46,11 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export default function CtaAction({ contact }: Props) {
-  const dispatch = useDispatch()
-  const user = useSelector((state: IAppState) => state.user as IUser)
+  const user: IUser = useSelector((state: IAppState) => state.user)
   const [showEmailComposer, setShowEmailComposer] = useState<boolean>(false)
   const classes = useStyles()
 
   const toggleEmailComposer = () => setShowEmailComposer(!showEmailComposer)
-  const toggleChat = () => dispatch(toggleChatbar())
 
   return (
     <>
@@ -60,12 +66,26 @@ export default function CtaAction({ contact }: Props) {
         />
       )}
       <Box className={classes.container}>
-        <Box className={classes.item} onClick={toggleChat}>
-          <Chat />
-        </Box>
-        <Box className={classes.item} onClick={toggleEmailComposer}>
+        <ChatButton
+          contact={contact}
+          render={({ onClick, isDisabled }) => (
+            <IconButton
+              size="small"
+              className={classes.item}
+              disabled={isDisabled}
+              onClick={onClick}
+            >
+              {!isDisabled ? <Chat /> : <Loading />}
+            </IconButton>
+          )}
+        />
+        <IconButton
+          size="small"
+          className={classes.item}
+          onClick={toggleEmailComposer}
+        >
           <EmailOutline />
-        </Box>
+        </IconButton>
       </Box>
     </>
   )
