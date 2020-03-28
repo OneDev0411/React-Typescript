@@ -75,7 +75,7 @@ export default function AppSideNav() {
                 badgeContent={inboxNotificationNumber}
                 color="primary"
               >
-                Inbox ({inboxNotificationNumber})
+                Inbox
               </AppNavbarBadge>
             </SideNavLinkItem>
           </Acl.Crm>
