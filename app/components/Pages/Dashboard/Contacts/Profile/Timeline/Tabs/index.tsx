@@ -1,6 +1,7 @@
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
+import { getNotes } from 'models/contacts/helpers/get-notes'
 import { PageTabs, Tab } from 'components/PageTabs'
 
 import AddEvent from '../AddEvent'
@@ -42,6 +43,7 @@ export const useStyles = makeStyles((theme: Theme) =>
 
 export function TabsFilter(props: Props) {
   const classes = useStyles()
+  const notes = getNotes(props.contact)
 
   return (
     <div className={classes.container}>
@@ -52,7 +54,11 @@ export function TabsFilter(props: Props) {
           onChange={props.onChangeFilter}
           tabs={[
             <Tab key={0} value={Filters.Events} label="Relationship" />,
-            <Tab key={1} value={Filters.Notes} label="Notes" />
+            <Tab
+              key={1}
+              value={Filters.Notes}
+              label={`Notes (${notes.length})`}
+            />
           ]}
         />
       </div>
