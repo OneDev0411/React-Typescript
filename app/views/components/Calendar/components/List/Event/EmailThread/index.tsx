@@ -7,14 +7,13 @@ import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
 import { iconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { findInPeopleByEmail } from 'utils/find-in-people-by-email'
-
+import { getPersonDisplayName } from 'utils/get-person-display-name'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import { ListContext } from '../../context'
 import { EventContainer } from '../components/EventContainer'
 import { sharedStyles } from '../styles'
 import { EventBadge } from '../components/EventBadge'
-import { EmailRecipient } from '../../../../../EmailRecipient'
 
 interface Props {
   style: React.CSSProperties
@@ -53,13 +52,13 @@ export function EmailThread({ style, event }: Props) {
           </a>
           <span className={classes.splitter}>—</span>
           {recipients.map((recipient, index) => {
+            const person = findInPeopleByEmail(event.people, recipient)
+            const displayName = getPersonDisplayName(person)
+
             return (
               <React.Fragment key={index}>
                 {index !== 0 && <>,&nbsp;</>}
-                <EmailRecipient
-                  recipient={recipient}
-                  person={findInPeopleByEmail(event.people, recipient)}
-                />
+                {displayName || recipient}
               </React.Fragment>
             )
           })}
