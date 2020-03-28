@@ -94,10 +94,15 @@ const VirtualList: React.FC<Props> = ({
   }
 
   return (
-    <Container>
+    <Container
+      style={{
+        width: props.width,
+        height: props.height
+      }}
+    >
       {isLoading && (
         <Loading loadingPosition={loadingPosition}>
-          <Spinner />
+          <Spinner style={{ padding: 0 }} />
         </Loading>
       )}
 

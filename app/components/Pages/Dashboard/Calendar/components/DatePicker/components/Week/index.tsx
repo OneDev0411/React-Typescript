@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       justifyContent: 'center',
       padding: theme.spacing(0.5, 0),
-      width: '3.5rem',
+      width: '4rem',
       color: theme.palette.grey[600],
       backgroundColor: theme.palette.grey[100],
       cursor: 'pointer',

@@ -23,7 +23,7 @@ interface Props {
 const useStyles = makeStyles(sharedStyles)
 
 export function EmailThread({ style, event }: Props) {
-  const classes = useStyles()
+  const classes = useStyles({})
   const { setSelectedEvent } = useContext(ListContext)
   const thread = event.full_thread
 

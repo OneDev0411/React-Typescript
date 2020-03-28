@@ -26,7 +26,7 @@ export default function CalendarPage(props: WithRouterProps) {
 
   return (
     <div className={classes.container}>
-      <GlobalHeader title="Calendar" />
+      <GlobalHeader title="Calendar" noPadding />
 
       <div className={classes.topSide}>
         <Filters onChange={setFilter} />

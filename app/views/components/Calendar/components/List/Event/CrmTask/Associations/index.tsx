@@ -28,7 +28,7 @@ const useSharedStyles = makeStyles(sharedStyles)
 
 export function Associations({ event, onEventChange }: Props) {
   const classes = useStyles()
-  const sharedStyles = useSharedStyles()
+  const sharedStyles = useSharedStyles({})
   const { setSelectedEvent } = useContext(ListContext)
 
   if (!event.people) {

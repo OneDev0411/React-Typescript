@@ -60,7 +60,7 @@ export const Filters = {
 
 const TAB_ITEMS = [
   {
-    label: 'All',
+    label: 'All Deals',
     filter: Filters.all,
     link: ''
   },

@@ -23,7 +23,7 @@ interface Props {
 
 const useStyles = makeStyles(sharedStyles)
 export function CrmTask({ style, event, onEventChange }: Props) {
-  const classes = useStyles()
+  const classes = useStyles({})
   const { setSelectedEvent } = useContext(ListContext)
 
   const handleSelectEvent = (e: MouseEvent<HTMLElement>) => {
