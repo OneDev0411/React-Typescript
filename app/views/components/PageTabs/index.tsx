@@ -51,7 +51,7 @@ const useStyles = makeStyles(
       display: 'flex',
       justifyContent: 'center',
       backgroundColor: 'transparent',
-      marginLeft: theme.spacing(0.75) * -1, // hack
+      marginLeft: theme.spacing(-0.75), // hack
       '& > div': {
         maxWidth: 30,
         width: '100%',
