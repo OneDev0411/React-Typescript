@@ -35,7 +35,7 @@ export function EmailRecipient({ recipient, person }: Props) {
       {displayName && emailAddress ? (
         <>
           {displayName}
-          {!!emailAddress && <>&nbsp;&lt;{emailAddress}&gt;</>}
+          {emailAddress && ` <${emailAddress}>`}
         </>
       ) : (
         displayName || emailAddress
