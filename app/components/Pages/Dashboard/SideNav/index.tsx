@@ -1,12 +1,19 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
 
 import { ACL } from '../../../../constants/acl'
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
 import { selectUnreadEmailThreadsCount } from '../../../../reducers/inbox'
+import { InboxAction } from '../../../../reducers/inbox/types'
+
+import { fetchUnreadEmailThreadsCount } from '../../../../store_actions/inbox'
 
 import { useDealsNotificationsNumber } from '../../../../hooks/use-deals-notifications-number'
 import { useChatRoomsNotificationsNumber } from '../../../../hooks/use-chat-rooms-notifications-number'
 import useTypedSelector from '../../../../hooks/use-typeed-selector'
+
+import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
 import Acl from '../../../../views/components/Acl'
 import { ScrollableArea } from '../../../../views/components/ScrollableArea'
@@ -44,6 +51,14 @@ export default function AppSideNav() {
   const dealsNotificationsNumber = useDealsNotificationsNumber()
   const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
   const logoSrc = Brand.asset('office_logo', '/static/images/logo.svg')
+
+  const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
+
+  function handleEmailThreadEvent(): void {
+    dispatch(fetchUnreadEmailThreadsCount())
+  }
+
+  useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
 
   return (
     <Sidenav>
