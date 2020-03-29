@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Box } from '@material-ui/core'
 
-import { PageTabs, Tab, TabSpacer } from 'components/PageTabs'
+import { PageTabs, Tab } from 'components/PageTabs'
 import SavedSegments from 'components/Grid/SavedSegments/List'
 import Badge from 'components/Badge'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
@@ -135,10 +135,9 @@ export const ContactsTabs = ({
             key="saved-list"
             value="saved-list"
             label={<SavedSegments {...savedListProps} />}
-          />,
-          <TabSpacer key="space" />,
-          <Tab key="sort" label={<SortFields {...sortProps} />} />
+          />
         ]}
+        actions={[<Tab key="sort" label={<SortFields {...sortProps} />} />]}
       />
       {filter.show && (
         <ContactFilters
