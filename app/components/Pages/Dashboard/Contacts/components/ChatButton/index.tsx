@@ -1,9 +1,15 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  ReactNode
+} from 'react'
 import { AnyAction } from 'redux'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { Button } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import { IAppState } from 'reducers'
 
@@ -12,26 +18,39 @@ import { createRoom } from 'actions/chatroom/room'
 import ChatIcon from 'components/SvgIcons/Chat/IconChat'
 
 // Chatroom in Dashboard
-import Chatroom from '../../../../Chatroom/Util/chatroom'
+import Chatroom from '../../../Chatroom/Util/chatroom'
 
-import { useIconStyles } from '../../../../../../../styles/use-icon-styles'
+import { useIconStyles } from '../../../../../../styles/use-icon-styles'
 
-import { styles } from './styles'
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      button: {
+        marginRight: theme.spacing(2),
+        marginBottom: theme.spacing(2),
 
-const useStyles = makeStyles(styles, { name: 'ChatButton' })
+        '&[disabled] svg': {
+          fill: theme.palette.action.disabled
+        }
+      }
+    }),
+  { name: 'ChatButton' }
+)
 
 interface Props {
   contact: IContact
-  dispatch: ThunkDispatch<any, any, AnyAction>
-  user: IUser
+  render?: (props: { onClick: () => void; isDisabled: boolean }) => ReactNode
 }
 
-function ChatButton({ contact, dispatch, user }: Props) {
+function ChatButton({ contact, render }: Props) {
+  const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
+  const user: IUser = useSelector((state: IAppState) => state.user)
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const { email, phone_number, users } = contact
-  const [isChattable, setIsChattable] = useState(false)
-  const [isCreatingRoom, setIsCreatingRoom] = useState(false)
+  const [isChattable, setIsChattable] = useState<boolean>(false)
+  const [isCreatingRoom, setIsCreatingRoom] = useState<boolean>(false)
+  const isDisabled: boolean = !isChattable || isCreatingRoom
 
   // User  can chat just with contacts which at least has
   // email or phone or user attribute.
@@ -71,10 +90,14 @@ function ChatButton({ contact, dispatch, user }: Props) {
     }
   }, [dispatch, recipients])
 
+  if (render) {
+    return <>{render({ onClick, isDisabled })}</>
+  }
+
   return (
     <Button
       className={classes.button}
-      disabled={!isChattable || isCreatingRoom}
+      disabled={isDisabled}
       onClick={onClick}
       size="small"
       variant="outlined"
@@ -85,4 +108,4 @@ function ChatButton({ contact, dispatch, user }: Props) {
   )
 }
 
-export default connect(({ user }: IAppState) => ({ user }))(ChatButton)
+export default ChatButton

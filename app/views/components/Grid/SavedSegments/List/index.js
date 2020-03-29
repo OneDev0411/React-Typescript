@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withStyles } from '@material-ui/core/styles'
+import { ListItem, withStyles } from '@material-ui/core'
 
 import {
   // eslint-disable-next-line import/named
@@ -98,6 +98,11 @@ class SegmentsList extends React.Component {
         }}
         listPlugin={{
           style: { width: 220 }
+        }}
+        morePlugin={{
+          textContainer: ({ children }) => (
+            <ListItem button>{children}</ListItem>
+          )
         }}
         renderMenu={({ close }) =>
           props.list.map(item => {

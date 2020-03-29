@@ -8,7 +8,13 @@ export const Tab = withStyles(theme => ({
     ...theme.typography.body1,
     '&.Mui-selected': {
       ...theme.typography.subtitle1,
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      '& button[aria-controls="menu-list-grow"]': {
+        color: theme.palette.primary.main,
+        '& svg': {
+          fill: theme.palette.primary.main
+        }
+      }
     }
   }
 }))((props: TabProps) => <BaseTab {...props} />)

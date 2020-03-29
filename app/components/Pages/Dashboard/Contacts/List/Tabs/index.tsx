@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Box } from '@material-ui/core'
 
-import { PageTabs, Tab, TabSpacer } from 'components/PageTabs'
+import { PageTabs, Tab } from 'components/PageTabs'
 import SavedSegments from 'components/Grid/SavedSegments/List'
 import Badge from 'components/Badge'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
@@ -85,7 +85,6 @@ export const ContactsTabs = ({
   const isSyncedListActive =
     activeSegment && activeSegment.id === SYNCED_CONTACTS_LIST_ID
   const activeTab = getActiveTab({ isAllContactsActive, isSyncedListActive })
-
   const clickHandler = async (type: string) => {
     await dispatch(resetActiveFilters(CONTACTS_SEGMENT_NAME))
     await dispatch(changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type))
@@ -99,6 +98,26 @@ export const ContactsTabs = ({
     handleFilterChange({ filters: [], flows: [] }, true)
   }
 
+  const syncedContactsTab =
+    syncedContacts.accounts > 0 ? (
+      <Tab
+        key="synced-contact"
+        value="synced-contact"
+        label={
+          <span onClick={() => clickHandler(SYNCED_CONTACTS_LIST_ID)}>
+            Synced Contacts
+            {syncedContacts.contactsCount > 0 && (
+              <Box display="inline-flex" ml={0.5}>
+                <Badge large appearance="success">
+                  {syncedContacts.contactsCount}
+                </Badge>
+              </Box>
+            )}
+          </span>
+        }
+      />
+    ) : null
+
   return (
     <>
       <PageTabs
@@ -111,31 +130,14 @@ export const ContactsTabs = ({
               <span onClick={() => clickHandler('default')}>All Contacts</span>
             }
           />,
+          syncedContactsTab,
           <Tab
             key="saved-list"
             value="saved-list"
             label={<SavedSegments {...savedListProps} />}
-          />,
-          <Tab
-            disabled={syncedContacts.accounts <= 0}
-            key="synced-contact"
-            value="synced-contact"
-            label={
-              <span onClick={() => clickHandler(SYNCED_CONTACTS_LIST_ID)}>
-                Synced Contacts
-                {syncedContacts.contactsCount > 0 && (
-                  <Box display="inline-flex" ml={0.5}>
-                    <Badge large appearance="success">
-                      {syncedContacts.contactsCount}
-                    </Badge>
-                  </Box>
-                )}
-              </span>
-            }
-          />,
-          <TabSpacer key="space" />,
-          <Tab key="sort" label={<SortFields {...sortProps} />} />
+          />
         ]}
+        actions={[<Tab key="sort" label={<SortFields {...sortProps} />} />]}
       />
       {filter.show && (
         <ContactFilters

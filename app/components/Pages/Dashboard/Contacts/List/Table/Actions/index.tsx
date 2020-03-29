@@ -32,8 +32,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      '& button': {
-        marginLeft: theme.spacing(1)
+      '& > *:not(:last-child)': {
+        marginRight: theme.spacing(1)
       }
     },
     moreActionContainer: {
@@ -72,14 +72,24 @@ export function TableActions({
   const toggleMoreAction = (event: React.MouseEvent<HTMLElement>) => {
     setMoreActionEl(moreActionEl ? null : event.currentTarget)
   }
-
+  const {
+    selection: {
+      selectedRowIds,
+      excludedRows,
+      isAllRowsSelected,
+      isEntireRowsSelected
+    }
+  } = state
   const isMoreActionOpen = Boolean(moreActionEl)
   const moreActionID = isMoreActionOpen ? 'more-action-popper' : undefined
 
-  const entireMode = state.selection.isEntireRowsSelected
-  const isAnyRowsSelected =
-    state.selection.isEntireRowsSelected ||
-    state.selection.selectedRowIds.length > 0
+  const isAllDisable = !(
+    isEntireRowsSelected ||
+    isAllRowsSelected ||
+    selectedRowIds.length > 0
+  )
+  const isEntireModeDisable = isEntireRowsSelected ? true : isAllDisable
+  const isMergeDisable = !(isAllRowsSelected || selectedRowIds.length >= 2)
 
   const deselectRows = () => dispatch(resetRows())
   const deselectAndReload = () => {
@@ -91,42 +101,39 @@ export function TableActions({
     <div className={classes.container}>
       <ActionWrapper
         atLeast="one"
-        bulkMode={entireMode}
+        bulkMode={isEntireRowsSelected}
         action="sending an email"
-        disabled={!isAnyRowsSelected}
+        disabled={isEntireModeDisable}
       >
-        <Email
-          disabled={!isAnyRowsSelected}
-          selectedRows={state.selection.selectedRowIds}
-        />
+        <Email disabled={isEntireModeDisable} selectedRows={selectedRowIds} />
       </ActionWrapper>
 
       <ActionWrapper
         atLeast="one"
-        bulkMode={entireMode}
+        bulkMode={isEntireRowsSelected}
         action="marketing"
-        disabled={!isAnyRowsSelected}
+        disabled={isEntireModeDisable}
       >
         <SendMlsListingCard
-          disabled={!isAnyRowsSelected}
-          selectedRows={state.selection.selectedRowIds}
+          disabled={isEntireModeDisable}
+          selectedRows={selectedRowIds}
         >
           Marketing
         </SendMlsListingCard>
       </ActionWrapper>
 
       <ActionWrapper
-        bulkMode={entireMode}
+        bulkMode={isEntireRowsSelected}
         atLeast="one"
         action="tagging"
-        disabled={!isAnyRowsSelected}
+        disabled={isAllDisable}
       >
         <TagContacts
-          disabled={!isAnyRowsSelected}
-          entireMode={entireMode}
+          disabled={isAllDisable}
+          entireMode={isEntireRowsSelected}
           totalRowsCount={totalRowsCount}
-          excludedRows={state.selection.excludedRows}
-          selectedRows={state.selection.selectedRowIds}
+          excludedRows={excludedRows}
+          selectedRows={selectedRowIds}
           filters={filters.attributeFilters}
           searchText={filters.query}
           conditionOperator={filters.filter_type}
@@ -138,28 +145,28 @@ export function TableActions({
 
       <ActionWrapper
         atLeast="one"
-        bulkMode={entireMode}
+        bulkMode={isEntireRowsSelected}
         action="creating an event"
-        disabled={!isAnyRowsSelected}
+        disabled={isEntireModeDisable}
       >
         <CreateEvent
-          disabled={!isAnyRowsSelected}
-          selectedRows={state.selection.selectedRowIds}
+          disabled={isEntireModeDisable}
+          selectedRows={selectedRowIds}
           submitCallback={deselectAndReload}
         />
       </ActionWrapper>
 
       <AddToFlowAction
-        entireMode={entireMode}
-        excludedRows={state.selection.excludedRows}
-        selectedRows={state.selection.selectedRowIds}
+        entireMode={isEntireRowsSelected}
+        excludedRows={excludedRows}
+        selectedRows={selectedRowIds}
         filters={filters}
         resetSelectedRows={deselectRows}
         reloadContacts={reloadContacts}
       />
       <ExportContacts
-        excludedRows={state.selection.excludedRows}
-        exportIds={state.selection.selectedRowIds}
+        excludedRows={excludedRows}
+        exportIds={selectedRowIds}
         filters={filters.attributeFilters}
         flows={filters.flows}
         crmTasks={filters.crm_tasks}
@@ -182,16 +189,12 @@ export function TableActions({
         className={classes.moreActionContainer}
       >
         <List>
-          <ListItem
-            button
-            disabled={!isAnyRowsSelected}
-            onClick={onRequestDelete}
-          >
+          <ListItem button disabled={isAllDisable} onClick={onRequestDelete}>
             <ActionWrapper
-              bulkMode={entireMode}
+              bulkMode={isEntireRowsSelected}
               atLeast="one"
               action="delete"
-              disabled={!isAnyRowsSelected}
+              disabled={isAllDisable}
             >
               <ListItemText>
                 <Typography color="error">Delete</Typography>
@@ -199,11 +202,9 @@ export function TableActions({
             </ActionWrapper>
           </ListItem>
           <MergeContacts
-            acEntireMode={entireMode}
-            disabled={
-              !isAnyRowsSelected || state.selection.selectedRowIds.length < 2
-            }
-            selectedRows={state.selection.selectedRowIds}
+            isEntireMode={isEntireRowsSelected}
+            disabled={isMergeDisable}
+            selectedRows={selectedRowIds}
             submitCallback={deselectAndReload}
           />
         </List>

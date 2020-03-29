@@ -68,6 +68,9 @@ export class ShowMoreLess extends Component {
   }
 
   renderOpenState() {
+    const { textContainer: Container } = this.props
+    const text = this.renderShowLess()
+
     return (
       <Flex
         column={this.props.column}
@@ -75,12 +78,15 @@ export class ShowMoreLess extends Component {
         style={this.props.style}
       >
         {this.props.children}
-        {this.renderShowLess()}
+        {Container ? <Container>{text}</Container> : text}
       </Flex>
     )
   }
 
   renderCloseState() {
+    const { textContainer: Container } = this.props
+    const text = this.renderShowMore()
+
     return (
       <Flex
         column={this.props.column}
@@ -90,22 +96,20 @@ export class ShowMoreLess extends Component {
         {React.Children.map(this.props.children, (child, i) =>
           i < this.props.count ? child : null
         )}
-        {this.renderShowMore()}
+        {Container ? <Container>{text}</Container> : text}
       </Flex>
     )
   }
 
   render() {
-    const childrenCount = React.Children.count(this.props.children)
+    const { children, count } = this.props
+    const { isOpen } = this.state
+    const childrenCount = React.Children.count(children)
 
-    if (childrenCount <= this.props.count) {
+    if (childrenCount <= count) {
       return this.renderAllChildren()
     }
 
-    if (this.state.isOpen) {
-      return this.renderOpenState()
-    }
-
-    return this.renderCloseState()
+    return isOpen ? this.renderOpenState() : this.renderCloseState()
   }
 }

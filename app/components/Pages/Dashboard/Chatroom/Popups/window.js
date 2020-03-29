@@ -55,6 +55,10 @@ export default ({
     left += 20 * (number - 1)
   }
 
+  if (!room.id) {
+    return null
+  }
+
   return (
     <ClickOutside
       onClickOutside={() => {
