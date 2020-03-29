@@ -47,7 +47,8 @@ deploy_irish:
     - apt-get install -y ruby-dev
     - gem install dpl
   script:
-    - dpl --provider=heroku --app=rechat-irish --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD  environment:
+    - dpl --provider=heroku --app=rechat-irish --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
+  environment:
     name: irish
     url: https://irish.rechat.com
   only:
