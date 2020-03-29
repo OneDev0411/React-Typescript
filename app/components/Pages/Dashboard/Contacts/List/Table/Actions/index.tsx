@@ -202,7 +202,7 @@ export function TableActions({
             </ActionWrapper>
           </ListItem>
           <MergeContacts
-            acEntireMode={isEntireRowsSelected}
+            isEntireMode={isEntireRowsSelected}
             disabled={isMergeDisable}
             selectedRows={selectedRowIds}
             submitCallback={deselectAndReload}

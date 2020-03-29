@@ -27,7 +27,7 @@ class MergeContacts extends React.Component {
     return (
       <ListItem button disabled={this.props.disabled} onClick={this.onClick}>
         <ActionWrapper
-          bulkMode={this.props.acEntireMode}
+          bulkMode={this.props.isEntireMode}
           action="merging"
           atLeast="two"
           disabled={this.props.disabled}
