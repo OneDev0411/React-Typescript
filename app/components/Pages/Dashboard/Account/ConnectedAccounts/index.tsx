@@ -3,7 +3,7 @@ import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
-import { List, Box } from '@material-ui/core'
+import { List, Box, Paper, Grid, Typography } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 
 import { IAppState } from 'reducers'
@@ -15,8 +15,9 @@ import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-accou
 import LoadingContainer from 'components/LoadingContainer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import ConnectAccounts from './ConnectAccounts'
+import ConnectAccount from './ConnectAccount'
 import { ConnectedAccount } from './ConnectedAccount'
+import ConnectAccountButtons from './ConnectAccountButtons'
 
 interface Props {
   accounts: IOAuthAccount[]
@@ -50,26 +51,45 @@ function ConnectedAccounts({
           <LoadingContainer style={{}} />
         </Box>
       ) : accounts.length === 0 ? (
-        <ConnectAccounts />
+        <ConnectAccount />
       ) : (
-        <List disablePadding>
-          {accounts.map(account => (
-            <ConnectedAccount
-              account={account}
-              key={account.id}
-              onSync={syncOAuthAccount}
-              onDelete={(provider, accountId) => {
-                confirmation.setConfirmationModal({
-                  message: `Your account will be disconnected and 
+        <>
+          <Box marginBottom={1.5}>
+            <Paper variant="outlined">
+              <Box paddingX={3} paddingY={2}>
+                <Grid container alignItems="center">
+                  <Grid item xs>
+                    <Typography variant="subtitle2">
+                      Connect other accounts
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <ConnectAccountButtons size="small" />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Paper>
+          </Box>
+
+          <List disablePadding>
+            {accounts.map(account => (
+              <ConnectedAccount
+                account={account}
+                key={account.id}
+                onSync={syncOAuthAccount}
+                onDelete={(provider, accountId) => {
+                  confirmation.setConfirmationModal({
+                    message: `Your account will be disconnected and 
                         removed but imported contacts and emails will be preserved.`,
-                  onConfirm: () => {
-                    disconnectOAuthAccount(provider, accountId)
-                  }
-                })
-              }}
-            />
-          ))}
-        </List>
+                    onConfirm: () => {
+                      disconnectOAuthAccount(provider, accountId)
+                    }
+                  })
+                }}
+              />
+            ))}
+          </List>
+        </>
       )}
     </>
   )
