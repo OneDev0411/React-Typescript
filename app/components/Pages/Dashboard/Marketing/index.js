@@ -47,7 +47,7 @@ export function MarketingLayout({ params, router, render }) {
         <title>Marketing | Rechat</title>
       </Helmet>
 
-      <PageLayout>
+      <PageLayout position="relative" overflow="hidden">
         <PageLayout.Header title="Marketing Center" />
         <PageLayout.Main>
           <Tabs

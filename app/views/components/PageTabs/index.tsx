@@ -60,15 +60,33 @@ const useStyles = makeStyles(
       }
     },
     megaMenuContainer: {
-      padding: theme.spacing(2.5, 1.5),
+      padding: theme.spacing(2.5, 0),
       position: 'absolute',
       top: 57,
       left: 0,
       width: '100%',
-      minHeight: 250,
+      minHeight: 350,
       zIndex: theme.zIndex.gridAction,
       background: theme.palette.background.paper,
-      boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.1)'
+      boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.1)',
+      '&::after,&::before': {
+        // hack for having edge to edge megamenu
+        position: 'absolute',
+        content: "''",
+        top: 0,
+        width: '50%',
+        height: '100%',
+        background: theme.palette.background.paper,
+        zIndex: -1
+      },
+      '&::before': {
+        left: '-49%',
+        boxShadow: '-15px 10px 15px rgba(0, 0, 0, 0.1)'
+      },
+      '&::after': {
+        right: '-49%',
+        boxShadow: '15px 10px 15px rgba(0, 0, 0, 0.1)'
+      }
     }
   }),
   {
