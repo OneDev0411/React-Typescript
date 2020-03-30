@@ -22,23 +22,6 @@ async function run() {
   )
 
   console.log('[ + ] Static assets are copied'.magenta)
-
-  fs.copySync(
-    path.join(appConfig.compile.entry, 'static/pages/terms/index.html'),
-    path.join(appConfig.compile.output, 'terms/index.html')
-  )
-
-  fs.copySync(
-    path.join(appConfig.compile.entry, 'static/pages/terms/mls/index.html'),
-    path.join(appConfig.compile.output, 'terms/mls/index.html')
-  )
-
-  fs.copySync(
-    path.join(appConfig.compile.entry, 'static/pages/privacy/index.html'),
-    path.join(appConfig.compile.output, 'privacy/index.html')
-  )
-
-  console.log('[ + ] Template files copied'.magenta)
 }
 
 function compile() {
