@@ -7,6 +7,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
+import Webpackbar from 'webpackbar'
 
 import moment from 'moment'
 
@@ -52,9 +53,18 @@ webpackConfig.optimization.minimizer = [
   new TerserPlugin({
     cache: true,
     sourceMap: true,
+    parallel: true,
     exclude: /grapesjs/
   })
 ]
+
+webpackConfig.plugins.push(
+  new Webpackbar({
+    profile: true,
+    fancy: false,
+    basic: true
+  })
+)
 
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
