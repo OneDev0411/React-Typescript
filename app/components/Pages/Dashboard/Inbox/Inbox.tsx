@@ -1,14 +1,17 @@
 import React, { useState, useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { Grid, Theme, Divider, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
+import Helmet from 'react-helmet'
 import classNames from 'classnames'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
+
+import useTypedSelector from 'hooks/use-typeed-selector'
 
 import GlobalPageLayout from 'components/GlobalPageLayout'
 
@@ -51,9 +54,12 @@ const useStyles = makeStyles(
 export default function Inbox({ params }: WithRouterProps) {
   const selectedEmailThreadId: UUID | undefined = params.emailThreadId
 
-  const accounts = useSelector<IAppState, IOAuthAccount[]>(
-    ({ contacts: { oAuthAccounts } }) =>
-      selectAllConnectedAccounts(oAuthAccounts)
+  const unreadEmailThreadsCount = useTypedSelector(state =>
+    selectUnreadEmailThreadsCount(state.inbox)
+  )
+
+  const accounts = useTypedSelector(({ contacts: { oAuthAccounts } }) =>
+    selectAllConnectedAccounts(oAuthAccounts)
   )
   const noConnectedAccounts = accounts.length === 0
 
@@ -82,64 +88,76 @@ export default function Inbox({ params }: WithRouterProps) {
   const classes = useStyles()
 
   return (
-    <GlobalPageLayout className={classes.layout}>
-      <Box paddingLeft={5} flex="0 1 auto">
-        {initializing || noConnectedAccounts ? (
-          <GlobalPageLayout.Header title="Inbox" />
-        ) : (
-          <GlobalPageLayout.HeaderWithSearch
-            title="Inbox"
-            onSearch={
-              query =>
-                setSearchQuery(searchQuery => query || (searchQuery && query)) // Keep it undefined until there are actually some query.
-            }
-            SearchInputProps={{
-              placeholder: 'Search emails',
-              isLoading: searchStatus
-            }}
-          />
-        )}
-      </Box>
-      <GlobalPageLayout.Main
-        height={0}
-        flex="1 1 auto"
-        display="flex"
-        flexDirection="column"
-      >
-        <Box paddingLeft={5}>
-          <Divider />
+    <>
+      <Helmet>
+        <title>
+          Inbox{unreadEmailThreadsCount ? ` (${unreadEmailThreadsCount})` : ''}{' '}
+          | Rechat
+        </title>
+      </Helmet>
+
+      <GlobalPageLayout className={classes.layout}>
+        <Box paddingLeft={5} flex="0 1 auto">
+          {initializing || noConnectedAccounts ? (
+            <GlobalPageLayout.Header title="Inbox" />
+          ) : (
+            <GlobalPageLayout.HeaderWithSearch
+              title="Inbox"
+              onSearch={
+                query =>
+                  setSearchQuery(searchQuery => query || (searchQuery && query)) // Keep it undefined until there are actually some query.
+              }
+              SearchInputProps={{
+                placeholder: 'Search emails',
+                isLoading: searchStatus
+              }}
+            />
+          )}
         </Box>
-        {initializing ? null : noConnectedAccounts ? (
-          <InboxConnectAccount />
-        ) : (
-          <Grid container spacing={0} className={classes.body}>
-            <Grid item className={classNames(classes.list, classes.fullHeight)}>
-              <InboxEmailThreadList
-                selectedEmailThreadId={selectedEmailThreadId}
-                onSelectEmailThread={setSelectedEmailThreadId}
-                searchQuery={searchQuery}
-                onSearchStatusChange={setSearchStatus}
-                onEmailThreadsUpdate={handleEmailThreadsUpdate}
-              />
+        <GlobalPageLayout.Main
+          height={0}
+          flex="1 1 auto"
+          display="flex"
+          flexDirection="column"
+        >
+          <Box paddingLeft={5}>
+            <Divider />
+          </Box>
+          {initializing ? null : noConnectedAccounts ? (
+            <InboxConnectAccount />
+          ) : (
+            <Grid container spacing={0} className={classes.body}>
+              <Grid
+                item
+                className={classNames(classes.list, classes.fullHeight)}
+              >
+                <InboxEmailThreadList
+                  selectedEmailThreadId={selectedEmailThreadId}
+                  onSelectEmailThread={setSelectedEmailThreadId}
+                  searchQuery={searchQuery}
+                  onSearchStatusChange={setSearchStatus}
+                  onEmailThreadsUpdate={handleEmailThreadsUpdate}
+                />
+              </Grid>
+              <Grid
+                item
+                xs
+                className={classNames(
+                  classes.conversation,
+                  emailThreadCount === 0 && classes.conversationHidden,
+                  classes.fullHeight
+                )}
+              >
+                <InboxEmailThread
+                  key={selectedEmailThreadId}
+                  emailThreadId={selectedEmailThreadId}
+                  onClose={inboxEmailThreadOnCloseMemoized}
+                />
+              </Grid>
             </Grid>
-            <Grid
-              item
-              xs
-              className={classNames(
-                classes.conversation,
-                emailThreadCount === 0 && classes.conversationHidden,
-                classes.fullHeight
-              )}
-            >
-              <InboxEmailThread
-                key={selectedEmailThreadId}
-                emailThreadId={selectedEmailThreadId}
-                onClose={inboxEmailThreadOnCloseMemoized}
-              />
-            </Grid>
-          </Grid>
-        )}
-      </GlobalPageLayout.Main>
-    </GlobalPageLayout>
+          )}
+        </GlobalPageLayout.Main>
+      </GlobalPageLayout>
+    </>
   )
 }
