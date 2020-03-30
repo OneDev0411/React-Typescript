@@ -116,7 +116,7 @@ function TemplatesList(props) {
         actions={
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={() => {
               setPreviewModalOpen(false)
               setActionTriggered(true)
