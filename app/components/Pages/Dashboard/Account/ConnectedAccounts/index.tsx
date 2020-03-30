@@ -1,32 +1,21 @@
-import { OAuthProvider } from 'constants/contacts'
-
-import * as React from 'react'
-import { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
+import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
-
+import { ThunkDispatch } from 'redux-thunk'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
+import { List, Box } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 
-import { Box, Button, List } from '@material-ui/core'
-
-import { AnyAction } from 'redux'
-
-import { ThunkDispatch } from 'redux-thunk'
-
 import { IAppState } from 'reducers'
-
-import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
-import Loading from 'partials/Loading'
-import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
-import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
-
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
 
-import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import LoadingContainer from 'components/LoadingContainer'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
-
+import ConnectAccounts from './ConnectAccounts'
 import { ConnectedAccount } from './ConnectedAccount'
 
 interface Props {
@@ -37,8 +26,6 @@ interface Props {
   disconnectOAuthAccount: IAsyncActionProp<typeof disconnectOAuthAccount>
 }
 
-const iconSize = { width: 16, height: 16 }
-
 function ConnectedAccounts({
   accounts,
   loading,
@@ -46,65 +33,44 @@ function ConnectedAccounts({
   syncOAuthAccount,
   disconnectOAuthAccount
 }: Props) {
-  useEffect(() => {
+  useEffectOnce(() => {
     fetchOAuthAccounts()
-  }, [fetchOAuthAccounts])
+  })
 
   const confirmation = useContext(ConfirmationModalContext)
-  const google = useConnectOAuthAccount(OAuthProvider.Google)
-  const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
-
-  const onDelete = (provider: OAuthProvider, accountId: string) => {
-    confirmation.setConfirmationModal({
-      message: `Your account will be disconnected and 
-        removed but imported contacts and emails will be preserved.`,
-      onConfirm: () => {
-        disconnectOAuthAccount(provider, accountId)
-      }
-    })
-  }
 
   return (
     <>
       <Helmet>
         <title>Connected Accounts | Settings | Rechat</title>
       </Helmet>
-      <Box p={2} my={2}>
-        <Button
-          variant="outlined"
-          disabled={outlook.connecting}
-          onClick={outlook.connect}
-        >
-          <IconOutlook size={iconSize} />
-          <Box pl={1}>Connect Outlook</Box>
-        </Button>
-        <Box mr={1} />
-        <Button
-          variant="outlined"
-          disabled={google.connecting}
-          onClick={google.connect}
-        >
-          <IconGoogle size={iconSize} />
-          <Box pl={1}>Connect Google</Box>
-        </Button>
-      </Box>
 
-      <Box paddingX={3}>
-        {loading && accounts.length === 0 ? (
-          <Loading />
-        ) : (
-          <List disablePadding>
-            {accounts.map(account => (
-              <ConnectedAccount
-                account={account}
-                key={account.id}
-                onSync={syncOAuthAccount}
-                onDelete={onDelete}
-              />
-            ))}
-          </List>
-        )}
-      </Box>
+      {loading ? (
+        <Box margin={2}>
+          <LoadingContainer style={{}} />
+        </Box>
+      ) : accounts.length === 0 ? (
+        <ConnectAccounts />
+      ) : (
+        <List disablePadding>
+          {accounts.map(account => (
+            <ConnectedAccount
+              account={account}
+              key={account.id}
+              onSync={syncOAuthAccount}
+              onDelete={(provider, accountId) => {
+                confirmation.setConfirmationModal({
+                  message: `Your account will be disconnected and 
+                        removed but imported contacts and emails will be preserved.`,
+                  onConfirm: () => {
+                    disconnectOAuthAccount(provider, accountId)
+                  }
+                })
+              }}
+            />
+          ))}
+        </List>
+      )}
     </>
   )
 }

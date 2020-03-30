@@ -3,11 +3,17 @@ import path from 'path'
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import superagent from 'superagent'
+import superdebug from 'superagent-debugger'
 import nunjucks from 'nunjucks'
 import xml2js from 'xml2js'
 
+import Fetch from '../../../app/services/fetch'
 import getListing from '../../../app/models/listings/listing/get-listing'
-import { getPrice, getField } from '../../../app/models/Deal/helpers/context'
+import {
+  getPrice,
+  getField,
+  getContext
+} from '../../../app/models/Deal/helpers/context'
 
 import {
   API_URL,
@@ -32,6 +38,40 @@ function getFormattedListingPictures(listing) {
   })
 }
 
+async function getFormattedDealMediaPictures(deal, accessToken) {
+  try {
+    const response = await new Fetch({ useReferencedFormat: false })
+      .get(`/deals/${deal.id}`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .query({ 'associations[]': ['deal.gallery'] })
+
+    const rawGalleryItems = response.body.data.gallery.items || []
+
+    return rawGalleryItems.map((item, index) => {
+      const url = item.file.preview_url
+      const urlWithoutQuery = url.split('?')[0]
+      const filename = path.basename(
+        urlWithoutQuery,
+        path.extname(urlWithoutQuery)
+      )
+
+      return {
+        id: filename,
+        caption: `${deal.id} - Media - ${index}`,
+        filename,
+        url
+      }
+    })
+  } catch (err) {
+    console.error(
+      'Error fetching deal photso for MyMarketingMatters (getFormattedDealMediaPictures):',
+      err
+    )
+
+    return []
+  }
+}
+
 function getListingAddressField(listing, field, defaultValue = '') {
   if (listing && listing.property && listing.property.address) {
     return listing.property.address[field] || defaultValue
@@ -46,7 +86,14 @@ async function getRequestBody(user, deal, costCenter, callbackUrl) {
 
   const address = getField(deal, 'street_address') || ''
   const description = listing ? listing.property.description : ''
-  const pictures = listing ? getFormattedListingPictures(listing) : []
+  const dealMediaPictures = await getFormattedDealMediaPictures(
+    deal,
+    user.access_token
+  )
+  const pictures = listing
+    ? [...getFormattedListingPictures(listing), ...dealMediaPictures]
+    : dealMediaPictures
+
   const city = getListingAddressField(listing, 'city')
   const state = getListingAddressField(listing, 'state')
   const zip = getListingAddressField(listing, 'postal_code')
@@ -66,7 +113,7 @@ async function getRequestBody(user, deal, costCenter, callbackUrl) {
       },
       properties: [
         {
-          id: deal.id,
+          id: getContext('mls_id') || deal.id,
           price,
           address,
           description,
@@ -87,6 +134,7 @@ async function sendPunchoutRequest(user, deal, costCenter, callbackUrl) {
   const response = await superagent
     .post(API_URL)
     .set('Content-Type', 'application/xml')
+    .use(superdebug(console.info))
     .send(requestBody)
 
   return response

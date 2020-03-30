@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 
-import { primary } from 'views/utils/colors'
 import { LatoFamilyStyle } from 'components/Typography/styles'
 
 export const Container = styled.div`
@@ -19,7 +18,7 @@ export const Toolbar = styled.div`
 
 export const Input = styled.input`
   height: 2.3rem;
-  border: 1px solid ${primary};
+  border: 1px solid ${({ theme }) => theme.palette.secondary.main};
   border-radius: 3px;
   padding: 0 0.5rem;
   width: 80%;
@@ -43,12 +42,12 @@ export const Title = styled.div`
   display: flex;
   align-items: center;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 400;
   padding: 0.825rem 2px;
   border: 1px dashed transparent;
 
   :hover {
     cursor: pointer;
-    border: 1px dashed ${primary};
+    border: 1px dashed ${({ theme }) => theme.palette.secondary.main};
   }
 `

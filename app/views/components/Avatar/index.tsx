@@ -47,6 +47,7 @@ const Avatar: React.FunctionComponent<AvatarProps> = ({
       borderRadius={borderRadius}
       backgroundColor={backgroundColor}
       style={style}
+      title={title}
     >
       {imageSrc ? (
         <Image alt="rechat avatar" src={imageSrc} />

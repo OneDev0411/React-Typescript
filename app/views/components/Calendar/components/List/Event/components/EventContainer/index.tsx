@@ -2,7 +2,13 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import cn from 'classnames'
 
+import { Tooltip } from '@material-ui/core'
+
+import { useIconStyles } from 'views/../styles/use-icon-styles'
+
 import { ClassesProps } from 'utils/ts-utils'
+
+import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 
 import { DateTime } from './DateTime'
 
@@ -14,10 +20,10 @@ const useStyles = makeStyles(styles)
 
 interface Props {
   style: React.CSSProperties
-  event: ICalendarEvent & { rowIndex?: number }
-  Icon?: any
   title: React.ReactNode
-  subtitle?: React.ReactNode
+  event: ICalendarEvent & { rowIndex?: number }
+  editable: boolean
+  Icon?: any
   actions?: React.ReactNode
   onClick?(): void
 }
@@ -27,15 +33,16 @@ export function EventContainer({
   event,
   Icon,
   title,
-  subtitle,
+  editable,
   actions,
   onClick,
   classes: inputClasses
 }: Props & ClassesProps<typeof styles>) {
   const sharedClasses = useSharedStyles()
+  const iconStyles = useIconStyles()
   const classes = useStyles({
     classes: inputClasses,
-    evenRow: event.rowIndex ? event.rowIndex % 2 === 0 : false,
+    evenRow: event.rowIndex ? event.rowIndex % 2 === 0 : true,
     clickable: typeof onClick === 'function'
   })
 
@@ -67,11 +74,17 @@ export function EventContainer({
             </div>
           </div>
 
-          <div>{actions}</div>
-        </div>
-
-        <div className={sharedClasses.row}>
-          <div className={sharedClasses.subtitle}>{subtitle}</div>
+          <div className={classes.actions}>
+            {editable && (
+              <Tooltip title="Edit Event" placement="top">
+                <EditIcon
+                  className={cn(iconStyles.small, classes.iconEdit)}
+                  onClick={onClick}
+                />
+              </Tooltip>
+            )}
+            {actions}
+          </div>
         </div>
       </div>
     </div>

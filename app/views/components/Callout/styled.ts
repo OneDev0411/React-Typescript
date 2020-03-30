@@ -31,7 +31,7 @@ export const CalloutContainer = styled.div<Props>`
   border-radius: 6px;
   padding: ${padding};
   margin: ${margin};
-  color: ${({ theme, type }: Props) => theme.palette.info.contrastText};
+  color: ${({ theme }: Props) => theme.palette.info.contrastText};
   background-color: ${bgColor};
   display: flex;
   align-items: center;
@@ -41,7 +41,9 @@ export const CalloutContent = styled.div`
   flex: 1;
 `
 
-export const CalloutCloseButton = styled(IconButton)`
+export const CalloutCloseButton = styled(IconButton)<{
+  theme: Theme
+}>`
   background: rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   padding: 0;
@@ -50,5 +52,8 @@ export const CalloutCloseButton = styled(IconButton)`
   svg {
     margin: auto;
     fill: initial;
+  }
+  :hover {
+    background: ${({ theme }: Props) => theme.palette.info.contrastText};
   }
 `

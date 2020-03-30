@@ -43,6 +43,7 @@ export function EmailCampaign({ style, event }: Props) {
       classes={{ root: sending ? classes.sending : '' }}
       event={event}
       Icon={eventIcons.Email.icon}
+      editable={false}
       title={
         <div>
           <a

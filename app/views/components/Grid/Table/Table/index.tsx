@@ -7,7 +7,7 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { Sorting } from '../features/Sorting'
 import { Actions } from '../features/Actions'
 
-import { Header } from '../Header'
+// import { Header } from '../Header'
 import { Body } from '../Body'
 import { useTable } from '../hooks/use-table'
 
@@ -28,8 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
     headerContainer: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: theme.spacing(2, 0)
+      justifyContent: 'space-between'
     },
     tableContainer: {
       position: 'relative',
@@ -74,16 +73,17 @@ export function GridTable<Row>({
   selection = null,
   sorting = null,
   infiniteScrolling = null,
-  hasHeader = false,
+  // hasHeader = false,
   stickyHeader = false,
   TableActions = null,
   ToolbarComponent = null,
   LoadingStateComponent = null,
-  EmptyStateComponent = null
+  EmptyStateComponent = null,
+  classes = {}
 }: Props<Row>) {
   useInfiniteScroll(infiniteScrolling)
 
-  const classes = useStyles({ loading })
+  const gridClasses = useStyles({ loading })
   const [state, dispatch] = useGridContext()
 
   useEffectOnce(() => {
@@ -110,33 +110,36 @@ export function GridTable<Row>({
 
   return (
     <>
-      <div className={classes.headerContainer}>
-        <div>{ToolbarComponent}</div>
+      {(ToolbarComponent || (sorting && sorting.columns)) && (
+        <div className={gridClasses.headerContainer}>
+          <div>{ToolbarComponent}</div>
 
-        {rows && rows.length > 0 && (
-          <div>
-            <Sorting<Row> columns={columns} options={sorting} />
-          </div>
-        )}
-      </div>
+          {rows && rows.length > 0 && (
+            <div>
+              <Sorting<Row> columns={columns} options={sorting} />
+            </div>
+          )}
+        </div>
+      )}
 
       {rows && rows.length === 0 && !loading && EmptyStateComponent && (
         <EmptyStateComponent />
       )}
 
       {summary && !loading && (
-        <div className={classes.summary}>{summary(totalRows, state)}</div>
+        <div className={gridClasses.summary}>{summary(totalRows, state)}</div>
       )}
 
-      <div className={classes.tableContainer}>
+      <div className={gridClasses.tableContainer}>
         {rows && rows.length > 0 && (
           <Table stickyHeader={stickyHeader}>
-            {hasHeader && <Header<Row> columns={newColumns} rows={newRows} />}
+            {/* {hasHeader && <Header<Row> columns={newColumns} rows={newRows} />} */}
             <Body<Row>
               columns={newColumns}
               rows={newRows}
               selection={selection}
               hoverable={hoverable}
+              classes={classes}
               getTdProps={getTdProps}
               getTrProps={getTrProps}
             />
@@ -144,7 +147,7 @@ export function GridTable<Row>({
         )}
 
         {loading && LoadingStateComponent && (
-          <div className={classes.loading}>
+          <div className={gridClasses.loading}>
             <LoadingStateComponent />
           </div>
         )}

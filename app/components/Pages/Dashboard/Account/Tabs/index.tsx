@@ -9,19 +9,21 @@ import { PageTabs, TabLink } from 'components/PageTabs'
 interface ItemsShape {
   label: string
   to: string
+  isHidden?: (user: IUser) => boolean
   component?: React.ReactNode
 }
 
 const CrmAccess = ({ children }) => <Acl.Crm>{children}</Acl.Crm>
 
-const Items: ItemsShape[] = [
+const tabs: ItemsShape[] = [
   {
     label: 'Profile',
     to: '/dashboard/account'
   },
   {
     label: 'Upgrade to agent',
-    to: '/dashboard/account/upgrade'
+    to: '/dashboard/account/upgrade',
+    isHidden: user => user.user_type === 'Agent'
   },
   {
     label: 'Manage Tags',
@@ -59,19 +61,33 @@ const Items: ItemsShape[] = [
   }
 ]
 
-export const SettingsTabs = ({ location }: WithRouterProps) => {
+interface Props {
+  user: IUser
+}
+
+export const SettingsTabs = ({ user, location }: Props & WithRouterProps) => {
   const currentUrl = location.pathname
+  const matchingTabs = tabs.filter(({ to }) => currentUrl.startsWith(to))
+  const matchingTab = matchingTabs.sort((a, b) => b.to.length - a.to.length)[0]
 
   return (
     <PageTabs
-      defaultValue={currentUrl}
-      tabs={Items.map(({ label, to, component = false }, i) => {
-        const hasComponent = component ? { component } : {}
+      defaultValue={matchingTab.to}
+      tabs={tabs
+        .filter(({ isHidden }) => !isHidden || !isHidden(user))
+        .map(({ label, to, component = false }, i) => {
+          const hasComponent = component ? { component } : {}
 
-        return (
-          <TabLink key={i} {...hasComponent} label={label} to={to} value={to} />
-        )
-      })}
+          return (
+            <TabLink
+              key={i}
+              {...hasComponent}
+              label={label}
+              to={to}
+              value={to}
+            />
+          )
+        })}
     />
   )
 }

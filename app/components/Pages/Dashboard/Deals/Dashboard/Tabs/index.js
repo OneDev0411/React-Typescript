@@ -7,6 +7,7 @@ import { Container, NavBar, NavItem, TabContent } from './styled'
 import FoldersPane from './Panes/Folders'
 import EventsPane from './Panes/Events'
 import MarketingPane from './Panes/Marketing'
+import MediaManagerPane from './Panes/MediaManager'
 
 import Notifications from '../Notifications'
 
@@ -17,6 +18,12 @@ export default class Tabs extends React.Component {
       label: 'Checklists',
       isDisabled: () => false,
       render: props => <FoldersPane {...props} />
+    },
+    {
+      id: 'photos',
+      label: 'Photos',
+      isDisabled: () => false,
+      render: props => <MediaManagerPane {...props} />
     },
     {
       id: 'events',

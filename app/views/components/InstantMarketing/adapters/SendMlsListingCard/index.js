@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Button } from '@material-ui/core'
 
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 import { selectContact } from 'reducers/contacts/list'
@@ -8,7 +9,6 @@ import SearchListingDrawer from 'components/SearchListingDrawer'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
-import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 
@@ -259,7 +259,9 @@ class SendMlsListingCard extends React.Component {
           listing.gallery_image_urls &&
           Array.isArray(listing.gallery_image_urls)
         ) {
-          listing.gallery_image_urls.forEach(image => {
+          const uniqueAssets = [...new Set(listing.gallery_image_urls)]
+
+          uniqueAssets.forEach(image => {
             assets.push({
               listing: listing.id,
               image
@@ -294,18 +296,19 @@ class SendMlsListingCard extends React.Component {
     return (
       <Fragment>
         {!this.props.hasExternalTrigger && (
-          <ActionButton
+          <Button
+            variant="outlined"
             disabled={disabled}
-            appearance="outline"
             onClick={this.openListingModal}
             size="small"
           >
             {this.props.children}
-          </ActionButton>
+          </Button>
         )}
 
         <SearchListingDrawer
           mockListings
+          allowSkip
           isOpen={
             (this.state.isListingsModalOpen || this.state.isEditingListings) &&
             !this.props.isEdit
@@ -318,11 +321,11 @@ class SendMlsListingCard extends React.Component {
           onSelectListingsCallback={this.handleSelectListings}
           multipleSelection={this.IsMultiListing}
           renderAction={props => (
-            <ActionButton {...props.buttonProps}>
+            <Button {...props.buttonProps}>
               {this.state.isEditingListings
                 ? 'Apply Changes'
                 : `Next (${props.selectedItemsCount} Listings Selected)`}
-            </ActionButton>
+            </Button>
           )}
         />
 

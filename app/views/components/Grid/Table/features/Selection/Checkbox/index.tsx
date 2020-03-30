@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Checkbox as MUICheckbox } from '@material-ui/core'
+import { Checkbox as MUICheckbox, Tooltip } from '@material-ui/core'
 
 interface Props {
   checked: boolean
+  tooltipTitle?: string
   indeterminate?: boolean
   onChange: () => void
 }
 
-export default function Checkbox({ checked, indeterminate, onChange }: Props) {
+export default function Checkbox({
+  checked,
+  indeterminate,
+  tooltipTitle,
+  onChange
+}: Props) {
   const [isChecked, setIsChecked] = useState<boolean>(checked)
 
   useEffect(() => {
@@ -18,13 +24,22 @@ export default function Checkbox({ checked, indeterminate, onChange }: Props) {
     setIsChecked(!isChecked)
     setTimeout(onChange, 0)
   }
-
-  return (
+  const checkBox = (
     <MUICheckbox
-      color="primary"
+      color="secondary"
       checked={isChecked}
       indeterminate={indeterminate}
       onChange={handleToggleRow}
     />
   )
+
+  if (tooltipTitle) {
+    return (
+      <Tooltip title={tooltipTitle} placement="top">
+        {checkBox}
+      </Tooltip>
+    )
+  }
+
+  return checkBox
 }

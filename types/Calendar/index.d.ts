@@ -64,3 +64,33 @@ interface ICalendarEventsList {
 interface ICalendarMonthEvents {
   [key: string]: ICalendarEvent[] | []
 }
+
+interface IGoogleCalendarItem {
+  id: string
+  name: string
+  description: string
+  permission: string
+  alreadySynced: boolean
+}
+
+interface IGoogleCalendars {
+  calendars: IGoogleCalendarItem[]
+  currentSelectedCal: {
+    kind: string
+    etag: string
+    id: string
+    summary: string
+    description: string
+    location: string
+    timeZone: string
+    colorId: number
+    backgroundColor: string
+    foregroundColor: string
+    selected: boolean
+    accessRole: string
+    defaultReminders: unknown[]
+    conferenceProperties: {
+      allowedConferenceSolutionTypes: string[]
+    }
+  }
+}

@@ -110,7 +110,10 @@ declare interface IEmailCampaignInputBase {
 }
 
 declare interface IIndividualEmailCampaignInput
-  extends IEmailCampaignInputBase {}
+  extends IEmailCampaignInputBase {
+  google_credential?: string
+  microsoft_credential?: string
+}
 
 interface IEmailHeaders {
   message_id?: string
@@ -163,6 +166,7 @@ declare type IEmailCampaign<
   complained: number
   stored: number
   text: string
+  template?: IMarketingTemplateInstance
   type: 'email_campaign'
   sent: number
   microsoft_credential: UUID | null

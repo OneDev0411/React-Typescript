@@ -19,7 +19,7 @@ const submitSigninForm = (loginData, redirectTo, userId) => (
     async user => {
       try {
         if (!user.id) {
-          const userData = await getUser(userId)
+          const userData = await getUser(userId, user.access_token)
 
           user = {
             ...user,

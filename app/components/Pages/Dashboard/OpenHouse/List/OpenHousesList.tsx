@@ -5,11 +5,12 @@ import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
 import { Alert } from '@material-ui/lab'
-import { Box, Link, IconButton } from '@material-ui/core'
+import { Box, Link, IconButton, Theme } from '@material-ui/core'
+import { makeStyles, createStyles } from '@material-ui/styles'
 
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
+import { useGridStyles } from 'components/Grid/Table/styles'
 
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -23,8 +24,7 @@ import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import { RenderProps } from 'components/Grid/Table/types'
 
 import EmptyState from './EmptyState'
-import CreateNewOpenHouse from './CreateNewOpenHouse'
-import Photo from './columns/Photo'
+import Avatar from './columns/Avatar'
 import Title from './columns/Title'
 import Date from './columns/Date'
 import Registrants from './columns/Registrants'
@@ -42,8 +42,27 @@ interface Props {
 
 type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
+const useAlertStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      root: {
+        marginBottom: theme.spacing(2)
+      },
+      message: {
+        '& a, & a:hover': {
+          color: theme.palette.info.dark,
+          textDecoration: 'none'
+        }
+      }
+    }),
+  { name: 'MuiAlert' }
+)
+
 function OpenHousesList(props: Props) {
-  const iconClasses = useIconStyles()
+  useAlertStyles()
+
+  const gridClasses = useGridStyles()
+
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
       order: '-due_date',
@@ -71,10 +90,11 @@ function OpenHousesList(props: Props) {
 
   const columns = [
     {
-      header: 'Photo',
-      id: 'photo',
+      header: 'Avatar',
+      id: 'Avatar',
+      width: '60px',
       render: ({ row }: RenderProps<TableRow>) => (
-        <Photo
+        <Avatar
           listings={
             row.associations
               ? row.associations.filter(a => a.association_type === 'listing')
@@ -84,20 +104,17 @@ function OpenHousesList(props: Props) {
       )
     },
     {
-      header: 'Infos',
-      id: 'info',
+      header: 'Title',
+      id: 'title',
       primary: true,
       render: ({ row }: RenderProps<TableRow>) => (
-        <Title
-          description={row.description}
-          onClick={() => handleEdit(row)}
-          title={row.title}
-        />
+        <Title title={row.title} onClick={() => handleEdit(row)} />
       )
     },
     {
       header: 'Date',
       id: 'date',
+      class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (
         <Date dueDate={row.due_date} />
       )
@@ -105,6 +122,8 @@ function OpenHousesList(props: Props) {
     {
       header: 'Registrants',
       id: 'registrants',
+      width: '100px',
+      class: 'opaque',
       render: ({ row }: RenderProps<TableRow>) => (
         <Registrants
           registrants={
@@ -117,6 +136,8 @@ function OpenHousesList(props: Props) {
     },
     {
       id: 'guest-registration',
+      width: '200px',
+      class: 'visible-on-hover',
       render: ({ row }: RenderProps<TableRow>) => (
         <GuestRegistration
           activeBrandId={props.activeBrandId}
@@ -126,6 +147,8 @@ function OpenHousesList(props: Props) {
     },
     {
       id: 'actions',
+      width: '50px',
+      class: 'visible-on-hover',
       render: ({ row }: RenderProps<TableRow>) => (
         <Actions
           openHouse={row}
@@ -169,7 +192,7 @@ function OpenHousesList(props: Props) {
       return <h4>{error}</h4>
     }
 
-    if (list.length === 0) {
+    if (!list.length) {
       return <EmptyState onOpenDrawer={onOpenOHDrawer} />
     }
 
@@ -180,6 +203,9 @@ function OpenHousesList(props: Props) {
         totalRows={(list || []).length}
         loading={isFetching ? 'middle' : null}
         LoadingStateComponent={LoadingContainer}
+        classes={{
+          row: gridClasses.row
+        }}
       />
     )
   }
@@ -191,11 +217,7 @@ function OpenHousesList(props: Props) {
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header title="Open House Registration Pages">
-          <Box textAlign="right">
-            <CreateNewOpenHouse onOpenDrawer={onOpenOHDrawer} />
-          </Box>
-        </PageLayout.Header>
+        <PageLayout.Header title="Open House Registration Pages" />
         <PageLayout.Main>
           <Box>
             <Acl access={ACL.DEALS}>
@@ -206,19 +228,16 @@ function OpenHousesList(props: Props) {
                     <IconButton
                       aria-label="close"
                       color="inherit"
-                      size="small"
-                      onClick={() => {
-                        setAlertToOpen(false)
-                      }}
+                      onClick={() => setAlertToOpen(false)}
                     >
-                      <CloseIcon className={iconClasses.medium} />
+                      <CloseIcon size="small" />
                     </IconButton>
                   }
                 >
                   <Box>
-                    Visit <Link href="/dashboard/deals">deals</Link> to Notify
-                    your Office to Book an Open House on the MLS. This page is
-                    only for creating Open House Registration pages and events.
+                    Visit <Link href="/dashboard/deals">deals</Link> to notify
+                    your office to book an open house on the MLS. This page is
+                    only for creating open house registration pages and events.
                   </Box>
                 </Alert>
               )}

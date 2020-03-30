@@ -17,28 +17,10 @@
 }
 
 @font-face {
-  font-family: 'LatoLight';
-  src: url('fonts/Lato-Light.woff2') format('woff2'), /* Modern Browsers */
-       url('fonts/Lato-Light.woff') format('woff');
-  font-style: normal;
-  font-weight: 300;
-  text-rendering: optimizeLegibility;
-}
-
-@font-face {
-  font-family: 'Lato';
+  font-family: 'LatoRegular';
   src: url('fonts/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
        url('fonts/Lato-Regular.woff') format('woff');
   font-style: normal;
   font-weight: 400;
-  text-rendering: optimizeLegibility;
-}
-
-@font-face {
-  font-family: 'LatoThin';
-  src: url('fonts/Lato-Thin.woff2') format('woff2'), /* Modern Browsers */
-       url('fonts/Lato-Thin.woff') format('woff');
-  font-style: normal;
-  font-weight: 100;
   text-rendering: optimizeLegibility;
 }

@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'underscore'
+import Flex from 'styled-flex-component'
+import { Button, Tooltip } from '@material-ui/core'
 
 import { searchListings } from 'models/Deal/listing'
 
@@ -91,6 +93,7 @@ class SearchListingDrawer extends React.Component {
   render() {
     return (
       <SearchDrawer
+        forceRenderFooter={this.props.allowSkip}
         title={this.props.title}
         showLoadingIndicator={this.state.isWorking}
         multipleSelection={this.props.multipleSelection}
@@ -104,6 +107,35 @@ class SearchListingDrawer extends React.Component {
         searchFunction={this.searchListing}
         onSelectItems={this.handleSelectListings}
         {...this.props}
+        renderAction={
+          this.props.allowSkip
+            ? props => (
+                <Flex>
+                  <Tooltip
+                    placement="left"
+                    title="Skip if not able to find it on MLS"
+                  >
+                    <Button
+                      variant="outlined"
+                      color="default"
+                      style={{
+                        marginRight: '0.5rem'
+                      }}
+                      onClick={async () => {
+                        const mockListing = await getMockListing()
+
+                        this.handleSelectListings([mockListing])
+                      }}
+                    >
+                      Skip
+                    </Button>
+                  </Tooltip>
+                  {this.props.multipleSelection &&
+                    this.props.renderAction(props)}
+                </Flex>
+              )
+            : this.props.renderAction
+        }
       />
     )
   }
@@ -114,7 +146,8 @@ SearchListingDrawer.propTypes = {
   mockListings: PropTypes.bool,
   allowedStatuses: PropTypes.array,
   title: PropTypes.string,
-  defaultListTitle: PropTypes.string
+  defaultListTitle: PropTypes.string,
+  allowSkip: PropTypes.bool
 }
 
 SearchListingDrawer.defaultProps = {
@@ -122,7 +155,8 @@ SearchListingDrawer.defaultProps = {
   mockListings: false,
   allowedStatuses: [],
   title: 'Select a Listing',
-  defaultListTitle: 'Add from your deals'
+  defaultListTitle: 'Add from your deals',
+  allowSkip: false
 }
 
 export default SearchListingDrawer

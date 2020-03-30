@@ -65,5 +65,4 @@ declare interface IUserTeam {
   acl: IPermission[]
   type: 'user_role'
   settings: StringMap<any>
-  brand_settings: StringMap<any> | null
 }

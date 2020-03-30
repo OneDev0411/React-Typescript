@@ -31,9 +31,7 @@ export function EmailRecipient({ recipient, person }: Props) {
   }
 
   const content = (
-    <span style={{ position: 'relative', zIndex: 1 }}>
-      {displayName || emailAddress}
-    </span>
+    <span style={{ position: 'relative', zIndex: 1 }}>{displayName}</span>
   )
 
   if (person && isContact(person)) {

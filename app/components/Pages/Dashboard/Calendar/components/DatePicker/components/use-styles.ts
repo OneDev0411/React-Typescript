@@ -5,13 +5,14 @@ export const useStyles = makeStyles((theme: Theme) =>
     dropdownButton: {
       backgroundColor: theme.palette.grey[100],
       borderRadius: 0,
-      margin: theme.spacing(0, 0, 0, 0.5),
+      margin: theme.spacing(0, 0, 0, 0.25),
       color: theme.palette.common.black
     },
     button: {
       minWidth: '7rem',
-      fontSize: theme.typography.body1.fontSize,
-      fontWeight: theme.typography.fontWeightBlack
+      '&:hover': {
+        backgroundColor: theme.palette.action.hover
+      }
     },
     sharp: {
       borderRadius: 0

@@ -1,6 +1,5 @@
-import styled, { css } from 'styled-components'
-
-import { grey, primary } from 'views/utils/colors'
+import styled, { css, ThemedStyledProps } from 'styled-components'
+import { Theme } from '@material-ui/core'
 
 interface Props {
   isActive?: boolean
@@ -20,36 +19,39 @@ export const Item = styled.div<Props>`
   padding: 0.5em 1em;
   cursor: pointer;
   white-space: nowrap;
-  color: ${props => (props.isActive ? '#fff' : '#000')};
-  background-color: ${props => (props.isActive ? primary : '#fff')};
-  font-weight: ${props => (props.isSelected && !props.isDisabled ? 700 : 400)};
+  color: ${({ isActive, theme }: ThemedStyledProps<Props, Theme>) =>
+    isActive ? theme.palette.primary.contrastText : theme.palette.common.black};
+  background-color: ${({ isActive, theme }: ThemedStyledProps<Props, Theme>) =>
+    isActive ? theme.palette.primary.main : theme.palette.common.white};
+  font-weight: ${({ isSelected, isDisabled }) =>
+    isSelected && !isDisabled ? 700 : 400};
 
-  ${({ noContrast }) =>
+  ${({ noContrast, theme }: ThemedStyledProps<Props, Theme>) =>
     noContrast
       ? css`
           &:hover,
           &:focus {
-            background-color: ${grey.A150};
+            background-color: ${theme.palette.grey[50]};
           }
         `
       : css`
           &:hover,
           &:focus {
-            color: #fff;
-            background-color: ${primary};
+            color: ${theme.palette.primary.contrastText};
+            background-color: ${theme.palette.primary.main};
 
             > svg {
-              fill: #fff;
+              fill: ${theme.palette.primary.contrastText};
             }
           }
         `}
 
-  ${props =>
-    props.item && props.item.icon && props.item.iconColor
+  ${({ item }) =>
+    item && item.icon && item.iconColor
       ? css`
           > svg {
             margin-right: 0.5em;
-            fill: ${props.item.iconColor};
+            fill: ${item.iconColor};
           }
         `
       : ''};

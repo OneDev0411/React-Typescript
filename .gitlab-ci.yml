@@ -1,10 +1,10 @@
 image: node:10
 
 variables:
-  LABELS_TO_REMOVE: 'Merge Requested'
-  LABELS_TO_ADD_FOR_IRISH: 'Deployed to Boer'
-  LABELS_TO_ADD_FOR_CHAPPAR: 'Deployed to Alpine'
-  LABELS_TO_ADD_FOR_PRODUCTION: 'Deployed to Production'
+  LABELS_TO_REMOVE: "Merge Requested"
+  LABELS_TO_ADD_FOR_IRISH: "Deployed to Boer"
+  LABELS_TO_ADD_FOR_CHAPPAR: "Deployed to Alpine"
+  LABELS_TO_ADD_FOR_PRODUCTION: "Deployed to Production"
 
 stages:
   - build
@@ -43,7 +43,6 @@ deploy_alpha:
   environment:
     name: alpha
     url: https://alpha.rechat.com
-  when: manual
   only:
     - alpha
 

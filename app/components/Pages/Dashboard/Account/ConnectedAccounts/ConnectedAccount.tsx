@@ -7,9 +7,13 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
+  Tooltip,
   Theme
 } from '@material-ui/core'
 import styled, { ThemeProps } from 'styled-components'
+import Flex from 'styled-flex-component'
+
+import IconPermission from 'components/SvgIcons/Permission/IconPermission'
 
 import Avatar from 'components/Avatar'
 import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatus'
@@ -19,7 +23,9 @@ import {
   oAuthAccountTypeToProvider,
   oAuthAccountTypeToTitle
 } from './constants'
+
 import { SyncButton } from './SyncButton'
+import { ConnectedCalendar } from './ConnectedCalendar'
 
 interface Props {
   account: IOAuthAccount
@@ -47,16 +53,41 @@ export function ConnectedAccount({ account, onSync, onDelete }: Props) {
         <Grid item xs={4}>
           <ListItemText
             primary={account.email}
-            secondary={oAuthAccountTypeToTitle[account.type]}
+            secondary={
+              <Flex alignCenter>
+                <div style={{ marginRight: '0.5rem' }}>
+                  {oAuthAccountTypeToTitle[account.type]}
+                </div>
+
+                <Tooltip
+                  title={
+                    <>
+                      <div>Permissions:</div>
+                      {account.scope_summary.map((name, index) => (
+                        <div key={index}>{name}</div>
+                      ))}
+                    </>
+                  }
+                >
+                  <IconPermission />
+                </Tooltip>
+              </Flex>
+            }
           />
         </Grid>
+
         <Grid item xs={4}>
           <ListItemText
             primary={<ConnectedAccountSyncStatus account={account} />}
             secondary={<SyncButton account={account} onSync={onSync} />}
           />
         </Grid>
+
         <ListItemSecondaryAction>
+          {oAuthAccountTypeToProvider[account.type] === 'google' && (
+            <ConnectedCalendar gcid={account.id} />
+          )}
+
           <DangerButton
             variant="outlined"
             size="small"

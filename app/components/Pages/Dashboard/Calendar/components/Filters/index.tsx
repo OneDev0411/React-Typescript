@@ -20,7 +20,6 @@ export const TAB_ITEMS: TabItem[] = [
         'contact',
         'contact_attribute',
         'crm_task',
-        'email_campaign',
         'deal_context'
       ]
     },
@@ -32,13 +31,6 @@ export const TAB_ITEMS: TabItem[] = [
       'object_types[]': ['contact']
     },
     link: 'touches'
-  },
-  {
-    label: 'Calls',
-    filter: {
-      'event_types[]': ['Call']
-    },
-    link: 'calls'
   },
   {
     label: 'Celebrations',
@@ -53,13 +45,6 @@ export const TAB_ITEMS: TabItem[] = [
       'object_types[]': ['deal_context']
     },
     link: 'critical-dates'
-  },
-  {
-    label: 'Scheduled Emails',
-    filter: {
-      'object_types[]': ['email_campaign']
-    },
-    link: 'emails'
   }
 ]
 
@@ -76,12 +61,14 @@ export const Filters = withRouter((props: Props & WithRouterProps) => {
 
   return (
     <PageTabs
-      defaultValue={props.params.id || 0}
+      defaultValue={props.params.id || 'All'}
       onChange={handleChangeTab}
       tabs={TAB_ITEMS.map(({ label, link }, index: number) => {
         const url = `${BASE_URL}${link}`
 
-        return <TabLink key={index} value={link || 0} label={label} to={url} />
+        return (
+          <TabLink key={index} value={link || 'All'} label={label} to={url} />
+        )
       })}
     />
   )

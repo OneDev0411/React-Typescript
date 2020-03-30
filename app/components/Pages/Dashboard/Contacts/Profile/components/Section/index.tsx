@@ -15,9 +15,6 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:hover .menu__icon': {
         fill: theme.palette.common.black
       }
-    },
-    title: {
-      fontWeight: theme.typography.fontWeightBold
     }
   })
 )
@@ -55,7 +52,7 @@ export const Section: FunctionComponent<Props> = ({
         {titleRenderer ? (
           titleRenderer()
         ) : (
-          <Typography id={title} variant="body1" className={classes.title}>
+          <Typography id={title} variant="subtitle2">
             {title}
           </Typography>
         )}

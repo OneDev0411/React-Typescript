@@ -1,22 +1,19 @@
 import styled from 'styled-components'
-import Flex from 'styled-flex-component'
 
 import Card from 'components/Card'
-import { grey, red } from 'views/utils/colors'
-
 import Button from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
 
 function getItemColor(props) {
   if (props.isIncomplete && !props.isActive) {
-    return red.A100
+    return props.theme.palette.error.main
   }
 
   return '#000'
 }
 
 export const RemoveButton = styled(IconButton)`
-  visibility: hidden;
+  height: 1.5em;
   margin-left: 0.5em;
   padding: 0;
 `
@@ -25,16 +22,16 @@ export const ItemTitle = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 0.8125rem;
 `
 
-export const Container = styled(Flex)`
+export const Container = styled.div`
+  display: inline-flex;
   position: relative;
-  height: 40px;
   margin-right: 0.5em;
-  line-height: 38px;
-  border-radius: 3px;
-  background-color: ${props => (props.isActive ? '#fff' : grey.A100)};
-  border: solid 1px ${props => (props.isActive ? '#000' : grey.A100)};
+  border-radius: 100px;
+  border: solid 1px
+    ${props => (props.isActive ? '#000' : props.theme.palette.grey['100'])};
   cursor: pointer;
 
   ${ItemTitle} {
@@ -46,8 +43,8 @@ export const Container = styled(Flex)`
     border: solid 1px ${props => getItemColor(props)};
   }
 
-  &:hover ${RemoveButton} {
-    visibility: visible;
+  &:hover ${RemoveButton} svg {
+    fill: ${props => props.theme.palette.grey['600']};
   }
 `
 
@@ -72,5 +69,5 @@ export const DoneButton = styled(Button)`
   display: block;
   width: 100%;
   text-align: center;
-  border-top: 1px solid ${grey.A300};
+  border-top: 1px solid ${props => props.theme.palette.grey['300']};
 `

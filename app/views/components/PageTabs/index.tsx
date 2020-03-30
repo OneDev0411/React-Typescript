@@ -1,23 +1,40 @@
-import React, { useState } from 'react'
+import React, { useState, ReactNode } from 'react'
 import { Tabs, createStyles, makeStyles, Theme } from '@material-ui/core'
 
 export * from './Tab'
 export * from './TabLink'
 export * from './DropdownTab'
+export * from './TabSpacer'
 
-type SelectedTab = string | number | null
-
+type SelectedTab = string | number | boolean | null
+type RenderMegaMenu = {
+  selectedTab: SelectedTab
+  close: () => void
+}
 interface Props {
-  tabs: React.ReactNode[]
+  tabs: ReactNode[]
+  actions?: ReactNode[]
   defaultValue?: SelectedTab
+  defaultAction?: SelectedTab
+  value?: SelectedTab
+  actionValue?: SelectedTab
+  megamenuTabs?: SelectedTab[]
+  megaMenu?: (p: RenderMegaMenu) => ReactNode
   onChange?: (value: SelectedTab) => void
+  onChangeAction?: (value: SelectedTab) => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    container: {
+      position: 'relative',
+      display: 'flex',
+      width: '100%'
+    },
     tabContainer: {
+      width: '100%',
       margin: theme.spacing(1, 0),
-      borderBottom: `2px solid ${theme.palette.divider}`
+      borderBottom: `1px solid ${theme.palette.divider}`
     },
     indicator: {
       display: 'flex',
@@ -34,6 +51,17 @@ const useStyles = makeStyles((theme: Theme) =>
         ),
         backgroundColor: theme.palette.primary.main
       }
+    },
+    megaMenuContainer: {
+      padding: theme.spacing(2.5, 1.5),
+      position: 'absolute',
+      top: 57,
+      left: 0,
+      width: '100%',
+      minHeight: 250,
+      zIndex: theme.zIndex.gridAction,
+      background: theme.palette.background.paper,
+      boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.1)'
     }
   })
 )
@@ -70,35 +98,95 @@ const useStyles = makeStyles((theme: Theme) =>
  */
 export function PageTabs({
   defaultValue = null,
+  defaultAction = null,
+  value,
+  actions,
+  actionValue,
+  tabs,
+  megamenuTabs = [],
+  megaMenu,
   onChange = () => {},
-  tabs
+  onChangeAction = () => {}
 }: Props) {
   const classes = useStyles()
   const [selectedTab, setSelectedTab] = useState<SelectedTab>(defaultValue)
+  const [selectedAction, setSelectedAction] = useState<SelectedTab>(
+    defaultAction
+  )
+  const [showMegaMenu, setShowMegaMenu] = useState<boolean>(false)
+
   const activeTab =
     defaultValue && selectedTab !== defaultValue ? defaultValue : selectedTab
 
-  const handleChange = (e: React.MouseEvent<{}>, value: SelectedTab) => {
-    setSelectedTab(value)
+  const activeAction =
+    defaultAction && selectedAction !== defaultAction
+      ? defaultAction
+      : selectedAction
 
-    onChange(value)
+  const handleChangeTab = (e: React.MouseEvent<{}>, tab: SelectedTab) => {
+    if (megaMenu && megamenuTabs) {
+      if (megamenuTabs.includes(tab)) {
+        const isVisible = !(tab === selectedTab && showMegaMenu)
+
+        setShowMegaMenu(isVisible)
+      } else {
+        setShowMegaMenu(false)
+      }
+    }
+
+    setSelectedTab(tab)
+
+    onChange(tab)
   }
 
+  const handleChangeAction = (e: React.MouseEvent<{}>, action: SelectedTab) => {
+    setSelectedAction(action)
+
+    onChangeAction(action)
+  }
+  const closeMegaMenu = () => setShowMegaMenu(false)
+
   return (
-    <Tabs
-      value={activeTab}
-      indicatorColor="primary"
-      textColor="primary"
-      variant="scrollable"
-      scrollButtons="auto"
-      onChange={handleChange}
-      classes={{
-        root: classes.tabContainer,
-        indicator: classes.indicator
-      }}
-      TabIndicatorProps={{ children: <div /> }}
-    >
-      {tabs.map(tab => tab)}
-    </Tabs>
+    <div className={classes.container}>
+      <Tabs
+        value={value || activeTab || false}
+        indicatorColor="primary"
+        textColor="primary"
+        variant="scrollable"
+        scrollButtons="auto"
+        onChange={handleChangeTab}
+        classes={{
+          root: classes.tabContainer,
+          indicator: classes.indicator
+        }}
+        TabIndicatorProps={{ children: <div /> }}
+      >
+        {tabs.map(tab => tab)}
+      </Tabs>
+
+      {actions && (
+        <div>
+          <Tabs
+            value={actionValue || activeAction || false}
+            onChange={handleChangeAction}
+            variant="scrollable"
+            scrollButtons="auto"
+            classes={{
+              root: classes.tabContainer,
+              indicator: classes.indicator
+            }}
+            TabIndicatorProps={{ children: <div /> }}
+          >
+            {actions.map(tab => tab)}
+          </Tabs>
+        </div>
+      )}
+
+      {megaMenu && showMegaMenu && (
+        <div className={classes.megaMenuContainer}>
+          {megaMenu({ selectedTab, close: closeMegaMenu })}
+        </div>
+      )}
+    </div>
   )
 }

@@ -1,10 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
-import Avatar from 'react-avatar'
 
-import ImageStatus from 'components/ImageStatus'
-import { getAttributeFromSummary } from 'models/contacts/helpers'
+import {
+  Avatar,
+  Badge as BaseBadge,
+  BadgeProps,
+  makeStyles,
+  createStyles,
+  withStyles,
+  Theme
+} from '@material-ui/core'
+
+import {
+  getAttributeFromSummary,
+  getContactNameInitials
+} from 'models/contacts/helpers'
 
 import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
@@ -16,17 +26,9 @@ import {
 
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
-const AvatarContainer = styled.div`
-  display: table;
-  position: relative;
-  align-self: center;
-  .avatar div {
-    font-weight: 700 !important;
-  }
-`
-
-const PATTERN = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
-
+interface CBadgeProps extends BadgeProps {
+  isOnline: boolean
+}
 interface StateProps {
   attributeDefs: IAttributeDefsState
 }
@@ -35,21 +37,51 @@ interface Props {
   contact: INormalizedContact
 }
 
+const PATTERN = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
+
+const Badge = withStyles((theme: Theme) =>
+  createStyles({
+    badge: (props: CBadgeProps) => ({
+      backgroundColor: props.isOnline ? theme.palette.success.light : 'inherit',
+      color: props.isOnline ? theme.palette.success.light : 'inherit',
+      boxShadow: props.isOnline
+        ? `0 0 0 2px ${theme.palette.background.paper}`
+        : '0'
+    })
+  })
+)(BaseBadge)
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    avatar: {
+      backgroundColor: theme.palette.divider,
+      color: theme.palette.text.primary
+    }
+  })
+)
+
 function ContactAvatar({ contact, attributeDefs }: Props & StateProps) {
+  const classes = useStyles()
   const name = getAttributeFromSummary(contact, 'display_name')
-  const statusColor = getContactOnlineStatus(contact) ? '#32b86d' : '#c3c3c3'
 
   return (
-    <AvatarContainer>
+    <Badge
+      overlap="circle"
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right'
+      }}
+      variant="dot"
+      isOnline={getContactOnlineStatus(contact)}
+    >
       <Avatar
-        color="#000"
-        round
-        name={name}
+        alt={name}
         src={getAvatarUrl(contact, attributeDefs)}
-        size={40}
-      />
-      <ImageStatus statusColor={statusColor} />
-    </AvatarContainer>
+        className={classes.avatar}
+      >
+        {getContactNameInitials(contact)}
+      </Avatar>
+    </Badge>
   )
 }
 

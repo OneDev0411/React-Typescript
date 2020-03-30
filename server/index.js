@@ -16,7 +16,6 @@ import fetch from './util/fetch'
 import universalMiddleware from './util/universal'
 import checkToken from './util/check-token'
 import appConfig from '../config/webpack'
-import websiteRoutes from './_website'
 import { logger } from './util/logger'
 
 const app = new Koa()
@@ -115,6 +114,21 @@ app.use(
   )
 )
 
+app.use(
+  session(
+    {
+      key: 'rechat-webapp-app:session',
+      maxAge: 60 * 86400 * 1000, // 60 days
+      gzip: true,
+      overwrite: true,
+      httpOnly: true,
+      signed: true,
+      domain: 'app.rechat.com'
+    },
+    app
+  )
+)
+
 /**
  * middleware for global variables
  */
@@ -133,9 +147,6 @@ _.each(require('./api/routes'), route => {
   // eslint-disable-next-line
   app.use(mount('/api', require(route.path)))
 })
-
-// Adding websites route
-app.use(websiteRoutes)
 
 if (__DEV__) {
   development()

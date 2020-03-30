@@ -14,6 +14,7 @@ import ImageDrawer from 'components/ImageDrawer'
 import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
+import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 
 import { getActiveTeam, isBackOffice } from 'utils/user-teams'
 
@@ -68,8 +69,12 @@ class Builder extends React.Component {
       isImageDrawerOpen: false,
       isGifDrawerOpen: false,
       isVideoDrawerOpen: false,
-      isArticleDrawerOpen: false
+      isArticleDrawerOpen: false,
+      isNeighborhoodsReportDrawerOpen: false,
+      isNeighborhoodsGraphsReportDrawerOpen: false
     }
+
+    this.emailBlocksRegistered = false
 
     this.keyframe = 0
 
@@ -104,20 +109,28 @@ class Builder extends React.Component {
         {
           type: 'select',
           label: 'Icon',
-          name: 'name',
+          name: 'src',
           options: [
-            { value: 'linkedin', name: 'Linkedin' },
-            { value: 'facebook', name: 'Facebook' },
-            { value: 'instagram', name: 'Instagram' },
-            { value: 'twitter', name: 'Twitter' },
-            { value: 'web', name: 'Web' },
-            { value: 'youtube', name: 'Youtube' },
-            { value: 'pinterest', name: 'Pinterest' },
-            { value: 'snapchat', name: 'Snapchat' },
-            { value: 'vimeo', name: 'Vimeo' },
-            { value: 'tumblr', name: 'Tumblr' },
-            { value: 'soundcloud', name: 'SoundCloud' },
-            { value: 'medium', name: 'Medium' }
+            {
+              value: 'https://i.ibb.co/qr5rZym/facebook.png',
+              name: 'Facebook'
+            },
+            {
+              value: 'https://i.ibb.co/HC5KTG1/instagram.png',
+              name: 'Instagram'
+            },
+            {
+              value: 'https://i.ibb.co/kxjXJ5B/linkedin.png',
+              name: 'Linkedin'
+            },
+            {
+              value: 'https://i.ibb.co/7WkrhZV/twitter.png',
+              name: 'Twitter'
+            },
+            {
+              value: 'https://i.ibb.co/8jd2Jyc/youtube.png',
+              name: 'Youtube'
+            }
           ]
         },
         {
@@ -209,16 +222,18 @@ class Builder extends React.Component {
   }
 
   addAgentAssets = agents => {
-    this.editor.AssetManager.add(
-      agents.map(({ agent }) => {
-        return ['profile_image_url', 'cover_image_url']
-          .filter(attr => agent[attr])
-          .map(attr => ({
+    const agentImageAttrKeys = ['profile_image_url', 'cover_image_url']
+
+    agents.forEach(({ agent }) => {
+      agentImageAttrKeys
+        .filter(attr => agent[attr])
+        .forEach(attr => {
+          this.editor.AssetManager.add({
             image: agent[attr],
             avatar: true
-          }))
-      })
-    )
+          })
+        })
+    })
   }
 
   setRte = () => {
@@ -256,6 +271,13 @@ class Builder extends React.Component {
   }
 
   registerEmailBlocks = () => {
+    // We should not reregister blocks if it's already done!
+    if (this.emailBlocksRegistered) {
+      return
+    }
+
+    this.emailBlocksRegistered = true
+
     const { brand } = getActiveTeam(this.props.user)
     const renderData = getTemplateRenderData(brand)
 
@@ -289,6 +311,14 @@ class Builder extends React.Component {
       article: {
         onDrop: () => {
           this.setState({ isArticleDrawerOpen: true })
+        }
+      },
+      neighborhoods: {
+        onNeighborhoodsDrop: () => {
+          this.setState({ isNeighborhoodsReportDrawerOpen: true })
+        },
+        onNeighborhoodsGraphsDrop: () => {
+          this.setState({ isNeighborhoodsGraphsReportDrawerOpen: true })
         }
       }
     })
@@ -546,6 +576,10 @@ class Builder extends React.Component {
       templateHtmlCss: this.getTemplateHtmlCss()
     })
     this.resize()
+
+    if (this.isEmailTemplate && this.isMjmlTemplate) {
+      this.registerEmailBlocks()
+    }
   }
 
   deselectAll = () => {
@@ -742,7 +776,7 @@ class Builder extends React.Component {
   }
 
   isTemplatesListEnabled = () => {
-    if (this.props.showTemplatesColumn === false) {
+    if (this.props.hideTemplatesColumn) {
       return false
     }
 
@@ -856,6 +890,28 @@ class Builder extends React.Component {
               this.setState({ isArticleDrawerOpen: false })
             }}
           />
+          <NeighborhoodsReportDrawer
+            isOpen={
+              this.state.isNeighborhoodsReportDrawerOpen ||
+              this.state.isNeighborhoodsGraphsReportDrawerOpen
+            }
+            onlyAggregatedReports={
+              this.state.isNeighborhoodsGraphsReportDrawerOpen
+            }
+            onClose={() => {
+              this.setState({
+                isNeighborhoodsReportDrawerOpen: false,
+                isNeighborhoodsGraphsReportDrawerOpen: false
+              })
+            }}
+            onSelect={report => {
+              this.blocks.neighborhoods.selectHandler(report)
+              this.setState({
+                isNeighborhoodsReportDrawerOpen: false,
+                isNeighborhoodsGraphsReportDrawerOpen: false
+              })
+            }}
+          />
           <Header>
             {this.isTemplatesListEnabled() && (
               <>
@@ -943,7 +999,7 @@ class Builder extends React.Component {
                 onClick={this.props.onClose}
                 style={{ marginLeft: '0.5rem' }}
               >
-                <CloseIcon />
+                <CloseIcon size="small" />
               </IconButton>
             </Actions>
           </Header>

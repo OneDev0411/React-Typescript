@@ -88,7 +88,7 @@ export default function VideoDrawer({
           <Thumbnail onLoad={() => setIsLoading(false)} src={video.thumbnail} />
         )}
       </OverlayDrawer.Body>
-      <OverlayDrawer.Footer>
+      <OverlayDrawer.Footer rowReverse>
         <Button
           disabled={isLoading || !video}
           color="primary"

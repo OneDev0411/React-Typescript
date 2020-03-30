@@ -1,15 +1,22 @@
-import React from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import React, { useState } from 'react'
+import {
+  Button,
+  Popper,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  createStyles,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
 import { StateContext, DispatchContext } from 'components/Grid/Table/context'
 
-import IconButton from 'components/Button/IconButton'
-
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
-
-import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
 
 import Email from '../../Actions/Email'
 import MergeContacts from '../../Actions/MergeContacts'
@@ -22,9 +29,18 @@ import { ActionWrapper } from '../components/ActionWrapper'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       '& button': {
         marginLeft: theme.spacing(1)
       }
+    },
+    moreActionContainer: {
+      background: theme.palette.background.paper,
+      zIndex: 1100,
+      borderRadius: theme.shape.borderRadius,
+      boxShadow: `0 0 5px 0 ${theme.palette.text.hint}`
     }
   })
 )
@@ -51,6 +67,14 @@ export function TableActions({
   handleChangeContactsAttributes
 }: Props) {
   const classes = useStyles()
+  const [moreActionEl, setMoreActionEl] = useState<null | HTMLElement>(null)
+
+  const toggleMoreAction = (event: React.MouseEvent<HTMLElement>) => {
+    setMoreActionEl(moreActionEl ? null : event.currentTarget)
+  }
+
+  const isMoreActionOpen = Boolean(moreActionEl)
+  const moreActionID = isMoreActionOpen ? 'more-action-popper' : undefined
 
   const entireMode = state.selection.isEntireRowsSelected
   const isAnyRowsSelected =
@@ -65,18 +89,6 @@ export function TableActions({
 
   return (
     <div className={classes.container}>
-      <ExportContacts
-        excludedRows={state.selection.excludedRows}
-        exportIds={state.selection.selectedRowIds}
-        filters={filters.attributeFilters}
-        flows={filters.flows}
-        crmTasks={filters.crm_tasks}
-        searchText={filters.text}
-        conditionOperator={filters.filter_type}
-        users={filters.users}
-        disabled={isFetching}
-      />
-
       <ActionWrapper
         atLeast="one"
         bulkMode={entireMode}
@@ -145,35 +157,57 @@ export function TableActions({
         resetSelectedRows={deselectRows}
         reloadContacts={reloadContacts}
       />
-
-      <ActionWrapper
-        bulkMode={entireMode}
-        action="merging"
-        atLeast="two"
-        disabled={!isAnyRowsSelected}
+      <ExportContacts
+        excludedRows={state.selection.excludedRows}
+        exportIds={state.selection.selectedRowIds}
+        filters={filters.attributeFilters}
+        flows={filters.flows}
+        crmTasks={filters.crm_tasks}
+        searchText={filters.text}
+        conditionOperator={filters.filter_type}
+        users={filters.users}
+        disabled={isFetching}
+      />
+      <Button
+        aria-describedby={moreActionID}
+        size="small"
+        onClick={toggleMoreAction}
       >
-        <MergeContacts
-          disabled={!isAnyRowsSelected}
-          selectedRows={state.selection.selectedRowIds}
-          submitCallback={deselectAndReload}
-        />
-      </ActionWrapper>
-
-      <ActionWrapper
-        bulkMode={entireMode}
-        atLeast="one"
-        action="delete"
-        disabled={!isAnyRowsSelected}
+        <IconHorizontalDots />
+      </Button>
+      <Popper
+        id={moreActionID}
+        open={isMoreActionOpen}
+        anchorEl={moreActionEl}
+        className={classes.moreActionContainer}
       >
-        <IconButton
-          disabled={!isAnyRowsSelected}
-          size="small"
-          appearance="outline"
-          onClick={onRequestDelete}
-        >
-          <IconDeleteOutline />
-        </IconButton>
-      </ActionWrapper>
+        <List>
+          <ListItem
+            button
+            disabled={!isAnyRowsSelected}
+            onClick={onRequestDelete}
+          >
+            <ActionWrapper
+              bulkMode={entireMode}
+              atLeast="one"
+              action="delete"
+              disabled={!isAnyRowsSelected}
+            >
+              <ListItemText>
+                <Typography color="error">Delete</Typography>
+              </ListItemText>
+            </ActionWrapper>
+          </ListItem>
+          <MergeContacts
+            acEntireMode={entireMode}
+            disabled={
+              !isAnyRowsSelected || state.selection.selectedRowIds.length < 2
+            }
+            selectedRows={state.selection.selectedRowIds}
+            submitCallback={deselectAndReload}
+          />
+        </List>
+      </Popper>
     </div>
   )
 }

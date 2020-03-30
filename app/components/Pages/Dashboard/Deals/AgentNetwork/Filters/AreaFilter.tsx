@@ -129,7 +129,7 @@ export default function AreaFilter(props: Props) {
           <FormControlLabel
             control={
               <Radio
-                color="primary"
+                color="secondary"
                 checked={isFilterTypeRadius}
                 disabled={disabled}
                 onChange={handleChangeType}
@@ -158,7 +158,7 @@ export default function AreaFilter(props: Props) {
             </Box>
             <Button
               disabled={disabled}
-              color="primary"
+              color="secondary"
               className={classes.searchButton}
               onClick={onSearch}
               size="small"
@@ -174,7 +174,7 @@ export default function AreaFilter(props: Props) {
           <FormControlLabel
             control={
               <Radio
-                color="primary"
+                color="secondary"
                 checked={isFilterTypeCustom}
                 disabled={disabled}
                 onChange={handleChangeType}
@@ -243,7 +243,7 @@ export default function AreaFilter(props: Props) {
                 (selectedParentAreas.length === 0 &&
                   selectedSubAreas.length === 0)
               }
-              color="primary"
+              color="secondary"
               className={classes.searchButton}
               onClick={onSearch}
               size="small"

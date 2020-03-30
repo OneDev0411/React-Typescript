@@ -15,6 +15,7 @@ const routes = {
     'export-custom-report'
   ],
   'my-marketing-matters': ['punchout'],
+  liveby: ['neighborhoods', 'report'],
   utils: ['get-url-metadata']
 }
 

@@ -39,6 +39,8 @@ import ListingMapMarker from '../../../Partials/ListingMapMarker'
 
 import ShareModal from '../../components/modals/ShareListingModal'
 
+import { appSidenavWidth } from '../../../SideNav/variables'
+
 export const renderFeatures = (title, value) => {
   if (!value) {
     return null
@@ -100,7 +102,7 @@ const ListingDesktopView = ({
     viewer_width = window.innerWidth
 
     if (!data.is_widget && container !== 'modal') {
-      viewer_width -= 56
+      viewer_width -= appSidenavWidth + 15 // Scrollbar width
     }
   }
 
@@ -519,7 +521,7 @@ const ListingDesktopView = ({
 
     main_content = (
       <div style={S('bg-fff')}>
-        <div style={S('p-0 relative')}>
+        <div style={{ margin: '0 1.5rem', position: 'relative', padding: 0 }}>
           {listing.gallery_image_urls && listing.gallery_image_urls.length
             ? listing_images
             : ''}
@@ -530,7 +532,7 @@ const ListingDesktopView = ({
         </div>
 
         <div>
-          <div style={S('pt-40 pl-20 pr-20')} className="clearfix">
+          <div style={{ padding: '2rem 1.5rem' }} className="clearfix">
             <Col sm={9} style={S('pl-0')}>
               <div style={S('mb-20')}>
                 <Col sm={4} style={S('pl-0')}>
@@ -686,10 +688,6 @@ const ListingDesktopView = ({
                   <div>
                     <div style={S('fw-600 font-18 mb-10')}>All Features</div>
                     {renderFeatures(
-                      'Parking/Garage',
-                      property.parking_spaces_garage ? 'Yes' : 'No'
-                    )}
-                    {renderFeatures(
                       'Parking Spaces',
                       property.parking_spaces_covered_total
                     )}
@@ -750,7 +748,7 @@ const ListingDesktopView = ({
   }
 
   let viewer_wrap_style = S(
-    `absolute h-100p bg-fff t-0 l-0 z-10 ml-56 w-${viewer_width}`
+    `absolute h-100p bg-fff t-0 l-0 z-10 ml-${appSidenavWidth} w-${viewer_width}`
   )
 
   if (data.is_widget) {
@@ -797,7 +795,7 @@ const ListingDesktopView = ({
   const headerProps = {
     alignCenter: true,
     justifyBetween: true,
-    style: { height: '70px', padding: '0 1.5rem' }
+    style: { padding: '2rem 1.5rem' }
   }
   const Header = (
     <Flex {...headerProps}>

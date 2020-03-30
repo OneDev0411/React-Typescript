@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router'
 import Flex from 'styled-flex-component'
 import moment from 'moment'
 
@@ -12,7 +11,7 @@ import ActionsButton from '../../../../components/ActionsButton'
 
 import { RowContainer, Row } from '../../styled'
 
-import { FileName, FileDate } from './styled'
+import { FileName, FileLink, FileDate } from './styled'
 
 class Files extends React.Component {
   getFileLink = file => {
@@ -65,9 +64,9 @@ class Files extends React.Component {
 
                     <div style={{ marginLeft: '1rem' }}>
                       <FileName>
-                        <Link to={this.getFileLink(file)}>
+                        <FileLink to={this.getFileLink(file)}>
                           <TextMiddleTruncate text={file.name} maxLength={80} />
-                        </Link>
+                        </FileLink>
                       </FileName>
 
                       <FileDate>

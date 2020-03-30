@@ -1,82 +1,32 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
-
-import PageSideNav from 'components/PageSideNav'
-import IconSearch from 'components/SvgIcons/Search/IconSearch'
-import IconNotification from 'components/SvgIcons/Notifications/IconNotifications'
-import {
-  Container as PageContainer,
-  Content as PageContent
-} from 'components/SlideMenu'
-
-import { SectionsEnum } from 'components/PageSideNav/types'
-
-import SavedSearchesList from './SavedSearchesList'
-
-const urlGenerator = url => `/dashboard/mls${url}`
-
-const sideNavSections = [
-  {
-    type: SectionsEnum.LINK,
-    title: 'Properties',
-    items: [
-      {
-        isIndex: true,
-        title: 'Search',
-        icon: IconSearch,
-        link: urlGenerator('/')
-      },
-      {
-        title: 'Following',
-        icon: IconNotification,
-        link: urlGenerator('/following')
-      }
-    ]
-  }
-]
+import { Box } from '@material-ui/core'
 
 class Listings extends Component {
-  state = {
-    isSideMenuOpen: !!this.props.user
-  }
-
-  toggleSideMenu = () =>
-    this.setState(state => ({
-      isSideMenuOpen: !state.isSideMenuOpen
-    }))
-
   render() {
     const { user } = this.props
-    const { isSideMenuOpen } = this.state
 
+    // Layout is made with flex. For the big picture, checkout the sample:
+    // https://codepen.io/mohsentaleb/pen/jOPeVBK
     return (
-      <React.Fragment>
+      <>
         <Helmet>
           <title>Properties | Rechat</title>
         </Helmet>
-        <PageContainer
-          isOpen={isSideMenuOpen}
-          className={`l-listings ${user ? 'l-listings--logged' : ''}`}
+        <Box
+          display="flex"
+          flexDirection="column"
+          flexWrap="nowrap"
+          height="100%"
         >
-          {user && (
-            <PageSideNav isOpen={isSideMenuOpen} sections={sideNavSections}>
-              <SavedSearchesList />
-            </PageSideNav>
-          )}
-
-          <PageContent isSideMenuOpen={isSideMenuOpen} style={{ padding: 0 }}>
-            {user
-              ? React.Children.map(this.props.children, child =>
-                  React.cloneElement(child, {
-                    isSideMenuOpen,
-                    toggleSideMenu: this.toggleSideMenu
-                  })
-                )
-              : this.props.children}
-          </PageContent>
-        </PageContainer>
-      </React.Fragment>
+          {user
+            ? React.Children.map(this.props.children, child =>
+                React.cloneElement(child)
+              )
+            : this.props.children}
+        </Box>
+      </>
     )
   }
 }

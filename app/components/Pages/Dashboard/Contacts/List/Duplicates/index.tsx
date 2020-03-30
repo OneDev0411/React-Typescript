@@ -18,13 +18,12 @@ import { dismissAllMergeClusters } from 'models/contacts/dismiss-all-merge-clust
 import { dismissMergeCluster } from 'models/contacts/dismiss-merge-cluster'
 import { dismissMergeContact } from 'models/contacts/dismiss-merge-contact'
 
+import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import DuplicateContactsList from 'components/DuplicateContacts/DuplicateContactsList'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import { Container } from '../styled'
-
-import Header from './Header'
+import HeaderOptions from './HeaderOptions'
 import ZeroState from './ZeroState'
 
 interface ClusterWithMaster {
@@ -79,7 +78,7 @@ export default function Duplicates({
       const duplicates = await getDuplicateContacts()
 
       setClusters(
-        duplicates.map(item => ({
+        duplicates.data.map(item => ({
           masterId: item.contacts[0]!.id,
           duplicates: item
         }))
@@ -348,95 +347,78 @@ export default function Duplicates({
       }
     })
   }
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <LoadingContainer
+          style={{
+            height: 'calc(100vh - 6em)'
+          }}
+        />
+      )
+    }
 
-  const renderHeader = () => {
-    return (
-      <Header
-        listsLength={clusters.length}
-        isSideMenuOpen={isSideMenuOpen}
-        onSideMenuTriggerClick={onSideMenuTriggerClick}
-        onDismissAllClick={handleDismissAllClustersClick}
-        onMergeAllClick={handleMergeAllClustersClick}
-      />
-    )
-  }
+    if (clusters.length === 0) {
+      return <ZeroState />
+    }
 
-  if (isLoading) {
-    return (
-      <>
-        {renderHeader()}
-        <Container>
-          <LoadingContainer
-            style={{
-              height: 'calc(100vh - 6em)'
-            }}
+    return clusters.map(cluster => {
+      const clusterId = cluster.duplicates.id
+      const clusterHeader = getClusterHeader(clusterId)
+
+      return (
+        <div
+          key={`${clusterId}-master-${cluster.masterId}`}
+          className={classes.clusterWrapper}
+        >
+          <div className={classes.clusterHeader}>
+            <div>
+              <Typography variant="body1">{clusterHeader}</Typography>
+            </div>
+            <div className={classes.clusterHeaderActions}>
+              <Button
+                variant="text"
+                color="secondary"
+                className={classes.dismissButton}
+                onClick={() => handleDismissClusterClick(clusterId)}
+              >
+                Dismiss
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => handleMergeClusterClick(clusterId)}
+              >
+                Merge
+              </Button>
+            </div>
+          </div>
+          <DuplicateContactsList
+            key={clusterId}
+            contacts={cluster.duplicates.contacts}
+            masterId={cluster.masterId}
+            onDismissClick={contactId =>
+              handleDismissContactClick(clusterId, contactId)
+            }
+            onSetMasterClick={masterId =>
+              handleSetMasterIdClick(clusterId, masterId)
+            }
           />
-        </Container>
-      </>
-    )
-  }
-
-  if (clusters.length === 0) {
-    return (
-      <>
-        {renderHeader()}
-        <Container>
-          <ZeroState />
-        </Container>
-      </>
-    )
+        </div>
+      )
+    })
   }
 
   return (
-    <>
-      {renderHeader()}
-      <Container>
-        {clusters.map(cluster => {
-          const clusterId = cluster.duplicates.id
-          const clusterHeader = getClusterHeader(clusterId)
-
-          return (
-            <div
-              key={`${clusterId}-master-${cluster.masterId}`}
-              className={classes.clusterWrapper}
-            >
-              <div className={classes.clusterHeader}>
-                <div>
-                  <Typography variant="body1">{clusterHeader}</Typography>
-                </div>
-                <div className={classes.clusterHeaderActions}>
-                  <Button
-                    variant="text"
-                    color="secondary"
-                    className={classes.dismissButton}
-                    onClick={() => handleDismissClusterClick(clusterId)}
-                  >
-                    Dismiss
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => handleMergeClusterClick(clusterId)}
-                  >
-                    Merge
-                  </Button>
-                </div>
-              </div>
-              <DuplicateContactsList
-                key={clusterId}
-                contacts={cluster.duplicates.contacts}
-                masterId={cluster.masterId}
-                onDismissClick={contactId =>
-                  handleDismissContactClick(clusterId, contactId)
-                }
-                onSetMasterClick={masterId =>
-                  handleSetMasterIdClick(clusterId, masterId)
-                }
-              />
-            </div>
-          )
-        })}
-      </Container>
-    </>
+    <PageLayout>
+      <PageLayout.Header title="Duplicate Contacts">
+        <HeaderOptions
+          listsLength={clusters.length}
+          onDismissAllClick={handleDismissAllClustersClick}
+          onMergeAllClick={handleMergeAllClustersClick}
+        />
+      </PageLayout.Header>
+      <PageLayout.Main>{renderContent()}</PageLayout.Main>
+    </PageLayout>
   )
 }

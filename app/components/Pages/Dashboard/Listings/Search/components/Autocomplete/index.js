@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { IconButton } from '@material-ui/core'
 import { browserHistory } from 'react-router'
 import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
 import { batchActions } from 'redux-batched-actions'
+
+import { SearchInput } from 'components/GlobalHeaderWithSearch/SearchInput'
 
 import getPlace from 'models/listings/search/get-place'
 import { searchListings } from 'models/listings/search/search-listings'
@@ -22,8 +25,6 @@ import { goToPlace, setMapProps } from 'actions/listings/map'
 import resetAreasOptions from 'actions/listings/search/reset-areas-options'
 import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
 
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
-import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
 
 import {
@@ -32,13 +33,10 @@ import {
 } from '../../../../../../../constants/listings/search'
 
 import {
+  SearchContainer,
   ListContainer,
-  Input,
   ListTitle,
-  ClearButton,
-  SearchIcon,
   Item,
-  LoadingContainer
 } from './styled'
 
 class MlsAutocompleteSearch extends Component {
@@ -68,9 +66,9 @@ class MlsAutocompleteSearch extends Component {
   inputRef = React.createRef()
 
   handleChangeInput = e => {
-    const input = e.target.value
+    const { value } = e.target
 
-    this.setState({ input, isDrity: true }, () => this.search(input))
+    this.setState({ input: value, isDrity: true }, () => this.search(value))
   }
 
   handleKeyDownInput = e => {
@@ -260,8 +258,10 @@ class MlsAutocompleteSearch extends Component {
       ])
 
       await dispatch(getListingsByQuery(this.state.input, { limit: 200 }))
+      this.setState({ isLoading: false })
     } catch (error) {
       console.log(error)
+      this.setState({ isLoading: false })
     } finally {
       this.inputRef.current.blur()
     }
@@ -289,8 +289,7 @@ class MlsAutocompleteSearch extends Component {
 
   render() {
     return (
-      <div style={{ position: 'relative' }}>
-        <SearchIcon />
+      <SearchContainer>
         <Downshift
           isOpen={this.state.isOpen}
           onSelect={this.handleSelectedItem}
@@ -301,14 +300,16 @@ class MlsAutocompleteSearch extends Component {
 
             return (
               <div>
-                <Input
+                <SearchInput
                   ref={this.inputRef}
                   value={this.state.input}
                   onChange={this.handleChangeInput}
                   onKeyDown={this.handleKeyDownInput}
                   onFocus={this.handleInputFocus}
                   onBlur={this.handleInputBlur}
-                  placeholder="Search location or MLS#"
+                  placeholder="Search location or MLS number"
+                  onClear={this.onClear}
+                  isLoading={this.state.isLoading}
                 />
                 {isOpen && (
                   <ListContainer>
@@ -354,19 +355,7 @@ class MlsAutocompleteSearch extends Component {
             )
           }}
         />
-
-        {!this.state.isLoading && this.state.input && (
-          <ClearButton isFit inverse iconSize="large" onClick={this.onClear}>
-            <IconClose />
-          </ClearButton>
-        )}
-
-        {this.state.isLoading && (
-          <LoadingContainer>
-            <Loading />
-          </LoadingContainer>
-        )}
-      </div>
+      </SearchContainer>
     )
   }
 }

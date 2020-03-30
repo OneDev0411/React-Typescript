@@ -11,7 +11,13 @@ import cn from 'classnames'
 
 import { resolveAccessor } from '../helpers/resolve-accessor'
 
-import { TableColumn, GridSelectionOptions, TrProps, TdProps } from '../types'
+import {
+  TableColumn,
+  GridSelectionOptions,
+  GridClasses,
+  TrProps,
+  TdProps
+} from '../types'
 import { useGridContext } from '../hooks/use-grid-context'
 
 interface Props<Row> {
@@ -19,6 +25,7 @@ interface Props<Row> {
   rows: Row[]
   selection: GridSelectionOptions<Row> | null
   hoverable: boolean
+  classes: GridClasses
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
 }
@@ -34,6 +41,8 @@ const useStyles = makeStyles((theme: Theme) =>
       const br = theme.shape.borderRadius
 
       let styles = {
+        fontSize: theme.typography.body1.fontSize,
+        fontWeight: theme.typography.body1.fontWeight,
         '& td:first-child': {
           paddingLeft: theme.spacing(1),
           borderRadius: `${br}px 0 0 ${br}px`
@@ -42,7 +51,6 @@ const useStyles = makeStyles((theme: Theme) =>
           borderRadius: `0 ${br}px ${br}px 0`
         },
         '&:hover .primary': {
-          color: theme.palette.primary.main,
           cursor: 'pointer'
         }
       }
@@ -77,14 +85,15 @@ const useStyles = makeStyles((theme: Theme) =>
 export function Body<Row>({
   columns,
   rows,
+  classes,
   selection,
   hoverable,
   getTdProps = () => ({}),
   getTrProps = () => ({})
-}: Props<Row>) {
+}: Props<Row & { id?: string }>) {
   const [state] = useGridContext()
 
-  const classes = useStyles({
+  const bodyClasses = useStyles({
     selection
   })
 
@@ -98,14 +107,15 @@ export function Body<Row>({
 
   return (
     <>
-      <TableBody className={classes.table}>
+      <TableBody className={bodyClasses.table}>
         {rows.map((row, rowIndex: number) => {
           const selected = isRowSelected(row, rowIndex)
+          const rowId = row.id || rowIndex
 
           return (
             <TableRow
-              key={rowIndex}
-              className={classes.row}
+              key={rowId}
+              className={cn(bodyClasses.row, classes.row)}
               hover={hoverable}
               {...getTrProps({
                 rowIndex,
@@ -114,13 +124,15 @@ export function Body<Row>({
               })}
             >
               {columns
-                .filter((column: TableColumn<Row>) => column.render)
+                .filter(
+                  (column: TableColumn<Row>) => column.render || column.accessor
+                )
                 .map((column: TableColumn<Row>, columnIndex: number) => (
                   <TableCell
                     key={columnIndex}
                     align={column.align || 'inherit'}
                     classes={{
-                      root: classes.column
+                      root: cn(bodyClasses.column, column.class)
                     }}
                     className={cn({
                       primary: column.primary === true,

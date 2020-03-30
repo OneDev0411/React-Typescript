@@ -5,13 +5,14 @@ import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
+import { Button } from '@material-ui/core'
+
 import { splitPDF, getSplitJobStatus } from 'models/Deal/splitter'
 import { createTaskMessage } from 'models/Deal/task'
 
 import { changeNeedsAttention, addTaskFile } from 'actions/deals'
 
 import { CheckBoxButton } from 'components/Button/CheckboxButton'
-import ActionButton from 'components/Button/ActionButton'
 
 import Spinner from 'components/Spinner'
 
@@ -208,23 +209,26 @@ class Form extends React.Component {
               &nbsp;Notify Office
             </Flex>
 
-            <ActionButton
-              appearance="outline"
+            <Button
+              variant="outlined"
+              color="secondary"
               size="small"
               onClick={() => this.handleSave(true)}
               disabled={isDisabled}
             >
               Save and quit
-            </ActionButton>
+            </Button>
 
-            <ActionButton
+            <Button
               size="small"
+              variant="contained"
+              color="secondary"
               disabled={isDisabled}
               onClick={() => this.handleSave(false)}
               style={{ marginLeft: '0.5rem' }}
             >
               Save and create another
-            </ActionButton>
+            </Button>
           </Flex>
         </Container>
       </React.Fragment>

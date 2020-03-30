@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { IAppState } from 'reducers'
+import { IAppState } from '../../../../reducers'
 
 import { ACL } from '../../../../constants/acl'
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
@@ -16,8 +16,9 @@ import Brand from '../../../../controllers/Brand'
 
 import Logo from './components/Logo'
 import { UserMenu } from './components/UserMenu'
-import { SideNavLinkItem } from './components/SideNavLinkItem'
+import SideNavLinkItem from './components/SideNavLinkItem'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
+import SupportTrigger from './components/SupportTrigger'
 
 import {
   Sidenav,
@@ -40,7 +41,7 @@ export default function AppSideNav() {
   )
   const dealsNotificationsNumber = useDealsNotificationsNumber()
   const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
-  const logoSrc = Brand.asset('office_logo')
+  const logoSrc = Brand.asset('office_logo', '/static/images/logo.svg')
 
   return (
     <Sidenav>
@@ -52,6 +53,10 @@ export default function AppSideNav() {
       >
         <SidenavListGroup data-test="side-nav-list">
           <Acl.Crm>
+            <SideNavLinkItem to="/dashboard/inbox">Inbox</SideNavLinkItem>
+          </Acl.Crm>
+
+          <Acl.Crm>
             <SideNavLinkItem to="/dashboard/calendar">Calendar</SideNavLinkItem>
           </Acl.Crm>
 
@@ -62,14 +67,56 @@ export default function AppSideNav() {
 
         <SidenavListGroup>
           <Acl.Marketing>
-            <SideNavLinkItem to="/dashboard/insights">Email</SideNavLinkItem>
-          </Acl.Marketing>
-
-          <Acl.Marketing>
             <SideNavLinkItem to="/dashboard/marketing">
               Marketing
             </SideNavLinkItem>
           </Acl.Marketing>
+
+          <Acl.Marketing>
+            <SideNavLinkItem to="/dashboard/insights">
+              Email Insight
+            </SideNavLinkItem>
+          </Acl.Marketing>
+
+          <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
+            <SideNavLinkItem to="/dashboard/open-house">
+              Open House
+            </SideNavLinkItem>
+          </Acl>
+
+          <Acl.Crm>
+            <SideNavLinkItem to="/dashboard/tours">Tours</SideNavLinkItem>
+          </Acl.Crm>
+
+          <SideNavLinkItem to="/dashboard/mls">Properties</SideNavLinkItem>
+
+          <Acl access={hasWebsitePermission}>
+            <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
+          </Acl>
+
+          <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
+            <SideNavLinkItem to="/dashboard/deals">
+              <AppNavbarBadge
+                badgeContent={dealsNotificationsNumber}
+                color="primary"
+              >
+                Deals
+              </AppNavbarBadge>
+            </SideNavLinkItem>
+          </Acl>
+        </SidenavListGroup>
+
+        <SidenavListGroup>
+          {user && (
+            <SideNavItem>
+              <AppNavbarBadge
+                badgeContent={chatRoomsNotificationsNumber}
+                color="primary"
+              >
+                <MessagesDrawerTrigger />
+              </AppNavbarBadge>
+            </SideNavItem>
+          )}
 
           {user && (
             <SideNavLinkItem to="/dashboard/notifications">
@@ -79,50 +126,7 @@ export default function AppSideNav() {
             </SideNavLinkItem>
           )}
 
-          {user && (
-            <SideNavItem>
-              <AppNavbarBadge
-                badgeContent={chatRoomsNotificationsNumber}
-                color="error"
-              >
-                <MessagesDrawerTrigger />
-              </AppNavbarBadge>
-            </SideNavItem>
-          )}
-        </SidenavListGroup>
-
-        <SidenavListGroup>
-          <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
-            <SideNavLinkItem to="/dashboard/deals">
-              <AppNavbarBadge
-                badgeContent={dealsNotificationsNumber}
-                color="error"
-              >
-                Deals
-              </AppNavbarBadge>
-            </SideNavLinkItem>
-          </Acl>
-
-          <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
-            <SideNavLinkItem
-              tooltip="Open House Registration Pages"
-              to="/dashboard/open-house"
-            >
-              Open House
-            </SideNavLinkItem>
-          </Acl>
-
-          <SideNavLinkItem tooltip="All MLS® Properties" to="/dashboard/mls">
-            Properties
-          </SideNavLinkItem>
-
-          <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/tours">Toursheets</SideNavLinkItem>
-          </Acl.Crm>
-
-          <Acl access={hasWebsitePermission}>
-            <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
-          </Acl>
+          <SupportTrigger />
         </SidenavListGroup>
       </ScrollableArea>
 

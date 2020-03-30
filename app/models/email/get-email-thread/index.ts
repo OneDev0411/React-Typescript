@@ -3,7 +3,8 @@ import { toEntityAssociation } from 'utils/association-utils'
 import Fetch from '../../../services/fetch'
 
 const DEFAULT_EMAIL_THREAD_ASSOCIATIONS: IEmailThreadAssociations[] = [
-  'messages'
+  'messages',
+  'contacts'
 ]
 export async function getEmailThread<A1 extends IEmailThreadAssociations>(
   threadKey: string,

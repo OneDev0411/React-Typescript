@@ -31,7 +31,7 @@ export const styles = (theme: Theme) =>
           color: 'inherit'
         }
       },
-      '& a, & button': {
+      '& a, & button, & svg': {
         zIndex: 1,
         position: 'relative'
       },
@@ -39,8 +39,28 @@ export const styles = (theme: Theme) =>
         color: '#1D1F26' // TODO: use palette
       },
       '&:hover a': {
-        color: theme.palette.primary.main,
+        color: theme.palette.secondary.main,
         textDecoration: 'underline'
+      },
+      '&:hover $actions': {
+        opacity: 1
+      }
+    },
+    iconEdit: {
+      marginRight: theme.spacing(2),
+      fill: theme.palette.grey[400],
+      '&:hover': {
+        fill: theme.palette.grey[300]
+      }
+    },
+    actions: {
+      display: 'flex',
+      alignItems: 'center',
+      opacity: 0,
+      transition: '0.1s ease-in opacity',
+      '& button, & a': {
+        marginRight: theme.spacing(2),
+        textDecoration: 'none'
       }
     }
   })

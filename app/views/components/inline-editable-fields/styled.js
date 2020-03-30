@@ -5,16 +5,15 @@ import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
 import StarIcon from 'components/SvgIcons/Star/StarIcon'
 import ArrowIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import { primary, grey, borderColor } from 'views/utils/colors'
 
 export const ViewModeContainer = styled.div`
   position: relative;
   padding: 0.5em;
-  border-radius: ${props => props.theme.shape.borderRadius}px;
+  border-radius: ${({ theme }) => theme.shape.borderRadius}px;
 
   &:hover {
     cursor: pointer;
-    background-color: ${props => props.theme.palette.action.hover};
+    background-color: ${({ theme }) => theme.palette.action.hover};
 
     .action-bar {
       visibility: visible;
@@ -47,19 +46,14 @@ export const EditButton = styled(ActionButton)`
 export const EditModeContainer = styled.div`
   position: relative;
   padding: 0.5em;
-  border-radius: ${props =>
-    props.isStatic
-      ? `${props.theme.shape.borderRadius}px`
-      : `${props.theme.shape.borderRadius}px ${
-          props.theme.shape.borderRadius
-        }px 0 0`};
-  background: ${props =>
-    props.hasError
-      ? fade(
-          props.theme.palette.error.main,
-          props.theme.palette.action.hoverOpacity
-        )
-      : props.theme.palette.action.selected};
+  border-radius: ${({ isStatic, theme }) =>
+    isStatic
+      ? `${theme.shape.borderRadius}px`
+      : `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`};
+  background: ${({ hasError, theme }) =>
+    hasError
+      ? fade(theme.palette.error.main, theme.palette.action.hoverOpacity)
+      : theme.palette.action.selected};
 `
 
 export const Label = styled.div`
@@ -83,10 +77,12 @@ export const DropdownButton = styled(LinkButton)`
   padding: 0;
   height: auto;
   line-height: 1.5;
-  color: ${({ isOpen }) => (isOpen ? primary : '#000')};
+  color: ${({ isOpen, theme }) =>
+    isOpen ? theme.palette.primary.main : theme.palette.common.black};
 
   > svg {
-    fill: ${({ isOpen }) => (isOpen ? primary : '#000')};
+    fill: ${({ isOpen, theme }) =>
+      isOpen ? theme.palette.primary.main : theme.palette.common.black};
   }
 `
 
@@ -101,22 +97,22 @@ export const Input = styled.input`
   padding: 0.25em 0.5em;
   border: none;
   background: transparent;
-  background: #fff;
+  background: ${({ theme }) => theme.palette.common.white};
 
   &:focus {
     outline: none;
     border-radius: 3px;
-    border: 1px solid ${primary};
+    border: 1px solid ${({ theme }) => theme.palette.primary.main};
   }
 `
 
 export const EditModeActionBar = styled.div`
   display: flex;
   align-items: center;
-  justify-content: ${props =>
-    props.showDelete ? 'space-between' : 'flex-end'};
-  ${props =>
-    props.isStatic
+  justify-content: ${({ showDelete }) =>
+    showDelete ? 'space-between' : 'flex-end'};
+  ${({ isStatic, theme }) =>
+    isStatic
       ? css`
           margin-top: 1rem;
         `
@@ -129,7 +125,7 @@ export const EditModeActionBar = styled.div`
           z-index: 1;
           padding: 0 0.5em;
           border-radius: 0 0 3px 3px;
-          background: ${grey.A100};
-          border: 1px solid ${borderColor};
+          background: ${theme.palette.grey[100]};
+          border: 1px solid ${theme.palette.grey[300]};
         `}
 `

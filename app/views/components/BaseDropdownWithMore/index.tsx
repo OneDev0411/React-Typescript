@@ -13,25 +13,31 @@ interface Props extends BaseProps {
     row: boolean
     column: boolean
     count: number
-    moreText: string
-    lessText: string
+    moreText?: string
+    lessText?: string
+    textStyle?: object
+    style?: object
   }
 }
 
 export function BaseDropdownWithMore({
   renderMenu,
+  listPlugin,
   morePlugin,
   ...props
 }: Props) {
+  const basicShowMoreStyle = { maxHeight: 350, overflow: 'auto' }
+  const showMoreStyle =
+    morePlugin && morePlugin.style
+      ? { ...morePlugin.style, ...basicShowMoreStyle }
+      : basicShowMoreStyle
+
   return (
     <BaseDropdown
       {...props}
       renderMenu={props => (
-        <List>
-          <ShowMoreLess
-            {...morePlugin}
-            style={{ maxHeight: 350, overflow: 'auto' }}
-          >
+        <List {...listPlugin}>
+          <ShowMoreLess {...morePlugin} style={showMoreStyle}>
             {renderMenu(props)}
           </ShowMoreLess>
         </List>

@@ -3,7 +3,14 @@ import { useEffect, useState, useContext } from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
-import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core'
+import {
+  makeStyles,
+  Theme,
+  Typography,
+  Box,
+  IconButton
+} from '@material-ui/core'
+import classNames from 'classnames'
 
 import { IAppState } from 'reducers'
 import {
@@ -17,28 +24,64 @@ import { deleteEmailTemplate } from 'actions/email-templates/delete-email-templa
 import { getActiveTeamId } from 'utils/user-teams'
 
 import Table from 'components/Grid/Table'
+import { TableColumn } from 'components/Grid/Table/types'
 import Tooltip from 'components/tooltip'
-import ActionButton from 'components/Button/ActionButton'
 import LoadingContainer from 'components/LoadingContainer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { RenderProps } from 'components/Grid/Table/types'
+import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    body2: {
-      color: theme.palette.grey['500']
-    },
-    deleteButtonWrapper: {
-      textAlign: 'right'
+const useStyles = makeStyles((theme: Theme) => ({
+  name: {
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(1.5)
+  },
+  subject: {
+    paddingRight: theme.spacing(2)
+  },
+  body: {
+    paddingRight: theme.spacing(2)
+  },
+  actions: {
+    flexGrow: 1,
+    textAlign: 'right'
+  },
+  deleteAction: {
+    '&:hover svg *': {
+      fill: theme.palette.error.main
     }
-  })
-)
+  },
+  deleteActionDisabled: {
+    fill: theme.palette.action.disabled,
+    '&:hover svg *': {
+      fill: theme.palette.action.disabled
+    }
+  },
+  row: {
+    cursor: 'pointer',
+    '&:hover': {
+      '& $name': {
+        color: theme.palette.secondary.main
+      }
+    },
+    '&:not(:hover)': {
+      '& $subject': {
+        color: theme.palette.grey[500]
+      },
+      '& $body': {
+        color: theme.palette.grey[500]
+      },
+      '& $actions': {
+        display: 'none'
+      }
+    }
+  }
+}))
 
 interface Props {
   brand: UUID
   isFetching: boolean
   templates: IBrandEmailTemplate[]
-  onItemClick: (IBrandEmailTemplate) => void
+  onItemClick: (item: IBrandEmailTemplate) => void
   deleteEmailTemplate: IAsyncActionProp<typeof deleteEmailTemplate>
   fetchEmailTemplates: IAsyncActionProp<typeof fetchEmailTemplates>
 }
@@ -75,72 +118,85 @@ function EmailTemplatesList({
     fetchEmailTemplates(brand)
   }, [brand, fetchEmailTemplates])
 
-  const columns = [
+  const columns: TableColumn<IBrandEmailTemplate>[] = [
     {
       header: 'Name',
       id: 'name',
+      width: '25%',
       primary: true,
-      accessor: (template: IBrandEmailTemplate) => template.name,
-      render: ({ row }: RenderProps<IBrandEmailTemplate>) => (
-        <Typography noWrap variant="body1">
+      accessor: template => template.name,
+      render: ({ row }) => (
+        <Typography noWrap variant="body2" classes={{ root: classes.name }}>
           {row.name}
         </Typography>
       )
     },
     {
-      header: 'Content',
-      id: 'content',
+      header: 'Subject',
+      id: 'subject',
+      width: '30%',
       sortable: false,
-      render: ({ row }: RenderProps<IBrandEmailTemplate>) => (
-        <div>
-          <Typography noWrap variant="body1">
-            {row.subject}
-          </Typography>
-          <Typography noWrap variant="body2" className={classes.body2}>
-            {row.text}
-          </Typography>
-        </div>
+      render: ({ row }) => (
+        <Typography noWrap variant="body2" classes={{ root: classes.subject }}>
+          {row.subject}
+        </Typography>
       )
     },
     {
-      id: 'delete',
+      header: 'Body',
+      id: 'body-actions',
       sortable: false,
-      render: ({
-        row: { id, editable, name }
-      }: RenderProps<IBrandEmailTemplate>) => (
-        <div className={classes.deleteButtonWrapper}>
-          <Tooltip
-            caption={
-              editable ? 'Delete' : "You can't delete default templates."
-            }
-          >
-            <ActionButton
-              size="small"
-              appearance="outline"
-              inverse
-              className="danger"
-              disabled={!editable}
-              onClick={e => {
-                e.stopPropagation()
-
-                modal.setConfirmationModal({
-                  message: 'Delete Email Template!',
-                  description: `Are you sure about deleting "${name}" template?`,
-                  confirmLabel: 'Yes, I am sure',
-                  onConfirm: () => handleDelete(id)
-                })
-              }}
+      render: ({ row }) => (
+        <Box display="flex" alignItems="center" paddingRight={4}>
+          <Typography noWrap variant="body2" classes={{ root: classes.body }}>
+            {row.text}
+          </Typography>
+          <div className={classes.actions}>
+            <Tooltip
+              caption={
+                !row.editable
+                  ? "You can't delete default templates."
+                  : isTemplateDeleting(row.id)
+                  ? 'Deleting...'
+                  : 'Delete'
+              }
             >
-              {isTemplateDeleting(id) ? 'Deleting...' : 'Delete'}
-            </ActionButton>
-          </Tooltip>
-        </div>
+              <IconButton
+                classes={{
+                  root: classNames(
+                    classes.deleteAction,
+                    (!row.editable || isTemplateDeleting(row.id)) &&
+                      classes.deleteActionDisabled
+                  )
+                }}
+                onClick={e => {
+                  e.stopPropagation()
+
+                  if (!row.editable || isTemplateDeleting(row.id)) {
+                    return
+                  }
+
+                  modal.setConfirmationModal({
+                    message: 'Delete Email Template!',
+                    description: `Are you sure about deleting "${
+                      row.name
+                    }" template?`,
+                    confirmLabel: 'Yes, I am sure',
+                    onConfirm: () => handleDelete(row.id)
+                  })
+                }}
+              >
+                <TrashIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
+        </Box>
       )
     }
   ]
 
   return (
-    <Table<IBrandEmailTemplate>
+    <Table
       rows={templates}
       totalRows={(templates || []).length}
       columns={columns}
@@ -148,14 +204,10 @@ function EmailTemplatesList({
       LoadingStateComponent={() => (
         <LoadingContainer style={{ padding: '20% 0' }} />
       )}
-      getTrProps={({ rowIndex: number, row: template }) => {
-        return {
-          onClick: isTemplateDeleting(template.id)
-            ? () => {}
-            : () => onItemClick(template),
-          style: { cursor: 'pointer' }
-        }
-      }}
+      getTrProps={({ row }) => ({
+        onClick: () => isTemplateDeleting(row.id) || onItemClick(row)
+      })}
+      classes={{ row: classes.row }}
     />
   )
 }

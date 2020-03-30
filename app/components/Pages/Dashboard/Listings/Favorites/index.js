@@ -2,22 +2,47 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Helmet } from 'react-helmet'
+import memoize from 'lodash/memoize'
+import { Box } from '@material-ui/core'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+import { getUserTeams } from 'actions/user/teams'
 
 import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
 import { selectListings } from '../../../../../reducers/listings'
 
+import {
+  formatListing,
+  addDistanceFromCenterToListing
+} from '../helpers/format-listing'
+import { normalizeListingLocation } from '../../../../../utils/map'
+
+import {
+  parsSortIndex,
+  getDefaultSort,
+  sortByIndex,
+  SORT_FIELD_SETTING_KEY
+} from '../helpers/sort-utils'
+
 import Map from './Map'
 import { Header } from '../components/PageHeader'
-import { MapView } from '../components/MapView'
-import { GridView } from '../components/GridView'
-import { GalleryView } from '../components/GalleryView'
+import Tabs from '../components/Tabs'
+import MapView from '../components/MapView'
+import ListView from '../components/ListView'
+import GridView from '../components/GridView'
 
 class Favorites extends React.Component {
   constructor(props) {
     super(props)
 
+    const { index, ascending } = parsSortIndex(getDefaultSort(this.props.user))
+
     this.state = {
-      activeView: props.location.query.view || 'map'
+      activeView: props.location.query.view || 'map',
+      activeSort: {
+        index,
+        ascending
+      }
     }
   }
 
@@ -33,44 +58,91 @@ class Favorites extends React.Component {
     const activeView = e.currentTarget.dataset.view
 
     this.setState({ activeView }, () => {
-      browserHistory.push(`/dashboard/mls/following?view=${activeView}`)
+      browserHistory.push(`/dashboard/mls/favorites?view=${activeView}`)
     })
+  }
+
+  formatAndAddDistance = (listing, center, user) =>
+    addDistanceFromCenterToListing(
+      formatListing(normalizeListingLocation(listing), user),
+      center
+    )
+
+  sortListings = memoize((listings, index, ascending) => {
+    const formattedListings = listings.data.map(listing =>
+      this.formatAndAddDistance(listing, this.props.mapCenter, this.props.user)
+    )
+
+    return formattedListings.sort((a, b) => sortByIndex(a, b, index, ascending))
+  })
+
+  onChangeSort = async e => {
+    let sort = e.currentTarget.dataset.sort
+    const { index, ascending } = parsSortIndex(sort)
+
+    this.setState({
+      activeSort: {
+        index,
+        ascending
+      }
+    })
+    await putUserSetting(SORT_FIELD_SETTING_KEY, sort)
+    this.props.getUserTeams(this.props.user)
   }
 
   renderMain() {
     const { listings, isFetching } = this.props
+
+    const sortedListings = this.sortListings(
+      listings,
+      this.state.activeSort.index,
+      this.state.activeSort.ascending
+    )
 
     switch (this.state.activeView) {
       case 'map':
         return (
           <MapView
             tabName="favorites"
-            listings={listings}
+            sortedListings={sortedListings}
             Map={<Map markers={listings.data} isFetching={isFetching} />}
           />
         )
 
-      case 'gallery':
-        return <GalleryView isFetching={isFetching} listings={listings} />
+      case 'grid':
+        return (
+          <GridView isFetching={isFetching} sortedListings={sortedListings} />
+        )
 
       default:
-        return <GridView isFetching={isFetching} listings={listings} />
+        return (
+          <ListView
+            isFetching={isFetching}
+            sortedListings={sortedListings}
+            listings={listings}
+          />
+        )
     }
   }
 
+  // Layout is made with flex. For the big picture, checkout the sample:
+  // https://codepen.io/mohsentaleb/pen/jOPeVBK
   render() {
     return (
       <React.Fragment>
         <Helmet>
-          <title>Following | Properties | Rechat</title>
+          <title>Favorites | Properties | Rechat</title>
         </Helmet>
-        <Header
-          title="Following"
-          onChangeView={this.onChangeView}
-          activeView={this.state.activeView}
-          isSideMenuOpen={this.props.isSideMenuOpen}
-          toggleSideMenu={this.props.toggleSideMenu}
-        />
+        <Box flex="0 1 auto">
+          <Header title="Favorites" />
+          <Tabs
+            onChangeView={this.onChangeView}
+            activeView={this.state.activeView}
+            onChangeSort={this.onChangeSort}
+            activeSort={this.state.activeSort}
+            user={this.props.user}
+          />
+        </Box>
         {this.renderMain()}
       </React.Fragment>
     )
@@ -92,5 +164,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { getFavorites }
+  { getFavorites, getUserTeams }
 )(Favorites)

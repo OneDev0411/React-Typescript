@@ -1,7 +1,5 @@
 import clip from 'text-clipper'
 
-import { toUTCDate } from 'utils/date-times/to-utc'
-
 import { EmailThreadEmail } from '../types'
 
 import {
@@ -23,7 +21,7 @@ export function normalizeThreadMessageToThreadEmail(
         to: message.to,
         cc: message.cc,
         bcc: message.bcc,
-        date: toUTCDate(new Date(message.message_date * 1000)),
+        date: new Date(message.message_date * 1000),
         htmlBody: message.html_body || '',
         internetMessageId: message.internet_message_id,
         messageId: message.message_id,
@@ -49,7 +47,7 @@ function normalizeEmailToThreadEmail(
     bcc: email.bcc,
     htmlBody: email.html,
     messageId: email.headers && email.headers.message_id,
-    date: toUTCDate(new Date(email.created_at * 1000)),
+    date: new Date(email.created_at * 1000),
     // FIXME: Abbas said it has some problems in API and hopefully
     //  will be fixed in future. Now we set attachments to an empty array!
     attachments: [],

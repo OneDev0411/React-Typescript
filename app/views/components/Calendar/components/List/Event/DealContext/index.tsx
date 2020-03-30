@@ -17,6 +17,7 @@ export function DealContext({ style, event }: Props) {
       style={style}
       event={event}
       Icon={icon.icon}
+      editable={false}
       title={
         <div>
           {event.type_label} for{' '}

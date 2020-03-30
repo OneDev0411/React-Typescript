@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Link as RouterLink } from 'react-router'
 import { Link, MenuItem } from '@material-ui/core'
+import Flex from 'styled-flex-component'
 
 import SplitButton from 'components/SplitButton'
 import { IAppState } from 'reducers'
@@ -16,12 +17,7 @@ import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { iconSizes } from 'components/SvgIcons/icon-sizes'
 
-import {
-  CsvIcon,
-  GoogleIcon,
-  GoogleIconWithWhiteBg,
-  OutlookIcon
-} from './styled'
+import { CsvIcon, GoogleIcon, ButtonText, OutlookIcon } from './styled'
 import { ConnectedAccount } from './ConnectedAccount'
 import { IMPORT_TOOLTIP_VISITED_SETTINGS_KEY } from '../constants'
 import { useConnectOAuthAccount } from './use-connect-oauth-account'
@@ -55,12 +51,11 @@ export function ImportContactsButton({ accounts, user }: Props) {
 
   return (
     <SplitButton
-      color="primary"
-      variant="contained"
       popperPlacement="bottom-end"
       disabled={google.connecting || syncing}
       onClick={google.connect}
-      style={{ marginRight: '1rem', zIndex: 2 }}
+      style={{ zIndex: 2 }}
+      size="large"
       renderMenu={() => (
         <>
           <MenuItem onClick={outlook.connect} disabled={outlook.connecting}>
@@ -112,10 +107,10 @@ export function ImportContactsButton({ accounts, user }: Props) {
           </div>
         }
       >
-        <div>
-          <GoogleIconWithWhiteBg size={iconSizes.small} /> Import Google
-          Contacts
-        </div>
+        <Flex alignCenter>
+          <GoogleIcon size={iconSizes.small} />
+          <ButtonText>Sync with: Google</ButtonText>
+        </Flex>
       </PopOver>
     </SplitButton>
   )

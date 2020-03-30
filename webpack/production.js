@@ -51,7 +51,6 @@ webpackConfig.optimization.minimize = true
 webpackConfig.optimization.minimizer = [
   new TerserPlugin({
     cache: true,
-    parallel: true,
     sourceMap: true,
     exclude: /grapesjs/
   })
@@ -116,6 +115,10 @@ webpackConfig.plugins.push(
 
         if (/\.css/.test(fileName)) {
           return 'text/css'
+        }
+
+        if (/\.svg/.test(fileName)) {
+          return 'image/svg+xml; charset=UTF-8'
         }
 
         return 'text/plain'

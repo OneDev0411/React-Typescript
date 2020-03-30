@@ -1,0 +1,57 @@
+import React from 'react'
+import { createStyles, makeStyles, Theme } from '@material-ui/core'
+
+import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
+
+import { StateContext, DispatchContext } from 'components/Grid/Table/context'
+
+import CreateTourAction from '../CreateTourAction'
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      '& button': {
+        marginLeft: theme.spacing(1)
+      }
+    }
+  })
+)
+
+interface Props {
+  state: StateContext
+  dispatch: DispatchContext
+  isFetching: boolean
+  totalRowsCount: number
+  listings: ICompactListing[]
+  user: IUser
+}
+
+export default function TableActions({
+  state,
+  dispatch,
+  isFetching,
+  totalRowsCount,
+  listings,
+  user
+}: Props) {
+  const classes = useStyles()
+
+  const isAnyRowsSelected =
+    state.selection.isEntireRowsSelected ||
+    state.selection.selectedRowIds.length > 0
+
+  const deselectRows = () => dispatch(resetRows())
+
+  return (
+    <div className={classes.container}>
+      <CreateTourAction
+        disabled={!isAnyRowsSelected}
+        listings={listings.filter(listing =>
+          state.selection.selectedRowIds.includes(listing.id)
+        )}
+        submitCallback={deselectRows}
+        user={user}
+      />
+    </div>
+  )
+}

@@ -37,7 +37,6 @@ export default function Menu({ contact }: Props) {
             variant="outlined"
             onClick={onClick}
             data-test={testId}
-            color="secondary"
             className={classes.button}
           >
             <EmailIcon className={iconClasses.rightMargin} />

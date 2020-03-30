@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
-import { Box } from '@material-ui/core'
+import { Box, Button, IconButton } from '@material-ui/core'
 
 import { confirmation } from 'actions/confirmation'
 
@@ -10,6 +10,8 @@ import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 import InstantMarketing from 'components/InstantMarketing'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { formatDate } from 'components/InstantMarketing/helpers/nunjucks-filters'
+
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { getTemplates } from 'models/instant-marketing'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
@@ -22,14 +24,14 @@ import LoadingContainer from 'components/LoadingContainer'
 
 import { goTo } from 'utils/go-to'
 
+import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
+
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
 import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
-import IconButton from '../../Button/IconButton'
-import ActionButton from '../../Button/ActionButton'
 import { ItemChangelog } from '../../TeamContact/ItemChangelog'
-import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
+
 import { Title } from '../../EventDrawer/components/Title'
 import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import { Description } from '../../EventDrawer/components/Description'
@@ -103,6 +105,8 @@ class OpenHouseDrawerInternal extends React.Component {
       (!props.openHouse && !props.openHouseId) ||
       Object.keys(props.initialValues).length > 0
   }
+
+  static contextType = ConfirmationModalContext
 
   get dealAassociation() {
     const { openHouse } = this.state
@@ -303,6 +307,17 @@ class OpenHouseDrawerInternal extends React.Component {
     }
   }
 
+  onDelete = () => {
+    this.context.setConfirmationModal({
+      message: 'Delete Open House',
+      description: `Are you sure about deleting "${
+        this.props.openHouse.title
+      }"?`,
+      confirmLabel: 'Yes, I am sure',
+      onConfirm: () => this.delete()
+    })
+  }
+
   delete = async () => {
     try {
       this.setState({ isDisabled: true })
@@ -350,7 +365,9 @@ class OpenHouseDrawerInternal extends React.Component {
       return []
     }
 
-    this.state.listing.gallery_image_urls.forEach(image => {
+    const uniqueAssets = [...new Set(this.state.listing.gallery_image_urls)]
+
+    uniqueAssets.forEach(image => {
       assets.push({
         listing: this.state.listing.id,
         image
@@ -404,7 +421,11 @@ class OpenHouseDrawerInternal extends React.Component {
     const { isDisabled, openHouse, error } = this.state
 
     return (
-      <Drawer open={this.props.isOpen} onClose={this.props.onClose}>
+      <Drawer
+        open={this.props.isOpen}
+        onClose={this.props.onClose}
+        zIndex={1000} // Because of the MC builder z-index
+      >
         <Drawer.Header
           title={`${this.isNew ? 'New' : 'Edit'} Open House Registration Page`}
         />
@@ -522,15 +543,15 @@ class OpenHouseDrawerInternal extends React.Component {
                         <Flex alignCenter>
                           {!this.isNew && (
                             <>
-                              <Tooltip placement="top" caption="Delete">
+                              <Tooltip
+                                placement="top"
+                                caption="Delete Registration Page"
+                              >
                                 <IconButton
-                                  isFit
-                                  inverse
-                                  type="button"
                                   disabled={isDisabled}
-                                  onClick={this.delete}
+                                  onClick={this.onDelete}
                                 >
-                                  <IconDelete />
+                                  <IconDelete size="medium" />
                                 </IconButton>
                               </Tooltip>
                               <Divider
@@ -550,18 +571,19 @@ class OpenHouseDrawerInternal extends React.Component {
                           />
                         </Flex>
                         <Flex alignCenter>
-                          <ActionButton
-                            type="button"
-                            appearance="outline"
+                          <Button
+                            variant="outlined"
                             onClick={this.handleEditTemplateClick}
                           >
                             {this.state.openHouse
                               ? 'Redesign Guest Registration Page'
                               : 'Edit Guest Registration Page'}
-                          </ActionButton>
+                          </Button>
 
-                          <ActionButton
-                            type="button"
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            disableElevation
                             disabled={
                               isDisabled ||
                               (!this.state.template && !this.state.rawTemplate)
@@ -570,7 +592,7 @@ class OpenHouseDrawerInternal extends React.Component {
                             style={{ marginLeft: '0.5em' }}
                           >
                             {this.getSaveButtonText()}
-                          </ActionButton>
+                          </Button>
                         </Flex>
                       </Footer>
                     </div>
@@ -579,12 +601,9 @@ class OpenHouseDrawerInternal extends React.Component {
                   {this.state.isTemplateBuilderOpen && (
                     <InstantMarketing
                       isOpen
-                      containerStyle={{
-                        zIndex: 1003
-                      }}
                       headerTitle="Edit Guest Registration Page"
                       closeConfirmation={false}
-                      showTemplatesColumn={false}
+                      hideTemplatesColumn
                       saveButtonLabel="Save"
                       onClose={this.toggleTemplateBuilder}
                       handleSave={this.handleSaveTemplate}

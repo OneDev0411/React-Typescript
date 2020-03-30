@@ -64,7 +64,9 @@ export default function Field(props: Props) {
     return (
       <Container>
         {props.value && (
-          <Typography variant={props.variant}>{props.value}</Typography>
+          <Typography variant={props.variant} noWrap>
+            {props.value}
+          </Typography>
         )}
         {!props.disabled && (
           <Typography

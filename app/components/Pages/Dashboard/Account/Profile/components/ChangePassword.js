@@ -3,15 +3,21 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Field, reduxForm } from 'redux-form'
+import { reduxForm } from 'redux-form'
+import { Button } from '@material-ui/core'
+
+import { updateUser } from 'actions/user'
 
 import FormCard from 'components/FormCard'
 
+import getUser from '../../../../../../models/user/get-user/index'
+
+import Field from './Field'
 import SimpleField from './SimpleField'
 import changePassword from '../../../../../../models/user/change-password'
-import Button from '../../../../../../views/components/Button/ActionButton'
 
 const ChangePasswordForm = ({
+  user,
   invalid,
   pristine,
   submitError,
@@ -21,25 +27,35 @@ const ChangePasswordForm = ({
   onSubmitHandler,
   submitSuccessfully
 }) => {
+  const hasUserPassword = user.has_password
   const isDisabled = isSubmitting || (invalid && !pristine)
+  const getSubmitButtonText = () => {
+    if (user.has_password) {
+      return isSubmitting ? 'Updating...' : 'Update'
+    }
+
+    return isSubmitting ? 'Creating...' : 'Create'
+  }
 
   return (
-    <FormCard title="Change Password">
+    <FormCard title={hasUserPassword ? 'Change Password' : 'New Password'}>
       <form
         className="c-account__form clearfix"
         onSubmit={handleSubmit(onSubmitHandler)}
       >
-        <Field
-          component={SimpleField}
-          label="Current Password"
-          name="old_password"
-          type="password"
-          onChange={(e, value, newValue) => {
-            if (submitError && newValue) {
-              setSubmitError(false)
-            }
-          }}
-        />
+        {hasUserPassword && (
+          <Field
+            component={SimpleField}
+            label="Current Password"
+            name="old_password"
+            type="password"
+            onChange={(e, value, newValue) => {
+              if (submitError && newValue) {
+                setSubmitError(false)
+              }
+            }}
+          />
+        )}
         <Field
           autoComplete="new-password"
           component={SimpleField}
@@ -78,11 +94,13 @@ const ChangePasswordForm = ({
         )}
         <div style={{ textAlign: 'right' }}>
           <Button
-            data-test="change-password-form-submit-button"
+            color="secondary"
+            variant="contained"
             type="submit"
             disabled={isDisabled}
+            data-test="change-password-form-submit-button"
           >
-            {isSubmitting ? 'Updating...' : 'Update'}
+            {getSubmitButtonText()}
           </Button>
         </div>
       </form>
@@ -125,9 +143,13 @@ const getErrorMessage = errorCode => {
 }
 
 export default compose(
-  connect(({ brand }) => ({
-    brand
-  })),
+  connect(
+    ({ brand, user }) => ({
+      brand,
+      user
+    }),
+    { updateUser }
+  ),
   reduxForm({
     form: 'change_password',
     validate
@@ -137,7 +159,9 @@ export default compose(
   withState('submitSuccessfully', 'setSubmitSuccessfully', false),
   withHandlers({
     onSubmitHandler: ({
+      user,
       reset,
+      updateUser,
       setSubmitError,
       setIsSubmitting,
       setSubmitSuccessfully
@@ -149,10 +173,13 @@ export default compose(
 
       try {
         await changePassword({ old_password, new_password })
+
+        const updatedUser = await getUser(user.id)
+
+        updateUser(updatedUser)
         reset()
         setIsSubmitting(false)
         setSubmitSuccessfully(true)
-
         setTimeout(() => setSubmitSuccessfully(false), 2000)
       } catch (errorCode) {
         setIsSubmitting(false)

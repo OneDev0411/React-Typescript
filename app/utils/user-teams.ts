@@ -151,11 +151,15 @@ const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
 ) => {
   const team = getActiveTeam(user)
   const settings = (team && getSettings(team)) || {}
+
+  // console.log('team', team)
+  // console.log('teamsettings', getSettings(team))
+
   return key ? settings[key] : settings
 }
 
 export const getActiveTeamSettings = getSettingsFromActiveTeam(
-  team => team.brand_settings
+  team => team.brand.settings
 )
 
 export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(

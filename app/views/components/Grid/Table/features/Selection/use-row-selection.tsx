@@ -33,6 +33,7 @@ export function useRowsSelection<Row>(
     {
       id: 'row-selection',
       header: '',
+      class: 'opaque',
       render: (rowItem: RenderProps<Row>) => {
         const showDefaultValue =
           options.defaultRender &&
@@ -41,7 +42,7 @@ export function useRowsSelection<Row>(
           !state.selection.isEntireRowsSelected
 
         return (
-          <div style={{ width: '48px' }}>
+          <>
             <div
               className="selection--default-value"
               style={{
@@ -64,7 +65,7 @@ export function useRowsSelection<Row>(
                 onChange={() => handleToggleRow(rowItem)}
               />
             </div>
-          </div>
+          </>
         )
       }
     },

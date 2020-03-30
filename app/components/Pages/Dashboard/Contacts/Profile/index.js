@@ -1,5 +1,3 @@
-import { ACL } from 'constants/acl'
-
 import React from 'react'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
@@ -19,8 +17,6 @@ import { updateContactSelf } from 'models/contacts/update-contact-self'
 
 import { isLoadedContactAttrDefs } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
-
-import Acl from 'components/Acl'
 
 import { getContactsTags } from 'store_actions/contacts/get-contacts-tags'
 import { normalizeContact as associationNormalizer } from 'views/utils/association-normalizers'
@@ -184,8 +180,6 @@ class ContactProfile extends React.Component {
       state => ({ contact: { ...state.contact, ...newContact } }),
       fallback
     )
-
-    this.fetchTimeline()
   }
 
   onChangeOwner = async item => {
@@ -321,17 +315,15 @@ class ContactProfile extends React.Component {
             />
           </SideColumn>
           <MainColumn>
-            <Acl access={ACL.BETA}>
-              <MergeDuplicates
-                contact={this.state.contact}
-                mergeCallback={this.mergeCallback}
-              />
-            </Acl>
+            <MergeDuplicates
+              contact={this.state.contact}
+              mergeCallback={this.mergeCallback}
+            />
             <Timeline
               ref={this.timelineRef}
               contact={this.state.contact}
               defaultAssociation={defaultAssociation}
-              onCreateNote={this.setContact}
+              onChangeNote={this.setContact}
             />
           </MainColumn>
         </PageContainer>

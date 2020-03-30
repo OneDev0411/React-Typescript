@@ -1,9 +1,10 @@
 import React, { Fragment, useState, useRef } from 'react'
 
+import { Button } from '@material-ui/core'
+
 import DealContext from 'models/Deal/helpers/dynamic-context'
 import { getField } from 'models/Deal/helpers/context/get-field'
 
-import ActionButton from 'components/Button/ActionButton'
 import DatePicker from 'components/DatePicker'
 
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
@@ -76,23 +77,26 @@ export function ContextField(props) {
           <Footer>
             {!contextValue &&
               ['TBD', 'N/A'].map((value, index) => (
-                <ActionButton
+                <Button
                   key={index}
                   size="small"
-                  appearance="outline"
+                  variant="outlined"
+                  color="secondary"
                   onClick={() => handleSaveValue(value, false)}
                 >
                   {value}
-                </ActionButton>
+                </Button>
               ))}
 
-            <ActionButton
+            <Button
               size="small"
+              variant="contained"
+              color="secondary"
               disabled={!isValueSet}
               onClick={() => handleSaveValue(fieldValue)}
             >
               Save
-            </ActionButton>
+            </Button>
           </Footer>
         </Fragment>
       </ContextInlineEdit>

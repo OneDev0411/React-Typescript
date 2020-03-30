@@ -1,3 +1,3 @@
 export default function() {
-  return import('../../mock_listing.json')
+  return import('./mock_listing.json')
 }

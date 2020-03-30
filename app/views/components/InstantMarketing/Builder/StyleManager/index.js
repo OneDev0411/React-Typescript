@@ -167,14 +167,13 @@ export const load = async colors => {
             <TextAlignPicker
               value={
                 isMjmlElement(selected)
-                  ? selected.attributes.attributes.align
+                  ? selected.attributes.attributes.align ||
+                    selected.attributes.attributes.textAlign
                   : getStyle(selected).textAlign
               }
               onChange={textAlign => {
                 if (isMjmlElement(selected)) {
                   setStyle(selected, 'align', textAlign)
-
-                  return
                 }
 
                 setStyle(selected, 'text-align', textAlign)

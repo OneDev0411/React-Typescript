@@ -1,12 +1,13 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useState } from 'react'
+
+import cn from 'classnames'
+import { createStyles, makeStyles } from '@material-ui/core'
 
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import { Table } from 'components/Grid/Table'
 
-import { putUserSetting } from 'models/user/put-user-setting'
-import { getUserTeams } from 'actions/user/teams'
+import { useGridStyles } from 'components/Grid/Table/styles'
 
 import { TableActions } from './Actions'
 
@@ -22,17 +23,42 @@ import TagsString from './columns/Tags'
 import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
 
-import { SORT_FIELD_SETTING_KEY } from '../constants'
+const useCustomGridStyles = makeStyles(theme =>
+  createStyles({
+    row: {
+      '& td': {
+        '&.tags': {
+          '& .MuiChip-root': { opacity: 0.5 }
+        },
+        '&.flows': {
+          '& a': { color: theme.palette.grey['500'] },
+          '& svg': { fill: theme.palette.grey['500'] }
+        }
+      },
+      '&:hover td': {
+        '&.tags': {
+          '& .MuiChip-root': { opacity: 1 }
+        },
+        '&.flows': {
+          '& a': { color: theme.palette.text.primary },
+          '& svg': { fill: theme.palette.text.primary }
+        }
+      }
+    }
+  })
+)
 
-class ContactsList extends React.Component {
-  state = { selectedTagContact: [] }
+const ContactsList = props => {
+  const gridClasses = useGridStyles()
+  const customGridClasses = useCustomGridStyles()
+  const [selectedTagContact, setSelectedTagContact] = useState([])
 
-  onSelectTagContact = selectedTagContact =>
-    this.setState({ selectedTagContact: [selectedTagContact] })
+  const onSelectTagContact = selectedTagContact =>
+    setSelectedTagContact([selectedTagContact])
 
-  closeTagsOverlay = () => this.setState({ selectedTagContact: [] })
+  const closeTagsOverlay = () => setSelectedTagContact([])
 
-  columns = [
+  const columns = [
     {
       id: 'name',
       primary: true,
@@ -44,15 +70,18 @@ class ContactsList extends React.Component {
       id: 'last_touched',
       sortable: false,
       width: '20%',
+      class: 'opaque',
       render: ({ row: contact }) => <LastTouched contact={contact} />
     },
     {
       id: 'flows',
       sortable: false,
       width: '8%',
+      class: 'opaque flows',
       render: ({ row: contact }) => (
         <FlowCell
           contactId={contact.id}
+          callback={props.reloadContacts}
           flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
         />
       )
@@ -60,122 +89,89 @@ class ContactsList extends React.Component {
     {
       id: 'tag',
       width: '30%',
+      class: 'opaque tags',
       render: ({ row: contact }) => (
-        <TagsString
-          contact={contact}
-          onSelectTagContact={this.onSelectTagContact}
-        />
+        <TagsString contact={contact} onSelectTagContact={onSelectTagContact} />
       )
     },
     {
       id: 'delete-contact',
       sortable: false,
       width: '5%',
+      class: 'visible-on-hover',
       render: ({ row: contact }) => (
-        <Menu
-          contactId={contact.id}
-          handleOnDelete={this.props.onRequestDelete}
-        />
+        <Menu contactId={contact.id} handleOnDelete={props.onRequestDelete} />
       )
     }
   ]
 
-  sortableColumns = [
-    { label: 'Most Recent', value: 'updated_at', ascending: false },
-    { label: 'Last Touch', value: 'last_touch', ascending: false },
-    { label: 'First name A-Z', value: 'display_name', ascending: true },
-    { label: 'First name Z-A', value: 'display_name', ascending: false },
-    { label: 'Last name A-Z', value: 'sort_field', ascending: true },
-    { label: 'Last name Z-A', value: 'sort_field', ascending: false },
-    { label: 'Created At', value: 'created_at', ascending: true }
-  ]
+  const getLoading = () => {
+    const { isFetching, isFetchingMore, isFetchingMoreBefore } = props
 
-  getLoading = () => {
-    if (
-      !this.props.isFetching &&
-      !this.props.isFetchingMore &&
-      !this.props.isFetchingMoreBefore
-    ) {
+    if (!isFetching && !isFetchingMore && !isFetchingMoreBefore) {
       return null
     }
 
-    if (this.props.isFetching) {
+    if (isFetching) {
       return 'middle'
     }
 
-    if (this.props.isFetchingMore) {
+    if (isFetchingMore) {
       return 'bottom'
     }
 
-    if (this.props.isFetchingMoreBefore) {
+    if (isFetchingMoreBefore) {
       return 'top'
     }
   }
 
-  getDefaultSort = () => {
-    return this.sortableColumns.find(item => item.value === this.props.order)
-  }
-
-  render() {
-    const { props, state } = this
-
-    return (
-      <>
-        <Table
-          rows={props.data}
-          totalRows={props.listInfo.total || 0}
-          summary={total => `${total} Contacts`}
-          loading={this.getLoading()}
-          columns={this.columns}
-          LoadingStateComponent={LoadingComponent}
-          sorting={{
-            columns: this.sortableColumns,
-            defaultSort: this.getDefaultSort(),
-            onChange: async item => {
-              props.handleChangeOrder(item)
-
-              await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
-              props.dispatch(getUserTeams(props.user))
+  return (
+    <>
+      <Table
+        rows={props.data}
+        totalRows={props.totalRows}
+        loading={getLoading()}
+        columns={columns}
+        LoadingStateComponent={LoadingComponent}
+        selection={{
+          defaultRender: ({ row }) => <Avatar contact={row} />
+        }}
+        classes={{
+          row: cn(gridClasses.row, customGridClasses.row)
+        }}
+        infiniteScrolling={{
+          accuracy: 300, // px
+          debounceTime: 300, // ms
+          onScrollBottom: props.onRequestLoadMore,
+          onScrollTop: props.onRequestLoadMoreBefore
+        }}
+        TableActions={({ state, dispatch }) => (
+          <TableActions
+            state={state}
+            dispatch={dispatch}
+            filters={props.filters}
+            isFetching={props.isFetching}
+            totalRowsCount={props.listInfo.total}
+            reloadContacts={props.reloadContacts}
+            onRequestDelete={props.onRequestDelete}
+            handleChangeContactsAttributes={
+              props.handleChangeContactsAttributes
             }
-          }}
-          selection={{
-            defaultRender: ({ row }) => <Avatar contact={row} />
-          }}
-          infiniteScrolling={{
-            accuracy: 300, // px
-            debounceTime: 300, // ms
-            container: this.props.tableContainerId,
-            onScrollBottom: props.onRequestLoadMore,
-            onScrollTop: props.onRequestLoadMoreBefore
-          }}
-          TableActions={({ state, dispatch }) => (
-            <TableActions
-              state={state}
-              dispatch={dispatch}
-              filters={props.filters}
-              isFetching={props.isFetching}
-              totalRowsCount={props.listInfo.total}
-              reloadContacts={this.props.reloadContacts}
-              onRequestDelete={this.props.onRequestDelete}
-              handleChangeContactsAttributes={
-                props.handleChangeContactsAttributes
-              }
-            />
-          )}
-          EmptyStateComponent={() => (
-            <NoSearchResults description="Try typing another name, email, phone or tag." />
-          )}
-        />
+          />
+        )}
+        EmptyStateComponent={() => (
+          <NoSearchResults description="Try typing another name, email, phone or tag." />
+        )}
+      />
 
-        <TagsOverlay
-          closeOverlay={this.closeTagsOverlay}
-          isOpen={state.selectedTagContact.length > 0}
-          selectedContactsIds={state.selectedTagContact}
-          handleChangeContactsAttributes={props.handleChangeContactsAttributes}
-        />
-      </>
-    )
-  }
+      <TagsOverlay
+        closeOverlay={closeTagsOverlay}
+        isOpen={selectedTagContact.length > 0}
+        selectedContactsIds={selectedTagContact}
+        handleChangeContactsAttributes={props.handleChangeContactsAttributes}
+      />
+    </>
+  )
 }
 
-export default connect(({ user }) => ({ user }))(ContactsList)
+export default ContactsList

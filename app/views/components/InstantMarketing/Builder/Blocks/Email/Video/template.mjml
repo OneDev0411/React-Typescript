@@ -1,8 +1,3 @@
-<mj-section rechat-editable="tree" background-color="#fff">
-  <mj-column width="100%">
-    <mj-image src="{{image}}"></mj-image>
-    <mj-button href="{{url}}" border-radius="12px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="1.17" width="258px" height="48px" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}">
-      ► WATCH VIDEO
-    </mj-button>
-  </mj-column>
-</mj-section>
+<mj-hero rechat-editable="tree" mode="fluid-height" background-url="{{image}}" background-color="#262626" padding="200px 0px">
+  <mj-image width="128px" height="128px" padding="0" src="https://i.ibb.co/mbM3Sxn/play.png" href="{{url}}"></mj-image>
+</mj-hero>

@@ -1,5 +1,4 @@
 import React, { MouseEvent, useState } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -9,16 +8,7 @@ import Button from './Button'
 import items from './items'
 import Menu from './Menu'
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    wrapper: {
-      marginLeft: theme.spacing(2)
-    }
-  })
-)
-
 export default function GlobalActionsButton() {
-  const classes = useStyles()
   const user = useSelector((state: IAppState) => state.user as IUser)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [selectedItem, setSelectedItem] = useState<null | Item>(null)
@@ -97,15 +87,14 @@ export default function GlobalActionsButton() {
 
   return (
     <>
-      <div className={classes.wrapper}>
-        <Button onMouseEnter={handleMenuOpen} />
-        <Menu
-          items={items}
-          anchorEl={anchorEl}
-          onClose={handleMenuClose}
-          onItemClick={handleItemClick}
-        />
-      </div>
+      <Button onClick={handleMenuOpen} />
+      <Menu
+        items={items}
+        anchorEl={anchorEl}
+        onClose={handleMenuClose}
+        onItemClick={handleItemClick}
+      />
+
       {renderSelectedItem()}
     </>
   )

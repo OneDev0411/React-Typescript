@@ -1,13 +1,15 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { red, primary } from 'views/utils/colors'
+import { Theme } from '@material-ui/core'
 
 interface TitleProps {
   selectable: boolean
+  theme: Theme
 }
 
 interface ChecklistNameProps {
   error: boolean
+  theme: Theme
 }
 
 export const Container = styled.div``
@@ -35,17 +37,20 @@ export const NameSection = styled.div`
 export const Title = styled.div`
   font-size: 1rem;
   font-weight: 500;
-  color: ${(props: TitleProps) => (props.selectable ? '#000' : red.A100)};
+  color: ${(props: TitleProps) =>
+    props.selectable
+      ? props.theme.palette.common.black
+      : props.theme.palette.error.main};
 
   ${(props: TitleProps) =>
     props.selectable &&
-    `
-    :hover {
-      cursor: pointer;
-      color: ${primary};
-      text-decoration: underline;
-    }
-  `}
+    css`
+      :hover {
+        cursor: pointer;
+        color: ${({ theme }) => theme.palette.secondary.main};
+        text-decoration: underline;
+      }
+    `}
 `
 
 export const DateTime = styled.div`
@@ -55,5 +60,8 @@ export const DateTime = styled.div`
 
 export const ChecklistName = styled.div`
   font-size: 0.875rem;
-  color: ${(props: ChecklistNameProps) => (props.error ? red.A100 : '#000')};
+  color: ${(props: ChecklistNameProps) =>
+    props.error
+      ? props.theme.palette.error.main
+      : props.theme.palette.common.black};
 `

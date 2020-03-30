@@ -74,7 +74,6 @@ function ChatButton({ contact, dispatch, user }: Props) {
   return (
     <Button
       className={classes.button}
-      color="secondary"
       disabled={!isChattable || isCreatingRoom}
       onClick={onClick}
       size="small"

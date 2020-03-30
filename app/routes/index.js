@@ -160,7 +160,10 @@ const AsyncContactsImportCsv = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */)
 })
-
+const AsyncDuplicateContacts = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Contacts/List/Duplicates' /* webpackChunkName: "duplicate_contact" */)
+})
 /* ==================================== */
 //  CRM FLOWS
 /* ==================================== */
@@ -199,17 +202,21 @@ const AsyncToursList = Load({
 
 const AsyncMarketing = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Marketing' /* webpackChunkName: "marketing" */)
-})
-
-const AsyncMarketingTemplates = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Marketing/Templates' /* webpackChunkName: "marketing_templates" */)
+    import('../components/Pages/Dashboard/Marketing/List' /* webpackChunkName: "marketing" */)
 })
 
 const AsyncMarketingHistory = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Marketing/History' /* webpackChunkName: "marketing_history" */)
+})
+
+/* ==================================== */
+//  Inbox
+/* ==================================== */
+
+const AsyncInbox = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Inbox' /* webpackChunkName: "inbox" */)
 })
 
 /* ==================================== */
@@ -466,13 +473,17 @@ export default (
 
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
-        <Route path="following" component={AsyncListingsFavorites} />
+        <Route path="favorites" component={AsyncListingsFavorites} />
         <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
       </Route>
 
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
       <Route component={AsyncContacts} path="/dashboard/contacts" />
+      <Route
+        component={AsyncDuplicateContacts}
+        path="/dashboard/contacts/duplicates"
+      />
       <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       <Route
         path="/dashboard/contacts/import/csv"
@@ -522,10 +533,13 @@ export default (
       <Route path="/dashboard/tours" component={AsyncToursList} />
       <Route path="/dashboard/open-house" component={AsyncOpenHousesList} />
 
-      <Route path="/dashboard/marketing" component={AsyncMarketing}>
-        <IndexRoute component={AsyncMarketingHistory} />
-        <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
-      </Route>
+      <Route path="/dashboard/marketing" component={AsyncMarketingHistory} />
+      <Route
+        path="/dashboard/marketing/:types(/:medium)"
+        component={AsyncMarketing}
+      />
+
+      <Route path="/dashboard/inbox(/:emailThreadId)" component={AsyncInbox} />
 
       <Route path="/dashboard/insights">
         <IndexRoute component={AsyncMarketingInsightsList} />

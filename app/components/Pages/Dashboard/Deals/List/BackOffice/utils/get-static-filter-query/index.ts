@@ -9,7 +9,7 @@ export function getStaticFilterQuery(searchQuery: SearchQuery): object {
   if (searchQuery.filter === 'listing') {
     return {
       contexts: {
-        contract_status: {
+        listing_status: {
           text: [
             'Coming Soon',
             'Active',
