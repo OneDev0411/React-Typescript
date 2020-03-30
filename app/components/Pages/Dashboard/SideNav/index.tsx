@@ -1,13 +1,19 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-
-import { IAppState } from '../../../../reducers'
+import { useDispatch } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
 
 import { ACL } from '../../../../constants/acl'
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
+import { selectUnreadEmailThreadsCount } from '../../../../reducers/inbox'
+import { InboxAction } from '../../../../reducers/inbox/types'
+
+import { fetchUnreadEmailThreadsCount } from '../../../../store_actions/inbox'
 
 import { useDealsNotificationsNumber } from '../../../../hooks/use-deals-notifications-number'
 import { useChatRoomsNotificationsNumber } from '../../../../hooks/use-chat-rooms-notifications-number'
+import useTypedSelector from '../../../../hooks/use-typed-selector'
+
+import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
 import Acl from '../../../../views/components/Acl'
 import { ScrollableArea } from '../../../../views/components/ScrollableArea'
@@ -35,13 +41,24 @@ const hasWebsitePermission = user =>
   user.agent.office_mlsid === 'CSTPP01'
 
 export default function AppSideNav() {
-  const user = useSelector((state: IAppState) => state.user)
-  const appNotifications = useSelector((state: IAppState) =>
+  const user = useTypedSelector<IUser>(state => state.user)
+  const appNotifications = useTypedSelector(state =>
     selectNotificationNewCount(state.globalNotifications)
+  )
+  const inboxNotificationNumber = useTypedSelector(state =>
+    selectUnreadEmailThreadsCount(state.inbox)
   )
   const dealsNotificationsNumber = useDealsNotificationsNumber()
   const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
   const logoSrc = Brand.asset('office_logo', '/static/images/logo.svg')
+
+  const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
+
+  function handleEmailThreadEvent(): void {
+    dispatch(fetchUnreadEmailThreadsCount())
+  }
+
+  useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
 
   return (
     <Sidenav>
@@ -53,7 +70,14 @@ export default function AppSideNav() {
       >
         <SidenavListGroup data-test="side-nav-list">
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/inbox">Inbox</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/inbox">
+              <AppNavbarBadge
+                badgeContent={inboxNotificationNumber}
+                color="primary"
+              >
+                Inbox
+              </AppNavbarBadge>
+            </SideNavLinkItem>
           </Acl.Crm>
 
           <Acl.Crm>

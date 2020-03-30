@@ -1,14 +1,17 @@
 import React, { useState, useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { Grid, Theme, Divider, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
+import { Helmet } from 'react-helmet'
 import classNames from 'classnames'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
+
+import useTypedSelector from 'hooks/use-typed-selector'
 
 import GlobalPageLayout from 'components/GlobalPageLayout'
 
@@ -51,9 +54,12 @@ const useStyles = makeStyles(
 export default function Inbox({ params }: WithRouterProps) {
   const selectedEmailThreadId: UUID | undefined = params.emailThreadId
 
-  const accounts = useSelector<IAppState, IOAuthAccount[]>(
-    ({ contacts: { oAuthAccounts } }) =>
-      selectAllConnectedAccounts(oAuthAccounts)
+  const unreadEmailThreadsCount = useTypedSelector(state =>
+    selectUnreadEmailThreadsCount(state.inbox)
+  )
+
+  const accounts = useTypedSelector(({ contacts: { oAuthAccounts } }) =>
+    selectAllConnectedAccounts(oAuthAccounts)
   )
   const noConnectedAccounts = accounts.length === 0
 
@@ -83,6 +89,13 @@ export default function Inbox({ params }: WithRouterProps) {
 
   return (
     <GlobalPageLayout className={classes.layout}>
+      <Helmet>
+        <title>
+          Inbox {unreadEmailThreadsCount ? `(${unreadEmailThreadsCount}) ` : ''}
+          | Rechat
+        </title>
+      </Helmet>
+
       <Box paddingLeft={5} flex="0 1 auto">
         {initializing || noConnectedAccounts ? (
           <GlobalPageLayout.Header title="Inbox" />
@@ -100,6 +113,7 @@ export default function Inbox({ params }: WithRouterProps) {
           />
         )}
       </Box>
+
       <GlobalPageLayout.Main
         height={0}
         flex="1 1 auto"

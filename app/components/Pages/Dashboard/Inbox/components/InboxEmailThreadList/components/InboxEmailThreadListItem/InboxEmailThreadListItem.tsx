@@ -3,9 +3,7 @@ import { Paper, Typography } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
 
-import { useSelector } from 'react-redux'
-
-import { IAppState } from 'reducers'
+import useTypedSelector from 'hooks/use-typed-selector'
 
 import { useInboxEmailThreadListItemStyles } from './styles'
 import getRecipientNamesText from './helpers/get-recipient-names-text'
@@ -19,7 +17,7 @@ export default function InboxEmailThreadListItem({
   emailThread,
   selected
 }: Props) {
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
+  const user = useTypedSelector<IUser>(state => state.user)
 
   const recipients = useMemo(() => getRecipientNamesText(user, emailThread), [
     user,

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
 
-import { IAppState } from 'reducers'
+import useTypedSelector from 'hooks/use-typed-selector'
+
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 interface EventBase {
@@ -19,11 +19,9 @@ export default function useEmailThreadEvents(
   handleUpdateEmailThreads: (updatedEmailThreadIds: UUID[]) => void,
   handleDeleteEmailThreads: (deletedEmailThreadIds: UUID[]) => void
 ) {
-  const oAuthAccounts = useSelector(
-    (state: IAppState) => state.contacts.oAuthAccounts
+  const allConnectedAccounts = useTypedSelector(state =>
+    selectAllConnectedAccounts(state.contacts.oAuthAccounts)
   )
-
-  const allAccounts = selectAllConnectedAccounts(oAuthAccounts)
 
   useEffect(() => {
     const socket: SocketIOClient.Socket = (window as any).socket
@@ -34,11 +32,15 @@ export default function useEmailThreadEvents(
       }
 
       if ('google_credential' in event) {
-        return allAccounts.some(({ id }) => id === event.google_credential)
+        return allConnectedAccounts.some(
+          ({ id }) => id === event.google_credential
+        )
       }
 
       if ('microsoft_credential' in event) {
-        return allAccounts.some(({ id }) => id === event.microsoft_credential)
+        return allConnectedAccounts.some(
+          ({ id }) => id === event.microsoft_credential
+        )
       }
 
       return false
@@ -60,5 +62,5 @@ export default function useEmailThreadEvents(
       socket.off('email_thread:update', handleFilteredUpdateEmailThreads)
       socket.off('email_thread:delete', handleFilteredDeleteEmailThreads)
     }
-  }, [allAccounts, handleDeleteEmailThreads, handleUpdateEmailThreads])
+  }, [allConnectedAccounts, handleDeleteEmailThreads, handleUpdateEmailThreads])
 }
