@@ -34,7 +34,7 @@ export function inbox(
       return {
         ...state,
         unreadEmailThreadsCount: {
-          status: 'errored',
+          status: 'failed',
           error: action.error
         }
       }
@@ -55,7 +55,7 @@ export function selectUnreadEmailThreadsCount(
 export function selectUnreadEmailThreadsError(
   state: InboxState
 ): string | undefined {
-  return state.unreadEmailThreadsCount.status === 'errored'
+  return state.unreadEmailThreadsCount.status === 'failed'
     ? String(state.unreadEmailThreadsCount.error)
     : undefined
 }

@@ -15,7 +15,7 @@ export interface InboxState {
         readonly count: number
       }
     | {
-        readonly status: 'errored'
+        readonly status: 'failed'
         readonly error: any
       }
 }
