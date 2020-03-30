@@ -53,6 +53,7 @@ webpackConfig.optimization.minimizer = [
   new TerserPlugin({
     cache: true,
     sourceMap: true,
+    parallel: true,
     exclude: /grapesjs/
   })
 ]
