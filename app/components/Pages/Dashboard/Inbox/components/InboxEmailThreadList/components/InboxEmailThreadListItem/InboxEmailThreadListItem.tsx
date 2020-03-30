@@ -3,7 +3,7 @@ import { Paper, Typography } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
 
-import useTypedSelector from 'hooks/use-typeed-selector'
+import useTypedSelector from 'hooks/use-typed-selector'
 
 import { useInboxEmailThreadListItemStyles } from './styles'
 import getRecipientNamesText from './helpers/get-recipient-names-text'

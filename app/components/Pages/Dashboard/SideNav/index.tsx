@@ -11,7 +11,7 @@ import { fetchUnreadEmailThreadsCount } from '../../../../store_actions/inbox'
 
 import { useDealsNotificationsNumber } from '../../../../hooks/use-deals-notifications-number'
 import { useChatRoomsNotificationsNumber } from '../../../../hooks/use-chat-rooms-notifications-number'
-import useTypedSelector from '../../../../hooks/use-typeed-selector'
+import useTypedSelector from '../../../../hooks/use-typed-selector'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 

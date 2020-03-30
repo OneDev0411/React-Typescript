@@ -11,7 +11,7 @@ import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
-import useTypedSelector from 'hooks/use-typeed-selector'
+import useTypedSelector from 'hooks/use-typed-selector'
 
 import GlobalPageLayout from 'components/GlobalPageLayout'
 
