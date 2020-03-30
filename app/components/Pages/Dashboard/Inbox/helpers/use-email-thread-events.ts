@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 
-import useTypedSelector from 'hooks/use-typed-selector'
+import useTypedSelector from '../../../../../hooks/use-typed-selector'
 
-import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { selectAllConnectedAccounts } from '../../../../../reducers/contacts/oAuthAccounts'
 
 interface EventBase {
   threads: UUID[]

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { throttle } from 'lodash'
+import { debounce } from 'lodash'
 import { makeStyles, Theme } from '@material-ui/core'
 
 import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'
@@ -41,7 +41,7 @@ export default function GlobalHeaderWithSearch({
   const [searchQueryValue, setSearchQueryValue] = useState('')
 
   const throttledSearchHandler = useRef(
-    throttle((value: string) => onSearch(value), 1000)
+    debounce((value: string) => onSearch(value), 500)
   )
 
   useEffect(() => {
