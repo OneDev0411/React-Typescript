@@ -11,7 +11,7 @@ import { getActiveTeamId } from 'utils/user-teams'
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
 
-import { useTemplatesList } from './hooks/use-templates-list'
+import { useTemplates } from './hooks/use-templates'
 import Tabs from './Tabs'
 
 export function MarketingLayout({ params, router, render }) {
@@ -22,13 +22,18 @@ export function MarketingLayout({ params, router, render }) {
 
   const activeBrand = getActiveTeamId(user)
 
-  const { templates, loading } = useTemplatesList(activeBrand, templateTypes)
+  const { templates, loading } = useTemplates(activeBrand)
   const mediums = useMarketingCenterMediums(templates)
 
   const currentMedium = params.medium
-  const currentMediumTemplates = templates.filter(item =>
-    currentMedium ? item.medium === currentMedium : true
-  )
+  const currentPageItems = templates.filter(item => {
+    const mediumMatches = currentMedium ? item.medium === currentMedium : true
+    const typeMatches = templateTypes
+      ? templateTypes.includes(item.template_type)
+      : true
+
+    return mediumMatches && typeMatches
+  })
 
   useEffect(() => {
     if (templateTypes && !currentMedium && mediums.length > 0) {
@@ -52,7 +57,7 @@ export function MarketingLayout({ params, router, render }) {
           />
           {render &&
             render({
-              items: currentMediumTemplates,
+              items: currentPageItems,
               isLoading: loading,
               types: params.types,
               medium: params.medium

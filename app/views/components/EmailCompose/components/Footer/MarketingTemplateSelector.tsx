@@ -116,7 +116,7 @@ export function MarketingTemplateSelector(props: Props) {
           to="/dashboard/marketing"
         >
           <ListItemText
-            secondary={<Box color="secondary.main">Open My Designs</Box>}
+            primary={<Box color="primary.main">Open All Designs</Box>}
           />
         </ListItem>
         <MarketingTemplateMasonry
