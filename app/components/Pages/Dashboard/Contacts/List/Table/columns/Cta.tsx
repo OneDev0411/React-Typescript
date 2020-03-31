@@ -61,7 +61,7 @@ export default function CtaAction({ contact }: Props) {
     if ((emails || []).length === 0) {
       return notify({
         status: 'error',
-        message: 'User has not email!'
+        message: 'User has no Email!'
       })
     }
 

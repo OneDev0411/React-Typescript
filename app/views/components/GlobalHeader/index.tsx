@@ -18,7 +18,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'space-between',
     padding: ({ noPadding }: GlobalHeaderProps) =>
       !noPadding ? theme.spacing(3) : 0,
-    width: '100%'
+    width: '100%',
+    overflow: 'hidden'
   },
   title: {
     marginRight: theme.spacing(1),
@@ -45,7 +46,7 @@ export default function GlobalHeader({
   return (
     <div className={classes.wrapper}>
       {title && (
-        <Typography variant="h4" className={classes.title}>
+        <Typography variant="h4" noWrap className={classes.title}>
           {title}
         </Typography>
       )}

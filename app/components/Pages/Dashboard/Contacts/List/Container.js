@@ -688,7 +688,7 @@ class ContactsList extends React.Component {
       !state.firstLetter &&
       !syncing &&
       !state.syncStatus &&
-      !this.state.searchInputValue &&
+      !state.searchInputValue &&
       (!activeSegment ||
         !activeSegment.filters ||
         activeSegment.filters.length === 0)
