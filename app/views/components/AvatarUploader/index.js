@@ -74,6 +74,7 @@ export class AvatarUploader extends Component {
         closeHandler={this.closeModal}
         width={300}
         height={300}
+        isOpen={this.state.isOpen}
       />
     )
   }
