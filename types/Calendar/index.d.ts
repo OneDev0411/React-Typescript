@@ -75,22 +75,6 @@ interface IGoogleCalendarItem {
 
 interface IGoogleCalendars {
   calendars: IGoogleCalendarItem[]
-  currentSelectedCal: {
-    kind: string
-    etag: string
-    id: string
-    summary: string
-    description: string
-    location: string
-    timeZone: string
-    colorId: number
-    backgroundColor: string
-    foregroundColor: string
-    selected: boolean
-    accessRole: string
-    defaultReminders: unknown[]
-    conferenceProperties: {
-      allowedConferenceSolutionTypes: string[]
-    }
-  }
+  primaryCalendar: IGoogleCalendarItem
+  isConfigured: boolean
 }

@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
-import { addNotification as notify } from 'reapop'
+import { addNotification } from 'reapop'
 import { useDispatch } from 'react-redux'
 
 import {
+  Theme,
   Popover,
   MenuItem,
   Checkbox,
   Button,
-  createStyles,
-  makeStyles,
-  Theme
+  FormControlLabel
 } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { getUserCalendars } from 'models/user/get-calendars'
@@ -21,41 +21,46 @@ interface Props {
   gcid: string
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     dropdownToggleButton: {
       marginRight: theme.spacing(1)
     },
     buttonContainer: {
       padding: theme.spacing(1, 2)
     }
-  })
+  }),
+  { name: 'ConnectedCalendar' }
 )
 
-export function ConnectedCalendar({ gcid }: Props) {
+export default function ConnectedCalendar({ gcid }: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
 
-  const [list, setCalendarsList] = useState<IGoogleCalendars | null>(null)
-  const [selectedItems, setSelectedItems] = useState<string[]>([])
+  const [userCalendars, setUserCalendars] = useState<IGoogleCalendars | null>(
+    null
+  )
+  const [selectedItemIds, setSelectedItemIds] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
   const handleLoadCalendar = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null = null
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    if (event) {
-      setAnchorEl(event.currentTarget)
-    }
+    setAnchorEl(event.currentTarget)
 
     try {
       setIsLoading(true)
 
-      const list = await getUserCalendars(gcid)
+      const userCalendars = await getUserCalendars(gcid)
+      const selectedItemIds = userCalendars.calendars
+        .filter(({ alreadySynced }) => alreadySynced)
+        .map(({ id }) => id)
 
+      setUserCalendars(userCalendars)
+      setSelectedItemIds(selectedItemIds)
       setIsLoading(false)
-      setCalendarsList(list)
     } catch (anchorEl) {
       setIsLoading(false)
     }
@@ -64,30 +69,29 @@ export function ConnectedCalendar({ gcid }: Props) {
   const handleCloseMenu = () => setAnchorEl(null)
 
   const handleToggleCalendarItem = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    item: IGoogleCalendarItem
+    item: IGoogleCalendarItem,
+    selected: boolean
   ) => {
-    const selected = e.target.checked
-
     if (selected) {
-      setSelectedItems([...selectedItems, item.id])
+      setSelectedItemIds([...selectedItemIds, item.id])
     } else {
-      setSelectedItems(selectedItems.filter(index => index !== item.id))
+      setSelectedItemIds(selectedItemIds.filter(index => index !== item.id))
     }
   }
 
   const handleApplyConfig = async () => {
-    const toSync = selectedItems
-    const toStopSync = list!.calendars
-      .filter(item => selectedItems.includes(item.id) === false)
-      .map(item => item.id)
+    const toSync = selectedItemIds
+    const toStopSync = userCalendars!.calendars
+      .filter(({ id }) => !selectedItemIds.includes(id))
+      .map(({ id }) => id)
 
     try {
       setIsSaving(true)
+
       await configCalendars(gcid, { toSync, toStopSync })
 
       dispatch(
-        notify({
+        addNotification({
           status: 'success',
           message: 'The changes have been saved'
         })
@@ -99,7 +103,7 @@ export function ConnectedCalendar({ gcid }: Props) {
       setIsSaving(false)
 
       dispatch(
-        notify({
+        addNotification({
           status: 'error',
           message: 'Could not save the changes. please try again.'
         })
@@ -136,15 +140,22 @@ export function ConnectedCalendar({ gcid }: Props) {
         {isLoading && (
           <LoadingContainer size="3em" style={{ margin: '0.5rem 3rem' }} />
         )}
-        {!isLoading && list && (
+        {!isLoading && userCalendars && (
           <>
-            {list.calendars.map(item => (
+            {userCalendars.calendars.map(item => (
               <MenuItem key={item.id}>
-                <Checkbox
-                  color="primary"
-                  onChange={e => handleToggleCalendarItem(e, item)}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      color="primary"
+                      checked={selectedItemIds.includes(item.id)}
+                      onChange={(_, checked) =>
+                        handleToggleCalendarItem(item, checked)
+                      }
+                    />
+                  }
+                  label={item.name}
                 />
-                {item.name}
               </MenuItem>
             ))}
 
