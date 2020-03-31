@@ -75,6 +75,11 @@ const AsyncOnboardingOAuthAccounts = Load({
     import('../components/Pages/AgentOnboarding/OAuthAccounts' /* webpackChunkName: "onboarding_oauth_accounts" */)
 })
 
+const AsyncOnboardingProfile = Load({
+  loader: () =>
+    import('../components/Pages/AgentOnboarding/Profile' /* webpackChunkName: "onboarding_profile" */)
+})
+
 /* ==================================== */
 //  MLS
 /* ==================================== */
@@ -485,6 +490,7 @@ export default (
         path="onboarding/oauth-accounts"
         component={AsyncOnboardingOAuthAccounts}
       />
+      <Route path="onboarding/profile" component={AsyncOnboardingProfile} />
 
       <Route path="branch" component={AsyncBranch} />
       <Route path="share" component={AsyncShare} />
