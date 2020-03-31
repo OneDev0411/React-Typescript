@@ -11,12 +11,12 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      maxWidth: '33rem',
+      maxWidth: '40rem',
       textAlign: 'center',
       marginBottom: theme.spacing(6)
     },
     logo: {
-      width: 100,
+      width: 72,
       marginBottom: theme.spacing(3)
     }
   })
@@ -39,7 +39,7 @@ export default function Header({ brand, title, subtitle }: Props) {
   return (
     <Box className={classes.box}>
       <img src={siteLogo} className={classes.logo} alt="logo" />
-      <Typography variant="h4">{title}</Typography>
+      <Typography variant="h5">{title}</Typography>
       <Typography variant="subtitle1">{subtitle}</Typography>
     </Box>
   )

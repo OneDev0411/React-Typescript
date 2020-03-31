@@ -78,6 +78,7 @@ export default function ConfirmAgentId(props) {
               name="mlsid"
               onChange={onChange}
               className="c-simple-field__input"
+              style={{ width: '360px' }}
             />
           </div>
 

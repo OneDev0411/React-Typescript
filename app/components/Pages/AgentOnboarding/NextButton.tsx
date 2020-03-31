@@ -12,9 +12,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   to: string
+  text?: string
 }
 
-export default function NextButton({ to }: Props) {
+export default function NextButton({ to, text = 'Next' }: Props) {
   const classes = useStyles()
 
   return (
@@ -25,7 +26,7 @@ export default function NextButton({ to }: Props) {
       variant="contained"
       className={classes.button}
     >
-      Next
+      {text}
     </Button>
   )
 }
