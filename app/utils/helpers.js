@@ -321,8 +321,16 @@ export function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
+// Translates an index to a label consisting of English letters
+// Initially we had a simple function which returned up to 26 letters but
+// apparently we wanted more:
+// https://gitlab.com/rechat/web/-/issues/3922#note_303292408
 export function getIndexLabel(index) {
-  return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')[index]
+  index = (parseInt("ooooooop0", 26) + index).toString(26);
+  return index.slice(index.indexOf("p") + 1).replace(/./g, c => {
+    c = c.charCodeAt(0);
+    return String.fromCharCode(c < 64 ? c + 17 : c - 22);
+  });
 }
 
 export function noop() { }

@@ -1,6 +1,6 @@
-import React, { ReactNode, useState, useRef } from 'react'
+import React, { ReactNode, useState, useRef, useEffect } from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { Theme, Grid, Box, Button } from '@material-ui/core'
+import { Theme, Grid, Box, Button, Divider } from '@material-ui/core'
 
 import NoContentMessage from '../NoContentMessage'
 
@@ -13,13 +13,14 @@ const useStyles = makeStyles(
     },
     list: {
       width: '100%',
-      minHeight: '100%',
-      borderRight: `1px solid ${theme.palette.grey.A100}`
+      minHeight: '100%'
     },
     itemWrapper: {
       width: '100%',
-      cursor: 'pointer',
-      borderBottom: `1px solid ${theme.palette.grey.A100}`
+      cursor: 'pointer'
+    },
+    itemDivider: {
+      marginLeft: theme.spacing(5)
     }
   }),
   { name: 'InfiniteScrollList' }
@@ -47,6 +48,12 @@ export default function InfiniteScrollList<Item>({
   const [status, setStatus] = useState<
     'fetched' | 'fetching' | 'error' | 'finished'
   >('fetched')
+
+  useEffect(() => {
+    setStatus(status =>
+      status === 'error' || status === 'finished' ? 'fetched' : status
+    )
+  }, [items])
 
   const listWrapperRef = useRef<HTMLDivElement>(null)
 
@@ -93,12 +100,7 @@ export default function InfiniteScrollList<Item>({
       ref={listWrapperRef}
       onScroll={fetchMoreItemsManagedIfRequired}
     >
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        classes={{ root: classes.list }}
-      >
+      <Grid container spacing={0} direction="column" className={classes.list}>
         {items.length === 0 && status === 'finished' ? (
           <NoContentMessage>{emptyListMessage}</NoContentMessage>
         ) : (
@@ -108,9 +110,10 @@ export default function InfiniteScrollList<Item>({
                 key={itemKey(item, index)}
                 item
                 onClick={() => onSelectItem && onSelectItem(item)}
-                classes={{ root: classes.itemWrapper }}
+                className={classes.itemWrapper}
               >
                 {renderItem(item, item === selectedItem)}
+                <Divider className={classes.itemDivider} />
               </Grid>
             ))}
             <Grid item xs>

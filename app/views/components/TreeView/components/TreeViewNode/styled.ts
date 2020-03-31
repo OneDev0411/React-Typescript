@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components'
-
 import { FlexItem } from 'styled-flex-component'
+
+import { StyledSVGWithProps } from 'utils/ts-utils'
 
 import { primary, grey } from 'views/utils/colors'
 
@@ -38,8 +39,6 @@ export const TreeViewNodeContent = styled(FlexItem).attrs({ grow: 1 })`
   white-space: nowrap;
 `
 
-type Props = { expanded?: boolean }
-
 export const TreeViewExpandButton = styled.button`
   background: none;
   width: 2rem;
@@ -61,19 +60,26 @@ export const TreeViewExpandButton = styled.button`
     color: ${primary};
   }
 `
-export const TreeViewExpandArrow = styled(IconKeyboardArrowDown)<Props>`
+
+export const TreeViewNodeChildrenContainer = styled.div`
+  padding-left: 1.4rem;
+`
+
+interface TreeViewExpandArrowProps {
+  expanded?: boolean
+}
+
+export const TreeViewExpandArrow: StyledSVGWithProps<
+  TreeViewExpandArrowProps
+> = styled(IconKeyboardArrowDown)`
   transition: transform 0.2s;
   fill: currentColor;
   padding-top: 0.15rem;
   flex-shrink: 0;
 
-  ${({ expanded }) =>
+  ${({ expanded }: TreeViewExpandArrowProps) =>
     !expanded &&
     css`
       transform: rotateZ(-90deg);
     `}
-`
-
-export const TreeViewNodeChildrenContainer = styled.div`
-  padding-left: 1.4rem;
 `

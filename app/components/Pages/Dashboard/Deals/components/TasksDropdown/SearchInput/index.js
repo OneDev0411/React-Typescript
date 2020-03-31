@@ -40,9 +40,9 @@ export const SearchInput = ({
   disabled
 }) => (
   <SearchContainer
-    isBlock
-    appearance="outline"
-    type="button"
+    fullWidth
+    color="secondary"
+    variant="outlined"
     onClick={onClick}
     disabled={disabled}
   >

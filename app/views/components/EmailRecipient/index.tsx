@@ -32,7 +32,14 @@ export function EmailRecipient({ recipient, person }: Props) {
 
   const content = (
     <span style={{ position: 'relative', zIndex: 1 }}>
-      {displayName || emailAddress}
+      {displayName && emailAddress ? (
+        <>
+          {displayName}
+          {emailAddress && ` <${emailAddress}>`}
+        </>
+      ) : (
+        displayName || emailAddress
+      )}
     </span>
   )
 

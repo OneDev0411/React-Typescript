@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import Flex from 'styled-flex-component'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
 
 import UploadPlaceholder from './UploadPlaceholder'
 import UploadManager from '../../../UploadManager'
@@ -52,16 +52,9 @@ export function UploadFolder(props: Props) {
           {/*
           // @ts-ignore TODO: js component */}
           <UploadManager deal={props.deal}>
-            <ActionButton
-              size="small"
-              as="span"
-              style={{
-                width: '9rem',
-                justifyContent: 'center'
-              }}
-            >
+            <Button size="small" color="secondary" variant="contained">
               Upload
-            </ActionButton>
+            </Button>
           </UploadManager>
         </Flex>
       </Header>

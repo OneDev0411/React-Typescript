@@ -1,24 +1,29 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const Container = styled.div`
-  position: relative;
-  width: 100%;
-  height: 40px;
-  background-color: #d4d4d4;
-  border-radius: 3px;
-  font-size: 15px;
-  overflow: hidden;
+  ${({ theme }) => css`
+    position: relative;
+    width: 100%;
+    height: ${theme.spacing(5)}px;
+    background-color: ${theme.palette.grey['500']};
+    border-radius: 3px;
+    font-size: 15px;
+    overflow: hidden;
+  `}
 `
 
 const Percentage = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 40px;
-  background-color: ${props => (props.percent > 0 ? '#35b863' : 'transparent')};
-  width: ${props => props.percent}%;
-  transition: width 0.6s ease-in;
+  ${({ theme }) => css`
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: ${theme.spacing(5)}px;
+    background-color: ${props =>
+      props.percent > 0 ? theme.palette.secondary.main : 'transparent'};
+    width: ${props => props.percent}%;
+    transition: width 0.6s ease-in;
+  `}
 `
 
 const Title = styled.div`
@@ -44,16 +49,16 @@ export default function UploadProgress(props) {
       <Title percent={amount}>
         {!amount && <div>Upload is starting…</div>}
 
-        {amount &&
-          amount < 100 && (
-            <div>
-              Uploading ‘{filename}’ …{' '}
-              <strong>{amount ? amount.toFixed(2) : 0}%</strong>
-            </div>
-          )}
+        {amount && amount < 100 && (
+          <div>
+            Uploading ‘{filename}’ …{' '}
+            <strong>{amount ? amount.toFixed(2) : 0}%</strong>
+          </div>
+        )}
 
-        {amount === 100 &&
-          !props.isUploadFinished && <div>Upload Finished. Storing...</div>}
+        {amount === 100 && !props.isUploadFinished && (
+          <div>Upload Finished. Storing...</div>
+        )}
 
         {props.isUploadFinished && <div>Upload Finished</div>}
       </Title>

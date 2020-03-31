@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { primary, grey } from 'views/utils/colors'
 import IconCheckmark from '../../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
 
-const chooseColor = isSelected => (isSelected ? '#000000' : primary)
+const chooseColor = (theme, isSelected) =>
+  isSelected ? theme.palette.primary.main : '#000'
 
 const TagContainer = styled.div`
   padding: 0.5em 1em;
@@ -14,18 +14,22 @@ const TagContainer = styled.div`
   border: solid 1px;
   border-radius: 3px;
   background-color: #fff;
-  color: ${({ isSelected }) => chooseColor(isSelected)};
-  border-color: ${({ isSelected }) => chooseColor(isSelected)};
+  color: ${({ theme, isSelected }) => chooseColor(theme, isSelected)};
+  border-color: ${({ theme, isSelected }) => chooseColor(theme, isSelected)};
   cursor: pointer;
 
   :hover {
-    background-color: ${grey.A100};
+    background-color: ${props => props.theme.palette.grey[100]};
   }
+`
+const CheckIcon = styled(IconCheckmark)`
+  margin-right: 0.5rem;
+  fill: ${props => props.theme.palette.primary.main};
 `
 
 const Tag = ({ tag, onSelectionChange, tagDataType }) => (
   <TagContainer isSelected={tag.isSelected} onClick={onSelectionChange}>
-    {tag.isSelected && <IconCheckmark style={{ marginRight: '0.5rem' }} />}
+    {tag.isSelected && <CheckIcon />}
     {tag[tagDataType]}
   </TagContainer>
 )

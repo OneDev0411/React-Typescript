@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react'
 
+import { deleteTemplateInstance } from 'models/instant-marketing/delete-template-instance'
 import { getHistory } from 'models/instant-marketing/get-history'
 
-function useTemplatesHistory(): [
-  null | IMarketingTemplateInstance[],
-  boolean,
-  null | any
-] {
+interface TemplatesHistory {
+  templates: IMarketingTemplateInstance[]
+  isLoading: boolean
+  deleteTemplate: (id: UUID) => Promise<void>
+  error: Nullable<Error>
+}
+
+function useTemplatesHistory(): TemplatesHistory {
   const [templates, setTemplates] = useState<IMarketingTemplateInstance[]>([])
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -51,7 +55,12 @@ function useTemplatesHistory(): [
     }
   }, [])
 
-  return [templates, isLoading, error]
+  async function deleteTemplate(id: UUID): Promise<void> {
+    await deleteTemplateInstance(id)
+    setTemplates(templates.filter(item => item.id !== id))
+  }
+
+  return { templates, isLoading, error, deleteTemplate }
 }
 
 export default useTemplatesHistory

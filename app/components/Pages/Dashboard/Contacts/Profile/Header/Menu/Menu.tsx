@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Button } from '@material-ui/core'
 import { ButtonProps } from '@material-ui/core/Button'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import SendEmailButton from 'components/SendEmailButton'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
@@ -12,10 +12,22 @@ import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize
 
 import { useIconStyles } from '../../../../../../../styles/use-icon-styles'
 
-import Chat from './ChatButton'
-import { styles } from './styles'
+import Chat from '../../../components/ChatButton'
 
-const useStyles = makeStyles(styles, { name: 'HeaderMenu' })
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      button: {
+        marginRight: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+
+        '&[disabled] svg': {
+          fill: theme.palette.action.disabled
+        }
+      }
+    }),
+  { name: 'HeaderMenu' }
+)
 
 interface Props {
   contact: INormalizedContact
@@ -37,7 +49,6 @@ export default function Menu({ contact }: Props) {
             variant="outlined"
             onClick={onClick}
             data-test={testId}
-            color="secondary"
             className={classes.button}
           >
             <EmailIcon className={iconClasses.rightMargin} />

@@ -28,7 +28,7 @@ export const buttonBaseStyle = css<ActionButtonProps>`
 
   border: none;
   outline: none;
-  border-radius: 3px;
+  border-radius: 4px;
 
   position: relative;
   display: inline-flex;
@@ -38,7 +38,7 @@ export const buttonBaseStyle = css<ActionButtonProps>`
   vertical-align: middle;
   margin: 0;
 
-  font-family: Barlow;
+  font-family: LatoRegular;
   font-weight: normal;
   text-decoration: none;
   white-space: nowrap;
@@ -105,12 +105,14 @@ export const ButtonAppearances = {
     }
 
     ${isNotDisableState}hover, ${isNotDisableState}focus {
-      color: ${props => props.brandColor || primary};
-      border-color: ${props => props.brandColor || primary};
+      color: ${props => props.brandColor || props.theme.palette.secondary.main};
+      border-color: ${props =>
+        props.brandColor || props.theme.palette.secondary.main};
       text-decoration: none;
 
       svg {
-        fill: ${props => props.brandColor || primary};
+        fill: ${props =>
+          props.brandColor || props.theme.palette.secondary.main};
       }
     }
 

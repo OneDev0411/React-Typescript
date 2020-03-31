@@ -1,15 +1,26 @@
 import React from 'react'
-import { Dropdown, MenuItem } from 'react-bootstrap'
+import { Dropdown } from 'react-bootstrap'
 
 import styled from 'styled-components'
 
 import IconButtonBase from '../../../../../../../views/components/Button/IconButton'
-import VerticalDotsIcon from '../../../../../../../views/components/SvgIcons/VeriticalDots/VerticalDotsIcon'
-import { grey } from '../../../../../../../views/utils/colors'
+import IconHorizontalDots from '../../../../../../../views/components/SvgIcons/HorizontalDots/IconHorizontalDots'
 
 const IconButton = styled(IconButtonBase)`
   > svg {
-    fill: ${grey.A550};
+    fill: ${props => props.theme.palette.grey['400']};
+    &:hover {
+      fill: ${props => props.theme.palette.secondary.main};
+    }
+  }
+`
+const DeleteAction = styled.span`
+  display: block;
+  padding: ${props => props.theme.spacing(1)}px;
+  color: ${props => props.theme.palette.error.main};
+  cursor: pointer;
+  &:hover {
+    background: ${props => props.theme.palette.grey[200]};
   }
 `
 
@@ -22,19 +33,18 @@ const Menu = ({ contactId, handleOnDelete }) => (
     <IconButton
       data-test="contact-menu"
       bsRole="toggle"
+      iconSize="large"
       inverse
       isFit
-      onClick={e => console.dir(e.target) || e.stopPropagation()}
+      onClick={e => e.stopPropagation()}
     >
-      <VerticalDotsIcon />
+      <IconHorizontalDots />
     </IconButton>
 
     <Dropdown.Menu bsRole="menu">
-      <MenuItem
-        data-test="contact-row-delete-action"
+      <DeleteAction
         eventKey="Delete"
         key={`contact_${contactId}__dropdown__item_delete`}
-        style={{ width: '100%', textAlign: 'left' }}
         onClick={e =>
           handleOnDelete(e, {
             selectedRows: [contactId]
@@ -42,7 +52,7 @@ const Menu = ({ contactId, handleOnDelete }) => (
         }
       >
         Delete
-      </MenuItem>
+      </DeleteAction>
     </Dropdown.Menu>
   </Dropdown>
 )

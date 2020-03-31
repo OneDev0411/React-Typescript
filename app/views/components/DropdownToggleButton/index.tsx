@@ -1,37 +1,43 @@
-import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
-import { ButtonProps } from '@material-ui/core/Button'
-
-import * as React from 'react'
-import { forwardRef, Ref } from 'react'
-
+import React, { forwardRef, Ref, ReactNode } from 'react'
 import classNames from 'classnames'
-
+import {
+  Button,
+  ButtonProps,
+  createStyles,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 import { fade } from '@material-ui/core/styles'
 
-import IconArrowDropDown from '../SvgIcons/ArrowDropDown/IconArrowDropDown'
+import { ClassesProps } from '../../../utils/ts-utils'
+
+import IconArrowDropDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 interface Props extends ButtonProps {
   isActive?: boolean
+  children?: ReactNode
 }
 
-const useStyles = makeStyles((theme: Theme) => {
+const styles = (theme: Theme) => {
   return createStyles({
-    button: {
+    root: {
       whiteSpace: 'nowrap'
     },
     buttonActive: {
       '&, &:hover': {
         background: fade(
-          theme.palette.primary.main,
+          theme.palette.secondary.main,
           theme.palette.action.hoverOpacity
         )
       }
     },
     rotated: {
       transform: 'rotateX(180deg)'
-    }
+    },
+    arrowIcon: {}
   })
-})
+}
+const useStyles = makeStyles(styles)
 
 /**
  * A button to be used as trigger for dropdown or any toggleable UI.
@@ -44,22 +50,31 @@ const useStyles = makeStyles((theme: Theme) => {
  */
 export const DropdownToggleButton = forwardRef(
   (
-    { isActive, children, ...buttonProps }: Props,
+    {
+      isActive,
+      children,
+      classes,
+      ...buttonProps
+    }: Props & ClassesProps<typeof styles>,
     ref: Ref<HTMLButtonElement>
   ) => {
-    const classes = useStyles()
+    const styleClasses = useStyles({ classes })
 
     return (
       <Button
         {...buttonProps}
         classes={{
-          root: classNames(classes.button, { [classes.buttonActive]: isActive })
+          root: classNames(styleClasses.root, {
+            [styleClasses.buttonActive]: isActive
+          })
         }}
         ref={ref}
       >
         {children}
         <IconArrowDropDown
-          className={classNames({ [classes.rotated]: isActive })}
+          className={classNames(styleClasses.arrowIcon, {
+            [styleClasses.rotated]: isActive
+          })}
         />
       </Button>
     )

@@ -13,7 +13,6 @@ import { loadJS } from 'utils/load-js'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 
 import Header from 'components/PageHeader'
-import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable'
 
 import config from '../../../../../../config/public'
 
@@ -164,7 +163,6 @@ class AgentNetwork extends React.Component {
 
   onClose = () => {
     browserHistory.push(`/dashboard/deals/${this.props.deal.id}/marketing`)
-    resetGridSelectedItems('agent_network')
   }
 
   onSetFilter = filter => {

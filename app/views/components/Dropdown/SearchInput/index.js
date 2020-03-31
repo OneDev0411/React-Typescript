@@ -34,9 +34,9 @@ const Input = styled.input`
   caret-color: ${primary};
   ::placeholder {
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 400;
     color: ${grey.A900};
-    font-family: Barlow, sans-serif;
+    font-family: LatoRegular, sans-serif;
   }
   :focus {
     outline: none;

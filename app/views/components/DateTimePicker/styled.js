@@ -121,7 +121,7 @@ export const PickerContainer = styled(Card)`
   }
 
   .DayPicker-Day {
-    padding: 0.25em 0.5em;
+    padding: 0.25em 0.25em;
   }
 
   .DayPicker .DayPicker-Day--outside:hover {

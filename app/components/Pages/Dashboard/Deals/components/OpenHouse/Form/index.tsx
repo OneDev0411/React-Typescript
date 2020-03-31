@@ -272,7 +272,11 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
       {startTime && (
         <div className={classes.fieldContainer}>
           {!endTime ? (
-            <Button variant="text" color="primary" onClick={setInitialEndDate}>
+            <Button
+              variant="text"
+              color="secondary"
+              onClick={setInitialEndDate}
+            >
               Add End Time
             </Button>
           ) : (
@@ -289,7 +293,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
 
                 <Button
                   variant="text"
-                  color="primary"
+                  color="secondary"
                   size="small"
                   onClick={() => setEndTime(null)}
                 >
@@ -305,7 +309,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
         <Button
           fullWidth
           variant="contained"
-          color="primary"
+          color="secondary"
           disabled={!startTime || isSaving}
           onClick={handleSave}
         >

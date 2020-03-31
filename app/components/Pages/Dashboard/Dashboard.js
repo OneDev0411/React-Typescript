@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
@@ -26,18 +26,19 @@ import { getDeals, searchDeals } from '../../../store_actions/deals'
 import { getAllNotifications } from '../../../store_actions/notifications'
 import { isLoadedContactAttrDefs } from '../../../reducers/contacts/attributeDefs'
 import getFavorites from '../../../store_actions/listings/favorites/get-favorites'
+import { fetchUnreadEmailThreadsCount } from '../../../store_actions/inbox'
 
 import CheckBrowser from '../../../views/components/CheckBrowser'
+import Intercom from '../../../views/components/Intercom'
 
 import { hasUserAccess, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
 
 import syncOpenHouseData from '../../helpers/sync-open-house-offline-registers'
 
 import SideNav from './SideNav'
-import Intercom from './Partials/Intercom'
 import VerificationBanner from './Partials/VerificationBanner'
 
-class App extends React.Component {
+class App extends Component {
   componentWillMount() {
     const { user, dispatch } = this.props
 
@@ -111,6 +112,9 @@ class App extends React.Component {
 
     // Get MLS favorites
     dispatch(getFavorites(user))
+
+    // fetch the number of unread email threads
+    dispatch(fetchUnreadEmailThreadsCount())
 
     dispatch(syncOpenHouseData(user.access_token))
   }

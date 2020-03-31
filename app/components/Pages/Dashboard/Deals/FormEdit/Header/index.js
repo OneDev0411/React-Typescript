@@ -1,7 +1,8 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
+
 import { CloseButton } from 'components/Button/CloseButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
@@ -19,12 +20,14 @@ export function Header(props) {
       </Title>
 
       <Flex alignCenter>
-        <ActionButton
+        <Button
+          variant="contained"
+          color="secondary"
           disabled={!props.isFormLoaded || props.isSaving}
           onClick={props.onSave}
         >
           {props.isSaving ? 'Saving...' : 'Save'}
-        </ActionButton>
+        </Button>
 
         <Divider />
         <CloseButton isFit iconSize="large" inverse />

@@ -3,9 +3,10 @@ import _ from 'underscore'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import { Button } from '@material-ui/core'
+
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 
-import Button from 'components/Button/ActionButton'
 import { AssociationItem } from 'components/AssocationItem'
 import EmailAssociation from 'components/CRMEmailAssociation'
 import AssociationsDrawer from 'components/AssociationsDrawer'
@@ -158,7 +159,7 @@ export class Associations extends React.Component {
           </Flex>
         )}
         {otherAssociations.length > 6 && (
-          <Button size="large" appearance="link" onClick={this.openMoreDrawer}>
+          <Button size="medium" color="seconday" onClick={this.openMoreDrawer}>
             View All Associations
           </Button>
         )}

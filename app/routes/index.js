@@ -181,7 +181,10 @@ const AsyncContactsImportCsv = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */)
 })
-
+const AsyncDuplicateContacts = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Contacts/List/Duplicates' /* webpackChunkName: "duplicate_contact" */)
+})
 /* ==================================== */
 //  CRM FLOWS
 /* ==================================== */
@@ -220,12 +223,7 @@ const AsyncToursList = Load({
 
 const AsyncMarketing = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Marketing' /* webpackChunkName: "marketing" */)
-})
-
-const AsyncMarketingTemplates = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Marketing/Templates' /* webpackChunkName: "marketing_templates" */)
+    import('../components/Pages/Dashboard/Marketing/List' /* webpackChunkName: "marketing" */)
 })
 
 const AsyncMarketingHistory = Load({
@@ -498,16 +496,15 @@ export default (
       <Route path="dashboard" component={Dashboard}>
         <Route path="inbox(/:emailThreadId)" component={AsyncInbox} />
 
-        <Route path="calendar" component={AsyncCalendar} />
+        <Route path="calendar(/:id)" component={AsyncCalendar} />
 
         <Route component={AsyncContacts} path="contacts" />
+        <Route component={AsyncDuplicateContacts} path="contacts/duplicates" />
         <Route path="contacts/:id" component={AsyncContactProfile} />
         <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
 
-        <Route path="marketing" component={AsyncMarketing}>
-          <IndexRoute component={AsyncMarketingHistory} />
-          <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
-        </Route>
+        <Route path="marketing" component={AsyncMarketingHistory} />
+        <Route component={AsyncMarketing} path="marketing/:types(/:medium)" />
 
         <Route path="insights">
           <IndexRoute component={AsyncMarketingInsightsList} />
@@ -520,22 +517,25 @@ export default (
 
         <Route path="deals(/filter/:filter)" component={AsyncDealsLayout}>
           <IndexRoute component={AsyncDealsList} />
+          <Route path="deals/create(/:id)" component={AsyncDealCreate} />
+          <Route
+            path="deals/:id/form-edit/:taskId"
+            component={AsyncDealFormEdit}
+          />
+          <Route
+            path="deals/:id/create-offer"
+            component={AsyncDealCreateOffer}
+          />
+          <Route
+            path="deals/:id/view/:taskId(/:entityType/:entityId)"
+            component={AsyncDealFileViewer}
+          />
+          <Route
+            path="deals/:id/marketing/network"
+            component={AsyncAgentNetwork}
+          />
+          <Route path="deals/:id(/:tab)" component={AsyncDealDashboard} />
         </Route>
-        <Route path="deals/create(/:id)" component={AsyncDealCreate} />
-        <Route
-          path="deals/:id/form-edit/:taskId"
-          component={AsyncDealFormEdit}
-        />
-        <Route path="deals/:id/create-offer" component={AsyncDealCreateOffer} />
-        <Route
-          path="deals/:id/view/:taskId(/:entityType/:entityId)"
-          component={AsyncDealFileViewer}
-        />
-        <Route
-          path="deals/:id/marketing/network"
-          component={AsyncAgentNetwork}
-        />
-        <Route path="deals/:id(/:tab)" component={AsyncDealDashboard} />
 
         <Route path="mls" component={AsyncListingsLayout}>
           <IndexRoute component={AsyncListingsSearch} />

@@ -1,92 +1,42 @@
 import React from 'react'
+import { Box } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 
-import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
 
-import { formatListing } from '../../helpers/format-listing'
-import { Address } from './columns/Address'
+import ListingCard from '../ListingCard'
 
-export class GridView extends React.Component {
-  columns = [
-    {
-      header: 'Address',
-      id: 'address',
-      width: '30%',
-      render: ({ rowData: listing }) => <Address listing={listing} />
-    },
-    {
-      header: 'Price',
-      id: 'price',
-      sortType: 'number',
-      accessor: listing => listing.price,
-      render: ({ rowData: listing }) => `$${listing.price.toLocaleString()}`
-    },
-    {
-      header: 'Beds',
-      id: 'beds',
-      sortType: 'number',
-      accessor: listing => listing.beds,
-      render: ({ rowData: listing }) => listing.beds
-    },
-    {
-      header: 'Baths',
-      id: 'baths',
-      sortType: 'number',
-      accessor: listing => listing.baths,
-      render: ({ rowData: listing }) => listing.baths
-    },
-    {
-      header: 'sqft',
-      id: 'sqft',
-      sortType: 'number',
-      accessor: listing => listing.sqft,
-      render: ({ rowData: listing }) => listing.sqft.toLocaleString()
-    },
-    {
-      header: '$/Sqft',
-      sortType: 'number',
-      id: 'pricePerSquareFoot',
-      accessor: listing => listing.pricePerSquareFoot,
-      render: ({ rowData: listing }) =>
-        `$${listing.pricePerSquareFoot.toLocaleString()}`
-    },
-    {
-      header: 'Built Year',
-      id: 'year',
-      sortType: 'number',
-      accessor: listing => listing.builtYear,
-      render: ({ rowData: listing }) => listing.builtYear
-    },
-    {
-      header: 'Zip Code',
-      id: 'zipcode',
-      sortType: 'number',
-      accessor: listing => listing.zipCode,
-      render: ({ rowData: listing }) => listing.zipCode
-    }
-  ]
-
-  format = listing => formatListing(listing, this.props.user)
-
-  render() {
-    return (
-      <div style={{ padding: ' 0 1.5em 1.5em' }}>
-        <Table
-          columns={this.columns}
-          data={this.props.listings.data.map(this.format)}
-          isFetching={this.props.isFetching}
-          LoadingState={LoadingComponent}
-          summary={{
-            entityName: 'Listings',
-            style: { color: '#000' },
-            total: this.props.listings.info.total
-          }}
-          plugins={{
-            sortable: {},
-            ...this.props.plugins
-          }}
-        />
-      </div>
-    )
+const useStyles = makeStyles(theme => ({
+  listingContainer: {
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: theme.palette.grey[200],
+    width: 336,
+    marginRight: theme.spacing(2),
+    marginBottom: theme.spacing(2)
   }
+}))
+
+export default function GridView({ isFetching, sortedListings }) {
+  const theme = useTheme()
+  const classes = useStyles()
+
+  const renderContent = () => {
+    if (isFetching) {
+      return <LoadingComponent />
+    }
+
+    return sortedListings.map(listing => (
+      <Box key={listing.id} className={classes.listingContainer}>
+        <ListingCard listing={listing} isShowOnMap />
+      </Box>
+    ))
+  }
+
+  return (
+    <Box display="flex" flexWrap="wrap" p={theme.spacing(2, 2)}>
+      {renderContent()}
+    </Box>
+  )
 }

@@ -1,16 +1,18 @@
 import React, { useContext, useState } from 'react'
-import { connect } from 'react-redux'
-import { Helmet } from 'react-helmet'
-import { addNotification as notify } from 'reapop'
-import { Button } from '@material-ui/core'
-
-import { ThunkDispatch } from 'redux-thunk'
-
 import { AnyAction } from 'redux'
+import { connect } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
+import { addNotification as notify } from 'reapop'
+import { Helmet } from 'react-helmet'
+import { withRouter, WithRouterProps } from 'react-router'
+import { Typography, Theme, IconButton } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
 
 import Table from 'components/Grid/Table'
-import PageHeader from 'components/PageHeader'
+import { TableColumn } from 'components/Grid/Table/types'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { BasicDropdown } from 'components/BasicDropdown'
+import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
@@ -22,21 +24,51 @@ import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingCo
 
 import { getFlowEditUrl, createFlow } from '../helpers'
 import New from '../New'
+import CtaBar from '../../Account/components/CtaBar'
 
 import { getFlowActions } from './helpers'
 
-import Name from './columns/Name'
-import EnrolledContacts from './columns/EnrolledContacts'
-import Actions from './columns/Actions'
-
-import { PageContainer } from './styled'
+const useStyles = makeStyles((theme: Theme) => ({
+  name: {
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(1.5)
+  },
+  description: {
+    paddingRight: theme.spacing(2)
+  },
+  enrolledContacts: {},
+  actions: {
+    marginRight: theme.spacing(4),
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+  row: {
+    cursor: 'pointer',
+    '&:hover': {
+      '& $name': {
+        color: theme.palette.secondary.main
+      }
+    },
+    '&:not(:hover)': {
+      '& $description': {
+        color: theme.palette.grey[500]
+      },
+      '& $enrolledContacts': {
+        color: theme.palette.grey[500]
+      },
+      '& $actions': {
+        display: 'none'
+      }
+    }
+  }
+}))
 
 interface Props {
   user: IUser
   notify: IAsyncActionProp<typeof notify>
 }
 
-function List(props: Props) {
+function List(props: Props & WithRouterProps) {
   const brand = getActiveTeamId(props.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedFlow, setSelectedFlow] = useState<IBrandFlow | null>(null)
@@ -77,71 +109,99 @@ function List(props: Props) {
     }
   }
 
-  const columns = [
+  const classes = useStyles()
+
+  const columns: TableColumn<IBrandFlow>[] = [
     {
       header: 'Name',
       id: 'name',
-      width: '70%',
-      verticalAlign: 'center',
-      render: (props: { rowData: IBrandFlow }) => (
-        <Name
-          id={props.rowData.id}
-          name={props.rowData.name}
-          description={props.rowData.description}
-        />
+      primary: true,
+      width: '33%',
+      render: ({ row }) => (
+        <Typography noWrap variant="body2" classes={{ root: classes.name }}>
+          {row.name}
+        </Typography>
+      )
+    },
+    {
+      header: 'Description',
+      id: 'description',
+      render: ({ row }) => (
+        <Typography
+          noWrap
+          variant="body2"
+          classes={{ root: classes.description }}
+        >
+          {row.description}
+        </Typography>
       )
     },
     {
       header: 'Enrolled Contacts',
       id: 'cotnacts',
-      verticalAlign: 'center',
-      render: (props: { rowData: IBrandFlow }) => (
-        <EnrolledContacts activeFlows={props.rowData.active_flows} />
+      width: '160px',
+      render: ({ row }) => (
+        <Typography
+          variant="body2"
+          classes={{ root: classes.enrolledContacts }}
+        >
+          {row.active_flows} Enrolled
+        </Typography>
       )
     },
     {
-      header: '',
       id: 'actions',
-      verticalAlign: 'center',
-      render: (renderProps: { rowData: IBrandFlow }) => {
-        const actions = getFlowActions(renderProps.rowData)
+      width: '32px',
+      render: ({ row }) => {
+        const actions = getFlowActions(row)
 
         return (
-          <Actions
-            actions={actions}
-            onSelect={action => {
-              switch (action.value) {
-                case 'duplicate':
-                  setSelectedFlow(renderProps.rowData)
-                  setIsModalOpen(true)
+          <div className={classes.actions}>
+            <BasicDropdown
+              fullHeight
+              pullTo="right"
+              selectedItem={null}
+              buttonRenderer={(btnProps: any) => (
+                <IconButton {...btnProps}>
+                  <IconHorizontalDots />
+                </IconButton>
+              )}
+              items={actions}
+              onSelect={(action: typeof actions[number]) => {
+                switch (action.value) {
+                  case 'duplicate':
+                    setSelectedFlow(row)
+                    setIsModalOpen(true)
+                    break
 
-                  return
-                case 'delete':
-                  confirmation.setConfirmationModal({
-                    message: `Delete "${renderProps.rowData.name}" Flow?`,
-                    description:
-                      'This Flow will be deleted and you can not use it anymore. Are you sure?',
-                    onConfirm: async () => {
-                      if (!brand) {
-                        return
+                  case 'delete':
+                    confirmation.setConfirmationModal({
+                      message: `Delete "${row.name}" Flow?`,
+                      description: `This Flow will be deleted 
+                      and you can not use it anymore. Are you sure?`,
+                      onConfirm: async () => {
+                        if (!brand) {
+                          return
+                        }
+
+                        await deleteBrandFlow(brand, row.id)
+                        await reloadFlows()
+                        props.notify({
+                          message: `"${row.name}" Flow deleted.`,
+                          status: 'success'
+                        })
                       }
+                    })
+                    break
 
-                      await deleteBrandFlow(brand, renderProps.rowData.id)
-                      await reloadFlows()
-                      props.notify({
-                        message: `"${renderProps.rowData.name}" Flow deleted.`,
-                        status: 'success'
-                      })
-                    }
-                  })
-
-                  return
-                case 'edit':
-                case 'view':
-                  goTo(getFlowEditUrl(renderProps.rowData.id))
-              }
-            }}
-          />
+                  case 'edit':
+                  case 'view':
+                    goTo(getFlowEditUrl(row.id))
+                    break
+                }
+              }}
+            />
+          </div>
         )
       }
     }
@@ -152,6 +212,7 @@ function List(props: Props) {
       <Helmet>
         <title>Flows | Rechat</title>
       </Helmet>
+
       {isModalOpen && (
         <New
           onClose={() => {
@@ -162,47 +223,44 @@ function List(props: Props) {
           flow={selectedFlow}
         />
       )}
-      <PageHeader style={{ marginBottom: 0, marginTop: '1.5rem' }}>
-        <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Flows</PageHeader.Heading>
-        </PageHeader.Title>
 
-        <PageHeader.Menu>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setIsModalOpen(true)}
-          >
-            Create Flow
-          </Button>
-        </PageHeader.Menu>
-      </PageHeader>
+      <CtaBar
+        label="Create new flow"
+        description="Create a custom flow for your specific needs – We’ll take care of the rest!"
+        onClick={() => setIsModalOpen(true)}
+      />
 
-      <PageContainer>
-        {isFetching && !error && <LoadingComponent />}
-        {!isFetching && !error && (
-          <Table
-            data={flows}
-            columns={columns}
-            showToolbar={false}
-            isFetching={isFetching}
-            LoadingState={LoadingComponent}
-          />
-        )}
-        {error && <h4>{error}</h4>}
-      </PageContainer>
+      {error ? (
+        <h4>{error}</h4>
+      ) : isFetching ? (
+        <LoadingComponent />
+      ) : (
+        <Table
+          columns={columns}
+          rows={flows}
+          totalRows={(flows || []).length}
+          loading={isFetching ? 'middle' : null}
+          LoadingStateComponent={LoadingComponent}
+          getTdProps={({ column, row }) => ({
+            onClick: () => {
+              if (column.id !== 'actions') {
+                props.router.push(`/dashboard/account/flows/${row.id}`)
+              }
+            }
+          })}
+          classes={{ row: classes.row }}
+        />
+      )}
     </>
   )
 }
 
 const mapStateToProps = ({ user }) => ({ user })
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
+  notify: (...args: Parameters<typeof notify>) => dispatch(notify(...args))
+})
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    notify: (...args: Parameters<typeof notify>) => dispatch(notify(...args))
-  }
-}
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(List)
+)(withRouter(List))

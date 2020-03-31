@@ -1,32 +1,34 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { BasicDropdown } from 'components/BasicDropdown'
-import XlsxIcon from 'components/SvgIcons/Xlsx/XlsxIcon'
+import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 import Item from './item'
 import { DOWNLOAD_TYPES_DROPDOWN_ITEMS } from './constants'
-
-const Xlsx = styled(XlsxIcon)`
-  margin-right: 0.5rem;
-`
 
 export default function ExportButton({ disabled, onExportClick }) {
   return (
     <BasicDropdown
       selectedItem={null}
-      buttonSize="small"
       items={DOWNLOAD_TYPES_DROPDOWN_ITEMS}
-      buttonIcon={Xlsx}
       onChange={async item => onExportClick(item.type)}
-      buttonText="Export Contacts"
+      buttonText="Export"
+      pullTo="right"
       disabled={disabled}
-      menuStyle={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: 'max-content',
-        overflow: 'hidden'
-      }}
+      style={{ display: 'inline' }}
+      upsideDown
+      fullHeight
+      buttonRenderer={({ text, isOpen, disabled, onClick }) => (
+        <DropdownToggleButton
+          variant="outlined"
+          size="small"
+          disabled={disabled}
+          onClick={onClick}
+          isActive={isOpen}
+        >
+          {text}
+        </DropdownToggleButton>
+      )}
       itemRenderer={({ item, ...rest }) => (
         <Item
           key={item.type}

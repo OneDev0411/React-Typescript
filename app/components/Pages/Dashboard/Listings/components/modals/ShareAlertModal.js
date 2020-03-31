@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { IconButton } from '@material-ui/core'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
@@ -11,7 +12,6 @@ import { createRoom } from 'actions/chatroom/room'
 import createAlert from 'actions/listings/alerts/create-alert'
 
 import ActionButton from 'components/Button/ActionButton'
-import IconButton from 'components/Button/IconButton'
 import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import { H2 } from 'components/Typography/headings'
 
@@ -41,11 +41,7 @@ const ShareAlertModal = ({
       >
         <Flex alignCenter justifyBetween style={{ padding: '1em' }}>
           <H2>Share a search</H2>
-          <IconButton
-            isFit
-            iconSize="large"
-            onClick={isSharing ? () => {} : onHide}
-          >
+          <IconButton onClick={isSharing ? () => {} : onHide}>
             <IconClose />
           </IconButton>
         </Flex>

@@ -108,7 +108,7 @@ export default compose(
   withState('shareAlertModalIsActive', 'setShareAlertModalIsActive', false),
   withHandlers({
     titleInputOnChange: ({ setAlertTitle }) => e => {
-      setAlertTitle(e.target.value)
+      setAlertTitle(e.target.value.trim())
     },
     saveAlertHandler: ({
       user,

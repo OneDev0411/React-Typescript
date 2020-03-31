@@ -5,7 +5,7 @@ import { primary } from '../../../../views/utils/colors'
 export const getBrandInfo = brand => {
   let siteColor = primary
   let siteTitle = 'Rechat'
-  let siteLogo = '/static/images/appicon.png'
+  let siteLogo = '/static/images/logo.svg'
 
   if (brand) {
     siteLogo = Brand.asset('site_logo', null, brand)

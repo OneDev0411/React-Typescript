@@ -1,23 +1,22 @@
 import React from 'react'
 
+import { Button } from '@material-ui/core'
+
+import Avatar from 'components/Avatar'
 import Loading from 'components/Spinner'
 import Table from 'components/Grid/Table'
-import Button from 'components/Button/ActionButton'
-import SendDealPromotionCard from 'components/InstantMarketing/adapters/SendDealPromotion'
 
-import { Name } from './columns/Name'
+import { RenderProps } from 'components/Grid/Table/types'
+
+import { StateContext } from 'components/Grid/Table/context'
+
 import { Company } from './columns/Company'
 import { ContactInfo } from './columns/ContactInfo'
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
 
-import { IDealAgent } from '../types'
+import { TableActions } from './Actions'
 
-const buttonStyle = {
-  padding: '0.25rem 0 1rem',
-  height: 'auto',
-  lineHeight: 1,
-  width: '100%'
-}
+import { IDealAgent } from '../types'
 
 interface State {
   selectedAgent: null | any
@@ -45,67 +44,29 @@ export class Grid extends React.Component<Props, State> {
       }
     })
 
-  getRecipients = (
-    selectedRows: UUID[]
-  ): IDenormalizedEmailRecipientDealAgentInput[] => {
-    const { data } = this.props
-
-    if (
-      Array.isArray(data) === false ||
-      Array.isArray(selectedRows) === false ||
-      data.length === 0 ||
-      selectedRows.length === 0
-    ) {
-      return []
-    }
-
-    // Sometimes an agent can have a null id and email
-    // in this cases we need to make sure filtering them out
-    return data
-      .filter(
-        item =>
-          item.agent &&
-          item.agentId &&
-          selectedRows.includes(item.id) &&
-          (item.agent.email || item.email)
-      )
-      .map(item => ({
-        recipient_type: 'Agent',
-        agent: item.agent.email
-          ? item.agent
-          : {
-              ...item.agent,
-              email: item.email
-            }
-      }))
-  }
-
   columns = [
     {
       id: 'name',
       header: 'Name',
       width: '20%',
-      accessor: agent => agent.name,
-      render: ({ rowData: agent }) => <Name name={agent.name} />
+      accessor: (agent: IDealAgent) => agent.name
     },
     {
       id: 'company',
       header: 'Company',
       width: '17%',
-      accessor: agent => agent.company,
-      render: ({ rowData: agent }) => <Company name={agent.company} />
+      accessor: (agent: IDealAgent) => agent.company,
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Company name={agent.company} />
+      )
     },
     {
       id: 'listings',
       header: '# of Listings',
-      accessor: agent => agent.asListing.length,
-      render: ({ rowData: agent }) =>
+      accessor: (agent: IDealAgent) => agent.asListing.length,
+      render: ({ row: agent }: RenderProps<IDealAgent>) =>
         agent.asListing.length > 0 ? (
-          <Button
-            appearance="link"
-            style={buttonStyle}
-            onClick={() => this.onSelectAgent(agent, 'asListing')}
-          >
+          <Button onClick={() => this.onSelectAgent(agent, 'asListing')}>
             {agent.asListing.length}
           </Button>
         ) : (
@@ -115,14 +76,10 @@ export class Grid extends React.Component<Props, State> {
     {
       id: 'buyers',
       header: '# of Buyers',
-      accessor: agent => agent.asBuyers.length,
-      render: ({ rowData: agent }) =>
+      accessor: (agent: IDealAgent) => agent.asBuyers.length,
+      render: ({ row: agent }: RenderProps<IDealAgent>) =>
         agent.asBuyers.length > 0 ? (
-          <Button
-            appearance="link"
-            style={buttonStyle}
-            onClick={() => this.onSelectAgent(agent, 'asBuyers')}
-          >
+          <Button onClick={() => this.onSelectAgent(agent, 'asBuyers')}>
             {agent.asBuyers.length}
           </Button>
         ) : (
@@ -132,8 +89,8 @@ export class Grid extends React.Component<Props, State> {
     {
       id: 'value_in',
       header: 'Volume in $',
-      accessor: agent => agent.listingsTotalVolume,
-      render: ({ rowData: agent }) =>
+      accessor: (agent: IDealAgent) => agent.listingsTotalVolume,
+      render: ({ row: agent }: RenderProps<IDealAgent>) =>
         agent.listingsTotalVolume > 0
           ? `$${agent.listingsTotalVolume.toLocaleString()}`
           : 0
@@ -141,8 +98,8 @@ export class Grid extends React.Component<Props, State> {
     {
       id: 'avg_price',
       header: 'Avg Price',
-      accessor: agent => agent.listingsAveragePrice,
-      render: ({ rowData: agent }) =>
+      accessor: (agent: IDealAgent) => agent.listingsAveragePrice,
+      render: ({ row: agent }: RenderProps<IDealAgent>) =>
         agent.listingsAveragePrice > 0
           ? `$${agent.listingsAveragePrice.toLocaleString()}`
           : 0
@@ -150,35 +107,9 @@ export class Grid extends React.Component<Props, State> {
     {
       id: 'email',
       header: 'Contact Info',
-      width: '23%',
       sortable: false,
-      accessor: agent => agent.email,
-      render: ({ rowData: agent }) => <ContactInfo agent={agent} />
-    }
-  ]
-
-  actions = [
-    {
-      display: props => props.selectedRows.length > 0,
-      render: props => (
-        /*
-        // @ts-ignore because SendDealPromotionCard is not yet migrated to ts */
-        <SendDealPromotionCard
-          deal={this.props.deal}
-          recipients={this.getRecipients(props.selectedRows)}
-          selectedRows={props.selectedRows}
-          mediums="Email"
-          types={[
-            'OpenHouse',
-            'JustSold',
-            'ComingSoon',
-            'JustListed',
-            'PriceImprovement'
-          ]}
-        >
-          Promote Listing
-        </SendDealPromotionCard>
-      )
+      accessor: (agent: IDealAgent) => agent.email,
+      render: ({ row: agent }) => <ContactInfo agent={agent} />
     }
   ]
 
@@ -187,22 +118,27 @@ export class Grid extends React.Component<Props, State> {
 
     return (
       <div style={{ padding: '0 1.5em' }}>
-        <Table
-          data={this.props.data}
+        <Table<IDealAgent>
+          rows={this.props.data}
           columns={this.columns}
-          LoadingState={Loading}
-          isFetching={this.props.isFetching}
-          summary={{ entityName: 'Agents' }}
-          plugins={{
-            sortable: {},
-            selectable: {
-              persistent: true,
-              storageKey: 'agent_network'
-            },
-            actionable: {
-              actions: this.actions
+          totalRows={(this.props.data || []).length}
+          LoadingStateComponent={Loading}
+          loading={this.props.isFetching ? 'middle' : null}
+          summary={total => `${total} Agents`}
+          selection={{
+            defaultRender: ({ row }: RenderProps<IDealAgent>) => {
+              return <Avatar title={row.name} />
             }
           }}
+          TableActions={({
+            state,
+            rows
+          }: {
+            state: StateContext
+            rows: IDealAgent[]
+          }) => (
+            <TableActions rows={rows} state={state} deal={this.props.deal} />
+          )}
         />
 
         {selectedAgent && (

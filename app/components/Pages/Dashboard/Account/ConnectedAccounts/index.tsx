@@ -1,34 +1,23 @@
-import { OAuthProvider } from 'constants/contacts'
-
-import * as React from 'react'
-import { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
+import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
-
+import { ThunkDispatch } from 'redux-thunk'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
+import { List, Box, Paper, Grid, Typography } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 
-import { Box, Button, List, Typography } from '@material-ui/core'
-
-import { AnyAction } from 'redux'
-
-import { ThunkDispatch } from 'redux-thunk'
-
 import { IAppState } from 'reducers'
-import PageHeader from 'components/PageHeader'
-import { iconSizes } from 'components/SvgIcons/icon-sizes'
-import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
-import Loading from 'partials/Loading'
-import GoogleSigninButton from 'components/GoogleSigninButton'
-import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
-
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
 
-import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import LoadingContainer from 'components/LoadingContainer'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
-
+import ConnectAccount from './ConnectAccount'
 import { ConnectedAccount } from './ConnectedAccount'
+import ConnectAccountButtons from './ConnectAccountButtons'
 
 interface Props {
   accounts: IOAuthAccount[]
@@ -45,71 +34,63 @@ function ConnectedAccounts({
   syncOAuthAccount,
   disconnectOAuthAccount
 }: Props) {
-  useEffect(() => {
+  useEffectOnce(() => {
     fetchOAuthAccounts()
-  }, [fetchOAuthAccounts])
+  })
 
   const confirmation = useContext(ConfirmationModalContext)
-  const google = useConnectOAuthAccount(OAuthProvider.Google)
-  const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
-
-  const onDelete = (provider: OAuthProvider, accountId: string) => {
-    confirmation.setConfirmationModal({
-      message:
-        'Your account will be disconnected and removed but imported contacts and emails will be preserved.',
-      onConfirm: () => {
-        disconnectOAuthAccount(provider, accountId)
-      }
-    })
-  }
 
   return (
     <>
       <Helmet>
         <title>Connected Accounts | Settings | Rechat</title>
       </Helmet>
-      <PageHeader style={{ marginBottom: 0, marginTop: '1.5rem' }}>
-        <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Connected Accounts</PageHeader.Heading>
-        </PageHeader.Title>
-        <PageHeader.Menu>
-          <GoogleSigninButton
-            disabled={google.connecting}
-            onClick={google.connect}
-          >
-            Sign in with google
-          </GoogleSigninButton>
-          <Box mr={1} />
-          <Button
-            variant="outlined"
-            disabled={outlook.connecting}
-            onClick={outlook.connect}
-          >
-            <IconOutlook
-              size={iconSizes.small}
-              style={{ marginRight: '1rem' }}
-            />
-            <Typography variant="button">Sync with Outlook</Typography>
-          </Button>
-        </PageHeader.Menu>
-      </PageHeader>
 
-      <Box paddingX={3}>
-        {loading && accounts.length === 0 ? (
-          <Loading />
-        ) : (
+      {loading ? (
+        <Box margin={2}>
+          <LoadingContainer style={{}} />
+        </Box>
+      ) : accounts.length === 0 ? (
+        <ConnectAccount />
+      ) : (
+        <>
+          <Box marginBottom={1.5}>
+            <Paper variant="outlined">
+              <Box paddingX={3} paddingY={2}>
+                <Grid container alignItems="center">
+                  <Grid item xs>
+                    <Typography variant="subtitle2">
+                      Connect other accounts
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <ConnectAccountButtons size="small" />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Paper>
+          </Box>
+
           <List disablePadding>
             {accounts.map(account => (
               <ConnectedAccount
                 account={account}
                 key={account.id}
                 onSync={syncOAuthAccount}
-                onDelete={onDelete}
+                onDelete={(provider, accountId) => {
+                  confirmation.setConfirmationModal({
+                    message: `Your account will be disconnected and 
+                    removed but imported contacts and emails will be preserved.`,
+                    onConfirm: () => {
+                      disconnectOAuthAccount(provider, accountId)
+                    }
+                  })
+                }}
               />
             ))}
           </List>
-        )}
-      </Box>
+        </>
+      )}
     </>
   )
 }

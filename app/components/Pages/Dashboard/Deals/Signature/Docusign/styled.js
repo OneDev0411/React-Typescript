@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button as MuiButton } from '@material-ui/core'
 
-export const Button = styled(ActionButton)`
+export const Button = styled(MuiButton)`
   margin-left: 10px;
   color: #2196f3;
   background-color: #fff;

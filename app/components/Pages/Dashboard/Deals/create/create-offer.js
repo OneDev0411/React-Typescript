@@ -6,6 +6,8 @@ import _ from 'underscore'
 import moment from 'moment'
 import { Helmet } from 'react-helmet'
 
+import { Button } from '@material-ui/core'
+
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
 
@@ -13,7 +15,7 @@ import { FullPageHeader } from 'components/FullPageHeader'
 
 import { confirmation } from 'actions/confirmation'
 
-import ActionButton from 'components/Button/ActionButton'
+import IntercomTrigger from 'components/IntercomTrigger'
 
 import { createRoles, createOffer, upsertContexts } from 'actions/deals'
 
@@ -25,7 +27,6 @@ import DealStatus from './deal-status'
 import EscrowOfficers from './escrow-officer'
 import DealReferrals from './deal-referrals'
 import Contexts from './contexts'
-import IntercomTrigger from '../../Partials/IntercomTrigger'
 
 import { getLegalFullName } from '../utils/roles'
 
@@ -590,25 +591,26 @@ class CreateOffer extends React.Component {
                 again.
               </span>
               <IntercomTrigger
-                render={({ activeIntercom, intercomIsActive }) => (
-                  <button
-                    type="button"
-                    onClick={!intercomIsActive ? activeIntercom : () => false}
-                    className="btn btn-primary c-button--link"
+                render={({ activeIntercom, isIntercomActive }) => (
+                  <Button
+                    color="secondary"
+                    onClick={!isIntercomActive ? activeIntercom : () => false}
                   >
                     Support
-                  </button>
+                  </Button>
                 )}
               />
             </div>
           )}
 
-          <ActionButton
+          <Button
+            color="secondary"
+            variant="contained"
             disabled={saving || offerType.length === 0}
             onClick={this.createOffer}
           >
             {saving ? 'Creating Offer ...' : 'Create Offer'}
-          </ActionButton>
+          </Button>
 
           <div className="error-summary">
             {this.isFormSubmitted && validationErrors.length > 0 && (

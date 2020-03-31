@@ -7,13 +7,14 @@
       float: left;
       font-size: 24px;
       font-weight: 600;
-      line-height: 1.0;
+      line-height: 1;
     }
     .close {
       opacity: 1;
       color: #9b9b9b;
-      &:hover, &:focus {
-        color: #0945eb;
+      &:hover,
+      &:focus {
+        color: $brand-primary;
       }
     }
     .leave-icon {
@@ -23,10 +24,11 @@
       line-height: 1;
       text-shadow: 0 1px 0 #fff;
       margin-right: 20px;
-      &:hover, &:focus {
+      &:hover,
+      &:focus {
         cursor: pointer;
         svg g {
-          fill: #0945eb;
+          fill: $brand-primary;
         }
       }
     }

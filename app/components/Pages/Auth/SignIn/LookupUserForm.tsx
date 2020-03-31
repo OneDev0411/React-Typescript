@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router'
+import { Typography } from '@material-ui/core'
 import { Form, Field } from 'react-final-form'
 import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
@@ -50,7 +51,7 @@ export default function LookUpForm({
       initialValues={initialValues}
       onSubmit={onSubmit}
       validate={validate}
-      render={({ handleSubmit }) => (
+      render={({ handleSubmit, form }) => (
         <form onSubmit={handleSubmit}>
           <Field
             name="username"
@@ -65,6 +66,16 @@ export default function LookUpForm({
               type={submitMessage.type}
             >
               {submitMessage.text}
+              <Typography>
+                <Link
+                  style={{ color: theme.palette.info.contrastText }}
+                  to={`/signup?email=${window.encodeURIComponent(
+                    form.getState().values.username
+                  )}`}
+                >
+                  Do you want to sign up?
+                </Link>
+              </Typography>
             </Callout>
           )}
           <SubmitButton
@@ -73,7 +84,7 @@ export default function LookUpForm({
             text={isLoading ? 'Looking up...' : 'Next'}
           />
 
-          <p style={{ textAlign: 'center' }}>
+          <p className="c-auth__subtitle">
             <small>Don't have an account?</small>
             &nbsp;&nbsp;
             <Link to="/signup">Sign up</Link>

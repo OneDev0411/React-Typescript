@@ -3,7 +3,7 @@ import { Field } from 'react-final-form'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
 
 import { FinalFormDrawer } from 'components/FinalFormDrawer'
 import { TextInput } from 'components/Forms/TextInput'
@@ -116,7 +116,9 @@ export default class SignatureComposeDrawer extends React.Component {
             <Flex>
               <Field name="auto_notify" component={AutoNotify} />
 
-              <ActionButton
+              <Button
+                variant="contained"
+                color="secondary"
                 type="submit"
                 disabled={this.props.isSubmitting}
                 onClick={props.handleSubmit}
@@ -124,7 +126,7 @@ export default class SignatureComposeDrawer extends React.Component {
                 {this.props.isSubmitting
                   ? 'Please Wait...'
                   : 'Next: View in Docusign'}
-              </ActionButton>
+              </Button>
             </Flex>
           </Flex>
         )}
