@@ -24,7 +24,7 @@ const defaultProps: IconButtonProps = {
 }
 
 const getColor = props => {
-  if (props.appearance === 'primary') {
+  if (['primary', 'secondary'].includes(props.appearance)) {
     return '#fff'
   }
 
