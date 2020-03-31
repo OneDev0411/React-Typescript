@@ -171,7 +171,7 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
     <>
       <Callout
         dense
-        type="default"
+        type="info"
         closeButtonTooltip="Dismiss"
         style={{ padding: '0.5rem 1rem', margin: '1rem' }}
         onClose={() => {
