@@ -1,5 +1,3 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import * as React from 'react'
 import {
   Grid,
@@ -13,6 +11,8 @@ import {
 import styled, { ThemeProps } from 'styled-components'
 import Flex from 'styled-flex-component'
 
+import { OAuthProvider } from 'constants/contacts'
+
 import IconPermission from 'components/SvgIcons/Permission/IconPermission'
 
 import Avatar from 'components/Avatar'
@@ -25,7 +25,7 @@ import {
 } from './constants'
 
 import { SyncButton } from './SyncButton'
-import { ConnectedCalendar } from './ConnectedCalendar'
+import ConnectedCalendar from './ConnectedCalendar'
 
 interface Props {
   account: IOAuthAccount
@@ -38,7 +38,7 @@ const ConnectedAccountListItem = styled(ListItem)`
     ${({ theme }: ThemeProps<Theme>) => theme.palette.divider};
 ` as typeof ListItem
 
-export function ConnectedAccount({ account, onSync, onDelete }: Props) {
+export default function ConnectedAccount({ account, onSync, onDelete }: Props) {
   return (
     <ConnectedAccountListItem>
       <ListItemAvatar>
