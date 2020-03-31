@@ -68,22 +68,21 @@ export default function CtaAction({ contact }: Props) {
     setShowEmailComposer(!showEmailComposer)
   }
 
-  const renderChatButton =
-    email || phone_number || users ? (
-      <ChatButton
-        contact={contact}
-        render={({ onClick, isDisabled }) => (
-          <IconButton
-            size="small"
-            className={classes.item}
-            disabled={isDisabled}
-            onClick={onClick}
-          >
-            {!isDisabled ? <Chat /> : <Loading />}
-          </IconButton>
-        )}
-      />
-    ) : null
+  const renderChatButton = (email || phone_number || users) && (
+    <ChatButton
+      contact={contact}
+      render={({ onClick, isDisabled }) => (
+        <IconButton
+          size="small"
+          className={classes.item}
+          disabled={isDisabled}
+          onClick={onClick}
+        >
+          {!isDisabled ? <Chat /> : <Loading />}
+        </IconButton>
+      )}
+    />
+  )
 
   return (
     <>
