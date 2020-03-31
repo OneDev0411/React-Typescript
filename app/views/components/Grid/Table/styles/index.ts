@@ -16,6 +16,7 @@ export const styles = (theme: Theme) =>
         }
       },
       '&:hover td': {
+        cursor: 'pointer',
         '&.primary a': {
           color: theme.palette.secondary.main,
           textDecoration: 'underline'
