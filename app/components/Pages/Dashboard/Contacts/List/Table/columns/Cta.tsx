@@ -30,7 +30,8 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      display: 'flex'
+      display: 'flex',
+      justifyContent: 'center'
     },
     item: {
       display: 'inline-flex',
@@ -53,10 +54,11 @@ export default function CtaAction({ contact }: Props) {
   const user: IUser = useSelector((state: IAppState) => state.user)
   const [showEmailComposer, setShowEmailComposer] = useState<boolean>(false)
   const notify = (args: Notification) => dispatch(addNotification(args))
+  const { emails, email, phone_number, users } = contact
   const classes = useStyles()
 
   const toggleEmailComposer = () => {
-    if ((contact.emails || []).length === 0) {
+    if ((emails || []).length === 0) {
       return notify({
         status: 'error',
         message: 'User has not email!'
@@ -65,6 +67,23 @@ export default function CtaAction({ contact }: Props) {
 
     setShowEmailComposer(!showEmailComposer)
   }
+
+  const renderChatButton =
+    email || phone_number || users ? (
+      <ChatButton
+        contact={contact}
+        render={({ onClick, isDisabled }) => (
+          <IconButton
+            size="small"
+            className={classes.item}
+            disabled={isDisabled}
+            onClick={onClick}
+          >
+            {!isDisabled ? <Chat /> : <Loading />}
+          </IconButton>
+        )}
+      />
+    ) : null
 
   return (
     <>
@@ -80,19 +99,7 @@ export default function CtaAction({ contact }: Props) {
         />
       )}
       <Box className={classes.container}>
-        <ChatButton
-          contact={contact}
-          render={({ onClick, isDisabled }) => (
-            <IconButton
-              size="small"
-              className={classes.item}
-              disabled={isDisabled}
-              onClick={onClick}
-            >
-              {!isDisabled ? <Chat /> : <Loading />}
-            </IconButton>
-          )}
-        />
+        {renderChatButton}
         <IconButton
           size="small"
           className={classes.item}

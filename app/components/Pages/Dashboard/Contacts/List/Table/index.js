@@ -140,6 +140,13 @@ const ContactsList = props => {
       onClick: () => goTo(`/dashboard/contacts/${contact.id}`)
     }
   }
+  const getColumnProps = ({ column }) => {
+    if (['cta', 'flows', 'tag', 'delete-contact'].includes(column.id)) {
+      return {
+        onClick: e => e.stopPropagation()
+      }
+    }
+  }
 
   return (
     <>
@@ -150,6 +157,7 @@ const ContactsList = props => {
         columns={columns}
         LoadingStateComponent={LoadingComponent}
         getTrProps={getRowProps}
+        getTdProps={getColumnProps}
         selection={{
           defaultRender: ({ row }) => <Avatar contact={row} />
         }}
