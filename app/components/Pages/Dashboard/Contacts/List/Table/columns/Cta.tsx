@@ -56,7 +56,7 @@ export default function CtaAction({ contact }: Props) {
   const classes = useStyles()
 
   const toggleEmailComposer = () => {
-    if (!contact.email || (contact.emails || []).length === 0) {
+    if ((contact.emails || []).length === 0) {
       return notify({
         status: 'error',
         message: 'User has not email!'
