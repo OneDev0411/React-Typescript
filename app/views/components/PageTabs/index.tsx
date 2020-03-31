@@ -40,7 +40,7 @@ const useStyles = makeStyles(
       '& .MuiTab-root': {
         paddingLeft: 0,
         paddingRight: 0,
-        marginRight: theme.spacing(2)
+        marginRight: theme.spacing(4)
       }
     },
     actionsFlexContainer: {
