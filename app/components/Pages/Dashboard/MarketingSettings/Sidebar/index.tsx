@@ -43,7 +43,10 @@ export default function Sidebar({ sections, settings, onUpdate }: Props) {
     key: BrandSettingsPaletteKey,
     value: string
   ) => {
-    console.log({ key, value })
+    if (settings[key] === value) {
+      return
+    }
+
     onUpdate({
       ...settings,
       [key]: value
