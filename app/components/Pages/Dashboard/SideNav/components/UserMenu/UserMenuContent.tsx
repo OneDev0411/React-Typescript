@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Acl from '../../../../../../views/components/Acl'
+import { ACL } from '../../../../../../constants/acl'
 import Link from '../../../../../../views/components/ALink'
 import { ScrollableArea } from '../../../../../../views/components/ScrollableArea'
 
@@ -17,7 +18,7 @@ interface Props {
 export function UserMenuContent({
   user,
   showChecklists,
-  onClose = () => { }
+  onClose = () => {}
 }: Props) {
   return (
     <SideMenuContainer>
@@ -58,6 +59,17 @@ export function UserMenuContent({
             Account settings
           </Link>
         </li>
+        <Acl access={[ACL.BACK_OFFICE, ACL.MARKETING]}>
+          <li>
+            <Link
+              noStyle
+              to="/dashboard/marketing-center-settings"
+              onClick={onClose}
+            >
+              Marketing Center Settings
+            </Link>
+          </li>
+        </Acl>
         <ListItemDivider role="separator" />
         <li>
           <a

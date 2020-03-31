@@ -9,7 +9,7 @@ export interface TemplateRenderData {
 }
 
 export default function getTemplateRenderData(
-  brand: IUserTeam
+  brand: IBrand
 ): TemplateRenderData {
   const palette = getBrandStyles(brand, get.bind(null, brand))
 
