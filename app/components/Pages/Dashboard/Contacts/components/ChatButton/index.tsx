@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  useCallback,
-  ReactNode
-} from 'react'
+import React, { useState, useMemo, useCallback, ReactNode } from 'react'
 import { AnyAction } from 'redux'
 import { useSelector, useDispatch } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
@@ -48,17 +42,11 @@ function ChatButton({ contact, render }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const { email, phone_number, users } = contact
-  const [isChattable, setIsChattable] = useState<boolean>(false)
   const [isCreatingRoom, setIsCreatingRoom] = useState<boolean>(false)
-  const isDisabled: boolean = !isChattable || isCreatingRoom
+  const isChattable: boolean = !!(email || phone_number || users)
 
   // User  can chat just with contacts which at least has
   // email or phone or user attribute.
-  useEffect(() => {
-    if (isChattable || email || phone_number || users) {
-      setIsChattable(true)
-    }
-  }, [email, isChattable, phone_number, users])
 
   const recipients = useMemo(() => {
     const filterNull = arr => arr.filter(item => item != null)
@@ -91,13 +79,13 @@ function ChatButton({ contact, render }: Props) {
   }, [dispatch, recipients])
 
   if (render) {
-    return <>{render({ onClick, isDisabled })}</>
+    return <>{render({ onClick, isDisabled: isCreatingRoom })}</>
   }
 
   return (
     <Button
       className={classes.button}
-      disabled={isDisabled}
+      disabled={!isChattable || isCreatingRoom}
       onClick={onClick}
       size="small"
       variant="outlined"
