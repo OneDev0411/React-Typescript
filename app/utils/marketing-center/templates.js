@@ -1,7 +1,7 @@
 import nunjucks from 'nunjucks'
 import flattenBrand from 'utils/flatten-brand'
 
-const BRAND_STYLES_TEMPLATE = `{% if get('body-font-family') %}
+export const BRAND_STYLES_TEMPLATE = `{% if get('body-font-family') %}
   <mj-font name="{{get('body-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('body-font-family')}}"></mj-font>
 {% endif %}
 
