@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { AnyAction } from 'redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
 
 import {
   Box,
@@ -8,6 +10,7 @@ import {
   createStyles,
   Theme
 } from '@material-ui/core'
+import { addNotification, Notification } from 'reapop'
 
 import { IAppState } from 'reducers'
 
@@ -46,11 +49,22 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export default function CtaAction({ contact }: Props) {
+  const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
   const user: IUser = useSelector((state: IAppState) => state.user)
   const [showEmailComposer, setShowEmailComposer] = useState<boolean>(false)
+  const notify = (args: Notification) => dispatch(addNotification(args))
   const classes = useStyles()
 
-  const toggleEmailComposer = () => setShowEmailComposer(!showEmailComposer)
+  const toggleEmailComposer = () => {
+    if (!contact.email || (contact.emails || []).length === 0) {
+      return notify({
+        status: 'error',
+        message: 'User has not email!'
+      })
+    }
+
+    setShowEmailComposer(!showEmailComposer)
+  }
 
   return (
     <>
