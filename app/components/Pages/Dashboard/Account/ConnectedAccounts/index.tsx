@@ -80,7 +80,7 @@ function ConnectedAccounts({
                 onDelete={(provider, accountId) => {
                   confirmation.setConfirmationModal({
                     message: `Your account will be disconnected and 
-                        removed but imported contacts and emails will be preserved.`,
+                    removed but imported contacts and emails will be preserved.`,
                     onConfirm: () => {
                       disconnectOAuthAccount(provider, accountId)
                     }

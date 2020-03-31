@@ -114,7 +114,7 @@ class SavedSearchesList extends Component {
             this.props.dispatch(getAlerts())
           }
         }}
-        renderMenu={({ close }) => {
+        renderMenu={() => {
           if (this.props.isFetching || isDeleting) {
             return [
               <ListItem key="loading">

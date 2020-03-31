@@ -6,7 +6,7 @@ import { connectOAuthAccount } from 'models/o-auth-accounts/connect-o-auth-accou
 
 import { useOnRestoredFromPersistedState } from 'hooks/use-on-restored-from-persisted-state'
 
-import { startImportingOAuthContacts } from './helpers'
+import { startImportingOAuthContacts } from 'utils/oauth-provider'
 
 export function useConnectOAuthAccount(
   provider: OAuthProvider,

@@ -18,9 +18,8 @@ class WentWrong extends React.Component {
 
     return (
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        {
-          "You have encountered an unknown system issue. We're working on it. In the meantime, connect with our"
-        }
+        You have encountered an unknown system issue. We're working on it. In
+        the meantime, connect with our
         <IntercomTrigger
           key="MLS_SEARCH_MODAL__INERCOM_TRIGGER"
           render={({ activeIntercom, isIntercomActive }) => (
@@ -47,7 +46,7 @@ class WentWrong extends React.Component {
             </Button>
           )}
         />
-        {'.'}
+        .
       </div>
     )
   }

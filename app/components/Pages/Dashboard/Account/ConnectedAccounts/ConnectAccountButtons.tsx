@@ -1,9 +1,9 @@
+import { OAuthProvider } from 'constants/contacts'
+
 import React from 'react'
 import { Box, Button } from '@material-ui/core'
 
-import { OAuthProvider } from 'constants/contacts'
-
-import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
+import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 
 import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
 import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'

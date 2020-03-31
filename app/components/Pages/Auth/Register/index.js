@@ -251,14 +251,13 @@ export default compose(
         userPassword.email = emailFromURI
       }
 
-      // console.log(redirectTo, formInputsValue, userPassword, userInfo)
       try {
         let redirect = '/dashboard/mls'
 
         await updatePassword(userPassword)
 
         if (user_type === 'Agent') {
-          redirect = `/dashboard/account/upgrade?redirectTo=${encodeURIComponent(
+          redirect = `/onboarding/confirm-agent-id?redirectTo=${encodeURIComponent(
             redirectTo
           )}`
         }

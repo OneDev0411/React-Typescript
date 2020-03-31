@@ -1,9 +1,9 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import React from 'react'
 import cn from 'classnames'
 import { Box, Button, Typography } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
+
+import { OAuthProvider } from 'constants/contacts'
 
 import GoogleSigninButton from 'components/GoogleSigninButton'
 
@@ -12,7 +12,7 @@ import { CreateContact } from 'components/CreateContact'
 import IconCsv from 'components/SvgIcons/Csv/IconCsv'
 import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 
-import { useConnectOAuthAccount } from '../ImportContactsButton/use-connect-oauth-account'
+import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 
 const useStyles = makeStyles(
   (theme: Theme) =>

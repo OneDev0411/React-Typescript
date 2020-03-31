@@ -41,7 +41,7 @@ export function Notes(props: Props) {
       ])
 
       props.onChange(contact)
-    } catch (e) {}
+    } catch (e) { }
   }
 
   const handleDeleteNote = async note => {
@@ -89,7 +89,9 @@ export function Notes(props: Props) {
                 type="button"
                 className={classes.buttonContainer}
                 onClick={() => setSelectedNote(note)}
-              />
+              >
+                Add
+              </button>
 
               <div className={classes.row}>
                 <div className={classes.container}>

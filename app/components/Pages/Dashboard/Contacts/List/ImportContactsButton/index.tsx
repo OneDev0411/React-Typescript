@@ -17,10 +17,11 @@ import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { iconSizes } from 'components/SvgIcons/icon-sizes'
 
-import { CsvIcon, GoogleIcon, ButtonText, OutlookIcon } from './styled'
+import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
+
 import { ConnectedAccount } from './ConnectedAccount'
 import { IMPORT_TOOLTIP_VISITED_SETTINGS_KEY } from '../constants'
-import { useConnectOAuthAccount } from './use-connect-oauth-account'
+import { CsvIcon, GoogleIcon, ButtonText, OutlookIcon } from './styled'
 
 interface Props {
   accounts: IOAuthAccount[]

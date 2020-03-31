@@ -67,19 +67,6 @@ class ProfileCatalog extends Component {
     this.closeModal()
   }
 
-  renderUploader() {
-    return (
-      <ImageUploader
-        radius="50%"
-        // file={this.props.avatar.src} // CORS PROBLEM FOR NOW!
-        saveHandler={this.onAvatarSet}
-        closeHandler={this.closeModal}
-        width={300}
-        height={300}
-      />
-    )
-  }
-
   getImageUploadButtonText() {
     if (this.props.isUploading) {
       return 'Uploading'
@@ -120,7 +107,15 @@ class ProfileCatalog extends Component {
             >
               {`${this.getImageUploadButtonText()} Profile Picture`}
             </Button>
-            {this.state.isOpen && this.renderUploader()}
+            <ImageUploader
+              radius="50%"
+              // file={this.props.avatar.src} // CORS PROBLEM FOR NOW!
+              saveHandler={this.onAvatarSet}
+              closeHandler={this.closeModal}
+              width={300}
+              height={300}
+              isOpen={this.state.isOpen}
+            />
           </ProfileImageActions>
         </Container>
         <hr />

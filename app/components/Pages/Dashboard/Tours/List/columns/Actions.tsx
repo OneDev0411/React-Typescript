@@ -57,8 +57,10 @@ export default function Actions({ onEdit, reloadList, tour }: Props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={onEdit}>Edit</MenuItem>
-        <MenuItem onClick={onDelete}>
+        <MenuItem onClick={onEdit} disabled={isDeleting}>
+          Edit
+        </MenuItem>
+        <MenuItem onClick={onDelete} disabled={isDeleting}>
           <Typography color="error">Delete</Typography>
         </MenuItem>
       </Menu>

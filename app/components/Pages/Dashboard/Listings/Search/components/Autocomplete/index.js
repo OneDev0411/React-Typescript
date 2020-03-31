@@ -32,12 +32,7 @@ import {
   SEARCH_BY_QUERY
 } from '../../../../../../../constants/listings/search'
 
-import {
-  SearchContainer,
-  ListContainer,
-  ListTitle,
-  Item,
-} from './styled'
+import { SearchContainer, ListContainer, ListTitle, Item } from './styled'
 
 class MlsAutocompleteSearch extends Component {
   state = {

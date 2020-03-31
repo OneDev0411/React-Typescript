@@ -19,9 +19,9 @@ import { GridHookPlugin, LoadingPosition } from '../types'
 
 import { useGridContext } from '../hooks/use-grid-context'
 
-import { Props } from '..'
-
 import { setActiveSort } from '../context/actions/sorting/set-active-sort'
+
+import { Props } from '..'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

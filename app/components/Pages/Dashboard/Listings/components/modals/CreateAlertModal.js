@@ -6,11 +6,12 @@ import withHandlers from 'recompose/withHandlers'
 import { Modal } from 'react-bootstrap'
 import Flex from 'styled-flex-component'
 
+import createAlert from 'actions/listings/alerts/create-alert'
+import ActionButton from 'components/Button/ActionButton'
+
 import SuccessModal from './SuccessModal'
 import ShareAlertModal from './ShareAlertModal'
-import createAlert from '../../../../../../store_actions/listings/alerts/create-alert'
-
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import { normalizeAlertOptions } from './normalize-alert-options'
 
 const CreateAlertModal = ({
   onHide,
@@ -42,13 +43,10 @@ const CreateAlertModal = ({
           <p style={{ marginBottom: 0 }}>than your local MLS®</p>
         </div>
         <div style={{ padding: '2rem' }}>
-          <label htmlFor="alertName" style={{ display: 'block' }}>
-            Alert Name
-          </label>
+          <div>Alert Name</div>
           <input
             id="alertName"
             type="text"
-            autoFocus
             className="c-create-alert-modal__alert-title-input"
             placeholder="Naming your alert..."
             onChange={titleInputOnChange}
@@ -94,38 +92,6 @@ const CreateAlertModal = ({
     />
   </div>
 )
-
-export const normalizeAlertOptions = (
-  searchOptions,
-  drawingPoints,
-  alertOptions
-) => {
-  let points = searchOptions.points
-  const {
-    mls_areas,
-    postal_codes,
-    school_districts,
-    subdivisions,
-    counties
-  } = searchOptions
-
-  if (
-    drawingPoints.length === 0 &&
-    (mls_areas || postal_codes || school_districts || subdivisions || counties)
-  ) {
-    points = null
-  }
-
-  const open_house = searchOptions.open_house || false
-
-  return {
-    ...searchOptions,
-    ...alertOptions,
-    points,
-    open_house,
-    limit: null
-  }
-}
 
 export default compose(
   connect(

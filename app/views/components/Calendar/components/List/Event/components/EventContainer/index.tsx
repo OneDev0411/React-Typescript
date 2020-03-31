@@ -57,7 +57,9 @@ export function EventContainer({
           type="button"
           className={sharedClasses.buttonContainer}
           onClick={onClick}
-        />
+        >
+          Add
+        </button>
 
         <div className={sharedClasses.row}>
           <div className={sharedClasses.container}>

@@ -9,16 +9,28 @@ import getListing from '../../../../../models/listings/listing/get-listing'
 import changeListingFollowStatuses from '../../../../../models/listings/listing/change-listing-follow-status'
 import listing_util from '../../../../../utils/listing'
 
+const MOBILE_WIDTH = 768
+
 class Listing extends React.Component {
   state = {
     isFetching: false,
     errorMessage: undefined,
-    listing: {}
+    listing: {},
+    windowInnerWidth: window.innerWidth
   }
 
   componentDidMount() {
+    window.addEventListener('resize', this.handleWindowWidthResize)
+
     this.initializeListing()
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleWindowWidthResize)
+  }
+
+  handleWindowWidthResize = () =>
+    this.setState({ windowInnerWidth: window.innerWidth })
 
   async initializeListing() {
     const { id: listingId } = this.props.params
@@ -91,7 +103,7 @@ class Listing extends React.Component {
   }
 
   render() {
-    const { listing, isFetching, errorMessage } = this.state
+    const { listing, isFetching, errorMessage, windowInnerWidth } = this.state
 
     let content = (
       <ListingDesktopView
@@ -100,10 +112,11 @@ class Listing extends React.Component {
         isFetching={isFetching}
         errorMessage={errorMessage}
         onClickFollow={this.onClickFollow}
+        windowInnerWidth={windowInnerWidth}
       />
     )
 
-    if (this.props.data.is_mobile) {
+    if (windowInnerWidth <= MOBILE_WIDTH) {
       content = (
         <ListingMobileView
           {...this.props}

@@ -1,6 +1,6 @@
 import { connectedRouterRedirect } from 'redux-auth-wrapper/history3/redirect'
 
-import getUserDefaultHomepage from '../utils/get-default-home-page'
+import { getUserDefaultHomepage } from '../utils/get-default-home-page'
 
 const userIsNotAuthenticated = connectedRouterRedirect({
   // This sends the user either to the query param route if we have one, or to the landing page if none is specified and the user is already logged in

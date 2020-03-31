@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router'
 import signin from '../../models/auth/signin'
 import getUser from '../../models/user/get-user'
 import * as actionsType from '../../constants/auth/signin'
-import getDefaultHomePage from '../../utils/get-default-home-page'
+import { getUserDefaultHomepage } from '../../utils/get-default-home-page'
 
 import { getUserTeams } from '../user/teams'
 
@@ -53,7 +53,7 @@ const submitSigninForm = (loginData, redirectTo, userId) => (
           window.Raven.setUserContext(userData)
         }
 
-        const defaultHomePage = getDefaultHomePage(getState().user)
+        const defaultHomePage = getUserDefaultHomepage(getState().user)
 
         if (redirectTo && redirectTo.includes('http')) {
           browserHistory.push('/branch?waitingForRedirect')
