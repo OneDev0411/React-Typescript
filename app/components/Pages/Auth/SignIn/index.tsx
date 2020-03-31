@@ -14,7 +14,7 @@ import signin from '../../../../models/auth/signin'
 import signup from '../../../../models/auth/signup'
 import { lookUpUserByEmail } from '../../../../models/user/lookup-user-by-email'
 
-import getDefaultHomePage from '../../../../utils/get-default-home-page'
+import { getUserDefaultHomepage } from '../../../../utils/get-default-home-page'
 
 import { getBrandInfo } from './get-brand-info'
 import SignInForm from './SiginForm'
@@ -130,7 +130,7 @@ export default function Signin(props: Props) {
         window.Raven.setUserContext(userData)
       }
 
-      const defaultHomePage = getDefaultHomePage(user)
+      const defaultHomePage = getUserDefaultHomepage(user)
 
       if (redirectTo && redirectTo.includes('http')) {
         browserHistory.push('/branch?waitingForRedirect')
