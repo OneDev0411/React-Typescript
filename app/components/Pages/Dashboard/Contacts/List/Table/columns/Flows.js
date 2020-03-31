@@ -9,6 +9,7 @@ import IconThunderbolt from 'components/SvgIcons/Thunderbolt/ThunderboltIcon'
 const commonStyle = `
   display: inline-flex;
   align-items: center;
+  cursor: pointer;
   > svg {
     width: 1em;
     height: 1em;
