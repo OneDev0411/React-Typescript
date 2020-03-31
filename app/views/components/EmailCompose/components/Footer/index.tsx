@@ -114,6 +114,7 @@ export function Footer({
             </ActionButton>
           )}
           <ActionButton
+            appearance="secondary"
             data-test="compose-send-email"
             type="submit"
             disabled={busy || props.isSubmitDisabled}
