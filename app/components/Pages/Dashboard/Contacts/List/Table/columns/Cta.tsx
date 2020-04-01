@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import { AnyAction } from 'redux'
-import { useSelector, useDispatch } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
+import { useSelector } from 'react-redux'
 
 import {
   Box,
@@ -10,7 +8,6 @@ import {
   createStyles,
   Theme
 } from '@material-ui/core'
-import { addNotification, Notification } from 'reapop'
 
 import { IAppState } from 'reducers'
 
@@ -20,6 +17,7 @@ import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize
 import EmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 import Chat from 'components/SvgIcons/Chat/IconChat'
+import MissingEmailModal from 'components/MissingEmailModal'
 
 import ChatButton from '../../../components/ChatButton'
 
@@ -40,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       '& svg': {
         width: 'unset',
-        height: theme.spacing(2.25)
+        height: theme.spacing(2.5)
       },
       '&:hover svg': {
         fill: theme.palette.primary.main
@@ -50,19 +48,17 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export default function CtaAction({ contact }: Props) {
-  const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
   const user: IUser = useSelector((state: IAppState) => state.user)
   const [showEmailComposer, setShowEmailComposer] = useState<boolean>(false)
-  const notify = (args: Notification) => dispatch(addNotification(args))
-  const { emails, email, phone_number, users } = contact
+  const [showMissingEmailModal, setShowMissingEmailModal] = useState<boolean>(
+    false
+  )
+  const { id, emails, email, phone_number, users } = contact
   const classes = useStyles()
 
   const toggleEmailComposer = () => {
     if ((emails || []).length === 0) {
-      return notify({
-        status: 'error',
-        message: 'User has no Email!'
-      })
+      return setShowMissingEmailModal(true)
     }
 
     setShowEmailComposer(!showEmailComposer)
@@ -86,6 +82,14 @@ export default function CtaAction({ contact }: Props) {
 
   return (
     <>
+      {showMissingEmailModal && (
+        <MissingEmailModal
+          isOpen
+          contactId={id}
+          onClose={() => setShowMissingEmailModal(false)}
+          action="send an Email"
+        />
+      )}
       {showEmailComposer && (
         <SingleEmailComposeDrawer
           isOpen
