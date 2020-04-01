@@ -4,7 +4,6 @@ import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
-import TerserPlugin from 'terser-webpack-plugin'
 
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 
@@ -38,16 +37,6 @@ webpackConfig.entry = {
   app: [appConfig.compile.entry],
   vendor: appConfig.compile.vendors
 }
-
-webpackConfig.optimization.minimize = true
-
-webpackConfig.optimization.minimizer = [
-  new TerserPlugin({
-    cache: true,
-    parallel: true,
-    sourceMap: true
-  })
-]
 
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
