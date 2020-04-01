@@ -11,20 +11,29 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Props {
-  to: string
+  to?: string
   text?: string
+  type?: 'button' | 'submit'
+  onClick?: () => void
 }
 
-export default function NextButton({ to, text = 'Next' }: Props) {
+export default function NextButton({
+  to,
+  onClick,
+  text = 'Next',
+  type = 'button'
+}: Props) {
   const classes = useStyles()
 
   return (
     <Button
-      href={to}
-      size="large"
-      color="primary"
-      variant="contained"
       className={classes.button}
+      color="primary"
+      href={to}
+      onClick={onClick}
+      size="large"
+      type={type}
+      variant="contained"
     >
       {text}
     </Button>
