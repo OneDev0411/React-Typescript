@@ -178,9 +178,9 @@ class Roles extends React.Component {
                     <RoleTitle>{getLegalFullName(role)}</RoleTitle>
                     <RoleType>
                       {roleName(role.role)}
-                      {this.props.showEmail && role.user
-                        ? ` . ${role.user.email}`
-                        : null}
+                      {this.props.showEmail &&
+                        role.user &&
+                        ` . ${role.user.email}`}
                     </RoleType>
                   </RoleInfo>
                 </Flex>
@@ -198,7 +198,6 @@ class Roles extends React.Component {
                         color="secondary"
                         variant="outlined"
                         size="small"
-                        style={{ marginLeft: '0.5rem' }}
                         onClick={() => this.toggleReplaceAgentDrawer(role)}
                       >
                         Replace

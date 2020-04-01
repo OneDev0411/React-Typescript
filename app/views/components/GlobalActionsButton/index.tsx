@@ -8,7 +8,12 @@ import Button from './Button'
 import items from './items'
 import Menu from './Menu'
 
-export default function GlobalActionsButton() {
+interface Props {
+  onCreateEvent: (event: IEvent) => void
+  onCreateContact: (contact: IContact) => void
+}
+
+export default function GlobalActionsButton(props: Props) {
   const user = useSelector((state: IAppState) => state.user as IUser)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [selectedItem, setSelectedItem] = useState<null | Item>(null)
@@ -28,6 +33,16 @@ export default function GlobalActionsButton() {
 
   const handleCloseRenderedItem = () => {
     setSelectedItem(null)
+  }
+
+  const handleSubmitEvent = (event: IEvent) => {
+    props.onCreateEvent(event)
+    handleCloseRenderedItem()
+  }
+
+  const handleSubmitContact = (contact: IContact) => {
+    props.onCreateContact(contact)
+    handleCloseRenderedItem()
   }
 
   const renderSelectedItem = () => {
@@ -50,8 +65,8 @@ export default function GlobalActionsButton() {
         return selectedItem.render({
           user,
           isOpen: true,
-          submitCallback: handleCloseRenderedItem,
-          onClose: handleCloseRenderedItem
+          onClose: handleCloseRenderedItem,
+          submitCallback: handleSubmitEvent
         })
 
       case 'contact':
@@ -59,7 +74,7 @@ export default function GlobalActionsButton() {
           user,
           isOpen: true,
           onClose: handleCloseRenderedItem,
-          submitCallback: handleCloseRenderedItem
+          submitCallback: handleSubmitContact
         })
 
       case 'deal':

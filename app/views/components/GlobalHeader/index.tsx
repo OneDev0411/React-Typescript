@@ -8,6 +8,8 @@ export interface GlobalHeaderProps {
   noPadding?: boolean
   noGlobalActionsButton?: boolean
   children?: React.ReactNode
+  onCreateEvent?: (event: IEvent) => void
+  onCreateContact?: (event: IContact) => void
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -39,7 +41,9 @@ export default function GlobalHeader({
   title,
   noPadding,
   noGlobalActionsButton,
-  children
+  children,
+  onCreateEvent = () => {},
+  onCreateContact = () => {}
 }: GlobalHeaderProps) {
   const classes = useStyles({ noPadding })
 
@@ -53,7 +57,10 @@ export default function GlobalHeader({
       {children && <div className={classes.content}>{children}</div>}
       {!noGlobalActionsButton && (
         <div className={classes.globalAction}>
-          <GlobalActionsButton />
+          <GlobalActionsButton
+            onCreateEvent={onCreateEvent}
+            onCreateContact={onCreateContact}
+          />
         </div>
       )}
     </div>

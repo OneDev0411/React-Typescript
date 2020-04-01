@@ -17,7 +17,7 @@ export function getTimelineInitialRange(): NumberRange {
   const end =
     new Date(
       today.getFullYear(),
-      today.getMonth(),
+      today.getMonth() + 6,
       today.getDate(),
       23,
       59,
