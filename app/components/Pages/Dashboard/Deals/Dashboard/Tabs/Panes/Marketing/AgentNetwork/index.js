@@ -2,6 +2,8 @@ import React from 'react'
 
 import { Button } from '@material-ui/core'
 
+import { goTo } from 'utils/go-to'
+
 import {
   Container,
   Title,
@@ -24,7 +26,7 @@ export default function AgentNetworkPane({ deal }) {
         <Button
           variant="contained"
           color="secondary"
-          to={`/dashboard/deals/${deal.id}/marketing/network`}
+          onClick={() => goTo(`/dashboard/deals/${deal.id}/marketing/network`)}
         >
           View Network
         </Button>
