@@ -8,7 +8,11 @@ import Button from './Button'
 import items from './items'
 import Menu from './Menu'
 
-export default function GlobalActionsButton() {
+interface Props {
+  onCreateEvent: (event: IEvent) => void
+}
+
+export default function GlobalActionsButton(props: Props) {
   const user = useSelector((state: IAppState) => state.user as IUser)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [selectedItem, setSelectedItem] = useState<null | Item>(null)
@@ -28,6 +32,11 @@ export default function GlobalActionsButton() {
 
   const handleCloseRenderedItem = () => {
     setSelectedItem(null)
+  }
+
+  const handleSubmitCallback = (event: IEvent) => {
+    props.onCreateEvent(event)
+    handleCloseRenderedItem()
   }
 
   const renderSelectedItem = () => {
@@ -50,8 +59,8 @@ export default function GlobalActionsButton() {
         return selectedItem.render({
           user,
           isOpen: true,
-          submitCallback: handleCloseRenderedItem,
-          onClose: handleCloseRenderedItem
+          onClose: handleCloseRenderedItem,
+          submitCallback: handleSubmitCallback
         })
 
       case 'contact':
