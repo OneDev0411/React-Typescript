@@ -10,6 +10,7 @@ import Menu from './Menu'
 
 interface Props {
   onCreateEvent: (event: IEvent) => void
+  onCreateContact: (contact: IContact) => void
 }
 
 export default function GlobalActionsButton(props: Props) {
@@ -34,9 +35,16 @@ export default function GlobalActionsButton(props: Props) {
     setSelectedItem(null)
   }
 
-  const handleSubmitCallback = (event: IEvent) => {
+  const handleSubmitEvent = (event: IEvent) => {
     props.onCreateEvent(event)
     handleCloseRenderedItem()
+  }
+
+  const handleSubmitContact = (contact: IContact) => {
+    props.onCreateContact(contact)
+    handleCloseRenderedItem()
+
+    console.log('>>>', contact)
   }
 
   const renderSelectedItem = () => {
@@ -60,7 +68,7 @@ export default function GlobalActionsButton(props: Props) {
           user,
           isOpen: true,
           onClose: handleCloseRenderedItem,
-          submitCallback: handleSubmitCallback
+          submitCallback: handleSubmitEvent
         })
 
       case 'contact':
@@ -68,7 +76,7 @@ export default function GlobalActionsButton(props: Props) {
           user,
           isOpen: true,
           onClose: handleCloseRenderedItem,
-          submitCallback: handleCloseRenderedItem
+          submitCallback: handleSubmitContact
         })
 
       case 'deal':
