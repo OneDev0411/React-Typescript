@@ -11,7 +11,6 @@ import {
 import {
   addActiveFilter,
   changeConditionOperator,
-  createActiveFilters,
   createActiveFiltersWithConditionOperator,
   removeActiveFilter,
   toggleActiveFilter,
@@ -240,7 +239,6 @@ const ConnectedFilters = connect(
   mapStateToProps,
   {
     addActiveFilter,
-    createActiveFilters,
     removeActiveFilter,
     toggleActiveFilter,
     updateActiveFilter,
