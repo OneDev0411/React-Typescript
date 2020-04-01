@@ -6,7 +6,7 @@ import { H4 } from 'components/Typography/headings'
 const Container = styled(H4)`
   ${({ theme }) => css`
     color: #7f7f7f;
-    ${theme.typography.body2};
+    ${theme.typography.body1};
   `}
 `
 
