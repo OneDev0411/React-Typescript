@@ -1,4 +1,9 @@
-import React from 'react'
+import React, {
+  useImperativeHandle,
+  useState,
+  forwardRef,
+  RefObject
+} from 'react'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
@@ -48,28 +53,52 @@ export const TAB_ITEMS: TabItem[] = [
   }
 ]
 
+export const DEFAULT_TAB = 'All'
+
+export interface FiltersRef {
+  changeFilter(tab: string): void
+}
+
 interface Props {
+  filterRef?: RefObject<FiltersRef>
   onChange: (filter: object) => void
 }
 
-export const Filters = withRouter((props: Props & WithRouterProps) => {
+const Filters = withRouter((props: Props & WithRouterProps) => {
+  const [activeTab, setActiveTab] = useState(DEFAULT_TAB)
+
   const handleChangeTab = (value: string) => {
     const item = TAB_ITEMS.find(({ link }) => link === value) || TAB_ITEMS[0]
 
+    setActiveTab(value)
     props.onChange(item.filter)
   }
 
+  useImperativeHandle(props.filterRef, () => ({
+    changeFilter: (tab: string) => handleChangeTab(tab)
+  }))
+
   return (
     <PageTabs
-      defaultValue={props.params.id || 'All'}
+      defaultValue={props.params.id || DEFAULT_TAB}
+      value={activeTab}
       onChange={handleChangeTab}
       tabs={TAB_ITEMS.map(({ label, link }, index: number) => {
         const url = `${BASE_URL}${link}`
 
         return (
-          <TabLink key={index} value={link || 'All'} label={label} to={url} />
+          <TabLink
+            key={index}
+            value={link || DEFAULT_TAB}
+            label={label}
+            to={url}
+          />
         )
       })}
     />
   )
 })
+
+export default forwardRef((props: Props, ref: RefObject<FiltersRef>) => (
+  <Filters {...props} filterRef={ref} />
+))
