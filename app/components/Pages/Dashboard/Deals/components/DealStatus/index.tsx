@@ -122,7 +122,6 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
         </>
       }
       DropdownToggleButtonProps={{
-        color: 'secondary',
         variant: 'outlined',
         size: 'small'
       }}

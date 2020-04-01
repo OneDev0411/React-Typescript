@@ -39,7 +39,8 @@ const useStyles = makeStyles(
     tabsFlexContainer: {
       '& .MuiTab-root': {
         paddingLeft: 0,
-        paddingRight: theme.spacing(2)
+        paddingRight: 0,
+        marginRight: theme.spacing(4)
       }
     },
     actionsFlexContainer: {
@@ -51,7 +52,7 @@ const useStyles = makeStyles(
       display: 'flex',
       justifyContent: 'center',
       backgroundColor: 'transparent',
-      marginLeft: theme.spacing(-0.75), // hack
+      marginLeft: theme.spacing(-0.75 / 2),
       '& > div': {
         width: '100%',
         marginLeft: theme.spacing(0.75),

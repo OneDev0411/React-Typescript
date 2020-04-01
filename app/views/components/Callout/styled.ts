@@ -12,13 +12,13 @@ type Props = Required<Pick<ComponentProps<typeof Callout>, 'type' | 'dense'>> &
 const bgColor = ({ theme, type }: Props) => {
   switch (type) {
     case 'error':
-      return theme.palette.error.light
+      return theme.palette.error.ultralight
     case 'info':
-      return theme.palette.info.light
+      return theme.palette.info.ultralight
     case 'warn':
-      return theme.palette.warning.light
+      return theme.palette.warning.ultralight
     case 'success':
-      return theme.palette.success.light
+      return theme.palette.success.ultralight
     default:
       return theme.palette.grey['100']
   }

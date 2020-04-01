@@ -58,13 +58,17 @@ export function EmailThread({ style, event }: Props) {
             return (
               <React.Fragment key={index}>
                 {index !== 0 && <>,&nbsp;</>}
-                {displayName || recipient}
+                <TextMiddleTruncate
+                  text={displayName || recipient}
+                  maxLength={15}
+                />
               </React.Fragment>
             )
           })}
           {othersText && (
             <>
-              &nbsp;and&nbsp;<span>{othersText}</span>
+              &nbsp;and&nbsp;
+              <span>{othersText}</span>
             </>
           )}
           {thread.message_count > 1 && (

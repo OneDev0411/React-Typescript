@@ -24,7 +24,7 @@ export function DeleteButton(props: Props) {
 
   return (
     <IconButton size="small" onClick={props.onClick}>
-      <IconDelete fillColor={theme.palette.common.black} />
+      <IconDelete size="small" fillColor={theme.palette.error.main} />
     </IconButton>
   )
 }

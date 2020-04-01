@@ -57,7 +57,6 @@ function YardSign({ deal, style }: Props) {
       <DropdownToggleButton
         isActive={Boolean(anchorEl)}
         variant="outlined"
-        color="secondary"
         size="small"
         style={style}
         onClick={toggleMenu}
