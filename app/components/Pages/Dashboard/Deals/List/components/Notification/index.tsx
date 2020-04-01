@@ -13,7 +13,7 @@ const useStyles = makeStyles(
       height: theme.spacing(2.5),
       top: theme.spacing(1) * -1,
       right: theme.spacing(1) * -1,
-      background: theme.palette.secondary.light,
+      background: theme.palette.error.light,
       color: theme.palette.common.white,
       borderRadius: '100%',
       border: `2px solid ${theme.palette.common.white}`,
