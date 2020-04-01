@@ -20,7 +20,7 @@ import {
   CheckboxField,
   AssigneesField,
   AssociationsList,
-  EndTimeField,
+  EndDateTimeField,
   WhenFieldChanges,
   FieldError
 } from '../final-form-fields'
@@ -84,8 +84,6 @@ export class EventDrawer extends Component {
       (!props.event && !props.eventId) ||
       Object.keys(this.props.initialValues).length > 0
   }
-
-  static contextType = ConfirmationModalContext
 
   load = async () => {
     if (this.props.event) {
@@ -277,7 +275,7 @@ export class EventDrawer extends Component {
                             selectedDate={values.dueDate}
                           />
 
-                          <EndTimeField dueDate={values.dueDate} />
+                          <EndDateTimeField dueDate={values.dueDate} />
                         </FieldContainer>
 
                         <FieldError
@@ -383,3 +381,4 @@ export class EventDrawer extends Component {
 
 EventDrawer.propTypes = propTypes
 EventDrawer.defaultProps = defaultProps
+EventDrawer.contextType = ConfirmationModalContext
