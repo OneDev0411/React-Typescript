@@ -57,7 +57,6 @@ export const Menu = withRouter(
         {deal.deal_type === 'Selling' && !deal.has_active_offer && (
           <Button
             size="small"
-            color="secondary"
             variant="outlined"
             onClick={() =>
               router.push(`/dashboard/deals/${deal.id}/create-offer`)
