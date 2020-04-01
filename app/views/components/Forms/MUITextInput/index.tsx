@@ -5,7 +5,8 @@ import TextField from '@material-ui/core/TextField'
 export const MUITextInput: React.SFC<
   FieldRenderProps<HTMLInputElement | HTMLTextAreaElement>
 > = ({ input: { name, onChange, value, ...restInput }, meta, ...rest }) => {
-  const showError = Boolean(meta.submitFailed && meta.error) // TODO: we may need to change this condition in the future
+  // TODO: we may need to change this condition in the future
+  const showError = Boolean(meta.submitFailed && meta.error)
 
   return (
     <TextField

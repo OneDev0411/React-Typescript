@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Button, Theme } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/styles'
 
@@ -11,6 +11,8 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Props {
+  children?: ReactNode
+  disabled?: boolean
   to?: string
   text?: string
   type?: 'button' | 'submit'
@@ -18,9 +20,10 @@ interface Props {
 }
 
 export default function NextButton({
-  to,
+  children = 'Next',
+  disabled,
   onClick,
-  text = 'Next',
+  to,
   type = 'button'
 }: Props) {
   const classes = useStyles()
@@ -28,6 +31,7 @@ export default function NextButton({
   return (
     <Button
       className={classes.button}
+      disabled={disabled}
       color="primary"
       href={to}
       onClick={onClick}
@@ -35,7 +39,7 @@ export default function NextButton({
       type={type}
       variant="contained"
     >
-      {text}
+      {children}
     </Button>
   )
 }

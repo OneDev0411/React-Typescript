@@ -1,19 +1,24 @@
 import React, { ReactNode } from 'react'
-import { Box } from '@material-ui/core'
+import { Box, Theme } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/styles'
 
 import { ClassesProps } from 'utils/ts-utils'
 
-const styles = () =>
+const styles = (theme: Theme) =>
   createStyles({
     box: {
-      maxWidth: '33rem',
+      width: '100%',
       alignItems: 'center',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
       textAlign: 'center',
-      margin: '15vh auto 0'
+      margin: '0 auto',
+      padding: '3rem 1rem 0',
+      [theme.breakpoints.up('sm')]: {
+        paddingTop: '15vh',
+        maxWidth: '33rem'
+      }
     }
   })
 

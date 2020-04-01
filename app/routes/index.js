@@ -70,6 +70,16 @@ const AsyncConfirmAgentId = Load({
     import('../components/Pages/AgentOnboarding/ConfirmAgentId' /* webpackChunkName: "confirm_agent_id" */)
 })
 
+const AsyncOnboardingPhoneNumber = Load({
+  loader: () =>
+    import('../components/Pages/AgentOnboarding/PhoneNumber' /* webpackChunkName: "onboarding_phone_number" */)
+})
+
+const AsyncOnboardingVerifyPhoneNumber = Load({
+  loader: () =>
+    import('../components/Pages/AgentOnboarding/VerifyPhoneNumber' /* webpackChunkName: "onboarding_verify_phone_number" */)
+})
+
 const AsyncOnboardingOAuthAccounts = Load({
   loader: () =>
     import('../components/Pages/AgentOnboarding/OAuthAccounts' /* webpackChunkName: "onboarding_oauth_accounts" */)
@@ -483,6 +493,14 @@ export default (
       <Route
         path="onboarding/confirm-agent-id"
         component={AsyncConfirmAgentId}
+      />
+      <Route
+        path="onboarding/phone-number"
+        component={AsyncOnboardingPhoneNumber}
+      />
+      <Route
+        path="onboarding/verify-phone-number"
+        component={AsyncOnboardingVerifyPhoneNumber}
       />
       <Route
         path="onboarding/oauth-accounts"
