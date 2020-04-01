@@ -24,7 +24,12 @@ import {
   setNewlyUploadedMediaFields
 } from './context/actions'
 
-export default function MediaManager({ deal }: { deal: IDeal }) {
+interface Props {
+  user: IUser
+  deal: IDeal
+}
+
+export default function MediaManager({ user, deal }: Props) {
   const classes = useStyles()
   const reduxDispatch = useDispatch()
   const uploaderRef = useRef<DropzoneRef>(null)
@@ -95,6 +100,8 @@ export default function MediaManager({ deal }: { deal: IDeal }) {
           <Header
             mediasCount={getUploadedMedia(state).length}
             uploaderRef={uploaderRef}
+            deal={deal}
+            user={user}
           />
           <Gallery medias={state} deal={deal} uploaderRef={uploaderRef} />
           {getSelectedMedia(state).length > 0 && (
