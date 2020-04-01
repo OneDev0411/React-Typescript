@@ -72,7 +72,7 @@ export function MarketingCenterSettings() {
     dispatch(getUserTeams(user))
   }
 
-  const sidebarSections = getSidebarSections(settings)
+  const sidebarSections = getSidebarSections()
 
   return (
     <Acl access={[ACL.BACK_OFFICE, ACL.MARKETING]}>
