@@ -43,8 +43,6 @@ export default function GlobalActionsButton(props: Props) {
   const handleSubmitContact = (contact: IContact) => {
     props.onCreateContact(contact)
     handleCloseRenderedItem()
-
-    console.log('>>>', contact)
   }
 
   const renderSelectedItem = () => {
