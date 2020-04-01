@@ -60,7 +60,7 @@ export interface FiltersRef {
 }
 
 interface Props {
-  filterRef?: RefObject<FiltersRef>
+  filtersRef?: RefObject<FiltersRef>
   onChange: (filter: object) => void
 }
 
@@ -74,7 +74,7 @@ const Filters = withRouter((props: Props & WithRouterProps) => {
     props.onChange(item.filter)
   }
 
-  useImperativeHandle(props.filterRef, () => ({
+  useImperativeHandle(props.filtersRef, () => ({
     changeFilter: (tab: string) => handleChangeTab(tab)
   }))
 
@@ -100,5 +100,5 @@ const Filters = withRouter((props: Props & WithRouterProps) => {
 })
 
 export default forwardRef((props: Props, ref: RefObject<FiltersRef>) => (
-  <Filters {...props} filterRef={ref} />
+  <Filters {...props} filtersRef={ref} />
 ))
