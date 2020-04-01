@@ -3,7 +3,9 @@ import { Button } from '@material-ui/core'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { getDealChecklists } from 'reducers/deals/checklists'
+import { selectDealTasks } from 'reducers/deals/tasks'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
+import { setSelectedTask } from 'actions/deals'
 
 import { IAppState } from 'reducers'
 
@@ -14,38 +16,48 @@ interface Props {
 
 interface ReduxStateType {
   checklists: IDealChecklist[]
+  tasks: IDealTask[]
 }
 
 export default function CreateSyncTask(props: Props) {
   const [isCreatingTask, setIsCreatingTask] = useState<boolean>(false)
 
-  const { checklists }: ReduxStateType = useSelector(
+  const { checklists, tasks }: ReduxStateType = useSelector(
     ({ deals }: IAppState) => ({
-      checklists: getDealChecklists(props.deal, deals.checklists)
+      checklists: getDealChecklists(props.deal, deals.checklists),
+      tasks: selectDealTasks(props.deal, deals.checklists, deals.tasks)
     })
   )
   const dispatch = useDispatch()
 
   const handleCreateSyncTask = async (): Promise<void> => {
-    const checklist = checklists.find(
-      checklist => checklist.checklist_type === 'Selling'
-    ) as IDealChecklist
+    const mediaTask = tasks.find(task => task.task_type === 'Media')!
 
-    setIsCreatingTask(true)
+    // we already have a media task available, we don't create another one.
+    if (mediaTask) {
+      dispatch(setSelectedTask(mediaTask))
+    } else {
+      const checklist = checklists.find(
+        checklist => checklist.checklist_type === 'Selling'
+      )!
 
-    const task = await dispatch(
-      createRequestTask({
-        checklist,
-        userId: props.user.id,
-        dealId: props.deal.id,
-        taskType: 'Media',
-        taskTitle: 'Media: Please sync photos',
-        taskComment: 'Please be sure all photos are synced with MLS',
-        notifyMessage: 'Back office has been notified'
-      })
-    )
+      setIsCreatingTask(true)
 
-    setIsCreatingTask(false)
+      const task = await dispatch(
+        createRequestTask({
+          checklist,
+          userId: props.user.id,
+          dealId: props.deal.id,
+          taskType: 'Media',
+          taskTitle: 'Media: Photos are changed',
+          notifyMessage: 'Back office has been notified'
+        })
+      )
+
+      dispatch(setSelectedTask(task))
+
+      setIsCreatingTask(false)
+    }
   }
 
   return (
@@ -54,7 +66,7 @@ export default function CreateSyncTask(props: Props) {
       disabled={isCreatingTask}
       onClick={handleCreateSyncTask}
     >
-      {isCreatingTask ? 'Creating...' : 'Request MLS Sync'}
+      {isCreatingTask ? 'Please wait...' : 'Message Office'}
     </Button>
   )
 }
