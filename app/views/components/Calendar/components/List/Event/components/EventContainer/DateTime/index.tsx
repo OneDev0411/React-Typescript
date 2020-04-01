@@ -21,9 +21,13 @@ export function DateTime({ event }: Props) {
   const dueDate = formatDate(event.timestamp)
 
   if (event.end_date) {
+    const sameDay =
+      getDatePart(toDateObject(event.timestamp)).getTime() ===
+      getDatePart(toDateObject(event.end_date)).getTime()
+
     return (
       <span>
-        {dueDate} {formatDate(event.end_date)}
+        {dueDate} {formatDate(event.end_date, sameDay)}
       </span>
     )
   }
@@ -31,9 +35,24 @@ export function DateTime({ event }: Props) {
   return <span>{dueDate}</span>
 }
 
-function formatDate(date: Date | string | number): string {
+function formatDate(
+  date: Date | string | number,
+  timePartOnly: boolean = true
+): string {
   return fecha.format(
-    new Date(date instanceof Date ? date : parseFloat(date as string) * 1000),
-    'hh:mm A'
+    toDateObject(date),
+    timePartOnly ? 'hh:mm\u00A0A' : 'MMM\u00A0D,\u00A0hh:mm\u00A0A'
   )
+}
+function toDateObject(date: Date | string | number): Date {
+  return new Date(
+    date instanceof Date ? date : parseFloat(date as string) * 1000
+  )
+}
+function getDatePart(date: Date): Date {
+  const clone = new Date(date)
+
+  clone.setHours(0, 0, 0, 0)
+
+  return clone
 }
