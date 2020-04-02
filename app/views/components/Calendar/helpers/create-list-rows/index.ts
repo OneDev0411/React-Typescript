@@ -13,7 +13,9 @@ export function createListRows(
 ): ICalendarListRow[] {
   const activeDayId = createDayId(activeDate, false)
 
-  return Object.entries(events).flatMap(([month, daysOfMonth]) => {
+  const distributedEvents = distributeMultiDayEvents(events)
+
+  return Object.entries(distributedEvents).flatMap(([month, daysOfMonth]) => {
     if (
       placeholders.includes(Placeholder.Month) &&
       isEmptyMonth(month, daysOfMonth, activeDate)
@@ -39,6 +41,41 @@ export function createListRows(
 }
 
 /**
+ * Duplicates multi day events through all its days.
+ * It doesn't mutate the input `events` and creates a new one.
+ */
+function distributeMultiDayEvents(
+  events: ICalendarEventsList
+): ICalendarEventsList {
+  const distributedEvents: ICalendarEventsList = {}
+  let multiDayEvents: ICalendarEvent[] = []
+
+  Object.entries(events).forEach(([month, daysOfMonth]) => {
+    distributedEvents[month] = {}
+    Object.entries(daysOfMonth).forEach(([day, events]) => {
+      const dayStart = new Date(day).getTime()
+      const dayEnd = dayStart + 24 * 60 * 60 * 1000
+
+      distributedEvents[month][day] = []
+      multiDayEvents = multiDayEvents.filter(
+        event => parseFloat(event.end_date!) * 1000 > dayStart
+      )
+      multiDayEvents.forEach(event => distributedEvents[month][day].push(event))
+
+      events.forEach(event => {
+        distributedEvents[month][day].push(event)
+
+        if (parseFloat(event.end_date!) * 1000 > dayEnd) {
+          multiDayEvents.push(event)
+        }
+      })
+    })
+  })
+
+  return distributedEvents
+}
+
+/**
  * returns month's events
  * @param days
  */
@@ -50,7 +87,7 @@ function getMonthEvents(
   const now = new Date()
   const today = fecha.format(now, 'YYYY-MM-DD')
   const tomorrow = fecha.format(
-    new Date().setDate(now.getDate() + 1),
+    new Date(now).setDate(now.getDate() + 1),
     'YYYY-MM-DD'
   )
 

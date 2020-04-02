@@ -32,7 +32,7 @@ export const sharedStyles = (theme: Theme) =>
       }
     }),
     time: {
-      width: '6.5rem',
+      width: '5rem',
       color: theme.palette.grey[500],
       ...theme.typography.caption
     },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import fecha from 'fecha'
 import { Field, FieldRenderProps } from 'react-final-form'
 import DayPicker, { Modifiers } from 'react-day-picker'
@@ -7,6 +7,7 @@ import {
   Theme,
   Box,
   Button,
+  IconButton,
   ClickAwayListener,
   Grow,
   Popper,
@@ -47,7 +48,7 @@ export function EndDateTimeField({
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
-  const anchorRef = React.useRef<HTMLButtonElement>(null)
+  const anchorRef = useRef<HTMLButtonElement>(null)
 
   const [endDate, setEndDate] = useState(dueDate)
   const [isOpen, setIsOpen] = useState(false)
@@ -67,17 +68,16 @@ export function EndDateTimeField({
       name="endDate"
       render={(fieldProps: FieldRenderProps<any>) => {
         const { value, onChange } = fieldProps.input
-        const defaultDate = value || dueDate
 
         return (
           <Box display="flex" alignItems="center" pr={1}>
-            {value && <Typography variant="body2">End Time:</Typography>}
+            {value && <Typography variant="body2">To</Typography>}
             <Button
               aria-describedby={id}
               color="primary"
               ref={anchorRef}
               onClick={() => {
-                setEndDate(defaultDate)
+                setEndDate(value || dueDate)
                 setIsOpen(!isOpen)
               }}
             >
@@ -87,14 +87,13 @@ export function EndDateTimeField({
             </Button>
             {value && (
               <Tooltip placement={placement} title="Remove Time">
-                <Button
-                  size="small"
+                <IconButton
                   // @ts-ignore FinalForm bug
                   onClick={() => onChange(null)}
                   className={classes.removeButton}
                 >
                   <IconClose className={iconClasses.small} />
-                </Button>
+                </IconButton>
               </Tooltip>
             )}
             <Popper
