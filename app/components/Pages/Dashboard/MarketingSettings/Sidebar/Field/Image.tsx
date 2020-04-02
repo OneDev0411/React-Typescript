@@ -54,7 +54,7 @@ export default function Image({ name, value, label, onChange }: Props) {
     return (
       <Card variant="outlined">
         <CardActionArea>
-          <CardMedia component="img" alt={label} src={value} title={label} />
+          <CardMedia component="img" src={value} />
         </CardActionArea>
         <CardActions>
           <IconButton size="small">
