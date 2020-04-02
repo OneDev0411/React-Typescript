@@ -7,7 +7,7 @@ interface Props {
 
 export function DateTime({ event }: Props) {
   const startsAndFinishesInTheSameDay =
-    !!event.end_date &&
+    event.end_date &&
     getDatePart(toDateObject(event.timestamp)).getTime() ===
       getDatePart(toDateObject(event.end_date)).getTime()
 
