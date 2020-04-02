@@ -59,16 +59,6 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
     '.MuiOutlinedInput-input[type="time"]': {
       minWidth: '7rem'
     },
-
-    // input styles according to this UX audit:
-    // https://gitlab.com/rechat/web/issues/3058#note_207010785
-    // We probably need to update outlined and filled text fields too
-    '.MuiInput-underline::after': {
-      borderBottomColor: theme.palette.primary.main
-    },
-    '.MuiFormLabel-root.Mui-focused': {
-      color: theme.palette.primary.main
-    },
     // ///////////////////////
 
     '.MuiLinearProgress-root': {
