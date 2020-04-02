@@ -9,17 +9,16 @@ import Item from './components/Item'
 interface Props {
   data: Section
   mediums: string[]
-  onClose: () => void
 }
 
-export const SectionMegaMenu = ({ data, mediums, onClose }: Props) => {
+export const SectionMegaMenu = ({ data, mediums }: Props) => {
   const { items } = data
 
   return (
     <Grid container spacing={2}>
       {items.map((item, i) => (
         <Grid key={i} item>
-          <Item data={item} mediums={mediums} onClose={onClose} />
+          <Item data={item} mediums={mediums} />
         </Grid>
       ))}
     </Grid>

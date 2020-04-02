@@ -18,8 +18,6 @@ interface Props {
   defaultAction?: SelectedTab
   value?: SelectedTab
   actionValue?: SelectedTab
-  megamenuTabs?: SelectedTab[]
-  megaMenu?: (p: RenderMegaMenu) => ReactNode
   onChange?: (value: SelectedTab) => void
   onChangeAction?: (value: SelectedTab) => void
 }
@@ -33,7 +31,7 @@ const useStyles = makeStyles(
     },
     tabContainer: {
       width: '100%',
-      margin: theme.spacing(1, 0),
+      marginTop: theme.spacing(1),
       borderBottom: `1px solid ${theme.palette.divider}`
     },
     tabsFlexContainer: {
@@ -59,34 +57,8 @@ const useStyles = makeStyles(
         backgroundColor: theme.palette.primary.main
       }
     },
-    megaMenuContainer: {
-      padding: theme.spacing(2.5, 0),
-      position: 'absolute',
-      top: 57,
-      left: 0,
-      width: '100%',
-      minHeight: 350,
-      zIndex: theme.zIndex.gridAction,
-      background: theme.palette.background.paper,
-      boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.1)',
-      '&::after,&::before': {
-        // hack for having edge to edge megamenu
-        position: 'absolute',
-        content: "''",
-        top: 0,
-        width: '50%',
-        height: '100%',
-        background: theme.palette.background.paper,
-        zIndex: -1
-      },
-      '&::before': {
-        left: '-49%',
-        boxShadow: '-15px 10px 15px rgba(0, 0, 0, 0.1)'
-      },
-      '&::after': {
-        right: '-49%',
-        boxShadow: '15px 10px 15px rgba(0, 0, 0, 0.1)'
-      }
+    scroller: {
+      position: 'inherit'
     }
   }),
   {
@@ -131,8 +103,6 @@ export function PageTabs({
   actions,
   actionValue,
   tabs,
-  megamenuTabs = [],
-  megaMenu,
   onChange = () => {},
   onChangeAction = () => {}
 }: Props) {
@@ -141,38 +111,24 @@ export function PageTabs({
   const [selectedAction, setSelectedAction] = useState<SelectedTab>(
     defaultAction
   )
-  const [showMegaMenu, setShowMegaMenu] = useState<boolean>(false)
 
   const activeTab =
     defaultValue && selectedTab !== defaultValue ? defaultValue : selectedTab
-
   const activeAction =
     defaultAction && selectedAction !== defaultAction
       ? defaultAction
       : selectedAction
 
-  const handleChangeTab = (e: React.MouseEvent<{}>, tab: SelectedTab) => {
-    if (megaMenu && megamenuTabs) {
-      if (megamenuTabs.includes(tab)) {
-        const isVisible = !(tab === selectedTab && showMegaMenu)
-
-        setShowMegaMenu(isVisible)
-      } else {
-        setShowMegaMenu(false)
-      }
-    }
-
+  const handleChangeTab = (tab: SelectedTab) => {
     setSelectedTab(tab)
 
     onChange(tab)
   }
-
-  const handleChangeAction = (e: React.MouseEvent<{}>, action: SelectedTab) => {
+  const handleChangeAction = (action: SelectedTab) => {
     setSelectedAction(action)
 
     onChangeAction(action)
   }
-  const closeMegaMenu = () => setShowMegaMenu(false)
 
   return (
     <div className={classes.container}>
@@ -182,9 +138,10 @@ export function PageTabs({
         textColor="primary"
         variant="scrollable"
         scrollButtons="auto"
-        onChange={handleChangeTab}
+        onChange={(e, v) => handleChangeTab(v)}
         classes={{
           root: classes.tabContainer,
+          scroller: classes.scroller,
           indicator: classes.indicator,
           flexContainer: classes.tabsFlexContainer
         }}
@@ -197,7 +154,7 @@ export function PageTabs({
         <div>
           <Tabs
             value={actionValue || activeAction || false}
-            onChange={handleChangeAction}
+            onChange={(e, v) => handleChangeAction(v)}
             variant="scrollable"
             scrollButtons="auto"
             classes={{
@@ -209,12 +166,6 @@ export function PageTabs({
           >
             {actions.map(tab => tab)}
           </Tabs>
-        </div>
-      )}
-
-      {megaMenu && showMegaMenu && (
-        <div className={classes.megaMenuContainer}>
-          {megaMenu({ selectedTab, close: closeMegaMenu })}
         </div>
       )}
     </div>
