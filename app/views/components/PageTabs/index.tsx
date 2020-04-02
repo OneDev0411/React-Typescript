@@ -35,10 +35,12 @@ const useStyles = makeStyles(
       borderBottom: `1px solid ${theme.palette.divider}`
     },
     tabsFlexContainer: {
+      '& > *': {
+        marginRight: theme.spacing(4)
+      },
       '& .MuiTab-root': {
         paddingLeft: 0,
-        paddingRight: 0,
-        marginRight: theme.spacing(4)
+        paddingRight: 0
       }
     },
     actionsFlexContainer: {

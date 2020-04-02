@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
@@ -14,7 +14,7 @@ import PageLayout from 'components/GlobalPageLayout'
 import { useTemplates } from './hooks/use-templates'
 import Tabs from './Tabs'
 
-export function MarketingLayout({ params, router, render }) {
+export function MarketingLayout({ params, render }) {
   const sections = useMarketingCenterSections(params)
   const user = useSelector(({ user }) => user)
 
@@ -23,6 +23,7 @@ export function MarketingLayout({ params, router, render }) {
   const activeBrand = getActiveTeamId(user)
 
   const { templates, loading } = useTemplates(activeBrand)
+
   const mediums = useMarketingCenterMediums(templates)
 
   const currentMedium = params.medium
@@ -34,12 +35,6 @@ export function MarketingLayout({ params, router, render }) {
 
     return mediumMatches && typeMatches
   })
-
-  useEffect(() => {
-    if (templateTypes && !currentMedium && mediums.length > 0) {
-      router.push(`/dashboard/marketing/${templateTypes}/${mediums[0]}`)
-    }
-  }, [currentMedium, mediums, router, templateTypes])
 
   return (
     <Acl.Marketing fallbackUrl="/dashboard/mls">
