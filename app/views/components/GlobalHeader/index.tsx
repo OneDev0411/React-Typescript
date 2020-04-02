@@ -12,30 +12,31 @@ export interface GlobalHeaderProps {
   onCreateContact?: (event: IContact) => void
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  wrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: ({ noPadding }: GlobalHeaderProps) =>
-      !noPadding ? theme.spacing(3) : 0,
-    width: '100%',
-    overflow: 'hidden'
-  },
-  title: {
-    marginRight: theme.spacing(1),
-    // According to Shayan, the title looks a little misaligned vertically.
-    // This is a fix for it to look better with the actions button and the search box.
-    alignSelf: 'flex-start'
-  },
-  content: {
-    flexGrow: 1
-  },
-  globalAction: {
-    marginLeft: theme.spacing(1)
-  }
-}))
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    wrapper: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: ({ noPadding }: GlobalHeaderProps) =>
+        !noPadding ? theme.spacing(3) : 0,
+      width: '100%',
+      overflow: 'hidden'
+    },
+    title: {
+      marginRight: theme.spacing(1),
+      alignSelf: 'flex-start'
+    },
+    content: {
+      flexGrow: 1
+    },
+    globalAction: {
+      marginLeft: theme.spacing(1)
+    }
+  }),
+  { name: 'GlobalHeader' }
+)
 
 export default function GlobalHeader({
   title,

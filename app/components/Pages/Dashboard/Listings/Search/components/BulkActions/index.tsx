@@ -1,6 +1,8 @@
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
+import Acl from 'views/components/Acl'
+
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
 import { StateContext, DispatchContext } from 'components/Grid/Table/context'
@@ -44,14 +46,16 @@ export default function TableActions({
 
   return (
     <div className={classes.container}>
-      <CreateTourAction
-        disabled={!isAnyRowsSelected}
-        listings={listings.filter(listing =>
-          state.selection.selectedRowIds.includes(listing.id)
-        )}
-        submitCallback={deselectRows}
-        user={user}
-      />
+      <Acl.Crm>
+        <CreateTourAction
+          disabled={!isAnyRowsSelected}
+          listings={listings.filter(listing =>
+            state.selection.selectedRowIds.includes(listing.id)
+          )}
+          submitCallback={deselectRows}
+          user={user}
+        />
+      </Acl.Crm>
     </div>
   )
 }
