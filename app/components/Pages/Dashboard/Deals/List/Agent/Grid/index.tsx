@@ -14,7 +14,6 @@ import { IAppState } from 'reducers'
 
 import {
   getStatus,
-  getAddress,
   getField,
   getFormattedPrice
 } from 'models/Deal/helpers/context'
@@ -57,7 +56,7 @@ function AgentGrid(props: Props & WithRouterProps) {
       {
         id: 'address',
         width: '45%',
-        accessor: (deal: IDeal) => getAddress(deal, roles),
+        accessor: (deal: IDeal) => deal.title,
         render: ({ row: deal, totalRows, rowIndex }) => (
           <Address
             deal={deal}

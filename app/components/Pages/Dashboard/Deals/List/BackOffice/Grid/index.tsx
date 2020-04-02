@@ -11,7 +11,6 @@ import { useGridStyles } from 'components/Grid/Table/styles'
 import { IAppState } from 'reducers'
 
 import {
-  getAddress,
   getStatus,
   getFormattedPrice,
   getPrice
@@ -78,7 +77,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       {
         id: 'address',
         width: '25%',
-        accessor: (deal: IDeal) => getAddress(deal, roles),
+        accessor: (deal: IDeal) => deal.title,
         render: ({ row: deal }) => (
           <Address deal={deal} notificationsCount={deal.attention_requests} />
         )
