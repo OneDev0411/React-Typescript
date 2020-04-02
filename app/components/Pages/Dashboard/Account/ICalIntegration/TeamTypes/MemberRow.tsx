@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react'
 import { Typography } from '@material-ui/core'
-import { ThemeStyle } from '@material-ui/core/styles/createTypography'
+import { Variant } from '@material-ui/core/styles/createTypography'
 
 import { Checkbox } from 'components/Checkbox'
 
@@ -8,7 +8,7 @@ interface Props {
   title: string
   selected: boolean
   onChange: () => void
-  typographyVariant?: ThemeStyle
+  typographyVariant?: Variant
   style?: CSSProperties
 }
 
