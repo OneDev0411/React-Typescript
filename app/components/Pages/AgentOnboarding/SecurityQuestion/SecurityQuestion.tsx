@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { browserHistory, WithRouterProps } from 'react-router'
 import { Helmet } from 'react-helmet'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
@@ -10,7 +10,8 @@ import { Alert } from '@material-ui/lab'
 import { IAppState } from 'reducers'
 import { updateUser } from 'actions/user'
 
-import searchAgent from 'models/agent/search'
+import getVerificationCode from 'models/verify/request'
+import { upgradeAgent } from 'models/user/upgrade-to-agent'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
@@ -21,62 +22,52 @@ import NextButton from '../NextButton'
 import { useCommonStyles } from '../common-styles'
 
 interface FormValues {
-  mlsId: string
+  secret: string
 }
 
-export default function ConfirmAgentId() {
+export function SecurityQuestion(props: WithRouterProps) {
   const dispatch = useDispatch()
   const commonClasses = useCommonStyles()
-  const user = useSelector((store: IAppState) => store.user)
-  const brand = useSelector((store: IAppState) => store.brand)
+  const brand: IBrand = useSelector((store: IAppState) => store.brand)
+  const agent: IAgent = props.location.state.agent
 
   const onSubmit = async (values: FormValues) => {
     try {
-      const agents = await searchAgent(values.mlsId)
-
-      let state: {
-        agent?: IAgent
-        agents?: IAgent[]
-      } = { agent: agents[0] }
-      let nextStepUrl = 'security-question'
-
-      if (agents.length === 1) {
-        dispatch(
-          updateUser({
-            ...user,
-            agent: agents[0]
-          })
-        )
-      } else {
-        state = { agents }
-        nextStepUrl = 'choose-mls'
-      }
-
-      browserHistory.push({
-        pathname: `/onboarding/confirm-agent-id/${nextStepUrl}`,
-        query: { mlsId: values.mlsId },
-        state
+      const user = await upgradeAgent({
+        agent: agent.id,
+        secret: values.secret
       })
-    } catch (errorCode) {
-      if (errorCode === 404) {
-        return {
-          [FORM_ERROR]: `Agent corresponding to this MLS ID (${
-            values.mlsId
-          }) not found!`
-        }
-      }
 
+      if (user) {
+        dispatch(updateUser(user))
+
+        let nextStepUrl = 'oauth-accounts'
+
+        if (user.phone_number) {
+          nextStepUrl = `verify-phone-number?pn=${window.encodeURIComponent(
+            user.phone_number
+          )}`
+        } else if (!user.phone_confirmed) {
+          await getVerificationCode('phone')
+          nextStepUrl = 'phone-number'
+        }
+
+        browserHistory.push(`/onboarding/${nextStepUrl}`)
+      }
+    } catch (error) {
       return {
-        [FORM_ERROR]: 'There was an error with this request. Please try again.'
+        [FORM_ERROR]:
+          error.message ||
+          'There was an error with this request. Please try again.'
       }
     }
   }
 
-  const validate = ({ mlsId }: FormValues) => {
-    mlsId = mlsId && mlsId.trim()
+  const validate = ({ secret }: FormValues) => {
+    secret = secret && secret.trim()
 
-    if (!mlsId) {
-      return { mlsId: 'Required!' }
+    if (!secret) {
+      return { secret: 'Required!' }
     }
 
     return {}
@@ -85,14 +76,14 @@ export default function ConfirmAgentId() {
   return (
     <>
       <Helmet>
-        <title>Confirm Agent ID | Onboarding | Rechat</title>
+        <title>Confirm Contact Info| Onboarding | Rechat</title>
       </Helmet>
 
       <Container>
         <Header
           brand={brand}
-          title="Agent Verification"
-          subtitle="Enter your agent license # to unlock MLS features."
+          title="Confirm Contact Information"
+          subtitle="Enter the complete mobile number or email address."
         />
 
         <Form
@@ -104,13 +95,13 @@ export default function ConfirmAgentId() {
             return (
               <form onSubmit={handleSubmit}>
                 <Box mb={5}>
-                  <Box mb={5}>
+                  <Box mb={5} textAlign="left">
                     <Field
                       component={MUITextInput}
-                      id="mlsId"
-                      label="Agent Number"
-                      placeholder="xxxxxx"
-                      name="mlsId"
+                      id="secret"
+                      label="MLS ID"
+                      placeholder={agent.secret_questions.join(' or ')}
+                      name="secret"
                       variant="filled"
                       classes={{ root: commonClasses.field }}
                     />

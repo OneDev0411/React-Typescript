@@ -1,5 +1,5 @@
-import { withRouter } from 'react-router'
-
 import ConfirmAgentId from './ConfirmAgentId'
 
-export default withRouter(ConfirmAgentId)
+export { ConfirmAgentId }
+
+export default ConfirmAgentId

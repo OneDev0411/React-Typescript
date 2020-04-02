@@ -70,6 +70,16 @@ const AsyncConfirmAgentId = Load({
     import('../components/Pages/AgentOnboarding/ConfirmAgentId' /* webpackChunkName: "confirm_agent_id" */)
 })
 
+const AsyncOnboardinChooseMls = Load({
+  loader: () =>
+    import('../components/Pages/AgentOnboarding/ChooseMls' /* webpackChunkName: "onboarding_choose_mls" */)
+})
+
+const AsyncOnboardinSecurityQuestion = Load({
+  loader: () =>
+    import('../components/Pages/AgentOnboarding/SecurityQuestion' /* webpackChunkName: "onboarding_security_question" */)
+})
+
 const AsyncOnboardingPhoneNumber = Load({
   loader: () =>
     import('../components/Pages/AgentOnboarding/PhoneNumber' /* webpackChunkName: "onboarding_phone_number" */)
@@ -493,6 +503,14 @@ export default (
       <Route
         path="onboarding/confirm-agent-id"
         component={AsyncConfirmAgentId}
+      />
+      <Route
+        path="onboarding/confirm-agent-id/choose-mls"
+        component={AsyncOnboardinChooseMls}
+      />
+      <Route
+        path="onboarding/confirm-agent-id/security-question"
+        component={AsyncOnboardinSecurityQuestion}
       />
       <Route
         path="onboarding/phone-number"
