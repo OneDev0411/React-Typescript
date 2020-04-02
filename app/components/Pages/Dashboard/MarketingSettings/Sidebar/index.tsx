@@ -20,10 +20,11 @@ const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       wrapper: {
-        borderLeft: `1px solid ${theme.palette.divider}`
-      },
-      scrollableArea: {
-        maxHeight: '100vh',
+        borderLeft: `1px solid ${theme.palette.divider}`,
+        position: 'sticky',
+        top: 0,
+        right: 0,
+        height: '100vh',
         overflow: 'overlay'
       }
     }),
@@ -55,32 +56,30 @@ export default function Sidebar({ sections, settings, onUpdate }: Props) {
   }
 
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.scrollableArea}>
-        {sections.map((section, sectionIndex) => (
-          <React.Fragment key={section.name}>
-            <ExpansionPanel elevation={0}>
-              <ExpansionPanelSummary expandIcon={<IconKeyboardArrowDown />}>
-                <Typography variant="subtitle2">{section.name}</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <Grid container spacing={2}>
-                  {section.fields.map(field => (
-                    <Field
-                      key={field.name}
-                      {...field}
-                      value={settings[field.name]}
-                      onChange={handleUpdateSettings}
-                    />
-                  ))}
-                </Grid>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-            {sectionIndex < sections.length - 1 && <Divider />}
-          </React.Fragment>
-        ))}
-      </div>
+    <Grid item md={3} className={classes.wrapper}>
+      {sections.map((section, sectionIndex) => (
+        <React.Fragment key={section.name}>
+          <ExpansionPanel elevation={0}>
+            <ExpansionPanelSummary expandIcon={<IconKeyboardArrowDown />}>
+              <Typography variant="subtitle2">{section.name}</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Grid container spacing={2}>
+                {section.fields.map(field => (
+                  <Field
+                    key={field.name}
+                    {...field}
+                    value={settings[field.name]}
+                    onChange={handleUpdateSettings}
+                  />
+                ))}
+              </Grid>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          {sectionIndex < sections.length - 1 && <Divider />}
+        </React.Fragment>
+      ))}
       <Divider />
-    </div>
+    </Grid>
   )
 }

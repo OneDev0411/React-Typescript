@@ -122,13 +122,11 @@ export function MarketingCenterSettings() {
                 }}
               />
             </Grid>
-            <Grid item md={3}>
-              <Sidebar
-                sections={sidebarSections}
-                settings={settings}
-                onUpdate={handleUpdateSettings}
-              />
-            </Grid>
+            <Sidebar
+              sections={sidebarSections}
+              settings={settings}
+              onUpdate={handleUpdateSettings}
+            />
           </Grid>
         </PageLayout.Main>
       </PageLayout>
