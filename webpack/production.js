@@ -3,11 +3,8 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
-import TerserPlugin from 'terser-webpack-plugin'
-import Webpackbar from 'webpackbar'
 
 import moment from 'moment'
 
@@ -47,25 +44,6 @@ webpackConfig.entry = {
   vendor: appConfig.compile.vendors
 }
 
-webpackConfig.optimization.minimize = true
-
-webpackConfig.optimization.minimizer = [
-  new TerserPlugin({
-    cache: true,
-    sourceMap: true,
-    parallel: true,
-    exclude: /grapesjs/
-  })
-]
-
-webpackConfig.plugins.push(
-  new Webpackbar({
-    profile: true,
-    fancy: false,
-    basic: true
-  })
-)
-
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
   new MomentLocalesPlugin(),
@@ -87,18 +65,6 @@ webpackConfig.plugins.push(
     algorithm: 'gzip',
     test: /\.js$|\.css$/,
     filename: '[path]'
-  }),
-  new ForkTsCheckerWebpackPlugin({
-    /**
-     * We want build to fail if there is a ts error
-     */
-    async: false,
-    /**
-     * react-scripts also sets this to true and the overhead is negligible
-     * with respect to production build time
-     */
-    checkSyntacticErrors: true,
-    useTypescriptIncrementalApi: true
   }),
   new S3Plugin({
     progress: false, // Messes the terminal up

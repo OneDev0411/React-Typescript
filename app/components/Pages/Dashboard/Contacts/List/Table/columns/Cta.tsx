@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import { AnyAction } from 'redux'
-import { useSelector, useDispatch } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
+import { useSelector } from 'react-redux'
 
 import {
   Box,
@@ -10,7 +8,6 @@ import {
   createStyles,
   Theme
 } from '@material-ui/core'
-import { addNotification, Notification } from 'reapop'
 
 import { IAppState } from 'reducers'
 
@@ -20,6 +17,7 @@ import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize
 import EmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 import Chat from 'components/SvgIcons/Chat/IconChat'
+import MissingEmailModal from 'components/MissingEmailModal'
 
 import ChatButton from '../../../components/ChatButton'
 
@@ -30,7 +28,8 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      display: 'flex'
+      display: 'flex',
+      justifyContent: 'center'
     },
     item: {
       display: 'inline-flex',
@@ -39,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       '& svg': {
         width: 'unset',
-        height: theme.spacing(2.25)
+        height: theme.spacing(2.5)
       },
       '&:hover svg': {
         fill: theme.palette.primary.main
@@ -49,25 +48,48 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export default function CtaAction({ contact }: Props) {
-  const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
   const user: IUser = useSelector((state: IAppState) => state.user)
   const [showEmailComposer, setShowEmailComposer] = useState<boolean>(false)
-  const notify = (args: Notification) => dispatch(addNotification(args))
+  const [showMissingEmailModal, setShowMissingEmailModal] = useState<boolean>(
+    false
+  )
+  const { id, emails, email, phone_number, users } = contact
   const classes = useStyles()
 
   const toggleEmailComposer = () => {
-    if ((contact.emails || []).length === 0) {
-      return notify({
-        status: 'error',
-        message: 'User has not email!'
-      })
+    if ((emails || []).length === 0) {
+      return setShowMissingEmailModal(true)
     }
 
     setShowEmailComposer(!showEmailComposer)
   }
 
+  const renderChatButton = (email || phone_number || users) && (
+    <ChatButton
+      contact={contact}
+      render={({ onClick, isDisabled }) => (
+        <IconButton
+          size="small"
+          className={classes.item}
+          disabled={isDisabled}
+          onClick={onClick}
+        >
+          {!isDisabled ? <Chat /> : <Loading />}
+        </IconButton>
+      )}
+    />
+  )
+
   return (
     <>
+      {showMissingEmailModal && (
+        <MissingEmailModal
+          isOpen
+          contactId={id}
+          onClose={() => setShowMissingEmailModal(false)}
+          action="send an Email"
+        />
+      )}
       {showEmailComposer && (
         <SingleEmailComposeDrawer
           isOpen
@@ -80,19 +102,7 @@ export default function CtaAction({ contact }: Props) {
         />
       )}
       <Box className={classes.container}>
-        <ChatButton
-          contact={contact}
-          render={({ onClick, isDisabled }) => (
-            <IconButton
-              size="small"
-              className={classes.item}
-              disabled={isDisabled}
-              onClick={onClick}
-            >
-              {!isDisabled ? <Chat /> : <Loading />}
-            </IconButton>
-          )}
-        />
+        {renderChatButton}
         <IconButton
           size="small"
           className={classes.item}

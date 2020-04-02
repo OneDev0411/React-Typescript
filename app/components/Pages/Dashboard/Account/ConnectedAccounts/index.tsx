@@ -16,7 +16,7 @@ import LoadingContainer from 'components/LoadingContainer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import ConnectAccount from './ConnectAccount'
-import { ConnectedAccount } from './ConnectedAccount'
+import ConnectedAccount from './ConnectedAccount'
 import ConnectAccountButtons from './ConnectAccountButtons'
 
 interface Props {

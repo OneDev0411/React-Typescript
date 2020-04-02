@@ -1,11 +1,13 @@
 import React, { useState, Fragment } from 'react'
-import { makeStyles, Tooltip } from '@material-ui/core'
+import { makeStyles, Tooltip, IconButton, Theme } from '@material-ui/core'
 import produce from 'immer'
 
 import cn from 'classnames'
 import fecha from 'fecha'
 import groupBy from 'lodash/groupBy'
 import map from 'lodash/map'
+
+import { useTheme } from '@material-ui/styles'
 
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
@@ -27,6 +29,7 @@ interface Props {
 export const useStyles = makeStyles(styles)
 
 export function Notes(props: Props) {
+  const theme = useTheme<Theme>()
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const [selectedNote, setSelectedNote] = useState(null)
@@ -107,11 +110,14 @@ export function Notes(props: Props) {
                 </div>
 
                 <div className={classes.actions}>
-                  <Tooltip title="Edit Note" placement="top">
-                    <EditIcon
-                      className={cn(iconClasses.small, classes.iconEdit)}
-                    />
-                  </Tooltip>
+                  <IconButton onClick={() => setSelectedNote(note)}>
+                    <Tooltip title="Edit Note" placement="top">
+                      <EditIcon
+                        className={iconClasses.small}
+                        fillColor={theme.palette.grey[400]}
+                      />
+                    </Tooltip>
+                  </IconButton>
                 </div>
               </div>
             </div>

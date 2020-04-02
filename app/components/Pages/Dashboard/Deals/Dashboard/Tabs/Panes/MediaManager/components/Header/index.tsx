@@ -5,16 +5,24 @@ import pluralize from 'pluralize'
 
 import IconUpload from 'components/SvgIcons/Upload/IconUpload'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
+import CreateSyncTask from './CreateSyncTask'
 
+import { useIconStyles } from 'views/../styles/use-icon-styles'
 import { useStyles } from '../../styles'
 
 interface Props {
   mediasCount: number
   uploaderRef: React.RefObject<any>
+  deal: IDeal
+  user: IUser
 }
 
-export default function Header({ mediasCount, uploaderRef }: Props) {
+export default function Header({
+  mediasCount,
+  uploaderRef,
+  deal,
+  user
+}: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
@@ -43,19 +51,14 @@ export default function Header({ mediasCount, uploaderRef }: Props) {
         flexDirection="row-reverse"
         className={classes.actionButtons}
       >
-        <Button
-          variant="contained"
-          color="secondary"
-          disableElevation
-          className={classes.lowerCaseButton}
-          onClick={openBrowse}
-        >
+        <Button variant="contained" color="secondary" onClick={openBrowse}>
           <IconUpload
             fillColor="#fff"
             className={cn(iconClasses.small, iconClasses.rightMargin)}
           />{' '}
           Upload
         </Button>
+        <CreateSyncTask deal={deal} user={user} />
         {/* <Button
           variant="outlined"
           disableElevation

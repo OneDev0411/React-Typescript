@@ -116,7 +116,6 @@ function OpenHouses({
         ref={actionButtonRef}
         isActive={Boolean(anchorEl)}
         variant="outlined"
-        color="secondary"
         size="small"
         style={style}
         disabled={checklists.length === 0}

@@ -98,6 +98,17 @@ export function Body<Row>({
       state.selection.selectedRowIds.includes(row.id || rowIndex.toString())
     )
   }
+  const strictProps = ({ column }: TdProps<Row>): object => {
+    if (column.id === 'row-selection') {
+      return {
+        onClick: e => {
+          e.stopPropagation()
+        }
+      }
+    }
+
+    return {}
+  }
 
   return (
     <>
@@ -138,6 +149,12 @@ export function Body<Row>({
                       ...(column.style || {})
                     }}
                     {...getTdProps({
+                      columnIndex,
+                      column,
+                      rowIndex,
+                      row
+                    })}
+                    {...strictProps({
                       columnIndex,
                       column,
                       rowIndex,

@@ -40,7 +40,7 @@ export const Header = styled.div`
 export const HeaderTitle = styled(H4)`
   ${({ theme }) => css`
     margin-right: ${theme.spacing(1)}px;
-    ${theme.typography.subtitle2};
+    ${theme.typography.subtitle1};
   `}
 `
 

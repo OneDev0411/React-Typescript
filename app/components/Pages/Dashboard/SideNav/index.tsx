@@ -96,26 +96,20 @@ export default function AppSideNav() {
             </SideNavLinkItem>
           </Acl.Marketing>
 
-          <Acl.Marketing>
-            <SideNavLinkItem to="/dashboard/insights">
-              Email Insight
-            </SideNavLinkItem>
-          </Acl.Marketing>
+          <SideNavLinkItem to="/dashboard/mls">Properties</SideNavLinkItem>
 
-          <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
-            <SideNavLinkItem to="/dashboard/open-house">
-              Open House
-            </SideNavLinkItem>
-          </Acl>
+          <Acl.Marketing>
+            <SideNavLinkItem to="/dashboard/insights">Insight</SideNavLinkItem>
+          </Acl.Marketing>
 
           <Acl.Crm>
             <SideNavLinkItem to="/dashboard/tours">Tours</SideNavLinkItem>
           </Acl.Crm>
 
-          <SideNavLinkItem to="/dashboard/mls">Properties</SideNavLinkItem>
-
-          <Acl access={hasWebsitePermission}>
-            <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
+          <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
+            <SideNavLinkItem to="/dashboard/open-house">
+              Open House
+            </SideNavLinkItem>
           </Acl>
 
           <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
@@ -127,6 +121,10 @@ export default function AppSideNav() {
                 Deals
               </AppNavbarBadge>
             </SideNavLinkItem>
+          </Acl>
+
+          <Acl access={hasWebsitePermission}>
+            <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
           </Acl>
         </SidenavListGroup>
 

@@ -19,11 +19,6 @@ export const RoleActions = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-
-  button {
-    height: 1.6rem;
-    line-height: 1.6rem;
-  }
 `
 
 export const RoleAvatar = styled.div`

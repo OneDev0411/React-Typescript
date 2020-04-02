@@ -86,12 +86,5 @@ export const styles = (theme: Theme) =>
       borderRadius: '100%',
       marginRight: '1rem',
       backgroundColor: fade('#6A7589', 0.2)
-    },
-    iconEdit: {
-      marginRight: theme.spacing(2),
-      fill: theme.palette.grey[400],
-      '&:hover': {
-        fill: theme.palette.grey[300]
-      }
     }
   })

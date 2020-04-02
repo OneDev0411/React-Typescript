@@ -122,7 +122,7 @@ function FoldersTab({ deal, checklists, tasks, isBackOffice }: Props) {
           isBackOffice={isBackOffice}
           tasks={selectChecklistTasks(checklist, tasks).filter(
             (task: IDealTask) =>
-              ['GeneralComments', 'YardSign', 'OpenHouse'].includes(
+              ['GeneralComments', 'YardSign', 'OpenHouse', 'Media'].includes(
                 task.task_type
               ) === false
           )}

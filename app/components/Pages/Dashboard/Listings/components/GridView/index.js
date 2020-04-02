@@ -1,26 +1,13 @@
 import React from 'react'
-import { Box } from '@material-ui/core'
+import { Grid, Box } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
-import { makeStyles } from '@material-ui/core/styles'
 
 import LoadingComponent from '../../../../../../views/components/Spinner'
 
 import ListingCard from '../ListingCard'
 
-const useStyles = makeStyles(theme => ({
-  listingContainer: {
-    borderBottomStyle: 'solid',
-    borderBottomWidth: 1,
-    borderBottomColor: theme.palette.grey[200],
-    width: 336,
-    marginRight: theme.spacing(2),
-    marginBottom: theme.spacing(2)
-  }
-}))
-
 export default function GridView({ isFetching, sortedListings }) {
   const theme = useTheme()
-  const classes = useStyles()
 
   const renderContent = () => {
     if (isFetching) {
@@ -28,15 +15,17 @@ export default function GridView({ isFetching, sortedListings }) {
     }
 
     return sortedListings.map(listing => (
-      <Box key={listing.id} className={classes.listingContainer}>
+      <Grid key={listing.id} item xs={12} sm={12} md={6} lg={4} xl={3}>
         <ListingCard listing={listing} isShowOnMap />
-      </Box>
+      </Grid>
     ))
   }
 
   return (
-    <Box display="flex" flexWrap="wrap" p={theme.spacing(2, 2)}>
-      {renderContent()}
+    <Box p={theme.spacing(1, 2)}>
+      <Grid container spacing={2}>
+        {renderContent()}
+      </Grid>
     </Box>
   )
 }
