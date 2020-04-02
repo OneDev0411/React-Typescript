@@ -50,7 +50,7 @@ const useStyles = makeStyles(
   { name: 'VerifyPhoneNumber' }
 )
 
-interface Values {
+interface FormValues {
   code: string | undefined
 }
 
@@ -71,7 +71,7 @@ export function VerifyPhoneNumber({ location }: WithRouterProps) {
       })
     )
 
-  const onSubmit = async (values: Values) => {
+  const onSubmit = async (values: FormValues) => {
     try {
       const user = await verify({
         verifyType: 'phone',
@@ -116,7 +116,7 @@ export function VerifyPhoneNumber({ location }: WithRouterProps) {
     }
   }
 
-  const validate = ({ code }: Values) => {
+  const validate = ({ code }: FormValues) => {
     code = code && code.trim()
 
     if (!code) {
@@ -159,7 +159,6 @@ export function VerifyPhoneNumber({ location }: WithRouterProps) {
                 <Box mb={5}>
                   <Box mb={5}>
                     <Field
-                      color="secondary"
                       component={MUITextInput}
                       id="code"
                       label="Verification Code"

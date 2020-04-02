@@ -96,7 +96,6 @@ export function PhoneNumber({ location }: WithRouterProps) {
               <form onSubmit={handleSubmit}>
                 <Box mb={5}>
                   <Field
-                    color="secondary"
                     component={MUITextInput}
                     id="phone-number"
                     label="US Phone number"
