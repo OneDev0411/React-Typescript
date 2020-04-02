@@ -165,7 +165,7 @@ export function VerifyPhoneNumber({ location }: WithRouterProps) {
                       placeholder="xxxx"
                       name="code"
                       variant="filled"
-                      classes={{ root: commonClasses.textField }}
+                      classes={{ root: commonClasses.field }}
                     />
                     {submitError && !submitting && (
                       <Box mt={3}>

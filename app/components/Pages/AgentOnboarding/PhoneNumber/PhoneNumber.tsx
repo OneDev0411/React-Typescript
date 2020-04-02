@@ -22,6 +22,7 @@ import Header from '../Header'
 import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
 import Container from '../Container'
+import { useCommonStyles } from '../common-styles'
 
 interface FormValues {
   phone_number: string | undefined
@@ -29,6 +30,7 @@ interface FormValues {
 
 export function PhoneNumber({ location }: WithRouterProps) {
   const dispatch = useDispatch()
+  const commonClasses = useCommonStyles()
   const phoneNumber = window.decodeURIComponent(location.query.pn || '')
   const brand = useSelector((store: IAppState) => store.brand)
 
@@ -103,6 +105,7 @@ export function PhoneNumber({ location }: WithRouterProps) {
                     variant="filled"
                     formatOnBlur
                     format={formatPhoneNumber}
+                    classes={{ root: commonClasses.field }}
                   />
                   {submitError && !submitting && (
                     <Box mt={3}>

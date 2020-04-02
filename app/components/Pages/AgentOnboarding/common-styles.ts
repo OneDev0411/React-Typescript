@@ -2,7 +2,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 export const useCommonStyles = makeStyles((theme: Theme) =>
   createStyles({
-    textField: {
+    field: {
       width: '100%',
       [theme.breakpoints.up(300)]: {
         width: 280
