@@ -56,7 +56,7 @@ const overrideTabStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       root: {
-        padding: theme.spacing(0, 0, 0, 4)
+        padding: theme.spacing(0, 0, 0, 5)
       }
     }),
   { name: 'MuiTabs' }
@@ -154,7 +154,7 @@ export const Tabs = ({
       </Box>
       <Box className={classes.boxSwitcher}>
         <SortDrowndown onChangeSort={onChangeSort} activeSort={activeSort} />
-        {!isWidget && (
+        {!isWidget && user && (
           <ViewSwitcher onChangeView={onChangeView} activeView={activeView} />
         )}
       </Box>
