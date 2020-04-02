@@ -43,13 +43,13 @@ export function SecurityQuestion(props: WithRouterProps) {
 
         let nextStepUrl = 'oauth-accounts'
 
-        if (user.phone_number) {
+        if (!user.phone_number) {
+          nextStepUrl = 'phone-number'
+        } else if (!user.phone_confirmed) {
+          await getVerificationCode('phone')
           nextStepUrl = `verify-phone-number?pn=${window.encodeURIComponent(
             user.phone_number
           )}`
-        } else if (!user.phone_confirmed) {
-          await getVerificationCode('phone')
-          nextStepUrl = 'phone-number'
         }
 
         browserHistory.push(`/onboarding/${nextStepUrl}`)
