@@ -1,76 +1,19 @@
 import { SidebarSection } from './types'
 
 export function getSidebarSections(): SidebarSection[] {
-  const logosSection: SidebarSection = {
-    name: 'Logos',
+  const bodySection: SidebarSection = {
+    name: 'Body',
     fields: [
-      {
-        name: 'container-logo-square',
-        type: 'image',
-        label: 'Container Square'
-      },
-      {
-        name: 'container-logo-wide',
-        type: 'image',
-        label: 'Container Wide'
-      },
       {
         name: 'body-logo-square',
         type: 'image',
-        label: 'Body Square'
+        label: 'Square Logo'
       },
       {
         name: 'body-logo-wide',
         type: 'image',
-        label: 'Body Wide'
-      }
-    ]
-  }
-
-  const containerSection: SidebarSection = {
-    name: 'Container',
-    fields: [
-      {
-        name: 'container-bg-color',
-        type: 'color',
-        label: 'Background Color'
+        label: 'Wide Logo'
       },
-      {
-        name: 'inverted-container-bg-color',
-        type: 'color',
-        label: 'Inverted Background Color'
-      },
-      {
-        name: 'container-text-color',
-        type: 'color',
-        label: 'Text Color'
-      },
-      {
-        name: 'inverted-container-text-color',
-        type: 'color',
-        label: 'Inverted Text Color'
-      },
-      {
-        name: 'container-font-family',
-        type: 'font-family',
-        label: 'Font Family'
-      },
-      {
-        name: 'container-font-size',
-        type: 'pixel',
-        label: 'Font Size'
-      },
-      {
-        name: 'container-font-weight',
-        type: 'font-weight',
-        label: 'Font Weight'
-      }
-    ]
-  }
-
-  const bodySection: SidebarSection = {
-    name: 'Body',
-    fields: [
       {
         name: 'body-bg-color',
         type: 'color',
@@ -95,6 +38,56 @@ export function getSidebarSections(): SidebarSection[] {
         name: 'body-font-weight',
         type: 'font-weight',
         label: 'Font Weight'
+      }
+    ]
+  }
+  const containerSection: SidebarSection = {
+    name: 'Container',
+    fields: [
+      {
+        name: 'container-logo-square',
+        type: 'image',
+        label: 'Square Logo'
+      },
+      {
+        name: 'container-logo-wide',
+        type: 'image',
+        label: 'Wide Logo'
+      },
+      {
+        name: 'container-bg-color',
+        type: 'color',
+        label: 'Background Color'
+      },
+      {
+        name: 'container-text-color',
+        type: 'color',
+        label: 'Text Color'
+      },
+      {
+        name: 'container-font-family',
+        type: 'font-family',
+        label: 'Font Family'
+      },
+      {
+        name: 'container-font-size',
+        type: 'pixel',
+        label: 'Font Size'
+      },
+      {
+        name: 'container-font-weight',
+        type: 'font-weight',
+        label: 'Font Weight'
+      },
+      {
+        name: 'inverted-container-bg-color',
+        type: 'color',
+        label: 'Inverted Background Color'
+      },
+      {
+        name: 'inverted-container-text-color',
+        type: 'color',
+        label: 'Inverted Text Color'
       }
     ]
   }
@@ -189,14 +182,14 @@ export function getSidebarSections(): SidebarSection[] {
         label: 'Text Color'
       },
       {
-        name: 'inverted-button-text-color',
-        type: 'color',
-        label: 'Inverted Text Color'
-      },
-      {
         name: 'button-bg-color',
         type: 'color',
         label: 'Background Color'
+      },
+      {
+        name: 'inverted-button-text-color',
+        type: 'color',
+        label: 'Inverted Text Color'
       },
       {
         name: 'inverted-button-bg-color',
@@ -206,11 +199,5 @@ export function getSidebarSections(): SidebarSection[] {
     ]
   }
 
-  return [
-    logosSection,
-    containerSection,
-    bodySection,
-    headersSection,
-    buttonsSection
-  ]
+  return [bodySection, containerSection, headersSection, buttonsSection]
 }
