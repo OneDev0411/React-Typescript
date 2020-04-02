@@ -16,8 +16,12 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(6)
     },
     logo: {
-      width: 72,
-      marginBottom: theme.spacing(3)
+      width: 100,
+      height: 100,
+      marginBottom: theme.spacing(2)
+    },
+    title: {
+      marginBottom: theme.spacing(2)
     }
   })
 )
@@ -30,7 +34,7 @@ interface Props {
 
 export default function Header({ brand, title, subtitle }: Props) {
   const classes = useStyles()
-  let siteLogo = '/static/images/appicon.png'
+  let siteLogo = '/static/images/logo.svg'
 
   if (brand) {
     siteLogo = Brand.asset('site_logo', null, brand)
@@ -39,8 +43,10 @@ export default function Header({ brand, title, subtitle }: Props) {
   return (
     <Box className={classes.box}>
       <img src={siteLogo} className={classes.logo} alt="logo" />
-      <Typography variant="h5">{title}</Typography>
-      <Typography variant="subtitle1">{subtitle}</Typography>
+      <Typography variant="h4" className={classes.title}>
+        {title}
+      </Typography>
+      <Typography variant="body1">{subtitle}</Typography>
     </Box>
   )
 }
