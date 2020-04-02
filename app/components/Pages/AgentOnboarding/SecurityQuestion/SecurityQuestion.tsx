@@ -82,7 +82,7 @@ export function SecurityQuestion(props: WithRouterProps) {
       <Container>
         <Header
           brand={brand}
-          title="Confirm Contact Information"
+          title="Agent Verification"
           subtitle="Enter the complete mobile number or email address."
         />
 
