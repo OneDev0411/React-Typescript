@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
-import { Button } from '@material-ui/core'
+import { Button, Theme } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
 
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
@@ -17,9 +18,24 @@ interface Props {
   isBackOffice: boolean
 }
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    root: {
+      borderColor: theme.palette.error.main,
+      color: theme.palette.error.main,
+      '&:hover': {
+        borderColor: theme.palette.error.main,
+        backgroundColor: theme.palette.error.ultralight
+      }
+    }
+  }),
+  { name: 'DeleteDeal' }
+)
+
 export default function DeleteDeal(props: Props) {
   const [isDeleting, setIsDeleting] = useState(false)
   const dispatch = useDispatch()
+  const classes = useStyles()
 
   const { user, checklists } = useSelector(({ deals, user }: IAppState) => ({
     user,
@@ -97,6 +113,7 @@ export default function DeleteDeal(props: Props) {
       disabled={isDeleting}
       variant="outlined"
       color="secondary"
+      className={classes.root}
       onClick={handleClick}
     >
       Delete Deal

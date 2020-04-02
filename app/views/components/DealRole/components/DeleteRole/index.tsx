@@ -6,12 +6,10 @@ import {
   Tooltip,
   IconButton,
   IconButtonProps,
-  makeStyles,
   Theme,
-  createStyles
+  useTheme
 } from '@material-ui/core'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
 import { deleteRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
@@ -28,24 +26,10 @@ interface Props {
   onDeleteRole: (role: IDealRole) => void
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    removeButton: {
-      '& svg path': {
-        fill: theme.palette.common.black
-      },
-      '&:hover svg path': {
-        fill: theme.palette.error.main
-      }
-    }
-  })
-)
-
 export default function DeleteRole(props: Props) {
   const [isDeleting, setIsDeleting] = useState(false)
   const dispatch = useDispatch()
-  const classes = useStyles()
-  const iconClasses = useIconStyles()
+  const theme = useTheme<Theme>()
 
   const handleRemoveRole = useCallback(() => {
     dispatch(
@@ -89,10 +73,9 @@ export default function DeleteRole(props: Props) {
       <IconButton
         size="small"
         onClick={handleRemoveRole}
-        className={classes.removeButton}
         {...props.buttonProps}
       >
-        <TrashIcon className={iconClasses.small} />
+        <TrashIcon size="small" fillColor={theme.palette.error.main} />
       </IconButton>
     </Tooltip>
   )

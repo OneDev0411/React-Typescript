@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ChangeEvent } from 'react'
 import { Checkbox as MUICheckbox, Tooltip } from '@material-ui/core'
 
 interface Props {
@@ -20,7 +20,8 @@ export default function Checkbox({
     setIsChecked(checked)
   }, [checked])
 
-  const handleToggleRow = () => {
+  const handleToggleRow = (e: ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation()
     setIsChecked(!isChecked)
     setTimeout(onChange, 0)
   }

@@ -6,7 +6,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { IAppState } from 'reducers/index'
 
-import GlobalHeader from 'components/GlobalHeader'
+import PageLayout from 'components/GlobalPageLayout'
 import { SearchInput } from 'components/GlobalHeaderWithSearch'
 
 import { searchDeals, getDeals } from 'actions/deals'
@@ -83,8 +83,8 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
   }, [searchQuery])
 
   return (
-    <div className={classes.container}>
-      <GlobalHeader title="Deals Admin" noPadding>
+    <PageLayout>
+      <PageLayout.Header title="Deals Admin">
         <div className={classes.headerContainer}>
           <SearchInput
             placeholder="Search deals by address, MLS# or agent name..."
@@ -93,18 +93,19 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
 
           <ExportDeals />
         </div>
-      </GlobalHeader>
+      </PageLayout.Header>
+      <PageLayout.Main>
+        <div className={classes.filtersContainer}>
+          <TabFilters
+            deals={deals}
+            activeFilter={props.params.filter}
+            searchQuery={searchQuery}
+            sortableColumns={SORTABLE_COLUMNS}
+          />
+        </div>
 
-      <div className={classes.filtersContainer}>
-        <TabFilters
-          deals={deals}
-          activeFilter={props.params.filter}
-          searchQuery={searchQuery}
-          sortableColumns={SORTABLE_COLUMNS}
-        />
-      </div>
-
-      <Grid searchQuery={searchQuery} />
-    </div>
+        <Grid searchQuery={searchQuery} />
+      </PageLayout.Main>
+    </PageLayout>
   )
 }

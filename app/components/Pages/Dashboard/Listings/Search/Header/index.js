@@ -25,11 +25,11 @@ const useStyles = makeStyles(
 export function Header(props) {
   const classes = useStyles()
   const theme = useTheme()
-  const { isFetching, activeView } = props
+  const { isFetching, activeView, showGlobalActionsButton } = props
 
   return (
     <Box p={5}>
-      <GlobalPageLayout.Header title="All Properties">
+      <GlobalPageLayout.Header title="All Properties" noGlobalActionsButton={!showGlobalActionsButton}>
         <Box className={classes.body}>
           <Autocomplete activeView={activeView} />
           <BaseDropdown

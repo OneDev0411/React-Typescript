@@ -25,7 +25,7 @@ const useStyles = makeStyles(
       width: theme.spacing(4),
       height: theme.spacing(4),
       borderRadius: '100%',
-      backgroundColor: theme.palette.common.black
+      backgroundColor: theme.palette.grey[200]
     },
     container: {
       display: 'flex',

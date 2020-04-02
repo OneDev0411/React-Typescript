@@ -12,7 +12,7 @@ interface CreateRequestTask {
   dealId: UUID
   taskType: string
   taskTitle: string
-  taskComment: string
+  taskComment?: string
   notifyMessage: string
 }
 
@@ -51,7 +51,9 @@ export const createRequestTask = ({
     return null
   }
 
-  createTaskComment(task as IDealTask, userId, taskComment)
+  if (taskComment) {
+    createTaskComment(task as IDealTask, userId, taskComment)
+  }
 
   dispatch(changeNeedsAttention(dealId, task!.id, true))
 

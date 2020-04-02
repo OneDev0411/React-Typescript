@@ -9,6 +9,8 @@ import { Table } from 'components/Grid/Table'
 
 import { useGridStyles } from 'components/Grid/Table/styles'
 
+import { goTo } from 'utils/go-to'
+
 import { TableActions } from './Actions'
 
 import TagsOverlay from '../../components/TagsOverlay'
@@ -133,6 +135,19 @@ const ContactsList = props => {
     }
   }
 
+  const getRowProps = ({ row: contact }) => {
+    return {
+      onClick: () => goTo(`/dashboard/contacts/${contact.id}`)
+    }
+  }
+  const getColumnProps = ({ column }) => {
+    if (['cta', 'flows', 'tag', 'delete-contact'].includes(column.id)) {
+      return {
+        onClick: e => e.stopPropagation()
+      }
+    }
+  }
+
   return (
     <>
       <Table
@@ -141,6 +156,8 @@ const ContactsList = props => {
         loading={getLoading()}
         columns={columns}
         LoadingStateComponent={LoadingComponent}
+        getTrProps={getRowProps}
+        getTdProps={getColumnProps}
         selection={{
           defaultRender: ({ row }) => <Avatar contact={row} />
         }}

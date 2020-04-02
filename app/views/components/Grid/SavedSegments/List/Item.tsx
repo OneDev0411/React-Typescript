@@ -33,6 +33,11 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:hover .MuiListItemSecondaryAction-root': {
         display: 'block'
       }
+    },
+    textItem: {
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis'
     }
   })
 )
@@ -71,7 +76,7 @@ function Item(props: Props) {
       selected={selected}
       onClick={onSelect}
     >
-      <ListItemText>
+      <ListItemText disableTypography className={classes.textItem}>
         {uppercaseFirstLetter(name)}
         {item.badge && (
           <Badge large style={{ marginLeft: '0.5rem' }}>

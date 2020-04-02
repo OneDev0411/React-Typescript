@@ -17,7 +17,7 @@ const useStyles = makeStyles(
         overflow: 'visible',
         pointerEvents: 'none'
       },
-      content: ({ targetStyle }) => ({
+      content: ({ targetStyle }: any) => ({
         // border color is inline with grape not our theme
         border: '3px solid #0945eb',
         pointerEvents: 'initial',

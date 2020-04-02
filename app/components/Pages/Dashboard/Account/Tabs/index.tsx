@@ -1,13 +1,11 @@
 import { ACL } from 'constants/acl'
 
 import React from 'react'
+import { withRouter, WithRouterProps } from 'react-router'
 
 import Acl from 'components/Acl'
 import { PageTabs, TabLink } from 'components/PageTabs'
 
-interface Props {
-  user: IUser
-}
 interface ItemsShape {
   label: string
   to: string
@@ -63,8 +61,12 @@ const tabs: ItemsShape[] = [
   }
 ]
 
-export const SettingsTabs = ({ user }: Props) => {
-  const currentUrl = window.location.pathname
+interface Props {
+  user: IUser
+}
+
+export const SettingsTabs = ({ user, location }: Props & WithRouterProps) => {
+  const currentUrl = location.pathname
   const matchingTabs = tabs.filter(({ to }) => currentUrl.startsWith(to))
   const matchingTab = matchingTabs.sort((a, b) => b.to.length - a.to.length)[0]
 
@@ -90,4 +92,4 @@ export const SettingsTabs = ({ user }: Props) => {
   )
 }
 
-export default SettingsTabs
+export default withRouter(SettingsTabs)
