@@ -5,7 +5,6 @@ import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
-import Webpackbar from 'webpackbar'
 
 import moment from 'moment'
 
@@ -44,12 +43,6 @@ webpackConfig.entry = {
   app: [appConfig.compile.entry],
   vendor: appConfig.compile.vendors
 }
-
-webpackConfig.plugins.push(
-  new Webpackbar({
-    profile: true
-  })
-)
 
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
