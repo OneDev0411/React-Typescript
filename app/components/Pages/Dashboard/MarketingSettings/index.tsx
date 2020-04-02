@@ -13,7 +13,7 @@ import TemplatePreview from 'components/TemplatePreview'
 import { getActiveTeamPalette, getActiveTeamId } from 'utils/user-teams'
 import { ACL } from 'constants/acl'
 
-import { updatePalette } from 'models/brand-settings/update-palette'
+import { updatePalette } from 'models/brand/update-palette'
 
 import { getUserTeams } from 'actions/user/teams'
 

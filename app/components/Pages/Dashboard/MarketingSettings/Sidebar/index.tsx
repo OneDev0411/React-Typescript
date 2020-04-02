@@ -2,9 +2,6 @@ import React from 'react'
 import {
   Grid,
   Divider,
-  TextField,
-  FormControl,
-  InputAdornment,
   Typography,
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -13,11 +10,11 @@ import {
   createStyles,
   Theme
 } from '@material-ui/core'
-import ColorPicker from 'material-ui-color-picker'
 
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import { SidebarSection } from '../types'
+import Field from './Field'
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -28,10 +25,6 @@ const useStyles = makeStyles(
       scrollableArea: {
         maxHeight: '100vh',
         overflow: 'overlay'
-      },
-      colorPickerSquare: {
-        width: theme.spacing(3),
-        height: theme.spacing(3)
       }
     }),
   { name: 'MarketingSettingsSidebar' }
@@ -73,49 +66,12 @@ export default function Sidebar({ sections, settings, onUpdate }: Props) {
               <ExpansionPanelDetails>
                 <Grid container spacing={2}>
                   {section.fields.map(field => (
-                    <Grid container item key={field.name}>
-                      <FormControl fullWidth>
-                        {field.type === 'color' && (
-                          <ColorPicker
-                            size="small"
-                            variant="outlined"
-                            label={field.label}
-                            value={settings[field.name]}
-                            TextFieldProps={{ value: settings[field.name] }}
-                            InputProps={{
-                              endAdornment: (
-                                <InputAdornment position="end">
-                                  <span
-                                    className={classes.colorPickerSquare}
-                                    style={{
-                                      backgroundColor: settings[field.name]
-                                    }}
-                                  />
-                                </InputAdornment>
-                              )
-                            }}
-                            onChange={(color?: string) => {
-                              if (!color) {
-                                return
-                              }
-
-                              handleUpdateSettings(field.name, color)
-                            }}
-                          />
-                        )}
-                        {field.type !== 'color' && (
-                          <TextField
-                            size="small"
-                            variant="outlined"
-                            label={field.label}
-                            value={settings[field.name]}
-                            onChange={e =>
-                              handleUpdateSettings(field.name, e.target.value)
-                            }
-                          />
-                        )}
-                      </FormControl>
-                    </Grid>
+                    <Field
+                      key={field.name}
+                      {...field}
+                      value={settings[field.name]}
+                      onChange={handleUpdateSettings}
+                    />
                   ))}
                 </Grid>
               </ExpansionPanelDetails>
