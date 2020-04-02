@@ -1,22 +1,10 @@
-import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
-import CompressionPlugin from 'compression-webpack-plugin'
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
-
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
 webpackConfig.mode = 'production'
-
-webpackConfig.optimization = {
-  splitChunks: {
-    chunks: 'all'
-  }
-}
 
 function postcss() {
   return [require('autoprefixer')()]
@@ -39,12 +27,6 @@ webpackConfig.entry = {
 }
 
 webpackConfig.plugins.push(
-  new webpack.optimize.AggressiveMergingPlugin(),
-  new MomentLocalesPlugin(),
-  new MiniCssExtractPlugin({
-    filename: '[name].[hash].css'
-  }),
-  new OptimizeCSSAssetsPlugin(),
   new HtmlWebpackPlugin({
     template: appConfig.compile.template,
     hash: false,
@@ -55,11 +37,6 @@ webpackConfig.plugins.push(
     }
   }),
 
-  new CompressionPlugin({
-    algorithm: 'gzip',
-    test: /\.js$|\.css$/,
-    filename: '[path]'
-  }),
   new ForkTsCheckerWebpackPlugin({
     /**
      * We want build to fail if there is a ts error
@@ -77,7 +54,6 @@ webpackConfig.plugins.push(
 webpackConfig.module.rules.push({
   test: /\.(sa|sc|c)ss$/,
   use: [
-    MiniCssExtractPlugin.loader,
     'css-loader',
     {
       loader: 'postcss-loader',
