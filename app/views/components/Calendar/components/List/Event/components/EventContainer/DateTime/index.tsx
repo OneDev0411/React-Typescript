@@ -8,8 +8,7 @@ interface Props {
 export function DateTime({ event }: Props) {
   const startsAndFinishesInTheSameDay =
     event.end_date &&
-    getDatePart(toDateObject(event.timestamp)).getTime() ===
-      getDatePart(toDateObject(event.end_date)).getTime()
+    getDatePartTicks(event.timestamp) === getDatePartTicks(event.end_date)
 
   if (
     ![
@@ -38,7 +37,7 @@ export function DateTime({ event }: Props) {
 }
 
 function formatDate(date: Date | string | number): string {
-  return fecha.format(toDateObject(date), 'hh:mm\u00A0A')
+  return fecha.format(toDateObject(date), 'hh:mm\u00A0A') // non-breaking space
 }
 function toDateObject(date: Date | string | number): Date {
   return new Date(
@@ -51,4 +50,7 @@ function getDatePart(date: Date): Date {
   clone.setHours(0, 0, 0, 0)
 
   return clone
+}
+function getDatePartTicks(date: Date | string | number): number {
+  return getDatePart(toDateObject(date)).getTime()
 }
