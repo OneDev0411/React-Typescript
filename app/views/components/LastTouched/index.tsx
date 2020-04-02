@@ -1,6 +1,6 @@
 import React from 'react'
 import timeago from 'timeago.js'
-import { Typography, Box } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 
 interface Props {
   contact: IContact
@@ -18,18 +18,17 @@ export function LastTouched(props: Props) {
   }
 
   return (
-    <Box display="flex" alignItems="center">
-      <Typography variant="body2">
+    <div>
+      <Typography variant="body2" component="span">
         Last Touch was <b>{timeago().format(lastTouch * 1000)}</b>
+        {!nextTouch && '.'}
       </Typography>
-      {nextTouch ? (
-        <Typography variant="body2">
+      {nextTouch && (
+        <Typography variant="body2" component="span">
           , you wanted to be in touch every{' '}
           <b>{Math.round((nextTouch - lastTouch) / 86400)}</b> days.
         </Typography>
-      ) : (
-        '.'
       )}
-    </Box>
+    </div>
   )
 }
