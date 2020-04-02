@@ -53,7 +53,7 @@ const useStyles = makeStyles(
       marginLeft: theme.spacing(-0.75 / 2),
       '& > div': {
         width: '100%',
-        marginLeft: theme.spacing(0.75),
+        marginLeft: theme.spacing(0.75 / 2),
         backgroundColor: theme.palette.primary.main
       }
     },
