@@ -54,7 +54,7 @@ function distributeMultiDayEvents(
     distributedEvents[month] = {}
     Object.entries(daysOfMonth).forEach(([day, events]) => {
       const dayStart = new Date(day).getTime()
-      const dayEnd = dayStart + 24 * 60 * 60 * 1000
+      const dayEnd = dayStart + 86400000 // = one day
 
       distributedEvents[month][day] = []
       multiDayEvents = multiDayEvents.filter(
