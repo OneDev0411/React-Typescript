@@ -27,7 +27,7 @@ interface FormValues {
 
 export function SecurityQuestion(props: WithRouterProps) {
   const dispatch = useDispatch()
-  const commonClasses = useCommonStyles()
+  const commonClasses = useCommonStyles({})
   const brand: IBrand = useSelector((store: IAppState) => store.brand)
   const agent: IAgent = props.location.state.agent
 
@@ -57,7 +57,7 @@ export function SecurityQuestion(props: WithRouterProps) {
     } catch (error) {
       return {
         [FORM_ERROR]:
-          error.message ||
+          error.response.body.message ||
           'There was an error with this request. Please try again.'
       }
     }
@@ -99,7 +99,7 @@ export function SecurityQuestion(props: WithRouterProps) {
                     <Field
                       component={MUITextInput}
                       id="secret"
-                      label="MLS ID"
+                      label="Security Question"
                       placeholder={agent.secret_questions.join(' or ')}
                       name="secret"
                       variant="filled"
