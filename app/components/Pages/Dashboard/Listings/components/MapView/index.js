@@ -42,7 +42,7 @@ const MapView = props => {
     }
 
     return props.sortedListings.map(listing => (
-      <Grid key={listing.id} item>
+      <Grid key={listing.id} item xs={12}>
         <ListingCard isShowOnMap listing={listing} tabName={props.tabName} />
       </Grid>
     ))
