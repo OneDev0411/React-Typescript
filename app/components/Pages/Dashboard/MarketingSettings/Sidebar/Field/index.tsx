@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Grid,
   FormControl,
-  TextField,
   InputAdornment,
   makeStyles,
   createStyles,
@@ -11,7 +10,10 @@ import {
 import ColorPicker from 'material-ui-color-picker'
 
 import { FieldProps } from './types'
-import Image from './Image'
+import ImageField from './Image'
+import FontField from './Font'
+import PixelField from './Pixel'
+import WeightField from './Weight'
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -63,15 +65,15 @@ export default function Field(props: FieldProps) {
             }}
           />
         )}
-        {props.type === 'image' && <Image {...props} />}
-        {props.type !== 'color' && props.type !== 'image' && (
-          <TextField
-            size="small"
-            variant="outlined"
-            label={props.label}
-            value={props.value}
-            onChange={e => props.onChange(props.name, e.target.value)}
-          />
+        {props.type === 'image' && <ImageField {...props} />}
+        {props.type === 'font-family' && (
+          <FontField {...props} onChange={props.onChange} />
+        )}
+        {props.type === 'pixel' && (
+          <PixelField {...props} onChange={props.onChange} />
+        )}
+        {props.type === 'font-weight' && (
+          <WeightField {...props} onChange={props.onChange} />
         )}
       </FormControl>
     </Grid>
