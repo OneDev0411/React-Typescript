@@ -64,6 +64,7 @@ const useStyles = makeStyles(
          as Shayan asked, @ramin add a negative `maerginLeft` in indicator container
          to be edge to edge,which cause an overflow for indicator ribbon
          and we need to neutralize that effect by adding this
+         https://gitlab.com/rechat/web/-/issues/3913#note_309055945
         */
         marginLeft: theme.spacing(0.75 / 2),
         backgroundColor: theme.palette.primary.main

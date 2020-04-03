@@ -13,6 +13,7 @@ Shayan asked several customizations on Tab component we use (MUI) include
 Mega Menu which it doesn't support originally, so we had to do some 
 sort of hack. in the feature, we need to implement our own tab component
 to cover all features we need and does not break sth
+https://www.figma.com/file/zwcX1R35UMgGoll1rtEVEo/Architecture?node-id=8289%3A0
 */
 interface Props extends TabProps {
   renderMegaMenu?: () => ReactNode
