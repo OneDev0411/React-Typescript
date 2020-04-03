@@ -7,6 +7,13 @@ import {
   Theme
 } from '@material-ui/core'
 
+// TODO: Refactor PageTab to our own Tab component
+/*
+Shayan asked several customizations on Tab component we use (MUI) include
+Mega Menu which it doesn't support originally, so we had to do some 
+sort of hack. in the feature, we need to implement our own tab component
+to cover all features we need and does not break sth
+*/
 interface Props extends TabProps {
   renderMegaMenu?: () => ReactNode
 }
@@ -25,7 +32,6 @@ const useStyles = makeStyles(
       },
       selected: {
         ...theme.typography.subtitle1,
-        fontWeight: 'bold',
         '& button[aria-controls="menu-list-grow"]': {
           color: theme.palette.primary.main,
           '& svg': {
