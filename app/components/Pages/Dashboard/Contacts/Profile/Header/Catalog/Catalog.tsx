@@ -32,7 +32,7 @@ export default function Catalog({ contact }: Props) {
   const classes = useStyles()
 
   return (
-    <Box mt={3} mb={2}>
+    <Box mb={2}>
       <Box display="flex" alignItems="center" mb={1}>
         <Avatar contact={contact} />
         <Box display="flex" alignItems="center" className={classes.title}>
