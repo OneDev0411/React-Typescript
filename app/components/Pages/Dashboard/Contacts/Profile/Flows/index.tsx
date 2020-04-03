@@ -1,7 +1,12 @@
 import React from 'react'
-import { Box, Tooltip } from '@material-ui/core'
-
-import styled from 'styled-components'
+import {
+  Box,
+  Tooltip,
+  Theme,
+  Button,
+  createStyles,
+  makeStyles
+} from '@material-ui/core'
 
 import AddToFlowButton from 'components/AddToFlowButton'
 import IconThunderbolt from 'components/SvgIcons/Thunderbolt/ThunderboltIcon'
@@ -9,16 +14,22 @@ import IconThunderbolt from 'components/SvgIcons/Thunderbolt/ThunderboltIcon'
 import { Section } from '../components/Section'
 import List from './List/List'
 
-const AddFlow = styled.span`
-  color: ${props => props.theme.palette.grey['500']};
-  cursor: pointer;
-  > svg {
-    fill: ${props => props.theme.palette.grey['500']};
-    width: 0.8em;
-    height: 0.8em;
-    margin-right: 0.25rem;
-  }
-`
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      button: {
+        color: theme.palette.grey['500'],
+        marginLeft: 0,
+        '& svg': {
+          fill: theme.palette.grey['500'],
+          width: '0.8em',
+          height: '0.8em',
+          marginRight: '0.25rem'
+        }
+      }
+    }),
+  { name: 'AddFlow' }
+)
 
 interface Props {
   addCallback: () => void
@@ -28,6 +39,8 @@ interface Props {
 }
 
 function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
+  const classes = useStyles()
+
   return (
     <Section
       title="Flows"
@@ -44,9 +57,9 @@ function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
           contacts={{ ids: [contactId] }}
           buttonRenderer={buttonProps => (
             <Tooltip title="Add to Flow">
-              <AddFlow {...buttonProps}>
+              <Button className={classes.button} {...buttonProps}>
                 <IconThunderbolt />+
-              </AddFlow>
+              </Button>
             </Tooltip>
           )}
         />
