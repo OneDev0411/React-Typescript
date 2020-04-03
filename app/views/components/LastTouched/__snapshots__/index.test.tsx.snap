@@ -2,24 +2,20 @@
 
 exports[`Contact profile last touched component renders 1`] = `
 <div
-  class="MuiBox-root MuiBox-root-2"
+  class="MuiBox-root MuiBox-root-3 makeStyles-wrapper-1"
 >
-  <p
-    class="MuiTypography-root MuiTypography-body2"
-  >
+  <span>
     Last Touch was 
     <b>
       just now
     </b>
-  </p>
-  <p
-    class="MuiTypography-root MuiTypography-body2"
-  >
+  </span>
+  <span>
     , you wanted to be in touch every 
     <b>
       23123
     </b>
      days.
-  </p>
+  </span>
 </div>
 `;
