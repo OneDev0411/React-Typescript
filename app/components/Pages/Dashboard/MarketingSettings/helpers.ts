@@ -14,6 +14,7 @@ export function getSidebarSections(): SidebarSection[] {
         type: 'image',
         label: 'Wide Logo'
       },
+      'divider',
       {
         name: 'body-bg-color',
         type: 'color',
@@ -54,6 +55,7 @@ export function getSidebarSections(): SidebarSection[] {
         type: 'image',
         label: 'Wide Logo'
       },
+      'divider',
       {
         name: 'container-bg-color',
         type: 'color',
@@ -79,6 +81,7 @@ export function getSidebarSections(): SidebarSection[] {
         type: 'font-weight',
         label: 'Font Weight'
       },
+      'divider',
       {
         name: 'inverted-container-bg-color',
         type: 'color',
@@ -110,6 +113,7 @@ export function getSidebarSections(): SidebarSection[] {
         type: 'font-weight',
         label: 'H1 Font Weight'
       },
+      'divider',
       {
         name: 'h1-text-color',
         type: 'color',
@@ -135,6 +139,7 @@ export function getSidebarSections(): SidebarSection[] {
         type: 'color',
         label: 'H2 Text Color'
       },
+      'divider',
       {
         name: 'h3-font-family',
         type: 'font-family',
@@ -186,6 +191,7 @@ export function getSidebarSections(): SidebarSection[] {
         type: 'color',
         label: 'Background Color'
       },
+      'divider',
       {
         name: 'inverted-button-text-color',
         type: 'color',

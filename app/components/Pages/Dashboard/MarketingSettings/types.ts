@@ -13,5 +13,5 @@ export interface SidebarSectionField {
 
 export interface SidebarSection {
   name: string
-  fields: SidebarSectionField[]
+  fields: (SidebarSectionField | 'divider')[]
 }
