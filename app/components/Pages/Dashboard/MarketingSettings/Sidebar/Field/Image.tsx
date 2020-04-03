@@ -4,6 +4,7 @@ import {
   CardMedia,
   CardActionArea,
   CardActions,
+  Tooltip,
   IconButton,
   Typography,
   makeStyles,
@@ -28,6 +29,7 @@ const useStyles = makeStyles(
       },
       imageUploader: {
         width: '100%',
+        border: `1px solid ${theme.palette.divider}`,
         borderRadius: theme.shape.borderRadius,
         backgroundColor: theme.palette.grey[200],
         height: '100px',
@@ -43,7 +45,7 @@ interface Props extends FieldProps {
   // onImageUpload: (image: File) => Promise<void>
 }
 
-export default function Image({ name, value, label, onChange }: Props) {
+export default function ImageField({ name, value, label, onChange }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
@@ -57,12 +59,16 @@ export default function Image({ name, value, label, onChange }: Props) {
           <CardMedia component="img" src={value} />
         </CardActionArea>
         <CardActions>
-          <IconButton size="small">
-            <IconUpload className={iconClasses.small} />
-          </IconButton>
-          <IconButton size="small">
-            <IconDeleteOutline className={iconClasses.small} />
-          </IconButton>
+          <Tooltip title="Change Image">
+            <IconButton size="small">
+              <IconUpload className={iconClasses.small} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete Image">
+            <IconButton size="small">
+              <IconDeleteOutline className={iconClasses.small} />
+            </IconButton>
+          </Tooltip>
         </CardActions>
       </Card>
     )
