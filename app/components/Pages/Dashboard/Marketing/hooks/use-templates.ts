@@ -16,9 +16,8 @@ interface TemplatesList {
   error: Error | null
 }
 
-export function useTemplatesList(
+export function useTemplates(
   brandId: UUID,
-  types: string,
   mediums: string[] = ALL_MEDIUMS
 ): TemplatesList {
   const [templates, setTemplates] = useState<IMarketingTemplate[]>([])
@@ -36,11 +35,7 @@ export function useTemplatesList(
       try {
         setLoading(true)
 
-        const templates = await getTemplates(
-          brandId,
-          Array.isArray(types) ? types.split(',') : [],
-          mediums
-        )
+        const templates = await getTemplates(brandId, [], mediums)
 
         if (!didCancel) {
           setTemplates(templates)
@@ -61,7 +56,7 @@ export function useTemplatesList(
     return () => {
       didCancel = true
     }
-  }, [brandId, mediums, types])
+  }, [brandId, mediums])
 
   return {
     templates,

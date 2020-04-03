@@ -8,20 +8,30 @@ import Item from './components/Item'
 
 interface Props {
   data: Section
-  mediums: string[]
-  onClose: () => void
+  mediums: { [key: string]: string[] }
 }
 
-export const SectionMegaMenu = ({ data, mediums, onClose }: Props) => {
+export const SectionMegaMenu = ({ data, mediums }: Props) => {
   const { items } = data
+  const sanitizeMediums = item => {
+    if (!Object.keys(mediums).length || !item.value || !item.title) {
+      return []
+    }
+
+    return !Array.isArray(item.value)
+      ? mediums[item.value]
+      : mediums[item.title]
+  }
 
   return (
     <Grid container spacing={2}>
-      {items.map((item, i) => (
-        <Grid key={i} item>
-          <Item data={item} mediums={mediums} onClose={onClose} />
-        </Grid>
-      ))}
+      {items.map((item, i) => {
+        return (
+          <Grid key={i} item>
+            <Item data={item} mediums={sanitizeMediums(item)} />
+          </Grid>
+        )
+      })}
     </Grid>
   )
 }

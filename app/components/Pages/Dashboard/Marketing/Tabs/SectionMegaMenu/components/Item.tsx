@@ -10,7 +10,6 @@ import { MEDIUMS_COLLECTION } from '../../../constants'
 interface Props {
   data: SectionItem
   mediums: string[]
-  onClose: () => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -44,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-function Item({ data, mediums, onClose }: Props) {
+function Item({ data, mediums }: Props) {
   const classes = useStyles()
   const { title, link } = data
 
@@ -55,7 +54,6 @@ function Item({ data, mediums, onClose }: Props) {
       return null
     }
 
-    onClose()
     goTo(link)
   }
 

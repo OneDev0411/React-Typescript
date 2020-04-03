@@ -9,13 +9,12 @@ import MegaMenu from './SectionMegaMenu'
 
 interface Props {
   sections: SectionCollection
-  mediums: string[]
+  mediums: { [key: string]: string[] }
   templateTypes: string
 }
 
-const ContactsTabs = ({ sections, mediums, templateTypes }: Props) => {
+const MarketingTabs = ({ sections, mediums, templateTypes }: Props) => {
   const { marketingCenter, life, properties } = sections
-  const keys: string[] = [life.key, properties.key]
 
   const checkValidTemplateTypes = (items: SectionItem[]) => {
     return _findIndex(items, (i: SectionItem) => {
@@ -38,16 +37,6 @@ const ContactsTabs = ({ sections, mediums, templateTypes }: Props) => {
 
     return marketingCenter.items[0].link
   }
-  const renderMegaMenu = ({ selectedTab, close }) => {
-    switch (selectedTab) {
-      case life.key:
-        return <MegaMenu data={life} mediums={mediums} onClose={close} />
-      case properties.key:
-        return <MegaMenu data={properties} mediums={mediums} onClose={close} />
-      default:
-        return null
-    }
-  }
 
   return (
     <PageTabs
@@ -56,17 +45,23 @@ const ContactsTabs = ({ sections, mediums, templateTypes }: Props) => {
         ...marketingCenter.items.map(i => (
           <TabLink key={i.link} to={i.link} value={i.link} label={i.title} />
         )),
-        <Tab key={life.key} value={life.key} label={life.title} />,
+        <Tab
+          key={life.key}
+          value={life.key}
+          label={life.title}
+          renderMegaMenu={() => <MegaMenu data={life} mediums={mediums} />}
+        />,
         <Tab
           key={properties.key}
           value={properties.key}
           label={properties.title}
+          renderMegaMenu={() => (
+            <MegaMenu data={properties} mediums={mediums} />
+          )}
         />
       ]}
-      megamenuTabs={keys}
-      megaMenu={props => renderMegaMenu(props)}
     />
   )
 }
 
-export default ContactsTabs
+export default MarketingTabs

@@ -18,8 +18,6 @@ interface Props {
   defaultAction?: SelectedTab
   value?: SelectedTab
   actionValue?: SelectedTab
-  megamenuTabs?: SelectedTab[]
-  megaMenu?: (p: RenderMegaMenu) => ReactNode
   onChange?: (value: SelectedTab) => void
   onChangeAction?: (value: SelectedTab) => void
 }
@@ -33,14 +31,21 @@ const useStyles = makeStyles(
     },
     tabContainer: {
       width: '100%',
-      margin: theme.spacing(1, 0),
+      marginTop: theme.spacing(1),
       borderBottom: `1px solid ${theme.palette.divider}`
     },
     tabsFlexContainer: {
+      /* 
+       shayan asked a 32px `marginRight` between each tab and since 
+       there could be several node types with the different class name
+       in tab container we use a general direct css selector
+      */
+      '& > *': {
+        marginRight: theme.spacing(4)
+      },
       '& .MuiTab-root': {
         paddingLeft: 0,
-        paddingRight: 0,
-        marginRight: theme.spacing(4)
+        paddingRight: 0
       }
     },
     actionsFlexContainer: {
@@ -55,20 +60,18 @@ const useStyles = makeStyles(
       marginLeft: theme.spacing(-0.75 / 2),
       '& > div': {
         width: '100%',
-        marginLeft: theme.spacing(0.75),
+        /* 
+         as Shayan asked, @ramin add a negative `maerginLeft` in indicator container
+         to be edge to edge,which cause an overflow for indicator ribbon
+         and we need to neutralize that effect by adding this
+         https://gitlab.com/rechat/web/-/issues/3913#note_309055945
+        */
+        marginLeft: theme.spacing(0.75 / 2),
         backgroundColor: theme.palette.primary.main
       }
     },
-    megaMenuContainer: {
-      padding: theme.spacing(2.5, 1.5),
-      position: 'absolute',
-      top: 57,
-      left: 0,
-      width: '100%',
-      minHeight: 250,
-      zIndex: theme.zIndex.gridAction,
-      background: theme.palette.background.paper,
-      boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.1)'
+    scroller: {
+      position: 'inherit'
     }
   }),
   {
@@ -113,8 +116,6 @@ export function PageTabs({
   actions,
   actionValue,
   tabs,
-  megamenuTabs = [],
-  megaMenu,
   onChange = () => {},
   onChangeAction = () => {}
 }: Props) {
@@ -123,38 +124,24 @@ export function PageTabs({
   const [selectedAction, setSelectedAction] = useState<SelectedTab>(
     defaultAction
   )
-  const [showMegaMenu, setShowMegaMenu] = useState<boolean>(false)
 
   const activeTab =
     defaultValue && selectedTab !== defaultValue ? defaultValue : selectedTab
-
   const activeAction =
     defaultAction && selectedAction !== defaultAction
       ? defaultAction
       : selectedAction
 
-  const handleChangeTab = (e: React.MouseEvent<{}>, tab: SelectedTab) => {
-    if (megaMenu && megamenuTabs) {
-      if (megamenuTabs.includes(tab)) {
-        const isVisible = !(tab === selectedTab && showMegaMenu)
-
-        setShowMegaMenu(isVisible)
-      } else {
-        setShowMegaMenu(false)
-      }
-    }
-
+  const handleChangeTab = (tab: SelectedTab) => {
     setSelectedTab(tab)
 
     onChange(tab)
   }
-
-  const handleChangeAction = (e: React.MouseEvent<{}>, action: SelectedTab) => {
+  const handleChangeAction = (action: SelectedTab) => {
     setSelectedAction(action)
 
     onChangeAction(action)
   }
-  const closeMegaMenu = () => setShowMegaMenu(false)
 
   return (
     <div className={classes.container}>
@@ -164,9 +151,10 @@ export function PageTabs({
         textColor="primary"
         variant="scrollable"
         scrollButtons="auto"
-        onChange={handleChangeTab}
+        onChange={(e, v) => handleChangeTab(v)}
         classes={{
           root: classes.tabContainer,
+          scroller: classes.scroller,
           indicator: classes.indicator,
           flexContainer: classes.tabsFlexContainer
         }}
@@ -179,7 +167,7 @@ export function PageTabs({
         <div>
           <Tabs
             value={actionValue || activeAction || false}
-            onChange={handleChangeAction}
+            onChange={(e, v) => handleChangeAction(v)}
             variant="scrollable"
             scrollButtons="auto"
             classes={{
@@ -191,12 +179,6 @@ export function PageTabs({
           >
             {actions.map(tab => tab)}
           </Tabs>
-        </div>
-      )}
-
-      {megaMenu && showMegaMenu && (
-        <div className={classes.megaMenuContainer}>
-          {megaMenu({ selectedTab, close: closeMegaMenu })}
         </div>
       )}
     </div>

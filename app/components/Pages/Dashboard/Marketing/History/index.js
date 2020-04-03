@@ -32,7 +32,7 @@ function History() {
   return (
     <>
       <Helmet>
-        <title>My Designs | Marketing | Rechat</title>
+        <title>All Designs | Marketing | Rechat</title>
       </Helmet>
 
       <Layout
