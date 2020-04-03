@@ -43,8 +43,8 @@ export function TemplateSelector(props: Props & ClassesProps<typeof styles>) {
           className={classes.tabsRoot}
           value={templateTabIndex}
           onChange={(_, newTabIndex) => setTemplateTabIndex(newTabIndex)}
-          textColor="primary"
-          indicatorColor="primary"
+          textColor="secondary"
+          indicatorColor="secondary"
         >
           <Tab className={classes.tabRoot} label="Email Templates" />
           <Tab className={classes.tabRoot} label="My designs" />

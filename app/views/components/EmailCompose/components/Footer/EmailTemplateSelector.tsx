@@ -59,6 +59,9 @@ const useStyles = makeStyles(
         '&:hover $secondaryAction': {
           opacity: 1
         }
+      },
+      iconColor: {
+        fill: theme.palette.secondary.main
       }
     }),
   { name: 'EmailTemplateSelector' }
@@ -173,15 +176,21 @@ function EmailTemplateSelector({
           <List disablePadding>
             <ListItem dense button divider onClick={openNewTemplateDrawer}>
               <ListItemText
-                primary={
-                  <Box display="flex" alignItems="center" color="primary.main">
+                secondary={
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    color="secondary.main"
+                  >
                     <IconAddCircleOutline
                       className={classNames(
-                        iconClasses.currentColor,
+                        classes.iconColor,
                         iconClasses.rightMargin
                       )}
                     />
-                    <Typography>Add a new Email Template</Typography>
+                    <Typography color="secondary">
+                      Add a new Email Template
+                    </Typography>
                   </Box>
                 }
               />

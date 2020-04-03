@@ -582,7 +582,7 @@ class OpenHouseDrawerInternal extends React.Component {
 
                           <Button
                             variant="contained"
-                            color="primary"
+                            color="secondary"
                             disableElevation
                             disabled={
                               isDisabled ||
