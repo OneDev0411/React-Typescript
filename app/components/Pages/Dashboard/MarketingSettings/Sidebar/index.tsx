@@ -26,6 +26,9 @@ const useStyles = makeStyles(
         right: 0,
         height: '100vh',
         overflow: 'overlay'
+      },
+      dividerContainer: {
+        width: '100%'
       }
     }),
   { name: 'MarketingSettingsSidebar' }
@@ -65,14 +68,22 @@ export default function Sidebar({ sections, settings, onUpdate }: Props) {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Grid container spacing={2}>
-                {section.fields.map(field => (
-                  <Field
-                    key={field.name}
-                    {...field}
-                    value={settings[field.name]}
-                    onChange={handleUpdateSettings}
-                  />
-                ))}
+                {section.fields.map(field =>
+                  field === 'divider' ? (
+                    <Grid container item>
+                      <div className={classes.dividerContainer}>
+                        <Divider />
+                      </div>
+                    </Grid>
+                  ) : (
+                    <Field
+                      key={field.name}
+                      {...field}
+                      value={settings[field.name]}
+                      onChange={handleUpdateSettings}
+                    />
+                  )
+                )}
               </Grid>
             </ExpansionPanelDetails>
           </ExpansionPanel>
