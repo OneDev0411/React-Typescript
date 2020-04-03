@@ -21,8 +21,6 @@ export function useMarketingCenterMediums(
   const [mediums, setMediums] = useState<Response>({})
 
   useEffect(() => {
-    console.log('useEffect')
-
     const groupHoliday = [
       'Christmas',
       'NewYear',
@@ -40,10 +38,9 @@ export function useMarketingCenterMediums(
     })
     const mediums = {}
 
-    // eslint-disable-next-line guard-for-in, no-restricted-syntax
-    for (let key in groupByType) {
+    Object.keys(groupByType).forEach(key => {
       mediums[key] = sanitizeMediums(groupByType[key])
-    }
+    })
 
     setMediums(mediums)
   }, [templates])

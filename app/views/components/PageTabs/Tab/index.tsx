@@ -20,10 +20,7 @@ const useStyles = makeStyles(
         ...theme.typography.body1,
         zIndex: 1,
         '&:hover': {
-          color: theme.palette.primary.main,
-          '& + $megaMenuContainer': {
-            visibility: 'visible'
-          }
+          color: theme.palette.primary.main
         }
       },
       selected: {
@@ -36,7 +33,12 @@ const useStyles = makeStyles(
           }
         }
       },
-      megaMenuContainer: {
+      megaMenuWrapper: {
+        '&:hover $megaMenuContent': {
+          visibility: 'visible'
+        }
+      },
+      megaMenuContent: {
         padding: theme.spacing(2.5, 0),
         position: 'absolute',
         top: 57,
@@ -48,7 +50,10 @@ const useStyles = makeStyles(
         boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.1)',
         visibility: 'hidden',
         '&:hover': {
-          visibility: 'visible'
+          visibility: 'visible',
+          '& + $root': {
+            color: theme.palette.primary.main
+          }
         },
         '&::after,&::before': {
           // hack for having edge to edge megamenu
@@ -87,9 +92,9 @@ export const Tab = ({ renderMegaMenu, ...props }: Props) => {
 
   if (renderMegaMenu) {
     return (
-      <div>
+      <div className={classes.megaMenuWrapper}>
+        <div className={classes.megaMenuContent}>{renderMegaMenu()}</div>
         {baseContent}
-        <div className={classes.megaMenuContainer}>{renderMegaMenu()}</div>
       </div>
     )
   }
