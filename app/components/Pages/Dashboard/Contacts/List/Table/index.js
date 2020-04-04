@@ -72,21 +72,21 @@ const ContactsList = props => {
     {
       id: 'cta',
       primary: true,
-      width: '6%',
+      width: '9%',
       class: 'visible-on-hover',
       render: ({ row: contact }) => <CtaAction contact={contact} />
     },
     {
       id: 'last_touched',
       sortable: false,
-      width: '19%',
+      width: '17%',
       class: 'opaque',
       render: ({ row: contact }) => <LastTouched contact={contact} />
     },
     {
       id: 'flows',
       sortable: false,
-      width: '8%',
+      width: '7%',
       class: 'opaque flows',
       render: ({ row: contact }) => (
         <FlowCell

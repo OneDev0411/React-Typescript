@@ -27,7 +27,8 @@ const useStyles = makeStyles(
     container: {
       position: 'relative',
       display: 'flex',
-      width: '100%'
+      width: '100%',
+      marginBottom: theme.spacing(1)
     },
     tabContainer: {
       width: '100%',
