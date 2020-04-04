@@ -123,7 +123,6 @@ export default function FontField({
   return (
     <Autocomplete
       disableClearable
-      autoSelect
       openOnFocus
       size="small"
       noOptionsText="No result"
