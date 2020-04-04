@@ -113,12 +113,12 @@ export function getSidebarSections(): SidebarSection[] {
         type: 'font-weight',
         label: 'H1 Font Weight'
       },
-      'divider',
       {
         name: 'h1-text-color',
         type: 'color',
         label: 'H1 Text Color'
       },
+      'divider',
       {
         name: 'h2-font-family',
         type: 'font-family',
