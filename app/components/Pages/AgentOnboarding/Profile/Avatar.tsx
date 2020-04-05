@@ -4,9 +4,11 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import { ImageUploader } from 'components/ImageUploader'
 
+import { Avatar as AvatarType } from './types'
+
 interface Props {
-  onChange: (src: string) => void
-  src?: string
+  onChange: (src: AvatarType) => void
+  data: AvatarType
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -22,16 +24,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function ProfileAvatar({ onChange, src = '' }) {
+export default function ProfileAvatar({ onChange, data }: Props) {
   const classes = useStyles()
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleOnChange = async data => {
-    const file = data.target ? data.target.files[0] : data.files.file
+    const file: Blob = data.target ? data.target.files[0] : data.files.file
     let reader = new FileReader()
 
     reader.addEventListener('load', () => {
-      onChange(reader.result)
+      if (typeof reader.result === 'string') {
+        onChange({ src: reader.result, file })
+      }
     })
 
     reader.readAsDataURL(file)
@@ -59,12 +63,16 @@ export default function ProfileAvatar({ onChange, src = '' }) {
         justifyContent="space-between"
       >
         <Box display="flex" alignItems="center">
-          <Avatar className={classes.large} variant="circle" src={src} />
+          <Avatar className={classes.large} variant="circle" src={data.src} />
           <Box ml={3} textAlign="left">
             <Typography variant="h6">Your profile image</Typography>
-            <Typography variant="body2">
-              To make it easier for you we’ve used your (google) image.
-            </Typography>
+            {data.type && (
+              <Typography variant="body2">
+                {`To make it easier for you we’ve used your ${
+                  data.type
+                } account's image.`}
+              </Typography>
+            )}
           </Box>
         </Box>
         <Button onClick={() => setIsModalOpen(true)} variant="outlined">
