@@ -1,10 +1,6 @@
 import Fetch from '../../../services/fetch'
 
-/**
- * upload user profile image
- * @param {object}
- */
-const uploadProfileImage = async file => {
+export async function uploadUserProfileImage(file: Blob): Promise<IUser> {
   try {
     const response = await new Fetch()
       .upload('/users/self/profile_image_url', 'patch')
@@ -15,5 +11,3 @@ const uploadProfileImage = async file => {
     throw error
   }
 }
-
-export default uploadProfileImage

@@ -7,7 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import { Button, IconButton, Box } from '@material-ui/core'
 
 import editUser from 'actions/user/edit'
-import uploadAvatar from 'actions/user/upload-avatar'
+import { uploadUserAvatarAction } from 'actions/user/upload-avatar'
 import { confirmation } from 'actions/confirmation'
 
 import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
@@ -145,7 +145,7 @@ export default compose(
         try {
           setAvatar(reader.result)
           setUploading(true)
-          await dispatch(uploadAvatar(file))
+          await dispatch(uploadUserAvatarAction(file))
         } catch (error) {
           setAvatar(null)
           console.log(error)

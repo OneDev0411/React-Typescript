@@ -1,13 +1,13 @@
-import upload from '../../models/user/upload-avatar'
-import * as actionsType from '../../constants/user'
+import * as actionsType from 'constants/user'
+import { uploadUserProfileImage } from 'models/user/upload-avatar'
 
-const uploadAvatar = image => async dispatch => {
+export const uploadUserAvatarAction = image => async dispatch => {
   dispatch({
     type: actionsType.UPLOAD_AVATAR_REQUEST
   })
 
   try {
-    const user = await upload(image)
+    const user = await uploadUserProfileImage(image)
 
     dispatch({
       user,
@@ -19,5 +19,3 @@ const uploadAvatar = image => async dispatch => {
     throw status
   }
 }
-
-export default uploadAvatar
