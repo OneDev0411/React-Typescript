@@ -56,13 +56,11 @@ declare interface ICalendarEventHeader {
 declare type ICalendarListRow = ICalendarEvent | ICalendarEventHeader
 
 interface ICalendarEventsList {
-  [key: string]: {
-    ICalendarMonthEvents
-  }
+  [month: string]: ICalendarMonthEvents
 }
 
 interface ICalendarMonthEvents {
-  [key: string]: ICalendarEvent[] | []
+  [day: string]: ICalendarEvent[]
 }
 
 interface IGoogleCalendarItem {

@@ -6,6 +6,10 @@ interface Props {
 }
 
 export function DateTime({ event }: Props) {
+  const startsAndFinishesInTheSameDay =
+    event.end_date &&
+    getDatePartTicks(event.timestamp) === getDatePartTicks(event.end_date)
+
   if (
     ![
       'crm_association',
@@ -13,7 +17,8 @@ export function DateTime({ event }: Props) {
       'email_campaign',
       'email_campaign_recipient',
       'email_thread_recipient'
-    ].includes(event.object_type)
+    ].includes(event.object_type) ||
+    !startsAndFinishesInTheSameDay
   ) {
     return <span>All day</span>
   }
@@ -32,8 +37,20 @@ export function DateTime({ event }: Props) {
 }
 
 function formatDate(date: Date | string | number): string {
-  return fecha.format(
-    new Date(date instanceof Date ? date : parseFloat(date as string) * 1000),
-    'hh:mm A'
+  return fecha.format(toDateObject(date), 'hh:mm\u00A0A') // non-breaking space
+}
+function toDateObject(date: Date | string | number): Date {
+  return new Date(
+    date instanceof Date ? date : parseFloat(date as string) * 1000
   )
+}
+function getDatePart(date: Date): Date {
+  const clone = new Date(date)
+
+  clone.setHours(0, 0, 0, 0)
+
+  return clone
+}
+function getDatePartTicks(date: Date | string | number): number {
+  return getDatePart(toDateObject(date)).getTime()
 }
