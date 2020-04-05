@@ -1,6 +1,5 @@
 import React from 'react'
 import cn from 'classnames'
-import { browserHistory } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { Box, ButtonBase, Theme, useTheme } from '@material-ui/core'
@@ -121,11 +120,7 @@ export function OAuthAccounts() {
           Connect Outlook
         </ButtonBase>
       </Box>
-      {connectedAccounts.length > 0 && <NextButton onClick={onClickNextStep} />}
+      {connectedAccounts.length > 0 && <NextButton to="/onboarding/profile" />}
     </Container>
   )
-}
-
-function onClickNextStep() {
-  browserHistory.push('/onboarding/profile')
 }
