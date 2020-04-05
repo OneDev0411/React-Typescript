@@ -18,6 +18,7 @@ import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
 import CheckIcon from 'components/SvgIcons/CircleCheck/IconCircleCheck'
+import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Header from '../Header'
 import SkipButton from '../SkipButton'
@@ -71,6 +72,9 @@ export function OAuthAccounts() {
   const connectedAccounts = useSelector((store: IAppState) =>
     selectAllConnectedAccounts(store.contacts.oAuthAccounts)
   )
+  const isLoadingConnectedAccounts = useSelector((store: IAppState) =>
+    Object.values(store.contacts.oAuthAccounts.loading).some(i => i)
+  )
 
   useEffectOnce(() => {
     dispatch(fetchOAuthAccounts())
@@ -98,7 +102,9 @@ export function OAuthAccounts() {
       />
       <Box marginBottom={6} width="100%" display="flex">
         <ButtonBase
-          disabled={google.connecting || isGoogleConnected}
+          disabled={
+            google.connecting || isGoogleConnected || isLoadingConnectedAccounts
+          }
           onClick={google.connect}
           className={cn(classes.baseButton, classes.googleButton)}
         >
@@ -109,7 +115,11 @@ export function OAuthAccounts() {
           Connect Google
         </ButtonBase>
         <ButtonBase
-          disabled={outlook.connecting || isOutlookConnected}
+          disabled={
+            outlook.connecting ||
+            isOutlookConnected ||
+            isLoadingConnectedAccounts
+          }
           onClick={outlook.connect}
           className={classes.baseButton}
         >
@@ -120,7 +130,10 @@ export function OAuthAccounts() {
           Connect Outlook
         </ButtonBase>
       </Box>
-      {connectedAccounts.length > 0 && <NextButton to="/onboarding/profile" />}
+      {isLoadingConnectedAccounts && <CircleSpinner />}
+      {connectedAccounts.length > 0 && !isLoadingConnectedAccounts && (
+        <NextButton to="/onboarding/profile" />
+      )}
     </Container>
   )
 }
