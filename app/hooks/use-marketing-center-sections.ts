@@ -31,7 +31,7 @@ const ALL_SECTIONS: SectionCollection = {
     items: [
       {
         isIndex: true,
-        title: 'My Designs',
+        title: 'All Designs',
         link: urlGenerator('/'),
         icon: MyDesignsIcon
       }

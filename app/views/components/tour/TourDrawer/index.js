@@ -273,7 +273,7 @@ export class TourDrawer extends React.Component {
                   <Footer justifyBetween>
                     <Flex alignCenter>
                       {!this.isNew && (
-                        <React.Fragment>
+                        <>
                           <Tooltip placement="top" caption="Delete">
                             <IconButton
                               disabled={isDisabled}
@@ -283,7 +283,7 @@ export class TourDrawer extends React.Component {
                             </IconButton>
                           </Tooltip>
                           <Divider margin="0 1rem" width="1px" height="2rem" />
-                        </React.Fragment>
+                        </>
                       )}
                       <AddAssociationButton
                         associations={values.clients}
@@ -313,7 +313,7 @@ export class TourDrawer extends React.Component {
                       </Tooltip>
                       <Button
                         variant="contained"
-                        color="primary"
+                        color="secondary"
                         disableElevation
                         disabled={isDisabled}
                         onClick={this.handleSubmit}

@@ -3,7 +3,7 @@ import { WithRouterProps } from 'react-router'
 
 import GlobalHeader from 'components/GlobalHeader'
 
-import List from 'components/Calendar'
+import Calendar from 'components/Calendar'
 import { CalendarRef } from 'components/Calendar/types'
 
 import Filters, {
@@ -51,7 +51,7 @@ export default function CalendarPage(props: WithRouterProps) {
       </div>
 
       <div className={classes.listContainer}>
-        <List ref={calendarRef} filter={filter} />
+        <Calendar ref={calendarRef} filter={filter} />
       </div>
     </div>
   )

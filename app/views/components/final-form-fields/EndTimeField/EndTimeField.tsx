@@ -73,7 +73,7 @@ export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
             {value && <Typography variant="body2">End Time:</Typography>}
             <Button
               aria-describedby={id}
-              color="primary"
+              color="secondary"
               ref={anchorRef}
               onClick={handleToggle}
             >
@@ -114,7 +114,6 @@ export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
                           onChange={setEndDate}
                         />
                         <Button
-                          color="primary"
                           onClick={e => {
                             // @ts-ignore FinalForm bug
                             onChange(endDate)
@@ -122,7 +121,7 @@ export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
                           }}
                           size="small"
                           type="button"
-                          variant="contained"
+                          variant="outlined"
                           className={classes.addButton}
                         >
                           Add

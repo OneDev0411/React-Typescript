@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
@@ -11,10 +11,10 @@ import { getActiveTeamId } from 'utils/user-teams'
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
 
-import { useTemplatesList } from './hooks/use-templates-list'
+import { useTemplates } from './hooks/use-templates'
 import Tabs from './Tabs'
 
-export function MarketingLayout({ params, router, render }) {
+export function MarketingLayout({ params, render }) {
   const sections = useMarketingCenterSections(params)
   const user = useSelector(({ user }) => user)
 
@@ -22,19 +22,19 @@ export function MarketingLayout({ params, router, render }) {
 
   const activeBrand = getActiveTeamId(user)
 
-  const { templates, loading } = useTemplatesList(activeBrand, templateTypes)
+  const { templates, loading } = useTemplates(activeBrand)
+
   const mediums = useMarketingCenterMediums(templates)
 
   const currentMedium = params.medium
-  const currentMediumTemplates = templates.filter(item =>
-    currentMedium ? item.medium === currentMedium : true
-  )
+  const currentPageItems = templates.filter(item => {
+    const mediumMatches = currentMedium ? item.medium === currentMedium : true
+    const typeMatches = templateTypes
+      ? templateTypes.includes(item.template_type)
+      : true
 
-  useEffect(() => {
-    if (templateTypes && !currentMedium && mediums.length > 0) {
-      router.push(`/dashboard/marketing/${templateTypes}/${mediums[0]}`)
-    }
-  }, [currentMedium, mediums, router, templateTypes])
+    return mediumMatches && typeMatches
+  })
 
   return (
     <Acl.Marketing fallbackUrl="/dashboard/mls">
@@ -42,7 +42,7 @@ export function MarketingLayout({ params, router, render }) {
         <title>Marketing | Rechat</title>
       </Helmet>
 
-      <PageLayout>
+      <PageLayout position="relative" overflow="hidden">
         <PageLayout.Header title="Marketing Center" />
         <PageLayout.Main>
           <Tabs
@@ -52,7 +52,7 @@ export function MarketingLayout({ params, router, render }) {
           />
           {render &&
             render({
-              items: currentMediumTemplates,
+              items: currentPageItems,
               isLoading: loading,
               types: params.types,
               medium: params.medium

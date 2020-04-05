@@ -1,8 +1,8 @@
 import fecha from 'fecha'
 
 import { createDayId } from '../create-day-id'
-
 import eventEmptyState from '../get-event-empty-state'
+import createMultiDayEvents from '../create-multi-day-events'
 
 import { Placeholder } from '../../types'
 
@@ -13,7 +13,9 @@ export function createListRows(
 ): ICalendarListRow[] {
   const activeDayId = createDayId(activeDate, false)
 
-  return Object.entries(events).flatMap(([month, daysOfMonth]) => {
+  const distributedEvents = createMultiDayEvents(events)
+
+  return Object.entries(distributedEvents).flatMap(([month, daysOfMonth]) => {
     if (
       placeholders.includes(Placeholder.Month) &&
       isEmptyMonth(month, daysOfMonth, activeDate)
@@ -50,7 +52,7 @@ function getMonthEvents(
   const now = new Date()
   const today = fecha.format(now, 'YYYY-MM-DD')
   const tomorrow = fecha.format(
-    new Date().setDate(now.getDate() + 1),
+    new Date(now).setDate(now.getDate() + 1),
     'YYYY-MM-DD'
   )
 

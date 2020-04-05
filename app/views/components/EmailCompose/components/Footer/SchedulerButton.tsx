@@ -12,7 +12,7 @@ function SchedulerButton(props) {
         inverse
         rightRounded
         iconSize="large"
-        appearance="primary"
+        appearance="secondary"
         onClick={props.onOpen}
       >
         <TimeIcon />

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { Button } from '@material-ui/core'
@@ -10,8 +10,11 @@ import { EventDrawer } from 'components/EventDrawer'
 import { selectContact } from 'reducers/contacts/list'
 
 class CreateEvent extends Component {
-  state = {
-    showDrawer: false
+  constructor(props) {
+    super(props)
+    this.state = {
+      showDrawer: false
+    }
   }
 
   openDrawer = () => {
@@ -35,7 +38,7 @@ class CreateEvent extends Component {
     const { user, associations, disabled } = this.props
 
     return (
-      <Fragment>
+      <>
         <Button
           disabled={disabled}
           variant="outlined"
@@ -53,7 +56,7 @@ class CreateEvent extends Component {
             submitCallback={this.onEventSubmit}
           />
         )}
-      </Fragment>
+      </>
     )
   }
 }

@@ -65,6 +65,7 @@ export default function HeaderOptions({
     <Box textAlign="right">
       <Button
         variant="text"
+        size="large"
         disabled={isMerging || isDismissing}
         onClick={handleDismissAll}
         className={classes.dismissAllButton}
@@ -73,6 +74,7 @@ export default function HeaderOptions({
       </Button>
       <Button
         variant="outlined"
+        size="large"
         disabled={isMerging || isDismissing}
         onClick={handleMergeAll}
       >

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import { Box } from '@material-ui/core'
@@ -20,7 +20,7 @@ import {
   CheckboxField,
   AssigneesField,
   AssociationsList,
-  EndTimeField,
+  EndDateTimeField,
   WhenFieldChanges,
   FieldError
 } from '../final-form-fields'
@@ -84,8 +84,6 @@ export class EventDrawer extends Component {
       (!props.event && !props.eventId) ||
       Object.keys(this.props.initialValues).length > 0
   }
-
-  static contextType = ConfirmationModalContext
 
   load = async () => {
     if (this.props.event) {
@@ -195,7 +193,7 @@ export class EventDrawer extends Component {
                   new Date(values.dueDate).getTime() < new Date().getTime() - 1
 
                 return (
-                  <React.Fragment>
+                  <>
                     <FormContainer
                       onSubmit={formProps.handleSubmit}
                       id="event-drawer-form"
@@ -242,7 +240,7 @@ export class EventDrawer extends Component {
                         {this.isNew ? (
                           <Title fullWidth />
                         ) : (
-                          <Fragment>
+                          <>
                             <Flex alignCenter style={{ height: '2.25rem' }}>
                               <CheckboxField
                                 name="status"
@@ -250,7 +248,7 @@ export class EventDrawer extends Component {
                               />
                             </Flex>
                             <Title />
-                          </Fragment>
+                          </>
                         )}
                       </Flex>
 
@@ -277,7 +275,7 @@ export class EventDrawer extends Component {
                             selectedDate={values.dueDate}
                           />
 
-                          <EndTimeField dueDate={values.dueDate} />
+                          <EndDateTimeField dueDate={values.dueDate} />
                         </FieldContainer>
 
                         <FieldError
@@ -307,7 +305,7 @@ export class EventDrawer extends Component {
                     <Footer justifyBetween alignCenter>
                       <Flex alignCenter>
                         {!this.isNew && (
-                          <React.Fragment>
+                          <>
                             <Tooltip placement="top" caption="Delete">
                               <IconButton
                                 isFit
@@ -333,7 +331,7 @@ export class EventDrawer extends Component {
                               width="1px"
                               height="2rem"
                             />
-                          </React.Fragment>
+                          </>
                         )}
                         <AddAssociationButton
                           associations={values.associations}
@@ -361,6 +359,7 @@ export class EventDrawer extends Component {
                         />
                       </Flex>
                       <ActionButton
+                        appearance="secondary"
                         type="button"
                         disabled={isDisabled}
                         onClick={this.handleSubmit}
@@ -369,7 +368,7 @@ export class EventDrawer extends Component {
                         {this.state.isSaving ? 'Saving...' : 'Save'}
                       </ActionButton>
                     </Footer>
-                  </React.Fragment>
+                  </>
                 )
               }}
             />
@@ -382,3 +381,4 @@ export class EventDrawer extends Component {
 
 EventDrawer.propTypes = propTypes
 EventDrawer.defaultProps = defaultProps
+EventDrawer.contextType = ConfirmationModalContext

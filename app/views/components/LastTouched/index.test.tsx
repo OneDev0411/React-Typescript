@@ -6,6 +6,8 @@ import fullContactJson from 'fixtures/contacts/full-contact.json'
 
 import mockDate, { RealDate } from 'utils/test-utils/mock-date'
 
+import { AppTheme } from '../../../AppTheme'
+
 import { LastTouched } from '.'
 
 const fullContact = fullContactJson as IContact
@@ -20,13 +22,21 @@ describe('Contact profile last touched component', () => {
   })
 
   it('renders', () => {
-    const wrapper = render(<LastTouched contact={fullContact} />)
+    const wrapper = render(
+      <AppTheme>
+        <LastTouched contact={fullContact} />
+      </AppTheme>
+    )
 
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
   it('renders touch periods without decimal points', () => {
-    const wrapper = render(<LastTouched contact={fullContact} />)
+    const wrapper = render(
+      <AppTheme>
+        <LastTouched contact={fullContact} />
+      </AppTheme>
+    )
 
     const decimalPointedPeriod =
       (fullContact.next_touch! - fullContact.last_touch!) / 86400

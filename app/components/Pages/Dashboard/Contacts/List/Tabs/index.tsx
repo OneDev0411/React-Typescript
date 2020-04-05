@@ -99,7 +99,7 @@ export const ContactsTabs = ({
   }
 
   const syncedContactsTab =
-    syncedContacts.accounts > 0 ? (
+    syncedContacts.contactsCount > 0 ? (
       <Tab
         key="synced-contact"
         value="synced-contact"
