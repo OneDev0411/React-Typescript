@@ -93,6 +93,8 @@ class App extends Component {
 
   componentWillUnmount() {
     this.props.dispatch(inactiveIntercom())
+
+    window.removeEventListener('online', this.handleOnlineEvent)
   }
 
   static getDerivedStateFromError(error) {
@@ -160,6 +162,8 @@ class App extends Component {
 
       // set user data for sentry
       this.setSentryUser(user, data.brand)
+
+      window.addEventListener('online', this.handleOnlineEvent)
     }
 
     // check user is mobile device or not
@@ -174,6 +178,11 @@ class App extends Component {
     if (user) {
       dispatch(syncOpenHouseData(user.access_token))
     }
+  }
+
+  handleOnlineEvent = () => {
+    // update the number of unread emails in Inbox nav link notification badge
+    this.props.dispatch(fetchUnreadEmailThreadsCount())
   }
 
   getBrand() {
