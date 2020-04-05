@@ -65,14 +65,14 @@ const ContactsList = props => {
     {
       id: 'name',
       primary: true,
-      width: '24%',
+      width: '21%',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       render: ({ row: contact }) => <Name contact={contact} />
     },
     {
       id: 'cta',
       primary: true,
-      width: '9%',
+      width: '12%',
       class: 'visible-on-hover',
       render: ({ row: contact }) => <CtaAction contact={contact} />
     },
