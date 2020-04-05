@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
-import { primary } from 'views/utils/colors'
+import IconCircleCheck from 'components/SvgIcons/CircleCheckOutline/IconCircleCheckOutline'
 
-import IconCircleCheck from 'components/SvgIcons/CircleCheck/IconCircleCheck'
+import { primary } from 'views/utils/colors'
 
 export const CSSLogo = styled.img`
   width: 9rem;
