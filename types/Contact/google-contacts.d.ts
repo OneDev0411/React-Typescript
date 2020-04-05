@@ -1,3 +1,5 @@
+declare type IOAuthAccountTypes = 'google_credential' | 'microsoft_credential'
+
 declare interface IOAuthAccountImport {
   redirect: string
   url: string

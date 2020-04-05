@@ -1,18 +1,24 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import React from 'react'
 import cn from 'classnames'
-import { useSelector } from 'react-redux'
-import { Box, Typography, ButtonBase } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { browserHistory } from 'react-router'
+import { useSelector, useDispatch } from 'react-redux'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
+import { Box, ButtonBase, Theme, useTheme } from '@material-ui/core'
+import { createStyles, makeStyles } from '@material-ui/styles'
+
+import { OAuthProvider } from 'constants/contacts'
 
 import { IAppState } from 'reducers'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
-import IconCsv from 'components/SvgIcons/Csv/IconCsv'
-import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
-import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
+
+import { iconSizes } from 'components/SvgIcons/icon-sizes'
+import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
+import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
+import CheckIcon from 'components/SvgIcons/CircleCheck/IconCircleCheck'
 
 import Header from '../Header'
 import SkipButton from '../SkipButton'
@@ -25,12 +31,6 @@ const useStyles = makeStyles(
       container: {
         maxWidth: '784px'
       },
-      marginBottom: {
-        marginBottom: theme.spacing(2)
-      },
-      buttonText: {
-        marginLeft: theme.spacing(2)
-      },
       baseButton: {
         position: 'relative',
         height: theme.spacing(30),
@@ -41,30 +41,53 @@ const useStyles = makeStyles(
         alignItems: 'center',
         border: `1px solid ${theme.palette.divider}`,
         borderRadius: `${theme.shape.borderRadius}px`,
-        '& > svg': {
-          width: theme.spacing(9),
-          height: theme.spacing(9),
-          marginBottom: theme.spacing(2)
+
+        '&:hover': {
+          boxShadow: theme.shadows[3]
         }
+      },
+      accountIcon: {
+        marginBottom: theme.spacing(2)
       },
       googleButton: {
         marginRight: theme.spacing(2)
       },
-      csvButton: {
-        height: theme.spacing(9),
-        width: '100%',
-        border: `1px solid ${theme.palette.divider}`,
-        borderRadius: `${theme.shape.borderRadius}px`
+      checkIcon: {
+        position: 'absolute',
+        top: theme.spacing(1),
+        right: theme.spacing(1),
+        fill: theme.palette.primary.main
       }
     }),
   { name: 'OAuthAccounts' }
 )
 
 export function OAuthAccounts() {
-  const classes = useStyles()
+  const theme = useTheme()
+  const classes = useStyles({})
+  const dispatch = useDispatch()
   const brand = useSelector((store: IAppState) => store.brand)
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
+  const connectedAccounts = useSelector((store: IAppState) =>
+    selectAllConnectedAccounts(store.contacts.oAuthAccounts)
+  )
+
+  useEffectOnce(() => {
+    dispatch(fetchOAuthAccounts())
+  })
+
+  const isConnected = (type: IOAuthAccountTypes) => {
+    return connectedAccounts.some(a => a.type === type)
+  }
+
+  const isGoogleConnected = isConnected('google_credential')
+  const isOutlookConnected = isConnected('microsoft_credential')
+
+  const accountIconSize = {
+    width: theme.spacing(9),
+    height: theme.spacing(9)
+  }
 
   return (
     <Container classes={{ box: classes.container }}>
@@ -74,37 +97,35 @@ export function OAuthAccounts() {
         title="Be Connected"
         subtitle="To get the best experience select the accounts you would like to connect"
       />
-      <Box marginBottom={6} width="100%">
-        <Box mb={1.5} display="flex">
-          <ButtonBase
-            disabled={google.connecting}
-            onClick={google.connect}
-            className={cn(classes.baseButton, classes.googleButton)}
-          >
-            <GoogleIcon />
-            Connect Google
-          </ButtonBase>
-          <ButtonBase
-            disabled={outlook.connecting}
-            onClick={outlook.connect}
-            className={classes.baseButton}
-          >
-            <IconOutlook />
-            Connect Outlook
-          </ButtonBase>
-        </Box>
-
+      <Box marginBottom={6} width="100%" display="flex">
         <ButtonBase
-          href="/dashboard/contacts/import/csv"
-          className={classes.csvButton}
+          disabled={google.connecting || isGoogleConnected}
+          onClick={google.connect}
+          className={cn(classes.baseButton, classes.googleButton)}
         >
-          <IconCsv />
-          <Typography variant="button" className={classes.buttonText}>
-            Import CSV spreadsheet
-          </Typography>
+          {isGoogleConnected && (
+            <CheckIcon className={classes.checkIcon} size={iconSizes.large} />
+          )}
+          <GoogleIcon className={classes.accountIcon} size={accountIconSize} />
+          Connect Google
+        </ButtonBase>
+        <ButtonBase
+          disabled={outlook.connecting || isOutlookConnected}
+          onClick={outlook.connect}
+          className={classes.baseButton}
+        >
+          {isOutlookConnected && (
+            <CheckIcon className={classes.checkIcon} size={iconSizes.large} />
+          )}
+          <IconOutlook className={classes.accountIcon} size={accountIconSize} />
+          Connect Outlook
         </ButtonBase>
       </Box>
-      <NextButton to="/onboarding/profile" />
+      {connectedAccounts.length > 0 && <NextButton onClick={onClickNextStep} />}
     </Container>
   )
+}
+
+function onClickNextStep() {
+  browserHistory.push('/onboarding/profile')
 }
