@@ -1,8 +1,10 @@
 import React, { ReactNode } from 'react'
 
+import { Box, Typography } from '@material-ui/core'
+
 import { EditEmailButton } from 'components/EditEmailButton'
 
-import { isEmailInProgress, isEmailScheduled, truncateString } from '../helpers'
+import { isEmailInProgress, isEmailScheduled } from '../helpers'
 import { StyledBadge, StyledLink } from '../styled'
 
 interface Props {
@@ -17,7 +19,9 @@ function TitleColumn({ data, reloadList }) {
 
   const title = (
     <div className="info-title">
-      <div>{truncateString(data.subject, 30)}</div>
+      <Box pr={2} maxWidth="100%">
+        <Typography noWrap>{data.subject}</Typography>
+      </Box>
       {isInProgress && (
         <StyledBadge appearance="warning">In Progress</StyledBadge>
       )}

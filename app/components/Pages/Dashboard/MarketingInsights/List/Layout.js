@@ -6,7 +6,7 @@ import { Box, Button } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
-import { PageTabs, Tab, TabLink, TabSpacer } from 'components/PageTabs'
+import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import Tooltip from 'components/tooltip'
 
 import { SortValues } from './helpers'
@@ -33,12 +33,12 @@ function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
   ]
 
   return (
-    <React.Fragment>
+    <>
       <Helmet>
         <title>Email | Rechat</title>
       </Helmet>
       <PageLayout>
-        <PageLayout.Header title="My Email">
+        <PageLayout.Header title="Email Insight">
           <Box textAlign="right">
             <Tooltip placement="bottom">
               <Button
@@ -54,11 +54,10 @@ function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
         <PageLayout.Main>
           <PageTabs
             defaultValue={currentUrl}
-            tabs={[
-              ...Items.map(({ label, to }, i) => {
-                return <TabLink key={i} label={label} to={to} value={to} />
-              }),
-              <TabSpacer key="spacer" />,
+            tabs={Items.map(({ label, to }, i) => (
+              <TabLink key={i} label={label} to={to} value={to} />
+            ))}
+            actions={[
               <Tab
                 key="sort-field"
                 label={
@@ -79,7 +78,7 @@ function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
           </Box>
         </PageLayout.Main>
       </PageLayout>
-    </React.Fragment>
+    </>
   )
 }
 
