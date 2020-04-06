@@ -62,6 +62,7 @@ const useStyles = makeStyles(
       justifyContent: 'center',
       backgroundColor: 'transparent',
       marginLeft: theme.spacing(-0.75 / 2),
+      bottom: theme.spacing(0.25 / 2),
       '& > div': {
         width: '100%',
         /* 

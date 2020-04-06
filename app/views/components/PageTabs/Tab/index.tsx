@@ -48,13 +48,15 @@ const useStyles = makeStyles(
       megaMenuContent: {
         padding: theme.spacing(2.5, 0),
         position: 'absolute',
-        top: 57,
+        top: 56,
         left: 0,
         width: '100%',
         minHeight: 250,
         zIndex: theme.zIndex.gridAction,
         background: theme.palette.background.paper,
         boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.1)',
+        // hack for hanling visibilty bug on safari
+        borderTop: `1px solid ${theme.palette.divider}`,
         visibility: 'hidden',
         '&:hover': {
           visibility: 'visible',

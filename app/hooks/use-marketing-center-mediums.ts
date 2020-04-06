@@ -3,7 +3,7 @@ import _groupBy from 'lodash/groupBy'
 
 import { onlyUnique, sortAlphabetically } from 'utils/helpers'
 
-type Response = {
+type Mediums = {
   [key: string]: string[]
 }
 
@@ -17,8 +17,8 @@ function sanitizeMediums(templates: IMarketingTemplate[]) {
 
 export function useMarketingCenterMediums(
   templates: IMarketingTemplate[]
-): Response {
-  const [mediums, setMediums] = useState<Response>({})
+): Mediums {
+  const [mediums, setMediums] = useState<Mediums>({})
 
   useEffect(() => {
     const groupHoliday = [
@@ -36,13 +36,13 @@ export function useMarketingCenterMediums(
 
       return i.template_type
     })
-    const mediums = {}
+    const nextMediums: Mediums = {}
 
     Object.keys(groupByType).forEach(key => {
-      mediums[key] = sanitizeMediums(groupByType[key])
+      nextMediums[key] = sanitizeMediums(groupByType[key])
     })
 
-    setMediums(mediums)
+    setMediums(nextMediums)
   }, [templates])
 
   return mediums

@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.tertiary.dark
     },
     title: {
-      ...theme.typography.subtitle2,
+      ...theme.typography.subtitle1,
       cursor: 'pointer',
       '&:hover': {
         color: theme.palette.primary.main
