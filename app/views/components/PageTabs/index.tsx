@@ -47,6 +47,9 @@ const useStyles = makeStyles(
       '& .MuiTab-root': {
         paddingLeft: 0,
         paddingRight: 0
+      },
+      '& .MuiTab-wrapper': {
+        alignItems: 'flex-start'
       }
     },
     actionsFlexContainer: {
