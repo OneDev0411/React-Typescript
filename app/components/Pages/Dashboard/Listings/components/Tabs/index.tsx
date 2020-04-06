@@ -48,18 +48,14 @@ const useStyle = makeStyles(
         justifyContent: 'flex-end',
         marginBottom: theme.spacing(1),
         padding: theme.spacing(0, 5)
+      },
+      spacer: {
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        width: theme.spacing(5),
+        marginBottom: theme.spacing(1)
       }
     }),
   { name: 'TabParts' }
-)
-const overrideTabStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      root: {
-        padding: theme.spacing(0, 0, 0, 5)
-      }
-    }),
-  { name: 'MuiTabs' }
 )
 
 const tabLinks: TabsShape[] = [
@@ -89,8 +85,6 @@ export const Tabs = ({
 }: Props & WithRouterProps) => {
   const currentUrl = location.pathname
   const classes = useStyle()
-
-  overrideTabStyles()
 
   let availableTabs: React.ReactNode[]
 
@@ -143,6 +137,7 @@ export const Tabs = ({
 
   return (
     <Box display="flex">
+      <Box className={classes.spacer} />
       <Box flexGrow="1">
         <PageTabs
           defaultValue={currentUrl}
