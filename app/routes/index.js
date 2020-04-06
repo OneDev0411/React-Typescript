@@ -583,7 +583,7 @@ export default (
         <IndexRoute component={AsyncContexts} />
       </Route>
 
-      <Route path="/dashboard/marketing-center-settings">
+      <Route path="/dashboard/mc-settings">
         <IndexRoute component={AsyncMarketingSettings} />
       </Route>
 
