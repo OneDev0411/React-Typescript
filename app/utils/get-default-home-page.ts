@@ -1,6 +1,6 @@
 import { hasUserAccess } from './user-teams'
 
-export function getUserDefaultHomepage(user: IUser): string {
+export function getUserDefaultHomepage(user?: IUser): string {
   const dashboardBaseUrl = '/dashboard/'
   let defaultHomepage = `${dashboardBaseUrl}mls`
 
