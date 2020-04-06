@@ -110,7 +110,7 @@ export function Register(props: WithRouterProps) {
     }
 
     try {
-      let redirect: string | undefined
+      let redirect: string = redirectTo
 
       await updatePassword(userPassword)
 
@@ -118,11 +118,19 @@ export function Register(props: WithRouterProps) {
         redirect = '/onboarding/confirm-agent-id'
 
         if (redirectTo) {
-          redirect = `${redirect}?redirectTo=${redirectTo}`
+          redirect = `${redirect}?rtd=${redirectTo}`
         }
+
+        browserHistory.push({
+          ...props.location,
+          query: {
+            ...props.location.query,
+            redirectTo: redirect
+          }
+        })
       }
 
-      await dispatch(submitSigninForm(loginInfo, redirect))
+      await dispatch(submitSigninForm(loginInfo))
 
       const user = await editUser(userInfo)
 
