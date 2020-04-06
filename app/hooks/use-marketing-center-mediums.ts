@@ -30,6 +30,10 @@ export function useMarketingCenterMediums(
   const [mediums, setMediums] = useState<Mediums>({})
 
   useEffect(() => {
+    if (!templates || templates.length === 0) {
+      return
+    }
+
     const groupedTemplatesByType = _groupBy(templates, i => {
       if (HOLIDAY_TEMPLATE_TYPES.includes(i.template.template_type)) {
         return 'Holiday'
@@ -38,13 +42,13 @@ export function useMarketingCenterMediums(
       return i.template.template_type
     })
 
-    const mediums = {}
+    const newMediums: Mediums = {}
 
     Object.keys(groupedTemplatesByType).forEach(key => {
-      mediums[key] = getFormattedUniqueMediums(groupedTemplatesByType[key])
+      newMediums[key] = getFormattedUniqueMediums(groupedTemplatesByType[key])
     })
 
-    setMediums(mediums)
+    setMediums(newMediums)
   }, [templates])
 
   return mediums

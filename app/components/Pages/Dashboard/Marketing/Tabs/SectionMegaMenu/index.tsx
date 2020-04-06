@@ -13,22 +13,29 @@ interface Props {
 
 export const SectionMegaMenu = ({ data, mediums }: Props) => {
   const { items } = data
+
   const sanitizeMediums = item => {
     if (!Object.keys(mediums).length || !item.value || !item.title) {
       return []
     }
 
-    return !Array.isArray(item.value)
-      ? mediums[item.value]
-      : mediums[item.title]
+    const mediumKey = Array.isArray(item.value) ? item.title : item.value
+
+    if (mediums[mediumKey]) {
+      return mediums[mediumKey]
+    }
+
+    return []
   }
 
   return (
     <Grid container spacing={2}>
       {items.map((item, i) => {
+        const currentSectionMediums = sanitizeMediums(item)
+
         return (
           <Grid key={i} item>
-            <Item data={item} mediums={sanitizeMediums(item)} />
+            <Item data={item} mediums={currentSectionMediums} />
           </Grid>
         )
       })}
