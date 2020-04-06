@@ -51,10 +51,17 @@ export function UploadFolder(props: Props) {
         <Flex>
           {/*
           // @ts-ignore TODO: js component */}
-          <UploadManager deal={props.deal}>
-            <Button size="small" color="secondary" variant="contained">
-              Upload
-            </Button>
+          <UploadManager deal={props.deal} disableClick>
+            {({ onClick }) => (
+              <Button
+                size="small"
+                color="secondary"
+                variant="contained"
+                onClick={onClick}
+              >
+                Upload
+              </Button>
+            )}
           </UploadManager>
         </Flex>
       </Header>
