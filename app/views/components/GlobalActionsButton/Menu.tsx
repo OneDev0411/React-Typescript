@@ -59,6 +59,7 @@ export default function Menu({ items, anchorEl, onItemClick, onClose }: Props) {
         vertical: 'top',
         horizontal: 'right'
       }}
+      transitionDuration={0}
     >
       <List
         dense
