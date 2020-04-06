@@ -23,6 +23,22 @@ const bgColor = ({ theme, type }: Props) => {
       return theme.palette.grey['100']
   }
 }
+
+const fontColor = ({ theme, type }: Props) => {
+  switch (type) {
+    case 'error':
+      return theme.palette.error.contrastText
+    case 'info':
+      return theme.palette.info.contrastText
+    case 'warn':
+      return theme.palette.warning.contrastText
+    case 'success':
+      return theme.palette.success.contrastText
+    default:
+      return theme.palette.common.black
+  }
+}
+
 const padding = ({ theme, dense }: Props) =>
   dense ? theme.spacing(0.5, 1) : theme.spacing(1.5, 2)
 const margin = ({ theme, dense }: Props) =>
@@ -31,7 +47,7 @@ export const CalloutContainer = styled.div<Props>`
   border-radius: 6px;
   padding: ${padding};
   margin: ${margin};
-  color: ${({ theme }: Props) => theme.palette.info.contrastText};
+  color: ${fontColor};
   background-color: ${bgColor};
   display: flex;
   align-items: center;
