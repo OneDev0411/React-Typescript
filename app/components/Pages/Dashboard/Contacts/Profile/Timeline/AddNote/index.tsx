@@ -47,7 +47,7 @@ function AddNote({
   return (
     <>
       <Button
-        color="secondary"
+        color="primary"
         variant="outlined"
         size="small"
         onClick={toggleDrawer}
