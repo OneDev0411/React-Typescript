@@ -141,7 +141,9 @@ class SavedSearchesList extends Component {
                 className={classes.savedSearchItem}
               >
                 <ListItemText
-                  primary={uppercaseFirstLetter(item.title || '')}
+                  primary={uppercaseFirstLetter(
+                    item.title || 'Untitled Search'
+                  )}
                   style={{
                     overflow: 'hidden',
                     cursor: 'pointer',
