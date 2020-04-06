@@ -28,7 +28,8 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginBottom: theme.spacing(1)
+      marginBottom: theme.spacing(1),
+      color: theme.palette.common.black
     }
   }),
   { name: 'DealNotification' }
