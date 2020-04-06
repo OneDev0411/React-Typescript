@@ -37,9 +37,6 @@ const useStyles = makeStyles((theme: Theme) =>
     icon: {
       minWidth: `${theme.spacing(3)}px !important`
     },
-    itemIcon: {
-      marginRight: theme.spacing(3)
-    },
     addIcon: {
       visibility: 'hidden'
     }
@@ -67,10 +64,8 @@ export default function MenuItem({ item, onClick }: Props) {
       classes={{ button: classes.itemButton }}
       onClick={handleClick}
     >
-      <ListItemIcon
-        className={cn(iconClasses.small, classes.icon, classes.itemIcon)}
-      >
-        <item.Icon />
+      <ListItemIcon className={classes.icon}>
+        <item.Icon className={iconClasses.small} />
       </ListItemIcon>
       <ListItemText primary={item.title} />
       <ListItemIcon
