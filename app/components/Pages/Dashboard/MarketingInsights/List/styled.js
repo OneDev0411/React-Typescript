@@ -44,6 +44,5 @@ export const StyledLink = styled(ALink)`
 `
 
 export const StyledBadge = styled(Badge)`
-  padding: 0.25rem 0.75rem;
   margin-left: 0.25rem;
 `

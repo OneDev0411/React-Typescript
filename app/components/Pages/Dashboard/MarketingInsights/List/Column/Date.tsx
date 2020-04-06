@@ -1,4 +1,5 @@
 import React from 'react'
+import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
 
@@ -8,7 +9,17 @@ interface Props {
   data: IEmailCampaign
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      fontSize: theme.typography.caption.fontSize,
+      color: theme.palette.grey[500]
+    }
+  })
+)
+
 function DateColumn({ data }: Props) {
+  const classes = useStyles()
   const isScheduled: boolean = isEmailScheduled(data)
   const isInProgress: boolean = isEmailInProgress(data)
 
@@ -22,7 +33,11 @@ function DateColumn({ data }: Props) {
     date = '-'
   }
 
-  return <span>{isScheduled ? `Scheduled for ${date}` : date}</span>
+  return (
+    <span className={classes.container}>
+      {isScheduled ? `Scheduled for ${date}` : date}
+    </span>
+  )
 }
 
 export default DateColumn

@@ -16,7 +16,6 @@ import NoSearchResults from '../../../../Partials/no-search-results'
 import Actions from './MarketingInsightsActions'
 import ThumbnailColumn from './Column/Thumbnail'
 import TitleColumn from './Column/Title'
-import DateColumn from './Column/Date'
 import RecipientsColumn from './Column/Recipients'
 import StatsColumn from './Column/Stats'
 import { InsightContainer } from './styled'
@@ -73,7 +72,7 @@ function List(props) {
         header: 'Title',
         id: 'title',
         primary: true,
-        width: '27%',
+        width: '32%',
         verticalAlign: 'center',
         render: ({ row }) => (
           <TitleColumn
@@ -86,23 +85,15 @@ function List(props) {
         header: 'Recipients',
         id: 'recipients',
         class: 'opaque',
-        width: '22%',
+        width: '26%',
         verticalAlign: 'center',
         render: ({ row }) => <RecipientsColumn data={row.recipients} />
-      },
-      {
-        header: 'Date',
-        id: 'date',
-        class: 'opaque',
-        width: '21%',
-        verticalAlign: 'center',
-        render: ({ row }) => <DateColumn data={row} />
       },
       {
         header: 'Delivered',
         id: 'delivered',
         class: 'opaque',
-        width: '10%',
+        width: '14%',
         verticalAlign: 'center',
         render: ({ row: { executed_at, delivered, sent, failed } }) => {
           if (!executed_at) {
@@ -113,9 +104,8 @@ function List(props) {
 
           return (
             <StatsColumn
-              value={value}
-              primaryHint={`Delivered: ${value}`}
-              secondryHint={`${percent(failed, sent)} Bounced`}
+              title={`Delivered: ${value}`}
+              details={`${percent(failed, sent)} Bounced`}
             />
           )
         }
@@ -124,7 +114,7 @@ function List(props) {
         header: 'Open Rate',
         id: 'open-rate',
         class: 'opaque',
-        width: '10%',
+        width: '14%',
         verticalAlign: 'center',
         render: ({ row: { executed_at, opened, sent } }) => {
           if (!executed_at) {
@@ -135,9 +125,8 @@ function List(props) {
 
           return (
             <StatsColumn
-              value={value}
-              primaryHint={`Open Rate: ${value}`}
-              secondryHint={`${opened} Recipients`}
+              title={`Open Rate: ${value}`}
+              details={`${opened} Recipients`}
             />
           )
         }
@@ -146,7 +135,7 @@ function List(props) {
         header: 'Click Rate',
         id: 'click-rate',
         class: 'opaque',
-        width: '10%',
+        width: '14%',
         verticalAlign: 'center',
         render: ({ row: { executed_at, clicked, sent } }) => {
           if (!executed_at) {
@@ -157,9 +146,8 @@ function List(props) {
 
           return (
             <StatsColumn
-              value={value}
-              primaryHint={`Click Rate: ${value}`}
-              secondryHint={`${clicked} Times`}
+              title={`Click Rate: ${value}`}
+              details={`${clicked} Times`}
             />
           )
         }

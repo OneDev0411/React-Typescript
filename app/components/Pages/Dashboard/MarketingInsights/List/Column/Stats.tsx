@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       lineHeight: theme.typography.button.lineHeight,
       cursor: 'help',
-      textDecoration: 'underline',
       '&:hover + $popover': {
         visibility: 'visible'
       }
@@ -27,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: 160,
       position: 'absolute',
       top: 0,
-      left: theme.spacing(-6.5),
+      left: 0,
       marginTop: theme.spacing(3.5),
       background: '#fff',
       visibility: 'hidden',
@@ -42,20 +41,19 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Props {
-  value: string
-  primaryHint: string
-  secondryHint: string
+  title: string
+  details: string
 }
 
-function StatsColumn({ value, primaryHint, secondryHint }: Props) {
+function StatsColumn({ title, details }: Props) {
   const classes = useStyles()
 
   return (
     <div className={classes.container}>
-      <span className={classes.statLabel}>{value}</span>
+      <span className={classes.statLabel}>{title}</span>
       <List disablePadding className={classes.popover}>
         <ListItem>
-          <ListItemText primary={primaryHint} secondary={secondryHint} />
+          <ListItemText primary={details} />
         </ListItem>
       </List>
     </div>
