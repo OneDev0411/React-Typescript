@@ -1,7 +1,9 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { Uploader } from 'components/Uploader'
+
+import { AppTheme } from '../../../../../AppTheme'
 
 import { AssetImage } from './AssetImage'
 
@@ -27,11 +29,13 @@ export const load = async () => {
       },
       render() {
         ReactDOM.render(
-          <AssetImage
-            model={this.model}
-            target={target}
-            templateId={templateId}
-          />,
+          <AppTheme>
+            <AssetImage
+              model={this.model}
+              target={target}
+              templateId={templateId}
+            />
+          </AppTheme>,
           this.el
         )
 
@@ -82,7 +86,7 @@ export const load = async () => {
               }
             }}
           >
-            <Fragment>Click or drop images here</Fragment>
+            <>Click or drop images here</>
           </Uploader>,
           this.el
         )

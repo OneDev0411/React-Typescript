@@ -6,8 +6,11 @@ import { Container, CropButton, Image } from './styled'
 import { uploadAsset } from '../helpers'
 
 export class AssetImage extends React.Component {
-  state = {
-    isCropperOpen: false
+  constructor(props) {
+    super(props)
+    this.state = {
+      isCropperOpen: false
+    }
   }
 
   getTargetElement() {
@@ -23,7 +26,7 @@ export class AssetImage extends React.Component {
 
     const setSrc = () => this.props.target.set('src', url)
     const setBg = () => {
-      const style = Object.assign({}, this.props.target.get('style'))
+      const style = { ...this.props.target.get('style') }
 
       style['background-image'] = `url(${url})`
       this.props.target.set('style', style)
