@@ -191,6 +191,9 @@ const theme = createMuiTheme({
     },
     MuiButtonGroup: {
       disableRipple: true
+    },
+    MuiTooltip: {
+      arrow: true
     }
   },
   zIndex: {
