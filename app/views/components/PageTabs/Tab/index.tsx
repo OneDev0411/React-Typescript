@@ -23,7 +23,7 @@ const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       root: {
-        minWidth: theme.spacing(8),
+        minWidth: 'unset',
         color: theme.palette.common.black,
         ...theme.typography.body1,
         zIndex: 1,

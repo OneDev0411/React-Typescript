@@ -62,7 +62,7 @@ export function AgentsList(props: Props) {
       <Search
         value={searchTerm}
         onChange={debouncedSetSearchTerm}
-        style={{ marginBottom: '1rem' }}
+        style={{ margin: '1rem 0' }}
         placeholder="Search for teams or agents"
       />
 
