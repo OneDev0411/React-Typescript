@@ -1,5 +1,4 @@
 import { Theme, withStyles } from '@material-ui/core'
-import cssTriangle from 'css-triangle'
 
 export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
   // @global is handled by jss-plugin-global.
@@ -70,71 +69,10 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
       fontSize: theme.typography.body1.fontSize,
       fontWeight: theme.typography.body1.fontWeight,
       padding: theme.spacing(1, 1.5),
-      position: 'relative',
-
-      // TODO: remove all arrow related styles (from here to end of this rule)
-      //  when upgraded to [4.7.0](https://github.com/mui-org/material-ui/blob/master/CHANGELOG.md#470)
-      //  or above that has built-in support for arrows. we can enable arrows
-      //  for all tooltip by default with a default prop in theme definition
-      //  like what we did for disabling ink ripple for buttons globally
-      '&::before': {
-        content: '""',
-        position: 'absolute'
-      },
-      // selector for top/bottom positioned tooltips is changed because of
-      // this issue: https://github.com/mui-org/material-ui/issues/17424
-      '[x-placement=bottom] > &::before': {
-        top: -8,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        ...cssTriangle.generate({
-          ...{
-            width: 16,
-            height: 8,
-            color: theme.palette.common.black
-          },
-          direction: 'top'
-        })
-      },
-      '[x-placement=top] > &::before': {
-        bottom: -8,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        ...cssTriangle.generate({
-          ...{
-            width: 16,
-            height: 8,
-            color: theme.palette.common.black
-          },
-          direction: 'bottom'
-        })
-      },
-      '&.MuiTooltip-tooltipPlacementLeft::before': {
-        right: -8,
-        top: '50%',
-        transform: 'translateY(-50%)',
-        ...cssTriangle.generate({
-          ...{
-            width: 8,
-            height: 16,
-            color: theme.palette.common.black
-          },
-          direction: 'right'
-        })
-      },
-      '&.MuiTooltip-tooltipPlacementRight::before': {
-        left: -8,
-        top: '50%',
-        transform: 'translateY(-50%)',
-        ...cssTriangle.generate({
-          ...{
-            width: 8,
-            height: 16,
-            color: theme.palette.common.black
-          },
-          direction: 'left'
-        })
-      }
+      position: 'relative'
+    },
+    '.MuiTooltip-arrow': {
+      color: theme.palette.common.black
     },
     '.MuiButton-outlined:not(.MuiButton-outlinedPrimary, .MuiButton-outlinedSecondary)': {
       borderColor: theme.palette.common.black
