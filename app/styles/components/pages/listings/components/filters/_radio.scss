@@ -27,7 +27,7 @@
   &:checked {
     + .c-radio__label {
       &:before {
-        background-color: $brand-primary;
+        background-color: $brand-secondary;
         box-shadow: inset 0 0 0 4px $gray-lighter;
       }
     }
