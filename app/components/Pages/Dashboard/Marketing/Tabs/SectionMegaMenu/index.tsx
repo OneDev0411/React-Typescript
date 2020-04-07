@@ -18,9 +18,13 @@ export const SectionMegaMenu = ({ data, mediums }: Props) => {
       return []
     }
 
-    return !Array.isArray(item.value)
-      ? mediums[item.value]
-      : mediums[item.title]
+    const mediumKey = !Array.isArray(item.value) ? item.value : item.title
+
+    if (mediums[mediumKey]) {
+      return mediums[mediumKey]
+    }
+
+    return []
   }
 
   return (
