@@ -68,8 +68,7 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
       background: theme.palette.common.black,
       fontSize: theme.typography.body1.fontSize,
       fontWeight: theme.typography.body1.fontWeight,
-      padding: theme.spacing(1, 1.5),
-      position: 'relative'
+      padding: theme.spacing(1, 1.5)
     },
     '.MuiTooltip-arrow': {
       color: theme.palette.common.black
