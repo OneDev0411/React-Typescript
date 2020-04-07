@@ -17,6 +17,7 @@ $gray-lighter: #f2f2f2 !default;
 
 $brand-primary: #00b286 !default;
 $brand-primary-dark: #008060 !default;
+$brand-secondary: #0945eb !default;
 $brand-success: #4caf50 !default;
 $brand-info: #2196f3 !default;
 $brand-warning: #ff9900 !default;
@@ -42,10 +43,11 @@ $link-hover-decoration: underline !default;
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-$system-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue";
+$system-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
 
-$font-family-sans-serif: "LatoRegular", #{$system-font-family}, sans-serif !default;
-$font-family-serif: "LatoRegular", #{$system-font-family}, serif !default;
+$font-family-sans-serif: 'LatoRegular', #{$system-font-family}, sans-serif !default;
+$font-family-serif: 'LatoRegular', #{$system-font-family}, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace !default;
 $font-family-base: $font-family-serif !default;
