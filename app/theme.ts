@@ -193,8 +193,7 @@ const theme = createMuiTheme({
       disableRipple: true
     },
     MuiTooltip: {
-      arrow: true,
-      leaveDelay: 100000
+      arrow: true
     }
   },
   zIndex: {
