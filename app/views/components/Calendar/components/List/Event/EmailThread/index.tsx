@@ -60,7 +60,11 @@ export function EmailThread({ style, event }: Props) {
                 {index !== 0 && <>,&nbsp;</>}
                 <TextMiddleTruncate
                   text={displayName || recipient}
-                  maxLength={15}
+                  maxLength={othersText ? 20 : 30}
+                  style={{
+                    position: 'relative',
+                    zIndex: 1
+                  }}
                 />
               </React.Fragment>
             )

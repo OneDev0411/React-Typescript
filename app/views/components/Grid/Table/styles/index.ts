@@ -28,7 +28,8 @@ export const styles = (theme: Theme) =>
           visibility: 'visible'
         },
         '& .underline-on-hover': {
-          textDecoration: 'underline'
+          textDecoration: 'underline',
+          color: theme.palette.secondary.main
         }
       }
     }

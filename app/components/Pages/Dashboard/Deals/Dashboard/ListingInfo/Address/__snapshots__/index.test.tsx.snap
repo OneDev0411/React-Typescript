@@ -6,7 +6,7 @@ exports[`Deal address component renders with address 1`] = `
   title=""
 >
   <h6
-    class="MuiTypography-root-15 MuiTypography-subtitle1-26"
+    class="MuiTypography-root-15 MuiTypography-h6-25"
   >
     1200 Main St
   </h6>
@@ -30,7 +30,7 @@ exports[`Deal address component renders without address 1`] = `
   title=""
 >
   <h6
-    class="MuiTypography-root-91 MuiTypography-subtitle1-102"
+    class="MuiTypography-root-91 MuiTypography-h6-101"
   >
     Some title for a deal without address
   </h6>

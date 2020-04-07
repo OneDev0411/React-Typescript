@@ -35,10 +35,12 @@ function sanitizeText(text) {
 TextMiddleTruncate.propTypes = {
   text: PropTypes.string.isRequired,
   maxLength: PropTypes.number,
-  tooltipPlacement: PropTypes.string
+  tooltipPlacement: PropTypes.string,
+  style: PropTypes.object
 }
 
 TextMiddleTruncate.defaultProps = {
   maxLength: 40,
-  tooltipPlacement: 'top'
+  tooltipPlacement: 'top',
+  style: {}
 }

@@ -32,7 +32,7 @@ export function Activity(props) {
 
       <TextMiddleTruncate
         text={props.latestActivity.comment}
-        maxLength={60}
+        maxLength={50}
         tooltipPlacement="bottom"
       />
     </LastActivity>

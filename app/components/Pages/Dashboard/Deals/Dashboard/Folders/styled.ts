@@ -175,8 +175,8 @@ export const LabelItem = styled.div`
   background-color: #e6e6e6;
   padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
-  min-width: 6rem;
   border-radius: 0.75rem;
   margin-right: 0.5rem;
   max-height: 1.5rem;
+  white-space: nowrap;
 `
