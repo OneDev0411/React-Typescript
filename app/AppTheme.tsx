@@ -10,12 +10,12 @@ export const AppTheme = ({ children }) => (
     {/* Enable overriding styles with styled(SomeCmp)`...`. See https://material-ui.com/guides/interoperability#controlling-priority */}
     <StylesProvider injectFirst>
       {/* Provide theme for material-ui built-in components like buttons */}
+      <MaterialUiGlobalOverrides />
       <ThemeProvider theme={theme}>
         {/* Provide theme to be used for our own styled components */}
         <StyledComponentsThemeProvider theme={theme}>
           <>{children}</>
         </StyledComponentsThemeProvider>
-        <MaterialUiGlobalOverrides />
       </ThemeProvider>
     </StylesProvider>
   </>
