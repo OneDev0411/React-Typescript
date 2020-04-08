@@ -21,6 +21,10 @@ import extractMoreQuickSuggestions, {
 } from './helpers/extract-more-quick-suggestions'
 import RecipientQuickSuggestions from './components/RecipientQuickSuggestions'
 
+interface StateProps {
+  user: IUser
+  dealRoles: IDealRole[]
+}
 interface Props {
   deal?: IDeal
   currentRecipients?: IDenormalizedEmailRecipientInput[]
