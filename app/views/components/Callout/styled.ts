@@ -27,13 +27,13 @@ const bgColor = ({ theme, type }: Props) => {
 const fontColor = ({ theme, type }: Props) => {
   switch (type) {
     case 'error':
-      return theme.palette.error.contrastText
+      return theme.palette.error.dark
     case 'info':
-      return theme.palette.info.contrastText
+      return theme.palette.info.dark
     case 'warn':
-      return theme.palette.warning.contrastText
+      return theme.palette.warning.dark
     case 'success':
-      return theme.palette.success.contrastText
+      return theme.palette.success.dark
     default:
       return theme.palette.common.black
   }
