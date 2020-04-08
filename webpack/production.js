@@ -104,18 +104,34 @@ webpackConfig.plugins.push(
   })
 )
 
-webpackConfig.module.rules.push({
-  test: /\.(sa|sc|c)ss$/,
-  use: [
-    'css-loader',
-    {
-      loader: 'postcss-loader',
-      options: {
-        plugins: postcss
+webpackConfig.module.rules.push(
+  {
+    test: /\.css/,
+    use: [
+      'style-loader',
+      'css-loader',
+      {
+        loader: 'postcss-loader',
+        options: {
+          plugins: postcss
+        }
       }
-    },
-    'sass-loader'
-  ]
-})
+    ]
+  },
+  {
+    test: /\.scss/,
+    use: [
+      'style-loader',
+      'css-loader',
+      {
+        loader: 'postcss-loader',
+        options: {
+          plugins: postcss
+        }
+      },
+      'sass-loader'
+    ]
+  }
+)
 
 export default webpackConfig
