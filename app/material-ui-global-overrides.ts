@@ -30,11 +30,6 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
       textTransform: 'uppercase'
     },
 
-    '@media(min-width: 960px)': {
-      '.MuiTab-root': {
-        fontSize: '0.875rem'
-      }
-    },
     '.MuiTab-root': {
       minWidth: '7rem'
     },
