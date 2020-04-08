@@ -107,7 +107,6 @@ webpackConfig.plugins.push(
 webpackConfig.module.rules.push({
   test: /\.(sa|sc|c)ss$/,
   use: [
-    MiniCssExtractPlugin.loader,
     'css-loader',
     {
       loader: 'postcss-loader',
