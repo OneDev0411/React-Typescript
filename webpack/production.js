@@ -3,7 +3,6 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 
 import moment from 'moment'
@@ -47,9 +46,6 @@ webpackConfig.entry = {
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
   new MomentLocalesPlugin(),
-  new MiniCssExtractPlugin({
-    filename: '[name].[hash].css'
-  }),
   new OptimizeCSSAssetsPlugin(),
   new HtmlWebpackPlugin({
     template: appConfig.compile.template,
