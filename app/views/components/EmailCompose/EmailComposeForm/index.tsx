@@ -262,6 +262,7 @@ function EmailComposeForm<T>({
                   }
                 }}
                 fullWidth
+                color="secondary"
                 component={TextField}
               />
 
