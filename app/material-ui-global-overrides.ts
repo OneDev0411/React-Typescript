@@ -30,26 +30,9 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
       textTransform: 'uppercase'
     },
 
-    '@media(min-width: 960px)': {
-      '.MuiTab-root': {
-        fontSize: '0.875rem'
-      }
-    },
-    '.MuiTab-root': {
-      minWidth: '7rem'
-    },
-    '.MuiTabs-indicator': {
-      height: 3
-    },
-
     '.MuiInputBase-root label, .MuiFormControlLabel-root': {
       // neutralize bootstrap styles!
       marginBottom: 'initial'
-    },
-    '.MuiAvatar-root': {
-      background: theme.palette.common.black,
-      color: theme.palette.common.white,
-      fill: theme.palette.common.white
     },
     '.MuiOutlinedInput-notchedOutline legend': {
       // neutralize bootstrap styles!
