@@ -15,3 +15,5 @@ export interface SidebarSection {
   name: string
   fields: (SidebarSectionField | 'divider')[]
 }
+
+export type ImageUploadHandler = (image: File) => Promise<IFile>

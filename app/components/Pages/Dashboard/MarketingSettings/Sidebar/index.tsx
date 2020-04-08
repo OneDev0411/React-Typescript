@@ -13,7 +13,7 @@ import {
 
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
-import { SidebarSection } from '../types'
+import { SidebarSection, ImageUploadHandler } from '../types'
 import Field from './Field'
 
 const useStyles = makeStyles(
@@ -37,11 +37,16 @@ const useStyles = makeStyles(
 interface Props {
   sections: SidebarSection[]
   settings: BrandSettingsPalette
-  // onImageUpload: () => void
+  onImageUpload: ImageUploadHandler
   onUpdate: (newSettings: BrandSettingsPalette) => void
 }
 
-export default function Sidebar({ sections, settings, onUpdate }: Props) {
+export default function Sidebar({
+  sections,
+  settings,
+  onImageUpload,
+  onUpdate
+}: Props) {
   const classes = useStyles()
 
   const handleUpdateSettings = (
@@ -68,9 +73,9 @@ export default function Sidebar({ sections, settings, onUpdate }: Props) {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Grid container spacing={2}>
-                {section.fields.map(field =>
+                {section.fields.map((field, index) =>
                   field === 'divider' ? (
-                    <Grid container item>
+                    <Grid container item key={index}>
                       <div className={classes.dividerContainer}>
                         <Divider />
                       </div>
@@ -81,6 +86,7 @@ export default function Sidebar({ sections, settings, onUpdate }: Props) {
                       {...field}
                       value={settings[field.name]}
                       onChange={handleUpdateSettings}
+                      onImageUpload={onImageUpload}
                     />
                   )
                 )}

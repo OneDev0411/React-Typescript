@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import { Grid, Button, Divider } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router'
@@ -9,11 +9,14 @@ import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-list
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
 import TemplatePreview from 'components/TemplatePreview'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { getActiveTeamPalette, getActiveTeamId } from 'utils/user-teams'
 import { ACL } from 'constants/acl'
 
 import { updatePalette } from 'models/brand/update-palette'
+import { uploadBrandAsset } from 'models/brand/upload-asset'
+import { invalidateThumbnails } from 'models/instant-marketing/invalidate-thumbnails'
 
 import { getUserTeams } from 'actions/user/teams'
 
@@ -33,6 +36,7 @@ export function MarketingCenterSettings() {
   const [settings, setSettings] = useState<BrandSettingsPalette>(
     getActiveTeamPalette(user)
   )
+  const confirmation = useContext(ConfirmationModalContext)
 
   useEffectOnce(() => {
     async function loadMockLising() {
@@ -52,8 +56,15 @@ export function MarketingCenterSettings() {
       return
     }
 
-    setSettings(defaultSettings)
-    setDefaultSettings(null)
+    confirmation.setConfirmationModal({
+      message: `All your unsaved changes will be lost.
+Are you sure?`,
+      confirmLabel: 'Yes',
+      onConfirm: () => {
+        setSettings(defaultSettings)
+        setDefaultSettings(null)
+      }
+    })
   }
 
   const handleUpdateSettings = (newSettings: BrandSettingsPalette) => {
@@ -67,10 +78,24 @@ export function MarketingCenterSettings() {
   const saveSettings = async () => {
     setIsLoading(true)
     await updatePalette(activeBrand, settings)
+    await invalidateThumbnails(activeBrand)
     setDefaultSettings(null)
     setIsLoading(false)
     dispatch(getUserTeams(user))
   }
+
+  const handleImageUpload = useCallback(
+    async (image: File) => {
+      setIsLoading(true)
+
+      const file = await uploadBrandAsset(activeBrand, image)
+
+      setIsLoading(false)
+
+      return file
+    },
+    [activeBrand]
+  )
 
   const sidebarSections = getSidebarSections()
 
@@ -126,6 +151,7 @@ export function MarketingCenterSettings() {
               sections={sidebarSections}
               settings={settings}
               onUpdate={handleUpdateSettings}
+              onImageUpload={handleImageUpload}
             />
           </Grid>
         </PageLayout.Main>
