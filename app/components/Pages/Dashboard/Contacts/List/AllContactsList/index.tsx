@@ -5,7 +5,6 @@ import { IAppState } from 'reducers'
 import { resetActiveFilters as resetActiveFiltersAction } from 'actions/filter-segments/active-filters'
 import { selectActiveFilters } from 'reducers/filter-segments'
 
-import Badge from 'components/Badge'
 import ToolTip from 'components/tooltip'
 import {
   ListTitle,
@@ -91,14 +90,7 @@ function AllContactsList({
           isSelected={isSyncedListSelected}
           onClick={() => clickHandler(SYNCED_CONTACTS_LIST_ID)}
         >
-          <ListItemName>
-            Synced Contacts
-            {syncedContacts.contactsCount > 0 && (
-              <Badge large style={{ marginLeft: '0.5rem' }}>
-                {syncedContacts.contactsCount}
-              </Badge>
-            )}
-          </ListItemName>
+          <ListItemName>Synced Contacts</ListItemName>
         </ListItem>
       )}
       <ListItem

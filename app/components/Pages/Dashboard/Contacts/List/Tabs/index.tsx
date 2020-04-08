@@ -1,10 +1,8 @@
 import React, { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Box } from '@material-ui/core'
 
 import { PageTabs, Tab } from 'components/PageTabs'
 import SavedSegments from 'components/Grid/SavedSegments/List'
-import Badge from 'components/Badge'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 import { IAppState } from 'reducers'
@@ -99,20 +97,13 @@ export const ContactsTabs = ({
   }
 
   const syncedContactsTab =
-    syncedContacts.contactsCount > 0 ? (
+    syncedContacts.accounts > 0 ? (
       <Tab
         key="synced-contact"
         value="synced-contact"
         label={
           <span onClick={() => clickHandler(SYNCED_CONTACTS_LIST_ID)}>
             Synced Contacts
-            {syncedContacts.contactsCount > 0 && (
-              <Box display="inline-flex" ml={0.5}>
-                <Badge large appearance="success">
-                  {syncedContacts.contactsCount}
-                </Badge>
-              </Box>
-            )}
           </span>
         }
       />
