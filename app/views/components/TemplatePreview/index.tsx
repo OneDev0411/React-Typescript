@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
+import useDeepCompareEffect from 'use-deep-compare-effect'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { Iframe } from 'components/Iframe'
@@ -18,7 +19,7 @@ interface Props {
 export default function TemplatePreview({ template, palette, data }: Props) {
   const [previewMarkup, setPreviewMarkup] = useState<string>('')
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     async function loadTemplate() {
       const renderData = getTemplatePreviewRenderData(palette)
 
