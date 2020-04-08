@@ -246,6 +246,7 @@ export function ChipsInput<T>({
         return (
           <div className={classes.container}>
             <TextFieldComponent
+              color="secondary"
               inputRef={inputRef}
               fullWidth
               {...TextFieldProps}
