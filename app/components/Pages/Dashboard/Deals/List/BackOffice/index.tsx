@@ -7,7 +7,6 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core'
 import { IAppState } from 'reducers/index'
 
 import PageLayout from 'components/GlobalPageLayout'
-import { SearchInput } from 'components/GlobalHeaderWithSearch'
 
 import { searchDeals, getDeals } from 'actions/deals'
 
@@ -16,6 +15,7 @@ import TabFilters from './Filters'
 import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
 
 import { ExportDeals } from '../components/ExportDeals'
+import { DebouncedSearchInput } from '../components/SearchInput'
 
 import { SearchQuery } from './types'
 
@@ -62,18 +62,16 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
     term: searchCriteria
   }
 
-  const handleQueryChange = (e): void => {
-    const { value } = e.target
-
+  const handleQueryChange = (value): void => {
     setSearchCriteria(value)
 
     if (value.length === 0) {
       dispatch(getDeals(user))
-
-      return
     }
 
-    dispatch(searchDeals(user, value))
+    if (value.length > 3 && searchQuery.type === 'inbox') {
+      dispatch(searchDeals(user, value))
+    }
   }
 
   useDeepCompareEffect(() => {
@@ -86,7 +84,7 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
     <PageLayout>
       <PageLayout.Header title="Deals Admin">
         <div className={classes.headerContainer}>
-          <SearchInput
+          <DebouncedSearchInput
             placeholder="Search deals by address, MLS# or agent name..."
             onChange={handleQueryChange}
           />

@@ -29,7 +29,7 @@ export function uppercaseFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
-export function getNameInitials(name) {
+export function getNameInitials(name, length = 2) {
   if (!name) {
     return
   }
@@ -39,7 +39,7 @@ export function getNameInitials(name) {
     .map(word => /^[A-Za-z\s]+$/.test(word) ? word.charAt(0).toUpperCase() : '')
     .join('')
     .trim()
-    .substring(0, 2)
+    .substring(0, length)
 
   if (nameInitials) return nameInitials
 
