@@ -1,33 +1,10 @@
-import styled from "styled-components"
 import React from 'react'
 import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
 
-import { Dropdown } from '../../../../components/Dropdown'
-import LinkButton from '../../../../components/Button/LinkButton'
-import { eventTypesIcons } from '../../../../utils/event-types-icons'
-import ArrowDropDown from '../../../../components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import { grey, primary } from '../../../../utils/colors'
-
-export const Button = styled(LinkButton)`
-  min-width: 160px;
-  font-weight: 500;
-  justify-content: space-between;
-  background-color: ${grey.A150};
-  color: ${({ isOpen }) => (isOpen ? primary : '#000')};
-
-  :hover {
-    > svg {
-      fill: ${primary};
-    }
-  }
-`
-
-export const IconArrow = styled(ArrowDropDown)`
-  position: relative;
-  margin-left: 1em;
-  transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
-`
+import { Dropdown } from 'components/Dropdown'
+import { DropdownToggleButton } from 'components/DropdownToggleButton'
+import { eventTypesIcons } from 'views/utils/event-types-icons'
 
 const ITEMS = [
   {
@@ -65,6 +42,7 @@ export function EventType() {
     <Field
       name="task_type"
       render={({ input }) => (
+        // @ts-ignore js-component
         <Dropdown
           input={input}
           icons={eventTypesIcons}
@@ -72,7 +50,7 @@ export function EventType() {
           fullHeight
           style={{ marginBottom: '1em' }}
           buttonRenderer={({ icon: Icon, iconColor, ...props }) => (
-            <Button {...props} isActive={props.isOpen} inverse>
+            <DropdownToggleButton {...props} isActive={props.isOpen}>
               <Flex alignCenter>
                 {Icon && (
                   <Icon
@@ -84,8 +62,7 @@ export function EventType() {
                 )}
                 {props.value}
               </Flex>
-              <IconArrow isOpen={props.isOpen} />
-            </Button>
+            </DropdownToggleButton>
           )}
         />
       )}
