@@ -118,6 +118,9 @@ export class TeamContactSelect extends React.Component {
             </ActionButton>
           )
         }}
+        menuStyle={{
+          maxWidth: '100%'
+        }}
         itemRenderer={({ item, ...itemProps }) => {
           const isSelected = owner.id === item.value.id
 

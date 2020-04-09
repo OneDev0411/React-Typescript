@@ -1,7 +1,7 @@
 import React from 'react'
 import DatePicker from 'react-day-picker'
+import { Button } from '@material-ui/core'
 
-import ActionButton from 'components/Button/ActionButton'
 import { Divider } from 'components/Divider'
 import TimeInput from 'components/TimeInput'
 
@@ -40,38 +40,38 @@ function Picker(props) {
       />
 
       {props.hasTime && (
-        <React.Fragment>
+        <>
           <Divider margin="0.5em 0" />
           <TimeInput
             initialDate={dateFallback(props.selectedDate)}
             onChange={handleChangeTime}
           />
-        </React.Fragment>
+        </>
       )}
       {(props.hasDone || props.hasRemove) && (
-        <React.Fragment>
+        <>
           <Divider margin="0.5em 0" />
           <div className="picker-actions">
             <div>
               {props.hasRemove && isDateSet && props.hasInitialDate && (
-                <ActionButton
-                  appearance="outline"
+                <Button
+                  variant="text"
                   size="small"
-                  style={{ fontWeight: 500 }}
                   onClick={props.onRemove}
                   data-test="date-picker-remove"
                 >
                   Remove
-                </ActionButton>
+                </Button>
               )}
             </div>
             {props.hasDone && (
-              <ActionButton
+              <Button
                 size="small"
                 type="button"
+                color="secondary"
+                variant="contained"
                 onClick={props.onDone}
                 disabled={!isDateSet}
-                style={{ fontWeight: 500 }}
                 data-test="date-picker-done"
               >
                 {pickerSaveButtonText({
@@ -79,10 +79,10 @@ function Picker(props) {
                   hasInitialDate: props.hasInitialDate,
                   saveButtonText: props.saveButtonText
                 })}
-              </ActionButton>
+              </Button>
             )}
           </div>
-        </React.Fragment>
+        </>
       )}
     </PickerContent>
   )

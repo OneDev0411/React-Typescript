@@ -18,11 +18,10 @@ import { PopperPlacementType } from '@material-ui/core/Popper'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 
 import TimeInput from 'components/TimeInput'
+import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import { Divider } from 'components/Divider'
 import { PickerContainer } from 'components/DateTimePicker/styled'
-
-import { useIconStyles } from '../../../../styles/use-icon-styles'
 
 const useStyles = makeStyles((theme: Theme) => ({
   removeButton: {
@@ -46,7 +45,6 @@ export function EndDateTimeField({
 }: Props) {
   const theme = useTheme()
   const classes = useStyles()
-  const iconClasses = useIconStyles()
 
   const anchorRef = useRef<HTMLButtonElement>(null)
 
@@ -74,7 +72,7 @@ export function EndDateTimeField({
             {value && <Typography variant="body2">To</Typography>}
             <Button
               aria-describedby={id}
-              color="primary"
+              color="secondary"
               ref={anchorRef}
               onClick={() => {
                 setEndDate(value || dueDate)
@@ -88,11 +86,13 @@ export function EndDateTimeField({
             {value && (
               <Tooltip placement={placement} title="Remove Time">
                 <IconButton
+                  size="small"
+                  color="secondary"
                   // @ts-ignore FinalForm bug
                   onClick={() => onChange(null)}
                   className={classes.removeButton}
                 >
-                  <IconClose className={iconClasses.small} />
+                  <IconClose size={iconSizes.small} />
                 </IconButton>
               </Tooltip>
             )}
@@ -151,7 +151,7 @@ export function EndDateTimeField({
                         />
                         <Button
                           variant="text"
-                          color="primary"
+                          color="secondary"
                           onClick={event => {
                             // @ts-ignore FinalForm bug
                             onChange(endDate)

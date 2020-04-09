@@ -132,7 +132,7 @@ function DateTimePicker(props) {
 
   if (props.mode == 'PopUp') {
     component = (
-      <React.Fragment>
+      <>
         {props.popUpButton({ toggleOpen, selectedDate })}
         <PickerPopUp
           onClose={toggleOpen}
@@ -141,7 +141,7 @@ function DateTimePicker(props) {
         >
           {component}
         </PickerPopUp>
-      </React.Fragment>
+      </>
     )
   }
 
