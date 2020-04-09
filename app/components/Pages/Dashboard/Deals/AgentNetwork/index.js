@@ -24,7 +24,7 @@ import GlobalHeader from 'components/GlobalHeader'
 
 import config from '../../../../../../config/public'
 
-import { Grid } from './Grid'
+import Grid from './Grid'
 import AreaFilter from './Filters/AreaFilter'
 import { DEFAULT_RADIUS_FILTER } from './constants'
 import { normalizeList } from './helpers/normalize-list'

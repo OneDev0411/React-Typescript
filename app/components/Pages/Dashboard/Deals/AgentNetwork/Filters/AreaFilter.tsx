@@ -164,7 +164,7 @@ export default function AreaFilter(props: Props) {
               color="secondary"
               className={classes.searchButton}
               onClick={onSearch}
-              size="small"
+              size="medium"
               variant="contained"
             >
               Search

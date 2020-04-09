@@ -8,7 +8,7 @@ export const ContactInfo = props => {
   return (
     <>
       <div>
-        <TextMiddleTruncate text={email} maxLength={25} />
+        <TextMiddleTruncate text={email} maxLength={20} />
       </div>
       <div>{phone}</div>
     </>

@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { Button, Avatar } from '@material-ui/core'
+import { Button, Avatar, Theme } from '@material-ui/core'
+
+import { withTheme } from '@material-ui/styles'
 
 import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 import { putUserSetting } from 'models/user/put-user-setting'
@@ -35,7 +37,12 @@ interface Props {
 
 export const SORT_FIELD_SETTING_KEY = 'grid_deals_agent_network_sort_field'
 
-export class Grid extends React.Component<Props, State> {
+class Grid extends React.Component<
+  Props & {
+    theme: Theme
+  },
+  State
+> {
   constructor(props) {
     super(props)
 
@@ -65,6 +72,7 @@ export class Grid extends React.Component<Props, State> {
     {
       id: 'company',
       header: 'Company',
+      width: '10%',
       accessor: (agent: IDealAgent) => agent.company,
       render: ({ row: agent }: RenderProps<IDealAgent>) => (
         <Company name={agent.company} />
@@ -73,6 +81,7 @@ export class Grid extends React.Component<Props, State> {
     {
       id: 'listings',
       header: '# of Listings',
+      width: '10%',
       accessor: (agent: IDealAgent) => agent.asListing.length,
       render: ({ row: agent }: RenderProps<IDealAgent>) =>
         agent.asListing.length > 0 ? (
@@ -86,6 +95,7 @@ export class Grid extends React.Component<Props, State> {
     {
       id: 'buyers',
       header: '# of Buyers',
+      width: '10%',
       accessor: (agent: IDealAgent) => agent.asBuyers.length,
       render: ({ row: agent }: RenderProps<IDealAgent>) =>
         agent.asBuyers.length > 0 ? (
@@ -99,6 +109,7 @@ export class Grid extends React.Component<Props, State> {
     {
       id: 'value_in',
       header: 'Volume in $',
+      width: '10%',
       accessor: (agent: IDealAgent) => agent.listingsTotalVolume,
       render: ({ row: agent }: RenderProps<IDealAgent>) =>
         agent.listingsTotalVolume > 0
@@ -108,6 +119,7 @@ export class Grid extends React.Component<Props, State> {
     {
       id: 'avg_price',
       header: 'Avg Price',
+      width: '10%',
       accessor: (agent: IDealAgent) => agent.listingsAveragePrice,
       render: ({ row: agent }: RenderProps<IDealAgent>) =>
         agent.listingsAveragePrice > 0
@@ -158,7 +170,7 @@ export class Grid extends React.Component<Props, State> {
           }}
           selection={{
             columnProps: {
-              width: '60px'
+              width: this.props.theme.spacing(7.5)
             },
             defaultRender: ({ row }: RenderProps<IDealAgent>) => {
               return <Avatar alt={row.name}>{row.name && row.name[0]}</Avatar>
@@ -187,3 +199,5 @@ export class Grid extends React.Component<Props, State> {
     )
   }
 }
+
+export default withTheme(Grid)
