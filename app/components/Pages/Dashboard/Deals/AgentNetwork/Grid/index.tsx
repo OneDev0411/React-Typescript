@@ -1,17 +1,17 @@
 import React from 'react'
 
-import { Button } from '@material-ui/core'
+import { Button, Avatar } from '@material-ui/core'
 
 import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 import { putUserSetting } from 'models/user/put-user-setting'
 
-import Avatar from 'components/Avatar'
-import Loading from 'components/Spinner'
 import Table from 'components/Grid/Table'
 
 import { RenderProps } from 'components/Grid/Table/types'
 
 import { StateContext } from 'components/Grid/Table/context'
+
+import LoadingContainer from 'components/LoadingContainer'
 
 import { Company } from './columns/Company'
 import { ContactInfo } from './columns/ContactInfo'
@@ -141,13 +141,15 @@ export class Grid extends React.Component<Props, State> {
     const { selectedAgent } = this.state
 
     return (
-      <div style={{ padding: '0 1.5em' }}>
+      <>
         <Table<IDealAgent>
           rows={this.props.data}
           columns={this.columns}
           totalRows={(this.props.data || []).length}
-          LoadingStateComponent={Loading}
-          loading={this.props.isFetching ? 'middle' : null}
+          LoadingStateComponent={() => (
+            <LoadingContainer style={{ padding: 0 }} />
+          )}
+          loading={this.props.isFetching ? 'top' : null}
           summary={total => `${total} Agents`}
           sorting={{
             defaultSort: this.getActiveSort(),
@@ -155,8 +157,11 @@ export class Grid extends React.Component<Props, State> {
             onChange: this.handleChangeSort
           }}
           selection={{
+            columnProps: {
+              width: '60px'
+            },
             defaultRender: ({ row }: RenderProps<IDealAgent>) => {
-              return <Avatar title={row.name} />
+              return <Avatar alt={row.name}>{row.name && row.name[0]}</Avatar>
             }
           }}
           TableActions={({
@@ -178,7 +183,7 @@ export class Grid extends React.Component<Props, State> {
             listings={selectedAgent.list}
           />
         )}
-      </div>
+      </>
     )
   }
 }

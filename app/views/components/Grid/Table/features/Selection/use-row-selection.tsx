@@ -32,8 +32,9 @@ export function useRowsSelection<Row>(
   const newColumns = [
     {
       id: 'row-selection',
-      header: '',
       class: 'opaque',
+      header: '',
+      ...(options.columnProps || {}),
       render: (rowItem: RenderProps<Row>) => {
         const showDefaultValue =
           options.defaultRender &&
