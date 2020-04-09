@@ -118,7 +118,8 @@ export function DateTimePicker({
             </div>
 
             <Button
-              variant="outlined"
+              variant="text"
+              color="secondary"
               data-test="date-picker-done"
               onClick={handleClose}
             >
