@@ -513,6 +513,10 @@ class ContactsList extends React.Component {
         }
 
         await deleteContactsBulk(bulkDeleteParams)
+        this.setState(() => ({
+          showDuplicateClusterAlert: false,
+          duplicateClusterCount: 0
+        }))
         await this.reloadContacts()
       } else {
         const rows =
