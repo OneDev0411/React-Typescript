@@ -765,7 +765,7 @@ class ContactsList extends React.Component {
               }}
             />
           )}
-          {isZeroState && <ZeroState />}
+          {isZeroState && <ZeroState onCreateContact={this.onCreateContact} />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
               {this.renderTabs()}
