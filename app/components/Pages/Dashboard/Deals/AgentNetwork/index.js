@@ -195,7 +195,7 @@ class AgentNetwork extends React.Component {
 
             <div>
               <CloseButton
-                backUrl="/dashboard/deals"
+                backUrl={`/dashboard/deals/${this.props.deal.id}`}
                 buttonProps={{
                   size: 'medium'
                 }}
