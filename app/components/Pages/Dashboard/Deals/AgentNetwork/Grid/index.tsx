@@ -15,6 +15,8 @@ import { StateContext } from 'components/Grid/Table/context'
 import LoadingContainer from 'components/LoadingContainer'
 import IconEmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
 
+import { getNameInitials } from 'utils/helpers'
+
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
 import { SortableColumns } from './helpers/sortable-columns'
 import { TableActions } from './Actions'
@@ -159,13 +161,6 @@ class Grid extends React.Component<
         </Flex>
       )
     }
-    // {
-    //   id: 'email',
-    //   header: 'Contact Info',
-    //   sortable: false,
-    //   accessor: (agent: IDealAgent) => agent.email,
-    //   render: ({ row: agent }) => <ContactInfo agent={agent} />
-    // }
   ]
 
   getActiveSort = () => {
@@ -206,7 +201,9 @@ class Grid extends React.Component<
               width: `${this.props.theme.spacing(7.5)}px`
             },
             defaultRender: ({ row }: RenderProps<IDealAgent>) => {
-              return <Avatar alt={row.name}>{row.name && row.name[0]}</Avatar>
+              return (
+                <Avatar alt={row.name}>{getNameInitials(row.name, 1)}</Avatar>
+              )
             }
           }}
           TableActions={({
