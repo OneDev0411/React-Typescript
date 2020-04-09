@@ -86,6 +86,10 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
                 <>
                   <MenuItem
                     key={0}
+                    selected={
+                      props.params.filter === 'listing' &&
+                      props.location.query.type === 'query'
+                    }
                     onClick={() => {
                       toggleMenu()
                       props.router.push(
@@ -98,6 +102,10 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
 
                   <MenuItem
                     key={1}
+                    selected={
+                      props.params.filter === 'contract' &&
+                      props.location.query.type === 'query'
+                    }
                     onClick={() => {
                       toggleMenu()
                       props.router.push(
