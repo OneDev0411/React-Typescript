@@ -19,6 +19,10 @@ export function TableActions({ state, rows, deal }: Props) {
       deal={deal}
       recipients={getRecipients(rows, state.selection.selectedRowIds)}
       mediums="Email"
+      buttonProps={{
+        color: 'secondary',
+        variant: 'contained'
+      }}
       types={[
         'OpenHouse',
         'JustSold',
