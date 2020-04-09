@@ -25,10 +25,6 @@ import { useGetMlsSubArea } from './use-get-mls-sub-areas'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      padding: 0,
-      margin: theme.spacing(3, 0)
-    },
     radiusInput: {
       width: 75
     },
@@ -126,7 +122,7 @@ export default function AreaFilter(props: Props) {
   }
 
   return (
-    <Box px={3} className={classes.root}>
+    <Box my="3">
       <Box mb={1}>Select a search area:</Box>
       <Box display="flex" alignItems="center">
         <Box mr={2} display="flex" alignItems="center">
