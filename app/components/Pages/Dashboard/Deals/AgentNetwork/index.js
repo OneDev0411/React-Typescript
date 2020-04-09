@@ -6,6 +6,8 @@ import { Typography } from '@material-ui/core'
 
 import Flex from 'styled-flex-component'
 
+import { withTheme } from '@material-ui/styles'
+
 import getPlace from 'models/listings/search/get-place'
 import { getAddress } from 'models/Deal/helpers/context'
 import getListing from 'models/listings/listing/get-listing'
@@ -180,8 +182,8 @@ class AgentNetwork extends React.Component {
 
   render() {
     return (
-      <>
-        <GlobalHeader noGlobalActionsButton>
+      <div style={{ margin: this.props.theme.spacing(5) }}>
+        <GlobalHeader noGlobalActionsButton noPadding>
           <Flex spaceBetween>
             <Flex
               column
@@ -190,7 +192,14 @@ class AgentNetwork extends React.Component {
               }}
             >
               <Typography variant="h4">Agent Network</Typography>
-              <Typography variant="body1">{this.state.address}</Typography>
+              <Typography
+                variant="body1"
+                style={{
+                  color: this.props.theme.palette.grey[900]
+                }}
+              >
+                {this.state.address}
+              </Typography>
             </Flex>
 
             <div>
@@ -220,7 +229,7 @@ class AgentNetwork extends React.Component {
           listInfo={this.state.listInfo}
           onChangeSelectedRows={this.onChangeSelectedRows}
         />
-      </>
+      </div>
     )
   }
 }
@@ -230,4 +239,4 @@ const mapStateToProps = (state, props) => ({
   deal: selectDealById(state.deals.list, props.params.id)
 })
 
-export default withRouter(connect(mapStateToProps)(AgentNetwork))
+export default withTheme(withRouter(connect(mapStateToProps)(AgentNetwork)))
