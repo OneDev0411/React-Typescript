@@ -3,11 +3,8 @@ import {
   Theme,
   makeStyles,
   createStyles,
-  Divider,
   Popover,
-  List,
-  ListSubheader,
-  Typography
+  List
 } from '@material-ui/core'
 
 import { Item } from './types'
@@ -17,16 +14,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     itemsWrapper: {
       margin: theme.spacing(1)
-    },
-    subheader: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: theme.spacing(1, 2)
-    },
-    divider: {
-      margin: theme.spacing(0, 2)
     }
   })
 )
@@ -61,17 +48,7 @@ export default function Menu({ items, anchorEl, onItemClick, onClose }: Props) {
       }}
       transitionDuration={0}
     >
-      <List
-        dense
-        subheader={
-          <>
-            <ListSubheader disableGutters className={classes.subheader}>
-              <Typography variant="overline">Create</Typography>
-            </ListSubheader>
-            <Divider className={classes.divider} />
-          </>
-        }
-      >
+      <List dense>
         <div className={classes.itemsWrapper}>
           {items.map((item, index) => (
             <MenuItem key={index} item={item} onClick={handleItemClick} />
