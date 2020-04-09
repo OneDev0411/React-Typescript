@@ -170,7 +170,7 @@ class Grid extends React.Component<
           }}
           selection={{
             columnProps: {
-              width: this.props.theme.spacing(7.5)
+              width: `${this.props.theme.spacing(7.5)}px`
             },
             defaultRender: ({ row }: RenderProps<IDealAgent>) => {
               return <Avatar alt={row.name}>{row.name && row.name[0]}</Avatar>
