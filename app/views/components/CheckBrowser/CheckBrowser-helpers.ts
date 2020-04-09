@@ -59,7 +59,7 @@ export function browserStatus(): BrowserStatus {
   return output
 }
 
-export function generatePropeprMessage(status: BrowserStatus) {
+export function getMessage(status: BrowserStatus) {
   const output = {
     text: '',
     actionText: '',
