@@ -151,7 +151,10 @@ export const ButtonAppearances = {
   `,
   link: css<ActionButtonProps>`
     ${buttonBaseStyle};
-    color: ${props => (props.inverse ? '#000' : props.brandColor || primary)};
+    color: ${props =>
+      props.inverse
+        ? '#000'
+        : props.brandColor || props.theme.palette.secondary.main};
     background-color: transparent;
     &[disabled] {
       text-decoration: none;
@@ -160,19 +163,19 @@ export const ButtonAppearances = {
       color: ${props =>
         props.brandColor
           ? Chromath.towards(props.brandColor, 'black', 0.25).toString()
-          : primaryDark};
+          : props.theme.palette.secondary.dark};
       text-decoration: none;
       svg {
         fill: ${props =>
           props.brandColor
             ? Chromath.towards(props.brandColor, 'black', 0.25).toString()
-            : primaryDark};
+            : props.theme.palette.secondary.dark};
       }
     }
     svg {
       fill: ${props =>
         !props.inverse || props.isActive
-          ? props.brandColor || primary
+          ? props.brandColor || props.theme.palette.secondary.main
           : '#000'};
     }
   `,
