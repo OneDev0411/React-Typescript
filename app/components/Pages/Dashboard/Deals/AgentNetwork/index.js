@@ -213,6 +213,7 @@ class AgentNetwork extends React.Component {
         />
 
         <Grid
+          user={this.props.user}
           data={this.state.list.filter(filterNonMLSAgents)}
           deal={this.props.deal}
           isFetching={this.state.isFetching}
@@ -225,6 +226,7 @@ class AgentNetwork extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
+  user: state.user,
   deal: selectDealById(state.deals.list, props.params.id)
 })
 

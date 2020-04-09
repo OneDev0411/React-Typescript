@@ -2,6 +2,9 @@ import React from 'react'
 
 import { Button } from '@material-ui/core'
 
+import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
+import { putUserSetting } from 'models/user/put-user-setting'
+
 import Avatar from 'components/Avatar'
 import Loading from 'components/Spinner'
 import Table from 'components/Grid/Table'
@@ -14,6 +17,8 @@ import { Company } from './columns/Company'
 import { ContactInfo } from './columns/ContactInfo'
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
 
+import { SortableColumns } from './helpers/sortable-columns'
+
 import { TableActions } from './Actions'
 
 import { IDealAgent } from '../types'
@@ -22,10 +27,13 @@ interface State {
   selectedAgent: null | any
 }
 interface Props {
+  user: IUser
   data: IDealAgent[]
   deal: IDeal
   isFetching: boolean
 }
+
+export const SORT_FIELD_SETTING_KEY = 'grid_deals_agent_network_sort_field'
 
 export class Grid extends React.Component<Props, State> {
   constructor(props) {
@@ -115,6 +123,20 @@ export class Grid extends React.Component<Props, State> {
     }
   ]
 
+  getActiveSort = () => {
+    const sort = parseSortSetting(
+      this.props.user,
+      SORT_FIELD_SETTING_KEY,
+      'name'
+    )
+
+    return SortableColumns.find(col => col.value === sort.id)
+  }
+
+  handleChangeSort = async column => {
+    putUserSetting(SORT_FIELD_SETTING_KEY, column.value)
+  }
+
   render() {
     const { selectedAgent } = this.state
 
@@ -127,6 +149,11 @@ export class Grid extends React.Component<Props, State> {
           LoadingStateComponent={Loading}
           loading={this.props.isFetching ? 'middle' : null}
           summary={total => `${total} Agents`}
+          sorting={{
+            defaultSort: this.getActiveSort(),
+            columns: SortableColumns,
+            onChange: this.handleChangeSort
+          }}
           selection={{
             defaultRender: ({ row }: RenderProps<IDealAgent>) => {
               return <Avatar title={row.name} />
