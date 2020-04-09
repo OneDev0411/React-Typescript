@@ -12,16 +12,6 @@ export const SortableColumns: SortableColumn[] = [
     ascending: false
   },
   {
-    label: 'Company (A-Z)',
-    value: 'company',
-    ascending: true
-  },
-  {
-    label: 'Company (Z-A)',
-    value: 'company',
-    ascending: false
-  },
-  {
     label: '# of Listings (Low-Hight)',
     value: 'listings',
     ascending: true

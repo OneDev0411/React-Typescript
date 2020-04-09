@@ -1,27 +1,24 @@
 import React from 'react'
 
-import { Button, Avatar, Theme } from '@material-ui/core'
+import { Button, Avatar, Tooltip, Theme } from '@material-ui/core'
 
 import { withTheme } from '@material-ui/styles'
+
+import Flex from 'styled-flex-component'
 
 import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 import { putUserSetting } from 'models/user/put-user-setting'
 
 import Table from 'components/Grid/Table'
-
 import { RenderProps } from 'components/Grid/Table/types'
-
 import { StateContext } from 'components/Grid/Table/context'
-
 import LoadingContainer from 'components/LoadingContainer'
+import IconEmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
 
-import { Company } from './columns/Company'
-import { ContactInfo } from './columns/ContactInfo'
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
-
 import { SortableColumns } from './helpers/sortable-columns'
-
 import { TableActions } from './Actions'
+import { Caption } from './columns/Caption'
 
 import { IDealAgent } from '../types'
 
@@ -67,72 +64,108 @@ class Grid extends React.Component<
     {
       id: 'name',
       header: 'Name',
-      accessor: (agent: IDealAgent) => agent.name
+      width: '20%',
+      accessor: (agent: IDealAgent) => agent.name,
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <>
+          <div>{agent.name}</div>
+          <Caption variant="body2">{agent.company}</Caption>
+        </>
+      )
     },
     {
-      id: 'company',
-      header: 'Company',
+      id: 'contact',
       width: '10%',
-      accessor: (agent: IDealAgent) => agent.company,
       render: ({ row: agent }: RenderProps<IDealAgent>) => (
-        <Company name={agent.company} />
+        <Tooltip
+          title={
+            <>
+              <div>{agent.email}</div>
+              <div>{agent.phone}</div>
+            </>
+          }
+        >
+          <Flex alignCenter justifyCenter>
+            <IconEmailOutline />
+          </Flex>
+        </Tooltip>
       )
     },
     {
       id: 'listings',
-      header: '# of Listings',
-      width: '10%',
       accessor: (agent: IDealAgent) => agent.asListing.length,
-      render: ({ row: agent }: RenderProps<IDealAgent>) =>
-        agent.asListing.length > 0 ? (
-          <Button onClick={() => this.onSelectAgent(agent, 'asListing')}>
-            {agent.asListing.length}
-          </Button>
-        ) : (
-          '0'
-        )
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Flex alignCenter>
+          <Caption># of Listings:&nbsp;</Caption>
+          {agent.asListing.length > 0 ? (
+            <Button
+              size="small"
+              style={{
+                minWidth: 'unset'
+              }}
+              onClick={() => this.onSelectAgent(agent, 'asListing')}
+            >
+              {agent.asListing.length}
+            </Button>
+          ) : (
+            '0'
+          )}
+        </Flex>
+      )
     },
     {
       id: 'buyers',
-      header: '# of Buyers',
-      width: '10%',
       accessor: (agent: IDealAgent) => agent.asBuyers.length,
-      render: ({ row: agent }: RenderProps<IDealAgent>) =>
-        agent.asBuyers.length > 0 ? (
-          <Button onClick={() => this.onSelectAgent(agent, 'asBuyers')}>
-            {agent.asBuyers.length}
-          </Button>
-        ) : (
-          '0'
-        )
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Flex alignCenter>
+          <Caption># of Buyers:&nbsp;</Caption>
+          {agent.asBuyers.length > 0 ? (
+            <Button
+              size="small"
+              style={{
+                minWidth: 'unset'
+              }}
+              onClick={() => this.onSelectAgent(agent, 'asBuyers')}
+            >
+              {agent.asBuyers.length}
+            </Button>
+          ) : (
+            '0'
+          )}
+        </Flex>
+      )
     },
     {
       id: 'value_in',
-      header: 'Volume in $',
-      width: '10%',
       accessor: (agent: IDealAgent) => agent.listingsTotalVolume,
-      render: ({ row: agent }: RenderProps<IDealAgent>) =>
-        agent.listingsTotalVolume > 0
-          ? `$${agent.listingsTotalVolume.toLocaleString()}`
-          : 0
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Flex>
+          <Caption>Volume in $:&nbsp;</Caption>
+          {agent.listingsTotalVolume > 0
+            ? `$${agent.listingsTotalVolume.toLocaleString()}`
+            : 0}
+        </Flex>
+      )
     },
     {
       id: 'avg_price',
-      header: 'Avg Price',
-      width: '10%',
       accessor: (agent: IDealAgent) => agent.listingsAveragePrice,
-      render: ({ row: agent }: RenderProps<IDealAgent>) =>
-        agent.listingsAveragePrice > 0
-          ? `$${agent.listingsAveragePrice.toLocaleString()}`
-          : 0
-    },
-    {
-      id: 'email',
-      header: 'Contact Info',
-      sortable: false,
-      accessor: (agent: IDealAgent) => agent.email,
-      render: ({ row: agent }) => <ContactInfo agent={agent} />
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Flex>
+          <Caption>Avg Price:&nbsp;</Caption>
+          {agent.listingsAveragePrice > 0
+            ? `$${agent.listingsAveragePrice.toLocaleString()}`
+            : 0}
+        </Flex>
+      )
     }
+    // {
+    //   id: 'email',
+    //   header: 'Contact Info',
+    //   sortable: false,
+    //   accessor: (agent: IDealAgent) => agent.email,
+    //   render: ({ row: agent }) => <ContactInfo agent={agent} />
+    // }
   ]
 
   getActiveSort = () => {
