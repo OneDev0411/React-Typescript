@@ -57,7 +57,6 @@ function Picker(props) {
                 <Button
                   variant="text"
                   size="small"
-                  style={{ fontWeight: 500 }}
                   onClick={props.onRemove}
                   data-test="date-picker-remove"
                 >
