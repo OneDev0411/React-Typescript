@@ -195,7 +195,7 @@ class AgentNetwork extends React.Component {
               <Typography
                 variant="body1"
                 style={{
-                  color: this.props.theme.palette.grey[900]
+                  color: this.props.theme.palette.grey[600]
                 }}
               >
                 {this.state.address}
