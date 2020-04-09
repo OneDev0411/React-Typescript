@@ -1,12 +1,16 @@
 import React from 'react'
 
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+
 export const ContactInfo = props => {
   const { email, phone } = props.agent
 
   return (
-    <React.Fragment>
-      <div>{email}</div>
+    <>
+      <div>
+        <TextMiddleTruncate text={email} maxLength={15} />
+      </div>
       <div>{phone}</div>
-    </React.Fragment>
+    </>
   )
 }

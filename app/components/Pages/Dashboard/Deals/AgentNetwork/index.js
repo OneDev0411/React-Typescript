@@ -2,6 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 
+import { Typography } from '@material-ui/core'
+
+import Flex from 'styled-flex-component'
+
 import getPlace from 'models/listings/search/get-place'
 import { getAddress } from 'models/Deal/helpers/context'
 import getListing from 'models/listings/listing/get-listing'
@@ -12,7 +16,9 @@ import { selectDealById } from 'reducers/deals/list'
 import { loadJS } from 'utils/load-js'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 
-import Header from 'components/PageHeader'
+import { CloseButton } from 'components/Button/CloseButton'
+
+import GlobalHeader from 'components/GlobalHeader'
 
 import config from '../../../../../../config/public'
 
@@ -175,12 +181,31 @@ class AgentNetwork extends React.Component {
   render() {
     return (
       <>
-        <Header
-          onClickCloseButton={this.onClose}
-          showBackButton={false}
-          subtitle={this.state.address}
-          title="Agent Network"
-        />
+        <GlobalHeader noGlobalActionsButton>
+          <Flex spaceBetween>
+            <Flex
+              column
+              style={{
+                flexGrow: 1
+              }}
+            >
+              <Typography variant="h4">Agent Network</Typography>
+              <Typography variant="body1">{this.state.address}</Typography>
+            </Flex>
+
+            <div>
+              <CloseButton
+                backUrl="/dashboard/deals"
+                buttonProps={{
+                  size: 'medium'
+                }}
+                iconProps={{
+                  size: 'medium'
+                }}
+              />
+            </div>
+          </Flex>
+        </GlobalHeader>
 
         <AreaFilter
           disabled={this.state.isFetching}

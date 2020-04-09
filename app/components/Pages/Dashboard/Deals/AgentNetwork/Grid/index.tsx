@@ -28,8 +28,12 @@ interface Props {
 }
 
 export class Grid extends React.Component<Props, State> {
-  state: State = {
-    selectedAgent: null
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      selectedAgent: null
+    }
   }
 
   onCloseDrawer = () => this.setState({ selectedAgent: null })
@@ -48,13 +52,11 @@ export class Grid extends React.Component<Props, State> {
     {
       id: 'name',
       header: 'Name',
-      width: '20%',
       accessor: (agent: IDealAgent) => agent.name
     },
     {
       id: 'company',
       header: 'Company',
-      width: '17%',
       accessor: (agent: IDealAgent) => agent.company,
       render: ({ row: agent }: RenderProps<IDealAgent>) => (
         <Company name={agent.company} />
