@@ -45,7 +45,7 @@ export const SearchInput = forwardRef(
     const theme = useTheme<Theme>()
     const [nonEmpty, setNonEmpty] = useState(false)
     const inputEl = useRef<HTMLInputElement | null>(null)
-    const widthStyle = fullWidth ? {} : { width: '360px' } // default width
+    const widthStyle = { width: fullWidth ? '100%' : '360px' } // default width
 
     // Exposing some methods for the input el
     useImperativeHandle(ref, () => ({
