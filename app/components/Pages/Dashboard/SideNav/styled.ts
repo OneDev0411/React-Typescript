@@ -33,7 +33,7 @@ export const SideNavItem = styled.li`
 
 const itemStyle = css`
   padding-left: ${(props: ThemeProps<Theme>) =>
-    `calc(${props.theme.spacing(4)}px - ${props.theme.spacing(0.5)}px)`};
+    `calc(${props.theme.spacing(3)}px - ${props.theme.spacing(0.5)}px)`};
   border-radius: 0;
   border-left: 4px solid transparent;
   color: ${(props: ThemeProps<Theme>) =>

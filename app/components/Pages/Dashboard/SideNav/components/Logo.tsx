@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   box: {
     width: WIDTH,
     height: HEIGHT,
-    margin: theme.spacing(6, 0, 6, 4)
+    margin: theme.spacing(4, 0, 4, 3)
   },
   image: {
     maxWidth: '100%',
