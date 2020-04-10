@@ -1,19 +1,15 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import PropTypes from 'prop-types'
 import Downshift from 'downshift'
-
 import _ from 'underscore'
-
 import { Box } from '@material-ui/core'
 
 import { SearchInput } from 'components/GlobalHeaderWithSearch'
 
 import Drawer from '../OverlayDrawer'
 import Loading from '../../../components/Partials/Loading'
-
 import { SelectedItems } from './SelectedItems'
 import { SearchResultList } from './SearchResult'
-
 import { DefaultItems } from './DefaultItems'
 import Footer from './components/Footer'
 
@@ -39,9 +35,8 @@ class SearchDrawer extends React.Component {
       ...initialState,
       selectedItems: {}
     }
+    this.inputRef = createRef()
   }
-
-  inputRef = React.createRef()
 
   handleSearch = async e => {
     const value = e.target.value
@@ -82,7 +77,7 @@ class SearchDrawer extends React.Component {
 
   handleClose = () => {
     this.setState(initialState)
-
+    this.inputRef.current.clear()
     this.props.onClose()
   }
 
@@ -96,7 +91,7 @@ class SearchDrawer extends React.Component {
     }
 
     this.setState(initialState)
-
+    this.inputRef.current.clear()
     this.props.onSelectItems({
       [item.id]: item
     })
@@ -104,7 +99,7 @@ class SearchDrawer extends React.Component {
 
   handleSelectMultipleItems = () => {
     this.setState(initialState)
-
+    this.inputRef.current.clear()
     this.props.onSelectItems(this.state.selectedItems)
   }
 
@@ -116,6 +111,7 @@ class SearchDrawer extends React.Component {
     this.setState({
       searchResults: []
     })
+    this.inputRef.current.clear()
   }
 
   handleAddNewItem = item => {
@@ -125,6 +121,7 @@ class SearchDrawer extends React.Component {
       selectedItems: { ...state.selectedItems, [normalized.id]: normalized },
       searchResults: []
     }))
+    this.inputRef.current.clear()
   }
 
   handleUpdateList = list => {
@@ -161,16 +158,14 @@ class SearchDrawer extends React.Component {
               <div style={{ position: 'relative' }}>
                 <Box py={2}>
                   <SearchInput
-                    {...this.props.searchInputOptions}
                     fullWidth
                     ref={this.inputRef}
                     onChange={this.handleSearch}
                     onClear={this.handleClear}
+                    {...this.props.searchInputOptions}
                   />
                 </Box>
-
                 {(isSearching || showLoadingIndicator) && <Loading />}
-
                 <SearchResultList
                   isLoading={this.props.showLoadingIndicator}
                   searchResults={this.SearchResults}
@@ -181,7 +176,6 @@ class SearchDrawer extends React.Component {
                   ItemRow={this.props.ItemRow}
                   multipleSelection={this.props.multipleSelection}
                 />
-
                 <SelectedItems
                   isLoading={this.props.showLoadingIndicator}
                   selectedItems={this.state.selectedItems}
@@ -191,7 +185,6 @@ class SearchDrawer extends React.Component {
                   ItemRow={this.props.ItemRow}
                   multipleSelection={this.props.multipleSelection}
                 />
-
                 <DefaultItems
                   isLoading={this.props.showLoadingIndicator}
                   searchResults={this.SearchResults}
@@ -206,7 +199,6 @@ class SearchDrawer extends React.Component {
             )}
           />
         </Drawer.Body>
-
         <Footer
           multipleSelection={
             this.props.multipleSelection || this.props.forceRenderFooter
@@ -228,7 +220,6 @@ SearchDrawer.defaultProps = {
   multipleSelection: false,
   forceRenderFooter: false
 }
-
 SearchDrawer.propTypes = {
   showLoadingIndicator: PropTypes.bool,
   multipleSelection: PropTypes.bool,
