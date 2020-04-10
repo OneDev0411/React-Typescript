@@ -2,8 +2,8 @@ import React, { useState, useMemo, useCallback, ReactNode } from 'react'
 import { AnyAction } from 'redux'
 import { useSelector, useDispatch } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
-import { Button } from '@material-ui/core'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import { IconButton } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core/styles'
 
 import { IAppState } from 'reducers'
 
@@ -14,20 +14,17 @@ import ChatIcon from 'components/SvgIcons/Chat/IconChat'
 // Chatroom in Dashboard
 import Chatroom from '../../../Chatroom/Util/chatroom'
 
-import { useIconStyles } from '../../../../../../styles/use-icon-styles'
-
 const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      button: {
-        marginRight: theme.spacing(2),
-        marginBottom: theme.spacing(2),
+  (theme: Theme) => ({
+    button: {
+      marginRight: theme.spacing(2),
+      marginBottom: theme.spacing(2),
 
-        '&[disabled] svg': {
-          fill: theme.palette.action.disabled
-        }
+      '&[disabled] svg': {
+        fill: theme.palette.action.disabled
       }
-    }),
+    }
+  }),
   { name: 'ChatButton' }
 )
 
@@ -40,7 +37,6 @@ function ChatButton({ contact, render }: Props) {
   const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
   const user: IUser = useSelector((state: IAppState) => state.user)
   const classes = useStyles()
-  const iconClasses = useIconStyles()
   const { email, phone_number, users } = contact
   const [isCreatingRoom, setIsCreatingRoom] = useState<boolean>(false)
   const isChattable: boolean = !!(email || phone_number || users)
@@ -83,16 +79,14 @@ function ChatButton({ contact, render }: Props) {
   }
 
   return (
-    <Button
+    <IconButton
       className={classes.button}
       disabled={!isChattable || isCreatingRoom}
       onClick={onClick}
       size="small"
-      variant="outlined"
     >
-      <ChatIcon className={iconClasses.rightMargin} />
-      Chat
-    </Button>
+      <ChatIcon />
+    </IconButton>
   )
 }
 
