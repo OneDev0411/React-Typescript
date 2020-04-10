@@ -58,6 +58,12 @@ export const SearchInput = forwardRef(
         if (inputEl && inputEl.current) {
           inputEl.current.blur()
         }
+      },
+      clear: () => {
+        if (inputEl && inputEl.current) {
+          inputEl.current.value = ''
+          setNonEmpty(false)
+        }
       }
     }))
 
