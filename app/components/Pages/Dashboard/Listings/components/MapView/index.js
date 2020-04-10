@@ -12,8 +12,7 @@ const CARDS_CONTAINER_WIDTH = '30em'
 const useStyles = makeStyles(
   theme => ({
     container: {
-      flex: '1 1 auto',
-      overflow: 'hidden'
+      flex: '1 1 auto'
     },
     row: {
       display: 'flex',
@@ -26,6 +25,7 @@ const useStyles = makeStyles(
     },
     cardsContainer: {
       width: `${CARDS_CONTAINER_WIDTH}`,
+      height: 'calc(100vh - 9em)',
       padding: theme.spacing(0, 2, 2),
       overflowY: 'scroll',
       borderLeft: `1px solid ${theme.palette.divider}`
