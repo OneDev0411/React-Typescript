@@ -17,9 +17,6 @@ import Chatroom from '../../../Chatroom/Util/chatroom'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     button: {
-      marginRight: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-
       '&[disabled] svg': {
         fill: theme.palette.action.disabled
       }
@@ -83,7 +80,6 @@ function ChatButton({ contact, render }: Props) {
       className={classes.button}
       disabled={!isChattable || isCreatingRoom}
       onClick={onClick}
-      size="small"
     >
       <ChatIcon />
     </IconButton>
