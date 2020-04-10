@@ -4,8 +4,11 @@ import Downshift from 'downshift'
 
 import _ from 'underscore'
 
+import { Box } from '@material-ui/core'
+
+import { SearchInput } from 'components/GlobalHeaderWithSearch'
+
 import Drawer from '../OverlayDrawer'
-import Search from '../Grid/Search'
 import Loading from '../../../components/Partials/Loading'
 
 import { SelectedItems } from './SelectedItems'
@@ -30,12 +33,17 @@ const initialState = {
  * - whether item is selected or not is not passed to renderer as prop
  */
 class SearchDrawer extends React.Component {
-  state = {
-    ...initialState,
-    selectedItems: {}
+  constructor(props) {
+    super(props)
+    this.state = {
+      ...initialState,
+      selectedItems: {}
+    }
   }
 
-  handleSearch = async value => {
+  handleSearch = async e => {
+    const value = e.target.value
+
     if (value.length === 0) {
       return this.setState(initialState)
     }
@@ -72,9 +80,12 @@ class SearchDrawer extends React.Component {
 
   handleClose = () => {
     this.setState(initialState)
-    this.searchInputRef.clear()
 
     this.props.onClose()
+  }
+
+  handleClear = () => {
+    this.setState(initialState)
   }
 
   handleSelectItem = item => {
@@ -83,7 +94,6 @@ class SearchDrawer extends React.Component {
     }
 
     this.setState(initialState)
-    this.searchInputRef.clear()
 
     this.props.onSelectItems({
       [item.id]: item
@@ -92,7 +102,6 @@ class SearchDrawer extends React.Component {
 
   handleSelectMultipleItems = () => {
     this.setState(initialState)
-    this.searchInputRef.clear()
 
     this.props.onSelectItems(this.state.selectedItems)
   }
@@ -105,8 +114,6 @@ class SearchDrawer extends React.Component {
     this.setState({
       searchResults: []
     })
-
-    this.searchInputRef.clear()
   }
 
   handleAddNewItem = item => {
@@ -116,8 +123,6 @@ class SearchDrawer extends React.Component {
       selectedItems: { ...state.selectedItems, [normalized.id]: normalized },
       searchResults: []
     }))
-
-    this.searchInputRef.clear()
   }
 
   handleUpdateList = list => {
@@ -152,16 +157,15 @@ class SearchDrawer extends React.Component {
           <Downshift
             render={({ getItemProps }) => (
               <div style={{ position: 'relative' }}>
-                <Search
-                  {...this.props.searchInputOptions}
-                  onChange={this.handleSearch}
-                  isSearching={isSearching || showLoadingIndicator}
-                  inputRef={ref => (this.searchInputRef = ref)}
-                  style={{
-                    ...this.props.searchInputOptions.style,
-                    margin: '1.5rem 0'
-                  }}
-                />
+                <Box py={2}>
+                  <SearchInput
+                    {...this.props.searchInputOptions}
+                    fullWidth
+                    inputRef={ref => (this.searchInputRef = ref)}
+                    onChange={this.handleSearch}
+                    onClear={this.handleClear}
+                  />
+                </Box>
 
                 {(isSearching || showLoadingIndicator) && <Loading />}
 
