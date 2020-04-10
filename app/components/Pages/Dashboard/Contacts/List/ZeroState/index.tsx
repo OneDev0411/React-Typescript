@@ -1,10 +1,9 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import React from 'react'
 import cn from 'classnames'
 import { Box, Button, Typography } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
+import { OAuthProvider } from 'constants/contacts'
 import GoogleSigninButton from 'components/GoogleSigninButton'
 
 import { Divider } from 'components/Divider'
@@ -70,7 +69,7 @@ export function ZeroState() {
         style={{ marginBottom: '1rem' }}
         size="large"
       >
-        Sign in with google
+        Sign in with Google
       </GoogleSigninButton>
 
       <Button
@@ -82,7 +81,7 @@ export function ZeroState() {
       >
         <IconOutlook />
         <Typography variant="button" className={classes.buttonText}>
-          Sync with Outlook
+          Sign in with Outlook
         </Typography>
       </Button>
 
