@@ -41,6 +41,8 @@ class SearchDrawer extends React.Component {
     }
   }
 
+  inputRef = React.createRef()
+
   handleSearch = async e => {
     const value = e.target.value
 
@@ -161,7 +163,7 @@ class SearchDrawer extends React.Component {
                   <SearchInput
                     {...this.props.searchInputOptions}
                     fullWidth
-                    inputRef={ref => (this.searchInputRef = ref)}
+                    ref={this.inputRef}
                     onChange={this.handleSearch}
                     onClear={this.handleClear}
                   />
