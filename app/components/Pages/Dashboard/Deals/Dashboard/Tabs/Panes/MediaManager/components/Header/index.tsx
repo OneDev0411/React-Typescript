@@ -5,9 +5,10 @@ import pluralize from 'pluralize'
 
 import IconUpload from 'components/SvgIcons/Upload/IconUpload'
 
+import { useIconStyles } from 'views/../styles/use-icon-styles'
+
 import CreateSyncTask from './CreateSyncTask'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
 import { useStyles } from '../../styles'
 
 interface Props {
@@ -58,7 +59,7 @@ export default function Header({
           />{' '}
           Upload
         </Button>
-        <CreateSyncTask deal={deal} user={user} />
+        {!deal.is_draft && <CreateSyncTask deal={deal} user={user} />}
         {/* <Button
           variant="outlined"
           disableElevation
