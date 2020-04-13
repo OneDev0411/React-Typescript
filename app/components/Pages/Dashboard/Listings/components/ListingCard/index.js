@@ -69,10 +69,13 @@ const ListingCard = ({
         {typeof onClick === 'function' ? (
           <a
             href="#"
+            role="button"
             target={target}
             onClick={onClick}
             className="c-listing-card__link"
-          />
+          >
+            {listing.address}
+          </a>
         ) : (
           <Link
             target={target}
