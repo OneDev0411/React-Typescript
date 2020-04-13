@@ -1,12 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router'
-import { connect } from 'react-redux'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import LazyLoad from 'react-lazy-load'
 
 import { isLeaseProperty } from 'utils/listing'
-import { setMapHoveredMarkerId } from 'store_actions/listings/map'
 
 import './style.scss'
 
@@ -17,12 +13,7 @@ const ListingCard = ({ isWidget = false, listing, onClick, user = null }) => {
 
   return (
     <LazyLoad className="c-listing-card" height={200} offsetBottom={900}>
-      <div
-        style={listing.backgroundImage}
-        className="c-listing-card__inner"
-        onMouseLeave={isShowOnMap ? onMouseLeave : () => {}}
-        onMouseEnter={isShowOnMap ? () => onMouseEnter(listing.id) : () => {}}
-      >
+      <div style={listing.backgroundImage} className="c-listing-card__inner">
         <div className="c-listing-card__content-wrapper">
           {listing.statusColor && (
             <div>
@@ -85,21 +76,6 @@ const ListingCard = ({ isWidget = false, listing, onClick, user = null }) => {
   )
 }
 
-export default compose(
-  connect(
-    ({ user }) => ({ user }),
-    {
-      setMapHoveredMarkerId
-    }
-  ),
-  withHandlers({
-    onMouseEnter: ({ setMapHoveredMarkerId, tabName }) => id => {
-      setMapHoveredMarkerId(tabName, id)
-    },
-    onMouseLeave: ({ setMapHoveredMarkerId, tabName }) => () => {
-      setMapHoveredMarkerId(tabName, -1)
-    }
-  })
-)(ListingCard)
+export default ListingCard
 
-// todo: refactor setMapHoveredMarkerId to internal state
+// todo: add internal setMapHoveredMarkerId

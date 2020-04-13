@@ -52,8 +52,6 @@ const map = ({
   searchText,
   searchLocation,
   onGoogleApiLoaded,
-  onMarkerMouseEnter,
-  onMarkerMouseLeave,
   onClickRemovePolygon,
   fitBoundsByPoints
 }) => (
@@ -83,9 +81,6 @@ const map = ({
               listing={points[0]}
               isWidget={isWidget}
               key={`SIMPLE_MARKER_${id}`}
-              markerPopupIsActive={map.hoveredMarkerId === id}
-              onMouseEnterHandler={() => onMarkerMouseEnter(id)}
-              onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
             />
           )
         }
@@ -259,12 +254,6 @@ const mapHOC = compose(
         setIsInit(true)
         onChange(getMapProps(googleMap))
       }
-    },
-    onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
-      setMapHoveredMarkerId('search', -1)
-    },
-    onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
-      setMapHoveredMarkerId('search', id)
     },
     onClickRemovePolygon: ({
       map,
