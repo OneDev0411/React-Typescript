@@ -86,6 +86,7 @@ export default function CtaAction({ contact }: Props) {
             onClick={onClick}
           >
             {!isDisabled ? (
+              // @ts-ignore js component
               <Chat data-icon="chat" />
             ) : (
               <Loading data-icon="loading" />

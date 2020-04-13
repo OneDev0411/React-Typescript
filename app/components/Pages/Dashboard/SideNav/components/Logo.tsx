@@ -2,45 +2,35 @@ import React from 'react'
 
 import { Box, makeStyles, Theme } from '@material-ui/core'
 
-const WIDTH = 56
-const HEIGHT = 56
-
 const useStyles = makeStyles((theme: Theme) => ({
-  box: {
-    width: WIDTH,
-    height: HEIGHT,
-    margin: theme.spacing(6, 0, 6, 4)
-  },
-  image: {
-    maxWidth: '100%',
-    borderRadius: '50%'
-  },
-  fallback: {
-    display: 'block',
-    fontSize: theme.spacing(4),
-    textAlign: 'center',
-    lineHeight: 2,
-    fontWeight: theme.typography.fontWeightBlack,
-    borderRadius: '50%',
-    color: theme.palette.primary.contrastText,
-    backgroundColor: theme.palette.primary.main
+  typeLogo: {
+    marginLeft: theme.spacing(1)
   }
 }))
 
-interface Props {
-  src?: string
-}
-
-export default function Logo({ src }: Props) {
+export default function Logo() {
   const classes = useStyles()
 
   return (
-    <Box className={classes.box}>
-      {src ? (
-        <img alt="brand" src={src} className={classes.image} />
-      ) : (
-        <span className={classes.fallback}>Re</span>
-      )}
+    <Box
+      display="flex"
+      alignItems="center"
+      height="24px"
+      pt="60px"
+      pb={4}
+      px={3}
+    >
+      <img
+        alt="mini-logo"
+        height="18px"
+        src="/static/images/logo--mini--white.svg"
+      />
+      <img
+        alt="type-logo"
+        className={classes.typeLogo}
+        height="20px"
+        src="/static/images/logo--type--white.svg"
+      />
     </Box>
   )
 }
