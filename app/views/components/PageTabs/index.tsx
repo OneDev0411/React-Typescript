@@ -18,6 +18,7 @@ interface Props {
   defaultAction?: SelectedTab
   value?: SelectedTab
   actionValue?: SelectedTab
+  hasMegaMenu?: boolean
   onChange?: (value: SelectedTab) => void
   onChangeAction?: (value: SelectedTab) => void
 }
@@ -34,46 +35,6 @@ const useStyles = makeStyles(
       width: '100%',
       marginTop: theme.spacing(1),
       borderBottom: `1px solid ${theme.palette.divider}`
-    },
-    tabsFlexContainer: {
-      /* 
-       shayan asked a 32px `marginRight` between each tab and since 
-       there could be several node types with the different class name
-       in tab container we use a general direct css selector
-      */
-      '& > *': {
-        marginRight: theme.spacing(4)
-      },
-      '& .MuiTab-root': {
-        paddingLeft: 0,
-        paddingRight: 0
-      },
-      '& .MuiTab-wrapper': {
-        alignItems: 'flex-start'
-      }
-    },
-    actionsFlexContainer: {
-      '& .MuiTab-root': {
-        paddingRight: 0
-      }
-    },
-    indicator: {
-      display: 'flex',
-      justifyContent: 'center',
-      backgroundColor: 'transparent',
-      marginLeft: theme.spacing(-0.75 / 2),
-      bottom: theme.spacing(0.25 / 2),
-      '& > div': {
-        width: '100%',
-        /* 
-         as Shayan asked, @ramin add a negative `maerginLeft` in indicator container
-         to be edge to edge,which cause an overflow for indicator ribbon
-         and we need to neutralize that effect by adding this
-         https://gitlab.com/rechat/web/-/issues/3913#note_309055945
-        */
-        marginLeft: theme.spacing(0.75 / 2),
-        backgroundColor: theme.palette.primary.main
-      }
     },
     scroller: {
       position: 'inherit'
@@ -121,6 +82,7 @@ export function PageTabs({
   actions,
   actionValue,
   tabs,
+  hasMegaMenu,
   onChange = () => {},
   onChangeAction = () => {}
 }: Props) {
@@ -159,9 +121,7 @@ export function PageTabs({
         onChange={(e, v) => handleChangeTab(v)}
         classes={{
           root: classes.tabContainer,
-          scroller: classes.scroller,
-          indicator: classes.indicator,
-          flexContainer: classes.tabsFlexContainer
+          scroller: hasMegaMenu ? classes.scroller : ''
         }}
         TabIndicatorProps={{ children: <div /> }}
       >
@@ -176,9 +136,7 @@ export function PageTabs({
             variant="scrollable"
             scrollButtons="auto"
             classes={{
-              root: classes.tabContainer,
-              indicator: classes.indicator,
-              flexContainer: classes.actionsFlexContainer
+              root: classes.tabContainer
             }}
             TabIndicatorProps={{ children: <div /> }}
           >

@@ -16,7 +16,6 @@ export const marketingTemplateCardStyles = (theme: Theme) =>
     },
     card: {
       display: 'flex',
-      alignItems: 'center',
       position: 'relative' as any,
       borderRadius: 3,
       transition: '0.3s',

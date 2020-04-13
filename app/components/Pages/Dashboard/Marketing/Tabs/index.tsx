@@ -41,6 +41,7 @@ const MarketingTabs = ({ sections, mediums, templateTypes }: Props) => {
   return (
     <PageTabs
       defaultValue={getActiveTab()}
+      hasMegaMenu
       tabs={[
         ...marketingCenter.items.map(i => (
           <TabLink key={i.link} to={i.link} value={i.link} label={i.title} />

@@ -5,10 +5,10 @@ import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 
 import TemplatesList from 'components/TemplatesList'
 
-import Layout from '..'
-
 import useTemplatesHistory from './useTemplatesHistory'
 import EmptyState from './EmptyState'
+
+import Layout from '..'
 
 const PAGE_SIZE = 12
 
