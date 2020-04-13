@@ -35,6 +35,7 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
 import { updateTeamSetting } from 'actions/user/update-team-setting'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
+import { goTo } from 'utils/go-to'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
@@ -616,6 +617,14 @@ class ContactsList extends React.Component {
     })
   }
 
+  onCreateContact = contact => {
+    if (!contact) {
+      return null
+    }
+
+    goTo(`/dashboard/contacts/${contact.id}`)
+  }
+
   renderTabs = (props = {}) => {
     const { viewAsUsers, listInfo, activeSegment } = this.props
 
@@ -706,6 +715,7 @@ class ContactsList extends React.Component {
         <PageLayout.HeaderWithSearch
           title={title}
           onSearch={this.handleSearch}
+          onCreateContact={this.onCreateContact}
           SearchInputProps={{
             placeholder: 'Search Contacts'
           }}
@@ -755,7 +765,7 @@ class ContactsList extends React.Component {
               }}
             />
           )}
-          {isZeroState && <ZeroState />}
+          {isZeroState && <ZeroState onCreateContact={this.onCreateContact} />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
               {this.renderTabs()}

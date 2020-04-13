@@ -4,6 +4,7 @@ import { Box, Button, Typography } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 import { OAuthProvider } from 'constants/contacts'
+
 import GoogleSigninButton from 'components/GoogleSigninButton'
 
 import { Divider } from 'components/Divider'
@@ -12,6 +13,10 @@ import IconCsv from 'components/SvgIcons/Csv/IconCsv'
 import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 
 import { useConnectOAuthAccount } from '../ImportContactsButton/use-connect-oauth-account'
+
+interface Props {
+  onCreateContact: (contact: IContact) => void
+}
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -41,7 +46,7 @@ const useStyles = makeStyles(
   { name: 'zeroState' }
 )
 
-export function ZeroState() {
+export function ZeroState({ onCreateContact }: Props) {
   const classes = useStyles()
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
@@ -100,6 +105,7 @@ export function ZeroState() {
       </Button>
 
       <CreateContact
+        submitCallback={onCreateContact}
         buttonProps={{ className: classes.button, size: 'large' }}
       />
     </Box>
