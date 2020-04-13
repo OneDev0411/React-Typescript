@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles, Box, Grid } from '@material-ui/core'
 
-import LoadingComponent from '../../../../../../views/components/Spinner'
+import LoadingComponent from 'components/Spinner'
 
 import ListingCard from '../ListingCard'
 
@@ -56,30 +56,3 @@ const MapView = props => {
 }
 
 export default MapView
-
-// export const MapView = compose(
-//   withState('sortBy', 'changeSortBy', {
-//     index: 'price',
-//     isDescending: true
-//   }),
-//   withPropsOnChange(
-//     (props, nextProps) =>
-//       props.listings.data.length !== nextProps.listings.data.length,
-//     ownerProps => ({
-//       formatedData: ownerProps.listings.data.map(l =>
-//         format(l, ownerProps.mapCenter, ownerProps.user)
-//       )
-//     })
-//   ),
-//   withPropsOnChange(
-//     (props, nextProps) =>
-//       props.formatedData.length !== nextProps.formatedData.length ||
-//       props.sortBy.index !== nextProps.sortBy.index ||
-//       props.sortBy.isDescending !== nextProps.sortBy.isDescending,
-//     ownerProps => ({
-//       data: ownerProps.formatedData.sort((a, b) =>
-//         sortBy(a, b, ownerProps.sortBy.index, ownerProps.sortBy.isDescending)
-//       )
-//     })
-//   )
-// )(MapViewContainer)
