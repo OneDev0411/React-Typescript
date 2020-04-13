@@ -6,17 +6,13 @@ import LoadingComponent from '../../../../../../views/components/Spinner'
 import ListingCard from '../ListingCard'
 
 const CARDS_CONTAINER_WIDTH = '30em'
+const VERTICAL_GAP_FROM_PAGE_TOP = '12em' // It's the page header height
 
-// Layout is made with flex. For the big picture, checkout the sample:
-// https://codepen.io/mohsentaleb/pen/jOPeVBK
 const useStyles = makeStyles(
   theme => ({
     container: {
-      flex: '1 1 auto'
-    },
-    row: {
       display: 'flex',
-      height: '100%'
+      height: `calc(100vh - ${VERTICAL_GAP_FROM_PAGE_TOP})`
     },
     mapContainer: {
       width: `calc(100% - ${CARDS_CONTAINER_WIDTH})`,
@@ -25,7 +21,6 @@ const useStyles = makeStyles(
     },
     cardsContainer: {
       width: `${CARDS_CONTAINER_WIDTH}`,
-      height: 'calc(100vh - 9em)',
       padding: theme.spacing(0, 2, 2),
       overflowY: 'scroll',
       borderLeft: `1px solid ${theme.palette.divider}`
@@ -50,13 +45,11 @@ const MapView = props => {
 
   return (
     <Box className={classes.container}>
-      <Box className={classes.row}>
-        <Box className={classes.mapContainer}>{props.Map}</Box>
-        <Box className={classes.cardsContainer}>
-          <Grid container spacing={1}>
-            {renderCards()}
-          </Grid>
-        </Box>
+      <Box className={classes.mapContainer}>{props.Map}</Box>
+      <Box className={classes.cardsContainer}>
+        <Grid container spacing={1}>
+          {renderCards()}
+        </Grid>
       </Box>
     </Box>
   )
