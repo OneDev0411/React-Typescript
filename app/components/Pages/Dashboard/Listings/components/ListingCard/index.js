@@ -12,15 +12,7 @@ import './style.scss'
 
 import FavoriteHeart from '../FavoriteHeart'
 
-const ListingCard = ({
-  user,
-  listing,
-  onClick,
-  isWidget,
-  onMouseEnter,
-  onMouseLeave,
-  isShowOnMap = false
-}) => {
+const ListingCard = ({ isWidget = false, listing, onClick, user = null }) => {
   const target = user && !isWidget ? '' : '_blank'
 
   return (
