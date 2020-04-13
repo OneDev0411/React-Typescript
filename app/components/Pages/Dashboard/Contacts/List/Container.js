@@ -472,21 +472,24 @@ class ContactsList extends React.Component {
   }
 
   handleOnDelete = (e, options) => {
-    const selectedRows =
-      options && options.selectedRows ? options.selectedRows : []
+    const singleSelectedRow =
+      options && options.singleSelectedRow ? options.singleSelectedRow : []
     const state = this.props.gridStateContext
     const entireMode = state.selection.isEntireRowsSelected
 
     const selectedRowsLength = entireMode
       ? this.props.listInfo.total - state.selection.excludedRows.length
       : state.selection.selectedRowIds.length
-    const isManyContacts = entireMode ? true : selectedRowsLength > 1
+    const isSingleContact = singleSelectedRow.length === 1
+    const isManyContacts = isSingleContact
+      ? false
+      : entireMode || selectedRowsLength > 1
 
     this.props.confirmation({
       confirmLabel: 'Delete',
       message: `Delete ${isManyContacts ? 'contacts' : 'contact'}?`,
       onConfirm: () => {
-        this.handleDeleteContact({ selectedRows })
+        this.handleDeleteContact({ singleSelectedRow })
       },
       description: `Deleting ${
         isManyContacts ? `these ${selectedRowsLength} contacts` : 'this contact'
@@ -498,13 +501,14 @@ class ContactsList extends React.Component {
     })
   }
 
-  handleDeleteContact = async ({ selectedRows }) => {
+  handleDeleteContact = async ({ singleSelectedRow }) => {
     const state = this.props.gridStateContext
+    const isSingleContact = singleSelectedRow.length === 1
 
     try {
       this.rowsUpdating(true)
 
-      if (state.selection.isEntireRowsSelected) {
+      if (state.selection.isEntireRowsSelected && !isSingleContact) {
         const bulkDeleteParams = {
           users: this.props.viewAsUsers,
           searchText: this.state.searchInputValue,
@@ -521,9 +525,9 @@ class ContactsList extends React.Component {
         await this.reloadContacts()
       } else {
         const rows =
-          state.selection.selectedRowIds.length > 0
+          state.selection.selectedRowIds.length > 0 && !isSingleContact
             ? state.selection.selectedRowIds
-            : selectedRows
+            : singleSelectedRow
 
         await this.props.deleteContacts(rows)
       }
