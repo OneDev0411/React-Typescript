@@ -46,7 +46,7 @@ export const SearchInput = forwardRef(
       fullWidth,
       onClear,
       isLoading,
-      debounceTime = 500,
+      debounceTime = 0,
       onChange = () => {},
       ...others
     }: SearchInputProps,
@@ -82,12 +82,19 @@ export const SearchInput = forwardRef(
       }
     }))
 
-    const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
       const value = e.target.value
 
       setNonEmpty(!!value)
 
-      debouncedOnChange(e, value)
+      if (debounceTime > 0) {
+        // https://stackoverflow.com/questions/49081149/debounce-on-react-got-e-target-value-undefined?answertab=active#tab-top
+        debouncedOnChange(e, value)
+
+        return
+      }
+
+      onChange(e)
     }
 
     const clearInput = () => {
