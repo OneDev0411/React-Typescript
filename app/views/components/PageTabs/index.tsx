@@ -3,6 +3,7 @@ import { Tabs, makeStyles, Theme } from '@material-ui/core'
 
 export * from './Tab'
 export * from './TabLink'
+export * from './MegaTab'
 export * from './DropdownTab'
 export * from './TabSpacer'
 
