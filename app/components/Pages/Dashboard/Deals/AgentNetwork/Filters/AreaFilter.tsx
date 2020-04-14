@@ -122,7 +122,7 @@ export default function AreaFilter(props: Props) {
   }
 
   return (
-    <Box my="3">
+    <Box my={3}>
       <Box mb={1}>Select a search area:</Box>
       <Box display="flex" alignItems="center">
         <Box mr={2} display="flex" alignItems="center">
