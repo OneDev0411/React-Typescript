@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography, makeStyles, Theme } from '@material-ui/core'
 
+import { noop } from 'utils/helpers'
 import GlobalActionsButton from 'components/GlobalActionsButton'
 
 export interface GlobalHeaderProps {
@@ -9,7 +10,10 @@ export interface GlobalHeaderProps {
   noGlobalActionsButton?: boolean
   children?: React.ReactNode
   onCreateEvent?: (event: IEvent) => void
-  onCreateContact?: (event: IContact) => void
+  onCreateContact?: (contact: IContact) => void
+  onCreateTour?: (
+    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => void
 }
 
 const useStyles = makeStyles(
@@ -43,8 +47,9 @@ export default function GlobalHeader({
   noPadding,
   noGlobalActionsButton,
   children,
-  onCreateEvent = () => {},
-  onCreateContact = () => {}
+  onCreateEvent = noop,
+  onCreateContact = noop,
+  onCreateTour = noop
 }: GlobalHeaderProps) {
   const classes = useStyles({ noPadding })
 
@@ -61,6 +66,7 @@ export default function GlobalHeader({
           <GlobalActionsButton
             onCreateEvent={onCreateEvent}
             onCreateContact={onCreateContact}
+            onCreateTour={onCreateTour}
           />
         </div>
       )}

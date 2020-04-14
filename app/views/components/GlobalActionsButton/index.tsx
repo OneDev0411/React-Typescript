@@ -11,6 +11,9 @@ import Menu from './Menu'
 interface Props {
   onCreateEvent: (event: IEvent) => void
   onCreateContact: (contact: IContact) => void
+  onCreateTour: (
+    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => void
 }
 
 export default function GlobalActionsButton(props: Props) {
@@ -42,6 +45,13 @@ export default function GlobalActionsButton(props: Props) {
 
   const handleSubmitContact = (contact: IContact) => {
     props.onCreateContact(contact)
+    handleCloseRenderedItem()
+  }
+
+  const handleSubmitTour = (
+    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => {
+    props.onCreateTour(tour)
     handleCloseRenderedItem()
   }
 
@@ -95,7 +105,7 @@ export default function GlobalActionsButton(props: Props) {
           isOpen: true,
           listings: [],
           onClose: handleCloseRenderedItem,
-          submitCallback: handleCloseRenderedItem
+          submitCallback: handleSubmitTour
         })
     }
   }
