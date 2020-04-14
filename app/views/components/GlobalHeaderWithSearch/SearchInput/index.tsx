@@ -9,6 +9,8 @@ import {
 import { useTheme } from '@material-ui/styles'
 import { TextFieldProps } from '@material-ui/core/TextField'
 
+import { useDebouncedCallback } from 'use-debounce'
+
 import IconSearch from 'components/SvgIcons/Search/IconSearch'
 import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
@@ -33,12 +35,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export type SearchInputProps = TextFieldProps & {
   isLoading?: boolean
+  debounceTime?: number
   onClear?: () => void
+  onChange: (e: React.ChangeEvent<HTMLInputElement>, value?: string) => null
 }
 
 export const SearchInput = forwardRef(
   (
-    { fullWidth, onChange, onClear, isLoading, ...others }: SearchInputProps,
+    {
+      fullWidth,
+      onClear,
+      isLoading,
+      debounceTime = 500,
+      onChange,
+      ...others
+    }: SearchInputProps,
     ref
   ) => {
     const classes = useStyles()
@@ -46,6 +57,10 @@ export const SearchInput = forwardRef(
     const [nonEmpty, setNonEmpty] = useState(false)
     const inputEl = useRef<HTMLInputElement | null>(null)
     const widthStyle = { width: fullWidth ? '100%' : '360px' } // default width
+
+    const [debouncedOnChange] = useDebouncedCallback(onChange, debounceTime, {
+      maxWait: 2000
+    })
 
     // Exposing some methods for the input el
     useImperativeHandle(ref, () => ({
@@ -70,13 +85,9 @@ export const SearchInput = forwardRef(
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value
 
-      onChange && onChange(e)
+      setNonEmpty(!!value)
 
-      if (value) {
-        setNonEmpty(true)
-      } else {
-        setNonEmpty(false)
-      }
+      debouncedOnChange(e, value)
     }
 
     const clearInput = () => {
