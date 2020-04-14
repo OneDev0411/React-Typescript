@@ -1,6 +1,5 @@
-import React, { useState, ReactNode } from 'react'
+import React, { useRef, ReactNode } from 'react'
 import { TabProps, createStyles, makeStyles, Theme } from '@material-ui/core'
-import cn from 'classnames'
 
 import { Tab } from '../Tab'
 
@@ -73,23 +72,27 @@ const useStyles = makeStyles(
 
 export const MegaTab = ({ render, ...props }: Props) => {
   const classes = useStyles()
-  const [closeFlag, setCloseFlag] = useState<boolean>(false)
-
+  const megaMenuContentRef = useRef<HTMLDivElement>(null)
   const close = () => {
-    setCloseFlag(true)
-    setTimeout(() => {
-      setCloseFlag(false)
-    }, 1)
+    const $el = megaMenuContentRef.current
+
+    /*
+      since we relay on css, hover  for showing container and
+      don't have any open state, and we wanna expose a close
+      function we need this setTimeOut for simulating it
+    */
+
+    if ($el) {
+      $el.classList.add(classes.megaMenuContentClosed)
+      setTimeout(() => {
+        $el.classList.remove(classes.megaMenuContentClosed)
+      }, 0)
+    }
   }
 
   return (
     <div className={classes.megaMenuWrapper}>
-      <div
-        className={cn(
-          classes.megaMenuContent,
-          closeFlag && classes.megaMenuContentClosed
-        )}
-      >
+      <div ref={megaMenuContentRef} className={classes.megaMenuContent}>
         {render({ close })}
       </div>
       <Tab {...props} />
