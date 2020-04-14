@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Helmet } from 'react-helmet'
 import memoize from 'lodash/memoize'
-import { Box } from '@material-ui/core'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
@@ -131,24 +130,20 @@ class Favorites extends React.Component {
     }
   }
 
-  // Layout is made with flex. For the big picture, checkout the sample:
-  // https://codepen.io/mohsentaleb/pen/jOPeVBK
   render() {
     return (
       <>
         <Helmet>
           <title>Favorites | Properties | Rechat</title>
         </Helmet>
-        <Box flex="0 1 auto">
-          <Header title="Favorites" />
-          <Tabs
-            onChangeView={this.onChangeView}
-            activeView={this.state.activeView}
-            onChangeSort={this.onChangeSort}
-            activeSort={this.state.activeSort}
-            user={this.props.user}
-          />
-        </Box>
+        <Header title="Favorites" />
+        <Tabs
+          onChangeView={this.onChangeView}
+          activeView={this.state.activeView}
+          onChangeSort={this.onChangeSort}
+          activeSort={this.state.activeSort}
+          user={this.props.user}
+        />
         {this.renderMain()}
       </>
     )

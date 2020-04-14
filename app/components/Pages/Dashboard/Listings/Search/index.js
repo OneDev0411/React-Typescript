@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 import memoize from 'lodash/memoize'
 import hash from 'object-hash'
-import { Box } from '@material-ui/core'
 
 import { DALLAS_POINTS } from 'constants/listings/dallas-points'
 
@@ -411,31 +410,26 @@ class Search extends React.Component {
   render() {
     const { user } = this.props
 
-    // Layout is made with flex. For the big picture, checkout the sample:
-    // https://codepen.io/mohsentaleb/pen/jOPeVBK
     return (
       <>
-        <Box flex="0 1 auto">
-          <Header
-            isWidget={this.props.isWidget}
-            isFetching={this.props.isFetching}
-            activeView={this.state.activeView}
-            onChangeView={this.onChangeView}
-            hasData={this.props.listings.data.length > 0}
-            showGlobalActionsButton={user}
-          />
-
-          <Tabs
-            user={user}
-            onChangeView={this.onChangeView}
-            onChangeSort={this.onChangeSort}
-            activeView={this.state.activeView}
-            isWidget={this.props.isWidget}
-            activeSort={this.state.activeSort}
-            saveSearchHandler={this.handleSaveSearch}
-            showSavedSearchButton
-          />
-        </Box>
+        <Header
+          isWidget={this.props.isWidget}
+          isFetching={this.props.isFetching}
+          activeView={this.state.activeView}
+          onChangeView={this.onChangeView}
+          hasData={this.props.listings.data.length > 0}
+          showGlobalActionsButton={user}
+        />
+        <Tabs
+          user={user}
+          onChangeView={this.onChangeView}
+          onChangeSort={this.onChangeSort}
+          activeView={this.state.activeView}
+          isWidget={this.props.isWidget}
+          activeSort={this.state.activeSort}
+          saveSearchHandler={this.handleSaveSearch}
+          showSavedSearchButton
+        />
         {this.renderMain()}
         <CreateAlertModal
           user={user}
