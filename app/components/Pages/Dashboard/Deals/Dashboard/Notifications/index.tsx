@@ -66,7 +66,7 @@ export default function Notifications({ deal }: Props) {
         </Typography>
 
         <IconButton size="small" onClick={() => setIsOpen(false)}>
-          <CloseIcon fillColor={theme.palette.common.white} size="small" />
+          <CloseIcon fillColor={theme.palette.common.black} size="small" />
         </IconButton>
       </div>
 
