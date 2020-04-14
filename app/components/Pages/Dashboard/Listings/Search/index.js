@@ -1,5 +1,3 @@
-import { DALLAS_POINTS } from 'constants/listings/dallas-points'
-
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
@@ -7,6 +5,8 @@ import { batchActions } from 'redux-batched-actions'
 import memoize from 'lodash/memoize'
 import hash from 'object-hash'
 import { Box } from '@material-ui/core'
+
+import { DALLAS_POINTS } from 'constants/listings/dallas-points'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
@@ -415,7 +415,7 @@ class Search extends React.Component {
     // https://codepen.io/mohsentaleb/pen/jOPeVBK
     return (
       <>
-        <Box flex="0 1 auto">
+        <Box flex="0 1 auto" px={5}>
           <Header
             isWidget={this.props.isWidget}
             isFetching={this.props.isFetching}
@@ -436,7 +436,7 @@ class Search extends React.Component {
             showSavedSearchButton
           />
         </Box>
-        {this.renderMain()}
+        <Box px={5}>{this.renderMain()}</Box>
         <CreateAlertModal
           user={user}
           onHide={this.shareModalCloseHandler}

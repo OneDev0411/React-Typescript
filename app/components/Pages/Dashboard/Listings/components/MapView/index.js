@@ -1,4 +1,5 @@
 import React from 'react'
+import cn from 'classnames'
 import { makeStyles, Box, Grid } from '@material-ui/core'
 
 import LoadingComponent from 'components/Spinner'
@@ -21,7 +22,7 @@ const useStyles = makeStyles(
     },
     cardsContainer: {
       width: `${CARDS_CONTAINER_WIDTH}`,
-      padding: theme.spacing(0, 2, 2),
+      padding: theme.spacing(0, 0.5, 2, 2),
       overflowY: 'scroll',
       borderLeft: `1px solid ${theme.palette.divider}`
     }
@@ -50,7 +51,7 @@ const MapView = props => {
   return (
     <Box className={classes.container}>
       <Box className={classes.mapContainer}>{props.Map}</Box>
-      <Box className={classes.cardsContainer}>
+      <Box className={cn(classes.cardsContainer, 'u-scrollbar--thinner--self')}>
         <Grid container spacing={1}>
           {renderCards()}
         </Grid>

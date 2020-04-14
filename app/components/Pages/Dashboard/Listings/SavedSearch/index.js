@@ -5,6 +5,7 @@ import { browserHistory, withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
 import memoize from 'lodash/memoize'
 import hash from 'object-hash'
+import { Box } from '@material-ui/core'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 
@@ -239,26 +240,28 @@ class SavedSearch extends React.Component {
         <Helmet>
           <title> {title && `${`${title} | `}`}Properties | Rechat</title>
         </Helmet>
-        <Header
-          title={title}
-          subtitle={this.props.savedSearch.proposed_title}
-          RightComponent={() => (
-            <Avatars
-              users={this.props.savedSearch.users}
-              style={{ marginRight: '2rem' }}
-              tooltipPlacement="bottom"
-            />
-          )}
-        />
-        <Tabs
-          user={this.props.user}
-          onChangeView={this.onChangeView}
-          onChangeSort={this.onChangeSort}
-          activeView={this.state.activeView}
-          isWidget={this.props.isWidget}
-          activeSort={this.state.activeSort}
-        />
-        {this.renderMain()}
+        <Box px={5}>
+          <Header
+            title={title}
+            subtitle={this.props.savedSearch.proposed_title}
+            RightComponent={() => (
+              <Avatars
+                users={this.props.savedSearch.users}
+                style={{ marginRight: '2rem' }}
+                tooltipPlacement="bottom"
+              />
+            )}
+          />
+          <Tabs
+            user={this.props.user}
+            onChangeView={this.onChangeView}
+            onChangeSort={this.onChangeSort}
+            activeView={this.state.activeView}
+            isWidget={this.props.isWidget}
+            activeSort={this.state.activeSort}
+          />
+          {this.renderMain()}
+        </Box>
       </>
     )
   }

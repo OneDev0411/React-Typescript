@@ -1,14 +1,11 @@
 import React from 'react'
 import { Grid, Box } from '@material-ui/core'
-import { useTheme } from '@material-ui/styles'
 
 import LoadingComponent from '../../../../../../views/components/Spinner'
 
 import ListingCard from '../ListingCard'
 
 export default function GridView({ isFetching, sortedListings, user }) {
-  const theme = useTheme()
-
   const renderContent = () => {
     if (isFetching) {
       return <LoadingComponent />
@@ -22,7 +19,7 @@ export default function GridView({ isFetching, sortedListings, user }) {
   }
 
   return (
-    <Box p={theme.spacing(1, 2)}>
+    <Box py={1}>
       <Grid container spacing={2}>
         {renderContent()}
       </Grid>

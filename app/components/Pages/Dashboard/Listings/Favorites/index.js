@@ -139,7 +139,7 @@ class Favorites extends React.Component {
         <Helmet>
           <title>Favorites | Properties | Rechat</title>
         </Helmet>
-        <Box flex="0 1 auto">
+        <Box flex="0 1 auto" px={5}>
           <Header title="Favorites" />
           <Tabs
             onChangeView={this.onChangeView}
@@ -149,7 +149,7 @@ class Favorites extends React.Component {
             user={this.props.user}
           />
         </Box>
-        {this.renderMain()}
+        <Box px={5}>{this.renderMain()}</Box>
       </>
     )
   }
