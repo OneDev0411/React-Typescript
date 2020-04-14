@@ -14,6 +14,9 @@ interface Props {
   onCreateTour: (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => void
+  onCreateOpenHouse: (
+    oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => void
 }
 
 export default function GlobalActionsButton(props: Props) {
@@ -52,6 +55,13 @@ export default function GlobalActionsButton(props: Props) {
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {
     props.onCreateTour(tour)
+    handleCloseRenderedItem()
+  }
+
+  const handleSubmitOpenHouse = (
+    oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => {
+    props.onCreateOpenHouse(oh)
     handleCloseRenderedItem()
   }
 
@@ -96,7 +106,7 @@ export default function GlobalActionsButton(props: Props) {
         return selectedItem.render({
           isOpen: true,
           onClose: handleCloseRenderedItem,
-          submitCallback: handleCloseRenderedItem
+          submitCallback: handleSubmitOpenHouse
         })
 
       case 'tour':

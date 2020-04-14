@@ -14,6 +14,9 @@ export interface GlobalHeaderProps {
   onCreateTour?: (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => void
+  onCreateOpenHouse?: (
+    oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => void
 }
 
 const useStyles = makeStyles(
@@ -49,7 +52,8 @@ export default function GlobalHeader({
   children,
   onCreateEvent = noop,
   onCreateContact = noop,
-  onCreateTour = noop
+  onCreateTour = noop,
+  onCreateOpenHouse = noop
 }: GlobalHeaderProps) {
   const classes = useStyles({ noPadding })
 
@@ -67,6 +71,7 @@ export default function GlobalHeader({
             onCreateEvent={onCreateEvent}
             onCreateContact={onCreateContact}
             onCreateTour={onCreateTour}
+            onCreateOpenHouse={onCreateOpenHouse}
           />
         </div>
       )}
