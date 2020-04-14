@@ -14,7 +14,7 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       maxWidth: '100%',
-      width: 300,
+      width: '18.75rem',
       maxHeight: '18.75rem',
       overflow: 'auto'
     }
