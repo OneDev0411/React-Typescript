@@ -13,6 +13,7 @@ const useStyles = makeStyles(
   theme => ({
     container: {
       display: 'flex',
+      overflow: 'hidden',
       height: `calc(100vh - ${VERTICAL_GAP_FROM_PAGE_TOP})`
     },
     mapContainer: {
