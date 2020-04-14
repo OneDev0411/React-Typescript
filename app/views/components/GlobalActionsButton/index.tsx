@@ -11,6 +11,12 @@ import Menu from './Menu'
 interface Props {
   onCreateEvent: (event: IEvent) => void
   onCreateContact: (contact: IContact) => void
+  onCreateTour: (
+    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => void
+  onCreateOpenHouse: (
+    oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => void
 }
 
 export default function GlobalActionsButton(props: Props) {
@@ -42,6 +48,20 @@ export default function GlobalActionsButton(props: Props) {
 
   const handleSubmitContact = (contact: IContact) => {
     props.onCreateContact(contact)
+    handleCloseRenderedItem()
+  }
+
+  const handleSubmitTour = (
+    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => {
+    props.onCreateTour(tour)
+    handleCloseRenderedItem()
+  }
+
+  const handleSubmitOpenHouse = (
+    oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => {
+    props.onCreateOpenHouse(oh)
     handleCloseRenderedItem()
   }
 
@@ -86,7 +106,7 @@ export default function GlobalActionsButton(props: Props) {
         return selectedItem.render({
           isOpen: true,
           onClose: handleCloseRenderedItem,
-          submitCallback: handleCloseRenderedItem
+          submitCallback: handleSubmitOpenHouse
         })
 
       case 'tour':
@@ -95,7 +115,7 @@ export default function GlobalActionsButton(props: Props) {
           isOpen: true,
           listings: [],
           onClose: handleCloseRenderedItem,
-          submitCallback: handleCloseRenderedItem
+          submitCallback: handleSubmitTour
         })
     }
   }
