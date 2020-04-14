@@ -15,6 +15,7 @@ function Listings(props: { children: ReactChildren }) {
         flexDirection="column"
         flexWrap="nowrap"
         height="100%"
+        px={5}
       >
         {props.children}
       </Box>

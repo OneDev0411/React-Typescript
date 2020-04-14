@@ -415,7 +415,7 @@ class Search extends React.Component {
     // https://codepen.io/mohsentaleb/pen/jOPeVBK
     return (
       <>
-        <Box flex="0 1 auto" px={5}>
+        <Box flex="0 1 auto">
           <Header
             isWidget={this.props.isWidget}
             isFetching={this.props.isFetching}
@@ -436,7 +436,7 @@ class Search extends React.Component {
             showSavedSearchButton
           />
         </Box>
-        <Box px={5}>{this.renderMain()}</Box>
+        {this.renderMain()}
         <CreateAlertModal
           user={user}
           onHide={this.shareModalCloseHandler}

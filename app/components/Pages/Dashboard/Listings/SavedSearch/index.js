@@ -240,7 +240,7 @@ class SavedSearch extends React.Component {
         <Helmet>
           <title> {title && `${`${title} | `}`}Properties | Rechat</title>
         </Helmet>
-        <Box px={5}>
+        <Box>
           <Header
             title={title}
             subtitle={this.props.savedSearch.proposed_title}
