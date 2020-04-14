@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import getCRMTimeline from 'models/get-crm-timeline'
 import NewTask from 'components/NewEvent'
@@ -62,7 +62,7 @@ export default class EventsPane extends React.Component {
 
   render() {
     return (
-      <Fragment>
+      <>
         <FactsheetContainer>
           <FactsheetsNav
             deal={this.props.deal}
@@ -80,6 +80,7 @@ export default class EventsPane extends React.Component {
             <NewTask
               user={this.props.user}
               defaultAssociation={this.defaultAssociation}
+              submitCallback={this.fetchTimeline}
             />
           </Card>
 
@@ -92,7 +93,7 @@ export default class EventsPane extends React.Component {
             user={this.props.user}
           />
         </MainContainer>
-      </Fragment>
+      </>
     )
   }
 }
