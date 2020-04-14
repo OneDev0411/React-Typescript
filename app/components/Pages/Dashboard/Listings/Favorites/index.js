@@ -91,7 +91,7 @@ class Favorites extends React.Component {
   }
 
   renderMain() {
-    const { listings, isFetching } = this.props
+    const { listings, isFetching, user } = this.props
 
     const sortedListings = this.sortListings(
       listings,
@@ -103,6 +103,7 @@ class Favorites extends React.Component {
       case 'map':
         return (
           <MapView
+            user={user}
             tabName="favorites"
             sortedListings={sortedListings}
             Map={<Map markers={listings.data} isFetching={isFetching} />}
@@ -111,7 +112,11 @@ class Favorites extends React.Component {
 
       case 'grid':
         return (
-          <GridView isFetching={isFetching} sortedListings={sortedListings} />
+          <GridView
+            isFetching={isFetching}
+            sortedListings={sortedListings}
+            user={user}
+          />
         )
 
       default:
@@ -120,6 +125,7 @@ class Favorites extends React.Component {
             isFetching={isFetching}
             sortedListings={sortedListings}
             listings={listings}
+            user={user}
           />
         )
     }
@@ -129,7 +135,7 @@ class Favorites extends React.Component {
   // https://codepen.io/mohsentaleb/pen/jOPeVBK
   render() {
     return (
-      <React.Fragment>
+      <>
         <Helmet>
           <title>Favorites | Properties | Rechat</title>
         </Helmet>
@@ -144,7 +150,7 @@ class Favorites extends React.Component {
           />
         </Box>
         {this.renderMain()}
-      </React.Fragment>
+      </>
     )
   }
 }

@@ -38,7 +38,11 @@ const MapView = props => {
 
     return props.sortedListings.map(listing => (
       <Grid key={listing.id} item xs={12}>
-        <ListingCard isShowOnMap listing={listing} tabName={props.tabName} />
+        <ListingCard
+          listing={listing}
+          tabName={props.tabName}
+          user={props.user}
+        />
       </Grid>
     ))
   }

@@ -6,7 +6,7 @@ import LoadingComponent from '../../../../../../views/components/Spinner'
 
 import ListingCard from '../ListingCard'
 
-export default function GridView({ isFetching, sortedListings }) {
+export default function GridView({ isFetching, sortedListings, user }) {
   const theme = useTheme()
 
   const renderContent = () => {
@@ -16,7 +16,7 @@ export default function GridView({ isFetching, sortedListings }) {
 
     return sortedListings.map(listing => (
       <Grid key={listing.id} item xs={12} sm={12} md={6} lg={4} xl={3}>
-        <ListingCard listing={listing} isShowOnMap />
+        <ListingCard listing={listing} user={user} />
       </Grid>
     ))
   }

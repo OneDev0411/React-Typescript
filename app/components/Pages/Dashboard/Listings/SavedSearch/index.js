@@ -184,6 +184,7 @@ class SavedSearch extends React.Component {
   )
 
   renderMain() {
+    const { user } = this.props
     const { listings, isFetching } = this.state
 
     const sortedListings = this.sortListings(
@@ -196,6 +197,7 @@ class SavedSearch extends React.Component {
       case 'map':
         return (
           <MapView
+            user={user}
             tabName="alerts"
             sortedListings={sortedListings}
             Map={
@@ -210,7 +212,11 @@ class SavedSearch extends React.Component {
 
       case 'grid':
         return (
-          <GridView isFetching={isFetching} sortedListings={sortedListings} />
+          <GridView
+            isFetching={isFetching}
+            sortedListings={sortedListings}
+            user={user}
+          />
         )
 
       default:
@@ -219,6 +225,7 @@ class SavedSearch extends React.Component {
             isFetching={isFetching}
             sortedListings={sortedListings}
             listings={listings}
+            user={user}
           />
         )
     }
@@ -228,7 +235,7 @@ class SavedSearch extends React.Component {
     const { title } = this.props.savedSearch
 
     return (
-      <React.Fragment>
+      <>
         <Helmet>
           <title> {title && `${`${title} | `}`}Properties | Rechat</title>
         </Helmet>
@@ -252,7 +259,7 @@ class SavedSearch extends React.Component {
           activeSort={this.state.activeSort}
         />
         {this.renderMain()}
-      </React.Fragment>
+      </>
     )
   }
 }
