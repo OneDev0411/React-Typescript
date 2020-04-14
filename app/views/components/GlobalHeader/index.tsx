@@ -28,8 +28,7 @@ const useStyles = makeStyles(
       justifyContent: 'space-between',
       padding: ({ noPadding }: GlobalHeaderProps) =>
         !noPadding ? theme.spacing(3) : 0,
-      width: '100%',
-      overflow: 'hidden'
+      width: '100%'
     },
     title: {
       marginRight: theme.spacing(1),
