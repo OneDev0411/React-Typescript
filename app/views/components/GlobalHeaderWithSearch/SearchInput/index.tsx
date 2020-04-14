@@ -37,7 +37,7 @@ export type SearchInputProps = TextFieldProps & {
   isLoading?: boolean
   debounceTime?: number
   onClear?: () => void
-  onChange: (e: React.ChangeEvent<HTMLInputElement>, value?: string) => null
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>, value?: string) => void
 }
 
 export const SearchInput = forwardRef(
@@ -47,7 +47,7 @@ export const SearchInput = forwardRef(
       onClear,
       isLoading,
       debounceTime = 500,
-      onChange,
+      onChange = () => {},
       ...others
     }: SearchInputProps,
     ref
