@@ -5,7 +5,7 @@ import LoadingComponent from 'components/Spinner'
 
 import ListingCard from '../ListingCard'
 
-const CARDS_CONTAINER_WIDTH = '25em'
+const CARDS_CONTAINER_WIDTH = '27em'
 const VERTICAL_GAP_FROM_PAGE_TOP = '12em' // It's the page header height
 
 const useStyles = makeStyles(
