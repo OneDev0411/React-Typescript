@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { IconButton, makeStyles, Theme, Typography } from '@material-ui/core'
 
-import useEffectOnce from 'react-use/lib/useEffectOnce'
-
 import { useTheme } from '@material-ui/styles'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { nl2br } from 'utils/nl2br'
 
@@ -36,25 +35,43 @@ const useStyles = makeStyles(
 )
 
 export default function Notifications({ deal }: Props) {
+  const newNotificationsCount = (deal.new_notifications || []).length
+
+  const getUnreadNotifications = useCallback(() => {
+    return (deal.new_notifications || []).filter(
+      notification => notification.room === null
+    ) as (IChatMessage & {
+      message: string
+    })[]
+  }, [deal.new_notifications])
+
+  const [unreadNotifications, setUnreadNotifications] = useState(
+    getUnreadNotifications()
+  )
   const dispatch = useDispatch()
   const classes = useStyles()
   const theme = useTheme<Theme>()
 
-  const unreadNotifications = Array.isArray(deal.new_notifications)
-    ? (deal.new_notifications.filter(
-        notification => notification.room === null
-      ) as (IChatMessage & {
-        message: string
-      })[])
-    : []
+  const clearNotifications = () => {
+    dispatch(clearDealNotifications(deal))
+  }
 
-  const [isOpen, setIsOpen] = useState(unreadNotifications.length > 0)
+  const handleClose = () => {
+    clearNotifications()
+    setUnreadNotifications([])
+  }
 
   useEffectOnce(() => {
-    dispatch(clearDealNotifications())
+    clearNotifications()
   })
 
-  if (!isOpen || unreadNotifications.length === 0) {
+  useEffect(() => {
+    if (newNotificationsCount > 0) {
+      setUnreadNotifications(getUnreadNotifications())
+    }
+  }, [newNotificationsCount, getUnreadNotifications])
+
+  if (unreadNotifications.length === 0) {
     return null
   }
 
@@ -65,7 +82,7 @@ export default function Notifications({ deal }: Props) {
           Notifications since your last visit
         </Typography>
 
-        <IconButton size="small" onClick={() => setIsOpen(false)}>
+        <IconButton size="small" onClick={handleClose}>
           <CloseIcon fillColor={theme.palette.common.black} size="small" />
         </IconButton>
       </div>
