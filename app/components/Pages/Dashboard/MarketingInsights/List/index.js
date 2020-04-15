@@ -207,6 +207,7 @@ function List(props) {
     <Layout
       sentCount={stats.sent}
       scheduledCount={stats.scheduled}
+      onCreateEmail={() => setQueue(queue => queue + 1)}
       renderContent={props => (
         <InsightContainer>{renderContent(props)}</InsightContainer>
       )}
