@@ -31,8 +31,7 @@ const useStyles = makeStyles(
       width: '100%'
     },
     title: {
-      marginRight: theme.spacing(1),
-      alignSelf: 'flex-start'
+      marginRight: theme.spacing(1)
     },
     content: {
       flexGrow: 1
