@@ -10,10 +10,13 @@ import {
 import { Link } from 'react-router'
 
 import { getNameInitials } from 'utils/helpers.js'
+
 import CopyButton from 'components/CopyButton'
 import { EmailComposeFormProps } from 'components/EmailCompose'
 import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
+
+import { getName } from './helpers'
 
 import Activity from './Activity'
 import {
@@ -72,11 +75,11 @@ function MiniProfile(props: MiniProfilePropsType) {
     <ProfileContainer>
       <div className="head">
         <Avatar
-          alt={data.name}
+          alt={getName(data)}
           src={data.profile_image_url}
           className={classes.avatar}
         >
-          {getNameInitials(data.name)}
+          {getNameInitials(getName(data))}
         </Avatar>
 
         <div className="actions">
