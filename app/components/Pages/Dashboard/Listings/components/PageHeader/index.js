@@ -6,6 +6,10 @@ import GlobalPageLayout from 'components/GlobalPageLayout'
 
 const useStyles = makeStyles(theme =>
   createStyles({
+    container: {
+      height: theme.spacing(15),
+      display: 'flex'
+    },
     subtitle: {
       color: theme.palette.grey['400']
     }
@@ -17,7 +21,7 @@ export function Header(props) {
   const { subtitle, title } = props
 
   return (
-    <Box py={5}>
+    <Box className={classes.container}>
       <GlobalPageLayout.Header>
         <Typography variant="h4">{title}</Typography>
         <Typography variant="h6" className={classes.subtitle}>
