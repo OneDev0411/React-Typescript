@@ -34,6 +34,7 @@ export const Header = styled.div`
     height: 3.5rem;
     padding: 0 calc(1rem + 3px);
     border-bottom: 1px solid ${theme.palette.divider};
+    background: ${theme.palette.grey['300']};
   `}
 `
 
