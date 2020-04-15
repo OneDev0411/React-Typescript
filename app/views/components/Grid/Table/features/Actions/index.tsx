@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Tooltip, createStyles, makeStyles, Theme } from '@material-ui/core'
+import Slide from '@material-ui/core/Slide'
 
 import Checkbox from '../Selection/Checkbox'
 
@@ -91,28 +92,30 @@ export function Actions<Row>({ rows, TableActions, totalRows }: Props<Row>) {
     : 'Select All Rows'
 
   return (
-    <div className={classes.container}>
-      <div className={classes.infoContainer}>
-        <Tooltip title={tooltipTitle} placement="top">
-          <Checkbox
-            checked={isAllRowsSelected}
-            tooltipTitle={tooltipTitle}
-            indeterminate={isSomeRowsSelected}
-            onChange={toggleAll}
-          />
-        </Tooltip>
+    <Slide in direction="up">
+      <div className={classes.container}>
+        <div className={classes.infoContainer}>
+          <Tooltip title={tooltipTitle} placement="top">
+            <Checkbox
+              checked={isAllRowsSelected}
+              tooltipTitle={tooltipTitle}
+              indeterminate={isSomeRowsSelected}
+              onChange={toggleAll}
+            />
+          </Tooltip>
 
-        <span className={classes.summary} onClick={toggleAll}>
-          {getSelectedCount()} of {totalRows} selected
-        </span>
-        <ToggleEntireRows<Row> rows={rows} totalRows={totalRows} />
-      </div>
-
-      {TableActions && (
-        <div className={classes.actionsContainer}>
-          <TableActions state={state} dispatch={dispatch} rows={rows} />
+          <span className={classes.summary} onClick={toggleAll}>
+            {getSelectedCount()} of {totalRows} selected
+          </span>
+          <ToggleEntireRows<Row> rows={rows} totalRows={totalRows} />
         </div>
-      )}
-    </div>
+
+        {TableActions && (
+          <div className={classes.actionsContainer}>
+            <TableActions state={state} dispatch={dispatch} rows={rows} />
+          </div>
+        )}
+      </div>
+    </Slide>
   )
 }
