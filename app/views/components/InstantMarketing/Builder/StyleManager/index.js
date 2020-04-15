@@ -65,7 +65,7 @@ export const load = async colors => {
     const getStyle = target => getComputedStyle(target.view.el)
 
     const setStyle = (target, prop, value) => {
-      const selectedTargetStyles = Object.assign({}, target.get('style'))
+      const selectedTargetStyles = { ...target.get('style') }
 
       selectedTargetStyles[prop] = value
       target.set('style', selectedTargetStyles)
