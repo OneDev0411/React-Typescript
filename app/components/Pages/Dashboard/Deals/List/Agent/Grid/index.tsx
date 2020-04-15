@@ -3,7 +3,10 @@ import { useSelector } from 'react-redux'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { TableCellProps } from '@material-ui/core'
+import { TableCellProps, Box, Theme } from '@material-ui/core'
+import Skeleton from '@material-ui/lab/Skeleton'
+
+import { useTheme } from '@material-ui/styles'
 
 import Grid from 'components/Grid/Table'
 import { TrProps } from 'components/Grid/Table/types'
@@ -41,6 +44,7 @@ interface Props {
 
 function AgentGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
+  const theme = useTheme<Theme>()
 
   const { isFetchingDeals, deals, roles, user } = useSelector(
     ({ deals, user }: IAppState) => ({
@@ -67,6 +71,24 @@ function AgentGrid(props: Props & WithRouterProps) {
               deal.new_notifications ? deal.new_notifications.length : 0
             }
           />
+        ),
+        lazyRender: () => (
+          <Box display="flex" alignItems="center" height="100%">
+            <Skeleton
+              animation={false}
+              variant="circle"
+              width="32px"
+              height="32px"
+            />
+            <Skeleton
+              animation={false}
+              width="50%"
+              height="60%"
+              style={{
+                marginLeft: theme.spacing(1)
+              }}
+            />
+          </Box>
         )
       },
       {
@@ -107,10 +129,18 @@ function AgentGrid(props: Props & WithRouterProps) {
         accessor: (deal: IDeal) => getPrimaryAgentName(deal, roles),
         render: ({ row: deal }: { row: IDeal }) => {
           return <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
-        }
+        },
+        lazyRender: () => (
+          <Skeleton
+            animation={false}
+            variant="circle"
+            width="32px"
+            height="32px"
+          />
+        )
       }
     ]
-  }, [roles, user])
+  }, [roles, user, theme])
 
   const data = useMemo(() => {
     if (!deals) {
