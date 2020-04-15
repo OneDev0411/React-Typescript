@@ -31,7 +31,7 @@ export const load = async () => {
             <AssetImage
               model={this.model}
               target={target}
-              templateIdGetter={() => getStorageData('templateId')}
+              getTemplateId={() => getStorageData('templateId')}
             />
           </AppTheme>,
           this.el
