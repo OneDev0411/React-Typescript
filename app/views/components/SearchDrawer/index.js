@@ -38,11 +38,13 @@ class SearchDrawer extends React.Component {
     this.inputRef = createRef()
   }
 
-  handleSearch = async e => {
-    const value = e.target.value
-
+  handleSearch = async (_, value) => {
     if (value.length === 0) {
       return this.setState(initialState)
+    }
+
+    if (value.length < 3) {
+      return
     }
 
     try {

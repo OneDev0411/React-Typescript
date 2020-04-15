@@ -108,7 +108,7 @@ class SearchListingDrawer extends React.Component {
         multipleSelection={this.props.multipleSelection}
         searchInputOptions={{
           placeholder: this.props.searchPlaceholder,
-          debounceTime: 500,
+          debounceTime: 700,
           minimumLength: 3
         }}
         ItemRow={ListingItem}
