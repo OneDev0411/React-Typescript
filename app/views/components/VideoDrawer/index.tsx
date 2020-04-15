@@ -4,7 +4,7 @@ import { CircularProgress, Button } from '@material-ui/core'
 import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
 
-import { getYoutubeThumbnailUrl } from './helpers'
+import { getVideoThumbnailUrl } from './helpers'
 import { Video } from './types'
 import { Thumbnail } from './styled'
 
@@ -26,24 +26,26 @@ export default function VideoDrawer({
   useEffect(() => {
     if (!input) {
       setVideo(undefined)
-
-      return
     }
 
-    const thumbnail = getYoutubeThumbnailUrl(input)
+    async function fetchThumbnail() {
+      const thumbnail = await getVideoThumbnailUrl(input)
 
-    if (!thumbnail) {
-      setVideo(undefined)
+      if (!thumbnail) {
+        setVideo(undefined)
 
-      return
+        return
+      }
+
+      const newVideo: Video = {
+        url: input,
+        thumbnail
+      }
+
+      setVideo(newVideo)
     }
 
-    const newVideo: Video = {
-      url: input,
-      thumbnail
-    }
-
-    setVideo(newVideo)
+    fetchThumbnail()
   }, [input])
 
   return (
@@ -55,7 +57,7 @@ export default function VideoDrawer({
         onClose()
       }}
     >
-      <OverlayDrawer.Header title="Insert a Youtube video URL" />
+      <OverlayDrawer.Header title="Insert a Youtube/Vimeo video URL" />
       <OverlayDrawer.Body>
         <Search
           onChange={value => {
