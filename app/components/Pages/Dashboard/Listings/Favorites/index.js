@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Helmet } from 'react-helmet'
 import memoize from 'lodash/memoize'
-import { Box } from '@material-ui/core'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
@@ -91,7 +90,7 @@ class Favorites extends React.Component {
   }
 
   renderMain() {
-    const { listings, isFetching } = this.props
+    const { listings, isFetching, user } = this.props
 
     const sortedListings = this.sortListings(
       listings,
@@ -103,6 +102,7 @@ class Favorites extends React.Component {
       case 'map':
         return (
           <MapView
+            user={user}
             tabName="favorites"
             sortedListings={sortedListings}
             Map={<Map markers={listings.data} isFetching={isFetching} />}
@@ -111,7 +111,11 @@ class Favorites extends React.Component {
 
       case 'grid':
         return (
-          <GridView isFetching={isFetching} sortedListings={sortedListings} />
+          <GridView
+            isFetching={isFetching}
+            sortedListings={sortedListings}
+            user={user}
+          />
         )
 
       default:
@@ -120,31 +124,28 @@ class Favorites extends React.Component {
             isFetching={isFetching}
             sortedListings={sortedListings}
             listings={listings}
+            user={user}
           />
         )
     }
   }
 
-  // Layout is made with flex. For the big picture, checkout the sample:
-  // https://codepen.io/mohsentaleb/pen/jOPeVBK
   render() {
     return (
-      <React.Fragment>
+      <>
         <Helmet>
           <title>Favorites | Properties | Rechat</title>
         </Helmet>
-        <Box flex="0 1 auto">
-          <Header title="Favorites" />
-          <Tabs
-            onChangeView={this.onChangeView}
-            activeView={this.state.activeView}
-            onChangeSort={this.onChangeSort}
-            activeSort={this.state.activeSort}
-            user={this.props.user}
-          />
-        </Box>
+        <Header title="Favorites" />
+        <Tabs
+          onChangeView={this.onChangeView}
+          activeView={this.state.activeView}
+          onChangeSort={this.onChangeSort}
+          activeSort={this.state.activeSort}
+          user={this.props.user}
+        />
         {this.renderMain()}
-      </React.Fragment>
+      </>
     )
   }
 }

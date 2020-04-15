@@ -17,7 +17,7 @@ export default function Logo() {
       alignItems="center"
       height="24px"
       pt="60px"
-      pb={4}
+      pb={5}
       px={3}
     >
       <img

@@ -47,12 +47,7 @@ const useStyle = makeStyles(
         flexGrow: 1,
         justifyContent: 'flex-end',
         marginBottom: theme.spacing(1),
-        padding: theme.spacing(0, 5)
-      },
-      spacer: {
-        borderBottom: `1px solid ${theme.palette.divider}`,
-        width: theme.spacing(5),
-        marginBottom: theme.spacing(1)
+        paddingLeft: theme.spacing(5)
       }
     }),
   { name: 'TabParts' }
@@ -137,7 +132,6 @@ export const Tabs = ({
 
   return (
     <Box display="flex">
-      <Box className={classes.spacer} />
       <Box flexGrow="1">
         <PageTabs
           defaultValue={currentUrl}

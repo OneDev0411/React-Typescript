@@ -17,7 +17,7 @@ export function Header(props) {
   const { subtitle, title } = props
 
   return (
-    <Box p={5}>
+    <Box py={5}>
       <GlobalPageLayout.Header>
         <Typography variant="h4">{title}</Typography>
         <Typography variant="h6" className={classes.subtitle}>

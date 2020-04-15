@@ -57,7 +57,7 @@
 .c-listing-card__link {
   @extend %full-absolute;
   display: block;
-  text-indent: 100000;
+  text-indent: -100000px;
 }
 
 .c-listing-card__content-wrapper {
