@@ -57,7 +57,7 @@ export default function VideoDrawer({
         onClose()
       }}
     >
-      <OverlayDrawer.Header title="Insert a Youtube/Vimeo video URL" />
+      <OverlayDrawer.Header title="Insert a Youtube/Vimeo video link" />
       <OverlayDrawer.Body>
         <Search
           onChange={value => {
@@ -69,7 +69,7 @@ export default function VideoDrawer({
 
             setInput(value)
           }}
-          placeholder="https://www.youtube.com/watch?v=0mm57rH1sTE"
+          placeholder="Paste your Youtube or Vimeo video link here"
           isSearching={isLoading}
           debounceTime={500}
           style={{
