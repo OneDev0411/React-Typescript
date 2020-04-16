@@ -148,6 +148,7 @@
     "moment-timezone": "^0.5.23",
     "node-sass": "^4.13.1",
     "normalizr": "^3.2.4",
+    "numeral": "^2.0.6",
     "nunjucks": "^3.1.7",
     "object-hash": "^2.0.3",
     "offline-js": "^0.7.19",
