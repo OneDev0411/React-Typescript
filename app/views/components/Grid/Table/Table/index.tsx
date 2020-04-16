@@ -67,7 +67,7 @@ export function GridTable<Row>({
   totalRows,
   getTdProps,
   getTrProps,
-  lazy = true,
+  lazy = false,
   hoverable = true,
   summary = null,
   loading = null,
