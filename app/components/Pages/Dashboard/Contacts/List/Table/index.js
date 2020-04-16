@@ -170,10 +170,8 @@ const ContactsList = props => {
           onScrollBottom: props.onRequestLoadMore,
           onScrollTop: props.onRequestLoadMoreBefore
         }}
-        TableActions={({ state, dispatch }) => (
+        TableActions={
           <TableActions
-            state={state}
-            dispatch={dispatch}
             filters={props.filters}
             isFetching={props.isFetching}
             totalRowsCount={props.listInfo.total}
@@ -183,7 +181,7 @@ const ContactsList = props => {
               props.handleChangeContactsAttributes
             }
           />
-        )}
+        }
         EmptyStateComponent={() => (
           <NoSearchResults description="Try typing another name, email, phone or tag." />
         )}
