@@ -1,8 +1,7 @@
 import React from 'react'
 import NotificationsSystem from 'reapop'
 import notificationTheme from 'reapop-theme-wybo'
-import useScroll from 'react-router-scroll/lib/useScroll'
-import { applyRouterMiddleware, browserHistory, Router } from 'react-router'
+import { browserHistory, Router } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import smoothscroll from 'smoothscroll-polyfill'
 
@@ -41,9 +40,7 @@ if (typeof window !== 'undefined') {
 const App = () => (
   <AppTheme>
     <ConfirmationModalProvider>
-      <Router history={history} render={applyRouterMiddleware(useScroll())}>
-        {routes}
-      </Router>
+      <Router history={history}>{routes}</Router>
       <ConfirmationModal />
     </ConfirmationModalProvider>
 
