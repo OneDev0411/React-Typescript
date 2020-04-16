@@ -177,7 +177,7 @@ function List(props) {
 
     if (hasError) {
       return (
-        <NoSearchResults description='Try sending your first campaign using "Actions" button and click on "Email".' />
+        <NoSearchResults description='Try sending your first campaign using "Create" button and click on "Email".' />
       )
     }
 
@@ -187,7 +187,7 @@ function List(props) {
         totalRows={list.length}
         columns={columns}
         EmptyStateComponent={() => (
-          <NoSearchResults description='Try sending your first campaign using "Actions" button and click on "Email".' />
+          <NoSearchResults description='Try sending your first campaign using "Create" button and click on "Email".' />
         )}
         sorting={{
           sortBy: {
