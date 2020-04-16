@@ -209,8 +209,8 @@ export default class Fetch {
       const requestId = response.header['x-request-id']
       const status = response.status
       const request = response.req
-
-      console.log(`${status} <${requestId}> ${request.method} ${request.url}`)
+      const elapsed = Date.now() - this._startTime
+      console.log(`${status} <${requestId}> (${elapsed}ms) ${request.method} ${request.url}`)
     }
   }
 }
