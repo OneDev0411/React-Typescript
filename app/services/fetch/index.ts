@@ -44,7 +44,7 @@ export default class Fetch {
     this._appUrl = isServerSide ? config.app.url : ''
     this._proxyUrl = `${this._appUrl}/api/proxifier`
     this._isProductionEnv = isProductionEnv
-    this._startTime = null
+    this._startTime = Date.now()
   }
 
   _create(method, endpoint): SuperAgent.SuperAgentRequest {
@@ -63,8 +63,6 @@ export default class Fetch {
     const useProxy = this.options.proxy || this._isServerSide
 
     this._isLoggedIn = user && user.access_token !== undefined
-
-    this._startTime = Date.now()
 
     let agent: SuperAgent.SuperAgentRequest
 
