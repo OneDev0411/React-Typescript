@@ -9,16 +9,18 @@ import withPropsOnChange from 'recompose/withPropsOnChange'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 
-import { reset as resetSearchType } from '../../../../../../store_actions/listings/search/set-type'
 import {
   setCssPositionToListingsWithSameBuilding,
   normalizeListingsForMarkers,
   getBounds
-} from '../../../../../../utils/map'
-import * as mapActions from '../../../../../../store_actions/listings/map'
-import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
-import getListingsByMapBounds from '../../../../../../store_actions/listings/search/get-listings/by-map-bounds'
-import { SearchPin } from '../../../../../../views/MLS/SearchPin'
+} from 'utils/map'
+import * as mapActions from 'actions/listings/map'
+import * as drawingActions from 'actions/listings/map/drawing'
+import { reset as resetSearchType } from 'actions/listings/search/set-type'
+import getListingsByMapBounds from 'actions/listings/search/get-listings/by-map-bounds'
+
+import SearchPinMarker from 'components/SearchPinMarker'
+
 import ZoomController from '../../components/ZoomController'
 import SimpleMarker from '../../components/Markers/SimpleMarker'
 import ClusterMarker from '../../components/Markers/ClusterMarker'
@@ -95,7 +97,9 @@ const map = ({
           />
         )
       })}
-      {searchLocation && <SearchPin {...searchLocation} caption={searchText} />}
+      {searchLocation && (
+        <SearchPinMarker {...searchLocation} caption={searchText} />
+      )}
     </Map>
     <DrawingButton />
     <DrawingRemoveButton
