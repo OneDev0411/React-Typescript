@@ -35,7 +35,9 @@ export function browserStatus(): BrowserStatus {
       safari: `>=${validBrowsers.safari}`
     },
 
-    chrome: `>=${validBrowsers.chrome}`
+    chrome: `>=${validBrowsers.chrome}`,
+
+    firefox: `>=${validBrowsers.firefox}`
   })
 
   const output = {
