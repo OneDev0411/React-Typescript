@@ -71,7 +71,7 @@ class ContactsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedSidebarFilter: null,
+      selectedShortcutFilter: null,
       firstLetter: props.location.query.letter || null,
       isShowingDuplicatesList:
         props.activeSegment.id === DUPLICATE_CONTACTS_LIST_ID,
@@ -101,7 +101,7 @@ class ContactsList extends React.Component {
       getContactsTags()
     }
 
-    this.setSelectedSidebarFilter()
+    this.setSelectedShortcutFilter()
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -144,20 +144,20 @@ class ContactsList extends React.Component {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
-  setSelectedSidebarFilter = () => {
+  setSelectedShortcutFilter = () => {
     const { activeSegment, filters, flows } = this.props
 
     if (
       activeSegment &&
       activeSegment.name &&
       activeSegment.id !== 'default' &&
-      this.state.selectedSidebarFilter === null
+      this.state.selectedShortcutFilter === null
     ) {
-      this.setState({ selectedSidebarFilter: null })
+      this.setState({ selectedShortcutFilter: null })
     } else if (filters && filters.length === 1) {
-      this.setState({ selectedSidebarFilter: filters })
+      this.setState({ selectedShortcutFilter: filters })
     } else if (flows && flows.length === 1) {
-      this.setState({ selectedSidebarFilter: flows })
+      this.setState({ selectedShortcutFilter: flows })
     }
   }
 
@@ -168,7 +168,7 @@ class ContactsList extends React.Component {
       activeSegment &&
       activeSegment.name &&
       activeSegment.id !== 'default' &&
-      this.state.selectedSidebarFilter === null
+      this.state.selectedShortcutFilter === null
     ) {
       return `List: ${activeSegment.name}`
     }
@@ -176,7 +176,7 @@ class ContactsList extends React.Component {
     if (
       filters &&
       filters.length === 1 &&
-      this.state.selectedSidebarFilter !== null
+      this.state.selectedShortcutFilter !== null
     ) {
       return `Tag: ${filters[0].value}`
     }
@@ -184,7 +184,7 @@ class ContactsList extends React.Component {
     if (
       flows &&
       flows.length === 1 &&
-      this.state.selectedSidebarFilter !== null
+      this.state.selectedShortcutFilter !== null
     ) {
       return `Flow: ${activeFilters[0].values[0].label}`
     }
@@ -321,7 +321,7 @@ class ContactsList extends React.Component {
    */
   handleChangeSavedSegment = savedSegment => {
     this.setState({
-      selectedSidebarFilter: null
+      selectedShortcutFilter: null
     })
     this.handleFilterChange({}, true)
 
@@ -575,7 +575,7 @@ class ContactsList extends React.Component {
   }
 
   shouldShowFilters = () => {
-    return this.state.selectedSidebarFilter === null
+    return this.state.selectedShortcutFilter === null
   }
 
   handleListTouchReminderUpdate = async value => {
@@ -604,20 +604,20 @@ class ContactsList extends React.Component {
 
   getActiveTag = () => {
     // all or segmented list
-    if (!Array.isArray(this.state.selectedSidebarFilter)) {
+    if (!Array.isArray(this.state.selectedShortcutFilter)) {
       return undefined
     }
 
     // flow
     if (
-      this.state.selectedSidebarFilter.some(item => typeof item === 'string')
+      this.state.selectedShortcutFilter.some(item => typeof item === 'string')
     ) {
       return undefined
     }
 
     // tag
     return Object.values(this.props.tags).find(value => {
-      return value.text === this.state.selectedSidebarFilter[0].value
+      return value.text === this.state.selectedShortcutFilter[0].value
     })
   }
 
@@ -636,8 +636,22 @@ class ContactsList extends React.Component {
       <ContactsTabs
         handleFilterChange={this.handleFilterChange}
         handleChangeSavedSegment={this.handleChangeSavedSegment}
+        handleResetShortcutFilter={() => {
+          this.setState(() => ({
+            selectedShortcutFilter: null
+          }))
+        }}
         filter={{
           show: this.shouldShowFilters()
+        }}
+        tagListProps={{
+          onClick: filters => {
+            this.setState({
+              selectedShortcutFilter: filters.filters
+            })
+            this.handleFilterChange({ ...filters, flows: [] }, true)
+          },
+          isActive: this.state.selectedShortcutFilter !== null
         }}
         savedListProps={{
           name: CONTACTS_SEGMENT_NAME,
