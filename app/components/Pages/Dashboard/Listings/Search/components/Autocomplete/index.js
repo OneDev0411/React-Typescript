@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { IconButton } from '@material-ui/core'
 import { browserHistory } from 'react-router'
 import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
@@ -32,12 +31,7 @@ import {
   SEARCH_BY_QUERY
 } from '../../../../../../../constants/listings/search'
 
-import {
-  SearchContainer,
-  ListContainer,
-  ListTitle,
-  Item,
-} from './styled'
+import { SearchContainer, ListContainer, ListTitle, Item } from './styled'
 
 class MlsAutocompleteSearch extends Component {
   state = {
@@ -173,6 +167,8 @@ class MlsAutocompleteSearch extends Component {
   }
 
   search = debounce(async input => {
+    input = input.trim()
+
     if (input.length <= 3 || this.state.isSearchingByQuery) {
       return
     }
@@ -248,6 +244,10 @@ class MlsAutocompleteSearch extends Component {
   handleEnterKey = async () => {
     const { dispatch } = this.props
 
+    if (this.state.input.trim().length < 3) {
+      return
+    }
+
     this.setState({ isSearchingByQuery: true, isLoading: true })
 
     try {
@@ -268,7 +268,7 @@ class MlsAutocompleteSearch extends Component {
   }
 
   renderPlacesItem = item => (
-    <React.Fragment>
+    <>
       <span className="item__query">
         <span className="item__matched">
           {item.matched_substrings
@@ -284,7 +284,7 @@ class MlsAutocompleteSearch extends Component {
         )}
       </span>
       <span>{item.structured_formatting.secondary_text}</span>
-    </React.Fragment>
+    </>
   )
 
   render() {
