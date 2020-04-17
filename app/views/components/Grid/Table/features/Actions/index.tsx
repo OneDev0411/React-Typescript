@@ -10,12 +10,11 @@ import { ToggleEntireRows } from '../Selection/ToggleEntireRows'
 import { useGridContext } from '../../hooks/use-grid-context'
 
 import { SELECTION__TOGGLE_ALL } from '../../context/constants'
-import { TableActionComponent } from '../../types'
 
 interface Props<Row> {
   rows: Row[]
   totalRows: number
-  TableActions: React.ReactType<TableActionComponent<Row>> | null
+  TableActions: React.ReactNode | null
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -111,9 +110,7 @@ export function Actions<Row>({ rows, TableActions, totalRows }: Props<Row>) {
         </div>
 
         {TableActions && (
-          <div className={classes.actionsContainer}>
-            <TableActions state={state} dispatch={dispatch} rows={rows} />
-          </div>
+          <div className={classes.actionsContainer}>{TableActions}</div>
         )}
       </div>
     </Slide>

@@ -102,16 +102,14 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
         classes={{
           row: gridClasses.row
         }}
-        TableActions={({ state, dispatch }) => (
+        TableActions={
           <TableActions
-            state={state}
-            dispatch={dispatch}
             isFetching={isFetching}
             totalRowsCount={listings.info.total}
             listings={listings.data}
             user={user}
           />
-        )}
+        }
       />
     </Box>
   )
