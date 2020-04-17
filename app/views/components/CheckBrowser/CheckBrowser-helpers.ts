@@ -4,7 +4,8 @@ import { isUUID } from '../../../utils/validations/is-uuid/is-uuid'
 
 const validBrowsers = {
   chrome: 68,
-  safari: 10
+  safari: 10,
+  firefox: 70
 }
 
 const downloadLink = {
