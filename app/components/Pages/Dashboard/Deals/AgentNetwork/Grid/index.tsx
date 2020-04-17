@@ -11,7 +11,6 @@ import { putUserSetting } from 'models/user/put-user-setting'
 
 import Table from 'components/Grid/Table'
 import { RenderProps } from 'components/Grid/Table/types'
-import { StateContext } from 'components/Grid/Table/context'
 import LoadingContainer from 'components/LoadingContainer'
 import IconEmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
 
@@ -206,15 +205,9 @@ class Grid extends React.Component<
               )
             }
           }}
-          TableActions={({
-            state,
-            rows
-          }: {
-            state: StateContext
-            rows: IDealAgent[]
-          }) => (
-            <TableActions rows={rows} state={state} deal={this.props.deal} />
-          )}
+          TableActions={
+            <TableActions rows={this.props.data} deal={this.props.deal} />
+          }
         />
 
         {selectedAgent && (

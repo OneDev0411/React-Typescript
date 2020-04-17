@@ -8,7 +8,6 @@ import { GridTable } from './Table'
 
 import {
   TableColumn,
-  TableActionComponent,
   GridSelectionOptions,
   GridSortingOption,
   LoadingPosition,
@@ -31,7 +30,7 @@ export interface Props<Row> {
   lazy?: boolean
   loading?: LoadingPosition
   summary?: ((total: number, state: StateContext) => React.ReactText) | null
-  TableActions?: React.ReactType<TableActionComponent<Row>> | null
+  TableActions?: React.ReactNode | null
   ToolbarComponent?: React.ReactType<any> | null
   EmptyStateComponent?: React.ReactType<any> | null
   LoadingStateComponent?: React.ReactType<any> | null
