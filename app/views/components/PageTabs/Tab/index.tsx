@@ -13,12 +13,13 @@ export const Tab = withStyles(theme => ({
   },
   selected: {
     ...theme.typography.subtitle1,
-    fontWeight: 'bold',
     '& button[aria-controls="menu-list-grow"]': {
-      color: theme.palette.primary.main,
-      '& svg': {
-        fill: theme.palette.primary.main
-      }
+      ...theme.typography.subtitle1
+    }
+  },
+  textColorPrimary: {
+    '&$selected': {
+      color: theme.palette.common.black
     }
   }
 }))((props: TabProps) => <BaseTab {...props} />)
