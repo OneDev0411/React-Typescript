@@ -54,11 +54,6 @@ const useStyles = makeStyles((theme: Theme) =>
           fill: theme.palette.text.disabled
         }
       }
-    },
-    textItem: {
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis'
     }
   })
 )
@@ -132,7 +127,7 @@ export const TagsList = (props: Props) => {
               selected={isSelected}
               onClick={() => onSelectList(item)}
             >
-              <ListItemText disableTypography className={classes.textItem}>
+              <ListItemText primaryTypographyProps={{ noWrap: true }}>
                 {item.text}
               </ListItemText>
             </ListItem>
