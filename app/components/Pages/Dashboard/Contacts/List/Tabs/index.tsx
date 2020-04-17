@@ -17,12 +17,18 @@ import { SYNCED_CONTACTS_LIST_ID } from '../constants'
 
 import { SortFields } from '../SortFields'
 import ContactFilters from '../Filters'
+import TagsList from '../TagsList'
 
 interface Props {
   handleFilterChange: (newFilters: object, resetLoadedRanges: boolean) => void
   handleChangeSavedSegment: (savedSegment: object) => void
+  handleResetShortcutFilter: () => void
   filter: {
     show: boolean
+  }
+  tagListProps: {
+    onClick: ({ filters: any }) => void
+    isActive: boolean
   }
   savedListProps: {
     name: string
@@ -45,7 +51,11 @@ interface ReduxStateType {
   activeFilters: StringMap<IActiveFilter>
 }
 
-const getActiveTab = ({ isAllContactsActive, isSyncedListActive }) => {
+const getActiveTab = ({
+  isAllContactsActive,
+  isSyncedListActive,
+  isTagListActive
+}) => {
   if (isAllContactsActive) {
     return 'all-contact'
   }
@@ -54,15 +64,21 @@ const getActiveTab = ({ isAllContactsActive, isSyncedListActive }) => {
     return 'synced-contact'
   }
 
+  if (isTagListActive) {
+    return 'tag-list'
+  }
+
   return 'saved-list'
 }
 
 export const ContactsTabs = ({
+  handleResetShortcutFilter,
   handleChangeSavedSegment,
   handleFilterChange,
   savedListProps,
   activeSegment,
   contactCount,
+  tagListProps,
   sortProps,
   filter,
   users
@@ -82,18 +98,21 @@ export const ContactsTabs = ({
   }, [activeFilters, activeSegment])
   const isSyncedListActive =
     activeSegment && activeSegment.id === SYNCED_CONTACTS_LIST_ID
-  const activeTab = getActiveTab({ isAllContactsActive, isSyncedListActive })
+  const activeTab = getActiveTab({
+    isAllContactsActive,
+    isSyncedListActive,
+    isTagListActive: tagListProps.isActive
+  })
   const clickHandler = async (type: string) => {
     await dispatch(resetActiveFilters(CONTACTS_SEGMENT_NAME))
     await dispatch(changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type))
 
     if (type === SYNCED_CONTACTS_LIST_ID) {
-      handleChangeSavedSegment(activeSegment)
-
-      return
+      return handleChangeSavedSegment(activeSegment)
     }
 
     handleFilterChange({ filters: [], flows: [] }, true)
+    handleResetShortcutFilter()
   }
 
   const syncedContactsTab =
@@ -126,6 +145,11 @@ export const ContactsTabs = ({
             key="saved-list"
             value="saved-list"
             label={<SavedSegments {...savedListProps} />}
+          />,
+          <Tab
+            key="tag-list"
+            value="tag-list"
+            label={<TagsList onFilterChange={tagListProps.onClick} />}
           />
         ]}
         actions={[<Tab key="sort" label={<SortFields {...sortProps} />} />]}

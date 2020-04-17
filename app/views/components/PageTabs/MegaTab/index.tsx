@@ -38,7 +38,7 @@ const useStyles = makeStyles(
         visibility: 'hidden',
         '&:hover': {
           visibility: 'visible',
-          '& + $root': {
+          '& + .MuiTab-root': {
             color: theme.palette.primary.main
           }
         },
