@@ -1,5 +1,6 @@
 import React, { useRef, ReactNode } from 'react'
 import { TabProps, createStyles, makeStyles, Theme } from '@material-ui/core'
+import { fade } from '@material-ui/core/styles'
 
 import { Tab } from '../Tab'
 
@@ -19,8 +20,16 @@ const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       megaMenuWrapper: {
-        '&:hover $megaMenuContent': {
-          visibility: 'visible'
+        '&:hover': {
+          '& $megaMenuContent': {
+            visibility: 'visible'
+          },
+          '& .MuiTab-root': {
+            background: fade(
+              theme.palette.primary.main,
+              theme.palette.action.hoverOpacity
+            )
+          }
         }
       },
       megaMenuContent: {
@@ -39,6 +48,10 @@ const useStyles = makeStyles(
         '&:hover': {
           visibility: 'visible',
           '& + .MuiTab-root': {
+            background: fade(
+              theme.palette.primary.main,
+              theme.palette.action.hoverOpacity
+            ),
             color: theme.palette.primary.main
           }
         },
