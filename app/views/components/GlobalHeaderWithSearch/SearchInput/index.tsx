@@ -23,13 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.grey[600],
     height: theme.spacing(5.25),
     lineHeight: 'initial',
-    padding: theme.spacing(0, 2.5),
-    '&&&:before': {
-      borderBottom: 'none'
-    },
-    '&&:after': {
-      borderBottom: 'none'
-    }
+    padding: theme.spacing(0, 1.5)
   }
 }))
 
@@ -124,6 +118,7 @@ export const SearchInput = forwardRef(
 
     return (
       <TextField
+        color="secondary"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
