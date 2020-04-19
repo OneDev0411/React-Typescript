@@ -141,7 +141,7 @@ const ContactsList = props => {
     }
   }
   const getColumnProps = ({ column }) => {
-    if (['cta', 'flows', 'tag', 'delete-contact'].includes(column.id)) {
+    if (['name', 'cta', 'flows', 'tag', 'delete-contact'].includes(column.id)) {
       return {
         onClick: e => e.stopPropagation()
       }
