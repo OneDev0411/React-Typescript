@@ -8,6 +8,7 @@ import {
   useState
 } from 'react'
 import sanitizeHtml from 'sanitize-html'
+import { Box, CircularProgress } from '@material-ui/core'
 
 interface Props extends HTMLProps<HTMLIFrameElement> {
   /**
@@ -60,26 +61,17 @@ export function Iframe({
 }: Props) {
   const ref = useRef<HTMLIFrameElement>(null)
   const [height, setHeight] = useState<number | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const updateHeight = () => {
     if (
       ref.current &&
       ref.current.contentDocument &&
-      ref.current.contentDocument.documentElement
+      ref.current.contentDocument.body
     ) {
       const documentElement = ref.current.contentDocument.documentElement
 
-      setHeight(documentElement.offsetHeight)
-
-      // Check if it requires horizontal scroll bars,
-      // and then add its height to the height of the iframe.
-      setTimeout(() => {
-        if (documentElement.offsetHeight > documentElement.clientHeight) {
-          setHeight(
-            documentElement.offsetHeight * 2 - documentElement.clientHeight
-          )
-        }
-      })
+      setHeight(documentElement.scrollHeight)
     }
   }
 
@@ -100,6 +92,7 @@ export function Iframe({
       ref.current.contentDocument.documentElement
     ) {
       updateHeight()
+      setIsLoading(false)
 
       if (linkTarget) {
         ref.current.contentDocument.querySelectorAll('a').forEach(element => {
@@ -119,15 +112,25 @@ export function Iframe({
   )
 
   return (
-    <iframe
-      ref={ref}
-      title={title}
-      frameBorder={0}
-      onLoad={onLoad}
-      height={autoHeight ? height : undefined}
-      width={fullWidth ? '100%' : undefined}
-      {...props}
-      srcDoc={appliedSrcDoc}
-    />
+    <>
+      {isLoading && (
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <CircularProgress />
+        </Box>
+      )}
+      <iframe
+        ref={ref}
+        title={title}
+        frameBorder={0}
+        onLoad={onLoad}
+        height={autoHeight ? height : undefined}
+        width={fullWidth ? '100%' : undefined}
+        {...props}
+        style={{
+          visibility: isLoading ? 'hidden' : 'visible'
+        }}
+        srcDoc={appliedSrcDoc}
+      />
+    </>
   )
 }
