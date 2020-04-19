@@ -125,7 +125,10 @@ export const TagsList = (props: Props) => {
               button
               key={index}
               selected={isSelected}
-              onClick={() => onSelectList(item)}
+              onClick={() => {
+                onSelectList(item)
+                close()
+              }}
             >
               <ListItemText primaryTypographyProps={{ noWrap: true }}>
                 {item.text}
