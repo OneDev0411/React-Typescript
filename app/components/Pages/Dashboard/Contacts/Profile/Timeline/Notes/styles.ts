@@ -68,7 +68,8 @@ export const styles = (theme: Theme) =>
       right: 0,
       width: '100%',
       height: '100%',
-      opacity: 0
+      opacity: 0,
+      textIndent: '-11000px'
     },
     actions: {
       display: 'flex',
