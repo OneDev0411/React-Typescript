@@ -27,7 +27,6 @@ export interface Props<Row> {
   hasHeader?: boolean
   stickyHeader?: boolean
   hoverable?: boolean
-  lazy?: boolean
   loading?: LoadingPosition
   summary?: ((total: number, state: StateContext) => React.ReactText) | null
   TableActions?: React.ReactNode | null
