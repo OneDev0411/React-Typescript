@@ -1,9 +1,8 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import React from 'react'
 import { Typography, Theme, Box, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
+import { OAuthProvider } from 'constants/contacts'
 import { useConnectOAuthAccount } from 'crm/List/ImportContactsButton/use-connect-oauth-account'
 import importEmailsSvg from 'assets/images/dashboard/import-emails.svg'
 
@@ -52,7 +51,7 @@ export default function InboxConnectAccount() {
           onClick={google.connect}
           className={classes.marginRight}
         >
-          Sign in with google
+          Sign in with Google
         </GoogleSigninButton>
 
         <Button
@@ -61,7 +60,7 @@ export default function InboxConnectAccount() {
           variant="outlined"
         >
           <IconOutlook size={iconSizes.small} className={classes.marginRight} />
-          <Typography variant="button">Sync with Outlook</Typography>
+          <Typography variant="button">Sign in with Outlook</Typography>
         </Button>
       </Box>
     </div>

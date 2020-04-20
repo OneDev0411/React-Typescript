@@ -1,6 +1,8 @@
 import React from 'react'
 
-import LinkButton from 'components/Button/LinkButton'
+import { Button } from '@material-ui/core'
+
+import { goTo } from 'utils/go-to'
 
 import {
   Container,
@@ -21,12 +23,13 @@ export default function AgentNetworkPane({ deal }) {
           relevant to your listing to co-broke within the community.
         </Description>
 
-        <LinkButton
-          appearance="primary"
-          to={`/dashboard/deals/${deal.id}/marketing/network`}
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => goTo(`/dashboard/deals/${deal.id}/marketing/network`)}
         >
           View Network
-        </LinkButton>
+        </Button>
       </LeftColumn>
 
       <RightColumn>

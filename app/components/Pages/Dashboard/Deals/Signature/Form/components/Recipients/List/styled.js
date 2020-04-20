@@ -1,21 +1,9 @@
 import styled from 'styled-components'
 
-import ActionButton from 'components/Button/ActionButton'
-import { primary } from 'views/utils/colors'
-
 import {
   RoleItem,
   RoleTitle as Title
 } from '../../../../../components/Roles/styled'
-
-export const MenuItem = styled(ActionButton)`
-  color: #000;
-
-  &:hover {
-    color: #fff !important;
-    background-color: ${primary};
-  }
-`
 
 export const Header = styled.div`
   display: flex;
@@ -31,6 +19,10 @@ export const ItemContainer = styled.div`
   align-items: center;
   box-shadow: 0 1px 0 0 #f5f5f5;
   margin-bottom: 0.5rem;
+
+  button svg {
+    fill: ${({ theme }) => theme.palette.common.black} !important;
+  }
 `
 
 export const RoleTitle = styled(Title)`
@@ -54,11 +46,11 @@ export const Role = styled(RoleItem)`
 `
 
 export const OrderCell = styled.div`
-  width: 10%;
+  width: 15%;
 `
 
 export const RoleCell = styled.div`
-  width: 60%;
+  width: 55%;
 `
 
 export const RecipientTypeCell = styled.div`
@@ -68,6 +60,6 @@ export const RecipientTypeCell = styled.div`
 `
 
 export const DeleteCell = styled.div`
-  width: 5%;
+  width: auto;
   text-align: right;
 `

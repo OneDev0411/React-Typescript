@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) => {
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
-      padding: theme.spacing(1, 3),
+      padding: theme.spacing(1),
       cursor: 'pointer',
       '&:hover': {
         backgroundColor: theme.palette.action.hover
@@ -91,8 +91,7 @@ function List(props: Props & StateProps) {
     <div className={classes.root}>
       <Button
         fullWidth
-        color="primary"
-        size="large"
+        color="secondary"
         classes={{
           label: classes.buttonLabel
         }}

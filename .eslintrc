@@ -46,6 +46,8 @@
     }
   },
   "rules": {
+    "react/state-in-constructor": "off",
+    "react/static-property-placement": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "import/no-unresolved": [
@@ -143,6 +145,7 @@
     "no-mixed-operators": 0,
     "no-param-reassign": 0,
     "react/forbid-prop-types": 0,
+    "react/jsx-props-no-spreading": 0,
     "react/jsx-no-target-blank": 0,
     "react/no-unused-prop-types": 0,
     "no-console": 0,
@@ -295,8 +298,7 @@
       }
     ]
   },
-  "overrides": [
-    {
+  "overrides": [{
       "files": [
         "**/*.ts",
         "**/*.tsx"

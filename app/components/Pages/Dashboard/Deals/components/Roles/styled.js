@@ -1,6 +1,4 @@
-import styled from 'styled-components'
-
-import { primary } from 'views/utils/colors'
+import styled, { css } from 'styled-components'
 
 import { SectionTitle } from '../../Dashboard/Factsheet/styled'
 
@@ -9,8 +7,11 @@ export const RolesContainer = styled.div`
 `
 
 export const RolesTitle = styled(SectionTitle)`
-  padding: 0 1.5rem;
-  margin-bottom: 1.5rem;
+  ${({ theme }) => css`
+    padding: ${theme.spacing(0, 3)};
+    margin-bottom: ${theme.spacing(3)}px;
+    ${theme.typography.subtitle1};
+  `}
 `
 
 export const RoleActions = styled.div`
@@ -18,16 +19,11 @@ export const RoleActions = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-
-  button {
-    height: 1.6rem;
-    line-height: 1.6rem;
-  }
 `
 
 export const RoleAvatar = styled.div`
   text-align: center;
-  width: 45px;
+  width: 32px;
 `
 
 export const RoleInfo = styled.div`
@@ -37,38 +33,38 @@ export const RoleInfo = styled.div`
 
 export const RoleTitle = styled.div`
   color: #263445;
-  font-size: 1rem;
 `
 
 export const RoleType = styled.div`
-  font-weight: normal;
   color: #8696a4;
-  font-size: 1rem;
   text-decoration: none;
 `
 
 export const RoleItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 3px;
-  margin-bottom: 1rem;
-  padding: 0 1.5rem;
-  cursor: pointer;
-  position: relative;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 3px;
+    margin-bottom: 1rem;
+    padding: 0 1.5rem;
+    cursor: pointer;
+    position: relative;
+    ${theme.typography.body2};
 
-  :hover {
-    background: ${props =>
-      props.noBackgroundHover ? 'transparent' : '#f0f4f7'};
-    border-radius: 0;
-  }
+    :hover {
+      background: ${props =>
+        props.noBackgroundHover ? 'transparent' : '#f0f4f7'};
+      border-radius: 0;
+    }
 
-  :hover ${RoleActions} {
-    opacity: 1;
-  }
+    :hover ${RoleActions} {
+      opacity: 1;
+    }
 
-  :hover ${RoleTitle} {
-    color: ${primary};
-    text-decoration: underline;
-  }
+    :hover ${RoleTitle} {
+      color: ${({ theme }) => theme.palette.secondary.main};
+      text-decoration: underline;
+    }
+  `}
 `

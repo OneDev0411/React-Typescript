@@ -27,7 +27,7 @@ export default function NoContentMessage({ children, error }: Props) {
     <Typography
       variant="body1"
       color={error ? 'error' : 'inherit'}
-      classes={{ root: classes.root }}
+      className={classes.root}
     >
       {children}
     </Typography>

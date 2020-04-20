@@ -1,86 +1,81 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import Table from 'components/Grid/Table'
 import ContactInfo from 'components/ContactInfo'
 import MiniContact from 'components/MiniContact'
 
+import { RenderProps } from 'components/Grid/Table/types'
+import { useGridStyles } from 'components/Grid/Table/styles'
+
+import { SortableColumnsType as SortFieldType } from './SortField'
 import RowBadges from './RowBadges'
 import { ContactColumn } from './styled'
-import { contactsList, SortValues, doSort } from './helpers'
+import { contactsList } from './helpers'
 import { ContactsListType } from './types'
 
-const defaultSort = SortValues.MOST_OPENED
-
-interface TableColumnProps {
-  rowData: ContactsListType
-}
 interface ContactsPropsType {
   item: IEmailCampaign<IEmailCampaignAssociation>
+  sortBy: SortFieldType
+  onChangeSort: (field: SortFieldType) => void
 }
 
-function ContactsTable(props: ContactsPropsType) {
-  const [itemData, setItemData] = useState<ContactsListType[]>([])
-  const [sort, setSort] = useState(defaultSort)
+const columns = [
+  {
+    header: 'Contact',
+    id: 'contact',
+    primary: true,
+    width: '60%',
+    render: ({ row }: RenderProps<ContactsListType>) => (
+      <ContactColumn>
+        <div>
+          <MiniContact data={row.original_data} type="insight">
+            <ContactInfo data={row} />
+          </MiniContact>
+        </div>
+        <div className="labels-container">
+          <RowBadges data={row} />
+        </div>
+      </ContactColumn>
+    )
+  },
+  {
+    header: 'Opened',
+    id: 'opened',
+    class: 'opaque',
+    width: '20%',
+    render: ({ row }: RenderProps<ContactsListType>) => (
+      <span>Opened: {row.opened}</span>
+    )
+  },
+  {
+    header: 'Clicked',
+    id: 'clicked',
+    class: 'opaque',
+    width: '20%',
+    render: ({ row }: RenderProps<ContactsListType>) => (
+      <span>Clicked: {row.clicked}</span>
+    )
+  }
+]
 
-  // This is weird? For sure. Seems we have a bug on Grid plugins which
-  // doesn't work properly on first mount, so this is a workaround :(
-  useEffect(() => {
-    const list = doSort(contactsList(props.item), sort)
-
-    setItemData(list)
-  }, [sort, props.item])
-
-  const columns = [
-    {
-      header: 'Contact',
-      id: 'contact',
-      width: '75%',
-      verticalAlign: 'center',
-      render: (props: TableColumnProps) => (
-        <ContactColumn>
-          <div>
-            <MiniContact data={props.rowData.original_data} type="insight">
-              <ContactInfo data={props.rowData} />
-            </MiniContact>
-          </div>
-          <div className="labels-container">
-            <RowBadges data={props.rowData} />
-          </div>
-        </ContactColumn>
-      )
-    },
-    {
-      header: 'Opened',
-      id: 'opened',
-      verticalAlign: 'center',
-      render: props => <span>{props.rowData.opened}</span>
-    },
-    {
-      header: 'Clicked',
-      id: 'clicked',
-      verticalAlign: 'center',
-      render: props => <span>{props.rowData.clicked}</span>
-    }
-  ]
-
-  const sortableColumns = [
-    { label: 'Name A-Z', value: SortValues.ALPHABETICAL },
-    { label: 'Bounced', value: SortValues.BOUNCED },
-    { label: 'Unsubscribed', value: SortValues.UNSUBSCRIBED },
-    { label: 'Most Clicked', value: SortValues.MOST_CLICKED },
-    { label: 'Most Opened', value: SortValues.MOST_OPENED }
-  ]
+function ContactsTable({ item, sortBy, onChangeSort }: ContactsPropsType) {
+  const gridClasses = useGridStyles()
+  const rows = contactsList(item)
 
   return (
-    <Table
-      data={itemData}
+    <Table<ContactsListType>
+      rows={rows}
+      totalRows={(rows || []).length}
       columns={columns}
-      plugins={{
-        sortable: {
-          columns: sortableColumns,
-          defaultIndex: sort,
-          onChange: ({ value }) => setSort(value)
-        }
+      classes={{
+        row: gridClasses.row
+      }}
+      sorting={{
+        sortBy: {
+          value: sortBy.value,
+          ascending: sortBy.ascending
+        },
+        onChange: onChangeSort
       }}
     />
   )

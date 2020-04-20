@@ -19,9 +19,6 @@ function OpenHouseRegistration({ event, user }: Props & StateProps) {
   if (event.event_type === 'Open House') {
     return (
       <Button
-        variant="outlined"
-        color="secondary"
-        size="small"
         href={`/openhouse/${event.crm_task}/${getActiveTeamId(user)}/register`}
         target="_blank"
       >

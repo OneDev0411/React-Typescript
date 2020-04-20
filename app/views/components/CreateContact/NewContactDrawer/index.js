@@ -27,7 +27,7 @@ const propTypes = {
 }
 const defaultProps = {
   section: '',
-  submitCallback() {}
+  submitCallback: null
 }
 
 class NewContactDrawer extends React.Component {
@@ -69,6 +69,12 @@ class NewContactDrawer extends React.Component {
       const contact = response.data[0]
 
       this.props.onClose()
+
+      if (this.props.submitCallback) {
+        this.props.submitCallback(contact)
+
+        return
+      }
 
       browserHistory.push(`/dashboard/contacts/${contact.id}`)
     } catch (error) {

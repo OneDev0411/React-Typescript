@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components'
 
-import { grey, primary } from 'views/utils/colors'
-
 export const Title = styled.h3`
   font-size: 1.5rem;
   font-weight: 500;
@@ -16,12 +14,12 @@ export const Title = styled.h3`
     `};
 
   &:hover {
-    color: ${primary};
+    color: ${({ theme }) => theme.palette.secondary.main};
     text-decoration: underline;
   }
 `
 
 export const Description = styled.p`
-  color: ${grey.A900};
+  color: ${({ theme }) => theme.palette.grey['900']};
   margin: 0;
 `

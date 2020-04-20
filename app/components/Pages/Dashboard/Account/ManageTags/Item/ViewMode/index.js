@@ -1,8 +1,8 @@
 import React from 'react'
+import { IconButton } from '@material-ui/core'
 
 import Tooltip from 'components/tooltip'
-import IconButton from 'components/Button/IconButton'
-import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 
 import { Container, Title } from './styled'
 import { LoadingIcon } from '../styled'
@@ -28,13 +28,8 @@ export class ViewMode extends React.Component {
           </div>
         ) : (
           <Tooltip caption="Delete tag">
-            <IconButton
-              isFit
-              inverse
-              appearance="icon"
-              onClick={this.onDeleteClick}
-            >
-              <DeleteIcon />
+            <IconButton size="small" onClick={this.onDeleteClick}>
+              <TrashIcon size="small" />
             </IconButton>
           </Tooltip>
         )}

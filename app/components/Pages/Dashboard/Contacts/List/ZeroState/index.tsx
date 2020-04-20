@@ -1,9 +1,9 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import React from 'react'
 import cn from 'classnames'
 import { Box, Button, Typography } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
+
+import { OAuthProvider } from 'constants/contacts'
 
 import GoogleSigninButton from 'components/GoogleSigninButton'
 
@@ -13,6 +13,10 @@ import IconCsv from 'components/SvgIcons/Csv/IconCsv'
 import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 
 import { useConnectOAuthAccount } from '../ImportContactsButton/use-connect-oauth-account'
+
+interface Props {
+  onCreateContact: (contact: IContact) => void
+}
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -28,6 +32,10 @@ const useStyles = makeStyles(
       marginBottom: {
         marginBottom: theme.spacing(2)
       },
+      title: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis'
+      },
       description: {
         marginBottom: theme.spacing(4)
       },
@@ -38,7 +46,7 @@ const useStyles = makeStyles(
   { name: 'zeroState' }
 )
 
-export function ZeroState() {
+export function ZeroState({ onCreateContact }: Props) {
   const classes = useStyles()
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
@@ -52,7 +60,9 @@ export function ZeroState() {
       flexDirection="column"
     >
       <img src="/static/images/contacts/zero-state.svg" alt="zero-state" />
-      <h2>No contact! Import now with one click :)</h2>
+      <h2 className={classes.title}>
+        No contact! Import now with one click :)
+      </h2>
       <Typography variant="body1" className={classes.description}>
         People and relationships are central to your business. Start building
         your referral network in Rechat by importing or creating a contact now.
@@ -64,7 +74,7 @@ export function ZeroState() {
         style={{ marginBottom: '1rem' }}
         size="large"
       >
-        Sign in with google
+        Sign in with Google
       </GoogleSigninButton>
 
       <Button
@@ -76,7 +86,7 @@ export function ZeroState() {
       >
         <IconOutlook />
         <Typography variant="button" className={classes.buttonText}>
-          Sync with Outlook
+          Sign in with Outlook
         </Typography>
       </Button>
 
@@ -95,6 +105,7 @@ export function ZeroState() {
       </Button>
 
       <CreateContact
+        submitCallback={onCreateContact}
         buttonProps={{ className: classes.button, size: 'large' }}
       />
     </Box>

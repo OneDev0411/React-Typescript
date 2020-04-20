@@ -5,17 +5,22 @@ import Flex from 'styled-flex-component'
 
 import styled from 'styled-components'
 
+import { Button } from '@material-ui/core'
+
 import { setUploadAttributes } from 'actions/deals'
-import ActionButton from 'components/Button/ActionButton'
-import { primary, grey } from 'views/utils/colors'
+
+import { grey } from 'views/utils/colors'
 
 const Container = styled(Flex)`
   height: 100%;
   padding-left: 0.5rem;
   background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};
-  border: solid 1px ${({ isFocused }) => (isFocused ? primary : '#d4d4d4')};
+  border: solid 1px
+    ${({ isFocused, theme }) =>
+      isFocused ? theme.palette.secondary.main : '#d4d4d4'};
   :hover {
-    background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A000)};
+    background-color: ${({ isFocused, theme }) =>
+      isFocused ? '#ffffff' : theme.palette.grey.A100};
   }
 `
 
@@ -24,7 +29,7 @@ const Input = styled.input`
   height: 30px;
   padding: 0 5px;
   font-size: 14px;
-  caret-color: ${primary};
+  caret-color: ${({ theme }) => theme.palette.secondary.main};
   background-color: transparent;
   color: ${grey.A900};
   border: none;
@@ -88,28 +93,28 @@ class FileName extends React.Component {
           onBlur={() => this.save(file)}
           onKeyPress={e => this.onKeyPress(e, file)}
           onClick={() => this.setActiveState()}
-          // className={cn('input-edit-name', { disabled: !isFocused })}
         />
 
         {isFocused ? (
-          <ActionButton
+          <Button
             size="small"
-            // className="c-button--shadow save"
+            variant="contained"
+            color="secondary"
             onClick={() => this.save(file)}
           >
             Save
-          </ActionButton>
+          </Button>
         ) : (
-          <ActionButton
+          <Button
             size="small"
-            appearance="link"
+            color="secondary"
             className={cn({
               canEditName: isFocused
             })}
             onClick={() => this.setActiveState()}
           >
             EDIT
-          </ActionButton>
+          </Button>
         )}
       </Container>
     )

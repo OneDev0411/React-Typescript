@@ -3,11 +3,8 @@ import styled, { ThemeProps } from 'styled-components'
 import 'draft-js/dist/Draft.css'
 import { Theme } from '@material-ui/core'
 
-import Flex from 'styled-flex-component'
-
 import { ComponentProps, ComponentType, CSSProperties } from 'react'
-
-import { primary, primaryDark } from '../../utils/colors'
+import Flex from 'styled-flex-component'
 
 export const Toolbar = styled.div`
   display: flex;
@@ -71,7 +68,8 @@ export const EditorWrapper = styled.div`
     border-radius: 2px;
   }
   .focused {
-    box-shadow: 0 0 0 3px ${primaryDark};
+    box-shadow: 0 0 0 3px
+      ${({ theme }: ThemeProps<Theme>) => theme.palette.primary.dark};
   }
 
   ////////////////////////////////////////////////
@@ -83,7 +81,7 @@ export const EditorWrapper = styled.div`
     content: '';
     width: 8px;
     height: 8px;
-    background: ${primaryDark};
+    background: ${({ theme }: ThemeProps<Theme>) => theme.palette.primary.dark};
     position: absolute;
     top: 50%;
     z-index: 2;
@@ -99,6 +97,7 @@ export const EditorWrapper = styled.div`
   /////////////////////////////////////////////////
 
   .unfocused:hover {
-    box-shadow: 0 0 0 3px ${primary};
+    box-shadow: 0 0 0 3px
+      ${({ theme }: ThemeProps<Theme>) => theme.palette.primary.main};
   }
 `

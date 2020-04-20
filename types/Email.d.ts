@@ -166,6 +166,7 @@ declare type IEmailCampaign<
   complained: number
   stored: number
   text: string
+  template?: IMarketingTemplateInstance
   type: 'email_campaign'
   sent: number
   microsoft_credential: UUID | null
@@ -176,7 +177,7 @@ declare type IEmailCampaign<
   IEmailRecipient<RecipientAssociations>[],
   Associations
 > &
-  Association<'from', IUser, Associations> &
+  Association<'from', IUser | IOAuthAccount, Associations> &
   Association<'template', IMarketingTemplateInstance | null, Associations> &
   Association<
     'emails',

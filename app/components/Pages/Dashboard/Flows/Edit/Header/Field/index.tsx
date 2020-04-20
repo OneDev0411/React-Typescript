@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Typography from '@material-ui/core/Typography'
-import { ThemeStyle } from '@material-ui/core/styles/createTypography'
+import { Variant } from '@material-ui/core/styles/createTypography'
 
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 
@@ -11,7 +11,7 @@ interface Props {
   value?: string
   disabled?: boolean
   validate: (value: string) => string
-  variant: ThemeStyle
+  variant: Variant
   name: 'name' | 'description'
   onChange: (value: string) => Promise<any>
 }
@@ -64,7 +64,9 @@ export default function Field(props: Props) {
     return (
       <Container>
         {props.value && (
-          <Typography variant={props.variant}>{props.value}</Typography>
+          <Typography variant={props.variant} noWrap>
+            {props.value}
+          </Typography>
         )}
         {!props.disabled && (
           <Typography

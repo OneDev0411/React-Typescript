@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 import {
   Box,
   Button,
+  Avatar,
   createStyles,
   Link,
   makeStyles,
@@ -18,7 +19,6 @@ import useBoolean from 'react-use/lib/useBoolean'
 
 import { Iframe } from 'components/Iframe'
 
-import Avatar from '../../Avatar'
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
 import { EmailItemHeaderActions } from './EmailItemHeaderActions'
@@ -71,8 +71,15 @@ const styles = (theme: Theme) =>
       alignItems: 'center',
       padding: theme.spacing(2, 2.5)
     },
+    emailSnippet: {
+      color: theme.palette.grey[500]
+    },
     actionButton: {
       marginRight: `${theme.spacing(1)}px`
+    },
+    avatar: {
+      backgroundColor: theme.palette.divider,
+      color: theme.palette.text.primary
     }
   })
 const useStyles = makeStyles(styles, { name: 'EmailThreadItem' })
@@ -123,13 +130,19 @@ export function EmailThreadItem({
         onClick={onToggleCollapsed && (() => onToggleCollapsed(!collapsed))}
       >
         <Box mr={2}>
-          <Avatar title={email.from} />
+          <Avatar alt={email.from} sizes="32" className={classes.avatar}>
+            {email.from.substring(0, 1).toUpperCase()}
+          </Avatar>
         </Box>
         <Box flex={1} mr={2} overflow="hidden">
-          <Typography style={{ lineHeight: 1.3 }} noWrap>
+          <Typography variant="body2" noWrap>
             <EmailRecipient recipient={email.from} />
           </Typography>
-          <Typography color="textSecondary" noWrap>
+          <Typography
+            variant="body2"
+            noWrap
+            classes={{ root: classes.emailSnippet }}
+          >
             {collapsed ? email.snippet : <EmailItemRecipients email={email} />}
           </Typography>
         </Box>
@@ -195,6 +208,7 @@ export function EmailThreadItem({
                 <Button
                   className={classes.actionButton}
                   onClick={() => openResponse('reply')}
+                  variant="outlined"
                   color={
                     isResponseOpen && responseType === 'reply'
                       ? 'primary'
@@ -208,6 +222,7 @@ export function EmailThreadItem({
                   <Button
                     className={classes.actionButton}
                     onClick={() => openResponse('replyAll')}
+                    variant="outlined"
                     color={
                       isResponseOpen && responseType === 'replyAll'
                         ? 'primary'
@@ -222,6 +237,7 @@ export function EmailThreadItem({
                 <Button
                   className={classes.actionButton}
                   onClick={() => openResponse('forward')}
+                  variant="outlined"
                   color={
                     isResponseOpen && responseType === 'forward'
                       ? 'primary'

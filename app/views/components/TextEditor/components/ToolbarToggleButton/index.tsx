@@ -30,7 +30,7 @@ export function ToolbarToggleButton({
   const btn = (
     <ToolbarIconButton
       onClick={onClick}
-      color={isActive ? 'primary' : undefined}
+      color={isActive ? 'secondary' : undefined}
       {...props}
     >
       {props.children}

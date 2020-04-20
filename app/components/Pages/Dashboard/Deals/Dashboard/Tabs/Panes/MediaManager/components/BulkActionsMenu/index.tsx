@@ -90,7 +90,7 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
       >
         <Box flexGrow={1}>
           <Checkbox
-            color="primary"
+            color="secondary"
             onChange={handleSelectNone}
             checked={selectedGalleryItems.length === mediaGallery.length}
             indeterminate={

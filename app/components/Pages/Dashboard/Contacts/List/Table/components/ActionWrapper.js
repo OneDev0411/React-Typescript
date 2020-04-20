@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import Tooltip from 'components/tooltip'
+import { Tooltip } from '@material-ui/core'
 
 function getCaption(action, atLeast = 'one', bulkMode = false) {
   let entityName = 'contact'
@@ -29,7 +29,7 @@ export function ActionWrapper({
   bulkMode
 }) {
   return disabled ? (
-    <Tooltip placement="bottom" caption={getCaption(action, atLeast, bulkMode)}>
+    <Tooltip placement="top" title={getCaption(action, atLeast, bulkMode)}>
       <DisabledActionContainer>{children}</DisabledActionContainer>
     </Tooltip>
   ) : (

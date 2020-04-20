@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components'
 
-import { blue } from '../../../utils/colors'
-
 import Button, { ActionButtonProps } from '../ActionButton'
 import { getIconSize, getIconStatesStyle } from '../helpers'
 
@@ -26,7 +24,7 @@ const defaultProps: IconButtonProps = {
 }
 
 const getColor = props => {
-  if (props.appearance === 'primary') {
+  if (['primary', 'secondary'].includes(props.appearance)) {
     return '#fff'
   }
 
@@ -37,7 +35,7 @@ const getColor = props => {
     return '#000'
   }
 
-  return blue.A100
+  return props.theme.palette.primary.main
 }
 
 const checkFit = props => {

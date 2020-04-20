@@ -11,15 +11,22 @@ import {
   SectionItem
 } from 'components/PageSideNav/types'
 
+interface ExtendedSection extends Section {
+  key: string
+}
+
+export type SectionCollection = { [key: string]: ExtendedSection }
+
 function urlGenerator(url: string | string[]): string {
   return `/dashboard/marketing${
     typeof url === 'string' ? url : `/${url.join(',')}`
   }`
 }
 
-const ALL_SECTIONS: Section[] = [
-  {
+const ALL_SECTIONS: SectionCollection = {
+  marketingCenter: {
     type: SectionsEnum.LINK,
+    key: 'marketingCenter',
     title: 'Marketing Center',
     items: [
       {
@@ -30,8 +37,9 @@ const ALL_SECTIONS: Section[] = [
       }
     ]
   },
-  {
+  life: {
     type: SectionsEnum.LINK,
+    key: 'life',
     title: 'Life',
     items: [
       {
@@ -81,8 +89,9 @@ const ALL_SECTIONS: Section[] = [
       }
     ]
   },
-  {
+  properties: {
     type: SectionsEnum.LINK,
+    key: 'properties',
     title: 'Properties',
     items: [
       {
@@ -133,7 +142,7 @@ const ALL_SECTIONS: Section[] = [
       }
     ]
   }
-]
+}
 
 function getPrivilegedSectionItems(
   user: IUser,
@@ -148,12 +157,22 @@ function getPrivilegedSectionItems(
   })
 }
 
-export function useMarketingCenterSections(): Section[] {
+function getSerializedValue(value?: string | string[]): string {
+  if (!value) {
+    return ''
+  }
+
+  return Array.isArray(value) ? value.join(',') : value
+}
+
+export function useMarketingCenterSections({ types }): SectionCollection {
   const user = useSelector<IAppState, IUser>(state => state.user)
 
-  const newSections: Section[] = []
+  const newSections: SectionCollection = {}
+  const sectionKeys = Object.keys(ALL_SECTIONS)
 
-  ALL_SECTIONS.forEach(section => {
+  sectionKeys.forEach(key => {
+    const section = ALL_SECTIONS[key]
     const hasAccessToSection = (section.access || []).every(access =>
       hasUserAccess(user, access)
     )
@@ -164,12 +183,20 @@ export function useMarketingCenterSections(): Section[] {
       return
     }
 
-    const newSection: Section = {
+    const activeType = section.items.find(
+      item => getSerializedValue(item.value) === types
+    )
+
+    const newSection: ExtendedSection = {
       ...section,
-      items: getPrivilegedSectionItems(user, section)
+      items: getPrivilegedSectionItems(user, section),
+      title: activeType
+        ? `${section.title}: ${activeType.title}`
+        : section.title,
+      value: activeType ? getSerializedValue(activeType.value) : null
     }
 
-    newSections.push(newSection)
+    newSections[key] = newSection
   })
 
   return newSections

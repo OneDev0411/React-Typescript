@@ -2,14 +2,14 @@ import styled from 'styled-components'
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import { Box, Button } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import _ from 'underscore'
 
 import copy from '../../../../../../utils/copy-text-to-clipboard'
 import IconCalendarBase from '../../../../../../views/components/SvgIcons/Calender/IconCalendar'
 import getCalenderFeed from '../../../../../../models/user/generate-calender-feed'
-import Button from '../../../../../../views/components/Button/ActionButton'
 import { GenerateUrlContainer, GenerateUrlText, FeedUrl } from './styled'
-import Alert from '../../../Partials/Alert'
 
 const IconCalendar = styled(IconCalendarBase)`
   > g {
@@ -103,11 +103,9 @@ class GenerateUrl extends React.Component {
     return (
       <React.Fragment>
         {errorMessage && (
-          <Alert
-            type="error"
-            message={errorMessage}
-            style={{ marginBottom: '0.5em' }}
-          />
+          <Box marginBottom={1}>
+            <Alert severity="error">{errorMessage}</Alert>
+          </Box>
         )}
         <GenerateUrlContainer>
           <IconCalendar />
@@ -130,13 +128,16 @@ class GenerateUrl extends React.Component {
               {feedURl}
             </FeedUrl>
           ) : (
-            <Button
-              style={{ marginLeft: '1em' }}
-              onClick={this.generateUrlClick}
-              disabled={isFetchingFeed || errorMessage}
-            >
-              {`Generate URL${isFetchingFeed ? '...' : ''}`}
-            </Button>
+            <Box marginLeft="1em">
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={isFetchingFeed || errorMessage}
+                onClick={this.generateUrlClick}
+              >
+                {`Generate URL${isFetchingFeed ? '...' : ''}`}
+              </Button>
+            </Box>
           )}
         </GenerateUrlContainer>
       </React.Fragment>

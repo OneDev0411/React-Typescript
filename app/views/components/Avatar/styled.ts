@@ -36,7 +36,7 @@ interface InitialsProps {
 }
 
 export const Initials = styled.div`
-  font-size: ${(props: InitialsProps) => (props.size * 0.5) / 16}rem;
+  font-size: ${(props: InitialsProps) => (props.size * 0.4) / 16}rem;
   color: #fff;
 `
 

@@ -1,33 +1,26 @@
 import React from 'react'
+import { makeStyles } from '@material-ui/styles'
+import cn from 'classnames'
 
-import styles from '../../styles'
+import { sharedStyles } from '../../styles'
 
 interface Props {
   event: ICalendarEvent
   style: React.CSSProperties
 }
 
-const emptyRowStyles = {
-  alignItems: 'center',
-  height: '100%',
-  color: '#536280'
-}
+const useStyles = makeStyles(sharedStyles)
 
 export function EmptyState({ event, style }: Props) {
+  const classes = useStyles({})
+
   return (
-    <>
-      <div style={style}>
-        <div
-          style={{
-            ...styles.row,
-            ...emptyRowStyles
-          }}
-        >
-          <div style={styles.container}>
-            No event set for this {event.type}!
-          </div>
+    <div style={style}>
+      <div className={cn(classes.row, classes.emptyRowStyles)}>
+        <div className={classes.container}>
+          No event set for this {event.type}!
         </div>
       </div>
-    </>
+    </div>
   )
 }

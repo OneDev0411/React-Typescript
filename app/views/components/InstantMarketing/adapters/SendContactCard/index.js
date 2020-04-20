@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import idx from 'idx'
@@ -21,19 +21,23 @@ import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketin
 import SocialDrawer from '../../components/SocialDrawer'
 
 class SendContactCard extends React.Component {
-  state = {
-    isFetchingContact: false,
-    isMissingEmailModalOpen: false,
-    contact: this.props.contact,
-    isBuilderOpen: false,
-    isComposeEmailOpen: false,
-    isSearchDrawerOpen: false,
-    isSocialDrawerOpen: false,
-    socialNetworkName: '',
-    owner: this.props.user,
-    emailBody: '',
-    templateInstance: null,
-    isGettingTemplateInstance: false
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isFetchingContact: false,
+      isMissingEmailModalOpen: false,
+      contact: this.props.contact,
+      isBuilderOpen: false,
+      isComposeEmailOpen: false,
+      isSearchDrawerOpen: false,
+      isSocialDrawerOpen: false,
+      socialNetworkName: '',
+      owner: this.props.user,
+      emailBody: '',
+      templateInstance: null,
+      isGettingTemplateInstance: false
+    }
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -224,13 +228,37 @@ class SendContactCard extends React.Component {
       isSocialDrawerOpen: false
     })
 
+  renderButton = () => {
+    const { buttonRenderrer } = this.props
+
+    const renderProps = {
+      onClick: this.showBuilder,
+      disabled: this.state.isFetchingContact
+    }
+
+    if (buttonRenderrer) {
+      return buttonRenderrer(renderProps)
+    }
+
+    return (
+      <Button
+        variant="outlined"
+        onClick={this.showBuilder}
+        disabled={this.state.isFetchingContact}
+        {...this.props.buttonProps}
+      >
+        {this.props.children}
+      </Button>
+    )
+  }
+
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
       return null
     }
 
     return (
-      <Fragment>
+      <>
         <MissingEmailModal
           isOpen={this.state.isMissingEmailModalOpen}
           contactId={this.state.contact && this.state.contact.id}
@@ -239,15 +267,7 @@ class SendContactCard extends React.Component {
         />
 
         {this.props.contact || this.props.contactId ? (
-          <Button
-            color="secondary"
-            variant="outlined"
-            onClick={this.showBuilder}
-            disabled={this.state.isFetchingContact}
-            {...this.props.buttonProps}
-          >
-            {this.props.children}
-          </Button>
+          this.renderButton()
         ) : (
           <SearchContactDrawer
             title="Select a Contact"
@@ -303,7 +323,7 @@ class SendContactCard extends React.Component {
             onClose={this.closeSocialDrawer}
           />
         )}
-      </Fragment>
+      </>
     )
   }
 }

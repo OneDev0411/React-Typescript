@@ -23,7 +23,7 @@
       "address": "rechat.test2@gmail.com"
     }
   ],
-  "senders_raw": null,
+  "senders_raw": [],
   "message_count": 6,
   "has_attachments": false,
   "is_read": false,

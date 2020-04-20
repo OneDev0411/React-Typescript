@@ -152,7 +152,7 @@ export default function MediaItem({ media, deal }: Props) {
             />
             <Button
               variant="contained"
-              color="primary"
+              color="secondary"
               onClick={saveEdit}
               className={cn(classes.lowerCaseButton, 'save-btn')}
             >

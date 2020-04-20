@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { primary } from 'views/utils/colors'
-
 import { ChecklistItemContainer, ChecklistItemTitle } from '../../styled'
 
 export const CreateTaskItem = ({ checklist, onSelect }) => (
@@ -11,7 +9,7 @@ export const CreateTaskItem = ({ checklist, onSelect }) => (
       onSelect(checklist.id)
     }}
   >
-    <ChecklistItemTitle color={primary} bold>
+    <ChecklistItemTitle selected bold>
       Add new task to {checklist.title}
     </ChecklistItemTitle>
   </ChecklistItemContainer>

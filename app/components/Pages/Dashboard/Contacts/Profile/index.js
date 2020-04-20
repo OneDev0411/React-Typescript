@@ -180,8 +180,6 @@ class ContactProfile extends React.Component {
       state => ({ contact: { ...state.contact, ...newContact } }),
       fallback
     )
-
-    this.fetchTimeline()
   }
 
   onChangeOwner = async item => {
@@ -295,9 +293,9 @@ class ContactProfile extends React.Component {
             <Divider />
             <Tags contact={contact} />
             <Divider />
-            <Dates {..._props} />
             <ContactInfo {..._props} />
             <AddressesSection {..._props} />
+            <Dates {..._props} />
             <Details {..._props} />
             <Partner {..._props} />
             <Divider />
@@ -325,7 +323,7 @@ class ContactProfile extends React.Component {
               ref={this.timelineRef}
               contact={this.state.contact}
               defaultAssociation={defaultAssociation}
-              onCreateNote={this.setContact}
+              onChangeNote={this.setContact}
             />
           </MainColumn>
         </PageContainer>

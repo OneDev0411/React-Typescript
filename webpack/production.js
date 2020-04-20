@@ -3,10 +3,6 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
-import TerserPlugin from 'terser-webpack-plugin'
 
 import moment from 'moment'
 
@@ -46,24 +42,9 @@ webpackConfig.entry = {
   vendor: appConfig.compile.vendors
 }
 
-webpackConfig.optimization.minimize = true
-
-webpackConfig.optimization.minimizer = [
-  new TerserPlugin({
-    cache: true,
-    parallel: true,
-    sourceMap: true,
-    exclude: /grapesjs/
-  })
-]
-
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
   new MomentLocalesPlugin(),
-  new MiniCssExtractPlugin({
-    filename: '[name].[hash].css'
-  }),
-  new OptimizeCSSAssetsPlugin(),
   new HtmlWebpackPlugin({
     template: appConfig.compile.template,
     hash: false,
@@ -78,18 +59,6 @@ webpackConfig.plugins.push(
     algorithm: 'gzip',
     test: /\.js$|\.css$/,
     filename: '[path]'
-  }),
-  new ForkTsCheckerWebpackPlugin({
-    /**
-     * We want build to fail if there is a ts error
-     */
-    async: false,
-    /**
-     * react-scripts also sets this to true and the overhead is negligible
-     * with respect to production build time
-     */
-    checkSyntacticErrors: true,
-    useTypescriptIncrementalApi: true
   }),
   new S3Plugin({
     progress: false, // Messes the terminal up
@@ -129,19 +98,34 @@ webpackConfig.plugins.push(
   })
 )
 
-webpackConfig.module.rules.push({
-  test: /\.(sa|sc|c)ss$/,
-  use: [
-    MiniCssExtractPlugin.loader,
-    'css-loader',
-    {
-      loader: 'postcss-loader',
-      options: {
-        plugins: postcss
+webpackConfig.module.rules.push(
+  {
+    test: /\.css/,
+    use: [
+      'style-loader',
+      'css-loader',
+      {
+        loader: 'postcss-loader',
+        options: {
+          plugins: postcss
+        }
       }
-    },
-    'sass-loader'
-  ]
-})
+    ]
+  },
+  {
+    test: /\.scss/,
+    use: [
+      'style-loader',
+      'css-loader',
+      {
+        loader: 'postcss-loader',
+        options: {
+          plugins: postcss
+        }
+      },
+      'sass-loader'
+    ]
+  }
+)
 
 export default webpackConfig

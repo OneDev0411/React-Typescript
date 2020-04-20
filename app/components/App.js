@@ -44,15 +44,18 @@ import { isLoadedContactAttrDefs } from '../reducers/contacts/attributeDefs'
 import { selectListings } from '../reducers/listings'
 import getFavorites from '../store_actions/listings/favorites/get-favorites'
 
+// inbox
+import { fetchUnreadEmailThreadsCount } from '../store_actions/inbox'
+
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 
 import config from '../../config/public'
 
-import Intercom from './Pages/Dashboard/Partials/Intercom'
 import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
 import { getAllNotifications } from '../store_actions/notifications'
 
+import Intercom from '../views/components/Intercom'
 import CheckBrowser from '../views/components/CheckBrowser'
 
 class App extends Component {
@@ -90,6 +93,8 @@ class App extends Component {
 
   componentWillUnmount() {
     this.props.dispatch(inactiveIntercom())
+
+    window.removeEventListener('online', this.handleOnlineEvent)
   }
 
   static getDerivedStateFromError(error) {
@@ -149,11 +154,16 @@ class App extends Component {
       // load saved listings
       dispatch(getFavorites(user))
 
+      // fetch the number of unread email threads
+      dispatch(fetchUnreadEmailThreadsCount())
+
       // set user for full story
       this.setFullStoryUser(user)
 
       // set user data for sentry
       this.setSentryUser(user, data.brand)
+
+      window.addEventListener('online', this.handleOnlineEvent)
     }
 
     // check user is mobile device or not
@@ -168,6 +178,11 @@ class App extends Component {
     if (user) {
       dispatch(syncOpenHouseData(user.access_token))
     }
+  }
+
+  handleOnlineEvent = () => {
+    // update the number of unread emails in Inbox nav link notification badge
+    this.props.dispatch(fetchUnreadEmailThreadsCount())
   }
 
   getBrand() {

@@ -5,6 +5,8 @@ import gmailThreadJson from 'fixtures/email-thread/gmail-thread-1.json'
 import outlookThreadJson from 'fixtures/email-thread/outlook-thread-1.json'
 import forwardedEmailThreadJson from 'fixtures/email-thread/forwarded-email-thread.json'
 
+import { AppTheme } from '../../../../AppTheme'
+
 import { EmailThreadItem } from './EmailThreadItem'
 import { normalizeThreadMessageToThreadEmail } from '../helpers/normalize-to-email-thread-email'
 
@@ -42,11 +44,13 @@ jest.mock('../../Iframe', () => ({
 describe('EmailThreadItem', () => {
   it('renders', () => {
     render(
-      <EmailThreadItem
-        email={normalizeThreadMessageToThreadEmail(gmailThread.messages[0])}
-        collapsed={false}
-        onToggleCollapsed={() => {}}
-      />
+      <AppTheme>
+        <EmailThreadItem
+          email={normalizeThreadMessageToThreadEmail(gmailThread.messages[0])}
+          collapsed={false}
+          onToggleCollapsed={() => {}}
+        />
+      </AppTheme>
     )
   })
 
@@ -59,11 +63,13 @@ describe('EmailThreadItem', () => {
       'This reply is sent via gmail client, not rechat'
 
     const $ = render(
-      <EmailThreadItem
-        email={replyFromGmail}
-        collapsed={false}
-        onToggleCollapsed={() => {}}
-      />
+      <AppTheme>
+        <EmailThreadItem
+          email={replyFromGmail}
+          collapsed={false}
+          onToggleCollapsed={() => {}}
+        />
+      </AppTheme>
     )
 
     expect($.queryByText(somethingInOriginalEmail, { exact: false })).toBeNull()
@@ -80,11 +86,13 @@ describe('EmailThreadItem', () => {
     const somethingInReplyFromOutlook = 'Reply body 2'
 
     const $ = render(
-      <EmailThreadItem
-        email={replyFromOutlook}
-        collapsed={false}
-        onToggleCollapsed={() => {}}
-      />
+      <AppTheme>
+        <EmailThreadItem
+          email={replyFromOutlook}
+          collapsed={false}
+          onToggleCollapsed={() => {}}
+        />
+      </AppTheme>
     )
 
     expect($.queryByText(somethingInOriginalEmail, { exact: false })).toBeNull()
@@ -101,11 +109,13 @@ describe('EmailThreadItem', () => {
     const somethingInReplyFromRechat = 'And this reply is sent from rechat!'
 
     const $ = render(
-      <EmailThreadItem
-        email={replyFromRechat}
-        collapsed={false}
-        onToggleCollapsed={() => {}}
-      />
+      <AppTheme>
+        <EmailThreadItem
+          email={replyFromRechat}
+          collapsed={false}
+          onToggleCollapsed={() => {}}
+        />
+      </AppTheme>
     )
 
     expect($.queryByText(somethingInOriginalEmail, { exact: false })).toBeNull()
@@ -134,11 +144,13 @@ describe('EmailThreadItem', () => {
     const somethingInReplyFromGmail = 'reply to forwarded email'
 
     const $ = render(
-      <EmailThreadItem
-        email={originalEmail}
-        collapsed={false}
-        onToggleCollapsed={() => {}}
-      />
+      <AppTheme>
+        <EmailThreadItem
+          email={originalEmail}
+          collapsed={false}
+          onToggleCollapsed={() => {}}
+        />
+      </AppTheme>
     )
 
     expect(
@@ -146,11 +158,13 @@ describe('EmailThreadItem', () => {
     ).not.toBeNull()
 
     $.rerender(
-      <EmailThreadItem
-        email={secondForwardEmail}
-        collapsed={false}
-        onToggleCollapsed={() => {}}
-      />
+      <AppTheme>
+        <EmailThreadItem
+          email={secondForwardEmail}
+          collapsed={false}
+          onToggleCollapsed={() => {}}
+        />
+      </AppTheme>
     )
 
     expect(
@@ -161,11 +175,13 @@ describe('EmailThreadItem', () => {
     ).not.toBeNull()
 
     $.rerender(
-      <EmailThreadItem
-        email={replyEmail}
-        collapsed={false}
-        onToggleCollapsed={() => {}}
-      />
+      <AppTheme>
+        <EmailThreadItem
+          email={replyEmail}
+          collapsed={false}
+          onToggleCollapsed={() => {}}
+        />
+      </AppTheme>
     )
 
     expect($.queryByText(somethingInOriginalEmail, { exact: false })).toBeNull()
@@ -179,11 +195,13 @@ describe('EmailThreadItem', () => {
     const email = normalizeThreadMessageToThreadEmail(gmailThread.messages[1])
 
     const $ = render(
-      <EmailThreadItem
-        email={email}
-        collapsed={false}
-        onToggleCollapsed={() => {}}
-      />
+      <AppTheme>
+        <EmailThreadItem
+          email={email}
+          collapsed={false}
+          onToggleCollapsed={() => {}}
+        />
+      </AppTheme>
     )
 
     expect($.queryByTitle('Show trimmed content')).not.toBeNull()
@@ -193,11 +211,13 @@ describe('EmailThreadItem', () => {
     const email = normalizeThreadMessageToThreadEmail(gmailThread.messages[0])
 
     const $ = render(
-      <EmailThreadItem
-        email={email}
-        collapsed={false}
-        onToggleCollapsed={() => {}}
-      />
+      <AppTheme>
+        <EmailThreadItem
+          email={email}
+          collapsed={false}
+          onToggleCollapsed={() => {}}
+        />
+      </AppTheme>
     )
 
     expect($.queryByTitle('Show trimmed content')).toBeNull()
@@ -208,11 +228,13 @@ describe('EmailThreadItem', () => {
     const originalContent = 'This is the original content'
 
     const $ = render(
-      <EmailThreadItem
-        email={email}
-        collapsed={false}
-        onToggleCollapsed={() => {}}
-      />
+      <AppTheme>
+        <EmailThreadItem
+          email={email}
+          collapsed={false}
+          onToggleCollapsed={() => {}}
+        />
+      </AppTheme>
     )
 
     const toggleButton = $.getByTitle('Show trimmed content')

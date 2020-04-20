@@ -77,7 +77,7 @@ export function DateTimePicker({
       ) : (
         <Button
           variant="text"
-          color="primary"
+          color="secondary"
           data-test="date-time-picker-button"
           onClick={handleOpen}
         >
@@ -119,7 +119,7 @@ export function DateTimePicker({
 
             <Button
               variant="text"
-              color="primary"
+              color="secondary"
               data-test="date-picker-done"
               onClick={handleClose}
             >

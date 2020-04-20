@@ -38,11 +38,16 @@ declare type ICalendarEvent<
   people: (IContact | IAgent)[] | null
   people_len: number | null
   full_deal?: IDeal
-} & Association<'full_thread', IEmailThread, Associations>
+} & { rowIndex?: number } & Association<
+    'full_thread',
+    IEmailThread,
+    Associations
+  >
 
 declare interface ICalendarEventHeader {
   date: string
   headerType: string
+  isTomorrow: boolean
   isToday: boolean
   isEventHeader: boolean
   title: string
@@ -51,13 +56,11 @@ declare interface ICalendarEventHeader {
 declare type ICalendarListRow = ICalendarEvent | ICalendarEventHeader
 
 interface ICalendarEventsList {
-  [key: string]: {
-    ICalendarMonthEvents
-  }
+  [month: string]: ICalendarMonthEvents
 }
 
 interface ICalendarMonthEvents {
-  [key: string]: ICalendarEvent[] | []
+  [day: string]: ICalendarEvent[]
 }
 
 interface IGoogleCalendarItem {
@@ -70,22 +73,6 @@ interface IGoogleCalendarItem {
 
 interface IGoogleCalendars {
   calendars: IGoogleCalendarItem[]
-  currentSelectedCal: {
-    kind: string
-    etag: string
-    id: string
-    summary: string
-    description: string
-    location: string
-    timeZone: string
-    colorId: number
-    backgroundColor: string
-    foregroundColor: string
-    selected: boolean
-    accessRole: string
-    defaultReminders: unknown[]
-    conferenceProperties: {
-      allowedConferenceSolutionTypes: string[]
-    }
-  }
+  primaryCalendar: IGoogleCalendarItem
+  isConfigured: boolean
 }

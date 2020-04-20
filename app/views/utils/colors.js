@@ -1,53 +1,57 @@
-const newRed = '#F43B38'
-
+const newRed = '#F44336'
+const lightOrange = '#FFB74D'
 export const red = {
   A100: newRed,
   A200: newRed,
   primary: newRed,
-  dark: '#b90010'
+  dark: '#D32F2F'
 }
-
 export const yellow = {
-  A100: '#F8A700'
+  A100: lightOrange
 }
-
 export const green = {
   A100: '#32b863',
   primary: '#5cb85c'
 }
 export const orange = {
-  light: '#F8EAB3',
-  primary: '#f6a623',
-  dark: '#7A5C02'
+  light: lightOrange,
+  primary: '#FF9900',
+  dark: '#F57C00'
 }
-
 export const blue = {
-  A100: '#0945eb',
-  A200: '#001eb7'
+  A100: '#0945EB',
+  A200: '#001EB7'
 }
-
+// Maping of the MUI grey colors to Rechat grey colors
+// 50 = A000, A125, A150, A175
+// 100 = A100
+// 200 = A200, A250
+// 300 = A300
+// 400 = A400, A500, A550
+// 500 = A600
+// 600 = A900
 export const grey = {
-  A000: '#fafafa',
-  A100: '#f2f2f2',
-  A125: '#f7f7f7',
-  A150: '#f8f8f8',
-  A175: '#f9f9f9',
-  A200: '#eaeaea',
-  A250: '#e6e6e6',
-  A300: '#d4d4d4',
-  A400: '#c4c4c4',
-  A500: '#b4b4b4',
-  A550: '#b2b2b2',
-  A600: '#a4a4a4',
-  A900: '#7F7F7F'
+  A000: '#F9FAFC',
+  A100: '#F0F2F5',
+  A125: '#F9FAFC',
+  A150: '#F9FAFC',
+  A175: '#F9FAFC',
+  A200: '#E7E9EC',
+  A250: '#E7E9EC',
+  A300: '#D7D9DC',
+  A400: '#B4B5B8',
+  A500: '#B4B5B8',
+  A550: '#B4B5B8',
+  A600: '#949598',
+  A900: '#6C6D70'
 }
-
-export const primary = blue.A100
-export const primaryDark = blue.A200
-
+export const primary = '#00B286'
+export const primaryDark = '#008060'
+export const secondary = blue.A100
+export const secondaryDark = blue.A200
+export const secondaryLight = '#6971FF'
 export const error = red.A200
 export const deleteColor = red.A200
-
 export const disabledColor = grey.A900
 export const disabledBgColor = grey.A550
 export const borderColor = grey.A300

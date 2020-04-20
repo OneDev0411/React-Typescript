@@ -1,75 +1,63 @@
-import styled from 'styled-components'
 import React from 'react'
-import Flex from 'styled-flex-component'
+import { Box, Button, makeStyles } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
 
-import { borderColor } from '../../../../../../views/utils/colors'
-import Button from '../../../../../../views/components/Button/ActionButton'
-import FilterButton from '../../../../../../views/components/Button/DropButton'
-import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
+import GlobalPageLayout from 'components/GlobalPageLayout'
+import { BaseDropdown } from 'components/BaseDropdown'
+import IconArrowDown from 'views/components/SvgIcons/ArrowDownKeyboard/IconArrowDownKeyboard'
 
 import Filters from '../components/Filters'
 import Autocomplete from '../components/Autocomplete'
-import { ViewSwitcher } from '../../components/ViewSwitcher'
 
-const Container = styled(Flex)`
-  height: 6rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 1.5em;
-  border-bottom: 1px solid ${borderColor};
-`
+const useStyles = makeStyles(
+  theme => ({
+    container: {
+      height: theme.spacing(15),
+      display: 'flex'
+    },
+    body: {
+      display: 'flex',
+      justifyContent: 'flex-end'
+    },
+    filtersButton: {
+      marginLeft: theme.spacing(1)
+    }
+  }),
+  { name: 'MLSSearchHeader' }
+)
 
 export function Header(props) {
-  const {
-    isFetching,
-    filtersIsOpen,
-    onClickFilter,
-    isSideMenuOpen,
-    activeView,
-    isWidget
-  } = props
+  const classes = useStyles()
+  const theme = useTheme()
+  const { isFetching, activeView, showGlobalActionsButton } = props
 
   return (
-    <Container>
-      <Flex alignCenter>
-        {!isWidget && props.user && (
-          <MenuTrigger
-            onClick={props.toggleSideMenu}
-            isExpended={isSideMenuOpen}
+    <Box className={classes.container}>
+      <GlobalPageLayout.Header
+        title="All Properties"
+        noGlobalActionsButton={!showGlobalActionsButton}
+      >
+        <Box className={classes.body}>
+          <Autocomplete activeView={activeView} />
+          <BaseDropdown
+            renderDropdownButton={buttonProps => (
+              <Button
+                className={classes.filtersButton}
+                variant="outlined"
+                size="large"
+                disabled={isFetching}
+                {...buttonProps}
+              >
+                Filters
+                <IconArrowDown fillColor={theme.palette.common.black} />
+              </Button>
+            )}
+            renderMenu={({ close }) => (
+              <Filters isSubmitting={isFetching} handleClose={close} />
+            )}
           />
-        )}
-        <Autocomplete activeView={activeView} />
-        <FilterButton
-          style={{ marginLeft: '0.5em' }}
-          onClick={onClickFilter}
-          isOpen={filtersIsOpen}
-          disabled={isFetching}
-          text="Filter"
-          size="large"
-          appearance="outline"
-        />
-        <Filters
-          isOpen={filtersIsOpen}
-          isSubmitting={isFetching}
-          isSideMenuOpen={isSideMenuOpen}
-          handleClose={onClickFilter}
-        />
-        {!isWidget && props.user && (
-          <Button
-            size="large"
-            disabled={isFetching}
-            onClick={props.saveSearchHandler}
-            style={{ marginLeft: '0.5em' }}
-          >
-            Save Search
-          </Button>
-        )}
-      </Flex>
-
-      {!isWidget && (
-        <ViewSwitcher activeView={activeView} onChange={props.onChangeView} />
-      )}
-    </Container>
+        </Box>
+      </GlobalPageLayout.Header>
+    </Box>
   )
 }

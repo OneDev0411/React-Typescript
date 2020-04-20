@@ -31,7 +31,7 @@
       .delete-icon {
         visibility: visible;
         &:hover {
-          color: #0945eb;
+          color: $brand-primary;
           cursor: pointer;
         }
       }

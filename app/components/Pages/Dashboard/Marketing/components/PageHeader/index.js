@@ -4,10 +4,10 @@ import { Box } from '@material-ui/core'
 import styled from 'styled-components'
 
 import { Trigger as MenuTrigger } from 'components/SlideMenu'
-import { merriweatherFamilyStyle } from 'components/Typography/styles'
+import { LatoFamilyStyle } from 'components/Typography/styles'
 
 export const Title = styled.h1`
-  ${merriweatherFamilyStyle}
+  ${LatoFamilyStyle}
   font-size: 1rem;
   font-weight: 900;
   margin: 0;

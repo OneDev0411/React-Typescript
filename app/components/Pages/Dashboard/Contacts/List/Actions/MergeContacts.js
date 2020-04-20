@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { ListItem, ListItemText } from '@material-ui/core'
+
+import { ActionWrapper } from '../Table/components/ActionWrapper'
 import { mergeContact } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
-import IconButton from '../../../../../../views/components/Button/IconButton'
-import IconMerge from '../../../../../../views/components/SvgIcons/Merge/IconMerge'
-import Tooltip from '../../../../../../views/components/tooltip'
 
 class MergeContacts extends React.Component {
   onClick = () => {
@@ -25,16 +25,16 @@ class MergeContacts extends React.Component {
 
   render() {
     return (
-      <Tooltip placement="bottom" caption="Merge">
-        <IconButton
+      <ListItem button disabled={this.props.disabled} onClick={this.onClick}>
+        <ActionWrapper
+          bulkMode={this.props.isEntireMode}
+          action="merging"
+          atLeast="two"
           disabled={this.props.disabled}
-          size="small"
-          appearance="outline"
-          onClick={this.onClick}
         >
-          <IconMerge />
-        </IconButton>
-      </Tooltip>
+          <ListItemText primary="Merge" />
+        </ActionWrapper>
+      </ListItem>
     )
   }
 }
