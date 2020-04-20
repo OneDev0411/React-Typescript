@@ -17,7 +17,6 @@ interface Props<Row> {
   rows: Row[]
   selection: GridSelectionOptions<Row> | null
   hoverable: boolean
-  lazy: boolean
   classes: GridClasses
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
@@ -39,7 +38,6 @@ export function Body<Row>({
   classes,
   selection,
   hoverable,
-  lazy,
   getTdProps = () => ({}),
   getTrProps = () => ({})
 }: Props<Row & { id?: string }>) {
@@ -70,7 +68,6 @@ export function Body<Row>({
               isSelected={isRowSelected(row, rowIndex)}
               classes={classes}
               hoverable={hoverable}
-              lazy={lazy}
               getTdProps={getTdProps}
               getTrProps={getTrProps}
             />
