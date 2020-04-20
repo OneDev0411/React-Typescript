@@ -8,7 +8,7 @@ import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-
 import { IAppState } from 'reducers'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
-import { EditNoteDrawer } from 'components/EditNoteDrawer'
+import AddOrEditNoteDrawer from 'components/AddOrEditNoteDrawer/AddOrEditNoteDrawer'
 
 interface StateProps {
   attributeDefs: any
@@ -55,7 +55,7 @@ function AddNote({
         Add Note
       </Button>
 
-      <EditNoteDrawer
+      <AddOrEditNoteDrawer
         isOpen={isDrawerOpen}
         onClose={toggleDrawer}
         onSubmit={handleCreateNote}
