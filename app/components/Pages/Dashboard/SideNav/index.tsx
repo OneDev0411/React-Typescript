@@ -103,7 +103,7 @@ export default function AppSideNav() {
             <SideNavLinkItem to="/dashboard/tours">Tours</SideNavLinkItem>
           </Acl.Crm>
 
-          <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
+          <Acl access={[ACL.CRM, ACL.MARKETING]}>
             <SideNavLinkItem to="/dashboard/open-house">
               Open House
             </SideNavLinkItem>
