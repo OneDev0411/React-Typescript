@@ -8,7 +8,6 @@ import {
   useState
 } from 'react'
 import sanitizeHtml from 'sanitize-html'
-import { Box, CircularProgress } from '@material-ui/core'
 
 interface Props extends HTMLProps<HTMLIFrameElement> {
   /**
@@ -56,12 +55,14 @@ export function Iframe({
   linkTarget = '_blank',
   srcDoc,
   sanitize,
+  height: passedHeight,
   onLoad: receivedOnLoad,
   ...props
 }: Props) {
   const ref = useRef<HTMLIFrameElement>(null)
-  const [height, setHeight] = useState<number | undefined>(undefined)
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [height, setHeight] = useState<
+    HTMLProps<HTMLIFrameElement>['height'] | undefined
+  >(passedHeight)
 
   const updateHeight = () => {
     if (
@@ -92,7 +93,6 @@ export function Iframe({
       ref.current.contentDocument.documentElement
     ) {
       updateHeight()
-      setIsLoading(false)
 
       if (linkTarget) {
         ref.current.contentDocument.querySelectorAll('a').forEach(element => {
@@ -112,25 +112,15 @@ export function Iframe({
   )
 
   return (
-    <>
-      {isLoading && (
-        <Box display="flex" flexDirection="column" alignItems="center">
-          <CircularProgress />
-        </Box>
-      )}
-      <iframe
-        ref={ref}
-        title={title}
-        frameBorder={0}
-        onLoad={onLoad}
-        height={autoHeight ? height : undefined}
-        width={fullWidth ? '100%' : undefined}
-        {...props}
-        style={{
-          visibility: isLoading ? 'hidden' : 'visible'
-        }}
-        srcDoc={appliedSrcDoc}
-      />
-    </>
+    <iframe
+      ref={ref}
+      title={title}
+      frameBorder={0}
+      onLoad={onLoad}
+      height={height}
+      width={fullWidth ? '100%' : undefined}
+      {...props}
+      srcDoc={appliedSrcDoc}
+    />
   )
 }
