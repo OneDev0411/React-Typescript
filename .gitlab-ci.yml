@@ -66,6 +66,5 @@ deploy_production:
   environment:
     name: production
     url: https://rechat.com
-  when: manual
   only:
     - master

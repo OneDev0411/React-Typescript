@@ -85,13 +85,12 @@ export const Tabs = ({
 
   availableTabs = tabLinks.map(({ label, to, allowAnonymousAccess }, i) => {
     return (
-      (user || allowAnonymousAccess) && (
-        <TabLink key={i} label={label} to={to} value={to} />
-      )
+      (user || allowAnonymousAccess) &&
+      !isWidget && <TabLink key={i} label={label} to={to} value={to} />
     )
   })
 
-  if (user) {
+  if (user && !isWidget) {
     availableTabs.push(
       <Tab
         key="saved-list"

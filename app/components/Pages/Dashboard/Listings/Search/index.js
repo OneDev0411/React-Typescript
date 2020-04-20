@@ -408,7 +408,7 @@ class Search extends React.Component {
   onClickFilter = () => this.props.dispatch(toggleFilterArea())
 
   render() {
-    const { user } = this.props
+    const { user, isWidget } = this.props
 
     return (
       <>
@@ -418,14 +418,14 @@ class Search extends React.Component {
           activeView={this.state.activeView}
           onChangeView={this.onChangeView}
           hasData={this.props.listings.data.length > 0}
-          showGlobalActionsButton={user}
+          showGlobalActionsButton={user && !isWidget}
         />
         <Tabs
           user={user}
           onChangeView={this.onChangeView}
           onChangeSort={this.onChangeSort}
           activeView={this.state.activeView}
-          isWidget={this.props.isWidget}
+          isWidget={isWidget}
           activeSort={this.state.activeSort}
           saveSearchHandler={this.handleSaveSearch}
           showSavedSearchButton
