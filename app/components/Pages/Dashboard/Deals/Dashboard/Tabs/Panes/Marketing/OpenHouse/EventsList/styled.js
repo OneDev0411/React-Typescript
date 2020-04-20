@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
-import ActionButton from 'components/Button/ActionButton'
-import { primary } from 'views/utils/colors'
+import { Button } from '@material-ui/core'
 
 export const Container = styled.div`
   display: block;
@@ -33,7 +32,7 @@ export const RegistrationLink = styled.div`
   align-items: center;
 `
 
-export const AppendButton = styled(ActionButton)`
+export const AppendButton = styled(Button)`
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   margin-left: 0.5rem;
@@ -48,7 +47,7 @@ export const LinkText = styled.div`
   font-size: 1rem;
   font-weight: 500;
   padding: 0 0 0 1rem;
-  color: ${primary};
+  color: ${({ theme }) => theme.palette.secondary.main};
 
   a {
     display: block;
@@ -75,7 +74,7 @@ export const EventItem = styled.div`
   }
 
   :hover ${EventInfoTitle} {
-    color: ${primary};
+    color: ${({ theme }) => theme.palette.secondary.main};
     text-decoration: underline;
   }
 

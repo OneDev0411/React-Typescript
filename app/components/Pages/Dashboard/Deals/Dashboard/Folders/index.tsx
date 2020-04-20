@@ -3,11 +3,11 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
+import { Button } from '@material-ui/core'
+
 import { useDeepMemo } from 'hooks/use-deep-memo'
 
 import { selectChecklistTasks } from 'reducers/deals/tasks'
-
-import ActionButton from 'components/Button/ActionButton'
 
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
@@ -122,7 +122,7 @@ function FoldersTab({ deal, checklists, tasks, isBackOffice }: Props) {
           isBackOffice={isBackOffice}
           tasks={selectChecklistTasks(checklist, tasks).filter(
             (task: IDealTask) =>
-              ['GeneralComments', 'YardSign', 'OpenHouse'].includes(
+              ['GeneralComments', 'YardSign', 'OpenHouse', 'Media'].includes(
                 task.task_type
               ) === false
           )}
@@ -134,24 +134,26 @@ function FoldersTab({ deal, checklists, tasks, isBackOffice }: Props) {
 
       <Flex>
         {terminatedChecklistsCount > 0 && (
-          <ActionButton
+          <Button
             onClick={toggleDisplayTerminatedChecklists}
-            appearance="outline"
+            color="secondary"
+            variant="outlined"
             style={{
               marginRight: '0.5rem'
             }}
           >
             {showTerminatedFolders ? 'Hide' : 'Show'} Terminated
-          </ActionButton>
+          </Button>
         )}
 
         {deactivatedChecklistsCount > 0 && (
-          <ActionButton
+          <Button
             onClick={toggleDisplayDeactivatedChecklists}
-            appearance="outline"
+            color="secondary"
+            variant="outlined"
           >
             {showDeactivatedFolders ? 'Hide' : 'Show'} Backed up
-          </ActionButton>
+          </Button>
         )}
       </Flex>
     </Container>

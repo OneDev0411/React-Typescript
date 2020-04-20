@@ -2,10 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 
+import { IconButton } from '@material-ui/core'
+
 import { AddContactAssociation } from '../AddContactAssociations'
 import { AddListingAssociation } from '../AddListingAssociations'
 import { AddDealAssociation } from '../AddDealAssociation'
-import Button from '../Button/IconButton'
+
 import IconContact from '../SvgIcons/Contacts/IconContacts'
 import IconListing from '../SvgIcons/Properties/IconProperties'
 import IconDeal from '../SvgIcons/Deals/IconDeal'
@@ -45,17 +47,13 @@ class ButtonComponent extends React.Component {
     const Icon = this.icons[this.props.type]
 
     return (
-      <Button
-        isFit
-        inverse
-        type="button"
-        iconSize="large"
+      <IconButton
         onClick={onClick}
         disabled={this.props.disabled}
-        style={{ marginRight: '1rem' }}
+        style={{ marginRight: '0.5rem' }}
       >
         <Icon />
-      </Button>
+      </IconButton>
     )
   }
 

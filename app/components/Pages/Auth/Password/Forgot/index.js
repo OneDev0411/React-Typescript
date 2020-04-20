@@ -80,7 +80,9 @@ const ForgotForm = ({
                 <br />
                 Please check <b>{resetSuccessfully}</b>.
               </p>
-              <a href="/">Back to homepage</a>
+              <a className="c-auth__subtitle" href="/">
+                Back to homepage
+              </a>
             </div>
           )}
         </main>

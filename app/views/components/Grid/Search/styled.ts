@@ -1,30 +1,39 @@
-import styled from 'styled-components'
+import styled, { ThemeProps } from 'styled-components'
+import { Theme } from '@material-ui/core/styles'
 
-import { primary, grey, borderColor } from '../../../utils/colors'
 import IconSearchBase from '../../SvgIcons/Search/IconSearch'
 import IconButtonFlex from '../../Button/IconButton'
 
-export const Container = styled.div<{ isFocused: boolean }>`
+interface StyleProp extends ThemeProps<Theme> {
+  isFocused?: boolean
+  isSearching?: boolean
+}
+
+export const Container = styled.div<StyleProp>`
   display: flex;
   align-items: center;
   padding-left: 1em;
   border-radius: 3px;
-  background-color: ${({ isFocused }) => (isFocused ? '#fff' : grey.A175)};
-  border: solid 1px ${({ isFocused }) => (isFocused ? primary : borderColor)};
+  background-color: ${({ isFocused, theme }) =>
+    isFocused ? '#fff' : theme.palette.grey[50]};
+  border: solid 1px
+    ${({ isFocused, theme }) =>
+      isFocused ? theme.palette.primary.main : theme.palette.grey[300]};
   :hover {
-    background-color: ${({ isFocused }) => (isFocused ? '#fff' : grey.A100)};
+    background-color: ${({ isFocused, theme }) =>
+      isFocused ? '#fff' : theme.palette.grey[100]};
   }
 `
 
-export const TextInput = styled.input`
+export const TextInput = styled.input<StyleProp>`
   width: 100%;
   height: 45px;
   border: none;
   font-size: 1rem;
   padding: 0 5px;
-  font-family: Barlow, sans-serif;
+  font-family: LatoRegular, sans-serif;
   background-color: transparent;
-  caret-color: ${primary};
+  caret-color: ${({ theme }) => theme.palette.primary.main};
 
   ::-ms-clear {
     display: none;
@@ -32,16 +41,16 @@ export const TextInput = styled.input`
 
   ::-webkit-input-placeholder {
     font-size: 1rem;
-    font-weight: 500;
-    color: ${grey.A900};
-    font-family: Barlow, sans-serif;
+    font-weight: 400;
+    color: ${({ theme }: ThemeProps<Theme>) => theme.palette.grey[600]};
+    font-family: LatoRegular, sans-serif;
   }
 
   ::placeholder {
     font-size: 1rem;
-    font-weight: 500;
-    color: ${grey.A900};
-    font-family: Barlow, sans-serif;
+    font-weight: 400;
+    color: ${({ theme }: ThemeProps<Theme>) => theme.palette.grey[600]};
+    font-family: LatoRegular, sans-serif;
   }
   :focus {
     outline: none;
@@ -50,15 +59,16 @@ export const TextInput = styled.input`
 
 export const IconSearch = styled(IconSearchBase)`
   path {
-    fill: ${grey.A900} !important;
+    fill: ${({ theme }: ThemeProps<Theme>) =>
+      theme.palette.grey[600]} !important;
   }
   ${Container}:hover & path {
     fill: #000 !important;
   }
 `
-export const Icon = styled.div<{ isSearching?: boolean }>`
-  color: ${grey.A900};
-  padding-top: ${props => (props.isSearching ? '0' : '4px')};
+export const Icon = styled.div<StyleProp>`
+  color: ${({ theme }) => theme.palette.grey[600]};
+  padding-top: ${({ isSearching }) => (isSearching ? '0' : '4px')};
 `
 
 export const IconButton = styled(IconButtonFlex)`

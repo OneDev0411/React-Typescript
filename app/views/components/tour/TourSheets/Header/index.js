@@ -1,9 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useTheme } from '@material-ui/core/styles'
+
+import { IconButton } from '@material-ui/core'
 
 import PageHeader from '../../../PageHeader'
 import { Divider } from '../../../Divider'
-import Button from '../../../Button/IconButton'
+import Tooltip from '../../../tooltip'
 import IconPrint from '../../../SvgIcons/Print/IconPrint'
 import IconClose from '../../../SvgIcons/Close/CloseIcon'
 
@@ -16,6 +19,8 @@ Header.propTypes = {
 Header.propTypes = PageHeader.defaultProps
 
 export function Header(props) {
+  const theme = useTheme()
+
   return (
     <PageHeader
       title={props.title}
@@ -29,18 +34,22 @@ export function Header(props) {
         left: 0,
         zIndex: 1,
         margin: 0,
-        padding: '1.5rem',
-        backgroundColor: '#FFF'
+        padding: theme.spacing(2),
+        backgroundColor: theme.palette.background.paper
       }}
     >
       <PageHeader.Menu>
-        <Button isFit inverse iconSize="XLarge" onClick={window.print}>
-          <IconPrint />
-        </Button>
+        <Tooltip placement="bottom" caption="Print">
+          <IconButton onClick={window.print}>
+            <IconPrint size="medium" />
+          </IconButton>
+        </Tooltip>
         <Divider width="1px" height="1.5rem" margin="0 1.5rem" />
-        <Button isFit inverse iconSize="XLarge" onClick={props.handleClose}>
-          <IconClose />
-        </Button>
+        <Tooltip placement="bottom" caption="Close">
+          <IconButton onClick={props.handleClose}>
+            <IconClose size="medium" />
+          </IconButton>
+        </Tooltip>
       </PageHeader.Menu>
     </PageHeader>
   )

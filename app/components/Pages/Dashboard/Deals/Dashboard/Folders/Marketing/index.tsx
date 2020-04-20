@@ -19,7 +19,7 @@ interface Props {
 function MarketingChecklist(props: Props & StateProps) {
   const [isFolderExpanded, setIsFolderExpanded] = useState<boolean>(true)
   const tasks = props.tasks.filter(task =>
-    ['YardSign', 'OpenHouse'].includes(task.task_type)
+    ['YardSign', 'OpenHouse', 'Media'].includes(task.task_type)
   )
 
   if (tasks.length === 0) {

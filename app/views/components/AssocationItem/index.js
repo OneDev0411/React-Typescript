@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { IconButton } from '@material-ui/core'
 
 import Avatar from '../Avatar'
 import { ShadowLink } from '../ShadowLink'
@@ -52,8 +53,10 @@ class AssociationItemBase extends Component {
         </DetailsContainer>
         {!isReadOnly && <ShadowLink href={record.url} target="_blank" />}
         {this.props.isRemovable && (
-          <RemoveButton isFit inverse type="button" onClick={this.onRemove}>
-            <CloseIcon />
+          <RemoveButton onClick={this.onRemove}>
+            <IconButton>
+              <CloseIcon size="small" />
+            </IconButton>
           </RemoveButton>
         )}
       </Container>

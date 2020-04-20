@@ -1,142 +1,64 @@
 import React from 'react'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withPropsOnChange from 'recompose/withPropsOnChange'
-import idx from 'idx'
+import cn from 'classnames'
+import { makeStyles, Box, Grid } from '@material-ui/core'
 
-import Table from '../../../../../../views/components/Grid/Table'
-import LoadingComponent from '../../../../../../views/components/Spinner'
-import { normalizeListingLocation } from '../../../../../../utils/map'
+import LoadingComponent from 'components/Spinner'
 
 import ListingCard from '../ListingCard'
-import { formatListing } from '../../helpers/format-listing'
-import { sortOptions } from '../../helpers/sort-plugin-options'
-import { MainContainer, MapContainer, TableContainer } from './styled'
 
-const addListingsDistanceFromCenter = (listing, center) => {
-  if (!center || !idx(window, w => w.google.maps.geometry)) {
-    return listing
-  }
+const CARDS_CONTAINER_WIDTH = '27em'
+const VERTICAL_GAP_FROM_PAGE_TOP = '12em' // It's the page header height
 
-  const { google } = window
-
-  const centerLatLng = new google.maps.LatLng(center.lat, center.lng)
-
-  const listingLocation = new google.maps.LatLng(listing.lat, listing.lng)
-
-  const distanceFromCenter = google.maps.geometry.spherical.computeDistanceBetween(
-    centerLatLng,
-    listingLocation
-  )
-
-  return {
-    ...listing,
-    distanceFromCenter
-  }
-}
-
-const format = (listing, center, user) =>
-  addListingsDistanceFromCenter(
-    formatListing(normalizeListingLocation(listing), user),
-    center
-  )
-
-const sortBy = (a, b, index, isDescending) =>
-  isDescending ? a[index] - b[index] : b[index] - a[index]
-
-export class MapViewContainer extends React.Component {
-  columns = [
-    {
-      id: 'price',
-      accessor: listing => listing.price,
-      render: ({ rowData: listing }) => (
-        <ListingCard
-          isShowOnMap
-          key={listing.id}
-          listing={listing}
-          tabName={this.props.tabName}
-        />
-      )
+const useStyles = makeStyles(
+  theme => ({
+    container: {
+      display: 'flex',
+      overflow: 'hidden',
+      height: `calc(100vh - ${VERTICAL_GAP_FROM_PAGE_TOP})`
+    },
+    mapContainer: {
+      width: `calc(100% - ${CARDS_CONTAINER_WIDTH})`,
+      height: '100%',
+      position: 'relative'
+    },
+    cardsContainer: {
+      width: `${CARDS_CONTAINER_WIDTH}`,
+      padding: theme.spacing(0, 0.5, 2, 2),
+      overflowY: 'scroll',
+      borderLeft: `1px solid ${theme.palette.divider}`
     }
-  ]
-
-  onChangeSort = ({ value: index }) => {
-    const isDescending = index.charAt(0) === '-'
-
-    if (isDescending) {
-      index = index.slice(1)
-    }
-
-    this.props.changeSortBy({
-      index,
-      isDescending
-    })
-  }
-
-  render() {
-    return (
-      <MainContainer>
-        <MapContainer>{this.props.Map}</MapContainer>
-        <TableContainer>
-          <Table
-            columns={this.columns}
-            data={this.props.data}
-            isFetching={this.props.isFetching}
-            LoadingState={LoadingComponent}
-            showTableHeader={false}
-            summary={{
-              entityName: 'Listings',
-              style: { color: '#000' },
-              total: this.props.listings.info.total
-            }}
-            getTrProps={() => ({
-              style: {
-                padding: 0,
-                border: 'none'
-              }
-            })}
-            getTdProps={() => ({ style: { padding: 0 } })}
-            plugins={{
-              sortable: {
-                columns: [
-                  ...sortOptions.columns,
-                  { label: 'Distance (High-Low)', value: 'distanceFromCenter' },
-                  { label: 'Distance (Low-High)', value: '-distanceFromCenter' }
-                ],
-                defaultIndex: sortOptions.defaultIndex,
-                onChange: this.onChangeSort
-              }
-            }}
-          />
-        </TableContainer>
-      </MainContainer>
-    )
-  }
-}
-
-export const MapView = compose(
-  withState('sortBy', 'changeSortBy', {
-    index: 'price',
-    isDescending: true
   }),
-  withPropsOnChange(
-    (props, nextProps) =>
-      props.listings.data.length !== nextProps.listings.data.length,
-    ownerProps => ({
-      formatedData: ownerProps.listings.data.map(l =>
-        format(l, ownerProps.mapCenter, ownerProps.user)
-      )
-    })
-  ),
-  withPropsOnChange(
-    (props, nextProps) =>
-      props.formatedData.length !== nextProps.formatedData.length ||
-      props.sortBy.index !== nextProps.sortBy.index ||
-      props.sortBy.isDescending !== nextProps.sortBy.isDescending,
-    ownerProps => ({
-      data: ownerProps.formatedData.sort((a, b) =>
-        sortBy(a, b, ownerProps.sortBy.index, ownerProps.sortBy.isDescending)
-      )
-    })
+  { name: 'MapView' }
+)
+
+const MapView = props => {
+  const classes = useStyles()
+  const renderCards = () => {
+    if (props.isFetching) {
+      return <LoadingComponent />
+    }
+
+    return props.sortedListings.map(listing => (
+      <Grid key={listing.id} item xs={12}>
+        <ListingCard
+          listing={listing}
+          tabName={props.tabName}
+          user={props.user}
+        />
+      </Grid>
+    ))
+  }
+
+  return (
+    <Box className={classes.container}>
+      <Box className={classes.mapContainer}>{props.Map}</Box>
+      <Box className={cn(classes.cardsContainer, 'u-scrollbar--thinner--self')}>
+        <Grid container spacing={1}>
+          {renderCards()}
+        </Grid>
+      </Box>
+    </Box>
   )
-)(MapViewContainer)
+}
+
+export default MapView

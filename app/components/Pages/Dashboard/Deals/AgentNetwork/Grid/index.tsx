@@ -1,36 +1,52 @@
 import React from 'react'
 
-import Loading from 'components/Spinner'
-import Table from 'components/Grid/Table'
-import Button from 'components/Button/ActionButton'
-import SendDealPromotionCard from 'components/InstantMarketing/adapters/SendDealPromotion'
+import { Button, Avatar, Tooltip, Theme } from '@material-ui/core'
 
-import { Name } from './columns/Name'
-import { Company } from './columns/Company'
-import { ContactInfo } from './columns/ContactInfo'
+import { withTheme } from '@material-ui/styles'
+
+import Flex from 'styled-flex-component'
+
+import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
+import { putUserSetting } from 'models/user/put-user-setting'
+
+import Table from 'components/Grid/Table'
+import { RenderProps } from 'components/Grid/Table/types'
+import LoadingContainer from 'components/LoadingContainer'
+import IconEmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
+
+import { getNameInitials } from 'utils/helpers'
+
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
+import { SortableColumns } from './helpers/sortable-columns'
+import { TableActions } from './Actions'
+import { Caption } from './columns/Caption'
 
 import { IDealAgent } from '../types'
-
-const buttonStyle = {
-  padding: '0.25rem 0 1rem',
-  height: 'auto',
-  lineHeight: 1,
-  width: '100%'
-}
 
 interface State {
   selectedAgent: null | any
 }
 interface Props {
+  user: IUser
   data: IDealAgent[]
   deal: IDeal
   isFetching: boolean
 }
 
-export class Grid extends React.Component<Props, State> {
-  state: State = {
-    selectedAgent: null
+export const SORT_FIELD_SETTING_KEY = 'grid_deals_agent_network_sort_field'
+
+class Grid extends React.Component<
+  Props & {
+    theme: Theme
+  },
+  State
+> {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      selectedAgent: null
+    }
   }
 
   onCloseDrawer = () => this.setState({ selectedAgent: null })
@@ -45,164 +61,153 @@ export class Grid extends React.Component<Props, State> {
       }
     })
 
-  getRecipients = (
-    selectedRows: UUID[]
-  ): IDenormalizedEmailRecipientDealAgentInput[] => {
-    const { data } = this.props
-
-    if (
-      Array.isArray(data) === false ||
-      Array.isArray(selectedRows) === false ||
-      data.length === 0 ||
-      selectedRows.length === 0
-    ) {
-      return []
-    }
-
-    // Sometimes an agent can have a null id and email
-    // in this cases we need to make sure filtering them out
-    return data
-      .filter(
-        item =>
-          item.agent &&
-          item.agentId &&
-          selectedRows.includes(item.id) &&
-          (item.agent.email || item.email)
-      )
-      .map(item => ({
-        recipient_type: 'Agent',
-        agent: item.agent.email
-          ? item.agent
-          : {
-              ...item.agent,
-              email: item.email
-            }
-      }))
-  }
-
   columns = [
     {
       id: 'name',
       header: 'Name',
       width: '20%',
-      accessor: agent => agent.name,
-      render: ({ rowData: agent }) => <Name name={agent.name} />
+      accessor: (agent: IDealAgent) => agent.name,
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <>
+          <div>{agent.name}</div>
+          <Caption variant="body2">{agent.company}</Caption>
+        </>
+      )
     },
     {
-      id: 'company',
-      header: 'Company',
-      width: '17%',
-      accessor: agent => agent.company,
-      render: ({ rowData: agent }) => <Company name={agent.company} />
+      id: 'contact',
+      width: '10%',
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Tooltip
+          title={
+            <>
+              <div>{agent.email}</div>
+              <div>{agent.phone}</div>
+            </>
+          }
+        >
+          <Flex alignCenter justifyCenter>
+            <IconEmailOutline />
+          </Flex>
+        </Tooltip>
+      )
     },
     {
       id: 'listings',
-      header: '# of Listings',
-      accessor: agent => agent.asListing.length,
-      render: ({ rowData: agent }) =>
-        agent.asListing.length > 0 ? (
-          <Button
-            appearance="link"
-            style={buttonStyle}
-            onClick={() => this.onSelectAgent(agent, 'asListing')}
-          >
-            {agent.asListing.length}
-          </Button>
-        ) : (
-          '0'
-        )
+      accessor: (agent: IDealAgent) => agent.asListing.length,
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Flex alignCenter>
+          <Caption># of Listings:&nbsp;</Caption>
+          {agent.asListing.length > 0 ? (
+            <Button
+              size="small"
+              style={{
+                minWidth: 'unset'
+              }}
+              onClick={() => this.onSelectAgent(agent, 'asListing')}
+            >
+              {agent.asListing.length}
+            </Button>
+          ) : (
+            '0'
+          )}
+        </Flex>
+      )
     },
     {
       id: 'buyers',
-      header: '# of Buyers',
-      accessor: agent => agent.asBuyers.length,
-      render: ({ rowData: agent }) =>
-        agent.asBuyers.length > 0 ? (
-          <Button
-            appearance="link"
-            style={buttonStyle}
-            onClick={() => this.onSelectAgent(agent, 'asBuyers')}
-          >
-            {agent.asBuyers.length}
-          </Button>
-        ) : (
-          '0'
-        )
+      accessor: (agent: IDealAgent) => agent.asBuyers.length,
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Flex alignCenter>
+          <Caption># of Buyers:&nbsp;</Caption>
+          {agent.asBuyers.length > 0 ? (
+            <Button
+              size="small"
+              style={{
+                minWidth: 'unset'
+              }}
+              onClick={() => this.onSelectAgent(agent, 'asBuyers')}
+            >
+              {agent.asBuyers.length}
+            </Button>
+          ) : (
+            '0'
+          )}
+        </Flex>
+      )
     },
     {
       id: 'value_in',
-      header: 'Volume in $',
-      accessor: agent => agent.listingsTotalVolume,
-      render: ({ rowData: agent }) =>
-        agent.listingsTotalVolume > 0
-          ? `$${agent.listingsTotalVolume.toLocaleString()}`
-          : 0
+      accessor: (agent: IDealAgent) => agent.listingsTotalVolume,
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Flex>
+          <Caption>Volume in $:&nbsp;</Caption>
+          {agent.listingsTotalVolume > 0
+            ? `$${agent.listingsTotalVolume.toLocaleString()}`
+            : 0}
+        </Flex>
+      )
     },
     {
       id: 'avg_price',
-      header: 'Avg Price',
-      accessor: agent => agent.listingsAveragePrice,
-      render: ({ rowData: agent }) =>
-        agent.listingsAveragePrice > 0
-          ? `$${agent.listingsAveragePrice.toLocaleString()}`
-          : 0
-    },
-    {
-      id: 'email',
-      header: 'Contact Info',
-      width: '23%',
-      sortable: false,
-      accessor: agent => agent.email,
-      render: ({ rowData: agent }) => <ContactInfo agent={agent} />
-    }
-  ]
-
-  actions = [
-    {
-      display: props => props.selectedRows.length > 0,
-      render: props => (
-        /*
-        // @ts-ignore because SendDealPromotionCard is not yet migrated to ts */
-        <SendDealPromotionCard
-          deal={this.props.deal}
-          recipients={this.getRecipients(props.selectedRows)}
-          selectedRows={props.selectedRows}
-          mediums="Email"
-          types={[
-            'OpenHouse',
-            'JustSold',
-            'ComingSoon',
-            'JustListed',
-            'PriceImprovement'
-          ]}
-        >
-          Promote Listing
-        </SendDealPromotionCard>
+      accessor: (agent: IDealAgent) => agent.listingsAveragePrice,
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Flex>
+          <Caption>Avg Price:&nbsp;</Caption>
+          {agent.listingsAveragePrice > 0
+            ? `$${agent.listingsAveragePrice.toLocaleString()}`
+            : 0}
+        </Flex>
       )
     }
   ]
+
+  getActiveSort = () => {
+    const sort = parseSortSetting(
+      this.props.user,
+      SORT_FIELD_SETTING_KEY,
+      'name'
+    )
+
+    return SortableColumns.find(col => col.value === sort.id)
+  }
+
+  handleChangeSort = async column => {
+    putUserSetting(SORT_FIELD_SETTING_KEY, column.value)
+  }
 
   render() {
     const { selectedAgent } = this.state
 
     return (
-      <div style={{ padding: '0 1.5em' }}>
-        <Table
-          data={this.props.data}
+      <>
+        <Table<IDealAgent>
+          rows={this.props.data}
           columns={this.columns}
-          LoadingState={Loading}
-          isFetching={this.props.isFetching}
-          summary={{ entityName: 'Agents' }}
-          plugins={{
-            sortable: {},
-            selectable: {
-              persistent: true,
-              storageKey: 'agent_network'
+          totalRows={(this.props.data || []).length}
+          LoadingStateComponent={() => (
+            <LoadingContainer style={{ padding: 0 }} />
+          )}
+          loading={this.props.isFetching ? 'top' : null}
+          summary={total => `${total} Agents`}
+          sorting={{
+            defaultSort: this.getActiveSort(),
+            columns: SortableColumns,
+            onChange: this.handleChangeSort
+          }}
+          selection={{
+            columnProps: {
+              width: `${this.props.theme.spacing(7.5)}px`
             },
-            actionable: {
-              actions: this.actions
+            defaultRender: ({ row }: RenderProps<IDealAgent>) => {
+              return (
+                <Avatar alt={row.name}>{getNameInitials(row.name, 1)}</Avatar>
+              )
             }
           }}
+          TableActions={
+            <TableActions rows={this.props.data} deal={this.props.deal} />
+          }
         />
 
         {selectedAgent && (
@@ -213,7 +218,9 @@ export class Grid extends React.Component<Props, State> {
             listings={selectedAgent.list}
           />
         )}
-      </div>
+      </>
     )
   }
 }
+
+export default withTheme(Grid)

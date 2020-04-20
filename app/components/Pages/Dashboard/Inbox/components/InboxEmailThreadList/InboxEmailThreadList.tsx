@@ -1,23 +1,39 @@
-import React, { useState, useMemo, useCallback } from 'react'
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { addNotification } from 'reapop'
 
 import { getEmailThreads } from 'models/email/get-email-threads'
+import {
+  searchEmailThreads,
+  SearchEmailThreadsNext
+} from 'models/email/search-email-threads'
 
 import InfiniteScrollList from '../InfiniteScrollList'
 import InboxEmailThreadListItem from './components/InboxEmailThreadListItem'
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
 
-const emailThreadFetchCount = 30
+const emailThreadFetchCountInitial = 10
+const emailThreadFetchCount = 20
+
+interface SearchMetaData {
+  searchQuery?: string
+  next?: SearchEmailThreadsNext
+}
 
 interface Props {
   selectedEmailThreadId?: UUID
   onSelectEmailThread: (emailThreadId: UUID | undefined) => void
+  searchQuery?: string
+  onSearchStatusChange?: (searching: boolean) => void
+  onEmailThreadsUpdate?: (emailThreads: IEmailThread<'contacts'>[]) => void
 }
 
 export default function InboxEmailThreadList({
   selectedEmailThreadId,
-  onSelectEmailThread
+  onSelectEmailThread,
+  searchQuery,
+  onSearchStatusChange,
+  onEmailThreadsUpdate
 }: Props) {
   const [emailThreads, setEmailThreads] = useState<IEmailThread<'contacts'>[]>(
     []
@@ -27,6 +43,17 @@ export default function InboxEmailThreadList({
     () => emailThreads.find(({ id }) => id === selectedEmailThreadId),
     [emailThreads, selectedEmailThreadId]
   )
+
+  const searchMetaDataRef = useRef<SearchMetaData>({ searchQuery })
+
+  searchMetaDataRef.current.searchQuery = searchQuery
+
+  useEffect(() => {
+    onEmailThreadsUpdate && onEmailThreadsUpdate([])
+    setEmailThreads([])
+    searchQuery && onSelectEmailThread(undefined)
+    delete searchMetaDataRef.current.next
+  }, [onEmailThreadsUpdate, searchQuery])
 
   const dispatch = useDispatch()
 
@@ -50,14 +77,20 @@ export default function InboxEmailThreadList({
           .concat(filteredUpdatedEmailThreads)
           .sort((a, b) => b.last_message_date - a.last_message_date)
 
+        onEmailThreadsUpdate && onEmailThreadsUpdate(newEmailThreads)
+
         return newEmailThreads
       })
     },
-    []
+    [onEmailThreadsUpdate]
   )
 
   const handleUpdateEmailThreads = useCallback(
     async (updatedEmailThreadIds: UUID[]) => {
+      if (searchQuery) {
+        return
+      }
+
       try {
         const updatedEmailThreads = await getEmailThreads(
           {
@@ -80,51 +113,110 @@ export default function InboxEmailThreadList({
         )
       }
     },
-    [dispatch, joinEmailThreads]
+    [dispatch, joinEmailThreads, searchQuery]
   )
   const handleDeleteEmailThreads = useCallback(
     (deletedEmailThreadIds: UUID[]) => {
+      if (searchQuery) {
+        return
+      }
+
       setEmailThreads(emailThreads =>
         emailThreads.filter(({ id }) => !deletedEmailThreadIds.includes(id))
       )
     },
-    []
+    [searchQuery]
   )
 
   useEmailThreadEvents(handleUpdateEmailThreads, handleDeleteEmailThreads)
 
+  async function handleNeedMoreItems(): Promise<boolean> {
+    try {
+      const getMoreEmailThreads = searchQuery
+        ? getMoreEmailThreadsWithSearch
+        : getMoreEmailThreadsWithoutSearch
+
+      const { moreEmailThreads, finished } = await getMoreEmailThreads()
+
+      joinEmailThreads(moreEmailThreads, 'expand')
+
+      return finished
+    } catch (reason) {
+      console.error(reason)
+      dispatch(
+        addNotification({
+          status: 'error',
+          message:
+            'Something went wrong while fetching more emails. Please try again.'
+        })
+      )
+      throw reason
+    }
+
+    async function getMoreEmailThreadsWithSearch(): Promise<{
+      moreEmailThreads: IEmailThread<'contacts'>[]
+      finished: boolean
+    }> {
+      try {
+        const searchQuery = searchMetaDataRef.current.searchQuery!
+
+        onSearchStatusChange && onSearchStatusChange(true)
+
+        const { emailThreads, next } = await searchEmailThreads({
+          selection: ['email_thread.snippet'],
+          searchQuery,
+          next: searchMetaDataRef.current.next
+        })
+
+        onSearchStatusChange && onSearchStatusChange(false)
+
+        if (searchQuery !== searchMetaDataRef.current.searchQuery) {
+          return {
+            moreEmailThreads: [],
+            finished: false
+          }
+        }
+
+        searchMetaDataRef.current.next = next
+
+        return {
+          moreEmailThreads: emailThreads,
+          finished: Object.values(next).filter(Boolean).length === 0
+        }
+      } catch (reason) {
+        onSearchStatusChange && onSearchStatusChange(false)
+        throw reason
+      }
+    }
+    async function getMoreEmailThreadsWithoutSearch(): Promise<{
+      moreEmailThreads: IEmailThread<'contacts'>[]
+      finished: boolean
+    }> {
+      const count =
+        emailThreads.length === 0
+          ? emailThreadFetchCountInitial
+          : emailThreadFetchCount
+      const moreEmailThreads = await getEmailThreads(
+        {
+          selection: ['email_thread.snippet'],
+          start: emailThreads.length,
+          limit: count
+        },
+        ['contacts']
+      )
+      const finished = moreEmailThreads.length < count
+
+      return { moreEmailThreads, finished }
+    }
+  }
+
   return (
     <InfiniteScrollList
       items={emailThreads}
-      onNeedMoreItems={async () => {
-        try {
-          const moreEmailThreads = await getEmailThreads(
-            {
-              selection: ['email_thread.snippet'],
-              start: emailThreads.length,
-              limit: emailThreadFetchCount
-            },
-            ['contacts']
-          )
-
-          joinEmailThreads(moreEmailThreads, 'expand')
-
-          return moreEmailThreads.length < emailThreadFetchCount
-        } catch (reason) {
-          console.error(reason)
-          dispatch(
-            addNotification({
-              status: 'error',
-              message:
-                'Something went wrong while fetching more emails. Please try again.'
-            })
-          )
-          throw reason
-        }
-      }}
+      onNeedMoreItems={handleNeedMoreItems}
       selectedItem={selectedEmailThread}
       onSelectItem={emailThread =>
-        emailThread && onSelectEmailThread(emailThread.id)
+        onSelectEmailThread(emailThread && emailThread.id)
       }
       emptyListMessage="No Emails"
       itemKey={(emailThread, index) => emailThread.id}

@@ -122,14 +122,14 @@ export default function AreaFilter(props: Props) {
   }
 
   return (
-    <Box px={3}>
+    <Box my={3}>
       <Box mb={1}>Select a search area:</Box>
-      <Box display="flex" alignItems="flex-start">
+      <Box display="flex" alignItems="center">
         <Box mr={2} display="flex" alignItems="center">
           <FormControlLabel
             control={
               <Radio
-                color="primary"
+                color="secondary"
                 checked={isFilterTypeRadius}
                 disabled={disabled}
                 onChange={handleChangeType}
@@ -151,17 +151,16 @@ export default function AreaFilter(props: Props) {
               margin="dense"
               onChange={onChangeRadius}
               value={radius}
-              variant="filled"
             />
             <Box ml={2} mt={1.25}>
               Miles
             </Box>
             <Button
               disabled={disabled}
-              color="primary"
+              color="secondary"
               className={classes.searchButton}
               onClick={onSearch}
-              size="small"
+              size="medium"
               variant="contained"
             >
               Search
@@ -169,12 +168,12 @@ export default function AreaFilter(props: Props) {
           </Box>
         )}
       </Box>
-      <Box display="flex" alignItems="flex-start">
+      <Box display="flex" alignItems="center">
         <Box display="flex" alignItems="center">
           <FormControlLabel
             control={
               <Radio
-                color="primary"
+                color="secondary"
                 checked={isFilterTypeCustom}
                 disabled={disabled}
                 onChange={handleChangeType}
@@ -203,8 +202,7 @@ export default function AreaFilter(props: Props) {
                   disabled,
                   hiddenLabel: true,
                   margin: 'dense',
-                  placeholder: 'Enter MLS Area',
-                  variant: 'filled'
+                  placeholder: 'Enter MLS Area'
                 } as TextFieldProps
               }
               ChipProps={{
@@ -229,8 +227,7 @@ export default function AreaFilter(props: Props) {
                     selectedParentAreas.length === 0,
                   hiddenLabel: true,
                   margin: 'dense',
-                  placeholder: 'Enter MLS Sub-area',
-                  variant: 'filled'
+                  placeholder: 'Enter MLS Sub-area'
                 } as TextFieldProps
               }
               ChipProps={{
@@ -243,10 +240,10 @@ export default function AreaFilter(props: Props) {
                 (selectedParentAreas.length === 0 &&
                   selectedSubAreas.length === 0)
               }
-              color="primary"
+              color="secondary"
               className={classes.searchButton}
               onClick={onSearch}
-              size="small"
+              size="medium"
               variant="contained"
             >
               Search

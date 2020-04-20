@@ -1,8 +1,6 @@
 import { ACTIVE_INTERCOM, INACTIVE_INTERCOM } from '../../constants/intercom'
 
-export const activeIntercom = () => (dispatch, getState) => {
-  const { isActive } = getState().intercom
-
+export const activeIntercom = isActive => dispatch => {
   if (isActive || !window.Intercom) {
     return Promise.resolve()
   }
@@ -14,9 +12,7 @@ export const activeIntercom = () => (dispatch, getState) => {
   })
 }
 
-export const inactiveIntercom = () => (dispatch, getState) => {
-  const { isActive } = getState().intercom
-
+export const inactiveIntercom = isActive => dispatch => {
   if (!isActive || !window.Intercom) {
     return Promise.resolve()
   }

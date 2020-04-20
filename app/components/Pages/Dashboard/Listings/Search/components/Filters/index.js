@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import { reduxForm } from 'redux-form'
 import withHandlers from 'recompose/withHandlers'
-import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
 
 import { getStatusColor } from 'utils/listing'
@@ -43,27 +42,19 @@ const INITIAL_VALUES = {
 }
 
 const Filters = ({
-  isOpen,
   resetHandler,
   pristine,
   activeSold,
   handleClose,
   handleSubmit,
   isSubmitting,
-  isSideMenuOpen,
   onSubmitHandler,
   activeOpenHouses,
   activeOtherListings,
   activePendingListings
 }) => (
-  <ClickOutside onClickOutside={isOpen ? handleClose : () => false}>
-    <div
-      className={cn({
-        'c-filters': true,
-        'c-filters--isOpen': isOpen,
-        'side-menu--open': isSideMenuOpen
-      })}
-    >
+  <ClickOutside onClickOutside={handleClose}>
+    <div className="c-filters">
       <div className="c-filters__inner-wrapper u-scrollbar--thinner">
         <form
           onSubmit={handleSubmit(onSubmitHandler)}
@@ -168,6 +159,7 @@ const Filters = ({
             Reset Filters
           </ActionButton>
           <ActionButton
+            appearance="secondary"
             size="large"
             disabled={isSubmitting}
             onClick={handleSubmit(onSubmitHandler)}

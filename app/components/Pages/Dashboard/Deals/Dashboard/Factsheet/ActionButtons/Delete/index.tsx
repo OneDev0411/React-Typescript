@@ -1,9 +1,7 @@
 import React from 'react'
-import { IconButton } from '@material-ui/core'
+import { IconButton, Theme, useTheme } from '@material-ui/core'
 
 import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import { ContextField } from '../../types'
 
@@ -15,7 +13,7 @@ interface Props {
 }
 
 export function DeleteButton(props: Props) {
-  const iconClassess = useIconStyles()
+  const theme = useTheme<Theme>()
 
   const hasValue = props.value || props.value === 0
   const isRequired = props.field.mandatory && !props.deal.is_draft
@@ -25,12 +23,8 @@ export function DeleteButton(props: Props) {
   }
 
   return (
-    <IconButton
-      size="small"
-      className={iconClassess.leftMargin}
-      onClick={props.onClick}
-    >
-      <IconDelete className={iconClassess.small} />
+    <IconButton size="small" onClick={props.onClick}>
+      <IconDelete size="small" fillColor={theme.palette.error.main} />
     </IconButton>
   )
 }

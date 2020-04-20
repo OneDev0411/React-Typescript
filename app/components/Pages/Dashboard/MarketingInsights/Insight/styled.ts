@@ -1,4 +1,5 @@
-import styled from 'styled-components'
+import styled, { ThemeProps } from 'styled-components'
+import { Theme } from '@material-ui/core/styles'
 
 import Badge from 'components/Badge'
 import { grey } from 'views/utils/colors'
@@ -13,25 +14,23 @@ export const InsightContainer = styled.div`
   padding: 0 1.5rem 3rem 1.5rem;
   min-height: calc(100vh - 7.5rem);
 
-  & > aside {
-    width: 30%;
+  & > .sidebar {
+    width: 25%;
     margin-right: 1rem;
   }
 
-  & > section {
-    width: 70%;
-    background: #fff;
-    border-radius: 0.18rem;
-    border: solid 1px ${grey.A300};
-    padding: 1.5rem;
+  & > .content {
+    flex-grow: 1;
   }
 `
 
 export const SummaryCard = styled.div`
+  max-width: 100%;
   background: #fff;
   border-radius: 0.18rem;
   border: solid 1px ${grey.A300};
   padding: 1.5rem;
+  overflow: hidden;
 
   ul {
     list-style: none;
@@ -42,11 +41,18 @@ export const SummaryCard = styled.div`
       margin-bottom: 1rem;
 
       .field-name {
-        color: ${grey.A900};
+        color: ${(props: ThemeProps<Theme>) => props.theme.palette.grey['600']};
+        font-size: ${(props: ThemeProps<Theme>) =>
+          props.theme.typography.subtitle2.fontSize};
+        font-weight: ${(props: ThemeProps<Theme>) =>
+          props.theme.typography.subtitle2.fontWeight};
         margin-bottom: 0.125rem;
       }
       .field-value {
-        font-weight: bold;
+        font-size: ${(props: ThemeProps<Theme>) =>
+          props.theme.typography.body2.fontSize};
+        font-weight: ${(props: ThemeProps<Theme>) =>
+          props.theme.typography.body2.fontWeight};
       }
     }
   }
@@ -57,8 +63,9 @@ export const SummaryCard = styled.div`
     margin-top: 1.5rem;
 
     & .title {
-      font-size: 1.25rem;
-      font-weight: bold;
+      font-size: ${(props: ThemeProps<Theme>) =>
+        props.theme.typography.subtitle1.fontSize};
+      font-weight: 'bold';
       margin-bottom: 1.5rem;
     }
 
@@ -66,7 +73,7 @@ export const SummaryCard = styled.div`
       position: absolute;
       top: 0;
       left: 0;
-      width: 3rem;
+      width: 100%;
       height: 1px;
       background: #ccc;
       display: block;
@@ -76,8 +83,7 @@ export const SummaryCard = styled.div`
 `
 
 export const ContactColumn = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: block;
   padding-right: 1rem;
 
   .labels-container {

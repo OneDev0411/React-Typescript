@@ -1,9 +1,13 @@
 import React from 'react'
 import cn from 'classnames'
+
+import ClickOutside from 'react-click-outside'
+
 import Messages from '../Messages'
 import Toolbar from './toolbar'
 import ChatNotification from '../../../../../services/notification/chat'
-import ClickOutside from 'react-click-outside'
+
+import { appSidenavWidth } from '../../SideNav/variables'
 
 /**
  * on focus popup
@@ -37,7 +41,7 @@ export default ({
   // extract settings
   const { minimize } = settings
   const width = 270 // pixels
-  const defaultLeft = 130 // pixel
+  const defaultLeft = appSidenavWidth + 8 // pixel
 
   let left = width * (number - 1) + defaultLeft
 
@@ -49,6 +53,10 @@ export default ({
   // margin left
   if (number > 1) {
     left += 20 * (number - 1)
+  }
+
+  if (!room.id) {
+    return null
   }
 
   return (

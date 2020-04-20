@@ -17,6 +17,7 @@ declare interface IDeal extends IModel<'deal'> {
   property_type: string
   faired_at: number
   context: object
+  new_notifications: IChatMessage[] | null
 }
 
 declare interface IDealList {

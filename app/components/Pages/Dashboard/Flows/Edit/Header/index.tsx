@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Tooltip } from '@material-ui/core'
+import { Button, Tooltip, Box } from '@material-ui/core'
 
 import PageHeader from 'components/PageHeader'
 import { CloseButton } from 'components/Button/CloseButton'
@@ -9,7 +9,6 @@ import { brandBackground } from 'views/utils/colors'
 
 import { nameValidate, descriptionValidate } from './helpers'
 import Field from './Field'
-import { Container } from './styled'
 
 interface Props {
   disableEdit?: boolean
@@ -27,36 +26,37 @@ export default function Header({
   onDuplicateClick
 }: Props) {
   return (
-    <PageHeader
-      isFlat
-      style={{
-        alignItems: 'flex-start',
-        width: '100%',
-        margin: 0,
-        padding: '1.5em',
-        background: brandBackground
-      }}
+    <Box
+      width="100%"
+      padding={3}
+      style={{ backgroundColor: brandBackground }}
+      display="flex"
+      alignItems="flex-start"
     >
-      <PageHeader.Title showBackButton={false}>
-        <Container>
-          <Field
-            variant="h5"
-            name="name"
-            value={name}
-            disabled={disableEdit}
-            validate={nameValidate}
-            onChange={value => onChange({ name: value })}
-          />
-          <Field
-            variant="subtitle1"
-            name="description"
-            value={description}
-            disabled={disableEdit}
-            validate={descriptionValidate}
-            onChange={value => onChange({ description: value })}
-          />
-        </Container>
-      </PageHeader.Title>
+      <Box
+        width={0}
+        flexGrow={1}
+        marginRight={3}
+        display="flex"
+        flexDirection="column"
+      >
+        <Field
+          variant="h5"
+          name="name"
+          value={name}
+          disabled={disableEdit}
+          validate={nameValidate}
+          onChange={value => onChange({ name: value })}
+        />
+        <Field
+          variant="subtitle1"
+          name="description"
+          value={description}
+          disabled={disableEdit}
+          validate={descriptionValidate}
+          onChange={value => onChange({ description: value })}
+        />
+      </Box>
       <PageHeader.Menu>
         <Tooltip title="Duplicate this Flow">
           <Button variant="outlined" onClick={onDuplicateClick}>
@@ -71,6 +71,6 @@ export default function Header({
           defaultBackUrl="/dashboard/account/flows"
         />
       </PageHeader.Menu>
-    </PageHeader>
+    </Box>
   )
 }

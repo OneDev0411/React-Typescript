@@ -1,8 +1,8 @@
 import fecha from 'fecha'
 
 import { createDayId } from '../create-day-id'
-
 import eventEmptyState from '../get-event-empty-state'
+import createMultiDayEvents from '../create-multi-day-events'
 
 import { Placeholder } from '../../types'
 
@@ -13,7 +13,9 @@ export function createListRows(
 ): ICalendarListRow[] {
   const activeDayId = createDayId(activeDate, false)
 
-  return Object.entries(events).flatMap(([month, daysOfMonth]) => {
+  const distributedEvents = createMultiDayEvents(events)
+
+  return Object.entries(distributedEvents).flatMap(([month, daysOfMonth]) => {
     if (
       placeholders.includes(Placeholder.Month) &&
       isEmptyMonth(month, daysOfMonth, activeDate)
@@ -23,6 +25,7 @@ export function createListRows(
           isEventHeader: true,
           headerType: 'month-header',
           isToday: false,
+          isTomorrow: false,
           title: getMonthTitle(new Date(month), daysOfMonth),
           date: month
         },
@@ -46,7 +49,12 @@ function getMonthEvents(
   activeDayId: string,
   placeholders: Placeholder[]
 ): ICalendarListRow[] {
-  const today = fecha.format(new Date(), 'YYYY-MM-DD')
+  const now = new Date()
+  const today = fecha.format(now, 'YYYY-MM-DD')
+  const tomorrow = fecha.format(
+    new Date(now).setDate(now.getDate() + 1),
+    'YYYY-MM-DD'
+  )
 
   return Object.entries(days)
     .filter(([day, events]) => {
@@ -65,11 +73,17 @@ function getMonthEvents(
           isEventHeader: true,
           headerType: 'day-header',
           isToday: fecha.format(new Date(day), 'YYYY-MM-DD') === today,
+          isTomorrow: fecha.format(new Date(day), 'YYYY-MM-DD') === tomorrow,
           title: getDayTitle(new Date(day)),
           date: day
         },
         ...(events.length > 0
-          ? events
+          ? (events as ICalendarEvent[]).map(
+              (event: ICalendarEvent, index: number) => ({
+                ...event,
+                rowIndex: index
+              })
+            )
           : [
               {
                 ...eventEmptyState,
@@ -129,8 +143,8 @@ function isEmptyMonth(
  */
 function getDayTitle(date: Date) {
   return date.getFullYear() !== new Date().getFullYear()
-    ? fecha.format(date, 'dddd, MMMM D, YYYY')
-    : fecha.format(date, 'dddd, MMMM D')
+    ? fecha.format(date, 'dddd, MMMM Do, YYYY')
+    : fecha.format(date, 'dddd, MMMM Do')
 }
 
 /**

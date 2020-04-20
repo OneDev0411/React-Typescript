@@ -3,9 +3,9 @@ import { withRouter, WithRouterProps } from 'react-router'
 import { connect } from 'react-redux'
 import { addNotification, Notification } from 'reapop'
 
-import { getActiveTeam } from 'utils/user-teams'
+import { Button } from '@material-ui/core'
 
-import ActionButton from 'components/Button/ActionButton'
+import { getActiveTeam } from 'utils/user-teams'
 
 import {
   Container,
@@ -101,9 +101,14 @@ function MyMarketingMatters({
           <br />
           My Marketing Matters.
         </Description>
-        <ActionButton onClick={onClick} disabled={isLoading}>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={onClick}
+          disabled={isLoading}
+        >
           Connect to My Marketing Matters
-        </ActionButton>
+        </Button>
       </LeftColumn>
       <RightColumn>
         <Image

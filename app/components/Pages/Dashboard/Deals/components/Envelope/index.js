@@ -3,14 +3,14 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import moment from 'moment'
 
+import { Button } from '@material-ui/core'
+
 import { voidEnvelope } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 import Deal from 'models/Deal'
 
-import LinkButton from 'components/Button/LinkButton'
-import ActionButton from 'components/Button/ActionButton'
 import Avatar from 'components/Avatar'
 
 import Tooltip from 'components/tooltip'
@@ -108,18 +108,19 @@ class Envelope extends React.Component {
 
           <div>
             {isSent && (
-              <ActionButton
+              <Button
                 size="small"
+                variant="outlined"
                 disabled={this.state.isResending}
                 onClick={this.resendDocs}
               >
                 Resend docs
-              </ActionButton>
+              </Button>
             )}
 
             {isDraft && (
-              <LinkButton
-                appearance="primary"
+              <Button
+                color="secondary"
                 size="small"
                 href={getEnvelopeEditLink(
                   envelope.id,
@@ -128,12 +129,12 @@ class Envelope extends React.Component {
                 target="_blank"
               >
                 Review & Send
-              </LinkButton>
+              </Button>
             )}
 
-            <ActionButton
+            <Button
               size="small"
-              appearance="outline"
+              variant="outlined"
               disabled={!isVoidable || isVoided || this.state.isVoiding}
               onClick={this.requestVoidEnvelope}
             >
@@ -147,7 +148,7 @@ class Envelope extends React.Component {
               >
                 <span>{isVoided ? 'Voided' : 'Void'}</span>
               </Tooltip>
-            </ActionButton>
+            </Button>
           </div>
         </Header>
 

@@ -1,9 +1,10 @@
 import React from 'react'
-import { render, cleanup } from '@testing-library/react'
+import { cleanup } from '@testing-library/react'
 
 import { emailCampaignEmail as emailCampaignEmailObj } from 'fixtures/insights/insight'
 
 import { ContactsListType } from '../../../components/Pages/Dashboard/MarketingInsights/Insight/types'
+import { renderWithTheme } from '../../../../tests/unit/utils/render-with-theme'
 
 import ContactInfo from '.'
 
@@ -28,7 +29,7 @@ describe('ContactInfo tests', () => {
       clicked: 0
     }
 
-    const { queryByText } = render(<ContactInfo data={item} />)
+    const { queryByText } = renderWithTheme(<ContactInfo data={item} />)
     const name_el = queryByText(item.display_name!)
 
     expect(name_el).not.toBeNull()
@@ -52,34 +53,11 @@ describe('ContactInfo tests', () => {
       clicked: 0
     }
 
-    const { queryByText } = render(<ContactInfo data={item} />)
+    const { queryByText } = renderWithTheme(<ContactInfo data={item} />)
     const name_el = queryByText(item.display_name!)
 
     expect(name_el).not.toBeNull()
     // @ts-ignore
     expect(name_el.nodeName).not.toBe('A')
-  })
-
-  // Related issue: 2846
-  it('should renders just an email', () => {
-    const item: ContactsListType = {
-      id: '295c3b16-83a6-11e9-a74d-0a95998482ac',
-      display_name: null,
-      profile_image_url: null,
-      to: 'booom@ail.com',
-      contact: null,
-      original_data: emailCampaignEmail,
-      unsubscribed: 0,
-      failed: 0,
-      opened: 0,
-      clicked: 0
-    }
-
-    const { container } = render(<ContactInfo data={item} />)
-    const profile_info_el = container.querySelector('.profile-info')
-
-    expect(profile_info_el).not.toBeNull()
-    // @ts-ignore
-    expect(profile_info_el.childElementCount).toBe(1)
   })
 })

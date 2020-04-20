@@ -15,8 +15,8 @@ export const ItemDescription = styled.div`
 export const Container = styled.div`
   display: flex;
   flex-direction: row;
-  font-family: Barlow;
-  width: 100%;
+  font-family: LatoRegular;
+  width: 300px;
   padding: 0.6rem 1rem;
   cursor: pointer;
 

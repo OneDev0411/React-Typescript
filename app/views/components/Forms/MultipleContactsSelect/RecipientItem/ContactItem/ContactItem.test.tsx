@@ -1,8 +1,8 @@
-import { render } from '@testing-library/react'
-
 import * as React from 'react'
 
 import contact from 'fixtures/contacts/contact.json'
+
+import { renderWithTheme } from '../../../../../../../tests/unit/utils/render-with-theme'
 
 import ContactItem from '.'
 
@@ -16,11 +16,11 @@ const recipient = {
 
 describe('ContactItem', () => {
   it('should render', () => {
-    render(<ContactItem recipient={recipient} />)
+    renderWithTheme(<ContactItem recipient={recipient} />)
   })
 
   it('should render email as well as contact name', () => {
-    const { container } = render(<ContactItem recipient={recipient} />)
+    const { container } = renderWithTheme(<ContactItem recipient={recipient} />)
 
     expect(container.textContent).toContain('esparipour@gmail.com')
     expect(container.textContent).toContain('Mojtaba Espari Pour')

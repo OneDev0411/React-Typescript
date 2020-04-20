@@ -3,17 +3,18 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Field, reduxForm } from 'redux-form'
+import { reduxForm } from 'redux-form'
+import { Button } from '@material-ui/core'
 
 import FormCard from 'components/FormCard'
 
+import Field from './Field'
 import Catalog from './ProfileCatalog'
 import SimpleField from './SimpleField'
 import PhoneNumberField from './PhoneNumberField'
 import VerifyMobileNumber from './VerifyPhoneNumber'
 
 import editUser from '../../../../../../store_actions/user/edit'
-import Button from '../../../../../../views/components/Button/ActionButton'
 
 let PersonalInfoForm = ({
   user,
@@ -74,8 +75,10 @@ let PersonalInfoForm = ({
         )}
         <div style={{ textAlign: 'right' }}>
           <Button
-            type="submit"
+            color="secondary"
+            variant="contained"
             disabled={isDisabled}
+            type="submit"
             data-test="personal-info-form-submit-button"
           >
             {isSubmitting ? 'Updating...' : 'Update'}

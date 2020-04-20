@@ -2,9 +2,13 @@
 
 exports[`Contacts list last touched component renders for contacts with last touch 1`] = `
 <div>
-  <span>
-    Last Touch was 
-    <b>
+  <span
+    class="makeStyles-lastTouchLabel-2"
+  >
+    Last Touch: 
+    <b
+      class="makeStyles-lastTouchValue-3"
+    >
       just now
     </b>
   </span>
@@ -12,9 +16,9 @@ exports[`Contacts list last touched component renders for contacts with last tou
 `;
 
 exports[`Contacts list last touched component renders for contacts without last touch 1`] = `
-<div
-  class="hover-color--black styled__NoTouches-sc-1as214f-0 kwVaCt"
+<span
+  class="makeStyles-notouch-1"
 >
   No Touches
-</div>
+</span>
 `;

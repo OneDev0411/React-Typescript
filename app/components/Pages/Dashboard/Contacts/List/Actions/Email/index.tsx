@@ -19,6 +19,7 @@ export function Email({ contacts, disabled }: Props) {
     // TODO: refactor SendEmailButton with TS
     <SendEmailButton
       disabled={disabled}
+      size="small"
       recipients={normalizeContactsForEmailCompose(contacts)}
       style={{
         fontSize: '0.875rem'
@@ -31,9 +32,9 @@ function mapStateToProps(
   { contacts },
   { selectedRows }: { selectedRows: UUID[] }
 ) {
-  const rawContacts: IContact[] = selectedRows.map(id =>
-    selectContact(contacts.list, id)
-  )
+  const rawContacts: IContact[] = selectedRows
+    .map(id => selectContact(contacts.list, id))
+    .filter(id => !!id)
 
   const normalizedContacts = rawContacts.map(normalizeContact)
 

@@ -1,27 +1,20 @@
 import styled from 'styled-components'
 import React from 'react'
 import Downshift from 'downshift'
-import Flex from 'styled-flex-component'
 
-import { FilterItemToolTip, MissingValueToolTip } from './tooltip'
+import Button from '@material-ui/core/Button'
+
+import { FilterItemToolTip } from './tooltip'
 import { Container, List, ListItem } from './styled'
-import Button from '../../../Button/ActionButton'
-import { blue } from '../../../../utils/colors'
 import Icon from '../../../SvgIcons/Add/AddIcon'
 
 const IconAdd = styled(Icon)`
-  fill: ${blue.A100};
-  width: 1em;
-  height: 1em;
-`
-
-const AddItem = styled(Button)`
-  padding: 0;
-  margin-right: 1em;
-
-  &:hover > svg {
-    fill: ${blue.A200};
-  }
+  fill: ${props =>
+    !props.disabled
+      ? props.theme.palette.secondary.main
+      : props.theme.palette.action.disabled};
+  width: 1.3em;
+  height: 1.3em;
 `
 
 export class AddFilter extends React.Component {
@@ -63,19 +56,16 @@ export class AddFilter extends React.Component {
         >
           {({ isOpen, getItemProps }) => (
             <div>
-              <AddItem
+              <Button
+                color="secondary"
+                size="small"
                 data-test="add-filter"
-                appearance="link"
                 onClick={this.toggleMenu}
                 disabled={disabled}
               >
-                <MissingValueToolTip enabled={disabled}>
-                  <Flex alignCenter>
-                    <IconAdd />
-                    <span style={{ fontWight: 500 }}>Add Filter</span>
-                  </Flex>
-                </MissingValueToolTip>
-              </AddItem>
+                <IconAdd disabled={disabled} />
+                <span style={{ fontWight: 500 }}>Add Filter</span>
+              </Button>
 
               {isOpen && (
                 <List depth={3}>

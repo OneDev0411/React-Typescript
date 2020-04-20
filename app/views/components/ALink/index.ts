@@ -29,6 +29,7 @@ const ALink = styled.a<Props>`
       ? css`
           &:hover,
           &:focus {
+            color: inherit;
             text-decoration: none;
           }
         `

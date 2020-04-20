@@ -8,6 +8,8 @@ import _ from 'underscore'
 import moment from 'moment'
 import { Helmet } from 'react-helmet'
 
+import { Button } from '@material-ui/core'
+
 import { getActiveTeamId } from 'utils/user-teams'
 
 import Deal from 'models/Deal'
@@ -29,8 +31,6 @@ import {
 } from 'actions/deals'
 
 import { isBackOffice } from 'utils/user-teams'
-
-import ActionButton from 'components/Button/ActionButton'
 
 import DealType from './deal-type'
 import DealSide from './deal-side'
@@ -1070,18 +1070,25 @@ class CreateDeal extends React.Component {
             />
           )}
 
-          <ActionButton
+          <Button
+            color="secondary"
+            variant="outlined"
             style={{ marginRight: '10px' }}
             onClick={this.updateOrCreateDeal}
             disabled={!canSaveDeal}
           >
             {this.SubmitLabel}
-          </ActionButton>
+          </Button>
 
           {deal && (
-            <ActionButton onClick={this.goLive} disabled={!canSaveDeal}>
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={this.goLive}
+              disabled={!canSaveDeal}
+            >
               {saving ? 'Saving ...' : 'Make visible to admin'}
-            </ActionButton>
+            </Button>
           )}
 
           <div className="error-summary">

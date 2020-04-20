@@ -1,8 +1,9 @@
 import React from 'react'
-import { render } from 'enzyme'
 
 import user from 'fixtures/users/agent.json'
 import dealJson from 'fixtures/deal/seller-with-offer.json'
+
+import { renderWithThemeEnzyme } from '../../../../tests/unit/utils/render-with-theme'
 
 const deal = dealJson as { roles: IDealRole[] }
 
@@ -10,7 +11,7 @@ import { DealRole } from '.'
 
 describe('Test Deal Roles component', () => {
   it('Should show legal_names when role is Title', () => {
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={{}}
@@ -27,7 +28,7 @@ describe('Test Deal Roles component', () => {
   })
 
   it('Should render Office form', () => {
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={{}}
@@ -42,7 +43,7 @@ describe('Test Deal Roles component', () => {
   })
 
   it('Should render Agent form', () => {
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={{}}
@@ -56,7 +57,7 @@ describe('Test Deal Roles component', () => {
   })
 
   it('Should render Agent form with searchable company field', () => {
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         allowedRoles={['Seller']}
@@ -74,7 +75,7 @@ describe('Test Deal Roles component', () => {
   })
 
   it('Should show Office form when showBrokerageFields is true', () => {
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={{}}
@@ -101,7 +102,7 @@ describe('Test Deal Roles component', () => {
 
     const office = sellerAgentRole.agent!.office
 
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={sellerAgentRole}

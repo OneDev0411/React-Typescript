@@ -4,6 +4,7 @@ declare type IDealTaskType =
   | 'Generic'
   | 'YardSign'
   | 'OpenHouse'
+  | 'Media'
 
 declare interface IDealTaskRoom extends IModel<'room'> {
   attachments: IFile[] | null

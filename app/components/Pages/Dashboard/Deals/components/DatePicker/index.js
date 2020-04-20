@@ -3,7 +3,8 @@ import DatePicker from 'react-day-picker'
 import ClickOutSide from 'react-click-outside'
 import Flex from 'styled-flex-component'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
+
 import { PickerContainer } from 'components/DateTimePicker/styled'
 import { Divider } from 'components/Divider'
 
@@ -64,24 +65,22 @@ export default class extends React.Component {
               <Divider margin="0.5em 0" />
 
               <Flex alignCenter justifyBetween>
-                <ActionButton
-                  appearance="outline"
+                <Button
+                  variant="outlined"
                   size="small"
-                  style={{ fontWeight: 500 }}
                   onClick={() => this.onClose()}
                 >
                   Cancel
-                </ActionButton>
+                </Button>
 
-                <ActionButton
+                <Button
                   size="small"
-                  type="button"
+                  variant="contained"
                   onClick={() => this.onSelectDate(selectedDate || date)}
                   disabled={!date}
-                  style={{ fontWeight: 500 }}
                 >
                   {saveText || 'Update'}
-                </ActionButton>
+                </Button>
               </Flex>
             </PickerContainer>
           </ClickOutSide>

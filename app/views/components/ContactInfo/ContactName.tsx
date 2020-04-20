@@ -8,16 +8,18 @@ interface ContactNamePropsType {
   data: ContactsListType
 }
 
-function ContactName(props: ContactNamePropsType) {
-  const name = props.data.display_name
+function ContactName({ data }: ContactNamePropsType) {
+  const name = data.display_name || data.to
 
   if (!name) {
     return null
   }
 
-  if (props.data.contact) {
+  if (data.contact) {
     return (
-      <Alink to={`/dashboard/contacts/${props.data.contact}`}>{name}</Alink>
+      <Alink to={`/dashboard/contacts/${data.contact}`} noStyle>
+        {name}
+      </Alink>
     )
   }
 

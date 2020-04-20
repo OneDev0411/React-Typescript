@@ -5,21 +5,13 @@ import Badge from 'components/Badge'
 import { grey } from 'views/utils/colors'
 
 export const InsightContainer = styled.div`
-  & .insight-table-container {
-    padding: 0 1.5rem;
-    opacity: 0;
-    transform: translateY(3rem);
-    transition: all 0.5s 0.2s;
-
-    &.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
   & .info-title {
     display: flex;
     justify-content: space-between;
+    font-size: ${props => props.theme.typography.body2.fontSize};
+    &:hover {
+      color: ${props => props.theme.palette.secondary.main};
+    }
   }
 `
 
@@ -29,15 +21,12 @@ export const Info = styled.div`
 
   & .sub-info {
     color: ${grey.A600};
-    font-size: 0.875rem;
+    font-size: ${props => props.theme.typography.body2.fontSize};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
     margin-right: 0.5rem;
-  }
-
-  & .main-info {
   }
 `
 
@@ -48,10 +37,12 @@ export const StyledLink = styled(ALink)`
   display: block;
   font-weight: 500;
   margin-top: -4px;
-  cursor: default;
+  cursor: pointer;
+  &:hover {
+    text-decoration-color: ${props => props.theme.palette.secondary.main};
+  }
 `
 
 export const StyledBadge = styled(Badge)`
-  padding: 0.25rem 0.75rem;
   margin-left: 0.25rem;
 `

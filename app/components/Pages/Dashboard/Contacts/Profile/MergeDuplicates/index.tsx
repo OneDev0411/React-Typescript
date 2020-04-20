@@ -171,11 +171,11 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
     <>
       <Callout
         dense
-        type="warn"
+        type="info"
         closeButtonTooltip="Dismiss"
         style={{ padding: '0.5rem 1rem', margin: '1rem' }}
-        onClose={async () => {
-          await handleDismissMergeCallout(contact.id)
+        onClose={() => {
+          handleDismissMergeCallout(contact.id)
         }}
       >
         <CallOutContentContainer>
@@ -184,7 +184,7 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
             {pluralize('contact', duplicateContacts.contacts.length - 1)}{' '}
             similar to <b>{contact.display_name}</b>. Do you want to merge them?
           </span>
-          <Button color="primary" variant="text" onClick={handleReviewClick}>
+          <Button color="secondary" variant="text" onClick={handleReviewClick}>
             Review
           </Button>
         </CallOutContentContainer>

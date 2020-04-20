@@ -2,11 +2,12 @@ import styled, { css } from 'styled-components'
 
 import { grey } from '../../utils/colors'
 import Button from '../Button/IconButton'
-import { merriweatherFamilyStyle } from '../Typography/styles'
+import { LatoFamilyStyle } from '../Typography/styles'
 
 export const RemoveButton = styled(Button)`
   visibility: hidden;
   margin-left: 0.75em;
+  padding: 0;
 `
 
 export const DetailsContainer = styled.div`
@@ -40,7 +41,7 @@ export const Container = styled.div`
 `
 
 export const Title = styled.div`
-  ${merriweatherFamilyStyle};
+  ${LatoFamilyStyle};
   font-size: 0.875rem;
 `
 
