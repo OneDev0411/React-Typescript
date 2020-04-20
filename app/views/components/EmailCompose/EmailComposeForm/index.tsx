@@ -34,6 +34,7 @@ import { DangerButton } from '../../Button/DangerButton'
 import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
 import { isFileAttachment } from '../helpers/is-file-attachment'
 import { useEditorState } from '../../TextEditor/hooks/use-editor-state'
+import { useEmailFormValidator } from './use-email-form-validator'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
 
