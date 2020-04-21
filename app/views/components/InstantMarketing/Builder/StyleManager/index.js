@@ -4,12 +4,14 @@ import ReactDOMServer from 'react-dom/server'
 
 import { AppTheme } from '../../../../../AppTheme'
 
+import { loadGrapesjs } from '../utils/load-grapes'
+
 import { Container } from './styled'
 import FontSizePicker from './FontSizePicker'
 import FontWeightPicker from './FontWeightPicker'
 import ColorPicker from './ColorPicker'
 import TextAlignPicker from './TextAlignPicker'
-import { loadGrapesjs } from '../utils/load-grapes'
+import WidthPicker from './WidthPicker'
 
 function renderWithTheme(node, container) {
   ReactDOM.render(<AppTheme>{node}</AppTheme>, container)
@@ -22,6 +24,7 @@ export const load = async colors => {
     let styleManagerContainer
     let fontSizePickerContainer
     let fontWeightPickerContainer
+    let widthPickerContainer
     let textAlignPickerContainer
     let colorPickerContainer
     let backgroundColorPickerContainer
@@ -29,6 +32,7 @@ export const load = async colors => {
     const {
       fontSizePicker: fontSizePickerOptions = {},
       fontWeightPicker: fontWeightPickerOptions = {},
+      widthPicker: widthPickerOptions = {},
       textAlignPicker: textAlignPickerOptions = {},
       colorPicker: colorPickerOptions = {},
       backgroundColorPicker: backgroundColorPickerOptions = {}
@@ -71,6 +75,17 @@ export const load = async colors => {
       target.set('style', selectedTargetStyles)
     }
 
+    const setMjmlAttr = (target, attr, value) => {
+      target.setAttributes({
+        ...target.getAttributes(),
+        [attr]: value
+      })
+    }
+
+    const getMjmlAttr = (target, attr) => {
+      return target.getAttributes()[attr]
+    }
+
     editor.on('load', () => {
       const pn = editor.Panels
       const id = 'views-container'
@@ -97,6 +112,12 @@ export const load = async colors => {
         fontWeightPickerContainer = document.createElement('div')
         fontWeightPickerContainer.id = 'mc-editor-font-weight-picker'
         styleManagerContainer.appendChild(fontWeightPickerContainer)
+      }
+
+      if (!widthPickerOptions.disabled) {
+        widthPickerContainer = document.createElement('div')
+        widthPickerContainer.id = 'mc-editor-width-picker'
+        styleManagerContainer.appendChild(widthPickerContainer)
       }
 
       if (!textAlignPickerOptions.disabled) {
@@ -194,15 +215,34 @@ export const load = async colors => {
             <FontSizePicker
               value={
                 isMjmlElement(selected)
-                  ? selected.attributes.attributes['font-size']
+                  ? getMjmlAttr(selected, 'font-size')
                   : getStyle(selected).fontSize
               }
               onChange={fontSize => {
-                editor.getSelected().trigger('sync:content') // in order to sync changed text and keep the changes
+                // in order to sync changed text and keep the changes
+                editor.getSelected().trigger('sync:content')
                 setStyle(selected, 'font-size', fontSize)
               }}
             />,
             fontSizePickerContainer
+          )
+        }
+      }
+
+      if (!widthPickerOptions.disabled) {
+        ReactDOM.unmountComponentAtNode(widthPickerContainer)
+
+        if (isElementAllowed(selected, widthPickerOptions.conditions)) {
+          renderWithTheme(
+            <WidthPicker
+              value={getMjmlAttr(selected, 'width')}
+              onChange={width => {
+                // in order to sync changed text and keep the changes
+                editor.getSelected().trigger('sync:content')
+                setMjmlAttr(selected, 'width', width)
+              }}
+            />,
+            widthPickerContainer
           )
         }
       }
