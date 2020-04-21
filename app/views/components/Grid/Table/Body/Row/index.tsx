@@ -3,8 +3,6 @@ import React from 'react'
 import { TableCell, TableRow } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
-import { useIntersection } from 'react-use'
-
 import cn from 'classnames'
 
 import { resolveAccessor } from '../../helpers/resolve-accessor'
@@ -84,12 +82,6 @@ export function Row<Row>({
   getTrProps = () => ({})
 }: Props<Row>) {
   const rowClasses = useStyles({ selection })
-  const intersectionRef = React.useRef(null)
-  const intersection = useIntersection(intersectionRef, {
-    root: null,
-    rootMargin: '0px',
-    threshold: 1
-  })
 
   const strictProps = ({ column }: TdProps<Row>): object => {
     if (column.id === 'row-selection') {
@@ -105,7 +97,6 @@ export function Row<Row>({
 
   return (
     <TableRow
-      ref={intersectionRef}
       className={cn(rowClasses.row, classes.row)}
       hover={hoverable}
       {...getTrProps({
@@ -145,9 +136,7 @@ export function Row<Row>({
               row
             })}
           >
-            {intersection &&
-              intersection.intersectionRatio > 0.7 &&
-              getCell(column, row, rowIndex, columnIndex, rowsCount)}
+            {getCell(column, row, rowIndex, columnIndex, rowsCount)}
           </TableCell>
         ))}
     </TableRow>
