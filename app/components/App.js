@@ -4,8 +4,6 @@ import { withRouter } from 'react-router'
 import ReactGA from 'react-ga'
 import { Helmet } from 'react-helmet'
 
-import EmailVerificationBanner from 'components/EmailVerificationBanner'
-
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
@@ -58,6 +56,7 @@ import { getAllNotifications } from '../store_actions/notifications'
 
 import Intercom from '../views/components/Intercom'
 import CheckBrowser from '../views/components/CheckBrowser'
+import EmailVerificationBanner from '../views/components/EmailVerificationBanner'
 
 class App extends Component {
   componentWillMount() {
