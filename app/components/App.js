@@ -4,11 +4,12 @@ import { withRouter } from 'react-router'
 import ReactGA from 'react-ga'
 import { Helmet } from 'react-helmet'
 
+import EmailVerificationBanner from 'components/EmailVerificationBanner'
+
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
 import getBrand from '../store_actions/brand'
-import VerificationBanner from './Pages/Dashboard/Partials/VerificationBanner'
 
 // services
 import ChatSocket from '../services/socket/chat'
@@ -345,7 +346,7 @@ class App extends Component {
         </Helmet>
         <div className="u-scrollbar">
           {user && !user.email_confirmed && (
-            <VerificationBanner email={user.email} />
+            <EmailVerificationBanner show email={user.email} />
           )}
 
           <SideNav data={data} location={location} />
