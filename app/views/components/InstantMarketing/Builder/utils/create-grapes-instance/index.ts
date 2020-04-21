@@ -38,6 +38,8 @@ const STYLE_MANAGER_BG_COLORABLE_TAGS = [
 
 const STYLE_MANAGER_WIDTH_ALLOWED_TAGS = ['mj-button']
 
+const STYLE_MANAGER_PADDING_ALLOWED_TAGS = ['mj-section', 'mj-wrapper']
+
 export function createGrapesInstance(
   Grapesjs: any,
   { assets, plugins, pluginsOpts }
@@ -98,6 +100,12 @@ export function createGrapesInstance(
         widthPicker: {
           conditions: {
             allowedTags: STYLE_MANAGER_WIDTH_ALLOWED_TAGS,
+            forbiddenStyles: []
+          }
+        },
+        paddingPicker: {
+          conditions: {
+            allowedTags: STYLE_MANAGER_PADDING_ALLOWED_TAGS,
             forbiddenStyles: []
           }
         }

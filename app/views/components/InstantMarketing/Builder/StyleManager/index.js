@@ -12,6 +12,7 @@ import FontWeightPicker from './FontWeightPicker'
 import ColorPicker from './ColorPicker'
 import TextAlignPicker from './TextAlignPicker'
 import WidthPicker from './WidthPicker'
+import PaddingPicker from './PaddingPicker'
 
 function renderWithTheme(node, container) {
   ReactDOM.render(<AppTheme>{node}</AppTheme>, container)
@@ -25,6 +26,7 @@ export const load = async colors => {
     let fontSizePickerContainer
     let fontWeightPickerContainer
     let widthPickerContainer
+    let paddingPickerContainer
     let textAlignPickerContainer
     let colorPickerContainer
     let backgroundColorPickerContainer
@@ -33,6 +35,7 @@ export const load = async colors => {
       fontSizePicker: fontSizePickerOptions = {},
       fontWeightPicker: fontWeightPickerOptions = {},
       widthPicker: widthPickerOptions = {},
+      paddingPicker: paddingPickerOptions = {},
       textAlignPicker: textAlignPickerOptions = {},
       colorPicker: colorPickerOptions = {},
       backgroundColorPicker: backgroundColorPickerOptions = {}
@@ -86,6 +89,61 @@ export const load = async colors => {
       return target.getAttributes()[attr]
     }
 
+    const getStructuredDirectionalMjmlAttr = (target, prop) => {
+      const result = {
+        top: '',
+        right: '',
+        bottom: '',
+        left: ''
+      }
+
+      // First we try to get these from shortcuts
+      const propValue = getMjmlAttr(target, prop) || ''
+      const propValueParts = propValue.split(' ')
+
+      // Cover formats like 20px
+      if (propValue && propValueParts.length === 1) {
+        result.top = propValue
+        result.right = propValue
+        result.bottom = propValue
+        result.left = propValue
+      }
+
+      // Cover formats like 20px 20px
+      if (propValueParts.length === 2) {
+        result.top = propValueParts[0]
+        result.bottom = propValueParts[0]
+        result.right = propValueParts[1]
+        result.left = propValueParts[1]
+      }
+
+      // Cover formats like 20px 20px 20px 20px or 20px 20px 20px
+      if (propValueParts.length === 3 || propValueParts.length === 4) {
+        result.top = propValueParts[0]
+        result.right = propValueParts[1]
+        result.bottom = propValueParts[2]
+        result.left = propValueParts[propValueParts[propValueParts.length - 1]]
+      }
+
+      if (getMjmlAttr(target, `${prop}-top`)) {
+        result.top = getMjmlAttr(target, `${prop}-top`)
+      }
+
+      if (getMjmlAttr(target, `${prop}-right`)) {
+        result.right = getMjmlAttr(target, `${prop}-right`)
+      }
+
+      if (getMjmlAttr(target, `${prop}-bottom`)) {
+        result.bottom = getMjmlAttr(target, `${prop}-bottom`)
+      }
+
+      if (getMjmlAttr(target, `${prop}-left`)) {
+        result.left = getMjmlAttr(target, `${prop}-left`)
+      }
+
+      return result
+    }
+
     editor.on('load', () => {
       const pn = editor.Panels
       const id = 'views-container'
@@ -118,6 +176,12 @@ export const load = async colors => {
         widthPickerContainer = document.createElement('div')
         widthPickerContainer.id = 'mc-editor-width-picker'
         styleManagerContainer.appendChild(widthPickerContainer)
+      }
+
+      if (!paddingPickerOptions.disabled) {
+        paddingPickerContainer = document.createElement('div')
+        paddingPickerContainer.id = 'mc-editor-padding-picker'
+        styleManagerContainer.appendChild(paddingPickerContainer)
       }
 
       if (!textAlignPickerOptions.disabled) {
@@ -243,6 +307,33 @@ export const load = async colors => {
               }}
             />,
             widthPickerContainer
+          )
+        }
+      }
+
+      if (!paddingPickerOptions.disabled) {
+        ReactDOM.unmountComponentAtNode(paddingPickerContainer)
+
+        if (isElementAllowed(selected, paddingPickerOptions.conditions)) {
+          const { top, bottom } = getStructuredDirectionalMjmlAttr(
+            selected,
+            'padding'
+          )
+
+          renderWithTheme(
+            <PaddingPicker
+              value={{
+                top,
+                bottom
+              }}
+              onChange={padding => {
+                // in order to sync changed text and keep the changes
+                editor.getSelected().trigger('sync:content')
+                setMjmlAttr(selected, 'padding-top', padding.top)
+                setMjmlAttr(selected, 'padding-bottom', padding.bottom)
+              }}
+            />,
+            paddingPickerContainer
           )
         }
       }
