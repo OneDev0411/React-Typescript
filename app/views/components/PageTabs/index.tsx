@@ -111,14 +111,20 @@ export function PageTabs({
     onChangeAction(action)
   }
 
+  /*
+   * scrollButtons are set to audo by default in material.
+   * However, they have a huge impact as they require complete layout calculations
+   * on each run. This has a humongous performance impact all across Rechat
+   * as basically all contents in Recht are rendered inside Tabs.
+   */
+
   return (
     <div className={classes.container}>
       <Tabs
         value={value || activeTab || false}
         indicatorColor="primary"
         textColor="primary"
-        variant="scrollable"
-        scrollButtons="auto"
+        scrollButtons="off"
         onChange={(e, v) => handleChangeTab(v)}
         classes={{
           root: classes.tabContainer,
@@ -134,8 +140,7 @@ export function PageTabs({
           <Tabs
             value={actionValue || activeAction || false}
             onChange={(e, v) => handleChangeAction(v)}
-            variant="scrollable"
-            scrollButtons="auto"
+            scrollButtons="off"
             classes={{
               root: classes.tabContainer
             }}
