@@ -56,6 +56,7 @@ export function useRowsSelection<Row>(
             <div
               className="selection--checkbox"
               style={{ display: showDefaultValue ? 'none' : 'block' }}
+              onClick={e => e.stopPropagation()}
             >
               <Checkbox
                 checked={isRowSelected<Row>(
