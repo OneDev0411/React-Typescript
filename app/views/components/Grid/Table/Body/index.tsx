@@ -108,49 +108,53 @@ export function Body<Row>({
 
   return (
     <TableBody className={bodyClasses.table}>
-      {rows.map((row, rowIndex: number) => (
-        <TableRow
-          key={row.id || rowIndex}
-          className={cn(bodyClasses.row, classes.row)}
-          hover={hoverable}
-          {...getTrProps({
-            rowIndex,
-            row,
-            selected: isRowSelected(row, rowIndex)
-          })}
-        >
-          {columns
-            .filter(
-              (column: TableColumn<Row>) => column.render || column.accessor
-            )
-            .map((column: TableColumn<Row>, columnIndex: number) => (
-              <TableCell
-                key={columnIndex}
-                align={column.align || 'inherit'}
-                classes={{
-                  root: cn(bodyClasses.column, column.class)
-                }}
-                className={cn({
-                  primary: column.primary === true,
-                  selected: isRowSelected
-                })}
-                style={{
-                  width: column.width || 'inherit',
-                  ...(column.rowStyle || {}),
-                  ...(column.style || {})
-                }}
-                {...getTdProps({
-                  columnIndex,
-                  column,
-                  rowIndex,
-                  row
-                })}
-              >
-                {getCell(column, row, rowIndex, columnIndex, rows.length)}
-              </TableCell>
-            ))}
-        </TableRow>
-      ))}
+      {rows.map((row, rowIndex: number) => {
+        const isSelected = isRowSelected(row, rowIndex)
+
+        return (
+          <TableRow
+            key={row.id || rowIndex}
+            className={cn(bodyClasses.row, classes.row)}
+            hover={hoverable}
+            {...getTrProps({
+              rowIndex,
+              row,
+              selected: isSelected
+            })}
+          >
+            {columns
+              .filter(
+                (column: TableColumn<Row>) => column.render || column.accessor
+              )
+              .map((column: TableColumn<Row>, columnIndex: number) => (
+                <TableCell
+                  key={columnIndex}
+                  align={column.align || 'inherit'}
+                  classes={{
+                    root: cn(bodyClasses.column, column.class)
+                  }}
+                  className={cn({
+                    primary: column.primary === true,
+                    selected: isSelected
+                  })}
+                  style={{
+                    width: column.width || 'inherit',
+                    ...(column.rowStyle || {}),
+                    ...(column.style || {})
+                  }}
+                  {...getTdProps({
+                    columnIndex,
+                    column,
+                    rowIndex,
+                    row
+                  })}
+                >
+                  {getCell(column, row, rowIndex, columnIndex, rows.length)}
+                </TableCell>
+              ))}
+          </TableRow>
+        )
+      })}
     </TableBody>
   )
 }
