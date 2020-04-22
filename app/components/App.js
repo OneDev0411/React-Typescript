@@ -8,7 +8,6 @@ import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
 import getBrand from '../store_actions/brand'
-import VerificationBanner from './Pages/Dashboard/Partials/VerificationBanner'
 
 // services
 import ChatSocket from '../services/socket/chat'
@@ -57,6 +56,7 @@ import { getAllNotifications } from '../store_actions/notifications'
 
 import Intercom from '../views/components/Intercom'
 import CheckBrowser from '../views/components/CheckBrowser'
+import EmailVerificationBanner from '../views/components/EmailVerificationBanner'
 
 class App extends Component {
   componentWillMount() {
@@ -345,7 +345,7 @@ class App extends Component {
         </Helmet>
         <div className="u-scrollbar">
           {user && !user.email_confirmed && (
-            <VerificationBanner email={user.email} />
+            <EmailVerificationBanner show email={user.email} />
           )}
 
           <SideNav data={data} location={location} />
