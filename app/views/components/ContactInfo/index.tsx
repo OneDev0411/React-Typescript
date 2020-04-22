@@ -1,15 +1,7 @@
 import React from 'react'
-import {
-  Box,
-  Tooltip,
-  Avatar,
-  Typography,
-  makeStyles,
-  createStyles,
-  Theme
-} from '@material-ui/core'
+import { Box, Tooltip, Avatar, Theme, useTheme } from '@material-ui/core'
 
-import ContactName from './ContactName'
+import ContactName from 'components/ContactInfo/ContactName'
 
 import { ContactsListType } from '../../../components/Pages/Dashboard/MarketingInsights/Insight/types'
 
@@ -17,56 +9,55 @@ interface ContactInfoPropsType {
   data: ContactsListType
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    wrapper: {
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%'
-    },
-    userDetails: {
-      textAlign: 'left',
-      marginLeft: theme.spacing(1),
-      width: `calc(100% - ${theme.spacing(6)}px)`
-    },
-    userEmail: {
-      color: theme.palette.grey[400]
-    },
-    avatar: {
-      backgroundColor: theme.palette.divider,
-      color: theme.palette.text.primary
-    }
-  })
-)
-
+/**
+ * IMPORTANT: this component is refactored based on inline-styles
+ * becuase it's heavily using in Grids (Insight,Contact) and running
+ * a bunch of JSS styles makes the webpage deadly slow
+ */
 function ContactInfo({ data }: ContactInfoPropsType) {
-  const classes = useStyles()
+  const theme = useTheme<Theme>()
   const title = data.display_name || data.to
 
   return (
-    <Box className={classes.wrapper}>
+    <Box display="flex" alignItems="center" width="100%">
       <Avatar
         alt={title}
         src={data.profile_image_url || ''}
         sizes="32"
-        className={classes.avatar}
+        style={{
+          backgroundColor: theme.palette.divider,
+          color: theme.palette.text.primary
+        }}
       >
         {title.substring(0, 1).toUpperCase()}
       </Avatar>
-      <div className={classes.userDetails}>
-        <Typography noWrap variant="body2">
+      <div
+        style={{
+          textAlign: 'left',
+          marginLeft: theme.spacing(1),
+          width: `calc(100% - ${theme.spacing(6)}px)`
+        }}
+      >
+        <div
+          style={{
+            whiteSpace: 'nowrap',
+            ...theme.typography.body2
+          }}
+        >
           <ContactName data={data} />
-        </Typography>
+        </div>
         {data.to && title !== data.to && (
           <Tooltip title={data.to}>
-            <Typography
-              noWrap
-              variant="body2"
-              display="block"
-              className={classes.userEmail}
+            <div
+              style={{
+                display: 'block',
+                whiteSpace: 'nowrap',
+                color: theme.palette.grey[400],
+                ...theme.typography.body2
+              }}
             >
               {data.to}
-            </Typography>
+            </div>
           </Tooltip>
         )}
       </div>
