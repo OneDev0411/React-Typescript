@@ -32,13 +32,10 @@ interface Props<Row> {
 }
 
 interface Props<Row> {
-  row: Row
-  rowIndex: number
-  rowsCount: number
   columns: TableColumn<Row>[]
-  hoverable: boolean
+  rows: Row[]
   selection: GridSelectionOptions<Row> | null
-  isSelected: boolean
+  hoverable: boolean
   classes: GridClasses
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
