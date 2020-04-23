@@ -1,5 +1,5 @@
 import React from 'react'
-
+import _get from 'lodash/get'
 import { Table, makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -156,6 +156,7 @@ export function GridTable<Row>({
       <Actions<Row>
         rows={newRows}
         totalRows={totalRows}
+        showSelectAll={_get(selection, 'showSelectAll', true)}
         TableActions={TableActions}
       />
     </>
