@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, makeStyles, createStyles, Theme } from '@material-ui/core'
+import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
@@ -11,8 +11,7 @@ import { Body } from '../Body'
 import { useTable } from '../hooks/use-table'
 
 import { useRowsSelection } from '../features/Selection/use-row-selection'
-import { useRowsSorting } from '../features/Sorting/use-row-sorting'
-import { useInfiniteScroll } from '../features/InfiniteScrolling/use-scroll'
+// import { useRowsSorting } from '../features/Sorting/use-row-sorting'
 
 import { GridHookPlugin, LoadingPosition } from '../types'
 
@@ -28,12 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between'
-    },
-    tableContainer: {
-      position: 'relative',
-      '& table': {
-        tableLayout: 'fixed'
-      }
     },
     summary: {
       margin: theme.spacing(1, 0),
@@ -72,7 +65,6 @@ export function GridTable<Row>({
   selection = null,
   sorting = null,
   infiniteScrolling = null,
-  // hasHeader = false,
   stickyHeader = false,
   TableActions = null,
   ToolbarComponent = null,
@@ -80,7 +72,7 @@ export function GridTable<Row>({
   EmptyStateComponent = null,
   classes = {}
 }: Props<Row>) {
-  useInfiniteScroll(infiniteScrolling)
+  // useInfiniteScroll(infiniteScrolling)
 
   const gridClasses = useStyles({ loading })
   const [state, dispatch] = useGridContext()
@@ -97,9 +89,9 @@ export function GridTable<Row>({
     plugins.push([useRowsSelection, selection])
   }
 
-  if (sorting) {
-    plugins.push([useRowsSorting, sorting])
-  }
+  // if (sorting) {
+  //   plugins.push([useRowsSorting, sorting])
+  // }
 
   const { columns: newColumns, rows: newRows } = useTable<Row>(
     columns,
@@ -129,28 +121,23 @@ export function GridTable<Row>({
         <div className={gridClasses.summary}>{summary(totalRows, state)}</div>
       )}
 
-      <div className={gridClasses.tableContainer}>
-        {rows && rows.length > 0 && (
-          <Table stickyHeader={stickyHeader}>
-            {/* {hasHeader && <Header<Row> columns={newColumns} rows={newRows} />} */}
-            <Body<Row>
-              columns={newColumns}
-              rows={newRows}
-              selection={selection}
-              hoverable={hoverable}
-              classes={classes}
-              getTdProps={getTdProps}
-              getTrProps={getTrProps}
-            />
-          </Table>
-        )}
+      {rows && rows.length > 0 && (
+        <Body<Row>
+          columns={newColumns}
+          rows={newRows}
+          selection={selection}
+          hoverable={hoverable}
+          classes={classes}
+          getTdProps={getTdProps}
+          getTrProps={getTrProps}
+        />
+      )}
 
-        {loading && LoadingStateComponent && (
-          <div className={gridClasses.loading}>
-            <LoadingStateComponent />
-          </div>
-        )}
-      </div>
+      {loading && LoadingStateComponent && (
+        <div className={gridClasses.loading}>
+          <LoadingStateComponent />
+        </div>
+      )}
 
       <Actions<Row>
         rows={newRows}

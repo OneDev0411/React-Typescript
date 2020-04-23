@@ -5,7 +5,7 @@
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
     "commit": "commit",
-    "develop": "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node --extensions \".js,.ts,.tsx\"",
+    "develop": "NODE_ENV=development NODE_OPTIONS=--max_old_space_size=4096 nodemon ./bin/server --config ./nodemon.config.json --exec babel-node --extensions \".js,.ts,.tsx\"",
     "developClient": "NODE_ENV=development notify=true npx babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "debug": "ndb npm run develop",
     "icons": "babel-node ./icon-manager",
@@ -211,6 +211,7 @@
     "react-use": "^14.1.1",
     "react-use-controllable-state": "0.0.7",
     "react-use-promise": "^0.2.0",
+    "react-virtualized": "^9.21.2",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
     "reapop": "^1.1.4",
