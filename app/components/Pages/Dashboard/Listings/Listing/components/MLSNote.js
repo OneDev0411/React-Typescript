@@ -6,7 +6,7 @@ export default function MLSNote({ mls, mlsName }) {
     return null
   }
 
-  const today = new Date()
+  const lastUpdateDate = getLastUpdateDate()
 
   return (
     <div style={{ maxWidth: '60em', marginTop: '2em', color: '#aaa' }}>
@@ -18,9 +18,9 @@ export default function MLSNote({ mls, mlsName }) {
         )}
         {mls && (
           <span>
-            {` Copyright © ${mls} ${today.getFullYear()}. All rights reserved. Last updated at ${fecha.format(
-              today,
-              'mediumDate'
+            {` Copyright © ${mls} ${lastUpdateDate.getFullYear()}. All rights reserved. Last updated at ${fecha.format(
+              lastUpdateDate,
+              'MMM DD, YYYY hh:mm A'
             )}.`}
           </span>
         )}
@@ -37,4 +37,15 @@ export default function MLSNote({ mls, mlsName }) {
       </p>
     </div>
   )
+}
+
+// Rounds the timestamp to the nearest 15 minute.
+// For example we show 7:15 if it's 7:19, and 7:45 if it's 7:58
+function getLastUpdateDate() {
+  const date = new Date()
+  const minutes = date.getMinutes()
+
+  date.setMinutes(minutes - (minutes % 15))
+
+  return date
 }

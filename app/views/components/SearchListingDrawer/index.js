@@ -14,8 +14,11 @@ import ListingItem from './ListingItem'
 import getMockListing from './helpers/get-mock-listing'
 
 class SearchListingDrawer extends React.Component {
-  state = {
-    isWorking: false
+  constructor(props) {
+    super(props)
+    this.state = {
+      isWorking: false
+    }
   }
 
   handleSelectListings = async items => {
@@ -66,6 +69,12 @@ class SearchListingDrawer extends React.Component {
   })
 
   searchListing = async value => {
+    // The search listing endpoint does not accept
+    // a value with a length of fewer than three characters
+    if (value.length < 3) {
+      return
+    }
+
     let response = await searchListings(value)
 
     if (/^[0-9]{5,8}$/.test(value)) {
@@ -99,7 +108,7 @@ class SearchListingDrawer extends React.Component {
         multipleSelection={this.props.multipleSelection}
         searchInputOptions={{
           placeholder: this.props.searchPlaceholder,
-          debounceTime: 500,
+          debounceTime: 700,
           minimumLength: 3
         }}
         ItemRow={ListingItem}

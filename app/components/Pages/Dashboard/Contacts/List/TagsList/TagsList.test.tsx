@@ -19,7 +19,6 @@ describe('tagsList', () => {
         existingTags={tags}
         isFetching={false}
         updateActiveFilter={() => null}
-        isActive
       />
     )
   })

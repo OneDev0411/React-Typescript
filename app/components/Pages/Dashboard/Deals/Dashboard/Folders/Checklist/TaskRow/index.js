@@ -178,7 +178,7 @@ class Task extends React.Component {
               </Flex>
             </Flex>
 
-            <Flex alignCenter>
+            <Flex alignCenter wrapReverse>
               <TaskStatus
                 task={props.task}
                 isBackOffice={props.isBackOffice}

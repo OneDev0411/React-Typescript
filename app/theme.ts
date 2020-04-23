@@ -192,8 +192,8 @@ const theme = createMuiTheme({
     MuiButtonGroup: {
       disableRipple: true
     },
-    MuiTextField: {
-      color: 'secondary'
+    MuiTooltip: {
+      arrow: true
     }
   },
   zIndex: {
@@ -214,7 +214,7 @@ theme.typography.body3 = {
 
 if (process.env.NODE_ENV === 'development') {
   // eslint-disable-next-line
-  ;(window as any).theme = theme
+  ; (window as any).theme = theme
 }
 
 export { theme }

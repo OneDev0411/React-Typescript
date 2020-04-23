@@ -1,18 +1,18 @@
 import React, { useState, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
-import useDebouncedCallback from 'use-debounce/lib/callback'
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
+
+import { IAppState } from 'reducers'
 
 import { searchDeals, getDeals } from 'actions/deals'
 import { viewAsEveryoneOnTeam, viewAs } from 'utils/user-teams'
 
 import PageLayout from 'components/GlobalPageLayout'
-import { SearchInput } from 'components/GlobalHeaderWithSearch'
 
-import { IAppState } from 'reducers'
+import { DebouncedSearchInput } from '../components/SearchInput'
 
 import { SORTABLE_COLUMNS } from './helpers/agent-sorting'
 
@@ -50,15 +50,13 @@ export default function AgentTable(props: WithRouterProps) {
     })
   )
 
-  const handleQueryChange = e => {
+  const handleQueryChange = value => {
     if (isFetchingDeals) {
       return
     }
 
-    const { value } = e.target
-
     setSearchCriteria(value)
-    debouncedFetch(user, value)
+    fetch(user, value)
   }
 
   const fetch = useCallback(
@@ -72,8 +70,6 @@ export default function AgentTable(props: WithRouterProps) {
     [dispatch]
   )
 
-  const [debouncedFetch] = useDebouncedCallback(fetch, 500)
-
   useDeepCompareEffect(() => {
     fetch(user, searchCriteria)
   }, [viewAsUsers])
@@ -82,7 +78,7 @@ export default function AgentTable(props: WithRouterProps) {
     <PageLayout>
       <PageLayout.Header title="My deals">
         <div className={classes.headerContainer}>
-          <SearchInput
+          <DebouncedSearchInput
             placeholder="Search deals by address, MLS# or agent name..."
             onChange={handleQueryChange}
           />

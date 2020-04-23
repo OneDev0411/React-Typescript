@@ -15,7 +15,9 @@ const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
     root: {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      ...theme.typography.body2,
+      fontWeight: 700
     },
     divider: {
       margin: theme.spacing(0, 1),

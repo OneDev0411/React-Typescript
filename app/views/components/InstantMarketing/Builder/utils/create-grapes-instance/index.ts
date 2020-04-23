@@ -27,12 +27,18 @@ const STYLE_MANAGER_TEXT_TAGS = [
   'mj-button'
 ]
 
+const STYLE_MANAGER_ALIGNABLE_TAGS = ['mj-social']
+
 const STYLE_MANAGER_BG_COLORABLE_TAGS = [
   'mj-button',
   'mj-column',
   'mj-section',
   'mj-wrapper'
 ]
+
+const STYLE_MANAGER_WIDTH_ALLOWED_TAGS = ['mj-button']
+
+const STYLE_MANAGER_PADDING_ALLOWED_TAGS = ['mj-section', 'mj-wrapper']
 
 export function createGrapesInstance(
   Grapesjs: any,
@@ -72,7 +78,10 @@ export function createGrapesInstance(
         },
         textAlignPicker: {
           conditions: {
-            allowedTags: STYLE_MANAGER_TEXT_TAGS,
+            allowedTags: [
+              ...STYLE_MANAGER_TEXT_TAGS,
+              ...STYLE_MANAGER_ALIGNABLE_TAGS
+            ],
             forbiddenStyles: ['background-image']
           }
         },
@@ -86,6 +95,18 @@ export function createGrapesInstance(
           conditions: {
             allowedTags: STYLE_MANAGER_BG_COLORABLE_TAGS,
             forbiddenStyles: ['background-image']
+          }
+        },
+        widthPicker: {
+          conditions: {
+            allowedTags: STYLE_MANAGER_WIDTH_ALLOWED_TAGS,
+            forbiddenStyles: []
+          }
+        },
+        paddingPicker: {
+          conditions: {
+            allowedTags: STYLE_MANAGER_PADDING_ALLOWED_TAGS,
+            forbiddenStyles: []
           }
         }
       }

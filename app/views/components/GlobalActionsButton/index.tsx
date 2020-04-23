@@ -11,6 +11,13 @@ import Menu from './Menu'
 interface Props {
   onCreateEvent: (event: IEvent) => void
   onCreateContact: (contact: IContact) => void
+  onCreateEmail: (email: IEmailCampaign) => void
+  onCreateTour: (
+    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => void
+  onCreateOpenHouse: (
+    oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => void
 }
 
 export default function GlobalActionsButton(props: Props) {
@@ -44,6 +51,24 @@ export default function GlobalActionsButton(props: Props) {
     props.onCreateContact(contact)
     handleCloseRenderedItem()
   }
+  const handleSubmitEmail = (email: IEmailCampaign) => {
+    props.onCreateEmail(email)
+    handleCloseRenderedItem()
+  }
+
+  const handleSubmitTour = (
+    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => {
+    props.onCreateTour(tour)
+    handleCloseRenderedItem()
+  }
+
+  const handleSubmitOpenHouse = (
+    oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => {
+    props.onCreateOpenHouse(oh)
+    handleCloseRenderedItem()
+  }
 
   const renderSelectedItem = () => {
     if (!selectedItem) {
@@ -58,7 +83,7 @@ export default function GlobalActionsButton(props: Props) {
             from: user
           },
           onClose: handleCloseRenderedItem,
-          onSent: handleCloseRenderedItem
+          onSent: handleSubmitEmail
         })
 
       case 'event':
@@ -86,7 +111,7 @@ export default function GlobalActionsButton(props: Props) {
         return selectedItem.render({
           isOpen: true,
           onClose: handleCloseRenderedItem,
-          submitCallback: handleCloseRenderedItem
+          submitCallback: handleSubmitOpenHouse
         })
 
       case 'tour':
@@ -95,7 +120,7 @@ export default function GlobalActionsButton(props: Props) {
           isOpen: true,
           listings: [],
           onClose: handleCloseRenderedItem,
-          submitCallback: handleCloseRenderedItem
+          submitCallback: handleSubmitTour
         })
     }
   }

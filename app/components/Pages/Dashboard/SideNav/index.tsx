@@ -18,8 +18,6 @@ import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 import Acl from '../../../../views/components/Acl'
 import { ScrollableArea } from '../../../../views/components/ScrollableArea'
 
-import Brand from '../../../../controllers/Brand'
-
 import Logo from './components/Logo'
 import { UserMenu } from './components/UserMenu'
 import SideNavLinkItem from './components/SideNavLinkItem'
@@ -50,7 +48,6 @@ export default function AppSideNav() {
   )
   const dealsNotificationsNumber = useDealsNotificationsNumber()
   const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
-  const logoSrc = Brand.asset('office_logo', '/static/images/logo.svg')
 
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
 
@@ -62,7 +59,7 @@ export default function AppSideNav() {
 
   return (
     <Sidenav>
-      <Logo src={logoSrc} />
+      <Logo />
       <ScrollableArea
         shadowColor={scrollableAreaShadowColor}
         style={{ flex: '1 1' }}
@@ -106,7 +103,7 @@ export default function AppSideNav() {
             <SideNavLinkItem to="/dashboard/tours">Tours</SideNavLinkItem>
           </Acl.Crm>
 
-          <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
+          <Acl access={[ACL.CRM, ACL.MARKETING]}>
             <SideNavLinkItem to="/dashboard/open-house">
               Open House
             </SideNavLinkItem>

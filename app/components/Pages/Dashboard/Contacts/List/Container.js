@@ -35,6 +35,7 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
 import { updateTeamSetting } from 'actions/user/update-team-setting'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
+import { goTo } from 'utils/go-to'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
@@ -70,7 +71,7 @@ class ContactsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedSidebarFilter: null,
+      selectedShortcutFilter: null,
       firstLetter: props.location.query.letter || null,
       isShowingDuplicatesList:
         props.activeSegment.id === DUPLICATE_CONTACTS_LIST_ID,
@@ -100,7 +101,7 @@ class ContactsList extends React.Component {
       getContactsTags()
     }
 
-    this.setSelectedSidebarFilter()
+    this.setSelectedShortcutFilter()
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -143,20 +144,20 @@ class ContactsList extends React.Component {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
-  setSelectedSidebarFilter = () => {
+  setSelectedShortcutFilter = () => {
     const { activeSegment, filters, flows } = this.props
 
     if (
       activeSegment &&
       activeSegment.name &&
       activeSegment.id !== 'default' &&
-      this.state.selectedSidebarFilter === null
+      this.state.selectedShortcutFilter === null
     ) {
-      this.setState({ selectedSidebarFilter: null })
+      this.setState({ selectedShortcutFilter: null })
     } else if (filters && filters.length === 1) {
-      this.setState({ selectedSidebarFilter: filters })
+      this.setState({ selectedShortcutFilter: filters })
     } else if (flows && flows.length === 1) {
-      this.setState({ selectedSidebarFilter: flows })
+      this.setState({ selectedShortcutFilter: flows })
     }
   }
 
@@ -167,7 +168,7 @@ class ContactsList extends React.Component {
       activeSegment &&
       activeSegment.name &&
       activeSegment.id !== 'default' &&
-      this.state.selectedSidebarFilter === null
+      this.state.selectedShortcutFilter === null
     ) {
       return `List: ${activeSegment.name}`
     }
@@ -175,7 +176,7 @@ class ContactsList extends React.Component {
     if (
       filters &&
       filters.length === 1 &&
-      this.state.selectedSidebarFilter !== null
+      this.state.selectedShortcutFilter !== null
     ) {
       return `Tag: ${filters[0].value}`
     }
@@ -183,7 +184,7 @@ class ContactsList extends React.Component {
     if (
       flows &&
       flows.length === 1 &&
-      this.state.selectedSidebarFilter !== null
+      this.state.selectedShortcutFilter !== null
     ) {
       return `Flow: ${activeFilters[0].values[0].label}`
     }
@@ -320,7 +321,7 @@ class ContactsList extends React.Component {
    */
   handleChangeSavedSegment = savedSegment => {
     this.setState({
-      selectedSidebarFilter: null
+      selectedShortcutFilter: null
     })
     this.handleFilterChange({}, true)
 
@@ -471,21 +472,24 @@ class ContactsList extends React.Component {
   }
 
   handleOnDelete = (e, options) => {
-    const selectedRows =
-      options && options.selectedRows ? options.selectedRows : []
+    const singleSelectedRow =
+      options && options.singleSelectedRow ? options.singleSelectedRow : []
     const state = this.props.gridStateContext
     const entireMode = state.selection.isEntireRowsSelected
 
     const selectedRowsLength = entireMode
       ? this.props.listInfo.total - state.selection.excludedRows.length
       : state.selection.selectedRowIds.length
-    const isManyContacts = entireMode ? true : selectedRowsLength > 1
+    const isSingleContact = singleSelectedRow.length === 1
+    const isManyContacts = isSingleContact
+      ? false
+      : entireMode || selectedRowsLength > 1
 
     this.props.confirmation({
       confirmLabel: 'Delete',
       message: `Delete ${isManyContacts ? 'contacts' : 'contact'}?`,
       onConfirm: () => {
-        this.handleDeleteContact({ selectedRows })
+        this.handleDeleteContact({ singleSelectedRow })
       },
       description: `Deleting ${
         isManyContacts ? `these ${selectedRowsLength} contacts` : 'this contact'
@@ -497,13 +501,14 @@ class ContactsList extends React.Component {
     })
   }
 
-  handleDeleteContact = async ({ selectedRows }) => {
+  handleDeleteContact = async ({ singleSelectedRow }) => {
     const state = this.props.gridStateContext
+    const isSingleContact = singleSelectedRow.length === 1
 
     try {
       this.rowsUpdating(true)
 
-      if (state.selection.isEntireRowsSelected) {
+      if (state.selection.isEntireRowsSelected && !isSingleContact) {
         const bulkDeleteParams = {
           users: this.props.viewAsUsers,
           searchText: this.state.searchInputValue,
@@ -513,12 +518,16 @@ class ContactsList extends React.Component {
         }
 
         await deleteContactsBulk(bulkDeleteParams)
+        this.setState(() => ({
+          showDuplicateClusterAlert: false,
+          duplicateClusterCount: 0
+        }))
         await this.reloadContacts()
       } else {
         const rows =
-          state.selection.selectedRowIds.length > 0
+          state.selection.selectedRowIds.length > 0 && !isSingleContact
             ? state.selection.selectedRowIds
-            : selectedRows
+            : singleSelectedRow
 
         await this.props.deleteContacts(rows)
       }
@@ -566,7 +575,7 @@ class ContactsList extends React.Component {
   }
 
   shouldShowFilters = () => {
-    return this.state.selectedSidebarFilter === null
+    return this.state.selectedShortcutFilter === null
   }
 
   handleListTouchReminderUpdate = async value => {
@@ -595,21 +604,29 @@ class ContactsList extends React.Component {
 
   getActiveTag = () => {
     // all or segmented list
-    if (!Array.isArray(this.state.selectedSidebarFilter)) {
+    if (!Array.isArray(this.state.selectedShortcutFilter)) {
       return undefined
     }
 
     // flow
     if (
-      this.state.selectedSidebarFilter.some(item => typeof item === 'string')
+      this.state.selectedShortcutFilter.some(item => typeof item === 'string')
     ) {
       return undefined
     }
 
     // tag
     return Object.values(this.props.tags).find(value => {
-      return value.text === this.state.selectedSidebarFilter[0].value
+      return value.text === this.state.selectedShortcutFilter[0].value
     })
+  }
+
+  onCreateContact = contact => {
+    if (!contact) {
+      return null
+    }
+
+    goTo(`/dashboard/contacts/${contact.id}`)
   }
 
   renderTabs = (props = {}) => {
@@ -619,8 +636,22 @@ class ContactsList extends React.Component {
       <ContactsTabs
         handleFilterChange={this.handleFilterChange}
         handleChangeSavedSegment={this.handleChangeSavedSegment}
+        handleResetShortcutFilter={() => {
+          this.setState(() => ({
+            selectedShortcutFilter: null
+          }))
+        }}
         filter={{
           show: this.shouldShowFilters()
+        }}
+        tagListProps={{
+          onClick: filters => {
+            this.setState({
+              selectedShortcutFilter: filters.filters
+            })
+            this.handleFilterChange({ ...filters, flows: [] }, true)
+          },
+          isActive: this.state.selectedShortcutFilter !== null
         }}
         savedListProps={{
           name: CONTACTS_SEGMENT_NAME,
@@ -702,6 +733,7 @@ class ContactsList extends React.Component {
         <PageLayout.HeaderWithSearch
           title={title}
           onSearch={this.handleSearch}
+          onCreateContact={this.onCreateContact}
           SearchInputProps={{
             placeholder: 'Search Contacts'
           }}
@@ -751,7 +783,7 @@ class ContactsList extends React.Component {
               }}
             />
           )}
-          {isZeroState && <ZeroState />}
+          {isZeroState && <ZeroState onCreateContact={this.onCreateContact} />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
               {this.renderTabs()}

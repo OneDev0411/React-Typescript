@@ -47,7 +47,7 @@ const Menu = ({ contactId, handleOnDelete }) => (
         key={`contact_${contactId}__dropdown__item_delete`}
         onClick={e =>
           handleOnDelete(e, {
-            selectedRows: [contactId]
+            singleSelectedRow: [contactId]
           })
         }
       >

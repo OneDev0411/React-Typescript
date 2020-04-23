@@ -9,11 +9,11 @@ interface Props extends BaseProps {
   renderMenu: (renderProps: { close: () => void }) => ReactNode[]
   listPlugin?: ListProps
   morePlugin?: {
-    defaultOpen: boolean
-    row: boolean
-    column: boolean
-    count: number
-    container?: ReactNode
+    defaultOpen?: boolean
+    row?: boolean
+    column?: boolean
+    count?: number
+    textContainer?: ReactNode
     moreText?: string
     lessText?: string
     textStyle?: object

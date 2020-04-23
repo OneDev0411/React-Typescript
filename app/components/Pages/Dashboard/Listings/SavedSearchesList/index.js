@@ -114,7 +114,7 @@ class SavedSearchesList extends Component {
             this.props.dispatch(getAlerts())
           }
         }}
-        renderMenu={({ close }) => {
+        renderMenu={() => {
           if (this.props.isFetching || isDeleting) {
             return [
               <ListItem key="loading">
@@ -160,7 +160,7 @@ class SavedSearchesList extends Component {
                     aria-label="delete"
                   >
                     <IconDelete
-                      style={{ fill: 'currentColor', width: 16, height: 16 }}
+                      style={{ fill: 'currentColor', width: 12, height: 12 }}
                     />
                   </IconButton>
                 </ListItemSecondaryAction>

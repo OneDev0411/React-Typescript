@@ -311,7 +311,7 @@ class OpenHouseDrawerInternal extends React.Component {
     this.context.setConfirmationModal({
       message: 'Delete Open House',
       description: `Are you sure about deleting "${
-        this.props.openHouse.title
+        this.state.openHouse.title
       }"?`,
       confirmLabel: 'Yes, I am sure',
       onConfirm: () => this.delete()

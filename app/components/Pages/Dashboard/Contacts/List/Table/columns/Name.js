@@ -2,20 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
+import { Typography, Tooltip } from '@material-ui/core'
+
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import { grey } from 'views/utils/colors'
 
 import Link from 'components/ALink'
-import Tooltip from 'components/tooltip'
 import MiniContact from 'components/MiniContact'
 import PartnerIcon from 'components/SvgIcons/Partner/IconPartner'
-
-const ellipsis = {
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis'
-}
 
 const ContactsListName = ({ contact }) => {
   const name = getAttributeFromSummary(contact, 'display_name')
@@ -42,32 +37,30 @@ const ContactsListName = ({ contact }) => {
                 s
               }
             }}
-            style={{
-              ...ellipsis,
-              fontWeight: 500,
-              padding: 0
-            }}
           >
-            {name}
+            <Typography noWrap variant="inherit" display="block">
+              {name}
+            </Typography>
           </Link>
         </MiniContact>
         {typeof contact.partner_name === 'string' &&
           contact.partner_name.trim().length > 0 && (
-            <Tooltip caption="Spouse/Partner">
+            <Tooltip title="Spouse/Partner">
               <Flex alignCenter>
                 <PartnerIcon
                   style={{ width: '1rem', height: '1rem', fill: grey.A550 }}
                 />
                 <span
                   style={{
-                    ...ellipsis,
                     width: 'calc(100% - 1.24rem)',
                     marginLeft: '0.25rem',
                     color: grey.A550
                   }}
                   className="hover-color--black"
                 >
-                  {contact.partner_name}
+                  <Typography noWrap variant="inherit" display="block">
+                    {contact.partner_name}
+                  </Typography>
                 </span>
               </Flex>
             </Tooltip>

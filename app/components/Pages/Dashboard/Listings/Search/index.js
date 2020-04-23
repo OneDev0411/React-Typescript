@@ -1,12 +1,11 @@
-import { DALLAS_POINTS } from 'constants/listings/dallas-points'
-
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 import memoize from 'lodash/memoize'
 import hash from 'object-hash'
-import { Box } from '@material-ui/core'
+
+import { DALLAS_POINTS } from 'constants/listings/dallas-points'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
@@ -409,33 +408,28 @@ class Search extends React.Component {
   onClickFilter = () => this.props.dispatch(toggleFilterArea())
 
   render() {
-    const { user } = this.props
+    const { user, isWidget } = this.props
 
-    // Layout is made with flex. For the big picture, checkout the sample:
-    // https://codepen.io/mohsentaleb/pen/jOPeVBK
     return (
       <>
-        <Box flex="0 1 auto">
-          <Header
-            isWidget={this.props.isWidget}
-            isFetching={this.props.isFetching}
-            activeView={this.state.activeView}
-            onChangeView={this.onChangeView}
-            hasData={this.props.listings.data.length > 0}
-            showGlobalActionsButton={user}
-          />
-
-          <Tabs
-            user={user}
-            onChangeView={this.onChangeView}
-            onChangeSort={this.onChangeSort}
-            activeView={this.state.activeView}
-            isWidget={this.props.isWidget}
-            activeSort={this.state.activeSort}
-            saveSearchHandler={this.handleSaveSearch}
-            showSavedSearchButton
-          />
-        </Box>
+        <Header
+          isWidget={this.props.isWidget}
+          isFetching={this.props.isFetching}
+          activeView={this.state.activeView}
+          onChangeView={this.onChangeView}
+          hasData={this.props.listings.data.length > 0}
+          showGlobalActionsButton={user && !isWidget}
+        />
+        <Tabs
+          user={user}
+          onChangeView={this.onChangeView}
+          onChangeSort={this.onChangeSort}
+          activeView={this.state.activeView}
+          isWidget={isWidget}
+          activeSort={this.state.activeSort}
+          saveSearchHandler={this.handleSaveSearch}
+          showSavedSearchButton
+        />
         {this.renderMain()}
         <CreateAlertModal
           user={user}

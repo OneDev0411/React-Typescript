@@ -5,6 +5,7 @@ export const LastActivity = styled.div`
     color: ${theme.palette.grey['900']} !important;
     color: #d1d1d1;
     opacity: 0;
+    margin: ${theme.spacing(1, 0)};
     ${theme.typography.body3};
 
     :hover {

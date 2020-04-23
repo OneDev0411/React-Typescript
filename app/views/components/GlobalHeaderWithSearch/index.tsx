@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { debounce } from 'lodash'
 import { makeStyles, Theme } from '@material-ui/core'
 
@@ -44,10 +44,6 @@ export default function GlobalHeaderWithSearch({
     debounce((value: string) => onSearch(value), 500)
   )
 
-  useEffect(() => {
-    throttledSearchHandler.current(searchQueryValue)
-  }, [searchQueryValue])
-
   return (
     <GlobalHeader {...globalHeaderProps}>
       <div className={classes.wrapper}>
@@ -55,9 +51,10 @@ export default function GlobalHeaderWithSearch({
         <div className={classes.searchContainer}>
           <SearchInput
             value={searchQueryValue}
-            onChange={({ target: { value: searchQueryValue } }) =>
-              setSearchQueryValue(searchQueryValue)
-            }
+            onChange={({ target: { value } }) => {
+              setSearchQueryValue(value)
+              throttledSearchHandler.current(value)
+            }}
             {...SearchInputProps}
           />
         </div>

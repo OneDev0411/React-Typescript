@@ -9,9 +9,10 @@ import Item from './components/Item'
 interface Props {
   data: Section
   mediums: { [key: string]: string[] }
+  onClose: () => void
 }
 
-export const SectionMegaMenu = ({ data, mediums }: Props) => {
+export const SectionMegaMenu = ({ data, mediums, onClose }: Props) => {
   const { items } = data
 
   const sanitizeMediums = item => {
@@ -35,7 +36,11 @@ export const SectionMegaMenu = ({ data, mediums }: Props) => {
 
         return (
           <Grid key={i} item>
-            <Item data={item} mediums={currentSectionMediums} />
+            <Item
+              data={item}
+              mediums={currentSectionMediums}
+              onClose={onClose}
+            />
           </Grid>
         )
       })}

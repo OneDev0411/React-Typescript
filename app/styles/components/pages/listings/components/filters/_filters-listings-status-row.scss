@@ -55,7 +55,7 @@
       fill: $gray-base;
     }
     &:hover > svg {
-      fill: $brand-primary;
+      fill: $brand-secondary;
     }
   }
 }
@@ -66,7 +66,7 @@
   height: 100%;
   top: 1em;
   right: 0;
-  transition: transform .2s;
+  transition: transform 0.2s;
   transform: rotate(0);
   .c-filters-status__right-side > .is-active > & {
     fill: $brand-primary;
@@ -83,7 +83,7 @@
   padding: 0;
   list-style: none;
   background: #f8f8f8;
-  transition: all .3s;
+  transition: all 0.3s;
   @include visually-hidden();
   &.is-active {
     @include visually-hidden(undo);
@@ -99,7 +99,7 @@
 }
 
 .c-filters-sub-statuses__item {
-  > input[type="checkbox"] {
+  > input[type='checkbox'] {
     @include visually-hidden();
     &:checked + label > svg {
       visibility: visible;
@@ -124,7 +124,7 @@
       visibility: hidden;
       opacity: 0;
       margin-right: 0.5em;
-      fill: $brand-primary;
+      fill: $brand-secondary;
     }
   }
 }

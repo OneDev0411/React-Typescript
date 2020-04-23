@@ -18,9 +18,10 @@ const Image = styled.img`
 const IconContainer = styled(Flex)`
   width: 40px;
   height: 40px;
-  background-color: #000;
+  background-color: ${props => props.theme.palette.grey['200']};
   border-radius: 50%;
   > svg {
+    fill: ${props => props.theme.palette.grey['500']};
     height: 16px;
     width: 16px;
   }

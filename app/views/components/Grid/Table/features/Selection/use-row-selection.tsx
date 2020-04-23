@@ -32,8 +32,9 @@ export function useRowsSelection<Row>(
   const newColumns = [
     {
       id: 'row-selection',
-      header: '',
       class: 'opaque',
+      header: '',
+      ...(options.columnProps || {}),
       render: (rowItem: RenderProps<Row>) => {
         const showDefaultValue =
           options.defaultRender &&
@@ -55,6 +56,7 @@ export function useRowsSelection<Row>(
             <div
               className="selection--checkbox"
               style={{ display: showDefaultValue ? 'none' : 'block' }}
+              onClick={e => e.stopPropagation()}
             >
               <Checkbox
                 checked={isRowSelected<Row>(

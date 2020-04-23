@@ -3,6 +3,8 @@ import _ from 'lodash'
 import S from 'shorti'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import numeral from 'numeral'
+
 import { numberWithCommas, friendlyDate } from '../../../../utils/helpers'
 import Brand from '../../../../controllers/Brand'
 import listing_util from '../../../../utils/listing'
@@ -72,7 +74,7 @@ export default function ListingMarker({ data, listing, context, popupIsActive })
     price = listing.close_price
   }
 
-  const price_small = listing_util.shortPrice(price)
+  const price_small = numeral(price).format('0.[00]a')
 
   let active_class = ''
 

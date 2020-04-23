@@ -1,6 +1,6 @@
 import { ComponentProps, ReactNode } from 'react'
 
-import { BulkEmailComposeDrawer } from 'components/EmailCompose'
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { EventDrawer } from 'components/EventDrawer'
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
@@ -16,7 +16,7 @@ interface BaseItem<T extends ItemType> {
 }
 
 interface EmailItem extends BaseItem<'email'> {
-  render(props: ComponentProps<typeof BulkEmailComposeDrawer>): ReactNode
+  render(props: ComponentProps<typeof SingleEmailComposeDrawer>): ReactNode
 }
 
 interface EventItem extends BaseItem<'event'> {

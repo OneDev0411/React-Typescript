@@ -9,9 +9,9 @@ function getFirstWord(text) {
 }
 
 export function getContactNameInitials(contact) {
-  if (!contact || !contact.first_name) {
+  if (!contact || !contact.display_name) {
     return ''
   }
 
-  return getNameInitials(`${getFirstWord(contact.first_name)}}`)
+  return getNameInitials(`${getFirstWord(contact.display_name)}}`)
 }

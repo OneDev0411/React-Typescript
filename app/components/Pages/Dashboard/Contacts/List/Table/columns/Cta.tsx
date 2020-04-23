@@ -38,11 +38,12 @@ const useStyles = makeStyles((theme: Theme) =>
     item: {
       display: 'inline-flex',
       '&:not(:last-child)': {
-        marginRight: theme.spacing(0.5)
+        marginRight: theme.spacing(0.75)
       },
       '& svg': {
         width: 'unset',
         height: theme.spacing(3),
+        '&[data-icon="chat"]': { height: theme.spacing(2.5) },
         '&[data-icon="event"]': { height: theme.spacing(2.25) }
       },
       '&:hover svg': {
@@ -86,6 +87,7 @@ export default function CtaAction({ contact }: Props) {
             onClick={onClick}
           >
             {!isDisabled ? (
+              // @ts-ignore js component
               <Chat data-icon="chat" />
             ) : (
               <Loading data-icon="loading" />

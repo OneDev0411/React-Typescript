@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useContext, useMemo, useRef } from 'react'
 import { Popper, Tooltip } from '@material-ui/core'
 import createEmojiPlugin from 'draft-js-emoji-plugin'
 import EmojiSelectPopover from 'draft-js-emoji-plugin/lib/components/EmojiSelect/Popover'
@@ -22,10 +22,9 @@ import { useEmojiStyles } from './use-emoji-styles'
 import 'draft-js-emoji-plugin/lib/plugin.css'
 import { ToolbarIconButton } from '../../components/ToolbarIconButton'
 
-import { useEditor } from '../../hooks/use-editor'
-
 import { BaseDropdown } from '../../../BaseDropdown'
 import { usePopperizedEmojiSuggestions } from './use-popperized-emoji-suggestions'
+import { EditorContext } from '../../editor-context'
 
 const emojis = createEmojisFromStrategy(strategy)
 const imagePath = '//cdn.jsdelivr.net/emojione/assets/svg/' // google: 'https://ssl.gstatic.com/mail/emoji/v7/png48/emoji_u'
@@ -42,7 +41,7 @@ interface Props {
 }
 
 export function EmojiFeature({ closeOnSelection = true }: Props) {
-  const { setEditorState, editorState } = useEditor()
+  const { setEditorState, editorState } = useContext(EditorContext)
   const editorStateRef = useLatestValueRef(editorState)
   const storeRef = useRef({
     setEditorState,

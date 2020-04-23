@@ -178,6 +178,7 @@ export function EmailThreadItem({
           <Box p={2} pl={9} overflow="hidden">
             <Iframe
               title="Email body"
+              height="400px"
               srcDoc={trimQuotedContent ? trimmedEmailBody : emailBody}
             />
             {isToggleQuotedContentVisible && (

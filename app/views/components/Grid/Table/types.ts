@@ -1,7 +1,5 @@
 import { TableCellProps } from '@material-ui/core/TableCell'
 
-import { StateContext, DispatchContext } from './context'
-
 type StringOrNumber = string | number
 
 export interface RenderProps<Row> {
@@ -9,12 +7,6 @@ export interface RenderProps<Row> {
   totalRows: number
   rowIndex: number
   columnIndex: number
-}
-
-export interface TableActionComponent<Row> {
-  state: StateContext
-  dispatch: DispatchContext
-  rows: Row[]
 }
 
 export interface ColumnHeaderProps<Row> {
@@ -62,6 +54,7 @@ export type GridHookPlugin<Row, Options> = (
 }
 
 export interface GridSelectionOptions<Row> {
+  columnProps?: Omit<TableColumn<Row>, 'id'>
   defaultRender?: null | ((rowItem: RenderProps<Row>) => React.ReactNode)
 }
 

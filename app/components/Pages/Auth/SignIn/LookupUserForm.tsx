@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router'
-import { Typography } from '@material-ui/core'
+import { Typography, Box } from '@material-ui/core'
 import { Form, Field } from 'react-final-form'
 import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
@@ -61,14 +61,16 @@ export default function LookUpForm({
             component={SimpleField}
           />
           {submitMessage && (
-            <Callout
-              style={{ margin: theme.spacing(1.5, 0) }}
-              type={submitMessage.type}
-            >
-              {submitMessage.text}
+            <Box mt={1.5} mb={2}>
+              <Callout
+                style={{ margin: theme.spacing(0, 0, 1, 0) }}
+                type={submitMessage.type}
+              >
+                {submitMessage.text}
+              </Callout>
               <Typography>
                 <Link
-                  style={{ color: theme.palette.info.contrastText }}
+                  style={{ color: theme.palette.secondary.main }}
                   to={`/signup?email=${window.encodeURIComponent(
                     form.getState().values.username
                   )}`}
@@ -76,7 +78,7 @@ export default function LookUpForm({
                   Do you want to sign up?
                 </Link>
               </Typography>
-            </Callout>
+            </Box>
           )}
           <SubmitButton
             isDisabled={isLoading}

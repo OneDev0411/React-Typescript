@@ -22,12 +22,9 @@ const map = ({
   defaultCenter,
   bootstrapURLKeys,
   onGoogleApiLoaded,
-  onMarkerMouseEnter,
-  onMarkerMouseLeave,
-  map: { hoveredMarkerId },
   mapProps: { zoom, center }
 }) => (
-  <React.Fragment>
+  <>
     <Map
       zoom={zoom}
       style={style}
@@ -51,15 +48,12 @@ const map = ({
             data={appData}
             listing={marker}
             key={`MARKER_${id}`}
-            onMouseEnterHandler={() => onMarkerMouseEnter(id)}
-            onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
-            markerPopupIsActive={hoveredMarkerId === id}
           />
         )
       })}
     </Map>
     <ZoomController tabName="favorites" />
-  </React.Fragment>
+  </>
 )
 
 const mapHOC = compose(
@@ -93,12 +87,6 @@ const mapHOC = compose(
     },
     onChange: ({ setMapProps }) => mapProps => {
       setMapProps('favorites', mapProps)
-    },
-    onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
-      setMapHoveredMarkerId('favorites', -1)
-    },
-    onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
-      setMapHoveredMarkerId('favorites', id)
     }
   }),
   withPropsOnChange(

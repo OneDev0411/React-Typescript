@@ -10,7 +10,7 @@ export const BadgeCounter = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background: ${theme.palette.secondary.main};
+    background: ${theme.palette.error.main};
     top: -11px;
     right: 0px;
     font-size: 13px;

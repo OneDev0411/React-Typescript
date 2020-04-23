@@ -11,6 +11,10 @@ import Autocomplete from '../components/Autocomplete'
 
 const useStyles = makeStyles(
   theme => ({
+    container: {
+      height: theme.spacing(15),
+      display: 'flex'
+    },
     body: {
       display: 'flex',
       justifyContent: 'flex-end'
@@ -28,8 +32,11 @@ export function Header(props) {
   const { isFetching, activeView, showGlobalActionsButton } = props
 
   return (
-    <Box p={5}>
-      <GlobalPageLayout.Header title="All Properties" noGlobalActionsButton={!showGlobalActionsButton}>
+    <Box className={classes.container}>
+      <GlobalPageLayout.Header
+        title="All Properties"
+        noGlobalActionsButton={!showGlobalActionsButton}
+      >
         <Box className={classes.body}>
           <Autocomplete activeView={activeView} />
           <BaseDropdown

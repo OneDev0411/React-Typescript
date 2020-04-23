@@ -14,7 +14,12 @@ import SortField from './SortField'
 
 const urlGenerator = (url = '') => `/dashboard/insights${url}`
 
-function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
+function InsightsLayout({
+  sentCount,
+  scheduledCount,
+  onCreateEmail,
+  renderContent
+}) {
   const [sortField, setSortField] = useState({
     label: 'Newest',
     value: SortValues.Newest,
@@ -38,7 +43,7 @@ function InsightsLayout({ sentCount, scheduledCount, renderContent }) {
         <title>Email | Rechat</title>
       </Helmet>
       <PageLayout>
-        <PageLayout.Header title="Email Insight">
+        <PageLayout.Header title="Email Insight" onCreateEmail={onCreateEmail}>
           <Box textAlign="right">
             <Tooltip placement="bottom">
               <Button

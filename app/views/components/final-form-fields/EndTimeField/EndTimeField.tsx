@@ -82,6 +82,7 @@ export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
             {value && (
               <Tooltip placement={placement} title="Remove Time">
                 <Button
+                  color="secondary"
                   size="small"
                   // @ts-ignore FinalForm bug
                   onClick={() => onChange(null)}
@@ -121,7 +122,7 @@ export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
                           }}
                           size="small"
                           type="button"
-                          variant="outlined"
+                          color="secondary"
                           className={classes.addButton}
                         >
                           Add

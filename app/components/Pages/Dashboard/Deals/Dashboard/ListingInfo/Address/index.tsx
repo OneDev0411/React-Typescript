@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(1)
     },
     addressInput: {
-      width: '20rem'
+      width: '18rem'
     }
   })
 )
@@ -87,7 +87,7 @@ export function Address(props: Props) {
             handleCancel={cancleEdit}
             handleSubmit={handleSave}
             style={{
-              width: '20rem'
+              width: '18rem'
             }}
             renderSearchField={inputProps => (
               <TextField
@@ -118,7 +118,7 @@ export function Address(props: Props) {
           placement="bottom"
         >
           <div className={classes.container} onClick={editAddress}>
-            <Typography variant="subtitle1">{title}</Typography>
+            <Typography variant="h6">{title}</Typography>
 
             {!props.deal.listing && (
               <Button

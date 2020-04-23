@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography, makeStyles, Theme } from '@material-ui/core'
 
+import { noop } from 'utils/helpers'
 import GlobalActionsButton from 'components/GlobalActionsButton'
 
 export interface GlobalHeaderProps {
@@ -9,7 +10,14 @@ export interface GlobalHeaderProps {
   noGlobalActionsButton?: boolean
   children?: React.ReactNode
   onCreateEvent?: (event: IEvent) => void
-  onCreateContact?: (event: IContact) => void
+  onCreateContact?: (contact: IContact) => void
+  onCreateEmail?: (email: IEmailCampaign) => void
+  onCreateTour?: (
+    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => void
+  onCreateOpenHouse?: (
+    oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => void
 }
 
 const useStyles = makeStyles(
@@ -21,12 +29,10 @@ const useStyles = makeStyles(
       justifyContent: 'space-between',
       padding: ({ noPadding }: GlobalHeaderProps) =>
         !noPadding ? theme.spacing(3) : 0,
-      width: '100%',
-      overflow: 'hidden'
+      width: '100%'
     },
     title: {
-      marginRight: theme.spacing(1),
-      alignSelf: 'flex-start'
+      marginRight: theme.spacing(1)
     },
     content: {
       flexGrow: 1
@@ -43,8 +49,11 @@ export default function GlobalHeader({
   noPadding,
   noGlobalActionsButton,
   children,
-  onCreateEvent = () => {},
-  onCreateContact = () => {}
+  onCreateEvent = noop,
+  onCreateContact = noop,
+  onCreateEmail = noop,
+  onCreateTour = noop,
+  onCreateOpenHouse = noop
 }: GlobalHeaderProps) {
   const classes = useStyles({ noPadding })
 
@@ -61,6 +70,9 @@ export default function GlobalHeader({
           <GlobalActionsButton
             onCreateEvent={onCreateEvent}
             onCreateContact={onCreateContact}
+            onCreateEmail={onCreateEmail}
+            onCreateTour={onCreateTour}
+            onCreateOpenHouse={onCreateOpenHouse}
           />
         </div>
       )}

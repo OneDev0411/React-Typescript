@@ -1,7 +1,7 @@
 import React from 'react'
 import _findIndex from 'lodash/findIndex'
 
-import { PageTabs, Tab, TabLink } from 'components/PageTabs'
+import { PageTabs, TabLink, MegaTab } from 'components/PageTabs'
 import { SectionItem } from 'components/PageSideNav/types'
 import { SectionCollection } from 'hooks/use-marketing-center-sections'
 
@@ -41,22 +41,25 @@ const MarketingTabs = ({ sections, mediums, templateTypes }: Props) => {
   return (
     <PageTabs
       defaultValue={getActiveTab()}
+      hasMegaMenu
       tabs={[
         ...marketingCenter.items.map(i => (
           <TabLink key={i.link} to={i.link} value={i.link} label={i.title} />
         )),
-        <Tab
+        <MegaTab
           key={life.key}
           value={life.key}
           label={life.title}
-          renderMegaMenu={() => <MegaMenu data={life} mediums={mediums} />}
+          render={({ close }) => (
+            <MegaMenu data={life} mediums={mediums} onClose={close} />
+          )}
         />,
-        <Tab
+        <MegaTab
           key={properties.key}
           value={properties.key}
           label={properties.title}
-          renderMegaMenu={() => (
-            <MegaMenu data={properties} mediums={mediums} />
+          render={({ close }) => (
+            <MegaMenu data={properties} mediums={mediums} onClose={close} />
           )}
         />
       ]}
