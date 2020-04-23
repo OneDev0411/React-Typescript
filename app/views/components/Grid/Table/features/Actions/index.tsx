@@ -94,8 +94,6 @@ export function Actions<Row>({
     (isEntireRowsSelected && excludedRows.length > 0)
   const tooltipTitle = isAllSelected ? 'Deselect All Rows' : 'Select All Rows'
 
-  console.log(showSelectAll)
-
   return (
     <Slide in direction="up">
       <div className={classes.container}>

@@ -156,7 +156,7 @@ export function GridTable<Row>({
         rows={newRows}
         totalRows={totalRows}
         showSelectAll={
-          selection && typeof selection.showSelectAll !== 'undefined'
+          selection && selection.showSelectAll !== undefined
             ? selection.showSelectAll
             : true
         }
