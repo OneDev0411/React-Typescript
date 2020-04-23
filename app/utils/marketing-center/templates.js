@@ -102,11 +102,11 @@ export const BRAND_STYLES_TEMPLATE = `{% if get('body-font-family') %}
     font-weight="{{get('button-font-weight')}}"
     font-size="{{get('button-font-size')}}"
   ></mj-button>
-  <mj-button
+  <mj-class
     name="inverted-button"
     background-color="{{get('inverted-button-bg-color')}}"
     color="{{get('inverted-button-text-color')}}"
-  ></mj-button>
+  ></mj-class>
 </mj-attribues>
 `
 
