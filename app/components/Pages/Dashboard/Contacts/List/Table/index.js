@@ -159,7 +159,8 @@ const ContactsList = props => {
         getTrProps={getRowProps}
         getTdProps={getColumnProps}
         selection={{
-          defaultRender: ({ row }) => <Avatar contact={row} />
+          defaultRender: ({ row }) => <Avatar contact={row} />,
+          showSelectAll: false
         }}
         classes={{
           row: cn(gridClasses.row, customGridClasses.row)
