@@ -48,7 +48,10 @@ class AssociationItemBase extends Component {
     return (
       <Container style={this.props.style} isReadOnly={isReadOnly}>
         <DetailsContainer>
-          <ProfilePhoto alt={avatar.title} src={avatar.image}>
+          <ProfilePhoto
+            alt={avatar.title}
+            src={avatar.image || avatar.placeHolderImage}
+          >
             {getNameInitials(avatar.title)}
           </ProfilePhoto>
           <div style={{ marginLeft: '0.5em' }}>
