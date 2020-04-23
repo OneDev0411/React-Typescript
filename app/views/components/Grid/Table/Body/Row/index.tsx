@@ -5,7 +5,7 @@ import cn from 'classnames'
 import { resolveAccessor } from '../../helpers/resolve-accessor'
 
 import { StateContext } from '../../context'
-import { TableColumn, TrProps, TdProps } from '../../types'
+import { TableColumn, TrProps, TdProps, GridClasses } from '../../types'
 
 import { RowContainer, Column } from './styled'
 
@@ -16,6 +16,7 @@ interface Props<Row> {
     rows: Row[]
     columns: TableColumn<Row>[]
     state: StateContext
+    classes: GridClasses
     getTrProps?: (data: TrProps<Row>) => object
     getTdProps?: (data: TdProps<Row>) => object
   }
@@ -28,6 +29,7 @@ function Row<T>({
     columns,
     rows,
     state,
+    classes,
     getTrProps = () => ({}),
     getTdProps = () => ({})
   }
@@ -55,11 +57,11 @@ function Row<T>({
         .map((column: TableColumn<T>, columnIndex: number) => (
           <Column
             key={columnIndex}
-            className={cn({
+            className={cn(classes.row, {
               primary: column.primary === true
             })}
             style={{
-              width: column.width || 'inherit',
+              width: column.width,
               ...(column.rowStyle || {}),
               ...(column.style || {})
             }}

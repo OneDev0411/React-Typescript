@@ -59,21 +59,16 @@ export function GridTable<Row>({
   totalRows,
   getTdProps,
   getTrProps,
-  hoverable = true,
   summary = null,
   loading = null,
   selection = null,
   sorting = null,
-  infiniteScrolling = null,
-  stickyHeader = false,
   TableActions = null,
   ToolbarComponent = null,
   LoadingStateComponent = null,
   EmptyStateComponent = null,
   classes = {}
 }: Props<Row>) {
-  // useInfiniteScroll(infiniteScrolling)
-
   const gridClasses = useStyles({ loading })
   const [state, dispatch] = useGridContext()
 
@@ -125,8 +120,6 @@ export function GridTable<Row>({
         <Body<Row>
           columns={newColumns}
           rows={newRows}
-          selection={selection}
-          hoverable={hoverable}
           classes={classes}
           getTdProps={getTdProps}
           getTrProps={getTrProps}
