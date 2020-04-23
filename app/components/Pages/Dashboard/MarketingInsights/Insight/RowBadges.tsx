@@ -24,7 +24,7 @@ function RowBadges({ data }: BadgePropsType) {
     output.push(<StyledBadge>Bounced {count}</StyledBadge>)
   }
 
-  return <React.Fragment>{output}</React.Fragment>
+  return <>{output}</>
 }
 
 export default RowBadges
