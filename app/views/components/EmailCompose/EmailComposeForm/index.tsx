@@ -82,7 +82,7 @@ function EmailComposeForm<T>({
   const [topFieldsCollapsed, setTopFieldsCollapsed] = useState<boolean>(
     hasRecipients
   )
-  const emailBodyEditorRef = useRef<TextEditorRef>(null)
+  const editorRef = useRef<TextEditorRef>(null)
   const [
     marketingTemplate,
     setMarketingTemplate
@@ -203,8 +203,8 @@ function EmailComposeForm<T>({
   }
 
   const scrollToEnd = () => {
-    if (emailBodyEditorRef.current) {
-      emailBodyEditorRef.current.scrollToEnd()
+    if (editorRef.current) {
+      editorRef.current.scrollToEnd()
     }
   }
 
@@ -280,7 +280,7 @@ function EmailComposeForm<T>({
               />
 
               <EmailBody
-                emailBodyEditorRef={emailBodyEditorRef}
+                editorRef={editorRef}
                 DraftEditorProps={{
                   onFocus: () => setTopFieldsCollapsed(true)
                 }}

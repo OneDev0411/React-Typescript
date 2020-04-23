@@ -1,5 +1,5 @@
 import React from 'react'
-import { Options as ExportOptions } from 'draft-js-import-html'
+import { Options as ImportOptions } from 'draft-js-import-html'
 
 import { RichTextFeature } from 'components/TextEditor/features/RichText'
 import { ImageFeature } from 'components/TextEditor/features/Image'
@@ -15,7 +15,7 @@ interface Props {
   signature: string
   hasSignatureByDefault: boolean | undefined
   onEditSignature: () => void
-  stateFromHtmlOptions: ExportOptions
+  stateFromHtmlOptions: ImportOptions
 }
 
 export function EmailEditorFeatures(props: Props) {

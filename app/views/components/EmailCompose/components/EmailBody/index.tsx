@@ -21,7 +21,7 @@ interface Props {
   hasTemplateVariables?: boolean
   autofocus?: boolean
   DraftEditorProps?: TextEditorProps['DraftEditorProps']
-  emailBodyEditorRef?: RefObject<TextEditorRef>
+  editorRef?: RefObject<TextEditorRef>
   onChangeEditor: (state: EditorState) => void
   editorState: EditorState
   stateFromHtmlOptions: ImportOptions
@@ -42,7 +42,7 @@ const EmailBody = ({
   autofocus = false,
   DraftEditorProps = {},
   uploadAttachment = uploadEmailAttachment,
-  emailBodyEditorRef,
+  editorRef,
   onChangeEditor,
   editorState,
   stateFromHtmlOptions
@@ -92,7 +92,7 @@ const EmailBody = ({
               onAttachmentDropped={upload}
               DraftEditorProps={DraftEditorProps}
               appendix={attachments}
-              ref={emailBodyEditorRef}
+              ref={editorRef}
               onChange={onChangeEditor}
               editorState={editorState}
             >

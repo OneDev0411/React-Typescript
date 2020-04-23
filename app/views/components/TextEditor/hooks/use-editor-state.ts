@@ -37,51 +37,61 @@ export function useEditorState(HTML: string = ''): UseEditorState {
 
   editorStateRef.current = editorState
 
-  // convenient method for resetting editor html content
-  const reset = (html = '') => {
-    setEditorState(
-      EditorState.createWithContent(stateFromHTML(html, stateFromHtmlOptions))
-    )
-  }
-
-  /**
-   * update is different from reset, in that it keeps states other than
-   * current content, like the undo/redo stack
-   * @param html
-   */
-  const update = (html = '') => {
-    setEditorState(
-      EditorState.push(
-        editorStateRef.current,
-        stateFromHTML(html, stateFromHtmlOptions),
-        'insert-fragment'
+  const options = useMemo(() => {
+    // convenient method for resetting editor html content
+    const reset = (html = '') => {
+      setEditorState(
+        EditorState.createWithContent(stateFromHTML(html, stateFromHtmlOptions))
       )
-    )
-  }
-  // convenient method for getting plain text of the editor content
-  const getPlainText = () => {
-    return editorStateRef.current.getCurrentContent().getPlainText()
-  }
+    }
 
-  // convenient method for getting html content of the editor
-  const getHtml = () => {
-    return stateToHTML(
-      editorStateRef.current.getCurrentContent(),
-      stateToHtmlOptions
-    )
-  }
-  /**
-   * returns true if the content includes an image which is being uploaded
-   */
-  const hasUploadingImage = () => {
-    const entities = Object.values(
-      convertToRaw(editorStateRef.current.getCurrentContent()).entityMap
-    )
+    /**
+     * update is different from reset, in that it keeps states other than
+     * current content, like the undo/redo stack
+     * @param html
+     */
+    const update = (html = '') => {
+      setEditorState(
+        EditorState.push(
+          editorStateRef.current,
+          stateFromHTML(html, stateFromHtmlOptions),
+          'insert-fragment'
+        )
+      )
+    }
+    // convenient method for getting plain text of the editor content
+    const getPlainText = () => {
+      return editorStateRef.current.getCurrentContent().getPlainText()
+    }
 
-    return entities.some(
-      entity => entity.type === 'IMAGE' && entity.data.uploading
-    )
-  }
+    // convenient method for getting html content of the editor
+    const getHtml = () => {
+      return stateToHTML(
+        editorStateRef.current.getCurrentContent(),
+        stateToHtmlOptions
+      )
+    }
+    /**
+     * returns true if the content includes an image which is being uploaded
+     */
+    const hasUploadingImage = () => {
+      const entities = Object.values(
+        convertToRaw(editorStateRef.current.getCurrentContent()).entityMap
+      )
+
+      return entities.some(
+        entity => entity.type === 'IMAGE' && entity.data.uploading
+      )
+    }
+
+    return {
+      reset,
+      update,
+      getPlainText,
+      getHtml,
+      hasUploadingImage
+    }
+  }, [editorStateRef, stateFromHtmlOptions, stateToHtmlOptions])
 
   return [
     editorState,
@@ -89,11 +99,7 @@ export function useEditorState(HTML: string = ''): UseEditorState {
     {
       stateToHtmlOptions,
       stateFromHtmlOptions,
-      reset,
-      update,
-      getPlainText,
-      getHtml,
-      hasUploadingImage
+      ...options
     }
   ]
 }
