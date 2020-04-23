@@ -17,7 +17,11 @@ import { ClassesProps } from 'utils/ts-utils'
 
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
-import { EmailComposeFormProps, EmailFormValues } from '../types'
+import {
+  EmailComposeFormProps,
+  EmailFormValues,
+  EmailComposeValues
+} from '../types'
 import EmailBody from '../components/EmailBody'
 import { AttachmentsList } from '../fields/Attachments'
 import { styles } from './styles'
@@ -29,6 +33,7 @@ import { Callout } from '../../Callout'
 import { DangerButton } from '../../Button/DangerButton'
 import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
 import { isFileAttachment } from '../helpers/is-file-attachment'
+import { useEditorState } from '../../TextEditor/hooks/use-editor-state'
 import { useEmailFormValidator } from './use-email-form-validator'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
@@ -77,7 +82,7 @@ function EmailComposeForm<T>({
   const [topFieldsCollapsed, setTopFieldsCollapsed] = useState<boolean>(
     hasRecipients
   )
-  const emailBodyEditorRef = useRef<TextEditorRef>(null)
+  const editorRef = useRef<TextEditorRef>(null)
   const [
     marketingTemplate,
     setMarketingTemplate
@@ -96,23 +101,33 @@ function EmailComposeForm<T>({
 
   const classes = useEmailFormStyles(props)
 
+  const [editorState, setEditorState, bodyEditor] = useEditorState(
+    initialValues.body
+  )
+
   const handleSendEmail = async (formData: EmailFormValues) => {
     const { successMessage, errorMessage } = getSendEmailResultMessages(
       !!formData.due_at
     )
 
     let result: T
+    let data: EmailComposeValues = formData
+
+    if (marketingTemplate) {
+      data = {
+        ...data,
+        body: marketingTemplate.html,
+        template: marketingTemplate.id
+      }
+    } else {
+      data = {
+        ...data,
+        body: bodyEditor.getHtml()
+      }
+    }
 
     try {
-      result = await props.sendEmail(
-        marketingTemplate
-          ? {
-              ...formData,
-              body: marketingTemplate.html,
-              template: marketingTemplate.id
-            }
-          : formData
-      )
+      result = await props.sendEmail(data)
     } catch (e) {
       console.error('error in sending email', e)
 
@@ -138,9 +153,7 @@ function EmailComposeForm<T>({
 
   const onSubmit = form => {
     const uploadingAttachment = (form.uploadingAttachments || []).length > 0
-    const uploadingImage =
-      emailBodyEditorRef.current &&
-      emailBodyEditorRef.current.hasUploadingImage()
+    const uploadingImage = bodyEditor.hasUploadingImage()
 
     if (uploadingImage || uploadingAttachment) {
       return new Promise((resolve, reject) => {
@@ -190,8 +203,8 @@ function EmailComposeForm<T>({
   }
 
   const scrollToEnd = () => {
-    if (emailBodyEditorRef.current) {
-      emailBodyEditorRef.current.scrollToEnd()
+    if (editorRef.current) {
+      editorRef.current.scrollToEnd()
     }
   }
 
@@ -267,7 +280,7 @@ function EmailComposeForm<T>({
               />
 
               <EmailBody
-                editorRef={emailBodyEditorRef}
+                editorRef={editorRef}
                 DraftEditorProps={{
                   onFocus: () => setTopFieldsCollapsed(true)
                 }}
@@ -284,6 +297,9 @@ function EmailComposeForm<T>({
                 attachments={
                   <Field name="attachments" component={AttachmentsList} />
                 }
+                editorState={editorState}
+                onChangeEditor={setEditorState}
+                stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
               />
               {marketingTemplate && (
                 <Callout dense>
@@ -331,10 +347,7 @@ function EmailComposeForm<T>({
                   onEmailTemplateSelected={template => {
                     subjectInput.onChange(template.subject as any)
                     setMarketingTemplate(null)
-
-                    if (emailBodyEditorRef.current) {
-                      emailBodyEditorRef.current.update(template.body)
-                    }
+                    bodyEditor.update(template.body)
                   }}
                   onMarketingTemplateSelected={template => {
                     setMarketingTemplate(template)

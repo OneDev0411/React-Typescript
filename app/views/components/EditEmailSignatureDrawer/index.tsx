@@ -15,11 +15,7 @@ export function EditEmailSignatureDrawer({ isOpen, onClose }: Props) {
     <Drawer open={isOpen} onClose={onClose}>
       <Drawer.Header title="Edit Email Signature" />
       <Drawer.Body style={{ overflow: 'hidden' }}>
-        <EditEmailSignature
-          formId="email-signature-form"
-          onSaved={onClose}
-          showActions={false}
-        />
+        <EditEmailSignature onSaved={onClose} showActions={false} />
       </Drawer.Body>
       <Drawer.Footer>
         <Button
