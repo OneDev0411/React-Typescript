@@ -3,22 +3,13 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import { Avatar, createStyles, makeStyles } from '@material-ui/core'
+import { Avatar } from '@material-ui/core'
 
 import { getNameInitials } from 'utils/helpers.js'
 
 import { formatPhoneNumber } from 'utils/format'
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    avatar: {
-      width: 40,
-      height: 40,
-      backgroundColor: theme.palette.grey['200'],
-      color: theme.palette.grey['500']
-    }
-  })
-)
+import { useAvatarStyles } from '../../../../../styles/use-avatar-styles'
 
 export const Container = styled(Flex)`
   display: flex;
@@ -39,7 +30,7 @@ const propTypes = {
 }
 
 function ContactItem(props) {
-  const classes = useStyles()
+  const avatarClasses = useAvatarStyles({ size: 40 })
   const { item, onClickHandler } = props
   const {
     phone_number,
@@ -54,7 +45,11 @@ function ContactItem(props) {
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
-      <Avatar alt={title} src={profile_image_url} className={classes.avatar}>
+      <Avatar
+        alt={title}
+        src={profile_image_url}
+        className={avatarClasses.avatar}
+      >
         {getNameInitials(
           email !== title && phone_number !== title ? title : ''
         )}
