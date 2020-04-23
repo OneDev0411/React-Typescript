@@ -11,6 +11,7 @@ import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
+import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 
 import LoadingContainer from 'components/LoadingContainer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -25,6 +26,9 @@ interface Props {
   fetchOAuthAccounts: IAsyncActionProp<typeof fetchOAuthAccounts>
   syncOAuthAccount: IAsyncActionProp<typeof syncOAuthAccount>
   disconnectOAuthAccount: IAsyncActionProp<typeof disconnectOAuthAccount>
+  fetchUnreadEmailThreadsCount: IAsyncActionProp<
+    typeof fetchUnreadEmailThreadsCount
+  >
 }
 
 function ConnectedAccounts({
@@ -32,7 +36,8 @@ function ConnectedAccounts({
   loading,
   fetchOAuthAccounts,
   syncOAuthAccount,
-  disconnectOAuthAccount
+  disconnectOAuthAccount,
+  fetchUnreadEmailThreadsCount
 }: Props) {
   useEffectOnce(() => {
     fetchOAuthAccounts()
@@ -80,9 +85,10 @@ function ConnectedAccounts({
                 onDelete={(provider, accountId) => {
                   confirmation.setConfirmationModal({
                     message: `Your account will be disconnected and 
-                    removed but imported contacts and emails will be preserved.`,
-                    onConfirm: () => {
-                      disconnectOAuthAccount(provider, accountId)
+                        removed but imported contacts and emails will be preserved.`,
+                    onConfirm: async () => {
+                      await disconnectOAuthAccount(provider, accountId)
+                      await fetchUnreadEmailThreadsCount()
                     }
                   })
                 }}
@@ -107,7 +113,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
       dispatch(syncOAuthAccount(...args)),
     disconnectOAuthAccount: (
       ...args: Parameters<typeof disconnectOAuthAccount>
-    ) => dispatch(disconnectOAuthAccount(...args))
+    ) => dispatch(disconnectOAuthAccount(...args)),
+    fetchUnreadEmailThreadsCount: (
+      ...args: Parameters<typeof fetchUnreadEmailThreadsCount>
+    ) => dispatch(fetchUnreadEmailThreadsCount(...args))
   }
 }
 

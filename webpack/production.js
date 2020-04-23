@@ -3,8 +3,6 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 
 import moment from 'moment'
 
@@ -47,10 +45,6 @@ webpackConfig.entry = {
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
   new MomentLocalesPlugin(),
-  new MiniCssExtractPlugin({
-    filename: '[name].[hash].css'
-  }),
-  new OptimizeCSSAssetsPlugin(),
   new HtmlWebpackPlugin({
     template: appConfig.compile.template,
     hash: false,
@@ -104,19 +98,34 @@ webpackConfig.plugins.push(
   })
 )
 
-webpackConfig.module.rules.push({
-  test: /\.(sa|sc|c)ss$/,
-  use: [
-    MiniCssExtractPlugin.loader,
-    'css-loader',
-    {
-      loader: 'postcss-loader',
-      options: {
-        plugins: postcss
+webpackConfig.module.rules.push(
+  {
+    test: /\.css/,
+    use: [
+      'style-loader',
+      'css-loader',
+      {
+        loader: 'postcss-loader',
+        options: {
+          plugins: postcss
+        }
       }
-    },
-    'sass-loader'
-  ]
-})
+    ]
+  },
+  {
+    test: /\.scss/,
+    use: [
+      'style-loader',
+      'css-loader',
+      {
+        loader: 'postcss-loader',
+        options: {
+          plugins: postcss
+        }
+      },
+      'sass-loader'
+    ]
+  }
+)
 
 export default webpackConfig

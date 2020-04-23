@@ -1,5 +1,3 @@
-import { ACL } from 'constants/acl'
-
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
@@ -7,6 +5,8 @@ import { Helmet } from 'react-helmet'
 import { Alert } from '@material-ui/lab'
 import { Box, Link, IconButton, Theme } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/styles'
+
+import { ACL } from 'constants/acl'
 
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -214,7 +214,10 @@ function OpenHousesList(props: Props) {
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header title="Open House Registration Pages" />
+        <PageLayout.Header
+          title="Open House Registration Pages"
+          onCreateOpenHouse={reloadList}
+        />
         <PageLayout.Main>
           <Box>
             <Acl access={ACL.DEALS}>

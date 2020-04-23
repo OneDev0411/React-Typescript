@@ -10,6 +10,7 @@ import { MEDIUMS_COLLECTION } from '../../../constants'
 interface Props {
   data: SectionItem
   mediums: string[]
+  onClose: () => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.tertiary.dark
     },
     title: {
-      ...theme.typography.subtitle2,
+      ...theme.typography.subtitle1,
       cursor: 'pointer',
       '&:hover': {
         color: theme.palette.primary.main
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-function Item({ data, mediums }: Props) {
+function Item({ data, mediums, onClose }: Props) {
   const classes = useStyles()
   const { title, link } = data
 
@@ -53,6 +54,8 @@ function Item({ data, mediums }: Props) {
     if (!link) {
       return null
     }
+
+    onClose()
 
     goTo(link)
   }

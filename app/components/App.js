@@ -8,7 +8,6 @@ import getBrand from '../store_actions/brand'
 import { getUserTeams } from '../store_actions/user/teams'
 
 import Brand from '../controllers/Brand'
-import syncOpenHouseData from './helpers/sync-open-house-offline-registers'
 
 class App extends React.Component {
   componentWillMount() {
@@ -48,8 +47,6 @@ class App extends React.Component {
 
       // set user data for sentry
       this.setSentryUser(user, brand)
-
-      dispatch(syncOpenHouseData(user.access_token))
     }
 
     // google analytics

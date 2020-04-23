@@ -4,7 +4,8 @@ import { isUUID } from '../../../utils/validations/is-uuid/is-uuid'
 
 const validBrowsers = {
   chrome: 68,
-  safari: 10
+  safari: 10,
+  firefox: 70
 }
 
 const downloadLink = {
@@ -34,7 +35,9 @@ export function browserStatus(): BrowserStatus {
       safari: `>=${validBrowsers.safari}`
     },
 
-    chrome: `>=${validBrowsers.chrome}`
+    chrome: `>=${validBrowsers.chrome}`,
+
+    firefox: `>=${validBrowsers.firefox}`
   })
 
   const output = {
@@ -59,7 +62,7 @@ export function browserStatus(): BrowserStatus {
   return output
 }
 
-export function generatePropeprMessage(status: BrowserStatus) {
+export function getMessage(status: BrowserStatus) {
   const output = {
     text: '',
     actionText: '',

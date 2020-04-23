@@ -17,6 +17,8 @@ $gray-lighter: #f2f2f2 !default;
 
 $brand-primary: #00b286 !default;
 $brand-primary-dark: #008060 !default;
+$brand-secondary: #0945eb !default;
+$brand-secondary-dark: #001EB7 !default;
 $brand-success: #4caf50 !default;
 $brand-info: #2196f3 !default;
 $brand-warning: #ff9900 !default;
@@ -32,9 +34,9 @@ $body-bg: #fff !default;
 $text-color: $gray-base !default;
 
 //** Global textual link color.
-$link-color: $brand-primary !default;
+$link-color: $brand-secondary !default;
 //** Link hover color set via `darken()` function.
-$link-hover-color: $brand-primary-dark !default;
+$link-hover-color: $brand-secondary-dark !default;
 //** Link hover decoration.
 $link-hover-decoration: underline !default;
 
@@ -42,10 +44,11 @@ $link-hover-decoration: underline !default;
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-$system-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue";
+$system-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
 
-$font-family-sans-serif: "LatoRegular", #{$system-font-family}, sans-serif !default;
-$font-family-serif: "LatoRegular", #{$system-font-family}, serif !default;
+$font-family-sans-serif: 'LatoRegular', #{$system-font-family}, sans-serif !default;
+$font-family-serif: 'LatoRegular', #{$system-font-family}, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace !default;
 $font-family-base: $font-family-serif !default;
@@ -153,8 +156,8 @@ $table-border-color: #ddd !default;
 $btn-font-weight: normal !default;
 
 $btn-default-color: #fff !default;
-$btn-default-bg: $brand-primary !default;
-$btn-default-border: $brand-primary !default;
+$btn-default-bg: $brand-secondary !default;
+$btn-default-border: $brand-secondary !default;
 
 $btn-primary-color: #fff !default;
 $btn-primary-bg: $brand-primary !default;
@@ -207,7 +210,7 @@ $input-border-radius-large: $border-radius-large !default;
 $input-border-radius-small: $border-radius-small !default;
 
 //** Border color for inputs on focus
-$input-border-focus: $brand-primary !default;
+$input-border-focus: $brand-secondary !default;
 
 //** Placeholder text color
 $input-color-placeholder: $gray-dark !default;
@@ -255,9 +258,9 @@ $dropdown-fallback-border: $gray !default;
 $dropdown-divider-bg: $gray !default;
 
 //** Dropdown link text color.
-$dropdown-link-color: $brand-primary !default;
+$dropdown-link-color: $brand-secondary !default;
 //** Hover color for dropdown links.
-$dropdown-link-hover-color: $brand-primary-dark !default;
+$dropdown-link-hover-color: $brand-secondary-dark !default;
 //** Hover background for dropdown links.
 $dropdown-link-hover-bg: $gray !default;
 
@@ -467,8 +470,8 @@ $pagination-hover-bg: $gray-lighter !default;
 $pagination-hover-border: #ddd !default;
 
 $pagination-active-color: #fff !default;
-$pagination-active-bg: $brand-primary !default;
-$pagination-active-border: $brand-primary !default;
+$pagination-active-bg: $brand-secondary !default;
+$pagination-active-border: $brand-secondary !default;
 
 $pagination-disabled-color: $gray-light !default;
 $pagination-disabled-bg: #fff !default;

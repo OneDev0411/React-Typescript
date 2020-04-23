@@ -17,6 +17,7 @@ import { updateUser } from 'actions/user'
 import { getUserDefaultHomepage } from 'utils/get-default-home-page'
 
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
 
 import Header from '../Header'
 import SkipButton from '../SkipButton'
@@ -48,13 +49,15 @@ export function Profile() {
   const dispatch = useDispatch()
   const user = useSelector((store: IAppState) => store.user)
   const brand = useSelector((store: IAppState) => store.brand)
-  const [signature, setSignature] = useState('')
+  const [editorState, setEditorState, signatureEditor] = useEditorState('')
+
   const [submitError, setSubmitError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const nextStepUrl = getUserDefaultHomepage(user)
   const connectedAccounts = useSelector((store: IAppState) =>
     selectAllConnectedAccounts(store.contacts.oAuthAccounts)
   )
+  const hasSignature = editorState.getCurrentContent().getPlainText()
 
   const [avatar, setAvatar] = useState(getOauthAccountAvatar(connectedAccounts))
 
@@ -74,8 +77,8 @@ export function Profile() {
         requestBody.profile_image_url = avatar.src
       }
 
-      if (signature) {
-        requestBody.email_signature = signature
+      if (hasSignature) {
+        requestBody.email_signature = signatureEditor.getHtml()
       }
 
       if (Object.keys(requestBody).length > 0) {
@@ -109,7 +112,10 @@ export function Profile() {
       />
       <Box marginBottom={6} width="100%">
         <Avatar data={avatar} onChange={setAvatar} />
-        <EmailSignatureEditor user={user} onChange={setSignature} />
+        <EmailSignatureEditor
+          editorState={editorState}
+          onChange={setEditorState}
+        />
       </Box>
       {submitError && !submitting && (
         <Box mt={3}>
@@ -118,7 +124,7 @@ export function Profile() {
       )}
 
       {submitting && <CircleSpinner />}
-      {(signature || avatar.src) && !submitting && (
+      {(hasSignature || avatar.src) && !submitting && (
         <NextButton onClick={onSubmit}>Let's Go!</NextButton>
       )}
     </Container>

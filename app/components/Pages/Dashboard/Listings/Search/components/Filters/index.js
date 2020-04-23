@@ -159,6 +159,7 @@ const Filters = ({
             Reset Filters
           </ActionButton>
           <ActionButton
+            appearance="secondary"
             size="large"
             disabled={isSubmitting}
             onClick={handleSubmit(onSubmitHandler)}

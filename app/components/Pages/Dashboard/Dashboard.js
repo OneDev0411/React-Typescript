@@ -30,13 +30,13 @@ import { fetchUnreadEmailThreadsCount } from '../../../store_actions/inbox'
 
 import CheckBrowser from '../../../views/components/CheckBrowser'
 import Intercom from '../../../views/components/Intercom'
+import EmailVerificationBanner from '../../../views/components/EmailVerificationBanner'
 
 import { hasUserAccess, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
 
 import syncOpenHouseData from '../../helpers/sync-open-house-offline-registers'
 
 import SideNav from './SideNav'
-import VerificationBanner from './Partials/VerificationBanner'
 
 class App extends Component {
   componentWillMount() {
@@ -69,6 +69,8 @@ class App extends Component {
 
   componentWillUnmount() {
     this.props.dispatch(inactiveIntercom())
+
+    window.removeEventListener('online', this.handleOnlineEvent)
   }
 
   async initializeApp() {
@@ -117,6 +119,8 @@ class App extends Component {
     dispatch(fetchUnreadEmailThreadsCount())
 
     dispatch(syncOpenHouseData(user.access_token))
+
+    window.addEventListener('online', this.handleOnlineEvent)
   }
 
   initializeSockets(user) {
@@ -129,6 +133,11 @@ class App extends Component {
     if (this.hasDealsAccess) {
       new DealSocket(user)
     }
+  }
+
+  handleOnlineEvent = () => {
+    // update the number of unread emails in Inbox nav link notification badge
+    this.props.dispatch(fetchUnreadEmailThreadsCount())
   }
 
   render() {
@@ -155,7 +164,7 @@ class App extends Component {
         </Helmet>
         <div className="u-scrollbar">
           {user && !user.email_confirmed && (
-            <VerificationBanner email={user.email} />
+            <EmailVerificationBanner show email={user.email} />
           )}
 
           <SideNav location={location} />

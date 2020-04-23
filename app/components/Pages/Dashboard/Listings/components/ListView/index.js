@@ -3,7 +3,6 @@ import React from 'react'
 import pluralize from 'pluralize'
 
 import { Box } from '@material-ui/core'
-import { useTheme } from '@material-ui/styles'
 
 import { useGridStyles } from 'components/Grid/Table/styles'
 
@@ -15,7 +14,6 @@ import { Address } from './columns/Address'
 import { Avatar } from './columns/Avatar'
 
 const ListView = ({ sortedListings, listings, isFetching, user }) => {
-  const theme = useTheme()
   const gridClasses = useGridStyles()
 
   const columns = [
@@ -91,7 +89,7 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
   ]
 
   return (
-    <Box p={theme.spacing(0, 1, 1)}>
+    <Box pb={1}>
       <Table
         columns={columns}
         rows={sortedListings}
@@ -104,16 +102,14 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
         classes={{
           row: gridClasses.row
         }}
-        TableActions={({ state, dispatch }) => (
+        TableActions={
           <TableActions
-            state={state}
-            dispatch={dispatch}
             isFetching={isFetching}
             totalRowsCount={listings.info.total}
             listings={listings.data}
             user={user}
           />
-        )}
+        }
       />
     </Box>
   )

@@ -21,7 +21,7 @@ function AddEvent({ contact, user }: Props & StateProps) {
   return (
     <>
       <Button
-        color="secondary"
+        color="primary"
         variant="contained"
         size="small"
         onClick={toggleDrawer}

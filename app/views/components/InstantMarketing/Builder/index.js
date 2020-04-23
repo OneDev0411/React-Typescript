@@ -831,7 +831,6 @@ class Builder extends React.Component {
           )}
           {this.state.isAgentDrawerOpen && (
             <TeamAgents
-              isPrimaryAgent
               multiSelection
               user={this.props.user}
               title="Select Agents"

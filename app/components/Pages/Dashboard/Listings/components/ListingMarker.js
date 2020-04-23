@@ -1,10 +1,12 @@
 import S from 'shorti'
 import React from 'react'
 import PropTypes from 'prop-types'
+import numeral from 'numeral'
+import fecha from 'fecha'
+
+import listing_util from 'utils/listing'
 
 import Brand from '../../../../../controllers/Brand'
-import listing_util from '../../../../../utils/listing'
-import { numberWithCommas, friendlyDate } from '../../../../../utils/helpers'
 
 export default function ListingMarker({ user, brand, listing, popupIsActive }) {
   const property = listing.compact_property || listing.property
@@ -18,20 +20,16 @@ export default function ListingMarker({ user, brand, listing, popupIsActive }) {
     price = listing.close_price
   }
 
-  const price_small = listing_util.shortPrice(price)
+  const price_small = numeral(price).format('0.[00]a')
 
-  const square_feet = numberWithCommas(
-    Math.floor(listing_util.metersToFeet(property.square_meters))
-  )
+  const square_feet = Math.floor(
+    listing_util.metersToFeet(property.square_meters)
+  ).toLocaleString()
 
   let sold_date
 
   if (listing.close_date) {
-    const sold_date_obj = friendlyDate(listing.close_date)
-
-    sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${
-      sold_date_obj.year
-    }`
+    sold_date = fecha.format(listing.close_date * 1000, 'mediumDate')
   }
 
   let resize_url

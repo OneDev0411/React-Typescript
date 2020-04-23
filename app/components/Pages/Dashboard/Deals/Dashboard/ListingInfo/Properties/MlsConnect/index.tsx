@@ -88,7 +88,7 @@ export function MlsConnect({ deal }: Props) {
     <>
       {deal.listing ? (
         <div className={classes.mls}>
-          <Button color="secondary" size="small" onClick={toggleDrawer}>
+          <Button color="secondary" size="medium" onClick={toggleDrawer}>
             MLS# {getField(deal, 'mls_number')}
           </Button>
 
@@ -117,7 +117,7 @@ export function MlsConnect({ deal }: Props) {
           </IconButton>
         </div>
       ) : (
-        <Button color="secondary" size="small" onClick={toggleDrawer}>
+        <Button color="secondary" size="medium" onClick={toggleDrawer}>
           Add MLS# number
         </Button>
       )}

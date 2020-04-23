@@ -1,8 +1,9 @@
 import React from 'react'
 
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
+
 import { goTo } from 'utils/go-to'
 
-import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import EmailIcon from 'components/SvgIcons/EmailOutlined/IconEmailOutlined'
 
 import { EventDrawer } from 'components/EventDrawer'
@@ -28,7 +29,7 @@ const items: Item[] = [
     type: 'email',
     Icon: EmailIcon,
     render: props => {
-      return <BulkEmailComposeDrawer {...props} />
+      return <SingleEmailComposeDrawer {...props} />
     }
   },
   {

@@ -23,12 +23,6 @@ export const updateMapZoom = (tabName, zoomType) => ({
   type: `${types.SET_MAP_ZOOM}_${zoomType}`
 })
 
-export const setMapHoveredMarkerId = (tabName, id) => ({
-  id,
-  tabName,
-  type: types.SET_MAP_HOVERED_MARKER_ID
-})
-
 export const goToPlace = mapProps => (dispatch, getState) => {
   const { listings, map } = getState().search
 

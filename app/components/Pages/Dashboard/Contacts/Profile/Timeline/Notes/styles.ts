@@ -69,7 +69,7 @@ export const styles = (theme: Theme) =>
       width: '100%',
       height: '100%',
       opacity: 0,
-      textIndent: 300000
+      textIndent: '-11000px'
     },
     actions: {
       display: 'flex',

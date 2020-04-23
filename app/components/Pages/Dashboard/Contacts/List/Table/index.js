@@ -65,14 +65,14 @@ const ContactsList = props => {
     {
       id: 'name',
       primary: true,
-      width: '24%',
+      width: '21%',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       render: ({ row: contact }) => <Name contact={contact} />
     },
     {
       id: 'cta',
       primary: true,
-      width: '9%',
+      width: '12%',
       class: 'visible-on-hover',
       render: ({ row: contact }) => <CtaAction contact={contact} />
     },
@@ -141,7 +141,7 @@ const ContactsList = props => {
     }
   }
   const getColumnProps = ({ column }) => {
-    if (['cta', 'flows', 'tag', 'delete-contact'].includes(column.id)) {
+    if (['name', 'cta', 'flows', 'tag', 'delete-contact'].includes(column.id)) {
       return {
         onClick: e => e.stopPropagation()
       }
@@ -170,10 +170,8 @@ const ContactsList = props => {
           onScrollBottom: props.onRequestLoadMore,
           onScrollTop: props.onRequestLoadMoreBefore
         }}
-        TableActions={({ state, dispatch }) => (
+        TableActions={
           <TableActions
-            state={state}
-            dispatch={dispatch}
             filters={props.filters}
             isFetching={props.isFetching}
             totalRowsCount={props.listInfo.total}
@@ -183,7 +181,7 @@ const ContactsList = props => {
               props.handleChangeContactsAttributes
             }
           />
-        )}
+        }
         EmptyStateComponent={() => (
           <NoSearchResults description="Try typing another name, email, phone or tag." />
         )}

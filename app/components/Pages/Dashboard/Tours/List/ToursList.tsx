@@ -163,7 +163,7 @@ function ToursList(props: { user: IUser }) {
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header title="Tours" />
+        <PageLayout.Header title="Tours" onCreateTour={reloadList} />
 
         <PageLayout.Main>
           <Box>

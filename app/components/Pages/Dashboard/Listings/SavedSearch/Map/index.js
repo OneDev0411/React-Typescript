@@ -33,9 +33,6 @@ const map = ({
   defaultCenter,
   bootstrapURLKeys,
   onGoogleApiLoaded,
-  onMarkerMouseEnter,
-  onMarkerMouseLeave,
-  map: { hoveredMarkerId },
   mapProps: { zoom, center }
 }) => (
   <Map
@@ -60,9 +57,6 @@ const map = ({
           user={user}
           listing={points[0]}
           key={`MARKER_${id}`}
-          onMouseEnterHandler={() => onMarkerMouseEnter(id)}
-          onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
-          markerPopupIsActive={hoveredMarkerId === id}
         />
       )
     })}
@@ -123,12 +117,6 @@ const mapHOC = compose(
     },
     onChange: ({ setMapProps }) => mapProps => {
       setMapProps('alerts', mapProps)
-    },
-    onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
-      setMapHoveredMarkerId('alerts', -1)
-    },
-    onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
-      setMapHoveredMarkerId('alerts', id)
     }
   }),
   withPropsOnChange(

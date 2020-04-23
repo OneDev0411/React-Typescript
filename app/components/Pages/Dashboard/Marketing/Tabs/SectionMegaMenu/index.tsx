@@ -9,18 +9,23 @@ import Item from './components/Item'
 interface Props {
   data: Section
   mediums: { [key: string]: string[] }
+  onClose: () => void
 }
 
-export const SectionMegaMenu = ({ data, mediums }: Props) => {
+export const SectionMegaMenu = ({ data, mediums, onClose }: Props) => {
   const { items } = data
   const sanitizeMediums = item => {
     if (!Object.keys(mediums).length || !item.value || !item.title) {
       return []
     }
 
-    return !Array.isArray(item.value)
-      ? mediums[item.value]
-      : mediums[item.title]
+    const mediumKey = !Array.isArray(item.value) ? item.value : item.title
+
+    if (mediums[mediumKey]) {
+      return mediums[mediumKey]
+    }
+
+    return []
   }
 
   return (
@@ -28,7 +33,11 @@ export const SectionMegaMenu = ({ data, mediums }: Props) => {
       {items.map((item, i) => {
         return (
           <Grid key={i} item>
-            <Item data={item} mediums={sanitizeMediums(item)} />
+            <Item
+              data={item}
+              mediums={sanitizeMediums(item)}
+              onClose={onClose}
+            />
           </Grid>
         )
       })}

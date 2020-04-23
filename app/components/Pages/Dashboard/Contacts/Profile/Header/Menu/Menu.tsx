@@ -1,16 +1,13 @@
 import React from 'react'
-import { Box, Button } from '@material-ui/core'
-import { ButtonProps } from '@material-ui/core/Button'
+import { Box, IconButton } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import SendEmailButton from 'components/SendEmailButton'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
-import EmailIcon from 'components/SvgIcons/EmailOutline/IconEmailOutline'
+import EmailIcon from 'components/SvgIcons/EmailOutlined/IconEmailOutlined'
 import BirthDayIcon from 'components/SvgIcons/Birthday/IconBirthday'
 
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
-
-import { useIconStyles } from '../../../../../../../styles/use-icon-styles'
 
 import Chat from '../../../components/ChatButton'
 
@@ -18,9 +15,6 @@ const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       button: {
-        marginRight: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-
         '&[disabled] svg': {
           fill: theme.palette.action.disabled
         }
@@ -35,7 +29,6 @@ interface Props {
 
 export default function Menu({ contact }: Props) {
   const classes = useStyles()
-  const iconClasses = useIconStyles()
 
   return (
     <Box display="flex" flexWrap="wrap" alignItems="center" mb={1}>
@@ -44,16 +37,13 @@ export default function Menu({ contact }: Props) {
       <SendEmailButton
         recipients={normalizeContactsForEmailCompose([contact])}
         render={({ onClick, testId }) => (
-          <Button
-            size="small"
-            variant="outlined"
+          <IconButton
             onClick={onClick}
             data-test={testId}
             className={classes.button}
           >
-            <EmailIcon className={iconClasses.rightMargin} />
-            Email
-          </Button>
+            <EmailIcon />
+          </IconButton>
         )}
       />
 
@@ -64,16 +54,16 @@ export default function Menu({ contact }: Props) {
       <SendContactCard
         contact={contact}
         mediums="Email"
-        buttonProps={
-          {
-            size: 'small',
-            className: classes.button
-          } as ButtonProps
-        }
-      >
-        <BirthDayIcon className={iconClasses.rightMargin} />
-        Send Card
-      </SendContactCard>
+        buttonRenderrer={({ disabled, onClick }) => (
+          <IconButton
+            className={classes.button}
+            disabled={disabled}
+            onClick={onClick}
+          >
+            <BirthDayIcon />
+          </IconButton>
+        )}
+      />
     </Box>
   )
 }

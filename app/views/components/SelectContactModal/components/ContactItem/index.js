@@ -3,9 +3,13 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
+import { Avatar } from '@material-ui/core'
+
+import { getNameInitials } from 'utils/helpers.js'
+
 import { formatPhoneNumber } from 'utils/format'
 
-import Avatar from '../../../Avatar'
+import { useAvatarStyles } from '../../../../../styles/use-avatar-styles'
 
 export const Container = styled(Flex)`
   display: flex;
@@ -26,8 +30,14 @@ const propTypes = {
 }
 
 function ContactItem(props) {
+  const avatarClasses = useAvatarStyles({ size: 40 })
   const { item, onClickHandler } = props
-  const { phone_number, email, display_name: title } = item.summary
+  const {
+    phone_number,
+    email,
+    profile_image_url,
+    display_name: title
+  } = item.summary
   const formatedPhoneNumber = formatPhoneNumber(phone_number)
   const summary =
     props.summary ||
@@ -35,7 +45,15 @@ function ContactItem(props) {
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
-      <Avatar {...getAvatarProps(item.summary)} />
+      <Avatar
+        alt={title}
+        src={profile_image_url}
+        className={avatarClasses.avatar}
+      >
+        {getNameInitials(
+          email !== title && phone_number !== title ? title : ''
+        )}
+      </Avatar>
       <div style={{ paddingLeft: '1em' }}>
         <div style={{ lineHeight: 1 }}>{title}</div>
         <div style={{ color: '#7f7f7f' }}>{summary}</div>
@@ -47,17 +65,3 @@ function ContactItem(props) {
 ContactItem.propTypes = propTypes
 
 export default ContactItem
-
-function getAvatarProps(user) {
-  const { email, phone_number, display_name, profile_image_url } = user
-
-  return {
-    size: 40,
-    image: profile_image_url,
-    placeHolderImage: '/static/icons/contact-association-avatar.svg',
-    title:
-      email !== display_name && phone_number !== display_name
-        ? display_name
-        : ''
-  }
-}

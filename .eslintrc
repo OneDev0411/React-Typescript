@@ -300,7 +300,8 @@
       }
     ]
   },
-  "overrides": [{
+  "overrides": [
+    {
       "files": [
         "**/*.ts",
         "**/*.tsx"

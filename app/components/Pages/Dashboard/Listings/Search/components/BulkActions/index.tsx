@@ -7,6 +7,8 @@ import { resetRows } from 'components/Grid/Table/context/actions/selection/reset
 
 import { StateContext, DispatchContext } from 'components/Grid/Table/context'
 
+import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
+
 import CreateTourAction from '../CreateTourAction'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,14 +30,8 @@ interface Props {
   user: IUser
 }
 
-export default function TableActions({
-  state,
-  dispatch,
-  isFetching,
-  totalRowsCount,
-  listings,
-  user
-}: Props) {
+export default function TableActions({ listings, user }: Props) {
+  const [state, dispatch] = useGridContext()
   const classes = useStyles()
 
   const isAnyRowsSelected =

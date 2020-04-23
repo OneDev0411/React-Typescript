@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box, Theme } from '@material-ui/core'
 import styled, { ThemeProps } from 'styled-components'
+import { EditorState } from 'draft-js'
 
 import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
 
@@ -11,8 +12,8 @@ import { EmojiFeature } from 'components/TextEditor/features/Emoji'
 import EmailIcon from 'components/SvgIcons/EmailOutline/IconEmailOutline'
 
 interface Props {
-  user: IUser
-  onChange: (signature: string) => void
+  editorState: EditorState
+  onChange: (state: EditorState) => void
 }
 
 const StyledTextEditor = styled(TextEditor)`
@@ -20,7 +21,7 @@ const StyledTextEditor = styled(TextEditor)`
   padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 1, 1, 1)};
 `
 
-export default function EmailSignatureEditor({ user, onChange }: Props) {
+export default function EmailSignatureEditor({ editorState, onChange }: Props) {
   const uploadImage = async file => {
     const response = await uploadEmailSignatureAttachment(file)
     const uploadedFile: IFile = response.body.data
@@ -34,7 +35,7 @@ export default function EmailSignatureEditor({ user, onChange }: Props) {
         <EmailIcon />
         <span style={{ marginLeft: '0.5rem' }}>Your email signature</span>
       </Box>
-      <StyledTextEditor onChange={onChange}>
+      <StyledTextEditor editorState={editorState} onChange={onChange}>
         <RichTextFeature />
         <ImageFeature uploadImage={uploadImage} />
         <EmojiFeature />

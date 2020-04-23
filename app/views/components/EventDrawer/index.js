@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Box } from '@material-ui/core'
+import { Box, IconButton } from '@material-ui/core'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
+import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
+
 import Drawer from '../OverlayDrawer'
 import { Divider } from '../Divider'
-import IconButton from '../Button/IconButton'
 import ActionButton from '../Button/ActionButton'
 import { ItemChangelog } from '../TeamContact/ItemChangelog'
-import IconDelete from '../SvgIcons/DeleteOutline/IconDeleteOutline'
 import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
 import {
   DateTimeField,
@@ -308,22 +308,10 @@ export class EventDrawer extends Component {
                           <>
                             <Tooltip placement="top" caption="Delete">
                               <IconButton
-                                isFit
-                                inverse
-                                type="button"
                                 disabled={isDisabled}
                                 onClick={this.delete}
-                                style={{
-                                  width: '1.375rem',
-                                  height: '1.375rem'
-                                }}
                               >
-                                <IconDelete
-                                  style={{
-                                    width: '100%',
-                                    height: '100%'
-                                  }}
-                                />
+                                <IconDelete size="medium" />
                               </IconButton>
                             </Tooltip>
                             <Divider

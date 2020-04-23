@@ -30,7 +30,7 @@ export default function GlobalActionsMenu({ onClick }: Props) {
         root: classes.root
       }}
     >
-      Actions
+      Create
       <IconArrowDown fillColor={theme.palette.primary.contrastText} />
     </Button>
   )

@@ -55,7 +55,7 @@ function AgentGrid(props: Props & WithRouterProps) {
     return [
       {
         id: 'address',
-        width: '45%',
+        width: '30%',
         accessor: (deal: IDeal) => deal.title,
         render: ({ row: deal, totalRows, rowIndex }) => (
           <Address

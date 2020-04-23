@@ -9,6 +9,8 @@ import {
 import { useTheme } from '@material-ui/styles'
 import { TextFieldProps } from '@material-ui/core/TextField'
 
+import { useDebouncedCallback } from 'use-debounce'
+
 import IconSearch from 'components/SvgIcons/Search/IconSearch'
 import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
@@ -21,31 +23,38 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.grey[600],
     height: theme.spacing(5.25),
     lineHeight: 'initial',
-    padding: theme.spacing(0, 2.5),
-    '&&&:before': {
-      borderBottom: 'none'
-    },
-    '&&:after': {
-      borderBottom: 'none'
-    }
+    padding: theme.spacing(0, 1.5)
   }
 }))
 
 export type SearchInputProps = TextFieldProps & {
   isLoading?: boolean
+  debounceTime?: number
   onClear?: () => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>, value?: string) => void
 }
 
 export const SearchInput = forwardRef(
   (
-    { fullWidth, onChange, onClear, isLoading, ...others }: SearchInputProps,
+    {
+      fullWidth,
+      onClear,
+      isLoading,
+      debounceTime = 0,
+      onChange = () => {},
+      ...others
+    }: SearchInputProps,
     ref
   ) => {
     const classes = useStyles()
     const theme = useTheme<Theme>()
     const [nonEmpty, setNonEmpty] = useState(false)
     const inputEl = useRef<HTMLInputElement | null>(null)
-    const widthStyle = fullWidth ? {} : { width: '360px' } // default width
+    const widthStyle = { width: fullWidth ? '100%' : '360px' } // default width
+
+    const [debouncedOnChange] = useDebouncedCallback(onChange, debounceTime, {
+      maxWait: 2000
+    })
 
     // Exposing some methods for the input el
     useImperativeHandle(ref, () => ({
@@ -58,19 +67,28 @@ export const SearchInput = forwardRef(
         if (inputEl && inputEl.current) {
           inputEl.current.blur()
         }
+      },
+      clear: () => {
+        if (inputEl && inputEl.current) {
+          inputEl.current.value = ''
+          setNonEmpty(false)
+        }
       }
     }))
 
-    const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
       const value = e.target.value
 
-      onChange && onChange(e)
+      setNonEmpty(!!value)
 
-      if (value) {
-        setNonEmpty(true)
-      } else {
-        setNonEmpty(false)
+      if (debounceTime > 0) {
+        // https://stackoverflow.com/questions/49081149/debounce-on-react-got-e-target-value-undefined?answertab=active#tab-top
+        debouncedOnChange(e, value)
+
+        return
       }
+
+      onChange(e)
     }
 
     const clearInput = () => {
@@ -100,6 +118,7 @@ export const SearchInput = forwardRef(
 
     return (
       <TextField
+        color="secondary"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

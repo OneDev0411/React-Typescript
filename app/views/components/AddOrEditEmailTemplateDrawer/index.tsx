@@ -12,6 +12,7 @@ import { updateEmailTemplate } from 'actions/email-templates/update-email-templa
 import { createEmailTemplate } from 'actions/email-templates/create-email-template'
 import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
+import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
 
 import { InlineInputLabel } from '../InlineInputLabel'
 import EmailBody from '../EmailCompose/components/EmailBody'
@@ -49,6 +50,10 @@ export function AddOrEditEmailTemplateDrawer({
     include_signature: false
   })
 
+  const [editorState, setEditorState, bodyEditor] = useEditorState(
+    formData.body
+  )
+
   useDeepCompareEffect(() => {
     const template: Partial<IBrandEmailTemplateInput> = emailTemplate || {}
 
@@ -62,6 +67,11 @@ export function AddOrEditEmailTemplateDrawer({
   }, [emailTemplate])
 
   const handleSubmit = async (values: IBrandEmailTemplateInput) => {
+    values = {
+      ...values,
+      body: bodyEditor.getHtml()
+    }
+
     try {
       const resultEmailTemplate = emailTemplate
         ? await updateEmailTemplate(
@@ -145,10 +155,10 @@ export function AddOrEditEmailTemplateDrawer({
             hasSignatureByDefault
             hasTemplateVariables
             hasStaticBody={!editable}
-            FieldProps={{
-              validate: value => !value && 'Email content is required'
-            }}
             content={emailTemplate ? emailTemplate.body : ''}
+            editorState={editorState}
+            onChangeEditor={setEditorState}
+            stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
           />
         </div>
       )}
@@ -173,3 +183,8 @@ export default connect(
   }),
   mapDispatchToProps
 )(AddOrEditEmailTemplateDrawer)
+
+// TODO: EDITOR ERROR
+// FieldProps={{
+//   validate: value => !value && 'Email content is required'
+// }}

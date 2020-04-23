@@ -47,19 +47,10 @@ const useStyle = makeStyles(
         flexGrow: 1,
         justifyContent: 'flex-end',
         marginBottom: theme.spacing(1),
-        padding: theme.spacing(0, 5)
+        paddingLeft: theme.spacing(5)
       }
     }),
   { name: 'TabParts' }
-)
-const overrideTabStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      root: {
-        padding: theme.spacing(0, 0, 0, 5)
-      }
-    }),
-  { name: 'MuiTabs' }
 )
 
 const tabLinks: TabsShape[] = [
@@ -90,19 +81,16 @@ export const Tabs = ({
   const currentUrl = location.pathname
   const classes = useStyle()
 
-  overrideTabStyles()
-
   let availableTabs: React.ReactNode[]
 
   availableTabs = tabLinks.map(({ label, to, allowAnonymousAccess }, i) => {
     return (
-      (user || allowAnonymousAccess) && (
-        <TabLink key={i} label={label} to={to} value={to} />
-      )
+      (user || allowAnonymousAccess) &&
+      !isWidget && <TabLink key={i} label={label} to={to} value={to} />
     )
   })
 
-  if (user) {
+  if (user && !isWidget) {
     availableTabs.push(
       <Tab
         key="saved-list"

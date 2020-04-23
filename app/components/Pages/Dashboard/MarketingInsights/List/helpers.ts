@@ -52,6 +52,10 @@ export function isEmailQueued(item) {
   return item.due_at * 1000 > now
 }
 
+export function isEmailFailed(item) {
+  return !!item.failed_at
+}
+
 export function isEmailScheduled(item) {
   return !item.executed_at && isEmailQueued(item)
 }

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 
 import {
   Box,
+  Tooltip,
   IconButton,
   makeStyles,
   createStyles,
@@ -31,22 +32,19 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       display: 'flex',
-      justifyContent: 'center',
+      justifyContent: 'end',
       alignItems: 'center'
     },
     item: {
       display: 'inline-flex',
-      width: theme.spacing(3.25),
-      height: theme.spacing(3.25),
       '&:not(:last-child)': {
-        marginRight: theme.spacing(0.25)
+        marginRight: theme.spacing(0.75)
       },
       '& svg': {
         width: 'unset',
-        '&[data-icon="email"],&[data-icon="chat"],&[data-icon="loading"]': {
-          height: theme.spacing(2.5)
-        },
-        '&[data-icon="event"]': { height: theme.spacing(1.75) }
+        height: theme.spacing(3),
+        '&[data-icon="chat"]': { height: theme.spacing(2.5) },
+        '&[data-icon="event"]': { height: theme.spacing(2.25) }
       },
       '&:hover svg': {
         fill: theme.palette.primary.main
@@ -81,18 +79,21 @@ export default function CtaAction({ contact }: Props) {
     <ChatButton
       contact={contact}
       render={({ onClick, isDisabled }) => (
-        <IconButton
-          size="small"
-          className={classes.item}
-          disabled={isDisabled}
-          onClick={onClick}
-        >
-          {!isDisabled ? (
-            <Chat data-icon="chat" />
-          ) : (
-            <Loading data-icon="loading" />
-          )}
-        </IconButton>
+        <Tooltip title="Chat with contact">
+          <IconButton
+            size="small"
+            className={classes.item}
+            disabled={isDisabled}
+            onClick={onClick}
+          >
+            {!isDisabled ? (
+              // @ts-ignore js component
+              <Chat data-icon="chat" />
+            ) : (
+              <Loading data-icon="loading" />
+            )}
+          </IconButton>
+        </Tooltip>
       )}
     />
   )
@@ -131,20 +132,24 @@ export default function CtaAction({ contact }: Props) {
         />
       )}
       <Box className={classes.container}>
-        <IconButton
-          size="small"
-          className={classes.item}
-          onClick={toggleEventDrawer}
-        >
-          <CalendarIcon data-icon="event" />
-        </IconButton>
-        <IconButton
-          size="small"
-          className={classes.item}
-          onClick={toggleEmailComposer}
-        >
-          <EmailOutline data-icon="email" />
-        </IconButton>
+        <Tooltip title="Create an event">
+          <IconButton
+            size="small"
+            className={classes.item}
+            onClick={toggleEventDrawer}
+          >
+            <CalendarIcon data-icon="event" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Send an email">
+          <IconButton
+            size="small"
+            className={classes.item}
+            onClick={toggleEmailComposer}
+          >
+            <EmailOutline data-icon="email" />
+          </IconButton>
+        </Tooltip>
         {renderChatButton}
       </Box>
     </>

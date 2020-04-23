@@ -1,7 +1,7 @@
 import React from 'react'
-import { Tooltip } from '@material-ui/core'
+import { Box, Tooltip, Typography } from '@material-ui/core'
 
-import { recipientsList, truncateString } from '../helpers'
+import { recipientsList } from '../helpers'
 
 interface Props {
   data: IEmailCampaign
@@ -41,7 +41,9 @@ function RecipientsColumn({ data }: Props) {
 
     return (
       <Tooltip title={emailAddress}>
-        <span>{truncateString(emailAddress, 35)}</span>
+        <Box pr={2} maxWidth="100%">
+          <Typography noWrap>{emailAddress}</Typography>
+        </Box>
       </Tooltip>
     )
   }

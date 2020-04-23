@@ -13,10 +13,10 @@ import {
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
-import { StateContext, DispatchContext } from 'components/Grid/Table/context'
-
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
+
+import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 
 import Email from '../../Actions/Email'
 import MergeContacts from '../../Actions/MergeContacts'
@@ -46,8 +46,6 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Props {
-  state: StateContext
-  dispatch: DispatchContext
   totalRowsCount: number
   reloadContacts: () => void
   onRequestDelete: () => void
@@ -57,8 +55,6 @@ interface Props {
 }
 
 export function TableActions({
-  state,
-  dispatch,
   filters,
   isFetching,
   totalRowsCount,
@@ -66,6 +62,7 @@ export function TableActions({
   onRequestDelete,
   handleChangeContactsAttributes
 }: Props) {
+  const [state, dispatch] = useGridContext()
   const classes = useStyles()
   const [moreActionEl, setMoreActionEl] = useState<null | HTMLElement>(null)
 

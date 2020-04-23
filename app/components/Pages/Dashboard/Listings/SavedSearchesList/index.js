@@ -141,7 +141,9 @@ class SavedSearchesList extends Component {
                 className={classes.savedSearchItem}
               >
                 <ListItemText
-                  primary={uppercaseFirstLetter(item.title || '')}
+                  primary={uppercaseFirstLetter(
+                    item.title || 'Untitled Search'
+                  )}
                   style={{
                     overflow: 'hidden',
                     cursor: 'pointer',
@@ -158,7 +160,7 @@ class SavedSearchesList extends Component {
                     aria-label="delete"
                   >
                     <IconDelete
-                      style={{ fill: 'currentColor', width: 16, height: 16 }}
+                      style={{ fill: 'currentColor', width: 12, height: 12 }}
                     />
                   </IconButton>
                 </ListItemSecondaryAction>
