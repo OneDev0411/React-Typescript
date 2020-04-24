@@ -99,6 +99,7 @@ export function Register(props: WithRouterProps) {
 
     const loginInfo = {
       password,
+      user_type,
       username: emailFromURI
     }
 
