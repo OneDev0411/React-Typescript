@@ -57,16 +57,11 @@ declare interface IBrandUser {
   type: 'brand_user' // is it fixed?
   user: IUser
 }
-declare interface IBrandRole {
-  acl: string[]
+declare interface IBrandRole extends IModel<'brand_role'> {
+  acl: IPermission[]
   brand: string
-  created_at: number
-  deleted_at: number | null
-  id: UUID
   users?: IBrandUser[]
-  role: string
-  type: string
-  updated_at: number
+  role: IBrandRoleType
 }
 
 declare type IBrandInput = MapFieldsToUuid<
