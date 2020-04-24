@@ -1,4 +1,4 @@
-import React, { useRef, ComponentProps, useEffect } from 'react'
+import React, { useRef, ComponentProps, useEffect, useMemo } from 'react'
 import { Theme } from '@material-ui/core'
 
 import AutoSizer from 'react-virtualized-auto-sizer'
@@ -8,9 +8,10 @@ import { FixedSizeList } from 'react-window'
 
 import { useTheme } from '@material-ui/styles'
 
-import { TableColumn, GridClasses, TrProps, TdProps } from '../types'
-
+import { getColumnsSize } from '../helpers/get-columns-size'
 import { useGridContext } from '../hooks/use-grid-context'
+
+import { TableColumn, GridClasses, TrProps, TdProps } from '../types'
 
 import Row from './Row'
 
@@ -37,6 +38,8 @@ export function Body<Row>({
 
   const listRef = useRef<FixedSizeList>(null)
 
+  const columnsSize = useMemo(() => getColumnsSize<Row>(columns), [columns])
+
   useEffect(() => {
     listRef.current && listRef.current.scrollTo(scrollTop)
   }, [scrollTop])
@@ -60,7 +63,8 @@ export function Body<Row>({
                 state,
                 classes,
                 getTrProps,
-                getTdProps
+                getTdProps,
+                columnsSize
               } as ComponentProps<typeof Row>['data']
             }
             style={{

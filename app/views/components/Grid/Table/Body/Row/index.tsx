@@ -17,6 +17,7 @@ interface Props<Row> {
     columns: TableColumn<Row>[]
     state: StateContext
     classes: GridClasses
+    columnsSize: string[]
     getTrProps?: (data: TrProps<Row>) => object
     getTdProps?: (data: TdProps<Row>) => object
   }
@@ -30,6 +31,7 @@ function Row<T>({
     rows,
     state,
     classes,
+    columnsSize,
     getTrProps = () => ({}),
     getTdProps = () => ({})
   }
@@ -62,7 +64,8 @@ function Row<T>({
               primary: column.primary === true
             })}
             style={{
-              width: column.width,
+              width: columnsSize[columnIndex],
+              textAlign: column.align || 'left',
               ...(column.rowStyle || {}),
               ...(column.style || {})
             }}
