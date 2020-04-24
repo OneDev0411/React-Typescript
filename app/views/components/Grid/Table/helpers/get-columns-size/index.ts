@@ -1,7 +1,7 @@
 import { TableColumn } from '../../types'
 
 export function getColumnsSize<Row>(columns: TableColumn<Row>[]): string[] {
-  const renderableColumns = columns.filter(col => !!col.render)
+  const renderableColumns = columns.filter(col => col.render || col.accessor)
   const sizelessColumns = renderableColumns.filter(col => !col.width)
 
   const calc = columns
