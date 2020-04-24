@@ -9,8 +9,6 @@ import { Alert } from '@material-ui/lab'
 
 import { IAppState } from 'reducers'
 import { updateUser } from 'actions/user'
-
-import getVerificationCode from 'models/verify/request'
 import { upgradeAgent } from 'models/user/upgrade-to-agent'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
@@ -41,18 +39,7 @@ export function SecurityQuestion(props: WithRouterProps) {
       if (user) {
         dispatch(updateUser(user))
 
-        let nextStepUrl = 'oauth-accounts'
-
-        if (!user.phone_number) {
-          nextStepUrl = 'phone-number'
-        } else if (!user.phone_confirmed) {
-          await getVerificationCode('phone')
-          nextStepUrl = `verify-phone-number?pn=${window.encodeURIComponent(
-            user.phone_number
-          )}`
-        }
-
-        browserHistory.push(`/onboarding/${nextStepUrl}`)
+        browserHistory.push('/onboarding/config-brand')
       }
     } catch (error) {
       return {
