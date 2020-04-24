@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { browserHistory, WithRouterProps } from 'react-router'
+import { browserHistory, WithRouterProps, Link } from 'react-router'
 import { Helmet } from 'react-helmet'
 import { Form } from 'react-final-form'
 import { Box } from '@material-ui/core'
@@ -11,6 +11,7 @@ import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Header from '../Header'
 import Container from '../Container'
+import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
 
 import { MlsSelect } from './MlsSelect'
@@ -40,6 +41,7 @@ export function ChooseMls(props: WithRouterProps) {
       </Helmet>
 
       <Container>
+        <SkipButton to="/onboarding/config-brand" />
         <Header
           brand={brand}
           title="Choose MLS"
@@ -74,6 +76,8 @@ export function ChooseMls(props: WithRouterProps) {
             )
           }}
         />
+
+        <Link to={`/onboarding/confirm-agent-id?mlsId=${mlsId}`}>Back</Link>
       </Container>
     </>
   )

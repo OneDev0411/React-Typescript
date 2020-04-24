@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { browserHistory, WithRouterProps } from 'react-router'
+import { browserHistory, Link, WithRouterProps } from 'react-router'
 import { Helmet } from 'react-helmet'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
@@ -16,6 +16,7 @@ import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Header from '../Header'
 import Container from '../Container'
+import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
 import { useCommonStyles } from '../common-styles'
 
@@ -67,6 +68,7 @@ export function SecurityQuestion(props: WithRouterProps) {
       </Helmet>
 
       <Container>
+        <SkipButton to="/onboarding/config-brand" />
         <Header
           brand={brand}
           title="Agent Verification"
@@ -109,6 +111,10 @@ export function SecurityQuestion(props: WithRouterProps) {
             )
           }}
         />
+
+        <Link to="/onboarding/confirm-agent-id">
+          Try again with a new agent license!
+        </Link>
       </Container>
     </>
   )

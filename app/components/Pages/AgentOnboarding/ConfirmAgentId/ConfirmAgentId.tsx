@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { browserHistory, WithRouterProps } from 'react-router'
 import { Helmet } from 'react-helmet'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
@@ -17,6 +17,7 @@ import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Header from '../Header'
 import Container from '../Container'
+import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
 import { useCommonStyles } from '../common-styles'
 
@@ -24,9 +25,10 @@ interface FormValues {
   mlsId: string
 }
 
-export default function ConfirmAgentId() {
+export default function ConfirmAgentId(props: WithRouterProps) {
   const dispatch = useDispatch()
   const commonClasses = useCommonStyles()
+  const mlsId = props.location.query.mlsId
   const user = useSelector((store: IAppState) => store.user)
   const brand = useSelector((store: IAppState) => store.brand)
 
@@ -89,6 +91,7 @@ export default function ConfirmAgentId() {
       </Helmet>
 
       <Container>
+        <SkipButton to="/onboarding/config-brand" />
         <Header
           brand={brand}
           title="Agent Verification"
@@ -98,6 +101,7 @@ export default function ConfirmAgentId() {
         <Form
           onSubmit={onSubmit}
           validate={validate}
+          initialValues={{ mlsId }}
           render={({ handleSubmit, form }) => {
             const { submitError, submitting } = form.getState()
 
