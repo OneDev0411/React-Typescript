@@ -6,12 +6,11 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { Sorting } from '../features/Sorting'
 import { Actions } from '../features/Actions'
 
-// import { Header } from '../Header'
 import { Body } from '../Body'
 import { useTable } from '../hooks/use-table'
 
 import { useRowsSelection } from '../features/Selection/use-row-selection'
-// import { useRowsSorting } from '../features/Sorting/use-row-sorting'
+import { useRowsSorting } from '../features/Sorting/use-row-sorting'
 
 import { GridHookPlugin, LoadingPosition } from '../types'
 
@@ -84,9 +83,9 @@ export function GridTable<Row>({
     plugins.push([useRowsSelection, selection])
   }
 
-  // if (sorting) {
-  //   plugins.push([useRowsSorting, sorting])
-  // }
+  if (sorting) {
+    plugins.push([useRowsSorting, sorting])
+  }
 
   const { columns: newColumns, rows: newRows } = useTable<Row>(
     columns,
