@@ -39,7 +39,7 @@ export async function getChildrenBrands(brandId) {
 
 export async function addBrand(
   team: Pick<IBrand, 'name' | 'brand_type'>,
-  parentId: string
+  parentId: string | null
 ): Promise<ApiResponseBody<IBrand>> {
   const payload: IBrandInput = {
     name: team.name,
