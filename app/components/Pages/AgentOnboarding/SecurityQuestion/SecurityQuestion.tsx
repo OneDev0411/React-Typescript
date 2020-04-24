@@ -4,7 +4,7 @@ import { browserHistory, Link, WithRouterProps } from 'react-router'
 import { Helmet } from 'react-helmet'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
-import { Box } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 
 import { IAppState } from 'reducers'
@@ -83,13 +83,27 @@ export function SecurityQuestion(props: WithRouterProps) {
 
             return (
               <form onSubmit={handleSubmit}>
+                <Box textAlign="left" mb={2}>
+                  <Typography
+                    variant="body2"
+                    display="block"
+                    color="textSecondary"
+                  >
+                    Hint:
+                  </Typography>
+                  {agent.secret_questions.map((q, index) => (
+                    <Typography key={index} display="block" variant="subtitle1">
+                      {q}
+                    </Typography>
+                  ))}
+                </Box>
+
                 <Box mb={5}>
                   <Box mb={5} textAlign="left">
                     <Field
                       component={MUITextInput}
                       id="secret"
                       label="Security Question"
-                      placeholder={agent.secret_questions.join(' or ')}
                       name="secret"
                       variant="filled"
                       classes={{ root: commonClasses.field }}
