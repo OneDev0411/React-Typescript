@@ -1,9 +1,8 @@
-import React, { useRef, ComponentProps } from 'react'
+import React, { useRef, ComponentProps, useEffect } from 'react'
 import { Theme } from '@material-ui/core'
 
 import AutoSizer from 'react-virtualized-auto-sizer'
-import { WindowScroller } from 'react-virtualized'
-import { useWindowSize } from 'react-use'
+import { useWindowSize, useWindowScroll } from 'react-use'
 
 import { FixedSizeList } from 'react-window'
 
@@ -31,19 +30,19 @@ export function Body<Row>({
   getTrProps = () => ({})
 }: Props<Row>) {
   const theme = useTheme<Theme>()
-  const { height: windowHeight } = useWindowSize()
   const [state] = useGridContext()
+
+  const { height: windowHeight } = useWindowSize()
+  const { y: scrollTop } = useWindowScroll()
 
   const listRef = useRef<FixedSizeList>(null)
 
-  const handleScroll = ({ scrollTop }) => {
+  useEffect(() => {
     listRef.current && listRef.current.scrollTo(scrollTop)
-  }
+  }, [scrollTop])
 
   return (
     <div style={{ height: '100%' }}>
-      <WindowScroller onScroll={handleScroll}>{() => <div />}</WindowScroller>
-
       <AutoSizer disableHeight>
         {({ width }) => (
           <FixedSizeList
