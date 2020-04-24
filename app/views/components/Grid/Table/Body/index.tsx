@@ -38,6 +38,7 @@ interface Props<Row> {
   columns: TableColumn<Row>[]
   rows: Row[]
   classes: GridClasses
+  virtualize: boolean
   infiniteScrolling: InfiniteScrollingOptions | null
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
@@ -47,6 +48,7 @@ export function Body<Row>({
   columns,
   rows,
   classes,
+  virtualize,
   infiniteScrolling,
   getTdProps = () => ({}),
   getTrProps = () => ({})
@@ -89,6 +91,31 @@ export function Body<Row>({
       console.log('[ Grid ] Reached End')
       debouncedOnReachEnd()
     }
+  }
+
+  if (!virtualize) {
+    return (
+      <>
+        {rows.map((_, rowIndex) => (
+          <Row
+            key={rowIndex}
+            index={rowIndex}
+            style={{
+              height: theme.spacing(8)
+            }}
+            data={{
+              rows,
+              columns,
+              state,
+              classes,
+              getTrProps,
+              getTdProps,
+              columnsSize
+            }}
+          />
+        ))}
+      </>
+    )
   }
 
   return (

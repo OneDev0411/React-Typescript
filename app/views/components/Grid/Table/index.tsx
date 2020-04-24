@@ -20,6 +20,7 @@ export interface Props<Row> {
   columns: TableColumn<Row>[]
   rows: Row[]
   totalRows: number
+  virtualize?: boolean
   selection?: GridSelectionOptions<Row> | null
   sorting?: GridSortingOption | null
   infiniteScrolling?: InfiniteScrollingOptions | null
