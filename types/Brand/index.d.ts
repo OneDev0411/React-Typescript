@@ -1,4 +1,7 @@
 declare type IBrandType = 'Team' | 'Brokerage' | 'Office' | 'Personal' | 'Other'
+
+declare type IBrandRoleType = 'Admin' | 'Agent' | 'Other'
+
 declare type IAccessControlPolicy =
   | 'ActiveTeam'
   | 'ActiveTeamAndParents'
