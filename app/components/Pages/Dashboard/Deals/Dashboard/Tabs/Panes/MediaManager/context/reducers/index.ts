@@ -70,14 +70,14 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
     }
 
     case actionTypes.ADD_MEDIA: {
-      const { fileObject } = action.payload
+      const { fileObject, order = 0 } = action.payload
 
       return [
         {
           file: fileObject.name,
           src: fileObject.preview,
           name: 'Description',
-          order: 0,
+          order,
           selected: false,
           isNew: true,
           uploadProgress: 0
