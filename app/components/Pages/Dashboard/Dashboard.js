@@ -64,7 +64,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.initializeApp()
+    this.init()
   }
 
   componentWillUnmount() {
@@ -73,7 +73,7 @@ class App extends Component {
     window.removeEventListener('online', this.handleOnlineEvent)
   }
 
-  async initializeApp() {
+  async init() {
     const { user, deals, dispatch } = this.props
 
     if (!user) {
