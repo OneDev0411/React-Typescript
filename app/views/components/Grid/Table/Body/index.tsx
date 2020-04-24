@@ -101,7 +101,7 @@ export function Body<Row>({
             itemSize={theme.spacing(8)}
             width={width}
             height={windowHeight}
-            overscanCount={5}
+            overscanCount={8}
             itemData={
               {
                 rows,

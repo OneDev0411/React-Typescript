@@ -2,7 +2,7 @@ import React from 'react'
 
 import pluralize from 'pluralize'
 
-import { Box } from '@material-ui/core'
+import { Box, useTheme } from '@material-ui/core'
 
 import { useGridStyles } from 'components/Grid/Table/styles'
 
@@ -15,6 +15,7 @@ import { Avatar } from './columns/Avatar'
 
 const ListView = ({ sortedListings, listings, isFetching, user }) => {
   const gridClasses = useGridStyles()
+  const theme = useTheme()
 
   const columns = [
     {
@@ -97,7 +98,10 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
         loading={isFetching ? 'middle' : null}
         LoadingStateComponent={LoadingComponent}
         selection={{
-          defaultRender: ({ row: listing }) => <Avatar listing={listing} />
+          defaultRender: ({ row: listing }) => <Avatar listing={listing} />,
+          columnProps: {
+            width: theme.spacing(4)
+          }
         }}
         classes={{
           row: gridClasses.row

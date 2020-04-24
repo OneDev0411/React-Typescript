@@ -46,14 +46,13 @@ export default function FlowCell(props) {
     )
   }
 
-  const pathname = `/dashboard/contacts/${contactId}`
   const params = new URL(document.location).searchParams
 
   return (
     <Link
       noStyle
       to={{
-        pathname,
+        pathname: `/dashboard/contacts/${contactId}`,
         state: {
           id: contactId,
           s: parseInt(params.get('s'), 10)
