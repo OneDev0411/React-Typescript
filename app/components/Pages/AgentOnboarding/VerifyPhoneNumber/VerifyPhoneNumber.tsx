@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { WithRouterProps, Link } from 'react-router'
+import { WithRouterProps, Link, browserHistory } from 'react-router'
 import { Helmet } from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
 import { FORM_ERROR } from 'final-form'
@@ -82,6 +82,8 @@ export function VerifyPhoneNumber({ location }: WithRouterProps) {
       })
 
       dispatch(updateUser(user))
+
+      browserHistory.push('/onboarding/oauth-accounts')
     } catch (error) {
       if (error === 403) {
         return {
