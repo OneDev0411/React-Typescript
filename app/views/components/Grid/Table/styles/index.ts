@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/styles'
 export const styles = (theme: Theme) =>
   createStyles({
     row: {
-      '& td': {
+      '& .column': {
         '& a': {
           color: theme.palette.text.primary
         },
@@ -15,7 +15,7 @@ export const styles = (theme: Theme) =>
           visibility: 'hidden'
         }
       },
-      '&:hover td': {
+      '&:hover .column': {
         cursor: 'pointer',
         '&.primary a': {
           color: theme.palette.secondary.main,
@@ -35,4 +35,6 @@ export const styles = (theme: Theme) =>
     }
   })
 
-export const useGridStyles = makeStyles(styles)
+export const useGridStyles = makeStyles(styles, {
+  name: 'grid-default-styles'
+})

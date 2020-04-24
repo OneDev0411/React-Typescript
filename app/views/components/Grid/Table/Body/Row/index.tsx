@@ -7,7 +7,7 @@ import { resolveAccessor } from '../../helpers/resolve-accessor'
 import { StateContext } from '../../context'
 import { TableColumn, TrProps, TdProps, GridClasses } from '../../types'
 
-import { RowContainer, Column } from './styled'
+import { RowContainer } from './styled'
 
 interface Props<Row> {
   index: number
@@ -45,6 +45,7 @@ function Row<T>({
     <RowContainer
       index={rowIndex}
       selected={isRowSelected}
+      className={classes.row}
       style={style}
       {...getTrProps({
         rowIndex,
@@ -55,9 +56,9 @@ function Row<T>({
       {columns
         .filter((column: TableColumn<T>) => column.render || column.accessor)
         .map((column: TableColumn<T>, columnIndex: number) => (
-          <Column
+          <div
             key={columnIndex}
-            className={cn(classes.row, {
+            className={cn('column', column.class, {
               primary: column.primary === true
             })}
             style={{
@@ -73,7 +74,7 @@ function Row<T>({
             })}
           >
             {getCell(column, row, rowIndex, columnIndex, rows.length)}
-          </Column>
+          </div>
         ))}
     </RowContainer>
   )

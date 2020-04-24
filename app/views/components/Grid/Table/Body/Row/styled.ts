@@ -1,8 +1,6 @@
 import styled, { css } from 'styled-components'
 import { Theme } from '@material-ui/core'
 
-export const Column = styled.div``
-
 export const RowContainer = styled.div<{
   index: number
   selected: boolean
@@ -12,13 +10,13 @@ export const RowContainer = styled.div<{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    ${theme.typography.body2};
+
     background-color: ${index % 2 === 0
       ? theme.palette.grey[50]
       : 'transparent'};
 
-    ${theme.typography.body1.fontSize};
-
-    ${Column}:first-child {
+    .column:first-child {
       padding-left: ${theme.spacing(1)}px;
     }
 
@@ -28,6 +26,8 @@ export const RowContainer = styled.div<{
 
     &:hover .primary {
       cursor: pointer;
+      color: ${theme.palette.secondary.main};
+      text-decoration: underline;
     }
 
     &:hover .selection--default-value {
