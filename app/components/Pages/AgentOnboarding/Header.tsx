@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Props {
-  brand: IBrand
+  brand?: IBrand | null
   title: string
   subtitle?: string
 }
