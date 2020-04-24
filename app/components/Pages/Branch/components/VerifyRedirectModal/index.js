@@ -27,7 +27,9 @@ const VerifyRedirectModal = ({ type, params, brandInfo }) => {
             <Button appearance="outline" to="/dashboard/mls">
               Cancel
             </Button>
-            <SigninButton href={signOutLink}>Sign out</SigninButton>
+            <SigninButton style={{ marginLeft: '0.5rem' }} href={signOutLink}>
+              Sign out
+            </SigninButton>
           </div>
         </div>
       ) : (
