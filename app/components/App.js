@@ -35,7 +35,7 @@ class App extends React.Component {
     let { user, brand, dispatch } = this.props
 
     if (user) {
-      if (!user.teams || !user.teams[0].brand.roles) {
+      if (!idx(user, user => user.teams[0].brand.roles)) {
         user = {
           ...user,
           teams: await dispatch(getUserTeams(user))
