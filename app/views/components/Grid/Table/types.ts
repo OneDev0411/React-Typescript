@@ -72,6 +72,11 @@ export interface GridSortingOption {
   onChange?: (item: SortableColumn) => void
 }
 
+export interface InfiniteScrollingOptions {
+  onReachStart: () => void
+  onReachEnd: () => void
+}
+
 export interface ActiveSort {
   ascending: boolean
   value?: string

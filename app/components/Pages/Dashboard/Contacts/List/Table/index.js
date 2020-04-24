@@ -168,10 +168,8 @@ const ContactsList = props => {
           row: cn(gridClasses.row, customGridClasses.row)
         }}
         infiniteScrolling={{
-          accuracy: 300, // px
-          debounceTime: 300, // ms
-          onScrollBottom: props.onRequestLoadMore,
-          onScrollTop: props.onRequestLoadMoreBefore
+          onReachEnd: props.onRequestLoadMore,
+          onReachStart: props.onRequestLoadMoreBefore
         }}
         TableActions={
           <TableActions

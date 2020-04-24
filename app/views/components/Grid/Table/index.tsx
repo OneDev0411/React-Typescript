@@ -8,6 +8,7 @@ import {
   TableColumn,
   GridSelectionOptions,
   GridSortingOption,
+  InfiniteScrollingOptions,
   LoadingPosition,
   GridClasses,
   TrProps,
@@ -21,6 +22,7 @@ export interface Props<Row> {
   totalRows: number
   selection?: GridSelectionOptions<Row> | null
   sorting?: GridSortingOption | null
+  infiniteScrolling?: InfiniteScrollingOptions | null
   loading?: LoadingPosition
   summary?: ((total: number, state: StateContext) => React.ReactText) | null
   TableActions?: React.ReactNode | null

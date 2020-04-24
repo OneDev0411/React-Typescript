@@ -62,6 +62,7 @@ export function GridTable<Row>({
   loading = null,
   selection = null,
   sorting = null,
+  infiniteScrolling = null,
   TableActions = null,
   ToolbarComponent = null,
   LoadingStateComponent = null,
@@ -122,6 +123,7 @@ export function GridTable<Row>({
           classes={classes}
           getTdProps={getTdProps}
           getTrProps={getTrProps}
+          infiniteScrolling={infiniteScrolling}
         />
       )}
 
