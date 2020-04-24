@@ -32,7 +32,7 @@ interface FormValues {
 export function ConfigBrand() {
   const dispatch = useDispatch()
   const commonClasses = useCommonStyles()
-  const user = useSelector((store: IAppState) => store.user)
+  const user: IUser = useSelector((store: IAppState) => store.user)
   const activeBrand = getActiveBrand(user)
 
   const getNextStep = useCallback(() => {
@@ -52,17 +52,37 @@ export function ConfigBrand() {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      await addBrand(
+      const parentBrand = await addBrand(
         {
           name: values.name,
           brand_type: 'Brokerage'
         },
-        null
+        null,
+        [
+          {
+            role: 'Admin',
+            acl: ['Admin'],
+            members: [{ user: user.id }]
+          }
+        ]
+      )
+
+      await addBrand(
+        {
+          name: `${user.first_name}'s Team`,
+          brand_type: 'Personal'
+        },
+        parentBrand.data.id,
+        [
+          {
+            role: 'Agent',
+            acl: ['CRM', 'Marketing'],
+            members: [{ user: user.id }]
+          }
+        ]
       )
 
       const teams = await getTeams(user)
-
-      console.log(teams)
 
       dispatch(
         updateUser({
