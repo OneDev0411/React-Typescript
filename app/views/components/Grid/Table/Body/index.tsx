@@ -92,7 +92,7 @@ export function Body<Row>({
   }
 
   return (
-    <div style={{ height: '100%' }}>
+    <>
       <AutoSizer disableHeight>
         {({ width }) => (
           <FixedSizeList
@@ -128,7 +128,7 @@ export function Body<Row>({
           </FixedSizeList>
         )}
       </AutoSizer>
-    </div>
+    </>
   )
 }
 

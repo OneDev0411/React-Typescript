@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1, 0),
       color: theme.palette.grey[700]
     },
+    tableContainer: {
+      height: '100%'
+    },
     loading: ({ loading }: { loading: LoadingPosition }) => {
       let top: number | string = '50%'
 
@@ -116,22 +119,24 @@ export function GridTable<Row>({
         <div className={gridClasses.summary}>{summary(totalRows, state)}</div>
       )}
 
-      {rows && rows.length > 0 && (
-        <Body<Row>
-          columns={newColumns}
-          rows={newRows}
-          classes={classes}
-          getTdProps={getTdProps}
-          getTrProps={getTrProps}
-          infiniteScrolling={infiniteScrolling}
-        />
-      )}
+      <div className="tableContainer">
+        {rows && rows.length > 0 && (
+          <Body<Row>
+            columns={newColumns}
+            rows={newRows}
+            classes={classes}
+            getTdProps={getTdProps}
+            getTrProps={getTrProps}
+            infiniteScrolling={infiniteScrolling}
+          />
+        )}
 
-      {loading && LoadingStateComponent && (
-        <div className={gridClasses.loading}>
-          <LoadingStateComponent />
-        </div>
-      )}
+        {loading && LoadingStateComponent && (
+          <div className={gridClasses.loading}>
+            <LoadingStateComponent />
+          </div>
+        )}
+      </div>
 
       <Actions<Row>
         rows={newRows}
