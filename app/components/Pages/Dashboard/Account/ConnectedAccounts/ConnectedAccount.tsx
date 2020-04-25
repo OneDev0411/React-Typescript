@@ -11,6 +11,8 @@ import {
 import styled, { ThemeProps } from 'styled-components'
 import Flex from 'styled-flex-component'
 
+import { useTheme } from '@material-ui/styles'
+
 import { OAuthProvider } from 'constants/contacts'
 
 import IconPermission from 'components/SvgIcons/Permission/IconPermission'
@@ -39,6 +41,8 @@ const ConnectedAccountListItem = styled(ListItem)`
 ` as typeof ListItem
 
 export default function ConnectedAccount({ account, onSync, onDelete }: Props) {
+  const theme = useTheme<Theme>()
+
   return (
     <ConnectedAccountListItem>
       <ListItemAvatar>
@@ -62,14 +66,23 @@ export default function ConnectedAccount({ account, onSync, onDelete }: Props) {
                 <Tooltip
                   title={
                     <>
-                      <div>Permissions:</div>
                       {account.scope_summary.map((name, index) => (
-                        <div key={index}>{name}</div>
+                        <div
+                          key={index}
+                          style={{
+                            textTransform: 'capitalize'
+                          }}
+                        >
+                          {name.split('.').join(' ')}
+                        </div>
                       ))}
                     </>
                   }
                 >
-                  <IconPermission />
+                  <IconPermission
+                    size="small"
+                    fillColor={theme.palette.grey[500]}
+                  />
                 </Tooltip>
               </Flex>
             }
@@ -84,9 +97,10 @@ export default function ConnectedAccount({ account, onSync, onDelete }: Props) {
         </Grid>
 
         <ListItemSecondaryAction>
-          {oAuthAccountTypeToProvider[account.type] === 'google' && (
-            <ConnectedCalendar gcid={account.id} />
-          )}
+          {oAuthAccountTypeToProvider[account.type] === 'google' &&
+            account.scope_summary.includes('calendar') && (
+              <ConnectedCalendar gcid={account.id} />
+            )}
 
           <DangerButton
             variant="outlined"
