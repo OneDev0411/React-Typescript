@@ -21,7 +21,17 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
       width: 0,
       flexGrow: 1,
       padding: theme.spacing(1.5, 0),
-      paddingRight: `calc(${theme.spacing(2)}px + 0.5em)` /* scroll bar */
+      paddingRight: `calc(${theme.spacing(2)}px + 0.5em)` /* scroll bar */,
+      '&:hover': {
+        '& $date': {
+          display: 'none'
+        }
+      },
+      '&:not(:hover)': {
+        '& $actions': {
+          display: 'none'
+        }
+      }
     },
     infoRead: {
       backgroundColor: theme.palette.grey[50]
@@ -41,6 +51,13 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
     dateUnread: {
       color: theme.palette.common.black,
       fontWeight: 700
+    },
+    actions: {
+      height: 0,
+      flex: '0 0 auto',
+      position: 'relative',
+      top: -theme.spacing(1.5),
+      right: -theme.spacing(1)
     },
     subject: {
       color: theme.palette.common.black

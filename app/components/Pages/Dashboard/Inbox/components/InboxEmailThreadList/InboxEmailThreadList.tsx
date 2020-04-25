@@ -224,6 +224,10 @@ export default function InboxEmailThreadList({
         <InboxEmailThreadListItem
           emailThread={emailThread}
           selected={selected}
+          onChangeStatus={() =>
+            console.log(emailThread.id, '>>>>>>>>', !emailThread.is_read)
+          }
+          onDelete={() => console.log('delete email thread', emailThread.id)}
         />
       )}
     />

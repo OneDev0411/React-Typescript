@@ -1,9 +1,13 @@
 import React, { useMemo } from 'react'
-import { Paper, Typography } from '@material-ui/core'
+import { Paper, Typography, IconButton, Tooltip } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
 
 import useTypedSelector from 'hooks/use-typed-selector'
+
+import IconTrash from 'views/components/SvgIcons/Trash/TrashIcon'
+import IconMailRead from 'views/components/SvgIcons/MailRead/IconMailRead'
+import IconMailUnread from 'views/components/SvgIcons/MailUnread/IconMailUnread'
 
 import { useInboxEmailThreadListItemStyles } from './styles'
 import getRecipientNamesText from './helpers/get-recipient-names-text'
@@ -11,11 +15,15 @@ import getRecipientNamesText from './helpers/get-recipient-names-text'
 interface Props {
   emailThread: IEmailThread<'contacts'>
   selected?: boolean
+  onChangeStatus?: () => void
+  onDelete?: () => void
 }
 
 export default function InboxEmailThreadListItem({
   emailThread,
-  selected
+  selected,
+  onChangeStatus,
+  onDelete
 }: Props) {
   const user = useTypedSelector<IUser>(state => state.user)
 
@@ -89,6 +97,38 @@ export default function InboxEmailThreadListItem({
           >
             &nbsp;&nbsp;{messageDateShortText}
           </Typography>
+          <div className={classes.actions}>
+            {onChangeStatus && (
+              <Tooltip
+                title={`Mark as ${emailThread.is_read ? 'unread' : 'read'}`}
+              >
+                <IconButton
+                  onClick={event => {
+                    onChangeStatus()
+                    event.stopPropagation()
+                  }}
+                >
+                  {emailThread.is_read ? (
+                    <IconMailUnread size="small" />
+                  ) : (
+                    <IconMailRead size="small" />
+                  )}
+                </IconButton>
+              </Tooltip>
+            )}
+            {onDelete && (
+              <Tooltip title="Delete">
+                <IconButton
+                  onClick={event => {
+                    onDelete()
+                    event.stopPropagation()
+                  }}
+                >
+                  <IconTrash size="small" />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
         </div>
         <Typography
           variant={emailThread.is_read ? 'body2' : 'subtitle2'}
