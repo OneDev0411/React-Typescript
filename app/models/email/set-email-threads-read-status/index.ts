@@ -5,7 +5,7 @@ export async function setEmailThreadsReadStatus(
   status: boolean
 ): Promise<void> {
   await new Fetch().put('/emails/threads/status').send({
-    'thread_keys[]': emailThreadIds,
+    thread_keys: emailThreadIds,
     is_read: status
   })
 }
