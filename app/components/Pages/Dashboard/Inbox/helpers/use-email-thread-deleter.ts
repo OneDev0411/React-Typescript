@@ -49,6 +49,7 @@ export default function useEmailThreadDeleter(emailThreadId: UUID) {
   return {
     deleteEmailThread,
     deletingEmailThread,
-    emailThreadIsDeleted
+    emailThreadIsDeleted,
+    deleteEmailThreadDisabled: deletingEmailThread || emailThreadIsDeleted
   }
 }

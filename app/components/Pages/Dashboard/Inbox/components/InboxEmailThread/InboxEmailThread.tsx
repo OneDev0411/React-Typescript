@@ -111,16 +111,14 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
 
   const {
     setEmailThreadReadStatus,
-    settingEmailThreadReadStatus,
-    lastEmailThreadReadStatus
+    setEmailThreadReadStatusDisabled
   } = useEmailThreadReadStatusSetter(
     emailThreadId!,
     (emailThread && emailThread.is_read)!
   )
   const {
     deleteEmailThread,
-    deletingEmailThread,
-    emailThreadIsDeleted
+    deleteEmailThreadDisabled
   } = useEmailThreadDeleter(emailThreadId!)
 
   const handleUpdateEmailThreads = useCallback(
@@ -278,10 +276,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             <ListItemText>Forward</ListItemText>
           </MenuItem> */}
           <MenuItem
-            disabled={
-              settingEmailThreadReadStatus ||
-              lastEmailThreadReadStatus !== emailThread.is_read
-            }
+            disabled={setEmailThreadReadStatusDisabled}
             dense
             onClick={() => {
               setEmailThreadReadStatus(!emailThread.is_read)
@@ -303,7 +298,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             <Divider />
           </Box>
           <MenuItem
-            disabled={deletingEmailThread || emailThreadIsDeleted}
+            disabled={deleteEmailThreadDisabled}
             dense
             onClick={() => {
               deleteEmailThread()

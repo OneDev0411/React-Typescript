@@ -60,6 +60,8 @@ export default function useEmailThreadReadStatusSetter(
   return {
     setEmailThreadReadStatus,
     settingEmailThreadReadStatus,
-    lastEmailThreadReadStatus
+    lastEmailThreadReadStatus,
+    setEmailThreadReadStatusDisabled:
+      settingEmailThreadReadStatus || lastEmailThreadReadStatus !== readStatus
   }
 }

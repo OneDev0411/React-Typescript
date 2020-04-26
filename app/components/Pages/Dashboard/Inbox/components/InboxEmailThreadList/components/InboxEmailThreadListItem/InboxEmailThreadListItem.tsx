@@ -43,13 +43,11 @@ export default function InboxEmailThreadListItem({
 
   const {
     setEmailThreadReadStatus,
-    settingEmailThreadReadStatus,
-    lastEmailThreadReadStatus
+    setEmailThreadReadStatusDisabled
   } = useEmailThreadReadStatusSetter(emailThread.id, emailThread.is_read)
   const {
     deleteEmailThread,
-    deletingEmailThread,
-    emailThreadIsDeleted
+    deleteEmailThreadDisabled
   } = useEmailThreadDeleter(emailThread.id)
 
   const classes = useInboxEmailThreadListItemStyles()
@@ -109,14 +107,16 @@ export default function InboxEmailThreadListItem({
           <div className={classes.actions}>
             <Tooltip
               title={
-                settingEmailThreadReadStatus ||
-                lastEmailThreadReadStatus !== emailThread.is_read
+                setEmailThreadReadStatusDisabled
                   ? `Marking as ${emailThread.is_read ? 'unread' : 'read'}...`
                   : `Mark as ${emailThread.is_read ? 'unread' : 'read'}`
               }
             >
               <IconButton
-                className={classes.action}
+                className={classNames(
+                  classes.action,
+                  setEmailThreadReadStatusDisabled && classes.actionDisabled
+                )}
                 onClick={event => {
                   setEmailThreadReadStatus(!emailThread.is_read)
                   event.stopPropagation()
@@ -130,14 +130,13 @@ export default function InboxEmailThreadListItem({
               </IconButton>
             </Tooltip>
             <Tooltip
-              title={
-                deletingEmailThread || emailThreadIsDeleted
-                  ? 'Deleting...'
-                  : 'Delete'
-              }
+              title={deleteEmailThreadDisabled ? 'Deleting...' : 'Delete'}
             >
               <IconButton
-                className={classes.action}
+                className={classNames(
+                  classes.action,
+                  deleteEmailThreadDisabled && classes.actionDisabled
+                )}
                 onClick={event => {
                   deleteEmailThread()
                   event.stopPropagation()

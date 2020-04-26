@@ -63,11 +63,15 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
       '& svg *': {
         fill: theme.palette.grey[600]
       },
-      '&:hover svg *': {
+      '&:hover:not($actionDisabled) svg *': {
         fill: theme.palette.common.black
       }
     },
-    actionDelete: {},
+    actionDisabled: {
+      '& svg *': {
+        fill: theme.palette.grey[400]
+      }
+    },
     subject: {
       color: theme.palette.common.black
     },
