@@ -49,8 +49,7 @@ const Image = styled.svg`${propsToCss}`
 const children = (
   <Fragment>
     <g
-      fill='currentColor'
-      clipPath='url(#s-0655e57c09-a)'
+      clipPath='url(#s-c10db64518-a)'
       key='key-0'
     >
       <path
@@ -64,7 +63,7 @@ const children = (
       key='key-1'
     >
       <clipPath
-        id='s-0655e57c09-a'
+        id='s-c10db64518-a'
       >
         <path
           fill='transparent'
