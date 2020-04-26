@@ -103,7 +103,7 @@ function getCell<Row>(
     return resolveAccessor(column.accessor, row, rowIndex)
   }
 
-  return ''
+  return null
 }
 
 export default memo(Row)
