@@ -36,6 +36,8 @@ import { useMenu } from 'hooks/use-menu'
 import { getNameInitials } from 'utils/helpers'
 
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
+import useEmailThreadReadStatusSetter from '../../helpers/use-email-thread-read-status-setter'
+import useEmailThreadDeleter from '../../helpers/use-email-thread-deleter'
 import NoContentMessage from '../NoContentMessage'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -106,6 +108,20 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   useEffect(() => {
     fetchEmailThread()
   }, [fetchEmailThread])
+
+  const {
+    setEmailThreadReadStatus,
+    settingEmailThreadReadStatus,
+    lastEmailThreadReadStatus
+  } = useEmailThreadReadStatusSetter(
+    emailThreadId!,
+    (emailThread && emailThread.is_read)!
+  )
+  const {
+    deleteEmailThread,
+    deletingEmailThread,
+    emailThreadIsDeleted
+  } = useEmailThreadDeleter(emailThreadId!)
 
   const handleUpdateEmailThreads = useCallback(
     (updatedEmailThreadIds: UUID[]) => {
@@ -262,9 +278,13 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             <ListItemText>Forward</ListItemText>
           </MenuItem> */}
           <MenuItem
+            disabled={
+              settingEmailThreadReadStatus ||
+              lastEmailThreadReadStatus !== emailThread.is_read
+            }
             dense
             onClick={() => {
-              // onSetReadStatus && onSetReadStatus(!emailThread.is_read)
+              setEmailThreadReadStatus(!emailThread.is_read)
               closeMenu()
             }}
           >
@@ -283,9 +303,10 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             <Divider />
           </Box>
           <MenuItem
+            disabled={deletingEmailThread || emailThreadIsDeleted}
             dense
             onClick={() => {
-              // onDelete && onDelete()
+              deleteEmailThread()
               closeMenu()
             }}
           >

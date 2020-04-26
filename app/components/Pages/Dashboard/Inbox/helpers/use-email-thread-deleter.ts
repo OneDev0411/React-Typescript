@@ -16,7 +16,7 @@ export default function useEmailThreadDeleter(emailThreadId: UUID) {
   const dispatch = useDispatch()
 
   async function deleteEmailThread(): Promise<boolean> {
-    if (deletingEmailThread || emailThreadIsDeleted) {
+    if (!emailThreadId || deletingEmailThread || emailThreadIsDeleted) {
       return false
     }
 

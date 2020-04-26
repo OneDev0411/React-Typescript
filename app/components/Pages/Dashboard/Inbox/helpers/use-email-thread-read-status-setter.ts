@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { addNotification } from 'reapop'
 
@@ -16,10 +16,20 @@ export default function useEmailThreadReadStatusSetter(
     readStatus
   )
 
+  useEffect(() => {
+    setSettingEmailThreadReadStatus(false)
+    setLastEmailThreadReadStatus(readStatus)
+  }, [emailThreadId, readStatus])
+
   const dispatch = useDispatch()
 
   async function setEmailThreadReadStatus(status: boolean): Promise<boolean> {
-    if (settingEmailThreadReadStatus || status === lastEmailThreadReadStatus) {
+    if (
+      !emailThreadId ||
+      typeof readStatus !== 'boolean' ||
+      settingEmailThreadReadStatus ||
+      status === lastEmailThreadReadStatus
+    ) {
       return false
     }
 
