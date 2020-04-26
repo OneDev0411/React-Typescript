@@ -11,7 +11,8 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
-  Divider
+  Divider,
+  Paper
 } from '@material-ui/core'
 import { AvatarGroup } from '@material-ui/lab'
 import { makeStyles, useTheme } from '@material-ui/styles'
@@ -22,11 +23,13 @@ import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-s
 
 import { normalizeThreadMessageToThreadEmail } from 'components/EmailThread/helpers/normalize-to-email-thread-email'
 import { EmailThreadEmails } from 'components/EmailThread'
+import { EmailResponseType } from 'components/EmailThread/types'
+import { EmailResponseComposeForm } from 'components/EmailCompose/EmailResponseComposeForm'
 import IconVerticalDocs from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
 import IconClose from 'components/SvgIcons/Close/CloseIcon'
-// import IconReply from 'components/SvgIcons/Reply/IconReply'
-// import IconReplyAll from 'components/SvgIcons/ReplyAll/IconReplyAll'
-// import IconForward from 'components/SvgIcons/Forward/IconForward'
+import IconReply from 'components/SvgIcons/Reply/IconReply'
+import IconReplyAll from 'components/SvgIcons/ReplyAll/IconReplyAll'
+import IconForward from 'components/SvgIcons/Forward/IconForward'
 import IconTrash from 'views/components/SvgIcons/Trash/TrashIcon'
 import IconMailRead from 'views/components/SvgIcons/MailRead/IconMailRead'
 import IconMailUnread from 'views/components/SvgIcons/MailUnread/IconMailUnread'
@@ -145,6 +148,11 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
 
   useEmailThreadEvents(handleUpdateEmailThreads, handleDeleteEmailThreads)
 
+  const hasReplyAll = emailThread && emailThread.recipients.length > 1 // TODO: Is this logic correct?
+
+  const [isResponseOpen, setIsResponseOpen] = useState(false)
+  const [responseType, setResponseType] = useState<EmailResponseType>('reply')
+
   const recipients = useMemo(
     () =>
       emailThread
@@ -253,28 +261,49 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             <ListItemIcon>
               <IconClose size="small" />
             </ListItemIcon>
-            <ListItemText>Close Conversation</ListItemText>
+            <ListItemText>Close</ListItemText>
           </MenuItem>
-          {/* <MenuItem dense onClick={select(props.onReply)}>
+          <MenuItem
+            dense
+            onClick={() => {
+              setResponseType('reply')
+              setIsResponseOpen(true)
+              closeMenu()
+            }}
+          >
             <ListItemIcon>
-              <IconReply size='small' />
+              <IconReply size="small" />
             </ListItemIcon>
             <ListItemText>Reply</ListItemText>
           </MenuItem>
-          {hasReplyAll(props.email) && (
-            <MenuItem dense onClick={select(props.onReplyAll)}>
+          {hasReplyAll && (
+            <MenuItem
+              dense
+              onClick={() => {
+                setResponseType('replyAll')
+                setIsResponseOpen(true)
+                closeMenu()
+              }}
+            >
               <ListItemIcon>
-                <IconReplyAll size='small' />
+                <IconReplyAll size="small" />
               </ListItemIcon>
               <ListItemText>Reply All</ListItemText>
             </MenuItem>
           )}
-          <MenuItem dense onClick={select(props.onForward)}>
+          <MenuItem
+            dense
+            onClick={() => {
+              setResponseType('forward')
+              setIsResponseOpen(true)
+              closeMenu()
+            }}
+          >
             <ListItemIcon>
-              <IconForward size='small' />
+              <IconForward size="small" />
             </ListItemIcon>
             <ListItemText>Forward</ListItemText>
-          </MenuItem> */}
+          </MenuItem>
           <MenuItem
             disabled={setEmailThreadReadStatusDisabled}
             dense
@@ -316,6 +345,18 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
       </Box>
       <Box overflow="auto">
         <EmailThreadEmails emails={emails} />
+        {isResponseOpen && (
+          <Box padding={2} paddingLeft={9}>
+            <Paper elevation={10}>
+              <EmailResponseComposeForm
+                email={emails[emails.length - 1]}
+                responseType={responseType}
+                onCancel={() => setIsResponseOpen(false)}
+                onSent={() => setIsResponseOpen(false)}
+              />
+            </Paper>
+          </Box>
+        )}
       </Box>
     </Box>
   )
