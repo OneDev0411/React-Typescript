@@ -26,11 +26,6 @@ interface Props {
   searchQuery?: string
   onSearchStatusChange?: (searching: boolean) => void
   onUpdateEmailThreads?: (emailThreads: IEmailThread<'contacts'>[]) => void
-  onSetEmailThreadReadStatus?: (
-    emailThread: IEmailThread<'contacts'>,
-    status: boolean
-  ) => void
-  onDeleteEmailThread?: (emailThread: IEmailThread<'contacts'>) => void
 }
 
 export default function InboxEmailThreadList({
@@ -38,9 +33,7 @@ export default function InboxEmailThreadList({
   onSelectEmailThread,
   searchQuery,
   onSearchStatusChange,
-  onUpdateEmailThreads,
-  onSetEmailThreadReadStatus,
-  onDeleteEmailThread
+  onUpdateEmailThreads
 }: Props) {
   const [emailThreads, setEmailThreads] = useState<IEmailThread<'contacts'>[]>(
     []
@@ -231,13 +224,6 @@ export default function InboxEmailThreadList({
         <InboxEmailThreadListItem
           emailThread={emailThread}
           selected={selected}
-          onSetReadStatus={status =>
-            onSetEmailThreadReadStatus &&
-            onSetEmailThreadReadStatus(emailThread, status)
-          }
-          onDelete={() =>
-            onDeleteEmailThread && onDeleteEmailThread(emailThread)
-          }
         />
       )}
     />

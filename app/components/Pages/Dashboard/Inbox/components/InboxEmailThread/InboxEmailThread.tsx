@@ -47,16 +47,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   emailThreadId?: UUID
   onClose: () => void
-  onSetReadStatus?: (status: boolean) => void
-  onDelete?: () => void
 }
 
-export default function InboxEmailThread({
-  emailThreadId,
-  onClose,
-  onSetReadStatus,
-  onDelete
-}: Props) {
+export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   const [status, setStatus] = useState<
     'empty' | 'fetching' | 'error' | 'fetched'
   >('empty')
@@ -271,7 +264,7 @@ export default function InboxEmailThread({
           <MenuItem
             dense
             onClick={() => {
-              onSetReadStatus && onSetReadStatus(!emailThread.is_read)
+              // onSetReadStatus && onSetReadStatus(!emailThread.is_read)
               closeMenu()
             }}
           >
@@ -292,7 +285,7 @@ export default function InboxEmailThread({
           <MenuItem
             dense
             onClick={() => {
-              onDelete && onDelete()
+              // onDelete && onDelete()
               closeMenu()
             }}
           >

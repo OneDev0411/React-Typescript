@@ -59,6 +59,15 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
       top: -theme.spacing(1.5),
       right: -theme.spacing(1)
     },
+    action: {
+      '& svg *': {
+        fill: theme.palette.grey[600]
+      },
+      '&:hover svg *': {
+        fill: theme.palette.common.black
+      }
+    },
+    actionDelete: {},
     subject: {
       color: theme.palette.common.black
     },

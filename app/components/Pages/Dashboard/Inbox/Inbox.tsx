@@ -13,9 +13,6 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import useTypedSelector from 'hooks/use-typed-selector'
 
-import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
-import { deleteEmailThreads } from 'models/email/delete-email-threads'
-
 import GlobalPageLayout from 'components/GlobalPageLayout'
 
 import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
@@ -137,12 +134,6 @@ export default function Inbox({ params }: WithRouterProps) {
                 searchQuery={searchQuery}
                 onSearchStatusChange={setSearchStatus}
                 onUpdateEmailThreads={handleEmailThreadsUpdate}
-                onSetEmailThreadReadStatus={(emailThread, status) =>
-                  setEmailThreadsReadStatus([emailThread.id], status)
-                }
-                onDeleteEmailThread={emailThread =>
-                  deleteEmailThreads([emailThread.id])
-                }
               />
             </Grid>
             <Grid
@@ -158,10 +149,6 @@ export default function Inbox({ params }: WithRouterProps) {
                 key={selectedEmailThreadId}
                 emailThreadId={selectedEmailThreadId}
                 onClose={handleInboxEmailThreadClose}
-                onSetReadStatus={status =>
-                  setEmailThreadsReadStatus([selectedEmailThreadId], status)
-                }
-                onDelete={() => deleteEmailThreads([selectedEmailThreadId])}
               />
             </Grid>
           </Grid>

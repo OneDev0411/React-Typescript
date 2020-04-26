@@ -11,19 +11,17 @@ import IconMailUnread from 'views/components/SvgIcons/MailUnread/IconMailUnread'
 
 import { useInboxEmailThreadListItemStyles } from './styles'
 import getRecipientNamesText from './helpers/get-recipient-names-text'
+import useEmailThreadReadStatusSetter from '../../../../helpers/use-email-thread-read-status-setter'
+import useEmailThreadDeleter from '../../../../helpers/use-email-thread-deleter'
 
 interface Props {
   emailThread: IEmailThread<'contacts'>
   selected?: boolean
-  onSetReadStatus?: (status: boolean) => void
-  onDelete?: () => void
 }
 
 export default function InboxEmailThreadListItem({
   emailThread,
-  selected,
-  onSetReadStatus,
-  onDelete
+  selected
 }: Props) {
   const user = useTypedSelector<IUser>(state => state.user)
 
@@ -42,6 +40,17 @@ export default function InboxEmailThreadListItem({
     messageDate,
     messageDate < today ? 'D\u00A0MMM' : 'h:mm\u00A0A'
   )
+
+  const {
+    setEmailThreadReadStatus,
+    settingEmailThreadReadStatus,
+    lastEmailThreadReadStatus
+  } = useEmailThreadReadStatusSetter(emailThread.id, emailThread.is_read)
+  const {
+    deleteEmailThread,
+    deletingEmailThread,
+    emailThreadIsDeleted
+  } = useEmailThreadDeleter(emailThread.id)
 
   const classes = useInboxEmailThreadListItemStyles()
 
@@ -98,36 +107,45 @@ export default function InboxEmailThreadListItem({
             &nbsp;&nbsp;{messageDateShortText}
           </Typography>
           <div className={classes.actions}>
-            {onSetReadStatus && (
-              <Tooltip
-                title={`Mark as ${emailThread.is_read ? 'unread' : 'read'}`}
+            <Tooltip
+              title={
+                settingEmailThreadReadStatus ||
+                lastEmailThreadReadStatus !== emailThread.is_read
+                  ? `Marking as ${emailThread.is_read ? 'unread' : 'read'}...`
+                  : `Mark as ${emailThread.is_read ? 'unread' : 'read'}`
+              }
+            >
+              <IconButton
+                className={classes.action}
+                onClick={event => {
+                  setEmailThreadReadStatus(!emailThread.is_read)
+                  event.stopPropagation()
+                }}
               >
-                <IconButton
-                  onClick={event => {
-                    onSetReadStatus(!emailThread.is_read)
-                    event.stopPropagation()
-                  }}
-                >
-                  {emailThread.is_read ? (
-                    <IconMailUnread size="small" />
-                  ) : (
-                    <IconMailRead size="small" />
-                  )}
-                </IconButton>
-              </Tooltip>
-            )}
-            {onDelete && (
-              <Tooltip title="Delete">
-                <IconButton
-                  onClick={event => {
-                    onDelete()
-                    event.stopPropagation()
-                  }}
-                >
-                  <IconTrash size="small" />
-                </IconButton>
-              </Tooltip>
-            )}
+                {emailThread.is_read ? (
+                  <IconMailUnread size="small" />
+                ) : (
+                  <IconMailRead size="small" />
+                )}
+              </IconButton>
+            </Tooltip>
+            <Tooltip
+              title={
+                deletingEmailThread || emailThreadIsDeleted
+                  ? 'Deleting...'
+                  : 'Delete'
+              }
+            >
+              <IconButton
+                className={classes.action}
+                onClick={event => {
+                  deleteEmailThread()
+                  event.stopPropagation()
+                }}
+              >
+                <IconTrash size="small" />
+              </IconButton>
+            </Tooltip>
           </div>
         </div>
         <Typography
