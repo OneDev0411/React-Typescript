@@ -13,6 +13,9 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import useTypedSelector from 'hooks/use-typed-selector'
 
+import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
+import { deleteEmailThreads } from 'models/email/delete-email-threads'
+
 import GlobalPageLayout from 'components/GlobalPageLayout'
 
 import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
@@ -80,7 +83,7 @@ export default function Inbox({ params }: WithRouterProps) {
     dispatch(fetchOAuthAccounts()).then(() => setInitializing(false))
   })
 
-  const inboxEmailThreadOnCloseMemoized = useCallback(
+  const handleInboxEmailThreadClose = useCallback(
     () => setSelectedEmailThreadId(undefined),
     []
   )
@@ -133,7 +136,13 @@ export default function Inbox({ params }: WithRouterProps) {
                 onSelectEmailThread={setSelectedEmailThreadId}
                 searchQuery={searchQuery}
                 onSearchStatusChange={setSearchStatus}
-                onEmailThreadsUpdate={handleEmailThreadsUpdate}
+                onUpdateEmailThreads={handleEmailThreadsUpdate}
+                onSetEmailThreadReadStatus={(emailThread, status) =>
+                  setEmailThreadsReadStatus([emailThread.id], status)
+                }
+                onDeleteEmailThread={emailThread =>
+                  deleteEmailThreads([emailThread.id])
+                }
               />
             </Grid>
             <Grid
@@ -148,7 +157,11 @@ export default function Inbox({ params }: WithRouterProps) {
               <InboxEmailThread
                 key={selectedEmailThreadId}
                 emailThreadId={selectedEmailThreadId}
-                onClose={inboxEmailThreadOnCloseMemoized}
+                onClose={handleInboxEmailThreadClose}
+                onSetReadStatus={status =>
+                  setEmailThreadsReadStatus([selectedEmailThreadId], status)
+                }
+                onDelete={() => deleteEmailThreads([selectedEmailThreadId])}
               />
             </Grid>
           </Grid>

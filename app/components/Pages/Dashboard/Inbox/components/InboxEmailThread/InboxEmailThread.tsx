@@ -1,35 +1,72 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
-import { Box, IconButton, Typography, Avatar } from '@material-ui/core'
+import {
+  Box,
+  IconButton,
+  Typography,
+  Avatar,
+  Tooltip,
+  Menu,
+  Theme,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+  Divider
+} from '@material-ui/core'
 import { AvatarGroup } from '@material-ui/lab'
+import { makeStyles, useTheme } from '@material-ui/styles'
 import { addNotification } from 'reapop'
 
 import { getEmailThread } from 'models/email/get-email-thread'
+import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
 
 import { normalizeThreadMessageToThreadEmail } from 'components/EmailThread/helpers/normalize-to-email-thread-email'
 import { EmailThreadEmails } from 'components/EmailThread'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import IconVerticalDocs from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
+import IconClose from 'components/SvgIcons/Close/CloseIcon'
+// import IconReply from 'components/SvgIcons/Reply/IconReply'
+// import IconReplyAll from 'components/SvgIcons/ReplyAll/IconReplyAll'
+// import IconForward from 'components/SvgIcons/Forward/IconForward'
+import IconTrash from 'views/components/SvgIcons/Trash/TrashIcon'
+import IconMailRead from 'views/components/SvgIcons/MailRead/IconMailRead'
+import IconMailUnread from 'views/components/SvgIcons/MailUnread/IconMailUnread'
+
+import { useMenu } from 'hooks/use-menu'
 
 import { getNameInitials } from 'utils/helpers'
 
-import markEmailThreadAsRead from '../../helpers/mark-email-thread-as-read'
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
 import NoContentMessage from '../NoContentMessage'
+
+const useStyles = makeStyles((theme: Theme) => ({
+  moreMenu: {
+    minWidth: '15rem'
+  }
+}))
 
 interface Props {
   emailThreadId?: UUID
   onClose: () => void
+  onSetReadStatus?: (status: boolean) => void
+  onDelete?: () => void
 }
 
-export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
+export default function InboxEmailThread({
+  emailThreadId,
+  onClose,
+  onSetReadStatus,
+  onDelete
+}: Props) {
   const [status, setStatus] = useState<
     'empty' | 'fetching' | 'error' | 'fetched'
   >('empty')
   const [emailThread, setEmailThread] = useState<IEmailThread<
     'messages' | 'contacts'
   > | null>(null)
-
+  const { menuProps, buttonTriggerProps, onClose: closeMenu } = useMenu()
   const dispatch = useDispatch()
+  const classes = useStyles()
+  const theme = useTheme<Theme>()
 
   const fetchEmailThread = useCallback(async () => {
     if (emailThreadId) {
@@ -43,7 +80,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
 
         if (!emailThread.is_read) {
           try {
-            await markEmailThreadAsRead(emailThread)
+            await setEmailThreadsReadStatus([emailThread.id], true)
           } catch (reason) {
             console.error(reason)
             dispatch(
@@ -185,15 +222,88 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             </AvatarGroup>
           </Box>
         )}
-        <IconButton
-          onClick={() => {
-            setEmailThread(null)
-            setStatus('empty')
-            onClose()
-          }}
+        <Tooltip title="More">
+          <IconButton {...buttonTriggerProps}>
+            <IconVerticalDocs size="small" />
+          </IconButton>
+        </Tooltip>
+        <Menu
+          {...menuProps}
+          disableScrollLock
+          classes={{ paper: classes.moreMenu }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         >
-          <CloseIcon size="small" />
-        </IconButton>
+          <MenuItem
+            dense
+            onClick={() => {
+              setEmailThread(null)
+              setStatus('empty')
+              onClose()
+              closeMenu()
+            }}
+          >
+            <ListItemIcon>
+              <IconClose size="small" />
+            </ListItemIcon>
+            <ListItemText>Close Conversation</ListItemText>
+          </MenuItem>
+          {/* <MenuItem dense onClick={select(props.onReply)}>
+            <ListItemIcon>
+              <IconReply size='small' />
+            </ListItemIcon>
+            <ListItemText>Reply</ListItemText>
+          </MenuItem>
+          {hasReplyAll(props.email) && (
+            <MenuItem dense onClick={select(props.onReplyAll)}>
+              <ListItemIcon>
+                <IconReplyAll size='small' />
+              </ListItemIcon>
+              <ListItemText>Reply All</ListItemText>
+            </MenuItem>
+          )}
+          <MenuItem dense onClick={select(props.onForward)}>
+            <ListItemIcon>
+              <IconForward size='small' />
+            </ListItemIcon>
+            <ListItemText>Forward</ListItemText>
+          </MenuItem> */}
+          <MenuItem
+            dense
+            onClick={() => {
+              onSetReadStatus && onSetReadStatus(!emailThread.is_read)
+              closeMenu()
+            }}
+          >
+            <ListItemIcon>
+              {emailThread.is_read ? (
+                <IconMailUnread size="small" />
+              ) : (
+                <IconMailRead size="small" />
+              )}
+            </ListItemIcon>
+            <ListItemText>
+              Mark as {emailThread.is_read ? 'unread' : 'read'}
+            </ListItemText>
+          </MenuItem>
+          <Box marginY={1}>
+            <Divider />
+          </Box>
+          <MenuItem
+            dense
+            onClick={() => {
+              onDelete && onDelete()
+              closeMenu()
+            }}
+          >
+            <ListItemIcon>
+              <IconTrash size="small" fillColor={theme.palette.error.main} />
+            </ListItemIcon>
+            <ListItemText primaryTypographyProps={{ color: 'error' }}>
+              Delete
+            </ListItemText>
+          </MenuItem>
+        </Menu>
       </Box>
       <Box overflow="auto">
         <EmailThreadEmails emails={emails} />

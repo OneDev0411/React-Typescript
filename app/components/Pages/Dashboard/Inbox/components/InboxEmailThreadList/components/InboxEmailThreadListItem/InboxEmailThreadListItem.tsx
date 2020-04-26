@@ -15,14 +15,14 @@ import getRecipientNamesText from './helpers/get-recipient-names-text'
 interface Props {
   emailThread: IEmailThread<'contacts'>
   selected?: boolean
-  onChangeStatus?: () => void
+  onSetReadStatus?: (status: boolean) => void
   onDelete?: () => void
 }
 
 export default function InboxEmailThreadListItem({
   emailThread,
   selected,
-  onChangeStatus,
+  onSetReadStatus,
   onDelete
 }: Props) {
   const user = useTypedSelector<IUser>(state => state.user)
@@ -98,13 +98,13 @@ export default function InboxEmailThreadListItem({
             &nbsp;&nbsp;{messageDateShortText}
           </Typography>
           <div className={classes.actions}>
-            {onChangeStatus && (
+            {onSetReadStatus && (
               <Tooltip
                 title={`Mark as ${emailThread.is_read ? 'unread' : 'read'}`}
               >
                 <IconButton
                   onClick={event => {
-                    onChangeStatus()
+                    onSetReadStatus(!emailThread.is_read)
                     event.stopPropagation()
                   }}
                 >
