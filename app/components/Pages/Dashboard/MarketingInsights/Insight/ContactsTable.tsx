@@ -24,7 +24,7 @@ const columns = [
     header: 'Contact',
     id: 'contact',
     primary: true,
-    width: '60%',
+    width: '40%',
     render: ({ row }: RenderProps<ContactsListType>) => (
       <ContactColumn>
         <div>
@@ -32,10 +32,17 @@ const columns = [
             <ContactInfo data={row} />
           </MiniContact>
         </div>
-        <div className="labels-container">
-          <RowBadges data={row} />
-        </div>
       </ContactColumn>
+    )
+  },
+  {
+    header: 'Badge',
+    id: 'badge',
+    width: '20%',
+    render: ({ row }: RenderProps<ContactsListType>) => (
+      <div className="labels-container">
+        <RowBadges data={row} />
+      </div>
     )
   },
   {
