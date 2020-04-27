@@ -22,6 +22,7 @@ declare type ICalendarEvent<
     status: string
     is_partner: boolean
     all_day?: boolean
+    send_updates: boolean
   }
   next_occurence: string
   object_type: string
