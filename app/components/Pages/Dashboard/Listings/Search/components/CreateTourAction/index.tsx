@@ -7,6 +7,7 @@ import CreateTourDrawer from 'components/tour/CreateTourDrawer/CreateTourDrawer'
 
 interface Props {
   disabled: boolean
+  isExceeded: boolean
   listings: ICompactListing[]
   submitCallback: () => void
   user: IUser
@@ -19,7 +20,7 @@ export default function CreateTourAction(props: Props) {
   const handleCreateTourDrawer = () => {
     // Google JS API can't route for more than 25 waypoint along with an start and an end. Resulting 27 points.
     // Original issue: https://gitlab.com/rechat/web/-/issues/3922#note_303336248
-    if (props.listings.length > 27) {
+    if (props.isExceeded) {
       modal.setConfirmationModal({
         message: 'Error',
         // eslint-disable-next-line
