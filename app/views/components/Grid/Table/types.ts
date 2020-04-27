@@ -56,6 +56,7 @@ export type GridHookPlugin<Row, Options> = (
 export interface GridSelectionOptions<Row> {
   columnProps?: Omit<TableColumn<Row>, 'id'>
   defaultRender?: null | ((rowItem: RenderProps<Row>) => React.ReactNode)
+  showSelectAll?: boolean
 }
 
 export interface SortableColumn {
@@ -69,6 +70,11 @@ export interface GridSortingOption {
   defaultSort?: ActiveSort
   sortBy?: ActiveSort | null
   onChange?: (item: SortableColumn) => void
+}
+
+export interface InfiniteScrollingOptions {
+  onReachStart: () => void
+  onReachEnd: () => void
 }
 
 export interface ActiveSort {

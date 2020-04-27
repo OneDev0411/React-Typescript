@@ -1,14 +1,7 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import {
-  Box,
-  Tooltip,
-  IconButton,
-  makeStyles,
-  createStyles,
-  Theme
-} from '@material-ui/core'
+import { Tooltip, IconButton, makeStyles, Theme } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
 import { EventDrawer } from 'components/EventDrawer'
@@ -28,33 +21,31 @@ interface Props {
   contact: IContact
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      display: 'flex',
-      justifyContent: 'end',
-      alignItems: 'center'
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    display: 'flex',
+    justifyContent: 'end',
+    alignItems: 'center'
+  },
+  item: {
+    display: 'inline-flex',
+    '&:not(:last-child)': {
+      marginRight: theme.spacing(0.75)
     },
-    item: {
-      display: 'inline-flex',
-      '&:not(:last-child)': {
-        marginRight: theme.spacing(0.75)
-      },
-      '& svg': {
-        width: 'unset',
-        height: theme.spacing(3),
-        '&[data-icon="chat"]': { height: theme.spacing(2.5) },
-        '&[data-icon="event"]': { height: theme.spacing(2.25) }
-      },
-      '&:hover svg': {
-        fill: theme.palette.primary.main
-      }
+    '& svg': {
+      width: 'unset',
+      height: theme.spacing(3),
+      '&[data-icon="chat"]': { height: theme.spacing(2.5) },
+      '&[data-icon="event"]': { height: theme.spacing(2.25) }
     },
-    emailIcon: {
-      height: theme.spacing(2.5)
+    '&:hover svg': {
+      fill: theme.palette.primary.main
     }
-  })
-)
+  },
+  emailIcon: {
+    height: theme.spacing(2.5)
+  }
+}))
 
 export default function CtaAction({ contact }: Props) {
   const user: IUser = useSelector((state: IAppState) => state.user)
@@ -131,7 +122,7 @@ export default function CtaAction({ contact }: Props) {
           submitCallback={toggleEventDrawer}
         />
       )}
-      <Box className={classes.container}>
+      <div className={classes.container}>
         <Tooltip title="Create an event">
           <IconButton
             size="small"
@@ -151,7 +142,7 @@ export default function CtaAction({ contact }: Props) {
           </IconButton>
         </Tooltip>
         {renderChatButton}
-      </Box>
+      </div>
     </>
   )
 }

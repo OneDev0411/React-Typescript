@@ -178,17 +178,19 @@ class Grid extends React.Component<
 
   render() {
     const { selectedAgent } = this.state
+    const totalRows = (this.props.data || []).length
 
     return (
       <>
         <Table<IDealAgent>
           rows={this.props.data}
           columns={this.columns}
-          totalRows={(this.props.data || []).length}
+          totalRows={totalRows}
+          virtualize={totalRows > 150}
           LoadingStateComponent={() => (
             <LoadingContainer style={{ padding: 0 }} />
           )}
-          loading={this.props.isFetching ? 'top' : null}
+          loading={this.props.isFetching ? 'middle' : null}
           summary={total => `${total} Agents`}
           sorting={{
             defaultSort: this.getActiveSort(),
