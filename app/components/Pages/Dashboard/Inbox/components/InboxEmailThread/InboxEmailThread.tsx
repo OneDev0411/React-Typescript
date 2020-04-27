@@ -66,47 +66,50 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
 
-  const fetchEmailThread = useCallback(async () => {
-    if (emailThreadId) {
-      setStatus('fetching')
+  const fetchEmailThread = useCallback(
+    async (skipMarkingAsRead: boolean = false) => {
+      if (emailThreadId) {
+        setStatus('fetching')
 
-      try {
-        const emailThread = await getEmailThread(emailThreadId)
+        try {
+          const emailThread = await getEmailThread(emailThreadId)
 
-        setEmailThread(emailThread)
-        setStatus('fetched')
+          setEmailThread(emailThread)
+          setStatus('fetched')
 
-        if (!emailThread.is_read) {
-          try {
-            await setEmailThreadsReadStatus([emailThread.id], true)
-          } catch (reason) {
-            console.error(reason)
-            dispatch(
-              addNotification({
-                status: 'error',
-                message:
-                  'Something went wrong while marking the email as read.' +
-                  ' Please reload the page.'
-              })
-            )
+          if (!skipMarkingAsRead && !emailThread.is_read) {
+            try {
+              await setEmailThreadsReadStatus([emailThread.id], true)
+            } catch (reason) {
+              console.error(reason)
+              dispatch(
+                addNotification({
+                  status: 'error',
+                  message:
+                    'Something went wrong while marking the email as read.' +
+                    ' Please reload the page.'
+                })
+              )
+            }
           }
+        } catch (reason) {
+          console.error(reason)
+          dispatch(
+            addNotification({
+              status: 'error',
+              message:
+                'Something went wrong while fetching the email.' +
+                ' Please reload the page.'
+            })
+          )
+          setStatus('error')
         }
-      } catch (reason) {
-        console.error(reason)
-        dispatch(
-          addNotification({
-            status: 'error',
-            message:
-              'Something went wrong while fetching the email.' +
-              ' Please reload the page.'
-          })
-        )
-        setStatus('error')
+      } else {
+        setStatus('empty')
       }
-    } else {
-      setStatus('empty')
-    }
-  }, [dispatch, emailThreadId])
+    },
+    [dispatch, emailThreadId]
+  )
 
   useEffect(() => {
     fetchEmailThread()
@@ -127,7 +130,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   const handleUpdateEmailThreads = useCallback(
     (updatedEmailThreadIds: UUID[]) => {
       if (emailThreadId && updatedEmailThreadIds.includes(emailThreadId)) {
-        fetchEmailThread()
+        fetchEmailThread(true)
       }
     },
     [emailThreadId, fetchEmailThread]
