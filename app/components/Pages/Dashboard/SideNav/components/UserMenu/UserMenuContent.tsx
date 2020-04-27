@@ -61,7 +61,7 @@ export function UserMenuContent({
         </li>
         <Acl access={[ACL.ADMIN, ACL.MARKETING]}>
           <li>
-            <Link noStyle to="/dashboard/mc-settings" onClick={onClose}>
+            <Link noStyle to="/dashboard/brand-settings" onClick={onClose}>
               Brand Settings
             </Link>
           </li>

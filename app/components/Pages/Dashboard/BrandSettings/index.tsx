@@ -102,14 +102,11 @@ Are you sure?`,
   return (
     <Acl access={[ACL.BACK_OFFICE, ACL.MARKETING]}>
       <Helmet>
-        <title>Marketing Center Settings | Rechat</title>
+        <title>Brand Settings | Rechat</title>
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header
-          title="Marketing Center Settings"
-          noGlobalActionsButton
-        >
+        <PageLayout.Header title="Brand Settings" noGlobalActionsButton>
           <Grid container justify="flex-end" spacing={2}>
             <Grid item>
               <Button
