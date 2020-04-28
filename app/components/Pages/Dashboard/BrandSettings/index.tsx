@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useContext } from 'react'
-import { Grid, Button, Divider } from '@material-ui/core'
+import { Grid, Button, Divider, Box } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
@@ -21,7 +21,11 @@ import { invalidateThumbnails } from 'models/instant-marketing/invalidate-thumbn
 import { getUserTeams } from 'actions/user/teams'
 
 import { TEMPLATE } from './constants'
-import { getSidebarSections } from './helpers'
+import {
+  getSidebarSections,
+  getSimpleSidebarSections,
+  getPreferredSidebarView
+} from './helpers'
 import Sidebar from './Sidebar'
 
 export function MarketingCenterSettings() {
@@ -35,6 +39,9 @@ export function MarketingCenterSettings() {
   >(null)
   const [settings, setSettings] = useState<BrandSettingsPalette>(
     getActiveTeamPalette(user)
+  )
+  const [preferredSideBarView, setPreferredSidebarView] = useState(
+    getPreferredSidebarView(settings)
   )
   const confirmation = useContext(ConfirmationModalContext)
 
@@ -59,7 +66,7 @@ export function MarketingCenterSettings() {
     confirmation.setConfirmationModal({
       message: `All your unsaved changes will be lost.
 Are you sure?`,
-      confirmLabel: 'Yes',
+      confirmLabel: 'Yes, I am',
       onConfirm: () => {
         setSettings(defaultSettings)
         setDefaultSettings(null)
@@ -97,7 +104,10 @@ Are you sure?`,
     [activeBrand]
   )
 
-  const sidebarSections = getSidebarSections()
+  const sidebarSections =
+    preferredSideBarView === 'full'
+      ? getSidebarSections()
+      : getSimpleSidebarSections()
 
   return (
     <Acl access={[ACL.BACK_OFFICE, ACL.MARKETING]}>
@@ -145,11 +155,34 @@ Are you sure?`,
               />
             </Grid>
             <Sidebar
+              defaultExpandedPanels={preferredSideBarView === 'simple'}
               sections={sidebarSections}
               settings={settings}
               onUpdate={handleUpdateSettings}
               onImageUpload={handleImageUpload}
-            />
+            >
+              <Grid container item justify="center">
+                <Box my={2}>
+                  {preferredSideBarView === 'simple' ? (
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => setPreferredSidebarView('full')}
+                    >
+                      Advanced Settings
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => setPreferredSidebarView('simple')}
+                    >
+                      Simple Settings
+                    </Button>
+                  )}
+                </Box>
+              </Grid>
+            </Sidebar>
           </Grid>
         </PageLayout.Main>
       </PageLayout>

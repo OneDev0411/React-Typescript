@@ -25,7 +25,7 @@ export default function WeightField({
   value,
   label,
   onChange,
-  name
+  names
 }: FieldProps) {
   const classes = useStyles()
 
@@ -53,7 +53,7 @@ export default function WeightField({
           return
         }
 
-        onChange(name, color)
+        onChange(names, color)
       }}
     />
   )

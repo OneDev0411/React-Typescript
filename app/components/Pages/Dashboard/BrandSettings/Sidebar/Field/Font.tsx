@@ -20,7 +20,7 @@ function getFontId(fontFamily: string): string {
 
 export default function FontField({
   value = FONT_FAMILY_DEFAULT,
-  name,
+  names,
   label,
   onChange
 }: FieldProps) {
@@ -72,8 +72,10 @@ export default function FontField({
       return
     }
 
-    fontManager.current.setOnChange((font: Font) => onChange(name, font.family))
-  }, [name, onChange])
+    fontManager.current.setOnChange((font: Font) => {
+      onChange(names, font.family)
+    })
+  }, [names, onChange])
 
   useEffect(() => {
     if (!fontManager.current) {

@@ -13,10 +13,12 @@ export default function PixelField({
   value,
   label,
   onChange,
-  name
+  names
 }: FieldProps) {
   const handleChange = (value: string = '1px') => {
-    onChange(name, `${Math.abs(parseInt(value, 10))}px`)
+    const pxValue = `${Math.abs(parseInt(value, 10))}px`
+
+    onChange(names, pxValue)
   }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {

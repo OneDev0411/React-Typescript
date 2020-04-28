@@ -1,42 +1,74 @@
-import { SidebarSection } from './types'
+import { SidebarSection, SidebarSectionField } from './types'
+
+export function getSimpleSidebarSections(): SidebarSection[] {
+  const colors: SidebarSection = {
+    name: 'Brand Palette',
+    fields: [
+      {
+        names: [
+          'body-logo-square',
+          'container-logo-square',
+          'body-logo-wide',
+          'container-logo-wide'
+        ],
+        type: 'image',
+        label: 'Logo'
+      },
+      {
+        names: [
+          'container-text-color',
+          'h1-text-color',
+          'h2-text-color',
+          'h3-text-color',
+          'inverted-container-bg-color',
+          'button-bg-color'
+        ],
+        type: 'color',
+        label: 'Primary Color'
+      }
+    ]
+  }
+
+  return [colors]
+}
 
 export function getSidebarSections(): SidebarSection[] {
   const bodySection: SidebarSection = {
     name: 'Body',
     fields: [
       {
-        name: 'body-logo-square',
+        names: ['body-logo-square'],
         type: 'image',
         label: 'Square Logo'
       },
       {
-        name: 'body-logo-wide',
+        names: ['body-logo-wide'],
         type: 'image',
         label: 'Wide Logo'
       },
       'divider',
       {
-        name: 'body-bg-color',
+        names: ['body-bg-color'],
         type: 'color',
         label: 'Background Color'
       },
       {
-        name: 'body-text-color',
+        names: ['body-text-color'],
         type: 'color',
         label: 'Text Color'
       },
       {
-        name: 'body-font-family',
+        names: ['body-font-family'],
         type: 'font-family',
         label: 'Font Family'
       },
       {
-        name: 'body-font-size',
+        names: ['body-font-size'],
         type: 'pixel',
         label: 'Font Size'
       },
       {
-        name: 'body-font-weight',
+        names: ['body-font-weight'],
         type: 'font-weight',
         label: 'Font Weight'
       }
@@ -46,49 +78,49 @@ export function getSidebarSections(): SidebarSection[] {
     name: 'Container',
     fields: [
       {
-        name: 'container-logo-square',
+        names: ['container-logo-square'],
         type: 'image',
         label: 'Square Logo'
       },
       {
-        name: 'container-logo-wide',
+        names: ['container-logo-wide'],
         type: 'image',
         label: 'Wide Logo'
       },
       'divider',
       {
-        name: 'container-bg-color',
+        names: ['container-bg-color'],
         type: 'color',
         label: 'Background Color'
       },
       {
-        name: 'container-text-color',
+        names: ['container-text-color'],
         type: 'color',
         label: 'Text Color'
       },
       {
-        name: 'container-font-family',
+        names: ['container-font-family'],
         type: 'font-family',
         label: 'Font Family'
       },
       {
-        name: 'container-font-size',
+        names: ['container-font-size'],
         type: 'pixel',
         label: 'Font Size'
       },
       {
-        name: 'container-font-weight',
+        names: ['container-font-weight'],
         type: 'font-weight',
         label: 'Font Weight'
       },
       'divider',
       {
-        name: 'inverted-container-bg-color',
+        names: ['inverted-container-bg-color'],
         type: 'color',
         label: 'Inverted Background Color'
       },
       {
-        name: 'inverted-container-text-color',
+        names: ['inverted-container-text-color'],
         type: 'color',
         label: 'Inverted Text Color'
       }
@@ -99,64 +131,64 @@ export function getSidebarSections(): SidebarSection[] {
     name: 'Headers',
     fields: [
       {
-        name: 'h1-font-family',
+        names: ['h1-font-family'],
         type: 'font-family',
         label: 'H1 Font Family'
       },
       {
-        name: 'h1-font-size',
+        names: ['h1-font-size'],
         type: 'pixel',
         label: 'H1 Font Size'
       },
       {
-        name: 'h1-font-weight',
+        names: ['h1-font-weight'],
         type: 'font-weight',
         label: 'H1 Font Weight'
       },
       {
-        name: 'h1-text-color',
+        names: ['h1-text-color'],
         type: 'color',
         label: 'H1 Text Color'
       },
       'divider',
       {
-        name: 'h2-font-family',
+        names: ['h2-font-family'],
         type: 'font-family',
         label: 'H2 Font Family'
       },
       {
-        name: 'h2-font-size',
+        names: ['h2-font-size'],
         type: 'pixel',
         label: 'H2 Font Size'
       },
       {
-        name: 'h2-font-weight',
+        names: ['h2-font-weight'],
         type: 'font-weight',
         label: 'H2 Font Weight'
       },
       {
-        name: 'h2-text-color',
+        names: ['h2-text-color'],
         type: 'color',
         label: 'H2 Text Color'
       },
       'divider',
       {
-        name: 'h3-font-family',
+        names: ['h3-font-family'],
         type: 'font-family',
         label: 'H3 Font Family'
       },
       {
-        name: 'h3-font-size',
+        names: ['h3-font-size'],
         type: 'pixel',
         label: 'H3 Font Size'
       },
       {
-        name: 'h3-font-weight',
+        names: ['h3-font-weight'],
         type: 'font-weight',
         label: 'H3 Font Weight'
       },
       {
-        name: 'h3-text-color',
+        names: ['h3-text-color'],
         type: 'color',
         label: 'H3 Text Color'
       }
@@ -167,38 +199,38 @@ export function getSidebarSections(): SidebarSection[] {
     name: 'Buttons',
     fields: [
       {
-        name: 'button-font-family',
+        names: ['button-font-family'],
         type: 'font-family',
         label: 'Font Family'
       },
       {
-        name: 'button-font-size',
+        names: ['button-font-size'],
         type: 'pixel',
         label: 'Font Size'
       },
       {
-        name: 'button-font-weight',
+        names: ['button-font-weight'],
         type: 'font-weight',
         label: 'Font Weight'
       },
       {
-        name: 'button-text-color',
+        names: ['button-text-color'],
         type: 'color',
         label: 'Text Color'
       },
       {
-        name: 'button-bg-color',
+        names: ['button-bg-color'],
         type: 'color',
         label: 'Background Color'
       },
       'divider',
       {
-        name: 'inverted-button-text-color',
+        names: ['inverted-button-text-color'],
         type: 'color',
         label: 'Inverted Text Color'
       },
       {
-        name: 'inverted-button-bg-color',
+        names: ['inverted-button-bg-color'],
         type: 'color',
         label: 'Inverted Background Color'
       }
@@ -206,4 +238,25 @@ export function getSidebarSections(): SidebarSection[] {
   }
 
   return [bodySection, containerSection, headersSection, buttonsSection]
+}
+
+export function getPreferredSidebarView(
+  settings: BrandSettingsPalette
+): 'simple' | 'full' {
+  const simpleSidebarSections = getSimpleSidebarSections()
+  const shouldShowSimple = simpleSidebarSections.every(section => {
+    return section.fields.every((field: SidebarSectionField) => {
+      const intendedValue = settings[field.names[0]]
+
+      return field.names.every(
+        fieldName => settings[fieldName] === intendedValue
+      )
+    })
+  })
+
+  if (shouldShowSimple) {
+    return 'simple'
+  }
+
+  return 'full'
 }

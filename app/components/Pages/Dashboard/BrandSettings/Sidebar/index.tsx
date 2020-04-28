@@ -35,6 +35,8 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  children: React.ReactNode
+  defaultExpandedPanels?: boolean
   sections: SidebarSection[]
   settings: BrandSettingsPalette
   onImageUpload: ImageUploadHandler
@@ -42,6 +44,8 @@ interface Props {
 }
 
 export default function Sidebar({
+  children,
+  defaultExpandedPanels,
   sections,
   settings,
   onImageUpload,
@@ -50,16 +54,20 @@ export default function Sidebar({
   const classes = useStyles()
 
   const handleUpdateSettings = (
-    key: BrandSettingsPaletteKey,
+    key: BrandSettingsPaletteKey | BrandSettingsPaletteKey[],
     value: string
   ) => {
-    if (settings[key] === value) {
-      return
-    }
+    const keys = Array.isArray(key) ? key : [key]
+
+    const changedSettings = {}
+
+    keys.forEach(settingKey => {
+      changedSettings[settingKey] = value
+    })
 
     onUpdate({
       ...settings,
-      [key]: value
+      ...changedSettings
     })
   }
 
@@ -67,29 +75,39 @@ export default function Sidebar({
     <Grid item md={3} className={classes.wrapper}>
       {sections.map((section, sectionIndex) => (
         <React.Fragment key={section.name}>
-          <ExpansionPanel elevation={0}>
+          <ExpansionPanel
+            TransitionProps={{ unmountOnExit: true }}
+            elevation={0}
+            defaultExpanded={defaultExpandedPanels}
+          >
             <ExpansionPanelSummary expandIcon={<IconKeyboardArrowDown />}>
               <Typography variant="subtitle2">{section.name}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Grid container spacing={2}>
-                {section.fields.map((field, index) =>
-                  field === 'divider' ? (
-                    <Grid container item key={index}>
-                      <div className={classes.dividerContainer}>
-                        <Divider />
-                      </div>
-                    </Grid>
-                  ) : (
+                {section.fields.map((field, index) => {
+                  if (field === 'divider') {
+                    return (
+                      <Grid container item key={index}>
+                        <div className={classes.dividerContainer}>
+                          <Divider />
+                        </div>
+                      </Grid>
+                    )
+                  }
+
+                  const value = settings[field.names[0]]
+
+                  return (
                     <Field
-                      key={field.name}
+                      key={field.label}
                       {...field}
-                      value={settings[field.name]}
+                      value={value}
                       onChange={handleUpdateSettings}
                       onImageUpload={onImageUpload}
                     />
                   )
-                )}
+                })}
               </Grid>
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -97,6 +115,7 @@ export default function Sidebar({
         </React.Fragment>
       ))}
       <Divider />
+      {children}
     </Grid>
   )
 }

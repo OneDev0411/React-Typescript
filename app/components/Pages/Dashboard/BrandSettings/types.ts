@@ -6,7 +6,7 @@ export type FieldType =
   | 'font-weight'
 
 export interface SidebarSectionField {
-  name: BrandSettingsPaletteKey
+  names: BrandSettingsPaletteKey[]
   type: FieldType
   label: string
 }

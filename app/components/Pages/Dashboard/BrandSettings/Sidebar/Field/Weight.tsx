@@ -10,7 +10,7 @@ export default function WeightField({
   value,
   label,
   onChange,
-  name
+  names
 }: FieldProps) {
   return (
     <Autocomplete
@@ -32,7 +32,9 @@ export default function WeightField({
       renderInput={params => (
         <TextField {...params} label={label} variant="outlined" />
       )}
-      onChange={(e: any, weight: string) => onChange(name, weight)}
+      onChange={(e: any, weight: string) => {
+        onChange(names, weight)
+      }}
     />
   )
 }

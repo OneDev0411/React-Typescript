@@ -53,7 +53,7 @@ interface Props extends FieldProps {
 }
 
 export default function ImageField({
-  name,
+  names,
   value,
   label,
   onImageUpload,
@@ -73,10 +73,11 @@ export default function ImageField({
 
       const file = await onImageUpload(acceptedFiles[0])
 
-      onChange(name, file.url)
+      onChange(names, file.url)
+
       setIsUploading(false)
     },
-    [name, onChange, onImageUpload]
+    [names, onChange, onImageUpload]
   )
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
@@ -86,7 +87,7 @@ export default function ImageField({
   })
 
   const handleDeleteClick = () => {
-    onChange(name, '')
+    onChange(names, '')
   }
 
   const renderImage = () => {
