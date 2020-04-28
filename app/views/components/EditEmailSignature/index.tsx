@@ -19,7 +19,7 @@ interface Props {
   showActions?: boolean
 }
 
-const StyledTextEditor = styled(TextEditor)`
+export const StyledTextEditor = styled(TextEditor)`
   border: 1px solid ${(props: ThemeProps<Theme>) => props.theme.palette.divider};
   padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 1, 1, 1)};
 `
@@ -83,8 +83,7 @@ export default function EditEmailSignature({
       {showActions && (
         <Grid container justify="flex-end">
           <Button
-            type="submit"
-            color="primary"
+            color="secondary"
             variant="contained"
             disabled={isSaving}
             onClick={onSave}
