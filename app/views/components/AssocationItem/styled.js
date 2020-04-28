@@ -8,7 +8,7 @@ import { LatoFamilyStyle } from '../Typography/styles'
 export const ProfilePhoto = styled(Avatar)`
   width: 2em;
   height: 2em;
-  background-color: ${props => props.theme.palette.grey['200']};
+  background-color: ${props => props.theme.palette.grey['400']};
   color: ${props => props.theme.palette.grey['500']};
 `
 
