@@ -151,11 +151,20 @@ export class EventDrawer extends Component {
   }
 
   handleSave = async event => {
+    const { event: currentEvent } = this.state
+    const filterContactAssociations = i => i.association_type === 'contact'
     const contactAssociations = event.associations.filter(
-      i => i.association_type === 'contact'
-    )
+      filterContactAssociations
+    ).length
+    const isUpdating = !!(currentEvent && currentEvent.id)
+    const currentContactAssociations = isUpdating
+      ? currentEvent.associations.filter(filterContactAssociations).length
+      : 0
+    const shouldShowNotify = isUpdating
+      ? currentContactAssociations !== contactAssociations
+      : contactAssociations > 0
 
-    if (contactAssociations.length > 0) {
+    if (shouldShowNotify) {
       return this.setState(() => ({
         shouldShowNotify: true,
         currentEvent: event
@@ -166,8 +175,6 @@ export class EventDrawer extends Component {
   }
 
   handleSubmit = () => {
-    console.log('handleSubmit')
-
     let event
 
     if (typeof Event === 'function') {
