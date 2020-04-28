@@ -20,7 +20,7 @@ import { RenderProps } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
 import IconEmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
-import { SELECTION__TOGGLE_ENTIRE_ROWS } from 'components/Grid/Table/context/constants'
+import { SELECTION__TOGGLE_ALL } from 'components/Grid/Table/context/constants'
 import { getNameInitials } from 'utils/helpers'
 
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
@@ -205,7 +205,8 @@ const Grid = (props: Props) => {
   }
   const toggleAll = () =>
     dispatch({
-      type: SELECTION__TOGGLE_ENTIRE_ROWS
+      type: SELECTION__TOGGLE_ALL,
+      rows: props.data
     })
   const getSummeryInfo = () => {
     const totalRows = (props.data || []).length
@@ -224,18 +225,20 @@ const Grid = (props: Props) => {
 
   return (
     <>
-      <div className={classes.infoContainer}>
-        <Tooltip title={tooltipTitle}>
-          <Checkbox
-            disableRipple
-            className={classes.toggleAll}
-            checked={isAllSelected}
-            indeterminate={isSomeRowsSelected}
-            onChange={toggleAll}
-          />
-        </Tooltip>
-        <span className={classes.totalRow}>{getSummeryInfo()}</span>
-      </div>
+      {!props.isFetching && (
+        <div className={classes.infoContainer}>
+          <Tooltip title={tooltipTitle}>
+            <Checkbox
+              disableRipple
+              className={classes.toggleAll}
+              checked={isAllSelected}
+              indeterminate={isSomeRowsSelected}
+              onChange={toggleAll}
+            />
+          </Tooltip>
+          <span className={classes.totalRow}>{getSummeryInfo()}</span>
+        </div>
+      )}
 
       <Table<IDealAgent>
         rows={props.data}
