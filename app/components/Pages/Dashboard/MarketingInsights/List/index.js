@@ -70,10 +70,11 @@ function List(props) {
       },
       {
         header: 'Title',
-        id: 'title',
+        id: 'title-date',
         primary: true,
         width: '32%',
         verticalAlign: 'center',
+        accessor: row => row.due_at,
         render: ({ row }) => (
           <TitleColumn
             data={row}

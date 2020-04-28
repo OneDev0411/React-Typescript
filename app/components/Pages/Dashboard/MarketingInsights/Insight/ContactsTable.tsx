@@ -25,6 +25,7 @@ const columns = [
     id: 'contact',
     primary: true,
     width: '40%',
+    accessor: (row: ContactsListType) => row.display_name,
     render: ({ row }: RenderProps<ContactsListType>) => (
       <ContactColumn>
         <div>
@@ -50,6 +51,7 @@ const columns = [
     id: 'opened',
     class: 'opaque',
     width: '20%',
+    accessor: (row: ContactsListType) => row.opened,
     render: ({ row }: RenderProps<ContactsListType>) => (
       <span>Opened: {row.opened}</span>
     )
@@ -59,6 +61,7 @@ const columns = [
     id: 'clicked',
     class: 'opaque',
     width: '20%',
+    accessor: (row: ContactsListType) => row.clicked,
     render: ({ row }: RenderProps<ContactsListType>) => (
       <span>Clicked: {row.clicked}</span>
     )
@@ -68,6 +71,8 @@ const columns = [
 function ContactsTable({ item, sortBy, onChangeSort }: ContactsPropsType) {
   const gridClasses = useGridStyles()
   const rows = contactsList(item)
+
+  console.log('>>', sortBy)
 
   return (
     <Table<ContactsListType>

@@ -88,26 +88,3 @@ export function doFilterOnInsightList(
     }
   }
 }
-
-export enum SortValues {
-  Newest = 'Newest',
-  Oldest = 'Oldest'
-}
-
-export function doSort(list: any, sortValue: SortValues) {
-  const sort = SortValues[sortValue]
-
-  if (sort === SortValues.Newest) {
-    return list.sort(function newestSort(a, b) {
-      return b.due_at - a.due_at
-    })
-  }
-
-  if (sort === SortValues.Oldest) {
-    return list.sort(function oldestSort(a, b) {
-      return a.due_at - b.due_at
-    })
-  }
-
-  return list
-}
