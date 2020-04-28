@@ -28,7 +28,7 @@ import LastTouched from './columns/LastTouched'
 
 const useCustomGridStyles = makeStyles(theme => ({
   row: {
-    '& td': {
+    '& .column': {
       '&.tags': {
         '& .MuiChip-root': { opacity: 0.5 }
       },
@@ -37,7 +37,7 @@ const useCustomGridStyles = makeStyles(theme => ({
         '& svg': { fill: theme.palette.grey['500'] }
       }
     },
-    '&:hover td': {
+    '&:hover .column': {
       '&.tags': {
         '& .MuiChip-root': { opacity: 1 }
       },
