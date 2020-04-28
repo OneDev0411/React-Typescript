@@ -23,7 +23,12 @@ export default function Footer(props) {
       >
         Cancel
       </Button>
-      <Button disabled={props.disabled} onClick={props.onAdd} size="small">
+      <Button
+        appearance="secondary"
+        disabled={props.disabled}
+        onClick={props.onAdd}
+        size="small"
+      >
         {props.isAdding ? 'Adding' : 'Add'}
       </Button>
     </div>
