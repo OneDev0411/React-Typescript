@@ -57,53 +57,40 @@ function Notifications({ params }: WithRouterProps) {
   const handleNotifClick = (notification: INotification) => {
     dispatch(markNotificationAsSeen(notification.id))
 
-    if (notification.objects) {
-      switch (notification.notification_type) {
-        case 'DealRoleReactedToEnvelope':
-          browserHistory.push(
-            `/dashboard/deals/${notification.objects[0].deal}`
-          )
-          break
-        case 'UserReactedToEnvelope':
-          browserHistory.push(
-            `/dashboard/deals/${notification.objects[0].deal}`
-          )
-          break
+    switch (notification.notification_type) {
+      case 'DealRoleReactedToEnvelope':
+        browserHistory.push(`/dashboard/deals/${notification.objects[0].deal}`)
+        break
+      case 'UserReactedToEnvelope':
+        browserHistory.push(`/dashboard/deals/${notification.objects[0].deal}`)
+        break
 
-        case 'OpenHouseAvailableListing':
-          browserHistory.push(`/dashboard/mls/${notification.objects[0].id}`)
-          break
-        case 'ContactAttributeIsDueContact':
-          browserHistory.push(
-            `/dashboard/contacts/${notification.objects[0].id}`
-          )
-          break
-        case 'DealContextIsDueDeal':
-          browserHistory.push(`/dashboard/deals/${notification.objects[0].id}`)
-          break
-        case 'CrmTaskIsDueCrmTask':
-        case 'ReminderIsDueCrmTask':
-        case 'UserAssignedCrmTask':
-        case 'UserEditedCrmTask':
-          openCRMTaskDrawer(notification.objects[0])
-          break
-        default:
-          break
-      }
-    } else if (notification.subjects) {
-      switch (notification.notification_type) {
-        case 'ListingPriceDroppedUser':
-          browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
-          break
-        case 'ListingStatusChangedUser':
-          browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
-          break
-        case 'ListingBecameAvailableUser':
-          browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
-          break
-        default:
-          break
-      }
+      case 'OpenHouseAvailableListing':
+        browserHistory.push(`/dashboard/mls/${notification.objects[0].id}`)
+        break
+      case 'ContactAttributeIsDueContact':
+        browserHistory.push(`/dashboard/contacts/${notification.objects[0].id}`)
+        break
+      case 'DealContextIsDueDeal':
+        browserHistory.push(`/dashboard/deals/${notification.objects[0].id}`)
+        break
+      case 'CrmTaskIsDueCrmTask':
+      case 'ReminderIsDueCrmTask':
+      case 'UserAssignedCrmTask':
+      case 'UserEditedCrmTask':
+        openCRMTaskDrawer(notification.objects[0])
+        break
+      case 'ListingPriceDroppedUser':
+        browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
+        break
+      case 'ListingStatusChangedUser':
+        browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
+        break
+      case 'ListingBecameAvailableUser':
+        browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
+        break
+      default:
+        break
     }
   }
 
