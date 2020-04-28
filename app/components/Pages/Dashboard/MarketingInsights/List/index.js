@@ -160,12 +160,12 @@ function List(props) {
         verticalAlign: 'center',
         width: '2rem',
         render: ({ row }) =>
-          !row.executed_at ? (
+          !row.executed_at && (
             <Actions
               data={row}
               reloadList={() => setQueue(queue => queue + 1)}
             />
-          ) : null
+          )
       }
     ],
     []
