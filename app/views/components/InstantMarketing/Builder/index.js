@@ -47,7 +47,10 @@ import { SOCIAL_NETWORKS, BASICS_BLOCK_CATEGORY } from './constants'
 import { registerEmailBlocks } from './Blocks/Email'
 import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
-import getTemplateRenderData from './utils/get-template-render-data'
+import {
+  getMjmlTemplateRenderData,
+  getNonMjmlTemplateRenderData
+} from './utils/get-template-render-data'
 
 const ENABLE_CUSTOM_RTE = false
 
@@ -279,7 +282,7 @@ class Builder extends React.Component {
     this.emailBlocksRegistered = true
 
     const { brand } = getActiveTeam(this.props.user)
-    const renderData = getTemplateRenderData(brand)
+    const renderData = getMjmlTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
     this.blocks = registerEmailBlocks(this.editor, renderData, {
@@ -326,7 +329,7 @@ class Builder extends React.Component {
 
   registerSocialBlocks = () => {
     const { brand } = getActiveTeam(this.props.user)
-    const renderData = getTemplateRenderData(brand)
+    const renderData = getNonMjmlTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
     this.blocks = registerSocialBlocks(this.editor, renderData)
@@ -528,11 +531,13 @@ class Builder extends React.Component {
     this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
   }
 
-  generateBrandedTemplate = (template, data) => {
+  generateBrandedTemplate = (templateMarkup, data) => {
     const { brand } = getActiveTeam(this.props.user)
-    const renderData = getTemplateRenderData(brand)
+    const renderData = this.isMjmlTemplate
+      ? getMjmlTemplateRenderData(brand)
+      : getNonMjmlTemplateRenderData(brand)
 
-    return nunjucks.renderString(template, {
+    return nunjucks.renderString(templateMarkup, {
       ...data,
       ...renderData
     })
