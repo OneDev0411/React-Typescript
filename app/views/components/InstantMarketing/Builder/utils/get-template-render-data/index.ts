@@ -7,7 +7,7 @@ import { getListingUrl, get } from '../../../helpers/nunjucks-functions'
 
 interface CommonTemplateRenderData {
   getListingUrl: (listing: IListing) => string
-  get: (name: string) => string
+  get: (name: BrandSettingsPaletteKey) => string
 }
 
 export interface TemplateRenderData extends CommonTemplateRenderData {
