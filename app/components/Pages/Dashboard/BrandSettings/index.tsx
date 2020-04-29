@@ -110,7 +110,7 @@ Are you sure?`,
       : getSimpleSidebarSections()
 
   return (
-    <Acl access={[ACL.BACK_OFFICE, ACL.MARKETING]}>
+    <Acl access={[ACL.ADMIN, ACL.MARKETING]}>
       <Helmet>
         <title>Brand Settings | Rechat</title>
       </Helmet>
