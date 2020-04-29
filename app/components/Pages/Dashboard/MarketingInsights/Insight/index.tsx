@@ -15,7 +15,6 @@ import { Container } from '../../Contacts/components/Container'
 import Loading from '../../../../Partials/Loading'
 
 import { percent } from '../List/helpers'
-import { SortValues } from './helpers'
 
 import { InsightContainer, PageContainer, SummaryCard } from './styled'
 import useItemData from './useItemData'
@@ -34,7 +33,7 @@ function Insight(props: InsightPropsType) {
   const { id } = props.params
   const [sortField, setSortField] = useState<SortFieldType>({
     label: 'Most Opened',
-    value: SortValues.MOST_OPENED,
+    value: 'opened',
     ascending: false
   })
   const [isOpenViewEmail, setOpenViewEmail] = React.useState(false)
