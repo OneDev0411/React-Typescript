@@ -7,7 +7,7 @@ import Fetch from '../../../services/fetch'
  * @returns {object} Returns merged contact.
  */
 
-export async function mergeContact(contactId, sub_contacts, query = {}) {
+export async function mergeContact(contactId, sub_contacts) {
   if (!contactId) {
     throw new Error('Contact id is required.')
   }
@@ -20,17 +20,14 @@ export async function mergeContact(contactId, sub_contacts, query = {}) {
     throw new Error('sub_contacts is empty!')
   }
 
-  const response = await new Fetch()
-    .post('/contacts/merge')
-    .send({
-      clusters: [
-        {
-          parent: contactId,
-          sub_contacts: sub_contacts.filter(item => item !== contactId)
-        }
-      ]
-    })
-    .query(query)
+  const response = await new Fetch().post('/contacts/merge').send({
+    clusters: [
+      {
+        parent: contactId,
+        sub_contacts: sub_contacts.filter(item => item !== contactId)
+      }
+    ]
+  })
 
   return response.body
 }
