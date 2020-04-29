@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { IconButton, MenuItem } from '@material-ui/core'
+import { IconButton, MenuItem, Typography } from '@material-ui/core'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 
@@ -37,7 +37,7 @@ export default function Menu({ contactId, handleOnDelete }: Props) {
               })
             }}
           >
-            Delete
+            <Typography color="error">Delete</Typography>
           </MenuItem>
         </div>
       )}
