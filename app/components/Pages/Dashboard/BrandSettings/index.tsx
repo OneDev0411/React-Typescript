@@ -5,6 +5,8 @@ import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import isEqual from 'lodash/isEqual'
+
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
@@ -75,8 +77,10 @@ Are you sure?`,
   }
 
   const handleUpdateSettings = (newSettings: BrandSettingsPalette) => {
-    if (!defaultSettings) {
+    if (!defaultSettings && !isEqual(newSettings, settings)) {
       setDefaultSettings(settings)
+    } else {
+      setDefaultSettings(null)
     }
 
     setSettings(newSettings)
