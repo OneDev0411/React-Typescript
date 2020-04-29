@@ -21,7 +21,7 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
       width: 0,
       flexGrow: 1,
       padding: theme.spacing(1.5, 0),
-      paddingRight: `calc(${theme.spacing(2)}px + 0.5em)` /* scroll bar */,
+      paddingRight: theme.spacing(3) /* 1 unit (=0.5em) for scroll bar */,
       '&:hover': {
         '& $date': {
           display: 'none'
