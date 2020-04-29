@@ -114,6 +114,7 @@ export const TagsList = (props: Props) => {
         style: { width: 220 }
       }}
       morePlugin={{
+        count: 5,
         textContainer: ({ children }) => <ListItem button>{children}</ListItem>
       }}
       renderMenu={({ close }) =>
