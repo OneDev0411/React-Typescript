@@ -35,7 +35,7 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
       const { file } = action.payload
 
       const newState = state.map(media => {
-        if (media.file === file) {
+        if (media.file === file && !media.isNew) {
           return { ...media, selected: !media.selected }
         }
 
@@ -63,7 +63,7 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
       const { selected } = action.payload
 
       const newState = state.map(media => {
-        return { ...media, selected }
+        return { ...media, selected: media.isNew ? false : selected }
       })
 
       return newState
