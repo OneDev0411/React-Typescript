@@ -8,13 +8,9 @@ interface ContactsMergeClusterInput {
 export async function mergeContactsBatch(
   clusters: ContactsMergeClusterInput[]
 ): Promise<ApiResponseBody<unknown>> {
-  try {
-    const response = await new Fetch().post('/contacts/merge').send({
-      clusters
-    })
+  const response = await new Fetch().post('/contacts/merge').send({
+    clusters
+  })
 
-    return response.body.data
-  } catch (error) {
-    throw error
-  }
+  return response.body.data
 }

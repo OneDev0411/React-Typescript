@@ -1,5 +1,4 @@
 import Fetch from '../../../services/fetch'
-import { defaultQuery } from '../helpers/default-query'
 
 /**
  * Merging contacts to a contact.
@@ -8,11 +7,7 @@ import { defaultQuery } from '../helpers/default-query'
  * @returns {object} Returns merged contact.
  */
 
-export async function mergeContact(
-  contactId,
-  sub_contacts,
-  query = defaultQuery
-) {
+export async function mergeContact(contactId, sub_contacts, query = {}) {
   if (!contactId) {
     throw new Error('Contact id is required.')
   }
@@ -25,16 +20,17 @@ export async function mergeContact(
     throw new Error('sub_contacts is empty!')
   }
 
-  try {
-    const response = await new Fetch()
-      .post(`/contacts/${contactId}/merge`)
-      .send({
-        sub_contacts: sub_contacts.filter(item => item !== contactId)
-      })
-      .query(query)
+  const response = await new Fetch()
+    .post('/contacts/merge')
+    .send({
+      clusters: [
+        {
+          parent: contactId,
+          sub_contacts: sub_contacts.filter(item => item !== contactId)
+        }
+      ]
+    })
+    .query(query)
 
-    return response.body
-  } catch (error) {
-    throw error
-  }
+  return response.body
 }

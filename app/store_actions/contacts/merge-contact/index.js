@@ -1,5 +1,6 @@
 import { addNotification as notify } from 'reapop'
 import { batchActions } from 'redux-batched-actions'
+
 import {
   FETCH_MERGE_CONTACTS_REQUEST,
   FETCH_MERGE_CONTACTS_FAILURE
