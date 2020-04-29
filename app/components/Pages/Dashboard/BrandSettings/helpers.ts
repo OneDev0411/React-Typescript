@@ -1,3 +1,7 @@
+import isEqual from 'lodash/isEqual'
+
+import { DEFAULT_BRAND_PALETTE } from 'utils/constants'
+
 import { SidebarSection, SidebarSectionField } from './types'
 
 export function getSimpleSidebarSections(): SidebarSection[] {
@@ -243,6 +247,10 @@ export function getSidebarSections(): SidebarSection[] {
 export function getPreferredSidebarView(
   settings: BrandSettingsPalette
 ): 'simple' | 'full' {
+  if (isEqual(settings, DEFAULT_BRAND_PALETTE)) {
+    return 'simple'
+  }
+
   const simpleSidebarSections = getSimpleSidebarSections()
   const shouldShowSimple = simpleSidebarSections.every(section => {
     return section.fields.every((field: SidebarSectionField) => {
