@@ -56,19 +56,19 @@ export const useInboxEmailThreadListItemStyles = makeStyles(
       height: 0,
       flex: '0 0 auto',
       position: 'relative',
-      top: -theme.spacing(1.5),
-      right: -theme.spacing(1)
+      top: theme.spacing(-1.5),
+      right: theme.spacing(-1)
     },
     action: {
-      '& svg *': {
+      '& svg': {
         fill: theme.palette.grey[600]
       },
-      '&:hover:not($actionDisabled) svg *': {
+      '&:hover:not($actionDisabled) svg': {
         fill: theme.palette.common.black
       }
     },
     actionDisabled: {
-      '& svg *': {
+      '& svg': {
         fill: theme.palette.grey[400]
       }
     },
