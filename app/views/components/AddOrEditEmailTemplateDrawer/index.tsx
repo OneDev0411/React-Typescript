@@ -56,14 +56,16 @@ export function AddOrEditEmailTemplateDrawer({
 
   useDeepCompareEffect(() => {
     const template: Partial<IBrandEmailTemplateInput> = emailTemplate || {}
+    const body = template.body || ''
 
     setFormData({
       subject: template.subject || '',
       name: template.name || '',
       include_signature: template.include_signature || false,
       goal: template.goal || '',
-      body: template.body || ''
+      body
     })
+    bodyEditor.reset(body)
   }, [emailTemplate])
 
   const handleSubmit = async (values: IBrandEmailTemplateInput) => {
