@@ -54,8 +54,9 @@ export const MarketingList = () => {
                     }
                   >
                     <Box>
-                      Some template preview images might be outdated or not
-                      ready. They will be here in a few minutes.
+                      Some of the previews shown below may not be ready or
+                      slightly outdated. We are working in the background to
+                      update them. This usually takes a few minutes.
                     </Box>
                   </Alert>
                 </Box>
