@@ -34,11 +34,7 @@ export const renameMedia = (
     }
   })
 
-  try {
-    await renameMediaModel(dealId, file, name)
-  } catch (err) {
-    throw err
-  }
+  await renameMediaModel(dealId, file, name)
 }
 
 export const toggleGallerySelection = (selected: boolean) => ({
@@ -48,10 +44,17 @@ export const toggleGallerySelection = (selected: boolean) => ({
   }
 })
 
-export const addMedia = (fileObject: {}) => ({
+export const addMedia = ({
+  file: fileObject,
+  order = 0
+}: {
+  file: {}
+  order?: number
+}) => ({
   type: actionTypes.ADD_MEDIA,
   payload: {
-    fileObject
+    fileObject,
+    order
   }
 })
 

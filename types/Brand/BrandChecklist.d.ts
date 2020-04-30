@@ -7,7 +7,7 @@ declare interface IBrandChecklist extends IModel<'brand_checklist'> {
   order: number
   property_type: string // it's actually enum
   tab_name: string
-  tasks: IBrandChecklistTask[]
+  tasks: IBrandChecklistTask[] | null
 }
 
 declare interface IBrandChecklistTask {

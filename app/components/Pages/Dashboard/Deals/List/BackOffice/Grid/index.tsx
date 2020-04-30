@@ -174,6 +174,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       columns={columns}
       rows={data}
       totalRows={data.length}
+      virtualize={data.length > 150}
       LoadingStateComponent={LoadingState}
       EmptyStateComponent={EmptyState}
       loading={isFetchingDeals ? 'middle' : null}

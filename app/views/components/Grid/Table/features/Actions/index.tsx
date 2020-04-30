@@ -14,6 +14,7 @@ import { SELECTION__TOGGLE_ALL } from '../../context/constants'
 interface Props<Row> {
   rows: Row[]
   totalRows: number
+  showSelectAll: boolean
   TableActions: React.ReactNode | null
 }
 
@@ -34,10 +35,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     infoContainer: {
       display: 'flex',
-      alignItems: 'center'
-    },
-    actionsContainer: {
-      marginLeft: theme.spacing(5)
+      alignItems: 'center',
+      marginRight: theme.spacing(5)
     },
     summary: {
       fontSize: theme.typography.body2.fontSize,
@@ -47,26 +46,35 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export function Actions<Row>({ rows, TableActions, totalRows }: Props<Row>) {
+export function Actions<Row>({
+  rows,
+  totalRows,
+  TableActions,
+  showSelectAll = true
+}: Props<Row>) {
   const classes = useStyles()
   const [state, dispatch] = useGridContext()
+  const {
+    isAllRowsSelected,
+    isEntireRowsSelected,
+    selectedRowIds,
+    excludedRows
+  } = state.selection
 
   if (
-    !state.selection.isAllRowsSelected &&
-    !state.selection.isEntireRowsSelected &&
-    state.selection.selectedRowIds.length === 0
+    !isAllRowsSelected &&
+    !isEntireRowsSelected &&
+    selectedRowIds.length === 0
   ) {
     return null
   }
 
   const getSelectedCount = () => {
-    if (state.selection.isEntireRowsSelected) {
-      return totalRows - state.selection.excludedRows.length
+    if (isEntireRowsSelected) {
+      return totalRows - excludedRows.length
     }
 
-    return state.selection.isAllRowsSelected
-      ? rows.length
-      : state.selection.selectedRowIds.length
+    return isAllRowsSelected ? rows.length : selectedRowIds.length
   }
   const toggleAll = () =>
     dispatch({
@@ -74,44 +82,40 @@ export function Actions<Row>({ rows, TableActions, totalRows }: Props<Row>) {
       rows
     })
 
-  const isAllRowsSelected =
-    state.selection.isAllRowsSelected ||
-    state.selection.selectedRowIds.length === rows.length ||
-    (state.selection.isEntireRowsSelected &&
-      state.selection.excludedRows.length === 0)
+  const isAllSelected =
+    isAllRowsSelected ||
+    selectedRowIds.length === rows.length ||
+    (isEntireRowsSelected && excludedRows.length === 0)
 
   const isSomeRowsSelected =
-    (state.selection.isAllRowsSelected === false &&
-      state.selection.selectedRowIds.length > 0 &&
-      state.selection.selectedRowIds.length < rows.length) ||
-    (state.selection.isEntireRowsSelected &&
-      state.selection.excludedRows.length > 0)
-  const tooltipTitle = isAllRowsSelected
-    ? 'Deselect All Rows'
-    : 'Select All Rows'
+    (isAllRowsSelected === false &&
+      selectedRowIds.length > 0 &&
+      selectedRowIds.length < rows.length) ||
+    (isEntireRowsSelected && excludedRows.length > 0)
+  const tooltipTitle = isAllSelected ? 'Deselect All Rows' : 'Select All Rows'
 
   return (
     <Slide in direction="up">
       <div className={classes.container}>
-        <div className={classes.infoContainer}>
-          <Tooltip title={tooltipTitle} placement="top">
-            <Checkbox
-              checked={isAllRowsSelected}
-              tooltipTitle={tooltipTitle}
-              indeterminate={isSomeRowsSelected}
-              onChange={toggleAll}
-            />
-          </Tooltip>
+        {showSelectAll && (
+          <div className={classes.infoContainer}>
+            <Tooltip title={tooltipTitle} placement="top">
+              <Checkbox
+                checked={isAllSelected}
+                tooltipTitle={tooltipTitle}
+                indeterminate={isSomeRowsSelected}
+                onChange={toggleAll}
+              />
+            </Tooltip>
 
-          <span className={classes.summary} onClick={toggleAll}>
-            {getSelectedCount()} of {totalRows} selected
-          </span>
-          <ToggleEntireRows<Row> rows={rows} totalRows={totalRows} />
-        </div>
-
-        {TableActions && (
-          <div className={classes.actionsContainer}>{TableActions}</div>
+            <span className={classes.summary} onClick={toggleAll}>
+              {getSelectedCount()} of {totalRows} selected
+            </span>
+            <ToggleEntireRows<Row> rows={rows} totalRows={totalRows} />
+          </div>
         )}
+
+        {TableActions && <div>{TableActions}</div>}
       </div>
     </Slide>
   )

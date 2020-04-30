@@ -39,9 +39,7 @@ function TitleColumn({ data, reloadList }) {
     )
   } else {
     titleRenderer = (
-      <StyledLink to={isScheduled ? '' : `/dashboard/insights/${data.id}`}>
-        {title}
-      </StyledLink>
+      <StyledLink to={`/dashboard/insights/${data.id}`}>{title}</StyledLink>
     )
   }
 

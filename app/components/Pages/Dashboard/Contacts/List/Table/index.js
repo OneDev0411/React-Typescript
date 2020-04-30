@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import cn from 'classnames'
-import { createStyles, makeStyles } from '@material-ui/core'
+import { makeStyles, useTheme } from '@material-ui/core'
 
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 
@@ -26,35 +26,34 @@ import TagsString from './columns/Tags'
 import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
 
-const useCustomGridStyles = makeStyles(theme =>
-  createStyles({
-    row: {
-      '& td': {
-        '&.tags': {
-          '& .MuiChip-root': { opacity: 0.5 }
-        },
-        '&.flows': {
-          '& a': { color: theme.palette.grey['500'] },
-          '& svg': { fill: theme.palette.grey['500'] }
-        }
+const useCustomGridStyles = makeStyles(theme => ({
+  row: {
+    '& .column': {
+      '&.tags': {
+        '& .MuiChip-root': { opacity: 0.5 }
       },
-      '&:hover td': {
-        '&.tags': {
-          '& .MuiChip-root': { opacity: 1 }
-        },
-        '&.flows': {
-          '& a': { color: theme.palette.text.primary },
-          '& svg': { fill: theme.palette.text.primary }
-        }
+      '&.flows': {
+        '& a': { color: theme.palette.grey['500'] },
+        '& svg': { fill: theme.palette.grey['500'] }
+      }
+    },
+    '&:hover .column': {
+      '&.tags': {
+        '& .MuiChip-root': { opacity: 1 }
+      },
+      '&.flows': {
+        '& a': { color: theme.palette.text.primary },
+        '& svg': { fill: theme.palette.text.primary }
       }
     }
-  })
-)
+  }
+}))
 
 const ContactsList = props => {
   const gridClasses = useGridStyles()
   const customGridClasses = useCustomGridStyles()
   const [selectedTagContact, setSelectedTagContact] = useState([])
+  const theme = useTheme()
 
   const onSelectTagContact = selectedTagContact =>
     setSelectedTagContact([selectedTagContact])
@@ -159,16 +158,18 @@ const ContactsList = props => {
         getTrProps={getRowProps}
         getTdProps={getColumnProps}
         selection={{
-          defaultRender: ({ row }) => <Avatar contact={row} />
+          defaultRender: ({ row }) => <Avatar contact={row} />,
+          columnProps: {
+            width: theme.spacing(7)
+          },
+          showSelectAll: false
         }}
         classes={{
           row: cn(gridClasses.row, customGridClasses.row)
         }}
         infiniteScrolling={{
-          accuracy: 300, // px
-          debounceTime: 300, // ms
-          onScrollBottom: props.onRequestLoadMore,
-          onScrollTop: props.onRequestLoadMoreBefore
+          onReachEnd: props.onRequestLoadMore,
+          onReachStart: props.onRequestLoadMoreBefore
         }}
         TableActions={
           <TableActions

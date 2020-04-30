@@ -60,7 +60,8 @@ export function CheckListTable({
           <TableRow key={task.id}>
             <TableCell>
               <InlineEditableString
-                {...(index === checklist.tasks.length - 1
+                {...(Array.isArray(checklist.tasks) &&
+                index === checklist.tasks.length - 1
                   ? { ref: lastTaskNameEditorRef }
                   : {})}
                 value={task.title}

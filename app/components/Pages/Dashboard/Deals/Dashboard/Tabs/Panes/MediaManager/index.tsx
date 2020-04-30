@@ -36,12 +36,13 @@ export default function MediaManager({ user, deal }: Props) {
 
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
   const confirmationModal = useContext(ConfirmationModalContext)
-  const upload = async fileObject => {
+  const upload = async (fileObject, order) => {
     try {
       const response = await uploadMedia(
         deal.id,
         fileObject,
         '',
+        order,
         progressEvent => {
           if (progressEvent.percent) {
             dispatch(
@@ -79,9 +80,13 @@ export default function MediaManager({ user, deal }: Props) {
       })
     }
 
+    let nextOrder =
+      Math.max(...state.map(galleryItem => galleryItem.order), -1) + 1
+
     files.forEach(file => {
-      dispatch(addMedia(file))
-      upload(file)
+      dispatch(addMedia({ file, order: nextOrder }))
+      upload(file, nextOrder)
+      nextOrder += 1
     })
   }
 

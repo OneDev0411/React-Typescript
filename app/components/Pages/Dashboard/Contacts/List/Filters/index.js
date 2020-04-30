@@ -1,10 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { createStyles, makeStyles } from '@material-ui/core'
+import { Checkbox, Tooltip, createStyles, makeStyles } from '@material-ui/core'
 
 import { selectTags } from 'reducers/contacts/tags'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+
+import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
+import { SELECTION__TOGGLE_ENTIRE_ROWS } from 'components/Grid/Table/context/constants'
 
 import Filters from 'components/Grid/Filters'
 import SaveSegment from 'components/Grid/SavedSegments/Create'
@@ -22,6 +25,13 @@ import { getPredefinedContactLists } from '../utils/get-predefined-contact-lists
 
 const useStyles = makeStyles(theme =>
   createStyles({
+    infoContainer: {
+      display: 'inline-block'
+    },
+    toggleAll: {
+      padding: 0,
+      marginRight: theme.spacing(1)
+    },
     totalRow: {
       display: 'inline-flex',
       marginRight: theme.spacing(2),
@@ -32,7 +42,28 @@ const useStyles = makeStyles(theme =>
 )
 
 function ContactFilters(props) {
+  const [state, dispatch] = useGridContext()
   const classes = useStyles()
+  const {
+    isAllRowsSelected,
+    isEntireRowsSelected,
+    selectedRowIds,
+    excludedRows
+  } = state.selection
+  const isAllSelected =
+    isAllRowsSelected ||
+    selectedRowIds.length === props.contactCount ||
+    (isEntireRowsSelected && excludedRows.length === 0)
+
+  const isSomeRowsSelected =
+    (isAllRowsSelected === false &&
+      selectedRowIds.length > 0 &&
+      selectedRowIds.length < props.contactCount) ||
+    (isEntireRowsSelected && excludedRows.length > 0)
+  const tooltipTitle =
+    isAllSelected || isEntireRowsSelected
+      ? 'Deselect All Rows'
+      : 'Select All Rows'
 
   const getConfig = () => {
     const { attributeDefs, tags, user } = props
@@ -79,10 +110,38 @@ function ContactFilters(props) {
       }
     ]
   }
+  const getSummeryInfo = () => {
+    let selectedCount
+
+    if (isEntireRowsSelected) {
+      selectedCount = props.contactCount - excludedRows.length
+    } else if (selectedRowIds.length > 0) {
+      selectedCount = selectedRowIds.length
+    }
+
+    return selectedCount
+      ? `${selectedCount} of ${props.contactCount} selected`
+      : `${props.contactCount} CONTACTS`
+  }
+  const toggleAll = () =>
+    dispatch({
+      type: SELECTION__TOGGLE_ENTIRE_ROWS
+    })
 
   return (
     <>
-      <span className={classes.totalRow}>{props.contactCount} CONTACTS</span>
+      <div className={classes.infoContainer}>
+        <Tooltip title={tooltipTitle}>
+          <Checkbox
+            disableRipple
+            className={classes.toggleAll}
+            checked={isAllSelected}
+            indeterminate={isSomeRowsSelected}
+            onChange={toggleAll}
+          />
+        </Tooltip>
+        <span className={classes.totalRow}>{getSummeryInfo()}</span>
+      </div>
       <Filters
         name="contacts"
         plugins={['segments']}

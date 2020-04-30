@@ -1,5 +1,6 @@
 import { addNotification as notify } from 'reapop'
 import { batchActions } from 'redux-batched-actions'
+
 import {
   FETCH_MERGE_CONTACTS_REQUEST,
   FETCH_MERGE_CONTACTS_FAILURE
@@ -7,7 +8,7 @@ import {
 import { mergeContact as postMergeContacts } from '../../../models/contacts/merge-contact'
 import { afterDeleteContactsFetch } from '../delete-contact'
 
-export function mergeContact(contactId, sub_contacts, query) {
+export function mergeContact(contactId, sub_contacts) {
   return async (dispatch, getState) => {
     if (
       !contactId ||
@@ -28,7 +29,7 @@ export function mergeContact(contactId, sub_contacts, query) {
         type: FETCH_MERGE_CONTACTS_REQUEST
       })
 
-      await postMergeContacts(contactId, sub_contacts, query)
+      await postMergeContacts(contactId, sub_contacts)
 
       await afterDeleteContactsFetch(dispatch, getState, sub_contacts)
       dispatch(

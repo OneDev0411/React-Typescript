@@ -66,6 +66,12 @@ export function useEditorState(HTML: string = ''): UseEditorState {
 
     // convenient method for getting html content of the editor
     const getHtml = () => {
+      const plainText = getPlainText()
+
+      if (plainText.length === 0) {
+        return ''
+      }
+
       return stateToHTML(
         editorStateRef.current.getCurrentContent(),
         stateToHtmlOptions
