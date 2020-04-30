@@ -67,13 +67,13 @@ export function UserTypeField() {
               <FormControlLabel
                 value="Agent"
                 control={<Radio />}
-                label="I'm an Agent"
+                label="I'm a Professional"
                 classes={{ root: classes.controlLabel }}
               />
               <FormControlLabel
                 value="Client"
                 control={<Radio />}
-                label="I'm a Client"
+                label="I'm a Buyer/Seller"
                 classes={{ root: classes.controlLabel }}
               />
             </RadioGroup>
