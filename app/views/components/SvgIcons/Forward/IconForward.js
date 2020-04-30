@@ -49,7 +49,6 @@ const Image = styled.svg`${propsToCss}`
 const children = (
   <Fragment>
     <path
-      fill='currentColor'
       d='M22.491 11.07l-6.784-6.777A1 1 0 0 0 14 5v3.043a.25.25 0 0 1-.25.25H2a1 1 0 0 0-1 1v4.5a1 1 0 0 0 1 1h11.75a.25.25 0 0 1 .25.25v3.1a1 1 0 0 0 1.684.727l6.781-6.357a1.001 1.001 0 0 0 .026-1.443z'
       key='key-0'
     />
