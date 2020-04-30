@@ -40,14 +40,19 @@ export default function TableActions({ listings, user }: Props) {
 
   const deselectRows = () => dispatch(resetRows())
 
+  const selectedListings = listings.filter(listing =>
+    state.selection.selectedRowIds.includes(listing.id)
+  )
+
   return (
     <div className={classes.container}>
       <Acl.Crm>
         <CreateTourAction
           disabled={!isAnyRowsSelected}
-          listings={listings.filter(listing =>
-            state.selection.selectedRowIds.includes(listing.id)
-          )}
+          isExceeded={
+            selectedListings.length > 27 || state.selection.isEntireRowsSelected
+          }
+          listings={selectedListings}
           submitCallback={deselectRows}
           user={user}
         />

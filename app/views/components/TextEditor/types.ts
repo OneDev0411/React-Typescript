@@ -1,4 +1,3 @@
-import { FieldProps } from 'react-final-form'
 import {
   ComponentProps,
   CSSProperties,
@@ -8,12 +7,8 @@ import {
   RefObject
 } from 'react'
 import Dropzone from 'react-dropzone'
-
 import { ContentBlock, ContentState, EditorProps, EditorState } from 'draft-js'
-
 import { DraftJsPlugin } from 'draft-js-plugins-editor'
-
-import { Options } from 'draft-js-import-html'
 
 import { ClassesProps } from 'utils/ts-utils'
 
@@ -35,10 +30,11 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
   children?: ReactNode
   className?: string
   defaultValue?: string
-  input?: FieldProps<any>['input']
-  onChange?: (value: string) => void
+  onChange?: (state: EditorState) => void
   disabled?: boolean
   placeholder?: string
+
+  editorState: EditorState
 
   /**
    * DraftJS [textAlignment](https://draftjs.org/docs/advanced-topics-text-direction#text-alignment)
@@ -95,7 +91,6 @@ export interface DraftPluginEditorInlineDecoratorProps {
 export interface EditorContextApi {
   editorState: EditorState
   setEditorState: (newState: EditorState) => void
-  stateFromHtmlOptions: Options
   editorRef: RefObject<DraftJsPlugin>
   /**
    * Adds a plugin and return a function which will remove this plugin.

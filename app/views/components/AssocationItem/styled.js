@@ -1,8 +1,16 @@
 import styled, { css } from 'styled-components'
+import { Avatar } from '@material-ui/core'
 
 import { grey } from '../../utils/colors'
 import Button from '../Button/IconButton'
 import { LatoFamilyStyle } from '../Typography/styles'
+
+export const ProfilePhoto = styled(Avatar)`
+  width: 2em;
+  height: 2em;
+  background-color: ${props => props.theme.palette.grey['400']};
+  color: ${props => props.theme.palette.grey['500']};
+`
 
 export const RemoveButton = styled(Button)`
   visibility: hidden;

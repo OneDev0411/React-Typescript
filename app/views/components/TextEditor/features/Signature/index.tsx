@@ -1,14 +1,13 @@
-import { ContentBlock } from 'draft-js'
-
-import { Box } from '@material-ui/core'
-
 import React, { useContext, useLayoutEffect } from 'react'
+import { ContentBlock } from 'draft-js'
+import { Box } from '@material-ui/core'
+import { Options as ExportOptions } from 'draft-js-import-html'
 
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
 
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 import createSignaturePlugin from './draft-js-signature-plugin'
-import { useEditor } from '../../hooks/use-editor'
+import { EditorContext } from '../../editor-context'
 import { ToolbarFragment } from '../../components/ToolbarFragment'
 import { Checkbox } from '../../../Checkbox'
 import ConfirmationModalContext from '../../../ConfirmationModal/context'
@@ -30,15 +29,18 @@ interface Props {
    * use it.
    */
   onEditSignature?: () => void
+
+  stateFromHtmlOptions: ExportOptions
 }
 
 export function SignatureFeature({
   signature,
   onEditSignature,
+  stateFromHtmlOptions,
   hasSignatureByDefault
 }: Props) {
   const confirmation = useContext(ConfirmationModalContext)
-  const { stateFromHtmlOptions, editorState, setEditorState } = useEditor()
+  const { editorState, setEditorState } = useContext(EditorContext)
 
   const signatureRef = useLatestValueRef(signature)
 

@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { IconButton } from '@material-ui/core'
 
-import Avatar from '../Avatar'
+import { getNameInitials } from 'utils/helpers.js'
+
 import { ShadowLink } from '../ShadowLink'
 import CloseIcon from '../SvgIcons/Close/CloseIcon'
 
 import {
+  ProfilePhoto,
   Container,
   Title,
   Details,
@@ -41,11 +43,17 @@ class AssociationItemBase extends Component {
     }
 
     const record = association[association.association_type]
+    const { avatar } = record
 
     return (
       <Container style={this.props.style} isReadOnly={isReadOnly}>
         <DetailsContainer>
-          <Avatar {...record.avatar} />
+          <ProfilePhoto
+            alt={avatar.title}
+            src={avatar.image || avatar.placeHolderImage}
+          >
+            {getNameInitials(avatar.title)}
+          </ProfilePhoto>
           <div style={{ marginLeft: '0.5em' }}>
             <Title>{record.title}</Title>
             <Details>{record.details}</Details>

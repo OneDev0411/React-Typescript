@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useContext } from 'react'
 import createRichButtonsPlugin from 'draft-js-richbuttons-plugin'
 import createAnchorPlugin from 'draft-js-anchor-plugin'
 
@@ -11,7 +11,7 @@ import { DraftJsPlugin } from 'draft-js-plugins-editor'
 import { getShortcutTooltip } from 'utils/get-shortcut-tooltip'
 
 import { ToolbarFragment } from '../../components/ToolbarFragment'
-import { useEditor } from '../../hooks/use-editor'
+import { EditorContext } from '../../editor-context'
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 import { ToolbarToggleButton } from '../../components/ToolbarToggleButton'
 import IconBold from '../../../SvgIcons/Bold/IconBold'
@@ -63,7 +63,7 @@ export function RichTextFeature({
   lists = true,
   textSize = true
 }: Props) {
-  const { editorState, setEditorState, editorRef } = useEditor()
+  const { editorState, setEditorState, editorRef } = useContext(EditorContext)
   const originalEditorRef = useRef<DraftEditor | null>(null)
 
   if (editorRef.current) {
