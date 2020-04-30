@@ -8,11 +8,9 @@ import {
   Font
 } from '@samuelmeuli/font-manager'
 
-// import config from '../../../../../../../config/public'
+import config from '../../../../../../../config/public'
 
 import { FieldProps } from './types'
-
-const API_KEY = 'AIzaSyCNY_oRs9HhkFcAyQJLQNTXWoa45jUm7sc'
 
 function getFontId(fontFamily: string): string {
   return fontFamily.replace(/\s+/g, '-').toLowerCase()
@@ -46,11 +44,15 @@ export default function FontField({
 
     async function initFontManager() {
       try {
-        fontManager.current = new FontManager(API_KEY, FONT_FAMILY_DEFAULT, {
-          ...OPTIONS_DEFAULTS,
-          filter: fontManagerFilter,
-          limit: 500
-        })
+        fontManager.current = new FontManager(
+          config.google.api_key,
+          FONT_FAMILY_DEFAULT,
+          {
+            ...OPTIONS_DEFAULTS,
+            filter: fontManagerFilter,
+            limit: 500
+          }
+        )
 
         const iterableFonts = await fontManager.current.init()
         const allFonts = Array.from(iterableFonts.values())
