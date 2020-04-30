@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { browserHistory, Link, WithRouterProps } from 'react-router'
-import { Helmet } from 'react-helmet'
+
+import { Link, WithRouterProps } from 'react-router'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
 import { Box, Typography } from '@material-ui/core'
@@ -14,6 +14,8 @@ import { upgradeAgent } from 'models/user/upgrade-to-agent'
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
+import { useDocumentTitle } from '../use-document-title'
+
 import Header from '../Header'
 import Container from '../Container'
 import SkipButton from '../SkipButton'
@@ -25,6 +27,8 @@ interface FormValues {
 }
 
 export function SecurityQuestion(props: WithRouterProps) {
+  useDocumentTitle('Security Question')
+
   const dispatch = useDispatch()
   const commonClasses = useCommonStyles({})
   const brand: IBrand = useSelector((store: IAppState) => store.brand)
@@ -40,7 +44,7 @@ export function SecurityQuestion(props: WithRouterProps) {
       if (user) {
         dispatch(updateUser(user))
 
-        browserHistory.push('/onboarding/config-brand')
+        props.router.push('/onboarding/config-brand')
       }
     } catch (error) {
       return {
@@ -62,74 +66,68 @@ export function SecurityQuestion(props: WithRouterProps) {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>Confirm Contact Info| Onboarding | Rechat</title>
-      </Helmet>
+    <Container>
+      <SkipButton to="/onboarding/config-brand" />
+      <Header
+        brand={brand}
+        title="Agent Verification"
+        subtitle="Enter the complete mobile number or email address."
+      />
 
-      <Container>
-        <SkipButton to="/onboarding/config-brand" />
-        <Header
-          brand={brand}
-          title="Agent Verification"
-          subtitle="Enter the complete mobile number or email address."
-        />
+      <Form
+        onSubmit={onSubmit}
+        validate={validate}
+        render={({ handleSubmit, form }) => {
+          const { submitError, submitting } = form.getState()
 
-        <Form
-          onSubmit={onSubmit}
-          validate={validate}
-          render={({ handleSubmit, form }) => {
-            const { submitError, submitting } = form.getState()
-
-            return (
-              <form onSubmit={handleSubmit}>
-                <Box textAlign="left" mb={2}>
-                  <Typography
-                    variant="body2"
-                    display="block"
-                    color="textSecondary"
-                  >
-                    Hint:
+          return (
+            <form onSubmit={handleSubmit}>
+              <Box textAlign="left" mb={2}>
+                <Typography
+                  variant="body2"
+                  display="block"
+                  color="textSecondary"
+                >
+                  Hint:
+                </Typography>
+                {agent.secret_questions.map((question, index) => (
+                  <Typography key={index} display="block" variant="subtitle1">
+                    {question}
                   </Typography>
-                  {agent.secret_questions.map((q, index) => (
-                    <Typography key={index} display="block" variant="subtitle1">
-                      {q}
-                    </Typography>
-                  ))}
-                </Box>
+                ))}
+              </Box>
 
-                <Box mb={5}>
-                  <Box mb={5} textAlign="left">
-                    <Field
-                      component={MUITextInput}
-                      id="secret"
-                      label="Security Question"
-                      name="secret"
-                      variant="filled"
-                      classes={{ root: commonClasses.field }}
-                    />
-                    {submitError && !submitting && (
-                      <Box mt={3}>
-                        <Alert severity="error">{submitError}</Alert>
-                      </Box>
-                    )}
-                  </Box>
-
-                  {submitting ? (
-                    <CircleSpinner />
-                  ) : (
-                    <NextButton type="submit" disabled={submitting} />
+              <Box mb={5}>
+                <Box mb={5} textAlign="left">
+                  <Field
+                    component={MUITextInput}
+                    id="secret"
+                    label="Security Question"
+                    name="secret"
+                    variant="filled"
+                    classes={{ root: commonClasses.field }}
+                  />
+                  {submitError && !submitting && (
+                    <Box mt={3}>
+                      <Alert severity="error">{submitError}</Alert>
+                    </Box>
                   )}
                 </Box>
-              </form>
-            )
-          }}
-        />
 
-        <Link to="/onboarding/confirm-agent-id">
-          Try again with a new agent license!
-        </Link>
-      </Container>
-    </>
+                {submitting ? (
+                  <CircleSpinner />
+                ) : (
+                  <NextButton type="submit" disabled={submitting} />
+                )}
+              </Box>
+            </form>
+          )
+        }}
+      />
+
+      <Link to="/onboarding/confirm-agent-id">
+        Try again with a new agent license!
+      </Link>
+    </Container>
   )
 }

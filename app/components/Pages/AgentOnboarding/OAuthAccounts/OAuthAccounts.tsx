@@ -3,7 +3,7 @@ import cn from 'classnames'
 import { useSelector, useDispatch } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { Box, ButtonBase, Theme, useTheme } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/styles'
 
 import { OAuthProvider } from 'constants/contacts'
 
@@ -24,45 +24,47 @@ import Header from '../Header'
 import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
 import Container from '../Container'
+import { useDocumentTitle } from '../use-document-title'
 
 const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      container: {
-        maxWidth: '784px'
-      },
-      baseButton: {
-        position: 'relative',
-        height: theme.spacing(30),
-        width: `calc(50% - ${theme.spacing(1)}px)`,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        border: `1px solid ${theme.palette.divider}`,
-        borderRadius: `${theme.shape.borderRadius}px`,
+  (theme: Theme) => ({
+    container: {
+      maxWidth: '784px'
+    },
+    baseButton: {
+      position: 'relative',
+      height: theme.spacing(30),
+      width: `calc(50% - ${theme.spacing(1)}px)`,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      border: `1px solid ${theme.palette.divider}`,
+      borderRadius: `${theme.shape.borderRadius}px`,
 
-        '&:hover': {
-          boxShadow: theme.shadows[3]
-        }
-      },
-      accountIcon: {
-        marginBottom: theme.spacing(2)
-      },
-      googleButton: {
-        marginRight: theme.spacing(2)
-      },
-      checkIcon: {
-        position: 'absolute',
-        top: theme.spacing(1),
-        right: theme.spacing(1),
-        fill: theme.palette.primary.main
+      '&:hover': {
+        boxShadow: theme.shadows[3]
       }
-    }),
+    },
+    accountIcon: {
+      marginBottom: theme.spacing(2)
+    },
+    googleButton: {
+      marginRight: theme.spacing(2)
+    },
+    checkIcon: {
+      position: 'absolute',
+      top: theme.spacing(1),
+      right: theme.spacing(1),
+      fill: theme.palette.primary.main
+    }
+  }),
   { name: 'OAuthAccounts' }
 )
 
 export function OAuthAccounts() {
+  useDocumentTitle('OAuth Accounts')
+
   const theme = useTheme()
   const classes = useStyles({})
   const dispatch = useDispatch()

@@ -1,28 +1,26 @@
 import React from 'react'
 import { Link as RouterLink } from 'react-router'
 import { Link, Theme } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/styles'
 
 import Icon from 'components/SvgIcons/LongArrowRight/IconLongArrowRight'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    link: {
-      alignItems: 'center',
-      display: 'inline-flex',
-      position: 'absolute',
-      right: theme.spacing(1.5),
-      top: theme.spacing(1),
-      '&:hover > svg': {
-        fill: theme.palette.primary.dark
-      }
-    },
-    icon: {
-      fill: 'currentColor',
-      marginLeft: theme.spacing(1)
+const useStyles = makeStyles((theme: Theme) => ({
+  link: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    position: 'absolute',
+    right: theme.spacing(1.5),
+    top: theme.spacing(1),
+    '&:hover > svg': {
+      fill: theme.palette.primary.dark
     }
-  })
-)
+  },
+  icon: {
+    fill: 'currentColor',
+    marginLeft: theme.spacing(1)
+  }
+}))
 
 interface Props {
   to: string

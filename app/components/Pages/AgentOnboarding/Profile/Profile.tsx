@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 import idx from 'idx'
 
 import { editUser } from 'models/user/edit'
@@ -23,28 +23,30 @@ import Header from '../Header'
 import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
 import Container from '../Container'
+import { useDocumentTitle } from '../use-document-title'
 
 import Avatar from './Avatar'
 import EmailSignatureEditor from './EmailSignatureEditor'
 import { getOauthAccountAvatar } from './get-oauth-account-avatar'
 
 const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      container: {
-        maxWidth: '784px'
-      },
-      marginBottom: {
-        marginBottom: theme.spacing(2)
-      },
-      buttonText: {
-        marginLeft: theme.spacing(2)
-      }
-    }),
+  (theme: Theme) => ({
+    container: {
+      maxWidth: '784px'
+    },
+    marginBottom: {
+      marginBottom: theme.spacing(2)
+    },
+    buttonText: {
+      marginLeft: theme.spacing(2)
+    }
+  }),
   { name: 'OAuthAccounts' }
 )
 
 export function Profile() {
+  useDocumentTitle('Profile')
+
   const classes = useStyles()
   const dispatch = useDispatch()
   const user = useSelector((store: IAppState) => store.user)

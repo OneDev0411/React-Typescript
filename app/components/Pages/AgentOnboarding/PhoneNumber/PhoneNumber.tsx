@@ -1,5 +1,4 @@
 import React from 'react'
-import { Helmet } from 'react-helmet'
 import { FORM_ERROR } from 'final-form'
 import { browserHistory, WithRouterProps } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
@@ -23,12 +22,15 @@ import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
 import Container from '../Container'
 import { useCommonStyles } from '../common-styles'
+import { useDocumentTitle } from '../use-document-title'
 
 interface FormValues {
   phone_number: string | undefined
 }
 
 export function PhoneNumber({ location }: WithRouterProps) {
+  useDocumentTitle('Phone Number')
+
   const dispatch = useDispatch()
   const commonClasses = useCommonStyles()
   const phoneNumber = window.decodeURIComponent(location.query.pn || '')
@@ -74,56 +76,50 @@ export function PhoneNumber({ location }: WithRouterProps) {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>Phone Number | On-boarding | Rechat</title>
-      </Helmet>
+    <Container>
+      <SkipButton to="/onboarding/oauth-accounts" />
+      <Header
+        brand={brand}
+        title="Enter Phone Number"
+        subtitle="We use your number to reach you and send important info"
+      />
 
-      <Container>
-        <SkipButton to="/onboarding/oauth-accounts" />
-        <Header
-          brand={brand}
-          title="Enter Phone Number"
-          subtitle="We use your number to reach you and send important info"
-        />
+      <Form
+        onSubmit={onSubmit}
+        validate={validate}
+        initialValues={{ phone_number: formatPhoneNumber(phoneNumber) }}
+        render={({ handleSubmit, form }) => {
+          const { submitError, submitting } = form.getState()
 
-        <Form
-          onSubmit={onSubmit}
-          validate={validate}
-          initialValues={{ phone_number: formatPhoneNumber(phoneNumber) }}
-          render={({ handleSubmit, form }) => {
-            const { submitError, submitting } = form.getState()
-
-            return (
-              <form onSubmit={handleSubmit}>
-                <Box mb={5}>
-                  <Field
-                    component={MUITextInput}
-                    id="phone-number"
-                    label="US Phone number"
-                    name="phone_number"
-                    variant="filled"
-                    formatOnBlur
-                    format={formatPhoneNumber}
-                    classes={{ root: commonClasses.field }}
-                  />
-                  {submitError && !submitting && (
-                    <Box mt={3}>
-                      <Alert severity="error">{submitError}</Alert>
-                    </Box>
-                  )}
-                </Box>
-
-                {submitting ? (
-                  <CircleSpinner />
-                ) : (
-                  <NextButton type="submit" disabled={submitting} />
+          return (
+            <form onSubmit={handleSubmit}>
+              <Box mb={5}>
+                <Field
+                  component={MUITextInput}
+                  id="phone-number"
+                  label="US Phone number"
+                  name="phone_number"
+                  variant="filled"
+                  formatOnBlur
+                  format={formatPhoneNumber}
+                  classes={{ root: commonClasses.field }}
+                />
+                {submitError && !submitting && (
+                  <Box mt={3}>
+                    <Alert severity="error">{submitError}</Alert>
+                  </Box>
                 )}
-              </form>
-            )
-          }}
-        />
-      </Container>
-    </>
+              </Box>
+
+              {submitting ? (
+                <CircleSpinner />
+              ) : (
+                <NextButton type="submit" disabled={submitting} />
+              )}
+            </form>
+          )
+        }}
+      />
+    </Container>
   )
 }

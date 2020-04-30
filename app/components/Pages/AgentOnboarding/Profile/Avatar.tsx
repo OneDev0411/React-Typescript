@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Button, Avatar, Typography } from '@material-ui/core'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import { makeStyles, Theme } from '@material-ui/core/styles'
 
 import { ImageUploader } from 'components/ImageUploader'
 
@@ -11,18 +11,16 @@ interface Props {
   data: AvatarType
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: `${theme.shape.borderRadius}px`
-    },
-    large: {
-      width: theme.spacing(9),
-      height: theme.spacing(9)
-    }
-  })
-)
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    border: `1px solid ${theme.palette.divider}`,
+    borderRadius: `${theme.shape.borderRadius}px`
+  },
+  large: {
+    width: theme.spacing(9),
+    height: theme.spacing(9)
+  }
+}))
 
 export default function ProfileAvatar({ onChange, data }: Props) {
   const classes = useStyles()

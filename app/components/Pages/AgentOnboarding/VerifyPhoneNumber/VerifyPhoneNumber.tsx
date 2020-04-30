@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
-import { WithRouterProps, Link, browserHistory } from 'react-router'
-import { Helmet } from 'react-helmet'
+import { WithRouterProps, Link } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
 import { addNotification as notify } from 'reapop'
 import { Box, Button, Typography } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import { formatPhoneNumber } from 'utils/format'
 
@@ -25,28 +24,28 @@ import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
 import Container from '../Container'
 import { useCommonStyles } from '../common-styles'
+import { useDocumentTitle } from '../use-document-title'
 
 const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      link: {
-        ...theme.typography.button,
-        color: theme.palette.secondary.main,
-        margin: theme.spacing(0, 1),
-        '&:hover': {
-          color: theme.palette.secondary.dark
-        }
-      },
-      helperLinksContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        [theme.breakpoints.up('sm')]: {
-          height: theme.spacing(6),
-          flexDirection: 'row',
-          alignItems: 'center'
-        }
+  (theme: Theme) => ({
+    link: {
+      ...theme.typography.button,
+      color: theme.palette.secondary.main,
+      margin: theme.spacing(0, 1),
+      '&:hover': {
+        color: theme.palette.secondary.dark
       }
-    }),
+    },
+    helperLinksContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      [theme.breakpoints.up('sm')]: {
+        height: theme.spacing(6),
+        flexDirection: 'row',
+        alignItems: 'center'
+      }
+    }
+  }),
   { name: 'VerifyPhoneNumber' }
 )
 
@@ -54,22 +53,15 @@ interface FormValues {
   code: string | undefined
 }
 
-export function VerifyPhoneNumber({ location }: WithRouterProps) {
+export function VerifyPhoneNumber(props: WithRouterProps) {
+  useDocumentTitle('Verify Phone Number')
+
   const classes = useStyles()
   const commonClasses = useCommonStyles()
   const dispatch = useDispatch()
   const brand = useSelector((store: IAppState) => store.brand)
-  const phoneNumber = window.decodeURIComponent(location.query.pn || '')
+  const phoneNumber = window.decodeURIComponent(props.location.query.pn || '')
   const [isReSending, setIsReSending] = useState(false)
-
-  const alert = (status, message, dismissAfter = 4000) =>
-    dispatch(
-      notify({
-        status,
-        message,
-        dismissAfter
-      })
-    )
 
   const onSubmit = async (values: FormValues) => {
     try {
@@ -83,7 +75,7 @@ export function VerifyPhoneNumber({ location }: WithRouterProps) {
 
       dispatch(updateUser(user))
 
-      browserHistory.push('/onboarding/oauth-accounts')
+      props.router.push('/onboarding/oauth-accounts')
     } catch (error) {
       if (error === 403) {
         return {
@@ -104,16 +96,21 @@ export function VerifyPhoneNumber({ location }: WithRouterProps) {
       await getVerificationCode('phone')
 
       setIsReSending(false)
-      alert(
-        'success',
-        'A new 4-digit code has been texted to your mobile number.'
+      dispatch(
+        notify({
+          status: 'success',
+          message: 'A new 4-digit code has been texted to your mobile number.'
+        })
       )
     } catch (errorCode) {
       setIsReSending(false)
-      alert(
-        'error',
-        'Sorry, something went wrong while sending a new code. Please try again.',
-        6000
+      dispatch(
+        notify({
+          status: 'error',
+          message:
+            'Sorry, something went wrong while sending a new code. Please try again.',
+          dismissAfter: 6000
+        })
       )
     }
   }
@@ -135,80 +132,74 @@ export function VerifyPhoneNumber({ location }: WithRouterProps) {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>Verify Phone Number | On-boarding | Rechat</title>
-      </Helmet>
+    <Container>
+      <SkipButton to="/onboarding/oauth-accounts" />
+      <Header
+        brand={brand}
+        title="Verify Phone Number"
+        subtitle={`We sent an activation code to ${formatPhoneNumber(
+          phoneNumber
+        )}, Please enter it here:`}
+      />
 
-      <Container>
-        <SkipButton to="/onboarding/oauth-accounts" />
-        <Header
-          brand={brand}
-          title="Verify Phone Number"
-          subtitle={`We sent an activation code to ${formatPhoneNumber(
-            phoneNumber
-          )}, Please enter it here:`}
-        />
+      <Form
+        onSubmit={onSubmit}
+        validate={validate}
+        render={({ handleSubmit, form }) => {
+          const { submitError, submitting } = form.getState()
 
-        <Form
-          onSubmit={onSubmit}
-          validate={validate}
-          render={({ handleSubmit, form }) => {
-            const { submitError, submitting } = form.getState()
-
-            return (
-              <form onSubmit={handleSubmit}>
+          return (
+            <form onSubmit={handleSubmit}>
+              <Box mb={5}>
                 <Box mb={5}>
-                  <Box mb={5}>
-                    <Field
-                      component={MUITextInput}
-                      id="code"
-                      label="Verification Code"
-                      placeholder="xxxx"
-                      name="code"
-                      variant="filled"
-                      classes={{ root: commonClasses.field }}
-                    />
-                    {submitError && !submitting && (
-                      <Box mt={3}>
-                        <Alert severity="error">{submitError}</Alert>
-                      </Box>
-                    )}
-                  </Box>
-
-                  {submitting ? (
-                    <CircleSpinner />
-                  ) : (
-                    <NextButton type="submit" disabled={submitting} />
+                  <Field
+                    component={MUITextInput}
+                    id="code"
+                    label="Verification Code"
+                    placeholder="xxxx"
+                    name="code"
+                    variant="filled"
+                    classes={{ root: commonClasses.field }}
+                  />
+                  {submitError && !submitting && (
+                    <Box mt={3}>
+                      <Alert severity="error">{submitError}</Alert>
+                    </Box>
                   )}
                 </Box>
-              </form>
-            )
-          }}
-        />
 
-        <Box className={classes.helperLinksContainer}>
-          <Typography variant="button">Didn’t recive any message?</Typography>
-          <Box display="flex" alignItems="center" height="3rem">
-            <Link
-              className={classes.link}
-              to={`/onboarding/phone-number?pn=${window.encodeURIComponent(
-                phoneNumber
-              )}`}
-            >
-              Correct Phone Number
-            </Link>
-            <Typography variant="button">or</Typography>
-            {isReSending ? (
-              <CircleSpinner />
-            ) : (
-              <Button color="secondary" onClick={handleReSendCode}>
-                resend the code
-              </Button>
-            )}
-          </Box>
+                {submitting ? (
+                  <CircleSpinner />
+                ) : (
+                  <NextButton type="submit" disabled={submitting} />
+                )}
+              </Box>
+            </form>
+          )
+        }}
+      />
+
+      <Box className={classes.helperLinksContainer}>
+        <Typography variant="button">Didn’t recive any message?</Typography>
+        <Box display="flex" alignItems="center" height="3rem">
+          <Link
+            className={classes.link}
+            to={`/onboarding/phone-number?pn=${window.encodeURIComponent(
+              phoneNumber
+            )}`}
+          >
+            Correct Phone Number
+          </Link>
+          <Typography variant="button">or</Typography>
+          {isReSending ? (
+            <CircleSpinner />
+          ) : (
+            <Button color="secondary" onClick={handleReSendCode}>
+              resend the code
+            </Button>
+          )}
         </Box>
-      </Container>
-    </>
+      </Box>
+    </Container>
   )
 }

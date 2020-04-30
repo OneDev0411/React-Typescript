@@ -13,16 +13,6 @@ export function getOauthAccountAvatar(
     a => a.type === 'google_credential'
   )
 
-  const prepareReturnObject = (
-    account: IOAuthAccount,
-    type: 'Google' | 'Outlook'
-  ): Avatar => {
-    return {
-      src: account.profile_image_url || '',
-      type
-    }
-  }
-
   if (googleAccount && googleAccount.profile_image_url) {
     return prepareReturnObject(googleAccount, 'Google')
   }
@@ -37,4 +27,14 @@ export function getOauthAccountAvatar(
   }
 
   return avatar
+}
+
+function prepareReturnObject(
+  account: IOAuthAccount,
+  type: 'Google' | 'Outlook'
+): Avatar {
+  return {
+    src: account.profile_image_url || '',
+    type
+  }
 }

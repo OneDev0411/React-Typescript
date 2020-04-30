@@ -4,13 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory, WithRouterProps, Link } from 'react-router'
 import { FORM_ERROR } from 'final-form'
 import { Form } from 'react-final-form'
-import {
-  Box,
-  Theme,
-  createStyles,
-  makeStyles,
-  Typography
-} from '@material-ui/core'
+import { Box, Theme, makeStyles, Typography } from '@material-ui/core'
 
 import { Alert } from '@material-ui/lab'
 
@@ -30,20 +24,19 @@ import { TextField } from './TextField'
 import { UserTypeField } from './UserTypeField'
 
 const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      header: {
-        marginBottom: theme.spacing(3)
-      },
-      link: {
-        ...theme.typography.button,
-        color: theme.palette.secondary.main,
-        marginLeft: theme.spacing(0.5),
-        '&:hover': {
-          color: theme.palette.secondary.dark
-        }
+  (theme: Theme) => ({
+    header: {
+      marginBottom: theme.spacing(3)
+    },
+    link: {
+      ...theme.typography.button,
+      color: theme.palette.secondary.main,
+      marginLeft: theme.spacing(0.5),
+      '&:hover': {
+        color: theme.palette.secondary.dark
       }
-    }),
+    }
+  }),
   { name: 'RegisterForm' }
 )
 

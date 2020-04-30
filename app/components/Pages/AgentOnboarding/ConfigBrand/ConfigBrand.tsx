@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import { Helmet } from 'react-helmet'
 import { FORM_ERROR } from 'final-form'
 import { browserHistory } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
@@ -23,6 +22,7 @@ import Header from '../Header'
 import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
 import Container from '../Container'
+import { useDocumentTitle } from '../use-document-title'
 import { useCommonStyles } from '../common-styles'
 
 interface FormValues {
@@ -30,6 +30,8 @@ interface FormValues {
 }
 
 export function ConfigBrand() {
+  useDocumentTitle('Config Brand')
+
   const dispatch = useDispatch()
   const commonClasses = useCommonStyles()
   const user: IUser = useSelector((store: IAppState) => store.user)
@@ -122,53 +124,47 @@ export function ConfigBrand() {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>Config Brand | On-boarding | Rechat</title>
-      </Helmet>
+    <Container>
+      <SkipButton to="/onboarding/oauth-accounts" />
+      <Header
+        brand={activeBrand}
+        title="Config Your Brand"
+        subtitle="We use these information to set up your brand."
+      />
 
-      <Container>
-        <SkipButton to="/onboarding/oauth-accounts" />
-        <Header
-          brand={activeBrand}
-          title="Config Your Brand"
-          subtitle="We use these information to set up your brand."
-        />
+      <Form
+        onSubmit={onSubmit}
+        validate={validate}
+        render={({ handleSubmit, form }) => {
+          const { submitError, submitting } = form.getState()
 
-        <Form
-          onSubmit={onSubmit}
-          validate={validate}
-          render={({ handleSubmit, form }) => {
-            const { submitError, submitting } = form.getState()
-
-            return (
-              <form onSubmit={handleSubmit}>
-                <Box mb={5}>
-                  <Field
-                    component={MUITextInput}
-                    id="name"
-                    label="Brand Name"
-                    name="name"
-                    variant="filled"
-                    classes={{ root: commonClasses.field }}
-                  />
-                  {submitError && !submitting && (
-                    <Box mt={3}>
-                      <Alert severity="error">{submitError}</Alert>
-                    </Box>
-                  )}
-                </Box>
-
-                {submitting ? (
-                  <CircleSpinner />
-                ) : (
-                  <NextButton type="submit" disabled={submitting} />
+          return (
+            <form onSubmit={handleSubmit}>
+              <Box mb={5}>
+                <Field
+                  component={MUITextInput}
+                  id="name"
+                  label="Brand Name"
+                  name="name"
+                  variant="filled"
+                  classes={{ root: commonClasses.field }}
+                />
+                {submitError && !submitting && (
+                  <Box mt={3}>
+                    <Alert severity="error">{submitError}</Alert>
+                  </Box>
                 )}
-              </form>
-            )
-          }}
-        />
-      </Container>
-    </>
+              </Box>
+
+              {submitting ? (
+                <CircleSpinner />
+              ) : (
+                <NextButton type="submit" disabled={submitting} />
+              )}
+            </form>
+          )
+        }}
+      />
+    </Container>
   )
 }

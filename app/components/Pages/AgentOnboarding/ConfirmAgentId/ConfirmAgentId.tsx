@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { browserHistory, WithRouterProps } from 'react-router'
-import { Helmet } from 'react-helmet'
+import { WithRouterProps } from 'react-router'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
 import { Box } from '@material-ui/core'
@@ -19,6 +18,7 @@ import Header from '../Header'
 import Container from '../Container'
 import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
+import { useDocumentTitle } from '../use-document-title'
 import { useCommonStyles } from '../common-styles'
 
 interface FormValues {
@@ -26,6 +26,8 @@ interface FormValues {
 }
 
 export default function ConfirmAgentId(props: WithRouterProps) {
+  useDocumentTitle('Confirm Agent ID')
+
   const dispatch = useDispatch()
   const commonClasses = useCommonStyles()
   const mlsId = props.location.query.mlsId
@@ -54,7 +56,7 @@ export default function ConfirmAgentId(props: WithRouterProps) {
         nextStepUrl = 'choose-mls'
       }
 
-      browserHistory.push({
+      props.router.push({
         pathname: `/onboarding/confirm-agent-id/${nextStepUrl}`,
         query: { mlsId: values.mlsId },
         state
@@ -85,57 +87,51 @@ export default function ConfirmAgentId(props: WithRouterProps) {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>Confirm Agent ID | Onboarding | Rechat</title>
-      </Helmet>
+    <Container>
+      <SkipButton to="/onboarding/config-brand" />
+      <Header
+        brand={brand}
+        title="Agent Verification"
+        subtitle="Enter your agent license # to unlock MLS features."
+      />
 
-      <Container>
-        <SkipButton to="/onboarding/config-brand" />
-        <Header
-          brand={brand}
-          title="Agent Verification"
-          subtitle="Enter your agent license # to unlock MLS features."
-        />
+      <Form
+        onSubmit={onSubmit}
+        validate={validate}
+        initialValues={{ mlsId }}
+        render={({ handleSubmit, form }) => {
+          const { submitError, submitting } = form.getState()
 
-        <Form
-          onSubmit={onSubmit}
-          validate={validate}
-          initialValues={{ mlsId }}
-          render={({ handleSubmit, form }) => {
-            const { submitError, submitting } = form.getState()
-
-            return (
-              <form onSubmit={handleSubmit}>
+          return (
+            <form onSubmit={handleSubmit}>
+              <Box mb={5}>
                 <Box mb={5}>
-                  <Box mb={5}>
-                    <Field
-                      component={MUITextInput}
-                      id="mlsId"
-                      label="Agent Number"
-                      placeholder="xxxxxx"
-                      name="mlsId"
-                      variant="filled"
-                      classes={{ root: commonClasses.field }}
-                    />
-                    {submitError && !submitting && (
-                      <Box mt={3}>
-                        <Alert severity="error">{submitError}</Alert>
-                      </Box>
-                    )}
-                  </Box>
-
-                  {submitting ? (
-                    <CircleSpinner />
-                  ) : (
-                    <NextButton type="submit" disabled={submitting} />
+                  <Field
+                    component={MUITextInput}
+                    id="mlsId"
+                    label="Agent Number"
+                    placeholder="xxxxxx"
+                    name="mlsId"
+                    variant="filled"
+                    classes={{ root: commonClasses.field }}
+                  />
+                  {submitError && !submitting && (
+                    <Box mt={3}>
+                      <Alert severity="error">{submitError}</Alert>
+                    </Box>
                   )}
                 </Box>
-              </form>
-            )
-          }}
-        />
-      </Container>
-    </>
+
+                {submitting ? (
+                  <CircleSpinner />
+                ) : (
+                  <NextButton type="submit" disabled={submitting} />
+                )}
+              </Box>
+            </form>
+          )
+        }}
+      />
+    </Container>
   )
 }
