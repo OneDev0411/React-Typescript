@@ -2,7 +2,7 @@ import fecha from 'fecha'
 
 export function getTemplateImage(
   template,
-  fallbackImage = 'https://images.unsplash.com/photo-1453928582365-b6ad33cbcf64'
+  fallbackImage = 'https://i.ibb.co/ZhVwVzy/template-placeholder.png'
 ) {
   if (template.type === 'template_instance') {
     return {
