@@ -20,7 +20,8 @@ const sortableColumns: SortableColumnsType[] = [
   { label: 'Most Clicked', value: 'clicked', ascending: false },
   { label: 'Less Clicked', value: 'clicked', ascending: true },
   { label: 'Most Opened', value: 'opened', ascending: false },
-  { label: 'Less Opened', value: 'opened', ascending: true }
+  { label: 'Bounced', value: 'bounce', ascending: false },
+  { label: 'Unsubscribed', value: 'unsubscribe', ascending: false }
 ]
 
 const SortFields = ({ sortLabel, onChange }: Props) => {
