@@ -26,7 +26,8 @@ import { getPredefinedContactLists } from '../utils/get-predefined-contact-lists
 const useStyles = makeStyles(theme =>
   createStyles({
     infoContainer: {
-      display: 'inline-block'
+      display: 'inline-block',
+      marginLeft: theme.spacing(2)
     },
     toggleAll: {
       padding: 0,
