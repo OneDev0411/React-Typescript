@@ -7,7 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import { Button, IconButton, Box } from '@material-ui/core'
 
 import editUser from 'actions/user/edit'
-import uploadAvatar from 'actions/user/upload-avatar'
+import { uploadUserAvatarAction } from 'actions/user/upload-avatar'
 import { confirmation } from 'actions/confirmation'
 
 import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
@@ -67,19 +67,6 @@ class ProfileCatalog extends Component {
     this.closeModal()
   }
 
-  renderUploader() {
-    return (
-      <ImageUploader
-        radius="50%"
-        // file={this.props.avatar.src} // CORS PROBLEM FOR NOW!
-        saveHandler={this.onAvatarSet}
-        closeHandler={this.closeModal}
-        width={300}
-        height={300}
-      />
-    )
-  }
-
   getImageUploadButtonText() {
     if (this.props.isUploading) {
       return 'Uploading'
@@ -120,7 +107,15 @@ class ProfileCatalog extends Component {
             >
               {`${this.getImageUploadButtonText()} Profile Picture`}
             </Button>
-            {this.state.isOpen && this.renderUploader()}
+            <ImageUploader
+              radius="50%"
+              // file={this.props.avatar.src} // CORS PROBLEM FOR NOW!
+              saveHandler={this.onAvatarSet}
+              closeHandler={this.closeModal}
+              width={300}
+              height={300}
+              isOpen={this.state.isOpen}
+            />
           </ProfileImageActions>
         </Container>
         <hr />
@@ -150,7 +145,7 @@ export default compose(
         try {
           setAvatar(reader.result)
           setUploading(true)
-          await dispatch(uploadAvatar(file))
+          await dispatch(uploadUserAvatarAction(file))
         } catch (error) {
           setAvatar(null)
           console.log(error)

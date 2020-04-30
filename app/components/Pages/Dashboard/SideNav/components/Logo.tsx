@@ -22,13 +22,13 @@ export default function Logo() {
     >
       <img
         alt="mini-logo"
-        height="18px"
+        width="26px"
         src="/static/images/logo--mini--white.svg"
       />
       <img
         alt="type-logo"
         className={classes.typeLogo}
-        height="20px"
+        width="68px"
         src="/static/images/logo--type--white.svg"
       />
     </Box>

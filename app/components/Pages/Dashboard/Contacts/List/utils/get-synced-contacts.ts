@@ -8,10 +8,12 @@ import { IAppState } from 'reducers'
 
 // import { getActiveTeamSettings } from 'utils/user-teams'
 
-import { isDeletedOrRevoked } from 'reducers/contacts/oAuthAccounts'
+import {
+  isDeletedOrRevoked
+  // getNumOfSyncedContacts
+} from 'utils/oauth-provider'
 
 // import { SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY } from '../constants'
-// import { getNumOfSyncedContacts } from '../ImportContactsButton/helpers'
 
 export interface SyncedContacts {
   accounts: number

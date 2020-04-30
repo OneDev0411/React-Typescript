@@ -47,7 +47,7 @@ let mapOnChangeDebounce = 0
 const map = ({
   map,
   user,
-  appData,
+  brand,
   isWidget,
   onChange,
   clusters,
@@ -79,7 +79,7 @@ const map = ({
               lat={lat}
               lng={lng}
               user={user}
-              data={appData}
+              barnd={brand}
               listing={points[0]}
               isWidget={isWidget}
               key={`SIMPLE_MARKER_${id}`}
@@ -114,9 +114,9 @@ const map = ({
 
 const mapHOC = compose(
   connect(
-    ({ user, data, search }, { listings }) => ({
+    ({ user, brand, search }, { listings }) => ({
       user,
-      appData: data,
+      brand,
       map: search.map,
       searchType: search.type,
       mapProps: search.map.props,

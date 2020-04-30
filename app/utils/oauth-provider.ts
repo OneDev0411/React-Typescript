@@ -1,8 +1,13 @@
 import { OAuthProvider } from 'constants/contacts'
 
-import { isDeletedOrRevoked } from 'reducers/contacts/oAuthAccounts'
+import { notDeleted } from './not-deleted'
 
 const KEY = 'oAuthImportRequestTime'
+
+export function isDeletedOrRevoked(account: IOAuthAccount) {
+  return !notDeleted(account) || account.revoked
+}
+
 /**
  * A helper for remembering oAuth contacts import in progress when user
  * is navigated to oAuth provider and back to Rechat.

@@ -1,25 +1,26 @@
 import { hasUserAccess } from './user-teams'
 
-export default function getUserDefaultHomepage(user) {
-  let defaultHomepage = '/dashboard/mls'
+export function getUserDefaultHomepage(user?: IUser): string {
+  const dashboardBaseUrl = '/dashboard/'
+  let defaultHomepage = `${dashboardBaseUrl}mls`
 
   if (!user) {
     return defaultHomepage
   }
 
   if (hasUserAccess(user, 'Marketing')) {
-    return '/dashboard/marketing'
+    return `${dashboardBaseUrl}marketing`
   }
 
   if (hasUserAccess(user, 'CRM')) {
-    return '/dashboard/contacts'
+    return `${dashboardBaseUrl}contacts`
   }
 
   if (
     hasUserAccess(user, 'Deals') ||
     hasUserAccess(user, 'BackOffice')
   ) {
-    return '/dashboard/deals'
+    return `${dashboardBaseUrl}deals`
   }
 
   return defaultHomepage
