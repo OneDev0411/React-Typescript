@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Helmet } from 'react-helmet'
-import { Box, IconButton } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import TemplatesList from 'components/TemplatesList'
 
 import Layout from '..'
@@ -23,11 +22,6 @@ function isGenerationThumbnails(brandTemplates) {
 }
 
 export const MarketingList = () => {
-  const [
-    showGeneratingThumbnailsAlert,
-    setShowGeneratingThumbnailsAlert
-  ] = useState(false)
-
   return (
     <>
       <Helmet>
@@ -35,24 +29,11 @@ export const MarketingList = () => {
       </Helmet>
       <Layout
         render={({ items, isLoading, types, medium, onDeleteTemplate }) => {
-          setShowGeneratingThumbnailsAlert(isGenerationThumbnails(items))
-
           return (
             <>
-              {showGeneratingThumbnailsAlert && (
+              {isGenerationThumbnails(items) && (
                 <Box mt={1.5}>
-                  <Alert
-                    severity="info"
-                    action={
-                      <IconButton
-                        aria-label="close"
-                        color="inherit"
-                        onClick={() => setShowGeneratingThumbnailsAlert(false)}
-                      >
-                        <CloseIcon size="small" />
-                      </IconButton>
-                    }
-                  >
+                  <Alert severity="info">
                     <Box>
                       Some of the previews shown below may not be ready or
                       slightly outdated. We are working in the background to
