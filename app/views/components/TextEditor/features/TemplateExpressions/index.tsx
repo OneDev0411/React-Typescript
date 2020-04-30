@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 import createTemplateExpressionsPlugin from './template-expressions-plugin'
@@ -9,7 +9,7 @@ import {
 } from '../../../TemplateVariablesButton'
 import { insertTemplateVariable } from './modifiers/insert-template-expression'
 import { ToolbarFragment } from '../../components/ToolbarFragment'
-import { useEditor } from '../../hooks/use-editor'
+import { EditorContext } from '../../editor-context'
 
 interface Props {
   /**
@@ -36,7 +36,7 @@ export function TemplateExpressionsFeature({
     []
   )
 
-  const { setEditorState, editorState } = useEditor()
+  const { setEditorState, editorState } = useContext(EditorContext)
   const insertVariable = (suggestion: ITemplateVariableSuggestion) => {
     setEditorState(
       insertTemplateVariable(

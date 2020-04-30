@@ -54,6 +54,9 @@ const useStyles = makeStyles((theme: Theme) =>
           fill: theme.palette.text.disabled
         }
       }
+    },
+    item: {
+      display: 'inline-block'
     }
   })
 )
@@ -114,7 +117,12 @@ export const TagsList = (props: Props) => {
         style: { width: 220 }
       }}
       morePlugin={{
-        textContainer: ({ children }) => <ListItem button>{children}</ListItem>
+        count: 5,
+        textContainer: ({ children }) => (
+          <ListItem button className={classes.item}>
+            {children}
+          </ListItem>
+        )
       }}
       renderMenu={({ close }) =>
         existingTags.map((item, index) => {
@@ -123,6 +131,7 @@ export const TagsList = (props: Props) => {
           return (
             <ListItem
               button
+              className={classes.item}
               key={index}
               selected={isSelected}
               onClick={() => {

@@ -12,12 +12,13 @@ import { useTheme } from '@material-ui/styles'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 import { getNotes } from 'models/contacts/helpers/get-notes'
-import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import SanitizedHtml from 'components/SanitizedHtml'
-import { EditNoteDrawer } from 'components/EditNoteDrawer'
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 import IconNote from 'components/SvgIcons/Note/IconNote'
+import AddOrEditNoteDrawer from 'components/AddOrEditNoteDrawer/AddOrEditNoteDrawer'
+
+import { useIconStyles } from '../../../../../../../styles/use-icon-styles'
 
 import { styles } from './styles'
 
@@ -32,7 +33,7 @@ export function Notes(props: Props) {
   const theme = useTheme<Theme>()
   const classes = useStyles()
   const iconClasses = useIconStyles()
-  const [selectedNote, setSelectedNote] = useState(null)
+  const [selectedNote, setSelectedNote] = useState(undefined)
 
   const handleUpdateNote = async note => {
     try {
@@ -92,7 +93,9 @@ export function Notes(props: Props) {
                 type="button"
                 className={classes.buttonContainer}
                 onClick={() => setSelectedNote(note)}
-              />
+              >
+                Note
+              </button>
 
               <div className={classes.row}>
                 <div className={classes.container}>
@@ -124,10 +127,10 @@ export function Notes(props: Props) {
       ))}
 
       {selectedNote && (
-        <EditNoteDrawer
+        <AddOrEditNoteDrawer
           isOpen
           note={selectedNote}
-          onClose={() => setSelectedNote(null)}
+          onClose={() => setSelectedNote(undefined)}
           onSubmit={handleUpdateNote}
           onDelete={handleDeleteNote}
         />

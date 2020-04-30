@@ -3,14 +3,12 @@ import _ from 'underscore'
 
 import { setTime } from 'utils/set-time'
 import { months } from 'utils/date-times/months'
-import { EditNoteDrawer } from 'components/EditNoteDrawer'
 import { EventDrawer } from 'components/EventDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import Loading from 'components/LoadingContainer'
 
 import { Card } from './styled'
-import { NoteItem } from './NoteItem'
 import { TourItem } from './TourItem'
 import { EventItem } from './EventItem'
 import AutoEmailItem from './AutoEmailItem'
@@ -20,13 +18,8 @@ import { Container, Title } from './styled'
 
 export class Timeline extends React.Component {
   state = {
-    selectedNote: null,
     selectedEvent: null
   }
-
-  onClickNote = selectedNote => this.setState({ selectedNote })
-
-  closeEditNoteDrawer = () => this.setState({ selectedNote: null })
 
   closeEventDrawer = () => this.setState({ selectedEvent: null })
 
@@ -170,20 +163,6 @@ export class Timeline extends React.Component {
               />
             )
           }
-
-          if (
-            activity.type === 'contact_attribute' &&
-            activity.attribute_type === 'note'
-          ) {
-            return (
-              <NoteItem
-                contact={this.props.contact}
-                key={key}
-                note={activity}
-                onClick={this.onClickNote}
-              />
-            )
-          }
         })}
       </Card>
     </React.Fragment>
@@ -267,16 +246,6 @@ export class Timeline extends React.Component {
               </Container>
             )
           })}
-
-        {this.state.selectedNote && (
-          <EditNoteDrawer
-            isOpen
-            note={this.state.selectedNote}
-            onClose={this.closeEditNoteDrawer}
-            onSubmit={this.props.editNoteHandler}
-            onDelete={this.props.deleteNoteHandler}
-          />
-        )}
 
         {this.renderCRMTaskItemsDrawer()}
       </div>

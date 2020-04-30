@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import { useTheme } from '@material-ui/core'
+
 import {
   getField,
   getStatus,
@@ -24,6 +26,7 @@ Item.propTypes = {
 export function Item(props) {
   const { item, onClickHandler } = props
   const status = getStatus(item)
+  const theme = useTheme()
 
   if (props.itemRenderer) {
     return props.itemRenderer({
@@ -37,7 +40,10 @@ export function Item(props) {
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
-      <Avatar {...getAvatarProps(item)} />
+      <Avatar
+        backgroundColor={theme.palette.grey['400']}
+        {...getAvatarProps(item)}
+      />
       <div style={{ paddingLeft: '1em' }}>
         <Flex alignCenter>
           <Details>{getPrice(item) || '$0'}</Details>

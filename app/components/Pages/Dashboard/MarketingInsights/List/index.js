@@ -70,10 +70,11 @@ function List(props) {
       },
       {
         header: 'Title',
-        id: 'title',
+        id: 'title-date',
         primary: true,
         width: '32%',
         verticalAlign: 'center',
+        accessor: row => row.due_at,
         render: ({ row }) => (
           <TitleColumn
             data={row}
@@ -159,12 +160,12 @@ function List(props) {
         verticalAlign: 'center',
         width: '2rem',
         render: ({ row }) =>
-          !row.executed_at ? (
+          !row.executed_at && (
             <Actions
               data={row}
               reloadList={() => setQueue(queue => queue + 1)}
             />
-          ) : null
+          )
       }
     ],
     []

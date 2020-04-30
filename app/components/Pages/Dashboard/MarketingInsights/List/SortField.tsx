@@ -3,8 +3,6 @@ import { MenuItem } from '@material-ui/core'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 
-import { SortValues } from './helpers'
-
 interface Props {
   sortLabel: string
   onChange: (item) => void
@@ -16,8 +14,8 @@ interface SortableColumnsType {
 }
 
 const sortableColumns: SortableColumnsType[] = [
-  { label: 'Newest', value: SortValues.Newest, ascending: true },
-  { label: 'Oldest', value: SortValues.Oldest, ascending: false }
+  { label: 'Newest', value: 'title-date', ascending: false },
+  { label: 'Oldest', value: 'title-date', ascending: true }
 ]
 
 const SortFields = ({ sortLabel, onChange }: Props) => {

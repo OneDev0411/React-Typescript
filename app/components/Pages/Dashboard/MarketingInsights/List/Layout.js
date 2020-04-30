@@ -9,7 +9,6 @@ import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import Tooltip from 'components/tooltip'
 
-import { SortValues } from './helpers'
 import SortField from './SortField'
 
 const urlGenerator = (url = '') => `/dashboard/insights${url}`
@@ -22,8 +21,8 @@ function InsightsLayout({
 }) {
   const [sortField, setSortField] = useState({
     label: 'Newest',
-    value: SortValues.Newest,
-    ascending: true
+    value: 'title-date',
+    ascending: false
   })
   const currentUrl = window.location.pathname
   const Items = [

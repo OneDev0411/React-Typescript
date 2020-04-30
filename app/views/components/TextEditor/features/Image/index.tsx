@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { composeDecorators } from 'draft-js-plugins-editor'
 import createImagePlugin from 'draft-js-image-plugin'
 import 'draft-js-image-plugin/lib/plugin.css'
@@ -21,7 +21,7 @@ import { getImageSizeOptions } from './utils/get-image-size-options'
 import { getImageDimensions } from './utils/get-image-dimensions'
 import { removeUnwantedEmptyLineBeforeAtomic } from '../../modifiers/remove-unwanted-empty-block-before-atomic'
 import { updateEntityData } from '../../modifiers/update-entity-data'
-import { useEditor } from '../../hooks/use-editor'
+import { EditorContext } from '../../editor-context'
 import { InlineImageToolbar } from './ImageInlineToolbar'
 import { AddImageButton } from './AddImageButton'
 import { AddGifButton } from './AddGifButton'
@@ -103,7 +103,7 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
     }
   }
 
-  const { editorState, setEditorState, editorRef } = useEditor()
+  const { editorState, setEditorState, editorRef } = useContext(EditorContext)
 
   const { image: imagePlugin } = useEditorPlugins(() => {
     const resizeablePlugin = createResizeablePlugin(resizablePluginOptions)

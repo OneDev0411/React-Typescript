@@ -5,13 +5,13 @@ import { ThunkDispatch } from 'redux-thunk'
 import { addNotification as notify } from 'reapop'
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
-import { Typography, Theme, IconButton } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import { Typography, Theme, IconButton, MenuItem } from '@material-ui/core'
+import { makeStyles, useTheme } from '@material-ui/styles'
 
 import Table from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { BasicDropdown } from 'components/BasicDropdown'
+import { BaseDropdown } from 'components/BaseDropdown'
 import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
 
 import { getActiveTeamId } from 'utils/user-teams'
@@ -74,6 +74,7 @@ function List(props: Props & WithRouterProps) {
   const [selectedFlow, setSelectedFlow] = useState<IBrandFlow | null>(null)
   const { flows, reloadFlows, isFetching, error } = useGetBrandFlows(brand)
   const confirmation = useContext(ConfirmationModalContext)
+  const theme = useTheme<Theme>()
 
   async function newFlowSubmitHandler(flowData: IBrandFlowInput) {
     try {
@@ -151,57 +152,70 @@ function List(props: Props & WithRouterProps) {
     },
     {
       id: 'actions',
-      width: '32px',
+      width: `${theme.spacing(4)}px`,
       render: ({ row }) => {
-        const actions = getFlowActions(row)
-
         return (
-          <div className={classes.actions}>
-            <BasicDropdown
-              fullHeight
-              pullTo="right"
-              selectedItem={null}
-              buttonRenderer={(btnProps: any) => (
-                <IconButton {...btnProps}>
-                  <IconHorizontalDots />
-                </IconButton>
-              )}
-              items={actions}
-              onSelect={(action: typeof actions[number]) => {
-                switch (action.value) {
-                  case 'duplicate':
-                    setSelectedFlow(row)
-                    setIsModalOpen(true)
-                    break
+          <BaseDropdown
+            PopperProps={{
+              placement: 'bottom-end'
+            }}
+            renderDropdownButton={buttonProps => (
+              <IconButton
+                {...buttonProps}
+                style={{
+                  padding: 0
+                }}
+              >
+                <IconHorizontalDots />
+              </IconButton>
+            )}
+            renderMenu={({ close }) => (
+              <div>
+                {getFlowActions(row).map((item, index) => (
+                  <MenuItem
+                    key={index}
+                    onClick={() => {
+                      close()
 
-                  case 'delete':
-                    confirmation.setConfirmationModal({
-                      message: `Delete "${row.name}" Flow?`,
-                      description: `This Flow will be deleted 
-                      and you can not use it anymore. Are you sure?`,
-                      onConfirm: async () => {
-                        if (!brand) {
-                          return
-                        }
+                      switch (item.value) {
+                        case 'duplicate':
+                          setSelectedFlow(row)
+                          setIsModalOpen(true)
+                          break
 
-                        await deleteBrandFlow(brand, row.id)
-                        await reloadFlows()
-                        props.notify({
-                          message: `"${row.name}" Flow deleted.`,
-                          status: 'success'
-                        })
+                        case 'delete':
+                          confirmation.setConfirmationModal({
+                            message: `Delete "${row.name}" Flow?`,
+                            description: `This Flow will be deleted 
+                            and you can not use it anymore. Are you sure?`,
+                            onConfirm: async () => {
+                              if (!brand) {
+                                return
+                              }
+
+                              await deleteBrandFlow(brand, row.id)
+                              await reloadFlows()
+                              props.notify({
+                                message: `"${row.name}" Flow deleted.`,
+                                status: 'success'
+                              })
+                            }
+                          })
+                          break
+
+                        case 'edit':
+                        case 'view':
+                          goTo(getFlowEditUrl(row.id))
+                          break
                       }
-                    })
-                    break
-
-                  case 'edit':
-                  case 'view':
-                    goTo(getFlowEditUrl(row.id))
-                    break
-                }
-              }}
-            />
-          </div>
+                    }}
+                  >
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </div>
+            )}
+          />
         )
       }
     }
