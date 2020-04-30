@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import { Box, IconButton } from '@material-ui/core'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
@@ -28,7 +32,7 @@ import Tooltip from '../tooltip'
 import { AddAssociationButton } from '../AddAssociationButton'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
-import { validate } from './helpers/validate'
+import { validate, hasGoogleAccount } from './helpers/validate'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
@@ -71,7 +75,7 @@ const defaultProps = {
  * after opening until we can reinitialize it.
  *
  */
-export class EventDrawer extends Component {
+class PresentEventDrawer extends Component {
   constructor(props) {
     super(props)
 
@@ -87,6 +91,10 @@ export class EventDrawer extends Component {
     this.isNew =
       (!props.event && !props.eventId) ||
       Object.keys(this.props.initialValues).length > 0
+  }
+
+  componentDidMount() {
+    this.props.fetchOAuthAccounts()
   }
 
   load = async () => {
@@ -113,8 +121,6 @@ export class EventDrawer extends Component {
   }
 
   save = async event => {
-    console.log('from save method', event)
-
     try {
       let newEvent
       let action = 'created'
@@ -151,20 +157,10 @@ export class EventDrawer extends Component {
   }
 
   handleSave = async event => {
-    const { event: currentEvent } = this.state
-    const filterContactAssociations = i => i.association_type === 'contact'
-    const contactAssociations = event.associations.filter(
-      filterContactAssociations
-    ).length
-    const isUpdating = !!(currentEvent && currentEvent.id)
-    const currentContactAssociations = isUpdating
-      ? currentEvent.associations.filter(filterContactAssociations).length
-      : 0
-    const shouldShowNotify = isUpdating
-      ? currentContactAssociations !== contactAssociations
-      : contactAssociations > 0
+    const { accounts } = this.props
+    const shouldShowModal = hasGoogleAccount(accounts)
 
-    if (shouldShowNotify) {
+    if (shouldShowModal) {
       return this.setState(() => ({
         shouldShowNotify: true,
         currentEvent: event
@@ -416,6 +412,15 @@ export class EventDrawer extends Component {
   }
 }
 
-EventDrawer.propTypes = propTypes
-EventDrawer.defaultProps = defaultProps
-EventDrawer.contextType = ConfirmationModalContext
+PresentEventDrawer.propTypes = propTypes
+PresentEventDrawer.defaultProps = defaultProps
+PresentEventDrawer.contextType = ConfirmationModalContext
+
+const mapStateToProps = state => ({
+  accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
+})
+
+export const EventDrawer = connect(
+  mapStateToProps,
+  { fetchOAuthAccounts }
+)(PresentEventDrawer)
