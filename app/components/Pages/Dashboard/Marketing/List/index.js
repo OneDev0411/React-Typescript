@@ -14,7 +14,7 @@ function isGenerationThumbnails(brandTemplates) {
       return true
     }
 
-    if (!brandTemplate.thumbnail && !brandTemplate.thumbnail.preview_url) {
+    if (!brandTemplate.thumbnail || !brandTemplate.thumbnail.preview_url) {
       return true
     }
 
