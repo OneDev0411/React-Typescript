@@ -80,7 +80,7 @@ export default function Inbox({ params }: WithRouterProps) {
     dispatch(fetchOAuthAccounts()).then(() => setInitializing(false))
   })
 
-  const inboxEmailThreadOnCloseMemoized = useCallback(
+  const handleInboxEmailThreadClose = useCallback(
     () => setSelectedEmailThreadId(undefined),
     []
   )
@@ -133,7 +133,7 @@ export default function Inbox({ params }: WithRouterProps) {
                 onSelectEmailThread={setSelectedEmailThreadId}
                 searchQuery={searchQuery}
                 onSearchStatusChange={setSearchStatus}
-                onEmailThreadsUpdate={handleEmailThreadsUpdate}
+                onUpdateEmailThreads={handleEmailThreadsUpdate}
               />
             </Grid>
             <Grid
@@ -148,7 +148,7 @@ export default function Inbox({ params }: WithRouterProps) {
               <InboxEmailThread
                 key={selectedEmailThreadId}
                 emailThreadId={selectedEmailThreadId}
-                onClose={inboxEmailThreadOnCloseMemoized}
+                onClose={handleInboxEmailThreadClose}
               />
             </Grid>
           </Grid>

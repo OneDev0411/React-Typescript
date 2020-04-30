@@ -48,26 +48,12 @@ const Image = styled.svg`${propsToCss}`
 
 const children = (
   <Fragment>
-    <g
-      clipPath='url(#s-c1344da856-a)'
+    <path
+      fillRule='evenodd'
+      d='M1.08 4.649A2.495 2.495 0 0 1 3 3.75h18a2.495 2.495 0 0 1 1.936.918c.353.431.564.982.564 1.582v12a2.5 2.5 0 0 1-2.5 2.5H3a2.5 2.5 0 0 1-2.5-2.5v-12a2.49 2.49 0 0 1 .58-1.601zM2.5 7.07v11.18a.5.5 0 0 0 .5.5h18a.5.5 0 0 0 .5-.5V7.07l-6.873 5.287a4.308 4.308 0 0 1-5.254 0L2.5 7.07zm17.436-1.32H4.064l6.529 5.021a2.308 2.308 0 0 0 2.814 0l6.529-5.021z'
+      clipRule='evenodd'
       key='key-0'
-    >
-      <path
-        d='M19.618 10.612c-3.011-2.67-7.125-2.853-8.859-2.793a.25.25 0 0 1-.259-.25V4.997a1 1 0 0 0-1.642-.764L1.364 10.6a1 1 0 0 0-.013 1.532l7.513 6.637a1 1 0 0 0 1.636-.773V14.96a.25.25 0 0 1 .2-.244c1.908-.4 8.135-1.158 11.36 4.89a.5.5 0 0 0 .94-.235c0-3.82-1.138-6.767-3.382-8.759z'
-      />
-    </g>
-    <defs
-      key='key-1'
-    >
-      <clipPath
-        id='s-c1344da856-a'
-      >
-        <path
-          fill='transparent'
-          d='M0 0h24v24H0z'
-        />
-      </clipPath>
-    </defs>
+    />
   </Fragment>
 )
 
@@ -103,5 +89,5 @@ export default Object.assign(Image, {
   getCss,
   defaultProps,
   propTypes,
-  displayName: 'IconReply'
+  displayName: 'IconMailUnread'
 })
