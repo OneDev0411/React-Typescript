@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/styles'
 
 import Brand from '../../../controllers/Brand'
 
+import Logo from './Logo'
+
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
     alignItems: 'center',
@@ -15,8 +17,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: theme.spacing(6)
   },
   logo: {
-    width: 96,
-    height: 96,
+    width: theme.spacing(10),
+    height: theme.spacing(10),
     marginBottom: theme.spacing(2)
   },
   title: {
@@ -32,15 +34,15 @@ interface Props {
 
 export default function Header({ brand, title, subtitle }: Props) {
   const classes = useStyles()
-  let siteLogo = '/static/images/logo.svg'
-
-  if (brand) {
-    siteLogo = Brand.asset('site_logo', null, brand)
-  }
+  const siteLogo = brand && Brand.asset('site_logo', '', brand)
 
   return (
     <Box className={classes.box}>
-      <img src={siteLogo} className={classes.logo} alt="logo" />
+      {siteLogo ? (
+        <img src={siteLogo} className={classes.logo} alt="logo" />
+      ) : (
+        <Logo />
+      )}
       <Typography variant="h4" className={classes.title}>
         {title}
       </Typography>
