@@ -79,6 +79,7 @@ export default function ImageField({
     },
     [names, onChange, onImageUpload]
   )
+
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
     multiple: false,

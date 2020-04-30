@@ -5,7 +5,7 @@ import { DEFAULT_BRAND_PALETTE } from 'utils/constants'
 import { SidebarSection, SidebarSectionField } from './types'
 
 export function getSimpleSidebarSections(): SidebarSection[] {
-  const colors: SidebarSection = {
+  const paletteSection: SidebarSection = {
     name: 'Brand Palette',
     fields: [
       {
@@ -33,7 +33,7 @@ export function getSimpleSidebarSections(): SidebarSection[] {
     ]
   }
 
-  return [colors]
+  return [paletteSection]
 }
 
 export function getSidebarSections(): SidebarSection[] {

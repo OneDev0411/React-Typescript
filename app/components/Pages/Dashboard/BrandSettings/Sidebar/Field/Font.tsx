@@ -54,11 +54,10 @@ export default function FontField({
           }
         )
 
-        const iterableFonts = await fontManager.current.init()
-        const allFonts = Array.from(iterableFonts.values())
-        const allFontNames = allFonts.map(item => item.family)
+        const fontList = await fontManager.current.init()
+        const fontNames = Array.from(fontList.values()).map(item => item.family)
 
-        setFonts(allFontNames)
+        setFonts(fontNames)
         setStatus('succeed')
       } catch (err) {
         setStatus('failed')
@@ -112,12 +111,8 @@ export default function FontField({
     setSearchQuery(query)
   }
 
-  if (status === 'loading') {
-    return <div>Loading</div>
-  }
-
-  if (status === 'failed') {
-    return <div>Error</div>
+  if (status === 'loading' || status === 'failed') {
+    return null
   }
 
   if (fonts.length === 0) {

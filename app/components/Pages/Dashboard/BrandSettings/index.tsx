@@ -30,7 +30,7 @@ import {
 } from './helpers'
 import Sidebar from './Sidebar'
 
-export function MarketingCenterSettings() {
+export function BrandSettings() {
   const dispatch = useDispatch()
   const user = useSelector(({ user }) => user)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -196,4 +196,4 @@ Are you sure?`,
   )
 }
 
-export default withRouter(MarketingCenterSettings)
+export default withRouter(BrandSettings)

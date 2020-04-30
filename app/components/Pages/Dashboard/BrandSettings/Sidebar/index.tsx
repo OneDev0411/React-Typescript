@@ -73,7 +73,7 @@ export default function Sidebar({
 
   return (
     <Grid item md={3} className={classes.wrapper}>
-      {sections.map((section, sectionIndex) => (
+      {sections.map(section => (
         <React.Fragment key={section.name}>
           <ExpansionPanel
             TransitionProps={{ unmountOnExit: true }}
@@ -111,10 +111,9 @@ export default function Sidebar({
               </Grid>
             </ExpansionPanelDetails>
           </ExpansionPanel>
-          {sectionIndex < sections.length - 1 && <Divider />}
+          <Divider />
         </React.Fragment>
       ))}
-      <Divider />
       {children}
     </Grid>
   )
