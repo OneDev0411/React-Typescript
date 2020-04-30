@@ -77,9 +77,11 @@ Are you sure?`,
   }
 
   const handleUpdateSettings = (newSettings: BrandSettingsPalette) => {
-    if (!defaultSettings && !isEqual(newSettings, settings)) {
-      setDefaultSettings(settings)
-    } else {
+    if (!defaultSettings) {
+      if (!isEqual(newSettings, settings)) {
+        setDefaultSettings(settings)
+      }
+    } else if (isEqual(newSettings, defaultSettings)) {
       setDefaultSettings(null)
     }
 
@@ -134,7 +136,7 @@ Are you sure?`,
             </Grid>
             <Grid item>
               <Button
-                disabled={isLoading}
+                disabled={isLoading || !defaultSettings}
                 variant="contained"
                 size="large"
                 color="primary"
