@@ -101,7 +101,7 @@ export function SecurityQuestion(props: WithRouterProps) {
                   <Field
                     component={MUITextInput}
                     id="secret"
-                    label="Security Question"
+                    label="Enter full phone or email shown above"
                     name="secret"
                     variant="filled"
                     classes={{ root: commonClasses.field }}

@@ -127,8 +127,8 @@ export function ConfigBrand() {
     <Container>
       <Header
         brand={activeBrand}
-        title="Config Your Brand"
-        subtitle="We use these information to set up your brand."
+        title="Enter Brokerage or Brand Name"
+        subtitle="We use this information to set up your brand."
       />
 
       <Form
@@ -143,7 +143,7 @@ export function ConfigBrand() {
                 <Field
                   component={MUITextInput}
                   id="name"
-                  label="Brand Name"
+                  label="Brokerage or Brand Name"
                   name="name"
                   variant="filled"
                   classes={{ root: commonClasses.field }}

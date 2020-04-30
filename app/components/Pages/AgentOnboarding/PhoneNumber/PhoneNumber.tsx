@@ -79,8 +79,8 @@ export function PhoneNumber({ location }: WithRouterProps) {
     <Container>
       <Header
         brand={brand}
-        title="Enter Phone Number"
-        subtitle="We use your number to reach you and send important info"
+        title="Verify Phone Number"
+        subtitle="We will not share your number with anyone"
       />
 
       <Form

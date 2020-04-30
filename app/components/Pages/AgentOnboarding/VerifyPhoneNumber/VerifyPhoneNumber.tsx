@@ -135,7 +135,7 @@ export function VerifyPhoneNumber(props: WithRouterProps) {
     <Container>
       <Header
         brand={brand}
-        title="Verify Phone Number"
+        title="Enter Code"
         subtitle={`We sent an activation code to ${formatPhoneNumber(
           phoneNumber
         )}, Please enter it here:`}
@@ -182,7 +182,7 @@ export function VerifyPhoneNumber(props: WithRouterProps) {
       />
 
       <Box className={classes.helperLinksContainer}>
-        <Typography variant="button">Didn’t recive any message?</Typography>
+        <Typography variant="button">Didn’t receive any message?</Typography>
         <Box display="flex" alignItems="center" height="3rem">
           <Link
             className={classes.link}

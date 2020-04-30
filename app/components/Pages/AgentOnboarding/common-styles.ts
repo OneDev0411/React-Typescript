@@ -8,6 +8,7 @@ export const useCommonStyles = makeStyles((theme: Theme) => ({
     },
     [theme.breakpoints.up('sm')]: {
       width: 400
-    }
+    },
+    textAlign: 'left'
   }
 }))

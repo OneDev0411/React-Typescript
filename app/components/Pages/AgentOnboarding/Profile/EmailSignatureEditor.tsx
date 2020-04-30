@@ -29,7 +29,12 @@ export default function EmailSignatureEditor({ editorState, onChange }: Props) {
         <EmailIcon />
         <span style={{ marginLeft: '0.5rem' }}>Your email signature</span>
       </Box>
-      <StyledTextEditor editorState={editorState} onChange={onChange}>
+      <StyledTextEditor
+        style={{ minHeight: '10rem' }}
+        editorState={editorState}
+        onChange={onChange}
+        placeholder="Type something or copy from your Gmail or Outlook account"
+      >
         <RichTextFeature />
         <ImageFeature uploadImage={uploadImage} />
         <EmojiFeature />
