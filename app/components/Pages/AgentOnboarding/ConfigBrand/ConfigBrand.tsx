@@ -125,7 +125,6 @@ export function ConfigBrand() {
 
   return (
     <Container>
-      <SkipButton to="/onboarding/oauth-accounts" />
       <Header
         brand={activeBrand}
         title="Config Your Brand"
@@ -159,7 +158,10 @@ export function ConfigBrand() {
               {submitting ? (
                 <CircleSpinner />
               ) : (
-                <NextButton type="submit" disabled={submitting} />
+                <Box display="flex" justifyContent="center">
+                  <SkipButton to="/onboarding/oauth-accounts" />
+                  <NextButton type="submit" disabled={submitting} />
+                </Box>
               )}
             </form>
           )

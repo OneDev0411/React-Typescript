@@ -18,8 +18,8 @@ import Header from '../Header'
 import Container from '../Container'
 import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
-import { useDocumentTitle } from '../use-document-title'
 import { useCommonStyles } from '../common-styles'
+import { useDocumentTitle } from '../use-document-title'
 
 interface FormValues {
   mlsId: string
@@ -88,7 +88,6 @@ export default function ConfirmAgentId(props: WithRouterProps) {
 
   return (
     <Container>
-      <SkipButton to="/onboarding/config-brand" />
       <Header
         brand={brand}
         title="Agent Verification"
@@ -125,7 +124,10 @@ export default function ConfirmAgentId(props: WithRouterProps) {
                 {submitting ? (
                   <CircleSpinner />
                 ) : (
-                  <NextButton type="submit" disabled={submitting} />
+                  <Box display="flex" justifyContent="center">
+                    <SkipButton to="/onboarding/config-brand" />
+                    <NextButton type="submit" disabled={submitting} />
+                  </Box>
                 )}
               </Box>
             </form>

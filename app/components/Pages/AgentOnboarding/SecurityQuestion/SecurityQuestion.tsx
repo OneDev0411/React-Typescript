@@ -67,7 +67,6 @@ export function SecurityQuestion(props: WithRouterProps) {
 
   return (
     <Container>
-      <SkipButton to="/onboarding/config-brand" />
       <Header
         brand={brand}
         title="Agent Verification"
@@ -117,7 +116,10 @@ export function SecurityQuestion(props: WithRouterProps) {
                 {submitting ? (
                   <CircleSpinner />
                 ) : (
-                  <NextButton type="submit" disabled={submitting} />
+                  <Box display="flex" justifyContent="center">
+                    <SkipButton to="/onboarding/config-brand" />
+                    <NextButton type="submit" disabled={submitting} />
+                  </Box>
                 )}
               </Box>
             </form>

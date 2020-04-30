@@ -1,24 +1,14 @@
 import React from 'react'
-import { Link as RouterLink } from 'react-router'
-import { Link, Theme } from '@material-ui/core'
+import { browserHistory } from 'react-router'
+import { Button, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
-import Icon from 'components/SvgIcons/LongArrowRight/IconLongArrowRight'
+import { FOOTER_BUTTONS_WIDTH } from './constants'
 
 const useStyles = makeStyles((theme: Theme) => ({
-  link: {
-    alignItems: 'center',
-    display: 'inline-flex',
-    position: 'absolute',
-    right: theme.spacing(1.5),
-    top: theme.spacing(1),
-    '&:hover > svg': {
-      fill: theme.palette.primary.dark
-    }
-  },
-  icon: {
-    fill: 'currentColor',
-    marginLeft: theme.spacing(1)
+  button: {
+    width: theme.spacing(FOOTER_BUTTONS_WIDTH),
+    marginRight: theme.spacing(3)
   }
 }))
 
@@ -30,14 +20,13 @@ export default function SkipButton({ to }: Props) {
   const classes = useStyles()
 
   return (
-    <Link
-      className={classes.link}
-      color="textPrimary"
-      component={RouterLink}
-      to={to}
+    <Button
+      size="large"
+      variant="outlined"
+      className={classes.button}
+      onClick={() => browserHistory.push(to)}
     >
-      <span>Skip this step</span>
-      <Icon className={classes.icon} />
-    </Link>
+      Skip
+    </Button>
   )
 }

@@ -68,6 +68,7 @@ export function OAuthAccounts() {
   const theme = useTheme()
   const classes = useStyles({})
   const dispatch = useDispatch()
+  const nextStepUrl = '/onboarding/profile'
   const brand = useSelector((store: IAppState) => store.brand)
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
@@ -96,7 +97,6 @@ export function OAuthAccounts() {
 
   return (
     <Container classes={{ box: classes.container }}>
-      <SkipButton to="/onboarding/profile" />
       <Header
         brand={brand}
         title="Be Connected"
@@ -132,9 +132,13 @@ export function OAuthAccounts() {
           Connect Outlook
         </ButtonBase>
       </Box>
-      {isLoadingConnectedAccounts && <CircleSpinner />}
-      {connectedAccounts.length > 0 && !isLoadingConnectedAccounts && (
-        <NextButton to="/onboarding/profile" />
+      {isLoadingConnectedAccounts ? (
+        <CircleSpinner />
+      ) : (
+        <Box display="flex" justifyContent="center">
+          <SkipButton to={nextStepUrl} />
+          {connectedAccounts.length > 0 && <NextButton to={nextStepUrl} />}
+        </Box>
       )}
     </Container>
   )
