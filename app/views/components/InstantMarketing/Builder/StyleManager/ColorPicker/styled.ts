@@ -11,7 +11,6 @@ export const ColorPickerContainer = styled(ItemContainer)`
 
   .circle-picker {
     margin: 0 !important;
-    flex-wrap: nowrap !important;
     width: 100% !important;
   }
 `
