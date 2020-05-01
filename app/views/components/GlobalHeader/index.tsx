@@ -11,6 +11,7 @@ import {
 } from 'utils/user-teams'
 
 import GlobalActionsButton from 'components/GlobalActionsButton'
+import { ItemType } from 'components/GlobalActionsButton/types'
 
 export interface GlobalHeaderProps {
   title?: string
@@ -64,9 +65,7 @@ export default function GlobalHeader({
   onCreateOpenHouse = noop
 }: GlobalHeaderProps) {
   const classes = useStyles({ noPadding })
-  const availableActions: React.ComponentProps<
-    typeof GlobalActionsButton
-  >['availableActions'] = []
+  const availableActions: ItemType[] = []
 
   const user = useSelector((store: IAppState) => store.user)
 
