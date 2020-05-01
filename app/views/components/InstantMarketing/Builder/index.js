@@ -47,7 +47,10 @@ import { SOCIAL_NETWORKS, BASICS_BLOCK_CATEGORY } from './constants'
 import { registerEmailBlocks } from './Blocks/Email'
 import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
-import getTemplateRenderData from './utils/get-template-render-data'
+import {
+  getMjmlTemplateRenderData,
+  getNonMjmlTemplateRenderData
+} from './utils/get-template-render-data'
 
 const ENABLE_CUSTOM_RTE = false
 
@@ -279,7 +282,7 @@ class Builder extends React.Component {
     this.emailBlocksRegistered = true
 
     const { brand } = getActiveTeam(this.props.user)
-    const renderData = getTemplateRenderData(brand)
+    const renderData = getMjmlTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
     this.blocks = registerEmailBlocks(this.editor, renderData, {
@@ -326,7 +329,7 @@ class Builder extends React.Component {
 
   registerSocialBlocks = () => {
     const { brand } = getActiveTeam(this.props.user)
-    const renderData = getTemplateRenderData(brand)
+    const renderData = getNonMjmlTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
     this.blocks = registerSocialBlocks(this.editor, renderData)
@@ -460,7 +463,7 @@ class Builder extends React.Component {
   }
 
   getSavedTemplate() {
-    if (this.state.selectedTemplate.mjml) {
+    if (this.state.selectedTemplate.template.mjml) {
       return this.getMjmlTemplate()
     }
 
@@ -528,11 +531,13 @@ class Builder extends React.Component {
     this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
   }
 
-  generateBrandedTemplate = (template, data) => {
+  generateBrandedTemplate = (templateMarkup, data) => {
     const { brand } = getActiveTeam(this.props.user)
-    const renderData = getTemplateRenderData(brand)
+    const renderData = this.isMjmlTemplate
+      ? getMjmlTemplateRenderData(brand)
+      : getNonMjmlTemplateRenderData(brand)
 
-    return nunjucks.renderString(template, {
+    return nunjucks.renderString(templateMarkup, {
       ...data,
       ...renderData
     })
@@ -551,7 +556,8 @@ class Builder extends React.Component {
     config.forceClass = !this.isMjmlTemplate
 
     const components = this.editor.DomComponents
-    let html = selectedTemplate.template
+
+    let html = selectedTemplate.markup
 
     // GrapeJS doesn't support for inline style for body tag, we are making our styles
     // Inline using juice. so we need to extract them and put them in <head>
@@ -672,22 +678,31 @@ class Builder extends React.Component {
   }
 
   get isVideoTemplate() {
-    return this.state.selectedTemplate && this.state.selectedTemplate.video
+    return (
+      this.state.selectedTemplate &&
+      this.state.selectedTemplate.template &&
+      this.state.selectedTemplate.template.video
+    )
   }
 
   get isEmailTemplate() {
     return (
       this.state.selectedTemplate &&
-      this.state.selectedTemplate.medium === 'Email'
+      this.state.selectedTemplate.template &&
+      this.state.selectedTemplate.template.medium === 'Email'
     )
   }
 
   get isMjmlTemplate() {
-    return this.state.selectedTemplate && this.state.selectedTemplate.mjml
+    return (
+      this.state.selectedTemplate &&
+      this.state.selectedTemplate.template &&
+      this.state.selectedTemplate.template.mjml
+    )
   }
 
   get isTemplateLoaded() {
-    return this.state.selectedTemplate && this.state.selectedTemplate.template
+    return this.state.selectedTemplate && this.state.selectedTemplate.markup
   }
 
   get showEditListingsButton() {
@@ -704,7 +719,7 @@ class Builder extends React.Component {
     }
 
     if (this.state.selectedTemplate) {
-      return this.state.selectedTemplate.medium !== 'Email'
+      return this.state.selectedTemplate.template.medium !== 'Email'
     }
 
     if (this.props.mediums) {
@@ -732,7 +747,7 @@ class Builder extends React.Component {
       return []
     }
 
-    if (this.state.selectedTemplate.medium === 'LinkedInCover') {
+    if (this.state.selectedTemplate.template.medium === 'LinkedInCover') {
       return SOCIAL_NETWORKS.filter(({ name }) => name === 'LinkedIn')
     }
 
@@ -744,13 +759,10 @@ class Builder extends React.Component {
       state => ({
         selectedTemplate: {
           ...state.selectedTemplate,
-          template: this.generateBrandedTemplate(
-            state.originalTemplate.template,
-            {
-              ...this.props.templateData,
-              ...newData
-            }
-          )
+          markup: this.generateBrandedTemplate(state.originalTemplate.markup, {
+            ...this.props.templateData,
+            ...newData
+          })
         }
       }),
       () => {
@@ -782,7 +794,8 @@ class Builder extends React.Component {
 
     if (
       this.state.selectedTemplate &&
-      this.state.selectedTemplate.variant === SAVED_TEMPLATE_VARIANT
+      this.state.selectedTemplate.template &&
+      this.state.selectedTemplate.template.variant === SAVED_TEMPLATE_VARIANT
     ) {
       return false
     }
@@ -955,9 +968,9 @@ class Builder extends React.Component {
             <Actions>
               {this.shouldShowSaveAsTemplateButton() && (
                 <AddToMarketingCenter
-                  medium={this.state.selectedTemplate.medium}
-                  inputs={this.state.selectedTemplate.inputs}
-                  mjml={this.state.selectedTemplate.mjml}
+                  medium={this.state.selectedTemplate.template.medium}
+                  inputs={this.state.selectedTemplate.template.inputs}
+                  mjml={this.state.selectedTemplate.template.mjml}
                   user={this.props.user}
                   getTemplateMarkup={this.getTemplateMarkup.bind(this)}
                 />

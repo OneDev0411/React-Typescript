@@ -41,7 +41,6 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
     '.MuiOutlinedInput-input[type="time"]': {
       minWidth: '7rem'
     },
-    // ///////////////////////
 
     '.MuiLinearProgress-root': {
       height: '1rem',

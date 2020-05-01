@@ -6,11 +6,11 @@ import { getHistory } from 'models/instant-marketing/get-history'
 interface TemplatesHistory {
   templates: IMarketingTemplateInstance[]
   isLoading: boolean
-  deleteTemplate: (id: UUID) => Promise<void>
   error: Nullable<Error>
+  deleteTemplate: (id: UUID) => Promise<void>
 }
 
-function useTemplatesHistory(): TemplatesHistory {
+export function useTemplatesHistory(): TemplatesHistory {
   const [templates, setTemplates] = useState<IMarketingTemplateInstance[]>([])
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -62,5 +62,3 @@ function useTemplatesHistory(): TemplatesHistory {
 
   return { templates, isLoading, error, deleteTemplate }
 }
-
-export default useTemplatesHistory

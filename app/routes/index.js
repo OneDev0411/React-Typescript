@@ -389,6 +389,11 @@ const AsyncWebsitesList = Load({
 //  Other Pages
 /* ==================================== */
 
+const AsyncBrandSettings = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/BrandSettings' /* webpackChunkName: "brand_settings" */)
+})
+
 const AsyncShare = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Marketing/SharePage' /* webpackChunkName: "mc_share_page" */)
@@ -640,6 +645,10 @@ export default (
 
         <Route path="contexts">
           <IndexRoute component={AsyncContexts} />
+        </Route>
+
+        <Route path="brand-settings">
+          <IndexRoute component={AsyncBrandSettings} />
         </Route>
 
         <Route path="websites">

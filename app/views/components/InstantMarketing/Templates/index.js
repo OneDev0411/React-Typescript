@@ -5,7 +5,6 @@ import _ from 'underscore'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 import { getActiveTeamId } from 'utils/user-teams'
-import { getBrandByType } from 'utils/user-teams'
 
 import Spinner from 'components/Spinner'
 
@@ -93,8 +92,10 @@ class Templates extends React.Component {
       selectedTemplate: template.id
     })
 
-    if (!template.template) {
-      template.template = await loadTemplateHtml(`${template.url}/index.html`)
+    if (!template.markup) {
+      template.markup = await loadTemplateHtml(
+        `${template.template.url}/index.html`
+      )
 
       // append fetched html into template data
       this.updateTemplate(template)
@@ -111,17 +112,11 @@ class Templates extends React.Component {
     }))
 
   render() {
-    const brokerageBrand = getBrandByType(this.props.user, 'Brokerage')
-
     return (
       <Container>
         {this.state.isLoading && <Spinner />}
 
         {this.state.templates.map(template => {
-          const preview_url = template.file
-            ? template.file.preview_url
-            : `${template.url}/${brokerageBrand.id}/thumbnail.png`
-
           return (
             <TemplateItem
               key={template.id}
@@ -137,7 +132,7 @@ class Templates extends React.Component {
                 />
               ) : (
                 <Image
-                  src={preview_url}
+                  src={template.preview ? template.preview.url : ''}
                   title={template.name}
                   width="97%"
                   style={{

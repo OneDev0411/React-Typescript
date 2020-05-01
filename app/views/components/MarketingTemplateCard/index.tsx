@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 
-import { getBrandByType } from 'utils/user-teams'
 import { getTemplateImage, itemDateText } from 'utils/marketing-center/helpers'
 import { ClassesProps } from 'utils/ts-utils'
 import { IAppState } from 'reducers/index'
@@ -30,10 +29,9 @@ function MarketingTemplateCard(
   props: Props & StateProps & ClassesProps<typeof marketingTemplateCardStyles>
 ) {
   const { template } = props
-  const brokerageBrand = getBrandByType(props.user, 'Brokerage')
   const classes = useStyles({ classes: props.classes })
 
-  const { thumbnail } = getTemplateImage(template, brokerageBrand)
+  const { thumbnail } = getTemplateImage(template)
 
   const isInstance = template.type === 'template_instance'
 

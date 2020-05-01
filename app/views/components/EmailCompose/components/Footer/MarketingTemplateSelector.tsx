@@ -20,7 +20,7 @@ import { ScrollableArea } from 'components/ScrollableArea'
 import { ServerError } from 'components/ServerError'
 import MarketingTemplatePreviewModal from 'components/MarketingTemplatePreviewModal'
 
-import useTemplatesHistory from '../../../../../components/Pages/Dashboard/Marketing/History/useTemplatesHistory'
+import { useTemplatesHistory } from '../../../../../components/Pages/Dashboard/Marketing/hooks/use-templates-history'
 import { FooterBottomDrawerZeroState } from './FooterBottomDrawerZeroState'
 import { MarketingTemplateMasonry } from '../../../MarketingTemplateMasonry'
 
