@@ -154,10 +154,10 @@ export const TEMPLATE = `
         <mj-image width="180px" padding="24px 0 12px 0" src="{{get('body-logo-square')}}" href="#"></mj-image>
         {% endif %} 
         <mj-text mj-class="body" padding="0px" align="center" >
-          <p>Powered by Rechatâ„¢</p>
+          <p>Powered by Rechat™</p>
         </mj-text>   
         <mj-text mj-class="body" padding="0px" align="center" >
-          <p>Rechat Â® 2018, All Rights Reserved. </p>
+          <p>Rechat ® 2020, All Rights Reserved.</p>
         </mj-text>
         <mj-text mj-class="body" padding="0px" align="center" >
                    <p><a  style="text-decoration:underline;margin-right: 8px;"
