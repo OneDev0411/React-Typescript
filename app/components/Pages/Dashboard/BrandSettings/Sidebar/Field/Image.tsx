@@ -9,7 +9,6 @@ import {
   IconButton,
   Typography,
   makeStyles,
-  createStyles,
   Theme
 } from '@material-ui/core'
 import { useDropzone } from 'dropzone'
@@ -23,28 +22,27 @@ import { ImageUploadHandler } from '../../types'
 import { FieldProps } from './types'
 
 const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      loadingProgress: {
-        display: 'block',
-        margin: `${theme.spacing(3)}px auto ${theme.spacing(1)}px`
-      },
-      image: {
-        width: '100%',
-        height: 'auto'
-      },
-      imageUploader: {
-        width: '100%',
-        border: `1px solid ${theme.palette.divider}`,
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: theme.palette.grey[200],
-        height: 100,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer'
-      }
-    }),
+  (theme: Theme) => ({
+    loadingProgress: {
+      display: 'block',
+      margin: `${theme.spacing(3)}px auto ${theme.spacing(1)}px`
+    },
+    image: {
+      width: '100%',
+      height: 'auto'
+    },
+    imageUploader: {
+      width: '100%',
+      border: `1px solid ${theme.palette.divider}`,
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: theme.palette.grey[200],
+      height: 100,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer'
+    }
+  }),
   { name: 'MarketingSettingsImageField' }
 )
 

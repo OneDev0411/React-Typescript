@@ -1,23 +1,17 @@
 import React from 'react'
-import {
-  InputAdornment,
-  Theme,
-  makeStyles,
-  createStyles
-} from '@material-ui/core'
+import { InputAdornment, Theme, makeStyles } from '@material-ui/core'
 import ColorPicker from 'material-ui-color-picker'
 
 import { FieldProps } from './types'
 
 const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      colorPickerSquare: {
-        border: `1px solid ${theme.palette.divider}`,
-        width: theme.spacing(3),
-        height: theme.spacing(3)
-      }
-    }),
+  (theme: Theme) => ({
+    colorPickerSquare: {
+      border: `1px solid ${theme.palette.divider}`,
+      width: theme.spacing(3),
+      height: theme.spacing(3)
+    }
+  }),
   { name: 'MarketingSettingsColorField' }
 )
 

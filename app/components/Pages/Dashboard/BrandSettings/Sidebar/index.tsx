@@ -7,7 +7,6 @@ import {
   ExpansionPanelSummary,
   ExpansionPanelDetails,
   makeStyles,
-  createStyles,
   Theme
 } from '@material-ui/core'
 
@@ -17,20 +16,19 @@ import { SidebarSection, ImageUploadHandler } from '../types'
 import Field from './Field'
 
 const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      wrapper: {
-        borderLeft: `1px solid ${theme.palette.divider}`,
-        position: 'sticky',
-        top: 0,
-        right: 0,
-        height: '100vh',
-        overflow: 'overlay'
-      },
-      dividerContainer: {
-        width: '100%'
-      }
-    }),
+  (theme: Theme) => ({
+    wrapper: {
+      borderLeft: `1px solid ${theme.palette.divider}`,
+      position: 'sticky',
+      top: 0,
+      right: 0,
+      height: '100vh',
+      overflow: 'overlay'
+    },
+    dividerContainer: {
+      width: '100%'
+    }
+  }),
   { name: 'MarketingSettingsSidebar' }
 )
 
