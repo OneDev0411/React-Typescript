@@ -560,31 +560,40 @@ export default (
         <Route path="tours" component={AsyncToursList} />
         <Route path="open-house" component={AsyncOpenHousesList} />
 
-        <Route path="deals(/filter/:filter)" component={AsyncDealsLayout}>
+        <Route
+          path="/dashboard/deals(/filter/:filter)"
+          component={AsyncDealsLayout}
+        >
           <IndexRoute component={AsyncDealsList} />
-          <Route path="deals/create(/:id)" component={AsyncDealCreate} />
           <Route
-            path="deals/:id/form-edit/:taskId"
+            path="/dashboard/deals/create(/:id)"
+            component={AsyncDealCreate}
+          />
+          <Route
+            path="/dashboard/deals/:id/form-edit/:taskId"
             component={AsyncDealFormEdit}
           />
           <Route
-            path="deals/:id/create-offer"
+            path="/dashboard/deals/:id/create-offer"
             component={AsyncDealCreateOffer}
           />
           <Route
-            path="deals/:id/view/:taskId(/:entityType/:entityId)"
+            path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"
             component={AsyncDealFileViewer}
           />
           <Route
-            path="deals/:id/marketing/network"
+            path="/dashboard/deals/:id/marketing/network"
             component={AsyncAgentNetwork}
           />
-          <Route path="deals/:id(/:tab)" component={AsyncDealDashboard} />
+          <Route
+            path="/dashboard/deals/:id(/:tab)"
+            component={AsyncDealDashboard}
+          />
         </Route>
 
         <Route path="mls" component={AsyncListingsLayout}>
           <IndexRoute component={AsyncListingsSearch} />
-          <Route path="following" component={AsyncListingsFavorites} />
+          <Route path="favorites" component={AsyncListingsFavorites} />
           <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
         </Route>
 
