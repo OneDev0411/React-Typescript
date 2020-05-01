@@ -9,11 +9,11 @@ import Layout from '..'
 
 function isGenerationThumbnails(brandTemplates) {
   return brandTemplates.some(brandTemplate => {
-    if (brandTemplate.thumbnail_requested_at) {
-      return true
-    }
-
-    if (!brandTemplate.thumbnail || !brandTemplate.thumbnail.preview_url) {
+    if (
+      !brandTemplate.is_thumbnail_ready ||
+      !brandTemplate.thumbnail ||
+      !brandTemplate.thumbnail.preview_url
+    ) {
       return true
     }
 
