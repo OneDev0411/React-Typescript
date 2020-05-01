@@ -8,7 +8,7 @@ import {
   Font
 } from '@samuelmeuli/font-manager'
 
-import config from '../../../../../../../config/public'
+import config from 'config'
 
 import { FieldProps } from './types'
 
