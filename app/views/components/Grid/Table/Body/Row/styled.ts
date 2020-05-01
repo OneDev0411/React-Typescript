@@ -26,8 +26,11 @@ export const RowContainer = styled.div<{
 
     &:hover .primary {
       cursor: pointer;
-      color: ${theme.palette.secondary.main};
-      text-decoration: underline;
+
+      a {
+        color: ${theme.palette.secondary.main};
+        text-decoration: underline;
+      }
     }
 
     &:hover .selection--default-value {

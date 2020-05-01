@@ -137,20 +137,21 @@ export function ChecklistHeader({
             >
               Add Generic Task
             </ListItem>
-            {checklist.tasks.every(
-              task => task.task_type !== 'GeneralComments'
-            ) && (
-              <ListItem
-                className={classes.splitMenuItem}
-                button
-                onClick={event => {
-                  addGeneralCommentTask(checklist)
-                  closeMenu(event)
-                }}
-              >
-                Add General Comments
-              </ListItem>
-            )}
+            {Array.isArray(checklist.tasks) &&
+              checklist.tasks.every(
+                task => task.task_type !== 'GeneralComments'
+              ) && (
+                <ListItem
+                  className={classes.splitMenuItem}
+                  button
+                  onClick={event => {
+                    addGeneralCommentTask(checklist)
+                    closeMenu(event)
+                  }}
+                >
+                  Add General Comments
+                </ListItem>
+              )}
           </List>
         )}
       >

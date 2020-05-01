@@ -22,6 +22,8 @@ import { CloseButton } from 'components/Button/CloseButton'
 
 import GlobalHeader from 'components/GlobalHeader'
 
+import { GridContextProvider } from 'components/Grid/Table/context/provider'
+
 import config from '../../../../../../config/public'
 
 import Grid from './Grid'
@@ -220,15 +222,16 @@ class AgentNetwork extends React.Component {
           disabled={this.state.isFetching}
           handleSearch={this.onSetFilter}
         />
-
-        <Grid
-          user={this.props.user}
-          data={this.state.list.filter(filterNonMLSAgents)}
-          deal={this.props.deal}
-          isFetching={this.state.isFetching}
-          listInfo={this.state.listInfo}
-          onChangeSelectedRows={this.onChangeSelectedRows}
-        />
+        <GridContextProvider>
+          <Grid
+            user={this.props.user}
+            data={this.state.list.filter(filterNonMLSAgents)}
+            deal={this.props.deal}
+            isFetching={this.state.isFetching}
+            listInfo={this.state.listInfo}
+            onChangeSelectedRows={this.onChangeSelectedRows}
+          />
+        </GridContextProvider>
       </div>
     )
   }

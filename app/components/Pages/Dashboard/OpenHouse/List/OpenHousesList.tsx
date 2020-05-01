@@ -8,20 +8,17 @@ import { makeStyles, createStyles } from '@material-ui/styles'
 
 import { ACL } from 'constants/acl'
 
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
-
-import { useGridStyles } from 'components/Grid/Table/styles'
-
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { getActiveTeamId } from 'utils/user-teams'
 
+import { RenderProps } from 'components/Grid/Table/types'
+import { useGridStyles } from 'components/Grid/Table/styles'
 import Acl from 'components/Acl'
 import Table from 'components/Grid/Table'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
-
-import { RenderProps } from 'components/Grid/Table/types'
 
 import EmptyState from './EmptyState'
 import Avatar from './columns/Avatar'

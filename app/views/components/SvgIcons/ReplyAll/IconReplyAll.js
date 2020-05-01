@@ -6,7 +6,11 @@ const width = '24'
 const height = '24'
 const viewBox = '0 0 24 24'
 
-const sizes = {}
+const sizes = {
+  small: { width: 16, height: 16 },
+  medium: { width: 24, height: 24 },
+  large: { width: 32, height: 32 }
+}
 
 // somehow sizes is ending up in markup, even if it is not a valid svg attribute
 // until we have a better solution, just render it empty, instead to '[Object object]'
@@ -45,8 +49,7 @@ const Image = styled.svg`${propsToCss}`
 const children = (
   <Fragment>
     <g
-      fill='currentColor'
-      clipPath='url(#s-0655e57c09-a)'
+      clipPath='url(#s-c10db64518-a)'
       key='key-0'
     >
       <path
@@ -60,7 +63,7 @@ const children = (
       key='key-1'
     >
       <clipPath
-        id='s-0655e57c09-a'
+        id='s-c10db64518-a'
       >
         <path
           fill='transparent'

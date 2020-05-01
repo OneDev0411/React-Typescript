@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addNotification } from 'reapop'
 import { Box, Button, Grid, Theme } from '@material-ui/core'
-import styled, { ThemeProps } from 'styled-components'
+import styled, { css, ThemeProps } from 'styled-components'
 
 import { IAppState } from 'reducers'
 import editUser from 'actions/user/edit'
@@ -19,9 +19,11 @@ interface Props {
   showActions?: boolean
 }
 
-const StyledTextEditor = styled(TextEditor)`
-  border: 1px solid ${(props: ThemeProps<Theme>) => props.theme.palette.divider};
-  padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 1, 1, 1)};
+export const StyledTextEditor = styled(TextEditor)`
+  ${(props: ThemeProps<Theme>) => css`
+    border: 1px solid ${props.theme.palette.divider};
+    padding: ${props.theme.spacing(0, 1, 1, 1)};
+  `}
 `
 
 export default function EditEmailSignature({
@@ -83,8 +85,7 @@ export default function EditEmailSignature({
       {showActions && (
         <Grid container justify="flex-end">
           <Button
-            type="submit"
-            color="primary"
+            color="secondary"
             variant="contained"
             disabled={isSaving}
             onClick={onSave}

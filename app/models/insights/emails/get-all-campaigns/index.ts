@@ -15,8 +15,8 @@ async function getAll(user: IUser): Promise<Array<IEmailCampaign>> {
     const response = await new Fetch().get(endpoint)
 
     return response.body.data
-  } catch (e) {
-    throw e
+  } catch (error) {
+    throw error
   }
 }
 

@@ -30,6 +30,16 @@ export function getActiveTeam(user: Partial<IUser> | null): IUserTeam | null {
   return activeTeam || null
 }
 
+export function getActiveBrand(user: Partial<IUser> | null): IBrand | null {
+  const activeTeam = getActiveTeam(user)
+
+  if (activeTeam == null) {
+    return null
+  }
+
+  return activeTeam.brand
+}
+
 export function getActiveTeamId(user: IUser | null): UUID | null {
   if (user == null) {
     return null

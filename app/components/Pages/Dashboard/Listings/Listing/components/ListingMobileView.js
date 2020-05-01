@@ -1,47 +1,33 @@
+import React from 'react'
 import S from 'shorti'
-// import ReactDOM from 'react-dom'
 import Map from 'google-map-react'
 import ReactSwipe from 'react-swipe'
-import React from 'react'
 
-// import { browserHistory } from 'react-router'
-
-// import { connect } from 'react-redux'
-// import compose from 'recompose/compose'
-// import lifecycle from 'recompose/lifecycle'
-// import withState from 'recompose/withState'
-// import withHandlers from 'recompose/withHandlers'
-
-import { renderFeatures } from './ListingDesktopView'
-
-import { formatPhoneNumber } from '../../../../../../utils/format'
-import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
 import config from '../../../../../../../config/public'
-import Brand from '../../../../../../controllers/Brand'
-import listingUtils from '../../../../../../utils/listing'
 
-import FetchError from './FetchError'
-import MLSNote from './MLSNote'
+import listingUtils from '../../../../../../utils/listing'
+import { formatPhoneNumber } from '../../../../../../utils/format'
+
+import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
+
+import Brand from '../../../../../../controllers/Brand'
 
 import Loading from '../../../../../Partials/Loading'
-// import FavoriteHeart from '../../components/FavoriteHeart'
-import ListingMarker from '../../../Partials/ListingMarker'
-import ListingMapMarker from '../../../Partials/ListingMapMarker'
 
-// import ShareModal from '../../components/modals/ShareListingModal'
+import ListingMarker from '../../components/ListingMarker'
+
+import MLSNote from './MLSNote'
+import FetchError from './FetchError'
+import { renderFeatures } from './ListingDesktopView'
 
 const ListingMobileView = ({
-  data,
+  brand,
+  user,
   listing,
   isFetching,
   errorMessage
-  // showShareModal,
-  // onHideShareModal,
-  // shareModalIsActive
 }) => {
-  const { user } = data
   const brand_agent = listing.proposed_agent
-
   let current_slide
 
   if (listing) {
@@ -175,25 +161,6 @@ const ListingMobileView = ({
         </span>
       </div>
     )
-
-    // let number_days_indicator
-    // if (listing.list_date) {
-    //   const days_on_market = listingUtils.getDOM(listing.dom)
-    //   number_days_indicator = (
-    //     <div
-    //       className="pull-left"
-    //       style={S(
-    //         'bg-ebeef1 relative t-7 br-100 pt-11 h-35 pl-15 pr-15 mr-15'
-    //       )}
-    //     >
-    //       <span style={S('font-14 relative t-3n')}>
-    //         <b>
-    //           {days_on_market} days ago
-    //         </b>
-    //       </span>
-    //     </div>
-    //   )
-    // }
 
     let mls_link
 
@@ -350,19 +317,14 @@ const ListingMobileView = ({
               center={{ lat: latitude, lng: longitude }}
               options={{ scrollwheel: false, draggable: false }}
             >
-              <ListingMapMarker
-                lat={latitude}
-                lng={longitude}
-                style={S('pointer mt-10')}
+              <div
+                style={{
+                  cursor: 'pointer',
+                  marginTop: '0.5rem'
+                }}
               >
-                <ListingMarker
-                  data={data}
-                  listing={listing}
-                  property={listing.property}
-                  address={listing.property.address}
-                  key={`listing-marker${listing.id}`}
-                />
-              </ListingMapMarker>
+                <ListingMarker user={user} brand={brand} listing={listing} />
+              </div>
             </Map>
           </div>
         </div>
@@ -554,25 +516,7 @@ const ListingMobileView = ({
   const viewer_wrap_style = S(
     'absolute h-100p bg-fff t-0 l-0 z-1000 ml-0 w-100p'
   )
-  // const nav_bar_style = S('mb-0 p-0 h-65 pt-7 w-100p')
 
-  // let join_area
-  // let brand_logo = (
-  //   <span style={S('font-28')} className="tk-calluna-sans text-primary">
-  //     Rechat
-  //   </span>
-  // )
-  // if (Brand.asset('site_logo_wide')) {
-  //   const host = `https://${window.location.host}`
-  //   brand_logo = (
-  //     <span>
-  //       <img style={S('w-200')} src={Brand.asset('site_logo_wide')} />
-  //     </span>
-  //   )
-  // }
-
-  // let left_area
-  // if (user) {
   let left_area = (
     <div style={S('h-65 w-200')}>
       <a
@@ -604,76 +548,6 @@ const ListingMobileView = ({
       </a>
     </div>
   )
-  // left_area = (
-  //   <button
-  //     onClick={() => hideModal()}
-  //     style={{
-  //       position: 'absolute',
-  //       left: '20px',
-  //       top: '20px',
-  //       fontSize: '18px',
-  //       borderWidth: 0,
-  //       padding: 0,
-  //       backgroundColor: 'transparent'
-  //     }}
-  //   >
-  //     <span
-  //       href="#"
-  //       style={S('relative pull-left font-30 mr-10 t-5n')}
-  //       className="close"
-  //     >
-  //       &times;
-  //     </span>
-  //     Close
-  //   </button>
-  // )
-  // }
-
-  // let right_area
-  // if (user && Object.keys(listing).length > 0) {
-  //   const login_btn_color = Brand.color('primary', '006aff')
-
-  //   right_area = (
-  //     <div style={{ ...nav_bar_style, ...S('pull-right w-60p') }}>
-  //       <div style={S('pull-right relative r-120 t-6')}>
-  //         <FavoriteHeart listing={listing} width="40px" height="40px" />
-  //       </div>
-  //       <Button
-  //         onClick={showShareModal}
-  //         style={S(
-  //           `absolute r-20 t-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`
-  //         )}
-  //         bsStyle="primary"
-  //         type="button"
-  //       >
-  //         Share &nbsp;&nbsp;<i className="fa fa-share" />
-  //       </Button>
-  //     </div>
-  //   )
-  // }
-
-  // if (!user) {
-  //   const login_btn_color = Brand.color('primary', '006aff')
-
-  //   join_area = (
-  //     <div style={S('h-70')}>
-  //       <div style={S('pull-left p-16')}>
-  //         {brand_logo}
-  //       </div>
-  //       <div style={S('pull-right pt-16')}>
-  //         <a
-  //           style={S(
-  //             `color-fff mr-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`
-  //           )}
-  //           className="btn"
-  //           href={`/signin?redirect_to=/dashboard/mls/${listing.id}`}
-  //         >
-  //           Log in
-  //         </a>
-  //       </div>
-  //     </div>
-  //   )
-  // }
 
   let brand_agent_footer
 
@@ -739,69 +613,13 @@ const ListingMobileView = ({
     )
   }
 
-  // Claim account message
-  // let claim_account_message
-  // let token
-  // if (data.location && data.location.query && data.location.query.token) {
-  //   token = data.location.query.token
-  // }
-
-  // if (token) {
-  //   let contact_info = data.location.query.email
-
-  //   if (data.location.query.phone_number) {
-  //     contact_info = data.location.query.phone_number
-  //   }
-
-  //   claim_account_message = (
-  //     <div style={S('bg-2196f3 color-fff w-100p font-17 p-20 text-center')}>
-  //       This listing was shared to {contact_info}. Claim your account to save
-  //       this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
-  //       <Button
-  //         bsSize="large"
-  //         style={S('bg-fff color-2196f3 border-none')}
-  //         onClick={handleActivateAccountClick}
-  //       >
-  //         Activate your account
-  //       </Button>
-  //     </div>
-  //   )
-  // }
-
-  // {claim_account_message}
-  // {user && <div style={{ height: '65px' }} className="clearfix">
-  //   {left_area}
-  //   {right_area}
-  // </div>}
-
   return (
     <div style={viewer_wrap_style}>
       {left_area}
       {main_content}
       {brand_agent_footer}
-      {/* <ShareModal
-        listing={listing}
-        user={user}
-        isActive={shareModalIsActive}
-        onHide={onHideShareModal}
-      /> */}
     </div>
   )
 }
-
-// export default compose(
-//   withState('shareModalIsActive', 'setShareModalIsActive', false),
-//   withHandlers({
-//     hideModal: () => () => browserHistory.goBack()
-//   }),
-//   withHandlers({
-//     onHideShareModal: ({ setShareModalIsActive }) => () => {
-//       setShareModalIsActive(false)
-//     },
-//     showShareModal: ({ setShareModalIsActive }) => () => {
-//       setShareModalIsActive(true)
-//     }
-//   })
-// )(ListingMobileView)
 
 export default ListingMobileView

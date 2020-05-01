@@ -46,8 +46,6 @@
     }
   },
   "rules": {
-    "react/state-in-constructor": "off",
-    "react/static-property-placement": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "import/no-unresolved": [
@@ -124,6 +122,7 @@
       }
     ],
     "eqeqeq": 0,
+    "no-useless-catch": 0,
     "no-nested-ternary": 0,
     "import/newline-after-import": 0,
     "import/first": 0,
@@ -155,6 +154,9 @@
     "no-unused-vars": "error",
     "prefer-const": 0,
     "jsx-quotes": 1,
+    "react/jsx-fragments": 0,
+    "react/state-in-constructor": 0,
+    "react/static-property-placement": 0,
     "react/jsx-no-undef": 1,
     "react/jsx-uses-react": 1,
     "react/jsx-uses-vars": 1,
@@ -298,7 +300,8 @@
       }
     ]
   },
-  "overrides": [{
+  "overrides": [
+    {
       "files": [
         "**/*.ts",
         "**/*.tsx"

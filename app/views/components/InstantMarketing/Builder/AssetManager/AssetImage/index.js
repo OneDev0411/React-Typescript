@@ -91,16 +91,15 @@ export class AssetImage extends React.Component {
           Crop and Select
         </CropButton>
 
-        {this.state.isCropperOpen && (
-          <ImageUploader
-            disableChangePhoto
-            file={imageWithoutCache}
-            width={targetElement.clientWidth * 2}
-            height={targetElement.clientHeight * 2}
-            saveHandler={this.onCrop}
-            closeHandler={this.closeCropper}
-          />
-        )}
+        <ImageUploader
+          disableChangePhoto
+          isCropperOpen={this.state.isCropperOpen}
+          file={imageWithoutCache}
+          width={targetElement.clientWidth * 2}
+          height={targetElement.clientHeight * 2}
+          saveHandler={this.onCrop}
+          closeHandler={this.closeCropper}
+        />
       </Container>
     )
   }

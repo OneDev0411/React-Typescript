@@ -4,8 +4,10 @@ import { getDefaultList } from 'reducers/filter-segments'
 import { IAppState } from 'reducers'
 
 import { getActiveTeamSettings } from 'utils/user-teams'
-
-import { isDeletedOrRevoked } from 'reducers/contacts/oAuthAccounts'
+import {
+  isDeletedOrRevoked,
+  getNumOfSyncedContacts
+} from 'utils/oauth-provider'
 
 import { getOrganizeSyncedContactsList } from '../OrganizeSyncedContactsButton/helpers'
 import {
@@ -13,7 +15,6 @@ import {
   SYNCED_CONTACTS_LIST_ID,
   DUPLICATE_CONTACTS_LIST_ID
 } from '../constants'
-import { getNumOfSyncedContacts } from '../ImportContactsButton/helpers'
 import { oAuthAccountTypeToProvider } from '../../../Account/ConnectedAccounts/constants'
 
 export const getPredefinedContactLists = (

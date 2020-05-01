@@ -216,7 +216,7 @@ export function EmailThreadItem({
                       : undefined
                   }
                 >
-                  <IconReply className={iconClassName} />
+                  <IconReply fill="currentColor" className={iconClassName} />
                   Reply
                 </Button>
                 {hasReplyAll(email) && (
@@ -230,7 +230,10 @@ export function EmailThreadItem({
                         : undefined
                     }
                   >
-                    <IconReplyAll className={iconClassName} />
+                    <IconReplyAll
+                      fill="currentColor"
+                      className={iconClassName}
+                    />
                     Reply All
                   </Button>
                 )}
@@ -245,7 +248,7 @@ export function EmailThreadItem({
                       : undefined
                   }
                 >
-                  <IconForward className={iconClassName} />
+                  <IconForward fill="currentColor" className={iconClassName} />
                   Forward
                 </Button>
               </Box>

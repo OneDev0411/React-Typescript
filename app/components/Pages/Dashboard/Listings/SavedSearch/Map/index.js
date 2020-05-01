@@ -27,7 +27,6 @@ const map = ({
   user,
   style,
   markers,
-  appData,
   options,
   onChange,
   defaultZoom,
@@ -56,7 +55,6 @@ const map = ({
           lat={lat}
           lng={lng}
           user={user}
-          data={appData}
           listing={points[0]}
           key={`MARKER_${id}`}
         />
@@ -95,14 +93,14 @@ const mapHOC = compose(
     defaultCenter: mapInitialState.center
   }),
   connect(
-    ({ user, data, alerts }) => {
+    ({ user, brand, alerts }) => {
       const { map, loggedAlert } = alerts
 
       return {
         map,
+        brand,
         user,
         loggedAlert,
-        appData: data,
         mapProps: map.props
       }
     },

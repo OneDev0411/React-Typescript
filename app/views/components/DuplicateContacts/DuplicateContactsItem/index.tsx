@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(0, 0.5)
     },
     contactSource: {
-      color: theme.palette.action.disabled
+      color: theme.palette.grey['500']
     },
     masterText: {
       color: theme.palette.success.main

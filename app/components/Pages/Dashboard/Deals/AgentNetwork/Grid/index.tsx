@@ -1,19 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { Button, Avatar, Tooltip, Theme } from '@material-ui/core'
-
-import { withTheme } from '@material-ui/styles'
+import {
+  Button,
+  Avatar,
+  Tooltip,
+  Theme,
+  Checkbox,
+  makeStyles,
+  useTheme
+} from '@material-ui/core'
 
 import Flex from 'styled-flex-component'
 
 import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 import { putUserSetting } from 'models/user/put-user-setting'
 
-import Table from 'components/Grid/Table'
+import { Table } from 'components/Grid/Table'
 import { RenderProps } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
 import IconEmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
-
+import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
+import { SELECTION__TOGGLE_ALL } from 'components/Grid/Table/context/constants'
 import { getNameInitials } from 'utils/helpers'
 
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
@@ -23,9 +30,6 @@ import { Caption } from './columns/Caption'
 
 import { IDealAgent } from '../types'
 
-interface State {
-  selectedAgent: null | any
-}
 interface Props {
   user: IUser
   data: IDealAgent[]
@@ -34,34 +38,62 @@ interface Props {
 }
 
 export const SORT_FIELD_SETTING_KEY = 'grid_deals_agent_network_sort_field'
-
-class Grid extends React.Component<
-  Props & {
-    theme: Theme
-  },
-  State
-> {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      selectedAgent: null
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    infoContainer: {
+      display: 'inline-block'
+    },
+    toggleAll: {
+      padding: 0,
+      marginRight: theme.spacing(1)
+    },
+    totalRow: {
+      display: 'inline-flex',
+      marginRight: theme.spacing(2),
+      fontSize: theme.typography.overline.fontSize,
+      color: theme.palette.grey['500']
     }
-  }
+  }),
+  { name: 'AgentsGrid' }
+)
+const Grid = (props: Props) => {
+  const [state, dispatch] = useGridContext()
+  const classes = useStyles()
+  const theme: Theme = useTheme()
+  const [selectedAgent, setSelectedAgent] = useState<null | any>(null)
+  const {
+    isAllRowsSelected,
+    isEntireRowsSelected,
+    selectedRowIds,
+    excludedRows
+  } = state.selection
 
-  onCloseDrawer = () => this.setState({ selectedAgent: null })
+  const isAllSelected =
+    isAllRowsSelected ||
+    selectedRowIds.length === (props.data || []).length ||
+    (isEntireRowsSelected && excludedRows.length === 0)
 
-  onSelectAgent = (agent, listType) =>
-    this.setState({
-      selectedAgent: {
-        title: `${agent.name} ${
-          listType === 'asListing' ? 'listings' : 'Buyers'
-        } (${agent[listType].length})`,
-        list: agent[listType].map(id => agent.listings[id])
-      }
+  const isSomeRowsSelected =
+    (isAllRowsSelected === false &&
+      selectedRowIds.length > 0 &&
+      selectedRowIds.length < (props.data || []).length) ||
+    (isEntireRowsSelected && excludedRows.length > 0)
+  const tooltipTitle =
+    isAllSelected || isEntireRowsSelected
+      ? 'Deselect All Rows'
+      : 'Select All Rows'
+
+  const onCloseDrawer = () => setSelectedAgent(null)
+
+  const onSelectAgent = (agent, listType) =>
+    setSelectedAgent({
+      title: `${agent.name} ${
+        listType === 'asListing' ? 'listings' : 'Buyers'
+      } (${agent[listType].length})`,
+      list: agent[listType].map(id => agent.listings[id])
     })
 
-  columns = [
+  const columns = [
     {
       id: 'name',
       header: 'Name',
@@ -104,7 +136,7 @@ class Grid extends React.Component<
               style={{
                 minWidth: 'unset'
               }}
-              onClick={() => this.onSelectAgent(agent, 'asListing')}
+              onClick={() => onSelectAgent(agent, 'asListing')}
             >
               {agent.asListing.length}
             </Button>
@@ -126,7 +158,7 @@ class Grid extends React.Component<
               style={{
                 minWidth: 'unset'
               }}
-              onClick={() => this.onSelectAgent(agent, 'asBuyers')}
+              onClick={() => onSelectAgent(agent, 'asBuyers')}
             >
               {agent.asBuyers.length}
             </Button>
@@ -162,67 +194,89 @@ class Grid extends React.Component<
     }
   ]
 
-  getActiveSort = () => {
-    const sort = parseSortSetting(
-      this.props.user,
-      SORT_FIELD_SETTING_KEY,
-      'name'
-    )
+  const getActiveSort = () => {
+    const sort = parseSortSetting(props.user, SORT_FIELD_SETTING_KEY, 'name')
 
     return SortableColumns.find(col => col.value === sort.id)
   }
 
-  handleChangeSort = async column => {
+  const handleChangeSort = async column => {
     putUserSetting(SORT_FIELD_SETTING_KEY, column.value)
   }
+  const toggleAll = () =>
+    dispatch({
+      type: SELECTION__TOGGLE_ALL,
+      rows: props.data
+    })
+  const getSummeryInfo = () => {
+    const totalRows = (props.data || []).length
+    let selectedCount
 
-  render() {
-    const { selectedAgent } = this.state
-    const totalRows = (this.props.data || []).length
+    if (isEntireRowsSelected) {
+      selectedCount = totalRows - excludedRows.length
+    } else if (selectedRowIds.length > 0) {
+      selectedCount = selectedRowIds.length
+    }
 
-    return (
-      <>
-        <Table<IDealAgent>
-          rows={this.props.data}
-          columns={this.columns}
-          totalRows={totalRows}
-          virtualize={totalRows > 150}
-          LoadingStateComponent={() => (
-            <LoadingContainer style={{ padding: 0 }} />
-          )}
-          loading={this.props.isFetching ? 'middle' : null}
-          summary={total => `${total} Agents`}
-          sorting={{
-            defaultSort: this.getActiveSort(),
-            columns: SortableColumns,
-            onChange: this.handleChangeSort
-          }}
-          selection={{
-            columnProps: {
-              width: `${this.props.theme.spacing(7.5)}px`
-            },
-            defaultRender: ({ row }: RenderProps<IDealAgent>) => {
-              return (
-                <Avatar alt={row.name}>{getNameInitials(row.name, 1)}</Avatar>
-              )
-            }
-          }}
-          TableActions={
-            <TableActions rows={this.props.data} deal={this.props.deal} />
-          }
-        />
-
-        {selectedAgent && (
-          <ListingsListViewDrawer
-            isOpen
-            title={selectedAgent.title}
-            onClose={this.onCloseDrawer}
-            listings={selectedAgent.list}
-          />
-        )}
-      </>
-    )
+    return selectedCount
+      ? `${selectedCount} of ${totalRows} selected`
+      : `${totalRows} Agents`
   }
+
+  return (
+    <>
+      {!props.isFetching && (
+        <div className={classes.infoContainer}>
+          <Tooltip title={tooltipTitle}>
+            <Checkbox
+              disableRipple
+              className={classes.toggleAll}
+              checked={isAllSelected}
+              indeterminate={isSomeRowsSelected}
+              onChange={toggleAll}
+            />
+          </Tooltip>
+          <span className={classes.totalRow}>{getSummeryInfo()}</span>
+        </div>
+      )}
+
+      <Table<IDealAgent>
+        rows={props.data}
+        columns={columns}
+        totalRows={(props.data || []).length}
+        LoadingStateComponent={() => (
+          <LoadingContainer style={{ padding: 0 }} />
+        )}
+        loading={props.isFetching ? 'top' : null}
+        sorting={{
+          defaultSort: getActiveSort(),
+          columns: SortableColumns,
+          onChange: handleChangeSort
+        }}
+        selection={{
+          columnProps: {
+            width: `${theme.spacing(7.5)}px`
+          },
+          defaultRender: ({ row }: RenderProps<IDealAgent>) => {
+            return (
+              <Avatar alt={row.name}>{getNameInitials(row.name, 1)}</Avatar>
+            )
+          },
+          showSelectAll: false
+        }}
+        TableActions={<TableActions rows={props.data} deal={props.deal} />}
+      />
+
+      {selectedAgent && (
+        <ListingsListViewDrawer
+          isOpen
+          title={selectedAgent.title}
+          onClose={onCloseDrawer}
+          listings={selectedAgent.list}
+        />
+      )}
+    </>
+  )
 }
 
-export default withTheme(Grid)
+export default Grid

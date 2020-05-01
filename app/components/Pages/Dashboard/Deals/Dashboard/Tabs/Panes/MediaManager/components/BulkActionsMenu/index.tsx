@@ -18,7 +18,8 @@ import {
 } from '../../context/actions'
 import {
   getSelectedMedia,
-  getSelectedMediaIds
+  getSelectedMediaIds,
+  getSelectableMedia
 } from '../../context/helpers/selectors'
 
 interface Props {
@@ -30,6 +31,7 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
   const classes = useStyles()
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [downloadUrl, setDownloadUrl] = useState('')
+  const selectableItems = getSelectableMedia(mediaGallery)
   const selectedGalleryItems = getSelectedMedia(mediaGallery)
   const { dispatch } = useMediaManagerContext()
   const confirmationModal = useContext(ConfirmationModalContext)
@@ -92,17 +94,17 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
           <Checkbox
             color="secondary"
             onChange={handleSelectNone}
-            checked={selectedGalleryItems.length === mediaGallery.length}
+            checked={selectedGalleryItems.length === selectableItems.length}
             indeterminate={
               selectedGalleryItems.length > 0 &&
-              selectedGalleryItems.length !== mediaGallery.length
+              selectedGalleryItems.length !== selectableItems.length
             }
           />
           <Typography display="inline" className={classes.bold}>
             {pluralize('photo', selectedGalleryItems.length, true)} selected
           </Typography>
 
-          {selectedGalleryItems.length !== mediaGallery.length && (
+          {selectedGalleryItems.length !== selectableItems.length && (
             <>
               <Typography
                 display="inline"
@@ -112,7 +114,7 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
                 &nbsp;&#9679;&nbsp;
               </Typography>
               <Button href="#" onClick={handleSelectAll}>
-                Select all {pluralize('photo', mediaGallery.length, true)}
+                Select all {pluralize('photo', selectableItems.length, true)}
               </Button>
             </>
           )}

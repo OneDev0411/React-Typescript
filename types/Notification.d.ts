@@ -87,6 +87,6 @@ declare interface INotification extends IModel<'notification'> {
   notification_type: string
   seen: boolean
   recommendations: any[] | null
-  objects: any[] | null
-  subjects: any[] | null
+  objects: any[]
+  subjects: any[]
 }

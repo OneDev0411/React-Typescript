@@ -30,14 +30,12 @@ export default class Fetch {
     const isServerSide = typeof window === 'undefined'
     const isProductionEnv = process.env.NODE_ENV === 'production'
 
-    this.options = Object.assign(
-      {
-        proxy: false,
-        progress: null,
-        useReferencedFormat: true
-      },
-      options
-    )
+    this.options = {
+      proxy: false,
+      progress: null,
+      useReferencedFormat: true,
+      ...options
+    }
 
     this._middlewares = this.registerMiddlewares(this.options)
     this._isServerSide = isServerSide
@@ -210,7 +208,12 @@ export default class Fetch {
       const status = response.status
       const request = response.req
       const elapsed = Date.now() - (this._startTime || Date.now())
-      console.log(`${status} <${requestId}> (${elapsed}ms) ${request.method} ${request.url}`)
+
+      console.log(
+        `${status} <${requestId}> (${elapsed}ms) ${request.method} ${
+          request.url
+        }`
+      )
     }
   }
 }

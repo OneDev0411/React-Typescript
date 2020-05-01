@@ -1,10 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { Box } from '@material-ui/core'
+
 import Spinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
+import { ScrollableArea } from 'components/ScrollableArea'
+
+import IconCog from 'components/SvgIcons/Cog/IconCog'
+
 import FlowItem from '../FlowItem'
-import { Container, EmptyContainer } from './styled'
+import { List, Container, EmptyContainer, SettingLink } from './styled'
 
 ListView.propTypes = {
   error: PropTypes.string.isRequired,
@@ -25,7 +31,9 @@ export default function ListView(props) {
 
   if (props.error) {
     return (
-      <EmptyContainer style={{ color: '#F43B38' }}>{props.error}</EmptyContainer>
+      <EmptyContainer style={{ color: '#F43B38' }}>
+        {props.error}
+      </EmptyContainer>
     )
   }
 
@@ -36,15 +44,25 @@ export default function ListView(props) {
   }
 
   return (
-    <Container className="u-scrollbar--thinner--self">
-      {items.map(flow => (
-        <FlowItem
-          item={flow}
-          key={flow.id}
-          onSelect={props.onSelect}
-          selected={props.selectedFlowId === flow.id}
-        />
-      ))}
+    <Container>
+      <ScrollableArea hasThinnerScrollbar>
+        <List>
+          {items.map(flow => (
+            <FlowItem
+              item={flow}
+              key={flow.id}
+              onSelect={props.onSelect}
+              selected={props.selectedFlowId === flow.id}
+            />
+          ))}
+        </List>
+      </ScrollableArea>
+      <Box pl={1.5}>
+        <SettingLink to="/dashboard/account/flows">
+          <IconCog />
+          <span>Manage Flows</span>
+        </SettingLink>
+      </Box>
     </Container>
   )
 }
