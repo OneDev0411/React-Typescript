@@ -28,6 +28,7 @@
     // but it seems it doesn't work
     "baseUrl": ".",
     "paths": {
+      "config": ["config/public/*"],
       "store": ["app/stores"],
       "actions/*": ["app/store_actions/*"],
       "assets/*": ["app/static/*"],
