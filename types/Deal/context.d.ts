@@ -2,16 +2,7 @@ declare type IContextSection = 'Listing' | 'CDA' | 'Dates' | null
 declare type IContextSource = 'Provided' | 'MLS' | null
 declare type IContextDataType = 'Text' | 'Date' | 'Number' | null
 declare type IContextFormat = 'Currency' | null
-declare type IContextCondition =
-  | 'Buying'
-  | 'Selling'
-  | 'Resale'
-  | 'New Home'
-  | 'Lot / Land'
-  | 'Residential Lease'
-  | 'Commercial Sale'
-  | 'Commercial Lease'
-  | 'Active Offer'
+declare type IContextCondition = IDealType | IDealPropertyType
 
 declare interface IDealBrandContext {
   id: UUID

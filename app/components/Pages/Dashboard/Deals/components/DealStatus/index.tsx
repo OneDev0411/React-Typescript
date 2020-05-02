@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { MenuItem, createStyles, makeStyles, Theme } from '@material-ui/core'
 
+import { useEffectOnce } from 'react-use'
+
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 
-import { getStatusColorClass } from 'utils/listing'
 import { upsertContexts } from 'actions/deals'
 
 import { getDealChecklists } from 'reducers/deals/checklists'
@@ -14,11 +15,11 @@ import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 import { IAppState } from 'reducers'
 
 import Deal from 'models/Deal'
+import { getDealStatuses } from 'models/Deal/status/get-statuses'
+
 import DealContext from 'models/Deal/helpers/dynamic-context'
 
 import { BaseDropdown } from 'components/BaseDropdown'
-
-import { getStatusList } from './helpers/get-status-list'
 
 interface Props {
   deal: IDeal
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function DealStatus({ deal, isBackOffice }: Props) {
   const [isSaving, setIsSaving] = useState(false)
+  const [statuses, setStatuses] = useState<IDealStatus[]>([])
   const classes = useStyles()
 
   const dispatch = useDispatch()
@@ -46,16 +48,36 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
     checklists: getDealChecklists(deal, deals.checklists)
   }))
 
-  const statusOptions = getStatusList(deal, isBackOffice).map(statusName => ({
-    label: statusName,
-    value: statusName
-  }))
+  useEffectOnce(() => {
+    const fetchStatuses = async () => {
+      try {
+        const statuses = await getDealStatuses(deal.brand.id)
+
+        setStatuses(
+          statuses.filter(status => {
+            if (!isBackOffice && status.admin_only) {
+              return false
+            }
+
+            return (
+              status.deal_types.includes(deal.deal_type) &&
+              status.property_types.includes(deal.property_type)
+            )
+          })
+        )
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    fetchStatuses()
+  })
 
   /**
    * updates listing_status context
    * @param {Object} selectedItem the selected dropdown item
    */
-  const updateStatus = async status => {
+  const updateStatus = async (status: string) => {
     if (isSaving) {
       return false
     }
@@ -79,6 +101,12 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
 
     // set state
     setIsSaving(false)
+  }
+
+  const getStatusColor = (status: string) => {
+    const item = statuses.find(item => item.label === status)
+
+    return item ? item.color : 'transparent'
   }
 
   /**
@@ -114,7 +142,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
           <span
             className={classes.bullet}
             style={{
-              backgroundColor: getStatusColorClass(dealStatus)
+              backgroundColor: getStatusColor(dealStatus)
             }}
           />
 
@@ -127,19 +155,19 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
       }}
       renderMenu={({ close }) => (
         <div>
-          {statusOptions.map((item, index) => (
+          {statuses.map((item, index) => (
             <MenuItem
               key={index}
               value={index}
               onClick={() => {
                 close()
-                updateStatus(item.value)
+                updateStatus(item.label)
               }}
             >
               <span
                 className={classes.bullet}
                 style={{
-                  backgroundColor: getStatusColorClass(item.value)
+                  backgroundColor: item.color
                 }}
               />
               {item.label}
