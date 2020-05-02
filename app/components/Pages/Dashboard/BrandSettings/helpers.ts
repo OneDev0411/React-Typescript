@@ -67,16 +67,6 @@ export function getSidebarSections(): SidebarSection[] {
         type: 'image',
         label: 'Wide Logo'
       },
-      {
-        names: ['inverted-logo-square'],
-        type: 'image',
-        label: 'Inverted Square Logo'
-      },
-      {
-        names: ['inverted-logo-wide'],
-        type: 'image',
-        label: 'Inverted Wide Logo'
-      },
       'divider',
       {
         names: ['body-bg-color'],
@@ -117,6 +107,16 @@ export function getSidebarSections(): SidebarSection[] {
         names: ['container-logo-wide'],
         type: 'image',
         label: 'Wide Logo'
+      },
+      {
+        names: ['inverted-logo-square'],
+        type: 'image',
+        label: 'Inverted Square Logo'
+      },
+      {
+        names: ['inverted-logo-wide'],
+        type: 'image',
+        label: 'Inverted Wide Logo'
       },
       'divider',
       {
