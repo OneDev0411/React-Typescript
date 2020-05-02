@@ -61,6 +61,8 @@ declare type BrandSettingsPaletteKey =
   | 'inverted-logo-square'
   | 'inverted-container-bg-color'
   | 'inverted-container-text-color'
+  | 'website'
+  | 'name'
 
 declare type BrandSettingsPalette = Record<BrandSettingsPaletteKey, string>
 

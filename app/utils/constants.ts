@@ -44,5 +44,7 @@ export const DEFAULT_BRAND_PALETTE: BrandSettingsPalette = {
   'inverted-logo-wide': '',
   'inverted-logo-square': '',
   'inverted-container-bg-color': '#000',
-  'inverted-container-text-color': '#fff'
+  'inverted-container-text-color': '#fff',
+  'website': '',
+  'name': ''
 }

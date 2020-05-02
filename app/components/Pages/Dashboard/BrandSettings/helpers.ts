@@ -13,7 +13,9 @@ export function getSimpleSidebarSections(): SidebarSection[] {
           'body-logo-square',
           'container-logo-square',
           'body-logo-wide',
-          'container-logo-wide'
+          'container-logo-wide',
+          'inverted-logo-square',
+          'inverted-logo-wide'
         ],
         type: 'image',
         label: 'Logo'
@@ -37,6 +39,21 @@ export function getSimpleSidebarSections(): SidebarSection[] {
 }
 
 export function getSidebarSections(): SidebarSection[] {
+  const informationSection: SidebarSection = {
+    name: 'Information',
+    fields: [
+      {
+        names: ['name'],
+        type: 'text',
+        label: 'Brand Name'
+      },
+      {
+        names: ['website'],
+        type: 'text',
+        label: 'Website'
+      }
+    ]
+  }
   const bodySection: SidebarSection = {
     name: 'Body',
     fields: [
@@ -49,6 +66,16 @@ export function getSidebarSections(): SidebarSection[] {
         names: ['body-logo-wide'],
         type: 'image',
         label: 'Wide Logo'
+      },
+      {
+        names: ['inverted-logo-square'],
+        type: 'image',
+        label: 'Inverted Square Logo'
+      },
+      {
+        names: ['inverted-logo-wide'],
+        type: 'image',
+        label: 'Inverted Wide Logo'
       },
       'divider',
       {
@@ -227,6 +254,11 @@ export function getSidebarSections(): SidebarSection[] {
         type: 'color',
         label: 'Background Color'
       },
+      {
+        names: ['button-border'],
+        type: 'border',
+        label: 'Border Color'
+      },
       'divider',
       {
         names: ['inverted-button-text-color'],
@@ -241,7 +273,13 @@ export function getSidebarSections(): SidebarSection[] {
     ]
   }
 
-  return [bodySection, containerSection, headersSection, buttonsSection]
+  return [
+    informationSection,
+    bodySection,
+    containerSection,
+    headersSection,
+    buttonsSection
+  ]
 }
 
 export function getPreferredSidebarView(

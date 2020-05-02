@@ -4,6 +4,8 @@ export type FieldType =
   | 'pixel'
   | 'font-family'
   | 'font-weight'
+  | 'text'
+  | 'border'
 
 export interface SidebarSectionField {
   names: BrandSettingsPaletteKey[]
