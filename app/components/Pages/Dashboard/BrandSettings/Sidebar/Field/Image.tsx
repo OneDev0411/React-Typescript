@@ -28,8 +28,7 @@ const useStyles = makeStyles(
       margin: `${theme.spacing(3)}px auto ${theme.spacing(1)}px`
     },
     image: {
-      width: '100%',
-      height: 'auto'
+      backgroundColor: theme.palette.grey[400]
     },
     imageUploader: {
       width: '100%',
@@ -100,7 +99,7 @@ export default function ImageField({
               component={CircularProgress}
             />
           ) : (
-            <CardMedia component="img" src={value} />
+            <CardMedia className={classes.image} component="img" src={value} />
           )}
         </CardActionArea>
         <CardActions>

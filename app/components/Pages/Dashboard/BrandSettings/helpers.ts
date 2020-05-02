@@ -108,16 +108,6 @@ export function getSidebarSections(): SidebarSection[] {
         type: 'image',
         label: 'Wide Logo'
       },
-      {
-        names: ['inverted-logo-square'],
-        type: 'image',
-        label: 'Inverted Square Logo'
-      },
-      {
-        names: ['inverted-logo-wide'],
-        type: 'image',
-        label: 'Inverted Wide Logo'
-      },
       'divider',
       {
         names: ['container-bg-color'],
@@ -144,16 +134,82 @@ export function getSidebarSections(): SidebarSection[] {
         type: 'font-weight',
         label: 'Font Weight'
       },
+      {
+        names: ['light-text-color'],
+        type: 'color',
+        label: 'Light Text Color'
+      },
+      {
+        names: ['light-font-family'],
+        type: 'font-family',
+        label: 'Light Font Family'
+      },
+      {
+        names: ['light-font-size'],
+        type: 'pixel',
+        label: 'Light Font Size'
+      },
+      {
+        names: ['light-font-weight'],
+        type: 'font-weight',
+        label: 'Light Font Weight'
+      }
+    ]
+  }
+
+  const colorizedContainerSection: SidebarSection = {
+    name: 'Colorized Container',
+    fields: [
+      {
+        names: ['inverted-logo-square'],
+        type: 'image',
+        label: 'Square Logo'
+      },
+      {
+        names: ['inverted-logo-wide'],
+        type: 'image',
+        label: 'Wide Logo'
+      },
       'divider',
       {
         names: ['inverted-container-bg-color'],
         type: 'color',
-        label: 'Inverted Background Color'
+        label: 'Background Color'
       },
       {
         names: ['inverted-container-text-color'],
         type: 'color',
+        label: 'Text Color'
+      },
+      {
+        names: ['inverted-light-text-color'],
+        type: 'color',
+        label: 'Light Text Color'
+      },
+      {
+        names: ['inverted-h1-text-color'],
+        type: 'color',
+        label: 'H1 Text Color'
+      },
+      {
+        names: ['inverted-h2-text-color'],
+        type: 'color',
+        label: 'H2 Text Color'
+      },
+      {
+        names: ['inverted-h3-text-color'],
+        type: 'color',
+        label: 'H3 Text Color'
+      },
+      {
+        names: ['inverted-button-text-color'],
+        type: 'color',
         label: 'Inverted Text Color'
+      },
+      {
+        names: ['inverted-button-bg-color'],
+        type: 'color',
+        label: 'Inverted Background Color'
       }
     ]
   }
@@ -258,17 +314,6 @@ export function getSidebarSections(): SidebarSection[] {
         names: ['button-border'],
         type: 'border',
         label: 'Border Color'
-      },
-      'divider',
-      {
-        names: ['inverted-button-text-color'],
-        type: 'color',
-        label: 'Inverted Text Color'
-      },
-      {
-        names: ['inverted-button-bg-color'],
-        type: 'color',
-        label: 'Inverted Background Color'
       }
     ]
   }
@@ -277,6 +322,7 @@ export function getSidebarSections(): SidebarSection[] {
     informationSection,
     bodySection,
     containerSection,
+    colorizedContainerSection,
     headersSection,
     buttonsSection
   ]
