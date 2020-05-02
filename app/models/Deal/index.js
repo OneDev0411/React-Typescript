@@ -17,14 +17,9 @@ import * as uploadHelpers from './helpers/upload'
 
 export default {
   get: {
-    side: contextHelpers.getSide,
-    formattedPrice: contextHelpers.getFormattedPrice,
-    clientNames: contextHelpers.getClientNames,
     status: contextHelpers.getStatus,
-    address: contextHelpers.getAddress,
     field: contextHelpers.getField,
-    context: contextHelpers.getContext,
-    discrepency: contextHelpers.getContextDiscrepency
+    context: contextHelpers.getContext
   },
   upload: {
     ...uploadHelpers
