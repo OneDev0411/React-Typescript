@@ -204,12 +204,12 @@ export function getSidebarSections(): SidebarSection[] {
       {
         names: ['inverted-button-text-color'],
         type: 'color',
-        label: 'Inverted Text Color'
+        label: 'Button Text Color'
       },
       {
         names: ['inverted-button-bg-color'],
         type: 'color',
-        label: 'Inverted Background Color'
+        label: 'Button Background Color'
       }
     ]
   }
