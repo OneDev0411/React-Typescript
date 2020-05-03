@@ -42,30 +42,29 @@ export function AddOrEditEmailTemplateDrawer({
   addNotification,
   activeTeamId
 }: Props) {
-  const [formData, setFormData] = useState<IBrandEmailTemplateInput>({
+  const [formData, setFormData] = useState<
+    Omit<IBrandEmailTemplateInput, 'body'>
+  >({
     name: '',
     subject: '',
-    body: '',
     goal: '',
     include_signature: false
   })
 
   const [editorState, setEditorState, bodyEditor] = useEditorState(
-    formData.body
+    (emailTemplate && emailTemplate.body) || ''
   )
 
   useDeepCompareEffect(() => {
     const template: Partial<IBrandEmailTemplateInput> = emailTemplate || {}
-    const body = template.body || ''
 
     setFormData({
       subject: template.subject || '',
       name: template.name || '',
       include_signature: template.include_signature || false,
-      goal: template.goal || '',
-      body
+      goal: template.goal || ''
     })
-    bodyEditor.reset(body)
+    bodyEditor.reset(template.body || '')
   }, [emailTemplate])
 
   const handleSubmit = async (values: IBrandEmailTemplateInput) => {
