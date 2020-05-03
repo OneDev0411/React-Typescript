@@ -115,22 +115,22 @@ export const TextEditor = forwardRef(
     const firstRenderFlagRef = useRef(true)
 
     useEffect(() => {
-      const pluginsEditor = editorRef.current
-
-      if (firstRenderFlagRef.current && pluginsEditor && rerenderEditor) {
+      if (firstRenderFlagRef.current && editorRef.current && rerenderEditor) {
         // draft-js-plugins-editor uses UNSAFE_componentWillMount to create
         // the editor state with proper decorator. If we don't delay running
         // this, it causes decorator to not being set correctly which has
         // serious consequences. e.g. links don't render properly.
         setTimeout(() => {
+          const pluginsEditor = editorRef.current
+
           firstRenderFlagRef.current = false
 
-          if (editorState) {
-            onChange(moveSelectionToStart(editorState))
-          }
+          if (pluginsEditor) {
+            onChange(moveSelectionToStart(pluginsEditor.getEditorState()))
 
-          if (autofocus) {
-            pluginsEditor.editor && pluginsEditor.focus()
+            if (autofocus) {
+              pluginsEditor.editor && pluginsEditor.focus()
+            }
           }
         })
       }
