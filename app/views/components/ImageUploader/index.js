@@ -15,6 +15,7 @@ export class ImageUploader extends Component {
     super(props)
 
     this.state = {
+      isOpen: props.isOpen,
       file: props.file,
       scale: props.scale,
       rotate: props.rotate
@@ -132,7 +133,7 @@ export class ImageUploader extends Component {
 
     return (
       <Modal
-        isOpen={this.props.isOpen}
+        isOpen={this.state.isOpen}
         onRequestClose={this.onClose}
         style={{
           content: {
