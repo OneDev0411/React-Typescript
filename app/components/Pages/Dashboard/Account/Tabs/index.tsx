@@ -1,9 +1,7 @@
-import { ACL } from 'constants/acl'
-
 import React from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import Acl from 'components/Acl'
+import { hasUserAccessToCrm, hasUserAccessToDeals } from 'utils/user-teams'
 import { PageTabs, TabLink } from 'components/PageTabs'
 
 interface ItemsShape {
@@ -13,7 +11,7 @@ interface ItemsShape {
   component?: React.ReactNode
 }
 
-const CrmAccess = ({ children }) => <Acl.Crm>{children}</Acl.Crm>
+const hasNotAccessToCRM = user => !hasUserAccessToCrm(user)
 
 const tabs: ItemsShape[] = [
   {
@@ -28,36 +26,37 @@ const tabs: ItemsShape[] = [
   {
     label: 'Manage Tags',
     to: '/dashboard/account/manage-tags',
-    component: CrmAccess
+    isHidden: hasNotAccessToCRM
   },
   {
     label: 'Email Signature',
-    to: '/dashboard/account/email-signature'
+    to: '/dashboard/account/email-signature',
+    isHidden: hasNotAccessToCRM
   },
   {
     label: 'Connected Accounts',
-    to: '/dashboard/account/connected-accounts'
+    to: '/dashboard/account/connected-accounts',
+    isHidden: hasNotAccessToCRM
   },
   {
     label: 'Flows',
     to: '/dashboard/account/flows',
-    component: CrmAccess
+    isHidden: hasNotAccessToCRM
   },
   {
     label: 'Email Templates',
-    to: '/dashboard/account/email-templates'
+    to: '/dashboard/account/email-templates',
+    isHidden: hasNotAccessToCRM
   },
   {
     label: 'Reminder Notifications',
     to: '/dashboard/account/reminder-notifications',
-    component: ({ children }) => (
-      <Acl access={{ oneOf: [ACL.CRM, ACL.DEALS] }}>{children}</Acl>
-    )
+    isHidden: user => !hasUserAccessToDeals(user) || hasNotAccessToCRM(user)
   },
   {
     label: 'Calendar Export',
     to: '/dashboard/account/exportCalendar',
-    component: CrmAccess
+    isHidden: hasNotAccessToCRM
   }
 ]
 
@@ -75,19 +74,9 @@ export const SettingsTabs = ({ user, location }: Props & WithRouterProps) => {
       defaultValue={matchingTab.to}
       tabs={tabs
         .filter(({ isHidden }) => !isHidden || !isHidden(user))
-        .map(({ label, to, component = false }, i) => {
-          const hasComponent = component ? { component } : {}
-
-          return (
-            <TabLink
-              key={i}
-              {...hasComponent}
-              label={label}
-              to={to}
-              value={to}
-            />
-          )
-        })}
+        .map(({ label, to }, i) => (
+          <TabLink key={i} label={label} to={to} value={to} />
+        ))}
     />
   )
 }
