@@ -93,9 +93,10 @@ class Templates extends React.Component {
     })
 
     if (!template.markup) {
-      template.markup = await loadTemplateHtml(
-        `${template.template.url}/index.html`
-      )
+      template.markup =
+        template.type === 'template'
+          ? template.template // my designs templates
+          : await loadTemplateHtml(`${template.template.url}/index.html`) // brand templates
 
       // append fetched html into template data
       this.updateTemplate(template)
