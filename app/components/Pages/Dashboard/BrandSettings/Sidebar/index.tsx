@@ -74,7 +74,7 @@ export default function Sidebar({
       {sections.map(section => (
         <React.Fragment key={section.name}>
           <ExpansionPanel
-            TransitionProps={{ unmountOnExit: true }}
+            TransitionProps={{ mountOnEnter: true }}
             elevation={0}
             defaultExpanded={defaultExpandedPanels}
           >
