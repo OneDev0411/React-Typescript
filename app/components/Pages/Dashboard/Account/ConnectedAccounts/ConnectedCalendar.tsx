@@ -8,6 +8,7 @@ import {
   MenuItem,
   Checkbox,
   Button,
+  Tooltip,
   FormControlLabel
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
@@ -16,6 +17,7 @@ import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { getUserCalendars } from 'models/user/get-calendars'
 import LoadingContainer from 'components/LoadingContainer'
 import { configCalendars } from 'models/user/config-calendars'
+import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
 
 interface Props {
   gcid: string
@@ -28,6 +30,9 @@ const useStyles = makeStyles(
     },
     buttonContainer: {
       padding: theme.spacing(1, 2)
+    },
+    infoIcon: {
+      fill: theme.palette.divider
     }
   }),
   { name: 'ConnectedCalendar' }
@@ -156,6 +161,11 @@ export default function ConnectedCalendar({ gcid }: Props) {
                   }
                   label={item.name}
                 />
+                {item.description && (
+                  <Tooltip title={item.description}>
+                    <IconInfoOutline className={classes.infoIcon} />
+                  </Tooltip>
+                )}
               </MenuItem>
             ))}
 
