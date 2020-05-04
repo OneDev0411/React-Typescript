@@ -41,17 +41,18 @@ export default function ProfileAvatar({ onChange, data }: Props) {
 
   return (
     <>
-      <ImageUploader
-        width={300}
-        height={300}
-        radius="50%"
-        isOpen={isModalOpen}
-        saveHandler={data => {
-          handleOnChange(data)
-          setIsModalOpen(false)
-        }}
-        closeHandler={() => setIsModalOpen(false)}
-      />
+      {isModalOpen && (
+        <ImageUploader
+          width={300}
+          height={300}
+          radius="50%"
+          saveHandler={data => {
+            handleOnChange(data)
+            setIsModalOpen(false)
+          }}
+          closeHandler={() => setIsModalOpen(false)}
+        />
+      )}
       <Box
         mb={6}
         p={1.5}
