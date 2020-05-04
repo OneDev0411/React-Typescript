@@ -41,8 +41,6 @@ const NotifyGuests = ({
 
   const handleNotify = async (show: boolean = false) => {
     if (isDeleting) {
-      console.log('isDeleting')
-
       return onDelete(show)
     }
 
