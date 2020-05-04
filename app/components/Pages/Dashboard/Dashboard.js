@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
-import { browserHistory, withRouter } from 'react-router'
+import { withRouter } from 'react-router'
 
 import asyncComponentLoader from '../../../loader'
 
@@ -42,13 +42,8 @@ class App extends Component {
   componentWillMount() {
     const { user, dispatch } = this.props
 
-    if (!user) {
-      const redirectPathname = '/signout'
-
-      browserHistory.push(redirectPathname)
-      window.location.href = redirectPathname
-
-      return
+    if (user) {
+      new ChatSocket(user)
     }
 
     if (typeof window !== 'undefined') {
@@ -59,8 +54,6 @@ class App extends Component {
         import('simplebar')
       }
     }
-
-    new ChatSocket(user)
   }
 
   componentDidMount() {
@@ -68,9 +61,13 @@ class App extends Component {
   }
 
   componentWillUnmount() {
-    this.props.dispatch(inactiveIntercom())
+    const { user, dispatch } = this.props
 
-    window.removeEventListener('online', this.handleOnlineEvent)
+    dispatch(inactiveIntercom())
+
+    if (user && hasUserAccess(user, 'CRM')) {
+      window.removeEventListener('online', this.handleOnlineEvent)
+    }
   }
 
   async init() {
@@ -115,12 +112,14 @@ class App extends Component {
     // Get MLS favorites
     dispatch(getFavorites(user))
 
-    // fetch the number of unread email threads
-    dispatch(fetchUnreadEmailThreadsCount())
-
     dispatch(syncOpenHouseData(user.access_token))
 
-    window.addEventListener('online', this.handleOnlineEvent)
+    if (this.hasCrmAccess) {
+      // fetch the number of unread email threads
+      dispatch(fetchUnreadEmailThreadsCount())
+
+      window.addEventListener('online', this.handleOnlineEvent)
+    }
   }
 
   initializeSockets(user) {
@@ -142,10 +141,6 @@ class App extends Component {
 
   render() {
     const { data, user, rooms, location } = this.props
-
-    if (!user) {
-      return null
-    }
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
