@@ -48,6 +48,7 @@ function MarketingTemplateCard(
   return (
     <div
       key={template.id}
+      title={template.template.name}
       className={classNames(classes.root, {
         [classes.rootHasSuffix]: isInstance
       })}
@@ -64,7 +65,11 @@ function MarketingTemplateCard(
         {template.video ? (
           <video src={thumbnail} muted autoPlay />
         ) : (
-          <img alt={template.name} src={thumbnail} className={classes.image} />
+          <img
+            alt={template.template.name}
+            src={thumbnail}
+            className={classes.image}
+          />
         )}
 
         <div className={classes.actions}>{props.actions}</div>
