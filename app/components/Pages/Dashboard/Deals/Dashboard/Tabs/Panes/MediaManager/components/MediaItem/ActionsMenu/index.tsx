@@ -188,15 +188,16 @@ export default function ActionsMenu({ media, deal }: Props) {
             </MenuItem>
           </Menu>
         </div>
-        <ImageUploader
-          disableChangePhoto
-          file={src}
-          width={287}
-          height={287}
-          isOpen={isCropperOpen}
-          saveHandler={onCrop}
-          closeHandler={hideCropper}
-        />
+        {isCropperOpen && (
+          <ImageUploader
+            disableChangePhoto
+            file={src}
+            width={287}
+            height={287}
+            saveHandler={onCrop}
+            closeHandler={hideCropper}
+          />
+        )}
       </Box>
       <DownloadModal
         isOpen={modalIsOpen}
