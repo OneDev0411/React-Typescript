@@ -20,22 +20,36 @@ const useStyles = makeStyles(
 
 interface Props {
   isNew: boolean
-  isSaving: boolean
-  currentEvent: ICalendarEvent
+  isDeleting: boolean
+  isDisabled: boolean
+  currentEvent: ICalendarEvent | null
   onSave: (event) => void
+  onDelete: (show: boolean) => void
   onCancel: () => void
 }
 
 const NotifyGuests = ({
   isNew,
-  isSaving,
+  isDisabled,
+  isDeleting,
   currentEvent,
   onSave,
+  onDelete,
   onCancel
 }: Props) => {
   const classes = useStyles()
 
   const handleNotify = async (show: boolean = false) => {
+    if (isDeleting) {
+      console.log('isDeleting')
+
+      return onDelete(show)
+    }
+
+    if (!currentEvent) {
+      return
+    }
+
     const payload = {
       ...currentEvent,
       metadata: {
@@ -45,13 +59,22 @@ const NotifyGuests = ({
 
     await onSave(payload)
   }
+  const getTitle = (): string => {
+    if (isNew) {
+      return 'Create'
+    }
+
+    if (isDeleting) {
+      return 'Delete'
+    }
+
+    return 'Update'
+  }
 
   return (
     <Modal isOpen autoHeight>
       <Box p={4}>
-        <Typography variant="subtitle1">
-          {isNew ? 'Create' : 'Update'} Event
-        </Typography>
+        <Typography variant="subtitle1">{getTitle()} Event</Typography>
         <Typography variant="body2">
           Would you like to send update emails to existing guests?
         </Typography>
@@ -59,7 +82,7 @@ const NotifyGuests = ({
           <Button size="small" onClick={onCancel} disableElevation>
             Cancel
           </Button>
-          {!isSaving ? (
+          {!isDisabled ? (
             <>
               <Button
                 variant="outlined"
@@ -87,7 +110,7 @@ const NotifyGuests = ({
               disabled
               disableElevation
             >
-              Saving...
+              Waiting...
             </Button>
           )}
         </Box>

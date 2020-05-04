@@ -83,6 +83,7 @@ class PresentEventDrawer extends Component {
       error: null,
       isDisabled: false,
       isSaving: false,
+      isDeleting: false,
       event: props.event,
       currentEvent: null,
       shouldShowNotify: false
@@ -143,10 +144,10 @@ class PresentEventDrawer extends Component {
     }
   }
 
-  delete = async () => {
+  delete = async (shouldNotify = false) => {
     try {
       this.setState({ isDisabled: true })
-      await deleteTask(this.state.event.id)
+      await deleteTask(this.state.event.id, shouldNotify)
       this.setState({ isDisabled: false }, () =>
         this.props.deleteCallback(this.state.event)
       )
@@ -156,13 +157,27 @@ class PresentEventDrawer extends Component {
     }
   }
 
+  handleDelete = async () => {
+    const { accounts } = this.props
+    const shouldShowModal = hasGoogleAccount(accounts)
+
+    if (shouldShowModal) {
+      return this.setState(() => ({
+        shouldShowNotify: shouldShowModal,
+        isDeleting: true
+      }))
+    }
+
+    await this.delete()
+  }
+
   handleSave = async event => {
     const { accounts } = this.props
     const shouldShowModal = hasGoogleAccount(accounts)
 
     if (shouldShowModal) {
       return this.setState(() => ({
-        shouldShowNotify: true,
+        shouldShowNotify: shouldShowModal,
         currentEvent: event
       }))
     }
@@ -191,6 +206,7 @@ class PresentEventDrawer extends Component {
       event,
       error,
       isSaving,
+      isDeleting,
       shouldShowNotify,
       currentEvent
     } = this.state
@@ -202,11 +218,13 @@ class PresentEventDrawer extends Component {
 
     return (
       <>
-        {shouldShowNotify && isOpen && currentEvent && (
+        {shouldShowNotify && isOpen && (
           <NotifyGuests
             isNew={this.isNew}
-            isSaving={isSaving}
+            isDisabled={isDisabled}
+            isDeleting={isDeleting}
             onSave={this.save}
+            onDelete={this.delete}
             onCancel={onClose}
             currentEvent={currentEvent}
           />
@@ -353,7 +371,7 @@ class PresentEventDrawer extends Component {
                               <Tooltip placement="top" caption="Delete">
                                 <IconButton
                                   disabled={isDisabled}
-                                  onClick={this.delete}
+                                  onClick={this.handleDelete}
                                 >
                                   <IconDelete size="medium" />
                                 </IconButton>
