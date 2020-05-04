@@ -132,8 +132,9 @@ class Templates extends React.Component {
                 />
               ) : (
                 <Image
+                  alt={template.template.name}
+                  title={template.template.name}
                   src={template.preview ? template.preview.url : ''}
-                  title={template.name}
                   width="97%"
                   style={{
                     margin: '1.5%',
