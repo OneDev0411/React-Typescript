@@ -28,7 +28,7 @@ interface Props {
   onCancel: () => void
 }
 
-const NotifyGuests = ({
+export const NotifyGuests = ({
   isNew,
   isDisabled,
   isDeleting,
@@ -57,6 +57,7 @@ const NotifyGuests = ({
 
     await onSave(payload)
   }
+
   const getTitle = (): string => {
     if (isNew) {
       return 'Create'
@@ -116,5 +117,3 @@ const NotifyGuests = ({
     </Modal>
   )
 }
-
-export default NotifyGuests

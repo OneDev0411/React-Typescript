@@ -42,7 +42,7 @@ import { UpdateReminder } from './components/UpdateReminder'
 import UpdateEndDate from './components/UpdateEndDate/UpdateEndDate'
 import { Description } from './components/Description'
 import { EventType } from './components/EventType'
-import NotifyGuests from './components/NotifyGuests'
+import { NotifyGuests } from './components/NotifyGuests'
 
 import { FormContainer, FieldContainer, Footer } from './styled'
 
