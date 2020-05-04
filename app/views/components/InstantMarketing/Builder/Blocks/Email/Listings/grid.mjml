@@ -25,7 +25,7 @@
       {% endif %}
     </mj-text>
     <mj-spacer height="10px"></mj-spacer>
-    <mj-button rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px" font-family="Helvetica, Arial, sans-serif" font-size="14px" line-height="1.5" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}" align="left" href="{{getListingUrl(listing)}}">
+    <mj-button rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px" font-family="Helvetica, Arial, sans-serif" font-size="14px" line-height="1.5" align="left" href="{{getListingUrl(listing)}}">
       View Listing
     </mj-button>
   </mj-column>
