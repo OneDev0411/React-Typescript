@@ -574,7 +574,11 @@ class Builder extends React.Component {
 
     components.clear()
     this.editor.setStyle('')
-    this.setEditorTemplateId(selectedTemplate.id)
+    this.setEditorTemplateId(
+      selectedTemplate.type === 'template'
+        ? selectedTemplate.id // my designs templates
+        : selectedTemplate.template.id // brand templates
+    )
     this.editor.setComponents(html)
     this.lockIn()
     this.deselectAll()
