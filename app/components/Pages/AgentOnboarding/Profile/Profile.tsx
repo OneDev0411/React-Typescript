@@ -106,6 +106,7 @@ export function Profile() {
 
   return (
     <Container classes={{ box: classes.container }}>
+      <SkipButton to={nextStepUrl} />
       <Header
         brand={brand}
         title="Let’s make it feel more like home!"
@@ -124,15 +125,9 @@ export function Profile() {
         </Box>
       )}
 
-      {submitting ? (
-        <CircleSpinner />
-      ) : (
-        <Box display="flex" justifyContent="center">
-          <SkipButton to={nextStepUrl} />
-          {(hasSignature || avatar.src) && (
-            <NextButton onClick={onSubmit}>Let's Go!</NextButton>
-          )}
-        </Box>
+      {submitting && <CircleSpinner />}
+      {(hasSignature || avatar.src) && !submitting && (
+        <NextButton onClick={onSubmit}>Let's Go!</NextButton>
       )}
     </Container>
   )

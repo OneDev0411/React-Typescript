@@ -3,11 +3,9 @@ import { browserHistory } from 'react-router'
 import { Button, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
-import { FOOTER_BUTTONS_WIDTH } from './constants'
-
 const useStyles = makeStyles((theme: Theme) => ({
   button: {
-    width: theme.spacing(FOOTER_BUTTONS_WIDTH)
+    width: theme.spacing(27.5)
   }
 }))
 
