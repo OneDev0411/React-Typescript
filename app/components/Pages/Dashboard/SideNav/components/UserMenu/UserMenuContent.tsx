@@ -22,7 +22,7 @@ export function UserMenuContent({
   showChecklists,
   onClose = () => {}
 }: Props) {
-  const activeTeam = getActiveBrand(user)
+  const activeBrand = getActiveBrand(user)
 
   return (
     <SideMenuContainer>
@@ -63,7 +63,7 @@ export function UserMenuContent({
             Account settings
           </Link>
         </li>
-        {activeTeam && activeTeam.brand_type === 'Brokerage' && (
+        {activeBrand && activeBrand.brand_type === 'Brokerage' && (
           <Acl access={[ACL.ADMIN, ACL.MARKETING]}>
             <li>
               <Link noStyle to="/dashboard/brand-settings" onClick={onClose}>
