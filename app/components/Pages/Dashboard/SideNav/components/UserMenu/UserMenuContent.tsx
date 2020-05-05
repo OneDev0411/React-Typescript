@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { getActiveBrand } from 'utils/user-teams'
+
 import Acl from '../../../../../../views/components/Acl'
 import { ACL } from '../../../../../../constants/acl'
 import Link from '../../../../../../views/components/ALink'
@@ -20,6 +22,8 @@ export function UserMenuContent({
   showChecklists,
   onClose = () => {}
 }: Props) {
+  const activeBrand = getActiveBrand(user)
+
   return (
     <SideMenuContainer>
       <ScrollableArea hasThinnerScrollbar>
@@ -59,13 +63,15 @@ export function UserMenuContent({
             Account settings
           </Link>
         </li>
-        <Acl access={[ACL.ADMIN, ACL.MARKETING]}>
-          <li>
-            <Link noStyle to="/dashboard/brand-settings" onClick={onClose}>
-              Brand Settings
-            </Link>
-          </li>
-        </Acl>
+        {activeBrand && activeBrand.brand_type === 'Brokerage' && (
+          <Acl access={[ACL.ADMIN, ACL.MARKETING]}>
+            <li>
+              <Link noStyle to="/dashboard/brand-settings" onClick={onClose}>
+                Brand Settings
+              </Link>
+            </li>
+          </Acl>
+        )}
         <ListItemDivider role="separator" />
         <li>
           <a

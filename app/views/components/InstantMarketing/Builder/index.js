@@ -19,6 +19,7 @@ import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 import { getActiveTeam, isBackOffice } from 'utils/user-teams'
 
 import nunjucks from '../helpers/nunjucks'
+import getTemplateObject from '../helpers/get-template-object'
 import { getBrandColors } from '../helpers/get-brand-colors'
 
 import { loadGrapesjs } from './utils/load-grapes'
@@ -462,14 +463,6 @@ class Builder extends React.Component {
     updateAll(this.editor.DomComponents.getWrapper())
   }
 
-  getSavedTemplate() {
-    if (this.state.selectedTemplate.template.mjml) {
-      return this.getMjmlTemplate()
-    }
-
-    return this.getHtmlTemplate()
-  }
-
   getMjmlTemplate() {
     const result = this.editor.getHtml()
 
@@ -574,11 +567,7 @@ class Builder extends React.Component {
 
     components.clear()
     this.editor.setStyle('')
-    this.setEditorTemplateId(
-      selectedTemplate.type === 'template'
-        ? selectedTemplate.id // my designs templates
-        : selectedTemplate.template.id // brand templates
-    )
+    this.setEditorTemplateId(getTemplateObject(selectedTemplate).id)
     this.editor.setComponents(html)
     this.lockIn()
     this.deselectAll()
@@ -681,32 +670,40 @@ class Builder extends React.Component {
     })
   }
 
+  // This accessor is going to return the template object
+  // which contains all templates fields that we need for different thins
+  // The purpose of this accessor is to return the proper object for
+  // both brand templates and template instances (my designs)
+  get selectedTemplate() {
+    if (!this.state.selectedTemplate) {
+      return null
+    }
+
+    return getTemplateObject(this.state.selectedTemplate)
+  }
+
+  getSavedTemplate() {
+    if (this.selectedTemplate.mjml) {
+      return this.getMjmlTemplate()
+    }
+
+    return this.getHtmlTemplate()
+  }
+
   get isVideoTemplate() {
-    return (
-      this.state.selectedTemplate &&
-      this.state.selectedTemplate.template &&
-      this.state.selectedTemplate.template.video
-    )
+    return this.selectedTemplate && this.selectedTemplate.video
   }
 
   get isEmailTemplate() {
-    return (
-      this.state.selectedTemplate &&
-      this.state.selectedTemplate.template &&
-      this.state.selectedTemplate.template.medium === 'Email'
-    )
+    return this.selectedTemplate && this.selectedTemplate.medium === 'Email'
   }
 
   get isMjmlTemplate() {
-    return (
-      this.state.selectedTemplate &&
-      this.state.selectedTemplate.template &&
-      this.state.selectedTemplate.template.mjml
-    )
+    return this.selectedTemplate && this.selectedTemplate.mjml
   }
 
   get isTemplateLoaded() {
-    return this.state.selectedTemplate && this.state.selectedTemplate.markup
+    return this.selectedTemplate && this.selectedTemplate.markup
   }
 
   get showEditListingsButton() {
@@ -722,8 +719,8 @@ class Builder extends React.Component {
       return false
     }
 
-    if (this.state.selectedTemplate) {
-      return this.state.selectedTemplate.template.medium !== 'Email'
+    if (this.selectedTemplate) {
+      return this.selectedTemplate.medium !== 'Email'
     }
 
     if (this.props.mediums) {
@@ -747,11 +744,13 @@ class Builder extends React.Component {
   }
 
   get socialNetworks() {
-    if (!this.state.selectedTemplate) {
+    const selectedTemplate = this.selectedTemplate
+
+    if (!selectedTemplate) {
       return []
     }
 
-    if (this.state.selectedTemplate.template.medium === 'LinkedInCover') {
+    if (selectedTemplate.medium === 'LinkedInCover') {
       return SOCIAL_NETWORKS.filter(({ name }) => name === 'LinkedIn')
     }
 
@@ -797,9 +796,8 @@ class Builder extends React.Component {
     }
 
     if (
-      this.state.selectedTemplate &&
-      this.state.selectedTemplate.template &&
-      this.state.selectedTemplate.template.variant === SAVED_TEMPLATE_VARIANT
+      this.selectedTemplate &&
+      this.selectedTemplate.variant === SAVED_TEMPLATE_VARIANT
     ) {
       return false
     }
@@ -972,9 +970,9 @@ class Builder extends React.Component {
             <Actions>
               {this.shouldShowSaveAsTemplateButton() && (
                 <AddToMarketingCenter
-                  medium={this.state.selectedTemplate.template.medium}
-                  inputs={this.state.selectedTemplate.template.inputs}
-                  mjml={this.state.selectedTemplate.template.mjml}
+                  medium={this.selectedTemplate.medium}
+                  inputs={this.selectedTemplate.inputs}
+                  mjml={this.selectedTemplate.mjml}
                   user={this.props.user}
                   getTemplateMarkup={this.getTemplateMarkup.bind(this)}
                 />
