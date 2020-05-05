@@ -17,6 +17,7 @@ import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
 import SocialDrawer from '../../components/SocialDrawer'
 
@@ -171,7 +172,9 @@ class SendContactCard extends React.Component {
   generatePreviewImage = async brandTemplate => {
     this.setState({ isGettingTemplateInstance: true })
 
-    const instance = await getTemplateInstances(brandTemplate.template.id, {
+    const template = getTemplateObject(brandTemplate)
+
+    const instance = await getTemplateInstances(template.id, {
       ...this.TemplateInstanceData,
       html: brandTemplate.result
     })

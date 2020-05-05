@@ -12,6 +12,7 @@ import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketin
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import { attachDealDataToListing } from 'components/SearchListingDrawer/helpers/attach-deal-to-listing'
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplateTypes } from '../../helpers/get-template-types'
@@ -104,7 +105,9 @@ class SendDealPromotion extends React.Component {
   generatePreviewImage = async brandTemplate => {
     this.setState({ isGettingTemplateInstance: true })
 
-    const instance = await getTemplateInstances(brandTemplate.template.id, {
+    const template = getTemplateObject(brandTemplate)
+
+    const instance = await getTemplateInstances(template.id, {
       ...this.TemplateInstanceData,
       html: brandTemplate.result
     })
