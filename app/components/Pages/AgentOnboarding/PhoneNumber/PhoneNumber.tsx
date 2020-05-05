@@ -77,6 +77,7 @@ export function PhoneNumber({ location }: WithRouterProps) {
 
   return (
     <Container>
+      <SkipButton to="/onboarding/oauth-accounts" />
       <Header
         brand={brand}
         title="Verify Phone Number"
@@ -113,10 +114,7 @@ export function PhoneNumber({ location }: WithRouterProps) {
               {submitting ? (
                 <CircleSpinner />
               ) : (
-                <Box display="flex" justifyContent="center">
-                  <SkipButton to="/onboarding/oauth-accounts" />
-                  <NextButton type="submit" disabled={submitting} />
-                </Box>
+                <NextButton type="submit" disabled={submitting} />
               )}
             </form>
           )
