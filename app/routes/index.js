@@ -338,9 +338,9 @@ const ConnectedAccountsSetting = Load({
     import('../components/Pages/Dashboard/Account/ConnectedAccounts' /* webpackChunkName: "connected_accounts" */)
 })
 
-const AsyncUpgradeAccount = Load({
+const AsyncUpgradeToAgent = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account/Upgrade' /* webpackChunkName: "upgrade" */)
+    import('../components/Pages/Dashboard/Account/UpgradeToAgent' /* webpackChunkName: "upgrade_to_agent" */)
 })
 
 const AsyncCSS = Load({
@@ -615,7 +615,7 @@ export default (
 
         <Route path="account" component={AsyncAccountLayout}>
           <IndexRoute component={AsyncProfile} />
-          <Route path="upgrade" component={AsyncUpgradeAccount} />
+          <Route path="upgrade" component={AsyncUpgradeToAgent} />
 
           <Route path="exportCalendar" component={ExportCalendar} />
           <Route path="manage-tags" component={ManageTags} />
