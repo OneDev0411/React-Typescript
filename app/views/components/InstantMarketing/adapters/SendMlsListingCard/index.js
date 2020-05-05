@@ -11,6 +11,7 @@ import InstantMarketing from 'components/InstantMarketing'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
 import { getTemplateTypes } from '../../helpers/get-template-types'
@@ -187,7 +188,9 @@ class SendMlsListingCard extends React.Component {
   generatePreviewImage = async brandTemplate => {
     this.setState({ isGettingTemplateInstance: true })
 
-    const instance = await getTemplateInstances(brandTemplate.template.id, {
+    const template = getTemplateObject(brandTemplate)
+
+    const instance = await getTemplateInstances(template.id, {
       ...this.TemplateInstanceData,
       html: brandTemplate.result
     })
