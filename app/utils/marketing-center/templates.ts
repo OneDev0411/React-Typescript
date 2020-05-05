@@ -110,27 +110,28 @@ export const BRAND_STYLES_TEMPLATE_MJML = `{% if get('body-font-family') %}
 </mj-attribues>
 `
 
-export const BRAND_STYLES_TEMPLATE_NON_MJML = `<style>
+export const BRAND_STYLES_TEMPLATE_NON_MJML = `
 {% if get('body-font-family') %}
-  @import url('https://fonts.googleapis.com/css?family={{get('body-font-family')}}');
+  <link href="https://fonts.googleapis.com/css2?family={{get('body-font-family')}}" rel="stylesheet"></link>
 {% endif %}
 
-{% if get('container-font-family') %}
-  @import url('https://fonts.googleapis.com/css?family={{get('container-font-family')}}');
+{% if get('body-font-family') %}
+  <link href="https://fonts.googleapis.com/css2?family={{get('container-font-family')}}" rel="stylesheet"></link>
 {% endif %}
 
-{% if get('h1-font-family') %}
-  @import url('https://fonts.googleapis.com/css?family={{get('h1-font-family')}}');
+{% if get('body-font-family') %}
+  <link href="https://fonts.googleapis.com/css2?family={{get('h1-font-family')}}" rel="stylesheet"></link>
 {% endif %}
 
-{% if get('h2-font-family') %}
-  @import url('https://fonts.googleapis.com/css?family={{get('h2-font-family')}}');
+{% if get('body-font-family') %}
+  <link href="https://fonts.googleapis.com/css2?family={{get('h2-font-family')}}" rel="stylesheet"></link>
 {% endif %}
 
-{% if get('h3-font-family') %}
-  @import url('https://fonts.googleapis.com/css?family={{get('h3-font-family')}}');
+{% if get('body-font-family') %}
+  <link href="https://fonts.googleapis.com/css2?family={{get('h3-font-family')}}" rel="stylesheet"></link>
 {% endif %}
 
+<style>
 body {
   background:  {{ get('body-bg-color') }};
   color:       {{ get('body-text-color') }};
