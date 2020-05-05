@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { getActiveBrand } from 'utils/user-teams'
+import { getActiveBrand } from '../../../../../../utils/user-teams'
 
 import Acl from '../../../../../../views/components/Acl'
 import { ACL } from '../../../../../../constants/acl'
