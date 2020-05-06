@@ -19,7 +19,6 @@ import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Header from '../Header'
-import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
 import Container from '../Container'
 import { useDocumentTitle } from '../use-document-title'
@@ -125,7 +124,6 @@ export function ConfigBrand() {
 
   return (
     <Container>
-      <SkipButton to="/onboarding/oauth-accounts" />
       <Header
         brand={activeBrand}
         title="Enter Brokerage or Brand Name"
