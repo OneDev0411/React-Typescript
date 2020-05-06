@@ -60,9 +60,8 @@ const useStyles = makeStyles((theme: Theme) => {
     buttonContainer: {
       marginTop: theme.spacing(2)
     },
-    timeInputContainer: {
-      display: 'flex',
-      flexDirection: 'column'
+    flexContainer: {
+      display: 'flex'
     },
     buttonLabel: {
       justifyContent: 'flex-start'
@@ -254,7 +253,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
         />
       </DatePickerContainer>
       <Grid container spacing={1}>
-        <Grid item xs={6} className={classes.timeInputContainer}>
+        <Grid item xs={6} direction="column" className={classes.flexContainer}>
           <InputLabel>From</InputLabel>
           <TimeInput
             id="start-time"
@@ -263,7 +262,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
             onChange={handleChangeStartTime}
           />
         </Grid>
-        <Grid item xs={6} className={classes.timeInputContainer}>
+        <Grid item xs={6} direction="column" className={classes.flexContainer}>
           <InputLabel>To</InputLabel>
 
           <TimeInput
