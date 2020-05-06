@@ -54,16 +54,11 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
         const statuses = await getDealStatuses(deal.brand.id)
 
         setStatuses(
-          statuses.filter(status => {
-            if (!isBackOffice && status.admin_only) {
-              return false
-            }
-
-            return (
+          statuses.filter(
+            status =>
               status.deal_types.includes(deal.deal_type) &&
               status.property_types.includes(deal.property_type)
-            )
-          })
+          )
         )
       } catch (e) {
         console.log(e)
@@ -77,27 +72,29 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
    * updates listing_status context
    * @param {Object} selectedItem the selected dropdown item
    */
-  const updateStatus = async (status: string) => {
+  const updateStatus = async (item: IDealStatus): Promise<void> => {
     if (isSaving) {
-      return false
+      return
+    }
+
+    if (item.admin_only && !isBackOffice) {
+      notifyAdmin(item.label)
+
+      return
     }
 
     setIsSaving(true)
 
-    if (isBackOffice) {
-      await dispatch(
-        upsertContexts(deal.id, [
-          DealContext.createUpsertObject(
-            deal,
-            DealContext.getStatusField(deal),
-            status,
-            true
-          )
-        ])
-      )
-    } else {
-      await notifyAdmin(status)
-    }
+    await dispatch(
+      upsertContexts(deal.id, [
+        DealContext.createUpsertObject(
+          deal,
+          DealContext.getStatusField(deal),
+          item.label,
+          true
+        )
+      ])
+    )
 
     // set state
     setIsSaving(false)
@@ -161,7 +158,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
               value={index}
               onClick={() => {
                 close()
-                updateStatus(item.label)
+                updateStatus(item)
               }}
             >
               <span
