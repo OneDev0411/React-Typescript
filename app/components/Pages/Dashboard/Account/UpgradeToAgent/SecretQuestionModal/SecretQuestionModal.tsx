@@ -19,17 +19,20 @@ import { SecretQuestionForm } from './SecretQuestionForm'
 
 const BACKDROP_TIMEOUT = 500
 
-const useStyles = makeStyles(() => ({
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  paper: {
-    width: '600px',
-    height: '400px'
-  }
-}))
+const useStyles = makeStyles(
+  () => ({
+    modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    paper: {
+      width: '600px',
+      height: '400px'
+    }
+  }),
+  { name: 'SecretQuestionModal' }
+)
 
 interface Props {
   isOpen: boolean
@@ -94,8 +97,8 @@ export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
       open={isOpen}
       onClose={onHide}
       className={classes.modal}
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
+      aria-labelledby="agent-verification-modal-title"
+      aria-describedby="agent-verification-modal-description"
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
