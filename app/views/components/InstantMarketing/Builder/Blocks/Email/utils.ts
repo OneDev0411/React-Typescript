@@ -12,6 +12,7 @@ import TextIcon from 'assets/images/marketing/editor/blocks/text.png'
 import DividerIcon from 'assets/images/marketing/editor/blocks/divider.png'
 import SpacerIcon from 'assets/images/marketing/editor/blocks/spacer.png'
 import ImageIcon from 'assets/images/marketing/editor/blocks/image.png'
+import PhotoGifIcon from 'assets/images/marketing/editor/blocks/photo-gif.png'
 import ButtonIcon from 'assets/images/marketing/editor/blocks/button.png'
 import ShareIcon from 'assets/images/marketing/editor/blocks/share.png'
 
@@ -91,7 +92,7 @@ const BLOCK_BUTTON_ICONS = {
   text: TextIcon,
   [dividerBlockName]: DividerIcon,
   [spacerBlockName]: SpacerIcon,
-  'mj-image': ImageIcon,
+  'mj-image': PhotoGifIcon,
   'mj-button': ButtonIcon,
   'mj-social-group': ShareIcon,
 

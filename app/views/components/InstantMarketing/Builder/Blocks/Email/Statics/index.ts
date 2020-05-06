@@ -70,7 +70,7 @@ export default function registerStaticBlocks(
   })
 
   registerBlock(editor, {
-    label: 'Upload Image',
+    label: 'Photo/GIF Upload',
     category: BASICS_BLOCK_CATEGORY,
     blockName: imageBlockName,
     template: templates[imageBlockName],
