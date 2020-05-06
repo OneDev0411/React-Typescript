@@ -54,9 +54,6 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
     },
     '.MuiTooltip-arrow': {
       color: theme.palette.common.black
-    },
-    '.MuiButton-outlined:not(.MuiButton-outlinedPrimary, .MuiButton-outlinedSecondary)': {
-      borderColor: theme.palette.common.black
     }
   }
 }))(() => null)
