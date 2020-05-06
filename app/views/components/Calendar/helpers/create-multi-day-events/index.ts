@@ -23,10 +23,7 @@ export default function createMultiDayEvents(
       events.forEach(event => {
         distributedEvents[month][day].push(event)
 
-        const isAllDay =
-          event.metadata && event.metadata.all_day
-            ? event.metadata.all_day
-            : false
+        const isAllDay = (event.metadata && event.metadata.all_day) || false
         const endDate = new Date(parseFloat(event.end_date!) * 1000)
 
         if (isAllDay) {

@@ -13,7 +13,7 @@ export function DateTime({ event }: Props) {
       return metadata.all_day
     }
 
-    const startsAndFinishesInTheSameDay =
+    const isOneDayEvent =
       end_date && getDatePartTicks(timestamp) === getDatePartTicks(end_date)
     const isRechatEvent: boolean = [
       'crm_association',
@@ -23,7 +23,7 @@ export function DateTime({ event }: Props) {
       'email_thread_recipient'
     ].includes(object_type)
 
-    if (!isRechatEvent || !startsAndFinishesInTheSameDay) {
+    if (!isRechatEvent || !isOneDayEvent) {
       return true
     }
 
