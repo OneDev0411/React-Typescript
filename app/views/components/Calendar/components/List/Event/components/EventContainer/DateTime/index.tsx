@@ -15,7 +15,7 @@ export function DateTime({ event }: Props) {
 
     const isOneDayEvent =
       end_date && getDatePartTicks(timestamp) === getDatePartTicks(end_date)
-    const isRechatEvent: boolean = [
+    const isInternalEvent = [
       'crm_association',
       'crm_task',
       'email_campaign',
@@ -23,7 +23,7 @@ export function DateTime({ event }: Props) {
       'email_thread_recipient'
     ].includes(object_type)
 
-    if (!isRechatEvent || !isOneDayEvent) {
+    if (!isInternalEvent || !isOneDayEvent) {
       return true
     }
 
