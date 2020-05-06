@@ -21,6 +21,7 @@ declare type ICalendarEvent<
   metadata: {
     status: string
     is_partner: boolean
+    all_day?: boolean
   }
   next_occurence: string
   object_type: string

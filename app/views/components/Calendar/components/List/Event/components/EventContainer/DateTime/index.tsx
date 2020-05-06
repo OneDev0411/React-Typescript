@@ -6,20 +6,31 @@ interface Props {
 }
 
 export function DateTime({ event }: Props) {
-  const startsAndFinishesInTheSameDay =
-    event.end_date &&
-    getDatePartTicks(event.timestamp) === getDatePartTicks(event.end_date)
+  const isAllDayEvent = () => {
+    const { metadata, end_date, timestamp, object_type } = event
 
-  if (
-    ![
+    if (metadata && typeof metadata.all_day !== 'undefined') {
+      return metadata.all_day
+    }
+
+    const startsAndFinishesInTheSameDay =
+      end_date && getDatePartTicks(timestamp) === getDatePartTicks(end_date)
+    const isRechatEvent: boolean = [
       'crm_association',
       'crm_task',
       'email_campaign',
       'email_campaign_recipient',
       'email_thread_recipient'
-    ].includes(event.object_type) ||
-    !startsAndFinishesInTheSameDay
-  ) {
+    ].includes(object_type)
+
+    if (!isRechatEvent || !startsAndFinishesInTheSameDay) {
+      return true
+    }
+
+    return false
+  }
+
+  if (isAllDayEvent()) {
     return <span>All day</span>
   }
 
