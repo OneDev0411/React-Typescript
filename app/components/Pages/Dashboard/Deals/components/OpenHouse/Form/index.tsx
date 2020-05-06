@@ -2,9 +2,14 @@ import React, { useState, useContext, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
-import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
+import {
+  Button,
+  createStyles,
+  makeStyles,
+  Theme,
+  Grid
+} from '@material-ui/core'
 import DayPicker from 'react-day-picker'
-import Flex from 'styled-flex-component'
 import fecha from 'fecha'
 
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -55,8 +60,8 @@ const useStyles = makeStyles((theme: Theme) => {
     buttonContainer: {
       marginTop: theme.spacing(2)
     },
-    fieldContainer: {
-      marginTop: theme.spacing(1)
+    flexContainer: {
+      display: 'flex'
     },
     buttonLabel: {
       justifyContent: 'flex-start'
@@ -130,14 +135,6 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
     if (endTime > new Date(startTime!).getTime()) {
       setEndTime(date)
     }
-  }
-
-  const setInitialEndDate = () => {
-    const date = new Date(
-      new Date(startTime!).setHours(startTime!.getHours() + 1)
-    )
-
-    setEndTime(date)
   }
 
   const handleSave = async (): Promise<void> => {
@@ -255,55 +252,27 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
           onDayClick={handleSetStartDate}
         />
       </DatePickerContainer>
-
-      <div className={classes.fieldContainer}>
-        <InputLabel>From</InputLabel>
-
-        <div>
+      <Grid container spacing={1}>
+        <Grid item xs={6} direction="column" className={classes.flexContainer}>
+          <InputLabel>From</InputLabel>
           <TimeInput
             id="start-time"
             defaultDate={getDefaultTime()}
             initialDate={startTime}
             onChange={handleChangeStartTime}
           />
-        </div>
-      </div>
+        </Grid>
+        <Grid item xs={6} direction="column" className={classes.flexContainer}>
+          <InputLabel>To</InputLabel>
 
-      {startTime && (
-        <div className={classes.fieldContainer}>
-          {!endTime ? (
-            <Button
-              variant="text"
-              color="secondary"
-              onClick={setInitialEndDate}
-            >
-              Add End Time
-            </Button>
-          ) : (
-            <>
-              <InputLabel>To</InputLabel>
-
-              <Flex alignCenter justifyBetween>
-                <TimeInput
-                  id="end-time"
-                  defaultDate={getDefaultTime()}
-                  initialDate={endTime}
-                  onChange={handleSetEndTime}
-                />
-
-                <Button
-                  variant="text"
-                  color="secondary"
-                  size="small"
-                  onClick={() => setEndTime(null)}
-                >
-                  Remove End Time
-                </Button>
-              </Flex>
-            </>
-          )}
-        </div>
-      )}
+          <TimeInput
+            id="end-time"
+            defaultDate={getDefaultTime()}
+            initialDate={endTime}
+            onChange={handleSetEndTime}
+          />
+        </Grid>
+      </Grid>
 
       <div className={classes.buttonContainer}>
         <Button
