@@ -15,3 +15,14 @@ export function validate(values) {
 
   return errors
 }
+export function hasGoogleAccount(accounts) {
+  if (!Array.isArray(accounts)) {
+    return false
+  }
+
+  const filteredGoogle = accounts.filter(
+    i => i.type === 'google_credential' && !i.revoked && !i.deleted_at
+  )
+
+  return filteredGoogle.length > 0
+}

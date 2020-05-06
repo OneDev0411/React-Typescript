@@ -1,10 +1,10 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Link as RouterLink } from 'react-router'
 import { Link, MenuItem } from '@material-ui/core'
 import Flex from 'styled-flex-component'
+
+import { OAuthProvider } from 'constants/contacts'
 
 import SplitButton from 'components/SplitButton'
 import { IAppState } from 'reducers'

@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import { Box, IconButton } from '@material-ui/core'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
@@ -28,7 +32,7 @@ import Tooltip from '../tooltip'
 import { AddAssociationButton } from '../AddAssociationButton'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
-import { validate } from './helpers/validate'
+import { validate, hasGoogleAccount } from './helpers/validate'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
@@ -38,6 +42,8 @@ import { UpdateReminder } from './components/UpdateReminder'
 import UpdateEndDate from './components/UpdateEndDate/UpdateEndDate'
 import { Description } from './components/Description'
 import { EventType } from './components/EventType'
+import { NotifyGuests } from './components/NotifyGuests'
+
 import { FormContainer, FieldContainer, Footer } from './styled'
 
 const propTypes = {
@@ -69,7 +75,7 @@ const defaultProps = {
  * after opening until we can reinitialize it.
  *
  */
-export class EventDrawer extends Component {
+class PresentEventDrawer extends Component {
   constructor(props) {
     super(props)
 
@@ -77,12 +83,19 @@ export class EventDrawer extends Component {
       error: null,
       isDisabled: false,
       isSaving: false,
-      event: props.event
+      isDeleting: false,
+      event: props.event,
+      currentEvent: null,
+      shouldShowNotify: false
     }
 
     this.isNew =
       (!props.event && !props.eventId) ||
       Object.keys(this.props.initialValues).length > 0
+  }
+
+  componentDidMount() {
+    this.props.fetchOAuthAccounts()
   }
 
   load = async () => {
@@ -131,10 +144,10 @@ export class EventDrawer extends Component {
     }
   }
 
-  delete = async () => {
+  delete = async (shouldNotify = false) => {
     try {
       this.setState({ isDisabled: true })
-      await deleteTask(this.state.event.id)
+      await deleteTask(this.state.event.id, shouldNotify)
       this.setState({ isDisabled: false }, () =>
         this.props.deleteCallback(this.state.event)
       )
@@ -142,6 +155,34 @@ export class EventDrawer extends Component {
       console.log(error)
       this.setState({ isDisabled: false, error })
     }
+  }
+
+  handleDelete = async () => {
+    const { accounts } = this.props
+    const shouldShowModal = hasGoogleAccount(accounts)
+
+    if (shouldShowModal) {
+      return this.setState(() => ({
+        shouldShowNotify: shouldShowModal,
+        isDeleting: true
+      }))
+    }
+
+    await this.delete()
+  }
+
+  handleSave = async event => {
+    const { accounts } = this.props
+    const shouldShowModal = hasGoogleAccount(accounts)
+
+    if (shouldShowModal) {
+      return this.setState(() => ({
+        shouldShowNotify: shouldShowModal,
+        currentEvent: event
+      }))
+    }
+
+    await this.save(event)
   }
 
   handleSubmit = () => {
@@ -160,213 +201,244 @@ export class EventDrawer extends Component {
 
   render() {
     let crm_task
-    const { isDisabled, event, error } = this.state
-    const { defaultAssociation, user } = this.props
+    const {
+      isDisabled,
+      event,
+      error,
+      isSaving,
+      isDeleting,
+      shouldShowNotify,
+      currentEvent
+    } = this.state
+    const { defaultAssociation, user, isOpen, onClose } = this.props
 
     if (event) {
       crm_task = event.id
     }
 
     return (
-      <Drawer open={this.props.isOpen} onClose={this.props.onClose}>
-        <Drawer.Header title={`${this.isNew ? 'Add' : 'Edit'} Event`} />
-        <Drawer.Body>
-          {error && error.status === 404 ? (
-            <Alert message={error.response.body.message} type="error" />
-          ) : (
-            <LoadSaveReinitializeForm
-              initialValues={this.props.initialValues}
-              load={this.load}
-              postLoadFormat={event =>
-                postLoadFormat(event, user, defaultAssociation)
-              }
-              preSaveFormat={(values, originalValues) =>
-                preSaveFormat(values, originalValues, user)
-              }
-              save={this.save}
-              validate={validate}
-              render={formProps => {
-                const { values } = formProps
+      <>
+        {shouldShowNotify && isOpen && (
+          <NotifyGuests
+            isNew={this.isNew}
+            isDisabled={isDisabled}
+            isDeleting={isDeleting}
+            onSave={this.save}
+            onDelete={this.delete}
+            onCancel={onClose}
+            currentEvent={currentEvent}
+          />
+        )}
+        <Drawer open={isOpen} onClose={onClose}>
+          <Drawer.Header title={`${this.isNew ? 'Add' : 'Edit'} Event`} />
+          <Drawer.Body>
+            {error && error.status === 404 ? (
+              <Alert message={error.response.body.message} type="error" />
+            ) : (
+              <LoadSaveReinitializeForm
+                initialValues={this.props.initialValues}
+                load={this.load}
+                postLoadFormat={event =>
+                  postLoadFormat(event, user, defaultAssociation)
+                }
+                preSaveFormat={(values, originalValues) =>
+                  preSaveFormat(values, originalValues, user)
+                }
+                save={this.handleSave}
+                validate={validate}
+                render={formProps => {
+                  const { values } = formProps
 
-                const isDone = values.status === 'DONE'
-                const isPastDate =
-                  new Date(values.dueDate).getTime() < new Date().getTime() - 1
+                  const isDone = values.status === 'DONE'
+                  const isPastDate =
+                    new Date(values.dueDate).getTime() <
+                    new Date().getTime() - 1
 
-                return (
-                  <>
-                    <FormContainer
-                      onSubmit={formProps.handleSubmit}
-                      id="event-drawer-form"
-                    >
-                      {!this.isNew && (
-                        <WhenFieldChanges
-                          set="status"
-                          watch="dueDate"
-                          setter={onChange => {
-                            if (isPastDate) {
-                              if (!isDone) {
-                                onChange('DONE')
-                              }
-                            } else if (isDone) {
-                              onChange('PENDING')
-                            }
-                          }}
-                        />
-                      )}
-                      {/* Set future event due date to now if user wants to mark it as done */}
-                      {!this.isNew && (
-                        <WhenFieldChanges
-                          set="dueDate"
-                          watch="status"
-                          setter={onChange => {
-                            if (isDone && !isPastDate) {
-                              this.context.setConfirmationModal({
-                                message: 'Heads up!',
-                                description:
-                                  'If you mark this event as done, the event due date will change to now. Are you sure?',
-                                onConfirm: () => {
-                                  onChange(new Date())
-                                },
-                                onCancel: () => {
-                                  values.status = 'PENDING'
+                  return (
+                    <>
+                      <FormContainer
+                        onSubmit={formProps.handleSubmit}
+                        id="event-drawer-form"
+                      >
+                        {!this.isNew && (
+                          <WhenFieldChanges
+                            set="status"
+                            watch="dueDate"
+                            setter={onChange => {
+                              if (isPastDate) {
+                                if (!isDone) {
+                                  onChange('DONE')
                                 }
-                              })
-                            }
-                          }}
-                        />
-                      )}
-                      <UpdateReminder dueDate={values.dueDate} />
-                      <Flex style={{ marginBottom: '1rem' }}>
-                        {this.isNew ? (
-                          <Title fullWidth />
-                        ) : (
-                          <>
-                            <Flex alignCenter style={{ height: '2.25rem' }}>
-                              <CheckboxField
-                                name="status"
-                                id="event-drawer__status-field"
-                              />
-                            </Flex>
-                            <Title />
-                          </>
+                              } else if (isDone) {
+                                onChange('PENDING')
+                              }
+                            }}
+                          />
                         )}
-                      </Flex>
+                        {/* Set future event due date to now if user wants to mark it as done */}
+                        {!this.isNew && (
+                          <WhenFieldChanges
+                            set="dueDate"
+                            watch="status"
+                            setter={onChange => {
+                              if (isDone && !isPastDate) {
+                                this.context.setConfirmationModal({
+                                  message: 'Heads up!',
+                                  description:
+                                    'If you mark this event as done, the event due date will change to now. Are you sure?',
+                                  onConfirm: () => {
+                                    onChange(new Date())
+                                  },
+                                  onCancel: () => {
+                                    values.status = 'PENDING'
+                                  }
+                                })
+                              }
+                            }}
+                          />
+                        )}
+                        <UpdateReminder dueDate={values.dueDate} />
+                        <Flex style={{ marginBottom: '1rem' }}>
+                          {this.isNew ? (
+                            <Title fullWidth />
+                          ) : (
+                            <>
+                              <Flex alignCenter style={{ height: '2.25rem' }}>
+                                <CheckboxField
+                                  name="status"
+                                  id="event-drawer__status-field"
+                                />
+                              </Flex>
+                              <Title />
+                            </>
+                          )}
+                        </Flex>
 
-                      <Description
-                        style={{ padding: this.isNew ? 0 : '0 0 0 2.5rem' }}
-                        placeholder="Add a description about this event"
-                      />
+                        <Description
+                          style={{ padding: this.isNew ? 0 : '0 0 0 2.5rem' }}
+                          placeholder="Add a description about this event"
+                        />
 
-                      <EventType />
+                        <EventType />
 
-                      <UpdateEndDate
-                        dueDate={values.dueDate}
-                        endDate={values.endDate}
-                      />
+                        <UpdateEndDate
+                          dueDate={values.dueDate}
+                          endDate={values.endDate}
+                        />
 
-                      <Box mb={4}>
-                        <FieldContainer
-                          alignCenter
-                          justifyBetween
-                          style={{ marginBottom: '0.5em' }}
-                        >
-                          <DateTimeField
-                            name="dueDate"
-                            selectedDate={values.dueDate}
+                        <Box mb={4}>
+                          <FieldContainer
+                            alignCenter
+                            justifyBetween
+                            style={{ marginBottom: '0.5em' }}
+                          >
+                            <DateTimeField
+                              name="dueDate"
+                              selectedDate={values.dueDate}
+                            />
+
+                            <EndDateTimeField dueDate={values.dueDate} />
+                          </FieldContainer>
+
+                          <FieldError
+                            name="endDate"
+                            style={{ fontSize: '1rem', marginBottom: '0.5em' }}
                           />
 
-                          <EndDateTimeField dueDate={values.dueDate} />
-                        </FieldContainer>
+                          <Reminder dueDate={values.dueDate} />
+                        </Box>
 
-                        <FieldError
-                          name="endDate"
-                          style={{ fontSize: '1rem', marginBottom: '0.5em' }}
-                        />
+                        <AssigneesField name="assignees" owner={user} />
 
-                        <Reminder dueDate={values.dueDate} />
-                      </Box>
+                        <Divider margin="2em 0" />
 
-                      <AssigneesField name="assignees" owner={user} />
-
-                      <Divider margin="2em 0" />
-
-                      <AssociationsList
-                        name="associations"
-                        showDefaultAssociation
-                        associations={values.associations}
-                        defaultAssociation={defaultAssociation}
-                      />
-
-                      <ItemChangelog
-                        item={values}
-                        style={{ marginTop: '2em' }}
-                      />
-                    </FormContainer>
-                    <Footer justifyBetween alignCenter>
-                      <Flex alignCenter>
-                        {!this.isNew && (
-                          <>
-                            <Tooltip placement="top" caption="Delete">
-                              <IconButton
-                                disabled={isDisabled}
-                                onClick={this.delete}
-                              >
-                                <IconDelete size="medium" />
-                              </IconButton>
-                            </Tooltip>
-                            <Divider
-                              margin="0 1rem"
-                              width="1px"
-                              height="2rem"
-                            />
-                          </>
-                        )}
-                        <AddAssociationButton
-                          associations={values.associations}
-                          crm_task={crm_task}
-                          disabled={isDisabled}
-                          type="contact"
+                        <AssociationsList
                           name="associations"
-                          caption="Attach Client"
-                        />
-                        <AddAssociationButton
+                          showDefaultAssociation
                           associations={values.associations}
-                          crm_task={crm_task}
-                          disabled={isDisabled}
-                          type="listing"
-                          name="associations"
-                          caption="Attach Property"
+                          defaultAssociation={defaultAssociation}
                         />
-                        <AddAssociationButton
-                          associations={values.associations}
-                          crm_task={crm_task}
-                          disabled={isDisabled}
-                          type="deal"
-                          name="associations"
-                          caption="Attach Deal"
+
+                        <ItemChangelog
+                          item={values}
+                          style={{ marginTop: '2em' }}
                         />
-                      </Flex>
-                      <ActionButton
-                        appearance="secondary"
-                        type="button"
-                        disabled={isDisabled}
-                        onClick={this.handleSubmit}
-                        style={{ marginLeft: '0.5em' }}
-                      >
-                        {this.state.isSaving ? 'Saving...' : 'Save'}
-                      </ActionButton>
-                    </Footer>
-                  </>
-                )
-              }}
-            />
-          )}
-        </Drawer.Body>
-      </Drawer>
+                      </FormContainer>
+                      <Footer justifyBetween alignCenter>
+                        <Flex alignCenter>
+                          {!this.isNew && (
+                            <>
+                              <Tooltip placement="top" caption="Delete">
+                                <IconButton
+                                  disabled={isDisabled}
+                                  onClick={this.handleDelete}
+                                >
+                                  <IconDelete size="medium" />
+                                </IconButton>
+                              </Tooltip>
+                              <Divider
+                                margin="0 1rem"
+                                width="1px"
+                                height="2rem"
+                              />
+                            </>
+                          )}
+                          <AddAssociationButton
+                            associations={values.associations}
+                            crm_task={crm_task}
+                            disabled={isDisabled}
+                            type="contact"
+                            name="associations"
+                            caption="Attach Client"
+                          />
+                          <AddAssociationButton
+                            associations={values.associations}
+                            crm_task={crm_task}
+                            disabled={isDisabled}
+                            type="listing"
+                            name="associations"
+                            caption="Attach Property"
+                          />
+                          <AddAssociationButton
+                            associations={values.associations}
+                            crm_task={crm_task}
+                            disabled={isDisabled}
+                            type="deal"
+                            name="associations"
+                            caption="Attach Deal"
+                          />
+                        </Flex>
+                        <ActionButton
+                          appearance="secondary"
+                          type="button"
+                          disabled={isDisabled}
+                          onClick={this.handleSubmit}
+                          style={{ marginLeft: '0.5em' }}
+                        >
+                          {isSaving ? 'Saving...' : 'Save'}
+                        </ActionButton>
+                      </Footer>
+                    </>
+                  )
+                }}
+              />
+            )}
+          </Drawer.Body>
+        </Drawer>
+      </>
     )
   }
 }
 
-EventDrawer.propTypes = propTypes
-EventDrawer.defaultProps = defaultProps
-EventDrawer.contextType = ConfirmationModalContext
+PresentEventDrawer.propTypes = propTypes
+PresentEventDrawer.defaultProps = defaultProps
+PresentEventDrawer.contextType = ConfirmationModalContext
+
+const mapStateToProps = state => ({
+  accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
+})
+
+export const EventDrawer = connect(
+  mapStateToProps,
+  { fetchOAuthAccounts }
+)(PresentEventDrawer)
