@@ -16,15 +16,16 @@ interface Props {
   event: ICalendarEvent
   onEventChange(event: IEvent, type: string): void
 }
-
-const events: {
+type EventsType = {
   component({
     event,
     style,
     onEventChange
   }: Props): React.ReactElement<any> | null
   condition(event: ICalendarEvent): boolean
-}[] = [
+}
+
+const events: EventsType[] = [
   {
     component: EmptyState,
     condition: (event: ICalendarEvent) =>
