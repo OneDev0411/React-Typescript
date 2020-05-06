@@ -22,7 +22,6 @@ export default function FontField({
   label,
   onChange
 }: FieldProps) {
-  const [isOpen, setIsOpen] = useState(false)
   const [status, setStatus] = useState<'loading' | 'failed' | 'succeed'>(
     'loading'
   )
@@ -31,7 +30,7 @@ export default function FontField({
   const fontManager = useRef<FontManager | null>(null)
 
   useEffect(() => {
-    if (fontManager.current || !isOpen) {
+    if (fontManager.current) {
       return
     }
 
@@ -67,7 +66,7 @@ export default function FontField({
     }
 
     initFontManager()
-  }, [searchQuery, isOpen])
+  }, [searchQuery])
 
   useEffect(() => {
     if (!fontManager.current) {
@@ -116,9 +115,6 @@ export default function FontField({
     <Autocomplete
       disableClearable
       openOnFocus
-      open={isOpen}
-      onOpen={() => setIsOpen(true)}
-      onClose={() => setIsOpen(false)}
       loading={status === 'loading'}
       size="small"
       noOptionsText="No result"
