@@ -54,8 +54,15 @@ export const Filters = {
     FilterNames.Pending.includes(getStatus(deal)) &&
     !deal.is_draft &&
     !deal.deleted_at,
-  archives: (deal: IDeal) =>
-    FilterNames.Archive.includes(getStatus(deal)) || !!deal.deleted_at
+  archives: (deal: IDeal, statuses: IDealStatus[] = []) => {
+    if (deal.deleted_at) {
+      return true
+    }
+
+    const status = statuses.find(item => item.label === getStatus(deal))
+
+    return status && status.archived === true
+  }
 }
 
 const TAB_ITEMS = [

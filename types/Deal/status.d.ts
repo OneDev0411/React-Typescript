@@ -7,6 +7,7 @@ declare interface IDealStatus {
   brand: string
   label: string
   color: string
+  archived: boolean
   deal_types: IDealType[]
   property_types: IDealPropertyType[]
   admin_only: boolean

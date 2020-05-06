@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
-
 import { withRouter, WithRouterProps } from 'react-router'
+import { useEffectOnce } from 'react-use'
 
 import { TableCellProps } from '@material-ui/core'
 
@@ -17,6 +17,9 @@ import {
   getField,
   getFormattedPrice
 } from 'models/Deal/helpers/context'
+import { getDealStatuses } from 'models/Deal/status/get-statuses'
+
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 import { getGridSort } from '../../helpers/sorting'
@@ -41,6 +44,7 @@ interface Props {
 
 function AgentGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
+  const [statuses, setStatuses] = useState<IDealStatus[]>([])
 
   const { isFetchingDeals, deals, roles, user } = useSelector(
     ({ deals, user }: IAppState) => ({
@@ -50,6 +54,20 @@ function AgentGrid(props: Props & WithRouterProps) {
       user
     })
   )
+
+  useEffectOnce(() => {
+    const fetchStatuses = async () => {
+      try {
+        const statuses = await getDealStatuses(getActiveTeamId(user)!)
+
+        setStatuses(statuses)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    fetchStatuses()
+  })
 
   const columns = useMemo(() => {
     return [
@@ -122,8 +140,10 @@ function AgentGrid(props: Props & WithRouterProps) {
         ? Filters[props.activeFilter]
         : Filters.all
 
-    return Object.values(deals).filter(deal => filterFn(deal)) as IDeal[]
-  }, [deals, props.activeFilter])
+    return Object.values(deals).filter(deal =>
+      filterFn(deal, statuses)
+    ) as IDeal[]
+  }, [deals, statuses, props.activeFilter])
 
   const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
     return {
@@ -145,7 +165,7 @@ function AgentGrid(props: Props & WithRouterProps) {
       columns={columns}
       rows={data}
       totalRows={data.length}
-      virtualize={data.length > 150}
+      virtualize={data.length > 30}
       LoadingStateComponent={LoadingState}
       EmptyStateComponent={EmptyState}
       loading={isFetchingDeals ? 'middle' : null}
