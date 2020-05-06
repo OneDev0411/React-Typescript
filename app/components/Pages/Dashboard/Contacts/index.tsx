@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet'
 
 import { IAppState } from 'reducers'
 
-import { getAttributeDefs } from '../../../../store_actions/contacts'
+import { getAttributeDefs } from 'actions/contacts'
 
 import {
   IAttributeDefsState,
