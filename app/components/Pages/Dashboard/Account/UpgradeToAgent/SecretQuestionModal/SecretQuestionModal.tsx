@@ -1,16 +1,35 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { browserHistory } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { FORM_ERROR } from 'final-form'
-import { Box } from '@material-ui/core'
+import {
+  Box,
+  Modal,
+  Paper,
+  Fade,
+  Backdrop,
+  makeStyles
+} from '@material-ui/core'
 
 import { updateUser } from 'actions/user'
 import { upgradeAgent } from 'models/user/upgrade-to-agent'
 
-import Modal from 'components/BareModal'
-
 import { MlsSelect } from './MlsSelect'
 import { SecretQuestionForm } from './SecretQuestionForm'
+
+const BACKDROP_TIMEOUT = 500
+
+const useStyles = makeStyles(() => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  paper: {
+    width: '600px',
+    height: '400px'
+  }
+}))
 
 interface Props {
   isOpen: boolean
@@ -20,8 +39,24 @@ interface Props {
 }
 
 export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
+  const classes = useStyles()
   const dispatch = useDispatch()
+  const backdropTimeout = useRef(0)
   const [selectedAgent, setSelectedAgent] = useState<IAgent | null>(null)
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(backdropTimeout.current)
+    }
+  }, [])
+
+  const hide = () => {
+    onHide()
+    backdropTimeout.current = setTimeout(
+      () => setSelectedAgent(null),
+      BACKDROP_TIMEOUT
+    )
+  }
 
   const onChangeSelectMls = event => {
     const selectedAgent = agents.find(agent => agent.id === event.target.value)
@@ -43,8 +78,7 @@ export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
       })
 
       dispatch(updateUser(user))
-      setSelectedAgent(null)
-      onHide()
+      hide()
       browserHistory.push('/dashboard/account')
     } catch (error) {
       return {
@@ -55,36 +89,45 @@ export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
     }
   }
 
-  const onCancel = () => {
-    setSelectedAgent(null)
-    onHide()
-  }
-
   return (
-    <Modal isOpen={isOpen} onRequestClose={onHide}>
-      <Box
-        p={3}
-        height="100%"
-        display="flex"
-        flexDirection="column"
-        justifyContent="space-between"
-      >
-        {!selectedAgent && agents.length > 1 ? (
-          <MlsSelect
-            items={agents}
-            mlsId={mlsId}
-            onCancel={onCancel}
-            onChange={onChangeSelectMls}
-            defaultValue={agents[0]}
-          />
-        ) : (
-          <SecretQuestionForm
-            agent={selectedAgent}
-            onCancel={onCancel}
-            onConfirm={onConfirm}
-          />
-        )}
-      </Box>
+    <Modal
+      open={isOpen}
+      onClose={onHide}
+      className={classes.modal}
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: BACKDROP_TIMEOUT
+      }}
+    >
+      <Fade in={isOpen}>
+        <Paper className={classes.paper}>
+          <Box
+            p={3}
+            height="100%"
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+          >
+            {selectedAgent ? (
+              <SecretQuestionForm
+                agent={selectedAgent}
+                onCancel={hide}
+                onConfirm={onConfirm}
+              />
+            ) : (
+              <MlsSelect
+                agents={agents}
+                mlsId={mlsId}
+                onCancel={hide}
+                onChange={onChangeSelectMls}
+              />
+            )}
+          </Box>
+        </Paper>
+      </Fade>
     </Modal>
   )
 }

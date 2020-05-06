@@ -5,6 +5,8 @@ import { Alert } from '@material-ui/lab'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 
+import { Header } from './Header'
+
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
     width: theme.spacing(47)
@@ -39,13 +41,10 @@ export function SecretQuestionForm(props: Props) {
 
   return (
     <>
-      <Box mb={3}>
-        <Typography variant="h4">Agent Verification</Typography>
-        <Box mb={1} />
-        <Typography>
-          Enter the complete mobile number or email address.
-        </Typography>
-      </Box>
+      <Header
+        title="Agent Verification"
+        description="Enter the complete mobile number or email address."
+      />
 
       <Form
         onSubmit={props.onConfirm}
