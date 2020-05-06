@@ -7,6 +7,7 @@ const routes = {
   message: ['messages'],
   contact: ['export-outlook'],
   pdf: ['get-size'],
+  user: ['refresh-token'],
   deal: [
     'docusign-login',
     'envelope-sign',
