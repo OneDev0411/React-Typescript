@@ -37,11 +37,31 @@ export function ChooseMls(props: WithRouterProps) {
   const onSubmit = (values: FormValues) => {
     const agent = agents.find(a => a.id === values.agentId)
 
+    if (!agent) {
+      return
+    }
+
     props.router.push({
       pathname: '/onboarding/confirm-agent-id/security-question',
       state: { agent }
     })
   }
+
+  const defaultValue = '0000'
+  const selectItems = [
+    {
+      name: '--Select--',
+      value: defaultValue
+    },
+    ...agents.map(item => ({
+      value: item.id,
+      name: `${item.mls}${
+        item.first_name || item.last_name
+          ? ` - ${item.first_name} ${item.last_name}`
+          : ''
+      }`
+    }))
+  ]
 
   return (
     <Container>
@@ -54,7 +74,7 @@ export function ChooseMls(props: WithRouterProps) {
 
       <Form
         onSubmit={onSubmit}
-        initialValues={{ agentId: agents[0].id }}
+        initialValues={{ agentId: defaultValue }}
         render={({ handleSubmit, form }) => {
           const { submitError, submitting } = form.getState()
 
@@ -62,7 +82,7 @@ export function ChooseMls(props: WithRouterProps) {
             <form onSubmit={handleSubmit}>
               <Box mb={5}>
                 <Box mb={5}>
-                  <MlsSelect items={agents} />
+                  <MlsSelect items={selectItems} />
                   {submitError && !submitting && (
                     <Box mt={3}>
                       <Alert severity="error">{submitError}</Alert>

@@ -28,7 +28,10 @@ const useStyles = makeStyles(
     },
     paper: {
       width: '600px',
-      height: '400px'
+      height: '400px',
+      '&:focus': {
+        outline: 'none'
+      }
     }
   }),
   { name: 'SecretQuestionModal' }

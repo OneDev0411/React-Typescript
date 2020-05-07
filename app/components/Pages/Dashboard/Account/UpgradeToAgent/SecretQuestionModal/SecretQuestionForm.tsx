@@ -53,7 +53,10 @@ export function SecretQuestionForm(props: Props) {
           const { submitError, submitting } = form.getState()
 
           return (
-            <form onSubmit={handleSubmit} style={{ height: '100%' }}>
+            <form
+              onSubmit={handleSubmit}
+              style={{ height: 'calc(100% - 94px)' }}
+            >
               <Box
                 height="100%"
                 display="flex"

@@ -1,10 +1,22 @@
 import React from 'react'
 import { Field } from 'react-final-form'
-import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
+import {
+  FormControl,
+  FormHelperText,
+  Link,
+  InputLabel,
+  Select,
+  MenuItem
+} from '@material-ui/core'
 
 import { useCommonStyles } from '../common-styles'
 
-export function MlsSelect({ items }: { items: IAgent[] }) {
+interface Items {
+  name: string
+  value: string
+}
+
+export function MlsSelect({ items }: { items: Items[] }) {
   const commonClasses = useCommonStyles()
 
   return (
@@ -25,11 +37,22 @@ export function MlsSelect({ items }: { items: IAgent[] }) {
               onChange={input.onChange}
             >
               {items.map(item => (
-                <MenuItem key={item.id} value={item.id}>
-                  {item.mls}
+                <MenuItem key={item.value} value={item.value}>
+                  {item.name}
                 </MenuItem>
               ))}
             </Select>
+            <FormHelperText variant="standard">
+              <span>Couldn't find your MLS in here? Send us an email to </span>
+              <Link
+                target="_blank"
+                color="secondary"
+                href="mailto:support@rechat.com"
+              >
+                support@rechat.com
+              </Link>
+              <span> and we'll activate your account for you.</span>
+            </FormHelperText>
           </FormControl>
         )
       }}
