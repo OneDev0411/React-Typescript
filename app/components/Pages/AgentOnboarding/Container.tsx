@@ -16,7 +16,7 @@ const styles = (theme: Theme) =>
       margin: '0 auto',
       padding: '3rem 1rem 0',
       [theme.breakpoints.up('sm')]: {
-        paddingTop: '15vh',
+        paddingTop: '13vh',
         maxWidth: '33rem'
       }
     }
