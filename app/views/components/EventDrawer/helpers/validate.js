@@ -26,3 +26,15 @@ export function hasGoogleAccount(accounts) {
 
   return filteredGoogle.length > 0
 }
+
+export function hasContactAssociation(event) {
+  if (!event || !event.associations) {
+    return false
+  }
+
+  const contactAssociationsCount = event.associations.filter(
+    i => i.association_type === 'contact'
+  ).length
+
+  return contactAssociationsCount > 0
+}
