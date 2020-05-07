@@ -32,7 +32,11 @@ import Tooltip from '../tooltip'
 import { AddAssociationButton } from '../AddAssociationButton'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
-import { validate, hasGoogleAccount } from './helpers/validate'
+import {
+  validate,
+  hasGoogleAccount,
+  hasContactAssociation
+} from './helpers/validate'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
@@ -158,8 +162,10 @@ class PresentEventDrawer extends Component {
   }
 
   handleDelete = async () => {
+    const { event } = this.state
     const { accounts } = this.props
-    const shouldShowModal = hasGoogleAccount(accounts)
+    const shouldShowModal =
+      hasContactAssociation(event) && hasGoogleAccount(accounts)
 
     if (shouldShowModal) {
       return this.setState(() => ({
@@ -173,7 +179,9 @@ class PresentEventDrawer extends Component {
 
   handleSave = async event => {
     const { accounts } = this.props
-    const shouldShowModal = hasGoogleAccount(accounts)
+
+    const shouldShowModal =
+      hasContactAssociation(event) && hasGoogleAccount(accounts)
 
     if (shouldShowModal) {
       return this.setState(() => ({

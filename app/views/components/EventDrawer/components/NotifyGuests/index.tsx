@@ -48,9 +48,12 @@ export const NotifyGuests = ({
       return
     }
 
+    const currentMeta = currentEvent.metadata || {}
+
     const payload = {
       ...currentEvent,
       metadata: {
+        ...currentMeta,
         send_updates: show
       }
     }
