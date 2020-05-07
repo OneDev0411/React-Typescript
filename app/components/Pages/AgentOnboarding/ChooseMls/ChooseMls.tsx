@@ -37,6 +37,10 @@ export function ChooseMls(props: WithRouterProps) {
   const onSubmit = (values: FormValues) => {
     const agent = agents.find(a => a.id === values.agentId)
 
+    if (!agent) {
+      return
+    }
+
     props.router.push({
       pathname: '/onboarding/confirm-agent-id/security-question',
       state: { agent }
