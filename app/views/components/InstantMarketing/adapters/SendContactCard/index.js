@@ -317,15 +317,6 @@ class SendContactCard extends React.Component {
             onClose={this.closeSocialDrawer}
           />
         )}
-
-        {this.state.isSocialDrawerOpen && (
-          <SocialDrawer
-            template={this.state.htmlTemplate}
-            templateInstanceData={this.TemplateInstanceData}
-            socialNetworkName={this.state.socialNetworkName}
-            onClose={this.closeSocialDrawer}
-          />
-        )}
       </>
     )
   }
