@@ -11,7 +11,12 @@ import {
 
 import { useCommonStyles } from '../common-styles'
 
-export function MlsSelect({ items }: { items: IAgent[] }) {
+interface Items {
+  name: string
+  value: string
+}
+
+export function MlsSelect({ items }: { items: Items[] }) {
   const commonClasses = useCommonStyles()
 
   return (
@@ -32,8 +37,8 @@ export function MlsSelect({ items }: { items: IAgent[] }) {
               onChange={input.onChange}
             >
               {items.map(item => (
-                <MenuItem key={item.id} value={item.id}>
-                  {item.mls}
+                <MenuItem key={item.value} value={item.value}>
+                  {item.name}
                 </MenuItem>
               ))}
             </Select>
