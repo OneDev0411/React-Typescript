@@ -104,22 +104,18 @@ export function Register(props: WithRouterProps) {
     }
 
     try {
-      let redirect: string = redirectTo
-
       await updatePassword(userPassword)
 
       if (user_type === 'Agent') {
-        redirect = '/onboarding/confirm-agent-id'
-
         if (redirectTo) {
-          redirect = `${redirect}?rtd=${redirectTo}`
+          window.localStorage.setItem('onboarding_redirectAtTheEnd', redirectTo)
         }
 
         browserHistory.push({
           ...props.location,
           query: {
             ...props.location.query,
-            redirectTo: redirect
+            redirectTo: '/onboarding/confirm-agent-id'
           }
         })
       }

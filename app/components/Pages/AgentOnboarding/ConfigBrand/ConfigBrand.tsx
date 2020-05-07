@@ -8,12 +8,13 @@ import { Alert } from '@material-ui/lab'
 
 import { getActiveBrand } from 'utils/user-teams'
 
-import { IAppState } from 'reducers'
-
-import { addBrand } from 'models/BrandConsole/Brands'
 import { getTeams } from 'models/user/get-teams'
-import { updateUser } from 'actions/user'
+import { addBrand } from 'models/BrandConsole/Brands'
 import getVerificationCode from 'models/verify/request'
+import { putUserSetting } from 'models/user/put-user-setting'
+
+import { IAppState } from 'reducers'
+import { updateUser } from 'actions/user'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
@@ -84,10 +85,17 @@ export function ConfigBrand() {
       )
 
       const teams = await getTeams(user)
+      const personalTeam = teams.find(
+        team => team.brand.brand_type === 'Personal'
+      )
+
+      await putUserSetting('user_filter', [], personalTeam.brand.id)
 
       dispatch(
         updateUser({
           ...user,
+          active_brand: personalTeam.brand.id,
+          brand: personalTeam.brand.id,
           teams
         })
       )

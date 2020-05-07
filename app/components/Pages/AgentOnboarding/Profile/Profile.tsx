@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { browserHistory } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { Box } from '@material-ui/core'
@@ -51,17 +51,32 @@ export function Profile() {
   const dispatch = useDispatch()
   const user = useSelector((store: IAppState) => store.user)
   const brand = useSelector((store: IAppState) => store.brand)
+
   const [editorState, setEditorState, signatureEditor] = useEditorState('')
+
+  const [nextStepUrl, setNextStepUrl] = useState(getUserDefaultHomepage(user))
 
   const [submitError, setSubmitError] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const nextStepUrl = getUserDefaultHomepage(user)
+
   const connectedAccounts = useSelector((store: IAppState) =>
     selectAllConnectedAccounts(store.contacts.oAuthAccounts)
   )
+
   const hasSignature = editorState.getCurrentContent().getPlainText()
 
   const [avatar, setAvatar] = useState(getOauthAccountAvatar(connectedAccounts))
+
+  useEffect(() => {
+    const REDIRECT_KEY = 'onboarding_redirectAtTheEnd'
+    const redirectTo = window.localStorage.getItem(REDIRECT_KEY)
+
+    if (redirectTo) {
+      setNextStepUrl(redirectTo)
+    }
+
+    return () => window.localStorage.removeItem(REDIRECT_KEY)
+  }, [])
 
   const onSubmit = async () => {
     let user: IUser | null = null

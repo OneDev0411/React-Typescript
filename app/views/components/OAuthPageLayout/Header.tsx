@@ -7,6 +7,8 @@ import { ClassesProps } from 'utils/ts-utils'
 
 import Brand from '../../../controllers/Brand'
 
+import { Logo } from './Logo'
+
 const styles = (theme: Theme) =>
   createStyles({
     box: {
@@ -17,11 +19,6 @@ const styles = (theme: Theme) =>
       maxWidth: '40rem',
       textAlign: 'center',
       marginBottom: theme.spacing(6)
-    },
-    logo: {
-      width: 100,
-      height: 100,
-      marginBottom: theme.spacing(2)
     },
     title: {
       marginBottom: theme.spacing(2)
@@ -40,15 +37,15 @@ const useStyles = makeStyles(styles)
 
 export function Header({ brand, title, ...props }: HeaderProps) {
   const classes = useStyles(props.classes)
-  let siteLogo = '/static/images/logo.svg'
+  let brandLogo
 
   if (brand) {
-    siteLogo = Brand.asset('site_logo', null, brand)
+    brandLogo = Brand.asset('site_logo', null, brand)
   }
 
   return (
     <Box className={classnames(classes.box, props.className)}>
-      <img src={siteLogo} className={classes.logo} alt="logo" />
+      <Logo brandLogo={brandLogo} />
       <Typography variant="h4" className={classes.title}>
         {title}
       </Typography>

@@ -506,6 +506,8 @@ export default (
         <Route path="mls" component={AsyncListingsLayout}>
           <IndexRoute component={AsyncListingsSearch} />
         </Route>
+
+        <Route path="mls/:id" component={AsyncListingSinglePage} />
       </Route>
     </Route>
 
