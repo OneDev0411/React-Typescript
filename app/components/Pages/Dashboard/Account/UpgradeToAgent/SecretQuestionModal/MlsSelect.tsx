@@ -30,7 +30,7 @@ export function MlsSelect({ agents, onChange, mlsId, onCancel }: Props) {
       value: item.id,
       name: `${item.mls}${
         item.first_name || item.last_name
-          ? `- ${item.first_name} ${item.last_name}`
+          ? ` - ${item.first_name} ${item.last_name}`
           : ''
       }`
     }))
