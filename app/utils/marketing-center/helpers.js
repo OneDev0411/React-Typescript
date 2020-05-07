@@ -1,5 +1,7 @@
 import fecha from 'fecha'
 
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
+
 export function getTemplateImage(
   template,
   fallbackImage = 'https://i.ibb.co/ZhVwVzy/template-placeholder.png'
@@ -108,11 +110,12 @@ export function itemDateText(time) {
 }
 
 export function getTemplateType(initType, template) {
-  if (template && template.template && template.template.template_type) {
-    return template.template.template_type
+  if (!template) {
+    return initType
   }
 
-  return initType
+  const normalizedTemplate = getTemplateObject(template)
+  return normalizedTemplate.template_type || initType
 }
 
 export function getMedium(props) {

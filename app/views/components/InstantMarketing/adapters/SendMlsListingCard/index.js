@@ -237,7 +237,7 @@ class SendMlsListingCard extends React.Component {
 
   get TemplateTypes() {
     return this.props.selectedTemplate
-      ? [this.props.selectedTemplate.template_type]
+      ? [getTemplateObject(this.props.selectedTemplate).template_type]
       : getTemplateTypes(this.state.listings)
   }
 
