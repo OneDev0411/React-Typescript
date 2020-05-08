@@ -2,7 +2,7 @@ import _ from 'lodash'
 import S from 'shorti'
 import Map from 'google-map-react'
 import React from 'react'
-import { browserHistory, Link } from 'react-router'
+import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -32,6 +32,7 @@ import ArrowRightIcon from '../../../../../../views/components/SvgIcons/ArrowRig
 
 import FetchError from './FetchError'
 import MLSNote from './MLSNote'
+import ClaimAccountBanner from './ClaimAccountBanner'
 import Loading from '../../../../../Partials/Loading'
 import FavoriteHeart from '../../components/FavoriteHeart'
 import ListingMarker from '../../components/ListingMarker'
@@ -787,6 +788,16 @@ const ListingDesktopView = ({
     )
   }
 
+  let contact_info
+
+  if (data.location && data.location.query && data.location.query.token) {
+    contact_info = data.location.query.email
+
+    if (data.location.query.phone_number) {
+      contact_info = data.location.query.phone_number
+    }
+  }
+
   const headerProps = {
     alignCenter: true,
     justifyBetween: true,
@@ -823,41 +834,6 @@ const ListingDesktopView = ({
       )}
     </Flex>
   )
-
-  // Claim account message
-  let token
-  let contact_info
-  let claim_account_message
-
-  if (data.location && data.location.query && data.location.query.token) {
-    token = data.location.query.token
-  }
-
-  if (token) {
-    contact_info = data.location.query.email
-
-    if (data.location.query.phone_number) {
-      contact_info = data.location.query.phone_number
-    }
-
-    claim_account_message = (
-      <div style={S('bg-2196f3 color-fff w-100p font-17 p-20 text-center')}>
-        This listing was shared to {contact_info}. Claim your account to save
-        this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
-        <Link
-          style={{
-            padding: '1rem',
-            color: '#0945eb',
-            textDecoration: 'none',
-            backgroundColor: '#fff'
-          }}
-          to={`/register${window.location.search}`}
-        >
-          Activate your account
-        </Link>
-      </div>
-    )
-  }
 
   let brand_agent_footer
 
@@ -930,7 +906,6 @@ const ListingDesktopView = ({
 
   return (
     <div style={viewer_wrap_style}>
-      {claim_account_message}
       {Header}
       {main_content}
       {brand_agent_footer}
@@ -957,6 +932,7 @@ const ListingDesktopView = ({
         isActive={shareModalIsActive}
         onHide={onHideShareModal}
       />
+      <ClaimAccountBanner />
     </div>
   )
 }

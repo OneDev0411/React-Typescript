@@ -17,6 +17,7 @@ import Loading from '../../../../../Partials/Loading'
 import ListingMarker from '../../components/ListingMarker'
 
 import MLSNote from './MLSNote'
+import ClaimAccountBanner from './ClaimAccountBanner'
 import FetchError from './FetchError'
 import { renderFeatures } from './ListingDesktopView'
 
@@ -618,6 +619,7 @@ const ListingMobileView = ({
       {left_area}
       {main_content}
       {brand_agent_footer}
+      <ClaimAccountBanner />
     </div>
   )
 }
