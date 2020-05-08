@@ -116,14 +116,14 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   })
 
   const onChangeDay = (date: Date) => {
-    const _startDate = new Date(date)
-    const _endDate = new Date(date)
+    const newStartDate = new Date(date)
+    const newEndDate = new Date(date)
 
-    _startDate.setHours(startDate.getHours(), startDate.getMinutes())
-    _endDate.setHours(endDate.getHours(), endDate.getMinutes())
+    newStartDate.setHours(startDate.getHours(), startDate.getMinutes())
+    newEndDate.setHours(endDate.getHours(), endDate.getMinutes())
 
-    setStartDate(new Date(_startDate))
-    setEndDate(new Date(_endDate))
+    setStartDate(new Date(newStartDate))
+    setEndDate(new Date(newEndDate))
   }
 
   const handleSave = async (): Promise<void> => {

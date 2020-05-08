@@ -1,5 +1,4 @@
-const now = new Date()
-const setHours = hour => new Date(now.setHours(hour, 0, 0, 0))
+const setHours = hour => new Date(new Date().setHours(hour))
 
 const INITIAL_START_DATE = setHours(10)
 const INITIAL_END_DATE = setHours(12)
