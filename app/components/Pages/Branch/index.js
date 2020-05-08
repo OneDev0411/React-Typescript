@@ -107,7 +107,8 @@ const redirectHandler = async (
     action,
     loggedInUser,
     userInfo,
-    branchUrl
+    branchUrl,
+    email
   }
   const hasConflict = () =>
     loggedInUser &&
