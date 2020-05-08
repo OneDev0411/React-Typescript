@@ -99,7 +99,7 @@ function AgentGrid(props: Props & WithRouterProps) {
         id: 'status',
         width: '15%',
         class: 'opaque',
-        accessor: (deal: IDeal) => getStatus(deal)
+        accessor: (deal: IDeal) => getStatus(deal) || ''
       },
       {
         id: 'price',

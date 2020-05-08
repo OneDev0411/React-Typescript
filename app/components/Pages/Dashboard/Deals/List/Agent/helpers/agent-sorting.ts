@@ -4,16 +4,6 @@ export const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field'
 
 export const SORTABLE_COLUMNS: SortableColumn[] = [
   {
-    label: 'Status (A-Z)',
-    value: 'status',
-    ascending: true
-  },
-  {
-    label: 'Status (Z-A)',
-    value: 'status',
-    ascending: false
-  },
-  {
     label: 'Address (A-Z)',
     value: 'address',
     ascending: true
@@ -21,6 +11,16 @@ export const SORTABLE_COLUMNS: SortableColumn[] = [
   {
     label: 'Address (Z-A)',
     value: 'address',
+    ascending: false
+  },
+  {
+    label: 'Status (A-Z)',
+    value: 'status',
+    ascending: true
+  },
+  {
+    label: 'Status (Z-A)',
+    value: 'status',
     ascending: false
   },
   {
