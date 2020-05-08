@@ -450,6 +450,26 @@ export function Calendar({
     // eslint-disable-next-line
   }, [listRows])
 
+  useEffect(() => {
+    const socket: SocketIOClient.Socket = (window as any).socket
+
+    console.log(socket)
+
+    if (!socket) {
+      return
+    }
+
+    function handleUpdate() {
+      handleLoadEvents(activeDate, initialRange)
+    }
+
+    socket.on('Calendar.Updated', handleUpdate)
+
+    return () => {
+      socket.off('Calendar.Updated', handleUpdate)
+    }
+  }, [])
+
   /**
    * exposes below methods to be accessible outside of the component
    */
