@@ -22,7 +22,9 @@ const OOPS_PAGE = '/oops'
 const branchKey = publicConfig.branch.key
 
 const getConfilictMessageText = email =>
-  `You are currently logged in a different user.  Please sign out and sign in using ${email}.`
+  `You are currently logged in a different user.  Please sign out and sign in using ${decodeURIComponent(
+    email
+  )}.`
 
 const getActionRedirectURL = params => {
   const { action, room, alert, listing, crm_task } = params
@@ -107,7 +109,8 @@ const redirectHandler = async (
     action,
     loggedInUser,
     userInfo,
-    branchUrl
+    branchUrl,
+    email
   }
   const hasConflict = () =>
     loggedInUser &&
@@ -158,13 +161,11 @@ const redirectHandler = async (
       redirect += `&email=${email}`
     }
 
-    redirect += `&redirectTo=${encodeURIComponent(
-      getActionRedirectURL(branchData)
-    )}`
+    redirect += `&redirectTo=${getActionRedirectURL(branchData)}`
 
     if (hasConflict()) {
       console.log('you logged with different user')
-      params.redirectTo = encodeURIComponent(redirect)
+      params.redirectTo = redirect
       params.messageText =
         'You are currently logged in a different user. Please sign out and sign up your new account.'
       setActiveModal({ name: 'SHADOW_CONFLICT', params })
@@ -194,7 +195,7 @@ const redirectHandler = async (
         name: 'CONFLICT',
         params: {
           ...params,
-          messageText: getConfilictMessageText(encodeURIComponent(email)),
+          messageText: getConfilictMessageText(email),
           actionButtonProps: {
             onClick: loginHandler,
             text: 'Sign in'
@@ -214,8 +215,8 @@ const redirectHandler = async (
 
     if (hasConflict()) {
       console.log('you logged with deferent user')
-      params.redirectTo = encodeURIComponent(redirect)
-      params.messageText = getConfilictMessageText(encodeURIComponent(email))
+      params.redirectTo = redirect
+      params.messageText = getConfilictMessageText(email)
       setActiveModal({ name: 'CONFLICT', params })
 
       return
@@ -232,7 +233,7 @@ const redirectHandler = async (
     redirect = !listing
       ? `/signin?${username}&redirectTo=`
       : `/dashboard/mls/${listing}?${username}&redirectTo=`
-    redirect += encodeURIComponent(getActionRedirectURL(branchData))
+    redirect += getActionRedirectURL(branchData)
   }
 
   browserHistory.push(redirect)
