@@ -1,7 +1,6 @@
-import React, { useState, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
-import { useEffectOnce } from 'react-use'
 
 import { TableCellProps } from '@material-ui/core'
 
@@ -17,9 +16,15 @@ import {
   getField,
   getFormattedPrice
 } from 'models/Deal/helpers/context'
-import { getDealStatuses } from 'models/Deal/status/get-statuses'
-
 import { getActiveTeamId } from 'utils/user-teams'
+
+import { useDealStatuses } from 'hooks/use-deal-statuses'
+
+import {
+  isActiveDeal,
+  isArchivedDeal,
+  isPendingDeal
+} from 'deals/List/helpers/statuses'
 
 import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 import { getGridSort } from '../../helpers/sorting'
@@ -34,17 +39,32 @@ import CriticalDate, {
 } from '../../components/table-columns/CriticalDate'
 
 import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
-import { Filters } from '../Filters'
-import { statusSortMethod } from '../../components/table-columns/Status/helpers/sort-method'
 
 interface Props {
   sortableColumns: SortableColumn[]
   activeFilter: string
 }
 
+const Filters = {
+  all: (deal: IDeal, statuses: IDealStatus[] = []) => {
+    return !isArchivedDeal(deal, statuses)
+  },
+  drafts: (deal: IDeal) => {
+    return deal.is_draft === true
+  },
+  listings: (deal: IDeal, statuses: IDealStatus[] = []) => {
+    return isActiveDeal(deal, statuses)
+  },
+  pendings: (deal: IDeal, statuses: IDealStatus[] = []) => {
+    return isPendingDeal(deal, statuses)
+  },
+  archives: (deal: IDeal, statuses: IDealStatus[] = []) => {
+    return isArchivedDeal(deal, statuses)
+  }
+}
+
 function AgentGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
-  const [statuses, setStatuses] = useState<IDealStatus[]>([])
 
   const { isFetchingDeals, deals, roles, user } = useSelector(
     ({ deals, user }: IAppState) => ({
@@ -55,19 +75,7 @@ function AgentGrid(props: Props & WithRouterProps) {
     })
   )
 
-  useEffectOnce(() => {
-    const fetchStatuses = async () => {
-      try {
-        const statuses = await getDealStatuses(getActiveTeamId(user)!)
-
-        setStatuses(statuses)
-      } catch (e) {
-        console.log(e)
-      }
-    }
-
-    fetchStatuses()
-  })
+  const statuses = useDealStatuses(getActiveTeamId(user)!)
 
   const columns = useMemo(() => {
     return [
@@ -91,8 +99,7 @@ function AgentGrid(props: Props & WithRouterProps) {
         id: 'status',
         width: '15%',
         class: 'opaque',
-        accessor: (deal: IDeal) => getStatus(deal),
-        sortMethod: statusSortMethod
+        accessor: (deal: IDeal) => getStatus(deal)
       },
       {
         id: 'price',
