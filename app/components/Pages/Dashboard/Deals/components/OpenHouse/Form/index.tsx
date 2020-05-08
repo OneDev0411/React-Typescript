@@ -33,8 +33,6 @@ import { normalizeListing } from 'views/utils/association-normalizers'
 
 import { DatePickerContainer } from './styled'
 
-import { INITIAL_START_DATE, INITIAL_END_DATE } from './helpers/initial-dates'
-
 interface StateProps {
   user: IUser
   checklists: IDealChecklist[]
@@ -87,12 +85,12 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   const [startDate, setStartDate] = useState<Date>(
     props.defaultStartDate
       ? new Date(props.defaultStartDate * 1000)
-      : INITIAL_START_DATE
+      : new Date(new Date().setHours(10))
   )
   const [endDate, setEndDate] = useState<Date>(
     props.defaultEndDate
       ? new Date(props.defaultEndDate * 1000)
-      : INITIAL_END_DATE
+      : new Date(new Date().setHours(12))
   )
 
   useEffect(() => {
