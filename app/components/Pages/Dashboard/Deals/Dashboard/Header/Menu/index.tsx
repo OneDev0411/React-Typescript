@@ -50,7 +50,7 @@ export const Menu = withRouter(
           />
         )}
 
-        {deal.deal_type === 'Selling' && <YardSign deal={deal} />}
+        <YardSign deal={deal} />
 
         <SendEmail deal={deal} size="small" />
 
