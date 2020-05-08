@@ -47,8 +47,8 @@ interface Props {
   deal: IDeal
   task: IDealTask | null
   autoBookOpenHouse: boolean
-  defaultStartTime: number | null
-  defaultEndTime: number | null
+  defaultStartDate: number | null
+  defaultEndDate: number | null
   onUpsertTask(task: IDealTask): void
 }
 
@@ -82,11 +82,15 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
     boolean
   >(false)
 
-  const [startTime, setStartTime] = useState<Date | null>(
-    props.defaultStartTime ? new Date(props.defaultStartTime * 1000) : null
+  const [startDate, setStartDate] = useState<Date>(
+    props.defaultStartDate
+      ? new Date(props.defaultStartDate * 1000)
+      : new Date(new Date().setHours(10))
   )
-  const [endTime, setEndTime] = useState<Date | null>(
-    props.defaultEndTime ? new Date(props.defaultEndTime * 1000) : null
+  const [endDate, setEndDate] = useState<Date>(
+    props.defaultEndDate
+      ? new Date(props.defaultEndDate * 1000)
+      : new Date(new Date().setHours(12))
   )
 
   useEffect(() => {
@@ -109,36 +113,19 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
     props.autoBookOpenHouse && handleSave()
   })
 
-  const handleSetStartDate = (date: Date) => {
-    const datetime = new Date(date)
+  const onChangeDay = (date: Date) => {
+    const newStartDate = new Date(date)
+    const newEndDate = new Date(date)
 
-    datetime.setHours(startTime ? startTime.getHours() : 0)
-    datetime.setMinutes(startTime ? startTime.getMinutes() : 0)
+    newStartDate.setHours(startDate.getHours(), startDate.getMinutes())
+    newEndDate.setHours(endDate.getHours(), endDate.getMinutes())
 
-    setStartTime(datetime)
-  }
-
-  const handleChangeStartTime = (date: Date) => {
-    setStartTime(date)
-
-    if (endTime && date > endTime) {
-      setEndTime(date)
-    }
-  }
-
-  const handleSetEndTime = (date: Date) => {
-    const endTime = new Date(startTime!).setHours(
-      date.getHours(),
-      date.getMinutes()
-    )
-
-    if (endTime > new Date(startTime!).getTime()) {
-      setEndTime(date)
-    }
+    setStartDate(new Date(newStartDate))
+    setEndDate(new Date(newEndDate))
   }
 
   const handleSave = async (): Promise<void> => {
-    if (!startTime) {
+    if (!startDate) {
       return
     }
 
@@ -149,8 +136,8 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
     )!
 
     const taskTitle = [
-      fecha.format(startTime, 'dddd, MMMM D, YYYY  hh:mmA'),
-      endTime ? `- ${fecha.format(endTime, 'hh:mmA')}` : ''
+      fecha.format(startDate, 'dddd, MMMM D, YYYY  hh:mmA'),
+      endDate ? `- ${fecha.format(endDate, 'hh:mmA')}` : ''
     ].join(' ')
 
     if (props.task) {
@@ -220,8 +207,8 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
       return {
         assignees: [props.user],
         registrants: [],
-        endDate: endTime,
-        dueDate: startTime,
+        endDate,
+        dueDate: startDate,
         location: {
           association_type: 'listing',
           index: 1,
@@ -244,12 +231,12 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
     <div className={classes.root}>
       <DatePickerContainer>
         <DayPicker
-          initialMonth={startTime || new Date()}
-          selectedDays={startTime}
+          initialMonth={startDate}
+          selectedDays={startDate}
           disabledDays={{
             before: new Date()
           }}
-          onDayClick={handleSetStartDate}
+          onDayClick={onChangeDay}
         />
       </DatePickerContainer>
       <Grid container spacing={1}>
@@ -257,9 +244,8 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
           <InputLabel>From</InputLabel>
           <TimeInput
             id="start-time"
-            defaultDate={getDefaultTime()}
-            initialDate={startTime}
-            onChange={handleChangeStartTime}
+            initialDate={startDate}
+            onChange={setStartDate}
           />
         </Grid>
         <Grid item xs={6} direction="column" className={classes.flexContainer}>
@@ -267,9 +253,8 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
 
           <TimeInput
             id="end-time"
-            defaultDate={getDefaultTime()}
-            initialDate={endTime}
-            onChange={handleSetEndTime}
+            initialDate={endDate}
+            onChange={setEndDate}
           />
         </Grid>
       </Grid>
@@ -279,7 +264,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
           fullWidth
           variant="contained"
           color="secondary"
-          disabled={!startTime || isSaving}
+          disabled={isSaving}
           onClick={handleSave}
         >
           {isSaving ? (
@@ -304,10 +289,6 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
       )}
     </div>
   )
-}
-
-function getDefaultTime(): Date {
-  return new Date(new Date().setHours(0, 0, 0, 0))
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
