@@ -33,7 +33,7 @@ import { normalizeListing } from 'views/utils/association-normalizers'
 
 import { DatePickerContainer } from './styled'
 
-import { INITIAL_START_DATE, INITIAL_END_DATE } from './initial-dates'
+import { INITIAL_START_DATE, INITIAL_END_DATE } from './helpers/initial-dates'
 
 interface StateProps {
   user: IUser
@@ -49,8 +49,8 @@ interface Props {
   deal: IDeal
   task: IDealTask | null
   autoBookOpenHouse: boolean
-  defaultStartTime: number | null
-  defaultEndTime: number | null
+  defaultStartDate: number | null
+  defaultEndDate: number | null
   onUpsertTask(task: IDealTask): void
 }
 
@@ -85,13 +85,13 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   >(false)
 
   const [startDate, setStartDate] = useState<Date>(
-    props.defaultStartTime
-      ? new Date(props.defaultStartTime * 1000)
+    props.defaultStartDate
+      ? new Date(props.defaultStartDate * 1000)
       : INITIAL_START_DATE
   )
   const [endDate, setEndDate] = useState<Date>(
-    props.defaultEndTime
-      ? new Date(props.defaultEndTime * 1000)
+    props.defaultEndDate
+      ? new Date(props.defaultEndDate * 1000)
       : INITIAL_END_DATE
   )
 

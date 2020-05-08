@@ -148,8 +148,8 @@ function OpenHouses({
               autoBookOpenHouse={
                 location.state && location.state.autoBookOpenHouse === true
               }
-              defaultStartTime={location.state && location.state.startTime}
-              defaultEndTime={location.state && location.state.endTime}
+              defaultStartDate={location.state && location.state.startTime}
+              defaultEndDate={location.state && location.state.endTime}
               onUpsertTask={handleUpsertTask}
             />
           ) : (
