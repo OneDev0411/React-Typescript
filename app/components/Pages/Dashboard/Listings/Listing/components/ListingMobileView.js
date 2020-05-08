@@ -539,12 +539,7 @@ const ListingMobileView = ({
             src={Brand.asset('site_logo_wide')}
           />
         ) : (
-          <img
-            alt="Rechat"
-            width={36}
-            height={36}
-            src="/static/images/logo.svg"
-          />
+          <img alt="Rechat" width="120px" src="/static/images/logo.svg" />
         )}
       </a>
     </div>
