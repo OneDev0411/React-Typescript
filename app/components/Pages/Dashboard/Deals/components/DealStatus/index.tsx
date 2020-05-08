@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { MenuItem, createStyles, makeStyles, Theme } from '@material-ui/core'
 
-import { useEffectOnce } from 'react-use'
-
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 
 import { upsertContexts } from 'actions/deals'
@@ -15,7 +13,8 @@ import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 import { IAppState } from 'reducers'
 
 import Deal from 'models/Deal'
-import { getDealStatuses } from 'models/Deal/status/get-statuses'
+
+import { useDealStatuses } from 'hooks/use-deal-statuses'
 
 import DealContext from 'models/Deal/helpers/dynamic-context'
 
@@ -38,35 +37,16 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export default function DealStatus({ deal, isBackOffice }: Props) {
-  const [isSaving, setIsSaving] = useState(false)
-  const [statuses, setStatuses] = useState<IDealStatus[]>([])
   const classes = useStyles()
+
+  const [isSaving, setIsSaving] = useState(false)
+  const statuses = useDealStatuses(deal.brand.id)
 
   const dispatch = useDispatch()
   const { user, checklists } = useSelector(({ user, deals }: IAppState) => ({
     user,
     checklists: getDealChecklists(deal, deals.checklists)
   }))
-
-  useEffectOnce(() => {
-    const fetchStatuses = async () => {
-      try {
-        const statuses = await getDealStatuses(deal.brand.id)
-
-        setStatuses(
-          statuses.filter(
-            status =>
-              status.deal_types.includes(deal.deal_type) &&
-              status.property_types.includes(deal.property_type)
-          )
-        )
-      } catch (e) {
-        console.log(e)
-      }
-    }
-
-    fetchStatuses()
-  })
 
   /**
    * updates listing_status context
@@ -152,24 +132,30 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
       }}
       renderMenu={({ close }) => (
         <div>
-          {statuses.map((item, index) => (
-            <MenuItem
-              key={index}
-              value={index}
-              onClick={() => {
-                close()
-                updateStatus(item)
-              }}
-            >
-              <span
-                className={classes.bullet}
-                style={{
-                  backgroundColor: item.color
+          {statuses
+            .filter(
+              status =>
+                status.deal_types.includes(deal.deal_type) &&
+                status.property_types.includes(deal.property_type)
+            )
+            .map((item, index) => (
+              <MenuItem
+                key={index}
+                value={index}
+                onClick={() => {
+                  close()
+                  updateStatus(item)
                 }}
-              />
-              {item.label}
-            </MenuItem>
-          ))}
+              >
+                <span
+                  className={classes.bullet}
+                  style={{
+                    backgroundColor: item.color
+                  }}
+                />
+                {item.label}
+              </MenuItem>
+            ))}
         </div>
       )}
     />
