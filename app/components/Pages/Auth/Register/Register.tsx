@@ -142,7 +142,7 @@ export function Register(props: WithRouterProps) {
   const initialValues = {
     first_name: paramsFromURI.first_name,
     last_name: paramsFromURI.last_name,
-    email: paramsFromURI.email || '',
+    email: '',
     password: '',
     repeatedPassword: '',
     user_type: 'Agent'
