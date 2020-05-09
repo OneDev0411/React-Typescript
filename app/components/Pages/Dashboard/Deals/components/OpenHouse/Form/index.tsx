@@ -85,12 +85,12 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   const [startDate, setStartDate] = useState<Date>(
     props.defaultStartDate
       ? new Date(props.defaultStartDate * 1000)
-      : new Date(new Date().setHours(10))
+      : new Date(new Date().setHours(10, 0, 0))
   )
   const [endDate, setEndDate] = useState<Date>(
     props.defaultEndDate
       ? new Date(props.defaultEndDate * 1000)
-      : new Date(new Date().setHours(12))
+      : new Date(new Date().setHours(12, 0, 0))
   )
 
   useEffect(() => {
