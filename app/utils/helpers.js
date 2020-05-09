@@ -1,6 +1,17 @@
-export function getUrlSearchFromParams(params) {
+export function createUrlSearch(params, filter) {
   const queryString = Object.keys(params)
-    .filter(key => params[key] && params[key] !== 0)
+    .filter(key => {
+      const value = params[key]
+
+      if (typeof filter === 'function') {
+        return filter(value)
+      }
+
+      // Filtering null, undefined, NaN and empty string values
+      return (typeof value === 'number' && !Number.isNaN(value)) ||
+        typeof value === 'boolean' ||
+        Boolean(value)
+    })
     .map(key => `${key}=${params[key]}`)
     .join('&')
 

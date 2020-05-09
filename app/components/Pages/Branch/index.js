@@ -10,7 +10,7 @@ import idx from 'idx'
 import publicConfig from '../../../../config/public'
 
 import signin from '../../../store_actions/auth/signin'
-import { getUrlSearchFromParams } from '../../../utils/helpers'
+import { createUrlSearch } from '../../../utils/helpers'
 import Loading from '../../Partials/Loading'
 import { getBrandInfo } from '../Auth/SignIn/get-brand-info'
 import { lookUpUserByEmail } from '../../../models/user/lookup-user-by-email'
@@ -163,7 +163,7 @@ const redirectHandler = async (
     if (hasConflict()) {
       console.log('you logged with different user')
       queryParams.redirectFromSignout = redirect
-      params.to = `/signout${getUrlSearchFromParams(queryParams)}`
+      params.to = `/signout${createUrlSearch(queryParams)}`
       params.messageText =
         'You are currently logged in a different user. Please sign out and sign up your new account.'
       setActiveModal({ name: 'SHADOW_CONFLICT', params })
@@ -171,7 +171,7 @@ const redirectHandler = async (
       return
     }
 
-    redirect += getUrlSearchFromParams(queryParams)
+    redirect += createUrlSearch(queryParams)
   } else if (actionType === 'UserLogin') {
     console.log('UserLogin', branchData)
 
