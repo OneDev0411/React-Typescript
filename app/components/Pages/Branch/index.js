@@ -10,7 +10,7 @@ import idx from 'idx'
 import publicConfig from '../../../../config/public'
 
 import signin from '../../../store_actions/auth/signin'
-
+import { getUrlSearchFromParams } from '../../../utils/helpers'
 import Loading from '../../Partials/Loading'
 import { getBrandInfo } from '../Auth/SignIn/get-brand-info'
 import { lookUpUserByEmail } from '../../../models/user/lookup-user-by-email'
@@ -147,31 +147,31 @@ const redirectHandler = async (
     }
   } else if (userInfo && userInfo.is_shadow) {
     console.log('isShadow:', branchData)
-    redirect = `register?token=${token}`
+    redirect = '/register'
 
     if (listing) {
-      redirect = `/dashboard/mls/${listing}?token=${token}`
+      redirect = `/dashboard/mls/${listing}`
     }
 
-    if (phone_number) {
-      redirect += `&phone_number=${phone_number}`
+    let queryParams = {
+      token,
+      email,
+      phone_number,
+      redirectTo: getActionRedirectURL(branchData)
     }
-
-    if (email) {
-      redirect += `&email=${email}`
-    }
-
-    redirect += `&redirectTo=${getActionRedirectURL(branchData)}`
 
     if (hasConflict()) {
       console.log('you logged with different user')
-      params.redirectTo = redirect
+      queryParams.redirectFromSignout = redirect
+      params.to = `/signout${getUrlSearchFromParams(queryParams)}`
       params.messageText =
         'You are currently logged in a different user. Please sign out and sign up your new account.'
       setActiveModal({ name: 'SHADOW_CONFLICT', params })
 
       return
     }
+
+    redirect += getUrlSearchFromParams(queryParams)
   } else if (actionType === 'UserLogin') {
     console.log('UserLogin', branchData)
 
