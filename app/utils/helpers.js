@@ -1,3 +1,16 @@
+export function getUrlSearchFromParams(params) {
+  const queryString = Object.keys(params)
+    .filter(key => params[key] && params[key] !== 0)
+    .map(key => `${key}=${params[key]}`)
+    .join('&')
+
+  if (queryString.length > 0) {
+    return `?${queryString}`
+  }
+
+  return ''
+}
+
 export function sortAlphabetically(a, b) {
   return compare(a.toLowerCase(), b.toLowerCase())
 }
