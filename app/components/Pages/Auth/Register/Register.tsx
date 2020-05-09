@@ -62,12 +62,7 @@ export function Register(props: WithRouterProps) {
   const onSubmit = async (values: FormValues) => {
     const { first_name, last_name, email, password, user_type } = values
 
-    const {
-      token,
-      redirectTo = '',
-      phone_number,
-      email: emailFromURI
-    } = paramsFromURI
+    let { token, redirectTo, phone_number, email: emailFromURI } = paramsFromURI
 
     const userPassword: {
       email?: string
@@ -139,13 +134,21 @@ export function Register(props: WithRouterProps) {
     return `/signin?${queryString}`
   }
 
-  const initialValues = {
-    first_name: paramsFromURI.first_name,
-    last_name: paramsFromURI.last_name,
-    email: '',
-    password: '',
-    repeatedPassword: '',
-    user_type: 'Agent'
+  const getInitialValues = () => {
+    let email = paramsFromURI.email
+
+    if (paramsFromURI.phone_number) {
+      email = ''
+    }
+
+    return {
+      first_name: paramsFromURI.first_name,
+      last_name: paramsFromURI.last_name,
+      email,
+      password: '',
+      repeatedPassword: '',
+      user_type: 'Agent'
+    }
   }
 
   return (
@@ -153,7 +156,7 @@ export function Register(props: WithRouterProps) {
       <OAuthPageLayout.Header title="Welcome to Rechat" brand={brand} />
       <OAuthPageLayout.Main>
         <Form
-          initialValues={initialValues}
+          initialValues={getInitialValues()}
           onSubmit={onSubmit}
           validate={validate}
           render={({ handleSubmit, form }) => {
