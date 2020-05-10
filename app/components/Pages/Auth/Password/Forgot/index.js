@@ -14,6 +14,7 @@ import SimpleField from '../../../Dashboard/Account/Profile/components/SimpleFie
 
 const ForgotForm = ({
   brand,
+  username,
   submitError,
   isSubmitting,
   handleSubmit,
@@ -70,7 +71,9 @@ const ForgotForm = ({
               </Button>
               <p className="c-auth__subtitle">
                 <small>Change your mind?</small>&nbsp;&nbsp;
-                <Link to="/signin">Sign in</Link>
+                <Link to={`/signin?username=${encodeURIComponent(username)}`}>
+                  Sign in
+                </Link>
               </p>
             </form>
           ) : (
@@ -109,6 +112,7 @@ export default compose(
 
     return {
       brand,
+      username: email,
       initialValues: { email }
     }
   }),

@@ -9,12 +9,14 @@ import withHandlers from 'recompose/withHandlers'
 import { getBrandInfo } from '../../SignIn/get-brand-info'
 import ConflictModal from '../../../Branch/components/ConflictModal'
 import updatePassword from '../../../../../models/auth/password/update'
+import { createUrlSearch } from '../../../../../utils/helpers'
 import Button from '../../../../../views/components/Button/ActionButton'
 import SimpleField from '../../../Dashboard/Account/Profile/components/SimpleField'
 
 const Reset = ({
   user,
   brand,
+  loginParams,
   submitError,
   isSubmitting,
   handleSubmit,
@@ -38,7 +40,6 @@ const Reset = ({
             />
           </a>
         )}
-        <h1 className="c-auth__title">{siteTitle}</h1>
         {!submitSuccessfully && (
           <p className="c-auth__subtitle">Reset your password</p>
         )}
@@ -118,9 +119,10 @@ const Reset = ({
       userInfo: user,
       actionButtonProps: {
         text: 'Sign out',
-        href: `/signout?redirectFromSignout=${encodeURIComponent(
-          window.location.href
-        )}`
+        href: `/signout${createUrlSearch({
+          ...loginParams,
+          redirectFromSignout: '/password/reset'
+        })}`
       },
       messageText:
         'You are logged in on this device. To reset your password, please sign out.'
@@ -150,8 +152,8 @@ const validate = values => {
   return errors
 }
 export default compose(
-  connect(({ brand }, { location: { query = {} } }) => {
-    const { token, email } = query
+  connect(({ brand }, { location }) => {
+    const { token, email } = location.query
 
     return {
       brand,

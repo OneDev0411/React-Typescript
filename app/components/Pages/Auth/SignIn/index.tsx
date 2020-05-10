@@ -183,6 +183,7 @@ export default function Signin(props: Props) {
                 setIsHiddenLookUpForm(false)
                 setSignInFormSubmitMsg(null)
               }}
+              username={username}
             />
           ) : (
             <LookUpUserForm
