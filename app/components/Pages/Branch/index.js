@@ -118,8 +118,8 @@ const redirectHandler = async (
       (email && decodeURIComponent(email) !== loggedInUser.email))
 
   if (actionType === 'VERIFY') {
-    // console.log('verify')
     redirect = generateVerificationActionRedirectUrl(branchData)
+    console.log('verify', branchData, redirect)
 
     const setParams = () => ({
       ...params,

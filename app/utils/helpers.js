@@ -1,4 +1,4 @@
-export function createUrlSearch(params, filter) {
+export function createUrlSearch(params, filter, encode = false) {
   const queryString = Object.keys(params)
     .filter(key => {
       const value = params[key]
@@ -12,7 +12,9 @@ export function createUrlSearch(params, filter) {
         typeof value === 'boolean' ||
         Boolean(value)
     })
-    .map(key => `${key}=${params[key]}`)
+    .map(key => `${key}=${
+      encode ? encodeURIComponent(params[key]) : params[key]
+    }`)
     .join('&')
 
   if (queryString.length > 0) {
