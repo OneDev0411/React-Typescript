@@ -38,7 +38,6 @@ const ForgotForm = ({
               />
             </a>
           )}
-          <h1 className="c-auth__title">{siteTitle}</h1>
           {!resetSuccessfully && (
             <p className="c-auth__subtitle">Forgot your password?</p>
           )}
