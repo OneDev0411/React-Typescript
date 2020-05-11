@@ -36,7 +36,6 @@ import { Title } from '../../EventDrawer/components/Title'
 import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import { Description } from '../../EventDrawer/components/Description'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
-import UpdateEndDate from '../../EventDrawer/components/UpdateEndDate/UpdateEndDate'
 import Reminder from '../../EventDrawer/components/Reminder/Reminder'
 import {
   AssigneesField,
@@ -476,11 +475,6 @@ class OpenHouseDrawerInternal extends React.Component {
                           dueDate={values.dueDate}
                           // 1 hour before
                           defaultOption={REMINDER_DROPDOWN_OPTIONS[5]}
-                        />
-
-                        <UpdateEndDate
-                          dueDate={values.dueDate}
-                          endDate={values.endDate}
                         />
 
                         <Box mb={4}>
