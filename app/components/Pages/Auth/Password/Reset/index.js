@@ -119,10 +119,14 @@ const Reset = ({
       userInfo: user,
       actionButtonProps: {
         text: 'Sign out',
-        href: `/signout${createUrlSearch({
-          ...loginParams,
-          redirectFromSignout: '/password/reset'
-        })}`
+        href: `/signout${createUrlSearch(
+          {
+            ...loginParams,
+            redirectFromSignout: '/password/reset'
+          },
+          undefined,
+          true
+        )}`
       },
       messageText:
         'You are logged in on this device. To reset your password, please sign out.'
