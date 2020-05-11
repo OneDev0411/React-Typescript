@@ -10,7 +10,7 @@ import { ListContext } from '../../context'
 import { EventContainer } from '../components/EventContainer'
 import { Associations } from './Associations'
 import { CrmStatus } from './Status'
-import OpenHouseRegistration from './actions/OpenHouseRegistration'
+import { OpenHouseRegistration } from './actions/OpenHouseRegistration'
 
 import { sharedStyles } from '../styles'
 

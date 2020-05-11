@@ -3,6 +3,7 @@ export function convertTaskToCalendarEvent(event: IEvent): ICalendarEvent {
 
   return {
     ...event,
+    crm_task: event.id,
     campaign: null,
     contact: null,
     created_by: '',

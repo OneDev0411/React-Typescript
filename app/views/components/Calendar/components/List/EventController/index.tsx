@@ -12,14 +12,12 @@ import {
 
 interface Props {
   user: IUser
-  activeDate: Date | null
   onEventChange(event: IEvent, type: string): void
   onScheduledEmailChange(emailCampaign: IEmailCampaign): void
 }
 
 export function EventController({
   user,
-  activeDate,
   onEventChange,
   onScheduledEmailChange
 }: Props) {
