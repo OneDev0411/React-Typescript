@@ -4,7 +4,7 @@ import { Button } from '@material-ui/core'
 
 import AddIcon from 'components/SvgIcons/Add/AddIcon'
 
-import { RoleAgentIntegration } from '../components/Roles/AgentIntegration'
+import RoleAgentIntegration from '../components/Roles/AgentIntegration'
 import RoleItem from './role-item'
 
 class CrudRole extends React.Component {
