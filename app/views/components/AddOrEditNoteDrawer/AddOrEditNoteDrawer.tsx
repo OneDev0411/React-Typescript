@@ -50,6 +50,7 @@ export default function AddOrEditNoteDrawer({ note, ...props }: Props) {
       await props.onSubmit(data)
 
       setIsSaving(false)
+      editor.reset()
       props.onClose()
     } catch (error) {
       console.log(error)
