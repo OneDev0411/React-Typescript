@@ -22,9 +22,9 @@ const OOPS_PAGE = '/oops'
 const branchKey = publicConfig.branch.key
 
 const getConfilictMessageText = email =>
-  `You are currently logged in a different user.  Please sign out and sign in using ${decodeURIComponent(
-    email
-  )}.`
+  `You are currently logged in a different user.  Please sign out and sign in ${
+    email ? `using ${decodeURIComponent(email)}` : 'again'
+  }.`
 
 const getActionRedirectURL = params => {
   const { action, room, alert, listing, crm_task } = params
