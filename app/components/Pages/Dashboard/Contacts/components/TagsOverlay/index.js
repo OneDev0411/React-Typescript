@@ -438,7 +438,7 @@ function mapStateToProps(state) {
   } = state
   const existingTags = selectTags(tags)
   const filter = selectContactsInfo(ContactListStore).filter || []
-  const searchText = selectContactsInfo(ContactListStore).searchText || ''
+  const searchText = selectContactsInfo(ContactListStore).searchInputValue || ''
 
   return {
     attributeDefs,
