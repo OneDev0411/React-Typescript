@@ -25,7 +25,7 @@ export function DateTime({ event }: Props) {
 }
 
 function isAllDayEvent(event: ICalendarEvent) {
-  if (event.metadata && event.metadata.all_day) {
+  if (event.metadata && typeof event.metadata.all_day === 'boolean') {
     return event.metadata.all_day
   }
 
