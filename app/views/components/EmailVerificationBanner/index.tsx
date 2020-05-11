@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { Snackbar, Box, Button } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 
-import verify from 'models/verify'
+import verify from '../../../models/verify'
 
 export default function EmailVerificationBanner({ email }) {
   const [isHide, setIsHide] = useState(false)
