@@ -6,40 +6,17 @@ interface Props {
 }
 
 export function DateTime({ event }: Props) {
-  const isAllDayEvent = () => {
-    const { metadata, end_date, timestamp, object_type } = event
-
-    if (metadata && typeof metadata.all_day !== 'undefined') {
-      return metadata.all_day
-    }
-
-    const isOneDayEvent =
-      end_date && getDatePartTicks(timestamp) === getDatePartTicks(end_date)
-    const isInternalEvent = [
-      'crm_association',
-      'crm_task',
-      'email_campaign',
-      'email_campaign_recipient',
-      'email_thread_recipient'
-    ].includes(object_type)
-
-    if (!isInternalEvent || !isOneDayEvent) {
-      return true
-    }
-
-    return false
-  }
-
-  if (isAllDayEvent()) {
+  if (isAllDayEvent(event)) {
     return <span>All day</span>
   }
 
-  const dueDate = formatDate(event.timestamp)
+  const timeFormat = 'hh:mm\u00A0A'
+  const dueDate = formatDate(event.timestamp, timeFormat)
 
   if (event.end_date) {
     return (
       <span>
-        {dueDate} {formatDate(event.end_date)}
+        {dueDate} {formatDate(event.end_date, timeFormat)}
       </span>
     )
   }
@@ -47,21 +24,35 @@ export function DateTime({ event }: Props) {
   return <span>{dueDate}</span>
 }
 
-function formatDate(date: Date | string | number): string {
-  return fecha.format(toDateObject(date), 'hh:mm\u00A0A') // non-breaking space
+function isAllDayEvent(event: ICalendarEvent) {
+  if (event.metadata && typeof event.metadata.all_day === 'boolean') {
+    return event.metadata.all_day
+  }
+
+  const isOneDayEvent = event.end_date
+    ? formatDate(event.timestamp, 'YYYYMMDD') ===
+      formatDate(event.end_date, 'YYYYMMDD')
+    : true
+
+  const isInternalEvent = [
+    'crm_association',
+    'crm_task',
+    'email_campaign',
+    'email_campaign_recipient',
+    'email_thread_recipient'
+  ].includes(event.object_type)
+
+  if (!isInternalEvent || !isOneDayEvent) {
+    return true
+  }
+
+  return false
 }
-function toDateObject(date: Date | string | number): Date {
-  return new Date(
+
+function formatDate(date: Date | string | number, format: string): string {
+  const dateObject = new Date(
     date instanceof Date ? date : parseFloat(date as string) * 1000
   )
-}
-function getDatePart(date: Date): Date {
-  const clone = new Date(date)
 
-  clone.setHours(0, 0, 0, 0)
-
-  return clone
-}
-function getDatePartTicks(date: Date | string | number): number {
-  return getDatePart(toDateObject(date)).getTime()
+  return fecha.format(dateObject, format)
 }
