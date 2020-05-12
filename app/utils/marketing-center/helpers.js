@@ -6,7 +6,7 @@ export function getTemplateImage(
   template,
   fallbackImage = 'https://i.ibb.co/ZhVwVzy/template-placeholder.png'
 ) {
-  if (template.type === 'template_instance') {
+  if (template.type === 'template_instance' || template.type === 'template') {
     return {
       original: template.file ? template.file.url : fallbackImage,
       thumbnail: template.file ? template.file.preview_url : fallbackImage

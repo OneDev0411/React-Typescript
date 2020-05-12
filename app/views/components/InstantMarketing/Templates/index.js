@@ -5,6 +5,7 @@ import _ from 'underscore'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 import { getActiveTeamId } from 'utils/user-teams'
+import { getTemplateImage } from 'utils/marketing-center/helpers'
 
 import Spinner from 'components/Spinner'
 
@@ -135,7 +136,7 @@ class Templates extends React.Component {
                 <Image
                   alt={template.template.name}
                   title={template.template.name}
-                  src={template.preview ? template.preview.url : ''}
+                  src={getTemplateImage(template).original}
                   width="97%"
                   style={{
                     margin: '1.5%',
