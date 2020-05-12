@@ -110,14 +110,15 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
     <BaseDropdown
       buttonLabel={
         <>
-          <span
-            className={classes.bullet}
-            style={{
-              backgroundColor: getStatusColorClass(dealStatus)
-            }}
-          />
-
-          {isSaving ? 'Saving...' : dealStatus}
+          {dealStatus && (
+            <span
+              className={classes.bullet}
+              style={{
+                backgroundColor: getStatusColorClass(dealStatus)
+              }}
+            />
+          )}
+          {isSaving ? 'Saving...' : dealStatus || 'Change Status'}
         </>
       }
       DropdownToggleButtonProps={{
