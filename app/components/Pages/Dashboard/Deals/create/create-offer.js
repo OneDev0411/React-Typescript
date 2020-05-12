@@ -462,6 +462,7 @@ class CreateOffer extends React.Component {
     return this.state.statuses
       .filter(
         status =>
+          status.is_pending &&
           status.deal_types.includes('Buying') &&
           status.property_types.includes(this.props.deal.property_type)
       )

@@ -346,11 +346,20 @@ class CreateDeal extends React.Component {
 
   get StatusList() {
     return this.state.statuses
-      .filter(
-        status =>
+      .filter(status => {
+        if (this.state.dealSide === 'Selling' && !status.is_active) {
+          return false
+        }
+
+        if (this.state.dealSide === 'Buying' && !status.is_pending) {
+          return false
+        }
+
+        return (
           status.deal_types.includes(this.state.dealSide) &&
           status.property_types.includes(this.state.dealPropertyType)
-      )
+        )
+      })
       .map(status => status.label)
   }
 

@@ -3,20 +3,16 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { MenuItem, createStyles, makeStyles, Theme } from '@material-ui/core'
 
+import { IAppState } from 'reducers'
+import Deal from 'models/Deal'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
-
 import { upsertContexts } from 'actions/deals'
-
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
-
-import { IAppState } from 'reducers'
-
-import Deal from 'models/Deal'
-
 import { useDealStatuses } from 'hooks/use-deal-statuses'
-
 import DealContext from 'models/Deal/helpers/dynamic-context'
+
+import { getStatusColorClass } from 'utils/listing'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 
@@ -80,10 +76,12 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
     setIsSaving(false)
   }
 
-  const getStatusColor = (status: string) => {
-    const item = statuses.find(item => item.label === status)
+  const getDealType = (): IDealType => {
+    if (deal.has_active_offer) {
+      return 'Buying'
+    }
 
-    return item ? item.color : 'transparent'
+    return deal.deal_type
   }
 
   /**
@@ -119,7 +117,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
           <span
             className={classes.bullet}
             style={{
-              backgroundColor: getStatusColor(dealStatus)
+              backgroundColor: getStatusColorClass(dealStatus)
             }}
           />
 
@@ -135,7 +133,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
           {statuses
             .filter(
               status =>
-                status.deal_types.includes(deal.deal_type) &&
+                status.deal_types.includes(getDealType()) &&
                 status.property_types.includes(deal.property_type)
             )
             .map((item, index) => (
@@ -150,7 +148,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
                 <span
                   className={classes.bullet}
                   style={{
-                    backgroundColor: item.color
+                    backgroundColor: getStatusColorClass(item.label)
                   }}
                 />
                 {item.label}

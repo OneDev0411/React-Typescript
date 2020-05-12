@@ -6,7 +6,6 @@ declare interface IDealStatus {
   deleted_at: number | null
   brand: string
   label: string
-  color: string
   is_active: boolean
   is_pending: boolean
   is_archived: boolean
