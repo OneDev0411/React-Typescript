@@ -53,7 +53,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
       return
     }
 
-    if (item.admin_only && !isBackOffice) {
+    if (item.admin_only && !deal.is_draft && !isBackOffice) {
       notifyAdmin(item.label)
 
       return
