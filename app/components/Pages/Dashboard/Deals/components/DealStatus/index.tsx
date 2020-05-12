@@ -104,10 +104,6 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
     )
   }
 
-  if (deal.is_draft) {
-    return null
-  }
-
   const dealStatus = Deal.get.status(deal)
 
   return (
