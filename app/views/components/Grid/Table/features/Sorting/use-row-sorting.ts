@@ -38,14 +38,14 @@ function sort<Row>(
 
   let sortedData: Row[] = []
 
-  if (column && column.sortMethod) {
-    sortedData = column.sortMethod(column, data)
+  if (column && column.sortFn) {
+    sortedData = column.sortFn(data)
   } else {
-    sortedData = sortData(data, (row, index) => {
-      return defaultSortMethod(
+    sortedData = sortData(data, (row, index) =>
+      defaultSortMethod(
         resolveAccessor(column ? column.accessor : row[sortBy], row, index)
       )
-    })
+    )
   }
 
   return isAscendingSort ? sortedData : sortedData.reverse()

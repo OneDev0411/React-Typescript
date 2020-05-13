@@ -28,6 +28,7 @@ import {
 
 import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 import { getGridSort } from '../../helpers/sorting'
+import { sortStatus } from '../helpers/status-sorting'
 
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
@@ -99,7 +100,8 @@ function AgentGrid(props: Props & WithRouterProps) {
         id: 'status',
         width: '15%',
         class: 'opaque',
-        accessor: (deal: IDeal) => getStatus(deal) || ''
+        accessor: (deal: IDeal) => getStatus(deal) || '',
+        sortFn: (rows: IDeal[]) => sortStatus(rows, statuses)
       },
       {
         id: 'price',
@@ -135,7 +137,7 @@ function AgentGrid(props: Props & WithRouterProps) {
         }
       }
     ]
-  }, [roles, user])
+  }, [roles, user, statuses])
 
   const data = useMemo(() => {
     if (!deals) {

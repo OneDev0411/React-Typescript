@@ -39,7 +39,7 @@ export interface TableColumn<Row> {
   sortType?: ColumnSortType
   sortTitle?: string
   class?: string
-  sortMethod?: (column: TableColumn<Row>, rows: Row[]) => Row[]
+  sortFn?: (rows: Row[]) => Row[]
   accessor?: (row: Row) => StringOrNumber | null | undefined
   render?: (data: RenderProps<Row>) => React.ReactNode | string
 }

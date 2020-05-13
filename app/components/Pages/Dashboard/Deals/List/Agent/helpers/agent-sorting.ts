@@ -14,12 +14,12 @@ export const SORTABLE_COLUMNS: SortableColumn[] = [
     ascending: false
   },
   {
-    label: 'Status (A-Z)',
+    label: 'Status (Active, Pending, Archived)',
     value: 'status',
     ascending: true
   },
   {
-    label: 'Status (Z-A)',
+    label: 'Status (Archived, Pending, Active)',
     value: 'status',
     ascending: false
   },
