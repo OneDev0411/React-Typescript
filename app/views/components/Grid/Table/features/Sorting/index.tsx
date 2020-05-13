@@ -98,9 +98,9 @@ export function Sorting<Row>({ columns, options }: Props<Row>) {
   )
 }
 
-function getActiveSortLabel<Row>(state: StateContext) {
+function getActiveSortLabel(state: StateContext) {
   if (!state.sorting.activeSort) {
-    return 'A - Z'
+    return '- Select Sort -'
   }
 
   return state.sorting.activeSort.label

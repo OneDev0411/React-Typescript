@@ -15,7 +15,7 @@ export function getActiveSort(
 } {
   let sort = parseSortSetting(user, sortFieldSettingKey, DEFAULT_SORT)
 
-  if (location.search) {
+  if (location.query.sortBy) {
     sort = {
       id: location.query.sortBy,
       ascending: location.query.sortType === 'asc'
