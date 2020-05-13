@@ -245,7 +245,8 @@ class SendMlsListingCard extends React.Component {
     return (
       this.props.isMultiListing ||
       (this.props.selectedTemplate &&
-        this.props.selectedTemplate.template_type === 'Listings')
+        getTemplateObject(this.props.selectedTemplate).template_type ===
+          'Listings')
     )
   }
 
