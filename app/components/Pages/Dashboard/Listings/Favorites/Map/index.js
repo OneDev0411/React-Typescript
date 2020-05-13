@@ -92,7 +92,12 @@ const mapHOC = compose(
   withPropsOnChange(
     (props, nextProps) => props.markers.length !== nextProps.markers.length,
     ({ markers, mapProps }) => {
-      if (!window.google || !markers.length || !mapProps.bounds) {
+      if (
+        !window.currentMap ||
+        !window.google ||
+        !markers.length ||
+        !mapProps.bounds
+      ) {
         return {}
       }
 
