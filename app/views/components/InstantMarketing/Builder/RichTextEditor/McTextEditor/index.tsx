@@ -8,6 +8,7 @@ import { defaultTemplateVariableSuggestions } from 'components/EmailCompose/defa
 
 import { RichTextFeature } from 'components/TextEditor/features/RichText'
 import { TemplateExpressionsFeature } from 'components/TextEditor/features/TemplateExpressions'
+
 import { EmojiFeature } from '../../../../TextEditor/features/Emoji'
 
 const useStyles = makeStyles(

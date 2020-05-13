@@ -25,6 +25,10 @@ import {
   viewAs,
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
+import {
+  clearImportingGoogleContacts,
+  getNewConnectedGoogleAccount
+} from 'utils/oauth-provider'
 import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
@@ -55,10 +59,6 @@ import {
 } from './constants'
 import { CalloutSpinner, NavigateDuplicate } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
-import {
-  clearImportingGoogleContacts,
-  getNewConnectedGoogleAccount
-} from './ImportContactsButton/helpers'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'

@@ -7,7 +7,13 @@ import { TourDrawer } from 'components/tour/TourDrawer'
 
 import CreateOpenHouse from './OpenHouse'
 
-type ItemType = 'email' | 'event' | 'contact' | 'deal' | 'openhouse' | 'tour'
+export type ItemType =
+  | 'email'
+  | 'event'
+  | 'contact'
+  | 'deal'
+  | 'openhouse'
+  | 'tour'
 
 interface BaseItem<T extends ItemType> {
   title: string

@@ -7,7 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import { Button, IconButton, Box } from '@material-ui/core'
 
 import editUser from 'actions/user/edit'
-import uploadAvatar from 'actions/user/upload-avatar'
+import { uploadUserAvatarAction } from 'actions/user/upload-avatar'
 import { confirmation } from 'actions/confirmation'
 
 import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
@@ -96,7 +96,10 @@ class ProfileCatalog extends Component {
     return (
       <React.Fragment>
         <Container>
-          <Avatar user={this.props.user} data-test="profile-avatar-image" />
+          <Avatar
+            user={this.props.user}
+            data-test="profile-avatar-image"
+          />
 
           <ProfileImageActions>
             {this.props.user.profile_image_url && (
@@ -150,7 +153,7 @@ export default compose(
         try {
           setAvatar(reader.result)
           setUploading(true)
-          await dispatch(uploadAvatar(file))
+          await dispatch(uploadUserAvatarAction(file))
         } catch (error) {
           setAvatar(null)
           console.log(error)

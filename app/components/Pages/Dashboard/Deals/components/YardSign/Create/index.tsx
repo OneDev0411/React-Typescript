@@ -76,7 +76,7 @@ function Form(props: Props & StateProps & DispatchProps) {
 
   const handleCreateYardSign = async (): Promise<void> => {
     const checklist = props.checklists.find(
-      checklist => checklist.checklist_type === 'Selling'
+      checklist => checklist.checklist_type === props.deal.deal_type
     ) as IDealChecklist
 
     setIsCreatingTask(true)

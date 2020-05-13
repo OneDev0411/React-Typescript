@@ -7,16 +7,18 @@ import withHandlers from 'recompose/withHandlers'
 import { Modal } from 'react-bootstrap'
 import Flex from 'styled-flex-component'
 
-import SuccessModal from './SuccessModal'
-import { normalizeAlertOptions } from './CreateAlertModal'
-import Recipients from '../../../../../Partials/ShareView'
-import { hasRecipients } from '../../../../../../utils/helpers'
-import { createRoom } from '../../../../../../store_actions/chatroom/room'
-import createAlert from '../../../../../../store_actions/listings/alerts/create-alert'
+import { hasRecipients } from 'utils/helpers'
+import { createRoom } from 'actions/chatroom/room'
+import createAlert from 'actions/listings/alerts/create-alert'
 
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
-import IconClose from '../../../../../../views/components/SvgIcons/Close/CloseIcon'
-import { H2 } from '../../../../../../views/components/Typography/headings'
+import ActionButton from 'components/Button/ActionButton'
+import IconClose from 'components/SvgIcons/Close/CloseIcon'
+import { H2 } from 'components/Typography/headings'
+
+import Recipients from '../../../../../Partials/ShareView'
+
+import SuccessModal from './SuccessModal'
+import { normalizeAlertOptions } from './normalize-alert-options'
 
 const ShareAlertModal = ({
   onHide,
@@ -63,8 +65,8 @@ const ShareAlertModal = ({
 
 export default compose(
   connect(
-    ({ data, search }) => ({
-      user: data.user,
+    ({ user, search }) => ({
+      user,
       searchOptions: search.options,
       drawingPoints: search.map.drawing.points
     }),

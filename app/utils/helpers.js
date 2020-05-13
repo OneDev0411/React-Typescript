@@ -1,3 +1,29 @@
+export function createUrlSearch(params, filter, encode = false) {
+  const queryString = Object.keys(params)
+    .filter(key => {
+      const value = params[key]
+
+      if (typeof filter === 'function') {
+        return filter(value)
+      }
+
+      // Filtering null, undefined, NaN and empty string values
+      return (typeof value === 'number' && !Number.isNaN(value)) ||
+        typeof value === 'boolean' ||
+        Boolean(value)
+    })
+    .map(key => `${key}=${
+      encode ? encodeURIComponent(params[key]) : params[key]
+    }`)
+    .join('&')
+
+  if (queryString.length > 0) {
+    return `?${queryString}`
+  }
+
+  return ''
+}
+
 export function sortAlphabetically(a, b) {
   return compare(a.toLowerCase(), b.toLowerCase())
 }

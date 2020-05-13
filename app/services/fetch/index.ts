@@ -1,6 +1,8 @@
 import SuperAgent from 'superagent'
 
 import store from '../../stores'
+import { updateUser } from '../../store_actions/user'
+
 import config from '../../../config/public'
 import { getActiveTeamId } from '../../utils/user-teams'
 
@@ -30,14 +32,12 @@ export default class Fetch {
     const isServerSide = typeof window === 'undefined'
     const isProductionEnv = process.env.NODE_ENV === 'production'
 
-    this.options = Object.assign(
-      {
-        proxy: false,
-        progress: null,
-        useReferencedFormat: true
-      },
-      options
-    )
+    this.options = {
+      proxy: false,
+      progress: null,
+      useReferencedFormat: true,
+      ...options
+    }
 
     this._middlewares = this.registerMiddlewares(this.options)
     this._isServerSide = isServerSide
@@ -47,7 +47,7 @@ export default class Fetch {
     this._startTime = Date.now()
   }
 
-  _create(method, endpoint): SuperAgent.SuperAgentRequest {
+  _create(method: string, endpoint: string): SuperAgent.SuperAgentRequest {
     const { user, brand } = store.getState() as any
 
     let brandId
@@ -100,24 +100,36 @@ export default class Fetch {
       agent.set('X-RECHAT-BRAND', brandId)
     }
 
-    agent.on('response', response => {
-      this.runMiddlewares(response)
+    agent.on(
+      'response',
+      (
+        response: SuperAgent.Response & { req: SuperAgent.SuperAgentRequest }
+      ) => {
+        this.runMiddlewares(response)
 
-      this.logResponse(response)
-    })
-
-    agent.on('error', error => {
-      this.logResponse(error.response)
-
-      const errorCode = error.response && ~~error.response.statusCode
-
-      // create error log
-      this.createErrorLog(errorCode, error)
-
-      if (errorCode === 401) {
-        this.handle401Error(error)
+        this.logResponse(response)
       }
-    })
+    )
+
+    agent.on(
+      'error',
+      (error: {
+        response: (SuperAgent.Response & {
+          statusCode: number
+        }) & { req: SuperAgent.SuperAgentRequest }
+      }) => {
+        const errorCode = error.response && ~~error.response.statusCode
+
+        this.logResponse(error.response)
+
+        // create error log
+        this.createErrorLog(errorCode, error)
+
+        if (errorCode === 401) {
+          this.handle401Error(error, agent, user)
+        }
+      }
+    )
 
     if (typeof this.options.progress === 'function') {
       agent.on('progress', this.options.progress)
@@ -126,44 +138,89 @@ export default class Fetch {
     return agent
   }
 
-  handle401Error(error) {
+  handle401Error(error, agent: SuperAgent.SuperAgentRequest, user: IUser) {
     // server send to client 401 error for invalid answer!
     // Emil said "we can not change it in server",
     // so we forced to handle it in here with this dirty way.
     // https://gitlab.com/rechat/web/issues/695
     //
-    const { body } = error.response
-    const errorMessage = body && body.message
     const isUpgradeToAgentRequest =
-      errorMessage === 'Invalid answer to secret question'
+      error.response &&
+      error.response.body &&
+      error.response.body.message === 'Invalid answer to secret question'
 
-    // handle session expiration
-    if (!this._isServerSide && this._isLoggedIn && !isUpgradeToAgentRequest) {
-      window.location.href = '/signout'
+    if (isUpgradeToAgentRequest || this._isServerSide || !this._isLoggedIn) {
+      return
+    }
+
+    this.refreshToken(agent, user)
+  }
+
+  /**
+   * tries to refresh the token and retry the request when token is expired
+   */
+  async refreshToken(
+    agent: SuperAgent.SuperAgentRequest & {
+      header?: any
+      _retries?: number
+      _retry?: () => void
+    },
+    user: IUser
+  ) {
+    if (Number(agent._retries) > 0) {
+      agent._retries = 0
+
+      return
+    }
+
+    agent._retries = 1
+
+    try {
+      const {
+        body: { access_token, refresh_token }
+      } = await SuperAgent.post(`${this._appUrl}/api/user/refresh-token`).send({
+        access_token: user.access_token,
+        refresh_token: user.refresh_token
+      })
+
+      store.dispatch(
+        updateUser({
+          access_token,
+          refresh_token
+        })
+      )
+
+      // set new token
+      agent.header!.Authorization = `Bearer ${access_token}`
+
+      // retry to previous request with new token
+      agent._retry!()
+    } catch (e) {
+      console.log('[ Fetch ] Can not refresh token')
     }
   }
 
-  get(endpoint) {
+  get(endpoint: string) {
     return this._create('get', endpoint)
   }
 
-  post(endpoint) {
+  post(endpoint: string) {
     return this._create('post', endpoint)
   }
 
-  put(endpoint) {
+  put(endpoint: string) {
     return this._create('put', endpoint)
   }
 
-  patch(endpoint) {
+  patch(endpoint: string) {
     return this._create('patch', endpoint)
   }
 
-  delete(endpoint) {
+  delete(endpoint: string) {
     return this._create('delete', endpoint)
   }
 
-  upload(endpoint, method = 'post') {
+  upload(endpoint: string, method = 'post') {
     return this._create(method, endpoint)
   }
 
@@ -180,13 +237,15 @@ export default class Fetch {
     return list
   }
 
-  runMiddlewares(response: ApiResponse<any>) {
+  runMiddlewares(
+    response: SuperAgent.Response & { req: SuperAgent.SuperAgentRequest }
+  ) {
     Object.values(this._middlewares).forEach(fn => fn(response))
   }
 
   createErrorLog(
-    code,
-    error: { response?: SuperAgent.ResponseError; message?: string } = {}
+    code: number,
+    error: { response?: SuperAgent.Response; message?: string } = {}
   ) {
     if (!this._isProductionEnv) {
       return
@@ -210,7 +269,12 @@ export default class Fetch {
       const status = response.status
       const request = response.req
       const elapsed = Date.now() - (this._startTime || Date.now())
-      console.log(`${status} <${requestId}> (${elapsed}ms) ${request.method} ${request.url}`)
+
+      console.log(
+        `${status} <${requestId}> (${elapsed}ms) ${request.method} ${
+          request.url
+        }`
+      )
     }
   }
 }

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
 
-import { Item } from './types'
+import { Item, ItemType } from './types'
 import Button from './Button'
 import items from './items'
 import Menu from './Menu'
@@ -18,6 +18,7 @@ interface Props {
   onCreateOpenHouse: (
     oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => void
+  availableActions: ItemType[]
 }
 
 export default function GlobalActionsButton(props: Props) {
@@ -125,11 +126,20 @@ export default function GlobalActionsButton(props: Props) {
     }
   }
 
+  const availableItems = items.filter(item =>
+    props.availableActions.includes(item.type)
+  )
+
+  // If no items are available, we should not render the button at all
+  if (availableItems.length === 0) {
+    return null
+  }
+
   return (
     <>
       <Button onClick={handleMenuOpen} />
       <Menu
-        items={items}
+        items={availableItems}
         anchorEl={anchorEl}
         onClose={handleMenuClose}
         onItemClick={handleItemClick}

@@ -8,7 +8,7 @@ export function useMarketingCenterCategories(): SectionItem[] {
   const allSections = _values(useMarketingCenterSections({ types: null }))
 
   return allSections.reduce((prev, curr) => {
-    // We don't need my designs section
+    // We don't need all designs section
     return [...prev, ...curr.items.filter(item => !item.isIndex)]
   }, [])
 }

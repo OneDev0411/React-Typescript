@@ -1,10 +1,10 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Link as RouterLink } from 'react-router'
 import { Link, MenuItem } from '@material-ui/core'
 import Flex from 'styled-flex-component'
+
+import { OAuthProvider } from 'constants/contacts'
 
 import SplitButton from 'components/SplitButton'
 import { IAppState } from 'reducers'
@@ -17,10 +17,11 @@ import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { iconSizes } from 'components/SvgIcons/icon-sizes'
 
-import { CsvIcon, GoogleIcon, ButtonText, OutlookIcon } from './styled'
+import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
+
 import { ConnectedAccount } from './ConnectedAccount'
 import { IMPORT_TOOLTIP_VISITED_SETTINGS_KEY } from '../constants'
-import { useConnectOAuthAccount } from './use-connect-oauth-account'
+import { CsvIcon, GoogleIcon, ButtonText, OutlookIcon } from './styled'
 
 interface Props {
   accounts: IOAuthAccount[]

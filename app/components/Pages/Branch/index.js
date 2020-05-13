@@ -10,7 +10,7 @@ import idx from 'idx'
 import publicConfig from '../../../../config/public'
 
 import signin from '../../../store_actions/auth/signin'
-
+import { createUrlSearch } from '../../../utils/helpers'
 import Loading from '../../Partials/Loading'
 import { getBrandInfo } from '../Auth/SignIn/get-brand-info'
 import { lookUpUserByEmail } from '../../../models/user/lookup-user-by-email'
@@ -22,7 +22,9 @@ const OOPS_PAGE = '/oops'
 const branchKey = publicConfig.branch.key
 
 const getConfilictMessageText = email =>
-  `You are currently logged in a different user.  Please sign out and sign in using ${email}.`
+  `You are currently logged in a different user.  Please sign out and sign in ${
+    email ? `using ${decodeURIComponent(email)}` : 'again'
+  }.`
 
 const getActionRedirectURL = params => {
   const { action, room, alert, listing, crm_task } = params
@@ -107,7 +109,8 @@ const redirectHandler = async (
     action,
     loggedInUser,
     userInfo,
-    branchUrl
+    branchUrl,
+    email
   }
   const hasConflict = () =>
     loggedInUser &&
@@ -115,8 +118,8 @@ const redirectHandler = async (
       (email && decodeURIComponent(email) !== loggedInUser.email))
 
   if (actionType === 'VERIFY') {
-    // console.log('verify')
     redirect = generateVerificationActionRedirectUrl(branchData)
+    console.log('verify', branchData, redirect)
 
     const setParams = () => ({
       ...params,
@@ -144,33 +147,31 @@ const redirectHandler = async (
     }
   } else if (userInfo && userInfo.is_shadow) {
     console.log('isShadow:', branchData)
-    redirect = `register?token=${token}`
+    redirect = '/register'
 
     if (listing) {
-      redirect = `/dashboard/mls/${listing}?token=${token}`
+      redirect = `/dashboard/mls/${listing}`
     }
 
-    if (phone_number) {
-      redirect += `&phone_number=${phone_number}`
+    let queryParams = {
+      token,
+      email,
+      phone_number,
+      redirectTo: getActionRedirectURL(branchData)
     }
-
-    if (email) {
-      redirect += `&email=${email}`
-    }
-
-    redirect += `&redirectTo=${encodeURIComponent(
-      getActionRedirectURL(branchData)
-    )}`
 
     if (hasConflict()) {
       console.log('you logged with different user')
-      params.redirectTo = encodeURIComponent(redirect)
+      queryParams.redirectFromSignout = redirect
+      params.to = `/signout${createUrlSearch(queryParams)}`
       params.messageText =
         'You are currently logged in a different user. Please sign out and sign up your new account.'
       setActiveModal({ name: 'SHADOW_CONFLICT', params })
 
       return
     }
+
+    redirect += createUrlSearch(queryParams)
   } else if (actionType === 'UserLogin') {
     console.log('UserLogin', branchData)
 
@@ -182,7 +183,7 @@ const redirectHandler = async (
             grant_type: 'refresh_token',
             client_id: branchData.refresh_token.client
           },
-          undefined,
+          '/dashboard/',
           branchData.refresh_token.user
         )
       )
@@ -194,7 +195,7 @@ const redirectHandler = async (
         name: 'CONFLICT',
         params: {
           ...params,
-          messageText: getConfilictMessageText(encodeURIComponent(email)),
+          messageText: getConfilictMessageText(email),
           actionButtonProps: {
             onClick: loginHandler,
             text: 'Sign in'
@@ -214,8 +215,8 @@ const redirectHandler = async (
 
     if (hasConflict()) {
       console.log('you logged with deferent user')
-      params.redirectTo = encodeURIComponent(redirect)
-      params.messageText = getConfilictMessageText(encodeURIComponent(email))
+      params.redirectTo = redirect
+      params.messageText = getConfilictMessageText(email)
       setActiveModal({ name: 'CONFLICT', params })
 
       return
@@ -232,7 +233,7 @@ const redirectHandler = async (
     redirect = !listing
       ? `/signin?${username}&redirectTo=`
       : `/dashboard/mls/${listing}?${username}&redirectTo=`
-    redirect += encodeURIComponent(getActionRedirectURL(branchData))
+    redirect += getActionRedirectURL(branchData)
   }
 
   browserHistory.push(redirect)

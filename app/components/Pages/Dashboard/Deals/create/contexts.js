@@ -4,9 +4,12 @@ import cn from 'classnames'
 import _ from 'underscore'
 import fecha from 'fecha'
 
+import { Button } from '@material-ui/core'
+
 import { H2 } from 'components/Typography/headings'
 
 import { DateTimePicker } from 'components/DateTimePicker'
+import AddIcon from 'components/SvgIcons/Add/AddIcon'
 
 import Input from '../../../../../views/components/Input'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
@@ -129,8 +132,12 @@ export default class extends React.Component {
                           onEdit={handleOpen}
                         />
                       ) : (
-                        <div className="add-item" onClick={handleOpen}>
-                          <span className="icon">+</span>
+                        <Button
+                          color="secondary"
+                          className="add-item"
+                          onClick={handleOpen}
+                        >
+                          <AddIcon className="addIcon" />
                           <span
                             className={cn('text', {
                               hasError: hasError && field.mandatory
@@ -141,7 +148,7 @@ export default class extends React.Component {
                               <span className="required">*</span>
                             )}
                           </span>
-                        </div>
+                        </Button>
                       )}
                     </>
                   </div>

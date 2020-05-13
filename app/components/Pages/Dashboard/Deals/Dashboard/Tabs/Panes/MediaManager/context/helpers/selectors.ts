@@ -12,6 +12,12 @@ export const getSelectedMedia = (
   return mediaGallery.filter(media => media.selected)
 }
 
+export const getSelectableMedia = (
+  mediaGallery: IMediaGallery
+): IMediaGallery => {
+  return mediaGallery.filter(media => !media.isNew)
+}
+
 export const getSelectedMediaIds = (mediaGallery: IMediaGallery): string[] => {
   return mediaGallery.map(media => media.file)
 }

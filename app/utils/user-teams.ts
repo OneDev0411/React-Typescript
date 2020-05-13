@@ -1,9 +1,12 @@
 import cookie from 'js-cookie'
 import idx from 'idx'
-import { notDeleted } from './not-deleted'
-import { flatMap, identity, uniqBy } from 'lodash'
+import { flatMap, identity, uniqBy, get as _get } from 'lodash'
 
 import { ACL } from '../constants/acl'
+
+import { notDeleted } from './not-deleted'
+import { DEFAULT_BRAND_PALETTE } from './constants'
+import flattenBrand from './flatten-brand'
 
 function getActiveTeamFromCookieOrUser(user) {
   return user.active_brand || user.brand || cookie.get('rechat-active-team')
@@ -25,6 +28,16 @@ export function getActiveTeam(user: Partial<IUser> | null): IUserTeam | null {
   }
 
   return activeTeam || null
+}
+
+export function getActiveBrand(user: Partial<IUser> | null): IBrand | null {
+  const activeTeam = getActiveTeam(user)
+
+  if (activeTeam == null) {
+    return null
+  }
+
+  return activeTeam.brand
 }
 
 export function getActiveTeamId(user: IUser | null): UUID | null {
@@ -152,9 +165,6 @@ const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
   const team = getActiveTeam(user)
   const settings = (team && getSettings(team)) || {}
 
-  // console.log('team', team)
-  // console.log('teamsettings', getSettings(team))
-
   return key ? settings[key] : settings
 }
 
@@ -165,6 +175,26 @@ export const getActiveTeamSettings = getSettingsFromActiveTeam(
 export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(
   team => team.settings
 )
+
+export function getActiveTeamPalette(user: IUser): BrandSettingsPalette {
+  const team = getActiveTeam(user)
+
+  if (!team || !team.brand) {
+    return DEFAULT_BRAND_PALETTE
+  }
+
+  const brand = flattenBrand(team.brand)
+  if (
+    !brand ||
+    !brand.settings ||
+    !brand.settings.palette ||
+    !brand.settings.palette.palette
+  ) {
+    return DEFAULT_BRAND_PALETTE
+  }
+
+  return brand.settings.palette.palette
+}
 
 export function viewAsEveryoneOnTeam(user: IUser | null): boolean {
   if (user == null) {

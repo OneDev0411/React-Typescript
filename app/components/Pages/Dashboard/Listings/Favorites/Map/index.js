@@ -12,10 +12,10 @@ import * as actions from '../../../../../../store_actions/listings/map'
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
 
 const map = ({
+  brand,
   user,
   style,
   markers,
-  appData,
   options,
   onChange,
   defaultZoom,
@@ -42,10 +42,10 @@ const map = ({
 
         return (
           <Marker
+            brand={brand}
             lat={lat}
             lng={lng}
             user={user}
-            data={appData}
             listing={marker}
             key={`MARKER_${id}`}
           />
@@ -68,13 +68,13 @@ const mapHOC = compose(
     }
   }),
   connect(
-    ({ user, data, favorites }) => {
+    ({ user, brand, favorites }) => {
       const { map } = favorites
 
       return {
         map,
         user,
-        appData: data,
+        brand,
         mapProps: map.props
       }
     },
@@ -92,7 +92,12 @@ const mapHOC = compose(
   withPropsOnChange(
     (props, nextProps) => props.markers.length !== nextProps.markers.length,
     ({ markers, mapProps }) => {
-      if (!window.google || !markers.length || !mapProps.bounds) {
+      if (
+        !window.currentMap ||
+        !window.google ||
+        !markers.length ||
+        !mapProps.bounds
+      ) {
         return {}
       }
 

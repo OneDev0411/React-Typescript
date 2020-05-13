@@ -144,7 +144,7 @@ export class TourDrawer extends React.Component {
   onDelete = () => {
     this.context.setConfirmationModal({
       message: 'Delete Toursheet',
-      description: `Are you sure about deleting "${this.props.tour.title}"?`,
+      description: `Are you sure about deleting "${this.state.tour.title}"?`,
       confirmLabel: 'Yes, I am sure',
       onConfirm: () => this.handleDelete()
     })

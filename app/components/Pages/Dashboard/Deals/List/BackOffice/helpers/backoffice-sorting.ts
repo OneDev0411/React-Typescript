@@ -29,7 +29,7 @@ export const SORTABLE_COLUMNS: SortableColumn[] = [
     ascending: true
   },
   {
-    label: 'Contract Price (Hight-Low)',
+    label: 'Contract Price (High-Low)',
     value: 'contract-price',
     ascending: false
   },

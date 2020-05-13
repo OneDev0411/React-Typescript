@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
+import { deleteBrandTemplate } from 'models/instant-marketing/delete-brand-template'
 
 const ALL_MEDIUMS = [
   'Email',
@@ -10,18 +11,19 @@ const ALL_MEDIUMS = [
   'InstagramStory'
 ]
 
-interface TemplatesList {
-  templates: IMarketingTemplate[]
-  loading: boolean
-  error: Error | null
+interface TemplatesData {
+  templates: IBrandMarketingTemplate[]
+  isLoading: boolean
+  error: Nullable<Error>
+  deleteTemplate: (template: IBrandMarketingTemplate) => Promise<void>
 }
 
 export function useTemplates(
   brandId: UUID,
   mediums: string[] = ALL_MEDIUMS
-): TemplatesList {
-  const [templates, setTemplates] = useState<IMarketingTemplate[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
+): TemplatesData {
+  const [templates, setTemplates] = useState<IBrandMarketingTemplate[]>([])
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
@@ -33,19 +35,19 @@ export function useTemplates(
       }
 
       try {
-        setLoading(true)
+        setIsLoading(true)
 
         const templates = await getTemplates(brandId, [], mediums)
 
         if (!didCancel) {
           setTemplates(templates)
-          setLoading(false)
+          setIsLoading(false)
           setError(null)
         }
       } catch (error) {
         if (!didCancel) {
-          console.error(error)
-          setLoading(false)
+          setTemplates([])
+          setIsLoading(false)
           setError(error)
         }
       }
@@ -58,9 +60,10 @@ export function useTemplates(
     }
   }, [brandId, mediums])
 
-  return {
-    templates,
-    loading,
-    error
+  const deleteTemplate = async (template: IBrandMarketingTemplate) => {
+    await deleteBrandTemplate(template.brand, template.id)
+    setTemplates(templates.filter(item => item.id !== template.id))
   }
+
+  return { templates, isLoading, deleteTemplate, error }
 }
