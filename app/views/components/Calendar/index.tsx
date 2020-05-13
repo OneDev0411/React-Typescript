@@ -63,6 +63,11 @@ interface StateProps {
   user: IUser
 }
 
+interface SocketUpdate {
+  upserted: ICalendarEvent[]
+  deleted: UUID[]
+}
+
 export function Calendar({
   calendarRef,
   viewAsUsers,
@@ -103,7 +108,6 @@ export function Calendar({
   const [calendarRange, setCalendarRange] = useState<NumberRange>(
     getDateRange()
   )
-
   // create a debounced function for setActiveDate
   const [debouncedSetActiveDate] = useDebouncedCallback(setActiveDate, 500)
 
@@ -450,15 +454,41 @@ export function Calendar({
     // eslint-disable-next-line
   }, [listRows])
 
-  useEffectOnce(() => {
+  useEffect(() => {
     const socket: SocketIOClient.Socket = (window as any).socket
 
     if (!socket) {
       return
     }
 
-    function handleUpdate() {
-      handleLoadEvents(activeDate, initialRange)
+    function handleUpdate({ upserted, deleted }: SocketUpdate) {
+      if (upserted.length === 0 && deleted.length === 0) {
+        return
+      }
+
+      const currentEvents: ICalendarEvent[] =
+        deleted.length > 0
+          ? events.filter(e => !deleted.includes(e.id))
+          : events
+      const nextEvents =
+        upserted.length > 0 ? [...upserted, ...currentEvents] : currentEvents
+
+      const normalizedEvents = normalizeEvents(
+        nextEvents,
+        calendarRange,
+        contrariwise
+      )
+
+      const nextRows = createListRows(
+        normalizedEvents,
+        activeDate,
+        placeholders
+      )
+
+      // update events list
+      setEvents(nextEvents)
+
+      setListRows(nextRows)
     }
 
     socket.on('Calendar.Updated', handleUpdate)
