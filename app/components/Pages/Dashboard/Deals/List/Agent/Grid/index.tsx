@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
-
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { TableCellProps } from '@material-ui/core'
@@ -17,9 +16,19 @@ import {
   getField,
   getFormattedPrice
 } from 'models/Deal/helpers/context'
+import { getActiveTeamId } from 'utils/user-teams'
+
+import { useDealStatuses } from 'hooks/use-deal-statuses'
+
+import {
+  isActiveDeal,
+  isArchivedDeal,
+  isPendingDeal
+} from 'deals/List/helpers/statuses'
 
 import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 import { getGridSort } from '../../helpers/sorting'
+import { sortStatus } from '../helpers/status-sorting'
 
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
@@ -31,12 +40,28 @@ import CriticalDate, {
 } from '../../components/table-columns/CriticalDate'
 
 import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
-import { Filters } from '../Filters'
-import { statusSortMethod } from '../../components/table-columns/Status/helpers/sort-method'
 
 interface Props {
   sortableColumns: SortableColumn[]
   activeFilter: string
+}
+
+const Filters = {
+  all: (deal: IDeal, statuses: IDealStatus[] = []) => {
+    return !isArchivedDeal(deal, statuses)
+  },
+  drafts: (deal: IDeal) => {
+    return deal.is_draft === true
+  },
+  listings: (deal: IDeal, statuses: IDealStatus[] = []) => {
+    return isActiveDeal(deal, statuses)
+  },
+  pendings: (deal: IDeal, statuses: IDealStatus[] = []) => {
+    return isPendingDeal(deal, statuses)
+  },
+  archives: (deal: IDeal, statuses: IDealStatus[] = []) => {
+    return isArchivedDeal(deal, statuses)
+  }
 }
 
 function AgentGrid(props: Props & WithRouterProps) {
@@ -50,6 +75,8 @@ function AgentGrid(props: Props & WithRouterProps) {
       user
     })
   )
+
+  const statuses = useDealStatuses(getActiveTeamId(user)!)
 
   const columns = useMemo(() => {
     return [
@@ -73,8 +100,8 @@ function AgentGrid(props: Props & WithRouterProps) {
         id: 'status',
         width: '15%',
         class: 'opaque',
-        accessor: (deal: IDeal) => getStatus(deal),
-        sortMethod: statusSortMethod
+        accessor: (deal: IDeal) => getStatus(deal) || '',
+        sortFn: (rows: IDeal[]) => sortStatus(rows, statuses)
       },
       {
         id: 'price',
@@ -110,7 +137,7 @@ function AgentGrid(props: Props & WithRouterProps) {
         }
       }
     ]
-  }, [roles, user])
+  }, [roles, user, statuses])
 
   const data = useMemo(() => {
     if (!deals) {
@@ -122,8 +149,10 @@ function AgentGrid(props: Props & WithRouterProps) {
         ? Filters[props.activeFilter]
         : Filters.all
 
-    return Object.values(deals).filter(deal => filterFn(deal)) as IDeal[]
-  }, [deals, props.activeFilter])
+    return Object.values(deals).filter(deal =>
+      filterFn(deal, statuses)
+    ) as IDeal[]
+  }, [deals, statuses, props.activeFilter])
 
   const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
     return {
@@ -145,7 +174,7 @@ function AgentGrid(props: Props & WithRouterProps) {
       columns={columns}
       rows={data}
       totalRows={data.length}
-      virtualize={data.length > 150}
+      virtualize={data.length > 30}
       LoadingStateComponent={LoadingState}
       EmptyStateComponent={EmptyState}
       loading={isFetchingDeals ? 'middle' : null}

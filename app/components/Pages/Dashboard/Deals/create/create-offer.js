@@ -10,6 +10,7 @@ import { Button } from '@material-ui/core'
 
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
+import { getDealStatuses } from 'models/Deal/status/get-statuses'
 
 import { FullPageHeader } from 'components/FullPageHeader'
 
@@ -49,7 +50,8 @@ class CreateOffer extends React.Component {
       escrowOfficers: {},
       referrals: {},
       submitError: null,
-      validationErrors: []
+      validationErrors: [],
+      statuses: []
     }
 
     this.isFormSubmitted = false
@@ -61,6 +63,8 @@ class CreateOffer extends React.Component {
     if (deal.roles) {
       this.initializeRoles(deal.roles)
     }
+
+    this.loadStatuses()
   }
 
   initializeContexts = () => {
@@ -442,15 +446,27 @@ class CreateOffer extends React.Component {
     }
   }
 
+  loadStatuses = async () => {
+    try {
+      const statuses = await getDealStatuses(this.props.deal.brand.id)
+
+      this.setState({
+        statuses
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   get StatusList() {
-    return this.props.deal.property_type.includes('Lease')
-      ? ['Active', 'Lease Contract']
-      : [
-          'Active Contingent',
-          'Active Kick Out',
-          'Active Option Contract',
-          'Pending'
-        ]
+    return this.state.statuses
+      .filter(
+        status =>
+          status.is_pending &&
+          status.deal_types.includes('Buying') &&
+          status.property_types.includes(this.props.deal.property_type)
+      )
+      .map(status => status.label)
   }
 
   render() {

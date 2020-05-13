@@ -34,33 +34,21 @@ function sort<Row>(
   sortBy: string,
   isAscendingSort: boolean
 ): Row[] {
-  const sortColumn = getSortColumn<Row>(columns, sortBy)
-  const sort = getSortFn<Row>(columns, sortBy)
+  const column = columns.find(column => column.id === sortBy)
 
-  const sortedData = sortData(data, (row, index) => {
-    return sort(
-      resolveAccessor(
-        sortColumn ? sortColumn.accessor : row[sortBy],
-        row,
-        index
+  let sortedData: Row[] = []
+
+  if (column && column.sortFn) {
+    sortedData = column.sortFn(data)
+  } else {
+    sortedData = sortData(data, (row, index) =>
+      defaultSortMethod(
+        resolveAccessor(column ? column.accessor : row[sortBy], row, index)
       )
     )
-  })
+  }
 
   return isAscendingSort ? sortedData : sortedData.reverse()
-}
-
-function getSortFn<Row>(columns: TableColumn<Row>[], sortBy: string) {
-  const column = getSortColumn(columns, sortBy)
-
-  return column && column.sortMethod ? column.sortMethod : defaultSortMethod
-}
-
-function getSortColumn<Row>(
-  columns: TableColumn<Row>[],
-  sortBy: string
-): TableColumn<Row> | undefined {
-  return columns.find(column => column.id === sortBy)
 }
 
 function defaultSortMethod(accessor: string | number): string | number {

@@ -32,6 +32,8 @@ import {
 
 import { isBackOffice } from 'utils/user-teams'
 
+import { getDealStatuses } from 'models/Deal/status/get-statuses'
+
 import DealType from './deal-type'
 import DealSide from './deal-side'
 import DealPropertyType from './deal-property-type'
@@ -64,7 +66,8 @@ class CreateDeal extends React.Component {
     referrals: {},
     escrowOfficers: {},
     submitError: null,
-    validationErrors: []
+    validationErrors: [],
+    statuses: []
   }
 
   componentDidMount() {
@@ -75,6 +78,8 @@ class CreateDeal extends React.Component {
     if (this.props.params.id) {
       this.initializeDeal()
     }
+
+    this.loadStatuses()
   }
 
   isFormSubmitted = false
@@ -327,23 +332,35 @@ class CreateDeal extends React.Component {
     return getActiveTeamId(this.props.user)
   }
 
-  get StatusList() {
-    if (this.state.dealSide === 'Selling') {
-      const isLeaseOrCommercial =
-        this.state.dealPropertyType.includes('Commercial') ||
-        this.state.dealPropertyType.includes('Lease')
+  loadStatuses = async () => {
+    try {
+      const statuses = await getDealStatuses(getActiveTeamId(this.props.user))
 
-      return isLeaseOrCommercial ? [] : ['Coming Soon', 'Active']
+      this.setState({
+        statuses
+      })
+    } catch (e) {
+      console.log(e)
     }
+  }
 
-    return this.state.dealPropertyType.includes('Lease')
-      ? ['Active', 'Lease Contract']
-      : [
-          'Active Contingent',
-          'Active Kick Out',
-          'Active Option Contract',
-          'Pending'
-        ]
+  get StatusList() {
+    return this.state.statuses
+      .filter(status => {
+        if (this.state.dealSide === 'Selling' && !status.is_active) {
+          return false
+        }
+
+        if (this.state.dealSide === 'Buying' && !status.is_pending) {
+          return false
+        }
+
+        return (
+          status.deal_types.includes(this.state.dealSide) &&
+          status.property_types.includes(this.state.dealPropertyType)
+        )
+      })
+      .map(status => status.label)
   }
 
   /**
