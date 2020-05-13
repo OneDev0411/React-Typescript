@@ -1,27 +1,42 @@
-import { getBrandStyles } from 'utils/marketing-center/templates'
-
 import {
-  getAsset,
-  getListingUrl,
-  getColor
-} from '../../../helpers/nunjucks-functions'
+  getMjmlBrandStyles,
+  getNonMjmlBrandStyles
+} from 'utils/marketing-center/templates'
 
-export interface TemplateRenderData {
-  palette: string
-  getAsset: (assetName: string) => string
+import { getListingUrl, get } from '../../../helpers/nunjucks-functions'
+
+interface CommonTemplateRenderData {
   getListingUrl: (listing: IListing) => string
-  getColor: (color: string) => string
+  get: (name: BrandSettingsPaletteKey) => string
 }
 
-export default function getTemplateRenderData(
-  brand: IUserTeam
-): TemplateRenderData {
-  const palette = getBrandStyles(brand)
+export interface TemplateRenderData extends CommonTemplateRenderData {
+  palette: string
+}
+
+function getCommonTemplateRenderData(brand: IBrand): CommonTemplateRenderData {
+  return {
+    getListingUrl: getListingUrl.bind(null, brand),
+    get: get.bind(null, brand)
+  }
+}
+
+export function getMjmlTemplateRenderData(brand: IBrand): TemplateRenderData {
+  const palette = getMjmlBrandStyles(brand, get.bind(null, brand))
 
   return {
     palette,
-    getAsset: getAsset.bind(null, brand),
-    getListingUrl: getListingUrl.bind(null, brand),
-    getColor: getColor.bind(null, brand)
+    ...getCommonTemplateRenderData(brand)
+  }
+}
+
+export function getNonMjmlTemplateRenderData(
+  brand: IBrand
+): TemplateRenderData {
+  const palette = getNonMjmlBrandStyles(brand, get.bind(null, brand))
+
+  return {
+    palette,
+    ...getCommonTemplateRenderData(brand)
   }
 }

@@ -12,7 +12,7 @@ import { CreateContact } from 'components/CreateContact'
 import IconCsv from 'components/SvgIcons/Csv/IconCsv'
 import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 
-import { useConnectOAuthAccount } from '../ImportContactsButton/use-connect-oauth-account'
+import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 
 interface Props {
   onCreateContact: (contact: IContact) => void

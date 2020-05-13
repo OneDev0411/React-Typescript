@@ -139,7 +139,6 @@ const CalendarList: React.FC<Props> = props => {
       </AutoSizer>
 
       <EventController
-        activeDate={activeDate}
         user={props.user}
         onEventChange={handleEventChange}
         onScheduledEmailChange={handleScheduledEmailChange}

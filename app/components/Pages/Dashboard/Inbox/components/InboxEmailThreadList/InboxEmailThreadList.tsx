@@ -25,7 +25,7 @@ interface Props {
   onSelectEmailThread: (emailThreadId: UUID | undefined) => void
   searchQuery?: string
   onSearchStatusChange?: (searching: boolean) => void
-  onEmailThreadsUpdate?: (emailThreads: IEmailThread<'contacts'>[]) => void
+  onUpdateEmailThreads?: (emailThreads: IEmailThread<'contacts'>[]) => void
 }
 
 export default function InboxEmailThreadList({
@@ -33,7 +33,7 @@ export default function InboxEmailThreadList({
   onSelectEmailThread,
   searchQuery,
   onSearchStatusChange,
-  onEmailThreadsUpdate
+  onUpdateEmailThreads
 }: Props) {
   const [emailThreads, setEmailThreads] = useState<IEmailThread<'contacts'>[]>(
     []
@@ -49,11 +49,11 @@ export default function InboxEmailThreadList({
   searchMetaDataRef.current.searchQuery = searchQuery
 
   useEffect(() => {
-    onEmailThreadsUpdate && onEmailThreadsUpdate([])
+    onUpdateEmailThreads && onUpdateEmailThreads([])
     setEmailThreads([])
     searchQuery && onSelectEmailThread(undefined)
     delete searchMetaDataRef.current.next
-  }, [onEmailThreadsUpdate, searchQuery])
+  }, [onUpdateEmailThreads, searchQuery])
 
   const dispatch = useDispatch()
 
@@ -77,12 +77,12 @@ export default function InboxEmailThreadList({
           .concat(filteredUpdatedEmailThreads)
           .sort((a, b) => b.last_message_date - a.last_message_date)
 
-        onEmailThreadsUpdate && onEmailThreadsUpdate(newEmailThreads)
+        onUpdateEmailThreads && onUpdateEmailThreads(newEmailThreads)
 
         return newEmailThreads
       })
     },
-    [onEmailThreadsUpdate]
+    [onUpdateEmailThreads]
   )
 
   const handleUpdateEmailThreads = useCallback(

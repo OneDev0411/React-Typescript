@@ -6,7 +6,14 @@ import ActionButton from '../../../../../views/components/Button/ActionButton'
 import { SigninButton } from '../SigninButton'
 
 const ConflictModal = ({ params, brandInfo }) => {
-  let { email, userInfo, redirectTo, messageText, actionButtonProps } = params
+  let {
+    to,
+    email,
+    userInfo,
+    redirectTo,
+    messageText,
+    actionButtonProps
+  } = params
   let is_shadow
 
   if (userInfo) {
@@ -17,14 +24,12 @@ const ConflictModal = ({ params, brandInfo }) => {
 
   const actionButton = actionButtonProps || {
     text: 'Sign in',
-    href: `/signout?username=${encodeURIComponent(
-      email
-    )}&redirectTo=${redirectTo}`
+    href: `/signout?username=${email}&redirectTo=${redirectTo}`
   }
 
   if (is_shadow) {
     actionButton.text = 'Sign out'
-    actionButton.href = `/signout?redirectFromSignout=${redirectTo}`
+    actionButton.href = to
   }
 
   return (

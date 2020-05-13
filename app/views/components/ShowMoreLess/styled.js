@@ -8,6 +8,7 @@ export const ShowMoreLessText = styled.div`
   color: ${props => props.theme.palette.primary.main};
   font-weight: 400;
   cursor: pointer;
+  width: 100%;
 `
 
 export const ArrowDown = styled(Arrow)`

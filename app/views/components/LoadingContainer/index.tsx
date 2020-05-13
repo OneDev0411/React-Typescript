@@ -4,14 +4,6 @@ import Flex from 'styled-flex-component'
 import { primary } from 'views/utils/colors'
 import Spinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
-LoadingContainer.defaultProps = {
-  className: '',
-  color: primary,
-  size: '6em',
-  title: '',
-  style: { padding: 'calc(50% - 1px) 0' }
-}
-
 interface Props {
   className?: string
   color?: string

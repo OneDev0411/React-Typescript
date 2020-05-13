@@ -26,6 +26,10 @@ export default function useEmailThreadEvents(
   useEffect(() => {
     const socket: SocketIOClient.Socket = (window as any).socket
 
+    if (!socket) {
+      return
+    }
+
     function filterEvent(event: Event): boolean {
       if (event.threads.length === 0) {
         return false

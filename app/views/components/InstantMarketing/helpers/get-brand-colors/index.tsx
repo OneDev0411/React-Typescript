@@ -1,36 +1,26 @@
 import flattenBrand from 'utils/flatten-brand'
 
-const SHARED_COLORS = ['#fff', '#000']
 const DEFAULT_COLORS = ['#fff', '#ccc', '#999', '#666', '#333', '#000']
 
 export function getBrandColors(brand: IBrand): string[] {
-  const flattedBrand = flattenBrand(brand) as IBrand
+  const flattedBrand = flattenBrand(brand)
 
-  if (!flattedBrand.palette) {
+  if (
+    !flattedBrand ||
+    !flattedBrand.settings ||
+    !flattedBrand.settings.palette ||
+    !flattedBrand.settings.palette.palette
+  ) {
     return DEFAULT_COLORS
   }
 
-  const colors: string[] = []
+  const brandPalette = flattedBrand.settings.palette
+    .palette as BrandSettingsPalette
 
-  if (flattedBrand.palette.primary) {
-    colors.push(flattedBrand.palette.primary)
-  }
+  const colorKeys = Object.keys(brandPalette).filter(key =>
+    key.includes('color')
+  )
+  const brandColors = colorKeys.map(key => brandPalette[key])
 
-  if (flattedBrand.palette.marketing) {
-    if (flattedBrand.palette.marketing.alpha) {
-      colors.push(...Object.values(flattedBrand.palette.marketing.alpha))
-    }
-
-    if (flattedBrand.palette.marketing.beta) {
-      colors.push(...Object.values(flattedBrand.palette.marketing.beta))
-    }
-
-    if (flattedBrand.palette.marketing.theta) {
-      colors.push(...Object.values(flattedBrand.palette.marketing.theta))
-    }
-  }
-
-  colors.push(...SHARED_COLORS)
-
-  return [...new Set(colors.map(color => color.toLowerCase()))]
+  return [...new Set(brandColors)]
 }

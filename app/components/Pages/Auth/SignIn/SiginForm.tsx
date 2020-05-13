@@ -15,6 +15,7 @@ interface Props {
   submitMessage: SubmitMessage | null
   onSubmit: (values) => void
   handleBackToLookupForm: () => void
+  username: string
 }
 
 export default function SignInForm({
@@ -22,7 +23,8 @@ export default function SignInForm({
   isLoading,
   submitMessage,
   onSubmit,
-  handleBackToLookupForm
+  handleBackToLookupForm,
+  username
 }: Props) {
   const validate = values => {
     let errors: { password?: string } = {}
@@ -69,7 +71,9 @@ export default function SignInForm({
           </p>
           <p className="c-auth__subtitle">
             &nbsp;&nbsp;
-            <Link to="/password/forgot">Forgot Password?</Link>
+            <Link to={`/password/forgot?email=${encodeURIComponent(username)}`}>
+              Forgot Password?
+            </Link>
           </p>
         </form>
       )}

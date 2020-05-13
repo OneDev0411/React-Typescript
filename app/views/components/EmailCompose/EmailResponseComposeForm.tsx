@@ -1,10 +1,10 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import React, { useCallback, useMemo } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { flow } from 'lodash'
 import { shallowEqual } from 'recompose'
+
+import { OAuthProvider } from 'constants/contacts'
 
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 import { IAppState } from 'reducers'

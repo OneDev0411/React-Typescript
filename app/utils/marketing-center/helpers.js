@@ -1,22 +1,21 @@
 import fecha from 'fecha'
 
-export function getTemplateImage(template, brokerageBrand) {
-  if (template.file) {
-    const URL = template.file.preview_url
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
+export function getTemplateImage(
+  template,
+  fallbackImage = 'https://i.ibb.co/ZhVwVzy/template-placeholder.png'
+) {
+  if (template.type === 'template_instance' || template.type === 'template') {
     return {
-      original: URL,
-      thumbnail: URL
+      original: template.file ? template.file.url : fallbackImage,
+      thumbnail: template.file ? template.file.preview_url : fallbackImage
     }
   }
 
-  const brandId = brokerageBrand ? `/${brokerageBrand.id}` : ''
-  const generateURL = type =>
-    `${template.url}${brandId}/${type}.${template.video ? 'mp4' : 'png'}`
-
   return {
-    original: generateURL('preview'),
-    thumbnail: generateURL('thumbnail')
+    original: template.preview ? template.preview.url : fallbackImage,
+    thumbnail: template.thumbnail ? template.thumbnail.url : fallbackImage
   }
 }
 
@@ -24,8 +23,8 @@ export function createdAt(date) {
   return fecha.format(new Date(date * 1000), 'MMM DD, YYYY - hh:mm A')
 }
 
-export function getSelectedMediumTemplates(templates, wantedMedium) {
-  return templates.filter(t => t.medium === wantedMedium)
+export function getSelectedMediumTemplates(brandTemplates, wantedMedium) {
+  return brandTemplates.filter(t => t.template.medium === wantedMedium)
 }
 
 function getTemplateIndex(availableTemplates, selectedTemplate) {
@@ -111,11 +110,12 @@ export function itemDateText(time) {
 }
 
 export function getTemplateType(initType, template) {
-  if (template && template.template && template.template.template_type) {
-    return template.template.template_type
+  if (!template) {
+    return initType
   }
 
-  return initType
+  const normalizedTemplate = getTemplateObject(template)
+  return normalizedTemplate.template_type || initType
 }
 
 export function getMedium(props) {

@@ -31,7 +31,6 @@ const requestVerify = ({
               />
             </Link>
           )}
-          <h1 className="c-auth__title">{siteTitle}</h1>
           <p className="c-auth__subtitle">
             Request a {verifyType} verification link
           </p>

@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react'
+import { IconButton, Tooltip } from '@material-ui/core'
 
 import { TextEditor } from 'components/TextEditor'
 import { TextEditorRef } from 'components/TextEditor/types'
 import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
 import Drawer from 'components/OverlayDrawer'
 import Button from 'components/Button/ActionButton'
-import IconButton from 'components/Button/IconButton'
-import IconDelete from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
 
 import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
 
@@ -50,6 +50,7 @@ export default function AddOrEditNoteDrawer({ note, ...props }: Props) {
       await props.onSubmit(data)
 
       setIsSaving(false)
+      editor.reset()
       props.onClose()
     } catch (error) {
       console.log(error)
@@ -102,14 +103,11 @@ export default function AddOrEditNoteDrawer({ note, ...props }: Props) {
               {isDeleting ? (
                 'Deleting...'
               ) : (
-                <IconButton
-                  isFit
-                  inverse
-                  onClick={onDelete}
-                  disabled={isSaving}
-                >
-                  <IconDelete />
-                </IconButton>
+                <Tooltip title="Delete Note">
+                  <IconButton onClick={onDelete} disabled={isSaving}>
+                    <IconDelete size="medium" />
+                  </IconButton>
+                </Tooltip>
               )}
             </>
           )}

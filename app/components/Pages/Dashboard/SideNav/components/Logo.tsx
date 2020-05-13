@@ -1,36 +1,24 @@
 import React from 'react'
+import { makeStyles, Theme } from '@material-ui/core'
 
-import { Box, makeStyles, Theme } from '@material-ui/core'
-
-const useStyles = makeStyles((theme: Theme) => ({
-  typeLogo: {
-    marginLeft: theme.spacing(1)
-  }
-}))
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    logo: {
+      width: theme.spacing(20),
+      padding: theme.spacing(5, 3, 3)
+    }
+  }),
+  { name: 'Logo' }
+)
 
 export default function Logo() {
   const classes = useStyles()
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      height="24px"
-      pt="60px"
-      pb={5}
-      px={3}
-    >
-      <img
-        alt="mini-logo"
-        height="18px"
-        src="/static/images/logo--mini--white.svg"
-      />
-      <img
-        alt="type-logo"
-        className={classes.typeLogo}
-        height="20px"
-        src="/static/images/logo--type--white.svg"
-      />
-    </Box>
+    <img
+      alt="logo"
+      className={classes.logo}
+      src="/static/images/logo--white.svg"
+    />
   )
 }

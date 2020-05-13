@@ -1,8 +1,17 @@
 import React from 'react'
 import { Typography, makeStyles, Theme } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
+import { IAppState } from 'reducers'
 import { noop } from 'utils/helpers'
+import {
+  hasUserAccessToCrm,
+  hasUserAccessToDeals,
+  hasUserAccessToMarketingCenter
+} from 'utils/user-teams'
+
 import GlobalActionsButton from 'components/GlobalActionsButton'
+import { ItemType } from 'components/GlobalActionsButton/types'
 
 export interface GlobalHeaderProps {
   title?: string
@@ -56,6 +65,21 @@ export default function GlobalHeader({
   onCreateOpenHouse = noop
 }: GlobalHeaderProps) {
   const classes = useStyles({ noPadding })
+  const availableActions: ItemType[] = []
+
+  const user = useSelector((store: IAppState) => store.user)
+
+  if (hasUserAccessToCrm(user)) {
+    availableActions.push('email', 'event', 'contact', 'tour')
+  }
+
+  if (hasUserAccessToDeals(user)) {
+    availableActions.push('deal')
+  }
+
+  if (hasUserAccessToCrm(user) && hasUserAccessToMarketingCenter(user)) {
+    availableActions.push('openhouse')
+  }
 
   return (
     <div className={classes.wrapper}>
@@ -68,6 +92,7 @@ export default function GlobalHeader({
       {!noGlobalActionsButton && (
         <div className={classes.globalAction}>
           <GlobalActionsButton
+            availableActions={availableActions}
             onCreateEvent={onCreateEvent}
             onCreateContact={onCreateContact}
             onCreateEmail={onCreateEmail}

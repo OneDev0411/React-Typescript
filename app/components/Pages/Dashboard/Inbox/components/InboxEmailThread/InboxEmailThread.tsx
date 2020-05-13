@@ -1,20 +1,53 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
-import { Box, IconButton, Typography, Avatar } from '@material-ui/core'
+import {
+  Box,
+  IconButton,
+  Typography,
+  Avatar,
+  Tooltip,
+  Menu,
+  Theme,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Paper
+} from '@material-ui/core'
 import { AvatarGroup } from '@material-ui/lab'
+import { makeStyles, useTheme } from '@material-ui/styles'
 import { addNotification } from 'reapop'
 
 import { getEmailThread } from 'models/email/get-email-thread'
+import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
 
 import { normalizeThreadMessageToThreadEmail } from 'components/EmailThread/helpers/normalize-to-email-thread-email'
 import { EmailThreadEmails } from 'components/EmailThread'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { EmailResponseType } from 'components/EmailThread/types'
+import { EmailResponseComposeForm } from 'components/EmailCompose/EmailResponseComposeForm'
+import IconVerticalDocs from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
+import IconClose from 'components/SvgIcons/Close/CloseIcon'
+import IconReply from 'components/SvgIcons/Reply/IconReply'
+import IconReplyAll from 'components/SvgIcons/ReplyAll/IconReplyAll'
+import IconForward from 'components/SvgIcons/Forward/IconForward'
+import IconTrash from 'views/components/SvgIcons/Trash/TrashIcon'
+import IconMailRead from 'views/components/SvgIcons/MailRead/IconMailRead'
+import IconMailUnread from 'views/components/SvgIcons/MailUnread/IconMailUnread'
+
+import { useMenu } from 'hooks/use-menu'
 
 import { getNameInitials } from 'utils/helpers'
 
-import markEmailThreadAsRead from '../../helpers/mark-email-thread-as-read'
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
+import useEmailThreadReadStatusSetter from '../../helpers/use-email-thread-read-status-setter'
+import useEmailThreadDeleter from '../../helpers/use-email-thread-deleter'
 import NoContentMessage from '../NoContentMessage'
+
+const useStyles = makeStyles((theme: Theme) => ({
+  moreMenu: {
+    minWidth: '15rem'
+  }
+}))
 
 interface Props {
   emailThreadId?: UUID
@@ -28,59 +61,76 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   const [emailThread, setEmailThread] = useState<IEmailThread<
     'messages' | 'contacts'
   > | null>(null)
-
+  const { menuProps, buttonTriggerProps, onClose: closeMenu } = useMenu()
   const dispatch = useDispatch()
+  const classes = useStyles()
+  const theme = useTheme<Theme>()
 
-  const fetchEmailThread = useCallback(async () => {
-    if (emailThreadId) {
-      setStatus('fetching')
+  const fetchEmailThread = useCallback(
+    async (skipMarkingAsRead: boolean = false) => {
+      if (emailThreadId) {
+        setStatus('fetching')
 
-      try {
-        const emailThread = await getEmailThread(emailThreadId)
+        try {
+          const emailThread = await getEmailThread(emailThreadId)
 
-        setEmailThread(emailThread)
-        setStatus('fetched')
+          setEmailThread(emailThread)
+          setStatus('fetched')
 
-        if (!emailThread.is_read) {
-          try {
-            await markEmailThreadAsRead(emailThread)
-          } catch (reason) {
-            console.error(reason)
-            dispatch(
-              addNotification({
-                status: 'error',
-                message:
-                  'Something went wrong while marking the email as read.' +
-                  ' Please reload the page.'
-              })
-            )
+          if (!skipMarkingAsRead && !emailThread.is_read) {
+            try {
+              await setEmailThreadsReadStatus([emailThread.id], true)
+            } catch (reason) {
+              console.error(reason)
+              dispatch(
+                addNotification({
+                  status: 'error',
+                  message:
+                    'Something went wrong while marking the email as read.' +
+                    ' Please reload the page.'
+                })
+              )
+            }
           }
+        } catch (reason) {
+          console.error(reason)
+          dispatch(
+            addNotification({
+              status: 'error',
+              message:
+                'Something went wrong while fetching the email.' +
+                ' Please reload the page.'
+            })
+          )
+          setStatus('error')
         }
-      } catch (reason) {
-        console.error(reason)
-        dispatch(
-          addNotification({
-            status: 'error',
-            message:
-              'Something went wrong while fetching the email.' +
-              ' Please reload the page.'
-          })
-        )
-        setStatus('error')
+      } else {
+        setStatus('empty')
       }
-    } else {
-      setStatus('empty')
-    }
-  }, [dispatch, emailThreadId])
+    },
+    [dispatch, emailThreadId]
+  )
 
   useEffect(() => {
     fetchEmailThread()
   }, [fetchEmailThread])
 
+  const {
+    setEmailThreadReadStatus,
+    setEmailThreadReadStatusDisabled
+  } = useEmailThreadReadStatusSetter(
+    emailThreadId!,
+    (emailThread && emailThread.is_read)!
+  )
+  const {
+    deleteEmailThread,
+    deleteEmailThreadDisabled
+  } = useEmailThreadDeleter(emailThreadId!)
+
   const handleUpdateEmailThreads = useCallback(
     (updatedEmailThreadIds: UUID[]) => {
       if (emailThreadId && updatedEmailThreadIds.includes(emailThreadId)) {
-        fetchEmailThread()
+        fetchEmailThread(true)
       }
     },
     [emailThreadId, fetchEmailThread]
@@ -100,6 +150,11 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   )
 
   useEmailThreadEvents(handleUpdateEmailThreads, handleDeleteEmailThreads)
+
+  const hasReplyAll = emailThread && emailThread.recipients.length > 1 // TODO: Is this logic correct?
+
+  const [isResponseOpen, setIsResponseOpen] = useState(false)
+  const [responseType, setResponseType] = useState<EmailResponseType>('reply')
 
   const recipients = useMemo(
     () =>
@@ -185,18 +240,126 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             </AvatarGroup>
           </Box>
         )}
-        <IconButton
-          onClick={() => {
-            setEmailThread(null)
-            setStatus('empty')
-            onClose()
-          }}
+        <Tooltip title="More">
+          <IconButton {...buttonTriggerProps}>
+            <IconVerticalDocs size="small" />
+          </IconButton>
+        </Tooltip>
+        <Menu
+          {...menuProps}
+          disableScrollLock
+          classes={{ paper: classes.moreMenu }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         >
-          <CloseIcon size="small" />
-        </IconButton>
+          <MenuItem
+            dense
+            onClick={() => {
+              setEmailThread(null)
+              setStatus('empty')
+              onClose()
+              closeMenu()
+            }}
+          >
+            <ListItemIcon>
+              <IconClose size="small" />
+            </ListItemIcon>
+            <ListItemText>Close</ListItemText>
+          </MenuItem>
+          <MenuItem
+            dense
+            onClick={() => {
+              setResponseType('reply')
+              setIsResponseOpen(true)
+              closeMenu()
+            }}
+          >
+            <ListItemIcon>
+              <IconReply size="small" />
+            </ListItemIcon>
+            <ListItemText>Reply</ListItemText>
+          </MenuItem>
+          {hasReplyAll && (
+            <MenuItem
+              dense
+              onClick={() => {
+                setResponseType('replyAll')
+                setIsResponseOpen(true)
+                closeMenu()
+              }}
+            >
+              <ListItemIcon>
+                <IconReplyAll size="small" />
+              </ListItemIcon>
+              <ListItemText>Reply All</ListItemText>
+            </MenuItem>
+          )}
+          <MenuItem
+            dense
+            onClick={() => {
+              setResponseType('forward')
+              setIsResponseOpen(true)
+              closeMenu()
+            }}
+          >
+            <ListItemIcon>
+              <IconForward size="small" />
+            </ListItemIcon>
+            <ListItemText>Forward</ListItemText>
+          </MenuItem>
+          <MenuItem
+            disabled={setEmailThreadReadStatusDisabled}
+            dense
+            onClick={() => {
+              setEmailThreadReadStatus(!emailThread.is_read)
+              closeMenu()
+            }}
+          >
+            <ListItemIcon>
+              {emailThread.is_read ? (
+                <IconMailUnread size="small" />
+              ) : (
+                <IconMailRead size="small" />
+              )}
+            </ListItemIcon>
+            <ListItemText>
+              Mark as {emailThread.is_read ? 'unread' : 'read'}
+            </ListItemText>
+          </MenuItem>
+          <Box marginY={1}>
+            <Divider />
+          </Box>
+          <MenuItem
+            disabled={deleteEmailThreadDisabled}
+            dense
+            onClick={() => {
+              deleteEmailThread()
+              closeMenu()
+            }}
+          >
+            <ListItemIcon>
+              <IconTrash size="small" fillColor={theme.palette.error.main} />
+            </ListItemIcon>
+            <ListItemText primaryTypographyProps={{ color: 'error' }}>
+              Delete
+            </ListItemText>
+          </MenuItem>
+        </Menu>
       </Box>
       <Box overflow="auto">
         <EmailThreadEmails emails={emails} />
+        {isResponseOpen && (
+          <Box padding={2} paddingLeft={9}>
+            <Paper elevation={10}>
+              <EmailResponseComposeForm
+                email={emails[emails.length - 1]}
+                responseType={responseType}
+                onCancel={() => setIsResponseOpen(false)}
+                onSent={() => setIsResponseOpen(false)}
+              />
+            </Paper>
+          </Box>
+        )}
       </Box>
     </Box>
   )

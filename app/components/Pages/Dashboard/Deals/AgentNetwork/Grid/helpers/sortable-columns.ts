@@ -12,7 +12,7 @@ export const SortableColumns: SortableColumn[] = [
     ascending: false
   },
   {
-    label: '# of Listings (Low-Hight)',
+    label: '# of Listings (Low-High)',
     value: 'listings',
     ascending: true
   },
@@ -27,7 +27,7 @@ export const SortableColumns: SortableColumn[] = [
     ascending: true
   },
   {
-    label: '# of Buyers (Hight-Low)',
+    label: '# of Buyers (High-Low)',
     value: 'buyers',
     ascending: false
   },

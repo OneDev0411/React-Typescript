@@ -12,6 +12,7 @@ import { InlineAddressField } from 'components/inline-editable-fields/InlineAddr
 import SearchListings from 'components/SearchListingDrawer'
 
 import { H2 } from 'components/Typography/headings'
+import AddIcon from 'components/SvgIcons/Add/AddIcon'
 
 import RequiredIcon from 'components/SvgIcons/Required/IconRequired'
 
@@ -88,7 +89,7 @@ export default function DealAddress(props) {
                 className="add-item"
                 onClick={toggleMlsDrawer}
               >
-                <span className="icon">+</span>
+                <AddIcon className="addIcon" />
                 <span className="text">Enter MLS #</span>
               </Button>
             </div>
@@ -128,7 +129,7 @@ export default function DealAddress(props) {
                 className="add-item"
                 onClick={toggleManualAddressEntry}
               >
-                <span className="icon">+</span>
+                <AddIcon className="addIcon" />
                 <span className="text">
                   {isBuyingSide ? 'Or manually input' : 'Add address'}
                 </span>

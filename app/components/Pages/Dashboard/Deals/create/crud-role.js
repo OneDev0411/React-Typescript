@@ -1,6 +1,8 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import { Button } from '@material-ui/core'
+
+import AddIcon from 'components/SvgIcons/Add/AddIcon'
 
 import RoleAgentIntegration from '../components/Roles/AgentIntegration'
 import RoleItem from './role-item'
@@ -24,7 +26,7 @@ class CrudRole extends React.Component {
     const { user, ctaTitle, onRemoveUser, onUpsertUser, ...rest } = this.props
 
     return (
-      <Fragment>
+      <>
         {user ? (
           <RoleItem
             user={user}
@@ -38,7 +40,7 @@ class CrudRole extends React.Component {
               onClick={this.showModal}
               className="add-item"
             >
-              <span className="icon test">+</span>
+              <AddIcon className="addIcon" />
               <span className="text">{ctaTitle}</span>
             </Button>
           </div>
@@ -53,7 +55,7 @@ class CrudRole extends React.Component {
             {...rest}
           />
         )}
-      </Fragment>
+      </>
     )
   }
 }

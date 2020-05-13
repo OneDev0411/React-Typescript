@@ -8,18 +8,6 @@
   }
 }
 
-.signin-page-wrapper.c-auth--register {
-  @media screen and (min-width: 35em) {
-    background-color: #fff;
-  }
-
-  @media screen and (min-width: 50em) {
-    width: 700px;
-    position: relative;
-    margin: 0 auto;
-  }
-}
-
 .c-auth {
   padding: 5.1rem 3.2rem 5.7rem;
   margin: 0 auto;
@@ -32,21 +20,6 @@
     border-radius: 3px;
     background-color: #fff;
     box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.05);
-  }
-
-  .c-auth--register > & {
-    @media screen and (min-width: 35em) {
-      // 560px
-      border-radius: 0;
-      box-shadow: none;
-    }
-
-    @media screen and (min-width: 50em) {
-      // 800px
-      width: 60%;
-      left: right;
-      padding: 0;
-    }
   }
 }
 
@@ -61,19 +34,8 @@
 }
 
 .c-auth__logo {
-  width: 64px;
-  border-radius: 3px;
+  width: 160px;
   margin-bottom: 1rem;
-
-  .c-auth--register & {
-    @media screen and (min-width: 50em) {
-      // 800px
-      position: absolute;
-      top: 2rem;
-      left: 2rem;
-      margin-bottom: 0;
-    }
-  }
 }
 
 .c-auth__title {
@@ -243,21 +205,6 @@
 
 .c-auth__submit-alert--warning {
   @extend .c-alert--warning;
-}
-
-.c-auth--register__houseIcon {
-  display: none;
-
-  @media screen and (min-width: 50em) {
-    width: 40%;
-    display: block;
-    float: left;
-    margin-right: 4rem;
-  }
-
-  > img {
-    max-width: 100%;
-  }
 }
 
 .c-auth__field--radio {

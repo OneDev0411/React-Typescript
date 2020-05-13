@@ -13,8 +13,7 @@ import Fallback from './Fallback'
 import TemplateAction from './TemplateAction'
 import MarketingTemplatePreviewModal from '../MarketingTemplatePreviewModal'
 import { MarketingTemplateMasonry } from '../MarketingTemplateMasonry'
-import { TemplateCardActions } from './TemplateCardActions'
-import { TemplateInstanceCardActions } from './TemplateInstanceCardActions'
+import TemplateCardActions from './TemplateCardActions'
 
 function TemplatesList(props) {
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
@@ -22,7 +21,15 @@ function TemplatesList(props) {
   const [isActionTriggered, setActionTriggered] = useState(false)
   const [isEditActionTriggered, setEditActionTriggered] = useState(false)
   const modal = useContext(ConfirmationModalContext)
-  const handleDelete = props.onDelete
+
+  const notifyDeleteError = () => {
+    props.notify({
+      title: 'Error deleting template. Please try again or contact support.',
+      status: 'error'
+    })
+  }
+
+  const handleDeleteInstance = props.onDeleteInstance
     ? template => {
         modal.setConfirmationModal({
           message: 'Delete your design?',
@@ -30,20 +37,36 @@ function TemplatesList(props) {
           confirmLabel: 'Delete',
           appearance: 'danger',
           onConfirm: () => {
-            props.onDelete(template.id).catch(() => {
-              props.notify({
-                title:
-                  'There is a problem for deleting the template. Please try again.',
-                status: 'error',
-                dismissible: true
-              })
-            })
+            try {
+              props.onDeleteInstance(template.id)
+            } catch (e) {
+              console.error(e)
+              notifyDeleteError()
+            }
           }
         })
       }
     : undefined
 
-  const isEmpty = props.items.length == 0
+  const handleDeleteBrandTemplate = template => {
+    modal.setConfirmationModal({
+      message: 'Delete this template?',
+      description:
+        'Once deleted you and your team members would not be able to recover it.',
+      confirmLabel: 'Delete',
+      appearance: 'danger',
+      onConfirm: async () => {
+        try {
+          props.onDelete(template)
+        } catch (e) {
+          console.error(e)
+          notifyDeleteError()
+        }
+      }
+    })
+  }
+
+  const isEmpty = props.items.length === 0 && !props.isLoading
 
   if (props.isLoading || isEmpty) {
     return (
@@ -83,8 +106,9 @@ function TemplatesList(props) {
                 }}
                 actions={
                   isTemplateInstance(template) ? (
-                    <TemplateInstanceCardActions
-                      handleDelete={() => handleDelete(template)}
+                    <TemplateCardActions
+                      editButtonText="Continue"
+                      handleDelete={() => handleDeleteInstance(template)}
                       handleEdit={() => {
                         setActionTriggered(true)
                         setEditActionTriggered(true)
@@ -93,7 +117,12 @@ function TemplatesList(props) {
                     />
                   ) : (
                     <TemplateCardActions
-                      handleCustomize={() => {
+                      handleDelete={
+                        props.onDelete
+                          ? () => handleDeleteBrandTemplate(template)
+                          : undefined
+                      }
+                      handleEdit={() => {
                         setActionTriggered(true)
                         setEditActionTriggered(false)
                         setSelectedTemplate(template)

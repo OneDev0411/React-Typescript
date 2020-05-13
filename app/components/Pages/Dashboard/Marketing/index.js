@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet'
 
 import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
 import { useMarketingCenterMediums } from 'hooks/use-marketing-center-mediums'
-
 import { getActiveTeamId } from 'utils/user-teams'
 
 import Acl from 'components/Acl'
@@ -22,15 +21,16 @@ export function MarketingLayout({ params, render }) {
 
   const activeBrand = getActiveTeamId(user)
 
-  const { templates, loading } = useTemplates(activeBrand)
-
+  const { templates, isLoading, deleteTemplate } = useTemplates(activeBrand)
   const mediums = useMarketingCenterMediums(templates)
 
   const currentMedium = params.medium
   const currentPageItems = templates.filter(item => {
-    const mediumMatches = currentMedium ? item.medium === currentMedium : true
+    const mediumMatches = currentMedium
+      ? item.template.medium === currentMedium
+      : true
     const typeMatches = templateTypes
-      ? templateTypes.includes(item.template_type)
+      ? templateTypes.includes(item.template.template_type)
       : true
 
     return mediumMatches && typeMatches
@@ -53,9 +53,10 @@ export function MarketingLayout({ params, render }) {
           {render &&
             render({
               items: currentPageItems,
-              isLoading: loading,
+              isLoading,
               types: params.types,
-              medium: params.medium
+              medium: params.medium,
+              onDeleteTemplate: deleteTemplate
             })}
         </PageLayout.Main>
       </PageLayout>

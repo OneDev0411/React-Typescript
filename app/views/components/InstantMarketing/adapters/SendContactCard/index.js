@@ -17,6 +17,7 @@ import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
 import SocialDrawer from '../../components/SocialDrawer'
 
@@ -168,12 +169,14 @@ class SendContactCard extends React.Component {
     })
   }
 
-  generatePreviewImage = async template => {
+  generatePreviewImage = async brandTemplate => {
     this.setState({ isGettingTemplateInstance: true })
+
+    const template = getTemplateObject(brandTemplate)
 
     const instance = await getTemplateInstances(template.id, {
       ...this.TemplateInstanceData,
-      html: template.result
+      html: brandTemplate.result
     })
 
     this.setState({
@@ -305,15 +308,6 @@ class SendContactCard extends React.Component {
           getEmail={this.getEmail}
           isSubmitDisabled={this.state.isGettingTemplateInstance}
         />
-
-        {this.state.isSocialDrawerOpen && (
-          <SocialDrawer
-            template={this.state.htmlTemplate}
-            templateInstanceData={this.TemplateInstanceData}
-            socialNetworkName={this.state.socialNetworkName}
-            onClose={this.closeSocialDrawer}
-          />
-        )}
 
         {this.state.isSocialDrawerOpen && (
           <SocialDrawer

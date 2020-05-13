@@ -1,27 +1,29 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router'
 
-import ListingMarker from '../../../Partials/ListingMarker'
+import ListingMarker from '../ListingMarker'
 
 const setMarkerCssPosition = listing => {
+  const position = {
+    position,
+    top: 0,
+    left: 0
+  }
+
   if (listing.cssPosition) {
     const { left, top } = listing.cssPosition
 
     return {
-      position: 'absolute',
+      ...position,
       top,
       left
     }
   }
 
-  return {
-    position: 'absolute',
-    top: 0,
-    left: 0
-  }
+  return position
 }
 
-const SimpleMarker = ({ data, user, listing, isWidget }) => {
+const SimpleMarker = ({ user, listing, isWidget }) => {
   const [isHoverd, setIsHoverd] = useState(false)
 
   return (
@@ -33,12 +35,7 @@ const SimpleMarker = ({ data, user, listing, isWidget }) => {
       style={setMarkerCssPosition(listing)}
       target={user && !isWidget ? '' : '_blank'}
     >
-      <ListingMarker
-        data={data}
-        context="map"
-        listing={listing}
-        popupIsActive={isHoverd}
-      />
+      <ListingMarker context="map" listing={listing} popupIsActive={isHoverd} />
     </Link>
   )
 }

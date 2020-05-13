@@ -23,6 +23,8 @@
     "user_type": "Agent",
     "deleted_at": null,
     "phone_confirmed": true,
+    "access_token": "",
+    "refresh_token": "",
     "agent": {
       "id": "a42184f2-43e4-11e9-b00c-0a95998482ac",
       "email": "esparipour+agent@gmail.com",
@@ -33,7 +35,9 @@
       "last_name": "Esparipour",
       "middle_name": "",
       "phone_number": "(999) 999-9999",
-      "phone_numbers": ["(999) 999-9999"],
+      "phone_numbers": [
+        "(999) 999-9999"
+      ],
       "nar_number": "",
       "office_mui": 9999999,
       "status": "Active",
@@ -145,7 +149,9 @@
       "last_name": "Esparipour",
       "middle_name": "",
       "phone_number": "(999) 999-9999",
-      "phone_numbers": ["(999) 999-9999"],
+      "phone_numbers": [
+        "(999) 999-9999"
+      ],
       "nar_number": "",
       "office_mui": 9999999,
       "status": "Active",
@@ -222,7 +228,9 @@
       "last_name": "Esparipour",
       "middle_name": "",
       "phone_number": "(999) 999-9999",
-      "phone_numbers": ["(999) 999-9999"],
+      "phone_numbers": [
+        "(999) 999-9999"
+      ],
       "nar_number": "",
       "office_mui": 9999999,
       "status": "Active",
@@ -302,7 +310,8 @@
     "mojtabast.com"
   ],
   "tags": null,
-  "address": [{
+  "address": [
+    {
       "name": "Carol J Stephens 1635 Franklin",
       "suftype": "St",
       "extra": "Home",
@@ -361,7 +370,8 @@
       "full": "Qweqwe"
     }
   ],
-  "attributes": [{
+  "attributes": [
+    {
       "id": "495077c9-690f-43d7-9cc3-8049f7879c06",
       "contact": "e58aa965-600f-4b3c-a400-fd0f52a66b6f",
       "attribute_def": {
@@ -2091,51 +2101,55 @@
       "type": "contact_attribute"
     }
   ],
-  "users": [{
-    "type": "user",
-    "username": null,
-    "first_name": "Mojtaba",
-    "last_name": "Espari Pour",
-    "email": "esparipour@gmail.com",
-    "phone_number": null,
-    "created_at": 1552224626.28669,
-    "id": "aa1e847e-4338-11e9-9bd8-0a95998482ac",
-    "address_id": null,
-    "cover_image_url": null,
-    "profile_image_url": null,
-    "updated_at": 1552225337.23154,
-    "user_status": "Active",
-    "profile_image_thumbnail_url": null,
-    "cover_image_thumbnail_url": null,
-    "email_confirmed": true,
-    "timezone": "America/Chicago",
-    "user_type": "Client",
-    "deleted_at": null,
-    "phone_confirmed": false,
-    "agent": null,
-    "is_shadow": false,
-    "personal_room": "aa216626-4338-11e9-9bd9-0a95998482ac",
-    "brand": null,
-    "fake_email": false,
-    "features": null,
-    "last_seen_at": 1562104167.494,
-    "last_seen_by": {
-      "id": "df3614fc-3fe2-11e7-ade2-0242ac110003",
-      "version": "Irish",
-      "name": "Web",
-      "client_type": "Web",
-      "type": "client"
-    },
-    "email_signature": null,
-    "current_time": "8:01 PM - Saturday Jul 06, 2019",
-    "push_allowed": true,
-    "last_seen_type": "Web",
-    "has_docusign": false,
-    "active_brand": null,
-    "display_name": "Mojtaba Espari Pour",
-    "abbreviated_display_name": "Mojtaba",
-    "online_state": "Offline"
-  }],
+  "users": [
+    {
+      "type": "user",
+      "username": null,
+      "first_name": "Mojtaba",
+      "last_name": "Espari Pour",
+      "email": "esparipour@gmail.com",
+      "phone_number": null,
+      "created_at": 1552224626.28669,
+      "id": "aa1e847e-4338-11e9-9bd8-0a95998482ac",
+      "address_id": null,
+      "cover_image_url": null,
+      "profile_image_url": null,
+      "updated_at": 1552225337.23154,
+      "user_status": "Active",
+      "profile_image_thumbnail_url": null,
+      "cover_image_thumbnail_url": null,
+      "email_confirmed": true,
+      "timezone": "America/Chicago",
+      "user_type": "Client",
+      "deleted_at": null,
+      "phone_confirmed": false,
+      "agent": null,
+      "is_shadow": false,
+      "personal_room": "aa216626-4338-11e9-9bd9-0a95998482ac",
+      "brand": null,
+      "fake_email": false,
+      "features": null,
+      "last_seen_at": 1562104167.494,
+      "last_seen_by": {
+        "id": "df3614fc-3fe2-11e7-ade2-0242ac110003",
+        "version": "Irish",
+        "name": "Web",
+        "client_type": "Web",
+        "type": "client"
+      },
+      "access_token": "",
+      "refresh_token": "",
+      "email_signature": null,
+      "current_time": "8:01 PM - Saturday Jul 06, 2019",
+      "push_allowed": true,
+      "last_seen_type": "Web",
+      "has_docusign": false,
+      "active_brand": null,
+      "display_name": "Mojtaba Espari Pour",
+      "abbreviated_display_name": "Mojtaba",
+      "online_state": "Offline"
+    }
+  ],
   "deals": null,
   "type": "contact"
 }

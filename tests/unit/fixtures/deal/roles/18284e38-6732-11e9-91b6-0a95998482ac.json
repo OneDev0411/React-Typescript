@@ -42,7 +42,9 @@
     "active_brand": "28810bfc-8565-11e9-b821-0a95998482ac",
     "display_name": "Alireza Mirian",
     "abbreviated_display_name": "Alireza",
-    "online_state": "Online"
+    "online_state": "Online",
+    "access_token": "",
+    "refresh_token": ""
   },
   "commission_dollar": null,
   "brokerwolf_id": null,
