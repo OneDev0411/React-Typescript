@@ -506,8 +506,6 @@ export default (
         <Route path="mls" component={AsyncListingsLayout}>
           <IndexRoute component={AsyncListingsSearch} />
         </Route>
-
-        <Route path="mls/:id" component={AsyncListingSinglePage} />
       </Route>
     </Route>
 
@@ -598,13 +596,13 @@ export default (
           />
         </Route>
 
-        <Route path="mls" component={AsyncListingsLayout}>
+        <Route path="/dashboard/mls" component={AsyncListingsLayout}>
           <IndexRoute component={AsyncListingsSearch} />
           <Route path="favorites" component={AsyncListingsFavorites} />
           <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
         </Route>
 
-        <Route path="mls/:id" component={AsyncListingSinglePage} />
+        <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />
