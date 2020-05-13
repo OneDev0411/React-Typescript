@@ -16,7 +16,7 @@ import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 
-import { getActiveTeam, isBackOffice } from 'utils/user-teams'
+import { isBackOffice, getBrandByType } from 'utils/user-teams'
 
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
@@ -152,7 +152,7 @@ class Builder extends React.Component {
     const { load: loadAssetManagerPlugin } = await import('./AssetManager')
     const { load: loadStyleManagerPlugin } = await import('./StyleManager')
 
-    const { brand } = getActiveTeam(this.props.user)
+    const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
 
     await Promise.all([
@@ -282,7 +282,7 @@ class Builder extends React.Component {
 
     this.emailBlocksRegistered = true
 
-    const { brand } = getActiveTeam(this.props.user)
+    const brand = getBrandByType(this.props.user, 'Brokerage')
     const renderData = getMjmlTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
@@ -329,7 +329,7 @@ class Builder extends React.Component {
   }
 
   registerSocialBlocks = () => {
-    const { brand } = getActiveTeam(this.props.user)
+    const brand = getBrandByType(this.props.user, 'Brokerage')
     const renderData = getNonMjmlTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
@@ -525,7 +525,7 @@ class Builder extends React.Component {
   }
 
   generateBrandedTemplate = (templateMarkup, data) => {
-    const { brand } = getActiveTeam(this.props.user)
+    const brand = getBrandByType(this.props.user, 'Brokerage')
     const renderData = this.isMjmlTemplate
       ? getMjmlTemplateRenderData(brand)
       : getNonMjmlTemplateRenderData(brand)
