@@ -20,7 +20,6 @@ import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
 import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import Reminder from '../../EventDrawer/components/Reminder/Reminder'
-import UpdateEndDate from '../../EventDrawer/components/UpdateEndDate/UpdateEndDate'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import { AddAssociationButton } from '../../AddAssociationButton'
 import {
@@ -206,10 +205,6 @@ export class TourDrawer extends React.Component {
                     <Description placeholder="Enter any general notes for your clients" />
 
                     <Section label="Itinerary Date">
-                      <UpdateEndDate
-                        dueDate={values.dueDate}
-                        endDate={values.endDate}
-                      />
                       <UpdateReminder
                         dueDate={values.dueDate}
                         // 1 hour before

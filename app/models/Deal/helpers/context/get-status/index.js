@@ -5,5 +5,8 @@ export function getStatus(deal) {
     return 'Archived'
   }
 
-  return getField(deal, 'contract_status') || getField(deal, 'listing_status')
+  const status =
+    getField(deal, 'contract_status') || getField(deal, 'listing_status')
+
+  return status ? status.trim() : status
 }
