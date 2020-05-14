@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Field } from 'react-final-form'
+import sanitizeHtml from 'sanitize-html'
 
 import TextareaAutosize from 'react-textarea-autosize'
 
@@ -38,7 +39,14 @@ export function Description(props) {
   return (
     <Field
       name="description"
-      render={({ input }) => <TextArea {...input} {...props} />}
+      render={({ input: { value, restInput } }) => {
+        const sanitizedValue = sanitizeHtml(value, {
+          allowedTags: [],
+          allowedAttributes: {}
+        })
+
+        return <TextArea value={sanitizedValue} {...restInput} {...props} />
+      }}
     />
   )
 }
