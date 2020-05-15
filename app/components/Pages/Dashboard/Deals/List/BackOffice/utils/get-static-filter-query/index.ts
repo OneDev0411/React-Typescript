@@ -13,10 +13,13 @@ export function getStaticFilterQuery(
     return {
       contexts: {
         listing_status: {
-          text: statuses.filter(
-            item =>
-              item.deal_types.includes('Selling') && item.is_archived === false
-          )
+          text: statuses
+            .filter(
+              item =>
+                item.deal_types.includes('Selling') &&
+                item.is_archived === false
+            )
+            .map(item => item.label)
         }
       }
     }
@@ -26,10 +29,12 @@ export function getStaticFilterQuery(
     return {
       contexts: {
         contract_status: {
-          text: statuses.filter(
-            item =>
-              item.deal_types.includes('Buying') && item.is_archived === false
-          )
+          text: statuses
+            .filter(
+              item =>
+                item.deal_types.includes('Buying') && item.is_archived === false
+            )
+            .map(item => item.label)
         }
       }
     }
