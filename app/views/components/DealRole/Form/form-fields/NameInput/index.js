@@ -56,11 +56,11 @@ export function NameInput(props) {
 
       const agents = await searchAgents(name, 'q')
 
-      return agents.map(user => ({
-        ...user,
-        company: user.office ? user.office.name : '',
-        value: user[props.searchFieldValue],
-        label: user.full_name
+      return agents.map(agent => ({
+        ...agent,
+        company: agent.office ? agent.office.name : '',
+        value: agent[props.searchFieldValue],
+        label: agent.full_name
       }))
     } catch (e) {
       console.log(e)
