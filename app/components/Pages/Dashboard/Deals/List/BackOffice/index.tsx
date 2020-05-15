@@ -106,7 +106,7 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
           />
         </div>
 
-        <Grid searchQuery={searchQuery} />
+        <Grid searchQuery={searchQuery} statuses={statuses} />
       </PageLayout.Main>
     </PageLayout>
   )

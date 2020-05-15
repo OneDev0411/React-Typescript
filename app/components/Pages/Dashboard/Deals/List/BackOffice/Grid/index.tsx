@@ -35,9 +35,11 @@ import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
 } from '../helpers/backoffice-sorting'
+import { sortStatus } from '../../helpers/status-sorting'
 
 interface Props {
   searchQuery: SearchQuery
+  statuses: IDealStatus[]
 }
 
 function BackOfficeGrid(props: Props & WithRouterProps) {
@@ -85,7 +87,8 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       {
         id: 'status',
         class: 'opaque',
-        accessor: getStatus
+        accessor: (deal: IDeal) => getStatus(deal) || '',
+        sortFn: (rows: IDeal[]) => sortStatus(rows, props.statuses)
       },
       {
         id: 'agent-name',
@@ -130,7 +133,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
         )
       }
     ]
-  }, [roles, user])
+  }, [roles, user, props.statuses])
 
   const getData = (): IDeal[] => {
     if (!deals) {

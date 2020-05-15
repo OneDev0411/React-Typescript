@@ -28,7 +28,7 @@ import {
 
 import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 import { getGridSort } from '../../helpers/sorting'
-import { sortStatus } from '../helpers/status-sorting'
+import { sortStatus } from '../../helpers/status-sorting'
 
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
