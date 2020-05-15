@@ -34,7 +34,9 @@ export const NameSection = styled.div`
   margin: 0 1rem;
 `
 
-export const Title = styled.div`
+export const Title = styled.div<{
+  selectable: boolean
+}>`
   font-size: 1rem;
   font-weight: 500;
   color: ${(props: TitleProps) =>
@@ -58,7 +60,9 @@ export const DateTime = styled.div`
   color: #7f7f7f;
 `
 
-export const ChecklistName = styled.div`
+export const ChecklistName = styled.div<{
+  error: boolean
+}>`
   font-size: 0.875rem;
   color: ${(props: ChecklistNameProps) =>
     props.error
