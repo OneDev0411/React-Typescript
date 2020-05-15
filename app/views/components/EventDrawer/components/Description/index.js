@@ -39,7 +39,7 @@ export function Description(props) {
   return (
     <Field
       name="description"
-      render={({ input: { value, restInput } }) => {
+      render={({ input: { value, ...restInput } }) => {
         const sanitizedValue = sanitizeHtml(value, {
           allowedTags: [],
           allowedAttributes: {}
