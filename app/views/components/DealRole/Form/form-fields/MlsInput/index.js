@@ -15,18 +15,16 @@ export function MlsInput(props) {
     try {
       setIsSearching(true)
 
-      const agent = await searchAgents(mls)
+      const agents = await searchAgents(mls)
 
-      return [
-        {
-          ...agent,
-          company: agent.office ? agent.office.name : '',
-          value: agent.mlsid,
-          label: agent.full_name
-        }
-      ]
+      return agents.map(agent => ({
+        ...agent,
+        company: agent.office ? agent.office.name : '',
+        value: agent.mlsid,
+        label: agent.full_name
+      }))
     } catch (e) {
-      /* nothing */
+      console.log(e)
     } finally {
       setIsSearching(false)
     }
