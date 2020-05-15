@@ -463,7 +463,7 @@ function authenticate(nextState, replace) {
 export default (
   <Route>
     <Route path="/">
-      <IndexRoute component={GoToDashboard} />} />
+      <IndexRoute component={GoToDashboard} />
       <Route path="dashboard" component={GoToDashboard} />
     </Route>
 
