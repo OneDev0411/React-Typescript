@@ -3,6 +3,7 @@ import { ChipProps } from '@material-ui/core/Chip'
 import { TextFieldProps } from '@material-ui/core/TextField'
 import { Observable } from 'rxjs'
 import { TextField } from '@material-ui/core'
+import { TextField as FinalFormTextField } from 'final-form-material-ui'
 
 import { AvatarProps } from 'components/Avatar'
 
@@ -101,5 +102,5 @@ export interface ChipsInputProps<T> {
    */
   TextFieldProps?: TextFieldProps | any // TODO update type to take out excluded props
 
-  TextFieldComponent?: typeof TextField
+  TextFieldComponent?: typeof TextField | typeof FinalFormTextField
 }
