@@ -57,4 +57,4 @@ const user = (state = null, action) => {
 
 export default user
 
-export const selectTeamIsFetching = state => state.is_fetching_teams
+export const isFetchingSelectedTeam = state => state.is_fetching_teams
