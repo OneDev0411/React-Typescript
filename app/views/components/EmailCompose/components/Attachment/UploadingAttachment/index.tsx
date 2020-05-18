@@ -8,10 +8,10 @@ import {
   Theme
 } from '@material-ui/core'
 
-import { Attachment } from '..'
-
 import { IUploadingAttachment } from '../../../types'
 import { useUploadRequest } from './use-upload-request'
+
+import { Attachment } from '..'
 
 type AttachmentProps = ComponentProps<typeof Attachment>
 
@@ -54,7 +54,7 @@ export function UploadingAttachment({
   }
 
   return (
-    <Attachment onDelete={cancel} {...props}>
+    <Attachment {...props} onDelete={cancel}>
       <Box display="flex" alignItems="center">
         <Box flexGrow={1}>{attachment.file.name}</Box>
         {progress !== null && progress <= 100 && (

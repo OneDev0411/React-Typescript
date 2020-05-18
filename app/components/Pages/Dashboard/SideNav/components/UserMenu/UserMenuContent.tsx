@@ -63,7 +63,7 @@ export function UserMenuContent({
             Account settings
           </Link>
         </li>
-        {activeBrand && activeBrand.brand_type === 'Brokerage' && (
+        {activeBrand?.brand_type === 'Brokerage' && (
           <Acl access={[ACL.ADMIN, ACL.MARKETING]}>
             <li>
               <Link noStyle to="/dashboard/brand-settings" onClick={onClose}>

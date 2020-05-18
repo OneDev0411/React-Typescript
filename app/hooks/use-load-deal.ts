@@ -7,7 +7,7 @@ import { getDeal, getContextsByDeal, getForms } from 'actions/deals'
 import { selectContextsByDeal } from 'reducers/deals/contexts'
 import { IAppState } from 'reducers'
 
-import store from '../stores'
+import { useReduxDispatch } from './use-redux-dispatch'
 
 /**
  * returns full dump of deal inclduing its forms and contexts
@@ -16,6 +16,7 @@ import store from '../stores'
  */
 export function useLoadFullDeal(id: string, deal: IDeal) {
   const deals = useSelector((state: IAppState) => state.deals)
+  const dispatch = useReduxDispatch()
 
   const { contexts, forms } = useMemo(() => {
     return {
@@ -51,7 +52,7 @@ export function useLoadFullDeal(id: string, deal: IDeal) {
       setIsFetchingDeal(true)
 
       // fetch deal by id
-      const result: IDeal = await store.dispatch(getDeal(id))
+      const result: IDeal = await dispatch(getDeal(id))
 
       setIsFetchingDeal(false)
 
@@ -69,7 +70,7 @@ export function useLoadFullDeal(id: string, deal: IDeal) {
       setIsFetchingContexts(true)
 
       try {
-        await store.dispatch(getContextsByDeal(deal.id))
+        await dispatch(getContextsByDeal(deal.id))
       } catch (e) {
         console.log(e)
       }
@@ -88,7 +89,7 @@ export function useLoadFullDeal(id: string, deal: IDeal) {
       setIsFetchingForms(true)
 
       try {
-        await store.dispatch(getForms(deal.id))
+        await dispatch(getForms(deal.id))
       } catch (e) {
         console.log(e)
       }

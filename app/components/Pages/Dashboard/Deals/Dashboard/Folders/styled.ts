@@ -60,7 +60,7 @@ export const ItemsContainer = styled.div<{
 `
 
 type ArrowIconProps = {
-  isOpen: boolean
+  isOpen?: boolean
   show?: boolean
 }
 

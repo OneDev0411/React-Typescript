@@ -38,13 +38,13 @@ interface Props {
 const ConnectedAccountListItem = styled(ListItem)`
   border-bottom: 1px solid
     ${({ theme }: ThemeProps<Theme>) => theme.palette.divider};
-` as typeof ListItem
+`
 
 export default function ConnectedAccount({ account, onSync, onDelete }: Props) {
   const theme = useTheme<Theme>()
 
   return (
-    <ConnectedAccountListItem>
+    <ConnectedAccountListItem button>
       <ListItemAvatar>
         <Avatar
           size={40}
