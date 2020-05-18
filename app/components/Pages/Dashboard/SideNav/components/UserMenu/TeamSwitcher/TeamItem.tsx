@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import {
   Avatar,
   ListItem,
+  ListItemProps,
   ListItemAvatar,
   ListItemText,
   Tooltip
@@ -14,7 +15,7 @@ import { ViewAsList } from './ViewAsList'
 
 interface Props {
   isSwtching: boolean
-  onClick: (team: IUserTeam) => Promise<void>
+  onClick: ListItemProps['onClick']
   selected: boolean
   team: IUserTeam
 }

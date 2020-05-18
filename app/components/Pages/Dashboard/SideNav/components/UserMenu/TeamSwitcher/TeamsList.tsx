@@ -19,9 +19,7 @@ export function TeamsList({ user }: Props) {
 
   const activeTeamId = useMemo(() => getActiveTeamId(user), [user])
 
-  const onClickTeam = async team => {
-    const teamId = team.brand.id
-
+  const onClickTeam = async (teamId: string) => {
     setSwitchingTeam(teamId)
 
     await putUserSetting('user_filter', viewAs(user), teamId)
@@ -50,7 +48,7 @@ export function TeamsList({ user }: Props) {
             <TeamItem
               key={team.id}
               isSwitching={switchingTeam === teamId}
-              onClick={onClickTeam}
+              onClick={() => onClickTeam(teamId)}
               selected={teamId === activeTeamId}
               team={team}
             />
