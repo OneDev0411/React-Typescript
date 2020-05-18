@@ -14,11 +14,14 @@ import { IAppState } from '../../../../../../../reducers'
 
 import { ViewAsMember } from './ViewAsMember'
 
-const useStyle = makeStyles(theme => ({
-  list: {
-    backgroundColor: theme.palette.grey['50']
-  }
-}))
+const useStyle = makeStyles(
+  theme => ({
+    list: {
+      backgroundColor: theme.palette.grey['50']
+    }
+  }),
+  { name: 'ViewAsList' }
+)
 
 interface Props {
   team: IUserTeam
@@ -30,19 +33,7 @@ export function ViewAsList({ team }: Props) {
   const user = useSelector((store: IAppState) => store.user)
   const brandMembers = getTeamAvailableMembers(team)
   const allMembersId = brandMembers.map(m => m.id)
-  const initialSelectedMembers = useMemo(() => {
-    const selectedMembers = viewAs(user) || []
-
-    if (
-      selectedMembers.length === 0 ||
-      selectedMembers.length === allMembersId.length
-    ) {
-      return allMembersId
-    }
-
-    return selectedMembers
-  }, [allMembersId, user])
-
+  const initialSelectedMembers = useMemo(() => viewAs(user) || [], [user])
   const [selectedMembers, setSelectedMembers] = useState(initialSelectedMembers)
 
   if (isBackOffice(user)) {
@@ -103,7 +94,7 @@ export function ViewAsList({ team }: Props) {
         )
       })}
       <Box px={2} pb={1}>
-        <Button variant="outlined" fullWidth onClick={onApply}>
+        <Button size="small" variant="outlined" fullWidth onClick={onApply}>
           Apply
         </Button>
       </Box>
