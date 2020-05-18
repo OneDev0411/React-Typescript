@@ -1,21 +1,21 @@
 import React from 'react'
 
+import MailOutlineOutlinedIcon from '@material-ui/icons/MailOutlineOutlined'
+
+import EventOutlinedIcon from '@material-ui/icons/EventOutlined'
+
+import ContactsOutlinedIcon from '@material-ui/icons/ContactsOutlined'
+
+import LocalAtmOutlinedIcon from '@material-ui/icons/LocalAtmOutlined'
+
+import MeetingRoomOutlinedIcon from '@material-ui/icons/MeetingRoomOutlined'
+
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 
 import { goTo } from 'utils/go-to'
 
-import EmailIcon from 'components/SvgIcons/EmailOutlined/IconEmailOutlined'
-
 import { EventDrawer } from 'components/EventDrawer'
-import CalendarIcon from 'components/SvgIcons/Calendar2/IconCalendar'
-
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
-import IconContacts from 'components/SvgIcons/Contacts/IconContacts'
-
-import IconDeal from 'components/SvgIcons/Deals/IconDeal'
-
-import IconOpenHouseOutline from 'components/SvgIcons/OpenHouseOutline/IconOpenHouseOutline'
-
 import { TourDrawer } from 'components/tour/TourDrawer'
 import IconTourOutline from 'components/SvgIcons/TourOutline/IconTourOutline'
 
@@ -27,7 +27,7 @@ const items: Item[] = [
   {
     title: 'Email',
     type: 'email',
-    Icon: EmailIcon,
+    Icon: MailOutlineOutlinedIcon,
     render: props => {
       return <SingleEmailComposeDrawer {...props} />
     }
@@ -35,7 +35,7 @@ const items: Item[] = [
   {
     title: 'Event',
     type: 'event',
-    Icon: CalendarIcon,
+    Icon: EventOutlinedIcon,
     render: props => {
       return <EventDrawer {...props} />
     }
@@ -43,7 +43,7 @@ const items: Item[] = [
   {
     title: 'Contact',
     type: 'contact',
-    Icon: IconContacts,
+    Icon: ContactsOutlinedIcon,
     render: props => {
       return <NewContactDrawer {...props} />
     }
@@ -51,7 +51,7 @@ const items: Item[] = [
   {
     title: 'Deal',
     type: 'deal',
-    Icon: IconDeal,
+    Icon: LocalAtmOutlinedIcon,
     redirectTo: url => {
       goTo(url)
     }
@@ -59,7 +59,7 @@ const items: Item[] = [
   {
     title: 'OH Registration Page',
     type: 'openhouse',
-    Icon: IconOpenHouseOutline,
+    Icon: MeetingRoomOutlinedIcon,
     render: props => {
       return <CreateOpenHouse {...props} />
     }
