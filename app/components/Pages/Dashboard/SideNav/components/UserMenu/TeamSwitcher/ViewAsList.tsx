@@ -36,7 +36,7 @@ export function ViewAsList({ team }: Props) {
   const initialSelectedMembers = useMemo(() => viewAs(user) || [], [user])
   const [selectedMembers, setSelectedMembers] = useState(initialSelectedMembers)
 
-  if (isBackOffice(user)) {
+  if (isBackOffice(user) || brandMembers.length === 1) {
     return null
   }
 
