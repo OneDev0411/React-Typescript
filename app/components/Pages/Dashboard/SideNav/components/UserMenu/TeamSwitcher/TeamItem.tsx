@@ -10,7 +10,7 @@ import {
 import flattenBrand from '../../../../../../../utils/flatten-brand'
 import Loading from '../../../../../../../views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
-import ViewAsFilter from './ViewAsFilter'
+import { ViewAsList } from './ViewAsList'
 
 interface Props {
   isSwtching: boolean
@@ -50,7 +50,7 @@ export function TeamItem({ isSwitching, onClick, selected, team }) {
           <Loading style={{ width: '2.25rem', height: '2.25rem' }} />
         )}
       </ListItem>
-      <ViewAsFilter team={team} isActive={selected} />
+      {selected && <ViewAsList team={team} />}
     </>
   )
 }
