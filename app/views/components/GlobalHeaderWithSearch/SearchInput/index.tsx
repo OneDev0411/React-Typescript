@@ -11,8 +11,10 @@ import { TextFieldProps } from '@material-ui/core/TextField'
 
 import { useDebouncedCallback } from 'use-debounce'
 
-import IconSearch from 'components/SvgIcons/Search/IconSearch'
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
+import SearchIcon from '@material-ui/icons/Search'
+
+import CloseIcon from '@material-ui/icons/Close'
+
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -122,7 +124,7 @@ export const SearchInput = forwardRef(
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <IconSearch fill={theme.palette.grey[600]} />
+              <SearchIcon style={{ color: theme.palette.grey[600] }} />
             </InputAdornment>
           ),
           endAdornment: (
@@ -130,7 +132,10 @@ export const SearchInput = forwardRef(
               {isLoading && <Loading />}
               {nonEmpty && (
                 <IconButton size="small" onClick={clearInput}>
-                  <IconClose size="small" fillColor={theme.palette.grey[600]} />
+                  <CloseIcon
+                    fontSize="small"
+                    style={{ color: theme.palette.grey[600] }}
+                  />
                 </IconButton>
               )}
             </>
