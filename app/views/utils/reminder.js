@@ -1,3 +1,5 @@
+import fecha from 'fecha'
+
 const NONE_OPTION = { title: 'None', value: -1 }
 
 const REMINDER_ITEMS = {
@@ -50,7 +52,9 @@ export function getReminderItem(dueDate, reminderDate) {
   const value = dueDate - reminderDate
   const title = REMINDER_ITEMS[value]
 
-  return title ? { title, value } : NONE_OPTION
+  return title
+    ? { title, value }
+    : { title: fecha.format(reminderDate, 'MMM D, YYYY hh:mm A'), value }
 }
 
 /**
