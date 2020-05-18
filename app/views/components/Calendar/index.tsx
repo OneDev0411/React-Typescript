@@ -530,7 +530,10 @@ function mapStateToProps({ user }: IAppState) {
 
   return {
     user,
-    viewAsUsers: viewAsUsers.length === teamMembers.length ? [] : viewAsUsers
+    viewAsUsers:
+      viewAsUsers == null || viewAsUsers.length === teamMembers.length
+        ? []
+        : viewAsUsers
   }
 }
 
