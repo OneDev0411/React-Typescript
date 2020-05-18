@@ -1,7 +1,6 @@
 import React from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
-// import Loading from 'components/Partials/Loading'
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 
 import { goTo } from 'utils/go-to'
