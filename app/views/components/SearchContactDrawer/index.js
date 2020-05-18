@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { Button, Divider, makeStyles } from '@material-ui/core'
+import { Button, makeStyles } from '@material-ui/core'
 
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 
@@ -52,7 +52,6 @@ export function SearchContactDrawer(props) {
         >
           New Contact
         </Button>
-        <Divider />
         {showCreateContact && (
           <NewContactDrawer
             isOpen
