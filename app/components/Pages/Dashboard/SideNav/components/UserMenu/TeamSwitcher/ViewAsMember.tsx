@@ -3,8 +3,7 @@ import {
   Checkbox,
   CheckboxProps,
   ListItem,
-  ListItemText,
-  Tooltip
+  ListItemText
 } from '@material-ui/core'
 
 interface Props {
@@ -16,11 +15,9 @@ interface Props {
 export function ViewAsMember({ checked, onChange, title }: Props) {
   return (
     <ListItem dense>
-      <Tooltip title={title}>
-        <ListItemText primaryTypographyProps={{ noWrap: true }}>
-          {title}
-        </ListItemText>
-      </Tooltip>
+      <ListItemText primaryTypographyProps={{ noWrap: true }}>
+        {title}
+      </ListItemText>
       <Checkbox checked={checked} onChange={onChange} />
     </ListItem>
   )
