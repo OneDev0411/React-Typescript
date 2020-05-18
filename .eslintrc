@@ -202,7 +202,8 @@
       {
         "semi": false,
         "singleQuote": true,
-        "printWidth": 80
+        "printWidth": 80,
+        "trailingComma": "none"
       }
     ],
     "padding-line-between-statements": [
