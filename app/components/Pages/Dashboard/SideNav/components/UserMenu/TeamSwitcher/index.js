@@ -1,8 +1,13 @@
 import React, { Fragment } from 'react'
-import Flex from 'styled-flex-component'
 import idx from 'idx/lib/idx'
-
-import Avatar from '../../../../../../../views/components/UserAvatar'
+import {
+  Avatar,
+  Box,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Tooltip
+} from '@material-ui/core'
 
 import { putUserSetting } from '../../../../../../../models/user/put-user-setting'
 
@@ -16,7 +21,6 @@ import { viewAs, getActiveTeamId } from '../../../../../../../utils/user-teams'
 import { selectTeamIsFetching } from '../../../../../../../reducers/user'
 
 import ViewAsFilter from './ViewAsFilter'
-import { TeamName, Button } from './styled'
 import { ListItemDivider } from '../../../styled'
 
 export default class TeamSwitcher extends React.Component {
@@ -31,16 +35,7 @@ export default class TeamSwitcher extends React.Component {
   getAvatar(brand) {
     const flatted = flattenBrand(brand)
 
-    return (
-      <Avatar
-        round
-        showStateIndicator={false}
-        name={flatted.name}
-        size={30}
-        src={flatted.assets ? flatted.assets.site_logo : null}
-        color="#000000"
-      />
-    )
+    return flatted.name.charAt(0).toUpperCase()
   }
 
   changeTeam = (e, team) => {
@@ -60,33 +55,34 @@ export default class TeamSwitcher extends React.Component {
     const { savingTeam } = this.state
     const isActiveTeam = team.brand.id === this.ActiveTeam
 
-    return [
-      <li key={team.brand.id}>
-        <Button
-          appearance="link"
+    return (
+      <>
+        <ListItem
+          button
+          key={team.brand.id}
           disabled={savingTeam}
-          isSelected={isActiveTeam}
+          selected={isActiveTeam}
           onClick={e => this.changeTeam(e, team)}
         >
-          <Flex alignCenter style={{ width: 'calc(100% - 2.25rem)' }}>
-            {this.getAvatar(team.brand)}
-
-            <TeamName>{team.brand.name}</TeamName>
-          </Flex>
-          <Flex alignCenter>
-            {!savingTeam && isActiveTeam && (
-              <CheckmarkIcon style={{ fill: primary }} />
-            )}
+          <ListItemAvatar>
+            <Avatar>{this.getAvatar(team.brand)}</Avatar>
+          </ListItemAvatar>
+          <Tooltip title={team.brand.name}>
+            <ListItemText primaryTypographyProps={{ noWrap: true }}>
+              {team.brand.name}
+            </ListItemText>
+          </Tooltip>
+          <>
+            {isActiveTeam && <CheckmarkIcon style={{ fill: primary }} />}
 
             {savingTeam === team.brand.id && (
               <Loading style={{ width: '2.25rem', height: '2.25rem' }} />
             )}
-          </Flex>
-        </Button>
-        <ViewAsFilter team={team} isActive={isActiveTeam && !savingTeam} />
-      </li>,
-      <ListItemDivider key={`sp_${team.brand.id}`} role="separator" />
-    ]
+          </>
+        </ListItem>
+        <ViewAsFilter team={team} isActive={isActiveTeam} />
+      </>
+    )
   }
 
   render() {
@@ -95,9 +91,9 @@ export default class TeamSwitcher extends React.Component {
     if (selectTeamIsFetching(user)) {
       return (
         <Fragment>
-          <Flex center>
+          <Box display="flex" justifyContent="center" alignItems="center">
             <Loading />
-          </Flex>
+          </Box>
           <ListItemDivider role="separator" />
         </Fragment>
       )
