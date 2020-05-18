@@ -79,10 +79,10 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
   }
 
   useDeepCompareEffect(() => {
-    if (searchQuery.type === 'query') {
+    if (searchQuery.type === 'query' && statuses.length > 0) {
       dispatch(searchDeals(user, getStaticFilterQuery(searchQuery, statuses)))
     }
-  }, [searchQuery])
+  }, [dispatch, searchQuery, statuses, user])
 
   return (
     <PageLayout>
