@@ -13,7 +13,8 @@ import {
 } from '@material-ui/core'
 import { PopperPlacementType } from '@material-ui/core/Popper'
 
-import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+
 import { ClassesProps } from 'utils/ts-utils'
 
 interface RenderMenuProps {
@@ -35,9 +36,6 @@ interface Props {
 
 const styles = (theme: Theme) =>
   createStyles({
-    icon: {
-      fill: 'currentColor'
-    },
     mainButton: {
       flex: 1
     }
@@ -85,7 +83,7 @@ export default function SplitButton(
           onClick={handleToggle}
           size="small"
         >
-          <IconKeyboardArrowDown className={classes.icon} />
+          <KeyboardArrowDownIcon />
         </Button>
       </ButtonGroup>
       <Popper
