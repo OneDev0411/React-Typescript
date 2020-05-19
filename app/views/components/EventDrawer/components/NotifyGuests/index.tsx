@@ -81,7 +81,12 @@ export const NotifyGuests = ({
           Would you like to send update emails to existing guests?
         </Typography>
         <Box className={classes.submitBtn}>
-          <Button size="small" onClick={onCancel} disableElevation>
+          <Button
+            size="small"
+            onClick={onCancel}
+            disabled={isDisabled}
+            disableElevation
+          >
             Cancel
           </Button>
           {!isDisabled ? (
