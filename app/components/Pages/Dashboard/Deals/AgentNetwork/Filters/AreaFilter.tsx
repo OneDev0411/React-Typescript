@@ -14,10 +14,11 @@ import { Observable } from 'rxjs'
 import { of } from 'rxjs/observable/of'
 
 import { ChipsInput } from 'components/ChipsInput'
-
-import { useChipStyles } from '../../../../../../styles/use-chips-styles'
+import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
+import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
 import { DEFAULT_RADIUS_FILTER } from '../constants'
+import { useChipStyles } from '../../../../../../styles/use-chips-styles'
 
 import { useGetMlsArea } from './use-get-mls-areas'
 import { itemToChip, itemToSuggestion } from './helpers'
@@ -50,11 +51,12 @@ interface Props {
   handleSearch: (filter: Filter) => void
 }
 
-export default function AreaFilter(props: Props) {
+export function AreaFilter(props: Props) {
   const classes = useStyles()
   const chipsClasses = useChipStyles()
   const { disabled } = props
   const parentAreas = useGetMlsArea()
+  const [, gridDispatch] = useGridContext()
   const [radius, setRadius] = useState<number>(DEFAULT_RADIUS_FILTER.radius)
   const [selectedParentAreas, setSelectedParentAreas] = useState<IMLSArea[]>([])
   const [selectedSubAreas, setSelectedSubAreas] = useState<IMLSArea[]>([])
@@ -68,7 +70,7 @@ export default function AreaFilter(props: Props) {
   const isFilterTypeRadius = filterType === 'radius'
   const isFilterTypeCustom = filterType === 'custom'
 
-  const handleChangeType = event => {
+  const handleChangeType = (event) => {
     setFilterType(event.target.value)
   }
 
@@ -102,12 +104,12 @@ export default function AreaFilter(props: Props) {
     [
       ...selectedSubAreas,
       ...selectedParentAreas.filter(
-        parentArea =>
+        (parentArea) =>
           !selectedSubAreas.some(
-            subArea => subArea.parent === parentArea.number
+            (subArea) => subArea.parent === parentArea.number
           )
       )
-    ].map(area => [area.number, area.parent])
+    ].map((area) => [area.number, area.parent])
 
   const onSearch = () => {
     const filter: Filter = { type: filterType }
@@ -118,6 +120,7 @@ export default function AreaFilter(props: Props) {
       filter.areas = getFilteredAreas()
     }
 
+    gridDispatch(resetRows())
     props.handleSearch(filter)
   }
 

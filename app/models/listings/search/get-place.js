@@ -2,13 +2,11 @@ import config from '../../../../config/public'
 
 const getPlace = async (address, compact = true) => {
   if (!address) {
-    return
+    return null
   }
 
   try {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?key=${
-      config.google.api_key
-    }&address=${address}`
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?key=${config.google.api_key}&address=${address}`
     const request = new Request(url, {
       method: 'GET'
     })
