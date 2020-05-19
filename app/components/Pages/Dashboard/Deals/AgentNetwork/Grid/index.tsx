@@ -56,7 +56,8 @@ const useStyles = makeStyles(
   }),
   { name: 'AgentsGrid' }
 )
-const Grid = (props: Props) => {
+
+export function Grid(props: Props) {
   const [state, dispatch] = useGridContext()
   const classes = useStyles()
   const theme: Theme = useTheme()
@@ -78,6 +79,7 @@ const Grid = (props: Props) => {
       selectedRowIds.length > 0 &&
       selectedRowIds.length < (props.data || []).length) ||
     (isEntireRowsSelected && excludedRows.length > 0)
+
   const tooltipTitle =
     isAllSelected || isEntireRowsSelected
       ? 'Deselect All Rows'
@@ -90,7 +92,7 @@ const Grid = (props: Props) => {
       title: `${agent.name} ${
         listType === 'asListing' ? 'listings' : 'Buyers'
       } (${agent[listType].length})`,
-      list: agent[listType].map(id => agent.listings[id])
+      list: agent[listType].map((id) => agent.listings[id])
     })
 
   const columns = [
@@ -197,17 +199,19 @@ const Grid = (props: Props) => {
   const getActiveSort = () => {
     const sort = parseSortSetting(props.user, SORT_FIELD_SETTING_KEY, 'name')
 
-    return SortableColumns.find(col => col.value === sort.id)
+    return SortableColumns.find((col) => col.value === sort.id)
   }
 
-  const handleChangeSort = async column => {
+  const handleChangeSort = async (column) => {
     putUserSetting(SORT_FIELD_SETTING_KEY, column.value)
   }
+
   const toggleAll = () =>
     dispatch({
       type: SELECTION__TOGGLE_ALL,
       rows: props.data
     })
+
   const getSummeryInfo = () => {
     const totalRows = (props.data || []).length
     let selectedCount
@@ -225,7 +229,7 @@ const Grid = (props: Props) => {
 
   return (
     <>
-      {!props.isFetching && (
+      {!props.isFetching && (props.data || []).length > 0 && (
         <div className={classes.infoContainer}>
           <Tooltip title={tooltipTitle}>
             <Checkbox
@@ -278,5 +282,3 @@ const Grid = (props: Props) => {
     </>
   )
 }
-
-export default Grid
