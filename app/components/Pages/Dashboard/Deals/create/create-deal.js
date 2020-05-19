@@ -32,7 +32,7 @@ import {
 
 import { isBackOffice } from 'utils/user-teams'
 
-import { getDealStatuses } from 'models/Deal/status/get-statuses'
+import { getBrandStatuses } from 'models/Deal/status/get-brand-statuses'
 
 import DealType from './deal-type'
 import DealSide from './deal-side'
@@ -108,7 +108,7 @@ class CreateDeal extends React.Component {
     })
   }
 
-  generateRolesFromDeal = deal => {
+  generateRolesFromDeal = (deal) => {
     const isBuyingDeal = deal.deal_type === 'Buying'
 
     const roles = {
@@ -124,7 +124,7 @@ class CreateDeal extends React.Component {
       return roles
     }
 
-    deal.roles.forEach(roleId => {
+    deal.roles.forEach((roleId) => {
       const roleItem = this.props.roles[roleId]
 
       if (!roleItem) {
@@ -214,7 +214,7 @@ class CreateDeal extends React.Component {
     return roles
   }
 
-  generateContextsFromDeal = deal => {
+  generateContextsFromDeal = (deal) => {
     const contexts = {}
 
     const dealContexts = _.indexBy(
@@ -222,7 +222,7 @@ class CreateDeal extends React.Component {
       'key'
     )
 
-    _.each(dealContexts, context => {
+    _.each(dealContexts, (context) => {
       let value = Deal.get.field(deal, context.key)
 
       if (value !== null && context.data_type === 'Date') {
@@ -235,7 +235,7 @@ class CreateDeal extends React.Component {
     return contexts
   }
 
-  generateAddressFromDeal = deal => {
+  generateAddressFromDeal = (deal) => {
     const address_components = {}
 
     const fields = [
@@ -250,11 +250,11 @@ class CreateDeal extends React.Component {
       'unit_number'
     ]
 
-    fields.forEach(name => {
+    fields.forEach((name) => {
       address_components[name] = Deal.get.field(deal, name)
     })
 
-    if (_.every(address_components, component => component === null)) {
+    if (_.every(address_components, (component) => component === null)) {
       return null
     }
 
@@ -272,7 +272,7 @@ class CreateDeal extends React.Component {
    */
   onUpsertRole = (form, type) =>
     this.setState(
-      state => ({
+      (state) => ({
         [type]: {
           ...state[type],
           [form.id]: form
@@ -286,8 +286,8 @@ class CreateDeal extends React.Component {
    */
   onRemoveRole = (id, type) =>
     this.setState(
-      state => ({
-        [type]: _.omit(state[type], role => role.id === id)
+      (state) => ({
+        [type]: _.omit(state[type], (role) => role.id === id)
       }),
       () => this.validateForm()
     )
@@ -295,7 +295,7 @@ class CreateDeal extends React.Component {
   /**
    * handles create an mls or manual address
    */
-  onCreateAddress = address => {
+  onCreateAddress = (address) => {
     this.setState({ dealAddress: address }, () => this.validateForm())
   }
 
@@ -334,7 +334,7 @@ class CreateDeal extends React.Component {
 
   loadStatuses = async () => {
     try {
-      const statuses = await getDealStatuses(getActiveTeamId(this.props.user))
+      const statuses = await getBrandStatuses(getActiveTeamId(this.props.user))
 
       this.setState({
         statuses
@@ -346,7 +346,7 @@ class CreateDeal extends React.Component {
 
   get StatusList() {
     return this.state.statuses
-      .filter(status => {
+      .filter((status) => {
         if (this.state.dealSide === 'Selling' && !status.is_active) {
           return false
         }
@@ -360,7 +360,7 @@ class CreateDeal extends React.Component {
           status.property_types.includes(this.state.dealPropertyType)
         )
       })
-      .map(status => status.label)
+      .map((status) => status.label)
   }
 
   /**
@@ -417,8 +417,8 @@ class CreateDeal extends React.Component {
       agents: {
         validator: () =>
           dealSide === 'Buying'
-            ? !!_.find(agents, agent => agent.role === 'BuyerAgent')
-            : !!_.find(agents, agent => agent.role === 'SellerAgent')
+            ? !!_.find(agents, (agent) => agent.role === 'BuyerAgent')
+            : !!_.find(agents, (agent) => agent.role === 'SellerAgent')
       },
       clients: {
         validator: () => _.size(clients) > 0
@@ -465,7 +465,7 @@ class CreateDeal extends React.Component {
   /**
    * when user tries to change deal side, we should show a confirmation modal
    */
-  requestChangeDealSide = nextDealSide => {
+  requestChangeDealSide = (nextDealSide) => {
     const { dealSide } = this.state
 
     if (dealSide === nextDealSide) {
@@ -479,7 +479,7 @@ class CreateDeal extends React.Component {
       'sellingClients',
       'referrals',
       'escrowOfficers'
-    ].some(name => _.size(this.state[name]) > 0)
+    ].some((name) => _.size(this.state[name]) > 0)
 
     if (showConfirmation) {
       return this.props.confirmation({
@@ -495,7 +495,7 @@ class CreateDeal extends React.Component {
   /**
    * handles change deal type
    */
-  changeDealType = isDraft =>
+  changeDealType = (isDraft) =>
     this.setState({
       isDraft,
       validationErrors: [],
@@ -506,9 +506,9 @@ class CreateDeal extends React.Component {
    * handles changing deal side
    * when deal side changes, we should reset roles and ender_type
    */
-  changeDealSide = dealSide =>
+  changeDealSide = (dealSide) =>
     this.setState(
-      state => ({
+      (state) => ({
         dealSide,
         dealStatus: '',
         agents: {},
@@ -526,8 +526,8 @@ class CreateDeal extends React.Component {
   /**
    * handles change deal property type
    */
-  changePropertyType = dealPropertyType =>
-    this.setState(state => ({
+  changePropertyType = (dealPropertyType) =>
+    this.setState((state) => ({
       dealPropertyType,
       dealStatus: '',
       contexts: this.getDefaultContextValues(state.dealSide, dealPropertyType),
@@ -537,7 +537,7 @@ class CreateDeal extends React.Component {
   /**
    * handles deal status change
    */
-  changeDealStatus = status =>
+  changeDealStatus = (status) =>
     this.setState({ dealStatus: status }, () => this.validateForm())
 
   /**
@@ -545,7 +545,7 @@ class CreateDeal extends React.Component {
    */
   changeContext = (field, value) => {
     this.setState(
-      state => ({
+      (state) => ({
         contexts: {
           ...state.contexts,
           [field]: value
@@ -558,12 +558,12 @@ class CreateDeal extends React.Component {
   /**
    * handles deal ender_type context change
    */
-  changeEnderType = enderType => this.setState({ enderType })
+  changeEnderType = (enderType) => this.setState({ enderType })
 
   /**
    * check an specific field has error or not
    */
-  hasError = field => {
+  hasError = (field) => {
     const { validationErrors } = this.state
 
     return this.isFormSubmitted && validationErrors.includes(field)
@@ -574,7 +574,7 @@ class CreateDeal extends React.Component {
    */
   updateOrCreateDeal = () => {
     this.setState(
-      state => ({
+      (state) => ({
         isDraft: this.props.deal ? true : state.isDraft
       }),
       this.upsertDeal
@@ -630,14 +630,14 @@ class CreateDeal extends React.Component {
         }
       })
 
-      const roles = this.Roles.map(role => ({
+      const roles = this.Roles.map((role) => ({
         ...role,
         checklist: checklist.id
       }))
 
       await Deal.createRole(deal.id, roles)
 
-      const contexts = this.Contexts.map(context => ({
+      const contexts = this.Contexts.map((context) => ({
         ...context,
         checklist: checklist.id
       }))
@@ -666,12 +666,12 @@ class CreateDeal extends React.Component {
     const { id: dealId } = this.props.deal
 
     const dealObject = this.createDealObject()
-    const contexts = this.Contexts.map(context => ({
+    const contexts = this.Contexts.map((context) => ({
       ...context,
       checklist: DealContext.getChecklist(this.props.deal, context.key)
     }))
 
-    const newRoles = _.filter(this.Roles, role => !role.deal).map(role => ({
+    const newRoles = _.filter(this.Roles, (role) => !role.deal).map((role) => ({
       ...role,
       checklist: this.props.deal.checklists[0]
     }))
@@ -738,7 +738,7 @@ class CreateDeal extends React.Component {
   }
 
   getPrimaryAgentBrandId = () => {
-    const primaryAgent = Object.values(this.state.agents).find(agent =>
+    const primaryAgent = Object.values(this.state.agents).find((agent) =>
       ['SellerAgent', 'BuyerAgent'].includes(agent.role)
     )
 
@@ -748,7 +748,7 @@ class CreateDeal extends React.Component {
   /**
    * create context object
    */
-  createContextsObject = contexts => {
+  createContextsObject = (contexts) => {
     const { dealSide, dealPropertyType } = this.state
     const list = []
 
@@ -801,7 +801,7 @@ class CreateDeal extends React.Component {
     const list = this.getDealContexts(dealSide, dealPropertyType)
     const defaultValues = {}
 
-    list.forEach(context => {
+    list.forEach((context) => {
       if (!_.isUndefined(context.default_value)) {
         defaultValues[context.key] = context.default_value
       }
@@ -868,18 +868,20 @@ class CreateDeal extends React.Component {
 
     const roles = []
 
-    _.each(clients, client => roles.push(_.omit(client, ['id', 'contact'])))
-    _.each(sellingClients, client =>
+    _.each(clients, (client) => roles.push(_.omit(client, ['id', 'contact'])))
+    _.each(sellingClients, (client) =>
       roles.push(_.omit(client, ['id', 'contact']))
     )
 
-    _.each(agents, agent => roles.push(_.omit(agent, ['id', 'contact'])))
-    _.each(sellingAgents, agent => roles.push(_.omit(agent, ['id', 'contact'])))
+    _.each(agents, (agent) => roles.push(_.omit(agent, ['id', 'contact'])))
+    _.each(sellingAgents, (agent) =>
+      roles.push(_.omit(agent, ['id', 'contact']))
+    )
 
-    _.each(referrals, referral =>
+    _.each(referrals, (referral) =>
       roles.push(_.omit(referral, ['id', 'contact']))
     )
-    _.each(escrowOfficers, officer =>
+    _.each(escrowOfficers, (officer) =>
       roles.push(_.omit(officer, ['id', 'contact']))
     )
 
@@ -962,17 +964,17 @@ class CreateDeal extends React.Component {
                   hasError={this.hasError('clients')}
                   dealSide={dealSide}
                   clients={clients}
-                  onUpsertClient={form => this.onUpsertRole(form, 'clients')}
-                  onRemoveClient={id => this.onRemoveRole(id, 'clients')}
+                  onUpsertClient={(form) => this.onUpsertRole(form, 'clients')}
+                  onRemoveClient={(id) => this.onRemoveRole(id, 'clients')}
                 />
 
                 <DealReferrals
                   dealSide={dealSide}
                   referrals={referrals}
-                  onUpsertReferral={form =>
+                  onUpsertReferral={(form) =>
                     this.onUpsertRole(form, 'referrals')
                   }
-                  onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
+                  onRemoveReferral={(id) => this.onRemoveRole(id, 'referrals')}
                 />
 
                 <DealAgents
@@ -982,8 +984,8 @@ class CreateDeal extends React.Component {
                   dealSide={dealSide}
                   agents={agents}
                   dealEnderType={enderType}
-                  onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
-                  onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
+                  onUpsertAgent={(form) => this.onUpsertRole(form, 'agents')}
+                  onRemoveAgent={(id) => this.onRemoveRole(id, 'agents')}
                 />
 
                 {dealSide === 'Buying' && (
@@ -1005,10 +1007,10 @@ class CreateDeal extends React.Component {
                       agents={sellingAgents}
                       isCommissionRequired={this.IsDoubleEnded}
                       dealEnderType={enderType}
-                      onUpsertAgent={form =>
+                      onUpsertAgent={(form) =>
                         this.onUpsertRole(form, 'sellingAgents')
                       }
-                      onRemoveAgent={id =>
+                      onRemoveAgent={(id) =>
                         this.onRemoveRole(id, 'sellingAgents')
                       }
                     />
@@ -1019,10 +1021,10 @@ class CreateDeal extends React.Component {
                       dealSide="Selling"
                       clients={sellingClients}
                       title="Seller (Landlord)"
-                      onUpsertClient={form =>
+                      onUpsertClient={(form) =>
                         this.onUpsertRole(form, 'sellingClients')
                       }
-                      onRemoveClient={id =>
+                      onRemoveClient={(id) =>
                         this.onRemoveRole(id, 'sellingClients')
                       }
                     />
@@ -1032,10 +1034,10 @@ class CreateDeal extends React.Component {
                         isRequired={requiredFields.includes('escrow_officer')}
                         hasError={this.hasError('escrow_officer')}
                         escrowOfficers={escrowOfficers}
-                        onUpsertEscrowOfficer={form =>
+                        onUpsertEscrowOfficer={(form) =>
                           this.onUpsertRole(form, 'escrowOfficers')
                         }
-                        onRemoveEscrowOfficer={id =>
+                        onRemoveEscrowOfficer={(id) =>
                           this.onRemoveRole(id, 'escrowOfficers')
                         }
                       />
@@ -1131,15 +1133,12 @@ function mapStateToProps({ user, deals }, { params }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    confirmation,
-    createDeal,
-    upsertContexts,
-    ejectDraftMode,
-    createRoles,
-    updateListing,
-    notify
-  }
-)(CreateDeal)
+export default connect(mapStateToProps, {
+  confirmation,
+  createDeal,
+  upsertContexts,
+  ejectDraftMode,
+  createRoles,
+  updateListing,
+  notify
+})(CreateDeal)
