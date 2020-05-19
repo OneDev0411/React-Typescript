@@ -1,11 +1,10 @@
 import React from 'react'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
-import _ from 'underscore'
 import { Helmet } from 'react-helmet'
 
 import { goTo } from 'utils/go-to'
-import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
+import { viewAs } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
 import { stopFlow } from 'models/flows/stop-flow'
@@ -71,19 +70,6 @@ class ContactProfile extends React.Component {
     window.socket.on('crm_task:create', this.fetchTimeline)
     window.socket.on('email_campaign:create', this.fetchTimeline)
     window.socket.on('email_campaign:send', this.fetchTimeline)
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
-      !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
-    ) {
-      const viewAsUsers = viewAsEveryoneOnTeam(nextProps.user)
-        ? []
-        : nextProps.viewAsUsers
-
-      this.props.getContactsTags(viewAsUsers)
-    }
   }
 
   componentDidUpdate(prevProps) {

@@ -33,7 +33,7 @@ export function ViewAsList({ team }: Props) {
   const user = useSelector((store: IAppState) => store.user)
   const brandMembers = getTeamAvailableMembers(team)
   const allMembersId = brandMembers.map(m => m.id)
-  const initialSelectedMembers = useMemo(() => viewAs(user) || [], [user])
+  const initialSelectedMembers = useMemo(() => viewAs(user, team), [user, team])
   const [selectedMembers, setSelectedMembers] = useState(initialSelectedMembers)
 
   if (isBackOffice(user) || brandMembers.length === 1) {
@@ -66,6 +66,8 @@ export function ViewAsList({ team }: Props) {
     }
 
     dispatch(setViewAsFilter(user, selectedMembers))
+
+    window.location.reload(true)
   }
 
   return (
@@ -93,7 +95,7 @@ export function ViewAsList({ team }: Props) {
           />
         )
       })}
-      <Box px={2} pb={1}>
+      <Box px={2} py={1}>
         <Button size="small" variant="outlined" fullWidth onClick={onApply}>
           Apply
         </Button>

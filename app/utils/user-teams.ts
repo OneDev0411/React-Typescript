@@ -144,13 +144,13 @@ export function isActiveTeamTraining(user: IUser | null): boolean {
 export function viewAs(
   user: IUser | null,
   activeTeam: IUserTeam | null = getActiveTeam(user)
-): UUID[] | null {
+): UUID[] {
   if (
     activeTeam &&
     !idx(activeTeam, t => t.acl.includes('BackOffice')) &&
     idx(activeTeam, team => team.settings.user_filter[0])
   ) {
-    return activeTeam.settings.user_filter
+    return activeTeam.settings.user_filter || []
   }
 
   return []

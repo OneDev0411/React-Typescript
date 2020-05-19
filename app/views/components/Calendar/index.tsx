@@ -17,11 +17,7 @@ import { IAppState } from 'reducers/index'
 
 import { getCalendar } from 'models/calendar/get-calendar'
 
-import {
-  viewAs,
-  getTeamAvailableMembers,
-  getActiveTeam
-} from 'utils/user-teams'
+import { viewAs } from 'utils/user-teams'
 
 import { LoadingPosition, VirtualListRef } from 'components/VirtualList'
 
@@ -525,15 +521,9 @@ export function Calendar({
 }
 
 function mapStateToProps({ user }: IAppState) {
-  const teamMembers = getTeamAvailableMembers(getActiveTeam(user))
-  const viewAsUsers = viewAs(user)
-
   return {
     user,
-    viewAsUsers:
-      viewAsUsers == null || viewAsUsers.length === teamMembers.length
-        ? []
-        : viewAsUsers
+    viewAsUsers: viewAs(user)
   }
 }
 
