@@ -25,4 +25,5 @@ declare interface IEvent extends IModel<'crm_task'> {
   contact: IContact
   title: string
   description: string
+  metadata?: Pick<ICalendarEvent, 'metadata'>
 }
