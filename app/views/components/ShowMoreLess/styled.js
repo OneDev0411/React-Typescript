@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import Arrow from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 
 export const ShowMoreLessText = styled.div`
   display: flex;
@@ -11,10 +11,7 @@ export const ShowMoreLessText = styled.div`
   width: 100%;
 `
 
-export const ArrowDown = styled(Arrow)`
-  fill: ${props => props.theme.palette.primary.main};
-  width: 1.25rem;
-  height: 1.25rem;
+export const ArrowDown = styled(KeyboardArrowDownIcon)`
   margin-top: 0.2rem;
 `
 
