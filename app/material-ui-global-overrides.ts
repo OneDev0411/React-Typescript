@@ -12,6 +12,7 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
     },
 
     '.MuiIconButton-root': {
+      color: theme.palette.common.black,
       // because of disabling ripple globally
       '&.Mui-focusVisible': {
         background: theme.palette.action.selected
