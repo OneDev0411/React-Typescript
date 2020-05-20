@@ -211,6 +211,16 @@ class PresentEventDrawer extends Component {
     document.getElementById('event-drawer-form').dispatchEvent(event)
   }
 
+  handleClose = () => {
+    if (this.state.shouldShowNotify) {
+      this.setState(() => ({
+        shouldShowNotify: false
+      }))
+    }
+
+    this.props.onClose()
+  }
+
   render() {
     let crm_task
     const {
@@ -222,7 +232,7 @@ class PresentEventDrawer extends Component {
       shouldShowNotify,
       currentEvent
     } = this.state
-    const { defaultAssociation, user, isOpen, onClose } = this.props
+    const { defaultAssociation, user, isOpen } = this.props
 
     if (event) {
       crm_task = event.id
@@ -237,11 +247,11 @@ class PresentEventDrawer extends Component {
             isDeleting={isDeleting}
             onSave={this.save}
             onDelete={this.delete}
-            onCancel={onClose}
+            onCancel={this.handleClose}
             currentEvent={currentEvent}
           />
         )}
-        <Drawer open={isOpen} onClose={onClose}>
+        <Drawer open={isOpen} onClose={this.handleClose}>
           <Drawer.Header title={`${this.isNew ? 'Add' : 'Edit'} Event`} />
           <Drawer.Body>
             {error && error.status === 404 ? (
