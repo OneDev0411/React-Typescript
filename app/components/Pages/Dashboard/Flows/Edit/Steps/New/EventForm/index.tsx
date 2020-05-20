@@ -23,7 +23,7 @@ import {
 
 interface FormData {
   task_type: {
-    title: string
+    title: TTaskType
     value: TTaskType
   }
   title: string
@@ -47,14 +47,15 @@ export default function EventForm({
   onCancel,
   onDelete
 }: Props) {
-  function getInitialValues(stepData?: IBrandFlowStep) {
+  function getInitialValues(stepData?: IBrandFlowStep): FormData {
     if (!stepData || !stepData.event) {
       return {
         task_type: {
           value: 'Call',
           title: 'Call'
         },
-        wait_for: '1',
+        title: '',
+        wait_for: 1,
         at: '08:00'
       }
     }
@@ -69,7 +70,7 @@ export default function EventForm({
       },
       title: stepData.title,
       description: stepData.description,
-      wait_for: stepData.wait_days.toString(),
+      wait_for: stepData.wait_days,
       at
     }
   }
