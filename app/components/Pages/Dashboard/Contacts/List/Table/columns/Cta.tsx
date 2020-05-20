@@ -3,13 +3,15 @@ import { useSelector } from 'react-redux'
 
 import { Tooltip, IconButton, makeStyles, Theme } from '@material-ui/core'
 
+import EventOutlinedIcon from '@material-ui/icons/EventOutlined'
+
+import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined'
+
 import { IAppState } from 'reducers'
 import { EventDrawer } from 'components/EventDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 
-import EmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
-import CalendarIcon from 'components/SvgIcons/Calendar2/IconCalendar'
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 import Chat from 'components/SvgIcons/Chat/IconChat'
 import MissingEmailModal from 'components/MissingEmailModal'
@@ -32,18 +34,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&:not(:last-child)': {
       marginRight: theme.spacing(0.75)
     },
-    '& svg': {
-      width: 'unset',
-      height: theme.spacing(3),
-      '&[data-icon="chat"]': { height: theme.spacing(2.5) },
-      '&[data-icon="event"]': { height: theme.spacing(2.25) }
-    },
     '&:hover svg': {
       fill: theme.palette.primary.main
     }
-  },
-  emailIcon: {
-    height: theme.spacing(2.5)
   }
 }))
 
@@ -129,7 +122,7 @@ export default function CtaAction({ contact }: Props) {
             className={classes.item}
             onClick={toggleEventDrawer}
           >
-            <CalendarIcon data-icon="event" />
+            <EventOutlinedIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Send an email">
@@ -138,7 +131,7 @@ export default function CtaAction({ contact }: Props) {
             className={classes.item}
             onClick={toggleEmailComposer}
           >
-            <EmailOutline data-icon="email" />
+            <EmailOutlinedIcon />
           </IconButton>
         </Tooltip>
         {renderChatButton}
