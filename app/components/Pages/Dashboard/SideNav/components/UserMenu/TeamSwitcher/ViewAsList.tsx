@@ -60,12 +60,12 @@ export function ViewAsList({ team }: Props) {
     setSelectedMembers(allMembersId)
   }
 
-  const onApply = () => {
+  const onApply = async () => {
     if (isEqual(selectedMembers, initialSelectedMembers)) {
       return
     }
 
-    dispatch(setViewAsFilter(user, selectedMembers))
+    await dispatch(setViewAsFilter(user, selectedMembers))
 
     window.location.reload(true)
   }
