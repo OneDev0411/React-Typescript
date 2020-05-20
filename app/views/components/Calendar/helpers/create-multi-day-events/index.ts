@@ -1,3 +1,14 @@
+function getEndDate(event: ICalendarEvent): Date {
+  const isAllDay = event.metadata?.all_day || false
+  const endDate = new Date(parseFloat(event.end_date!) * 1000)
+
+  if (isAllDay) {
+    endDate.setHours(0, 0, 0, 0)
+  }
+
+  return endDate
+}
+
 /**
  * Duplicates multi day events through all its days.
  * It doesn't mutate the input `events` and creates a new one.
@@ -15,20 +26,17 @@ export default function createMultiDayEvents(
       const dayEnd = dayStart + 86400000 // = one day
 
       distributedEvents[month][day] = []
-      multiDayEvents = multiDayEvents.filter(
-        event => parseFloat(event.end_date!) * 1000 > dayStart
-      )
+      multiDayEvents = multiDayEvents.filter(event => {
+        const endDate = getEndDate(event)
+
+        return endDate.getTime() > dayStart
+      })
       multiDayEvents.forEach(event => distributedEvents[month][day].push(event))
 
       events.forEach(event => {
         distributedEvents[month][day].push(event)
 
-        const isAllDay = (event.metadata && event.metadata.all_day) || false
-        const endDate = new Date(parseFloat(event.end_date!) * 1000)
-
-        if (isAllDay) {
-          endDate.setHours(0, 0, 0, 0)
-        }
+        const endDate = getEndDate(event)
 
         if (endDate.getTime() > dayEnd) {
           multiDayEvents.push(event)
