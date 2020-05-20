@@ -282,21 +282,6 @@ class PresentEventDrawer extends Component {
                         onSubmit={formProps.handleSubmit}
                         id="event-drawer-form"
                       >
-                        {!this.isNew && (
-                          <WhenFieldChanges
-                            set="status"
-                            watch="dueDate"
-                            setter={onChange => {
-                              if (isPastDate) {
-                                if (!isDone) {
-                                  onChange('DONE')
-                                }
-                              } else if (isDone) {
-                                onChange('PENDING')
-                              }
-                            }}
-                          />
-                        )}
                         {/* Set future event due date to now if user wants to mark it as done */}
                         {!this.isNew && (
                           <WhenFieldChanges
