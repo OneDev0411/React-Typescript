@@ -43,13 +43,6 @@ export default (state = initialState, action) => {
 
     case CHANGE_VIEW_AS_FILTER_SUCCESS:
     case CHANGE_VIEW_AS_FILTER_FAILURE:
-      // A dirty hack for controlling action domain
-      // if the filter change has happened in other areas
-      // the fetching state should be reset
-      if (window.location.pathname.indexOf('deals') > -1) {
-        return state
-      }
-
       return {
         ...state,
         isFetchingDeals: false
