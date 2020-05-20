@@ -1,10 +1,8 @@
 import React from 'react'
-
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { IconButton, MenuItem, Typography } from '@material-ui/core'
 
 import { BaseDropdown } from 'components/BaseDropdown'
-
-import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
 
 interface Props {
   contactId: UUID
@@ -24,7 +22,7 @@ export default function Menu({ contactId, handleOnDelete }: Props) {
       }}
       renderDropdownButton={buttonProps => (
         <IconButton {...buttonProps}>
-          <IconHorizontalDots />
+          <MoreHorizIcon />
         </IconButton>
       )}
       renderMenu={({ close }) => (
