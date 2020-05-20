@@ -49,10 +49,12 @@ export function AddRole(props) {
     props.onClick()
   }
 
-  const handleClickOutside = () =>
+  const handleClickOutside = () => {
     setShowRoles(
-      document.getElementsByClassName('deal-role-form-modal').length > 0
+      document.getElementsByClassName('deal-role-form-modal').length > 0 ||
+        document.getElementsByClassName('MuiDrawer-root').length > 0
     )
+  }
 
   const handleUpsertRole = role => {
     setShowRoles(false)
