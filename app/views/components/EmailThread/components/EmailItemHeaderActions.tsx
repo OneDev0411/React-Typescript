@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { useSelector } from 'react-redux'
 
 import {
   Box,
@@ -14,10 +13,11 @@ import {
   Tooltip
 } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
+import classNames from 'classnames'
 
-import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
+import useTypedSelector from 'hooks/use-typed-selector'
 import { useMenu } from 'hooks/use-menu'
 
 import { ClassesProps } from 'utils/ts-utils'
@@ -26,7 +26,9 @@ import IconReply from '../../SvgIcons/Reply/IconReply'
 import IconReplyAll from '../../SvgIcons/ReplyAll/IconReplyAll'
 import IconForward from '../../SvgIcons/Forward/IconForward'
 import IconVerticalDocs from '../../SvgIcons/VeriticalDots/VerticalDotsIcon'
-import IconEmailRead from '../../SvgIcons/EmailRead/IconEmailRead'
+import IconMailRead from '../../SvgIcons/MailRead/IconMailRead'
+import IconMailUnread from '../../SvgIcons/MailUnread/IconMailUnread'
+
 import { iconSizes } from '../../SvgIcons/icon-sizes'
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
 import { EmailThreadEmail } from '../types'
@@ -62,7 +64,7 @@ export function EmailItemHeaderActions(
   props: Props & ClassesProps<typeof styles>
 ) {
   const { menuProps, buttonTriggerProps, onClose } = useMenu()
-  const accounts: IOAuthAccount[] = useSelector((state: IAppState) =>
+  const accounts: IOAuthAccount[] = useTypedSelector(state =>
     selectAllConnectedAccounts(state.contacts.oAuthAccounts)
   )
 
@@ -153,17 +155,24 @@ export function EmailItemHeaderActions(
           <MenuItem
             dense
             onClick={select(props.onChangeReadStatus, hasModifyAccess)}
-            classes={{
-              root: hasModifyAccess ? '' : classes.disabledMenu
-            }}
+            className={classNames(!hasModifyAccess && classes.disabledMenu)}
           >
             <ListItemIcon>
-              <IconEmailRead
-                size={iconSizes.small}
-                fillColor={
-                  hasModifyAccess ? '#000' : theme.palette.action.disabled
-                }
-              />
+              {props.email.isRead ? (
+                <IconMailUnread
+                  size={iconSizes.small}
+                  fillColor={
+                    hasModifyAccess ? '#000' : theme.palette.action.disabled
+                  }
+                />
+              ) : (
+                <IconMailRead
+                  size={iconSizes.small}
+                  fillColor={
+                    hasModifyAccess ? '#000' : theme.palette.action.disabled
+                  }
+                />
+              )}
             </ListItemIcon>
             <ListItemText>
               Mark as {props.email.isRead ? 'unread' : 'read'}

@@ -1,9 +1,7 @@
 import React, { useContext } from 'react'
-import { useSelector } from 'react-redux'
 import { Box, makeStyles } from '@material-ui/core'
 
-import { IAppState } from 'reducers'
-
+import useTypedSelector from 'hooks/use-typed-selector'
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
 import { findInPeopleByEmail } from 'utils/find-in-people-by-email'
@@ -29,7 +27,7 @@ const useStyles = makeStyles(sharedStyles)
 export function EmailThread({ style, event }: Props) {
   const classes = useStyles({})
   const { setSelectedEvent } = useContext(ListContext)
-  const accounts: IOAuthAccount[] = useSelector((state: IAppState) =>
+  const accounts: IOAuthAccount[] = useTypedSelector(state =>
     selectAllConnectedAccounts(state.contacts.oAuthAccounts)
   )
   const thread = event.full_thread

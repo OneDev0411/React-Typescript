@@ -6,7 +6,7 @@ import { Button } from '@material-ui/core'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
-import { markThreadAsRead } from 'components/EmailThread/helpers/mark-thread-as-read'
+import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
 
 import { hasOAuthAccess } from 'components/EmailThread/helpers/has-oauth-access'
 
@@ -47,7 +47,7 @@ export function EmailThreadDrawerByThreadKey({
         'mail.modify'
       )
     ) {
-      markThreadAsRead(thread)
+      setEmailThreadsReadStatus([thread.id], true)
     }
   }, [accounts, loading, thread])
 
