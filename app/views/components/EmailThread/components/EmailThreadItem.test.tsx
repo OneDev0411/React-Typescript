@@ -1,4 +1,6 @@
 import React from 'react'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 import { render, fireEvent } from '@testing-library/react'
 
 import gmailThreadJson from 'fixtures/email-thread/gmail-thread-1.json'
@@ -43,14 +45,20 @@ jest.mock('../../Iframe', () => ({
 
 describe('EmailThreadItem', () => {
   it('renders', () => {
+    const mockStore = createStore((state, action) => state, {
+      contacts: { oAuthAccounts: { list: {} } }
+    })
+
     render(
-      <AppTheme>
-        <EmailThreadItem
-          email={normalizeThreadMessageToThreadEmail(gmailThread.messages[0])}
-          collapsed={false}
-          onToggleCollapsed={() => {}}
-        />
-      </AppTheme>
+      <Provider store={mockStore}>
+        <AppTheme>
+          <EmailThreadItem
+            email={normalizeThreadMessageToThreadEmail(gmailThread.messages[0])}
+            collapsed={false}
+            onToggleCollapsed={() => {}}
+          />
+        </AppTheme>
+      </Provider>
     )
   })
 
@@ -62,14 +70,20 @@ describe('EmailThreadItem', () => {
     const somethingInReplyFromGmail =
       'This reply is sent via gmail client, not rechat'
 
+    const mockStore = createStore((state, action) => state, {
+      contacts: { oAuthAccounts: { list: {} } }
+    })
+
     const $ = render(
-      <AppTheme>
-        <EmailThreadItem
-          email={replyFromGmail}
-          collapsed={false}
-          onToggleCollapsed={() => {}}
-        />
-      </AppTheme>
+      <Provider store={mockStore}>
+        <AppTheme>
+          <EmailThreadItem
+            email={replyFromGmail}
+            collapsed={false}
+            onToggleCollapsed={() => {}}
+          />
+        </AppTheme>
+      </Provider>
     )
 
     expect($.queryByText(somethingInOriginalEmail, { exact: false })).toBeNull()
@@ -85,14 +99,20 @@ describe('EmailThreadItem', () => {
     const somethingInOriginalEmail = 'Reply To Saeed From Outlook'
     const somethingInReplyFromOutlook = 'Reply body 2'
 
+    const mockStore = createStore((state, action) => state, {
+      contacts: { oAuthAccounts: { list: {} } }
+    })
+
     const $ = render(
-      <AppTheme>
-        <EmailThreadItem
-          email={replyFromOutlook}
-          collapsed={false}
-          onToggleCollapsed={() => {}}
-        />
-      </AppTheme>
+      <Provider store={mockStore}>
+        <AppTheme>
+          <EmailThreadItem
+            email={replyFromOutlook}
+            collapsed={false}
+            onToggleCollapsed={() => {}}
+          />
+        </AppTheme>
+      </Provider>
     )
 
     expect($.queryByText(somethingInOriginalEmail, { exact: false })).toBeNull()
@@ -108,14 +128,20 @@ describe('EmailThreadItem', () => {
     const somethingInOriginalEmail = 'This is the original content'
     const somethingInReplyFromRechat = 'And this reply is sent from rechat!'
 
+    const mockStore = createStore((state, action) => state, {
+      contacts: { oAuthAccounts: { list: {} } }
+    })
+
     const $ = render(
-      <AppTheme>
-        <EmailThreadItem
-          email={replyFromRechat}
-          collapsed={false}
-          onToggleCollapsed={() => {}}
-        />
-      </AppTheme>
+      <Provider store={mockStore}>
+        <AppTheme>
+          <EmailThreadItem
+            email={replyFromRechat}
+            collapsed={false}
+            onToggleCollapsed={() => {}}
+          />
+        </AppTheme>
+      </Provider>
     )
 
     expect($.queryByText(somethingInOriginalEmail, { exact: false })).toBeNull()
@@ -143,14 +169,20 @@ describe('EmailThreadItem', () => {
     const somethingInSecondForward = 'Forwarded with an extra message'
     const somethingInReplyFromGmail = 'reply to forwarded email'
 
+    const mockStore = createStore((state, action) => state, {
+      contacts: { oAuthAccounts: { list: {} } }
+    })
+
     const $ = render(
-      <AppTheme>
-        <EmailThreadItem
-          email={originalEmail}
-          collapsed={false}
-          onToggleCollapsed={() => {}}
-        />
-      </AppTheme>
+      <Provider store={mockStore}>
+        <AppTheme>
+          <EmailThreadItem
+            email={originalEmail}
+            collapsed={false}
+            onToggleCollapsed={() => {}}
+          />
+        </AppTheme>
+      </Provider>
     )
 
     expect(
@@ -158,13 +190,15 @@ describe('EmailThreadItem', () => {
     ).not.toBeNull()
 
     $.rerender(
-      <AppTheme>
-        <EmailThreadItem
-          email={secondForwardEmail}
-          collapsed={false}
-          onToggleCollapsed={() => {}}
-        />
-      </AppTheme>
+      <Provider store={mockStore}>
+        <AppTheme>
+          <EmailThreadItem
+            email={secondForwardEmail}
+            collapsed={false}
+            onToggleCollapsed={() => {}}
+          />
+        </AppTheme>
+      </Provider>
     )
 
     expect(
@@ -175,13 +209,15 @@ describe('EmailThreadItem', () => {
     ).not.toBeNull()
 
     $.rerender(
-      <AppTheme>
-        <EmailThreadItem
-          email={replyEmail}
-          collapsed={false}
-          onToggleCollapsed={() => {}}
-        />
-      </AppTheme>
+      <Provider store={mockStore}>
+        <AppTheme>
+          <EmailThreadItem
+            email={replyEmail}
+            collapsed={false}
+            onToggleCollapsed={() => {}}
+          />
+        </AppTheme>
+      </Provider>
     )
 
     expect($.queryByText(somethingInOriginalEmail, { exact: false })).toBeNull()
@@ -194,14 +230,20 @@ describe('EmailThreadItem', () => {
   it('renders "•••" when there is replied content', () => {
     const email = normalizeThreadMessageToThreadEmail(gmailThread.messages[1])
 
+    const mockStore = createStore((state, action) => state, {
+      contacts: { oAuthAccounts: { list: {} } }
+    })
+
     const $ = render(
-      <AppTheme>
-        <EmailThreadItem
-          email={email}
-          collapsed={false}
-          onToggleCollapsed={() => {}}
-        />
-      </AppTheme>
+      <Provider store={mockStore}>
+        <AppTheme>
+          <EmailThreadItem
+            email={email}
+            collapsed={false}
+            onToggleCollapsed={() => {}}
+          />
+        </AppTheme>
+      </Provider>
     )
 
     expect($.queryByTitle('Show trimmed content')).not.toBeNull()
@@ -210,14 +252,20 @@ describe('EmailThreadItem', () => {
   it('does not render "•••" when there is no replied content', () => {
     const email = normalizeThreadMessageToThreadEmail(gmailThread.messages[0])
 
+    const mockStore = createStore((state, action) => state, {
+      contacts: { oAuthAccounts: { list: {} } }
+    })
+
     const $ = render(
-      <AppTheme>
-        <EmailThreadItem
-          email={email}
-          collapsed={false}
-          onToggleCollapsed={() => {}}
-        />
-      </AppTheme>
+      <Provider store={mockStore}>
+        <AppTheme>
+          <EmailThreadItem
+            email={email}
+            collapsed={false}
+            onToggleCollapsed={() => {}}
+          />
+        </AppTheme>
+      </Provider>
     )
 
     expect($.queryByTitle('Show trimmed content')).toBeNull()
@@ -227,14 +275,20 @@ describe('EmailThreadItem', () => {
     const email = normalizeThreadMessageToThreadEmail(gmailThread.messages[1])
     const originalContent = 'This is the original content'
 
+    const mockStore = createStore((state, action) => state, {
+      contacts: { oAuthAccounts: { list: {} } }
+    })
+
     const $ = render(
-      <AppTheme>
-        <EmailThreadItem
-          email={email}
-          collapsed={false}
-          onToggleCollapsed={() => {}}
-        />
-      </AppTheme>
+      <Provider store={mockStore}>
+        <AppTheme>
+          <EmailThreadItem
+            email={email}
+            collapsed={false}
+            onToggleCollapsed={() => {}}
+          />
+        </AppTheme>
+      </Provider>
     )
 
     const toggleButton = $.getByTitle('Show trimmed content')
