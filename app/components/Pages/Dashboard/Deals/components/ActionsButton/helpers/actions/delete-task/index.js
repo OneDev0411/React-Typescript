@@ -5,7 +5,7 @@ import { notifyOffice } from '../notify-office'
 import store from '../../../../../../../../../stores'
 
 export async function deleteTask(props) {
-  if (props.task.is_deletable === false && !props.isBackOffice) {
+  if (props.task.required && !props.isBackOffice) {
     return store.dispatch(
       confirmation({
         message: 'Delete a required folder?',
