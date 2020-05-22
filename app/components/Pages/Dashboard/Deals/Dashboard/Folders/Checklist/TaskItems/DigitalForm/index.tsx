@@ -10,7 +10,7 @@ import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelo
 
 import ActionsButton from '../../../../../components/ActionsButton'
 
-import { FileContainer, FileRow, FileTitle, FileLink } from '../styled'
+import { ItemContainer, ItemRow, ItemTitle, ItemLink } from '../styled'
 import { LabelItem } from '../../../styled'
 
 interface Props {
@@ -41,17 +41,17 @@ export function DigitalForm({ deal, task }: Props) {
   }
 
   return (
-    <FileContainer>
-      <FileRow>
+    <ItemContainer>
+      <ItemRow>
         <Flex alignCenter justifyBetween>
-          <FileTitle>
-            <FileLink
+          <ItemTitle>
+            <ItemLink
               className="file-link"
               to={`/dashboard/deals/${deal.id}/form-edit/${task.id}`}
             >
               {task.title}
-            </FileLink>
-          </FileTitle>
+            </ItemLink>
+          </ItemTitle>
 
           <ActionsButton
             type="document"
@@ -64,7 +64,7 @@ export function DigitalForm({ deal, task }: Props) {
         <Flex alignCenter>
           <LabelItem>Base Form</LabelItem>
         </Flex>
-      </FileRow>
-    </FileContainer>
+      </ItemRow>
+    </ItemContainer>
   )
 }
