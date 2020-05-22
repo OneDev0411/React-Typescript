@@ -1,3 +1,4 @@
+// TODO: should be removed and use standard DateTimeField component
 import React, { useState, useRef } from 'react'
 import fecha from 'fecha'
 import { Field, FieldRenderProps } from 'react-final-form'
@@ -34,12 +35,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface Props {
   dueDate: Date
+  showTimePicker?: boolean
   datePickerModifiers?: Partial<Modifiers>
   placement?: PopperPlacementType
 }
 
 export function EndDateTimeField({
   dueDate,
+  showTimePicker = false,
   datePickerModifiers,
   placement = 'bottom-end'
 }: Props) {
@@ -52,6 +55,7 @@ export function EndDateTimeField({
   const [isOpen, setIsOpen] = useState(false)
 
   const id = isOpen ? 'end-date-time-field' : undefined
+  const formatter = showTimePicker ? 'MMM D, YYYY hh:mm A' : 'MMM D, YYYY'
 
   function handleClose(event: any) {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
@@ -79,9 +83,7 @@ export function EndDateTimeField({
                 setIsOpen(!isOpen)
               }}
             >
-              {value
-                ? fecha.format(value, 'MMM D, YYYY hh:mm A')
-                : 'Add End Time'}
+              {value ? fecha.format(value, formatter) : 'Add End Time'}
             </Button>
             {value && (
               <Tooltip placement={placement} title="Remove Time">
@@ -133,22 +135,26 @@ export function EndDateTimeField({
                       <Divider margin="0.5em 0" />
 
                       <Flex alignCenter justifyBetween>
-                        <TimeInput
-                          initialDate={endDate}
-                          onChange={(date: Date) => {
-                            const newEndDate = new Date(endDate)
+                        <div>
+                          {showTimePicker && (
+                            <TimeInput
+                              initialDate={endDate}
+                              onChange={(date: Date) => {
+                                const newEndDate = new Date(endDate)
 
-                            newEndDate.setHours(
-                              date.getHours(),
-                              date.getMinutes(),
-                              date.getSeconds(),
-                              date.getMilliseconds()
-                            )
-                            setEndDate(newEndDate)
-                            // @ts-ignore FinalForm bug
-                            value && onChange(newEndDate)
-                          }}
-                        />
+                                newEndDate.setHours(
+                                  date.getHours(),
+                                  date.getMinutes(),
+                                  date.getSeconds(),
+                                  date.getMilliseconds()
+                                )
+                                setEndDate(newEndDate)
+                                // @ts-ignore FinalForm bug
+                                value && onChange(newEndDate)
+                              }}
+                            />
+                          )}
+                        </div>
                         <Button
                           variant="text"
                           color="secondary"

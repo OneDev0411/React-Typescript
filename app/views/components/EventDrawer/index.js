@@ -269,6 +269,7 @@ class PresentEventDrawer extends Component {
                 render={formProps => {
                   const { values } = formProps
 
+                  const isAllDay = values.metadata?.all_day || false
                   const isDone = values.status === 'DONE'
                   const isPastDate =
                     new Date(values.dueDate).getTime() <
@@ -350,9 +351,13 @@ class PresentEventDrawer extends Component {
                             <DateTimeField
                               name="dueDate"
                               selectedDate={values.dueDate}
+                              showTimePicker={!isAllDay}
                             />
 
-                            <EndDateTimeField dueDate={values.dueDate} />
+                            <EndDateTimeField
+                              dueDate={values.dueDate}
+                              showTimePicker={!isAllDay}
+                            />
                           </FieldContainer>
 
                           <FieldError

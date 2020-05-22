@@ -9,6 +9,8 @@ import { normalizeAssociations } from 'views/utils/association-normalizers'
  * @returns {Promise} a formated Task
  */
 export async function postLoadFormat(task, owner, defaultAssociation) {
+  const isAllDayTask = task.metadata?.all_day || false
+
   let reminder = {
     title: 'None',
     value: -1
@@ -37,13 +39,34 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
 
   const { reminders, end_date } = task
 
-  const normalizeServerDate = date => date * 1000
+  const normalizeServerDate = (date, isEndDate = false) => {
+    const normalizedDate = new Date(Number(date) * 1000)
+
+    if (isAllDayTask) {
+      const resetMinutes = isEndDate ? -1 : 0
+
+      normalizedDate.setHours(0, resetMinutes, 0, 0)
+    }
+
+    return normalizedDate
+  }
   const dueDate = normalizeServerDate(task.due_date)
-  const endDate = end_date ? new Date(normalizeServerDate(end_date)) : null
+  const endDate = end_date ? normalizeServerDate(end_date, true) : null
 
   if (Array.isArray(reminders) && reminders.length > 0) {
     const { timestamp } = reminders[reminders.length - 1]
-    const reminderTimestamp = timestamp * 1000
+    const rowReminder = new Date(timestamp * 1000)
+
+    if (isAllDayTask) {
+      rowReminder.setHours(
+        rowReminder.getUTCHours(),
+        rowReminder.getUTCMinutes(),
+        0,
+        0
+      )
+    }
+
+    const reminderTimestamp = rowReminder.getTime()
 
     if (timestamp && reminderTimestamp > new Date().getTime()) {
       reminder = getReminderItem(dueDate, reminderTimestamp)
@@ -63,7 +86,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
   return {
     ...task,
     reminder,
-    dueDate: new Date(dueDate),
+    dueDate,
     endDate,
     task_type: {
       title: task.task_type,

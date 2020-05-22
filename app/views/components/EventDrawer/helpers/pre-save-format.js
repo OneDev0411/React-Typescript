@@ -15,6 +15,12 @@ export async function preSaveFormat(values, originalValues) {
     assignees,
     associations = []
   } = values
+  // const isAllDay = values.metadata?.all_day || false
+
+  // if (isAllDay) {
+  //   dueDate.setUTCHours(24, 0, 0, 0)
+  //   endDate.setUTCHours(24, 0, 0, 0)
+  // }
 
   const dueDateTimestamp = dueDate.getTime()
 
