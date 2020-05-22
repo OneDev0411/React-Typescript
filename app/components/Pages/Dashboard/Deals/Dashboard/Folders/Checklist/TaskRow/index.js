@@ -17,7 +17,7 @@ import TaskStatus from './Status'
 
 import ActionsButton from '../../../../components/ActionsButton'
 
-import TaskFiles from '../TaskFiles'
+import { TaskFiles } from '../TaskFiles'
 import TaskNotifications from '../Notification'
 import EnvelopeView from '../Envelope'
 import { Activity } from './Activity'
@@ -111,9 +111,7 @@ class Task extends React.Component {
     // If there is a form and an envelope in the task: we should open up the envelop version in the view/print (so for instance if there is a base form and then a signed copy of the envelop, tapping on the task name should open up the version with signatures on them.)
     if (envelopes.length > 0) {
       browserHistory.push(
-        `/dashboard/deals/${props.deal.id}/view/${props.task.id}/envelope/${
-          envelopes[0].id
-        }`
+        `/dashboard/deals/${props.deal.id}/view/${props.task.id}/envelope/${envelopes[0].id}`
       )
 
       return
@@ -125,9 +123,7 @@ class Task extends React.Component {
     if (props.isBackOffice) {
       link = props.task.submission
         ? `/dashboard/deals/${props.deal.id}/view/${props.task.id}`
-        : `/dashboard/deals/${props.deal.id}/view/${props.task.id}/attachment/${
-            props.task.room.attachments[0].id
-          }`
+        : `/dashboard/deals/${props.deal.id}/view/${props.task.id}/attachment/${props.task.room.attachments[0].id}`
       browserHistory.push(link)
 
       return
@@ -213,7 +209,8 @@ function mapStateToProps({ deals }, props) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { setSelectedTask, setExpandTask, updateDealNotifications }
-)(Task)
+export default connect(mapStateToProps, {
+  setSelectedTask,
+  setExpandTask,
+  updateDealNotifications
+})(Task)
