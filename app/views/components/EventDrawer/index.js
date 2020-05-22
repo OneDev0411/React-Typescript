@@ -376,7 +376,6 @@ class PresentEventDrawer extends Component {
                             </>
                           )}
                           <AddAssociationButton
-                            associations={values.associations}
                             crm_task={crm_task}
                             disabled={isDisabled}
                             type="contact"
@@ -384,7 +383,6 @@ class PresentEventDrawer extends Component {
                             caption="Attach Client"
                           />
                           <AddAssociationButton
-                            associations={values.associations}
                             crm_task={crm_task}
                             disabled={isDisabled}
                             type="listing"
@@ -392,7 +390,6 @@ class PresentEventDrawer extends Component {
                             caption="Attach Property"
                           />
                           <AddAssociationButton
-                            associations={values.associations}
                             crm_task={crm_task}
                             disabled={isDisabled}
                             type="deal"
@@ -430,6 +427,7 @@ const mapStateToProps = state => ({
   accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
 })
 
-export const EventDrawer = connect(mapStateToProps, { fetchOAuthAccounts })(
-  PresentEventDrawer
-)
+export const EventDrawer = connect(
+  mapStateToProps,
+  { fetchOAuthAccounts }
+)(PresentEventDrawer)
