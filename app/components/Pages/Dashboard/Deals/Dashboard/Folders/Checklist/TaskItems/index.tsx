@@ -1,8 +1,8 @@
 import React from 'react'
 import sortBy from 'lodash/sortBy'
 
-import DigitalForm from './DigitalForm'
-import FileAttachment from './Attachment'
+import { DigitalForm } from './DigitalForm'
+import { Attachment } from './Attachment'
 
 import { Container } from './styled'
 
@@ -13,9 +13,9 @@ interface Props {
   isBackOffice: boolean
 }
 
-export function TaskFiles(props: Props) {
+export function TaskItems(props: Props) {
   if (!props.isOpen) {
-    return false
+    return null
   }
 
   const getFiles = () => {
@@ -35,14 +35,9 @@ export function TaskFiles(props: Props) {
     <Container>
       {getFiles().map((item, key) =>
         item.type === 'task' ? (
-          <DigitalForm
-            key={key}
-            task={item}
-            deal={props.deal}
-            isBackOffice={props.isBackOffice}
-          />
+          <DigitalForm key={key} task={item} deal={props.deal} />
         ) : (
-          <FileAttachment
+          <Attachment
             key={key}
             deal={props.deal}
             task={props.task}

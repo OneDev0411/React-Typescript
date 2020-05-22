@@ -8,33 +8,27 @@ export const Container = styled.div`
   align-items: center;
 `
 
-export const FileContainer = styled.div`
+export const ItemContainer = styled.div`
   width: 100%;
   background-color: #f7f7f7;
 
   :hover {
     background-color: #f2f2f2;
   }
-
-  ${props =>
-    props.isBlur &&
-    `
-    filter: blur(5px);
-  `};
 `
 
-export const FileTitle = styled.div`
+export const ItemTitle = styled.div`
   font-size: 1rem;
   font-weight: 500;
 `
 
-export const FileDate = styled.div`
+export const ItemDate = styled.div`
   font-size: 0.875rem;
   font-weight: 500;
   color: ${grey.A900};
 `
 
-export const FileLink = styled(LinkButton)`
+export const ItemLink = styled(LinkButton)`
   color: #000;
   font-size: 1rem;
   font-weight: 500;
@@ -44,15 +38,11 @@ export const FileLink = styled(LinkButton)`
   line-height: 1.8;
 `
 
-export const FileRow = styled.div`
+export const ItemRow = styled.div`
   display: flex;
   flex-direction: column;
 
   border-bottom: solid 1px #e6e6e6;
   padding: 0.825rem 1rem;
   padding-left: 3rem;
-
-  :hover a.file-link {
-    color: #0945eb !important;
-  }
 `
