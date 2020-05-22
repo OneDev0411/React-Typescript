@@ -36,7 +36,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
   const classes = useStyles()
 
   const [isSaving, setIsSaving] = useState(false)
-  const statuses = useDealStatuses(deal.brand.id)
+  const statuses = useDealStatuses(deal.id)
 
   const dispatch = useDispatch()
   const { user, checklists } = useSelector(({ user, deals }: IAppState) => ({
