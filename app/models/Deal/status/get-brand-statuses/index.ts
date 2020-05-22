@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-export async function getDealStatuses(brandId: UUID): Promise<IDealStatus[]> {
+export async function getBrandStatuses(brandId: UUID): Promise<IDealStatus[]> {
   try {
     const response = await new Fetch().get(`/brands/${brandId}/deals/statuses`)
 
