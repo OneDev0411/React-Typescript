@@ -4,15 +4,11 @@
   "updated_at": 1583944547.92942,
   "brand": "a0454440-be05-11e9-9b6e-1663bb1b90f0",
   "user": "95b9c3ac-49a7-11e9-8abe-0a95998482ac",
-  "google_credential": null,
   "microsoft_credential": "debcc087-fd59-4635-8fda-d65264ee82cf",
   "subject": "Test Web Noti - 1",
   "first_message_date": 1579717136,
   "last_message_date": 1579718998,
-  "recipients": [
-    "saeed.uni68@gmail.com",
-    "shamidi@briggsfreeman.com"
-  ],
+  "recipients": ["saeed.uni68@gmail.com", "shamidi@briggsfreeman.com"],
   "recipients_raw": [
     {
       "name": "Saeed Vayghan",
@@ -39,10 +35,7 @@
       "thread_id": "AAQkAGMzNDg4YmM0LTc5ZTYtNGFlYy1hNzlmLTVkODM2ZDM0MzU5OQAQAHHvv1x5gRNMrPPDKUhSbc0=",
       "internet_message_id": "CAE1nWLSBGxe7Y7UBTUeE86a4bEnmsr1_L8vsybquOXUOznshzg@mail.gmail.com",
       "in_bound": true,
-      "recipients": [
-        "saeed.uni68@gmail.com",
-        "shamidi@briggsfreeman.com"
-      ],
+      "recipients": ["saeed.uni68@gmail.com", "shamidi@briggsfreeman.com"],
       "subject": "Test Web Noti - 1",
       "has_attachments": false,
       "from_raw": {
@@ -59,9 +52,7 @@
       "bcc_raw": [],
       "in_reply_to": null,
       "from": "Saeed Vayghan <saeed.uni68@gmail.com>",
-      "to": [
-        "shamidi@briggsfreeman.com"
-      ],
+      "to": ["shamidi@briggsfreeman.com"],
       "cc": [],
       "bcc": [],
       "thread_key": "debcc087-fd59-4635-8fda-d65264ee82cfAAQkAGMzNDg4YmM0LTc5ZTYtNGFlYy1hNzlmLTVkODM2ZDM0MzU5OQAQAHHvv1x5gRNMrPPDKUhSbc0=",
@@ -81,10 +72,7 @@
       "thread_id": "AAQkAGMzNDg4YmM0LTc5ZTYtNGFlYy1hNzlmLTVkODM2ZDM0MzU5OQAQAHHvv1x5gRNMrPPDKUhSbc0=",
       "internet_message_id": "MN2PR14MB3120EF44BA3AF6AF9662F15ABA0C0@MN2PR14MB3120.namprd14.prod.outlook.com",
       "in_bound": false,
-      "recipients": [
-        "shamidi@briggsfreeman.com",
-        "saeed.uni68@gmail.com"
-      ],
+      "recipients": ["shamidi@briggsfreeman.com", "saeed.uni68@gmail.com"],
       "subject": "Re: Test Web Noti - 1",
       "has_attachments": false,
       "from_raw": {
@@ -101,9 +89,7 @@
       "bcc_raw": [],
       "in_reply_to": null,
       "from": "Shayan Hamidi <shamidi@briggsfreeman.com>",
-      "to": [
-        "saeed.uni68@gmail.com"
-      ],
+      "to": ["saeed.uni68@gmail.com"],
       "cc": [],
       "bcc": [],
       "thread_key": "debcc087-fd59-4635-8fda-d65264ee82cfAAQkAGMzNDg4YmM0LTc5ZTYtNGFlYy1hNzlmLTVkODM2ZDM0MzU5OQAQAHHvv1x5gRNMrPPDKUhSbc0=",
@@ -123,10 +109,7 @@
       "thread_id": "AAQkAGMzNDg4YmM0LTc5ZTYtNGFlYy1hNzlmLTVkODM2ZDM0MzU5OQAQAHHvv1x5gRNMrPPDKUhSbc0=",
       "internet_message_id": "MN2PR14MB3120F4CB5763BD0B76E73C76BA0C0@MN2PR14MB3120.namprd14.prod.outlook.com",
       "in_bound": false,
-      "recipients": [
-        "shamidi@briggsfreeman.com",
-        "saeed.uni68@gmail.com"
-      ],
+      "recipients": ["shamidi@briggsfreeman.com", "saeed.uni68@gmail.com"],
       "subject": "Re: Test Web Noti - 1",
       "has_attachments": false,
       "from_raw": {
@@ -143,9 +126,7 @@
       "bcc_raw": [],
       "in_reply_to": null,
       "from": "Shayan Hamidi <shamidi@briggsfreeman.com>",
-      "to": [
-        "saeed.uni68@gmail.com"
-      ],
+      "to": ["saeed.uni68@gmail.com"],
       "cc": [],
       "bcc": [],
       "thread_key": "debcc087-fd59-4635-8fda-d65264ee82cfAAQkAGMzNDg4YmM0LTc5ZTYtNGFlYy1hNzlmLTVkODM2ZDM0MzU5OQAQAHHvv1x5gRNMrPPDKUhSbc0=",

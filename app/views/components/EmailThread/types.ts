@@ -30,6 +30,7 @@ export interface EmailThreadEmail {
   snippet: string
   date: Date
   inBound: boolean
+  isRead: boolean
 
   messageId?: string
   internetMessageId?: string

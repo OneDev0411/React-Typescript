@@ -5,14 +5,10 @@
   "brand": "28810bfc-8565-11e9-b821-0a95998482ac",
   "user": "29f259b4-626a-11e9-a064-0a95998482ac",
   "google_credential": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec19",
-  "microsoft_credential": null,
   "subject": "Fwd: Leo Ji has sent you a message on Lejebolig.dk",
   "first_message_date": 1583673433,
   "last_message_date": 1583673941,
-  "recipients": [
-    "alireza.mirian@gmail.com",
-    "rechat.test2@gmail.com"
-  ],
+  "recipients": ["alireza.mirian@gmail.com", "rechat.test2@gmail.com"],
   "recipients_raw": [
     {
       "name": "Alireza Mirian",
@@ -39,10 +35,7 @@
       "thread_id": "170ba4b0be0797e6",
       "internet_message_id": "CAOq1U5Cr9G97d6EFO=mfrfqNSPR2C0uGB8grR_-YZ_6hGfPKOg@mail.gmail.com",
       "in_bound": true,
-      "recipients": [
-        "alireza.mirian@gmail.com",
-        "rechat.test2@gmail.com"
-      ],
+      "recipients": ["alireza.mirian@gmail.com", "rechat.test2@gmail.com"],
       "subject": "Fwd: Leo Ji has sent you a message on Lejebolig.dk",
       "has_attachments": false,
       "attachments": [],
@@ -60,9 +53,7 @@
       "bcc_raw": [],
       "in_reply_to": "DF9GruNrSXiGwA4K3HFSpw@ismtpd0002p1lon1.sendgrid.net",
       "from": "Alireza Mirian <alireza.mirian@gmail.com>",
-      "to": [
-        "rechat.test2@gmail.com"
-      ],
+      "to": ["rechat.test2@gmail.com"],
       "cc": [],
       "bcc": [],
       "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec19170ba4b0be0797e6",
@@ -83,10 +74,7 @@
       "thread_id": "170ba4b0be0797e6",
       "internet_message_id": "CAOq1U5CHzeociEG_K8tgX7btBxsOFOWAyn05ghQodrrJsdTkpA@mail.gmail.com",
       "in_bound": true,
-      "recipients": [
-        "alireza.mirian@gmail.com",
-        "rechat.test2@gmail.com"
-      ],
+      "recipients": ["alireza.mirian@gmail.com", "rechat.test2@gmail.com"],
       "subject": "Fwd: Leo Ji has sent you a message on Lejebolig.dk",
       "has_attachments": false,
       "attachments": [],
@@ -104,9 +92,7 @@
       "bcc_raw": [],
       "in_reply_to": "CAOq1U5Cr9G97d6EFO=mfrfqNSPR2C0uGB8grR_-YZ_6hGfPKOg@mail.gmail.com",
       "from": "Alireza Mirian <alireza.mirian@gmail.com>",
-      "to": [
-        "rechat.test2@gmail.com"
-      ],
+      "to": ["rechat.test2@gmail.com"],
       "cc": [],
       "bcc": [],
       "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec19170ba4b0be0797e6",
@@ -127,10 +113,7 @@
       "thread_id": "170ba4b0be0797e6",
       "internet_message_id": "CACumHE-oaC3-wb=HqSXC9dgUWNEe-b_qR9ug8+dDkmhLwUgcfg@mail.gmail.com",
       "in_bound": false,
-      "recipients": [
-        "rechat.test2@gmail.com",
-        "alireza.mirian@gmail.com"
-      ],
+      "recipients": ["rechat.test2@gmail.com", "alireza.mirian@gmail.com"],
       "subject": "Re: Fwd: Leo Ji has sent you a message on Lejebolig.dk",
       "has_attachments": false,
       "attachments": [],
@@ -148,9 +131,7 @@
       "bcc_raw": [],
       "in_reply_to": "CAOq1U5CHzeociEG_K8tgX7btBxsOFOWAyn05ghQodrrJsdTkpA@mail.gmail.com",
       "from": "test account <rechat.test2@gmail.com>",
-      "to": [
-        "alireza.mirian@gmail.com"
-      ],
+      "to": ["alireza.mirian@gmail.com"],
       "cc": [],
       "bcc": [],
       "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec19170ba4b0be0797e6",
