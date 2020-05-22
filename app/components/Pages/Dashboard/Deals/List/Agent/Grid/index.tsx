@@ -18,7 +18,7 @@ import {
 } from 'models/Deal/helpers/context'
 import { getActiveTeamId } from 'utils/user-teams'
 
-import { useDealStatuses } from 'hooks/use-deal-statuses'
+import { useBrandStatuses } from 'hooks/use-brand-statuses'
 
 import {
   isActiveDeal,
@@ -76,7 +76,7 @@ function AgentGrid(props: Props & WithRouterProps) {
     })
   )
 
-  const statuses = useDealStatuses(getActiveTeamId(user)!)
+  const statuses = useBrandStatuses(getActiveTeamId(user)!)
 
   const columns = useMemo(() => {
     return [
