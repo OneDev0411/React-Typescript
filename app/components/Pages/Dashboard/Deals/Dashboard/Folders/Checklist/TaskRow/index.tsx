@@ -126,7 +126,11 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
   return (
     <RowContainer isTaskExpanded={isTaskExpanded}>
       <Row>
-        <RowArrowIcon onClick={toggleTaskOpen} />
+        <RowArrowIcon
+          onClick={toggleTaskOpen}
+          show={isRowExpandable}
+          isOpen={isTaskExpanded}
+        />
 
         <Flex column style={{ flex: 1 }}>
           <Flex alignCenter justifyBetween>

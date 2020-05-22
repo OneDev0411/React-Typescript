@@ -66,7 +66,10 @@ type ArrowIconProps = {
 
 export const ArrowIcon: StyledSVGWithProps<ArrowIconProps> = styled(
   ArrowDownIcon
-)`
+)<{
+  isOpen?: boolean
+  show?: boolean
+}>`
   width: 1.5em;
   height: 1.5em;
   margin-right: 0.5rem;
@@ -147,7 +150,7 @@ export const Row = styled.div`
 export const RowArrowIcon = styled(ArrowIcon)`
   align-self: flex-start;
   margin-top: 1px;
-` as typeof ArrowDownIcon
+` as typeof ArrowIcon
 
 export const RowTitle = styled.div<{
   clickable: boolean
