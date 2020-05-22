@@ -5,14 +5,10 @@
   "brand": "28810bfc-8565-11e9-b821-0a95998482ac",
   "user": "29f259b4-626a-11e9-a064-0a95998482ac",
   "google_credential": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec19",
-  "microsoft_credential": null,
   "subject": "A new test for #3634",
   "first_message_date": 1581604793,
   "last_message_date": 1583673016,
-  "recipients": [
-    "alireza.mirian@gmail.com",
-    "rechat.test2@gmail.com"
-  ],
+  "recipients": ["alireza.mirian@gmail.com", "rechat.test2@gmail.com"],
   "recipients_raw": [
     {
       "name": "Alireza Mirian",
@@ -39,10 +35,7 @@
       "thread_id": "1703efe173383887",
       "internet_message_id": "CAOq1U5DWr4mKy+xdx=_P7ZguEgHYsPaJ37s35nqk5BMkm6pwBQ@mail.gmail.com",
       "in_bound": true,
-      "recipients": [
-        "alireza.mirian@gmail.com",
-        "rechat.test2@gmail.com"
-      ],
+      "recipients": ["alireza.mirian@gmail.com", "rechat.test2@gmail.com"],
       "subject": "A new test for #3634",
       "has_attachments": false,
       "attachments": [],
@@ -60,9 +53,7 @@
       "bcc_raw": [],
       "in_reply_to": null,
       "from": "Alireza Mirian <alireza.mirian@gmail.com>",
-      "to": [
-        "rechat.test2@gmail.com"
-      ],
+      "to": ["rechat.test2@gmail.com"],
       "cc": [],
       "bcc": [],
       "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
@@ -83,10 +74,7 @@
       "thread_id": "1703efe173383887",
       "internet_message_id": "CACumHE_CrOMTVjZX4N_w1VfGFZUOxxSoqOmUFtssL+1LVc-Z0g@mail.gmail.com",
       "in_bound": false,
-      "recipients": [
-        "rechat.test2@gmail.com",
-        "alireza.mirian@gmail.com"
-      ],
+      "recipients": ["rechat.test2@gmail.com", "alireza.mirian@gmail.com"],
       "subject": "Re: A new test for #3634",
       "has_attachments": false,
       "attachments": [],
@@ -104,9 +92,7 @@
       "bcc_raw": [],
       "in_reply_to": "CAOq1U5DWr4mKy+xdx=_P7ZguEgHYsPaJ37s35nqk5BMkm6pwBQ@mail.gmail.com",
       "from": "test account <rechat.test2@gmail.com>",
-      "to": [
-        "alireza.mirian@gmail.com"
-      ],
+      "to": ["alireza.mirian@gmail.com"],
       "cc": [],
       "bcc": [],
       "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
@@ -127,10 +113,7 @@
       "thread_id": "1703efe173383887",
       "internet_message_id": "CAOq1U5ARgCtBR=05UBYKhwgXaQLYMj5RMDaAFx1BkP7H6v0W6Q@mail.gmail.com",
       "in_bound": true,
-      "recipients": [
-        "alireza.mirian@gmail.com",
-        "rechat.test2@gmail.com"
-      ],
+      "recipients": ["alireza.mirian@gmail.com", "rechat.test2@gmail.com"],
       "subject": "Re: A new test for #3634",
       "has_attachments": false,
       "attachments": [],
@@ -148,9 +131,7 @@
       "bcc_raw": [],
       "in_reply_to": "CACumHE_CrOMTVjZX4N_w1VfGFZUOxxSoqOmUFtssL+1LVc-Z0g@mail.gmail.com",
       "from": "Alireza Mirian <alireza.mirian@gmail.com>",
-      "to": [
-        "rechat.test2@gmail.com"
-      ],
+      "to": ["rechat.test2@gmail.com"],
       "cc": [],
       "bcc": [],
       "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
@@ -171,10 +152,7 @@
       "thread_id": "1703efe173383887",
       "internet_message_id": "CACumHE9AQAPxcf_zBcb=jC5eyQuT-GztH8r-7CkupoSP4HASAw@mail.gmail.com",
       "in_bound": false,
-      "recipients": [
-        "rechat.test2@gmail.com",
-        "alireza.mirian@gmail.com"
-      ],
+      "recipients": ["rechat.test2@gmail.com", "alireza.mirian@gmail.com"],
       "subject": "Re: A new test for #3634",
       "has_attachments": false,
       "attachments": [],
@@ -192,9 +170,7 @@
       "bcc_raw": [],
       "in_reply_to": "CAOq1U5ARgCtBR=05UBYKhwgXaQLYMj5RMDaAFx1BkP7H6v0W6Q@mail.gmail.com",
       "from": "test account <rechat.test2@gmail.com>",
-      "to": [
-        "alireza.mirian@gmail.com"
-      ],
+      "to": ["alireza.mirian@gmail.com"],
       "cc": [],
       "bcc": [],
       "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
@@ -215,10 +191,7 @@
       "thread_id": "1703efe173383887",
       "internet_message_id": "CACumHE_wpof=1OCX1-mZ7NVpbRVHGj=38UR9DxsojQWMPabxng@mail.gmail.com",
       "in_bound": false,
-      "recipients": [
-        "rechat.test2@gmail.com",
-        "alireza.mirian@gmail.com"
-      ],
+      "recipients": ["rechat.test2@gmail.com", "alireza.mirian@gmail.com"],
       "subject": "Re: A new test for #3634",
       "has_attachments": false,
       "attachments": [],
@@ -236,9 +209,7 @@
       "bcc_raw": [],
       "in_reply_to": "CACumHE9AQAPxcf_zBcb=jC5eyQuT-GztH8r-7CkupoSP4HASAw@mail.gmail.com",
       "from": "test account <rechat.test2@gmail.com>",
-      "to": [
-        "alireza.mirian@gmail.com"
-      ],
+      "to": ["alireza.mirian@gmail.com"],
       "cc": [],
       "bcc": [],
       "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
@@ -259,10 +230,7 @@
       "thread_id": "1703efe173383887",
       "internet_message_id": "CAOq1U5AdzsLSd6Q8+LQrD-0xQiSREs_FDuOWdMtAZaVr+fncgg@mail.gmail.com",
       "in_bound": true,
-      "recipients": [
-        "alireza.mirian@gmail.com",
-        "rechat.test2@gmail.com"
-      ],
+      "recipients": ["alireza.mirian@gmail.com", "rechat.test2@gmail.com"],
       "subject": "Re: A new test for #3634",
       "has_attachments": false,
       "attachments": [],
@@ -280,9 +248,7 @@
       "bcc_raw": [],
       "in_reply_to": "CACumHE_wpof=1OCX1-mZ7NVpbRVHGj=38UR9DxsojQWMPabxng@mail.gmail.com",
       "from": "Alireza Mirian <alireza.mirian@gmail.com>",
-      "to": [
-        "rechat.test2@gmail.com"
-      ],
+      "to": ["rechat.test2@gmail.com"],
       "cc": [],
       "bcc": [],
       "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
