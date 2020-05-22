@@ -76,7 +76,7 @@ export function EventContainer({
                 </div>
               )}
 
-              <div style={inlineStyles.title}>{title}</div>
+              <div className={sharedClasses.title}>{title}</div>
             </div>
           </div>
 
