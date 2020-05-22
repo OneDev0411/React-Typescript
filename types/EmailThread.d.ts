@@ -83,7 +83,3 @@ declare type IEmailThread<
   type: 'email_thread'
 } & Association<'messages', IEmailThreadMessage[], Associations> &
   Association<'contacts', (IContact & IContactSummary)[] | null, Associations>
-
-declare type IThreadCredentialKeys =
-  | 'google_credential'
-  | 'microsoft_credential'
