@@ -5,7 +5,7 @@ import { IAppState } from 'reducers'
 
 import { selectDealTasks } from 'reducers/deals/tasks'
 
-import ChecklistFolder from '../Checklist'
+import { ChecklistFolder } from '../Checklist'
 
 interface StateProps {
   tasks: IDealTask[]

@@ -13,7 +13,7 @@ import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { Container } from './styled'
-import ChecklistFolder from './Checklist'
+import { ChecklistFolder } from './Checklist'
 
 import { UploadFolder } from './Uploads'
 import MarketingChecklist from './Marketing'

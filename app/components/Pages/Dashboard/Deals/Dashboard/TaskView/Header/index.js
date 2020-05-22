@@ -9,7 +9,7 @@ import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
-import TaskStatus from '../../Folders/Checklist/TaskRow/Status'
+import { TaskStatus } from '../../Folders/Checklist/TaskRow/Status'
 
 import { Container, Input, Toolbar, TitleContainer, Title } from './styled'
 
@@ -121,9 +121,6 @@ class Header extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  {
-    updateTask
-  }
-)(Header)
+export default connect(null, {
+  updateTask
+})(Header)

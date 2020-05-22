@@ -159,12 +159,12 @@ export const RowTitle = styled.div<{
     font-weight: bold;
 
     ${clickable &&
-      css`
-        :hover {
-          cursor: pointer;
-          color: #0945eb;
-        }
-      `}
+    css`
+      :hover {
+        cursor: pointer;
+        color: #0945eb;
+      }
+    `}
   `}
 `
 

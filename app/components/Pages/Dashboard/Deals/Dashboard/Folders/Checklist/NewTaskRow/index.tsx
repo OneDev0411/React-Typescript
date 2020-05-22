@@ -11,7 +11,7 @@ import TaskCreate from '../../../../components/TaskCreate'
 
 interface Props {
   deal: IDeal
-  checklist: IDealChecklist
+  checklist: IDealChecklist | null
 }
 
 const useStyles = makeStyles((theme: Theme) =>
