@@ -234,6 +234,7 @@ declare type IEmail<Fields extends IEmailOptionalFields = ''> = {
   google_id: null | string
   microsoft_id: null | string
   tracking_id: UUID
+  is_read: boolean
   type: 'email'
 } & Association<'html', string, Fields> &
   Association<'text', string, Fields>

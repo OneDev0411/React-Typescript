@@ -25,6 +25,7 @@ export function normalizeThreadMessageToThreadEmail(
         htmlBody: message.html_body || '',
         internetMessageId: message.internet_message_id,
         messageId: message.message_id,
+        isRead: message.is_read,
         snippet: message.snippet,
         subject: message.subject || '',
         microsoftId: isGoogleMessage(message)
@@ -48,10 +49,11 @@ function normalizeEmailToThreadEmail(
     htmlBody: email.html,
     messageId: email.headers && email.headers.message_id,
     date: new Date(email.created_at * 1000),
-    // FIXME: Abbas said it has some problems in API and hopefully
-    //  will be fixed in future. Now we set attachments to an empty array!
+    //TODO: FIXME: Abbas said it has some problems in API and hopefully
+    //             will be fixed in future. Now we set attachments to an empty array!
     attachments: [],
     inBound: false,
+    isRead: email.is_read,
     subject: email.subject,
     snippet: clip(email.text, 50, { indicator: '' }),
     microsoftId: email.microsoft_id || undefined,

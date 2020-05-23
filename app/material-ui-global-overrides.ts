@@ -54,6 +54,9 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
     },
     '.MuiTooltip-arrow': {
       color: theme.palette.common.black
+    },
+    '.MuiAvatar-colorDefault': {
+      color: theme.palette.common.black
     }
   }
 }))(() => null)

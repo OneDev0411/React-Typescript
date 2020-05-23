@@ -41,12 +41,11 @@ export default function AgentTable(props: WithRouterProps) {
   const classes = useStyles()
 
   const dispatch = useDispatch()
-  const { deals, user, isFetchingDeals, viewAsUsers } = useSelector(
+  const { deals, user, isFetchingDeals } = useSelector(
     ({ deals, user }: IAppState) => ({
       user,
       deals: deals.list,
-      isFetchingDeals: deals.properties.isFetchingDeals,
-      viewAsUsers: viewAs(user)
+      isFetchingDeals: deals.properties.isFetchingDeals
     })
   )
 
@@ -69,10 +68,6 @@ export default function AgentTable(props: WithRouterProps) {
     },
     [dispatch]
   )
-
-  useDeepCompareEffect(() => {
-    fetch(user, searchCriteria)
-  }, [viewAsUsers])
 
   return (
     <PageLayout>

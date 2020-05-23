@@ -57,13 +57,10 @@ export function AgentsList(props: Props) {
 
   return (
     <div>
-      {/*
-      // @ts-ignore js component */}
       <Search
-        value={searchTerm}
-        onChange={debouncedSetSearchTerm}
         style={{ margin: '1rem 0' }}
         placeholder="Search for teams or agents"
+        onChange={debouncedSetSearchTerm}
       />
 
       {!props.isLoading && !teams.length && (

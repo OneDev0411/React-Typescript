@@ -5,15 +5,13 @@ import { updateEmailCampaign as mockUpdateEmailCampaign } from 'models/email/upd
 import { createBulkEmailCampaign as mockCreateBulkEmailCampaign } from 'models/email/create-bulk-email-campaign'
 
 // eslint-disable-next-line import/no-unresolved
-import userJson from 'fixtures/users/agent.json'
+import user from 'fixtures/users/agent.json'
 
 // eslint-disable-next-line import/no-unresolved
 import templateInstance from 'fixtures/marketing-center/template-instance.json'
 
 import { TestBed } from '../../../../tests/unit/TestBed'
 import { BulkEmailComposeForm } from './BulkEmailComposeForm'
-
-const user = userJson as IUser
 
 jest.mock('models/email/create-bulk-email-campaign')
 jest.mock('models/email/update-email-campaign')
@@ -72,7 +70,7 @@ describe('BulkEmailComposeForm', () => {
         <BulkEmailComposeForm
           hasStaticBody
           initialValues={{
-            from: user,
+            from: user as any,
             body: templateInstance.html
           }}
         />

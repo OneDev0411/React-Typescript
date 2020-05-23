@@ -138,7 +138,12 @@ class PresentEventDrawer extends Component {
         newEvent = await createTask(event, CRM_TASKS_QUERY)
       }
 
-      this.setState({ isDisabled: false, isSaving: false, event: newEvent })
+      this.setState({
+        isDisabled: false,
+        isSaving: false,
+        shouldShowNotify: false,
+        event: newEvent
+      })
       await this.props.submitCallback(newEvent, action)
     } catch (error) {
       console.log(error)
@@ -151,7 +156,7 @@ class PresentEventDrawer extends Component {
     try {
       this.setState({ isDisabled: true })
       await deleteTask(this.state.event.id, shouldNotify)
-      this.setState({ isDisabled: false }, () =>
+      this.setState({ isDisabled: false, shouldShowNotify: false }, () =>
         this.props.deleteCallback(this.state.event)
       )
     } catch (error) {
@@ -206,6 +211,16 @@ class PresentEventDrawer extends Component {
     document.getElementById('event-drawer-form').dispatchEvent(event)
   }
 
+  handleClose = () => {
+    if (this.state.shouldShowNotify) {
+      this.setState(() => ({
+        shouldShowNotify: false
+      }))
+    }
+
+    this.props.onClose()
+  }
+
   render() {
     let crm_task
     const {
@@ -217,7 +232,7 @@ class PresentEventDrawer extends Component {
       shouldShowNotify,
       currentEvent
     } = this.state
-    const { defaultAssociation, user, isOpen, onClose } = this.props
+    const { defaultAssociation, user, isOpen } = this.props
 
     if (event) {
       crm_task = event.id
@@ -232,11 +247,11 @@ class PresentEventDrawer extends Component {
             isDeleting={isDeleting}
             onSave={this.save}
             onDelete={this.delete}
-            onCancel={onClose}
+            onCancel={this.handleClose}
             currentEvent={currentEvent}
           />
         )}
-        <Drawer open={isOpen} onClose={onClose}>
+        <Drawer open={isOpen} onClose={this.handleClose}>
           <Drawer.Header title={`${this.isNew ? 'Add' : 'Edit'} Event`} />
           <Drawer.Body>
             {error && error.status === 404 ? (

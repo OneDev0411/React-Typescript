@@ -43,9 +43,10 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
 
   if (Array.isArray(reminders) && reminders.length > 0) {
     const { timestamp } = reminders[reminders.length - 1]
+    const reminderTimestamp = timestamp * 1000
 
-    if (timestamp && timestamp * 1000 > new Date().getTime()) {
-      reminder = getReminderItem(dueDate, timestamp * 1000)
+    if (timestamp && reminderTimestamp > new Date().getTime()) {
+      reminder = getReminderItem(dueDate, reminderTimestamp)
     }
   }
 

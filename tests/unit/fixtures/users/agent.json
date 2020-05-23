@@ -98,6 +98,10 @@
         "offices": [
           "RCHT01"
         ],
+        "settings": {
+          "view_as": null,
+          "user_filter": null
+        },
         "hostnames": [
           "main.irish.rechat.com"
         ],
@@ -113,6 +117,10 @@
               "Admin"
             ],
             "brand_settings": null,
+            "settings": {
+              "view_as": null,
+              "user_filter": null
+            },
             "type": "brand_role",
             "users": [
               {
@@ -340,6 +348,10 @@
               "CRM"
             ],
             "brand_settings": null,
+            "settings": {
+              "view_as": null,
+              "user_filter": null
+            },
             "type": "brand_role",
             "users": [
               {
@@ -845,6 +857,10 @@
         "brand_type": "Other",
         "type": "brand",
         "offices": [],
+        "settings": {
+          "view_as": null,
+          "user_filter": null
+        },
         "hostnames": null,
         "roles": [
           {
@@ -855,6 +871,10 @@
             "deleted_at": null,
             "role": "Agent",
             "brand_settings": null,
+            "settings": {
+              "view_as": null,
+              "user_filter": null
+            },
             "acl": [
               "CRM"
             ],
@@ -1001,6 +1021,10 @@
             "offices": [
               "RCHT01"
             ],
+            "settings": {
+              "view_as": null,
+              "user_filter": null
+            },
             "hostnames": [
               "main.irish.rechat.com"
             ],
@@ -1705,6 +1729,10 @@
           "brand_type": "Other",
           "type": "brand",
           "offices": [],
+          "settings": {
+            "view_as": null,
+            "user_filter": null
+          },
           "hostnames": null,
           "roles": [
             {
@@ -2552,6 +2580,10 @@
         "brand_type": "Other",
         "type": "brand",
         "offices": [],
+        "settings": {
+          "view_as": null,
+          "user_filter": null
+        },
         "hostnames": null,
         "roles": [
           {
