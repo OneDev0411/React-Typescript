@@ -9,7 +9,8 @@ import {
 } from '@material-ui/core'
 import { fade } from '@material-ui/core/styles'
 
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import { mdiChevronDown } from '@mdi/js'
+import Icon from '@mdi/react'
 
 import { ClassesProps } from '../../../utils/ts-utils'
 
@@ -71,7 +72,9 @@ export const DropdownToggleButton = forwardRef(
         ref={ref}
       >
         {children}
-        <KeyboardArrowDownIcon
+        <Icon
+          path={mdiChevronDown}
+          size={1}
           className={classNames(styleClasses.arrowIcon, {
             [styleClasses.rotated]: isActive
           })}
