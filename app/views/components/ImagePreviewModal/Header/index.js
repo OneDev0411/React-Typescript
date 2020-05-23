@@ -1,10 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { mdiClose } from '@mdi/js'
+
+import Icon from '@mdi/react'
+
+import { IconButton } from '@material-ui/core'
+
 import { Divider } from '../../Divider'
 import PageHeader from '../../PageHeader'
-import Button from '../../Button/IconButton'
-import IconClose from '../../SvgIcons/Close/CloseIcon'
 
 Header.propTypes = {
   ...PageHeader.propTypes,
@@ -30,22 +34,22 @@ export function Header(props) {
       className={props.className}
       style={{
         width: '100%',
-        height: 'auto',
+        height: '5rem',
         position: 'fixed',
         top: 0,
         left: 0,
         zIndex: 1,
         margin: 0,
-        padding: '1.5rem',
+        padding: '0 1.5rem',
         backgroundColor: '#FFF'
       }}
     >
       <PageHeader.Menu>
         {menuContent}
         {menuContent && <Divider width="1px" height="1.5rem" margin="0 1rem" />}
-        <Button isFit inverse iconSize="large" onClick={props.handleClose}>
-          <IconClose />
-        </Button>
+        <IconButton onClick={props.handleClose}>
+          <Icon path={mdiClose} size="2rem" />
+        </IconButton>
       </PageHeader.Menu>
     </PageHeader>
   )
