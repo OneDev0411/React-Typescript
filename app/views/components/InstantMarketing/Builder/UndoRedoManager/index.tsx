@@ -3,8 +3,10 @@ import { Tooltip, IconButton } from '@material-ui/core'
 import { Editor } from 'grapesjs'
 import { useTheme } from '@material-ui/core/styles'
 
-import UndoIcon from 'components/SvgIcons/Undo/IconUndo'
-import RedoIcon from 'components/SvgIcons/Redo/IconRedo'
+import { mdiUndoVariant } from '@mdi/js'
+import Icon from '@mdi/react'
+
+import { mdiRedoVariant } from '@mdi/js'
 
 import useUndoRedo from './use-undo-redo'
 
@@ -21,8 +23,10 @@ export default function UndoRedoManager({ editor }: Props) {
       <Tooltip title="Undo">
         <div>
           <IconButton disabled={!hasUndo} onClick={undo}>
-            <UndoIcon
-              fillColor={
+            <Icon
+              path={mdiUndoVariant}
+              size={1}
+              color={
                 hasUndo
                   ? theme.palette.common.black
                   : theme.palette.action.disabled
@@ -34,8 +38,10 @@ export default function UndoRedoManager({ editor }: Props) {
       <Tooltip title="Redo">
         <div>
           <IconButton disabled={!hasRedo} onClick={redo}>
-            <RedoIcon
-              fillColor={
+            <Icon
+              path={mdiRedoVariant}
+              size={1}
+              color={
                 hasRedo
                   ? theme.palette.common.black
                   : theme.palette.action.disabled
