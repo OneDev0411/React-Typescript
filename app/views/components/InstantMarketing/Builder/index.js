@@ -4,8 +4,10 @@ import { connect } from 'react-redux'
 import juice from 'juice'
 import { Button, IconButton, Tooltip } from '@material-ui/core'
 
+import { mdiClose } from '@mdi/js'
+import Icon from '@mdi/react'
+
 import { Portal } from 'components/Portal'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import IconMenu from 'components/SvgIcons/Menu/IconMenu'
 import SearchListingDrawer from 'components/SearchListingDrawer'
@@ -1013,7 +1015,7 @@ class Builder extends React.Component {
                 onClick={this.props.onClose}
                 style={{ marginLeft: '0.5rem' }}
               >
-                <CloseIcon size="small" />
+                <Icon path={mdiClose} size={1} />
               </IconButton>
             </Actions>
           </Header>
