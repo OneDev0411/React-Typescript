@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components'
 
 import { Theme } from '@material-ui/core'
 
-import { H4 } from 'components/Typography/headings'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import { StyledSVGWithProps } from 'utils/ts-utils'
@@ -38,7 +37,7 @@ export const Header = styled.div`
   `}
 `
 
-export const HeaderTitle = styled(H4)`
+export const HeaderTitle = styled.div`
   ${({ theme }) => css`
     margin-right: ${theme.spacing(1)}px;
     ${theme.typography.subtitle1};
