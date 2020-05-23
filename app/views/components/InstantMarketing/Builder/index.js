@@ -7,9 +7,10 @@ import { Button, IconButton, Tooltip } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 import Icon from '@mdi/react'
 
+import { mdiMenu } from '@mdi/js'
+
 import { Portal } from 'components/Portal'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import IconMenu from 'components/SvgIcons/Menu/IconMenu'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import TeamAgents from 'components/TeamAgents'
 import ImageDrawer from 'components/ImageDrawer'
@@ -939,7 +940,7 @@ class Builder extends React.Component {
                   }
                 >
                   <IconButton onClick={this.toggleTemplatesColumnVisibility}>
-                    <IconMenu />
+                    <Icon path={mdiMenu} size={1} />
                   </IconButton>
                 </Tooltip>
 
