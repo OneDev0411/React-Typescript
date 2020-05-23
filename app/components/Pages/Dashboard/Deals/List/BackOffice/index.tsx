@@ -9,7 +9,7 @@ import { IAppState } from 'reducers/index'
 import PageLayout from 'components/GlobalPageLayout'
 
 import { searchDeals, getDeals } from 'actions/deals'
-import { useDealStatuses } from 'hooks/use-deal-statuses'
+import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { getActiveTeamId } from 'utils/user-teams'
 
 import TabFilters from './Filters'
@@ -57,7 +57,7 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
     deals: deals.list
   }))
 
-  const statuses = useDealStatuses(getActiveTeamId(user)!)
+  const statuses = useBrandStatuses(getActiveTeamId(user)!)
 
   const [searchCriteria, setSearchCriteria] = useState('')
   const searchQuery: SearchQuery = {
