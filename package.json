@@ -64,6 +64,8 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.53",
     "@material-ui/styles": "^4.9.14",
+    "@mdi/js": "^5.2.45",
+    "@mdi/react": "^1.4.0",
     "@mikeljames/draft-js-drag-n-drop-upload-plugin": "^2.0.1",
     "@reach/tabs": "^0.1.5",
     "@samuelmeuli/font-manager": "^1.4.0",
