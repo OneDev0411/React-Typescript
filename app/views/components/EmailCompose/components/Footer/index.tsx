@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Field } from 'react-final-form'
+import { Field, useFormState, useField } from 'react-final-form'
 
 import { IconButton } from '@material-ui/core'
 
@@ -12,11 +12,11 @@ import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
 import IconDelete from 'components/SvgIcons/Delete/IconDelete'
 
+import { isFileAttachment } from '../../helpers/is-file-attachment'
 import { FooterContainer, FooterInnerContainer } from './styled'
 import { textForSubmitButton } from './helpers'
 import SchedulerButton from './SchedulerButton'
 import { EmailAttachmentsDropdown } from '../EmailAttachmentsDropdown'
-import { EmailFormValues } from '../../types'
 import { useButtonStyles } from '../../../../../styles/use-button-styles'
 import IconTemplate from '../../../SvgIcons/Template/IconTemplate'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
@@ -27,31 +27,30 @@ import { TemplateSelector } from './TemplateSelector'
 
 interface Props {
   isSubmitDisabled: boolean
-  formProps: {
-    values: EmailFormValues
-  }
   deal?: IDeal
   onChanged: () => void
-  initialAttachments: IFile[]
-  isSubmitting: boolean
   hasStaticBody?: boolean
-  onEmailTemplateSelected: (template: IBrandEmailTemplate) => void
-  onMarketingTemplateSelected: (template: IMarketingTemplateInstance) => void
+  updateBody: (body: string) => void
+  setMarketingTemplate: (template: IBrandEmailTemplate | null) => void
   onCancel?: () => void
-  onDelete?: (values: EmailFormValues) => void | Promise<any>
+  onDelete?: (values) => void | Promise<any>
   className?: string
   uploadAttachment: typeof uploadEmailAttachment
 }
 
 export function Footer({
   onDelete,
-  onEmailTemplateSelected,
-  onMarketingTemplateSelected,
+  updateBody,
+  setMarketingTemplate,
   hasStaticBody,
   ...props
 }: Props) {
-  const due_at = props.formProps.values.due_at
-  const isScheduled = !!due_at
+  const formState = useFormState()
+  const dueAtField = useField('due_at')
+  const subjectField = useField('subject')
+
+  const dueAt = dueAtField.input.value
+  const isScheduled = !!dueAt
 
   const buttonClasses = useButtonStyles()
   const iconClasses = useIconStyles()
@@ -59,15 +58,21 @@ export function Footer({
   const [isDeleting, setDeleting] = useState(false)
   const [isTemplateDrawerOpen, setTemplateDrawerOpen] = useState(false)
 
-  const busy = isDeleting || props.isSubmitting
+  const busy = isDeleting || formState.submitting
+
+  const initialAttachments: IFile[] = (
+    formState.initialValues.attachments || []
+  ).filter(isFileAttachment)
 
   const selectEmailTemplate = (template: IBrandEmailTemplate) => {
     setTemplateDrawerOpen(false)
-    onEmailTemplateSelected(template)
+    setMarketingTemplate(null)
+    subjectField.input.onChange(template.subject)
+    updateBody(template.body)
   }
   const selectMarketingTemplate = (template: IMarketingTemplateInstance) => {
     setTemplateDrawerOpen(false)
-    onMarketingTemplateSelected(template)
+    setMarketingTemplate(template)
   }
 
   return (
@@ -84,7 +89,7 @@ export function Footer({
             deal={props.deal}
             onChanged={props.onChanged}
             uploadAttachment={props.uploadAttachment}
-            initialAttachments={props.initialAttachments}
+            initialAttachments={initialAttachments}
           />
           {!hasStaticBody && (
             <DropdownToggleButton
@@ -102,7 +107,7 @@ export function Footer({
 
         <div className="action-bar">
           {isScheduled && (
-            <span className="scheduled-on">Send on {formatDate(due_at)}</span>
+            <span className="scheduled-on">Send on {formatDate(dueAt)}</span>
           )}
           {props.onCancel && (
             <ActionButton
@@ -121,7 +126,7 @@ export function Footer({
             leftRounded
           >
             {textForSubmitButton({
-              isSubmitting: props.isSubmitting,
+              isSubmitting: formState.submitting,
               isDateSet: isScheduled
             })}
           </ActionButton>
@@ -152,7 +157,7 @@ export function Footer({
                 setDeleting(true)
 
                 try {
-                  await onDelete(props.formProps.values)
+                  await onDelete(formState.values)
                 } finally {
                   setDeleting(false)
                 }

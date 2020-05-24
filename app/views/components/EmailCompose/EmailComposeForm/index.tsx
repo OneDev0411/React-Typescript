@@ -32,7 +32,6 @@ import { TextEditorRef } from '../../TextEditor/types'
 import { Callout } from '../../Callout'
 import { DangerButton } from '../../Button/DangerButton'
 import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
-import { isFileAttachment } from '../helpers/is-file-attachment'
 import { useEditorState } from '../../TextEditor/hooks/use-editor-state'
 import { useEmailFormValidator } from './use-email-form-validator'
 
@@ -191,9 +190,7 @@ function EmailComposeForm<T>({
           confirmLabel: 'Send anyway',
           onCancel: reject,
           onConfirm: () => {
-            handleSendEmail(form)
-              .then(resolve)
-              .catch(reject)
+            handleSendEmail(form).then(resolve).catch(reject)
           }
         })
       })
@@ -245,7 +242,6 @@ function EmailComposeForm<T>({
       initialValuesEqual={isEqual}
       keepDirtyOnReinitialize
       render={formProps => {
-        const { submitting } = formProps
         const values = formProps.values as EmailFormValues
 
         return (
@@ -318,43 +314,24 @@ function EmailComposeForm<T>({
                 </Callout>
               )}
             </div>
+
             {children}
 
-            {/*
-            If react-final-form was up to date, we could use useField instead
-            of nesting footer inside a Field just to be able to update subject.
-            */}
-            <Field
-              name="subject"
-              render={({ input: subjectInput }) => (
-                <Footer
-                  formProps={{ values: formProps.values as EmailFormValues }}
-                  isSubmitting={submitting}
-                  isSubmitDisabled={
-                    typeof isSubmitDisabled === 'function'
-                      ? isSubmitDisabled(values)
-                      : isSubmitDisabled
-                  }
-                  uploadAttachment={uploadAttachment}
-                  initialAttachments={(initialValues.attachments || []).filter(
-                    isFileAttachment
-                  )}
-                  deal={props.deal}
-                  onCancel={onCancel}
-                  onDelete={onDelete}
-                  onChanged={scrollToEnd}
-                  hasStaticBody={props.hasStaticBody}
-                  onEmailTemplateSelected={template => {
-                    subjectInput.onChange(template.subject as any)
-                    setMarketingTemplate(null)
-                    bodyEditor.update(template.body)
-                  }}
-                  onMarketingTemplateSelected={template => {
-                    setMarketingTemplate(template)
-                  }}
-                  className={classes.footer}
-                />
-              )}
+            <Footer
+              isSubmitDisabled={
+                typeof isSubmitDisabled === 'function'
+                  ? isSubmitDisabled(values)
+                  : isSubmitDisabled
+              }
+              uploadAttachment={uploadAttachment}
+              deal={props.deal}
+              onCancel={onCancel}
+              onDelete={onDelete}
+              onChanged={scrollToEnd}
+              hasStaticBody={props.hasStaticBody}
+              className={classes.footer}
+              updateBody={bodyEditor.update}
+              setMarketingTemplate={setMarketingTemplate}
             />
           </form>
         )
