@@ -30,7 +30,7 @@ import {
   FieldError
 } from '../final-form-fields'
 import Tooltip from '../tooltip'
-import { AddAssociationButton } from '../AddAssociationButton'
+import AddAssociation from '../AddAssociation'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
 import { validate } from './helpers/validate'
@@ -221,10 +221,8 @@ class PresentEventDrawer extends Component {
   }
 
   render() {
-    let crm_task
     const {
       isDisabled,
-      event,
       error,
       isSaving,
       isDeleting,
@@ -232,10 +230,6 @@ class PresentEventDrawer extends Component {
       currentEvent
     } = this.state
     const { defaultAssociation, user, isOpen } = this.props
-
-    if (event) {
-      crm_task = event.id
-    }
 
     return (
       <>
@@ -375,27 +369,15 @@ class PresentEventDrawer extends Component {
                               />
                             </>
                           )}
-                          <AddAssociationButton
-                            crm_task={crm_task}
+                          <AddAssociation
                             disabled={isDisabled}
                             type="contact"
-                            name="associations"
-                            caption="Attach Client"
                           />
-                          <AddAssociationButton
-                            crm_task={crm_task}
+                          <AddAssociation
                             disabled={isDisabled}
                             type="listing"
-                            name="associations"
-                            caption="Attach Property"
                           />
-                          <AddAssociationButton
-                            crm_task={crm_task}
-                            disabled={isDisabled}
-                            type="deal"
-                            name="associations"
-                            caption="Attach Deal"
-                          />
+                          <AddAssociation disabled={isDisabled} type="deal" />
                         </Flex>
                         <ActionButton
                           appearance="secondary"
@@ -427,7 +409,6 @@ const mapStateToProps = state => ({
   accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
 })
 
-export const EventDrawer = connect(
-  mapStateToProps,
-  { fetchOAuthAccounts }
-)(PresentEventDrawer)
+export const EventDrawer = connect(mapStateToProps, { fetchOAuthAccounts })(
+  PresentEventDrawer
+)

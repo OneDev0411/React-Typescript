@@ -19,7 +19,7 @@ import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
 import Reminder from '../../EventDrawer/components/Reminder/Reminder'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
-import { AddAssociationButton } from '../../AddAssociationButton'
+import AddAssociation from '../../AddAssociation'
 import {
   AssigneesField,
   AssociationsList,
@@ -272,19 +272,15 @@ export class TourDrawer extends React.Component {
                           <Divider margin="0 1rem" width="1px" height="2rem" />
                         </>
                       )}
-                      <AddAssociationButton
-                        associations={values.clients}
+                      <AddAssociation
                         disabled={isDisabled}
                         type="contact"
                         name="clients"
-                        caption="Attach Client"
                       />
-                      <AddAssociationButton
-                        associations={values.locations}
+                      <AddAssociation
                         disabled={isDisabled}
                         type="listing"
                         name="locations"
-                        caption="Attach Property"
                       />
                     </Flex>
                     <Flex alignCenter>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Field } from 'react-final-form'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
@@ -109,16 +108,7 @@ export default class Task extends Component {
                     defaultAssociation={defaultAssociation}
                   />
                   <Flex justifyBetween alignCenter>
-                    <Field
-                      name="associations"
-                      render={({ input }) => (
-                        <AssociationsButtons
-                          disabled={submitting}
-                          associations={values.associations}
-                          onClick={input.onChange}
-                        />
-                      )}
-                    />
+                    <AssociationsButtons disabled={submitting} />
 
                     <Flex justifyBetween alignCenter>
                       <ActionButton

@@ -40,7 +40,7 @@ import {
   DateTimeField,
   FieldError
 } from '../../final-form-fields'
-import { AddAssociationButton } from '../../AddAssociationButton'
+import AddAssociation from '../../AddAssociation'
 import { AssociationsList, EndTimeField } from '../../final-form-fields'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
@@ -413,7 +413,7 @@ class OpenHouseDrawerInternal extends React.Component {
 
   render() {
     const { user } = this.props
-    const { isDisabled, openHouse, error } = this.state
+    const { isDisabled, error } = this.state
 
     return (
       <Drawer
@@ -544,9 +544,7 @@ class OpenHouseDrawerInternal extends React.Component {
                               />
                             </>
                           )}
-                          <AddAssociationButton
-                            associations={values.registrants}
-                            crm_task={openHouse ? openHouse.id : ''}
+                          <AddAssociation
                             disabled={isDisabled}
                             type="contact"
                             name="registrants"

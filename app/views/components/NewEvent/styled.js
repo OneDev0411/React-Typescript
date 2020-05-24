@@ -7,7 +7,7 @@ import ArrowDropDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArr
 
 export const FormContainer = styled.form`
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 1rem 0.5rem;
 `
 export const FieldContainer = styled(Flex)`
   height: 2.5rem;
