@@ -3,11 +3,17 @@ import { Paper, Typography, IconButton, Tooltip } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
 
-import useTypedSelector from 'hooks/use-typed-selector'
+import { mdiEmailOpenOutline } from '@mdi/js'
 
-import IconTrash from 'views/components/SvgIcons/Trash/TrashIcon'
-import IconMailRead from 'views/components/SvgIcons/MailRead/IconMailRead'
-import IconMailUnread from 'views/components/SvgIcons/MailUnread/IconMailUnread'
+import Icon from '@mdi/react'
+
+import { mdiEmailOutline } from '@mdi/js'
+
+import { mdiTrashCanOutline } from '@mdi/js'
+
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+
+import useTypedSelector from 'hooks/use-typed-selector'
 
 import { useInboxEmailThreadListItemStyles } from './styles'
 import getRecipientNamesText from './helpers/get-recipient-names-text'
@@ -123,9 +129,9 @@ export default function InboxEmailThreadListItem({
                 }}
               >
                 {emailThread.is_read ? (
-                  <IconMailUnread size="small" />
+                  <Icon path={mdiEmailOutline} size={muiIconSizes.small} />
                 ) : (
-                  <IconMailRead size="small" />
+                  <Icon path={mdiEmailOpenOutline} size={muiIconSizes.small} />
                 )}
               </IconButton>
             </Tooltip>
@@ -142,7 +148,7 @@ export default function InboxEmailThreadListItem({
                   event.stopPropagation()
                 }}
               >
-                <IconTrash size="small" />
+                <Icon path={mdiTrashCanOutline} size={muiIconSizes.small} />
               </IconButton>
             </Tooltip>
           </div>
