@@ -47,7 +47,11 @@ export function ExportButton({ disabled, onExportClick }: Props) {
   return (
     <BaseDropdown
       buttonLabel="Export"
-      DropdownToggleButtonProps={{ disabled, variant: 'outlined' }}
+      DropdownToggleButtonProps={{
+        disabled,
+        size: 'small',
+        variant: 'outlined'
+      }}
       renderMenu={({ close }) => (
         <List>
           {items.map(item => (
