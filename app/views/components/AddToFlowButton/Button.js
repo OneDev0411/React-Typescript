@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { mdiLightningBolt } from '@mdi/js'
 
 import { noop } from 'utils/helpers'
 
 import TextIconButton from 'components/Button/TextIconButton'
-import Icon from 'components/SvgIcons/Thunderbolt/ThunderboltIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 Button.propTypes = {
   id: PropTypes.string,
@@ -30,5 +31,11 @@ export default function Button({ id, isOpen, render, onClick }) {
     return render(buttonProps)
   }
 
-  return <TextIconButton text="Add to Flow" iconLeft={Icon} {...buttonProps} />
+  return (
+    <TextIconButton
+      text="Add to Flow"
+      iconLeft={() => <SvgIcon path={mdiLightningBolt} />}
+      {...buttonProps}
+    />
+  )
 }
