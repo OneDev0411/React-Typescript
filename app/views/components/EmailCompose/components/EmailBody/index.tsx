@@ -8,8 +8,7 @@ import Loading from 'components/LoadingContainer'
 import { IAppState } from 'reducers'
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
-import { UploadAttachment } from 'components/EmailCompose/fields/UploadAttachment'
-
+import { useUploadAttachment } from '../../helpers/use-upload-attachment'
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 import { TextEditorProps, TextEditorRef } from '../../../TextEditor/types'
 import { EmailEditorFeatures } from './EmailEditorFeatures'
@@ -48,6 +47,7 @@ const EmailBody = ({
   stateFromHtmlOptions
 }: Props) => {
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
+  const [upload] = useUploadAttachment(uploadAttachment)
 
   const signature = useSelector<IAppState, string>(
     state => state.user.email_signature
@@ -64,55 +64,51 @@ const EmailBody = ({
   )
 
   return (
-    <UploadAttachment uploadAttachment={uploadAttachment}>
-      {({ upload }) => (
+    <>
+      {hasStaticBody ? (
         <>
-          {hasStaticBody ? (
+          {content ? (
             <>
-              {content ? (
-                <>
-                  <iframe
-                    title="email body"
-                    width="100%"
-                    srcDoc={content}
-                    style={{
-                      border: '0',
-                      flex: '1'
-                    }}
-                  />
-                  {attachments}
-                </>
-              ) : (
-                <Loading style={{ margin: 'auto' }} />
-              )}
+              <iframe
+                title="email body"
+                width="100%"
+                srcDoc={content}
+                style={{
+                  border: '0',
+                  flex: '1'
+                }}
+              />
+              {attachments}
             </>
           ) : (
-            <TextEditor
-              autofocus={autofocus}
-              onAttachmentDropped={upload}
-              DraftEditorProps={DraftEditorProps}
-              appendix={attachments}
-              ref={editorRef}
-              onChange={onChangeEditor}
-              editorState={editorState}
-            >
-              <EmailEditorFeatures
-                uploadImage={uploadImage}
-                hasTemplateVariables={hasTemplateVariables}
-                signature={signature}
-                hasSignatureByDefault={hasSignatureByDefault}
-                stateFromHtmlOptions={stateFromHtmlOptions}
-                onEditSignature={() => setSignatureEditorVisible(true)}
-              />
-            </TextEditor>
+            <Loading style={{ margin: 'auto' }} />
           )}
-          <EditEmailSignatureDrawer
-            isOpen={signatureEditorVisible}
-            onClose={() => setSignatureEditorVisible(false)}
-          />
         </>
+      ) : (
+        <TextEditor
+          autofocus={autofocus}
+          onAttachmentDropped={upload}
+          DraftEditorProps={DraftEditorProps}
+          appendix={attachments}
+          ref={editorRef}
+          onChange={onChangeEditor}
+          editorState={editorState}
+        >
+          <EmailEditorFeatures
+            uploadImage={uploadImage}
+            hasTemplateVariables={hasTemplateVariables}
+            signature={signature}
+            hasSignatureByDefault={hasSignatureByDefault}
+            stateFromHtmlOptions={stateFromHtmlOptions}
+            onEditSignature={() => setSignatureEditorVisible(true)}
+          />
+        </TextEditor>
       )}
-    </UploadAttachment>
+      <EditEmailSignatureDrawer
+        isOpen={signatureEditorVisible}
+        onClose={() => setSignatureEditorVisible(false)}
+      />
+    </>
   )
 }
 

@@ -15,7 +15,7 @@ import { BaseDropdown } from '../../../BaseDropdown'
 import { FilePicker } from '../../../FilePicker'
 import AddDealFile from '../AddDealFile'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
-import { UploadAttachment } from '../../fields/UploadAttachment'
+import { useUploadAttachment } from '../../helpers/use-upload-attachment'
 import config from '../../../../../../config/public'
 
 interface Props {
@@ -37,6 +37,7 @@ export function EmailAttachmentsDropdown({
   onChanged = () => {}
 }: Props) {
   const iconClasses = useIconStyles()
+  const [upload] = useUploadAttachment(uploadAttachment)
 
   const dropboxChooser = useDropboxChooser({
     appKey: config.dropbox.app_key,
@@ -45,6 +46,11 @@ export function EmailAttachmentsDropdown({
       linkType: 'direct'
     }
   })
+
+  const uploadFromComputer = (files: FileList) => {
+    upload(files)
+    onChanged()
+  }
 
   return (
     <BaseDropdown
@@ -104,34 +110,23 @@ export function EmailAttachmentsDropdown({
               </ListItem>
             )}
           />
-          <UploadAttachment uploadAttachment={uploadAttachment}>
-            {({ upload }) => {
-              const uploadFromComputer = (files: FileList) => {
-                upload(files)
-                onChanged()
-              }
-
-              return (
-                <FilePicker onFilePicked={uploadFromComputer}>
-                  {({ pickFiles }) => (
-                    <ListItem
-                      button
-                      onClick={() => {
-                        pickFiles()
-                        close()
-                      }}
-                    >
-                      <IconUpload
-                        size={iconSizes.small}
-                        className={iconClasses.rightMargin}
-                      />
-                      Attach from your computer
-                    </ListItem>
-                  )}
-                </FilePicker>
-              )
-            }}
-          </UploadAttachment>
+          <FilePicker onFilePicked={uploadFromComputer}>
+            {({ pickFiles }) => (
+              <ListItem
+                button
+                onClick={() => {
+                  pickFiles()
+                  close()
+                }}
+              >
+                <IconUpload
+                  size={iconSizes.small}
+                  className={iconClasses.rightMargin}
+                />
+                Attach from your computer
+              </ListItem>
+            )}
+          </FilePicker>
         </List>
       )}
     />
