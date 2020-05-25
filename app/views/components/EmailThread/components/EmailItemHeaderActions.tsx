@@ -14,22 +14,21 @@ import {
 } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 import classNames from 'classnames'
+import Icon from '@mdi/react'
+import { mdiDotsVertical } from '@mdi/js'
+import { mdiReply } from '@mdi/js'
+import { mdiForward } from '@mdi/js'
+import { mdiReplyAll } from '@mdi/js'
+import { mdiEmailOutline } from '@mdi/js'
+import { mdiEmailOpenOutline } from '@mdi/js'
 
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
-import useTypedSelector from 'hooks/use-typed-selector'
 import { useMenu } from 'hooks/use-menu'
+import useTypedSelector from 'hooks/use-typed-selector'
 
 import { ClassesProps } from 'utils/ts-utils'
 
-import IconReply from '../../SvgIcons/Reply/IconReply'
-import IconReplyAll from '../../SvgIcons/ReplyAll/IconReplyAll'
-import IconForward from '../../SvgIcons/Forward/IconForward'
-import IconVerticalDocs from '../../SvgIcons/VeriticalDots/VerticalDotsIcon'
-import IconMailRead from '../../SvgIcons/MailRead/IconMailRead'
-import IconMailUnread from '../../SvgIcons/MailUnread/IconMailUnread'
-
-import { iconSizes } from '../../SvgIcons/icon-sizes'
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
 import { EmailThreadEmail } from '../types'
 import { hasOAuthAccess } from '../helpers/has-oauth-access'
@@ -94,16 +93,14 @@ export function EmailItemHeaderActions(
     <Box ml={1} onClick={e => e.stopPropagation()}>
       <Tooltip title="Reply">
         <IconButton onClick={props.onReply}>
-          <IconReply
-            size={iconSizes.small}
-            color={theme.palette.common.black}
-          />
+          <Icon path={mdiReply} size={1} color={theme.palette.common.black} />
         </IconButton>
       </Tooltip>
       <Tooltip title="More">
         <IconButton {...buttonTriggerProps}>
-          <IconVerticalDocs
-            size={iconSizes.small}
+          <Icon
+            path={mdiDotsVertical}
+            size={1}
             color={theme.palette.common.black}
           />
         </IconButton>
@@ -117,18 +114,16 @@ export function EmailItemHeaderActions(
       >
         <MenuItem dense onClick={select(props.onReply)}>
           <ListItemIcon>
-            <IconReply
-              size={iconSizes.small}
-              color={theme.palette.common.black}
-            />
+            <Icon path={mdiReply} size={1} color={theme.palette.common.black} />
           </ListItemIcon>
           <ListItemText>Reply</ListItemText>
         </MenuItem>
         {hasReplyAll(props.email) && (
           <MenuItem dense onClick={select(props.onReplyAll)}>
             <ListItemIcon>
-              <IconReplyAll
-                size={iconSizes.small}
+              <Icon
+                path={mdiReplyAll}
+                size={1}
                 color={theme.palette.common.black}
               />
             </ListItemIcon>
@@ -137,8 +132,9 @@ export function EmailItemHeaderActions(
         )}
         <MenuItem dense onClick={select(props.onForward)}>
           <ListItemIcon>
-            <IconForward
-              size={iconSizes.small}
+            <Icon
+              path={mdiForward}
+              size={1}
               color={theme.palette.common.black}
             />
           </ListItemIcon>
@@ -159,16 +155,18 @@ export function EmailItemHeaderActions(
           >
             <ListItemIcon>
               {props.email.isRead ? (
-                <IconMailUnread
-                  size={iconSizes.small}
-                  fillColor={
+                <Icon
+                  path={mdiEmailOutline}
+                  size={1}
+                  color={
                     hasModifyAccess ? '#000' : theme.palette.action.disabled
                   }
                 />
               ) : (
-                <IconMailRead
-                  size={iconSizes.small}
-                  fillColor={
+                <Icon
+                  path={mdiEmailOpenOutline}
+                  size={1}
+                  color={
                     hasModifyAccess ? '#000' : theme.palette.action.disabled
                   }
                 />
