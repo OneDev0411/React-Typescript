@@ -1,5 +1,4 @@
 import React from 'react'
-import pure from 'recompose/pure'
 import { CSSProperties } from '@material-ui/styles'
 
 import { getNameInitials } from '../../../utils/helpers'
@@ -61,4 +60,4 @@ const Avatar: React.FunctionComponent<AvatarProps> = ({
   )
 }
 
-export default pure(Avatar)
+export default Avatar
