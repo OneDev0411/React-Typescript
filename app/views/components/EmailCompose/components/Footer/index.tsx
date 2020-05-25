@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Field, useFormState, useField } from 'react-final-form'
+import { useFormState, useField } from 'react-final-form'
 
 import { IconButton } from '@material-ui/core'
 
@@ -130,25 +130,20 @@ export function Footer({
               isDateSet: isScheduled
             })}
           </ActionButton>
-          <Field
-            name="due_at"
-            render={fieldProps => (
-              <DateTimePicker
-                popUpButton={buttonProps => (
-                  <SchedulerButton
-                    onOpen={buttonProps.toggleOpen}
-                    isScheduled={isScheduled}
-                  />
-                )}
-                disabledDays={{
-                  before: new Date()
-                }}
-                popUpPosition="top-right"
-                saveButtonText="Schedule"
-                initialSelectedDate={fieldProps.input.value}
-                onDone={fieldProps.input.onChange}
+          <DateTimePicker
+            popUpButton={buttonProps => (
+              <SchedulerButton
+                onOpen={buttonProps.toggleOpen}
+                isScheduled={isScheduled}
               />
             )}
+            disabledDays={{
+              before: new Date()
+            }}
+            popUpPosition="top-right"
+            saveButtonText="Schedule"
+            initialSelectedDate={dueAt}
+            onDone={dueAtField.input.onChange}
           />
 
           {onDelete && (
