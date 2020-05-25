@@ -3,9 +3,10 @@ import { useSelector } from 'react-redux'
 
 import { Tooltip, IconButton, makeStyles, Theme } from '@material-ui/core'
 
-import EventOutlinedIcon from '@material-ui/icons/EventOutlined'
-
-import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined'
+import { mdiCalendarOutline } from '@mdi/js'
+import { mdiEmailOutline } from '@mdi/js'
+import { mdiChatProcessingOutline } from '@mdi/js'
+import Icon from '@mdi/react'
 
 import { IAppState } from 'reducers'
 import { EventDrawer } from 'components/EventDrawer'
@@ -13,7 +14,6 @@ import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
-import Chat from 'components/SvgIcons/Chat/IconChat'
 import MissingEmailModal from 'components/MissingEmailModal'
 import { normalizeContact } from 'views/utils/association-normalizers'
 
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       marginRight: theme.spacing(0.75)
     },
     '&:hover svg': {
-      fill: theme.palette.primary.main
+      color: theme.palette.primary.main
     }
   }
 }))
@@ -72,7 +72,7 @@ export default function CtaAction({ contact }: Props) {
           >
             {!isDisabled ? (
               // @ts-ignore js component
-              <Chat data-icon="chat" />
+              <Icon path={mdiChatProcessingOutline} size={1} />
             ) : (
               <Loading data-icon="loading" />
             )}
@@ -122,7 +122,7 @@ export default function CtaAction({ contact }: Props) {
             className={classes.item}
             onClick={toggleEventDrawer}
           >
-            <EventOutlinedIcon />
+            <Icon path={mdiCalendarOutline} size={1} />
           </IconButton>
         </Tooltip>
         <Tooltip title="Send an email">
@@ -131,7 +131,7 @@ export default function CtaAction({ contact }: Props) {
             className={classes.item}
             onClick={toggleEmailComposer}
           >
-            <EmailOutlinedIcon />
+            <Icon path={mdiEmailOutline} size={1} />
           </IconButton>
         </Tooltip>
         {renderChatButton}
