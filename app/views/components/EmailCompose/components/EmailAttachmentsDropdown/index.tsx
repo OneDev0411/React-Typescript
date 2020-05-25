@@ -67,11 +67,14 @@ export function EmailAttachmentsDropdown({
       renderMenu={({ close }) => (
         <List>
           <AddDealFile
-            {...attachmentsField}
             deafultSelectedDeal={deal}
             initialAttachments={initialAttachments}
-            onChanged={onChanged}
+            onChange={files => {
+              attachmentsField.input.onChange(files)
+              onChanged()
+            }}
             onClick={close}
+            value={attachmentsField.input.value}
           />
           <ListItem
             button
