@@ -42,7 +42,7 @@ interface Props {
 
 export function EndDateTimeField({
   dueDate,
-  showTimePicker = false,
+  showTimePicker = true,
   datePickerModifiers,
   placement = 'bottom-end'
 }: Props) {

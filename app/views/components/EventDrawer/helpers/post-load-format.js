@@ -1,5 +1,6 @@
 import { getReminderItem } from 'views/utils/reminder'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
+import { isNegativeTimezone } from 'utils/is-negative-timezone'
 
 /**
  * Format form data for api model
@@ -43,9 +44,10 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
     const normalizedDate = new Date(Number(date) * 1000)
 
     if (isAllDayTask) {
+      const resetHours = isNegativeTimezone() ? 24 : 0
       const resetMinutes = isEndDate ? -1 : 0
 
-      normalizedDate.setHours(0, resetMinutes, 0, 0)
+      normalizedDate.setHours(resetHours, resetMinutes, 0, 0)
     }
 
     return normalizedDate
