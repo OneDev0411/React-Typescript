@@ -1,5 +1,7 @@
 import uniqBy from 'lodash/uniqBy'
 
+import { isNegativeTimezone } from 'utils/is-negative-timezone'
+
 import { createDayId } from '../create-day-id'
 import { sortEvents } from '../sort-events'
 
@@ -41,7 +43,6 @@ function getEvents(
 
   return uniqEvents.reduce((acc: string[], event: ICalendarEvent) => {
     const index = getEventIndex(event, range)
-
     const [year, month, day] = index.split('/')
     const monthId = `${year}/${month}/1`
     const dayId = `${year}/${month}/${day}`
@@ -119,6 +120,12 @@ function getEventIndex(event: ICalendarEvent, range: NumberRange) {
   const from = new Date(start * 1000)
   const to = new Date(end * 1000)
   const eventTime = new Date(event.timestamp * 1000)
+  const isAllDayEvent = event.metadata?.all_day || false
+
+  if (isAllDayEvent && isNegativeTimezone()) {
+    eventTime.setHours(24, 0, 0, 0)
+  }
+
   const convertToUTC =
     [
       'crm_association',
