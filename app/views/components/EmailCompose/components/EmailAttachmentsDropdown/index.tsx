@@ -1,8 +1,7 @@
+import React from 'react'
+import { useField } from 'react-final-form'
 import { List, ListItem } from '@material-ui/core'
 import { useDropboxChooser } from 'use-dropbox-chooser'
-import * as React from 'react'
-
-import { Field } from 'react-final-form'
 
 import IconUpload from 'components/SvgIcons/Upload/IconUpload'
 import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
@@ -37,6 +36,7 @@ export function EmailAttachmentsDropdown({
   onChanged = () => {}
 }: Props) {
   const iconClasses = useIconStyles()
+  const attachmentsField = useField('attachments')
   const [upload] = useUploadAttachment(uploadAttachment)
 
   const dropboxChooser = useDropboxChooser({
@@ -66,50 +66,46 @@ export function EmailAttachmentsDropdown({
       PopperProps={{ keepMounted: true }}
       renderMenu={({ close }) => (
         <List>
-          <Field
-            name="attachments"
+          <AddDealFile
+            {...attachmentsField}
             deafultSelectedDeal={deal}
             initialAttachments={initialAttachments}
-            component={AddDealFile}
             onChanged={onChanged}
             onClick={close}
           />
-          <Field
-            name="attachments"
-            render={({ input }) => (
-              <ListItem
-                button
-                disabled={dropboxChooser.isOpen}
-                onClick={async () => {
-                  try {
-                    const files = await dropboxChooser.open()
+          <ListItem
+            button
+            disabled={dropboxChooser.isOpen}
+            onClick={async () => {
+              try {
+                const files = await dropboxChooser.open()
 
-                    if (input) {
-                      input.onChange([
-                        ...(input.value || []),
-                        ...files.map(
-                          ({ name, link }) =>
-                            ({
-                              name,
-                              is_inline: false,
-                              url: link
-                            } as IEmailAttachmentUrlInput)
-                        )
-                      ] as any)
-                    }
-                  } catch (e) {}
+                if (attachmentsField.input) {
+                  const { onChange, value } = attachmentsField.input
 
-                  close()
-                }}
-              >
-                <IconDropbox
-                  size={iconSizes.small}
-                  className={iconClasses.rightMargin}
-                />
-                Attach from dropbox
-              </ListItem>
-            )}
-          />
+                  onChange([
+                    ...(value || []),
+                    ...files.map(
+                      ({ name, link }) =>
+                        ({
+                          name,
+                          is_inline: false,
+                          url: link
+                        } as IEmailAttachmentUrlInput)
+                    )
+                  ] as any)
+                }
+              } catch (e) {}
+
+              close()
+            }}
+          >
+            <IconDropbox
+              size={iconSizes.small}
+              className={iconClasses.rightMargin}
+            />
+            Attach from dropbox
+          </ListItem>
           <FilePicker onFilePicked={uploadFromComputer}>
             {({ pickFiles }) => (
               <ListItem
