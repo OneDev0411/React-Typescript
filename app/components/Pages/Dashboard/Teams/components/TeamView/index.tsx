@@ -1,15 +1,15 @@
-import * as React from 'react'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
+import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
+import {
+  mdiAccountEditOutline,
+  mdiAccountPlusOutline,
+  mdiPencil,
+  mdiTrashCanOutline
+} from '@mdi/js'
 
-import EditOutlineIcon from 'components/SvgIcons/EditOutline/EditOutlineIcon'
-import EditRolesIcon from 'components/SvgIcons/EditRoles/EditRolesIcon'
-import DeleteOutlineIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
-import Tooltip from 'components/tooltip'
 import PageHeader from 'components/PageHeader'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import AddUserIcon from 'components/SvgIcons/AddUser/AddUserIcon'
-
-import { AddTeamMemberButton, Container, IconButton } from './styled'
 import { TeamMember } from '../TeamMember'
 import { getTeamUsersWithRoles } from '../../helpers/get-team-users-with-roles'
 import { TeamMemberTitle } from '../TeamMember/styled'
@@ -37,36 +37,44 @@ export const TeamView = React.memo(
     const teamUsers = useMemo(() => getTeamUsersWithRoles(team), [team])
 
     return (
-      <Container>
-        <PageHeader isFlat>
+      <Box p={3}>
+        <PageHeader
+          isFlat
+          style={{ width: '100%', margin: '0 0 1.5rem', padding: 0 }}
+        >
           <PageHeader.Title showBackButton={false}>
             <PageHeader.Heading>{team.name}</PageHeader.Heading>
           </PageHeader.Title>
 
           <PageHeader.Menu>
-            <Tooltip placement="bottom" caption="Edit Roles">
+            <Tooltip title="Edit Roles">
               <IconButton onClick={onEditRoles}>
-                <EditRolesIcon style={{ padding: '.1rem' }} />
+                <SvgIcon path={mdiAccountEditOutline} />
               </IconButton>
             </Tooltip>
-            <Tooltip placement="bottom" caption="Edit Team">
+            <Tooltip title="Edit Team">
               <IconButton onClick={onEdit}>
-                <EditOutlineIcon style={{ padding: '.1rem' }} />
+                <SvgIcon path={mdiPencil} />
               </IconButton>
             </Tooltip>
-            <Tooltip placement="bottom" caption="Delete Team">
+            <Tooltip title="Delete Team">
               <IconButton onClick={onDelete}>
-                <DeleteOutlineIcon style={{ padding: '.1rem' }} />
+                <SvgIcon path={mdiTrashCanOutline} />
               </IconButton>
             </Tooltip>
           </PageHeader.Menu>
         </PageHeader>
 
         <div>
-          <AddTeamMemberButton onClick={onAddMember}>
-            <AddUserIcon />
-            <TeamMemberTitle>Add New Member</TeamMemberTitle>
-          </AddTeamMemberButton>
+          <Box mb={1} display="flex" justifyContent="flex-end">
+            <Button onClick={onAddMember}>
+              <SvgIcon
+                path={mdiAccountPlusOutline}
+                style={{ marginRight: '0.5rem' }}
+              />
+              <TeamMemberTitle>Add New Member</TeamMemberTitle>
+            </Button>
+          </Box>
           {teamUsers.map(teamUser => (
             <TeamMember
               key={teamUser.user.id}
@@ -80,7 +88,7 @@ export const TeamView = React.memo(
             />
           ))}
         </div>
-      </Container>
+      </Box>
     )
   }
 )
