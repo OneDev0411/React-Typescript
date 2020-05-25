@@ -18,6 +18,24 @@ import { AvatarGroup } from '@material-ui/lab'
 import { makeStyles, useTheme } from '@material-ui/styles'
 import { addNotification } from 'reapop'
 
+import { mdiEmailOpenOutline } from '@mdi/js'
+
+import Icon from '@mdi/react'
+
+import { mdiEmailOutline } from '@mdi/js'
+
+import { mdiTrashCanOutline } from '@mdi/js'
+
+import { mdiDotsVertical } from '@mdi/js'
+
+import { mdiForward } from '@mdi/js'
+
+import { mdiReplyAll } from '@mdi/js'
+
+import { mdiReply } from '@mdi/js'
+
+import { mdiClose } from '@mdi/js'
+
 import { getEmailThread } from 'models/email/get-email-thread'
 import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
 
@@ -25,14 +43,6 @@ import { normalizeThreadMessageToThreadEmail } from 'components/EmailThread/help
 import { EmailThreadEmails } from 'components/EmailThread'
 import { EmailResponseType } from 'components/EmailThread/types'
 import { EmailResponseComposeForm } from 'components/EmailCompose/EmailResponseComposeForm'
-import IconVerticalDocs from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
-import IconReply from 'components/SvgIcons/Reply/IconReply'
-import IconReplyAll from 'components/SvgIcons/ReplyAll/IconReplyAll'
-import IconForward from 'components/SvgIcons/Forward/IconForward'
-import IconTrash from 'views/components/SvgIcons/Trash/TrashIcon'
-import IconMailRead from 'views/components/SvgIcons/MailRead/IconMailRead'
-import IconMailUnread from 'views/components/SvgIcons/MailUnread/IconMailUnread'
 
 import { useMenu } from 'hooks/use-menu'
 
@@ -46,6 +56,9 @@ import NoContentMessage from '../NoContentMessage'
 const useStyles = makeStyles((theme: Theme) => ({
   moreMenu: {
     minWidth: '15rem'
+  },
+  icon: {
+    color: theme.palette.common.black
   }
 }))
 
@@ -168,9 +181,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             const name =
               (contact &&
                 (contact.display_name ||
-                  `${contact.first_name} ${contact.middle_name} ${
-                    contact.last_name
-                  }`)) ||
+                  `${contact.first_name} ${contact.middle_name} ${contact.last_name}`)) ||
               r.name ||
               ''
 
@@ -242,7 +253,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
         )}
         <Tooltip title="More">
           <IconButton {...buttonTriggerProps}>
-            <IconVerticalDocs size="small" />
+            <Icon path={mdiDotsVertical} size={1} className={classes.icon} />
           </IconButton>
         </Tooltip>
         <Menu
@@ -262,7 +273,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <IconClose size="small" />
+              <Icon path={mdiClose} size={1} className={classes.icon} />
             </ListItemIcon>
             <ListItemText>Close</ListItemText>
           </MenuItem>
@@ -275,7 +286,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <IconReply size="small" />
+              <Icon path={mdiReply} size={1} className={classes.icon} />
             </ListItemIcon>
             <ListItemText>Reply</ListItemText>
           </MenuItem>
@@ -289,7 +300,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
               }}
             >
               <ListItemIcon>
-                <IconReplyAll size="small" />
+                <Icon path={mdiReplyAll} size={1} className={classes.icon} />
               </ListItemIcon>
               <ListItemText>Reply All</ListItemText>
             </MenuItem>
@@ -303,7 +314,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <IconForward size="small" />
+              <Icon path={mdiForward} size={1} className={classes.icon} />
             </ListItemIcon>
             <ListItemText>Forward</ListItemText>
           </MenuItem>
@@ -317,9 +328,17 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
           >
             <ListItemIcon>
               {emailThread.is_read ? (
-                <IconMailUnread size="small" />
+                <Icon
+                  path={mdiEmailOutline}
+                  size={1}
+                  className={classes.icon}
+                />
               ) : (
-                <IconMailRead size="small" />
+                <Icon
+                  path={mdiEmailOpenOutline}
+                  size={1}
+                  className={classes.icon}
+                />
               )}
             </ListItemIcon>
             <ListItemText>
@@ -338,7 +357,11 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <IconTrash size="small" fillColor={theme.palette.error.main} />
+              <Icon
+                path={mdiTrashCanOutline}
+                size={1}
+                color={theme.palette.error.main}
+              />
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{ color: 'error' }}>
               Delete
