@@ -11,9 +11,10 @@ import { TextFieldProps } from '@material-ui/core/TextField'
 
 import { useDebouncedCallback } from 'use-debounce'
 
-import SearchIcon from '@material-ui/icons/Search'
+import { mdiMagnify } from '@mdi/js'
 
-import CloseIcon from '@material-ui/icons/Close'
+import Icon from '@mdi/react'
+import { mdiClose } from '@mdi/js'
 
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
@@ -124,7 +125,11 @@ export const SearchInput = forwardRef(
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon style={{ color: theme.palette.grey[600] }} />
+              <Icon
+                path={mdiMagnify}
+                size={1}
+                color={theme.palette.grey[600]}
+              />
             </InputAdornment>
           ),
           endAdornment: (
@@ -132,9 +137,10 @@ export const SearchInput = forwardRef(
               {isLoading && <Loading />}
               {nonEmpty && (
                 <IconButton size="small" onClick={clearInput}>
-                  <CloseIcon
-                    fontSize="small"
-                    style={{ color: theme.palette.grey[600] }}
+                  <Icon
+                    path={mdiClose}
+                    size={1}
+                    color={theme.palette.grey[600]}
                   />
                 </IconButton>
               )}
