@@ -34,7 +34,7 @@ import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
 import {
   validate,
-  hasGoogleAccount,
+  hasValidConnectedAccount,
   hasContactAssociation
 } from './helpers/validate'
 import { preSaveFormat } from './helpers/pre-save-format'
@@ -169,7 +169,7 @@ class PresentEventDrawer extends Component {
     const { event } = this.state
     const { accounts } = this.props
     const shouldShowModal =
-      hasContactAssociation(event) && hasGoogleAccount(accounts)
+      hasContactAssociation(event) && hasValidConnectedAccount(accounts)
 
     if (shouldShowModal) {
       return this.setState(() => ({
@@ -185,7 +185,7 @@ class PresentEventDrawer extends Component {
     const { accounts } = this.props
 
     const shouldShowModal =
-      hasContactAssociation(event) && hasGoogleAccount(accounts)
+      hasContactAssociation(event) && hasValidConnectedAccount(accounts)
 
     if (shouldShowModal) {
       return this.setState(() => ({
@@ -455,7 +455,6 @@ const mapStateToProps = state => ({
   accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
 })
 
-export const EventDrawer = connect(
-  mapStateToProps,
-  { fetchOAuthAccounts }
-)(PresentEventDrawer)
+export const EventDrawer = connect(mapStateToProps, { fetchOAuthAccounts })(
+  PresentEventDrawer
+)
