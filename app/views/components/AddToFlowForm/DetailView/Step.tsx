@@ -1,8 +1,9 @@
 import React from 'react'
 import { Box, Typography, makeStyles } from '@material-ui/core'
 
-import Icon from '../../../../components/Pages/Dashboard/Flows/Edit/Steps/Item/Icon'
-
+// TODO: merge all events icon into one specific file
+import { EVENT_ICONS } from '../../../../components/Pages/Dashboard/Flows/Edit/Steps/Item/icons'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 import { StepContainer } from './styled'
 
 const useStyles = makeStyles({
@@ -17,15 +18,15 @@ interface Props {
 
 export default function Step({ step }: Props) {
   const classes = useStyles()
+  const type = step.event ? step.event.task_type : 'Email'
+  const icon =
+    EVENT_ICONS.find(icon => icon.type === type) ||
+    EVENT_ICONS[EVENT_ICONS.length - 1]
 
   return (
     <StepContainer alignCenter justifyBetween>
       <Box display="flex" alignItems="center" width="70%">
-        <Icon
-          hasBackground={false}
-          containerStyle={{ width: 'auto', height: 'auto', margin: 0 }}
-          type={step.event ? step.event.task_type : 'Email'}
-        />
+        <SvgIcon path={icon.icon} />
         <Typography
           noWrap
           variant="body2"
