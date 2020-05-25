@@ -17,15 +17,20 @@ import classNames from 'classnames'
 
 import useBoolean from 'react-use/lib/useBoolean'
 
+import { mdiForward } from '@mdi/js'
+
+import Icon from '@mdi/react'
+
+import { mdiReplyAll } from '@mdi/js'
+
+import { mdiReply } from '@mdi/js'
+
 import { Iframe } from 'components/Iframe'
 
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
 import { EmailItemHeaderActions } from './EmailItemHeaderActions'
 import { EmailItemRecipients } from './EmailItemRecipients'
-import IconReply from '../../SvgIcons/Reply/IconReply'
-import IconReplyAll from '../../SvgIcons/ReplyAll/IconReplyAll'
-import IconForward from '../../SvgIcons/Forward/IconForward'
 import { Attachment } from '../../EmailCompose/components/Attachment'
 import { EmailResponseType, EmailThreadEmail } from '../types'
 import { decodeContentIds } from '../helpers/decode-content-ids'
@@ -103,8 +108,6 @@ export function EmailThreadItem({
     setIsResponseOpen(true)
     setResponseType(type)
   }
-
-  const iconClassName = classNames(iconClasses.rightMargin, iconClasses.small)
 
   const emailBody = useMemo(
     () => decodeContentIds(email.attachments, email.htmlBody || ''),
@@ -219,7 +222,11 @@ export function EmailThreadItem({
                       : undefined
                   }
                 >
-                  <IconReply fill="currentColor" className={iconClassName} />
+                  <Icon
+                    path={mdiReply}
+                    className={iconClasses.rightMargin}
+                    size={1}
+                  />
                   Reply
                 </Button>
                 {hasReplyAll(email) && (
@@ -233,9 +240,10 @@ export function EmailThreadItem({
                         : undefined
                     }
                   >
-                    <IconReplyAll
-                      fill="currentColor"
-                      className={iconClassName}
+                    <Icon
+                      path={mdiReplyAll}
+                      size={1}
+                      className={iconClasses.rightMargin}
                     />
                     Reply All
                   </Button>
@@ -251,7 +259,11 @@ export function EmailThreadItem({
                       : undefined
                   }
                 >
-                  <IconForward fill="currentColor" className={iconClassName} />
+                  <Icon
+                    path={mdiForward}
+                    size={1}
+                    className={iconClasses.rightMargin}
+                  />
                   Forward
                 </Button>
               </Box>
