@@ -3,8 +3,11 @@ import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 import { Avatar, Typography } from '@material-ui/core'
 
+import { mdiCheck } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { Item } from '../../Dropdown/Item'
-import CheckmarkIcon from '../../SvgIcons/Checkmark/IconCheckmark'
 
 const Container = styled(Item)`
   pointer-events: ${props => (props.isDisabled ? 'none' : 'initial')};
@@ -36,7 +39,9 @@ export function TeamMember(props) {
           {info}
         </Typography>
       </Flex>
-      {props.isSelected && <CheckmarkIcon style={{ marginLeft: '2em' }} />}
+      {props.isSelected && (
+        <SvgIcon path={mdiCheck} style={{ marginLeft: '2em' }} />
+      )}
     </Container>
   )
 }
