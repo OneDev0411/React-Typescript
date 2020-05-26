@@ -13,7 +13,9 @@ import {
 } from '@material-ui/core'
 import { PopperPlacementType } from '@material-ui/core/Popper'
 
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import { mdiChevronDown } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ClassesProps } from 'utils/ts-utils'
 
@@ -83,7 +85,7 @@ export default function SplitButton(
           onClick={handleToggle}
           size="small"
         >
-          <KeyboardArrowDownIcon />
+          <SvgIcon path={mdiChevronDown} />
         </Button>
       </ButtonGroup>
       <Popper
