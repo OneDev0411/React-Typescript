@@ -2,9 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import { Tooltip } from '@material-ui/core'
 
+import { mdiLightningBolt } from '@mdi/js'
+
 import AddToFlowButton from 'components/AddToFlowButton'
 import ALinkToClosable from 'components/ALinkToClosable'
-import IconThunderbolt from 'components/SvgIcons/Thunderbolt/ThunderboltIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 const commonStyle = `
   display: inline-flex;
@@ -38,7 +41,7 @@ export default function FlowCell(props) {
         buttonRenderer={buttonProps => (
           <Tooltip title="Add to flow">
             <AddFlow {...buttonProps}>
-              <IconThunderbolt />+
+              <SvgIcon size={muiIconSizes.small} path={mdiLightningBolt} />+
             </AddFlow>
           </Tooltip>
         )}
@@ -59,7 +62,7 @@ export default function FlowCell(props) {
         }
       }}
     >
-      <IconThunderbolt />
+      <SvgIcon size={muiIconSizes.small} path={mdiLightningBolt} />
       {flowsCount}
     </Link>
   )
