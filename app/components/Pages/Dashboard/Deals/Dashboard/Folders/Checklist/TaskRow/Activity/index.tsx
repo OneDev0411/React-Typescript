@@ -7,17 +7,24 @@ import Tooltip from 'components/tooltip'
 
 import { LastActivity } from './styled'
 
-export function Activity(props) {
-  if (!props.latestActivity || !props.latestActivity.comment) {
-    return false
+interface Props {
+  task: IDealTask
+  onClick: () => void
+}
+
+export function Activity({ task, onClick }: Props) {
+  const latestActivity = task.room.latest_activity
+
+  if (!latestActivity || !latestActivity.comment) {
+    return null
   }
 
   return (
-    <LastActivity onClick={props.onClick}>
+    <LastActivity onClick={onClick}>
       <Tooltip
         placement="bottom"
         caption={moment
-          .unix(props.latestActivity.created_at)
+          .unix(latestActivity.created_at)
           .format('MMM DD, YYYY, hh:mm A')}
       >
         <span
@@ -25,13 +32,13 @@ export function Activity(props) {
             textTransform: 'capitalize'
           }}
         >
-          {moment.unix(props.latestActivity.created_at).fromNow()}
+          {moment.unix(latestActivity.created_at).fromNow()}
           ,&nbsp;
         </span>
       </Tooltip>
 
       <TextMiddleTruncate
-        text={props.latestActivity.comment}
+        text={latestActivity.comment}
         maxLength={50}
         tooltipPlacement="bottom"
       />

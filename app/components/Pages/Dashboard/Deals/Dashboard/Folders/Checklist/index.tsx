@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import Flex from 'styled-flex-component'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
@@ -7,12 +7,14 @@ import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { isChecklistExpanded } from 'reducers/deals/checklists'
 import { setExpandChecklist } from 'actions/deals'
 
+import { IAppState } from 'reducers'
+
 import { ChecklistLabels } from './Labels'
 
 import MessageAdmin from './MessageAdmin'
 import Menu from './Menu'
 
-import TaskRow from './TaskRow'
+import { TaskRow } from './TaskRow'
 import NewTaskRow from './NewTaskRow'
 
 import {
@@ -23,39 +25,38 @@ import {
   ArrowIcon
 } from '../styled'
 
-interface DispatchProps {
-  setExpandChecklist(checklistId: UUID, isFolderExpanded: boolean): void
-}
-
-interface StateProps {
-  isFolderExpanded: boolean
-}
-
 interface Props {
   deal: IDeal
   tasks: IDealTask[]
   title: string
-  checklist: IDealChecklist
+  checklist: IDealChecklist | null
   isBackOffice: boolean
+  isFolderExpanded?: boolean
   createNewTask?: boolean
-  onToggleExpand(): void
+  onToggleExpand?(): void
 }
 
-const ChecklistFolder = React.memo(
+export const ChecklistFolder = React.memo(
   ({
     deal,
     tasks,
     title,
     isBackOffice,
     checklist,
-    isFolderExpanded,
-    setExpandChecklist,
+    isFolderExpanded = false,
     createNewTask = true,
     onToggleExpand = () => {}
-  }: Props & StateProps & DispatchProps) => {
+  }: Props) => {
+    const dispatch = useDispatch()
+    const isExpanded = useSelector<IAppState, boolean>(({ deals }) => {
+      return checklist
+        ? isChecklistExpanded(deals.checklists, checklist.id)
+        : isFolderExpanded || false
+    })
+
     const toggleFolderOpen = () => {
       if (checklist) {
-        setExpandChecklist(checklist.id, !isFolderExpanded)
+        dispatch(setExpandChecklist(checklist.id, !isExpanded))
       }
 
       onToggleExpand()
@@ -69,7 +70,7 @@ const ChecklistFolder = React.memo(
             style={{ cursor: 'pointer' }}
             onClick={toggleFolderOpen}
           >
-            <ArrowIcon isOpen={isFolderExpanded} />
+            <ArrowIcon isOpen={isExpanded} />
             <HeaderTitle>
               <TextMiddleTruncate text={title} maxLength={100} />
             </HeaderTitle>
@@ -78,8 +79,6 @@ const ChecklistFolder = React.memo(
 
           {checklist && (
             <Flex alignCenter>
-              {/*
-              // @ts-ignore TODO: js component */}
               <MessageAdmin
                 deal={deal}
                 checklist={checklist}
@@ -87,8 +86,6 @@ const ChecklistFolder = React.memo(
                 checklistName={checklist.title}
               />
 
-              {/*
-              // @ts-ignore TODO: js component */}
               <Menu
                 deal={deal}
                 checklist={checklist}
@@ -98,7 +95,7 @@ const ChecklistFolder = React.memo(
           )}
         </Header>
 
-        <ItemsContainer isOpen={isFolderExpanded}>
+        <ItemsContainer isOpen={isExpanded}>
           {tasks.map(task => (
             <TaskRow
               key={task.id}
@@ -114,16 +111,3 @@ const ChecklistFolder = React.memo(
     )
   }
 )
-
-function mapStateToProps({ deals }, props) {
-  return {
-    isFolderExpanded: props.checklist
-      ? isChecklistExpanded(deals.checklists, props.checklist.id)
-      : props.isFolderExpanded || false
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  { setExpandChecklist }
-)(ChecklistFolder)

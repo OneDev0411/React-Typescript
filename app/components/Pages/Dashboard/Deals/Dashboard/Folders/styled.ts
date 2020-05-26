@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components'
 
 import { Theme } from '@material-ui/core'
 
-import { H4 } from 'components/Typography/headings'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import { StyledSVGWithProps } from 'utils/ts-utils'
@@ -38,7 +37,7 @@ export const Header = styled.div`
   `}
 `
 
-export const HeaderTitle = styled(H4)`
+export const HeaderTitle = styled.div`
   ${({ theme }) => css`
     margin-right: ${theme.spacing(1)}px;
     ${theme.typography.subtitle1};
@@ -66,7 +65,10 @@ type ArrowIconProps = {
 
 export const ArrowIcon: StyledSVGWithProps<ArrowIconProps> = styled(
   ArrowDownIcon
-)`
+)<{
+  isOpen?: boolean
+  show?: boolean
+}>`
   width: 1.5em;
   height: 1.5em;
   margin-right: 0.5rem;
@@ -147,7 +149,7 @@ export const Row = styled.div`
 export const RowArrowIcon = styled(ArrowIcon)`
   align-self: flex-start;
   margin-top: 1px;
-` as typeof ArrowDownIcon
+` as typeof ArrowIcon
 
 export const RowTitle = styled.div<{
   clickable: boolean
@@ -159,12 +161,12 @@ export const RowTitle = styled.div<{
     font-weight: bold;
 
     ${clickable &&
-      css`
-        :hover {
-          cursor: pointer;
-          color: #0945eb;
-        }
-      `}
+    css`
+      :hover {
+        cursor: pointer;
+        color: #0945eb;
+      }
+    `}
   `}
 `
 

@@ -143,7 +143,4 @@ function mapStateToProps({ deals }, ownProps) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { createFormTask }
-)(TaskCreate)
+export default connect(mapStateToProps, { createFormTask })(TaskCreate)

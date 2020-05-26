@@ -53,7 +53,7 @@ interface Props {
   type: 'task' | 'document'
   deal: IDeal
   task: IDealTask
-  document: IDealTask | IFile
+  document?: IDealTask | IFile
 }
 
 interface State {
@@ -173,13 +173,13 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
   createDocumentsConditions = (): ActionConditions => {
     let documentType: 'Form' | 'Pdf' | 'Generic'
 
-    const isTask = this.props.document.type === 'task'
-    const isFile = this.props.document.type === 'file'
+    const isTask = this.props.document!.type === 'task'
+    const isFile = this.props.document!.type === 'file'
 
     // get all envelopes of the document
     const envelopes = getDocumentEnvelopes(
       this.props.envelopes,
-      this.props.document
+      this.props.document!
     )
 
     if (isTask) {
@@ -262,7 +262,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
   getEsignAttachments = () => {
     return getEsignAttachments({
       task: this.props.task,
-      document: this.props.document
+      document: this.props.document!
     })
   }
 
@@ -504,9 +504,6 @@ function mapStateToProps({ deals, user }: IAppState, props: Props) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    setSelectedTask
-  }
-)(ActionsButton)
+export default connect(mapStateToProps, {
+  setSelectedTask
+})(ActionsButton)
