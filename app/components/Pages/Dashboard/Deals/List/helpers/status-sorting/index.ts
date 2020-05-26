@@ -15,22 +15,22 @@ export function sortStatus(rows: IDeal[], statuses: IDealStatus[]) {
     const status = statusesByLabel[value]
 
     if (!status) {
-      return 50
+      return 500
     }
 
     if (status.is_active) {
-      return activeStatuses.indexOf(value) + 10
+      return activeStatuses.indexOf(value) + 100
     }
 
     if (status.is_pending) {
-      return pendingStatuses.indexOf(value) + 20
+      return pendingStatuses.indexOf(value) + 200
     }
 
     if (status.is_archived) {
-      return archivedStatuses.indexOf(value) + 30
+      return archivedStatuses.indexOf(value) + 300
     }
 
-    return 40
+    return 400
   })
 }
 
