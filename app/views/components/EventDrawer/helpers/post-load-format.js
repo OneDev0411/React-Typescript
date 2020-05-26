@@ -60,6 +60,8 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
     const rowReminder = new Date(timestamp * 1000)
 
     if (isAllDayTask) {
+      rowReminder.setDate(rowReminder.getUTCDate())
+      rowReminder.setMonth(rowReminder.getUTCMonth())
       rowReminder.setHours(
         rowReminder.getUTCHours(),
         rowReminder.getUTCMinutes(),
