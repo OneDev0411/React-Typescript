@@ -4,7 +4,7 @@ import fecha from 'fecha'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
-import EnvelopeView from '../../Envelope'
+import { EnvelopeStatus } from '../../EnvelopeStatus'
 import ActionsButton from '../../../../../components/ActionsButton'
 
 import { ItemLink } from './ItemLink'
@@ -18,7 +18,7 @@ interface Props {
   isBackOffice: boolean
 }
 
-export function Attachment({ file, deal, task, isBackOffice }: Props) {
+export function Attachment({ deal, task, file, isBackOffice }: Props) {
   return (
     <ItemContainer>
       <ItemRow>
@@ -53,7 +53,7 @@ export function Attachment({ file, deal, task, isBackOffice }: Props) {
         </Flex>
 
         <Flex alignCenter>
-          <EnvelopeView
+          <EnvelopeStatus
             type="document"
             deal={deal}
             task={task}

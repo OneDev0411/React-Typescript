@@ -21,7 +21,7 @@ import ActionsButton from '../../../../components/ActionsButton'
 
 import { TaskItems } from '../TaskItems'
 import TaskNotifications from '../Notification'
-import EnvelopeView from '../Envelope'
+import { EnvelopeStatus } from '../EnvelopeStatus'
 import { Activity } from './Activity'
 
 import { RowContainer, Row, RowTitle, RowArrowIcon } from '../../styled'
@@ -153,7 +153,7 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
 
           <Flex alignCenter wrapReverse>
             <TaskStatus deal={deal} task={task} isBackOffice={isBackOffice} />
-            <EnvelopeView type="task" deal={deal} task={task} />
+            <EnvelopeStatus type="task" deal={deal} task={task} />
             <Activity task={task} onClick={handleSelectTask} />
           </Flex>
         </Flex>

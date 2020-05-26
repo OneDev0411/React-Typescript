@@ -2,7 +2,9 @@ import styled from 'styled-components'
 
 import { LabelItem } from '../../styled'
 
-export const Container = styled(LabelItem)`
+export const Container = styled(LabelItem)<{
+  disabled?: boolean
+}>`
   a {
     text-decoration: none;
     color: #000;
