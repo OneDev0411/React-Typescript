@@ -4,10 +4,9 @@ import { connect } from 'react-redux'
 import juice from 'juice'
 import { Button, IconButton, Tooltip } from '@material-ui/core'
 
-import { mdiClose } from '@mdi/js'
-import Icon from '@mdi/react'
+import { mdiClose, mdiMenu } from '@mdi/js'
 
-import { mdiMenu } from '@mdi/js'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Portal } from 'components/Portal'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -940,7 +939,7 @@ class Builder extends React.Component {
                   }
                 >
                   <IconButton onClick={this.toggleTemplatesColumnVisibility}>
-                    <Icon path={mdiMenu} size={1} />
+                    <SvgIcon path={mdiMenu} />
                   </IconButton>
                 </Tooltip>
 
@@ -1016,7 +1015,7 @@ class Builder extends React.Component {
                 onClick={this.props.onClose}
                 style={{ marginLeft: '0.5rem' }}
               >
-                <Icon path={mdiClose} size={1} />
+                <SvgIcon path={mdiClose} />
               </IconButton>
             </Actions>
           </Header>
