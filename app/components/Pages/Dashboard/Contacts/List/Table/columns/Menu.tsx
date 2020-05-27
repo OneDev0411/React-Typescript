@@ -1,7 +1,9 @@
 import React from 'react'
 import { mdiDotsHorizontal } from '@mdi/js'
-import Icon from '@mdi/react'
+
 import { IconButton, MenuItem, Typography } from '@material-ui/core'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 
@@ -23,7 +25,7 @@ export default function Menu({ contactId, handleOnDelete }: Props) {
       }}
       renderDropdownButton={buttonProps => (
         <IconButton {...buttonProps}>
-          <Icon path={mdiDotsHorizontal} size={1} />
+          <SvgIcon path={mdiDotsHorizontal} />
         </IconButton>
       )}
       renderMenu={({ close }) => (

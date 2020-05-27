@@ -3,10 +3,13 @@ import { useSelector } from 'react-redux'
 
 import { Tooltip, IconButton, makeStyles, Theme } from '@material-ui/core'
 
-import { mdiCalendarOutline } from '@mdi/js'
-import { mdiEmailOutline } from '@mdi/js'
-import { mdiChatProcessingOutline } from '@mdi/js'
-import Icon from '@mdi/react'
+import {
+  mdiCalendarOutline,
+  mdiEmailOutline,
+  mdiChatProcessingOutline
+} from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { IAppState } from 'reducers'
 import { EventDrawer } from 'components/EventDrawer'
@@ -72,7 +75,7 @@ export default function CtaAction({ contact }: Props) {
           >
             {!isDisabled ? (
               // @ts-ignore js component
-              <Icon path={mdiChatProcessingOutline} size={1} />
+              <SvgIcon path={mdiChatProcessingOutline} />
             ) : (
               <Loading data-icon="loading" />
             )}
@@ -122,7 +125,7 @@ export default function CtaAction({ contact }: Props) {
             className={classes.item}
             onClick={toggleEventDrawer}
           >
-            <Icon path={mdiCalendarOutline} size={1} />
+            <SvgIcon path={mdiCalendarOutline} />
           </IconButton>
         </Tooltip>
         <Tooltip title="Send an email">
@@ -131,7 +134,7 @@ export default function CtaAction({ contact }: Props) {
             className={classes.item}
             onClick={toggleEmailComposer}
           >
-            <Icon path={mdiEmailOutline} size={1} />
+            <SvgIcon path={mdiEmailOutline} />
           </IconButton>
         </Tooltip>
         {renderChatButton}
