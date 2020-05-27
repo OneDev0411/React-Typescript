@@ -78,11 +78,16 @@ export const NotifyGuests = ({
       <Box p={4}>
         <Typography variant="subtitle1">{getTitle()} Event</Typography>
         <Typography variant="body2">
-          Would you like to send update emails to existing guests?
+          Would you like Google to send invitation emails to Calendar guests?
         </Typography>
         <Box className={classes.submitBtn}>
-          <Button size="small" onClick={onCancel} disableElevation>
-            Cancel
+          <Button
+            size="small"
+            onClick={onCancel}
+            disabled={isDisabled}
+            disableElevation
+          >
+            Dismiss
           </Button>
           {!isDisabled ? (
             <>

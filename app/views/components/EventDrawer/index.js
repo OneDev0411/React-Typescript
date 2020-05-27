@@ -32,11 +32,9 @@ import Tooltip from '../tooltip'
 import { AddAssociationButton } from '../AddAssociationButton'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
-import {
-  validate,
-  hasGoogleAccount,
-  hasContactAssociation
-} from './helpers/validate'
+import { validate } from './helpers/validate'
+import { hasContactAssociation } from './helpers/has-contact-association'
+import { hasValidConnectedAccount } from './helpers/has-valid-connected-account'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
@@ -164,7 +162,7 @@ class PresentEventDrawer extends Component {
     const { event } = this.state
     const { accounts } = this.props
     const shouldShowModal =
-      hasContactAssociation(event) && hasGoogleAccount(accounts)
+      hasContactAssociation(event) && hasValidConnectedAccount(accounts)
 
     if (shouldShowModal) {
       return this.setState(() => ({
@@ -180,7 +178,7 @@ class PresentEventDrawer extends Component {
     const { accounts } = this.props
 
     const shouldShowModal =
-      hasContactAssociation(event) && hasGoogleAccount(accounts)
+      hasContactAssociation(event) && hasValidConnectedAccount(accounts)
 
     if (shouldShowModal) {
       return this.setState(() => ({
@@ -440,7 +438,6 @@ const mapStateToProps = state => ({
   accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
 })
 
-export const EventDrawer = connect(
-  mapStateToProps,
-  { fetchOAuthAccounts }
-)(PresentEventDrawer)
+export const EventDrawer = connect(mapStateToProps, { fetchOAuthAccounts })(
+  PresentEventDrawer
+)
