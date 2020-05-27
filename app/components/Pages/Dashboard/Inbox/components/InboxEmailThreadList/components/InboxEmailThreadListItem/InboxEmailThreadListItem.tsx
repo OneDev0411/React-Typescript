@@ -5,11 +5,9 @@ import classNames from 'classnames'
 
 import { mdiEmailOpenOutline } from '@mdi/js'
 
-import Icon from '@mdi/react'
+import { mdiEmailOutline, mdiTrashCanOutline } from '@mdi/js'
 
-import { mdiEmailOutline } from '@mdi/js'
-
-import { mdiTrashCanOutline } from '@mdi/js'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
@@ -129,9 +127,12 @@ export default function InboxEmailThreadListItem({
                 }}
               >
                 {emailThread.is_read ? (
-                  <Icon path={mdiEmailOutline} size={muiIconSizes.small} />
+                  <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
                 ) : (
-                  <Icon path={mdiEmailOpenOutline} size={muiIconSizes.small} />
+                  <SvgIcon
+                    path={mdiEmailOpenOutline}
+                    size={muiIconSizes.small}
+                  />
                 )}
               </IconButton>
             </Tooltip>
@@ -148,7 +149,7 @@ export default function InboxEmailThreadListItem({
                   event.stopPropagation()
                 }}
               >
-                <Icon path={mdiTrashCanOutline} size={muiIconSizes.small} />
+                <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
               </IconButton>
             </Tooltip>
           </div>
