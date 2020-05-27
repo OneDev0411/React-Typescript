@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 
 import { mdiClose } from '@mdi/js'
 
-import Icon from '@mdi/react'
-
 import { IconButton } from '@material-ui/core'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { Divider } from '../../Divider'
 import PageHeader from '../../PageHeader'
@@ -48,7 +49,7 @@ export function Header(props) {
         {menuContent}
         {menuContent && <Divider width="1px" height="1.5rem" margin="0 1rem" />}
         <IconButton onClick={props.handleClose}>
-          <Icon path={mdiClose} size="2rem" />
+          <SvgIcon path={mdiClose} size={muiIconSizes.large} />
         </IconButton>
       </PageHeader.Menu>
     </PageHeader>
