@@ -4,11 +4,9 @@ import { fade } from '@material-ui/core/styles'
 
 import { Editor } from 'grapesjs'
 
-import { mdiMonitor } from '@mdi/js'
+import { mdiMonitor, mdiCellphone } from '@mdi/js'
 
-import Icon from '@mdi/react'
-
-import { mdiCellphone } from '@mdi/js'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
@@ -45,9 +43,8 @@ export default function DeviceManager({ editor }: Props) {
           onClick={() => setDevice('Desktop')}
           className={isDesktop ? classes.selected : ''}
         >
-          <Icon
+          <SvgIcon
             path={mdiMonitor}
-            size={1}
             className={isDesktop ? iconClasses.active : ''}
           />
         </IconButton>
@@ -58,9 +55,8 @@ export default function DeviceManager({ editor }: Props) {
           onClick={() => setDevice('Mobile portrait')}
           className={isMobile ? classes.selected : ''}
         >
-          <Icon
+          <SvgIcon
             path={mdiCellphone}
-            size={1}
             className={isMobile ? iconClasses.active : ''}
           />
         </IconButton>
