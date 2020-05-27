@@ -4,17 +4,16 @@ import * as React from 'react'
 
 import { Field } from 'react-final-form'
 
-import IconUpload from 'components/SvgIcons/Upload/IconUpload'
-import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
-import IconDropbox from 'components/SvgIcons/Dropbox/IconDropbox'
+import { mdiAttachment, mdiDropbox, mdiProgressUpload } from '@mdi/js'
 
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { BaseDropdown } from '../../../BaseDropdown'
 import { FilePicker } from '../../../FilePicker'
 import AddDealFile from '../AddDealFile'
-import { iconSizes } from '../../../SvgIcons/icon-sizes'
 import { UploadAttachment } from '../../fields/UploadAttachment'
 import config from '../../../../../../config/public'
 
@@ -50,10 +49,7 @@ export function EmailAttachmentsDropdown({
     <BaseDropdown
       buttonLabel={
         <>
-          <IconAttachment
-            size={iconSizes.small}
-            className={iconClasses.rightMargin}
-          />{' '}
+          <SvgIcon path={mdiAttachment} className={iconClasses.rightMargin} />
           Attachments
         </>
       }
@@ -96,8 +92,8 @@ export function EmailAttachmentsDropdown({
                   close()
                 }}
               >
-                <IconDropbox
-                  size={iconSizes.small}
+                <SvgIcon
+                  path={mdiDropbox}
                   className={iconClasses.rightMargin}
                 />
                 Attach from dropbox
@@ -121,8 +117,8 @@ export function EmailAttachmentsDropdown({
                         close()
                       }}
                     >
-                      <IconUpload
-                        size={iconSizes.small}
+                      <SvgIcon
+                        path={mdiProgressUpload}
                         className={iconClasses.rightMargin}
                       />
                       Attach from your computer
