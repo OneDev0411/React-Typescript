@@ -18,23 +18,18 @@ import { AvatarGroup } from '@material-ui/lab'
 import { makeStyles, useTheme } from '@material-ui/styles'
 import { addNotification } from 'reapop'
 
-import { mdiEmailOpenOutline } from '@mdi/js'
+import {
+  mdiEmailOpenOutline,
+  mdiEmailOutline,
+  mdiTrashCanOutline,
+  mdiDotsVertical,
+  mdiForward,
+  mdiReplyAll,
+  mdiReply,
+  mdiClose
+} from '@mdi/js'
 
-import Icon from '@mdi/react'
-
-import { mdiEmailOutline } from '@mdi/js'
-
-import { mdiTrashCanOutline } from '@mdi/js'
-
-import { mdiDotsVertical } from '@mdi/js'
-
-import { mdiForward } from '@mdi/js'
-
-import { mdiReplyAll } from '@mdi/js'
-
-import { mdiReply } from '@mdi/js'
-
-import { mdiClose } from '@mdi/js'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getEmailThread } from 'models/email/get-email-thread'
 import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
@@ -253,7 +248,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
         )}
         <Tooltip title="More">
           <IconButton {...buttonTriggerProps}>
-            <Icon path={mdiDotsVertical} size={1} className={classes.icon} />
+            <SvgIcon path={mdiDotsVertical} className={classes.icon} />
           </IconButton>
         </Tooltip>
         <Menu
@@ -273,7 +268,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <Icon path={mdiClose} size={1} className={classes.icon} />
+              <SvgIcon path={mdiClose} className={classes.icon} />
             </ListItemIcon>
             <ListItemText>Close</ListItemText>
           </MenuItem>
@@ -286,7 +281,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <Icon path={mdiReply} size={1} className={classes.icon} />
+              <SvgIcon path={mdiReply} className={classes.icon} />
             </ListItemIcon>
             <ListItemText>Reply</ListItemText>
           </MenuItem>
@@ -300,7 +295,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
               }}
             >
               <ListItemIcon>
-                <Icon path={mdiReplyAll} size={1} className={classes.icon} />
+                <SvgIcon path={mdiReplyAll} className={classes.icon} />
               </ListItemIcon>
               <ListItemText>Reply All</ListItemText>
             </MenuItem>
@@ -314,7 +309,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <Icon path={mdiForward} size={1} className={classes.icon} />
+              <SvgIcon path={mdiForward} className={classes.icon} />
             </ListItemIcon>
             <ListItemText>Forward</ListItemText>
           </MenuItem>
@@ -328,17 +323,9 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
           >
             <ListItemIcon>
               {emailThread.is_read ? (
-                <Icon
-                  path={mdiEmailOutline}
-                  size={1}
-                  className={classes.icon}
-                />
+                <SvgIcon path={mdiEmailOutline} className={classes.icon} />
               ) : (
-                <Icon
-                  path={mdiEmailOpenOutline}
-                  size={1}
-                  className={classes.icon}
-                />
+                <SvgIcon path={mdiEmailOpenOutline} className={classes.icon} />
               )}
             </ListItemIcon>
             <ListItemText>
@@ -357,9 +344,8 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <Icon
+              <SvgIcon
                 path={mdiTrashCanOutline}
-                size={1}
                 color={theme.palette.error.main}
               />
             </ListItemIcon>
