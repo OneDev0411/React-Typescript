@@ -6,10 +6,8 @@ declare type ICalendarEvent<
   Associations extends ICalendarEventAssociations = ''
 > = {
   id: UUID
-  timestamp: number
   recurring: boolean
   title: string
-  timestamp: number
   object_type: string
   campaign: UUID | null
   contact: UUID | null
