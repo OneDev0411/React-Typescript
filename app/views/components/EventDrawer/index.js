@@ -32,11 +32,9 @@ import Tooltip from '../tooltip'
 import { AddAssociationButton } from '../AddAssociationButton'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
-import {
-  validate,
-  hasValidConnectedAccount,
-  hasContactAssociation
-} from './helpers/validate'
+import { validate } from './helpers/validate'
+import { hasContactAssociation } from './helpers/has-contact-association'
+import { hasValidConnectedAccount } from './helpers/has-valid-connected-account'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
