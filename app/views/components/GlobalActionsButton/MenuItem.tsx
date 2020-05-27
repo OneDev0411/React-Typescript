@@ -9,8 +9,9 @@ import {
   ListItemText
 } from '@material-ui/core'
 
-import AddIcon from '@material-ui/icons/Add'
+import { mdiPlus } from '@mdi/js'
 
+import { SvgIcon } from '../SvgIcons/SvgIcon'
 import { useIconStyles } from '../../../styles/use-icon-styles'
 import { Item } from './types'
 
@@ -69,7 +70,7 @@ export default function MenuItem({ item, onClick }: Props) {
       onClick={handleClick}
     >
       <ListItemIcon className={cn(classes.icon, classes.itemIcon)}>
-        <item.Icon fontSize="small" />
+        <SvgIcon path={item.Icon} />
       </ListItemIcon>
       <ListItemText primary={item.title} />
       <ListItemIcon
@@ -80,7 +81,7 @@ export default function MenuItem({ item, onClick }: Props) {
           classes.addIcon
         )}
       >
-        <AddIcon />
+        <SvgIcon path={mdiPlus} />
       </ListItemIcon>
     </ListItem>
   )
