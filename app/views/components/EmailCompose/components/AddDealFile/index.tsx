@@ -5,6 +5,8 @@ import { ListItem } from '@material-ui/core'
 
 import { FieldRenderProps } from 'react-final-form'
 
+import { mdiCurrencyUsdCircle } from '@mdi/js'
+
 import { useDeepMemo } from 'hooks/use-deep-memo'
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
@@ -18,11 +20,11 @@ import { IAppState } from 'reducers'
 import SearchDealDrawer from 'components/SearchDealDrawer'
 import SelectDealFileDrawer from 'components/SelectDealFileDrawer'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { getAllDealDocuments } from '../../../SelectDealFileDrawer/helpers/get-all-deal-documents'
 
 import { DealRow } from './DealRow'
-import IconDealFilled from '../../../SvgIcons/Deals/IconDealFilled'
-import { iconSizes } from '../../../SvgIcons/icon-sizes'
 
 interface StateProps {
   checklists: Record<UUID, IDealChecklist>
@@ -133,8 +135,8 @@ export function AddDealFile({
   return (
     <>
       <ListItem button onClick={handleClick}>
-        <IconDealFilled
-          size={iconSizes.small}
+        <SvgIcon
+          path={mdiCurrencyUsdCircle}
           style={{ marginRight: '0.5rem' }}
         />
         Attach from deals
