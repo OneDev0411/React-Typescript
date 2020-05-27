@@ -31,16 +31,17 @@ export function ContextField(props) {
   const getDate = () => {
     const date = new Date(fieldValue || new Date())
 
-    return date instanceof Date && !Number.isNaN(date) ? date : new Date()
+    // eslint-disable-next-line no-restricted-globals
+    return date instanceof Date && !isNaN(date) ? date : new Date()
   }
 
-  const handleSaveValue = (value, updateContext) => {
+  const handleSaveValue = (value, updateContext = false) => {
     props.onSaveValue(context.current, value, updateContext)
     setEditorStatus(false)
   }
 
   const normalizeValue = () => {
-    if (context.current.data_type === 'Date' && props.annotation.format) {
+    if (context.current.data_type === 'Date' && props.value) {
       return formatDate(props.value, props.annotation.format)
     }
 
@@ -69,10 +70,7 @@ export function ContextField(props) {
         <>
           <Body>
             {context.current.data_type === 'Date' ? (
-              <DatePicker
-                onChange={date => setFieldValue(formatDate(date))}
-                selectedDate={getDate()}
-              />
+              <DatePicker onChange={setFieldValue} selectedDate={getDate()} />
             ) : (
               <TextInput
                 context={context.current}
