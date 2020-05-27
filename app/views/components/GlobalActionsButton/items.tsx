@@ -1,14 +1,12 @@
 import React from 'react'
 
-import MailOutlineOutlinedIcon from '@material-ui/icons/MailOutlineOutlined'
-
-import EventOutlinedIcon from '@material-ui/icons/EventOutlined'
-
-import ContactsOutlinedIcon from '@material-ui/icons/ContactsOutlined'
-
-import LocalAtmOutlinedIcon from '@material-ui/icons/LocalAtmOutlined'
-
-import MeetingRoomOutlinedIcon from '@material-ui/icons/MeetingRoomOutlined'
+import {
+  mdiEmailOutline,
+  mdiCalendarOutline,
+  mdiContactsOutline,
+  mdiCurrencyUsdCircleOutline,
+  mdiShoePrint
+} from '@mdi/js'
 
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 
@@ -17,7 +15,8 @@ import { goTo } from 'utils/go-to'
 import { EventDrawer } from 'components/EventDrawer'
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
-import IconTourOutline from 'components/SvgIcons/TourOutline/IconTourOutline'
+
+import { MeetingRoomOutlined } from '../SvgIcons/icons'
 
 import CreateOpenHouse from './OpenHouse'
 
@@ -27,7 +26,7 @@ const items: Item[] = [
   {
     title: 'Email',
     type: 'email',
-    Icon: MailOutlineOutlinedIcon,
+    Icon: mdiEmailOutline,
     render: props => {
       return <SingleEmailComposeDrawer {...props} />
     }
@@ -35,7 +34,7 @@ const items: Item[] = [
   {
     title: 'Event',
     type: 'event',
-    Icon: EventOutlinedIcon,
+    Icon: mdiCalendarOutline,
     render: props => {
       return <EventDrawer {...props} />
     }
@@ -43,7 +42,7 @@ const items: Item[] = [
   {
     title: 'Contact',
     type: 'contact',
-    Icon: ContactsOutlinedIcon,
+    Icon: mdiContactsOutline,
     render: props => {
       return <NewContactDrawer {...props} />
     }
@@ -51,7 +50,7 @@ const items: Item[] = [
   {
     title: 'Deal',
     type: 'deal',
-    Icon: LocalAtmOutlinedIcon,
+    Icon: mdiCurrencyUsdCircleOutline,
     redirectTo: url => {
       goTo(url)
     }
@@ -59,7 +58,7 @@ const items: Item[] = [
   {
     title: 'OH Registration Page',
     type: 'openhouse',
-    Icon: MeetingRoomOutlinedIcon,
+    Icon: MeetingRoomOutlined,
     render: props => {
       return <CreateOpenHouse {...props} />
     }
@@ -67,7 +66,7 @@ const items: Item[] = [
   {
     title: 'Toursheet',
     type: 'tour',
-    Icon: IconTourOutline,
+    Icon: mdiShoePrint,
     render: props => {
       return <TourDrawer {...props} />
     }
