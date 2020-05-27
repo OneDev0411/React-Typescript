@@ -35,7 +35,7 @@ export function ContextField(props) {
     return date instanceof Date && !isNaN(date) ? date : new Date()
   }
 
-  const handleSaveValue = (value, updateContext = false) => {
+  const handleSaveValue = (value, updateContext) => {
     props.onSaveValue(context.current, value, updateContext)
     setEditorStatus(false)
   }
