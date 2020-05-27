@@ -85,7 +85,12 @@ export function CheckListTable({
       result.destination.index
     )
 
-    onReorderTasks(reorderedTasks)
+    onReorderTasks(
+      reorderedTasks.map((task, order) => ({
+        ...task,
+        order: order + 1
+      }))
+    )
   }
 
   return (

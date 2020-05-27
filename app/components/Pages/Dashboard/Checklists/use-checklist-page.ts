@@ -117,7 +117,7 @@ export function useChecklistsPage(rootBrandId: string | null) {
     if (rootBrandId) {
       const orders = tasks.map((task, order) => ({
         id: task.id,
-        order
+        order: order + 1
       }))
 
       sortTasks(rootBrandId, checklistId, orders)
