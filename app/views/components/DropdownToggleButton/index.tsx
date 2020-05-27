@@ -10,7 +10,8 @@ import {
 import { fade } from '@material-ui/core/styles'
 
 import { mdiChevronDown } from '@mdi/js'
-import Icon from '@mdi/react'
+
+import { SvgIcon } from '../SvgIcons/SvgIcon'
 
 import { ClassesProps } from '../../../utils/ts-utils'
 
@@ -72,9 +73,8 @@ export const DropdownToggleButton = forwardRef(
         ref={ref}
       >
         {children}
-        <Icon
+        <SvgIcon
           path={mdiChevronDown}
-          size={1}
           className={classNames(styleClasses.arrowIcon, {
             [styleClasses.rotated]: isActive
           })}
