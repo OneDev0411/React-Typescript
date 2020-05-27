@@ -13,8 +13,9 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import { mdiMagnify } from '@mdi/js'
 
-import Icon from '@mdi/react'
 import { mdiClose } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
@@ -125,11 +126,7 @@ export const SearchInput = forwardRef(
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <Icon
-                path={mdiMagnify}
-                size={1}
-                color={theme.palette.grey[600]}
-              />
+              <SvgIcon path={mdiMagnify} color={theme.palette.grey[600]} />
             </InputAdornment>
           ),
           endAdornment: (
@@ -137,11 +134,7 @@ export const SearchInput = forwardRef(
               {isLoading && <Loading />}
               {nonEmpty && (
                 <IconButton size="small" onClick={clearInput}>
-                  <Icon
-                    path={mdiClose}
-                    size={1}
-                    color={theme.palette.grey[600]}
-                  />
+                  <SvgIcon path={mdiClose} color={theme.palette.grey[600]} />
                 </IconButton>
               )}
             </>
