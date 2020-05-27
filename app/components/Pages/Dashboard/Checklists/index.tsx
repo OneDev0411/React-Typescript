@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { Helmet } from 'react-helmet'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { browserHistory, RouteComponentProps } from 'react-router'
 import { Box } from '@material-ui/core'
 
@@ -21,9 +21,11 @@ interface Props extends RouteComponentProps<any, {}> {
   user: IUser
 }
 
-export function ChecklistsPage({ user, location }: Props) {
+export function ChecklistsPage({ location }: Props) {
   const dealType = location.query.deal_type
   const propertyType = location.query.property_type
+
+  const user = useSelector<IAppState, IUser>(({ user }) => user)
 
   // If dealType and propertyType are not specified or are invalid, redirect
   // to the first item
@@ -53,7 +55,8 @@ export function ChecklistsPage({ user, location }: Props) {
     updateChecklist,
     addGeneralCommentTask,
     addFormTask,
-    deleteTask
+    deleteTask,
+    reorderTasks
   } = useChecklistsPage(activeTeamId)
 
   const filteredChecklists = (checklists || []).filter(
@@ -111,6 +114,7 @@ export function ChecklistsPage({ user, location }: Props) {
                     deleteTask={deleteTask}
                     checklist={checklist}
                     lastTaskNameEditorRef={lastTaskNameEditorRef}
+                    onReorderTasks={tasks => reorderTasks(checklist.id, tasks)}
                   />
                 </Box>
               </Box>
@@ -122,4 +126,4 @@ export function ChecklistsPage({ user, location }: Props) {
   )
 }
 
-export default connect(({ user }: IAppState) => ({ user }))(ChecklistsPage)
+export default ChecklistsPage
