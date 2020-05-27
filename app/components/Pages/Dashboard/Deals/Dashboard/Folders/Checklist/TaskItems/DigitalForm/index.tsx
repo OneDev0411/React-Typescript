@@ -1,12 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-
 import Flex from 'styled-flex-component'
-
-import { IAppState } from 'reducers'
-import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-
-import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
 
 import ActionsButton from '../../../../../components/ActionsButton'
 
@@ -19,24 +12,7 @@ interface Props {
 }
 
 export function DigitalForm({ deal, task }: Props) {
-  const envelopes = useSelector<IAppState, IDealEnvelope[]>(({ deals }) =>
-    selectDealEnvelopes(deal, deals.envelopes)
-  )
-
-  const hasActiveEnvelope = () => {
-    const documentEnvelopes = getDocumentEnvelopes(envelopes, task)
-
-    if (
-      documentEnvelopes.length === 0 ||
-      documentEnvelopes[0].status === 'Voided'
-    ) {
-      return false
-    }
-
-    return true
-  }
-
-  if (!task || !task.form || hasActiveEnvelope()) {
+  if (!task || !task.form) {
     return null
   }
 
@@ -62,7 +38,7 @@ export function DigitalForm({ deal, task }: Props) {
         </Flex>
 
         <Flex alignCenter>
-          <LabelItem>Base Form</LabelItem>
+          <LabelItem>Digital Form</LabelItem>
         </Flex>
       </ItemRow>
     </ItemContainer>

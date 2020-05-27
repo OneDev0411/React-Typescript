@@ -233,12 +233,6 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
     return envelopes[0].status
   }
 
-  getActiveEnvelopes = (envelopes: IDealEnvelope[]) => {
-    return envelopes.filter(
-      envelope => ['Voided', 'Declined'].includes(envelope.status) === false
-    )
-  }
-
   getSplitterFiles = () => {
     const files = getLastStates({
       deal: this.props.deal,

@@ -3,8 +3,7 @@ import Flex from 'styled-flex-component'
 import fecha from 'fecha'
 
 import { useTheme } from '@material-ui/styles'
-
-import { Theme, Typography } from '@material-ui/core'
+import { Theme } from '@material-ui/core'
 
 import ActionsButton from '../../../../../components/ActionsButton'
 import { EnvelopeStatus } from '../../EnvelopeStatus'
@@ -55,23 +54,6 @@ export function Envelope({ deal, task, envelope }: Props) {
             task={task}
             document={task}
           />
-        </Flex>
-
-        <Flex alignCenter>
-          <Typography variant="body2" color="textSecondary">
-            To: &nbsp;
-          </Typography>
-
-          {envelope.recipients.map((recipient, index) => (
-            <Typography
-              key={recipient.id}
-              variant="body2"
-              color="textSecondary"
-            >
-              {recipient.role.legal_full_name}
-              {index < envelope.recipients.length - 1 && <span>,&nbsp;</span>}
-            </Typography>
-          ))}
         </Flex>
       </ItemRow>
     </ItemContainer>
