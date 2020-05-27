@@ -3,9 +3,11 @@ import { Paper, Typography, IconButton, Tooltip } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
 
-import { mdiEmailOpenOutline } from '@mdi/js'
-
-import { mdiEmailOutline, mdiTrashCanOutline } from '@mdi/js'
+import {
+  mdiEmailOutline,
+  mdiTrashCanOutline,
+  mdiEmailOpenOutline
+} from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
