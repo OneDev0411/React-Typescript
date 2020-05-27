@@ -59,6 +59,16 @@ export function EnvelopeStatus({
   }
 
   const getTitle = (envelope: IDealEnvelope): string => {
+    if (envelope.status === 'Voided') {
+      return 'Void'
+    }
+
+    if (envelope.status === 'Declined') {
+      return 'Declined'
+    }
+
+    const extra = envelope.status === 'Created' ? ' (Draft)' : ''
+
     const recipients = envelope.recipients.filter(
       recipient => recipient.envelope_recipient_type === 'Signer'
     )
@@ -69,7 +79,7 @@ export function EnvelopeStatus({
 
     const signedCount = recipients.filter(r => r.status === 'Completed').length
 
-    return `${signedCount} of ${recipients.length} signed`
+    return `${signedCount} of ${recipients.length} signed${extra}`
   }
 
   const envelopeItem = getEnvelope()

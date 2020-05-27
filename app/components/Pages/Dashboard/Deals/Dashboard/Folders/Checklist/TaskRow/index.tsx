@@ -44,9 +44,16 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
   )
 
   const getRowsCount = () => {
-    const attachmentsCount = (task.room.attachments || []).length
+    let count = 0
 
-    return task.submission ? attachmentsCount + 1 : attachmentsCount
+    if (task.form) {
+      count++
+    }
+
+    count += (task.room.attachments || []).length
+    count += (getTaskEnvelopes(envelopes, task) || []).length
+
+    return count
   }
 
   const toggleTaskOpen = () => {
@@ -77,7 +84,7 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
     // If task is empty, i.e no form and no uploaded file: clicking task name does nothing (it's not clickable)
     if (rowsCount === 0) {
       return (
-        hasDigitalForm &&
+        task.form &&
         browserHistory.push(`/dashboard/deals/${deal.id}/form-edit/${task.id}`)
       )
     }
@@ -119,9 +126,7 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
     window.open(link, '_blank')
   }
 
-  const isRowExpandable = (task.room.attachments || []).length > 0
-  const hasDigitalForm = task.form !== null
-  const isRowClickable = getRowsCount() > 0 || hasDigitalForm
+  const isRowExpandable = getRowsCount() > 1
 
   return (
     <RowContainer isTaskExpanded={isTaskExpanded}>
@@ -134,7 +139,7 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
 
         <Flex column style={{ flex: 1 }}>
           <Flex alignCenter justifyBetween>
-            <RowTitle clickable={isRowClickable} onClick={handleClickTask}>
+            <RowTitle clickable onClick={handleClickTask}>
               {task.title}
             </RowTitle>
 

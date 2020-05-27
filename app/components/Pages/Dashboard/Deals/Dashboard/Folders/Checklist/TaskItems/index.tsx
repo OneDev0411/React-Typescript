@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux'
 import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
+import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
+
 import { DigitalForm } from './DigitalForm'
 import { Attachment } from './Attachment'
 import { Envelope } from './Envelope'
@@ -20,9 +22,11 @@ interface Props {
 }
 
 export function TaskItems({ deal, task, isBackOffice, isOpen }: Props) {
-  const envelopes = useSelector<IAppState, IDealEnvelope[]>(({ deals }) =>
+  const deal_envelopes = useSelector<IAppState, IDealEnvelope[]>(({ deals }) =>
     selectDealEnvelopes(deal, deals.envelopes)
   )
+
+  const envelopes = getTaskEnvelopes(deal_envelopes, task)
 
   if (!isOpen) {
     return null
