@@ -3,29 +3,21 @@ import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 
 import { Map } from '../../../tour/Map'
-import { AssociationItem } from '../../../AssocationItem/index.js'
+import { AssociationItem } from '../../../AssocationItem'
 
-class LocationComponent extends React.Component {
-  render() {
-    const { location } = this.props
-
-    return (
-      <div style={{ marginBottom: '2.5rem' }}>
-        <div style={{ height: '12rem', marginBottom: '0.5rem' }}>
-          <Map
-            id="tour-direction-map"
-            listings={[location.listing.original]}
-            showDirection={false}
-          />
-        </div>
-        <AssociationItem
-          association={location}
-          isRemovable={false}
-          style={{ display: 'inline-flex' }}
+function LocationComponent({ location }) {
+  return (
+    <div style={{ marginBottom: '2.5rem' }}>
+      <div style={{ height: '12rem', marginBottom: '0.5rem' }}>
+        <Map
+          id="tour-direction-map"
+          listings={[location.listing.original]}
+          showDirection={false}
         />
       </div>
-    )
-  }
+      <AssociationItem association={location} isRemovable={false} />
+    </div>
+  )
 }
 
 export function Location(props) {
