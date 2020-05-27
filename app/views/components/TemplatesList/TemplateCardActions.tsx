@@ -4,7 +4,7 @@ import { createStyles, makeStyles } from '@material-ui/core'
 
 import { mdiTrashCanOutline } from '@mdi/js'
 
-import Icon from '@mdi/react'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import ActionButton from '../Button/ActionButton'
 import Tooltip from '../tooltip'
@@ -67,7 +67,7 @@ export default function TemplateCardActions({
                 handleDelete()
               }}
             >
-              <Icon path={mdiTrashCanOutline} size={1} />
+              <SvgIcon path={mdiTrashCanOutline} />
             </IconButton>
           </Tooltip>
         </div>
