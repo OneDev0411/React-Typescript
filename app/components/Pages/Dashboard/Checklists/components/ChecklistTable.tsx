@@ -16,7 +16,8 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Theme
+  Theme,
+  Tooltip
 } from '@material-ui/core'
 import classNames from 'classnames'
 
@@ -29,6 +30,7 @@ import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutli
 import { useDictionary } from 'hooks/use-dictionary'
 
 import { InlineEditableString } from 'components/inline-editable-fields/InlineEditableString'
+import IconDragHandle from 'components/SvgIcons/DragHandle/IconDragHandle'
 
 import { useTableStyles } from '../../../../../styles/table.style'
 import { dealTaskTypeToString } from '../constants'
@@ -97,6 +99,7 @@ export function CheckListTable({
       >
         <TableHead>
           <TableRow>
+            <TableCell />
             <TableCell>Name</TableCell>
             <TableCell>Type</TableCell>
             <TableCell style={{ width: 1 }}>Required?</TableCell>
@@ -130,6 +133,16 @@ export function CheckListTable({
                           : {})
                       }}
                     >
+                      <TableCell
+                        style={{
+                          width: '2%'
+                        }}
+                      >
+                        <Tooltip title="Drag row to reorder">
+                          <IconDragHandle />
+                        </Tooltip>
+                      </TableCell>
+
                       <TableCell
                         style={{
                           width: '65%'
@@ -189,7 +202,7 @@ export function CheckListTable({
                       </TableCell>
                       <TableCell
                         style={{
-                          width: '10%'
+                          width: '8%'
                         }}
                       >
                         <IconButton
