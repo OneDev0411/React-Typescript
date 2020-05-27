@@ -14,13 +14,17 @@ import {
 } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 import classNames from 'classnames'
-import Icon from '@mdi/react'
-import { mdiDotsVertical } from '@mdi/js'
-import { mdiReply } from '@mdi/js'
-import { mdiForward } from '@mdi/js'
-import { mdiReplyAll } from '@mdi/js'
-import { mdiEmailOutline } from '@mdi/js'
-import { mdiEmailOpenOutline } from '@mdi/js'
+
+import {
+  mdiDotsVertical,
+  mdiReply,
+  mdiForward,
+  mdiReplyAll,
+  mdiEmailOutline,
+  mdiEmailOpenOutline
+} from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
@@ -52,6 +56,9 @@ const styles = (theme: Theme) =>
       '&:hover': {
         backgroundColor: 'transparent'
       }
+    },
+    iconColor: {
+      color: theme.palette.common.black
     }
   })
 
@@ -93,16 +100,12 @@ export function EmailItemHeaderActions(
     <Box ml={1} onClick={e => e.stopPropagation()}>
       <Tooltip title="Reply">
         <IconButton onClick={props.onReply}>
-          <Icon path={mdiReply} size={1} color={theme.palette.common.black} />
+          <SvgIcon path={mdiReply} className={classes.iconColor} />
         </IconButton>
       </Tooltip>
       <Tooltip title="More">
         <IconButton {...buttonTriggerProps}>
-          <Icon
-            path={mdiDotsVertical}
-            size={1}
-            color={theme.palette.common.black}
-          />
+          <SvgIcon path={mdiDotsVertical} className={classes.iconColor} />
         </IconButton>
       </Tooltip>
       <Menu
@@ -114,29 +117,21 @@ export function EmailItemHeaderActions(
       >
         <MenuItem dense onClick={select(props.onReply)}>
           <ListItemIcon>
-            <Icon path={mdiReply} size={1} color={theme.palette.common.black} />
+            <SvgIcon path={mdiReply} className={classes.iconColor} />
           </ListItemIcon>
           <ListItemText>Reply</ListItemText>
         </MenuItem>
         {hasReplyAll(props.email) && (
           <MenuItem dense onClick={select(props.onReplyAll)}>
             <ListItemIcon>
-              <Icon
-                path={mdiReplyAll}
-                size={1}
-                color={theme.palette.common.black}
-              />
+              <SvgIcon path={mdiReplyAll} className={classes.iconColor} />
             </ListItemIcon>
             <ListItemText>Reply All</ListItemText>
           </MenuItem>
         )}
         <MenuItem dense onClick={select(props.onForward)}>
           <ListItemIcon>
-            <Icon
-              path={mdiForward}
-              size={1}
-              color={theme.palette.common.black}
-            />
+            <SvgIcon path={mdiForward} className={classes.iconColor} />
           </ListItemIcon>
           <ListItemText>Forward</ListItemText>
         </MenuItem>
@@ -155,17 +150,15 @@ export function EmailItemHeaderActions(
           >
             <ListItemIcon>
               {props.email.isRead ? (
-                <Icon
+                <SvgIcon
                   path={mdiEmailOutline}
-                  size={1}
                   color={
                     hasModifyAccess ? '#000' : theme.palette.action.disabled
                   }
                 />
               ) : (
-                <Icon
+                <SvgIcon
                   path={mdiEmailOpenOutline}
-                  size={1}
                   color={
                     hasModifyAccess ? '#000' : theme.palette.action.disabled
                   }
