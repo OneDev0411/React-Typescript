@@ -1,7 +1,5 @@
 import React from 'react'
-import { Chip, Avatar, Theme } from '@material-ui/core'
-
-import { makeStyles } from '@material-ui/styles'
+import { Chip, Avatar, Theme, makeStyles } from '@material-ui/core'
 
 import Link from 'components/ALink'
 
