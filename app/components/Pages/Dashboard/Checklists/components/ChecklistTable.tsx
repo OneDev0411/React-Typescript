@@ -38,13 +38,15 @@ interface Props {
   updateTask: (task: IBrandChecklistTask) => void
   deleteTask: (checklistId: string, taskId: string) => void
   lastTaskNameEditorRef?: RefObject<any>
+  onReorderTasks: (tasks: IBrandChecklistTask[]) => void
 }
 
 export function CheckListTable({
   checklist,
   updateTask,
   deleteTask,
-  lastTaskNameEditorRef
+  lastTaskNameEditorRef,
+  onReorderTasks
 }: Props) {
   const theme = useTheme<Theme>()
   const [isRemoving, setRemoving] = useDictionary<boolean>()
@@ -54,8 +56,34 @@ export function CheckListTable({
 
   const confirmationModal = useContext(ConfirmationModalContext)
 
+  const reorder = (
+    list: IBrandChecklistTask[],
+    startIndex: number,
+    endIndex: number
+  ) => {
+    const result = Array.from(list)
+    const [removed] = result.splice(startIndex, 1)
+
+    result.splice(endIndex, 0, removed)
+
+    return result
+  }
+
   const onDragEnd = (result: DropResult) => {
-    console.log(result)
+    if (
+      !result.destination ||
+      result.destination.index === result.source.index
+    ) {
+      return
+    }
+
+    const reorderedTasks = reorder(
+      checklist.tasks || [],
+      result.source.index,
+      result.destination.index
+    )
+
+    onReorderTasks(reorderedTasks)
   }
 
   return (

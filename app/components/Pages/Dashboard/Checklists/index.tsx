@@ -55,7 +55,8 @@ export function ChecklistsPage({ location }: Props) {
     updateChecklist,
     addGeneralCommentTask,
     addFormTask,
-    deleteTask
+    deleteTask,
+    reorderTasks
   } = useChecklistsPage(activeTeamId)
 
   const filteredChecklists = (checklists || []).filter(
@@ -113,6 +114,7 @@ export function ChecklistsPage({ location }: Props) {
                     deleteTask={deleteTask}
                     checklist={checklist}
                     lastTaskNameEditorRef={lastTaskNameEditorRef}
+                    onReorderTasks={tasks => reorderTasks(checklist.id, tasks)}
                   />
                 </Box>
               </Box>
