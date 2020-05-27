@@ -11,9 +11,7 @@ import { TextFieldProps } from '@material-ui/core/TextField'
 
 import { useDebouncedCallback } from 'use-debounce'
 
-import { mdiMagnify } from '@mdi/js'
-
-import { mdiClose } from '@mdi/js'
+import { mdiMagnify, mdiClose } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
