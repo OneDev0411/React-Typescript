@@ -34,14 +34,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface Props {
-  dueDate: Date
+  selectedDate: Date
   showTimePicker?: boolean
   datePickerModifiers?: Partial<Modifiers>
   placement?: PopperPlacementType
 }
 
 export function EndDateTimeField({
-  dueDate,
+  selectedDate,
   showTimePicker = true,
   datePickerModifiers,
   placement = 'bottom-end'
@@ -51,7 +51,7 @@ export function EndDateTimeField({
 
   const anchorRef = useRef<HTMLButtonElement>(null)
 
-  const [endDate, setEndDate] = useState(dueDate)
+  const [endDate, setEndDate] = useState(selectedDate)
   const [isOpen, setIsOpen] = useState(false)
 
   const id = isOpen ? 'end-date-time-field' : undefined
@@ -68,6 +68,7 @@ export function EndDateTimeField({
   return (
     <Field
       name="endDate"
+      initialValue={selectedDate}
       render={(fieldProps: FieldRenderProps<any>) => {
         const { value, onChange } = fieldProps.input
 
@@ -79,11 +80,10 @@ export function EndDateTimeField({
               color="secondary"
               ref={anchorRef}
               onClick={() => {
-                setEndDate(value || dueDate)
                 setIsOpen(!isOpen)
               }}
             >
-              {value ? fecha.format(value, formatter) : 'Add End Time'}
+              {fecha.format(value, formatter)}
             </Button>
             {value && (
               <Tooltip placement={placement} title="Remove Time">

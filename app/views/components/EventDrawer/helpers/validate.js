@@ -5,7 +5,7 @@ export function validate(values) {
     errors.title = 'Required!'
   }
 
-  if (values.endDate && values.endDate.getTime() <= values.dueDate.getTime()) {
+  if (values.endDate && values.endDate.getTime() < values.dueDate.getTime()) {
     errors.endDate = 'End time must be after the start time!'
   }
 

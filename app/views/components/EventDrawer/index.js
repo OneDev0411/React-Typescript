@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Box, IconButton } from '@material-ui/core'
+import { Box, IconButton, FormControlLabel, Checkbox } from '@material-ui/core'
+
+import { Field } from 'react-final-form'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
@@ -269,7 +271,6 @@ class PresentEventDrawer extends Component {
                 render={formProps => {
                   const { values } = formProps
 
-                  const isAllDay = values.metadata?.all_day || false
                   const isDone = values.status === 'DONE'
                   const isPastDate =
                     new Date(values.dueDate).getTime() <
@@ -351,20 +352,37 @@ class PresentEventDrawer extends Component {
                             <DateTimeField
                               name="dueDate"
                               selectedDate={values.dueDate}
-                              showTimePicker={!isAllDay}
+                              showTimePicker={!values.allDay}
                             />
 
                             <EndDateTimeField
-                              dueDate={values.dueDate}
-                              showTimePicker={!isAllDay}
+                              selectedDate={values.endDate}
+                              showTimePicker={!values.allDay}
                             />
                           </FieldContainer>
 
+                          <Field
+                            name="allDay"
+                            render={({ input }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={input.value}
+                                    onChange={e =>
+                                      input.onChange(e.target.checked)
+                                    }
+                                    name="allDay"
+                                    color="primary"
+                                  />
+                                }
+                                label="All Day Event"
+                              />
+                            )}
+                          />
                           <FieldError
                             name="endDate"
                             style={{ fontSize: '1rem', marginBottom: '0.5em' }}
                           />
-
                           <Reminder dueDate={values.dueDate} />
                         </Box>
 

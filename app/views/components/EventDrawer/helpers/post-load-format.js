@@ -10,8 +10,6 @@ import { isNegativeTimezone } from 'utils/is-negative-timezone'
  * @returns {Promise} a formated Task
  */
 export async function postLoadFormat(task, owner, defaultAssociation) {
-  const isAllDayTask = task.metadata?.all_day || false
-
   let reminder = {
     title: 'None',
     value: -1
@@ -28,17 +26,25 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
   }
 
   if (!task) {
+    const initialDueDate = new Date()
+    const initialEndDate = new Date()
+
+    initialDueDate.setHours(0, 0, 0, 0)
+    initialEndDate.setHours(23, 59, 0, 0)
+
     return {
       assignees: [owner],
       associations,
-      dueDate: new Date(),
-      endDate: null,
+      dueDate: initialDueDate,
+      endDate: initialEndDate,
+      allDay: true,
       reminder,
       task_type: { title: 'Call', value: 'Call' }
     }
   }
 
   const { reminders, end_date } = task
+  const isAllDayTask = task.metadata?.all_day || false
 
   const normalizeServerDate = (date, isEndDate = false) => {
     const normalizedDate = new Date(Number(date) * 1000)
@@ -92,6 +98,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
     reminder,
     dueDate,
     endDate,
+    allDay: isAllDayTask,
     task_type: {
       title: task.task_type,
       value: task.task_type
