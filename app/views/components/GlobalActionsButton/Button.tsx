@@ -1,7 +1,9 @@
 import React, { MouseEvent } from 'react'
 import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
 
-import KeyboardArrowDownTwoToneIcon from '@material-ui/icons/KeyboardArrowDownTwoTone'
+import { mdiChevronDown } from '@mdi/js'
+
+import { SvgIcon } from '../SvgIcons/SvgIcon'
 
 interface Props {
   onClick: (event: MouseEvent<HTMLElement>) => void
@@ -29,7 +31,7 @@ export default function GlobalActionsMenu({ onClick }: Props) {
       }}
     >
       Create
-      <KeyboardArrowDownTwoToneIcon />
+      <SvgIcon path={mdiChevronDown} />
     </Button>
   )
 }
