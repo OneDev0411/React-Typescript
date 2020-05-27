@@ -17,13 +17,9 @@ import classNames from 'classnames'
 
 import useBoolean from 'react-use/lib/useBoolean'
 
-import { mdiForward } from '@mdi/js'
+import { mdiForward, mdiReplyAll, mdiReply } from '@mdi/js'
 
-import Icon from '@mdi/react'
-
-import { mdiReplyAll } from '@mdi/js'
-
-import { mdiReply } from '@mdi/js'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Iframe } from 'components/Iframe'
 
@@ -94,7 +90,7 @@ export function EmailThreadItem({
   email,
   onToggleCollapsed,
   showBottomButtons = false,
-  onEmailSent = () => { },
+  onEmailSent = () => {},
   ...props
 }: Props) {
   const iconClasses = useIconStyles()
@@ -222,10 +218,9 @@ export function EmailThreadItem({
                       : undefined
                   }
                 >
-                  <Icon
+                  <SvgIcon
                     path={mdiReply}
                     className={iconClasses.rightMargin}
-                    size={1}
                   />
                   Reply
                 </Button>
@@ -240,9 +235,8 @@ export function EmailThreadItem({
                         : undefined
                     }
                   >
-                    <Icon
+                    <SvgIcon
                       path={mdiReplyAll}
-                      size={1}
                       className={iconClasses.rightMargin}
                     />
                     Reply All
@@ -259,9 +253,8 @@ export function EmailThreadItem({
                       : undefined
                   }
                 >
-                  <Icon
+                  <SvgIcon
                     path={mdiForward}
-                    size={1}
                     className={iconClasses.rightMargin}
                   />
                   Forward
