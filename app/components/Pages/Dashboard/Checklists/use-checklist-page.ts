@@ -7,7 +7,8 @@ import {
   getBrandChecklists,
   removeBrandChecklistTask,
   updateBrandChecklist,
-  updateBrandChecklistTask
+  updateBrandChecklistTask,
+  sortTasks
 } from 'models/BrandConsole/Checklists'
 import { getBrandForms } from 'models/BrandConsole/Forms'
 
@@ -24,7 +25,7 @@ export function useChecklistsPage(rootBrandId: string | null) {
     [rootBrandId]
   )
 
-  const fetchChecklists = async brandId => {
+  const fetchChecklists = async (brandId: UUID) => {
     setLoading(true)
 
     try {
@@ -112,6 +113,31 @@ export function useChecklistsPage(rootBrandId: string | null) {
     }
   }
 
+  const reorderTasks = (checklistId: UUID, tasks: IBrandChecklistTask[]) => {
+    if (rootBrandId) {
+      const orders = tasks.map((task, order) => ({
+        id: task.id,
+        order
+      }))
+
+      sortTasks(rootBrandId, checklistId, orders)
+
+      // update related checklist with sorted tasks
+      setChecklists(checklists =>
+        checklists.map(checklist => {
+          if (checklist.id === checklistId) {
+            return {
+              ...checklist,
+              tasks
+            }
+          }
+
+          return checklist
+        })
+      )
+    }
+  }
+
   return {
     checklists,
     loading,
@@ -120,6 +146,7 @@ export function useChecklistsPage(rootBrandId: string | null) {
     updateChecklist,
     updateTask,
     deleteTask,
+    reorderTasks,
     addGenericTask,
     addGeneralCommentTask,
     addFormTask,

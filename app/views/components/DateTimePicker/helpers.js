@@ -2,8 +2,10 @@ import fecha from 'fecha'
 
 import { setTime } from '../../../utils/set-time'
 
-export function formatDate(date) {
-  return date ? fecha.format(date, 'MMM D, YYYY hh:mm A') : ''
+export function formatDate(date, showTime = true) {
+  const formatter = showTime ? 'MMM D, YYYY hh:mm A' : 'MMM D, YYYY'
+
+  return date ? fecha.format(date, formatter) : ''
 }
 
 export function setTimeStringToDate(date, time) {

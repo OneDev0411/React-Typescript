@@ -1,5 +1,6 @@
 import { getReminderItem } from 'views/utils/reminder'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
+import { isNegativeTimezone } from 'utils/is-negative-timezone'
 
 /**
  * Format form data for api model
@@ -25,25 +26,57 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
   }
 
   if (!task) {
+    const initialDueDate = new Date()
+    const initialEndDate = new Date()
+
+    initialDueDate.setHours(0, 0, 0, 0)
+    initialEndDate.setHours(23, 59, 0, 0)
+
     return {
       assignees: [owner],
       associations,
-      dueDate: new Date(),
-      endDate: null,
+      dueDate: initialDueDate,
+      endDate: initialEndDate,
+      allDay: true,
       reminder,
       task_type: { title: 'Call', value: 'Call' }
     }
   }
 
   const { reminders, end_date } = task
+  const isAllDayTask = task.metadata?.all_day || false
 
-  const normalizeServerDate = date => date * 1000
+  const normalizeServerDate = (date, isEndDate = false) => {
+    const normalizedDate = new Date(Number(date) * 1000)
+
+    if (isAllDayTask) {
+      const resetHours = isNegativeTimezone() ? 24 : 0
+      const resetMinutes = isEndDate ? -1 : 0
+
+      normalizedDate.setHours(resetHours, resetMinutes, 0, 0)
+    }
+
+    return normalizedDate
+  }
   const dueDate = normalizeServerDate(task.due_date)
-  const endDate = end_date ? new Date(normalizeServerDate(end_date)) : null
+  const endDate = end_date ? normalizeServerDate(end_date, true) : null
 
   if (Array.isArray(reminders) && reminders.length > 0) {
     const { timestamp } = reminders[reminders.length - 1]
-    const reminderTimestamp = timestamp * 1000
+    const rowReminder = new Date(timestamp * 1000)
+
+    if (isAllDayTask) {
+      rowReminder.setDate(rowReminder.getUTCDate())
+      rowReminder.setMonth(rowReminder.getUTCMonth())
+      rowReminder.setHours(
+        rowReminder.getUTCHours(),
+        rowReminder.getUTCMinutes(),
+        0,
+        0
+      )
+    }
+
+    const reminderTimestamp = rowReminder.getTime()
 
     if (timestamp && reminderTimestamp > new Date().getTime()) {
       reminder = getReminderItem(dueDate, reminderTimestamp)
@@ -63,8 +96,9 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
   return {
     ...task,
     reminder,
-    dueDate: new Date(dueDate),
+    dueDate,
     endDate,
+    allDay: isAllDayTask,
     task_type: {
       title: task.task_type,
       value: task.task_type

@@ -1,3 +1,5 @@
+import { isNegativeTimezone } from 'utils/is-negative-timezone'
+
 /**
  * Format form data for api model
  * @param {object} values The form values
@@ -9,19 +11,33 @@ export async function preSaveFormat(values, originalValues) {
     status,
     dueDate,
     endDate,
+    allDay,
     reminder,
     task_type,
     description,
     assignees,
     associations = []
   } = values
+  const isAllDay = values.metadata?.all_day || allDay || false
+
+  if (isAllDay) {
+    const resetHours = isNegativeTimezone() ? 0 : 24
+
+    dueDate.setUTCHours(resetHours, 0, 0, 0)
+    endDate.setUTCHours(resetHours, 0, 0, 0)
+  }
 
   const dueDateTimestamp = dueDate.getTime()
+  const endDateTimestamp = endDate.getTime()
 
   const task = {
     title: title.trim(),
     due_date: dueDateTimestamp / 1000,
+    end_date: endDateTimestamp / 1000,
     task_type: task_type.value,
+    metadata: {
+      all_day: !!allDay
+    },
     assignees: assignees.map(a => a.id),
     status:
       dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'
@@ -29,12 +45,6 @@ export async function preSaveFormat(values, originalValues) {
 
   if ((originalValues && originalValues.id) || description) {
     task.description = (description && description.trim()) || ''
-  }
-
-  if (endDate) {
-    task.end_date = endDate.getTime() / 1000
-  } else if (originalValues && originalValues.end_date) {
-    task.end_date = null
   }
 
   if (task.status === 'DONE') {
@@ -68,9 +78,14 @@ export async function preSaveFormat(values, originalValues) {
   })
 
   if (originalValues) {
+    const metadata = originalValues.metadata
+      ? { ...originalValues.metadata, ...task.metadata }
+      : task.metadata
+
     return {
       ...originalValues,
-      ...task
+      ...task,
+      metadata
     }
   }
 

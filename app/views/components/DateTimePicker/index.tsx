@@ -16,6 +16,9 @@ import { PickerContainer } from './styled'
 import { isToday, formatDate } from './helpers'
 
 interface RenderProps {
+  rowDate: Date
+  formattedDate: string
+  isToday: boolean
   handleOpen: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
@@ -26,7 +29,7 @@ interface Props {
   showTimePicker?: boolean
   saveCaption?: string
   defaultAnchorElement?: HTMLElement | null
-  children?({ handleOpen }: RenderProps): React.ReactNode
+  children?(renderParams: RenderProps): React.ReactNode
   onChange?(date: Date): void
   onClose?(date: Date | null): void
 }
@@ -46,6 +49,7 @@ export function DateTimePicker({
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(
     defaultAnchorElement
   )
+  const formattedDate = formatDate(date, showTimePicker)
 
   const handleClose = () => {
     setAnchorEl(null)
@@ -72,6 +76,9 @@ export function DateTimePicker({
     <div style={style}>
       {children ? (
         children({
+          rowDate: date,
+          isToday: isToday(date),
+          formattedDate,
           handleOpen
         })
       ) : (
@@ -82,7 +89,7 @@ export function DateTimePicker({
           onClick={handleOpen}
         >
           {isToday(date) && <span>Today,&nbsp;</span>}
-          <span>{formatDate(date)}</span>
+          <span>{formattedDate}</span>
         </Button>
       )}
 
