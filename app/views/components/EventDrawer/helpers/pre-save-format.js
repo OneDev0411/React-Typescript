@@ -18,7 +18,7 @@ export async function preSaveFormat(values, originalValues) {
     assignees,
     associations = []
   } = values
-  const isAllDay = values.metadata?.all_day || allDay || false
+  const isAllDay = allDay || false
 
   if (isAllDay) {
     const resetHours = isNegativeTimezone() ? 0 : 24
@@ -36,7 +36,7 @@ export async function preSaveFormat(values, originalValues) {
     end_date: endDateTimestamp / 1000,
     task_type: task_type.value,
     metadata: {
-      all_day: !!allDay
+      all_day: isAllDay
     },
     assignees: assignees.map(a => a.id),
     status:
