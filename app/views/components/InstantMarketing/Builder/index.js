@@ -17,6 +17,7 @@ import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 
 import { isBackOffice, getBrandByType } from 'utils/user-teams'
+import { loadJS, unloadJS } from 'utils/load-js'
 
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
@@ -147,6 +148,8 @@ class Builder extends React.Component {
   }
 
   async componentDidMount() {
+    await this.loadCKEditor()
+
     const { Grapesjs, GrapesjsMjml } = await loadGrapesjs()
 
     const { load: loadAssetManagerPlugin } = await import('./AssetManager')
@@ -186,6 +189,20 @@ class Builder extends React.Component {
 
       iframe.removeEventListener('paste', this.iframePasteHandler)
     }
+
+    unloadJS('ckeditor')
+  }
+
+  loadCKEditor = () => {
+    return new Promise(resolve => {
+      loadJS(
+        // 'https://cdn.ckeditor.com/ckeditor5/19.1.0/inline/ckeditor.js',
+        'https://cdn.ckeditor.com/4.14.0/full-all/ckeditor.js',
+        // '/static/ckeditor/ckeditor.js',
+        'ckeditor',
+        resolve
+      )
+    })
   }
 
   static contextType = ConfirmationModalContext
