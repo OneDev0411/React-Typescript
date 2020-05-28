@@ -22,11 +22,11 @@ interface Props {
 }
 
 export function TaskItems({ deal, task, isBackOffice, isOpen }: Props) {
-  const deal_envelopes = useSelector<IAppState, IDealEnvelope[]>(({ deals }) =>
+  const dealEnvelopes = useSelector<IAppState, IDealEnvelope[]>(({ deals }) =>
     selectDealEnvelopes(deal, deals.envelopes)
   )
 
-  const envelopes = getTaskEnvelopes(deal_envelopes, task)
+  const envelopes = getTaskEnvelopes(dealEnvelopes, task)
 
   if (!isOpen) {
     return null
