@@ -1,7 +1,25 @@
 import { Editor } from 'grapesjs'
 import grapesjsPluginCkeditor from 'grapesjs-plugin-ckeditor'
+import {
+  FontManager,
+  FONT_FAMILY_DEFAULT,
+  OPTIONS_DEFAULTS
+} from '@samuelmeuli/font-manager'
 
-import config from './config'
+import config from 'config'
+
+import grapesConfig from './config'
+
+async function loadFontFamilies(families: string[]): Promise<void> {
+  if (families.length === 0) {
+    return
+  }
+
+  await new FontManager(config.google.api_key, FONT_FAMILY_DEFAULT, {
+    ...OPTIONS_DEFAULTS,
+    families
+  }).init()
+}
 
 const STYLE_MANAGER_TEXT_TAGS = [
   'div',
@@ -64,12 +82,14 @@ const CK_EDITOR_LINE_HEIGHT_VALUES = [
   '3'
 ]
 
-export function createGrapesInstance(
+export async function createGrapesInstance(
   Grapesjs: any,
-  { assets, colors, plugins, pluginsOpts }
-): Editor {
+  { assets, colors, fontFamilies, plugins, pluginsOpts }
+): Promise<Editor> {
+  await loadFontFamilies(fontFamilies)
+
   return Grapesjs.init({
-    ...config,
+    ...grapesConfig,
     keepUnusedStyles: true,
     container: '#grapesjs-canvas',
     components: null,
@@ -109,6 +129,7 @@ export function createGrapesInstance(
             .map(color => color.replace('#', ''))
             .join(','),
           line_height: CK_EDITOR_LINE_HEIGHT_VALUES.join(';'),
+          font_names: fontFamilies.join(';'),
           colorButton_enableMore: false,
           linkShowAdvancedTab: false,
           linkShowTargetTab: false

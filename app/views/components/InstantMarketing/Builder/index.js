@@ -53,6 +53,7 @@ import {
   getMjmlTemplateRenderData,
   getNonMjmlTemplateRenderData
 } from './utils/get-template-render-data'
+import { getBrandFontFamilies } from '../helpers/get-brand-font-families'
 
 const ENABLE_CUSTOM_RTE = false
 
@@ -157,6 +158,7 @@ class Builder extends React.Component {
 
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
+    const brandFonts = getBrandFontFamilies(brand)
 
     await Promise.all([
       loadAssetManagerPlugin(),
@@ -167,9 +169,10 @@ class Builder extends React.Component {
       isLoading: false
     })
 
-    this.editor = createGrapesInstance(Grapesjs, {
+    this.editor = await createGrapesInstance(Grapesjs, {
       assets: [...this.props.assets, ...this.userAssets],
       colors: brandColors,
+      fontFamilies: brandFonts,
       plugins: [GrapesjsMjml],
       pluginsOpts: {
         [GrapesjsMjml]: {
