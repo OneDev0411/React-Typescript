@@ -150,6 +150,7 @@ class Builder extends React.Component {
 
   async componentDidMount() {
     await this.loadCKEditor()
+    document.body.style.overflow = 'hidden'
 
     const { Grapesjs, GrapesjsMjml } = await loadGrapesjs()
 
@@ -193,6 +194,8 @@ class Builder extends React.Component {
 
       iframe.removeEventListener('paste', this.iframePasteHandler)
     }
+
+    document.body.style.overflow = 'unset'
 
     unloadJS('ckeditor')
   }
