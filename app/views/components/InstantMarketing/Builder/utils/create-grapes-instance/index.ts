@@ -105,17 +105,6 @@ export function createGrapesInstance(
       ...pluginsOpts,
       [grapesjsPluginCkeditor]: {
         options: {
-          toolbarGroups: [
-            {
-              name: 'paragraph',
-              groups: ['list', 'indent', 'align']
-            },
-            { name: 'links' },
-            '/',
-            { name: 'basicstyles', groups: ['basicstyles', 'colors'] },
-            { name: 'styles' },
-            { name: 'others' }
-          ],
           removeButtons: CK_EDITOR_BUTTONS_TO_REMOVE.join(','),
           colorButton_colors: colors
             .map(color => color.replace('#', ''))
