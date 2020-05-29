@@ -1,24 +1,18 @@
 import { Editor } from 'grapesjs'
 import grapesjsPluginCkeditor from 'grapesjs-plugin-ckeditor'
-import {
-  FontManager,
-  FONT_FAMILY_DEFAULT,
-  OPTIONS_DEFAULTS
-} from '@samuelmeuli/font-manager'
 
-import config from 'config'
+import config from './config'
 
-import grapesConfig from './config'
-
-async function loadFontFamilies(families: string[]): Promise<void> {
+function getFontFamiliesCSSFiles(families: string[]): string[] {
   if (families.length === 0) {
-    return
+    return []
   }
 
-  await new FontManager(config.google.api_key, FONT_FAMILY_DEFAULT, {
-    ...OPTIONS_DEFAULTS,
-    families
-  }).init()
+  return [
+    `https://fonts.googleapis.com/css2?${families
+      .map(family => `family=${encodeURIComponent(family)}`)
+      .join('&')}`
+  ]
 }
 
 const STYLE_MANAGER_TEXT_TAGS = [
@@ -82,14 +76,12 @@ const CK_EDITOR_LINE_HEIGHT_VALUES = [
   '3'
 ]
 
-export async function createGrapesInstance(
+export function createGrapesInstance(
   Grapesjs: any,
   { assets, colors, fontFamilies, plugins, pluginsOpts }
-): Promise<Editor> {
-  await loadFontFamilies(fontFamilies)
-
+): Editor {
   return Grapesjs.init({
-    ...grapesConfig,
+    ...config,
     keepUnusedStyles: true,
     container: '#grapesjs-canvas',
     components: null,
@@ -129,6 +121,7 @@ export async function createGrapesInstance(
             .map(color => color.replace('#', ''))
             .join(','),
           line_height: CK_EDITOR_LINE_HEIGHT_VALUES.join(';'),
+          contentsCss: getFontFamiliesCSSFiles(fontFamilies),
           font_names: fontFamilies.join(';'),
           colorButton_enableMore: false,
           linkShowAdvancedTab: false,

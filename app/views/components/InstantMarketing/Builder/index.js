@@ -169,7 +169,7 @@ class Builder extends React.Component {
       isLoading: false
     })
 
-    this.editor = await createGrapesInstance(Grapesjs, {
+    this.editor = createGrapesInstance(Grapesjs, {
       assets: [...this.props.assets, ...this.userAssets],
       colors: brandColors,
       fontFamilies: brandFonts,
