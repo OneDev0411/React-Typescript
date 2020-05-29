@@ -33,7 +33,6 @@ import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
 import { TeamSelector } from './TeamSelector'
-import { createRichTextEditor } from './RichTextEditor'
 
 import {
   Container,
@@ -54,8 +53,6 @@ import {
   getNonMjmlTemplateRenderData
 } from './utils/get-template-render-data'
 import { getBrandFontFamilies } from '../helpers/get-brand-font-families'
-
-const ENABLE_CUSTOM_RTE = false
 
 class Builder extends React.Component {
   constructor(props) {
@@ -258,15 +255,6 @@ class Builder extends React.Component {
     })
   }
 
-  setRte = () => {
-    const { enable, disable } = createRichTextEditor(this.editor)
-
-    this.editor.setCustomRte({
-      enable,
-      disable
-    })
-  }
-
   setupGrapesJs = () => {
     this.setState({ isEditorLoaded: true })
 
@@ -278,10 +266,6 @@ class Builder extends React.Component {
     this.removeTextStylesOnPaste()
     this.disableDefaultDeviceManager()
     this.scrollSidebarToTopOnComponentSelect()
-
-    if (ENABLE_CUSTOM_RTE) {
-      this.setRte()
-    }
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       this.registerEmailBlocks()
