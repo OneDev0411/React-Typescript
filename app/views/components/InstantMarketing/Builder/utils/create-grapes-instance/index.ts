@@ -41,21 +41,23 @@ const STYLE_MANAGER_WIDTH_ALLOWED_TAGS = ['mj-button']
 
 const STYLE_MANAGER_PADDING_ALLOWED_TAGS = ['mj-section', 'mj-wrapper']
 
-const getFontSizes = (start: number, end: number, step: number = 2): string => {
-  let fontSizes = ''
+const CK_EDITOR_BUTTONS_TO_REMOVE = ['Anchor', 'Cut', 'Copy', 'Paste']
 
-  for (let i = start; i < end; i += step) {
-    fontSizes = `${fontSizes}${i}px;`
-  }
-
-  fontSizes += `${end}px`
-
-  return fontSizes
-}
+const CK_EDITOR_LINE_HEIGHT_VALUES = [
+  '1',
+  '1.1',
+  '1.2',
+  '1.4',
+  '1.5',
+  '1.7',
+  '2',
+  '2.5',
+  '3'
+]
 
 export function createGrapesInstance(
   Grapesjs: any,
-  { assets, plugins, pluginsOpts }
+  { assets, colors, plugins, pluginsOpts }
 ): Editor {
   return Grapesjs.init({
     ...config,
@@ -82,8 +84,11 @@ export function createGrapesInstance(
       ...pluginsOpts,
       [grapesjsPluginCkeditor]: {
         options: {
-          fontSize_sizes: getFontSizes(8, 100),
-          colorButton_colors: ['000000', 'ffffff', '333333'].join(','),
+          removeButtons: CK_EDITOR_BUTTONS_TO_REMOVE.join(','),
+          colorButton_colors: colors
+            .map(color => color.replace('#', ''))
+            .join(','),
+          line_height: CK_EDITOR_LINE_HEIGHT_VALUES.join(';'),
           colorButton_enableMore: false
         }
       },

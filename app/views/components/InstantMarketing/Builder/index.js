@@ -169,6 +169,7 @@ class Builder extends React.Component {
 
     this.editor = createGrapesInstance(Grapesjs, {
       assets: [...this.props.assets, ...this.userAssets],
+      colors: brandColors,
       plugins: [GrapesjsMjml],
       pluginsOpts: {
         [GrapesjsMjml]: {
@@ -195,13 +196,7 @@ class Builder extends React.Component {
 
   loadCKEditor = () => {
     return new Promise(resolve => {
-      loadJS(
-        // 'https://cdn.ckeditor.com/ckeditor5/19.1.0/inline/ckeditor.js',
-        'https://cdn.ckeditor.com/4.14.0/full-all/ckeditor.js',
-        // '/static/ckeditor/ckeditor.js',
-        'ckeditor',
-        resolve
-      )
+      loadJS('/static/ckeditor/ckeditor.js', 'ckeditor', resolve)
     })
   }
 
