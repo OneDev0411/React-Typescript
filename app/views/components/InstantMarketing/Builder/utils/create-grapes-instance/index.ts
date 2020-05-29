@@ -95,6 +95,22 @@ export function createGrapesInstance(
       }
     },
     showDevices: false,
+    keymaps: {
+      defaults: {
+        'core:undo': {
+          keys: '⌘+z, ctrl+z',
+          handler: 'core:undo'
+        },
+        'core:redo': {
+          keys: '⌘+shift+z, ctrl+shift+z',
+          handler: 'core:redo'
+        },
+        'core:copy': {
+          keys: '⌘+c, ctrl+c',
+          handler: 'core:copy'
+        }
+      }
+    },
     plugins: [
       'asset-blocks',
       'style-manager',
@@ -114,7 +130,9 @@ export function createGrapesInstance(
           font_names: fontFamilies.join(';'),
           colorButton_enableMore: false,
           linkShowAdvancedTab: false,
-          linkShowTargetTab: false
+          linkShowTargetTab: false,
+          allowedContent: true, // In order to keep content as is
+          enterMode: 2 // equals to: CKEDITOR.ENTER_BR, in order to stop adding p tags
         }
       },
       'style-manager': {
