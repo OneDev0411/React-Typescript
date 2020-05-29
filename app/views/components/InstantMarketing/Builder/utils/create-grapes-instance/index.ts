@@ -41,7 +41,16 @@ const STYLE_MANAGER_WIDTH_ALLOWED_TAGS = ['mj-button']
 
 const STYLE_MANAGER_PADDING_ALLOWED_TAGS = ['mj-section', 'mj-wrapper']
 
-const CK_EDITOR_BUTTONS_TO_REMOVE = ['Anchor', 'Cut', 'Copy', 'Paste']
+const CK_EDITOR_BUTTONS_TO_REMOVE = [
+  'Anchor',
+  'Cut',
+  'Copy',
+  'Paste',
+  'PasteText',
+  'PasteFromWord',
+  'Undo',
+  'Redo'
+]
 
 const CK_EDITOR_LINE_HEIGHT_VALUES = [
   '1',
@@ -89,7 +98,9 @@ export function createGrapesInstance(
             .map(color => color.replace('#', ''))
             .join(','),
           line_height: CK_EDITOR_LINE_HEIGHT_VALUES.join(';'),
-          colorButton_enableMore: false
+          colorButton_enableMore: false,
+          linkShowAdvancedTab: false,
+          linkShowTargetTab: false
         }
       },
       'style-manager': {
