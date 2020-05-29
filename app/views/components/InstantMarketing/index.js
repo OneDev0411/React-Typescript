@@ -23,10 +23,6 @@ class InstantMarketing extends React.Component {
   }
 
   render() {
-    if (!this.props.isOpen) {
-      return null
-    }
-
     return (
       <Builder
         {...this.props}

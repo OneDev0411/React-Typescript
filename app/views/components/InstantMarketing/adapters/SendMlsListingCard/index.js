@@ -333,20 +333,21 @@ class SendMlsListingCard extends React.Component {
           )}
         />
 
-        <InstantMarketing
-          onBuilderLoad={this.handleLoadInstantMarketing}
-          isOpen={this.state.isInstantMarketingBuilderOpen}
-          onClose={this.closeMarketing}
-          handleSave={this.handleSaveMarketingCard}
-          handleSocialSharing={this.handleSocialSharing}
-          templateData={this.TemplateData}
-          templateTypes={this.TemplateTypes}
-          assets={this.Assets}
-          mediums={this.props.mediums}
-          defaultTemplate={this.props.selectedTemplate}
-          onShowEditListings={this.handleEditListings}
-          isEdit={this.props.isEdit}
-        />
+        {this.state.isInstantMarketingBuilderOpen && (
+          <InstantMarketing
+            onBuilderLoad={this.handleLoadInstantMarketing}
+            onClose={this.closeMarketing}
+            handleSave={this.handleSaveMarketingCard}
+            handleSocialSharing={this.handleSocialSharing}
+            templateData={this.TemplateData}
+            templateTypes={this.TemplateTypes}
+            assets={this.Assets}
+            mediums={this.props.mediums}
+            defaultTemplate={this.props.selectedTemplate}
+            onShowEditListings={this.handleEditListings}
+            isEdit={this.props.isEdit}
+          />
+        )}
 
         {this.state.isComposeEmailOpen && (
           <BulkEmailComposeDrawer
