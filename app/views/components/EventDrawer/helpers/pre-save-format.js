@@ -21,10 +21,18 @@ export async function preSaveFormat(values, originalValues) {
   const isAllDay = allDay || false
 
   if (isAllDay) {
-    const resetHours = isNegativeTimezone() ? 0 : 24
+    if (originalValues && !originalValues.metadata?.all_day) {
+      let resetDueHours = isNegativeTimezone() ? -1 : 0
+      let resetEndHours = isNegativeTimezone() ? 0 : 24
 
-    dueDate.setUTCHours(resetHours, 0, 0, 0)
-    endDate.setUTCHours(resetHours, 0, 0, 0)
+      dueDate.setUTCHours(resetDueHours, 0, 0, 0)
+      endDate.setUTCHours(resetEndHours, 0, 0, 0)
+    } else {
+      let resetHours = isNegativeTimezone() ? 0 : 24
+
+      dueDate.setUTCHours(resetHours, 0, 0, 0)
+      endDate.setUTCHours(resetHours, 0, 0, 0)
+    }
   }
 
   const dueDateTimestamp = dueDate.getTime()
