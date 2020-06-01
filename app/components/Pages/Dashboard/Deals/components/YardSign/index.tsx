@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-
+import { useDispatch, useSelector } from 'react-redux'
 import { Popover } from '@material-ui/core'
 import { PopoverActions } from '@material-ui/core/Popover'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
+import { getActiveTeamSettings } from 'utils/user-teams'
+import { YARD_SIGN_REQUESTS_SETTINGS_KEY } from 'constants/user'
+import { IAppState } from 'reducers'
 import { setSelectedTask } from 'actions/deals'
 
 import Form from './Create'
@@ -21,12 +23,20 @@ function YardSign({ deal, style }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [showForm, setShowForm] = useState<boolean>(false)
   const dispatch = useDispatch()
+  const user = useSelector((store: IAppState) => store.user)
+
+  const activeBrandSettings = getActiveTeamSettings(user, '', true)
+  const showYardSign = activeBrandSettings[YARD_SIGN_REQUESTS_SETTINGS_KEY]
 
   useEffect(() => {
     if (popoverActions.current) {
       popoverActions.current.updatePosition()
     }
   }, [showForm])
+
+  if (!showYardSign) {
+    return null
+  }
 
   const toggleMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null = null

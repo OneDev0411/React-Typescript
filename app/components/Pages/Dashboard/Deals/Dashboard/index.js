@@ -44,11 +44,7 @@ function DealDetails(props) {
       </Helmet>
 
       <PageWrapper>
-        <PageHeader
-          user={props.user}
-          deal={props.deal}
-          isBackOffice={props.isBackOffice}
-        />
+        <PageHeader deal={props.deal} isBackOffice={props.isBackOffice} />
 
         <TabSections
           deal={props.deal}
