@@ -96,7 +96,13 @@ export function ViewAsList({ team }: Props) {
         )
       })}
       <Box px={2} py={1}>
-        <Button size="small" variant="outlined" fullWidth onClick={onApply}>
+        <Button
+          size="small"
+          variant="contained"
+          color="secondary"
+          fullWidth
+          onClick={onApply}
+        >
           Apply
         </Button>
       </Box>
