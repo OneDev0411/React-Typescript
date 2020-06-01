@@ -86,7 +86,7 @@ const ListingMobileView = ({
     bedroom_count = property.bedroom_count
     bathroom_count = property.bathroom_count
     square_feet = numberWithCommas(
-      Math.floor(listingUtils.metersToFeet(property.square_meters))
+      Math.round(listingUtils.metersToFeet(property.square_meters))
     )
 
     if (property.square_meters) {
