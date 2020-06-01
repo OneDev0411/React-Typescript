@@ -142,7 +142,12 @@ export const selectTaskById = (state, id) => (state && id ? state[id] : null)
 export const selectChecklistTasks = (checklist, state) =>
   Array.isArray(checklist.tasks) ? checklist.tasks.map(id => state[id]) : []
 
-export const selectDealTasks = (deal, checklists, state) => {
+export const selectDealTasks = (
+  deal,
+  checklists,
+  state,
+  includeTerminatedChecklists = false
+) => {
   const list = []
 
   if (!deal.checklists) {
@@ -152,7 +157,11 @@ export const selectDealTasks = (deal, checklists, state) => {
   deal.checklists.forEach(checklistId => {
     const checklist = checklists[checklistId]
 
-    if (checklist.tasks && !checklist.is_terminated) {
+    if (checklist.is_terminated && !includeTerminatedChecklists) {
+      return
+    }
+
+    if (checklist.tasks) {
       checklist.tasks.forEach(taskId => list.push(state[taskId]))
     }
   })
