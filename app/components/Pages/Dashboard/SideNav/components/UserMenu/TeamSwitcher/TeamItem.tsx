@@ -1,8 +1,7 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, MouseEvent } from 'react'
 import {
   Avatar,
   ListItem,
-  ListItemProps,
   ListItemAvatar,
   ListItemText,
   Tooltip
@@ -14,13 +13,20 @@ import Loading from '../../../../../../../views/components/SvgIcons/CircleSpinne
 import { ViewAsList } from './ViewAsList'
 
 interface Props {
-  isSwtching: boolean
-  onClick: ListItemProps['onClick']
+  disabled: boolean
+  isSwitching: boolean
+  onClick: (event: MouseEvent<HTMLDivElement>) => void
   selected: boolean
   team: IUserTeam
 }
 
-export function TeamItem({ isSwitching, onClick, selected, team }) {
+export function TeamItem({
+  disabled,
+  isSwitching,
+  onClick,
+  selected,
+  team
+}: Props) {
   const getTeamNameInitial = useCallback(brand => {
     const flatted = flattenBrand(brand)
 
@@ -35,7 +41,7 @@ export function TeamItem({ isSwitching, onClick, selected, team }) {
     <>
       <ListItem
         button
-        disabled={isSwitching}
+        disabled={disabled}
         selected={selected}
         onClick={onClick}
       >
@@ -51,7 +57,7 @@ export function TeamItem({ isSwitching, onClick, selected, team }) {
           <Loading style={{ width: '2.25rem', height: '2.25rem' }} />
         )}
       </ListItem>
-      {selected && <ViewAsList team={team} />}
+      {selected && <ViewAsList team={team} disabled={disabled} />}
     </>
   )
 }

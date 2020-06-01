@@ -25,10 +25,11 @@ const useStyle = makeStyles(
 )
 
 interface Props {
+  disabled: boolean
   team: IUserTeam
 }
 
-export function ViewAsList({ team }: Props) {
+export function ViewAsList({ disabled, team }: Props) {
   const classes = useStyle()
   const dispatch = useDispatch()
   const user = useSelector((store: IAppState) => store.user)
@@ -80,7 +81,7 @@ export function ViewAsList({ team }: Props) {
       {brandMembers.length > 1 && (
         <ViewAsMember
           title="Everyone on team"
-          disabled={isSubmitting}
+          disabled={isSubmitting || disabled}
           onChange={() => onChangeSelectAllMembers()}
           checked={selectedMembers.length === brandMembers.length}
         />
@@ -95,7 +96,7 @@ export function ViewAsList({ team }: Props) {
           <ViewAsMember
             key={index}
             title={title}
-            disabled={isSubmitting}
+            disabled={isSubmitting || disabled}
             checked={selectedMembers.includes(memberId)}
             onChange={() => onChangeMember(memberId)}
           />
@@ -108,7 +109,7 @@ export function ViewAsList({ team }: Props) {
           color="secondary"
           fullWidth
           onClick={onApply}
-          disabled={isSubmitting}
+          disabled={isSubmitting || disabled}
         >
           Apply
         </Button>
