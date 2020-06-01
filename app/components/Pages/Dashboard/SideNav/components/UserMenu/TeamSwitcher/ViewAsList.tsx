@@ -10,6 +10,7 @@ import {
 } from '../../../../../../../utils/user-teams'
 
 import { setViewAsFilter } from '../../../../../../../store_actions/user/set-view-as-filter'
+
 import { IAppState } from '../../../../../../../reducers'
 
 import { ViewAsMember } from './ViewAsMember'
@@ -24,10 +25,11 @@ const useStyle = makeStyles(
 )
 
 interface Props {
+  disabled: boolean
   team: IUserTeam
 }
 
-export function ViewAsList({ team }: Props) {
+export function ViewAsList({ disabled, team }: Props) {
   const classes = useStyle()
   const dispatch = useDispatch()
   const user = useSelector((store: IAppState) => store.user)
@@ -35,6 +37,7 @@ export function ViewAsList({ team }: Props) {
   const allMembersId = brandMembers.map(m => m.id)
   const initialSelectedMembers = useMemo(() => viewAs(user, team), [user, team])
   const [selectedMembers, setSelectedMembers] = useState(initialSelectedMembers)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   if (isBackOffice(user) || brandMembers.length === 1) {
     return null
@@ -65,6 +68,8 @@ export function ViewAsList({ team }: Props) {
       return
     }
 
+    setIsSubmitting(true)
+
     await dispatch(setViewAsFilter(user, selectedMembers))
 
     window.location.reload(true)
@@ -76,6 +81,7 @@ export function ViewAsList({ team }: Props) {
       {brandMembers.length > 1 && (
         <ViewAsMember
           title="Everyone on team"
+          disabled={isSubmitting || disabled}
           onChange={() => onChangeSelectAllMembers()}
           checked={selectedMembers.length === brandMembers.length}
         />
@@ -90,13 +96,21 @@ export function ViewAsList({ team }: Props) {
           <ViewAsMember
             key={index}
             title={title}
+            disabled={isSubmitting || disabled}
             checked={selectedMembers.includes(memberId)}
             onChange={() => onChangeMember(memberId)}
           />
         )
       })}
       <Box px={2} py={1}>
-        <Button size="small" variant="outlined" fullWidth onClick={onApply}>
+        <Button
+          size="small"
+          variant="contained"
+          color="secondary"
+          fullWidth
+          onClick={onApply}
+          disabled={isSubmitting || disabled}
+        >
           Apply
         </Button>
       </Box>
