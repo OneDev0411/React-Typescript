@@ -10,6 +10,7 @@ import {
 } from '../../../../../../../utils/user-teams'
 
 import { setViewAsFilter } from '../../../../../../../store_actions/user/set-view-as-filter'
+
 import { IAppState } from '../../../../../../../reducers'
 
 import { ViewAsMember } from './ViewAsMember'
@@ -35,6 +36,7 @@ export function ViewAsList({ team }: Props) {
   const allMembersId = brandMembers.map(m => m.id)
   const initialSelectedMembers = useMemo(() => viewAs(user, team), [user, team])
   const [selectedMembers, setSelectedMembers] = useState(initialSelectedMembers)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   if (isBackOffice(user) || brandMembers.length === 1) {
     return null
@@ -65,6 +67,8 @@ export function ViewAsList({ team }: Props) {
       return
     }
 
+    setIsSubmitting(true)
+
     await dispatch(setViewAsFilter(user, selectedMembers))
 
     window.location.reload(true)
@@ -76,6 +80,7 @@ export function ViewAsList({ team }: Props) {
       {brandMembers.length > 1 && (
         <ViewAsMember
           title="Everyone on team"
+          disabled={isSubmitting}
           onChange={() => onChangeSelectAllMembers()}
           checked={selectedMembers.length === brandMembers.length}
         />
@@ -90,6 +95,7 @@ export function ViewAsList({ team }: Props) {
           <ViewAsMember
             key={index}
             title={title}
+            disabled={isSubmitting}
             checked={selectedMembers.includes(memberId)}
             onChange={() => onChangeMember(memberId)}
           />
@@ -102,6 +108,7 @@ export function ViewAsList({ team }: Props) {
           color="secondary"
           fullWidth
           onClick={onApply}
+          disabled={isSubmitting}
         >
           Apply
         </Button>
