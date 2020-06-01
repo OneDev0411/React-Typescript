@@ -2,9 +2,11 @@ import React from 'react'
 
 import { Tooltip } from '@material-ui/core'
 
-import { BasicDropdown } from '../../../../BasicDropdown/index'
-import IconTextSize from '../../../../SvgIcons/TextSize/IconTextSize'
+import { mdiFormatSize } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { BasicDropdown } from '../../../../BasicDropdown/index'
 import { TextButton } from './TextButton'
 import { ToolbarIconButton } from '../../../components/ToolbarIconButton'
 
@@ -26,7 +28,7 @@ export default function HeadingButtons(props: Props) {
       buttonRenderer={props => (
         <Tooltip title="Size">
           <ToolbarIconButton {...props}>
-            <IconTextSize />
+            <SvgIcon path={mdiFormatSize} />
           </ToolbarIconButton>
         </Tooltip>
       )}
