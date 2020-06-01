@@ -7,9 +7,11 @@ import createEmojisFromStrategy from 'draft-js-emoji-plugin/lib/utils/createEmoj
 import strategy from 'emojione/emoji.json'
 import { mergeWith } from 'lodash'
 
-import { useLatestValueRef } from 'hooks/use-latest-value-ref'
+import { mdiEmoticonHappyOutline } from '@mdi/js'
 
-import IconEmoji from 'components/SvgIcons/Emoji/IconEmoji'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { useLatestValueRef } from 'hooks/use-latest-value-ref'
 
 import { ToolbarFragment } from '../../components/ToolbarFragment'
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
@@ -89,7 +91,7 @@ export function EmojiFeature({ closeOnSelection = true }: Props) {
                 ref={ref}
                 onClick={onClick}
               >
-                <IconEmoji />
+                <SvgIcon path={mdiEmoticonHappyOutline} />
               </ToolbarIconButton>
             </Tooltip>
           )}
