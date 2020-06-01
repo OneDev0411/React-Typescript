@@ -156,24 +156,40 @@ export function viewAs(
   return []
 }
 
-type GetSettings = (team: IUserTeam) => StringMap<any> | null
+type GetSettings = (team: IUserTeam, includesParents?: boolean) => StringMap<any>
 
 const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
   user: IUser | null,
-  key: string
+  key?: string,
+  includesParents?: boolean
 ) => {
   const team = getActiveTeam(user)
-  const settings = (team && getSettings(team)) || {}
+
+  if (!team) {
+    return {}
+  }
+  
+  const settings = getSettings(team, includesParents)
 
   return key ? settings[key] : settings
 }
 
 export const getActiveTeamSettings = getSettingsFromActiveTeam(
-  team => team.brand.settings
+  (team, includesParents) => {
+    let settings: StringMap<any> | null | undefined = team.brand.settings
+
+    if (includesParents) {
+      let brand = flattenBrand(team.brand)
+
+      settings = brand?.settings
+    }
+
+    return settings || {}
+  }
 )
 
 export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(
-  team => team.settings
+  team => team.settings || {}
 )
 
 export function getActiveTeamPalette(user: IUser): BrandSettingsPalette {
