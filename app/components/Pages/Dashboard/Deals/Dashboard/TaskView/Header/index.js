@@ -62,8 +62,9 @@ class Header extends React.Component {
         <Toolbar>
           <div>
             <TaskStatus
+              deal={this.props.deal}
               task={this.props.task}
-              isDraftDeal={this.props.deal.is_draft}
+              isBackOffice={this.props.isBackOffice}
             />
           </div>
 

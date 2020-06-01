@@ -8,7 +8,7 @@ exports[`Deal address component renders with address 1`] = `
   <h6
     class="MuiTypography-root-15 MuiTypography-h6-25"
   >
-    1200 Main St
+    1200 Main St, Dallas, TX, 75202
   </h6>
   <button
     class="MuiButtonBase-root-74 MuiButton-root-45 MuiButton-text-47 makeStyles-editButton-2 MuiButton-textSecondary-49 MuiButton-textSizeSmall-60 MuiButton-sizeSmall-66"

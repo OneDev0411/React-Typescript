@@ -54,6 +54,16 @@ export const SORTABLE_COLUMNS: SortableColumn[] = [
     ascending: false
   },
   {
+    label: 'Office Name (A-Z)',
+    value: 'office',
+    ascending: true
+  },
+  {
+    label: 'Office Name (Z-A)',
+    value: 'office',
+    ascending: false
+  },
+  {
     label: 'Submit Time (A-Z)',
     value: 'submitted-at',
     ascending: true
