@@ -8,6 +8,7 @@ import { ListingProperties } from '../ListingInfo/Properties'
 
 interface Props {
   deal: IDeal
+  user: IUser
   isBackOffice: boolean
 }
 
@@ -22,14 +23,14 @@ const useStyles = makeStyles((theme: Theme) => {
   })
 })
 
-export function PageHeader({ deal, isBackOffice }: Props) {
+export function PageHeader({ deal, user, isBackOffice }: Props) {
   const classes = useStyles()
 
   return (
     <Box py={3} px={5}>
       <div className={classes.info}>
         <ListingInfo deal={deal} isBackOffice={isBackOffice} />
-        <Menu deal={deal} isBackOffice={isBackOffice} />
+        <Menu user={user} deal={deal} isBackOffice={isBackOffice} />
       </div>
 
       <ListingProperties deal={deal} isBackOffice={isBackOffice} />

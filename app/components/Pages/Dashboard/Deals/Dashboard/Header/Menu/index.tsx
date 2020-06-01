@@ -6,6 +6,12 @@ import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
 import { CloseButton } from 'components/Button/CloseButton'
 import SendEmail from 'components/SendEmailButton'
 
+import { getActiveTeamSettings } from 'utils/user-teams'
+import {
+  OPEN_HOUSE_REQUESTS_SETTINGS_KEY,
+  YARD_SIGN_REQUESTS_SETTINGS_KEY
+} from 'constants/user'
+
 import YardSign from 'deals/components/YardSign'
 import OpenHouse from 'deals/components/OpenHouse'
 
@@ -14,6 +20,7 @@ import DealStatus from '../../../components/DealStatus'
 
 interface Props {
   deal: IDeal
+  user: IUser
   isBackOffice: boolean
 }
 
@@ -36,21 +43,24 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export const Menu = withRouter(
-  ({ deal, isBackOffice, router, location }: Props & WithRouterProps) => {
+  ({ deal, user, isBackOffice, router, location }: Props & WithRouterProps) => {
     const classes = useStyles()
+    const activeBrandSettings = getActiveTeamSettings(user, '', true)
+    const showYardSign = activeBrandSettings[YARD_SIGN_REQUESTS_SETTINGS_KEY]
+    const showOpenHouse = activeBrandSettings[OPEN_HOUSE_REQUESTS_SETTINGS_KEY]
 
     return (
       <div className={classes.container}>
         {deal.is_draft === true && <RemoveDraft deal={deal} />}
 
-        {deal.deal_type === 'Selling' && (
+        {showOpenHouse && deal.deal_type === 'Selling' && (
           <OpenHouse
             deal={deal}
             defaultOpen={(location.state || {}).autoBookOpenHouse}
           />
         )}
 
-        <YardSign deal={deal} />
+        {showYardSign && <YardSign deal={deal} />}
 
         <SendEmail deal={deal} size="small" />
 
