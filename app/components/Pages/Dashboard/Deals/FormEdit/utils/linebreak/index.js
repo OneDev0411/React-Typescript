@@ -39,6 +39,16 @@ const breakText = (text, rects, fontSize, fontName, isBold) => {
     fontSize = maxSize
   }
 
+  // it doesn't mean to have a font size lower than one
+  if (fontSize <= 1) {
+    return {
+      values: {
+        0: text
+      },
+      fontSize: 1
+    }
+  }
+
   if (rects[0].multiline) {
     return {
       values: [text],

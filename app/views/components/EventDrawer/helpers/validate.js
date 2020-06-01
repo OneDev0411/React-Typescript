@@ -5,7 +5,7 @@ export function validate(values) {
     errors.title = 'Required!'
   }
 
-  if (values.endDate && values.endDate.getTime() <= values.dueDate.getTime()) {
+  if (values.endDate && values.endDate.getTime() < values.dueDate.getTime()) {
     errors.endDate = 'End time must be after the start time!'
   }
 
@@ -14,27 +14,4 @@ export function validate(values) {
   }
 
   return errors
-}
-export function hasGoogleAccount(accounts) {
-  if (!Array.isArray(accounts)) {
-    return false
-  }
-
-  const filteredGoogle = accounts.filter(
-    i => i.type === 'google_credential' && !i.revoked && !i.deleted_at
-  )
-
-  return filteredGoogle.length > 0
-}
-
-export function hasContactAssociation(event) {
-  if (!event || !event.associations) {
-    return false
-  }
-
-  const contactAssociationsCount = event.associations.filter(
-    i => i.association_type === 'contact'
-  ).length
-
-  return contactAssociationsCount > 0
 }

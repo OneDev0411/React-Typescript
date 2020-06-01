@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Box, IconButton } from '@material-ui/core'
+import { Box, IconButton, FormControlLabel, Checkbox } from '@material-ui/core'
+
+import { Field } from 'react-final-form'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
@@ -32,11 +34,9 @@ import Tooltip from '../tooltip'
 import { AddAssociationButton } from '../AddAssociationButton'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
-import {
-  validate,
-  hasGoogleAccount,
-  hasContactAssociation
-} from './helpers/validate'
+import { validate } from './helpers/validate'
+import { hasContactAssociation } from './helpers/has-contact-association'
+import { hasValidConnectedAccount } from './helpers/has-valid-connected-account'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
@@ -169,7 +169,7 @@ class PresentEventDrawer extends Component {
     const { event } = this.state
     const { accounts } = this.props
     const shouldShowModal =
-      hasContactAssociation(event) && hasGoogleAccount(accounts)
+      hasContactAssociation(event) && hasValidConnectedAccount(accounts)
 
     if (shouldShowModal) {
       return this.setState(() => ({
@@ -185,7 +185,7 @@ class PresentEventDrawer extends Component {
     const { accounts } = this.props
 
     const shouldShowModal =
-      hasContactAssociation(event) && hasGoogleAccount(accounts)
+      hasContactAssociation(event) && hasValidConnectedAccount(accounts)
 
     if (shouldShowModal) {
       return this.setState(() => ({
@@ -352,16 +352,37 @@ class PresentEventDrawer extends Component {
                             <DateTimeField
                               name="dueDate"
                               selectedDate={values.dueDate}
+                              showTimePicker={!values.allDay}
                             />
 
-                            <EndDateTimeField dueDate={values.dueDate} />
+                            <EndDateTimeField
+                              selectedDate={values.endDate}
+                              showTimePicker={!values.allDay}
+                            />
                           </FieldContainer>
 
+                          <Field
+                            name="allDay"
+                            render={({ input }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={input.value}
+                                    onChange={e =>
+                                      input.onChange(e.target.checked)
+                                    }
+                                    name="allDay"
+                                    color="primary"
+                                  />
+                                }
+                                label="All Day Event"
+                              />
+                            )}
+                          />
                           <FieldError
                             name="endDate"
                             style={{ fontSize: '1rem', marginBottom: '0.5em' }}
                           />
-
                           <Reminder dueDate={values.dueDate} />
                         </Box>
 
@@ -455,7 +476,6 @@ const mapStateToProps = state => ({
   accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
 })
 
-export const EventDrawer = connect(
-  mapStateToProps,
-  { fetchOAuthAccounts }
-)(PresentEventDrawer)
+export const EventDrawer = connect(mapStateToProps, { fetchOAuthAccounts })(
+  PresentEventDrawer
+)

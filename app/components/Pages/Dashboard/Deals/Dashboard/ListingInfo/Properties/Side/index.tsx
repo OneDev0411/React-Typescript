@@ -38,7 +38,7 @@ function DealSide(props: Props) {
     const dealType = props.deal.deal_type === 'Buying' ? 'Buying' : 'Listing'
 
     if (enderType === 'AgentDoubleEnder') {
-      return 'Both'
+      return `${dealType} (Agent DE)`
     }
 
     if (enderType === 'OfficeDoubleEnder') {
