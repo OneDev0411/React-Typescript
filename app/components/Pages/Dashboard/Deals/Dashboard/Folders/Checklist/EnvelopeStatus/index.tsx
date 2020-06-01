@@ -1,63 +1,15 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { Link } from 'react-router'
-
-import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-
-import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
-import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
-
-import { IAppState } from 'reducers'
 
 import { Container } from './styled'
 
 interface Props {
-  type: 'task' | 'document' | 'envelope'
   deal: IDeal
   task: IDealTask
-  envelope?: IDealEnvelope
-  document?: IFile
+  envelope: IDealEnvelope
 }
 
-export function EnvelopeStatus({
-  deal,
-  task,
-  document,
-  envelope,
-  type
-}: Props) {
-  const envelopes = useSelector<IAppState, IDealEnvelope[]>(({ deals }) =>
-    selectDealEnvelopes(deal, deals.envelopes)
-  )
-
-  const getEnvelope = () => {
-    let itemEnvelopes: IDealEnvelope[] = []
-
-    if (type === 'envelope') {
-      return envelope
-    }
-
-    if (type === 'task') {
-      itemEnvelopes = getTaskEnvelopes(envelopes, task)
-    }
-
-    if (type === 'document') {
-      itemEnvelopes = getDocumentEnvelopes(envelopes, document!)
-    }
-
-    itemEnvelopes = itemEnvelopes
-      .filter(
-        envelope => ['Voided', 'Declined'].includes(envelope.status) === false
-      )
-      .sort((a, b) => b.created_at - a.created_at)
-
-    if (itemEnvelopes.length === 0) {
-      return null
-    }
-
-    return itemEnvelopes[0]
-  }
-
+export function EnvelopeStatus({ deal, task, envelope }: Props) {
   const getTitle = (envelope: IDealEnvelope): string => {
     if (envelope.status === 'Voided') {
       return 'Void'
@@ -82,18 +34,16 @@ export function EnvelopeStatus({
     return `${signedCount} of ${recipients.length} signed${extra}`
   }
 
-  const envelopeItem = getEnvelope()
-
-  if (!envelopeItem) {
+  if (!envelope) {
     return null
   }
 
   return (
     <Container>
       <Link
-        to={`/dashboard/deals/${deal.id}/view/${task.id}/envelope/${envelopeItem.id}`}
+        to={`/dashboard/deals/${deal.id}/view/${task.id}/envelope/${envelope.id}`}
       >
-        {getTitle(envelopeItem)}
+        {getTitle(envelope)}
       </Link>
     </Container>
   )

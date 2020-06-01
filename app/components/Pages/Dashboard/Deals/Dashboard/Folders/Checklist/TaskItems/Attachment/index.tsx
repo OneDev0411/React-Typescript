@@ -4,12 +4,14 @@ import fecha from 'fecha'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
-import { EnvelopeStatus } from '../../EnvelopeStatus'
 import ActionsButton from '../../../../../components/ActionsButton'
 
 import { ItemLink } from './ItemLink'
 
 import { ItemContainer, ItemRow, ItemTitle, ItemDate } from '../styled'
+import { LabelItem } from '../../../styled'
+
+import getFileActions from './get-file-actions'
 
 interface Props {
   deal: IDeal
@@ -19,6 +21,8 @@ interface Props {
 }
 
 export function Attachment({ deal, task, file, isBackOffice }: Props) {
+  const actions: ActionButtonId[] = getFileActions(file)
+
   return (
     <ItemContainer>
       <ItemRow>
@@ -35,29 +39,24 @@ export function Attachment({ deal, task, file, isBackOffice }: Props) {
               </ItemLink>
             </ItemTitle>
 
-            <ItemDate>
-              Uploaded at{' '}
-              {fecha.format(
-                new Date(file.created_at * 1000),
-                'MMM DD YYYY, h:mm A'
-              )}
-            </ItemDate>
+            <Flex>
+              <LabelItem>Uploaded File</LabelItem>
+
+              <ItemDate>
+                Uploaded at{' '}
+                {fecha.format(
+                  new Date(file.created_at * 1000),
+                  'MMM DD YYYY, h:mm A'
+                )}
+              </ItemDate>
+            </Flex>
           </Flex>
 
           <ActionsButton
-            type="document"
             deal={deal}
             task={task}
-            document={file}
-          />
-        </Flex>
-
-        <Flex alignCenter>
-          <EnvelopeStatus
-            type="document"
-            deal={deal}
-            task={task}
-            document={file}
+            file={file}
+            actions={actions}
           />
         </Flex>
       </ItemRow>

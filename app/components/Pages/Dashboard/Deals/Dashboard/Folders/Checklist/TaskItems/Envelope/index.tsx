@@ -10,6 +10,8 @@ import { EnvelopeStatus } from '../../EnvelopeStatus'
 
 import { ItemContainer, ItemRow, ItemTitle, ItemDate } from '../styled'
 
+import getEnvelopeActions from './get-envelope-actions'
+
 interface Props {
   deal: IDeal
   task: IDealTask
@@ -18,6 +20,8 @@ interface Props {
 
 export function Envelope({ deal, task, envelope }: Props) {
   const theme = useTheme<Theme>()
+
+  const actions: ActionButtonId[] = getEnvelopeActions(envelope)
 
   return (
     <ItemContainer>
@@ -31,12 +35,7 @@ export function Envelope({ deal, task, envelope }: Props) {
                 margin: theme.spacing(1, 0)
               }}
             >
-              <EnvelopeStatus
-                type="envelope"
-                deal={deal}
-                task={task}
-                envelope={envelope}
-              />
+              <EnvelopeStatus deal={deal} task={task} envelope={envelope} />
 
               <ItemDate>
                 Created at{' '}
@@ -49,10 +48,10 @@ export function Envelope({ deal, task, envelope }: Props) {
           </Flex>
 
           <ActionsButton
-            type="document"
             deal={deal}
             task={task}
-            document={task}
+            envelope={envelope}
+            actions={actions}
           />
         </Flex>
       </ItemRow>

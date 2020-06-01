@@ -6,6 +6,8 @@ import ActionsButton from '../../../../../components/ActionsButton'
 import { ItemContainer, ItemRow, ItemTitle, ItemLink } from '../styled'
 import { LabelItem } from '../../../styled'
 
+import getFormActions from './get-form-actions'
+
 interface Props {
   deal: IDeal
   task: IDealTask
@@ -15,6 +17,8 @@ export function DigitalForm({ deal, task }: Props) {
   if (!task || !task.form) {
     return null
   }
+
+  const actions: ActionButtonId[] = getFormActions(task)
 
   return (
     <ItemContainer>
@@ -29,12 +33,7 @@ export function DigitalForm({ deal, task }: Props) {
             </ItemLink>
           </ItemTitle>
 
-          <ActionsButton
-            type="document"
-            deal={deal}
-            task={task}
-            document={task}
-          />
+          <ActionsButton deal={deal} task={task} actions={actions} />
         </Flex>
 
         <Flex alignCenter>
