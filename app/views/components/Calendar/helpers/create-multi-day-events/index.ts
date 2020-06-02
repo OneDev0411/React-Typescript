@@ -11,6 +11,13 @@ function getEndDate(event: ICalendarEvent): Date {
   return endDate
 }
 
+function sortItems(a, b) {
+  const dateObjectA = new Date(a[0])
+  const dateObjectB = new Date(b[0])
+
+  return dateObjectA < dateObjectB ? -1 : 1
+}
+
 /**
  * Duplicates multi day events through all its days.
  * It doesn't mutate the input `events` and creates a new one.
@@ -20,10 +27,14 @@ export default function createMultiDayEvents(
 ): ICalendarEventsList {
   const distributedEvents: ICalendarEventsList = {}
   let multiDayEvents: ICalendarEvent[] = []
+  const months = Object.entries(events).sort(sortItems)
 
-  Object.entries(events).forEach(([month, daysOfMonth]) => {
+  months.forEach(([month, daysOfMonth]) => {
     distributedEvents[month] = {}
-    Object.entries(daysOfMonth).forEach(([day, events]) => {
+
+    const days = Object.entries(daysOfMonth).sort(sortItems)
+
+    days.forEach(([day, events]) => {
       const dayStart = new Date(day).getTime()
       const dayEnd = dayStart + 86400000 // = one day
 
