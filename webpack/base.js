@@ -1,18 +1,11 @@
 const path = require('path')
 
 const webpack = require('webpack')
-const { ESBuildPlugin } = require('esbuild-loader')
 
 const config = require('../config/webpack')
 
 function resolvePath(dirPath) {
   return path.resolve(__dirname, dirPath)
-}
-
-const ESBUILD_COMMON_OPTIONS = {
-  jsxFactory: 'React.createElement',
-  jsxFragment: 'React.Fragment',
-  sourceMap: false
 }
 
 module.exports = {
@@ -51,27 +44,12 @@ module.exports = {
       fixtures: resolvePath('../tests/unit/fixtures')
     }
   },
-  plugins: [new webpack.DefinePlugin(config.globals), new ESBuildPlugin()],
+  plugins: [new webpack.DefinePlugin(config.globals)],
   externals: {
     fs: '{}'
   },
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        loader: 'esbuild-loader',
-        include: config.compile.entry,
-        options: {
-          ...ESBUILD_COMMON_OPTIONS,
-          loader: 'jsx'
-        }
-      },
-      {
-        test: /\.(jsx|tsx?)$/,
-        loader: 'esbuild-loader',
-        include: config.compile.entry,
-        options: ESBUILD_COMMON_OPTIONS
-      },
       {
         test: /\.woff(\?.*)?$/,
         use: [

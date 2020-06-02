@@ -1,6 +1,7 @@
 import ForkTsCheckerNotifierWebpackPlugin from 'fork-ts-checker-notifier-webpack-plugin'
 import Webpackbar from 'webpackbar'
 
+import { ESBuildPlugin } from 'esbuild-loader'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
 import UnusedFilesWebpackPlugin from 'unused-files-webpack-plugin'
@@ -10,6 +11,12 @@ import appConfig from '../config/webpack'
 import webpackConfig from './base'
 
 webpackConfig.mode = 'development'
+
+const ESBUILD_COMMON_OPTIONS = {
+  jsxFactory: 'React.createElement',
+  jsxFragment: 'React.Fragment',
+  sourceMap: false
+}
 
 const postcss = function postcss() {
   return [
@@ -26,6 +33,7 @@ const postcss = function postcss() {
 webpackConfig.entry = [appConfig.compile.entry]
 
 webpackConfig.plugins.push(
+  new ESBuildPlugin(),
   new UnusedFilesWebpackPlugin({
     patterns: ['app/**/*.+(css|js|jsx|ts|tsx)'],
     globOptions: {
@@ -98,6 +106,25 @@ webpackConfig.plugins.push(
 )
 
 webpackConfig.module.rules.push(
+  {
+    test: /\.js$/,
+    exclude: /(node_modules|bower_components)/,
+    use: {
+      loader: 'esbuild-loader',
+      options: {
+        ...ESBUILD_COMMON_OPTIONS,
+        loader: 'jsx'
+      }
+    }
+  },
+  {
+    test: /\.(jsx|tsx?)$/,
+    exclude: /(node_modules|bower_components)/,
+    use: {
+      loader: 'esbuild-loader',
+      options: ESBUILD_COMMON_OPTIONS
+    }
+  },
   {
     test: /\.css/,
     use: [

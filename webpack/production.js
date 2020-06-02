@@ -17,10 +17,7 @@ webpackConfig.optimization = {
   }
 }
 
-const Expires = moment()
-  .utc()
-  .add('1', 'month')
-  .toDate()
+const Expires = moment().utc().add('1', 'month').toDate()
 
 function postcss() {
   return [require('autoprefixer')()]
@@ -99,6 +96,11 @@ webpackConfig.plugins.push(
 )
 
 webpackConfig.module.rules.push(
+  {
+    test: /\.(ts|tsx|js)$/,
+    loader: 'babel-loader',
+    options: {}
+  },
   {
     test: /\.css/,
     use: [
