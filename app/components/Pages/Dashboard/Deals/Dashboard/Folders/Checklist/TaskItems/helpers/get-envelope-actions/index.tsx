@@ -5,9 +5,9 @@ import {
   DOCUSIGN_ENVELOPE,
   EMAIL_ENVELOPE,
   VIEW_ENVELOPE
-} from '../../../../../components/ActionsButton/data/action-buttons'
+} from '../action-buttons'
 
-export default function getEnvelopeActions(envelope): ActionButtonId[] {
+export function getEnvelopeActions(envelope: IDealEnvelope): ActionButtonId[] {
   switch (envelope.status) {
     case 'Created':
       return [

@@ -11,7 +11,7 @@ import { ItemLink } from './ItemLink'
 import { ItemContainer, ItemRow, ItemTitle, ItemDate } from '../styled'
 import { LabelItem } from '../../../styled'
 
-import getFileActions from './get-file-actions'
+import { getFileActions } from '../helpers/get-file-actions'
 
 interface Props {
   deal: IDeal

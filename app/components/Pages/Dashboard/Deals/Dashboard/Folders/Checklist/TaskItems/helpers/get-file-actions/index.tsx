@@ -6,7 +6,7 @@ import {
   MOVE_FILE,
   VIEW_FILE,
   SPLIT_PDF
-} from '../../../../../components/ActionsButton/data/action-buttons'
+} from '../action-buttons'
 
 export default function getFileActions(): ActionButtonId[] {
   return [

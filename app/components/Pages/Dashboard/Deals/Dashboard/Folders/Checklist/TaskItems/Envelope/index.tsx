@@ -10,7 +10,7 @@ import { EnvelopeStatus } from '../../EnvelopeStatus'
 
 import { ItemContainer, ItemRow, ItemTitle, ItemDate } from '../styled'
 
-import getEnvelopeActions from './get-envelope-actions'
+import { getEnvelopeActions } from '../helpers/get-envelope-actions'
 
 interface Props {
   deal: IDeal
