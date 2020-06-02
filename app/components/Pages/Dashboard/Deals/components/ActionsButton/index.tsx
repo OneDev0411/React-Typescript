@@ -18,7 +18,7 @@ import { normalizeActions } from './data/normalize-actions'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
 import {
   approveTask,
-  changeTaskRequired,
+  requireTask,
   createNeedsAttention,
   declineTask,
   deleteFile,
@@ -105,7 +105,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
       'notify-task': createNeedsAttention,
       'approve-task': approveTask,
       'decline-task': declineTask,
-      //       'require-task': requireTask,
+      'require-task': requireTask,
       'remove-task-notification': removeTaskNotification,
       'resend-envelope': resendEnvelope,
       'review-envelope': reviewEnvelope,
@@ -166,7 +166,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
     const files = getLastStates({
       deal: this.props.deal,
       task: this.props.task,
-      document: this.props.document,
+      file: this.props.file,
       envelopes: this.props.envelopes
     })
 
@@ -177,7 +177,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
     return getLastStates({
       deal: this.props.deal,
       task: this.props.task,
-      document: this.props.document,
+      file: this.props.file,
       envelopes: this.props.envelopes
     })
   }
@@ -185,7 +185,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
   getEsignAttachments = () => {
     return getEsignAttachments({
       task: this.props.task,
-      document: this.props.document!
+      file: this.props.file!
     })
   }
 
@@ -230,7 +230,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
     let links = getLastStates({
       deal: this.props.deal,
       task: this.props.task,
-      document: this.props.document,
+      file: this.props.file,
       envelopes: this.props.envelopes,
       isBackOffice: this.props.isBackOffice
     })
@@ -287,11 +287,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
     const secondaryActions: ActionButton[] = normalizeActions(
       this.props.actions
     )
-    const primaryAction: ActionButton | undefined = secondaryActions.shift()
-
-    if (!primaryAction) {
-      return null
-    }
+    const primaryAction: ActionButton = secondaryActions.shift()!
 
     return (
       <div>
@@ -379,7 +375,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
             isOpen
             deal={this.props.deal}
             file={{
-              ...this.props.document,
+              ...this.props.file,
               task: this.props.task ? this.props.task.id : null
             }}
             onClose={this.toggleMoveFile}

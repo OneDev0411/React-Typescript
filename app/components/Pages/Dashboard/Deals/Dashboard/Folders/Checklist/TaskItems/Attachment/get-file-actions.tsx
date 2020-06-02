@@ -8,7 +8,7 @@ import {
   SPLIT_PDF
 } from '../../../../../components/ActionsButton/data/action-buttons'
 
-export default function getFileActions(task): ActionButtonId[] {
+export default function getFileActions(): ActionButtonId[] {
   return [
     VIEW_FILE,
     DOCUSIGN_FILE,

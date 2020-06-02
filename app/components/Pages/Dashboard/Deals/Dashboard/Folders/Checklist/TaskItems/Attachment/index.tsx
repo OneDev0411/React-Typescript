@@ -21,7 +21,7 @@ interface Props {
 }
 
 export function Attachment({ deal, task, file, isBackOffice }: Props) {
-  const actions: ActionButtonId[] = getFileActions(file)
+  const actions: ActionButtonId[] = getFileActions()
 
   return (
     <ItemContainer>
