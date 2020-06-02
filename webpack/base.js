@@ -51,12 +51,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx|js)$/,
-        loader: 'babel-loader',
-        include: config.compile.entry,
-        options: {}
-      },
-      {
         test: /\.woff(\?.*)?$/,
         use: [
           {
