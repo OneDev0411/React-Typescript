@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Checkbox } from '@material-ui/core'
+import { Box, Checkbox, makeStyles } from '@material-ui/core'
 
 import { useStyles } from '../../../styles'
 import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
@@ -10,8 +10,20 @@ interface Props {
   media: IMediaItem
 }
 
+const useCheckboxStyles = makeStyles({
+  root: {
+    padding: '3px',
+
+    '&:hover': {
+      backgroundColor: 'transparent'
+    }
+  }
+})
+
 export default function SelectCheckbox({ media }: Props) {
   const classes = useStyles()
+  const checkboxClasses = useCheckboxStyles()
+
   const { dispatch } = useMediaManagerContext()
   const { file, selected } = media
 
@@ -21,7 +33,13 @@ export default function SelectCheckbox({ media }: Props) {
 
   return (
     <Box className={classes.selectCheckbox}>
-      <Checkbox color="secondary" checked={selected} onChange={handleChange} />
+      <Checkbox
+        className={checkboxClasses.root}
+        color="secondary"
+        checked={selected}
+        onChange={handleChange}
+        disableRipple
+      />
     </Box>
   )
 }

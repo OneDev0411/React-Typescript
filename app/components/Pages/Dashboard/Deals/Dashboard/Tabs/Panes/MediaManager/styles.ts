@@ -57,6 +57,11 @@ export const useStyles = makeStyles(
         '&.selected': {
           '& $selectCheckbox': {
             opacity: 1
+          },
+          '& $mediaThumbnail': {
+            borderColor: theme.palette.secondary.main,
+            borderWidth: '2px',
+            borderStyle: 'solid'
           }
         }
       },
@@ -88,13 +93,14 @@ export const useStyles = makeStyles(
       },
       selectCheckbox: {
         position: 'absolute',
-        top: 0,
-        left: 0,
+        top: '15px',
+        left: '15px',
         opacity: 0,
-        padding: theme.spacing(1),
         width: 30,
         height: 30,
-        transition: '0.2s ease-in opacity'
+        transition: '0.2s ease-in opacity',
+        backgroundColor: theme.palette.background.paper,
+        borderRadius: theme.shape.borderRadius
       },
 
       sortHandle: {
