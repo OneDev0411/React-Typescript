@@ -32,7 +32,7 @@ interface Props {
   isBackOffice: boolean
 }
 
-import getTaskActions from './get-task-actions'
+import { getTaskActions } from './get-task-actions'
 
 export function TaskRow({ deal, task, isBackOffice }: Props) {
   const [isTaskExpanded, setIsTaskExpanded] = useState(
@@ -136,7 +136,12 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
 
   const isRowExpandable = getRowsCount() > 1 || Boolean(file)
 
-  const actions: ActionButtonId[] = getTaskActions({ task, envelope, file })
+  const actions: ActionButtonId[] = getTaskActions(
+    task,
+    envelope,
+    file,
+    isBackOffice
+  )
 
   return (
     <RowContainer isTaskExpanded={isTaskExpanded}>

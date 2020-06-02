@@ -19,9 +19,19 @@ import {
   DELETE_TASK
 } from '../../../../../components/ActionsButton/data/action-buttons'
 
-export default function (props): ActionButtonId[] {
-  const { envelope, task, file, isBackOffice } = props
+interface Props {
+  envelope: IDealEnvelope
+  task: IDealTask
+  file?: IFile
+  isBackOffice: boolean
+}
 
+export function getTaskActions({
+  envelope,
+  task,
+  file,
+  isBackOffice
+}: Props): ActionButtonId[] {
   const actions: ActionButtonId[] = []
 
   const isVoidable =
@@ -40,7 +50,7 @@ export default function (props): ActionButtonId[] {
   file && !task.form && !envelope && actions.push(DOCUSIGN_FILE)
   file && !task.form && !envelope && actions.push(EMAIL_FILE)
   file && !task.form && !envelope && actions.push(VIEW_FILE)
-  file && file.type === 'pdf' && actions.push(SPLIT_PDF)
+  file && file.mime === 'application/pdf' && actions.push(SPLIT_PDF)
   actions.push(UPLOAD)
 
   actions.push(SHOW_COMMENTS)

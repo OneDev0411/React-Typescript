@@ -30,6 +30,7 @@ export function EnvelopeStatus({ deal, task, envelope }: Props) {
     const signedCount = recipients.filter(r => r.status === 'Completed').length
 
     const extra = envelope.status === 'Created' ? ' (Draft)' : ''
+
     return `${signedCount} of ${recipients.length} signed${extra}`
   }
 
