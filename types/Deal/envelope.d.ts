@@ -43,7 +43,7 @@ declare type ActionButtonId = number
 declare type ActionButton = {
   label: string
   type: string
-  condition: function | undefined
+  condition?: function
   disabled: boolean
   tooltip: string
 }
