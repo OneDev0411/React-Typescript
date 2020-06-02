@@ -97,7 +97,6 @@ class Files extends React.Component {
                   </Flex>
 
                   <ActionsButton
-                    type="document"
                     deal={this.props.deal}
                     task={null}
                     file={file}
