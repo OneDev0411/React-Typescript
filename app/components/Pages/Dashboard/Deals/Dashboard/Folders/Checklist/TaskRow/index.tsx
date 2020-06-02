@@ -136,12 +136,12 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
 
   const isRowExpandable = getRowsCount() > 1 || Boolean(file)
 
-  const actions: ActionButtonId[] = getTaskActions(
+  const actions: ActionButtonId[] = getTaskActions({
     task,
     envelope,
     file,
     isBackOffice
-  )
+  })
 
   return (
     <RowContainer isTaskExpanded={isTaskExpanded}>
