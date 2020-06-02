@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 
 import { Box } from '@material-ui/core'
 
+import { mdiCog } from '@mdi/js'
+
 import Spinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-
 import { ScrollableArea } from 'components/ScrollableArea'
-
-import IconCog from 'components/SvgIcons/Cog/IconCog'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import FlowItem from '../FlowItem'
 import { List, Container, EmptyContainer, SettingLink } from './styled'
@@ -59,7 +60,7 @@ export default function ListView(props) {
       </ScrollableArea>
       <Box pl={1.5}>
         <SettingLink to="/dashboard/account/flows">
-          <IconCog />
+          <SvgIcon path={mdiCog} size={muiIconSizes.small} />
           <span>Manage Flows</span>
         </SettingLink>
       </Box>
