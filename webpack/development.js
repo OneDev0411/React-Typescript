@@ -15,7 +15,7 @@ webpackConfig.mode = 'development'
 const ESBUILD_COMMON_OPTIONS = {
   jsxFactory: 'React.createElement',
   jsxFragment: 'React.Fragment',
-  sourceMap: false
+  sourceMap: true
 }
 
 const postcss = function postcss() {
