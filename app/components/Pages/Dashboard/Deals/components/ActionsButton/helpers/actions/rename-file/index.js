@@ -12,7 +12,7 @@ export async function renameFile(props) {
       confirmLabel: 'Update',
       needsUserEntry: true,
       multilineEntry: false,
-      inputDefaultValue: props.document.name,
+      inputDefaultValue: props.file.name,
       onConfirm: filename => handleRenameFile(props, filename)
     })
   )
@@ -28,7 +28,7 @@ function handleRenameFile(props, filename) {
     )
   }
 
-  const extension = props.document.name.split('.').pop()
+  const extension = props.file.name.split('.').pop()
 
   const newFilename = filename.endsWith(extension)
     ? filename
@@ -36,7 +36,7 @@ function handleRenameFile(props, filename) {
 
   try {
     return store.dispatch(
-      renameTaskFile(props.task.id, props.document.id, newFilename)
+      renameTaskFile(props.task.id, props.file.id, newFilename)
     )
   } catch (e) {
     store.dispatch(

@@ -37,3 +37,13 @@ declare interface IDealEnvelope extends IModel<'envelope'> {
   status: EnvelopeStatus
   title: string
 }
+
+declare type ActionButtonId = number
+
+declare type ActionButton = {
+  label: string
+  type: string
+  condition?: function
+  disabled: boolean
+  tooltip: string
+}

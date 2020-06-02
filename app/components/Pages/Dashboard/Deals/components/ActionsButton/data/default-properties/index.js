@@ -1,97 +1,125 @@
 import {
-  EDIT_BUTTON,
-  SHOW_COMMENTS_BUTTON,
-  DOCUSIGN_BUTTON,
-  VOID_BUTTON,
-  RESEND_BUTTON,
-  EMAIL_BUTTON,
-  MOVE_BUTTON,
-  VIEW_BUTTON,
-  TASK_NOTIFICATION_BUTTON,
-  UPLOAD_BUTTON,
-  RENAME_BUTTON,
-  DELETE_FILE_BUTTON,
-  DELETE_TASK_BUTTON,
-  REVIEW_ENVELOPE_BUTTON,
-  SPLIT_PDF_BUTTON,
-  APPROVE_TASK_BUTTON,
-  DECLINE_TASK_BUTTON,
-  TASK_REQUIRED
+  EDIT_FORM,
+  SHOW_COMMENTS,
+  DOCUSIGN_FORM,
+  DOCUSIGN_FILE,
+  DOCUSIGN_ENVELOPE,
+  VOID_ENVELOPE,
+  RESEND_ENVELOPE,
+  EMAIL_ENVELOPE,
+  REVIEW_ENVELOPE,
+  EMAIL_FILE,
+  EMAIL_FORM,
+  MOVE_FILE,
+  VIEW_ENVELOPE,
+  VIEW_FORM,
+  VIEW_FILE,
+  TASK_NOTIFICATION,
+  UPLOAD,
+  RENAME_FILE,
+  DELETE_FILE,
+  DELETE_TASK,
+  REQUIRE_TASK,
+  APPROVE_TASK,
+  DECLINE_TASK,
+  SPLIT_PDF
 } from '../action-buttons'
 
 export const actionsDefaultProperties = {
-  [EDIT_BUTTON]: {
+  [EDIT_FORM]: {
     label: 'Edit Form',
-    type: 'edit-form',
-    tooltip:
-      'You cannot edit while you have sent this out for signature. You can either void or wait for the signature to get completed.'
+    type: 'edit-form'
   },
-  [SHOW_COMMENTS_BUTTON]: {
+  [SHOW_COMMENTS]: {
     label: ({ isBackOffice }) =>
       isBackOffice ? 'Message Agent' : 'Message Admin',
     type: 'comments'
   },
-  [DOCUSIGN_BUTTON]: {
+  [DOCUSIGN_FORM]: {
     label: 'Docusign',
     type: 'get-signature'
   },
-  [VOID_BUTTON]: {
+  [DOCUSIGN_ENVELOPE]: {
+    label: 'Docusign',
+    type: 'get-signature'
+  },
+  [DOCUSIGN_FILE]: {
+    label: 'Docusign',
+    type: 'docusign-file'
+  },
+  [VOID_ENVELOPE]: {
     label: 'Void',
     type: 'void-envelope'
   },
-  [RESEND_BUTTON]: {
+  [RESEND_ENVELOPE]: {
     label: 'Resend',
     type: 'resend-envelope'
   },
-  [EMAIL_BUTTON]: {
+  [EMAIL_ENVELOPE]: {
     label: 'Email',
-    type: 'send-email'
+    type: 'email-envelope'
   },
-  [UPLOAD_BUTTON]: {
+  [EMAIL_FILE]: {
+    label: 'Email',
+    type: 'email-file'
+  },
+  [EMAIL_FORM]: {
+    label: 'Email',
+    type: 'email-form'
+  },
+  [UPLOAD]: {
     label: 'Upload',
     type: 'upload'
   },
-  [RENAME_BUTTON]: {
+  [RENAME_FILE]: {
     label: 'Rename',
-    type: 'rename'
+    type: 'rename-file'
   },
-  [VIEW_BUTTON]: {
+  [VIEW_ENVELOPE]: {
     label: 'View/Print',
-    type: 'view'
+    type: 'view-envelope'
   },
-  [DELETE_FILE_BUTTON]: {
+  [VIEW_FILE]: {
+    label: 'View/Print',
+    type: 'view-file'
+  },
+  [VIEW_FORM]: {
+    label: 'View/Print',
+    type: 'view-form'
+  },
+  [DELETE_FILE]: {
     label: 'Delete',
     type: 'delete-file'
   },
-  [DELETE_TASK_BUTTON]: {
+  [DELETE_TASK]: {
     label: 'Delete',
     type: 'delete-task'
   },
-  [MOVE_BUTTON]: {
+  [MOVE_FILE]: {
     label: 'Move',
     type: 'move-file'
   },
-  [REVIEW_ENVELOPE_BUTTON]: {
+  [REVIEW_ENVELOPE]: {
     label: 'Review in Docusign',
     type: 'review-envelope'
   },
-  [SPLIT_PDF_BUTTON]: {
+  [SPLIT_PDF]: {
     label: 'Split PDF',
     type: 'split-pdf'
   },
-  [APPROVE_TASK_BUTTON]: {
+  [APPROVE_TASK]: {
     label: 'Approve',
     type: 'approve-task',
     condition: ({ is_backoffice, is_task_notified }) =>
       is_backoffice && is_task_notified
   },
-  [DECLINE_TASK_BUTTON]: {
+  [DECLINE_TASK]: {
     label: 'Decline',
     type: 'decline-task',
     condition: ({ is_backoffice, is_task_notified }) =>
       is_backoffice && is_task_notified
   },
-  [TASK_NOTIFICATION_BUTTON]: {
+  [TASK_NOTIFICATION]: {
     label: ({ task, isBackOffice }) => {
       if (isBackOffice && task.attention_requested) {
         return 'Cancel Needs Attention'
@@ -109,7 +137,7 @@ export const actionsDefaultProperties = {
       return true
     }
   },
-  [TASK_REQUIRED]: {
+  [REQUIRE_TASK]: {
     label: ({ task }) =>
       task.required ? 'Mark as Optional' : 'Mark as Required',
     type: 'change-task-required',

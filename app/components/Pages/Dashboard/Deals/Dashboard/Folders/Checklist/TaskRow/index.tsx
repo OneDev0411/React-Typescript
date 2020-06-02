@@ -32,6 +32,8 @@ interface Props {
   isBackOffice: boolean
 }
 
+import { getTaskActions } from './get-task-actions'
+
 export function TaskRow({ deal, task, isBackOffice }: Props) {
   const [isTaskExpanded, setIsTaskExpanded] = useState(
     task.is_expanded === true
@@ -39,14 +41,29 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
 
   const dispatch = useDispatch()
 
-  const envelopes = useSelector<IAppState, IDealEnvelope[]>(({ deals }) =>
+  const dealEnvelopes = useSelector<IAppState, IDealEnvelope[]>(({ deals }) =>
     selectDealEnvelopes(deal, deals.envelopes)
   )
 
-  const getRowsCount = () => {
-    const attachmentsCount = (task.room.attachments || []).length
+  const taskEnvelopes = getTaskEnvelopes(dealEnvelopes, task)
+  const envelope = taskEnvelopes.filter(
+    envelope => !['Voided', 'Declined'].includes(envelope.status)
+  )[0]
 
-    return task.submission ? attachmentsCount + 1 : attachmentsCount
+  const { attachments } = task.room
+  const file: IFile | undefined = attachments ? attachments[0] : undefined
+
+  const getRowsCount = () => {
+    let count = 0
+
+    if (task.form) {
+      count++
+    }
+
+    count += (task.room.attachments || []).length
+    count += (getTaskEnvelopes(taskEnvelopes, task) || []).length
+
+    return count
   }
 
   const toggleTaskOpen = () => {
@@ -77,7 +94,7 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
     // If task is empty, i.e no form and no uploaded file: clicking task name does nothing (it's not clickable)
     if (rowsCount === 0) {
       return (
-        hasDigitalForm &&
+        task.form &&
         browserHistory.push(`/dashboard/deals/${deal.id}/form-edit/${task.id}`)
       )
     }
@@ -89,12 +106,10 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
       return
     }
 
-    const taskEnvelopes = getTaskEnvelopes(envelopes, task)
-
     // If there is a form and an envelope in the task: we should open up the envelop version in the view/print (so for instance if there is a base form and then a signed copy of the envelop, tapping on the task name should open up the version with signatures on them.)
-    if (taskEnvelopes.length > 0) {
+    if (envelope) {
       browserHistory.push(
-        `/dashboard/deals/${deal.id}/view/${task.id}/envelope/${taskEnvelopes[0].id}`
+        `/dashboard/deals/${deal.id}/view/${task.id}/envelope/${envelope.id}`
       )
 
       return
@@ -119,9 +134,14 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
     window.open(link, '_blank')
   }
 
-  const isRowExpandable = (task.room.attachments || []).length > 0
-  const hasDigitalForm = task.form !== null
-  const isRowClickable = getRowsCount() > 0 || hasDigitalForm
+  const isRowExpandable = getRowsCount() > 1 || Boolean(file)
+
+  const actions: ActionButtonId[] = getTaskActions({
+    task,
+    envelope,
+    file,
+    isBackOffice
+  })
 
   return (
     <RowContainer isTaskExpanded={isTaskExpanded}>
@@ -134,7 +154,7 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
 
         <Flex column style={{ flex: 1 }}>
           <Flex alignCenter justifyBetween>
-            <RowTitle clickable={isRowClickable} onClick={handleClickTask}>
+            <RowTitle clickable onClick={handleClickTask}>
               {task.title}
             </RowTitle>
 
@@ -147,13 +167,19 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
                 style={{ margin: '-3px 0.625rem 0 0' }}
               />
 
-              <ActionsButton type="task" deal={deal} task={task} />
+              <ActionsButton
+                deal={deal}
+                task={task}
+                envelope={envelope}
+                file={file}
+                actions={actions}
+              />
             </Flex>
           </Flex>
 
           <Flex alignCenter wrapReverse>
             <TaskStatus deal={deal} task={task} isBackOffice={isBackOffice} />
-            <EnvelopeStatus type="task" deal={deal} task={task} />
+            <EnvelopeStatus envelope={envelope} deal={deal} task={task} />
             <Activity task={task} onClick={handleSelectTask} />
           </Flex>
         </Flex>

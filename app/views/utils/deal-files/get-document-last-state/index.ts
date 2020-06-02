@@ -7,7 +7,7 @@ import { getEnvelopeFile } from '../get-envelope-file'
 interface Params {
   deal: IDeal
   task: IDealTask
-  document?: IFile | IDealTask
+  file?: IFile
   envelopes: IDealEnvelope[]
   isBackOffice?: boolean
 }
@@ -17,7 +17,7 @@ interface Params {
  * @param data
  */
 export function getLastStates(data: Params): IDealFile[] {
-  if (data.document && data.document.type === 'file') {
+  if (data.file) {
     return getDocuments(data)
   }
 
@@ -37,10 +37,10 @@ function getTaskFile(data: Params): IDealFile[] {
 
   const attachments = (data.task.room.attachments || [])
     .sort((a, b) => b.created_at - a.created_at)
-    .map(document =>
+    .map(file =>
       getDocumentLatestFile({
         ...data,
-        document
+        file
       })
     )
 
@@ -104,8 +104,8 @@ function getTaskLatestFiles(data: Params): IDealFile[] {
  * @param data
  */
 function getDocumentLatestFile(data: Params): IDealFile {
-  const document = {
-    ...data.document,
+  const file = {
+    ...data.file,
     task: data.task ? data.task.id : null,
     checklist: data.task ? data.task.checklist : null,
     source: 'attachment'
@@ -113,7 +113,7 @@ function getDocumentLatestFile(data: Params): IDealFile {
 
   const envelopes: IDealEnvelope[] = getDocumentEnvelopes(
     data.envelopes,
-    document
+    file
   ).filter(envelope => envelope.status !== 'Voided')
 
   if (envelopes.length > 0) {
@@ -125,8 +125,8 @@ function getDocumentLatestFile(data: Params): IDealFile {
 
   return data.isBackOffice
     ? {
-        ...document,
-        internal_url: `${baseUrl}/attachment/${document.id}`
+        ...file,
+        internal_url: `${baseUrl}/attachment/${file.id}`
       }
-    : document
+    : file
 }
