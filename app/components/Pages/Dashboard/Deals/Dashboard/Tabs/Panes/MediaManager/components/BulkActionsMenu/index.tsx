@@ -100,21 +100,18 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
               selectedGalleryItems.length !== selectableItems.length
             }
           />
-          <Typography display="inline" className={classes.bold}>
-            {pluralize('photo', selectedGalleryItems.length, true)} selected
-          </Typography>
-
+          <Typography display="inline">
+            {selectedGalleryItems.length} of {selectableItems.length} selected
+          </Typography>{' '}
           {selectedGalleryItems.length !== selectableItems.length && (
             <>
-              <Typography
-                display="inline"
-                variant="body2"
-                color="textSecondary"
+              <Button
+                color="secondary"
+                href="#"
+                size="large"
+                onClick={handleSelectAll}
               >
-                &nbsp;&#9679;&nbsp;
-              </Typography>
-              <Button href="#" onClick={handleSelectAll}>
-                Select all {pluralize('photo', selectableItems.length, true)}
+                (Select All)
               </Button>
             </>
           )}
