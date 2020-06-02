@@ -5,7 +5,7 @@ import {
   DOCUSIGN_ENVELOPE,
   EMAIL_ENVELOPE,
   VIEW_ENVELOPE
-} from '../action-buttons'
+} from 'deals/components/ActionsButton/data/action-buttons'
 
 export function getEnvelopeActions(envelope: IDealEnvelope): ActionButtonId[] {
   switch (envelope.status) {
