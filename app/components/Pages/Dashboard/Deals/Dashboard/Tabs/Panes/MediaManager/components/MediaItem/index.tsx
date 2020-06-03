@@ -24,6 +24,8 @@ interface Props {
   deal: IDeal
 }
 
+const EMPTY_NAME_TEXT = 'Caption can go here...'
+
 export default function MediaItem({ media, deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
@@ -109,9 +111,7 @@ export default function MediaItem({ media, deal }: Props) {
           />
           <UploadProgessBar value={uploadProgress} />
         </Box>
-        <Button className={classes.mediaLabel} fullWidth>
-          Uploading...
-        </Button>
+        <Box className={classes.mediaLabel}>Uploading...</Box>
       </Box>
     )
   }
@@ -136,7 +136,7 @@ export default function MediaItem({ media, deal }: Props) {
           >
             <IconEdit fillColor="#333" className={iconClasses.small} />
           </IconButton>
-          {name}
+          {name || EMPTY_NAME_TEXT}
         </Box>
       )}
 
