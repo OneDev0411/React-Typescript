@@ -1,11 +1,11 @@
 interface Params {
   task: IDealTask
-  document: IDealTask | IFile
+  file?: IFile
 }
 
-export function getEsignAttachments({ task, document }: Params) {
-  if (document && document.type === 'file') {
-    return getDocumentAttachment(task, document)
+export function getEsignAttachments({ task, file }: Params) {
+  if (file) {
+    return getDocumentAttachment(task, file)
   }
 
   return getTaskAttachments(task)
@@ -58,26 +58,23 @@ function getTaskAttachments(task: IDealTask): IDealFile[] {
   return attachments
 }
 
-function getDocumentAttachment(
-  task: IDealTask,
-  document: IDealTask | IFile
-): IDealFile[] {
-  if (document.type === 'task' && document.submission) {
+function getDocumentAttachment(task: IDealTask, file: IFile): IDealFile[] {
+  if (task.submission) {
     return [
       {
-        ...document.submission.file,
+        ...task.submission.file,
         source: 'submission',
-        url: document.pdf_url,
+        url: task.pdf_url,
         task: task.id,
         checklist: task.checklist
       }
     ]
   }
 
-  if (document.type === 'file' && document.mime === 'application/pdf') {
+  if (file && file.mime === 'application/pdf') {
     return [
       {
-        ...document,
+        ...file,
         source: 'attachment',
         task: task.id,
         checklist: task.checklist

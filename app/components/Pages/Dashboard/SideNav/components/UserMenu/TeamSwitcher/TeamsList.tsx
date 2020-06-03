@@ -10,17 +10,27 @@ import { isFetchingSelectedTeam } from '../../../../../../../reducers/user'
 
 import { TeamItem } from './TeamItem'
 
+interface SwitcherStatus {
+  isSwitching: boolean
+  switchedTeamId: UUID
+}
 interface Props {
   user: IUser
 }
 
 export function TeamsList({ user }: Props) {
-  const [switchingTeam, setSwitchingTeam] = useState('')
+  const [switcherStatus, setSwitcherStatus] = useState<SwitcherStatus>({
+    isSwitching: false,
+    switchedTeamId: ''
+  })
 
   const activeTeamId = useMemo(() => getActiveTeamId(user), [user])
 
   const onClickTeam = async (teamId: string) => {
-    setSwitchingTeam(teamId)
+    setSwitcherStatus({
+      isSwitching: true,
+      switchedTeamId: teamId
+    })
 
     await putUserSetting('user_filter', viewAs(user), teamId)
 
@@ -47,7 +57,8 @@ export function TeamsList({ user }: Props) {
           return (
             <TeamItem
               key={team.id}
-              isSwitching={switchingTeam === teamId}
+              disabled={switcherStatus.isSwitching}
+              isSwitching={switcherStatus.switchedTeamId === teamId}
               onClick={() => onClickTeam(teamId)}
               selected={teamId === activeTeamId}
               team={team}

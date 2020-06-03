@@ -38,7 +38,7 @@ import syncOpenHouseData from '../../helpers/sync-open-house-offline-registers'
 
 import SideNav from './SideNav'
 
-class App extends Component {
+class Dashboard extends Component {
   componentWillMount() {
     const { user, dispatch } = this.props
 
@@ -187,4 +187,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(App))
+export default withRouter(connect(mapStateToProps)(Dashboard))

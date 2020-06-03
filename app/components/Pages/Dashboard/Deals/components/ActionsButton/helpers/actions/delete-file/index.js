@@ -15,12 +15,12 @@ export async function deleteFile(props) {
   )
 }
 
-async function handleDelete({ deal, document, task }) {
+async function handleDelete({ deal, file, task }) {
   try {
     await store.dispatch(
       asyncDeleteFile({
         dealId: deal.id,
-        fileId: document.id,
+        fileId: file.id,
         taskId: task ? task.id : null
       })
     )

@@ -1,17 +1,12 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-
 import Flex from 'styled-flex-component'
-
-import { IAppState } from 'reducers'
-import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-
-import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
 
 import ActionsButton from '../../../../../components/ActionsButton'
 
 import { ItemContainer, ItemRow, ItemTitle, ItemLink } from '../styled'
 import { LabelItem } from '../../../styled'
+
+import { getFormActions } from '../helpers/get-form-actions'
 
 interface Props {
   deal: IDeal
@@ -19,26 +14,11 @@ interface Props {
 }
 
 export function DigitalForm({ deal, task }: Props) {
-  const envelopes = useSelector<IAppState, IDealEnvelope[]>(({ deals }) =>
-    selectDealEnvelopes(deal, deals.envelopes)
-  )
-
-  const hasActiveEnvelope = () => {
-    const documentEnvelopes = getDocumentEnvelopes(envelopes, task)
-
-    if (
-      documentEnvelopes.length === 0 ||
-      documentEnvelopes[0].status === 'Voided'
-    ) {
-      return false
-    }
-
-    return true
-  }
-
-  if (!task || !task.form || hasActiveEnvelope()) {
+  if (!task || !task.form) {
     return null
   }
+
+  const actions: ActionButtonId[] = getFormActions()
 
   return (
     <ItemContainer>
@@ -53,16 +33,11 @@ export function DigitalForm({ deal, task }: Props) {
             </ItemLink>
           </ItemTitle>
 
-          <ActionsButton
-            type="document"
-            deal={deal}
-            task={task}
-            document={task}
-          />
+          <ActionsButton deal={deal} task={task} actions={actions} />
         </Flex>
 
         <Flex alignCenter>
-          <LabelItem>Base Form</LabelItem>
+          <LabelItem>Digital Form</LabelItem>
         </Flex>
       </ItemRow>
     </ItemContainer>

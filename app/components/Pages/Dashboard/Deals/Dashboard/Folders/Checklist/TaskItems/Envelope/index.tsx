@@ -3,13 +3,14 @@ import Flex from 'styled-flex-component'
 import fecha from 'fecha'
 
 import { useTheme } from '@material-ui/styles'
-
-import { Theme, Typography } from '@material-ui/core'
+import { Theme } from '@material-ui/core'
 
 import ActionsButton from '../../../../../components/ActionsButton'
 import { EnvelopeStatus } from '../../EnvelopeStatus'
 
 import { ItemContainer, ItemRow, ItemTitle, ItemDate } from '../styled'
+
+import { getEnvelopeActions } from '../helpers/get-envelope-actions'
 
 interface Props {
   deal: IDeal
@@ -19,6 +20,8 @@ interface Props {
 
 export function Envelope({ deal, task, envelope }: Props) {
   const theme = useTheme<Theme>()
+
+  const actions: ActionButtonId[] = getEnvelopeActions(envelope)
 
   return (
     <ItemContainer>
@@ -32,12 +35,7 @@ export function Envelope({ deal, task, envelope }: Props) {
                 margin: theme.spacing(1, 0)
               }}
             >
-              <EnvelopeStatus
-                type="envelope"
-                deal={deal}
-                task={task}
-                envelope={envelope}
-              />
+              <EnvelopeStatus deal={deal} task={task} envelope={envelope} />
 
               <ItemDate>
                 Created at{' '}
@@ -50,28 +48,11 @@ export function Envelope({ deal, task, envelope }: Props) {
           </Flex>
 
           <ActionsButton
-            type="document"
             deal={deal}
             task={task}
-            document={task}
+            envelope={envelope}
+            actions={actions}
           />
-        </Flex>
-
-        <Flex alignCenter>
-          <Typography variant="body2" color="textSecondary">
-            To: &nbsp;
-          </Typography>
-
-          {envelope.recipients.map((recipient, index) => (
-            <Typography
-              key={recipient.id}
-              variant="body2"
-              color="textSecondary"
-            >
-              {recipient.role.legal_full_name}
-              {index < envelope.recipients.length - 1 && <span>,&nbsp;</span>}
-            </Typography>
-          ))}
         </Flex>
       </ItemRow>
     </ItemContainer>
