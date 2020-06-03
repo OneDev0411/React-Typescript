@@ -84,9 +84,10 @@ export default function MediaManager({ user, deal }: Props) {
       Math.max(...state.map(galleryItem => galleryItem.order), -1) + 1
 
     files.forEach(file => {
-      dispatch(addMedia({ file, order: nextOrder }))
-      upload(file, nextOrder)
-      nextOrder += 1
+      // dispatch(addMedia({ file, order: nextOrder }))
+      // upload(file, nextOrder)
+      // nextOrder += 1
+      console.log(file)
     })
   }
 

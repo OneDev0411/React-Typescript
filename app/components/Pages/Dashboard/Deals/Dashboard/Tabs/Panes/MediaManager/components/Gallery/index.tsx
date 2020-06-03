@@ -2,8 +2,6 @@ import React from 'react'
 import { Box } from '@material-ui/core'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 
-import { IMediaItem, IMediaGallery } from '../../types'
-
 import { useStyles } from '../../styles'
 import { reorderGallery } from '../../context/actions'
 
@@ -38,6 +36,7 @@ export default function Gallery({ medias, deal, uploaderRef }: Props) {
             index={index}
             media={media}
             deal={deal}
+            disabled
           />
         ))}
       </Box>

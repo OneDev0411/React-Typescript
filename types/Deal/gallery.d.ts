@@ -1,4 +1,4 @@
-export interface IMediaItem {
+declare interface IMediaItem {
   file: string
   src: string
   name: string
@@ -8,9 +8,9 @@ export interface IMediaItem {
   isNew?: boolean
 }
 
-export type IMediaGallery = IMediaItem[]
+declare type IMediaGallery = IMediaItem[]
 
-export interface IMediaManagerContext {
+declare interface IMediaManagerContext {
   state: IMediaGallery
   dispatch: React.Dispatch<any>
 }

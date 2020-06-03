@@ -2,8 +2,6 @@ import arrayMove from 'array-move'
 
 import * as actionTypes from '../actions/action-types'
 
-import { IMediaGallery } from '../../types'
-
 export const initialState: IMediaGallery = []
 
 // TODO: Implement inversion of control for the reducer functions

@@ -32,7 +32,6 @@ import { useStyles } from '../../../styles'
 
 import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
 
-import { IMediaItem } from '../../../types'
 import {
   setMediaUploadProgress,
   deleteMedia as deleteMediaAction,
@@ -98,10 +97,7 @@ export default function ActionsMenu({ media, deal }: Props) {
   }
 
   const onCrop = ({ files }) => {
-    const fileName = files.originalFile
-      .split('?')[0]
-      .split('/')
-      .pop()
+    const fileName = files.originalFile.split('?')[0].split('/').pop()
     const croppedFile = new File([files.file], fileName)
 
     upload(croppedFile)

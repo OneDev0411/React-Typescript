@@ -5,7 +5,6 @@ import useThunkReducer from 'react-hook-thunk-reducer'
 import { getMediaGallery } from 'models/media-manager'
 
 import { reducer } from '../context/reducers'
-import { IMediaGallery } from '../types'
 import { setGalleryItems } from '../context/actions'
 
 export default function useFetchData(dealId: string) {

@@ -17,7 +17,6 @@ import UploadProgessBar from './UploadProgessBar'
 import SortHandle from './SortHandle'
 
 import useMediaManagerContext from '../../hooks/useMediaManagerContext'
-import { IMediaItem } from '../../types'
 import { renameMedia } from '../../context/actions'
 
 interface Props {

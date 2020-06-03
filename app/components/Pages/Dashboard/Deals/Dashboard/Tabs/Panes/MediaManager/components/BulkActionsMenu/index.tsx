@@ -11,7 +11,6 @@ import DownloadModal from '../DownloadModal'
 
 import { useStyles } from '../../styles'
 import useMediaManagerContext from '../../hooks/useMediaManagerContext'
-import { IMediaGallery } from '../../types'
 import {
   toggleGallerySelection,
   deleteMedias as deleteMediasAction
