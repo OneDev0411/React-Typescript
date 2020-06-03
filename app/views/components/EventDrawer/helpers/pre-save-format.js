@@ -57,7 +57,7 @@ export async function preSaveFormat(values, originalValues) {
   if ((originalValues && originalValues.id) || description) {
     task.description = stateToHTML(description.getCurrentContent())
       .trim()
-      .replace(/(\r\n|\n|\r)/gm, '')
+      .replace(/(\r\n|\n|\r)/gm, '') // remove unneccessary new line
   }
 
   if (task.status === 'DONE') {
