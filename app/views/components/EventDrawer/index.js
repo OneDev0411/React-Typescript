@@ -336,10 +336,7 @@ class PresentEventDrawer extends Component {
                           )}
                         </Flex>
 
-                        <Description
-                          style={{ padding: this.isNew ? 0 : '0 0 0 2.5rem' }}
-                          placeholder="Add a description about this event"
-                        />
+                        <Description placeholder="Add a description about this event" />
 
                         <EventType />
 

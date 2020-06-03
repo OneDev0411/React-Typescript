@@ -1,3 +1,5 @@
+import { stateToHTML } from 'draft-js-export-html'
+
 import { isNegativeTimezone } from 'utils/is-negative-timezone'
 
 /**
@@ -18,6 +20,7 @@ export async function preSaveFormat(values, originalValues) {
     assignees,
     associations = []
   } = values
+
   const isAllDay = allDay || false
 
   if (isAllDay) {
@@ -52,7 +55,9 @@ export async function preSaveFormat(values, originalValues) {
   }
 
   if ((originalValues && originalValues.id) || description) {
-    task.description = (description && description.trim()) || ''
+    task.description = stateToHTML(description.getCurrentContent())
+      .trim()
+      .replace(/(\r\n|\n|\r)/gm, '') // remove unneccessary new line
   }
 
   if (task.status === 'DONE') {

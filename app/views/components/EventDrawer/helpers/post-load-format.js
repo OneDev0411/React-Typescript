@@ -1,3 +1,6 @@
+import { EditorState } from 'draft-js'
+import { stateFromHTML } from 'draft-js-import-html'
+
 import { getReminderItem } from 'views/utils/reminder'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 import { isNegativeTimezone } from 'utils/is-negative-timezone'
@@ -17,6 +20,10 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
 
   const associations = []
 
+  const description = EditorState.createWithContent(
+    stateFromHTML(task ? task.description : '')
+  )
+
   if (defaultAssociation) {
     if (Array.isArray(defaultAssociation)) {
       associations.push(...defaultAssociation)
@@ -35,6 +42,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
     return {
       assignees: [owner],
       associations,
+      description,
       dueDate: initialDueDate,
       endDate: initialEndDate,
       allDay: true,
@@ -95,6 +103,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
 
   return {
     ...task,
+    description,
     reminder,
     dueDate,
     endDate,
