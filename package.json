@@ -122,7 +122,7 @@
     "google-maps": "^3.3.0",
     "grapesjs": "^0.15.10",
     "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#6ef2bf6",
-    "grapesjs-plugin-ckeditor": "0.0.9",
+    "grapesjs-plugin-mjml-ckeditor": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-plugin-mjml-ckeditor.git#1f41023",
     "history": "^3.3.0",
     "hogan.js": "^3.0.2",
     "html-webpack-plugin": "^4.0.1",

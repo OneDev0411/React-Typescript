@@ -1,5 +1,5 @@
 import { Editor } from 'grapesjs'
-import grapesjsPluginCkeditor from 'grapesjs-plugin-ckeditor'
+import grapesjsPluginCkeditor from 'grapesjs-plugin-mjml-ckeditor'
 
 import config from './config'
 
