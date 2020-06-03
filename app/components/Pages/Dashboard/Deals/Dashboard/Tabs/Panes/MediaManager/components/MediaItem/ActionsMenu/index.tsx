@@ -55,7 +55,7 @@ export default function ActionsMenu({ media, deal }: Props) {
   const [downloadUrl, setDownloadUrl] = useState('')
   const { dispatch } = useMediaManagerContext()
   const confirmationModal = useContext(ConfirmationModalContext)
-  const { file, src, name } = media
+  const { id, src, name } = media
   const fileExtension = src.substr(src.lastIndexOf('.'), 4)
 
   const handleModalClose = () => {
@@ -73,7 +73,7 @@ export default function ActionsMenu({ media, deal }: Props) {
   const handleDownload = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
 
-    const url = await downloadMedias(deal.id, [media.file])
+    const url = await downloadMedias(deal.id, [media.id])
 
     setDownloadUrl(url)
     setModalIsOpen(true)
@@ -86,8 +86,8 @@ export default function ActionsMenu({ media, deal }: Props) {
       description: 'This action can not be undone. Are you sure?',
       confirmLabel: 'Yes, Please',
       onConfirm: () => {
-        deleteMedias(deal.id, [file])
-        dispatch(deleteMediaAction(file))
+        deleteMedias(deal.id, [id])
+        dispatch(deleteMediaAction(id))
       }
     })
   }
@@ -107,21 +107,21 @@ export default function ActionsMenu({ media, deal }: Props) {
     try {
       const response = await uploadCroppedMedia(
         deal.id,
-        media.file,
+        media.id,
         fileObject,
         `${media.name}.${fileExtension}`,
         progressEvent => {
           if (progressEvent.percent) {
-            dispatch(setMediaUploadProgress(file, progressEvent.percent))
+            dispatch(setMediaUploadProgress(id, progressEvent.percent))
           } else {
-            dispatch(setMediaAsUploaded(file))
+            dispatch(setMediaAsUploaded(id))
           }
         }
       )
 
       const { preview_url: src } = response
 
-      dispatch(setNewlyUploadedMediaFields(file, file, src, name))
+      dispatch(setNewlyUploadedMediaFields(id, id, src))
     } catch (err) {
       console.log(err)
       reduxDispatch(

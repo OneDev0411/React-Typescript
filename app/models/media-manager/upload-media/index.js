@@ -2,7 +2,7 @@ import Fetch from '../../../services/fetch'
 
 export async function uploadMedia(
   dealId,
-  file,
+  fileObject,
   fileName = null,
   order = 0,
   uploadProgressCallback = null
@@ -12,7 +12,7 @@ export async function uploadMedia(
     useReferencedFormat: true
   })
     .upload(`/deals/${dealId}/gallery/items`)
-    .attach('file', file, fileName)
+    .attach('file', fileObject, fileName)
     .field({ order })
 
   return result.body.data

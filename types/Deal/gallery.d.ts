@@ -1,11 +1,11 @@
 declare interface IMediaItem {
-  file: string
+  id: UUID
   src: string
   name: string
   order: number
   selected?: boolean
   uploadProgress?: number | undefined
-  isNew?: boolean
+  isUploading?: boolean
 }
 
 declare type IMediaGallery = IMediaItem[]

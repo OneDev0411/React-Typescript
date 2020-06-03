@@ -13,27 +13,27 @@ export const setGalleryItems = (gallery: IMediaGallery) => ({
   }
 })
 
-export const toggleMediaSelection = (file: string) => ({
+export const toggleMediaSelection = (id: UUID) => ({
   type: actionTypes.TOGGLE_MEDIA_SELECTION,
   payload: {
-    file
+    id
   }
 })
 
 export const renameMedia = (
-  file: string,
+  id: UUID,
   name: string,
   dealId: IDeal['id']
 ) => async (dispatch: React.Dispatch<any>) => {
   dispatch({
     type: actionTypes.SET_MEDIA_NAME,
     payload: {
-      file,
+      id,
       name
     }
   })
 
-  await renameMediaModel(dealId, file, name)
+  await renameMediaModel(dealId, id, name)
 }
 
 export const toggleGallerySelection = (selected: boolean) => ({
@@ -44,10 +44,10 @@ export const toggleGallerySelection = (selected: boolean) => ({
 })
 
 export const addMedia = ({
-  file: fileObject,
+  fileObject,
   order = 0
 }: {
-  file: {}
+  fileObject: {}
   order?: number
 }) => ({
   type: actionTypes.ADD_MEDIA,
@@ -57,31 +57,31 @@ export const addMedia = ({
   }
 })
 
-export const setMediaAsUploaded = (file: string) => ({
+export const setMediaAsUploaded = (id: UUID) => ({
   type: actionTypes.SET_MEDIA_AS_UPLOADED,
   payload: {
-    file
+    id
   }
 })
 
-export const deleteMedia = (file: string) => ({
+export const deleteMedia = (id: UUID) => ({
   type: actionTypes.DELETE_MEDIA,
   payload: {
-    file
+    id
   }
 })
 
-export const deleteMedias = (files: string[]) => ({
+export const deleteMedias = (ids: UUID[]) => ({
   type: actionTypes.DELETE_MEDIAS,
   payload: {
-    files
+    ids
   }
 })
 
-export const setMediaUploadProgress = (file: string, progress: number) => ({
+export const setMediaUploadProgress = (id: UUID, progress: number) => ({
   type: actionTypes.SET_MEDIA_UPLOAD_PROGRESS,
   payload: {
-    file,
+    id,
     progress
   }
 })
@@ -102,16 +102,14 @@ export const reorderGallery = (
 }
 
 export const setNewlyUploadedMediaFields = (
-  file: string,
-  newId: string,
-  src: string,
-  name: string
+  id: UUID,
+  newId: UUID,
+  src: string
 ) => ({
   type: actionTypes.SET_NEWLY_UPLOADED_MEDIA_FIELDS,
   payload: {
-    file,
+    id,
     newId,
-    src,
-    name
+    src
   }
 })

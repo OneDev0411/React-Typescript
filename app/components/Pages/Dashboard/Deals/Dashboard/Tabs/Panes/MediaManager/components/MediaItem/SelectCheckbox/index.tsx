@@ -24,10 +24,10 @@ export default function SelectCheckbox({ media }: Props) {
   const checkboxClasses = useCheckboxStyles()
 
   const { dispatch } = useMediaManagerContext()
-  const { file, selected } = media
+  const { id, selected } = media
 
   const handleChange = () => {
-    dispatch(toggleMediaSelection(file))
+    dispatch(toggleMediaSelection(id))
   }
 
   return (

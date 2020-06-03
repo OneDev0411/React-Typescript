@@ -36,12 +36,12 @@ export default function MediaManager({ user, deal }: Props) {
 
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
   const confirmationModal = useContext(ConfirmationModalContext)
-  const upload = async (fileObject, order) => {
+  const upload = async (fileObject, order: number) => {
     try {
       const response = await uploadMedia(
         deal.id,
         fileObject,
-        '',
+        null,
         order,
         progressEvent => {
           if (progressEvent.percent) {
@@ -53,10 +53,10 @@ export default function MediaManager({ user, deal }: Props) {
           }
         }
       )
-      const { id: file, name } = response
+      const { id } = response
       const { preview_url: src } = response.file
 
-      dispatch(setNewlyUploadedMediaFields(fileObject.name, file, src, name))
+      dispatch(setNewlyUploadedMediaFields(fileObject.name, id, src))
     } catch (err) {
       console.log(err)
       reduxDispatch(
@@ -68,7 +68,7 @@ export default function MediaManager({ user, deal }: Props) {
       )
     }
   }
-  const onDrop = (files: any[], rejectedFiles: []) => {
+  const onDrop = (fileObjects: any[], rejectedFiles: []) => {
     if (rejectedFiles.length > 0) {
       confirmationModal.setConfirmationModal({
         message: `${rejectedFiles.length} unsupported files dropped!`,
@@ -80,14 +80,21 @@ export default function MediaManager({ user, deal }: Props) {
       })
     }
 
-    let nextOrder =
-      Math.max(...state.map(galleryItem => galleryItem.order), -1) + 1
+    // Upon uploading new photos we need to calculate the correct order of that item
+    // so that the next time user visits the page, he sees them with that exact same
+    // order.
+    // The rule is, new photos are *appended* to the gallery and since the user needs
+    // to see the upload process, we'll scroll all the way down to the bottom when he
+    // drops the files.
+    let order = state.length
+      ? Math.max(...state.map(galleryItem => galleryItem.order)) + 1
+      : 0
 
-    files.forEach(file => {
-      // dispatch(addMedia({ file, order: nextOrder }))
-      // upload(file, nextOrder)
-      // nextOrder += 1
-      console.log(file)
+    fileObjects.forEach(fileObject => {
+      console.log(fileObject)
+      dispatch(addMedia({ fileObject, order }))
+      upload(fileObject, order)
+      order++
     })
   }
 

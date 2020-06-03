@@ -32,11 +32,10 @@ export default function Gallery({ medias, deal, uploaderRef }: Props) {
         <UploadPlaceholderItem uploaderRef={uploaderRef} />
         {medias.map((media, index) => (
           <SortableMediaItem
-            key={media.file}
+            key={media.id}
             index={index}
             media={media}
             deal={deal}
-            disabled
           />
         ))}
       </Box>

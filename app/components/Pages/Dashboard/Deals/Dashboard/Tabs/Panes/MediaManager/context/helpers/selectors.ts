@@ -1,7 +1,7 @@
 export const getUploadedMedia = (
   mediaGallery: IMediaGallery
 ): IMediaGallery => {
-  return mediaGallery.filter(media => !media.isNew)
+  return mediaGallery.filter(media => !media.isUploading)
 }
 
 export const getSelectedMedia = (
@@ -13,17 +13,17 @@ export const getSelectedMedia = (
 export const getSelectableMedia = (
   mediaGallery: IMediaGallery
 ): IMediaGallery => {
-  return mediaGallery.filter(media => !media.isNew)
+  return mediaGallery.filter(media => !media.isUploading)
 }
 
-export const getSelectedMediaIds = (mediaGallery: IMediaGallery): string[] => {
-  return mediaGallery.map(media => media.file)
+export const getSelectedMediaIds = (mediaGallery: IMediaGallery): UUID[] => {
+  return mediaGallery.map(media => media.id)
 }
 
 export const getMediaSorts = (mediaGallery: IMediaGallery) => {
   return mediaGallery.map(media => {
     return {
-      id: media.file,
+      id: media.id,
       order: media.order
     }
   })

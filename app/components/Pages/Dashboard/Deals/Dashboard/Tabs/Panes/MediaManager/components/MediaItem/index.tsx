@@ -30,7 +30,7 @@ export default function MediaItem({ media, deal }: Props) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const reduxDispatch = useDispatch()
 
-  const { file, src, selected, name, order, isNew, uploadProgress } = media
+  const { id, src, selected, name, order, isUploading, uploadProgress } = media
 
   const { dispatch } = useMediaManagerContext()
 
@@ -57,7 +57,7 @@ export default function MediaItem({ media, deal }: Props) {
       const newName = textareaRef.current.value
 
       try {
-        dispatch(renameMedia(file, newName, deal.id))
+        dispatch(renameMedia(id, newName, deal.id))
         setEditMode(false)
       } catch (e) {
         setEditMode(false)
@@ -96,7 +96,7 @@ export default function MediaItem({ media, deal }: Props) {
     </Box>
   ))
 
-  if (isNew) {
+  if (isUploading) {
     return (
       <Box
         className={cn(classes.mediaCard, classes.mediaCardUploading)}
