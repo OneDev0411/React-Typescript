@@ -15,30 +15,7 @@ function getFontFamiliesCSSFiles(families: string[]): string[] {
   ]
 }
 
-const STYLE_MANAGER_TEXT_TAGS = [
-  'div',
-  'section',
-  'table',
-  'tr',
-  'td',
-  'ol',
-  'ul',
-  'li',
-  'p',
-  'span',
-  'a',
-  'h1',
-  'h2',
-  'h3',
-  'h4',
-  'h5',
-  'h6',
-  'address',
-  'q',
-  'label',
-  'mj-text',
-  'mj-button'
-]
+const STYLE_MANAGER_TEXT_TAGS = ['div', 'section', 'a', 'mj-button']
 
 const STYLE_MANAGER_ALIGNABLE_TAGS = ['mj-social']
 
