@@ -39,13 +39,18 @@ export function getTaskActions({
   const isDraft = envelope && ['Created'].includes(envelope.status)
 
   envelope && isDraft && actions.push(REVIEW_ENVELOPE)
-  envelope && isVoidable && actions.push(VOID_ENVELOPE)
   envelope && actions.push(VIEW_ENVELOPE)
   envelope && actions.push(EMAIL_ENVELOPE)
+  envelope && isVoidable && actions.push(VOID_ENVELOPE)
 
+  /*
+   * There are 2 docusign_form's in this.
+   * The reason is, we want the docusign_form to appear on top when the user has edited the form already.
+   */
+  task.form && task.submission && !file && actions.push(DOCUSIGN_FORM)
   task.form && actions.push(EDIT_FORM)
   task.form && !envelope && !file && actions.push(VIEW_FORM)
-  task.form && !file && actions.push(DOCUSIGN_FORM)
+  task.form && !task.submission && !file && actions.push(DOCUSIGN_FORM)
 
   file && !task.form && !envelope && actions.push(DOCUSIGN_FILE)
   file && !task.form && !envelope && actions.push(EMAIL_FILE)
