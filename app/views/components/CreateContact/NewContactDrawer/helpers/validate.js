@@ -1,5 +1,3 @@
-import { FORM_ERROR } from 'final-form'
-
 export function submitValidate(values) {
   const isEmptyTextField = fieldName =>
     !values[fieldName] || !values[fieldName].trim()
@@ -16,9 +14,8 @@ export function submitValidate(values) {
     isEmptyFieldArray(values.email) &&
     isEmptyFieldArray(values.phone_number)
   ) {
-    return {
-      [FORM_ERROR]:
-        'Please fill in any of the contacts profile fields to add your contact.'
-    }
+    return 'Please fill in any of the contacts profile fields to add your contact.'
   }
+
+  return ''
 }
