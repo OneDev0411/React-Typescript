@@ -99,6 +99,7 @@ export function createGrapesInstance(
           font_names: fontFamilies.join(';'),
           colorButton_enableMore: false,
           linkShowAdvancedTab: false,
+          linkDefaultProtocol: 'https://',
           linkShowTargetTab: false,
           allowedContent: true, // In order to keep content as is
           enterMode: 2, // equals to: CKEDITOR.ENTER_BR, in order to stop adding p tags
