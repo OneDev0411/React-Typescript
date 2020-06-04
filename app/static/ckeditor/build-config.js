@@ -13,10 +13,10 @@
  * (1) https://ckeditor.com/cke4/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) https://ckeditor.com/cke4/builder/4aa71fd4f4c6e9aa25b446c7427205d6
+ * (2) https://ckeditor.com/cke4/builder/92b81150e654241b06124b4c16d73ea7
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) https://ckeditor.com/cke4/builder/download/4aa71fd4f4c6e9aa25b446c7427205d6
+ * (3) https://ckeditor.com/cke4/builder/download/92b81150e654241b06124b4c16d73ea7
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -53,7 +53,6 @@ var CKBUILDER_CONFIG = {
 	],
 	plugins : {
 		'autogrow' : 1,
-		'clipboard' : 1,
 		'colorbutton' : 1,
 		'colordialog' : 1,
 		'computedfont' : 1,
@@ -65,7 +64,6 @@ var CKBUILDER_CONFIG = {
 		'entities' : 1,
 		'floatingspace' : 1,
 		'font' : 1,
-		'googleDocPastePlugin' : 1,
 		'htmlwriter' : 1,
 		'indentblock' : 1,
 		'indentlist' : 1,
@@ -76,19 +74,12 @@ var CKBUILDER_CONFIG = {
 		'liststyle' : 1,
 		'maximize' : 1,
 		'openlink' : 1,
-		'pasteFromGoogleDoc' : 1,
-		'pastefromexcel' : 1,
-		'pastefromgdocs' : 1,
-		'pastefromword' : 1,
-		'pastetext' : 1,
-		'pastetools' : 1,
 		'quicktable' : 1,
 		'sharedspace' : 1,
 		'showborders' : 1,
 		'tab' : 1,
 		'table' : 1,
 		'tableresize' : 1,
-		'tableselection' : 1,
 		'tablesorter' : 1,
 		'tabletools' : 1,
 		'toolbar' : 1,
