@@ -1,4 +1,4 @@
-import React, { CSSProperties, RefObject } from 'react'
+import React, { CSSProperties } from 'react'
 
 import _ from 'underscore'
 
@@ -18,7 +18,6 @@ interface Props {
   showClearSearch?: boolean
   style?: CSSProperties
   onClearSearch?: (string) => any
-
   inputRef?: (ref: HTMLInputElement) => void
 }
 
@@ -28,6 +27,7 @@ interface State {
 }
 
 class Search extends React.Component<Props, State> {
+  // eslint-disable-next-line react/static-property-placement
   static defaultProps = {
     placeholder: '',
     className: '',
@@ -39,8 +39,6 @@ class Search extends React.Component<Props, State> {
     disableOnSearch: true,
     showClearSearch: true
   }
-
-  private onChangeHandler: any
 
   constructor(props) {
     super(props)
@@ -55,6 +53,8 @@ class Search extends React.Component<Props, State> {
     this.onChangeHandler =
       debounceTime > 0 ? _.debounce(onChange, debounceTime) : onChange
   }
+
+  private onChangeHandler: any
 
   handleChange = e => {
     const { value } = e.target

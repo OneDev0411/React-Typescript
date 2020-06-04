@@ -46,7 +46,7 @@ export function ApproveButton(props: Props) {
     <Flex justifyEnd className={root}>
       <Button
         variant="text"
-        color="primary"
+        color="secondary"
         size="small"
         className={button}
         disabled={isSaving}

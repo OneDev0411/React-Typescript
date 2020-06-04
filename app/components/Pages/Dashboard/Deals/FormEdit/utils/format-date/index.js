@@ -1,5 +1,5 @@
-import fecha from 'fecha'
+import moment from 'moment'
 
-export function formatDate(date) {
-  return fecha.format(new Date(date), 'MMM D, YYYY')
+export function formatDate(date, format) {
+  return moment.utc(date).format(format || 'DD MMMM, YYYY')
 }

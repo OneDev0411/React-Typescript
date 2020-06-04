@@ -7,6 +7,8 @@ import IconNav from '../../SvgIcons/NavMenu/IconNav'
 
 const propTypes = {
   onClick: PropTypes.func.isRequired,
+  isExpended: PropTypes.bool,
+  isOpen: PropTypes.bool,
   tooltip: PropTypes.string,
   style: PropTypes.shape(),
   className: PropTypes.string

@@ -1,26 +1,20 @@
 import React from 'react'
-import { SnackbarContent, IconButton, Button, Theme } from '@material-ui/core'
+import { Snackbar, Link, Theme } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core/styles'
-import { useTheme } from '@material-ui/styles'
 
 import {
   browserStatus,
-  generatePropeprMessage,
+  getMessage,
   isListingPage
 } from './CheckBrowser-helpers'
-import CloseIcon from '../SvgIcons/Close/CloseIcon'
 
-const useStyles = makeStyles(theme => {
+const useStyles = makeStyles((theme: Theme) => {
   return {
     snackbar: {
-      backgroundColor: theme.palette.warning.light,
-      width: '100%',
-      zIndex: 2019,
-      position: 'fixed',
-      color: theme.palette.warning.dark
-    },
-    message: {
-      verticalAlign: 'middle'
+      width: '640px',
+      maxWidth: '100%',
+      paddingRight: theme.spacing(2)
     }
   }
 })
@@ -31,10 +25,9 @@ interface CheckBrowserPropsType extends React.FC {
 }
 
 function CheckBrowser(props: CheckBrowserPropsType) {
-  const theme = useTheme<Theme>()
   const classes = useStyles()
   const status = browserStatus()
-  const message = generatePropeprMessage(status)
+  const message = getMessage(status)
   const [isShowSnackbar, setShowSnackbar] = React.useState(
     !status.isSupported || status.isOutdated
   )
@@ -46,33 +39,25 @@ function CheckBrowser(props: CheckBrowserPropsType) {
   return (
     <>
       {isShowSnackbar && (
-        <SnackbarContent
-          elevation={0}
+        <Snackbar
+          open
           className={classes.snackbar}
-          message={
-            <>
-              <span className={classes.message}>{message.text}</span>{' '}
-              <Button
-                key={message.actionText}
-                aria-label={message.actionText}
-                color="primary"
-                onClick={() => window.open(message.actionLink, '_blank')}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={() => setShowSnackbar(false)} severity="warning">
+            <div>
+              <span>{message.text}</span>{' '}
+              <Link
+                color="secondary"
+                rel="noreferrer"
+                href={message.actionLink}
+                target="_blank"
               >
                 {message.actionText}
-              </Button>
-            </>
-          }
-          action={[
-            <IconButton
-              key="close"
-              aria-label="close"
-              color="inherit"
-              onClick={() => setShowSnackbar(false)}
-            >
-              <CloseIcon fill={theme.palette.warning.dark} />
-            </IconButton>
-          ]}
-        />
+              </Link>
+            </div>
+          </Alert>
+        </Snackbar>
       )}
       {props.children}
     </>

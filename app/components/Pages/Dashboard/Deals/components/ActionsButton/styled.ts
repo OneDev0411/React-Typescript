@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
-import { primary } from 'views/utils/colors'
+import styled, { css } from 'styled-components'
+import { Theme } from '@material-ui/core'
 
 interface PrimaryActionProps {
   hasSecondaryActions: boolean
@@ -8,64 +7,70 @@ interface PrimaryActionProps {
 
 interface MenuItemProps {
   disabled: boolean
+  theme: Theme
 }
 
 export const PrimaryAction = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: 500;
-  height: 100%;
-  width: ${(props: PrimaryActionProps) =>
-    props.hasSecondaryActions ? '10rem' : '12.3rem'};
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    ${theme.typography.body2};
 
-  :hover {
-    color: ${primary};
-    background-color: #d9d9d9;
-  }
+    width: ${(props: PrimaryActionProps) =>
+      props.hasSecondaryActions ? '8rem' : '9.3rem'};
 
-  :active {
-    background-color: #bfbfbf;
-  }
+    :hover {
+      color: ${theme.palette.secondary.main};
+      background-color: ${theme.palette.action.hover};
+    }
+
+    :active {
+      background-color: ${theme.palette.action.selected};
+    }
+  `}
 `
 
 export const MenuButton = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-left: 1px solid #ccc;
-  background-color: #f2f2f2;
-  border-radius: 0 3px 3px 0;
-  width: 2.3rem;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid ${theme.palette.divider};
+    border-radius: 0 3px 3px 0;
+    width: 2.3rem;
 
-  :hover,
-  :focus {
-    background-color: #d9d9d9;
+    :hover,
+    :focus {
+      color: ${theme.palette.secondary.main};
+      background-color: ${theme.palette.action.hover};
 
-    svg {
-      transition: 0.1s ease-in transform;
-      fill: ${primary};
+      svg {
+        transition: 0.1s ease-in transform;
+        fill: ${theme.palette.secondary.main};
+      }
     }
-  }
 
-  :active {
-    background-color: #bfbfbf;
-  }
+    :active {
+      background-color: ${theme.palette.action.selected};
+    }
+  `}
 `
 
 export const Container = styled.div`
-  display: flex;
-  height: 2.3rem;
-  opacity: 0.3;
-  border-radius: 3px;
-  background-color: #e6e6e6;
-  border: 1px solid #e6e6e6;
-  cursor: pointer;
+  ${({ theme }) => css`
+    display: flex;
+    height: 2.3rem;
+    opacity: 0.3;
+    border-radius: 3px;
+    border: 1px solid ${theme.palette.divider};
+    cursor: pointer;
 
-  :hover {
-    border-color: ${primary};
-  }
+    :hover {
+      border-color: ${theme.palette.action.selected};
+    }
+  `}
 `
 
 export const MenuContainer = styled.div`
@@ -81,19 +86,20 @@ export const MenuContainer = styled.div`
     0 8px 10px 0 rgba(0, 0, 0, 0.16);
 `
 
-export const MenuItem = styled.div`
-  font-size: 1rem;
-  font-weight: 500;
-  color: ${(props: MenuItemProps) => (props.disabled ? 'gray' : '#000')};
-  padding: 0.5rem 1rem;
+export const MenuItem = styled.div<MenuItemProps>`
+  ${({ theme, disabled }) => css`
+    color: ${disabled ? theme.palette.grey['900'] : theme.palette.common.black};
+    padding: ${theme.spacing(1, 2)};
+    ${theme.typography.body2};
 
-  ${(props: MenuItemProps) =>
-    props.disabled === false &&
-    `
-    :hover {
-      cursor: pointer;
-      background-color: ${primary};
-      color: #fff;
-    }
+    ${(props: MenuItemProps) =>
+      props.disabled === false &&
+      css`
+        :hover {
+          cursor: pointer;
+          background-color: ${theme.palette.action.hover};
+          color: ${theme.palette.secondary.main};
+        }
+      `}
   `}
 `

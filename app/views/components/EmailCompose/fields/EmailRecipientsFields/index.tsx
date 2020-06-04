@@ -1,15 +1,14 @@
 import React, { ComponentProps, HTMLProps, useState } from 'react'
-
-import { Field } from 'react-final-form'
-
+import { Field, FieldRenderProps } from 'react-final-form'
+import { OnFocus } from 'react-final-form-listeners'
 import { TextFieldProps } from '@material-ui/core/TextField'
 
-import { EmailFormValues } from '../../types'
+import EmailRecipientsChipsInput from 'components/EmailRecipientsChipsInput'
+import { EmailRecipientQuickSuggestions } from 'components/EmailRecipientQuickSuggestions'
 
+import { EmailFormValues } from '../../types'
 import { From } from '../../components/From'
 import { CcBccButtons } from '../../components/CcBccButtons'
-
-import EmailRecipientsChipsInput from '../../../EmailRecipientsChipsInput'
 
 interface Props {
   values: EmailFormValues
@@ -32,12 +31,19 @@ export function EmailRecipientsFields({
 }: Props) {
   const [hasCc, setCc] = useState(false)
   const [hasBcc, setBcc] = useState(false)
+  const [lastFocusedSendType, setLastFocusedSendType] = useState<
+    IEmailRecipientSendType
+  >('To')
 
   const isCcShown = hasCc || (values.cc || []).length > 0
   const isBccShown = hasBcc || (values.bcc || []).length > 0
 
   const commonProps: typeof EmailRecipientsChipsInputProps = {
-    deal,
+    TextFieldProps: {
+      inputProps: {
+        autoFocus: true
+      } as HTMLProps<HTMLInputElement>
+    } as TextFieldProps,
     ...EmailRecipientsChipsInputProps
   }
 
@@ -56,53 +62,14 @@ export function EmailRecipientsFields({
           </From>
         )}
       />
-
       <Field
-        name="bcc"
-        render={bccFieldProps => (
-          <Field
-            label="To"
-            name="to"
-            render={toFieldProps => (
-              <EmailRecipientsChipsInput
-                {...toFieldProps}
-                deal={deal}
-                includeQuickSuggestions={includeQuickSuggestions}
-                readOnly={disableAddNewRecipient}
-                currentlyUsedQuickSuggestions={[
-                  ...(toFieldProps.input.value || []),
-                  ...(bccFieldProps.input.value || [])
-                ]}
-                // we need to do this weird stuff because of the weird UX
-                // which is to show suggestions under `To` field but for some
-                // of them we want to add them to bcc!
-                // So The logic for handling quick suggestion selection
-                // cannot be handled in the EmailRecipientsChipsInput itself
-                // and the event needs to bubble up to be handled at upper levels
-                // in this case.
-                // Hopefully we revise it and remove such weirdness
-                onQuickSuggestionSelected={(
-                  recipient,
-                  sendType: IEmailRecipientSendType
-                ) => {
-                  const fieldProps =
-                    sendType === 'BCC' ? bccFieldProps : toFieldProps
-
-                  fieldProps.input.onChange([
-                    ...(fieldProps.input.value || []),
-                    recipient
-                  ] as any)
-                }}
-                TextFieldProps={
-                  {
-                    inputProps: {
-                      autoFocus: true
-                    } as HTMLProps<HTMLInputElement>
-                  } as TextFieldProps
-                }
-                {...commonProps}
-              />
-            )}
+        label="To"
+        name="to"
+        render={toFieldProps => (
+          <EmailRecipientsChipsInput
+            {...toFieldProps}
+            readOnly={disableAddNewRecipient}
+            {...commonProps}
           />
         )}
       />
@@ -120,6 +87,63 @@ export function EmailRecipientsFields({
           name="bcc"
           component={EmailRecipientsChipsInput as any}
           {...commonProps}
+        />
+      )}
+      {includeQuickSuggestions && (
+        <Field
+          name="bcc"
+          render={bccFieldProps => (
+            <Field
+              name="cc"
+              render={ccFieldProps => (
+                <Field
+                  label="To"
+                  name="to"
+                  render={toFieldProps => {
+                    return (
+                      <>
+                        <OnFocus name="to">
+                          {() => setLastFocusedSendType('To')}
+                        </OnFocus>
+                        <OnFocus name="cc">
+                          {() => {
+                            console.log('cc focused')
+                            setLastFocusedSendType('CC')
+                          }}
+                        </OnFocus>
+                        <OnFocus name="bcc">
+                          {() => setLastFocusedSendType('BCC')}
+                        </OnFocus>
+                        <EmailRecipientQuickSuggestions
+                          deal={deal}
+                          currentRecipients={[
+                            ...(toFieldProps.input.value || []),
+                            ...(ccFieldProps.input.value || []),
+                            ...(bccFieldProps.input.value || [])
+                          ]}
+                          onSelect={(
+                            recipient,
+                            sendType: IEmailRecipientSendType = lastFocusedSendType
+                          ) => {
+                            const fieldProps: FieldRenderProps<any> = {
+                              To: toFieldProps,
+                              CC: ccFieldProps,
+                              BCC: bccFieldProps
+                            }[sendType]
+
+                            fieldProps.input.onChange([
+                              ...(fieldProps.input.value || []),
+                              recipient
+                            ] as any)
+                          }}
+                        />
+                      </>
+                    )
+                  }}
+                />
+              )}
+            />
+          )}
         />
       )}
     </>

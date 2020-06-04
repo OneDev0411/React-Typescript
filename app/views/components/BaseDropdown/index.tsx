@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { ReactNode, RefObject, useRef } from 'react'
 import {
+  ButtonProps,
+  PopperProps,
   ClickAwayListener,
   Fade,
   Paper,
@@ -10,13 +12,9 @@ import {
 
 import { useControllableState } from 'react-use-controllable-state/dist'
 
-import { ButtonProps } from '@material-ui/core/Button'
-
-import { PopperProps } from '@material-ui/core/Popper'
-
 import { DropdownToggleButton } from '../DropdownToggleButton'
 
-interface RenderToggleButtonProps {
+export interface RenderToggleButtonProps {
   isActive: boolean
   ref: RefObject<any>
   onClick: () => void
@@ -24,7 +22,7 @@ interface RenderToggleButtonProps {
   'aria-haspopup': 'true'
 }
 
-interface Props {
+export interface Props {
   /**
    * for optional control over isOpen state. If passed, you need to pass
    * onIsOpenChange too.

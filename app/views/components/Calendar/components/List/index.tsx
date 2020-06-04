@@ -1,7 +1,7 @@
 import React, { ComponentProps, forwardRef, RefObject, useState } from 'react'
-import { ListOnItemsRenderedProps } from 'react-window'
-import useResizeObserver from 'use-resize-observer'
 
+import { ListOnItemsRenderedProps } from 'react-window'
+import AutoSizer from 'react-virtualized-auto-sizer'
 import debounce from 'lodash/debounce'
 
 import VirtualList, {
@@ -16,7 +16,6 @@ import { EmptyState } from './EmptyState'
 
 import { EventController } from './EventController'
 
-import { Container } from './styled'
 import { Row } from './Row'
 
 interface Props {
@@ -43,7 +42,6 @@ const defaultProps = {
 }
 
 const CalendarList: React.FC<Props> = props => {
-  const [containerRef, listWidth, listHeight] = useResizeObserver()
   const [activeDate, setActiveDate] = useState<Date | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<ICalendarEvent | null>(
     null
@@ -110,56 +108,51 @@ const CalendarList: React.FC<Props> = props => {
         setSelectedEvent
       }}
     >
-      <Container ref={containerRef}>
-        {props.rows.length === 0 && !props.isLoading && <EmptyState />}
+      {props.rows.length === 0 && !props.isLoading && <EmptyState />}
 
-        <VirtualList
-          width={listWidth}
-          height={listHeight}
-          itemCount={props.rows.length}
-          itemData={
-            {
-              rows: props.rows,
-              activeDate,
-              onEventChange: handleEventChange
-            } as ComponentProps<typeof Row>['data']
-          }
-          onReachEnd={props.onReachEnd}
-          onReachStart={props.onReachStart}
-          threshold={2}
-          isLoading={props.isLoading}
-          loadingPosition={props.loadingPosition}
-          onVisibleRowChange={debounce(getInViewDate, 50)}
-          itemSize={index => getRowHeight(props.rows[index])}
-          overscanCount={3}
-          ref={props.listRef}
-        >
-          {Row}
-        </VirtualList>
+      <AutoSizer>
+        {({ width, height }) => (
+          <VirtualList
+            width={width}
+            height={height}
+            itemCount={props.rows.length}
+            itemData={
+              {
+                rows: props.rows,
+                activeDate,
+                onEventChange: handleEventChange
+              } as ComponentProps<typeof Row>['data']
+            }
+            onReachEnd={props.onReachEnd}
+            onReachStart={props.onReachStart}
+            threshold={2}
+            isLoading={props.isLoading}
+            loadingPosition={props.loadingPosition}
+            onVisibleRowChange={debounce(getInViewDate, 50)}
+            itemSize={index => getRowHeight(props.rows[index])}
+            overscanCount={3}
+            ref={props.listRef}
+          >
+            {Row}
+          </VirtualList>
+        )}
+      </AutoSizer>
 
-        <EventController
-          activeDate={activeDate}
-          user={props.user}
-          onEventChange={handleEventChange}
-          onScheduledEmailChange={handleScheduledEmailChange}
-        />
-      </Container>
+      <EventController
+        user={props.user}
+        onEventChange={handleEventChange}
+        onScheduledEmailChange={handleScheduledEmailChange}
+      />
     </ListContext.Provider>
   )
 }
 
 function getRowHeight(row: ICalendarListRow): number {
   if (row.hasOwnProperty('isEventHeader')) {
-    return 26
+    return 50
   }
 
-  const event = row as ICalendarEvent
-
-  return ['crm_task', 'crm_association', 'email_thread_recipient'].includes(
-    event.object_type
-  ) || ['next_touch', 'day-empty-state'].includes(event.event_type)
-    ? 72
-    : 55
+  return 60
 }
 
 CalendarList.defaultProps = defaultProps

@@ -15,8 +15,8 @@ export const AppTheme = ({ children }) => (
         <StyledComponentsThemeProvider theme={theme}>
           <>{children}</>
         </StyledComponentsThemeProvider>
-        <MaterialUiGlobalOverrides />
       </ThemeProvider>
     </StylesProvider>
+    <MaterialUiGlobalOverrides />
   </>
 )

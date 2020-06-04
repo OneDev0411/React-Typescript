@@ -1,22 +1,22 @@
-import styled from 'styled-components'
-
-import { red, primary } from 'views/utils/colors'
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
-  position: relative;
-  margin-right: 0.25rem;
-  cursor: pointer;
+  ${({ theme }) => css`
+    position: relative;
+    margin-right: 0.25rem;
+    cursor: pointer;
 
-  :hover {
-    svg > path {
-      fill: ${primary};
+    :hover {
+      svg > path {
+        fill: ${theme.palette.secondary.main};
+      }
     }
-  }
+  `}
 `
 
 export const BadgeCounter = styled.div`
   position: absolute;
-  background: ${red.A100};
+  background: ${({ theme }) => theme.palette.error.main};
   top: -3px;
   right: -3px;
   font-size: 10px;

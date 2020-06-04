@@ -1,8 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router'
 import { withRouter, WithRouterProps } from 'react-router'
 import { Typography, Button } from '@material-ui/core'
 
+import Link from 'components/ALink'
 import BareModal from 'components/BareModal'
 
 import { ModalContent, ButtonsContainer } from './styled'
@@ -33,7 +33,11 @@ function MissingEmailModal({
             Cancel
           </Button>
           {contactId && !isContactPagePath(location.pathname, contactId) && (
-            <Link target="_blank" to={`/dashboard/contacts/${contactId}`}>
+            <Link
+              noStyle
+              target="_blank"
+              to={`/dashboard/contacts/${contactId}`}
+            >
               <Button onClick={onClose} variant="contained" color="primary">
                 Edit Contact
               </Button>

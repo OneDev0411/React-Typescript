@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import { createStyles, Drawer, makeStyles } from '@material-ui/core'
+import { createStyles, Drawer, makeStyles, Theme } from '@material-ui/core'
 import { DrawerProps as OriginalDrawerProps } from '@material-ui/core/Drawer'
 
 import { mergeWith } from 'lodash'
@@ -8,21 +8,27 @@ import Body from './Body'
 import Header from './Header'
 import Footer from './Footer'
 import { DrawerContext, useDrawerContext } from './drawer-context'
-import { DrawerContextType, DrawerProps } from './types'
+import { DrawerContextType, DrawerProps, StyleProps } from './types'
 
 export { useDrawerContext } from './drawer-context'
 export * from './types'
 
-const styles = createStyles({
-  root: ({ width }: { width: number | string }) => ({
-    width: '100%', // fullwidth on small devices
-    '@media (min-width: 48em)': {
-      width
-    }
-  })
-})
-
-const useStyles = makeStyles(styles, { name: 'OverlayDrawer' })
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      // The any type is because of the important word.
+      modal: (props: StyleProps): any => ({
+        zIndex: `${props.zIndex}!important`
+      }),
+      paper: (props: StyleProps) => ({
+        width: '100%', // fullwidth on small devices
+        '@media (min-width: 48em)': {
+          width: props.width
+        }
+      })
+    }),
+  { name: 'OverlayDrawer' }
+)
 
 const OverlayDrawer = ({
   children,
@@ -35,9 +41,10 @@ const OverlayDrawer = ({
   closeOnEscape = false,
   anchor = 'right',
   width = '38rem',
+  zIndex,
   ...rest
-}: DrawerProps) => {
-  const classes = useStyles({ width })
+}: DrawerProps & StyleProps) => {
+  const classes = useStyles({ width, zIndex })
   const parentDrawerContext = useDrawerContext()
 
   const handleOnClose: OriginalDrawerProps['onClose'] = useCallback(
@@ -67,7 +74,7 @@ const OverlayDrawer = ({
     DrawerProps['classes'],
     DrawerProps['classes']
   >(
-    { paper: classes.root },
+    { modal: classes.modal, paper: classes.paper },
     rest.classes,
     (value1, value2) => `${value1 || ''} ${value2 || ''}`
   )

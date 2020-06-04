@@ -2,7 +2,7 @@ import _ from 'lodash'
 import S from 'shorti'
 import Map from 'google-map-react'
 import React from 'react'
-import { browserHistory, Link } from 'react-router'
+import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -32,12 +32,14 @@ import ArrowRightIcon from '../../../../../../views/components/SvgIcons/ArrowRig
 
 import FetchError from './FetchError'
 import MLSNote from './MLSNote'
+import ClaimAccountBanner from './ClaimAccountBanner'
 import Loading from '../../../../../Partials/Loading'
 import FavoriteHeart from '../../components/FavoriteHeart'
-import ListingMarker from '../../../Partials/ListingMarker'
-import ListingMapMarker from '../../../Partials/ListingMapMarker'
+import ListingMarker from '../../components/ListingMarker'
 
 import ShareModal from '../../components/modals/ShareListingModal'
+
+import { appSidenavWidth } from '../../../SideNav/variables'
 
 export const renderFeatures = (title, value) => {
   if (!value) {
@@ -88,7 +90,8 @@ const ListingDesktopView = ({
   galleryModalIsActive,
   handleModalGalleryNav,
   galleryModalActiveIndex,
-  galleryModalDirection
+  galleryModalDirection,
+  windowInnerWidth
 }) => {
   const brandColor = Brand.color('primary', primary, brand)
 
@@ -97,10 +100,10 @@ const ListingDesktopView = ({
   let viewer_width = 0
 
   if (typeof window !== 'undefined') {
-    viewer_width = window.innerWidth
+    viewer_width = windowInnerWidth
 
     if (!data.is_widget && container !== 'modal') {
-      viewer_width -= 56
+      viewer_width -= appSidenavWidth + 15 // Scrollbar width
     }
   }
 
@@ -479,19 +482,14 @@ const ListingDesktopView = ({
           }}
           bootstrapURLKeys={bootstrap_url_keys}
         >
-          <ListingMapMarker
-            style={S('pointer mt-10')}
-            lat={center.lat}
-            lng={center.lng}
+          <div
+            style={{
+              cursor: 'pointer',
+              marginTop: '0.5rem'
+            }}
           >
-            <ListingMarker
-              data={data}
-              listing={listing}
-              property={listing.property}
-              address={listing.property.address}
-              key={`listing-marker${listing.id}`}
-            />
-          </ListingMapMarker>
+            <ListingMarker user={user} brand={brand} listing={listing} />
+          </div>
         </Map>
       )
     }
@@ -519,7 +517,7 @@ const ListingDesktopView = ({
 
     main_content = (
       <div style={S('bg-fff')}>
-        <div style={S('p-0 relative')}>
+        <div style={{ margin: '0 1.5rem', position: 'relative', padding: 0 }}>
           {listing.gallery_image_urls && listing.gallery_image_urls.length
             ? listing_images
             : ''}
@@ -530,7 +528,7 @@ const ListingDesktopView = ({
         </div>
 
         <div>
-          <div style={S('pt-40 pl-20 pr-20')} className="clearfix">
+          <div style={{ padding: '2rem 1.5rem' }} className="clearfix">
             <Col sm={9} style={S('pl-0')}>
               <div style={S('mb-20')}>
                 <Col sm={4} style={S('pl-0')}>
@@ -686,10 +684,6 @@ const ListingDesktopView = ({
                   <div>
                     <div style={S('fw-600 font-18 mb-10')}>All Features</div>
                     {renderFeatures(
-                      'Parking/Garage',
-                      property.parking_spaces_garage ? 'Yes' : 'No'
-                    )}
-                    {renderFeatures(
                       'Parking Spaces',
                       property.parking_spaces_covered_total
                     )}
@@ -750,7 +744,7 @@ const ListingDesktopView = ({
   }
 
   let viewer_wrap_style = S(
-    `absolute h-100p bg-fff t-0 l-0 z-10 ml-56 w-${viewer_width}`
+    `absolute h-100p bg-fff t-0 l-0 z-10 ml-${appSidenavWidth} w-${viewer_width}`
   )
 
   if (data.is_widget) {
@@ -794,10 +788,20 @@ const ListingDesktopView = ({
     )
   }
 
+  let contact_info
+
+  if (data.location && data.location.query && data.location.query.token) {
+    contact_info = data.location.query.email
+
+    if (data.location.query.phone_number) {
+      contact_info = data.location.query.phone_number
+    }
+  }
+
   const headerProps = {
     alignCenter: true,
     justifyBetween: true,
-    style: { height: '70px', padding: '0 1.5rem' }
+    style: { padding: '2rem 1.5rem' }
   }
   const Header = (
     <Flex {...headerProps}>
@@ -830,41 +834,6 @@ const ListingDesktopView = ({
       )}
     </Flex>
   )
-
-  // Claim account message
-  let token
-  let contact_info
-  let claim_account_message
-
-  if (data.location && data.location.query && data.location.query.token) {
-    token = data.location.query.token
-  }
-
-  if (token) {
-    contact_info = data.location.query.email
-
-    if (data.location.query.phone_number) {
-      contact_info = data.location.query.phone_number
-    }
-
-    claim_account_message = (
-      <div style={S('bg-2196f3 color-fff w-100p font-17 p-20 text-center')}>
-        This listing was shared to {contact_info}. Claim your account to save
-        this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
-        <Link
-          style={{
-            padding: '1rem',
-            color: '#0945eb',
-            textDecoration: 'none',
-            backgroundColor: '#fff'
-          }}
-          to={`/register${window.location.search}`}
-        >
-          Activate your account
-        </Link>
-      </div>
-    )
-  }
 
   let brand_agent_footer
 
@@ -937,7 +906,6 @@ const ListingDesktopView = ({
 
   return (
     <div style={viewer_wrap_style}>
-      {claim_account_message}
       {Header}
       {main_content}
       {brand_agent_footer}
@@ -964,6 +932,7 @@ const ListingDesktopView = ({
         isActive={shareModalIsActive}
         onHide={onHideShareModal}
       />
+      <ClaimAccountBanner />
     </div>
   )
 }

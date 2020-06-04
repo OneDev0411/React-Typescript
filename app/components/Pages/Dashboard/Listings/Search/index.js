@@ -1,12 +1,27 @@
-import { DALLAS_POINTS } from 'constants/listings/dallas-points'
-
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
+import memoize from 'lodash/memoize'
+import hash from 'object-hash'
+
+import { DALLAS_POINTS } from 'constants/listings/dallas-points'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+import { getUserTeams } from 'actions/user/teams'
+
+import {
+  parsSortIndex,
+  getDefaultSort,
+  sortByIndex,
+  SORT_FIELD_SETTING_KEY
+} from '../helpers/sort-utils'
+
+import Tabs from '../components/Tabs'
 
 import { loadJS } from '../../../../../utils/load-js'
 import { getBounds, isLocationInTX } from '../../../../../utils/map'
+
 import getPlace from '../../../../../models/listings/search/get-place'
 import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points'
 import { selectListings } from '../../../../../reducers/listings'
@@ -17,15 +32,21 @@ import { toggleFilterArea } from '../../../../../store_actions/listings/search/f
 import { confirmation } from '../../../../../store_actions/confirmation'
 
 import Map from './components/Map'
-import { MapView } from '../components/MapView'
 import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
-import { GridView } from '../components/GridView'
-import { GalleryView } from '../components/GalleryView'
+import MapView from '../components/MapView'
+import ListView from '../components/ListView'
+import GridView from '../components/GridView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
+import {
+  addDistanceFromCenterToListing,
+  formatListing
+} from '../helpers/format-listing'
+import { normalizeListingLocation } from '../../../../../utils/map'
 
 import { Header } from './Header'
 import CreateTourAction from './components/CreateTourAction'
 
+// Golden ratio
 const RADIUS = 1.61803398875 / 2
 
 class Search extends React.Component {
@@ -42,8 +63,14 @@ class Search extends React.Component {
       activeView = 'map'
     }
 
+    const { index, ascending } = parsSortIndex(getDefaultSort(this.props.user))
+
     this.state = {
       activeView,
+      activeSort: {
+        index,
+        ascending
+      },
       isCalculatingLocation: false,
       isMapInitialized: false,
       shareModalIsActive: false
@@ -286,12 +313,57 @@ class Search extends React.Component {
     }
   ]
 
+  formatAndAddDistance = (listing, center, user) =>
+    addDistanceFromCenterToListing(
+      formatListing(normalizeListingLocation(listing), user),
+      center
+    )
+
+  onChangeSort = async e => {
+    let sort = e.currentTarget.dataset.sort
+    const { index, ascending } = parsSortIndex(sort)
+
+    this.setState({
+      activeSort: {
+        index,
+        ascending
+      }
+    })
+    await putUserSetting(SORT_FIELD_SETTING_KEY, sort)
+    this.props.dispatch(getUserTeams(this.props.user))
+  }
+
+  sortListings = memoize(
+    (listings, index, ascending) => {
+      const formattedListings = listings.data.map(listing =>
+        this.formatAndAddDistance(
+          listing,
+          this.props.mapCenter,
+          this.props.user
+        )
+      )
+
+      return formattedListings.sort((a, b) =>
+        sortByIndex(a, b, index, ascending)
+      )
+    },
+    (...args) => `${hash(args[0])}_${args[1]}_${args[2]}`
+  )
+
   renderMain() {
+    const sortedListings = this.sortListings(
+      this.props.listings,
+      this.state.activeSort.index,
+      this.state.activeSort.ascending
+    )
+
     const { isCalculatingLocation } = this.state
     const _props = {
       user: this.props.user,
       listings: this.props.listings,
-      isFetching: this.props.isFetching || isCalculatingLocation
+      sortedListings,
+      isFetching: this.props.isFetching || isCalculatingLocation,
+      totalRows: this.props.listings.info.total
     }
 
     switch (this.state.activeView) {
@@ -309,12 +381,12 @@ class Search extends React.Component {
           />
         )
 
-      case 'gallery':
-        return <GalleryView {..._props} />
+      case 'grid':
+        return <GridView {..._props} />
 
       default:
         return (
-          <GridView
+          <ListView
             {..._props}
             plugins={
               _props.user && {
@@ -336,22 +408,27 @@ class Search extends React.Component {
   onClickFilter = () => this.props.dispatch(toggleFilterArea())
 
   render() {
-    const { user } = this.props
+    const { user, isWidget } = this.props
 
     return (
-      <React.Fragment>
+      <>
         <Header
-          user={user}
           isWidget={this.props.isWidget}
           isFetching={this.props.isFetching}
-          filtersIsOpen={this.props.filtersIsOpen}
           activeView={this.state.activeView}
-          isSideMenuOpen={this.props.isSideMenuOpen}
-          toggleSideMenu={this.props.toggleSideMenu}
-          saveSearchHandler={this.handleSaveSearch}
-          onClickFilter={this.onClickFilter}
           onChangeView={this.onChangeView}
           hasData={this.props.listings.data.length > 0}
+          showGlobalActionsButton={user && !isWidget}
+        />
+        <Tabs
+          user={user}
+          onChangeView={this.onChangeView}
+          onChangeSort={this.onChangeSort}
+          activeView={this.state.activeView}
+          isWidget={isWidget}
+          activeSort={this.state.activeSort}
+          saveSearchHandler={this.handleSaveSearch}
+          showSavedSearchButton
         />
         {this.renderMain()}
         <CreateAlertModal
@@ -360,7 +437,7 @@ class Search extends React.Component {
           isActive={this.state.shareModalIsActive}
           alertProposedTitle={this.props.listings.info.proposed_title}
         />
-      </React.Fragment>
+      </>
     )
   }
 }

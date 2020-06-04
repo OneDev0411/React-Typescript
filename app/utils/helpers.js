@@ -1,3 +1,29 @@
+export function createUrlSearch(params, filter, encode = false) {
+  const queryString = Object.keys(params)
+    .filter(key => {
+      const value = params[key]
+
+      if (typeof filter === 'function') {
+        return filter(value)
+      }
+
+      // Filtering null, undefined, NaN and empty string values
+      return (typeof value === 'number' && !Number.isNaN(value)) ||
+        typeof value === 'boolean' ||
+        Boolean(value)
+    })
+    .map(key => `${key}=${
+      encode ? encodeURIComponent(params[key]) : params[key]
+    }`)
+    .join('&')
+
+  if (queryString.length > 0) {
+    return `?${queryString}`
+  }
+
+  return ''
+}
+
 export function sortAlphabetically(a, b) {
   return compare(a.toLowerCase(), b.toLowerCase())
 }
@@ -17,11 +43,11 @@ export function compareNumbers(a, b) {
   return a - b;
 }
 
-export function joinItemsWithString(items = [], string = ', ') { 
+export function joinItemsWithString(items = [], string = ', ') {
   return items.filter(i => typeof i === 'string').join(string)
 }
 
-export function onlyUnique(value, index, self) { 
+export function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
 
@@ -29,17 +55,25 @@ export function uppercaseFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
-export function getNameInitials(name) {
+export function getNameInitials(name, length = 2) {
   if (!name) {
     return
   }
 
-  return name
-    .split(' ')
+  const nameInitials = name
+    .split(/[\s\n]/)
     .map(word => /^[A-Za-z\s]+$/.test(word) ? word.charAt(0).toUpperCase() : '')
     .join('')
     .trim()
-    .substring(0, 2)
+    .substring(0, length)
+
+  if (nameInitials) return nameInitials
+
+  // Otherwise, return first letter occurrence,
+  // for cases that only the email address is available:
+  const match = name.match(/[a-zA-Z]/)
+
+  return match ? match[0].toUpperCase() : '\u00A0'
 }
 
 export function getPlaceholderImage(text, options = {
@@ -188,7 +222,7 @@ export async function isValidPhoneNumber(phone_number) {
 
   try {
     return phoneUtil.isValidNumber(phoneUtil.parse(phone_number, 'US'))
-  } catch(e) {
+  } catch (e) {
     return false
   }
 }
@@ -298,12 +332,12 @@ export const toNumber = (value, formated = false) => {
 //  This proposed solution avoids the floating-number arithmetic issue
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round#A_better_solution
 export function round(number, precision) {
-  const shift = function(number, precision) {
+  const shift = function (number, precision) {
     const numArray = `${number}`.split('e')
 
     return +`${numArray[0]}e${
       numArray[1] ? +numArray[1] + precision : precision
-    }`
+      }`
   }
 
   return shift(Math.round(shift(number, +precision)), -precision)
@@ -313,8 +347,16 @@ export function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
+// Translates an index to a label consisting of English letters
+// Initially we had a simple function which returned up to 26 letters but
+// apparently we wanted more:
+// https://gitlab.com/rechat/web/-/issues/3922#note_303292408
 export function getIndexLabel(index) {
-  return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')[index]
+  index = (parseInt("ooooooop0", 26) + index).toString(26);
+  return index.slice(index.indexOf("p") + 1).replace(/./g, c => {
+    c = c.charCodeAt(0);
+    return String.fromCharCode(c < 64 ? c + 17 : c - 22);
+  });
 }
 
-export function noop() {}
+export function noop() { }

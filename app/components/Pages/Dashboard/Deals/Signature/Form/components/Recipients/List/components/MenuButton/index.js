@@ -1,14 +1,14 @@
 import React from 'react'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
+
 import { primary } from 'views/utils/colors'
 
 import IconDrop from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 export function MenuButton(props) {
   return (
-    <ActionButton
-      appearance="link"
+    <Button
       {...props}
       style={{
         padding: 0,
@@ -26,6 +26,6 @@ export function MenuButton(props) {
           transform: `rotate(${props.isOpen} ? '180deg' : '0')`
         }}
       />
-    </ActionButton>
+    </Button>
   )
 }

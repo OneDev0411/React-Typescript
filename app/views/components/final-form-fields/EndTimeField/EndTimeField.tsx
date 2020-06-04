@@ -70,14 +70,10 @@ export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
 
         return (
           <Box display="flex" alignItems="center" pr={1}>
-            {value && (
-              <Typography variant="body2" component="span">
-                End Time:
-              </Typography>
-            )}
+            {value && <Typography variant="body2">End Time:</Typography>}
             <Button
               aria-describedby={id}
-              color="primary"
+              color="secondary"
               ref={anchorRef}
               onClick={handleToggle}
             >
@@ -86,6 +82,7 @@ export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
             {value && (
               <Tooltip placement={placement} title="Remove Time">
                 <Button
+                  color="secondary"
                   size="small"
                   // @ts-ignore FinalForm bug
                   onClick={() => onChange(null)}
@@ -118,7 +115,6 @@ export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
                           onChange={setEndDate}
                         />
                         <Button
-                          color="primary"
                           onClick={e => {
                             // @ts-ignore FinalForm bug
                             onChange(endDate)
@@ -126,7 +122,7 @@ export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
                           }}
                           size="small"
                           type="button"
-                          variant="contained"
+                          color="secondary"
                           className={classes.addButton}
                         >
                           Add

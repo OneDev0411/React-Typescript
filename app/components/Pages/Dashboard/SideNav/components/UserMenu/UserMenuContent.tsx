@@ -1,12 +1,42 @@
 import React from 'react'
+import { browserHistory } from 'react-router'
+import {
+  Divider,
+  List,
+  ListSubheader,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 
-import { ScrollableArea } from '../../../../../../views/components/ScrollableArea'
-import Link from '../../../../../../views/components/ALink'
+import { getActiveBrand } from '../../../../../../utils/user-teams'
 
-import { SideMenuContainer, SideMenuList, SubTitle } from './styled'
-import TeamSwitcher from './TeamSwitcher'
-import { ListItemDivider } from '../../styled'
 import Acl from '../../../../../../views/components/Acl'
+import { ACL } from '../../../../../../constants/acl'
+import { ScrollableArea } from '../../../../../../views/components/ScrollableArea'
+import SettingsIcon from '../../../../../../views/components/SvgIcons/CogOutline/IconCogOutline'
+
+import TeamSwitcher from './TeamSwitcher'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'auto',
+      width: theme.spacing(32),
+      height: 'min-content',
+      // we set a max height to prevent menu from being clipped when it's longer
+      // than viewport height.
+      maxHeight: `calc(
+        100vh - ${theme.spacing(9)}px
+      )`
+    }
+  }),
+  { name: 'UserMenuContent' }
+)
 
 interface Props {
   user: IUser
@@ -19,47 +49,65 @@ export function UserMenuContent({
   showChecklists,
   onClose = () => {}
 }: Props) {
+  const classes = useStyles()
+  const activeBrand = getActiveBrand(user)
+
+  const onClick = page => {
+    onClose()
+    browserHistory.push(`/dashboard/${page}`)
+  }
+
   return (
-    <SideMenuContainer>
+    <div className={classes.container}>
       <ScrollableArea hasThinnerScrollbar>
-        <SideMenuList>
+        <List disablePadding>
           <TeamSwitcher user={user} />
-        </SideMenuList>
+        </List>
       </ScrollableArea>
 
-      <SideMenuList>
-        {user.teams && user.teams.length > 1 && (
-          <SubTitle>Team Settings</SubTitle>
-        )}
+      <List disablePadding>
         <Acl.Admin>
-          <li>
-            <Link noStyle to="/dashboard/teams" onClick={onClose}>
-              Members
-            </Link>
-          </li>
-        </Acl.Admin>
-        {showChecklists && (
+          {user.teams && user.teams.length > 1 && (
+            <ListSubheader>Team Settings</ListSubheader>
+          )}
+          {activeBrand && activeBrand.brand_type === 'Brokerage' && (
+            <Acl access={[ACL.ADMIN, ACL.MARKETING]}>
+              <ListItem button onClick={() => onClick('brand-settings')}>
+                Brand
+              </ListItem>
+            </Acl>
+          )}
+          <ListItem button onClick={() => onClick('teams')}>
+            Members
+          </ListItem>
           <Acl.Admin>
-            <li>
-              <Link noStyle to="/dashboard/checklists" onClick={onClose}>
-                Checklists
-              </Link>
-            </li>
+            <ListItem button onClick={() => onClick('contexts')}>
+              Contexts
+            </ListItem>
           </Acl.Admin>
-        )}
-        <ListItemDivider role="separator" />
-        <li>
-          <a
-            href="/signout"
-            onClick={() => {
-              window.localStorage.removeItem('verificationBanner')
-              onClose()
-            }}
-          >
-            Sign out
-          </a>
-        </li>
-      </SideMenuList>
-    </SideMenuContainer>
+          {showChecklists && (
+            <ListItem button onClick={() => onClick('checklists')}>
+              Checklists
+            </ListItem>
+          )}
+          <Divider role="separator" />
+        </Acl.Admin>
+        <ListItem divider button onClick={() => onClick('account')}>
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText>Account Settings</ListItemText>
+        </ListItem>
+        <ListItem
+          button
+          onClick={() => {
+            onClose()
+            window.location.pathname = 'signout'
+          }}
+        >
+          <ListItemText>Sign out</ListItemText>
+        </ListItem>
+      </List>
+    </div>
   )
 }

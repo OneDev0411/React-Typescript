@@ -21,9 +21,7 @@ const signupShadow = async email => {
     const { type, email_confirmed } = response.body.data
 
     if (type === 'user_reference' && !email_confirmed) {
-      const error = { http: 202 }
-
-      throw error
+      return 202
     }
 
     return response.statusCode

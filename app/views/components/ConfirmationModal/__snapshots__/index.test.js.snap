@@ -23,7 +23,7 @@ exports[`ConfirmationModal component should render modal properly 1`] = `
     class="cta styled__ActionBarContainer-sc-1w2c0cs-0 cSTkgI"
   >
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary"
+      class="MuiButtonBase-root MuiButton-root MuiButton-outlined"
       data-test="confirmation-modal-cancel-button"
       tabindex="0"
       type="button"

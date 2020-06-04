@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react'
 import Checkbox from '@material-ui/core/Checkbox'
 
+import { Tooltip } from '@material-ui/core'
+
 import { updateTask } from 'models/tasks/update-task'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -69,16 +71,13 @@ export function CrmStatus({ event, onChange }: Props) {
   }
 
   return (
-    <Checkbox
-      color="primary"
-      disableRipple
-      checked={isChecked}
-      onChange={handleChange}
-      // used inline style for the sake of performance in Virtual List
-      style={{
-        padding: 0,
-        margin: '-2px 0.5rem 0 -2px'
-      }}
-    />
+    <Tooltip title="Mark As Done" placement="top">
+      <Checkbox
+        color="primary"
+        disableRipple
+        checked={isChecked}
+        onClick={handleChange}
+      />
+    </Tooltip>
   )
 }

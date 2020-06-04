@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Button, IconButton, Box } from '@material-ui/core'
 
 import { noop } from 'utils/helpers'
 import Tooltip from 'components/tooltip'
-import IconButton from 'components/Button/IconButton'
-import ActionButton from 'components/Button/ActionButton'
-import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 
 import { EditModeActionBar, EditModeContainer } from '../../styled'
 
@@ -50,41 +49,36 @@ export class EditMode extends React.Component {
           {showDelete && (
             <Tooltip caption="Delete">
               <IconButton
-                isFit
-                inverse
+                size="small"
                 disabled={isDisabled}
                 onClick={this.props.handleDelete}
                 data-test="inline-editable-field-delete"
               >
-                <DeleteIcon />
+                <TrashIcon size="small" />
               </IconButton>
             </Tooltip>
           )}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center'
-            }}
-          >
-            <ActionButton
-              size="small"
-              inverse
-              appearance="link"
-              disabled={isDisabled}
-              onClick={this.props.handleCancel}
-              style={{ fontWeight: 500 }}
-            >
-              Cancel
-            </ActionButton>
-            <ActionButton
+          <Box display="flex" alignItems="center">
+            <Box marginRight={1}>
+              <Button
+                size="small"
+                disabled={isDisabled}
+                onClick={this.props.handleCancel}
+              >
+                Cancel
+              </Button>
+            </Box>
+            <Button
+              variant="contained"
+              color="secondary"
               size="small"
               disabled={isDisabled}
               onClick={this.props.handleSave}
               data-test="inline-editable-field-save"
             >
               {isDisabled ? 'Saving...' : 'Save'}
-            </ActionButton>
-          </div>
+            </Button>
+          </Box>
         </EditModeActionBar>
       </EditModeContainer>
     )

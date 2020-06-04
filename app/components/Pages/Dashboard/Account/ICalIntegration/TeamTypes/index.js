@@ -4,7 +4,8 @@ import flatten from 'lodash/flatten'
 
 import { getBrandUsers } from 'utils/user-teams'
 
-import { Section, Title } from '../styled'
+import { Section } from '../styled'
+import Title from '../Title'
 import MemberRow from './MemberRow'
 
 const TeamTypes = ({
@@ -63,11 +64,6 @@ const TeamTypes = ({
               style={{ marginLeft: '1.5rem', marginBottom: '1rem' }}
             >
               <MemberRow
-                style={{
-                  fontWeight: 500,
-                  fontSize: '1.25rem',
-                  marginBottom: '0.25em'
-                }}
                 selected={isTeamSelected}
                 title={brand.name}
                 onChange={() => {
@@ -77,6 +73,8 @@ const TeamTypes = ({
                     onRemoveTeam(Object.keys(teamMembers))
                   }
                 }}
+                typographyVariant="subtitle1"
+                style={{ marginBottom: '0.25em' }}
               />
               {brand.member_count > 0 && (
                 <div

@@ -5,11 +5,12 @@ import { addNotification as notify } from 'reapop'
 
 import Flex from 'styled-flex-component'
 
+import { Button } from '@material-ui/core'
+
 import UserAvatar from 'components/Avatar'
 import { createRoles, deleteRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
-import ActionButton from 'components/Button/ActionButton'
 import DeleteRole from 'components/DealRole/components/DeleteRole'
 
 import { selectDealRoles } from 'reducers/deals/roles'
@@ -166,7 +167,7 @@ class Roles extends React.Component {
                 <Flex alignCenter>
                   <RoleAvatar>
                     <UserAvatar
-                      size={40}
+                      size={32}
                       color="#000"
                       title={getAvatarTitle(role)}
                       image={role.user ? role.user.profile_image_url : null}
@@ -177,9 +178,9 @@ class Roles extends React.Component {
                     <RoleTitle>{getLegalFullName(role)}</RoleTitle>
                     <RoleType>
                       {roleName(role.role)}
-                      {this.props.showEmail && role.user
-                        ? ` . ${role.user.email}`
-                        : null}
+                      {this.props.showEmail &&
+                        role.user &&
+                        ` . ${role.user.email}`}
                     </RoleType>
                   </RoleInfo>
                 </Flex>
@@ -193,14 +194,14 @@ class Roles extends React.Component {
                         style={{ padding: 0, marginLeft: '0.5rem' }}
                       />
                     ) : (
-                      <ActionButton
-                        appearance="outline"
+                      <Button
+                        color="secondary"
+                        variant="outlined"
                         size="small"
-                        style={{ marginLeft: '0.5rem' }}
                         onClick={() => this.toggleReplaceAgentDrawer(role)}
                       >
                         Replace
-                      </ActionButton>
+                      </Button>
                     )}
                   </RoleActions>
                 )}

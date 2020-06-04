@@ -1,16 +1,11 @@
-import styled, { css } from 'styled-components'
-
-import { grey, primary } from 'views/utils/colors'
+import styled, { css, ThemedStyledProps } from 'styled-components'
+import { Theme } from '@material-ui/core'
 
 interface Props {
   isActive?: boolean
   isSelected?: boolean
   isDisabled?: boolean
   item?: { icon?: string; iconColor?: string }
-  /**
-   * if set to true, hover and active state are going to be light instead of primary
-   */
-  noContrast?: boolean
 }
 
 export const Item = styled.div<Props>`
@@ -20,36 +15,31 @@ export const Item = styled.div<Props>`
   padding: 0.5em 1em;
   cursor: pointer;
   white-space: nowrap;
-  color: ${props => (props.isActive ? '#fff' : '#000')};
-  background-color: ${props => (props.isActive ? primary : '#fff')};
-  font-weight: ${props => (props.isSelected && !props.isDisabled ? 700 : 400)};
+  background-color: ${({
+    isSelected,
+    theme
+  }: ThemedStyledProps<Props, Theme>) =>
+    isSelected ? theme.palette.action.selected : 'transparent'};
 
-  ${({ noContrast }) =>
-    noContrast
-      ? css`
-          &:hover,
-          &:focus {
-            background-color: ${grey.A150};
-          }
-        `
-      : css`
-          &:hover,
-          &:focus {
-            color: #fff;
-            background-color: ${primary};
+  &:hover {
+    background-color: ${({
+      isActive,
+      isSelected,
+      theme
+    }: ThemedStyledProps<Props, Theme>) =>
+      isActive
+        ? isSelected
+          ? theme.palette.action.selected
+          : theme.palette.action.hover
+        : 'inherit'};
+  }
 
-            > svg {
-              fill: #fff;
-            }
-          }
-        `}
-
-  ${props =>
-    props.item && props.item.icon && props.item.iconColor
+  ${({ item }) =>
+    item && item.icon && item.iconColor
       ? css`
           > svg {
             margin-right: 0.5em;
-            fill: ${props.item.iconColor};
+            fill: ${item.iconColor};
           }
         `
       : ''};

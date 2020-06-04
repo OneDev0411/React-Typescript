@@ -21,5 +21,5 @@ interface Props {
 export function Tag(props: Props) {
   const classes = useStyles()
 
-  return <Chip label={props.text} className={classes.chip} />
+  return <Chip label={props.text} className={classes.chip} variant="outlined" />
 }

@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Button from 'components/Button/ActionButton'
-
-import IntercomTrigger from '../../IntercomTrigger'
+import IntercomTrigger from 'components/IntercomTrigger'
 
 class WentWrong extends React.Component {
   static propTypes = {
@@ -19,17 +18,16 @@ class WentWrong extends React.Component {
 
     return (
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        {
-          "You have encountered an unknown system issue. We're working on it. In the meantime, connect with our"
-        }
+        You have encountered an unknown system issue. We're working on it. In
+        the meantime, connect with our
         <IntercomTrigger
           key="MLS_SEARCH_MODAL__INERCOM_TRIGGER"
-          render={({ activeIntercom, intercomIsActive }) => (
+          render={({ activeIntercom, isIntercomActive }) => (
             <Button
               size="large"
               appearance="link"
               onClick={
-                intercomIsActive
+                isIntercomActive
                   ? () => false
                   : () => {
                       onClickSupport()
@@ -48,7 +46,7 @@ class WentWrong extends React.Component {
             </Button>
           )}
         />
-        {'.'}
+        .
       </div>
     )
   }

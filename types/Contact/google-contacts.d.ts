@@ -1,3 +1,5 @@
+declare type IOAuthAccountTypes = 'google_credential' | 'microsoft_credential'
+
 declare interface IOAuthAccountImport {
   redirect: string
   url: string
@@ -20,13 +22,14 @@ declare interface IOAuthAccountBase {
   last_sync_duration: number
   messages_total: null | number
   ord: string
-  photo: string
+  photo: string | null
+  profile_image_url: string | null
   resource_name: string
   revoked: boolean
   histories?: IGoogleSyncHistory[]
   sync_status: 'success' | 'pending' | null
   scope: string[]
-  scope_summary: OAuthAccountScope[] | null
+  scope_summary: OAuthAccountScope[]
   threads_total: null | number
   type: string
   updated_at: string
@@ -80,4 +83,5 @@ declare type OAuthAccountScope =
   | 'contacts.read'
   | 'mail.read'
   | 'mail.send'
+  | 'mail.modify'
   | 'calendar'

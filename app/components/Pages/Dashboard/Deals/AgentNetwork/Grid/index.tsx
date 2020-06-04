@@ -1,215 +1,288 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import Loading from 'components/Spinner'
-import Table from 'components/Grid/Table'
-import Button from 'components/Button/ActionButton'
-import SendDealPromotionCard from 'components/InstantMarketing/adapters/SendDealPromotion'
+import {
+  Button,
+  Avatar,
+  Tooltip,
+  Theme,
+  Checkbox,
+  makeStyles,
+  useTheme
+} from '@material-ui/core'
 
-import { Name } from './columns/Name'
-import { Company } from './columns/Company'
-import { ContactInfo } from './columns/ContactInfo'
+import Flex from 'styled-flex-component'
+
+import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
+import { putUserSetting } from 'models/user/put-user-setting'
+
+import { Table } from 'components/Grid/Table'
+import { RenderProps } from 'components/Grid/Table/types'
+import LoadingContainer from 'components/LoadingContainer'
+import IconEmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
+import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
+import { SELECTION__TOGGLE_ALL } from 'components/Grid/Table/context/constants'
+import { getNameInitials } from 'utils/helpers'
+
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
+import { SortableColumns } from './helpers/sortable-columns'
+import { TableActions } from './Actions'
+import { Caption } from './columns/Caption'
 
 import { IDealAgent } from '../types'
 
-const buttonStyle = {
-  padding: '0.25rem 0 1rem',
-  height: 'auto',
-  lineHeight: 1,
-  width: '100%'
-}
-
-interface State {
-  selectedAgent: null | any
-}
 interface Props {
+  user: IUser
   data: IDealAgent[]
   deal: IDeal
   isFetching: boolean
 }
 
-export class Grid extends React.Component<Props, State> {
-  state: State = {
-    selectedAgent: null
-  }
+export const SORT_FIELD_SETTING_KEY = 'grid_deals_agent_network_sort_field'
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    infoContainer: {
+      display: 'inline-block'
+    },
+    toggleAll: {
+      padding: 0,
+      marginRight: theme.spacing(1)
+    },
+    totalRow: {
+      display: 'inline-flex',
+      marginRight: theme.spacing(2),
+      fontSize: theme.typography.overline.fontSize,
+      color: theme.palette.grey['500']
+    }
+  }),
+  { name: 'AgentsGrid' }
+)
 
-  onCloseDrawer = () => this.setState({ selectedAgent: null })
+export function Grid(props: Props) {
+  const [state, dispatch] = useGridContext()
+  const classes = useStyles()
+  const theme: Theme = useTheme()
+  const [selectedAgent, setSelectedAgent] = useState<null | any>(null)
+  const {
+    isAllRowsSelected,
+    isEntireRowsSelected,
+    selectedRowIds,
+    excludedRows
+  } = state.selection
 
-  onSelectAgent = (agent, listType) =>
-    this.setState({
-      selectedAgent: {
-        title: `${agent.name} ${
-          listType === 'asListing' ? 'listings' : 'Buyers'
-        } (${agent[listType].length})`,
-        list: agent[listType].map(id => agent.listings[id])
-      }
+  const isAllSelected =
+    isAllRowsSelected ||
+    selectedRowIds.length === (props.data || []).length ||
+    (isEntireRowsSelected && excludedRows.length === 0)
+
+  const isSomeRowsSelected =
+    (isAllRowsSelected === false &&
+      selectedRowIds.length > 0 &&
+      selectedRowIds.length < (props.data || []).length) ||
+    (isEntireRowsSelected && excludedRows.length > 0)
+
+  const tooltipTitle =
+    isAllSelected || isEntireRowsSelected
+      ? 'Deselect All Rows'
+      : 'Select All Rows'
+
+  const onCloseDrawer = () => setSelectedAgent(null)
+
+  const onSelectAgent = (agent, listType) =>
+    setSelectedAgent({
+      title: `${agent.name} ${
+        listType === 'asListing' ? 'listings' : 'Buyers'
+      } (${agent[listType].length})`,
+      list: agent[listType].map(id => agent.listings[id])
     })
 
-  getRecipients = (
-    selectedRows: UUID[]
-  ): IDenormalizedEmailRecipientDealAgentInput[] => {
-    const { data } = this.props
-
-    if (
-      Array.isArray(data) === false ||
-      Array.isArray(selectedRows) === false ||
-      data.length === 0 ||
-      selectedRows.length === 0
-    ) {
-      return []
-    }
-
-    // Sometimes an agent can have a null id and email
-    // in this cases we need to make sure filtering them out
-    return data
-      .filter(
-        item =>
-          item.agentId &&
-          item.agent &&
-          item.agent.email &&
-          selectedRows.includes(item.id) &&
-          item.email
-      )
-      .map(item => ({
-        recipient_type: 'Agent',
-        agent: item.agent
-      }))
-  }
-
-  columns = [
+  const columns = [
     {
       id: 'name',
       header: 'Name',
       width: '20%',
-      accessor: agent => agent.name,
-      render: ({ rowData: agent }) => <Name name={agent.name} />
+      accessor: (agent: IDealAgent) => agent.name,
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <>
+          <div>{agent.name}</div>
+          <Caption variant="body2">{agent.company}</Caption>
+        </>
+      )
     },
     {
-      id: 'company',
-      header: 'Company',
-      width: '17%',
-      accessor: agent => agent.company,
-      render: ({ rowData: agent }) => <Company name={agent.company} />
+      id: 'contact',
+      width: '10%',
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Tooltip
+          title={
+            <>
+              <div>{agent.email}</div>
+              <div>{agent.phone}</div>
+            </>
+          }
+        >
+          <Flex alignCenter justifyCenter>
+            <IconEmailOutline />
+          </Flex>
+        </Tooltip>
+      )
     },
     {
       id: 'listings',
-      header: '# of Listings',
-      accessor: agent => agent.asListing.length,
-      render: ({ rowData: agent }) =>
-        agent.asListing.length > 0 ? (
-          <Button
-            appearance="link"
-            style={buttonStyle}
-            onClick={() => this.onSelectAgent(agent, 'asListing')}
-          >
-            {agent.asListing.length}
-          </Button>
-        ) : (
-          '0'
-        )
+      accessor: (agent: IDealAgent) => agent.asListing.length,
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Flex alignCenter>
+          <Caption># of Listings:&nbsp;</Caption>
+          {agent.asListing.length > 0 ? (
+            <Button
+              size="small"
+              style={{
+                minWidth: 'unset'
+              }}
+              onClick={() => onSelectAgent(agent, 'asListing')}
+            >
+              {agent.asListing.length}
+            </Button>
+          ) : (
+            '0'
+          )}
+        </Flex>
+      )
     },
     {
       id: 'buyers',
-      header: '# of Buyers',
-      accessor: agent => agent.asBuyers.length,
-      render: ({ rowData: agent }) =>
-        agent.asBuyers.length > 0 ? (
-          <Button
-            appearance="link"
-            style={buttonStyle}
-            onClick={() => this.onSelectAgent(agent, 'asBuyers')}
-          >
-            {agent.asBuyers.length}
-          </Button>
-        ) : (
-          '0'
-        )
+      accessor: (agent: IDealAgent) => agent.asBuyers.length,
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Flex alignCenter>
+          <Caption># of Buyers:&nbsp;</Caption>
+          {agent.asBuyers.length > 0 ? (
+            <Button
+              size="small"
+              style={{
+                minWidth: 'unset'
+              }}
+              onClick={() => onSelectAgent(agent, 'asBuyers')}
+            >
+              {agent.asBuyers.length}
+            </Button>
+          ) : (
+            '0'
+          )}
+        </Flex>
+      )
     },
     {
       id: 'value_in',
-      header: 'Volume in $',
-      accessor: agent => agent.listingsTotalVolume,
-      render: ({ rowData: agent }) =>
-        agent.listingsTotalVolume > 0
-          ? `$${agent.listingsTotalVolume.toLocaleString()}`
-          : 0
+      accessor: (agent: IDealAgent) => agent.listingsTotalVolume,
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Flex>
+          <Caption>Volume in $:&nbsp;</Caption>
+          {agent.listingsTotalVolume > 0
+            ? `$${agent.listingsTotalVolume.toLocaleString()}`
+            : 0}
+        </Flex>
+      )
     },
     {
       id: 'avg_price',
-      header: 'Avg Price',
-      accessor: agent => agent.listingsAveragePrice,
-      render: ({ rowData: agent }) =>
-        agent.listingsAveragePrice > 0
-          ? `$${agent.listingsAveragePrice.toLocaleString()}`
-          : 0
-    },
-    {
-      id: 'email',
-      header: 'Contact Info',
-      width: '23%',
-      sortable: false,
-      accessor: agent => agent.email,
-      render: ({ rowData: agent }) => <ContactInfo agent={agent} />
-    }
-  ]
-
-  actions = [
-    {
-      display: props => props.selectedRows.length > 0,
-      render: props => (
-        /*
-        // @ts-ignore because SendDealPromotionCard is not yet migrated to ts */
-        <SendDealPromotionCard
-          deal={this.props.deal}
-          recipients={this.getRecipients(props.selectedRows)}
-          selectedRows={props.selectedRows}
-          mediums="Email"
-          types={[
-            'OpenHouse',
-            'JustSold',
-            'ComingSoon',
-            'JustListed',
-            'PriceImprovement'
-          ]}
-        >
-          Promote Listing
-        </SendDealPromotionCard>
+      accessor: (agent: IDealAgent) => agent.listingsAveragePrice,
+      render: ({ row: agent }: RenderProps<IDealAgent>) => (
+        <Flex>
+          <Caption>Avg Price:&nbsp;</Caption>
+          {agent.listingsAveragePrice > 0
+            ? `$${agent.listingsAveragePrice.toLocaleString()}`
+            : 0}
+        </Flex>
       )
     }
   ]
 
-  render() {
-    const { selectedAgent } = this.state
-
-    return (
-      <div style={{ padding: '0 1.5em' }}>
-        <Table
-          data={this.props.data}
-          columns={this.columns}
-          LoadingState={Loading}
-          isFetching={this.props.isFetching}
-          summary={{ entityName: 'Agents' }}
-          plugins={{
-            sortable: {},
-            selectable: {
-              persistent: true,
-              storageKey: 'agent_network'
-            },
-            actionable: {
-              actions: this.actions
-            }
-          }}
-        />
-
-        {selectedAgent && (
-          <ListingsListViewDrawer
-            isOpen
-            title={selectedAgent.title}
-            onClose={this.onCloseDrawer}
-            listings={selectedAgent.list}
-          />
-        )}
-      </div>
+  const getActiveSort = () => {
+    const sort = parseSortSetting(
+      props.user,
+      SORT_FIELD_SETTING_KEY,
+      '-listings'
     )
+
+    return SortableColumns.find(col => col.value === sort.id)
   }
+
+  const handleChangeSort = async column => {
+    putUserSetting(SORT_FIELD_SETTING_KEY, column.value)
+  }
+
+  const toggleAll = () =>
+    dispatch({
+      type: SELECTION__TOGGLE_ALL,
+      rows: props.data
+    })
+
+  const getSummeryInfo = () => {
+    const totalRows = (props.data || []).length
+    let selectedCount
+
+    if (isEntireRowsSelected) {
+      selectedCount = totalRows - excludedRows.length
+    } else if (selectedRowIds.length > 0) {
+      selectedCount = selectedRowIds.length
+    }
+
+    return selectedCount
+      ? `${selectedCount} of ${totalRows} selected`
+      : `${totalRows} Agents`
+  }
+
+  return (
+    <>
+      {!props.isFetching && (props.data || []).length > 0 && (
+        <div className={classes.infoContainer}>
+          <Tooltip title={tooltipTitle}>
+            <Checkbox
+              disableRipple
+              className={classes.toggleAll}
+              checked={isAllSelected}
+              indeterminate={isSomeRowsSelected}
+              onChange={toggleAll}
+            />
+          </Tooltip>
+          <span className={classes.totalRow}>{getSummeryInfo()}</span>
+        </div>
+      )}
+
+      <Table<IDealAgent>
+        rows={props.data}
+        columns={columns}
+        totalRows={(props.data || []).length}
+        LoadingStateComponent={() => (
+          <LoadingContainer style={{ padding: 0 }} />
+        )}
+        loading={props.isFetching ? 'top' : null}
+        sorting={{
+          defaultSort: getActiveSort(),
+          columns: SortableColumns,
+          onChange: handleChangeSort
+        }}
+        selection={{
+          columnProps: {
+            width: `${theme.spacing(7.5)}px`
+          },
+          defaultRender: ({ row }: RenderProps<IDealAgent>) => {
+            return (
+              <Avatar alt={row.name}>{getNameInitials(row.name, 1)}</Avatar>
+            )
+          },
+          showSelectAll: false
+        }}
+        TableActions={<TableActions rows={props.data} deal={props.deal} />}
+      />
+
+      {selectedAgent && (
+        <ListingsListViewDrawer
+          isOpen
+          title={selectedAgent.title}
+          onClose={onCloseDrawer}
+          listings={selectedAgent.list}
+        />
+      )}
+    </>
+  )
 }

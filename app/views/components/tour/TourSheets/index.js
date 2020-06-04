@@ -13,7 +13,7 @@ TourSheets.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   listings: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  tour: PropTypes.shape().isRequired
+  tour: PropTypes.oneOfType([null, PropTypes.shape()]).isRequired
 }
 
 export function TourSheets(props) {

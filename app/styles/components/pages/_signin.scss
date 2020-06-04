@@ -4,51 +4,27 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f0f4f7;
-  }
-}
-
-.signin-page-wrapper.c-auth--register {
-  @media screen and (min-width: 35em) {
-    background-color: #fff;
-  }
-
-  @media screen and (min-width: 50em) {
-    width: 700px;
-    position: relative;
-    margin: 0 auto;
+    background-color: #e5e5e5;
   }
 }
 
 .c-auth {
-  padding: 2rem;
+  padding: 5.1rem 3.2rem 5.7rem;
   margin: 0 auto;
   line-height: 1;
 
-  @media screen and (min-width: 35em) { // 560px
+  @media screen and (min-width: 35em) {
+    // 560px
     width: 500px;
     margin: 0;
     border-radius: 3px;
     background-color: #fff;
-    box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1);
-  }
-
-  .c-auth--register > & {
-    @media screen and (min-width: 35em) { // 560px
-      border-radius: 0;
-      box-shadow: none;
-    }
-
-    @media screen and (min-width: 50em) { // 800px
-      width: 60%;
-      left: right;
-      padding: 0;
-    }
+    box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.05);
   }
 }
 
 .c-auth__header {
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   font-size: 1.2rem;
   text-align: center;
 
@@ -58,29 +34,23 @@
 }
 
 .c-auth__logo {
-  width: 64px;
-  border-radius: 3px;
-  margin-bottom: 2rem;
-
-  .c-auth--register & {
-    @media screen and (min-width: 50em) {
-      // 800px
-      position: absolute;
-      top: 2rem;
-      left: 2rem;
-      margin-bottom: 0;
-    }
-  }
+  width: 160px;
+  margin-bottom: 1rem;
 }
 
 .c-auth__title {
   margin: 0 0 0.5em;
-  font-weight: bold;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 30px;
   letter-spacing: 1px;
 }
 
 .c-auth__subtitle {
   text-align: center;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.15px;
 }
 
 .c-auth__field {
@@ -178,11 +148,11 @@
     top: -18px;
     left: 0;
     font-size: 1.4rem;
-    color: darken(#A9BBCB, 10%);
+    color: darken(#a9bbcb, 10%);
     transition: 0.3s;
 
     > sup {
-      color: #F43B38;
+      color: #f43b38;
     }
   }
 }
@@ -219,8 +189,9 @@
 .c-auth__submit-error-alert,
 .c-auth__submit-alert--success {
   @extend .c-alert;
-  line-height: 1.5;
-  margin-bottom: 1em;
+  line-height: 24px;
+  letter-spacing: 0.15px;
+  margin-bottom: 2em;
 }
 
 .c-auth__field__error-alert,
@@ -234,21 +205,6 @@
 
 .c-auth__submit-alert--warning {
   @extend .c-alert--warning;
-}
-
-.c-auth--register__houseIcon {
-  display: none;
-
-  @media screen and (min-width: 50em) {
-    width: 40%;
-    display: block;
-    float: left;
-    margin-right: 4rem;
-  }
-
-  > img {
-    max-width: 100%;
-  }
 }
 
 .c-auth__field--radio {
@@ -279,7 +235,7 @@
   text-align: center;
   font-weight: normal;
   color: #aaa;
-  border: 1px solid #A9BBCB;
+  border: 1px solid #a9bbcb;
   display: flex;
   align-items: center;
   transition: 0.3s;

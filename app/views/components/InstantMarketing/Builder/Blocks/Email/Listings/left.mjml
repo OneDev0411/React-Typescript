@@ -1,34 +1,39 @@
 {% for listing in listings %}
-<mj-section rechat-editable="tree" background-color="#fff" padding-top="0" padding-bottom="5px">
+<mj-section padding="20px 20px" rechat-editable="tree" background-color="#fff">
   <mj-column>
-    <mj-image padding="24px 16px 0px" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
+    <mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
   </mj-column>
-  <mj-column>
-    <mj-text padding="24px 16px 16px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-weight="Bold" font-size="28px" line-height="1.15" color="#000" align="left">
-      Must See
-    </mj-text>
-    <mj-text padding="0 16px 4px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="20px" line-height="1.2" color="#000" align="left">
+  <mj-column padding-left="10px">
+    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="20px" line-height="1.5" align="left">
       {{listing.property.address.street_address}}
     </mj-text>
-    <mj-text padding="0 16px 16px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="16px" line-height="1" color="#666" font-weight="500" align="left">
-      {{ listing.price | currency }}{% if listing.is_lease %}/mo{% endif %}
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px" line-height="1.5" align="left">
+      <strong>{{ listing.price | currency }}</strong>{% if listing.is_lease %}/mo{% endif %}
     </mj-text>
-    <mj-text padding="0 16px 24px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="16px" line-height="1" color="#1A1A1A" align="left">
-      {% if listing.property.bedroom_count %}
-      <span>{{listing.property.bedroom_count}} Beds,</span>
-      {% endif %}
-      {% if listing.property.bathroom_count %}
-      <span>{{listing.property.bathroom_count}} Baths,</span>
-      {% endif %}
-      {% if listing.property.square_meters %}
-      <span>{{listing.property.square_meters | area}} Sqft,</span>
-      {% endif %}
-      {% if listing.property.year_built %}
-      <span>Built in {{listing.property.year_built}}</span>
-      {% endif %}
+    <mj-spacer height="5px"></mj-spacer>
+    {% if listing.property.bedroom_count %}
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+      <span><strong>{{listing.property.bedroom_count}}</strong> Beds</span>
     </mj-text>
-    <mj-button inner-padding="4px 16px" padding="0 16px" border-radius="4px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="16px" font-weight="500" line-height="1.5" height="32px" color="#0945EB" border="1px solid #0945EB" background-color="#fff" align="left" href="{{getListingUrl(listing)}}">
-      View Property
+    {% endif %}
+    {% if listing.property.bathroom_count %}
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+      <span><strong>{{listing.property.bathroom_count}}</strong> Baths</span>
+    </mj-text>
+    {% endif %}
+    {% if listing.property.square_meters %}
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+      <span><strong>{{listing.property.square_meters | area}}</strong> Sqft</span>
+    </mj-text>
+    {% endif %}
+    {% if listing.property.year_built %}
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+      <span>Built in <strong>{{listing.property.year_built}}</strong></span>
+    </mj-text>
+    {% endif %}
+    <mj-spacer height="5px"></mj-spacer>
+    <mj-button rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px" font-family="Helvetica, Arial, sans-serif" font-size="14px" line-height="1.5" align="left" href="{{getListingUrl(listing)}}">
+      View Listing
     </mj-button>
   </mj-column>
 </mj-section>

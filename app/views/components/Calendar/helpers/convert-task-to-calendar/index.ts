@@ -1,14 +1,20 @@
 export function convertTaskToCalendarEvent(event: IEvent): ICalendarEvent {
   const people = getPeople(event.associations)
+  const basicMetadata = { is_partner: false, status: '', send_updates: false }
+
+  const metadata = event.metadata
+    ? { ...basicMetadata, ...event.metadata }
+    : basicMetadata
 
   return {
     ...event,
+    crm_task: event.id,
     campaign: null,
     contact: null,
     created_by: '',
     date: '',
     deal: null,
-    metadata: { is_partner: false, status: '' },
+    metadata,
     next_occurence: '',
     recurring: false,
     status: '',

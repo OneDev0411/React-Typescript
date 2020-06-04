@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { grey, borderColor, primary } from '../../../../../../utils/colors'
-import { merriweatherFamilyStyle } from '../../../../../Typography/styles'
+import { LatoFamilyStyle } from '../../../../../Typography/styles'
 import IconClose from '../../../../../SvgIcons/Close/CloseIcon'
 
 export const CloseIcon = styled(IconClose)`
@@ -35,7 +35,7 @@ export const Listing = styled.div`
 `
 
 export const Title = styled.div`
-  ${merriweatherFamilyStyle};
+  ${LatoFamilyStyle};
   font-size: 0.875rem;
 
   &:hover {

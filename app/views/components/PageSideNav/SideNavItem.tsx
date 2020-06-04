@@ -3,7 +3,7 @@ import cn from 'classnames'
 import { Link } from 'react-router'
 import { Typography, MenuItem, Box } from '@material-ui/core'
 
-import TrashIcon from 'components/SvgIcons/TrashIcon'
+import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 
 import { isOnThisUrl } from './helpers'
 import SideNavBadge from './SideNavBadge'
@@ -31,8 +31,9 @@ function SideNavItem(props: SideNavItemProps) {
   return (
     <SideNavTooltip text={tooltip}>
       {/*
-        // @ts-ignore component is not accepted for some reason */}
+      // @ts-ignore component is not accepted for some reason */}
       <MenuItem
+        // @ts-ignore
         to={link}
         component={Link}
         activeClassName="is-selected"
@@ -48,9 +49,7 @@ function SideNavItem(props: SideNavItemProps) {
               <Icon style={{ width: '1em', height: '1em' }} />
             </Box>
           )}
-          <Typography variant="body2" component="span">
-            {title}
-          </Typography>
+          <Typography variant="body2">{title}</Typography>
           {onDelete && (
             <div
               className="section-item__delete"
@@ -60,7 +59,7 @@ function SideNavItem(props: SideNavItemProps) {
                 onDelete()
               }}
             >
-              <TrashIcon color="" size={16} />
+              <TrashIcon size="small" />
             </div>
           )}
         </Box>

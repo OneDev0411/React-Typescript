@@ -11,7 +11,7 @@ export interface AvatarProps {
   isOnline?: boolean
   size?: number
   title?: string
-  image?: string
+  image?: string | null
   borderRadius?: number
   placeHolderImage?: string
   initials?: string
@@ -47,6 +47,7 @@ const Avatar: React.FunctionComponent<AvatarProps> = ({
       borderRadius={borderRadius}
       backgroundColor={backgroundColor}
       style={style}
+      title={title}
     >
       {imageSrc ? (
         <Image alt="rechat avatar" src={imageSrc} />

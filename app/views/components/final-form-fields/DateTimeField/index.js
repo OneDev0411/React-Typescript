@@ -7,23 +7,31 @@ import { DateTimePicker } from '../../DateTimePicker'
 DateTimeField.propTypes = {
   name: PropTypes.string.isRequired,
   selectedDate: PropTypes.instanceOf(Date),
-  datePickerModifiers: PropTypes.shape()
+  datePickerModifiers: PropTypes.shape(),
+  showTimePicker: PropTypes.bool
 }
 
 DateTimeField.defaultProps = {
   selectedDate: new Date(),
-  datePickerModifiers: {}
+  datePickerModifiers: {},
+  showTimePicker: true
 }
 
-export function DateTimeField(props) {
+export function DateTimeField({
+  name,
+  selectedDate,
+  datePickerModifiers,
+  showTimePicker
+}) {
   return (
     <Field
-      name={props.name}
+      name={name}
       render={fieldProps => (
         <DateTimePicker
           onChange={fieldProps.input.onChange}
-          selectedDate={props.selectedDate}
-          datePickerModifiers={props.datePickerModifiers}
+          selectedDate={selectedDate}
+          showTimePicker={showTimePicker}
+          datePickerModifiers={datePickerModifiers}
         />
       )}
     />

@@ -7,6 +7,7 @@ const routes = {
   message: ['messages'],
   contact: ['export-outlook'],
   pdf: ['get-size'],
+  user: ['refresh-token'],
   deal: [
     'docusign-login',
     'envelope-sign',
@@ -15,7 +16,8 @@ const routes = {
     'export-custom-report'
   ],
   'my-marketing-matters': ['punchout'],
-  utils: ['get-url-metadata']
+  liveby: ['neighborhoods', 'report'],
+  utils: ['get-url-metadata', 'render-mjml']
 }
 
 _.each(routes, (group, name) => {

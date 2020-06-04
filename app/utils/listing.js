@@ -158,35 +158,6 @@ export const getListingAddress = listing => {
 export const getDOM = dom => Math.floor(dom)
 // return Math.floor((((new Date()).getTime() / 1000) - dom_seconds) / 86400)
 
-export const shortPrice = price => {
-  // The round function works with precision. We want three number regardless af point place. The below algorithm change number to have two number after point, then round it. After it change it back.
-  const decimalLength = Math.pow(10, price.toString().split('.')[0].length - 1)
-  let price_small = round(price / decimalLength, 2)
-
-  const letter = price_small * decimalLength >= 1000000 ? 'm' : 'k'
-  const factor = price_small * decimalLength >= 1000000 ? 1000000 : 1000
-
-  price_small *= decimalLength / factor
-
-  // if decimalLength / factor is more than one, the price_small would have not rounded anymore.
-  // 8.62*100/10 =86.19999999999999
-  // the blow condition fix it.
-  if (decimalLength / factor > 1) {
-    price_small = round(price_small, 0)
-  }
-
-  // Below conditions force price to have 3 three numbers. This done by adding zero after the point
-  if (Number.isInteger(price_small) && price_small.toString().length < 3) {
-    price_small += '.'
-  }
-
-  if (!Number.isInteger(price_small) && price_small.toString().length < 4) {
-    price_small += '0'.repeat(4 - price_small.toString().length)
-  }
-
-  return price_small + letter
-}
-
 export const getResizeUrl = full_size_url => full_size_url || ''
 // if (!full_size_url) { return '' }
 // let image_replace = full_size_url.replace('http://cdn.rechat.co/', '')
@@ -225,7 +196,6 @@ export default {
   localAddress,
   addressTitle,
   getDOM,
-  shortPrice,
   getResizeUrl,
   squareMetersToAcres,
   isLeaseProperty

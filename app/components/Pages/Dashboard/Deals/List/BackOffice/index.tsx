@@ -1,32 +1,29 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { WithRouterProps } from 'react-router'
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
+import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { IAppState } from 'reducers/index'
 
-import PageSideNav from 'components/PageSideNav'
-import { Content } from 'components/SlideMenu'
-import Search from 'components/Grid/Search'
-import { searchDeals, getDeals } from 'actions/deals'
+import PageLayout from 'components/GlobalPageLayout'
 
-import { PageContainer, GridContainer } from '../styles/page-container/styled'
+import { searchDeals, getDeals } from 'actions/deals'
+import { useBrandStatuses } from 'hooks/use-brand-statuses'
+import { getActiveTeamId } from 'utils/user-teams'
+
+import TabFilters from './Filters'
+
+import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
+
+import { ExportDeals } from '../components/ExportDeals'
+import { DebouncedSearchInput } from '../components/SearchInput'
 
 import { SearchQuery } from './types'
 
-import { getPageTitle } from './utils/get-page-title'
 import { getStaticFilterQuery } from './utils/get-static-filter-query'
 
-import PageHeader from '../components/PageHeader'
 import Grid from './Grid'
-import BackofficeFilters from './Filters'
-
-let persistentSearchInput = ''
-
-interface RouterProps {
-  params?: any
-  location?: any
-}
 
 interface StateProps {
   user: IUser
@@ -35,88 +32,82 @@ interface StateProps {
   searchDeals(user: IUser, value: object | string): void
 }
 
-function BackofficeTable(props: RouterProps & StateProps) {
-  const [isSideMenuOpen, setIsSideMenuOpen] = useState<boolean>(true)
-  const [searchCriteria, setSearchCriteria] = useState<string>(
-    persistentSearchInput
-  )
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      margin: theme.spacing(5)
+    },
+    headerContainer: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'flex-end'
+    },
+    filtersContainer: {
+      margin: theme.spacing(5, 0)
+    }
+  })
+)
 
+export default function BackofficeTable(props: WithRouterProps & StateProps) {
+  const classes = useStyles()
+
+  const dispatch = useDispatch()
+  const { user, deals } = useSelector(({ user, deals }: IAppState) => ({
+    user,
+    deals: deals.list
+  }))
+
+  const statuses = useBrandStatuses(getActiveTeamId(user)!)
+
+  const [searchCriteria, setSearchCriteria] = useState('')
   const searchQuery: SearchQuery = {
     filter: props.params.filter,
     type: props.location.query.type || 'inbox',
     term: searchCriteria
   }
 
-  const toggleSideMenu = () => setIsSideMenuOpen(!isSideMenuOpen)
-
-  const handleSearch = (value: string): void => {
+  const handleQueryChange = (value): void => {
     setSearchCriteria(value)
 
-    // set persistent search input
-    persistentSearchInput = value
-
     if (value.length === 0) {
-      return props.getDeals(props.user)
+      dispatch(getDeals(user))
     }
 
-    props.searchDeals(props.user, value)
+    if (value.length > 3 && searchQuery.type === 'inbox') {
+      dispatch(searchDeals(user, value))
+    }
   }
 
   useDeepCompareEffect(() => {
-    if (searchQuery.type === 'query') {
-      props.searchDeals(props.user, getStaticFilterQuery(searchQuery))
+    if (searchQuery.type === 'query' && statuses.length > 0) {
+      dispatch(searchDeals(user, getStaticFilterQuery(searchQuery, statuses)))
     }
-  }, [searchQuery])
+  }, [dispatch, searchQuery, statuses, user])
 
   return (
-    <PageContainer isOpen={isSideMenuOpen}>
-      <PageSideNav isOpen={isSideMenuOpen}>
-        <BackofficeFilters
-          searchQuery={searchQuery}
-          isFetchingDeals={props.isFetchingDeals}
-          onBackToInboxes={() => handleSearch('')}
-        />
-      </PageSideNav>
-
-      <Content isSideMenuOpen={isSideMenuOpen}>
-        <PageHeader
-          title={getPageTitle(searchQuery)}
-          isSideMenuOpen={isSideMenuOpen}
-          onMenuTriggerChange={toggleSideMenu}
-        />
-
-        <GridContainer>
-          {/*
-          // @ts-ignore TODO: js component */}
-          <Search
-            disableOnSearch
-            showLoadingOnSearch
-            defaultValue={persistentSearchInput}
-            isSearching={props.isFetchingDeals}
-            placeholder="Search deals by address, MLS # or agent name…"
-            onChange={handleSearch}
-            onClearSearch={handleSearch}
-            debounceTime={600}
-            minimumLength={4}
+    <PageLayout>
+      <PageLayout.Header title="Deals Admin">
+        <div className={classes.headerContainer}>
+          <DebouncedSearchInput
+            placeholder="Search deals by address, MLS# or agent name..."
+            onChange={handleQueryChange}
           />
 
-          {/*
-          // @ts-ignore TODO: js component */}
-          <Grid searchQuery={searchQuery} />
-        </GridContainer>
-      </Content>
-    </PageContainer>
+          <ExportDeals />
+        </div>
+      </PageLayout.Header>
+      <PageLayout.Main>
+        <div className={classes.filtersContainer}>
+          <TabFilters
+            deals={deals}
+            activeFilter={props.params.filter}
+            searchQuery={searchQuery}
+            sortableColumns={SORTABLE_COLUMNS}
+          />
+        </div>
+
+        <Grid searchQuery={searchQuery} statuses={statuses} />
+      </PageLayout.Main>
+    </PageLayout>
   )
 }
-
-function mapStateToProps({ user, deals }: IAppState) {
-  return {
-    user,
-    isFetchingDeals: deals.properties.isFetchingDeals
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  { searchDeals, getDeals }
-)(BackofficeTable)

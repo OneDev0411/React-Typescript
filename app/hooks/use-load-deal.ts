@@ -1,11 +1,13 @@
 import { useState, useMemo } from 'react'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { useSelector } from 'react-redux'
+
 import { getDeal, getContextsByDeal, getForms } from 'actions/deals'
 import { selectContextsByDeal } from 'reducers/deals/contexts'
 import { IAppState } from 'reducers'
 
-import store from '../stores'
+import { useReduxDispatch } from './use-redux-dispatch'
 
 /**
  * returns full dump of deal inclduing its forms and contexts
@@ -13,14 +15,15 @@ import store from '../stores'
  * @param deal - the minimal version of the deal
  */
 export function useLoadFullDeal(id: string, deal: IDeal) {
-  const { contexts, forms } = useMemo(() => {
-    const deals = (store.getState() as IAppState).deals
+  const deals = useSelector((state: IAppState) => state.deals)
+  const dispatch = useReduxDispatch()
 
+  const { contexts, forms } = useMemo(() => {
     return {
       contexts: selectContextsByDeal(deals.contexts, id),
       forms: deals.forms
     }
-  }, [id])
+  }, [deals.contexts, deals.forms, id])
 
   const [dealWithChecklists, setDeal] = useState<IDeal>(deal)
   const [isFetchingCompleted, setIsFetchingCompleted] = useState<boolean>(false)
@@ -49,7 +52,7 @@ export function useLoadFullDeal(id: string, deal: IDeal) {
       setIsFetchingDeal(true)
 
       // fetch deal by id
-      const result: IDeal = await store.dispatch(getDeal(id))
+      const result: IDeal = await dispatch(getDeal(id))
 
       setIsFetchingDeal(false)
 
@@ -67,7 +70,7 @@ export function useLoadFullDeal(id: string, deal: IDeal) {
       setIsFetchingContexts(true)
 
       try {
-        await store.dispatch(getContextsByDeal(deal.id))
+        await dispatch(getContextsByDeal(deal.id))
       } catch (e) {
         console.log(e)
       }
@@ -86,7 +89,7 @@ export function useLoadFullDeal(id: string, deal: IDeal) {
       setIsFetchingForms(true)
 
       try {
-        await store.dispatch(getForms(deal.id))
+        await dispatch(getForms(deal.id))
       } catch (e) {
         console.log(e)
       }

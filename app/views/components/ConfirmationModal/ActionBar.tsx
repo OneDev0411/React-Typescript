@@ -22,7 +22,6 @@ function ActionBar({
       {confirmation.needsCancel && (
         <Button
           variant="outlined"
-          color="secondary"
           onClick={onCancel}
           data-test="confirmation-modal-cancel-button"
         >

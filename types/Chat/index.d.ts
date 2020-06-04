@@ -25,3 +25,14 @@ declare interface IChatMessageDelivery extends IModel<'notification_delivery'> {
   user: UUID
   delivery_type: string // 'sms' | 'email' | '?' ...
 }
+
+declare interface IChatRoom extends IModel<'room'> {
+  title: string | null
+  room_type: 'Group' | 'Direct' | 'Task'
+  new_notifications: number | null
+  latest_activity: IChatActivity | null
+  proposed_title: string
+  owner: IUser
+  user: IUser[]
+  latest_message: IChatMessage
+}

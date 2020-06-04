@@ -1,19 +1,14 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import cn from 'classnames'
 
 import { Button } from '@material-ui/core'
-
-import IconNote from 'components/SvgIcons/Note/IconNote'
 
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
 import { IAppState } from 'reducers'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
-import { EditNoteDrawer } from 'components/EditNoteDrawer'
-
-import { useIconStyles } from '../../../../../../../styles/use-icon-styles'
+import AddOrEditNoteDrawer from 'components/AddOrEditNoteDrawer/AddOrEditNoteDrawer'
 
 interface StateProps {
   attributeDefs: any
@@ -29,7 +24,6 @@ function AddNote({
   attributeDefs,
   onCreateNote
 }: Props & StateProps) {
-  const iconClasses = useIconStyles()
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
 
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen)
@@ -52,15 +46,16 @@ function AddNote({
 
   return (
     <>
-      <Button color="primary" variant="contained" onClick={toggleDrawer}>
-        <IconNote
-          fillColor="#fff"
-          className={cn(iconClasses.small, iconClasses.rightMargin)}
-        />
+      <Button
+        color="primary"
+        variant="outlined"
+        size="small"
+        onClick={toggleDrawer}
+      >
         Add Note
       </Button>
 
-      <EditNoteDrawer
+      <AddOrEditNoteDrawer
         isOpen={isDrawerOpen}
         onClose={toggleDrawer}
         onSubmit={handleCreateNote}

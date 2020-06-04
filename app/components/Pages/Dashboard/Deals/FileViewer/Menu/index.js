@@ -2,11 +2,11 @@ import React from 'react'
 
 import Flex from 'styled-flex-component'
 
+import { Button, IconButton } from '@material-ui/core'
+
 import { getDealTitle } from 'deals/utils/get-deal-title'
 import { getDealAddress } from 'deals/utils/get-deal-address'
 
-import ActionButton from 'components/Button/ActionButton'
-import IconButton from 'components/Button/IconButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
@@ -49,44 +49,43 @@ export class Menu extends React.Component {
 
           <Flex alignCenter>
             <div>
-              <ActionButton
-                appearance="outline"
+              <Button
+                color="secondary"
+                variant="outlined"
                 size="small"
                 onClick={props.onToggleFactsheet}
               >
                 {props.isFactsheetOpen ? 'Hide' : 'Show'} Factsheet
-              </ActionButton>
+              </Button>
 
               {props.task && (
-                <ActionButton
-                  appearance="outline"
+                <Button
+                  color="secondary"
+                  variant="outlined"
                   size="small"
                   style={{ marginLeft: '1rem' }}
                   onClick={props.onToggleComments}
                 >
                   {props.isCommentsOpen ? 'Hide' : 'Show'} Comments
-                </ActionButton>
+                </Button>
               )}
 
               {props.file.type === 'pdf' && !props.isEnvelopeView && (
-                <ActionButton
+                <Button
                   size="small"
+                  color="secondary"
+                  variant="contained"
                   style={{ marginLeft: '1rem' }}
                   onClick={this.toggleOpenPdfSplitter}
                 >
                   Split PDF
-                </ActionButton>
+                </Button>
               )}
             </div>
 
             <MenuDivider />
 
-            <IconButton
-              iconSize="Large"
-              inverse
-              isFit
-              onClick={props.onClickBackButton}
-            >
+            <IconButton size="medium" onClick={props.onClickBackButton}>
               <CloseIcon />
             </IconButton>
           </Flex>

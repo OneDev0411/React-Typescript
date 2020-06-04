@@ -8,7 +8,6 @@ function Menu(props) {
     <Flex alignCenter style={{ padding: '1.5em 0' }}>
       <CloseButton
         isFit
-        iconSize="large"
         inverse
         defaultBackUrl="/dashboard/contacts"
         backUrl={props.backUrl}

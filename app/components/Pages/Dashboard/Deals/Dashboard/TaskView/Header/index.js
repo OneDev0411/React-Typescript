@@ -9,7 +9,7 @@ import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
-import TaskStatus from '../../Folders/Checklist/TaskRow/Status'
+import { TaskStatus } from '../../Folders/Checklist/TaskRow/Status'
 
 import { Container, Input, Toolbar, TitleContainer, Title } from './styled'
 
@@ -62,8 +62,9 @@ class Header extends React.Component {
         <Toolbar>
           <div>
             <TaskStatus
+              deal={this.props.deal}
               task={this.props.task}
-              isDraftDeal={this.props.deal.is_draft}
+              isBackOffice={this.props.isBackOffice}
             />
           </div>
 
@@ -121,9 +122,6 @@ class Header extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  {
-    updateTask
-  }
-)(Header)
+export default connect(null, {
+  updateTask
+})(Header)

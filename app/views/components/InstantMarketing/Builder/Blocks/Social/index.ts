@@ -1,6 +1,6 @@
 import { Editor } from 'grapesjs'
 
-import { TemplateRenderData } from '../../utils/get-template-render-data/index'
+import { TemplateRenderData } from '../../utils/get-template-render-data'
 import {
   reorderBlocksWithCustomLabels,
   collapseBlockCategories

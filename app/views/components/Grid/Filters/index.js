@@ -11,7 +11,6 @@ import {
 import {
   addActiveFilter,
   changeConditionOperator,
-  createActiveFilters,
   createActiveFiltersWithConditionOperator,
   removeActiveFilter,
   toggleActiveFilter,
@@ -25,10 +24,24 @@ import { AddFilter } from './Create'
 import { FilterItem } from './Item'
 
 const Container = styled.div`
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 1.5em;
+`
+const FiltersContainer = styled.div`
+  flex-grow: 1;
+`
+const FiltersOptions = styled.div`
+  > * {
+    display: inline-flex;
+  }
+  span.spacer {
+    width: 1px;
+    height: ${props => props.theme.spacing(2.5)}px;
+    margin: ${props => props.theme.spacing(0, 1.5)};
+    background: ${props => props.theme.palette.divider};
+    vertical-align: middle;
+  }
 `
 
 class Filters extends React.Component {
@@ -148,50 +161,54 @@ class Filters extends React.Component {
   render() {
     const { children, ...props } = this.props
     const { activeFilters } = props
+    const activeFiltersList = Object.keys(activeFilters)
 
     return (
       <Container>
-        {this.props.disableConditionOperators || (
-          <ConditionOperators
-            selectedItem={this.props.conditionOperator}
-            onChange={this.onConditionChange}
+        <FiltersOptions>
+          {this.props.disableConditionOperators || (
+            <>
+              {activeFiltersList.length >= 2 && (
+                <ConditionOperators
+                  selectedItem={this.props.conditionOperator}
+                  onChange={this.onConditionChange}
+                />
+              )}
+              <span className="spacer" />
+            </>
+          )}
+        </FiltersOptions>
+        <FiltersContainer>
+          {activeFiltersList.map(id => {
+            const filter = activeFilters[id]
+
+            return (
+              <FilterItem
+                key={id}
+                {...filter}
+                isIncomplete={!isFilterValid(filter)}
+                filterConfig={this.findFilterById(filter.id)}
+                onToggleFilterActive={() => this.toggleFilterActive(id)}
+                onRemove={() => this.removeFilter(id)}
+                onFilterChange={(values, operator) =>
+                  this.onFilterChange(id, values, operator)
+                }
+              />
+            )
+          })}
+
+          <AddFilter
+            config={props.config}
+            disabled={!Object.values(activeFilters).every(isFilterValid)}
+            onNewFilter={this.createFilter}
           />
-        )}
-
-        {Object.keys(activeFilters).map(id => {
-          const filter = activeFilters[id]
-
-          return (
-            <FilterItem
-              key={id}
-              {...filter}
-              isIncomplete={!isFilterValid(filter)}
-              filterConfig={this.findFilterById(filter.id)}
-              onToggleFilterActive={() => this.toggleFilterActive(id)}
-              onRemove={() => this.removeFilter(id)}
-              onFilterChange={(values, operator) =>
-                this.onFilterChange(id, values, operator)
-              }
-            />
-          )
-        })}
-
-        <AddFilter
-          config={props.config}
-          disabled={!Object.values(activeFilters).every(isFilterValid)}
-          onNewFilter={this.createFilter}
-        />
-
-        {/*
-        TODO: don't pass all props to the child. Refactor SaveSegment component
-        to read required stuff from redux state instead
-        */}
-        {React.Children.map(children, child =>
-          React.cloneElement(child, {
-            filters: activeFilters,
-            ...props
-          })
-        )}
+          {React.Children.map(children, child =>
+            React.cloneElement(child, {
+              filters: activeFilters,
+              ...props
+            })
+          )}
+        </FiltersContainer>
       </Container>
     )
   }
@@ -222,7 +239,6 @@ const ConnectedFilters = connect(
   mapStateToProps,
   {
     addActiveFilter,
-    createActiveFilters,
     removeActiveFilter,
     toggleActiveFilter,
     updateActiveFilter,

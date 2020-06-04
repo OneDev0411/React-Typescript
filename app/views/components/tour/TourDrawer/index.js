@@ -1,24 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Box } from '@material-ui/core'
+import { Box, Button, IconButton } from '@material-ui/core'
 
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { isSoloActiveTeam } from 'utils/user-teams'
 import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
+import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
+
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
 import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
-import IconButton from '../../Button/IconButton'
-import ActionButton from '../../Button/ActionButton'
 import { ItemChangelog } from '../../TeamContact/ItemChangelog'
-import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
+
 import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
 import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import Reminder from '../../EventDrawer/components/Reminder/Reminder'
-import UpdateEndDate from '../../EventDrawer/components/UpdateEndDate/UpdateEndDate'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import { AddAssociationButton } from '../../AddAssociationButton'
 import {
@@ -87,6 +88,8 @@ export class TourDrawer extends React.Component {
       Object(this.props.initialValues).length > 0
   }
 
+  static contextType = ConfirmationModalContext
+
   load = async () => {
     if (this.props.tour) {
       return this.props.tour
@@ -137,7 +140,16 @@ export class TourDrawer extends React.Component {
     }
   }
 
-  delete = async () => {
+  onDelete = () => {
+    this.context.setConfirmationModal({
+      message: 'Delete Toursheet',
+      description: `Are you sure about deleting "${this.state.tour.title}"?`,
+      confirmLabel: 'Yes, I am sure',
+      onConfirm: () => this.handleDelete()
+    })
+  }
+
+  handleDelete = async () => {
     try {
       this.setState({ isDisabled: true })
       await deleteTask(this.state.tour.id)
@@ -193,10 +205,6 @@ export class TourDrawer extends React.Component {
                     <Description placeholder="Enter any general notes for your clients" />
 
                     <Section label="Itinerary Date">
-                      <UpdateEndDate
-                        dueDate={values.dueDate}
-                        endDate={values.endDate}
-                      />
                       <UpdateReminder
                         dueDate={values.dueDate}
                         // 1 hour before
@@ -212,6 +220,11 @@ export class TourDrawer extends React.Component {
                           <DateTimeField
                             name="dueDate"
                             selectedDate={values.dueDate}
+                            datePickerModifiers={{
+                              disabled: {
+                                before: new Date()
+                              }
+                            }}
                           />
 
                           <EndTimeField dueDate={values.dueDate} />
@@ -255,20 +268,17 @@ export class TourDrawer extends React.Component {
                   <Footer justifyBetween>
                     <Flex alignCenter>
                       {!this.isNew && (
-                        <React.Fragment>
+                        <>
                           <Tooltip placement="top" caption="Delete">
                             <IconButton
-                              isFit
-                              inverse
-                              type="button"
                               disabled={isDisabled}
-                              onClick={this.delete}
+                              onClick={this.onDelete}
                             >
-                              <IconDelete />
+                              <IconDelete size="medium" />
                             </IconButton>
                           </Tooltip>
                           <Divider margin="0 1rem" width="1px" height="2rem" />
-                        </React.Fragment>
+                        </>
                       )}
                       <AddAssociationButton
                         associations={values.clients}
@@ -296,14 +306,16 @@ export class TourDrawer extends React.Component {
                           tour={prePreviewFormat(values, this.state.tour)}
                         />
                       </Tooltip>
-                      <ActionButton
-                        type="button"
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        disableElevation
                         disabled={isDisabled}
                         onClick={this.handleSubmit}
                         style={{ marginLeft: '0.5em' }}
                       >
                         {this.state.isSaving ? 'Saving...' : 'Save'}
-                      </ActionButton>
+                      </Button>
                     </Flex>
                   </Footer>
                 </div>

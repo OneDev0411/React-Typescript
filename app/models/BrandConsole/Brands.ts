@@ -37,14 +37,20 @@ export async function getChildrenBrands(brandId) {
   }
 }
 
+interface BrandRole extends Pick<IBrandRole, 'acl' | 'role'> {
+  members: { user: UUID }[]
+}
+
 export async function addBrand(
-  team: Pick<IBrand, 'name' | 'brand_type'>,
-  parentId: string
+  team: Partial<IBrand>,
+  parentId: string | null,
+  roles?: BrandRole[]
 ): Promise<ApiResponseBody<IBrand>> {
   const payload: IBrandInput = {
     name: team.name,
     brand_type: team.brand_type,
-    parent: parentId
+    parent: parentId,
+    roles
   }
 
   return (await new Fetch()

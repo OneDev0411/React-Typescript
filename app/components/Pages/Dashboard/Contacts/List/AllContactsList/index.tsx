@@ -5,21 +5,24 @@ import { IAppState } from 'reducers'
 import { resetActiveFilters as resetActiveFiltersAction } from 'actions/filter-segments/active-filters'
 import { selectActiveFilters } from 'reducers/filter-segments'
 
-import Badge from 'components/Badge'
 import ToolTip from 'components/tooltip'
 import {
   ListTitle,
   ListItem,
   ListItemName
 } from 'components/Grid/SavedSegments/List/styled'
+
 import { changeActiveFilterSegment as changeActiveFilterSegmentAction } from 'actions/filter-segments/change-active-segment'
 
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
-import { SYNCED_CONTACTS_LIST_ID } from '../constants'
+import {
+  SYNCED_CONTACTS_LIST_ID,
+  DUPLICATE_CONTACTS_LIST_ID
+} from '../constants'
 import { getSyncedContacts, SyncedContacts } from '../utils/get-synced-contacts'
 
 interface Props {
-  onFilterChange: (selectedSegment?: unknown) => void
+  onFilterChange: (selectedSegment: unknown, type: string) => void
   resetActiveFilters: (segmentName: string) => void
   activeFilters: StringMap<IActiveFilter>
   changeActiveFilterSegment: typeof changeActiveFilterSegmentAction
@@ -36,18 +39,36 @@ function AllContactsList({
   syncedContacts
 }: Props) {
   const isAllContactsSelected = useMemo(() => {
-    return Object.values(activeFilters).length === 0
-  }, [activeFilters])
-  const isSyncedListSelected = activeSegment.id === SYNCED_CONTACTS_LIST_ID
+    return (
+      Object.values(activeFilters).length === 0 &&
+      (!activeSegment || activeSegment.id === 'default')
+    )
+  }, [activeFilters, activeSegment])
+  const isSyncedListSelected =
+    activeSegment && activeSegment.id === SYNCED_CONTACTS_LIST_ID
+  const isDuplicatesListSelected =
+    activeSegment && activeSegment.id === DUPLICATE_CONTACTS_LIST_ID
 
   const clickHandler = async (type: string) => {
     await resetActiveFilters(CONTACTS_SEGMENT_NAME)
     await changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type)
 
-    const selectedSegment =
-      type === SYNCED_CONTACTS_LIST_ID ? activeSegment : null
+    let selectedSegment: ISavedSegment | null = null
 
-    onFilterChange(selectedSegment)
+    if (type === SYNCED_CONTACTS_LIST_ID) {
+      selectedSegment = activeSegment
+    }
+
+    if (type === DUPLICATE_CONTACTS_LIST_ID) {
+      selectedSegment = {
+        id: DUPLICATE_CONTACTS_LIST_ID,
+        name: 'Duplicates',
+        is_editable: false,
+        filters: []
+      }
+    }
+
+    onFilterChange(selectedSegment, type)
   }
 
   return (
@@ -69,16 +90,15 @@ function AllContactsList({
           isSelected={isSyncedListSelected}
           onClick={() => clickHandler(SYNCED_CONTACTS_LIST_ID)}
         >
-          <ListItemName>
-            Synced Contacts
-            {syncedContacts.contactsCount > 0 && (
-              <Badge large style={{ marginLeft: '0.5rem' }}>
-                {syncedContacts.contactsCount}
-              </Badge>
-            )}
-          </ListItemName>
+          <ListItemName>Synced Contacts</ListItemName>
         </ListItem>
       )}
+      <ListItem
+        isSelected={isDuplicatesListSelected}
+        onClick={() => clickHandler(DUPLICATE_CONTACTS_LIST_ID)}
+      >
+        <ListItemName>Duplicates</ListItemName>
+      </ListItem>
     </div>
   )
 }

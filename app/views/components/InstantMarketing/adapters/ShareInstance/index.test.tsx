@@ -2,7 +2,7 @@ import * as React from 'react'
 import { fireEvent, render } from '@testing-library/react'
 
 // eslint-disable-next-line import/no-unresolved
-import userJson from 'fixtures/users/agent.json'
+import user from 'fixtures/users/agent.json'
 
 // eslint-disable-next-line import/no-unresolved
 import templateInstance from 'fixtures/marketing-center/template-instance.json'
@@ -10,8 +10,6 @@ import templateInstance from 'fixtures/marketing-center/template-instance.json'
 import { createBulkEmailCampaign } from 'models/email/create-bulk-email-campaign'
 
 import { TestBed } from '../../../../../../tests/unit/TestBed'
-
-const user = userJson as IUser
 
 // we use the connected component because we need to provide redux store
 // for inner components anyways
@@ -67,20 +65,23 @@ describe('ShareInstance', () => {
       target: { value: subject }
     })
 
-    // Send email
+    // Send Email
     fireEvent.click(getByTestId('compose-send-email'))
-    expect(createBulkEmailCampaign).toHaveBeenCalledWith(
-      expect.objectContaining({
-        from: user.id,
-        html: templateInstance.html,
-        template: templateInstance.id,
-        to: [
-          {
-            recipient_type: 'Email',
-            email
-          }
-        ]
-      })
-    )
+
+    setTimeout(() => {
+      expect(createBulkEmailCampaign).toHaveBeenCalledWith(
+        expect.objectContaining({
+          from: user.id,
+          html: templateInstance.html,
+          template: templateInstance.id,
+          to: [
+            {
+              recipient_type: 'Email',
+              email
+            }
+          ]
+        })
+      )
+    }, 2000)
   })
 })

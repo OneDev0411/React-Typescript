@@ -14,14 +14,16 @@ import { Observable } from 'rxjs'
 import { of } from 'rxjs/observable/of'
 
 import { ChipsInput } from 'components/ChipsInput'
-
-import { useChipStyles } from '../../../../../../styles/use-chips-styles'
+import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
+import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
 import { DEFAULT_RADIUS_FILTER } from '../constants'
+import { useChipStyles } from '../../../../../../styles/use-chips-styles'
 
 import { useGetMlsArea } from './use-get-mls-areas'
 import { itemToChip, itemToSuggestion } from './helpers'
 import { useGetMlsSubArea } from './use-get-mls-sub-areas'
+import type { Filter, FilterTypes } from './types'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,26 +41,21 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export interface Filter {
-  type: string
-  radius?: number
-  areas?: Array<Array<number>>
-}
-
 interface Props {
   disabled: boolean
   handleSearch: (filter: Filter) => void
 }
 
-export default function AreaFilter(props: Props) {
+export function AreaFilter(props: Props) {
   const classes = useStyles()
   const chipsClasses = useChipStyles()
   const { disabled } = props
   const parentAreas = useGetMlsArea()
+  const [, gridDispatch] = useGridContext()
   const [radius, setRadius] = useState<number>(DEFAULT_RADIUS_FILTER.radius)
   const [selectedParentAreas, setSelectedParentAreas] = useState<IMLSArea[]>([])
   const [selectedSubAreas, setSelectedSubAreas] = useState<IMLSArea[]>([])
-  const [filterType, setFilterType] = useState<string>(
+  const [filterType, setFilterType] = useState<FilterTypes>(
     DEFAULT_RADIUS_FILTER.type
   )
   const { subAreas, isLoadingSubAreas } = useGetMlsSubArea(
@@ -118,18 +115,19 @@ export default function AreaFilter(props: Props) {
       filter.areas = getFilteredAreas()
     }
 
+    gridDispatch(resetRows())
     props.handleSearch(filter)
   }
 
   return (
-    <Box px={3}>
+    <Box my={3}>
       <Box mb={1}>Select a search area:</Box>
-      <Box display="flex" alignItems="flex-start">
+      <Box display="flex" alignItems="center">
         <Box mr={2} display="flex" alignItems="center">
           <FormControlLabel
             control={
               <Radio
-                color="primary"
+                color="secondary"
                 checked={isFilterTypeRadius}
                 disabled={disabled}
                 onChange={handleChangeType}
@@ -151,17 +149,16 @@ export default function AreaFilter(props: Props) {
               margin="dense"
               onChange={onChangeRadius}
               value={radius}
-              variant="filled"
             />
             <Box ml={2} mt={1.25}>
               Miles
             </Box>
             <Button
               disabled={disabled}
-              color="primary"
+              color="secondary"
               className={classes.searchButton}
               onClick={onSearch}
-              size="small"
+              size="medium"
               variant="contained"
             >
               Search
@@ -169,12 +166,12 @@ export default function AreaFilter(props: Props) {
           </Box>
         )}
       </Box>
-      <Box display="flex" alignItems="flex-start">
+      <Box display="flex" alignItems="center">
         <Box display="flex" alignItems="center">
           <FormControlLabel
             control={
               <Radio
-                color="primary"
+                color="secondary"
                 checked={isFilterTypeCustom}
                 disabled={disabled}
                 onChange={handleChangeType}
@@ -203,8 +200,7 @@ export default function AreaFilter(props: Props) {
                   disabled,
                   hiddenLabel: true,
                   margin: 'dense',
-                  placeholder: 'Enter MLS Area',
-                  variant: 'filled'
+                  placeholder: 'Enter MLS Area'
                 } as TextFieldProps
               }
               ChipProps={{
@@ -229,8 +225,7 @@ export default function AreaFilter(props: Props) {
                     selectedParentAreas.length === 0,
                   hiddenLabel: true,
                   margin: 'dense',
-                  placeholder: 'Enter MLS Sub-area',
-                  variant: 'filled'
+                  placeholder: 'Enter MLS Sub-area'
                 } as TextFieldProps
               }
               ChipProps={{
@@ -243,10 +238,10 @@ export default function AreaFilter(props: Props) {
                 (selectedParentAreas.length === 0 &&
                   selectedSubAreas.length === 0)
               }
-              color="primary"
+              color="secondary"
               className={classes.searchButton}
               onClick={onSearch}
-              size="small"
+              size="medium"
               variant="contained"
             >
               Search

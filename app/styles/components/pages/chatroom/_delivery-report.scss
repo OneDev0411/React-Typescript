@@ -31,7 +31,7 @@
   .read-by {
     .title {
       i {
-        color: #0945eb;
+        color: $brand-primary;
       }
     }
   }
@@ -79,7 +79,7 @@
   }
   &.blue {
     i {
-      color: #0945eb;
+      color: $brand-primary;
     }
   }
 }

@@ -21,6 +21,7 @@ export interface EventTypeIcon {
   icon: React.FC<any>
 }
 
+// @ts-ignore js component
 export const eventTypesIcons = [
   {
     name: 'Call',

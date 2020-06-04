@@ -1,27 +1,20 @@
 import React, {
-  ChangeEvent,
   forwardRef,
   RefObject,
   useImperativeHandle,
   useRef,
   useState
 } from 'react'
-
-import { getNotes } from 'models/contacts/helpers/get-notes'
+import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 import List from 'components/Calendar'
-import { CalendarRef, LoadingDirection } from 'components/Calendar/types'
+import { CalendarRef } from 'components/Calendar/types'
 
-import { getUpcomingInitialRange } from './helpers/get-upcoming-range'
 import { getTimelineInitialRange } from './helpers/get-timeline-range'
-import { convertNoteToCalendarEvent } from './helpers/convert-note-to-calendar-event'
 
-import AddEvent from './AddEvent'
-import AddNote from './AddNote'
+import { Notes } from './Notes'
 
 import { Filters, TabsFilter } from './Tabs'
-
-import { Actions, Container, Header } from './styled'
 
 export interface TimelineRef {
   refresh(): void
@@ -30,47 +23,67 @@ export interface TimelineRef {
 interface Props {
   contact: IContact
   timelineRef?: RefObject<TimelineRef>
-  onCreateNote(contact: IContact): void
+  onChangeNote: (contact: IContact) => void
 }
 
 const associations = ['calendar_event.full_thread']
 
+export const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      display: 'flex',
+      flexFlow: 'column',
+      height: '100vh',
+      maxHeight: '100vh',
+      overflow: 'hidden',
+      padding: theme.spacing(0, 2)
+    },
+    header: {
+      flex: '0 1 auto'
+    },
+    list: {
+      flex: '1 1 auto'
+    }
+  })
+)
+
 function Timeline(props: Props) {
+  const classes = useStyles()
   const timelineRef = useRef<CalendarRef>(null)
 
-  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.All)
-
-  const filter = {
-    contact: props.contact.id,
-    object_types: [
-      'email_thread_recipient',
-      'crm_association',
-      'email_campaign_recipient',
-      'contact',
-      'contact_attribute',
-      'deal_context'
-    ]
-  }
-
-  const getCalendarRange = (filter: Filters) =>
-    filter === Filters.All
-      ? getTimelineInitialRange()
-      : getUpcomingInitialRange()
+  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Events)
 
   const handleReload = (filter = activeFilter) => {
-    timelineRef.current!.refresh(new Date(), getCalendarRange(filter))
+    timelineRef.current!.refresh(new Date(), getTimelineInitialRange())
   }
 
-  const handleChangeFilter = (e: ChangeEvent<{}> | null, value: number) => {
-    // update filter
+  const handleChangeFilter = (value: Filters) => {
     setActiveFilter(value)
   }
 
   const handleCreateNote = (contact: IContact) => {
-    props.onCreateNote(contact)
+    props.onChangeNote(contact)
+    setActiveFilter(Filters.Notes)
+  }
 
-    // reload timeline
-    handleReload()
+  const getFilter = () => {
+    if (activeFilter === Filters.Notes) {
+      return {
+        object_types: ['contact_notes']
+      }
+    }
+
+    return {
+      contact: props.contact.id,
+      object_types: [
+        'email_thread_recipient',
+        'crm_association',
+        'email_campaign_recipient',
+        'contact',
+        'contact_attribute',
+        'deal_context'
+      ]
+    }
   }
 
   useImperativeHandle(props.timelineRef, () => ({
@@ -81,42 +94,35 @@ function Timeline(props: Props) {
     return null
   }
 
-  const notes = getNotes(props.contact).map(note =>
-    convertNoteToCalendarEvent(note, props.contact)
-  )
-
   return (
-    <Container>
-      <Header>
+    <div className={classes.container}>
+      <div className={classes.header}>
         <TabsFilter
-          activeFilter={activeFilter}
-          onChangeFilter={handleChangeFilter}
-        />
-
-        <Actions>
-          <AddNote
-            contactId={props.contact.id}
-            onCreateNote={handleCreateNote}
-          />
-          <AddEvent contact={props.contact} />
-        </Actions>
-      </Header>
-
-      <div>
-        <List
-          // display calendar events vice versa
-          contrariwise={activeFilter === Filters.All}
-          ref={timelineRef}
+          activeTab={activeFilter}
           contact={props.contact}
-          filter={filter}
-          initialRange={getCalendarRange(activeFilter)}
-          associations={associations}
-          directions={[LoadingDirection.Bottom]}
-          placeholders={[]}
-          defaultEvents={notes} // TODO: convert notes to events
+          onChangeFilter={handleChangeFilter}
+          onCreateNote={handleCreateNote}
         />
       </div>
-    </Container>
+
+      <div className={classes.list}>
+        {activeFilter === Filters.Events && (
+          <List
+            contrariwise
+            ref={timelineRef}
+            contact={props.contact}
+            filter={getFilter()}
+            initialRange={getTimelineInitialRange()}
+            associations={associations}
+            placeholders={[]}
+          />
+        )}
+
+        {activeFilter === Filters.Notes && (
+          <Notes contact={props.contact} onChange={props.onChangeNote} />
+        )}
+      </div>
+    </div>
   )
 }
 

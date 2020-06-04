@@ -1,25 +1,32 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
-import { Theme } from '@material-ui/core/styles'
-import { useTheme } from '@material-ui/styles'
+
+import { Alert } from '@material-ui/lab'
+import { Box, Link, IconButton, Theme } from '@material-ui/core'
+import { makeStyles, createStyles } from '@material-ui/styles'
+
+import { ACL } from 'constants/acl'
 
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { getActiveTeamId } from 'utils/user-teams'
 
+import { RenderProps } from 'components/Grid/Table/types'
+import { useGridStyles } from 'components/Grid/Table/styles'
 import Acl from 'components/Acl'
 import Table from 'components/Grid/Table'
-import PageHeader from 'components/PageHeader'
+import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
-import { Callout } from 'components/Callout'
-
 import EmptyState from './EmptyState'
-import CreateNewOpenHouse from './CreateNewOpenHouse'
-import Info from './columns/Info'
-import Actions from './columns/Actions'
+import Avatar from './columns/Avatar'
+import Title from './columns/Title'
+import Date from './columns/Date'
 import Registrants from './columns/Registrants'
+import GuestRegistration from './columns/GuestRegistration'
+import Actions from './columns/Actions'
 
 interface Associations {
   deal?: IDeal
@@ -30,8 +37,29 @@ interface Props {
   activeBrandId: UUID
 }
 
+type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+
+const useAlertStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      root: {
+        marginBottom: theme.spacing(2)
+      },
+      message: {
+        '& a, & a:hover': {
+          color: theme.palette.info.dark,
+          textDecoration: 'none'
+        }
+      }
+    }),
+  { name: 'MuiAlert' }
+)
+
 function OpenHousesList(props: Props) {
-  const theme = useTheme<Theme>()
+  useAlertStyles()
+
+  const gridClasses = useGridStyles()
+
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
       order: '-due_date',
@@ -41,7 +69,9 @@ function OpenHousesList(props: Props) {
       isFetching: true
     }
   )
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isAlertOpen, setAlertToOpen] = useState(true)
   const [selectedOH, setSelectedOH] = useState<ICRMTask<
     CRMTaskAssociation,
     CRMTaskAssociationType
@@ -57,57 +87,69 @@ function OpenHousesList(props: Props) {
 
   const columns = [
     {
-      header: 'Info',
-      id: 'info',
-      width: '50%',
-      verticalAlign: 'center',
-      render: ({
-        rowData
-      }: {
-        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-      }) => (
-        <Info
-          dueDate={rowData.due_date}
-          description={rowData.description}
-          onClick={() => handleEdit(rowData)}
-          title={rowData.title}
-        />
-      )
-    },
-    {
-      header: 'Registrants',
-      id: 'registrants',
-      width: '10%',
-      verticalAlign: 'center',
-      render: ({
-        rowData
-      }: {
-        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-      }) => (
-        <Registrants
-          registrants={
-            rowData.associations
-              ? rowData.associations.filter(
-                  a => a.association_type === 'contact'
-                )
+      header: 'Avatar',
+      id: 'Avatar',
+      width: '60px',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Avatar
+          listings={
+            row.associations
+              ? row.associations.filter(a => a.association_type === 'listing')
               : []
           }
         />
       )
     },
     {
-      id: 'actions',
-      width: '40%',
-      verticalAlign: 'center',
-      render: ({
-        rowData
-      }: {
-        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-      }) => (
-        <Actions
+      header: 'Title',
+      id: 'title',
+      primary: true,
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Title title={row.title} onClick={() => handleEdit(row)} />
+      )
+    },
+    {
+      header: 'Date',
+      id: 'date',
+      class: 'opaque',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Date dueDate={row.due_date} />
+      )
+    },
+    {
+      header: 'Registrants',
+      id: 'registrants',
+      width: '100px',
+      class: 'opaque',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Registrants
+          registrants={
+            row.associations
+              ? row.associations.filter(a => a.association_type === 'contact')
+              : []
+          }
+        />
+      )
+    },
+    {
+      id: 'guest-registration',
+      width: '200px',
+      class: 'visible-on-hover',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <GuestRegistration
           activeBrandId={props.activeBrandId}
-          openHouse={rowData}
-          onEdit={() => handleEdit(rowData)}
+          openHouse={row}
+        />
+      )
+    },
+    {
+      id: 'actions',
+      width: '50px',
+      class: 'visible-on-hover',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Actions
+          openHouse={row}
+          onEdit={() => handleEdit(row)}
           reloadList={reloadList}
         />
       )
@@ -147,17 +189,20 @@ function OpenHousesList(props: Props) {
       return <h4>{error}</h4>
     }
 
-    if (list.length === 0) {
+    if (!list.length) {
       return <EmptyState onOpenDrawer={onOpenOHDrawer} />
     }
 
     return (
-      <Table
+      <Table<TableRow>
         columns={columns}
-        data={list}
-        isFetching={isFetching}
-        LoadingState={LoadingContainer}
-        showToolbar={false}
+        rows={list}
+        totalRows={(list || []).length}
+        loading={isFetching ? 'middle' : null}
+        LoadingStateComponent={LoadingContainer}
+        classes={{
+          row: gridClasses.row
+        }}
       />
     )
   }
@@ -168,44 +213,51 @@ function OpenHousesList(props: Props) {
         <title>Open House Registration Pages | Rechat</title>
       </Helmet>
 
-      <PageHeader>
-        <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Open House Registration Pages</PageHeader.Heading>
-        </PageHeader.Title>
-
-        <PageHeader.Menu>
-          <CreateNewOpenHouse onOpenDrawer={onOpenOHDrawer} />
-        </PageHeader.Menu>
-      </PageHeader>
-
-      <Acl.Deals>
-        <div style={{ padding: theme.spacing(0, 3, 9) }}>
-          <Callout type="info" style={{ margin: theme.spacing(1.5, 0) }}>
-            To Notify your Office to Book an Open House on the MLS please find
-            the button inside of your{' '}
-            <a href="/dashboard/deals" target="_blank">
-              deals
-            </a>
-            . This page is only for creating Open House Registration pages and
-            events for your listings or other agents listings that you are
-            holding an open house for.
-          </Callout>
-
-          {renderContent()}
-        </div>
-      </Acl.Deals>
-
-      {isDrawerOpen && (
-        // @ts-ignore js component
-        <OpenHouseDrawer
-          deleteCallback={drawerCallback}
-          isOpen
-          onClose={onCloseOHDrawer}
-          openHouse={selectedOH}
-          submitCallback={drawerCallback}
-          associations={associations}
+      <PageLayout>
+        <PageLayout.Header
+          title="Open House Registration Pages"
+          onCreateOpenHouse={reloadList}
         />
-      )}
+        <PageLayout.Main>
+          <Box>
+            <Acl access={ACL.DEALS}>
+              {isAlertOpen && (
+                <Alert
+                  severity="info"
+                  action={
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      onClick={() => setAlertToOpen(false)}
+                    >
+                      <CloseIcon size="small" />
+                    </IconButton>
+                  }
+                >
+                  <Box>
+                    Visit <Link href="/dashboard/deals">deals</Link> to notify
+                    your office to book an open house on the MLS. This page is
+                    only for creating open house registration pages and events.
+                  </Box>
+                </Alert>
+              )}
+            </Acl>
+            {renderContent()}
+
+            {isDrawerOpen && (
+              // @ts-ignore js component
+              <OpenHouseDrawer
+                deleteCallback={drawerCallback}
+                isOpen
+                onClose={onCloseOHDrawer}
+                openHouse={selectedOH}
+                submitCallback={drawerCallback}
+                associations={associations}
+              />
+            )}
+          </Box>
+        </PageLayout.Main>
+      </PageLayout>
     </>
   )
 }

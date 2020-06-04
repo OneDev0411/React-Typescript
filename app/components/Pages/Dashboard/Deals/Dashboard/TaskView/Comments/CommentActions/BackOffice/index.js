@@ -2,7 +2,8 @@ import React, { Fragment } from 'react'
 
 import Flex from 'styled-flex-component'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
+
 import ToolTip from 'views/components/tooltip'
 
 import CheckmarkIcon from 'components/SvgIcons/Checkmark/IconCheckmark'
@@ -74,12 +75,14 @@ export default function BackOffice(props) {
           <Loading>Saving ...</Loading>
         )}
 
-        <ActionButton
+        <Button
+          variant="contained"
+          color="secondary"
           disabled={isSaving || !hasComment}
           onClick={() => onSendComment(false)}
         >
           Comment
-        </ActionButton>
+        </Button>
       </div>
     </Flex>
   )

@@ -7,7 +7,7 @@ import lifecycle from 'recompose/lifecycle'
 import withHandlers from 'recompose/withHandlers'
 
 import Alert from '../../Dashboard/Partials/Alert'
-import { getBrandInfo } from '../../Auth/SignIn'
+import { getBrandInfo } from '../../Auth/SignIn/get-brand-info'
 import verify from '../../../../models/verify'
 import { Spinner } from '../../../Partials/Loading'
 import { updateUser } from '../../../../store_actions/user'
@@ -37,7 +37,6 @@ const confirmVerify = ({
               />
             </Link>
           )}
-          <h1 className="c-auth__title">{siteTitle}</h1>
           <p className="c-auth__subticonfirmtle">Verification for</p>
           <p>
             {
@@ -69,17 +68,10 @@ const confirmVerify = ({
 export default compose(
   connect(
     ({ brand }, { location: { query }, params: { verifyType } }) => {
-      const {
-        email,
-        email_code,
-        phone_code,
-        phone_number,
-        receivingUserEmail
-      } = query
+      const { email, email_code, phone_code, phone_number } = query
 
       const verifyQueryParams = {
-        verifyType,
-        receivingUserEmail
+        verifyType
       }
 
       if (verifyType === 'email') {
@@ -122,7 +114,7 @@ export default compose(
 
       verify
         .request(verifyType)
-        .then(statusCode => {
+        .then(() => {
           setIsSubmitting(false)
           setUserMessage({
             type: 'success',

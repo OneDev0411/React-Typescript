@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { primary } from 'views/utils/colors'
-
 const Container = styled.div`
   width: 100%;
   padding: 0.6rem 1rem;
@@ -10,7 +8,7 @@ const Container = styled.div`
   cursor: pointer;
 
   &:hover {
-    color: ${primary};
+    color: ${props => props.theme.palette.secondary.main};
     font-weight: 500;
   }
 `

@@ -7,21 +7,17 @@ import { EventContainer } from '../components/EventContainer'
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
-  nextItem: ICalendarListRow
 }
 
-export function DealContext({ style, event, nextItem }: Props) {
+export function DealContext({ style, event }: Props) {
   const icon = eventIcons['Task Critical']
 
   return (
     <EventContainer
       style={style}
       event={event}
-      nextItem={nextItem}
-      icon={{
-        color: icon.color,
-        element: icon.icon
-      }}
+      Icon={icon.icon}
+      editable={false}
       title={
         <div>
           {event.type_label} for{' '}

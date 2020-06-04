@@ -40,16 +40,19 @@ describe('EditEmailDrawer', () => {
     )
 
     fireEvent.click(element)
-    expect(updateEmailCampaign).toBeCalledWith(
-      '5f4a9526-dedf-11e9-ae4b-027d31a1f7a0',
-      {
-        from: '95b9c3ac-49a7-11e9-8abe-0a95998482ac',
-        to: [{ recipient_type: 'Email', email: 'alireza.mirian@gmail.com' }],
-        subject: 'test',
-        html: mcEmailCampaign.html,
-        attachments: [],
-        due_at: new Date('2019-09-26T15:24:00.000Z')
-      }
-    )
-  })
+
+    setTimeout(() => {
+      expect(updateEmailCampaign).toBeCalledWith(
+        '5f4a9526-dedf-11e9-ae4b-027d31a1f7a0',
+        {
+          from: '95b9c3ac-49a7-11e9-8abe-0a95998482ac',
+          to: [{ recipient_type: 'Email', email: 'alireza.mirian@gmail.com' }],
+          subject: 'test',
+          html: mcEmailCampaign.html,
+          attachments: [],
+          due_at: new Date('2019-09-26T15:24:00.000Z')
+        }
+      )
+    })
+  }, 2000)
 })

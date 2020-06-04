@@ -1,6 +1,4 @@
-import styled from 'styled-components'
-
-import { primary } from 'views/utils/colors'
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
   margin-bottom: 2.5rem;
@@ -14,17 +12,19 @@ export const Header = styled.div`
 `
 
 export const NewChecklistItem = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 1rem;
-  font-weight: 500;
-  color: ${primary};
-  cursor: pointer;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 500;
+    color: ${theme.palette.secondary.main};
+    cursor: pointer;
 
-  svg {
-    fill: ${primary};
-    margin-right: 0.5rem;
-  }
+    svg {
+      fill: ${theme.palette.secondary.main};
+      margin-right: 0.5rem;
+    }
+  `}
 `
 
 export const Title = styled.div`

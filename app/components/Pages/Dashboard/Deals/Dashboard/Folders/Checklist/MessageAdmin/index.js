@@ -2,11 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import { Button } from '@material-ui/core'
+
 import PendingIcon from 'components/SvgIcons/DealTaskPending/IconPending'
 
 import { setSelectedTask, updateDealNotifications } from 'actions/deals'
 
-import ActionButton from 'components/Button/ActionButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import { Container, BadgeCounter } from './styled'
@@ -44,13 +45,15 @@ class MessageAdmin extends React.Component {
 
     return (
       <Container>
-        <ActionButton
+        <Button
+          color="secondary"
+          variant="contained"
           size="small"
           onClick={() => this.handleSelectTask(task, room)}
         >
           <TextMiddleTruncate text={this.props.checklistName} maxLength={15} />
           &nbsp;General Comments
-        </ActionButton>
+        </Button>
 
         {(new_notifications > 0 || task.attention_requested) && (
           <BadgeCounter

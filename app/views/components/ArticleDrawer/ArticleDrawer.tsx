@@ -111,7 +111,7 @@ export default function ArticleDrawer({
           </div>
         )}
       </OverlayDrawer.Body>
-      <OverlayDrawer.Footer>
+      <OverlayDrawer.Footer rowReverse>
         <Button
           disabled={isFetching || !article}
           color="primary"

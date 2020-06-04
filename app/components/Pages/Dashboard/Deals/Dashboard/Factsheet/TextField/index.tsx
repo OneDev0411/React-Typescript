@@ -21,7 +21,8 @@ import {
   Item,
   ItemLabel,
   ItemValue,
-  ItemActions
+  ItemActions,
+  EmptyValue
 } from '../styled'
 
 interface Props {
@@ -148,7 +149,9 @@ export function TextField({
       >
         <Item>
           <ItemLabel onClick={toggleEditing}>{field.label}</ItemLabel>
-          <ItemValue>{field.getFormattedValue(value)}</ItemValue>
+          <ItemValue>
+            {field.getFormattedValue(value) || <EmptyValue>—</EmptyValue>}
+          </ItemValue>
 
           <ItemActions>
             <EditButton onClick={toggleEditing} />

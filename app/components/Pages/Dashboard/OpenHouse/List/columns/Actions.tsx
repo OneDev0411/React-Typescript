@@ -1,31 +1,38 @@
 import React, { useContext, useState } from 'react'
-import { Button, Box } from '@material-ui/core'
+import { Typography, Menu, MenuItem, IconButton } from '@material-ui/core'
 
 import { deleteTask } from 'models/tasks/delete-task'
 
-import SplitButton from 'components/SplitButton'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import config from '../../../../../../../config/public'
+import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
+
+import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 interface Props {
-  activeBrandId: UUID
   onEdit: () => void
   openHouse: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   reloadList: () => void
 }
 
-export default function Actions({
-  activeBrandId,
-  onEdit,
-  openHouse,
-  reloadList
-}: Props) {
+export default function Actions({ onEdit, openHouse, reloadList }: Props) {
+  const iconClasses = useIconStyles()
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const confirmation = useContext(ConfirmationModalContext)
-  const registerPageURL = `${config.app.url}/openhouse/${
-    openHouse.id
-  }/${activeBrandId}/register`
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleEdit = () => {
+    handleClose()
+    onEdit()
+  }
 
   const handleDelete = async () => {
     setIsDeleting(true)
@@ -36,6 +43,11 @@ export default function Actions({
 
   const onDelete = e => {
     e.stopPropagation()
+    handleClose()
+
+    if (isDeleting) {
+      return
+    }
 
     confirmation.setConfirmationModal({
       message: 'Delete Open House',
@@ -46,25 +58,21 @@ export default function Actions({
   }
 
   return (
-    <Box display="flex" justifyContent="flex-end">
-      <SplitButton
-        color="secondary"
-        variant="outlined"
-        popperPlacement="bottom-end"
-        onClick={() => window.open(registerPageURL)}
-        renderMenu={() => (
-          <>
-            <Button fullWidth onClick={onEdit}>
-              Edit
-            </Button>
-            <Button disabled={isDeleting} fullWidth onClick={onDelete}>
-              Delete
-            </Button>
-          </>
-        )}
+    <>
+      <IconButton onClick={handleMenuClick}>
+        <IconHorizontalDots fill="#000" className={iconClasses.medium} />
+      </IconButton>
+      <Menu
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
       >
-        Guest Registration Page
-      </SplitButton>
-    </Box>
+        <MenuItem onClick={handleEdit}>Edit</MenuItem>
+        <MenuItem onClick={onDelete}>
+          <Typography color="error">Delete</Typography>
+        </MenuItem>
+      </Menu>
+    </>
   )
 }

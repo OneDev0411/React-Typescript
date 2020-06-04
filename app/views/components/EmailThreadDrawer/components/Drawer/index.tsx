@@ -17,7 +17,7 @@ export function Drawer(props: DrawerProps) {
     <OverlayDrawer
       classes={classes}
       hideBackdrop
-      PaperProps={{ style: { width: '50vw', minWidth: '20rem' } }}
+      PaperProps={{ style: { width: '50vw', minWidth: '45rem' } }}
       {...props}
     />
   )

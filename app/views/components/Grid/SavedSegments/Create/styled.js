@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 
-import { primary, borderColor } from '../../../../utils/colors'
+export const Container = styled.div`
+  display: inline-flex;
+  margin-left: ${props => props.theme.spacing(1)}px;
+  vertical-align: middle;
+`
 
 export const ItemRow = styled.div`
   display: flex;
@@ -21,11 +25,11 @@ export const TextInput = styled.input`
   margin-left: 1em;
   border-radius: 3px;
   background-color: #ffffff;
-  border: solid 1px ${borderColor};
+  border: solid 1px ${props => props.theme.palette.grey['300']};
   padding: 0 1em;
 
   :focus {
     outline: none;
-    border-color: ${primary};
+    border-color: ${props => props.theme.palette.primary.main};
   }
 `

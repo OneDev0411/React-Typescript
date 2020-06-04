@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import { Button, IconButton, Box } from '@material-ui/core'
 
 import editUser from 'actions/user/edit'
 import uploadCoverImage from 'actions/user/upload-cover-image'
 
-import Button from 'components/Button/ActionButton'
 import FormCard from 'components/FormCard'
+import Tooltip from 'components/tooltip'
+import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 
 const MAX_SIZE = 256
 const MIN_WIDTH = 240
@@ -25,6 +27,8 @@ const CoverImage = ({
   deleteHandler,
   submitLabelText
 }) => {
+  const coverImageInputRef = useRef(null)
+
   const isUploading = submitLabelText !== SUBMIT_LABEL_TEXT
 
   return (
@@ -57,29 +61,37 @@ const CoverImage = ({
           <div className="c-cover-image__controllers">
             <input
               type="file"
-              id="image-cover-input"
               onChange={uploadHandler}
               className="c-cover-image__input"
               value={value}
+              ref={coverImageInputRef}
             />
-            <label
-              htmlFor="image-cover-input"
-              className={`c-cover-image__upload-btn ${
-                isDeleting || isUploading ? 'is-disable' : ''
-              }`}
-            >
-              {submitLabelText}
-            </label>
-            {((coverImage && !isUploading) || (!coverImage && isDeleting)) && (
+            <Box display="flex" alignItems="center">
+              {((coverImage && !isUploading) ||
+                (!coverImage && isDeleting)) && (
+                <Box marginRight={2}>
+                  <Tooltip
+                    caption={isDeleting ? 'Deleting...' : 'Delete Cover'}
+                  >
+                    <IconButton
+                      onClick={deleteHandler}
+                      disabled={isDeleting || isUploading}
+                      data-test="cover-image-form-delete-button"
+                    >
+                      <TrashIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              )}
               <Button
-                appearance="outline"
-                size="small"
-                onClick={deleteHandler}
+                variant="outlined"
+                onClick={() => coverImageInputRef.current.click()}
+                disabled={isDeleting || isUploading}
                 data-test="cover-image-form-delete-button"
               >
-                {isDeleting ? 'Deleting...' : 'Delete Cover'}
+                {submitLabelText}
               </Button>
-            )}
+            </Box>
           </div>
         </div>
         {submitError && (

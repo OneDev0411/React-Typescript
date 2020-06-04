@@ -21,14 +21,14 @@ import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { InlineEditableString } from 'components/inline-editable-fields/InlineEditableString'
 
 type Props = {
-  checklist: IBrandChecklist
+  checklist?: IBrandChecklist
   setTerminable: (terminable: boolean) => void
   setDeactivatable: (terminable: boolean) => void
   addGenericTask: (checklist: IBrandChecklist) => void
   addGeneralCommentTask: (checklist: IBrandChecklist) => void
   addFormTask: (checklist: IBrandChecklist, form: IDealForm) => void
   renameChecklist: (name: string) => void
-  forms: IDealForm[]
+  forms?: IDealForm[]
   formsState: ReturnType<typeof usePromise>[2]
 }
 
@@ -73,12 +73,16 @@ export function ChecklistHeader({
   const classes = useChecklistHeaderStyles()
 
   const formSearchFuse = useMemo(
-    () => new Fuse<IDealForm>(forms, { keys: ['name'] }),
+    () => new Fuse<IDealForm>(forms || [], { keys: ['name'] }),
     [forms]
   )
 
   const openFormPickerDrawer = () => {
     setFormPickerOpen(true)
+  }
+
+  if (!checklist) {
+    return null
   }
 
   return (
@@ -137,20 +141,21 @@ export function ChecklistHeader({
             >
               Add Generic Task
             </ListItem>
-            {checklist.tasks.every(
-              task => task.task_type !== 'GeneralComments'
-            ) && (
-              <ListItem
-                className={classes.splitMenuItem}
-                button
-                onClick={event => {
-                  addGeneralCommentTask(checklist)
-                  closeMenu(event)
-                }}
-              >
-                Add General Comments
-              </ListItem>
-            )}
+            {Array.isArray(checklist.tasks) &&
+              checklist.tasks.every(
+                task => task.task_type !== 'GeneralComments'
+              ) && (
+                <ListItem
+                  className={classes.splitMenuItem}
+                  button
+                  onClick={event => {
+                    addGeneralCommentTask(checklist)
+                    closeMenu(event)
+                  }}
+                >
+                  Add General Comments
+                </ListItem>
+              )}
           </List>
         )}
       >

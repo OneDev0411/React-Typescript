@@ -1,27 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
+import { Avatar, Typography } from '@material-ui/core'
 
-import { grey } from '../../../utils/colors'
-import Avatar from '../../Avatar'
 import { Item } from '../../Dropdown/Item'
 import CheckmarkIcon from '../../SvgIcons/Checkmark/IconCheckmark'
 
-const Info = styled.div`
-  color: ${grey.A500};
-`
 const Container = styled(Item)`
   pointer-events: ${props => (props.isDisabled ? 'none' : 'initial')};
-
-  &:hover {
-    ${Info} {
-      color: ${grey.A300};
-    }
-
-    ${CheckmarkIcon} {
-      fill: '#fff';
-    }
-  }
 `
 
 export function TeamMember(props) {
@@ -35,7 +21,7 @@ export function TeamMember(props) {
 
   return (
     <Container {...props}>
-      <Avatar image={user.profile_image_url} title={title} />
+      <Avatar src={user.profile_image_url} alt={title} />
       <Flex
         column
         style={{
@@ -43,8 +29,12 @@ export function TeamMember(props) {
           marginLeft: '1em'
         }}
       >
-        <div>{title}</div>
-        <Info>{info}</Info>
+        <Typography variant="subtitle2" noWrap>
+          {title}
+        </Typography>
+        <Typography variant="caption" noWrap>
+          {info}
+        </Typography>
       </Flex>
       {props.isSelected && <CheckmarkIcon style={{ marginLeft: '2em' }} />}
     </Container>

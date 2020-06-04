@@ -44,7 +44,6 @@ export default function TourItem({ dueDate, onClick, title }: Props) {
         {date}
       </Typography>
       <Typography
-        component="span"
         variant="body2"
         color="textSecondary"
         noWrap

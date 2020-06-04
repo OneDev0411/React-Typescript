@@ -1,29 +1,30 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Tooltip } from '@material-ui/core'
 
-import { green, primary } from 'views/utils/colors'
-import ALinkToClosable from 'components/ALinkToClosable'
-import TextIconButton from 'components/Button/TextIconButton'
 import AddToFlowButton from 'components/AddToFlowButton'
+import ALinkToClosable from 'components/ALinkToClosable'
 import IconThunderbolt from 'components/SvgIcons/Thunderbolt/ThunderboltIcon'
-import IconThunderboltOutline from 'components/SvgIcons/ThunderboltOutline/IconThunderboltOutline'
 
-const Link = styled(ALinkToClosable)`
-  display: flex;
+const commonStyle = `
+  display: inline-flex;
   align-items: center;
-
-  &:hover {
-    > svg {
-      fill: ${primary};
-    }
-  }
-
+  cursor: pointer;
   > svg {
     width: 1em;
     height: 1em;
-    fill: ${green.A100};
-    margin-right: 0.5rem;
+    margin-right: 0.25rem;
   }
+`
+const Link = styled(ALinkToClosable)`
+  ${commonStyle}
+  &:hover {
+    text-decoration: none;
+  }
+`
+
+const AddFlow = styled.span`
+  ${commonStyle}
 `
 
 export default function FlowCell(props) {
@@ -35,26 +36,23 @@ export default function FlowCell(props) {
         contacts={{ ids: [contactId] }}
         callback={props.callback}
         buttonRenderer={buttonProps => (
-          <TextIconButton
-            text="Add to Flow"
-            iconLeft={IconThunderboltOutline}
-            size="small"
-            className="ghost primaryHover"
-            iconSize="large"
-            {...buttonProps}
-          />
+          <Tooltip title="Add to flow">
+            <AddFlow {...buttonProps}>
+              <IconThunderbolt />+
+            </AddFlow>
+          </Tooltip>
         )}
       />
     )
   }
 
-  const pathname = `/dashboard/contacts/${contactId}`
   const params = new URL(document.location).searchParams
 
   return (
     <Link
+      noStyle
       to={{
-        pathname,
+        pathname: `/dashboard/contacts/${contactId}`,
         state: {
           id: contactId,
           s: parseInt(params.get('s'), 10)
@@ -62,7 +60,7 @@ export default function FlowCell(props) {
       }}
     >
       <IconThunderbolt />
-      {`Active in ${flowsCount} Flow${flowsCount > 1 ? 's' : ''}`}
+      {flowsCount}
     </Link>
   )
 }

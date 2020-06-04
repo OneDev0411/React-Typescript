@@ -3,16 +3,38 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
+import memoize from 'lodash/memoize'
+import hash from 'object-hash'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+
+import { getUserTeams } from 'actions/user/teams'
 
 import { getSavedSearchListings } from '../../../../../models/listings/alerts/get-alert-listings'
 import { selectAlert } from '../../../../../reducers/listings/alerts/list'
+import getAlerts from '../../../../../store_actions/listings/alerts/get-alerts'
+
+import {
+  parsSortIndex,
+  getDefaultSort,
+  sortByIndex,
+  SORT_FIELD_SETTING_KEY
+} from '../helpers/sort-utils'
+
+import Tabs from '../components/Tabs'
 
 import Map from './Map'
 import { Header } from '../components/PageHeader'
-import { MapView } from '../components/MapView'
-import { GridView } from '../components/GridView'
-import { GalleryView } from '../components/GalleryView'
+import MapView from '../components/MapView'
+import ListView from '../components/ListView'
+import GridView from '../components/GridView'
 import Avatars from '../../../../../views/components/Avatars'
+
+import {
+  formatListing,
+  addDistanceFromCenterToListing
+} from '../helpers/format-listing'
+import { normalizeListingLocation } from '../../../../../utils/map'
 
 const mappingStatus = status => {
   switch (status) {
@@ -40,9 +62,7 @@ const normalize = rec => ({
 
 const propTypes = {
   savedSearch: PropTypes.shape(),
-  location: PropTypes.shape().isRequired,
-  isSideMenuOpen: PropTypes.bool,
-  toggleSideMenu: PropTypes.func.isRequired
+  location: PropTypes.shape().isRequired
 }
 
 const defaultProps = {
@@ -50,18 +70,23 @@ const defaultProps = {
     title: '',
     proposed_title: '',
     users: []
-  },
-  isSideMenuOpen: true
+  }
 }
 
 class SavedSearch extends React.Component {
   constructor(props) {
     super(props)
 
+    const { index, ascending } = parsSortIndex(getDefaultSort(this.props.user))
+
     this.state = {
       listings: {
         data: [],
         info: { total: 0 }
+      },
+      activeSort: {
+        index,
+        ascending
       },
       isFetching: false,
       activeView: props.location.query.view || 'map'
@@ -79,6 +104,8 @@ class SavedSearch extends React.Component {
   }
 
   fetchListings = async () => {
+    await this.props.dispatch(getAlerts())
+
     const { savedSearch } = this.props
 
     try {
@@ -114,15 +141,65 @@ class SavedSearch extends React.Component {
     })
   }
 
+  formatAndAddDistance = (listing, center, user) =>
+    addDistanceFromCenterToListing(
+      formatListing(normalizeListingLocation(listing), user),
+      center
+    )
+
+  onChangeSort = async e => {
+    let sort = e.currentTarget.dataset.sort
+    const { index, ascending } = parsSortIndex(sort)
+
+    this.setState({
+      activeSort: {
+        index,
+        ascending
+      }
+    })
+    await putUserSetting(SORT_FIELD_SETTING_KEY, sort)
+    this.props.dispatch(getUserTeams(this.props.user))
+  }
+
+  sortListings = memoize(
+    (listings, index, ascending) => {
+      const formattedListings = listings.data.map(listing =>
+        this.formatAndAddDistance(
+          listing,
+          this.props.mapCenter,
+          this.props.user
+        )
+      )
+
+      return formattedListings.sort((a, b) =>
+        sortByIndex(a, b, index, ascending)
+      )
+    },
+    // Since listings are equal during renders and are read from this.state
+    // in order to make memoization work properly, we need to build a custom
+    // resolver function which makes a unique key for a specific saved search id,
+    // index and sort direction and returns the previously calculated items once it's
+    // called.
+    (...args) => `${hash(args[0])}_${args[1]}_${args[2]}`
+  )
+
   renderMain() {
+    const { user } = this.props
     const { listings, isFetching } = this.state
+
+    const sortedListings = this.sortListings(
+      listings,
+      this.state.activeSort.index,
+      this.state.activeSort.ascending
+    )
 
     switch (this.state.activeView) {
       case 'map':
         return (
           <MapView
+            user={user}
             tabName="alerts"
-            listings={listings}
+            sortedListings={sortedListings}
             Map={
               <Map
                 savedSearch={this.props.savedSearch}
@@ -133,40 +210,56 @@ class SavedSearch extends React.Component {
           />
         )
 
-      case 'gallery':
-        return <GalleryView isFetching={isFetching} listings={listings} />
+      case 'grid':
+        return (
+          <GridView
+            isFetching={isFetching}
+            sortedListings={sortedListings}
+            user={user}
+          />
+        )
 
       default:
-        return <GridView isFetching={isFetching} listings={listings} />
+        return (
+          <ListView
+            isFetching={isFetching}
+            sortedListings={sortedListings}
+            listings={listings}
+            user={user}
+          />
+        )
     }
   }
 
   render() {
-    const { props } = this
-    const { title } = props.savedSearch
+    const { title } = this.props.savedSearch
 
     return (
-      <React.Fragment>
+      <>
         <Helmet>
           <title> {title && `${`${title} | `}`}Properties | Rechat</title>
         </Helmet>
         <Header
           title={title}
-          subtitle={props.savedSearch.proposed_title}
-          onChangeView={this.onChangeView}
-          activeView={this.state.activeView}
-          isSideMenuOpen={props.isSideMenuOpen}
-          toggleSideMenu={props.toggleSideMenu}
+          subtitle={this.props.savedSearch.proposed_title}
           RightComponent={() => (
             <Avatars
-              users={props.savedSearch.users}
+              users={this.props.savedSearch.users}
               style={{ marginRight: '2rem' }}
               tooltipPlacement="bottom"
             />
           )}
         />
+        <Tabs
+          user={this.props.user}
+          onChangeView={this.onChangeView}
+          onChangeSort={this.onChangeSort}
+          activeView={this.state.activeView}
+          isWidget={this.props.isWidget}
+          activeSort={this.state.activeSort}
+        />
         {this.renderMain()}
-      </React.Fragment>
+      </>
     )
   }
 }
@@ -174,8 +267,9 @@ class SavedSearch extends React.Component {
 SavedSearch.propTypes = propTypes
 SavedSearch.defaultProps = defaultProps
 
-const mapStateToProps = (state, props) => ({
-  savedSearch: selectAlert(state.alerts.list, props.params.id)
+const mapStateToProps = ({ alerts, user }, props) => ({
+  savedSearch: selectAlert(alerts.list, props.params.id),
+  user
 })
 
 export default withRouter(connect(mapStateToProps)(SavedSearch))

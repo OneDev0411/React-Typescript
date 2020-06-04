@@ -2,23 +2,27 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { browserHistory } from 'react-router'
 
+import { IconButton } from '@material-ui/core'
+
 import { goTo } from '../../../../utils/go-to'
 
-import Button from '../IconButton'
 import Icon from '../../SvgIcons/Close/CloseIcon'
 
 export class CloseButton extends React.Component {
   static propTypes = {
     backUrl: PropTypes.string,
     defaultBackUrl: PropTypes.string,
-    query: PropTypes.object
+    query: PropTypes.object,
+    buttonProps: PropTypes.object,
+    iconProps: PropTypes.object
   }
 
   static defaultProps = {
-    ...Button.defaultProps,
     backUrl: '',
     defaultBackUrl: '',
-    query: {}
+    query: {},
+    buttonProps: {},
+    iconProps: {}
   }
 
   componentDidMount() {
@@ -58,9 +62,9 @@ export class CloseButton extends React.Component {
 
   render() {
     return (
-      <Button isFit iconSize="large" inverse onClick={this.handleOnClick}>
-        <Icon />
-      </Button>
+      <IconButton {...this.props.buttonProps} onClick={this.handleOnClick}>
+        <Icon size="medium" {...this.props.iconProps} />
+      </IconButton>
     )
   }
 }

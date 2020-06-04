@@ -1,54 +1,42 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { connect } from 'react-redux'
-
-import { Popover, createStyles, makeStyles, Theme } from '@material-ui/core'
+import { useDispatch, useSelector } from 'react-redux'
+import { Popover } from '@material-ui/core'
 import { PopoverActions } from '@material-ui/core/Popover'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
+import { getActiveTeamSettings } from 'utils/user-teams'
+import { YARD_SIGN_REQUESTS_SETTINGS_KEY } from 'constants/user'
+import { IAppState } from 'reducers'
 import { setSelectedTask } from 'actions/deals'
-
-import YardSignIcon from 'components/SvgIcons/YardSign/YardSignIcon'
-import { useIconStyles } from 'views/../styles/use-icon-styles'
-
-import { getSizeDependentStyles } from 'components/Button/ActionButton'
 
 import Form from './Create'
 import List from './List'
 
-interface DispatchProps {
-  setSelectedTask(task: IDealTask): void
-}
-
 interface Props {
   deal: IDeal
-  style: React.CSSProperties
+  style?: React.CSSProperties
 }
 
-const useStyles = makeStyles((theme: Theme) => {
-  return createStyles({
-    button: {
-      // same as action-button in components/button to make it consistent with other buttons
-      ...getSizeDependentStyles({}),
-      lineHeight: 'inherit',
-      borderColor: theme.palette.common.black
-    }
-  })
-})
-
-function YardSign({ deal, style, setSelectedTask }: Props & DispatchProps) {
+function YardSign({ deal, style }: Props) {
   const popoverActions = useRef<PopoverActions | null>(null)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [showForm, setShowForm] = useState<boolean>(false)
+  const dispatch = useDispatch()
+  const user = useSelector((store: IAppState) => store.user)
 
-  const classes = useStyles()
-  const iconClasses = useIconStyles()
+  const activeBrandSettings = getActiveTeamSettings(user, '', true)
+  const showYardSign = activeBrandSettings[YARD_SIGN_REQUESTS_SETTINGS_KEY]
 
   useEffect(() => {
     if (popoverActions.current) {
       popoverActions.current.updatePosition()
     }
   }, [showForm])
+
+  if (!showYardSign) {
+    return null
+  }
 
   const toggleMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null = null
@@ -67,11 +55,11 @@ function YardSign({ deal, style, setSelectedTask }: Props & DispatchProps) {
 
   const onCreateTask = (task: IDealTask): void => {
     toggleMenu()
-    setSelectedTask(task)
+    dispatch(setSelectedTask(task))
   }
 
   const handleSelectItem = (task: IDealTask): void => {
-    setSelectedTask(task)
+    dispatch(setSelectedTask(task))
   }
 
   return (
@@ -79,13 +67,11 @@ function YardSign({ deal, style, setSelectedTask }: Props & DispatchProps) {
       <DropdownToggleButton
         isActive={Boolean(anchorEl)}
         variant="outlined"
-        color="secondary"
         size="small"
-        className={classes.button}
         style={style}
         onClick={toggleMenu}
       >
-        <YardSignIcon className={iconClasses.rightMargin} /> Yard Sign
+        Yard Sign
       </DropdownToggleButton>
 
       <Popover
@@ -118,7 +104,4 @@ function YardSign({ deal, style, setSelectedTask }: Props & DispatchProps) {
   )
 }
 
-export default connect<null, DispatchProps, Props>(
-  null,
-  { setSelectedTask }
-)(YardSign)
+export default YardSign

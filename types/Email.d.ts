@@ -110,7 +110,10 @@ declare interface IEmailCampaignInputBase {
 }
 
 declare interface IIndividualEmailCampaignInput
-  extends IEmailCampaignInputBase {}
+  extends IEmailCampaignInputBase {
+  google_credential?: string
+  microsoft_credential?: string
+}
 
 interface IEmailHeaders {
   message_id?: string
@@ -163,6 +166,7 @@ declare type IEmailCampaign<
   complained: number
   stored: number
   text: string
+  template?: IMarketingTemplateInstance
   type: 'email_campaign'
   sent: number
   microsoft_credential: UUID | null
@@ -173,7 +177,7 @@ declare type IEmailCampaign<
   IEmailRecipient<RecipientAssociations>[],
   Associations
 > &
-  Association<'from', IUser, Associations> &
+  Association<'from', IUser | IOAuthAccount, Associations> &
   Association<'template', IMarketingTemplateInstance | null, Associations> &
   Association<
     'emails',
@@ -212,7 +216,7 @@ declare type IEmail<Fields extends IEmailOptionalFields = ''> = {
   from: string
   to: string[]
   subject: string
-  headers: IEmailCampaignInput['headers'] // ask
+  headers?: IEmailCampaignInput['headers'] // ask
   mailgun_id: string
   domain: 'Marketing' // ask
   campaign: UUID
@@ -230,6 +234,7 @@ declare type IEmail<Fields extends IEmailOptionalFields = ''> = {
   google_id: null | string
   microsoft_id: null | string
   tracking_id: UUID
+  is_read: boolean
   type: 'email'
 } & Association<'html', string, Fields> &
   Association<'text', string, Fields>

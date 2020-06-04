@@ -9,7 +9,11 @@ export interface DrawerProps extends OriginalDrawerProps {
   closeOnBackdropClick?: boolean
   closeOnEscape?: boolean
   onClose: (event: {}, reason: DrawerCloseReason) => void
-  width?: number | string
+}
+
+export interface StyleProps {
+  width?: string | number
+  zIndex?: number
 }
 
 export interface DrawerContextType extends Pick<DrawerProps, 'onClose'> {

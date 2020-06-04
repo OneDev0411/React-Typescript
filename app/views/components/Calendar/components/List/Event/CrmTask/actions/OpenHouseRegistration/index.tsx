@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import Button from '@material-ui/core/Button'
 
@@ -11,30 +11,19 @@ interface Props {
   event: ICalendarEvent
 }
 
-interface StateProps {
-  user: IUser
-}
+export function OpenHouseRegistration({ event }: Props) {
+  const user = useSelector<IAppState, IUser>(({ user }) => user)
 
-function OpenHouseRegistration({ event, user }: Props & StateProps) {
-  if (event.event_type === 'Open House') {
-    return (
-      <Button
-        variant="outlined"
-        color="secondary"
-        size="small"
-        href={`/openhouse/${event.crm_task}/${getActiveTeamId(user)}/register`}
-        target="_blank"
-      >
-        Guest Registration Page
-      </Button>
-    )
+  if (event.event_type !== 'Open House') {
+    return null
   }
 
-  return null
+  return (
+    <Button
+      href={`/openhouse/${event.crm_task}/${getActiveTeamId(user)}/register`}
+      target="_blank"
+    >
+      Guest Registration Page
+    </Button>
+  )
 }
-
-function mapStateToProps({ user }: IAppState): StateProps {
-  return { user }
-}
-
-export default connect(mapStateToProps)(OpenHouseRegistration)

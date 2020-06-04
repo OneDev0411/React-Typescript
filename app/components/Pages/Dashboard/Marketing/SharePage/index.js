@@ -12,7 +12,7 @@ function Share(props) {
               minHeight: '2.5rem',
               maxHeight: '2.5rem'
             }}
-            src="/static/images/appicon.png"
+            src="/static/images/logo.svg"
           />
         </a>
       </div>

@@ -20,6 +20,7 @@ import { intercom } from './intercom'
 import { tasks } from './tasks'
 import { notifications as globalNotifications } from './notifications'
 import { emailTemplates } from './email-templates'
+import { inbox } from './inbox'
 
 const appReducer = combineReducers({
   socket,
@@ -35,6 +36,8 @@ const appReducer = combineReducers({
   intercom,
   confirmation,
   globalNotifications,
+  inbox,
+
   /* deals reducers */
   deals,
 

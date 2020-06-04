@@ -1,4 +1,5 @@
 import _ from 'underscore'
+
 import types from '../../constants/chatroom'
 
 export function initialStates(states) {

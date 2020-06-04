@@ -1,14 +1,13 @@
 import React, { useContext, useState, useRef, useEffect } from 'react'
-import { connect } from 'react-redux'
-import { withRouter, RouteComponentProps } from 'react-router'
-
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
-
-import { Popover, createStyles, makeStyles, Theme } from '@material-ui/core'
+import { useSelector, useDispatch } from 'react-redux'
+import { withRouter, WithRouterProps } from 'react-router'
+import { Popover } from '@material-ui/core'
 import { PopoverActions } from '@material-ui/core/Popover'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
+import { getActiveTeamSettings } from 'utils/user-teams'
+import { OPEN_HOUSE_REQUESTS_SETTINGS_KEY } from 'constants/user'
 
 import { createTaskComment } from 'deals/utils/create-task-comment'
 import { setSelectedTask, updateTask } from 'actions/deals'
@@ -16,56 +15,37 @@ import { setSelectedTask, updateTask } from 'actions/deals'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 import { IAppState } from 'reducers'
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { getActiveTeamId } from 'utils/user-teams'
-
-import OpenHouseIcon from 'components/SvgIcons/OpenHouseOutline/IconOpenHouseOutline'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
-
-import { getSizeDependentStyles } from 'components/Button/ActionButton'
 
 import List from './List'
 import Form from './Form'
 
-interface DispatchProps {
-  setSelectedTask(task: IDealTask): void
-  updateTask: IAsyncActionProp<typeof updateTask>
-}
-
-interface StateProps {
-  user: IUser
-  activeTeamId: UUID | null
-}
-
 interface Props {
   deal: IDeal
   defaultOpen: boolean
-  style: React.CSSProperties
+  style?: React.CSSProperties
 }
 
-const useStyles = makeStyles((theme: Theme) => {
-  return createStyles({
-    button: {
-      ...getSizeDependentStyles({}),
-      lineHeight: 'inherit',
-      borderColor: theme.palette.common.black
-    }
-  })
-})
-
 function OpenHouses({
-  user,
-  activeTeamId,
   deal,
   style,
   location,
-  defaultOpen = false,
-  updateTask,
-  setSelectedTask
-}: Props & StateProps & DispatchProps & RouteComponentProps<any, {}>) {
-  const classes = useStyles()
-  const iconClasses = useIconStyles()
+  defaultOpen = false
+}: Props & WithRouterProps) {
+  const dispatch = useDispatch()
+
+  const { user, activeTeamId, checklists } = useSelector(
+    ({ user, deals }: IAppState) => ({
+      user,
+      activeTeamId: getActiveTeamId(user),
+      checklists: getDealChecklists(deal, deals.checklists)
+    })
+  )
+
+  const activeBrandSettings = getActiveTeamSettings(user, '', true)
+  const showOpenHouse = activeBrandSettings[OPEN_HOUSE_REQUESTS_SETTINGS_KEY]
 
   const confirmation = useContext(ConfirmationModalContext)
 
@@ -88,6 +68,10 @@ function OpenHouses({
     }
   }, [defaultOpen])
 
+  if (!showOpenHouse) {
+    return null
+  }
+
   const toggleMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null = null
   ) => {
@@ -106,8 +90,12 @@ function OpenHouses({
 
   const handleUpsertTask = (task: IDealTask): void => {
     setShowForm(false)
-    setSelectedTask(task)
+    dispatch(setSelectedTask(task))
     toggleMenu()
+
+    if (location.state && location.state.autoBookOpenHouse) {
+      location.state = {}
+    }
   }
 
   const handleClickEdit = (task: IDealTask): void => {
@@ -123,10 +111,10 @@ function OpenHouses({
       needsUserEntry: true,
       inputDefaultValue: "I'd like to cancel this open house, please.",
       onConfirm: (text: string) => {
-        updateTask(task.id, { title: 'Delete Open House' })
+        dispatch(updateTask(task.id, { title: 'Delete Open House' }))
 
         createTaskComment(task, user.id, text)
-        setSelectedTask(task)
+        dispatch(setSelectedTask(task))
       }
     })
   }
@@ -137,71 +125,56 @@ function OpenHouses({
         ref={actionButtonRef}
         isActive={Boolean(anchorEl)}
         variant="outlined"
-        color="secondary"
         size="small"
-        className={classes.button}
         style={style}
+        disabled={checklists.length === 0}
         onClick={toggleMenu}
       >
-        <OpenHouseIcon className={iconClasses.rightMargin} /> Open House
+        Open House
       </DropdownToggleButton>
-      <Popover
-        id={anchorEl ? 'openhouse-popover' : undefined}
-        action={popoverActions}
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={() => toggleMenu()}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left'
-        }}
-        style={{ zIndex: 10 }}
-      >
-        {showForm ? (
-          <Form
-            deal={deal}
-            task={selectedItem}
-            createRegistrationPage={!location.query.createOpenHouse}
-            defaultStartTime={location.query.startTime}
-            defaultEndTime={location.query.endTime}
-            onUpsertTask={handleUpsertTask}
-          />
-        ) : (
-          <List
-            deal={deal}
-            activeTeamId={activeTeamId}
-            onClickNewItem={() => setShowForm(true)}
-            onSelectItem={setSelectedTask}
-            onClickEdit={handleClickEdit}
-            onClickDelete={handleDelete}
-          />
-        )}
-      </Popover>
+
+      {checklists.length > 0 && (
+        <Popover
+          id={anchorEl ? 'openhouse-popover' : undefined}
+          action={popoverActions}
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={() => toggleMenu()}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left'
+          }}
+          style={{ zIndex: 10 }}
+        >
+          {showForm ? (
+            <Form
+              deal={deal}
+              task={selectedItem}
+              autoBookOpenHouse={
+                location.state && location.state.autoBookOpenHouse === true
+              }
+              defaultStartDate={location.state && location.state.startTime}
+              defaultEndDate={location.state && location.state.endTime}
+              onUpsertTask={handleUpsertTask}
+            />
+          ) : (
+            <List
+              deal={deal}
+              activeTeamId={activeTeamId}
+              onClickNewItem={() => setShowForm(true)}
+              onSelectItem={task => dispatch(setSelectedTask(task))}
+              onClickEdit={handleClickEdit}
+              onClickDelete={handleDelete}
+            />
+          )}
+        </Popover>
+      )}
     </>
   )
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    updateTask: (...args: Parameters<typeof updateTask>) =>
-      dispatch(updateTask(...args)),
-    setSelectedTask: (...args: Parameters<typeof setSelectedTask>) =>
-      dispatch(setSelectedTask(...args))
-  }
-}
-
-function mapStateToProps({ user }: IAppState): StateProps {
-  return {
-    user,
-    activeTeamId: getActiveTeamId(user)
-  }
-}
-
-export default connect<StateProps, DispatchProps, Props>(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(OpenHouses))
+export default withRouter(OpenHouses)

@@ -67,7 +67,7 @@ export function BasicMultiSelectDropdown({
         }
 
         return (
-          <Item key={item.value} onClick={onClick} noContrast>
+          <Item key={item.value} onClick={onClick}>
             <Checkbox
               id={`dropdown-item${item.value}`}
               checked={isSelected(item)}

@@ -11,8 +11,7 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 100%;
-  background-color: ${borderColor};
-
+  background-color: ${props => props.theme.palette.divider};
   > button {
     border: 0;
     clip: rect(0 0 0 0);
@@ -46,7 +45,7 @@ export const Image = styled.img`
 
 export const Initials = styled.div`
   font-size: 1.5rem;
-  color: #fff;
+  color: ${props => props.theme.palette.text.primary};
 `
 
 export const TriggerText = styled.div`

@@ -1,6 +1,13 @@
-declare type IMarketingTemplate = {
-  id: UUID
-  created_at: number
+declare interface IBrandMarketingTemplate extends IModel<'brand_template'> {
+  template: IMarketingTemplate
+  brand: UUID
+  thumbnail_requested_at: Nullable<number>
+  is_thumbnail_ready: Nullable<boolean>
+  thumbnail: IFile
+  preview: IFile
+}
+
+declare interface IMarketingTemplate extends IModel<'template'> {
   name: string
   brand: null
   template_type: string
@@ -10,8 +17,6 @@ declare type IMarketingTemplate = {
   url: string
   variant: string
   inputs: string[]
-  type: 'template'
-  updated_at: number
 }
 
 declare type IMarketingTemplateInstance<

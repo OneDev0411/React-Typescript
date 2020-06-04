@@ -6,6 +6,8 @@ import Drawer from 'components/OverlayDrawer'
 
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
+
 import PreviewFile from './PreviewFile'
 import SendSMS from './SendSMS'
 import DownloadImage from './DownloadImage'
@@ -27,7 +29,9 @@ class SocialDrawer extends React.Component {
     }
 
     try {
-      const instance = await getTemplateInstances(this.props.template.id, {
+      const template = getTemplateObject(this.props.template)
+
+      const instance = await getTemplateInstances(template.id, {
         ...this.props.templateInstanceData,
         html: this.props.template.result
       })

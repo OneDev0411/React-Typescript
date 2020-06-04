@@ -4,14 +4,11 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
-  useRef,
-  useState
+  useRef
 } from 'react'
 import Dropzone from 'react-dropzone'
 import { EditorState } from 'draft-js'
 import PluginsEditor from 'draft-js-plugins-editor'
-import { stateToHTML } from 'draft-js-export-html'
-import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
 import { makeStyles } from '@material-ui/core'
 import { shallowEqual } from 'recompose'
@@ -19,10 +16,9 @@ import { shallowEqual } from 'recompose'
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 
 import { EditorContainer, EditorWrapper, Toolbar } from './styled'
-import { FieldError } from '../final-form-fields/FieldError'
+// import { FieldError } from '../final-form-fields/FieldError'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { TextEditorProps } from './types'
-import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
 import { styles } from './styles'
@@ -52,8 +48,7 @@ export const TextEditor = forwardRef(
       disabled = false,
       autofocus = false,
       minHeight = true,
-      input = null,
-      onChange = () => {},
+      onChange = (state: EditorState) => undefined,
       placeholder = 'Type something…',
       plugins = [],
       DraftEditorProps = {},
@@ -62,28 +57,15 @@ export const TextEditor = forwardRef(
       appendix = null,
       toolbarRef,
       style,
+      editorState,
       ...props
     }: TextEditorProps,
     ref
   ) => {
     const editorElementRef = useRef<HTMLDivElement>(null)
     const editorRef = useRef<PluginsEditor>(null)
-    const editorStateRef = useRef<EditorState | null>(null)
 
     const classes = useStyles(props)
-
-    /**
-     * Images are not rendered appropriately without this option.
-     */
-    const { stateToHtmlOptions, stateFromHtmlOptions } = useMemo(
-      () =>
-        getHtmlConversionOptions(() =>
-          editorRef.current // editorRef is null in first render
-            ? editorRef.current.getEditorState()
-            : editorStateRef.current
-        ),
-      []
-    )
 
     /**
      * NOTE 1: We don't use top level plugin definition to prevent bugs when
@@ -94,53 +76,19 @@ export const TextEditor = forwardRef(
      */
     const { ...otherPlugins } = useMemo(() => createPlugins(), [])
 
-    const getInitialState = () => {
-      const initialValue = (input && input.value) || defaultValue
-
-      return EditorState.createWithContent(
-        stateFromHTML(initialValue, stateFromHtmlOptions)
-      )
-    }
-    const [editorState, setEditorState] = useState(getInitialState)
-
-    editorStateRef.current = editorState
-
     const handleChange = (newState: EditorState) => {
       if (!newState) {
         return false
       }
 
-      setEditorState(newState)
-
-      const newContent = newState.getCurrentContent()
-      /**
-       * We could have call onChange only of content state is changed to prevent
-       * unnecessary calls when only selection is changed. But it causes
-       * problems because {@link ContentState#mergeEntityData} (which is used
-       * in alignment plugin and other places) mutates contentState in place
-       * see this: https://github.com/facebook/draft-js/issues/940
-       * Note that this issue is closed at the time of writing this comment
-       * but it's without being fixed. At least in v0.10
-       */
-
-      const html =
-        newContent.getPlainText() === '' // isEmpty returns false if there is an empty paragraph
-          ? ''
-          : stateToHTML(newContent, stateToHtmlOptions)
-
-      setTimeout(() => (input ? input.onChange(html) : onChange(html)))
+      onChange(newState)
     }
 
     useImperativeHandle(
       ref,
       createEditorRef({
-        editorElementRef,
-        editorRef,
-        handleChange,
-        stateToHtmlOptions,
-        stateFromHtmlOptions
-      }),
-      [stateToHtmlOptions]
+        editorElementRef
+      })
     )
 
     const {
@@ -149,7 +97,6 @@ export const TextEditor = forwardRef(
       getDropzoneProps
     } = useCreateEditorContext({
       editorState,
-      stateFromHtmlOptions,
       onChange: handleChange,
       editorRef
     })
@@ -168,22 +115,22 @@ export const TextEditor = forwardRef(
     const firstRenderFlagRef = useRef(true)
 
     useEffect(() => {
-      const pluginsEditor = editorRef.current
-
-      if (firstRenderFlagRef.current && pluginsEditor && rerenderEditor) {
+      if (firstRenderFlagRef.current && editorRef.current && rerenderEditor) {
         // draft-js-plugins-editor uses UNSAFE_componentWillMount to create
         // the editor state with proper decorator. If we don't delay running
         // this, it causes decorator to not being set correctly which has
         // serious consequences. e.g. links don't render properly.
         setTimeout(() => {
+          const pluginsEditor = editorRef.current
+
           firstRenderFlagRef.current = false
 
-          if (editorStateRef.current) {
-            setEditorState(moveSelectionToStart(editorStateRef.current))
-          }
+          if (pluginsEditor) {
+            onChange(moveSelectionToStart(pluginsEditor.getEditorState()))
 
-          if (autofocus) {
-            pluginsEditor.editor && pluginsEditor.focus()
+            if (autofocus) {
+              pluginsEditor.editor && pluginsEditor.focus()
+            }
           }
         })
       }
@@ -192,9 +139,9 @@ export const TextEditor = forwardRef(
 
     useEffect(() => {}, [])
 
-    const dropzoneProps: Partial<
-      ComponentType<typeof Dropzone>
-    > = getDropzoneProps({
+    const dropzoneProps: Partial<ComponentType<
+      typeof Dropzone
+    >> = getDropzoneProps({
       disabled: !onAttachmentDropped,
       accept: onAttachmentDropped ? '*/*' : undefined,
       onDrop: (files: File[]) => {
@@ -267,8 +214,9 @@ export const TextEditor = forwardRef(
         <Toolbar ref={toolbarRef} className={classes.toolbar}>
           <ToolbarFragments segments={toolbarFragments} />
         </Toolbar>
-        {input && <FieldError name={input.name} />}
       </EditorContainer>
     )
   }
 )
+
+// {input && <FieldError name={input.name} />}

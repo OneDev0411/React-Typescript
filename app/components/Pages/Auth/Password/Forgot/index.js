@@ -7,13 +7,14 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import signup from '../../../../../models/auth/signup'
-import { getBrandInfo } from '../../SignIn'
+import { getBrandInfo } from '../../SignIn/get-brand-info'
 import resetPassword from '../../../../../models/auth/password/reset'
 import Button from '../../../../../views/components/Button/ActionButton'
 import SimpleField from '../../../Dashboard/Account/Profile/components/SimpleField'
 
 const ForgotForm = ({
   brand,
+  username,
   submitError,
   isSubmitting,
   handleSubmit,
@@ -37,7 +38,6 @@ const ForgotForm = ({
               />
             </a>
           )}
-          <h1 className="c-auth__title">{siteTitle}</h1>
           {!resetSuccessfully && (
             <p className="c-auth__subtitle">Forgot your password?</p>
           )}
@@ -70,7 +70,9 @@ const ForgotForm = ({
               </Button>
               <p className="c-auth__subtitle">
                 <small>Change your mind?</small>&nbsp;&nbsp;
-                <Link to="/signin">Sign in</Link>
+                <Link to={`/signin?username=${encodeURIComponent(username)}`}>
+                  Sign in
+                </Link>
               </p>
             </form>
           ) : (
@@ -80,7 +82,9 @@ const ForgotForm = ({
                 <br />
                 Please check <b>{resetSuccessfully}</b>.
               </p>
-              <a href="/">Back to homepage</a>
+              <a className="c-auth__subtitle" href="/">
+                Back to homepage
+              </a>
             </div>
           )}
         </main>
@@ -107,6 +111,7 @@ export default compose(
 
     return {
       brand,
+      username: email,
       initialValues: { email }
     }
   }),

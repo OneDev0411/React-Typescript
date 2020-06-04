@@ -1,7 +1,5 @@
 import styled, { keyframes, css } from 'styled-components'
 
-import { primary } from 'views/utils/colors'
-
 const infinityLoading = keyframes`
   from {
     left: 0;
@@ -25,7 +23,7 @@ export const Container = styled.div`
 `
 
 export const Bar = styled.div`
-  background-color: ${primary};
+  background-color: ${({ theme }) => theme.palette.secondary.main};
   width: ${props => props.percents}%;
   transition: width 0.2s ease-in;
   max-width: 100%;

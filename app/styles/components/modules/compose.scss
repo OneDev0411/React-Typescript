@@ -56,9 +56,9 @@
     }
   }
 
-  &.isFocused{
-    background-color:  #ffffff ;
-    border-color: #0945eb;
+  &.isFocused {
+    background-color: #ffffff;
+    border-color: $brand-primary;
     input::placeholder {
       color: #000000;
     }
@@ -69,7 +69,7 @@
 
   .to {
     letter-spacing: -0.2px;
-    color: #7F7F7F;
+    color: #7f7f7f;
     margin-right: 5px;
   }
   .tag {
@@ -100,7 +100,7 @@
       transition: 0.3s ease-in all;
       color: #9a9b9a;
       &:hover {
-        color: #0945eb;
+        color: $brand-primary;
       }
     }
   }
@@ -110,7 +110,7 @@
     margin: 0 0 0 5px;
     background-color: transparent;
     border: none;
-    caret-color: #0945eb;
+    caret-color: $brand-primary;
     &:focus {
       outline: 0;
     }
@@ -131,9 +131,9 @@
       display: inline-block;
       vertical-align: middle;
       float: none;
-      .suggestions__name:hover{
+      .suggestions__name:hover {
         text-decoration: underline;
-        }
+      }
     }
     .user-avatar {
       display: inline;
@@ -141,8 +141,7 @@
     }
     &:hover {
       background-color: #fafafa;
-      color: #0945eb;
-      
+      color: $brand-primary;
     }
   }
 }

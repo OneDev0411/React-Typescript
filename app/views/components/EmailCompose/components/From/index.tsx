@@ -71,7 +71,23 @@ export function From({ accounts, children, user }: Props) {
     microsoft: FieldRenderProps<any>
     google: FieldRenderProps<any>
   }) => {
-    const value = google.input.value || microsoft.input.value
+    const getValue = () => {
+      if (!hasAccounts) {
+        return ''
+      }
+
+      const isCredentialValid = credential =>
+        accounts!.some(a => a.type === credential)
+
+      if (google.input.value && isCredentialValid('google_credential')) {
+        return google.input.value
+      }
+
+      if (microsoft.input.value && isCredentialValid('microsoft_credential')) {
+        return microsoft.input.value
+      }
+    }
+
     const handleChange = (event: React.ChangeEvent<{ value: string }>) => {
       const selectedAccount = getSelectedAccount(event.target.value)
 
@@ -105,7 +121,7 @@ export function From({ accounts, children, user }: Props) {
             <>
               <Select
                 required
-                value={value}
+                value={getValue()}
                 error={error}
                 onChange={handleChange}
                 displayEmpty

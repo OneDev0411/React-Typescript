@@ -39,10 +39,9 @@ function UploadPlaceholder(props: Props & DispatchProps) {
       onRef={ref => (dropzoneRef.current = ref)}
     >
       <Container>
-        Drag & drop,
-        <ItemLink onClick={handleSelectFile}>upload</ItemLink>
-        or email files to
-        <ItemLink onClick={handleCopyEmail}>{props.deal.email}</ItemLink>
+        Drag & drop, <ItemLink onClick={handleSelectFile}>upload</ItemLink> or
+        email files to{' '}
+        <ItemLink onClick={handleCopyEmail}>{props.deal.email}</ItemLink>{' '}
       </Container>
     </UploadManager>
   )

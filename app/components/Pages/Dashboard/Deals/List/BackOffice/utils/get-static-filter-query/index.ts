@@ -5,20 +5,21 @@ import { SearchQuery } from '../../types'
  * @param user
  * @param searchQuery
  */
-export function getStaticFilterQuery(searchQuery: SearchQuery): object {
+export function getStaticFilterQuery(
+  searchQuery: SearchQuery,
+  statuses: IDealStatus[] = []
+): object {
   if (searchQuery.filter === 'listing') {
     return {
       contexts: {
-        contract_status: {
-          text: [
-            'Coming Soon',
-            'Active',
-            'Pending',
-            'Temp Off Market',
-            'Active Option Contract',
-            'Active Contingent',
-            'Active Kick Out'
-          ]
+        listing_status: {
+          text: statuses
+            .filter(
+              item =>
+                item.deal_types.includes('Selling') &&
+                item.is_archived === false
+            )
+            .map(item => item.label)
         }
       }
     }
@@ -28,13 +29,12 @@ export function getStaticFilterQuery(searchQuery: SearchQuery): object {
     return {
       contexts: {
         contract_status: {
-          text: [
-            'Lease Contract',
-            'Active Option Contract',
-            'Active Contingent',
-            'Active Kick Out',
-            'Pending'
-          ]
+          text: statuses
+            .filter(
+              item =>
+                item.deal_types.includes('Buying') && item.is_archived === false
+            )
+            .map(item => item.label)
         }
       }
     }

@@ -1,9 +1,6 @@
 import React from 'react'
 
-import { Link } from 'react-router'
 import { Divider, createStyles, makeStyles, Theme } from '@material-ui/core'
-
-import { getDealAddress } from 'deals/utils/get-deal-address'
 
 import MlsConnect from './MlsConnect'
 import Side from './Side'
@@ -19,7 +16,8 @@ const useStyles = makeStyles((theme: Theme) => {
     root: {
       display: 'flex',
       alignItems: 'center',
-      paddingLeft: theme.spacing(10)
+      ...theme.typography.body2,
+      fontWeight: 700
     },
     divider: {
       margin: theme.spacing(0, 1),
@@ -30,37 +28,14 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export function ListingProperties(props: Props) {
   const classes = useStyles()
-  const address = getDealAddress(props.deal)
 
   return (
     <div className={classes.root}>
-      {address}
-      {address.length > 0 && (
-        <Divider orientation="vertical" className={classes.divider} />
-      )}
-
-      {/* 
-      // @ts-ignore js component */}
       <Side deal={props.deal} isBackOffice={props.isBackOffice} />
-
       <Divider orientation="vertical" className={classes.divider} />
-
-      {/* 
-      // @ts-ignore js component */}
       <PropertyType deal={props.deal} isBackOffice={props.isBackOffice} />
-
       <Divider orientation="vertical" className={classes.divider} />
-
-      {/* 
-      // @ts-ignore js component */}
       <MlsConnect deal={props.deal} />
-
-      {props.deal.listing && (
-        <>
-          <Divider orientation="vertical" className={classes.divider} />
-          <Link to={`/dashboard/mls/${props.deal.listing}`}>View MLS</Link>
-        </>
-      )}
     </div>
   )
 }

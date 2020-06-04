@@ -2,12 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import uniqBy from 'lodash/uniqBy'
+import { Button } from '@material-ui/core'
 
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
 import { getUserTitle } from '../../../../models/user/helpers'
 
 import { TeamMember } from '../TeamMember'
-import Button from '../../Button/TextIconButton'
+import { iconSizes } from '../../SvgIcons/icon-sizes'
 import AddIcon from '../../SvgIcons/Add/AddIcon'
 import { BasicDropdown } from '../../BasicDropdown'
 
@@ -83,20 +84,10 @@ export class Assignees extends React.Component {
           itemToString={getUserTitle}
           style={{ display: 'inline-flex' }}
           buttonRenderer={buttonProps => (
-            <Button
-              {...buttonProps}
-              iconLeft={AddIcon}
-              text={this.props.buttonText}
-              appearance="link"
-              size="medium"
-              type="button"
-              style={{
-                height: 'auto',
-                padding: '0',
-                fontWeight: 500,
-                lineHeight: 1
-              }}
-            />
+            <Button {...buttonProps} variant="text" type="button">
+              <AddIcon size={iconSizes.small} />
+              {this.props.buttonText}
+            </Button>
           )}
           itemRenderer={({ item, ...itemProps }) => (
             <TeamMember

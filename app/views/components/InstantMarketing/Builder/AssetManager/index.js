@@ -1,7 +1,9 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { Uploader } from 'components/Uploader'
+
+import { AppTheme } from '../../../../../AppTheme'
 
 import { AssetImage } from './AssetImage'
 
@@ -19,19 +21,19 @@ export const load = async () => {
         editor.StorageManager.load(key, data => res(data))
       })
 
-    const { templateId } = await getStorageData('templateId')
-
     const AssetView = Backbone.View.extend({
       initialize({ model }) {
         this.model = model
       },
       render() {
         ReactDOM.render(
-          <AssetImage
-            model={this.model}
-            target={target}
-            templateId={templateId}
-          />,
+          <AppTheme>
+            <AssetImage
+              model={this.model}
+              target={target}
+              getTemplateId={() => getStorageData('templateId')}
+            />
+          </AppTheme>,
           this.el
         )
 
@@ -46,6 +48,8 @@ export const load = async () => {
             accept="image/*"
             uploadHandler={async files => {
               try {
+                const { templateId } = await getStorageData('templateId')
+
                 const uploadResponses = await Promise.all(
                   files.map(file => uploadAsset(file, templateId))
                 )
@@ -76,7 +80,7 @@ export const load = async () => {
               }
             }}
           >
-            <Fragment>Click or drop images here</Fragment>
+            <>Click or drop images here</>
           </Uploader>,
           this.el
         )

@@ -1,6 +1,5 @@
 import React from 'react'
 import Downshift from 'downshift'
-import _ from 'underscore'
 
 import { Item } from 'components/Dropdown/Item'
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
@@ -74,7 +73,7 @@ export class DropDownList extends React.Component {
           onOuterClick={this.toggleMenu}
           onInputValueChange={this.onInputValueChange}
         >
-          {({ isOpen, getInputProps, getItemProps }) => (
+          {({ isOpen, getInputProps, getItemProps, highlightedIndex }) => (
             <div>
               <ItemsContainer>
                 <InputContainer
@@ -110,6 +109,7 @@ export class DropDownList extends React.Component {
                       {...getItemProps({
                         index,
                         item,
+                        isActive: index === highlightedIndex,
                         isSelected: item.label === defaultValue
                       })}
                     >

@@ -2,13 +2,13 @@ import React from 'react'
 import { render } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-import fullContactJson from 'fixtures/contacts/full-contact.json'
+import fullContact from 'fixtures/contacts/full-contact.json'
 
 import mockDate, { RealDate } from 'utils/test-utils/mock-date'
 
-import { LastTouched } from '.'
+import { AppTheme } from '../../../AppTheme'
 
-const fullContact = fullContactJson as IContact
+import { LastTouched } from '.'
 
 describe('Contact profile last touched component', () => {
   beforeEach(() => {
@@ -20,13 +20,21 @@ describe('Contact profile last touched component', () => {
   })
 
   it('renders', () => {
-    const wrapper = render(<LastTouched contact={fullContact} />)
+    const wrapper = render(
+      <AppTheme>
+        <LastTouched contact={fullContact as any} />
+      </AppTheme>
+    )
 
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
   it('renders touch periods without decimal points', () => {
-    const wrapper = render(<LastTouched contact={fullContact} />)
+    const wrapper = render(
+      <AppTheme>
+        <LastTouched contact={fullContact as any} />
+      </AppTheme>
+    )
 
     const decimalPointedPeriod =
       (fullContact.next_touch! - fullContact.last_touch!) / 86400

@@ -11,7 +11,6 @@ export const EditorContext = createContext<EditorContextApi>({
   addPlugins: editorContextMethodStub,
   editorRef: createRef(),
   editorState: null as any, // We can provide exception throwing getter instead
-  stateFromHtmlOptions: null as any,
   addDropzonePropsInterceptor: editorContextMethodStub,
   setEditorState: editorContextMethodStub
 })

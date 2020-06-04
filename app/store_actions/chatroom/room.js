@@ -1,7 +1,9 @@
 import _ from 'underscore'
+
+import { addNotification as notify } from 'reapop'
+
 import Chatroom from '../../models/Chatroom'
 import types from '../../constants/chatroom'
-import { addNotification as notify } from 'reapop'
 
 function _getRooms(rooms) {
   return {
@@ -53,11 +55,13 @@ export function createRoom(recipients) {
 
       return room.id
     } catch (e) {
-      dispatch(notify({
-        title: 'Can not create room',
-        message: e.response ? e.response.body.message : null,
-        status: 'error'
-      }))
+      dispatch(
+        notify({
+          title: 'Can not create room',
+          message: e.response ? e.response.body.message : null,
+          status: 'error'
+        })
+      )
 
       return null
     }
@@ -100,10 +104,12 @@ export function removeMember(roomId, memberId) {
     ) {
       dispatch(removeMemberFromRoom(roomId, memberId))
     } else {
-      dispatch(notify({
-        message: response.response.body.message,
-        status: 'error'
-      }))
+      dispatch(
+        notify({
+          message: response.response.body.message,
+          status: 'error'
+        })
+      )
     }
   }
 }

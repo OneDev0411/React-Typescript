@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 
-import { primary, grey } from 'views/utils/colors'
 import IconSearchBase from 'components/SvgIcons/Search/IconSearch'
 import IconButtonFlex from 'components/Button/IconButton'
 
@@ -8,10 +7,14 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   border-radius: 0.25rem;
-  background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};
-  border: solid 1px ${({ isFocused }) => (isFocused ? primary : '#d4d4d4')};
+  background-color: ${({ isFocused, theme }) =>
+    isFocused ? theme.palette.common.white : '#f9f9f9'};
+  border: solid 1px
+    ${({ isFocused, theme }) =>
+      isFocused ? theme.palette.primary.main : theme.palette.divider};
   :hover {
-    background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A100)};
+    background-color: ${({ isFocused, theme }) =>
+      isFocused ? theme.palette.common.white : theme.palette.grey[100]};
   }
 `
 
@@ -22,7 +25,7 @@ export const TextInput = styled.input`
   font-size: 1rem;
   padding: 0 0.3125rem;
   background-color: transparent;
-  caret-color: ${primary};
+  caret-color: ${({ theme }) => theme.palette.primary.main};
 
   ::-ms-clear {
     display: none;
@@ -30,16 +33,16 @@ export const TextInput = styled.input`
 
   ::-webkit-input-placeholder {
     font-size: 1rem;
-    font-weight: 500;
-    color: ${grey.A900};
-    font-family: Barlow, sans-serif;
+    font-weight: 400;
+    color: ${({ theme }) => theme.palette.grey[600]};
+    font-family: LatoRegular, sans-serif;
   }
 
   ::placeholder {
     font-size: 1rem;
     font-weight: normal;
-    color: ${grey.A900};
-    font-family: Barlow, sans-serif;
+    color: ${({ theme }) => theme.palette.grey[600]};
+    font-family: LatoRegular, sans-serif;
   }
 
   :focus {
@@ -49,7 +52,7 @@ export const TextInput = styled.input`
 
 export const IconSearch = styled(IconSearchBase)`
   path {
-    fill: ${grey.A900} !important;
+    fill: ${({ theme }) => theme.palette.grey[600]} !important;
   }
   ${Container}:hover & path {
     fill: #000000 !important;
@@ -57,7 +60,7 @@ export const IconSearch = styled(IconSearchBase)`
 `
 
 export const Icon = styled.div`
-  color: ${grey.A900};
+  color: ${({ theme }) => theme.palette.grey[600]};
   padding-top: 0.25rem;
 `
 

@@ -1,8 +1,3 @@
-.l-account {
-  display: flex;
-  height: 100vh;
-}
-
 .l-account__sidenav {
   width: 15rem;
   background: #f2f2f2;
@@ -18,18 +13,5 @@
     margin: 0;
     line-height: 1;
     font-size: 1.125rem;
-  }
-}
-
-.l-account__main {
-  position: relative;
-  width: calc(100% - 230px);
-  overflow-x: hidden;
-  overflow-y: scroll;
-  box-shadow: -1px 0 2px 0 rgba(0,0,0,0.04), -1px 0 20px 0 rgba(0,0,0,0.1);
-
-  .signin-page-wrapper {
-    height: auto;
-    padding-top: 5em;
   }
 }

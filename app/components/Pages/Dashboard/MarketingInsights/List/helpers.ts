@@ -34,14 +34,26 @@ export function recipientsList(recipients) {
   }
 }
 
-export function show_title(title) {
-  return title ? title.trim() : 'No Title'
+export function truncateString(title, limit = 0) {
+  if (!title) {
+    return 'No Subject'
+  }
+
+  const trimedTitle = title.trim()
+
+  return limit > 0 && trimedTitle.length > limit
+    ? `${trimedTitle.substring(0, limit)}...`
+    : trimedTitle
 }
 
 export function isEmailQueued(item) {
   const now = new Date().getTime()
 
   return item.due_at * 1000 > now
+}
+
+export function isEmailFailed(item) {
+  return !!item.failed_at
 }
 
 export function isEmailScheduled(item) {
@@ -56,78 +68,23 @@ export function doFilterOnInsightList(
   list,
   type: InsightFiltersType = InsightFiltersType.SENT
 ) {
-  // Defining a muatable const :D
-  const output = {
-    list: [],
-    stats: {
-      scheduled: 0,
-      sent: 0
-    }
-  }
+  const isSentStatus = type === InsightFiltersType.SENT
 
-  // Filtering based on types
-  if (type === InsightFiltersType.SCHEDULED) {
-    output.list = list.filter(function filterInsightList(item) {
-      return isEmailScheduled(item)
-    })
+  const filteredList = list.filter(item => {
+    const isScheduledItem = isEmailScheduled(item)
 
-    output.stats = {
-      sent: list.length - output.list.length,
-      scheduled: output.list.length
-    }
-  }
+    return isSentStatus ? !isScheduledItem : isScheduledItem
+  })
 
-  if (type === InsightFiltersType.SENT) {
-    output.list = list.filter(function filterInsightList(item) {
-      return !isEmailScheduled(item)
-    })
-
-    output.stats = {
-      sent: output.list.length,
-      scheduled: list.length - output.list.length
-    }
-  }
+  const activeFilterStats = filteredList.length
+  const secondFilterStats = list.length - filteredList.length
 
   // Returning final output
-  return output
-}
-
-export function doFilterOnColumns(
-  columns: any,
-  filterType: InsightFiltersType
-) {
-  if (filterType === InsightFiltersType.SCHEDULED) {
-    return [
-      {
-        ...columns[0],
-        width: undefined
-      },
-      columns[columns.length - 1]
-    ]
+  return {
+    list: filteredList,
+    stats: {
+      scheduled: !isSentStatus ? activeFilterStats : secondFilterStats,
+      sent: isSentStatus ? activeFilterStats : secondFilterStats
+    }
   }
-
-  return columns
-}
-
-export enum SortValues {
-  Newest = 'Newest',
-  Oldest = 'Oldest'
-}
-
-export function doSort(list: any, sortValue: SortValues) {
-  const sort = SortValues[sortValue]
-
-  if (sort === SortValues.Newest) {
-    return list.sort(function newestSort(a, b) {
-      return b.due_at - a.due_at
-    })
-  }
-
-  if (sort === SortValues.Oldest) {
-    return list.sort(function oldestSort(a, b) {
-      return a.due_at - b.due_at
-    })
-  }
-
-  return list
 }

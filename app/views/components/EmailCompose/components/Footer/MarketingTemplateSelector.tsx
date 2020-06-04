@@ -20,7 +20,7 @@ import { ScrollableArea } from 'components/ScrollableArea'
 import { ServerError } from 'components/ServerError'
 import MarketingTemplatePreviewModal from 'components/MarketingTemplatePreviewModal'
 
-import useTemplatesHistory from '../../../../../components/Pages/Dashboard/Marketing/History/useTemplatesHistory'
+import { useTemplatesHistory } from '../../../../../components/Pages/Dashboard/Marketing/hooks/use-templates-history'
 import { FooterBottomDrawerZeroState } from './FooterBottomDrawerZeroState'
 import { MarketingTemplateMasonry } from '../../../MarketingTemplateMasonry'
 
@@ -43,7 +43,7 @@ const useStyles = makeStyles(
 )
 
 export function MarketingTemplateSelector(props: Props) {
-  const [templates, loading, error] = useTemplatesHistory()
+  const { templates, isLoading, error } = useTemplatesHistory()
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
   const [
     selectedTemplate,
@@ -53,10 +53,10 @@ export function MarketingTemplateSelector(props: Props) {
   const classes = useStyles()
 
   if (error) {
-    return <ServerError error={error} />
+    return <ServerError error={error as any} />
   }
 
-  if (templates && templates.length === 0 && !loading) {
+  if (templates && templates.length === 0 && !isLoading) {
     return (
       <FooterBottomDrawerZeroState
         description="There is no saved templates. Your previously used marketing email templates will appear here."
@@ -77,7 +77,7 @@ export function MarketingTemplateSelector(props: Props) {
   }
 
   const COLUMN_COUNT = 3
-  const items = loading
+  const items = isLoading
     ? range(0, 2 * COLUMN_COUNT).map(i => (
         <MarketingTemplateCardSkeleton height="12.5rem" key={i} />
       ))
@@ -116,7 +116,7 @@ export function MarketingTemplateSelector(props: Props) {
           to="/dashboard/marketing"
         >
           <ListItemText
-            primary={<Box color="primary.main">Open My Designs</Box>}
+            primary={<Box color="primary.main">Open All Designs</Box>}
           />
         </ListItem>
         <MarketingTemplateMasonry

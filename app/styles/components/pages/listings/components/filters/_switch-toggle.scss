@@ -1,52 +1,53 @@
 //Switch-Mixin
-$switch-on: #32b86d;
+$switch-on: $brand-secondary;
 $switch-off: #e9e9e9;
 @mixin switch-toggle($height, $switch-on, $switch-off) {
-    margin: 0;
-    padding: 0;
-    input[type="checkbox"] {
-        display: none;
-        &:checked+label {
-            background: $switch-on;
-            border-color: $switch-on;
-            box-shadow: inset 0 0 0 #{$height / 2} $switch-on;
-        }
+  margin: 0;
+  padding: 0;
+  input[type='checkbox'] {
+    display: none;
+    &:checked + label {
+      background: $switch-on;
+      border-color: $switch-on;
+      box-shadow: inset 0 0 0 #{$height / 2} $switch-on;
     }
-    label {
-        margin-bottom: 0;
-        display: inline-block;
-        background: $switch-off;
-        transition-duration: .2s;
-        transition-timing-function: ease-in-out;
-        transition-property: background, border-color, box-shadow;
-        box-shadow: inset 0 0 0 0 $switch-on;
-        >span {
-            width: $height;
-            height: $height;
-            display: inline-block;
-            background: #fff;
-            border-radius: 50%;
-            margin-top: 1px;
-            margin-left: 1px;
-            transition: margin-left .2s ease-in-out;
-            box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.23);
-        }
-        &:hover,
-        &>span:hover {
-            cursor: pointer;
-        }
+  }
+  label {
+    margin-bottom: 0;
+    display: inline-block;
+    background: $switch-off;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    transition-property: background, border-color, box-shadow;
+    box-shadow: inset 0 0 0 0 $switch-on;
+    > span {
+      width: $height;
+      height: $height;
+      display: inline-block;
+      background: #fff;
+      border-radius: 50%;
+      margin-top: 1px;
+      margin-left: 1px;
+      transition: margin-left 0.2s ease-in-out;
+      box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16),
+        0 3px 6px 0 rgba(0, 0, 0, 0.23);
     }
-    input[type="checkbox"]:checked+label>span {
-        margin-left: $height * 1.1;
+    &:hover,
+    & > span:hover {
+      cursor: pointer;
     }
-    label {
-        height: $height + 4;
-        width: $height * 2.25;
-        border-radius: $height;
-        border: 1px solid $switch-off;
-    }
+  }
+  input[type='checkbox']:checked + label > span {
+    margin-left: $height * 1.1;
+  }
+  label {
+    height: $height + 4;
+    width: $height * 2.25;
+    border-radius: $height;
+    border: 1px solid $switch-off;
+  }
 }
 
 .c-switch-toggle {
-    @include switch-toggle(18px, $switch-on, $switch-off);
+  @include switch-toggle(18px, $switch-on, $switch-off);
 }

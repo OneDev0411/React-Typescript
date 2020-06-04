@@ -3,10 +3,9 @@ import { withRouter, WithRouterProps } from 'react-router'
 import { connect } from 'react-redux'
 import { addNotification, Notification } from 'reapop'
 
-import { isSelling } from 'models/Deal/helpers/context/get-side'
-import { getActiveTeam } from 'utils/user-teams'
+import { Button } from '@material-ui/core'
 
-import ActionButton from 'components/Button/ActionButton'
+import { getActiveTeam } from 'utils/user-teams'
 
 import {
   Container,
@@ -70,7 +69,11 @@ function MyMarketingMatters({
         location.pathname
       )
 
-      result.response && window.location.replace(result.response.url)
+      if (result.response) {
+        const newWindow = window.open(result.response.url, '_blank')
+
+        newWindow && newWindow.focus()
+      }
     } catch (err) {
       notify({
         status: 'error',
@@ -83,24 +86,29 @@ function MyMarketingMatters({
     setIsLoading(false)
   }
 
-  // Only selling deal types for brands with mmm cost centers are supported
-  if (!isSelling(deal) || !costCenter) {
+  // Only brands with mmm cost center are supported
+  if (!costCenter) {
     return null
   }
 
   return (
     <Container style={{ marginBottom: '1.5rem' }}>
       <LeftColumn>
-        <Title>Direct Mail Marketing made Easier</Title>
+        <Title>Print Marketing, Postcards and Brochures</Title>
         <Description>
           Increase your marketing reach with direct mail postcards, newsletters,
           brochures, and more when you integrate with
           <br />
           My Marketing Matters.
         </Description>
-        <ActionButton onClick={onClick} disabled={isLoading}>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={onClick}
+          disabled={isLoading}
+        >
           Connect to My Marketing Matters
-        </ActionButton>
+        </Button>
       </LeftColumn>
       <RightColumn>
         <Image

@@ -68,3 +68,17 @@ export async function deleteChecklist(checklist) {
     return { error }
   }
 }
+
+export async function sortTasks(
+  brand: UUID,
+  checklist: UUID,
+  list: { id: UUID; order: number }[]
+) {
+  try {
+    return await new Fetch()
+      .put(`/brands/${brand}/checklists/${checklist}/sort`)
+      .send(list)
+  } catch (error) {
+    return { error }
+  }
+}

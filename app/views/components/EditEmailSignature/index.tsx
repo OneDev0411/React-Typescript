@@ -1,13 +1,8 @@
-import { connect } from 'react-redux'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { addNotification } from 'reapop'
 import { Box, Button, Grid, Theme } from '@material-ui/core'
-import { Field, Form } from 'react-final-form'
-import * as React from 'react'
-import styled, { ThemeProps } from 'styled-components'
-
-import { ThunkDispatch } from 'redux-thunk'
-
-import { AnyAction } from 'redux'
+import styled, { css, ThemeProps } from 'styled-components'
 
 import { IAppState } from 'reducers'
 import editUser from 'actions/user/edit'
@@ -17,43 +12,52 @@ import { TextEditor } from '../TextEditor'
 import { ImageFeature } from '../TextEditor/features/Image'
 import { RichTextFeature } from '../TextEditor/features/RichText'
 import { EmojiFeature } from '../TextEditor/features/Emoji'
+import { useEditorState } from '../TextEditor/hooks/use-editor-state'
 
 interface Props {
-  user: IUser
-  editUser: IAsyncActionProp<typeof editUser>
-  addNotification: typeof addNotification
   onSaved?: () => void
   showActions?: boolean
-  formId?: string
 }
 
-const StyledTextEditor = styled(TextEditor)`
-  border: 1px solid ${(props: ThemeProps<Theme>) => props.theme.palette.divider};
-  padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 1, 1, 1)};
+export const StyledTextEditor = styled(TextEditor)`
+  ${(props: ThemeProps<Theme>) => css`
+    border: 1px solid ${props.theme.palette.divider};
+    padding: ${props.theme.spacing(0, 1, 1, 1)};
+  `}
 `
 
-function EditEmailSignature({
-  user,
+export default function EditEmailSignature({
   onSaved = () => {},
-  editUser,
-  addNotification,
-  showActions = true,
-  formId
+  showActions = true
 }: Props) {
-  const submit = async (values: { signature: string }) => {
+  const dispatch = useDispatch()
+  const user = useSelector((state: IAppState) => state.user)
+
+  const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [editorState, setEditorState, signatureEditor] = useEditorState(
+    user.email_signature != null ? user.email_signature : ''
+  )
+
+  const onSave = async () => {
     try {
-      await editUser({ email_signature: values.signature || '' })
-      addNotification({
-        message: 'Email signature has been saved',
-        status: 'success'
-      })
+      setIsSaving(true)
+      await dispatch(editUser({ email_signature: signatureEditor.getHtml() }))
+      setIsSaving(false)
+      dispatch(
+        addNotification({
+          message: 'Email signature has been saved',
+          status: 'success'
+        })
+      )
       onSaved()
     } catch (e) {
       console.error(e)
-      addNotification({
-        message: 'Could not save email signature',
-        status: 'error'
-      })
+      dispatch(
+        addNotification({
+          message: 'Could not save email signature',
+          status: 'error'
+        })
+      )
     }
   }
 
@@ -65,51 +69,31 @@ function EditEmailSignature({
   }
 
   return (
-    <Form
-      initialValues={{ signature: user.email_signature }}
-      onSubmit={submit}
-      render={({ handleSubmit, submitting }) => (
-        <form id={formId} onSubmit={handleSubmit} noValidate>
-          <Box mb={2}>
-            <Field
-              name="signature"
-              render={({ input }) => (
-                <StyledTextEditor autofocus input={input}>
-                  <RichTextFeature />
-                  <ImageFeature uploadImage={uploadImage} />
-                  <EmojiFeature />
-                </StyledTextEditor>
-              )}
-            />
-          </Box>
+    <>
+      <Box mb={2}>
+        <StyledTextEditor
+          autofocus
+          editorState={editorState}
+          onChange={setEditorState}
+        >
+          <RichTextFeature />
+          <ImageFeature uploadImage={uploadImage} />
+          <EmojiFeature />
+        </StyledTextEditor>
+      </Box>
 
-          {showActions && (
-            <Grid container justify="flex-end">
-              <Button
-                type="submit"
-                color="primary"
-                variant="contained"
-                disabled={submitting}
-              >
-                Save
-              </Button>
-            </Grid>
-          )}
-        </form>
+      {showActions && (
+        <Grid container justify="flex-end">
+          <Button
+            color="secondary"
+            variant="contained"
+            disabled={isSaving}
+            onClick={onSave}
+          >
+            Save
+          </Button>
+        </Grid>
       )}
-    />
+    </>
   )
 }
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    editUser: (...args: Parameters<typeof editUser>) =>
-      dispatch(editUser(...args)),
-    addNotification
-  }
-}
-
-export default connect(
-  ({ user }: IAppState) => ({ user }),
-  mapDispatchToProps
-)(EditEmailSignature)

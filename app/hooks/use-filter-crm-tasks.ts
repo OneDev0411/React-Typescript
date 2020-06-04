@@ -39,8 +39,8 @@ export function useFilterCRMTasks(
   const [isFetching, setIsFetching] = useState<boolean>(initialState.isFetching)
 
   const fetch = useCallback(
-    async function fetch(forc = false) {
-      if (!forc && isEqual(prevQurey, query)) {
+    async function fetch(force = false) {
+      if (!force && isEqual(prevQurey, query)) {
         return
       }
 

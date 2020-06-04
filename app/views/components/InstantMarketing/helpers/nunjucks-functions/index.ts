@@ -1,18 +1,9 @@
-import lodashGet from 'lodash/get'
+import _get from 'lodash/get'
 
 import flattenBrand from 'utils/flatten-brand'
+import { DEFAULT_BRAND_PALETTE } from 'utils/constants'
 
 import config from '../../../../../../config/public'
-
-export const getAsset = (activeBrand: IBrand, name: string) => {
-  const brand = flattenBrand(activeBrand)
-
-  if (brand && brand.assets && brand.assets.marketing) {
-    return lodashGet(brand.assets.marketing, name)
-  }
-
-  return ''
-}
 
 export function getListingUrl(activeBrand: IBrand, listing: IListing) {
   const brand = flattenBrand(activeBrand)
@@ -23,12 +14,8 @@ export function getListingUrl(activeBrand: IBrand, listing: IListing) {
     : `${config.app.url}/dashboard/mls/${listing.id}`
 }
 
-export function getColor(activeBrand: IBrand, color: string) {
-  const brand = flattenBrand(activeBrand)
+export function get(brand: IBrand, key: BrandSettingsPaletteKey): string {
+  const defaultValue = _get(DEFAULT_BRAND_PALETTE, key)
 
-  if (brand && brand.palette && brand.palette.marketing) {
-    return lodashGet(brand.palette.marketing, color, '')
-  }
-
-  return ''
+  return _get(brand, `settings.palette.palette.${key}`, defaultValue)
 }

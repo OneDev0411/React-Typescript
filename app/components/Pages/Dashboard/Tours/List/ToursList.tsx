@@ -1,26 +1,34 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
-import { Theme } from '@material-ui/core/styles'
-import { useTheme } from '@material-ui/styles'
+
+import { Box } from '@material-ui/core'
 
 import { IAppState } from 'reducers/index'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 
+import { useGridStyles } from 'components/Grid/Table/styles'
+
 import Table from 'components/Grid/Table'
-import PageHeader from 'components/PageHeader'
+import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 import { TourSheets } from 'components/tour/TourSheets'
 
+import { RenderProps } from 'components/Grid/Table/types'
+
 import EmptyState from './EmptyState'
-import CreateNewTour from './CreateNewTour'
-import Info from './columns/Info'
-import Actions from './columns/Actions'
+
+import DueDate from './columns/DueDate'
+import Title from './columns/Title'
 import Participants from './columns/Participants'
+import ViewToursheet from './columns/ViewToursheet'
+import Actions from './columns/Actions'
+
+type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
 function ToursList(props: { user: IUser }) {
-  const theme = useTheme<Theme>()
+  const gridClasses = useGridStyles()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
       order: '-due_date',
@@ -48,61 +56,60 @@ function ToursList(props: { user: IUser }) {
 
   const columns = [
     {
-      header: 'Info',
-      id: 'info',
-      width: '50%',
+      header: 'Title',
+      id: 'title',
+      class: 'primary',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Title title={row.title} onClick={() => handleEdit(row)} />
+      )
+    },
+    {
+      header: 'Date',
+      id: 'date',
       verticalAlign: 'center',
-      render: ({
-        rowData
-      }: {
-        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-      }) => (
-        <Info
-          dueDate={rowData.due_date}
-          description={rowData.description}
-          onClick={() => handleEdit(rowData)}
-          title={rowData.title}
-        />
+      render: ({ row }: RenderProps<TableRow>) => (
+        <DueDate dueDate={row.due_date} />
       )
     },
     {
       header: 'Participants',
       id: 'participants',
-      width: '10%',
       verticalAlign: 'center',
-      render: ({
-        rowData
-      }: {
-        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-      }) => (
+      class: 'opaque',
+      render: ({ row }: RenderProps<TableRow>) => (
         <Participants
           participants={
-            rowData.associations
-              ? rowData.associations.filter(
-                  a => a.association_type === 'contact'
-                )
+            row.associations
+              ? row.associations.filter(a => a.association_type === 'contact')
               : []
           }
         />
       )
     },
     {
-      id: 'actions',
-      width: '40%',
+      id: 'view-toursheet',
       verticalAlign: 'center',
-      render: ({
-        rowData
-      }: {
-        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-      }) => (
-        <Actions
-          onEdit={() => handleEdit(rowData)}
+      class: 'visible-on-hover',
+      width: '150px',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <ViewToursheet
           onViewToursheet={() => {
-            setSelectedTour(rowData)
+            setSelectedTour(row)
             setIsOpenToursheetViewer(true)
           }}
+        />
+      )
+    },
+    {
+      id: 'actions',
+      verticalAlign: 'center',
+      width: '60px',
+      class: 'visible-on-hover',
+      render: ({ row }: RenderProps<TableRow>) => (
+        <Actions
+          onEdit={() => handleEdit(row)}
           reloadList={reloadList}
-          tour={rowData}
+          tour={row}
         />
       )
     }
@@ -136,12 +143,15 @@ function ToursList(props: { user: IUser }) {
     }
 
     return (
-      <Table
+      <Table<TableRow>
         columns={columns}
-        data={list}
-        isFetching={isFetching}
-        LoadingState={LoadingContainer}
-        showToolbar={false}
+        rows={list}
+        totalRows={(list || []).length}
+        loading={isFetching ? 'middle' : null}
+        LoadingStateComponent={LoadingContainer}
+        classes={{
+          row: gridClasses.row
+        }}
       />
     )
   }
@@ -149,50 +159,48 @@ function ToursList(props: { user: IUser }) {
   return (
     <>
       <Helmet>
-        <title>Toursheets | Rechat</title>
+        <title>Tours | Rechat</title>
       </Helmet>
 
-      <PageHeader>
-        <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Toursheets</PageHeader.Heading>
-        </PageHeader.Title>
+      <PageLayout>
+        <PageLayout.Header title="Tours" onCreateTour={reloadList} />
 
-        <PageHeader.Menu>
-          <CreateNewTour onOpenDrawer={onOpenTourDrawer} />
-        </PageHeader.Menu>
-      </PageHeader>
+        <PageLayout.Main>
+          <Box>
+            {renderContent()}
 
-      <div style={{ padding: theme.spacing(0, 3, 9) }}>{renderContent()}</div>
+            {isDrawerOpen && (
+              <TourDrawer
+                deleteCallback={drawerCallback}
+                isOpen
+                onClose={onCloseTourDrawer}
+                tour={selectedTour}
+                submitCallback={drawerCallback}
+                user={props.user}
+              />
+            )}
 
-      {isDrawerOpen && (
-        <TourDrawer
-          deleteCallback={drawerCallback}
-          isOpen
-          onClose={onCloseTourDrawer}
-          tour={selectedTour}
-          submitCallback={drawerCallback}
-          user={props.user}
-        />
-      )}
-
-      {isOpenToursheetViewer && (
-        <TourSheets
-          agent={props.user}
-          isOpen
-          handleClose={() => {
-            setSelectedTour(null)
-            setIsOpenToursheetViewer(false)
-          }}
-          tour={selectedTour}
-          listings={
-            selectedTour && selectedTour.associations
-              ? selectedTour.associations
-                  .filter(a => a.association_type === 'listing')
-                  .map(a => a.listing)
-              : []
-          }
-        />
-      )}
+            {isOpenToursheetViewer && (
+              <TourSheets
+                agent={props.user}
+                isOpen
+                handleClose={() => {
+                  setSelectedTour(null)
+                  setIsOpenToursheetViewer(false)
+                }}
+                tour={selectedTour}
+                listings={
+                  selectedTour && selectedTour.associations
+                    ? selectedTour.associations
+                        .filter(a => a.association_type === 'listing')
+                        .map(a => a.listing)
+                    : []
+                }
+              />
+            )}
+          </Box>
+        </PageLayout.Main>
+      </PageLayout>
     </>
   )
 }

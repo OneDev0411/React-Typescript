@@ -7,6 +7,8 @@ interface Props {
   associations: ICRMTaskAssociation<CRMTaskAssociationType>[]
   isOpen: boolean
   onClose: () => void
+  onDelete?: () => void
+  isRemovable?: boolean
   title?: string
 }
 
@@ -14,16 +16,24 @@ AssociationsDrawer.defaultProps = {
   title: 'All Associations'
 }
 
-export default function AssociationsDrawer(props: Props) {
+export default function AssociationsDrawer({
+  associations,
+  isOpen,
+  onClose,
+  onDelete,
+  isRemovable = false,
+  title
+}: Props) {
   return (
-    <Drawer open={props.isOpen} onClose={props.onClose}>
-      <Drawer.Header title={props.title} />
+    <Drawer open={isOpen} onClose={onClose}>
+      <Drawer.Header title={title} />
       <Drawer.Body style={{ padding: '1.5rem 1rem 1.5rem 1.5rem' }}>
-        {props.associations.map(association => (
+        {associations.map(association => (
           <AssociationItem
             association={association}
             key={association.id}
-            isRemovable={false}
+            isRemovable={isRemovable}
+            handleRemove={onDelete}
           />
         ))}
       </Drawer.Body>

@@ -2,32 +2,48 @@
 
 exports[`Deal address component renders with address 1`] = `
 <div
-  class="styled__TitleContainer-xmjc75-0 cuhPTb"
+  class="makeStyles-container-1"
+  title=""
 >
-  <h2
-    class="headings__H2-sc-15tq5ag-2 jNRgRN"
-    style="line-height:1.5"
+  <h6
+    class="MuiTypography-root-15 MuiTypography-h6-25"
   >
-    1200 Main St
-  </h2>
-  <span>
-    Edit Address
-  </span>
+    1200 Main St, Dallas, TX, 75202
+  </h6>
+  <button
+    class="MuiButtonBase-root-74 MuiButton-root-45 MuiButton-text-47 makeStyles-editButton-2 MuiButton-textSecondary-49 MuiButton-textSizeSmall-60 MuiButton-sizeSmall-66"
+    tabindex="0"
+    type="button"
+  >
+    <span
+      class="MuiButton-label-46"
+    >
+      Edit Address
+    </span>
+  </button>
 </div>
 `;
 
 exports[`Deal address component renders without address 1`] = `
 <div
-  class="styled__TitleContainer-xmjc75-0 cuhPTb"
+  class="makeStyles-container-77"
+  title=""
 >
-  <h2
-    class="headings__H2-sc-15tq5ag-2 jNRgRN"
-    style="line-height:1.5"
+  <h6
+    class="MuiTypography-root-91 MuiTypography-h6-101"
   >
     Some title for a deal without address
-  </h2>
-  <span>
-    + Add Address
-  </span>
+  </h6>
+  <button
+    class="MuiButtonBase-root-150 MuiButton-root-121 MuiButton-text-123 makeStyles-editButton-78 MuiButton-textSecondary-125 MuiButton-textSizeSmall-136 MuiButton-sizeSmall-142"
+    tabindex="0"
+    type="button"
+  >
+    <span
+      class="MuiButton-label-122"
+    >
+      + Add Address
+    </span>
+  </button>
 </div>
 `;

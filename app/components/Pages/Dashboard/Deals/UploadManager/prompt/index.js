@@ -7,6 +7,8 @@ import cn from 'classnames'
 import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
 
+import { Button } from '@material-ui/core'
+
 import {
   uploadTaskFile,
   uploadStashFile,
@@ -20,8 +22,6 @@ import ToolTip from 'components/tooltip'
 import Checkbox from 'components/CheckmarkButton'
 
 import Deal from 'models/Deal'
-
-import ActionButton from 'components/Button/ActionButton'
 
 import UploadProgress from './upload-progress'
 
@@ -311,7 +311,9 @@ class UploadModal extends React.Component {
                           </div>
 
                           <div className="file-cta">
-                            <ActionButton
+                            <Button
+                              color="secondary"
+                              variant="contained"
                               className={cn({
                                 uploaded: isUploaded
                               })}
@@ -321,7 +323,7 @@ class UploadModal extends React.Component {
                               onClick={() => this.upload(file, selectedTask)}
                             >
                               {this.getButtonCaption(file)}
-                            </ActionButton>
+                            </Button>
                           </div>
                         </Fragment>
                       )}
@@ -366,13 +368,15 @@ class UploadModal extends React.Component {
                 'You can split files as soon as upload them'
               }
             >
-              <ActionButton
+              <Button
+                variant="contained"
+                color="secondary"
                 disabled={!this.isSplitButtonActive}
                 style={{ marginRight: '1rem' }}
                 onClick={this.handleOpenSplitter}
               >
                 Split PDF
-              </ActionButton>
+              </Button>
             </ToolTip>
 
             <ToolTip caption="Create new documents and save them to tasks">

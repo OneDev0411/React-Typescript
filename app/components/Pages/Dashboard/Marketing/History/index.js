@@ -1,46 +1,53 @@
 import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
 
-import { deleteTemplateInstance } from 'models/instant-marketing/delete-template-instance'
+import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
+
 import TemplatesList from 'components/TemplatesList'
 
-import { Header } from '../components/PageHeader'
-import useTemplatesHistory from './useTemplatesHistory'
+import { useTemplatesHistory } from '../hooks/use-templates-history'
 import EmptyState from './EmptyState'
 
-function History(props) {
-  const [templates, isLoading] = useTemplatesHistory()
-  const [deletedTemplates, setDeletedTemplates] = useState([])
-  // We are using this for filtering the deleted items
-  const finalTemplates = templates.filter(
-    template => !deletedTemplates.includes(template.id)
-  )
+import Layout from '..'
 
-  function handleDelete(id) {
-    return deleteTemplateInstance(id).then(() => {
-      setDeletedTemplates([...deletedTemplates, id])
-    })
+const PAGE_SIZE = 12
+
+function History() {
+  const [limit, setLimit] = useState(PAGE_SIZE)
+  const { templates, isLoading, deleteTemplate } = useTemplatesHistory()
+
+  const loadNextPage = () => setLimit(limit => limit + PAGE_SIZE)
+
+  useInfiniteScroll({
+    accuracy: 400, // px
+    onScrollBottom: loadNextPage
+  })
+
+  async function handleDelete(id) {
+    await deleteTemplate(id)
   }
 
+  const loadedTemplates = templates.slice(0, limit)
+
   return (
-    <React.Fragment>
+    <>
       <Helmet>
-        <title>My Designs | Marketing | Rechat</title>
+        <title>All Designs | Marketing | Rechat</title>
       </Helmet>
-      <Header
-        title="My Designs"
-        style={{ padding: '0 1.5rem' }}
-        isSideMenuOpen={props.isSideMenuOpen}
-        toggleSideMenu={props.toggleSideMenu}
+
+      <Layout
+        render={() => (
+          <TemplatesList
+            pageSize={PAGE_SIZE}
+            type="history"
+            items={loadedTemplates}
+            isLoading={isLoading}
+            onDeleteInstance={handleDelete}
+            emptyState={<EmptyState />}
+          />
+        )}
       />
-      <TemplatesList
-        type="history"
-        items={finalTemplates}
-        isLoading={isLoading}
-        onDelete={handleDelete}
-        emptyState={<EmptyState />}
-      />
-    </React.Fragment>
+    </>
   )
 }
 

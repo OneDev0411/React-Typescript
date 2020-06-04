@@ -1,27 +1,30 @@
 import React from 'react'
-
 import { makeStyles } from '@material-ui/styles'
-import { fade } from '@material-ui/core/styles'
+import cn from 'classnames'
+
+import { Tooltip } from '@material-ui/core'
+
+import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import { ClassesProps } from 'utils/ts-utils'
+import { isPastDay } from 'utils/date-times/is-past-day'
+
+import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 
 import { DateTime } from './DateTime'
 
-import inlineStyles from '../../styles'
+import { sharedStyles } from '../../styles'
 import { styles } from './styles'
 
+const useSharedStyles = makeStyles(sharedStyles)
 const useStyles = makeStyles(styles)
 
 interface Props {
   style: React.CSSProperties
-  event: ICalendarEvent
-  nextItem: ICalendarListRow
-  icon?: {
-    color: string
-    element: any
-  }
   title: React.ReactNode
-  subtitle?: React.ReactNode
+  event: ICalendarEvent & { rowIndex?: number }
+  editable: boolean
+  Icon?: any
   actions?: React.ReactNode
   onClick?(): void
 }
@@ -29,18 +32,21 @@ interface Props {
 export function EventContainer({
   style,
   event,
-  nextItem,
-  icon,
+  Icon,
   title,
-  subtitle,
+  editable,
   actions,
   onClick,
   classes: inputClasses
 }: Props & ClassesProps<typeof styles>) {
-  const hasBorderBottom = nextItem && !nextItem.hasOwnProperty('isEventHeader')
+  const sharedClasses = useSharedStyles({
+    pastEvent: isPastDay(new Date(event.timestamp * 1000))
+  })
+
+  const iconStyles = useIconStyles()
   const classes = useStyles({
     classes: inputClasses,
-    hasBorderBottom,
+    evenRow: event.rowIndex ? event.rowIndex % 2 === 0 : true,
     clickable: typeof onClick === 'function'
   })
 
@@ -49,44 +55,42 @@ export function EventContainer({
       <div className={classes.root}>
         <button
           type="button"
-          style={inlineStyles.buttonContainer}
+          className={sharedClasses.buttonContainer}
           onClick={onClick}
-        />
+        >
+          Add
+        </button>
 
-        <div style={inlineStyles.row}>
-          <div style={inlineStyles.container}>
-            <div style={inlineStyles.time}>
+        <div className={sharedClasses.row}>
+          <div className={sharedClasses.container}>
+            <div className={sharedClasses.time}>
               <DateTime event={event} />
             </div>
-            <div
-              style={{
-                ...inlineStyles.container,
-                ...inlineStyles.title
-              }}
-            >
-              {icon && (
-                <div
-                  style={{
-                    ...inlineStyles.icon,
-                    backgroundColor: fade(icon.color, 0.2)
-                  }}
-                >
-                  <icon.element
-                    fill={icon.color}
+            <div className={cn(sharedClasses.container, sharedClasses.title)}>
+              {Icon && (
+                <div className={sharedClasses.icon}>
+                  <Icon
+                    fill="#6A7589"
                     style={{ width: '24px', height: '24px' }}
                   />
                 </div>
               )}
 
-              {title}
+              <div className={sharedClasses.title}>{title}</div>
             </div>
           </div>
 
-          <div>{actions}</div>
-        </div>
-
-        <div style={inlineStyles.row}>
-          <div style={inlineStyles.subtitle}>{subtitle}</div>
+          <div className={classes.actions}>
+            {editable && (
+              <Tooltip title="Edit Event" placement="top">
+                <EditIcon
+                  className={cn(iconStyles.small, classes.iconEdit)}
+                  onClick={onClick}
+                />
+              </Tooltip>
+            )}
+            {actions}
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography } from '@material-ui/core'
+import { Box, Link, Typography } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 import { LastTouched } from 'components/LastTouched'
@@ -9,17 +9,17 @@ import Avatar from './Avatar'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {
-      fontSize: '1.125rem',
-      lineHeight: 1.5,
       marginLeft: `${theme.spacing(1)}px`,
-      width: 'calc(100% - 56px)'
+      width: 'calc(100% - 64px)'
+    },
+    name: {
+      wordBreak: 'break-all'
     },
     editButton: {
-      fontFamily: theme.typography.fontFamily,
-      fontSize: '0.875rem',
-      marginLeft: `${theme.spacing(1)}px`
+      marginLeft: theme.spacing(1)
     },
     touch: {
+      paddingLeft: theme.spacing(1.5),
       color: theme.palette.grey['900']
     }
   })
@@ -33,15 +33,22 @@ export default function Catalog({ contact }: Props) {
   const classes = useStyles()
 
   return (
-    <Box mb={2}>
-      <Box display="flex" alignItems="center" mb={1}>
+    <Box mb={1}>
+      <Box display="flex" alignItems="center" mb={2}>
         <Avatar contact={contact} />
-        <Typography variant="h1" className={classes.title}>
-          {contact.display_name}
-          <a href="#Details" className={classes.editButton}>
+        <Box display="flex" alignItems="center" className={classes.title}>
+          <Typography variant="subtitle1" className={classes.name}>
+            {contact.display_name}
+          </Typography>
+          <Link
+            color="secondary"
+            href="#Details"
+            variant="caption"
+            className={classes.editButton}
+          >
             Edit
-          </a>
-        </Typography>
+          </Link>
+        </Box>
       </Box>
       <div className={classes.touch}>
         <LastTouched contact={contact} />

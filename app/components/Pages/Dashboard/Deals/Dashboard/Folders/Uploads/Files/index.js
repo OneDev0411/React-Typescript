@@ -1,18 +1,23 @@
 import React from 'react'
-import { Link } from 'react-router'
 import Flex from 'styled-flex-component'
 import moment from 'moment'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import Tooltip from 'components/tooltip'
-
 import Avatar from 'components/Avatar'
+
+import {
+  MOVE_FILE,
+  VIEW_FILE,
+  DELETE_FILE,
+  SPLIT_PDF
+} from 'deals/components/ActionsButton/data/action-buttons'
 
 import ActionsButton from '../../../../components/ActionsButton'
 
 import { RowContainer, Row } from '../../styled'
 
-import { FileName, FileDate } from './styled'
+import { FileName, FileLink, FileDate } from './styled'
 
 class Files extends React.Component {
   getFileLink = file => {
@@ -35,6 +40,12 @@ class Files extends React.Component {
     }
 
     return null
+  }
+
+  getActions = file => {
+    const actions = [MOVE_FILE, VIEW_FILE, DELETE_FILE]
+
+    return file.mime === 'application/pdf' ? [SPLIT_PDF, ...actions] : actions
   }
 
   render() {
@@ -65,9 +76,9 @@ class Files extends React.Component {
 
                     <div style={{ marginLeft: '1rem' }}>
                       <FileName>
-                        <Link to={this.getFileLink(file)}>
+                        <FileLink to={this.getFileLink(file)}>
                           <TextMiddleTruncate text={file.name} maxLength={80} />
-                        </Link>
+                        </FileLink>
                       </FileName>
 
                       <FileDate>
@@ -86,10 +97,10 @@ class Files extends React.Component {
                   </Flex>
 
                   <ActionsButton
-                    type="document"
                     deal={this.props.deal}
                     task={null}
-                    document={file}
+                    file={file}
+                    actions={this.getActions(file)}
                   />
                 </Flex>
               </Flex>

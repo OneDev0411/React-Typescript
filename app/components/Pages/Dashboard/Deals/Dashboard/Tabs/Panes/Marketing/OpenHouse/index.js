@@ -3,8 +3,9 @@ import Flex from 'styled-flex-component'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
+import { Button } from '@material-ui/core'
+
 import { confirmation } from 'actions/confirmation'
-import ActionButton from 'components/Button/ActionButton'
 
 import { CreateOpenHouse } from 'components/open-house/CreateOpenHouse'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
@@ -117,7 +118,9 @@ class OpenHouse extends React.Component {
               submitCallback={this.onCreateEvent}
               associations={{ deal: this.props.deal }}
             >
-              <ActionButton>Create Registration Page</ActionButton>
+              <Button color="secondary" variant="contained">
+                Create Registration Page
+              </Button>
             </CreateOpenHouse>
           </LeftColumn>
 

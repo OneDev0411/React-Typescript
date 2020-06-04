@@ -1,3 +1,3 @@
-<mj-button rechat-editable="tree" padding="0 0" inner-padding="4px 16px" border-radius="4px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="16px" font-weight="500" line-height="1.5" color="#0945EB" border="1px solid #0945EB" background-color="#fff" align="left">
+<mj-button rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px" font-family="Helvetica, Arial, sans-serif" font-size="14px" line-height="1.5" align="center">
   Click Here
 </mj-button>

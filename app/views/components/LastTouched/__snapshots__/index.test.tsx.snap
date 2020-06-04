@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Contact profile last touched component renders 1`] = `
-<div>
+<div
+  class="MuiBox-root MuiBox-root-3 makeStyles-wrapper-1"
+>
   <span>
     Last Touch was 
     <b>

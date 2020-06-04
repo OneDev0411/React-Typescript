@@ -190,7 +190,7 @@ $left-w: 44px;
 
   .alert {
     @extend %message-item-alert;
-    
+
     .alert-widget {
       width: 100% !important;
       align-items: center !important;
@@ -495,7 +495,7 @@ $left-w: 44px;
 
     &.selected,
     &:hover {
-      background-color: #0945eb;
+      background-color: $brand-primary;
       color: #fff;
       .name {
         color: #fff;
@@ -540,8 +540,8 @@ $left-w: 44px;
     background-color: rgba(255, 255, 255, 0.9);
     z-index: 501;
     text-align: center;
-    color: #0945eb;
-    border: 2px dashed #0945eb;
+    color: $brand-primary;
+    border: 2px dashed $brand-primary;
     i {
       margin-bottom: 10px;
     }

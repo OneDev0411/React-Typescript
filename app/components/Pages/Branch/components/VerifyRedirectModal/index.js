@@ -5,8 +5,14 @@ import { SigninButton } from '../SigninButton'
 import Button from '../../../../../views/components/Button/LinkButton'
 
 const VerifyRedirectModal = ({ type, params, brandInfo }) => {
-  const { receivingUser, redirectTo, verificationType } = params
-  const username = encodeURIComponent(receivingUser.email)
+  const { email, userInfo, redirectTo, verificationType } = params
+  let signOutLink = `/signout?redirectFromSignout=/signin&redirectTo=${redirectTo}`
+
+  const username = email || (userInfo && userInfo.email)
+
+  if (username) {
+    signOutLink = `${signOutLink}&username=${username}`
+  }
 
   return (
     <RedirectModal brandInfo={brandInfo}>
@@ -21,9 +27,7 @@ const VerifyRedirectModal = ({ type, params, brandInfo }) => {
             <Button appearance="outline" to="/dashboard/mls">
               Cancel
             </Button>
-            <SigninButton
-              href={`/signout?redirectFromSignout=/signin&username=${username}&redirectTo=${redirectTo}`}
-            >
+            <SigninButton style={{ marginLeft: '0.5rem' }} href={signOutLink}>
               Sign out
             </SigninButton>
           </div>

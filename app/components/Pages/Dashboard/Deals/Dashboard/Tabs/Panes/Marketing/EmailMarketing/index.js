@@ -21,6 +21,10 @@ export default function EmailMarketing(props) {
         <SendDealPromotion
           deal={props.deal}
           mediums="Email"
+          buttonProps={{
+            color: 'secondary',
+            variant: 'contained'
+          }}
           types={[
             'OpenHouse',
             'JustSold',

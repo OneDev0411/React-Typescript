@@ -174,7 +174,6 @@ export class ImageUploader extends Component {
           {hasImage && (
             <Footer
               scale={this.props.scale}
-              disableRotate={this.props.disableRotate}
               disableScale={this.props.disableScale}
               disableChangePhoto={this.props.disableChangePhoto}
               onScaleChange={this.onScaleChange}
@@ -196,7 +195,6 @@ ImageUploader.defaultProps = {
     maxSize: Infinity,
     minSize: 0
   },
-  disableRotate: false,
   disableScale: false,
   disableChangePhoto: false,
   notes: null,
@@ -222,7 +220,6 @@ ImageUploader.propTypes = {
     maxSize: PropTypes.number,
     minSize: PropTypes.number
   }),
-  disableRotate: PropTypes.bool,
   disableScale: PropTypes.bool,
   disableChangePhoto: PropTypes.bool,
   notes: PropTypes.element,

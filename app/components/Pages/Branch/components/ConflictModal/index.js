@@ -1,23 +1,35 @@
 import React from 'react'
 
 import RedirectModal from '../RedirectModal'
-import Button from '../../../../../views/components/Button/LinkButton'
+import LinkButton from '../../../../../views/components/Button/LinkButton'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
 import { SigninButton } from '../SigninButton'
 
 const ConflictModal = ({ params, brandInfo }) => {
-  const { receivingUser, redirectTo, messageText, actionButtonProps } = params
-  const { is_shadow } = receivingUser
+  let {
+    to,
+    email,
+    userInfo,
+    redirectTo,
+    messageText,
+    actionButtonProps
+  } = params
+  let is_shadow
+
+  if (userInfo) {
+    is_shadow = userInfo.is_shadow
+  }
+
+  email = email || (userInfo && userInfo.email)
 
   const actionButton = actionButtonProps || {
     text: 'Sign in',
-    href: `/signout?username=${encodeURIComponent(
-      receivingUser.email
-    )}&redirectTo=${redirectTo}`
+    href: `/signout?username=${email}&redirectTo=${redirectTo}`
   }
 
   if (is_shadow) {
     actionButton.text = 'Sign out'
-    actionButton.href = `/signout?redirectFromSignout=${redirectTo}`
+    actionButton.href = to
   }
 
   return (
@@ -31,12 +43,20 @@ const ConflictModal = ({ params, brandInfo }) => {
           {messageText}
         </p>
         <div>
-          <Button appearance="outline" to="/dashboard/mls">
+          <LinkButton
+            appearance="outline"
+            to="/dashboard/mls"
+            style={{ marginRight: '1rem' }}
+          >
             Cancel
-          </Button>
-          <SigninButton href={actionButton.href}>
-            {actionButton.text}
-          </SigninButton>
+          </LinkButton>
+          {actionButton.href ? (
+            <SigninButton href={actionButton.href}>
+              {actionButton.text}
+            </SigninButton>
+          ) : (
+            <ActionButton {...actionButton}>{actionButton.text}</ActionButton>
+          )}
         </div>
       </div>
     </RedirectModal>

@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
+import { Button } from '@material-ui/core'
+
 import ToolTip from 'components/tooltip'
 import { confirmation } from 'actions/confirmation'
-import ActionButton from 'components/Button/ActionButton'
 
 class Agent extends React.Component {
   sendComment = () => {
@@ -42,17 +43,20 @@ class Agent extends React.Component {
         <ToolTip
           caption={this.props.hasComment ? null : 'Notify office to Review'}
         >
-          <ActionButton
+          <Button
+            color="secondary"
+            variant="contained"
             disabled={this.props.isSaving || isSendDisabled}
             onClick={this.sendComment}
           >
             {this.props.isSaving ? 'Saving...' : 'Notify Office'}
-          </ActionButton>
+          </Button>
         </ToolTip>
 
         {this.props.task.attention_requested && (
-          <ActionButton
-            appearance="outline"
+          <Button
+            color="secondary"
+            variant="outlined"
             style={{
               borderColor: '#f6a623',
               color: '#f6a623'
@@ -61,7 +65,7 @@ class Agent extends React.Component {
             onClick={this.cancelNotify}
           >
             {this.props.isSaving ? 'Processing...' : 'Cancel Notify'}
-          </ActionButton>
+          </Button>
         )}
       </Fragment>
     )

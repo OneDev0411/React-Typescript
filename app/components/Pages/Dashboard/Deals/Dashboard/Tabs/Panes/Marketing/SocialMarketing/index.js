@@ -18,7 +18,14 @@ export default function SocialMarketing(props) {
         <Title>Social Marketing</Title>
         <Description>Beautiful social collateral for your listing.</Description>
 
-        <SendDealPromotion deal={props.deal} mediums="Social">
+        <SendDealPromotion
+          deal={props.deal}
+          mediums="Social"
+          buttonProps={{
+            color: 'secondary',
+            variant: 'contained'
+          }}
+        >
           Explore
         </SendDealPromotion>
       </LeftColumn>

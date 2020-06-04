@@ -27,7 +27,7 @@ export function ChecklistsSidenav() {
           ))}
         </SideNavSection>
         <SideNavSection>
-          <SideNavTitle>Offers</SideNavTitle>
+          <SideNavTitle>Contract</SideNavTitle>
           {buyingPropertyTypes.map(propertyType => (
             <SideNavItem
               key={propertyType}

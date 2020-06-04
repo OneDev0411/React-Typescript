@@ -1,5 +1,6 @@
 export const sellingPropertyTypes = [
   'Commercial Sale',
+  'Commercial Lease',
   'New Home',
   'Lot / Land',
   'Resale',
@@ -19,5 +20,6 @@ export const dealTaskTypeToString: { [key in IDealTaskType]: string } = {
   GeneralComments: 'General Comments',
   Generic: 'Generic',
   YardSign: 'Yard Sign',
-  OpenHouse: 'Open House'
+  OpenHouse: 'Open House',
+  Media: 'Media'
 }

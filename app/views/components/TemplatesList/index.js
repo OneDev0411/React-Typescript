@@ -1,56 +1,72 @@
 import React, { useContext, useState } from 'react'
 import { addNotification as notify } from 'reapop'
-import useMap from 'react-use/lib/useMap'
 import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
+import chunk from 'lodash/chunk'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
 
-import { TemplatesContainer, TemplatesListContainer } from './styled'
+import { TemplatesListContainer } from './styled'
 import MarketingTemplateCard from '../MarketingTemplateCard'
-import Title from './Title'
 import Fallback from './Fallback'
 import TemplateAction from './TemplateAction'
 import MarketingTemplatePreviewModal from '../MarketingTemplatePreviewModal'
 import { MarketingTemplateMasonry } from '../MarketingTemplateMasonry'
-import { TemplateCardActions } from './TemplateCardActions'
-import { TemplateInstanceCardActions } from './TemplateInstanceCardActions'
+import TemplateCardActions from './TemplateCardActions'
 
 function TemplatesList(props) {
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState(null)
   const [isActionTriggered, setActionTriggered] = useState(false)
   const [isEditActionTriggered, setEditActionTriggered] = useState(false)
-  const [deletingTemplates, { set: setDeleting }] = useMap()
   const modal = useContext(ConfirmationModalContext)
-  const handleDelete = props.onDelete
+
+  const notifyDeleteError = () => {
+    props.notify({
+      title: 'Error deleting template. Please try again or contact support.',
+      status: 'error'
+    })
+  }
+
+  const handleDeleteInstance = props.onDeleteInstance
     ? template => {
-        setDeleting(template.id, true)
         modal.setConfirmationModal({
           message: 'Delete your design?',
           description: 'Once deleted you would not be able to recover it.',
           confirmLabel: 'Delete',
           appearance: 'danger',
           onConfirm: () => {
-            props.onDelete(template.id).catch(() => {
-              setDeleting(template.id, false)
-              props.notify({
-                title:
-                  'There is a problem for deleting the template. Please try again.',
-                status: 'error',
-                dismissible: true
-              })
-            })
-          },
-          onCancel: () => {
-            setDeleting(template.id, false)
+            try {
+              props.onDeleteInstance(template.id)
+            } catch (e) {
+              console.error(e)
+              notifyDeleteError()
+            }
           }
         })
       }
     : undefined
 
-  const isEmpty = props.items.length == 0
+  const handleDeleteBrandTemplate = template => {
+    modal.setConfirmationModal({
+      message: 'Delete this template?',
+      description:
+        'Once deleted you and your team members would not be able to recover it.',
+      confirmLabel: 'Delete',
+      appearance: 'danger',
+      onConfirm: async () => {
+        try {
+          props.onDelete(template)
+        } catch (e) {
+          console.error(e)
+          notifyDeleteError()
+        }
+      }
+    })
+  }
+
+  const isEmpty = props.items.length === 0 && !props.isLoading
 
   if (props.isLoading || isEmpty) {
     return (
@@ -62,57 +78,62 @@ function TemplatesList(props) {
     )
   }
 
-  return (
-    <TemplatesContainer>
-      {props.titleRenderer ? (
-        props.titleRenderer()
-      ) : (
-        <Title count={props.items.length} />
-      )}
+  const pages = props.pageSize
+    ? chunk(props.items, props.pageSize)
+    : [props.items]
 
+  return (
+    <div>
       <TemplatesListContainer>
-        <MarketingTemplateMasonry
-          breakpointCols={{
-            default: 5,
-            1600: 4,
-            1200: 3,
-            960: 2,
-            568: 1
-          }}
-        >
-          {props.items.map(template => (
-            <MarketingTemplateCard
-              key={template.id}
-              template={template}
-              isLoading={deletingTemplates[template.id]}
-              suffix={deletingTemplates[template.id] && 'Deleting ...'}
-              handlePreview={() => {
-                setPreviewModalOpen(true)
-                setSelectedTemplate(template)
-              }}
-              actions={
-                isTemplateInstance(template) ? (
-                  <TemplateInstanceCardActions
-                    handleDelete={() => handleDelete(template)}
-                    handleEdit={() => {
-                      setActionTriggered(true)
-                      setEditActionTriggered(true)
-                      setSelectedTemplate(template)
-                    }}
-                  />
-                ) : (
-                  <TemplateCardActions
-                    handleCustomize={() => {
-                      setActionTriggered(true)
-                      setEditActionTriggered(false)
-                      setSelectedTemplate(template)
-                    }}
-                  />
-                )
-              }
-            />
-          ))}
-        </MarketingTemplateMasonry>
+        {pages.map((items, index) => (
+          <MarketingTemplateMasonry
+            key={index}
+            breakpointCols={{
+              default: 5,
+              1600: 4,
+              1200: 3,
+              960: 2,
+              568: 1
+            }}
+          >
+            {items.map(template => (
+              <MarketingTemplateCard
+                key={template.id}
+                template={template}
+                handlePreview={() => {
+                  setPreviewModalOpen(true)
+                  setSelectedTemplate(template)
+                }}
+                actions={
+                  isTemplateInstance(template) ? (
+                    <TemplateCardActions
+                      editButtonText="Continue"
+                      handleDelete={() => handleDeleteInstance(template)}
+                      handleEdit={() => {
+                        setActionTriggered(true)
+                        setEditActionTriggered(true)
+                        setSelectedTemplate(template)
+                      }}
+                    />
+                  ) : (
+                    <TemplateCardActions
+                      handleDelete={
+                        props.onDelete
+                          ? () => handleDeleteBrandTemplate(template)
+                          : undefined
+                      }
+                      handleEdit={() => {
+                        setActionTriggered(true)
+                        setEditActionTriggered(false)
+                        setSelectedTemplate(template)
+                      }}
+                    />
+                  )
+                }
+              />
+            ))}
+          </MarketingTemplateMasonry>
+        ))}
       </TemplatesListContainer>
 
       <MarketingTemplatePreviewModal
@@ -124,7 +145,7 @@ function TemplatesList(props) {
         actions={
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={() => {
               setPreviewModalOpen(false)
               setActionTriggered(true)
@@ -152,7 +173,7 @@ function TemplatesList(props) {
         setEditActionTriggered={setEditActionTriggered}
         selectedTemplate={selectedTemplate}
       />
-    </TemplatesContainer>
+    </div>
   )
 }
 

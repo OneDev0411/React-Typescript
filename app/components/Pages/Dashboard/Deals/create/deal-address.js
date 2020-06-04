@@ -3,20 +3,21 @@ import cn from 'classnames'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
+import { Button } from '@material-ui/core'
+
 import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 
-import ActionButton from 'components/Button/ActionButton'
 import SearchListings from 'components/SearchListingDrawer'
 
 import { H2 } from 'components/Typography/headings'
-import { primary } from 'views/utils/colors'
+import AddIcon from 'components/SvgIcons/Add/AddIcon'
 
 import RequiredIcon from 'components/SvgIcons/Required/IconRequired'
 
 const AddressInput = styled.input`
-  border: 1px dashed ${primary};
+  border: 1px dashed ${({ theme }) => theme.palette.secondary.main};
   border-radius: 3px;
   height: 35px;
   width: 20rem;
@@ -83,14 +84,14 @@ export default function DealAddress(props) {
         <div>
           {isBuyingSide && (
             <div className="entity-item address new">
-              <ActionButton
-                appearance="link"
+              <Button
+                color="secondary"
                 className="add-item"
                 onClick={toggleMlsDrawer}
               >
-                <span className="icon">+</span>
+                <AddIcon className="addIcon" />
                 <span className="text">Enter MLS #</span>
-              </ActionButton>
+              </Button>
             </div>
           )}
 
@@ -113,26 +114,26 @@ export default function DealAddress(props) {
                 )}
               />
 
-              <ActionButton
-                appearance="link"
+              <Button
+                color="secondary"
                 style={{ margin: 0, padding: 0, marginLeft: '0.5rem' }}
                 onClick={toggleManualAddressEntry}
               >
                 Cancel
-              </ActionButton>
+              </Button>
             </Flex>
           ) : (
             <div className="entity-item address new">
-              <ActionButton
-                appearance="link"
+              <Button
+                color="secondary"
                 className="add-item"
                 onClick={toggleManualAddressEntry}
               >
-                <span className="icon">+</span>
+                <AddIcon className="addIcon" />
                 <span className="text">
                   {isBuyingSide ? 'Or manually input' : 'Add address'}
                 </span>
-              </ActionButton>
+              </Button>
             </div>
           )}
         </div>

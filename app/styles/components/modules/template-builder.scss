@@ -1,12 +1,10 @@
 @import '../../../../node_modules/grapesjs/dist/css/grapes.min.css';
 
 .template-builder {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 100;
+
+  .gjs-sm-header {
+    display: none !important;
+  }
 
   .gjs-rte-actionbar {
     background: #fff;
@@ -21,21 +19,21 @@
       width: 2rem;
       height: 2rem;
 
-      &[title=Link] {
+      &[title='Link'] {
         display: none;
       }
 
       &:nth-last-child(2) {
         border-right: none;
       }
-      
+
       &:hover {
-        background-color: rgba(0,0,0,0.05);
+        background-color: rgba(0, 0, 0, 0.05);
       }
     }
 
     .gjs-rte-active {
-      background-color: rgba(0,0,0,0.1);
+      background-color: rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -43,19 +41,20 @@
     padding: 0;
   }
 
-  .gjs-block-category, .gjs-blocks-c {
+  .gjs-block-category,
+  .gjs-blocks-c {
     color: #000;
-    margin: 2px 0;
+    padding: 2px 0;
   }
 
   .gjs-block-category.gjs-open {
-    color: #0945eb;
-    border: none;
+    font-weight: bold;
   }
 
   .gjs-block-category {
     .gjs-block-label {
       height: 100%;
+      font-size: inherit;
 
       div {
         background-position-x: center;
@@ -64,13 +63,14 @@
         background-size: 2rem;
         width: 100%;
         height: 100%;
-        transition: background-image 0.1s ease-in;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-end;
       }
     }
+
+    border-bottom: 1px solid #ddd;
 
     // Basics
     &:nth-of-type(1) {
@@ -95,9 +95,21 @@
 
     // Articles
     &:nth-of-type(4) {
-      .gjs-title {        
+      .gjs-title {
         background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAAASwAAAEsAHOI6VIAAAAHdElNRQfjCh0TOSnmkVyQAAACfElEQVRYw+2XPWgUQRTHfzmCJ2ouIYer+AEKBqI2gmg6PzoNiqBeY6EWChamUaxOsNAIaiEqgggWFlaRgHfFdScKNtqIckGIKPhZ+IFJMGL0bi1ubm53b2Z3dnYLi/yn2Dez773/zJu3b2ZhHv8buny9rRxlpYWXGUqM89dE9RxuglZjYTTFpkQULi7no0muJSZxyahdd0tpjXhOMx5zR3o4IL3Nhas+ELM5EXvbV8iVLFArZOL5s0N3yLvNDHh6b3mKmzbJPQ4FRh6z3Y5EF65VHRSwjY3prmS5cnQ1NcChyBIAfnGJ90nCpUeJISkXWOZ71wWdO2eTXUMe2fF5+E2DBi4VdiYleemRZ2koNHZR5W47SjbhGuYyOUFR1God5iun7Uk+KDJPhVPc5I0tiR4HcYE8t0V/D9dtSTLsEGfHHI/443lTFgVyKaMAbLEP1y2OS7nCsELju3jmWrNS47Ny9B2AhwJ2m+SnTuUjdzrGKkwAMOMbNSia+nAd4yprfat4IaR9VOXo/mQkUKOmHH9IRtxyXLPib5fChs6jSfp0h6kHdb4lIdlLyWiSZ8UXEQpddhWjTQG4ELiDxiIxMDXX1JFcMaQYVZb6AHR7ch+HbKR1XVMZDEngi+FaEpGERTvm/Uu3J4NM09C2CfJpkNygJ8RqPSfTIMlF2C1OgyTqe38Sh6S98a0q1Iz2RZ7Rq7X65COpSykrjt98wKfEiPzLcOLMEshKyzMAOLI/0lRop+k6JqU8xk8D523bI1Ka5DkF2RvgddConMJfo7eVO2cDvfyIGahw9DHVFLzZNUW/5/ROhir9LQpV6dhAgUEWWbuf5RVj4l4zDxv8A3MjFh8lLvT/AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE5LTEwLTI5VDE2OjU3OjQxKzAzOjAwJtubYAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOS0xMC0yOVQxNjo1Nzo0MSswMzowMFeGI9wAAAAASUVORK5CYII=');
       }
+    }
+
+    // Market Reports
+    &:nth-of-type(5) {
+      .gjs-title {
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAITgAACE4AUWWMWAAAAAHdElNRQfkAwYPHDWYUgh7AAADtElEQVRYw82XW0gUURjHf+PMmrc10coumAkFFVgZJELY3Qj1LRIigsqiy0MUUVEEFfQQvUT1EAQhJF2ooKCn7hCVUlBQ1stSm5cizC5WWuusOz145uzs7IzO5hh952HOfN93vv/5LvOdM/APSBm2hRKWkWezo9DNTcJ+bXIs1/iFnjR+c5cpfoFU0IPhOHRqTaW0YYJ8ps1FYpBlTrVhgrxhK2sYjYFBDpXk+hUiO40ilxzGc4xeS7j6qPPmSQZTGIfGR97y21UrQoRMNrGNTGcFd5A0KthIGWPQ6CTMcx7SQrcjWDY72Es2AN+APG8hSGcLrQnVEuUrLTSyhUqKEgomi4P8FFrv2MoTe7jcvFhHp0tpGnziAaeoZxYZaEzkiIToYBXjeOwNpIY2We3vCEsj1tFDK/c5RxMRwWmnDsinyUviZ7OfIgB6Oct5YkxnDqWUUWBpH1lMZrJlVQe7uEq8UQ3asIq4J4vwhEyhynjmsY4GXvAJPcmvdupEnoJcx8DgB4vcIPI5SVQsvER+kjxAIVXs4SLPZEPp5ja1shQUlvOAEEcJIlmJJnZzQFR7E5t56epvDpOYykyCfOMVLby3yBSKySNMt9NCldV0id29poKhSUFN9bCo4q2A6GRtaku9UimPBEQvO1FHAmISN+SXfZox/hof+E5y2U214NzgMF02rUIKSbfx+mjnq3cglUOyST9hrk2qUM0tuuizjc9cZr53kPl0CIg2FiZJS3nu2sXuiM7ggbaL7tPJRoeCXEXMFSTCEq85aeYN0/nOcRoxHDQGgHW+WEJYgAqkezu+NeApG1hOiGtEBtF8TS26mGdzhxJw2JIriEEzzUNq6nwkKkH6bdIM6TGAQdR6gqZyW4kbSbxIadSwnhkWrkGIq1ymJ3UQN1rKaSbYeNOoJMIFpz39HdUkQQAEWWu64Icn8SY0UAhmWMeaMz9ATGqkgQA6VeyzQPoMEuK+zTMbSAV1TJDYCn084wofUgJRbTZtIMs4Q4lNspoV1KcI40JpwCjqkyAgwBJW+hPHNCDAHEdZOlP9AdEARUaxkRAq/dRSLrfgE4hJBg2iPgoEiE+UuNeAePp8jfApIP8diHlexCxPk2fIIwt0+dlGibePfpsVSdbEK5QDGlGKBaeYBZSJ+Wiq5fJM8eumUE6MiYI7jcUE0OWKBAoSkleDGLGEi0PiPD4G0zDfnpqFZO8zyiDvzlfroTVETkYm/dKqBsQIE0+2X6TSanVQIWtEfOmnd0Qi5Ex/ACxDjGkaZxaMAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIwLTAzLTA2VDE1OjI3OjIzKzAwOjAwtQZkggAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMC0wMy0wNlQxNToyNzoyMCswMDowMPWzxqMAAAAASUVORK5CYII=');
+      }
+    }
+
+
+    &:first-of-type {
+      border-top: 1px solid #ddd;
     }
   }
 
@@ -121,7 +133,7 @@
       background-position-x: 1rem;
 
       .gjs-caret-icon {
-        color: #7F7F7F;
+        color: inherit;
         order: 1;
       }
     }
@@ -148,8 +160,8 @@
 
   .gjs-pn-panel {
     z-index: 1;
-    
-    &.gjs-pn-views{
+
+    &.gjs-pn-views {
       display: none;
     }
 
@@ -294,11 +306,16 @@
     display: none;
   }
 
-  .gjs-one-bg, .gjs-three-bg {
-    background: #f2f2f2;
+  .gjs-one-bg,
+  .gjs-three-bg {
+    background: #fff;
   }
 
-  .gjs-two-color, .gjs-color-warn, .gjs-four-color, .gjs-color-main, .gjs-color-contrast {
+  .gjs-two-color,
+  .gjs-color-warn,
+  .gjs-four-color,
+  .gjs-color-main,
+  .gjs-color-contrast {
     color: #0945eb;
   }
 
@@ -306,11 +323,13 @@
     color: #0945eb;
   }
 
-  .gjs-badge, .gjs-toolbar {
+  .gjs-badge,
+  .gjs-toolbar {
     background-color: #0945eb;
   }
 
-  .gjs-pn-views, .gjs-pn-views-container {
+  .gjs-pn-views,
+  .gjs-pn-views-container {
     width: 17rem;
     border-left: 1px solid #e0e8ed;
   }
@@ -328,12 +347,15 @@
   .gjs-block {
     height: 7rem;
     background: #fff;
-    border: none;
     box-shadow: none;
     border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 0.7rem;
 
     &:hover {
-      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
+      color: #000;
+      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2),
+        0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
     }
   }
 }

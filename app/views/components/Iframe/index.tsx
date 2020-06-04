@@ -55,19 +55,24 @@ export function Iframe({
   linkTarget = '_blank',
   srcDoc,
   sanitize,
+  height: passedHeight,
   onLoad: receivedOnLoad,
   ...props
 }: Props) {
-  const ref = useRef<HTMLIFrameElement | null>(null)
-  const [height, setHeight] = useState<number | undefined>(undefined)
+  const ref = useRef<HTMLIFrameElement>(null)
+  const [height, setHeight] = useState<
+    HTMLProps<HTMLIFrameElement>['height'] | undefined
+  >(passedHeight)
 
   const updateHeight = () => {
     if (
       ref.current &&
       ref.current.contentDocument &&
-      ref.current.contentDocument.documentElement
+      ref.current.contentDocument.body
     ) {
-      setHeight(ref.current.contentDocument.documentElement.offsetHeight)
+      const documentElement = ref.current.contentDocument.documentElement
+
+      setHeight(documentElement.scrollHeight)
     }
   }
 
@@ -112,7 +117,7 @@ export function Iframe({
       title={title}
       frameBorder={0}
       onLoad={onLoad}
-      height={autoHeight ? height : undefined}
+      height={height}
       width={fullWidth ? '100%' : undefined}
       {...props}
       srcDoc={appliedSrcDoc}

@@ -61,7 +61,7 @@ function TextIconButton({
 
   if (iconRight) {
     IconRight = styled(iconRight)`
-      margin-left: ${text ? '0.5em' : 0};
+      margin-left: ${text ? '0.15em' : 0};
       transform: rotate(${iconAims[iconRightAim]});
     `
   }

@@ -6,10 +6,8 @@ declare type ICalendarEvent<
   Associations extends ICalendarEventAssociations = ''
 > = {
   id: UUID
-  timestamp: number
   recurring: boolean
   title: string
-  timestamp: number
   object_type: string
   campaign: UUID | null
   contact: UUID | null
@@ -21,6 +19,8 @@ declare type ICalendarEvent<
   metadata: {
     status: string
     is_partner: boolean
+    all_day?: boolean
+    send_updates: boolean
   }
   next_occurence: string
   object_type: string
@@ -38,11 +38,16 @@ declare type ICalendarEvent<
   people: (IContact | IAgent)[] | null
   people_len: number | null
   full_deal?: IDeal
-} & Association<'full_thread', IEmailThread, Associations>
+} & { rowIndex?: number } & Association<
+    'full_thread',
+    IEmailThread,
+    Associations
+  >
 
 declare interface ICalendarEventHeader {
   date: string
   headerType: string
+  isTomorrow: boolean
   isToday: boolean
   isEventHeader: boolean
   title: string
@@ -51,11 +56,23 @@ declare interface ICalendarEventHeader {
 declare type ICalendarListRow = ICalendarEvent | ICalendarEventHeader
 
 interface ICalendarEventsList {
-  [key: string]: {
-    ICalendarMonthEvents
-  }
+  [month: string]: ICalendarMonthEvents
 }
 
 interface ICalendarMonthEvents {
-  [key: string]: ICalendarEvent[] | []
+  [day: string]: ICalendarEvent[]
+}
+
+interface IGoogleCalendarItem {
+  id: string
+  name: string
+  description: string
+  permission: string
+  alreadySynced: boolean
+}
+
+interface IGoogleCalendars {
+  calendars: IGoogleCalendarItem[]
+  primaryCalendar: IGoogleCalendarItem
+  isConfigured: boolean
 }

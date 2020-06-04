@@ -1,16 +1,20 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
+
+import { Button } from '@material-ui/core'
 
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 import { searchContacts } from 'actions/contacts'
 
-import ActionButton from 'components/Button/ActionButton'
 import { EventDrawer } from 'components/EventDrawer'
 import { selectContact } from 'reducers/contacts/list'
 
 class CreateEvent extends Component {
-  state = {
-    showDrawer: false
+  constructor(props) {
+    super(props)
+    this.state = {
+      showDrawer: false
+    }
   }
 
   openDrawer = () => {
@@ -34,15 +38,15 @@ class CreateEvent extends Component {
     const { user, associations, disabled } = this.props
 
     return (
-      <Fragment>
-        <ActionButton
+      <>
+        <Button
           disabled={disabled}
-          appearance="outline"
+          variant="outlined"
           size="small"
           onClick={this.openDrawer}
         >
           Create Event
-        </ActionButton>
+        </Button>
         {this.state.showDrawer && (
           <EventDrawer
             isOpen
@@ -52,7 +56,7 @@ class CreateEvent extends Component {
             submitCallback={this.onEventSubmit}
           />
         )}
-      </Fragment>
+      </>
     )
   }
 }

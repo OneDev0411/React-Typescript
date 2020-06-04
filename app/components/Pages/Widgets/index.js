@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import idx from 'idx'
 
 import getBrand from '../../../store_actions/brand'
 import getFavorites from '../../../store_actions/listings/favorites/get-favorites'
@@ -13,7 +14,7 @@ class App extends Component {
     }
 
     if (!brand) {
-      this.props.getBrand()
+      this.props.getBrand(idx(this.props, props => props.location.query.brand))
     }
 
     if (user) {

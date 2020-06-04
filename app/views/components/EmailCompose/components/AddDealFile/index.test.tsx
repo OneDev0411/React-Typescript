@@ -1,5 +1,7 @@
 import { fireEvent, render, RenderResult } from '@testing-library/react'
 import * as React from 'react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 import { ReactNode } from 'react'
 import { FieldRenderProps } from 'react-final-form'
 import { keyBy } from 'lodash'
@@ -49,8 +51,19 @@ const AddDealFileTestBed = ({ children }: { children: ReactNode }) => {
 describe('AddDealFile component', () => {
   // https://gitlab.com/rechat/web/issues/2963
   test('renders', () => {
-    // @ts-ignore
-    const container = render(<AddDealFileBase input={{ value: [] }} />)
+    const mockStore = createStore((state, action) => state, {
+      deals: { checklists: {}, tasks: {}, envelopes: {} }
+    })
+
+    const container = render(
+      <Provider store={mockStore}>
+        <AddDealFileBase
+          input={{ ...input, value: [] }}
+          meta={{}}
+          initialAttachments={[]}
+        />
+      </Provider>
+    )
 
     expect(container).toMatchSnapshot()
   })

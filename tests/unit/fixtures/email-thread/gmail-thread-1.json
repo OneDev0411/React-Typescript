@@ -1,0 +1,264 @@
+{
+  "id": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
+  "created_at": 1581604811.09597,
+  "updated_at": 1583944547.92942,
+  "brand": "28810bfc-8565-11e9-b821-0a95998482ac",
+  "user": "29f259b4-626a-11e9-a064-0a95998482ac",
+  "google_credential": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec19",
+  "subject": "A new test for #3634",
+  "first_message_date": 1581604793,
+  "last_message_date": 1583673016,
+  "recipients": ["alireza.mirian@gmail.com", "rechat.test2@gmail.com"],
+  "recipients_raw": [
+    {
+      "name": "Alireza Mirian",
+      "address": "alireza.mirian@gmail.com"
+    },
+    {
+      "name": "test account",
+      "address": "rechat.test2@gmail.com"
+    }
+  ],
+  "senders_raw": [],
+  "message_count": 6,
+  "has_attachments": false,
+  "is_read": false,
+  "last_message_id": "1703efe173383887",
+  "messages": [
+    {
+      "id": "d5e51e26-f84a-411b-8cee-e78b01d9e53e",
+      "message_date": 1581604793,
+      "created_at": 1581604811.7721,
+      "updated_at": 1581605809.23026,
+      "google_credential": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec19",
+      "message_id": "1703efe173383887",
+      "thread_id": "1703efe173383887",
+      "internet_message_id": "CAOq1U5DWr4mKy+xdx=_P7ZguEgHYsPaJ37s35nqk5BMkm6pwBQ@mail.gmail.com",
+      "in_bound": true,
+      "recipients": ["alireza.mirian@gmail.com", "rechat.test2@gmail.com"],
+      "subject": "A new test for #3634",
+      "has_attachments": false,
+      "attachments": [],
+      "from_raw": {
+        "name": "Alireza Mirian",
+        "address": "alireza.mirian@gmail.com"
+      },
+      "to_raw": [
+        {
+          "name": "test account",
+          "address": "rechat.test2@gmail.com"
+        }
+      ],
+      "cc_raw": [],
+      "bcc_raw": [],
+      "in_reply_to": null,
+      "from": "Alireza Mirian <alireza.mirian@gmail.com>",
+      "to": ["rechat.test2@gmail.com"],
+      "cc": [],
+      "bcc": [],
+      "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
+      "is_read": true,
+      "type": "google_message",
+      "snippet": "This is the original content -- Alireza Mirian",
+      "unique_body": "",
+      "html_body": "<div dir=\"ltr\"><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">This is the original content</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br clear=\"all\"></div><div><br></div>-- <br><div dir=\"ltr\" class=\"gmail_signature\" data-smartmail=\"gmail_signature\"><div dir=\"ltr\"><div><div dir=\"ltr\"><div><div dir=\"ltr\">Alireza Mirian</div></div></div></div></div></div></div>\r\n",
+      "text_body": "This is the original content\r\n\r\n\r\n-- \r\nAlireza Mirian\r\n"
+    },
+    {
+      "id": "30a16579-0fb8-49f5-b9ba-90a2240b027f",
+      "message_date": 1581605849,
+      "created_at": 1581605850.11757,
+      "updated_at": 1581605850.11757,
+      "google_credential": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec19",
+      "message_id": "1703f0e0b7f5e462",
+      "thread_id": "1703efe173383887",
+      "internet_message_id": "CACumHE_CrOMTVjZX4N_w1VfGFZUOxxSoqOmUFtssL+1LVc-Z0g@mail.gmail.com",
+      "in_bound": false,
+      "recipients": ["rechat.test2@gmail.com", "alireza.mirian@gmail.com"],
+      "subject": "Re: A new test for #3634",
+      "has_attachments": false,
+      "attachments": [],
+      "from_raw": {
+        "name": "test account",
+        "address": "rechat.test2@gmail.com"
+      },
+      "to_raw": [
+        {
+          "name": "Alireza Mirian",
+          "address": "alireza.mirian@gmail.com"
+        }
+      ],
+      "cc_raw": [],
+      "bcc_raw": [],
+      "in_reply_to": "CAOq1U5DWr4mKy+xdx=_P7ZguEgHYsPaJ37s35nqk5BMkm6pwBQ@mail.gmail.com",
+      "from": "test account <rechat.test2@gmail.com>",
+      "to": ["alireza.mirian@gmail.com"],
+      "cc": [],
+      "bcc": [],
+      "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
+      "is_read": true,
+      "type": "google_message",
+      "snippet": "This reply is sent via gmail client, not rechat. On Thu, Feb 13, 2020 at 3:40 PM Alireza Mirian <alireza.mirian@gmail.com> wrote: This is the original content -- Alireza Mirian",
+      "unique_body": "",
+      "html_body": "<div dir=\"ltr\">This reply is sent via gmail client, not rechat.</div><br><div class=\"gmail_quote\"><div dir=\"ltr\" class=\"gmail_attr\">On Thu, Feb 13, 2020 at 3:40 PM Alireza Mirian <<a href=\"mailto:alireza.mirian@gmail.com\">alireza.mirian@gmail.com</a>> wrote:<br></div><blockquote class=\"gmail_quote\" style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\"><div dir=\"ltr\"><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">This is the original content</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br clear=\"all\"></div><div><br></div>-- <br><div dir=\"ltr\"><div dir=\"ltr\"><div><div dir=\"ltr\"><div><div dir=\"ltr\">Alireza Mirian</div></div></div></div></div></div></div>\r\n</blockquote></div>\r\n",
+      "text_body": "This reply is sent via gmail client, not rechat.\r\n\r\nOn Thu, Feb 13, 2020 at 3:40 PM Alireza Mirian <alireza.mirian@gmail.com>\r\nwrote:\r\n\r\n> This is the original content\r\n>\r\n>\r\n> --\r\n> Alireza Mirian\r\n>\r\n"
+    },
+    {
+      "id": "4eb711c9-a411-4fb6-988e-1f64fc2e5756",
+      "message_date": 1581707779,
+      "created_at": 1581707797.86002,
+      "updated_at": 1581784895.40543,
+      "google_credential": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec19",
+      "message_id": "1704521873c5bd05",
+      "thread_id": "1703efe173383887",
+      "internet_message_id": "CAOq1U5ARgCtBR=05UBYKhwgXaQLYMj5RMDaAFx1BkP7H6v0W6Q@mail.gmail.com",
+      "in_bound": true,
+      "recipients": ["alireza.mirian@gmail.com", "rechat.test2@gmail.com"],
+      "subject": "Re: A new test for #3634",
+      "has_attachments": false,
+      "attachments": [],
+      "from_raw": {
+        "name": "Alireza Mirian",
+        "address": "alireza.mirian@gmail.com"
+      },
+      "to_raw": [
+        {
+          "name": "test account",
+          "address": "rechat.test2@gmail.com"
+        }
+      ],
+      "cc_raw": [],
+      "bcc_raw": [],
+      "in_reply_to": "CACumHE_CrOMTVjZX4N_w1VfGFZUOxxSoqOmUFtssL+1LVc-Z0g@mail.gmail.com",
+      "from": "Alireza Mirian <alireza.mirian@gmail.com>",
+      "to": ["rechat.test2@gmail.com"],
+      "cc": [],
+      "bcc": [],
+      "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
+      "is_read": true,
+      "type": "google_message",
+      "snippet": "Again, another reply sent via gmail client. this is a long reply! :D On Thu, Feb 13, 2020 at 3:57 PM test account <rechat.test2@gmail.com> wrote: This reply is sent via gmail client, not rechat.",
+      "unique_body": "",
+      "html_body": "<div dir=\"ltr\"><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">Again, another reply sent via gmail client.</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">this is  </div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">a</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">long </div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">reply!</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">:D</div></div><br><div class=\"gmail_quote\"><div dir=\"ltr\" class=\"gmail_attr\">On Thu, Feb 13, 2020 at 3:57 PM test account <<a href=\"mailto:rechat.test2@gmail.com\">rechat.test2@gmail.com</a>> wrote:<br></div><blockquote class=\"gmail_quote\" style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\"><div dir=\"ltr\">This reply is sent via gmail client, not rechat.</div><br><div class=\"gmail_quote\"><div dir=\"ltr\" class=\"gmail_attr\">On Thu, Feb 13, 2020 at 3:40 PM Alireza Mirian <<a href=\"mailto:alireza.mirian@gmail.com\" target=\"_blank\">alireza.mirian@gmail.com</a>> wrote:<br></div><blockquote class=\"gmail_quote\" style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\"><div dir=\"ltr\"><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">This is the original content</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br clear=\"all\"></div><div><br></div>-- <br><div dir=\"ltr\"><div dir=\"ltr\"><div><div dir=\"ltr\"><div><div dir=\"ltr\">Alireza Mirian</div></div></div></div></div></div></div>\r\n</blockquote></div>\r\n</blockquote></div><br clear=\"all\"><div><br></div>-- <br><div dir=\"ltr\" class=\"gmail_signature\"><div dir=\"ltr\"><div><div dir=\"ltr\"><div><div dir=\"ltr\">Alireza Mirian</div></div></div></div></div></div>\r\n",
+      "text_body": "Again, another reply sent via gmail client.\r\n\r\nthis is\r\n\r\na\r\n\r\nlong\r\n\r\nreply!\r\n\r\n:D\r\n\r\nOn Thu, Feb 13, 2020 at 3:57 PM test account <rechat.test2@gmail.com> wrote:\r\n\r\n> This reply is sent via gmail client, not rechat.\r\n>\r\n> On Thu, Feb 13, 2020 at 3:40 PM Alireza Mirian <alireza.mirian@gmail.com>\r\n> wrote:\r\n>\r\n>> This is the original content\r\n>>\r\n>>\r\n>> --\r\n>> Alireza Mirian\r\n>>\r\n>\r\n\r\n-- \r\nAlireza Mirian\r\n"
+    },
+    {
+      "id": "62639c33-9052-4799-b552-ad2ea9ff592a",
+      "message_date": 1581790685,
+      "created_at": 1581790685.70911,
+      "updated_at": 1581790688.20088,
+      "google_credential": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec19",
+      "message_id": "1704a12669a969d3",
+      "thread_id": "1703efe173383887",
+      "internet_message_id": "CACumHE9AQAPxcf_zBcb=jC5eyQuT-GztH8r-7CkupoSP4HASAw@mail.gmail.com",
+      "in_bound": false,
+      "recipients": ["rechat.test2@gmail.com", "alireza.mirian@gmail.com"],
+      "subject": "Re: A new test for #3634",
+      "has_attachments": false,
+      "attachments": [],
+      "from_raw": {
+        "name": "test account",
+        "address": "rechat.test2@gmail.com"
+      },
+      "to_raw": [
+        {
+          "name": "",
+          "address": "alireza.mirian@gmail.com"
+        }
+      ],
+      "cc_raw": [],
+      "bcc_raw": [],
+      "in_reply_to": "CAOq1U5ARgCtBR=05UBYKhwgXaQLYMj5RMDaAFx1BkP7H6v0W6Q@mail.gmail.com",
+      "from": "test account <rechat.test2@gmail.com>",
+      "to": ["alireza.mirian@gmail.com"],
+      "cc": [],
+      "bcc": [],
+      "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
+      "is_read": true,
+      "type": "google_message",
+      "snippet": "And this reply is sent from rechat! this is also multi line! 😃 On Fri, Feb 14, 2020 pmt 7:16 PM Alireza Mirian <alireza.mirian@gmail.com> wrote: Again, another reply sent via gmail client. this",
+      "unique_body": "",
+      "html_body": "<div>And this reply is sent from &nbsp;rechat!</div>\n<div>this</div>\n<div>is &nbsp;also</div>\n<div>multi line! &nbsp;😃<br>\n</div>\n<div class=\"rechat-quote\">\n    <div dir=\"ltr\">\n    On Fri, Feb 14, 2020 pmt 7:16 PM Alireza Mirian <alireza.mirian@gmail.com> wrote:\n    </div>\n    <blockquote style=\"margin: 0 0 0 0.8ex; border-left: 1px solid rgb(204, 204, 204); padding-left: 1ex\">\n      <div dir=\"ltr\"><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">Again, another reply sent via gmail client.</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">this is&nbsp;&nbsp;</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">a</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">long&nbsp;</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">reply!</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">:D</div></div><br><div class=\"gmail_quote\"><div dir=\"ltr\" class=\"gmail_attr\">On Thu, Feb 13, 2020 at 3:57 PM test account <<a href=\"mailto:rechat.test2@gmail.com\">rechat.test2@gmail.com</a>> wrote:<br></div><blockquote class=\"gmail_quote\" style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\"><div dir=\"ltr\">This reply is sent via gmail client, not rechat.</div><br><div class=\"gmail_quote\"><div dir=\"ltr\" class=\"gmail_attr\">On Thu, Feb 13, 2020 at 3:40 PM Alireza Mirian <<a href=\"mailto:alireza.mirian@gmail.com\" target=\"_blank\">alireza.mirian@gmail.com</a>> wrote:<br></div><blockquote class=\"gmail_quote\" style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\"><div dir=\"ltr\"><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">This is the original content</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br clear=\"all\"></div><div><br></div>-- <br><div dir=\"ltr\"><div dir=\"ltr\"><div><div dir=\"ltr\"><div><div dir=\"ltr\">Alireza Mirian</div></div></div></div></div></div></div>\n</blockquote></div>\n</blockquote></div><br clear=\"all\"><div><br></div>-- <br><div dir=\"ltr\" class=\"gmail_signature\"><div dir=\"ltr\"><div><div dir=\"ltr\"><div><div dir=\"ltr\">Alireza Mirian</div></div></div></div></div></div>\n\n    </blockquote>\n  </div>\r\n",
+      "text_body": "And this reply is sent from rechat!thisis alsomulti line! 😃\nOn Fri, Feb 14, 2020 pmt 7:16 PM Alireza Mirian <alireza.mirian@gmail.com> wrote: >  Again, another reply sent via gmail client.\nthis is\na\nlong\nreply!\n:D\nOn Thu, Feb 13, 2020 at 3:57 PM test account <rechat.test2@gmail.com [rechat.test2@gmail.com]> wrote:\n> This reply is sent via gmail client, not rechat.\nOn Thu, Feb 13, 2020 at 3:40 PM Alireza Mirian <alireza.mirian@gmail.com [alireza.mirian@gmail.com]> wrote:\n> This is the original content\n\n-- \nAlireza Mirian\n\n\n\n-- \nAlireza Mirian\r\n"
+    },
+    {
+      "id": "6fc1c3ea-0beb-49ae-ac1e-5155c3b64572",
+      "message_date": 1583671285,
+      "created_at": 1583671285.87755,
+      "updated_at": 1583671289.88192,
+      "google_credential": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec19",
+      "message_id": "170ba2a165754639",
+      "thread_id": "1703efe173383887",
+      "internet_message_id": "CACumHE_wpof=1OCX1-mZ7NVpbRVHGj=38UR9DxsojQWMPabxng@mail.gmail.com",
+      "in_bound": false,
+      "recipients": ["rechat.test2@gmail.com", "alireza.mirian@gmail.com"],
+      "subject": "Re: A new test for #3634",
+      "has_attachments": false,
+      "attachments": [],
+      "from_raw": {
+        "name": "test account",
+        "address": "rechat.test2@gmail.com"
+      },
+      "to_raw": [
+        {
+          "name": "",
+          "address": "alireza.mirian@gmail.com"
+        }
+      ],
+      "cc_raw": [],
+      "bcc_raw": [],
+      "in_reply_to": "CACumHE9AQAPxcf_zBcb=jC5eyQuT-GztH8r-7CkupoSP4HASAw@mail.gmail.com",
+      "from": "test account <rechat.test2@gmail.com>",
+      "to": ["alireza.mirian@gmail.com"],
+      "cc": [],
+      "bcc": [],
+      "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
+      "is_read": true,
+      "type": "google_message",
+      "snippet": "Another reply sent from rechat! On Sat, Feb 15, 2020 pmt 6:18 PM test account <rechat.test2@gmail.com> wrote: And this reply is sent from rechat! this is also multi line! 😃 On Fri, Feb 14, 2020",
+      "unique_body": "",
+      "html_body": "<div>Another reply sent from rechat!<br>\n</div>\n<div class=\"rechat-quote\">\n    <div dir=\"ltr\">\n    On Sat, Feb 15, 2020 pmt 6:18 PM test account <rechat.test2@gmail.com> wrote:\n    <br>  \n    </div>\n    <blockquote style=\"margin: 0 0 0 0.8ex; border-left: 1px solid rgb(204, 204, 204); padding-left: 1ex\">\n      <div>And this reply is sent from &nbsp;rechat!</div>\n<div>this</div>\n<div>is &nbsp;also</div>\n<div>multi line! &nbsp;😃<br>\n</div>\n<div class=\"rechat-quote\">\n    <div dir=\"ltr\">\n    On Fri, Feb 14, 2020 pmt 7:16 PM Alireza Mirian <alireza.mirian@gmail.com> wrote:\n    </alireza.mirian@gmail.com></div>\n    <blockquote style=\"margin: 0 0 0 0.8ex; border-left: 1px solid rgb(204, 204, 204); padding-left: 1ex\">\n      <div dir=\"ltr\"><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">Again, another reply sent via gmail client.</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">this is&nbsp;&nbsp;</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">a</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">long&nbsp;</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">reply!</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">:D</div></div><br><div class=\"gmail_quote\"><div dir=\"ltr\" class=\"gmail_attr\">On Thu, Feb 13, 2020 at 3:57 PM test account <<a href=\"mailto:rechat.test2@gmail.com\">rechat.test2@gmail.com</a>> wrote:<br></div><blockquote class=\"gmail_quote\" style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\"><div dir=\"ltr\">This reply is sent via gmail client, not rechat.</div><br><div class=\"gmail_quote\"><div dir=\"ltr\" class=\"gmail_attr\">On Thu, Feb 13, 2020 at 3:40 PM Alireza Mirian <<a href=\"mailto:alireza.mirian@gmail.com\" target=\"_blank\">alireza.mirian@gmail.com</a>> wrote:<br></div><blockquote class=\"gmail_quote\" style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\"><div dir=\"ltr\"><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">This is the original content</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br clear=\"all\"></div><div><br></div>-- <br><div dir=\"ltr\"><div dir=\"ltr\"><div><div dir=\"ltr\"><div><div dir=\"ltr\">Alireza Mirian</div></div></div></div></div></div></div>\n</blockquote></div>\n</blockquote></div><br clear=\"all\"><div><br></div>-- <br><div dir=\"ltr\" class=\"gmail_signature\"><div dir=\"ltr\"><div><div dir=\"ltr\"><div><div dir=\"ltr\">Alireza Mirian</div></div></div></div></div></div>\n\n    </blockquote>\n  </div>\n\n    </blockquote>\n  </div>\r\n",
+      "text_body": "Another reply sent from rechat!\nOn Sat, Feb 15, 2020 pmt 6:18 PM test account <rechat.test2@gmail.com> wrote: \n>  And this reply is sent from rechat!thisis alsomulti line! 😃\nOn Fri, Feb 14, 2020 pmt 7:16 PM Alireza Mirian wrote: >  Again, another reply sent via gmail client.\nthis is\na\nlong\nreply!\n:D\nOn Thu, Feb 13, 2020 at 3:57 PM test account <rechat.test2@gmail.com [rechat.test2@gmail.com]> wrote:\n> This reply is sent via gmail client, not rechat.\nOn Thu, Feb 13, 2020 at 3:40 PM Alireza Mirian <alireza.mirian@gmail.com [alireza.mirian@gmail.com]> wrote:\n> This is the original content\n\n-- \nAlireza Mirian\n\n\n\n-- \nAlireza Mirian\r\n"
+    },
+    {
+      "id": "c06b5f65-abbb-4138-bebc-7db331cec2ae",
+      "message_date": 1583673016,
+      "created_at": 1583673034.102,
+      "updated_at": 1583673034.102,
+      "google_credential": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec19",
+      "message_id": "170ba44adac96328",
+      "thread_id": "1703efe173383887",
+      "internet_message_id": "CAOq1U5AdzsLSd6Q8+LQrD-0xQiSREs_FDuOWdMtAZaVr+fncgg@mail.gmail.com",
+      "in_bound": true,
+      "recipients": ["alireza.mirian@gmail.com", "rechat.test2@gmail.com"],
+      "subject": "Re: A new test for #3634",
+      "has_attachments": false,
+      "attachments": [],
+      "from_raw": {
+        "name": "Alireza Mirian",
+        "address": "alireza.mirian@gmail.com"
+      },
+      "to_raw": [
+        {
+          "name": "test account",
+          "address": "rechat.test2@gmail.com"
+        }
+      ],
+      "cc_raw": [],
+      "bcc_raw": [],
+      "in_reply_to": "CACumHE_wpof=1OCX1-mZ7NVpbRVHGj=38UR9DxsojQWMPabxng@mail.gmail.com",
+      "from": "Alireza Mirian <alireza.mirian@gmail.com>",
+      "to": ["rechat.test2@gmail.com"],
+      "cc": [],
+      "bcc": [],
+      "thread_key": "ccb4ff96-2a1e-4f9e-8bb3-b4fdff5dec191703efe173383887",
+      "is_read": false,
+      "type": "google_message",
+      "snippet": "from gmail again! On Sun, Mar 8, 2020 at 1:41 PM test account <rechat.test2@gmail.com> wrote: Another reply sent from rechat! On Sat, Feb 15, 2020 pmt 6:18 PM test account <rechat.test2@gmail.",
+      "unique_body": "",
+      "html_body": "<div dir=\"ltr\"><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">from gmail again!</div></div><br><div class=\"gmail_quote\"><div dir=\"ltr\" class=\"gmail_attr\">On Sun, Mar 8, 2020 at 1:41 PM test account <<a href=\"mailto:rechat.test2@gmail.com\">rechat.test2@gmail.com</a>> wrote:<br></div><blockquote class=\"gmail_quote\" style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\"><div>Another reply sent from rechat!<br>\r\n</div>\r\n<div>\r\n    <div dir=\"ltr\">\r\n    On Sat, Feb 15, 2020 pmt 6:18 PM test account <<a href=\"mailto:rechat.test2@gmail.com\" target=\"_blank\">rechat.test2@gmail.com</a>> wrote:\r\n    <br>  \r\n    </div>\r\n    <blockquote style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\">\r\n      <div>And this reply is sent from  rechat!</div>\r\n<div>this</div>\r\n<div>is  also</div>\r\n<div>multi line!  😃<br>\r\n</div>\r\n<div>\r\n    <div dir=\"ltr\">\r\n    On Fri, Feb 14, 2020 pmt 7:16 PM Alireza Mirian  wrote:\r\n    </div>\r\n    <blockquote style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\">\r\n      <div dir=\"ltr\"><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">Again, another reply sent via gmail client.</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">this is  </div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">a</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">long </div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">reply!</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br></div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">:D</div></div><br><div class=\"gmail_quote\"><div dir=\"ltr\" class=\"gmail_attr\">On Thu, Feb 13, 2020 at 3:57 PM test account <<a href=\"mailto:rechat.test2@gmail.com\" target=\"_blank\">rechat.test2@gmail.com</a>> wrote:<br></div><blockquote class=\"gmail_quote\" style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\"><div dir=\"ltr\">This reply is sent via gmail client, not rechat.</div><br><div class=\"gmail_quote\"><div dir=\"ltr\" class=\"gmail_attr\">On Thu, Feb 13, 2020 at 3:40 PM Alireza Mirian <<a href=\"mailto:alireza.mirian@gmail.com\" target=\"_blank\">alireza.mirian@gmail.com</a>> wrote:<br></div><blockquote class=\"gmail_quote\" style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\"><div dir=\"ltr\"><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\">This is the original content</div><div class=\"gmail_default\" style=\"font-family:tahoma,sans-serif;font-size:small\"><br clear=\"all\"></div><div><br></div>-- <br><div dir=\"ltr\"><div dir=\"ltr\"><div><div dir=\"ltr\"><div><div dir=\"ltr\">Alireza Mirian</div></div></div></div></div></div></div>\r\n</blockquote></div>\r\n</blockquote></div><br clear=\"all\"><div><br></div>-- <br><div dir=\"ltr\"><div dir=\"ltr\"><div><div dir=\"ltr\"><div><div dir=\"ltr\">Alireza Mirian</div></div></div></div></div></div>\r\n\r\n    </blockquote>\r\n  </div>\r\n\r\n    </blockquote>\r\n  </div>\r\n</blockquote></div><br clear=\"all\"><div><br></div>-- <br><div dir=\"ltr\" class=\"gmail_signature\"><div dir=\"ltr\"><div><div dir=\"ltr\"><div><div dir=\"ltr\">Alireza Mirian</div></div></div></div></div></div>\r\n",
+      "text_body": "from gmail again!\r\n\r\nOn Sun, Mar 8, 2020 at 1:41 PM test account <rechat.test2@gmail.com> wrote:\r\n\r\n> Another reply sent from rechat!\r\n> On Sat, Feb 15, 2020 pmt 6:18 PM test account <rechat.test2@gmail.com>\r\n> wrote:\r\n>\r\n> And this reply is sent from  rechat!\r\n> this\r\n> is  also\r\n> multi line!  😃\r\n> On Fri, Feb 14, 2020 pmt 7:16 PM Alireza Mirian wrote:\r\n>\r\n> Again, another reply sent via gmail client.\r\n>\r\n> this is\r\n>\r\n> a\r\n>\r\n> long\r\n>\r\n> reply!\r\n>\r\n> :D\r\n>\r\n> On Thu, Feb 13, 2020 at 3:57 PM test account <rechat.test2@gmail.com>\r\n> wrote:\r\n>\r\n>> This reply is sent via gmail client, not rechat.\r\n>>\r\n>> On Thu, Feb 13, 2020 at 3:40 PM Alireza Mirian <alireza.mirian@gmail.com>\r\n>> wrote:\r\n>>\r\n>>> This is the original content\r\n>>>\r\n>>>\r\n>>> --\r\n>>> Alireza Mirian\r\n>>>\r\n>>\r\n>\r\n> --\r\n> Alireza Mirian\r\n>\r\n>\r\n\r\n-- \r\nAlireza Mirian\r\n"
+    }
+  ],
+  "type": "email_thread"
+}

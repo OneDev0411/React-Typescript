@@ -2,68 +2,136 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Rechat.com">
-  <meta name="author" content="Rechat.com">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Rechat.com" />
+  <meta name="author" content="Rechat.com" />
   <!-- Remove Microsoft Edge's phone number styling -->
-  <meta name="format-detection" content="telephone=no">
+  <meta name="format-detection" content="telephone=no" />
 
   <title>Rechat</title>
 
-  <!-- -->
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/images/favicons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicons/favicon-16x16.png">
-  <link rel="manifest" href="/static/images/favicons/manifest.json">
-  <link rel="mask-icon" href="/static/images/favicons/safari-pinned-tab.svg" color="#0945eb">
-  <link rel="shortcut icon" href="/static/images/favicons/favicon.ico">
-  <meta name="msapplication-config" content="/static/images/favicons/browserconfig.xml">
-  <meta name="theme-color" content="#ffffff">
-  <meta name="apple-itunes-app" content="app-id=974093560">
+  <link rel="apple-touch-icon" sizes="144x144" href="/static/images/favicons/apple-touch-icon.png?v=NmbgrbW8Na" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicons/favicon-32x32.png?v=NmbgrbW8Na" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicons/favicon-16x16.png?v=NmbgrbW8Na" />
+  <link rel="manifest" href="/static/images/favicons/site.webmanifest?v=NmbgrbW8Na" />
+  <link rel="mask-icon" href="/static/images/favicons/safari-pinned-tab.svg?v=NmbgrbW8Na" color="#39ccaa" />
+  <link rel="shortcut icon" href="/static/images/favicons/favicon.ico?v=NmbgrbW8Na" />
+  <meta name="msapplication-TileColor" content="#da532c" />
+  <meta name="msapplication-config" content="/static/images/favicons/browserconfig.xml?v=NmbgrbW8Na" />
+  <meta name="theme-color" content="#ffffff" />
 
   <script>
-    window['_fs_debug'] = false;
-    window['_fs_host'] = 'fullstory.com';
-    window['_fs_org'] = '132WK';
-    window['_fs_namespace'] = 'FS';
-    (function (m, n, e, t, l, o, g, y) {
-      if (e in m) { if (m.console && m.console.log) { m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].'); } return; }
-      g = m[e] = function (a, b) { g.q ? g.q.push([a, b]) : g._api(a, b); }; g.q = [];
-      o = n.createElement(t); o.async = 1; o.src = 'https://' + _fs_host + '/s/fs.js';
-      y = n.getElementsByTagName(t)[0]; y.parentNode.insertBefore(o, y);
-      g.identify = function (i, v) { g(l, { uid: i }); if (v) g(l, v) }; g.setUserVars = function (v) { g(l, v) };
-      g.identifyAccount = function (i, v) { o = 'account'; v = v || {}; v.acctId = i; g(o, v) };
-      g.clearUserCookie = function (c, d, i) {
-        if (!c || document.cookie.match('fs_uid=[`;`]*`[`;`]*`[`;`]*`')) {
-          d = n.domain; while (1) {
-            n.cookie = 'fs_uid=;domain=' + d +
-              ';path=/;expires=' + new Date(0).toUTCString(); i = d.indexOf('.'); if (i < 0) break; d = d.slice(i + 1)
+    window['_fs_debug'] = false
+    window['_fs_host'] = 'fullstory.com'
+    window['_fs_org'] = '132WK'
+    window['_fs_namespace'] = 'FS'
+      ; (function (m, n, e, t, l, o, g, y) {
+        if (e in m) {
+          if (m.console && m.console.log) {
+            m.console.log(
+              'FullStory namespace conflict. Please set window["_fs_namespace"].'
+            )
+          }
+          return
+        }
+        g = m[e] = function (a, b) {
+          g.q ? g.q.push([a, b]) : g._api(a, b)
+        }
+        g.q = []
+        o = n.createElement(t)
+        o.async = 1
+        o.src = 'https://' + _fs_host + '/s/fs.js'
+        y = n.getElementsByTagName(t)[0]
+        y.parentNode.insertBefore(o, y)
+        g.identify = function (i, v) {
+          g(l, { uid: i })
+          if (v) g(l, v)
+        }
+        g.setUserVars = function (v) {
+          g(l, v)
+        }
+        g.identifyAccount = function (i, v) {
+          o = 'account'
+          v = v || {}
+          v.acctId = i
+          g(o, v)
+        }
+        g.clearUserCookie = function (c, d, i) {
+          if (!c || document.cookie.match('fs_uid=[`;`]*`[`;`]*`[`;`]*`')) {
+            d = n.domain
+            while (1) {
+              n.cookie =
+                'fs_uid=;domain=' +
+                d +
+                ';path=/;expires=' +
+                new Date(0).toUTCString()
+              i = d.indexOf('.')
+              if (i < 0) break
+              d = d.slice(i + 1)
+            }
           }
         }
-      };
-    })(window, document, window['_fs_namespace'], 'script', 'user');
+      })(window, document, window['_fs_namespace'], 'script', 'user')
   </script>
 </head>
 
 <body class="page">
   <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="app"></div>
+  <div id="app">{{{ body }}}</div>
+  <div class="hidden">
+    {{# store_data }}
+    <script>
+      window.__APPLICATION_STATE__ = '{{ store_data }}'
+    </script>
+    {{/ store_data }}
+  </div>
 
   <script>
     if (!window.INTERCOM_ID) {
-      window.INTERCOM_ID = '{{ variables.intercomId }}';
+      window.INTERCOM_ID = '{{ variables.intercomId }}'
     }
   </script>
   <script>
-    (function () { var w = window; var ic = w.Intercom; if (typeof ic === "function") { ic('reattach_activator'); ic('update', intercomSettings); } else { var d = document; var i = function () { i.c(arguments) }; i.q = []; i.c = function (args) { i.q.push(args) }; w.Intercom = i; function l() { var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://widget.intercom.io/widget/{{ variables.intercomId }}'; var x = d.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); } if (w.attachEvent) { w.attachEvent('onload', l); } else { w.addEventListener('load', l, false); } } })()
+    ; (function () {
+      var w = window
+      var ic = w.Intercom
+      if (typeof ic === 'function') {
+        ic('reattach_activator')
+        ic('update', intercomSettings)
+      } else {
+        var d = document
+        var i = function () {
+          i.c(arguments)
+        }
+        i.q = []
+        i.c = function (args) {
+          i.q.push(args)
+        }
+        w.Intercom = i
+        function l() {
+          var s = d.createElement('script')
+          s.type = 'text/javascript'
+          s.async = true
+          s.src =
+            'https://widget.intercom.io/widget/{{ variables.intercomId }}'
+          var x = d.getElementsByTagName('script')[0]
+          x.parentNode.insertBefore(s, x)
+        }
+        if (w.attachEvent) {
+          w.attachEvent('onload', l)
+        } else {
+          w.addEventListener('load', l, false)
+        }
+      }
+    })()
   </script>
   <script src="https://cdn.ravenjs.com/3.18.1/raven.min.js" crossorigin="anonymous"></script>
   <script type="text/javascript">
     Raven.config('{{ variables.sentryKey }}').install()
   </script>
-  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 </body>
 
 </html>

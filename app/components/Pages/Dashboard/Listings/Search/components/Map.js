@@ -9,16 +9,18 @@ import withPropsOnChange from 'recompose/withPropsOnChange'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 
-import { reset as resetSearchType } from '../../../../../../store_actions/listings/search/set-type'
 import {
   setCssPositionToListingsWithSameBuilding,
   normalizeListingsForMarkers,
   getBounds
-} from '../../../../../../utils/map'
-import * as mapActions from '../../../../../../store_actions/listings/map'
-import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
-import getListingsByMapBounds from '../../../../../../store_actions/listings/search/get-listings/by-map-bounds'
-import { SearchPin } from '../../../../../../views/MLS/SearchPin'
+} from 'utils/map'
+import * as mapActions from 'actions/listings/map'
+import * as drawingActions from 'actions/listings/map/drawing'
+import { reset as resetSearchType } from 'actions/listings/search/set-type'
+import getListingsByMapBounds from 'actions/listings/search/get-listings/by-map-bounds'
+
+import SearchPinMarker from 'components/SearchPinMarker'
+
 import ZoomController from '../../components/ZoomController'
 import SimpleMarker from '../../components/Markers/SimpleMarker'
 import ClusterMarker from '../../components/Markers/ClusterMarker'
@@ -45,15 +47,13 @@ let mapOnChangeDebounce = 0
 const map = ({
   map,
   user,
-  appData,
+  brand,
   isWidget,
   onChange,
   clusters,
   searchText,
   searchLocation,
   onGoogleApiLoaded,
-  onMarkerMouseEnter,
-  onMarkerMouseLeave,
   onClickRemovePolygon,
   fitBoundsByPoints
 }) => (
@@ -79,13 +79,10 @@ const map = ({
               lat={lat}
               lng={lng}
               user={user}
-              data={appData}
+              barnd={brand}
               listing={points[0]}
               isWidget={isWidget}
               key={`SIMPLE_MARKER_${id}`}
-              markerPopupIsActive={map.hoveredMarkerId === id}
-              onMouseEnterHandler={() => onMarkerMouseEnter(id)}
-              onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
             />
           )
         }
@@ -100,7 +97,9 @@ const map = ({
           />
         )
       })}
-      {searchLocation && <SearchPin {...searchLocation} caption={searchText} />}
+      {searchLocation && (
+        <SearchPinMarker {...searchLocation} caption={searchText} />
+      )}
     </Map>
     <DrawingButton />
     <DrawingRemoveButton
@@ -115,9 +114,9 @@ const map = ({
 
 const mapHOC = compose(
   connect(
-    ({ user, data, search }, { listings }) => ({
+    ({ user, brand, search }, { listings }) => ({
       user,
-      appData: data,
+      brand,
       map: search.map,
       searchType: search.type,
       mapProps: search.map.props,
@@ -259,12 +258,6 @@ const mapHOC = compose(
         setIsInit(true)
         onChange(getMapProps(googleMap))
       }
-    },
-    onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
-      setMapHoveredMarkerId('search', -1)
-    },
-    onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
-      setMapHoveredMarkerId('search', id)
     },
     onClickRemovePolygon: ({
       map,

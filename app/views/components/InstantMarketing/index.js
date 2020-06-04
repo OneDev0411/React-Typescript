@@ -40,7 +40,7 @@ class InstantMarketing extends React.Component {
 
 InstantMarketing.propTypes = {
   closeConfirmation: PropTypes.bool,
-  showTemplatesColumn: PropTypes.bool,
+  hideTemplatesColumn: PropTypes.bool,
   templateData: PropTypes.object,
   templateTypes: PropTypes.array,
   mediums: PropTypes.string,
@@ -51,7 +51,7 @@ InstantMarketing.propTypes = {
 
 InstantMarketing.defaultProps = {
   closeConfirmation: true,
-  showTemplatesColumn: true,
+  hideTemplatesColumn: false,
   templateData: {},
   templateTypes: [],
   mediums: '',

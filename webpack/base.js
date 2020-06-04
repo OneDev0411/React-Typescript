@@ -100,12 +100,6 @@ export default {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx|js)$/,
-        loader: 'babel-loader',
-        include: path.resolve(__dirname, '../app'),
-        options: {}
-      },
-      {
         test: /\.woff(\?.*)?$/,
         use: [
           {

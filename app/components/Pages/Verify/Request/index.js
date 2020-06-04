@@ -5,8 +5,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import Brand from '../../../../controllers/Brand'
-import { getBrandInfo } from '../../Auth/SignIn'
+import { getBrandInfo } from '../../Auth/SignIn/get-brand-info'
 import verify from '../../../../models/verify'
 
 const requestVerify = ({
@@ -28,11 +27,10 @@ const requestVerify = ({
               <img
                 src={siteLogo}
                 alt={`${siteTitle} logo`}
-                className={'c-auth__logo'}
+                className="c-auth__logo"
               />
             </Link>
           )}
-          <h1 className="c-auth__title">{siteTitle}</h1>
           <p className="c-auth__subtitle">
             Request a {verifyType} verification link
           </p>
@@ -46,6 +44,7 @@ const requestVerify = ({
                 </div>
               )}
               <button
+                type="button"
                 onClick={verifyRequestHandler}
                 className="c-auth__submit-btn"
                 disabled={isSubmitting}
@@ -74,7 +73,7 @@ const requestVerify = ({
 }
 
 export default compose(
-  connect(({ brand, user }, { params: { verifyType } }) => ({
+  connect(({ brand }, { params: { verifyType } }) => ({
     brand,
     verifyType
   })),
@@ -92,11 +91,11 @@ export default compose(
 
       verify
         .request(verifyType)
-        .then(statusCode => {
+        .then(() => {
           setIsSubmitting(false)
           setSubmitSuccessfully(true)
         })
-        .catch(errorCode => {
+        .catch(() => {
           setIsSubmitting(false)
           setSubmitError(true)
         })

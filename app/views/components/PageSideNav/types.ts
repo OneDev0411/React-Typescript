@@ -5,6 +5,23 @@ export enum SectionsEnum {
   SELECTABLE_LIST = 'list'
 }
 
+export interface SectionItem {
+  title: string
+  value?: string | string[]
+  link: string
+  isIndex?: boolean
+  icon?: React.ComponentType
+  access?: IPermission[]
+}
+
+export interface Section {
+  type: SectionsEnum
+  title: string
+  value?: string | null
+  items: SectionItem[]
+  access?: IPermission[]
+}
+
 interface SelectableListSection {
   type: SectionsEnum.SELECTABLE_LIST
   title?: string

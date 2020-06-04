@@ -27,7 +27,12 @@ function LocationsComponent({ locations, input: { onChange } }) {
 
   return (
     <>
-      <div style={{ height: '15rem', marginBottom: '1rem' }}>
+      <div
+        style={{
+          height: '15rem',
+          marginBottom: '1rem'
+        }}
+      >
         <Map
           id="tour-direction-map"
           listings={locations.map(l => l.listing.original)}
@@ -37,7 +42,10 @@ function LocationsComponent({ locations, input: { onChange } }) {
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="locations-droppable">
           {droppableProvided => (
-            <div style={{ width: '100%' }} ref={droppableProvided.innerRef}>
+            <div
+              style={{ zIndex: 1, position: 'relative' }}
+              ref={droppableProvided.innerRef}
+            >
               {locations.map((location, index) => {
                 if (!location || !location.association_type) {
                   return null

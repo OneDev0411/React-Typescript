@@ -4,7 +4,15 @@ import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
-import { Grid, Box, Paper, Tab, Tabs as MUITabs, Chip } from '@material-ui/core'
+import {
+  Grid,
+  Box,
+  Paper,
+  Tab,
+  Tabs as MUITabs,
+  Chip,
+  useTheme
+} from '@material-ui/core'
 import {
   Theme,
   makeStyles,
@@ -77,6 +85,7 @@ function Edit({
   fetchEmailTemplates,
   ...props
 }: WithRouterProps & Props) {
+  const theme = useTheme()
   const classes = useStyles()
   const [error, setError] = useState('')
   const [flow, setFlow] = useState<IBrandFlow | null>(null)
@@ -365,7 +374,7 @@ function Edit({
           <Box mb={1}>
             <Callout
               type="warn"
-              style={{ margin: 0 }}
+              style={{ margin: 0, color: theme.palette.warning.contrastText }}
               onClose={() => setWarning(null)}
             >
               {warning}

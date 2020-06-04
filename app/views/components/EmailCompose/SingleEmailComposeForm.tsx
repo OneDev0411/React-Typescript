@@ -1,18 +1,14 @@
-import { OAuthProvider } from 'constants/contacts'
-
-import React, { ComponentProps, useCallback, useMemo, useState } from 'react'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { ComponentProps, useCallback, useState } from 'react'
 import { OnChange } from 'react-final-form-listeners'
 import { Field } from 'react-final-form'
 
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
-import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
-import { IAppState } from 'reducers'
-import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
+import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
 import { normalizeRecipients } from './helpers/normalize-recepients'
+import { getInitialValues } from './helpers/get-initial-values'
+import { hasAccountSendPermission } from './helpers/has-account-send-permission'
 import { EmailFormValues } from './types'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import EmailComposeForm from './EmailComposeForm'
@@ -47,46 +43,22 @@ export function SingleEmailComposeForm({
   getEmail = email => email,
   disableAddNewRecipient = false,
   emailId,
-  filterAccounts = () => true,
+  filterAccounts = hasAccountSendPermission,
   preferredAccountId,
   deal,
   headers = {},
   ...otherProps
 }: Props) {
-  const oAuthAccounts = useSelector(
-    (state: IAppState) => state.contacts.oAuthAccounts
+  const [allAccounts, isLoadingAccounts] = useGetAllOauthAccounts(
+    filterAccounts
   )
 
-  const dispatch = useDispatch()
-  const allAccounts = selectAllConnectedAccounts(oAuthAccounts)
-
-  useEffectOnce(() => {
-    Object.entries(oAuthAccounts.loading).forEach(
-      ([provider, loading]: [OAuthProvider, boolean | null]) => {
-        if (loading === null) {
-          fetchOAuthAccounts(provider)(dispatch)
-        }
-      }
-    )
-  })
-
-  // If no account is selected and there are more than one account, we set
-  // one account by default to push user use one of their accounts for
-  // sending emails instead of using out default solution (Mailgun) for
-  // sending emails.
-  const initialValues: Partial<EmailFormValues> = useMemo(
-    () =>
-      allAccounts.length > 0 &&
-      (!otherProps.initialValues ||
-        !hasSelectedAccount(otherProps.initialValues))
-        ? {
-            ...otherProps.initialValues,
-            ...getDefaultSelectedAccount(allAccounts, preferredAccountId)
-          }
-        : otherProps.initialValues || {},
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [allAccounts.length, otherProps.initialValues, preferredAccountId]
+  const initialValues: Partial<EmailFormValues> = getInitialValues(
+    allAccounts,
+    preferredAccountId,
+    otherProps.initialValues
   )
+
   const handleSendEmail = async (
     formValue: EmailFormValues & { template: string }
   ) => {
@@ -111,12 +83,6 @@ export function SingleEmailComposeForm({
       ? updateEmailCampaign(emailId, emailData)
       : createEmailCampaign(emailData)
   }
-
-  // We disable submit until connected accounts are fetched, to make sure
-  // emails are sent with connected accounts in this case
-  const isLoadingAccounts = Object.values(oAuthAccounts.loading).some(
-    i => i !== false
-  )
 
   const getExpressionsContext = useCallback(
     (to: IDenormalizedEmailRecipientInput[] | undefined) => {
@@ -183,7 +149,7 @@ export function SingleEmailComposeForm({
           <>
             <EmailRecipientsFields
               deal={deal}
-              senderAccounts={allAccounts.filter(filterAccounts)}
+              senderAccounts={allAccounts}
               disableAddNewRecipient={disableAddNewRecipient}
               values={values}
             />
@@ -193,27 +159,4 @@ export function SingleEmailComposeForm({
       />
     </TemplateExpressionContext.Provider>
   )
-}
-
-function hasSelectedAccount(values: Partial<EmailFormValues>): boolean {
-  return Boolean(values.microsoft_credential || values.google_credential)
-}
-
-function getDefaultSelectedAccount(
-  allAccounts: (IOAuthAccount)[],
-  preferredAccountId: string | undefined
-): Pick<EmailFormValues, 'microsoft_credential' | 'google_credential'> {
-  const account =
-    allAccounts.find(
-      account => !preferredAccountId || account.id === preferredAccountId
-    ) || allAccounts[0]
-
-  return account
-    ? {
-        microsoft_credential:
-          account.type === 'microsoft_credential' ? account.id : undefined,
-        google_credential:
-          account.type === 'google_credential' ? account.id : undefined
-      }
-    : {}
 }

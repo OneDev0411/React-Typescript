@@ -1,10 +1,10 @@
 import React from 'react'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
-import _ from 'underscore'
 import { Helmet } from 'react-helmet'
 
-import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
+import { goTo } from 'utils/go-to'
+import { viewAs } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
 import { stopFlow } from 'models/flows/stop-flow'
@@ -38,6 +38,7 @@ import { PageContainer, SideColumn, MainColumn, PageWrapper } from './styled'
 import Header from './Header/Header'
 import Divider from './Divider'
 import Timeline from './Timeline'
+import MergeDuplicates from './MergeDuplicates'
 
 class ContactProfile extends React.Component {
   state = {
@@ -69,19 +70,6 @@ class ContactProfile extends React.Component {
     window.socket.on('crm_task:create', this.fetchTimeline)
     window.socket.on('email_campaign:create', this.fetchTimeline)
     window.socket.on('email_campaign:send', this.fetchTimeline)
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
-      !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
-    ) {
-      const viewAsUsers = viewAsEveryoneOnTeam(nextProps.user)
-        ? []
-        : nextProps.viewAsUsers
-
-      this.props.getContactsTags(viewAsUsers)
-    }
   }
 
   componentDidUpdate(prevProps) {
@@ -178,8 +166,6 @@ class ContactProfile extends React.Component {
       state => ({ contact: { ...state.contact, ...newContact } }),
       fallback
     )
-
-    this.fetchTimeline()
   }
 
   onChangeOwner = async item => {
@@ -225,6 +211,17 @@ class ContactProfile extends React.Component {
   addToFlowCallback = () => {
     this.fetchContact()
     this.fetchTimeline()
+  }
+
+  mergeCallback = async masterContactId => {
+    if (masterContactId === this.state.contact.id) {
+      await this.fetchContact()
+      this.fetchTimeline()
+
+      return
+    }
+
+    goTo(`/dashboard/contacts/${masterContactId}`)
   }
 
   handleUpdateContactInfo = attribute => {
@@ -282,9 +279,9 @@ class ContactProfile extends React.Component {
             <Divider />
             <Tags contact={contact} />
             <Divider />
-            <Dates {..._props} />
             <ContactInfo {..._props} />
             <AddressesSection {..._props} />
+            <Dates {..._props} />
             <Details {..._props} />
             <Partner {..._props} />
             <Divider />
@@ -304,11 +301,15 @@ class ContactProfile extends React.Component {
             />
           </SideColumn>
           <MainColumn>
+            <MergeDuplicates
+              contact={this.state.contact}
+              mergeCallback={this.mergeCallback}
+            />
             <Timeline
               ref={this.timelineRef}
               contact={this.state.contact}
               defaultAssociation={defaultAssociation}
-              onCreateNote={this.setContact}
+              onChangeNote={this.setContact}
             />
           </MainColumn>
         </PageContainer>

@@ -7,7 +7,7 @@
   background-color: #fff;
   box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.15);
   border-radius: 4px 4px 0 0;
-  z-index: 99;
+  z-index: 101;
   color: #4a494a;
   @media (max-width: 738px) {
     display: none !important;
@@ -61,7 +61,7 @@
     }
 
     &.isActive {
-      background-color:#0945eb;
+      background-color: $brand-primary;
       .icon {
         svg g,
         svg path {
@@ -114,7 +114,6 @@
     .message-item {
       margin: 10px 10px 0px 10px !important;
 
-
       .attachment {
         @extend %popup-message-attachment;
       }
@@ -124,7 +123,6 @@
       .alert {
         @extend %popup-message-alert;
       }
-
     }
 
     .message-subitem {
@@ -257,7 +255,7 @@
 
 %blinker {
   background-color: #ed8bb4;
-  background: linear-gradient(270deg, #f6f7f9, #0945eb);
+  background: linear-gradient(270deg, #f6f7f9, $brand-primary-dark);
   background-size: 400% 400%;
   -webkit-animation: blinkerAnimation 2s ease infinite;
   -moz-animation: blinkerAnimation 2s ease infinite;

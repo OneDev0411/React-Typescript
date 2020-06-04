@@ -6,14 +6,17 @@ import _ from 'underscore'
 import moment from 'moment'
 import { Helmet } from 'react-helmet'
 
+import { Button } from '@material-ui/core'
+
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
+import { getDealStatuses } from 'models/Deal/status/get-deal-statuses'
 
 import { FullPageHeader } from 'components/FullPageHeader'
 
 import { confirmation } from 'actions/confirmation'
 
-import ActionButton from 'components/Button/ActionButton'
+import IntercomTrigger from 'components/IntercomTrigger'
 
 import { createRoles, createOffer, upsertContexts } from 'actions/deals'
 
@@ -25,7 +28,6 @@ import DealStatus from './deal-status'
 import EscrowOfficers from './escrow-officer'
 import DealReferrals from './deal-referrals'
 import Contexts from './contexts'
-import IntercomTrigger from '../../Partials/IntercomTrigger'
 
 import { getLegalFullName } from '../utils/roles'
 
@@ -48,7 +50,8 @@ class CreateOffer extends React.Component {
       escrowOfficers: {},
       referrals: {},
       submitError: null,
-      validationErrors: []
+      validationErrors: [],
+      statuses: []
     }
 
     this.isFormSubmitted = false
@@ -60,6 +63,8 @@ class CreateOffer extends React.Component {
     if (deal.roles) {
       this.initializeRoles(deal.roles)
     }
+
+    this.loadStatuses()
   }
 
   initializeContexts = () => {
@@ -70,7 +75,7 @@ class CreateOffer extends React.Component {
 
     const indexedContexts = _.indexBy(dealContexts, 'key')
 
-    _.each(indexedContexts, context => {
+    _.each(indexedContexts, (context) => {
       let value = Deal.get.field(deal, context.key)
 
       if (value !== null && context.data_type === 'Date') {
@@ -83,11 +88,11 @@ class CreateOffer extends React.Component {
     return contexts
   }
 
-  initializeRoles = list => {
+  initializeRoles = (list) => {
     const { roles } = this.props
     const newState = {}
 
-    list.forEach(id => {
+    list.forEach((id) => {
       let type
       const item = roles[id]
 
@@ -130,7 +135,7 @@ class CreateOffer extends React.Component {
 
   onUpsertRole = (form, type) => {
     this.setState(
-      state => ({
+      (state) => ({
         [type]: {
           ...state[type],
           [form.id || form.user.id]: form
@@ -142,20 +147,20 @@ class CreateOffer extends React.Component {
 
   onRemoveRole = (id, type) => {
     this.setState(
-      state => ({
-        [type]: _.omit(state[type], role => role.id === id)
+      (state) => ({
+        [type]: _.omit(state[type], (role) => role.id === id)
       }),
       () => this.validateForm()
     )
   }
 
-  onChangeBuyerName = buyerName => {
+  onChangeBuyerName = (buyerName) => {
     this.setState({ buyerName }, () => this.validateForm())
   }
 
   changeContext = (field, value) => {
     this.setState(
-      state => ({
+      (state) => ({
         contexts: {
           ...state.contexts,
           [field]: value
@@ -165,18 +170,18 @@ class CreateOffer extends React.Component {
     )
   }
 
-  openDeal = id => {
+  openDeal = (id) => {
     browserHistory.push(`/dashboard/deals/${id}`)
   }
 
-  changeEnderType = enderType => {
+  changeEnderType = (enderType) => {
     this.setState({ enderType }, () => this.validateForm())
   }
 
   /**
    * handles deal status change
    */
-  changeDealStatus = status => {
+  changeDealStatus = (status) => {
     this.setState({ dealStatus: status }, () => this.validateForm())
   }
 
@@ -200,23 +205,23 @@ class CreateOffer extends React.Component {
     const { enderType, clients, agents, escrowOfficers, referrals } = this.state
     const roles = []
 
-    _.each(clients, client => roles.push(_.omit(client, 'id')))
-    _.each(agents, agent => roles.push(_.omit(agent, 'id')))
-    _.each(escrowOfficers, co => roles.push(_.omit(co, 'id')))
+    _.each(clients, (client) => roles.push(_.omit(client, 'id')))
+    _.each(agents, (agent) => roles.push(_.omit(agent, 'id')))
+    _.each(escrowOfficers, (co) => roles.push(_.omit(co, 'id')))
 
     if (enderType === 'AgentDoubleEnder') {
-      _.each(referrals, referral => roles.push(_.omit(referral, 'id')))
+      _.each(referrals, (referral) => roles.push(_.omit(referral, 'id')))
     }
 
-    return roles.filter(role => role.isEditable !== false)
+    return roles.filter((role) => role.isEditable !== false)
   }
 
   getBuyerNames = () => {
     const { clients } = this.state
 
     return _.chain(clients)
-      .pick(client => !client.readOnly)
-      .map(client => getLegalFullName(client, false))
+      .pick((client) => !client.readOnly)
+      .map((client) => getLegalFullName(client, false))
       .join(', ')
       .value()
   }
@@ -252,7 +257,7 @@ class CreateOffer extends React.Component {
       )
 
       if (isPrimaryOffer) {
-        const roles = this.getAllRoles().map(role => ({
+        const roles = this.getAllRoles().map((role) => ({
           ...role,
           checklist: checklist.id
         }))
@@ -322,7 +327,7 @@ class CreateOffer extends React.Component {
       return max
     }
 
-    deal.checklists.forEach(id => {
+    deal.checklists.forEach((id) => {
       const list = checklists[id]
 
       if (list.order > max) {
@@ -375,7 +380,7 @@ class CreateOffer extends React.Component {
   /**
    * check an specific field has error or not
    */
-  hasError = field => {
+  hasError = (field) => {
     const { validationErrors } = this.state
 
     return this.isFormSubmitted && validationErrors.includes(field)
@@ -441,15 +446,27 @@ class CreateOffer extends React.Component {
     }
   }
 
+  loadStatuses = async () => {
+    try {
+      const statuses = await getDealStatuses(this.props.deal.id)
+
+      this.setState({
+        statuses
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   get StatusList() {
-    return this.props.deal.property_type.includes('Lease')
-      ? ['Active', 'Lease Contract']
-      : [
-          'Active Contingent',
-          'Active Kick Out',
-          'Active Option Contract',
-          'Pending'
-        ]
+    return this.state.statuses
+      .filter(
+        (status) =>
+          status.is_pending &&
+          status.deal_types.includes('Buying') &&
+          status.property_types.includes(this.props.deal.property_type)
+      )
+      .map((status) => status.label)
   }
 
   render() {
@@ -494,7 +511,7 @@ class CreateOffer extends React.Component {
             <BuyerName
               hasError={this.hasError('buyer_name')}
               buyerName={buyerName}
-              onChangeBuyerName={name => this.onChangeBuyerName(name)}
+              onChangeBuyerName={(name) => this.onChangeBuyerName(name)}
             />
           )}
 
@@ -505,8 +522,8 @@ class CreateOffer extends React.Component {
                 hasError={this.hasError('clients')}
                 dealSide="Buying"
                 clients={clients}
-                onUpsertClient={form => this.onUpsertRole(form, 'clients')}
-                onRemoveClient={id => this.onRemoveRole(id, 'clients')}
+                onUpsertClient={(form) => this.onUpsertRole(form, 'clients')}
+                onRemoveClient={(id) => this.onRemoveRole(id, 'clients')}
               />
 
               <EnderType
@@ -514,7 +531,7 @@ class CreateOffer extends React.Component {
                 hasError={this.hasError('ender_type')}
                 enderType={enderType}
                 showAgentDoubleEnder
-                onChangeEnderType={type => this.changeEnderType(type)}
+                onChangeEnderType={(type) => this.changeEnderType(type)}
               />
 
               <DealAgents
@@ -526,8 +543,8 @@ class CreateOffer extends React.Component {
                 dealEnderType={enderType}
                 isCommissionRequired={this.IsDoubleEnded}
                 agents={agents}
-                onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
-                onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
+                onUpsertAgent={(form) => this.onUpsertRole(form, 'agents')}
+                onRemoveAgent={(id) => this.onRemoveRole(id, 'agents')}
               />
 
               {!this.isLeaseDeal() && (
@@ -535,10 +552,10 @@ class CreateOffer extends React.Component {
                   isRequired={requiredFields.includes('escrow_officers')}
                   hasError={this.hasError('escrow_officers')}
                   escrowOfficers={escrowOfficers}
-                  onUpsertEscrowOfficer={form =>
+                  onUpsertEscrowOfficer={(form) =>
                     this.onUpsertRole(form, 'escrowOfficers')
                   }
-                  onRemoveEscrowOfficer={id =>
+                  onRemoveEscrowOfficer={(id) =>
                     this.onRemoveRole(id, 'escrowOfficers')
                   }
                 />
@@ -549,17 +566,17 @@ class CreateOffer extends React.Component {
                 hasError={this.hasError('deal_status')}
                 statuses={this.StatusList}
                 dealStatus={dealStatus}
-                onChangeDealStatus={status => this.changeDealStatus(status)}
+                onChangeDealStatus={(status) => this.changeDealStatus(status)}
               />
 
               {isDoubleEndedAgent && (
                 <DealReferrals
                   dealSide="Buying"
                   referrals={referrals}
-                  onUpsertReferral={form =>
+                  onUpsertReferral={(form) =>
                     this.onUpsertRole(form, 'referrals')
                   }
-                  onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
+                  onRemoveReferral={(id) => this.onRemoveRole(id, 'referrals')}
                 />
               )}
 
@@ -590,25 +607,26 @@ class CreateOffer extends React.Component {
                 again.
               </span>
               <IntercomTrigger
-                render={({ activeIntercom, intercomIsActive }) => (
-                  <button
-                    type="button"
-                    onClick={!intercomIsActive ? activeIntercom : () => false}
-                    className="btn btn-primary c-button--link"
+                render={({ activeIntercom, isIntercomActive }) => (
+                  <Button
+                    color="secondary"
+                    onClick={!isIntercomActive ? activeIntercom : () => false}
                   >
                     Support
-                  </button>
+                  </Button>
                 )}
               />
             </div>
           )}
 
-          <ActionButton
+          <Button
+            color="secondary"
+            variant="contained"
             disabled={saving || offerType.length === 0}
             onClick={this.createOffer}
           >
             {saving ? 'Creating Offer ...' : 'Create Offer'}
-          </ActionButton>
+          </Button>
 
           <div className="error-summary">
             {this.isFormSubmitted && validationErrors.length > 0 && (
@@ -631,13 +649,10 @@ function mapStateToProps({ deals }, props) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    createOffer,
-    createRoles,
-    upsertContexts,
-    notify,
-    confirmation
-  }
-)(CreateOffer)
+export default connect(mapStateToProps, {
+  createOffer,
+  createRoles,
+  upsertContexts,
+  notify,
+  confirmation
+})(CreateOffer)

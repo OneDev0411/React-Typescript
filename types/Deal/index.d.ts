@@ -1,3 +1,13 @@
+declare type IDealType = 'Selling' | 'Buying'
+declare type IDealPropertyType =
+  | 'Resale'
+  | 'New Home'
+  | 'Lot / Land'
+  | 'Residential Lease'
+  | 'Commercial Sale'
+  | 'Commercial Lease'
+  | 'Active Offer'
+
 declare interface IDeal extends IModel<'deal'> {
   title: string
   deal_type: 'Selling' | 'Buying'
@@ -14,9 +24,10 @@ declare interface IDeal extends IModel<'deal'> {
   email: string
   created_by: IUsed
   brand: IBrand
-  property_type: string
+  property_type: IDealPropertyType
   faired_at: number
   context: object
+  new_notifications: IChatMessage[] | null
 }
 
 declare interface IDealList {

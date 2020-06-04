@@ -12,8 +12,8 @@ export const badgeBaseStyle = css`
   white-space: nowrap;
   border-radius: 30px;
 
-  font-family: Barlow;
-  font-weight: 600;
+  font-family: LatoRegular;
+  font-weight: 400;
 `
 
 export const badgeAppearances = {

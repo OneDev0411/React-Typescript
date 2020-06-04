@@ -1,6 +1,7 @@
-<mj-social rechat-editable="tree" font-size="12px" icon-size="24px" border-radius="12px" mode="horizontal">
-  <mj-social-element name="linkedin"></mj-social-element>
-  <mj-social-element name="facebook"></mj-social-element>
-  <mj-social-element name="instagram"></mj-social-element>
-  <mj-social-element name="twitter"></mj-social-element>
+<mj-social rechat-editable="tree" align="center" font-family="Helvetica, Arial, sans-serif" font-size="14px" icon-size="28px" border-radius="14px" mode="horizontal">
+  <mj-social-element title="facebook" src="https://i.ibb.co/qr5rZym/facebook.png"></mj-social-element>
+  <mj-social-element title="instagram" src="https://i.ibb.co/HC5KTG1/instagram.png"></mj-social-element>
+  <mj-social-element title="linkedin" src="https://i.ibb.co/kxjXJ5B/linkedin.png"></mj-social-element>
+  <mj-social-element title="twitter" src="https://i.ibb.co/7WkrhZV/twitter.png"></mj-social-element>
+  <mj-social-element title="youtube" src="https://i.ibb.co/8jd2Jyc/youtube.png"></mj-social-element>
 </mj-social>

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
-import ActionButton from '../../Button/ActionButton'
+import { Button } from '@material-ui/core'
 
 import { TourSheets } from '../TourSheets'
 
@@ -30,20 +30,19 @@ export class PreviewTourSheets extends React.Component {
   }
 
   handleOpen = () => this.setState({ isOpen: true })
+
   handleClose = () => this.setState({ isOpen: false })
 
   render() {
     return (
       <Fragment>
-        <ActionButton
-          appearance={this.props.appearance}
+        <Button
           disabled={this.props.disabled}
           onClick={this.handleOpen}
-          size={this.props.size}
-          style={this.props.style}
+          variant="outlined"
         >
           {this.props.title}
-        </ActionButton>
+        </Button>
 
         {this.state.isOpen && (
           <TourSheets

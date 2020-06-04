@@ -76,7 +76,7 @@ function Form(props: Props & StateProps & DispatchProps) {
 
   const handleCreateYardSign = async (): Promise<void> => {
     const checklist = props.checklists.find(
-      checklist => checklist.checklist_type === 'Selling'
+      checklist => checklist.checklist_type === props.deal.deal_type
     ) as IDealChecklist
 
     setIsCreatingTask(true)
@@ -138,7 +138,7 @@ function Form(props: Props & StateProps & DispatchProps) {
         <Button
           fullWidth
           variant="contained"
-          color="primary"
+          color="secondary"
           disabled={isCreatingTask || selectedItems.length === 0}
           onClick={handleCreateYardSign}
         >

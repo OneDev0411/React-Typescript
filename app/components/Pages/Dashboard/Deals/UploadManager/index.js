@@ -82,6 +82,11 @@ class UploadDocument extends React.Component {
   }
 
   render() {
+    const children =
+      typeof this.props.children === 'function'
+        ? this.props.children({ onClick: this.openDialog, ref: this.dropzone })
+        : this.props.children
+
     return (
       <Dropzone
         disableClick={this.props.disableClick}
@@ -106,7 +111,7 @@ class UploadDocument extends React.Component {
           </div>
         )}
 
-        {this.props.children || (
+        {children || (
           <div
             className={cn('file-upload', {
               'has-attachments': this.props.hasAttachments

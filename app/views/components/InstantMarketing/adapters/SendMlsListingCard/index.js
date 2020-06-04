@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Button } from '@material-ui/core'
 
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 import { selectContact } from 'reducers/contacts/list'
@@ -8,9 +9,9 @@ import SearchListingDrawer from 'components/SearchListingDrawer'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
-import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
 import { getTemplateTypes } from '../../helpers/get-template-types'
@@ -184,12 +185,14 @@ class SendMlsListingCard extends React.Component {
     })
   }
 
-  generatePreviewImage = async template => {
+  generatePreviewImage = async brandTemplate => {
     this.setState({ isGettingTemplateInstance: true })
+
+    const template = getTemplateObject(brandTemplate)
 
     const instance = await getTemplateInstances(template.id, {
       ...this.TemplateInstanceData,
-      html: template.result
+      html: brandTemplate.result
     })
 
     this.setState({
@@ -234,7 +237,7 @@ class SendMlsListingCard extends React.Component {
 
   get TemplateTypes() {
     return this.props.selectedTemplate
-      ? [this.props.selectedTemplate.template_type]
+      ? [getTemplateObject(this.props.selectedTemplate).template_type]
       : getTemplateTypes(this.state.listings)
   }
 
@@ -242,7 +245,8 @@ class SendMlsListingCard extends React.Component {
     return (
       this.props.isMultiListing ||
       (this.props.selectedTemplate &&
-        this.props.selectedTemplate.template_type === 'Listings')
+        getTemplateObject(this.props.selectedTemplate).template_type ===
+          'Listings')
     )
   }
 
@@ -259,7 +263,9 @@ class SendMlsListingCard extends React.Component {
           listing.gallery_image_urls &&
           Array.isArray(listing.gallery_image_urls)
         ) {
-          listing.gallery_image_urls.forEach(image => {
+          const uniqueAssets = [...new Set(listing.gallery_image_urls)]
+
+          uniqueAssets.forEach(image => {
             assets.push({
               listing: listing.id,
               image
@@ -294,18 +300,19 @@ class SendMlsListingCard extends React.Component {
     return (
       <Fragment>
         {!this.props.hasExternalTrigger && (
-          <ActionButton
+          <Button
+            variant="outlined"
             disabled={disabled}
-            appearance="outline"
             onClick={this.openListingModal}
             size="small"
           >
             {this.props.children}
-          </ActionButton>
+          </Button>
         )}
 
         <SearchListingDrawer
           mockListings
+          allowSkip
           isOpen={
             (this.state.isListingsModalOpen || this.state.isEditingListings) &&
             !this.props.isEdit
@@ -318,11 +325,11 @@ class SendMlsListingCard extends React.Component {
           onSelectListingsCallback={this.handleSelectListings}
           multipleSelection={this.IsMultiListing}
           renderAction={props => (
-            <ActionButton {...props.buttonProps}>
+            <Button {...props.buttonProps}>
               {this.state.isEditingListings
                 ? 'Apply Changes'
                 : `Next (${props.selectedItemsCount} Listings Selected)`}
-            </ActionButton>
+            </Button>
           )}
         />
 

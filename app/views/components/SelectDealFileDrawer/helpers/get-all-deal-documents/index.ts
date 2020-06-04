@@ -29,7 +29,7 @@ export function getAllDealDocuments(
         .forEach(file => {
           const files = getLastStates({
             deal,
-            document: file,
+            file,
             envelopes,
             task
           })

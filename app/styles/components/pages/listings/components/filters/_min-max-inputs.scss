@@ -36,19 +36,19 @@
 
   &::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: $brand-primary;
+    color: $brand-secondary;
   }
   &::-moz-placeholder {
     /* Firefox 19+ */
-    color: $brand-primary;
+    color: $brand-secondary;
   }
   &:-ms-input-placeholder {
     /* IE 10+ */
-    color: $brand-primary;
+    color: $brand-secondary;
   }
   &:-moz-placeholder {
     /* Firefox 18- */
-    color: $brand-primary;
+    color: $brand-secondary;
   }
 
   .c-min-max-inputs__alert + & {

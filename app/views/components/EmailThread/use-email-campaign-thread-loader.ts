@@ -99,6 +99,7 @@ export function createEmailFromEmailCampaign(
     tracking_id: '',
     type: 'email',
     html: campaign.html,
+    is_read: false,
     text: campaign.text,
     to: to.map(recipientToString),
     subject: campaign.subject,

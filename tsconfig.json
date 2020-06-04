@@ -28,66 +28,27 @@
     // but it seems it doesn't work
     "baseUrl": ".",
     "paths": {
-      "store": [
-        "app/stores"
-      ],
-      "actions/*": [
-        "app/store_actions/*"
-      ],
-      "assets/*": [
-        "app/static/*"
-      ],
-      "animations/*": [
-        "app/animations/*"
-      ],
-      "components/*": [
-        "app/views/components/*"
-      ],
-      "constants/*": [
-        "app/constants/*"
-      ],
-      "dashboard/*": [
-        "app/components/Dashboard/*"
-      ],
-      "hooks/*": [
-        "app/hooks/*"
-      ],
-      "models/*": [
-        "app/models/*"
-      ],
-      "reducers": [
-        "app/reducers"
-      ],
-      "reducers/*": [
-        "app/reducers/*"
-      ],
-      "routes/*": [
-        "app/routes/*"
-      ],
-      "partials/*": [
-        "app/components/Partials/*"
-      ],
-      "services/*": [
-        "app/services/*"
-      ],
-      "utils/*": [
-        "app/utils/*"
-      ],
-      "views/*": [
-        "app/views/*"
-      ],
-      "deals/*": [
-        "app/components/Pages/Dashboard/Deals/*"
-      ],
-      "crm/*": [
-        "app/components/Pages/Dashboard/Contacts/*"
-      ],
-      "fixtures/*": [
-        "tests/unit/fixtures/*"
-      ],
-      "types/*": [
-        "types/*"
-      ]
+      "config": ["config/public/index.js"],
+      "store": ["app/stores"],
+      "actions/*": ["app/store_actions/*"],
+      "assets/*": ["app/static/*"],
+      "animations/*": ["app/animations/*"],
+      "components/*": ["app/views/components/*"],
+      "constants/*": ["app/constants/*"],
+      "dashboard/*": ["app/components/Dashboard/*"],
+      "hooks/*": ["app/hooks/*"],
+      "models/*": ["app/models/*"],
+      "reducers": ["app/reducers"],
+      "reducers/*": ["app/reducers/*"],
+      "routes/*": ["app/routes/*"],
+      "partials/*": ["app/components/Partials/*"],
+      "services/*": ["app/services/*"],
+      "utils/*": ["app/utils/*"],
+      "views/*": ["app/views/*"],
+      "deals/*": ["app/components/Pages/Dashboard/Deals/*"],
+      "crm/*": ["app/components/Pages/Dashboard/Contacts/*"],
+      "fixtures/*": ["tests/unit/fixtures/*"],
+      "types/*": ["types/*"]
     }
   },
   "include": [

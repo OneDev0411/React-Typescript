@@ -10,9 +10,7 @@ interface BadgeProps {
 function SideNavBadge(props: BadgeProps) {
   return (
     <BadgeContainer>
-      <Typography variant="body2" component="span">
-        {props.count}
-      </Typography>
+      <Typography variant="body2">{props.count}</Typography>
     </BadgeContainer>
   )
 }

@@ -1,10 +1,6 @@
 import React from 'react'
 
-import { fade } from '@material-ui/core/styles'
-
-import { primary } from 'views/utils/colors'
-
-import { ContainerStyle, FlexStyle } from './styles'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 interface IProps {
   activeDate: Date | null
@@ -12,58 +8,65 @@ interface IProps {
   item: ICalendarEventHeader
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    flex: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    container: {
+      display: 'flex',
+      alignItems: 'flex-end',
+      padding: theme.spacing(0.5, 0),
+      borderRadius: theme.shape.borderRadius,
+      width: '100%',
+      height: '100%'
+    },
+    date: {
+      color: theme.palette.grey[600],
+      ...theme.typography.body1,
+      fontSize: theme.typography.h6.fontSize // Shayan is asked for it
+    },
+    dateAlias: {
+      color: theme.palette.common.black,
+      ...theme.typography.h6
+    },
+    splitter: {
+      width: '3px',
+      height: '3px',
+      borderRadius: '100%',
+      backgroundColor: theme.palette.grey[400],
+      margin: theme.spacing(0, 1)
+    }
+  })
+)
+
 /**
  * renders the day header
  * @param props
  */
 export function EventHeader(props: IProps) {
-  const isActive =
-    props.activeDate &&
-    props.activeDate.getTime() === new Date(props.item.date).getTime()
+  const classes = useStyles()
 
   return (
-    <div style={{ ...props.style }}>
-      <div
-        style={{
-          ...ContainerStyle,
-          ...getStyles(props.item, isActive)
-        }}
-      >
-        <div style={FlexStyle}>
-          {props.item.isToday && 'Today - '} {props.item.title}
+    <div style={props.style}>
+      <div className={classes.container}>
+        <div className={classes.flex}>
+          {props.item.isToday && (
+            <>
+              <span className={classes.dateAlias}>Today</span>
+              <span className={classes.splitter} />
+            </>
+          )}
+          {props.item.isTomorrow && (
+            <>
+              <span className={classes.dateAlias}>Tomorrow</span>
+              <span className={classes.splitter} />
+            </>
+          )}
+          <span className={classes.date}>{props.item.title}</span>
         </div>
       </div>
     </div>
   )
-}
-
-/**
- *
- * @param isToday
- * @param isActiveDay
- */
-function getStyles(
-  item: ICalendarEventHeader,
-  isActiveDay: boolean | null
-): React.CSSProperties {
-  if (item.isToday) {
-    return {
-      color: '#fff',
-      backgroundColor: primary,
-      fontWeight: 500
-    }
-  }
-
-  if (isActiveDay) {
-    return {
-      color: primary,
-      backgroundColor: fade(primary, 0.14),
-      fontWeight: 500
-    }
-  }
-
-  return {
-    backgroundColor: '#f5f8fa',
-    color: '#000'
-  }
 }

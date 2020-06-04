@@ -231,7 +231,7 @@ class EditDigitalForm extends React.Component {
 
                 <Button
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                   onClick={this.handleReloadPage}
                 >
                   Try Again

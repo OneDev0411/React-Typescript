@@ -3,19 +3,22 @@ import { useMemo, useState } from 'react'
 import {
   Box,
   Button,
+  Avatar,
   createStyles,
   Link,
   makeStyles,
   Paper,
   Theme,
+  Tooltip,
   Typography
 } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
 
+import useBoolean from 'react-use/lib/useBoolean'
+
 import { Iframe } from 'components/Iframe'
 
-import Avatar from '../../Avatar'
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
 import { EmailItemHeaderActions } from './EmailItemHeaderActions'
@@ -28,6 +31,10 @@ import { EmailResponseType, EmailThreadEmail } from '../types'
 import { decodeContentIds } from '../helpers/decode-content-ids'
 import { EmailResponseComposeForm } from '../../EmailCompose/EmailResponseComposeForm'
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
+import { EmailRecipient } from '../../EmailRecipient'
+import { ThreeDotsButton } from '../../ThreeDotsButton'
+import { trimEmailQuotedContent } from '../helpers/trimEmailQuotedContent'
+import { updateEmailReadStatus } from '../helpers/update-email-read-status'
 
 interface Props {
   email: EmailThreadEmail
@@ -64,8 +71,15 @@ const styles = (theme: Theme) =>
       alignItems: 'center',
       padding: theme.spacing(2, 2.5)
     },
+    emailSnippet: {
+      color: theme.palette.grey[500]
+    },
     actionButton: {
       marginRight: `${theme.spacing(1)}px`
+    },
+    avatar: {
+      backgroundColor: theme.palette.divider,
+      color: theme.palette.text.primary
     }
   })
 const useStyles = makeStyles(styles, { name: 'EmailThreadItem' })
@@ -75,13 +89,14 @@ export function EmailThreadItem({
   email,
   onToggleCollapsed,
   showBottomButtons = false,
-  onEmailSent = () => {},
+  onEmailSent = () => { },
   ...props
 }: Props) {
   const iconClasses = useIconStyles()
   const classes = useStyles(props)
 
   const [isResponseOpen, setIsResponseOpen] = useState(false)
+  const [trimQuotedContent, toggleTrimQuotedContent] = useBoolean(true)
   const [responseType, setResponseType] = useState<EmailResponseType>('reply')
 
   const openResponse = (type: EmailResponseType) => {
@@ -96,6 +111,13 @@ export function EmailThreadItem({
     [email]
   )
 
+  const trimmedEmailBody = useMemo(
+    () => emailBody && trimEmailQuotedContent(emailBody),
+    [emailBody]
+  )
+
+  const isToggleQuotedContentVisible = trimmedEmailBody !== emailBody
+
   const hasNonInlineAttachments =
     email.attachments.filter(attachment => !attachment.isInline).length > 0
 
@@ -108,11 +130,19 @@ export function EmailThreadItem({
         onClick={onToggleCollapsed && (() => onToggleCollapsed(!collapsed))}
       >
         <Box mr={2}>
-          <Avatar title={email.from} />
+          <Avatar alt={email.from} sizes="32" className={classes.avatar}>
+            {email.from.substring(0, 1).toUpperCase()}
+          </Avatar>
         </Box>
         <Box flex={1} mr={2} overflow="hidden">
-          <Typography style={{ lineHeight: 1.3 }}>{email.from}</Typography>
-          <Typography color="textSecondary" noWrap>
+          <Typography variant="body2" noWrap>
+            <EmailRecipient recipient={email.from} />
+          </Typography>
+          <Typography
+            variant="body2"
+            noWrap
+            classes={{ root: classes.emailSnippet }}
+          >
             {collapsed ? email.snippet : <EmailItemRecipients email={email} />}
           </Typography>
         </Box>
@@ -137,6 +167,9 @@ export function EmailThreadItem({
                 onReply={() => openResponse('reply')}
                 onReplyAll={() => openResponse('replyAll')}
                 onForward={() => openResponse('forward')}
+                onChangeReadStatus={() =>
+                  updateEmailReadStatus(email, !email.isRead)
+                }
               />
             )}
           </Box>
@@ -146,8 +179,26 @@ export function EmailThreadItem({
       {!collapsed && (
         <>
           <Box p={2} pl={9} overflow="hidden">
-            <Iframe title="Email body" srcDoc={emailBody} />
-
+            <Iframe
+              title="Email body"
+              height="400px"
+              srcDoc={trimQuotedContent ? trimmedEmailBody : emailBody}
+            />
+            {isToggleQuotedContentVisible && (
+              <>
+                <Tooltip
+                  title={
+                    trimQuotedContent
+                      ? 'Show trimmed content'
+                      : 'Hide expanded content'
+                  }
+                >
+                  <ThreeDotsButton onClick={toggleTrimQuotedContent} />
+                </Tooltip>
+                <br />
+              </>
+            )}
+            <br />
             {email.attachments.map(attachment => (
               <Attachment key={attachment.id} fullWidth={false}>
                 <Link target="_blank" href={attachment.url}>
@@ -161,26 +212,31 @@ export function EmailThreadItem({
                 <Button
                   className={classes.actionButton}
                   onClick={() => openResponse('reply')}
+                  variant="outlined"
                   color={
                     isResponseOpen && responseType === 'reply'
                       ? 'primary'
                       : undefined
                   }
                 >
-                  <IconReply className={iconClassName} />
+                  <IconReply fill="currentColor" className={iconClassName} />
                   Reply
                 </Button>
                 {hasReplyAll(email) && (
                   <Button
                     className={classes.actionButton}
                     onClick={() => openResponse('replyAll')}
+                    variant="outlined"
                     color={
                       isResponseOpen && responseType === 'replyAll'
                         ? 'primary'
                         : undefined
                     }
                   >
-                    <IconReplyAll className={iconClassName} />
+                    <IconReplyAll
+                      fill="currentColor"
+                      className={iconClassName}
+                    />
                     Reply All
                   </Button>
                 )}
@@ -188,13 +244,14 @@ export function EmailThreadItem({
                 <Button
                   className={classes.actionButton}
                   onClick={() => openResponse('forward')}
+                  variant="outlined"
                   color={
                     isResponseOpen && responseType === 'forward'
                       ? 'primary'
                       : undefined
                   }
                 >
-                  <IconForward className={iconClassName} />
+                  <IconForward fill="currentColor" className={iconClassName} />
                   Forward
                 </Button>
               </Box>

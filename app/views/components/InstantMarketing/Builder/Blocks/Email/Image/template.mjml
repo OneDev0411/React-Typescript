@@ -1,1 +1,1 @@
-<mj-image rechat-editable="true" src="{{image}}"></mj-image>
+<mj-image padding="0" rechat-editable="true" src="{{image}}"></mj-image>

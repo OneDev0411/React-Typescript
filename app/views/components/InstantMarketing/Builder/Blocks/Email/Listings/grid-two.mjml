@@ -6,23 +6,37 @@ align="right"
 {% endif %}
 {% endmacro %}
 
-<mj-section rechat-editable="tree" background-color="#fff">
-  {% for listing in listings %}
-
-  <mj-column width="50%">
-    <mj-image rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
-
-    <mj-text font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="13px" color="#000" padding-bottom="0" padding-top="0" {{ alignment(loop.index0) }}>
+{% for listingsBatch in listings | batch(2) %}
+<mj-section padding="20px 20px" rechat-editable="tree" background-color="#fff">
+  {% for listing in listingsBatch %}
+  <mj-column padding-left={{ "0" if loop.index0 === 0 else "5px" }} padding-right={{ "0" if loop.index0 === 1 else "5px" }}>
+    <mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
+    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="20px" line-height="1.5" {{ alignment(loop.index0) }}>
       {{listing.property.address.street_address}}
-      <span> | </span>
-      <strong>{{ listing.price | currency }}{% if listing.is_lease %}/mo{% endif %}</strong>
     </mj-text>
-
-    <mj-button inner-padding="0" text-decoration="underline" background-color="#fff" color="#000" font-size="15px" font-weight="600" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" href="{{getListingUrl(listing)}}" {{ alignment(loop.index0) }}>
-      Additional Information
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px" line-height="1.5" {{ alignment(loop.index0) }}>
+      <strong>{{ listing.price | currency }}</strong>{% if listing.is_lease %}/mo{% endif %}
+    </mj-text>
+    <mj-spacer height="10px"></mj-spacer>
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" {{ alignment(loop.index0) }}>
+      {% if listing.property.bedroom_count %}
+      <span><strong>{{listing.property.bedroom_count}}</strong> Beds,</span>
+      {% endif %}
+      {% if listing.property.bathroom_count %}
+      <span><strong>{{listing.property.bathroom_count}}</strong> Baths,</span>
+      {% endif %}
+      {% if listing.property.square_meters %}
+      <span><strong>{{listing.property.square_meters | area}}</strong> Sqft,</span>
+      {% endif %}
+      {% if listing.property.year_built %}
+      <span>Built in <strong>{{listing.property.year_built}}</strong></span>
+      {% endif %}
+    </mj-text>
+    <mj-spacer height="10px"></mj-spacer>
+    <mj-button rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px" font-family="Helvetica, Arial, sans-serif" font-size="14px" line-height="1.5" {{ alignment(loop.index0) }} href="{{getListingUrl(listing)}}">
+      View Listing
     </mj-button>
-
-    <mj-spacer height="16px"></mj-spacer>
   </mj-column>
   {% endfor %}
 </mj-section>
+{% endfor %}

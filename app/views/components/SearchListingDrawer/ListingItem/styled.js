@@ -71,9 +71,10 @@ export const Address = styled.div`
 export const IconContainer = styled(Flex)`
   width: 2.5rem;
   height: 2.5rem;
-  background-color: #000;
+  background-color: ${props => props.theme.palette.grey['200']};
   border-radius: 50%;
   > svg {
+    fill: ${props => props.theme.palette.grey['500']};
     height: 1rem;
     width: 1rem;
   }

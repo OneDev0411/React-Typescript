@@ -50,8 +50,7 @@ function List(props: Props & StateProps) {
     <>
       <Button
         fullWidth
-        color="primary"
-        size="large"
+        color="secondary"
         classes={{
           label: classes.buttonLabel
         }}

@@ -8,7 +8,8 @@ import { Checkbox } from 'components/Checkbox'
 
 import CategoryType from '../CategoryTypes'
 
-import { Section, Title } from '../styled'
+import { Section } from '../styled'
+import Title from '../Title'
 import { CategoryTypesContainer } from './styled'
 
 const defaultTaskTypes = [

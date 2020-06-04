@@ -1,21 +1,13 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { H4 } from 'components/Typography/headings'
 
 const Container = styled(H4)`
-  color: #7f7f7f;
-  font-weight: 500;
-  font-size: 0.875rem;
-
-  /* &.BACKUP,
-  &.PRIMARY {
-    color: #8da2b5;
-  }
-
-  &.TERMINATED {
-    color: #d0011b;
-  } */
+  ${({ theme }) => css`
+    color: #7f7f7f;
+    ${theme.typography.body1};
+  `}
 `
 
 export function ChecklistLabels(props) {

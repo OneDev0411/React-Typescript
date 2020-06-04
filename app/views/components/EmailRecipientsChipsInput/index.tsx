@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { FieldRenderProps } from 'react-final-form'
 import { Observable } from 'rxjs'
@@ -9,21 +9,17 @@ import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { TextField } from 'final-form-material-ui'
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
-
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
 import { IAppState } from 'reducers'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
-import { getSegments, areListsFetched } from 'reducers/filter-segments'
-import { useElementWidth } from 'hooks/use-element-width'
+import { areListsFetched, getSegments } from 'reducers/filter-segments'
 
 import { ChipsInput } from '../ChipsInput'
 import { InlineInputLabel } from '../InlineInputLabel'
 import { ChipsInputProps } from '../ChipsInput/types'
 import { recipientToChip } from './helpers/recipient-to-chip'
 import { recipientToSuggestion } from './helpers/recipient-to-suggestion'
-import { RecipientQuickSuggestions } from './RecipientQuickSuggestions'
 import { getTagSuggestions } from './helpers/get-tag-suggestions'
 import { getListSuggestions } from './helpers/get-list-suggestions'
 import { getContactSuggestions } from './helpers/get-contact-suggestions'
@@ -51,53 +47,17 @@ interface DispatchProps {
 }
 interface Props extends BaseProps {
   label?: string
-  includeQuickSuggestions?: boolean
 
   suggestTags?: boolean
   suggestLists?: boolean
   suggestContacts?: boolean
 
-  deal?: IDeal
-  /**
-   * Optional callback for handling suggestion selection. If not provided
-   * it will add to current list of recipients by default
-   * @param suggestion
-   */
-  onQuickSuggestionSelected?: (
-    suggestion: IDenormalizedEmailRecipientInput,
-    sendType?: IEmailRecipientSendType
-  ) => void
-  currentlyUsedQuickSuggestions?: IDenormalizedEmailRecipientInput[] | undefined
   /**
    * Optional control props
    */
   onChange?: (value: IDenormalizedEmailRecipientInput[]) => void
   value?: IDenormalizedEmailRecipientInput[]
 }
-
-const useEmailRecipientsChipsInputStyles = makeStyles<
-  Theme,
-  { labelWidth: number }
->(
-  theme =>
-    createStyles({
-      /**
-       * NOTE: In order to render suggestions behind the tags input, and
-       * aligned with inline label, we make chips input container wrap its
-       * children. When we do so, we need to provide a flex-basis (width)
-       * for the inner input (chips and html input) in order to fill the full
-       * available width and push the suggestions to next line.
-       * in order to do this we need inline label width
-       */
-      Input: {
-        flexWrap: 'wrap'
-      },
-      inputWrapper: props => ({
-        flexBasis: `calc(100% - ${props.labelWidth + 1}px)`
-      })
-    }),
-  { name: 'EmailRecipientsChipsInput' }
-)
 
 /**
  * A component for getting a list of tags, lists, contacts&email or contact&phone
@@ -117,26 +77,17 @@ const useEmailRecipientsChipsInputStyles = makeStyles<
  * cons:
  * - More overhead and more abstraction
  * - Cost of refactoring!
- *
- * NOTE: we can pull this *quick suggestions* feature up into ChipsInput, but
- * right now, there is a styling issue which is not resolved generally,
- * and it's fixed by a workaround. This workaround is dependent on the
- * label width! see the note in {@link useEmailRecipientsChipsInputStyles}
  */
 function EmailRecipientsChipsInput({
   getContactsTags,
   getSavedSegments,
   isLoadingTags,
   areListsFetched,
-  includeQuickSuggestions,
-  onQuickSuggestionSelected,
-  currentlyUsedQuickSuggestions,
   suggestTags = true,
   suggestLists = true,
   suggestContacts = true,
   tags, // provided from redux store
   lists, // provided from redux store
-  deal,
   label,
   input,
   meta,
@@ -144,15 +95,6 @@ function EmailRecipientsChipsInput({
   onChange,
   ...chipsInputProps
 }: Props & StateProps & DispatchProps) {
-  /**
-   The following lines of code are because we couldn't implement the UI
-   with pure css and we need labelWidth.
-   See the note in {@link useEmailRecipientsChipsInputStyles} for more
-   information. we can get rid of them if a css based solution is found.
-  */
-  const labelRef = useRef<HTMLElement>(null)
-  const labelWidth = useElementWidth(labelRef)
-
   const [recipients, setRecipients] = useControllableState<
     IDenormalizedEmailRecipientInput[]
   >(
@@ -160,8 +102,6 @@ function EmailRecipientsChipsInput({
     input ? (input.onChange as any) : onChange,
     []
   )
-
-  const classes = useEmailRecipientsChipsInputStyles({ labelWidth })
 
   useEffect(() => {
     if (!isLoadingTags) {
@@ -201,15 +141,6 @@ function EmailRecipientsChipsInput({
     email: value
   })
 
-  const acceptSuggestion = (
-    recipient: IDenormalizedEmailRecipientInput,
-    sendType?: IEmailRecipientSendType
-  ) => {
-    return onQuickSuggestionSelected
-      ? onQuickSuggestionSelected(recipient, sendType)
-      : setRecipients([...recipients, recipient])
-  }
-
   return (
     <ChipsInput
       {...chipsInputProps}
@@ -222,23 +153,16 @@ function EmailRecipientsChipsInput({
       TextFieldComponent={TextField}
       TextFieldProps={{
         InputProps: {
-          startAdornment: (
-            <InlineInputLabel ref={labelRef}>{label}</InlineInputLabel>
-          ),
-          endAdornment: includeQuickSuggestions ? (
-            <RecipientQuickSuggestions
-              deal={deal}
-              currentRecipients={currentlyUsedQuickSuggestions || recipients}
-              onSelect={acceptSuggestion}
-            />
-          ) : null,
-          className: classes.Input,
+          startAdornment: <InlineInputLabel>{label}</InlineInputLabel>,
           ...InputProps
         },
         inputProps: {
           ...inputProps,
-          'data-test': 'email-recipients-input',
-          inputWrapperClassName: classes.inputWrapper
+          onFocus: input && input.onFocus,
+          // passing onFocus causes error messages to be shown exactly while
+          // clicking on quick suggestions. So let's not show error messages
+          // on blur, they are gonna be shown anyways on submit.
+          'data-test': 'email-recipients-input'
         },
         input,
         meta,

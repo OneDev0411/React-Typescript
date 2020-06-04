@@ -2,6 +2,12 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
   position: relative;
+
+  button {
+    svg {
+      fill: ${({ theme }) => theme.palette.secondary.main};
+    }
+  }
 `
 
 export const Menu = styled.div`

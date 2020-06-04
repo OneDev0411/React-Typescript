@@ -1,17 +1,20 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
+import { Button } from '@material-ui/core'
+
 import Listing from 'models/listings/listing'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
-import ActionButton from 'components/Button/ActionButton'
+
 import InstantMarketing from 'components/InstantMarketing'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import { attachDealDataToListing } from 'components/SearchListingDrawer/helpers/attach-deal-to-listing'
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplateTypes } from '../../helpers/get-template-types'
@@ -101,12 +104,14 @@ class SendDealPromotion extends React.Component {
     }))
   }
 
-  generatePreviewImage = async template => {
+  generatePreviewImage = async brandTemplate => {
     this.setState({ isGettingTemplateInstance: true })
+
+    const template = getTemplateObject(brandTemplate)
 
     const instance = await getTemplateInstances(template.id, {
       ...this.TemplateInstanceData,
-      html: template.result
+      html: brandTemplate.result
     })
 
     this.setState({
@@ -154,7 +159,9 @@ class SendDealPromotion extends React.Component {
       return []
     }
 
-    return listing.gallery_image_urls.map(image => ({
+    const uniqueAssets = [...new Set(listing.gallery_image_urls)]
+
+    return uniqueAssets.map(image => ({
       image
     }))
   }
@@ -177,12 +184,13 @@ class SendDealPromotion extends React.Component {
 
     return (
       <Fragment>
-        <ActionButton
+        <Button
           style={this.props.buttonStyle}
           onClick={this.toggleInstantMarketingBuilder}
+          {...this.props.buttonProps}
         >
           {this.props.children}
-        </ActionButton>
+        </Button>
 
         {this.state.isInstantMarketingBuilderOpen && (
           <InstantMarketing

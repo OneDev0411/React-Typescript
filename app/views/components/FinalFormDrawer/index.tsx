@@ -164,6 +164,7 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
                           })
                         : this.renderWithTooltip(
                             <ActionButton
+                              appearance="secondary"
                               type="submit"
                               disabled={
                                 isSubmitDisabled ||

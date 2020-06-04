@@ -27,8 +27,6 @@ class UploadContacts extends React.Component {
   }
 
   componentDidMount() {
-    this.workerStateTimer = null
-
     if (this.validate()) {
       this.startImporting()
     }
@@ -38,15 +36,6 @@ class UploadContacts extends React.Component {
     this.handleWorkerStatus(nextProps.workerState)
   }
 
-  componentWillUnmount() {
-    this.unregisterTimer()
-  }
-
-  /**
-   * unregister the object registered with setTimeout
-   */
-  unregisterTimer = () => clearTimeout(this.workerStateTimer)
-
   /**
    *
    * @param {String} workerState - the worker state
@@ -55,8 +44,6 @@ class UploadContacts extends React.Component {
     if (workerState === this.props.workerState) {
       return false
     }
-
-    this.unregisterTimer()
 
     if (workerState === 'complete') {
       this.onFinish()
@@ -85,21 +72,6 @@ class UploadContacts extends React.Component {
     }
 
     return isValid
-  }
-
-  /**
-   * handles worker status manually when the socket sucks
-   */
-  getWorkerStatus = async () => {
-    const { workerId, getWorkerState } = this.props
-
-    try {
-      const state = await getWorkerState(workerId)
-
-      this.handleWorkerStatus(state)
-    } catch (e) {
-      console.log(e)
-    }
   }
 
   /**
@@ -146,9 +118,6 @@ class UploadContacts extends React.Component {
 
     try {
       await requestImportCsv(fileId, this.props.owner.id, mappedFields)
-
-      // check worker state manually if socket didn't respond
-      this.workerStateTimer = setTimeout(this.getWorkerStatus, 60000)
     } catch (e) {
       this.onError(e)
     }

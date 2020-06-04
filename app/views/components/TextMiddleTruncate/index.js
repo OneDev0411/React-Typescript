@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import ToolTip from 'components/tooltip'
+import { Tooltip } from '@material-ui/core'
+
 import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 
 export function TextMiddleTruncate(props) {
@@ -12,15 +13,15 @@ export function TextMiddleTruncate(props) {
       return text
     }
 
-    return null
+    return ''
   }
 
   return (
-    <ToolTip caption={getTooltipCaption()} placement={props.tooltipPlacement}>
+    <Tooltip title={getTooltipCaption()} placement={props.tooltipPlacement}>
       <span style={props.style}>
         {truncateTextFromMiddle(text, props.maxLength)}
       </span>
-    </ToolTip>
+    </Tooltip>
   )
 }
 
@@ -35,10 +36,12 @@ function sanitizeText(text) {
 TextMiddleTruncate.propTypes = {
   text: PropTypes.string.isRequired,
   maxLength: PropTypes.number,
-  tooltipPlacement: PropTypes.string
+  tooltipPlacement: PropTypes.string,
+  style: PropTypes.object
 }
 
 TextMiddleTruncate.defaultProps = {
   maxLength: 40,
-  tooltipPlacement: 'top'
+  tooltipPlacement: 'top',
+  style: {}
 }

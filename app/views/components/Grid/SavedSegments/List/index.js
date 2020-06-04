@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { ListItem, withStyles } from '@material-ui/core'
 
 import {
   // eslint-disable-next-line import/named
@@ -15,11 +16,22 @@ import {
   selectActiveSavedSegment
 } from 'reducers/filter-segments'
 
-import { ShowMoreLess } from 'components/ShowMoreLess'
-import LoadingIcon from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
 
 import Item from './Item'
-import { ListTitle, ListItem } from './styled'
+
+const styles = theme => ({
+  dropdownBtn: {
+    ...theme.typography.body1,
+    color: theme.palette.common.black,
+    '&.Mui-disabled': {
+      color: theme.palette.text.disabled,
+      '& svg': {
+        fill: theme.palette.text.disabled
+      }
+    }
+  }
+})
 
 class SegmentsList extends React.Component {
   state = {
@@ -75,13 +87,26 @@ class SegmentsList extends React.Component {
 
   render() {
     const { props } = this
+    const { classes } = props
 
     return (
-      <div data-test="lists-list" style={{ marginBottom: '2rem' }}>
-        <ListTitle>Lists</ListTitle>
-
-        <ShowMoreLess moreText="More lists" lessText="Less lists">
-          {props.list.map(item => {
+      <BaseDropdownWithMore
+        buttonLabel="Saved List"
+        DropdownToggleButtonProps={{
+          disabled: props.isFetching || props.list.length === 0,
+          className: classes.dropdownBtn
+        }}
+        listPlugin={{
+          style: { width: 220 }
+        }}
+        morePlugin={{
+          count: 5,
+          textContainer: ({ children }) => (
+            <ListItem button>{children}</ListItem>
+          )
+        }}
+        renderMenu={({ close }) =>
+          props.list.map(item => {
             const { id } = item
 
             return (
@@ -91,18 +116,13 @@ class SegmentsList extends React.Component {
                 item={item}
                 deleteHandler={this.deleteItem}
                 selectHandler={this.selectItem}
+                closeHandler={close}
                 selected={this.isSelected(id)}
               />
             )
-          })}
-        </ShowMoreLess>
-
-        {props.isFetching && (
-          <ListItem>
-            <LoadingIcon />
-          </ListItem>
-        )}
-      </div>
+          })
+        }
+      />
     )
   }
 }
@@ -133,4 +153,4 @@ ConnectedSegmentsList.defaultProps = {
   getPredefinedLists: name => ({ default: getDefaultList(name) })
 }
 
-export default ConnectedSegmentsList
+export default withStyles(styles)(ConnectedSegmentsList)

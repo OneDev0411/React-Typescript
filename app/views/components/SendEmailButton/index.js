@@ -1,8 +1,9 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
+
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import MissingEmailModal from 'components/MissingEmailModal'
 
@@ -33,19 +34,20 @@ function SendEmailButton(props) {
   }
 
   return (
-    <Fragment>
+    <>
       {props.render ? (
         props.render({ onClick: onSendClick, testId: 'send-email' })
       ) : (
-        <ActionButton
+        <Button
           disabled={props.disabled}
-          appearance={props.appearance}
+          variant={props.appearance}
+          size={props.size}
           style={props.style}
           onClick={onSendClick}
           data-test="send-email"
         >
           {props.title}
-        </ActionButton>
+        </Button>
       )}
       {/*
        We conditionally render, beacause of this comment:
@@ -78,7 +80,7 @@ function SendEmailButton(props) {
           getEmail={getEmail}
         />
       )}
-    </Fragment>
+    </>
   )
 }
 
@@ -94,6 +96,7 @@ SendEmailButton.propTypes = {
   defaultAttachments: PropTypes.array,
   recipients: PropTypes.array,
   appearance: PropTypes.string,
+  size: PropTypes.string,
   title: PropTypes.string,
   onSent: PropTypes.func
 }
@@ -103,7 +106,8 @@ SendEmailButton.defaultProps = {
   deal: null,
   defaultAttachments: [],
   recipients: null,
-  appearance: 'outline',
+  appearance: 'outlined',
+  size: 'medium',
   title: 'Email',
   onSent: () => {}
 }

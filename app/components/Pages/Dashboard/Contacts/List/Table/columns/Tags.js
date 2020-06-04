@@ -1,24 +1,38 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import styled from 'styled-components'
+import { Box, Tooltip, Chip, makeStyles, createStyles } from '@material-ui/core'
 
 import { getContactTags } from '../../../../../../../models/contacts/helpers'
-import ALink from '../../../../../../../views/components/ALink'
-import { grey } from '../../../../../../../views/utils/colors'
 
-const AddTags = styled.span`
-  color: ${grey.A550};
-`
+const useStyles = makeStyles(theme =>
+  createStyles({
+    container: {
+      display: 'inline-block',
+      cursor: 'pointer'
+    },
+    noTag: {
+      fontSize: theme.typography.caption.fontSize
+    },
+    tagLabel: {
+      fontSize: theme.typography.caption.fontSize,
+      marginRight: theme.spacing(0.5)
+    },
+    chip: {
+      marginRight: theme.spacing(0.25)
+    }
+  })
+)
+
 const TagsString = ({ contact, onSelectTagContact }) => {
+  const classes = useStyles()
   const tags = getContactTags(contact)
 
   const tagsCount = _.size(tags)
   const showingTags = []
-  const getShowingTags = () => showingTags.join(', ')
 
   _.every(tags, item => {
-    if (getShowingTags().length + item.text.length <= 66) {
+    if (showingTags.length < 2) {
       showingTags.push(item.text)
 
       return true
@@ -30,21 +44,39 @@ const TagsString = ({ contact, onSelectTagContact }) => {
   const invisibleTagsCount = tagsCount - showingTags.length
 
   return (
-    <ALink
-      data-test="add-tag"
-      style={{ cursor: 'pointer' }}
-      onClick={event => {
-        event.stopPropagation()
-        onSelectTagContact(contact.id)
-      }}
-    >
-      {tagsCount === 0 ? (
-        <AddTags className="primaryHover">Add Tags</AddTags>
-      ) : (
-        getShowingTags()
-      )}
-      {invisibleTagsCount > 0 && <span> and {invisibleTagsCount} more</span>}
-    </ALink>
+    <Tooltip title="Click to edit">
+      <Box
+        className={classes.container}
+        onClick={event => {
+          event.stopPropagation()
+          onSelectTagContact(contact.id)
+        }}
+      >
+        {tagsCount === 0 ? (
+          <span className={classes.noTag}>Add Tags</span>
+        ) : (
+          <>
+            <span className={classes.tagLabel}>TAGS:</span>
+            {showingTags.map(tag => (
+              <Chip
+                key={tag}
+                variant="outlined"
+                size="small"
+                className={classes.chip}
+                label={tag}
+              />
+            ))}
+          </>
+        )}
+        {invisibleTagsCount > 0 && (
+          <Chip
+            variant="outlined"
+            size="small"
+            label={`+ ${invisibleTagsCount}`}
+          />
+        )}
+      </Box>
+    </Tooltip>
   )
 }
 

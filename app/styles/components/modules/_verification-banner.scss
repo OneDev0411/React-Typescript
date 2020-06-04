@@ -1,8 +1,8 @@
 .c-verify-banner {
   position: fixed;
   top: 0;
-  left: 80px;
-  width: calc(100% - 80px);
+  left: $app-sidenav-width;
+  width: calc(100% - #{$app-sidenav-width});
   height: 71px;
   line-height: 71px;
   padding: 0 1em;

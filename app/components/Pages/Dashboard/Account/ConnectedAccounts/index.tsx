@@ -1,34 +1,24 @@
-import { OAuthProvider } from 'constants/contacts'
-
-import * as React from 'react'
-import { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
+import { AnyAction } from 'redux'
 import { connect } from 'react-redux'
-
+import { ThunkDispatch } from 'redux-thunk'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
+import { List, Box, Paper, Grid, Typography } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 
-import { Box, Button, List } from '@material-ui/core'
-
-import { AnyAction } from 'redux'
-
-import { ThunkDispatch } from 'redux-thunk'
-
 import { IAppState } from 'reducers'
-import PageHeader from 'components/PageHeader'
-
-import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
-import Loading from 'partials/Loading'
-import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
-import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import ConnectGoogleButton from 'crm/List/ImportContactsButton/ConnectGoogleButton'
-import ConnectOutlookButton from 'crm/List/ImportContactsButton/ConnectOutlookButton'
-import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
-
-import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
-
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
+import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
+import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 
-import { ConnectedAccount } from './ConnectedAccount'
+import LoadingContainer from 'components/LoadingContainer'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
+import ConnectAccount from './ConnectAccount'
+import ConnectedAccount from './ConnectedAccount'
+import ConnectAccountButtons from './ConnectAccountButtons'
 
 interface Props {
   accounts: IOAuthAccount[]
@@ -36,87 +26,77 @@ interface Props {
   fetchOAuthAccounts: IAsyncActionProp<typeof fetchOAuthAccounts>
   syncOAuthAccount: IAsyncActionProp<typeof syncOAuthAccount>
   disconnectOAuthAccount: IAsyncActionProp<typeof disconnectOAuthAccount>
+  fetchUnreadEmailThreadsCount: IAsyncActionProp<
+    typeof fetchUnreadEmailThreadsCount
+  >
 }
-
-const iconSize = { width: 16, height: 16 }
 
 function ConnectedAccounts({
   accounts,
   loading,
   fetchOAuthAccounts,
   syncOAuthAccount,
-  disconnectOAuthAccount
+  disconnectOAuthAccount,
+  fetchUnreadEmailThreadsCount
 }: Props) {
-  useEffect(() => {
+  useEffectOnce(() => {
     fetchOAuthAccounts()
-  }, [fetchOAuthAccounts])
+  })
 
   const confirmation = useContext(ConfirmationModalContext)
-
-  const onDelete = (provider: OAuthProvider, accountId: string) => {
-    confirmation.setConfirmationModal({
-      message:
-        'Your account will be disconnected and removed but imported contacts and emails will be preserved.',
-      onConfirm: () => {
-        disconnectOAuthAccount(provider, accountId)
-      }
-    })
-  }
 
   return (
     <>
       <Helmet>
         <title>Connected Accounts | Settings | Rechat</title>
       </Helmet>
-      <PageHeader style={{ marginBottom: 0, marginTop: '1.5rem' }}>
-        <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Connected Accounts</PageHeader.Heading>
-        </PageHeader.Title>
-        <PageHeader.Menu>
-          <ConnectOutlookButton>
-            {({ connect, connecting }) => (
-              <Button
-                variant="outlined"
-                disabled={connecting}
-                onClick={connect}
-              >
-                <IconOutlook size={iconSize} />
-                <Box pl={1}>Connect Outlook</Box>
-              </Button>
-            )}
-          </ConnectOutlookButton>
-          <Box mr={1} />
-          <ConnectGoogleButton>
-            {({ connect, connecting }) => (
-              <Button
-                variant="outlined"
-                disabled={connecting}
-                onClick={connect}
-              >
-                <IconGoogle size={iconSize} />
-                <Box pl={1}>Connect Google</Box>
-              </Button>
-            )}
-          </ConnectGoogleButton>
-        </PageHeader.Menu>
-      </PageHeader>
 
-      <Box paddingX={3}>
-        {loading && accounts.length === 0 ? (
-          <Loading />
-        ) : (
+      {loading ? (
+        <Box margin={2}>
+          <LoadingContainer style={{}} />
+        </Box>
+      ) : accounts.length === 0 ? (
+        <ConnectAccount />
+      ) : (
+        <>
+          <Box marginBottom={1.5}>
+            <Paper variant="outlined">
+              <Box paddingX={3} paddingY={2}>
+                <Grid container alignItems="center">
+                  <Grid item xs>
+                    <Typography variant="subtitle2">
+                      Connect other accounts
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <ConnectAccountButtons size="small" />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Paper>
+          </Box>
+
           <List disablePadding>
             {accounts.map(account => (
               <ConnectedAccount
                 account={account}
                 key={account.id}
                 onSync={syncOAuthAccount}
-                onDelete={onDelete}
+                onDelete={(provider, accountId) => {
+                  confirmation.setConfirmationModal({
+                    message: `Your account will be disconnected and 
+                        removed but imported contacts and emails will be preserved.`,
+                    onConfirm: async () => {
+                      await disconnectOAuthAccount(provider, accountId)
+                      await fetchUnreadEmailThreadsCount()
+                    }
+                  })
+                }}
               />
             ))}
           </List>
-        )}
-      </Box>
+        </>
+      )}
     </>
   )
 }
@@ -133,7 +113,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
       dispatch(syncOAuthAccount(...args)),
     disconnectOAuthAccount: (
       ...args: Parameters<typeof disconnectOAuthAccount>
-    ) => dispatch(disconnectOAuthAccount(...args))
+    ) => dispatch(disconnectOAuthAccount(...args)),
+    fetchUnreadEmailThreadsCount: (
+      ...args: Parameters<typeof fetchUnreadEmailThreadsCount>
+    ) => dispatch(fetchUnreadEmailThreadsCount(...args))
   }
 }
 

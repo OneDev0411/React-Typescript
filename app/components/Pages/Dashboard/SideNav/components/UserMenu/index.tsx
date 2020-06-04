@@ -1,25 +1,15 @@
-import Downshift from 'downshift'
-import Flex from 'styled-flex-component'
 import React from 'react'
-
 import usePromise from 'react-use-promise'
+import { Popover } from '@material-ui/core'
 
-import Link from '../../../../../../views/components/Button/LinkButton'
-
-import { UserMenuWrapper } from '../../styled'
-import { DropdownButton } from './DropdownButton'
-import { UserMenuContent } from './UserMenuContent'
 import { getActiveTeamId } from '../../../../../../utils/user-teams'
 import { getBrandChecklists } from '../../../../../../models/BrandConsole/Checklists'
 
-interface Props {
-  user: IUser
-  open: boolean
-  onToggle: () => void
-  brandLogoSrc: string
-}
+import ToggleButton from './ToggleButton'
 
-export function UserMenu(props: Props) {
+import { UserMenuContent } from './UserMenuContent'
+
+export function UserMenu({ user }: { user: IUser }) {
   /**
    * We need to show checklists link only if users has access to it.
    * Right now, the logic for access is like this:
@@ -37,38 +27,54 @@ export function UserMenu(props: Props) {
    * the link which may be seen as a UX problem.
    */
   const [checklists] = usePromise(() => {
-    const teamId = props.user && getActiveTeamId(props.user)
+    const teamId = user && getActiveTeamId(user)
 
     return (teamId && getBrandChecklists(teamId)) || Promise.reject()
-  }, [props.user])
+  }, [user])
 
-  return props.user ? (
-    <Downshift isOpen={props.open} onOuterClick={props.onToggle}>
-      {({ isOpen }) => (
-        <div>
-          <UserMenuWrapper>
-            <DropdownButton
-              user={props.user}
-              bsRole="toggle"
-              onClick={props.onToggle}
-              isDropDownOpen={props.open}
-            />
-            {isOpen && (
-              <UserMenuContent
-                user={props.user}
-                showChecklists={checklists && checklists.length > 0}
-                onClose={props.onToggle}
-              />
-            )}
-          </UserMenuWrapper>
-        </div>
-      )}
-    </Downshift>
-  ) : (
-    <Flex center style={{ padding: '0.75em 0' }}>
-      <Link to="/">
-        <img src={props.brandLogoSrc} alt="Rechat" width="32" height="32" />
-      </Link>
-    </Flex>
-  )
+  const [anchorEl, setAnchorEl] = React.useState(null)
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const isOpen = Boolean(anchorEl)
+  const id = isOpen ? 'user-menu-popover' : ''
+
+  return user ? (
+    <>
+      <ToggleButton
+        id={id}
+        isOpen={isOpen}
+        onClick={handleClick}
+        userName={user.display_name}
+        userAvatar={user.profile_image_url || ''}
+        userInfo={user.email || user.phone_number || ''}
+      />
+      <Popover
+        id={id}
+        open={isOpen}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left'
+        }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+      >
+        <UserMenuContent
+          user={user}
+          onClose={handleClose}
+          showChecklists={checklists ? checklists.length > 0 : false}
+        />
+      </Popover>
+    </>
+  ) : null
 }

@@ -2,7 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { getUserTitle } from '../../../../../models/user/helpers/get-user-title'
-import { getListingAddressObj } from '../../../../../utils/listing'
+import {
+  getListingAddressObj,
+  isLeaseProperty
+} from '../../../../../utils/listing'
 import {
   joinItemsWithString,
   getIndexLabel
@@ -114,9 +117,10 @@ export function LocationPage(props) {
           <div style={{ marginBottom: '1rem' }}>
             MLS#: <div style={{ display: 'inline' }}>{listing.mls_number}</div>
           </div>
-          <div
-            style={{ fontWeight: 600 }}
-          >{`$${listing.price.toLocaleString()}`}</div>
+          <div style={{ fontWeight: 600 }}>
+            {`$${listing.price.toLocaleString()}`}
+            {isLeaseProperty(listing) ? '/mo' : ''}
+          </div>
           <p style={{ fontWeight: 500, fontSize: '0.625rem' }}>{summary}</p>
           <p className={`${LOCATION_PAGE}__description`}>
             {listingData.description}

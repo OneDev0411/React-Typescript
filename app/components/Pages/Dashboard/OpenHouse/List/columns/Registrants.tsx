@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Button } from '@material-ui/core'
 
+import pluralize from 'pluralize'
+
 import AssociationsDrawer from 'components/AssociationsDrawer'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 
@@ -16,12 +18,12 @@ export default function Registrants({ registrants }: Props) {
   return (
     <>
       <Button
-        color="primary"
         disabled={count === 0}
+        color="inherit"
         onClick={() => setIsDrawerOpen(true)}
         size="small"
       >
-        {count}
+        {pluralize('Registrant', count, true)}
       </Button>
       {count > 0 && (
         <AssociationsDrawer

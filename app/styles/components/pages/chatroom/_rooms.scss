@@ -33,7 +33,7 @@
 }
 
 %room-new {
-  background-color:#0945eb;
+  background-color: $brand-primary;
   position: absolute;
   width: 290px;
   height: 40px;
@@ -54,7 +54,7 @@
   &:hover {
     cursor: pointer;
     color: #fff;
-    background-color: #001eb7;
+    background-color: $brand-primary-dark;
     svg g g {
       fill: #fff;
     }
@@ -65,7 +65,7 @@
     margin-right: 12px;
   }
   &:before {
-    content: "";
+    content: '';
     display: inline-block;
     vertical-align: middle;
     height: 100%;
@@ -98,7 +98,7 @@
       }
     }
     &:hover {
-      background-color: #0945eb;
+      background-color: $brand-primary;
       .btn-tgl {
         color: #ffffff;
       }
@@ -111,7 +111,7 @@
   }
 
   .two-direction-arrow-container:before {
-    content: "";
+    content: '';
     display: inline-block;
     vertical-align: middle;
     height: 100%;
@@ -151,7 +151,7 @@
       opacity: 1;
       span {
         font-weight: bold;
-        color: #0945eb;
+        color: $brand-primary;
       }
     }
     .message-typing {
@@ -174,13 +174,13 @@
       font-size: 11px;
       min-width: 30px;
       display: inline-block;
-      background-color: #0945eb;
+      background-color: $brand-primary;
     }
   }
   &:hover {
     background-color: #f2f2f2;
-    .title{
-      color: #0945eb;
+    .title {
+      color: $brand-primary;
     }
   }
   &.active {
@@ -204,6 +204,6 @@
   }
 
   &:hover svg > g {
-    fill: #0945eb;
+    fill: $brand-primary;
   }
 }

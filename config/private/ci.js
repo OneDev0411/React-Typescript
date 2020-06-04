@@ -28,5 +28,10 @@ export default {
   my_marketing_matters: {
     duns: process.env.MY_MARKETING_MATTERS_DUNS,
     shared_secret: process.env.MY_MARKETING_MATTERS_SHARED_SECRET
+  },
+  live_by: {
+    api_url: process.env.LIVE_BY_API_URL,
+    api_client_id: process.env.LIVE_BY_API_CLIENT_ID,
+    api_key: process.env.LIVE_BY_API_KEY
   }
 }

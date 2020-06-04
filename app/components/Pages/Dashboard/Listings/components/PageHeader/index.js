@@ -1,60 +1,33 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
+import { Box, Typography } from '@material-ui/core'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
 
-import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
-import PageHeader from '../../../../../../views/components/PageHeader'
+import GlobalPageLayout from 'components/GlobalPageLayout'
 
-import { ViewSwitcher } from '../../components/ViewSwitcher'
-
-Header.propTypes = {
-  showMenu: PropTypes.bool
-}
-
-Header.defaultProps = {
-  showMenu: true
-}
+const useStyles = makeStyles(theme =>
+  createStyles({
+    container: {
+      height: theme.spacing(15),
+      display: 'flex'
+    },
+    subtitle: {
+      color: theme.palette.grey['400']
+    }
+  })
+)
 
 export function Header(props) {
-  const { subtitle, RightComponent } = props
+  const classes = useStyles(props)
+  const { subtitle, title } = props
 
   return (
-    <PageHeader
-      style={{
-        margin: 0,
-        width: '100%',
-        minHeight: '6rem',
-        borderBottom: '1px solid #d4d4d4',
-        padding: subtitle ? '1.5em 1.5em 1em' : '1.5em'
-      }}
-    >
-      <Flex>
-        <MenuTrigger
-          onClick={props.toggleSideMenu}
-          isExpended={props.isSideMenuOpen}
-          style={{ width: '1.5em', height: '1.5em', marginRight: '0.5em' }}
-        />
-        <Flex column>
-          <PageHeader.Heading style={{ fontSize: '1.5rem', lineHeight: 1 }}>
-            {props.title}
-          </PageHeader.Heading>
-          {subtitle && (
-            <PageHeader.Subtitle style={{ marginTop: '0.5em' }}>
-              {subtitle}
-            </PageHeader.Subtitle>
-          )}
-        </Flex>
-      </Flex>
-
-      {props.showMenu && (
-        <PageHeader.Menu>
-          {RightComponent && <RightComponent />}
-          <ViewSwitcher
-            activeView={props.activeView}
-            onChange={props.onChangeView}
-          />
-        </PageHeader.Menu>
-      )}
-    </PageHeader>
+    <Box className={classes.container}>
+      <GlobalPageLayout.Header>
+        <Typography variant="h4">{title}</Typography>
+        <Typography variant="h6" className={classes.subtitle}>
+          {subtitle}
+        </Typography>
+      </GlobalPageLayout.Header>
+    </Box>
   )
 }

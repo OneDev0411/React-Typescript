@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import ArrowDropDown from 'components/SvgIcons/ArrowDropDown/IconArrowDropDown'
+
 import TextIconButton from '../TextIconButton'
-import IconDrop from '../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 const propTypes = {
   /**
@@ -25,7 +26,7 @@ function DropButton(props) {
   return (
     <TextIconButton
       {...props}
-      iconRight={IconDrop}
+      iconRight={ArrowDropDown}
       isActive={props.isOpen}
       iconRightAim={props.isOpen ? 'down' : 'up'}
     />

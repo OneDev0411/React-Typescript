@@ -6,6 +6,8 @@ import fecha from 'fecha'
 
 import Flex from 'styled-flex-component'
 
+import { Button } from '@material-ui/core'
+
 import { CheckBoxButton } from 'components/Button/CheckboxButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import Search from 'components/Grid/Search'
@@ -15,7 +17,7 @@ import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getChecklistById } from 'reducers/deals/checklists'
 
 import Tooltip from 'components/tooltip'
-import LinkButton from 'components/Button/LinkButton'
+
 import TasksDrawer from 'components/SelectDealTasksDrawer'
 
 import {
@@ -187,18 +189,19 @@ export class DocumentRow extends React.Component<Props & StateProps, State> {
 
               <ViewDocument>
                 {checklist && (
-                  <LinkButton target="_blank" to={document.url}>
+                  <Button color="secondary" target="_blank" href={document.url}>
                     View
-                  </LinkButton>
+                  </Button>
                 )}
               </ViewDocument>
 
               {!checklist && (
-                <LinkButton
+                <Button
+                  color="secondary"
                   onClick={() => this.handleOpenMoveFileDrawer(document)}
                 >
                   Move To Checklist
-                </LinkButton>
+                </Button>
               )}
             </DocumentItem>
           )

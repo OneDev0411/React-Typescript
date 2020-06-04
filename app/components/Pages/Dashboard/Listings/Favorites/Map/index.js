@@ -12,22 +12,19 @@ import * as actions from '../../../../../../store_actions/listings/map'
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
 
 const map = ({
+  brand,
   user,
   style,
   markers,
-  appData,
   options,
   onChange,
   defaultZoom,
   defaultCenter,
   bootstrapURLKeys,
   onGoogleApiLoaded,
-  onMarkerMouseEnter,
-  onMarkerMouseLeave,
-  map: { hoveredMarkerId },
   mapProps: { zoom, center }
 }) => (
-  <React.Fragment>
+  <>
     <Map
       zoom={zoom}
       style={style}
@@ -45,21 +42,18 @@ const map = ({
 
         return (
           <Marker
+            brand={brand}
             lat={lat}
             lng={lng}
             user={user}
-            data={appData}
             listing={marker}
             key={`MARKER_${id}`}
-            onMouseEnterHandler={() => onMarkerMouseEnter(id)}
-            onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
-            markerPopupIsActive={hoveredMarkerId === id}
           />
         )
       })}
     </Map>
     <ZoomController tabName="favorites" />
-  </React.Fragment>
+  </>
 )
 
 const mapHOC = compose(
@@ -70,17 +64,17 @@ const mapHOC = compose(
     defaultCenter: mapInitialState.center,
     style: {
       position: 'relative',
-      height: 'calc(100vh - 72px)'
+      height: '100%'
     }
   }),
   connect(
-    ({ user, data, favorites }) => {
+    ({ user, brand, favorites }) => {
       const { map } = favorites
 
       return {
         map,
         user,
-        appData: data,
+        brand,
         mapProps: map.props
       }
     },
@@ -93,18 +87,17 @@ const mapHOC = compose(
     },
     onChange: ({ setMapProps }) => mapProps => {
       setMapProps('favorites', mapProps)
-    },
-    onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
-      setMapHoveredMarkerId('favorites', -1)
-    },
-    onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
-      setMapHoveredMarkerId('favorites', id)
     }
   }),
   withPropsOnChange(
     (props, nextProps) => props.markers.length !== nextProps.markers.length,
     ({ markers, mapProps }) => {
-      if (!window.google || !markers.length || !mapProps.bounds) {
+      if (
+        !window.currentMap ||
+        !window.google ||
+        !markers.length ||
+        !mapProps.bounds
+      ) {
         return {}
       }
 

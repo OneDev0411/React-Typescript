@@ -9,6 +9,8 @@ declare interface IUserBase {
   profile_image_url: string | null
   cover_image_url: string | null
   email_signature: string | null
+  access_token: string
+  refresh_token: string
 }
 declare interface IUserInput extends Partial<IUserBase> {
   agent?: UUID
@@ -65,5 +67,4 @@ declare interface IUserTeam {
   acl: IPermission[]
   type: 'user_role'
   settings: StringMap<any>
-  brand_settings: StringMap<any> | null
 }

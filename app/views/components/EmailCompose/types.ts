@@ -14,7 +14,7 @@ export interface EmailFormValues {
   cc?: IDenormalizedEmailRecipientInput[] | undefined
   bcc?: IDenormalizedEmailRecipientInput[] | undefined
   subject: string
-  from: IUser
+  from: IUser | IOAuthAccount
   google_credential?: string
   microsoft_credential?: string
   due_at: Date | null
@@ -26,6 +26,8 @@ export interface UrlBasedEmailAttachmentInput {
   name: string
 }
 
+export type EmailComposeValues = EmailFormValues & { template?: UUID }
+
 export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   initialValues?: Partial<EmailFormValues>
   /**
@@ -33,9 +35,7 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
    * (mering API for sending email) is done
    * @param values
    */
-  sendEmail: (
-    values: EmailFormValues & { template?: UUID }
-  ) => Promise<EmailType>
+  sendEmail: (values: EmailComposeValues) => Promise<EmailType>
   onSent?: (result: EmailType) => void
   /**
    * A deal to suggest attachments from it

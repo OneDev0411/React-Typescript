@@ -1,19 +1,19 @@
-<mj-section background-color="#fff" padding-top="0" padding-bottom="5px">
-  {% for user in users %}
-  <mj-column width="25%" padding="24px">
-    <mj-image border-radius="6px" width="80px" height="80px" rechat-assets="avatar" align="center" src="{{ user.profile_image_url }}"></mj-image>
+{% for user in users %}
+<mj-section padding="20px 20px" text-align="left" background-color="#fff" rechat-editable="tree">
+  <mj-column>
+    <mj-image src="{{ user.profile_image_url }}" width="250px" padding="4px 25px" rechat-assets="avatar">
+    </mj-image>
   </mj-column>
-  <mj-column width="25%">
-    <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="bold">
+  <mj-column vertical-align="bottom">
+    <mj-text text-transform="uppercase" font-weight="600" font-size="17px" padding="5px 0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" line-height="1">
       {{user.display_name}}
     </mj-text>
-    <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="lighter">
+    <mj-text padding="5px 0" font-size="16px" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" line-height="1">
+      {{user.phone_number | phone}}
+    </mj-text>
+    <mj-button border="none" color="#000" inner-padding="0" padding="5px 0" href="mailto:{{user.email}}" align="left" text-align="left" text-decoration="none" background-color="#fff" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px" line-height="1">
       {{user.email}}
-    </mj-text>
-    <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="normal">
-      {{user.phone_number}}
-    </mj-text>
-    <mj-spacer height="16px"></mj-spacer>
+    </mj-button>
   </mj-column>
-  {% endfor %}
 </mj-section>
+{% endfor %}

@@ -1,87 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Avatar from 'react-avatar'
 import Flex from 'styled-flex-component'
-import styled from 'styled-components'
 
-import {
-  getContactAttribute,
-  getAttributeFromSummary,
-  getContactOnlineStatus
-} from 'models/contacts/helpers'
+import { Typography, Tooltip } from '@material-ui/core'
 
-import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import { grey } from 'views/utils/colors'
 
 import Link from 'components/ALink'
-import Tooltip from 'components/tooltip'
-import ImageStatus from 'components/ImageStatus'
 import MiniContact from 'components/MiniContact'
 import PartnerIcon from 'components/SvgIcons/Partner/IconPartner'
 
-const ellipsis = {
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis'
-}
-
-const AvatarContainer = styled.div`
-  display: table;
-  position: relative;
-  align-self: center;
-  .avatar div {
-    font-weight: 700 !important;
-  }
-`
-const ContactsListName = ({ contact, attributeDefs }) => {
-  let avatar = ''
-  const attribute_def = selectDefinitionByName(
-    attributeDefs,
-    'profile_image_url'
-  )
-
-  if (attribute_def) {
-    const avatars = getContactAttribute(contact, attribute_def)
-
-    avatar = avatars && avatars[0] && avatars[0].text
-
-    if (
-      !/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(
-        avatar
-      )
-    ) {
-      avatar = ''
-    }
-  }
-
+const ContactsListName = ({ contact }) => {
   const name = getAttributeFromSummary(contact, 'display_name')
 
-  const is_user_active = getContactOnlineStatus(contact)
-
-  const statusColor = is_user_active ? '#32b86d' : '#c3c3c3'
-
-  let s
-
-  if (contact.meta && contact.meta.s) {
-    s = contact.meta.s
-  } else {
-    s = '0'
-  }
+  const s = contact.meta && contact.meta.s ? contact.meta.s : '0'
 
   return (
     <Flex nowrap style={{ minWidth: '0' }}>
-      <AvatarContainer>
-        <Avatar
-          className="avatar"
-          color="#000"
-          round
-          name={name}
-          src={avatar}
-          size={40}
-        />
-        <ImageStatus statusColor={statusColor} />
-      </AvatarContainer>
       <Flex
         column
         style={{
@@ -100,32 +37,30 @@ const ContactsListName = ({ contact, attributeDefs }) => {
                 s
               }
             }}
-            style={{
-              ...ellipsis,
-              fontWeight: 500,
-              padding: 0
-            }}
           >
-            {name}
+            <Typography noWrap variant="inherit" display="block">
+              {name}
+            </Typography>
           </Link>
         </MiniContact>
         {typeof contact.partner_name === 'string' &&
           contact.partner_name.trim().length > 0 && (
-            <Tooltip caption="Spouse/Partner">
+            <Tooltip title="Spouse/Partner">
               <Flex alignCenter>
                 <PartnerIcon
                   style={{ width: '1rem', height: '1rem', fill: grey.A550 }}
                 />
                 <span
                   style={{
-                    ...ellipsis,
                     width: 'calc(100% - 1.24rem)',
                     marginLeft: '0.25rem',
                     color: grey.A550
                   }}
                   className="hover-color--black"
                 >
-                  {contact.partner_name}
+                  <Typography noWrap variant="inherit" display="block">
+                    {contact.partner_name}
+                  </Typography>
                 </span>
               </Flex>
             </Tooltip>

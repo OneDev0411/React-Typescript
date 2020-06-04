@@ -8,7 +8,6 @@ import { getContextsByBrand } from 'actions/deals'
 import { getAttributeDefs } from 'store_actions/contacts'
 import { getActiveTeamId } from 'utils/user-teams'
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
-import PageHeader from 'components/PageHeader'
 import ActionButton from 'components/Button/ActionButton'
 import { hasUserAccessToDeals, hasUserAccessToCrm } from 'utils/user-teams'
 import { selectContextsByBrand } from 'reducers/deals/contexts'
@@ -285,20 +284,17 @@ class ReminderNotifications extends Component {
         <Helmet>
           <title>Reminder Notifications | Settings | Rechat</title>
         </Helmet>
-        <PageHeader style={{ marginBottom: '1.5rem', marginTop: '1.5rem' }}>
-          <PageHeader.Title showBackButton={false}>
-            <PageHeader.Heading>Reminder Notifications</PageHeader.Heading>
-            {SHOULD_RENDER_FORCEPUSH_BUTTON && (
-              <ActionButton
-                appearance="outline"
-                style={{ marginLeft: '2rem' }}
-                onClick={() => this.forcePushNotifications()}
-              >
-                Force Push Notifications
-              </ActionButton>
-            )}
-          </PageHeader.Title>
-        </PageHeader>
+        <div>
+          {SHOULD_RENDER_FORCEPUSH_BUTTON && (
+            <ActionButton
+              appearance="outline"
+              style={{ marginLeft: '2rem' }}
+              onClick={() => this.forcePushNotifications()}
+            >
+              Force Push Notifications
+            </ActionButton>
+          )}
+        </div>
         <Flex>
           {this.state.loading ? (
             <Loading />

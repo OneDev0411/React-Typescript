@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Button } from '@material-ui/core'
 
@@ -39,10 +39,12 @@ export class PdfViewer extends React.Component {
       rootMargin: '10% 0px 0px 0px',
       threshold: 0.2
     })
+    document.body.style.overflow = 'hidden'
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyboardShortcuts)
+    document.body.style.overflow = 'unset'
   }
 
   onObserve = entries => {
@@ -255,7 +257,7 @@ export class PdfViewer extends React.Component {
     }
 
     return (
-      <Fragment>
+      <>
         <Toolbar
           downloadLink={this.props.downloadUrl || this.props.url}
           onFitWindow={this.handleFitWindow}
@@ -280,7 +282,7 @@ export class PdfViewer extends React.Component {
             )
           )}
         </Container>
-      </Fragment>
+      </>
     )
   }
 }

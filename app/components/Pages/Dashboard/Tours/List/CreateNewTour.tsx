@@ -8,7 +8,7 @@ interface Props {
 export default function CreateNewTour(props: Props) {
   return (
     <>
-      <Button color="primary" variant="contained" onClick={props.onOpenDrawer}>
+      <Button size="large" variant="outlined" onClick={props.onOpenDrawer}>
         Create a Toursheet
       </Button>
     </>

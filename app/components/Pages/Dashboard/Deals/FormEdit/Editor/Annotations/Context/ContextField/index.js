@@ -1,9 +1,10 @@
-import React, { Fragment, useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
+
+import { Button } from '@material-ui/core'
 
 import DealContext from 'models/Deal/helpers/dynamic-context'
 import { getField } from 'models/Deal/helpers/context/get-field'
 
-import ActionButton from 'components/Button/ActionButton'
 import DatePicker from 'components/DatePicker'
 
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
@@ -30,7 +31,8 @@ export function ContextField(props) {
   const getDate = () => {
     const date = new Date(fieldValue || new Date())
 
-    return date instanceof Date && !Number.isNaN(date) ? date : new Date()
+    // eslint-disable-next-line no-restricted-globals
+    return date instanceof Date && !isNaN(date) ? date : new Date()
   }
 
   const handleSaveValue = (value, updateContext) => {
@@ -38,8 +40,16 @@ export function ContextField(props) {
     setEditorStatus(false)
   }
 
+  const normalizeValue = () => {
+    if (context.current.data_type === 'Date' && props.value) {
+      return formatDate(props.value, props.annotation.format)
+    }
+
+    return props.value
+  }
+
   return (
-    <Fragment>
+    <>
       <div
         style={{
           ...props.style,
@@ -48,7 +58,7 @@ export function ContextField(props) {
         title={props.annotation.context}
         onClick={() => setEditorStatus(true)}
       >
-        {props.value}
+        {normalizeValue()}
       </div>
 
       <ContextInlineEdit
@@ -57,13 +67,10 @@ export function ContextField(props) {
         width={300}
         onDismiss={() => setEditorStatus(false)}
       >
-        <Fragment>
+        <>
           <Body>
             {context.current.data_type === 'Date' ? (
-              <DatePicker
-                onChange={date => setFieldValue(formatDate(date))}
-                selectedDate={getDate()}
-              />
+              <DatePicker onChange={setFieldValue} selectedDate={getDate()} />
             ) : (
               <TextInput
                 context={context.current}
@@ -76,26 +83,29 @@ export function ContextField(props) {
           <Footer>
             {!contextValue &&
               ['TBD', 'N/A'].map((value, index) => (
-                <ActionButton
+                <Button
                   key={index}
                   size="small"
-                  appearance="outline"
+                  variant="outlined"
+                  color="secondary"
                   onClick={() => handleSaveValue(value, false)}
                 >
                   {value}
-                </ActionButton>
+                </Button>
               ))}
 
-            <ActionButton
+            <Button
               size="small"
+              variant="contained"
+              color="secondary"
               disabled={!isValueSet}
               onClick={() => handleSaveValue(fieldValue)}
             >
               Save
-            </ActionButton>
+            </Button>
           </Footer>
-        </Fragment>
+        </>
       </ContextInlineEdit>
-    </Fragment>
+    </>
   )
 }

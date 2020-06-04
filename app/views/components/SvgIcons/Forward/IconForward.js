@@ -6,7 +6,11 @@ const width = '24'
 const height = '24'
 const viewBox = '0 0 24 24'
 
-const sizes = {}
+const sizes = {
+  small: { width: 16, height: 16 },
+  medium: { width: 24, height: 24 },
+  large: { width: 32, height: 32 }
+}
 
 // somehow sizes is ending up in markup, even if it is not a valid svg attribute
 // until we have a better solution, just render it empty, instead to '[Object object]'
@@ -45,14 +49,8 @@ const Image = styled.svg`${propsToCss}`
 const children = (
   <Fragment>
     <path
-      fill='currentColor'
-      d='M23.6 11.22l-7.991-9.987a1.232 1.232 0 0 0-1.383-.416A1.245 1.245 0 0 0 13.373 2v1.5a.25.25 0 0 1-.25.25H1.373A1.251 1.251 0 0 0 .123 5v8.752a.25.25 0 0 0 .25.25h4a2.5 2.5 0 0 1 2.5 2.5V20a.25.25 0 0 0 .25.25h6a.25.25 0 0 1 .25.25V22a1.259 1.259 0 0 0 1.798 1.123c.169-.082.316-.202.431-.35l7.986-9.982a1.228 1.228 0 0 0 .012-1.571z'
+      d='M22.491 11.07l-6.784-6.777A1 1 0 0 0 14 5v3.043a.25.25 0 0 1-.25.25H2a1 1 0 0 0-1 1v4.5a1 1 0 0 0 1 1h11.75a.25.25 0 0 1 .25.25v3.1a1 1 0 0 0 1.684.727l6.781-6.357a1.001 1.001 0 0 0 .026-1.443z'
       key='key-0'
-    />
-    <path
-      fill='currentColor'
-      d='M5.876 16.5a1.5 1.5 0 0 0-1.5-1.5H.973a.249.249 0 0 0-.168.434l4.649 4.238a.25.25 0 0 0 .418-.185l.004-2.987z'
-      key='key-1'
     />
   </Fragment>
 )

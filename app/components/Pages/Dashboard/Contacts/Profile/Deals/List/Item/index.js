@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import _ from 'underscore'
 
+import { Typography, Box } from '@material-ui/core'
+
 import { goTo } from 'utils/go-to'
 
 import { getContactUsers } from 'models/contacts/helpers'
@@ -64,13 +66,17 @@ class Item extends React.Component {
     return (
       <Container onClick={this.handleOnClickItem}>
         <Avatar {...avatar} size={40} />
-        <div style={{ marginLeft: '1rem', width: 'calc(100% - 3rem)' }}>
-          {address && <div>{address}</div>}
-          <Flex alignCenter>
-            {clientTitle && <div>{clientTitle}</div>}
-            {contactRoleName && <Role>{contactRoleName}</Role>}
-          </Flex>
-        </div>
+        <Box ml={1} width="calc(100% - 3rem)">
+          <Typography variant="body2">
+            {address && <Typography variant="body2">{address}</Typography>}
+            <Flex alignCenter>
+              {clientTitle && (
+                <Typography variant="body2">{clientTitle}</Typography>
+              )}
+              {contactRoleName && <Role>{contactRoleName}</Role>}
+            </Flex>
+          </Typography>
+        </Box>
       </Container>
     )
   }

@@ -90,11 +90,11 @@
         "allowShortCircuit": true
       }
     ],
-    "max-line-length": [
-      true,
+    "max-len": [
+      "warn",
       {
-        "limit": 85,
-        "ignore-pattern": "^import [^,]+ from"
+        "code": 85,
+        "ignorePattern": "^import [^,]+ from"
       }
     ],
     "comma-dangle": [
@@ -102,6 +102,7 @@
       "never"
     ],
     "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/label-has-associated-control": 0,
     "semi": [
       2,
       "never"
@@ -122,6 +123,7 @@
       }
     ],
     "eqeqeq": 0,
+    "no-useless-catch": 0,
     "no-nested-ternary": 0,
     "import/newline-after-import": 0,
     "import/first": 0,
@@ -143,6 +145,7 @@
     "no-mixed-operators": 0,
     "no-param-reassign": 0,
     "react/forbid-prop-types": 0,
+    "react/jsx-props-no-spreading": 0,
     "react/jsx-no-target-blank": 0,
     "react/no-unused-prop-types": 0,
     "no-console": 0,
@@ -152,6 +155,9 @@
     "no-unused-vars": "error",
     "prefer-const": 0,
     "jsx-quotes": 1,
+    "react/jsx-fragments": 0,
+    "react/state-in-constructor": 0,
+    "react/static-property-placement": 0,
     "react/jsx-no-undef": 1,
     "react/jsx-uses-react": 1,
     "react/jsx-uses-vars": 1,
@@ -197,7 +203,9 @@
       {
         "semi": false,
         "singleQuote": true,
-        "printWidth": 80
+        "printWidth": 80,
+        "trailingComma": "none",
+        "arrowParens": "avoid"
       }
     ],
     "padding-line-between-statements": [
@@ -322,8 +330,12 @@
       ],
       "rules": {
         /* seems it doesn't work!*/
-        "react/jsx-no-duplicate-props": [2, { "ignoreCase": false }],
-
+        "react/jsx-no-duplicate-props": [
+          2,
+          {
+            "ignoreCase": false
+          }
+        ],
         "react/no-multi-comp": [
           "off"
         ]

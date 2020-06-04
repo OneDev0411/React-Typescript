@@ -1,11 +1,11 @@
 import { Theme } from '@material-ui/core/styles'
-import { createStyles } from '@material-ui/styles'
+import { createStyles } from '@material-ui/core/styles'
 
 import { ClassesProps } from 'utils/ts-utils'
 
 interface StyleProps extends ClassesProps<typeof styles> {
-  hasBorderBottom: boolean | null
   clickable: boolean
+  evenRow: boolean
 }
 
 export const styles = (theme: Theme) =>
@@ -16,30 +16,51 @@ export const styles = (theme: Theme) =>
       alignItems: 'flex-start',
       justifyContent: 'center',
       height: '100%',
+      backgroundColor: (props: StyleProps) =>
+        props.evenRow ? theme.palette.grey[50] : theme.palette.common.white,
       cursor: (props: StyleProps) => (props.clickable ? 'pointer' : 'auto'),
-      borderBottom: (props: StyleProps) =>
-        props.hasBorderBottom ? '1px solid rgba(219, 230, 253, 0.5)' : 'none',
       '& button, a.MuiButtonBase-root': {
-        borderColor: '#eee',
-        color: '#eee'
+        display: 'none'
       },
       '&:hover': {
         transition: '0.2s ease-in background-color',
         backgroundColor: theme.palette.action.hover,
         '& button, a.MuiButtonBase-root': {
-          borderColor: 'inherit',
+          display: 'block',
+          border: 'none',
           color: 'inherit'
         }
       },
-      '& a, & button': {
+      '& a, & button, & svg': {
         zIndex: 1,
         position: 'relative'
       },
       '& a': {
-        color: theme.palette.secondary.dark
+        color: '#1D1F26' // TODO: use palette
       },
       '&:hover a': {
-        color: theme.palette.primary.main
+        color: theme.palette.secondary.main,
+        textDecoration: 'underline'
+      },
+      '&:hover $actions': {
+        opacity: 1
+      }
+    },
+    iconEdit: {
+      marginRight: theme.spacing(2),
+      fill: theme.palette.grey[400],
+      '&:hover': {
+        fill: theme.palette.grey[300]
+      }
+    },
+    actions: {
+      display: 'flex',
+      alignItems: 'center',
+      opacity: 0,
+      transition: '0.1s ease-in opacity',
+      '& button, & a': {
+        marginRight: theme.spacing(2),
+        textDecoration: 'none'
       }
     }
   })

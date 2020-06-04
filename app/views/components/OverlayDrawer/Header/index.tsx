@@ -1,8 +1,8 @@
 import React, { CSSProperties, ReactElement } from 'react'
 import Flex from 'styled-flex-component'
+import { IconButton } from '@material-ui/core'
 
 import { Title, Container } from './styled'
-import IconButton from '../../Button/IconButton'
 import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 import { useDrawerContext } from '../drawer-context'
 
@@ -33,14 +33,10 @@ const Header = ({ title, menu, style, children }: Props) => {
         <Flex alignCenter>
           {menu}
           <IconButton
-            type="button"
-            isFit
-            iconSize="large"
-            inverse
             onClick={event => onClose(event, 'closeButtonClick')}
             style={{ marginLeft: menu ? '1rem' : 0 }}
           >
-            <CloseIcon />
+            <CloseIcon size="small" />
           </IconButton>
         </Flex>
       </div>

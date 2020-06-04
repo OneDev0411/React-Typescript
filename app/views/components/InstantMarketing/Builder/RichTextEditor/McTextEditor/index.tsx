@@ -6,8 +6,9 @@ import { TextEditor } from 'components/TextEditor'
 import { TextEditorProps } from 'components/TextEditor/types'
 import { defaultTemplateVariableSuggestions } from 'components/EmailCompose/default-template-variable-suggestions'
 
-import { TemplateExpressionsFeature } from '../../../../TextEditor/features/TemplateExpressions'
-import { RichTextFeature } from '../../../../TextEditor/features/RichText'
+import { RichTextFeature } from 'components/TextEditor/features/RichText'
+import { TemplateExpressionsFeature } from 'components/TextEditor/features/TemplateExpressions'
+
 import { EmojiFeature } from '../../../../TextEditor/features/Emoji'
 
 const useStyles = makeStyles(
@@ -17,7 +18,7 @@ const useStyles = makeStyles(
         overflow: 'visible',
         pointerEvents: 'none'
       },
-      content: ({ targetStyle }) => ({
+      content: ({ targetStyle }: any) => ({
         // border color is inline with grape not our theme
         border: '3px solid #0945eb',
         pointerEvents: 'initial',
@@ -53,7 +54,10 @@ const useStyles = makeStyles(
 )
 
 interface Props
-  extends Pick<TextEditorProps, 'onChange' | 'defaultValue' | 'textAlignment'> {
+  extends Pick<
+    TextEditorProps,
+    'onChange' | 'defaultValue' | 'textAlignment' | 'editorState'
+  > {
   targetStyle: CSSProperties
 }
 

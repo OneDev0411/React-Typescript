@@ -1,12 +1,7 @@
-import React, {
-  Fragment,
-  ReactNode,
-  RefObject,
-  useCallback,
-  useState
-} from 'react'
-import { Field, FieldProps } from 'react-final-form'
+import React, { ReactNode, RefObject, useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { EditorState } from 'draft-js'
+import { Options as ImportOptions } from 'draft-js-import-html'
 
 import { TextEditor } from 'components/TextEditor'
 import Loading from 'components/LoadingContainer'
@@ -25,9 +20,11 @@ interface Props {
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
   autofocus?: boolean
-  FieldProps?: Partial<FieldProps<any>>
   DraftEditorProps?: TextEditorProps['DraftEditorProps']
   editorRef?: RefObject<TextEditorRef>
+  onChangeEditor: (state: EditorState) => void
+  editorState: EditorState
+  stateFromHtmlOptions: ImportOptions
   /**
    * we receive attachments as a prop, instead of rendering it after the email
    * body, to include it in the scroll area of the email content
@@ -42,11 +39,13 @@ const EmailBody = ({
   hasTemplateVariables,
   hasStaticBody = false,
   attachments = null,
-  FieldProps,
   autofocus = false,
   DraftEditorProps = {},
   uploadAttachment = uploadEmailAttachment,
-  editorRef
+  editorRef,
+  onChangeEditor,
+  editorState,
+  stateFromHtmlOptions
 }: Props) => {
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
 
@@ -68,32 +67,8 @@ const EmailBody = ({
     <UploadAttachment uploadAttachment={uploadAttachment}>
       {({ upload }) => (
         <>
-          {!hasStaticBody && (
-            <Field
-              name="body"
-              {...FieldProps || {}}
-              render={({ input, meta }) => (
-                <TextEditor
-                  autofocus={autofocus}
-                  onAttachmentDropped={upload}
-                  DraftEditorProps={DraftEditorProps}
-                  appendix={attachments}
-                  input={input}
-                  ref={editorRef}
-                >
-                  <EmailEditorFeatures
-                    uploadImage={uploadImage}
-                    hasTemplateVariables={hasTemplateVariables}
-                    signature={signature}
-                    hasSignatureByDefault={hasSignatureByDefault}
-                    onEditSignature={() => setSignatureEditorVisible(true)}
-                  />
-                </TextEditor>
-              )}
-            />
-          )}
-          {hasStaticBody && (
-            <Fragment>
+          {hasStaticBody ? (
+            <>
               {content ? (
                 <>
                   <iframe
@@ -110,7 +85,26 @@ const EmailBody = ({
               ) : (
                 <Loading style={{ margin: 'auto' }} />
               )}
-            </Fragment>
+            </>
+          ) : (
+            <TextEditor
+              autofocus={autofocus}
+              onAttachmentDropped={upload}
+              DraftEditorProps={DraftEditorProps}
+              appendix={attachments}
+              ref={editorRef}
+              onChange={onChangeEditor}
+              editorState={editorState}
+            >
+              <EmailEditorFeatures
+                uploadImage={uploadImage}
+                hasTemplateVariables={hasTemplateVariables}
+                signature={signature}
+                hasSignatureByDefault={hasSignatureByDefault}
+                stateFromHtmlOptions={stateFromHtmlOptions}
+                onEditSignature={() => setSignatureEditorVisible(true)}
+              />
+            </TextEditor>
           )}
           <EditEmailSignatureDrawer
             isOpen={signatureEditorVisible}

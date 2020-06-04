@@ -6,8 +6,11 @@ import { Container, CropButton, Image } from './styled'
 import { uploadAsset } from '../helpers'
 
 export class AssetImage extends React.Component {
-  state = {
-    isCropperOpen: false
+  constructor(props) {
+    super(props)
+    this.state = {
+      isCropperOpen: false
+    }
   }
 
   getTargetElement() {
@@ -23,7 +26,7 @@ export class AssetImage extends React.Component {
 
     const setSrc = () => this.props.target.set('src', url)
     const setBg = () => {
-      const style = Object.assign({}, this.props.target.get('style'))
+      const style = { ...this.props.target.get('style') }
 
       style['background-image'] = `url(${url})`
       this.props.target.set('style', style)
@@ -53,7 +56,8 @@ export class AssetImage extends React.Component {
     })
 
   onCropImg = async file => {
-    const response = await uploadAsset(file, this.props.templateId)
+    const { templateId } = await this.props.getTemplateId()
+    const response = await uploadAsset(file, templateId)
 
     this.onImageSelect({ url: response.body.data.file.url })
     this.setState({
@@ -90,7 +94,6 @@ export class AssetImage extends React.Component {
         {this.state.isCropperOpen && (
           <ImageUploader
             disableChangePhoto
-            disableRotate
             file={imageWithoutCache}
             width={targetElement.clientWidth * 2}
             height={targetElement.clientHeight * 2}

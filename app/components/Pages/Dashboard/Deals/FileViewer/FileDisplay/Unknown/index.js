@@ -36,7 +36,7 @@ export function Unknown(props) {
 
       <LinkButton
         style={{ margin: '0 auto' }}
-        appearance="primary"
+        appearance="secondary"
         href={props.file.url}
         target="_blank"
       >

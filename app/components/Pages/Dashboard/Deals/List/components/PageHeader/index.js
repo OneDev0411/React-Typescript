@@ -2,9 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
+import { Button } from '@material-ui/core'
+
 import PageHeader from 'components/PageHeader'
 import { Trigger as MenuTrigger } from 'components/SlideMenu'
-import ActionButton from 'components/Button/ActionButton'
 
 import ExportDeals from './ExportDeals'
 
@@ -23,13 +24,15 @@ export const Header = ({
     <PageHeader.Menu>
       <ExportDeals user={user} />
 
-      <ActionButton
+      <Button
         data-test="create-deal-button"
+        variant="contained"
+        color="secondary"
         style={{ marginLeft: '1rem' }}
         onClick={() => browserHistory.push('/dashboard/deals/create')}
       >
         Create New Deal
-      </ActionButton>
+      </Button>
     </PageHeader.Menu>
   </PageHeader>
 )

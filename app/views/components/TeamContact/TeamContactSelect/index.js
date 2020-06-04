@@ -14,6 +14,8 @@ import { Icon } from '../../Dropdown'
 
 import { getMembers } from '../helpers'
 
+import { ButtonText } from './styled'
+
 const propTypes = {
   onSelect: PropTypes.func.isRequired,
   owner: PropTypes.shape().isRequired,
@@ -101,13 +103,13 @@ export class TeamContactSelect extends React.Component {
                 fontWeight: 500
               }}
             >
-              <Flex alignCenter>
+              <Flex alignCenter style={{ width: '100%' }}>
                 <Avatar
                   size={32}
                   title={title}
                   image={buttonProps.selectedItem.value.profile_image_url}
                 />
-                <span style={{ margin: '0 0.5em 0 1em' }}>{title}</span>
+                <ButtonText>{title}</ButtonText>
               </Flex>
               <Icon
                 style={{ marginTop: '0.2em' }}
@@ -115,6 +117,9 @@ export class TeamContactSelect extends React.Component {
               />
             </ActionButton>
           )
+        }}
+        menuStyle={{
+          maxWidth: '100%'
         }}
         itemRenderer={({ item, ...itemProps }) => {
           const isSelected = owner.id === item.value.id

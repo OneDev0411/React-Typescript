@@ -12,9 +12,11 @@
 }
 
 .c-alert--success {
-  color: #15374d;
-  border: 1px solid #d1d7dc;
-  background: rgba(33, 150, 243, 0.1);
+  color: #388e3c;
+  background: #eff7ee;
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 1.1rem;
 }
 
 .c-alert--warning {
@@ -39,6 +41,7 @@
     center center no-repeat;
 }
 
-[data-balloon][data-balloon-pos="up"]:hover:before, [data-balloon][data-balloon-pos="up"][data-balloon-visible]:before {
+[data-balloon][data-balloon-pos='up']:hover:before,
+[data-balloon][data-balloon-pos='up'][data-balloon-visible]:before {
   transform: translate(-50%, -1px);
 }

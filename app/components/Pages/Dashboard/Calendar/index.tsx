@@ -1,167 +1,58 @@
-import React, { useState, useRef } from 'react'
-import debounce from 'lodash/debounce'
-import fecha from 'fecha'
-import isEqual from 'lodash/isEqual'
+import React, { useRef, useState } from 'react'
+import { WithRouterProps } from 'react-router'
 
-import List from 'components/Calendar'
+import GlobalHeader from 'components/GlobalHeader'
+
+import Calendar from 'components/Calendar'
 import { CalendarRef } from 'components/Calendar/types'
 
-import DatePicker from 'components/DatePicker'
+import Filters, {
+  FiltersRef,
+  DEFAULT_TAB,
+  TAB_ITEMS
+} from './components/Filters'
 
-import { TodayButton } from './components/TodayButton'
-import Filters, { defaultFilter, FiltersRef } from './components/Filters'
-import { Export } from './components/Export'
-import CreateEvent from './components/CreateEvent'
+import { DatePicker } from './components/DatePicker'
 
-import {
-  Container,
-  ListContainer,
-  Sidebar,
-  Header,
-  Main,
-  SideHeader,
-  Title
-} from './styled'
+import { useStyles as useCommonStyles } from './use-styles'
 
-const CalendarPage: React.FC = props => {
+export default function CalendarPage(props: WithRouterProps) {
+  const classes = useCommonStyles()
   const calendarRef = useRef<CalendarRef>(null)
   const filtersRef = useRef<FiltersRef>(null)
 
-  /*
-   * current active date of Calendar. the first visible day of day in
-   * list will be active date
-   */
-  const [activeDate, setActiveDate] = useState<Date>(new Date())
+  const [filter, setFilter] = useState(
+    (TAB_ITEMS.find(({ link }) => link === props.params.id) || TAB_ITEMS[0])
+      .filter
+  )
 
-  /**
-   * keeps list of fetched days
-   */
-  const [fetchedDays, setFetchedDays] = useState<{ [key: string]: number }>({})
-
-  /**
-   * current filters
-   */
-  const [filter, setFilter] = useState<object>(defaultFilter)
-
-  /**
-   * triggers when user clicks on a date in datepicker of left side
-   * @param date
-   */
-  const handleDatePickerChange = (date: Date = new Date()) => {
-    if (calendarRef.current) {
-      setActiveDate(date)
-
-      calendarRef.current.jumpToDate(date)
-    }
+  const handleChangeDate = (date: Date) => {
+    calendarRef.current && calendarRef.current.jumpToDate(date)
   }
 
-  /**
-   * triggers when user creates a new event
-   * @param event
-   * @param type
-   */
-  const handleEventChange = (event: IEvent, type: string): void => {
+  const handleCreateEvent = (event: IEvent) => {
     // set filters to All Events when creating a new event
-    if (type === 'created') {
-      filtersRef.current!.changeFilter(0)
-    }
+    filtersRef.current!.changeFilter(DEFAULT_TAB)
 
-    calendarRef.current!.updateCrmEvents(event, type)
-  }
-
-  /**
-   * triggers when new data is fetched by calendar
-   * @param events
-   */
-  const handleOnLoadEvents = (events: ICalendarEventsList) => {
-    setFetchedDays(getDaysWithEvent(events))
-  }
-
-  /**
-   * triggers when user changes the calendar filter
-   * @param filter
-   */
-  const handleChangeFilter = (selectedFilter: object): void => {
-    if (isEqual(filter, selectedFilter)) {
-      return
-    }
-
-    setFilter(selectedFilter)
-  }
-
-  /**
-   * returns list of empty date in the fetched range of calendar
-   * @param day
-   */
-  const getEmptyDays = (day: Date) => {
-    return !fetchedDays[fecha.format(day, 'YYYY/M/D')]
+    calendarRef.current!.updateCrmEvents(event, 'created')
   }
 
   return (
-    <Container>
-      <Sidebar>
-        <div>
-          <SideHeader>
-            <Title>Calendar</Title>
+    <div className={classes.container}>
+      <GlobalHeader
+        title="Calendar"
+        noPadding
+        onCreateEvent={handleCreateEvent}
+      />
 
-            <TodayButton onClick={() => handleDatePickerChange()} />
-          </SideHeader>
+      <div className={classes.topSide}>
+        <Filters onChange={setFilter} ref={filtersRef} />
+        <DatePicker onChange={handleChangeDate} style={{ margin: '1rem 0' }} />
+      </div>
 
-          <DatePicker
-            modifiers={{ empty: getEmptyDays }}
-            selectedDate={activeDate}
-            onChange={handleDatePickerChange}
-          />
-        </div>
-
-        <Export />
-      </Sidebar>
-
-      <Main>
-        <Header>
-          <Filters ref={filtersRef} onChange={handleChangeFilter} />
-          <CreateEvent onEventChange={handleEventChange} />
-        </Header>
-
-        <ListContainer className="u-scrollbar--thinner">
-          <List
-            ref={calendarRef}
-            filter={filter}
-            onChangeActiveDate={debounce(setActiveDate, 100)}
-            onLoadEvents={handleOnLoadEvents}
-          />
-        </ListContainer>
-      </Main>
-    </Container>
+      <div className={classes.listContainer}>
+        <Calendar ref={calendarRef} filter={filter} />
+      </div>
+    </div>
   )
 }
-
-/**
- * returns flatted list of days that have at least one event
- * @param events
- */
-function getDaysWithEvent(events: ICalendarEventsList) {
-  return Object.values(events).reduce((acc, daysOfMonth) => {
-    // finds list of days with more than one event
-    const filterByDays = Object.entries(daysOfMonth).reduce(
-      (acc, [dayId, dayEvents]) => {
-        if (dayEvents.length === 0) {
-          return acc
-        }
-
-        return {
-          ...acc,
-          [dayId]: dayEvents.length
-        }
-      },
-      {}
-    )
-
-    return {
-      ...acc,
-      ...filterByDays
-    }
-  }, {})
-}
-
-export default CalendarPage

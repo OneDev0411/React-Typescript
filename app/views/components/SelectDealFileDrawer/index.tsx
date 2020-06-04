@@ -4,8 +4,10 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 
+import { Button } from '@material-ui/core'
+
 import Drawer from 'components/OverlayDrawer'
-import ActionButton from 'components/Button/ActionButton'
+
 import Loading from 'components/Spinner'
 
 import { getDeal } from 'actions/deals'
@@ -97,13 +99,14 @@ function SelectDealFileDrawer({
       </Drawer.Body>
 
       <Drawer.Footer style={{ flexDirection: 'row-reverse' }}>
-        <ActionButton
+        <Button
+          color="secondary"
+          variant="contained"
           disabled={selectedItems.length === 0}
-          type="button"
           onClick={() => onChangeSelectedDocuments(selectedItems)}
         >
           Next
-        </ActionButton>
+        </Button>
       </Drawer.Footer>
     </Drawer>
   )

@@ -1,4 +1,7 @@
 declare type IBrandType = 'Team' | 'Brokerage' | 'Office' | 'Personal' | 'Other'
+
+declare type IBrandRoleType = 'Admin' | 'Agent' | 'Other'
+
 declare type IAccessControlPolicy =
   | 'ActiveTeam'
   | 'ActiveTeamAndParents'
@@ -11,11 +14,58 @@ declare type IPermission =
   | 'CRM'
   | 'BetaFeatures'
 
-declare interface ColorSet {
-  bg?: string
-  ta?: string
-  tb?: string
-}
+declare type BrandSettingsPaletteKey =
+  | 'body-bg-color'
+  | 'body-text-color'
+  | 'body-font-family'
+  | 'body-font-size'
+  | 'body-font-weight'
+  | 'body-logo-wide'
+  | 'body-logo-square'
+  | 'container-bg-color'
+  | 'container-text-color'
+  | 'container-font-family'
+  | 'container-font-size'
+  | 'container-font-weight'
+  | 'container-logo-wide'
+  | 'container-logo-square'
+  | 'button-bg-color'
+  | 'button-text-color'
+  | 'button-font-family'
+  | 'button-font-size'
+  | 'button-font-weight'
+  | 'button-border'
+  | 'light-text-color'
+  | 'light-font-family'
+  | 'light-font-size'
+  | 'light-font-weight'
+  | 'h1-text-color'
+  | 'h1-font-family'
+  | 'h1-font-size'
+  | 'h1-font-weight'
+  | 'h2-text-color'
+  | 'h2-font-family'
+  | 'h2-font-size'
+  | 'h2-font-weight'
+  | 'h3-text-color'
+  | 'h3-font-family'
+  | 'h3-font-size'
+  | 'h3-font-weight'
+  | 'inverted-button-bg-color'
+  | 'inverted-button-text-color'
+  | 'inverted-light-text-color'
+  | 'inverted-h1-text-color'
+  | 'inverted-h2-text-color'
+  | 'inverted-h3-text-color'
+  | 'inverted-logo-wide'
+  | 'inverted-logo-square'
+  | 'inverted-container-bg-color'
+  | 'inverted-container-text-color'
+  | 'website'
+  | 'name'
+
+declare type BrandSettingsPalette = Record<BrandSettingsPaletteKey, string>
+
 declare interface IBrand extends IModel<'brand'> {
   assets: any | null
   base_url: string
@@ -23,22 +73,22 @@ declare interface IBrand extends IModel<'brand'> {
   hostnames: string[] | null
   member_count: number
   messages: IBrandMessage
+  settings:
+    | StringMap<any>
+    | {
+        palette?: {
+          palette?: BrandSettingsPalette // brand.palette.palette! :(
+        }
+      }
+    | null
   name: string
   offices: string[]
-  palette?: {
-    type: 'brand_palette'
-    primary?: string
-    marketing?: {
-      alpha?: ColorSet
-      beta?: ColorSet
-      theta?: ColorSet
-    }
-  }
   parent: IBrand | null
   children?: IBrand[]
   roles?: IBrandRole[]
   training: boolean
 }
+
 declare interface IBrandMessage {
   type: 'brand_messages'
   branch_title?: string
@@ -46,6 +96,7 @@ declare interface IBrandMessage {
   office_title?: string
   site_title?: string
   mmm_cost_center?: string
+  search_headline?: string
 }
 
 declare interface IBrandUser {
@@ -55,16 +106,11 @@ declare interface IBrandUser {
   type: 'brand_user' // is it fixed?
   user: IUser
 }
-declare interface IBrandRole {
-  acl: string[]
+declare interface IBrandRole extends IModel<'brand_role'> {
+  acl: IPermission[]
   brand: string
-  created_at: number
-  deleted_at: number | null
-  id: UUID
   users?: IBrandUser[]
-  role: string
-  type: string
-  updated_at: number
+  role: IBrandRoleType
 }
 
 declare type IBrandInput = MapFieldsToUuid<

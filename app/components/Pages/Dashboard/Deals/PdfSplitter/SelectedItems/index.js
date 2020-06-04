@@ -4,8 +4,9 @@ import { DropTarget } from 'react-dnd'
 
 import Flex from 'styled-flex-component'
 
+import { Button } from '@material-ui/core'
+
 import { Page } from 'components/PdfViewer/Page'
-import ActionButton from 'components/Button/ActionButton'
 
 import { EmptyState } from './EmptyState'
 import { PageNumber } from '../styled'
@@ -50,8 +51,9 @@ class SelectedItems extends React.Component {
               <Flex alignCenter style={{ marginTop: '0.5rem' }}>
                 <PageNumber>{props.pageNumber}</PageNumber>
 
-                <ActionButton
-                  appearance="outline"
+                <Button
+                  variant="outlined"
+                  color="secondary"
                   size="small"
                   onClick={() =>
                     this.props.onChangeSelectedPages(
@@ -61,7 +63,7 @@ class SelectedItems extends React.Component {
                   }
                 >
                   Deselect
-                </ActionButton>
+                </Button>
               </Flex>
             )}
             pageStyle={{

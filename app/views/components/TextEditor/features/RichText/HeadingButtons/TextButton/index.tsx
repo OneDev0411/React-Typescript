@@ -1,8 +1,5 @@
 import React from 'react'
-
-import { primary } from '../../../../../../utils/colors'
-
-import { Button } from './styled'
+import { Button } from '@material-ui/core'
 
 interface Props {
   isActive?: boolean
@@ -10,15 +7,13 @@ interface Props {
   toggleBlockType?: (event: React.MouseEvent) => void
 }
 
-export function TextButton(props: Props) {
+export function TextButton({ isActive, title, toggleBlockType }: Props) {
   return (
     <Button
-      onClick={props.toggleBlockType}
-      style={{
-        color: props.isActive ? primary : '#262626'
-      }}
+      color={isActive ? 'secondary' : 'inherit'}
+      onClick={toggleBlockType}
     >
-      {props.title}
+      {title}
     </Button>
   )
 }

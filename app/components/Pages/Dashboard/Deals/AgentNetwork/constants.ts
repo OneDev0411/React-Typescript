@@ -1,7 +1,6 @@
-export const DEFAULT_RADIUS_FILTER: {
-  type: 'radius'
-  radius: number
-} = {
+import { Filter } from './Filters/types'
+
+export const DEFAULT_RADIUS_FILTER: Required<Omit<Filter, 'areas'>> = {
   type: 'radius',
   radius: 3
 }

@@ -1,16 +1,15 @@
 import React from 'react'
-import { render } from 'enzyme'
 
 import user from 'fixtures/users/agent.json'
-import dealJson from 'fixtures/deal/seller-with-offer.json'
+import deal from 'fixtures/deal/seller-with-offer.json'
 
-const deal = dealJson as { roles: IDealRole[] }
+import { renderWithThemeEnzyme } from '../../../../tests/unit/utils/render-with-theme'
 
 import { DealRole } from '.'
 
 describe('Test Deal Roles component', () => {
   it('Should show legal_names when role is Title', () => {
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={{}}
@@ -27,7 +26,7 @@ describe('Test Deal Roles component', () => {
   })
 
   it('Should render Office form', () => {
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={{}}
@@ -42,7 +41,7 @@ describe('Test Deal Roles component', () => {
   })
 
   it('Should render Agent form', () => {
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={{}}
@@ -56,7 +55,7 @@ describe('Test Deal Roles component', () => {
   })
 
   it('Should render Agent form with searchable company field', () => {
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         allowedRoles={['Seller']}
@@ -74,7 +73,7 @@ describe('Test Deal Roles component', () => {
   })
 
   it('Should show Office form when showBrokerageFields is true', () => {
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={{}}
@@ -95,13 +94,13 @@ describe('Test Deal Roles component', () => {
   })
 
   it('Should pre-populate office fields', () => {
-    const sellerAgentRole: IDealRole = deal.roles.find(
+    const sellerAgentRole = deal.roles.find(
       role => role.id === '7e104e10-89f3-11e9-8b7c-0a95998482ac'
-    )!
+    ) as IDealRole
 
     const office = sellerAgentRole.agent!.office
 
-    const wrapper = render(
+    const wrapper = renderWithThemeEnzyme(
       <DealRole
         isOpen
         form={sellerAgentRole}

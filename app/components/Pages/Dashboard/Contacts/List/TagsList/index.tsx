@@ -1,6 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
+
+import {
+  ListItem,
+  ListItemText,
+  createStyles,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 
 import {
   updateActiveFilter,
@@ -16,14 +23,7 @@ import {
 } from 'reducers/contacts/attributeDefs'
 import { selectActiveFilters } from 'reducers/filter-segments'
 
-import ToolTip from 'components/tooltip'
-import {
-  ListTitle,
-  ListItem,
-  ListItemName
-} from 'components/Grid/SavedSegments/List/styled'
-import { ShowMoreLess } from 'components/ShowMoreLess'
-import IconCog from 'components/SvgIcons/Cog/IconCog'
+import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
 
 import { normalizeAttributeFilters } from '../utils'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
@@ -33,7 +33,6 @@ interface Props {
   activeFilters: StringMap<IActiveFilter>
   onFilterChange: ({ filters: any }) => void // TODO
   existingTags: any // TODO
-  isActive: boolean
   isFetching: boolean
   updateActiveFilter: (
     segmentName: string,
@@ -44,23 +43,38 @@ interface Props {
   changeActiveFilterSegment: (nameId: string, segmentId: string) => void
 }
 
-export class TagsList extends React.Component<Props> {
-  constructor(props) {
-    super(props)
-    this.tagDefinitionId = selectDefinitionByName(
-      this.props.attributeDefs,
-      'tag'
-    )!.id
-  }
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    dropdownBtn: {
+      ...theme.typography.body1,
+      color: theme.palette.common.black,
+      '&.Mui-disabled': {
+        color: theme.palette.text.disabled,
+        '& svg': {
+          fill: theme.palette.text.disabled
+        }
+      }
+    },
+    item: {
+      display: 'inline-block'
+    }
+  })
+)
 
-  private tagDefinitionId: string
+export const TagsList = (props: Props) => {
+  const classes = useStyles()
+  const tagDefinitionId: string = selectDefinitionByName(
+    props.attributeDefs,
+    'tag'
+  )!.id
+  const { existingTags, isFetching } = props
 
-  onSelectList = async item => {
-    await this.props.changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, 'default')
-    this.props.resetActiveFilters('contacts')
+  const onSelectList = async item => {
+    await props.changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, 'default')
+    props.resetActiveFilters('contacts')
 
     const filter = {
-      id: this.tagDefinitionId,
+      id: tagDefinitionId,
       values: [{ value: item.text, label: item.text }],
       operator: {
         name: 'is',
@@ -68,24 +82,23 @@ export class TagsList extends React.Component<Props> {
       }
     }
 
-    this.props.updateActiveFilter('contacts', item.id, filter)
+    props.updateActiveFilter('contacts', item.id, filter)
 
     const nextFilters: StringMap<IActiveFilter> = {
       [item.id]: filter
     }
 
-    this.props.onFilterChange({
+    props.onFilterChange({
       filters: normalizeAttributeFilters(nextFilters)
     })
   }
 
-  isSelected = text => {
+  const checkSelected = text => {
     return (
-      this.props.isActive &&
-      Object.keys(this.props.activeFilters).length === 1 &&
-      Object.values(this.props.activeFilters).some(
+      Object.keys(props.activeFilters).length === 1 &&
+      Object.values(props.activeFilters).some(
         filter =>
-          filter.id === this.tagDefinitionId &&
+          filter.id === tagDefinitionId &&
           filter.values &&
           filter.values.some(({ value }) => value === text) &&
           !filter.operator.invert
@@ -93,50 +106,48 @@ export class TagsList extends React.Component<Props> {
     )
   }
 
-  render() {
-    const { existingTags, isFetching } = this.props
-
-    return (
-      <div style={{ marginTop: '1rem' }} data-test="tags-list">
-        <ListTitle>
-          <span>Tags</span>
-          <Link to="/dashboard/account/manage-tags">
-            <ToolTip caption="Manage tags">
-              <IconCog />
-            </ToolTip>
-          </Link>
-        </ListTitle>
-
-        <ShowMoreLess
-          moreText="More tags"
-          lessText="Less tags"
-          style={{ marginBottom: '2rem' }}
-        >
-          {existingTags.map((item, index) => {
-            const isSelected = this.isSelected(item.text)
-
-            return (
-              <ToolTip key={index} caption={item.text} placement="right">
-                <ListItem
-                  data-test={`tag-item-${item.text}`}
-                  isSelected={isSelected}
-                  onClick={() => this.onSelectList(item)}
-                >
-                  <ListItemName>{item.text}</ListItemName>
-                </ListItem>
-              </ToolTip>
-            )
-          })}
-        </ShowMoreLess>
-
-        {isFetching && (
-          <ListItem>
-            <i className="fa fa-spin fa-spinner" />
+  return (
+    <BaseDropdownWithMore
+      buttonLabel="Tags"
+      DropdownToggleButtonProps={{
+        className: classes.dropdownBtn,
+        disabled: isFetching || existingTags.length === 0
+      }}
+      listPlugin={{
+        style: { width: 220 }
+      }}
+      morePlugin={{
+        count: 5,
+        textContainer: ({ children }) => (
+          <ListItem button className={classes.item}>
+            {children}
           </ListItem>
-        )}
-      </div>
-    )
-  }
+        )
+      }}
+      renderMenu={({ close }) =>
+        existingTags.map((item, index) => {
+          const isSelected = checkSelected(item.text)
+
+          return (
+            <ListItem
+              button
+              className={classes.item}
+              key={index}
+              selected={isSelected}
+              onClick={() => {
+                onSelectList(item)
+                close()
+              }}
+            >
+              <ListItemText primaryTypographyProps={{ noWrap: true }}>
+                {item.text}
+              </ListItemText>
+            </ListItem>
+          )
+        })
+      }
+    />
+  )
 }
 
 function mapStateToProps(state: {

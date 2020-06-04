@@ -20,25 +20,19 @@ exports[`Deal list page header renders the page header 1`] = `
     <ExportDeals
       user={Object {}}
     />
-    <ActionButton__Button
-      appearance="primary"
-      brandColor=""
+    <WithStyles(ForwardRef(Button))
+      color="secondary"
       data-test="create-deal-button"
-      disabled={false}
-      inverse={false}
-      isActive={false}
-      isBlock={false}
       onClick={[Function]}
-      size="medium"
       style={
         Object {
           "marginLeft": "1rem",
         }
       }
-      type="button"
+      variant="contained"
     >
       Create New Deal
-    </ActionButton__Button>
+    </WithStyles(ForwardRef(Button))>
   </PageMenu>
 </withRouter(PageHeader)>
 `;

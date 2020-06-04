@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 
 import Dropzone from 'react-dropzone'
 
+import { Button } from '@material-ui/core'
+
 import OverlayDrawer from 'components/OverlayDrawer'
-import ActionButton from 'components/Button/ActionButton'
 
 import Deal from 'models/Deal'
 import { setUploadFiles } from 'actions/deals'
@@ -73,21 +74,23 @@ class CustomTask extends React.Component {
               justifyContent: 'flex-start'
             }}
           >
-            <ActionButton
+            <Button
+              color="secondary"
               style={{ marginLeft: '0.5rem' }}
               disabled={this.state.taskName.length === 0}
               onClick={this.selectFiles}
             >
               Create Folder & Upload
-            </ActionButton>
+            </Button>
 
-            <ActionButton
-              appearance="outline"
+            <Button
+              color="secondary"
+              variant="outlined"
               disabled={this.state.taskName.length === 0}
               onClick={this.handleCreateTask}
             >
               Create Folder
-            </ActionButton>
+            </Button>
           </OverlayDrawer.Footer>
         </OverlayDrawer>
 

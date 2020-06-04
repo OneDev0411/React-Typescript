@@ -1,13 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Button from '@material-ui/core/Button'
+import {
+  Button,
+  Avatar,
+  makeStyles,
+  createStyles,
+  Theme
+} from '@material-ui/core'
 import { Link } from 'react-router'
 
-import Avatar from 'components/Avatar'
+import { getNameInitials } from 'utils/helpers.js'
+
 import CopyButton from 'components/CopyButton'
 import { EmailComposeFormProps } from 'components/EmailCompose'
 import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
+
+import { getName } from './helpers'
 
 import Activity from './Activity'
 import {
@@ -16,10 +25,20 @@ import {
   ActionSettingsNamesType
 } from './types'
 import { ProfileContainer } from './styled'
-import { getName } from './helpers'
 import useProfile from './useProfile'
 import MiniContactActionButton from './MiniContactActionButton'
 import MiniContactSocialMedias from './MiniContactSocialMedias'
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    avatar: {
+      width: 72,
+      height: 72,
+      backgroundColor: theme.palette.divider,
+      color: theme.palette.text.primary
+    }
+  })
+)
 
 interface MiniProfilePropsType {
   type: MiniContactType
@@ -50,15 +69,18 @@ function MiniProfile(props: MiniProfilePropsType) {
       onSent: () => props.setActionSettings({})
     } as Partial<EmailComposeFormProps>
   }
+  const classes = useStyles()
 
   return (
     <ProfileContainer>
       <div className="head">
         <Avatar
-          title={getName(data)}
-          image={data.profile_image_url}
-          size={72}
-        />
+          alt={getName(data)}
+          src={data.profile_image_url}
+          className={classes.avatar}
+        >
+          {getNameInitials(getName(data))}
+        </Avatar>
 
         <div className="actions">
           <MiniContactActionButton
@@ -75,9 +97,14 @@ function MiniProfile(props: MiniProfilePropsType) {
         {!!data.name && (
           <div className="person-name">
             <span>{data.name}</span>
-            <Link to={`/dashboard/contacts/${output.contact_id}`}>
-              <Button color="primary">View Profile</Button>
-            </Link>
+            {!!output.contact_id && (
+              <Link
+                target="blank"
+                to={`/dashboard/contacts/${output.contact_id}`}
+              >
+                <Button color="primary">View Profile</Button>
+              </Link>
+            )}
           </div>
         )}
         {data.phone && (

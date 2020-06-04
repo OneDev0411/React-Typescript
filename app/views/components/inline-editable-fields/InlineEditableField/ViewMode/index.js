@@ -6,7 +6,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { noop } from 'utils/helpers'
 
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
-import DeleteIcon from 'components/SvgIcons/Delete/IconDelete'
+import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 import AddIcon from 'components/SvgIcons/CircleAdd/CircleAddIcon'
 
 import {
@@ -70,7 +70,7 @@ export function ViewMode(props) {
         >
           {props.showDelete && (
             <Button onClick={props.handleDelete} className={classes.button}>
-              <DeleteIcon />
+              <TrashIcon />
               Delete
             </Button>
           )}

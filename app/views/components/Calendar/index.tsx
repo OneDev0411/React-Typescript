@@ -17,11 +17,7 @@ import { IAppState } from 'reducers/index'
 
 import { getCalendar } from 'models/calendar/get-calendar'
 
-import {
-  viewAs,
-  getTeamAvailableMembers,
-  getActiveTeam
-} from 'utils/user-teams'
+import { viewAs } from 'utils/user-teams'
 
 import { LoadingPosition, VirtualListRef } from 'components/VirtualList'
 
@@ -54,7 +50,6 @@ interface Props {
   contrariwise?: boolean
   placeholders?: Placeholder[]
   directions?: LoadingDirection[]
-  defaultEvents?: ICalendarEvent[] // TODO: this is temporary until we convert notes to events
   onChangeActiveDate?: (activeDate: Date) => void
   onLoadEvents?: (events: ICalendarEventsList, range: NumberRange) => void
 }
@@ -62,6 +57,11 @@ interface Props {
 interface StateProps {
   viewAsUsers: UUID[]
   user: IUser
+}
+
+interface SocketUpdate {
+  upserted: ICalendarEvent[]
+  deleted: UUID[]
 }
 
 export function Calendar({
@@ -75,7 +75,6 @@ export function Calendar({
   filter = {},
   contrariwise = false,
   associations = [],
-  defaultEvents = [], // TODO: remove when notes converted to events
   onLoadEvents = () => null,
   onChangeActiveDate = () => null
 }: Props) {
@@ -105,7 +104,6 @@ export function Calendar({
   const [calendarRange, setCalendarRange] = useState<NumberRange>(
     getDateRange()
   )
-
   // create a debounced function for setActiveDate
   const [debouncedSetActiveDate] = useDebouncedCallback(setActiveDate, 500)
 
@@ -139,7 +137,7 @@ export function Calendar({
         })
 
         const nextEvents: ICalendarEvent[] = options.reset
-          ? [...fetchedEvents, ...defaultEvents]
+          ? fetchedEvents
           : fetchedEvents.concat(events)
 
         // get current range of fetched calendar
@@ -152,7 +150,7 @@ export function Calendar({
         )
 
         // update events list
-        setEvents([...nextEvents, ...defaultEvents])
+        setEvents(nextEvents)
 
         // updates virtual list rows
         setListRows(createListRows(normalizedEvents, activeDate, placeholders))
@@ -168,7 +166,6 @@ export function Calendar({
       viewAsUsers,
       filter,
       associations,
-      defaultEvents,
       events,
       contrariwise,
       activeDate,
@@ -453,6 +450,50 @@ export function Calendar({
     // eslint-disable-next-line
   }, [listRows])
 
+  useEffect(() => {
+    const socket: SocketIOClient.Socket = (window as any).socket
+
+    if (!socket) {
+      return
+    }
+
+    function handleUpdate({ upserted, deleted }: SocketUpdate) {
+      if (upserted.length === 0 && deleted.length === 0) {
+        return
+      }
+
+      const currentEvents: ICalendarEvent[] =
+        deleted.length > 0
+          ? events.filter(e => !deleted.includes(e.id))
+          : events
+      const nextEvents =
+        upserted.length > 0 ? [...upserted, ...currentEvents] : currentEvents
+
+      const normalizedEvents = normalizeEvents(
+        nextEvents,
+        calendarRange,
+        contrariwise
+      )
+
+      const nextRows = createListRows(
+        normalizedEvents,
+        activeDate,
+        placeholders
+      )
+
+      // update events list
+      setEvents(nextEvents)
+
+      setListRows(nextRows)
+    }
+
+    socket.on('Calendar.Updated', handleUpdate)
+
+    return () => {
+      socket.off('Calendar.Updated', handleUpdate)
+    }
+  })
+
   /**
    * exposes below methods to be accessible outside of the component
    */
@@ -466,7 +507,7 @@ export function Calendar({
     <List
       ref={listRef}
       rows={listRows}
-      user={user as IUser}
+      user={user!}
       contact={contact}
       isLoading={isLoading}
       loadingPosition={loadingPosition}
@@ -480,12 +521,9 @@ export function Calendar({
 }
 
 function mapStateToProps({ user }: IAppState) {
-  const teamMembers = getTeamAvailableMembers(getActiveTeam(user))
-  const viewAsUsers = viewAs(user)
-
   return {
     user,
-    viewAsUsers: viewAsUsers.length === teamMembers.length ? [] : viewAsUsers
+    viewAsUsers: viewAs(user)
   }
 }
 

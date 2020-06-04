@@ -50,7 +50,7 @@ export function PageTitle(props: Props) {
         <Flex alignCenter>
           {title ? (
             <Flex column>
-              <H1>{title}</H1>
+              <H1 data-type="page-title">{title}</H1>
               {subtitle && <Subtitle>{subtitle}</Subtitle>}
             </Flex>
           ) : (
@@ -87,7 +87,7 @@ export function PageTitle(props: Props) {
         )}
         <Flex column>
           {title && (
-            <H1>
+            <H1 data-type="page-title">
               <TextMiddleTruncate
                 text={title}
                 maxLength={props.maxTitleLength}

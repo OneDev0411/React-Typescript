@@ -6,33 +6,29 @@ const width = '24'
 const height = '24'
 const viewBox = '0 0 24 24'
 
-const sizes = {}
+const sizes = {
+  small: { width: 16, height: 16 },
+  medium: { width: 24, height: 24 },
+  large: { width: 32, height: 32 }
+}
 
 // somehow sizes is ending up in markup, even if it is not a valid svg attribute
 // until we have a better solution, just render it empty, instead to '[Object object]'
 Object.defineProperty(sizes, 'toString', { value: () => '', enumerable: false })
 
 const getDimensions = (size, sizes) => {
-  if (
-    size &&
-    typeof size.width === 'number' &&
-    typeof size.height === 'number'
-  ) {
+  if (size && typeof size.width === 'number' && typeof size.height === 'number') {
     return size
   }
-
-  return size && sizes[size] ? sizes[size] : { width, height }
+  return size && sizes[size]
+    ? sizes[size]
+    : { width, height }
 }
 
 const getCss = (size, sizes, fillColor, fillColorRule, noStyles) => {
-  if (noStyles) {
-    return ''
-  }
-
+  if (noStyles) { return '' }
   const dimensions = getDimensions(size, sizes)
-  const fillRule =
-    fillColor && fillColorRule ? `${fillColorRule}{ fill: ${fillColor}; }` : ''
-
+  const fillRule = fillColor && fillColorRule ? `${fillColorRule}{ fill: ${fillColor}; }` : ''
   return css`
     width: ${dimensions.width}px;
     height: ${dimensions.height}px;
@@ -40,22 +36,26 @@ const getCss = (size, sizes, fillColor, fillColorRule, noStyles) => {
   `
 }
 
-const propsToCss = ({ size, sizes, fillColor, fillColorRule, noStyles }) =>
-  getCss(size, sizes, fillColor, fillColorRule, noStyles)
+const propsToCss = ({
+  size,
+  sizes,
+  fillColor,
+  fillColorRule,
+  noStyles
+}) => getCss(size, sizes, fillColor, fillColorRule, noStyles)
 
-const Image = styled.svg`
-  ${propsToCss}
-`
+const Image = styled.svg`${propsToCss}`
 
 const children = (
   <Fragment>
     <path
-      d="M12 20.75a8.75 8.75 0 1 0 0-17.5 8.75 8.75 0 0 0 0 17.5zm0-1.5a7.25 7.25 0 1 1 0-14.5 7.25 7.25 0 0 1 0 14.5z"
-      key="key-0"
+      fill='none'
+      d='M0 0h24v24H0V0z'
+      key='key-0'
     />
     <path
-      d="M15.401 8.548l-4.198 5.568a.336.336 0 0 1-.506.036l-2.168-2.156-1.058 1.063 2.168 2.157a1.837 1.837 0 0 0 2.762-.198L16.6 9.452l-1.2-.904z"
-      key="key-1"
+      d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM9.29 16.29L5.7 12.7a.996.996 0 1 1 1.41-1.41L10 14.17l6.88-6.88a.996.996 0 1 1 1.41 1.41l-7.59 7.59a.996.996 0 0 1-1.41 0z'
+      key='key-1'
     />
   </Fragment>
 )

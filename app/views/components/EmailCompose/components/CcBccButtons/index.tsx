@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import Link from '@material-ui/core/Link'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
@@ -17,14 +17,20 @@ export function CcBccButtons({ showCc, showBcc, onCcAdded, onBccAdded }) {
   const classes = useStyles()
 
   return (
-    <Fragment>
+    <>
       {showCc && (
-        <Link component="button" className={classes.button} onClick={onCcAdded}>
+        <Link
+          color="secondary"
+          component="button"
+          className={classes.button}
+          onClick={onCcAdded}
+        >
           Cc
         </Link>
       )}
       {showBcc && (
         <Link
+          color="secondary"
           component="button"
           className={classes.button}
           onClick={onBccAdded}
@@ -32,6 +38,6 @@ export function CcBccButtons({ showCc, showBcc, onCcAdded, onBccAdded }) {
           Bcc
         </Link>
       )}
-    </Fragment>
+    </>
   )
 }

@@ -1,46 +1,54 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import IconClose from 'components/SvgIcons/Close/CloseIcon'
-import { red, primary } from 'views/utils/colors'
 
 export const DeleteIcon = styled(IconClose)`
-  fill: ${red.A100};
-  cursor: pointer;
-  opacity: 0;
+  ${({ theme }) => css`
+    fill: ${theme.palette.error.main};
+    cursor: pointer;
+    opacity: 0;
+    width: 16px;
+    height: 16px;
+    margin-left: ${theme.spacing(1)}px;
 
-  :hover {
-    fill: ${red.A200};
-  }
+    :hover {
+      fill: ${theme.palette.error.light};
+    }
+  `}
 `
 
 export const Item = styled.div`
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 3px;
-  background-color: #f2f2f2;
-  width: 16rem;
-  padding: 0.5rem;
-  margin: 0 0.5rem 0.5rem 0;
+  ${({ theme }) => css`
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    width: 16rem;
+    padding: ${theme.spacing(1)}px;
+    margin: ${theme.spacing(0, 1, 1, 0)};
 
-  :hover ${DeleteIcon} {
-    opacity: 1;
-  }
+    :hover ${DeleteIcon} {
+      opacity: 1;
+    }
+  `}
 `
 
 export const Title = styled.div`
-  font-size: 0.875rem;
-  font-weight: bold;
-  line-height: 1.14;
-  color: #000000;
+  ${({ theme }) => css`
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.14;
+    color: ${theme.palette.common.black};
 
-  a {
-    color: #000;
-    :hover {
-      text-decoration: underline;
-      color: ${primary};
+    a {
+      color: ${theme.palette.common.black};
+      :hover {
+        text-decoration: underline;
+        color: ${theme.palette.secondary.main};
+      }
     }
-  }
+  `}
 `
 
 export const DateTime = styled.div`
@@ -55,12 +63,10 @@ export const Icon = styled.div`
   background: #000;
   border-radius: 50%;
   margin-right: 0.25rem;
-  width: 2rem;
-  height: 2rem;
 
   svg {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1rem;
+    height: 1rem;
     fill: #fff !important;
   }
 `

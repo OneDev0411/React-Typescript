@@ -1,58 +1,67 @@
-import React, { Component, createRef } from 'react'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
 
+import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
+import { useMarketingCenterMediums } from 'hooks/use-marketing-center-mediums'
+import { getActiveTeamId } from 'utils/user-teams'
+
 import Acl from 'components/Acl'
-import PageSideNav from 'components/PageSideNav'
+import PageLayout from 'components/GlobalPageLayout'
 
-import {
-  Container as PageContainer,
-  Content as PageContent
-} from 'components/SlideMenu'
+import { useTemplates } from './hooks/use-templates'
+import Tabs from './Tabs'
 
-import { SECTIONS } from './helpers/sections'
+export function MarketingLayout({ params, render }) {
+  const sections = useMarketingCenterSections(params)
+  const user = useSelector(({ user }) => user)
 
-class Marketing extends Component {
-  state = {
-    isSideMenuOpen: true
-  }
+  const templateTypes = params.types
 
-  onboardingRef = createRef()
+  const activeBrand = getActiveTeamId(user)
 
-  toggleSideMenu = () =>
-    this.setState(state => ({
-      isSideMenuOpen: !state.isSideMenuOpen
-    }))
+  const { templates, isLoading, deleteTemplate } = useTemplates(activeBrand)
+  const mediums = useMarketingCenterMediums(templates)
 
-  handleShowIntro = () => {
-    this.onboardingRef.current.show()
-  }
+  const currentMedium = params.medium
+  const currentPageItems = templates.filter(item => {
+    const mediumMatches = currentMedium
+      ? item.template.medium === currentMedium
+      : true
+    const typeMatches = templateTypes
+      ? templateTypes.includes(item.template.template_type)
+      : true
 
-  render() {
-    const { isSideMenuOpen } = this.state
+    return mediumMatches && typeMatches
+  })
 
-    return (
-      <Acl.Marketing fallbackUrl="/dashboard/mls">
-        <PageContainer isOpen={isSideMenuOpen}>
-          <Helmet>
-            <title>Marketing | Rechat</title>
-          </Helmet>
+  return (
+    <Acl.Marketing fallbackUrl="/dashboard/mls">
+      <Helmet>
+        <title>Marketing | Rechat</title>
+      </Helmet>
 
-          <PageSideNav isOpen={isSideMenuOpen} sections={SECTIONS} />
-
-          <PageContent isSideMenuOpen={isSideMenuOpen}>
-            {React.Children.map(this.props.children, child =>
-              React.cloneElement(child, {
-                ...this.props.params,
-                isSideMenuOpen,
-                toggleSideMenu: this.toggleSideMenu
-              })
-            )}
-          </PageContent>
-        </PageContainer>
-      </Acl.Marketing>
-    )
-  }
+      <PageLayout position="relative" overflow="hidden">
+        <PageLayout.Header title="Marketing Center" />
+        <PageLayout.Main>
+          <Tabs
+            sections={sections}
+            mediums={mediums}
+            templateTypes={templateTypes}
+          />
+          {render &&
+            render({
+              items: currentPageItems,
+              isLoading,
+              types: params.types,
+              medium: params.medium,
+              onDeleteTemplate: deleteTemplate
+            })}
+        </PageLayout.Main>
+      </PageLayout>
+    </Acl.Marketing>
+  )
 }
 
-export default withRouter(Marketing)
+export default withRouter(MarketingLayout)

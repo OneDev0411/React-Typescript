@@ -15,9 +15,6 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:hover .menu__icon': {
         fill: theme.palette.common.black
       }
-    },
-    title: {
-      fontWeight: theme.typography.fontWeightBold
     }
   })
 )
@@ -44,7 +41,7 @@ export const Section: FunctionComponent<Props> = ({
   const classes = useStyles()
 
   return (
-    <Box className={classes.container} pb={3} pt={setting || onEdit ? 1.5 : 3}>
+    <Box className={classes.container} pb={2} pt={setting || onEdit ? 1 : 2}>
       <Box
         px={3}
         mb={1}
@@ -55,12 +52,7 @@ export const Section: FunctionComponent<Props> = ({
         {titleRenderer ? (
           titleRenderer()
         ) : (
-          <Typography
-            id={title}
-            variant="body1"
-            component="h3"
-            className={classes.title}
-          >
+          <Typography id={title} variant="subtitle2">
             {title}
           </Typography>
         )}

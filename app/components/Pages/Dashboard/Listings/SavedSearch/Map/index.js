@@ -27,16 +27,12 @@ const map = ({
   user,
   style,
   markers,
-  appData,
   options,
   onChange,
   defaultZoom,
   defaultCenter,
   bootstrapURLKeys,
   onGoogleApiLoaded,
-  onMarkerMouseEnter,
-  onMarkerMouseLeave,
-  map: { hoveredMarkerId },
   mapProps: { zoom, center }
 }) => (
   <Map
@@ -59,12 +55,8 @@ const map = ({
           lat={lat}
           lng={lng}
           user={user}
-          data={appData}
           listing={points[0]}
           key={`MARKER_${id}`}
-          onMouseEnterHandler={() => onMarkerMouseEnter(id)}
-          onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
-          markerPopupIsActive={hoveredMarkerId === id}
         />
       )
     })}
@@ -101,14 +93,14 @@ const mapHOC = compose(
     defaultCenter: mapInitialState.center
   }),
   connect(
-    ({ user, data, alerts }) => {
+    ({ user, brand, alerts }) => {
       const { map, loggedAlert } = alerts
 
       return {
         map,
+        brand,
         user,
         loggedAlert,
-        appData: data,
         mapProps: map.props
       }
     },
@@ -125,12 +117,6 @@ const mapHOC = compose(
     },
     onChange: ({ setMapProps }) => mapProps => {
       setMapProps('alerts', mapProps)
-    },
-    onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
-      setMapHoveredMarkerId('alerts', -1)
-    },
-    onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
-      setMapHoveredMarkerId('alerts', id)
     }
   }),
   withPropsOnChange(

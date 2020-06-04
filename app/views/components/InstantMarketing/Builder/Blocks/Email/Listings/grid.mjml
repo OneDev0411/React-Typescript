@@ -1,34 +1,34 @@
-<mj-section rechat-editable="tree" background-color="#fff">
-  {% for listing in listings %}
-  <mj-column width="50%">
-    <mj-image padding="12px" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
-    <mj-text padding="12px 12px 16px 12px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-weight="Bold" font-size="28px" line-height="1.15" color="#000" align="left">
-      Must See
-    </mj-text>
-    <mj-text padding="0 12px 4px 12px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="20px" line-height="1.2" color="#000">
+{% for listingsBatch in listings | batch(2) %}
+<mj-section padding="20px 20px" rechat-editable="tree" background-color="#fff">
+  {% for listing in listingsBatch %}
+  <mj-column padding-left={{ "0" if loop.index0 === 0 else "5px" }} padding-right={{ "0" if loop.index0 === 1 else "5px" }}>
+    <mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
+    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="20px" line-height="1.5" align="left">
       {{listing.property.address.street_address}}
     </mj-text>
-    <mj-text padding="0 12px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="16px" line-height="1" color="#666" font-weight="500" align="left">
-      {{ listing.price | currency }}{% if listing.is_lease %}/mo{% endif %}
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px" line-height="1.5" align="left">
+      <strong>{{ listing.price | currency }}</strong>{% if listing.is_lease %}/mo{% endif %}
     </mj-text>
-    <mj-text padding="16px 12px 12px 12px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="16px" line-height="1.5" color="#1A1A1A" align="left">
+    <mj-spacer height="10px"></mj-spacer>
+    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
       {% if listing.property.bedroom_count %}
-      <span>{{listing.property.bedroom_count}} Beds,</span>
+      <span><strong>{{listing.property.bedroom_count}}</strong> Beds,</span>
       {% endif %}
       {% if listing.property.bathroom_count %}
-      <span>{{listing.property.bathroom_count}} Baths,</span>
+      <span><strong>{{listing.property.bathroom_count}}</strong> Baths,</span>
       {% endif %}
       {% if listing.property.square_meters %}
-      <span>{{listing.property.square_meters | area}} Sqft,</span>
+      <span><strong>{{listing.property.square_meters | area}}</strong> Sqft,</span>
       {% endif %}
       {% if listing.property.year_built %}
-      <span>Built in {{listing.property.year_built}}</span>
+      <span>Built in <strong>{{listing.property.year_built}}</strong></span>
       {% endif %}
     </mj-text>
-    <mj-button inner-padding="4px 16px" padding="0 12px" border-radius="4px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="16px" font-weight="500" line-height="1.5" height="32px" color="#0945EB" border="1px solid #0945EB" background-color="#fff" align="left" href="{{getListingUrl(listing)}}">
-      View Property
+    <mj-spacer height="10px"></mj-spacer>
+    <mj-button rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px" font-family="Helvetica, Arial, sans-serif" font-size="14px" line-height="1.5" align="left" href="{{getListingUrl(listing)}}">
+      View Listing
     </mj-button>
-    <mj-spacer height="16px"></mj-spacer>
   </mj-column>
   {% endfor %}
 </mj-section>
+{% endfor %}

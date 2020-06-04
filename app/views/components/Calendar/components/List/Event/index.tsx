@@ -7,26 +7,25 @@ import { ContactAttribute } from './ContactAttribute'
 import { DealContext } from './DealContext'
 import { NextTouch } from './NextTouch'
 import { EmailCampaign } from './EmailCampaign'
+import { EmailThread } from './EmailThread'
 
 import emptyStateEvent from '../../../helpers/get-event-empty-state'
-import { EmailThread } from './EmailThread'
 
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
-  nextItem: ICalendarListRow
   onEventChange(event: IEvent, type: string): void
 }
-
-const events: {
+type EventsType = {
   component({
     event,
     style,
-    nextItem,
     onEventChange
   }: Props): React.ReactElement<any> | null
   condition(event: ICalendarEvent): boolean
-}[] = [
+}
+
+const events: EventsType[] = [
   {
     component: EmptyState,
     condition: (event: ICalendarEvent) =>
@@ -68,18 +67,17 @@ const events: {
 /**
  * renders the given calendar event
  */
-export function Event({ event, nextItem, style, onEventChange }: Props) {
-  const item = events.find(item => item.condition(event) === true)
+export function Event({ event, style, onEventChange }: Props) {
+  const eventItem = events.find(item => item.condition(event) === true)
 
-  if (!item) {
+  if (!eventItem) {
     return null
   }
 
   return (
-    <item.component
+    <eventItem.component
       style={style}
       event={event}
-      nextItem={nextItem}
       onEventChange={onEventChange}
     />
   )

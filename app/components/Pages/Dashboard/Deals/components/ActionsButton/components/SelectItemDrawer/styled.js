@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { primary } from 'views/utils/colors'
-
 export const Container = styled.div`
   display: flex;
   align-items: center;
@@ -22,7 +20,7 @@ export const Title = styled.div`
   font-weight: 400;
 
   :hover {
-    color: ${primary};
+    color: ${({ theme }) => theme.palette.secondary.main};
     text-decoration: underline;
     cursor: pointer;
   }

@@ -1,8 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import PageHeader from '../../../../../views/components/PageHeader'
-import ActionButton from '../../../../../views/components/Button/ActionButton'
+import { Box, Button } from '@material-ui/core'
+
+import PageLayout from 'components/GlobalPageLayout'
+
 import {
   markAllNotificationsAsSeen,
   deleteNewNotifications
@@ -10,13 +12,11 @@ import {
 import { selectNotificationIsFetching } from '../../../../../reducers/notifications'
 
 const NotificationsHeader = props => (
-  <PageHeader
-    title="Notifications"
-    showBackButton={false}
-    style={{ height: '71px' }}
-  >
-    <PageHeader.Menu>
-      <ActionButton
+  <PageLayout.Header title="Notifications">
+    <Box textAlign="right">
+      <Button
+        variant="outlined"
+        size="large"
         disabled={props.isFetching}
         onClick={() => {
           props.dispatch(markAllNotificationsAsSeen())
@@ -24,9 +24,9 @@ const NotificationsHeader = props => (
         }}
       >
         Mark all as read
-      </ActionButton>
-    </PageHeader.Menu>
-  </PageHeader>
+      </Button>
+    </Box>
+  </PageLayout.Header>
 )
 
 export default connect(({ globalNotifications }) => ({
