@@ -16,6 +16,8 @@ import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 import { putUserSetting } from 'models/user/put-user-setting'
 
 import { Table } from 'components/Grid/Table'
+import type { SortableColumn } from 'components/Grid/Table/types'
+
 import { RenderProps } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
 import IconEmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
@@ -203,11 +205,16 @@ export function Grid(props: Props) {
       '-listings'
     )
 
-    return SortableColumns.find(col => col.value === sort.id)
+    return SortableColumns.find(
+      col => col.value === sort.id && col.ascending === sort.ascending
+    )
   }
 
-  const handleChangeSort = async column => {
-    putUserSetting(SORT_FIELD_SETTING_KEY, column.value)
+  const handleChangeSort = async (column: SortableColumn) => {
+    putUserSetting(
+      SORT_FIELD_SETTING_KEY,
+      column.ascending ? column.value : `-${column.value}`
+    )
   }
 
   const toggleAll = () =>
