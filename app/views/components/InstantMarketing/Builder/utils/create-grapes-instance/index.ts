@@ -30,17 +30,6 @@ const STYLE_MANAGER_WIDTH_ALLOWED_TAGS = ['mj-button']
 
 const STYLE_MANAGER_PADDING_ALLOWED_TAGS = ['mj-section', 'mj-wrapper']
 
-const CK_EDITOR_BUTTONS_TO_REMOVE = [
-  'Anchor',
-  'Cut',
-  'Copy',
-  'Paste',
-  'PasteText',
-  'PasteFromWord',
-  'Undo',
-  'Redo'
-]
-
 const CK_EDITOR_LINE_HEIGHT_VALUES = [
   '1',
   '1.1',
@@ -102,7 +91,6 @@ export function createGrapesInstance(
       ...pluginsOpts,
       [grapesjsPluginCkeditor]: {
         options: {
-          removeButtons: CK_EDITOR_BUTTONS_TO_REMOVE.join(','),
           colorButton_colors: colors
             .map(color => color.replace('#', ''))
             .join(','),
@@ -113,7 +101,35 @@ export function createGrapesInstance(
           linkShowAdvancedTab: false,
           linkShowTargetTab: false,
           allowedContent: true, // In order to keep content as is
-          enterMode: 2 // equals to: CKEDITOR.ENTER_BR, in order to stop adding p tags
+          enterMode: 2, // equals to: CKEDITOR.ENTER_BR, in order to stop adding p tags
+          toolbar: [
+            [
+              'Bold',
+              'Italic',
+              'Underline',
+              'Strikethrough',
+              'BulletedList',
+              'NumberedList',
+              'Outdent',
+              'Indent',
+              'JustifyLeft',
+              'JustifyCenter',
+              'JustifyRight',
+              'JustifyBlock',
+              'Link',
+              'Unlink',
+              'Table'
+            ],
+            '/',
+            [
+              'Font',
+              'FontSize',
+              'lineheight',
+              'TextColor',
+              'BGColor',
+              'EmojiPanel'
+            ]
+          ]
         }
       },
       'style-manager': {
