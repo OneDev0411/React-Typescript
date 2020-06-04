@@ -92,7 +92,7 @@ export function Grid(props: Props) {
       title: `${agent.name} ${
         listType === 'asListing' ? 'listings' : 'Buyers'
       } (${agent[listType].length})`,
-      list: agent[listType].map((id) => agent.listings[id])
+      list: agent[listType].map(id => agent.listings[id])
     })
 
   const columns = [
@@ -197,12 +197,16 @@ export function Grid(props: Props) {
   ]
 
   const getActiveSort = () => {
-    const sort = parseSortSetting(props.user, SORT_FIELD_SETTING_KEY, 'name')
+    const sort = parseSortSetting(
+      props.user,
+      SORT_FIELD_SETTING_KEY,
+      '-listings'
+    )
 
-    return SortableColumns.find((col) => col.value === sort.id)
+    return SortableColumns.find(col => col.value === sort.id)
   }
 
-  const handleChangeSort = async (column) => {
+  const handleChangeSort = async column => {
     putUserSetting(SORT_FIELD_SETTING_KEY, column.value)
   }
 

@@ -1,14 +1,10 @@
-import React, { useState } from 'react'
-import { useEffectOnce } from 'react-use'
-import { WithRouterProps } from 'react-router'
-
-import { Theme, Typography } from '@material-ui/core'
-
+import React, { useState, useRef } from 'react'
 import Flex from 'styled-flex-component'
-
+import { useEffectOnce } from 'react-use'
 import { useSelector } from 'react-redux'
-
 import { useTheme } from '@material-ui/styles'
+import { WithRouterProps } from 'react-router'
+import { Theme, Typography } from '@material-ui/core'
 
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import { getAddress } from 'models/Deal/helpers/context'
@@ -30,9 +26,9 @@ import { DEFAULT_RADIUS_FILTER } from './constants'
 import { valertOptions } from './helpers/valert-options'
 import { normalizeList } from './helpers/normalize-list'
 import { filterNonMLSAgents } from './helpers/filter-non-mls-agents'
-
 import { Grid } from './Grid'
 import { AreaFilter } from './Filters/AreaFilter'
+import { Filter } from './Filters/types'
 import { IDealAgent } from './types'
 
 interface Place {
@@ -52,6 +48,8 @@ export default function AgentNetwork({ location, params }: Props) {
   const [place, setPlace] = useState<Place | null>(null)
   const [listing, setListing] = useState<IListing | null>(null)
   const [list, setList] = useState<IDealAgent[]>([])
+  const previousFilter = useRef<Filter>(DEFAULT_RADIUS_FILTER)
+  const rawList = useRef<StringMap<ICompactListing[]>>({})
 
   const theme = useTheme<Theme>()
 
@@ -67,52 +65,55 @@ export default function AgentNetwork({ location, params }: Props) {
   }))
 
   useEffectOnce(() => {
+    ;(window as any).initializeAgentNetworkList = initialize
+
     loadJS(
       `https://maps.googleapis.com/maps/api/js?key=${config.google.api_key}&libraries=geometry&callback=initializeAgentNetworkList`
     )
+  })
 
-    const initialize = async () => {
-      const filter = DEFAULT_RADIUS_FILTER
+  const initialize = async () => {
+    const filter = DEFAULT_RADIUS_FILTER
 
-      let query = null
-      let place = null
-      let listing = null
+    let query = null
+    let place = null
+    let listing = null
 
-      try {
-        if (deal) {
-          const address = getAddress(deal)
+    try {
+      if (deal) {
+        const address = getAddress(deal)
 
-          place = await getPlace(address)
+        place = await getPlace(address)
 
-          if (location) {
-            if (deal.listing) {
-              listing = await getListing(deal.listing)
-            }
-
-            setAddress(address)
-            setListing(listing)
-            setPlace(place)
-
-            query = getQuery(listing, place, filter)
+        if (location) {
+          if (deal.listing) {
+            listing = await getListing(deal.listing)
           }
-        } else if (address) {
-          place = await getPlace(address)
+
+          setAddress(address)
+          setListing(listing)
           setPlace(place)
 
           query = getQuery(listing, place, filter)
         }
+      } else if (address) {
+        place = await getPlace(address)
+        setPlace(place)
 
-        fetchAgents(query)
-      } catch (error) {
-        console.log(error)
-        setIsFetching(false)
+        query = getQuery(listing, place, filter)
       }
+
+      const data = await fetchAgents(query)
+
+      setList(normalizeList(data))
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsFetching(false)
     }
+  }
 
-    initialize()
-  })
-
-  const fetchAgents = async (query) => {
+  const fetchAgents = async query => {
     if (!query) {
       return
     }
@@ -127,11 +128,7 @@ export default function AgentNetwork({ location, params }: Props) {
         '?associations[]=compact_listing.selling_agent&associations[]=compact_listing.list_agent'
       )
 
-      const list = normalizeList(response.data).sort(
-        (a, b) => b.listingsCount - a.listingsCount
-      ) as IDealAgent[]
-
-      setList(list)
+      return response.data
     } catch (error) {
       console.log(error)
     } finally {
@@ -142,7 +139,7 @@ export default function AgentNetwork({ location, params }: Props) {
   const getQuery = (
     listing: IListing | null,
     place: Place | null,
-    filter: typeof DEFAULT_RADIUS_FILTER
+    filter: Filter
   ) => {
     let query
 
@@ -185,8 +182,64 @@ export default function AgentNetwork({ location, params }: Props) {
     return query
   }
 
-  const onSetFilter = (filter: typeof DEFAULT_RADIUS_FILTER) => {
-    fetchAgents(getQuery(listing, place, filter))
+  const onSetFilter = async (filter: Filter) => {
+    let newList: any[] = []
+    const RADIUS_FILTER_TYPE = 'radius'
+
+    if (filter.type === RADIUS_FILTER_TYPE) {
+      const data = await fetchAgents(getQuery(listing, place, filter))
+
+      rawList.current = {}
+      newList = normalizeList(data)
+    } else {
+      const getAreasInString = (areas: number[][]): string =>
+        areas.map(area => area.join('-')).join()
+
+      const currentAreas = getAreasInString(previousFilter.current.areas || [])
+
+      const nextAreas = getAreasInString(filter.areas || [])
+
+      const addedAreas = (filter.areas || []).filter(
+        area => !currentAreas.includes(area.join('-'))
+      )
+
+      const removedAreas = getAreasInString(
+        (previousFilter.current.areas || []).filter(
+          area => !nextAreas.includes(area.join('-'))
+        )
+      )
+
+      let newRawList: StringMap<ICompactListing[]> = {}
+
+      Object.keys(rawList.current).forEach(area => {
+        const areaKey = area.replace(',', '-')
+
+        if (removedAreas.includes(areaKey)) {
+          return false
+        }
+
+        newRawList[area] = rawList.current[area]
+      })
+
+      if (addedAreas.length > 0) {
+        const requests: Promise<ICompactListing[]>[] = addedAreas.map(area =>
+          fetchAgents(getQuery(listing, place, { ...filter, areas: [area] }))
+        )
+
+        const response = await Promise.all(requests)
+
+        response.forEach((data, index) => {
+          newRawList[addedAreas[index].join()] = data
+        })
+      }
+
+      rawList.current = newRawList
+
+      newList = normalizeList(Object.values(newRawList).flat())
+    }
+
+    previousFilter.current = filter
+    setList(newList)
   }
 
   return (

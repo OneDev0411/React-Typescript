@@ -23,6 +23,7 @@ import { useChipStyles } from '../../../../../../styles/use-chips-styles'
 import { useGetMlsArea } from './use-get-mls-areas'
 import { itemToChip, itemToSuggestion } from './helpers'
 import { useGetMlsSubArea } from './use-get-mls-sub-areas'
+import type { Filter, FilterTypes } from './types'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,12 +41,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export interface Filter {
-  type: string
-  radius?: number
-  areas?: Array<Array<number>>
-}
-
 interface Props {
   disabled: boolean
   handleSearch: (filter: Filter) => void
@@ -60,7 +55,7 @@ export function AreaFilter(props: Props) {
   const [radius, setRadius] = useState<number>(DEFAULT_RADIUS_FILTER.radius)
   const [selectedParentAreas, setSelectedParentAreas] = useState<IMLSArea[]>([])
   const [selectedSubAreas, setSelectedSubAreas] = useState<IMLSArea[]>([])
-  const [filterType, setFilterType] = useState<string>(
+  const [filterType, setFilterType] = useState<FilterTypes>(
     DEFAULT_RADIUS_FILTER.type
   )
   const { subAreas, isLoadingSubAreas } = useGetMlsSubArea(
@@ -70,7 +65,7 @@ export function AreaFilter(props: Props) {
   const isFilterTypeRadius = filterType === 'radius'
   const isFilterTypeCustom = filterType === 'custom'
 
-  const handleChangeType = (event) => {
+  const handleChangeType = event => {
     setFilterType(event.target.value)
   }
 
@@ -104,12 +99,12 @@ export function AreaFilter(props: Props) {
     [
       ...selectedSubAreas,
       ...selectedParentAreas.filter(
-        (parentArea) =>
+        parentArea =>
           !selectedSubAreas.some(
-            (subArea) => subArea.parent === parentArea.number
+            subArea => subArea.parent === parentArea.number
           )
       )
-    ].map((area) => [area.number, area.parent])
+    ].map(area => [area.number, area.parent])
 
   const onSearch = () => {
     const filter: Filter = { type: filterType }
