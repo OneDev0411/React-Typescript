@@ -1,4 +1,4 @@
-declare interface IMediaItem {
+export interface IMediaItem {
   id: UUID
   src: string
   name: string
@@ -8,9 +8,9 @@ declare interface IMediaItem {
   isUploading?: boolean
 }
 
-declare type IMediaGallery = IMediaItem[]
+export type IMediaGallery = IMediaItem[]
 
-declare interface IMediaManagerContext {
+export interface IMediaManagerContext {
   state: IMediaGallery
   dispatch: React.Dispatch<any>
 }

@@ -1,3 +1,5 @@
+import type { IMediaGallery } from '../../types'
+
 export const getUploadedMedia = (
   mediaGallery: IMediaGallery
 ): IMediaGallery => {

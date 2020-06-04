@@ -4,6 +4,7 @@ import {
 } from 'models/media-manager'
 
 import * as actionTypes from './action-types'
+import type { IMediaGallery } from '../../types'
 import { getMediaSorts } from '../helpers/selectors'
 
 export const setGalleryItems = (gallery: IMediaGallery) => ({

@@ -2,6 +2,8 @@ import React from 'react'
 import { Box } from '@material-ui/core'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 
+import type { IMediaItem, IMediaGallery } from '../../types'
+
 import { useStyles } from '../../styles'
 import { reorderGallery } from '../../context/actions'
 

@@ -31,6 +31,7 @@ import DownloadModal from '../../DownloadModal'
 import { useStyles } from '../../../styles'
 
 import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
+import type { IMediaItem } from '../../../types'
 
 import {
   setMediaUploadProgress,

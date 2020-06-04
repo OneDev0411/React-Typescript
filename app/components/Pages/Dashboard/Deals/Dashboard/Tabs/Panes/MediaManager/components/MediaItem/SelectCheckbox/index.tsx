@@ -3,6 +3,7 @@ import { Box, Checkbox, makeStyles } from '@material-ui/core'
 
 import { useStyles } from '../../../styles'
 import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
+import type { IMediaItem } from '../../../types'
 import { toggleMediaSelection } from '../../../context/actions'
 
 interface Props {
