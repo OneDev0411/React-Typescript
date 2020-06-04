@@ -16,9 +16,15 @@ interface Props {
   medias: IMediaGallery
   deal: IDeal
   uploaderRef: React.RefObject<any>
+  sortEnabled: Boolean
 }
 
-export default function Gallery({ medias, deal, uploaderRef }: Props) {
+export default function Gallery({
+  medias,
+  deal,
+  uploaderRef,
+  sortEnabled
+}: Props) {
   const classes = useStyles()
   const { dispatch } = useMediaManagerContext()
 
@@ -38,6 +44,7 @@ export default function Gallery({ medias, deal, uploaderRef }: Props) {
             index={index}
             media={media}
             deal={deal}
+            disabled={!sortEnabled}
           />
         ))}
       </Box>
@@ -60,6 +67,8 @@ export default function Gallery({ medias, deal, uploaderRef }: Props) {
       medias={medias}
       onSortEnd={onSortEnd}
       useDragHandle
+      useWindowAsScrollContainer
+      lockToContainerEdges
     />
   )
 }

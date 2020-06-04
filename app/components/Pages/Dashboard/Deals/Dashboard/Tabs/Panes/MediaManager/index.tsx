@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { Box } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
@@ -33,9 +33,11 @@ export default function MediaManager({ user, deal }: Props) {
   const classes = useStyles()
   const reduxDispatch = useDispatch()
   const uploaderRef = useRef<DropzoneRef>(null)
-
+  const [sortEnabled, setSortEnabled] = useState(true)
+  const [, setCurrentlyUploadingPhotos] = useState(0)
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
   const confirmationModal = useContext(ConfirmationModalContext)
+
   const upload = async (fileObject, order: number) => {
     try {
       const response = await uploadMedia(
@@ -55,6 +57,17 @@ export default function MediaManager({ user, deal }: Props) {
       )
       const { id } = response
       const { preview_url: src } = response.file
+
+      setCurrentlyUploadingPhotos(c => {
+        const newState = c - 1
+
+        if (newState === 0) {
+          // no files are remaining for upload
+          setSortEnabled(true)
+        }
+
+        return newState
+      })
 
       dispatch(setNewlyUploadedMediaFields(fileObject.name, id, src))
     } catch (err) {
@@ -90,10 +103,12 @@ export default function MediaManager({ user, deal }: Props) {
       ? Math.max(...state.map(galleryItem => galleryItem.order)) + 1
       : 0
 
+    setSortEnabled(false)
+
     fileObjects.forEach(fileObject => {
-      console.log(fileObject)
       dispatch(addMedia({ fileObject, order }))
       upload(fileObject, order)
+      setCurrentlyUploadingPhotos(c => c + 1)
       order++
     })
   }
@@ -116,7 +131,12 @@ export default function MediaManager({ user, deal }: Props) {
             deal={deal}
             user={user}
           />
-          <Gallery medias={state} deal={deal} uploaderRef={uploaderRef} />
+          <Gallery
+            medias={state}
+            deal={deal}
+            uploaderRef={uploaderRef}
+            sortEnabled={sortEnabled}
+          />
           {getSelectedMedia(state).length > 0 && (
             <BulkActionsMenu mediaGallery={state} deal={deal} />
           )}
