@@ -10,7 +10,7 @@ import { defaultQuery } from 'models/contacts/helpers/default-query'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 import { FinalFormDrawer } from 'components/FinalFormDrawer'
-import { TextField, Select } from 'components/final-form-fields'
+import { TextField } from 'components/final-form-fields'
 
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
@@ -114,15 +114,7 @@ class NewContactDrawer extends React.Component {
         }}
         render={({ submitError, form }) => (
           <React.Fragment>
-            <Select
-              data-test="contact-title-select"
-              items={this.getDefaultValues('title', 'enum_values')}
-              name="title"
-              label="Title"
-              placeholder="Title"
-            />
             <TextField name="first_name" label="First Name" />
-            <TextField name="middle_name" label="Middle Name" />
             <TextField name="last_name" label="Last Name" />
             <TextField name="source" label="Source" />
             <Emails
