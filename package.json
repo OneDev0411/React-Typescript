@@ -121,7 +121,7 @@
     "google-map-react": "^1.1.2",
     "google-maps": "^3.3.0",
     "grapesjs": "^0.15.10",
-    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#6ef2bf6",
+    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#d854069",
     "grapesjs-plugin-mjml-ckeditor": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-plugin-mjml-ckeditor.git#b3d1972",
     "history": "^3.3.0",
     "hogan.js": "^3.0.2",
