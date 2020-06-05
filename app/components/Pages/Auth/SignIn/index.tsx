@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Location } from 'history'
+import * as Sentry from '@sentry/browser'
 
 import { IAppState } from '../../../../reducers'
 
@@ -112,23 +113,16 @@ export default function Signin(props: Props) {
         }
       }
 
-      // set user data for sentry
-      // @ts-ignore we have to add '@sentry/browser'
-      if (window.Raven) {
-        const { email, id } = user
-
-        const userData = {
-          id,
-          email,
+      Sentry.configureScope(scope => {
+        scope.setUser({
+          id: user.id,
+          email: user.email,
           brand: brand && {
             id: brand.id,
             name: brand.name
           }
-        }
-
-        // @ts-ignore we have to add '@sentry/browser'
-        window.Raven.setUserContext(userData)
-      }
+        })
+      })
 
       const defaultHomePage = getUserDefaultHomepage(user)
 

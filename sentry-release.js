@@ -2,7 +2,7 @@ const SentryCli = require('@sentry/cli')
 
 async function release() {
   const cli = new SentryCli()
-  const version = process.env.CI_COMMIT_SHORT_SHA
+  const version = process.env.CI_COMMIT_SHA
 
   try {
     console.log('[ Sentry ] Providing a new release:', version)

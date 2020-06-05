@@ -67,6 +67,7 @@
     "@mikeljames/draft-js-drag-n-drop-upload-plugin": "^2.0.1",
     "@reach/tabs": "^0.1.5",
     "@samuelmeuli/font-manager": "^1.4.0",
+    "@sentry/browser": "^5.16.1",
     "@sentry/cli": "^1.54.0",
     "@types/react-window": "^1.8.0",
     "array-move": "^2.2.1",
