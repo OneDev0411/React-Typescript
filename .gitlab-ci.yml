@@ -11,7 +11,6 @@ build:
   script:
     - npm i
     - npm run build:ci
-    - npm run sentry:release # TODO: move to deploy stage when setup correctly
   # We don't need to run build for branches that are deployed. if build is broken
   # deploy also breaks.
   except:
@@ -48,6 +47,7 @@ deploy_irish:
     - apt-get install -y ruby-dev
     - gem install dpl
   script:
+    - npm run sentry:release
     - dpl --provider=heroku --app=rechat-irish --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
   environment:
     name: irish
@@ -63,6 +63,7 @@ deploy_production:
     - apt-get install -y ruby-dev
     - gem install dpl
   script:
+    - npm run sentry:release
     - dpl --provider=heroku --app=rechat-web --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
   environment:
     name: production
