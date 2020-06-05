@@ -101,7 +101,7 @@ if (process.env.SOURCE_VERSION) {
   webpackConfig.plugins.push(
     new SentryCliPlugin({
       release: process.env.SOURCE_VERSION, // refers to the latest commit hash
-      include: '../build/dist/',
+      include: '../../build/dist/',
       ignore: ['node_modules']
     })
   )
