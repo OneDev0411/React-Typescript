@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Box, Button, TextareaAutosize, IconButton } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  TextareaAutosize,
+  Typography,
+  IconButton
+} from '@material-ui/core'
 import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
 
@@ -25,7 +31,7 @@ interface Props {
   deal: IDeal
 }
 
-const EMPTY_NAME_TEXT = 'Caption can go here...'
+const EMPTY_NAME_TEXT = 'Caption can go here ...'
 
 export default function MediaItem({ media, deal }: Props) {
   const classes = useStyles()
@@ -137,7 +143,9 @@ export default function MediaItem({ media, deal }: Props) {
           >
             <IconEdit fillColor="#333" className={iconClasses.small} />
           </IconButton>
-          {name || EMPTY_NAME_TEXT}
+          {name || (
+            <Typography className="no-caption">{EMPTY_NAME_TEXT}</Typography>
+          )}
         </Box>
       )}
 

@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react'
-import { Box } from '@material-ui/core'
+import { Box, RootRef } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
 import { addNotification } from 'reapop'
@@ -33,10 +33,15 @@ export default function MediaManager({ user, deal }: Props) {
   const classes = useStyles()
   const reduxDispatch = useDispatch()
   const uploaderRef = useRef<DropzoneRef>(null)
+  const pageBottom = useRef<HTMLDivElement>(null)
   const [sortEnabled, setSortEnabled] = useState(true)
   const [, setCurrentlyUploadingPhotos] = useState(0)
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
   const confirmationModal = useContext(ConfirmationModalContext)
+
+  const scrollToBottom = () => {
+    pageBottom.current!.scrollIntoView({ behavior: 'smooth' })
+  }
 
   const upload = async (fileObject, order: number) => {
     try {
@@ -104,6 +109,7 @@ export default function MediaManager({ user, deal }: Props) {
       : 0
 
     setSortEnabled(false)
+    scrollToBottom()
 
     fileObjects.forEach(fileObject => {
       dispatch(addMedia({ fileObject, order }))
@@ -141,6 +147,9 @@ export default function MediaManager({ user, deal }: Props) {
             <BulkActionsMenu mediaGallery={state} deal={deal} />
           )}
         </Box>
+        <RootRef rootRef={pageBottom}>
+          <Box />
+        </RootRef>
       </MediaManagerContext.Provider>
     </Uploader>
   )

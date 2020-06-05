@@ -169,6 +169,10 @@ export const useStyles = makeStyles(
         textTransform: 'none',
         wordWrap: 'break-word',
 
+        '& .no-caption': {
+          color: theme.palette.grey['500']
+        },
+
         '&:hover': {
           background: 'none',
 
