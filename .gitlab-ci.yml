@@ -11,6 +11,7 @@ build:
   script:
     - npm i
     - npm run build:ci
+    - npm run sentry:release # TODO: move to deploy stage when setup correctly
   # We don't need to run build for branches that are deployed. if build is broken
   # deploy also breaks.
   except:
