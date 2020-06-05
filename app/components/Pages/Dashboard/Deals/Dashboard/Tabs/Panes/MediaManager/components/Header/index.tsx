@@ -11,6 +11,9 @@ import CreateSyncTask from './CreateSyncTask'
 
 import { useStyles } from '../../styles'
 
+import useMediaManagerContext from '../../hooks/useMediaManagerContext'
+import { toggleGallerySelection } from '../../context/actions'
+
 interface Props {
   mediasCount: number
   uploaderRef: React.RefObject<any>
@@ -26,9 +29,15 @@ export default function Header({
 }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
+  const { dispatch } = useMediaManagerContext()
 
   const openBrowse = () => {
     uploaderRef.current.open()
+  }
+
+  const handleSelectAll = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault()
+    dispatch(toggleGallerySelection(true))
   }
 
   return (
@@ -43,7 +52,15 @@ export default function Header({
           color="textSecondary"
           display="inline"
         >
-          (Max 50)
+          {' '}
+          <Button
+            color="secondary"
+            href="#"
+            size="large"
+            onClick={handleSelectAll}
+          >
+            Select All
+          </Button>
         </Typography>
       </Box>
       <Box
