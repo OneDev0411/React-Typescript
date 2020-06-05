@@ -60,7 +60,7 @@ webpackConfig.plugins.push(
   }),
   new S3Plugin({
     progress: false, // Messes the terminal up
-    exclude: /.*\.html$/,
+    exclude: [/.*\.html$/, /.*\.map$/],
     basePath: 'dist/',
     s3Options: {
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -75,7 +75,6 @@ webpackConfig.plugins.push(
           return 'gzip'
         }
       },
-
       ContentType(fileName) {
         if (/\.js/.test(fileName)) {
           return 'application/javascript'
@@ -101,7 +100,7 @@ if (process.env.SOURCE_VERSION) {
   webpackConfig.plugins.push(
     new SentryCliPlugin({
       release: process.env.SOURCE_VERSION, // refers to the latest commit hash
-      include: '../build/dist/',
+      include: 'dist/',
       ignore: ['node_modules']
     })
   )
