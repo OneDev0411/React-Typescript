@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import idx from 'idx'
+import * as Sentry from '@sentry/browser'
 
 import getBrand from '../../../store_actions/brand'
 import getFavorites from '../../../store_actions/listings/favorites/get-favorites'
@@ -39,20 +40,17 @@ class App extends Component {
   }
 
   setSentryUser(user, brand) {
-    if (window.Raven) {
-      const { email, id } = user
-      const userData = {
-        id,
-        email,
+    Sentry.configureScope(scope => {
+      scope.setUser({
+        id: user.id,
+        email: user.email,
         name: user.display_name,
         brand: brand && {
           id: brand.id,
           name: brand.name
         }
-      }
-
-      window.Raven.setUserContext(userData)
-    }
+      })
+    })
   }
 
   render() {
