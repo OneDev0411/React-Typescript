@@ -17,6 +17,7 @@ import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 
 import { isBackOffice, getBrandByType } from 'utils/user-teams'
+import { loadJS, unloadJS } from 'utils/load-js'
 
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
@@ -32,7 +33,6 @@ import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
 import { TeamSelector } from './TeamSelector'
-import { createRichTextEditor } from './RichTextEditor'
 
 import {
   Container,
@@ -52,8 +52,7 @@ import {
   getMjmlTemplateRenderData,
   getNonMjmlTemplateRenderData
 } from './utils/get-template-render-data'
-
-const ENABLE_CUSTOM_RTE = false
+import { getBrandFontFamilies } from '../helpers/get-brand-font-families'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -147,6 +146,9 @@ class Builder extends React.Component {
   }
 
   async componentDidMount() {
+    await this.loadCKEditor()
+    document.body.style.overflow = 'hidden'
+
     const { Grapesjs, GrapesjsMjml } = await loadGrapesjs()
 
     const { load: loadAssetManagerPlugin } = await import('./AssetManager')
@@ -154,6 +156,7 @@ class Builder extends React.Component {
 
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
+    const brandFonts = getBrandFontFamilies(brand)
 
     await Promise.all([
       loadAssetManagerPlugin(),
@@ -166,6 +169,8 @@ class Builder extends React.Component {
 
     this.editor = createGrapesInstance(Grapesjs, {
       assets: [...this.props.assets, ...this.userAssets],
+      colors: brandColors,
+      fontFamilies: brandFonts,
       plugins: [GrapesjsMjml],
       pluginsOpts: {
         [GrapesjsMjml]: {
@@ -186,6 +191,16 @@ class Builder extends React.Component {
 
       iframe.removeEventListener('paste', this.iframePasteHandler)
     }
+
+    document.body.style.overflow = 'unset'
+
+    unloadJS('ckeditor')
+  }
+
+  loadCKEditor = () => {
+    return new Promise(resolve => {
+      loadJS('/static/ckeditor/ckeditor.js', 'ckeditor', resolve)
+    })
   }
 
   static contextType = ConfirmationModalContext
@@ -240,15 +255,6 @@ class Builder extends React.Component {
     })
   }
 
-  setRte = () => {
-    const { enable, disable } = createRichTextEditor(this.editor)
-
-    this.editor.setCustomRte({
-      enable,
-      disable
-    })
-  }
-
   setupGrapesJs = () => {
     this.setState({ isEditorLoaded: true })
 
@@ -260,10 +266,6 @@ class Builder extends React.Component {
     this.removeTextStylesOnPaste()
     this.disableDefaultDeviceManager()
     this.scrollSidebarToTopOnComponentSelect()
-
-    if (ENABLE_CUSTOM_RTE) {
-      this.setRte()
-    }
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       this.registerEmailBlocks()
