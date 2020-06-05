@@ -1,4 +1,4 @@
-image: node:10
+image: node:12
 
 stages:
   - build
@@ -47,7 +47,6 @@ deploy_irish:
     - apt-get install -y ruby-dev
     - gem install dpl
   script:
-    - npm run sentry:release
     - dpl --provider=heroku --app=rechat-irish --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
   environment:
     name: irish
@@ -63,7 +62,6 @@ deploy_production:
     - apt-get install -y ruby-dev
     - gem install dpl
   script:
-    - npm run sentry:release
     - dpl --provider=heroku --app=rechat-web --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
   environment:
     name: production
