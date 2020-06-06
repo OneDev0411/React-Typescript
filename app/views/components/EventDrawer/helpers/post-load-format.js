@@ -5,6 +5,14 @@ import { getReminderItem } from 'views/utils/reminder'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 import { isNegativeTimezone } from 'utils/is-negative-timezone'
 
+function roundToMultipleFive(n) {
+  if (n % 5 == 0) {
+    return n
+  }
+
+  return Math.floor(n / 5) * 5 + 5
+}
+
 /**
  * Format form data for api model
  * @param {object} task The Task entity
@@ -34,10 +42,15 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
 
   if (!task) {
     const initialDueDate = new Date()
-    const initialEndDate = new Date()
 
-    initialDueDate.setHours(0, 0, 0, 0)
-    initialEndDate.setHours(23, 59, 0, 0)
+    initialDueDate.setHours(
+      initialDueDate.getHours(),
+      roundToMultipleFive(initialDueDate.getMinutes()),
+      0,
+      0
+    )
+
+    const initialEndDate = new Date(initialDueDate.getTime() + 3600000) // 1 hour after
 
     return {
       assignees: [owner],
@@ -45,7 +58,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
       description,
       dueDate: initialDueDate,
       endDate: initialEndDate,
-      allDay: true,
+      allDay: false,
       reminder,
       task_type: { title: 'Call', value: 'Call' }
     }
