@@ -55,7 +55,6 @@ export default function Header({
           {' '}
           <Button
             color="secondary"
-            href="#"
             size="large"
             onClick={handleSelectAll}
           >

@@ -63,8 +63,8 @@ export default function MediaManager({ user, deal }: Props) {
       const { id } = response
       const { preview_url: src } = response.file
 
-      setCurrentlyUploadingPhotos(c => {
-        const newState = c - 1
+      setCurrentlyUploadingPhotos(CurrentlyUploadingPhotos => {
+        const newState = CurrentlyUploadingPhotos - 1
 
         if (newState === 0) {
           // no files are remaining for upload
@@ -114,7 +114,9 @@ export default function MediaManager({ user, deal }: Props) {
     fileObjects.forEach(fileObject => {
       dispatch(addMedia({ fileObject, order }))
       upload(fileObject, order)
-      setCurrentlyUploadingPhotos(c => c + 1)
+      setCurrentlyUploadingPhotos(
+        CurrentlyUploadingPhotos => CurrentlyUploadingPhotos + 1
+      )
       order++
     })
   }

@@ -169,10 +169,6 @@ export const useStyles = makeStyles(
         textTransform: 'none',
         wordWrap: 'break-word',
 
-        '& .no-caption': {
-          color: theme.palette.grey['500']
-        },
-
         '&:hover': {
           background: 'none',
 
@@ -242,6 +238,10 @@ export const useStyles = makeStyles(
         position: 'absolute',
         top: 5,
         right: 5
+      },
+
+      mutedText: {
+        color: theme.palette.grey['500']
       }
     }),
   // Making the class names deterministic by setting theme name starting with `Mui`

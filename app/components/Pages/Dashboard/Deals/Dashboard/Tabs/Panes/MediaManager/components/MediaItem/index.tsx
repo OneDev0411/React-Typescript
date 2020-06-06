@@ -26,12 +26,12 @@ import useMediaManagerContext from '../../hooks/useMediaManagerContext'
 import type { IMediaItem } from '../../types'
 import { renameMedia } from '../../context/actions'
 
+const EMPTY_NAME_TEXT = 'Caption can go here ...'
+
 interface Props {
   media: IMediaItem
   deal: IDeal
 }
-
-const EMPTY_NAME_TEXT = 'Caption can go here ...'
 
 export default function MediaItem({ media, deal }: Props) {
   const classes = useStyles()
@@ -144,7 +144,9 @@ export default function MediaItem({ media, deal }: Props) {
             <IconEdit fillColor="#333" className={iconClasses.small} />
           </IconButton>
           {name || (
-            <Typography className="no-caption">{EMPTY_NAME_TEXT}</Typography>
+            <Typography className={classes.mutedText}>
+              {EMPTY_NAME_TEXT}
+            </Typography>
           )}
         </Box>
       )}

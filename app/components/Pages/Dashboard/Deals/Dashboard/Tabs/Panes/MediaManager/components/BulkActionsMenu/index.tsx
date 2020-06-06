@@ -105,12 +105,7 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
           </Typography>{' '}
           {selectedGalleryItems.length !== selectableItems.length && (
             <>
-              <Button
-                color="secondary"
-                href="#"
-                size="large"
-                onClick={handleSelectAll}
-              >
+              <Button color="secondary" size="large" onClick={handleSelectAll}>
                 (Select All)
               </Button>
             </>
