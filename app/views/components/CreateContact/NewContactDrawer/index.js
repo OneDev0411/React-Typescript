@@ -5,6 +5,7 @@ import arrayMutators from 'final-form-arrays'
 import { Form } from 'react-final-form'
 import { browserHistory } from 'react-router'
 import { Box, Button } from '@material-ui/core'
+import { addNotification as notify } from 'reapop'
 
 import { createContacts } from 'models/contacts/create-contacts'
 import { defaultQuery } from 'models/contacts/helpers/default-query'
@@ -83,6 +84,13 @@ class NewContactDrawer extends React.Component {
         if (this.props.submitCallback) {
           this.props.submitCallback(contact)
         }
+
+        this.props.dispatch(
+          notify({
+            message: 'The contact saved!',
+            status: 'success'
+          })
+        )
 
         form.reset()
       } else {
