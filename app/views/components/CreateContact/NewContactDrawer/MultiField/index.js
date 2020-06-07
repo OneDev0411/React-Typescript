@@ -3,12 +3,13 @@ import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import Flex from 'styled-flex-component'
 
+import { Dropdown } from 'components/Dropdown'
+import IconButton from 'components/Button/IconButton'
+import { Select } from 'components/final-form-fields/Select'
+import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
+import RemoveIcon from 'components/SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
+
 import { TextField } from './Input'
-import { Dropdown } from '../../../../Dropdown'
-import IconButton from '../../../../Button/IconButton'
-import { Select } from '../../../../final-form-fields/Select'
-import AddIcon from '../../../../SvgIcons/AddCircleOutline/IconAddCircleOutline'
-import RemoveIcon from '../../../../SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
 
 export function MultiField({
   defaultOptions,

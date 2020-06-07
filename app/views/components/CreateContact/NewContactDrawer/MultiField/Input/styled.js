@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { placeholderColor, error } from '../../../../../../utils/colors'
+
+import { placeholderColor, error } from 'views/utils/colors'
 
 export const ErrorMessage = styled.div`
   color: ${error};
