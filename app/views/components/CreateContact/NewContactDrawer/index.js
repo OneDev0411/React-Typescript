@@ -26,11 +26,13 @@ import { generateInitialValues } from './helpers/generate-initial-values'
 const propTypes = {
   section: PropTypes.string,
   submitCallback: PropTypes.func,
-  user: PropTypes.shape().isRequired
+  user: PropTypes.shape().isRequired,
+  showAddAnother: PropTypes.bool
 }
 const defaultProps = {
   section: '',
-  submitCallback: null
+  submitCallback: null,
+  showAddAnother: true
 }
 
 class NewContactDrawer extends React.Component {
@@ -49,6 +51,8 @@ class NewContactDrawer extends React.Component {
     formState,
     reInitializeAfterSubmit = false
   ) => {
+    const { submitCallback } = this.props
+
     if (this.state.submitError) {
       this.setState({ submitError: '' })
     }
@@ -81,8 +85,8 @@ class NewContactDrawer extends React.Component {
       this.setState({ isSubmitting: false })
 
       if (reInitializeAfterSubmit) {
-        if (this.props.submitCallback) {
-          this.props.submitCallback(contact)
+        if (submitCallback) {
+          submitCallback(contact)
         }
 
         this.props.dispatch(
@@ -96,8 +100,8 @@ class NewContactDrawer extends React.Component {
       } else {
         this.props.onClose()
 
-        if (this.props.submitCallback) {
-          this.props.submitCallback(contact)
+        if (submitCallback) {
+          submitCallback(contact)
 
           return
         }
@@ -191,17 +195,19 @@ class NewContactDrawer extends React.Component {
                       alignItems="center"
                       justifyContent="flex-end"
                     >
-                      <Box mr={1}>
-                        <Button
-                          type="button"
-                          color="secondary"
-                          variant="contained"
-                          disabled={isSubmitting}
-                          onClick={() => this.onSaveAndAddAnother(formProps)}
-                        >
-                          Save & Add Another
-                        </Button>
-                      </Box>
+                      {this.props.showAddAnother && (
+                        <Box mr={1}>
+                          <Button
+                            type="button"
+                            color="secondary"
+                            variant="contained"
+                            disabled={isSubmitting}
+                            onClick={() => this.onSaveAndAddAnother(formProps)}
+                          >
+                            Save & Add Another
+                          </Button>
+                        </Box>
+                      )}
                       <Button
                         type="submit"
                         color="secondary"
