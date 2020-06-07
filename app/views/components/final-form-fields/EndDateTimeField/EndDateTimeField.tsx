@@ -5,33 +5,19 @@ import { Field, FieldRenderProps } from 'react-final-form'
 import DayPicker, { Modifiers } from 'react-day-picker'
 import Flex from 'styled-flex-component'
 import {
-  Theme,
   Box,
   Button,
-  IconButton,
   ClickAwayListener,
   Grow,
   Popper,
-  Tooltip,
   Typography
 } from '@material-ui/core'
 import { PopperPlacementType } from '@material-ui/core/Popper'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { useTheme } from '@material-ui/core/styles'
 
 import TimeInput from 'components/TimeInput'
-import { iconSizes } from 'components/SvgIcons/icon-sizes'
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import { Divider } from 'components/Divider'
 import { PickerContainer } from 'components/DateTimePicker/styled'
-
-const useStyles = makeStyles((theme: Theme) => ({
-  removeButton: {
-    minWidth: 0
-  },
-  addButton: {
-    marginLeft: theme.spacing(1)
-  }
-}))
 
 interface Props {
   selectedDate: Date
@@ -47,7 +33,6 @@ export function EndDateTimeField({
   placement = 'bottom-end'
 }: Props) {
   const theme = useTheme()
-  const classes = useStyles()
 
   const anchorRef = useRef<HTMLButtonElement>(null)
 
@@ -85,19 +70,6 @@ export function EndDateTimeField({
             >
               {fecha.format(value, formatter)}
             </Button>
-            {value && (
-              <Tooltip placement={placement} title="Remove Time">
-                <IconButton
-                  size="small"
-                  color="secondary"
-                  // @ts-ignore FinalForm bug
-                  onClick={() => onChange(null)}
-                  className={classes.removeButton}
-                >
-                  <IconClose size={iconSizes.small} />
-                </IconButton>
-              </Tooltip>
-            )}
             <Popper
               anchorEl={anchorRef.current}
               open={isOpen}

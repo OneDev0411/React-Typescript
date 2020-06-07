@@ -1,7 +1,5 @@
 import { stateToHTML } from 'draft-js-export-html'
 
-import { isNegativeTimezone } from 'utils/is-negative-timezone'
-
 /**
  * Format form data for api model
  * @param {object} values The form values
@@ -24,18 +22,19 @@ export async function preSaveFormat(values, originalValues) {
   const isAllDay = allDay || false
 
   if (isAllDay) {
-    if (originalValues && !originalValues.metadata?.all_day) {
-      let resetDueHours = isNegativeTimezone() ? -1 : 0
-      let resetEndHours = isNegativeTimezone() ? 0 : 24
+    dueDate.setUTCFullYear(
+      dueDate.getFullYear(),
+      dueDate.getMonth(),
+      dueDate.getDate()
+    )
+    dueDate.setUTCHours(0, 0, 0, 0)
 
-      dueDate.setUTCHours(resetDueHours, 0, 0, 0)
-      endDate.setUTCHours(resetEndHours, 0, 0, 0)
-    } else {
-      let resetHours = isNegativeTimezone() ? 0 : 24
-
-      dueDate.setUTCHours(resetHours, 0, 0, 0)
-      endDate.setUTCHours(resetHours, 0, 0, 0)
-    }
+    endDate.setUTCFullYear(
+      endDate.getFullYear(),
+      endDate.getMonth(),
+      endDate.getDate()
+    )
+    endDate.setUTCHours(24, 0, 0, 0)
   }
 
   const dueDateTimestamp = dueDate.getTime()
