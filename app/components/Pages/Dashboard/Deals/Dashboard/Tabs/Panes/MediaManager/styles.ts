@@ -65,6 +65,13 @@ export const useStyles = makeStyles(
           }
         }
       },
+      mediaCardHelper: {
+        zIndex: 2,
+
+        '& $mediaThumbnailContainer': {
+          boxShadow: '5px 5px 15px rgba(0,0,0,0.4)'
+        }
+      },
       mediaCardUploading: {
         '& $mediaThumbnail': {
           opacity: 0.5

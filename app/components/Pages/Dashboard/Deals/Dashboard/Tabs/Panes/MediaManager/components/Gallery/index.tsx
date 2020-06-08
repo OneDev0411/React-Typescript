@@ -64,6 +64,7 @@ export default function Gallery({
   return (
     <SortableGallery
       axis="xy"
+      helperClass="MuiMediaManager-mediaCardHelper"
       medias={medias}
       onSortEnd={onSortEnd}
       useDragHandle
