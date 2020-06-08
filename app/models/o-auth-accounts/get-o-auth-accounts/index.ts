@@ -2,13 +2,11 @@ import Fetch from '../../../services/fetch'
 
 export async function getOAuthAccounts(
   provider: string,
-  withHistory = false
+  withJobs = false
 ): Promise<IOAuthAccount[]> {
   const response = await new Fetch()
     .get(`/users/self/${provider}`)
-    .query(
-      withHistory ? { associations: `${provider}_credential.histories` } : {}
-    )
+    .query(withJobs ? { associations: `${provider}_credential.jobs` } : {})
     .send()
 
   const accounts: IOAuthAccount[] = (response.body && response.body.data) || []

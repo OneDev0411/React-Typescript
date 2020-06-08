@@ -1,8 +1,8 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import { Link } from '@material-ui/core'
 
 import * as React from 'react'
+
+import { OAuthProvider } from 'constants/contacts'
 
 import { oAuthAccountTypeToProvider } from './constants'
 
@@ -12,17 +12,20 @@ interface Props {
 }
 
 export function SyncButton({ account, onSync }: Props) {
+  return <>Syncing ...</>
+
   if (account.revoked) {
     return <>Revoked</>
   }
 
-  if (!account.sync_status || account.sync_status === 'pending') {
+  if ((account.jobs || []).some(job => job.status !== 'success')) {
     return <>Syncing ...</>
   }
 
   return (
     <Link
       component="button"
+      color="secondary"
       onClick={() =>
         onSync(oAuthAccountTypeToProvider[account.type], account.id)
       }
