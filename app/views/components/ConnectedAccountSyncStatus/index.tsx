@@ -2,10 +2,6 @@ import * as React from 'react'
 
 import { Tooltip, IconButton } from '@material-ui/core'
 
-import cn from 'classnames'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
-
 import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
 import IconEmail from 'components/SvgIcons/EmailOutlined/IconEmailOutlined'
 import IconContact from 'components/SvgIcons/Contacts/IconContacts'
@@ -15,7 +11,6 @@ interface Props {
 }
 
 export function ConnectedAccountSyncStatus({ account }: Props) {
-  const iconClasses = useIconStyles()
   const calendarJob = (account.jobs || []).find(
     job => job.job_name === 'calendar'
   )
