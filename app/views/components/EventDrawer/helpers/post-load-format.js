@@ -50,7 +50,8 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
       0
     )
 
-    const initialEndDate = new Date(initialDueDate.getTime() + 3600000) // 1 hour after
+    // 1 hour after
+    const initialEndDate = new Date(initialDueDate.getTime() + 3600000)
 
     return {
       assignees: [owner],
@@ -65,7 +66,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
   }
 
   const { reminders, end_date } = task
-  const isAllDayTask = task.metadata?.all_day || false
+  const isAllDayTask = task.all_day || false
 
   const normalizeServerDate = (date, isEndDate = false) => {
     const normalizedDate = new Date(Number(date) * 1000)

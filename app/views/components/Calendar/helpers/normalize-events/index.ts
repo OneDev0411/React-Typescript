@@ -120,7 +120,7 @@ function getEventIndex(event: ICalendarEvent, range: NumberRange) {
   const from = new Date(start * 1000)
   const to = new Date(end * 1000)
   const eventTime = new Date(event.timestamp * 1000)
-  const isAllDayEvent = event.metadata?.all_day || false
+  const isAllDayEvent = event.all_day || false
 
   if (isAllDayEvent && isNegativeTimezone()) {
     eventTime.setHours(24, 0, 0, 0)
