@@ -24,7 +24,7 @@ function postcss() {
   return [require('autoprefixer')()]
 }
 
-webpackConfig.devtool = 'hidden-source-map'
+webpackConfig.devtool = 'source-map'
 
 webpackConfig.output.pathinfo = false
 webpackConfig.output.publicPath = process.env.ASSETS_BASEURL
