@@ -17,6 +17,7 @@ import { TextField } from 'components/final-form-fields'
 
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
+import { Tags } from './Tags'
 import { Owner } from './Owner'
 import { Emails } from './Emails'
 import { Phones } from './Phones'
@@ -169,6 +170,7 @@ class NewContactDrawer extends React.Component {
                   <Drawer.Body>
                     <TextField name="first_name" label="First Name" />
                     <TextField name="last_name" label="Last Name" />
+                    <Tags />
                     <TextField name="source" label="Source" />
                     <Emails
                       labels={this.getDefaultValues('email', 'labels')}

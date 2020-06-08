@@ -58,5 +58,14 @@ export function preSaveFormat(values, attributeDefs) {
     }
   })
 
+  values.tags.forEach(tag => {
+    const attributeDef = selectDefinitionByName(attributeDefs, 'tag')
+
+    attributes.push({
+      attribute_def: attributeDef.id,
+      text: tag.text
+    })
+  })
+
   return attributes
 }
