@@ -12,8 +12,6 @@ interface Props {
 }
 
 export function SyncButton({ account, onSync }: Props) {
-  return <>Syncing ...</>
-
   if (account.revoked) {
     return <>Revoked</>
   }
