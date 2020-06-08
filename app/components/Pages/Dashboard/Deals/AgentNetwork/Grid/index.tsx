@@ -16,6 +16,8 @@ import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 import { putUserSetting } from 'models/user/put-user-setting'
 
 import { Table } from 'components/Grid/Table'
+import type { SortableColumn } from 'components/Grid/Table/types'
+
 import { RenderProps } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
 import IconEmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
@@ -92,7 +94,7 @@ export function Grid(props: Props) {
       title: `${agent.name} ${
         listType === 'asListing' ? 'listings' : 'Buyers'
       } (${agent[listType].length})`,
-      list: agent[listType].map((id) => agent.listings[id])
+      list: agent[listType].map(id => agent.listings[id])
     })
 
   const columns = [
@@ -197,13 +199,22 @@ export function Grid(props: Props) {
   ]
 
   const getActiveSort = () => {
-    const sort = parseSortSetting(props.user, SORT_FIELD_SETTING_KEY, 'name')
+    const sort = parseSortSetting(
+      props.user,
+      SORT_FIELD_SETTING_KEY,
+      '-listings'
+    )
 
-    return SortableColumns.find((col) => col.value === sort.id)
+    return SortableColumns.find(
+      col => col.value === sort.id && col.ascending === sort.ascending
+    )
   }
 
-  const handleChangeSort = async (column) => {
-    putUserSetting(SORT_FIELD_SETTING_KEY, column.value)
+  const handleChangeSort = async (column: SortableColumn) => {
+    putUserSetting(
+      SORT_FIELD_SETTING_KEY,
+      column.ascending ? column.value : `-${column.value}`
+    )
   }
 
   const toggleAll = () =>

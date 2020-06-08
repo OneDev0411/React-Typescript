@@ -3,6 +3,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
+import SentryCliPlugin from '@sentry/webpack-plugin'
 
 import moment from 'moment'
 
@@ -23,7 +24,7 @@ function postcss() {
   return [require('autoprefixer')()]
 }
 
-webpackConfig.devtool = false
+webpackConfig.devtool = 'hidden-source-map'
 
 webpackConfig.output.pathinfo = false
 webpackConfig.output.publicPath = process.env.ASSETS_BASEURL
@@ -59,7 +60,7 @@ webpackConfig.plugins.push(
   }),
   new S3Plugin({
     progress: false, // Messes the terminal up
-    exclude: /.*\.html$/,
+    exclude: [/.*\.html$/, /.*\.map$/],
     basePath: 'dist/',
     s3Options: {
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -74,7 +75,6 @@ webpackConfig.plugins.push(
           return 'gzip'
         }
       },
-
       ContentType(fileName) {
         if (/\.js/.test(fileName)) {
           return 'application/javascript'
@@ -94,6 +94,17 @@ webpackConfig.plugins.push(
     noCdnizer: true
   })
 )
+
+// SOURCE_VERSION variable only exists in Heroku env
+if (process.env.SOURCE_VERSION) {
+  webpackConfig.plugins.push(
+    new SentryCliPlugin({
+      release: process.env.SOURCE_VERSION, // refers to the latest commit hash
+      include: 'dist/',
+      ignore: ['node_modules']
+    })
+  )
+}
 
 webpackConfig.module.rules.push(
   {

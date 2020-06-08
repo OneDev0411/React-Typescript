@@ -37,11 +37,11 @@ export const actionsDefaultProperties = {
   },
   [DOCUSIGN_FORM]: {
     label: 'Docusign',
-    type: 'get-signature'
+    type: 'docusign-form'
   },
   [DOCUSIGN_ENVELOPE]: {
     label: 'Docusign',
-    type: 'get-signature'
+    type: 'docusign-envelope'
   },
   [DOCUSIGN_FILE]: {
     label: 'Docusign',

@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
-
 import { Alert } from '@material-ui/lab'
-import { Box, Link, IconButton, Theme } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/styles'
+import { Box, Link, IconButton, Theme, makeStyles } from '@material-ui/core'
 
 import { ACL } from 'constants/acl'
-
+import { IAppState } from 'reducers'
+import { OPEN_HOUSE_REQUESTS_SETTINGS_KEY } from 'constants/user'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
-import { getActiveTeamId } from 'utils/user-teams'
+import { getActiveTeamId, getActiveTeamSettings } from 'utils/user-teams'
 
 import { RenderProps } from 'components/Grid/Table/types'
 import { useGridStyles } from 'components/Grid/Table/styles'
@@ -33,29 +32,24 @@ interface Associations {
   listing?: ICompactListing
 }
 
-interface Props {
-  activeBrandId: UUID
-}
-
 type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
 const useAlertStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      root: {
-        marginBottom: theme.spacing(2)
-      },
-      message: {
-        '& a, & a:hover': {
-          color: theme.palette.info.dark,
-          textDecoration: 'none'
-        }
+  (theme: Theme) => ({
+    root: {
+      marginBottom: theme.spacing(2)
+    },
+    message: {
+      '& a, & a:hover': {
+        color: theme.palette.info.dark,
+        textDecoration: 'none'
       }
-    }),
+    }
+  }),
   { name: 'MuiAlert' }
 )
 
-function OpenHousesList(props: Props) {
+function OpenHousesList() {
   useAlertStyles()
 
   const gridClasses = useGridStyles()
@@ -69,6 +63,12 @@ function OpenHousesList(props: Props) {
       isFetching: true
     }
   )
+
+  const user = useSelector<IAppState, IUser>(store => store.user)
+  const activeBrandId = getActiveTeamId(user) || ''
+  const activeBrandSettings = getActiveTeamSettings(user, '', true)
+  const showNotifyOfficeBanner =
+    activeBrandSettings[OPEN_HOUSE_REQUESTS_SETTINGS_KEY]
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isAlertOpen, setAlertToOpen] = useState(true)
@@ -136,10 +136,7 @@ function OpenHousesList(props: Props) {
       width: '200px',
       class: 'visible-on-hover',
       render: ({ row }: RenderProps<TableRow>) => (
-        <GuestRegistration
-          activeBrandId={props.activeBrandId}
-          openHouse={row}
-        />
+        <GuestRegistration activeBrandId={activeBrandId} openHouse={row} />
       )
     },
     {
@@ -220,28 +217,31 @@ function OpenHousesList(props: Props) {
         />
         <PageLayout.Main>
           <Box>
-            <Acl access={ACL.DEALS}>
-              {isAlertOpen && (
-                <Alert
-                  severity="info"
-                  action={
-                    <IconButton
-                      aria-label="close"
-                      color="inherit"
-                      onClick={() => setAlertToOpen(false)}
-                    >
-                      <CloseIcon size="small" />
-                    </IconButton>
-                  }
-                >
-                  <Box>
-                    Visit <Link href="/dashboard/deals">deals</Link> to notify
-                    your office to book an open house on the MLS. This page is
-                    only for creating open house registration pages and events.
-                  </Box>
-                </Alert>
-              )}
-            </Acl>
+            {showNotifyOfficeBanner && (
+              <Acl access={ACL.DEALS}>
+                {isAlertOpen && (
+                  <Alert
+                    severity="info"
+                    action={
+                      <IconButton
+                        aria-label="close"
+                        color="inherit"
+                        onClick={() => setAlertToOpen(false)}
+                      >
+                        <CloseIcon size="small" />
+                      </IconButton>
+                    }
+                  >
+                    <Box>
+                      Visit <Link href="/dashboard/deals">deals</Link> to notify
+                      your office to book an open house on the MLS. This page is
+                      only for creating open house registration pages and
+                      events.
+                    </Box>
+                  </Alert>
+                )}
+              </Acl>
+            )}
             {renderContent()}
 
             {isDrawerOpen && (
@@ -262,6 +262,4 @@ function OpenHousesList(props: Props) {
   )
 }
 
-export default connect((state: { user: IUser }) => ({
-  activeBrandId: getActiveTeamId(state.user)
-}))(OpenHousesList)
+export default OpenHousesList

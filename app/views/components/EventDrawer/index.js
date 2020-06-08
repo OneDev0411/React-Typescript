@@ -43,7 +43,7 @@ import { postLoadFormat } from './helpers/post-load-format'
 import Reminder from './components/Reminder/Reminder'
 import { Title } from './components/Title'
 import { UpdateReminder } from './components/UpdateReminder'
-import { Description } from './components/Description'
+import { Description } from './components/Description/RichText'
 import { EventType } from './components/EventType'
 import { NotifyGuests } from './components/NotifyGuests'
 
@@ -336,10 +336,7 @@ class PresentEventDrawer extends Component {
                           )}
                         </Flex>
 
-                        <Description
-                          style={{ padding: this.isNew ? 0 : '0 0 0 2.5rem' }}
-                          placeholder="Add a description about this event"
-                        />
+                        <Description placeholder="Add a description about this event" />
 
                         <EventType />
 

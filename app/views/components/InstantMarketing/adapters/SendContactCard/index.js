@@ -280,17 +280,21 @@ class SendContactCard extends React.Component {
           />
         )}
 
-        <InstantMarketing
-          isOpen={this.state.isBuilderOpen}
-          onClose={this.closeBuilder}
-          handleSave={this.handleSaveMarketingCard}
-          mediums={this.props.mediums}
-          templateData={{ user: this.props.user, contact: this.state.contact }}
-          templateTypes={['Birthday']}
-          defaultTemplate={this.props.selectedTemplate}
-          handleSocialSharing={this.handleSocialSharing}
-          isEdit={this.props.isEdit}
-        />
+        {this.state.isBuilderOpen && (
+          <InstantMarketing
+            onClose={this.closeBuilder}
+            handleSave={this.handleSaveMarketingCard}
+            mediums={this.props.mediums}
+            templateData={{
+              user: this.props.user,
+              contact: this.state.contact
+            }}
+            templateTypes={['Birthday']}
+            defaultTemplate={this.props.selectedTemplate}
+            handleSocialSharing={this.handleSocialSharing}
+            isEdit={this.props.isEdit}
+          />
+        )}
 
         <SingleEmailComposeDrawer
           isOpen={this.state.isComposeEmailOpen}
@@ -328,7 +332,6 @@ function mapStateToProps({ user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify, confirmation }
-)(SendContactCard)
+export default connect(mapStateToProps, { notify, confirmation })(
+  SendContactCard
+)

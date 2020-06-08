@@ -1,8 +1,6 @@
-export const DEFAULT_RADIUS_FILTER: {
-  type: 'radius' | 'custom'
-  radius: number
-  areas?: any // TODO: remove any
-} = {
+import { Filter } from './Filters/types'
+
+export const DEFAULT_RADIUS_FILTER: Required<Omit<Filter, 'areas'>> = {
   type: 'radius',
   radius: 3
 }

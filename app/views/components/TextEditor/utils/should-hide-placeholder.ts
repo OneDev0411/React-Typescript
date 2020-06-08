@@ -5,12 +5,7 @@ export function shouldHidePlaceholder(editorState) {
     return false
   }
 
-  if (
-    contentState
-      .getBlockMap()
-      .first()
-      .getType() !== 'unstyled'
-  ) {
+  if (contentState.getBlockMap().first().getType() !== 'unstyled') {
     return true
   }
 }

@@ -1,4 +1,4 @@
-import { isNegativeTimezone } from 'utils/is-negative-timezone'
+import { stateToHTML } from 'draft-js-export-html'
 
 /**
  * Format form data for api model
@@ -18,21 +18,23 @@ export async function preSaveFormat(values, originalValues) {
     assignees,
     associations = []
   } = values
+
   const isAllDay = allDay || false
 
   if (isAllDay) {
-    if (originalValues && !originalValues.metadata?.all_day) {
-      let resetDueHours = isNegativeTimezone() ? -1 : 0
-      let resetEndHours = isNegativeTimezone() ? 0 : 24
+    dueDate.setUTCFullYear(
+      dueDate.getFullYear(),
+      dueDate.getMonth(),
+      dueDate.getDate()
+    )
+    dueDate.setUTCHours(0, 0, 0, 0)
 
-      dueDate.setUTCHours(resetDueHours, 0, 0, 0)
-      endDate.setUTCHours(resetEndHours, 0, 0, 0)
-    } else {
-      let resetHours = isNegativeTimezone() ? 0 : 24
-
-      dueDate.setUTCHours(resetHours, 0, 0, 0)
-      endDate.setUTCHours(resetHours, 0, 0, 0)
-    }
+    endDate.setUTCFullYear(
+      endDate.getFullYear(),
+      endDate.getMonth(),
+      endDate.getDate()
+    )
+    endDate.setUTCHours(24, 0, 0, 0)
   }
 
   const dueDateTimestamp = dueDate.getTime()
@@ -52,7 +54,9 @@ export async function preSaveFormat(values, originalValues) {
   }
 
   if ((originalValues && originalValues.id) || description) {
-    task.description = (description && description.trim()) || ''
+    task.description = stateToHTML(description.getCurrentContent())
+      .trim()
+      .replace(/(\r\n|\n|\r)/gm, '') // remove unneccessary new line
   }
 
   if (task.status === 'DONE') {
