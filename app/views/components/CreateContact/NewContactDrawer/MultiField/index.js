@@ -46,7 +46,7 @@ export function MultiField({
                 width: '70%',
                 display: 'flex',
                 alignItems: 'flex-end',
-                padding: '0.25em 1em',
+                padding: '0 1em',
                 borderWidth: '0 0 1px 1px',
                 borderStyle: 'solid',
                 borderColor: '#d4d4d4'
@@ -67,7 +67,8 @@ export function MultiField({
                 style={{
                   display: 'flex',
                   alignItems: 'flex-end',
-                  marginLeft: '1em'
+                  marginLeft: '1em',
+                  marginBottom: '0.5em'
                 }}
               >
                 {index + 1 === fields.length ? (
