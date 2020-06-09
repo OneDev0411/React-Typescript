@@ -42,7 +42,7 @@ interface BrandRole extends Pick<IBrandRole, 'acl' | 'role'> {
 }
 
 export async function addBrand(
-  team: Pick<IBrand, 'name' | 'brand_type'>,
+  team: Partial<IBrand>,
   parentId: string | null,
   roles?: BrandRole[]
 ): Promise<ApiResponseBody<IBrand>> {

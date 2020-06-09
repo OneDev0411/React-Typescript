@@ -69,7 +69,7 @@ export default function DeleteRole(props: Props) {
   }
 
   return (
-    <Tooltip title={props.tooltip}>
+    <Tooltip title={props.tooltip || ''}>
       <IconButton
         size="small"
         onClick={handleRemoveRole}

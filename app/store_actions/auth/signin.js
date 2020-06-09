@@ -1,5 +1,7 @@
 import { browserHistory } from 'react-router'
 
+import * as Sentry from '@sentry/browser'
+
 import signin from '../../models/auth/signin'
 import getUser from '../../models/user/get-user'
 import * as actionsType from '../../constants/auth/signin'
@@ -35,22 +37,18 @@ const submitSigninForm = (loginData, redirectTo, userId) => (
           await dispatch(getUserTeams(user))
         }
 
-        // set user data for sentry
-        if (window.Raven) {
-          const { email, id } = user
-          const { brand } = getState()
+        const { brand } = getState()
 
-          const userData = {
-            id,
-            email,
+        Sentry.configureScope(scope => {
+          scope.setUser({
+            id: user.id,
+            email: user.email,
             brand: brand && {
               id: brand.id,
               name: brand.name
             }
-          }
-
-          window.Raven.setUserContext(userData)
-        }
+          })
+        })
 
         if (redirectTo) {
           if (redirectTo.includes('http')) {

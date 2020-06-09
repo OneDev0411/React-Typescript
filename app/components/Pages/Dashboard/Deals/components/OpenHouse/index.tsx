@@ -1,11 +1,13 @@
 import React, { useContext, useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
-
 import { Popover } from '@material-ui/core'
 import { PopoverActions } from '@material-ui/core/Popover'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
+import { getActiveTeamSettings } from 'utils/user-teams'
+import { OPEN_HOUSE_REQUESTS_SETTINGS_KEY } from 'constants/user'
 
 import { createTaskComment } from 'deals/utils/create-task-comment'
 import { setSelectedTask, updateTask } from 'actions/deals'
@@ -42,6 +44,9 @@ function OpenHouses({
     })
   )
 
+  const activeBrandSettings = getActiveTeamSettings(user, '', true)
+  const showOpenHouse = activeBrandSettings[OPEN_HOUSE_REQUESTS_SETTINGS_KEY]
+
   const confirmation = useContext(ConfirmationModalContext)
 
   const popoverActions = useRef<PopoverActions | null>(null)
@@ -62,6 +67,10 @@ function OpenHouses({
       setShowForm(true)
     }
   }, [defaultOpen])
+
+  if (!showOpenHouse) {
+    return null
+  }
 
   const toggleMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null = null

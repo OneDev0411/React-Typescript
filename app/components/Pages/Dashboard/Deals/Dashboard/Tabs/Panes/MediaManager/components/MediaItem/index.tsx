@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Box, Button, TextareaAutosize, IconButton } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  TextareaAutosize,
+  Typography,
+  IconButton
+} from '@material-ui/core'
 import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
 
@@ -17,8 +23,10 @@ import UploadProgessBar from './UploadProgessBar'
 import SortHandle from './SortHandle'
 
 import useMediaManagerContext from '../../hooks/useMediaManagerContext'
-import { IMediaItem } from '../../types'
+import type { IMediaItem } from '../../types'
 import { renameMedia } from '../../context/actions'
+
+const EMPTY_NAME_TEXT = 'Caption can go here ...'
 
 interface Props {
   media: IMediaItem
@@ -31,7 +39,7 @@ export default function MediaItem({ media, deal }: Props) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const reduxDispatch = useDispatch()
 
-  const { file, src, selected, name, order, isNew, uploadProgress } = media
+  const { id, src, selected, name, order, isUploading, uploadProgress } = media
 
   const { dispatch } = useMediaManagerContext()
 
@@ -58,7 +66,7 @@ export default function MediaItem({ media, deal }: Props) {
       const newName = textareaRef.current.value
 
       try {
-        dispatch(renameMedia(file, newName, deal.id))
+        dispatch(renameMedia(id, newName, deal.id))
         setEditMode(false)
       } catch (e) {
         setEditMode(false)
@@ -97,7 +105,7 @@ export default function MediaItem({ media, deal }: Props) {
     </Box>
   ))
 
-  if (isNew) {
+  if (isUploading) {
     return (
       <Box
         className={cn(classes.mediaCard, classes.mediaCardUploading)}
@@ -110,9 +118,7 @@ export default function MediaItem({ media, deal }: Props) {
           />
           <UploadProgessBar value={uploadProgress} />
         </Box>
-        <Button className={classes.mediaLabel} fullWidth>
-          Uploading...
-        </Button>
+        <Box className={classes.mediaLabel}>Uploading...</Box>
       </Box>
     )
   }
@@ -137,7 +143,11 @@ export default function MediaItem({ media, deal }: Props) {
           >
             <IconEdit fillColor="#333" className={iconClasses.small} />
           </IconButton>
-          {name}
+          {name || (
+            <Typography className={classes.mutedText}>
+              {EMPTY_NAME_TEXT}
+            </Typography>
+          )}
         </Box>
       )}
 

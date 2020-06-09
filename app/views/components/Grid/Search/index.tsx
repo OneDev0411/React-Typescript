@@ -18,7 +18,6 @@ interface Props {
   showClearSearch?: boolean
   style?: CSSProperties
   onClearSearch?: (string) => any
-
   inputRef?: (ref: HTMLInputElement) => void
 }
 

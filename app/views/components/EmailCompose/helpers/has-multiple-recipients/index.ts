@@ -9,9 +9,9 @@ import { notUndefined } from 'utils/ts-utils'
 export function hasMultipleRecipients(
   ...lists: (IDenormalizedEmailRecipientInput[] | null | undefined)[]
 ) {
-  const recipients: IDenormalizedEmailRecipientInput[] = lists
+  const recipients = lists
     .filter(notUndefined)
-    .flat()
+    .flat() as IDenormalizedEmailRecipientInput[]
 
   return (
     recipients.some(recipient => recipient.recipient_type !== 'Email') ||

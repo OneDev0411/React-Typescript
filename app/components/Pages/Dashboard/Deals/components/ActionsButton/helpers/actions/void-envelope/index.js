@@ -3,8 +3,6 @@ import { addNotification as notify } from 'reapop'
 import { voidEnvelope as voidEnvelopeDocument } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
-import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
-
 import store from '../../../../../../../../../stores'
 
 export function voidEnvelope(props) {
@@ -17,11 +15,9 @@ export function voidEnvelope(props) {
   )
 }
 
-async function handleVoidEnvelope({ envelopes, task, deal }) {
-  const envelopeDocuments = getTaskEnvelopes(envelopes, task)
-
+async function handleVoidEnvelope({ envelope, deal }) {
   try {
-    await store.dispatch(voidEnvelopeDocument(deal.id, envelopeDocuments[0].id))
+    await store.dispatch(voidEnvelopeDocument(deal.id, envelope.id))
 
     store.dispatch(
       notify({

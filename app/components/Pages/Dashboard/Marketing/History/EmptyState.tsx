@@ -55,7 +55,7 @@ export default function EmptyState() {
         <Button
           color="primary"
           target="blank"
-          href="https://help.rechat.com/en/articles/2562820-marketing-center-overview"
+          href="https://help.rechat.com/en/collections/1969137-marketing"
         >
           <IconVideo className={classes.videoIcon} />
           Learn More

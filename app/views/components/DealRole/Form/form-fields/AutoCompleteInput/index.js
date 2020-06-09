@@ -22,7 +22,7 @@ export function AutoCompleteInput(props) {
       showHintOnFocus={props.showHintOnFocus}
       hintMessage={props.hintMessage}
       hintStyle={{
-        top: '70%'
+        top: '4.5rem'
       }}
       inputProps={{
         highlightOnError: true

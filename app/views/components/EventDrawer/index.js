@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Box, IconButton } from '@material-ui/core'
+import { Box, IconButton, FormControlLabel, Checkbox } from '@material-ui/core'
+
+import { Field } from 'react-final-form'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
@@ -41,7 +43,7 @@ import { postLoadFormat } from './helpers/post-load-format'
 import Reminder from './components/Reminder/Reminder'
 import { Title } from './components/Title'
 import { UpdateReminder } from './components/UpdateReminder'
-import { Description } from './components/Description'
+import { Description } from './components/Description/RichText'
 import { EventType } from './components/EventType'
 import { NotifyGuests } from './components/NotifyGuests'
 
@@ -136,7 +138,12 @@ class PresentEventDrawer extends Component {
         newEvent = await createTask(event, CRM_TASKS_QUERY)
       }
 
-      this.setState({ isDisabled: false, isSaving: false, event: newEvent })
+      this.setState({
+        isDisabled: false,
+        isSaving: false,
+        shouldShowNotify: false,
+        event: newEvent
+      })
       await this.props.submitCallback(newEvent, action)
     } catch (error) {
       console.log(error)
@@ -149,7 +156,7 @@ class PresentEventDrawer extends Component {
     try {
       this.setState({ isDisabled: true })
       await deleteTask(this.state.event.id, shouldNotify)
-      this.setState({ isDisabled: false }, () =>
+      this.setState({ isDisabled: false, shouldShowNotify: false }, () =>
         this.props.deleteCallback(this.state.event)
       )
     } catch (error) {
@@ -204,6 +211,16 @@ class PresentEventDrawer extends Component {
     document.getElementById('event-drawer-form').dispatchEvent(event)
   }
 
+  handleClose = () => {
+    if (this.state.shouldShowNotify) {
+      this.setState(() => ({
+        shouldShowNotify: false
+      }))
+    }
+
+    this.props.onClose()
+  }
+
   render() {
     let crm_task
     const {
@@ -215,7 +232,7 @@ class PresentEventDrawer extends Component {
       shouldShowNotify,
       currentEvent
     } = this.state
-    const { defaultAssociation, user, isOpen, onClose } = this.props
+    const { defaultAssociation, user, isOpen } = this.props
 
     if (event) {
       crm_task = event.id
@@ -230,11 +247,11 @@ class PresentEventDrawer extends Component {
             isDeleting={isDeleting}
             onSave={this.save}
             onDelete={this.delete}
-            onCancel={onClose}
+            onCancel={this.handleClose}
             currentEvent={currentEvent}
           />
         )}
-        <Drawer open={isOpen} onClose={onClose}>
+        <Drawer open={isOpen} onClose={this.handleClose}>
           <Drawer.Header title={`${this.isNew ? 'Add' : 'Edit'} Event`} />
           <Drawer.Body>
             {error && error.status === 404 ? (
@@ -319,10 +336,7 @@ class PresentEventDrawer extends Component {
                           )}
                         </Flex>
 
-                        <Description
-                          style={{ padding: this.isNew ? 0 : '0 0 0 2.5rem' }}
-                          placeholder="Add a description about this event"
-                        />
+                        <Description placeholder="Add a description about this event" />
 
                         <EventType />
 
@@ -335,16 +349,37 @@ class PresentEventDrawer extends Component {
                             <DateTimeField
                               name="dueDate"
                               selectedDate={values.dueDate}
+                              showTimePicker={!values.allDay}
                             />
 
-                            <EndDateTimeField dueDate={values.dueDate} />
+                            <EndDateTimeField
+                              selectedDate={values.endDate}
+                              showTimePicker={!values.allDay}
+                            />
                           </FieldContainer>
 
+                          <Field
+                            name="allDay"
+                            render={({ input }) => (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={input.value}
+                                    onChange={e =>
+                                      input.onChange(e.target.checked)
+                                    }
+                                    name="allDay"
+                                    color="primary"
+                                  />
+                                }
+                                label="All Day Event"
+                              />
+                            )}
+                          />
                           <FieldError
                             name="endDate"
                             style={{ fontSize: '1rem', marginBottom: '0.5em' }}
                           />
-
                           <Reminder dueDate={values.dueDate} />
                         </Box>
 

@@ -3,8 +3,6 @@ import { addNotification as notify } from 'reapop'
 import { confirmation } from 'actions/confirmation'
 import { resendEnvelope as resendEnvelopeDocument } from 'models/Deal/envelope'
 
-import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
-
 import store from '../../../../../../../../../stores'
 
 export function resendEnvelope(props) {
@@ -18,10 +16,8 @@ export function resendEnvelope(props) {
 }
 
 async function handleResendEnvelope(props) {
-  const envelopes = getTaskEnvelopes(props.envelopes, props.task)
-
   try {
-    await resendEnvelopeDocument(envelopes[0].id)
+    await resendEnvelopeDocument(props.envelope.id)
 
     store.dispatch(
       notify({

@@ -20,11 +20,7 @@ import {
   selectContactsInfo,
   selectContactsListFetching
 } from 'reducers/contacts/list'
-import {
-  getUserSettingsInActiveTeam,
-  viewAs,
-  viewAsEveryoneOnTeam
-} from 'utils/user-teams'
+import { getUserSettingsInActiveTeam, viewAs } from 'utils/user-teams'
 import {
   clearImportingGoogleContacts,
   getNewConnectedGoogleAccount
@@ -110,27 +106,6 @@ class ContactsList extends React.Component {
         this.updateSyncState(provider, nextProps.oAuthAccounts)
       }
     })
-
-    if (
-      nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
-      !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
-    ) {
-      const viewAsUsers = viewAsEveryoneOnTeam(nextProps.user)
-        ? []
-        : nextProps.viewAsUsers
-
-      this.handleFilterChange({
-        filters: this.props.filters,
-        searchInputValue: this.state.searchInputValue,
-        start: 0,
-        order: this.order,
-        viewAsUsers,
-        conditionOperator:
-          nextProps.conditionOperator || this.props.conditionOperator
-      })
-
-      this.props.getContactsTags(viewAsUsers)
-    }
 
     const prevStart = this.props.location.query.s
     const nextStart = nextProps.location.query.s
@@ -868,7 +843,7 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
       'contacts',
       getPredefinedContactLists('Contacts', { user, contacts, ...restOfState })
     ),
-    viewAsUsers: viewAsEveryoneOnTeam(user) ? [] : viewAs(user)
+    viewAsUsers: viewAs(user)
   }
 }
 

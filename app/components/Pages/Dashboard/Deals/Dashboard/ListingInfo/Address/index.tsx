@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core'
 
 import { getField } from 'models/Deal/helpers/context/get-field'
-import { getDealTitle } from 'deals/utils/get-deal-title'
 import { getDealAddress } from 'deals/utils/get-deal-address'
 
 import { upsertContexts } from 'actions/deals'
@@ -47,6 +46,7 @@ export function Address(props: Props) {
 
   const cancleEdit = () => setIsEditingAddress(false)
   const editAddress = () => !props.deal.listing && setIsEditingAddress(true)
+  const fullAddress = getField(props.deal, 'full_address')
 
   const handleSave = async address => {
     const contexts = Object.entries(normalizeAddress(address)).reduce<
@@ -75,15 +75,12 @@ export function Address(props: Props) {
     }
   }
 
-  const title = getDealTitle(props.deal)
-  const address = getDealAddress(props.deal)
-
   return (
     <>
       {isEditingAddress ? (
         <div className={classes.container}>
           <InlineAddressField
-            address={getField(props.deal, 'full_address')}
+            address={fullAddress}
             handleCancel={cancleEdit}
             handleSubmit={handleSave}
             style={{
@@ -118,7 +115,9 @@ export function Address(props: Props) {
           placement="bottom"
         >
           <div className={classes.container} onClick={editAddress}>
-            <Typography variant="h6">{title}</Typography>
+            <Typography variant="h6">
+              {fullAddress || props.deal.title}
+            </Typography>
 
             {!props.deal.listing && (
               <Button
@@ -126,7 +125,7 @@ export function Address(props: Props) {
                 size="small"
                 className={classes.editButton}
               >
-                {address.length ? 'Edit Address' : '+ Add Address'}
+                {fullAddress ? 'Edit Address' : '+ Add Address'}
               </Button>
             )}
           </div>

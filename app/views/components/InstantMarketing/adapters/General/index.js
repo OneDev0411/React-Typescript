@@ -144,17 +144,18 @@ class General extends React.Component {
           </ActionButton>
         )}
 
-        <InstantMarketing
-          isOpen={this.state.isBuilderOpen}
-          onClose={this.closeBuilder}
-          handleSave={this.handleSaveMarketingCard}
-          handleSocialSharing={this.handleSocialSharing}
-          templateData={{ user }}
-          templateTypes={this.props.types}
-          mediums={this.props.mediums}
-          defaultTemplate={selectedTemplate}
-          isEdit={this.props.isEdit}
-        />
+        {this.state.isBuilderOpen && (
+          <InstantMarketing
+            onClose={this.closeBuilder}
+            handleSave={this.handleSaveMarketingCard}
+            handleSocialSharing={this.handleSocialSharing}
+            templateData={{ user }}
+            templateTypes={this.props.types}
+            mediums={this.props.mediums}
+            defaultTemplate={selectedTemplate}
+            isEdit={this.props.isEdit}
+          />
+        )}
 
         {this.state.isComposeEmailOpen && (
           <BulkEmailComposeDrawer

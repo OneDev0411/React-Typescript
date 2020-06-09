@@ -51,7 +51,9 @@ const config = {
       RECHAT_SPLITTER_URL: JSON.stringify(process.env.RECHAT_SPLITTER_URL),
       TENOR_API_KEY: JSON.stringify(process.env.TENOR_API_KEY),
       UNSPLASH_API_KEY: JSON.stringify(process.env.UNSPLASH_API_KEY),
-      DROPBOX_APP_KEY: JSON.stringify(process.env.DROPBOX_APP_KEY)
+      SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
+      DROPBOX_APP_KEY: JSON.stringify(process.env.DROPBOX_APP_KEY),
+      SOURCE_VERSION: JSON.stringify(process.env.SOURCE_VERSION)
     },
     __DEV__: __DEV__,
     NODE_ENV: env,

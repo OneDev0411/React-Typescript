@@ -4,8 +4,14 @@ import moment from 'moment'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import Tooltip from 'components/tooltip'
-
 import Avatar from 'components/Avatar'
+
+import {
+  MOVE_FILE,
+  VIEW_FILE,
+  DELETE_FILE,
+  SPLIT_PDF
+} from 'deals/components/ActionsButton/data/action-buttons'
 
 import ActionsButton from '../../../../components/ActionsButton'
 
@@ -34,6 +40,12 @@ class Files extends React.Component {
     }
 
     return null
+  }
+
+  getActions = file => {
+    const actions = [MOVE_FILE, VIEW_FILE, DELETE_FILE]
+
+    return file.mime === 'application/pdf' ? [SPLIT_PDF, ...actions] : actions
   }
 
   render() {
@@ -85,10 +97,10 @@ class Files extends React.Component {
                   </Flex>
 
                   <ActionsButton
-                    type="document"
                     deal={this.props.deal}
                     task={null}
-                    document={file}
+                    file={file}
+                    actions={this.getActions(file)}
                   />
                 </Flex>
               </Flex>

@@ -1,5 +1,5 @@
-import React, { useContext, useRef } from 'react'
-import { Box } from '@material-ui/core'
+import React, { useContext, useRef, useState } from 'react'
+import { Box, RootRef } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
 import { addNotification } from 'reapop'
@@ -33,15 +33,22 @@ export default function MediaManager({ user, deal }: Props) {
   const classes = useStyles()
   const reduxDispatch = useDispatch()
   const uploaderRef = useRef<DropzoneRef>(null)
-
+  const pageBottom = useRef<HTMLDivElement>(null)
+  const [sortEnabled, setSortEnabled] = useState(true)
+  const [, setCurrentlyUploadingPhotos] = useState(0)
   const { isLoading, state, dispatch } = useFetchGallery(deal.id)
   const confirmationModal = useContext(ConfirmationModalContext)
-  const upload = async (fileObject, order) => {
+
+  const scrollToBottom = () => {
+    pageBottom.current!.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const upload = async (fileObject, order: number) => {
     try {
       const response = await uploadMedia(
         deal.id,
         fileObject,
-        '',
+        null,
         order,
         progressEvent => {
           if (progressEvent.percent) {
@@ -53,10 +60,21 @@ export default function MediaManager({ user, deal }: Props) {
           }
         }
       )
-      const { id: file, name } = response
+      const { id } = response
       const { preview_url: src } = response.file
 
-      dispatch(setNewlyUploadedMediaFields(fileObject.name, file, src, name))
+      setCurrentlyUploadingPhotos(CurrentlyUploadingPhotos => {
+        const newState = CurrentlyUploadingPhotos - 1
+
+        if (newState === 0) {
+          // no files are remaining for upload
+          setSortEnabled(true)
+        }
+
+        return newState
+      })
+
+      dispatch(setNewlyUploadedMediaFields(fileObject.name, id, src))
     } catch (err) {
       console.log(err)
       reduxDispatch(
@@ -68,7 +86,7 @@ export default function MediaManager({ user, deal }: Props) {
       )
     }
   }
-  const onDrop = (files: any[], rejectedFiles: []) => {
+  const onDrop = (fileObjects: any[], rejectedFiles: []) => {
     if (rejectedFiles.length > 0) {
       confirmationModal.setConfirmationModal({
         message: `${rejectedFiles.length} unsupported files dropped!`,
@@ -80,13 +98,26 @@ export default function MediaManager({ user, deal }: Props) {
       })
     }
 
-    let nextOrder =
-      Math.max(...state.map(galleryItem => galleryItem.order), -1) + 1
+    // Upon uploading new photos we need to calculate the correct order of that item
+    // so that the next time user visits the page, he sees them with that exact same
+    // order.
+    // The rule is, new photos are *appended* to the gallery and since the user needs
+    // to see the upload process, we'll scroll all the way down to the bottom when he
+    // drops the files.
+    let order = state.length
+      ? Math.max(...state.map(galleryItem => galleryItem.order)) + 1
+      : 0
 
-    files.forEach(file => {
-      dispatch(addMedia({ file, order: nextOrder }))
-      upload(file, nextOrder)
-      nextOrder += 1
+    setSortEnabled(false)
+    scrollToBottom()
+
+    fileObjects.forEach(fileObject => {
+      dispatch(addMedia({ fileObject, order }))
+      upload(fileObject, order)
+      setCurrentlyUploadingPhotos(
+        CurrentlyUploadingPhotos => CurrentlyUploadingPhotos + 1
+      )
+      order++
     })
   }
 
@@ -108,11 +139,19 @@ export default function MediaManager({ user, deal }: Props) {
             deal={deal}
             user={user}
           />
-          <Gallery medias={state} deal={deal} uploaderRef={uploaderRef} />
+          <Gallery
+            medias={state}
+            deal={deal}
+            uploaderRef={uploaderRef}
+            sortEnabled={sortEnabled}
+          />
           {getSelectedMedia(state).length > 0 && (
             <BulkActionsMenu mediaGallery={state} deal={deal} />
           )}
         </Box>
+        <RootRef rootRef={pageBottom}>
+          <Box />
+        </RootRef>
       </MediaManagerContext.Provider>
     </Uploader>
   )

@@ -139,9 +139,9 @@ export const TextEditor = forwardRef(
 
     useEffect(() => {}, [])
 
-    const dropzoneProps: Partial<
-      ComponentType<typeof Dropzone>
-    > = getDropzoneProps({
+    const dropzoneProps: Partial<ComponentType<
+      typeof Dropzone
+    >> = getDropzoneProps({
       disabled: !onAttachmentDropped,
       accept: onAttachmentDropped ? '*/*' : undefined,
       onDrop: (files: File[]) => {

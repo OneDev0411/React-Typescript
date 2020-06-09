@@ -23,16 +23,12 @@ class InstantMarketing extends React.Component {
   }
 
   render() {
-    if (!this.props.isOpen) {
-      return false
-    }
-
     return (
       <Builder
+        {...this.props}
         onClose={this.handleCloseRequest}
         onSave={this.props.handleSave}
         onSocialSharing={this.props.handleSocialSharing}
-        {...this.props}
       />
     )
   }
@@ -60,7 +56,4 @@ InstantMarketing.defaultProps = {
   containerStyle: {}
 }
 
-export default connect(
-  null,
-  { confirmation }
-)(InstantMarketing)
+export default connect(null, { confirmation })(InstantMarketing)

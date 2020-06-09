@@ -11,9 +11,9 @@ import {
 } from './helpers'
 import { convertStepToStepInput } from '../helpers'
 
-const flow: IBrandFlow = flowData
-const flow2: IBrandFlow = flowData2
-const flow3: IBrandFlow = flowData3
+const flow = flowData as IBrandFlow
+const flow2 = flowData2 as IBrandFlow
+const flow3 = flowData3 as IBrandFlow
 
 describe('Flows edit helpers', () => {
   it('humanizeSeconds', () => {

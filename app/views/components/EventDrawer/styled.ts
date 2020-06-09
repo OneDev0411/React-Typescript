@@ -25,4 +25,5 @@ export const Footer = styled(Flex)`
   height: 4.5rem;
   background-color: #fff;
   border-top: 1px solid ${({ theme }: Props) => theme.palette.divider};
+  z-index: 1;
 `

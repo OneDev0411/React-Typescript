@@ -10,6 +10,7 @@ declare type EnvelopeStatus =
 declare interface IDealEnvelopeRecipients extends IModel<'envelope_recipient'> {
   envelope: UUID
   envelope_recipient_type: 'CarbonCopy' | 'Signer'
+  status: string
   order: number
   role: IDealRole
   signed_at: number | null
@@ -35,4 +36,14 @@ declare interface IDealEnvelope extends IModel<'envelope'> {
   documents: IDealEnvelopeDocument[]
   status: EnvelopeStatus
   title: string
+}
+
+declare type ActionButtonId = number
+
+declare type ActionButton = {
+  label: string
+  type: string
+  condition?: function
+  disabled: boolean
+  tooltip: string
 }

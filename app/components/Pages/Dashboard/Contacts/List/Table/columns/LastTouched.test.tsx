@@ -6,7 +6,8 @@ import fullContact from 'fixtures/contacts/full-contact.json'
 
 import mockDate, { RealDate } from 'utils/test-utils/mock-date'
 
-const contact: IContact = {
+// TODO: full-contact.json data is old and needs update
+const contact: any = {
   ...fullContact,
   user: fullContact.user as IUser,
   users: fullContact.users as IUser[]

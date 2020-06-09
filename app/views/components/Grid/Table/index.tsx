@@ -39,7 +39,7 @@ export const GridProvider = GridContextProvider
 
 export default function Grid<Row>(props: Props<Row>) {
   return (
-    <GridContextProvider<Row> sorting={props.sorting}>
+    <GridContextProvider<Row>>
       <GridTable<Row> {...props} />
     </GridContextProvider>
   )

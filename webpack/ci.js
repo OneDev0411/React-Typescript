@@ -51,18 +51,25 @@ webpackConfig.plugins.push(
   })
 )
 
-webpackConfig.module.rules.push({
-  test: /\.(sa|sc|c)ss$/,
-  use: [
-    'css-loader',
-    {
-      loader: 'postcss-loader',
-      options: {
-        plugins: postcss
-      }
-    },
-    'sass-loader'
-  ]
-})
+webpackConfig.module.rules.push(
+  {
+    test: /\.(ts|tsx|js)$/,
+    loader: 'babel-loader',
+    options: {}
+  },
+  {
+    test: /\.(sa|sc|c)ss$/,
+    use: [
+      'css-loader',
+      {
+        loader: 'postcss-loader',
+        options: {
+          plugins: postcss
+        }
+      },
+      'sass-loader'
+    ]
+  }
+)
 
 export default webpackConfig

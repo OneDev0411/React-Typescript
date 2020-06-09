@@ -28,7 +28,12 @@ function TaskView(props) {
           padding: '1rem 0 0 0'
         }}
       >
-        <Header task={task} deal={props.deal} onClose={onClose} />
+        <Header
+          task={task}
+          deal={props.deal}
+          isBackOffice={props.isBackOffice}
+          onClose={onClose}
+        />
       </Drawer.Header>
 
       <Drawer.Body
@@ -59,7 +64,4 @@ function TaskView(props) {
   )
 }
 
-export default connect(
-  null,
-  { setSelectedTask }
-)(TaskView)
+export default connect(null, { setSelectedTask })(TaskView)

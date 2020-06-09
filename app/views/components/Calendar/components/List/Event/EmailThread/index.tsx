@@ -1,14 +1,16 @@
 import React, { useContext } from 'react'
 import { Box, makeStyles } from '@material-ui/core'
 
+import useTypedSelector from 'hooks/use-typed-selector'
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
-import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
-import { iconSizes } from 'components/SvgIcons/icon-sizes'
-
 import { findInPeopleByEmail } from 'utils/find-in-people-by-email'
 import { getPersonDisplayName } from 'utils/get-person-display-name'
+import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
+import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { hasOAuthAccess } from 'components/EmailThread/helpers/has-oauth-access'
 
 import { ListContext } from '../../context'
 import { EventContainer } from '../components/EventContainer'
@@ -25,6 +27,9 @@ const useStyles = makeStyles(sharedStyles)
 export function EmailThread({ style, event }: Props) {
   const classes = useStyles({})
   const { setSelectedEvent } = useContext(ListContext)
+  const accounts: IOAuthAccount[] = useTypedSelector(state =>
+    selectAllConnectedAccounts(state.contacts.oAuthAccounts)
+  )
   const thread = event.full_thread
 
   const handleContainerClick = () => setSelectedEvent(event)
@@ -33,6 +38,14 @@ export function EmailThread({ style, event }: Props) {
     thread.recipients
   )
 
+  const isThreadRead = hasOAuthAccess(
+    accounts,
+    thread.google_credential || thread.microsoft_credential,
+    'mail.modify'
+  )
+    ? thread.is_read
+    : true
+
   return (
     <EventContainer
       style={style}
@@ -40,7 +53,13 @@ export function EmailThread({ style, event }: Props) {
       Icon={eventIcons.Email.icon}
       editable={false}
       title={
-        <Box display="flex" alignItems="center">
+        <Box
+          display="flex"
+          alignItems="center"
+          style={{
+            fontWeight: isThreadRead ? 400 : 600
+          }}
+        >
           <a
             className={classes.link}
             onClick={e => {

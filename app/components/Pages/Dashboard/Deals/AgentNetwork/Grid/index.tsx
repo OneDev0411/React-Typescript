@@ -16,6 +16,8 @@ import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 import { putUserSetting } from 'models/user/put-user-setting'
 
 import { Table } from 'components/Grid/Table'
+import type { SortableColumn } from 'components/Grid/Table/types'
+
 import { RenderProps } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
 import IconEmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
@@ -56,7 +58,8 @@ const useStyles = makeStyles(
   }),
   { name: 'AgentsGrid' }
 )
-const Grid = (props: Props) => {
+
+export function Grid(props: Props) {
   const [state, dispatch] = useGridContext()
   const classes = useStyles()
   const theme: Theme = useTheme()
@@ -78,6 +81,7 @@ const Grid = (props: Props) => {
       selectedRowIds.length > 0 &&
       selectedRowIds.length < (props.data || []).length) ||
     (isEntireRowsSelected && excludedRows.length > 0)
+
   const tooltipTitle =
     isAllSelected || isEntireRowsSelected
       ? 'Deselect All Rows'
@@ -195,19 +199,30 @@ const Grid = (props: Props) => {
   ]
 
   const getActiveSort = () => {
-    const sort = parseSortSetting(props.user, SORT_FIELD_SETTING_KEY, 'name')
+    const sort = parseSortSetting(
+      props.user,
+      SORT_FIELD_SETTING_KEY,
+      '-listings'
+    )
 
-    return SortableColumns.find(col => col.value === sort.id)
+    return SortableColumns.find(
+      col => col.value === sort.id && col.ascending === sort.ascending
+    )
   }
 
-  const handleChangeSort = async column => {
-    putUserSetting(SORT_FIELD_SETTING_KEY, column.value)
+  const handleChangeSort = async (column: SortableColumn) => {
+    putUserSetting(
+      SORT_FIELD_SETTING_KEY,
+      column.ascending ? column.value : `-${column.value}`
+    )
   }
+
   const toggleAll = () =>
     dispatch({
       type: SELECTION__TOGGLE_ALL,
       rows: props.data
     })
+
   const getSummeryInfo = () => {
     const totalRows = (props.data || []).length
     let selectedCount
@@ -225,7 +240,7 @@ const Grid = (props: Props) => {
 
   return (
     <>
-      {!props.isFetching && (
+      {!props.isFetching && (props.data || []).length > 0 && (
         <div className={classes.infoContainer}>
           <Tooltip title={tooltipTitle}>
             <Checkbox
@@ -278,5 +293,3 @@ const Grid = (props: Props) => {
     </>
   )
 }
-
-export default Grid

@@ -1,3 +1,5 @@
+import { stateToHTML } from 'draft-js-export-html'
+
 /**
  * Format form data for api model
  * @param {object} values The form values
@@ -9,6 +11,7 @@ export async function preSaveFormat(values, originalValues) {
     status,
     dueDate,
     endDate,
+    allDay,
     reminder,
     task_type,
     description,
@@ -16,25 +19,44 @@ export async function preSaveFormat(values, originalValues) {
     associations = []
   } = values
 
+  const isAllDay = allDay || false
+
+  if (isAllDay) {
+    dueDate.setUTCFullYear(
+      dueDate.getFullYear(),
+      dueDate.getMonth(),
+      dueDate.getDate()
+    )
+    dueDate.setUTCHours(0, 0, 0, 0)
+
+    endDate.setUTCFullYear(
+      endDate.getFullYear(),
+      endDate.getMonth(),
+      endDate.getDate()
+    )
+    endDate.setUTCHours(24, 0, 0, 0)
+  }
+
   const dueDateTimestamp = dueDate.getTime()
+  const endDateTimestamp = endDate.getTime()
 
   const task = {
     title: title.trim(),
     due_date: dueDateTimestamp / 1000,
+    end_date: endDateTimestamp / 1000,
     task_type: task_type.value,
+    metadata: {
+      all_day: isAllDay
+    },
     assignees: assignees.map(a => a.id),
     status:
       dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'
   }
 
   if ((originalValues && originalValues.id) || description) {
-    task.description = (description && description.trim()) || ''
-  }
-
-  if (endDate) {
-    task.end_date = endDate.getTime() / 1000
-  } else if (originalValues && originalValues.end_date) {
-    task.end_date = null
+    task.description = stateToHTML(description.getCurrentContent())
+      .trim()
+      .replace(/(\r\n|\n|\r)/gm, '') // remove unneccessary new line
   }
 
   if (task.status === 'DONE') {
@@ -68,9 +90,14 @@ export async function preSaveFormat(values, originalValues) {
   })
 
   if (originalValues) {
+    const metadata = originalValues.metadata
+      ? { ...originalValues.metadata, ...task.metadata }
+      : task.metadata
+
     return {
       ...originalValues,
-      ...task
+      ...task,
+      metadata
     }
   }
 

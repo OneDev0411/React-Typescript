@@ -144,36 +144,52 @@ export function isActiveTeamTraining(user: IUser | null): boolean {
 export function viewAs(
   user: IUser | null,
   activeTeam: IUserTeam | null = getActiveTeam(user)
-) {
+): UUID[] {
   if (
     activeTeam &&
     !idx(activeTeam, t => t.acl.includes('BackOffice')) &&
     idx(activeTeam, team => team.settings.user_filter[0])
   ) {
-    return activeTeam.settings.user_filter
+    return activeTeam.settings.user_filter || []
   }
 
   return []
 }
 
-type GetSettings = (team: IUserTeam) => StringMap<any> | null
+type GetSettings = (team: IUserTeam, includesParents?: boolean) => StringMap<any>
 
 const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
   user: IUser | null,
-  key: string
+  key?: string,
+  includesParents?: boolean
 ) => {
   const team = getActiveTeam(user)
-  const settings = (team && getSettings(team)) || {}
+
+  if (!team) {
+    return {}
+  }
+  
+  const settings = getSettings(team, includesParents)
 
   return key ? settings[key] : settings
 }
 
 export const getActiveTeamSettings = getSettingsFromActiveTeam(
-  team => team.brand.settings
+  (team, includesParents) => {
+    let settings: StringMap<any> | null | undefined = team.brand.settings
+
+    if (includesParents) {
+      let brand = flattenBrand(team.brand)
+
+      settings = brand?.settings
+    }
+
+    return settings || {}
+  }
 )
 
 export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(
-  team => team.settings
+  team => team.settings || {}
 )
 
 export function getActiveTeamPalette(user: IUser): BrandSettingsPalette {
@@ -204,6 +220,8 @@ export function viewAsEveryoneOnTeam(user: IUser | null): boolean {
   const users = viewAs(user)
 
   return (
+    // It means all members of the team
+    users == null ||
     users.length === 0 ||
     getTeamAvailableMembers(getActiveTeam(user)).length === users.length
   )
