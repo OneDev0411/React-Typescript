@@ -63,7 +63,7 @@ export function preSaveFormat(values, attributeDefs) {
 
     attributes.push({
       attribute_def: attributeDef.id,
-      text: tag.text
+      text: tag.value
     })
   })
 
