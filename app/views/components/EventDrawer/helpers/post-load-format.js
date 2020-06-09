@@ -1,9 +1,11 @@
 import { EditorState } from 'draft-js'
 import { stateFromHTML } from 'draft-js-import-html'
 
-import { getReminderItem } from 'views/utils/reminder'
-import { normalizeAssociations } from 'views/utils/association-normalizers'
 import { isNegativeTimezone } from 'utils/is-negative-timezone'
+
+import { getReminderItem } from 'views/utils/reminder'
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
+import { normalizeAssociations } from 'views/utils/association-normalizers'
 
 function roundToMultipleFive(n) {
   if (n % 5 == 0) {
@@ -21,10 +23,7 @@ function roundToMultipleFive(n) {
  * @returns {Promise} a formated Task
  */
 export async function postLoadFormat(task, owner, defaultAssociation) {
-  let reminder = {
-    title: 'None',
-    value: -1
-  }
+  let reminder = REMINDER_DROPDOWN_OPTIONS[3] // 15 minutes before
 
   const associations = []
 

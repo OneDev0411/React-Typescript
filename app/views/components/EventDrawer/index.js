@@ -42,7 +42,6 @@ import { postLoadFormat } from './helpers/post-load-format'
 
 import Reminder from './components/Reminder/Reminder'
 import { Title } from './components/Title'
-import { UpdateReminder } from './components/UpdateReminder'
 import { Description } from './components/Description/RichText'
 import { EventType } from './components/EventType'
 import { NotifyGuests } from './components/NotifyGuests'
@@ -304,7 +303,6 @@ class PresentEventDrawer extends Component {
                             }}
                           />
                         )}
-                        <UpdateReminder dueDate={values.dueDate} />
                         <Flex style={{ marginBottom: '1rem' }}>
                           {this.isNew ? (
                             <Title fullWidth />
