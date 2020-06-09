@@ -4,8 +4,7 @@ const INITIAL_VALUES = {
   tags: [],
   source: '',
   email: [{ label: { title: 'Personal', value: 'Personal' } }],
-  phone_number: [{ label: { title: 'Mobile', value: 'Mobile' } }],
-  title: { title: '-Select-', value: '-Select-' }
+  phone_number: [{ label: { title: 'Mobile', value: 'Mobile' } }]
 }
 
 export function generateInitialValues(initValues) {
