@@ -15,7 +15,7 @@ export const prepareListingsProperties = (user, listing) => {
   }
 
   const sqft = numberWithCommas(
-    Math.floor(listingUtils.metersToFeet(property.square_meters))
+    Math.round(listingUtils.metersToFeet(property.square_meters))
   )
 
   let price = listing.price
