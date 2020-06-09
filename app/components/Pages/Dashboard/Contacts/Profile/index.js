@@ -282,10 +282,9 @@ class ContactProfile extends React.Component {
             <ContactInfo {..._props} />
             <AddressesSection {..._props} />
             <Dates {..._props} />
+            <Deals contact={contact} />
             <Details {..._props} />
             <Partner {..._props} />
-            <Divider />
-            <Deals contact={contact} />
             <Divider />
             <Owner
               onSelect={this.onChangeOwner}

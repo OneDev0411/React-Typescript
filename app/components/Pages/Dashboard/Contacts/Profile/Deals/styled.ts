@@ -12,8 +12,3 @@ export const Container = styled.div`
     background-color: ${props => props.theme.palette.action.hover};
   }
 `
-
-export const Role = styled.div`
-  font-size: 0.875rem;
-  color: ${props => props.theme.palette.text.hint};
-`
