@@ -101,7 +101,8 @@ if (process.env.SOURCE_VERSION) {
     new SentryCliPlugin({
       release: process.env.SOURCE_VERSION, // refers to the latest commit hash
       include: 'dist/',
-      ignore: ['node_modules']
+      ignore: ['node_modules'],
+      urlPrefix: process.env.ASSETS_BASEURL
     })
   )
 }
