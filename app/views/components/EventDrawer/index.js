@@ -27,7 +27,6 @@ import {
   AssigneesField,
   AssociationsList,
   EndDateTimeField,
-  WhenFieldChanges,
   FieldError
 } from '../final-form-fields'
 import Tooltip from '../tooltip'
@@ -45,6 +44,7 @@ import { Title } from './components/Title'
 import { Description } from './components/Description/RichText'
 import { EventType } from './components/EventType'
 import { NotifyGuests } from './components/NotifyGuests'
+import { FutureEventDoneConfirmation } from './components/FutureEventDoneConfirmation'
 
 import { FormContainer, FieldContainer, Footer } from './styled'
 
@@ -270,39 +270,13 @@ class PresentEventDrawer extends Component {
                 render={formProps => {
                   const { values } = formProps
 
-                  const isDone = values.status === 'DONE'
-                  const isPastDate =
-                    new Date(values.dueDate).getTime() <
-                    new Date().getTime() - 1
-
                   return (
                     <>
                       <FormContainer
                         onSubmit={formProps.handleSubmit}
                         id="event-drawer-form"
                       >
-                        {/* Set future event due date to now if user wants to mark it as done */}
-                        {!this.isNew && (
-                          <WhenFieldChanges
-                            set="dueDate"
-                            watch="status"
-                            setter={onChange => {
-                              if (isDone && !isPastDate) {
-                                this.context.setConfirmationModal({
-                                  message: 'Heads up!',
-                                  description:
-                                    'If you mark this event as done, the event due date will change to now. Are you sure?',
-                                  onConfirm: () => {
-                                    onChange(new Date())
-                                  },
-                                  onCancel: () => {
-                                    values.status = 'PENDING'
-                                  }
-                                })
-                              }
-                            }}
-                          />
-                        )}
+                        {!this.isNew && <FutureEventDoneConfirmation />}
                         <Flex style={{ marginBottom: '1rem' }}>
                           {this.isNew ? (
                             <Title fullWidth />
