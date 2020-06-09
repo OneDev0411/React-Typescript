@@ -1,7 +1,7 @@
 import { isNegativeTimezone } from 'utils/is-negative-timezone'
 
 function getEndDate(event: ICalendarEvent): Date {
-  const isAllDay = event.metadata?.all_day || false
+  const isAllDay = event.all_day || false
   const endDate = new Date(Number(event.end_date!) * 1000)
 
   if (isAllDay && !isNegativeTimezone()) {

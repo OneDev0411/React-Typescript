@@ -6,7 +6,7 @@ interface Props {
 }
 
 export function DateTime({ event }: Props) {
-  if (isAllDayEvent(event)) {
+  if (event.all_day) {
     return <span>All day</span>
   }
 
@@ -22,31 +22,6 @@ export function DateTime({ event }: Props) {
   }
 
   return <span>{dueDate}</span>
-}
-
-function isAllDayEvent(event: ICalendarEvent) {
-  if (event.metadata && typeof event.metadata.all_day === 'boolean') {
-    return event.metadata.all_day
-  }
-
-  const isOneDayEvent = event.end_date
-    ? formatDate(event.timestamp, 'YYYYMMDD') ===
-      formatDate(event.end_date, 'YYYYMMDD')
-    : true
-
-  const isInternalEvent = [
-    'crm_association',
-    'crm_task',
-    'email_campaign',
-    'email_campaign_recipient',
-    'email_thread_recipient'
-  ].includes(event.object_type)
-
-  if (!isInternalEvent || !isOneDayEvent) {
-    return true
-  }
-
-  return false
 }
 
 function formatDate(date: Date | string | number, format: string): string {

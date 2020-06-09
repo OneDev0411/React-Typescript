@@ -1,54 +1,59 @@
 import * as React from 'react'
 
-import { Theme, Tooltip } from '@material-ui/core'
+import { Tooltip, IconButton } from '@material-ui/core'
 
-import styled, { ThemeProps } from 'styled-components'
-
-import IconWarning from 'components/SvgIcons/Warning/IconWarning'
-
-import { RelativeTime } from '../RelativeTime'
-
-type SyncType = 'contacts' | 'emails'
+import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
+import IconEmail from 'components/SvgIcons/EmailOutlined/IconEmailOutlined'
+import IconContact from 'components/SvgIcons/Contacts/IconContacts'
 
 interface Props {
   account: IOAuthAccount
-  syncType?: SyncType
 }
 
-const WarningIcon = styled(IconWarning).attrs({
-  size: { width: 16, height: 16 }
-})`
-  vertical-align: text-top;
-  margin: ${({ theme }: ThemeProps<Theme>) => theme.spacing(0, 1)};
-` as typeof IconWarning
-
-export function ConnectedAccountSyncStatus(props: Props) {
-  const lastSync = getLastSync(props.account, props.syncType)
-  const syncError = getSyncError(props.account)
+export function ConnectedAccountSyncStatus({ account }: Props) {
+  const calendarJob = (account.jobs || []).find(
+    job => job.job_name === 'calendar'
+  )
+  const contactsJob = (account.jobs || []).find(
+    job => job.job_name === 'contacts'
+  )
+  const emailsJob = (account.jobs || []).find(
+    job =>
+      job.job_name ===
+      (account.type === 'google_credential' ? 'gmail' : 'outlook')
+  )
 
   return (
-    <>
-      Synced <RelativeTime time={lastSync} />
-      {syncError && (
-        <Tooltip title={syncError}>
-          <WarningIcon />
-        </Tooltip>
-      )}
-    </>
+    <div>
+      <Tooltip
+        title={`Calendar is ${
+          calendarJob?.status === 'success' ? 'synced' : 'syncing'
+        }`}
+      >
+        <IconButton>
+          <IconCalendar />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip
+        title={`Emails are ${
+          emailsJob?.status === 'success' ? 'synced' : 'syncing'
+        } `}
+      >
+        <IconButton>
+          <IconEmail />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip
+        title={`Contacts are ${
+          contactsJob?.status === 'success' ? 'synced' : 'syncing'
+        } `}
+      >
+        <IconButton>
+          <IconContact />
+        </IconButton>
+      </Tooltip>
+    </div>
   )
-}
-
-function getLastSync(account: IOAuthAccount, syncType?: SyncType) {
-  switch (syncType) {
-    case 'contacts':
-      return account.contacts_last_sync_at
-    default:
-      return account.last_sync_at
-  }
-}
-
-function getSyncError(account: IOAuthAccount): string | null {
-  const latestSync = (account.histories || [])[0]
-
-  return (latestSync && latestSync.extract_contacts_error) || null
 }
