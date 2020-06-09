@@ -116,7 +116,9 @@ webpackConfig.module.rules.push(
   {
     test: /\.(ts|tsx|js)$/,
     loader: 'babel-loader',
-    options: {}
+    options: {
+      compact: false
+    }
   },
   {
     test: /\.css/,
