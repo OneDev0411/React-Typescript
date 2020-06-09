@@ -24,7 +24,7 @@ function postcss() {
   return [require('autoprefixer')()]
 }
 
-webpackConfig.devtool = false
+webpackConfig.devtool = 'source-map'
 
 webpackConfig.output.pathinfo = false
 webpackConfig.output.publicPath = process.env.ASSETS_BASEURL
@@ -39,12 +39,6 @@ webpackConfig.entry = {
   app: [appConfig.compile.entry],
   vendor: appConfig.compile.vendors
 }
-
-webpackConfig.plugins.push(
-  new webpack.SourceMapDevToolPlugin({
-    exclude: [/vendor/gi]
-  })
-)
 
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
