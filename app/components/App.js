@@ -11,7 +11,7 @@ import { getUserTeams } from '../store_actions/user/teams'
 import Brand from '../controllers/Brand'
 
 class App extends React.Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.dispatch(getBrand())
 
     if (typeof window !== 'undefined') {

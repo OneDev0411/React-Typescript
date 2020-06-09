@@ -18,7 +18,7 @@ export class Page extends React.Component {
     this.renderPage(this.props.isVisible)
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.isVisible &&
       !this.state.isPageRendered &&
