@@ -12,7 +12,7 @@ export function getStaticFilterQuery(
   if (searchQuery.filter === 'listing') {
     return {
       is_draft: false,
-      deal_types: ['Selling'],
+      deal_type: ['Selling'],
       contexts: {
         listing_status: {
           text: statuses
@@ -31,7 +31,7 @@ export function getStaticFilterQuery(
   if (searchQuery.filter === 'contract') {
     return {
       is_draft: false,
-      deal_types: ['Buying'],
+      deal_type: ['Buying'],
       contexts: {
         contract_status: {
           text: statuses
