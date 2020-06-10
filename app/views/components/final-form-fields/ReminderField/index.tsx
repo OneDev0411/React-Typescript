@@ -1,10 +1,22 @@
 import React from 'react'
 import { Field } from 'react-final-form'
+import { Theme, makeStyles } from '@material-ui/core'
+import { mdiBellOutline } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { Dropdown } from 'components/Dropdown'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
-import IconBell from 'components/SvgIcons/Bell/IconBell'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    icon: {
+      marginRight: theme.spacing(0.5)
+    }
+  }),
+  { name: 'Riminder' }
+)
 
 interface Props {
   dropDownProps?: object
@@ -12,6 +24,7 @@ interface Props {
 }
 
 export function ReminderField({ dropDownProps = {}, dueDate }: Props) {
+  const classes = useStyles()
   const now = Date.now()
   const dueDateTimestamp = dueDate.getTime()
 
@@ -31,7 +44,11 @@ export function ReminderField({ dropDownProps = {}, dueDate }: Props) {
             fullHeight
             buttonRenderer={buttonProps => (
               <DropdownToggleButton {...buttonProps}>
-                <IconBell />
+                <SvgIcon
+                  className={classes.icon}
+                  path={mdiBellOutline}
+                  size={muiIconSizes.small}
+                />
                 {buttonProps.value}
               </DropdownToggleButton>
             )}
