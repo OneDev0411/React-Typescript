@@ -28,7 +28,7 @@ export const useStyles = makeStyles(
         justifyContent: 'flex-start'
       },
       mediaCard: {
-        width: 287,
+        width: 211,
         padding: theme.spacing(1),
         marginBottom: theme.spacing(2),
         borderRadius: theme.shape.borderRadius,
@@ -81,7 +81,7 @@ export const useStyles = makeStyles(
         position: 'relative'
       },
       mediaThumbnail: {
-        height: 250,
+        height: 200,
         marginBottom: theme.spacing(1),
         borderRadius: theme.shape.borderRadius,
         transition: '0.2s ease-in opacity',
@@ -124,13 +124,13 @@ export const useStyles = makeStyles(
       },
       placeholderCard: {
         display: 'flex',
+        height: 200,
+        width: 195,
         alignItems: 'center',
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: theme.palette.grey['300'],
         background: theme.palette.grey['100'],
-        height: 250,
-        width: 270,
         margin: theme.spacing(1),
         marginBottom: theme.spacing(2),
         borderRadius: theme.shape.borderRadius,
