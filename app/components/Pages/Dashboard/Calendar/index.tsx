@@ -4,6 +4,7 @@ import { WithRouterProps } from 'react-router'
 import GlobalHeader from 'components/GlobalHeader'
 
 import Calendar from 'components/Calendar'
+import { GridCalendar } from 'components/GridCalendar'
 import { CalendarRef } from 'components/Calendar/types'
 
 import Filters, {
@@ -46,12 +47,13 @@ export default function CalendarPage(props: WithRouterProps) {
       />
 
       <div className={classes.topSide}>
-        <Filters onChange={setFilter} ref={filtersRef} />
-        <DatePicker onChange={handleChangeDate} style={{ margin: '1rem 0' }} />
+        {/* <Filters onChange={setFilter} ref={filtersRef} /> */}
+        {/* <DatePicker onChange={handleChangeDate} style={{ margin: '1rem 0' }} /> */}
       </div>
 
       <div className={classes.listContainer}>
-        <Calendar ref={calendarRef} filter={filter} />
+        {/* <Calendar ref={calendarRef} filter={filter} /> */}
+        <GridCalendar />
       </div>
     </div>
   )

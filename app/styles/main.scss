@@ -9,6 +9,11 @@
 
 @import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
 
+// full canlendar styles
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+
 // Fonts
 @import 'fonts/lato.scss';
 
