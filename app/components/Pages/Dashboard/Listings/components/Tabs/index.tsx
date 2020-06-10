@@ -3,8 +3,11 @@ import { withRouter, WithRouterProps } from 'react-router'
 import { Box } from '@material-ui/core'
 import { Theme, ButtonBase, makeStyles, createStyles } from '@material-ui/core'
 
+import { mdiPlus } from '@mdi/js'
+
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
-import AddIcon from 'components/SvgIcons/Add/AddIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import SavedSearchesList from '../../SavedSearchesList'
 import ViewSwitcher from '../GridControllers/ViewSwitcher'
@@ -35,7 +38,7 @@ const useStyle = makeStyles(
       saveSearch: {
         color: theme.palette.secondary.main,
         '& svg': {
-          fill: theme.palette.secondary.main
+          marginRight: theme.spacing(0.5)
         },
         '&:disabled': {
           opacity: 0.6
@@ -110,14 +113,7 @@ export const Tabs = ({
             disabled={isFetching}
             onClick={saveSearchHandler}
           >
-            <AddIcon
-              style={{
-                fill: 'currentColor',
-                width: 16,
-                height: 16,
-                marginRight: '.3rem'
-              }}
-            />
+            <SvgIcon path={mdiPlus} size={muiIconSizes.small} />
             Save Search
           </ButtonBase>
         </>
