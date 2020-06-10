@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { disabledColor, primary } from 'views/utils/colors'
+import { mdiTagOutline } from '@mdi/js'
 
-import TagIcon from '../../../../../../../views/components/SvgIcons/Tag/TagIcon'
+import { disabledColor, primary } from 'views/utils/colors'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const borderColor = (inputFocused, error) => {
   if (error) {
@@ -89,7 +90,7 @@ export default class CustomTag extends React.Component {
         onSubmit={this.props.onUpsert}
         error={error}
       >
-        <TagIcon style={{ marginLeft: '1em' }} />
+        <SvgIcon path={mdiTagOutline} style={{ marginLeft: '1em' }} />
         <Input
           data-test="new-tag-input"
           value={inputValue}
