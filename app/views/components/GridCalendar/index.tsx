@@ -8,14 +8,14 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 
-import { getCalendar } from 'models/calendar/get-calendar'
+import { getCalendar, FilterQuery } from 'models/calendar/get-calendar'
 
 import { IAppState } from 'reducers/index'
 
 import { viewAs } from 'utils/user-teams'
 
-// List of base calendar dependency
-import { getDateRange, Format } from '../Calendar/helpers/get-date-range'
+// List of basic calendar dependency
+import { getDateRange } from '../Calendar/helpers/get-date-range'
 import { ApiOptions, FetchOptions } from '../Calendar/types'
 
 // helpers
@@ -48,9 +48,6 @@ export const GridCalendarPresentation = ({
   // request status
   const [isLoading, setIsLoading] = useState(false)
 
-  // current active date
-  const [activeDate, setActiveDate] = useState<Date>(new Date())
-
   // current range of fetched events
   const [calendarRange, setCalendarRange] = useState<NumberRange>(
     getDateRange()
@@ -77,9 +74,25 @@ export const GridCalendarPresentation = ({
           'color: blue'
         )
 
+        // show all events in rechat
+        /* 
+          TODO: should add dynamic filter
+          should add filter base on the route which available now on timeline
+          calendar and we decide to discard it here for now
+        */
+        const defaultFilter: FilterQuery = {
+          'object_types[]': [
+            'contact',
+            'contact_attribute',
+            'crm_task',
+            'deal_context'
+          ]
+        }
+
         // fetch calendar data from server based on given parameters
         const fetchedEvents = await getCalendar({
           users: viewAsUsers,
+          filter: defaultFilter,
           associations: ['calendar_event.people', ...associations],
           ...apiOptions
         })
@@ -90,6 +103,10 @@ export const GridCalendarPresentation = ({
 
         // normalized events for using in full calendar
         const normalizedEvents: EventInput[] = normalizeEvents(nextEvents)
+
+        console.log('.....................................')
+        console.log(normalizedEvents)
+        console.log('.....................................')
 
         // update events list
         setEvents(normalizedEvents)
@@ -107,21 +124,14 @@ export const GridCalendarPresentation = ({
    * calendar range
    * @param date
    */
-  const handleLoadEvents = async (
-    date: Date = activeDate,
-    range: NumberRange | null = null
-  ) => {
-    const query: NumberRange =
-      range || getDateRange(date.getTime(), Format.Middle)
+  const handleLoadEvents = async (range: NumberRange | null = null) => {
+    const query: NumberRange = range || calendarRange
 
     // set loading position to center again
     // setLoadingPosition(LoadingPosition.Middle)
 
     // reset calendar range
     setCalendarRange(query)
-
-    // set active date
-    setActiveDate(date)
 
     await fetchEvents(
       {
@@ -137,13 +147,14 @@ export const GridCalendarPresentation = ({
    * Load initia events (behaves as componentDidMount)
    */
   useEffectOnce(() => {
-    handleLoadEvents(activeDate, initialRange)
+    handleLoadEvents(initialRange)
   })
 
   return (
     <FullCalendar
       height="parent"
       defaultView="dayGridMonth"
+      eventLimit
       header={{
         left: 'prev,next today',
         center: 'title',
