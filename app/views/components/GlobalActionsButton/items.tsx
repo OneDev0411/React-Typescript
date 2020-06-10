@@ -3,7 +3,6 @@ import React from 'react'
 import {
   mdiEmailOutline,
   mdiCalendarOutline,
-  mdiContactsOutline,
   mdiCurrencyUsdCircleOutline,
   mdiShoePrint
 } from '@mdi/js'
@@ -16,7 +15,10 @@ import { EventDrawer } from 'components/EventDrawer'
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 
-import { MeetingRoomOutlined } from '../SvgIcons/icons'
+import {
+  meetingRoomOutlined,
+  permContactCalendarOutlined
+} from '../SvgIcons/icons'
 
 import CreateOpenHouse from './OpenHouse'
 
@@ -42,7 +44,7 @@ const items: Item[] = [
   {
     title: 'Contact',
     type: 'contact',
-    Icon: mdiContactsOutline,
+    Icon: permContactCalendarOutlined,
     render: props => {
       return <NewContactDrawer {...props} />
     }
@@ -58,7 +60,7 @@ const items: Item[] = [
   {
     title: 'OH Registration Page',
     type: 'openhouse',
-    Icon: MeetingRoomOutlined,
+    Icon: meetingRoomOutlined,
     render: props => {
       return <CreateOpenHouse {...props} />
     }
