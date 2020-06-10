@@ -1,10 +1,11 @@
 import React from 'react'
 import { Box, Button, makeStyles } from '@material-ui/core'
-import { useTheme } from '@material-ui/styles'
+
+import { mdiChevronDown } from '@mdi/js'
 
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { BaseDropdown } from 'components/BaseDropdown'
-import IconArrowDown from 'views/components/SvgIcons/ArrowDownKeyboard/IconArrowDownKeyboard'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Filters from '../components/Filters'
 import Autocomplete from '../components/Autocomplete'
@@ -28,7 +29,6 @@ const useStyles = makeStyles(
 
 export function Header(props) {
   const classes = useStyles()
-  const theme = useTheme()
   const { isFetching, activeView, showGlobalActionsButton } = props
 
   return (
@@ -49,7 +49,7 @@ export function Header(props) {
                 {...buttonProps}
               >
                 Filters
-                <IconArrowDown fillColor={theme.palette.common.black} />
+                <SvgIcon path={mdiChevronDown} />
               </Button>
             )}
             renderMenu={({ close }) => (
