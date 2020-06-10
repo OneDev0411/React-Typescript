@@ -73,6 +73,7 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
       const { fileObject, order = 0 } = action.payload
 
       return [
+        ...state,
         {
           id: fileObject.name,
           src: fileObject.preview,
@@ -81,8 +82,7 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
           selected: false,
           isUploading: true,
           uploadProgress: 0
-        },
-        ...state
+        }
       ]
     }
 
