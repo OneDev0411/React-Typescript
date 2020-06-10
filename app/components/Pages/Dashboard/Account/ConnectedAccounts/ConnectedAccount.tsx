@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {
   Grid,
+  Box,
   ListItem,
   ListItemAvatar,
   ListItemSecondaryAction,
@@ -89,11 +90,11 @@ export default function ConnectedAccount({ account, onSync, onDelete }: Props) {
           />
         </Grid>
 
-        <Grid item xs={4}>
-          <ListItemText
-            primary={<ConnectedAccountSyncStatus account={account} />}
-            secondary={<SyncButton account={account} onSync={onSync} />}
-          />
+        <Grid item xs={4} direction="row" alignItems="center">
+          <Box display="flex" alignItems="center">
+            <ConnectedAccountSyncStatus account={account} />
+            <SyncButton account={account} onSync={onSync} />
+          </Box>
         </Grid>
 
         <ListItemSecondaryAction>

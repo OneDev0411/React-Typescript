@@ -35,7 +35,9 @@ interface Props {
  * @constructor
  */
 export function ImportContactsButton({ accounts, user }: Props) {
-  const syncing = accounts.some(account => account.sync_status === 'pending')
+  const syncing = accounts.some(account =>
+    (account.jobs || []).some(job => job.status !== 'success')
+  )
 
   const isTooltipOpen =
     !getUserSettingsInActiveTeam(user, IMPORT_TOOLTIP_VISITED_SETTINGS_KEY) &&

@@ -20,6 +20,7 @@ export async function updateTask(task, query = {}) {
       'index',
       'title',
       'status',
+      'all_day',
       'due_date',
       'end_date',
       'task_type',

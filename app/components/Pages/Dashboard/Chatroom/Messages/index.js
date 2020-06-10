@@ -70,6 +70,12 @@ class Messages extends React.Component {
   async initializeScroller() {
     const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
 
+    if (!this.messagesList) {
+      console.log('Could not initialize scroller')
+
+      return
+    }
+
     this.messagesObservable = Rx.Observable.fromEvent(
       this.messagesList,
       'scroll'

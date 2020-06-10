@@ -24,7 +24,7 @@ function postcss() {
   return [require('autoprefixer')()]
 }
 
-webpackConfig.devtool = 'hidden-source-map'
+webpackConfig.devtool = 'source-map'
 
 webpackConfig.output.pathinfo = false
 webpackConfig.output.publicPath = process.env.ASSETS_BASEURL
@@ -101,7 +101,8 @@ if (process.env.SOURCE_VERSION) {
     new SentryCliPlugin({
       release: process.env.SOURCE_VERSION, // refers to the latest commit hash
       include: 'dist/',
-      ignore: ['node_modules']
+      ignore: ['node_modules'],
+      urlPrefix: '~/dist'
     })
   )
 }
@@ -110,7 +111,9 @@ webpackConfig.module.rules.push(
   {
     test: /\.(ts|tsx|js)$/,
     loader: 'babel-loader',
-    options: {}
+    options: {
+      compact: false
+    }
   },
   {
     test: /\.css/,

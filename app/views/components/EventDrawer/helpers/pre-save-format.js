@@ -45,9 +45,7 @@ export async function preSaveFormat(values, originalValues) {
     due_date: dueDateTimestamp / 1000,
     end_date: endDateTimestamp / 1000,
     task_type: task_type.value,
-    metadata: {
-      all_day: isAllDay
-    },
+    all_day: isAllDay,
     assignees: assignees.map(a => a.id),
     status:
       dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'

@@ -11,7 +11,7 @@ import DownloadModal from '../DownloadModal'
 
 import { useStyles } from '../../styles'
 import useMediaManagerContext from '../../hooks/useMediaManagerContext'
-import { IMediaGallery } from '../../types'
+import type { IMediaGallery } from '../../types'
 import {
   toggleGallerySelection,
   deleteMedias as deleteMediasAction
@@ -100,21 +100,13 @@ export default function BulkActionsMenu({ mediaGallery, deal }: Props) {
               selectedGalleryItems.length !== selectableItems.length
             }
           />
-          <Typography display="inline" className={classes.bold}>
-            {pluralize('photo', selectedGalleryItems.length, true)} selected
-          </Typography>
-
+          <Typography display="inline">
+            {selectedGalleryItems.length} of {selectableItems.length} selected
+          </Typography>{' '}
           {selectedGalleryItems.length !== selectableItems.length && (
             <>
-              <Typography
-                display="inline"
-                variant="body2"
-                color="textSecondary"
-              >
-                &nbsp;&#9679;&nbsp;
-              </Typography>
-              <Button href="#" onClick={handleSelectAll}>
-                Select all {pluralize('photo', selectableItems.length, true)}
+              <Button color="secondary" size="large" onClick={handleSelectAll}>
+                (Select All)
               </Button>
             </>
           )}

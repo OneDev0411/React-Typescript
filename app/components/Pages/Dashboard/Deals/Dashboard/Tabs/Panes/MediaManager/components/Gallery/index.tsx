@@ -2,7 +2,7 @@ import React from 'react'
 import { Box } from '@material-ui/core'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 
-import { IMediaItem, IMediaGallery } from '../../types'
+import type { IMediaItem, IMediaGallery } from '../../types'
 
 import { useStyles } from '../../styles'
 import { reorderGallery } from '../../context/actions'
@@ -16,9 +16,15 @@ interface Props {
   medias: IMediaGallery
   deal: IDeal
   uploaderRef: React.RefObject<any>
+  sortEnabled: Boolean
 }
 
-export default function Gallery({ medias, deal, uploaderRef }: Props) {
+export default function Gallery({
+  medias,
+  deal,
+  uploaderRef,
+  sortEnabled
+}: Props) {
   const classes = useStyles()
   const { dispatch } = useMediaManagerContext()
 
@@ -34,10 +40,11 @@ export default function Gallery({ medias, deal, uploaderRef }: Props) {
         <UploadPlaceholderItem uploaderRef={uploaderRef} />
         {medias.map((media, index) => (
           <SortableMediaItem
-            key={media.file}
+            key={media.id}
             index={index}
             media={media}
             deal={deal}
+            disabled={!sortEnabled}
           />
         ))}
       </Box>
@@ -57,9 +64,12 @@ export default function Gallery({ medias, deal, uploaderRef }: Props) {
   return (
     <SortableGallery
       axis="xy"
+      helperClass="MuiMediaManager-mediaCardHelper"
       medias={medias}
       onSortEnd={onSortEnd}
       useDragHandle
+      useWindowAsScrollContainer
+      lockToContainerEdges
     />
   )
 }

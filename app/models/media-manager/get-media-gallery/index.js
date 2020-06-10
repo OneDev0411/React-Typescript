@@ -10,7 +10,7 @@ export async function getMediaGallery(dealId) {
 
     return rawGalleryItems.map(item => {
       return {
-        file: item.id,
+        id: item.id,
         src: item.file.preview_url,
         name: item.name,
         order: item.order,

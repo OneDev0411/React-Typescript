@@ -11,6 +11,8 @@ export function getStaticFilterQuery(
 ): object {
   if (searchQuery.filter === 'listing') {
     return {
+      is_draft: false,
+      deal_type: ['Selling'],
       contexts: {
         listing_status: {
           text: statuses
@@ -21,12 +23,15 @@ export function getStaticFilterQuery(
             )
             .map(item => item.label)
         }
-      }
+      },
+      $order: ['deals.created_at', 'DESC']
     }
   }
 
   if (searchQuery.filter === 'contract') {
     return {
+      is_draft: false,
+      deal_type: ['Buying'],
       contexts: {
         contract_status: {
           text: statuses
@@ -36,7 +41,8 @@ export function getStaticFilterQuery(
             )
             .map(item => item.label)
         }
-      }
+      },
+      $order: ['deals.created_at', 'DESC']
     }
   }
 
