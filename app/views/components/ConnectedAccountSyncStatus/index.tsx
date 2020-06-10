@@ -25,35 +25,41 @@ export function ConnectedAccountSyncStatus({ account }: Props) {
 
   return (
     <div>
-      <Tooltip
-        title={`Calendar is ${
-          calendarJob?.status === 'success' ? 'synced' : 'syncing'
-        }`}
-      >
-        <IconButton>
-          <IconCalendar />
-        </IconButton>
-      </Tooltip>
+      {calendarJob && (
+        <Tooltip
+          title={`Calendar is ${
+            calendarJob?.status === 'success' ? 'synced' : 'syncing'
+          }`}
+        >
+          <IconButton>
+            <IconCalendar />
+          </IconButton>
+        </Tooltip>
+      )}
 
-      <Tooltip
-        title={`Emails are ${
-          emailsJob?.status === 'success' ? 'synced' : 'syncing'
-        } `}
-      >
-        <IconButton>
-          <IconEmail />
-        </IconButton>
-      </Tooltip>
+      {emailsJob && (
+        <Tooltip
+          title={`Emails are ${
+            emailsJob?.status === 'success' ? 'synced' : 'syncing'
+          } `}
+        >
+          <IconButton>
+            <IconEmail />
+          </IconButton>
+        </Tooltip>
+      )}
 
-      <Tooltip
-        title={`Contacts are ${
-          contactsJob?.status === 'success' ? 'synced' : 'syncing'
-        } `}
-      >
-        <IconButton>
-          <IconContact />
-        </IconButton>
-      </Tooltip>
+      {contactsJob && (
+        <Tooltip
+          title={`Contacts are ${
+            contactsJob?.status === 'success' ? 'synced' : 'syncing'
+          } `}
+        >
+          <IconButton>
+            <IconContact />
+          </IconButton>
+        </Tooltip>
+      )}
     </div>
   )
 }
