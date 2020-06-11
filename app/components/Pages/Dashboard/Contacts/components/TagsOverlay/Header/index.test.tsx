@@ -2,9 +2,9 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
 import { Link } from 'react-router'
+import { mdiClose } from '@mdi/js'
 
 import IconButton from 'components/Button/IconButton'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 import Header from '.'
 
@@ -39,6 +39,6 @@ describe('TagsOverlay header', () => {
     )
 
     expect(wrapper.find(IconButton)).toHaveLength(1)
-    expect(wrapper.find(CloseIcon)).toHaveLength(1)
+    expect(wrapper.find({ path: mdiClose })).toHaveLength(1)
   })
 })
