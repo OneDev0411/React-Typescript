@@ -74,7 +74,7 @@ const EmailBody = ({
                 width="100%"
                 srcDoc={content}
                 style={{
-                  border: '0',
+                  border: 'none',
                   flex: '1'
                 }}
               />

@@ -78,12 +78,7 @@ export function EmailRecipientsFields({
       {includeQuickSuggestions && (
         <>
           <OnFocus name="to">{() => setLastFocusedSendType('To')}</OnFocus>
-          <OnFocus name="cc">
-            {() => {
-              console.log('cc focused')
-              setLastFocusedSendType('CC')
-            }}
-          </OnFocus>
+          <OnFocus name="cc">{() => setLastFocusedSendType('CC')}</OnFocus>
           <OnFocus name="bcc">{() => setLastFocusedSendType('BCC')}</OnFocus>
           <EmailRecipientQuickSuggestions
             deal={deal}
@@ -98,10 +93,7 @@ export function EmailRecipientsFields({
             ) => {
               const field = fields[sendType.toLowerCase()]
 
-              field.input.onChange([
-                ...(field.input.value || []),
-                recipient
-              ] as any)
+              field.input.onChange([...(field.input.value || []), recipient])
             }}
           />
         </>

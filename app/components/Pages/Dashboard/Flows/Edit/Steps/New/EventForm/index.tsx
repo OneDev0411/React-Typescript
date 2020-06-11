@@ -23,7 +23,7 @@ import {
 
 interface FormData {
   task_type: {
-    title: TTaskType
+    title: string
     value: TTaskType
   }
   title: string

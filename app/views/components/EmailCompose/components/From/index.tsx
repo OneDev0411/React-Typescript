@@ -77,7 +77,7 @@ export function From({ accounts, children, user }: Props) {
     }
 
     const isCredentialValid = credential =>
-      accounts!.some(a => a.type === credential)
+      accounts && accounts.some(a => a.type === credential)
 
     if (googleField.input.value && isCredentialValid(GOOGLE_CREDENTIAL)) {
       return googleField.input.value
@@ -93,12 +93,12 @@ export function From({ accounts, children, user }: Props) {
 
     googleField.input.onChange(
       selectedAccount && selectedAccount.type === GOOGLE_CREDENTIAL
-        ? (selectedAccount.id as any)
+        ? (selectedAccount.id as UUID)
         : null
     )
     outlookField.input.onChange(
       selectedAccount && selectedAccount.type === MICROSOFT_CREDENTIAL
-        ? (selectedAccount.id as any)
+        ? (selectedAccount.id as UUID)
         : null
     )
   }

@@ -3,7 +3,7 @@ import { useField } from 'react-final-form'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-const DONE = 'DONE'
+const DONE_STATUS = 'DONE'
 
 export function FutureEventDoneConfirmation() {
   const confirmation = useContext(ConfirmationModalContext)
@@ -25,9 +25,9 @@ export function FutureEventDoneConfirmation() {
   if (
     isFutureDate &&
     !confirmation.isShow &&
-    currentStatus === DONE &&
     statusField.meta.active &&
-    previousStatus.current !== DONE
+    currentStatus === DONE_STATUS &&
+    previousStatus.current !== DONE_STATUS
   ) {
     confirmation.setConfirmationModal({
       message: 'Heads up!',

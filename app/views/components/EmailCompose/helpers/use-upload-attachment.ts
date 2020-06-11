@@ -2,8 +2,6 @@ import { useField } from 'react-final-form'
 
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
-import { IUploadingAttachment } from '../types'
-
 export function useUploadAttachment(uploader: typeof uploadEmailAttachment) {
   const field = useField('uploadingAttachments')
 
@@ -12,13 +10,13 @@ export function useUploadAttachment(uploader: typeof uploadEmailAttachment) {
     const file = fileArray[0]
 
     if (file) {
-      field.input.onChange(([
+      field.input.onChange([
         ...(field.input.value || []),
         {
           file,
           request: uploader(file)
         }
-      ] as IUploadingAttachment[]) as any)
+      ])
     }
   }
 
