@@ -51,12 +51,12 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
   )[0]
 
   const { attachments } = task.room
-  const file: IFile | undefined = attachments ? attachments[0] : undefined
+  const file = attachments ? attachments[0] : undefined
 
   const getRowsCount = () => {
     let count = 0
 
-    if (task.form) {
+    if (task.submission) {
       count++
     }
 
@@ -67,7 +67,7 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
   }
 
   const toggleTaskOpen = () => {
-    if (!isRowExpandable) {
+    if (getRowsCount() === 0) {
       return
     }
 
@@ -134,7 +134,7 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
     window.open(link, '_blank')
   }
 
-  const isRowExpandable = getRowsCount() > 1 || Boolean(file)
+  const hasRows = getRowsCount() > 0
 
   const actions: ActionButtonId[] = getTaskActions({
     task,
@@ -148,13 +148,16 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
       <Row>
         <RowArrowIcon
           onClick={toggleTaskOpen}
-          show={isRowExpandable}
+          show={hasRows}
           isOpen={isTaskExpanded}
         />
 
         <Flex column style={{ flex: 1 }}>
           <Flex alignCenter justifyBetween>
-            <RowTitle clickable onClick={handleClickTask}>
+            <RowTitle
+              clickable={hasRows || Boolean(task.form)}
+              onClick={handleClickTask}
+            >
               {task.title}
             </RowTitle>
 

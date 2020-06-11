@@ -115,12 +115,6 @@ export const RowContainer = styled.div<{
         opacity: 1;
         color: #000;
       }
-
-      ${Notification} {
-        svg > path {
-          fill: #000;
-        }
-      }
     `}
 
   :hover ${ActionsButton} {
