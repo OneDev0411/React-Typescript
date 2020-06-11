@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 import memoize from 'lodash/memoize'
 import hash from 'object-hash'
+import { addNotification as notify } from 'reapop'
 
 import { DALLAS_POINTS } from 'constants/listings/dallas-points'
 
@@ -20,7 +21,7 @@ import {
 import Tabs from '../components/Tabs'
 
 import { loadJS } from '../../../../../utils/load-js'
-import { getBounds, isLocationInTX } from '../../../../../utils/map'
+import { getBounds, getLocationErrorMessage } from '../../../../../utils/map'
 
 import getPlace from '../../../../../models/listings/search/get-place'
 import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points'
@@ -82,9 +83,7 @@ class Search extends React.Component {
 
     if (!window.google) {
       loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${
-          bootstrapURLKeys.key
-        }&libraries=${bootstrapURLKeys.libraries}&callback=initialize`,
+        `https://maps.googleapis.com/maps/api/js?key=${bootstrapURLKeys.key}&libraries=${bootstrapURLKeys.libraries}&callback=initialize`,
         'loadJS-mls-search-map'
       )
     } else {
@@ -139,10 +138,6 @@ class Search extends React.Component {
 
         const center = { lat, lng }
 
-        if (!isLocationInTX(lat, lng)) {
-          return fetchDallas()
-        }
-
         const { dispatch } = this.props
         const { bounds, points } = getMapBoundsInCircle(center, RADIUS, true)
         const mapProps = {
@@ -169,7 +164,13 @@ class Search extends React.Component {
 
         setOffIsCalculatingLocation()
       },
-      () => {
+      error => {
+        this.props.dispatch(
+          notify({
+            message: getLocationErrorMessage(error),
+            status: 'error'
+          })
+        )
         setOffIsCalculatingLocation(fetchDallas)
       }
     )

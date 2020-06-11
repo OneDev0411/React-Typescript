@@ -1,87 +1,44 @@
 import { batchActions } from 'redux-batched-actions'
 import { addNotification as notify } from 'reapop'
 
-import { isLocationInTX } from '../../../../utils/map'
+import { getLocationErrorMessage } from 'utils/map'
 
 import * as types from '../../../../constants/listings/map'
-import {
-  DEFAULT_ZOOM,
-  DALLAS_LOCATION
-} from '../../../../constants/listings/defaults'
+import { DEFAULT_ZOOM } from '../../../../constants/listings/defaults'
 
 import { setMapProps } from '..'
-
-function setPosition(location) {
-  const {
-    coords: { latitude: lat, longitude: lng }
-  } = location
-  const zoom = DEFAULT_ZOOM
-
-  // If the user is outside of Dallas, we move it to Dallas.
-  // The below area is locating the Dallas.
-  // These points are consistent with the iOS app:
-  // https://gitlab.com/rechat/web/issues/1022#note_67523348
-
-  if (isLocationInTX(lat, lng)) {
-    return [
-      setMapProps('search', {
-        center: { lat, lng },
-        zoom
-      }),
-      { type: types.GET_USER_LOCATION_DONE, tabName: 'search' }
-    ]
-  }
-
-  return [
-    notify({
-      message: "We aren't support your location. You are out of Texas state!",
-      status: 'error'
-    }),
-    setMapProps('search', {
-      center: DALLAS_LOCATION,
-      zoom
-    })
-  ]
-}
-
-const showError = error => dispatch => {
-  let message
-
-  dispatch({ type: types.GET_USER_LOCATION_DONE, tabName: 'search' })
-
-  switch (error.code) {
-    case error.POSITION_UNAVAILABLE:
-      message = 'Location information is unavailable.'
-      break
-    case error.TIMEOUT:
-      message = 'The request to get user location timed out.'
-      break
-    case error.UNKNOWN_ERROR:
-      message = 'An unknown error occurred.'
-      break
-    default:
-      message = error.message
-  }
-
-  message &&
-    dispatch(
-      notify({
-        message,
-        status: 'error'
-      })
-    )
-}
 
 export const getLocation = () => dispatch => {
   if (window && 'geolocation' in window.navigator) {
     dispatch({ type: types.START_GET_USER_LOCATION, tabName: 'search' })
+
     navigator.geolocation.getCurrentPosition(
       location => {
-        batchActions([...setPosition(location).map(action => dispatch(action))])
+        const {
+          coords: { latitude: lat, longitude: lng }
+        } = location
+
+        batchActions([
+          dispatch(
+            setMapProps('search', {
+              center: { lat, lng },
+              zoom: DEFAULT_ZOOM
+            })
+          ),
+          dispatch({ type: types.GET_USER_LOCATION_DONE, tabName: 'search' })
+        ])
       },
       error => {
         console.log(error)
-        dispatch(showError(error))
+        batchActions([
+          dispatch({ type: types.GET_USER_LOCATION_DONE, tabName: 'search' }),
+          dispatch(
+            notify({
+              message: getLocationErrorMessage(error),
+              status: 'error'
+            })
+          )
+        ])
       }
     )
   } else {
