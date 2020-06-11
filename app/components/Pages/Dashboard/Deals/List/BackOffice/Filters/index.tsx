@@ -8,6 +8,7 @@ import { IAppState } from 'reducers'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
+import { getGridSort, getActiveSort } from 'deals/List/helpers/sorting'
 
 import { SortableColumn } from 'components/Grid/Table/types'
 
@@ -31,7 +32,7 @@ interface Props {
 const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const dispatch = useDispatch()
   const user = useSelector(({ user }: IAppState) => user)
-
+  const activeSort = getActiveSort(user, props.location, SORT_FIELD_SETTING_KEY)
   const inboxTabs = _.chain(props.deals)
     .pluck('inboxes')
     .flatten()
@@ -138,6 +139,10 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
                   {props.sortableColumns.map((column, index) => (
                     <MenuItem
                       key={index}
+                      selected={
+                        activeSort?.id === column.value &&
+                        activeSort?.ascending === column.ascending
+                      }
                       onClick={() => {
                         toggleMenu()
                         handleChangeSort(column)
