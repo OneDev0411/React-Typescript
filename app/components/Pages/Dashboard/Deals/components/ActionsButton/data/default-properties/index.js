@@ -140,7 +140,7 @@ export const actionsDefaultProperties = {
   [REQUIRE_TASK]: {
     label: ({ task }) =>
       task.required ? 'Mark as Optional' : 'Mark as Required',
-    type: 'change-task-required',
+    type: 'require-task',
     condition: ({ is_backoffice }) => is_backoffice
   }
 }
