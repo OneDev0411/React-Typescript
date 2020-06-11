@@ -87,8 +87,9 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       {
         id: 'status',
         class: 'opaque',
+        sortFn: (rows: IDeal[]) => sortStatus(rows, props.statuses),
         accessor: (deal: IDeal) => getStatus(deal) || '',
-        sortFn: (rows: IDeal[]) => sortStatus(rows, props.statuses)
+        render: ({ row: deal }: { row: IDeal }) => getStatus(deal)
       },
       {
         id: 'agent-name',
@@ -131,6 +132,10 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
         render: ({ row: deal }: { row: IDeal }) => (
           <div>{getFormattedPrice(getPrice(deal))}</div>
         )
+      },
+      {
+        id: 'creation-time',
+        accessor: (deal: IDeal) => deal.created_at
       }
     ]
   }, [roles, user, props.statuses])
