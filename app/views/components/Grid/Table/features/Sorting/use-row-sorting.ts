@@ -60,10 +60,7 @@ function defaultSortMethod(accessor: string | number): string | number {
     return accessor
   }
 
-  return accessor
-    .toString()
-    .trim()
-    .toLowerCase()
+  return accessor.toString().trim().toLowerCase()
 }
 
 function getSortedData<Row>(
