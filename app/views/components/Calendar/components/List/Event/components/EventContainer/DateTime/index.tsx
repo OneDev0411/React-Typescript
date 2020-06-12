@@ -16,7 +16,9 @@ export function DateTime({ event }: Props) {
   if (event.end_date) {
     return (
       <span>
-        {dueDate} {formatDate(event.end_date, timeFormat)}
+        {dueDate}
+        <br />
+        {formatDate(event.end_date, timeFormat)}
       </span>
     )
   }

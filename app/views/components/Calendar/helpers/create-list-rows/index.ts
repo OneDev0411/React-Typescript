@@ -9,11 +9,12 @@ import { Placeholder } from '../../types'
 export function createListRows(
   events: ICalendarEventsList,
   activeDate: Date,
-  placeholders: Placeholder[]
+  placeholders: Placeholder[],
+  contrariwise: boolean
 ): ICalendarListRow[] {
   const activeDayId = createDayId(activeDate, false)
 
-  const distributedEvents = createMultiDayEvents(events)
+  const distributedEvents = createMultiDayEvents(events, contrariwise)
 
   return Object.entries(distributedEvents).flatMap(([month, daysOfMonth]) => {
     if (
