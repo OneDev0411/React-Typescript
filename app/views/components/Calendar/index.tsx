@@ -143,17 +143,20 @@ export function Calendar({
         // get current range of fetched calendar
         const range = options.calendarRange || apiOptions.range
 
-        const normalizedEvents = normalizeEvents(
-          nextEvents,
-          range,
-          contrariwise
-        )
+        const normalizedEvents = normalizeEvents(nextEvents, range)
 
         // update events list
         setEvents(nextEvents)
 
         // updates virtual list rows
-        setListRows(createListRows(normalizedEvents, activeDate, placeholders))
+        setListRows(
+          createListRows(
+            normalizedEvents,
+            activeDate,
+            placeholders,
+            contrariwise
+          )
+        )
 
         onLoadEvents(normalizedEvents, range)
       } catch (e) {
@@ -205,8 +208,13 @@ export function Calendar({
      * should open the event dialog with the day set on it
      */
     if (rowId === -1 && placeholders.includes(Placeholder.Day)) {
-      const nextEvents = normalizeEvents(events, calendarRange, contrariwise)
-      const nextRows = createListRows(nextEvents, date, placeholders)
+      const nextEvents = normalizeEvents(events, calendarRange)
+      const nextRows = createListRows(
+        nextEvents,
+        date,
+        placeholders,
+        contrariwise
+      )
 
       setActiveDate(date)
       setListRows(nextRows)
@@ -347,16 +355,14 @@ export function Calendar({
    */
   const createListFromEvents = useCallback(
     (events: ICalendarEvent[]) => {
-      const normalizedEvents = normalizeEvents(
-        events,
-        calendarRange,
-        contrariwise
-      )
+      const normalizedEvents = normalizeEvents(events, calendarRange)
 
       setEvents(events)
-      setListRows(createListRows(normalizedEvents, activeDate, placeholders))
+      setListRows(
+        createListRows(normalizedEvents, activeDate, placeholders, contrariwise)
+      )
     },
-    [activeDate, calendarRange, contrariwise, placeholders]
+    [activeDate, calendarRange, placeholders, contrariwise]
   )
 
   /**
@@ -469,16 +475,13 @@ export function Calendar({
       const nextEvents =
         upserted.length > 0 ? [...upserted, ...currentEvents] : currentEvents
 
-      const normalizedEvents = normalizeEvents(
-        nextEvents,
-        calendarRange,
-        contrariwise
-      )
+      const normalizedEvents = normalizeEvents(nextEvents, calendarRange)
 
       const nextRows = createListRows(
         normalizedEvents,
         activeDate,
-        placeholders
+        placeholders,
+        contrariwise
       )
 
       // update events list
