@@ -98,10 +98,10 @@ export default function ConnectedAccount({ account, onSync, onDelete }: Props) {
         </Grid>
 
         <ListItemSecondaryAction>
-          {oAuthAccountTypeToProvider[account.type] === 'google' &&
+          {/* {oAuthAccountTypeToProvider[account.type] === 'google' &&
             account.scope_summary.includes('calendar') && (
               <ConnectedCalendar gcid={account.id} />
-            )}
+            )} */}
 
           <DangerButton
             variant="outlined"
