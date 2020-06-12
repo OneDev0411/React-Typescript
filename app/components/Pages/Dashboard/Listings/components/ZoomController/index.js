@@ -2,10 +2,11 @@ import React from 'react'
 import _ from 'underscore'
 import { connect } from 'react-redux'
 
-import { updateMapZoom } from '../../../../../../store_actions/listings/map'
+import { mdiMinus, mdiPlus } from '@mdi/js'
 
-import IconAdd from '../../../../../../views/components/SvgIcons/Add/AddIcon'
-import IconMines from '../../../../../../views/components/SvgIcons/Mines/IconMines'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { updateMapZoom } from '../../../../../../store_actions/listings/map'
 
 import { Container, Button } from './styled'
 
@@ -15,6 +16,7 @@ class ZoomController extends React.Component {
       this.props.dispatch(updateMapZoom(this.props.tabName, 'IN')),
       300
     )
+
   handleZoomOut = () =>
     _.debounce(
       this.props.dispatch(updateMapZoom(this.props.tabName, 'OUT')),
@@ -27,20 +29,18 @@ class ZoomController extends React.Component {
         <Button
           isFit
           inverse
-          iconSize="large"
           onClick={this.handleZoomIn}
           disabled={this.props.isFetching}
         >
-          <IconAdd />
+          <SvgIcon path={mdiPlus} />
         </Button>
         <Button
           isFit
           inverse
-          iconSize="large"
           onClick={this.handleZoomOut}
           disabled={this.props.isFetching}
         >
-          <IconMines />
+          <SvgIcon path={mdiMinus} />
         </Button>
       </Container>
     )
