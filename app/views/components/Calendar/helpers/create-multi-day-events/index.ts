@@ -11,13 +11,15 @@ function getEndDate(event: ICalendarEvent): Date {
   return endDate
 }
 
-function sortItems(a: string, b: string, contrariwise: boolean) {
-  const dateObjectA = new Date(a)
-  const dateObjectB = new Date(b)
+function sortItems<T>(list: [string, T][], contrariwise: boolean) {
+  return list.sort((a, b) => {
+    const dateObjectA = new Date(a[0])
+    const dateObjectB = new Date(b[0])
 
-  const number = dateObjectA < dateObjectB ? -1 : 1
+    const number = dateObjectA < dateObjectB ? -1 : 1
 
-  return contrariwise ? number * -1 : number
+    return contrariwise ? number * -1 : number
+  })
 }
 
 /**
@@ -30,16 +32,16 @@ export default function createMultiDayEvents(
 ): ICalendarEventsList {
   const distributedEvents: ICalendarEventsList = {}
   let multiDayEvents: ICalendarEvent[] = []
-  const months = Object.entries(events).sort((a, b) =>
-    sortItems(a[0], b[0], contrariwise)
+
+  const months = sortItems<ICalendarMonthEvents>(
+    Object.entries(events),
+    contrariwise
   )
 
   months.forEach(([month, daysOfMonth]) => {
     distributedEvents[month] = {}
 
-    const days = Object.entries(daysOfMonth).sort((a, b) =>
-      sortItems(a[0], b[0], contrariwise)
-    )
+    const days = sortItems(Object.entries(daysOfMonth), contrariwise)
 
     days.forEach(([day, events]) => {
       const dayStart = new Date(day).getTime()
