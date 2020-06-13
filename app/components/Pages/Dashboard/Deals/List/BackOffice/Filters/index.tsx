@@ -8,7 +8,7 @@ import { IAppState } from 'reducers'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
-import { getGridSort, getActiveSort } from 'deals/List/helpers/sorting'
+import { getActiveSort } from 'deals/List/helpers/sorting'
 
 import { SortableColumn } from 'components/Grid/Table/types'
 

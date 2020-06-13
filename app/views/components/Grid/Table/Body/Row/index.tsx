@@ -2,8 +2,6 @@ import React, { CSSProperties, memo } from 'react'
 
 import cn from 'classnames'
 
-import { resolveAccessor } from '../../helpers/resolve-accessor'
-
 import { StateContext } from '../../context'
 import { TableColumn, TrProps, TdProps, GridClasses } from '../../types'
 

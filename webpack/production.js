@@ -51,8 +51,22 @@ webpackConfig.plugins.push(
     minify: {
       collapseWhitespace: false
     }
-  }),
+  })
+)
 
+// SOURCE_VERSION variable only exists in Heroku env
+if (process.env.SOURCE_VERSION) {
+  webpackConfig.plugins.push(
+    new SentryCliPlugin({
+      release: process.env.SOURCE_VERSION, // refers to the latest commit hash
+      include: 'dist/',
+      ignore: ['node_modules'],
+      urlPrefix: process.env.ASSETS_BASEURL
+    })
+  )
+}
+
+webpackConfig.plugins.push(
   new CompressionPlugin({
     algorithm: 'gzip',
     test: /\.js$|\.css$/,
