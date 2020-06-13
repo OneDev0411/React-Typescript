@@ -1,20 +1,26 @@
 import { browserHistory } from 'react-router'
 
-export function viewEnvelope({ deal, envelope, task, isBackOffice }) {
-  const [doc] = envelope.documents.filter(d => {
-    if (d.task === task.id) {
+export function viewEnvelope({
+  deal,
+  envelope,
+  task,
+  isBackOffice
+}: {
+  deal: IDeal
+  envelope: IDealEnvelope
+  task: IDealTask
+  isBackOffice: boolean
+}) {
+  const [doc] = envelope.documents.filter(document => {
+    if (document.task === task.id) {
       return true
     }
 
     const { attachments } = task.room
 
-    for (const attachment of attachments) {
-      if (attachment.id === d.file) {
-        return true
-      }
-    }
-
-    return false
+    return (attachments || []).some(attachment => {
+      return attachment.id === document.file
+    })
   })
 
   if (isBackOffice) {
