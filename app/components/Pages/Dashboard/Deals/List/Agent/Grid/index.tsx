@@ -101,6 +101,7 @@ function AgentGrid(props: Props & WithRouterProps) {
         width: '15%',
         class: 'opaque',
         accessor: (deal: IDeal) => getStatus(deal) || '',
+        render: ({ row: deal }: { row: IDeal }) => getStatus(deal),
         sortFn: (rows: IDeal[]) => sortStatus(rows, statuses)
       },
       {

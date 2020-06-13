@@ -63,7 +63,6 @@ export function getTaskActions({
   isBackOffice && actions.push(APPROVE_TASK)
   isBackOffice && actions.push(DECLINE_TASK)
   isBackOffice && actions.push(REQUIRE_TASK)
-  isBackOffice && actions.push(DELETE_TASK)
 
   actions.push(DELETE_TASK)
 

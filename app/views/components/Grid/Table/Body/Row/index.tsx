@@ -2,8 +2,6 @@ import React, { CSSProperties, memo } from 'react'
 
 import cn from 'classnames'
 
-import { resolveAccessor } from '../../helpers/resolve-accessor'
-
 import { StateContext } from '../../context'
 import { TableColumn, TrProps, TdProps, GridClasses } from '../../types'
 
@@ -56,7 +54,7 @@ function Row<T>({
       })}
     >
       {columns
-        .filter((column: TableColumn<T>) => column.render || column.accessor)
+        .filter((column: TableColumn<T>) => column.render)
         .map((column: TableColumn<T>, columnIndex: number) => (
           <div
             key={columnIndex}
@@ -97,10 +95,6 @@ function getCell<Row>(
       rowIndex,
       columnIndex
     })
-  }
-
-  if (column.accessor) {
-    return resolveAccessor(column.accessor, row, rowIndex)
   }
 
   return null

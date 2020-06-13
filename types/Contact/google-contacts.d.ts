@@ -18,7 +18,6 @@ declare interface IOAuthAccountBase {
   history_id: null | string
   id: string
   last_name: string
-  last_sync_at: string
   last_sync_duration: number
   messages_total: null | number
   ord: string
@@ -26,8 +25,7 @@ declare interface IOAuthAccountBase {
   profile_image_url: string | null
   resource_name: string
   revoked: boolean
-  histories?: IGoogleSyncHistory[]
-  sync_status: 'success' | 'pending' | null
+  jobs?: IOAuthAccountJobs[]
   scope: string[]
   scope_summary: OAuthAccountScope[]
   threads_total: null | number
@@ -50,26 +48,11 @@ declare type IGoogleScope =
   | 'gmail.readonly'
   | 'gmail.send'
 
-declare interface IGoogleSyncHistory {
-  brand: string
-  contacts_total: number
-  created_at: string
-  deleted_at: null | string
-  glsh: UUID
-  google_credential: UUID
+declare interface IOAuthAccountJobs {
   id: UUID
-  messages_total: number
-  ord: string
-  status: boolean
-  sync_duration: number
-  synced_contacts_num: number
-  synced_messages_num: number
-  synced_threads_num: number
-  threads_total: number
-  extract_contacts_error: null | string
-  type: 'google_sync_history'
-  updated_at: string
-  user: UUID
+  job_name: 'calendar' | 'gmail' | 'contacts' | 'outlook'
+  start_at: string
+  status: any // success means successful, any other values means pending
 }
 
 /**

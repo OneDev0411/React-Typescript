@@ -57,15 +57,3 @@ export function startImportingOAuthContacts(provider: OAuthProvider) {
 export function clearImportingGoogleContacts(provider: OAuthProvider) {
   localStorage.removeItem(`${KEY}_${provider}`)
 }
-
-export function getNumOfSyncedContacts(since: Date, accounts: IOAuthAccount[]) {
-  return accounts
-    .flatMap(account => account.histories || [])
-    .reduce((sum, history) => {
-      if (new Date(history.updated_at) > since) {
-        return sum + history.synced_contacts_num
-      }
-
-      return sum
-    }, 0)
-}

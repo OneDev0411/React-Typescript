@@ -20,6 +20,7 @@ declare interface IEvent extends IModel<'crm_task'> {
   assignees: IUser[]
   due_date: number
   end_date: number | null
+  all_day: boolean
   task_type: string
   crm_task: UUID
   contact: IContact

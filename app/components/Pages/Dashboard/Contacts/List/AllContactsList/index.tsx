@@ -110,10 +110,7 @@ function mapStateToProps(state: IAppState) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    resetActiveFilters: resetActiveFiltersAction,
-    changeActiveFilterSegment: changeActiveFilterSegmentAction
-  }
-)(AllContactsList as React.FC)
+export default connect(mapStateToProps, {
+  resetActiveFilters: resetActiveFiltersAction,
+  changeActiveFilterSegment: changeActiveFilterSegmentAction
+})(AllContactsList as React.FC)
