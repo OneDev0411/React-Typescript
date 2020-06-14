@@ -46,6 +46,7 @@ export const GridCalendarPresentation = ({
   const [events, setEvents] = useState<EventInput[]>([])
 
   // request status
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(false)
 
   // current range of fetched events
@@ -104,10 +105,6 @@ export const GridCalendarPresentation = ({
         // normalized events for using in full calendar
         const normalizedEvents: EventInput[] = normalizeEvents(nextEvents)
 
-        console.log('.....................................')
-        console.log(normalizedEvents)
-        console.log('.....................................')
-
         // update events list
         setEvents(normalizedEvents)
       } catch (e) {
@@ -155,6 +152,7 @@ export const GridCalendarPresentation = ({
       height="parent"
       defaultView="dayGridMonth"
       eventLimit
+      editable
       header={{
         left: 'prev,next today',
         center: 'title',

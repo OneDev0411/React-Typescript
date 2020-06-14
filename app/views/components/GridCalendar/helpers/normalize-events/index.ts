@@ -15,10 +15,11 @@ export function normalizeEvents(events: ICalendarEvent[]): EventInput[] {
     event.object_type === 'crm_association' ? event.crm_task : event.id
   )
 
-  return uniqEvents.map(event => {
-    const { all_day } = event
+  return uniqEvents.map((event: ICalendarEvent) => {
+    const { id, all_day } = event
 
     return {
+      id,
       title: getTitle(event),
       allDay: all_day || false,
       ...getDates(event)
