@@ -22,6 +22,7 @@ export function normalizeEvents(events: ICalendarEvent[]): EventInput[] {
       id,
       title: getTitle(event),
       allDay: all_day || false,
+      editable: isEditable(event),
       ...getDates(event)
     }
   })
@@ -77,4 +78,21 @@ function getDates(event: ICalendarEvent): FullCalendarEventDate {
     start: startObject.toISOString(),
     ...end
   }
+}
+
+/**
+ * check event is daragable
+ * @param event
+ */
+function isEditable(event: ICalendarEvent): boolean {
+  const { object_type, event_type } = event
+
+  if (
+    ['contact', 'deal_context'].includes(object_type) ||
+    ['birthday', 'next_touch'].includes(event_type)
+  ) {
+    return false
+  }
+
+  return true
 }
