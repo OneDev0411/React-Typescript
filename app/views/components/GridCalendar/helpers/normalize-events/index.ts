@@ -16,14 +16,42 @@ export function normalizeEvents(events: ICalendarEvent[]): EventInput[] {
   )
 
   return uniqEvents.map(event => {
-    const { title, all_day } = event
+    const { all_day } = event
 
     return {
-      title,
+      title: getTitle(event),
       allDay: all_day || false,
       ...getDates(event)
     }
   })
+}
+
+/**
+ * get the event title
+ * @param event
+ */
+function getTitle(event: ICalendarEvent): string {
+  const { title, object_type, event_type, type_label } = event
+
+  if (
+    object_type === 'contact' &&
+    event_type === 'next_touch' &&
+    event.people
+  ) {
+    const contact = event.people[0] as IContact
+
+    return `Touch Reminder: ${contact.display_name}`
+  }
+
+  if (object_type === 'deal_context') {
+    return `${type_label} for ${title}`
+  }
+
+  if (!title) {
+    return `[No Title ${event_type}]`
+  }
+
+  return title
 }
 
 /**

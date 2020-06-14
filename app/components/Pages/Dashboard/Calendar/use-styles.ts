@@ -16,6 +16,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(4)
     },
     listContainer: {
+      marginTop: theme.spacing(4),
       flex: '1 1 auto'
     }
   })

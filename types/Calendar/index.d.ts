@@ -23,7 +23,6 @@ declare type ICalendarEvent<
     send_updates: boolean
   }
   next_occurence: string
-  object_type: string
   recurring: boolean
   status: string
   all_day: boolean
