@@ -28,7 +28,6 @@ import {
 } from './constants'
 
 import { SyncButton } from './SyncButton'
-import ConnectedCalendar from './ConnectedCalendar'
 
 interface Props {
   account: IOAuthAccount
