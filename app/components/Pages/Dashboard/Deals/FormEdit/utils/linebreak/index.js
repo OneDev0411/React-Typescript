@@ -1,6 +1,7 @@
 /* eslint-disable no-cond-assign, no-continue */
 
 const maxSize = 15
+const minSize = 8
 const el = document.createElement('div')
 
 document.body.appendChild(el)
@@ -39,13 +40,12 @@ const breakText = (text, rects, fontSize, fontName, isBold) => {
     fontSize = maxSize
   }
 
-  // it doesn't mean to have a font size lower than one
-  if (fontSize <= 1) {
+  if (fontSize <= minSize) {
     return {
       values: {
         0: text
       },
-      fontSize: 1
+      fontSize: minSize
     }
   }
 
