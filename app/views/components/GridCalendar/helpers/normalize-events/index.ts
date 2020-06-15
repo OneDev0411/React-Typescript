@@ -16,9 +16,10 @@ export function normalizeEvents(events: ICalendarEvent[]): EventInput[] {
   )
 
   return uniqEvents.map((event: ICalendarEvent) => {
-    const { id, all_day } = event
+    const { id, all_day, ...restEvent } = event
 
     return {
+      ...restEvent,
       id,
       title: getTitle(event),
       allDay: all_day || false,
@@ -64,7 +65,7 @@ function getDates(event: ICalendarEvent): FullCalendarEventDate {
   const { timestamp, end_date, recurring } = event
   const current = new Date()
   // Start Date
-  const startObject = new Date(timestamp * 1000)
+  const startObject = new Date(Number(timestamp || 0) * 1000)
 
   if (recurring) {
     startObject.setUTCFullYear(current.getUTCFullYear())
