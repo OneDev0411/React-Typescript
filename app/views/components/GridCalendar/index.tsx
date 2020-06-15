@@ -226,8 +226,7 @@ export const GridCalendarPresentation = ({
       eventLimit
       editable
       header={{
-        left: 'prev,next today',
-        center: 'title',
+        left: 'today, prev,next, title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
       }}
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

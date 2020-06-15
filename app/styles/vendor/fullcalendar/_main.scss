@@ -1,0 +1,75 @@
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+
+.fc-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & > h2 {
+    font-weight: 900;
+  }
+}
+
+.fc-button{
+  &:focus {
+    box-shadow: none !important;
+  }
+  &-primary{
+    &, &:disabled {
+      background-color: transparent;
+    }
+    &, &:hover, &:disabled, &:active {
+      color: #000 !important;
+      border-color: #E5E5E5 !important;
+    }
+    &:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+    &:active {
+      background: rgba(0, 0, 0, 0.05) !important;
+    }
+  }
+  &-active{
+    background-color: #0945EB !important;
+    border-color: #0945EB !important;
+    &, &:hover {
+      color: #fff !important;
+    }
+  }
+}
+
+.fc-next-button, .fc-prev-button {
+  &, &:hover, &:active {
+    border-color: transparent !important;
+  }
+  span{
+    color: #000;
+  }
+}
+
+.fc-unthemed {
+  th, td, thead, tbody, .fc-divider, .fc-row, .fc-content, .fc-popover, .fc-list-view, .fc-list-heading td {
+    border-color: #e0e0e0;
+  }
+}
+
+.fc-day {
+  &-header{
+    font-size: 1.25rem;
+    color: #949598;
+  }
+  &-top{
+    text-align: center;
+  }
+  &-number {
+    font-size: 1.1em;
+    color: #000;
+    float: none !important;
+  }
+}
+
+
+
+
+

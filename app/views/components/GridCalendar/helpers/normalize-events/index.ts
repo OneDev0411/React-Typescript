@@ -5,6 +5,11 @@ interface FullCalendarEventDate {
   start: string
   end?: string
 }
+interface FullCalendarEventStyle {
+  backgroundColor: string
+  borderColor: string
+  textColor: string
+}
 
 /**
  * return list of events for using in full calendar
@@ -24,7 +29,8 @@ export function normalizeEvents(events: ICalendarEvent[]): EventInput[] {
       title: getTitle(event),
       allDay: all_day || false,
       editable: isEditable(event),
-      ...getDates(event)
+      ...getDates(event),
+      ...getStyles(event)
     }
   })
 }
@@ -34,7 +40,7 @@ export function normalizeEvents(events: ICalendarEvent[]): EventInput[] {
  * @param event
  */
 function getTitle(event: ICalendarEvent): string {
-  const { title, object_type, event_type, type_label } = event
+  const { title, object_type, event_type } = event
 
   if (
     object_type === 'contact' &&
@@ -46,9 +52,9 @@ function getTitle(event: ICalendarEvent): string {
     return `Touch Reminder: ${contact.display_name}`
   }
 
-  if (object_type === 'deal_context') {
-    return `${type_label} for ${title}`
-  }
+  // if (object_type === 'deal_context') {
+  //   return `${type_label} for ${title}`
+  // }
 
   if (!title) {
     return `[No Title ${event_type}]`
@@ -96,4 +102,34 @@ function isEditable(event: ICalendarEvent): boolean {
   }
 
   return true
+}
+
+/**
+ * return event style for using in full calendar
+ * @param event
+ */
+function getStyles(event: ICalendarEvent): FullCalendarEventStyle {
+  const { object_type, event_type } = event
+
+  if (object_type === 'deal_context') {
+    return {
+      backgroundColor: '#f8f8ff',
+      borderColor: '#f8f8ff',
+      textColor: '#0945eb'
+    }
+  }
+
+  if (['birthday'].includes(event_type)) {
+    return {
+      backgroundColor: '#fce6fa',
+      borderColor: '#fce6fa',
+      textColor: '#ff00cc'
+    }
+  }
+
+  return {
+    backgroundColor: '#f2f2f2',
+    borderColor: '#f2f2f2',
+    textColor: '#000'
+  }
 }
