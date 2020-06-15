@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
+import { addNotification as notify } from 'reapop'
+import { useDispatch } from 'react-redux'
 
 import { goTo } from 'utils/go-to'
 
@@ -12,6 +14,26 @@ import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard
 function StatefulUrlAdapter({ location, ...props }: WithRouterProps) {
   const [listing, setListing] = useState<Nullable<IListing>>(null)
   const [contact, setContact] = useState<Nullable<IContact>>(null)
+  const dispatch = useDispatch()
+
+  const notifyError = useCallback(
+    (entity: string, statusCode?: number) => {
+      dispatch(
+        notify({
+          status: 'error',
+          message:
+            statusCode === 404
+              ? `${entity} not found.`
+              : 'Something went wrong. Please try again or contact support.'
+        })
+      )
+    },
+    [dispatch]
+  )
+
+  const goToMarketing = () => {
+    goTo('/dashboard/marketing')
+  }
 
   useEffect(() => {
     async function fetchContact() {
@@ -23,13 +45,17 @@ function StatefulUrlAdapter({ location, ...props }: WithRouterProps) {
         return
       }
 
-      const response = await getContact(contactId)
+      try {
+        const response = await getContact(contactId)
 
-      setContact(response.data)
+        setContact(response.data)
+      } catch (err) {
+        notifyError('Contact', err.response.statusCode)
+        goToMarketing()
+      }
     }
-
     fetchContact()
-  }, [location.query.contactId])
+  }, [location.query.contactId, notifyError])
 
   useEffect(() => {
     async function fetchListing() {
@@ -41,21 +67,24 @@ function StatefulUrlAdapter({ location, ...props }: WithRouterProps) {
         return
       }
 
-      const fetchedListing = await getListing(listingId)
+      try {
+        const fetchedListing = await getListing(listingId)
 
-      setListing(fetchedListing)
+        setListing(fetchedListing)
+      } catch (err) {
+        notifyError('Listing', err.response.statusCode)
+        goToMarketing()
+      }
     }
 
     fetchListing()
-  }, [location.query.listingId])
+  }, [location.query.listingId, notifyError])
 
   if (listing) {
     return (
       <ListingFlow
         {...props}
-        handleTrigger={() => {
-          goTo('/dashboard/marketing')
-        }}
+        handleTrigger={goToMarketing}
         hasExternalTrigger
         hideTemplatesColumn={false}
         listing={listing}
@@ -69,9 +98,7 @@ function StatefulUrlAdapter({ location, ...props }: WithRouterProps) {
     return (
       <ContactFlow
         {...props}
-        handleTrigger={() => {
-          goTo('/dashboard/marketing')
-        }}
+        handleTrigger={goToMarketing}
         isBuilderOpen
         hasExternalTrigger
         hideTemplatesColumn={false}
