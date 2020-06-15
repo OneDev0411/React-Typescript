@@ -7,7 +7,7 @@ import TemplatesList from 'components/TemplatesList'
 
 import Layout from '..'
 
-function isGenerationThumbnails(brandTemplates) {
+function isGeneratingThumbnails(brandTemplates) {
   return brandTemplates.some(brandTemplate => {
     if (
       !brandTemplate.is_thumbnail_ready ||
@@ -31,7 +31,7 @@ export const MarketingList = () => {
         render={({ items, isLoading, types, medium, onDeleteTemplate }) => {
           return (
             <>
-              {isGenerationThumbnails(items) && (
+              {isGeneratingThumbnails(items) && (
                 <Box mt={1.5}>
                   <Alert severity="info">
                     <Box>
