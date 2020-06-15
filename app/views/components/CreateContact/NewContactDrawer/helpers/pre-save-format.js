@@ -2,7 +2,6 @@ import { selectDefinitionByName } from '../../../../../reducers/contacts/attribu
 
 export function preSaveFormat(values, attributeDefs) {
   const attributes = []
-  const selectFields = ['title']
   const multipleFields = ['email', 'phone_number']
   const textFields = ['first_name', 'middle_name', 'last_name', 'source']
 
@@ -28,18 +27,6 @@ export function preSaveFormat(values, attributeDefs) {
     }
   })
 
-  selectFields.forEach(field => {
-    const attribute_def = selectDefinitionByName(attributeDefs, field)
-    const text = (values[field] && values[field].value) || values[field]
-
-    if (attribute_def && text && text !== '-Select-') {
-      attributes.push({
-        text,
-        attribute_def: attribute_def.id
-      })
-    }
-  })
-
   multipleFields.forEach(field => {
     const attribute_def = selectDefinitionByName(attributeDefs, field)
 
@@ -56,6 +43,15 @@ export function preSaveFormat(values, attributeDefs) {
         }
       })
     }
+  })
+
+  values.tags.forEach(tag => {
+    const attributeDef = selectDefinitionByName(attributeDefs, 'tag')
+
+    attributes.push({
+      attribute_def: attributeDef.id,
+      text: tag.value
+    })
   })
 
   return attributes

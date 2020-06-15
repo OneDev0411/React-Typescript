@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
+import { TextField as Input } from '@material-ui/core'
 
-import { Container, Label, LabelNote, ErrorMessage, Input } from '../styled'
+import { Container, Label, LabelNote, ErrorMessage } from '../styled'
 import { brandBackground } from '../../../utils/colors'
 
 TextField.propTypes = {

@@ -27,7 +27,7 @@ const useStyles = makeStyles(
         margin: 'auto'
       },
       button: {
-        width: '14.6rem'
+        width: '15.6rem'
       },
       marginBottom: {
         marginBottom: theme.spacing(2)
@@ -105,6 +105,7 @@ export function ZeroState({ onCreateContact }: Props) {
       </Button>
 
       <CreateContact
+        showAddAnother={false}
         submitCallback={onCreateContact}
         buttonProps={{ className: classes.button, size: 'large' }}
       />

@@ -35,7 +35,6 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
 import { updateTeamSetting } from 'actions/user/update-team-setting'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
-import { goTo } from 'utils/go-to'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
@@ -601,7 +600,7 @@ class ContactsList extends React.Component {
       return null
     }
 
-    goTo(`/dashboard/contacts/${contact.id}`)
+    this.reloadContacts()
   }
 
   renderTabs = (props = {}) => {
@@ -848,19 +847,16 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
 }
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    {
-      getContacts,
-      fetchOAuthAccounts,
-      searchContacts,
-      deleteContacts,
-      confirmation,
-      setContactsListTextFilter,
-      getContactsTags,
-      updateTeamSetting,
-      getUserTeams,
-      updateSegment: updateFilterSegment
-    }
-  )(ContactsList)
+  connect(mapStateToProps, {
+    getContacts,
+    fetchOAuthAccounts,
+    searchContacts,
+    deleteContacts,
+    confirmation,
+    setContactsListTextFilter,
+    getContactsTags,
+    updateTeamSetting,
+    getUserTeams,
+    updateSegment: updateFilterSegment
+  })(ContactsList)
 )
