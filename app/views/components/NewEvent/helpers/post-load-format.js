@@ -1,3 +1,5 @@
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
+
 /**
  * Format form data for api model
  * @param {object} owner the logged in user object
@@ -9,10 +11,7 @@ export async function postLoadFormat(owner, defaultAssociation) {
     assignees: [owner],
     associations: defaultAssociation ? [defaultAssociation] : [],
     dueDate: new Date(),
-    reminder: {
-      title: 'None',
-      value: null
-    },
+    reminder: REMINDER_DROPDOWN_OPTIONS[3], // 15 minutes before
     task_type: { title: 'Call', value: 'Call' }
   }
 }

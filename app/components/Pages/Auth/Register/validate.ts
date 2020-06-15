@@ -10,13 +10,8 @@ const isEmptyStr = str => {
   return str.trim().length === 0
 }
 
-export function validate({
-  email,
-  first_name,
-  last_name,
-  password,
-  repeatedPassword
-}: FormValues) {
+export function validate(values: Omit<FormValues, 'user_type'>) {
+  const { email, first_name, last_name, password, repeatedPassword } = values
   const errors: Partial<FormValues> = {}
 
   if (isEmptyStr(first_name)) {

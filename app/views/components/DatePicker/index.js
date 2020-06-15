@@ -31,7 +31,7 @@ export default class DatePicker extends React.Component {
     this.setDate(this.props)
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setDate(nextProps)
   }
 

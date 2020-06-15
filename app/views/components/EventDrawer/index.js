@@ -27,11 +27,10 @@ import {
   AssigneesField,
   AssociationsList,
   EndDateTimeField,
-  WhenFieldChanges,
   FieldError
 } from '../final-form-fields'
 import Tooltip from '../tooltip'
-import { AddAssociationButton } from '../AddAssociationButton'
+import AddAssociation from '../AddAssociation'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
 import { validate } from './helpers/validate'
@@ -42,10 +41,10 @@ import { postLoadFormat } from './helpers/post-load-format'
 
 import Reminder from './components/Reminder/Reminder'
 import { Title } from './components/Title'
-import { UpdateReminder } from './components/UpdateReminder'
 import { Description } from './components/Description/RichText'
 import { EventType } from './components/EventType'
 import { NotifyGuests } from './components/NotifyGuests'
+import { FutureEventDoneConfirmation } from './components/FutureEventDoneConfirmation'
 
 import { FormContainer, FieldContainer, Footer } from './styled'
 
@@ -222,10 +221,8 @@ class PresentEventDrawer extends Component {
   }
 
   render() {
-    let crm_task
     const {
       isDisabled,
-      event,
       error,
       isSaving,
       isDeleting,
@@ -233,10 +230,6 @@ class PresentEventDrawer extends Component {
       currentEvent
     } = this.state
     const { defaultAssociation, user, isOpen } = this.props
-
-    if (event) {
-      crm_task = event.id
-    }
 
     return (
       <>
@@ -271,55 +264,13 @@ class PresentEventDrawer extends Component {
                 render={formProps => {
                   const { values } = formProps
 
-                  const isDone = values.status === 'DONE'
-                  const isPastDate =
-                    new Date(values.dueDate).getTime() <
-                    new Date().getTime() - 1
-
                   return (
                     <>
                       <FormContainer
                         onSubmit={formProps.handleSubmit}
                         id="event-drawer-form"
                       >
-                        {!this.isNew && (
-                          <WhenFieldChanges
-                            set="status"
-                            watch="dueDate"
-                            setter={onChange => {
-                              if (isPastDate) {
-                                if (!isDone) {
-                                  onChange('DONE')
-                                }
-                              } else if (isDone) {
-                                onChange('PENDING')
-                              }
-                            }}
-                          />
-                        )}
-                        {/* Set future event due date to now if user wants to mark it as done */}
-                        {!this.isNew && (
-                          <WhenFieldChanges
-                            set="dueDate"
-                            watch="status"
-                            setter={onChange => {
-                              if (isDone && !isPastDate) {
-                                this.context.setConfirmationModal({
-                                  message: 'Heads up!',
-                                  description:
-                                    'If you mark this event as done, the event due date will change to now. Are you sure?',
-                                  onConfirm: () => {
-                                    onChange(new Date())
-                                  },
-                                  onCancel: () => {
-                                    values.status = 'PENDING'
-                                  }
-                                })
-                              }
-                            }}
-                          />
-                        )}
-                        <UpdateReminder dueDate={values.dueDate} />
+                        {!this.isNew && <FutureEventDoneConfirmation />}
                         <Flex style={{ marginBottom: '1rem' }}>
                           {this.isNew ? (
                             <Title fullWidth />
@@ -418,30 +369,15 @@ class PresentEventDrawer extends Component {
                               />
                             </>
                           )}
-                          <AddAssociationButton
-                            associations={values.associations}
-                            crm_task={crm_task}
+                          <AddAssociation
                             disabled={isDisabled}
                             type="contact"
-                            name="associations"
-                            caption="Attach Client"
                           />
-                          <AddAssociationButton
-                            associations={values.associations}
-                            crm_task={crm_task}
+                          <AddAssociation
                             disabled={isDisabled}
                             type="listing"
-                            name="associations"
-                            caption="Attach Property"
                           />
-                          <AddAssociationButton
-                            associations={values.associations}
-                            crm_task={crm_task}
-                            disabled={isDisabled}
-                            type="deal"
-                            name="associations"
-                            caption="Attach Deal"
-                          />
+                          <AddAssociation disabled={isDisabled} type="deal" />
                         </Flex>
                         <ActionButton
                           appearance="secondary"

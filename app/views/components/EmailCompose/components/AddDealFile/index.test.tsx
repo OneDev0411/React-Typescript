@@ -1,5 +1,5 @@
+import React from 'react'
 import { fireEvent, render, RenderResult } from '@testing-library/react'
-import * as React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { ReactNode } from 'react'
@@ -58,8 +58,8 @@ describe('AddDealFile component', () => {
     const container = render(
       <Provider store={mockStore}>
         <AddDealFileBase
-          input={{ ...input, value: [] }}
-          meta={{}}
+          value={[]}
+          onChange={input.onChange}
           initialAttachments={[]}
         />
       </Provider>
@@ -72,11 +72,7 @@ describe('AddDealFile component', () => {
     const onChange = jest.fn()
     const $ = render(
       <AddDealFileTestBed>
-        <AddDealFile
-          meta={{}}
-          input={{ ...input, onChange }}
-          initialAttachments={[]}
-        />
+        <AddDealFile value={[]} onChange={onChange} initialAttachments={[]} />
       </AddDealFileTestBed>
     )
 
@@ -97,8 +93,8 @@ describe('AddDealFile component', () => {
     const $ = render(
       <AddDealFileTestBed>
         <AddDealFile
-          meta={{}}
-          input={{ ...input, onChange, value: [file1] }}
+          value={[file1] as any}
+          onChange={onChange}
           initialAttachments={[]}
         />
       </AddDealFileTestBed>
@@ -121,11 +117,7 @@ describe('AddDealFile component', () => {
     const onChange = jest.fn()
     const $ = render(
       <AddDealFileTestBed>
-        <AddDealFile
-          meta={{}}
-          input={{ ...input, onChange, value: [] }}
-          initialAttachments={[]}
-        />
+        <AddDealFile value={[]} onChange={onChange} initialAttachments={[]} />
       </AddDealFileTestBed>
     )
 

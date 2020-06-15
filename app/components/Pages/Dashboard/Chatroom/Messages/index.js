@@ -46,7 +46,7 @@ class Messages extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { roomId, messages } = nextProps
 
     if (roomId && !messages[roomId]) {

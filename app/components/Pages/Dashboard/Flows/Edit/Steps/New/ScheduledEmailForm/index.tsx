@@ -52,13 +52,14 @@ export default function ScheduledEmailForm({
   onNewTemplateClick,
   onReviewTemplateClick
 }: Props) {
-  function getInitialValues(stepData?: IBrandFlowStep) {
+  function getInitialValues(stepData?: IBrandFlowStep): FormData {
     if (!stepData || !stepData.email) {
       return {
         email_template:
           (templates.find(({ id }) => id === defaultSelectedTemplate) || {})
-            .id || null,
-        wait_for: '1',
+            .id || '',
+        title: '',
+        wait_for: 1,
         at: '08:00'
       }
     }
@@ -75,7 +76,7 @@ export default function ScheduledEmailForm({
         stepData.email.id,
       title: stepData.title,
       description: stepData.description,
-      wait_for: days.toString(),
+      wait_for: days,
       at
     }
   }

@@ -39,7 +39,7 @@ export class CheckBoxButton extends React.Component {
     isSelected: this.props.isSelected
   }
 
-  componentWillReceiveProps({ isSelected }) {
+  UNSAFE_componentWillReceiveProps({ isSelected }) {
     if (this.state.isSelected === isSelected) {
       return false
     }

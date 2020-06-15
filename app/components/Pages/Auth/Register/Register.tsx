@@ -135,20 +135,19 @@ export function Register(props: WithRouterProps) {
   }
 
   const getInitialValues = () => {
-    let email = paramsFromURI.email
-
-    if (paramsFromURI.phone_number) {
-      email = ''
-    }
-
-    return {
-      first_name: paramsFromURI.first_name,
-      last_name: paramsFromURI.last_name,
-      email,
+    const values: FormValues = {
+      first_name: paramsFromURI.first_name || '',
+      last_name: paramsFromURI.last_name || '',
       password: '',
       repeatedPassword: '',
       user_type: 'Agent'
     }
+
+    if (!paramsFromURI.phone_number) {
+      values.email = paramsFromURI.email || ''
+    }
+
+    return values
   }
 
   return (
