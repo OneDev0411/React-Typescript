@@ -1,6 +1,8 @@
 import React, { memo, useState, useRef, useCallback } from 'react'
 import { connect } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
+import { makeStyles, Theme } from '@material-ui/core'
+import cn from 'classnames'
 // List of full calendar assets
 import FullCalendar from '@fullcalendar/react'
 import { EventInput, View } from '@fullcalendar/core'
@@ -38,6 +40,24 @@ interface Props {
   associations?: string[]
 }
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    loadingContainer: {
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      top: 0,
+      left: 0
+    },
+    isLoading: {
+      filter: 'blur(2px)'
+    }
+  }),
+  {
+    name: 'GridCalendar'
+  }
+)
+
 export const GridCalendarPresentation = ({
   user,
   viewAsUsers,
@@ -45,6 +65,7 @@ export const GridCalendarPresentation = ({
   contrariwise = false,
   associations = []
 }: Props) => {
+  const classes = useStyles()
   // calendat reference
   const calendarRef = useRef<FullCalendar>(null)
 
@@ -220,20 +241,26 @@ export const GridCalendarPresentation = ({
   })
 
   return (
-    <FullCalendar
-      height="parent"
-      defaultView="dayGridMonth"
-      eventLimit
-      editable
-      header={{
-        left: 'today, prev,next, title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-      }}
-      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-      ref={calendarRef}
-      datesRender={handleDatesRender}
-      events={events}
-    />
+    <div
+      className={cn(classes.loadingContainer, {
+        [classes.isLoading]: isLoading
+      })}
+    >
+      <FullCalendar
+        height="parent"
+        defaultView="dayGridMonth"
+        eventLimit
+        editable
+        header={{
+          left: 'today, prev,next, title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        }}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        ref={calendarRef}
+        datesRender={handleDatesRender}
+        events={events}
+      />
+    </div>
   )
 }
 
