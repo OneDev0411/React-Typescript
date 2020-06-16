@@ -5,7 +5,7 @@ import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 // List of full calendar assets
 import FullCalendar from '@fullcalendar/react'
-import { EventInput, View } from '@fullcalendar/core'
+import { EventInput, View, EventApi } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
@@ -15,6 +15,10 @@ import { getCalendar, FilterQuery } from 'models/calendar/get-calendar'
 import { IAppState } from 'reducers/index'
 
 import { viewAs } from 'utils/user-teams'
+
+import { CrmEventType } from 'components/Calendar/types'
+
+import { EventController } from './components/EventController'
 
 // List of basic calendar dependency
 import {
@@ -26,6 +30,7 @@ import { ApiOptions, FetchOptions } from '../Calendar/types'
 
 // helpers
 import { normalizeEvents } from './helpers/normalize-events'
+import { upsertCrmEvents } from '../Calendar/helpers/upsert-crm-events'
 
 interface StateProps {
   viewAsUsers: UUID[]
@@ -69,11 +74,15 @@ export const GridCalendarPresentation = ({
   // calendat reference
   const calendarRef = useRef<FullCalendar>(null)
 
+  // list of server events
+  const [rowEvents, setRowEvents] = useState<ICalendarEvent[]>([])
   // list of current events
   const [events, setEvents] = useState<EventInput[]>([])
-
+  // selected event
+  const [selectedEvent, setSelectedEvent] = useState<ICalendarEvent | null>(
+    null
+  )
   // request status
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(false)
 
   // current range of fetched events
@@ -127,12 +136,13 @@ export const GridCalendarPresentation = ({
 
         const nextEvents: ICalendarEvent[] = options.reset
           ? fetchedEvents
-          : fetchedEvents.concat(events)
+          : fetchedEvents.concat(rowEvents)
 
         // normalized events for using in full calendar
         const normalizedEvents: EventInput[] = normalizeEvents(nextEvents)
 
         // update events list
+        setRowEvents(nextEvents)
         setEvents(normalizedEvents)
       } catch (e) {
         console.log(e)
@@ -140,7 +150,7 @@ export const GridCalendarPresentation = ({
         setIsLoading(false)
       }
     },
-    [viewAsUsers, events, associations]
+    [viewAsUsers, rowEvents, associations]
   )
 
   const handleLoadEvents = async (range: NumberRange | null = null) => {
@@ -208,7 +218,6 @@ export const GridCalendarPresentation = ({
 
       const { query, calendar: nextCalendarRange } = createRanges(format)
 
-      console.log({ query, nextCalendarRange })
       setCalendarRange(nextCalendarRange)
       fetchEvents({
         range: query
@@ -234,6 +243,34 @@ export const GridCalendarPresentation = ({
   }
 
   /**
+   * trigger on clicking on an event
+   */
+  const handleClickEvent = ({ event }: { event: EventApi }) => {
+    const currentEvent: ICalendarEvent = event.extendedProps?.rowEvent
+
+    setSelectedEvent(currentEvent)
+  }
+
+  /**
+   * triggers when a crm events update or delete
+   */
+  const handleCrmEventChange = useCallback(
+    (event: IEvent, type: CrmEventType) => {
+      const nextEvents: ICalendarEvent[] = upsertCrmEvents(
+        rowEvents,
+        event,
+        type
+      )
+      const normalizedEvents: EventInput[] = normalizeEvents(nextEvents)
+
+      setRowEvents(nextEvents)
+      setEvents(normalizedEvents)
+      setSelectedEvent(null)
+    },
+    [rowEvents]
+  )
+
+  /**
    * Load initia events (behaves as componentDidMount)
    */
   useEffectOnce(() => {
@@ -241,26 +278,35 @@ export const GridCalendarPresentation = ({
   })
 
   return (
-    <div
-      className={cn(classes.loadingContainer, {
-        [classes.isLoading]: isLoading
-      })}
-    >
-      <FullCalendar
-        height="parent"
-        defaultView="dayGridMonth"
-        eventLimit
-        editable
-        header={{
-          left: 'today, prev,next, title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-        }}
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        ref={calendarRef}
-        datesRender={handleDatesRender}
-        events={events}
+    <>
+      <div
+        className={cn(classes.loadingContainer, {
+          [classes.isLoading]: isLoading
+        })}
+      >
+        <FullCalendar
+          height="parent"
+          defaultView="dayGridMonth"
+          eventLimit
+          editable
+          header={{
+            left: 'today, prev,next, title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+          }}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          ref={calendarRef}
+          events={events}
+          datesRender={handleDatesRender}
+          eventClick={handleClickEvent}
+        />
+      </div>
+      <EventController
+        user={user!}
+        event={selectedEvent}
+        setSelectedEvent={setSelectedEvent}
+        onEventChange={handleCrmEventChange}
       />
-    </div>
+    </>
   )
 }
 

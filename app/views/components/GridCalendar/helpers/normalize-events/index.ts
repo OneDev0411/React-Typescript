@@ -21,14 +21,14 @@ export function normalizeEvents(events: ICalendarEvent[]): EventInput[] {
   )
 
   return uniqEvents.map((event: ICalendarEvent) => {
-    const { id, all_day, ...restEvent } = event
+    const { id, all_day } = event
 
     return {
-      ...restEvent,
       id,
       title: getTitle(event),
       allDay: all_day || false,
       editable: isEditable(event),
+      rowEvent: event,
       ...getDates(event),
       ...getStyles(event)
     }
