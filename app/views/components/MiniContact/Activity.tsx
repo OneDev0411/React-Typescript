@@ -4,6 +4,8 @@ import React from 'react'
 // import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import { mdiClockOutline, mdiGiftOutline, mdiCalendarOutline } from '@mdi/js'
 
+import { useTheme } from '@material-ui/core'
+
 import { RelativeTime } from 'components/RelativeTime'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -18,6 +20,8 @@ interface ActivityPropsType {
 }
 
 function Activity(props: ActivityPropsType) {
+  const theme = useTheme()
+
   if ((!props.dates || props.dates.length == 0) && !props.last_touch) {
     return null
   }
@@ -43,7 +47,7 @@ function Activity(props: ActivityPropsType) {
                   <SvgIcon
                     path={mdiGiftOutline}
                     size={muiIconSizes.small}
-                    color="#FF6F6F"
+                    color={theme.palette.error.main}
                   />
                 ) : (
                   <SvgIcon
