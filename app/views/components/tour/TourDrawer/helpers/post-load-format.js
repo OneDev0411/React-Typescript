@@ -1,5 +1,6 @@
 import { compare } from 'utils/helpers'
 import { getReminderItem } from 'views/utils/reminder'
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 import {
   normalizeListing,
   normalizeAssociations
@@ -13,12 +14,9 @@ import {
  * @returns {Promise} a formated Task
  */
 export async function postLoadFormat(task, owner, listings) {
+  let reminder = REMINDER_DROPDOWN_OPTIONS[5] // One hour before
   let clients = []
   let locations = []
-  let reminder = {
-    title: 'None',
-    value: -1
-  }
 
   if (listings && listings.length > 0) {
     locations = listings.map(listing => ({

@@ -4,7 +4,7 @@ import uniq from 'lodash/uniq'
 
 import { getStatus } from 'models/Deal/helpers/context'
 
-export function sortStatus(rows: IDeal[], statuses: IDealStatus[]) {
+export function sortDealsStatus(rows: IDeal[], statuses: IDealStatus[]) {
   const statusesByLabel = keyBy(statuses, 'label')
   const activeStatuses = filterBy(statuses, 'is_active')
   const pendingStatuses = filterBy(statuses, 'is_pending')

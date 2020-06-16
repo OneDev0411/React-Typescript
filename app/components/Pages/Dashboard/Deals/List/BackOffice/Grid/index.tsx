@@ -17,6 +17,7 @@ import {
 } from 'models/Deal/helpers/context'
 
 import flattenBrand from 'utils/flatten-brand'
+import { sortDealsStatus } from 'utils/sort-deals-status'
 
 import { getGridSort } from 'deals/List/helpers/sorting'
 
@@ -35,7 +36,6 @@ import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
 } from '../helpers/backoffice-sorting'
-import { sortStatus } from '../../helpers/status-sorting'
 
 interface Props {
   searchQuery: SearchQuery
@@ -87,9 +87,9 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       {
         id: 'status',
         class: 'opaque',
-        sortFn: (rows: IDeal[]) => sortStatus(rows, props.statuses),
         accessor: (deal: IDeal) => getStatus(deal) || '',
-        render: ({ row: deal }: { row: IDeal }) => getStatus(deal)
+        render: ({ row: deal }: { row: IDeal }) => getStatus(deal),
+        sortFn: (rows: IDeal[]) => sortDealsStatus(rows, props.statuses)
       },
       {
         id: 'agent-name',

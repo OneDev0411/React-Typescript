@@ -1,25 +1,16 @@
 import React, { MouseEventHandler, useState } from 'react'
 import { useSelector } from 'react-redux'
-
 import { ListItem } from '@material-ui/core'
-
-import { FieldRenderProps } from 'react-final-form'
-
 import { mdiCurrencyUsdCircle } from '@mdi/js'
 
 import { useDeepMemo } from 'hooks/use-deep-memo'
-
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-
 import { selectDealTasks } from 'reducers/deals/tasks'
-
 import { notUndefined } from 'utils/ts-utils'
-
 import { IAppState } from 'reducers'
 
 import SearchDealDrawer from 'components/SearchDealDrawer'
 import SelectDealFileDrawer from 'components/SelectDealFileDrawer'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getAllDealDocuments } from '../../../SelectDealFileDrawer/helpers/get-all-deal-documents'
@@ -32,18 +23,20 @@ interface StateProps {
   envelopes: Record<UUID, IDealEnvelope>
 }
 
-interface Props extends FieldRenderProps<any> {
+interface Props {
   deafultSelectedDeal?: IDeal
   initialAttachments: IFile[]
   onClick?: MouseEventHandler
-  onChanged?: () => void
+  onChange: (files: IFile[]) => void
+  value: IFile[]
 }
 
 export function AddDealFile({
   initialAttachments,
   deafultSelectedDeal,
-  onChanged = () => {},
-  ...props
+  onChange,
+  onClick,
+  value = []
 }: Props) {
   const { checklists, tasks, envelopes }: StateProps = useSelector(
     ({ deals: { checklists, tasks, envelopes } }: IAppState) => ({
@@ -60,8 +53,8 @@ export function AddDealFile({
     setDealsListOpen(true)
     setDealFilesOpen(false)
 
-    if (props.onClick) {
-      props.onClick(event)
+    if (onClick) {
+      onClick(event)
     }
   }
 
@@ -87,7 +80,7 @@ export function AddDealFile({
     setDealFilesOpen(false)
 
     if (deal) {
-      const currentFiles: IFile[] = props.input.value || []
+      const currentFiles: IFile[] = value || []
 
       // Previously selected files which are either non-deal files or
       // deal files that are still selected
@@ -101,8 +94,7 @@ export function AddDealFile({
         preservedFiles.every(aFile => aFile.id !== file.id)
       )
 
-      props.input.onChange([...preservedFiles, ...newDealFiles] as any)
-      onChanged()
+      onChange([...preservedFiles, ...newDealFiles])
     }
   }
 
@@ -124,7 +116,7 @@ export function AddDealFile({
     return allDealFiles.find(document => document.id === file.id)
   }
 
-  const selectedDealFiles: IDealFile[] = (props.input.value || [])
+  const selectedDealFiles: IDealFile[] = (value || [])
     .map((file: IFile) => fileToDealFile(file))
     .filter(notUndefined)
 

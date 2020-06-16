@@ -6,7 +6,6 @@ import { Box, Button, IconButton } from '@material-ui/core'
 
 import { confirmation } from 'actions/confirmation'
 
-import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 import InstantMarketing from 'components/InstantMarketing'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { formatDate } from 'components/InstantMarketing/helpers/nunjucks-filters'
@@ -33,7 +32,6 @@ import Drawer from '../../OverlayDrawer'
 import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 
 import { Title } from '../../EventDrawer/components/Title'
-import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import { Description } from '../../EventDrawer/components/Description'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import Reminder from '../../EventDrawer/components/Reminder/Reminder'
@@ -42,7 +40,7 @@ import {
   DateTimeField,
   FieldError
 } from '../../final-form-fields'
-import { AddAssociationButton } from '../../AddAssociationButton'
+import AddAssociation from '../../AddAssociation'
 import { AssociationsList, EndTimeField } from '../../final-form-fields'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
@@ -415,7 +413,7 @@ class OpenHouseDrawerInternal extends React.Component {
 
   render() {
     const { user } = this.props
-    const { isDisabled, openHouse, error } = this.state
+    const { isDisabled, error } = this.state
 
     return (
       <Drawer
@@ -468,13 +466,6 @@ class OpenHouseDrawerInternal extends React.Component {
                           style={{ marginBottom: '1.5rem' }}
                         />
                         <Description placeholder="Enter any general notes for your clients" />
-
-                        <UpdateReminder
-                          dueDate={values.dueDate}
-                          // 1 hour before
-                          defaultOption={REMINDER_DROPDOWN_OPTIONS[5]}
-                        />
-
                         <Box mb={4}>
                           <FieldContainer
                             alignCenter
@@ -553,9 +544,7 @@ class OpenHouseDrawerInternal extends React.Component {
                               />
                             </>
                           )}
-                          <AddAssociationButton
-                            associations={values.registrants}
-                            crm_task={openHouse ? openHouse.id : ''}
+                          <AddAssociation
                             disabled={isDisabled}
                             type="contact"
                             name="registrants"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
 import DayPicker from 'react-day-picker'
 import Flex from 'styled-flex-component'
@@ -25,6 +25,7 @@ interface RenderProps {
 interface Props {
   style?: React.CSSProperties
   datePickerModifiers?: object
+  defaultlSelectedDate?: Date
   selectedDate?: Date
   showTimePicker?: boolean
   saveCaption?: string
@@ -38,6 +39,7 @@ export function DateTimePicker({
   style,
   showTimePicker = true,
   datePickerModifiers = {},
+  defaultlSelectedDate = new Date(),
   selectedDate = new Date(),
   children,
   defaultAnchorElement = null,
@@ -45,11 +47,18 @@ export function DateTimePicker({
   onChange = () => {},
   onClose = () => {}
 }: Props) {
-  const [date, setDate] = useState<Date>(selectedDate)
+  const [date, setDate] = useState<Date>(defaultlSelectedDate)
+  const initialSelectedDate = useRef<Date>(defaultlSelectedDate)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(
     defaultAnchorElement
   )
   const formattedDate = formatDate(date, showTimePicker)
+
+  useEffect(() => {
+    if (initialSelectedDate.current.getTime() !== selectedDate.getTime()) {
+      setDate(selectedDate)
+    }
+  }, [selectedDate])
 
   const handleClose = () => {
     setAnchorEl(null)

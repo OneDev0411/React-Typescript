@@ -1,6 +1,7 @@
 import React from 'react'
+import { TextField as Input } from '@material-ui/core'
 
-import { ErrorMessage, Input } from './styled'
+import { ErrorMessage } from './styled'
 
 export function TextField({ input, meta, placeholder }) {
   const { error, touched } = meta
@@ -14,6 +15,7 @@ export function TextField({ input, meta, placeholder }) {
         placeholder={placeholder}
         autoComplete="disabled"
         type="text"
+        fullWidth
       />
       {hasError && (
         <ErrorMessage style={{ wordWrap: 'break-word' }}>{error}</ErrorMessage>

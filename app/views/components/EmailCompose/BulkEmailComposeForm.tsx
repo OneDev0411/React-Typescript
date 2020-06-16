@@ -1,15 +1,8 @@
-import { Field } from 'react-final-form'
-
 import React, { ComponentProps, HTMLProps } from 'react'
-
-import { TextFieldProps } from '@material-ui/core/TextField'
-
-import styled from 'styled-components'
-
-import { Tooltip } from '@material-ui/core'
+import { Field } from 'react-final-form'
+import { TextFieldProps, Tooltip, makeStyles, Theme } from '@material-ui/core'
 
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
-
 import { createBulkEmailCampaign } from 'models/email/create-bulk-email-campaign'
 
 import { EmailFormValues } from './types'
@@ -27,10 +20,12 @@ import { hasAccountSendPermission } from './helpers/has-account-send-permission'
 import { attachmentFormValueToEmailAttachmentInput } from './helpers/attachment-form-value-to-email-attachment-input'
 import { EmailRecipientQuickSuggestions } from '../EmailRecipientQuickSuggestions'
 
-const LockIcon = styled(IconLock)`
-  vertical-align: text-bottom;
-  margin: 0 0.5rem;
-`
+const useStyles = makeStyles((theme: Theme) => ({
+  lockIcon: {
+    verticalAlign: 'text-bottom',
+    margin: theme.spacing(0, 1)
+  }
+}))
 
 interface Props
   extends Omit<
@@ -63,6 +58,7 @@ export function BulkEmailComposeForm({
   filterAccounts = hasAccountSendPermission,
   ...otherProps
 }: Props) {
+  const classes = useStyles()
   const [allAccounts, isLoadingAccounts] = useGetAllOauthAccounts(
     filterAccounts
   )
@@ -97,7 +93,7 @@ export function BulkEmailComposeForm({
     <span style={{ whiteSpace: 'nowrap' }}>
       Recipients
       <Tooltip title="Emails will be sent individually">
-        <LockIcon />
+        <IconLock className={classes.lockIcon} />
       </Tooltip>
     </span>
   )

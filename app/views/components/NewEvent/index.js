@@ -1,20 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Field } from 'react-final-form'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
 import { createTask } from 'models/tasks/create-task'
-import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
 import { EventDrawer } from 'components/EventDrawer'
 import ActionButton from 'components/Button/ActionButton'
 import {
   AssociationsList,
   DateTimeField,
-  ReminderField,
-  WhenFieldChanges
+  ReminderField
 } from 'components/final-form-fields'
 
 import LoadSaveReinitializeForm from 'views/utils/LoadSaveReinitializeForm'
@@ -83,30 +80,6 @@ export default class Task extends Component {
             return (
               <React.Fragment>
                 <FormContainer onSubmit={props.handleSubmit}>
-                  <WhenFieldChanges
-                    set="reminder"
-                    watch="dueDate"
-                    setter={onChange => {
-                      const items = REMINDER_DROPDOWN_OPTIONS.filter(
-                        ({ value }) =>
-                          value == null ||
-                          value <=
-                            new Date(values.dueDate).getTime() -
-                              new Date().getTime()
-                      )
-
-                      if (items.length === 0) {
-                        return onChange(REMINDER_DROPDOWN_OPTIONS[0])
-                      }
-
-                      // 15 Minutes Before
-                      if (items.some(item => item.value === '900000')) {
-                        onChange(REMINDER_DROPDOWN_OPTIONS[3])
-                      } else {
-                        onChange(items[items.length - 1])
-                      }
-                    }}
-                  />
                   <Flex
                     alignCenter
                     justifyBetween
@@ -135,16 +108,7 @@ export default class Task extends Component {
                     defaultAssociation={defaultAssociation}
                   />
                   <Flex justifyBetween alignCenter>
-                    <Field
-                      name="associations"
-                      render={({ input }) => (
-                        <AssociationsButtons
-                          disabled={submitting}
-                          associations={values.associations}
-                          onClick={input.onChange}
-                        />
-                      )}
-                    />
+                    <AssociationsButtons disabled={submitting} />
 
                     <Flex justifyBetween alignCenter>
                       <ActionButton

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { isEmail } from '../../../../../utils/validations'
+import { isEmail } from 'utils/validations'
 
-import { MultiField } from '../components/MultiField'
+import { MultiField } from '../MultiField'
 
 export function Emails({ labels, mutators }) {
   return (

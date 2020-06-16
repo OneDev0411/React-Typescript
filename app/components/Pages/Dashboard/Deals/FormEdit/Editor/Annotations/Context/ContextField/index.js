@@ -40,7 +40,7 @@ export function ContextField(props) {
     setEditorStatus(false)
   }
 
-  const normalizeValue = () => {
+  const formatValue = () => {
     if (context.current.data_type === 'Date' && props.value) {
       return formatDate(props.value, props.annotation.format)
     }
@@ -58,7 +58,7 @@ export function ContextField(props) {
         title={props.annotation.context}
         onClick={() => setEditorStatus(true)}
       >
-        {normalizeValue()}
+        {formatValue()}
       </div>
 
       <ContextInlineEdit
@@ -70,7 +70,10 @@ export function ContextField(props) {
         <>
           <Body>
             {context.current.data_type === 'Date' ? (
-              <DatePicker onChange={setFieldValue} selectedDate={getDate()} />
+              <DatePicker
+                onChange={value => setFieldValue(formatDate(value))}
+                selectedDate={getDate()}
+              />
             ) : (
               <TextInput
                 context={context.current}

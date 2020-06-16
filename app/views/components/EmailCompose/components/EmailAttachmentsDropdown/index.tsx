@@ -1,20 +1,18 @@
+import React from 'react'
+import { useField } from 'react-final-form'
 import { List, ListItem } from '@material-ui/core'
 import { useDropboxChooser } from 'use-dropbox-chooser'
-import * as React from 'react'
-
-import { Field } from 'react-final-form'
-
 import { mdiAttachment, mdiDropbox, mdiProgressUpload } from '@mdi/js'
 
-import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
 import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { BaseDropdown } from '../../../BaseDropdown'
 import { FilePicker } from '../../../FilePicker'
 import AddDealFile from '../AddDealFile'
-import { UploadAttachment } from '../../fields/UploadAttachment'
+import { useUploadAttachment } from '../../helpers/use-upload-attachment'
 import config from '../../../../../../config/public'
 
 interface Props {
@@ -36,6 +34,8 @@ export function EmailAttachmentsDropdown({
   onChanged = () => {}
 }: Props) {
   const iconClasses = useIconStyles()
+  const attachmentsField = useField('attachments')
+  const [upload] = useUploadAttachment(uploadAttachment)
 
   const dropboxChooser = useDropboxChooser({
     appKey: config.dropbox.app_key,
@@ -45,89 +45,79 @@ export function EmailAttachmentsDropdown({
     }
   })
 
+  const uploadFromComputer = (files: FileList) => {
+    upload(files)
+    onChanged()
+  }
+
   return (
     <BaseDropdown
       buttonLabel={
         <>
-          <SvgIcon path={mdiAttachment} className={iconClasses.rightMargin} />
+          <SvgIcon path={mdiAttachment} className={iconClasses.rightMargin} />{' '}
           Attachments
         </>
       }
       PopperProps={{ keepMounted: true }}
       renderMenu={({ close }) => (
         <List>
-          <Field
-            name="attachments"
+          <AddDealFile
             deafultSelectedDeal={deal}
             initialAttachments={initialAttachments}
-            component={AddDealFile}
-            onChanged={onChanged}
+            onChange={files => {
+              attachmentsField.input.onChange(files)
+              onChanged()
+            }}
             onClick={close}
+            value={attachmentsField.input.value}
           />
-          <Field
-            name="attachments"
-            render={({ input }) => (
+          <ListItem
+            button
+            disabled={dropboxChooser.isOpen}
+            onClick={async () => {
+              try {
+                const files = await dropboxChooser.open()
+
+                if (attachmentsField.input) {
+                  const { onChange, value } = attachmentsField.input
+
+                  onChange([
+                    ...(value || []),
+                    ...files.map(
+                      ({ name, link }) =>
+                        ({
+                          name,
+                          is_inline: false,
+                          url: link
+                        } as IEmailAttachmentUrlInput)
+                    )
+                  ] as any)
+                }
+              } catch (e) {}
+
+              close()
+            }}
+          >
+            <SvgIcon path={mdiDropbox} className={iconClasses.rightMargin} />
+            Attach from dropbox
+          </ListItem>
+          <FilePicker onFilePicked={uploadFromComputer}>
+            {({ pickFiles }) => (
               <ListItem
                 button
-                disabled={dropboxChooser.isOpen}
-                onClick={async () => {
-                  try {
-                    const files = await dropboxChooser.open()
-
-                    if (input) {
-                      input.onChange([
-                        ...(input.value || []),
-                        ...files.map(
-                          ({ name, link }) =>
-                            ({
-                              name,
-                              is_inline: false,
-                              url: link
-                            } as IEmailAttachmentUrlInput)
-                        )
-                      ] as any)
-                    }
-                  } catch (e) {}
-
+                onClick={() => {
+                  pickFiles()
                   close()
                 }}
               >
                 <SvgIcon
-                  path={mdiDropbox}
+                  path={mdiProgressUpload}
                   className={iconClasses.rightMargin}
                 />
-                Attach from dropbox
+                Attach from your computer
               </ListItem>
             )}
-          />
-          <UploadAttachment uploadAttachment={uploadAttachment}>
-            {({ upload }) => {
-              const uploadFromComputer = (files: FileList) => {
-                upload(files)
-                onChanged()
-              }
-
-              return (
-                <FilePicker onFilePicked={uploadFromComputer}>
-                  {({ pickFiles }) => (
-                    <ListItem
-                      button
-                      onClick={() => {
-                        pickFiles()
-                        close()
-                      }}
-                    >
-                      <SvgIcon
-                        path={mdiProgressUpload}
-                        className={iconClasses.rightMargin}
-                      />
-                      Attach from your computer
-                    </ListItem>
-                  )}
-                </FilePicker>
-              )
-            }}
-          </UploadAttachment>
+          </FilePicker>
         </List>
       )}
     />

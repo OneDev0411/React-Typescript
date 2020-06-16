@@ -18,7 +18,7 @@ class Comment extends React.Component {
     this.getRoom(task, rooms)
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { task, rooms } = nextProps
 
     this.getRoom(task, rooms)

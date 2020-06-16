@@ -270,6 +270,8 @@ class ContactProfile extends React.Component {
               addToFlowCallback={this.addToFlowCallback}
             />
             <Divider />
+            <Tags contact={contact} />
+            <Divider />
             <Flows
               flows={contact.flows}
               contactId={contact.id}
@@ -277,15 +279,12 @@ class ContactProfile extends React.Component {
               addCallback={this.addToFlowCallback}
             />
             <Divider />
-            <Tags contact={contact} />
-            <Divider />
             <ContactInfo {..._props} />
             <AddressesSection {..._props} />
             <Dates {..._props} />
+            <Deals contact={contact} />
             <Details {..._props} />
             <Partner {..._props} />
-            <Divider />
-            <Deals contact={contact} />
             <Divider />
             <Owner
               onSelect={this.onChangeOwner}
@@ -338,10 +337,7 @@ const mapStateToProps = ({ user, contacts }, props) => {
 }
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    {
-      getContactsTags
-    }
-  )(ContactProfile)
+  connect(mapStateToProps, {
+    getContactsTags
+  })(ContactProfile)
 )
