@@ -86,7 +86,6 @@ function StatefulUrlAdapter({ location, ...props }: WithRouterProps) {
         {...props}
         handleTrigger={goToMarketing}
         hasExternalTrigger
-        hideTemplatesColumn={false}
         listing={listing}
         mediums={location.query.medium}
         types={location.query.templateType.split(',')}
@@ -101,7 +100,6 @@ function StatefulUrlAdapter({ location, ...props }: WithRouterProps) {
         handleTrigger={goToMarketing}
         isBuilderOpen
         hasExternalTrigger
-        hideTemplatesColumn={false}
         contact={contact}
         mediums={location.query.medium}
         types={location.query.templateType.split(',')}

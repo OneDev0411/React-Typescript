@@ -24,7 +24,7 @@ interface Props {
 
 export default function InstantMarketing({
   closeConfirmation = true,
-  hideTemplatesColumn = true,
+  hideTemplatesColumn = false,
   templateData = {},
   templateTypes = [],
   mediums = '',
