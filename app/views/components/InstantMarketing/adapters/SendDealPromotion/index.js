@@ -16,6 +16,8 @@ import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-list
 import { attachDealDataToListing } from 'components/SearchListingDrawer/helpers/attach-deal-to-listing'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
+import { getMediaGallery } from 'models/media-manager'
+
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplateTypes } from '../../helpers/get-template-types'
 
@@ -29,7 +31,8 @@ const initialState = {
   socialNetworkName: '',
   emailBody: '',
   templateInstance: null,
-  isGettingTemplateInstance: false
+  isGettingTemplateInstance: false,
+  dealPhotos: []
 }
 
 class SendDealPromotion extends React.Component {
@@ -40,11 +43,13 @@ class SendDealPromotion extends React.Component {
 
   componentDidMount() {
     this.getDealListing()
+    this.fetchDealPhotos()
   }
 
   componentDidUpdate(props) {
     if (props.deal.id !== this.props.deal.id) {
       this.getDealListing()
+      this.fetchDealPhotos()
     }
   }
 
@@ -146,6 +151,16 @@ class SendDealPromotion extends React.Component {
     })
   }
 
+  fetchDealPhotos = async () => {
+    const deal = this.props.deal
+
+    const dealGallery = await getMediaGallery(deal.id)
+
+    const dealPhotos = dealGallery.map(photo => photo.src)
+
+    this.setState({ dealPhotos })
+  }
+
   get TemplateInstanceData() {
     return {
       deals: this.props.deal ? [this.props.deal.id] : []
@@ -159,7 +174,9 @@ class SendDealPromotion extends React.Component {
       return []
     }
 
-    const uniqueAssets = [...new Set(listing.gallery_image_urls)]
+    const uniqueAssets = [
+      ...new Set([...this.state.dealPhotos, ...listing.gallery_image_urls])
+    ]
 
     return uniqueAssets.map(image => ({
       image
