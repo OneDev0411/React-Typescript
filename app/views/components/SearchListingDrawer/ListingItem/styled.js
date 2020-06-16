@@ -75,7 +75,5 @@ export const IconContainer = styled(Flex)`
   border-radius: 50%;
   > svg {
     color: ${props => props.theme.palette.grey['500']};
-    height: 1rem;
-    width: 1rem;
   }
 `
