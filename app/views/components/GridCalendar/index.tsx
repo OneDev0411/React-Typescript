@@ -1,4 +1,4 @@
-import React, { memo, useState, useRef, useCallback } from 'react'
+import React, { memo, useState, useRef, useCallback, useEffect } from 'react'
 import { connect } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { makeStyles, Theme } from '@material-ui/core'
@@ -35,6 +35,11 @@ import { upsertCrmEvents } from '../Calendar/helpers/upsert-crm-events'
 interface StateProps {
   viewAsUsers: UUID[]
   user: IUser
+}
+
+interface SocketUpdate {
+  upserted: ICalendarEvent[]
+  deleted: UUID[]
 }
 
 interface Props {
@@ -275,6 +280,42 @@ export const GridCalendarPresentation = ({
    */
   useEffectOnce(() => {
     handleLoadEvents(initialRange)
+  })
+
+  /**
+   * sync with google and out look real-time
+   */
+  useEffect(() => {
+    const socket: SocketIOClient.Socket = (window as any).socket
+
+    if (!socket) {
+      return
+    }
+
+    function handleUpdate({ upserted, deleted }: SocketUpdate) {
+      if (upserted.length === 0 && deleted.length === 0) {
+        return
+      }
+
+      const currentEvents: ICalendarEvent[] =
+        deleted.length > 0
+          ? rowEvents.filter(e => !deleted.includes(e.id))
+          : rowEvents
+      const nextEvents =
+        upserted.length > 0 ? [...upserted, ...currentEvents] : currentEvents
+
+      const normalizedEvents = normalizeEvents(nextEvents)
+
+      // update events list
+      setRowEvents(nextEvents)
+      setEvents(normalizedEvents)
+    }
+
+    socket.on('Calendar.Updated', handleUpdate)
+
+    return () => {
+      socket.off('Calendar.Updated', handleUpdate)
+    }
   })
 
   return (
