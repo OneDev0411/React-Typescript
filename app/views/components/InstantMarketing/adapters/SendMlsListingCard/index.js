@@ -48,7 +48,8 @@ class SendMlsListingCard extends React.Component {
         props.isTriggered &&
         !state.isListingsModalOpen &&
         !state.isInstantMarketingBuilderOpen &&
-        !props.isEdit
+        !props.isEdit &&
+        !props.listing
       ) {
         return {
           isListingsModalOpen: true
@@ -56,7 +57,7 @@ class SendMlsListingCard extends React.Component {
       }
 
       // For just closing search drawer through its close CTA
-      if (!props.isTriggered && state.isListingsModalOpen) {
+      if (!props.isTriggered && state.isListingsModalOpen && !props.listing) {
         return {
           isListingsModalOpen: false
         }
@@ -66,10 +67,18 @@ class SendMlsListingCard extends React.Component {
       if (
         !props.isTriggered &&
         state.isListingsModalOpen &&
-        state.isInstantMarketingBuilderOpen
+        state.isInstantMarketingBuilderOpen &&
+        !props.listing
       ) {
         return {
           isListingsModalOpen: false
+        }
+      }
+
+      if (props.listing) {
+        return {
+          listings: [props.listing],
+          isInstantMarketingBuilderOpen: true
         }
       }
     }
@@ -236,6 +245,10 @@ class SendMlsListingCard extends React.Component {
   }
 
   get TemplateTypes() {
+    if (this.props.types) {
+      return this.props.types
+    }
+
     return this.props.selectedTemplate
       ? [getTemplateObject(this.props.selectedTemplate).template_type]
       : getTemplateTypes(this.state.listings)
@@ -346,6 +359,7 @@ class SendMlsListingCard extends React.Component {
             defaultTemplate={this.props.selectedTemplate}
             onShowEditListings={this.handleEditListings}
             isEdit={this.props.isEdit}
+            hideTemplatesColumn={this.props.hideTemplatesColumn}
           />
         )}
 
