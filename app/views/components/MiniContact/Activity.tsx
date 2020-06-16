@@ -2,10 +2,11 @@ import React from 'react'
 // import { Button } from '@material-ui/core'
 
 // import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
-import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
-import IconTime from 'components/SvgIcons/Time/IconTime'
-import IconBirthday from 'components/SvgIcons/Birthday/IconBirthday'
+import { mdiClockOutline, mdiGiftOutline, mdiCalendarOutline } from '@mdi/js'
+
 import { RelativeTime } from 'components/RelativeTime'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ProfileDateType } from './types'
 import { activitiesFormatter, formatDate } from './helpers'
@@ -27,7 +28,7 @@ function Activity(props: ActivityPropsType) {
         {props.last_touch && (
           <li>
             <div className="icon">
-              <IconTime style={{ width: '1em', height: '1em' }} />
+              <SvgIcon path={mdiClockOutline} size={muiIconSizes.small} />
             </div>
             <div className="text">
               Last Touched <RelativeTime time={props.last_touch * 1000} />
@@ -39,11 +40,16 @@ function Activity(props: ActivityPropsType) {
             <li key={i}>
               <div className="icon">
                 {item.title.includes('Birthday') ? (
-                  <IconBirthday
-                    style={{ width: '1em', height: '1em', fill: '#FF6F6F' }}
+                  <SvgIcon
+                    path={mdiGiftOutline}
+                    size={muiIconSizes.small}
+                    color="#FF6F6F"
                   />
                 ) : (
-                  <IconCalendar style={{ width: '1em', height: '1em' }} />
+                  <SvgIcon
+                    size={muiIconSizes.small}
+                    path={mdiCalendarOutline}
+                  />
                 )}
               </div>
               <div className="text">
