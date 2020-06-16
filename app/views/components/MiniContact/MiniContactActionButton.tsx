@@ -1,5 +1,6 @@
 import React from 'react'
 import { mdiCalendarOutline } from '@mdi/js'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import TextIconButton from 'components/Button/TextIconButton'
 import ActionButton from 'components/Button/ActionButton'
@@ -13,6 +14,15 @@ import {
   FormatterOutputType
 } from './types'
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    icon: {
+      marginRight: theme.spacing(0.5)
+    }
+  }),
+  { name: 'MiniContactActionButton' }
+)
+
 interface MiniContactActionButtonType {
   isLoading: boolean
   data: FormatterOutputType
@@ -23,6 +33,8 @@ interface MiniContactActionButtonType {
 }
 
 function MiniContactActionButton(props: MiniContactActionButtonType) {
+  const classes = useStyles()
+
   if (props.isLoading) {
     return <Loading />
   }
@@ -57,7 +69,11 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
         appearance="outline"
         // @ts-ignore
         iconLeft={() => (
-          <SvgIcon path={mdiCalendarOutline} size={muiIconSizes.small} />
+          <SvgIcon
+            path={mdiCalendarOutline}
+            size={muiIconSizes.small}
+            className={classes.icon}
+          />
         )}
         onClick={() => props.setActionSettings(actionSettings)}
         size="small"
