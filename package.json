@@ -149,7 +149,7 @@
     "match-sorter": "^2.2.3",
     "material-ui-color-picker": "^3.5.0",
     "merge": "^1.2.1",
-    "mjml": "^4.6.2",
+    "mjml": "^4.6.3",
     "mobile-detect": "^1.4.2",
     "moment": "^2.23.0",
     "moment-locales-webpack-plugin": "^1.2.0",
