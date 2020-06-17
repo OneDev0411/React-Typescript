@@ -80,7 +80,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
     return normalizedDate
   }
   const dueDate = normalizeServerDate(task.due_date)
-  const endDate = end_date ? normalizeServerDate(end_date, true) : null
+  const endDate = end_date ? normalizeServerDate(end_date, true) : dueDate
 
   if (Array.isArray(reminders) && reminders.length > 0) {
     const { timestamp } = reminders[reminders.length - 1]
