@@ -23,7 +23,7 @@ export function ListAttachmentItem(props) {
         </Title>
 
         <DateTime>
-          Uploaded in&nbsp;
+          Uploaded &nbsp;
           {fecha.format(
             new Date(props.attachment.created_at),
             'MMM DD, h:mm A'
