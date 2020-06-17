@@ -1,5 +1,7 @@
 import React from 'react'
 
+import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
+
 import { CrmEvents } from '../../../Calendar/components/CrmEvents'
 
 interface Props {
@@ -15,7 +17,7 @@ export const EventController = ({
   setSelectedEvent,
   onEventChange
 }: Props) => {
-  const eventDrawer =
+  const EventDrawer =
     event && ['crm_task', 'crm_association'].includes(event.object_type) ? (
       <CrmEvents
         isEventDrawerOpen
@@ -23,6 +25,19 @@ export const EventController = ({
         user={user}
         onEventChange={onEventChange}
         onCloseEventDrawer={() => setSelectedEvent(null)}
+      />
+    ) : null
+
+  const McBuilder =
+    event?.event_type &&
+    ['home_anniversary', 'birthday'].includes(event.event_type) ? (
+      <ContactFlow
+        handleTrigger={() => setSelectedEvent(null)}
+        isBuilderOpen
+        hasExternalTrigger
+        contact={event?.people![0] as IContact}
+        mediums="Email"
+        types={['Birthday']}
       />
     ) : null
 
@@ -56,5 +71,10 @@ export const EventController = ({
     return null
   }
 
-  return <>{eventDrawer}</>
+  return (
+    <>
+      {EventDrawer}
+      {McBuilder}
+    </>
+  )
 }
