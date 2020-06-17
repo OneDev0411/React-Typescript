@@ -39,11 +39,15 @@ export async function preSaveFormat(values, originalValues) {
 
   const dueDateTimestamp = dueDate.getTime()
   const endDateTimestamp = endDate.getTime()
+  const end_date =
+    originalValues.end_date || endDateTimestamp > dueDateTimestamp
+      ? endDateTimestamp / 1000
+      : null
 
   const task = {
     title: title.trim(),
     due_date: dueDateTimestamp / 1000,
-    end_date: endDateTimestamp / 1000,
+    end_date,
     task_type: task_type.value,
     all_day: isAllDay,
     assignees: assignees.map(a => a.id),
