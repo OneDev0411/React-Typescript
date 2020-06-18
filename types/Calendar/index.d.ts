@@ -26,7 +26,7 @@ declare type ICalendarEvent<
   recurring: boolean
   status: string
   all_day: boolean
-  end_date: string | null // TODO: communicated with Abbas
+  end_date: number | string | null // TODO: communicated with Abbas
   timestamp: number
   timestamp_midday: string
   timestamp_readable: string

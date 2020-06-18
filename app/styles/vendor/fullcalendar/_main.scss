@@ -69,6 +69,15 @@
   }
 }
 
+.fc {
+  &-event{
+    cursor: pointer;
+  }
+  &-draggable, &-resizable{
+    cursor: ew-resize !important;
+  }
+}
+
 
 
 

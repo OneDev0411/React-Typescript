@@ -11,6 +11,8 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 
 import { getCalendar, FilterQuery } from 'models/calendar/get-calendar'
+import { updateTask } from 'models/tasks'
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
 import { IAppState } from 'reducers/index'
 
@@ -30,6 +32,7 @@ import { ApiOptions, FetchOptions } from '../Calendar/types'
 
 // helpers
 import { normalizeEvents } from './helpers/normalize-events'
+import { normalizeEventOnEdit } from './helpers/normalize-event-on-edit'
 import { upsertCrmEvents } from '../Calendar/helpers/upsert-crm-events'
 
 interface StateProps {
@@ -257,6 +260,25 @@ export const GridCalendarPresentation = ({
   }
 
   /**
+   * trigger on dropping and dragging an event
+   */
+  const handleEditEvent = async ({ event }: { event: EventApi }) => {
+    try {
+      const { start, end } = event
+      const currentEvent: ICalendarEvent = event.extendedProps?.rowEvent
+      const nextEvent = normalizeEventOnEdit(start!, end!, currentEvent)
+
+      setIsLoading(true)
+      await updateTask(nextEvent, CRM_TASKS_QUERY)
+    } catch (e) {
+      console.log(e)
+      throw e
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  /**
    * triggers when a crm events update or delete
    */
   const handleCrmEventChange = useCallback(
@@ -339,6 +361,8 @@ export const GridCalendarPresentation = ({
           events={events}
           datesRender={handleDatesRender}
           eventClick={handleClickEvent}
+          eventDrop={handleEditEvent}
+          eventResize={handleEditEvent}
         />
       </div>
       <EventController
