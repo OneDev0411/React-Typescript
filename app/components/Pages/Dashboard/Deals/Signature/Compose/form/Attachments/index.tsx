@@ -1,35 +1,68 @@
 import React from 'react'
 
 import { useField } from 'react-final-form'
-import { useTheme } from '@material-ui/styles'
-import { Theme } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import { FieldError } from 'components/final-form-fields/FieldError'
 import { ListAttachmentItem } from 'components/ListAttachmentItem'
+import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
+import {
+  ADD_ATTACHMENTS,
+  REMOVE_ATTACHMENT
+} from 'deals/Dashboard/Folders/actions-context/constants'
 
-export function Attachments() {
-  const theme = useTheme<Theme>()
+interface Props {
+  onClose: () => void
+}
+
+export function Attachments({ onClose }: Props) {
   const field = useField('attachments')
+  const [, actionsDispatch] = useChecklistActionsContext()
+
+  const list = field.input.value || []
 
   const handleDelete = (attachment: IDealFile) => {
     const attachments = (field.input.value || []).filter(
       (item: typeof attachment) => item.id !== attachment.id
     )
 
+    actionsDispatch({
+      type: REMOVE_ATTACHMENT,
+      attachment
+    })
+
     field.input.onChange(attachments)
   }
 
-  return (
-    <div style={{ margin: theme.spacing(2, 0) }}>
-      {(field.input.value || []).map((attachment: IDealFile, index: number) => (
-        <ListAttachmentItem
-          key={index}
-          attachment={attachment}
-          onDelete={handleDelete}
-        />
-      ))}
+  const handleAddAttachments = () => {
+    actionsDispatch({
+      type: ADD_ATTACHMENTS,
+      attachments: field.input.value
+    })
 
-      <FieldError name={field.name} />
+    onClose()
+  }
+
+  return (
+    <div>
+      <Box marginTop={2}>
+        {list.map((attachment: IDealFile, index: number) => (
+          <ListAttachmentItem
+            key={index}
+            isRemovable={list.length > 1}
+            attachment={attachment}
+            onDelete={handleDelete}
+          />
+        ))}
+
+        <FieldError name={field.name} />
+      </Box>
+
+      <Box marginBottom={2}>
+        <Button color="secondary" onClick={handleAddAttachments}>
+          Add More Attachments
+        </Button>
+      </Box>
     </div>
   )
 }

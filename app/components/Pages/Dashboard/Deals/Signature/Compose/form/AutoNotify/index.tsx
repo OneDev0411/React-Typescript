@@ -19,7 +19,6 @@ const useStyles = makeStyles(
       alignItems: 'center',
       borderRadius: theme.shape.borderRadius,
       border: `solid 1px ${theme.palette.divider}`,
-      backgroundColor: theme.palette.grey['200'],
       padding: theme.spacing(0, 1),
       height: '2.5rem',
       marginRight: theme.spacing(1)

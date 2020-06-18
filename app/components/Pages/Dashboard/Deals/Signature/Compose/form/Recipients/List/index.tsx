@@ -12,7 +12,8 @@ import {
   Avatar,
   Typography,
   Box,
-  Theme
+  Theme,
+  TableContainer
 } from '@material-ui/core'
 
 import { useTheme } from '@material-ui/styles'
@@ -76,126 +77,130 @@ export function RecipientsList() {
   }
 
   return (
-    <div>
+    <Box mb={1}>
       {list.length > 0 && (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Order</TableCell>
-              <TableCell>Recipient</TableCell>
-              <TableCell>&nbsp;</TableCell>
-              <TableCell>&nbsp;</TableCell>
-            </TableRow>
-          </TableHead>
+        <TableContainer>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Order</TableCell>
+                <TableCell>Recipient</TableCell>
+                <TableCell>&nbsp;</TableCell>
+                <TableCell>&nbsp;</TableCell>
+              </TableRow>
+            </TableHead>
 
-          <TableBody>
-            {list.map((recipient: ISignatureRecipient, index) => (
-              <TableRow key={index}>
-                <TableCell
-                  style={{
-                    width: '10%'
-                  }}
-                >
-                  <BaseDropdown
-                    buttonLabel={recipient.order}
-                    renderMenu={({ close }) => {
-                      return (
-                        <MenuList>
-                          {new Array(list.length).fill(null).map((_, index) => (
-                            <MenuItem
-                              key={index}
-                              onClick={() => {
-                                close()
-                                handleOrderChange(recipient, index + 1)
-                              }}
-                            >
-                              {index + 1}
-                            </MenuItem>
-                          ))}
-                        </MenuList>
-                      )
+            <TableBody>
+              {list.map((recipient: ISignatureRecipient, index) => (
+                <TableRow key={index}>
+                  <TableCell
+                    style={{
+                      width: '10%'
                     }}
-                  />
-                </TableCell>
-
-                <TableCell
-                  style={{
-                    width: '55%'
-                  }}
-                >
-                  <Box display="flex">
-                    <Avatar
-                      alt={getAvatarTitle(recipient)}
-                      src={recipient?.user?.profile_image_url ?? undefined}
-                      style={{
-                        width: theme.spacing(4),
-                        height: theme.spacing(4),
-                        marginRight: theme.spacing(1)
+                  >
+                    <BaseDropdown
+                      buttonLabel={recipient.order}
+                      renderMenu={({ close }) => {
+                        return (
+                          <MenuList>
+                            {new Array(list.length)
+                              .fill(null)
+                              .map((_, index) => (
+                                <MenuItem
+                                  key={index}
+                                  onClick={() => {
+                                    close()
+                                    handleOrderChange(recipient, index + 1)
+                                  }}
+                                >
+                                  {index + 1}
+                                </MenuItem>
+                              ))}
+                          </MenuList>
+                        )
                       }}
                     />
+                  </TableCell>
 
-                    <div>
-                      <Typography variant="body2">
-                        {getLegalFullName(recipient)}
-                      </Typography>
-
-                      <Typography variant="caption">
-                        {roleName(recipient.role)}
-                      </Typography>
-                    </div>
-                  </Box>
-                </TableCell>
-
-                <TableCell
-                  style={{
-                    width: '25%'
-                  }}
-                >
-                  <BaseDropdown
-                    buttonLabel={getRecipientType(recipient)}
-                    renderMenu={({ close }) => {
-                      return (
-                        <MenuList>
-                          <MenuItem
-                            onClick={() => {
-                              close()
-                              handleChangeType(recipient, 'Signer')
-                            }}
-                          >
-                            Need To Sign
-                          </MenuItem>
-
-                          <MenuItem
-                            onClick={() => {
-                              close()
-                              handleChangeType(recipient, 'CarbonCopy')
-                            }}
-                          >
-                            CC
-                          </MenuItem>
-                        </MenuList>
-                      )
+                  <TableCell
+                    style={{
+                      width: '55%'
                     }}
-                  />
-                </TableCell>
-                <TableCell
-                  align="right"
-                  style={{
-                    width: '10%'
-                  }}
-                >
-                  <IconButton
-                    size="medium"
-                    onClick={() => handleRemoveRecipient(recipient)}
                   >
-                    <IconClose className={iconClasses.small} />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                    <Box display="flex">
+                      <Avatar
+                        alt={getAvatarTitle(recipient)}
+                        src={recipient?.user?.profile_image_url ?? undefined}
+                        style={{
+                          width: theme.spacing(4),
+                          height: theme.spacing(4),
+                          marginRight: theme.spacing(1)
+                        }}
+                      />
+
+                      <div>
+                        <Typography variant="body2">
+                          {getLegalFullName(recipient)}
+                        </Typography>
+
+                        <Typography variant="caption">
+                          {roleName(recipient.role)}
+                        </Typography>
+                      </div>
+                    </Box>
+                  </TableCell>
+
+                  <TableCell
+                    style={{
+                      width: '25%'
+                    }}
+                  >
+                    <BaseDropdown
+                      buttonLabel={getRecipientType(recipient)}
+                      renderMenu={({ close }) => {
+                        return (
+                          <MenuList>
+                            <MenuItem
+                              onClick={() => {
+                                close()
+                                handleChangeType(recipient, 'Signer')
+                              }}
+                            >
+                              Need To Sign
+                            </MenuItem>
+
+                            <MenuItem
+                              onClick={() => {
+                                close()
+                                handleChangeType(recipient, 'CarbonCopy')
+                              }}
+                            >
+                              CC
+                            </MenuItem>
+                          </MenuList>
+                        )
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    style={{
+                      width: '10%'
+                    }}
+                  >
+                    <IconButton
+                      size="medium"
+                      onClick={() => handleRemoveRecipient(recipient)}
+                    >
+                      <IconClose className={iconClasses.small} />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
-    </div>
+    </Box>
   )
 }

@@ -14,6 +14,15 @@ import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getEsignAttachments } from 'views/utils/deal-files/get-esign-attachments'
 import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
 
+import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
+
+import type {
+  StateContext,
+  DispatchContext
+} from 'deals/Dashboard/Folders/actions-context'
+
+import { ADD_ATTACHMENTS } from 'deals/Dashboard/Folders/actions-context/constants'
+
 import { normalizeActions } from './data/normalize-actions'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
 import {
@@ -52,6 +61,8 @@ interface Props {
   file?: IFile | undefined
   envelope?: IDealEnvelope
   actions: ActionButtonId[]
+  actionsState: StateContext
+  actionsDispatch: DispatchContext
 }
 
 interface State {
@@ -215,6 +226,15 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
    *
    */
   handleGetSignature = () => {
+    if (this.props.actionsState.attachments.length > 0) {
+      this.props.actionsDispatch({
+        type: ADD_ATTACHMENTS,
+        attachments: this.getEsignAttachments()
+      })
+
+      return
+    }
+
     this.setState({
       isSignatureFormOpen: true
     })
@@ -416,6 +436,16 @@ function mapStateToProps({ deals, user }: IAppState, props: Props) {
   }
 }
 
+const withContext = (Component: typeof ActionsButton) => (
+  props: Props & StateProps
+) => {
+  const [state, dispatch] = useChecklistActionsContext()
+
+  return (
+    <Component {...props} actionsState={state} actionsDispatch={dispatch} />
+  )
+}
+
 export default connect(mapStateToProps, {
   setSelectedTask
-})(ActionsButton)
+})(withContext(ActionsButton))

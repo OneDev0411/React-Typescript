@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
@@ -17,18 +17,29 @@ import { ChecklistFolder } from './Checklist'
 
 import { UploadFolder } from './Uploads'
 import MarketingChecklist from './Marketing'
+import { TaskActions } from './TaskActions'
+import { ActionContextProvider } from './actions-context/provider'
 
 type Tasks = Record<UUID, IDealTask>
 type Checklists = Record<UUID, IDealChecklist>
 
 interface Props {
   deal: IDeal
-  checklists: Checklists
-  tasks: Tasks
   isBackOffice: boolean
 }
 
-function FoldersTab({ deal, checklists, tasks, isBackOffice }: Props) {
+export default function FoldersTab({ deal, isBackOffice }: Props) {
+  const { tasks, checklists } = useSelector<
+    IAppState,
+    {
+      tasks: Tasks
+      checklists: Checklists
+    }
+  >(({ deals }) => ({
+    tasks: deals.tasks,
+    checklists: deals.checklists
+  }))
+
   const [showTerminatedFolders, setShowTerminatedFolders] = useState<boolean>(
     false
   )
@@ -112,55 +123,54 @@ function FoldersTab({ deal, checklists, tasks, isBackOffice }: Props) {
   }, [checklists, deal, showDeactivatedFolders, showTerminatedFolders])
 
   return (
-    <Container>
-      {filteredChecklists.map((checklist: IDealChecklist) => (
-        <ChecklistFolder
-          key={checklist.id}
-          checklist={checklist}
-          deal={deal}
-          title={checklist.title}
-          isBackOffice={isBackOffice}
-          tasks={selectChecklistTasks(checklist, tasks).filter(
-            (task: IDealTask) =>
-              ['GeneralComments', 'YardSign', 'OpenHouse', 'Media'].includes(
-                task.task_type
-              ) === false
+    <ActionContextProvider>
+      <Container>
+        {filteredChecklists.map((checklist: IDealChecklist) => (
+          <ChecklistFolder
+            key={checklist.id}
+            checklist={checklist}
+            deal={deal}
+            title={checklist.title}
+            isBackOffice={isBackOffice}
+            tasks={selectChecklistTasks(checklist, tasks).filter(
+              (task: IDealTask) =>
+                ['GeneralComments', 'YardSign', 'OpenHouse', 'Media'].includes(
+                  task.task_type
+                ) === false
+            )}
+          />
+        ))}
+
+        <MarketingChecklist deal={deal} isBackOffice={isBackOffice} />
+        <UploadFolder deal={deal} isBackOffice={isBackOffice} />
+
+        <Flex>
+          {terminatedChecklistsCount > 0 && (
+            <Button
+              onClick={toggleDisplayTerminatedChecklists}
+              color="secondary"
+              variant="outlined"
+              style={{
+                marginRight: '0.5rem'
+              }}
+            >
+              {showTerminatedFolders ? 'Hide' : 'Show'} Terminated
+            </Button>
           )}
-        />
-      ))}
 
-      <MarketingChecklist deal={deal} isBackOffice={isBackOffice} />
-      <UploadFolder deal={deal} isBackOffice={isBackOffice} />
+          {deactivatedChecklistsCount > 0 && (
+            <Button
+              onClick={toggleDisplayDeactivatedChecklists}
+              color="secondary"
+              variant="outlined"
+            >
+              {showDeactivatedFolders ? 'Hide' : 'Show'} Backed up
+            </Button>
+          )}
+        </Flex>
 
-      <Flex>
-        {terminatedChecklistsCount > 0 && (
-          <Button
-            onClick={toggleDisplayTerminatedChecklists}
-            color="secondary"
-            variant="outlined"
-            style={{
-              marginRight: '0.5rem'
-            }}
-          >
-            {showTerminatedFolders ? 'Hide' : 'Show'} Terminated
-          </Button>
-        )}
-
-        {deactivatedChecklistsCount > 0 && (
-          <Button
-            onClick={toggleDisplayDeactivatedChecklists}
-            color="secondary"
-            variant="outlined"
-          >
-            {showDeactivatedFolders ? 'Hide' : 'Show'} Backed up
-          </Button>
-        )}
-      </Flex>
-    </Container>
+        <TaskActions deal={deal} />
+      </Container>
+    </ActionContextProvider>
   )
 }
-
-export default connect(({ deals }: IAppState) => ({
-  checklists: deals.checklists,
-  tasks: deals.tasks
-}))(FoldersTab)

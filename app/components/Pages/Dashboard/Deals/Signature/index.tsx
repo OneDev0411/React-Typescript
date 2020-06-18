@@ -30,6 +30,7 @@ interface Props {
 }
 
 export default function Signature({
+  isOpen,
   deal,
   defaultAttachments,
   onClose
@@ -103,6 +104,10 @@ export default function Signature({
       setShowDocusignBanner(isDocusignError)
       setFormData(isDocusignError ? form : null)
     }
+  }
+
+  if (!isOpen) {
+    return null
   }
 
   return (

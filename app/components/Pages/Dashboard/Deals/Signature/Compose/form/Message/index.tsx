@@ -14,7 +14,7 @@ export function Message() {
       containerStyle={{
         borderBottom: 'none'
       }}
-      minRows={8}
+      minRows={7}
       maxRows={1000}
       {...field}
     />

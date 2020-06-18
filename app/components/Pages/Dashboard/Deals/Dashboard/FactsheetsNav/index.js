@@ -74,6 +74,9 @@ function FactsheetsSideNav(props) {
 }
 
 FactsheetsSideNav.propTypes = {
+  deal: PropTypes.object.isRequired,
+  isBackOffice: PropTypes.bool.isRequired,
+  isFetchingContexts: PropTypes.bool.isRequired,
   showCriticalDates: PropTypes.bool,
   showCriticalDatesDivider: PropTypes.bool,
   showCDAInformation: PropTypes.bool,
