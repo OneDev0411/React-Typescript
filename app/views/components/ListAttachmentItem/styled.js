@@ -9,7 +9,6 @@ export const DeleteIcon = styled(IconClose)`
     opacity: 0;
     width: 16px;
     height: 16px;
-    margin-left: ${theme.spacing(1)}px;
 
     :hover {
       fill: ${theme.palette.error.light};
@@ -62,7 +61,6 @@ export const Icon = styled.div`
   justify-content: center;
   background: #000;
   border-radius: 50%;
-  margin-right: 0.25rem;
   width: 1.75rem;
   height: 1.75rem;
 
