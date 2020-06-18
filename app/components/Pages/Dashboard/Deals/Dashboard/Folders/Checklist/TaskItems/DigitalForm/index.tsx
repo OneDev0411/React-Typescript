@@ -1,12 +1,14 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 
+import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
+
 import ActionsButton from '../../../../../components/ActionsButton'
+
+import { getFormActions } from '../helpers/get-form-actions'
 
 import { ItemContainer, ItemRow, ItemTitle, ItemLink } from '../styled'
 import { LabelItem } from '../../../styled'
-
-import { getFormActions } from '../helpers/get-form-actions'
 
 interface Props {
   deal: IDeal
@@ -14,11 +16,13 @@ interface Props {
 }
 
 export function DigitalForm({ deal, task }: Props) {
+  const [actionsState] = useChecklistActionsContext()
+
   if (!task || !task.form) {
     return null
   }
 
-  const actions: ActionButtonId[] = getFormActions()
+  const actions: ActionButtonId[] = getFormActions(actionsState)
 
   return (
     <ItemContainer>

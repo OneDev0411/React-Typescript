@@ -134,10 +134,12 @@ export function TaskActions({ deal }: Props) {
                           style={{ width: '100%' }}
                         >
                           <Box flex={9}>
-                            <TextMiddleTruncate
-                              text={attachment.name}
-                              maxLength={50}
-                            />
+                            <a link={attachment.url} target="_blank">
+                              <TextMiddleTruncate
+                                text={attachment.name}
+                                maxLength={50}
+                              />
+                            </a>
                           </Box>
 
                           <IconButton
