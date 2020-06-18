@@ -301,6 +301,9 @@ class SendContactCard extends React.Component {
             handleSocialSharing={this.handleSocialSharing}
             isEdit={this.props.isEdit}
             hideTemplatesColumn={this.props.hideTemplatesColumn}
+            isTemplatesColumnHiddenDefault={
+              this.props.isTemplatesColumnHiddenDefault
+            }
           />
         )}
 

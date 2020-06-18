@@ -48,7 +48,12 @@ function TemplateAction(props) {
   }
 
   if (props.location.query.templateType && props.location.query.medium) {
-    return <StatefulUrlFlow {...sharedProps} />
+    return (
+      <StatefulUrlFlow
+        {...sharedProps}
+        isTemplatesColumnHiddenDefault={false}
+      />
+    )
   }
 
   if (isEdit && !props.isTriggered) {
