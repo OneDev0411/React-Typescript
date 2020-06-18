@@ -47,6 +47,7 @@ import useEmailThreadEvents from '../../helpers/use-email-thread-events'
 import useEmailThreadReadStatusSetter from '../../helpers/use-email-thread-read-status-setter'
 import useEmailThreadDeleter from '../../helpers/use-email-thread-deleter'
 import NoContentMessage from '../NoContentMessage'
+import useEmailThreadArchiver from '../../helpers/use-email-thread-archiver'
 
 const useStyles = makeStyles((theme: Theme) => ({
   moreMenu: {
@@ -134,6 +135,10 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
     deleteEmailThread,
     deleteEmailThreadDisabled
   } = useEmailThreadDeleter(emailThreadId!)
+  const {
+    archiveEmailThread,
+    archiveEmailThreadDisabled
+  } = useEmailThreadArchiver(emailThreadId!)
 
   const handleUpdateEmailThreads = useCallback(
     (updatedEmailThreadIds: UUID[]) => {
@@ -168,25 +173,25 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
     () =>
       emailThread
         ? emailThread.recipients_raw.map(r => {
-            const contact = (emailThread.contacts || []).find(
-              c =>
-                c.email === r.address ||
-                (c.emails && c.emails.includes(r.address))
-            )
-            const name =
-              (contact &&
-                (contact.display_name ||
-                  `${contact.first_name} ${contact.middle_name} ${contact.last_name}`)) ||
-              r.name ||
-              ''
+          const contact = (emailThread.contacts || []).find(
+            c =>
+              c.email === r.address ||
+              (c.emails && c.emails.includes(r.address))
+          )
+          const name =
+            (contact &&
+              (contact.display_name ||
+                `${contact.first_name} ${contact.middle_name} ${contact.last_name}`)) ||
+            r.name ||
+            ''
 
-            return {
-              address: r.address,
-              name,
-              initials: (getNameInitials(name) as string) || '',
-              profileImageUrl: (contact && contact.profile_image_url) || ''
-            }
-          })
+          return {
+            address: r.address,
+            name,
+            initials: (getNameInitials(name) as string) || '',
+            profileImageUrl: (contact && contact.profile_image_url) || ''
+          }
+        })
         : [],
     [emailThread]
   )
@@ -325,12 +330,25 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
               {emailThread.is_read ? (
                 <SvgIcon path={mdiEmailOutline} className={classes.icon} />
               ) : (
-                <SvgIcon path={mdiEmailOpenOutline} className={classes.icon} />
-              )}
+                  <SvgIcon path={mdiEmailOpenOutline} className={classes.icon} />
+                )}
             </ListItemIcon>
             <ListItemText>
               Mark as {emailThread.is_read ? 'unread' : 'read'}
             </ListItemText>
+          </MenuItem>
+          <MenuItem
+            disabled={archiveEmailThreadDisabled}
+            dense
+            onClick={() => {
+              archiveEmailThread()
+              closeMenu()
+            }}
+          >
+            <ListItemIcon>
+              <IconArchive size="small" />
+            </ListItemIcon>
+            <ListItemText>Archive</ListItemText>
           </MenuItem>
           <Box marginY={1}>
             <Divider />

@@ -19,6 +19,7 @@ import { useInboxEmailThreadListItemStyles } from './styles'
 import getRecipientNamesText from './helpers/get-recipient-names-text'
 import useEmailThreadReadStatusSetter from '../../../../helpers/use-email-thread-read-status-setter'
 import useEmailThreadDeleter from '../../../../helpers/use-email-thread-deleter'
+import useEmailThreadArchiver from '../../../../helpers/use-email-thread-archiver'
 
 interface Props {
   emailThread: IEmailThread<'contacts'>
@@ -55,6 +56,10 @@ export default function InboxEmailThreadListItem({
     deleteEmailThread,
     deleteEmailThreadDisabled
   } = useEmailThreadDeleter(emailThread.id)
+  const {
+    archiveEmailThread,
+    archiveEmailThreadDisabled
+  } = useEmailThreadArchiver(emailThread.id)
 
   const classes = useInboxEmailThreadListItemStyles()
 
@@ -131,11 +136,11 @@ export default function InboxEmailThreadListItem({
                 {emailThread.is_read ? (
                   <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
                 ) : (
-                  <SvgIcon
-                    path={mdiEmailOpenOutline}
-                    size={muiIconSizes.small}
-                  />
-                )}
+                    <SvgIcon
+                      path={mdiEmailOpenOutline}
+                      size={muiIconSizes.small}
+                    />
+                  )}
               </IconButton>
             </Tooltip>
             <Tooltip
@@ -152,6 +157,22 @@ export default function InboxEmailThreadListItem({
                 }}
               >
                 <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip
+              title={archiveEmailThreadDisabled ? 'Archiving...' : 'Archive'}
+            >
+              <IconButton
+                className={classNames(
+                  classes.action,
+                  archiveEmailThreadDisabled && classes.actionDisabled
+                )}
+                onClick={event => {
+                  archiveEmailThread()
+                  event.stopPropagation()
+                }}
+              >
+                <IconArchive size="small" />
               </IconButton>
             </Tooltip>
           </div>
