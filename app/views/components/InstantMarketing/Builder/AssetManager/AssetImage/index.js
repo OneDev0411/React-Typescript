@@ -31,10 +31,17 @@ export class AssetImage extends React.Component {
       style['background-image'] = `url(${url})`
       this.props.target.set('style', style)
     }
+    const setCarouselImage = () => {
+      this.props.target.setAttributes({
+        ...this.props.target.getAttributes(),
+        src: url
+      })
+    }
 
     const setters = {
       image: setSrc,
       'mj-image': setSrc,
+      'mj-carousel-image': setCarouselImage,
       cell: setBg,
       text: setBg,
       '': setBg
@@ -66,10 +73,7 @@ export class AssetImage extends React.Component {
   }
 
   onCrop = ({ files }) => {
-    const fileName = files.originalFile
-      .split('?')[0]
-      .split('/')
-      .pop()
+    const fileName = files.originalFile.split('?')[0].split('/').pop()
     const file = new File([files.file], fileName)
 
     return this.onCropImg(file)
