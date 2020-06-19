@@ -349,7 +349,9 @@ class Builder extends React.Component {
   singleClickTextEditing = () => {
     this.editor.on('component:selected', selected => {
       const isImageAsset =
-        selected.get('type') === 'image' || selected.get('type') === 'mj-image'
+        selected.get('type') === 'image' ||
+        selected.get('type') === 'mj-image' ||
+        selected.get('type') === 'mj-carousel-image'
 
       if (!selected.view.onActive || isImageAsset) {
         return
