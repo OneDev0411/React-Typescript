@@ -7,6 +7,8 @@ import Drawer from 'components/OverlayDrawer'
 
 import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
 
+import type { FormValues } from '../types'
+
 import { Recipients } from './form/Recipients'
 import { From } from './form/From'
 import { Subject } from './form/Subject'
@@ -20,7 +22,7 @@ interface Props {
   attachments: IDealFile[]
   isOpen: boolean
   isSubmitting: boolean
-  onSubmit: () => Promise<void>
+  onSubmit: (form: FormValues) => Promise<void>
   onClose: () => void
 }
 
@@ -30,6 +32,7 @@ export function SignatureComposeDrawer({
   attachments,
   isOpen,
   isSubmitting,
+  onSubmit,
   onClose
 }: Props) {
   const [actionsState] = useChecklistActionsContext()
@@ -47,7 +50,7 @@ export function SignatureComposeDrawer({
       <Drawer.Header title="Send for Signatures" />
 
       <Form
-        onSubmit={() => {}}
+        onSubmit={onSubmit}
         initialValues={{
           subject: 'Please DocuSign',
           from: `${user.display_name} <${user.email}>`,

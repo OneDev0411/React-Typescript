@@ -8,6 +8,7 @@ import {
 } from '../constants'
 
 export const initialState: StateContext = {
+  actions: [],
   attachments: []
 }
 
@@ -16,6 +17,7 @@ export function reducer(state = initialState, action: Pick<any, any>) {
     case ADD_ATTACHMENTS:
       return {
         ...state,
+        actions: action.actions ?? state.actions,
         attachments: uniqBy(
           [...state.attachments, ...action.attachments],
           (attachment: IDealFile) => attachment.id
@@ -33,6 +35,7 @@ export function reducer(state = initialState, action: Pick<any, any>) {
     case CLEAR_ATTACHMENTS:
       return {
         ...state,
+        actions: [],
         attachments: []
       }
 

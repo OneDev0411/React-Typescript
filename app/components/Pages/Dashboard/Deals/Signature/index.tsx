@@ -12,15 +12,7 @@ import { IAppState } from 'reducers'
 
 import { SignatureComposeDrawer } from './Compose'
 import { DocusignAuthentication } from './DocusignAuthentication'
-import type { ISignatureRecipient } from './types'
-
-interface FormValues {
-  attachments: IDealFile[]
-  recipients: ISignatureRecipient[]
-  subject: string
-  message: string
-  auto_notify: boolean
-}
+import type { FormValues } from './types'
 
 interface Props {
   isOpen: boolean

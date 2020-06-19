@@ -5,6 +5,7 @@ import { initialState } from './reducers'
 export type DispatchContext = React.Dispatch<any>
 
 export interface StateContext {
+  actions: ActionButtonId[]
   attachments: IDealFile[]
 }
 

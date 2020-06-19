@@ -1,7 +1,3 @@
-import sortBy from 'lodash/sortBy'
-
-import { StateContext } from 'deals/Dashboard/Folders/actions-context'
-
 import {
   EMAIL_ENVELOPE,
   VOID_ENVELOPE,
@@ -28,15 +24,13 @@ interface Props {
   task: IDealTask
   file?: IFile
   isBackOffice: boolean
-  actionsState: StateContext
 }
 
 export function getTaskActions({
   envelope,
   task,
   file,
-  isBackOffice,
-  actionsState
+  isBackOffice
 }: Props): ActionButtonId[] {
   const actions: ActionButtonId[] = []
 
@@ -79,15 +73,6 @@ export function getTaskActions({
   isBackOffice && actions.push(REQUIRE_TASK)
 
   actions.push(DELETE_TASK)
-
-  if (
-    actionsState.attachments.length > 0 &&
-    (actions.includes(DOCUSIGN_FORM) || actions.includes(DOCUSIGN_FILE))
-  ) {
-    return sortBy(actions, (action, key) => {
-      return [DOCUSIGN_FORM, DOCUSIGN_FILE].includes(action) ? -1 : key
-    })
-  }
 
   return actions
 }

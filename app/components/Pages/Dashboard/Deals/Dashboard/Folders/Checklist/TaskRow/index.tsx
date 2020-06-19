@@ -33,14 +33,11 @@ interface Props {
 }
 
 import { getTaskActions } from './get-task-actions'
-import { useChecklistActionsContext } from '../../actions-context/hooks'
 
 export function TaskRow({ deal, task, isBackOffice }: Props) {
   const [isTaskExpanded, setIsTaskExpanded] = useState(
     task.is_expanded === true
   )
-
-  const [actionsState] = useChecklistActionsContext()
 
   const dispatch = useDispatch()
 
@@ -143,8 +140,7 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
     task,
     envelope,
     file,
-    isBackOffice,
-    actionsState
+    isBackOffice
   })
 
   return (

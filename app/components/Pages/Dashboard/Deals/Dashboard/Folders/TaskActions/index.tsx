@@ -23,6 +23,12 @@ import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import {
+  DOCUSIGN_ENVELOPE,
+  DOCUSIGN_FILE,
+  DOCUSIGN_FORM
+} from 'deals/components/ActionsButton/data/action-buttons'
+
+import {
   CLEAR_ATTACHMENTS,
   REMOVE_ATTACHMENT
 } from '../actions-context/constants'
@@ -95,13 +101,17 @@ export function TaskActions({ deal }: Props) {
         <Slide in direction="up">
           <div className={classes.root}>
             <div>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={() => setIsDocusignDrawerOpen(true)}
-              >
-                Docusign
-              </Button>
+              {state.actions.some(id =>
+                [DOCUSIGN_FORM, DOCUSIGN_ENVELOPE, DOCUSIGN_FILE].includes(id)
+              ) && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => setIsDocusignDrawerOpen(true)}
+                >
+                  Docusign
+                </Button>
+              )}
 
               <Button variant="outlined" color="secondary" disabled>
                 Send Email
@@ -134,7 +144,7 @@ export function TaskActions({ deal }: Props) {
                           style={{ width: '100%' }}
                         >
                           <Box flex={9}>
-                            <a link={attachment.url} target="_blank">
+                            <a href={attachment.url} target="_blank">
                               <TextMiddleTruncate
                                 text={attachment.name}
                                 maxLength={50}
@@ -164,7 +174,7 @@ export function TaskActions({ deal }: Props) {
                 className={classes.divider}
               />
               <Button color="secondary" onClick={handleDeselectAll}>
-                Deselect all
+                Ignore selections
               </Button>
             </Box>
           </div>

@@ -6,6 +6,13 @@ import { Box, Button } from '@material-ui/core'
 import { FieldError } from 'components/final-form-fields/FieldError'
 import { ListAttachmentItem } from 'components/ListAttachmentItem'
 import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
+
+import {
+  DOCUSIGN_FORM,
+  DOCUSIGN_FILE,
+  DOCUSIGN_ENVELOPE
+} from 'deals/components/ActionsButton/data/action-buttons'
+
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT
@@ -37,6 +44,7 @@ export function Attachments({ onClose }: Props) {
   const handleAddAttachments = () => {
     actionsDispatch({
       type: ADD_ATTACHMENTS,
+      actions: [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE],
       attachments: field.input.value
     })
 

@@ -1,8 +1,6 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 
-import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
-
 import ActionsButton from '../../../../../components/ActionsButton'
 
 import { getFormActions } from '../helpers/get-form-actions'
@@ -16,13 +14,11 @@ interface Props {
 }
 
 export function DigitalForm({ deal, task }: Props) {
-  const [actionsState] = useChecklistActionsContext()
-
   if (!task || !task.form) {
     return null
   }
 
-  const actions: ActionButtonId[] = getFormActions(actionsState)
+  const actions: ActionButtonId[] = getFormActions()
 
   return (
     <ItemContainer>

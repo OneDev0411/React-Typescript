@@ -25,6 +25,13 @@ import { ADD_ATTACHMENTS } from 'deals/Dashboard/Folders/actions-context/constan
 
 import { normalizeActions } from './data/normalize-actions'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
+
+import {
+  DOCUSIGN_FORM,
+  DOCUSIGN_ENVELOPE,
+  DOCUSIGN_FILE
+} from './data/action-buttons'
+
 import {
   approveTask,
   requireTask,
@@ -61,6 +68,9 @@ interface Props {
   file?: IFile | undefined
   envelope?: IDealEnvelope
   actions: ActionButtonId[]
+}
+
+interface ContextProps {
   actionsState: StateContext
   actionsDispatch: DispatchContext
 }
@@ -91,8 +101,11 @@ interface StateProps {
   }
 }
 
-class ActionsButton extends React.Component<Props & StateProps, State> {
-  constructor(props: Props & StateProps) {
+class ActionsButton extends React.Component<
+  Props & StateProps & ContextProps,
+  State
+> {
+  constructor(props: Props & StateProps & ContextProps) {
     super(props)
 
     this.state = {
@@ -226,7 +239,11 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
    *
    */
   handleGetSignature = () => {
-    if (this.props.actionsState.attachments.length > 0) {
+    if (
+      this.props.actionsState.actions.some(name =>
+        [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE].includes(name)
+      )
+    ) {
       this.props.actionsDispatch({
         type: ADD_ATTACHMENTS,
         attachments: this.getEsignAttachments()
@@ -305,8 +322,14 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
 
   render() {
     const secondaryActions: ActionButton[] = normalizeActions(
+      this.props.actionsState.actions,
       this.props.actions
     )
+
+    if (secondaryActions.length === 0) {
+      return null
+    }
+
     const primaryAction: ActionButton = secondaryActions.shift()!
 
     return (
