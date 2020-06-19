@@ -25,7 +25,10 @@ import { useIconStyles } from 'views/../styles/use-icon-styles'
 import {
   DOCUSIGN_ENVELOPE,
   DOCUSIGN_FILE,
-  DOCUSIGN_FORM
+  DOCUSIGN_FORM,
+  EMAIL_ENVELOPE,
+  EMAIL_FILE,
+  EMAIL_FORM
 } from 'deals/components/ActionsButton/data/action-buttons'
 
 import {
@@ -113,9 +116,13 @@ export function TaskActions({ deal }: Props) {
                 </Button>
               )}
 
-              <Button variant="outlined" color="secondary" disabled>
-                Send Email
-              </Button>
+              {state.actions.some(id =>
+                [EMAIL_FILE, EMAIL_ENVELOPE, EMAIL_FORM].includes(id)
+              ) && (
+                <Button variant="outlined" color="secondary" disabled>
+                  Send Email
+                </Button>
+              )}
             </div>
 
             <Box
