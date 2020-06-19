@@ -16,6 +16,7 @@ export const styles = (theme: Theme) =>
       alignItems: 'flex-start',
       justifyContent: 'center',
       height: '100%',
+      overflow: 'hidden',
       backgroundColor: (props: StyleProps) =>
         props.evenRow ? theme.palette.grey[50] : theme.palette.common.white,
       cursor: (props: StyleProps) => (props.clickable ? 'pointer' : 'auto'),

@@ -56,6 +56,7 @@ export function EmailThread({ style, event }: Props) {
         <Box
           display="flex"
           alignItems="center"
+          flexWrap="wrap"
           style={{
             fontWeight: isThreadRead ? 400 : 600
           }}
@@ -76,7 +77,12 @@ export function EmailThread({ style, event }: Props) {
 
             return (
               <React.Fragment key={index}>
-                {index !== 0 && <>,&nbsp;</>}
+                {index !== 0 && (
+                  <>
+                    <span>,</span>
+                    &nbsp;
+                  </>
+                )}
                 <TextMiddleTruncate
                   text={displayName || recipient}
                   maxLength={othersText ? 20 : 30}
@@ -90,7 +96,9 @@ export function EmailThread({ style, event }: Props) {
           })}
           {othersText && (
             <>
-              &nbsp;and&nbsp;
+              &nbsp;
+              <span>and</span>
+              &nbsp;
               <span>{othersText}</span>
             </>
           )}
