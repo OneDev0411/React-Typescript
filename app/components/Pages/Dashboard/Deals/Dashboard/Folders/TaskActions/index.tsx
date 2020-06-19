@@ -100,7 +100,7 @@ export function TaskActions({ deal }: Props) {
 
   return (
     <>
-      {state.attachments.length > 0 && (
+      {state.actions.length > 0 && (
         <Slide in direction="up">
           <div className={classes.root}>
             <div>

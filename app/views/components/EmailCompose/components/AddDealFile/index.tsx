@@ -16,6 +16,16 @@ import { IAppState } from 'reducers'
 import SearchDealDrawer from 'components/SearchDealDrawer'
 import SelectDealFileDrawer from 'components/SelectDealFileDrawer'
 
+import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
+
+import { ADD_ATTACHMENTS } from 'deals/Dashboard/Folders/actions-context/constants'
+
+import {
+  EMAIL_ENVELOPE,
+  EMAIL_FILE,
+  EMAIL_FORM
+} from 'deals/components/ActionsButton/data/action-buttons'
+
 import { getAllDealDocuments } from '../../../SelectDealFileDrawer/helpers/get-all-deal-documents'
 
 import { DealRow } from './DealRow'
@@ -43,6 +53,8 @@ export function AddDealFile({
   onClick,
   value = []
 }: Props) {
+  const [, actionsDispatch] = useChecklistActionsContext()
+
   const { checklists, tasks, envelopes }: StateProps = useSelector(
     ({ deals: { checklists, tasks, envelopes } }: IAppState) => ({
       checklists,
@@ -55,8 +67,16 @@ export function AddDealFile({
   const [deal, setDeal] = useState<IDeal | null>(deafultSelectedDeal || null)
 
   const handleClick = event => {
-    setDealsListOpen(true)
-    setDealFilesOpen(false)
+    if (deafultSelectedDeal) {
+      actionsDispatch({
+        type: ADD_ATTACHMENTS,
+        actions: [EMAIL_ENVELOPE, EMAIL_FILE, EMAIL_FORM],
+        attachments: []
+      })
+    } else {
+      setDealsListOpen(true)
+      setDealFilesOpen(false)
+    }
 
     if (onClick) {
       onClick(event)
