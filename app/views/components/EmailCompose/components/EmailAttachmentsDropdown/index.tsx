@@ -1,6 +1,6 @@
 import React from 'react'
 import { useField } from 'react-final-form'
-import { List, ListItem } from '@material-ui/core'
+import { List, ListItem, Tooltip } from '@material-ui/core'
 import { useDropboxChooser } from 'use-dropbox-chooser'
 
 import IconUpload from 'components/SvgIcons/Upload/IconUpload'
@@ -9,6 +9,7 @@ import IconDropbox from 'components/SvgIcons/Dropbox/IconDropbox'
 
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
+import { DropdownToggleButton } from '../../../DropdownToggleButton'
 import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { BaseDropdown } from '../../../BaseDropdown'
 import { FilePicker } from '../../../FilePicker'
@@ -54,15 +55,16 @@ export function EmailAttachmentsDropdown({
 
   return (
     <BaseDropdown
-      buttonLabel={
-        <>
-          <IconAttachment
-            size={iconSizes.small}
-            className={iconClasses.rightMargin}
-          />{' '}
-          Attachments
-        </>
-      }
+      renderDropdownButton={buttonProps => (
+        <Tooltip title="Attach files">
+          <DropdownToggleButton {...buttonProps}>
+            <IconAttachment
+              size={iconSizes.small}
+              className={iconClasses.rightMargin}
+            />
+          </DropdownToggleButton>
+        </Tooltip>
+      )}
       PopperProps={{ keepMounted: true }}
       renderMenu={({ close }) => (
         <List>

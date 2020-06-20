@@ -19,11 +19,13 @@ import SchedulerButton from './SchedulerButton'
 import { EmailAttachmentsDropdown } from '../EmailAttachmentsDropdown'
 import { useButtonStyles } from '../../../../../styles/use-button-styles'
 import IconTemplate from '../../../SvgIcons/Template/IconTemplate'
+import IconMyDesigns from '../../../SvgIcons/IconMyDesigns/IconMyDesigns'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
 import { DropdownToggleButton } from '../../../DropdownToggleButton'
 import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { FooterBottomDrawer } from './FooterBottomDrawer'
-import { TemplateSelector } from './TemplateSelector'
+import EmailTemplateSelector from './EmailTemplateSelector'
+import { MarketingTemplateSelector } from './MarketingTemplateSelector'
 
 interface Props {
   isSubmitDisabled: boolean
@@ -56,7 +58,10 @@ export function Footer({
   const iconClasses = useIconStyles()
 
   const [isDeleting, setDeleting] = useState(false)
-  const [isTemplateDrawerOpen, setTemplateDrawerOpen] = useState(false)
+  const [isEmailTemplateDrawerOpen, setEmailTemplateDrawerOpen] = useState(
+    false
+  )
+  const [isMCTemplateDrawerOpen, setMCTemplateDrawerOpen] = useState(false)
 
   const busy = isDeleting || formState.submitting
 
@@ -65,23 +70,29 @@ export function Footer({
   ).filter(isFileAttachment)
 
   const selectEmailTemplate = (template: IBrandEmailTemplate) => {
-    setTemplateDrawerOpen(false)
+    setEmailTemplateDrawerOpen(false)
     setMarketingTemplate(null)
     subjectField.input.onChange(template.subject)
     updateBody(template.body)
   }
   const selectMarketingTemplate = (template: IMarketingTemplateInstance) => {
-    setTemplateDrawerOpen(false)
+    setMCTemplateDrawerOpen(false)
     setMarketingTemplate(template)
   }
 
   return (
     <FooterContainer>
-      <FooterBottomDrawer isOpen={isTemplateDrawerOpen}>
-        <TemplateSelector
-          onEmailTemplateSelected={selectEmailTemplate}
-          onMarketingTemplateSelected={selectMarketingTemplate}
-        />
+      <FooterBottomDrawer
+        isOpen={isEmailTemplateDrawerOpen || isMCTemplateDrawerOpen}
+      >
+        {isEmailTemplateDrawerOpen && (
+          <EmailTemplateSelector onTemplateSelected={selectEmailTemplate} />
+        )}
+        {isMCTemplateDrawerOpen && (
+          <MarketingTemplateSelector
+            onTemplateSelected={selectMarketingTemplate}
+          />
+        )}
       </FooterBottomDrawer>
       <FooterInnerContainer className={props.className}>
         <div className="features-list">
@@ -93,14 +104,32 @@ export function Footer({
           />
           {!hasStaticBody && (
             <DropdownToggleButton
-              isActive={isTemplateDrawerOpen}
-              onClick={() => setTemplateDrawerOpen(open => !open)}
+              isActive={isEmailTemplateDrawerOpen}
+              onClick={() => {
+                setEmailTemplateDrawerOpen(open => !open)
+                setMCTemplateDrawerOpen(open => false)
+              }}
             >
               <IconTemplate
                 className={iconClasses.rightMargin}
                 size={iconSizes.small}
               />{' '}
               Templates
+            </DropdownToggleButton>
+          )}
+          {!hasStaticBody && (
+            <DropdownToggleButton
+              isActive={isMCTemplateDrawerOpen}
+              onClick={() => {
+                setMCTemplateDrawerOpen(open => !open)
+                setEmailTemplateDrawerOpen(open => false)
+              }}
+            >
+              <IconMyDesigns
+                className={iconClasses.rightMargin}
+                size={iconSizes.small}
+              />{' '}
+              My Design
             </DropdownToggleButton>
           )}
         </div>
