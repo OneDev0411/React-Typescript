@@ -41,9 +41,10 @@ interface StateProps {
 interface Props {
   deafultSelectedDeal?: IDeal
   initialAttachments: IFile[]
+  value: IFile[]
   onClick?: MouseEventHandler
   onChange: (files: IFile[]) => void
-  value: IFile[]
+  onClose?: () => void
 }
 
 export function AddDealFile({
@@ -51,6 +52,7 @@ export function AddDealFile({
   deafultSelectedDeal,
   onChange,
   onClick,
+  onClose = () => {},
   value = []
 }: Props) {
   const [, actionsDispatch] = useChecklistActionsContext()
@@ -73,14 +75,19 @@ export function AddDealFile({
         actions: [EMAIL_ENVELOPE, EMAIL_FILE, EMAIL_FORM],
         attachments: []
       })
-    } else {
-      setDealsListOpen(true)
-      setDealFilesOpen(false)
+
+      console.log('>>>', onClose)
+
+      onClick && onClick(event)
+      onClose()
+
+      return
     }
 
-    if (onClick) {
-      onClick(event)
-    }
+    setDealsListOpen(true)
+    setDealFilesOpen(false)
+
+    onClick && onClick(event)
   }
 
   const closeDealDrawer = () => setDealsListOpen(false)

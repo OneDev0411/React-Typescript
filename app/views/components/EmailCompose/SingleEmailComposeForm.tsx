@@ -47,6 +47,7 @@ export function SingleEmailComposeForm({
   preferredAccountId,
   deal,
   headers = {},
+  onClose = () => {},
   ...otherProps
 }: Props) {
   const [allAccounts, isLoadingAccounts] = useGetAllOauthAccounts(
@@ -121,6 +122,7 @@ export function SingleEmailComposeForm({
         deal={deal}
         isSubmitDisabled={isLoadingAccounts}
         sendEmail={handleSendEmail}
+        onClose={onClose}
         renderCollapsedFields={(values: EmailFormValues) => (
           <>
             {/*

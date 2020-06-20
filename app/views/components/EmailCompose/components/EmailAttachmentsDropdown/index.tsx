@@ -27,6 +27,7 @@ interface Props {
    * and a new attachment is added because of that.
    */
   onChanged?: () => void
+  onClose?: () => void
   uploadAttachment: typeof uploadEmailAttachment
 }
 
@@ -34,7 +35,8 @@ export function EmailAttachmentsDropdown({
   deal,
   initialAttachments,
   uploadAttachment,
-  onChanged = () => {}
+  onChanged = () => {},
+  onClose = () => {}
 }: Props) {
   const iconClasses = useIconStyles()
   const attachmentsField = useField('attachments')
@@ -76,6 +78,7 @@ export function EmailAttachmentsDropdown({
               onChanged()
             }}
             onClick={close}
+            onClose={onClose}
             value={attachmentsField.input.value}
           />
           <ListItem
