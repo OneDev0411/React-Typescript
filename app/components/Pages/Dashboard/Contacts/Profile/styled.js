@@ -28,6 +28,9 @@ export const SideColumn = styled.div`
 `
 
 export const MainColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   background-color: #fff;
 
   @media (min-width: 64em) {
