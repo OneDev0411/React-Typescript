@@ -35,8 +35,20 @@
     "test": "jest --watch",
     "jest": "jest"
   },
-  "engines": {
-    "node": "10.x"
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 80
+  },
+  "lint-staged": {
+    "**/*.+(js|ts|tsx|json|css|html|md)": "prettier --write",
+    "**/*.+(js|tsx|ts)": "eslint --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`"
+    }
   },
   "dependencies": {
     "@babel/cli": "^7.8.4",
@@ -354,6 +366,7 @@
     "husky": "^4.2.5",
     "jest": "^25.1.0",
     "jest-raw-loader": "^1.0.1",
+    "lint-staged": "^10.2.11",
     "ndb": "^1.1.5",
     "nodemon": "^2.0.4",
     "opn": "^6.0.0",
@@ -367,15 +380,7 @@
     "webpackbar": "^4.0.0",
     "whatwg-fetch": "^3.0.0"
   },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true,
-    "printWidth": 80
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint:staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`"
-    }
+  "engines": {
+    "node": "10.x"
   }
 }
