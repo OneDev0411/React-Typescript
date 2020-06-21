@@ -356,6 +356,13 @@ export const GridCalendarPresentation = ({
             left: 'today, prev,next, title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
           }}
+          buttonText={{
+            today: 'Today',
+            month: 'Month',
+            week: 'Week',
+            day: 'Day',
+            list: 'List'
+          }}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           ref={calendarRef}
           events={events}
