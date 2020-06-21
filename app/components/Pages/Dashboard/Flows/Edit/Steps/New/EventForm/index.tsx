@@ -164,14 +164,8 @@ export default function EventForm({
                     autoComplete="off"
                     required
                     validate={value =>
-                      validateInput(value, 'wait days', input => {
-                        const numericValue = parseInt(input, 10)
-
-                        return (
-                          numericValue.toString() === input &&
-                          numericValue >= 0 &&
-                          numericValue <= 365
-                        )
+                      validateInput(value, 'wait days', () => {
+                        return value >= 0 && value <= 365
                       })
                     }
                     component={MUITextInput}
