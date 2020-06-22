@@ -75,6 +75,9 @@
   th, td, thead, tbody, .fc-divider, .fc-row, .fc-content, .fc-popover, .fc-list-view, .fc-list-heading td {
     border-color: #e0e0e0;
   }
+  & thead td {
+    border-bottom: 0 hidden transparent;
+  }
 }
 
 .fc-day {
@@ -82,6 +85,7 @@
     font-size: .75rem;
     font-weight: 400;
     color: #949598;
+    text-transform: uppercase;
   }
   &-top{
     text-align: center;
