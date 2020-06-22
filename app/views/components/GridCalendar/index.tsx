@@ -249,6 +249,12 @@ export const GridCalendarPresentation = ({
       handleLoadMoreEvents(Format.Next)
     }
   }
+  /**
+   * trigger on clicking on a calendar cell
+   */
+  const handleDayClick = i => {
+    console.log(i)
+  }
 
   /**
    * trigger on clicking on an event
@@ -367,6 +373,7 @@ export const GridCalendarPresentation = ({
           ref={calendarRef}
           events={events}
           datesRender={handleDatesRender}
+          dateClick={handleDayClick}
           eventClick={handleClickEvent}
           eventDrop={handleEditEvent}
           eventResize={handleEditEvent}

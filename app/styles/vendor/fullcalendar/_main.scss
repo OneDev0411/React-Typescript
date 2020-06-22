@@ -7,13 +7,18 @@
   justify-content: center;
   align-items: center;
   & > h2 {
+    font-size: 1.25rem;
+    font-family: LatoBlack;
     font-weight: 900;
   }
 }
-.fc-right{
-  
+
+.fc-toolbar.fc-header-toolbar{
+  margin-bottom: .75rem;
 }
+
 .fc-button {
+  padding: 0.25em 0.85em;
   &:focus {
     box-shadow: none !important;
   }
@@ -74,7 +79,7 @@
 
 .fc-day {
   &-header{
-    font-size: 1.15rem;
+    font-size: .75rem;
     font-weight: 400;
     color: #949598;
   }
@@ -82,9 +87,12 @@
     text-align: center;
   }
   &-number {
-    font-size: 1.1em;
+    font-size: .75rem;
     color: #000;
     float: none !important;
+  }
+  &-grid-event{
+    margin: 1px 4px 0 !important;
   }
 }
 
@@ -92,11 +100,10 @@
   &-event{
     cursor: pointer;
   }
-  &-draggable, &-resizable{
-    cursor: ew-resize !important;
+  &-time{
+    color: rgba(#000, .5);
   }
 }
-
 
 
 
