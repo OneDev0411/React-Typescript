@@ -18,8 +18,7 @@
     "styled-svg": "styled-svg app/views/components/SvgIcons/**/*.svg --no-tests --size=24x24",
     "types:check": "tsc",
     "lint": "npm run lint:app && npm run lint:server && npm run lint:tests",
-    "lint:staged": "eslint `git diff --diff-filter=d --staged --name-only`",
-    "lint:fix-staged": "npm run lint:staged -- --fix",
+    "lint:fix-staged": "lint-staged",
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
     "lint:tests": "eslint ./tests --fix",
@@ -38,11 +37,13 @@
   "prettier": {
     "semi": false,
     "singleQuote": true,
-    "printWidth": 80
+    "printWidth": 80,
+    "trailingComma": "none",
+    "arrowParens": "avoid",
+    "endOfLine": "auto"
   },
   "lint-staged": {
-    "**/*.+(js|ts|tsx|json|css|html|md)": "prettier --write",
-    "**/*.+(js|tsx|ts)": "eslint --fix"
+    "**/*.(js|ts|tsx|json|css|html|md)": "eslint --fix"
   },
   "husky": {
     "hooks": {
