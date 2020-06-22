@@ -40,7 +40,7 @@ export async function preSaveFormat(values, originalValues) {
   const dueDateTimestamp = dueDate.getTime()
   const endDateTimestamp = endDate.getTime()
   const end_date =
-    originalValues.end_date || endDateTimestamp > dueDateTimestamp
+    originalValues?.end_date || endDateTimestamp > dueDateTimestamp
       ? endDateTimestamp / 1000
       : null
 
@@ -55,7 +55,7 @@ export async function preSaveFormat(values, originalValues) {
       dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'
   }
 
-  if ((originalValues && originalValues.id) || description) {
+  if (originalValues?.id || description) {
     task.description = stateToHTML(description.getCurrentContent())
       .trim()
       .replace(/(\r\n|\n|\r)/gm, '') // remove unneccessary new line
@@ -71,8 +71,8 @@ export async function preSaveFormat(values, originalValues) {
       }
     ]
   } else if (
-    (originalValues && originalValues.reminders == null) ||
-    (originalValues && originalValues.reminders && reminder.value == -1)
+    originalValues?.reminders == null ||
+    (originalValues?.reminders && reminder.value == -1)
   ) {
     task.reminders = []
   }

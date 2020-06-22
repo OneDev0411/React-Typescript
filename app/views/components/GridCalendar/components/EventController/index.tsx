@@ -7,30 +7,47 @@ import { CrmEvents } from '../../../Calendar/components/CrmEvents'
 interface Props {
   user: IUser
   event: ICalendarEvent | null
+  day: Date | null
   onEventChange(event: IEvent, type: string): void
   setSelectedEvent(event: ICalendarEvent | null): void
+  setSelectedDay(event: Date | null): void
 }
 
 export const EventController = ({
   user,
+  day,
   event,
   setSelectedEvent,
+  setSelectedDay,
   onEventChange
 }: Props) => {
-  const EventDrawer =
-    event && ['crm_task', 'crm_association'].includes(event.object_type) ? (
-      <CrmEvents
-        isEventDrawerOpen
-        event={event}
-        user={user}
-        onEventChange={onEventChange}
-        onCloseEventDrawer={() => setSelectedEvent(null)}
-      />
-    ) : null
+  const crmDrawerConditionOnClick =
+    event && ['crm_task', 'crm_association'].includes(event.object_type)
+  const crmDrawerPropsOnClick = crmDrawerConditionOnClick ? { event } : {}
+  const createEventOnDayProps = day ? { initialDueDate: day } : {}
 
-  const McBuilder =
-    event?.event_type &&
-    ['home_anniversary', 'birthday'].includes(event.event_type) ? (
+  const EventDrawer = (crmDrawerConditionOnClick || day) && (
+    <CrmEvents
+      isEventDrawerOpen
+      user={user}
+      onEventChange={onEventChange}
+      onCloseEventDrawer={() => {
+        setSelectedEvent(null)
+        setSelectedDay(null)
+      }}
+      {...crmDrawerPropsOnClick}
+      {...createEventOnDayProps}
+    />
+  )
+
+  const McBuilder = event?.event_type &&
+    [
+      'home_anniversary',
+      'birthday',
+      'work_anniversary',
+      'wedding_anniversary',
+      'child_birthday'
+    ].includes(event.event_type) && (
       <ContactFlow
         handleTrigger={() => setSelectedEvent(null)}
         isBuilderOpen
@@ -39,7 +56,7 @@ export const EventController = ({
         mediums="Email"
         types={['Birthday']}
       />
-    ) : null
+    )
 
   if (event?.object_type === 'contact' && event?.event_type === 'next_touch') {
     window.open(`/dashboard/contacts/${event.contact}`, '_blank')

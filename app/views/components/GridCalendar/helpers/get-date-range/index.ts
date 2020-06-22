@@ -50,7 +50,7 @@ export function getDateRange(
  * @param current - timestamp of current range (start or end)
  * @param target - the format of creating range.
  */
-export function shouldReCreateRange(current: number, target: number): boolean {
+export function shouldRecreateRange(current: number, target: number): boolean {
   const currentTimestamp = new Date(current).getTime()
   const targetTimestamp = new Date(target).getTime()
   const diffTime = Math.abs(targetTimestamp - currentTimestamp)

@@ -25,7 +25,7 @@ import { EventController } from './components/EventController'
 // List of basic calendar dependency
 import {
   getDateRange,
-  shouldReCreateRange,
+  shouldRecreateRange,
   Format
 } from './helpers/get-date-range'
 import { ApiOptions, FetchOptions } from '../Calendar/types'
@@ -90,6 +90,8 @@ export const GridCalendarPresentation = ({
   const [selectedEvent, setSelectedEvent] = useState<ICalendarEvent | null>(
     null
   )
+  // selected day
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null)
   // request status
   const [isLoading, setIsLoading] = useState(false)
 
@@ -241,19 +243,31 @@ export const GridCalendarPresentation = ({
     const { view } = e
     const [start, end] = calendarRange
 
-    if (shouldReCreateRange(start * 1000, view.currentStart.getTime())) {
+    if (shouldRecreateRange(start * 1000, view.currentStart.getTime())) {
       handleLoadMoreEvents(Format.Previous)
     }
 
-    if (shouldReCreateRange(end * 1000, view.currentEnd.getTime())) {
+    if (shouldRecreateRange(end * 1000, view.currentEnd.getTime())) {
       handleLoadMoreEvents(Format.Next)
     }
   }
   /**
    * trigger on clicking on a calendar cell
    */
-  const handleDayClick = i => {
-    console.log(i)
+  const handleDayClick = ({
+    date,
+    dateStr,
+    allDay
+  }: {
+    date: Date
+    dateStr: string
+    allDay: boolean
+  }) => {
+    const now = new Date()
+
+    date.setHours(now.getHours(), now.getMinutes(), 0, 0)
+    // console.log({ date, dateStr, allDay })
+    setSelectedDay(date)
   }
 
   /**
@@ -299,6 +313,7 @@ export const GridCalendarPresentation = ({
       setRowEvents(nextEvents)
       setEvents(normalizedEvents)
       setSelectedEvent(null)
+      setSelectedDay(null)
     },
     [rowEvents]
   )
@@ -382,7 +397,9 @@ export const GridCalendarPresentation = ({
       <EventController
         user={user!}
         event={selectedEvent}
+        day={selectedDay}
         setSelectedEvent={setSelectedEvent}
+        setSelectedDay={setSelectedDay}
         onEventChange={handleCrmEventChange}
       />
     </>
