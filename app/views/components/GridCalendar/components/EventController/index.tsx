@@ -3,6 +3,10 @@ import React from 'react'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 
 import { CrmEvents } from '../../../Calendar/components/CrmEvents'
+import {
+  isDealEvent,
+  isCelebrationEvent
+} from '../../helpers/normalize-events/helpers/event-checker'
 
 interface Props {
   user: IUser
@@ -40,23 +44,16 @@ export const EventController = ({
     />
   )
 
-  const McBuilder = event?.event_type &&
-    [
-      'home_anniversary',
-      'birthday',
-      'work_anniversary',
-      'wedding_anniversary',
-      'child_birthday'
-    ].includes(event.event_type) && (
-      <ContactFlow
-        handleTrigger={() => setSelectedEvent(null)}
-        isBuilderOpen
-        hasExternalTrigger
-        contact={event?.people![0] as IContact}
-        mediums="Email"
-        types={['Birthday']}
-      />
-    )
+  const McBuilder = event && isCelebrationEvent(event) && (
+    <ContactFlow
+      handleTrigger={() => setSelectedEvent(null)}
+      isBuilderOpen
+      hasExternalTrigger
+      contact={event?.people![0] as IContact}
+      mediums="Email"
+      types={['Birthday']}
+    />
+  )
 
   if (event?.object_type === 'contact' && event?.event_type === 'next_touch') {
     window.open(`/dashboard/contacts/${event.contact}`, '_blank')
@@ -64,25 +61,7 @@ export const EventController = ({
     return null
   }
 
-  if (
-    event?.object_type === 'deal_context' &&
-    [
-      'list_date',
-      'expiration_date',
-      'contract_date',
-      'inspection_date',
-      'option_period',
-      'financing_due',
-      'title_due',
-      't47_due',
-      'closing_date',
-      'possession_date',
-      'lease_executed',
-      'lease_application_date',
-      'lease_begin',
-      'lease_end'
-    ].includes(event?.event_type)
-  ) {
+  if (event && isDealEvent(event)) {
     window.open(`/dashboard/deals/${event.deal}`)
 
     return null

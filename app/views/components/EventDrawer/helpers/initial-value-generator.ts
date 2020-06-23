@@ -8,7 +8,7 @@ import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
  * @param {number} owner The owner of event
  * @returns {numver} a rounded number
  */
-function roundToMultipleFive(n) {
+const roundToMultipleFive = n => {
   if (n % 5 == 0) {
     return n
   }
@@ -24,14 +24,12 @@ function roundToMultipleFive(n) {
  * @param {Date} endDate initial end date
  * @returns {object} a formated Task
  */
-export function initialValueGenerator(
+export const initialValueGenerator = (
   owner: IUser,
   association: Array<any> = [],
   dueDate: Date = new Date(),
   endDate?: Date
-) {
-  // console.log(dueDate)
-
+) => {
   const reminder = REMINDER_DROPDOWN_OPTIONS[3] // 15 minutes before
   const description = EditorState.createWithContent(stateFromHTML(''))
 
