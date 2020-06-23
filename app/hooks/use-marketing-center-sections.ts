@@ -45,8 +45,7 @@ const ALL_SECTIONS: SectionCollection = {
       {
         title: '‌Blank Layouts',
         value: 'Layout',
-        link: urlGenerator('/Layout'),
-        access: ['BackOffice']
+        link: urlGenerator('/Layout')
       },
       {
         title: 'Newsletters',
@@ -97,8 +96,7 @@ const ALL_SECTIONS: SectionCollection = {
       {
         title: '‌Blank Layouts',
         value: 'ListingLayout',
-        link: urlGenerator('/ListingLayout'),
-        access: ['BackOffice']
+        link: urlGenerator('/ListingLayout')
       },
       {
         title: 'As Seen In',
