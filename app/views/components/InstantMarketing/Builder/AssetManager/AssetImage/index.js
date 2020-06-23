@@ -86,9 +86,7 @@ export class AssetImage extends React.Component {
 
     const image = this.props.model.get('image')
     const targetElement = this.getTargetElement()
-    // const imageWithoutCache = `${image}${
-    //   image.includes('?') ? '&dummy=' : '?'
-    // }${new Date().getTime()}`
+    const imageWithoutCorsIssue = `/api/utils/cors/${image}`
 
     return (
       <Container>
@@ -100,7 +98,7 @@ export class AssetImage extends React.Component {
         {this.state.isCropperOpen && (
           <ImageUploader
             disableChangePhoto
-            file={image}
+            file={imageWithoutCorsIssue}
             width={targetElement.clientWidth * 2}
             height={targetElement.clientHeight * 2}
             saveHandler={this.onCrop}
