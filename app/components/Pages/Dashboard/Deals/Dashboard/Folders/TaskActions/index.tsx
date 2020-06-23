@@ -13,12 +13,14 @@ import {
 } from '@material-ui/core'
 import pluralize from 'pluralize'
 
+import { useSelector } from 'react-redux'
+
 import QuestionCircleIcon from 'components/SvgIcons/QuestionCircle/QuestionCircleIcon'
 import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
 import { BaseDropdown } from 'components/BaseDropdown'
-
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
@@ -30,6 +32,8 @@ import {
   EMAIL_FILE,
   EMAIL_FORM
 } from 'deals/components/ActionsButton/data/action-buttons'
+
+import { IAppState } from 'reducers'
 
 import {
   CLEAR_ATTACHMENTS,
@@ -85,6 +89,9 @@ export function TaskActions({ deal }: Props) {
   const iconClasses = useIconStyles()
   const [state, dispatch] = useChecklistActionsContext()
   const [isDocusignDraweOpen, setIsDocusignDrawerOpen] = useState(false)
+  const [isEmailComposeDraweOpen, setIsEmailComposeDraweOpen] = useState(false)
+
+  const user = useSelector<IAppState, IUser>(({ user }) => user)
 
   const handleDeselectAll = () => {
     dispatch({
@@ -120,7 +127,11 @@ export function TaskActions({ deal }: Props) {
               {state.actions.some(id =>
                 [EMAIL_FILE, EMAIL_ENVELOPE, EMAIL_FORM].includes(id)
               ) && (
-                <Button variant="outlined" color="secondary" disabled>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => setIsEmailComposeDraweOpen(true)}
+                >
                   Send Email
                 </Button>
               )}
@@ -187,6 +198,19 @@ export function TaskActions({ deal }: Props) {
             </Box>
           </div>
         </Slide>
+      )}
+
+      {isEmailComposeDraweOpen && (
+        <SingleEmailComposeDrawer
+          isOpen
+          initialValues={{
+            from: user,
+            attachments: state.attachments
+          }}
+          deal={deal}
+          onClose={() => setIsEmailComposeDraweOpen(false)}
+          onSent={() => setIsEmailComposeDraweOpen(false)}
+        />
       )}
 
       <GetSignature

@@ -32,7 +32,10 @@ import { SelectItemDrawer } from './components/SelectItemDrawer'
 import {
   DOCUSIGN_FORM,
   DOCUSIGN_ENVELOPE,
-  DOCUSIGN_FILE
+  DOCUSIGN_FILE,
+  EMAIL_FORM,
+  EMAIL_FILE,
+  EMAIL_ENVELOPE
 } from './data/action-buttons'
 
 import {
@@ -229,15 +232,48 @@ class ActionsButton extends React.Component<
   /**
    *
    */
-  handleToggleComposeEmail = () =>
-    this.setState(state => ({
-      isComposeEmailOpen: !state.isComposeEmailOpen
-    }))
+  handleToggleComposeEmail = () => {
+    const files = this.getEmailComposeFiles()
+
+    if (
+      this.props.actionsState.actions.some(name =>
+        [EMAIL_FORM, EMAIL_FILE, EMAIL_ENVELOPE].includes(name)
+      ) === false
+    ) {
+      this.setState(state => ({
+        isComposeEmailOpen: !state.isComposeEmailOpen
+      }))
+
+      return
+    }
+
+    if (
+      this.props.actionsState.attachments.some(attachment =>
+        files.some(doc => doc.id === attachment.id)
+      )
+    ) {
+      files.forEach(attachment =>
+        this.props.actionsDispatch({
+          type: REMOVE_ATTACHMENT,
+          attachment
+        })
+      )
+
+      return
+    }
+
+    this.props.actionsDispatch({
+      type: ADD_ATTACHMENTS,
+      attachments: files
+    })
+  }
 
   /**
    *
    */
   handleGetSignature = () => {
+    const files = this.getEsignAttachments()
+
     if (
       this.props.actionsState.actions.some(name =>
         [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE].includes(name)
@@ -252,22 +288,22 @@ class ActionsButton extends React.Component<
 
     if (
       this.props.actionsState.attachments.some(attachment =>
-        this.getEsignAttachments().some(doc => doc.id === attachment.id)
+        files.some(doc => doc.id === attachment.id)
       )
     ) {
-      this.getEsignAttachments().forEach(attachment => {
+      files.forEach(attachment =>
         this.props.actionsDispatch({
           type: REMOVE_ATTACHMENT,
           attachment
         })
-      })
+      )
 
       return
     }
 
     this.props.actionsDispatch({
       type: ADD_ATTACHMENTS,
-      attachments: this.getEsignAttachments()
+      attachments: files
     })
   }
 
