@@ -8,6 +8,7 @@ const DONE_STATUS = 'DONE'
 export function FutureEventDoneConfirmation() {
   const confirmation = useContext(ConfirmationModalContext)
   const dueDateField = useField('dueDate')
+  const endDateField = useField('endDate')
   const statusField = useField('status')
   const currentStatus = statusField.input.value
   const previousStatus = useRef(currentStatus)
@@ -34,7 +35,18 @@ export function FutureEventDoneConfirmation() {
       description:
         'If you mark this event as done, the event due date will change to now. Are you sure?',
       onConfirm: () => {
-        dueDateField.input.onChange(new Date())
+        const now = new Date()
+        const nowArgs = [now.getFullYear(), now.getMonth(), now.getDate()]
+
+        const newDueDate = dueDateField.input.value.setFullYear(...nowArgs)
+
+        dueDateField.input.onChange(new Date(newDueDate))
+
+        if (endDateField.input.value) {
+          const newEndDate = endDateField.input.value.setFullYear(...nowArgs)
+
+          endDateField.input.onChange(new Date(newEndDate))
+        }
       },
       onCancel: () => {
         statusField.input.onChange('PENDING')
