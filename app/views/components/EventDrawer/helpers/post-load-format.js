@@ -4,16 +4,10 @@ import { stateFromHTML } from 'draft-js-import-html'
 import { isNegativeTimezone } from 'utils/is-negative-timezone'
 
 import { getReminderItem } from 'views/utils/reminder'
-import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
-function roundToMultipleFive(n) {
-  if (n % 5 == 0) {
-    return n
-  }
-
-  return Math.floor(n / 5) * 5 + 5
-}
+import { initialValueGenerator } from './initial-value-generator'
 
 /**
  * Format form data for api model
@@ -40,28 +34,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
   }
 
   if (!task) {
-    const initialDueDate = new Date()
-
-    initialDueDate.setHours(
-      initialDueDate.getHours(),
-      roundToMultipleFive(initialDueDate.getMinutes()),
-      0,
-      0
-    )
-
-    // 1 hour after
-    const initialEndDate = new Date(initialDueDate.getTime() + 3600000)
-
-    return {
-      assignees: [owner],
-      associations,
-      description,
-      dueDate: initialDueDate,
-      endDate: initialEndDate,
-      allDay: false,
-      reminder,
-      task_type: { title: 'Call', value: 'Call' }
-    }
+    return initialValueGenerator(owner, associations)
   }
 
   const { reminders, end_date } = task
@@ -80,7 +53,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
     return normalizedDate
   }
   const dueDate = normalizeServerDate(task.due_date)
-  const endDate = end_date ? normalizeServerDate(end_date, true) : null
+  const endDate = end_date ? normalizeServerDate(end_date, true) : dueDate
 
   if (Array.isArray(reminders) && reminders.length > 0) {
     const { timestamp } = reminders[reminders.length - 1]

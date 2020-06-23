@@ -304,7 +304,7 @@ class PresentEventDrawer extends Component {
                             />
 
                             <EndDateTimeField
-                              selectedDate={values.endDate}
+                              selectedDate={values.endDate || values.dueDate}
                               showTimePicker={!values.allDay}
                             />
                           </FieldContainer>

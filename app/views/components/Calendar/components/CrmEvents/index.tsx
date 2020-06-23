@@ -1,14 +1,14 @@
 import React from 'react'
 
 import { EventDrawer } from 'components/EventDrawer'
+import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 
-import { createDueDate } from './helpers/create-date'
-
 interface Props {
   isEventDrawerOpen: boolean
-  event?: ICalendarEvent
+  event?: ICalendarEvent | null
+  initialDueDate?: Date
   user: IUser
   onEventChange(event: IEvent, type: string): void
   onCloseEventDrawer(): void
@@ -28,16 +28,11 @@ export function CrmEvents(props: Props) {
   }
 
   if (!props.event) {
-    const initialValues = {
-      assignees: [props.user],
-      associations: [],
-      dueDate: createDueDate(new Date()),
-      reminder: {
-        title: 'None',
-        value: -1
-      },
-      task_type: { title: 'Call', value: 'Call' }
-    }
+    const initialValues = initialValueGenerator(
+      props.user,
+      [],
+      props.initialDueDate
+    )
 
     return <EventDrawer {...sharedProps} initialValues={initialValues} />
   }
