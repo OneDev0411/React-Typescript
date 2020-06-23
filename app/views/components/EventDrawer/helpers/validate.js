@@ -1,17 +1,28 @@
-export function validate(values) {
-  const { title, endDate, dueDate, allDay, assignees } = values
-  const errors = {}
-  const endDateValidator = allDay
-    ? endDate.getFullYear() < dueDate.getFullYear() ||
+const endDateValidator = (dueDate, endDate, isAllDay) => {
+  if (!endDate) {
+    return true
+  }
+
+  if (isAllDay) {
+    return (
+      endDate.getFullYear() < dueDate.getFullYear() ||
       endDate.getMonth() < dueDate.getMonth() ||
       endDate.getDate() < dueDate.getDate()
-    : endDate.getTime() < dueDate.getTime()
+    )
+  }
+
+  return endDate.getTime() < dueDate.getTime()
+}
+
+export const validate = values => {
+  const { title, dueDate, endDate, allDay, assignees } = values
+  const errors = {}
 
   if (!title || !title.trim()) {
     errors.title = 'Required!'
   }
 
-  if (endDate && endDateValidator) {
+  if (endDate && endDateValidator(dueDate, endDate, allDay)) {
     errors.endDate = 'End time must be after the start time!'
   }
 
