@@ -21,7 +21,10 @@ import type {
   DispatchContext
 } from 'deals/Dashboard/Folders/actions-context'
 
-import { ADD_ATTACHMENTS } from 'deals/Dashboard/Folders/actions-context/constants'
+import {
+  ADD_ATTACHMENTS,
+  REMOVE_ATTACHMENT
+} from 'deals/Dashboard/Folders/actions-context/constants'
 
 import { normalizeActions } from './data/normalize-actions'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
@@ -216,11 +219,7 @@ class ActionsButton extends React.Component<
   /**
    *
    */
-  handleUpload = () => {
-    if (this.dropzone) {
-      this.dropzone.open()
-    }
-  }
+  handleUpload = () => this.dropzone && this.dropzone.open()
 
   /**
    *
@@ -242,18 +241,33 @@ class ActionsButton extends React.Component<
     if (
       this.props.actionsState.actions.some(name =>
         [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE].includes(name)
-      )
+      ) === false
     ) {
-      this.props.actionsDispatch({
-        type: ADD_ATTACHMENTS,
-        attachments: this.getEsignAttachments()
+      this.setState({
+        isSignatureFormOpen: true
       })
 
       return
     }
 
-    this.setState({
-      isSignatureFormOpen: true
+    if (
+      this.props.actionsState.attachments.some(attachment =>
+        this.getEsignAttachments().some(doc => doc.id === attachment.id)
+      )
+    ) {
+      this.getEsignAttachments().forEach(attachment => {
+        this.props.actionsDispatch({
+          type: REMOVE_ATTACHMENT,
+          attachment
+        })
+      })
+
+      return
+    }
+
+    this.props.actionsDispatch({
+      type: ADD_ATTACHMENTS,
+      attachments: this.getEsignAttachments()
     })
   }
 
@@ -313,6 +327,9 @@ class ActionsButton extends React.Component<
     if (typeof button.label === 'function') {
       return button.label({
         task: this.props.task,
+        esignAttachments: this.getEsignAttachments(),
+        emailAttachments: this.getEmailComposeFiles(),
+        state: this.props.actionsState,
         isBackOffice: this.props.isBackOffice
       })
     }

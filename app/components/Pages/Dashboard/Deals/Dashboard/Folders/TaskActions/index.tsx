@@ -49,7 +49,8 @@ const useStyles = makeStyles(
       padding: theme.spacing(0, 2),
       bottom: 0,
       height: theme.spacing(8),
-      background: theme.palette.grey['100'],
+      background: theme.palette.common.white,
+      borderTop: `1px solid ${theme.palette.divider}`,
       '& button': {
         marginRight: theme.spacing(1)
       }
@@ -132,7 +133,7 @@ export function TaskActions({ deal }: Props) {
             >
               <BaseDropdown
                 renderDropdownButton={props => (
-                  <Button {...props}>
+                  <Button {...props} disabled={state.attachments.length === 0}>
                     <Typography variant="body1" className={classes.title}>
                       {pluralize('file', state.attachments.length, true)}{' '}
                       selected &nbsp;
@@ -181,7 +182,7 @@ export function TaskActions({ deal }: Props) {
                 className={classes.divider}
               />
               <Button color="secondary" onClick={handleDeselectAll}>
-                Ignore selections
+                Cancel
               </Button>
             </Box>
           </div>
