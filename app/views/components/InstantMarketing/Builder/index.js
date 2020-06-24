@@ -32,7 +32,6 @@ import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenter/constants'
 import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
-import { TeamSelector } from './TeamSelector'
 
 import {
   Container,
@@ -61,7 +60,6 @@ class Builder extends React.Component {
     this.state = {
       originalTemplate: null,
       selectedTemplate: props.defaultTemplate,
-      owner: props.templateData.user,
       isLoading: true,
       isEditorLoaded: false,
       templateHtmlCss: '',
@@ -517,7 +515,7 @@ class Builder extends React.Component {
       return
     }
 
-    this.props.onSave(this.getSavedTemplate(), this.state.owner)
+    this.props.onSave(this.getSavedTemplate(), this.props.templateData.user)
   }
 
   handleSocialSharing = socialNetworkName => {
@@ -638,40 +636,10 @@ class Builder extends React.Component {
       },
       () => {
         this.regenerateTemplate({
-          user: this.state.owner
+          user: this.props.templateData.user
         })
       }
     )
-  }
-
-  handleOwnerChange = owner => {
-    if (!this.isTemplateChanged()) {
-      this.setState({
-        owner
-      })
-
-      this.regenerateTemplate({
-        user: owner
-      })
-
-      return
-    }
-
-    this.context.setConfirmationModal({
-      message: 'Change sender?',
-      description:
-        "All the changes you've made to the template will be lost. Are you sure?",
-      confirmLabel: 'Yes, I am sure',
-      onConfirm: () => {
-        this.setState({
-          owner
-        })
-
-        this.regenerateTemplate({
-          user: owner
-        })
-      }
-    })
   }
 
   // This accessor is going to return the template object
@@ -961,14 +929,6 @@ class Builder extends React.Component {
                 <DeviceManager editor={this.editor} />
                 <Divider orientation="vertical" />
               </>
-            )}
-
-            {this.state.selectedTemplate && (
-              <TeamSelector
-                templateData={this.props.templateData}
-                owner={this.state.owner}
-                onSelect={this.handleOwnerChange}
-              />
             )}
 
             <Actions>
