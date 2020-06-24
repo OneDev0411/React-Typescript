@@ -22,21 +22,21 @@ interface Props {
   children?: ReactNode
 }
 
+/**
+ * NOTE: The API for sending email is somehow not intuitive.
+ * `from` should always exist in form of UUID of a user.n the form data too.
+ */
+
 export function From({ accounts, children, users }: Props) {
   const fromField = useField('from')
   const error = fromField.meta.error
 
-  const items = useMemo(() => {
-    let items: IUser[] | IOAuthAccount[] = []
+  const items = useMemo(() => [...(accounts || []), ...users], [
+    users,
+    accounts
+  ])
 
-    if (accounts) {
-      items = [...accounts]
-    }
-
-    return [...items, ...users]
-  }, [users, accounts])
-
-  const renderItemToString = (item: IUser | IOAuthAccount) => {
+  const renderItemToValue = (item: IUser | IOAuthAccount) => {
     switch (item.type) {
       case 'user':
         return userToEmailAddress(item)
@@ -69,7 +69,7 @@ export function From({ accounts, children, users }: Props) {
           disableUnderline
           value={fromField.input.value}
           onChange={handleChange}
-          renderValue={renderItemToString}
+          renderValue={renderItemToValue}
         >
           {items.map(item => (
             <MenuItem key={item.id} value={item.id}>

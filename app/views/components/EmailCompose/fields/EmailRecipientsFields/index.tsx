@@ -33,14 +33,14 @@ export function EmailRecipientsFields({
   users
 }: Props) {
   const fields = useRecipientFields()
-  const [hasCc, setCc] = useState(false)
-  const [hasBcc, setBcc] = useState(false)
+  const [ccVisibility, setCcVisibility] = useState(false)
+  const [bccVisibility, setBccVisibility] = useState(false)
   const [lastFocusedSendType, setLastFocusedSendType] = useState<
     IEmailRecipientSendType
   >('To')
 
-  const isCcShown = hasCc || (values.cc || []).length > 0
-  const isBccShown = hasBcc || (values.bcc || []).length > 0
+  const isCcShown = ccVisibility || (values.cc || []).length > 0
+  const isBccShown = bccVisibility || (values.bcc || []).length > 0
 
   const commonProps: typeof EmailRecipientsChipsInputProps = {
     TextFieldProps: {
@@ -57,8 +57,8 @@ export function EmailRecipientsFields({
         <CcBccButtons
           showCc={!isCcShown}
           showBcc={!isBccShown}
-          onCcAdded={() => setCc(true)}
-          onBccAdded={() => setBcc(true)}
+          onCcAdded={() => setCcVisibility(true)}
+          onBccAdded={() => setBccVisibility(true)}
         />
       </From>
       <EmailRecipientsChipsInput
