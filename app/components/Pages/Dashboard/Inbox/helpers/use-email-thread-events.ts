@@ -51,11 +51,9 @@ export default function useEmailThreadEvents(
     }
 
     function handleFilteredUpdateEmailThreads(event: Event) {
-      console.log('update', event) // TODO: Remove this line.
       filterEvent(event) && handleUpdateEmailThreads(event.threads)
     }
     function handleFilteredDeleteEmailThreads(event: Event) {
-      console.log('delete', event) // TODO: Remove this line.
       filterEvent(event) && handleDeleteEmailThreads(event.threads)
     }
 
