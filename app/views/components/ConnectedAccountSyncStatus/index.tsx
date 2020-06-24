@@ -1,6 +1,7 @@
-import * as React from 'react'
-
+import React from 'react'
 import { Tooltip, IconButton } from '@material-ui/core'
+
+import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
 
 import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
 import IconEmail from 'components/SvgIcons/EmailOutlined/IconEmailOutlined'
@@ -20,7 +21,7 @@ export function ConnectedAccountSyncStatus({ account }: Props) {
   const emailsJob = (account.jobs || []).find(
     job =>
       job.job_name ===
-      (account.type === 'google_credential' ? 'gmail' : 'outlook')
+      (account.type === GOOGLE_CREDENTIAL ? 'gmail' : 'outlook')
   )
 
   return (

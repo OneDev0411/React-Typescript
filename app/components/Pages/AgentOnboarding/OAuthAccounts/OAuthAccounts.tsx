@@ -6,6 +6,10 @@ import { Box, ButtonBase, Theme, useTheme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
 import { OAuthProvider } from 'constants/contacts'
+import {
+  GOOGLE_CREDENTIAL,
+  MICROSOFT_CREDENTIAL
+} from 'constants/oauth-accounts'
 
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
@@ -86,8 +90,8 @@ export function OAuthAccounts() {
     return connectedAccounts.some(a => a.type === type)
   }
 
-  const isGoogleConnected = isConnected('google_credential')
-  const isOutlookConnected = isConnected('microsoft_credential')
+  const isGoogleConnected = isConnected(GOOGLE_CREDENTIAL)
+  const isOutlookConnected = isConnected(MICROSOFT_CREDENTIAL)
 
   const accountIconSize = {
     width: theme.spacing(9),

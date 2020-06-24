@@ -1,3 +1,8 @@
+import {
+  GOOGLE_CREDENTIAL,
+  MICROSOFT_CREDENTIAL
+} from 'constants/oauth-accounts'
+
 import { Avatar } from './types'
 
 export function getOauthAccountAvatar(
@@ -10,7 +15,7 @@ export function getOauthAccountAvatar(
   }
 
   const googleAccount = connectedAccounts.find(
-    a => a.type === 'google_credential'
+    a => a.type === GOOGLE_CREDENTIAL
   )
 
   if (googleAccount && googleAccount.profile_image_url) {
@@ -20,7 +25,7 @@ export function getOauthAccountAvatar(
   let otherAccount: IOAuthAccount = connectedAccounts[0]
 
   if (
-    otherAccount.type === 'microsoft_credential' &&
+    otherAccount.type === MICROSOFT_CREDENTIAL &&
     otherAccount.profile_image_url
   ) {
     return prepareReturnObject(otherAccount, 'Outlook')
