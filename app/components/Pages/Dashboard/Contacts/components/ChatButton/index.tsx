@@ -83,8 +83,6 @@ function ChatButton({ contact, render }: Props) {
       disabled={!isChattable || isCreatingRoom}
       onClick={onClick}
     >
-      {/* 
-        // @ts-ignore js component */}
       <SvgIcon path={mdiChatProcessingOutline} />
     </IconButton>
   )
