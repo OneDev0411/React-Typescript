@@ -1,17 +1,20 @@
 import React, { ComponentProps, HTMLProps } from 'react'
 import { Field } from 'react-final-form'
 import { TextFieldProps, Tooltip, makeStyles, Theme } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
+import { IAppState } from 'reducers'
+import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 import { createBulkEmailCampaign } from 'models/email/create-bulk-email-campaign'
 
-import { EmailFormValues } from './types'
-import { normalizeRecipients } from './helpers/normalize-recepients'
-
-import { From } from './components/From'
-import EmailRecipientsChipsInput from '../EmailRecipientsChipsInput'
 import IconLock from '../SvgIcons/Lock/IconLock'
 
+import { EmailFormValues } from './types'
+import { normalizeRecipients } from './helpers/normalize-recepients'
+import { getFromData } from './helpers/get-from-data'
+import { From } from './components/From'
+import EmailRecipientsChipsInput from '../EmailRecipientsChipsInput'
 import EmailComposeForm from './EmailComposeForm'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
@@ -59,21 +62,23 @@ export function BulkEmailComposeForm({
   ...otherProps
 }: Props) {
   const classes = useStyles()
+  const user = useSelector<IAppState, IUser>(store => store.user)
+  const activeBrand = getActiveBrand(user)
+  const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
   const [allAccounts, isLoadingAccounts] = useGetAllOauthAccounts(
     filterAccounts
   )
 
-  const initialValues: Partial<EmailFormValues> = getInitialValues(
+  const initialValues: Partial<EmailFormValues> = getInitialValues({
     allAccounts,
-    preferredAccountId,
-    otherProps.initialValues
-  )
+    defaultValues: otherProps.initialValues,
+    defaultUser: user,
+    preferredAccountId
+  })
 
   const sendEmail = (formValue: EmailFormValues & { template: string }) => {
     const emailData: IIndividualEmailCampaignInput = getEmail({
-      from: (formValue.from && formValue.from.id) || '',
-      microsoft_credential: formValue.microsoft_credential,
-      google_credential: formValue.google_credential,
+      ...getFromData(formValue.from, user.id),
       to: normalizeRecipients(formValue.to || []),
       subject: (formValue.subject || '').trim(),
       html: formValue.body || '',
@@ -97,15 +102,10 @@ export function BulkEmailComposeForm({
       </Tooltip>
     </span>
   )
+
   const renderFields = () => (
     <>
-      <Field
-        render={({ input }) => (
-          <From user={input.value as IUser} accounts={allAccounts} />
-        )}
-        name="from"
-      />
-
+      <From users={activeBrandUsers} accounts={allAccounts} />
       <Field
         label={label}
         name="to"
@@ -137,21 +137,18 @@ export function BulkEmailComposeForm({
       />
     </>
   )
+
   const renderCollapsedFields = (values: EmailFormValues) => (
     <>
       {/*
       This is kind of a hack for a behavior in react-final-form.
       When `initialValues` are changed, it updates `values` but only
       those fields that have a corresponding field rendered at that
-      moment. `to`, `cc`, `google_credential` and `microsoft_credential` may
-      be updated in initialValues while top fields are collapsed and
-      therefore, the changes are never reflected to `values` in this case.
-      we render two dummy fields to prevent this issue.
+      moment. `to`, `cc` and bcc may be updated in initialValues while top 
+      fields are collapsed and therefore, the changes are never reflected to 
+      `values` in this case. we render two dummy fields to prevent this issue.
       */}
       <Field name="to" render={() => null} />
-      <Field name="google_credential" render={() => null} />
-      <Field name="microsoft_credential" render={() => null} />
-
       <CollapsedEmailRecipients to={values.to || []} />
     </>
   )

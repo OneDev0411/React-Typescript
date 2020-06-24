@@ -20,15 +20,17 @@ interface Props {
   EmailRecipientsChipsInputProps?: Partial<
     ComponentProps<typeof EmailRecipientsChipsInput>
   >
+  users: IUser[]
 }
 
 export function EmailRecipientsFields({
-  values,
+  EmailRecipientsChipsInputProps = {},
+  deal,
   disableAddNewRecipient = false,
   includeQuickSuggestions = true,
   senderAccounts,
-  deal,
-  EmailRecipientsChipsInputProps = {}
+  values,
+  users
 }: Props) {
   const fields = useRecipientFields()
   const [hasCc, setCc] = useState(false)
@@ -51,7 +53,7 @@ export function EmailRecipientsFields({
 
   return (
     <>
-      <From user={fields.from.input.value as IUser} accounts={senderAccounts}>
+      <From users={users} accounts={senderAccounts}>
         <CcBccButtons
           showCc={!isCcShown}
           showBcc={!isBccShown}

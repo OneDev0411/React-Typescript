@@ -219,14 +219,6 @@ function EmailComposeForm<T>({
           {
             name: 'to',
             focus: expandTolFields
-          },
-          {
-            name: 'microsoft_credential',
-            focus: expandTolFields
-          },
-          {
-            name: 'google_credential',
-            focus: expandTolFields
           }
         ]
       })
