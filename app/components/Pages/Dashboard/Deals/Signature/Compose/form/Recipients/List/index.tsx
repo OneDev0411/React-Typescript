@@ -103,19 +103,17 @@ export function RecipientsList() {
                       renderMenu={({ close }) => {
                         return (
                           <MenuList>
-                            {new Array(list.length)
-                              .fill(null)
-                              .map((_, index) => (
-                                <MenuItem
-                                  key={index}
-                                  onClick={() => {
-                                    close()
-                                    handleOrderChange(recipient, index + 1)
-                                  }}
-                                >
-                                  {index + 1}
-                                </MenuItem>
-                              ))}
+                            {list.map((_, index) => (
+                              <MenuItem
+                                key={index}
+                                onClick={() => {
+                                  close()
+                                  handleOrderChange(recipient, index + 1)
+                                }}
+                              >
+                                {index + 1}
+                              </MenuItem>
+                            ))}
                           </MenuList>
                         )
                       }}

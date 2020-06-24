@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import _ from 'underscore'
 
 import { confirmation } from 'actions/confirmation'
 import { createEnvelope } from 'actions/deals'
@@ -53,7 +52,7 @@ export default function Signature({
           }
     })
 
-    const recipients = _.map(form.recipients, recipient => ({
+    const recipients = Object.values(form.recipients).map(recipient => ({
       role: recipient.id,
       order: recipient.order,
       envelope_recipient_type: recipient.envelope_recipient_type

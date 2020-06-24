@@ -29,7 +29,7 @@ export function Attachments({ onClose }: Props) {
   const list = field.input.value || []
 
   const handleDelete = (attachment: IDealFile) => {
-    const attachments = (field.input.value || []).filter(
+    const attachments = list.filter(
       (item: typeof attachment) => item.id !== attachment.id
     )
 
@@ -45,7 +45,7 @@ export function Attachments({ onClose }: Props) {
     actionsDispatch({
       type: ADD_ATTACHMENTS,
       actions: [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE],
-      attachments: field.input.value
+      attachments: list
     })
 
     onClose()

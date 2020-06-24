@@ -66,13 +66,6 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       cursor: 'pointer'
-    },
-    popover: {
-      zIndex: 1000,
-      pointerEvents: 'none'
-    },
-    paper: {
-      padding: theme.spacing(1)
     }
   }),
   {

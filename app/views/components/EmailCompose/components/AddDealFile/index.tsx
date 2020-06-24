@@ -76,8 +76,6 @@ export function AddDealFile({
         attachments: []
       })
 
-      console.log('>>>', onClose)
-
       onClick && onClick(event)
       onClose()
 

@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
-import { Button } from '@material-ui/core'
+import { Button, Theme } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
 
 import { useDeepMemo } from 'hooks/use-deep-memo'
 
@@ -29,6 +30,8 @@ interface Props {
 }
 
 export default function FoldersTab({ deal, isBackOffice }: Props) {
+  const theme = useTheme<Theme>()
+
   const { tasks, checklists } = useSelector<
     IAppState,
     {
@@ -151,7 +154,7 @@ export default function FoldersTab({ deal, isBackOffice }: Props) {
               color="secondary"
               variant="outlined"
               style={{
-                marginRight: '0.5rem'
+                marginRight: theme.spacing(1)
               }}
             >
               {showTerminatedFolders ? 'Hide' : 'Show'} Terminated

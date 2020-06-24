@@ -10,8 +10,6 @@ import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 import Roles from 'deals/components/Roles'
 
-// import { Container, Menu } from './styled'
-
 interface Props {
   deal: IDeal
   selectedRoles: Record<string, IDealRole>
