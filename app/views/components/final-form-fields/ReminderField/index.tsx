@@ -15,7 +15,7 @@ const useStyles = makeStyles(
       marginRight: theme.spacing(0.5)
     }
   }),
-  { name: 'Riminder' }
+  { name: 'Reminder' }
 )
 
 interface Props {
