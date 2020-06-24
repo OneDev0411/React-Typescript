@@ -78,6 +78,8 @@ class Templates extends React.Component {
           ...new Set(templates.map(item => item.template.template_type))
         ]
 
+        currentTemplatesTypes.sort()
+
         const selectedTemplateType = currentTemplatesTypes.length
           ? currentTemplatesTypes[0]
           : null
