@@ -65,7 +65,7 @@ class Builder extends React.Component {
       isLoading: true,
       isEditorLoaded: false,
       templateHtmlCss: '',
-      isTemplatesColumnHidden: true,
+      isTemplatesColumnHidden: props.isTemplatesColumnHiddenDefault,
       loadedListingsAssets: [],
       isListingDrawerOpen: false,
       isAgentDrawerOpen: false,

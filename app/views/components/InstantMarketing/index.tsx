@@ -17,6 +17,7 @@ interface Props {
   assets?: string[]
   defaultTemplate?: Nullable<IBrandMarketingTemplate>
   containerStyle?: React.CSSProperties
+  isTemplatesColumnHiddenDefault?: boolean
   handleSave: (markup: string, owner: IUser) => void
   handleSocialSharing: (markup: string, socialNetworkName: string) => void
   onClose: () => void
@@ -31,6 +32,7 @@ export default function InstantMarketing({
   assets = [],
   defaultTemplate = null,
   containerStyle = {},
+  isTemplatesColumnHiddenDefault = true,
   handleSave,
   handleSocialSharing,
   onClose
@@ -60,6 +62,7 @@ export default function InstantMarketing({
       assets={assets}
       defaultTemplate={defaultTemplate}
       containerStyle={containerStyle}
+      isTemplatesColumnHiddenDefault={isTemplatesColumnHiddenDefault}
       onClose={handleClose}
       onSave={handleSave}
       onSocialSharing={handleSocialSharing}

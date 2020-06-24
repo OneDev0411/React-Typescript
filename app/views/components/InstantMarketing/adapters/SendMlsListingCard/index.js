@@ -360,6 +360,9 @@ class SendMlsListingCard extends React.Component {
             onShowEditListings={this.handleEditListings}
             isEdit={this.props.isEdit}
             hideTemplatesColumn={this.props.hideTemplatesColumn}
+            isTemplatesColumnHiddenDefault={
+              this.props.isTemplatesColumnHiddenDefault
+            }
           />
         )}
 
