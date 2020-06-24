@@ -26,6 +26,7 @@ const styles = (theme: Theme) =>
       background: theme.palette.background.paper,
       borderTop: `1px solid ${theme.palette.divider}`,
       maxHeight: '21rem',
+      minHeight: '21rem',
       overflow: 'auto',
       display: 'flex',
       flexDirection: 'column'

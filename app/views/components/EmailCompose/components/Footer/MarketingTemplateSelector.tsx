@@ -116,15 +116,17 @@ export function MarketingTemplateSelector(props: Props) {
           to="/dashboard/marketing"
         >
           <ListItemText
-            primary={<Box color="primary.main">Open All Designs</Box>}
+            primary={<Box color="secondary.main">Open All Designs</Box>}
           />
         </ListItem>
-        <MarketingTemplateMasonry
-          breakpointCols={COLUMN_COUNT}
-          className={classes.masonry}
-        >
-          {items}
-        </MarketingTemplateMasonry>
+        <Box pt={1}>
+          <MarketingTemplateMasonry
+            breakpointCols={COLUMN_COUNT}
+            className={classes.masonry}
+          >
+            {items}
+          </MarketingTemplateMasonry>
+        </Box>
       </ScrollableArea>
       <MarketingTemplatePreviewModal
         type="history"
