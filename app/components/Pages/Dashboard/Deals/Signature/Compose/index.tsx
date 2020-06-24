@@ -53,6 +53,7 @@ export function SignatureComposeDrawer({
         onSubmit={onSubmit}
         initialValues={{
           subject: 'Please DocuSign',
+          message: '',
           from: `${user.display_name} <${user.email}>`,
           recipients: {},
           auto_notify: true,
