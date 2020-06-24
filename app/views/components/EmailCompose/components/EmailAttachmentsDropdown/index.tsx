@@ -9,7 +9,6 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
 import { DropdownToggleButton } from '../../../DropdownToggleButton'
-import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { BaseDropdown } from '../../../BaseDropdown'
 import { FilePicker } from '../../../FilePicker'
 import AddDealFile from '../AddDealFile'
@@ -34,7 +33,6 @@ export function EmailAttachmentsDropdown({
   uploadAttachment,
   onChanged = () => {}
 }: Props) {
-  const iconClasses = useIconStyles()
   const attachmentsField = useField('attachments')
   const [upload] = useUploadAttachment(uploadAttachment)
 
@@ -56,7 +54,7 @@ export function EmailAttachmentsDropdown({
       renderDropdownButton={buttonProps => (
         <Tooltip title="Attach files">
           <DropdownToggleButton {...buttonProps}>
-            <SvgIcon path={mdiAttachment} className={iconClasses.rightMargin} />
+            <SvgIcon path={mdiAttachment} rightMargined />
           </DropdownToggleButton>
         </Tooltip>
       )}
@@ -100,7 +98,7 @@ export function EmailAttachmentsDropdown({
               close()
             }}
           >
-            <SvgIcon path={mdiDropbox} className={iconClasses.rightMargin} />
+            <SvgIcon path={mdiDropbox} rightMargined />
             Attach from dropbox
           </ListItem>
           <FilePicker onFilePicked={uploadFromComputer}>
@@ -112,10 +110,7 @@ export function EmailAttachmentsDropdown({
                   close()
                 }}
               >
-                <SvgIcon
-                  path={mdiProgressUpload}
-                  className={iconClasses.rightMargin}
-                />
+                <SvgIcon path={mdiProgressUpload} rightMargined />
                 Attach from your computer
               </ListItem>
             )}
