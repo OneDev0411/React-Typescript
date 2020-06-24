@@ -36,15 +36,15 @@ export const actionsDefaultProperties = {
     type: 'comments'
   },
   [DOCUSIGN_FORM]: {
-    label: 'Docusign',
+    label: getDocusignLabel,
     type: 'docusign-form'
   },
   [DOCUSIGN_ENVELOPE]: {
-    label: 'Docusign',
+    label: getDocusignLabel,
     type: 'docusign-envelope'
   },
   [DOCUSIGN_FILE]: {
-    label: 'Docusign',
+    label: getDocusignLabel,
     type: 'docusign-file'
   },
   [VOID_ENVELOPE]: {
@@ -56,15 +56,15 @@ export const actionsDefaultProperties = {
     type: 'resend-envelope'
   },
   [EMAIL_ENVELOPE]: {
-    label: 'Email',
+    label: getEmailLabel,
     type: 'email-envelope'
   },
   [EMAIL_FILE]: {
-    label: 'Email',
+    label: getEmailLabel,
     type: 'email-file'
   },
   [EMAIL_FORM]: {
-    label: 'Email',
+    label: getEmailLabel,
     type: 'email-form'
   },
   [UPLOAD]: {
@@ -143,4 +143,28 @@ export const actionsDefaultProperties = {
     type: 'require-task',
     condition: ({ is_backoffice }) => is_backoffice
   }
+}
+
+function getDocusignLabel({ state, esignAttachments }) {
+  if (state.actions.length === 0) {
+    return 'Docusign'
+  }
+
+  return state.attachments.some(attachment =>
+    esignAttachments.some(doc => doc.id === attachment.id)
+  )
+    ? 'Remove Docusign'
+    : 'Add to Docusign'
+}
+
+function getEmailLabel({ state, emailAttachments }) {
+  if (state.actions.length === 0) {
+    return 'Email'
+  }
+
+  return state.attachments.some(attachment =>
+    emailAttachments.some(doc => doc.id === attachment.id)
+  )
+    ? 'Remove from Email'
+    : 'Add to Email'
 }

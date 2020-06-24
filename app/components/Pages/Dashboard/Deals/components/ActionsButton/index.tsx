@@ -14,8 +14,30 @@ import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getEsignAttachments } from 'views/utils/deal-files/get-esign-attachments'
 import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
 
+import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
+
+import type {
+  StateContext,
+  DispatchContext
+} from 'deals/Dashboard/Folders/actions-context'
+
+import {
+  ADD_ATTACHMENTS,
+  REMOVE_ATTACHMENT
+} from 'deals/Dashboard/Folders/actions-context/constants'
+
 import { normalizeActions } from './data/normalize-actions'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
+
+import {
+  DOCUSIGN_FORM,
+  DOCUSIGN_ENVELOPE,
+  DOCUSIGN_FILE,
+  EMAIL_FORM,
+  EMAIL_FILE,
+  EMAIL_ENVELOPE
+} from './data/action-buttons'
+
 import {
   approveTask,
   requireTask,
@@ -54,6 +76,11 @@ interface Props {
   actions: ActionButtonId[]
 }
 
+interface ContextProps {
+  actionsState: StateContext
+  actionsDispatch: DispatchContext
+}
+
 interface State {
   isMenuOpen: boolean
   isSignatureFormOpen: boolean
@@ -80,8 +107,11 @@ interface StateProps {
   }
 }
 
-class ActionsButton extends React.Component<Props & StateProps, State> {
-  constructor(props: Props & StateProps) {
+class ActionsButton extends React.Component<
+  Props & StateProps & ContextProps,
+  State
+> {
+  constructor(props: Props & StateProps & ContextProps) {
     super(props)
 
     this.state = {
@@ -192,11 +222,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
   /**
    *
    */
-  handleUpload = () => {
-    if (this.dropzone) {
-      this.dropzone.open()
-    }
-  }
+  handleUpload = () => this.dropzone?.open()
 
   /**
    *
@@ -206,17 +232,78 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
   /**
    *
    */
-  handleToggleComposeEmail = () =>
-    this.setState(state => ({
-      isComposeEmailOpen: !state.isComposeEmailOpen
-    }))
+  handleToggleComposeEmail = () => {
+    const files = this.getEmailComposeFiles()
+
+    if (
+      this.props.actionsState.actions.some(name =>
+        [EMAIL_FORM, EMAIL_FILE, EMAIL_ENVELOPE].includes(name)
+      ) === false
+    ) {
+      this.setState(state => ({
+        isComposeEmailOpen: !state.isComposeEmailOpen
+      }))
+
+      return
+    }
+
+    if (
+      this.props.actionsState.attachments.some(attachment =>
+        files.some(doc => doc.id === attachment.id)
+      )
+    ) {
+      files.forEach(attachment =>
+        this.props.actionsDispatch({
+          type: REMOVE_ATTACHMENT,
+          attachment
+        })
+      )
+
+      return
+    }
+
+    this.props.actionsDispatch({
+      type: ADD_ATTACHMENTS,
+      attachments: files
+    })
+  }
 
   /**
    *
    */
   handleGetSignature = () => {
-    this.setState({
-      isSignatureFormOpen: true
+    const files = this.getEsignAttachments()
+
+    if (
+      this.props.actionsState.actions.some(name =>
+        [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE].includes(name)
+      ) === false
+    ) {
+      this.setState({
+        isSignatureFormOpen: true
+      })
+
+      return
+    }
+
+    if (
+      this.props.actionsState.attachments.some(attachment =>
+        files.some(doc => doc.id === attachment.id)
+      )
+    ) {
+      files.forEach(attachment =>
+        this.props.actionsDispatch({
+          type: REMOVE_ATTACHMENT,
+          attachment
+        })
+      )
+
+      return
+    }
+
+    this.props.actionsDispatch({
+      type: ADD_ATTACHMENTS,
+      attachments: files
     })
   }
 
@@ -276,6 +363,9 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
     if (typeof button.label === 'function') {
       return button.label({
         task: this.props.task,
+        esignAttachments: this.getEsignAttachments(),
+        emailAttachments: this.getEmailComposeFiles(),
+        state: this.props.actionsState,
         isBackOffice: this.props.isBackOffice
       })
     }
@@ -285,8 +375,14 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
 
   render() {
     const secondaryActions: ActionButton[] = normalizeActions(
+      this.props.actionsState.actions,
       this.props.actions
     )
+
+    if (secondaryActions.length === 0) {
+      return null
+    }
+
     const primaryAction: ActionButton = secondaryActions.shift()!
 
     return (
@@ -416,6 +512,16 @@ function mapStateToProps({ deals, user }: IAppState, props: Props) {
   }
 }
 
+const withContext = (Component: typeof ActionsButton) => (
+  props: Props & StateProps
+) => {
+  const [state, dispatch] = useChecklistActionsContext()
+
+  return (
+    <Component {...props} actionsState={state} actionsDispatch={dispatch} />
+  )
+}
+
 export default connect(mapStateToProps, {
   setSelectedTask
-})(ActionsButton)
+})(withContext(ActionsButton))

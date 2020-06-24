@@ -36,6 +36,7 @@ interface Props {
   setMarketingTemplate: (template: IBrandEmailTemplate | null) => void
   onCancel?: () => void
   onDelete?: (values) => void | Promise<any>
+  onClose?: () => void
   className?: string
   uploadAttachment: typeof uploadEmailAttachment
 }
@@ -45,6 +46,7 @@ export function Footer({
   updateBody,
   setMarketingTemplate,
   hasStaticBody,
+  onClose = () => {},
   ...props
 }: Props) {
   const formState = useFormState()
@@ -101,6 +103,7 @@ export function Footer({
             onChanged={props.onChanged}
             uploadAttachment={props.uploadAttachment}
             initialAttachments={initialAttachments}
+            onClose={onClose}
           />
           {!hasStaticBody && (
             <DropdownToggleButton

@@ -3,10 +3,10 @@ import Flex from 'styled-flex-component'
 
 import ActionsButton from '../../../../../components/ActionsButton'
 
+import { getFormActions } from '../helpers/get-form-actions'
+
 import { ItemContainer, ItemRow, ItemTitle, ItemLink } from '../styled'
 import { LabelItem } from '../../../styled'
-
-import { getFormActions } from '../helpers/get-form-actions'
 
 interface Props {
   deal: IDeal
