@@ -6,9 +6,10 @@ export const Container = styled.div`
   overflow: auto;
   background: white;
   width: 340px;
-  padding: 2rem 0;
   background-color: #f1f1f1;
   border: 1px solid #dadada;
+  display: flex;
+  flex-direction: column;
 `
 
 export const TemplateItem = styled.div`

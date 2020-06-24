@@ -11,12 +11,15 @@ import Spinner from 'components/Spinner'
 
 import { SAVED_TEMPLATE_VARIANT } from '../Builder/AddToMarketingCenter/constants'
 import { Container, TemplateItem, Video, Image } from './styled'
+import TemplateTypesSelect from './TemplateTypesSelect'
 
 class Templates extends React.Component {
   state = {
     isLoading: true,
     selectedTemplate: null,
-    templates: []
+    templates: [],
+    currentTemplatesTypes: [],
+    selectedTemplateType: null
   }
 
   componentDidMount() {
@@ -31,11 +34,11 @@ class Templates extends React.Component {
         }
       )
     } else {
-      this.getTemplatesList()
+      this.fetchTemplatesList()
     }
   }
 
-  getTemplatesList = async () => {
+  fetchTemplatesList = async () => {
     const { medium, defaultTemplate, templateTypes: types } = this.props
     const activeTeamBrandId = getActiveTeamId(this.props.user)
 
@@ -71,9 +74,19 @@ class Templates extends React.Component {
           templates = [...otherTemplates, ...savedTemplates]
         }
 
+        const currentTemplatesTypes = [
+          ...new Set(templates.map(item => item.template.template_type))
+        ]
+
+        const selectedTemplateType = currentTemplatesTypes.length
+          ? currentTemplatesTypes[0]
+          : null
+
         this.setState(
           {
             templates,
+            currentTemplatesTypes,
+            selectedTemplateType,
             selectedTemplate: templates[0].id
           },
           () => this.handleSelectTemplate(templates[0])
@@ -118,35 +131,52 @@ class Templates extends React.Component {
       <Container>
         {this.state.isLoading && <Spinner />}
 
-        {this.state.templates.map(template => {
-          return (
-            <TemplateItem
-              key={template.id}
-              onClick={() => this.handleSelectTemplate(template)}
-              isSelected={this.state.selectedTemplate === template.id}
-            >
-              {template.video ? (
-                <Video
-                  autoPlay="true"
-                  loop="true"
-                  type="video/mp4"
-                  src={`${template.url}/thumbnail.mp4`}
-                />
-              ) : (
-                <Image
-                  alt={template.template.name}
-                  title={template.template.name}
-                  src={getTemplateImage(template).original}
-                  width="97%"
-                  style={{
-                    margin: '1.5%',
-                    boxShadow: '0px 5px 10px #c3c3c3'
-                  }}
-                />
-              )}
-            </TemplateItem>
+        {this.state.currentTemplatesTypes.length && (
+          <TemplateTypesSelect
+            items={this.state.currentTemplatesTypes}
+            value={this.state.selectedTemplateType}
+            onSelect={value => {
+              this.setState({
+                selectedTemplateType: value
+              })
+            }}
+          />
+        )}
+        {this.state.templates
+          .filter(
+            brandTemplate =>
+              this.state.selectedTemplateType ===
+              brandTemplate.template.template_type
           )
-        })}
+          .map(template => {
+            return (
+              <TemplateItem
+                key={template.id}
+                onClick={() => this.handleSelectTemplate(template)}
+                isSelected={this.state.selectedTemplate === template.id}
+              >
+                {template.video ? (
+                  <Video
+                    autoPlay="true"
+                    loop="true"
+                    type="video/mp4"
+                    src={`${template.url}/thumbnail.mp4`}
+                  />
+                ) : (
+                  <Image
+                    alt={template.template.name}
+                    title={template.template.name}
+                    src={getTemplateImage(template).original}
+                    width="97%"
+                    style={{
+                      margin: '1.5%',
+                      boxShadow: '0px 5px 10px #c3c3c3'
+                    }}
+                  />
+                )}
+              </TemplateItem>
+            )
+          })}
       </Container>
     )
   }
