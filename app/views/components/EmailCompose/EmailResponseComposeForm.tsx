@@ -57,10 +57,7 @@ export function EmailResponseComposeForm({
 
   const user = useSelector((state: IAppState) => state.user as IUser)
   const allConnectedAccounts = useSelector<IAppState, IOAuthAccount[]>(
-    flow(
-      state => state.contacts.oAuthAccounts,
-      selectAllConnectedAccounts
-    ),
+    flow(state => state.contacts.oAuthAccounts, selectAllConnectedAccounts),
     shallowEqual
   )
   const initialValue = useMemo<EmailFormValues>((): EmailFormValues => {
@@ -76,8 +73,6 @@ export function EmailResponseComposeForm({
 
     return {
       from: user,
-      microsoft_credential: email.microsoftId,
-      google_credential: email.googleId,
       to,
       cc,
       bcc: [],
@@ -98,16 +93,17 @@ export function EmailResponseComposeForm({
   }, [allConnectedAccounts, email, responseType, user])
 
   const getHeaders = (emailInput: EmailFormValues) => {
-    const fromType: OAuthProvider | null =
-      (emailInput.google_credential && OAuthProvider.Google) ||
-      (emailInput.microsoft_credential && OAuthProvider.Outlook) ||
-      null
+    let fromType: OAuthProvider | null = null
+    let originType: OAuthProvider | null = null
 
-    const originType: OAuthProvider | null = email.googleId
-      ? OAuthProvider.Google
-      : email.microsoftId
-      ? OAuthProvider.Outlook
-      : null
+    if (email.googleId) {
+      fromType = OAuthProvider.Google
+      originType = OAuthProvider.Google
+    } else if (email.microsoftId) {
+      fromType = OAuthProvider.Outlook
+      originType = OAuthProvider.Outlook
+    }
+
     const originMatchesFrom = !originType || originType === fromType
 
     return {
@@ -116,6 +112,7 @@ export function EmailResponseComposeForm({
       in_reply_to: email.internetMessageId
     }
   }
+
   const getEmail = useCallback(
     (emailInput: IEmailCampaignInput): IEmailCampaignInput => {
       // TODO maybe this can be moved to EmailComposeForm as a next step

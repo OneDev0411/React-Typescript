@@ -20,25 +20,27 @@ interface Props {
   EmailRecipientsChipsInputProps?: Partial<
     ComponentProps<typeof EmailRecipientsChipsInput>
   >
+  users: IUser[]
 }
 
 export function EmailRecipientsFields({
-  values,
+  EmailRecipientsChipsInputProps = {},
+  deal,
   disableAddNewRecipient = false,
   includeQuickSuggestions = true,
   senderAccounts,
-  deal,
-  EmailRecipientsChipsInputProps = {}
+  values,
+  users
 }: Props) {
   const fields = useRecipientFields()
-  const [hasCc, setCc] = useState(false)
-  const [hasBcc, setBcc] = useState(false)
+  const [ccVisibility, setCcVisibility] = useState(false)
+  const [bccVisibility, setBccVisibility] = useState(false)
   const [lastFocusedSendType, setLastFocusedSendType] = useState<
     IEmailRecipientSendType
   >('To')
 
-  const isCcShown = hasCc || (values.cc || []).length > 0
-  const isBccShown = hasBcc || (values.bcc || []).length > 0
+  const isCcShown = ccVisibility || (values.cc || []).length > 0
+  const isBccShown = bccVisibility || (values.bcc || []).length > 0
 
   const commonProps: typeof EmailRecipientsChipsInputProps = {
     TextFieldProps: {
@@ -51,12 +53,12 @@ export function EmailRecipientsFields({
 
   return (
     <>
-      <From user={fields.from.input.value as IUser} accounts={senderAccounts}>
+      <From users={users} accounts={senderAccounts}>
         <CcBccButtons
           showCc={!isCcShown}
           showBcc={!isBccShown}
-          onCcAdded={() => setCc(true)}
-          onBccAdded={() => setBcc(true)}
+          onCcAdded={() => setCcVisibility(true)}
+          onBccAdded={() => setBccVisibility(true)}
         />
       </From>
       <EmailRecipientsChipsInput

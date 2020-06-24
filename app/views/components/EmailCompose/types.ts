@@ -15,8 +15,6 @@ export interface EmailFormValues {
   bcc?: IDenormalizedEmailRecipientInput[] | undefined
   subject: string
   from: IUser | IOAuthAccount
-  google_credential?: string
-  microsoft_credential?: string
   due_at: Date | null
   body: string | undefined
 }

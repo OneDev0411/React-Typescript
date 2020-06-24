@@ -1,3 +1,5 @@
+import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
+
 /**
  * Check for having a valid connected account for showing send notification modal
  * @param {IOAuthAccount[]} accounts The list of account
@@ -14,7 +16,7 @@ export function hasValidConnectedAccount(accounts: IOAuthAccount[]): boolean {
     }
 
     return (
-      account.type === 'google_credential' &&
+      account.type === GOOGLE_CREDENTIAL &&
       !account.revoked &&
       !account.deleted_at &&
       account.scope_summary.includes('calendar')
