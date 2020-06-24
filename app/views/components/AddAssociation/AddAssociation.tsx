@@ -32,10 +32,12 @@ export function AddAssociation({
       return
     }
 
-    const isDuplicate = associations.some(
-      association =>
-        association[type] && association[type].id === associatedObject.id
-    )
+    const isDuplicate =
+      Array.isArray(associations) &&
+      associations.some(
+        association =>
+          association[type] && association[type].id === associatedObject.id
+      )
 
     if (!isDuplicate) {
       field.input.onChange([
