@@ -31,7 +31,7 @@ class DrawingButton extends React.Component {
         onClick={this.onClick}
         disabled={this.props.isDrawing || this.props.isFetching}
       >
-        <SvgIcon path={mdiPencil} style={{ marginRight: '0.25em' }} />
+        <SvgIcon path={mdiPencil} />
         Draw
       </Button>
     )
