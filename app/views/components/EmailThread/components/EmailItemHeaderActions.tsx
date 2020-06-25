@@ -56,9 +56,6 @@ const styles = (theme: Theme) =>
       '&:hover': {
         backgroundColor: 'transparent'
       }
-    },
-    iconColor: {
-      color: theme.palette.common.black
     }
   })
 
@@ -100,12 +97,12 @@ export function EmailItemHeaderActions(
     <Box ml={1} onClick={e => e.stopPropagation()}>
       <Tooltip title="Reply">
         <IconButton onClick={props.onReply}>
-          <SvgIcon path={mdiReply} className={classes.iconColor} />
+          <SvgIcon path={mdiReply} color={theme.palette.common.black} />
         </IconButton>
       </Tooltip>
       <Tooltip title="More">
         <IconButton {...buttonTriggerProps}>
-          <SvgIcon path={mdiDotsVertical} className={classes.iconColor} />
+          <SvgIcon path={mdiDotsVertical} color={theme.palette.common.black} />
         </IconButton>
       </Tooltip>
       <Menu
@@ -117,21 +114,21 @@ export function EmailItemHeaderActions(
       >
         <MenuItem dense onClick={select(props.onReply)}>
           <ListItemIcon>
-            <SvgIcon path={mdiReply} className={classes.iconColor} />
+            <SvgIcon path={mdiReply} color={theme.palette.common.black} />
           </ListItemIcon>
           <ListItemText>Reply</ListItemText>
         </MenuItem>
         {hasReplyAll(props.email) && (
           <MenuItem dense onClick={select(props.onReplyAll)}>
             <ListItemIcon>
-              <SvgIcon path={mdiReplyAll} className={classes.iconColor} />
+              <SvgIcon path={mdiReplyAll} color={theme.palette.common.black} />
             </ListItemIcon>
             <ListItemText>Reply All</ListItemText>
           </MenuItem>
         )}
         <MenuItem dense onClick={select(props.onForward)}>
           <ListItemIcon>
-            <SvgIcon path={mdiForward} className={classes.iconColor} />
+            <SvgIcon path={mdiForward} color={theme.palette.common.black} />
           </ListItemIcon>
           <ListItemText>Forward</ListItemText>
         </MenuItem>
