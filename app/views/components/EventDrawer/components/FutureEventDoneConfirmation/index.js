@@ -26,7 +26,6 @@ export function FutureEventDoneConfirmation() {
   if (
     isFutureDate &&
     !confirmation.isShow &&
-    statusField.meta.active &&
     currentStatus === DONE_STATUS &&
     previousStatus.current !== DONE_STATUS
   ) {
