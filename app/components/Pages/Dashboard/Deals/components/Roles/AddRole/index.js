@@ -94,9 +94,7 @@ class AddRoleForm extends React.Component {
             onChange={this.handleSelectRole}
             buttonIcon={() => {
               // TODO: Remove/Refactor BaseDropdown
-              return (
-                <SvgIcon path={mdiPlus} style={{ marginRight: '0.5rem' }} />
-              )
+              return <SvgIcon path={mdiPlus} rightMargined />
             }}
             buttonText="Add a new contact"
             disabled={roleItems.length === 0}
