@@ -70,7 +70,7 @@ class TaskCreate extends React.Component {
       onClick={this.toggleCustomTaskDrawer}
       variant="outlined"
     >
-      <SvgIcon path={mdiPlusCircleOutline} style={{ marginRight: '0.5rem' }} />
+      <SvgIcon path={mdiPlusCircleOutline} rightMargined />
       Create New Folder
     </Button>
   )
