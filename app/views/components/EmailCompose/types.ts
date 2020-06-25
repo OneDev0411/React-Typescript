@@ -15,8 +15,6 @@ export interface EmailFormValues {
   bcc?: IDenormalizedEmailRecipientInput[] | undefined
   subject: string
   from: IUser | IOAuthAccount
-  google_credential?: string
-  microsoft_credential?: string
   due_at: Date | null
   body: string | undefined
 }
@@ -37,6 +35,7 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
    */
   sendEmail: (values: EmailComposeValues) => Promise<EmailType>
   onSent?: (result: EmailType) => void
+  onClose?: () => void
   /**
    * A deal to suggest attachments from it
    */

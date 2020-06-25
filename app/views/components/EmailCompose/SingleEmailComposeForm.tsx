@@ -1,11 +1,15 @@
 import React, { ComponentProps, useCallback, useState } from 'react'
 import { OnChange } from 'react-final-form-listeners'
 import { Field } from 'react-final-form'
+import { useSelector } from 'react-redux'
 
+import { IAppState } from 'reducers'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
+import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
 
 import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
+import { getFromData } from './helpers/get-from-data'
 import { normalizeRecipients } from './helpers/normalize-recepients'
 import { getInitialValues } from './helpers/get-initial-values'
 import { hasAccountSendPermission } from './helpers/has-account-send-permission'
@@ -47,25 +51,29 @@ export function SingleEmailComposeForm({
   preferredAccountId,
   deal,
   headers = {},
+  onClose = () => {},
   ...otherProps
 }: Props) {
+  const user = useSelector<IAppState, IUser>(store => store.user)
+  const activeBrand = getActiveBrand(user)
+  const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
+
   const [allAccounts, isLoadingAccounts] = useGetAllOauthAccounts(
     filterAccounts
   )
 
-  const initialValues: Partial<EmailFormValues> = getInitialValues(
+  const initialValues: Partial<EmailFormValues> = getInitialValues({
     allAccounts,
-    preferredAccountId,
-    otherProps.initialValues
-  )
+    defaultValues: otherProps.initialValues,
+    defaultUser: user,
+    preferredAccountId
+  })
 
   const handleSendEmail = async (
     formValue: EmailFormValues & { template: string }
   ) => {
     const emailData = getEmail({
-      from: (formValue.from && formValue.from.id) || '',
-      microsoft_credential: formValue.microsoft_credential,
-      google_credential: formValue.google_credential,
+      ...getFromData(formValue.from, user.id),
       to: normalizeRecipients(formValue.to),
       cc: normalizeRecipients(formValue.cc),
       bcc: normalizeRecipients(formValue.bcc),
@@ -121,21 +129,20 @@ export function SingleEmailComposeForm({
         deal={deal}
         isSubmitDisabled={isLoadingAccounts}
         sendEmail={handleSendEmail}
+        onClose={onClose}
         renderCollapsedFields={(values: EmailFormValues) => (
           <>
             {/*
             This is kind of a hack for a behavior in react-final-form.
             When `initialValues` are changed, it updates `values` but only
             those fields that have a corresponding field rendered at that
-            moment. `to`, `cc`, `google_credential` and `microsoft_credential` may
+            moment. `to`, `cc` and `bcc` may
             be updated in initialValues while top fields are collapsed and
             therefore, the changes are never reflected to `values` in this case.
             we render two dummy fields to prevent this issue.
             */}
             <Field name="cc" render={() => null} />
             <Field name="to" render={() => null} />
-            <Field name="google_credential" render={() => null} />
-            <Field name="microsoft_credential" render={() => null} />
             <OnChange name="to">{updateExpressionContext}</OnChange>
 
             <CollapsedEmailRecipients
@@ -149,6 +156,7 @@ export function SingleEmailComposeForm({
           <>
             <EmailRecipientsFields
               deal={deal}
+              users={activeBrandUsers}
               senderAccounts={allAccounts}
               disableAddNewRecipient={disableAddNewRecipient}
               values={values}

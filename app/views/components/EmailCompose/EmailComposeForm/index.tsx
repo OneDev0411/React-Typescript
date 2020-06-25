@@ -70,6 +70,7 @@ function EmailComposeForm<T>({
   onDelete,
   uploadAttachment = uploadEmailAttachment,
   onSent = () => {},
+  onClose = () => {},
   children,
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
@@ -218,14 +219,6 @@ function EmailComposeForm<T>({
           {
             name: 'to',
             focus: expandTolFields
-          },
-          {
-            name: 'microsoft_credential',
-            focus: expandTolFields
-          },
-          {
-            name: 'google_credential',
-            focus: expandTolFields
           }
         ]
       })
@@ -332,6 +325,7 @@ function EmailComposeForm<T>({
               className={classes.footer}
               updateBody={bodyEditor.update}
               setMarketingTemplate={setMarketingTemplate}
+              onClose={onClose}
             />
           </form>
         )

@@ -2,11 +2,12 @@ import React, { useState, useRef } from 'react'
 
 import { Button } from '@material-ui/core'
 
+import { isValidDate } from 'utils/date-times/is-valid-date'
+
 import DealContext from 'models/Deal/helpers/dynamic-context'
 import { getField } from 'models/Deal/helpers/context/get-field'
 
 import DatePicker from 'components/DatePicker'
-
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
 
 import { formatDate } from '../../../../utils/format-date'
@@ -42,7 +43,9 @@ export function ContextField(props) {
 
   const formatValue = () => {
     if (context.current.data_type === 'Date' && props.value) {
-      return formatDate(props.value, props.annotation.format)
+      const date = formatDate(props.value, props.annotation.format)
+
+      return isValidDate(date) ? date : props.value
     }
 
     return props.value

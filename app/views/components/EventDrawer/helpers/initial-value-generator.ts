@@ -19,14 +19,14 @@ const roundToMultipleFive = n => {
 /**
  * Generate a initial value for event drawer
  * @param {IUser} owner The owner of event
- * @param {Array<any>} association initial association
+ * @param {Array<ICRMTask>} associations initial associations
  * @param {Date} dueDate initial start date
  * @param {Date} endDate initial end date
  * @returns {object} a formated Task
  */
 export const initialValueGenerator = (
   owner: IUser,
-  association: Array<any> = [],
+  associations: Array<ICRMTask> = [],
   dueDate: Date = new Date(),
   endDate?: Date
 ) => {
@@ -45,7 +45,7 @@ export const initialValueGenerator = (
 
   return {
     assignees: [owner],
-    association,
+    associations,
     description,
     dueDate,
     endDate: endDate || baseEndDate,

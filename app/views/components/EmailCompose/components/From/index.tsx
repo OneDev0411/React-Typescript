@@ -1,6 +1,5 @@
+import React, { useMemo, ReactNode } from 'react'
 import { useField } from 'react-final-form'
-import * as React from 'react'
-import { ReactNode } from 'react'
 import {
   Box,
   FormHelperText,
@@ -15,156 +14,73 @@ import {
   MICROSOFT_CREDENTIAL
 } from 'constants/oauth-accounts'
 
-/**
- * NOTE: The API for sending email is somehow not intuitive.
- * `from` should always exist in form of UUID of a user.
- * In addition, either `google_credential` or `microsoft_credential` can
- * optionally be set.
- * - If `google_credential` is set the email is sent from gmail account
- * - If `microsoft_credential` is set the email is sent from outlook account
- * - If neither `google_credential` nor `microsoft_credential` is set, the email
- * is sent from Mailgun
- *
- * This has some faults:
- * `from`, `google_credential` and `microsoft_credential` are basically
- * defining ONE thing, which is the `from` field in the sent email.
- * This not only unnecessarily complicates the API, but also opens the
- * way for illegal states like when `google_credential` and
- * `microsoft_credential` have value, which may lead to unknown result.
- * The argument for using such structure in the API is that the `from`
- * being a user id is a hard-to-change design decision, and there are
- * lots of places which count on this.
- *
- * A better design would be to have `from` field like this:
- * {
- *   type: 'user',
- *   userId: '...'
- * }
- * {
- *   type: 'google_credential',
- *   google_credential_id: '...'
- * }
- * {
- *   type: 'microsoft_credential',
- *   microsoft_credential_id: '...'
- * }
- *
- * One approach is to consider this design in UI and convert it to what API
- * likes when sending email, but there is a problem with this approach:
- * server always requires `from` and this if we take the approach above,
- * when google or microsoft credentials are used, we lose the user which
- * cause problems in editing email.
- * So we stick with the API data structure and keep it in the form data too.
- */
+import { Item } from './Item'
+
 interface Props {
-  user: IUser
+  users: IUser[]
   accounts?: IOAuthAccount[]
   children?: ReactNode
 }
 
-export function From({ accounts, children, user }: Props) {
-  const googleField = useField(GOOGLE_CREDENTIAL)
-  const outlookField = useField(MICROSOFT_CREDENTIAL)
-  const hasAccounts = accounts && accounts.length > 0
+/**
+ * NOTE: The API for sending email is somehow not intuitive.
+ * `from` should always exist in form of UUID of a user.n the form data too.
+ */
 
-  function getSelectedAccount(id: string) {
-    return (accounts || []).find(account => account.id === id)
+export function From({ accounts, children, users }: Props) {
+  const fromField = useField('from')
+  const error = fromField.meta.error
+
+  const items = useMemo(() => [...(accounts || []), ...users], [
+    users,
+    accounts
+  ])
+
+  const renderItemToValue = (item: IUser | IOAuthAccount) => {
+    switch (item.type) {
+      case 'user':
+        return userToEmailAddress(item)
+      case GOOGLE_CREDENTIAL:
+      case MICROSOFT_CREDENTIAL:
+        return accountToString(item)
+      default:
+        return <Typography color="error">Unknown Address</Typography>
+    }
   }
 
-  const getValue = () => {
-    if (!hasAccounts) {
-      return ''
+  const handleChange = (event: React.ChangeEvent<{ value: UUID }>) => {
+    const id = event.target.value
+    const item = items.find(item => item.id === id)
+
+    if (!item) {
+      return false
     }
 
-    const isCredentialValid = credential =>
-      accounts && accounts.some(a => a.type === credential)
-
-    if (googleField.input.value && isCredentialValid(GOOGLE_CREDENTIAL)) {
-      return googleField.input.value
-    }
-
-    if (outlookField.input.value && isCredentialValid(MICROSOFT_CREDENTIAL)) {
-      return outlookField.input.value
-    }
+    fromField.input.onChange(item)
   }
-
-  const handleChange = (event: React.ChangeEvent<{ value: string }>) => {
-    const selectedAccount = getSelectedAccount(event.target.value)
-
-    googleField.input.onChange(
-      selectedAccount && selectedAccount.type === GOOGLE_CREDENTIAL
-        ? (selectedAccount.id as UUID)
-        : null
-    )
-    outlookField.input.onChange(
-      selectedAccount && selectedAccount.type === MICROSOFT_CREDENTIAL
-        ? (selectedAccount.id as UUID)
-        : null
-    )
-  }
-
-  const error = googleField.meta.error || outlookField.meta.error
-
-  const isUsingConnectedAccount = !!(
-    outlookField.input.value || googleField.input.value
-  )
 
   return (
     <Box display="flex" alignItems="center" my={1}>
       <FormLabel style={{ marginBottom: 0 }}>From</FormLabel>
       <Box flex="1" px={2}>
-        {hasAccounts || isUsingConnectedAccount ? (
-          /*
-             NOTE: we can remove this ternary and always render  a combo-box
-             if it's ok product-wise.
-             */
-          <>
-            <Select
-              required
-              value={getValue()}
-              error={error}
-              onChange={handleChange}
-              displayEmpty
-              renderValue={(value: string) => {
-                if (!value) {
-                  if (accounts && accounts.length > 0) {
-                    return '-- select --'
-                  }
-
-                  return userToEmailAddress(user)
-                }
-
-                const selectedAccount = getSelectedAccount(value)
-
-                if (selectedAccount) {
-                  return accountToString(selectedAccount)
-                }
-
-                return <Typography color="error">Unknown Address</Typography>
-              }}
-              disableUnderline
-            >
-              {!hasAccounts && (
-                <MenuItem value="">{userToEmailAddress(user)}</MenuItem>
-              )}
-              {accounts &&
-                accounts.map(account => (
-                  <MenuItem key={account.id} value={account.id}>
-                    {accountToString(account)}
-                  </MenuItem>
-                ))}
-            </Select>
-            {error && (
-              <FormHelperText error style={{ marginTop: 0 }}>
-                {error}
-              </FormHelperText>
-            )}
-          </>
-        ) : (
-          // Right now we don't offer options for user
-          // but we can easily add it. we need to accept
-          // it as a form input instead of `user` prop
-          (user && userToEmailAddress(user)) || ' - '
+        <Select
+          required
+          error={error}
+          disableUnderline
+          value={fromField.input.value}
+          onChange={handleChange}
+          renderValue={renderItemToValue}
+        >
+          {items.map(item => (
+            <MenuItem key={item.id} value={item.id}>
+              <Item item={item} />
+            </MenuItem>
+          ))}
+        </Select>
+        {error && (
+          <FormHelperText error style={{ marginTop: 0 }}>
+            {error}
+          </FormHelperText>
         )}
       </Box>
       {children}
