@@ -1,11 +1,10 @@
 import React from 'react'
 import { Tooltip, IconButton } from '@material-ui/core'
+import { mdiCalendarOutline, mdiEmailOutline } from '@mdi/js'
 
 import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
-
-import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
-import IconEmail from 'components/SvgIcons/EmailOutlined/IconEmailOutlined'
-import IconContact from 'components/SvgIcons/Contacts/IconContacts'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { permContactCalendarOutlined } from 'components/SvgIcons/icons'
 
 interface Props {
   account: IOAuthAccount
@@ -33,7 +32,7 @@ export function ConnectedAccountSyncStatus({ account }: Props) {
           }`}
         >
           <IconButton>
-            <IconCalendar />
+            <SvgIcon path={mdiCalendarOutline} />
           </IconButton>
         </Tooltip>
       )}
@@ -45,7 +44,7 @@ export function ConnectedAccountSyncStatus({ account }: Props) {
           } `}
         >
           <IconButton>
-            <IconEmail />
+            <SvgIcon path={mdiEmailOutline} />
           </IconButton>
         </Tooltip>
       )}
@@ -57,7 +56,7 @@ export function ConnectedAccountSyncStatus({ account }: Props) {
           } `}
         >
           <IconButton>
-            <IconContact />
+            <SvgIcon path={permContactCalendarOutlined} />
           </IconButton>
         </Tooltip>
       )}
