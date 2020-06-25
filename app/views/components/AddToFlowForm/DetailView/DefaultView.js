@@ -1,6 +1,6 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
-
+import { makeStyles } from '@material-ui/core'
 import { mdiLightningBolt } from '@mdi/js'
 
 import { grey } from 'views/utils/colors'
@@ -9,7 +9,18 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { Container } from './styled'
 
+const useStyles = makeStyles(
+  theme => ({
+    icon: {
+      marginBottom: theme.spacing(1)
+    }
+  }),
+  { name: 'FlowFormDefaultView' }
+)
+
 export default function DefaultView() {
+  const classes = useStyles()
+
   return (
     <Container center>
       <Flex center column>
@@ -17,7 +28,7 @@ export default function DefaultView() {
           path={mdiLightningBolt}
           color={grey.A900}
           size={muiIconSizes.large}
-          style={{ marginBottom: '1em' }}
+          className={classes.icon}
         />
         <div>Select a Flow from the left list.</div>
       </Flex>
