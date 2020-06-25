@@ -68,10 +68,7 @@ export const TeamView = React.memo(
         <div>
           <Box mb={1} display="flex" justifyContent="flex-end">
             <Button onClick={onAddMember}>
-              <SvgIcon
-                path={mdiAccountPlusOutline}
-                style={{ marginRight: '0.5rem' }}
-              />
+              <SvgIcon path={mdiAccountPlusOutline} rightMargined />
               <TeamMemberTitle>Add New Member</TeamMemberTitle>
             </Button>
           </Box>
