@@ -153,8 +153,6 @@ class NewContactDrawer extends React.Component {
             onSubmit={this.onSubmit}
           >
             {formProps => {
-              const { mutators } = formProps
-
               return (
                 <form
                   style={{
@@ -174,11 +172,11 @@ class NewContactDrawer extends React.Component {
                     <TextField name="source" label="Source" />
                     <Emails
                       labels={this.getDefaultValues('email', 'labels')}
-                      mutators={mutators}
+                      mutators={formProps.form.mutators}
                     />
                     <Phones
                       labels={this.getDefaultValues('phone_number', 'labels')}
-                      mutators={mutators}
+                      mutators={formProps.form.mutators}
                     />
                     <Owner name="owner" user={this.props.user} />
                     {submitError && (
