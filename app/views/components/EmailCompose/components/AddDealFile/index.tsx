@@ -152,10 +152,7 @@ export function AddDealFile({
   return (
     <>
       <ListItem button onClick={handleClick}>
-        <SvgIcon
-          path={mdiCurrencyUsdCircle}
-          style={{ marginRight: '0.5rem' }}
-        />
+        <SvgIcon path={mdiCurrencyUsdCircle} rightMargined />
         Attach from deals
       </ListItem>
 
