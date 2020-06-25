@@ -116,8 +116,8 @@ export function Footer({
               <IconTemplate
                 className={iconClasses.rightMargin}
                 size={iconSizes.small}
-              />{' '}
-              Templates
+              />
+              <span>Templates</span>
             </DropdownToggleButton>
           )}
           {!hasStaticBody && (
@@ -131,8 +131,8 @@ export function Footer({
               <IconMyDesigns
                 className={iconClasses.rightMargin}
                 size={iconSizes.small}
-              />{' '}
-              My Design
+              />
+              <span>My Designs</span>
             </DropdownToggleButton>
           )}
         </div>
