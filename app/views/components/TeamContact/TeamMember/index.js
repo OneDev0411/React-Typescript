@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
-import { Avatar, Typography } from '@material-ui/core'
-
+import { Avatar, Typography, makeStyles } from '@material-ui/core'
 import { mdiCheck } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -13,7 +12,17 @@ const Container = styled(Item)`
   pointer-events: ${props => (props.isDisabled ? 'none' : 'initial')};
 `
 
+const useStyles = makeStyles(
+  theme => ({
+    icon: {
+      marginLeft: theme.spacing(4)
+    }
+  }),
+  { name: 'TeamMember' }
+)
+
 export function TeamMember(props) {
+  const classes = useStyles()
   const { user, title } = props
 
   if (!user) {
@@ -39,9 +48,7 @@ export function TeamMember(props) {
           {info}
         </Typography>
       </Flex>
-      {props.isSelected && (
-        <SvgIcon path={mdiCheck} style={{ marginLeft: '2em' }} />
-      )}
+      {props.isSelected && <SvgIcon path={mdiCheck} className={classes.icon} />}
     </Container>
   )
 }
