@@ -37,9 +37,6 @@ const useStyle = makeStyles(
     createStyles({
       saveSearch: {
         color: theme.palette.secondary.main,
-        '& svg': {
-          marginRight: theme.spacing(0.5)
-        },
         '&:disabled': {
           opacity: 0.6
         }
@@ -113,7 +110,7 @@ export const Tabs = ({
             disabled={isFetching}
             onClick={saveSearchHandler}
           >
-            <SvgIcon path={mdiPlus} size={muiIconSizes.small} />
+            <SvgIcon path={mdiPlus} size={muiIconSizes.small} rightMargined />
             Save Search
           </ButtonBase>
         </>
