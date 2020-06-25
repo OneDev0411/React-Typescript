@@ -73,7 +73,7 @@ export function AddDealFile({
       actionsDispatch({
         type: ADD_ATTACHMENTS,
         actions: [EMAIL_ENVELOPE, EMAIL_FILE, EMAIL_FORM],
-        attachments: []
+        attachments: initialAttachments
       })
 
       onClick && onClick(event)
