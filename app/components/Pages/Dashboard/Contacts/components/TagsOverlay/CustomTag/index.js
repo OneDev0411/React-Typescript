@@ -90,7 +90,7 @@ export default class CustomTag extends React.Component {
         onSubmit={this.props.onUpsert}
         error={error}
       >
-        <SvgIcon path={mdiTagOutline} style={{ marginLeft: '1em' }} />
+        <SvgIcon path={mdiTagOutline} leftMargined />
         <Input
           data-test="new-tag-input"
           value={inputValue}
