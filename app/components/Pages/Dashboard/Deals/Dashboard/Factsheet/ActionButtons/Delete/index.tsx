@@ -1,7 +1,9 @@
 import React from 'react'
 import { IconButton, Theme, useTheme } from '@material-ui/core'
+import { mdiTrashCanOutline } from '@mdi/js'
 
-import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ContextField } from '../../types'
 
@@ -24,7 +26,11 @@ export function DeleteButton(props: Props) {
 
   return (
     <IconButton size="small" onClick={props.onClick}>
-      <IconDelete size="small" fillColor={theme.palette.error.main} />
+      <SvgIcon
+        path={mdiTrashCanOutline}
+        color={theme.palette.error.main}
+        size={muiIconSizes.small}
+      />
     </IconButton>
   )
 }
