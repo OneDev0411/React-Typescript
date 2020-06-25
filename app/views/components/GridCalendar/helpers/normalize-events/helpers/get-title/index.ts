@@ -1,3 +1,5 @@
+import { isDealEvent } from '../event-checker'
+
 /**
  * get the event title
  * @param event
@@ -16,6 +18,10 @@ export const getTitle = (event: ICalendarEvent): string => {
   }
 
   if (event_type === 'home_anniversary') {
+    return `Anniversary: ${title}`
+  }
+
+  if (isDealEvent(event)) {
     return `Closing: ${title}`
   }
 
