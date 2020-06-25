@@ -58,7 +58,7 @@ export function EmailAttachmentsDropdown({
   return (
     <BaseDropdown
       renderDropdownButton={buttonProps => (
-        <Tooltip title="Attach files">
+        <Tooltip title="Attach a File">
           <DropdownToggleButton {...buttonProps}>
             <IconAttachment
               size={iconSizes.small}
