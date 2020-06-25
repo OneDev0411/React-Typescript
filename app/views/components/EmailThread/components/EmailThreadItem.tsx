@@ -14,13 +14,10 @@ import {
 } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
-
 import useBoolean from 'react-use/lib/useBoolean'
-
 import { mdiForward, mdiReplyAll, mdiReply } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { Iframe } from 'components/Iframe'
 
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
@@ -218,10 +215,7 @@ export function EmailThreadItem({
                       : undefined
                   }
                 >
-                  <SvgIcon
-                    path={mdiReply}
-                    className={iconClasses.rightMargin}
-                  />
+                  <SvgIcon path={mdiReply} rightMargined />
                   Reply
                 </Button>
                 {hasReplyAll(email) && (
@@ -235,10 +229,7 @@ export function EmailThreadItem({
                         : undefined
                     }
                   >
-                    <SvgIcon
-                      path={mdiReplyAll}
-                      className={iconClasses.rightMargin}
-                    />
+                    <SvgIcon path={mdiReplyAll} rightMargined />
                     Reply All
                   </Button>
                 )}
@@ -253,10 +244,7 @@ export function EmailThreadItem({
                       : undefined
                   }
                 >
-                  <SvgIcon
-                    path={mdiForward}
-                    className={iconClasses.rightMargin}
-                  />
+                  <SvgIcon path={mdiForward} rightMargined />
                   Forward
                 </Button>
               </Box>
