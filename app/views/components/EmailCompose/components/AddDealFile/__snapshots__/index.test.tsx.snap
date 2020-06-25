@@ -12,9 +12,9 @@ Object {
         tabindex="0"
       >
         <svg
-          class=""
+          class="Icon-rightMargin-17"
           role="presentation"
-          style="margin-right: 0.5rem; width: 1.5rem; height: 1.5rem;"
+          style="width: 1.5rem; height: 1.5rem;"
           viewBox="0 0 24 24"
         >
           <path
@@ -37,9 +37,9 @@ Object {
       tabindex="0"
     >
       <svg
-        class=""
+        class="Icon-rightMargin-17"
         role="presentation"
-        style="margin-right: 0.5rem; width: 1.5rem; height: 1.5rem;"
+        style="width: 1.5rem; height: 1.5rem;"
         viewBox="0 0 24 24"
       >
         <path
