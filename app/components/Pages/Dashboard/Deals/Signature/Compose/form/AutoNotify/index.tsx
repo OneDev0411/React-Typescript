@@ -31,7 +31,11 @@ const useStyles = makeStyles(
   { name: 'SignatureAutoNotify' }
 )
 
-export function AutoNotify() {
+interface Props {
+  disabled: boolean
+}
+
+export function AutoNotify({ disabled }: Props) {
   const classes = useStyles()
   const field = useField('auto_notify')
 
@@ -42,6 +46,7 @@ export function AutoNotify() {
       <div className={classes.root}>
         <Checkbox
           disableRipple
+          disabled={disabled}
           checked={field.input.value}
           onClick={handleToggle}
         />
