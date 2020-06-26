@@ -624,10 +624,6 @@ class Builder extends React.Component {
     return `${this.editor.getCss()}${this.editor.getHtml()}`
   }
 
-  isTemplateChanged = () => {
-    return this.getTemplateHtmlCss() !== this.state.templateHtmlCss
-  }
-
   handleSelectTemplate = templateItem => {
     this.setState(
       {
