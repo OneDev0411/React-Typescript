@@ -1,4 +1,12 @@
-import React, { memo, useState, useRef, useCallback, useEffect } from 'react'
+import React, {
+  memo,
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  RefObject
+} from 'react'
 import { connect } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { makeStyles, Theme } from '@material-ui/core'
@@ -35,15 +43,8 @@ import { normalizeEvents } from './helpers/normalize-events'
 import { normalizeEventOnEdit } from './helpers/normalize-event-on-edit'
 import { upsertCrmEvents } from '../Calendar/helpers/upsert-crm-events'
 
-interface StateProps {
-  viewAsUsers: UUID[]
-  user: IUser
-}
-
-interface SocketUpdate {
-  upserted: ICalendarEvent[]
-  deleted: UUID[]
-}
+// helpers
+import { StateProps, SocketUpdate, ActionRef } from './types'
 
 interface Props {
   user?: IUser
@@ -51,6 +52,7 @@ interface Props {
   viewAsUsers?: UUID[]
   initialRange?: NumberRange
   associations?: string[]
+  actionRef?: RefObject<ActionRef>
 }
 
 const useStyles = makeStyles(
@@ -73,6 +75,7 @@ const useStyles = makeStyles(
 
 export const GridCalendarPresentation = ({
   user,
+  actionRef,
   viewAsUsers,
   initialRange,
   contrariwise = false,
@@ -360,6 +363,13 @@ export const GridCalendarPresentation = ({
       socket.off('Calendar.Updated', handleUpdate)
     }
   })
+
+  /**
+   * exposes below methods to be accessible outside of the component
+   */
+  useImperativeHandle(actionRef, () => ({
+    updateCrmEvents: handleCrmEventChange
+  }))
 
   return (
     <>
