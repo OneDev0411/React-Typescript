@@ -73,8 +73,8 @@ class ContactProfile extends React.Component {
     window.socket.on('crm_task:create', this.fetchTimeline)
     window.socket.on('email_campaign:create', this.fetchTimeline)
     window.socket.on('email_campaign:send', this.fetchTimeline)
-    window.socket.on('email_thread:update', this.handleEmailThreadEvent)
-    window.socket.on('email_thread:delete', this.handleEmailThreadEvent)
+    window.socket.on('email_thread:update', this.handleEmailThreadChangeEvent)
+    window.socket.on('email_thread:delete', this.handleEmailThreadChangeEvent)
   }
 
   componentDidUpdate(prevProps) {
@@ -89,8 +89,8 @@ class ContactProfile extends React.Component {
     window.socket.off('crm_task:create', this.fetchTimeline)
     window.socket.off('email_campaign:create', this.fetchTimeline)
     window.socket.off('email_campaign:send', this.fetchTimeline)
-    window.socket.off('email_thread:update', this.handleEmailThreadEvent)
-    window.socket.off('email_thread:delete', this.handleEmailThreadEvent)
+    window.socket.off('email_thread:update', this.handleEmailThreadChangeEvent)
+    window.socket.off('email_thread:delete', this.handleEmailThreadChangeEvent)
   }
 
   // creates a ref to the timeline
@@ -168,7 +168,7 @@ class ContactProfile extends React.Component {
    */
   fetchTimeline = () => setTimeout(this.timelineRef.current.refresh, 500)
 
-  handleEmailThreadEvent = event => {
+  handleEmailThreadChangeEvent = event => {
     if (skipEmailThreadChangeEvent(event, this.props.allConnectedAccounts)) {
       return
     }
