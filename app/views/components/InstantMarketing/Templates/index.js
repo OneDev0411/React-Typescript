@@ -75,7 +75,11 @@ class Templates extends React.Component {
         }
 
         const currentTemplatesTypes = [
-          ...new Set(templates.map(item => item.template.template_type))
+          ...new Set(
+            templates
+              .map(item => item.template.template_type)
+              .filter(type => !!type)
+          )
         ]
 
         currentTemplatesTypes.sort()
