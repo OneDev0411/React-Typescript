@@ -62,7 +62,6 @@ class Builder extends React.Component {
       selectedTemplate: props.defaultTemplate,
       isLoading: true,
       isEditorLoaded: false,
-      templateHtmlCss: '',
       isTemplatesColumnHidden: props.isTemplatesColumnHiddenDefault,
       loadedListingsAssets: [],
       isListingDrawerOpen: false,
@@ -573,9 +572,6 @@ class Builder extends React.Component {
     this.editor.setComponents(html)
     this.lockIn()
     this.deselectAll()
-    this.setState({
-      templateHtmlCss: this.getTemplateHtmlCss()
-    })
     this.resize()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
@@ -618,14 +614,6 @@ class Builder extends React.Component {
       canvas.style.transform = `scale(${scale})`
       canvas.style.transformOrigin = 'left top'
     }
-  }
-
-  getTemplateHtmlCss = () => {
-    return `${this.editor.getCss()}${this.editor.getHtml()}`
-  }
-
-  isTemplateChanged = () => {
-    return this.getTemplateHtmlCss() !== this.state.templateHtmlCss
   }
 
   handleSelectTemplate = templateItem => {
