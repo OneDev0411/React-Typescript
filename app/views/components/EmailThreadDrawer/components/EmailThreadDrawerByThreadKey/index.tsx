@@ -33,10 +33,9 @@ export function EmailThreadDrawerByThreadKey({
   const { fetchThread, thread, loading, error } = useEmailThreadLoader(
     threadKey
   )
-  const [
-    changingOrChangedStatusToReadThreadId,
-    setChangingOrChangedStatusToReadThreadId
-  ] = useState<UUID | undefined>(undefined)
+  const [markedAsReadThreadId, setMarkAsReadThreadId] = useState<
+    UUID | undefined
+  >(undefined)
   const accounts: IOAuthAccount[] = useSelector((state: IAppState) =>
     selectAllConnectedAccounts(state.contacts.oAuthAccounts)
   )
@@ -57,22 +56,16 @@ export function EmailThreadDrawerByThreadKey({
       thread.id === threadKey &&
       !loading &&
       !thread.is_read &&
-      changingOrChangedStatusToReadThreadId !== threadKey &&
+      markedAsReadThreadId !== threadKey &&
       hasAccessToModifyMail
     ) {
-      setChangingOrChangedStatusToReadThreadId(threadKey)
+      setMarkAsReadThreadId(threadKey)
       setEmailThreadsReadStatus([thread.id], true).catch(reason => {
         console.error(reason)
-        setChangingOrChangedStatusToReadThreadId(undefined)
+        setMarkAsReadThreadId(undefined)
       })
     }
-  }, [
-    threadKey,
-    thread,
-    loading,
-    hasAccessToModifyMail,
-    changingOrChangedStatusToReadThreadId
-  ])
+  }, [threadKey, thread, loading, hasAccessToModifyMail, markedAsReadThreadId])
 
   return (
     <Drawer {...drawerProps}>
