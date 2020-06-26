@@ -16,11 +16,14 @@ import { updateContactSelf } from 'models/contacts/update-contact-self'
 
 import { isLoadedContactAttrDefs } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { getContactsTags } from 'store_actions/contacts/get-contacts-tags'
 import { normalizeContact as associationNormalizer } from 'views/utils/association-normalizers'
 
 import Loading from '../../../../Partials/Loading'
+
+import skipEmailThreadChangeEvent from '../../Inbox/helpers/skip-email-thread-change-event'
 
 import { Container } from '../components/Container'
 import Flows from './Flows'
@@ -70,6 +73,8 @@ class ContactProfile extends React.Component {
     window.socket.on('crm_task:create', this.fetchTimeline)
     window.socket.on('email_campaign:create', this.fetchTimeline)
     window.socket.on('email_campaign:send', this.fetchTimeline)
+    window.socket.on('email_thread:update', this.handleEmailThreadChangeEvent)
+    window.socket.on('email_thread:delete', this.handleEmailThreadChangeEvent)
   }
 
   componentDidUpdate(prevProps) {
@@ -84,6 +89,8 @@ class ContactProfile extends React.Component {
     window.socket.off('crm_task:create', this.fetchTimeline)
     window.socket.off('email_campaign:create', this.fetchTimeline)
     window.socket.off('email_campaign:send', this.fetchTimeline)
+    window.socket.off('email_thread:update', this.handleEmailThreadChangeEvent)
+    window.socket.off('email_thread:delete', this.handleEmailThreadChangeEvent)
   }
 
   // creates a ref to the timeline
@@ -160,6 +167,14 @@ class ContactProfile extends React.Component {
    * refreshes timeline
    */
   fetchTimeline = () => setTimeout(this.timelineRef.current.refresh, 500)
+
+  handleEmailThreadChangeEvent = event => {
+    if (skipEmailThreadChangeEvent(event, this.props.allConnectedAccounts)) {
+      return
+    }
+
+    this.timelineRef.current.refresh()
+  }
 
   setContact = (newContact, fallback) => {
     this.setState(
@@ -327,12 +342,17 @@ const mapStateToProps = ({ user, contacts }, props) => {
     contact = null
   }
 
+  const allConnectedAccounts = selectAllConnectedAccounts(
+    contacts.oAuthAccounts
+  )
+
   return {
     user,
     contact,
     fetchTags,
     viewAsUsers: viewAs(user),
-    attributeDefs: contacts.attributeDefs
+    attributeDefs: contacts.attributeDefs,
+    allConnectedAccounts
   }
 }
 
