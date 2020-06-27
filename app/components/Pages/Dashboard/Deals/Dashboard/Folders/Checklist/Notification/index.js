@@ -1,16 +1,17 @@
 import React from 'react'
+import { useTheme } from '@material-ui/core'
 import PropTypes from 'prop-types'
-
 import { connect } from 'react-redux'
+import { mdiCommentOutline } from '@mdi/js'
 
 import Tooltip from 'components/tooltip'
-import IconComment from 'components/SvgIcons/DealComment/IconComment'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import IconButton from 'components/Button/IconButton'
 
 import { Container, BadgeCounter } from './styled'
 
 function Notification(props) {
+  const theme = useTheme()
   const { task, rooms } = props
   const room = rooms && rooms[task.room.id] ? rooms[task.room.id] : task.room
   const { new_notifications } = room
@@ -23,7 +24,11 @@ function Notification(props) {
         onClick={() => props.onClick(task)}
       >
         <IconButton isFit iconSize="XLarge" style={{ padding: 0 }}>
-          <IconComment className="deal--task-comments" />
+          <SvgIcon
+            path={mdiCommentOutline}
+            color={theme.palette.divider}
+            className="deal--task-comments"
+          />
         </IconButton>
 
         {new_notifications > 0 && (
