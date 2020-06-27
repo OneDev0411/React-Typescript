@@ -1,13 +1,11 @@
 import React from 'react'
 import moment from 'moment'
-
 import Flex from 'styled-flex-component'
-
 import { Tooltip } from '@material-ui/core'
+import { mdiBellRingOutline, mdiAlertOutline, mdiCheck } from '@mdi/js'
 
-import PendingIcon from 'components/SvgIcons/DealTaskPending/IconPending'
-import DeclinedIcon from 'components/SvgIcons/DealTaskDeclined/IconDeclined'
-import ApprovedIcon from 'components/SvgIcons/DealTaskApproved/IconApproved'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { Label } from './styled'
 
@@ -70,13 +68,13 @@ function getIcon(status: string) {
     case 'Pending':
     case 'Submitted':
     case 'Notified':
-      return <PendingIcon />
+      return <SvgIcon path={mdiBellRingOutline} size={muiIconSizes.xsmall} />
 
     case 'Declined':
-      return <DeclinedIcon />
+      return <SvgIcon path={mdiAlertOutline} size={muiIconSizes.small} />
 
     case 'Approved':
-      return <ApprovedIcon />
+      return <SvgIcon path={mdiCheck} size={muiIconSizes.small} />
 
     default:
       return null
