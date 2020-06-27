@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { mdiClose, mdiPencil } from '@mdi/js'
 
 import { updateTask } from 'actions/deals'
 
 import Spinner from 'components/Spinner'
 import IconButton from 'components/Button/IconButton'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
-import EditIcon from 'components/SvgIcons/Edit/EditIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import { TaskStatus } from '../../Folders/Checklist/TaskRow/Status'
@@ -76,7 +76,7 @@ class Header extends React.Component {
                 inverse
                 onClick={this.toggleEditName}
               >
-                <EditIcon />
+                <SvgIcon path={mdiPencil} />
               </IconButton>
             )}
 
@@ -89,7 +89,7 @@ class Header extends React.Component {
               }}
               onClick={this.props.onClose}
             >
-              <CloseIcon />
+              <SvgIcon path={mdiClose} />
             </IconButton>
           </div>
         </Toolbar>
