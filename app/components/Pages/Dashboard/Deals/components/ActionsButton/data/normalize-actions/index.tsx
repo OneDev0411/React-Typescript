@@ -1,4 +1,4 @@
-import { StateContext } from 'deals/Dashboard/Folders/actions-context'
+import { StateContext } from 'deals/contexts/actions-context'
 
 import { actionsDefaultProperties } from '../default-properties'
 

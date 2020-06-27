@@ -9,10 +9,6 @@ import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 
 import { IAppState } from 'reducers'
 
-import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
-
-import { CLEAR_ATTACHMENTS } from 'deals/Dashboard/Folders/actions-context/constants'
-
 import { SignatureComposeDrawer } from './Compose'
 import { DocusignAuthentication } from './DocusignAuthentication'
 import type { FormValues } from './types'
@@ -33,7 +29,6 @@ export default function Signature({
   const [isSending, setIsSending] = useState(false)
   const [showDocusignBanner, setShowDocusignBanner] = useState(false)
   const [formData, setFormData] = useState<FormValues | null>(null)
-  const [, actionsDispatch] = useChecklistActionsContext()
 
   const dispatch = useDispatch()
   const user = useSelector<IAppState, IUser>(({ user }) => user)
@@ -83,6 +78,8 @@ export default function Signature({
       setIsSending(false)
       setFormData(null)
 
+      onClose()
+
       dispatch(
         confirmation({
           description: 'Your envelope is ready',
@@ -91,10 +88,6 @@ export default function Signature({
           onConfirm: () => openDocusign(envelope)
         })
       )
-
-      actionsDispatch({
-        type: CLEAR_ATTACHMENTS
-      })
     } catch (e) {
       console.log(e)
 

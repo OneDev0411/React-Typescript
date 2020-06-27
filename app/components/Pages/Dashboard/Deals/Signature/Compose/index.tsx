@@ -5,7 +5,7 @@ import { Form } from 'react-final-form'
 
 import Drawer from 'components/OverlayDrawer'
 
-import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 
 import type { FormValues } from '../types'
 
