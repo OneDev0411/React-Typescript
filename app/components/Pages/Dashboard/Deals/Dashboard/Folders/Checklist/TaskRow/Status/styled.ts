@@ -17,8 +17,6 @@ export const Label = styled.div`
 
   svg {
     margin-right: 0.3125rem;
-    width: 0.6rem;
-    height: 0.6rem;
   }
 
   &.Incomplete {
