@@ -9,8 +9,9 @@ import {
   ListItemText
 } from '@material-ui/core'
 
-import AddIcon from 'components/SvgIcons/Add/AddIcon'
+import { mdiPlus } from '@mdi/js'
 
+import { SvgIcon } from '../SvgIcons/SvgIcon'
 import { useIconStyles } from '../../../styles/use-icon-styles'
 import { Item } from './types'
 
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
         color: theme.palette.primary.main,
 
         '& $icon, $addIcon': {
-          fill: theme.palette.primary.main
+          color: theme.palette.primary.main
         },
 
         '& $addIcon': {
@@ -34,8 +35,12 @@ const useStyles = makeStyles((theme: Theme) =>
         }
       }
     },
+    itemIcon: {
+      marginRight: theme.spacing(1)
+    },
     icon: {
-      minWidth: `${theme.spacing(3)}px !important`
+      minWidth: `${theme.spacing(3)}px !important`,
+      color: theme.palette.common.black
     },
     addIcon: {
       visibility: 'hidden'
@@ -64,8 +69,8 @@ export default function MenuItem({ item, onClick }: Props) {
       classes={{ button: classes.itemButton }}
       onClick={handleClick}
     >
-      <ListItemIcon className={classes.icon}>
-        <item.Icon className={iconClasses.small} />
+      <ListItemIcon className={cn(classes.icon, classes.itemIcon)}>
+        <SvgIcon path={item.Icon} />
       </ListItemIcon>
       <ListItemText primary={item.title} />
       <ListItemIcon
@@ -76,7 +81,7 @@ export default function MenuItem({ item, onClick }: Props) {
           classes.addIcon
         )}
       >
-        <AddIcon />
+        <SvgIcon path={mdiPlus} />
       </ListItemIcon>
     </ListItem>
   )

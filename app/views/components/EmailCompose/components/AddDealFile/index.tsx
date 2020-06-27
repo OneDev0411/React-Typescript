@@ -1,20 +1,17 @@
 import React, { MouseEventHandler, useState } from 'react'
 import { useSelector } from 'react-redux'
-
 import { ListItem } from '@material-ui/core'
+import { mdiCurrencyUsdCircle } from '@mdi/js'
 
 import { useDeepMemo } from 'hooks/use-deep-memo'
-
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-
 import { selectDealTasks } from 'reducers/deals/tasks'
-
 import { notUndefined } from 'utils/ts-utils'
-
 import { IAppState } from 'reducers'
 
 import SearchDealDrawer from 'components/SearchDealDrawer'
 import SelectDealFileDrawer from 'components/SelectDealFileDrawer'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
 
@@ -29,8 +26,6 @@ import {
 import { getAllDealDocuments } from '../../../SelectDealFileDrawer/helpers/get-all-deal-documents'
 
 import { DealRow } from './DealRow'
-import IconDealFilled from '../../../SvgIcons/Deals/IconDealFilled'
-import { iconSizes } from '../../../SvgIcons/icon-sizes'
 
 interface StateProps {
   checklists: Record<UUID, IDealChecklist>
@@ -157,10 +152,7 @@ export function AddDealFile({
   return (
     <>
       <ListItem button onClick={handleClick}>
-        <IconDealFilled
-          size={iconSizes.small}
-          style={{ marginRight: '0.5rem' }}
-        />
+        <SvgIcon path={mdiCurrencyUsdCircle} rightMargined />
         Attach from deals
       </ListItem>
 

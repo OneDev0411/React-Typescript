@@ -5,14 +5,14 @@ import Flex from 'styled-flex-component'
 import { Draggable } from 'react-beautiful-dnd'
 import { Card } from '@material-ui/core'
 
+import { mdiMapMarkerOutline, mdiClose } from '@mdi/js'
+
 import useRaisedMuiCard from 'hooks/use-raised-mui-card'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { getIndexLabel } from 'utils/helpers'
-
 import { red } from 'views/utils/colors'
 import Avatar from 'components/Avatar'
 import Button from 'components/Button/IconButton'
-import IconPinOn from 'components/SvgIcons/MapPinOn/IconMapPinOn'
 
 import { Container, Listing, Title, Details, CloseIcon } from './styled'
 
@@ -48,7 +48,7 @@ export function Location({ handleRemove, index, location }) {
             <Container>
               <Flex alignCenter justifyBetween style={{ padding: '0 0.5em' }}>
                 <Flex alignCenter>
-                  <IconPinOn style={{ fill: red.primary }} />
+                  <SvgIcon path={mdiMapMarkerOutline} color={red.primary} />
                   <div
                     style={{ fontSize: '1.5em', fontWeight: 500 }}
                   >{`${getIndexLabel(index)}`}</div>
@@ -58,7 +58,7 @@ export function Location({ handleRemove, index, location }) {
                   type="button"
                   onClick={() => handleRemove(location)}
                 >
-                  <CloseIcon />
+                  <CloseIcon path={mdiClose} />
                 </Button>
               </Flex>
               <Listing>

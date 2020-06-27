@@ -1,14 +1,12 @@
 import React from 'react'
 import { makeStyles, Theme } from '@material-ui/core'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
-import IconHome from 'components/SvgIcons/NewHome/IconHome'
+import { mdiHomeOutline } from '@mdi/js'
+
 import Avatar from 'components/Avatar'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import ALinkToClosable from 'components/ALinkToClosable'
-
 import { getField } from 'models/Deal/helpers/context'
-
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import { Side } from '../Side'
@@ -67,7 +65,6 @@ export function Address({
   notificationsCount
 }: Props) {
   const classes = useStyles()
-  const iconClasses = useIconStyles()
   const photo = getField(deal, 'photo')
 
   return (
@@ -79,7 +76,7 @@ export function Address({
           <Avatar image={photo} size={32} />
         ) : (
           <div className={classes.homeIcon}>
-            <IconHome className={iconClasses.small} />
+            <SvgIcon path={mdiHomeOutline} />
           </div>
         )}
       </div>

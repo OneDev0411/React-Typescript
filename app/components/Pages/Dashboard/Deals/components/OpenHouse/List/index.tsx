@@ -12,15 +12,12 @@ import {
   Theme
 } from '@material-ui/core'
 
+import { mdiPencil, mdiTrashCanOutline } from '@mdi/js'
+
 import { IAppState } from 'reducers/index'
 import { selectDealTasks } from 'reducers/deals/tasks'
-
 import { Divider } from 'components/Divider'
-
-import IconEdit from 'components/SvgIcons/Edit/EditIcon'
-import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface StateProps {
   user: IUser
@@ -81,7 +78,6 @@ const useStyles = makeStyles((theme: Theme) => {
 
 function List(props: Props & StateProps) {
   const classes = useStyles()
-  const iconClasses = useIconStyles()
 
   const tasks = useMemo(() => {
     return props.tasks.filter(task => task.task_type === 'OpenHouse')
@@ -115,7 +111,7 @@ function List(props: Props & StateProps) {
                       className={classes.iconButton}
                       onClick={() => props.onClickEdit(task)}
                     >
-                      <IconEdit className={iconClasses.small} />
+                      <SvgIcon path={mdiPencil} />
                     </IconButton>
                   </Tooltip>
 
@@ -125,7 +121,7 @@ function List(props: Props & StateProps) {
                       className={classes.iconButton}
                       onClick={() => props.onClickDelete(task)}
                     >
-                      <IconDelete className={iconClasses.small} />
+                      <SvgIcon path={mdiTrashCanOutline} />
                     </IconButton>
                   </Tooltip>
                 </Flex>

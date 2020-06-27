@@ -2,8 +2,11 @@ import React, { CSSProperties, ReactElement } from 'react'
 import Flex from 'styled-flex-component'
 import { IconButton } from '@material-ui/core'
 
+import { mdiClose } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { Title, Container } from './styled'
-import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 import { useDrawerContext } from '../drawer-context'
 
 interface Props {
@@ -36,7 +39,7 @@ const Header = ({ title, menu, style, children }: Props) => {
             onClick={event => onClose(event, 'closeButtonClick')}
             style={{ marginLeft: menu ? '1rem' : 0 }}
           >
-            <CloseIcon size="small" />
+            <SvgIcon path={mdiClose} />
           </IconButton>
         </Flex>
       </div>

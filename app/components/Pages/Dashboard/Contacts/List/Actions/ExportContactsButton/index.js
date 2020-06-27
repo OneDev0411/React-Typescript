@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import removeSpecialCharacters from 'utils/remove-special-characters'
 import { getActiveTeamId } from 'utils/user-teams'
 
-import ExportButton from './button'
+import { ExportButton } from './ExportButton'
 
 class ExportContacts extends React.Component {
   sendDownloadReuqest = async exportType => {

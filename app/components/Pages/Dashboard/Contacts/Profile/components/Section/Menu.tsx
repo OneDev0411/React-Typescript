@@ -1,8 +1,10 @@
 import React from 'react'
 import { Box, IconButton, Tooltip } from '@material-ui/core'
 
-import IconCog from 'components/SvgIcons/Cog/IconCog'
-import IconEdit from 'components/SvgIcons/Edit/EditIcon'
+import { mdiCog, mdiPencil } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 interface Props {
   onEdit?: () => void
@@ -18,14 +20,22 @@ export function Menu({ onEdit, setting }: Props) {
       {onEdit && (
         <Tooltip title="Edit">
           <IconButton onClick={onEdit}>
-            <IconEdit className="menu__icon" />
+            <SvgIcon
+              size={muiIconSizes.small}
+              path={mdiPencil}
+              className="menu__icon"
+            />
           </IconButton>
         </Tooltip>
       )}
       {setting && (
         <Tooltip title={setting.tooltip}>
           <IconButton href={setting.href}>
-            <IconCog className="menu__icon" />
+            <SvgIcon
+              size={muiIconSizes.small}
+              path={mdiCog}
+              className="menu__icon"
+            />
           </IconButton>
         </Tooltip>
       )}

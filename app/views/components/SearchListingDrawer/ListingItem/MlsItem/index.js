@@ -2,17 +2,17 @@ import React from 'react'
 import fecha from 'fecha'
 import Flex from 'styled-flex-component'
 
+import { mdiHomeOutline } from '@mdi/js'
+
 import {
   addressTitle,
   getListingAddressObj,
   getStatusColorClass
 } from 'utils/listing'
-
 import { grey } from 'views/utils/colors'
-
 import IconDrag from 'components/SvgIcons/Drag/IconDrag'
-import IconHome from 'components/SvgIcons/NewHome/IconHome'
 import IconDelete from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   ListItem,
@@ -55,7 +55,7 @@ export function MlsItem({ item, ...props }) {
             <ListItemImage alt="" src={item.cover_image_url} />
           ) : (
             <IconContainer center>
-              <IconHome />
+              <SvgIcon path={mdiHomeOutline} />
             </IconContainer>
           )}
           <ListItemAddress>

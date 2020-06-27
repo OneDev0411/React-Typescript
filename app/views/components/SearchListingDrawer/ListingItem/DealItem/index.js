@@ -1,14 +1,17 @@
 import React from 'react'
 
+import { mdiHomeOutline } from '@mdi/js'
+
 import Avatar from 'components/Avatar'
 import Deal from 'models/Deal'
 import { getStatusColor } from 'utils/listing'
 
 import IconDrag from 'components/SvgIcons/Drag/IconDrag'
-import IconHome from 'components/SvgIcons/NewHome/IconHome'
 import IconDelete from 'components/SvgIcons/Close/CloseIcon'
 
 import ActionButton from 'components/Button/ActionButton'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   ListItem,
@@ -44,7 +47,7 @@ export function DealItem({ item: deal, showAddButton, ...props }) {
           />
         ) : (
           <IconContainer center>
-            <IconHome />
+            <SvgIcon path={mdiHomeOutline} />
           </IconContainer>
         )}
 

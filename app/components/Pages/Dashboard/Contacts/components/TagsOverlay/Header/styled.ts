@@ -11,10 +11,9 @@ export const HeaderContainer = styled.div`
   width: 100%;
 
   svg {
-    width: 1rem;
-    height: 1rem;
+    color: ${props => props.theme.palette.common.black};
     &:hover {
-      fill: ${primary};
+      color: ${primary};
     }
   }
 `

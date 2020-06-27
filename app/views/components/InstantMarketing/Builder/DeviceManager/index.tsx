@@ -4,10 +4,11 @@ import { fade } from '@material-ui/core/styles'
 
 import { Editor } from 'grapesjs'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
+import { mdiMonitor, mdiCellphone } from '@mdi/js'
 
-import MobileIcon from 'components/SvgIcons/Mobile/IconMobile'
-import DesktopIcon from 'components/SvgIcons/Desktop/IconDesktop'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 const useStyles = makeStyles(theme => ({
   selected: {
@@ -42,7 +43,10 @@ export default function DeviceManager({ editor }: Props) {
           onClick={() => setDevice('Desktop')}
           className={isDesktop ? classes.selected : ''}
         >
-          <DesktopIcon className={isDesktop ? iconClasses.active : ''} />
+          <SvgIcon
+            path={mdiMonitor}
+            className={isDesktop ? iconClasses.active : ''}
+          />
         </IconButton>
       </Tooltip>
 
@@ -51,7 +55,10 @@ export default function DeviceManager({ editor }: Props) {
           onClick={() => setDevice('Mobile portrait')}
           className={isMobile ? classes.selected : ''}
         >
-          <MobileIcon className={isMobile ? iconClasses.active : ''} />
+          <SvgIcon
+            path={mdiCellphone}
+            className={isMobile ? iconClasses.active : ''}
+          />
         </IconButton>
       </Tooltip>
     </>

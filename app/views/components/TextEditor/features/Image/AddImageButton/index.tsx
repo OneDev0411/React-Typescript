@@ -2,8 +2,10 @@ import * as React from 'react'
 
 import { Tooltip } from '@material-ui/core'
 
-import ImageFileIcon from 'components/SvgIcons/ImageFile/ImageFileIcon'
+import { mdiFileImageOutline } from '@mdi/js'
+
 import { FilePicker } from 'components/FilePicker'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ToolbarIconButton } from '../../../components/ToolbarIconButton'
 
@@ -27,7 +29,7 @@ export function AddImageButton(props: Props) {
       {({ pickFiles }) => (
         <Tooltip title="Insert Image">
           <ToolbarIconButton onClick={pickFiles} data-test="add-image-button">
-            <ImageFileIcon />
+            <SvgIcon path={mdiFileImageOutline} />
           </ToolbarIconButton>
         </Tooltip>
       )}

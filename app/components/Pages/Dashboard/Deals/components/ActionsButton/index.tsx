@@ -2,10 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Downshift from 'downshift'
+import { mdiChevronDown } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { setSelectedTask } from 'actions/deals'
 import { isBackOffice } from 'utils/user-teams'
-import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import Tooltip from 'components/tooltip'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
@@ -403,11 +404,7 @@ class ActionsButton extends React.Component<
 
                 {secondaryActions.length > 0 && (
                   <MenuButton onClick={this.handleToggleMenu}>
-                    <ArrowDownIcon
-                      style={{
-                        transform: isOpen ? 'rotateX(180deg)' : 'initial'
-                      }}
-                    />
+                    <SvgIcon path={mdiChevronDown} rotate={isOpen ? 180 : 0} />
                   </MenuButton>
                 )}
               </Container>

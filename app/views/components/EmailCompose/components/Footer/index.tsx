@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import { useFormState, useField } from 'react-final-form'
 
 import { IconButton } from '@material-ui/core'
+import { mdiLayersOutline } from '@mdi/js'
 
 import ActionButton from 'components/Button/ActionButton'
-
 import DateTimePicker from 'components/DateTimePicker/next'
 import { formatDate } from 'components/DateTimePicker/helpers'
-
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
-
+// TODO: change icon
 import IconDelete from 'components/SvgIcons/Delete/IconDelete'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { isFileAttachment } from '../../helpers/is-file-attachment'
 import { FooterContainer, FooterInnerContainer } from './styled'
@@ -18,7 +18,7 @@ import { textForSubmitButton } from './helpers'
 import SchedulerButton from './SchedulerButton'
 import { EmailAttachmentsDropdown } from '../EmailAttachmentsDropdown'
 import { useButtonStyles } from '../../../../../styles/use-button-styles'
-import IconTemplate from '../../../SvgIcons/Template/IconTemplate'
+// TODO: change icon
 import IconMyDesigns from '../../../SvgIcons/IconMyDesigns/IconMyDesigns'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
 import { DropdownToggleButton } from '../../../DropdownToggleButton'
@@ -113,7 +113,8 @@ export function Footer({
                 setMCTemplateDrawerOpen(open => false)
               }}
             >
-              <IconTemplate
+              <SvgIcon
+                path={mdiLayersOutline}
                 className={iconClasses.rightMargin}
                 size={iconSizes.small}
               />
