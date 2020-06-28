@@ -18,8 +18,6 @@ import { ChecklistFolder } from './Checklist'
 
 import { UploadFolder } from './Uploads'
 import MarketingChecklist from './Marketing'
-import { TaskActions } from './TaskActions'
-import { ActionContextProvider } from './actions-context/provider'
 
 type Tasks = Record<UUID, IDealTask>
 type Checklists = Record<UUID, IDealChecklist>
@@ -126,54 +124,50 @@ export default function FoldersTab({ deal, isBackOffice }: Props) {
   }, [checklists, deal, showDeactivatedFolders, showTerminatedFolders])
 
   return (
-    <ActionContextProvider>
-      <Container>
-        {filteredChecklists.map((checklist: IDealChecklist) => (
-          <ChecklistFolder
-            key={checklist.id}
-            checklist={checklist}
-            deal={deal}
-            title={checklist.title}
-            isBackOffice={isBackOffice}
-            tasks={selectChecklistTasks(checklist, tasks).filter(
-              (task: IDealTask) =>
-                ['GeneralComments', 'YardSign', 'OpenHouse', 'Media'].includes(
-                  task.task_type
-                ) === false
-            )}
-          />
-        ))}
-
-        <MarketingChecklist deal={deal} isBackOffice={isBackOffice} />
-        <UploadFolder deal={deal} isBackOffice={isBackOffice} />
-
-        <Flex>
-          {terminatedChecklistsCount > 0 && (
-            <Button
-              onClick={toggleDisplayTerminatedChecklists}
-              color="secondary"
-              variant="outlined"
-              style={{
-                marginRight: theme.spacing(1)
-              }}
-            >
-              {showTerminatedFolders ? 'Hide' : 'Show'} Terminated
-            </Button>
+    <Container>
+      {filteredChecklists.map((checklist: IDealChecklist) => (
+        <ChecklistFolder
+          key={checklist.id}
+          checklist={checklist}
+          deal={deal}
+          title={checklist.title}
+          isBackOffice={isBackOffice}
+          tasks={selectChecklistTasks(checklist, tasks).filter(
+            (task: IDealTask) =>
+              ['GeneralComments', 'YardSign', 'OpenHouse', 'Media'].includes(
+                task.task_type
+              ) === false
           )}
+        />
+      ))}
 
-          {deactivatedChecklistsCount > 0 && (
-            <Button
-              onClick={toggleDisplayDeactivatedChecklists}
-              color="secondary"
-              variant="outlined"
-            >
-              {showDeactivatedFolders ? 'Hide' : 'Show'} Backed up
-            </Button>
-          )}
-        </Flex>
+      <MarketingChecklist deal={deal} isBackOffice={isBackOffice} />
+      <UploadFolder deal={deal} isBackOffice={isBackOffice} />
 
-        <TaskActions deal={deal} />
-      </Container>
-    </ActionContextProvider>
+      <Flex>
+        {terminatedChecklistsCount > 0 && (
+          <Button
+            onClick={toggleDisplayTerminatedChecklists}
+            color="secondary"
+            variant="outlined"
+            style={{
+              marginRight: theme.spacing(1)
+            }}
+          >
+            {showTerminatedFolders ? 'Hide' : 'Show'} Terminated
+          </Button>
+        )}
+
+        {deactivatedChecklistsCount > 0 && (
+          <Button
+            onClick={toggleDisplayDeactivatedChecklists}
+            color="secondary"
+            variant="outlined"
+          >
+            {showDeactivatedFolders ? 'Hide' : 'Show'} Backed up
+          </Button>
+        )}
+      </Flex>
+    </Container>
   )
 }

@@ -19,7 +19,7 @@ export function EnvelopeStatus({ deal, task, envelope }: Props) {
       return 'Declined'
     }
 
-    const recipients = envelope.recipients.filter(
+    const recipients = (envelope.recipients || []).filter(
       recipient => recipient.envelope_recipient_type === 'Signer'
     )
 

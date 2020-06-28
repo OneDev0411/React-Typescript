@@ -13,7 +13,8 @@ import {
   Typography,
   Box,
   Theme,
-  TableContainer
+  TableContainer,
+  makeStyles
 } from '@material-ui/core'
 
 import { useTheme } from '@material-ui/styles'
@@ -27,7 +28,17 @@ import { roleName, getLegalFullName } from 'deals/utils/roles'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    cell: {
+      padding: theme.spacing(0.5, 0)
+    }
+  }),
+  { name: 'ListTable' }
+)
+
 export function RecipientsList() {
+  const classes = useStyles()
   const iconClasses = useIconStyles()
   const theme = useTheme<Theme>()
 
@@ -76,6 +87,10 @@ export function RecipientsList() {
     }
   }
 
+  if (list.length === 0) {
+    return null
+  }
+
   return (
     <Box mb={1}>
       {list.length > 0 && (
@@ -83,8 +98,8 @@ export function RecipientsList() {
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>Order</TableCell>
-                <TableCell>Recipient</TableCell>
+                <TableCell className={classes.cell}>Order</TableCell>
+                <TableCell className={classes.cell}>Recipient</TableCell>
                 <TableCell>&nbsp;</TableCell>
                 <TableCell>&nbsp;</TableCell>
               </TableRow>
@@ -94,8 +109,9 @@ export function RecipientsList() {
               {list.map((recipient: ISignatureRecipient, index) => (
                 <TableRow key={index}>
                   <TableCell
+                    className={classes.cell}
                     style={{
-                      width: '10%'
+                      width: '5%'
                     }}
                   >
                     <BaseDropdown
@@ -121,8 +137,9 @@ export function RecipientsList() {
                   </TableCell>
 
                   <TableCell
+                    className={classes.cell}
                     style={{
-                      width: '55%'
+                      width: '70%'
                     }}
                   >
                     <Box display="flex">
@@ -149,8 +166,9 @@ export function RecipientsList() {
                   </TableCell>
 
                   <TableCell
+                    className={classes.cell}
                     style={{
-                      width: '25%'
+                      width: '20%'
                     }}
                   >
                     <BaseDropdown
@@ -181,9 +199,10 @@ export function RecipientsList() {
                     />
                   </TableCell>
                   <TableCell
+                    className={classes.cell}
                     align="right"
                     style={{
-                      width: '10%'
+                      width: '5%'
                     }}
                   >
                     <IconButton

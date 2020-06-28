@@ -5,7 +5,7 @@ import { Box, Button } from '@material-ui/core'
 
 import { FieldError } from 'components/final-form-fields/FieldError'
 import { ListAttachmentItem } from 'components/ListAttachmentItem'
-import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 
 import {
   DOCUSIGN_FORM,
@@ -16,7 +16,7 @@ import {
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT
-} from 'deals/Dashboard/Folders/actions-context/constants'
+} from 'deals/contexts/actions-context/constants'
 
 interface Props {
   onClose: () => void

@@ -13,9 +13,9 @@ import SearchDealDrawer from 'components/SearchDealDrawer'
 import SelectDealFileDrawer from 'components/SelectDealFileDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 
-import { ADD_ATTACHMENTS } from 'deals/Dashboard/Folders/actions-context/constants'
+import { ADD_ATTACHMENTS } from 'deals/contexts/actions-context/constants'
 
 import {
   EMAIL_ENVELOPE,

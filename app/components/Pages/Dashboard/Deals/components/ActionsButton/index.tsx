@@ -15,17 +15,17 @@ import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getEsignAttachments } from 'views/utils/deal-files/get-esign-attachments'
 import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
 
-import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 
 import type {
   StateContext,
   DispatchContext
-} from 'deals/Dashboard/Folders/actions-context'
+} from 'deals/contexts/actions-context'
 
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT
-} from 'deals/Dashboard/Folders/actions-context/constants'
+} from 'deals/contexts/actions-context/constants'
 
 import { normalizeActions } from './data/normalize-actions'
 import { SelectItemDrawer } from './components/SelectItemDrawer'

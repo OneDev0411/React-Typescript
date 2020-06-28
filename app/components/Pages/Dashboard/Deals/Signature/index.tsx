@@ -78,6 +78,8 @@ export default function Signature({
       setIsSending(false)
       setFormData(null)
 
+      onClose()
+
       dispatch(
         confirmation({
           description: 'Your envelope is ready',
