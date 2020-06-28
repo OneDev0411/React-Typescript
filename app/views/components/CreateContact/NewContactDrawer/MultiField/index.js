@@ -2,12 +2,13 @@ import React from 'react'
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import Flex from 'styled-flex-component'
+import { mdiPlusCircleOutline, mdiMinusCircleOutline } from '@mdi/js'
+import { useTheme } from '@material-ui/core/styles'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Dropdown } from 'components/Dropdown'
 import IconButton from 'components/Button/IconButton'
 import { Select } from 'components/final-form-fields/Select'
-import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
-import RemoveIcon from 'components/SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
 
 import { TextField } from './Input'
 
@@ -19,6 +20,8 @@ export function MultiField({
   title,
   validate
 }) {
+  const theme = useTheme()
+
   return (
     <FieldArray name={name}>
       {({ fields }) =>
@@ -80,7 +83,10 @@ export function MultiField({
                       mutators.push(name, { label: defaultSelectedItem })
                     }
                   >
-                    <AddIcon />
+                    <SvgIcon
+                      color={theme.palette.primary.main}
+                      path={mdiPlusCircleOutline}
+                    />
                   </IconButton>
                 ) : (
                   <IconButton
@@ -89,7 +95,10 @@ export function MultiField({
                     iconSize="large"
                     onClick={() => fields.remove(index)}
                   >
-                    <RemoveIcon />
+                    <SvgIcon
+                      color={theme.palette.primary.main}
+                      path={mdiMinusCircleOutline}
+                    />
                   </IconButton>
                 )}
               </div>
