@@ -1,18 +1,19 @@
 import React from 'react'
 import { Box, Grid, IconButton, Tooltip, Typography } from '@material-ui/core'
-
 import { EditorState } from 'draft-js'
+import {
+  mdiContentCopy,
+  mdiPencil,
+  mdiLinkOff,
+  mdiLink,
+  mdiEmail
+} from '@mdi/js'
 
 import copyTextToClipboard from 'utils/copy-text-to-clipboard'
-
-import IconLinkOpen from 'components/SvgIcons/LinkOpen/IconLink'
-import EditIcon from 'components/SvgIcons/Edit/EditIcon'
-import IconUnlink from 'components/SvgIcons/Unlink/IconUnlink'
-import IconCopy from 'components/SvgIcons/Copy/IconCopy'
-import IconEmail from 'components/SvgIcons/Email/IconEmail'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { removeLink } from '../../../utils/remove-link'
-import { useToolbarIconClass } from '../../../hooks/use-toolbar-icon-class'
 import { SelectionPopoverPaper } from '../../../components/SelectionPopoverPaper'
 
 interface Props {
@@ -39,14 +40,12 @@ export function LinkPreview(props: Props) {
     props.onClose()
   }
 
-  const LinkIcon = props.url.match(/^mailto:.+/) ? IconEmail : IconLinkOpen
-
-  const iconClassNames = useToolbarIconClass()
+  const LinkIcon = props.url.match(/^mailto:.+/) ? mdiEmail : mdiLink
 
   return (
     <SelectionPopoverPaper style={{ width: '18rem' }}>
       <Grid container alignItems="center" wrap="nowrap">
-        <LinkIcon className={iconClassNames} />
+        <SvgIcon path={LinkIcon} size={muiIconSizes.small} />
         {/*
         // @ts-ignore typing doesn't work for Box props */}
         <Typography noWrap component={Box} flexGrow={1} pl={1}>
@@ -56,17 +55,17 @@ export function LinkPreview(props: Props) {
         </Typography>
         <Tooltip title="Copy Link">
           <IconButton size="small" onClick={copyLink}>
-            <IconCopy className={iconClassNames} />
+            <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
           </IconButton>
         </Tooltip>
         <Tooltip title="Edit Link">
           <IconButton size="small" onClick={props.onEdit}>
-            <EditIcon className={iconClassNames} />
+            <SvgIcon path={mdiPencil} size={muiIconSizes.small} />
           </IconButton>
         </Tooltip>
         <Tooltip title="Remove Link">
           <IconButton size="small" onClick={unlink}>
-            <IconUnlink className={iconClassNames} />
+            <SvgIcon path={mdiLinkOff} size={muiIconSizes.small} />
           </IconButton>
         </Tooltip>
       </Grid>
