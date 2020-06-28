@@ -2,6 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import uniqBy from 'lodash/uniqBy'
+import { mdiChevronDown } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getUserTitle } from '../../../../models/user/helpers'
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
@@ -10,7 +13,6 @@ import Avatar from '../../Avatar'
 import { TeamMember } from '../TeamMember'
 import { BasicDropdown } from '../../BasicDropdown'
 import ActionButton from '../../Button/ActionButton'
-import { Icon } from '../../Dropdown'
 
 import { getMembers } from '../helpers'
 
@@ -111,9 +113,9 @@ export class TeamContactSelect extends React.Component {
                 />
                 <ButtonText>{title}</ButtonText>
               </Flex>
-              <Icon
-                style={{ marginTop: '0.2em' }}
-                isOpen={buttonProps.isOpen}
+              <SvgIcon
+                path={mdiChevronDown}
+                rotate={buttonProps.isOpen ? 180 : 0}
               />
             </ActionButton>
           )
