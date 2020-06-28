@@ -2,14 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import { Box, Button, IconButton } from '@material-ui/core'
+import { mdiTrashCanOutline } from '@mdi/js'
 
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { isSoloActiveTeam } from 'utils/user-teams'
-
-import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
-
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
@@ -266,7 +265,7 @@ export class TourDrawer extends React.Component {
                               disabled={isDisabled}
                               onClick={this.onDelete}
                             >
-                              <IconDelete size="medium" />
+                              <SvgIcon path={mdiTrashCanOutline} />
                             </IconButton>
                           </Tooltip>
                           <Divider margin="0 1rem" width="1px" height="2rem" />
