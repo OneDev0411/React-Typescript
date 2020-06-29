@@ -35,6 +35,7 @@ export function normalizeEventOnEdit(
     task_type: event.event_type,
     timestamp: start,
     due_date: start,
-    end_date: end
+    end_date: end,
+    status: newStart.getTime() <= new Date().getTime() ? 'DONE' : 'PENDING'
   }
 }

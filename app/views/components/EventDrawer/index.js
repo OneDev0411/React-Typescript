@@ -77,7 +77,7 @@ const defaultProps = {
  * after opening until we can reinitialize it.
  *
  */
-class PresentEventDrawer extends Component {
+class EventDrawerContainer extends Component {
   constructor(props) {
     super(props)
 
@@ -401,14 +401,14 @@ class PresentEventDrawer extends Component {
   }
 }
 
-PresentEventDrawer.propTypes = propTypes
-PresentEventDrawer.defaultProps = defaultProps
-PresentEventDrawer.contextType = ConfirmationModalContext
+EventDrawerContainer.propTypes = propTypes
+EventDrawerContainer.defaultProps = defaultProps
+EventDrawerContainer.contextType = ConfirmationModalContext
 
 const mapStateToProps = state => ({
   accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
 })
 
 export const EventDrawer = connect(mapStateToProps, { fetchOAuthAccounts })(
-  PresentEventDrawer
+  EventDrawerContainer
 )
