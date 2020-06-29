@@ -11,11 +11,5 @@ export const Container = styled.div`
 
   svg {
     margin-bottom: 1rem;
-    width: 3rem;
-    height: 3rem;
-
-    path {
-      fill: #ccc !important;
-    }
   }
 `
