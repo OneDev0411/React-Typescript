@@ -8,7 +8,6 @@ import { stateToHTML } from 'draft-js-export-html'
 export async function preSaveFormat(values, originalValues) {
   const {
     title,
-    status,
     dueDate,
     endDate,
     allDay,
@@ -51,8 +50,7 @@ export async function preSaveFormat(values, originalValues) {
     task_type: task_type.value,
     all_day: isAllDay,
     assignees: assignees.map(a => a.id),
-    status:
-      dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'
+    status: dueDateTimestamp <= new Date().getTime() ? 'DONE' : 'PENDING'
   }
 
   if (originalValues?.id || description) {
