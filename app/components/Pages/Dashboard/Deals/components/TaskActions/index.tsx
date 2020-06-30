@@ -208,6 +208,7 @@ export function TaskActions({ deal }: Props) {
         deal={deal}
         isOpen={isDocusignDraweOpen}
         defaultAttachments={state.attachments}
+        onClickAddAttachments={() => setIsDocusignDrawerOpen(false)}
         onClose={handleCloseSignatureDrawer}
       />
     </>

@@ -450,8 +450,10 @@ class ActionsButton extends React.Component<
           <GetSignature
             isOpen
             deal={this.props.deal}
-            onClose={this.handleDeselectAction}
             defaultAttachments={this.getEsignAttachments()}
+            onClickAddAttachments={() =>
+              this.setState({ isSignatureFormOpen: false })
+            }
           />
         )}
 
