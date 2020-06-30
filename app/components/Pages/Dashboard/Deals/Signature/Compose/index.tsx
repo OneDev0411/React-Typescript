@@ -22,6 +22,7 @@ interface Props {
   attachments: IDealFile[]
   isOpen: boolean
   isSubmitting: boolean
+  onClickAddAttachments: () => void
   onSubmit: (form: FormValues) => Promise<void>
   onClose: () => void
 }
@@ -32,6 +33,7 @@ export function SignatureComposeDrawer({
   attachments,
   isOpen,
   isSubmitting,
+  onClickAddAttachments,
   onSubmit,
   onClose
 }: Props) {
@@ -104,7 +106,7 @@ export function SignatureComposeDrawer({
               <From />
               <Subject />
               <Message />
-              <Attachments onClose={onClose} />
+              <Attachments onClickAddAttachments={onClickAddAttachments} />
             </Drawer.Body>
 
             <Drawer.Footer>

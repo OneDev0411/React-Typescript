@@ -6,6 +6,7 @@ import { SingleEmailComposeForm } from './SingleEmailComposeForm'
 interface Props extends ComponentProps<typeof SingleEmailComposeForm> {
   isOpen: boolean
   onClose?: () => void
+  onClickAddDealAttachments?: () => void
 
   getEmail?: (values: IEmailCampaignInput) => IEmailCampaignInput
   disableAddNewRecipient?: boolean
@@ -19,6 +20,7 @@ export function SingleEmailComposeDrawer({
   emailId,
   isOpen,
   onClose = () => {},
+  onClickAddDealAttachments = () => {},
   ...otherProps
 }: Props) {
   return (
@@ -27,7 +29,7 @@ export function SingleEmailComposeDrawer({
       <SingleEmailComposeForm
         {...otherProps}
         emailId={emailId}
-        onClose={onClose}
+        onClickAddDealAttachments={onClickAddDealAttachments}
       />
     </OverlayDrawer>
   )

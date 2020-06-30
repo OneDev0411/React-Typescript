@@ -39,7 +39,7 @@ interface Props {
   value: IFile[]
   onClick?: MouseEventHandler
   onChange: (files: IFile[]) => void
-  onClose?: () => void
+  onClickAddDealAttachments?: () => void
 }
 
 export function AddDealFile({
@@ -47,7 +47,7 @@ export function AddDealFile({
   deafultSelectedDeal,
   onChange,
   onClick,
-  onClose = () => {},
+  onClickAddDealAttachments = () => {},
   value = []
 }: Props) {
   const [, actionsDispatch] = useChecklistActionsContext()
@@ -72,7 +72,7 @@ export function AddDealFile({
       })
 
       onClick && onClick(event)
-      onClose()
+      onClickAddDealAttachments()
 
       return
     }
