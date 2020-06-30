@@ -14,7 +14,15 @@ interface Props {
 }
 
 const MarketingTabs = ({ sections, mediums, templateTypes }: Props) => {
-  const { marketingCenter, life, properties } = sections
+  const {
+    marketingCenter,
+    newsletters,
+    celebrations,
+    holidays,
+    properties,
+    branding,
+    layouts
+  } = sections
 
   const checkValidTemplateTypes = (items: SectionItem[]) => {
     return _findIndex(items, (i: SectionItem) => {
@@ -26,8 +34,8 @@ const MarketingTabs = ({ sections, mediums, templateTypes }: Props) => {
 
   const getActiveTab = () => {
     if (templateTypes) {
-      if (checkValidTemplateTypes(life.items) >= 0) {
-        return life.key
+      if (checkValidTemplateTypes(branding.items) >= 0) {
+        return branding.key
       }
 
       if (checkValidTemplateTypes(properties.items) >= 0) {
@@ -46,12 +54,23 @@ const MarketingTabs = ({ sections, mediums, templateTypes }: Props) => {
         ...marketingCenter.items.map(i => (
           <TabLink key={i.link} to={i.link} value={i.link} label={i.title} />
         )),
+        ...newsletters.items.map(i => (
+          <TabLink key={i.link} to={i.link} value={i.link} label={i.title} />
+        )),
         <MegaTab
-          key={life.key}
-          value={life.key}
-          label={life.title}
+          key={celebrations.key}
+          value={celebrations.key}
+          label={celebrations.title}
           render={({ close }) => (
-            <MegaMenu data={life} mediums={mediums} onClose={close} />
+            <MegaMenu data={celebrations} mediums={mediums} onClose={close} />
+          )}
+        />,
+        <MegaTab
+          key={holidays.key}
+          value={holidays.key}
+          label={holidays.title}
+          render={({ close }) => (
+            <MegaMenu data={holidays} mediums={mediums} onClose={close} />
           )}
         />,
         <MegaTab
@@ -60,6 +79,22 @@ const MarketingTabs = ({ sections, mediums, templateTypes }: Props) => {
           label={properties.title}
           render={({ close }) => (
             <MegaMenu data={properties} mediums={mediums} onClose={close} />
+          )}
+        />,
+        <MegaTab
+          key={branding.key}
+          value={branding.key}
+          label={branding.title}
+          render={({ close }) => (
+            <MegaMenu data={branding} mediums={mediums} onClose={close} />
+          )}
+        />,
+        <MegaTab
+          key={layouts.key}
+          value={layouts.key}
+          label={layouts.title}
+          render={({ close }) => (
+            <MegaMenu data={layouts} mediums={mediums} onClose={close} />
           )}
         />
       ]}
