@@ -34,54 +34,154 @@ const ALL_SECTIONS: SectionCollection = {
       }
     ]
   },
-  life: {
+  newsletters: {
     type: SectionsEnum.LINK,
-    key: 'life',
-    title: 'Life',
+    key: 'newsletters',
+    title: 'Newsletters',
     items: [
-      {
-        title: '‌Blank Layouts',
-        value: 'Layout',
-        link: urlGenerator('/Layout')
-      },
       {
         title: 'Newsletters',
         value: 'Newsletter',
         link: urlGenerator('/Newsletter')
-      },
+      }
+    ]
+  },
+  celebrations: {
+    type: SectionsEnum.LINK,
+    key: 'celebrations',
+    title: 'Celebrations',
+    items: [
       {
-        title: 'Occasions',
+        title: 'Birthday',
         value: 'Birthday',
         link: urlGenerator('/Birthday')
       },
       {
-        title: 'Brand Campaigns',
-        value: 'Brand',
-        link: urlGenerator('/Brand')
+        title: 'Home Anniversary',
+        value: 'HomeAnniversary',
+        link: urlGenerator('/HomeAnniversary')
       },
       {
-        title: 'Holiday',
-        value: [
-          'Christmas',
-          'NewYear',
-          'Valentines',
-          'StPatrick',
-          'Easter',
-          'OtherHoliday'
-        ],
-        link: urlGenerator([
-          'Christmas',
-          'NewYear',
-          'Valentines',
-          'StPatrick',
-          'Easter',
-          'OtherHoliday'
-        ])
+        title: 'Wedding Anniversary',
+        value: 'WeddingAnniversary',
+        link: urlGenerator('/WeddingAnniversary')
+      }
+    ]
+  },
+  holidays: {
+    type: SectionsEnum.LINK,
+    key: 'holidays',
+    title: 'Holidays',
+    items: [
+      {
+        title: 'Christmas',
+        value: 'Christmas',
+        link: urlGenerator('/Christmas')
       },
       {
-        title: 'New Agent',
-        value: 'NewAgent',
-        link: urlGenerator('/NewAgent')
+        title: 'New Year',
+        value: 'NewYear',
+        link: urlGenerator('/NewYear')
+      },
+      {
+        title: 'Valentines',
+        value: 'Valentines',
+        link: urlGenerator('/Valentines')
+      },
+      {
+        title: 'St Patrick',
+        value: 'StPatrick',
+        link: urlGenerator('/StPatrick')
+      },
+      {
+        title: 'Easter',
+        value: 'Easter',
+        link: urlGenerator('/Easter')
+      },
+      {
+        title: 'Fathers Day',
+        value: 'FathersDay',
+        link: urlGenerator('/FathersDay')
+      },
+      {
+        title: 'Mothers Day',
+        value: 'MothersDay',
+        link: urlGenerator('/MothersDay')
+      },
+      {
+        title: 'Memorial Day',
+        value: 'MemorialDay',
+        link: urlGenerator('/MemorialDay')
+      },
+      {
+        title: 'Labor Day',
+        value: 'LaborDay',
+        link: urlGenerator('/LaborDay')
+      },
+      {
+        title: 'Hannukkah',
+        value: 'Hannukkah',
+        link: urlGenerator('/Hannukkah')
+      },
+      {
+        title: 'Passover',
+        value: 'Passover',
+        link: urlGenerator('/Passover')
+      },
+      {
+        title: 'Rosh Hashanah',
+        value: 'RoshHashanah',
+        link: urlGenerator('/RoshHashanah')
+      },
+      {
+        title: 'Fourth Of July',
+        value: 'FourthOfJuly',
+        link: urlGenerator('/FourthOfJuly')
+      },
+      {
+        title: 'Veterans Day',
+        value: 'VeteransDay',
+        link: urlGenerator('/VeteransDay')
+      },
+      {
+        title: 'Thanksgiving',
+        value: 'Thanksgiving',
+        link: urlGenerator('/Thanksgiving')
+      },
+      {
+        title: 'Halloween',
+        value: 'Halloween',
+        link: urlGenerator('/Halloween')
+      },
+      {
+        title: 'Martin Luther King Day',
+        value: 'MLKDay',
+        link: urlGenerator('/MLKDay')
+      },
+      {
+        title: 'Independence Day',
+        value: 'IndependenceDay',
+        link: urlGenerator('/IndependenceDay')
+      },
+      {
+        title: 'Chinese New Year',
+        value: 'ChineseNewYear',
+        link: urlGenerator('/ChineseNewYear')
+      },
+      {
+        title: 'Diwaly',
+        value: 'Diwaly',
+        link: urlGenerator('/Diwaly')
+      },
+      {
+        title: 'Kwanzaa',
+        value: 'Kwanzaa',
+        link: urlGenerator('/Kwanzaa')
+      },
+      {
+        title: 'Others',
+        value: 'OtherHoliday',
+        link: urlGenerator('/OtherHoliday')
       }
     ]
   },
@@ -134,6 +234,35 @@ const ALL_SECTIONS: SectionCollection = {
         title: 'Multi Properties',
         value: 'Listings',
         link: urlGenerator('/Listings')
+      }
+    ]
+  },
+  branding: {
+    type: SectionsEnum.LINK,
+    key: 'branding',
+    title: 'Branding',
+    items: [
+      {
+        title: 'Brand Campaigns',
+        value: 'Brand',
+        link: urlGenerator('/Brand')
+      },
+      {
+        title: 'New Agent',
+        value: 'NewAgent',
+        link: urlGenerator('/NewAgent')
+      }
+    ]
+  },
+  layouts: {
+    type: SectionsEnum.LINK,
+    key: 'layouts',
+    title: 'Blank Layouts',
+    items: [
+      {
+        title: 'Blank Layouts',
+        value: 'Layout',
+        link: urlGenerator('/Layout')
       }
     ]
   }
