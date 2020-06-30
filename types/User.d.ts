@@ -6,6 +6,7 @@ declare interface IUserBase {
   phone_number: string | null
   is_shadow: boolean
   fake_email?: boolean
+  has_docusign: boolean
   profile_image_url: string | null
   cover_image_url: string | null
   email_signature: string | null

@@ -6,7 +6,7 @@ export interface ISignatureRecipient extends IDealRole {
 export interface FormValues {
   attachments: IDealFile[]
   recipients: Record<string, ISignatureRecipient>
-  from: string
+  owner: IUser
   subject: string
   message: string
   auto_notify: boolean

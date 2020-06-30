@@ -65,6 +65,7 @@ export default function Signature({
       // add envelope to list of envelopes
       const envelope = await Deal.sendEnvelope(
         deal.id,
+        form.owner.id,
         form.subject,
         form.message,
         attachments,

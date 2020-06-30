@@ -8,8 +8,8 @@ import { notDeleted } from './not-deleted'
 import { DEFAULT_BRAND_PALETTE } from './constants'
 import flattenBrand from './flatten-brand'
 
-function getActiveTeamFromCookieOrUser(user) {
-  return user.active_brand || user.brand || cookie.get('rechat-active-team')
+function getActiveTeamFromUser(user) {
+  return user.active_brand || user.brand
 }
 
 export function getActiveTeam(user: Partial<IUser> | null): IUserTeam | null {
@@ -20,7 +20,7 @@ export function getActiveTeam(user: Partial<IUser> | null): IUserTeam | null {
   const { teams } = user
 
   let activeTeam = teams.find(
-    team => team.brand.id === getActiveTeamFromCookieOrUser(user)
+    team => team.brand.id === getActiveTeamFromUser(user)
   )
 
   if (!activeTeam && teams) {
