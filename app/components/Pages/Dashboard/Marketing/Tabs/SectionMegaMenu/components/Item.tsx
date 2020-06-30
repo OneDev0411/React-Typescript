@@ -1,19 +1,12 @@
 import React from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core'
-
-import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
+import { Grid, makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { goTo } from 'utils/go-to'
 
+import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 import { SectionItem } from 'components/PageSideNav/types'
 
 import { MEDIUMS_COLLECTION } from '../../../constants'
-
-interface Props {
-  data: SectionItem
-  mediums: string[] | null
-  onClose: () => void
-}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,15 +35,15 @@ const useStyles = makeStyles((theme: Theme) =>
           marginBottom: theme.spacing(1)
         }
       }
-    },
-    noItems: {
-      display: 'block',
-      marginTop: theme.spacing(1),
-      ...theme.typography.body2,
-      color: theme.palette.grey[500]
     }
   })
 )
+
+interface Props {
+  data: SectionItem
+  mediums: string[] | null
+  onClose: () => void
+}
 
 function Item({ data, mediums, onClose }: Props) {
   const classes = useStyles()
@@ -77,10 +70,6 @@ function Item({ data, mediums, onClose }: Props) {
       )
     }
 
-    if (mediums.length === 0) {
-      return <span className={classes.noItems}>No Items</span>
-    }
-
     return (
       <ul className={classes.items}>
         {mediums.map(medium => {
@@ -96,13 +85,20 @@ function Item({ data, mediums, onClose }: Props) {
     )
   }
 
+  // Do not render categories without any mediums/templates
+  if (mediums?.length === 0) {
+    return null
+  }
+
   return (
-    <div className={classes.container}>
-      <span className={classes.title} onClick={e => navigateTo(e, link)}>
-        {title}
-      </span>
-      {renderContent()}
-    </div>
+    <Grid item>
+      <div className={classes.container}>
+        <span className={classes.title} onClick={e => navigateTo(e, link)}>
+          {title}
+        </span>
+        {renderContent()}
+      </div>
+    </Grid>
   )
 }
 

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Grid } from '@material-ui/core'
 
-import { Section } from 'components/PageSideNav/types'
+import { Section, SectionItem } from 'components/PageSideNav/types'
 
 import Item from './components/Item'
 
@@ -15,7 +15,7 @@ interface Props {
 export const SectionMegaMenu = ({ data, mediums, onClose }: Props) => {
   const { items } = data
 
-  const sanitizeMediums = item => {
+  const sanitizeMediums = (item: SectionItem) => {
     if (!Object.keys(mediums).length || !item.value || !item.title) {
       return null
     }
@@ -35,13 +35,12 @@ export const SectionMegaMenu = ({ data, mediums, onClose }: Props) => {
         const currentSectionMediums = sanitizeMediums(item)
 
         return (
-          <Grid key={i} item>
-            <Item
-              data={item}
-              mediums={currentSectionMediums}
-              onClose={onClose}
-            />
-          </Grid>
+          <Item
+            key={i}
+            data={item}
+            mediums={currentSectionMediums}
+            onClose={onClose}
+          />
         )
       })}
     </Grid>
