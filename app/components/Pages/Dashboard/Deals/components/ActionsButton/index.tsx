@@ -454,6 +454,7 @@ class ActionsButton extends React.Component<
             onClickAddAttachments={() =>
               this.setState({ isSignatureFormOpen: false })
             }
+            onClose={this.handleDeselectAction}
           />
         )}
 
@@ -486,6 +487,11 @@ class ActionsButton extends React.Component<
               attachments: this.getEmailComposeFiles()
             }}
             deal={this.props.deal}
+            onClickAddDealAttachments={() =>
+              this.setState({
+                isComposeEmailOpen: false
+              })
+            }
             onClose={this.handleToggleComposeEmail}
             onSent={this.handleToggleComposeEmail}
           />

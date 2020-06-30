@@ -36,6 +36,7 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   sendEmail: (values: EmailComposeValues) => Promise<EmailType>
   onSent?: (result: EmailType) => void
   onClose?: () => void
+  onClickAddDealAttachments?: () => void
   /**
    * A deal to suggest attachments from it
    */

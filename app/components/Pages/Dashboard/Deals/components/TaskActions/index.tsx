@@ -83,7 +83,7 @@ export function TaskActions({ deal }: Props) {
   const iconClasses = useIconStyles()
   const [state, dispatch] = useChecklistActionsContext()
   const [isDocusignDraweOpen, setIsDocusignDrawerOpen] = useState(false)
-  const [isEmailComposeDraweOpen, setIsEmailComposeDraweOpen] = useState(false)
+  const [isEmailComposeDraweOpen, setIsEmailComposeDrawerOpen] = useState(false)
 
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
@@ -95,7 +95,7 @@ export function TaskActions({ deal }: Props) {
 
   const handleCloseEmailDrawer = () => {
     cancel()
-    setIsEmailComposeDraweOpen(false)
+    setIsEmailComposeDrawerOpen(false)
   }
 
   const handleCloseSignatureDrawer = () => {
@@ -133,7 +133,7 @@ export function TaskActions({ deal }: Props) {
               <Button
                 variant="outlined"
                 color="secondary"
-                onClick={() => setIsEmailComposeDraweOpen(true)}
+                onClick={() => setIsEmailComposeDrawerOpen(true)}
               >
                 Send Email
               </Button>
@@ -199,6 +199,7 @@ export function TaskActions({ deal }: Props) {
             attachments: state.attachments
           }}
           deal={deal}
+          onClickAddDealAttachments={() => setIsEmailComposeDrawerOpen(false)}
           onClose={handleCloseEmailDrawer}
           onSent={handleCloseEmailDrawer}
         />
