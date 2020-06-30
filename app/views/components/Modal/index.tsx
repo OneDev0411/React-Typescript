@@ -20,13 +20,21 @@ const HeaderContainer = styled.div`
   line-height: 3.6;
 `
 
+interface ModalHeaderProps {
+  title: ReactNode
+  closeHandler?(): void
+  children?: ReactNode
+  className?: string
+}
+
 export function ModalHeader({
   title,
+  closeHandler,
   children = null,
-  closeHandler = () => {}
-}) {
+  className = ''
+}: ModalHeaderProps) {
   return (
-    <HeaderContainer>
+    <HeaderContainer className={className}>
       <div
         style={{
           display: 'flex',
@@ -37,15 +45,17 @@ export function ModalHeader({
         }}
       >
         <H3>{title}</H3>
-        <IconButton
-          iconSize="large"
-          isFit
-          inverse
-          onClick={closeHandler}
-          data-test="close-modal"
-        >
-          <CloseIcon />
-        </IconButton>
+        {closeHandler && (
+          <IconButton
+            iconSize="large"
+            isFit
+            inverse
+            onClick={closeHandler}
+            data-test="close-modal"
+          >
+            <CloseIcon />
+          </IconButton>
+        )}
       </div>
       {children}
     </HeaderContainer>

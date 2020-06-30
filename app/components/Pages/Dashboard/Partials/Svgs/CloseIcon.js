@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default ({ fill = '#BFBFC0' }) => (
+export default ({ fill = '#BFBFC0', width = 10, height = 10 }) => (
   <svg
-    width="10"
-    height="10"
+    width={width}
+    height={height}
     viewBox="0 0 10 10"
     className="close-icon"
     xmlns="http://www.w3.org/2000/svg"
