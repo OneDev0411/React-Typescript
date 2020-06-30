@@ -1,20 +1,18 @@
 import styled from 'styled-components'
 
-import { grey, primary } from 'views/utils/colors'
-import ALink from 'components/ALink'
-
 export const AccountInfoWrapper = styled.div`
   line-height: 1.5;
+  padding-top: 10px;
+  min-width: 240px;
   .header {
-    font-weight: 600;
+    display: flex;
   }
   .secondary {
-    color: ${grey.A900};
+    display: flex;
+    padding-left: 28px;
   }
-  .dot {
-    margin: 0 0.8rem;
-  }
-  ${ALink} {
-    color: ${primary};
+  .secondary .settings {
+    position: relative;
+    right: -10px;
   }
 `
