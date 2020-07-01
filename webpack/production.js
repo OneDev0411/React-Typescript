@@ -4,6 +4,7 @@ import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
 import SentryCliPlugin from '@sentry/webpack-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
 
 import moment from 'moment'
 
@@ -16,7 +17,9 @@ webpackConfig.optimization = {
   splitChunks: {
     chunks: 'all'
   },
-  usedExports: true
+  usedExports: true,
+  minimize: true,
+  minimizer: [new TerserPlugin()]
 }
 
 const Expires = moment().utc().add('1', 'month').toDate()
