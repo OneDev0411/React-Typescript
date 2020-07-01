@@ -1,7 +1,6 @@
 import React, {
   memo,
   useState,
-  useRef,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -12,8 +11,11 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 // List of full calendar assets
-import FullCalendar from '@fullcalendar/react'
-import { EventInput, View, EventApi } from '@fullcalendar/core'
+import FullCalendar, {
+  EventApi,
+  EventInput,
+  DatesSetArg
+} from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
@@ -82,9 +84,6 @@ export const GridCalendarPresentation = ({
   associations = []
 }: Props) => {
   const classes = useStyles()
-  // calendat reference
-  const calendarRef = useRef<FullCalendar>(null)
-
   // list of server events
   const [rowEvents, setRowEvents] = useState<ICalendarEvent[]>([])
   // list of current events
@@ -242,7 +241,7 @@ export const GridCalendarPresentation = ({
   /**
    * trigger on layout chnage
    */
-  const handleDatesRender = (e: { view: View; el: HTMLElement }) => {
+  const handleDatesRender = (e: DatesSetArg) => {
     const { view } = e
     const [start, end] = calendarRange
 
@@ -379,13 +378,13 @@ export const GridCalendarPresentation = ({
         })}
       >
         <FullCalendar
-          height="parent"
-          defaultView="dayGridMonth"
-          eventLimit
+          height="100%"
+          initialView="dayGridMonth"
+          dayMaxEventRows
           editable
-          header={{
-            left: 'today, prev,next, title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+          headerToolbar={{
+            left: 'today prev,next title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
           }}
           buttonText={{
             today: 'Today',
@@ -395,9 +394,8 @@ export const GridCalendarPresentation = ({
             list: 'List'
           }}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          ref={calendarRef}
           events={events}
-          datesRender={handleDatesRender}
+          datesSet={handleDatesRender}
           dateClick={handleDayClick}
           eventClick={handleClickEvent}
           eventDrop={handleEditEvent}

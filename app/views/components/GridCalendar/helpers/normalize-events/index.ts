@@ -1,5 +1,5 @@
 import _uniqBy from 'lodash/uniqBy'
-import { EventInput } from '@fullcalendar/core'
+import { EventInput } from '@fullcalendar/react'
 
 import { getTitle } from './helpers/get-title'
 import { getDates } from './helpers/get-dates'
