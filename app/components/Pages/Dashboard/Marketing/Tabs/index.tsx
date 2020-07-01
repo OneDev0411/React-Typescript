@@ -36,6 +36,12 @@ const MarketingTabs = ({ sections, mediums, templateTypes }: Props) => {
     })?.key
   }
 
+  // Do not render menus before getting all mediums
+  // We're doing this to prevent sections/tabs flashing
+  if (Object.keys(mediums).length === 0) {
+    return null
+  }
+
   return (
     <PageTabs
       defaultValue={getActiveTab()}
