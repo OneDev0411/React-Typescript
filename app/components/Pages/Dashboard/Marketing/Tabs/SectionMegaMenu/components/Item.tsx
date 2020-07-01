@@ -77,7 +77,7 @@ function Item({ data, mediums, onClose }: Props) {
   }
 
   // Do not render categories without any mediums/templates
-  if (mediums?.length === 0) {
+  if (mediums.length === 0) {
     return null
   }
 
