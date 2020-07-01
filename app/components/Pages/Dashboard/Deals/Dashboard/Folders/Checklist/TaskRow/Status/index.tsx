@@ -68,13 +68,25 @@ function getIcon(status: string) {
     case 'Pending':
     case 'Submitted':
     case 'Notified':
-      return <SvgIcon path={mdiBellRingOutline} size={muiIconSizes.xsmall} />
+      return (
+        <SvgIcon
+          rightMargined
+          path={mdiBellRingOutline}
+          size={muiIconSizes.xsmall}
+        />
+      )
 
     case 'Declined':
-      return <SvgIcon path={mdiAlertOutline} size={muiIconSizes.small} />
+      return (
+        <SvgIcon
+          rightMargined
+          path={mdiAlertOutline}
+          size={muiIconSizes.small}
+        />
+      )
 
     case 'Approved':
-      return <SvgIcon path={mdiCheck} size={muiIconSizes.small} />
+      return <SvgIcon rightMargined path={mdiCheck} size={muiIconSizes.small} />
 
     default:
       return null
