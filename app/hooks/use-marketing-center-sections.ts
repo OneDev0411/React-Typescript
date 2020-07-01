@@ -25,12 +25,11 @@ function urlGenerator(url: string | string[]): string {
 
 const ALL_SECTIONS: SectionCollection = {
   marketingCenter: {
-    type: SectionsEnum.LINK,
+    type: SectionsEnum.Link,
     key: 'marketingCenter',
     title: 'Marketing Center',
     items: [
       {
-        isIndex: true,
         title: 'My Designs',
         link: urlGenerator('/'),
         icon: MyDesignsIcon
@@ -38,7 +37,7 @@ const ALL_SECTIONS: SectionCollection = {
     ]
   },
   newsletters: {
-    type: SectionsEnum.LINK,
+    type: SectionsEnum.Link,
     key: 'newsletters',
     title: 'Newsletters',
     items: [
@@ -50,7 +49,7 @@ const ALL_SECTIONS: SectionCollection = {
     ]
   },
   celebrations: {
-    type: SectionsEnum.LINK,
+    type: SectionsEnum.List,
     key: 'celebrations',
     title: 'Celebrations',
     items: [
@@ -72,7 +71,7 @@ const ALL_SECTIONS: SectionCollection = {
     ]
   },
   holidays: {
-    type: SectionsEnum.LINK,
+    type: SectionsEnum.List,
     key: 'holidays',
     title: 'Holidays',
     items: [
@@ -189,7 +188,7 @@ const ALL_SECTIONS: SectionCollection = {
     ]
   },
   properties: {
-    type: SectionsEnum.LINK,
+    type: SectionsEnum.List,
     key: 'properties',
     title: 'Properties',
     items: [
@@ -241,7 +240,7 @@ const ALL_SECTIONS: SectionCollection = {
     ]
   },
   branding: {
-    type: SectionsEnum.LINK,
+    type: SectionsEnum.List,
     key: 'branding',
     title: 'Branding',
     items: [
@@ -258,7 +257,7 @@ const ALL_SECTIONS: SectionCollection = {
     ]
   },
   layouts: {
-    type: SectionsEnum.LINK,
+    type: SectionsEnum.List,
     key: 'layouts',
     title: 'Blank Layouts',
     items: [

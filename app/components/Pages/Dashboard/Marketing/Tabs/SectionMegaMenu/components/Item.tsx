@@ -3,7 +3,6 @@ import { Grid, makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { goTo } from 'utils/go-to'
 
-import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 import { SectionItem } from 'components/PageSideNav/types'
 
 import { MEDIUMS_COLLECTION } from '../../../constants'
@@ -41,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   data: SectionItem
-  mediums: string[] | null
+  mediums: string[]
   onClose: () => void
 }
 
@@ -61,15 +60,7 @@ function Item({ data, mediums, onClose }: Props) {
     goTo(link)
   }
 
-  const renderContent = () => {
-    if (!mediums) {
-      return (
-        <div>
-          <Loading />
-        </div>
-      )
-    }
-
+  const renderMediumsList = () => {
     return (
       <ul className={classes.items}>
         {mediums.map(medium => {
@@ -96,7 +87,7 @@ function Item({ data, mediums, onClose }: Props) {
         <span className={classes.title} onClick={e => navigateTo(e, link)}>
           {title}
         </span>
-        {renderContent()}
+        {renderMediumsList()}
       </div>
     </Grid>
   )
