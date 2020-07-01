@@ -2,6 +2,8 @@ import React from 'react'
 
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 
+import { goTo } from 'utils/go-to'
+
 import { CrmEvents } from '../../../Calendar/components/CrmEvents'
 import {
   isDealEvent,
@@ -56,13 +58,13 @@ export const EventController = ({
   )
 
   if (event?.object_type === 'contact' && event?.event_type === 'next_touch') {
-    window.open(`/dashboard/contacts/${event.contact}`, '_blank')
+    goTo(`/dashboard/contacts/${event.contact}`)
 
     return null
   }
 
   if (event && isDealEvent(event)) {
-    window.open(`/dashboard/deals/${event.deal}`)
+    goTo(`/dashboard/deals/${event.deal}`)
 
     return null
   }
