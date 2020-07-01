@@ -1,7 +1,6 @@
 import React, {
   memo,
   useState,
-  useRef,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -85,9 +84,6 @@ export const GridCalendarPresentation = ({
   associations = []
 }: Props) => {
   const classes = useStyles()
-  // calendat reference
-  const calendarRef = useRef<FullCalendar>(null)
-
   // list of server events
   const [rowEvents, setRowEvents] = useState<ICalendarEvent[]>([])
   // list of current events
@@ -387,8 +383,8 @@ export const GridCalendarPresentation = ({
           dayMaxEventRows
           editable
           headerToolbar={{
-            left: 'today, prev,next, title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            left: 'today prev,next title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
           }}
           buttonText={{
             today: 'Today',
@@ -398,7 +394,6 @@ export const GridCalendarPresentation = ({
             list: 'List'
           }}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          ref={calendarRef}
           events={events}
           datesSet={handleDatesRender}
           dateClick={handleDayClick}
