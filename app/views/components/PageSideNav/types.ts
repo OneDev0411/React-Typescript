@@ -1,8 +1,8 @@
 import { CSSProperties } from '@material-ui/styles'
 
 export enum SectionsEnum {
-  LINK = 'link',
-  SELECTABLE_LIST = 'list'
+  Link = 'link',
+  List = 'list'
 }
 
 export interface SectionItem {
@@ -23,7 +23,7 @@ export interface Section {
 }
 
 interface SelectableListSection {
-  type: SectionsEnum.SELECTABLE_LIST
+  type: SectionsEnum.List
   title?: string
   items: {
     title: string
@@ -31,22 +31,22 @@ interface SelectableListSection {
   }[]
 }
 
+export interface LinkListSection {
+  type: SectionsEnum.Link
+  title?: string
+  items: SideNavItemProps[]
+}
+
 export interface SideNavItemProps {
   // Without this, it's really hard to detect whether user is on a url or not.
   isIndex?: boolean
-  icon?: React.FC<any>
+  icon?: React.ComponentType
   title: string
   link?: string
   badge?: number
   isSelected?: boolean
   tooltip?: string | string[]
   onDelete?: () => void
-}
-
-export interface LinkListSection {
-  type: SectionsEnum.LINK
-  title?: string
-  items: SideNavItemProps[]
 }
 
 type SectionsType = SelectableListSection | LinkListSection

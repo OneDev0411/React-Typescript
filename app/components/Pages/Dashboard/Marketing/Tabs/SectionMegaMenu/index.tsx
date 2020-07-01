@@ -16,13 +16,9 @@ export const SectionMegaMenu = ({ data, mediums, onClose }: Props) => {
   const { items } = data
 
   const sanitizeMediums = (item: SectionItem) => {
-    if (!Object.keys(mediums).length || !item.value || !item.title) {
-      return null
-    }
-
     const mediumKey = Array.isArray(item.value) ? item.title : item.value
 
-    if (mediums[mediumKey]) {
+    if (mediumKey && mediums[mediumKey]) {
       return mediums[mediumKey]
     }
 
