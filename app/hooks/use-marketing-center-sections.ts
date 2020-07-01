@@ -1,7 +1,5 @@
 import { useSelector } from 'react-redux'
 
-import MyDesignsIcon from 'components/SvgIcons/IconMyDesigns/IconMyDesigns'
-
 import { IAppState } from 'reducers'
 import { hasUserAccess } from 'utils/user-teams'
 
@@ -31,8 +29,7 @@ const ALL_SECTIONS: SectionCollection = {
     items: [
       {
         title: 'My Designs',
-        link: urlGenerator('/'),
-        icon: MyDesignsIcon
+        link: urlGenerator('/')
       }
     ]
   },

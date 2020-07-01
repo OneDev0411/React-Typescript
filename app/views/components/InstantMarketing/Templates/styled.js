@@ -20,8 +20,7 @@ export const TemplateItem = styled.div`
   position: relative;
   border: 1px solid white;
   border-radius: 5px;
-  margin: auto;
-  margin-bottom: 20px;
+  margin: 0 auto 20px;
   cursor: pointer;
   width: 292px;
   text-align: center;

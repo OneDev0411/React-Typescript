@@ -1,13 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import { mdiDotsVertical } from '@mdi/js'
 
 import { updateChecklist } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
 import Spinner from 'components/Spinner'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { BasicDropdown } from 'components/BasicDropdown'
-import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 
 import { Loading } from './styled'
 
@@ -106,7 +107,7 @@ class ChecklistMenu extends React.Component {
       <BasicDropdown
         pullTo="right"
         style={{ margin: '0.25rem -0.75rem 0 0' }}
-        buttonRenderer={props => <VerticalDotsIcon {...props} />}
+        buttonRenderer={props => <SvgIcon path={mdiDotsVertical} {...props} />}
         items={menuItems}
         onChange={item => item.onClick()}
       />
@@ -114,7 +115,6 @@ class ChecklistMenu extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  { notify, confirmation, updateChecklist }
-)(ChecklistMenu)
+export default connect(null, { notify, confirmation, updateChecklist })(
+  ChecklistMenu
+)

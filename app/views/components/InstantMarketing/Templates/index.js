@@ -51,8 +51,8 @@ class Templates extends React.Component {
 
       if (templates.length > 0) {
         // sort template based on their types
-        templates = _.sortBy(templates, template =>
-          types.indexOf(template.template_type)
+        templates = _.sortBy(templates, brandTemplate =>
+          types.indexOf(brandTemplate.template.template_type)
         )
 
         // Reordering templates list and show the default tempalte
@@ -64,18 +64,24 @@ class Templates extends React.Component {
           ]
         } else {
           const savedTemplates = templates.filter(
-            template => template.variant === SAVED_TEMPLATE_VARIANT
+            brandTemplate =>
+              brandTemplate.template.variant === SAVED_TEMPLATE_VARIANT
           )
 
           const otherTemplates = templates.filter(
-            template => template.variant !== SAVED_TEMPLATE_VARIANT
+            brandTemplate =>
+              brandTemplate.template.variant !== SAVED_TEMPLATE_VARIANT
           )
 
           templates = [...otherTemplates, ...savedTemplates]
         }
 
         const currentTemplatesTypes = [
-          ...new Set(templates.map(item => item.template.template_type))
+          ...new Set(
+            templates
+              .map(item => item.template.template_type)
+              .filter(type => !!type)
+          )
         ]
 
         currentTemplatesTypes.sort()

@@ -1,31 +1,33 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
-import { MenuItem, Popover } from '@material-ui/core'
-import { useTheme } from '@material-ui/styles'
+import { MenuItem, Popover, useTheme } from '@material-ui/core'
+import {
+  mdiViewGridOutline,
+  mdiMapLegend,
+  mdiFormatListBulleted
+} from '@mdi/js'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 import { useIconStyles } from 'styles/use-icon-styles'
 
-import ListIcon from 'components/SvgIcons/List/ListIcon'
-import GalleryIcon from 'components/SvgIcons/GalleryView/IconGalleryView'
-import MapViewIcon from 'components/SvgIcons/Properties/IconProperties'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const listingViewOptions = [
   {
     label: 'Map View',
     value: 'map',
-    icon: props => <MapViewIcon {...props} />
+    icon: props => <SvgIcon path={mdiMapLegend} {...props} />
   },
   {
     label: 'Grid View',
     value: 'grid',
-    icon: props => <GalleryIcon {...props} />
+    icon: props => <SvgIcon path={mdiViewGridOutline} {...props} />
   },
   {
     label: 'List View',
     value: 'list',
-    icon: props => <ListIcon {...props} />
+    icon: props => <SvgIcon path={mdiFormatListBulleted} {...props} />
   }
 ]
 const ViewSwitcher = ({ onChangeView, activeView }) => {
@@ -91,7 +93,7 @@ const ViewSwitcher = ({ onChangeView, activeView }) => {
             {option.icon({
               color: theme.palette.primary,
               className: cn(iconClasses.small, iconClasses.rightMargin)
-            })}{' '}
+            })}
             {option.label}
           </MenuItem>
         ))}

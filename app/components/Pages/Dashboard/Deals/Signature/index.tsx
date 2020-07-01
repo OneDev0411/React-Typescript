@@ -18,13 +18,15 @@ interface Props {
   deal: IDeal
   defaultAttachments: any[]
   onClose: () => void
+  onClickAddAttachments?: () => void
 }
 
 export default function Signature({
   isOpen,
   deal,
   defaultAttachments,
-  onClose
+  onClose,
+  onClickAddAttachments = () => {}
 }: Props) {
   const [isSending, setIsSending] = useState(false)
   const [showDocusignBanner, setShowDocusignBanner] = useState(false)
@@ -78,6 +80,8 @@ export default function Signature({
       setIsSending(false)
       setFormData(null)
 
+      onClose()
+
       dispatch(
         confirmation({
           description: 'Your envelope is ready',
@@ -110,6 +114,7 @@ export default function Signature({
         isOpen={!showDocusignBanner}
         isSubmitting={isSending}
         onSubmit={handleSubmit}
+        onClickAddAttachments={onClickAddAttachments}
         onClose={onClose}
       />
 

@@ -4,26 +4,22 @@ import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 import { Box, Button, IconButton } from '@material-ui/core'
 
-import { confirmation } from 'actions/confirmation'
+import { mdiTrashCanOutline } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { confirmation } from 'actions/confirmation'
 import InstantMarketing from 'components/InstantMarketing'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { formatDate } from 'components/InstantMarketing/helpers/nunjucks-filters'
-
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
 import { getTemplates } from 'models/instant-marketing'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import getListing from 'models/listings/listing/get-listing'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { isSoloActiveTeam, getActiveTeamId } from 'utils/user-teams'
-
 import LoadingContainer from 'components/LoadingContainer'
-
 import { goTo } from 'utils/go-to'
-
-import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
 
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
@@ -534,7 +530,7 @@ class OpenHouseDrawerInternal extends React.Component {
                                   disabled={isDisabled}
                                   onClick={this.onDelete}
                                 >
-                                  <IconDelete size="medium" />
+                                  <SvgIcon path={mdiTrashCanOutline} />
                                 </IconButton>
                               </Tooltip>
                               <Divider

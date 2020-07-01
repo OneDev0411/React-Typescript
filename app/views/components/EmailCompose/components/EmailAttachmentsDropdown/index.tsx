@@ -2,19 +2,16 @@ import React from 'react'
 import { useField } from 'react-final-form'
 import { List, ListItem, Tooltip } from '@material-ui/core'
 import { useDropboxChooser } from 'use-dropbox-chooser'
+import { mdiAttachment, mdiDropbox, mdiProgressUpload } from '@mdi/js'
 
-import IconUpload from 'components/SvgIcons/Upload/IconUpload'
-import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
-import IconDropbox from 'components/SvgIcons/Dropbox/IconDropbox'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
 import { DropdownToggleButton } from '../../../DropdownToggleButton'
-import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { BaseDropdown } from '../../../BaseDropdown'
 import { FilePicker } from '../../../FilePicker'
 import AddDealFile from '../AddDealFile'
-import { iconSizes } from '../../../SvgIcons/icon-sizes'
 import { useUploadAttachment } from '../../helpers/use-upload-attachment'
 import config from '../../../../../../config/public'
 
@@ -27,7 +24,7 @@ interface Props {
    * and a new attachment is added because of that.
    */
   onChanged?: () => void
-  onClose?: () => void
+  onClickAddDealAttachments?: () => void
   uploadAttachment: typeof uploadEmailAttachment
 }
 
@@ -36,9 +33,8 @@ export function EmailAttachmentsDropdown({
   initialAttachments,
   uploadAttachment,
   onChanged = () => {},
-  onClose = () => {}
+  onClickAddDealAttachments = () => {}
 }: Props) {
-  const iconClasses = useIconStyles()
   const attachmentsField = useField('attachments')
   const [upload] = useUploadAttachment(uploadAttachment)
 
@@ -60,10 +56,7 @@ export function EmailAttachmentsDropdown({
       renderDropdownButton={buttonProps => (
         <Tooltip title="Attach a File">
           <DropdownToggleButton {...buttonProps}>
-            <IconAttachment
-              size={iconSizes.small}
-              className={iconClasses.rightMargin}
-            />
+            <SvgIcon path={mdiAttachment} rightMargined />
           </DropdownToggleButton>
         </Tooltip>
       )}
@@ -78,7 +71,7 @@ export function EmailAttachmentsDropdown({
               onChanged()
             }}
             onClick={close}
-            onClose={onClose}
+            onClickAddDealAttachments={onClickAddDealAttachments}
             value={attachmentsField.input.value}
           />
           <ListItem
@@ -108,10 +101,7 @@ export function EmailAttachmentsDropdown({
               close()
             }}
           >
-            <IconDropbox
-              size={iconSizes.small}
-              className={iconClasses.rightMargin}
-            />
+            <SvgIcon path={mdiDropbox} rightMargined />
             Attach from dropbox
           </ListItem>
           <FilePicker onFilePicked={uploadFromComputer}>
@@ -123,10 +113,7 @@ export function EmailAttachmentsDropdown({
                   close()
                 }}
               >
-                <IconUpload
-                  size={iconSizes.small}
-                  className={iconClasses.rightMargin}
-                />
+                <SvgIcon path={mdiProgressUpload} rightMargined />
                 Attach from your computer
               </ListItem>
             )}

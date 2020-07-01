@@ -2,10 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Downshift from 'downshift'
+import { mdiChevronDown } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { setSelectedTask } from 'actions/deals'
 import { isBackOffice } from 'utils/user-teams'
-import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import Tooltip from 'components/tooltip'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
@@ -14,17 +15,17 @@ import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getEsignAttachments } from 'views/utils/deal-files/get-esign-attachments'
 import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
 
-import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 
 import type {
   StateContext,
   DispatchContext
-} from 'deals/Dashboard/Folders/actions-context'
+} from 'deals/contexts/actions-context'
 
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT
-} from 'deals/Dashboard/Folders/actions-context/constants'
+} from 'deals/contexts/actions-context/constants'
 
 import { normalizeActions } from './data/normalize-actions'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
@@ -403,11 +404,7 @@ class ActionsButton extends React.Component<
 
                 {secondaryActions.length > 0 && (
                   <MenuButton onClick={this.handleToggleMenu}>
-                    <ArrowDownIcon
-                      style={{
-                        transform: isOpen ? 'rotateX(180deg)' : 'initial'
-                      }}
-                    />
+                    <SvgIcon path={mdiChevronDown} rotate={isOpen ? 180 : 0} />
                   </MenuButton>
                 )}
               </Container>
@@ -453,8 +450,11 @@ class ActionsButton extends React.Component<
           <GetSignature
             isOpen
             deal={this.props.deal}
-            onClose={this.handleDeselectAction}
             defaultAttachments={this.getEsignAttachments()}
+            onClickAddAttachments={() =>
+              this.setState({ isSignatureFormOpen: false })
+            }
+            onClose={this.handleDeselectAction}
           />
         )}
 
@@ -487,6 +487,11 @@ class ActionsButton extends React.Component<
               attachments: this.getEmailComposeFiles()
             }}
             deal={this.props.deal}
+            onClickAddDealAttachments={() =>
+              this.setState({
+                isComposeEmailOpen: false
+              })
+            }
             onClose={this.handleToggleComposeEmail}
             onSent={this.handleToggleComposeEmail}
           />

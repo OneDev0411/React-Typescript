@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { mdiClose } from '@mdi/js'
+
 import { Button, Icon } from './styled'
 
 export function DrawingRemoveButton(props) {
@@ -9,7 +11,7 @@ export function DrawingRemoveButton(props) {
 
   return (
     <Button onClick={props.onClick}>
-      <Icon />
+      <Icon path={mdiClose} />
       Remove Draw
     </Button>
   )

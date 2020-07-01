@@ -9,9 +9,10 @@ import {
   Typography
 } from '@material-ui/core'
 
-import { ClassesProps } from 'utils/ts-utils'
+import { mdiClose } from '@mdi/js'
 
-import CloseIcon from '../SvgIcons/Close/CloseIcon'
+import { ClassesProps } from 'utils/ts-utils'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   children: ReactNode
@@ -50,7 +51,7 @@ export function DialogTitle({
         </Box>
         {onClose && (
           <IconButton size="small" onClick={onClose}>
-            <CloseIcon />
+            <SvgIcon path={mdiClose} />
           </IconButton>
         )}
       </div>

@@ -4,17 +4,16 @@ import Downshift from 'downshift'
 
 import Button from '@material-ui/core/Button'
 
+import AddOutlinedIcon from '@material-ui/icons/AddOutlined'
+
 import { FilterItemToolTip } from './tooltip'
 import { Container, List, ListItem } from './styled'
-import Icon from '../../../SvgIcons/Add/AddIcon'
 
-const IconAdd = styled(Icon)`
+const IconAdd = styled(AddOutlinedIcon)`
   fill: ${props =>
     !props.disabled
       ? props.theme.palette.secondary.main
       : props.theme.palette.action.disabled};
-  width: 1.3em;
-  height: 1.3em;
 `
 
 export class AddFilter extends React.Component {
@@ -63,7 +62,7 @@ export class AddFilter extends React.Component {
                 onClick={this.toggleMenu}
                 disabled={disabled}
               >
-                <IconAdd disabled={disabled} />
+                <IconAdd disabled={disabled} fontSize="small" />
                 <span style={{ fontWight: 500 }}>Add Filter</span>
               </Button>
 

@@ -2,11 +2,11 @@ import React from 'react'
 import { Box, IconButton } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
+import { mdiGiftOutline, mdiEmailOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import SendEmailButton from 'components/SendEmailButton'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
-import EmailIcon from 'components/SvgIcons/EmailOutlined/IconEmailOutlined'
-import BirthDayIcon from 'components/SvgIcons/Birthday/IconBirthday'
-
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 
 import Chat from '../../../components/ChatButton'
@@ -42,7 +42,7 @@ export default function Menu({ contact }: Props) {
             data-test={testId}
             className={classes.button}
           >
-            <EmailIcon />
+            <SvgIcon path={mdiEmailOutline} />
           </IconButton>
         )}
       />
@@ -60,7 +60,7 @@ export default function Menu({ contact }: Props) {
             disabled={disabled}
             onClick={onClick}
           >
-            <BirthDayIcon />
+            <SvgIcon path={mdiGiftOutline} />
           </IconButton>
         )}
       />

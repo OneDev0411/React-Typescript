@@ -15,21 +15,24 @@ import {
 import { useTheme } from '@material-ui/styles'
 import classNames from 'classnames'
 
+import {
+  mdiDotsVertical,
+  mdiReply,
+  mdiForward,
+  mdiReplyAll,
+  mdiEmailOutline,
+  mdiEmailOpenOutline
+} from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
-import useTypedSelector from 'hooks/use-typed-selector'
 import { useMenu } from 'hooks/use-menu'
+import useTypedSelector from 'hooks/use-typed-selector'
 
 import { ClassesProps } from 'utils/ts-utils'
 
-import IconReply from '../../SvgIcons/Reply/IconReply'
-import IconReplyAll from '../../SvgIcons/ReplyAll/IconReplyAll'
-import IconForward from '../../SvgIcons/Forward/IconForward'
-import IconVerticalDocs from '../../SvgIcons/VeriticalDots/VerticalDotsIcon'
-import IconMailRead from '../../SvgIcons/MailRead/IconMailRead'
-import IconMailUnread from '../../SvgIcons/MailUnread/IconMailUnread'
-
-import { iconSizes } from '../../SvgIcons/icon-sizes'
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
 import { EmailThreadEmail } from '../types'
 import { hasOAuthAccess } from '../helpers/has-oauth-access'
@@ -94,18 +97,12 @@ export function EmailItemHeaderActions(
     <Box ml={1} onClick={e => e.stopPropagation()}>
       <Tooltip title="Reply">
         <IconButton onClick={props.onReply}>
-          <IconReply
-            size={iconSizes.small}
-            color={theme.palette.common.black}
-          />
+          <SvgIcon path={mdiReply} color={theme.palette.common.black} />
         </IconButton>
       </Tooltip>
       <Tooltip title="More">
         <IconButton {...buttonTriggerProps}>
-          <IconVerticalDocs
-            size={iconSizes.small}
-            color={theme.palette.common.black}
-          />
+          <SvgIcon path={mdiDotsVertical} color={theme.palette.common.black} />
         </IconButton>
       </Tooltip>
       <Menu
@@ -117,30 +114,21 @@ export function EmailItemHeaderActions(
       >
         <MenuItem dense onClick={select(props.onReply)}>
           <ListItemIcon>
-            <IconReply
-              size={iconSizes.small}
-              color={theme.palette.common.black}
-            />
+            <SvgIcon path={mdiReply} color={theme.palette.common.black} />
           </ListItemIcon>
           <ListItemText>Reply</ListItemText>
         </MenuItem>
         {hasReplyAll(props.email) && (
           <MenuItem dense onClick={select(props.onReplyAll)}>
             <ListItemIcon>
-              <IconReplyAll
-                size={iconSizes.small}
-                color={theme.palette.common.black}
-              />
+              <SvgIcon path={mdiReplyAll} color={theme.palette.common.black} />
             </ListItemIcon>
             <ListItemText>Reply All</ListItemText>
           </MenuItem>
         )}
         <MenuItem dense onClick={select(props.onForward)}>
           <ListItemIcon>
-            <IconForward
-              size={iconSizes.small}
-              color={theme.palette.common.black}
-            />
+            <SvgIcon path={mdiForward} color={theme.palette.common.black} />
           </ListItemIcon>
           <ListItemText>Forward</ListItemText>
         </MenuItem>
@@ -159,16 +147,16 @@ export function EmailItemHeaderActions(
           >
             <ListItemIcon>
               {props.email.isRead ? (
-                <IconMailUnread
-                  size={iconSizes.small}
-                  fillColor={
+                <SvgIcon
+                  path={mdiEmailOutline}
+                  color={
                     hasModifyAccess ? '#000' : theme.palette.action.disabled
                   }
                 />
               ) : (
-                <IconMailRead
-                  size={iconSizes.small}
-                  fillColor={
+                <SvgIcon
+                  path={mdiEmailOpenOutline}
+                  color={
                     hasModifyAccess ? '#000' : theme.palette.action.disabled
                   }
                 />

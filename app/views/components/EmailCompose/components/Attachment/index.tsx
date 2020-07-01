@@ -7,15 +7,11 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-
 import { fade } from '@material-ui/core/styles'
+import { mdiAttachment, mdiCloseCircleOutline } from '@mdi/js'
 
-import classNames from 'classnames'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import IconCircleClose from 'components/SvgIcons/CircleClose/IconCircleClose'
-import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
-
-import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { useTextStyles } from '../../../../../styles/use-text-styles'
 
 interface Props {
@@ -41,7 +37,6 @@ const useAttachmentStyles = makeStyles(
 
 export function Attachment({ children, onDelete, fullWidth = true }: Props) {
   const classes = useAttachmentStyles()
-  const iconClasses = useIconStyles()
   const textClasses = useTextStyles()
 
   return (
@@ -52,16 +47,13 @@ export function Attachment({ children, onDelete, fullWidth = true }: Props) {
       alignItems="center"
       className={classes.root}
     >
-      <IconAttachment
-        style={{ fill: 'currentColor' }}
-        className={classNames(iconClasses.rightMargin, iconClasses.small)}
-      />
+      <SvgIcon path={mdiAttachment} rightMargined />
       <Box flexGrow={1} className={textClasses.noWrap}>
         {children}
       </Box>
       {onDelete && (
         <IconButton size="small" onClick={onDelete}>
-          <IconCircleClose />
+          <SvgIcon path={mdiCloseCircleOutline} />
         </IconButton>
       )}
     </Box>

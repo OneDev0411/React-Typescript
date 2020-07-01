@@ -4,8 +4,10 @@ import { Tooltip } from '@material-ui/core'
 
 import useToggle from 'react-use/lib/useToggle'
 
-import GifIcon from 'components/SvgIcons/Gif/GIfIcon'
+import { mdiGif } from '@mdi/js'
+
 import GifDrawer from 'components/GifDrawer'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ToolbarIconButton } from '../../../components/ToolbarIconButton'
 import { GifItem } from '../../../../GifDrawer/types'
@@ -34,7 +36,7 @@ export function AddGifButton(props: Props) {
     <>
       <Tooltip title="Search and insert GIF">
         <ToolbarIconButton onClick={toggleGifDrawerOpen}>
-          <GifIcon />
+          <SvgIcon path={mdiGif} />
         </ToolbarIconButton>
       </Tooltip>
       <GifDrawer

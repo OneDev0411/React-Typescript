@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import { useFormState, useField } from 'react-final-form'
-
 import { IconButton } from '@material-ui/core'
+import { mdiLayersOutline, mdiTrashCanOutline } from '@mdi/js'
 
 import ActionButton from 'components/Button/ActionButton'
-
 import DateTimePicker from 'components/DateTimePicker/next'
 import { formatDate } from 'components/DateTimePicker/helpers'
-
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
-
-import IconDelete from 'components/SvgIcons/Delete/IconDelete'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { myDesignIcon } from 'components/SvgIcons/icons'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { isFileAttachment } from '../../helpers/is-file-attachment'
 import { FooterContainer, FooterInnerContainer } from './styled'
@@ -18,11 +17,7 @@ import { textForSubmitButton } from './helpers'
 import SchedulerButton from './SchedulerButton'
 import { EmailAttachmentsDropdown } from '../EmailAttachmentsDropdown'
 import { useButtonStyles } from '../../../../../styles/use-button-styles'
-import IconTemplate from '../../../SvgIcons/Template/IconTemplate'
-import IconMyDesigns from '../../../SvgIcons/IconMyDesigns/IconMyDesigns'
-import { iconSizes } from '../../../SvgIcons/icon-sizes'
 import { DropdownToggleButton } from '../../../DropdownToggleButton'
-import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { FooterBottomDrawer } from './FooterBottomDrawer'
 import EmailTemplateSelector from './EmailTemplateSelector'
 import { MarketingTemplateSelector } from './MarketingTemplateSelector'
@@ -36,7 +31,7 @@ interface Props {
   setMarketingTemplate: (template: IBrandEmailTemplate | null) => void
   onCancel?: () => void
   onDelete?: (values) => void | Promise<any>
-  onClose?: () => void
+  onClickAddDealAttachments?: () => void
   className?: string
   uploadAttachment: typeof uploadEmailAttachment
 }
@@ -46,7 +41,7 @@ export function Footer({
   updateBody,
   setMarketingTemplate,
   hasStaticBody,
-  onClose = () => {},
+  onClickAddDealAttachments = () => {},
   ...props
 }: Props) {
   const formState = useFormState()
@@ -57,8 +52,6 @@ export function Footer({
   const isScheduled = !!dueAt
 
   const buttonClasses = useButtonStyles()
-  const iconClasses = useIconStyles()
-
   const [isDeleting, setDeleting] = useState(false)
   const [isEmailTemplateDrawerOpen, setEmailTemplateDrawerOpen] = useState(
     false
@@ -103,7 +96,7 @@ export function Footer({
             onChanged={props.onChanged}
             uploadAttachment={props.uploadAttachment}
             initialAttachments={initialAttachments}
-            onClose={onClose}
+            onClickAddDealAttachments={onClickAddDealAttachments}
           />
           {!hasStaticBody && (
             <DropdownToggleButton
@@ -113,10 +106,7 @@ export function Footer({
                 setMCTemplateDrawerOpen(open => false)
               }}
             >
-              <IconTemplate
-                className={iconClasses.rightMargin}
-                size={iconSizes.small}
-              />
+              <SvgIcon path={mdiLayersOutline} rightMargined />
               <span>Templates</span>
             </DropdownToggleButton>
           )}
@@ -128,9 +118,10 @@ export function Footer({
                 setEmailTemplateDrawerOpen(open => false)
               }}
             >
-              <IconMyDesigns
-                className={iconClasses.rightMargin}
-                size={iconSizes.small}
+              <SvgIcon
+                path={myDesignIcon}
+                rightMargined
+                size={muiIconSizes.small}
               />
               <span>My Designs</span>
             </DropdownToggleButton>
@@ -192,7 +183,7 @@ export function Footer({
               disabled={busy}
               className={buttonClasses.danger}
             >
-              <IconDelete />
+              <SvgIcon path={mdiTrashCanOutline} />
             </IconButton>
           )}
         </div>

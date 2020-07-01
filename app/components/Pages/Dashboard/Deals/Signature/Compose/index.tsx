@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 import { Button, Box } from '@material-ui/core'
 import { Form } from 'react-final-form'
 
 import Drawer from 'components/OverlayDrawer'
 
-import { useChecklistActionsContext } from 'deals/Dashboard/Folders/actions-context/hooks'
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 
 import type { FormValues } from '../types'
 
@@ -22,6 +22,7 @@ interface Props {
   attachments: IDealFile[]
   isOpen: boolean
   isSubmitting: boolean
+  onClickAddAttachments: () => void
   onSubmit: (form: FormValues) => Promise<void>
   onClose: () => void
 }
@@ -32,10 +33,12 @@ export function SignatureComposeDrawer({
   attachments,
   isOpen,
   isSubmitting,
+  onClickAddAttachments,
   onSubmit,
   onClose
 }: Props) {
   const [actionsState] = useChecklistActionsContext()
+  const initialValues = useRef<FormValues | null>(null)
 
   const getAttchments = () => {
     if (actionsState.attachments.length > 0) {
@@ -45,28 +48,65 @@ export function SignatureComposeDrawer({
     return attachments
   }
 
+  const validate = (values: FormValues) => {
+    const errors: Record<string, string> = {}
+
+    if (Object.values(values.recipients).length === 0) {
+      errors.recipients = 'Select one recipient at least'
+    }
+
+    if (!values.subject) {
+      errors.subject = 'Enter email subject'
+    }
+
+    if (Object.values(values.attachments).length === 0) {
+      errors.attachments = 'Select one attachment at least'
+    }
+
+    return errors
+  }
+
+  const getInitialValues = () => {
+    if (initialValues.current || isSubmitting) {
+      return initialValues.current
+    }
+
+    initialValues.current = {
+      subject: 'Please DocuSign',
+      message: '',
+      from: `${user.display_name} <${user.email}>`,
+      recipients: {},
+      auto_notify: true,
+      attachments: getAttchments()
+    }
+
+    return initialValues.current
+  }
+
   return (
     <Drawer open={isOpen} onClose={onClose}>
       <Drawer.Header title="Send for Signatures" />
 
       <Form
         onSubmit={onSubmit}
-        initialValues={{
-          subject: 'Please DocuSign',
-          message: '',
-          from: `${user.display_name} <${user.email}>`,
-          recipients: {},
-          auto_notify: true,
-          attachments: getAttchments()
-        }}
-        render={({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
+        initialValues={getInitialValues()}
+        validate={validate}
+        render={({ handleSubmit, pristine }) => (
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flexBasis: '100%',
+              maxHeight: '100%'
+            }}
+          >
             <Drawer.Body>
               <Recipients deal={deal} />
               <From />
               <Subject />
               <Message />
-              <Attachments onClose={onClose} />
+              <Attachments onClickAddAttachments={onClickAddAttachments} />
             </Drawer.Body>
 
             <Drawer.Footer>
@@ -80,12 +120,11 @@ export function SignatureComposeDrawer({
                     variant="contained"
                     color="secondary"
                     type="submit"
-                    disabled={isSubmitting}
-                    onClick={() => {}}
+                    disabled={isSubmitting || pristine}
                   >
                     {isSubmitting ? 'Please Wait...' : 'Next: View in Docusign'}
                   </Button>
-                  <AutoNotify />
+                  <AutoNotify disabled={isSubmitting} />
                 </Box>
               </div>
             </Drawer.Footer>

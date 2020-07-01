@@ -1,19 +1,10 @@
 import { useEffect } from 'react'
 
+import { selectAllConnectedAccounts } from '../../../../../reducers/contacts/oAuthAccounts'
 import useTypedSelector from '../../../../../hooks/use-typed-selector'
 
-import { selectAllConnectedAccounts } from '../../../../../reducers/contacts/oAuthAccounts'
-
-interface EventBase {
-  threads: UUID[]
-}
-interface GoogleEvent extends EventBase {
-  google_credential: UUID
-}
-interface MicrosoftEvent extends EventBase {
-  microsoft_credential: UUID
-}
-type Event = GoogleEvent | MicrosoftEvent
+import { EmailThreadChangeEvent } from '../types'
+import skipEmailThreadChangeEvent from './skip-email-thread-change-event'
 
 export default function useEmailThreadEvents(
   handleUpdateEmailThreads: (updatedEmailThreadIds: UUID[]) => void,
@@ -30,31 +21,23 @@ export default function useEmailThreadEvents(
       return
     }
 
-    function filterEvent(event: Event): boolean {
-      if (event.threads.length === 0) {
-        return false
+    function handleFilteredUpdateEmailThreads(
+      event: EmailThreadChangeEvent
+    ): void {
+      if (skipEmailThreadChangeEvent(event, allConnectedAccounts)) {
+        return
       }
 
-      if ('google_credential' in event) {
-        return allConnectedAccounts.some(
-          ({ id }) => id === event.google_credential
-        )
-      }
-
-      if ('microsoft_credential' in event) {
-        return allConnectedAccounts.some(
-          ({ id }) => id === event.microsoft_credential
-        )
-      }
-
-      return false
+      handleUpdateEmailThreads(event.threads)
     }
+    function handleFilteredDeleteEmailThreads(
+      event: EmailThreadChangeEvent
+    ): void {
+      if (skipEmailThreadChangeEvent(event, allConnectedAccounts)) {
+        return
+      }
 
-    function handleFilteredUpdateEmailThreads(event: Event) {
-      filterEvent(event) && handleUpdateEmailThreads(event.threads)
-    }
-    function handleFilteredDeleteEmailThreads(event: Event) {
-      filterEvent(event) && handleDeleteEmailThreads(event.threads)
+      handleDeleteEmailThreads(event.threads)
     }
 
     socket.on('email_thread:update', handleFilteredUpdateEmailThreads)
