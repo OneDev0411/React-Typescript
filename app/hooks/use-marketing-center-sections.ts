@@ -193,11 +193,6 @@ const ALL_SECTIONS: SectionCollection = {
     title: 'Properties',
     items: [
       {
-        title: '‌Blank Layouts',
-        value: 'ListingLayout',
-        link: urlGenerator('/ListingLayout')
-      },
-      {
         title: 'As Seen In',
         value: 'AsSeenIn',
         link: urlGenerator('/AsSeenIn')
@@ -265,6 +260,11 @@ const ALL_SECTIONS: SectionCollection = {
         title: 'Blank Layouts',
         value: 'Layout',
         link: urlGenerator('/Layout')
+      },
+      {
+        title: 'Blank Listing Layouts',
+        value: 'ListingLayout',
+        link: urlGenerator('/ListingLayout')
       }
     ]
   }
