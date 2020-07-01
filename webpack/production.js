@@ -15,8 +15,7 @@ webpackConfig.mode = 'production'
 webpackConfig.optimization = {
   splitChunks: {
     chunks: 'all'
-  },
-  usedExports: true
+  }
 }
 
 const Expires = moment().utc().add('1', 'month').toDate()

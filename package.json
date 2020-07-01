@@ -2,7 +2,6 @@
   "name": "rechat",
   "version": "77.1.2",
   "main": "app.js",
-  "sideEffects": false,
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
     "commit": "commit",
