@@ -3,7 +3,7 @@ import { Box, Grid, IconButton, Tooltip, Typography } from '@material-ui/core'
 import { EditorState } from 'draft-js'
 import {
   mdiContentCopy,
-  mdiPencil,
+  mdiPencilOutline,
   mdiLinkOff,
   mdiLink,
   mdiEmail
@@ -60,7 +60,7 @@ export function LinkPreview(props: Props) {
         </Tooltip>
         <Tooltip title="Edit Link">
           <IconButton size="small" onClick={props.onEdit}>
-            <SvgIcon path={mdiPencil} size={muiIconSizes.small} />
+            <SvgIcon path={mdiPencilOutline} size={muiIconSizes.small} />
           </IconButton>
         </Tooltip>
         <Tooltip title="Remove Link">
