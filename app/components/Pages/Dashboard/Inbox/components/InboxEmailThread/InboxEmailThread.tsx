@@ -17,7 +17,6 @@ import {
 import { AvatarGroup } from '@material-ui/lab'
 import { makeStyles, useTheme } from '@material-ui/styles'
 import { addNotification } from 'reapop'
-
 import {
   mdiEmailOpenOutline,
   mdiEmailOutline,
@@ -26,10 +25,9 @@ import {
   mdiForward,
   mdiReplyAll,
   mdiReply,
-  mdiClose
+  mdiClose,
+  mdiArchiveOutline
 } from '@mdi/js'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getEmailThread } from 'models/email/get-email-thread'
 import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
@@ -38,6 +36,7 @@ import { normalizeThreadMessageToThreadEmail } from 'components/EmailThread/help
 import { EmailThreadEmails } from 'components/EmailThread'
 import { EmailResponseType } from 'components/EmailThread/types'
 import { EmailResponseComposeForm } from 'components/EmailCompose/EmailResponseComposeForm'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useMenu } from 'hooks/use-menu'
 
@@ -173,25 +172,25 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
     () =>
       emailThread
         ? emailThread.recipients_raw.map(r => {
-          const contact = (emailThread.contacts || []).find(
-            c =>
-              c.email === r.address ||
-              (c.emails && c.emails.includes(r.address))
-          )
-          const name =
-            (contact &&
-              (contact.display_name ||
-                `${contact.first_name} ${contact.middle_name} ${contact.last_name}`)) ||
-            r.name ||
-            ''
+            const contact = (emailThread.contacts || []).find(
+              c =>
+                c.email === r.address ||
+                (c.emails && c.emails.includes(r.address))
+            )
+            const name =
+              (contact &&
+                (contact.display_name ||
+                  `${contact.first_name} ${contact.middle_name} ${contact.last_name}`)) ||
+              r.name ||
+              ''
 
-          return {
-            address: r.address,
-            name,
-            initials: (getNameInitials(name) as string) || '',
-            profileImageUrl: (contact && contact.profile_image_url) || ''
-          }
-        })
+            return {
+              address: r.address,
+              name,
+              initials: (getNameInitials(name) as string) || '',
+              profileImageUrl: (contact && contact.profile_image_url) || ''
+            }
+          })
         : [],
     [emailThread]
   )
@@ -330,8 +329,8 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
               {emailThread.is_read ? (
                 <SvgIcon path={mdiEmailOutline} className={classes.icon} />
               ) : (
-                  <SvgIcon path={mdiEmailOpenOutline} className={classes.icon} />
-                )}
+                <SvgIcon path={mdiEmailOpenOutline} className={classes.icon} />
+              )}
             </ListItemIcon>
             <ListItemText>
               Mark as {emailThread.is_read ? 'unread' : 'read'}
@@ -346,7 +345,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <IconArchive size="small" />
+              <SvgIcon path={mdiArchiveOutline} className={classes.icon} />
             </ListItemIcon>
             <ListItemText>Archive</ListItemText>
           </MenuItem>

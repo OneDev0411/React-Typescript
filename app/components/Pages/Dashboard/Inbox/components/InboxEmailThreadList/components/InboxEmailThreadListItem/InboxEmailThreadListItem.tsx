@@ -2,15 +2,14 @@ import React, { useMemo } from 'react'
 import { Paper, Typography, IconButton, Tooltip } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
-
 import {
   mdiEmailOutline,
+  mdiEmailOpenOutline,
   mdiTrashCanOutline,
-  mdiEmailOpenOutline
+  mdiArchiveOutline
 } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import useTypedSelector from 'hooks/use-typed-selector'
@@ -136,11 +135,11 @@ export default function InboxEmailThreadListItem({
                 {emailThread.is_read ? (
                   <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
                 ) : (
-                    <SvgIcon
-                      path={mdiEmailOpenOutline}
-                      size={muiIconSizes.small}
-                    />
-                  )}
+                  <SvgIcon
+                    path={mdiEmailOpenOutline}
+                    size={muiIconSizes.small}
+                  />
+                )}
               </IconButton>
             </Tooltip>
             <Tooltip
@@ -172,7 +171,7 @@ export default function InboxEmailThreadListItem({
                   event.stopPropagation()
                 }}
               >
-                <IconArchive size="small" />
+                <SvgIcon path={mdiArchiveOutline} size={muiIconSizes.small} />
               </IconButton>
             </Tooltip>
           </div>
