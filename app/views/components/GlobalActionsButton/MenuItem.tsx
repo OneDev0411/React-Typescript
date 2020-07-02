@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
       }
     },
     itemIcon: {
-      marginRight: theme.spacing(1)
+      marginRight: theme.spacing(2)
     },
     icon: {
       minWidth: `${theme.spacing(3)}px !important`,
@@ -72,7 +72,10 @@ export default function MenuItem({ item, onClick }: Props) {
       <ListItemIcon className={cn(classes.icon, classes.itemIcon)}>
         <SvgIcon path={item.Icon} />
       </ListItemIcon>
-      <ListItemText primary={item.title} />
+      <ListItemText
+        primary={item.title}
+        primaryTypographyProps={{ variant: 'body1' }}
+      />
       <ListItemIcon
         className={cn(
           iconClasses.small,
