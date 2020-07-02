@@ -184,6 +184,24 @@ const ALL_SECTIONS: SectionCollection = {
       }
     ]
   },
+  branding: {
+    type: SectionsEnum.List,
+    key: 'branding',
+    title: 'Branding',
+    items: [
+      {
+        title: 'Brand Campaigns',
+        value: 'Brand',
+        link: urlGenerator('/Brand')
+      },
+      {
+        title: 'New Agent',
+        value: 'NewAgent',
+        link: urlGenerator('/NewAgent')
+      }
+    ]
+  },
+
   properties: {
     type: SectionsEnum.List,
     key: 'properties',
@@ -228,23 +246,6 @@ const ALL_SECTIONS: SectionCollection = {
         title: 'Multi Properties',
         value: 'Listings',
         link: urlGenerator('/Listings')
-      }
-    ]
-  },
-  branding: {
-    type: SectionsEnum.List,
-    key: 'branding',
-    title: 'Branding',
-    items: [
-      {
-        title: 'Brand Campaigns',
-        value: 'Brand',
-        link: urlGenerator('/Brand')
-      },
-      {
-        title: 'New Agent',
-        value: 'NewAgent',
-        link: urlGenerator('/NewAgent')
       }
     ]
   },
