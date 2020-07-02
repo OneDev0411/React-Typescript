@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { mdiClose, mdiPencil } from '@mdi/js'
+import { mdiClose, mdiPencilOutline } from '@mdi/js'
 
 import { updateTask } from 'actions/deals'
 
@@ -76,7 +76,7 @@ class Header extends React.Component {
                 inverse
                 onClick={this.toggleEditName}
               >
-                <SvgIcon path={mdiPencil} />
+                <SvgIcon path={mdiPencilOutline} />
               </IconButton>
             )}
 
