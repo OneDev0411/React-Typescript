@@ -3,7 +3,7 @@ import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
 import {
   mdiAccountEditOutline,
   mdiAccountPlusOutline,
-  mdiPencil,
+  mdiPencilOutline,
   mdiTrashCanOutline
 } from '@mdi/js'
 
@@ -54,7 +54,7 @@ export const TeamView = React.memo(
             </Tooltip>
             <Tooltip title="Edit Team">
               <IconButton onClick={onEdit}>
-                <SvgIcon path={mdiPencil} />
+                <SvgIcon path={mdiPencilOutline} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Delete Team">
