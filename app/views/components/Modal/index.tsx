@@ -1,10 +1,12 @@
 import React, { ComponentProps, ReactNode } from 'react'
+import { IconButton } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
 import styled from 'styled-components'
 
-import CloseIcon from '../SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import BareModal from '../BareModal'
 import { H3 } from '../Typography/headings'
-import IconButton from '../Button/IconButton'
 
 const HeaderContainer = styled.div`
   height: 72px;
@@ -46,14 +48,8 @@ export function ModalHeader({
       >
         <H3>{title}</H3>
         {closeHandler && (
-          <IconButton
-            iconSize="large"
-            isFit
-            inverse
-            onClick={closeHandler}
-            data-test="close-modal"
-          >
-            <CloseIcon />
+          <IconButton onClick={closeHandler} data-test="close-modal">
+            <SvgIcon path={mdiClose} />
           </IconButton>
         )}
       </div>
