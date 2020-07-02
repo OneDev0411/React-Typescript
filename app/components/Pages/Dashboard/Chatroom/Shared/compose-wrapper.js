@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { compose, withState, pure } from 'recompose'
+import { mdiLogout, mdiHelpCircleOutline, mdiClose } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Compose from '../../../../Partials/Compose'
 import { hasRecipients } from '../../../../../utils/helpers'
-import LeaveIcon from '../../Partials/Svgs/LeaveIcon'
-import HelpIcon from '../../Partials/Svgs/HelpIcon'
-import CloseIcon from '../../Partials/Svgs/CloseIcon'
 import { confirmation } from '../../../../../store_actions/confirmation'
 import {
   Modal,
@@ -60,7 +60,7 @@ const ComposeWrapper = ({
             caption={directRoom ? 'Archive chat' : 'Leave chat'}
           >
             <span
-              className=" leave-icon"
+              className="modal-action-button"
               onClick={() =>
                 confirmation({
                   message: directRoom
@@ -76,7 +76,7 @@ const ComposeWrapper = ({
                 })
               }
             >
-              <LeaveIcon />
+              <SvgIcon path={mdiLogout} />
             </span>
           </Tooltip>
         )}
@@ -85,17 +85,17 @@ const ComposeWrapper = ({
             placement="bottom"
             caption="You cannot add members to a direct message room"
           >
-            <span className=" leave-icon">
-              <HelpIcon />
+            <span className="modal-action-button">
+              <SvgIcon path={mdiHelpCircleOutline} />
             </span>
           </Tooltip>
         )}
         <Tooltip placement="bottom" caption="Close">
           <span
-            className=" close"
+            className="modal-action-button"
             onClick={() => onChangeComposeModal(!showComposeModal)}
           >
-            <CloseIcon width={14} height={14} />
+            <SvgIcon path={mdiClose} />
           </span>
         </Tooltip>
       </ModalHeader>
