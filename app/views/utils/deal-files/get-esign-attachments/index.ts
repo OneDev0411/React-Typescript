@@ -1,17 +1,29 @@
+type SignatureType = 'Form' | 'Envelope' | 'File'
+
 interface Params {
   task: IDealTask
   file?: IFile
+  envelope?: IDealEnvelope
+  type: SignatureType
 }
 
-export function getEsignAttachments({ task, file }: Params) {
-  if (file) {
-    return getDocumentAttachment(task, file)
+export function getEsignAttachments({ task, file, envelope, type }: Params) {
+  if (type === 'Form') {
+    return getFormAttachments(task)
   }
 
-  return getTaskAttachments(task)
+  if (type === 'File') {
+    return getFileAttachment(task, file!)
+  }
+
+  if (type === 'Envelope') {
+    return getEnvelopeAttachment(task, envelope!)
+  }
+
+  return []
 }
 
-function getTaskAttachments(task: IDealTask): IDealFile[] {
+function getFormAttachments(task: IDealTask): IDealFile[] {
   const attachments: IDealFile[] = []
 
   if (task.submission) {
@@ -58,19 +70,7 @@ function getTaskAttachments(task: IDealTask): IDealFile[] {
   return attachments
 }
 
-function getDocumentAttachment(task: IDealTask, file: IFile): IDealFile[] {
-  if (task.submission) {
-    return [
-      {
-        ...task.submission.file,
-        source: 'submission',
-        url: task.pdf_url,
-        task: task.id,
-        checklist: task.checklist
-      }
-    ]
-  }
-
+function getFileAttachment(task: IDealTask, file: IFile): IDealFile[] {
   if (file && file.mime === 'application/pdf') {
     return [
       {
@@ -83,4 +83,17 @@ function getDocumentAttachment(task: IDealTask, file: IFile): IDealFile[] {
   }
 
   return []
+}
+
+function getEnvelopeAttachment(
+  task: IDealTask,
+  envelope: IDealEnvelope
+): IDealFile[] {
+  return (envelope.documents || []).map(document => ({
+    ...document.pdf,
+    name: `${envelope.title}: ${document.pdf.name}`,
+    source: 'attachment',
+    task: task.id,
+    checklist: task.checklist
+  }))
 }

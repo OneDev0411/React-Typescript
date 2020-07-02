@@ -69,6 +69,8 @@ import {
   PrimaryAction
 } from './styled'
 
+type SignatureType = 'Form' | 'Envelope' | 'File' | null
+
 interface Props {
   deal: IDeal
   task: IDealTask
@@ -88,6 +90,7 @@ interface State {
   isPdfSplitterOpen: boolean
   isTasksDrawerOpen: boolean
   isComposeEmailOpen: boolean
+  signatureType: SignatureType
   multipleItemsSelection: {
     items: IDealFile[]
     title: string
@@ -118,6 +121,7 @@ class ActionsButton extends React.Component<
     this.state = {
       isMenuOpen: false,
       isSignatureFormOpen: false,
+      signatureType: null,
       isPdfSplitterOpen: false,
       isTasksDrawerOpen: false,
       isComposeEmailOpen: false,
@@ -144,9 +148,9 @@ class ActionsButton extends React.Component<
       'delete-file': deleteFile,
       'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
-      'docusign-envelope': this.handleGetSignature,
-      'docusign-form': this.handleGetSignature,
-      'docusign-file': this.handleGetSignature,
+      'docusign-envelope': this.docusignEnvelope,
+      'docusign-form': this.docusignForm,
+      'docusign-file': this.docusignFile,
       'email-form': this.handleToggleComposeEmail,
       'email-file': this.handleToggleComposeEmail,
       'email-envelope': this.handleToggleComposeEmail
@@ -185,7 +189,8 @@ class ActionsButton extends React.Component<
 
   handleDeselectAction = () =>
     this.setState({
-      isSignatureFormOpen: false
+      isSignatureFormOpen: false,
+      signatureType: null
     })
 
   handleCloseMultipleItemsSelectionDrawer = () =>
@@ -216,7 +221,9 @@ class ActionsButton extends React.Component<
   getEsignAttachments = () => {
     return getEsignAttachments({
       task: this.props.task,
-      file: this.props.file!
+      file: this.props.file!,
+      envelope: this.props.envelope,
+      type: this.state.signatureType!
     })
   }
 
@@ -267,6 +274,33 @@ class ActionsButton extends React.Component<
       type: ADD_ATTACHMENTS,
       attachments: files
     })
+  }
+
+  docusignEnvelope = () => {
+    this.setState(
+      {
+        signatureType: 'Envelope'
+      },
+      this.handleGetSignature
+    )
+  }
+
+  docusignForm = () => {
+    this.setState(
+      {
+        signatureType: 'Form'
+      },
+      this.handleGetSignature
+    )
+  }
+
+  docusignFile = () => {
+    this.setState(
+      {
+        signatureType: 'File'
+      },
+      this.handleGetSignature
+    )
   }
 
   /**
@@ -452,7 +486,7 @@ class ActionsButton extends React.Component<
             deal={this.props.deal}
             defaultAttachments={this.getEsignAttachments()}
             onClickAddAttachments={() =>
-              this.setState({ isSignatureFormOpen: false })
+              this.setState({ isSignatureFormOpen: false, signatureType: null })
             }
             onClose={this.handleDeselectAction}
           />
