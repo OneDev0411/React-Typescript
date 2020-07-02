@@ -12,7 +12,7 @@ import {
   Theme
 } from '@material-ui/core'
 
-import { mdiPencil, mdiTrashCanOutline } from '@mdi/js'
+import { mdiPencilOutline, mdiTrashCanOutline } from '@mdi/js'
 
 import { IAppState } from 'reducers/index'
 import { selectDealTasks } from 'reducers/deals/tasks'
@@ -111,7 +111,7 @@ function List(props: Props & StateProps) {
                       className={classes.iconButton}
                       onClick={() => props.onClickEdit(task)}
                     >
-                      <SvgIcon path={mdiPencil} />
+                      <SvgIcon path={mdiPencilOutline} />
                     </IconButton>
                   </Tooltip>
 
