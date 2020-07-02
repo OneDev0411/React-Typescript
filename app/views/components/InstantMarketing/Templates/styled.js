@@ -14,6 +14,10 @@ export const TemplateItem = styled.div`
   margin: 1rem;
   cursor: pointer;
   border: 4px solid ${props => (props.isSelected ? '#0945eb' : 'transparent')};
+
+  :hover {
+    border: 4px solid #0945eb;
+  }
 `
 
 const templateItemStyle = css`
