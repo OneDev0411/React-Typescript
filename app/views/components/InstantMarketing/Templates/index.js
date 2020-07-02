@@ -176,10 +176,6 @@ class Templates extends React.Component {
                     title={template.template.name}
                     src={getTemplateImage(template).original}
                     width="97%"
-                    style={{
-                      margin: '1.5%',
-                      boxShadow: '0px 5px 10px #c3c3c3'
-                    }}
                   />
                 )}
               </TemplateItem>
