@@ -1,28 +1,41 @@
 import React from 'react'
 import { mdiCogOutline } from '@mdi/js'
-import { Box, Tooltip, IconButton } from '@material-ui/core'
+import { Box, Tooltip, IconButton, Avatar, Theme } from '@material-ui/core'
 
-import Avatar from 'components/Avatar'
+import { makeStyles } from '@material-ui/styles'
+
 import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatus'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { AccountInfoWrapper } from './styled'
+
+const useStyles = makeStyles((theme: Theme) => ({
+  avatar: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+    fontSize: '1rem'
+  }
+}))
 
 interface Props {
   account: IOAuthAccount
 }
 
 export function ConnectedAccount({ account }: Props) {
+  const classes = useStyles()
+
   return (
     <AccountInfoWrapper>
       <div className="header">
-        {/* @ts-ignore props are detected mandatory from js file */}
-        <Avatar
-          size={24}
-          style={{ marginRight: '1rem' }}
-          title={account.display_name}
-          image={account.photo}
-        />
+        <Box marginRight="1rem">
+          <Tooltip title={account.display_name}>
+            <Avatar
+              alt={account.display_name}
+              src={account.photo || undefined}
+              className={classes.avatar}
+            />
+          </Tooltip>
+        </Box>
         {account.email}
       </div>
       <div className="secondary">
