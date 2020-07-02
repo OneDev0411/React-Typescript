@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { compose, withState, pure } from 'recompose'
 import { mdiLogout, mdiHelpCircleOutline, mdiClose } from '@mdi/js'
+import { Tooltip, Button } from '@material-ui/core'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -13,8 +14,6 @@ import {
   ModalHeader,
   ModalFooter
 } from '../../../../../views/components/Modal'
-import ActionButton from '../../../../../views/components/Button/ActionButton'
-import Tooltip from '../../../../../views/components/tooltip'
 
 const enhance = compose(
   pure,
@@ -55,10 +54,7 @@ const ComposeWrapper = ({
     >
       <ModalHeader title={title} className="modal-header">
         {OnLeaveClick && (
-          <Tooltip
-            placement="bottom"
-            caption={directRoom ? 'Archive chat' : 'Leave chat'}
-          >
+          <Tooltip title={directRoom ? 'Archive chat' : 'Leave chat'}>
             <span
               className="modal-action-button"
               onClick={() =>
@@ -81,16 +77,13 @@ const ComposeWrapper = ({
           </Tooltip>
         )}
         {directRoom && (
-          <Tooltip
-            placement="bottom"
-            caption="You cannot add members to a direct message room"
-          >
+          <Tooltip title="You cannot add members to a direct message room">
             <span className="modal-action-button">
               <SvgIcon path={mdiHelpCircleOutline} />
             </span>
           </Tooltip>
         )}
-        <Tooltip placement="bottom" caption="Close">
+        <Tooltip title="Close">
           <span
             className="modal-action-button"
             onClick={() => onChangeComposeModal(!showComposeModal)}
@@ -114,7 +107,9 @@ const ComposeWrapper = ({
 
       {!showOnly && (
         <ModalFooter>
-          <ActionButton
+          <Button
+            variant="contained"
+            color="primary"
             disabled={working || !hasRecipients(recipients)}
             onClick={async () => {
               await onButtonClick(recipients)
@@ -124,7 +119,7 @@ const ComposeWrapper = ({
             }}
           >
             {buttonTitle}
-          </ActionButton>
+          </Button>
         </ModalFooter>
       )}
     </Modal>
