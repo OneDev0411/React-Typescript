@@ -11,9 +11,6 @@ interface Props {
 }
 
 export function ConnectedAccountSyncStatus({ account }: Props) {
-  const calendarJob = (account.jobs || []).find(
-    job => job.job_name === 'calendar'
-  )
   const contactsJob = (account.jobs || []).find(
     job => job.job_name === 'contacts'
   )
@@ -22,17 +19,20 @@ export function ConnectedAccountSyncStatus({ account }: Props) {
       job.job_name ===
       (account.type === GOOGLE_CREDENTIAL ? 'gmail' : 'outlook')
   )
+  const calendarJob = (account.jobs || []).find(
+    job => job.job_name === 'calendar'
+  )
 
   return (
     <div>
-      {calendarJob && (
+      {contactsJob && (
         <Tooltip
-          title={`Calendar is ${
-            calendarJob?.status === 'success' ? 'synced' : 'syncing'
-          }`}
+          title={`Contacts are ${
+            contactsJob?.status === 'success' ? 'synced' : 'syncing'
+          } `}
         >
           <IconButton>
-            <SvgIcon path={mdiCalendarOutline} />
+            <SvgIcon path={permContactCalendarOutlined} />
           </IconButton>
         </Tooltip>
       )}
@@ -49,14 +49,14 @@ export function ConnectedAccountSyncStatus({ account }: Props) {
         </Tooltip>
       )}
 
-      {contactsJob && (
+      {calendarJob && (
         <Tooltip
-          title={`Contacts are ${
-            contactsJob?.status === 'success' ? 'synced' : 'syncing'
-          } `}
+          title={`Calendar is ${
+            calendarJob?.status === 'success' ? 'synced' : 'syncing'
+          }`}
         >
           <IconButton>
-            <SvgIcon path={permContactCalendarOutlined} />
+            <SvgIcon path={mdiCalendarOutline} />
           </IconButton>
         </Tooltip>
       )}
