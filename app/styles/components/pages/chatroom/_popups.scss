@@ -46,6 +46,7 @@
 
     .icons {
       @extend %fix--btn-group;
+      display: flex;
       .icon {
         margin-left: 15px;
         cursor: pointer;
@@ -56,6 +57,10 @@
         }
         &:hover {
           opacity: 1;
+        }
+        &.times {
+          height: 16px;
+          align-self: center;
         }
       }
     }

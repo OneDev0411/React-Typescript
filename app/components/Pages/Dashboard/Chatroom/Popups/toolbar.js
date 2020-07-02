@@ -1,8 +1,10 @@
 import React from 'react'
 import cn from 'classnames'
+import { mdiClose } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Members from '../Rooms/members'
-import CloseIcon from '../../Partials/Svgs/CloseIcon'
 import FullscreenIcon from '../../Partials/Svgs/FullscreenIcon'
 import MinimizeIcon from '../../Partials/Svgs/MinimizeIcon'
 
@@ -34,8 +36,13 @@ export default ({ room, isActive, onMinimize, onMaximize, onClose }) => (
 
       <Members room={room} iconSize={12} />
 
-      <span className="icon times close-icon" onClick={() => onClose(room.id)}>
-        <CloseIcon />
+      <span className="icon times">
+        <SvgIcon
+          path={mdiClose}
+          size="1rem"
+          color="#fff"
+          onClick={() => onClose(room.id)}
+        />
       </span>
     </div>
   </div>
