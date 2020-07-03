@@ -190,11 +190,6 @@ function getDocusignLabel(
     return 'Docusign'
   }
 
-  console.log({
-    a: state.attachments,
-    b: attachments
-  })
-
   const exists = state.attachments.some(attachment => {
     return attachments.some(item => item.id === attachment.id)
   })

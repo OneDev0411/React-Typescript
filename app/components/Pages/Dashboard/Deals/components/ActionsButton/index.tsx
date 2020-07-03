@@ -390,9 +390,11 @@ class ActionsButton extends React.Component<
   getButtonLabel = button => {
     if (typeof button.label === 'function') {
       return button.label({
-        task: this.props.task,
-        emailAttachments: this.getEmailComposeFiles(),
         state: this.props.actionsState,
+        task: this.props.task,
+        envelope: this.props.envelope,
+        file: this.props.file,
+        emailAttachments: this.getEmailComposeFiles(),
         isBackOffice: this.props.isBackOffice
       })
     }
