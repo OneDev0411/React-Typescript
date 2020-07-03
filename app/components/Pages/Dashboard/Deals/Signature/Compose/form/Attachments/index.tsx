@@ -45,7 +45,7 @@ export function Attachments({ onClickAddAttachments }: Props) {
     actionsDispatch({
       type: ADD_ATTACHMENTS,
       actions: [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE],
-      attachments: list
+      attachments: []
     })
 
     onClickAddAttachments()

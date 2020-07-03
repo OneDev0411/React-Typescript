@@ -12,7 +12,11 @@ import TasksDrawer from 'components/SelectDealTasksDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-import { getEsignAttachments } from 'views/utils/deal-files/get-esign-attachments'
+import {
+  getFormEsignAttachments,
+  getEnvelopeEsignAttachments,
+  getFileEsignAttachments
+} from 'views/utils/deal-files/get-esign-attachments'
 import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
 
 import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
@@ -218,15 +222,6 @@ class ActionsButton extends React.Component<
     })
   }
 
-  getEsignAttachments = () => {
-    return getEsignAttachments({
-      task: this.props.task,
-      file: this.props.file!,
-      envelope: this.props.envelope,
-      type: this.state.signatureType!
-    })
-  }
-
   /**
    *
    */
@@ -277,68 +272,66 @@ class ActionsButton extends React.Component<
   }
 
   docusignEnvelope = () => {
-    this.setState(
-      {
-        signatureType: 'Envelope'
-      },
-      this.handleGetSignature
+    const attachments = getEnvelopeEsignAttachments(
+      this.props.task,
+      this.props.envelope!
     )
+
+    this.updateDocusignList(attachments)
+    this.handleGetSignature()
   }
 
   docusignForm = () => {
-    this.setState(
-      {
-        signatureType: 'Form'
-      },
-      this.handleGetSignature
-    )
+    const attachments = getFormEsignAttachments(this.props.task)
+
+    this.updateDocusignList(attachments)
+    this.handleGetSignature()
   }
 
   docusignFile = () => {
-    this.setState(
-      {
-        signatureType: 'File'
-      },
-      this.handleGetSignature
+    const attachments = getFileEsignAttachments(
+      this.props.task,
+      this.props.file!
     )
+
+    this.updateDocusignList(attachments)
+    this.handleGetSignature()
+  }
+
+  updateDocusignList = (files: IFile[]) => {
+    files.forEach(file => {
+      const isFileExists = this.props.actionsState.attachments.some(
+        attachment => attachment.id === file.id
+      )
+
+      if (isFileExists) {
+        this.props.actionsDispatch({
+          type: REMOVE_ATTACHMENT,
+          attachment: file
+        })
+      } else {
+        this.props.actionsDispatch({
+          type: ADD_ATTACHMENTS,
+          attachments: [file]
+        })
+      }
+    })
   }
 
   /**
    *
    */
   handleGetSignature = () => {
-    const files = this.getEsignAttachments()
-
     if (
       this.props.actionsState.actions.some(name =>
         [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE].includes(name)
-      ) === false
+      )
     ) {
-      this.setState({
-        isSignatureFormOpen: true
-      })
-
       return
     }
 
-    if (
-      this.props.actionsState.attachments.some(attachment =>
-        files.some(doc => doc.id === attachment.id)
-      )
-    ) {
-      files.forEach(attachment =>
-        this.props.actionsDispatch({
-          type: REMOVE_ATTACHMENT,
-          attachment
-        })
-      )
-
-      return
-    }
-
-    this.props.actionsDispatch({
-      type: ADD_ATTACHMENTS,
-      attachments: files
+    this.setState({
+      isSignatureFormOpen: true
     })
   }
 
@@ -398,7 +391,6 @@ class ActionsButton extends React.Component<
     if (typeof button.label === 'function') {
       return button.label({
         task: this.props.task,
-        esignAttachments: this.getEsignAttachments(),
         emailAttachments: this.getEmailComposeFiles(),
         state: this.props.actionsState,
         isBackOffice: this.props.isBackOffice
@@ -484,7 +476,6 @@ class ActionsButton extends React.Component<
           <GetSignature
             isOpen
             deal={this.props.deal}
-            defaultAttachments={this.getEsignAttachments()}
             onClickAddAttachments={() =>
               this.setState({ isSignatureFormOpen: false, signatureType: null })
             }
