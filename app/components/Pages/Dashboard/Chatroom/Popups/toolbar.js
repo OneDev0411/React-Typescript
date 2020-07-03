@@ -1,12 +1,11 @@
 import React from 'react'
 import cn from 'classnames'
-import { mdiClose } from '@mdi/js'
+import { mdiWindowMinimize, mdiArrowTopRight, mdiClose } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import Members from '../Rooms/members'
-import FullscreenIcon from '../../Partials/Svgs/FullscreenIcon'
-import MinimizeIcon from '../../Partials/Svgs/MinimizeIcon'
 
 export default ({ room, isActive, onMinimize, onMaximize, onClose }) => (
   <div
@@ -20,27 +19,31 @@ export default ({ room, isActive, onMinimize, onMaximize, onClose }) => (
     </div>
 
     <div className="icons">
-      <span
-        className="icon minimize minimize-icon"
-        onClick={() => onMinimize(room.id)}
-      >
-        <MinimizeIcon />
+      <span className="icon" onClick={() => onMinimize(room.id)}>
+        <SvgIcon
+          path={mdiWindowMinimize}
+          size={muiIconSizes.small}
+          color={isActive ? '#fff' : '#b2b2b2'}
+          onClick={() => onClose(room.id)}
+        />
       </span>
 
-      <span
-        className="icon maximize maximize-icon"
-        onClick={() => onMaximize(room.id)}
-      >
-        <FullscreenIcon />
+      <span className="icon" onClick={() => onMaximize(room.id)}>
+        <SvgIcon
+          path={mdiArrowTopRight}
+          size={muiIconSizes.small}
+          color={isActive ? '#fff' : '#b2b2b2'}
+          onClick={() => onClose(room.id)}
+        />
       </span>
 
       <Members room={room} iconSize={12} />
 
-      <span className="icon times">
+      <span className="icon">
         <SvgIcon
           path={mdiClose}
-          size="1rem"
-          color="#fff"
+          size={muiIconSizes.small}
+          color={isActive ? '#fff' : '#b2b2b2'}
           onClick={() => onClose(room.id)}
         />
       </span>
