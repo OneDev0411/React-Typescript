@@ -1,4 +1,10 @@
 import {
+  getFormEsignAttachments,
+  getFileEsignAttachments,
+  getEnvelopeEsignAttachments
+} from 'views/utils/deal-files/get-esign-attachments'
+
+import {
   EDIT_FORM,
   SHOW_COMMENTS,
   DOCUSIGN_FORM,
@@ -25,6 +31,8 @@ import {
   SPLIT_PDF
 } from '../action-buttons'
 
+type DocusignType = 'Form' | 'Envelope' | 'File'
+
 export const actionsDefaultProperties = {
   [EDIT_FORM]: {
     label: 'Edit Form',
@@ -36,15 +44,15 @@ export const actionsDefaultProperties = {
     type: 'comments'
   },
   [DOCUSIGN_FORM]: {
-    label: getDocusignLabel,
+    label: getDocusignLabel.bind(null, 'Form'),
     type: 'docusign-form'
   },
   [DOCUSIGN_ENVELOPE]: {
-    label: getDocusignLabel,
+    label: getDocusignLabel.bind(null, 'Envelope'),
     type: 'docusign-envelope'
   },
   [DOCUSIGN_FILE]: {
-    label: getDocusignLabel,
+    label: getDocusignLabel.bind(null, 'File'),
     type: 'docusign-file'
   },
   [VOID_ENVELOPE]: {
@@ -145,16 +153,48 @@ export const actionsDefaultProperties = {
   }
 }
 
-function getDocusignLabel({ state, esignAttachments }) {
+function getDocusignLabel(
+  type: DocusignType,
+  {
+    state,
+    task,
+    file,
+    envelope
+  }: {
+    state: {
+      actions: string[]
+      attachments: IDealFile[]
+    }
+    task: IDealTask
+    file: IFile
+    envelope: IDealEnvelope
+  }
+): string {
+  let attachments: IDealFile[] = []
+
+  switch (type) {
+    case 'Form':
+      attachments = getFormEsignAttachments(task)
+      break
+
+    case 'Envelope':
+      attachments = getEnvelopeEsignAttachments(task, envelope)
+      break
+
+    case 'File':
+      attachments = getFileEsignAttachments(task, file)
+      break
+  }
+
   if (state.actions.length === 0) {
     return 'Docusign'
   }
 
-  return state.attachments.some(attachment =>
-    esignAttachments.some(doc => doc.id === attachment.id)
-  )
-    ? 'Remove Docusign'
-    : 'Add to Docusign'
+  const exists = state.attachments.some(attachment => {
+    return attachments.some(item => item.id === attachment.id)
+  })
+
+  return exists ? 'Remove Docusign' : 'Add to Docusign'
 }
 
 function getEmailLabel({ state, emailAttachments }) {
