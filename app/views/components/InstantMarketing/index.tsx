@@ -20,6 +20,7 @@ interface Props {
   isTemplatesColumnHiddenDefault?: boolean
   handleSave: (markup: string, owner: IUser) => void
   handleSocialSharing: (markup: string, socialNetworkName: string) => void
+  // handlePrintableSharing: (markup: string) => void
   onClose: () => void
 }
 
@@ -35,6 +36,7 @@ export default function InstantMarketing({
   isTemplatesColumnHiddenDefault = true,
   handleSave,
   handleSocialSharing,
+  // handlePrintableSharing,
   onClose
 }: Props) {
   const confirmation = useContext(ConfirmationModalContext)
@@ -66,6 +68,7 @@ export default function InstantMarketing({
       onClose={handleClose}
       onSave={handleSave}
       onSocialSharing={handleSocialSharing}
+      onPrintableSharing={handleSocialSharing}
     />
   )
 }
