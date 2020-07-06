@@ -17,7 +17,6 @@ import {
 import { AvatarGroup } from '@material-ui/lab'
 import { makeStyles, useTheme } from '@material-ui/styles'
 import { addNotification } from 'reapop'
-
 import {
   mdiEmailOpenOutline,
   mdiEmailOutline,
@@ -26,10 +25,9 @@ import {
   mdiForward,
   mdiReplyAll,
   mdiReply,
-  mdiClose
+  mdiClose,
+  mdiArchiveOutline
 } from '@mdi/js'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getEmailThread } from 'models/email/get-email-thread'
 import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
@@ -38,6 +36,7 @@ import { normalizeThreadMessageToThreadEmail } from 'components/EmailThread/help
 import { EmailThreadEmails } from 'components/EmailThread'
 import { EmailResponseType } from 'components/EmailThread/types'
 import { EmailResponseComposeForm } from 'components/EmailCompose/EmailResponseComposeForm'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useMenu } from 'hooks/use-menu'
 
@@ -47,6 +46,7 @@ import useEmailThreadEvents from '../../helpers/use-email-thread-events'
 import useEmailThreadReadStatusSetter from '../../helpers/use-email-thread-read-status-setter'
 import useEmailThreadDeleter from '../../helpers/use-email-thread-deleter'
 import NoContentMessage from '../NoContentMessage'
+import useEmailThreadArchiver from '../../helpers/use-email-thread-archiver'
 
 const useStyles = makeStyles((theme: Theme) => ({
   moreMenu: {
@@ -134,6 +134,10 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
     deleteEmailThread,
     deleteEmailThreadDisabled
   } = useEmailThreadDeleter(emailThreadId!)
+  const {
+    archiveEmailThread,
+    archiveEmailThreadDisabled
+  } = useEmailThreadArchiver(emailThreadId!)
 
   const handleUpdateEmailThreads = useCallback(
     (updatedEmailThreadIds: UUID[]) => {
@@ -331,6 +335,19 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             <ListItemText>
               Mark as {emailThread.is_read ? 'unread' : 'read'}
             </ListItemText>
+          </MenuItem>
+          <MenuItem
+            disabled={archiveEmailThreadDisabled}
+            dense
+            onClick={() => {
+              archiveEmailThread()
+              closeMenu()
+            }}
+          >
+            <ListItemIcon>
+              <SvgIcon path={mdiArchiveOutline} className={classes.icon} />
+            </ListItemIcon>
+            <ListItemText>Archive</ListItemText>
           </MenuItem>
           <Box marginY={1}>
             <Divider />
