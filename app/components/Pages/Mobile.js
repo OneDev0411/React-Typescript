@@ -157,7 +157,7 @@ const Mobile = ({ data, location }) => {
         )}
       </div>
       <div style={S('text-center color-fff absolute w-100p b-30 z-11')}>
-        Powered by &nbsp;
+        Powered by&nbsp;
         <span style={S('fw-600')}>
           Rechat
           <sup>TM</sup>
