@@ -95,21 +95,26 @@ function PreviewModal(props: Props & StateProps) {
     }
   }
 
-  const isPdf = props.selectedTemplate?.file?.mime === 'application/pdf'
+  if (!props.isOpen) {
+    return null
+  }
 
-  return (
-    <>
+  if (
+    (selectedTemplate as IMarketingTemplateInstance)?.file?.mime ===
+    'application/pdf'
+  ) {
+    return (
       <PdfViewerModal
-        isOpen={props.isOpen && isPdf}
+        isOpen
         title="Preview"
-        url={props.selectedTemplate?.file?.url}
+        url={(selectedTemplate as IMarketingTemplateInstance)?.file?.url}
         onClose={props?.onClose}
         {...modalProps}
       />
+    )
+  }
 
-      {props.isOpen && !isPdf && <ImagePreviewModal {...modalProps} />}
-    </>
-  )
+  return <ImagePreviewModal {...modalProps} />
 }
 
 export default connect<StateProps>(({ user }: IAppState) => ({ user }))(

@@ -6,18 +6,18 @@ import importPdfJs from 'utils/import-pdf-js'
 
 interface Props {
   url: string
-  style: React.CSSProperties
+  style?: React.CSSProperties
 }
 
-export function PdfThumbnail({ url, style }: Props) {
+export function PdfThumbnail({ url, style = {} }: Props) {
   const canvas = useRef<HTMLCanvasElement | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const load = async () => {
-      const PDFJS = await importPdfJs()
-
       setIsLoading(true)
+
+      const PDFJS = await importPdfJs()
 
       const document = await PDFJS.getDocument({
         url,
