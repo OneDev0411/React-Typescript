@@ -9,17 +9,25 @@ interface Props {
 }
 
 export function Thumbnail({ template, className }: Props) {
-  const { thumbnail } = getTemplateImage(template)
-
-  if (template?.file?.mime === 'application/pdf') {
-    return <PdfThumbnail url={template.file.url} />
+  if (
+    (template as IMarketingTemplateInstance)?.file?.mime === 'application/pdf'
+  ) {
+    return (
+      <PdfThumbnail url={(template as IMarketingTemplateInstance).file.url} />
+    )
   }
 
-  if (template.video) {
+  const { thumbnail } = getTemplateImage(template)
+
+  if ((template as IMarketingTemplate).video) {
     return <video src={thumbnail} muted autoPlay />
   }
 
   return (
-    <img alt={template.template.name} src={thumbnail} className={className} />
+    <img
+      alt={(template as IMarketingTemplateInstance)?.template.name}
+      src={thumbnail}
+      className={className}
+    />
   )
 }

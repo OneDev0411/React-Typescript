@@ -27,7 +27,7 @@ declare interface IMarketingTemplateInstance
   contacts?: IContact[]
   deals?: IDeal[]
   listings?: IListings[]
-  template?: ITemplate[]
+  template?: ITemplate
 }
 
 interface File {
