@@ -55,7 +55,8 @@ const propTypes = {
   initialValues: PropTypes.shape(),
   submitCallback: PropTypes.func,
   deleteCallback: PropTypes.func,
-  user: PropTypes.shape().isRequired
+  user: PropTypes.shape().isRequired,
+  title: PropTypes.string
 }
 
 const defaultProps = {
@@ -65,7 +66,8 @@ const defaultProps = {
   initialValues: {},
   defaultSelectedDate: new Date(),
   submitCallback: () => {},
-  deleteCallback: () => {}
+  deleteCallback: () => {},
+  title: ''
 }
 
 /**
@@ -245,7 +247,9 @@ class EventDrawerContainer extends Component {
           />
         )}
         <Drawer open={isOpen} onClose={this.handleClose}>
-          <Drawer.Header title={`${this.isNew ? 'Add' : 'Edit'} Event`} />
+          <Drawer.Header
+            title={this.props.title || `${this.isNew ? 'Add' : 'Edit'} Event`}
+          />
           <Drawer.Body>
             {error && error.status === 404 ? (
               <Alert message={error.response.body.message} type="error" />
@@ -406,6 +410,7 @@ EventDrawerContainer.defaultProps = defaultProps
 EventDrawerContainer.contextType = ConfirmationModalContext
 
 const mapStateToProps = state => ({
+  user: state.user,
   accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts)
 })
 
