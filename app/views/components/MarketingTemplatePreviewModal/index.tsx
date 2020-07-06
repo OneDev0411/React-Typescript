@@ -10,6 +10,7 @@ import {
 } from 'utils/marketing-center/helpers'
 
 import { IAppState } from 'reducers/index'
+import { PdfViewerModal } from 'components/PdfViewer/Modal'
 
 interface Props {
   isOpen: boolean
@@ -94,7 +95,21 @@ function PreviewModal(props: Props & StateProps) {
     }
   }
 
-  return <>{props.isOpen && <ImagePreviewModal {...modalProps} />}</>
+  const isPdf = props.selectedTemplate?.file?.mime === 'application/pdf'
+
+  return (
+    <>
+      <PdfViewerModal
+        isOpen={props.isOpen && isPdf}
+        title="Preview"
+        url={props.selectedTemplate?.file?.url}
+        onClose={props?.onClose}
+        {...modalProps}
+      />
+
+      {props.isOpen && !isPdf && <ImagePreviewModal {...modalProps} />}
+    </>
+  )
 }
 
 export default connect<StateProps>(({ user }: IAppState) => ({ user }))(

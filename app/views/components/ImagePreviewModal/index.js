@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import ProgressiveImage from 'react-progressive-image'
 import PropTypes from 'prop-types'
 
-import Tooltip from 'components/tooltip'
+import { Tooltip } from '@material-ui/core'
+import { ModalHeader } from 'components/ModalHeader'
+
 
 import BareModal from '../BareModal'
 
-import { Header } from './Header'
 import {
   Container,
   IconContainer,
@@ -69,10 +70,10 @@ export class ImagePreviewModal extends Component {
         contentLabel={title}
         onRequestClose={handleClose}
       >
-        <Header
-          handleClose={handleClose}
+        <ModalHeader
           title={title}
           menuRenderer={this.props.menuRenderer}
+          onClose={handleClose}
         />
         <Container
           onClick={event => {
@@ -83,7 +84,7 @@ export class ImagePreviewModal extends Component {
         >
           {this.props.showPreviousButton && (
             <IconContainer onClick={this.props.onPreviousButtonClick}>
-              <Tooltip caption="Previous">
+              <Tooltip title="Previous">
                 <PreviousIcon />
               </Tooltip>
             </IconContainer>
@@ -100,7 +101,7 @@ export class ImagePreviewModal extends Component {
           )}
           {this.props.showNextButton && (
             <IconContainer onClick={this.props.onNextButtonClick}>
-              <Tooltip caption="Next">
+              <Tooltip title="Next">
                 <NextIcon />
               </Tooltip>
             </IconContainer>
