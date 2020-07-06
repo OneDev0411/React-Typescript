@@ -118,12 +118,17 @@
       color: rgba(#000, .5);
     }
   }
+  &-h-event{
+    background-color: unset !important;
+    border: unset !important;
+  }
 }
 
 .fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion {
   font-size: .85rem;
   text-transform: uppercase;
 }
+
 
 
 

@@ -14,7 +14,8 @@ import cn from 'classnames'
 import FullCalendar, {
   EventApi,
   EventInput,
-  DatesSetArg
+  DatesSetArg,
+  EventContentArg
 } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -30,6 +31,7 @@ import { viewAs } from 'utils/user-teams'
 
 import { CrmEventType } from 'components/Calendar/types'
 
+import { Event } from './components/Event'
 import { EventController } from './components/EventController'
 
 // List of basic calendar dependency
@@ -48,15 +50,6 @@ import { upsertCrmEvents } from '../Calendar/helpers/upsert-crm-events'
 // helpers
 import { StateProps, SocketUpdate, ActionRef } from './types'
 
-interface Props {
-  user?: IUser
-  contrariwise?: boolean
-  viewAsUsers?: UUID[]
-  initialRange?: NumberRange
-  associations?: string[]
-  actionRef?: RefObject<ActionRef>
-}
-
 const useStyles = makeStyles(
   (theme: Theme) => ({
     loadingContainer: {
@@ -74,6 +67,15 @@ const useStyles = makeStyles(
     name: 'GridCalendar'
   }
 )
+
+interface Props {
+  user?: IUser
+  contrariwise?: boolean
+  viewAsUsers?: UUID[]
+  initialRange?: NumberRange
+  associations?: string[]
+  actionRef?: RefObject<ActionRef>
+}
 
 export const GridCalendarPresentation = ({
   user,
@@ -403,6 +405,14 @@ export const GridCalendarPresentation = ({
           eventClick={handleClickEvent}
           eventDrop={handleEditEvent}
           eventResize={handleEditEvent}
+          eventContent={(content: EventContentArg) => {
+            return (
+              <Event
+                event={content}
+                rowEvent={content.event.extendedProps.rowEvent}
+              />
+            )
+          }}
         />
       </div>
       <EventController
