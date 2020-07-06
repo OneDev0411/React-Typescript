@@ -22,13 +22,13 @@ import {
   mdiEmailOutline,
   mdiTrashCanOutline,
   mdiDotsVertical,
-  mdiForward,
-  mdiReplyAll,
-  mdiReply,
-  mdiClose,
-  mdiArchiveOutline
+  mdiReplyAllOutline,
+  mdiReplyOutline,
+  mdiArchiveOutline,
+  mdiClose
 } from '@mdi/js'
 
+import { forwardOutlined } from 'components/SvgIcons/icons'
 import { getEmailThread } from 'models/email/get-email-thread'
 import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
 
@@ -285,7 +285,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <SvgIcon path={mdiReply} className={classes.icon} />
+              <SvgIcon path={mdiReplyOutline} className={classes.icon} />
             </ListItemIcon>
             <ListItemText>Reply</ListItemText>
           </MenuItem>
@@ -299,7 +299,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
               }}
             >
               <ListItemIcon>
-                <SvgIcon path={mdiReplyAll} className={classes.icon} />
+                <SvgIcon path={mdiReplyAllOutline} className={classes.icon} />
               </ListItemIcon>
               <ListItemText>Reply All</ListItemText>
             </MenuItem>
@@ -313,7 +313,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <SvgIcon path={mdiForward} className={classes.icon} />
+              <SvgIcon path={forwardOutlined} className={classes.icon} />
             </ListItemIcon>
             <ListItemText>Forward</ListItemText>
           </MenuItem>
