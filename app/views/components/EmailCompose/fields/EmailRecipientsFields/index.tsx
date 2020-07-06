@@ -1,5 +1,4 @@
 import React, { ComponentProps, HTMLProps, useState } from 'react'
-import { OnFocus } from 'react-final-form-listeners'
 import { TextFieldProps } from '@material-ui/core/TextField'
 
 import EmailRecipientsChipsInput from 'components/EmailRecipientsChipsInput'
@@ -66,22 +65,26 @@ export function EmailRecipientsFields({
         {...fields.to}
         readOnly={disableAddNewRecipient}
         {...commonProps}
+        onFocus={() => setLastFocusedSendType('To')}
       />
       {isCcShown && (
-        <EmailRecipientsChipsInput label="Cc" {...fields.cc} {...commonProps} />
+        <EmailRecipientsChipsInput
+          label="Cc"
+          {...fields.cc}
+          {...commonProps}
+          onFocus={() => setLastFocusedSendType('CC')}
+        />
       )}
       {isBccShown && (
         <EmailRecipientsChipsInput
           label="Bcc"
           {...fields.bcc}
           {...commonProps}
+          onFocus={() => setLastFocusedSendType('BCC')}
         />
       )}
       {includeQuickSuggestions && (
         <>
-          <OnFocus name="to">{() => setLastFocusedSendType('To')}</OnFocus>
-          <OnFocus name="cc">{() => setLastFocusedSendType('CC')}</OnFocus>
-          <OnFocus name="bcc">{() => setLastFocusedSendType('BCC')}</OnFocus>
           <EmailRecipientQuickSuggestions
             deal={deal}
             currentRecipients={[
