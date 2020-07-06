@@ -5,7 +5,7 @@ import { stateToHTML } from 'draft-js-export-html'
  * @param {object} values The form values
  * @returns {object} a formated object
  */
-export async function preSaveFormat(values, originalValues) {
+export async function preSaveFormat(values, originalValues = null) {
   const {
     title,
     dueDate,
