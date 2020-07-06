@@ -16,8 +16,9 @@ import {
 
 import LoadSaveReinitializeForm from 'views/utils/LoadSaveReinitializeForm'
 
+import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
+
 import { preSaveFormat } from './helpers/pre-save-format'
-import { postLoadFormat } from './helpers/post-load-format'
 
 import { Title } from './components/Title'
 import { TaskType } from './components/TaskType'
@@ -59,6 +60,13 @@ export default class Task extends Component {
     })
   }
 
+  loadFormat = async () => {
+    const { user, defaultAssociation } = this.props
+    const associations = defaultAssociation ? [defaultAssociation] : []
+
+    return initialValueGenerator(user, associations)
+  }
+
   render() {
     const { defaultAssociation } = this.props
 
@@ -67,9 +75,7 @@ export default class Task extends Component {
         <LoadSaveReinitializeForm
           needsReinitialize
           load={() => null}
-          postLoadFormat={() =>
-            postLoadFormat(this.props.user, defaultAssociation)
-          }
+          postLoadFormat={() => this.loadFormat()}
           preSaveFormat={preSaveFormat}
           save={this.save}
           render={props => {
