@@ -75,7 +75,7 @@ export default class Task extends Component {
         <LoadSaveReinitializeForm
           needsReinitialize
           load={() => null}
-          postLoadFormat={() => this.loadFormat()}
+          postLoadFormat={this.loadFormat}
           preSaveFormat={preSaveFormat}
           save={this.save}
           render={props => {
