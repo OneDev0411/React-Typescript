@@ -1,6 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-
 import { mdiClose } from '@mdi/js'
 
 import { IconButton } from '@material-ui/core'
@@ -8,25 +6,18 @@ import { IconButton } from '@material-ui/core'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
-import { Divider } from '../../Divider'
-import PageHeader from '../../PageHeader'
+import { Divider } from 'components/Divider'
+import PageHeader from 'components/PageHeader'
 
-Header.propTypes = {
-  ...PageHeader.propTypes,
-  handleClose: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  menuRenderer: PropTypes.func
+interface Props {
+  title: string
+  className?: string
+  onClose: () => void
+  menuRenderer?: () => React.ReactNode
 }
 
-Header.propTypes = {
-  ...PageHeader.defaultProps,
-  menuRenderer() {
-    return null
-  }
-}
-
-export function Header(props) {
-  const menuContent = props.menuRenderer()
+export function ModalHeader(props: Props) {
+  const menuContent = props.menuRenderer?.()
 
   return (
     <PageHeader
@@ -48,7 +39,7 @@ export function Header(props) {
       <PageHeader.Menu>
         {menuContent}
         {menuContent && <Divider width="1px" height="1.5rem" margin="0 1rem" />}
-        <IconButton onClick={props.handleClose}>
+        <IconButton onClick={props.onClose}>
           <SvgIcon path={mdiClose} size={muiIconSizes.large} />
         </IconButton>
       </PageHeader.Menu>
