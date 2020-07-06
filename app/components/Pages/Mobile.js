@@ -116,7 +116,7 @@ const Mobile = ({ data, location }) => {
       <div style={S('bg-263445 absolute t-0 l-0 w-100p h-100p op-.7 z-9')} />
       <div style={S('color-fff z-10 relative text-center')}>
         <div style={S('mt-50 mb-30')}>
-          <img style={S('w-156')} src={logo} alt="" />
+          <img style={S('h-60')} src={logo} alt="" />
         </div>
         {location && location.query.type === 'iphone' ? (
           <div>
