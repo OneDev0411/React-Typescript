@@ -1,5 +1,6 @@
 .chatroom-add-member {
   .modal-header {
+    align-items: flex-start;
     background-color: #f9f9f9;
     border-bottom: none;
     padding: 23px 20px;
@@ -9,27 +10,17 @@
       font-weight: 600;
       line-height: 1;
     }
-    .close {
+    .modal-action-button {
       opacity: 1;
+      font-size: 21px;
+      line-height: 1;
       color: #9b9b9b;
       &:hover,
       &:focus {
         color: $brand-primary;
       }
-    }
-    .leave-icon {
-      float: right;
-      font-size: 21px;
-      font-weight: bold;
-      line-height: 1;
-      text-shadow: 0 1px 0 #fff;
-      margin-right: 20px;
-      &:hover,
-      &:focus {
-        cursor: pointer;
-        svg g {
-          fill: $brand-primary;
-        }
+      &:not(:last-child) {
+        margin-right: 20px;
       }
     }
   }
