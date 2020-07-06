@@ -3,10 +3,22 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
 import Spinner from 'components/Spinner'
+import { PdfThumbnail } from 'components/PdfThumbnail'
 
 import { Container, Image, Video, Error } from './styled'
 
 function preview(instance) {
+  if (instance.file.mime === 'application/pdf') {
+    return (
+      <PdfThumbnail
+        url={instance.file.url}
+        style={{
+          height: '100%'
+        }}
+      />
+    )
+  }
+
   if (instance.file.mime === 'image/png') {
     return <Image src={instance.file.url} alt="" />
   }
@@ -27,21 +39,17 @@ function PreviewFile(props) {
     <Container>
       {props.error && <Error>{props.error}</Error>}
 
-      {!props.instance &&
-        !props.error && (
-          <Fragment>
-            <Spinner />
-            Looking good! We are prepping your design to share, this could take
-            a minute…
-          </Fragment>
-        )}
+      {!props.instance && !props.error && (
+        <Fragment>
+          <Spinner />
+          Looking good! We are prepping your design to share, this could take a
+          minute...
+        </Fragment>
+      )}
 
       {props.instance && preview(props.instance)}
     </Container>
   )
 }
 
-export default connect(
-  null,
-  { notify }
-)(PreviewFile)
+export default connect(null, { notify })(PreviewFile)
