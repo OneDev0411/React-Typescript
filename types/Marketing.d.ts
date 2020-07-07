@@ -21,7 +21,7 @@ declare interface IMarketingTemplate extends IModel<'template'> {
 declare interface IMarketingTemplateInstance
   extends IModel<'template_instance'> {
   html: string
-  file: File
+  file: IFile
   created_by: string
   branch: string
   template: IMarketingTemplate
