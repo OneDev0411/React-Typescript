@@ -1,37 +1,48 @@
 import React from 'react'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import { SharedMediaProps } from './types'
 
+const useStyle = makeStyles((theme: Theme) => ({
+  container: {
+    maxWidth: '480px',
+    margin: '0 auto',
+    padding: theme.spacing(3)
+  },
+  logoContainer: {
+    marginBottom: theme.spacing(3)
+  },
+  logo: {
+    minHeight: theme.spacing(5),
+    maxHeight: theme.spacing(5)
+  },
+  previewContainer: {
+    width: '100%',
+    minHeight: '30vh',
+    marginBottom: theme.spacing(3)
+  },
+  previewImage: {
+    maxWidth: '100%',
+    maxHeight: '100%'
+  }
+}))
+
 export default function SharedImage({ url }: SharedMediaProps) {
+  const classes = useStyle()
+
   return (
-    <div style={{ maxWidth: '480px', margin: '0 auto', padding: '1.5rem' }}>
-      <div style={{ marginBottom: '1.5rem' }}>
+    <div className={classes.container}>
+      <div className={classes.logoContainer}>
         <a href="/">
           <img
+            className={classes.logo}
             alt="brand"
-            style={{
-              minHeight: '2.5rem',
-              maxHeight: '2.5rem'
-            }}
             src="/static/images/logo.svg"
           />
         </a>
       </div>
-      <div
-        style={{
-          width: '100%',
-          minHeight: '30vh',
-          marginBottom: '1.5rem'
-        }}
-      >
-        <img
-          style={{
-            maxWidth: '100%',
-            maxHeight: '100%'
-          }}
-          alt="preview"
-          src={url}
-        />
+      <div className={classes.previewContainer}>
+        <img className={classes.previewImage} alt="preview" src={url} />
       </div>
       <ol>
         <li>Press and hold on the image above.</li>
