@@ -109,13 +109,15 @@ export function MarketingTemplateSelector(props: Props) {
         type="history"
         isOpen={isPreviewModalOpen}
         onClose={() => setPreviewModalOpen(false)}
-        selectedTemplate={selectedTemplate}
-        setSelectedTemplate={setSelectedTemplate}
+        selectedTemplate={selectedTemplate!}
+        setSelectedTemplate={selected =>
+          setSelectedTemplate(selected as IMarketingTemplateInstance)
+        }
         actions={
           <Button
             variant="contained"
             color="primary"
-            onClick={() => props.onTemplateSelected(selectedTemplate)}
+            onClick={() => props.onTemplateSelected(selectedTemplate!)}
           >
             Add
           </Button>
