@@ -527,6 +527,14 @@ class Builder extends React.Component {
     this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
   }
 
+  handlePrintableSharing = () => {
+    if (!this.isTemplateMarkupRendered()) {
+      return
+    }
+
+    this.props.onPrintableSharing(this.getSavedTemplate())
+  }
+
   generateBrandedTemplate = (templateMarkup, data) => {
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const renderData = this.isMjmlTemplate
@@ -676,17 +684,36 @@ class Builder extends React.Component {
     )
   }
 
+  get isEmailMedium() {
+    if (this.selectedTemplate) {
+      return this.selectedTemplate.medium === 'Email'
+    }
+
+    return false
+  }
+
   get isSocialMedium() {
     if (this.props.templateTypes.includes('CrmOpenHouse')) {
       return false
     }
 
     if (this.selectedTemplate) {
-      return this.selectedTemplate.medium !== 'Email'
+      return (
+        this.selectedTemplate.medium !== 'Email' &&
+        this.selectedTemplate.medium !== 'Letter'
+      )
     }
 
     if (this.props.mediums) {
       return this.props.mediums !== 'Email'
+    }
+
+    return false
+  }
+
+  get isPrintableMedium() {
+    if (this.selectedTemplate) {
+      return this.selectedTemplate.medium === 'Letter'
     }
 
     return false
@@ -774,17 +801,10 @@ class Builder extends React.Component {
       return null
     }
 
-    const isSocialMedium = this.isSocialMedium
-    const socialNetworks = this.socialNetworks
-
     return (
       <Portal root="marketing-center">
         <Container
-          hideBlocks={
-            !this.isMjmlTemplate ||
-            this.isOpenHouseMedium ||
-            this.isSocialMedium
-          }
+          hideBlocks={!this.isMjmlTemplate}
           className="template-builder"
           style={this.props.containerStyle}
         >
@@ -943,14 +963,27 @@ class Builder extends React.Component {
                 </Button>
               )}
 
-              {this.state.selectedTemplate && isSocialMedium && (
+              {this.isSocialMedium && (
                 <SocialActions
-                  networks={socialNetworks}
+                  networks={this.socialNetworks}
                   onClick={this.handleSocialSharing}
                 />
               )}
 
-              {this.state.selectedTemplate && !isSocialMedium && (
+              {this.isPrintableMedium && (
+                <Button
+                  style={{
+                    marginLeft: '0.5rem'
+                  }}
+                  variant="contained"
+                  color="primary"
+                  onClick={this.handleSocialSharing}
+                >
+                  Continue
+                </Button>
+              )}
+
+              {this.isEmailMedium && (
                 <Button
                   style={{
                     marginLeft: '0.5rem'

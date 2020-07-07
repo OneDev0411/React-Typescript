@@ -2,14 +2,15 @@ import React from 'react'
 import FileSaver from 'file-saver'
 import agent from 'superagent'
 
-import ImageFileIcon from 'components/SvgIcons/ImageFile/ImageFileIcon'
-
 import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
+import { getFileType } from 'utils/file-utils/get-file-type'
+
+import ImageFileIcon from 'components/SvgIcons/ImageFile/ImageFileIcon'
 
 import { Button as DownloadButton } from '../components/Section/styled'
 import { Section } from '../components/Section'
 
-export default class DownloadImage extends React.Component {
+export default class DownloadFile extends React.Component {
   state = {
     isWorking: false
   }
@@ -43,10 +44,22 @@ export default class DownloadImage extends React.Component {
   render() {
     const { state } = this
 
+    const fileType = getFileType(this.props.instance.file)
+    const [title, description] =
+      fileType === 'pdf'
+        ? [
+            'Download PDF for Print:',
+            'Download PDF to your computer and print or share it however you want.'
+          ]
+        : [
+            'Download Image:',
+            'Download image to your computer and share however you want.'
+          ]
+
     return (
       <Section
-        title="Download Image:"
-        description="Download image to your computer and share however you want."
+        title={title}
+        description={description}
         button={() => (
           <DownloadButton
             disabled={state.isWorking}

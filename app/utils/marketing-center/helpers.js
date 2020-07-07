@@ -109,13 +109,13 @@ export function itemDateText(time) {
   return createdAt(time)
 }
 
-export function getTemplateType(initType, template) {
+export function getTemplateType(fallback, template) {
   if (!template) {
-    return initType
+    return fallback
   }
 
   const normalizedTemplate = getTemplateObject(template)
-  return normalizedTemplate.template_type || initType
+  return normalizedTemplate.template_type || fallback
 }
 
 export function getMedium(props) {

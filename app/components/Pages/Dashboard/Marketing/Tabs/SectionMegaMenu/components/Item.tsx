@@ -5,7 +5,7 @@ import { goTo } from 'utils/go-to'
 
 import { SectionItem } from 'components/PageSideNav/types'
 
-import { MEDIUMS_COLLECTION } from '../../../constants'
+import { MEDIUM_LABEL_MAP } from '../../../constants'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -68,7 +68,7 @@ function Item({ data, mediums, onClose }: Props) {
 
           return (
             <li key={medium} onClick={e => navigateTo(e, url)}>
-              {MEDIUMS_COLLECTION[medium] || medium}
+              {MEDIUM_LABEL_MAP[medium] || medium}
             </li>
           )
         })}

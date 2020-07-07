@@ -28,7 +28,7 @@ interface Props {
   onChanged: () => void
   hasStaticBody?: boolean
   updateBody: (body: string) => void
-  setMarketingTemplate: (template: IBrandEmailTemplate | null) => void
+  setMarketingTemplate: (template: IMarketingTemplateInstance | null) => void
   onCancel?: () => void
   onDelete?: (values) => void | Promise<any>
   onClickAddDealAttachments?: () => void
