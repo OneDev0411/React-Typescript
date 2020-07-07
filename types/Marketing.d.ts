@@ -24,10 +24,10 @@ declare interface IMarketingTemplateInstance
   file: File
   created_by: string
   branch: string
-  contacts?: IContact[]
-  deals?: IDeal[]
-  listings?: IListings[]
-  template?: ITemplate
+  template: IMarketingTemplate
+  contacts: Nullable<IContact[]>
+  deals: Nullable<IDeal[]>
+  listings: Nullable<IListings[]>
 }
 
 interface File {
@@ -43,12 +43,6 @@ interface File {
   url: string
   preview_url: string
   mime: string
-}
-
-declare interface IMarketingTemplateInstanceData {
-  listings?: UUID[]
-  deals?: UUID[]
-  contacts?: UUID[]
 }
 
 declare enum MarketingTemplateMedium {
