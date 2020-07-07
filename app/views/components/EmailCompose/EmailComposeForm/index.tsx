@@ -275,7 +275,7 @@ function EmailComposeForm<T>({
                 }}
                 autofocus={autofocusBody}
                 hasSignatureByDefault={props.hasSignatureByDefault}
-                hasStaticBody={marketingTemplate || props.hasStaticBody}
+                hasStaticBody={!!marketingTemplate || props.hasStaticBody}
                 hasTemplateVariables={props.hasTemplateVariables}
                 content={
                   marketingTemplate
