@@ -304,7 +304,10 @@ export const GridCalendarPresentation = ({
    * triggers when a crm events update or delete
    */
   const handleCrmEventChange = useCallback(
-    (event: IEvent, type: CrmEventType) => {
+    (
+      event: IEvent | ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>,
+      type: CrmEventType
+    ) => {
       const nextEvents: ICalendarEvent[] = upsertCrmEvents(
         rowEvents,
         event,

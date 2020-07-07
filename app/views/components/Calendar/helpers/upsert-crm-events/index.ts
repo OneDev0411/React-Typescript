@@ -4,11 +4,13 @@ import { convertTaskToCalendarEvent } from '../convert-task-to-calendar'
 
 export function upsertCrmEvents(
   events: ICalendarEvent[],
-  event: IEvent,
+  event: IEvent | ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>,
   type: CrmEventType,
   contact?: IContact
 ): ICalendarEvent[] {
-  const calendarEvent: ICalendarEvent = convertTaskToCalendarEvent(event)
+  const calendarEvent: ICalendarEvent = convertTaskToCalendarEvent(
+    event as IEvent
+  )
 
   // delete event from events list when user deletes related assocation of that contact inside contact profile timeline
   if (
