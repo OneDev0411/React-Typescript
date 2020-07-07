@@ -15,7 +15,7 @@ interface StateProps {
 }
 
 interface Props {
-  template: IMarketingTemplateInstance | IMarketingTemplate
+  template: IMarketingTemplateInstance | IBrandMarketingTemplate
   handlePreview?: () => void
   isLoading?: boolean
   suffix?: React.ReactNode // overrides default suffix
@@ -36,7 +36,7 @@ function MarketingTemplateCard(
 
   const handlePreview = e => {
     if (
-      !template.video &&
+      !template.template.video &&
       props.handlePreview &&
       e.target.dataset.card === 'true'
     ) {
@@ -54,7 +54,8 @@ function MarketingTemplateCard(
     >
       <div
         className={classNames(classes.card, {
-          [classes.cardHasPreview]: !template.isVideo && props.handlePreview,
+          [classes.cardHasPreview]:
+            !template.template.video && props.handlePreview,
           [classes.cardLoading]: props.isLoading
         })}
         onClick={handlePreview}

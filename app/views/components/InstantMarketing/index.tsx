@@ -36,7 +36,6 @@ export default function InstantMarketing({
   isTemplatesColumnHiddenDefault = true,
   handleSave,
   handleSocialSharing,
-  // handlePrintableSharing,
   onClose
 }: Props) {
   const confirmation = useContext(ConfirmationModalContext)

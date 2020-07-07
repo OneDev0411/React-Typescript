@@ -1,7 +1,5 @@
 import React, { ComponentProps } from 'react'
-import { connect } from 'react-redux'
 
-import { ImagePreviewModal } from 'components/ImagePreviewModal'
 import {
   getTemplateImage,
   navigateBetweenTemplatesUsingKeyboard,
@@ -9,27 +7,23 @@ import {
   selectPreviousTemplate
 } from 'utils/marketing-center/helpers'
 
-import { IAppState } from 'reducers/index'
+import { ImagePreviewModal } from 'components/ImagePreviewModal'
 import { PdfViewerModal } from 'components/PdfViewer/Modal'
 
 interface Props {
   isOpen: boolean
-  selectedTemplate: IMarketingTemplate | IMarketingTemplateInstance
+  selectedTemplate: IBrandMarketingTemplate | IMarketingTemplateInstance
   setSelectedTemplate: (
-    template: IMarketingTemplate | IMarketingTemplateInstance
+    template: IBrandMarketingTemplate | IMarketingTemplateInstance
   ) => void
   type: string // can be improved
-  medium?: string // can be improved
-  templates?: (IMarketingTemplate | IMarketingTemplateInstance)[]
+  medium?: MarketingTemplateMedium
+  templates?: (IBrandMarketingTemplate | IMarketingTemplateInstance)[]
   actions?: React.ReactNode
   onClose?: () => void
 }
 
-interface StateProps {
-  user: IUser
-}
-
-function PreviewModal(props: Props & StateProps) {
+function PreviewModal(props: Props) {
   const { selectedTemplate, templates, medium } = props
 
   if (!selectedTemplate) {
@@ -100,14 +94,14 @@ function PreviewModal(props: Props & StateProps) {
   }
 
   if (
-    (selectedTemplate as IMarketingTemplateInstance)?.file?.mime ===
-    'application/pdf'
+    selectedTemplate.type === 'template_instance' &&
+    selectedTemplate.file.mime === 'application/pdf'
   ) {
     return (
       <PdfViewerModal
         isOpen
         title="Preview"
-        url={(selectedTemplate as IMarketingTemplateInstance)?.file?.url}
+        url={selectedTemplate.file.url}
         onClose={props?.onClose}
         {...modalProps}
       />
@@ -117,6 +111,4 @@ function PreviewModal(props: Props & StateProps) {
   return <ImagePreviewModal {...modalProps} />
 }
 
-export default connect<StateProps>(({ user }: IAppState) => ({ user }))(
-  PreviewModal
-)
+export default PreviewModal
