@@ -3,9 +3,10 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { Button } from '@material-ui/core'
+import { mdiBellRingOutline } from '@mdi/js'
 
-import PendingIcon from 'components/SvgIcons/DealTaskPending/IconPending'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { setSelectedTask, updateDealNotifications } from 'actions/deals'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
@@ -59,7 +60,9 @@ class MessageAdmin extends React.Component {
           <BadgeCounter
             isRectangle={new_notifications > 0 && task.attention_requested}
           >
-            {task.attention_requested && <PendingIcon />}
+            {task.attention_requested && (
+              <SvgIcon path={mdiBellRingOutline} size={muiIconSizes.xsmall} />
+            )}
 
             {new_notifications > 0 && (
               <span
@@ -84,7 +87,7 @@ function mapStateToProps({ chatroom, deals }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { setSelectedTask, updateDealNotifications }
-)(MessageAdmin)
+export default connect(mapStateToProps, {
+  setSelectedTask,
+  updateDealNotifications
+})(MessageAdmin)

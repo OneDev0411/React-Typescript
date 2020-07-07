@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { mdiPencil } from '@mdi/js'
+import { mdiPencilOuline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -31,7 +31,7 @@ class DrawingButton extends React.Component {
         onClick={this.onClick}
         disabled={this.props.isDrawing || this.props.isFetching}
       >
-        <SvgIcon path={mdiPencil} />
+        <SvgIcon path={mdiPencilOuline} />
         Draw
       </Button>
     )

@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from 'react'
 import { Box, IconButton, Tooltip } from '@material-ui/core'
+import { mdiStopCircleOutline } from '@mdi/js'
 
-import StopIcon from 'components/SvgIcons/CircleStop/IconCircleStop'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { Container } from './styled'
 
@@ -28,7 +30,11 @@ export default function Item({ flow, onStop }: Props) {
         </Box>
         <Tooltip title="Stop this Flow">
           <IconButton onClick={handleOnStop}>
-            <StopIcon className="stop-icon" />
+            <SvgIcon
+              path={mdiStopCircleOutline}
+              className="stop-icon"
+              size={muiIconSizes.small}
+            />
           </IconButton>
         </Tooltip>
       </Box>

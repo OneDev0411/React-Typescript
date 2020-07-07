@@ -15,3 +15,5 @@ export const mapCheckOutline: string = 'M20.8535 3.29293c-.0937-.09377-.2209-.14
 export const printOutlined: string = 'M19 8h-1V3H6v5H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zM8 5h8v3H8V5zm8 12v2H8v-4h8v2zm2-2v-2H6v2H4v-4c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v4h-2z'
 
 export const myDesignIcon: string = 'M21 17H7V3h14v14zm0-16H7a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V3a2 2 0 00-2-2zM3 5H1v16a2 2 0 002 2h16v-2H3V5zm12 7h-2v3h-3v-5H8l6-5 6 5h-2v5h-3v-3z'
+
+export const forwardOutlined: string = 'M14 8.83L17.17 12 14 15.17V14H6v-4h8V8.83M12 4v4H4v8h8v4l8-8-8-8z'

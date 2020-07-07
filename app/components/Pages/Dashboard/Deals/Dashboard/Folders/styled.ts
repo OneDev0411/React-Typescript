@@ -8,7 +8,6 @@ import { StyledSVGWithProps } from 'utils/ts-utils'
 
 import { Container as ActionsButton } from '../../components/ActionsButton/styled'
 
-import { Container as Notification } from './Checklist/Notification/styled'
 import { LastActivity } from './Checklist/TaskRow/Activity/styled'
 
 export const Container = styled.div`
@@ -127,10 +126,8 @@ export const RowContainer = styled.div<{
     color: #000;
   }
 
-  :hover ${Notification} {
-    svg > path {
-      fill: #000;
-    }
+  :hover .deal--task-comments path {
+    fill: #000 !important;
   }
 `
 
