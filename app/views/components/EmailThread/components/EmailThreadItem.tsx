@@ -15,9 +15,10 @@ import {
 import fecha from 'fecha'
 import classNames from 'classnames'
 import useBoolean from 'react-use/lib/useBoolean'
-import { mdiForward, mdiReplyAll, mdiReply } from '@mdi/js'
+import { mdiReplyAllOutline, mdiReplyOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { forwardOutlined } from 'components/SvgIcons/icons'
 import { Iframe } from 'components/Iframe'
 
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
@@ -215,7 +216,7 @@ export function EmailThreadItem({
                       : undefined
                   }
                 >
-                  <SvgIcon path={mdiReply} rightMargined />
+                  <SvgIcon path={mdiReplyOutline} rightMargined />
                   Reply
                 </Button>
                 {hasReplyAll(email) && (
@@ -229,7 +230,7 @@ export function EmailThreadItem({
                         : undefined
                     }
                   >
-                    <SvgIcon path={mdiReplyAll} rightMargined />
+                    <SvgIcon path={mdiReplyAllOutline} rightMargined />
                     Reply All
                   </Button>
                 )}
@@ -244,7 +245,7 @@ export function EmailThreadItem({
                       : undefined
                   }
                 >
-                  <SvgIcon path={mdiForward} rightMargined />
+                  <SvgIcon path={forwardOutlined} rightMargined />
                   Forward
                 </Button>
               </Box>

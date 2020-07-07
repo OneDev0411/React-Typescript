@@ -1,13 +1,16 @@
 import React, { ReactNode } from 'react'
 import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
+import { mdiClose } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import IconButton from '../../Button/IconButton'
 
 import { TextMiddleTruncate } from '../../TextMiddleTruncate'
 
 import BackIcon from '../../SvgIcons/KeyboardArrowLeft/IconKeyboardArrowLeft'
-import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 
 import { H1 } from '../../Typography/headings'
 import { goTo } from '../../../../utils/go-to'
@@ -65,7 +68,7 @@ export function PageTitle(props: Props) {
             isFit
             onClick={onClickCloseButton}
           >
-            <CloseIcon />
+            <SvgIcon path={mdiClose} size={muiIconSizes.large} />
           </IconButton>
         </Flex>
       </Flex>

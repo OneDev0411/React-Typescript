@@ -1,30 +1,18 @@
 import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
-  min-height: 90vh;
-  max-height: 90vh;
+  height: 90vh;
   overflow: auto;
   background: white;
   width: 340px;
   background-color: #f1f1f1;
   border: 1px solid #dadada;
-  display: flex;
-  flex-direction: column;
 `
 
 export const TemplateItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  border: 1px solid white;
   border-radius: 5px;
-  margin: 0 auto 20px;
+  margin: 1rem;
   cursor: pointer;
-  width: 292px;
-  text-align: center;
-
   border: 4px solid ${props => (props.isSelected ? '#0945eb' : 'transparent')};
 
   :hover {

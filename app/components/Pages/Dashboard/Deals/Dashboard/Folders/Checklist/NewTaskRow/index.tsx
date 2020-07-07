@@ -1,11 +1,8 @@
 import React, { useState } from 'react'
-
 import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
-import cn from 'classnames'
+import { mdiPlusCircleOutline } from '@mdi/js'
 
-import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import TaskCreate from '../../../../components/TaskCreate'
 
@@ -29,7 +26,6 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function NewTaskRow(props: Props) {
   const [showCreateTaskDrawer, setShowCreateTaskDrawer] = useState(false)
   const classes = useStyles()
-  const iconClasses = useIconStyles()
 
   const toggleCreateTaskDrawer = () =>
     setShowCreateTaskDrawer(!showCreateTaskDrawer)
@@ -37,9 +33,7 @@ export default function NewTaskRow(props: Props) {
   return (
     <div className={classes.root}>
       <Button onClick={toggleCreateTaskDrawer} color="secondary">
-        <IconAdd
-          className={cn(iconClasses.rightMargin, iconClasses.currentColor)}
-        />
+        <SvgIcon path={mdiPlusCircleOutline} rightMargined />
         Add New Checklist Item
       </Button>
 

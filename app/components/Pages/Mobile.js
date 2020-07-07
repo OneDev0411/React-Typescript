@@ -1,18 +1,13 @@
 // MobileSplashViewer.js
 import React from 'react'
-import { connect } from 'react-redux'
-import withState from 'recompose/withState'
-import compose from 'recompose/compose'
 import S from 'shorti'
 
 import ActionButton from 'views/components/Button/ActionButton'
-
 import { primary } from 'views/utils/colors'
 
-import Brand from '../../controllers/Brand'
 import config from '../../../config/public'
 
-const Mobile = ({ iFrameSrc, data, setIFrameSrc, location }) => {
+export default function Mobile({ location }) {
   /**
    * Try to open the external app using URL scheme
    * @param urlNotFoundApp urlNotFoundApp where should go if app not found (if exists)
@@ -103,39 +98,26 @@ const Mobile = ({ iFrameSrc, data, setIFrameSrc, location }) => {
     goToAppPage = setTimeout(appWasNotFound, 2000)
   }
 
-  const mobile_splash_style = S(
-    'absolute t-0 z-1000 l-0 w-100p h-100p bg-000 color-fff bg-url(/static/images/mobile/mask@3x.jpg) bg-center bg-cover'
-  )
-
-  let logo = '/static/images/mobile/icon@3x.png'
-
-  if (data.brand) {
-    logo = Brand.asset('site_logo')
-  }
-
   return (
-    <div style={mobile_splash_style}>
+    <div
+      style={S(
+        'absolute t-0 z-1000 l-0 w-100p h-100p bg-000 color-fff bg-url(/static/images/mobile/mask@3x.jpg) bg-center bg-cover'
+      )}
+    >
       <div style={S('bg-263445 absolute t-0 l-0 w-100p h-100p op-.7 z-9')} />
       <div style={S('color-fff z-10 relative text-center')}>
         <div style={S('mt-50 mb-30')}>
-          <img style={S('w-76')} src={logo} alt="" />
+          <img style={S('h-60')} src="/static/images/logo--white.svg" alt="" />
         </div>
         {location && location.query.type === 'iphone' ? (
           <div>
-            {iFrameSrc && (
-              <iframe
-                style={{ display: 'none' }}
-                title="open iOS app"
-                src={iFrameSrc}
-              />
-            )}
             <p style={{ fontSize: '18px', padding: '2rem' }}>
               Our mobile web version is temporarily unavailable. Please use your
               desktop browser to access Rechat.com or use the mobile iOS App.
             </p>
             <ActionButton
               style={{
-                backgroundColor: Brand.color('primary', primary)
+                backgroundColor: primary
               }}
               onClick={() => {
                 document.location = 'rechat://'
@@ -145,11 +127,11 @@ const Mobile = ({ iFrameSrc, data, setIFrameSrc, location }) => {
               Open in my Rechat App
             </ActionButton>
             <p style={{ fontSize: '18px', padding: '2rem' }}>
-              If you don't have the app, you can get it from appStore:
+              If you don't have the app, you can get it from the App Store:
             </p>
             <ActionButton
               style={{
-                backgroundColor: Brand.color('primary', primary)
+                backgroundColor: primary
               }}
               onClick={() => {
                 document.location = config.itunes_url
@@ -166,7 +148,7 @@ const Mobile = ({ iFrameSrc, data, setIFrameSrc, location }) => {
         )}
       </div>
       <div style={S('text-center color-fff absolute w-100p b-30 z-11')}>
-        Powered by{' '}
+        Powered by&nbsp;
         <span style={S('fw-600')}>
           Rechat
           <sup>TM</sup>
@@ -175,8 +157,3 @@ const Mobile = ({ iFrameSrc, data, setIFrameSrc, location }) => {
     </div>
   )
 }
-
-export default compose(
-  connect(({ data }) => ({ data })),
-  withState('iFrameSrc', 'setIFrameSrc', '')
-)(Mobile)

@@ -14,18 +14,16 @@ import {
 } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 import classNames from 'classnames'
-
 import {
   mdiDotsVertical,
-  mdiReply,
-  mdiForward,
-  mdiReplyAll,
+  mdiReplyOutline,
+  mdiReplyAllOutline,
   mdiEmailOutline,
   mdiEmailOpenOutline
 } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
+import { forwardOutlined } from 'components/SvgIcons/icons'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { useMenu } from 'hooks/use-menu'
@@ -97,7 +95,7 @@ export function EmailItemHeaderActions(
     <Box ml={1} onClick={e => e.stopPropagation()}>
       <Tooltip title="Reply">
         <IconButton onClick={props.onReply}>
-          <SvgIcon path={mdiReply} color={theme.palette.common.black} />
+          <SvgIcon path={mdiReplyOutline} color={theme.palette.common.black} />
         </IconButton>
       </Tooltip>
       <Tooltip title="More">
@@ -114,21 +112,30 @@ export function EmailItemHeaderActions(
       >
         <MenuItem dense onClick={select(props.onReply)}>
           <ListItemIcon>
-            <SvgIcon path={mdiReply} color={theme.palette.common.black} />
+            <SvgIcon
+              path={mdiReplyOutline}
+              color={theme.palette.common.black}
+            />
           </ListItemIcon>
           <ListItemText>Reply</ListItemText>
         </MenuItem>
         {hasReplyAll(props.email) && (
           <MenuItem dense onClick={select(props.onReplyAll)}>
             <ListItemIcon>
-              <SvgIcon path={mdiReplyAll} color={theme.palette.common.black} />
+              <SvgIcon
+                path={mdiReplyAllOutline}
+                color={theme.palette.common.black}
+              />
             </ListItemIcon>
             <ListItemText>Reply All</ListItemText>
           </MenuItem>
         )}
         <MenuItem dense onClick={select(props.onForward)}>
           <ListItemIcon>
-            <SvgIcon path={mdiForward} color={theme.palette.common.black} />
+            <SvgIcon
+              path={forwardOutlined}
+              color={theme.palette.common.black}
+            />
           </ListItemIcon>
           <ListItemText>Forward</ListItemText>
         </MenuItem>

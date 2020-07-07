@@ -4,6 +4,8 @@ import { Box, fade, Theme, makeStyles } from '@material-ui/core'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 // TODO: merge all events icon into one specific file
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+
 import { EVENT_ICONS } from './icons'
 
 const DEFAULT_ICON = EVENT_ICONS[EVENT_ICONS.length - 1]
@@ -36,7 +38,7 @@ export default function Icon({ type, hasBackground = true }: Props) {
 
   return (
     <Box className={classes.container}>
-      <SvgIcon path={icon.icon} color={icon.color} />
+      <SvgIcon path={icon.icon} color={icon.color} size={muiIconSizes.small} />
     </Box>
   )
 }

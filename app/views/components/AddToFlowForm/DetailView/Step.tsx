@@ -2,6 +2,9 @@ import React from 'react'
 import { Box, Typography, makeStyles } from '@material-ui/core'
 
 // TODO: merge all events icon into one specific file
+
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+
 import { EVENT_ICONS } from '../../../../components/Pages/Dashboard/Flows/Edit/Steps/Item/icons'
 import { SvgIcon } from '../../SvgIcons/SvgIcon'
 import { StepContainer } from './styled'
@@ -26,7 +29,7 @@ export default function Step({ step }: Props) {
   return (
     <StepContainer alignCenter justifyBetween>
       <Box display="flex" alignItems="center" width="70%">
-        <SvgIcon path={icon.icon} />
+        <SvgIcon path={icon.icon} size={muiIconSizes.samll} />
         <Typography
           noWrap
           variant="body2"

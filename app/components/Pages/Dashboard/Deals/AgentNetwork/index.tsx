@@ -21,6 +21,7 @@ import config from 'config'
 import { GridContextProvider } from 'components/Grid/Table/context/provider'
 import GlobalHeader from 'components/GlobalHeader'
 import { CloseButton } from 'components/Button/CloseButton'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { DEFAULT_RADIUS_FILTER } from './constants'
 import { valertOptions } from './helpers/valert-options'
@@ -270,7 +271,7 @@ export default function AgentNetwork({ location, params }: Props) {
                 size: 'medium'
               }}
               iconProps={{
-                size: 'medium'
+                size: muiIconSizes.large
               }}
             />
           </div>

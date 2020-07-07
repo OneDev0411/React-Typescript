@@ -57,6 +57,7 @@ interface Props extends BaseProps {
    */
   onChange?: (value: IDenormalizedEmailRecipientInput[]) => void
   value?: IDenormalizedEmailRecipientInput[]
+  onFocus?: () => void
 }
 
 /**
@@ -93,6 +94,7 @@ function EmailRecipientsChipsInput({
   meta,
   value,
   onChange,
+  onFocus,
   ...chipsInputProps
 }: Props & StateProps & DispatchProps) {
   const [recipients, setRecipients] = useControllableState<
@@ -158,7 +160,10 @@ function EmailRecipientsChipsInput({
         },
         inputProps: {
           ...inputProps,
-          onFocus: input && input.onFocus,
+          onFocus: (event: any) => {
+            input && input.onFocus && input.onFocus(event)
+            onFocus && onFocus()
+          },
           // passing onFocus causes error messages to be shown exactly while
           // clicking on quick suggestions. So let's not show error messages
           // on blur, they are gonna be shown anyways on submit.

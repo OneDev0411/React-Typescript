@@ -7,7 +7,7 @@ import { Body } from '../components/Body'
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
 export function SearchResultList(props) {
-  if (props.isLoading || props.searchResults.length === 0) {
+  if (props.isLoading) {
     return false
   }
 
