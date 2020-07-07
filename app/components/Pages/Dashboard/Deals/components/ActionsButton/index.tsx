@@ -28,7 +28,8 @@ import type {
 
 import {
   ADD_ATTACHMENTS,
-  REMOVE_ATTACHMENT
+  REMOVE_ATTACHMENT,
+  CLEAR_ATTACHMENTS
 } from 'deals/contexts/actions-context/constants'
 
 import { normalizeActions } from './data/normalize-actions'
@@ -191,11 +192,15 @@ class ActionsButton extends React.Component<
   handleToggleMenu = () =>
     this.setState(state => ({ isMenuOpen: !state.isMenuOpen }))
 
-  handleDeselectAction = () =>
+  handleDeselectAction = () => {
     this.setState({
-      isSignatureFormOpen: false,
-      signatureType: null
+      isSignatureFormOpen: false
     })
+
+    this.props.actionsDispatch({
+      type: CLEAR_ATTACHMENTS
+    })
+  }
 
   handleCloseMultipleItemsSelectionDrawer = () =>
     this.setState({
@@ -268,6 +273,16 @@ class ActionsButton extends React.Component<
     this.props.actionsDispatch({
       type: ADD_ATTACHMENTS,
       attachments: files
+    })
+  }
+
+  handleCloseComposeEmail = () => {
+    this.setState(state => ({
+      isComposeEmailOpen: false
+    }))
+
+    this.props.actionsDispatch({
+      type: CLEAR_ATTACHMENTS
     })
   }
 
@@ -479,7 +494,7 @@ class ActionsButton extends React.Component<
             isOpen
             deal={this.props.deal}
             onClickAddAttachments={() =>
-              this.setState({ isSignatureFormOpen: false, signatureType: null })
+              this.setState({ isSignatureFormOpen: false })
             }
             onClose={this.handleDeselectAction}
           />
@@ -519,8 +534,8 @@ class ActionsButton extends React.Component<
                 isComposeEmailOpen: false
               })
             }
-            onClose={this.handleToggleComposeEmail}
-            onSent={this.handleToggleComposeEmail}
+            onClose={this.handleCloseComposeEmail}
+            onSent={this.handleCloseComposeEmail}
           />
         )}
 
