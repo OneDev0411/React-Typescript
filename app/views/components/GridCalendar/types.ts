@@ -9,5 +9,8 @@ export interface SocketUpdate {
 }
 
 export interface ActionRef {
-  updateCrmEvents(event: IEvent, type: string): void
+  updateCrmEvents(
+    event: IEvent | ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>,
+    type: string
+  ): void
 }

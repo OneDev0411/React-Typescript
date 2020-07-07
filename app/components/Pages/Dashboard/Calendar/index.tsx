@@ -12,7 +12,9 @@ export default function CalendarPage(props: WithRouterProps) {
   const classes = useCommonStyles()
   const actionRef = useRef<ActionRef>(null)
 
-  const handleCreateEvent = (event: IEvent) => {
+  const handleCreateTask = (
+    event: IEvent | ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => {
     actionRef.current!.updateCrmEvents(event, 'created')
   }
 
@@ -20,7 +22,9 @@ export default function CalendarPage(props: WithRouterProps) {
     <div className={classes.container}>
       <GlobalHeader
         title="Calendar"
-        onCreateEvent={handleCreateEvent}
+        onCreateEvent={handleCreateTask}
+        onCreateOpenHouse={handleCreateTask}
+        onCreateTour={handleCreateTask}
         noPadding
       />
       <div className={classes.listContainer}>
