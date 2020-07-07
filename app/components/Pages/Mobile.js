@@ -1,6 +1,6 @@
 // MobileSplashViewer.js
 import React from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import S from 'shorti'
 
 import ActionButton from 'views/components/Button/ActionButton'
@@ -10,7 +10,7 @@ import { primary } from 'views/utils/colors'
 import Brand from '../../controllers/Brand'
 import config from '../../../config/public'
 
-const Mobile = ({ data, location }) => {
+export default function Mobile({ location }) {
   /**
    * Try to open the external app using URL scheme
    * @param urlNotFoundApp urlNotFoundApp where should go if app not found (if exists)
@@ -105,11 +105,11 @@ const Mobile = ({ data, location }) => {
     'absolute t-0 z-1000 l-0 w-100p h-100p bg-000 color-fff bg-url(/static/images/mobile/mask@3x.jpg) bg-center bg-cover'
   )
 
-  let logo = '/static/images/logo--white.svg'
+  const brand = useSelector(({ data }) => data.brand)
 
-  if (data.brand) {
-    logo = Brand.asset('site_logo')
-  }
+  const logo = brand
+    ? Brand.asset('site_logo')
+    : '/static/images/logo--white.svg'
 
   return (
     <div style={mobile_splash_style}>
@@ -166,5 +166,3 @@ const Mobile = ({ data, location }) => {
     </div>
   )
 }
-
-export default connect(({ data }) => ({ data }))(Mobile)
