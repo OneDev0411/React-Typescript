@@ -54,9 +54,15 @@ export async function preSaveFormat(values, originalValues) {
   }
 
   if (originalValues?.id || description) {
-    task.description = stateToHTML(description.getCurrentContent())
-      .trim()
-      .replace(/(\r\n|\n|\r)/gm, '') // remove unneccessary new line
+    const currentDescription = description.getCurrentContent()
+
+    task.description =
+      currentDescription.hasText() &&
+      currentDescription.getPlainText().trim().length > 0
+        ? stateToHTML(currentDescription)
+            .trim()
+            .replace(/(\r\n|\n|\r)/gm, '') // remove unneccessary new line
+        : ''
   }
 
   if (task.status === 'DONE') {
