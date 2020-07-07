@@ -2,13 +2,17 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
+import { getFileType } from 'utils/file-utils/get-file-type'
+
 import Spinner from 'components/Spinner'
 import { PdfThumbnail } from 'components/PdfThumbnail'
 
 import { Container, Image, Video, Error } from './styled'
 
 function preview(instance) {
-  if (instance.file.mime === 'application/pdf') {
+  const fileType = getFileType(instance.file)
+
+  if (fileType === 'pdf') {
     return (
       <PdfThumbnail
         url={instance.file.url}
@@ -19,7 +23,7 @@ function preview(instance) {
     )
   }
 
-  if (instance.file.mime === 'image/png') {
+  if (fileType === 'image') {
     return <Image src={instance.file.url} alt="" />
   }
 
