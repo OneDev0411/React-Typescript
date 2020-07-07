@@ -3,8 +3,9 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import S from 'shorti'
 
-import ActionButton from 'views/components/Button/ActionButton'
+import { getActiveBrand } from 'utils/user-teams'
 
+import ActionButton from 'views/components/Button/ActionButton'
 import { primary } from 'views/utils/colors'
 
 import Brand from '../../controllers/Brand'
@@ -105,9 +106,9 @@ export default function Mobile({ location }) {
     'absolute t-0 z-1000 l-0 w-100p h-100p bg-000 color-fff bg-url(/static/images/mobile/mask@3x.jpg) bg-center bg-cover'
   )
 
-  const brand = useSelector(({ data }) => data.brand)
-
-  const logo = brand
+  const user = useSelector(({ user }) => user)
+  const activeBrand = getActiveBrand(user)
+  const logo = activeBrand
     ? Brand.asset('site_logo')
     : '/static/images/logo--white.svg'
 
