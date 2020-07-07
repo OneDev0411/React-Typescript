@@ -5,7 +5,6 @@ import S from 'shorti'
 import ActionButton from 'views/components/Button/ActionButton'
 import { primary } from 'views/utils/colors'
 
-import Brand from '../../controllers/Brand'
 import config from '../../../config/public'
 
 export default function Mobile({ location }) {
@@ -99,17 +98,16 @@ export default function Mobile({ location }) {
     goToAppPage = setTimeout(appWasNotFound, 2000)
   }
 
-  const mobile_splash_style = S(
-    'absolute t-0 z-1000 l-0 w-100p h-100p bg-000 color-fff bg-url(/static/images/mobile/mask@3x.jpg) bg-center bg-cover'
-  )
-  const logo = Brand.asset('site_logo', '/static/images/logo--white.svg')
-
   return (
-    <div style={mobile_splash_style}>
+    <div
+      style={S(
+        'absolute t-0 z-1000 l-0 w-100p h-100p bg-000 color-fff bg-url(/static/images/mobile/mask@3x.jpg) bg-center bg-cover'
+      )}
+    >
       <div style={S('bg-263445 absolute t-0 l-0 w-100p h-100p op-.7 z-9')} />
       <div style={S('color-fff z-10 relative text-center')}>
         <div style={S('mt-50 mb-30')}>
-          <img style={S('h-60')} src={logo} alt="" />
+          <img style={S('h-60')} src="/static/images/logo--white.svg" alt="" />
         </div>
         {location && location.query.type === 'iphone' ? (
           <div>
@@ -119,7 +117,7 @@ export default function Mobile({ location }) {
             </p>
             <ActionButton
               style={{
-                backgroundColor: Brand.color('primary', primary)
+                backgroundColor: primary
               }}
               onClick={() => {
                 document.location = 'rechat://'
@@ -133,7 +131,7 @@ export default function Mobile({ location }) {
             </p>
             <ActionButton
               style={{
-                backgroundColor: Brand.color('primary', primary)
+                backgroundColor: primary
               }}
               onClick={() => {
                 document.location = config.itunes_url
