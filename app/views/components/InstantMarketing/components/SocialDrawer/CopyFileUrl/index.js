@@ -23,7 +23,7 @@ function handleCopyUrl(props) {
   })
 }
 
-function DownloadImage(props) {
+function CopyFileUrl(props) {
   return (
     <Section
       title="Copy this URL to Share:"
@@ -38,7 +38,4 @@ function DownloadImage(props) {
   )
 }
 
-export default connect(
-  null,
-  { notify }
-)(DownloadImage)
+export default connect(null, { notify })(CopyFileUrl)

@@ -10,8 +10,8 @@ import getTemplateObject from 'components/InstantMarketing/helpers/get-template-
 
 import PreviewFile from './PreviewFile'
 import SendSMS from './SendSMS'
-import DownloadImage from './DownloadImage'
-import CopyImageUrl from './CopyImageUrl'
+import DownloadFile from './DownloadFile'
+import CopyFileUrl from './CopyFileUrl'
 
 class SocialDrawer extends React.Component {
   state = {
@@ -48,16 +48,23 @@ class SocialDrawer extends React.Component {
     }
   }
 
-  get ShowOrder() {
+  getActions = () => {
+    if (
+      this.state.instance &&
+      this.state.instance.file.mime === 'application/pdf'
+    ) {
+      return [DownloadFile, CopyFileUrl]
+    }
+
     if (this.props.socialNetworkName === 'Facebook') {
-      return [DownloadImage, SendSMS, CopyImageUrl]
+      return [DownloadFile, SendSMS, CopyFileUrl]
     }
 
     if (this.props.socialNetworkName === 'LinkedIn') {
-      return [DownloadImage, CopyImageUrl]
+      return [DownloadFile, CopyFileUrl]
     }
 
-    return [SendSMS, DownloadImage, CopyImageUrl]
+    return [SendSMS, DownloadFile, CopyFileUrl]
   }
 
   render() {
@@ -72,7 +79,7 @@ class SocialDrawer extends React.Component {
 
           {this.state.instance && (
             <Fragment>
-              {this.ShowOrder.map((Component, index) => (
+              {this.getActions().map((Component, index) => (
                 <Component
                   key={index}
                   instance={this.state.instance}
