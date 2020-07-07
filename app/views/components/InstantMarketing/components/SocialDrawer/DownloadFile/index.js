@@ -2,9 +2,10 @@ import React from 'react'
 import FileSaver from 'file-saver'
 import agent from 'superagent'
 
-import ImageFileIcon from 'components/SvgIcons/ImageFile/ImageFileIcon'
-
 import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
+import { getFileType } from 'utils/file-utils/get-file-type'
+
+import ImageFileIcon from 'components/SvgIcons/ImageFile/ImageFileIcon'
 
 import { Button as DownloadButton } from '../components/Section/styled'
 import { Section } from '../components/Section'
@@ -43,8 +44,7 @@ export default class DownloadFile extends React.Component {
   render() {
     const { state } = this
 
-    const fileType =
-      this.props.instance.file.mime === 'application/pdf' ? 'pdf' : 'image'
+    const fileType = getFileType(this.props.instance.file)
     const [title, description] =
       fileType === 'pdf'
         ? [

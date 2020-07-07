@@ -1,6 +1,8 @@
 import React from 'react'
 
 import { getTemplateImage } from 'utils/marketing-center/helpers'
+import { getFileType } from 'utils/file-utils/get-file-type'
+
 import { PdfThumbnail } from 'components/PdfThumbnail'
 
 interface Props {
@@ -11,7 +13,7 @@ interface Props {
 export function Thumbnail({ template, className }: Props) {
   if (
     template.type === 'template_instance' &&
-    template.file.mime === 'application/pdf'
+    getFileType(template.file) === 'pdf'
   ) {
     return <PdfThumbnail url={template.file.url} />
   }

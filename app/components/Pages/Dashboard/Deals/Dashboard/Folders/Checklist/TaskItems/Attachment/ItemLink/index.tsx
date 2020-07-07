@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
+import { getFileType } from 'utils/file-utils/get-file-type'
 
 import { ItemLink as Link } from '../../styled'
 
@@ -50,16 +51,4 @@ export function ItemLink({
       {children}
     </Link>
   )
-}
-
-function getFileType(file: IFile): string {
-  if (file.mime === 'application/pdf') {
-    return 'pdf'
-  }
-
-  if (file.mime.includes('image/')) {
-    return 'image'
-  }
-
-  return 'unknown'
 }

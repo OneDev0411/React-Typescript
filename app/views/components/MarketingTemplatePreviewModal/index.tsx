@@ -6,6 +6,7 @@ import {
   selectNextTemplate,
   selectPreviousTemplate
 } from 'utils/marketing-center/helpers'
+import { getFileType } from 'utils/file-utils/get-file-type'
 
 import { ImagePreviewModal } from 'components/ImagePreviewModal'
 import { PdfViewerModal } from 'components/PdfViewer/Modal'
@@ -95,7 +96,7 @@ function PreviewModal(props: Props) {
 
   if (
     selectedTemplate.type === 'template_instance' &&
-    selectedTemplate.file.mime === 'application/pdf'
+    getFileType(selectedTemplate.file) === 'pdf'
   ) {
     return (
       <PdfViewerModal

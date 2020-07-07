@@ -2,11 +2,11 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import Drawer from 'components/OverlayDrawer'
-
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
+import { getFileType } from 'utils/file-utils/get-file-type'
 
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
+import Drawer from 'components/OverlayDrawer'
 
 import PreviewFile from './PreviewFile'
 import SendSMS from './SendSMS'
@@ -51,7 +51,7 @@ class SocialDrawer extends React.Component {
   getActions = () => {
     if (
       this.state.instance &&
-      this.state.instance.file.mime === 'application/pdf'
+      getFileType(this.state.instance.file) === 'pdf'
     ) {
       return [DownloadFile, CopyFileUrl]
     }
