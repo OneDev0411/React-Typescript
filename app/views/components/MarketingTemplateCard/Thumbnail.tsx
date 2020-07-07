@@ -4,30 +4,25 @@ import { getTemplateImage } from 'utils/marketing-center/helpers'
 import { PdfThumbnail } from 'components/PdfThumbnail'
 
 interface Props {
-  template: IMarketingTemplateInstance | IMarketingTemplate
+  template: IMarketingTemplateInstance | IBrandMarketingTemplate
   className: string
 }
 
 export function Thumbnail({ template, className }: Props) {
   if (
-    (template as IMarketingTemplateInstance)?.file?.mime === 'application/pdf'
+    template.type === 'template_instance' &&
+    template.file.mime === 'application/pdf'
   ) {
-    return (
-      <PdfThumbnail url={(template as IMarketingTemplateInstance).file.url} />
-    )
+    return <PdfThumbnail url={template.file.url} />
   }
 
   const { thumbnail } = getTemplateImage(template)
 
-  if ((template as IMarketingTemplate).video) {
+  if (template.template.video) {
     return <video src={thumbnail} muted autoPlay />
   }
 
   return (
-    <img
-      alt={(template as IMarketingTemplateInstance)?.template.name}
-      src={thumbnail}
-      className={className}
-    />
+    <img alt={template.template.name} src={thumbnail} className={className} />
   )
 }
