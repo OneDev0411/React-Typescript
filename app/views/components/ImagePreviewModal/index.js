@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import ProgressiveImage from 'react-progressive-image'
 import PropTypes from 'prop-types'
-
 import { Tooltip } from '@material-ui/core'
-import { ModalHeader } from 'components/ModalHeader'
 
+import { ModalHeader } from 'components/ModalHeader'
 
 import BareModal from '../BareModal'
 
@@ -94,7 +93,7 @@ export class ImagePreviewModal extends Component {
               src={this.props.imgSrc}
               placeholder={this.props.imgSrcTiny}
             >
-              {(src, loading) => <Image blur={loading} alt={title} src={src} />}
+              {src => <Image alt={title} src={src} />}
             </ProgressiveImage>
           ) : (
             <Image alt={title} src={this.props.imgSrc} />
