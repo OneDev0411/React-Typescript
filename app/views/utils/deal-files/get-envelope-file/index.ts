@@ -18,6 +18,10 @@ export function getEnvelopeFile(
     )
   }
 
+  if (!document && envelope.documents.length > 0) {
+    document = envelope.documents[0]
+  }
+
   if (!document || !document.pdf) {
     return null
   }
