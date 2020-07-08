@@ -1,8 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router'
 
-import { goTo } from 'utils/go-to'
-
 import { getFileType } from 'utils/file-utils/get-file-type'
 
 import SharedImage from './SharedImage'
@@ -12,7 +10,7 @@ function Share(props) {
   const fileType = getFileType(props.location.state.file)
 
   if (fileType === 'pdf') {
-    return goTo(fileUrl)
+    return window.location.replace(fileUrl)
   }
 
   return <SharedImage url={fileUrl} />
