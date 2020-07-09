@@ -102,8 +102,8 @@ export function SignatureComposeDrawer({
             }}
           >
             <Drawer.Body>
-              <Recipients deal={deal} />
               <From />
+              <Recipients deal={deal} />
               <Subject />
               <Message />
               <Attachments onClickAddAttachments={onClickAddAttachments} />

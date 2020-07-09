@@ -2,13 +2,23 @@ export function getEnvelopeEsignAttachments(
   task: IDealTask,
   envelope: IDealEnvelope
 ): IDealFile[] {
-  return (envelope.documents || []).map(document => ({
-    ...document.pdf,
-    name: `${envelope.title}: ${document.pdf.name}`,
-    source: 'attachment',
-    task: task.id,
-    checklist: task.checklist
-  }))
+  return (envelope.documents || [])
+    .filter(document => {
+      if (document.task === task.id) {
+        return true
+      }
+
+      return (task.room?.attachments || []).some(attachment => {
+        return attachment.id === document.file
+      })
+    })
+    .map(document => ({
+      ...document.pdf,
+      name: `${envelope.title}: ${document.pdf.name}`,
+      source: 'attachment',
+      task: task.id,
+      checklist: task.checklist
+    }))
 }
 
 export function getFileEsignAttachments(
