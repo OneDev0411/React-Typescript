@@ -10,11 +10,8 @@ import Dialog from 'components/Dialog'
 import { IAppState } from 'reducers'
 
 import { FollowUpEmail } from './types'
-import getFollowUpEmailCrmTask from './helpers/get-follow-up-email-crm-task'
-
-const oneDayTimestamp = 24 * 3600000
-const todayTimestamp = new Date().getTime()
-const tomorrowTimestamp = todayTimestamp + oneDayTimestamp
+import { getFollowUpEmailCrmTask } from './get-follow-up-email-crm-task'
+import { oneDayTimestamp, todayTimestamp, tomorrowTimestamp } from './constants'
 
 const useStyles = makeStyles((theme: Theme) => ({
   description: {
