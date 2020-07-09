@@ -5,6 +5,8 @@ import {
   selectDefinition
 } from 'reducers/contacts/attributeDefs'
 
+import { LEGAL_PREFIXES } from 'components/DealRole/constants/legal_prefixes'
+
 import {
   TYPE_COMPANY,
   TYPE_PERSON
@@ -114,7 +116,7 @@ export function convertContactToRole(contact) {
     emails: values('email'),
     phone_numbers: values('phone_number'),
     companies: values('company'),
-    legal_prefix: summary.title,
+    legal_prefix: LEGAL_PREFIXES.includes(summary.title) ? summary.title : null,
     legal_first_name: summary.first_name,
     legal_middle_name: summary.middle_name,
     legal_last_name: summary.last_name,
