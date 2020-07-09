@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -27,7 +27,7 @@ class VerifyPhoneNumber extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!this.state.isOpen && this.needConfirm(nextProps.user)) {
       this.setState({
         isOpen: true
@@ -130,7 +130,4 @@ class VerifyPhoneNumber extends Component {
   }
 }
 
-export default connect(
-  ({ user }) => ({ user }),
-  { notify }
-)(VerifyPhoneNumber)
+export default connect(({ user }) => ({ user }), { notify })(VerifyPhoneNumber)

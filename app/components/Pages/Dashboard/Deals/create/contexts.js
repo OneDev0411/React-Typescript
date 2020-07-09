@@ -5,11 +5,11 @@ import _ from 'underscore'
 import fecha from 'fecha'
 
 import { Button } from '@material-ui/core'
+import { mdiPlus } from '@mdi/js'
 
 import { H2 } from 'components/Typography/headings'
-
 import { DateTimePicker } from 'components/DateTimePicker'
-import AddIcon from 'components/SvgIcons/Add/AddIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Input from '../../../../../views/components/Input'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
@@ -137,7 +137,7 @@ export default class extends React.Component {
                           className="add-item"
                           onClick={handleOpen}
                         >
-                          <AddIcon className="addIcon" />
+                          <SvgIcon path={mdiPlus} className="addIcon" />
                           <span
                             className={cn('text', {
                               hasError: hasError && field.mandatory

@@ -3,16 +3,16 @@ import cn from 'classnames'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import { Button } from '@material-ui/core'
+import { Button, useTheme } from '@material-ui/core'
+import { mdiPlus } from '@mdi/js'
 
 import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
-
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 
 import SearchListings from 'components/SearchListingDrawer'
 
 import { H2 } from 'components/Typography/headings'
-import AddIcon from 'components/SvgIcons/Add/AddIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import RequiredIcon from 'components/SvgIcons/Required/IconRequired'
 
@@ -26,6 +26,7 @@ const AddressInput = styled.input`
 `
 
 export default function DealAddress(props) {
+  const theme = useTheme()
   const [showManualAddress, setShowManualAddress] = useState(false)
   const [showMlsDrawer, setShowMlsDrawer] = useState(false)
 
@@ -89,7 +90,11 @@ export default function DealAddress(props) {
                 className="add-item"
                 onClick={toggleMlsDrawer}
               >
-                <AddIcon className="addIcon" />
+                <SvgIcon
+                  path={mdiPlus}
+                  rightMargined
+                  color={theme.palette.secondary.main}
+                />
                 <span className="text">Enter MLS #</span>
               </Button>
             </div>
@@ -129,7 +134,11 @@ export default function DealAddress(props) {
                 className="add-item"
                 onClick={toggleManualAddressEntry}
               >
-                <AddIcon className="addIcon" />
+                <SvgIcon
+                  path={mdiPlus}
+                  rightMargined
+                  color={theme.palette.secondary.main}
+                />
                 <span className="text">
                   {isBuyingSide ? 'Or manually input' : 'Add address'}
                 </span>

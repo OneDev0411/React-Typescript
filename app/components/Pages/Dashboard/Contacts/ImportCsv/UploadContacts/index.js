@@ -32,7 +32,7 @@ class UploadContacts extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.handleWorkerStatus(nextProps.workerState)
   }
 
@@ -197,14 +197,11 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    showMessageModal,
-    updateWizardStep,
-    requestImportCsv,
-    uploadCsvFile,
-    getWorkerState,
-    notify
-  }
-)(UploadContacts)
+export default connect(mapStateToProps, {
+  showMessageModal,
+  updateWizardStep,
+  requestImportCsv,
+  uploadCsvFile,
+  getWorkerState,
+  notify
+})(UploadContacts)

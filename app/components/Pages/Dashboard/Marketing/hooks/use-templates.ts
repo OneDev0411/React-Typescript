@@ -6,6 +6,7 @@ import { deleteBrandTemplate } from 'models/instant-marketing/delete-brand-templ
 const ALL_MEDIUMS = [
   'Email',
   'Social',
+  'Letter',
   'LinkedInCover',
   'FacebookCover',
   'InstagramStory'

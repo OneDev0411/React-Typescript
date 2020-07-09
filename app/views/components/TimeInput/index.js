@@ -1,7 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import IconTime from '../SvgIcons/Time/IconTime'
+import { mdiClockOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import useTime from './useTime'
 import { twelveFormat, formatNumber } from './helpers'
@@ -27,7 +30,7 @@ function TimeInput(props) {
   return (
     <TimeInputContainer>
       <span className="icon">
-        <IconTime />
+        <SvgIcon path={mdiClockOutline} size={muiIconSizes.small} />
       </span>
       <div className="time">
         <input

@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
+import { mdiInformationOutline } from '@mdi/js'
 
-import InfoIcon from 'components/SvgIcons/InfoOutline/IconInfoOutline'
 import Tooltip from 'components/tooltip'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { Container, Label, Input, Hint } from './styled'
 
@@ -37,7 +39,10 @@ export function TextField(props) {
             {props.hint && (
               <Hint>
                 <Tooltip caption={props.hint} placement="bottom">
-                  <InfoIcon />
+                  <SvgIcon
+                    path={mdiInformationOutline}
+                    size={muiIconSizes.small}
+                  />
                 </Tooltip>
               </Hint>
             )}

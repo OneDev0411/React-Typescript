@@ -24,7 +24,7 @@ class GenerateUrl extends React.Component {
     errorMessage: ''
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const selectedMembersChanged = !_.isEqual(
       nextProps.selectedMembers,
       this.props.selectedMembers
@@ -145,7 +145,4 @@ class GenerateUrl extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  { notify }
-)(GenerateUrl)
+export default connect(null, { notify })(GenerateUrl)

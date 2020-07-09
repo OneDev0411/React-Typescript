@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { browserHistory } from 'react-router'
+import { mdiClose } from '@mdi/js'
 
 import { IconButton } from '@material-ui/core'
 
 import { goTo } from '../../../../utils/go-to'
 
-import Icon from '../../SvgIcons/Close/CloseIcon'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 export class CloseButton extends React.Component {
   static propTypes = {
@@ -63,7 +64,7 @@ export class CloseButton extends React.Component {
   render() {
     return (
       <IconButton {...this.props.buttonProps} onClick={this.handleOnClick}>
-        <Icon size="medium" {...this.props.iconProps} />
+        <SvgIcon path={mdiClose} {...this.props.iconProps} />
       </IconButton>
     )
   }

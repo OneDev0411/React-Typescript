@@ -1,8 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+
+import { mdiMagnify } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { grey, primary, borderColor } from '../../../../utils/colors'
-import IconSearchBase from '../../../SvgIcons/Search/IconSearch'
 
 const Container = styled.div`
   border-radius: 3px;
@@ -37,12 +41,12 @@ const Input = styled.input`
   }
 `
 
-const IconSearch = styled(IconSearchBase)`
+const IconSearch = styled(SvgIcon)`
   path {
-    fill: ${grey.A900} !important;
+    color: ${grey.A900} !important;
   }
   ${Container}:hover & path {
-    fill: #000000 !important;
+    color: #000000 !important;
   }
 `
 
@@ -53,7 +57,9 @@ const propTypes = {
 
 class SearchInput extends React.Component {
   state = { isFocused: false }
+
   onBlur = () => this.setState({ isFocused: false })
+
   onFocus = () => this.setState({ isFocused: true })
 
   render() {
@@ -66,12 +72,11 @@ class SearchInput extends React.Component {
       >
         <Input {...inputProps} onBlur={this.onBlur} onFocus={this.onFocus} />
         <IconSearch
+          path={mdiMagnify}
           style={{
             position: 'absolute',
-            top: '13px',
-            left: '13px',
-            width: '1em',
-            height: '1em'
+            top: '10px',
+            left: '10px'
           }}
         />
       </Container>

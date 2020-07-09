@@ -1,93 +1,44 @@
 import React from 'react'
-import styled, { StyledComponent } from 'styled-components'
+import { Box, fade, Theme, makeStyles } from '@material-ui/core'
 
-import { fade } from '@material-ui/core/styles'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import Email from 'components/SvgIcons/EmailOutline/IconEmailOutline'
-import IconCall from 'components/SvgIcons/CallOutline/IconCallOutline'
-import Text from 'components/SvgIcons/Text/IconText'
-import Chat from 'components/SvgIcons/Chat/IconChat'
-import IconMessage from 'components/SvgIcons/Mail/IconMail'
-import Other from 'components/SvgIcons/MenuRounded/IconMenuRounded'
-import IconInPerson from 'components/SvgIcons/InPerson/IconInPerson'
+// TODO: merge all events icon into one specific file
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 100%;
-  margin-right: 1rem;
-`
-
-interface EventIcon {
-  type: TTaskType
-  icon: StyledComponent<'svg', any>
-  color: string
-}
-
-const EVENT_ICONS: EventIcon[] = [
-  {
-    type: 'Call',
-    icon: IconCall,
-    color: '#04C6D9'
-  },
-  {
-    type: 'In-Person Meeting',
-    icon: IconInPerson,
-    color: '#F7A700'
-  },
-  {
-    type: 'Text',
-    icon: Text,
-    color: '#000'
-  },
-  {
-    type: 'Chat',
-    icon: Chat,
-    color: '#ff00bf'
-  },
-  {
-    type: 'Mail',
-    icon: IconMessage,
-    color: '#7ED321'
-  },
-  {
-    type: 'Email',
-    icon: Email,
-    color: '#8F6CF0'
-  },
-  {
-    type: 'Other',
-    icon: Other,
-    color: '#9013FE'
-  }
-]
+import { EVENT_ICONS } from './icons'
 
 const DEFAULT_ICON = EVENT_ICONS[EVENT_ICONS.length - 1]
+
+const useStyles = makeStyles<Theme, { color: string; hasBackground: boolean }>(
+  theme => ({
+    container: props => ({
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: theme.spacing(4),
+      height: theme.spacing(4),
+      borderRadius: '100%',
+      marginRight: theme.spacing(2),
+      backgroundColor: props.hasBackground
+        ? fade(props.color, 0.2)
+        : 'transparent'
+    })
+  })
+)
 
 interface Props {
   type: TTaskType
   hasBackground?: boolean
-  containerStyle?: React.CSSProperties
 }
 
-export default function Icon({
-  type,
-  hasBackground = true,
-  containerStyle = {}
-}: Props) {
+export default function Icon({ type, hasBackground = true }: Props) {
   const icon = EVENT_ICONS.find(item => item.type === type) || DEFAULT_ICON
+  const classes = useStyles({ hasBackground, color: icon.color })
 
   return (
-    <Container
-      style={{
-        backgroundColor: hasBackground ? fade(icon.color, 0.2) : 'transparent',
-        ...containerStyle
-      }}
-    >
-      <icon.icon fill={icon.color} />
-    </Container>
+    <Box className={classes.container}>
+      <SvgIcon path={icon.icon} color={icon.color} size={muiIconSizes.small} />
+    </Box>
   )
 }

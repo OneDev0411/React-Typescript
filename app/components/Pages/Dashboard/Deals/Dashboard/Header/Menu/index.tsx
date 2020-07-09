@@ -2,6 +2,7 @@ import React from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
 
 import { CloseButton } from 'components/Button/CloseButton'
 import SendEmail from 'components/SendEmailButton'
@@ -28,15 +29,13 @@ const useStyles = makeStyles((theme: Theme) =>
         borderColor: `${theme.palette.divider} !important`, // important fixes safari
         marginLeft: theme.spacing(1)
       }
-    },
-    closeButtonIcon: {
-      fill: theme.palette.grey[600]
     }
   })
 )
 
 export const Menu = withRouter(
   ({ deal, isBackOffice, router, location }: Props & WithRouterProps) => {
+    const theme = useTheme<Theme>()
     const classes = useStyles()
 
     return (
@@ -71,11 +70,10 @@ export const Menu = withRouter(
         <CloseButton
           backUrl="/dashboard/deals"
           buttonProps={{
-            size: 'medium'
+            size: 'small'
           }}
           iconProps={{
-            className: classes.closeButtonIcon,
-            size: 'small'
+            color: theme.palette.grey[600]
           }}
         />
       </div>

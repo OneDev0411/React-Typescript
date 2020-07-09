@@ -4,10 +4,12 @@ import { connect } from 'react-redux'
 import juice from 'juice'
 import { Button, IconButton, Tooltip } from '@material-ui/core'
 
+import { mdiClose, mdiMenu } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { Portal } from 'components/Portal'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import IconMenu from 'components/SvgIcons/Menu/IconMenu'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import TeamAgents from 'components/TeamAgents'
 import ImageDrawer from 'components/ImageDrawer'
@@ -32,7 +34,6 @@ import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenter/constants'
 import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
-import { TeamSelector } from './TeamSelector'
 
 import {
   Container,
@@ -61,11 +62,9 @@ class Builder extends React.Component {
     this.state = {
       originalTemplate: null,
       selectedTemplate: props.defaultTemplate,
-      owner: props.templateData.user,
       isLoading: true,
       isEditorLoaded: false,
-      templateHtmlCss: '',
-      isTemplatesColumnHidden: true,
+      isTemplatesColumnHidden: props.isTemplatesColumnHiddenDefault,
       loadedListingsAssets: [],
       isListingDrawerOpen: false,
       isAgentDrawerOpen: false,
@@ -349,7 +348,9 @@ class Builder extends React.Component {
   singleClickTextEditing = () => {
     this.editor.on('component:selected', selected => {
       const isImageAsset =
-        selected.get('type') === 'image' || selected.get('type') === 'mj-image'
+        selected.get('type') === 'image' ||
+        selected.get('type') === 'mj-image' ||
+        selected.get('type') === 'mj-carousel-image'
 
       if (!selected.view.onActive || isImageAsset) {
         return
@@ -515,7 +516,7 @@ class Builder extends React.Component {
       return
     }
 
-    this.props.onSave(this.getSavedTemplate(), this.state.owner)
+    this.props.onSave(this.getSavedTemplate(), this.props.templateData.user)
   }
 
   handleSocialSharing = socialNetworkName => {
@@ -524,6 +525,14 @@ class Builder extends React.Component {
     }
 
     this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
+  }
+
+  handlePrintableSharing = () => {
+    if (!this.isTemplateMarkupRendered()) {
+      return
+    }
+
+    this.props.onPrintableSharing(this.getSavedTemplate())
   }
 
   generateBrandedTemplate = (templateMarkup, data) => {
@@ -573,9 +582,6 @@ class Builder extends React.Component {
     this.editor.setComponents(html)
     this.lockIn()
     this.deselectAll()
-    this.setState({
-      templateHtmlCss: this.getTemplateHtmlCss()
-    })
     this.resize()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
@@ -620,14 +626,6 @@ class Builder extends React.Component {
     }
   }
 
-  getTemplateHtmlCss = () => {
-    return `${this.editor.getCss()}${this.editor.getHtml()}`
-  }
-
-  isTemplateChanged = () => {
-    return this.getTemplateHtmlCss() !== this.state.templateHtmlCss
-  }
-
   handleSelectTemplate = templateItem => {
     this.setState(
       {
@@ -636,40 +634,10 @@ class Builder extends React.Component {
       },
       () => {
         this.regenerateTemplate({
-          user: this.state.owner
+          user: this.props.templateData.user
         })
       }
     )
-  }
-
-  handleOwnerChange = owner => {
-    if (!this.isTemplateChanged()) {
-      this.setState({
-        owner
-      })
-
-      this.regenerateTemplate({
-        user: owner
-      })
-
-      return
-    }
-
-    this.context.setConfirmationModal({
-      message: 'Change sender?',
-      description:
-        "All the changes you've made to the template will be lost. Are you sure?",
-      confirmLabel: 'Yes, I am sure',
-      onConfirm: () => {
-        this.setState({
-          owner
-        })
-
-        this.regenerateTemplate({
-          user: owner
-        })
-      }
-    })
   }
 
   // This accessor is going to return the template object
@@ -716,17 +684,36 @@ class Builder extends React.Component {
     )
   }
 
+  get isEmailMedium() {
+    if (this.selectedTemplate) {
+      return this.selectedTemplate.medium === 'Email'
+    }
+
+    return false
+  }
+
   get isSocialMedium() {
     if (this.props.templateTypes.includes('CrmOpenHouse')) {
       return false
     }
 
     if (this.selectedTemplate) {
-      return this.selectedTemplate.medium !== 'Email'
+      return (
+        this.selectedTemplate.medium !== 'Email' &&
+        this.selectedTemplate.medium !== 'Letter'
+      )
     }
 
     if (this.props.mediums) {
       return this.props.mediums !== 'Email'
+    }
+
+    return false
+  }
+
+  get isPrintableMedium() {
+    if (this.selectedTemplate) {
+      return this.selectedTemplate.medium === 'Letter'
     }
 
     return false
@@ -814,17 +801,10 @@ class Builder extends React.Component {
       return null
     }
 
-    const isSocialMedium = this.isSocialMedium
-    const socialNetworks = this.socialNetworks
-
     return (
       <Portal root="marketing-center">
         <Container
-          hideBlocks={
-            !this.isMjmlTemplate ||
-            this.isOpenHouseMedium ||
-            this.isSocialMedium
-          }
+          hideBlocks={!this.isMjmlTemplate}
           className="template-builder"
           style={this.props.containerStyle}
         >
@@ -939,7 +919,7 @@ class Builder extends React.Component {
                   }
                 >
                   <IconButton onClick={this.toggleTemplatesColumnVisibility}>
-                    <IconMenu />
+                    <SvgIcon path={mdiMenu} />
                   </IconButton>
                 </Tooltip>
 
@@ -959,14 +939,6 @@ class Builder extends React.Component {
                 <DeviceManager editor={this.editor} />
                 <Divider orientation="vertical" />
               </>
-            )}
-
-            {this.state.selectedTemplate && (
-              <TeamSelector
-                templateData={this.props.templateData}
-                owner={this.state.owner}
-                onSelect={this.handleOwnerChange}
-              />
             )}
 
             <Actions>
@@ -991,14 +963,27 @@ class Builder extends React.Component {
                 </Button>
               )}
 
-              {this.state.selectedTemplate && isSocialMedium && (
+              {this.isSocialMedium && (
                 <SocialActions
-                  networks={socialNetworks}
+                  networks={this.socialNetworks}
                   onClick={this.handleSocialSharing}
                 />
               )}
 
-              {this.state.selectedTemplate && !isSocialMedium && (
+              {this.isPrintableMedium && (
+                <Button
+                  style={{
+                    marginLeft: '0.5rem'
+                  }}
+                  variant="contained"
+                  color="primary"
+                  onClick={this.handleSocialSharing}
+                >
+                  Continue
+                </Button>
+              )}
+
+              {this.isEmailMedium && (
                 <Button
                   style={{
                     marginLeft: '0.5rem'
@@ -1015,7 +1000,7 @@ class Builder extends React.Component {
                 onClick={this.props.onClose}
                 style={{ marginLeft: '0.5rem' }}
               >
-                <CloseIcon size="small" />
+                <SvgIcon path={mdiClose} />
               </IconButton>
             </Actions>
           </Header>

@@ -2,8 +2,9 @@ import * as React from 'react'
 import { FieldRenderProps } from 'react-final-form'
 import TextField, { TextFieldProps } from '@material-ui/core/TextField'
 
-export const MUITextInput: React.SFC<
-  FieldRenderProps<HTMLInputElement | HTMLTextAreaElement> & TextFieldProps
+export const MUITextInput: React.FC<
+  FieldRenderProps<string, HTMLInputElement | HTMLTextAreaElement> &
+    TextFieldProps
 > = ({
   input: { name, onChange, value, ...restInput },
   meta,

@@ -1,9 +1,11 @@
 import React from 'react'
+import { withRouter } from 'react-router'
 
 import ShareInstance from 'components/InstantMarketing/adapters/ShareInstance'
 import GeneralFlow from 'components/InstantMarketing/adapters/General'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
+import StatefulUrlFlow from 'components/InstantMarketing/adapters/StatefulUrl'
 
 import {
   convertToTemplate,
@@ -43,6 +45,15 @@ function TemplateAction(props) {
       props.setTriggered(false)
       props.setEditActionTriggered(false)
     }
+  }
+
+  if (props.location.query.templateType && props.location.query.medium) {
+    return (
+      <StatefulUrlFlow
+        {...sharedProps}
+        isTemplatesColumnHiddenDefault={false}
+      />
+    )
   }
 
   if (isEdit && !props.isTriggered) {
@@ -97,4 +108,4 @@ function TemplateAction(props) {
   return <ListingFlow {...sharedProps} hasExternalTrigger />
 }
 
-export default TemplateAction
+export default withRouter(TemplateAction)

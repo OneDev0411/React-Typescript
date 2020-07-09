@@ -1,4 +1,8 @@
 import React from 'react'
+import { mdiMenuDown } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 const AccordionTrigger = ({ onClick, active }) => (
   <button
@@ -8,16 +12,11 @@ const AccordionTrigger = ({ onClick, active }) => (
       active ? 'is-active' : ''
     }`}
   >
-    <svg
-      height="36"
-      viewBox="0 0 24 24"
-      width="36"
-      xmlns="http://www.w3.org/2000/svg"
+    <SvgIcon
+      size={muiIconSizes.large}
       className="c-filters-status__accordion-trigger__icon"
-    >
-      <path d="M7 10l5 5 5-5z" />
-      <path d="M0 0h24v24H0z" fill="none" />
-    </svg>
+      path={mdiMenuDown}
+    />
   </button>
 )
 

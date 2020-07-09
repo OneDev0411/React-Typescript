@@ -8,12 +8,10 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       '& .menu__icon': {
-        width: theme.spacing(2),
-        height: theme.spacing(2),
-        fill: theme.palette.grey[500]
+        color: theme.palette.grey[500]
       },
       '&:hover .menu__icon': {
-        fill: theme.palette.common.black
+        color: theme.palette.common.black
       }
     }
   })

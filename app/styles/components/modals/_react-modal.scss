@@ -49,6 +49,7 @@
   
   &.c-tour-sheets,
   &.c-preview-image-modal,
+  &.c-preview-pdf-modal,
   &.c-full-screen-modal {
     @media screen and (min-width: 48em) {
       width: 100%;
@@ -61,7 +62,8 @@
     }
   }
 
-  &.c-preview-image-modal {
+  &.c-preview-image-modal,
+  &.c-preview-pdf-modal {
     background: rgba(0, 0, 0, 0.6);
   }
 }

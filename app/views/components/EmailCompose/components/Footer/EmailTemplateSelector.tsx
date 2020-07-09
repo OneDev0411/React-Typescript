@@ -18,6 +18,8 @@ import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import classNames from 'classnames'
 
+import { mdiPlusCircleOutline } from '@mdi/js'
+
 import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
 import { getActiveTeamId } from 'utils/user-teams'
 import { IAppState } from 'reducers'
@@ -28,9 +30,10 @@ import {
 } from 'reducers/email-templates'
 import { ServerError } from 'components/ServerError'
 import { ListSkeleton } from 'components/Skeletons/List'
-import IconAddCircleOutline from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 import AddOrEditEmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
 import EditOutlineIcon from 'components/SvgIcons/EditOutline/EditOutlineIcon'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useIconStyles } from '../../../../../styles/use-icon-styles'
 
@@ -59,9 +62,6 @@ const useStyles = makeStyles(
         '&:hover $secondaryAction': {
           opacity: 1
         }
-      },
-      iconColor: {
-        fill: theme.palette.secondary.main
       }
     }),
   { name: 'EmailTemplateSelector' }
@@ -182,11 +182,9 @@ function EmailTemplateSelector({
                     alignItems="center"
                     color="secondary.main"
                   >
-                    <IconAddCircleOutline
-                      className={classNames(
-                        classes.iconColor,
-                        iconClasses.rightMargin
-                      )}
+                    <SvgIcon
+                      path={mdiPlusCircleOutline}
+                      className={iconClasses.rightMargin}
                     />
                     <Typography color="secondary">
                       Add a new Email Template
@@ -229,16 +227,13 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   }
 }
 
-export default connect(
-  ({ emailTemplates, user }: IAppState) => {
-    const brandId = getActiveTeamId(user) || ''
+export default connect(({ emailTemplates, user }: IAppState) => {
+  const brandId = getActiveTeamId(user) || ''
 
-    return {
-      brand: brandId,
-      templates: selectEmailTemplates(emailTemplates, brandId),
-      isFetching: selectEmailTemplatesIsFetching(emailTemplates, brandId),
-      error: selectEmailTemplatesError(emailTemplates, brandId)
-    }
-  },
-  mapDispatchToProps
-)(EmailTemplateSelector)
+  return {
+    brand: brandId,
+    templates: selectEmailTemplates(emailTemplates, brandId),
+    isFetching: selectEmailTemplatesIsFetching(emailTemplates, brandId),
+    error: selectEmailTemplatesError(emailTemplates, brandId)
+  }
+}, mapDispatchToProps)(EmailTemplateSelector)

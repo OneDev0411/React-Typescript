@@ -1,7 +1,9 @@
 import React from 'react'
 import { Avatar, Theme, makeStyles, createStyles } from '@material-ui/core'
 
-import EmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
+import { mdiEmailOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -10,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 50,
       backgroundColor: theme.palette.grey['200'],
       '& svg': {
-        fill: theme.palette.grey['500']
+        color: theme.palette.grey['500']
       }
     }
   })
@@ -28,7 +30,7 @@ function ThumbnailColumn({ data }: Props) {
 
   return (
     <Avatar src={imageUrl} className={classes.root}>
-      <EmailOutline />
+      <SvgIcon path={mdiEmailOutline} />
     </Avatar>
   )
 }

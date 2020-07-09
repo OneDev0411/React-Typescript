@@ -13,13 +13,12 @@ import {
   useTheme
 } from '@material-ui/core'
 import { PopperPlacementType } from '@material-ui/core/Popper'
-
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
-import TimeInput from 'components/TimeInput'
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
+import { mdiClose } from '@mdi/js'
 
-import { useIconStyles } from '../../../../styles/use-icon-styles'
+import TimeInput from 'components/TimeInput'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,7 +39,6 @@ interface Props {
 export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
   const theme = useTheme()
   const classes = useStyles()
-  const iconClasses = useIconStyles()
 
   const anchorRef = React.useRef<HTMLButtonElement>(null)
 
@@ -88,7 +86,7 @@ export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
                   onClick={() => onChange(null)}
                   className={classes.removeButton}
                 >
-                  <IconClose className={iconClasses.small} />
+                  <SvgIcon path={mdiClose} />
                 </Button>
               </Tooltip>
             )}

@@ -72,6 +72,7 @@ function SendEmailButton(props) {
             from: props.user
           }}
           deal={deal}
+          onClickAddDealAttachments={() => setIsOpen(false)}
           onClose={() => setIsOpen(false)}
           onSent={() => {
             setIsOpen(false)

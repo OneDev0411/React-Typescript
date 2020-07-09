@@ -7,7 +7,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexFlow: 'column',
       height: '100vh',
       maxHeight: '100vh',
-      overflow: 'hidden',
       padding: theme.spacing(5),
       paddingBottom: 0
     },
@@ -16,6 +15,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(4)
     },
     listContainer: {
+      position: 'relative',
+      margin: theme.spacing(4, 0),
       flex: '1 1 auto'
     }
   })

@@ -11,10 +11,11 @@ import {
 
 import { withStyles } from '@material-ui/core/styles'
 
+import { mdiChevronDown, mdiChevronUp, mdiClose } from '@mdi/js'
+
 import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
-import IconDelete from 'components/SvgIcons/Close/CloseIcon'
-import ArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
-import ArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { uppercaseFirstLetter } from '../../../../../utils/helpers'
 import { confirmation } from '../../../../../store_actions/confirmation'
@@ -99,9 +100,15 @@ class SavedSearchesList extends Component {
           <span {...props}>
             Saved Searches{' '}
             {props.isActive ? (
-              <ArrowUp style={{ verticalAlign: 'middle' }} />
+              <SvgIcon
+                path={mdiChevronUp}
+                style={{ verticalAlign: 'middle' }}
+              />
             ) : (
-              <ArrowDown style={{ verticalAlign: 'middle' }} />
+              <SvgIcon
+                path={mdiChevronDown}
+                style={{ verticalAlign: 'middle' }}
+              />
             )}
           </span>
         )}
@@ -159,9 +166,7 @@ class SavedSearchesList extends Component {
                     edge="end"
                     aria-label="delete"
                   >
-                    <IconDelete
-                      style={{ fill: 'currentColor', width: 12, height: 12 }}
-                    />
+                    <SvgIcon path={mdiClose} size={muiIconSizes.small} />
                   </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>

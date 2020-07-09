@@ -1,33 +1,43 @@
 import React from 'react'
 import moment from 'moment'
 import Flex from 'styled-flex-component'
+import { mdiBellOutline } from '@mdi/js'
+import { useTheme, makeStyles } from '@material-ui/core'
 
 import Tooltip from 'components/tooltip'
-import IconNotification from 'components/SvgIcons/Notifications/IconNotifications'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-export default ({ message }) => (
-  <div className="activity">
-    <Flex>
-      <span
-        style={{
-          display: 'block',
-          width: '1.8rem',
-          height: '1.8rem',
-          border: '1px solid #ccc',
-          borderRadius: '100%',
-          marginRight: '0.9rem'
-        }}
-      >
-        <IconNotification style={{ fill: '#808080 ' }} />
-      </span>
-      <span className="name">{message.comment}</span>
-    </Flex>
-
-    <Tooltip
-      caption={moment.unix(message.created_at).format('MMM DD, YYYY h:mmA')}
-      placement="left"
-    >
-      <span>{moment.unix(message.created_at).fromNow()}</span>
-    </Tooltip>
-  </div>
+const useStyles = makeStyles(
+  theme => ({
+    box: {
+      width: theme.spacing(3.5),
+      height: theme.spacing(3.5),
+      border: `1px solid ${theme.palette.grey.A100}`,
+      borderRadius: '100%',
+      marginRight: theme.spacing(2)
+    }
+  }),
+  { name: 'MessageActivity' }
 )
+export default ({ message }) => {
+  const classes = useStyles()
+  const theme = useTheme()
+
+  return (
+    <div className="activity">
+      <Flex>
+        <span className={classes.box}>
+          <SvgIcon path={mdiBellOutline} color={theme.palette.grey[500]} />
+        </span>
+        <span className="name">{message.comment}</span>
+      </Flex>
+
+      <Tooltip
+        caption={moment.unix(message.created_at).format('MMM DD, YYYY h:mmA')}
+        placement="left"
+      >
+        <span>{moment.unix(message.created_at).fromNow()}</span>
+      </Tooltip>
+    </div>
+  )
+}

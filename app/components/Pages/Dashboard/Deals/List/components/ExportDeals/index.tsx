@@ -13,10 +13,10 @@ import {
 } from '@material-ui/core'
 
 import { useSelector } from 'react-redux'
+import { mdiArrowDown } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { IAppState } from 'reducers'
-import IconArrowDown from 'components/SvgIcons/ArrowDown/IconArrowDown'
-
 import { BaseDropdown, RenderToggleButtonProps } from 'components/BaseDropdown'
 import { getActiveTeamId } from 'utils/user-teams'
 
@@ -69,10 +69,7 @@ export function ExportDeals(props) {
                 key: 'list_date',
                 type: 'range',
                 high: moment().unix(),
-                low: moment()
-                  .add(-7, 'days')
-                  .startOf('day')
-                  .unix()
+                low: moment().add(-7, 'days').startOf('day').unix()
               }
             ],
             project: {
@@ -110,10 +107,7 @@ export function ExportDeals(props) {
                 key: 'contract_date',
                 type: 'range',
                 high: moment().unix(),
-                low: moment()
-                  .add(-7, 'days')
-                  .startOf('day')
-                  .unix()
+                low: moment().add(-7, 'days').startOf('day').unix()
               }
             ],
             project: {
@@ -144,7 +138,7 @@ export function ExportDeals(props) {
             size="large"
             {...buttonProps}
           >
-            <IconArrowDown />
+            <SvgIcon path={mdiArrowDown} />
           </Button>
         </Tooltip>
       )}

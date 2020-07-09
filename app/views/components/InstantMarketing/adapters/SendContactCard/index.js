@@ -80,6 +80,13 @@ class SendContactCard extends React.Component {
       }
     }
 
+    if (props.contact && props.isBuilderOpen) {
+      return {
+        contact: props.contact,
+        isBuilderOpen: true
+      }
+    }
+
     return state
   }
 
@@ -293,6 +300,10 @@ class SendContactCard extends React.Component {
             defaultTemplate={this.props.selectedTemplate}
             handleSocialSharing={this.handleSocialSharing}
             isEdit={this.props.isEdit}
+            hideTemplatesColumn={this.props.hideTemplatesColumn}
+            isTemplatesColumnHiddenDefault={
+              this.props.isTemplatesColumnHiddenDefault
+            }
           />
         )}
 

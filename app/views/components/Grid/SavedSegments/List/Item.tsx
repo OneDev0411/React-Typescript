@@ -10,10 +10,11 @@ import {
   Theme
 } from '@material-ui/core'
 
+import CloseIcon from '@material-ui/icons/Close'
+
 import { uppercaseFirstLetter } from 'utils/helpers'
 
 import Badge from 'components/Badge'
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 interface Props {
@@ -87,9 +88,7 @@ function Item(props: Props) {
       <ListItemSecondaryAction>
         {item.is_editable && (
           <IconButton size="small" aria-label="delete" onClick={onDelete}>
-            <IconClose
-              style={{ fill: 'currentColor', width: 10, height: 10 }}
-            />
+            <CloseIcon fontSize="small" />
           </IconButton>
         )}
       </ListItemSecondaryAction>

@@ -1,12 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { mdiPencilOuline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import {
   activeDrawing,
   inactiveDrawing
 } from '../../../../../../../store_actions/listings/map/drawing'
-
-import IconPencel from '../../../../../../../views/components/SvgIcons/Edit/EditIcon'
 
 import { Button } from './styled'
 
@@ -29,9 +31,7 @@ class DrawingButton extends React.Component {
         onClick={this.onClick}
         disabled={this.props.isDrawing || this.props.isFetching}
       >
-        <IconPencel
-          style={{ width: '1em', height: '1em', marginRight: '0.25em' }}
-        />
+        <SvgIcon path={mdiPencilOuline} />
         Draw
       </Button>
     )

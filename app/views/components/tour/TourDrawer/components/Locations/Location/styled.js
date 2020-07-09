@@ -1,15 +1,12 @@
 import styled from 'styled-components'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { grey, borderColor, primary } from '../../../../../../utils/colors'
 import { LatoFamilyStyle } from '../../../../../Typography/styles'
-import IconClose from '../../../../../SvgIcons/Close/CloseIcon'
 
-export const CloseIcon = styled(IconClose)`
-  fill: ${grey.A900} !important;
-
-  &:hover {
-    fill: ${primary} !important;
-  }
+export const CloseIcon = styled(SvgIcon)`
+  color: ${grey.A900} !important;
 `
 
 export const Container = styled.div`
@@ -20,7 +17,7 @@ export const Container = styled.div`
     background-color: ${grey.A250};
 
     ${CloseIcon} {
-      fill: #000 !important;
+      color: #000 !important;
     }
   }
 `

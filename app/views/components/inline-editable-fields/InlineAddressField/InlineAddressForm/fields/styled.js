@@ -33,9 +33,7 @@ export const Hint = styled.span`
   margin-left: 0.5em;
 
   svg {
-    width: inherit;
-    height: inherit;
-    fill: ${primary};
+    color: ${primary};
   }
 `
 

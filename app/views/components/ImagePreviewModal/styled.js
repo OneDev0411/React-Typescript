@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import ArrowLeftIcon from 'components/SvgIcons/ArrowLeft/ArrowLeftIcon'
 import ArrowRightIcon from 'components/SvgIcons/ArrowRight/ArrowRightIcon'
@@ -35,10 +35,4 @@ export const Image = styled.img`
   max-height: 100%;
   max-width: calc(100% - 3rem);
   user-select: none;
-
-  ${({ blur }) =>
-    blur &&
-    css`
-      filter: blur(2px);
-    `}
 `

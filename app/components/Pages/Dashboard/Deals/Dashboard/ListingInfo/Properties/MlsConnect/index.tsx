@@ -10,18 +10,15 @@ import {
   Theme
 } from '@material-ui/core'
 
+import { mdiTrashCanOutline, mdiOpenInNew } from '@mdi/js'
+
 import SearchListingDrawer from 'components/SearchListingDrawer'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
 import { updateListing } from 'actions/deals'
-
 import { getField } from 'models/Deal/helpers/context'
-
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import SiteLinkIcon from 'components/SvgIcons/SiteLink/SiteLinkIcon'
-import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
-
 import LoadingContainer from 'components/LoadingContainer'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 interface Props {
   deal: IDeal
@@ -50,7 +47,6 @@ export function MlsConnect({ deal }: Props) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const theme = useTheme<Theme>()
   const classes = useStyles()
-  const iconClasses = useIconStyles()
   const dispatch = useDispatch()
   const confirmation = useContext(ConfirmationModalContext)
 
@@ -98,9 +94,10 @@ export function MlsConnect({ deal }: Props) {
             target="_blank"
             href={`/dashboard/mls/${deal.listing}`}
           >
-            <SiteLinkIcon
-              className={iconClasses.small}
-              fillColor={theme.palette.common.black}
+            <SvgIcon
+              path={mdiOpenInNew}
+              color={theme.palette.common.black}
+              size={muiIconSizes.small}
             />
           </IconButton>
 
@@ -110,9 +107,10 @@ export function MlsConnect({ deal }: Props) {
             onClick={removeMlsConnection}
             className={classes.removeButton}
           >
-            <TrashIcon
-              className={iconClasses.small}
-              fillColor={theme.palette.common.black}
+            <SvgIcon
+              path={mdiTrashCanOutline}
+              color={theme.palette.common.black}
+              size={muiIconSizes.small}
             />
           </IconButton>
         </div>

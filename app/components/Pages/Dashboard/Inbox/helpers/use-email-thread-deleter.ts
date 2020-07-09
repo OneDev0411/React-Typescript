@@ -37,7 +37,7 @@ export default function useEmailThreadDeleter(emailThreadId: UUID) {
       dispatch(
         addNotification({
           status: 'error',
-          message: 'Something went wrong while deleting email thread.'
+          message: 'Something went wrong while deleting the email thread.'
         })
       )
       setDeletingEmailThread(false)
