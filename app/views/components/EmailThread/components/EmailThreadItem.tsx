@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Avatar,
-  createStyles,
   Link,
   makeStyles,
   Paper,
@@ -20,6 +19,7 @@ import { mdiReplyAllOutline, mdiReplyOutline } from '@mdi/js'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { forwardOutlined } from 'components/SvgIcons/icons'
 import { Iframe } from 'components/Iframe'
+import EmailFollowUpModal from 'components/EmailFollowUpModal'
 
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
@@ -55,8 +55,8 @@ interface Props {
   showBottomButtons?: boolean
 }
 
-const styles = (theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     root: {
       // limit the stickiness of the header within the email thread item
       position: 'relative'
@@ -80,8 +80,9 @@ const styles = (theme: Theme) =>
       backgroundColor: theme.palette.divider,
       color: theme.palette.text.primary
     }
-  })
-const useStyles = makeStyles(styles, { name: 'EmailThreadItem' })
+  }),
+  { name: 'EmailThreadItem' }
+)
 
 export function EmailThreadItem({
   collapsed,
@@ -97,6 +98,7 @@ export function EmailThreadItem({
   const [isResponseOpen, setIsResponseOpen] = useState(false)
   const [trimQuotedContent, toggleTrimQuotedContent] = useBoolean(true)
   const [responseType, setResponseType] = useState<EmailResponseType>('reply')
+  const [followUpModalIsOpen, setFollowUpModalIsOpen] = useState(false)
 
   const openResponse = (type: EmailResponseType) => {
     setIsResponseOpen(true)
@@ -248,6 +250,20 @@ export function EmailThreadItem({
                   <SvgIcon path={forwardOutlined} rightMargined />
                   Forward
                 </Button>
+
+                <Button
+                  className={classes.actionButton}
+                  onClick={() => setFollowUpModalIsOpen(true)}
+                  variant="contained"
+                  color="secondary"
+                >
+                  Set a Follow Up
+                </Button>
+                <EmailFollowUpModal
+                  email={email}
+                  isOpen={followUpModalIsOpen}
+                  onClose={() => setFollowUpModalIsOpen(false)}
+                />
               </Box>
             )}
             {isResponseOpen && (

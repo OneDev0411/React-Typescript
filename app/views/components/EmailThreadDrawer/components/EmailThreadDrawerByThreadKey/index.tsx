@@ -21,6 +21,7 @@ interface Props extends DrawerProps {
    * thread key is credential_id + thread_id
    */
   threadKey: string | undefined
+  hideBottomButtons?: boolean
 }
 
 /**
@@ -28,6 +29,7 @@ interface Props extends DrawerProps {
  */
 export function EmailThreadDrawerByThreadKey({
   threadKey,
+  hideBottomButtons,
   ...drawerProps
 }: Props) {
   const { fetchThread, thread, loading, error } = useEmailThreadLoader(
@@ -88,6 +90,7 @@ export function EmailThreadDrawerByThreadKey({
               messages={thread.messages}
               subject={thread.subject}
               onClose={drawerProps.onClose}
+              hideBottomButtons={hideBottomButtons}
             />
           )}
         </AsyncValueContainer>

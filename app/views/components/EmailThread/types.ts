@@ -35,6 +35,7 @@ export interface EmailThreadEmail {
   messageId?: string
   internetMessageId?: string
   threadId?: string
+  thread?: IEmailThread<IEmailThreadAssociations>
 
   microsoftId: string | undefined
   googleId: string | undefined

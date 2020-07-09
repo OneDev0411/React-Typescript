@@ -9,6 +9,7 @@ import { EventDrawer } from 'components/EventDrawer'
 import { preSaveFormat } from 'components/EventDrawer/helpers/pre-save-format'
 import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
 import Dialog from 'components/Dialog'
+import { EmailThreadEmail } from 'components/EmailThread/types'
 import { IAppState } from 'reducers'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 
@@ -27,11 +28,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-type FollowUpEmail = IEmailCampaign<
-  IEmailCampaignAssociation,
-  IEmailCampaignRecipientAssociation,
-  IEmailCampaignEmailAssociation
-> | null
+type FollowUpEmail =
+  | IEmailCampaign<
+      IEmailCampaignAssociation,
+      IEmailCampaignRecipientAssociation,
+      IEmailCampaignEmailAssociation
+    >
+  | EmailThreadEmail
+  | null
 
 interface Props {
   email: FollowUpEmail
@@ -82,7 +86,7 @@ function EmailFollowUpModal({ email, onClose, isOpen }: Props) {
       dispatch(
         notify({
           status: 'success',
-          message: 'The follow up task added!'
+          message: 'The follow up task is added!'
         })
       )
     }
@@ -150,36 +154,108 @@ function getCrmTask(email: FollowUpEmail, dueDate: Date, user: IUser) {
     return undefined
   }
 
-  const contactAssociations = email.recipients
-    .filter(resp => resp.contact)
-    .map(resp => ({
-      contact: resp.contact,
-      association_type: 'contact'
-    }))
+  if ('type' in email && email.type === 'email_campaign') {
+    return getCrmTaskFromEmailCampaign(email)
+  }
 
-  const owner = email.from.type === 'user' ? email.from : user
-  const title = `Follow up with ${contactAssociations[0]?.contact.display_name}`
-  const description = `This is a follow up reminder ${
-    owner.display_name
-  } set in Rechat, on ${fecha.format(
-    email.due_at * 1000,
-    'dddd MMMM Do, YYYY'
-  )} for the attached email.`
+  return getCrmTaskFromEmailThreadEmail(email as EmailThreadEmail)
 
-  const values = initialValueGenerator(
-    owner,
-    normalizeAssociations([
-      ...contactAssociations,
-      {
-        association_type: 'email',
-        email
+  function getCrmTaskFromEmailCampaign(
+    email: IEmailCampaign<
+      IEmailCampaignAssociation,
+      IEmailCampaignRecipientAssociation,
+      IEmailCampaignEmailAssociation
+    >
+  ) {
+    const owner = email.from.type === 'user' ? email.from : user
+    const contactAssociations = email.recipients
+      .filter(resp => resp.contact)
+      .map(resp => ({
+        contact: resp.contact,
+        association_type: 'contact'
+      }))
+    const title = `Follow up with ${contactAssociations[0]?.contact.display_name}`
+    const description = `This is a follow up reminder ${
+      owner.display_name
+    } set in Rechat, on ${fecha.format(
+      email.due_at * 1000,
+      'dddd MMMM Do, YYYY'
+    )} for the attached email.`
+
+    const values = initialValueGenerator(
+      owner,
+      normalizeAssociations([
+        ...contactAssociations,
+        {
+          association_type: 'email',
+          email
+        }
+      ]),
+      dueDate,
+      undefined,
+      title,
+      description
+    )
+
+    return values
+  }
+
+  function getCrmTaskFromEmailThreadEmail(email: EmailThreadEmail) {
+    const owner = user
+    const contactAssociations =
+      email.thread?.contacts?.map?.(contact => ({
+        contact,
+        association_type: 'contact'
+      })) || []
+    const threadMessage = email.thread?.messages?.find(
+      ({ id }) => id === email.id
+    )
+    const emailAssociation =
+      threadMessage &&
+      convertEmailThreadMessageToEmailAssociation(threadMessage)
+    const title = `Follow up with ${email.to[0]}`
+    const description = `This is a follow up reminder ${
+      owner.display_name
+    } set in Rechat, on ${fecha.format(
+      email.date,
+      'dddd MMMM Do, YYYY'
+    )} for the attached email.`
+
+    const values = initialValueGenerator(
+      owner,
+      normalizeAssociations(
+        [
+          ...contactAssociations,
+          emailAssociation && {
+            association_type: 'email',
+            email: emailAssociation
+          }
+        ].filter(Boolean)
+      ),
+      dueDate,
+      undefined,
+      title,
+      description
+    )
+
+    return values
+
+    function convertEmailThreadMessageToEmailAssociation(
+      threadMessage: IEmailThreadMessage
+    ): {
+      id: UUID
+      subject: string
+      text: string
+    } {
+      if (threadMessage.type === 'email') {
+        return threadMessage
       }
-    ]),
-    dueDate,
-    undefined,
-    title,
-    description
-  )
 
-  return values
+      return {
+        ...threadMessage,
+        subject: threadMessage.subject || '(No Subject)',
+        text: threadMessage.text_body || '(No Content)'
+      }
+    }
+  }
 }

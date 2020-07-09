@@ -1,6 +1,9 @@
 import React from 'react'
 
-import { EmailCampaignThreadByCampaignId } from '../EmailThreadDrawer'
+import {
+  EmailCampaignThreadByCampaignId,
+  EmailThreadDrawerByThreadKey
+} from '../EmailThreadDrawer'
 
 interface Props {
   contact?: IContact
@@ -9,12 +12,27 @@ interface Props {
 }
 
 export function EmailAssociationController({ email, contact, onClose }: Props) {
-  return (
-    <EmailCampaignThreadByCampaignId
-      open={!!(email.type === 'email_campaign')}
-      onClose={onClose}
-      contactId={contact && contact.id}
-      campaignId={email.id || undefined}
-    />
-  )
+  if (email.type === 'email_campaign') {
+    return (
+      <EmailCampaignThreadByCampaignId
+        open
+        onClose={onClose}
+        contactId={contact && contact.id}
+        campaignId={email.id || undefined}
+      />
+    )
+  }
+
+  if (['email', 'google_message', 'microsoft_message'].includes(email.type)) {
+    return (
+      <EmailThreadDrawerByThreadKey
+        open
+        onClose={onClose}
+        threadKey={email.thread_key}
+        hideBottomButtons
+      />
+    )
+  }
+
+  return null
 }
