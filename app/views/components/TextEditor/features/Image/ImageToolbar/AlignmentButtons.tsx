@@ -1,40 +1,41 @@
+import React from 'react'
+import { ContentBlock, EditorState } from 'draft-js'
 import { IconButton, Tooltip } from '@material-ui/core'
 
-import React from 'react'
-
-import { ContentBlock, EditorState } from 'draft-js'
-
-import IconAlignDefault from 'components/SvgIcons/AlignDefault/IconAlignDefault'
-import IconAlignLeft from 'components/SvgIcons/AlignLeft/IconAlignLeft'
-import IconAlignCenter from 'components/SvgIcons/AlignCenter/IconAlignCenter'
-import IconAlignRight from 'components/SvgIcons/AlignRight/IconAlignRight'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import {
+  imageAlignLeft,
+  imageAlignRight,
+  imageAlignCenter,
+  imageAlignDefault
+} from 'components/SvgIcons/icons'
 
 import { AtomicBlockEntityData } from '../../../types'
 import { getSelectedAtomicBlock } from '../../../utils/get-selected-atomic-block'
 import { updateAtomicBlockEntityData } from '../../../modifiers/update-atomic-block-entity-data'
 import { getAtomicBlockEntityData } from '../../../utils/get-atomic-block-entity-data'
-import { useToolbarIconClass } from '../../../hooks/use-toolbar-icon-class'
 
 type Alignment = AtomicBlockEntityData['alignment']
 
 const alignmentButton = [
   {
-    icon: IconAlignDefault,
+    icon: imageAlignDefault,
     alignment: 'default' as Alignment,
     tooltip: 'Default'
   },
   {
-    icon: IconAlignLeft,
+    icon: imageAlignLeft,
     alignment: 'left' as Alignment,
     tooltip: 'Inline with text (Left)'
   },
   {
-    icon: IconAlignCenter,
+    icon: imageAlignCenter,
     alignment: 'center' as Alignment,
     tooltip: 'Center'
   },
   {
-    icon: IconAlignRight,
+    icon: imageAlignRight,
     alignment: 'right' as Alignment,
     tooltip: 'Inline with text (Right)'
   }
@@ -58,8 +59,6 @@ export function BlockAlignmentButtons({ block, editorState, onChange }: Props) {
     {}
   const currentAlignment = blockEntityData.alignment || 'default'
 
-  const iconClassNames = useToolbarIconClass()
-
   const setAlignment = (alignment: Alignment) => {
     if (targetBlock) {
       onChange(
@@ -72,7 +71,7 @@ export function BlockAlignmentButtons({ block, editorState, onChange }: Props) {
 
   return (
     <>
-      {alignmentButton.map(({ alignment, tooltip, icon: Icon }, index) => (
+      {alignmentButton.map(({ alignment, tooltip, icon }, index) => (
         <Tooltip key={index} title={tooltip}>
           <IconButton
             size="small"
@@ -80,7 +79,7 @@ export function BlockAlignmentButtons({ block, editorState, onChange }: Props) {
             edge={index === alignmentButton.length - 1 && 'end'}
             color={currentAlignment === alignment ? 'primary' : undefined}
           >
-            <Icon className={iconClassNames} />
+            <SvgIcon path={icon} size={muiIconSizes.small} />
           </IconButton>
         </Tooltip>
       ))}

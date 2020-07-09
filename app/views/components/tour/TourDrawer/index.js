@@ -2,15 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import { Box, Button, IconButton } from '@material-ui/core'
+import { mdiTrashCanOutline } from '@mdi/js'
 
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { isSoloActiveTeam } from 'utils/user-teams'
-import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
-
-import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
-
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
@@ -18,10 +16,9 @@ import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 
 import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
-import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import Reminder from '../../EventDrawer/components/Reminder/Reminder'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
-import { AddAssociationButton } from '../../AddAssociationButton'
+import AddAssociation from '../../AddAssociation'
 import {
   AssigneesField,
   AssociationsList,
@@ -205,12 +202,6 @@ export class TourDrawer extends React.Component {
                     <Description placeholder="Enter any general notes for your clients" />
 
                     <Section label="Itinerary Date">
-                      <UpdateReminder
-                        dueDate={values.dueDate}
-                        // 1 hour before
-                        defaultOption={REMINDER_DROPDOWN_OPTIONS[5]}
-                      />
-
                       <Box mb={4}>
                         <FieldContainer
                           alignCenter
@@ -274,25 +265,21 @@ export class TourDrawer extends React.Component {
                               disabled={isDisabled}
                               onClick={this.onDelete}
                             >
-                              <IconDelete size="medium" />
+                              <SvgIcon path={mdiTrashCanOutline} />
                             </IconButton>
                           </Tooltip>
                           <Divider margin="0 1rem" width="1px" height="2rem" />
                         </>
                       )}
-                      <AddAssociationButton
-                        associations={values.clients}
+                      <AddAssociation
                         disabled={isDisabled}
                         type="contact"
                         name="clients"
-                        caption="Attach Client"
                       />
-                      <AddAssociationButton
-                        associations={values.locations}
+                      <AddAssociation
                         disabled={isDisabled}
                         type="listing"
                         name="locations"
-                        caption="Attach Property"
                       />
                     </Flex>
                     <Flex alignCenter>

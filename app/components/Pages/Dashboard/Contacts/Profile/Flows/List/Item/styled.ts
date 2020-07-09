@@ -20,8 +20,6 @@ export const Container = styled.div`
   }
 
   .stop-icon {
-    width: 1rem;
-    height: 1rem;
     opacity: 0.3;
   }
 

@@ -47,14 +47,15 @@ export default function EventForm({
   onCancel,
   onDelete
 }: Props) {
-  function getInitialValues(stepData?: IBrandFlowStep) {
+  function getInitialValues(stepData?: IBrandFlowStep): FormData {
     if (!stepData || !stepData.event) {
       return {
         task_type: {
           value: 'Call',
           title: 'Call'
         },
-        wait_for: '1',
+        title: '',
+        wait_for: 1,
         at: '08:00'
       }
     }
@@ -69,7 +70,7 @@ export default function EventForm({
       },
       title: stepData.title,
       description: stepData.description,
-      wait_for: stepData.wait_days.toString(),
+      wait_for: stepData.wait_days,
       at
     }
   }
@@ -163,14 +164,8 @@ export default function EventForm({
                     autoComplete="off"
                     required
                     validate={value =>
-                      validateInput(value, 'wait days', input => {
-                        const numericValue = parseInt(input, 10)
-
-                        return (
-                          numericValue.toString() === input &&
-                          numericValue >= 0 &&
-                          numericValue <= 365
-                        )
+                      validateInput(value, 'wait days', () => {
+                        return value >= 0 && value <= 365
                       })
                     }
                     component={MUITextInput}

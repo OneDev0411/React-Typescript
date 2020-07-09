@@ -36,15 +36,20 @@ import {
 } from './styled'
 
 const propTypes = {
+  deal: PropTypes.object.isRequired,
   disableAddRole: PropTypes.bool,
   allowDeleteRole: PropTypes.bool,
   showEmail: PropTypes.bool,
   showTitle: PropTypes.bool,
   isEmailRequired: PropTypes.bool,
   filter: PropTypes.func,
+  containerStyle: PropTypes.object,
   addRoleActionRenderer: PropTypes.func,
   onCloseAddRoleDrawer: PropTypes.func,
-  onTriggerRequiredEmail: PropTypes.func
+  onTriggerRequiredEmail: PropTypes.func,
+  onSelect: PropTypes.func.isRequired,
+  onUpsertRole: PropTypes.func,
+  onCreateRole: PropTypes.func
 }
 
 const defaultProps = {
@@ -54,6 +59,7 @@ const defaultProps = {
   isEmailRequired: false,
   showTitle: true,
   filter: () => true,
+  containerStyle: {},
   onCloseAddRoleDrawer: () => null,
   onTriggerRequiredEmail: () => null
 }
@@ -261,12 +267,9 @@ function mapStateToProps({ user, deals }, props) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    notify,
-    createRoles,
-    deleteRole,
-    confirmation
-  }
-)(Roles)
+export default connect(mapStateToProps, {
+  notify,
+  createRoles,
+  deleteRole,
+  confirmation
+})(Roles)

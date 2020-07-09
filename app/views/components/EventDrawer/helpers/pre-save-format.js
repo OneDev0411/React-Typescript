@@ -8,7 +8,6 @@ import { stateToHTML } from 'draft-js-export-html'
 export async function preSaveFormat(values, originalValues) {
   const {
     title,
-    status,
     dueDate,
     endDate,
     allDay,
@@ -39,22 +38,31 @@ export async function preSaveFormat(values, originalValues) {
 
   const dueDateTimestamp = dueDate.getTime()
   const endDateTimestamp = endDate.getTime()
+  const end_date =
+    originalValues?.end_date || endDateTimestamp > dueDateTimestamp
+      ? endDateTimestamp / 1000
+      : null
 
   const task = {
     title: title.trim(),
     due_date: dueDateTimestamp / 1000,
-    end_date: endDateTimestamp / 1000,
+    end_date,
     task_type: task_type.value,
     all_day: isAllDay,
     assignees: assignees.map(a => a.id),
-    status:
-      dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'
+    status: dueDateTimestamp <= new Date().getTime() ? 'DONE' : 'PENDING'
   }
 
-  if ((originalValues && originalValues.id) || description) {
-    task.description = stateToHTML(description.getCurrentContent())
-      .trim()
-      .replace(/(\r\n|\n|\r)/gm, '') // remove unneccessary new line
+  if (originalValues?.id || description) {
+    const currentDescription = description.getCurrentContent()
+
+    task.description =
+      currentDescription.hasText() &&
+      currentDescription.getPlainText().trim().length > 0
+        ? stateToHTML(currentDescription)
+            .trim()
+            .replace(/(\r\n|\n|\r)/gm, '') // remove unneccessary new line
+        : ''
   }
 
   if (task.status === 'DONE') {
@@ -67,8 +75,8 @@ export async function preSaveFormat(values, originalValues) {
       }
     ]
   } else if (
-    (originalValues && originalValues.reminders == null) ||
-    (originalValues && originalValues.reminders && reminder.value == -1)
+    originalValues?.reminders == null ||
+    (originalValues?.reminders && reminder.value == -1)
   ) {
     task.reminders = []
   }

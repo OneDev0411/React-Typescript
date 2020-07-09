@@ -32,6 +32,7 @@ export class CreateContact extends React.Component {
           onClose={this.toggleOpen}
           submitCallback={this.props.submitCallback}
           user={this.props.user}
+          showAddAnother={this.props.showAddAnother}
         />
       </>
     )

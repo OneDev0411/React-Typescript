@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { buttonBaseStyle } from '../../../../../../../views/components/Button/styles/ButtonAppearances'
 import { grey, deleteColor } from '../../../../../../../views/utils/colors'
-import CloseIcon from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
 
 const isNotDisableState = '&:not([disabled]):'
 
@@ -29,9 +30,7 @@ export const Button = styled.button`
   }
 `
 
-export const Icon = styled(CloseIcon)`
-  width: 1rem;
-  height: 1rem;
+export const Icon = styled(SvgIcon)`
   margin-right: 0.25rem;
-  fill: #fff;
+  color: #fff;
 `

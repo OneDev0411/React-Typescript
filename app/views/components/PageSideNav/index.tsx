@@ -15,7 +15,7 @@ function PageSideNav(props: PageSideNavProps) {
     <SideNavContainer isOpen={props.isOpen} width={props.width}>
       {(props.sections || []).map((section, secIndex) => {
         switch (section.type) {
-          case SectionsEnum.LINK:
+          case SectionsEnum.Link:
             return <LinkList section={section} key={secIndex} />
           default:
             return null

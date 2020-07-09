@@ -1,42 +1,55 @@
 {
   "name": "rechat",
-  "version": "77.2.0",
+  "version": "78.0.0",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
     "commit": "commit",
-    "develop": "NODE_ENV=development NODE_OPTIONS='--max_old_space_size=4096' nodemon ./bin/server --config ./nodemon.config.json --exec babel-node --extensions \".js,.ts,.tsx\"",
-    "developClient": "NODE_ENV=development notify=true npx babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
+    "develop": "cross-env NODE_ENV=development NODE_OPTIONS='--max_old_space_size=4096' nodemon ./bin/server --config ./nodemon.config.json --exec babel-node --extensions \".js,.ts,.tsx\"",
+    "developClient": "cross-env NODE_ENV=development notify=true babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "debug": "ndb npm run develop",
     "icons": "babel-node ./icon-manager",
-    "build": "rimraf dist && NODE_ENV=production babel-node ./build.js && rimraf dist/*.js.map",
-    "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build.js",
-    "build:ci": "NODE_ENV=ci NODE_OPTIONS='--max-old-space-size=8192' babel-node ./build.js",
-    "serve": "NODE_ENV=production forever node_modules/@babel/node/bin/babel-node.js --extensions \".js,.ts,.tsx\" ./bin/server ",
-    "serve:ci": "NODE_ENV=ci PORT=8081 babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
-    "serve:stage": "NODE_ENV=stage babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
+    "build": "rimraf dist && cross-env NODE_ENV=production babel-node ./build.js && rimraf dist/*.js.map",
+    "build:stage": "rimraf dist && cross-env NODE_ENV=stage babel-node ./build.js",
+    "build:ci": "cross-env NODE_ENV=ci NODE_OPTIONS='--max-old-space-size=8192' babel-node ./build.js",
+    "serve": "cross-env NODE_ENV=production forever node_modules/@babel/node/bin/babel-node.js --extensions \".js,.ts,.tsx\" ./bin/server ",
+    "serve:ci": "cross-env NODE_ENV=ci PORT=8081 babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
+    "serve:stage": "cross-env NODE_ENV=stage babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "styled-svg": "styled-svg app/views/components/SvgIcons/**/*.svg --no-tests --size=24x24",
     "types:check": "tsc",
     "lint": "npm run lint:app && npm run lint:server && npm run lint:tests",
-    "lint:staged": "eslint `git diff --diff-filter=d --staged --name-only`",
-    "lint:fix-staged": "npm run lint:staged -- --fix",
+    "lint:fix-staged": "lint-staged",
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
     "lint:tests": "eslint ./tests --fix",
     "e2e:start": "npm run e2e:api:update-image && npm run e2e:api:start & npm run e2e:server:start",
-    "e2e:server:start": "NODE_ENV=development E2E=true PORT=8081 notify=true npx babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
+    "e2e:server:start": "cross-env NODE_ENV=development E2E=true PORT=8081 notify=true babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "e2e:api:start": "cd tests/services && docker-compose down && docker-compose build --no-cache && docker-compose up",
     "e2e:api:update-image": "cd tests/services && docker-compose pull api",
     "e2e:api:fetch-config": "heroku config -s --app rechat-boer | sed -E \"s/(.*)='(.*)'/\\1=\\2/\" > tests/services/api/.env",
     "e2e:update-db": "docker exec e2e_postgres pg_dump --clean --if-exists -U rechat rechat > tests/services/db/data/test-data.sql",
-    "test:unit": "NODE_ENV=test jest",
+    "test:unit": "cross-env NODE_ENV=test jest",
     "test:update-snapshots": "npm run test:unit -- -u",
     "test:ci": "npm run test:unit",
     "test": "jest --watch",
     "jest": "jest"
   },
-  "engines": {
-    "node": "10.x"
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 80,
+    "trailingComma": "none",
+    "arrowParens": "avoid",
+    "endOfLine": "auto"
+  },
+  "lint-staged": {
+    "**/*.(js|ts|tsx|json|css|html|md)": "eslint --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`"
+    }
   },
   "dependencies": {
     "@babel/cli": "^7.8.4",
@@ -60,9 +73,16 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
+    "@fullcalendar/daygrid": "^5.1.0",
+    "@fullcalendar/interaction": "^5.1.0",
+    "@fullcalendar/react": "^5.1.0",
+    "@fullcalendar/timegrid": "^5.1.0",
     "@material-ui/core": "^4.9.14",
+    "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.53",
     "@material-ui/styles": "^4.9.14",
+    "@mdi/js": "^5.2.45",
+    "@mdi/react": "^1.4.0",
     "@mikeljames/draft-js-drag-n-drop-upload-plugin": "^2.0.1",
     "@reach/tabs": "^0.1.5",
     "@samuelmeuli/font-manager": "^1.4.0",
@@ -84,6 +104,7 @@
     "colors": "^1.3.3",
     "compression-webpack-plugin": "^4.0.0",
     "core-js": "^3.0.0",
+    "cross-env": "^7.0.2",
     "css-loader": "^0.28.11",
     "cuid": "^2.1.6",
     "downshift": "^1.31.16",
@@ -108,8 +129,8 @@
     "fecha": "^2.3.3",
     "file-loader": "^1.1.6",
     "file-saver": "^2.0.0",
-    "final-form": "^4.12.0",
-    "final-form-arrays": "1.1.2",
+    "final-form": "^4.19.1",
+    "final-form-arrays": "^3.0.2",
     "final-form-focus": "^1.1.2",
     "final-form-material-ui": "^0.3.0",
     "find-with-regex": "^1.1.3",
@@ -187,8 +208,8 @@
     "react-dom": "^16.8.1",
     "react-dropzone": "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
     "react-facebook": "^6.0.15",
-    "react-final-form": "^4.1.0",
-    "react-final-form-arrays": "^2.0.1",
+    "react-final-form": "^6.4.0",
+    "react-final-form-arrays": "^3.1.1",
     "react-final-form-listeners": "^1.0.2",
     "react-ga": "^2.5.3",
     "react-helmet": "^6.0.0-beta",
@@ -284,6 +305,8 @@
     "@types/intercom-client": "^2.9.5",
     "@types/jest": "^24.0.13",
     "@types/js-cookie": "^2.2.0",
+    "@types/koa": "^2.11.3",
+    "@types/koa-router": "^7.4.1",
     "@types/lodash": "^4.14.132",
     "@types/match-sorter": "^2.3.0",
     "@types/mjml": "^4.0.4",
@@ -354,6 +377,7 @@
     "husky": "^4.2.5",
     "jest": "^25.1.0",
     "jest-raw-loader": "^1.0.1",
+    "lint-staged": "^10.2.11",
     "ndb": "^1.1.5",
     "nodemon": "^2.0.4",
     "opn": "^6.0.0",
@@ -367,15 +391,7 @@
     "webpackbar": "^4.0.0",
     "whatwg-fetch": "^3.0.0"
   },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true,
-    "printWidth": 80
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint:staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`"
-    }
+  "engines": {
+    "node": "10.x"
   }
 }

@@ -17,7 +17,7 @@ const routes = {
   ],
   'my-marketing-matters': ['punchout'],
   liveby: ['neighborhoods', 'report'],
-  utils: ['get-url-metadata', 'render-mjml']
+  utils: ['get-url-metadata', 'render-mjml', 'cors']
 }
 
 _.each(routes, (group, name) => {

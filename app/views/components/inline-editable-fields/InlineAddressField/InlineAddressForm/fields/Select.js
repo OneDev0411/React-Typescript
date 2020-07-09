@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
+import { mdiChevronDown } from '@mdi/js'
 
 import { Dropdown } from 'components/Dropdown'
 import { Item } from 'components/Dropdown/Item'
-import ArrowDropDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Container, Label, SelectButton } from './styled'
 
@@ -56,7 +57,10 @@ export function Select(props) {
                 >
                   {props.value}
                 </span>
-                <ArrowDropDown isOpen={props.isOpen} />
+                <SvgIcon
+                  path={mdiChevronDown}
+                  rotate={props.isOpen ? 180 : 0}
+                />
               </SelectButton>
             )}
             itemRenderer={(props, item) => <Item {...props}>{item.title}</Item>}

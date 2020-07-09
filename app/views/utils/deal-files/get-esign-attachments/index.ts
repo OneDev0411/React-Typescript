@@ -1,17 +1,31 @@
-interface Params {
-  task: IDealTask
-  file?: IFile
+export function getEnvelopeEsignAttachments(
+  task: IDealTask,
+  envelope: IDealEnvelope
+): IDealFile[] {
+  return (envelope.documents || []).map(document => ({
+    ...document.pdf,
+    name: `${envelope.title}: ${document.pdf.name}`,
+    source: 'attachment',
+    task: task.id,
+    checklist: task.checklist
+  }))
 }
 
-export function getEsignAttachments({ task, file }: Params) {
-  if (file) {
-    return getDocumentAttachment(task, file)
-  }
-
-  return getTaskAttachments(task)
+export function getFileEsignAttachments(
+  task: IDealTask,
+  file: IFile
+): IDealFile[] {
+  return [
+    {
+      ...file,
+      source: 'attachment',
+      task: task.id,
+      checklist: task.checklist
+    }
+  ]
 }
 
-function getTaskAttachments(task: IDealTask): IDealFile[] {
+export function getFormEsignAttachments(task: IDealTask): IDealFile[] {
   const attachments: IDealFile[] = []
 
   if (task.submission) {
@@ -42,45 +56,18 @@ function getTaskAttachments(task: IDealTask): IDealFile[] {
     })
   }
 
-  if (Array.isArray(task.room.attachments)) {
-    task.room.attachments
-      .filter(file => file.mime === 'application/pdf')
-      .forEach(file => {
-        attachments.push({
-          ...file,
-          source: 'attachment',
-          task: task.id,
-          checklist: task.checklist
-        })
-      })
-  }
+  // if (Array.isArray(task.room.attachments)) {
+  //   task.room.attachments
+  //     .filter(file => file.mime === 'application/pdf')
+  //     .forEach(file => {
+  //       attachments.push({
+  //         ...file,
+  //         source: 'attachment',
+  //         task: task.id,
+  //         checklist: task.checklist
+  //       })
+  //     })
+  // }
 
   return attachments
-}
-
-function getDocumentAttachment(task: IDealTask, file: IFile): IDealFile[] {
-  if (task.submission) {
-    return [
-      {
-        ...task.submission.file,
-        source: 'submission',
-        url: task.pdf_url,
-        task: task.id,
-        checklist: task.checklist
-      }
-    ]
-  }
-
-  if (file && file.mime === 'application/pdf') {
-    return [
-      {
-        ...file,
-        source: 'attachment',
-        task: task.id,
-        checklist: task.checklist
-      }
-    ]
-  }
-
-  return []
 }

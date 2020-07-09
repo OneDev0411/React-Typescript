@@ -177,7 +177,4 @@ function TemplatesList(props) {
   )
 }
 
-export default connect(
-  null,
-  { notify }
-)(TemplatesList)
+export default connect(null, { notify })(TemplatesList)

@@ -11,12 +11,13 @@ import {
   Theme
 } from '@material-ui/core'
 
+import { mdiDotsHorizontal } from '@mdi/js'
+
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
-import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
-
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Email from '../../Actions/Email'
 import MergeContacts from '../../Actions/MergeContacts'
@@ -180,7 +181,7 @@ export function TableActions({
         size="small"
         onClick={toggleMoreAction}
       >
-        <IconHorizontalDots />
+        <SvgIcon path={mdiDotsHorizontal} />
       </Button>
       <Popper
         id={moreActionID}

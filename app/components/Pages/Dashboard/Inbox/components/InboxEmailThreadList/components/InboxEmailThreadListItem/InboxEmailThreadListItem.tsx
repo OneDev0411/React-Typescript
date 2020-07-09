@@ -2,17 +2,23 @@ import React, { useMemo } from 'react'
 import { Paper, Typography, IconButton, Tooltip } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
+import {
+  mdiEmailOutline,
+  mdiEmailOpenOutline,
+  mdiTrashCanOutline,
+  mdiArchiveOutline
+} from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import useTypedSelector from 'hooks/use-typed-selector'
-
-import IconTrash from 'views/components/SvgIcons/Trash/TrashIcon'
-import IconMailRead from 'views/components/SvgIcons/MailRead/IconMailRead'
-import IconMailUnread from 'views/components/SvgIcons/MailUnread/IconMailUnread'
 
 import { useInboxEmailThreadListItemStyles } from './styles'
 import getRecipientNamesText from './helpers/get-recipient-names-text'
 import useEmailThreadReadStatusSetter from '../../../../helpers/use-email-thread-read-status-setter'
 import useEmailThreadDeleter from '../../../../helpers/use-email-thread-deleter'
+import useEmailThreadArchiver from '../../../../helpers/use-email-thread-archiver'
 
 interface Props {
   emailThread: IEmailThread<'contacts'>
@@ -49,6 +55,10 @@ export default function InboxEmailThreadListItem({
     deleteEmailThread,
     deleteEmailThreadDisabled
   } = useEmailThreadDeleter(emailThread.id)
+  const {
+    archiveEmailThread,
+    archiveEmailThreadDisabled
+  } = useEmailThreadArchiver(emailThread.id)
 
   const classes = useInboxEmailThreadListItemStyles()
 
@@ -123,9 +133,12 @@ export default function InboxEmailThreadListItem({
                 }}
               >
                 {emailThread.is_read ? (
-                  <IconMailUnread size="small" />
+                  <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
                 ) : (
-                  <IconMailRead size="small" />
+                  <SvgIcon
+                    path={mdiEmailOpenOutline}
+                    size={muiIconSizes.small}
+                  />
                 )}
               </IconButton>
             </Tooltip>
@@ -142,7 +155,23 @@ export default function InboxEmailThreadListItem({
                   event.stopPropagation()
                 }}
               >
-                <IconTrash size="small" />
+                <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip
+              title={archiveEmailThreadDisabled ? 'Archiving...' : 'Archive'}
+            >
+              <IconButton
+                className={classNames(
+                  classes.action,
+                  archiveEmailThreadDisabled && classes.actionDisabled
+                )}
+                onClick={event => {
+                  archiveEmailThread()
+                  event.stopPropagation()
+                }}
+              >
+                <SvgIcon path={mdiArchiveOutline} size={muiIconSizes.small} />
               </IconButton>
             </Tooltip>
           </div>

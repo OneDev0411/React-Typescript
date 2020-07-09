@@ -1,7 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import IconLocation from '../../../../../../../views/components/SvgIcons/Location/IconLocation.js'
+import { mdiCrosshairsGps } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { getLocation } from '../../../../../../../store_actions/listings/map/user-location'
 import { getUserLocationIsFetching } from '../../../../../../../reducers/listings/map/user-location'
 import Tooltip from '../../../../../../../views/components/tooltip'
@@ -25,7 +28,7 @@ class LocationButton extends React.Component {
           onClick={this.onClick}
           disabled={this.props.isFetching}
         >
-          <IconLocation />
+          <SvgIcon path={mdiCrosshairsGps} />
         </Button>
       </Tooltip>
     )

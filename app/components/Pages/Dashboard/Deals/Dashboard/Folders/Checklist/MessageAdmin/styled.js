@@ -20,11 +20,6 @@ export const BadgeCounter = styled.div`
     min-width: 1.3rem;
     min-height: 1.3rem;
 
-    svg {
-      width: 12px;
-      height: 12px;
-    }
-
     ${props =>
       props.isRectangle &&
       `

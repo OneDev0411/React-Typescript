@@ -8,21 +8,25 @@ import { ContentBlock, Editor as DraftEditor } from 'draft-js'
 
 import { DraftJsPlugin } from 'draft-js-plugins-editor'
 
+import {
+  mdiLink,
+  mdiFormatListNumbered,
+  mdiFormatListBulleted,
+  mdiFormatUnderline,
+  mdiFormatItalic,
+  mdiFormatBold
+} from '@mdi/js'
+
 import { getShortcutTooltip } from 'utils/get-shortcut-tooltip'
 
 import { ToolbarFragment } from '../../components/ToolbarFragment'
 import { EditorContext } from '../../editor-context'
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 import { ToolbarToggleButton } from '../../components/ToolbarToggleButton'
-import IconBold from '../../../SvgIcons/Bold/IconBold'
-import IconItalic from '../../../SvgIcons/Italic/IconItalic'
-import IconUnderline from '../../../SvgIcons/Underline/IconUnderline'
-import { iconSizes } from '../../../SvgIcons/icon-sizes'
-import IconBulletedList from '../../../SvgIcons/BulletedList/IconBulletedList'
-import IconNumberedList from '../../../SvgIcons/NumberedList/IconNumberedList'
 import HeadingButtons from './HeadingButtons'
 import { ToolbarIconButton } from '../../components/ToolbarIconButton'
-import IconLink from '../../../SvgIcons/Link/IconLink'
+import { SvgIcon } from '../../../SvgIcons/SvgIcon'
+
 import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
 import { LinkEditorPopover } from './LinkEditorPopover'
 import {
@@ -117,12 +121,12 @@ export function RichTextFeature({
                 tooltip={getShortcutTooltip('Bold', 'B')}
                 edge="start"
               >
-                <IconBold />
+                <SvgIcon path={mdiFormatBold} />
               </ToolbarToggleButton>
             </BoldButton>
             <ItalicButton>
               <ToolbarToggleButton tooltip={getShortcutTooltip('Italic', 'I')}>
-                <IconItalic />
+                <SvgIcon path={mdiFormatItalic} />
               </ToolbarToggleButton>
             </ItalicButton>
 
@@ -130,7 +134,7 @@ export function RichTextFeature({
               <ToolbarToggleButton
                 tooltip={getShortcutTooltip('Underline', 'U')}
               >
-                <IconUnderline />
+                <SvgIcon path={mdiFormatUnderline} />
               </ToolbarToggleButton>
             </UnderlineButton>
           </>
@@ -140,13 +144,13 @@ export function RichTextFeature({
         <ToolbarFragment group="lists">
           <ULButton>
             <ToolbarToggleButton tooltip="Bulleted List" isBlockButton>
-              <IconBulletedList color="inherit" size={iconSizes.small} />
+              <SvgIcon path={mdiFormatListBulleted} />
             </ToolbarToggleButton>
           </ULButton>
 
           <OLButton>
             <ToolbarToggleButton tooltip="Numbered List" isBlockButton>
-              <IconNumberedList />
+              <SvgIcon path={mdiFormatListNumbered} />
             </ToolbarToggleButton>
           </OLButton>
         </ToolbarFragment>
@@ -185,7 +189,7 @@ export function RichTextFeature({
                 event.stopPropagation()
               }}
             >
-              <IconLink />
+              <SvgIcon path={mdiLink} />
             </ToolbarIconButton>
           </Tooltip>
         </ToolbarFragment>

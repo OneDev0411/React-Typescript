@@ -7,13 +7,15 @@ import withHandlers from 'recompose/withHandlers'
 import { Modal } from 'react-bootstrap'
 import Flex from 'styled-flex-component'
 
+import { mdiClose } from '@mdi/js'
+
 import { hasRecipients } from 'utils/helpers'
 import { createRoom } from 'actions/chatroom/room'
 import createAlert from 'actions/listings/alerts/create-alert'
 
 import ActionButton from 'components/Button/ActionButton'
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import { H2 } from 'components/Typography/headings'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Recipients from '../../../../../Partials/ShareView'
 
@@ -42,7 +44,7 @@ const ShareAlertModal = ({
         <Flex alignCenter justifyBetween style={{ padding: '1em' }}>
           <H2>Share a search</H2>
           <IconButton onClick={isSharing ? () => {} : onHide}>
-            <IconClose />
+            <SvgIcon path={mdiClose} />
           </IconButton>
         </Flex>
         <Modal.Body style={{ padding: 0 }}>

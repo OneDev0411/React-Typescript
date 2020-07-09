@@ -1,11 +1,10 @@
 const INITIAL_VALUES = {
   first_name: '',
   last_name: '',
-  middle_name: '',
+  tags: [],
   source: '',
   email: [{ label: { title: 'Personal', value: 'Personal' } }],
-  phone_number: [{ label: { title: 'Mobile', value: 'Mobile' } }],
-  title: { title: '-Select-', value: '-Select-' }
+  phone_number: [{ label: { title: 'Mobile', value: 'Mobile' } }]
 }
 
 export function generateInitialValues(initValues) {

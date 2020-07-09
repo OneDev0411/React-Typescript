@@ -39,7 +39,7 @@ import syncOpenHouseData from '../../helpers/sync-open-house-offline-registers'
 import SideNav from './SideNav'
 
 class Dashboard extends Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { user, dispatch } = this.props
 
     if (user) {

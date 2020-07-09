@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: `calc(100% - ${theme.spacing(6)}px)`
     },
     arrowIcon: {
-      fill: theme.palette.common.white,
+      color: theme.palette.common.white,
       transform: 'rotateX(180deg)'
     },
     arrowIconRotated: {

@@ -2,20 +2,48 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Downshift from 'downshift'
+import { mdiChevronDown } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { setSelectedTask } from 'actions/deals'
 import { isBackOffice } from 'utils/user-teams'
-import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import Tooltip from 'components/tooltip'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-import { getEsignAttachments } from 'views/utils/deal-files/get-esign-attachments'
+import {
+  getFormEsignAttachments,
+  getEnvelopeEsignAttachments,
+  getFileEsignAttachments
+} from 'views/utils/deal-files/get-esign-attachments'
 import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
+
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
+
+import type {
+  StateContext,
+  DispatchContext
+} from 'deals/contexts/actions-context'
+
+import {
+  ADD_ATTACHMENTS,
+  REMOVE_ATTACHMENT,
+  CLEAR_ATTACHMENTS
+} from 'deals/contexts/actions-context/constants'
 
 import { normalizeActions } from './data/normalize-actions'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
+
+import {
+  DOCUSIGN_FORM,
+  DOCUSIGN_ENVELOPE,
+  DOCUSIGN_FILE,
+  EMAIL_FORM,
+  EMAIL_FILE,
+  EMAIL_ENVELOPE
+} from './data/action-buttons'
+
 import {
   approveTask,
   requireTask,
@@ -46,6 +74,8 @@ import {
   PrimaryAction
 } from './styled'
 
+type SignatureType = 'Form' | 'Envelope' | 'File' | null
+
 interface Props {
   deal: IDeal
   task: IDealTask
@@ -54,12 +84,18 @@ interface Props {
   actions: ActionButtonId[]
 }
 
+interface ContextProps {
+  actionsState: StateContext
+  actionsDispatch: DispatchContext
+}
+
 interface State {
   isMenuOpen: boolean
   isSignatureFormOpen: boolean
   isPdfSplitterOpen: boolean
   isTasksDrawerOpen: boolean
   isComposeEmailOpen: boolean
+  signatureType: SignatureType
   multipleItemsSelection: {
     items: IDealFile[]
     title: string
@@ -80,13 +116,17 @@ interface StateProps {
   }
 }
 
-class ActionsButton extends React.Component<Props & StateProps, State> {
-  constructor(props: Props & StateProps) {
+class ActionsButton extends React.Component<
+  Props & StateProps & ContextProps,
+  State
+> {
+  constructor(props: Props & StateProps & ContextProps) {
     super(props)
 
     this.state = {
       isMenuOpen: false,
       isSignatureFormOpen: false,
+      signatureType: null,
       isPdfSplitterOpen: false,
       isTasksDrawerOpen: false,
       isComposeEmailOpen: false,
@@ -113,9 +153,9 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
       'delete-file': deleteFile,
       'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
-      'docusign-envelope': this.handleGetSignature,
-      'docusign-form': this.handleGetSignature,
-      'docusign-file': this.handleGetSignature,
+      'docusign-envelope': this.docusignEnvelope,
+      'docusign-form': this.docusignForm,
+      'docusign-file': this.docusignFile,
       'email-form': this.handleToggleComposeEmail,
       'email-file': this.handleToggleComposeEmail,
       'email-envelope': this.handleToggleComposeEmail
@@ -152,10 +192,15 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
   handleToggleMenu = () =>
     this.setState(state => ({ isMenuOpen: !state.isMenuOpen }))
 
-  handleDeselectAction = () =>
+  handleDeselectAction = () => {
     this.setState({
       isSignatureFormOpen: false
     })
+
+    this.props.actionsDispatch({
+      type: CLEAR_ATTACHMENTS
+    })
+  }
 
   handleCloseMultipleItemsSelectionDrawer = () =>
     this.setState({
@@ -182,21 +227,10 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
     })
   }
 
-  getEsignAttachments = () => {
-    return getEsignAttachments({
-      task: this.props.task,
-      file: this.props.file!
-    })
-  }
-
   /**
    *
    */
-  handleUpload = () => {
-    if (this.dropzone) {
-      this.dropzone.open()
-    }
-  }
+  handleUpload = () => this.dropzone?.open()
 
   /**
    *
@@ -206,15 +240,111 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
   /**
    *
    */
-  handleToggleComposeEmail = () =>
+  handleToggleComposeEmail = () => {
+    const files = this.getEmailComposeFiles()
+
+    if (
+      this.props.actionsState.actions.some(name =>
+        [EMAIL_FORM, EMAIL_FILE, EMAIL_ENVELOPE].includes(name)
+      ) === false
+    ) {
+      this.setState(state => ({
+        isComposeEmailOpen: !state.isComposeEmailOpen
+      }))
+
+      return
+    }
+
+    if (
+      this.props.actionsState.attachments.some(attachment =>
+        files.some(doc => doc.id === attachment.id)
+      )
+    ) {
+      files.forEach(attachment =>
+        this.props.actionsDispatch({
+          type: REMOVE_ATTACHMENT,
+          attachment
+        })
+      )
+
+      return
+    }
+
+    this.props.actionsDispatch({
+      type: ADD_ATTACHMENTS,
+      attachments: files
+    })
+  }
+
+  handleCloseComposeEmail = () => {
     this.setState(state => ({
-      isComposeEmailOpen: !state.isComposeEmailOpen
+      isComposeEmailOpen: false
     }))
+
+    this.props.actionsDispatch({
+      type: CLEAR_ATTACHMENTS
+    })
+  }
+
+  docusignEnvelope = () => {
+    const attachments = getEnvelopeEsignAttachments(
+      this.props.task,
+      this.props.envelope!
+    )
+
+    this.updateDocusignList(attachments)
+    this.handleGetSignature()
+  }
+
+  docusignForm = () => {
+    const attachments = getFormEsignAttachments(this.props.task)
+
+    this.updateDocusignList(attachments)
+    this.handleGetSignature()
+  }
+
+  docusignFile = () => {
+    const attachments = getFileEsignAttachments(
+      this.props.task,
+      this.props.file!
+    )
+
+    this.updateDocusignList(attachments)
+    this.handleGetSignature()
+  }
+
+  updateDocusignList = (files: IFile[]) => {
+    files.forEach(file => {
+      const isFileExists = this.props.actionsState.attachments.some(
+        attachment => attachment.id === file.id
+      )
+
+      if (isFileExists) {
+        this.props.actionsDispatch({
+          type: REMOVE_ATTACHMENT,
+          attachment: file
+        })
+      } else {
+        this.props.actionsDispatch({
+          type: ADD_ATTACHMENTS,
+          attachments: [file]
+        })
+      }
+    })
+  }
 
   /**
    *
    */
   handleGetSignature = () => {
+    if (
+      this.props.actionsState.actions.some(name =>
+        [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE].includes(name)
+      )
+    ) {
+      return
+    }
+
     this.setState({
       isSignatureFormOpen: true
     })
@@ -275,7 +405,11 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
   getButtonLabel = button => {
     if (typeof button.label === 'function') {
       return button.label({
+        state: this.props.actionsState,
         task: this.props.task,
+        envelope: this.props.envelope,
+        file: this.props.file,
+        emailAttachments: this.getEmailComposeFiles(),
         isBackOffice: this.props.isBackOffice
       })
     }
@@ -285,8 +419,14 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
 
   render() {
     const secondaryActions: ActionButton[] = normalizeActions(
+      this.props.actionsState.actions,
       this.props.actions
     )
+
+    if (secondaryActions.length === 0) {
+      return null
+    }
+
     const primaryAction: ActionButton = secondaryActions.shift()!
 
     return (
@@ -307,11 +447,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
 
                 {secondaryActions.length > 0 && (
                   <MenuButton onClick={this.handleToggleMenu}>
-                    <ArrowDownIcon
-                      style={{
-                        transform: isOpen ? 'rotateX(180deg)' : 'initial'
-                      }}
-                    />
+                    <SvgIcon path={mdiChevronDown} rotate={isOpen ? 180 : 0} />
                   </MenuButton>
                 )}
               </Container>
@@ -357,8 +493,10 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
           <GetSignature
             isOpen
             deal={this.props.deal}
+            onClickAddAttachments={() =>
+              this.setState({ isSignatureFormOpen: false })
+            }
             onClose={this.handleDeselectAction}
-            defaultAttachments={this.getEsignAttachments()}
           />
         )}
 
@@ -391,8 +529,13 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
               attachments: this.getEmailComposeFiles()
             }}
             deal={this.props.deal}
-            onClose={this.handleToggleComposeEmail}
-            onSent={this.handleToggleComposeEmail}
+            onClickAddDealAttachments={() =>
+              this.setState({
+                isComposeEmailOpen: false
+              })
+            }
+            onClose={this.handleCloseComposeEmail}
+            onSent={this.handleCloseComposeEmail}
           />
         )}
 
@@ -416,6 +559,16 @@ function mapStateToProps({ deals, user }: IAppState, props: Props) {
   }
 }
 
+const withContext = (Component: typeof ActionsButton) => (
+  props: Props & StateProps
+) => {
+  const [state, dispatch] = useChecklistActionsContext()
+
+  return (
+    <Component {...props} actionsState={state} actionsDispatch={dispatch} />
+  )
+}
+
 export default connect(mapStateToProps, {
   setSelectedTask
-})(ActionsButton)
+})(withContext(ActionsButton))

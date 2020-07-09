@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { mdiChevronDown } from '@mdi/js'
 
-import ArrowDropDown from 'components/SvgIcons/ArrowDropDown/IconArrowDropDown'
-
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 import TextIconButton from '../TextIconButton'
 
 const propTypes = {
@@ -26,7 +26,7 @@ function DropButton(props) {
   return (
     <TextIconButton
       {...props}
-      iconRight={ArrowDropDown}
+      iconRight={() => <SvgIcon path={mdiChevronDown} />}
       isActive={props.isOpen}
       iconRightAim={props.isOpen ? 'down' : 'up'}
     />

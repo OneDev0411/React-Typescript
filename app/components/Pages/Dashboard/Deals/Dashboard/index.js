@@ -8,6 +8,8 @@ import { isBackOffice } from 'utils/user-teams'
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
 
+import { ActionContextProvider } from '../contexts/actions-context/provider'
+
 import { getDealTitle } from '../utils/get-deal-title'
 
 import { PageHeader } from './Header'
@@ -15,6 +17,7 @@ import TabSections from './Tabs'
 import TaskView from './TaskView'
 
 import UploadPrompt from '../UploadManager/prompt'
+import { TaskActions } from '../components/TaskActions'
 
 import { DealContainer, PageWrapper } from './styled'
 
@@ -44,17 +47,21 @@ function DealDetails(props) {
       </Helmet>
 
       <PageWrapper>
-        <PageHeader deal={props.deal} isBackOffice={props.isBackOffice} />
+        <ActionContextProvider>
+          <PageHeader deal={props.deal} isBackOffice={props.isBackOffice} />
 
-        <TabSections
-          deal={props.deal}
-          user={props.user}
-          activeTab={activeTab}
-          onChangeTab={tab => setActiveTab(tab.id)}
-          isBackOffice={props.isBackOffice}
-          isFetchingChecklists={isFetchingDeal}
-          isFetchingContexts={isFetchingContexts}
-        />
+          <TabSections
+            deal={props.deal}
+            user={props.user}
+            activeTab={activeTab}
+            onChangeTab={tab => setActiveTab(tab.id)}
+            isBackOffice={props.isBackOffice}
+            isFetchingChecklists={isFetchingDeal}
+            isFetchingContexts={isFetchingContexts}
+          />
+
+          <TaskActions deal={props.deal} />
+        </ActionContextProvider>
 
         <TaskView
           deal={props.deal}

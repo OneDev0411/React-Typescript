@@ -8,7 +8,7 @@ export default class Stepper extends React.Component {
     active: this.props.active
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { active } = nextProps
 
     if (active !== this.state.active) {

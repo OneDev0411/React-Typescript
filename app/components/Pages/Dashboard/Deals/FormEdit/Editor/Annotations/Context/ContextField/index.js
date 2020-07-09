@@ -2,11 +2,12 @@ import React, { useState, useRef } from 'react'
 
 import { Button } from '@material-ui/core'
 
+import { isValidDate } from 'utils/date-times/is-valid-date'
+
 import DealContext from 'models/Deal/helpers/dynamic-context'
 import { getField } from 'models/Deal/helpers/context/get-field'
 
 import DatePicker from 'components/DatePicker'
-
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
 
 import { formatDate } from '../../../../utils/format-date'
@@ -40,9 +41,11 @@ export function ContextField(props) {
     setEditorStatus(false)
   }
 
-  const normalizeValue = () => {
+  const formatValue = () => {
     if (context.current.data_type === 'Date' && props.value) {
-      return formatDate(props.value, props.annotation.format)
+      const date = formatDate(props.value, props.annotation.format)
+
+      return isValidDate(date) ? date : props.value
     }
 
     return props.value
@@ -58,7 +61,7 @@ export function ContextField(props) {
         title={props.annotation.context}
         onClick={() => setEditorStatus(true)}
       >
-        {normalizeValue()}
+        {formatValue()}
       </div>
 
       <ContextInlineEdit
@@ -70,7 +73,10 @@ export function ContextField(props) {
         <>
           <Body>
             {context.current.data_type === 'Date' ? (
-              <DatePicker onChange={setFieldValue} selectedDate={getDate()} />
+              <DatePicker
+                onChange={value => setFieldValue(formatDate(value))}
+                selectedDate={getDate()}
+              />
             ) : (
               <TextInput
                 context={context.current}

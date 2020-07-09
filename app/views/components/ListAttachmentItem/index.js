@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import fecha from 'fecha'
 
+import { IconButton } from '@material-ui/core'
+
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import IconAttachment from '../SvgIcons/Attachment/IconAttachment'
@@ -23,7 +25,7 @@ export function ListAttachmentItem(props) {
         </Title>
 
         <DateTime>
-          Uploaded in&nbsp;
+          Uploaded &nbsp;
           {fecha.format(
             new Date(props.attachment.created_at),
             'MMM DD, h:mm A'
@@ -31,9 +33,13 @@ export function ListAttachmentItem(props) {
         </DateTime>
       </div>
 
-      {props.isRemovable && (
-        <DeleteIcon onClick={() => props.onDelete(props.attachment)} />
-      )}
+      <IconButton
+        disabled={!props.isRemovable}
+        size="small"
+        onClick={() => props.onDelete(props.attachment)}
+      >
+        {props.isRemovable && <DeleteIcon />}
+      </IconButton>
     </Item>
   )
 }

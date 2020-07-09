@@ -8,8 +8,11 @@ import {
   makeStyles
 } from '@material-ui/core'
 
+import { mdiLightningBolt } from '@mdi/js'
+
 import AddToFlowButton from 'components/AddToFlowButton'
-import IconThunderbolt from 'components/SvgIcons/Thunderbolt/ThunderboltIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { Section } from '../components/Section'
 import List from './List/List'
@@ -58,7 +61,7 @@ function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
           buttonRenderer={buttonProps => (
             <Tooltip title="Add to Flow">
               <Button className={classes.button} {...buttonProps}>
-                <IconThunderbolt />+
+                <SvgIcon path={mdiLightningBolt} size={muiIconSizes.small} />+
               </Button>
             </Tooltip>
           )}

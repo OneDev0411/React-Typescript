@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import Message from '../Util/message'
 import Mention from '../Util/mention'
 import Socket from '../../../../../services/socket/chat'
@@ -31,7 +32,7 @@ class ComposeMessage extends React.Component {
       .subscribe(() => this.sendMessage())
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.draft &&
       this.props.draft !== nextProps.draft &&

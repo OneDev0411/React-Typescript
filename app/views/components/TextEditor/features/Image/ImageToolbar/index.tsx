@@ -1,5 +1,6 @@
 import React from 'react'
 import { ContentBlock, EditorState } from 'draft-js'
+import { mdiTrashCanOutline } from '@mdi/js'
 
 import {
   Box,
@@ -12,12 +13,12 @@ import {
 } from '@material-ui/core'
 
 import { ClassesProps } from 'utils/ts-utils'
-import IconDelete from 'components/SvgIcons/Delete/IconDelete'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { BlockAlignmentButtons } from './AlignmentButtons'
 import { ImageSizeEditor } from './ImageSizeEditor'
 import { removeBlock } from '../../../modifiers/remove-block'
-import { useToolbarIconClass } from '../../../hooks/use-toolbar-icon-class'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -37,8 +38,6 @@ interface Props {
 
 export function ImageToolbar(props: Props & ClassesProps<typeof styles>) {
   const classes = useStyles(props)
-
-  const iconClassName = useToolbarIconClass()
 
   const remove = () =>
     props.block &&
@@ -60,7 +59,7 @@ export function ImageToolbar(props: Props & ClassesProps<typeof styles>) {
       <Divider orientation="vertical" className={classes.divider} />
       <Tooltip title="Remove Image">
         <IconButton size="small" edge="start" onClick={remove}>
-          <IconDelete className={iconClassName} />
+          <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
         </IconButton>
       </Tooltip>
     </Box>

@@ -24,7 +24,9 @@ export function GeneralInfo(props) {
         >
           {task.title}
         </Title>
-        {description && <Description>{description}</Description>}
+        {description && (
+          <Description dangerouslySetInnerHTML={{ __html: description }} />
+        )}
       </Flex>
     </Flex>
   )

@@ -8,6 +8,10 @@ import { flow } from 'lodash'
 
 import { IAppState } from 'reducers/index'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import {
+  GOOGLE_CREDENTIAL,
+  MICROSOFT_CREDENTIAL
+} from 'constants/oauth-accounts'
 
 import { EmailFormValues } from '../types'
 import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/validate-recipient'
@@ -35,9 +39,10 @@ export function useEmailFormValidator() {
         }
       }
 
-      const invalidAccountMsg = (type: string) => (
+      const invalidAccountMsg = (type: IOAuthAccountTypes) => (
         <>
-          Selected {type} account is removed or no longer connected.{' '}
+          Selected {type === GOOGLE_CREDENTIAL ? 'Google' : 'Outlook'} account
+          is removed or no longer connected.{' '}
           <Link
             component={RouterLink}
             target="_blank"
@@ -53,17 +58,11 @@ export function useEmailFormValidator() {
         allConnectedAccounts.some(account => account.id === accountId)
 
       if (
-        values.microsoft_credential &&
-        !accountExists(values.microsoft_credential)
+        (values.from.type === MICROSOFT_CREDENTIAL ||
+          values.from.type === GOOGLE_CREDENTIAL) &&
+        !accountExists(values.from.id)
       ) {
-        errors.microsoft_credential = invalidAccountMsg('Outlook')
-      }
-
-      if (
-        values.google_credential &&
-        !accountExists(values.google_credential)
-      ) {
-        errors.google_credential = invalidAccountMsg('Google')
+        errors.from = invalidAccountMsg(values.from.type)
       }
 
       return errors

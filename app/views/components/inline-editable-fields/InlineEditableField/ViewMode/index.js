@@ -3,11 +3,15 @@ import PropTypes from 'prop-types'
 import { Button, ButtonGroup } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 
-import { noop } from 'utils/helpers'
+import {
+  mdiPlusCircleOutline,
+  mdiPencilOutline,
+  mdiTrashCanOutline
+} from '@mdi/js'
 
-import EditIcon from 'components/SvgIcons/Edit/EditIcon'
-import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
-import AddIcon from 'components/SvgIcons/CircleAdd/CircleAddIcon'
+import { noop } from 'utils/helpers'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import {
   Label,
@@ -70,19 +74,19 @@ export function ViewMode(props) {
         >
           {props.showDelete && (
             <Button onClick={props.handleDelete} className={classes.button}>
-              <TrashIcon />
+              <SvgIcon size={muiIconSizes.small} path={mdiTrashCanOutline} />
               Delete
             </Button>
           )}
           {props.showEdit && (
             <Button onClick={toggleMode} className={classes.button}>
-              <EditIcon />
+              <SvgIcon size={muiIconSizes.small} path={mdiPencilOutline} />
               Edit
             </Button>
           )}
           {props.showAdd && (
             <Button onClick={props.handleAddNew} className={classes.button}>
-              <AddIcon />
+              <SvgIcon size={muiIconSizes.small} path={mdiPlusCircleOutline} />
               Add
             </Button>
           )}

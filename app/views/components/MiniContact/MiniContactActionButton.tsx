@@ -1,15 +1,27 @@
 import React from 'react'
+import { mdiCalendarOutline } from '@mdi/js'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import TextIconButton from 'components/Button/TextIconButton'
 import ActionButton from 'components/Button/ActionButton'
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import {
   ActionSettingsType,
   ActionSettingsNamesType,
   FormatterOutputType
 } from './types'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    icon: {
+      marginRight: theme.spacing(0.5)
+    }
+  }),
+  { name: 'MiniContactActionButton' }
+)
 
 interface MiniContactActionButtonType {
   isLoading: boolean
@@ -21,6 +33,8 @@ interface MiniContactActionButtonType {
 }
 
 function MiniContactActionButton(props: MiniContactActionButtonType) {
+  const classes = useStyles()
+
   if (props.isLoading) {
     return <Loading />
   }
@@ -54,7 +68,13 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
       <TextIconButton
         appearance="outline"
         // @ts-ignore
-        iconLeft={IconCalendar}
+        iconLeft={() => (
+          <SvgIcon
+            path={mdiCalendarOutline}
+            size={muiIconSizes.small}
+            className={classes.icon}
+          />
+        )}
         onClick={() => props.setActionSettings(actionSettings)}
         size="small"
         text="Add Event"

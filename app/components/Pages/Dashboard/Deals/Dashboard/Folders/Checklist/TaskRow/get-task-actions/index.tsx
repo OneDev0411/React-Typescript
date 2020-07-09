@@ -52,10 +52,18 @@ export function getTaskActions({
   task.form && !envelope && !file && actions.push(VIEW_FORM)
   task.form && !task.submission && !file && actions.push(DOCUSIGN_FORM)
 
-  file && !task.form && !envelope && actions.push(DOCUSIGN_FILE)
-  file && !task.form && !envelope && actions.push(EMAIL_FILE)
-  file && !task.form && !envelope && actions.push(VIEW_FILE)
-  file && file.mime === 'application/pdf' && actions.push(SPLIT_PDF)
+  const isPdf = file && file.mime === 'application/pdf'
+
+  isPdf &&
+    !envelope &&
+    !actions.includes(DOCUSIGN_FORM) &&
+    actions.push(DOCUSIGN_FILE)
+  isPdf && actions.push(SPLIT_PDF)
+  file && !actions.includes(EMAIL_ENVELOPE) && actions.push(EMAIL_FILE)
+  file &&
+    !actions.includes(VIEW_ENVELOPE) &&
+    !actions.includes(VIEW_FORM) &&
+    actions.push(VIEW_FILE)
   actions.push(UPLOAD)
 
   actions.push(SHOW_COMMENTS)
