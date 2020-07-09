@@ -74,8 +74,6 @@ import {
   PrimaryAction
 } from './styled'
 
-type SignatureType = 'Form' | 'Envelope' | 'File' | null
-
 interface Props {
   deal: IDeal
   task: IDealTask
@@ -95,7 +93,6 @@ interface State {
   isPdfSplitterOpen: boolean
   isTasksDrawerOpen: boolean
   isComposeEmailOpen: boolean
-  signatureType: SignatureType
   multipleItemsSelection: {
     items: IDealFile[]
     title: string
@@ -126,7 +123,6 @@ class ActionsButton extends React.Component<
     this.state = {
       isMenuOpen: false,
       isSignatureFormOpen: false,
-      signatureType: null,
       isPdfSplitterOpen: false,
       isTasksDrawerOpen: false,
       isComposeEmailOpen: false,
