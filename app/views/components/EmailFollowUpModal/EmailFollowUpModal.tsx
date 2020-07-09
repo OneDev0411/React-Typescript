@@ -207,12 +207,6 @@ function getCrmTask(email: FollowUpEmail, dueDate: Date, user: IUser) {
         contact,
         association_type: 'contact'
       })) || []
-    const threadMessage = email.thread?.messages?.find(
-      ({ id }) => id === email.id
-    )
-    const emailAssociation =
-      threadMessage &&
-      convertEmailThreadMessageToEmailAssociation(threadMessage)
     const title = `Follow up with ${email.to[0]}`
     const description = `This is a follow up reminder ${
       owner.display_name
@@ -223,15 +217,7 @@ function getCrmTask(email: FollowUpEmail, dueDate: Date, user: IUser) {
 
     const values = initialValueGenerator(
       owner,
-      normalizeAssociations(
-        [
-          ...contactAssociations,
-          emailAssociation && {
-            association_type: 'email',
-            email: emailAssociation
-          }
-        ].filter(Boolean)
-      ),
+      normalizeAssociations(contactAssociations),
       dueDate,
       undefined,
       title,
@@ -239,23 +225,5 @@ function getCrmTask(email: FollowUpEmail, dueDate: Date, user: IUser) {
     )
 
     return values
-
-    function convertEmailThreadMessageToEmailAssociation(
-      threadMessage: IEmailThreadMessage
-    ): {
-      id: UUID
-      subject: string
-      text: string
-    } {
-      if (threadMessage.type === 'email') {
-        return threadMessage
-      }
-
-      return {
-        ...threadMessage,
-        subject: threadMessage.subject || '(No Subject)',
-        text: threadMessage.text_body || '(No Content)'
-      }
-    }
   }
 }

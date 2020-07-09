@@ -11,19 +11,13 @@ interface Props {
   messages: IEmailThreadMessage[]
   subject: string
   onClose?: ModalProps['onClose']
-  hideBottomButtons?: boolean
 }
 
 /**
  * A component to show an email thread, which is basically a title on top and
  * a list of email items.
  */
-export function EmailThread({
-  messages,
-  subject,
-  onClose,
-  hideBottomButtons
-}: Props) {
+export function EmailThread({ messages, subject, onClose }: Props) {
   const emails = useMemo(
     () => messages.map(normalizeThreadMessageToThreadEmail),
     [messages]
@@ -51,7 +45,6 @@ export function EmailThread({
               onClose({}, 'escapeKeyDown')
             }
           }}
-          hideBottomButtons={hideBottomButtons}
         />
       </Box>
     </>

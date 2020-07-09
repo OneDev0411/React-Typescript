@@ -15,15 +15,9 @@ interface Props {
    * Callback to be called when an email in the thread is replied/forwarded
    */
   onEmailSent?: (email: IEmailCampaign) => void
-  hideBottomButtons?: boolean
 }
 
-export function EmailThreadEmails({
-  emails,
-  style = {},
-  onEmailSent,
-  hideBottomButtons
-}: Props) {
+export function EmailThreadEmails({ emails, style = {}, onEmailSent }: Props) {
   const [showAll, setShowAll] = useState(false)
 
   const [openedThreads, { set: setOpen }] = useMap()
@@ -57,7 +51,7 @@ export function EmailThreadEmails({
             <EmailThreadItem
               email={email}
               onToggleCollapsed={onToggleCollapsed}
-              showBottomButtons={!hideBottomButtons && last}
+              showBottomButtons={last}
               collapsed={collapsed}
               onEmailSent={onEmailSent}
             />

@@ -29,7 +29,6 @@ export function EmailAssociationController({ email, contact, onClose }: Props) {
         open
         onClose={onClose}
         threadKey={email.thread_key}
-        hideBottomButtons
       />
     )
   }
