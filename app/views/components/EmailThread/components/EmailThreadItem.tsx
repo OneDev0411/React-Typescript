@@ -19,7 +19,7 @@ import { mdiReplyAllOutline, mdiReplyOutline } from '@mdi/js'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { forwardOutlined } from 'components/SvgIcons/icons'
 import { Iframe } from 'components/Iframe'
-import EmailFollowUpModal from 'components/EmailFollowUpModal'
+// import EmailFollowUpModal from 'components/EmailFollowUpModal'
 
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
@@ -98,7 +98,7 @@ export function EmailThreadItem({
   const [isResponseOpen, setIsResponseOpen] = useState(false)
   const [trimQuotedContent, toggleTrimQuotedContent] = useBoolean(true)
   const [responseType, setResponseType] = useState<EmailResponseType>('reply')
-  const [followUpModalIsOpen, setFollowUpModalIsOpen] = useState(false)
+  // const [followUpModalIsOpen, setFollowUpModalIsOpen] = useState(false)
 
   const openResponse = (type: EmailResponseType) => {
     setIsResponseOpen(true)
@@ -251,7 +251,7 @@ export function EmailThreadItem({
                   Forward
                 </Button>
 
-                <Button
+                {/* <Button
                   className={classes.actionButton}
                   onClick={() => setFollowUpModalIsOpen(true)}
                   variant="contained"
@@ -263,7 +263,7 @@ export function EmailThreadItem({
                   email={email}
                   isOpen={followUpModalIsOpen}
                   onClose={() => setFollowUpModalIsOpen(false)}
-                />
+                /> */}
               </Box>
             )}
             {isResponseOpen && (
