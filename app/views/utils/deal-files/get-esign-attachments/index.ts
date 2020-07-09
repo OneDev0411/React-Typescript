@@ -3,7 +3,15 @@ export function getEnvelopeEsignAttachments(
   envelope: IDealEnvelope
 ): IDealFile[] {
   return (envelope.documents || [])
-    .filter(document => document.task === task.id)
+    .filter(document => {
+      if (document.task === task.id) {
+        return true
+      }
+
+      return (task.room?.attachments || []).some(attachment => {
+        return attachment.id === document.file
+      })
+    })
     .map(document => ({
       ...document.pdf,
       name: `${envelope.title}: ${document.pdf.name}`,
