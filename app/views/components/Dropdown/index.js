@@ -179,4 +179,4 @@ export const Dropdown = ({
   />
 )
 
-export { Icon, Button } from './styles'
+export { Button } from './styles'
