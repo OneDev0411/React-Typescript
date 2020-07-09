@@ -26,12 +26,14 @@ const roundToMultipleFive = n => {
  */
 export const initialValueGenerator = (
   owner: IUser,
-  associations: Array<ICRMTask> = [],
+  associations: any[],
   dueDate: Date = new Date(),
-  endDate?: Date
+  endDate?: Date,
+  title: string = '',
+  text: string = ''
 ) => {
   const reminder = REMINDER_DROPDOWN_OPTIONS[3] // 15 minutes before
-  const description = EditorState.createWithContent(stateFromHTML(''))
+  const description = EditorState.createWithContent(stateFromHTML(text))
 
   dueDate.setHours(
     dueDate.getHours(),
@@ -52,6 +54,7 @@ export const initialValueGenerator = (
     all_day: false,
     allDay: false,
     reminder,
-    task_type: { title: 'Call', value: 'Call' }
+    task_type: { title: 'Call', value: 'Call' },
+    title
   }
 }

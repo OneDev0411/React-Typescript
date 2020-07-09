@@ -8,17 +8,13 @@ const Container = styled.div`
   border-radius: 3px;
   border: solid 1px ${borderColor};
 
-  /* &:hover {
+  &:hover {
     cursor: pointer;
-    background-color: ${grey.A100};
 
     .subject {
       color: ${primary};
     }
-    .subject__icon {
-      fill: ${primary};
-    }
-  } */
+  }
 
   .cover {
     width: 6em;

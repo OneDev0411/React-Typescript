@@ -7,6 +7,7 @@ import { IAppState } from 'reducers'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
+import { toEntityAssociation } from 'utils/association-utils'
 
 import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
 import { getFromData } from './helpers/get-from-data'
@@ -90,7 +91,15 @@ export function SingleEmailComposeForm({
 
     return emailId
       ? updateEmailCampaign(emailId, emailData)
-      : createEmailCampaign(emailData)
+      : createEmailCampaign(emailData, {
+          associations: [
+            'email_campaign_recipient.contact',
+            'email_campaign_email.email',
+            ...['emails', 'template', 'from', 'recipients'].map(
+              toEntityAssociation('email_campaign')
+            )
+          ]
+        })
   }
 
   const getExpressionsContext = useCallback(
