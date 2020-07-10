@@ -1,13 +1,73 @@
-// MobileSplashViewer.js
 import React from 'react'
-import S from 'shorti'
-
-import ActionButton from 'views/components/Button/ActionButton'
-import { primary } from 'views/utils/colors'
+import { Button } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
+import classNames from 'classnames'
 
 import config from '../../../config/public'
 
+const useStyles = makeStyles(
+  theme => ({
+    absolute: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      height: '100%',
+      width: '100%'
+    },
+    main: {
+      zIndex: 1000,
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+      backgroundImage: 'url("/static/images/mobile/mask@3x.jpg")',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover'
+    },
+    shadow: {
+      background: '#263445',
+      opacity: 0.7
+    },
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      textAlign: 'center',
+      justifyContent: 'space-between'
+    },
+    contents: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      textAlign: 'center',
+      flex: '1 1 auto',
+      height: 0,
+      maxHeight: 500,
+      overflow: 'auto',
+      justifyContent: 'space-between'
+    },
+    logoWrapper: {
+      paddingTop: 50,
+      paddingBottom: 30
+    },
+    logo: {
+      height: theme.spacing(7.5)
+    },
+    text: {
+      fontSize: 18
+    },
+    footer: {
+      paddingTop: 20,
+      paddingBottom: 30
+    },
+    rechat: {
+      fontWeight: 600
+    }
+  }),
+  { name: 'Mobile' }
+)
+
 export default function Mobile({ location }) {
+  const classes = useStyles()
+
   /**
    * Try to open the external app using URL scheme
    * @param urlNotFoundApp urlNotFoundApp where should go if app not found (if exists)
@@ -99,60 +159,62 @@ export default function Mobile({ location }) {
   }
 
   return (
-    <div
-      style={S(
-        'absolute t-0 z-1000 l-0 w-100p h-100p bg-000 color-fff bg-url(/static/images/mobile/mask@3x.jpg) bg-center bg-cover'
-      )}
-    >
-      <div style={S('bg-263445 absolute t-0 l-0 w-100p h-100p op-.7 z-9')} />
-      <div style={S('color-fff z-10 relative text-center')}>
-        <div style={S('mt-50 mb-30')}>
-          <img style={S('h-60')} src="/static/images/logo--white.svg" alt="" />
-        </div>
-        {location && location.query.type === 'iphone' ? (
-          <div>
-            <p style={{ fontSize: '18px', padding: '2rem' }}>
+    <div className={classNames(classes.absolute, classes.main)}>
+      <div className={classNames(classes.absolute, classes.shadow)} />
+      <div className={classNames(classes.absolute, classes.container)}>
+        <div className={classes.contents}>
+          <div className={classes.logoWrapper}>
+            <img
+              className={classes.logo}
+              src="/static/images/logo--white.svg"
+              alt="Logo"
+            />
+          </div>
+          {location && location.query.type === 'iphone' ? (
+            <>
+              <p className={classes.text}>
+                Our mobile web version is temporarily unavailable. Please use
+                your desktop browser to access Rechat.com or use the mobile iOS
+                App.
+              </p>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => {
+                  document.location = 'rechat://'
+                  loadAppByUri(config.itunes_url)
+                }}
+              >
+                Open in my Rechat App
+              </Button>
+              <br />
+              <p className={classes.text}>
+                If you don't have the app, you can get it from the App Store:
+              </p>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => {
+                  document.location = config.itunes_url
+                }}
+              >
+                Install the App
+              </Button>
+            </>
+          ) : (
+            <div className={classes.text}>
               Our mobile web version is temporarily unavailable. Please use your
-              desktop browser to access Rechat.com or use the mobile iOS App.
-            </p>
-            <ActionButton
-              style={{
-                backgroundColor: primary
-              }}
-              onClick={() => {
-                document.location = 'rechat://'
-                loadAppByUri(config.itunes_url)
-              }}
-            >
-              Open in my Rechat App
-            </ActionButton>
-            <p style={{ fontSize: '18px', padding: '2rem' }}>
-              If you don't have the app, you can get it from the App Store:
-            </p>
-            <ActionButton
-              style={{
-                backgroundColor: primary
-              }}
-              onClick={() => {
-                document.location = config.itunes_url
-              }}
-            >
-              Install the App
-            </ActionButton>
-          </div>
-        ) : (
-          <div style={{ fontSize: '18px', padding: '2rem' }}>
-            Our mobile web version is temporarily unavailable. Please use your
-            desktop browser to access Rechat.com.
-          </div>
-        )}
-      </div>
-      <div style={S('text-center color-fff absolute w-100p b-30 z-11')}>
-        Powered by&nbsp;
-        <span style={S('fw-600')}>
-          Rechat
-          <sup>TM</sup>
-        </span>
+              desktop browser to access Rechat.com.
+            </div>
+          )}
+        </div>
+        <div className={classes.footer}>
+          Powered by&nbsp;
+          <span className={classes.rechat}>
+            Rechat
+            <sup>TM</sup>
+          </span>
+        </div>
       </div>
     </div>
   )
