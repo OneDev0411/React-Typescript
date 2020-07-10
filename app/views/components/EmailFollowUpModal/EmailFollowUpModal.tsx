@@ -126,7 +126,10 @@ export default function EmailFollowUpModal({ email, onClose, isOpen }: Props) {
           isOpen
           initialValues={crmTask}
           title="Add a follow up"
-          submitCallback={onClose}
+          submitCallback={() => {
+            setIsEventDrawerOpen(false)
+            onClose()
+          }}
           onClose={() => setIsEventDrawerOpen(false)}
         />
       )}
