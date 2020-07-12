@@ -1,5 +1,6 @@
 import {
   EMAIL_ENVELOPE,
+  EMAIL_FORM,
   VOID_ENVELOPE,
   REVIEW_ENVELOPE,
   VIEW_ENVELOPE,
@@ -58,8 +59,15 @@ export function getTaskActions({
     !envelope &&
     !actions.includes(DOCUSIGN_FORM) &&
     actions.push(DOCUSIGN_FILE)
+
   isPdf && actions.push(SPLIT_PDF)
+
   file && !actions.includes(EMAIL_ENVELOPE) && actions.push(EMAIL_FILE)
+
+  ![EMAIL_ENVELOPE, EMAIL_FILE].includes(EMAIL_FORM) &&
+    task.submission &&
+    actions.push(EMAIL_FORM)
+
   file &&
     !actions.includes(VIEW_ENVELOPE) &&
     !actions.includes(VIEW_FORM) &&

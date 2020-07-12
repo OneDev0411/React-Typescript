@@ -18,7 +18,7 @@ export function DigitalForm({ deal, task }: Props) {
     return null
   }
 
-  const actions: ActionButtonId[] = getFormActions()
+  const actions: ActionButtonId[] = getFormActions(task)
 
   return (
     <ItemContainer>
