@@ -200,11 +200,11 @@ class NewContactDrawer extends React.Component {
                           <Button
                             type="button"
                             color="secondary"
-                            variant="contained"
+                            variant="outlined"
                             disabled={isSubmitting}
                             onClick={() => this.onSaveAndAddAnother(formProps)}
                           >
-                            Save & Add Another
+                            Save &amp; Add Another
                           </Button>
                         </Box>
                       )}
