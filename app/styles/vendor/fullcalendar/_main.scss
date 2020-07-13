@@ -36,7 +36,7 @@
   }
 }
 
-.fc .fc-toolbar.fc-header-toolbar{
+.fc .fc-toolbar.fc-header-toolbar {
   margin-bottom: .75rem !important;
 }
 
@@ -61,7 +61,7 @@
         background: rgba(0, 0, 0, 0.05) !important;
       }
     }
-    &-active{
+    &-active {
       background-color: #0945EB !important;
       border-color: #0945EB !important;
       &, &:hover {
@@ -103,22 +103,26 @@
   }
 }
 
-.fc-daygrid-event-harness{
+.fc-daygrid-event-harness {
   margin: 1px 4px 0 !important;
 }
 
 .fc {
-  &-event{
+  &-event {
     cursor: pointer;
     &, &:hover {
       color: #000;
     }
-    &-time{
+    &-time {
       color: rgba(#000, .5);
     }
   }
 }
 
+.fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion {
+  font-size: .85rem;
+  text-transform: uppercase;
+}
 
 
 
