@@ -5,6 +5,12 @@ import {
 } from 'views/utils/deal-files/get-esign-attachments'
 
 import {
+  getFormEmailAttachments,
+  getEnvelopeEmailAttachments,
+  getFileEmailAttachments
+} from 'views/utils/deal-files/get-email-attachments'
+
+import {
   EDIT_FORM,
   SHOW_COMMENTS,
   DOCUSIGN_FORM,
@@ -31,7 +37,7 @@ import {
   SPLIT_PDF
 } from '../action-buttons'
 
-type DocusignType = 'Form' | 'Envelope' | 'File'
+type ActionType = 'Form' | 'Envelope' | 'File'
 
 export const actionsDefaultProperties = {
   [EDIT_FORM]: {
@@ -64,15 +70,15 @@ export const actionsDefaultProperties = {
     type: 'resend-envelope'
   },
   [EMAIL_ENVELOPE]: {
-    label: getEmailLabel,
+    label: getEmailLabel.bind(null, 'ENVELOPE'),
     type: 'email-envelope'
   },
   [EMAIL_FILE]: {
-    label: getEmailLabel,
+    label: getEmailLabel.bind(null, 'File'),
     type: 'email-file'
   },
   [EMAIL_FORM]: {
-    label: getEmailLabel,
+    label: getEmailLabel.bind(null, 'Form'),
     type: 'email-form'
   },
   [UPLOAD]: {
@@ -154,7 +160,7 @@ export const actionsDefaultProperties = {
 }
 
 function getDocusignLabel(
-  type: DocusignType,
+  type: ActionType,
   {
     state,
     task,
@@ -197,14 +203,48 @@ function getDocusignLabel(
   return exists ? 'Remove Docusign' : 'Add to Docusign'
 }
 
-function getEmailLabel({ state, emailAttachments }) {
+function getEmailLabel(
+  type: ActionType,
+  {
+    state,
+    task,
+    file,
+    envelope
+  }: {
+    state: {
+      actions: string[]
+      attachments: IDealFile[]
+    }
+    task: IDealTask
+    file: IFile
+    envelope: IDealEnvelope
+  }
+) {
   if (state.actions.length === 0) {
     return 'Email'
   }
 
-  return state.attachments.some(attachment =>
-    emailAttachments.some(doc => doc.id === attachment.id)
-  )
-    ? 'Remove from Email'
-    : 'Add to Email'
+  let attachments: IDealEmailFile[] = []
+
+  switch (type) {
+    case 'Form':
+      attachments = getFormEmailAttachments(task)
+      break
+
+    case 'Envelope':
+      attachments = getEnvelopeEmailAttachments(task, envelope)
+      break
+
+    case 'File':
+      attachments = getFileEmailAttachments(task, file)
+      break
+  }
+
+  const exists = state.attachments.some(attachment => {
+    return attachments.some(item =>
+      attachment.id ? item.id === attachment.id : item.url === attachment.url
+    )
+  })
+
+  return exists ? 'Remove from Email' : 'Add to Email'
 }
