@@ -64,7 +64,8 @@ export function getTaskActions({
 
   file && !actions.includes(EMAIL_ENVELOPE) && actions.push(EMAIL_FILE)
 
-  ![EMAIL_ENVELOPE, EMAIL_FILE].includes(EMAIL_FORM) &&
+  !actions.includes(EMAIL_ENVELOPE) &&
+    !actions.includes(EMAIL_FILE) &&
     task.submission &&
     actions.push(EMAIL_FORM)
 
