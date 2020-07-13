@@ -37,14 +37,24 @@ export function FutureEventDoneConfirmation() {
         const now = new Date()
         const nowArgs = [now.getFullYear(), now.getMonth(), now.getDate()]
 
-        const newDueDate = dueDateField.input.value.setFullYear(...nowArgs)
+        const newDueDate = new Date(
+          dueDateField.input.value.setFullYear(...nowArgs)
+        )
 
-        dueDateField.input.onChange(new Date(newDueDate))
+        dueDateField.input.onChange(
+          new Date(newDueDate.setHours(now.getHours(), now.getMinutes(), 0))
+        )
 
         if (endDateField.input.value) {
-          const newEndDate = endDateField.input.value.setFullYear(...nowArgs)
+          const newEndDate = new Date(
+            endDateField.input.value.setFullYear(...nowArgs)
+          )
 
-          endDateField.input.onChange(new Date(newEndDate))
+          endDateField.input.onChange(
+            new Date(
+              newEndDate.setHours(now.getHours() + 1, now.getMinutes(), 0)
+            )
+          )
         }
       },
       onCancel: () => {
