@@ -12,11 +12,14 @@
       &, &:hover, &:disabled, &:active {
         color: rgba(#000, 0.65) !important;
       }
+      &:hover {
+        z-index: 0 !important;
+      }
       &-active{
         background-color: transparent !important;
         border-color: #000 !important;
-        z-index: 2 !important;
         &, &:hover {
+          z-index: 1 !important;
           border-color: #000 !important;
           color: #000 !important;
         }
