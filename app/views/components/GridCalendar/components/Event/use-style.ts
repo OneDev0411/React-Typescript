@@ -1,6 +1,6 @@
 import { makeStyles, Theme } from '@material-ui/core'
 
-export const useStyles = makeStyles(
+export const useCommonStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       padding: theme.spacing(0.25, 0.5),
@@ -12,7 +12,11 @@ export const useStyles = makeStyles(
     },
     general: {
       background: 'trasnparent',
-      color: theme.palette.tertiary.dark
+      color: theme.palette.tertiary.dark,
+      '& span[data-for="date"]': {
+        marginRight: theme.spacing(0.5),
+        color: theme.palette.grey[500]
+      }
     },
     multiDay: {
       background: '#f2f2f2',
@@ -29,5 +33,40 @@ export const useStyles = makeStyles(
   }),
   {
     name: 'GridCalendarEvent'
+  }
+)
+export const usePopoverStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      minWidth: '415px'
+    },
+    body: {
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      padding: theme.spacing(3, 2.5)
+    },
+    icon: {
+      width: theme.spacing(5),
+      height: theme.spacing(5),
+      background: theme.palette.grey[200],
+      textAlign: 'center',
+      lineHeight: `${theme.spacing(6.5)}px`,
+      borderRadius: '100%'
+    },
+    details: {
+      paddingLeft: theme.spacing(1)
+    },
+    eventTitle: {
+      display: 'block',
+      ...theme.typography.body1
+    },
+    eventDate: {
+      ...theme.typography.body2,
+      color: theme.palette.grey[600]
+    }
+  }),
+  {
+    name: 'GridCalendarPopoverEvent'
   }
 )

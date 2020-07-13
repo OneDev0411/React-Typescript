@@ -278,9 +278,8 @@ export const GridCalendarPresentation = ({
    * trigger on clicking on an event
    */
   const handleClickEvent = ({ event }: { event: EventApi }) => {
-    const currentEvent: ICalendarEvent = event.extendedProps?.rowEvent
-
-    setSelectedEvent(currentEvent)
+    // const currentEvent: ICalendarEvent = event.extendedProps?.rowEvent
+    // setSelectedEvent(currentEvent)
   }
 
   /**
