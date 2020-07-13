@@ -7,6 +7,7 @@ export const Tab = withStyles(theme => ({
     color: theme.palette.common.black,
     ...theme.typography.body1,
     zIndex: 1,
+    whiteSpace: 'nowrap',
     '&:hover': {
       color: theme.palette.primary.main
     }
