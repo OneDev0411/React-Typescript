@@ -11,6 +11,7 @@ import {
   IconButton
 } from '@material-ui/core'
 import classNames from 'classnames'
+import { mdiTrashCanOutline } from '@mdi/js'
 
 import { IAppState } from 'reducers'
 import {
@@ -28,7 +29,7 @@ import { TableColumn } from 'components/Grid/Table/types'
 import Tooltip from 'components/tooltip'
 import LoadingContainer from 'components/LoadingContainer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles((theme: Theme) => ({
   name: {
@@ -178,15 +179,13 @@ function EmailTemplatesList({
 
                   modal.setConfirmationModal({
                     message: 'Delete Email Template!',
-                    description: `Are you sure about deleting "${
-                      row.name
-                    }" template?`,
+                    description: `Are you sure about deleting "${row.name}" template?`,
                     confirmLabel: 'Yes, I am sure',
                     onConfirm: () => handleDelete(row.id)
                   })
                 }}
               >
-                <TrashIcon />
+                <SvgIcon path={mdiTrashCanOutline} />
               </IconButton>
             </Tooltip>
           </div>
@@ -231,7 +230,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EmailTemplatesList)
+export default connect(mapStateToProps, mapDispatchToProps)(EmailTemplatesList)
