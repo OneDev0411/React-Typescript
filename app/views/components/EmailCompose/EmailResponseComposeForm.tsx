@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import { useSelector } from 'react-redux'
-import { flow } from 'lodash'
+import { flow, uniq } from 'lodash'
 import { shallowEqual } from 'recompose'
 
 import { OAuthProvider } from 'constants/contacts'
@@ -11,6 +11,8 @@ import { IAppState } from 'reducers'
 
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
+import { parseEmailRecipient } from 'components/EmailRecipientsChipsInput/helpers/parse-email-recipient'
+
 import {
   getReplyAllRecipients,
   getReplyRecipients
@@ -18,6 +20,7 @@ import {
 import { getReplyHtml } from './helpers/get-reply-html'
 import { getForwardHtml } from './helpers/get-forward-html'
 import { getReplySubject } from './helpers/get-reply-subject'
+import { hasAccountSendPermission } from './helpers/has-account-send-permission'
 import { EmailResponseType, EmailThreadEmail } from '../EmailThread/types'
 import { encodeContentIds } from '../EmailThread/helpers/encode-content-ids'
 import { SingleEmailComposeForm } from './SingleEmailComposeForm'
@@ -71,8 +74,26 @@ export function EmailResponseComposeForm({
         ? getReplyAllRecipients(email, ownerAccount ? ownerAccount.email : '')
         : getReplyRecipients(email)
 
+    const orderedEmailRecipients = uniq(
+      [
+        ...email.to,
+        ...email.cc,
+        ...email.bcc,
+        email.from,
+        ...allConnectedAccounts.map(({ email }) => email)
+      ].map(email => parseEmailRecipient(email).emailAddress)
+    )
+    const orderedSenderAccounts = allConnectedAccounts
+      .filter(hasAccountSendPermission)
+      .sort(
+        (a, b) =>
+          orderedEmailRecipients.indexOf(a.email) -
+          orderedEmailRecipients.indexOf(b.email)
+      )
+    const fromAccount = orderedSenderAccounts[0]
+
     return {
-      from: user,
+      from: fromAccount || user,
       to,
       cc,
       bcc: [],
@@ -153,12 +174,6 @@ export function EmailResponseComposeForm({
 
   const shouldRender = useRerenderOnChange(responseType)
 
-  // This filter is added in response to Saeed's request. Right now
-  // we have some issues in replying with an account other than
-  // the one by which the thread is started. We should remove
-  // this filtering when this issue is resolved.
-  const forcedSender = email.googleId || email.microsoftId
-
   return (
     shouldRender && (
       <SingleEmailComposeForm
@@ -168,7 +183,6 @@ export function EmailResponseComposeForm({
         initialValues={initialValue}
         getEmail={getEmail}
         headers={getHeaders}
-        filterAccounts={account => !forcedSender || account.id === forcedSender}
         hasSignatureByDefault={false}
       />
     )
