@@ -2,9 +2,11 @@ import Flex from 'styled-flex-component'
 import { Field } from 'react-final-form'
 
 import * as React from 'react'
+import { mdiTrashCanOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import IconButton from 'components/Button/IconButton'
-import DeleteOutlineIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import { TextInput } from 'components/Forms/TextInput'
 
 import { PermissionCell } from './PermissionCell'
@@ -33,7 +35,7 @@ export function RoleRow({ fieldName, onRemove }: Props) {
             component={TextInput as any}
           />
           <IconButton type="button" inverse onClick={onRemove}>
-            <DeleteOutlineIcon />
+            <SvgIcon path={mdiTrashCanOutline} />
           </IconButton>
         </Flex>
       </td>
