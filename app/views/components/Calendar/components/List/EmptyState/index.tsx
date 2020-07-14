@@ -1,7 +1,9 @@
 import React from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
-import IconTaskCritical from 'components/SvgIcons/TaskCritical/IconTaskCritical'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { importantDateIcon } from 'components/SvgIcons/icons'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,10 +19,8 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.grey[500]
     },
     icon: {
-      width: '40px !important',
-      height: '40px !important',
       marginBottom: theme.spacing(1),
-      fill: theme.palette.grey['500']
+      color: theme.palette.grey['500']
     }
   })
 )
@@ -30,7 +30,11 @@ export function EmptyState() {
 
   return (
     <div className={classes.container}>
-      <IconTaskCritical className={classes.icon} />
+      <SvgIcon
+        path={importantDateIcon}
+        className={classes.icon}
+        size={muiIconSizes.xlarge}
+      />
       <div className={classes.title}>No events</div>
     </div>
   )
