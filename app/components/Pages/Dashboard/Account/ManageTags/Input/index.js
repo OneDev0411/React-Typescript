@@ -1,6 +1,7 @@
 import React from 'react'
+import { mdiTagOutline } from '@mdi/js'
 
-import TagIcon from 'components/SvgIcons/Tag/TagIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import IconTextInput from 'components/Input/IconTextInput'
 
 import { TextInputPrefix, TextInputSuffix } from './styled'
@@ -8,7 +9,7 @@ import { TextInputPrefix, TextInputSuffix } from './styled'
 export class Input extends React.Component {
   renderPrefixElement = () => (
     <TextInputPrefix>
-      <TagIcon />
+      <SvgIcon path={mdiTagOutline} />
     </TextInputPrefix>
   )
 
