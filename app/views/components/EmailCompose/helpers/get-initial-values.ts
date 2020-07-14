@@ -26,7 +26,10 @@ export const getInitialValues = ({
     allAccounts.length > 0 &&
     [GOOGLE_CREDENTIAL, MICROSOFT_CREDENTIAL].includes(from.type)
   ) {
-    from = getDefaultSelectedAccount(allAccounts, preferredAccountId)
+    from = getDefaultSelectedAccount(
+      allAccounts,
+      preferredAccountId || (defaultValues?.from?.id ?? '')
+    )
   }
 
   return {
