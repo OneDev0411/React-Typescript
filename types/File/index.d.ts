@@ -14,3 +14,9 @@ declare interface IDealFile extends IFile {
   source: 'submission' | 'attachment' | 'envelope' | 'stash'
   internal_url?: string
 }
+
+declare interface IDealEmailFile {
+  id: UUID | null
+  name: string
+  url: string
+}

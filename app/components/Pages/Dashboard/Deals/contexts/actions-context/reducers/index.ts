@@ -20,15 +20,18 @@ export function reducer(state = initialState, action: Pick<any, any>) {
         actions: action.actions ?? state.actions,
         attachments: uniqBy(
           [...state.attachments, ...action.attachments],
-          (attachment: IDealFile) => attachment.id
+          (attachment: IDealFile) =>
+            attachment.id ? attachment.id : attachment.url
         )
       }
 
     case REMOVE_ATTACHMENT:
       return {
         ...state,
-        attachments: state.attachments.filter(
-          attachment => attachment.id !== action.attachment.id
+        attachments: state.attachments.filter(attachment =>
+          attachment.id
+            ? attachment.id !== action.attachment.id
+            : attachment.url !== action.attachment.url
         )
       }
 

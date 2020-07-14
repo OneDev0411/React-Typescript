@@ -1,24 +1,16 @@
+import { getEnvelopeAttachments } from '../get-envelope-attachments'
+
 export function getEnvelopeEsignAttachments(
   task: IDealTask,
   envelope: IDealEnvelope
 ): IDealFile[] {
-  return (envelope.documents || [])
-    .filter(document => {
-      if (document.task === task.id) {
-        return true
-      }
-
-      return (task.room?.attachments || []).some(attachment => {
-        return attachment.id === document.file
-      })
-    })
-    .map(document => ({
-      ...document.pdf,
-      name: `${envelope.title}: ${document.pdf.name}`,
-      source: 'attachment',
-      task: task.id,
-      checklist: task.checklist
-    }))
+  return getEnvelopeAttachments(task, envelope).map(document => ({
+    ...document.pdf,
+    name: `${envelope.title}: ${document.pdf.name}`,
+    source: 'attachment',
+    task: task.id,
+    checklist: task.checklist
+  }))
 }
 
 export function getFileEsignAttachments(
@@ -65,19 +57,6 @@ export function getFormEsignAttachments(task: IDealTask): IDealFile[] {
       checklist: task.checklist
     })
   }
-
-  // if (Array.isArray(task.room.attachments)) {
-  //   task.room.attachments
-  //     .filter(file => file.mime === 'application/pdf')
-  //     .forEach(file => {
-  //       attachments.push({
-  //         ...file,
-  //         source: 'attachment',
-  //         task: task.id,
-  //         checklist: task.checklist
-  //       })
-  //     })
-  // }
 
   return attachments
 }
