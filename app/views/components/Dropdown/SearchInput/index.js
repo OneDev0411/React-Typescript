@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useTheme } from '@material-ui/core/styles'
+import { mdiMagnify } from '@mdi/js'
 
-import SearchIcon from '../../SvgIcons/Search/IconSearch'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 import { grey, primary } from '../../../utils/colors'
 
 const Container = styled.div`
@@ -49,9 +51,13 @@ const Input = styled.input`
   }
 `
 
-export const SearchInput = props => (
-  <Container>
-    <SearchIcon style={{ marginLeft: '8px', fill: '#777' }} />
-    <Input {...props} />
-  </Container>
-)
+export const SearchInput = props => {
+  const theme = useTheme()
+
+  return (
+    <Container>
+      <SvgIcon path={mdiMagnify} leftMargined color={theme.palette.grey.A700} />
+      <Input {...props} />
+    </Container>
+  )
+}
