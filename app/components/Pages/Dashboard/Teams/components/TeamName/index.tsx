@@ -1,16 +1,17 @@
 import * as React from 'react'
+import { mdiPlusCircleOutline } from '@mdi/js'
 
 import { TextWithHighlights } from 'components/TextWithHighlights'
-
 import UserIcon from 'components/SvgIcons/InPerson/IconInPerson'
 
 import IconButton from 'components/Button/IconButton'
 import Tooltip from 'components/tooltip'
-import AddCircleOutlineIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { getBrandUsers } from 'utils/user-teams'
 
 import { userMatches } from '../../helpers/users-matches'
 import { TeamLink, TeamLinkWrapper, TeamUserBadge } from './styled'
-import { getBrandUsers } from 'utils/user-teams'
 
 interface Props {
   team: IBrand
@@ -54,7 +55,7 @@ export function TeamName({ team, searchTerm, onAddChild }: Props) {
           isFit
           style={{ margin: '0.3rem' }}
         >
-          <AddCircleOutlineIcon />
+          <SvgIcon path={mdiPlusCircleOutline} />
         </IconButton>
       </Tooltip>
     </TeamLinkWrapper>
