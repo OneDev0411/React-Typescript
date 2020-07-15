@@ -43,9 +43,9 @@ export function ContextField(props) {
 
   const formatValue = () => {
     if (context.current.data_type === 'Date' && props.value) {
-      const date = formatDate(props.value, props.annotation.format)
-
-      return isValidDate(date) ? date : props.value
+      return isValidDate(new Date(props.value))
+        ? formatDate(props.value, props.annotation.format)
+        : props.value
     }
 
     return props.value
