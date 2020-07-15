@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 import cn from 'classnames'
 
 import { useCommonStyles } from '../../use-style'
 import { BaseEventProps } from '../..'
 
-export const CelebrationEvent = ({
+const CelebrationEventComponent = ({
   event,
   rowEvent,
   handleShowDetails
@@ -20,3 +20,5 @@ export const CelebrationEvent = ({
     </div>
   )
 }
+
+export const CelebrationEvent = memo(CelebrationEventComponent)

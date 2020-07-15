@@ -38,13 +38,31 @@ export const useCommonStyles = makeStyles(
 export const usePopoverStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      minWidth: '415px'
+      minWidth: '415px',
+      padding: theme.spacing(2, 2.5)
     },
     body: {
       width: '100%',
       display: 'flex',
+      alignItems: 'center'
+    },
+    header: {
+      paddingBottom: theme.spacing(1.5),
+      display: 'flex',
+      flexDirection: 'row-reverse',
       alignItems: 'center',
-      padding: theme.spacing(3, 2.5)
+      '& > *': {
+        '&:first-child': {
+          marginLeft: theme.spacing(2.5)
+        },
+        '&:not(:first-child)': {
+          marginLeft: theme.spacing(2)
+        }
+      },
+      '& svg': {
+        width: theme.spacing(1.75),
+        height: theme.spacing(1.75)
+      }
     },
     icon: {
       width: theme.spacing(5),
@@ -53,6 +71,18 @@ export const usePopoverStyles = makeStyles(
       textAlign: 'center',
       lineHeight: `${theme.spacing(6.5)}px`,
       borderRadius: '100%'
+    },
+    dealIcon: {
+      background: '#f8f8ff',
+      '& svg': {
+        fill: '#0945eb'
+      }
+    },
+    celebrationIcon: {
+      background: '#FFD9EC',
+      '& svg': {
+        fill: '#FF0080'
+      }
     },
     details: {
       paddingLeft: theme.spacing(1)
