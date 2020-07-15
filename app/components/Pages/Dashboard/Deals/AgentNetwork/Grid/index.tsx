@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core'
 
 import Flex from 'styled-flex-component'
+import { mdiEmailOutline } from '@mdi/js'
 
 import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 import { putUserSetting } from 'models/user/put-user-setting'
@@ -20,7 +21,7 @@ import type { SortableColumn } from 'components/Grid/Table/types'
 
 import { RenderProps } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
-import IconEmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import { SELECTION__TOGGLE_ALL } from 'components/Grid/Table/context/constants'
 import { getNameInitials } from 'utils/helpers'
@@ -123,7 +124,7 @@ export function Grid(props: Props) {
           }
         >
           <Flex alignCenter justifyCenter>
-            <IconEmailOutline />
+            <SvgIcon path={mdiEmailOutline} />
           </Flex>
         </Tooltip>
       )

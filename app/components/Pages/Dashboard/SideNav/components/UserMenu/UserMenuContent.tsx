@@ -8,15 +8,17 @@ import {
   ListItemText,
   ListItemIcon,
   makeStyles,
-  Theme
+  Theme,
+  useTheme
 } from '@material-ui/core'
+import { mdiCogOutline } from '@mdi/js'
 
 import { getActiveBrand } from '../../../../../../utils/user-teams'
 
 import Acl from '../../../../../../views/components/Acl'
 import { ACL } from '../../../../../../constants/acl'
 import { ScrollableArea } from '../../../../../../views/components/ScrollableArea'
-import SettingsIcon from '../../../../../../views/components/SvgIcons/CogOutline/IconCogOutline'
+import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
 
 import TeamSwitcher from './TeamSwitcher'
 
@@ -49,6 +51,7 @@ export function UserMenuContent({
   showChecklists,
   onClose = () => {}
 }: Props) {
+  const theme = useTheme<Theme>()
   const classes = useStyles()
   const activeBrand = getActiveBrand(user)
 
@@ -94,7 +97,7 @@ export function UserMenuContent({
         </Acl.Admin>
         <ListItem divider button onClick={() => onClick('account')}>
           <ListItemIcon>
-            <SettingsIcon />
+            <SvgIcon path={mdiCogOutline} color={theme.palette.common.black} />
           </ListItemIcon>
           <ListItemText>Account Settings</ListItemText>
         </ListItem>

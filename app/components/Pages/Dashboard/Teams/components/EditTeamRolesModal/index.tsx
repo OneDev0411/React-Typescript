@@ -4,11 +4,13 @@ import * as React from 'react'
 
 import arrayMutators from 'final-form-arrays'
 import { FieldArray } from 'react-final-form-arrays'
+import { mdiPlus } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Modal, ModalFooter, ModalHeader } from 'components/Modal'
 
 import Button from 'components/Button/ActionButton'
-import AddIcon from 'components/SvgIcons/Add/AddIcon'
 
 import { EditTeamRolesTable, EditTeamRolesTableHeader } from './styled'
 import { RoleRow } from './components/RoleRow'
@@ -69,7 +71,7 @@ export function EditTeamRolesModal(props: Props) {
                                 })
                               }
                             >
-                              <AddIcon style={{ margin: '0 0.3rem' }} />
+                              <SvgIcon path={mdiPlus} leftMargined />
                               Add New Role
                             </Button>
                           </td>
