@@ -20,7 +20,7 @@ function getDealCostCenter(deal: IDeal): string | null {
   let brand: IBrand | null = deal.brand
 
   while (brand) {
-    if (brand.messages.mmm_cost_center) {
+    if (brand.messages?.mmm_cost_center) {
       costCenter = brand.messages.mmm_cost_center
       break
     }
