@@ -42,10 +42,10 @@ export function ContextField(props) {
   }
 
   const formatValue = () => {
-    if (context.current.data_type === 'Date' && props.value) {
-      const date = formatDate(props.value, props.annotation.format)
-
-      return isValidDate(date) ? date : props.value
+    if (context.current?.data_type === 'Date' && props.value) {
+      return isValidDate(new Date(props.value))
+        ? formatDate(props.value, props.annotation.format)
+        : props.value
     }
 
     return props.value
@@ -72,7 +72,7 @@ export function ContextField(props) {
       >
         <>
           <Body>
-            {context.current.data_type === 'Date' ? (
+            {context.current?.data_type === 'Date' ? (
               <DatePicker
                 onChange={value => setFieldValue(formatDate(value))}
                 selectedDate={getDate()}
