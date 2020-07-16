@@ -34,15 +34,12 @@ const useStyles = makeStyles(
       justifyContent: 'space-between'
     },
     contents: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      textAlign: 'center',
       flex: '1 1 auto',
-      height: 0,
       maxHeight: 500,
+      height: 0,
       overflow: 'auto',
-      justifyContent: 'space-between'
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2)
     },
     logoWrapper: {
       paddingTop: 50,
@@ -50,6 +47,9 @@ const useStyles = makeStyles(
     },
     logo: {
       height: theme.spacing(7.5)
+    },
+    item: {
+      marginBottom: theme.spacing(2)
     },
     text: {
       fontSize: 18
@@ -172,37 +172,40 @@ export default function Mobile({ location }) {
           </div>
           {location && location.query.type === 'iphone' ? (
             <>
-              <p className={classes.text}>
+              <p className={classNames(classes.item, classes.text)}>
                 Our mobile web version is temporarily unavailable. Please use
                 your desktop browser to access Rechat.com or use the mobile iOS
                 App.
               </p>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() => {
-                  document.location = 'rechat://'
-                  loadAppByUri(config.itunes_url)
-                }}
-              >
-                Open in my Rechat App
-              </Button>
-              <br />
-              <p className={classes.text}>
+              <div className={classes.item}>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={() => {
+                    document.location = 'rechat://'
+                    loadAppByUri(config.itunes_url)
+                  }}
+                >
+                  Open in my Rechat App
+                </Button>
+              </div>
+              <p className={classNames(classes.item, classes.text)}>
                 If you don't have the app, you can get it from the App Store:
               </p>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() => {
-                  document.location = config.itunes_url
-                }}
-              >
-                Install the App
-              </Button>
+              <div className={classes.item}>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={() => {
+                    document.location = config.itunes_url
+                  }}
+                >
+                  Install the App
+                </Button>
+              </div>
             </>
           ) : (
-            <div className={classes.text}>
+            <div className={classNames(classes.item, classes.text)}>
               Our mobile web version is temporarily unavailable. Please use your
               desktop browser to access Rechat.com.
             </div>

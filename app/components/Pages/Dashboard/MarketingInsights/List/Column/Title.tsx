@@ -13,7 +13,7 @@ interface Props {
   reloadList: () => void
 }
 
-function TitleColumn({ data, reloadList }) {
+function TitleColumn({ data, reloadList }: Props) {
   const isFailed: boolean = isEmailFailed(data)
   const isScheduled: boolean = isEmailScheduled(data)
   const isInProgress: boolean = isEmailInProgress(data)
