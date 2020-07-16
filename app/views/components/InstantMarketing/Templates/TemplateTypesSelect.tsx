@@ -34,7 +34,8 @@ function getValueToLabelMapping(
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      margin: theme.spacing(1, 2, 2)
+      margin: theme.spacing(1, 2, 2),
+      width: '90%'
     }
   }),
   { name: 'TemplateTypesSelect' }
