@@ -1,41 +1,54 @@
 import React from 'react'
+import {
+  mdiPlusCircleOutline,
+  mdiProgressDownload,
+  mdiMinusCircleOutline
+} from '@mdi/js'
+import { useTheme } from '@material-ui/core/styles'
 
 import Tooltip from 'components/tooltip'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { rotateRightIcon, fitToPageIcon } from 'components/SvgIcons/icons'
 
 import { Container, MenuItem } from './styled'
 
 export function Toolbar(props) {
+  const theme = useTheme()
+
   return (
     <Container>
       <MenuItem>
         <Tooltip placement="bottom" caption="Download File">
           <a target="_blank" href={props.downloadLink}>
-            <i className="fa fa-download" />
+            <SvgIcon
+              path={mdiProgressDownload}
+              color={theme.palette.common.black}
+            />
           </a>
         </Tooltip>
       </MenuItem>
 
       <MenuItem onClick={props.onZoomIn}>
         <Tooltip placement="bottom" caption="Zoom In">
-          <i className="fa fa-plus-circle" />
+          <SvgIcon path={mdiPlusCircleOutline} />
         </Tooltip>
       </MenuItem>
 
       <MenuItem onClick={props.onZoomOut}>
         <Tooltip placement="bottom" caption="Zoom Out">
-          <i className="fa fa-minus-circle" />
+          <SvgIcon path={mdiMinusCircleOutline} />
         </Tooltip>
       </MenuItem>
 
       <MenuItem>
         <Tooltip placement="bottom" caption="Fit Window">
-          <i className="fa fa-square-o" onClick={props.onFitWindow} />
+          <SvgIcon path={fitToPageIcon} onClick={props.onFitWindow} />
         </Tooltip>
       </MenuItem>
 
       <MenuItem onClick={props.onRotate}>
         <Tooltip placement="bottom" caption="Rotate Page">
-          <i className="fa fa-rotate-right" />
+          <SvgIcon path={rotateRightIcon} />
         </Tooltip>
       </MenuItem>
     </Container>
