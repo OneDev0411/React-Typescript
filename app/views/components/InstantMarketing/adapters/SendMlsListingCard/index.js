@@ -307,7 +307,7 @@ class SendMlsListingCard extends React.Component {
     const { user, disabled } = this.props
 
     if (hasMarketingAccess(user) === false) {
-      return false
+      return null
     }
 
     return (

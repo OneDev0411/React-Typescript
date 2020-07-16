@@ -11,7 +11,7 @@ import getListing from 'models/listings/listing/get-listing'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
-function StatefulUrlAdapter({ location, ...props }: WithRouterProps) {
+function StatefulUrlAdapter({ location }: WithRouterProps) {
   const [listing, setListing] = useState<Nullable<IListing>>(null)
   const [contact, setContact] = useState<Nullable<IContact>>(null)
   const dispatch = useDispatch()
@@ -83,8 +83,9 @@ function StatefulUrlAdapter({ location, ...props }: WithRouterProps) {
   if (listing) {
     return (
       <ListingFlow
-        {...props}
+        isTemplatesColumnHiddenDefault={false}
         handleTrigger={goToMarketing}
+        isTriggered
         hasExternalTrigger
         listing={listing}
         mediums={location.query.medium}
@@ -96,7 +97,7 @@ function StatefulUrlAdapter({ location, ...props }: WithRouterProps) {
   if (contact) {
     return (
       <ContactFlow
-        {...props}
+        isTemplatesColumnHiddenDefault={false}
         handleTrigger={goToMarketing}
         isBuilderOpen
         hasExternalTrigger
