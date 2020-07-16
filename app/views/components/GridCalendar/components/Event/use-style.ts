@@ -38,16 +38,10 @@ export const useCommonStyles = makeStyles(
 export const usePopoverStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      minWidth: '415px',
-      padding: theme.spacing(2, 2.5)
-    },
-    body: {
-      width: '100%',
-      display: 'flex',
-      alignItems: 'center'
+      minWidth: '415px'
     },
     header: {
-      paddingBottom: theme.spacing(1.5),
+      padding: theme.spacing(1.5),
       display: 'flex',
       flexDirection: 'row-reverse',
       alignItems: 'center',
@@ -63,6 +57,12 @@ export const usePopoverStyles = makeStyles(
         width: theme.spacing(1.75),
         height: theme.spacing(1.75)
       }
+    },
+    body: {
+      width: '100%',
+      padding: theme.spacing(2),
+      display: 'flex',
+      alignItems: 'center'
     },
     icon: {
       width: theme.spacing(5),
@@ -94,6 +94,15 @@ export const usePopoverStyles = makeStyles(
     eventDate: {
       ...theme.typography.body2,
       color: theme.palette.grey[600]
+    },
+    footer: {
+      padding: theme.spacing(1.5),
+      textAlign: 'right',
+      borderTop: '1px solid #e0e0e0',
+      direction: 'rtl',
+      '& > *:not(:last-child)': {
+        marginLeft: theme.spacing(0.5)
+      }
     }
   }),
   {

@@ -409,6 +409,7 @@ export const GridCalendarPresentation = ({
               <Event
                 event={content}
                 rowEvent={content.event.extendedProps.rowEvent}
+                onSelect={setSelectedEvent}
               />
             )
           }}

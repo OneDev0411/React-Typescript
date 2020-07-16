@@ -18,6 +18,10 @@ export interface BaseEventProps {
   handleCloseDetails?: () => void
 }
 
+interface Props extends Pick<BaseEventProps, 'event' | 'rowEvent'> {
+  onSelect(event: ICalendarEvent | null): void
+}
+
 type EventsType = {
   component({
     event,
@@ -45,8 +49,8 @@ const events: EventsType[] = [
   }
 ]
 
-export const Event = (props: Pick<BaseEventProps, 'event' | 'rowEvent'>) => {
-  const { rowEvent } = props
+export const Event = (props: Props) => {
+  const { rowEvent, onSelect } = props
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
 
   const handleShowDetails = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -66,7 +70,12 @@ export const Event = (props: Pick<BaseEventProps, 'event' | 'rowEvent'>) => {
   return (
     <>
       <eventItem.component {...props} handleShowDetails={handleShowDetails} />
-      <EventCard {...props} el={anchorEl} onClose={handleCloseDetails} />
+      <EventCard
+        {...props}
+        el={anchorEl}
+        onSelect={onSelect}
+        onClose={handleCloseDetails}
+      />
     </>
   )
 }

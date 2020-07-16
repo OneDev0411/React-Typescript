@@ -1,6 +1,6 @@
 import React, { useMemo, memo } from 'react'
 import cn from 'classnames'
-import { Popover, IconButton } from '@material-ui/core'
+import { Popover, Button, IconButton } from '@material-ui/core'
 
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { importantDatesIcons as contactIcons } from 'views/utils/important-dates-icons'
@@ -10,6 +10,7 @@ import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutli
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 
 import {
+  isCRMEvent,
   isDealEvent,
   isCelebrationEvent
 } from '../../../../helpers/normalize-events/helpers/event-checker'
@@ -21,10 +22,17 @@ import { getFormatDate } from './helper/get-format-date'
 
 interface Props extends Pick<BaseEventProps, 'event' | 'rowEvent'> {
   el: HTMLDivElement | null
-  onClose: () => void
+  onClose(): void
+  onSelect(event: ICalendarEvent | null): void
 }
 
-const EventCardComponent = ({ el, event, rowEvent, onClose }: Props) => {
+const EventCardComponent = ({
+  el,
+  event,
+  rowEvent,
+  onSelect,
+  onClose
+}: Props) => {
   const popoverClasses = usePopoverStyles()
   const open = Boolean(el)
   const id = open ? 'event-card-popover' : undefined
@@ -80,19 +88,27 @@ const EventCardComponent = ({ el, event, rowEvent, onClose }: Props) => {
           <IconButton size="small" aria-label="close" onClick={onClose}>
             <CloseIcon size="small" />
           </IconButton>
-          <IconButton
-            size="small"
-            aria-label="delete"
-            onClick={e => {
-              e.stopPropagation()
-              console.log('f')
-            }}
-          >
-            <IconDeleteOutline />
-          </IconButton>
-          <IconButton size="small" aria-label="close">
-            <EditIcon size="small" />
-          </IconButton>
+          {isCRMEvent(rowEvent) && (
+            <>
+              <IconButton
+                size="small"
+                aria-label="delete"
+                onClick={e => {
+                  e.stopPropagation()
+                  console.log('f')
+                }}
+              >
+                <IconDeleteOutline />
+              </IconButton>
+              <IconButton
+                size="small"
+                aria-label="edit"
+                onClick={() => onSelect(rowEvent)}
+              >
+                <EditIcon size="small" />
+              </IconButton>
+            </>
+          )}
         </header>
         <div className={popoverClasses.body}>
           <div
@@ -112,6 +128,24 @@ const EventCardComponent = ({ el, event, rowEvent, onClose }: Props) => {
             </span>
           </div>
         </div>
+        <footer className={popoverClasses.footer}>
+          {(isDeal || isCelebration) && (
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => onSelect(rowEvent)}
+            >
+              {isCelebration ? 'Send Card' : 'View Deal'}
+            </Button>
+          )}
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => onSelect(rowEvent)}
+          >
+            Follow Up
+          </Button>
+        </footer>
       </div>
     </Popover>
   )
