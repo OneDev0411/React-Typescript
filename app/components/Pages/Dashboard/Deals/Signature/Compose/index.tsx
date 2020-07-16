@@ -74,7 +74,7 @@ export function SignatureComposeDrawer({
     initialValues.current = {
       subject: 'Please DocuSign',
       message: '',
-      from: `${user.display_name} <${user.email}>`,
+      owner: user,
       recipients: {},
       auto_notify: true,
       attachments: getAttchments()
@@ -102,7 +102,7 @@ export function SignatureComposeDrawer({
             }}
           >
             <Drawer.Body>
-              <From />
+              <From deal={deal} />
               <Recipients deal={deal} />
               <Subject />
               <Message />

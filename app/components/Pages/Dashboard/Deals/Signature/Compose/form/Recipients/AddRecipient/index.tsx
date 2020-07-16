@@ -35,7 +35,11 @@ export function AddNewRecipient({
       renderDropdownButton={props => (
         <Button color="secondary" {...props}>
           <IconAdd
-            className={cn(iconClasses.rightMargin, iconClasses.currentColor)}
+            className={cn(
+              iconClasses.small,
+              iconClasses.rightMargin,
+              iconClasses.currentColor
+            )}
           />
           Add New Recipient
         </Button>

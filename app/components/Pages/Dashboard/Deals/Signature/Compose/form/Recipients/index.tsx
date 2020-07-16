@@ -34,7 +34,11 @@ export function Recipients({ deal }: Props) {
 
   return (
     <>
-      <InputContainer>
+      <InputContainer
+        style={{
+          paddingBottom: 0
+        }}
+      >
         {Object.values(field.input.value || {}).length === 0 && (
           <InputLabel hasError={field.meta.submitFailed && field.meta.error}>
             To: &nbsp;
