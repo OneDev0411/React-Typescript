@@ -46,17 +46,19 @@ export default class Mentions extends React.Component {
       this.onKeyUp(e)
     )
 
-    this.cursorHandler = Observable.fromEvent(this.input, 'keydown').subscribe(
-      e => this.onKeyDown(e)
-    )
+    this.cursorHandler = Observable.fromEvent(
+      this.input,
+      'keydown'
+    ).subscribe(e => this.onKeyDown(e))
 
     this.blurHandler = Observable.fromEvent(this.input, 'blur').subscribe(e =>
       this.clearSuggestions()
     )
 
-    this.suggestionsHandler = Observable.fromEvent(window, 'keyup').subscribe(
-      e => this.handleSuggestionsKeyEvents(e)
-    )
+    this.suggestionsHandler = Observable.fromEvent(
+      window,
+      'keyup'
+    ).subscribe(e => this.handleSuggestionsKeyEvents(e))
   }
 
   componentWillUnmount() {
@@ -329,15 +331,7 @@ export default class Mentions extends React.Component {
           bottom: `${position}px`
         }}
       >
-        <div className="heading">
-          Users matching {query}
-          <div className="hint">
-            <i className="fa fa-long-arrow-up" />
-            <i className="fa fa-long-arrow-down" /> to navigate
-            &nbsp;&nbsp;&nbsp; ↵ to select &nbsp;&nbsp;&nbsp;
-            <b>esc</b> to dismiss
-          </div>
-        </div>
+        <div className="heading">Users matching {query}</div>
         <div className="items">
           {suggestions.map((user, index) => (
             <div
