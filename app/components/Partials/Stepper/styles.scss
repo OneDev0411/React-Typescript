@@ -89,7 +89,7 @@ $brand-primary: #0945eb !default;
     background: #fff;
     border: 2px solid #e3e3e3;
 
-    i {
+    svg {
       color: #fff;
     }
   }
@@ -97,7 +97,8 @@ $brand-primary: #0945eb !default;
   .completed .round-tab {
     background: $brand-primary;
     border: 2px solid $brand-primary;
-
+    display: flex;
+    align-items: center;
     &:hover {
       border: 2px solid $brand-primary;
     }
