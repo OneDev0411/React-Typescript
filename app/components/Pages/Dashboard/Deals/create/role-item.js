@@ -1,7 +1,11 @@
 import React from 'react'
 import cn from 'classnames'
+import { mdiClose } from '@mdi/js'
+import { IconButton } from '@material-ui/core'
 
 import UserAvatar from 'components/UserAvatar'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getLegalFullName } from '../utils/roles'
 
@@ -23,15 +27,15 @@ export default ({ user, onClick, onRemove }) => (
     <span className="name">{getLegalFullName(user)}</span>
 
     {user.isRemovable !== false && (
-      <span
-        className="remove"
+      <IconButton
+        size="small"
         onClick={e => {
           e.stopPropagation()
           onRemove(user.id, user)
         }}
       >
-        <i className="fa fa-times" />
-      </span>
+        <SvgIcon path={mdiClose} size={muiIconSizes.small} />
+      </IconButton>
     )}
   </div>
 )
