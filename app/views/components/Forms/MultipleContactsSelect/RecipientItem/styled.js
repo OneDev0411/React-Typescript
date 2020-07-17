@@ -70,11 +70,6 @@ export const EmailsList = styled.div`
   z-index: 1;
 `
 
-export const ArrowIcon = styled.i`
-  margin-left: 10px;
-  font-weight: bold;
-`
-
 export const IconContainer = styled(Flex)`
   width: 25px;
   height: 25px;
