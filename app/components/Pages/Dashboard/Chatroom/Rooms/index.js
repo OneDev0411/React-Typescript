@@ -3,17 +3,19 @@ import { connect } from 'react-redux'
 import { Col, Row } from 'react-bootstrap'
 import _ from 'underscore'
 import cn from 'classnames'
+import { mdiChevronDoubleLeft, mdiArrowExpand } from '@mdi/js'
 
 import UserAvatar from 'components/UserAvatar'
 
 import Badge from 'components/Badge'
 
 import Tooltip from 'components/tooltip'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import SocketStatus from '../SocketStatus'
 import CreateRoom from './create-room'
 import UserTyping from '../UserTyping'
-import TwoDirectionArrow from '../../Partials/Svgs/TwoDirectionArrow'
 import SearchInput from '../../../../Partials/SearchInput'
 import {
   changeActiveRoom,
@@ -134,24 +136,29 @@ class Rooms extends React.Component {
           <Tooltip placement="bottom" caption="Close chat panel">
             <div className="toggle-sidebar">
               <button
+                type="button"
                 onClick={() => {
                   instantMode && this.props.toggleInstantMode()
                   showChatbar && this.props.toggleChatbar(false)
                 }}
                 className="c-button--shadow btn-tgl"
               >
-                <i className="fa fa-angle-double-left fa-2x" />
+                <SvgIcon
+                  path={mdiChevronDoubleLeft}
+                  size={muiIconSizes.large}
+                />
               </button>
             </div>
           </Tooltip>
           {showChatbar && (
             <Tooltip placement="bottom" caption="Expand Fullscreen">
-              <div className="toggle-sidebar two-direction-arrow-container">
+              <div className="toggle-sidebar">
                 <button
+                  type="button"
                   onClick={e => this.fullScreen(e)}
                   className="c-button--shadow btn-tgl"
                 >
-                  <TwoDirectionArrow className="two-direction-arrow" />
+                  <SvgIcon path={mdiArrowExpand} />
                 </button>
               </div>
             </Tooltip>
@@ -221,7 +228,8 @@ function mapStateToProps({ chatroom }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { toggleInstantMode, changeActiveRoom, toggleChatbar }
-)(Rooms)
+export default connect(mapStateToProps, {
+  toggleInstantMode,
+  changeActiveRoom,
+  toggleChatbar
+})(Rooms)
