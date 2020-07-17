@@ -121,6 +121,22 @@ export function isBackOffice(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.BACK_OFFICE)
 }
 
+export function isAdmin(user: IUser | null): boolean {
+  return hasUserAccess(user, ACL.ADMIN)
+}
+
+export function hasUserAccessToBrandSettings(user: IUser | null): boolean {
+  const brand = getActiveBrand(user)
+  
+  // Only brokerages should have brand settings 
+  if (!brand || brand.brand_type !== 'Brokerage') {
+    return false
+  }
+
+  // User should be an admin and should have access to MC
+  return isAdmin(user) && hasUserAccessToMarketingCenter(user)
+}
+
 export function isActiveTeamTraining(user: IUser | null): boolean {
   const activeTeam: IUserTeam | null = getActiveTeam(user)
 
