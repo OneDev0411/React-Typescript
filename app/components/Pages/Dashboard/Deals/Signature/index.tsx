@@ -16,7 +16,7 @@ import type { FormValues } from './types'
 interface Props {
   isOpen: boolean
   deal: IDeal
-  defaultAttachments: any[]
+  defaultAttachments?: IDealFile[]
   onClose: () => void
   onClickAddAttachments?: () => void
 }
@@ -102,14 +102,18 @@ export default function Signature({
     }
   }
 
+  if (!isOpen) {
+    return null
+  }
+
   return (
     <>
       <SignatureComposeDrawer
         user={user}
         deal={deal}
-        attachments={defaultAttachments}
         isOpen={isOpen && !showDocusignBanner}
         isSubmitting={isSending}
+        defaultAttachments={defaultAttachments}
         onSubmit={handleSubmit}
         onClickAddAttachments={onClickAddAttachments}
         onClose={onClose}

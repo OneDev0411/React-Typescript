@@ -35,7 +35,7 @@ import {
 import { IAppState } from 'reducers'
 
 import {
-  CLEAR_ATTACHMENTS,
+  CANCEL,
   REMOVE_ATTACHMENT,
   SET_DRAWER_STATUS
 } from '../../contexts/actions-context/constants'
@@ -89,7 +89,7 @@ export function TaskActions({ deal }: Props) {
 
   const cancel = () => {
     dispatch({
-      type: CLEAR_ATTACHMENTS
+      type: CANCEL
     })
   }
 

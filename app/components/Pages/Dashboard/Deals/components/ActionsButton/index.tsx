@@ -29,7 +29,7 @@ import type {
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT,
-  CLEAR_ATTACHMENTS,
+  CANCEL,
   SET_DRAWER_STATUS
 } from 'deals/contexts/actions-context/constants'
 
@@ -304,7 +304,7 @@ class ActionsButton extends React.Component<
     }))
 
     this.props.actionsDispatch({
-      type: CLEAR_ATTACHMENTS
+      type: CANCEL
     })
   }
 
