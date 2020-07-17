@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { FieldRenderProps } from 'react-final-form'
 import { Observable } from 'rxjs'
@@ -116,6 +116,8 @@ function EmailRecipientsChipsInput({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const [focused, setFocused] = useState(false)
+
   const getSuggestions: (
     searchTerm: string
   ) => Observable<IDenormalizedEmailRecipientInput[]> = (
@@ -163,6 +165,10 @@ function EmailRecipientsChipsInput({
           onFocus: (event: any) => {
             input && input.onFocus && input.onFocus(event)
             onFocus && onFocus()
+            setFocused(true)
+          },
+          onBlur: (event: any) => {
+            setFocused(false)
           },
           // passing onFocus causes error messages to be shown exactly while
           // clicking on quick suggestions. So let's not show error messages
@@ -171,6 +177,9 @@ function EmailRecipientsChipsInput({
         },
         input,
         meta,
+        placeholder: focused
+          ? 'Enter an email address or search for contacts, tags or lists'
+          : '',
         ...TextFieldProps
       }}
       searchDebounce={300}
