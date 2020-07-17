@@ -4,10 +4,12 @@ import { StateContext } from '..'
 import {
   ADD_ATTACHMENTS,
   CLEAR_ATTACHMENTS,
-  REMOVE_ATTACHMENT
+  REMOVE_ATTACHMENT,
+  SET_DRAWER_STATUS
 } from '../constants'
 
 export const initialState: StateContext = {
+  isDrawerOpen: false,
   actions: [],
   attachments: []
 }
@@ -18,11 +20,13 @@ export function reducer(state = initialState, action: Pick<any, any>) {
       return {
         ...state,
         actions: action.actions ?? state.actions,
-        attachments: uniqBy(
-          [...state.attachments, ...action.attachments],
-          (attachment: IDealFile) =>
-            attachment.id ? attachment.id : attachment.url
-        )
+        attachments: action.attachments
+          ? uniqBy(
+              [...state.attachments, ...action.attachments],
+              (attachment: IDealFile) =>
+                attachment.id ? attachment.id : attachment.url
+            )
+          : state.attachments
       }
 
     case REMOVE_ATTACHMENT:
@@ -33,6 +37,12 @@ export function reducer(state = initialState, action: Pick<any, any>) {
             ? attachment.id !== action.attachment.id
             : attachment.url !== action.attachment.url
         )
+      }
+
+    case SET_DRAWER_STATUS:
+      return {
+        ...state,
+        isDrawerOpen: action.isDrawerOpen
       }
 
     case CLEAR_ATTACHMENTS:

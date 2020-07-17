@@ -29,7 +29,8 @@ import type {
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT,
-  CLEAR_ATTACHMENTS
+  CLEAR_ATTACHMENTS,
+  SET_DRAWER_STATUS
 } from 'deals/contexts/actions-context/constants'
 
 import {
@@ -68,7 +69,6 @@ import {
   viewFile
 } from './helpers/actions'
 
-import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
 import UploadManager from '../../UploadManager'
 
@@ -95,7 +95,6 @@ interface ContextProps {
 
 interface State {
   isMenuOpen: boolean
-  isSignatureFormOpen: boolean
   isPdfSplitterOpen: boolean
   isTasksDrawerOpen: boolean
   isComposeEmailOpen: boolean
@@ -129,7 +128,6 @@ class ActionsButton extends React.Component<
 
     this.state = {
       isMenuOpen: false,
-      isSignatureFormOpen: false,
       isPdfSplitterOpen: false,
       isTasksDrawerOpen: false,
       isComposeEmailOpen: false,
@@ -195,16 +193,6 @@ class ActionsButton extends React.Component<
 
   handleToggleMenu = () =>
     this.setState(state => ({ isMenuOpen: !state.isMenuOpen }))
-
-  handleDeselectAction = () => {
-    this.setState({
-      isSignatureFormOpen: false
-    })
-
-    this.props.actionsDispatch({
-      type: CLEAR_ATTACHMENTS
-    })
-  }
 
   handleCloseMultipleItemsSelectionDrawer = () =>
     this.setState({
@@ -327,14 +315,12 @@ class ActionsButton extends React.Component<
     )
 
     this.updateDocusignList(attachments)
-    this.handleGetSignature()
   }
 
   docusignForm = () => {
     const attachments = getFormEsignAttachments(this.props.task)
 
     this.updateDocusignList(attachments)
-    this.handleGetSignature()
   }
 
   docusignFile = () => {
@@ -344,10 +330,14 @@ class ActionsButton extends React.Component<
     )
 
     this.updateDocusignList(attachments)
-    this.handleGetSignature()
   }
 
   updateDocusignList = (files: IFile[]) => {
+    this.props.actionsDispatch({
+      type: SET_DRAWER_STATUS,
+      isDrawerOpen: this.props.actionsState.actions.length === 0
+    })
+
     files.forEach(file => {
       const isFileExists = this.props.actionsState.attachments.some(
         attachment => attachment.id === file.id
@@ -361,26 +351,10 @@ class ActionsButton extends React.Component<
       } else {
         this.props.actionsDispatch({
           type: ADD_ATTACHMENTS,
-          attachments: [file]
+          attachments: [file],
+          actions: [DOCUSIGN_ENVELOPE, DOCUSIGN_FILE, DOCUSIGN_FORM]
         })
       }
-    })
-  }
-
-  /**
-   *
-   */
-  handleGetSignature = () => {
-    if (
-      this.props.actionsState.actions.some(name =>
-        [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE].includes(name)
-      )
-    ) {
-      return
-    }
-
-    this.setState({
-      isSignatureFormOpen: true
     })
   }
 
@@ -520,18 +494,6 @@ class ActionsButton extends React.Component<
         >
           <div />
         </UploadManager>
-
-        {this.state.isSignatureFormOpen && (
-          // @ts-ignore
-          <GetSignature
-            isOpen
-            deal={this.props.deal}
-            onClickAddAttachments={() =>
-              this.setState({ isSignatureFormOpen: false })
-            }
-            onClose={this.handleDeselectAction}
-          />
-        )}
 
         {this.state.isPdfSplitterOpen && (
           <PdfSplitter

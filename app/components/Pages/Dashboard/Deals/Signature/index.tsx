@@ -102,17 +102,13 @@ export default function Signature({
     }
   }
 
-  if (!isOpen) {
-    return null
-  }
-
   return (
     <>
       <SignatureComposeDrawer
         user={user}
         deal={deal}
         attachments={defaultAttachments}
-        isOpen={!showDocusignBanner}
+        isOpen={isOpen && !showDocusignBanner}
         isSubmitting={isSending}
         onSubmit={handleSubmit}
         onClickAddAttachments={onClickAddAttachments}
@@ -121,7 +117,7 @@ export default function Signature({
 
       <DocusignAuthentication
         user={user}
-        isOpen={showDocusignBanner}
+        isOpen={isOpen && showDocusignBanner}
         onAuthorize={() => handleSubmit(formData!)}
       />
     </>

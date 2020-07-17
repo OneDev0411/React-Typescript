@@ -36,7 +36,8 @@ import { IAppState } from 'reducers'
 
 import {
   CLEAR_ATTACHMENTS,
-  REMOVE_ATTACHMENT
+  REMOVE_ATTACHMENT,
+  SET_DRAWER_STATUS
 } from '../../contexts/actions-context/constants'
 import { useChecklistActionsContext } from '../../contexts/actions-context/hooks'
 
@@ -82,7 +83,6 @@ export function TaskActions({ deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const [state, dispatch] = useChecklistActionsContext()
-  const [isDocusignDraweOpen, setIsDocusignDrawerOpen] = useState(false)
   const [isEmailComposeDraweOpen, setIsEmailComposeDrawerOpen] = useState(false)
 
   const user = useSelector<IAppState, IUser>(({ user }) => user)
@@ -100,7 +100,7 @@ export function TaskActions({ deal }: Props) {
 
   const handleCloseSignatureDrawer = () => {
     cancel()
-    setIsDocusignDrawerOpen(false)
+    handleCloseDrawer()
   }
 
   const handleRemoveAttachment = (attachment: IDealFile) => {
@@ -110,9 +110,23 @@ export function TaskActions({ deal }: Props) {
     })
   }
 
+  const handleOpenDrawer = () => {
+    dispatch({
+      type: SET_DRAWER_STATUS,
+      isDrawerOpen: true
+    })
+  }
+
+  const handleCloseDrawer = () => {
+    dispatch({
+      type: SET_DRAWER_STATUS,
+      isDrawerOpen: false
+    })
+  }
+
   return (
     <>
-      {state.actions.length > 0 && (
+      {state.actions.length > 0 && !state.isDrawerOpen && (
         <Slide in direction="up">
           <div className={classes.root}>
             {state.actions.some(id =>
@@ -121,7 +135,7 @@ export function TaskActions({ deal }: Props) {
               <Button
                 variant="outlined"
                 color="secondary"
-                onClick={() => setIsDocusignDrawerOpen(true)}
+                onClick={handleOpenDrawer}
               >
                 Docusign
               </Button>
@@ -207,9 +221,14 @@ export function TaskActions({ deal }: Props) {
 
       <GetSignature
         deal={deal}
-        isOpen={isDocusignDraweOpen}
+        isOpen={
+          state.isDrawerOpen &&
+          state.actions.some(id =>
+            [DOCUSIGN_FORM, DOCUSIGN_ENVELOPE, DOCUSIGN_FILE].includes(id)
+          )
+        }
         defaultAttachments={state.attachments}
-        onClickAddAttachments={() => setIsDocusignDrawerOpen(false)}
+        onClickAddAttachments={handleCloseDrawer}
         onClose={handleCloseSignatureDrawer}
       />
     </>
