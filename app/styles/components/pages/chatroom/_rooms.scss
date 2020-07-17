@@ -79,7 +79,9 @@
   border-bottom: 1px solid #d4d4d4;
 
   .toggle-sidebar {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     float: right;
     margin-left: 20px;
     height: 30px;
@@ -93,7 +95,8 @@
       color: #000000;
       margin-left: 0;
       svg {
-        display: inline-block;
+        display: flex;
+        align-items: center;        
         vertical-align: middle;
       }
     }
@@ -108,13 +111,6 @@
         }
       }
     }
-  }
-
-  .two-direction-arrow-container:before {
-    content: '';
-    display: inline-block;
-    vertical-align: middle;
-    height: 100%;
   }
 
   .socket-status {
