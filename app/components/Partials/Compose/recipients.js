@@ -1,7 +1,10 @@
 import React from 'react'
 import _ from 'underscore'
 import cn from 'classnames'
+import { mdiClose } from '@mdi/js'
 
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import UserAvatar from 'components/UserAvatar'
 
 import AutoSizeInput from '../AutoSizeInput'
@@ -82,9 +85,10 @@ export default class extends React.Component {
             />
 
             <div className="display-name">{recp.display_name}</div>
-            <i
-              className="fa fa-times"
+            <SvgIcon
               onClick={() => this.props.onRemove(recp)}
+              path={mdiClose}
+              size={muiIconSizes.small}
             />
           </div>
         ))}
