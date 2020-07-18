@@ -86,20 +86,10 @@ export function TaskActions({ deal }: Props) {
 
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
-  const cancel = () => {
+  const handleCancel = () => {
     dispatch({
       type: CANCEL
     })
-  }
-
-  const handleCloseEmailDrawer = () => {
-    cancel()
-    handleCloseDrawer()
-  }
-
-  const handleCloseSignatureDrawer = () => {
-    cancel()
-    handleCloseDrawer()
   }
 
   const handleRemoveAttachment = (attachment: IDealFile) => {
@@ -197,7 +187,7 @@ export function TaskActions({ deal }: Props) {
               )}
             />
 
-            <Button color="secondary" onClick={cancel}>
+            <Button color="secondary" onClick={handleCancel}>
               Cancel
             </Button>
           </div>
@@ -217,8 +207,8 @@ export function TaskActions({ deal }: Props) {
         }}
         deal={deal}
         onClickAddDealAttachments={handleCloseDrawer}
-        onClose={handleCloseEmailDrawer}
-        onSent={handleCloseEmailDrawer}
+        onClose={handleCancel}
+        onSent={handleCancel}
       />
 
       <GetSignature
@@ -231,7 +221,7 @@ export function TaskActions({ deal }: Props) {
         }
         defaultAttachments={state.attachments}
         onClickAddAttachments={handleCloseDrawer}
-        onClose={handleCloseSignatureDrawer}
+        onClose={handleCancel}
       />
     </>
   )

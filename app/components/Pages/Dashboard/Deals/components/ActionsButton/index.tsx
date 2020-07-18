@@ -242,6 +242,11 @@ class ActionsButton extends React.Component<
    *
    */
   handleOpenComposeEmail = (files: IDealEmailFile[]) => {
+    this.props.actionsDispatch({
+      type: SET_DRAWER_STATUS,
+      isDrawerOpen: this.props.actionsState.actions.length === 0
+    })
+
     const exists = this.props.actionsState.attachments.some(attachment =>
       files.some(doc =>
         attachment.id ? doc.id === attachment.id : doc.url === attachment.url
@@ -258,11 +263,6 @@ class ActionsButton extends React.Component<
 
       return
     }
-
-    this.props.actionsDispatch({
-      type: SET_DRAWER_STATUS,
-      isDrawerOpen: this.props.actionsState.actions.length === 0
-    })
 
     this.props.actionsDispatch({
       type: ADD_ATTACHMENTS,
