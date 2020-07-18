@@ -105,8 +105,6 @@ function getContactAttributeObject(contact, name) {
  * @param {Object} attributeDefs - list of definitions
  */
 export function convertContactToRole(contact) {
-  const { summary } = contact
-
   const values = type =>
     getContactAttributeObject(contact, type).map(
       item => item[item.attribute_def.data_type]
@@ -116,14 +114,14 @@ export function convertContactToRole(contact) {
     emails: values('email'),
     phone_numbers: values('phone_number'),
     companies: values('company'),
-    legal_prefix: LEGAL_PREFIXES.includes(summary.title) ? summary.title : null,
-    legal_first_name: summary.first_name,
-    legal_middle_name: summary.middle_name,
-    legal_last_name: summary.last_name,
-    email: summary.email,
-    phone_number: summary.phone_number,
-    company: summary.company,
-    company_title: summary.company
+    legal_prefix: LEGAL_PREFIXES.includes(contact.title) ? contact.title : null,
+    legal_first_name: contact.first_name,
+    legal_middle_name: contact.middle_name,
+    legal_last_name: contact.last_name,
+    email: contact.email,
+    phone_number: contact.phone_number,
+    company: contact.company,
+    company_title: contact.company
   }
 }
 
