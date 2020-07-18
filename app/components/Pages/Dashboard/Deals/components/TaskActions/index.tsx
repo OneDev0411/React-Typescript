@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Button,
   IconButton,
@@ -83,7 +83,6 @@ export function TaskActions({ deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const [state, dispatch] = useChecklistActionsContext()
-  const [isEmailComposeDraweOpen, setIsEmailComposeDrawerOpen] = useState(false)
 
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
@@ -95,7 +94,7 @@ export function TaskActions({ deal }: Props) {
 
   const handleCloseEmailDrawer = () => {
     cancel()
-    setIsEmailComposeDrawerOpen(false)
+    handleCloseDrawer()
   }
 
   const handleCloseSignatureDrawer = () => {
@@ -147,7 +146,7 @@ export function TaskActions({ deal }: Props) {
               <Button
                 variant="outlined"
                 color="secondary"
-                onClick={() => setIsEmailComposeDrawerOpen(true)}
+                onClick={handleOpenDrawer}
               >
                 Send Email
               </Button>
@@ -205,19 +204,22 @@ export function TaskActions({ deal }: Props) {
         </Slide>
       )}
 
-      {isEmailComposeDraweOpen && (
-        <SingleEmailComposeDrawer
-          isOpen
-          initialValues={{
-            from: user,
-            attachments: state.attachments
-          }}
-          deal={deal}
-          onClickAddDealAttachments={() => setIsEmailComposeDrawerOpen(false)}
-          onClose={handleCloseEmailDrawer}
-          onSent={handleCloseEmailDrawer}
-        />
-      )}
+      <SingleEmailComposeDrawer
+        isOpen={
+          state.isDrawerOpen &&
+          state.actions.some(id =>
+            [EMAIL_FORM, EMAIL_ENVELOPE, EMAIL_FORM].includes(id)
+          )
+        }
+        initialValues={{
+          from: user,
+          attachments: state.attachments
+        }}
+        deal={deal}
+        onClickAddDealAttachments={handleCloseDrawer}
+        onClose={handleCloseEmailDrawer}
+        onSent={handleCloseEmailDrawer}
+      />
 
       <GetSignature
         deal={deal}
