@@ -3,12 +3,15 @@ import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
+import { Box } from '@material-ui/core'
+
+import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 // eslint-disable-next-line
 import VerifyPhoneNumberModal from '../../../../../../..//views/components/VerifyPhoneNumberModal'
 
 import getVerificationCode from '../../../../../../../models/verify/request'
-import { primary } from '../../../../../../../views/utils/colors'
 
 const Button = styled(ActionButton)`
   padding: 0;
@@ -107,18 +110,19 @@ class VerifyPhoneNumber extends Component {
               Submit the code
             </Button>
           </p>
-          <p>
-            Didn't receive a code?{' '}
+          <Box display="flex" alignItems="center">
+            <Box mr={0.5}>Didn't receive a code? </Box>
             {isReSending ? (
-              <span style={{ color: primary }}>
-                <i className="fa fa-spin fa-spinner" /> Sending...
-              </span>
+              <Box color="primary.main" display="flex" alignItems="center">
+                <CircleSpinner style={{ width: '24px', height: '24px' }} />{' '}
+                Sending...
+              </Box>
             ) : (
               <Button appearance="link" onClick={this.handleResend}>
                 Send a new code
               </Button>
             )}
-          </p>
+          </Box>
         </div>
 
         <VerifyPhoneNumberModal

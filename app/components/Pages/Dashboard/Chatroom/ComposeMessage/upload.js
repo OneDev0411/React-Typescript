@@ -2,6 +2,10 @@ import React from 'react'
 import Dropzone from 'react-dropzone'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import { mdiProgressUpload, mdiPlus } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import Message from '../Util/message'
 import Model from '../../../../../models/Chatroom'
 
@@ -206,22 +210,19 @@ class Upload extends React.Component {
           {dropzoneActive && (
             <div className="upload-guide">
               <div className="upload-area">
-                <i className="fa fa-long-arrow-down fa-3x" />
+                <SvgIcon path={mdiProgressUpload} size="70px" />
                 <p>Upload Here</p>
               </div>
             </div>
           )}
 
-          {children || <i className="fa fa-plus" aria-hidden="true" />}
+          {children || <SvgIcon path={mdiPlus} />}
         </Dropzone>
       </div>
     )
   }
 }
 
-export default connect(
-  null,
-  {
-    notify
-  }
-)(Upload)
+export default connect(null, {
+  notify
+})(Upload)

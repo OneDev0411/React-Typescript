@@ -95,8 +95,8 @@ export const ChecklistNewItemInput = styled.input`
 
 export const ChecklistNewItemCancel = styled.span`
   position: absolute;
-  right: 10px;
-  top: 5px;
+  right: 6px;
+  top: 9px;
   font-weight: 400;
   color: #0945eb;
 `

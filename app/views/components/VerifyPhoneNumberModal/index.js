@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import { Box } from '@material-ui/core'
 
 import getVerificationCode from '../../../models/verify/request'
 import VerifyPhoneNumber from '../../../models/verify/confirm'
 
+import CircleSpinner from '../SvgIcons/CircleSpinner/IconCircleSpinner'
 import BareModal from '../BareModal'
 import ActionButton from '../Button/ActionButton'
-import { primary } from '../../utils/colors'
 import IntercomTriger from '../IntercomTrigger'
 
 import { Title } from './components/Title'
@@ -229,12 +230,13 @@ class VerifyPhoneNumberModal extends Component {
             )}
           </div>
 
-          <p>
-            <span>Didn't receive a code? </span>
+          <Box display="flex" alignItems="center" mb={1}>
+            <Box mr={0.5}>Didn't receive a code? </Box>
             {isReSending ? (
-              <span style={{ color: primary }}>
-                <i className="fa fa-spin fa-spinner" /> Sending...
-              </span>
+              <Box color="primary.main" display="flex" alignItems="center">
+                <CircleSpinner style={{ width: '24px', height: '24px' }} />{' '}
+                Sending...
+              </Box>
             ) : (
               <LinkButton
                 appearance="link"
@@ -244,7 +246,7 @@ class VerifyPhoneNumberModal extends Component {
                 Send a new code
               </LinkButton>
             )}
-          </p>
+          </Box>
 
           {!unclosable && (
             <p>
