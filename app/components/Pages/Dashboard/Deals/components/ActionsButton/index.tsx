@@ -220,13 +220,13 @@ class ActionsButton extends React.Component<
       this.props.file!
     )
 
-    this.handleOpenComposeEmail(attachments)
+    this.updateEmailList(attachments)
   }
 
   emailForm = () => {
     const attachments = getFormEmailAttachments(this.props.task)
 
-    this.handleOpenComposeEmail(attachments)
+    this.updateEmailList(attachments)
   }
 
   emailEnvelope = () => {
@@ -235,13 +235,13 @@ class ActionsButton extends React.Component<
       this.props.envelope!
     )
 
-    this.handleOpenComposeEmail(attachments)
+    this.updateEmailList(attachments)
   }
 
   /**
    *
    */
-  handleOpenComposeEmail = (files: IDealEmailFile[]) => {
+  updateEmailList = (files: IDealEmailFile[]) => {
     this.props.actionsDispatch({
       type: SET_DRAWER_STATUS,
       isDrawerOpen: this.props.actionsState.actions.length === 0
