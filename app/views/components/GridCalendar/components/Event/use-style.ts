@@ -35,6 +35,7 @@ export const useCommonStyles = makeStyles(
     name: 'GridCalendarEvent'
   }
 )
+
 export const usePopoverStyles = makeStyles(
   (theme: Theme) => ({
     container: {

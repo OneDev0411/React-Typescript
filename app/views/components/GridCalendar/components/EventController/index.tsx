@@ -3,6 +3,7 @@ import React from 'react'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 
 import { goTo } from 'utils/go-to'
+import { CrmEventType } from 'components/Calendar/types'
 
 import { CrmEvents } from '../../../Calendar/components/CrmEvents'
 import {
@@ -15,7 +16,7 @@ interface Props {
   user: IUser
   event: ICalendarEvent | null
   day: Date | null
-  onEventChange(event: IEvent, type: string): void
+  onEventChange(event: IEvent, type: CrmEventType): void
   setSelectedEvent(event: ICalendarEvent | null): void
   setSelectedDay(event: Date | null): void
 }

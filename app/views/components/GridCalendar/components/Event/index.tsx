@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { EventContentArg } from '@fullcalendar/react'
 
+import { CrmEventType } from 'components/Calendar/types'
+
 import {
   isDealEvent,
   isCelebrationEvent
@@ -20,6 +22,7 @@ export interface BaseEventProps {
 
 interface Props extends Pick<BaseEventProps, 'event' | 'rowEvent'> {
   onSelect(event: ICalendarEvent | null): void
+  onChange(event: IEvent, type: CrmEventType): void
 }
 
 type EventsType = {
@@ -50,7 +53,7 @@ const events: EventsType[] = [
 ]
 
 export const Event = (props: Props) => {
-  const { rowEvent, onSelect } = props
+  const { rowEvent, onSelect, onChange } = props
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
 
   const handleShowDetails = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -74,6 +77,7 @@ export const Event = (props: Props) => {
         {...props}
         el={anchorEl}
         onSelect={onSelect}
+        onChange={onChange}
         onClose={handleCloseDetails}
       />
     </>

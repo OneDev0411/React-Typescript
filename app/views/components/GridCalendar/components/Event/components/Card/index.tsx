@@ -2,6 +2,9 @@ import React, { useMemo, memo } from 'react'
 import cn from 'classnames'
 import { Popover, Button, IconButton } from '@material-ui/core'
 
+import { deleteTask } from 'models/tasks'
+import { CrmEventType } from 'components/Calendar/types'
+
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { importantDatesIcons as contactIcons } from 'views/utils/important-dates-icons'
 
@@ -24,6 +27,7 @@ interface Props extends Pick<BaseEventProps, 'event' | 'rowEvent'> {
   el: HTMLDivElement | null
   onClose(): void
   onSelect(event: ICalendarEvent | null): void
+  onChange(event: IEvent, type: CrmEventType): void
 }
 
 const EventCardComponent = ({
@@ -31,6 +35,7 @@ const EventCardComponent = ({
   event,
   rowEvent,
   onSelect,
+  onChange,
   onClose
 }: Props) => {
   const popoverClasses = usePopoverStyles()
@@ -68,6 +73,16 @@ const EventCardComponent = ({
   const isDeal = useMemo(() => isDealEvent(rowEvent), [rowEvent])
   const isCelebration = useMemo(() => isCelebrationEvent(rowEvent), [rowEvent])
 
+  const handleDelete = async () => {
+    try {
+      await deleteTask(rowEvent.id)
+      // @ts-ignore
+      onChange(rowEvent, 'deleted')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <Popover
       id={id}
@@ -93,10 +108,7 @@ const EventCardComponent = ({
               <IconButton
                 size="small"
                 aria-label="delete"
-                onClick={e => {
-                  e.stopPropagation()
-                  console.log('f')
-                }}
+                onClick={handleDelete}
               >
                 <IconDeleteOutline />
               </IconButton>
