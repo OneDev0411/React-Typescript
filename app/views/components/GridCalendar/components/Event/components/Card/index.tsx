@@ -2,15 +2,16 @@ import React, { useState, useMemo, memo } from 'react'
 import cn from 'classnames'
 import { Popover, Button, IconButton } from '@material-ui/core'
 
+import { mdiClose, mdiTrashCanOutline, mdiPencilOutline } from '@mdi/js'
+
 import { deleteTask } from 'models/tasks'
 import { CrmEventType } from 'components/Calendar/types'
 
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { importantDatesIcons as contactIcons } from 'views/utils/important-dates-icons'
 
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
-import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
-import EditIcon from 'components/SvgIcons/Edit/EditIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import FollowUpModal from 'components/FollowUpModal'
 
 import {
@@ -107,7 +108,7 @@ const EventCardComponent = ({
         <div className={popoverClasses.container}>
           <header className={popoverClasses.header}>
             <IconButton size="small" aria-label="close" onClick={onClose}>
-              <CloseIcon size="small" />
+              <SvgIcon path={mdiClose} />
             </IconButton>
             {isCRMEvent(rowEvent) && (
               <>
@@ -116,14 +117,14 @@ const EventCardComponent = ({
                   aria-label="delete"
                   onClick={handleDelete}
                 >
-                  <IconDeleteOutline />
+                  <SvgIcon path={mdiTrashCanOutline} />
                 </IconButton>
                 <IconButton
                   size="small"
                   aria-label="edit"
                   onClick={() => onSelect(rowEvent)}
                 >
-                  <EditIcon size="small" />
+                  <SvgIcon path={mdiPencilOutline} />
                 </IconButton>
               </>
             )}

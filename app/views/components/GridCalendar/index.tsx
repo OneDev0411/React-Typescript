@@ -275,14 +275,6 @@ export const GridCalendarPresentation = ({
   }
 
   /**
-   * trigger on clicking on an event
-   */
-  const handleClickEvent = ({ event }: { event: EventApi }) => {
-    // const currentEvent: ICalendarEvent = event.extendedProps?.rowEvent
-    // setSelectedEvent(currentEvent)
-  }
-
-  /**
    * trigger on dropping and dragging an event
    */
   const handleEditEvent = async ({ event }: { event: EventApi }) => {
@@ -401,7 +393,6 @@ export const GridCalendarPresentation = ({
           events={events}
           datesSet={handleDatesRender}
           dateClick={handleDayClick}
-          eventClick={handleClickEvent}
           eventDrop={handleEditEvent}
           eventResize={handleEditEvent}
           eventContent={(content: EventContentArg) => {

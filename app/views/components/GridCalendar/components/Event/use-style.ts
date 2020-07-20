@@ -53,15 +53,11 @@ export const usePopoverStyles = makeStyles(
         '&:not(:first-child)': {
           marginLeft: theme.spacing(2)
         }
-      },
-      '& svg': {
-        width: theme.spacing(1.75),
-        height: theme.spacing(1.75)
       }
     },
     body: {
       width: '100%',
-      padding: theme.spacing(2),
+      padding: theme.spacing(0.5, 2, 2),
       display: 'flex',
       alignItems: 'center'
     },
