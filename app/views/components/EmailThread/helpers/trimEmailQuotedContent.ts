@@ -23,7 +23,17 @@
 export function trimEmailQuotedContent(htmlContent: string): string {
   const el = document.createElement('div')
 
-  el.innerHTML = htmlContent
+  /**
+   * We need to do something to disable automatic link fetching by images
+   * in order to avoid this whole process to mess up with the Pixel Tracking.
+   */
+  const dummyTag = generateDummyTag(htmlContent)
+  const [htmlContentWithoutImages, images] = extractImages(
+    htmlContent,
+    dummyTag
+  )
+
+  el.innerHTML = htmlContentWithoutImages
 
   const children = Array(...el.children)
 
@@ -34,14 +44,71 @@ export function trimEmailQuotedContent(htmlContent: string): string {
    * etc.), or id equal to "appendsonsend" which works for outlook. Then we
    * remove it along with all subsequent children.
    */
-  const firstQuotedChild = children.findIndex(childElement =>
+  const firstQuotedChildIndex = children.findIndex(childElement =>
     childElement.matches('#appendonsend, [class*="quote"]')
   )
 
-  return firstQuotedChild > -1
-    ? children
-        .slice(0, firstQuotedChild)
-        .map(element => element.outerHTML)
-        .join('')
-    : htmlContent
+  const trimmedHtmlContent =
+    firstQuotedChildIndex > -1
+      ? children
+          .filter(
+            (element, index) =>
+              index < firstQuotedChildIndex ||
+              element.tagName.toLowerCase().startsWith(dummyTag)
+          )
+          .map(element => element.outerHTML)
+          .join('')
+      : htmlContent
+
+  return injectImages(trimmedHtmlContent, dummyTag, images)
+
+  function generateDummyTag(htmlContent: string): string {
+    const lowerCasesHtmlContent = htmlContent.toLowerCase()
+    let dummyTag = 'xxxxx'
+
+    while (lowerCasesHtmlContent.includes(dummyTag)) {
+      dummyTag += 'x'
+    }
+
+    return dummyTag
+  }
+
+  function extractImages(
+    htmlContent: string,
+    dummyTag: string
+  ): [string, string[]] {
+    const images: string[] = []
+
+    do {
+      const imgPosition = htmlContent.search(/img/i)
+
+      if (imgPosition < 0) {
+        break
+      }
+
+      const dummyTagInstance = `${dummyTag}${images.length}`
+
+      images.push(htmlContent.slice(imgPosition, imgPosition + 3))
+      htmlContent =
+        htmlContent.slice(0, imgPosition) +
+        dummyTagInstance +
+        htmlContent.slice(imgPosition + 3)
+    } while (true)
+
+    return [htmlContent, images]
+  }
+
+  function injectImages(
+    htmlContent: string,
+    dummyTag: string,
+    images: string[]
+  ): string {
+    images.forEach((image, index) => {
+      const dummyTagInstance = `${dummyTag}${index}`
+
+      htmlContent = htmlContent.replace(dummyTagInstance, image)
+    })
+
+    return htmlContent
+  }
 }
