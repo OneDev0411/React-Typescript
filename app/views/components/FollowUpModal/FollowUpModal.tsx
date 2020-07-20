@@ -11,7 +11,7 @@ import { IAppState } from 'reducers'
 import { noop } from 'utils/helpers'
 
 import { FollowUpEmail } from './types'
-import { getFollowUpEmailCrmTask } from './helper/get-follow-up-crm-task'
+import { getFollowUpCrmTask } from './helper/get-follow-up-crm-task'
 import { getInitialDate } from './helper/get-initial-date'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -47,7 +47,7 @@ export default function FollowUpModal({
     [baseDate]
   )
   const crmTask = useMemo(
-    () => getFollowUpEmailCrmTask(email, new Date(tomorrowTimestamp), user),
+    () => getFollowUpCrmTask(email, new Date(tomorrowTimestamp), user),
     [email, tomorrowTimestamp, user]
   )
 
@@ -74,7 +74,7 @@ export default function FollowUpModal({
       setIsEventDrawerOpen(true)
     } else {
       const task = await preSaveFormat(
-        getFollowUpEmailCrmTask(email, new Date(dueDate), user)
+        getFollowUpCrmTask(email, new Date(dueDate), user)
       )
 
       const followUpTask = await createTask(task)

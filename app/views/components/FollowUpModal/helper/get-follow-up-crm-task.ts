@@ -6,7 +6,8 @@ import { normalizeAssociations } from 'views/utils/association-normalizers'
 
 import { FollowUpEmail } from '../types'
 
-export function getFollowUpEmailCrmTask(
+// TODO: should drop specific email association and make it general
+export function getFollowUpCrmTask(
   email: FollowUpEmail | undefined,
   dueDate: Date,
   user: IUser
@@ -103,11 +104,11 @@ function getCrmTaskFromEmailThreadEmail(
   return values
 }
 
-function getCrmTaskTitle(name?: string) {
+function getCrmTaskTitle(item?: string) {
   let title = 'Follow up'
 
-  if (name) {
-    return `${title} with ${name}`
+  if (item) {
+    return `${title}: ${item}`
   }
 
   return title
@@ -117,5 +118,5 @@ function getCrmTaskDescription(name: string, dueDate: Date | number) {
   return `This is a follow up reminder ${name} set in Rechat, on ${fecha.format(
     dueDate,
     'dddd MMMM Do, YYYY'
-  )} for the attached email.`
+  )}.`
 }
