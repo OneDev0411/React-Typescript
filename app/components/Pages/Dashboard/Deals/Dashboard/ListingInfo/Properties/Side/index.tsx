@@ -6,6 +6,7 @@ import { MenuItem } from '@material-ui/core'
 import Deal from 'models/Deal'
 import { upsertContexts } from 'actions/deals'
 import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
+import { getEnderType } from 'models/Deal/helpers/context'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 
@@ -33,20 +34,7 @@ function DealSide(props: Props) {
   ]
 
   const enderType = Deal.get.field(props.deal, 'ender_type')
-
-  const getSideName = () => {
-    const dealType = props.deal.deal_type === 'Buying' ? 'Buying' : 'Listing'
-
-    if (enderType === 'AgentDoubleEnder') {
-      return `${dealType} (Agent DE)`
-    }
-
-    if (enderType === 'OfficeDoubleEnder') {
-      return `${dealType} (Office DE)`
-    }
-
-    return dealType
-  }
+  const sideName = getEnderType(props.deal)
 
   const handleSelectEnderType = (value: string | null) => {
     if (value === enderType) {
@@ -61,12 +49,12 @@ function DealSide(props: Props) {
   }
 
   if (props.isBackOffice === false) {
-    return <span>Side: {getSideName()}</span>
+    return <span>Side: {sideName}</span>
   }
 
   return (
     <BaseDropdown
-      buttonLabel={getSideName()}
+      buttonLabel={sideName}
       renderMenu={({ close }) => (
         <div>
           {options.map((item, index) => (
