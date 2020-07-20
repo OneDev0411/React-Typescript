@@ -235,17 +235,14 @@ function mapStateToProps(state, { name, plugins, getPredefinedLists }) {
   return states
 }
 
-const ConnectedFilters = connect(
-  mapStateToProps,
-  {
-    addActiveFilter,
-    removeActiveFilter,
-    toggleActiveFilter,
-    updateActiveFilter,
-    changeConditionOperator,
-    createActiveFiltersWithConditionOperator
-  }
-)(Filters)
+const ConnectedFilters = connect(mapStateToProps, {
+  addActiveFilter,
+  removeActiveFilter,
+  toggleActiveFilter,
+  updateActiveFilter,
+  changeConditionOperator,
+  createActiveFiltersWithConditionOperator
+})(Filters)
 
 ConnectedFilters.defaultProps = {
   getPredefinedLists: name => ({ default: getDefaultList(name) })
