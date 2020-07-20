@@ -27,10 +27,10 @@ export function trimEmailQuotedContent(htmlContent: string): string {
    * We need to do something to disable automatic link fetching by images
    * in order to avoid this whole process to mess up with the Pixel Tracking.
    */
-  const dummyTag = generateDummyTag(htmlContent)
+  const dummyHtmlTag = generateDummyHtmlTag(htmlContent)
   const [htmlContentWithoutImages, images] = extractImages(
     htmlContent,
-    dummyTag
+    dummyHtmlTag
   )
 
   el.innerHTML = htmlContentWithoutImages
@@ -54,61 +54,61 @@ export function trimEmailQuotedContent(htmlContent: string): string {
           .filter(
             (element, index) =>
               index < firstQuotedChildIndex ||
-              element.tagName.toLowerCase().startsWith(dummyTag)
+              element.tagName.toLowerCase().startsWith(dummyHtmlTag)
           )
           .map(element => element.outerHTML)
           .join('')
       : htmlContent
 
-  return injectImages(trimmedHtmlContent, dummyTag, images)
+  return injectImages(trimmedHtmlContent, dummyHtmlTag, images)
+}
 
-  function generateDummyTag(htmlContent: string): string {
-    const lowerCasesHtmlContent = htmlContent.toLowerCase()
-    let dummyTag = 'xxxxx'
+function generateDummyHtmlTag(htmlContent: string): string {
+  const lowerCasesHtmlContent = htmlContent.toLowerCase()
+  let dummyHtmlTag = 'xxxxx'
 
-    while (lowerCasesHtmlContent.includes(dummyTag)) {
-      dummyTag += 'x'
+  while (lowerCasesHtmlContent.includes(dummyHtmlTag)) {
+    dummyHtmlTag += 'x'
+  }
+
+  return dummyHtmlTag
+}
+
+function extractImages(
+  htmlContent: string,
+  dummyHtmlTag: string
+): [string, string[]] {
+  const images: string[] = []
+
+  do {
+    const imgPosition = htmlContent.search(/img/i)
+
+    if (imgPosition < 0) {
+      break
     }
 
-    return dummyTag
-  }
+    const dummyHtmlTagInstance = `${dummyHtmlTag}${images.length}`
 
-  function extractImages(
-    htmlContent: string,
-    dummyTag: string
-  ): [string, string[]] {
-    const images: string[] = []
+    images.push(htmlContent.slice(imgPosition, imgPosition + 3))
+    htmlContent =
+      htmlContent.slice(0, imgPosition) +
+      dummyHtmlTagInstance +
+      htmlContent.slice(imgPosition + 3)
+  } while (true)
 
-    do {
-      const imgPosition = htmlContent.search(/img/i)
+  return [htmlContent, images]
+}
 
-      if (imgPosition < 0) {
-        break
-      }
+function injectImages(
+  htmlContent: string,
+  dummyHtmlTag: string,
+  images: string[]
+): string {
+  images.forEach((image, index) => {
+    const dummyHtmlTagInstance = `${dummyHtmlTag}${index}`
 
-      const dummyTagInstance = `${dummyTag}${images.length}`
+    htmlContent = htmlContent.replace(dummyHtmlTagInstance, image)
+  })
 
-      images.push(htmlContent.slice(imgPosition, imgPosition + 3))
-      htmlContent =
-        htmlContent.slice(0, imgPosition) +
-        dummyTagInstance +
-        htmlContent.slice(imgPosition + 3)
-    } while (true)
-
-    return [htmlContent, images]
-  }
-
-  function injectImages(
-    htmlContent: string,
-    dummyTag: string,
-    images: string[]
-  ): string {
-    images.forEach((image, index) => {
-      const dummyTagInstance = `${dummyTag}${index}`
-
-      htmlContent = htmlContent.replace(dummyTagInstance, image)
-    })
-
-    return htmlContent
-  }
+  return htmlContent
 }
