@@ -3,9 +3,10 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import IconButton from '@material-ui/core/IconButton'
+import { mdiTrashCanOutline } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import Tooltip from 'components/tooltip'
-import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 interface Props {
@@ -36,9 +37,7 @@ function ContextItem({ name, onSelect, onDelete }: Props) {
               })
             }}
           >
-            <IconDeleteOutline
-              style={{ fill: 'currentColor', width: 16, height: 16 }}
-            />
+            <SvgIcon path={mdiTrashCanOutline} />
           </IconButton>
         </Tooltip>
       </ListItemSecondaryAction>
