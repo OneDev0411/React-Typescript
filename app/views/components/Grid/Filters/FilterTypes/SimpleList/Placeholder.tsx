@@ -6,7 +6,6 @@ import { useTheme } from '@material-ui/core/styles'
 
 interface Props extends BoxProps {
   hasError?: boolean
-  children: React.ReactNode
 }
 
 export const Placeholder = ({ hasError = false, ...props }: Props) => {
