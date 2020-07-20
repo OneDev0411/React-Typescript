@@ -51,7 +51,7 @@ export function From({ deal }: Props) {
         member.id === user.id ||
         (member.user_type === 'Agent' &&
           member.has_docusign &&
-          roles.some(role => role.user.id === member.id))
+          roles.some(role => role?.user?.id === member.id))
     )
   }, [user, roles])
 

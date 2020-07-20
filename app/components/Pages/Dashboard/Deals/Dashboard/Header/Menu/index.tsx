@@ -5,13 +5,14 @@ import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 
 import { CloseButton } from 'components/Button/CloseButton'
-import SendEmail from 'components/SendEmailButton'
 
 import YardSign from 'deals/components/YardSign'
 import OpenHouse from 'deals/components/OpenHouse'
 
-import RemoveDraft from './RemoveDraft'
 import DealStatus from '../../../components/DealStatus'
+
+import RemoveDraft from './RemoveDraft'
+import { Email } from './Email'
 
 interface Props {
   deal: IDeal
@@ -51,7 +52,7 @@ export const Menu = withRouter(
 
         <YardSign deal={deal} />
 
-        <SendEmail deal={deal} size="small" />
+        <Email />
 
         {deal.deal_type === 'Selling' && !deal.has_active_offer && (
           <Button

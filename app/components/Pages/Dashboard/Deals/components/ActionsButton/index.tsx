@@ -9,7 +9,6 @@ import { setSelectedTask } from 'actions/deals'
 import { isBackOffice } from 'utils/user-teams'
 import Tooltip from 'components/tooltip'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
-import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import {
@@ -29,7 +28,7 @@ import type {
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT,
-  CLEAR_ATTACHMENTS
+  SET_DRAWER_STATUS
 } from 'deals/contexts/actions-context/constants'
 
 import {
@@ -68,7 +67,6 @@ import {
   viewFile
 } from './helpers/actions'
 
-import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
 import UploadManager from '../../UploadManager'
 
@@ -95,17 +93,14 @@ interface ContextProps {
 
 interface State {
   isMenuOpen: boolean
-  isSignatureFormOpen: boolean
   isPdfSplitterOpen: boolean
   isTasksDrawerOpen: boolean
-  isComposeEmailOpen: boolean
   multipleItemsSelection: {
     items: IDealFile[]
     title: string
     actionTitle: string
     onSelect(file: IDealFile): void
   } | null
-  emailComposeAttachments: IDealEmailFile[]
 }
 
 interface StateProps {
@@ -129,12 +124,9 @@ class ActionsButton extends React.Component<
 
     this.state = {
       isMenuOpen: false,
-      isSignatureFormOpen: false,
       isPdfSplitterOpen: false,
       isTasksDrawerOpen: false,
-      isComposeEmailOpen: false,
-      multipleItemsSelection: null,
-      emailComposeAttachments: []
+      multipleItemsSelection: null
     }
 
     this.actions = {
@@ -196,16 +188,6 @@ class ActionsButton extends React.Component<
   handleToggleMenu = () =>
     this.setState(state => ({ isMenuOpen: !state.isMenuOpen }))
 
-  handleDeselectAction = () => {
-    this.setState({
-      isSignatureFormOpen: false
-    })
-
-    this.props.actionsDispatch({
-      type: CLEAR_ATTACHMENTS
-    })
-  }
-
   handleCloseMultipleItemsSelectionDrawer = () =>
     this.setState({
       multipleItemsSelection: null
@@ -238,13 +220,13 @@ class ActionsButton extends React.Component<
       this.props.file!
     )
 
-    this.handleOpenComposeEmail(attachments)
+    this.updateEmailList(attachments)
   }
 
   emailForm = () => {
     const attachments = getFormEmailAttachments(this.props.task)
 
-    this.handleOpenComposeEmail(attachments)
+    this.updateEmailList(attachments)
   }
 
   emailEnvelope = () => {
@@ -253,38 +235,17 @@ class ActionsButton extends React.Component<
       this.props.envelope!
     )
 
-    this.handleOpenComposeEmail(attachments)
-  }
-
-  handleAddMoreEmailAttachments = () => {
-    this.props.actionsDispatch({
-      type: ADD_ATTACHMENTS,
-      actions: [EMAIL_ENVELOPE, EMAIL_FILE, EMAIL_FORM],
-      attachments: this.state.emailComposeAttachments
-    })
-
-    this.setState({
-      isComposeEmailOpen: false,
-      emailComposeAttachments: []
-    })
+    this.updateEmailList(attachments)
   }
 
   /**
    *
    */
-  handleOpenComposeEmail = (files: IDealEmailFile[]) => {
-    if (
-      this.props.actionsState.actions.some(name =>
-        [EMAIL_FORM, EMAIL_FILE, EMAIL_ENVELOPE].includes(name)
-      ) === false
-    ) {
-      this.setState({
-        isComposeEmailOpen: true,
-        emailComposeAttachments: files
-      })
-
-      return
-    }
+  updateEmailList = (files: IDealEmailFile[]) => {
+    this.props.actionsDispatch({
+      type: SET_DRAWER_STATUS,
+      isDrawerOpen: this.props.actionsState.actions.length === 0
+    })
 
     const exists = this.props.actionsState.attachments.some(attachment =>
       files.some(doc =>
@@ -305,18 +266,8 @@ class ActionsButton extends React.Component<
 
     this.props.actionsDispatch({
       type: ADD_ATTACHMENTS,
-      attachments: files
-    })
-  }
-
-  handleCloseComposeEmail = () => {
-    this.setState(state => ({
-      isComposeEmailOpen: false,
-      emailComposeAttachments: []
-    }))
-
-    this.props.actionsDispatch({
-      type: CLEAR_ATTACHMENTS
+      attachments: files,
+      actions: [EMAIL_FORM, EMAIL_FILE, EMAIL_ENVELOPE]
     })
   }
 
@@ -327,14 +278,12 @@ class ActionsButton extends React.Component<
     )
 
     this.updateDocusignList(attachments)
-    this.handleGetSignature()
   }
 
   docusignForm = () => {
     const attachments = getFormEsignAttachments(this.props.task)
 
     this.updateDocusignList(attachments)
-    this.handleGetSignature()
   }
 
   docusignFile = () => {
@@ -344,10 +293,14 @@ class ActionsButton extends React.Component<
     )
 
     this.updateDocusignList(attachments)
-    this.handleGetSignature()
   }
 
   updateDocusignList = (files: IFile[]) => {
+    this.props.actionsDispatch({
+      type: SET_DRAWER_STATUS,
+      isDrawerOpen: this.props.actionsState.actions.length === 0
+    })
+
     files.forEach(file => {
       const isFileExists = this.props.actionsState.attachments.some(
         attachment => attachment.id === file.id
@@ -361,26 +314,10 @@ class ActionsButton extends React.Component<
       } else {
         this.props.actionsDispatch({
           type: ADD_ATTACHMENTS,
-          attachments: [file]
+          attachments: [file],
+          actions: [DOCUSIGN_ENVELOPE, DOCUSIGN_FILE, DOCUSIGN_FORM]
         })
       }
-    })
-  }
-
-  /**
-   *
-   */
-  handleGetSignature = () => {
-    if (
-      this.props.actionsState.actions.some(name =>
-        [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE].includes(name)
-      )
-    ) {
-      return
-    }
-
-    this.setState({
-      isSignatureFormOpen: true
     })
   }
 
@@ -521,18 +458,6 @@ class ActionsButton extends React.Component<
           <div />
         </UploadManager>
 
-        {this.state.isSignatureFormOpen && (
-          // @ts-ignore
-          <GetSignature
-            isOpen
-            deal={this.props.deal}
-            onClickAddAttachments={() =>
-              this.setState({ isSignatureFormOpen: false })
-            }
-            onClose={this.handleDeselectAction}
-          />
-        )}
-
         {this.state.isPdfSplitterOpen && (
           <PdfSplitter
             files={this.getSplitterFiles()}
@@ -551,20 +476,6 @@ class ActionsButton extends React.Component<
             }}
             onClose={this.toggleMoveFile}
             title="Move to Checklist"
-          />
-        )}
-
-        {this.state.isComposeEmailOpen && (
-          <SingleEmailComposeDrawer
-            isOpen
-            initialValues={{
-              from: this.props.user,
-              attachments: this.state.emailComposeAttachments
-            }}
-            deal={this.props.deal}
-            onClickAddDealAttachments={this.handleAddMoreEmailAttachments}
-            onClose={this.handleCloseComposeEmail}
-            onSent={this.handleCloseComposeEmail}
           />
         )}
 

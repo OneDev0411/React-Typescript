@@ -70,7 +70,7 @@ export const actionsDefaultProperties = {
     type: 'resend-envelope'
   },
   [EMAIL_ENVELOPE]: {
-    label: getEmailLabel.bind(null, 'ENVELOPE'),
+    label: getEmailLabel.bind(null, 'Envelope'),
     type: 'email-envelope'
   },
   [EMAIL_FILE]: {
