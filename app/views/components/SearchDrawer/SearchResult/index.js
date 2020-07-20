@@ -8,26 +8,27 @@ import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
 export function SearchResultList(props) {
   if (props.isLoading) {
-    return false
+    return null
   }
 
   return (
     <ClickOutside onClickOutside={props.handleClickOutside}>
-      <ListContainer asDropDown={props.multipleSelection}>
-        {props.error && (
-          <Alert
-            type={props.error.type === 'error' ? props.error.type : 'warning'}
-            message={props.error.message}
-          />
-        )}
-
-        <Body
-          getItemProps={props.getItemProps}
-          list={props.searchResults}
-          handleSelectItem={props.handleSelectItem}
-          ItemRow={props.ItemRow}
+      {props.error && (
+        <Alert
+          type={props.error.type === 'error' ? props.error.type : 'warning'}
+          message={props.error.message}
         />
-      </ListContainer>
+      )}
+      {props.searchResults && props.searchResults.length > 0 && (
+        <ListContainer asDropDown={props.multipleSelection}>
+          <Body
+            getItemProps={props.getItemProps}
+            list={props.searchResults}
+            handleSelectItem={props.handleSelectItem}
+            ItemRow={props.ItemRow}
+          />
+        </ListContainer>
+      )}
     </ClickOutside>
   )
 }
