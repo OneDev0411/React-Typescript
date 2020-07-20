@@ -8,10 +8,11 @@ import { EventDrawer } from 'components/EventDrawer'
 import { preSaveFormat } from 'components/EventDrawer/helpers/pre-save-format'
 import Dialog from 'components/Dialog'
 import { IAppState } from 'reducers'
+import { noop } from 'utils/helpers'
 
 import { FollowUpEmail } from './types'
-import { getFollowUpEmailCrmTask } from './get-follow-up-email-crm-task'
-import { oneDayTimestamp, todayTimestamp, tomorrowTimestamp } from './constants'
+import { getFollowUpEmailCrmTask } from './helper/get-follow-up-crm-task'
+import { getInitialDate } from './helper/get-initial-date'
 
 const useStyles = makeStyles((theme: Theme) => ({
   description: {
@@ -23,19 +24,31 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface Props {
-  email: FollowUpEmail
+  email?: FollowUpEmail
+  baseDate?: Date
   isOpen: boolean
   onClose: () => void
+  callback?: (e: IEvent) => void
 }
 
-export default function EmailFollowUpModal({ email, onClose, isOpen }: Props) {
+export default function FollowUpModal({
+  isOpen,
+  email = undefined,
+  baseDate,
+  onClose,
+  callback = noop
+}: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const user = useSelector<IAppState, IUser>(state => state.user)
   const [isEventDrawerOpen, setIsEventDrawerOpen] = useState(false)
+  const { oneDayTimestamp, todayTimestamp, tomorrowTimestamp } = useMemo(
+    () => getInitialDate(baseDate),
+    [baseDate]
+  )
   const crmTask = useMemo(
     () => getFollowUpEmailCrmTask(email, new Date(tomorrowTimestamp), user),
-    [email, user]
+    [email, tomorrowTimestamp, user]
   )
 
   const handleClose = () => {
@@ -64,8 +77,9 @@ export default function EmailFollowUpModal({ email, onClose, isOpen }: Props) {
         getFollowUpEmailCrmTask(email, new Date(dueDate), user)
       )
 
-      await createTask(task)
+      const followUpTask = await createTask(task)
 
+      callback(followUpTask)
       onClose()
 
       dispatch(
@@ -126,7 +140,8 @@ export default function EmailFollowUpModal({ email, onClose, isOpen }: Props) {
           isOpen
           initialValues={crmTask}
           title="Add a follow up"
-          submitCallback={() => {
+          submitCallback={(event, action) => {
+            callback(event)
             setIsEventDrawerOpen(false)
             onClose()
           }}

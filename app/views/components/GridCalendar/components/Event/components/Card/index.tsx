@@ -1,4 +1,4 @@
-import React, { useMemo, memo } from 'react'
+import React, { useState, useMemo, memo } from 'react'
 import cn from 'classnames'
 import { Popover, Button, IconButton } from '@material-ui/core'
 
@@ -11,6 +11,7 @@ import { importantDatesIcons as contactIcons } from 'views/utils/important-dates
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
+import FollowUpModal from 'components/FollowUpModal'
 
 import {
   isCRMEvent,
@@ -39,6 +40,8 @@ const EventCardComponent = ({
   onClose
 }: Props) => {
   const popoverClasses = usePopoverStyles()
+  const [isFollowUpModalOpen, setFollowUpModalOpen] = useState(false)
+
   const open = Boolean(el)
   const id = open ? 'event-card-popover' : undefined
 
@@ -73,6 +76,8 @@ const EventCardComponent = ({
   const isDeal = useMemo(() => isDealEvent(rowEvent), [rowEvent])
   const isCelebration = useMemo(() => isCelebrationEvent(rowEvent), [rowEvent])
 
+  const onCloseFollowUpModal = () => setFollowUpModalOpen(false)
+
   const handleDelete = async () => {
     try {
       await deleteTask(rowEvent.id)
@@ -84,82 +89,92 @@ const EventCardComponent = ({
   }
 
   return (
-    <Popover
-      id={id}
-      open={open}
-      anchorEl={el}
-      onClose={onClose}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'center'
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'center'
-      }}
-    >
-      <div className={popoverClasses.container}>
-        <header className={popoverClasses.header}>
-          <IconButton size="small" aria-label="close" onClick={onClose}>
-            <CloseIcon size="small" />
-          </IconButton>
-          {isCRMEvent(rowEvent) && (
-            <>
-              <IconButton
+    <>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={el}
+        onClose={onClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center'
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+      >
+        <div className={popoverClasses.container}>
+          <header className={popoverClasses.header}>
+            <IconButton size="small" aria-label="close" onClick={onClose}>
+              <CloseIcon size="small" />
+            </IconButton>
+            {isCRMEvent(rowEvent) && (
+              <>
+                <IconButton
+                  size="small"
+                  aria-label="delete"
+                  onClick={handleDelete}
+                >
+                  <IconDeleteOutline />
+                </IconButton>
+                <IconButton
+                  size="small"
+                  aria-label="edit"
+                  onClick={() => onSelect(rowEvent)}
+                >
+                  <EditIcon size="small" />
+                </IconButton>
+              </>
+            )}
+          </header>
+          <div className={popoverClasses.body}>
+            <div
+              className={cn(popoverClasses.icon, {
+                [popoverClasses.dealIcon]: isDeal,
+                [popoverClasses.celebrationIcon]: isCelebration
+              })}
+            >
+              <icon.icon />
+            </div>
+            <div className={popoverClasses.details}>
+              <span className={popoverClasses.eventTitle}>
+                {event.event.title}
+              </span>
+              <span className={popoverClasses.eventDate}>
+                {getFormatDate(rowEvent)}
+              </span>
+            </div>
+          </div>
+          <footer className={popoverClasses.footer}>
+            {(isDeal || isCelebration) && (
+              <Button
+                variant="outlined"
                 size="small"
-                aria-label="delete"
-                onClick={handleDelete}
-              >
-                <IconDeleteOutline />
-              </IconButton>
-              <IconButton
-                size="small"
-                aria-label="edit"
                 onClick={() => onSelect(rowEvent)}
               >
-                <EditIcon size="small" />
-              </IconButton>
-            </>
-          )}
-        </header>
-        <div className={popoverClasses.body}>
-          <div
-            className={cn(popoverClasses.icon, {
-              [popoverClasses.dealIcon]: isDeal,
-              [popoverClasses.celebrationIcon]: isCelebration
-            })}
-          >
-            <icon.icon />
-          </div>
-          <div className={popoverClasses.details}>
-            <span className={popoverClasses.eventTitle}>
-              {event.event.title}
-            </span>
-            <span className={popoverClasses.eventDate}>
-              {getFormatDate(rowEvent)}
-            </span>
-          </div>
-        </div>
-        <footer className={popoverClasses.footer}>
-          {(isDeal || isCelebration) && (
+                {isCelebration ? 'Send Card' : 'View Deal'}
+              </Button>
+            )}
             <Button
               variant="outlined"
               size="small"
-              onClick={() => onSelect(rowEvent)}
+              onClick={() => setFollowUpModalOpen(true)}
             >
-              {isCelebration ? 'Send Card' : 'View Deal'}
+              Follow Up
             </Button>
-          )}
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => onSelect(rowEvent)}
-          >
-            Follow Up
-          </Button>
-        </footer>
-      </div>
-    </Popover>
+          </footer>
+        </div>
+      </Popover>
+      {isFollowUpModalOpen && (
+        <FollowUpModal
+          isOpen
+          baseDate={new Date(rowEvent.timestamp * 1000)}
+          onClose={onCloseFollowUpModal}
+          callback={e => onChange(e, 'created')}
+        />
+      )}
+    </>
   )
 }
 

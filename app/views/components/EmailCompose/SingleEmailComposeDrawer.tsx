@@ -1,6 +1,6 @@
 import React, { ComponentProps, useState } from 'react'
 
-import EmailFollowUpModal from '../EmailFollowUpModal'
+import FollowUpModal from '../FollowUpModal'
 import OverlayDrawer from '../OverlayDrawer'
 import { SingleEmailComposeForm } from './SingleEmailComposeForm'
 
@@ -40,7 +40,7 @@ export function SingleEmailComposeDrawer({
     setFollowUpModalIsOpen(true)
   }
 
-  const onCloseEmailFollowUpModal = () => {
+  const onCloseFollowUpModal = () => {
     setFollowUpModalIsOpen(false)
     onClose()
 
@@ -61,10 +61,10 @@ export function SingleEmailComposeDrawer({
           onClickAddDealAttachments={onClickAddDealAttachments}
         />
       </OverlayDrawer>
-      <EmailFollowUpModal
+      <FollowUpModal
         email={email}
         isOpen={followUpModalIsOpen}
-        onClose={onCloseEmailFollowUpModal}
+        onClose={onCloseFollowUpModal}
       />
     </>
   )

@@ -19,7 +19,6 @@ import { mdiReplyAllOutline, mdiReplyOutline } from '@mdi/js'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { forwardOutlined } from 'components/SvgIcons/icons'
 import { Iframe } from 'components/Iframe'
-// import EmailFollowUpModal from 'components/EmailFollowUpModal'
 
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
@@ -250,20 +249,6 @@ export function EmailThreadItem({
                   <SvgIcon path={forwardOutlined} rightMargined />
                   Forward
                 </Button>
-
-                {/* <Button
-                  className={classes.actionButton}
-                  onClick={() => setFollowUpModalIsOpen(true)}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Set a Follow Up
-                </Button>
-                <EmailFollowUpModal
-                  email={email}
-                  isOpen={followUpModalIsOpen}
-                  onClose={() => setFollowUpModalIsOpen(false)}
-                /> */}
               </Box>
             )}
             {isResponseOpen && (

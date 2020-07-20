@@ -4,15 +4,26 @@ import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-va
 import { EmailThreadEmail } from 'components/EmailThread/types'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 
-import { FollowUpEmail } from './types'
+import { FollowUpEmail } from '../types'
 
 export function getFollowUpEmailCrmTask(
-  email: FollowUpEmail,
+  email: FollowUpEmail | undefined,
   dueDate: Date,
   user: IUser
 ) {
   if (!email) {
-    return undefined
+    // return undefined
+    const title = getCrmTaskTitle()
+    const description = getCrmTaskDescription(user.display_name, dueDate)
+
+    return initialValueGenerator(
+      user,
+      [],
+      dueDate,
+      undefined,
+      title,
+      description
+    )
   }
 
   if ('type' in email && email.type === 'email_campaign') {
