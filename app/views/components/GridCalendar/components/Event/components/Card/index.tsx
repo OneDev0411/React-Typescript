@@ -1,6 +1,7 @@
 import React, { useState, useMemo, memo } from 'react'
 import cn from 'classnames'
 import { Popover, Button, IconButton } from '@material-ui/core'
+import fecha from 'fecha'
 
 import { mdiClose, mdiTrashCanOutline, mdiPencilOutline } from '@mdi/js'
 
@@ -170,6 +171,18 @@ const EventCardComponent = ({
       {isFollowUpModalOpen && (
         <FollowUpModal
           isOpen
+          dictionary={{
+            description:
+              'Never forget an event, put a reminder on your calendar now!',
+            taskTitle: () => `Follow Up: ${event.event.title}`,
+            taskDescription: (item, dueDate) =>
+              `This is a follow up reminder ${
+                event.event.title
+              } set in Rechat, on ${fecha.format(
+                dueDate,
+                'dddd MMMM Do, YYYY'
+              )}.`
+          }}
           baseDate={new Date(rowEvent.timestamp * 1000)}
           onClose={onCloseFollowUpModal}
           callback={e => onChange(e, 'created')}

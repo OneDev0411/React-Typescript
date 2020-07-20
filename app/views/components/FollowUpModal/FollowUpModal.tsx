@@ -23,18 +23,25 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-interface Props {
+export interface Props {
   email?: FollowUpEmail
   baseDate?: Date
   isOpen: boolean
+  dictionary?: {
+    title?: string
+    description?: string
+    taskTitle?: (item?: string) => string
+    taskDescription?: (item: string, dueDate: Date | number) => string
+  }
   onClose: () => void
   callback?: (e: IEvent) => void
 }
 
 export default function FollowUpModal({
   isOpen,
-  email = undefined,
   baseDate,
+  dictionary,
+  email = undefined,
   onClose,
   callback = noop
 }: Props) {
@@ -47,8 +54,9 @@ export default function FollowUpModal({
     [baseDate]
   )
   const crmTask = useMemo(
-    () => getFollowUpCrmTask(email, new Date(tomorrowTimestamp), user),
-    [email, tomorrowTimestamp, user]
+    () =>
+      getFollowUpCrmTask(email, new Date(tomorrowTimestamp), user, dictionary),
+    [dictionary, email, tomorrowTimestamp, user]
   )
 
   const handleClose = () => {
@@ -74,7 +82,7 @@ export default function FollowUpModal({
       setIsEventDrawerOpen(true)
     } else {
       const task = await preSaveFormat(
-        getFollowUpCrmTask(email, new Date(dueDate), user)
+        getFollowUpCrmTask(email, new Date(dueDate), user, dictionary)
       )
 
       const followUpTask = await createTask(task)
@@ -97,12 +105,13 @@ export default function FollowUpModal({
         id="email-follow-up-dialog"
         open={isOpen}
         onClose={handleClose}
-        title="Set a follow up?"
+        title={dictionary?.title || 'Set a follow up?'}
         maxWidth="xs"
       >
         <Typography gutterBottom className={classes.description}>
-          Growing sales is all about setting the next follow up, put a reminder
-          on your calendar now!
+          {dictionary?.description ||
+            `Growing sales is all about setting the next follow up, put a reminder
+          on your calendar now!`}
         </Typography>
         <Button
           fullWidth
