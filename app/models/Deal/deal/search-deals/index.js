@@ -40,10 +40,6 @@ export async function searchDeals(
     } else {
       associations = 'associations[]=deal.brand'
 
-      payload.role = {
-        user: [user.id]
-      }
-
       payload.$order = order
     }
 
