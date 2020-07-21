@@ -96,26 +96,26 @@ export function Address({
           <TextMiddleTruncate text={deal.title} maxLength={40} />
         </ALinkToClosable>
 
-        <div>
+        <div className={classes.container}>
           <Typography variant="caption" className={classes.enderType}>
             {getEnderType(deal)}
           </Typography>
+
+          {roles && (
+            <>
+              <div className={classes.circle} />
+              <div className={classes.side}>
+                <Side
+                  deal={deal}
+                  roles={roles}
+                  rowId={rowIndex! + 1}
+                  rowsCount={totalRows!}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
-
-      {roles && (
-        <>
-          <div className={classes.circle} />
-          <div className={classes.side}>
-            <Side
-              deal={deal}
-              roles={roles}
-              rowId={rowIndex! + 1}
-              rowsCount={totalRows!}
-            />
-          </div>
-        </>
-      )}
     </div>
   )
 }
