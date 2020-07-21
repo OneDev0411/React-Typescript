@@ -31,7 +31,10 @@ export function FolderOptionsMenu({ deal, checklist, isBackOffice }: Props) {
   const dispatch = useDispatch()
   const [isSaving, setIsSaving] = useState(false)
 
-  const handleUpdateChecklist = async (data: object, close: () => void) => {
+  const handleUpdateChecklist = async (
+    data: Partial<IDealChecklist>,
+    close: () => void
+  ) => {
     setIsSaving(true)
 
     try {
@@ -41,19 +44,19 @@ export function FolderOptionsMenu({ deal, checklist, isBackOffice }: Props) {
           ...data
         })
       )
-    } catch (e) {
-      addNotification({
-        message: 'Something bad happened. please try again',
-        status: 'error'
-      })
-    } finally {
+
       dispatch(
         addNotification({
           message: 'The checklist is updated',
           status: 'success'
         })
       )
-
+    } catch (e) {
+      addNotification({
+        message: 'Something bad happened. Please try again',
+        status: 'error'
+      })
+    } finally {
       setIsSaving(false)
       close()
     }
