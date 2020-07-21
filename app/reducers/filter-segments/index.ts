@@ -23,9 +23,14 @@ const filterSegments = <T>(state: IReduxFilterSegmentState<T>, action) => {
     case types.CHANGE_ACTIVE_FILTER_SEGMENT:
       return {
         ...state,
+        activeSegmentId: action.segmentId,
+        activeFilters: {}
+      }
+    case types.SWITCH_ACTIVE_SAVED_SEGMENT:
+      return {
+        ...state,
         activeSegmentId: action.segmentId
       }
-
     case types.FETCH_FILTER_SEGMENTS:
       return {
         ...state,
