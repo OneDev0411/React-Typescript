@@ -8,7 +8,7 @@ import {
   updateFilterSegment,
   changeActiveFilterSegment
 } from 'store_actions/filter-segments'
-
+import { SWITCH_ACTIVE_SAVED_SEGMENT } from 'constants/filter-segments'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 
 import Modal from 'components/BasicModal'
@@ -111,7 +111,13 @@ class SaveSegment extends React.Component {
           createFilterSegment(name, segment, DEFAULT_QUERY)
         )
 
-        dispatch(changeActiveFilterSegment(name, newSegment.id))
+        dispatch(
+          changeActiveFilterSegment(
+            name,
+            newSegment.id,
+            SWITCH_ACTIVE_SAVED_SEGMENT
+          )
+        )
       }
 
       this.setState({
