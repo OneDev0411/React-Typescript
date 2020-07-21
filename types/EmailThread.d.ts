@@ -42,6 +42,7 @@ declare interface IEmailThreadEmailBase<T> {
   to_raw: IRawEmailRecipient[]
   unique_body?: string
   is_read: boolean
+  campaign?: IEmailCampaign
   type: T
 }
 
