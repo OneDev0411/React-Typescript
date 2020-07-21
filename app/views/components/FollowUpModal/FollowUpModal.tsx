@@ -8,10 +8,11 @@ import { EventDrawer } from 'components/EventDrawer'
 import { preSaveFormat } from 'components/EventDrawer/helpers/pre-save-format'
 import Dialog from 'components/Dialog'
 import { IAppState } from 'reducers'
+import { noop } from 'utils/helpers'
 
 import { FollowUpEmail } from './types'
-import { getFollowUpEmailCrmTask } from './get-follow-up-email-crm-task'
-import { oneDayTimestamp, todayTimestamp, tomorrowTimestamp } from './constants'
+import { getFollowUpCrmTask } from './helper/get-follow-up-crm-task'
+import { getInitialDate } from './helper/get-initial-date'
 
 const useStyles = makeStyles((theme: Theme) => ({
   description: {
@@ -22,20 +23,40 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-interface Props {
-  email: FollowUpEmail
+export interface Props {
+  email?: FollowUpEmail
+  baseDate?: Date
   isOpen: boolean
+  dictionary?: {
+    title?: string
+    description?: string
+    taskTitle?: (item?: string) => string
+    taskDescription?: (item: string, dueDate: Date | number) => string
+  }
   onClose: () => void
+  callback?: (e: IEvent) => void
 }
 
-export default function EmailFollowUpModal({ email, onClose, isOpen }: Props) {
+export default function FollowUpModal({
+  isOpen,
+  baseDate,
+  dictionary,
+  email = undefined,
+  onClose,
+  callback = noop
+}: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const user = useSelector<IAppState, IUser>(state => state.user)
   const [isEventDrawerOpen, setIsEventDrawerOpen] = useState(false)
+  const { oneDayTimestamp, todayTimestamp, tomorrowTimestamp } = useMemo(
+    () => getInitialDate(baseDate),
+    [baseDate]
+  )
   const crmTask = useMemo(
-    () => getFollowUpEmailCrmTask(email, new Date(tomorrowTimestamp), user),
-    [email, user]
+    () =>
+      getFollowUpCrmTask(email, new Date(tomorrowTimestamp), user, dictionary),
+    [dictionary, email, tomorrowTimestamp, user]
   )
 
   const handleClose = () => {
@@ -61,11 +82,12 @@ export default function EmailFollowUpModal({ email, onClose, isOpen }: Props) {
       setIsEventDrawerOpen(true)
     } else {
       const task = await preSaveFormat(
-        getFollowUpEmailCrmTask(email, new Date(dueDate), user)
+        getFollowUpCrmTask(email, new Date(dueDate), user, dictionary)
       )
 
-      await createTask(task)
+      const followUpTask = await createTask(task)
 
+      callback(followUpTask)
       onClose()
 
       dispatch(
@@ -83,12 +105,13 @@ export default function EmailFollowUpModal({ email, onClose, isOpen }: Props) {
         id="email-follow-up-dialog"
         open={isOpen}
         onClose={handleClose}
-        title="Set a follow up?"
+        title={dictionary?.title || 'Set a follow up?'}
         maxWidth="xs"
       >
         <Typography gutterBottom className={classes.description}>
-          Growing sales is all about setting the next follow up, put a reminder
-          on your calendar now!
+          {dictionary?.description ||
+            `Growing sales is all about setting the next follow up, put a reminder
+          on your calendar now!`}
         </Typography>
         <Button
           fullWidth
@@ -126,7 +149,8 @@ export default function EmailFollowUpModal({ email, onClose, isOpen }: Props) {
           isOpen
           initialValues={crmTask}
           title="Add a follow up"
-          submitCallback={() => {
+          submitCallback={(event, action) => {
+            callback(event)
             setIsEventDrawerOpen(false)
             onClose()
           }}
