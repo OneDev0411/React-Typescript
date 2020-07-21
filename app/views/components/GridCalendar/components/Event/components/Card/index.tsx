@@ -158,13 +158,15 @@ const EventCardComponent = ({
                 {isCelebration ? 'Send Card' : 'View Deal'}
               </Button>
             )}
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={() => setFollowUpModalOpen(true)}
-            >
-              Follow Up
-            </Button>
+            {isCRMEvent(rowEvent) && (
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => setFollowUpModalOpen(true)}
+              >
+                Follow Up
+              </Button>
+            )}
           </footer>
         </div>
       </Popover>
