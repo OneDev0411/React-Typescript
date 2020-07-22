@@ -43,7 +43,7 @@ export default function DeleteDeal(props: Props) {
   }))
 
   const handleClick = () => {
-    if (props.isBackOffice && props.deal.is_draft) {
+    if (!props.isBackOffice && !props.deal.is_draft) {
       dispatch(
         confirmation({
           message: 'Delete Deal',
