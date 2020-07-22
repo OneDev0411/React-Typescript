@@ -19,6 +19,7 @@ import { mdiReplyAllOutline, mdiReplyOutline } from '@mdi/js'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { forwardOutlined } from 'components/SvgIcons/icons'
 import { Iframe } from 'components/Iframe'
+import CampaignStatus from 'components/CampaignStatus'
 
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
@@ -33,6 +34,7 @@ import { EmailRecipient } from '../../EmailRecipient'
 import { ThreeDotsButton } from '../../ThreeDotsButton'
 import { trimEmailQuotedContent } from '../helpers/trimEmailQuotedContent'
 import { updateEmailReadStatus } from '../helpers/update-email-read-status'
+import getStatusFromCampaign from '../helpers/get-status-from-campaign'
 
 interface Props {
   email: EmailThreadEmail
@@ -78,6 +80,9 @@ const useStyles = makeStyles(
     avatar: {
       backgroundColor: theme.palette.divider,
       color: theme.palette.text.primary
+    },
+    campaignStatus: {
+      marginRight: theme.spacing(1)
     }
   }),
   { name: 'EmailThreadItem' }
@@ -115,9 +120,12 @@ export function EmailThreadItem({
   )
 
   const isToggleQuotedContentVisible = trimmedEmailBody !== emailBody
-
   const hasNonInlineAttachments =
     email.attachments.filter(attachment => !attachment.isInline).length > 0
+  const hasCampaignStatus =
+    !!email.campaign?.google_credential ||
+    !!email.campaign?.microsoft_credential
+  const campaignStatus = email.campaign && getStatusFromCampaign(email.campaign)
 
   return (
     <div className={classes.root}>
@@ -153,6 +161,12 @@ export function EmailThreadItem({
                   iconClasses.small,
                   iconClasses.rightMargin
                 )}
+              />
+            )}
+            {hasCampaignStatus && (
+              <CampaignStatus
+                status={campaignStatus!}
+                className={classes.campaignStatus}
               />
             )}
             <Typography color="textSecondary" variant="caption">
