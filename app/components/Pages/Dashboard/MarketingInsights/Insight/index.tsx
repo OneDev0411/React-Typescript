@@ -95,20 +95,24 @@ function Insight(props: InsightPropsType) {
 
   const openEmailView = async () => {
     try {
-      const email = await getEmailCampaign(id, {
-        emailCampaignAssociations: ['emails'],
-        emailRecipientsAssociations: [],
-        emailFields: ['html', 'text'],
-        limit: 1
-      })
+      if (!emailPreview) {
+        const email = await getEmailCampaign(id, {
+          emailCampaignAssociations: ['emails'],
+          emailRecipientsAssociations: [],
+          emailFields: ['html', 'text'],
+          limit: 1
+        })
 
+        setEmailPreview(getEmailCampaignEmail(email))
+      }
+    } catch (e) {
+      console.error('something went wrong for loading preview')
+    } finally {
       setOpenViewEmail(true)
-      setEmailPreview(getEmailCampaignEmail(email))
-    } catch (e) {}
+    }
   }
 
   const closeEmailView = () => {
-    setEmailPreview(null)
     setOpenViewEmail(false)
   }
 
