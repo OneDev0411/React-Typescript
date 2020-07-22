@@ -20,7 +20,6 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { forwardOutlined } from 'components/SvgIcons/icons'
 import { Iframe } from 'components/Iframe'
 import CampaignStatus from 'components/CampaignStatus'
-// import EmailFollowUpModal from 'components/EmailFollowUpModal'
 
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
