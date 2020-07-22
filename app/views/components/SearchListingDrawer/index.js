@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'underscore'
 import Flex from 'styled-flex-component'
 import { Button, Tooltip } from '@material-ui/core'
 
@@ -39,7 +38,9 @@ class SearchListingDrawer extends React.Component {
       const mockedMLSData = mockListings ? await getMockListing() : null
 
       const listings = await Promise.all(
-        _.map(items, async item => {
+        Object.keys(items).map(async key => {
+          const item = items[key]
+
           if (item.gallery_image_urls) {
             return item
           }
@@ -188,7 +189,12 @@ SearchListingDrawer.propTypes = {
   mockListings: PropTypes.bool,
   allowedStatuses: PropTypes.array,
   title: PropTypes.string,
-  defaultListTitle: PropTypes.string,
+  defaultLists: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+      items: PropTypes.array
+    })
+  ),
   allowSkip: PropTypes.bool
 }
 
@@ -197,7 +203,7 @@ SearchListingDrawer.defaultProps = {
   mockListings: false,
   allowedStatuses: [],
   title: 'Select a Listing',
-  defaultListTitle: 'Add from your deals',
+  defaultLists: [],
   allowSkip: false
 }
 
