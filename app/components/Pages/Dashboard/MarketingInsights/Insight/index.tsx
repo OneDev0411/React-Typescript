@@ -8,6 +8,7 @@ import ContactInfo from 'components/ContactInfo'
 
 import { EmailThread } from 'components/EmailThread'
 
+import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
 
 import Header from './Header'
@@ -38,7 +39,9 @@ function Insight(props: InsightPropsType) {
   })
   const [isOpenViewEmail, setOpenViewEmail] = React.useState(false)
   const { item, isLoading } = useItemData(id)
-  const email = item && getEmailCampaignEmail(item)
+  const [emailPreview, setEmailPreview] = useState<IEmail<
+    IEmailOptionalFields
+  > | null>(null)
 
   if (isLoading) {
     return (
@@ -90,7 +93,24 @@ function Insight(props: InsightPropsType) {
 
   const { subject } = item
 
-  const closeEmailView = () => setOpenViewEmail(false)
+  const openEmailView = async () => {
+    try {
+      const email = await getEmailCampaign(id, {
+        emailCampaignAssociations: ['emails'],
+        emailRecipientsAssociations: [],
+        emailFields: ['html', 'text'],
+        limit: 1
+      })
+
+      setOpenViewEmail(true)
+      setEmailPreview(getEmailCampaignEmail(email))
+    } catch (e) {}
+  }
+
+  const closeEmailView = () => {
+    setEmailPreview(null)
+    setOpenViewEmail(false)
+  }
 
   return (
     <>
@@ -103,7 +123,7 @@ function Insight(props: InsightPropsType) {
         <Header
           backUrl="/dashboard/insights"
           title={subject}
-          onViewEmail={() => setOpenViewEmail(true)}
+          onViewEmail={openEmailView}
         />
         <Dialog
           maxWidth="lg"
@@ -111,10 +131,10 @@ function Insight(props: InsightPropsType) {
           onClose={closeEmailView}
           open={isOpenViewEmail}
         >
-          {email && (
+          {emailPreview && (
             <EmailThread
-              messages={[email]}
-              subject={email.subject}
+              messages={[emailPreview]}
+              subject={emailPreview.subject}
               onClose={closeEmailView}
             />
           )}
