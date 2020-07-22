@@ -11,7 +11,7 @@ export const useCommonStyles = makeStyles(
       ...theme.typography.body3
     },
     general: {
-      background: 'trasnparent',
+      background: 'transparent',
       color: theme.palette.tertiary.dark,
       '& span[data-for="date"]': {
         marginRight: theme.spacing(0.5),
