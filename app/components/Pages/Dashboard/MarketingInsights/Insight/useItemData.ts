@@ -12,9 +12,7 @@ function useItemData(id) {
   > | null>(null)
 
   useEffect(() => {
-    getEmailCampaign(id, {
-      emailFields: ['html', 'text']
-    })
+    getEmailCampaign(id)
       .then(data => {
         setError(false)
         setLoading(false)

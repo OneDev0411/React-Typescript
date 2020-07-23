@@ -37,6 +37,7 @@ interface GetEmailCampaignParams<
    * the given contact will be returned under `emails`.
    */
   contactId?: string
+  limit?: number
 }
 
 export async function getEmailCampaign<
@@ -51,12 +52,18 @@ export async function getEmailCampaign<
     emailRecipientsAssociations = DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS as A2[],
     emailCampaignEmailsAssociation = DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS as A3[],
     emailFields = [] as E[],
-    contactId
+    contactId,
+    limit
   }: GetEmailCampaignParams<A1, A2, A3, E> = {}
 ): Promise<IEmailCampaign<A1, A2, A3, E>> {
-  const associationCondition = contactId
-    ? { 'email_campaign.emails': { contact: contactId } }
-    : undefined
+  // Association Condition
+  const contactIdValue = contactId ? { contact: contactId } : {}
+  const limitValue = limit ? { limit } : {}
+  const associationCondition =
+    contactId || limit
+      ? { 'email_campaign.emails': { ...contactIdValue, ...limitValue } }
+      : {}
+
   const response = await new Fetch().get(`/emails/${id}`).query({
     associations: [
       ...emailCampaignAssociations.map(toEntityAssociation('email_campaign')),
