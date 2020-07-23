@@ -78,6 +78,7 @@ describe('BulkEmailComposeForm', () => {
           }
         ]
       } as IEmailCampaignInput),
+      expect.anything(),
       expect.anything()
     )
   })
