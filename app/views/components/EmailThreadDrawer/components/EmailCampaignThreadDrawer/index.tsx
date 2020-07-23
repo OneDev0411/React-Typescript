@@ -14,7 +14,7 @@ interface Props extends DrawerProps {
  * A drawer for showing an email thread UI for an email campaign.
  */
 export function EmailCampaignThreadDrawer({ campaign, ...drawerProps }: Props) {
-  const email = getEmailCampaignEmail<'html' | 'text'>(campaign)
+  const email = getEmailCampaignEmail(campaign)
 
   return (
     <Drawer {...drawerProps}>
