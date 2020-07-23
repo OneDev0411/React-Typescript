@@ -32,7 +32,13 @@ export function SingleEmailComposeDrawer({
   const [followUpModalIsOpen, setFollowUpModalIsOpen] = useState(false)
 
   const onSent = result => {
-    addFollowUp(result.data)
+    const email = result.data
+
+    if (email.individual) {
+      onClose()
+    } else {
+      addFollowUp(email)
+    }
   }
 
   const addFollowUp = email => {
