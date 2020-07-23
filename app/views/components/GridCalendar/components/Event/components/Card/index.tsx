@@ -87,7 +87,14 @@ const EventCardComponent = ({
       onChange(rowEvent, 'deleted')
     } catch (error) {
       console.log(error)
+    } finally {
+      onClose()
     }
+  }
+  const handleEdit = e => {
+    e.stopPropagation()
+    onSelect(rowEvent)
+    onClose()
   }
 
   return (
@@ -120,11 +127,7 @@ const EventCardComponent = ({
                 >
                   <SvgIcon path={mdiTrashCanOutline} />
                 </IconButton>
-                <IconButton
-                  size="small"
-                  aria-label="edit"
-                  onClick={() => onSelect(rowEvent)}
-                >
+                <IconButton size="small" aria-label="edit" onClick={handleEdit}>
                   <SvgIcon path={mdiPencilOutline} />
                 </IconButton>
               </>
