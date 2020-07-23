@@ -184,6 +184,7 @@ export function EmailResponseComposeForm({
         getEmail={getEmail}
         headers={getHeaders}
         hasSignatureByDefault={false}
+        disableMarketingTemplates
       />
     )
   )
