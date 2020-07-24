@@ -1,11 +1,21 @@
 import { InsightFiltersType } from './types'
 
-export function percent(num, allNum) {
-  if (num === 0 || allNum === 0) {
+export function percent(value: number, total: number): number {
+  if (value === 0 || total === 0) {
     return 0
   }
 
-  return Math.floor((num * 100) / allNum)
+  return Math.floor((value * 100) / total)
+}
+
+export function valueAndPercent(value: number, total: number): string {
+  const rate = percent(value, total)
+
+  if (rate === 0) {
+    return `${value}`
+  }
+
+  return `${value} (${rate}%)`
 }
 
 export function recipientsList(recipients) {

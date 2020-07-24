@@ -21,7 +21,7 @@ import StatsColumn from './Column/Stats'
 import { InsightContainer } from './styled'
 import useListData from './useListData'
 import { InsightFiltersType } from './types'
-import { percent } from './helpers'
+import { valueAndPercent } from './helpers'
 
 const useCustomGridStyles = makeStyles(theme =>
   createStyles({
@@ -101,54 +101,70 @@ function List(props) {
             return null
           }
 
-          const value = `${percent(delivered, sent)}%`
-
           return (
             <StatsColumn
-              title={`Delivered: ${value}`}
-              details={`${percent(failed, sent)} Bounced`}
+              title={`Delivered: ${valueAndPercent(delivered, sent)}`}
+              details={`${valueAndPercent(failed, sent)} Bounced`}
             />
           )
         }
       },
       {
-        header: 'Open Rate',
-        id: 'open-rate',
+        header: 'Opened',
+        id: 'opened',
         class: 'opaque',
         width: '14%',
         verticalAlign: 'center',
-        render: ({ row: { executed_at, opened, sent } }) => {
+        render: ({ row: { executed_at, individual, opened, sent } }) => {
           if (!executed_at) {
             return null
           }
 
-          const value = `${percent(opened, sent)}%`
+          if (individual) {
+            return (
+              <StatsColumn
+                title={`Opened: ${valueAndPercent(opened, sent)}`}
+                details={`${opened} People have opened the email`}
+              />
+            )
+          }
 
           return (
             <StatsColumn
-              title={`Open Rate: ${value}`}
-              details={`${opened} Recipients`}
+              title={`Opens: ${opened}`}
+              details={`Email is opened ${opened} time${
+                opened === 1 ? '' : 's'
+              }`}
             />
           )
         }
       },
       {
-        header: 'Click Rate',
-        id: 'click-rate',
+        header: 'Clicked',
+        id: 'clicked',
         class: 'opaque',
         width: '14%',
         verticalAlign: 'center',
-        render: ({ row: { executed_at, clicked, sent } }) => {
+        render: ({ row: { executed_at, individual, clicked, sent } }) => {
           if (!executed_at) {
             return null
           }
 
-          const value = `${percent(clicked, sent)}%`
+          if (individual) {
+            return (
+              <StatsColumn
+                title={`Clicked: ${valueAndPercent(clicked, sent)}`}
+                details={`${clicked} People have clicked the email`}
+              />
+            )
+          }
 
           return (
             <StatsColumn
-              title={`Click Rate: ${value}`}
-              details={`${clicked} Times`}
+              title={`Clicks: ${clicked}`}
+              details={`Email is clicked ${clicked} time${
+                clicked === 1 ? '' : 's'
+              }`}
             />
           )
         }
