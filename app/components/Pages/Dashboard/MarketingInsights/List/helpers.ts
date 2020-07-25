@@ -1,4 +1,13 @@
+import {
+  GOOGLE_CREDENTIAL,
+  MICROSOFT_CREDENTIAL
+} from 'constants/oauth-accounts'
+
 import { InsightFiltersType } from './types'
+
+export function hasPixelTracking(campaign: IEmailCampaign): boolean {
+  return !!campaign[GOOGLE_CREDENTIAL] || !!campaign[MICROSOFT_CREDENTIAL]
+}
 
 export function percent(value: number, total: number): number {
   if (value === 0 || total === 0) {
