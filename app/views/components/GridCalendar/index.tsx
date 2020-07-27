@@ -383,7 +383,7 @@ export const GridCalendarPresentation = ({
         <FullCalendar
           height="100%"
           initialView="dayGridMonth"
-          dayMaxEventRows
+          dayMaxEventRows={3}
           editable
           headerToolbar={{
             left: 'today prev,next title',

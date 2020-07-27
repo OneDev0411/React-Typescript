@@ -22,7 +22,9 @@ export const getTitle = (event: ICalendarEvent): string => {
   }
 
   if (isDealEvent(event)) {
-    return `Closing: ${title}`
+    const prefix = event.type_label || 'Deal'
+
+    return `${prefix}: ${title}`
   }
 
   if (!title) {
