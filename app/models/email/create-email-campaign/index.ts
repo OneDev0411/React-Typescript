@@ -2,9 +2,11 @@ import Fetch from '../../../services/fetch'
 
 export async function createEmailCampaign(
   email: IIndividualEmailCampaignInput,
-  query = {}
+  query = {},
+  individualMode?: boolean
 ) {
-  const response = await new Fetch().post('/emails').send(email).query(query)
+  const path = individualMode ? '/emails/individual' : '/emails'
+  const response = await new Fetch().post(path).send(email).query(query)
 
   return response.body
 }

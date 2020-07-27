@@ -1,6 +1,6 @@
 import React, { ComponentProps, HTMLProps } from 'react'
 import { Field } from 'react-final-form'
-import { TextFieldProps, Tooltip, makeStyles, Theme } from '@material-ui/core'
+import { TextFieldProps } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -8,12 +8,11 @@ import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 import { createBulkEmailCampaign } from 'models/email/create-bulk-email-campaign'
 
-import IconLock from '../SvgIcons/Lock/IconLock'
-
 import { EmailFormValues } from './types'
 import { normalizeRecipients } from './helpers/normalize-recepients'
 import { getFromData } from './helpers/get-from-data'
 import { From } from './components/From'
+import IndividualModeRecipientLabel from './components/IndividualModeRecipientLabel'
 import EmailRecipientsChipsInput from '../EmailRecipientsChipsInput'
 import EmailComposeForm from './EmailComposeForm'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
@@ -22,13 +21,6 @@ import { getInitialValues } from './helpers/get-initial-values'
 import { hasAccountSendPermission } from './helpers/has-account-send-permission'
 import { attachmentFormValueToEmailAttachmentInput } from './helpers/attachment-form-value-to-email-attachment-input'
 import { EmailRecipientQuickSuggestions } from '../EmailRecipientQuickSuggestions'
-
-const useStyles = makeStyles((theme: Theme) => ({
-  lockIcon: {
-    verticalAlign: 'text-bottom',
-    margin: theme.spacing(0, 1)
-  }
-}))
 
 interface Props
   extends Omit<
@@ -61,7 +53,6 @@ export function BulkEmailComposeForm({
   filterAccounts = hasAccountSendPermission,
   ...otherProps
 }: Props) {
-  const classes = useStyles()
   const user = useSelector<IAppState, IUser>(store => store.user)
   const activeBrand = getActiveBrand(user)
   const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
@@ -94,20 +85,11 @@ export function BulkEmailComposeForm({
       : createBulkEmailCampaign(emailData)
   }
 
-  const label = (
-    <span style={{ whiteSpace: 'nowrap' }}>
-      Recipients
-      <Tooltip title="Emails will be sent individually">
-        <IconLock className={classes.lockIcon} />
-      </Tooltip>
-    </span>
-  )
-
   const renderFields = () => (
     <>
       <From users={activeBrandUsers} accounts={allAccounts} />
       <Field
-        label={label}
+        label={<IndividualModeRecipientLabel />}
         name="to"
         render={toFieldProps => (
           <>

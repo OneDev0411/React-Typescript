@@ -37,6 +37,10 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   onSent?: (result: EmailType) => void
   onClose?: () => void
   onClickAddDealAttachments?: () => void
+  onSelectMarketingTemplate?: (
+    template: IMarketingTemplateInstance | null,
+    values: EmailFormValues
+  ) => boolean | Promise<boolean>
   /**
    * A deal to suggest attachments from it
    */
@@ -45,6 +49,7 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   hasStaticBody?: boolean
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
+  disableMarketingTemplates?: boolean
 
   renderCollapsedFields: (values: EmailFormValues) => ReactNode
   renderFields: (values: EmailFormValues) => ReactNode

@@ -28,6 +28,7 @@ interface Props {
   onChanged: () => void
   hasStaticBody?: boolean
   updateBody: (body: string) => void
+  disableMarketingTemplates?: boolean
   setMarketingTemplate: (template: IMarketingTemplateInstance | null) => void
   onCancel?: () => void
   onDelete?: (values) => void | Promise<any>
@@ -39,6 +40,7 @@ interface Props {
 export function Footer({
   onDelete,
   updateBody,
+  disableMarketingTemplates = false,
   setMarketingTemplate,
   hasStaticBody,
   onClickAddDealAttachments = () => {},
@@ -83,7 +85,7 @@ export function Footer({
         {isEmailTemplateDrawerOpen && (
           <EmailTemplateSelector onTemplateSelected={selectEmailTemplate} />
         )}
-        {isMCTemplateDrawerOpen && (
+        {isMCTemplateDrawerOpen && !disableMarketingTemplates && (
           <MarketingTemplateSelector
             onTemplateSelected={selectMarketingTemplate}
           />
@@ -110,7 +112,7 @@ export function Footer({
               <span>Templates</span>
             </DropdownToggleButton>
           )}
-          {!hasStaticBody && (
+          {!hasStaticBody && !disableMarketingTemplates && (
             <DropdownToggleButton
               isActive={isMCTemplateDrawerOpen}
               onClick={() => {
