@@ -1,12 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Box,
-  Dialog,
-  Theme,
-  Typography,
-  Avatar,
-  Tooltip
-} from '@material-ui/core'
+import { Dialog, Theme, Typography, Avatar, Tooltip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { Helmet } from 'react-helmet'
 import {
@@ -17,7 +10,6 @@ import {
 } from '@mdi/js'
 import classNames from 'classnames'
 
-import { PageTabs, Tab, TabSpacer } from 'components/PageTabs'
 import { formatDate } from 'components/DateTimePicker/helpers'
 import { EmailThread } from 'components/EmailThread'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -39,11 +31,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column'
   },
-  senderWrapper: {
+  headerWrapper: {
+    padding: theme.spacing(0, 3, 1, 3)
+  },
+  header: {
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    paddingTop: theme.spacing(1)
+    paddingTop: theme.spacing(1),
+    margin: theme.spacing(1, 0),
+    borderBottom: `1px solid ${theme.palette.divider}`
   },
   avatar: {
     backgroundColor: theme.palette.grey[200],
@@ -54,6 +51,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: theme.spacing(3),
     fontSize: theme.spacing(2)
   },
+  grow: {
+    flexGrow: 1
+  },
   enabledText: {
     color: theme.palette.common.black
   },
@@ -62,6 +62,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   activeText: {
     color: theme.palette.action.active
+  },
+  sortFieldWrapper: {
+    padding: theme.spacing(0.5, 0)
   },
   insightContainer: {
     padding: theme.spacing(0, 3, 6, 3)
@@ -228,45 +231,33 @@ function Insight({ params: { id } }: Props) {
             />
           )}
         </Dialog>
-        <Box px={3} pb={2}>
-          <PageTabs
-            defaultValue="unknown"
-            tabs={[
-              <TabSpacer key="sender-spacer">
-                <div className={classes.senderWrapper}>
-                  <Typography variant="body2" className={classes.disabledText}>
-                    Sent From&nbsp;&nbsp;
-                  </Typography>
-                  <Avatar
-                    alt={sentFromTitle}
-                    src={sentFrom.profile_image_url || ''}
-                    className={classNames(classes.avatar, classes.senderAvatar)}
-                  >
-                    {sentFromTitle.substring(0, 1).toUpperCase()}
-                  </Avatar>
-                  <Typography variant="body2" className={classes.enabledText}>
-                    &nbsp;&nbsp;{sentFromTitle}
-                  </Typography>
-                  <Typography variant="body2" className={classes.disabledText}>
-                    &nbsp;on
-                  </Typography>
-                  <Typography variant="body2" className={classes.enabledText}>
-                    &nbsp;{formatDate(item.executed_at! * 1000)}
-                  </Typography>
-                </div>
-              </TabSpacer>,
-              <Tab
-                key="sort-field"
-                label={
-                  <SortField
-                    sortLabel={sortField.label}
-                    onChange={setSortField}
-                  />
-                }
-              />
-            ]}
-          />
-        </Box>
+        <div className={classes.headerWrapper}>
+          <div className={classes.header}>
+            <Typography variant="body2" className={classes.disabledText}>
+              Sent From&nbsp;&nbsp;
+            </Typography>
+            <Avatar
+              alt={sentFromTitle}
+              src={sentFrom.profile_image_url || ''}
+              className={classNames(classes.avatar, classes.senderAvatar)}
+            >
+              {sentFromTitle.substring(0, 1).toUpperCase()}
+            </Avatar>
+            <Typography variant="body2" className={classes.enabledText}>
+              &nbsp;&nbsp;{sentFromTitle}
+            </Typography>
+            <Typography variant="body2" className={classes.disabledText}>
+              &nbsp;on
+            </Typography>
+            <Typography variant="body2" className={classes.enabledText}>
+              &nbsp;{formatDate(item.executed_at! * 1000)}
+            </Typography>
+            <div className={classes.grow} />
+            <div className={classes.sortFieldWrapper}>
+              <SortField sortLabel={sortField.label} onChange={setSortField} />
+            </div>
+          </div>
+        </div>
         <div className={classes.insightContainer}>
           <div className={classes.summary}>
             {summaryItems.map(
