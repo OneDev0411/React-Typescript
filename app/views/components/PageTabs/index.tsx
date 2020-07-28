@@ -22,8 +22,6 @@ interface Props {
   hasMegaMenu?: boolean
   onChange?: (value: SelectedTab) => void
   onChangeAction?: (value: SelectedTab) => void
-  content?: ReactNode
-  contentPosition?: 'left' | 'middle' | 'right'
 }
 
 const useStyles = makeStyles(
@@ -32,12 +30,12 @@ const useStyles = makeStyles(
       position: 'relative',
       display: 'flex',
       width: '100%',
-      borderBottom: `1px solid ${theme.palette.divider}`,
       marginBottom: theme.spacing(1)
     },
     tabContainer: {
       width: '100%',
-      marginTop: theme.spacing(1)
+      marginTop: theme.spacing(1),
+      borderBottom: `1px solid ${theme.palette.divider}`
     },
     scroller: {
       position: 'inherit'
@@ -85,9 +83,7 @@ export function PageTabs({
   tabs,
   hasMegaMenu,
   onChange = () => {},
-  onChangeAction = () => {},
-  content,
-  contentPosition = 'left'
+  onChangeAction = () => {}
 }: Props) {
   const classes = useStyles()
   const [selectedTab, setSelectedTab] = useState<SelectedTab>(defaultValue)
@@ -115,8 +111,6 @@ export function PageTabs({
 
   return (
     <div className={classes.container}>
-      {contentPosition === 'left' && content}
-
       <Tabs
         value={value || activeTab || false}
         indicatorColor="primary"
@@ -132,8 +126,6 @@ export function PageTabs({
       >
         {tabs.map(tab => tab)}
       </Tabs>
-
-      {contentPosition === 'middle' && content}
 
       {actions && (
         <div>
@@ -151,8 +143,6 @@ export function PageTabs({
           </Tabs>
         </div>
       )}
-
-      {contentPosition === 'right' && content}
     </div>
   )
 }

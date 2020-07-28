@@ -230,32 +230,31 @@ function Insight({ params: { id } }: Props) {
         </Dialog>
         <Box px={3} pb={2}>
           <PageTabs
-            content={
-              <div className={classes.senderWrapper}>
-                <Typography variant="body2" className={classes.disabledText}>
-                  Sent From&nbsp;&nbsp;
-                </Typography>
-                <Avatar
-                  alt={sentFromTitle}
-                  src={sentFrom.profile_image_url || ''}
-                  className={classNames(classes.avatar, classes.senderAvatar)}
-                >
-                  {sentFromTitle.substring(0, 1).toUpperCase()}
-                </Avatar>
-                <Typography variant="body2" className={classes.enabledText}>
-                  &nbsp;&nbsp;{sentFromTitle}
-                </Typography>
-                <Typography variant="body2" className={classes.disabledText}>
-                  &nbsp;on
-                </Typography>
-                <Typography variant="body2" className={classes.enabledText}>
-                  &nbsp;{formatDate(item.executed_at! * 1000)}
-                </Typography>
-              </div>
-            }
             defaultValue="unknown"
             tabs={[
-              <TabSpacer key="spacer" />,
+              <TabSpacer key="sender-spacer">
+                <div className={classes.senderWrapper}>
+                  <Typography variant="body2" className={classes.disabledText}>
+                    Sent From&nbsp;&nbsp;
+                  </Typography>
+                  <Avatar
+                    alt={sentFromTitle}
+                    src={sentFrom.profile_image_url || ''}
+                    className={classNames(classes.avatar, classes.senderAvatar)}
+                  >
+                    {sentFromTitle.substring(0, 1).toUpperCase()}
+                  </Avatar>
+                  <Typography variant="body2" className={classes.enabledText}>
+                    &nbsp;&nbsp;{sentFromTitle}
+                  </Typography>
+                  <Typography variant="body2" className={classes.disabledText}>
+                    &nbsp;on
+                  </Typography>
+                  <Typography variant="body2" className={classes.enabledText}>
+                    &nbsp;{formatDate(item.executed_at! * 1000)}
+                  </Typography>
+                </div>
+              </TabSpacer>,
               <Tab
                 key="sort-field"
                 label={
