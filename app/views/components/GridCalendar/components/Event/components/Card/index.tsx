@@ -103,6 +103,7 @@ const EventCardComponent = ({
         id={id}
         open={open}
         anchorEl={el}
+        container={() => document.getElementsByClassName('fc-more-popover')[0]}
         onClose={onClose}
         anchorOrigin={{
           vertical: 'bottom',
@@ -156,7 +157,10 @@ const EventCardComponent = ({
               <Button
                 variant="outlined"
                 size="small"
-                onClick={() => onSelect(rowEvent)}
+                onClick={() => {
+                  onSelect(rowEvent)
+                  onClose()
+                }}
               >
                 {isCelebration ? 'Send Card' : 'View Deal'}
               </Button>
@@ -165,7 +169,10 @@ const EventCardComponent = ({
               <Button
                 variant="outlined"
                 size="small"
-                onClick={() => setFollowUpModalOpen(true)}
+                onClick={() => {
+                  setFollowUpModalOpen(true)
+                  onClose()
+                }}
               >
                 Follow Up
               </Button>
