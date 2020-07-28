@@ -38,7 +38,11 @@ export default function CampaignStatus({ status, ...others }: Props) {
       label={
         <>
           {status.opened !== undefined && (
-            <Tooltip title="Opened">
+            <Tooltip
+              title={`Email is opened ${status.opened} time${
+                status.opened === 1 ? '' : 's'
+              }`}
+            >
               <span className={classes.label}>
                 <SvgIcon path={mdiEyeOutline} size={muiIconSizes.small} />
                 <Typography variant="caption">&nbsp;{status.opened}</Typography>
@@ -49,7 +53,11 @@ export default function CampaignStatus({ status, ...others }: Props) {
             <div className={classes.space} />
           )}
           {status.clicked !== undefined && (
-            <Tooltip title="Clicked">
+            <Tooltip
+              title={`Email is clicked ${status.clicked} time${
+                status.clicked === 1 ? '' : 's'
+              }`}
+            >
               <span className={classes.label}>
                 <SvgIcon
                   path={mdiCursorDefaultClickOutline}

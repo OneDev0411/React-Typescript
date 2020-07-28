@@ -21,7 +21,7 @@ import StatsColumn from './Column/Stats'
 import { InsightContainer } from './styled'
 import useListData from './useListData'
 import { InsightFiltersType } from './types'
-import { percent } from './helpers'
+import { valueAndPercent, hasPixelTracking } from './helpers'
 
 const useCustomGridStyles = makeStyles(theme =>
   createStyles({
@@ -96,59 +96,81 @@ function List(props) {
         class: 'opaque',
         width: '14%',
         verticalAlign: 'center',
-        render: ({ row: { executed_at, delivered, sent, failed } }) => {
-          if (!executed_at) {
+        render: ({ row }) => {
+          const { executed_at, delivered, sent, failed } = row
+
+          if (!executed_at || hasPixelTracking(row)) {
             return null
           }
 
-          const value = `${percent(delivered, sent)}%`
-
           return (
             <StatsColumn
-              title={`Delivered: ${value}`}
-              details={`${percent(failed, sent)} Bounced`}
+              title={`Delivered: ${valueAndPercent(delivered, sent)}`}
+              details={`${valueAndPercent(failed, sent)} Bounced`}
             />
           )
         }
       },
       {
-        header: 'Open Rate',
-        id: 'open-rate',
+        header: 'Opened',
+        id: 'opened',
         class: 'opaque',
         width: '14%',
         verticalAlign: 'center',
-        render: ({ row: { executed_at, opened, sent } }) => {
+        render: ({ row }) => {
+          const { executed_at, opened, sent } = row
+
           if (!executed_at) {
             return null
           }
 
-          const value = `${percent(opened, sent)}%`
+          if (hasPixelTracking(row)) {
+            return (
+              <StatsColumn
+                title={`Opens: ${opened}`}
+                details={`Email is opened ${opened} time${
+                  opened === 1 ? '' : 's'
+                }`}
+              />
+            )
+          }
 
           return (
             <StatsColumn
-              title={`Open Rate: ${value}`}
-              details={`${opened} Recipients`}
+              title={`Opened: ${valueAndPercent(opened, sent)}`}
+              details={`${opened} People have opened the email`}
             />
           )
         }
       },
       {
-        header: 'Click Rate',
-        id: 'click-rate',
+        header: 'Clicked',
+        id: 'clicked',
         class: 'opaque',
         width: '14%',
         verticalAlign: 'center',
-        render: ({ row: { executed_at, clicked, sent } }) => {
+        render: ({ row }) => {
+          const { executed_at, clicked, sent } = row
+
           if (!executed_at) {
             return null
           }
 
-          const value = `${percent(clicked, sent)}%`
+          if (hasPixelTracking(row)) {
+            return (
+              <StatsColumn
+                title={`Clicks: ${clicked}`}
+                details={`Email is clicked ${clicked} time${
+                  clicked === 1 ? '' : 's'
+                }`}
+              />
+            )
+          }
 
           return (
             <StatsColumn
-              title={`Click Rate: ${value}`}
-              details={`${clicked} Times`}
+              title={`Clicked: ${valueAndPercent(clicked, sent)}`}
+              details={`${clicked} People have clicked the email`}
             />
           )
         }

@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
+import { Dialog, Theme, Typography, Avatar, Tooltip } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
 import { Helmet } from 'react-helmet'
-import { Box, Dialog } from '@material-ui/core'
+import {
+  mdiCheckAll,
+  mdiEyeOutline,
+  mdiCursorDefaultClickOutline,
+  mdiAccountMultipleOutline
+} from '@mdi/js'
+import classNames from 'classnames'
 
-import { PageTabs, Tab, TabSpacer } from 'components/PageTabs'
 import { formatDate } from 'components/DateTimePicker/helpers'
-import ContactInfo from 'components/ContactInfo'
-
 import { EmailThread } from 'components/EmailThread'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
@@ -14,24 +20,85 @@ import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-e
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
 import Loading from '../../../../Partials/Loading'
-
-import { percent } from '../List/helpers'
-
-import { InsightContainer, PageContainer, SummaryCard } from './styled'
+import { hasPixelTracking, valueAndPercent } from '../List/helpers'
 import useItemData from './useItemData'
-import Summary from './Summary'
 import ContactsTable from './ContactsTable'
 import { ContactsListType } from './types'
 import SortField, { SortableColumnsType as SortFieldType } from './SortField'
 
-interface InsightPropsType {
+const useStyles = makeStyles((theme: Theme) => ({
+  pageContainer: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  headerWrapper: {
+    padding: theme.spacing(0, 3, 1, 3)
+  },
+  header: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    paddingTop: theme.spacing(1),
+    margin: theme.spacing(1, 0),
+    borderBottom: `1px solid ${theme.palette.divider}`
+  },
+  avatar: {
+    backgroundColor: theme.palette.grey[200],
+    color: theme.palette.text.primary
+  },
+  senderAvatar: {
+    height: theme.spacing(3),
+    width: theme.spacing(3),
+    fontSize: theme.spacing(2)
+  },
+  grow: {
+    flexGrow: 1
+  },
+  enabledText: {
+    color: theme.palette.common.black
+  },
+  disabledText: {
+    color: theme.palette.action.disabled
+  },
+  activeText: {
+    color: theme.palette.action.active
+  },
+  sortFieldWrapper: {
+    padding: theme.spacing(0.5, 0)
+  },
+  insightContainer: {
+    padding: theme.spacing(0, 3, 6, 3)
+  },
+  summary: {
+    display: 'flex',
+    marginBottom: theme.spacing(2),
+    border: `1px solid ${theme.palette.action.disabledBackground}`,
+    borderRadius: theme.spacing(0.5),
+    padding: theme.spacing(3, 2),
+    overflow: 'hidden'
+  },
+  summaryItem: {
+    display: 'flex',
+    alignItems: 'center',
+    width: theme.spacing(25)
+  },
+  summaryItemAvatar: {
+    height: theme.spacing(5),
+    width: theme.spacing(5),
+    marginRight: theme.spacing(2)
+  },
+  summaryItemInfo: {
+    width: theme.spacing(16)
+  }
+}))
+
+interface Props {
   params: {
     id: string
   }
 }
 
-function Insight(props: InsightPropsType) {
-  const { id } = props.params
+function Insight({ params: { id } }: Props) {
   const [sortField, setSortField] = useState<SortFieldType>({
     label: 'Most Opened',
     value: 'opened',
@@ -42,6 +109,8 @@ function Insight(props: InsightPropsType) {
   const [emailPreview, setEmailPreview] = useState<IEmail<
     IEmailOptionalFields
   > | null>(null)
+
+  const classes = useStyles()
 
   if (isLoading) {
     return (
@@ -56,42 +125,61 @@ function Insight(props: InsightPropsType) {
     return null
   }
 
-  const totalSent = item.sent
-  const summaryItems = [
-    { name: 'Date', value: formatDate(item.executed_at! * 1000) },
-    { name: 'Total Sent', value: totalSent },
-    {
-      name: 'Successful Deliveries',
-      value: `${percent(item.delivered, totalSent)}% (${item.delivered})`
-    },
-    {
-      name: 'Open Rate',
-      value: `${percent(item.opened, totalSent)}% (${item.opened})`
-    },
-    {
-      name: 'Bounced',
-      value: `${percent(item.failed, totalSent)}% (${item.failed})`
-    },
-    {
-      name: 'Click Rate',
-      value: `${percent(item.clicked, totalSent)}% (${item.clicked})`
-    }
-  ]
   const sentFrom: ContactsListType = {
-    display_name: '',
-    to: '',
-    profile_image_url: ''
+    display_name: item.from ? item.from.display_name || '' : '',
+    to: item.from ? item.from.email : '',
+    profile_image_url: item.from ? item.from.profile_image_url : ''
     // TODO(mojtaba): fix missing fields either make them optional in type
     //  definition, or provide them here
   } as ContactsListType
-
-  if (item.from) {
-    sentFrom.profile_image_url = item.from.profile_image_url
-    sentFrom.to = item.from.email
-    sentFrom.display_name = item.from.display_name || ''
-  }
-
-  const { subject } = item
+  const sentFromTitle = sentFrom.display_name || sentFrom.to
+  const pixelTracking = hasPixelTracking(item)
+  const summaryItems = [
+    {
+      icon: mdiAccountMultipleOutline,
+      value: `${item.sent} Recipient${item.sent === 1 ? '' : 's'}`,
+      label: 'Total Sent'
+    },
+    {
+      icon: mdiCheckAll,
+      value: valueAndPercent(item.delivered, item.sent),
+      label: 'Delivered',
+      tooltip: `${valueAndPercent(item.failed, item.sent)} Bounced`,
+      hidden: pixelTracking
+    },
+    {
+      icon: mdiEyeOutline,
+      value: `${item.opened}`,
+      label: 'Opens',
+      tooltip: `Email is opened ${item.opened} time${
+        item.opened === 1 ? '' : 's'
+      }`,
+      hidden: !pixelTracking
+    },
+    {
+      icon: mdiEyeOutline,
+      value: `${valueAndPercent(item.opened, item.sent)}`,
+      label: 'Opened',
+      tooltip: `${item.opened} People have opened the email`,
+      hidden: pixelTracking
+    },
+    {
+      icon: mdiCursorDefaultClickOutline,
+      value: `${item.clicked}`,
+      label: 'Clicks',
+      tooltip: `Email is clicked ${item.clicked} time${
+        item.clicked === 1 ? '' : 's'
+      }`,
+      hidden: !pixelTracking
+    },
+    {
+      icon: mdiCursorDefaultClickOutline,
+      value: `${valueAndPercent(item.clicked, item.sent)}`,
+      label: 'Clicked',
+      tooltip: `${item.clicked} People have clicked the email`,
+      hidden: pixelTracking
+    }
+  ]
 
   const openEmailView = async () => {
     try {
@@ -120,13 +208,13 @@ function Insight(props: InsightPropsType) {
     <>
       <Helmet>
         <title>{`${
-          subject ? `${subject} | ` : ''
+          item.subject ? `${item.subject} | ` : ''
         }Marketing Insights | Rechat`}</title>
       </Helmet>
-      <PageContainer>
+      <div className={classes.pageContainer}>
         <Header
           backUrl="/dashboard/insights"
-          title={subject}
+          title={item.subject}
           onViewEmail={openEmailView}
         />
         <Dialog
@@ -143,35 +231,71 @@ function Insight(props: InsightPropsType) {
             />
           )}
         </Dialog>
-        <Box px={3} pb={2}>
-          <PageTabs
-            defaultValue="unknown"
-            tabs={[
-              <TabSpacer key="spacer" />,
-              <Tab
-                key="sort-field"
-                label={
-                  <SortField
-                    sortLabel={sortField.label}
-                    onChange={setSortField}
-                  />
-                }
-              />
-            ]}
-          />
-        </Box>
-        <InsightContainer>
-          <aside className="sidebar">
-            <SummaryCard>
-              <Summary items={summaryItems} />
-              {item.from && (
-                <div className="sent-from">
-                  <div className="title">Sent From</div>
-                  <ContactInfo data={sentFrom} />
-                </div>
-              )}
-            </SummaryCard>
-          </aside>
+        <div className={classes.headerWrapper}>
+          <div className={classes.header}>
+            <Typography variant="body2" className={classes.disabledText}>
+              Sent From&nbsp;&nbsp;
+            </Typography>
+            <Avatar
+              alt={sentFromTitle}
+              src={sentFrom.profile_image_url || ''}
+              className={classNames(classes.avatar, classes.senderAvatar)}
+            >
+              {sentFromTitle.substring(0, 1).toUpperCase()}
+            </Avatar>
+            <Typography variant="body2" className={classes.enabledText}>
+              &nbsp;&nbsp;{sentFromTitle}
+            </Typography>
+            <Typography variant="body2" className={classes.disabledText}>
+              &nbsp;on
+            </Typography>
+            <Typography variant="body2" className={classes.enabledText}>
+              &nbsp;{formatDate(item.executed_at! * 1000)}
+            </Typography>
+            <div className={classes.grow} />
+            <div className={classes.sortFieldWrapper}>
+              <SortField sortLabel={sortField.label} onChange={setSortField} />
+            </div>
+          </div>
+        </div>
+        <div className={classes.insightContainer}>
+          <div className={classes.summary}>
+            {summaryItems.map(
+              ({ icon, value, label, tooltip, hidden }, index) =>
+                hidden ? null : (
+                  <Tooltip title={tooltip || ''} placement="bottom-start">
+                    <div key={index} className={classes.summaryItem}>
+                      <Avatar
+                        className={classNames(
+                          classes.avatar,
+                          classes.summaryItemAvatar
+                        )}
+                      >
+                        <SvgIcon path={icon} />
+                      </Avatar>
+                      <div className={classes.summaryItemInfo}>
+                        <Typography
+                          variant="subtitle1"
+                          display="block"
+                          noWrap
+                          className={classes.enabledText}
+                        >
+                          {value}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          display="block"
+                          noWrap
+                          className={classes.activeText}
+                        >
+                          {label}
+                        </Typography>
+                      </div>
+                    </div>
+                  </Tooltip>
+                )
+            )}
+          </div>
           <section className="content">
             <ContactsTable
               item={item}
@@ -179,8 +303,8 @@ function Insight(props: InsightPropsType) {
               onChangeSort={setSortField}
             />
           </section>
-        </InsightContainer>
-      </PageContainer>
+        </div>
+      </div>
     </>
   )
 }
