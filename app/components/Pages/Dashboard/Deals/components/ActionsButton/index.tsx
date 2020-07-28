@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 import Downshift from 'downshift'
 import { mdiChevronDown } from '@mdi/js'
 
@@ -317,45 +316,6 @@ class ActionsButton extends React.Component<
           attachments: [file],
           actions: [DOCUSIGN_ENVELOPE, DOCUSIGN_FILE, DOCUSIGN_FORM]
         })
-      }
-    })
-  }
-
-  /**
-   *
-   */
-  handleView = () => {
-    const openInNewTab = (link: string | undefined) =>
-      link && link.includes('/dashboard/deals/')
-
-    let links = getLastStates({
-      deal: this.props.deal,
-      task: this.props.task,
-      file: this.props.file,
-      envelopes: this.props.envelopes,
-      isBackOffice: this.props.isBackOffice
-    })
-
-    if (links.length <= 1) {
-      return links.length === 1 &&
-        this.props.isBackOffice &&
-        openInNewTab(links[0].internal_url)
-        ? browserHistory.push(links[0].internal_url as string)
-        : window.open(
-            links[0] ? links[0].url : this.props.task.pdf_url,
-            '_blank'
-          )
-    }
-
-    this.setState({
-      multipleItemsSelection: {
-        items: links,
-        title: 'Select a file to view/print',
-        actionTitle: 'View/Print',
-        onSelect: item =>
-          this.props.isBackOffice && openInNewTab(item.internal_url)
-            ? browserHistory.push(item.internal_url as string)
-            : window.open(item.url, '_blank')
       }
     })
   }
