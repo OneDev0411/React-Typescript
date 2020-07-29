@@ -13,6 +13,7 @@ declare interface IMarketingTemplate extends IModel<'template'> {
   template_type: string
   medium: MarketingTemplateMedium
   video: boolean
+  mjml: boolean
   url: string
   variant: string
   inputs: string[]
