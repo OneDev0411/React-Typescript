@@ -14,11 +14,11 @@ import TemplateThumbnail from 'components/TemplateThumbnail'
 
 const useStyles = makeStyles(() => ({
   templateThumbnailWrapper: {
-    transformOrigin: '0 0',
-    transform: 'scaleX(0.385) scaleY(0.365)', // pure hack :facepalm:
-    position: 'absolute',
-    top: 0,
-    left: 0
+    // transformOrigin: '0 0',
+    // transform: 'scaleX(0.385) scaleY(0.365)', // pure hack :facepalm:
+    // position: 'absolute',
+    // top: 0,
+    // left: 0
   }
 }))
 
@@ -31,8 +31,8 @@ interface Props {
 export function Thumbnail({ template, user, className }: Props) {
   const classes = useStyles()
   const brand = getActiveBrand(user)
-  const [width, setWidth] = useState('auto')
-  const [height, setHeight] = useState('auto')
+  // const [width, setWidth] = useState('auto')
+  // const [height, setHeight] = useState('auto')
   const [templateMarkup, setTemplateMarkup] = useState<string>('')
   const [mockListing, setMockListing] = useState<Optional<IListing>>(undefined)
 
@@ -79,20 +79,20 @@ export function Thumbnail({ template, user, className }: Props) {
   return (
     <div
       className={classes.templateThumbnailWrapper}
-      style={{
-        width,
-        height
-      }}
+      // style={{
+      //   width,
+      //   height
+      // }}
     >
       <TemplateThumbnail
         template={templateMarkup}
         mjml={template.template.mjml}
         brand={brand}
         data={{ listing: mockListing, user }}
-        setDimensions={(width, height) => {
-          setWidth(width)
-          setHeight(height)
-        }}
+        // setDimensions={(width, height) => {
+        //   setWidth(width)
+        //   setHeight(height)
+        // }}
       />
     </div>
   )
