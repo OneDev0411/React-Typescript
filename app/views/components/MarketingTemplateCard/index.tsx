@@ -62,7 +62,11 @@ function MarketingTemplateCard(
         data-card="true"
         data-test="marketing-template"
       >
-        <Thumbnail className={classes.image} template={template} />
+        <Thumbnail
+          template={template}
+          user={props.user}
+          className={classes.image}
+        />
         <div className={classes.actions}>{props.actions}</div>
       </div>
       {isInstance && (
