@@ -15,7 +15,15 @@ import { Box, makeStyles, useTheme } from '@material-ui/core'
 
 import { ClassesProps } from 'utils/ts-utils'
 
-import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+import {
+  uploadEmailAttachment,
+  UploadOrigin
+} from 'models/email/upload-email-attachment'
+
+import {
+  GOOGLE_CREDENTIAL,
+  MICROSOFT_CREDENTIAL
+} from 'constants/oauth-accounts'
 
 import {
   EmailComposeFormProps,
@@ -251,6 +259,13 @@ function EmailComposeForm<T>({
       keepDirtyOnReinitialize
       render={formProps => {
         const values = formProps.values as EmailFormValues
+        const fromField = values.from
+        const uploadOrigin: UploadOrigin =
+          fromField.type === GOOGLE_CREDENTIAL
+            ? 'gmail'
+            : fromField.type === MICROSOFT_CREDENTIAL
+            ? 'outlook'
+            : 'mailgun'
 
         return (
           <form
@@ -297,10 +312,11 @@ function EmailComposeForm<T>({
                     ? marketingTemplatePreviewHtml
                     : initialValues.body || ''
                 }
-                uploadAttachment={uploadAttachment}
                 attachments={
                   <Field name="attachments" component={AttachmentsList} />
                 }
+                uploadAttachment={uploadAttachment}
+                uploadOrigin={uploadOrigin}
                 editorState={editorState}
                 onChangeEditor={setEditorState}
                 stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
@@ -332,6 +348,7 @@ function EmailComposeForm<T>({
                   : isSubmitDisabled
               }
               uploadAttachment={uploadAttachment}
+              uploadOrigin={uploadOrigin}
               deal={props.deal}
               onCancel={onCancel}
               onDelete={onDelete}
