@@ -136,9 +136,7 @@ class OpenHouseDrawerInternal extends React.Component {
         const list = await getTemplates(activeTeamId, ['CrmOpenHouse'])
         const templateItem = list[0]
 
-        const rawTemplate = await loadTemplateHtml(
-          `${templateItem.template.url}/index.html`
-        )
+        const rawTemplate = await loadTemplateHtml(templateItem)
 
         const { associations } = this.props
 
