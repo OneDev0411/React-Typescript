@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import useDeepCompareEffect from 'use-deep-compare-effect'
 
 import { makeStyles } from '@material-ui/core'
@@ -12,7 +12,9 @@ import {
 } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 
 const useStyles = makeStyles(() => ({
-  iframe: {}
+  iframe: {
+    transformOrigin: '0 0'
+  }
 }))
 
 interface Props {
@@ -25,16 +27,16 @@ interface Props {
     contact?: Nullable<IContact>
   }
 
-  setDimensions?: (width: string, height: string) => void
+  // setDimensions?: (width: string, height: string) => void
 }
 
 export default function TemplateThumbnail({
   template,
   brand,
   mjml = true,
-  data,
-  setDimensions
-}: Props) {
+  data
+}: // setDimensions
+Props) {
   const classes = useStyles()
   const ref = useRef<HTMLIFrameElement>(null)
   const [previewMarkup, setPreviewMarkup] = useState<string>('')
@@ -64,31 +66,61 @@ export default function TemplateThumbnail({
     loadTemplate()
   }, [template, brand, mjml, data])
 
+  useEffect(() => {
+    if (!ref.current?.contentWindow || !previewMarkup) {
+      return
+    }
+
+    console.log('REF IS READY')
+    console.log(ref.current.clientWidth)
+
+    const widthSpace = ref.current.parentElement!.clientWidth
+
+    ref.current.width = '285px'
+    // ref.current.height = '2000px'
+
+    ref.current.srcdoc = previewMarkup
+
+    ref.current.onload = () => {
+      if (!ref.current?.contentWindow) {
+        return
+      }
+
+      const iframeWidth = ref.current.contentWindow.document.body.offsetWidth
+
+      const iframeHeight = ref.current.contentWindow.document.body.offsetHeight
+
+      const ratio = iframeWidth / widthSpace
+
+      console.log({
+        iframeWidth,
+        iframeHeight,
+        widthSpace,
+        ratio
+      })
+
+      // debugger
+
+      ref.current.style.transform = 'scale(0.5)'
+
+      ref.current.style.width = `${iframeWidth}px`
+      ref.current.style.height = `${iframeHeight}px`
+
+      if (ref.current.parentElement) {
+        ref.current.parentElement.style.height = `${ratio * iframeHeight}px`
+        // ref.current.parentElement.style.height = `${ratio * iframeHeight}px`
+      }
+    }
+  }, [ref, previewMarkup])
+
   return (
-    <iframe
-      ref={ref}
-      frameBorder={0}
-      onLoad={() => {
-        if (!ref.current?.contentWindow) {
-          return
-        }
-
-        const newWidth = `${
-          ref.current.contentWindow.document.body.scrollWidth + 50
-        }px`
-
-        const newHeight = `${
-          ref.current.contentWindow.document.body.scrollHeight + 50
-        }px`
-
-        ref.current.style.width = newWidth
-        ref.current.style.height = newHeight
-
-        setDimensions && setDimensions(newWidth, newHeight)
-      }}
-      title="Preview"
-      srcDoc={previewMarkup}
-      className={classes.iframe}
-    />
+    <div>
+      <iframe
+        ref={ref}
+        frameBorder={0}
+        title="Preview"
+        className={classes.iframe}
+      />
+    </div>
   )
 }
