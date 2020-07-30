@@ -271,9 +271,7 @@ export default class Fetch {
       const elapsed = Date.now() - (this._startTime || Date.now())
 
       console.log(
-        `${status} <${requestId}> (${elapsed}ms) ${request.method} ${
-          request.url
-        }`
+        `${status} <${requestId}> (${elapsed}ms) ${request.method} ${request.url}`
       )
     }
   }
