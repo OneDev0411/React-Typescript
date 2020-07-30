@@ -88,7 +88,7 @@ function List(props) {
         class: 'opaque',
         width: '26%',
         verticalAlign: 'center',
-        render: ({ row }) => <RecipientsColumn data={row.recipients} />
+        render: ({ row }) => <RecipientsColumn data={row} />
       },
       {
         header: 'Delivered',

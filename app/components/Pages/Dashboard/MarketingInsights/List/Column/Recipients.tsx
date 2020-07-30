@@ -4,15 +4,19 @@ import { Box, Tooltip, Typography } from '@material-ui/core'
 import { recipientsList } from '../helpers'
 
 interface Props {
-  data: IEmailCampaign
+  data: IEmailCampaign<'recipients'>
 }
 
 function RecipientsColumn({ data }: Props) {
-  if (!Array.isArray(data)) {
+  if (data.executed_at) {
+    return `${data.sent} Recipient${data.sent === 1 ? '' : 's'}`
+  }
+
+  if (!Array.isArray(data.recipients)) {
     return null
   }
 
-  const recipients = recipientsList(data)
+  const recipients = recipientsList(data.recipients)
 
   const tagsCount: number = recipients.tags.length || 0
   const listCount: number = recipients.list.length || 0
@@ -23,7 +27,9 @@ function RecipientsColumn({ data }: Props) {
   const items: string[] = []
 
   if (recipientsCount) {
-    items.push(`${recipientsCount} Recipients`)
+    items.push(
+      `${recipientsCount} Recipient${recipientsCount === 1 ? '' : 's'}`
+    )
   }
 
   if (listCount) {
