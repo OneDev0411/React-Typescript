@@ -13,7 +13,8 @@ import {
 
 const useStyles = makeStyles(() => ({
   iframe: {
-    transformOrigin: '0 0'
+    transformOrigin: '0 0',
+    background: '#fff'
   }
 }))
 
@@ -71,12 +72,9 @@ Props) {
       return
     }
 
-    console.log('REF IS READY')
-    console.log(ref.current.clientWidth)
+    const widthSpace = ref.current.clientWidth
 
-    const widthSpace = ref.current.parentElement!.clientWidth
-
-    ref.current.width = '285px'
+    ref.current.width = '700px'
     // ref.current.height = '2000px'
 
     ref.current.srcdoc = previewMarkup
@@ -90,18 +88,9 @@ Props) {
 
       const iframeHeight = ref.current.contentWindow.document.body.offsetHeight
 
-      const ratio = iframeWidth / widthSpace
+      const ratio = widthSpace / iframeWidth
 
-      console.log({
-        iframeWidth,
-        iframeHeight,
-        widthSpace,
-        ratio
-      })
-
-      // debugger
-
-      ref.current.style.transform = 'scale(0.5)'
+      ref.current.style.transform = `scale(${ratio})`
 
       ref.current.style.width = `${iframeWidth}px`
       ref.current.style.height = `${iframeHeight}px`
@@ -116,6 +105,7 @@ Props) {
   return (
     <div>
       <iframe
+        width="100%"
         ref={ref}
         frameBorder={0}
         title="Preview"
