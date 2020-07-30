@@ -22,7 +22,7 @@ function TitleColumn({ data, reloadList }: Props) {
   const title = (
     <div className="info-title">
       <Box pr={2} maxWidth="100%">
-        <Typography noWrap>{data.subject}</Typography>
+        <Typography noWrap>{data.subject || '(untitled)'}</Typography>
       </Box>
     </div>
   )

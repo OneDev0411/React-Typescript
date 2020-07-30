@@ -46,7 +46,7 @@ function ContactsTable({ item, sortBy, onChangeSort }: ContactsPropsType) {
         id: 'bounce',
         accessor: (row: ContactsListType) => row.failed,
         render: ({ row }: RenderProps<ContactsListType>) =>
-          row.failed > 0 && (
+          (row.failed > 0 || row.error) && (
             <Tooltip title={row.error || ''}>
               <StyledBadge>Bounced {row.failed >= 2 && row.failed}</StyledBadge>
             </Tooltip>
