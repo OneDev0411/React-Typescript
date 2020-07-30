@@ -395,6 +395,12 @@ export const GridCalendarPresentation = ({
           dateClick={handleDayClick}
           eventDrop={handleEditEvent}
           eventResize={handleEditEvent}
+          moreLinkClick="day"
+          views={{
+            timeGrid: {
+              dayMaxEventRows: false
+            }
+          }}
           eventContent={(content: EventContentArg) => {
             return (
               <Event
