@@ -1,5 +1,7 @@
 import fecha from 'fecha'
 
+import { isNegativeTimezone } from 'utils/is-negative-timezone'
+
 /**
  * return event style for using in full calendar
  * @param event
@@ -12,6 +14,11 @@ export const getFormatDate = (event: ICalendarEvent): string => {
   const isDiffrentDay =
     startDate.getDate() < endDate.getDate() ||
     startDate.getMonth() < endDate.getMonth()
+
+  if (all_day && isNegativeTimezone()) {
+    startDate.setHours(24)
+    endDate.setHours(24)
+  }
 
   const startFormatter = !all_day ? 'dddd, MMM D, hh:mm A' : 'dddd, MMM D'
   const endFormatter =
