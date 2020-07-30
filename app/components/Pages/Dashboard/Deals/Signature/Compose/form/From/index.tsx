@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import uniqBy from 'lodash/uniqBy'
 
 import {
   Box,
@@ -22,7 +23,6 @@ import {
   InputLabel,
   InputRequired
 } from 'components/Forms/styled'
-import { getTeamAvailableMembers, getActiveTeam } from 'utils/user-teams'
 import { selectDealRoles } from 'reducers/deals/roles'
 
 interface Props {
@@ -32,28 +32,36 @@ interface Props {
 export function From({ deal }: Props) {
   const field = useField('owner')
   const theme = useTheme<Theme>()
-  const { user, roles } = useSelector<
+  const { dealRoles, user } = useSelector<
     IAppState,
     {
+      dealRoles: IDealRole[]
       user: IUser
-      roles: IDealRole[]
     }
-  >(({ user, deals }) => {
+  >(({ deals, user }) => {
     return {
       user,
-      roles: selectDealRoles(deals.roles, deal)
+      dealRoles: selectDealRoles(deals.roles, deal)
     }
   })
 
-  const members = useMemo(() => {
-    return getTeamAvailableMembers(getActiveTeam(user)).filter(
-      member =>
-        member.id === user.id ||
-        (member.user_type === 'Agent' &&
-          member.has_docusign &&
-          roles.some(role => role?.user?.id === member.id))
-    )
-  }, [user, roles])
+  const users = useMemo(() => {
+    return [
+      user,
+      ...uniqBy(
+        dealRoles.filter(role => role?.user?.docusign),
+        role => role.user.docusign?.id
+      ).map(role => role.user)
+    ]
+  }, [user, dealRoles])
+
+  const getButtonLabel = (user: IUser) => {
+    if (!user.docusign) {
+      return `${user.display_name} <${user.email}>`
+    }
+
+    return `${user.docusign.first_name} ${user.docusign.last_name} <${user.docusign.email}>`
+  }
 
   return (
     <>
@@ -69,23 +77,23 @@ export function From({ deal }: Props) {
       </InputContainer>
 
       <BaseDropdown
-        buttonLabel={`${field.input.value.display_name} <${field.input.value.email}>`}
+        buttonLabel={getButtonLabel(field.input.value)}
         renderMenu={({ close }) => {
           return (
             <MenuList>
-              {members.map((member, index) => (
+              {users.map((user, index) => (
                 <MenuItem
                   key={index}
-                  selected={member.id === field.input.value.id}
+                  selected={user.id === field.input.value.id}
                   onClick={() => {
                     close()
-                    field.input.onChange(member)
+                    field.input.onChange(user)
                   }}
                 >
                   <Box display="flex" alignItems="center">
                     <Avatar
-                      alt={member.display_name}
-                      src={member.profile_image_url ?? undefined}
+                      alt={user.display_name}
+                      src={user.profile_image_url ?? undefined}
                       style={{
                         width: theme.spacing(5),
                         height: theme.spacing(5),
@@ -95,10 +103,18 @@ export function From({ deal }: Props) {
 
                     <div>
                       <Typography variant="body1">
-                        {member.display_name}
+                        {user.docusign ? (
+                          <>
+                            {user.docusign.first_name} {user.docusign.last_name}
+                          </>
+                        ) : (
+                          user.email
+                        )}
                       </Typography>
 
-                      <Typography variant="body2">{member.email}</Typography>
+                      <Typography variant="body2">
+                        {user.docusign?.email ?? user.email}
+                      </Typography>
                     </div>
                   </Box>
                 </MenuItem>
