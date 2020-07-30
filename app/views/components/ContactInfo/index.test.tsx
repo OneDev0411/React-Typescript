@@ -26,7 +26,8 @@ describe('ContactInfo tests', () => {
       original_data: emailCampaignEmail,
       failed: 0,
       opened: 0,
-      clicked: 0
+      clicked: 0,
+      error: null
     }
 
     const { queryByText } = renderWithTheme(<ContactInfo data={item} />)
@@ -50,7 +51,8 @@ describe('ContactInfo tests', () => {
       unsubscribed: 0,
       failed: 0,
       opened: 0,
-      clicked: 0
+      clicked: 0,
+      error: null
     }
 
     const { queryByText } = renderWithTheme(<ContactInfo data={item} />)

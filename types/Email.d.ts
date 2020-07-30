@@ -204,6 +204,7 @@ declare type IEmailCampaignEmail<
   complained: number
   stored: number
   email_address: string
+  error: string | null
   type: 'email_campaign_email'
   full_name: string
   profile_image_url: string | null

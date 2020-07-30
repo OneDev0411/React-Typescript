@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { Tooltip } from '@material-ui/core'
 
 import Table from 'components/Grid/Table'
 import ContactInfo from 'components/ContactInfo'
@@ -46,7 +47,9 @@ function ContactsTable({ item, sortBy, onChangeSort }: ContactsPropsType) {
         accessor: (row: ContactsListType) => row.failed,
         render: ({ row }: RenderProps<ContactsListType>) =>
           row.failed > 0 && (
-            <StyledBadge>Bounced {row.failed >= 2 && row.failed}</StyledBadge>
+            <Tooltip title={row.error || ''}>
+              <StyledBadge>Bounced {row.failed >= 2 && row.failed}</StyledBadge>
+            </Tooltip>
           )
       },
       {

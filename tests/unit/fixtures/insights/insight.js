@@ -62,7 +62,8 @@ const emailCampaignEmail = {
   send_type: 'To',
   stored: 0,
   type: 'email_campaign_email',
-  unsubscribed: 0
+  unsubscribed: 0,
+  error: null
 }
 
 export { item1, item2, item3, item4, emailCampaignEmail }
