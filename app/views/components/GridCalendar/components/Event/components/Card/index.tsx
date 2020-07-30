@@ -103,7 +103,6 @@ const EventCardComponent = ({
         id={id}
         open={open}
         anchorEl={el}
-        container={() => document.getElementsByClassName('fc-more-popover')[0]}
         onClose={onClose}
         anchorOrigin={{
           vertical: 'bottom',
