@@ -1,18 +1,19 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import React from 'react'
-import { Box, Button } from '@material-ui/core'
+import { Box, Button, useTheme } from '@material-ui/core'
 
+import { OAuthProvider } from 'constants/contacts'
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 
 import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
-import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
+import { outlookIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   size?: 'small' | 'medium' | 'large'
 }
 
 export default function ConnectAccountButtons({ size }: Props) {
+  const theme = useTheme()
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
   const google = useConnectOAuthAccount(OAuthProvider.Google)
 
@@ -27,7 +28,7 @@ export default function ConnectAccountButtons({ size }: Props) {
         onClick={outlook.connect}
       >
         <Box marginRight={1} />
-        <IconOutlook size={iconSize} />
+        <SvgIcon path={outlookIcon} color={theme.palette.info.main} />
         <Box marginX={1}>Connect Outlook</Box>
       </Button>
       <Box display="inline-block" mr={2} />
