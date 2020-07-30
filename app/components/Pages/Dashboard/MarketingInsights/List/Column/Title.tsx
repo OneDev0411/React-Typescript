@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography, Tooltip } from '@material-ui/core'
 
 import { EditEmailButton } from 'components/EditEmailButton'
 
@@ -48,7 +48,11 @@ function TitleColumn({ data, reloadList }: Props) {
       {titleRenderer}
       <Box>
         <Date data={data} />
-        {isFailed && <StyledBadge appearance="red">Failed</StyledBadge>}
+        {isFailed && (
+          <Tooltip title={data.failure || ''}>
+            <StyledBadge appearance="red">Failed</StyledBadge>
+          </Tooltip>
+        )}
         {isInProgress && (
           <StyledBadge appearance="warning">In Progress</StyledBadge>
         )}
