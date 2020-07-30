@@ -169,6 +169,7 @@ declare type IEmailCampaign<
   template?: IMarketingTemplateInstance
   type: 'email_campaign'
   sent: number
+  failure: string | null
   microsoft_credential: UUID | null
   google_credential: UUID | null
   headers: IEmailCampaignInput['headers']
