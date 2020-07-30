@@ -88,7 +88,7 @@ function List(props) {
         class: 'opaque',
         width: '26%',
         verticalAlign: 'center',
-        render: ({ row }) => <RecipientsColumn data={row.recipients} />
+        render: ({ row }) => <RecipientsColumn data={row} />
       },
       {
         header: 'Delivered',
@@ -118,7 +118,7 @@ function List(props) {
         width: '14%',
         verticalAlign: 'center',
         render: ({ row }) => {
-          const { executed_at, opened, sent } = row
+          const { executed_at, opened, delivered } = row
 
           if (!executed_at) {
             return null
@@ -137,7 +137,7 @@ function List(props) {
 
           return (
             <StatsColumn
-              title={`Opened: ${valueAndPercent(opened, sent)}`}
+              title={`Opened: ${valueAndPercent(opened, delivered)}`}
               details={`${opened} People have opened the email`}
             />
           )
@@ -150,7 +150,7 @@ function List(props) {
         width: '14%',
         verticalAlign: 'center',
         render: ({ row }) => {
-          const { executed_at, clicked, sent } = row
+          const { executed_at, clicked, delivered } = row
 
           if (!executed_at) {
             return null
@@ -169,7 +169,7 @@ function List(props) {
 
           return (
             <StatsColumn
-              title={`Clicked: ${valueAndPercent(clicked, sent)}`}
+              title={`Clicked: ${valueAndPercent(clicked, delivered)}`}
               details={`${clicked} People have clicked the email`}
             />
           )

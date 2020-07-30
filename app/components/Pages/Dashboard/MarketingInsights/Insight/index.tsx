@@ -158,7 +158,7 @@ function Insight({ params: { id } }: Props) {
     },
     {
       icon: mdiEyeOutline,
-      value: `${valueAndPercent(item.opened, item.sent)}`,
+      value: `${valueAndPercent(item.opened, item.delivered)}`,
       label: 'Opened',
       tooltip: `${item.opened} People have opened the email`,
       hidden: pixelTracking
@@ -174,7 +174,7 @@ function Insight({ params: { id } }: Props) {
     },
     {
       icon: mdiCursorDefaultClickOutline,
-      value: `${valueAndPercent(item.clicked, item.sent)}`,
+      value: `${valueAndPercent(item.clicked, item.delivered)}`,
       label: 'Clicked',
       tooltip: `${item.clicked} People have clicked the email`,
       hidden: pixelTracking
