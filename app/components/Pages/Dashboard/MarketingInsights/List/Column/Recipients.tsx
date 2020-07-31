@@ -8,8 +8,6 @@ interface Props {
 }
 
 function RecipientsColumn({ data }: Props) {
-  console.log('RecipientsColumn', data)
-
   if (data.executed_at) {
     return `${data.sent} Recipient${data.sent === 1 ? '' : 's'}`
   }
