@@ -8,6 +8,8 @@ interface Props {
 }
 
 function RecipientsColumn({ data }: Props) {
+  console.log('RecipientsColumn', data)
+
   if (data.executed_at) {
     return `${data.sent} Recipient${data.sent === 1 ? '' : 's'}`
   }
@@ -43,7 +45,7 @@ function RecipientsColumn({ data }: Props) {
   if (recipientsCount === 1 && listCount === 0 && tagsCount === 0) {
     // server puts the email on data even it sends to a contact
     // so maybe it confusing at some point that email isn't include the contact itself.
-    const emailAddress = data[0].email
+    const emailAddress = data.recipients[0].email || 'No Email'
 
     return (
       <Tooltip title={emailAddress}>
