@@ -6,7 +6,10 @@ import { Options as ImportOptions } from 'draft-js-import-html'
 import { TextEditor } from 'components/TextEditor'
 import Loading from 'components/LoadingContainer'
 import { IAppState } from 'reducers'
-import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+import {
+  uploadEmailAttachment,
+  UploadOrigin
+} from 'models/email/upload-email-attachment'
 
 import { useUploadAttachment } from '../../helpers/use-upload-attachment'
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
@@ -30,6 +33,7 @@ interface Props {
    */
   attachments?: ReactNode
   uploadAttachment?: typeof uploadEmailAttachment
+  uploadOrigin?: UploadOrigin
 }
 
 const EmailBody = ({
@@ -37,17 +41,18 @@ const EmailBody = ({
   hasSignatureByDefault,
   hasTemplateVariables,
   hasStaticBody = false,
-  attachments = null,
   autofocus = false,
   DraftEditorProps = {},
-  uploadAttachment = uploadEmailAttachment,
   editorRef,
   onChangeEditor,
   editorState,
-  stateFromHtmlOptions
+  stateFromHtmlOptions,
+  attachments = null,
+  uploadAttachment = uploadEmailAttachment,
+  uploadOrigin
 }: Props) => {
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
-  const [upload] = useUploadAttachment(uploadAttachment)
+  const [upload] = useUploadAttachment(uploadAttachment, uploadOrigin)
 
   const signature = useSelector<IAppState, string>(
     state => state.user.email_signature
@@ -55,12 +60,12 @@ const EmailBody = ({
 
   const uploadImage = useCallback(
     async file => {
-      const response = await uploadAttachment(file)
+      const response = await uploadAttachment(file, uploadOrigin)
       const uploadedFile: IFile = response.body.data
 
       return uploadedFile.url
     },
-    [uploadAttachment]
+    [uploadAttachment, uploadOrigin]
   )
 
   return (

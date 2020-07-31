@@ -1,8 +1,14 @@
 import { useField } from 'react-final-form'
 
-import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+import {
+  uploadEmailAttachment,
+  UploadOrigin
+} from 'models/email/upload-email-attachment'
 
-export function useUploadAttachment(uploader: typeof uploadEmailAttachment) {
+export function useUploadAttachment(
+  uploader: typeof uploadEmailAttachment,
+  origin?: UploadOrigin
+) {
   const field = useField('uploadingAttachments')
 
   const upload = (files: FileList | File[]) => {
@@ -14,7 +20,7 @@ export function useUploadAttachment(uploader: typeof uploadEmailAttachment) {
         ...(field.input.value || []),
         {
           file,
-          request: uploader(file)
+          request: uploader(file, origin)
         }
       ])
     }
