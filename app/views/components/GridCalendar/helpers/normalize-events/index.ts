@@ -4,7 +4,6 @@ import { EventInput } from '@fullcalendar/react'
 import { getTitle } from './helpers/get-title'
 import { getDates } from './helpers/get-dates'
 import { isEditable } from './helpers/is-editable'
-import { getStyles } from './helpers/get-styles'
 
 /**
  * return list of events for using in full calendar
@@ -24,8 +23,7 @@ export function normalizeEvents(events: ICalendarEvent[]): EventInput[] {
       allDay: all_day || false,
       editable: isEditable(event),
       rowEvent: event,
-      ...getDates(event),
-      ...getStyles(event)
+      ...getDates(event)
     }
   })
 }

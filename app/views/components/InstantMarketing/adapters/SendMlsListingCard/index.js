@@ -11,7 +11,10 @@ import InstantMarketing from 'components/InstantMarketing'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
+import { byValert } from 'models/listings/search/get-listings'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
+
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
 import { getTemplateTypes } from '../../helpers/get-template-types'
@@ -28,6 +31,7 @@ const defaultProps = {
 class SendMlsListingCard extends React.Component {
   state = {
     listings: [],
+    listingDrawerListings: [],
     isListingsModalOpen: false,
     isEditingListings: false,
     isInstantMarketingBuilderOpen: false,
@@ -86,12 +90,42 @@ class SendMlsListingCard extends React.Component {
     return state
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (this.props.isEdit && !this.state.isInstantMarketingBuilderOpen) {
       this.setState({
         isInstantMarketingBuilderOpen: true,
         listings: this.props.selectedTemplate.listings || []
       })
+    }
+
+    if (!this.props.isEdit) {
+      const brand = getActiveTeamId(this.props.user)
+
+      try {
+        const vAlertResponse = await byValert({
+          brand,
+          limit: 200,
+          sort_order: ['status'],
+          property_types: ['Residential'],
+          property_subtypes: [
+            'RES-Single Family',
+            'RES-Condo',
+            'RES-Townhouse',
+            'RES-Half Duplex',
+            'RES-Farm/Ranch'
+          ]
+        })
+
+        const listingDrawerListings = Object.keys(
+          vAlertResponse.entities.listings
+        ).map(key => vAlertResponse.entities.listings[key])
+
+        this.setState({ listingDrawerListings })
+      } catch (e) {
+        console.error(e)
+
+        this.setState({ listingDrawerListings: [] })
+      }
     }
   }
 
@@ -263,7 +297,7 @@ class SendMlsListingCard extends React.Component {
     )
   }
 
-  get DefaultList() {
+  get DealsDefaultList() {
     return getMlsDrawerInitialDeals(this.props.deals)
   }
 
@@ -307,7 +341,7 @@ class SendMlsListingCard extends React.Component {
     const { user, disabled } = this.props
 
     if (hasMarketingAccess(user) === false) {
-      return false
+      return null
     }
 
     return (
@@ -332,8 +366,16 @@ class SendMlsListingCard extends React.Component {
           }
           title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
-          defaultList={this.DefaultList}
-          defaultListTitle="Add from your deals"
+          defaultLists={[
+            {
+              title: 'Add from your MLS listings',
+              items: this.state.listingDrawerListings
+            },
+            {
+              title: 'Add from your deals',
+              items: this.DealsDefaultList
+            }
+          ]}
           onClose={this.closeListingModal}
           onSelectListingsCallback={this.handleSelectListings}
           multipleSelection={this.IsMultiListing}

@@ -85,6 +85,11 @@ export function reducer(state = initialState, action: Pick<Action, any>) {
             ]
           }
 
+          if (draft.selection.excludedRows.length === action.totalRows) {
+            draft.selection.isEntireRowsSelected = false
+            draft.selection.excludedRows = []
+          }
+
           return
         }
 

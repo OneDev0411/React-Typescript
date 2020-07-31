@@ -1,9 +1,9 @@
 import React from 'react'
 
+import { Typography } from '@material-ui/core'
+
 import PopOver from 'components/Popover'
-
 import Avatar from 'components/Avatar'
-
 import { getSide } from 'models/Deal/helpers/context/get-side'
 
 import { roleName, getLegalFullName } from '../../../../utils/roles'
@@ -24,7 +24,7 @@ export function Side({ deal, roles, rowId, rowsCount }: Props) {
   ) as UUID
 
   if (!deal.roles) {
-    return <span>{getSide(deal)}</span>
+    return <Typography variant="caption">{getSide(deal)}</Typography>
   }
 
   let relatedRoleUser
@@ -72,17 +72,13 @@ export function Side({ deal, roles, rowId, rowsCount }: Props) {
           cursor: 'help'
         }}
       >
-        <span>{sideName}</span>
+        <Typography variant="caption">{sideName}</Typography>
 
-        <span
-          style={{
-            fontSize: '14px'
-          }}
-        >
+        <Typography variant="caption">
           {relatedRoleUser && relatedRoleUser.last_name
             ? `: ${relatedRoleUser.last_name}`
             : ''}
-        </span>
+        </Typography>
       </div>
     </PopOver>
   )

@@ -8,14 +8,8 @@ import { ListAttachmentItem } from 'components/ListAttachmentItem'
 import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 
 import {
-  DOCUSIGN_FORM,
-  DOCUSIGN_FILE,
-  DOCUSIGN_ENVELOPE
-} from 'deals/components/ActionsButton/data/action-buttons'
-
-import {
-  ADD_ATTACHMENTS,
-  REMOVE_ATTACHMENT
+  REMOVE_ATTACHMENT,
+  SET_DRAWER_STATUS
 } from 'deals/contexts/actions-context/constants'
 
 interface Props {
@@ -43,9 +37,8 @@ export function Attachments({ onClickAddAttachments }: Props) {
 
   const handleAddAttachments = () => {
     actionsDispatch({
-      type: ADD_ATTACHMENTS,
-      actions: [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE],
-      attachments: []
+      type: SET_DRAWER_STATUS,
+      isDrawerOpen: false
     })
 
     onClickAddAttachments()

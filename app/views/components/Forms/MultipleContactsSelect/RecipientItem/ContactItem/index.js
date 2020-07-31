@@ -2,13 +2,13 @@ import React from 'react'
 import Downshift from 'downshift'
 
 import Flex from 'styled-flex-component'
+import { mdiChevronDown, mdiChevronUp, mdiClose } from '@mdi/js'
 
 import UserAvatar from 'components/Avatar'
-
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import {
-  ArrowIcon,
   DeleteButton,
   EmailItem,
   EmailsList,
@@ -79,10 +79,10 @@ export default class RecipientItem extends React.Component {
             </div>
 
             {hasMultipleEmails && (
-              <ArrowIcon
-                className={`fa fa-angle-${
-                  this.state.isMenuOpen ? 'up' : 'down'
-                }`}
+              <SvgIcon
+                leftMargined
+                size={muiIconSizes.small}
+                path={this.state.isMenuOpen ? mdiChevronUp : mdiChevronDown}
               />
             )}
           </Flex>
@@ -90,7 +90,7 @@ export default class RecipientItem extends React.Component {
 
         {recipient.readOnly !== true && (
           <DeleteButton size="16px" onClick={this.omitRecipient}>
-            <CloseIcon />
+            <SvgIcon path={mdiClose} />
           </DeleteButton>
         )}
 

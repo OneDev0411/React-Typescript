@@ -3,13 +3,17 @@ import uniqBy from 'lodash/uniqBy'
 import { StateContext } from '..'
 import {
   ADD_ATTACHMENTS,
-  CLEAR_ATTACHMENTS,
-  REMOVE_ATTACHMENT
+  CANCEL,
+  REMOVE_ATTACHMENT,
+  SET_DRAWER_STATUS,
+  SET_FORM_META
 } from '../constants'
 
 export const initialState: StateContext = {
+  isDrawerOpen: false,
   actions: [],
-  attachments: []
+  attachments: [],
+  form: null
 }
 
 export function reducer(state = initialState, action: Pick<any, any>) {
@@ -18,25 +22,41 @@ export function reducer(state = initialState, action: Pick<any, any>) {
       return {
         ...state,
         actions: action.actions ?? state.actions,
-        attachments: uniqBy(
-          [...state.attachments, ...action.attachments],
-          (attachment: IDealFile) => attachment.id
-        )
+        attachments: action.attachments
+          ? uniqBy(
+              [...state.attachments, ...action.attachments],
+              (attachment: IDealFile) =>
+                attachment.id ? attachment.id : attachment.url
+            )
+          : state.attachments
       }
 
     case REMOVE_ATTACHMENT:
       return {
         ...state,
-        attachments: state.attachments.filter(
-          attachment => attachment.id !== action.attachment.id
+        attachments: state.attachments.filter(attachment =>
+          attachment.id
+            ? attachment.id !== action.attachment.id
+            : attachment.url !== action.attachment.url
         )
       }
 
-    case CLEAR_ATTACHMENTS:
+    case SET_DRAWER_STATUS:
       return {
         ...state,
-        actions: [],
-        attachments: []
+        isDrawerOpen: action.isDrawerOpen
+      }
+
+    case SET_FORM_META:
+      return {
+        ...state,
+        form: action.form
+      }
+
+    case CANCEL:
+      return {
+        ...state,
+        ...initialState
       }
 
     default:

@@ -28,3 +28,5 @@ export const CHANGE_VIEW_AS_FILTER_FAILURE = 'CHANGE_VIEW_AS_FILTER_FAILURE'
 
 export const YARD_SIGN_REQUESTS_SETTINGS_KEY = 'enable-yard-sign-requests'
 export const OPEN_HOUSE_REQUESTS_SETTINGS_KEY = 'enable-open-house-requests'
+
+export const ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY = 'enable-liveby'

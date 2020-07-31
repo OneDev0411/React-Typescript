@@ -16,7 +16,7 @@ import type { FormValues } from './types'
 interface Props {
   isOpen: boolean
   deal: IDeal
-  defaultAttachments: any[]
+  defaultAttachments?: IDealFile[]
   onClose: () => void
   onClickAddAttachments?: () => void
 }
@@ -67,6 +67,7 @@ export default function Signature({
       // add envelope to list of envelopes
       const envelope = await Deal.sendEnvelope(
         deal.id,
+        form.owner.id,
         form.subject,
         form.message,
         attachments,
@@ -110,9 +111,9 @@ export default function Signature({
       <SignatureComposeDrawer
         user={user}
         deal={deal}
-        attachments={defaultAttachments}
-        isOpen={!showDocusignBanner}
+        isOpen={isOpen && !showDocusignBanner}
         isSubmitting={isSending}
+        defaultAttachments={defaultAttachments}
         onSubmit={handleSubmit}
         onClickAddAttachments={onClickAddAttachments}
         onClose={onClose}
@@ -120,7 +121,7 @@ export default function Signature({
 
       <DocusignAuthentication
         user={user}
-        isOpen={showDocusignBanner}
+        isOpen={isOpen && showDocusignBanner}
         onAuthorize={() => handleSubmit(formData!)}
       />
     </>

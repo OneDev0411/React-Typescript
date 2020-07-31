@@ -36,3 +36,11 @@ export const isCelebrationEvent = (event: ICalendarEvent): boolean => {
     'home_anniversary'
   ].includes(event?.event_type)
 }
+
+/**
+ * check the event is a CRM event
+ * @param event
+ */
+export const isCRMEvent = (event: ICalendarEvent): boolean => {
+  return ['crm_task', 'crm_association'].includes(event.object_type)
+}

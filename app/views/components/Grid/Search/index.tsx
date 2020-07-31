@@ -2,6 +2,7 @@ import React, { CSSProperties } from 'react'
 
 import _ from 'underscore'
 
+import CircleSpinner from '../../SvgIcons/CircleSpinner/IconCircleSpinner'
 import IconClose from '../../SvgIcons/Close/CloseIcon'
 
 import { Container, Icon, IconButton, IconSearch, TextInput } from './styled'
@@ -116,7 +117,7 @@ class Search extends React.Component<Props, State> {
       >
         <Icon isSearching={isSearching}>
           {isSearching && showLoadingOnSearch ? (
-            <i className="fa fa-spin fa-spinner" />
+            <CircleSpinner style={{ width: '24px', height: '24px' }} />
           ) : (
             <IconSearch />
           )}

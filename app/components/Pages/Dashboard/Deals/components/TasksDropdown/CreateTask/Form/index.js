@@ -1,7 +1,10 @@
 import React from 'react'
+import { mdiClose } from '@mdi/js'
+
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { NotifyOffice } from '../../NotifyOffice'
-
 import {
   ChecklistNewItemInputContainer,
   ChecklistNewItemInput,
@@ -82,7 +85,7 @@ export class CreateTaskForm extends React.Component {
             </ChecklistNewItemSave>
 
             <ChecklistNewItemCancel onClick={onCancel}>
-              <i className="fa fa-times" />
+              <SvgIcon path={mdiClose} size={muiIconSizes.small} />
             </ChecklistNewItemCancel>
           </ChecklistNewItemInputContainer>
         </ChecklistItemTitle>

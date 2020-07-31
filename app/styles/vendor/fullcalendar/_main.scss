@@ -12,11 +12,14 @@
       &, &:hover, &:disabled, &:active {
         color: rgba(#000, 0.65) !important;
       }
+      &:hover {
+        z-index: 0 !important;
+      }
       &-active{
         background-color: transparent !important;
         border-color: #000 !important;
-        z-index: 2 !important;
         &, &:hover {
+          z-index: 1 !important;
           border-color: #000 !important;
           color: #000 !important;
         }
@@ -33,7 +36,7 @@
   }
 }
 
-.fc .fc-toolbar.fc-header-toolbar{
+.fc .fc-toolbar.fc-header-toolbar {
   margin-bottom: .75rem !important;
 }
 
@@ -58,7 +61,7 @@
         background: rgba(0, 0, 0, 0.05) !important;
       }
     }
-    &-active{
+    &-active {
       background-color: #0945EB !important;
       border-color: #0945EB !important;
       &, &:hover {
@@ -100,20 +103,48 @@
   }
 }
 
-.fc-daygrid-event-harness{
-  margin: 1px 4px 0 !important;
+.fc-daygrid-event-harness {
+  margin-right: 4px !important;
+  margin-left: 4px !important;
 }
 
 .fc {
-  &-event{
+  &-event {
     cursor: pointer;
     &, &:hover {
       color: #000;
     }
-    &-time{
+    &-time {
       color: rgba(#000, .5);
     }
   }
+  &-h-event, &-v-event{
+    background-color: unset !important;
+    border: unset !important;
+  }
+  &-timegrid-event .fc-event-main {
+    padding: 0 !important;
+    position: relative;
+    & > * {
+      background: #f2f2f2 !important;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  &-daygrid-dot-event {
+    padding: 0 !important;
+  }
+  &-more-popover {
+    overflow: initial !important;
+  }
+}
+
+.fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion {
+  font-size: .85rem;
+  text-transform: uppercase;
 }
 
 

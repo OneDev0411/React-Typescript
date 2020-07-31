@@ -5,8 +5,6 @@ import { addNotification, Notification } from 'reapop'
 
 import { Button } from '@material-ui/core'
 
-import { getActiveTeam } from 'utils/user-teams'
-
 import {
   Container,
   Title,
@@ -17,14 +15,12 @@ import {
 } from '../styled'
 import { sendPunchOutRequest } from './helpers'
 
-function getUserCostCenter(user: IUser): string | null {
-  const team = getActiveTeam(user)
-
+function getDealCostCenter(deal: IDeal): string | null {
   let costCenter: string | null = null
-  let brand: IBrand | null = team && team.brand
+  let brand: IBrand | null = deal.brand
 
   while (brand) {
-    if (brand && brand.messages && brand.messages.mmm_cost_center) {
+    if (brand.messages?.mmm_cost_center) {
       costCenter = brand.messages.mmm_cost_center
       break
     }
@@ -51,8 +47,8 @@ function MyMarketingMatters({
   const [costCenter, setCostCenter] = useState<null | string>(null)
 
   useEffect(() => {
-    setCostCenter(getUserCostCenter(user))
-  }, [user])
+    setCostCenter(getDealCostCenter(deal))
+  }, [deal])
 
   async function onClick() {
     if (!costCenter) {
@@ -125,8 +121,5 @@ function MyMarketingMatters({
 }
 
 export default withRouter(
-  connect(
-    null,
-    { notify: addNotification }
-  )(MyMarketingMatters)
+  connect(null, { notify: addNotification })(MyMarketingMatters)
 )

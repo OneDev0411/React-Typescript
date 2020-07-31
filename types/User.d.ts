@@ -6,6 +6,7 @@ declare interface IUserBase {
   phone_number: string | null
   is_shadow: boolean
   fake_email?: boolean
+  docusign?: IUserDocusign
   profile_image_url: string | null
   cover_image_url: string | null
   email_signature: string | null
@@ -67,4 +68,10 @@ declare interface IUserTeam {
   acl: IPermission[]
   type: 'user_role'
   settings: StringMap<any>
+}
+
+declare interface IUserDocusign extends IModel<'docusign_account'> {
+  email: string
+  first_name: string
+  last_name: string
 }

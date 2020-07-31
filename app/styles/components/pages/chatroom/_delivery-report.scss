@@ -73,13 +73,4 @@
 .delivery-report {
   margin-left: 10px;
   cursor: pointer;
-  i {
-    color: #c6c6c6;
-    font-size: 10px;
-  }
-  &.blue {
-    i {
-      color: $brand-primary;
-    }
-  }
 }

@@ -1,21 +1,15 @@
-import styled from 'styled-components'
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { Box, Button } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import _ from 'underscore'
+import { mdiCalendarMonthOutline } from '@mdi/js'
 
 import copy from '../../../../../../utils/copy-text-to-clipboard'
-import IconCalendarBase from '../../../../../../views/components/SvgIcons/Calender/IconCalendar'
+import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
 import getCalenderFeed from '../../../../../../models/user/generate-calender-feed'
 import { GenerateUrlContainer, GenerateUrlText, FeedUrl } from './styled'
-
-const IconCalendar = styled(IconCalendarBase)`
-  > g {
-    fill: #000000;
-  }
-`
 
 class GenerateUrl extends React.Component {
   state = {
@@ -108,7 +102,7 @@ class GenerateUrl extends React.Component {
           </Box>
         )}
         <GenerateUrlContainer>
-          <IconCalendar />
+          <SvgIcon path={mdiCalendarMonthOutline} />
           <GenerateUrlText>Calendar Export URL:</GenerateUrlText>
           {feedURl ? (
             <FeedUrl

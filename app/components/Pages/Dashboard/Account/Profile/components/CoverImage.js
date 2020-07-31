@@ -3,14 +3,15 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Button, IconButton, Box } from '@material-ui/core'
+import { Button, IconButton, Box, useTheme } from '@material-ui/core'
+import { mdiAccount, mdiTrashCanOutline } from '@mdi/js'
 
 import editUser from 'actions/user/edit'
 import uploadCoverImage from 'actions/user/upload-cover-image'
 
 import FormCard from 'components/FormCard'
 import Tooltip from 'components/tooltip'
-import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const MAX_SIZE = 256
 const MIN_WIDTH = 240
@@ -27,6 +28,7 @@ const CoverImage = ({
   deleteHandler,
   submitLabelText
 }) => {
+  const theme = useTheme()
   const coverImageInputRef = useRef(null)
 
   const isUploading = submitLabelText !== SUBMIT_LABEL_TEXT
@@ -44,16 +46,11 @@ const CoverImage = ({
               />
             ) : (
               <div className="c-cover-image__placeholder">
-                <svg
-                  width="240"
-                  height="280"
-                  fill="#ccc"
-                  viewBox="0 0 24 24"
-                  className="c-avatar-uploader__svg"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
+                <SvgIcon
+                  path={mdiAccount}
+                  color={theme.palette.grey.A100}
+                  size="240px"
+                />
               </div>
             )}
           </div>
@@ -78,7 +75,7 @@ const CoverImage = ({
                       disabled={isDeleting || isUploading}
                       data-test="cover-image-form-delete-button"
                     >
-                      <TrashIcon />
+                      <SvgIcon path={mdiTrashCanOutline} />
                     </IconButton>
                   </Tooltip>
                 </Box>
@@ -111,13 +108,10 @@ const CoverImage = ({
 }
 
 export default compose(
-  connect(
-    ({ user, brand }) => ({ user, brand }),
-    {
-      editUser,
-      uploadCoverImage
-    }
-  ),
+  connect(({ user, brand }) => ({ user, brand }), {
+    editUser,
+    uploadCoverImage
+  }),
   withState(
     'coverImage',
     'setCoverImage',

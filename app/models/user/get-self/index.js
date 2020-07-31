@@ -2,7 +2,9 @@ import Fetch from '../../../services/fetch'
 
 const getUserProfile = async access_token => {
   try {
-    const request = new Fetch().get('/users/self')
+    const request = new Fetch()
+      .get('/users/self')
+      .query({ 'associations[]': ['user.docusign'] })
 
     // required on ssr
     if (access_token) {

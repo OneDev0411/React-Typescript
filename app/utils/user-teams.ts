@@ -8,8 +8,8 @@ import { notDeleted } from './not-deleted'
 import { DEFAULT_BRAND_PALETTE } from './constants'
 import flattenBrand from './flatten-brand'
 
-function getActiveTeamFromCookieOrUser(user) {
-  return user.active_brand || user.brand || cookie.get('rechat-active-team')
+function getActiveTeamFromUser(user) {
+  return user.active_brand || user.brand
 }
 
 export function getActiveTeam(user: Partial<IUser> | null): IUserTeam | null {
@@ -20,7 +20,7 @@ export function getActiveTeam(user: Partial<IUser> | null): IUserTeam | null {
   const { teams } = user
 
   let activeTeam = teams.find(
-    team => team.brand.id === getActiveTeamFromCookieOrUser(user)
+    team => team.brand.id === getActiveTeamFromUser(user)
   )
 
   if (!activeTeam && teams) {
@@ -119,6 +119,22 @@ export function hasUserAccessToMarketingCenter(user: IUser | null): boolean {
 
 export function isBackOffice(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.BACK_OFFICE)
+}
+
+export function isAdmin(user: IUser | null): boolean {
+  return hasUserAccess(user, ACL.ADMIN)
+}
+
+export function hasUserAccessToBrandSettings(user: IUser | null): boolean {
+  const brand = getActiveBrand(user)
+  
+  // Only brokerages should have brand settings 
+  if (!brand || brand.brand_type !== 'Brokerage') {
+    return false
+  }
+
+  // User should be an admin and should have access to MC
+  return isAdmin(user) && hasUserAccessToMarketingCenter(user)
 }
 
 export function isActiveTeamTraining(user: IUser | null): boolean {

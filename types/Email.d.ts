@@ -169,6 +169,7 @@ declare type IEmailCampaign<
   template?: IMarketingTemplateInstance
   type: 'email_campaign'
   sent: number
+  failure: string | null
   microsoft_credential: UUID | null
   google_credential: UUID | null
   headers: IEmailCampaignInput['headers']
@@ -203,6 +204,7 @@ declare type IEmailCampaignEmail<
   complained: number
   stored: number
   email_address: string
+  error: string | null
   type: 'email_campaign_email'
   full_name: string
   profile_image_url: string | null

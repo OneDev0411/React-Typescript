@@ -18,8 +18,13 @@ import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 
-import { isBackOffice, getBrandByType } from 'utils/user-teams'
+import {
+  isBackOffice,
+  getBrandByType,
+  getActiveTeamSettings
+} from 'utils/user-teams'
 import { loadJS, unloadJS } from 'utils/load-js'
+import { ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY } from 'constants/user'
 
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
@@ -287,7 +292,8 @@ class Builder extends React.Component {
     const renderData = getMjmlTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
-    this.blocks = registerEmailBlocks(this.editor, renderData, {
+
+    const emailBlocksOptions = {
       listing: {
         onDrop: () => {
           this.setState({ isListingDrawerOpen: true })
@@ -317,8 +323,17 @@ class Builder extends React.Component {
         onDrop: () => {
           this.setState({ isArticleDrawerOpen: true })
         }
-      },
-      neighborhoods: {
+      }
+    }
+
+    const showNeighborhoodsBlocks = getActiveTeamSettings(
+      this.props.user,
+      ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY,
+      true
+    )
+
+    if (showNeighborhoodsBlocks) {
+      emailBlocksOptions.neighborhoods = {
         onNeighborhoodsDrop: () => {
           this.setState({ isNeighborhoodsReportDrawerOpen: true })
         },
@@ -326,7 +341,13 @@ class Builder extends React.Component {
           this.setState({ isNeighborhoodsGraphsReportDrawerOpen: true })
         }
       }
-    })
+    }
+
+    this.blocks = registerEmailBlocks(
+      this.editor,
+      renderData,
+      emailBlocksOptions
+    )
   }
 
   registerSocialBlocks = () => {
@@ -886,28 +907,30 @@ class Builder extends React.Component {
               this.setState({ isArticleDrawerOpen: false })
             }}
           />
-          <NeighborhoodsReportDrawer
-            isOpen={
-              this.state.isNeighborhoodsReportDrawerOpen ||
-              this.state.isNeighborhoodsGraphsReportDrawerOpen
-            }
-            onlyAggregatedReports={
-              this.state.isNeighborhoodsGraphsReportDrawerOpen
-            }
-            onClose={() => {
-              this.setState({
-                isNeighborhoodsReportDrawerOpen: false,
-                isNeighborhoodsGraphsReportDrawerOpen: false
-              })
-            }}
-            onSelect={report => {
-              this.blocks.neighborhoods.selectHandler(report)
-              this.setState({
-                isNeighborhoodsReportDrawerOpen: false,
-                isNeighborhoodsGraphsReportDrawerOpen: false
-              })
-            }}
-          />
+          {this.blocks && this.blocks.neighborhoods && (
+            <NeighborhoodsReportDrawer
+              isOpen={
+                this.state.isNeighborhoodsReportDrawerOpen ||
+                this.state.isNeighborhoodsGraphsReportDrawerOpen
+              }
+              onlyAggregatedReports={
+                this.state.isNeighborhoodsGraphsReportDrawerOpen
+              }
+              onClose={() => {
+                this.setState({
+                  isNeighborhoodsReportDrawerOpen: false,
+                  isNeighborhoodsGraphsReportDrawerOpen: false
+                })
+              }}
+              onSelect={report => {
+                this.blocks.neighborhoods.selectHandler(report)
+                this.setState({
+                  isNeighborhoodsReportDrawerOpen: false,
+                  isNeighborhoodsGraphsReportDrawerOpen: false
+                })
+              }}
+            />
+          )}
           <Header>
             {this.isTemplatesListEnabled() && (
               <>

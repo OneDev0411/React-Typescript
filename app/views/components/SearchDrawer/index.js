@@ -132,12 +132,19 @@ class SearchDrawer extends React.Component {
     })
   }
 
-  get DefaultList() {
-    return this.props.defaultList.filter(item => {
-      const normalized = this.props.normalizeSelectedItem(item)
+  getNormalizedDefaultLists = () => {
+    return this.props.defaultLists
+      .map(defaultList => {
+        return {
+          title: defaultList.title,
+          items: defaultList.items.filter(item => {
+            const normalized = this.props.normalizeSelectedItem(item)
 
-      return !this.state.selectedItems[normalized.id]
-    })
+            return !this.state.selectedItems[normalized.id]
+          })
+        }
+      })
+      .filter(defaultList => defaultList.items.length > 0)
   }
 
   get SearchResults() {
@@ -150,6 +157,10 @@ class SearchDrawer extends React.Component {
     const { isSearching } = this.state
     const { showLoadingIndicator } = this.props
     const selectedItemsCount = Object.keys(this.state.selectedItems).length
+    const normalizedDefaultLists = this.getNormalizedDefaultLists()
+    const hasDefaultLists = normalizedDefaultLists.some(
+      defaultList => defaultList.items.length > 0
+    )
 
     return (
       <Drawer open={this.props.isOpen} onClose={this.handleClose}>
@@ -181,7 +192,7 @@ class SearchDrawer extends React.Component {
                 <SelectedItems
                   isLoading={this.props.showLoadingIndicator}
                   selectedItems={this.state.selectedItems}
-                  hasDefaultList={this.DefaultList.length > 0}
+                  hasDefaultList={hasDefaultLists}
                   getItemProps={getItemProps}
                   onUpdateList={this.handleUpdateList}
                   ItemRow={this.props.ItemRow}
@@ -190,8 +201,7 @@ class SearchDrawer extends React.Component {
                 <DefaultItems
                   isLoading={this.props.showLoadingIndicator}
                   searchResults={this.SearchResults}
-                  defaultListTitle={this.props.defaultListTitle}
-                  defaultItems={this.DefaultList}
+                  defaultLists={normalizedDefaultLists}
                   getItemProps={getItemProps}
                   handleSelectItem={this.handleSelectItem}
                   ItemRow={this.props.ItemRow}
@@ -217,8 +227,7 @@ class SearchDrawer extends React.Component {
 SearchDrawer.defaultProps = {
   showLoadingIndicator: false,
   searchInputOptions: {},
-  defaultList: [],
-  defaultListTitle: 'Add from list',
+  defaultLists: [],
   multipleSelection: false,
   forceRenderFooter: false
 }
@@ -228,8 +237,12 @@ SearchDrawer.propTypes = {
   searchInputOptions: PropTypes.object,
   searchFunction: PropTypes.func.isRequired,
   ItemRow: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
-  defaultList: PropTypes.array,
-  defaultListTitle: PropTypes.string,
+  defaultLists: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+      items: PropTypes.array
+    })
+  ),
   forceRenderFooter: PropTypes.bool
 }
 

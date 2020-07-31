@@ -8,6 +8,12 @@ import {
   SearchEmailThreadsNext
 } from 'models/email/search-email-threads'
 
+import useTypedSelector from 'hooks/use-typed-selector'
+
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+
+import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
+
 import InfiniteScrollList from '../InfiniteScrollList'
 import InboxEmailThreadListItem from './components/InboxEmailThreadListItem'
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
@@ -210,6 +216,17 @@ export default function InboxEmailThreadList({
     }
   }
 
+  const accounts = useTypedSelector(({ contacts }) =>
+    selectAllConnectedAccounts(contacts.oAuthAccounts)
+  )
+  const synchronizingEmails = accounts.some(({ jobs, type }) =>
+    jobs?.some(
+      ({ job_name, status }) =>
+        job_name === (type === GOOGLE_CREDENTIAL ? 'gmail' : 'outlook') &&
+        status !== 'success'
+    )
+  )
+
   return (
     <InfiniteScrollList
       items={emailThreads}
@@ -218,7 +235,7 @@ export default function InboxEmailThreadList({
       onSelectItem={emailThread =>
         onSelectEmailThread(emailThread && emailThread.id)
       }
-      emptyListMessage="No Emails"
+      emptyListMessage={synchronizingEmails ? 'Syncing...' : 'No Emails'}
       itemKey={(emailThread, index) => emailThread.id}
       renderItem={(emailThread, selected) => (
         <InboxEmailThreadListItem

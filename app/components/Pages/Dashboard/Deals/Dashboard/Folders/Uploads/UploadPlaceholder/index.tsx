@@ -1,31 +1,27 @@
-import React, { useRef } from 'react'
-import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import React, { useRef, useState } from 'react'
+
+import { Tooltip } from '@material-ui/core'
 
 import copy from 'utils/copy-text-to-clipboard'
 
 import UploadManager from '../../../../UploadManager'
 import { Container, ItemLink } from './styled'
 
-interface DispatchProps {
-  notify: typeof notify
-}
-
 interface Props {
   deal: IDeal
 }
 
-function UploadPlaceholder(props: Props & DispatchProps) {
+function UploadPlaceholder(props: Props) {
+  const [showTooltip, setShowTooltip] = useState(false)
+
   const dropzoneRef = useRef<{
     open(): void
   } | null>(null)
 
   const handleCopyEmail = () => {
     copy(props.deal.email)
-    props.notify({
-      message: 'Link Copied',
-      status: 'success'
-    })
+    setShowTooltip(true)
+    setTimeout(() => setShowTooltip(false), 2000)
   }
 
   const handleSelectFile = () =>
@@ -41,13 +37,12 @@ function UploadPlaceholder(props: Props & DispatchProps) {
       <Container>
         Drag & drop, <ItemLink onClick={handleSelectFile}>upload</ItemLink> or
         email files to{' '}
-        <ItemLink onClick={handleCopyEmail}>{props.deal.email}</ItemLink>{' '}
+        <Tooltip open={showTooltip} title="Email Address Copied">
+          <ItemLink onClick={handleCopyEmail}>{props.deal.email}</ItemLink>
+        </Tooltip>{' '}
       </Container>
     </UploadManager>
   )
 }
 
-export default connect(
-  null,
-  () => ({ notify })
-)(UploadPlaceholder)
+export default UploadPlaceholder

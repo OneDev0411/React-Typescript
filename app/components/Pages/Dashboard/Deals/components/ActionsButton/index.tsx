@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 import Downshift from 'downshift'
 import { mdiChevronDown } from '@mdi/js'
 
@@ -9,7 +8,6 @@ import { setSelectedTask } from 'actions/deals'
 import { isBackOffice } from 'utils/user-teams'
 import Tooltip from 'components/tooltip'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
-import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import {
@@ -29,8 +27,14 @@ import type {
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT,
-  CLEAR_ATTACHMENTS
+  SET_DRAWER_STATUS
 } from 'deals/contexts/actions-context/constants'
+
+import {
+  getFileEmailAttachments,
+  getFormEmailAttachments,
+  getEnvelopeEmailAttachments
+} from 'views/utils/deal-files/get-email-attachments'
 
 import { normalizeActions } from './data/normalize-actions'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
@@ -62,7 +66,6 @@ import {
   viewFile
 } from './helpers/actions'
 
-import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
 import UploadManager from '../../UploadManager'
 
@@ -89,10 +92,8 @@ interface ContextProps {
 
 interface State {
   isMenuOpen: boolean
-  isSignatureFormOpen: boolean
   isPdfSplitterOpen: boolean
   isTasksDrawerOpen: boolean
-  isComposeEmailOpen: boolean
   multipleItemsSelection: {
     items: IDealFile[]
     title: string
@@ -122,10 +123,8 @@ class ActionsButton extends React.Component<
 
     this.state = {
       isMenuOpen: false,
-      isSignatureFormOpen: false,
       isPdfSplitterOpen: false,
       isTasksDrawerOpen: false,
-      isComposeEmailOpen: false,
       multipleItemsSelection: null
     }
 
@@ -152,9 +151,9 @@ class ActionsButton extends React.Component<
       'docusign-envelope': this.docusignEnvelope,
       'docusign-form': this.docusignForm,
       'docusign-file': this.docusignFile,
-      'email-form': this.handleToggleComposeEmail,
-      'email-file': this.handleToggleComposeEmail,
-      'email-envelope': this.handleToggleComposeEmail
+      'email-form': this.emailForm,
+      'email-file': this.emailFile,
+      'email-envelope': this.emailEnvelope
     }
 
     this.handleSelectAction = this.handleSelectAction.bind(this)
@@ -188,16 +187,6 @@ class ActionsButton extends React.Component<
   handleToggleMenu = () =>
     this.setState(state => ({ isMenuOpen: !state.isMenuOpen }))
 
-  handleDeselectAction = () => {
-    this.setState({
-      isSignatureFormOpen: false
-    })
-
-    this.props.actionsDispatch({
-      type: CLEAR_ATTACHMENTS
-    })
-  }
-
   handleCloseMultipleItemsSelectionDrawer = () =>
     this.setState({
       multipleItemsSelection: null
@@ -214,15 +203,6 @@ class ActionsButton extends React.Component<
     return files.filter(file => file.mime === 'application/pdf')
   }
 
-  getEmailComposeFiles = () => {
-    return getLastStates({
-      deal: this.props.deal,
-      task: this.props.task,
-      file: this.props.file,
-      envelopes: this.props.envelopes
-    })
-  }
-
   /**
    *
    */
@@ -233,33 +213,50 @@ class ActionsButton extends React.Component<
    */
   handleShowComments = () => this.props.setSelectedTask(this.props.task)
 
+  emailFile = () => {
+    const attachments = getFileEmailAttachments(
+      this.props.task,
+      this.props.file!
+    )
+
+    this.updateEmailList(attachments)
+  }
+
+  emailForm = () => {
+    const attachments = getFormEmailAttachments(this.props.task)
+
+    this.updateEmailList(attachments)
+  }
+
+  emailEnvelope = () => {
+    const attachments = getEnvelopeEmailAttachments(
+      this.props.task,
+      this.props.envelope!
+    )
+
+    this.updateEmailList(attachments)
+  }
+
   /**
    *
    */
-  handleToggleComposeEmail = () => {
-    const files = this.getEmailComposeFiles()
+  updateEmailList = (files: IDealEmailFile[]) => {
+    this.props.actionsDispatch({
+      type: SET_DRAWER_STATUS,
+      isDrawerOpen: this.props.actionsState.actions.length === 0
+    })
 
-    if (
-      this.props.actionsState.actions.some(name =>
-        [EMAIL_FORM, EMAIL_FILE, EMAIL_ENVELOPE].includes(name)
-      ) === false
-    ) {
-      this.setState(state => ({
-        isComposeEmailOpen: !state.isComposeEmailOpen
-      }))
-
-      return
-    }
-
-    if (
-      this.props.actionsState.attachments.some(attachment =>
-        files.some(doc => doc.id === attachment.id)
+    const exists = this.props.actionsState.attachments.some(attachment =>
+      files.some(doc =>
+        attachment.id ? doc.id === attachment.id : doc.url === attachment.url
       )
-    ) {
-      files.forEach(attachment =>
+    )
+
+    if (exists) {
+      files.forEach(file =>
         this.props.actionsDispatch({
           type: REMOVE_ATTACHMENT,
-          attachment
+          attachment: file
         })
       )
 
@@ -268,17 +265,8 @@ class ActionsButton extends React.Component<
 
     this.props.actionsDispatch({
       type: ADD_ATTACHMENTS,
-      attachments: files
-    })
-  }
-
-  handleCloseComposeEmail = () => {
-    this.setState(state => ({
-      isComposeEmailOpen: false
-    }))
-
-    this.props.actionsDispatch({
-      type: CLEAR_ATTACHMENTS
+      attachments: files,
+      actions: [EMAIL_FORM, EMAIL_FILE, EMAIL_ENVELOPE]
     })
   }
 
@@ -289,14 +277,12 @@ class ActionsButton extends React.Component<
     )
 
     this.updateDocusignList(attachments)
-    this.handleGetSignature()
   }
 
   docusignForm = () => {
     const attachments = getFormEsignAttachments(this.props.task)
 
     this.updateDocusignList(attachments)
-    this.handleGetSignature()
   }
 
   docusignFile = () => {
@@ -306,10 +292,14 @@ class ActionsButton extends React.Component<
     )
 
     this.updateDocusignList(attachments)
-    this.handleGetSignature()
   }
 
   updateDocusignList = (files: IFile[]) => {
+    this.props.actionsDispatch({
+      type: SET_DRAWER_STATUS,
+      isDrawerOpen: this.props.actionsState.actions.length === 0
+    })
+
     files.forEach(file => {
       const isFileExists = this.props.actionsState.attachments.some(
         attachment => attachment.id === file.id
@@ -323,64 +313,9 @@ class ActionsButton extends React.Component<
       } else {
         this.props.actionsDispatch({
           type: ADD_ATTACHMENTS,
-          attachments: [file]
+          attachments: [file],
+          actions: [DOCUSIGN_ENVELOPE, DOCUSIGN_FILE, DOCUSIGN_FORM]
         })
-      }
-    })
-  }
-
-  /**
-   *
-   */
-  handleGetSignature = () => {
-    if (
-      this.props.actionsState.actions.some(name =>
-        [DOCUSIGN_FORM, DOCUSIGN_FILE, DOCUSIGN_ENVELOPE].includes(name)
-      )
-    ) {
-      return
-    }
-
-    this.setState({
-      isSignatureFormOpen: true
-    })
-  }
-
-  /**
-   *
-   */
-  handleView = () => {
-    const openInNewTab = (link: string | undefined) =>
-      link && link.includes('/dashboard/deals/')
-
-    let links = getLastStates({
-      deal: this.props.deal,
-      task: this.props.task,
-      file: this.props.file,
-      envelopes: this.props.envelopes,
-      isBackOffice: this.props.isBackOffice
-    })
-
-    if (links.length <= 1) {
-      return links.length === 1 &&
-        this.props.isBackOffice &&
-        openInNewTab(links[0].internal_url)
-        ? browserHistory.push(links[0].internal_url as string)
-        : window.open(
-            links[0] ? links[0].url : this.props.task.pdf_url,
-            '_blank'
-          )
-    }
-
-    this.setState({
-      multipleItemsSelection: {
-        items: links,
-        title: 'Select a file to view/print',
-        actionTitle: 'View/Print',
-        onSelect: item =>
-          this.props.isBackOffice && openInNewTab(item.internal_url)
-            ? browserHistory.push(item.internal_url as string)
-            : window.open(item.url, '_blank')
       }
     })
   }
@@ -405,7 +340,6 @@ class ActionsButton extends React.Component<
         task: this.props.task,
         envelope: this.props.envelope,
         file: this.props.file,
-        emailAttachments: this.getEmailComposeFiles(),
         isBackOffice: this.props.isBackOffice
       })
     }
@@ -484,18 +418,6 @@ class ActionsButton extends React.Component<
           <div />
         </UploadManager>
 
-        {this.state.isSignatureFormOpen && (
-          // @ts-ignore
-          <GetSignature
-            isOpen
-            deal={this.props.deal}
-            onClickAddAttachments={() =>
-              this.setState({ isSignatureFormOpen: false })
-            }
-            onClose={this.handleDeselectAction}
-          />
-        )}
-
         {this.state.isPdfSplitterOpen && (
           <PdfSplitter
             files={this.getSplitterFiles()}
@@ -514,24 +436,6 @@ class ActionsButton extends React.Component<
             }}
             onClose={this.toggleMoveFile}
             title="Move to Checklist"
-          />
-        )}
-
-        {this.state.isComposeEmailOpen && (
-          <SingleEmailComposeDrawer
-            isOpen
-            initialValues={{
-              from: this.props.user,
-              attachments: this.getEmailComposeFiles()
-            }}
-            deal={this.props.deal}
-            onClickAddDealAttachments={() =>
-              this.setState({
-                isComposeEmailOpen: false
-              })
-            }
-            onClose={this.handleCloseComposeEmail}
-            onSent={this.handleCloseComposeEmail}
           />
         )}
 

@@ -35,7 +35,11 @@ export function AddNewRecipient({
       renderDropdownButton={props => (
         <Button color="secondary" {...props}>
           <IconAdd
-            className={cn(iconClasses.rightMargin, iconClasses.currentColor)}
+            className={cn(
+              iconClasses.small,
+              iconClasses.rightMargin,
+              iconClasses.currentColor
+            )}
           />
           Add New Recipient
         </Button>
@@ -44,38 +48,33 @@ export function AddNewRecipient({
         const handleAddNewRecipient = handleAddRecipient.bind(null, close)
 
         return (
-          <div
-            style={{
+          <Roles
+            showEmail
+            isEmailRequired
+            showTitle={false}
+            deal={deal}
+            allowDeleteRole={false}
+            filter={role => !selectedRoles[role.id]}
+            onSelect={handleAddNewRecipient}
+            onUpsertRole={handleAddNewRecipient}
+            onCreateRole={handleAddNewRecipient}
+            containerStyle={{
+              padding: theme.spacing(2, 0),
               maxHeight: '50vh',
-              overflow: 'scroll'
+              overflow: 'auto'
             }}
-          >
-            <Roles
-              showEmail
-              isEmailRequired
-              showTitle={false}
-              deal={deal}
-              allowDeleteRole={false}
-              filter={role => !selectedRoles[role.id]}
-              onSelect={handleAddNewRecipient}
-              onUpsertRole={handleAddNewRecipient}
-              onCreateRole={handleAddNewRecipient}
-              containerStyle={{
-                padding: theme.spacing(2, 0)
-              }}
-              addRoleActionRenderer={props => (
-                <Button {...props} color="secondary" variant="outlined">
-                  <IconAdd
-                    className={cn(
-                      iconClasses.rightMargin,
-                      iconClasses.currentColor
-                    )}
-                  />
-                  Add New Contact
-                </Button>
-              )}
-            />
-          </div>
+            addRoleActionRenderer={props => (
+              <Button {...props} color="secondary" variant="outlined">
+                <IconAdd
+                  className={cn(
+                    iconClasses.rightMargin,
+                    iconClasses.currentColor
+                  )}
+                />
+                Add New Contact
+              </Button>
+            )}
+          />
         )
       }}
     />

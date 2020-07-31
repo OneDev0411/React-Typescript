@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Button,
   IconButton,
@@ -35,8 +35,9 @@ import {
 import { IAppState } from 'reducers'
 
 import {
-  CLEAR_ATTACHMENTS,
-  REMOVE_ATTACHMENT
+  CANCEL,
+  REMOVE_ATTACHMENT,
+  SET_DRAWER_STATUS
 } from '../../contexts/actions-context/constants'
 import { useChecklistActionsContext } from '../../contexts/actions-context/hooks'
 
@@ -82,25 +83,13 @@ export function TaskActions({ deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const [state, dispatch] = useChecklistActionsContext()
-  const [isDocusignDraweOpen, setIsDocusignDrawerOpen] = useState(false)
-  const [isEmailComposeDraweOpen, setIsEmailComposeDrawerOpen] = useState(false)
 
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
-  const cancel = () => {
+  const handleCancel = () => {
     dispatch({
-      type: CLEAR_ATTACHMENTS
+      type: CANCEL
     })
-  }
-
-  const handleCloseEmailDrawer = () => {
-    cancel()
-    setIsEmailComposeDrawerOpen(false)
-  }
-
-  const handleCloseSignatureDrawer = () => {
-    cancel()
-    setIsDocusignDrawerOpen(false)
   }
 
   const handleRemoveAttachment = (attachment: IDealFile) => {
@@ -110,9 +99,23 @@ export function TaskActions({ deal }: Props) {
     })
   }
 
+  const handleOpenDrawer = () => {
+    dispatch({
+      type: SET_DRAWER_STATUS,
+      isDrawerOpen: true
+    })
+  }
+
+  const handleCloseDrawer = () => {
+    dispatch({
+      type: SET_DRAWER_STATUS,
+      isDrawerOpen: false
+    })
+  }
+
   return (
     <>
-      {state.actions.length > 0 && (
+      {state.actions.length > 0 && !state.isDrawerOpen && (
         <Slide in direction="up">
           <div className={classes.root}>
             {state.actions.some(id =>
@@ -121,7 +124,7 @@ export function TaskActions({ deal }: Props) {
               <Button
                 variant="outlined"
                 color="secondary"
-                onClick={() => setIsDocusignDrawerOpen(true)}
+                onClick={handleOpenDrawer}
               >
                 Docusign
               </Button>
@@ -133,7 +136,7 @@ export function TaskActions({ deal }: Props) {
               <Button
                 variant="outlined"
                 color="secondary"
-                onClick={() => setIsEmailComposeDrawerOpen(true)}
+                onClick={handleOpenDrawer}
               >
                 Send Email
               </Button>
@@ -184,33 +187,41 @@ export function TaskActions({ deal }: Props) {
               )}
             />
 
-            <Button color="secondary" onClick={cancel}>
+            <Button color="secondary" onClick={handleCancel}>
               Cancel
             </Button>
           </div>
         </Slide>
       )}
 
-      {isEmailComposeDraweOpen && (
-        <SingleEmailComposeDrawer
-          isOpen
-          initialValues={{
-            from: user,
-            attachments: state.attachments
-          }}
-          deal={deal}
-          onClickAddDealAttachments={() => setIsEmailComposeDrawerOpen(false)}
-          onClose={handleCloseEmailDrawer}
-          onSent={handleCloseEmailDrawer}
-        />
-      )}
+      <SingleEmailComposeDrawer
+        isOpen={
+          state.isDrawerOpen &&
+          state.actions.some(id =>
+            [EMAIL_FORM, EMAIL_ENVELOPE, EMAIL_FORM].includes(id)
+          )
+        }
+        initialValues={{
+          from: user,
+          attachments: state.attachments
+        }}
+        deal={deal}
+        onClickAddDealAttachments={handleCloseDrawer}
+        onClose={handleCancel}
+        onSent={handleCancel}
+      />
 
       <GetSignature
         deal={deal}
-        isOpen={isDocusignDraweOpen}
+        isOpen={
+          state.isDrawerOpen &&
+          state.actions.some(id =>
+            [DOCUSIGN_FORM, DOCUSIGN_ENVELOPE, DOCUSIGN_FILE].includes(id)
+          )
+        }
         defaultAttachments={state.attachments}
-        onClickAddAttachments={() => setIsDocusignDrawerOpen(false)}
-        onClose={handleCloseSignatureDrawer}
+        onClickAddAttachments={handleCloseDrawer}
+        onClose={handleCancel}
       />
     </>
   )

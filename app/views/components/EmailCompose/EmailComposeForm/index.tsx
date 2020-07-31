@@ -71,6 +71,8 @@ function EmailComposeForm<T>({
   uploadAttachment = uploadEmailAttachment,
   onSent = () => {},
   onClickAddDealAttachments = () => {},
+  onSelectMarketingTemplate,
+  disableMarketingTemplates = false,
   children,
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
@@ -87,6 +89,19 @@ function EmailComposeForm<T>({
     marketingTemplate,
     setMarketingTemplate
   ] = useState<IMarketingTemplateInstance | null>(null)
+
+  const selectMarketingTemplate: (
+    template: IMarketingTemplateInstance | null,
+    values: EmailFormValues
+  ) => void = (template, values) => {
+    const result = onSelectMarketingTemplate?.(template, values)
+
+    if (result === true || result === undefined) {
+      return setMarketingTemplate(template)
+    }
+
+    result && result.then(result => result && setMarketingTemplate(template))
+  }
 
   const marketingTemplatePreviewHtml = useMemo(
     () =>
@@ -298,7 +313,7 @@ function EmailComposeForm<T>({
                     </Box>
                     <DangerButton
                       onClick={() => {
-                        setMarketingTemplate(null)
+                        selectMarketingTemplate(null, values)
                       }}
                     >
                       Remove
@@ -324,7 +339,10 @@ function EmailComposeForm<T>({
               hasStaticBody={props.hasStaticBody}
               className={classes.footer}
               updateBody={bodyEditor.update}
-              setMarketingTemplate={setMarketingTemplate}
+              disableMarketingTemplates={disableMarketingTemplates}
+              setMarketingTemplate={template =>
+                selectMarketingTemplate(template, values)
+              }
               onClickAddDealAttachments={onClickAddDealAttachments}
             />
           </form>

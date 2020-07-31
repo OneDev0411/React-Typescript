@@ -22,7 +22,7 @@ interface Options {
   gif: GifOptions
   video: VideoOptions
   article: ArticleOptions
-  neighborhoods: NeighborhoodsOptions
+  neighborhoods?: NeighborhoodsOptions
 }
 
 export function registerEmailBlocks(
@@ -45,14 +45,25 @@ export function registerEmailBlocks(
 
   registerStaticBlocks(editor, renderData)
 
-  const dynamicBlocks = {
+  const dynamicBlocks: {
+    listing: ReturnType<typeof registerListingBlocks>
+    agent: ReturnType<typeof registerAgentBlocks>
+    image: ReturnType<typeof registerImageBlock>
+    gif: ReturnType<typeof registerGifBlock>
+    video: ReturnType<typeof registerVideoBlock>
+    article: ReturnType<typeof registerArticleBlock>
+    neighborhoods?: ReturnType<typeof registerNeighborhoodsBlocks>
+  } = {
     listing: registerListingBlocks(editor, renderData, listing),
     agent: registerAgentBlocks(editor, renderData, agent),
     image: registerImageBlock(editor, image),
     gif: registerGifBlock(editor, gif),
     video: registerVideoBlock(editor, renderData, video),
-    article: registerArticleBlock(editor, renderData, article),
-    neighborhoods: registerNeighborhoodsBlocks(
+    article: registerArticleBlock(editor, renderData, article)
+  }
+
+  if (neighborhoods) {
+    dynamicBlocks.neighborhoods = registerNeighborhoodsBlocks(
       editor,
       renderData,
       neighborhoods

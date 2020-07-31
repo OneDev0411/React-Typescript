@@ -5,7 +5,7 @@ import { stateToHTML } from 'draft-js-export-html'
  * @param {object} values The form values
  * @returns {object} a formated object
  */
-export async function preSaveFormat(values, originalValues) {
+export async function preSaveFormat(values, originalValues = null) {
   const {
     title,
     dueDate,
@@ -39,9 +39,7 @@ export async function preSaveFormat(values, originalValues) {
   const dueDateTimestamp = dueDate.getTime()
   const endDateTimestamp = endDate.getTime()
   const end_date =
-    originalValues?.end_date || endDateTimestamp > dueDateTimestamp
-      ? endDateTimestamp / 1000
-      : null
+    endDateTimestamp > dueDateTimestamp ? endDateTimestamp / 1000 : null
 
   const task = {
     title: title.trim(),

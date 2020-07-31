@@ -28,8 +28,12 @@ export default function CreateOpenHouse(
       <SearchListingDrawer
         mockListings
         isOpen={isListingsDrawerOpen}
-        defaultList={deals}
-        defaultListTitle="Select from your selling deals:"
+        defaultLists={[
+          {
+            title: 'Select from your selling deals:',
+            items: deals
+          }
+        ]}
         onClose={() => {
           props.onClose()
           setIsListingsDrawerOpen(false)

@@ -27,8 +27,12 @@ function CreateNewOpenHouse(props: Props) {
       <SearchListingDrawer
         mockListings
         isOpen={isSearchDrawerOpen}
-        defaultList={selectSellingDeals(props.deals)}
-        defaultListTitle="Select from your selling deals:"
+        defaultLists={[
+          {
+            title: 'Select from your selling deals:',
+            items: selectSellingDeals(props.deals)
+          }
+        ]}
         onClose={() => setIsSearchDrawerOpen(false)}
         onSelect={(items: ICompactListing[] | IDeal[]) => {
           setIsSearchDrawerOpen(false)

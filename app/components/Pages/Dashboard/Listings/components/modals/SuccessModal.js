@@ -1,20 +1,39 @@
 import React from 'react'
 import { Modal } from 'react-bootstrap'
+import { mdiCheck } from '@mdi/js'
+import { makeStyles } from '@material-ui/styles'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+const useStyles = makeStyles(
+  theme => ({
+    checkIcon: {
+      margin: theme.spacing(3, 0, 0, 1)
+    },
+    bellIcon: {
+      height: '5rem',
+      margin: theme.spacing(2, 0, 0, 1)
+    }
+  }),
+  { name: 'SuccessModal' }
+)
 
 const Icon = ({ type }) => {
-  const style = { height: '5rem', margin: '2.5rem 0 0 0.5rem' }
+  const classes = useStyles()
 
   switch (type) {
     case 'SAVED_ALERT':
       return (
         <img
           alt="bell"
-          style={style}
+          className={classes.bellIcon}
           src="/static/images/dashboard/mls/alert-bell-saved.svg"
         />
       )
     default:
-      return <i className="fa fa-check" style={style} />
+      return (
+        <SvgIcon path={mdiCheck} className={classes.checkIcon} size="6rem" />
+      )
   }
 }
 

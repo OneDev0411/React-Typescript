@@ -198,7 +198,10 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   const emails = useMemo(
     () =>
       emailThread
-        ? emailThread.messages.map(normalizeThreadMessageToThreadEmail)
+        ? emailThread.messages.map(message => ({
+            ...normalizeThreadMessageToThreadEmail(message),
+            thread: emailThread
+          }))
         : [],
     [emailThread]
   )

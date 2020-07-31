@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Avatar,
-  createStyles,
   Link,
   makeStyles,
   Paper,
@@ -20,6 +19,7 @@ import { mdiReplyAllOutline, mdiReplyOutline } from '@mdi/js'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { forwardOutlined } from 'components/SvgIcons/icons'
 import { Iframe } from 'components/Iframe'
+import CampaignStatus from 'components/CampaignStatus'
 
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
@@ -34,6 +34,7 @@ import { EmailRecipient } from '../../EmailRecipient'
 import { ThreeDotsButton } from '../../ThreeDotsButton'
 import { trimEmailQuotedContent } from '../helpers/trimEmailQuotedContent'
 import { updateEmailReadStatus } from '../helpers/update-email-read-status'
+import getStatusFromCampaign from '../helpers/get-status-from-campaign'
 
 interface Props {
   email: EmailThreadEmail
@@ -55,8 +56,8 @@ interface Props {
   showBottomButtons?: boolean
 }
 
-const styles = (theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     root: {
       // limit the stickiness of the header within the email thread item
       position: 'relative'
@@ -79,9 +80,13 @@ const styles = (theme: Theme) =>
     avatar: {
       backgroundColor: theme.palette.divider,
       color: theme.palette.text.primary
+    },
+    campaignStatus: {
+      marginRight: theme.spacing(1)
     }
-  })
-const useStyles = makeStyles(styles, { name: 'EmailThreadItem' })
+  }),
+  { name: 'EmailThreadItem' }
+)
 
 export function EmailThreadItem({
   collapsed,
@@ -97,6 +102,7 @@ export function EmailThreadItem({
   const [isResponseOpen, setIsResponseOpen] = useState(false)
   const [trimQuotedContent, toggleTrimQuotedContent] = useBoolean(true)
   const [responseType, setResponseType] = useState<EmailResponseType>('reply')
+  // const [followUpModalIsOpen, setFollowUpModalIsOpen] = useState(false)
 
   const openResponse = (type: EmailResponseType) => {
     setIsResponseOpen(true)
@@ -114,9 +120,12 @@ export function EmailThreadItem({
   )
 
   const isToggleQuotedContentVisible = trimmedEmailBody !== emailBody
-
   const hasNonInlineAttachments =
     email.attachments.filter(attachment => !attachment.isInline).length > 0
+  const hasCampaignStatus =
+    !!email.campaign?.google_credential ||
+    !!email.campaign?.microsoft_credential
+  const campaignStatus = email.campaign && getStatusFromCampaign(email.campaign)
 
   return (
     <div className={classes.root}>
@@ -152,6 +161,12 @@ export function EmailThreadItem({
                   iconClasses.small,
                   iconClasses.rightMargin
                 )}
+              />
+            )}
+            {hasCampaignStatus && (
+              <CampaignStatus
+                status={campaignStatus!}
+                className={classes.campaignStatus}
               />
             )}
             <Typography color="textSecondary" variant="caption">
