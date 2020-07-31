@@ -88,7 +88,7 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/Valentines')
       },
       {
-        title: 'St Patrick',
+        title: "St. Patrick's Day",
         value: 'StPatrick',
         link: urlGenerator('/StPatrick')
       },
@@ -113,6 +113,11 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/WomansDay')
       },
       {
+        title: 'September 11',
+        value: 'PatriotsDay',
+        link: urlGenerator('/PatriotsDay')
+      },
+      {
         title: 'Memorial Day',
         value: 'MemorialDay',
         link: urlGenerator('/MemorialDay')
@@ -121,6 +126,11 @@ const ALL_SECTIONS: SectionCollection = {
         title: 'Labor Day',
         value: 'LaborDay',
         link: urlGenerator('/LaborDay')
+      },
+      {
+        title: 'Back To School',
+        value: 'BackToSchool',
+        link: urlGenerator('/BackToSchool')
       },
       {
         title: 'Hannukkah',
@@ -187,7 +197,7 @@ const ALL_SECTIONS: SectionCollection = {
   branding: {
     type: SectionsEnum.List,
     key: 'branding',
-    title: 'Branding',
+    title: 'Brand',
     items: [
       {
         title: 'Brand Campaigns',
