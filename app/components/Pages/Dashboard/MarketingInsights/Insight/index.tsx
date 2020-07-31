@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.common.black
   },
   disabledText: {
-    color: theme.palette.action.disabled
+    color: theme.palette.grey[500]
   },
   activeText: {
     color: theme.palette.action.active
