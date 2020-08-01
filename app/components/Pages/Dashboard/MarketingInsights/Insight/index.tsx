@@ -54,14 +54,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   grow: {
     flexGrow: 1
   },
-  enabledText: {
+  mainText: {
     color: theme.palette.common.black
   },
-  disabledText: {
+  labelText: {
     color: theme.palette.grey[500]
-  },
-  activeText: {
-    color: theme.palette.action.active
   },
   sortFieldWrapper: {
     padding: theme.spacing(0.5, 0)
@@ -233,7 +230,7 @@ function Insight({ params: { id } }: Props) {
         </Dialog>
         <div className={classes.headerWrapper}>
           <div className={classes.header}>
-            <Typography variant="body2" className={classes.disabledText}>
+            <Typography variant="body2" className={classes.labelText}>
               Sent From&nbsp;&nbsp;
             </Typography>
             <Avatar
@@ -243,13 +240,13 @@ function Insight({ params: { id } }: Props) {
             >
               {sentFromTitle.substring(0, 1).toUpperCase()}
             </Avatar>
-            <Typography variant="body2" className={classes.enabledText}>
+            <Typography variant="body2" className={classes.mainText}>
               &nbsp;&nbsp;{sentFromTitle}
             </Typography>
-            <Typography variant="body2" className={classes.disabledText}>
+            <Typography variant="body2" className={classes.labelText}>
               &nbsp;on
             </Typography>
-            <Typography variant="body2" className={classes.enabledText}>
+            <Typography variant="body2" className={classes.mainText}>
               &nbsp;{formatDate(item.executed_at! * 1000)}
             </Typography>
             <div className={classes.grow} />
@@ -278,7 +275,7 @@ function Insight({ params: { id } }: Props) {
                           variant="subtitle1"
                           display="block"
                           noWrap
-                          className={classes.enabledText}
+                          className={classes.mainText}
                         >
                           {value}
                         </Typography>
@@ -286,7 +283,7 @@ function Insight({ params: { id } }: Props) {
                           variant="caption"
                           display="block"
                           noWrap
-                          className={classes.activeText}
+                          className={classes.labelText}
                         >
                           {label}
                         </Typography>
