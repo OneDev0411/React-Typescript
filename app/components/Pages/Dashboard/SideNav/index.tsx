@@ -1,155 +1,64 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
 
-import { ACL } from '../../../../constants/acl'
-import { selectNotificationNewCount } from '../../../../reducers/notifications'
-import { selectUnreadEmailThreadsCount } from '../../../../reducers/inbox'
-import { InboxAction } from '../../../../reducers/inbox/types'
+import { Drawer, Hidden, makeStyles, Theme } from '@material-ui/core'
 
-import { fetchUnreadEmailThreadsCount } from '../../../../store_actions/inbox'
+import { appSidenavWidth } from './variables'
 
-import { useDealsNotificationsNumber } from '../../../../hooks/use-deals-notifications-number'
-import { useChatRoomsNotificationsNumber } from '../../../../hooks/use-chat-rooms-notifications-number'
-import useTypedSelector from '../../../../hooks/use-typed-selector'
+import { Menu } from './Menu'
 
-import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
+interface Props {
+  isMenuOpen: boolean
+  onDrawerToggle: () => void
+}
 
-import Acl from '../../../../views/components/Acl'
-import { ScrollableArea } from '../../../../views/components/ScrollableArea'
-
-import Logo from './components/Logo'
-import { UserMenu } from './components/UserMenu'
-import SideNavLinkItem from './components/SideNavLinkItem'
-import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
-import SupportTrigger from './components/SupportTrigger'
-
-import {
-  Sidenav,
-  SideNavItem,
-  SidenavListGroup,
-  AppNavbarBadge
-} from './styled'
-import { scrollableAreaShadowColor } from './variables'
-
-const hasWebsitePermission = user =>
-  user &&
-  user.agent &&
-  user.user_type === 'Agent' &&
-  user.agent.office_mlsid === 'CSTPP01'
-
-export default function AppSideNav() {
-  const user = useTypedSelector<IUser>(state => state.user)
-  const appNotifications = useTypedSelector(state =>
-    selectNotificationNewCount(state.globalNotifications)
-  )
-  const inboxNotificationNumber = useTypedSelector(state =>
-    selectUnreadEmailThreadsCount(state.inbox)
-  )
-  const dealsNotificationsNumber = useDealsNotificationsNumber()
-  const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
-
-  const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
-
-  function handleEmailThreadEvent(): void {
-    dispatch(fetchUnreadEmailThreadsCount())
+const useStyles = makeStyles((theme: Theme) => ({
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: appSidenavWidth,
+      flexShrink: 0
+    }
+  },
+  drawerPaper: {
+    width: appSidenavWidth,
+    backgroundColor: '#253053',
+    color: theme.palette.common.white
   }
+}))
 
-  useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
+export default function AppSideNav({ isMenuOpen, onDrawerToggle }: Props) {
+  const classes = useStyles()
 
   return (
-    <Sidenav>
-      <Logo />
-      <ScrollableArea
-        shadowColor={scrollableAreaShadowColor}
-        style={{ flex: '1 1' }}
-        hasThinnerScrollbar
-      >
-        <SidenavListGroup data-test="side-nav-list">
-          <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/inbox">
-              <AppNavbarBadge
-                badgeContent={inboxNotificationNumber}
-                color="primary"
-              >
-                Inbox
-              </AppNavbarBadge>
-            </SideNavLinkItem>
-          </Acl.Crm>
+    <nav className={classes.drawer} aria-label="menu">
+      <Hidden smUp implementation="css">
+        <Drawer
+          container={document.body}
+          variant="temporary"
+          anchor="left"
+          open={isMenuOpen}
+          onClose={onDrawerToggle}
+          classes={{
+            paper: classes.drawerPaper
+          }}
+          ModalProps={{
+            keepMounted: true
+          }}
+        >
+          <Menu />
+        </Drawer>
+      </Hidden>
 
-          <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/calendar">Calendar</SideNavLinkItem>
-          </Acl.Crm>
-
-          <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/contacts">Contacts</SideNavLinkItem>
-          </Acl.Crm>
-        </SidenavListGroup>
-
-        <SidenavListGroup>
-          <Acl.Marketing>
-            <SideNavLinkItem to="/dashboard/marketing">
-              Marketing
-            </SideNavLinkItem>
-          </Acl.Marketing>
-
-          <SideNavLinkItem to="/dashboard/mls">Properties</SideNavLinkItem>
-
-          <Acl.Marketing>
-            <SideNavLinkItem to="/dashboard/insights">Insight</SideNavLinkItem>
-          </Acl.Marketing>
-
-          <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/tours">Tours</SideNavLinkItem>
-          </Acl.Crm>
-
-          <Acl access={[ACL.CRM, ACL.MARKETING]}>
-            <SideNavLinkItem to="/dashboard/open-house">
-              Open House
-            </SideNavLinkItem>
-          </Acl>
-
-          <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
-            <SideNavLinkItem to="/dashboard/deals">
-              <AppNavbarBadge
-                badgeContent={dealsNotificationsNumber}
-                color="primary"
-              >
-                Deals
-              </AppNavbarBadge>
-            </SideNavLinkItem>
-          </Acl>
-
-          <Acl access={hasWebsitePermission}>
-            <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
-          </Acl>
-        </SidenavListGroup>
-
-        <SidenavListGroup>
-          {user && (
-            <SideNavItem>
-              <AppNavbarBadge
-                badgeContent={chatRoomsNotificationsNumber}
-                color="primary"
-              >
-                <MessagesDrawerTrigger />
-              </AppNavbarBadge>
-            </SideNavItem>
-          )}
-
-          {user && (
-            <SideNavLinkItem to="/dashboard/notifications">
-              <AppNavbarBadge badgeContent={appNotifications} color="primary">
-                Notifications
-              </AppNavbarBadge>
-            </SideNavLinkItem>
-          )}
-
-          <SupportTrigger />
-        </SidenavListGroup>
-      </ScrollableArea>
-
-      <UserMenu user={user} />
-    </Sidenav>
+      <Hidden xsDown implementation="css">
+        <Drawer
+          classes={{
+            paper: classes.drawerPaper
+          }}
+          variant="permanent"
+          open
+        >
+          <Menu />
+        </Drawer>
+      </Hidden>
+    </nav>
   )
 }
