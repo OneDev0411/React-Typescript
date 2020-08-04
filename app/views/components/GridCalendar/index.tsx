@@ -284,7 +284,10 @@ export const GridCalendarPresentation = ({
       const nextEvent = normalizeEventOnEdit(start!, end!, currentEvent)
 
       setIsLoading(true)
-      await updateTask(nextEvent, CRM_TASKS_QUERY)
+
+      const newEvent = await updateTask(nextEvent, CRM_TASKS_QUERY)
+
+      handleCrmEventChange(newEvent, 'updated')
     } catch (e) {
       console.log(e)
       throw e
