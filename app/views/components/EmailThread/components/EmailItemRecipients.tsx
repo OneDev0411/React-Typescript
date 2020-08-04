@@ -14,7 +14,13 @@ export function EmailItemRecipients({ email }: Props) {
   return (
     <>
       <Typography variant="body2" noWrap>
-        to {[...to, ...cc].map(renderRecipient)}
+        to {to.map(renderRecipient)}
+        {cc.length > 0 ? (
+          <>
+            {', cc: '}
+            {cc.map(renderRecipient)}
+          </>
+        ) : null}
         {bcc.length > 0 ? (
           <>
             {', bcc: '}
