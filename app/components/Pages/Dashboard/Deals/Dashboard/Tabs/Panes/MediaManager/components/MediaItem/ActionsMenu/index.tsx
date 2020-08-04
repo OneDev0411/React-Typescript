@@ -5,8 +5,10 @@ import {
   Typography,
   Box,
   Menu,
-  MenuItem
+  MenuItem,
+  useTheme
 } from '@material-ui/core'
+import { mdiDotsVertical, mdiDownload } from '@mdi/js'
 
 import { useDispatch } from 'react-redux'
 
@@ -16,15 +18,11 @@ import { uploadCroppedMedia } from 'models/media-manager'
 import { downloadMedias } from 'models/media-manager'
 
 import { ImageUploader } from 'components/ImageUploader'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { deleteMedias } from 'models/media-manager'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-import MoreVertIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
-import IconDownload from 'components/SvgIcons/Download/IconDownload'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import DownloadModal from '../../DownloadModal'
 
@@ -46,8 +44,8 @@ interface Props {
 }
 
 export default function ActionsMenu({ media, deal }: Props) {
+  const theme = useTheme()
   const classes = useStyles()
-  const iconClasses = useIconStyles()
   const reduxDispatch = useDispatch()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -153,9 +151,10 @@ export default function ActionsMenu({ media, deal }: Props) {
               className={classes.menuButton}
               onClick={handleDownload}
             >
-              <IconDownload
-                fill="#fff"
-                className={(iconClasses.medium, classes.iconButton)}
+              <SvgIcon
+                path={mdiDownload}
+                color={theme.palette.common.white}
+                className={classes.iconButton}
               />
             </Button>
           </Tooltip>
@@ -168,9 +167,10 @@ export default function ActionsMenu({ media, deal }: Props) {
             aria-haspopup="true"
             onClick={handleMenuClick}
           >
-            <MoreVertIcon
-              fill="#fff"
-              className={(iconClasses.medium, classes.iconButton)}
+            <SvgIcon
+              path={mdiDotsVertical}
+              color={theme.palette.common.white}
+              className={classes.iconButton}
             />
           </Button>
           <Menu
