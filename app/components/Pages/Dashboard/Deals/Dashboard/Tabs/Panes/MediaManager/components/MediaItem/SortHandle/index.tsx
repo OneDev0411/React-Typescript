@@ -1,20 +1,18 @@
 import React from 'react'
-import { Box } from '@material-ui/core'
-import cn from 'classnames'
+import { Box, useTheme } from '@material-ui/core'
+import { mdiDrag } from '@mdi/js'
 
-import IconDragHandle from 'components/SvgIcons/DragHandle/IconDragHandle'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useStyles } from '../../../styles'
 
 export default function SortHandle() {
+  const theme = useTheme()
   const classes = useStyles()
-  const iconClasses = useIconStyles()
 
   return (
     <Box className={classes.sortHandle}>
-      <IconDragHandle fillColor="#000" className={cn(iconClasses.small)} />
+      <SvgIcon path={mdiDrag} color={theme.palette.common.black} />
     </Box>
   )
 }
