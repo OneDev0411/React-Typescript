@@ -48,7 +48,7 @@ const events: EventsType[] = [
   {
     component: GeneralEvent,
     condition: (event: EventContentArg, rowEvent: ICalendarEvent) =>
-      ['crm_task', 'crm_association'].includes(rowEvent.object_type)
+      ['crm_task', 'crm_association', 'contact'].includes(rowEvent.object_type)
   }
 ]
 
