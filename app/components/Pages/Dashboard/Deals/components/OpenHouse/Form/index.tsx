@@ -1,7 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { connect } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
+import { useSelector } from 'react-redux'
 import {
   Button,
   createStyles,
@@ -16,7 +14,7 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { createTaskComment } from 'deals/utils/create-task-comment'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
-import { updateTask } from 'actions/deals'
+import { updateTask, changeNeedsAttention } from 'actions/deals'
 
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
@@ -31,16 +29,13 @@ import getListing from 'models/listings/listing/get-listing'
 import { addressTitle } from 'utils/listing'
 import { normalizeListing } from 'views/utils/association-normalizers'
 
+import { useReduxDispatch } from 'hooks/use-redux-dispatch'
+
 import { DatePickerContainer } from './styled'
 
 interface StateProps {
   user: IUser
   checklists: IDealChecklist[]
-}
-
-interface DispatchProps {
-  updateTask: IAsyncActionProp<typeof updateTask>
-  createRequestTask: IAsyncActionProp<typeof createRequestTask>
 }
 
 interface Props {
@@ -69,9 +64,17 @@ const useStyles = makeStyles((theme: Theme) => {
   })
 })
 
-function OpenHouseForm(props: Props & StateProps & DispatchProps) {
+function OpenHouseForm(props: Props) {
   const { listing: listingId } = props.deal
   const classes = useStyles()
+  const dispatch = useReduxDispatch()
+
+  const { user, checklists } = useSelector<IAppState, StateProps>(
+    ({ user, deals }) => ({
+      user,
+      checklists: getDealChecklists(props.deal, deals.checklists)
+    })
+  )
 
   const confirmation = useContext(ConfirmationModalContext)
 
@@ -131,7 +134,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
 
     setIsSaving(true)
 
-    const checklist = props.checklists.find(
+    const checklist = checklists.find(
       checklist => checklist.checklist_type === 'Selling'
     )!
 
@@ -143,13 +146,17 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
     if (props.task) {
       createTaskComment(
         props.task,
-        props.user.id,
+        user.id,
         `Please change open house time to:\n ${taskTitle}`
       )
 
-      await props.updateTask(props.task.id, {
-        title: `Update Open House to ${taskTitle}`
-      })
+      await dispatch(
+        updateTask(props.task.id, {
+          title: `Update Open House to ${taskTitle}`
+        })
+      )
+
+      dispatch(changeNeedsAttention(props.deal.id, props.task.id, true))
 
       props.onUpsertTask(props.task)
 
@@ -158,15 +165,17 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
       return
     }
 
-    const task = await props.createRequestTask({
-      checklist,
-      userId: props.user.id,
-      dealId: props.deal.id,
-      taskType: 'OpenHouse',
-      taskTitle: `Open House: ${taskTitle}`,
-      taskComment: `Please create an open house for this date:\n${taskTitle}`,
-      notifyMessage: 'Back office has been notified'
-    })
+    const task = await dispatch(
+      createRequestTask({
+        checklist,
+        userId: user.id,
+        dealId: props.deal.id,
+        taskType: 'OpenHouse',
+        taskTitle: `Open House: ${taskTitle}`,
+        taskComment: `Please create an open house for this date:\n${taskTitle}`,
+        notifyMessage: 'Back office has been notified'
+      })
+    )
 
     setIsSaving(false)
 
@@ -205,7 +214,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
     // MLS listting is mandatory for creating an open house from its drawer
     if (listing) {
       return {
-        assignees: [props.user],
+        assignees: [user],
         registrants: [],
         endDate,
         dueDate: startDate,
@@ -280,7 +289,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
         <OpenHouseDrawer
           isOpen
           dealNotifyOffice={false}
-          user={props.user}
+          user={user}
           associations={{ deal: props.deal }}
           submitCallback={handleCloseOHRegistrationDrawer}
           onClose={handleCloseOHRegistrationDrawer}
@@ -291,26 +300,4 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   )
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    updateTask: (...args: Parameters<typeof updateTask>) =>
-      dispatch(updateTask(...args)),
-    createRequestTask: (...args: Parameters<typeof createRequestTask>) =>
-      dispatch(createRequestTask(...args))
-  }
-}
-
-function mapStateToProps(
-  { user, deals }: IAppState,
-  ownProps: Props
-): StateProps {
-  return {
-    user,
-    checklists: getDealChecklists(ownProps.deal, deals.checklists)
-  }
-}
-
-export default connect<StateProps, DispatchProps, Props>(
-  mapStateToProps,
-  mapDispatchToProps
-)(OpenHouseForm)
+export default OpenHouseForm
