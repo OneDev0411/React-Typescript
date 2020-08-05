@@ -63,10 +63,4 @@ export const Icon = styled.div`
   border-radius: 50%;
   width: 1.75rem;
   height: 1.75rem;
-
-  svg {
-    width: 1rem;
-    height: 1rem;
-    fill: #fff !important;
-  }
 `
