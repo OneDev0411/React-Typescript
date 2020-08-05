@@ -270,9 +270,7 @@ const ListingDesktopView = ({
       </div>
     ))
 
-    listing_subtitle = `${listing.property.address.city}, ${
-      listing.property.address.state
-    } ${listing.property.address.postal_code}`
+    listing_subtitle = `${listing.property.address.city}, ${listing.property.address.state} ${listing.property.address.postal_code}`
 
     const status_color = listingUtils.getStatusColor(listing.status)
 
@@ -281,9 +279,7 @@ const ListingDesktopView = ({
     if (listing.close_date) {
       const sold_date_obj = friendlyDate(listing.close_date)
 
-      sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${
-        sold_date_obj.year
-      }`
+      sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
     }
 
     const listing_status_indicator = (
@@ -538,10 +534,7 @@ const ListingDesktopView = ({
                       <div style={S('text-center w-50p pull-left')}>
                         <a
                           target="_blank"
-                          href={`http://maps.google.com/?q=${
-                            listing.property.address
-                              .geo_source_formatted_address_google
-                          }`}
+                          href={`http://maps.google.com/?q=${listing.property.address.geo_source_formatted_address_google}`}
                         >
                           Google Maps
                         </a>
@@ -550,12 +543,7 @@ const ListingDesktopView = ({
                       <div style={S('text-center w-50p pull-left')}>
                         <a
                           target="_blank"
-                          href={`http://maps.google.com/?q=${
-                            listing.property.address
-                              .geo_source_formatted_address_google
-                          }&layer=c&cbll=${
-                            listing.property.address.location.latitude
-                          },${listing.property.address.location.longitude}`}
+                          href={`http://maps.google.com/?q=${listing.property.address.geo_source_formatted_address_google}&layer=c&cbll=${listing.property.address.location.latitude},${listing.property.address.location.longitude}`}
                         >
                           Street View
                         </a>
