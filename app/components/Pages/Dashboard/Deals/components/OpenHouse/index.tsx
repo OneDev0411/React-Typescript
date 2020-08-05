@@ -10,7 +10,11 @@ import { getActiveTeamSettings } from 'utils/user-teams'
 import { OPEN_HOUSE_REQUESTS_SETTINGS_KEY } from 'constants/user'
 
 import { createTaskComment } from 'deals/utils/create-task-comment'
-import { setSelectedTask, updateTask } from 'actions/deals'
+import {
+  setSelectedTask,
+  updateTask,
+  changeNeedsAttention
+} from 'actions/deals'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
@@ -112,6 +116,7 @@ function OpenHouses({
       inputDefaultValue: "I'd like to cancel this open house, please.",
       onConfirm: (text: string) => {
         dispatch(updateTask(task.id, { title: 'Delete Open House' }))
+        dispatch(changeNeedsAttention(deal.id, task.id, true))
 
         createTaskComment(task, user.id, text)
         dispatch(setSelectedTask(task))
