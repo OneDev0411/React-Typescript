@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, makeStyles, Theme } from '@material-ui/core'
+import { Typography, makeStyles, Theme, Hidden } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -82,25 +82,27 @@ export default function GlobalHeader({
   }
 
   return (
-    <div className={classes.wrapper}>
-      {title && (
-        <Typography variant="h4" noWrap className={classes.title}>
-          {title}
-        </Typography>
-      )}
-      {children && <div className={classes.content}>{children}</div>}
-      {!noGlobalActionsButton && (
-        <div className={classes.globalAction}>
-          <GlobalActionsButton
-            availableActions={availableActions}
-            onCreateEvent={onCreateEvent}
-            onCreateContact={onCreateContact}
-            onCreateEmail={onCreateEmail}
-            onCreateTour={onCreateTour}
-            onCreateOpenHouse={onCreateOpenHouse}
-          />
-        </div>
-      )}
-    </div>
+    <Hidden xsDown implementation="css">
+      <div className={classes.wrapper}>
+        {title && (
+          <Typography variant="h4" noWrap className={classes.title}>
+            {title}
+          </Typography>
+        )}
+        {children && <div className={classes.content}>{children}</div>}
+        {!noGlobalActionsButton && (
+          <div className={classes.globalAction}>
+            <GlobalActionsButton
+              availableActions={availableActions}
+              onCreateEvent={onCreateEvent}
+              onCreateContact={onCreateContact}
+              onCreateEmail={onCreateEmail}
+              onCreateTour={onCreateTour}
+              onCreateOpenHouse={onCreateOpenHouse}
+            />
+          </div>
+        )}
+      </div>
+    </Hidden>
   )
 }
