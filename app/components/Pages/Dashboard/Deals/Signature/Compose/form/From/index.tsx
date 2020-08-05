@@ -46,13 +46,13 @@ export function From({ deal }: Props) {
   })
 
   const users = useMemo(() => {
-    return [
-      user,
-      ...uniqBy(
-        dealRoles.filter(role => role?.user?.docusign),
-        role => role.user.docusign?.id
-      ).map(role => role.user)
-    ]
+    return uniqBy(
+      [
+        user,
+        ...dealRoles.filter(role => role?.user?.docusign).map(role => role.user)
+      ],
+      user => user.docusign?.id
+    )
   }, [user, dealRoles])
 
   const getButtonLabel = (user: IUser) => {
