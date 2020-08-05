@@ -5,6 +5,7 @@ import { makeStyles, Box, Grid } from '@material-ui/core'
 import LoadingComponent from 'components/Spinner'
 
 import ListingCard from '../ListingCard'
+import ZeroState from '../ZeroState'
 
 const CARDS_CONTAINER_WIDTH = '27em'
 const VERTICAL_GAP_FROM_PAGE_TOP = '12em' // It's the page header height
@@ -36,6 +37,10 @@ const MapView = props => {
   const renderCards = () => {
     if (props.isFetching) {
       return <LoadingComponent />
+    }
+
+    if (!props.sortedListings.length) {
+      return <ZeroState />
     }
 
     return props.sortedListings.map(listing => (

@@ -4,11 +4,16 @@ import { Grid, Box } from '@material-ui/core'
 import LoadingComponent from '../../../../../../views/components/Spinner'
 
 import ListingCard from '../ListingCard'
+import ZeroState from '../ZeroState'
 
 export default function GridView({ isFetching, sortedListings, user }) {
   const renderContent = () => {
     if (isFetching) {
       return <LoadingComponent />
+    }
+
+    if (!sortedListings.length) {
+      return <ZeroState />
     }
 
     return sortedListings.map(listing => (
