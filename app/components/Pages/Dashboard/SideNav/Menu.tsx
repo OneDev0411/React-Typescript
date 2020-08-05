@@ -34,11 +34,9 @@ import {
   AppNavbarBadge
 } from './styled'
 
-const hasWebsitePermission = user =>
-  user &&
-  user.agent &&
-  user.user_type === 'Agent' &&
-  user.agent.office_mlsid === 'CSTPP01'
+const hasWebsitePermission = (user?: IUser) => {
+  return user?.user_type === 'Agent' && user.agent?.office_mlsid === 'CSTPP01'
+}
 
 export function Menu() {
   const user = useTypedSelector<IUser>(state => state.user)

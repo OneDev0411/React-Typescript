@@ -1,7 +1,6 @@
 import React from 'react'
-import { Typography, makeStyles, Theme } from '@material-ui/core'
+import { Typography, makeStyles, Theme, Hidden } from '@material-ui/core'
 import { useSelector } from 'react-redux'
-import { Hidden } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
 import { noop } from 'utils/helpers'

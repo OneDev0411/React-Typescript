@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { Theme, IconButton } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import { Theme, IconButton, makeStyles } from '@material-ui/core'
 
 import { mdiMenu } from '@mdi/js'
 

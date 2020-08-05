@@ -6,11 +6,6 @@ import { appSidenavWidth } from './variables'
 
 import { Menu } from './Menu'
 
-interface Props {
-  isMenuOpen: boolean
-  onDrawerToggle: () => void
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
     [theme.breakpoints.up('sm')]: {
@@ -19,11 +14,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   drawerPaper: {
-    width: appSidenavWidth,
-    backgroundColor: '#253053',
-    color: theme.palette.common.white
+    width: appSidenavWidth
   }
 }))
+
+interface Props {
+  isMenuOpen: boolean
+  onDrawerToggle: () => void
+}
 
 export default function AppSideNav({ isMenuOpen, onDrawerToggle }: Props) {
   const classes = useStyles()
