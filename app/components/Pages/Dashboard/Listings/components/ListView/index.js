@@ -10,6 +10,8 @@ import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
 import TableActions from '../../Search/components/BulkActions'
 
+import ZeroState from '../ZeroState'
+
 import { Address } from './columns/Address'
 import { Avatar } from './columns/Avatar'
 
@@ -90,32 +92,38 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
   ]
 
   return (
-    <Box pb={1}>
-      <Table
-        columns={columns}
-        rows={sortedListings}
-        totalRows={listings.info.total}
-        loading={isFetching ? 'middle' : null}
-        LoadingStateComponent={LoadingComponent}
-        selection={{
-          defaultRender: ({ row: listing }) => <Avatar listing={listing} />,
-          columnProps: {
-            width: theme.spacing(4)
-          }
-        }}
-        classes={{
-          row: gridClasses.row
-        }}
-        TableActions={
-          <TableActions
-            isFetching={isFetching}
-            totalRowsCount={listings.info.total}
-            listings={listings.data}
-            user={user}
+    <>
+      {!sortedListings.length ? (
+        <ZeroState />
+      ) : (
+        <Box pb={1}>
+          <Table
+            columns={columns}
+            rows={sortedListings}
+            totalRows={listings.info.total}
+            loading={isFetching ? 'middle' : null}
+            LoadingStateComponent={LoadingComponent}
+            selection={{
+              defaultRender: ({ row: listing }) => <Avatar listing={listing} />,
+              columnProps: {
+                width: theme.spacing(4)
+              }
+            }}
+            classes={{
+              row: gridClasses.row
+            }}
+            TableActions={
+              <TableActions
+                isFetching={isFetching}
+                totalRowsCount={listings.info.total}
+                listings={listings.data}
+                user={user}
+              />
+            }
           />
-        }
-      />
-    </Box>
+        </Box>
+      )}
+    </>
   )
 }
 
