@@ -10,7 +10,7 @@ export function normalizeEventOnEdit(
   event: ICalendarEvent
 ) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { associations, ...omitedAssociationsEvent } = event
+  const { associations, ...omittedAssociationsEvent } = event
   const isAllDay = event.all_day || false
 
   if (isAllDay) {
@@ -33,7 +33,7 @@ export function normalizeEventOnEdit(
   const end = newEnd.getTime() / 1000
 
   return {
-    ...omitedAssociationsEvent,
+    ...omittedAssociationsEvent,
     task_type: event.event_type,
     timestamp: start,
     due_date: start,
