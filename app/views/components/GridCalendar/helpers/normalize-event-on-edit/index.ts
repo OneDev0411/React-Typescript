@@ -9,6 +9,7 @@ export function normalizeEventOnEdit(
   newEnd: Date,
   event: ICalendarEvent
 ) {
+  // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { associations, ...omittedAssociationsEvent } = event
   const isAllDay = event.all_day || false
