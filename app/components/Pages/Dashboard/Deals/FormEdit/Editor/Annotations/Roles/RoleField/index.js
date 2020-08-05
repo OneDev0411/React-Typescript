@@ -1,4 +1,5 @@
 import React, { useState, useMemo, Fragment } from 'react'
+import { mdiPencilOutline } from '@mdi/js'
 
 import { normalizeRoleNames } from 'deals/FormEdit/utils/normalize-role-names'
 import { getRoleTooltip } from 'deals/FormEdit/utils/get-role-tooltip'
@@ -8,7 +9,7 @@ import { isPrimaryAgent } from 'deals/utils/roles'
 
 import Tooltip from 'components/tooltip'
 import DealRole from 'components/DealRole'
-import EditIcon from 'components/SvgIcons/Edit/EditIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { AddRole } from '../AddRole'
 import { RoleItem } from './styled'
@@ -71,12 +72,11 @@ export function RoleField(props) {
             {isEmpty &&
               props.annotation.type === 'Role' &&
               roles[props.annotation.number] && (
-                <EditIcon
+                <SvgIcon
+                  path={mdiPencilOutline}
                   onClick={() => setRole(roles[props.annotation.number])}
-                  style={{
-                    height: props.style.height,
-                    fill: props.style.color
-                  }}
+                  size={props.style.height}
+                  color={props.style.color}
                 />
               )}
           </div>

@@ -12,9 +12,9 @@ import ClickOutside from 'react-click-outside'
 import { SortableHandle } from 'react-sortable-hoc'
 import { useDispatch } from 'react-redux'
 import { addNotification } from 'reapop'
+import { mdiPencilOutline } from '@mdi/js'
 
-import IconEdit from 'components/SvgIcons/Edit/EditIcon'
-import { useIconStyles } from 'views/../styles/use-icon-styles'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useStyles } from '../../styles'
 import ActionsMenu from './ActionsMenu'
@@ -35,7 +35,6 @@ interface Props {
 
 export default function MediaItem({ media, deal }: Props) {
   const classes = useStyles()
-  const iconClasses = useIconStyles()
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const reduxDispatch = useDispatch()
 
@@ -141,7 +140,7 @@ export default function MediaItem({ media, deal }: Props) {
             className={classes.editButton}
             onClick={() => setEditMode(true)}
           >
-            <IconEdit fillColor="#333" className={iconClasses.small} />
+            <SvgIcon path={mdiPencilOutline} />
           </IconButton>
           {name || (
             <Typography className={classes.mutedText}>

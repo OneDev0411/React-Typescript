@@ -7,8 +7,9 @@ import { Button, IconButton } from '@material-ui/core'
 import { getDealTitle } from 'deals/utils/get-deal-title'
 import { getDealAddress } from 'deals/utils/get-deal-address'
 
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { closeIcon } from 'components/SvgIcons/icons'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import PdfSplitter from '../../PdfSplitter'
@@ -85,8 +86,8 @@ export class Menu extends React.Component {
 
             <MenuDivider />
 
-            <IconButton size="medium" onClick={props.onClickBackButton}>
-              <CloseIcon />
+            <IconButton size="small" onClick={props.onClickBackButton}>
+              <SvgIcon path={closeIcon} size={muiIconSizes.large} />
             </IconButton>
           </Flex>
         </MenuContainer>

@@ -44,12 +44,12 @@ export const StatusButton = styled(IconButton)`
   justify-content: center;
 
   svg {
-    fill: ${props => (props.isActive ? getBackgroundColor(props) : '#000')};
+    color: ${props => (props.isActive ? getBackgroundColor(props) : '#000')};
   }
 
   :hover {
     svg {
-      fill: #fff;
+      color: #fff;
     }
 
     border-color: ${props => getBorderColor(props, true)};

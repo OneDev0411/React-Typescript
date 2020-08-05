@@ -119,7 +119,7 @@ export const useStyles = makeStyles(
         width: 30,
         height: 30,
         cursor: 'move',
-        padding: theme.spacing(0.7, 1),
+        padding: theme.spacing(0.4),
         borderRadius: theme.shape.borderRadius
       },
       placeholderCard: {
@@ -207,7 +207,7 @@ export const useStyles = makeStyles(
         }
       },
       iconButton: {
-        padding: 5
+        padding: 2
       },
       uploadPlaceholder: {
         position: 'fixed',

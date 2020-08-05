@@ -3,12 +3,10 @@ import React, { Fragment } from 'react'
 import Flex from 'styled-flex-component'
 
 import { Button } from '@material-ui/core'
+import { mdiClose, mdiCheck, mdiCircleOutline } from '@mdi/js'
 
 import ToolTip from 'views/components/tooltip'
-
-import CheckmarkIcon from 'components/SvgIcons/Checkmark/IconCheckmark'
-import DeleteIcon from 'components/SvgIcons/Close/CloseIcon'
-import CircleIcon from 'components/SvgIcons/Circle/IconCircle'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import RequiredAction from './RequiredAction'
 
@@ -40,7 +38,7 @@ export default function BackOffice(props) {
                   onSendComment(attention_requested ? false : null, 'Declined')
                 }
               >
-                <DeleteIcon />
+                <SvgIcon path={mdiClose} />
               </StatusButton>
             </ToolTip>
 
@@ -52,7 +50,7 @@ export default function BackOffice(props) {
                   onSendComment(attention_requested ? false : null, 'Approved')
                 }
               >
-                <CheckmarkIcon />
+                <SvgIcon path={mdiCheck} />
               </StatusButton>
             </ToolTip>
 
@@ -67,7 +65,7 @@ export default function BackOffice(props) {
                   )
                 }
               >
-                <CircleIcon />
+                <SvgIcon path={mdiCircleOutline} />
               </StatusButton>
             </ToolTip>
           </Fragment>
