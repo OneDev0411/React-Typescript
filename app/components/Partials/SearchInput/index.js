@@ -1,7 +1,9 @@
 import React from 'react'
 import cn from 'classnames'
+import { mdiMagnify } from '@mdi/js'
 
-import SearchIcon from '../../Pages/Dashboard/Partials/Svgs/SearchIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 export default class SearchInput extends React.Component {
   constructor(props) {
@@ -33,7 +35,7 @@ export default class SearchInput extends React.Component {
         style={style}
       >
         <div className="search-icon">
-          <SearchIcon />
+          <SvgIcon path={mdiMagnify} size={muiIconSizes.small} />
         </div>
 
         <input
