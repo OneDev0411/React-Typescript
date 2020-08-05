@@ -17,6 +17,7 @@ import {
   CarouselItem,
   OverlayTrigger
 } from 'react-bootstrap'
+import { mdiClose, mdiArrowLeft, mdiArrowRight } from '@mdi/js'
 
 import { formatPhoneNumber } from '../../../../../../utils/format'
 import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
@@ -26,9 +27,7 @@ import listingUtils from '../../../../../../utils/listing'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import TextIconButton from '../../../../../../views/components/Button/TextIconButton'
 import LinkButton from '../../../../../../views/components/Button/LinkButton'
-import IconClose from '../../../../../../views/components/SvgIcons/Close/CloseIcon'
-import ArrowLeftIcon from '../../../../../../views/components/SvgIcons/ArrowLeft/ArrowLeftIcon'
-import ArrowRightIcon from '../../../../../../views/components/SvgIcons/ArrowRight/ArrowRightIcon'
+import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
 
 import FetchError from './FetchError'
 import MLSNote from './MLSNote'
@@ -131,12 +130,12 @@ const ListingDesktopView = ({
   let bathroom_count
   let prev_icon = (
     <ArrowContainer center left>
-      <ArrowLeftIcon />
+      <SvgIcon path={mdiArrowLeft} />
     </ArrowContainer>
   )
   let next_icon = (
     <ArrowContainer center>
-      <ArrowRightIcon />
+      <SvgIcon path={mdiArrowRight} />
     </ArrowContainer>
   )
   let listing_subtitle
@@ -796,7 +795,7 @@ const ListingDesktopView = ({
       <TextIconButton
         appearance="outline"
         onClick={hideModal}
-        iconLeft={IconClose}
+        iconLeft={() => <SvgIcon path={mdiClose} rightMargined />}
         text="Close"
       />
       {user ? (
