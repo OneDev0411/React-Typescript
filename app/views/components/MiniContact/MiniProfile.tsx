@@ -57,7 +57,6 @@ function MiniProfile(props: MiniProfilePropsType) {
     type: ActionSettingsNamesType.EMAIL,
     data: {
       initialValues: {
-        from: props.user,
         to: [
           {
             recipient_type: 'Email',
