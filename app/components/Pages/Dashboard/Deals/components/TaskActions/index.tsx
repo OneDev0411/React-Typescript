@@ -154,8 +154,8 @@ export function TaskActions({ deal }: Props) {
               )}
               renderMenu={() => (
                 <MenuList>
-                  {state.attachments.map(attachment => (
-                    <MenuItem key={attachment.id}>
+                  {state.attachments.map((attachment, index) => (
+                    <MenuItem key={index}>
                       <Box
                         display="flex"
                         alignItems="center"
