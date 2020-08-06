@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, makeStyles, Theme, Hidden } from '@material-ui/core'
+import { Typography, makeStyles, Theme, useMediaQuery } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -65,9 +65,14 @@ export default function GlobalHeader({
   onCreateOpenHouse = noop
 }: GlobalHeaderProps) {
   const classes = useStyles({ noPadding })
+  const isHidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
   const availableActions: ItemType[] = []
 
   const user = useSelector((store: IAppState) => store.user)
+
+  if (isHidden) {
+    return null
+  }
 
   if (hasUserAccessToCrm(user)) {
     availableActions.push('email', 'event', 'contact', 'tour')
@@ -82,27 +87,25 @@ export default function GlobalHeader({
   }
 
   return (
-    <Hidden xsDown implementation="css">
-      <div className={classes.wrapper}>
-        {title && (
-          <Typography variant="h4" noWrap className={classes.title}>
-            {title}
-          </Typography>
-        )}
-        {children && <div className={classes.content}>{children}</div>}
-        {!noGlobalActionsButton && (
-          <div className={classes.globalAction}>
-            <GlobalActionsButton
-              availableActions={availableActions}
-              onCreateEvent={onCreateEvent}
-              onCreateContact={onCreateContact}
-              onCreateEmail={onCreateEmail}
-              onCreateTour={onCreateTour}
-              onCreateOpenHouse={onCreateOpenHouse}
-            />
-          </div>
-        )}
-      </div>
-    </Hidden>
+    <div className={classes.wrapper}>
+      {title && (
+        <Typography variant="h4" noWrap className={classes.title}>
+          {title}
+        </Typography>
+      )}
+      {children && <div className={classes.content}>{children}</div>}
+      {!noGlobalActionsButton && (
+        <div className={classes.globalAction}>
+          <GlobalActionsButton
+            availableActions={availableActions}
+            onCreateEvent={onCreateEvent}
+            onCreateContact={onCreateContact}
+            onCreateEmail={onCreateEmail}
+            onCreateTour={onCreateTour}
+            onCreateOpenHouse={onCreateOpenHouse}
+          />
+        </div>
+      )}
+    </div>
   )
 }
