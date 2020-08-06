@@ -58,5 +58,6 @@ declare module '@material-ui/core/styles/createTypography' {
 declare module '@material-ui/core/styles/zIndex' {
   interface ZIndex {
     gridAction: number
+    sideNavDrawer: number
   }
 }
