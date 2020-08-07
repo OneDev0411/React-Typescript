@@ -11,8 +11,6 @@ import {
   MenuItem
 } from '@material-ui/core'
 import pluralize from 'pluralize'
-
-import { useSelector } from 'react-redux'
 import { mdiHelpCircleOutline, mdiTrashCanOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
