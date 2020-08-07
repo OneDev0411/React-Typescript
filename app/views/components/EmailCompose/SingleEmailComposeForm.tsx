@@ -1,6 +1,5 @@
-import React, { ComponentProps, useCallback, useState } from 'react'
-import { OnChange } from 'react-final-form-listeners'
-import { Field } from 'react-final-form'
+import React, { ComponentProps, useState, useMemo } from 'react'
+import { Field, useField } from 'react-final-form'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -151,30 +150,23 @@ export function SingleEmailComposeForm({
     )
   }
 
-  const getExpressionsContext = useCallback(
-    (to: IDenormalizedEmailRecipientInput[] | undefined) => {
-      const firstRecipient = (to || [])[0]
+  const toField = useField<IDenormalizedEmailRecipientInput[] | undefined>('to')
+  const toFieldValue = toField?.input.value
+  const initialToFieldValue = initialValues?.to
+  const expressionContext = useMemo(() => {
+    const to = toFieldValue || initialToFieldValue
+    const firstRecipient = (to || [])[0]
 
-      if (firstRecipient && firstRecipient.recipient_type === 'Email') {
-        return {
-          recipient: firstRecipient.contact || {
-            email: firstRecipient.email
-          }
+    if (firstRecipient && firstRecipient.recipient_type === 'Email') {
+      return {
+        recipient: firstRecipient.contact || {
+          email: firstRecipient.email
         }
       }
+    }
 
-      return firstRecipient ? { recipient: {} } : null
-    },
-    []
-  )
-
-  const [expressionContext, setExpressionContext] = useState<object | null>(
-    getExpressionsContext(initialValues && initialValues.to)
-  )
-
-  const updateExpressionContext = (
-    to: IDenormalizedEmailRecipientInput[] | undefined
-  ) => setExpressionContext(getExpressionsContext(to))
+    return firstRecipient ? { recipient: {} } : null
+  }, [toFieldValue, initialToFieldValue])
 
   return (
     // NOTE: if we decided to show the result of the `sender` expressions
@@ -203,7 +195,6 @@ export function SingleEmailComposeForm({
             */}
             <Field name="cc" render={() => null} />
             <Field name="to" render={() => null} />
-            <OnChange name="to">{updateExpressionContext}</OnChange>
 
             <CollapsedEmailRecipients
               to={values.to || []}
@@ -222,7 +213,6 @@ export function SingleEmailComposeForm({
               senderAccounts={allAccounts}
               users={activeBrandUsers}
             />
-            <OnChange name="to">{updateExpressionContext}</OnChange>
           </>
         )}
       />
