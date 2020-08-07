@@ -47,13 +47,6 @@ export const styles = (theme: Theme) =>
         opacity: 1
       }
     },
-    iconEdit: {
-      marginRight: theme.spacing(2),
-      fill: theme.palette.grey[400],
-      '&:hover': {
-        fill: theme.palette.grey[300]
-      }
-    },
     actions: {
       display: 'flex',
       alignItems: 'center',
