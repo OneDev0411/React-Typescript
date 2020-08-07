@@ -8,6 +8,7 @@ import {
   mdiCursorDefaultClickOutline,
   mdiAccountMultipleOutline
 } from '@mdi/js'
+import pluralize from 'pluralize'
 import classNames from 'classnames'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
@@ -134,7 +135,7 @@ function Insight({ params: { id } }: Props) {
   const summaryItems = [
     {
       icon: mdiAccountMultipleOutline,
-      value: `${item.sent} Recipient${item.sent === 1 ? '' : 's'}`,
+      value: pluralize('Recipient', item.sent, true),
       label: 'Total Sent'
     },
     {
@@ -148,9 +149,7 @@ function Insight({ params: { id } }: Props) {
       icon: mdiEyeOutline,
       value: `${item.opened}`,
       label: 'Opens',
-      tooltip: `Email is opened ${item.opened} time${
-        item.opened === 1 ? '' : 's'
-      }`,
+      tooltip: `Email is opened ${pluralize('time', item.opened, true)}`,
       hidden: !pixelTracking
     },
     {
@@ -164,9 +163,7 @@ function Insight({ params: { id } }: Props) {
       icon: mdiCursorDefaultClickOutline,
       value: `${item.clicked}`,
       label: 'Clicks',
-      tooltip: `Email is clicked ${item.clicked} time${
-        item.clicked === 1 ? '' : 's'
-      }`,
+      tooltip: `Email is clicked ${pluralize('time', item.clicked, true)}`,
       hidden: !pixelTracking
     },
     {

@@ -1,9 +1,10 @@
 import { addNotification as notify } from 'reapop'
+import pluralize from 'pluralize'
 
 import openHouseStorage from '../../../server/util/pages/openhouse/registration/storage'
 import { onlineSubmitHandler as registerOpenHouse } from '../../../server/util/pages/openhouse/registration/handlers'
 
-export default function(accessToken) {
+export default function (accessToken) {
   return async dispatch => {
     const allOpenHouseData = openHouseStorage.getAll()
 
@@ -20,9 +21,11 @@ export default function(accessToken) {
       )
       dispatch(
         notify({
-          message: `${openHouseData.length} offline register${
-            openHouseData.length > 1 ? 's' : ''
-          } for "${openHouseData[0].title}" open house synced successfully`,
+          message: `${pluralize(
+            'offline register',
+            openHouseData.length,
+            true
+          )} for "${openHouseData[0].title}" open house synced successfully`,
           status: 'info'
         })
       )
