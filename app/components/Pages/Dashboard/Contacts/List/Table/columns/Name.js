@@ -3,14 +3,15 @@ import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
 import { Typography, Tooltip } from '@material-ui/core'
+import { mdiSetNone } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import { grey } from 'views/utils/colors'
 
 import Link from 'components/ALink'
 import MiniContact from 'components/MiniContact'
-import PartnerIcon from 'components/SvgIcons/Partner/IconPartner'
 
 const ContactsListName = ({ contact }) => {
   const name = getAttributeFromSummary(contact, 'display_name')
@@ -47,9 +48,7 @@ const ContactsListName = ({ contact }) => {
           contact.partner_name.trim().length > 0 && (
             <Tooltip title="Spouse/Partner">
               <Flex alignCenter>
-                <PartnerIcon
-                  style={{ width: '1rem', height: '1rem', fill: grey.A550 }}
-                />
+                <SvgIcon path={mdiSetNone} color={grey.A550} />
                 <span
                   style={{
                     width: 'calc(100% - 1.24rem)',
