@@ -1,16 +1,21 @@
 import React, { createContext, useState } from 'react'
-import { Box, makeStyles } from '@material-ui/core'
+import { Box, Theme, makeStyles } from '@material-ui/core'
 
 import SideNav from './SideNav'
+import { appSidenavWidth } from './SideNav/variables'
 
 interface Props {
   children: React.ReactNode
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   main: {
+    width: '100%',
     height: '100vh',
-    flexGrow: 1
+    flexGrow: 1,
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${appSidenavWidth}px)`
+    }
   }
 }))
 
