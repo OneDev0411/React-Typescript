@@ -4,6 +4,7 @@ import { withRouter } from 'react-router'
 import _ from 'underscore'
 import Alert from '@material-ui/lab/Alert'
 import { Box, IconButton } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
 
 import PageLayout from 'components/GlobalPageLayout'
 
@@ -35,9 +36,8 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
 import { updateTeamSetting } from 'actions/user/update-team-setting'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
-
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import ContactsTabs from './Tabs'
 import Table from './Table'
@@ -656,11 +656,12 @@ class ContactsList extends React.Component {
           severity="info"
           action={
             <IconButton
+              size="small"
               aria-label="close"
               color="inherit"
               onClick={this.closeDupicateAlert}
             >
-              <CloseIcon size="small" />
+              <SvgIcon path={mdiClose} />
             </IconButton>
           }
         >
