@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { addNotification, Notification } from 'reapop'
+import { mdiClockOutline } from '@mdi/js'
 
 import useInput from 'hooks/use-input'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { Container, Icon, Label, Input } from './styled'
+import { Container, Label, Input } from './styled'
 
 interface TouchReminderProps {
   value?: number
@@ -54,7 +56,7 @@ function TouchReminder({
 
   return (
     <Container>
-      <Icon />
+      <SvgIcon path={mdiClockOutline} rightMargined />
       <Label>Touch Reminder</Label>
       <Input
         value={value.toString()}
@@ -70,9 +72,6 @@ function TouchReminder({
   )
 }
 
-export default connect(
-  null,
-  {
-    notify: addNotification
-  }
-)(TouchReminder)
+export default connect(null, {
+  notify: addNotification
+})(TouchReminder)
