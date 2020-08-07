@@ -1,5 +1,5 @@
 import React, { ComponentProps, useState, useMemo } from 'react'
-import { Field, useField } from 'react-final-form'
+import { Field } from 'react-final-form'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -150,9 +150,8 @@ export function SingleEmailComposeForm({
     )
   }
 
-  const toField = useField<IDenormalizedEmailRecipientInput[] | undefined>('to')
-  const toFieldValue = toField?.input.value
   const initialToFieldValue = initialValues?.to
+  const [toFieldValue, setToFieldValue] = useState(initialToFieldValue)
   const expressionContext = useMemo(() => {
     const to = toFieldValue || initialToFieldValue
     const firstRecipient = (to || [])[0]
@@ -166,7 +165,7 @@ export function SingleEmailComposeForm({
     }
 
     return firstRecipient ? { recipient: {} } : null
-  }, [toFieldValue, initialToFieldValue])
+  }, [initialToFieldValue, toFieldValue])
 
   return (
     // NOTE: if we decided to show the result of the `sender` expressions
@@ -211,6 +210,7 @@ export function SingleEmailComposeForm({
               individualMode={individualMode}
               deal={deal}
               senderAccounts={allAccounts}
+              onToFieldChange={setToFieldValue}
               users={activeBrandUsers}
             />
           </>
