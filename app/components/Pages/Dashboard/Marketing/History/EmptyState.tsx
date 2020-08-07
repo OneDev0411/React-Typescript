@@ -7,13 +7,15 @@ import {
   createStyles,
   makeStyles,
   Theme,
+  useTheme,
   Link
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
+import { mdiPlayCircleOutline } from '@mdi/js'
 
 import { hasUserAccessToBrandSettings } from 'utils/user-teams'
 import { IAppState } from 'reducers'
-import IconVideo from 'components/SvgIcons/VideoFilled/IconVideoFilled'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface StylesProps {
   isDesktop: boolean
@@ -41,10 +43,6 @@ const useStyles = makeStyles((theme: Theme) =>
         maxWidth: '100%'
       }
     },
-    videoIcon: {
-      marginRight: '0.5em',
-      fill: `${theme.palette.primary.main}`
-    },
     brandSettingsAlertMessage: {
       width: '100%'
     },
@@ -55,6 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export default function EmptyState() {
+  const theme = useTheme<Theme>()
   const isDesktop = useMediaQuery('(min-width:1440px)')
   const classes = useStyles({ isDesktop })
   const getCoverSrc = (rate: number) =>
@@ -101,7 +100,11 @@ export default function EmptyState() {
             target="blank"
             href="https://help.rechat.com/en/collections/1969137-marketing"
           >
-            <IconVideo className={classes.videoIcon} />
+            <SvgIcon
+              path={mdiPlayCircleOutline}
+              rightMargined
+              color={theme.palette.primary.main}
+            />
             Learn More
           </Button>
         </div>
