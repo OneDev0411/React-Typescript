@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { mdiEmailOpenOutline } from '@mdi/js'
 
-import MailAttachmentIcon from 'components/SvgIcons/MailAttachment/IconMailAttachment'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Container from './styled'
 import { EmailAssociationController } from './EmailAssociationController'
@@ -31,7 +32,7 @@ function CRMEmailAssociation({ association, style }) {
           className={`cover ${email.img ? 'img' : 'icon'}`}
           style={{ backgroundImage: email.img && `url(${email.img})` }}
         >
-          {!email.img && <MailAttachmentIcon />}
+          {!email.img && <SvgIcon path={mdiEmailOpenOutline} />}
         </div>
         <div className="details">
           <div className="subject">
