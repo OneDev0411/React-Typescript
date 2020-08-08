@@ -7,7 +7,16 @@ export const isEditable = (event: ICalendarEvent): boolean => {
 
   if (
     ['contact', 'deal_context'].includes(object_type) ||
-    ['birthday', 'next_touch', 'Open House', 'Tour'].includes(event_type)
+    [
+      'birthday',
+      'child_birthday',
+      'next_touch',
+      'wedding_anniversary',
+      'home_anniversary',
+      'work_anniversary',
+      'Open House',
+      'Tour'
+    ].includes(event_type)
   ) {
     return false
   }
