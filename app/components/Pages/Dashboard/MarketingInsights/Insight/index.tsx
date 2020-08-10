@@ -103,9 +103,9 @@ function Insight({ params: { id } }: Props) {
   })
   const [isOpenViewEmail, setOpenViewEmail] = useState(false)
   const { item, isLoading } = useItemData(id)
-  const [emailPreview, setEmailPreview] = useState<
-    'loading' | IEmail<IEmailOptionalFields> | null
-  >(null)
+  const [emailPreview, setEmailPreview] = useState<IEmail<
+    IEmailOptionalFields
+  > | null>(null)
 
   const classes = useStyles()
 
@@ -181,8 +181,6 @@ function Insight({ params: { id } }: Props) {
   const openViewEmail = async () => {
     try {
       if (!emailPreview) {
-        setEmailPreview('loading')
-
         const email = await getEmailCampaign(id, {
           emailCampaignAssociations: ['emails'],
           emailRecipientsAssociations: [],
@@ -214,7 +212,7 @@ function Insight({ params: { id } }: Props) {
         <Header
           backUrl="/dashboard/insights"
           title={item.subject}
-          viewEmailDisabled={!item.emails || emailPreview === 'loading'}
+          viewEmailDisabled={!item.emails}
           onViewEmail={openViewEmail}
         />
         <Dialog
@@ -223,7 +221,7 @@ function Insight({ params: { id } }: Props) {
           onClose={closeEmailView}
           open={isOpenViewEmail}
         >
-          {emailPreview && emailPreview !== 'loading' && (
+          {emailPreview && (
             <EmailThread
               messages={[emailPreview]}
               subject={emailPreview.subject}
