@@ -5,7 +5,7 @@ import { getEmailCampaign } from 'models/email/get-email-campaign'
 function useItemData(id) {
   const [isLoading, setLoading] = useState<boolean>(true)
   const [hasError, setError] = useState<boolean>(false)
-  const [item, setItem] = useState<IEmailCampaign | null>(null)
+  const [item, setItem] = useState<any | null>(null)
 
   useEffect(() => {
     getEmailCampaign(id, {
@@ -16,7 +16,6 @@ function useItemData(id) {
       .then(data => {
         setError(false)
         setLoading(false)
-        // @ts-ignore
         setItem(data)
       })
       .catch(e => {
