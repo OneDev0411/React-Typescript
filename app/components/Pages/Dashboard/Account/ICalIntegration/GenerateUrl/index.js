@@ -95,7 +95,7 @@ class GenerateUrl extends React.Component {
     const { isFetchingFeed, feedURl, errorMessage } = this.state
 
     return (
-      <React.Fragment>
+      <>
         {errorMessage && (
           <Box marginBottom={1}>
             <Alert severity="error">{errorMessage}</Alert>
@@ -134,7 +134,7 @@ class GenerateUrl extends React.Component {
             </Box>
           )}
         </GenerateUrlContainer>
-      </React.Fragment>
+      </>
     )
   }
 }
