@@ -36,6 +36,7 @@ function OpenHouses({
   deal,
   style,
   location,
+  router,
   defaultOpen = false
 }: Props & WithRouterProps) {
   const dispatch = useDispatch()
@@ -98,7 +99,10 @@ function OpenHouses({
     toggleMenu()
 
     if (location.state && location.state.autoBookOpenHouse) {
-      location.state = {}
+      router.replace({
+        ...location,
+        state: {}
+      })
     }
   }
 
