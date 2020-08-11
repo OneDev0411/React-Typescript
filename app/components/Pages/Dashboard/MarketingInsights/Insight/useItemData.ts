@@ -5,11 +5,13 @@ import { getEmailCampaign } from 'models/email/get-email-campaign'
 function useItemData(id) {
   const [isLoading, setLoading] = useState<boolean>(true)
   const [hasError, setError] = useState<boolean>(false)
-  const [item, setItem] = useState<any | null>(null)
+  const [item, setItem] = useState<IEmailCampaign<
+    'from' | 'emails' | 'recipients'
+  > | null>(null)
 
   useEffect(() => {
     getEmailCampaign(id, {
-      emailCampaignAssociations: ['emails', 'from'],
+      emailCampaignAssociations: ['emails', 'from', 'recipients'],
       emailRecipientsAssociations: [],
       emailCampaignEmailsAssociation: []
     })
