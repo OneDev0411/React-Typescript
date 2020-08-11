@@ -1,18 +1,15 @@
 import React from 'react'
+import { Tooltip } from '@material-ui/core'
+
+import { mdiAlertOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 export default ({ message }) => (
-  <span
-    style={{ position: 'absolute', right: '5px', top: '30%' }}
-    data-balloon={message}
-    data-balloon-pos="up"
-  >
-    <i
-      style={{
-        verticalAlign: 'middle',
-        fontSize: '18px',
-        color: '#ec4b35'
-      }}
-      className="fa fa-warning"
-    />
-  </span>
+  <Tooltip title={message}>
+    <span style={{ position: 'absolute', right: '5px', top: '15%' }}>
+      <SvgIcon path={mdiAlertOutline} size={muiIconSizes.small} />
+    </span>
+  </Tooltip>
 )

@@ -58,7 +58,9 @@ export const MenuButton = styled.div`
   `}
 `
 
-export const Container = styled.div`
+export const Container = styled.div<{
+  theme: Theme
+}>`
   ${({ theme }) => css`
     display: flex;
     height: 2.3rem;
@@ -87,7 +89,7 @@ export const MenuContainer = styled.div`
 `
 
 export const MenuItem = styled.div<MenuItemProps>`
-  ${({ theme, disabled }) => css`
+  ${({ theme, disabled }) => `
     color: ${disabled ? theme.palette.grey['900'] : theme.palette.common.black};
     padding: ${theme.spacing(1, 2)};
     ${theme.typography.body2};
