@@ -6,13 +6,15 @@ function useItemData(id) {
   const [isLoading, setLoading] = useState<boolean>(true)
   const [hasError, setError] = useState<boolean>(false)
   const [item, setItem] = useState<IEmailCampaign<
-    IEmailCampaignAssociation,
-    IEmailCampaignRecipientAssociation,
-    IEmailCampaignEmailAssociation
+    'from' | 'emails' | 'recipients'
   > | null>(null)
 
   useEffect(() => {
-    getEmailCampaign(id)
+    getEmailCampaign(id, {
+      emailCampaignAssociations: ['emails', 'from', 'recipients'],
+      emailRecipientsAssociations: [],
+      emailCampaignEmailsAssociation: []
+    })
       .then(data => {
         setError(false)
         setLoading(false)
