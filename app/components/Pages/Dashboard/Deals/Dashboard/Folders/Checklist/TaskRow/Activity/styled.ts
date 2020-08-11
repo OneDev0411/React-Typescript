@@ -1,6 +1,9 @@
 import styled, { css } from 'styled-components'
+import { Theme } from '@material-ui/core'
 
-export const LastActivity = styled.div`
+export const LastActivity = styled.div<{
+  theme: Theme
+}>`
   ${({ theme }) => css`
     color: ${theme.palette.grey['900']} !important;
     color: #d1d1d1;
