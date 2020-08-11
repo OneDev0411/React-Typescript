@@ -9,6 +9,7 @@ import React, {
 import { connect } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { makeStyles, Theme } from '@material-ui/core'
+
 import cn from 'classnames'
 // List of full calendar assets
 import FullCalendar, {
@@ -49,6 +50,9 @@ import { upsertCrmEvents } from '../Calendar/helpers/upsert-crm-events'
 
 // helpers
 import { StateProps, SocketUpdate, ActionRef } from './types'
+
+// filter component
+import { FilterEvents } from './components/FilterEvents'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -103,6 +107,11 @@ export const GridCalendarPresentation = ({
   const [calendarRange, setCalendarRange] = useState<NumberRange>(
     getDateRange()
   )
+
+  // filter events el
+  const [filterEl, setFilterEl] = useState<HTMLButtonElement | null>(null)
+
+  const handleCloseFilterEvents = () => setFilterEl(null)
 
   /**
    * fetches events based on the given [[ApiOptions]]
@@ -371,6 +380,7 @@ export const GridCalendarPresentation = ({
 
   return (
     <>
+      <FilterEvents el={filterEl} onClose={handleCloseFilterEvents} />
       <div
         className={cn(classes.loadingContainer, {
           [classes.isLoading]: isLoading
@@ -381,9 +391,18 @@ export const GridCalendarPresentation = ({
           initialView="dayGridMonth"
           dayMaxEventRows={3}
           editable
+          customButtons={{
+            filterButton: {
+              text: 'Calendars...',
+              click: e => {
+                // @ts-ignore
+                setFilterEl(e.currentTarget as HTMLButtonElement)
+              }
+            }
+          }}
           headerToolbar={{
             left: 'today prev,next title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: 'filterButton dayGridMonth,timeGridWeek,timeGridDay'
           }}
           buttonText={{
             today: 'Today',
