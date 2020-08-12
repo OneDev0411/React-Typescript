@@ -89,14 +89,14 @@ export const MenuContainer = styled.div`
 `
 
 export const MenuItem = styled.div<MenuItemProps>`
-  ${({ theme, disabled }) => `
+  ${({ theme, disabled }) => css`
     color: ${disabled ? theme.palette.grey['900'] : theme.palette.common.black};
     padding: ${theme.spacing(1, 2)};
     ${theme.typography.body2};
 
     ${(props: MenuItemProps) =>
       props.disabled === false &&
-      css`
+      `
         :hover {
           cursor: pointer;
           background-color: ${theme.palette.action.hover};

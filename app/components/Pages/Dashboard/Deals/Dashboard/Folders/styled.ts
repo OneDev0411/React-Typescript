@@ -117,20 +117,18 @@ export const RowTitle = styled.div<{
   clickable: boolean
   theme: Theme
 }>`
-  ${({ theme, clickable }) => `
+  ${({ theme, clickable }) => css`
     margin-bottom: 0.75rem;
     ${theme.typography.body2};
     font-weight: bold;
 
-    ${
-      clickable &&
-      css`
+    ${clickable &&
+    `
         :hover {
           cursor: pointer;
           color: #0945eb;
         }
-      `
-    }
+      `}
   `}
 `
 
