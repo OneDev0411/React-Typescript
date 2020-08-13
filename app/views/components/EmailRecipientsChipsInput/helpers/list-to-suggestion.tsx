@@ -1,8 +1,9 @@
 import { Avatar } from '@material-ui/core'
 
 import React from 'react'
+import { mdiFormatListBulleted } from '@mdi/js'
 
-import ListIcon from '../../SvgIcons/List/ListIcon'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 import { Suggestion } from '../../ChipsInput/types'
 
 export function listToSuggestion(
@@ -13,7 +14,7 @@ export function listToSuggestion(
     subtitle: 'List',
     avatar: (
       <Avatar>
-        <ListIcon color="currentColor" />
+        <SvgIcon path={mdiFormatListBulleted} />
       </Avatar>
     )
   }
