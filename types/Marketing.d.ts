@@ -16,6 +16,7 @@ declare interface IMarketingTemplate extends IModel<'template'> {
   mjml: boolean
   url: string
   variant: string
+  variables: Nullable<string[]>
   inputs: string[]
 }
 

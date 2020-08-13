@@ -7,7 +7,7 @@ interface TemplateInstanceInputData {
   contacts?: UUID[]
 }
 
-export async function getTemplateInstances(
+export async function createTemplateInstance(
   templateId: UUID,
   data: TemplateInstanceInputData
 ): Promise<IMarketingTemplateInstance> {

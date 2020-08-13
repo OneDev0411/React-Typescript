@@ -62,10 +62,6 @@ export const marketingTemplateCardStyles = (theme: Theme) =>
       }
     },
 
-    image: {
-      width: '100%'
-    },
-
     suffix: {
       marginTop: theme.spacing(1),
       position: 'absolute',

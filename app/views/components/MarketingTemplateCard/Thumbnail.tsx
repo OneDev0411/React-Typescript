@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useEffectOnce } from 'react-use'
+import { useDeepCompareEffect } from 'react-use'
 
 import { makeStyles } from '@material-ui/core'
 
@@ -14,27 +14,28 @@ import TemplateThumbnail from 'components/TemplateThumbnail'
 
 const useStyles = makeStyles(() => ({
   templateThumbnailWrapper: {
-    // transformOrigin: '0 0',
-    // transform: 'scaleX(0.385) scaleY(0.365)', // pure hack :facepalm:
-    // position: 'absolute',
-    // top: 0,
-    // left: 0
+    margin: '0 auto'
   }
 }))
 
 interface Props {
-  template: IMarketingTemplateInstance | IBrandMarketingTemplate
   user: IUser
-  className: string
+  template: IMarketingTemplateInstance | IBrandMarketingTemplate
+  listing?: IListing
+
+  onClick?: React.ComponentProps<typeof TemplateThumbnail>['onClick']
 }
 
-export function Thumbnail({ template, user, className }: Props) {
+export function Thumbnail({
+  user,
+  template,
+  listing: receivedListing,
+  onClick
+}: Props) {
   const classes = useStyles()
   const brand = getActiveBrand(user)
-  // const [width, setWidth] = useState('auto')
-  // const [height, setHeight] = useState('auto')
   const [templateMarkup, setTemplateMarkup] = useState<string>('')
-  const [mockListing, setMockListing] = useState<Optional<IListing>>(undefined)
+  const [listing, setListing] = useState<Optional<IListing>>(undefined)
 
   useEffect(() => {
     async function fetchTemplateMarkup() {
@@ -55,15 +56,21 @@ export function Thumbnail({ template, user, className }: Props) {
     fetchTemplateMarkup()
   }, [template])
 
-  useEffectOnce(() => {
-    async function fetchMockListing() {
+  useDeepCompareEffect(() => {
+    async function fetchListingIfNeeded() {
+      if (receivedListing) {
+        setListing(receivedListing)
+
+        return
+      }
+
       const listing = await getMockListing()
 
-      setMockListing((listing as any) as IListing)
+      setListing((listing as any) as IListing)
     }
 
-    fetchMockListing()
-  })
+    fetchListingIfNeeded()
+  }, [receivedListing])
 
   if (
     template.type === 'template_instance' &&
@@ -77,22 +84,13 @@ export function Thumbnail({ template, user, className }: Props) {
   }
 
   return (
-    <div
-      className={classes.templateThumbnailWrapper}
-      // style={{
-      //   width,
-      //   height
-      // }}
-    >
+    <div className={classes.templateThumbnailWrapper}>
       <TemplateThumbnail
         template={templateMarkup}
         mjml={template.template.mjml}
         brand={brand}
-        data={{ listing: mockListing, user }}
-        // setDimensions={(width, height) => {
-        //   setWidth(width)
-        //   setHeight(height)
-        // }}
+        data={{ listing, user }}
+        onClick={onClick}
       />
     </div>
   )
