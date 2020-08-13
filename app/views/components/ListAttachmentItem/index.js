@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import fecha from 'fecha'
 
 import { IconButton, useTheme } from '@material-ui/core'
-import { mdiAttachment } from '@mdi/js'
+import { mdiAttachment, mdiClose } from '@mdi/js'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
@@ -41,7 +41,7 @@ export function ListAttachmentItem(props) {
         size="small"
         onClick={() => props.onDelete(props.attachment)}
       >
-        {props.isRemovable && <DeleteIcon />}
+        {props.isRemovable && <DeleteIcon path={mdiClose} />}
       </IconButton>
     </Item>
   )
