@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
 
 import Listing from 'models/listings/listing'
-import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
+import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
 
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 
@@ -114,7 +114,7 @@ class SendDealPromotion extends React.Component {
 
     const template = getTemplateObject(brandTemplate)
 
-    const instance = await getTemplateInstances(template.id, {
+    const instance = await createTemplateInstance(template.id, {
       ...this.TemplateInstanceData,
       html: brandTemplate.result
     })

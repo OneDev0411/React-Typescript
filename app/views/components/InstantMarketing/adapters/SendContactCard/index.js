@@ -6,7 +6,7 @@ import { Button } from '@material-ui/core'
 
 import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
-import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
+import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 
 import { confirmation } from 'actions/confirmation'
@@ -181,7 +181,7 @@ class SendContactCard extends React.Component {
 
     const template = getTemplateObject(brandTemplate)
 
-    const instance = await getTemplateInstances(template.id, {
+    const instance = await createTemplateInstance(template.id, {
       ...this.TemplateInstanceData,
       html: brandTemplate.result
     })

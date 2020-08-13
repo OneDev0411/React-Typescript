@@ -28,16 +28,16 @@ interface Props {
     contact?: Nullable<IContact>
   }
 
-  // setDimensions?: (width: string, height: string) => void
+  onClick?: () => void
 }
 
 export default function TemplateThumbnail({
   template,
   brand,
   mjml = true,
-  data
-}: // setDimensions
-Props) {
+  data,
+  onClick
+}: Props) {
   const classes = useStyles()
   const ref = useRef<HTMLIFrameElement>(null)
   const [previewMarkup, setPreviewMarkup] = useState<string>('')
@@ -68,25 +68,30 @@ Props) {
   }, [template, brand, mjml, data])
 
   useEffect(() => {
-    if (!ref.current?.contentWindow || !previewMarkup) {
+    if (!ref.current || !previewMarkup) {
       return
     }
 
     const widthSpace = ref.current.clientWidth
 
     ref.current.width = '700px'
-    // ref.current.height = '2000px'
 
     ref.current.srcdoc = previewMarkup
 
     ref.current.onload = () => {
-      if (!ref.current?.contentWindow) {
+      if (!ref.current?.contentDocument) {
         return
       }
 
-      const iframeWidth = ref.current.contentWindow.document.body.offsetWidth
+      // Iframe onclick hack!
+      // More info: https://stackoverflow.com/questions/1609741/how-to-add-click-event-to-a-iframe-with-jquery
+      if (onClick) {
+        ref.current.contentDocument.body.onclick = onClick
+      }
 
-      const iframeHeight = ref.current.contentWindow.document.body.offsetHeight
+      const iframeWidth = ref.current.contentDocument.body.offsetWidth
+
+      const iframeHeight = ref.current.contentDocument.body.offsetHeight
 
       const ratio = widthSpace / iframeWidth
 
@@ -97,10 +102,10 @@ Props) {
 
       if (ref.current.parentElement) {
         ref.current.parentElement.style.height = `${ratio * iframeHeight}px`
-        // ref.current.parentElement.style.height = `${ratio * iframeHeight}px`
+        ref.current.parentElement.style.width = `${ratio * iframeWidth}px`
       }
     }
-  }, [ref, previewMarkup])
+  }, [ref, previewMarkup, onClick])
 
   return (
     <div>

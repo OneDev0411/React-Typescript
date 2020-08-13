@@ -335,3 +335,27 @@ export function useMarketingCenterSections({ types }): SectionCollection {
 
   return newSections
 }
+
+export function getTemplateTypeToLabelMapping(): StringMap<string> {
+  const sectionKeys = Object.keys(ALL_SECTIONS)
+
+  const templateTypeToLabelMapping: StringMap<string> = {}
+
+  sectionKeys.forEach(sectionKey => {
+    const currentSection = ALL_SECTIONS[sectionKey]
+
+    currentSection.items.forEach(item => {
+      if (!item.value) {
+        return
+      }
+
+      const templateTypeValue = Array.isArray(item.value)
+        ? item.value.join(',')
+        : item.value
+
+      templateTypeToLabelMapping[templateTypeValue] = item.title
+    })
+  })
+
+  return templateTypeToLabelMapping
+}

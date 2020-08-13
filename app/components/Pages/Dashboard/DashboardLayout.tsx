@@ -10,6 +10,7 @@ interface Props {
 const useStyles = makeStyles(() => ({
   main: {
     height: '100vh',
+    width: '100%',
     flexGrow: 1
   }
 }))
