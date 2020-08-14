@@ -12,6 +12,8 @@ import {
   getTemplateType
 } from 'utils/marketing-center/helpers'
 
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
+
 import { SAVED_TEMPLATE_VARIANT } from '../InstantMarketing/Builder/AddToMarketingCenter/constants'
 
 const HOLIDAY_TYPES = [
@@ -20,8 +22,27 @@ const HOLIDAY_TYPES = [
   'Valentines',
   'StPatrick',
   'Easter',
+  'FathersDay',
+  'MothersDay',
+  'WomansDay',
+  'PatriotsDay',
+  'MemorialDay',
+  'LaborDay',
+  'BackToSchool',
+  'Hannukkah',
+  'Passover',
+  'RoshHashanah',
+  'FourthOfJuly',
+  'VeteransDay',
+  'Thanksgiving',
+  'Halloween',
+  'MLKDay',
+  'ChineseNewYear',
+  'Diwaly',
+  'Kwanzaa',
   'OtherHoliday'
 ]
+
 const GENERAL_FLOW_TYPES = [
   'Brand',
   'NewAgent',
@@ -30,6 +51,8 @@ const GENERAL_FLOW_TYPES = [
   HOLIDAY_TYPES.join(','),
   ...HOLIDAY_TYPES
 ]
+
+const CONTACT_FLOW_TYPES = ['WeddingAnniversary']
 
 function TemplateAction(props) {
   const { isEdit } = props
@@ -68,9 +91,10 @@ function TemplateAction(props) {
   // TODO: Refactor this logic as it's not right and it's fragile!
   // There's a "inputs" (inputs: string[]) key inside the template which we should check it for deciding about the flow!
   // We should check that inputs and use it for showing the proper flow based on template needs.
+
   if (
     props.selectedTemplate &&
-    props.selectedTemplate.variant === SAVED_TEMPLATE_VARIANT
+    getTemplateObject(props.selectedTemplate).variant === SAVED_TEMPLATE_VARIANT
   ) {
     return (
       <GeneralFlow
@@ -81,7 +105,10 @@ function TemplateAction(props) {
     )
   }
 
-  if (templateType === 'Birthday' && !isBirthdaySocial) {
+  if (
+    CONTACT_FLOW_TYPES.includes(templateType) ||
+    (templateType === 'Birthday' && !isBirthdaySocial)
+  ) {
     return <ContactFlow {...sharedProps} />
   }
 
