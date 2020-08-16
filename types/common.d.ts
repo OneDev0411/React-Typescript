@@ -96,3 +96,9 @@ declare type Association<
 > = Association extends Associations
   ? { [key in Field]: Value }
   : Record<never, never>
+
+/** Provides information about files and allows JavaScript in a web page to access their content. */
+interface IBlobFile extends Blob {
+  readonly lastModified: number
+  readonly name: string
+}
