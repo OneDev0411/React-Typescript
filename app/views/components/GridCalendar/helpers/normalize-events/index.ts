@@ -5,16 +5,49 @@ import { getTitle } from './helpers/get-title'
 import { getDates } from './helpers/get-dates'
 import { isEditable } from './helpers/is-editable'
 
+import { FilterShape } from '../../components/FilterEvents/type'
+import {
+  CRM_OBJECT_TYPE,
+  CELEBRATION_OBJECT_TYPE,
+  CELEBRATION_EVENTS_TYPE,
+  DEAL_OBJECT_TYPE,
+  DEAL_EVENTS_TYPE
+} from '../../components/FilterEvents/helper'
+
 /**
  * return list of events for using in full calendar
  * @param events
  */
-export function normalizeEvents(events: ICalendarEvent[]): EventInput[] {
-  const uniqEvents = _uniqBy(events, event =>
+export function normalizeEvents(
+  events: ICalendarEvent[],
+  filter: FilterShape
+): EventInput[] {
+  const uniqEvents: ICalendarEvent[] = _uniqBy(events, event =>
     event.object_type === 'crm_association' ? event.crm_task : event.id
   )
 
-  return uniqEvents.map((event: ICalendarEvent) => {
+  const filteredEvents: ICalendarEvent[] = uniqEvents.filter(event => {
+    if (CRM_OBJECT_TYPE.includes(event.object_type)) {
+      return true
+    }
+
+    let isCelebration =
+      filter.celebrationEvents &&
+      event.object_type === CELEBRATION_OBJECT_TYPE &&
+      CELEBRATION_EVENTS_TYPE.includes(event.event_type)
+    let isDeal =
+      filter.dealEvents &&
+      event.object_type === DEAL_OBJECT_TYPE &&
+      DEAL_EVENTS_TYPE.includes(event.event_type)
+
+    if (isCelebration || isDeal) {
+      return true
+    }
+
+    return false
+  })
+
+  return filteredEvents.map((event: ICalendarEvent) => {
     const { id, all_day } = event
 
     return {

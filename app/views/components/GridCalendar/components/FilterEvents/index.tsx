@@ -10,40 +10,29 @@ import {
 
 import { Form, Field } from 'react-final-form'
 
+import { AVAILABLE_FILTERS } from './values'
+
 import { FilterShape } from './type'
 
 interface Props {
   el: HTMLButtonElement | null
+  initialFilters: FilterShape
+  setFilter(filter: FilterShape): void
   onClose(): void
 }
 
-const FilterEventsComponent = ({ el, onClose }: Props) => {
+const FilterEventsComponent = ({
+  el,
+  initialFilters,
+  onClose,
+  setFilter
+}: Props) => {
   const open = Boolean(el)
   const id = open ? 'filter-event-popover' : undefined
 
-  // Available filters
-  const filters = [
-    {
-      name: 'celebrationEvents',
-      lable: 'Celebrations'
-    },
-    {
-      name: 'dealEvents',
-      lable: 'Deal’s Event'
-    },
-    {
-      name: 'holidayEvents',
-      lable: 'Holidays'
-    }
-  ]
-  const initialFilters: FilterShape = {
-    celebrationEvents: true,
-    dealEvents: true,
-    holidayEvents: true
-  }
-
   const onSubmit = (values: FilterShape) => {
-    console.log(values)
+    setFilter(values)
+    onClose()
   }
 
   return (
@@ -68,7 +57,7 @@ const FilterEventsComponent = ({ el, onClose }: Props) => {
           return (
             <form onSubmit={handleSubmit} noValidate>
               <List>
-                {filters.map(filter => (
+                {AVAILABLE_FILTERS.map(filter => (
                   <ListItem dense key={filter.name}>
                     <Field
                       name={filter.name}

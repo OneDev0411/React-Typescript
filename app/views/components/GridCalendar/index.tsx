@@ -53,6 +53,8 @@ import { StateProps, SocketUpdate, ActionRef } from './types'
 
 // filter component
 import { FilterEvents } from './components/FilterEvents'
+import { FilterShape } from './components/FilterEvents/type'
+import { INITIAL_FILTERS } from './components/FilterEvents/values'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -110,9 +112,24 @@ export const GridCalendarPresentation = ({
 
   // filter events el
   const [filterEl, setFilterEl] = useState<HTMLButtonElement | null>(null)
+  const [activeFilter, setActiveFilter] = useState<FilterShape>(INITIAL_FILTERS)
 
   const handleCloseFilterEvents = () => setFilterEl(null)
 
+  const updateEvents = useCallback(
+    (
+      nextEvents: ICalendarEvent[],
+      filter: typeof activeFilter = activeFilter
+    ) => {
+      // normalized events for using in full calendar
+      const normalizedEvents: EventInput[] = normalizeEvents(nextEvents, filter)
+
+      // update events list
+      setRowEvents(nextEvents)
+      setEvents(normalizedEvents)
+    },
+    [activeFilter]
+  )
   /**
    * fetches events based on the given [[ApiOptions]]
    * @param apiOptions - the api options
@@ -161,19 +178,14 @@ export const GridCalendarPresentation = ({
           ? fetchedEvents
           : fetchedEvents.concat(rowEvents)
 
-        // normalized events for using in full calendar
-        const normalizedEvents: EventInput[] = normalizeEvents(nextEvents)
-
-        // update events list
-        setRowEvents(nextEvents)
-        setEvents(normalizedEvents)
+        updateEvents(nextEvents)
       } catch (e) {
         console.log(e)
       } finally {
         setIsLoading(false)
       }
     },
-    [viewAsUsers, rowEvents, associations]
+    [viewAsUsers, associations, rowEvents, updateEvents]
   )
 
   const handleLoadEvents = async (range: NumberRange | null = null) => {
@@ -318,14 +330,12 @@ export const GridCalendarPresentation = ({
         event,
         type
       )
-      const normalizedEvents: EventInput[] = normalizeEvents(nextEvents)
 
-      setRowEvents(nextEvents)
-      setEvents(normalizedEvents)
+      updateEvents(nextEvents)
       setSelectedEvent(null)
       setSelectedDay(null)
     },
-    [rowEvents]
+    [rowEvents, updateEvents]
   )
 
   /**
@@ -357,11 +367,7 @@ export const GridCalendarPresentation = ({
       const nextEvents =
         upserted.length > 0 ? [...upserted, ...currentEvents] : currentEvents
 
-      const normalizedEvents = normalizeEvents(nextEvents)
-
-      // update events list
-      setRowEvents(nextEvents)
-      setEvents(normalizedEvents)
+      updateEvents(nextEvents)
     }
 
     socket.on('Calendar.Updated', handleUpdate)
@@ -371,16 +377,21 @@ export const GridCalendarPresentation = ({
     }
   })
 
-  /**
-   * exposes below methods to be accessible outside of the component
-   */
   useImperativeHandle(actionRef, () => ({
     updateCrmEvents: handleCrmEventChange
   }))
 
   return (
     <>
-      <FilterEvents el={filterEl} onClose={handleCloseFilterEvents} />
+      <FilterEvents
+        el={filterEl}
+        initialFilters={activeFilter}
+        setFilter={(v: FilterShape) => {
+          setActiveFilter(v)
+          updateEvents(rowEvents, v)
+        }}
+        onClose={handleCloseFilterEvents}
+      />
       <div
         className={cn(classes.loadingContainer, {
           [classes.isLoading]: isLoading
