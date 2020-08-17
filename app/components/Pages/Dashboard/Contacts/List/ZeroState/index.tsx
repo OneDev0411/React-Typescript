@@ -1,7 +1,14 @@
 import React from 'react'
 import cn from 'classnames'
-import { Box, Button, Typography, useTheme } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  Typography,
+  useTheme,
+  createStyles,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 
 import { OAuthProvider } from 'constants/contacts'
 
