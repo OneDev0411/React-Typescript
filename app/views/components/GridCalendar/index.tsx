@@ -386,9 +386,9 @@ export const GridCalendarPresentation = ({
       <FilterEvents
         el={filterEl}
         initialFilters={activeFilter}
-        setFilter={(v: FilterShape) => {
-          setActiveFilter(v)
-          updateEvents(rowEvents, v)
+        setFilter={(value: FilterShape) => {
+          setActiveFilter(value)
+          updateEvents(rowEvents, value)
         }}
         onClose={handleCloseFilterEvents}
       />
