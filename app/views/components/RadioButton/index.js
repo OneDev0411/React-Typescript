@@ -1,12 +1,13 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 import styled, { css } from 'styled-components'
+import { mdiRadioboxBlank, mdiRadioboxMarked } from '@mdi/js'
+import { useTheme } from '@material-ui/core/styles'
 
 import { grey } from 'views/utils/colors'
 
 import ToolTip from '../tooltip'
-import IconSelectedRadio from '../SvgIcons/Radio/SelectedRadio/IconSelectedRadio'
-import IconUnSelectedRadio from '../SvgIcons/Radio/UnSelectedRadio/IconUnSelectedRadio'
+import { SvgIcon } from '../SvgIcons/SvgIcon'
 
 const LabelContainer = styled.div`
   margin-left: 0.5rem;
@@ -31,17 +32,28 @@ export default ({
   onClick = () => {},
   style = {},
   caption = ''
-}) => (
-  <Flex justifyStart style={style} onClick={onClick}>
-    <ToolTip caption={tooltip}>
-      <Flex alignStart style={{ cursor: 'pointer' }}>
-        {selected ? <IconSelectedRadio /> : <IconUnSelectedRadio />}
-        <LabelContainer>
-          <RadioLabel disabled={disabled}>{title}</RadioLabel>
+}) => {
+  const theme = useTheme()
 
-          {caption && <Caption>{caption}</Caption>}
-        </LabelContainer>
-      </Flex>
-    </ToolTip>
-  </Flex>
-)
+  return (
+    <Flex justifyStart style={style} onClick={onClick}>
+      <ToolTip caption={tooltip}>
+        <Flex alignStart style={{ cursor: 'pointer' }}>
+          {selected ? (
+            <SvgIcon
+              path={mdiRadioboxMarked}
+              color={theme.palette.primary.main}
+            />
+          ) : (
+            <SvgIcon path={mdiRadioboxBlank} />
+          )}
+          <LabelContainer>
+            <RadioLabel disabled={disabled}>{title}</RadioLabel>
+
+            {caption && <Caption>{caption}</Caption>}
+          </LabelContainer>
+        </Flex>
+      </ToolTip>
+    </Flex>
+  )
+}
