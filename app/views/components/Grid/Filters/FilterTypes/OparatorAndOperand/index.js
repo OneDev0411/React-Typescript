@@ -1,14 +1,21 @@
 import React, { Fragment } from 'react'
 
 import PropTypes from 'prop-types'
+import { mdiRadioboxBlank, mdiRadioboxMarked } from '@mdi/js'
 
 import { DoneButton } from 'components/Grid/Filters/Item/styled'
-import IconSelectedRadio from 'components/SvgIcons/Radio/SelectedRadio/IconSelectedRadio'
-import IconUnSelectedRadio from 'components/SvgIcons/Radio/UnSelectedRadio/IconUnSelectedRadio'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { DropDownList } from './components/DropDownList'
 import { TextInput } from './components/TextInput'
-import { Container, InputContainer, Operator, Title } from './styled'
+import {
+  Container,
+  InputContainer,
+  Operator,
+  Title,
+  MarkedIcon
+} from './styled'
 
 import getOperator from './get-operator'
 
@@ -104,9 +111,12 @@ export class OperatorAndOperandFilter extends React.Component {
             <Operator key={index} onClick={() => this.onOperatorChange(item)}>
               <InputContainer>
                 {selectedOperator && selectedOperator.name === item.name ? (
-                  <IconSelectedRadio />
+                  <MarkedIcon
+                    path={mdiRadioboxMarked}
+                    size={muiIconSizes.small}
+                  />
                 ) : (
-                  <IconUnSelectedRadio />
+                  <SvgIcon path={mdiRadioboxBlank} size={muiIconSizes.small} />
                 )}
                 <Title>{item.name}</Title>
               </InputContainer>
