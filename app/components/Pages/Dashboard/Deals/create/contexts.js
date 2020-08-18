@@ -137,7 +137,12 @@ export default class extends React.Component {
                           className="add-item"
                           onClick={handleOpen}
                         >
-                          <SvgIcon path={mdiPlus} className="addIcon" />
+                          <SvgIcon
+                            path={mdiPlus}
+                            className={cn('add-icon', {
+                              hasError: hasError && field.mandatory
+                            })}
+                          />
                           <span
                             className={cn('text', {
                               hasError: hasError && field.mandatory
