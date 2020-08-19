@@ -27,20 +27,20 @@ export function normalizeEvents(
   )
 
   const filteredEvents: ICalendarEvent[] = uniqEvents.filter(event => {
-    if (CRM_OBJECT_TYPES.includes(event.object_type)) {
-      return true
-    }
+    const isUserEvent =
+      filter.userEvents && CRM_OBJECT_TYPES.includes(event.object_type)
 
     const isCelebration =
       filter.celebrationEvents &&
       event.object_type === CELEBRATION_OBJECT_TYPE &&
       CELEBRATION_EVENT_TYPES.includes(event.event_type)
+
     const isDeal =
       filter.dealEvents &&
       event.object_type === DEAL_OBJECT_TYPE &&
       DEAL_EVENT_TYPES.includes(event.event_type)
 
-    if (isCelebration || isDeal) {
+    if (isUserEvent || isCelebration || isDeal) {
       return true
     }
 

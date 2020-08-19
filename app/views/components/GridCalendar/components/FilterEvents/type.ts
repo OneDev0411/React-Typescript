@@ -3,6 +3,7 @@ export interface FilterLable {
   lable: string
 }
 export interface FilterShape {
+  userEvents: boolean
   celebrationEvents: boolean
   dealEvents: boolean
 }
