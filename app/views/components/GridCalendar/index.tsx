@@ -10,7 +10,6 @@ import { connect } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { makeStyles, Theme } from '@material-ui/core'
 
-import cn from 'classnames'
 // List of full calendar assets
 import FullCalendar, {
   EventApi,
@@ -58,15 +57,12 @@ import { INITIAL_FILTERS } from './components/FilterEvents/values'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    loadingContainer: {
+    calendarContainer: {
       position: 'absolute',
       width: '100%',
       height: '100%',
       top: 0,
       left: 0
-    },
-    isLoading: {
-      filter: 'blur(2px)'
     }
   }),
   {
@@ -392,11 +388,7 @@ export const GridCalendarPresentation = ({
         }}
         onClose={handleCloseFilterEvents}
       />
-      <div
-        className={cn(classes.loadingContainer, {
-          [classes.isLoading]: isLoading
-        })}
-      >
+      <div className={classes.calendarContainer}>
         <FullCalendar
           height="100%"
           initialView="dayGridMonth"
@@ -404,7 +396,7 @@ export const GridCalendarPresentation = ({
           editable
           customButtons={{
             filterButton: {
-              text: 'Calendars...',
+              text: 'Filter',
               click: e => {
                 // @ts-ignore
                 setFilterEl(e.currentTarget as HTMLButtonElement)
