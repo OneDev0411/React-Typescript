@@ -4,7 +4,6 @@ import {
   DialogContent,
   DialogTitle,
   Box,
-  IconButton,
   Typography,
   makeStyles,
   Theme,
@@ -30,6 +29,9 @@ const useStyles = makeStyles(
       },
       '& .tui-image-editor-menu': {
         background: theme.palette.grey[300]
+      },
+      '& .tie-crop-preset-button': {
+        display: 'none !important'
       }
     }
   }),
@@ -45,10 +47,11 @@ interface Props {
 
 export function ImageEditor({ file, onClose }: Props) {
   const classes = useStyles()
-  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [imageUrl, setImageUrl] = useState<string | ArrayBuffer | null>(null)
   const editorRef = useRef<{
     getInstance: () => any
   } | null>(null)
+  const cropperRatio = useRef<number | null>(null)
 
   const getEditorInstance = () => editorRef?.current?.getInstance()!
 
@@ -59,8 +62,15 @@ export function ImageEditor({ file, onClose }: Props) {
     reader.readAsDataURL(file)
   })
 
+  const handleObjectActivation = data => {
+    if (data.type === 'cropzone' && !cropperRatio.current) {
+      cropperRatio.current = 1
+      getEditorInstance().setCropzoneRect(1)
+    }
+  }
+
   const handleSave = () => {
-    // console.log(getEditorInstance().toDataURL())
+    console.log(getEditorInstance().toDataURL())
   }
 
   return (
@@ -83,6 +93,7 @@ export function ImageEditor({ file, onClose }: Props) {
         {imageUrl && (
           <Editor
             ref={editorRef}
+            onObjectActivated={handleObjectActivation}
             includeUI={{
               theme,
               loadImage: {
@@ -98,7 +109,7 @@ export function ImageEditor({ file, onClose }: Props) {
                 'icon',
                 'filter'
               ],
-              initMenu: 'filter',
+              initMenu: 'crop',
               menuBarPosition: 'right'
             }}
             selectionStyle={{

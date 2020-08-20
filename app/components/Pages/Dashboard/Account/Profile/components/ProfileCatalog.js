@@ -68,18 +68,18 @@ class ProfileCatalog extends Component {
     this.closeModal()
   }
 
-  renderUploader() {
-    return (
-      <ImageUploader
-        radius="50%"
-        // file={this.props.avatar.src} // CORS PROBLEM FOR NOW!
-        saveHandler={this.onAvatarSet}
-        closeHandler={this.closeModal}
-        width={300}
-        height={300}
-      />
-    )
-  }
+  // renderUploader() {
+  //   return (
+  //     <ImageUploader
+  //       radius="50%"
+  //       // file={this.props.avatar.src} // CORS PROBLEM FOR NOW!
+  //       saveHandler={this.onAvatarSet}
+  //       closeHandler={this.closeModal}
+  //       width={300}
+  //       height={300}
+  //     />
+  //   )
+  // }
 
   getImageUploadButtonText() {
     if (this.props.isUploading) {
@@ -95,7 +95,7 @@ class ProfileCatalog extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <Container>
           <Avatar user={this.props.user} data-test="profile-avatar-image" />
 
@@ -113,19 +113,31 @@ class ProfileCatalog extends Component {
                 </Tooltip>
               </Box>
             )}
-            <Button
+            <ImageUploader>
+              {({ openDialog }) => (
+                <Button
+                  variant="outlined"
+                  disabled={this.props.isUploading}
+                  onClick={openDialog}
+                  data-test="profile-avatar-upload-button"
+                >
+                  {`${this.getImageUploadButtonText()} Profile Picture`}
+                </Button>
+              )}
+            </ImageUploader>
+            {/* <Button
               variant="outlined"
               disabled={this.props.isUploading}
               onClick={this.openModal}
               data-test="profile-avatar-upload-button"
             >
               {`${this.getImageUploadButtonText()} Profile Picture`}
-            </Button>
-            {this.state.isOpen && this.renderUploader()}
+            </Button> */}
+            {/* {this.state.isOpen && this.renderUploader()} */}
           </ProfileImageActions>
         </Container>
         <hr />
-      </React.Fragment>
+      </>
     )
   }
 }
