@@ -126,7 +126,7 @@ export const RowTitle = styled.div<{
     `
         :hover {
           cursor: pointer;
-          color: #0945eb;
+          color: ${theme.palette.secondary.main};
         }
       `}
   `}
