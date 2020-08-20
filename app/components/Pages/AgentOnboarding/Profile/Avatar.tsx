@@ -67,9 +67,7 @@ export default function ProfileAvatar({ onChange, data }: Props) {
             <Typography variant="h6">Your profile image</Typography>
             {data.type && (
               <Typography variant="body2">
-                {`To make it easier for you we’ve used your ${
-                  data.type
-                } account's image.`}
+                {`To make it easier for you we’ve used your ${data.type} account's image.`}
               </Typography>
             )}
           </Box>
