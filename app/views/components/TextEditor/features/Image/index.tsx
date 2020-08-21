@@ -63,6 +63,13 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
    */
   const addImage = async (file: File) => {
     if (!isImageFile(file)) {
+      dispatch(
+        addNotification({
+          message: `Unable to load the file '${file.name}'. File type ${file.type} is not a supported image.`,
+          status: 'error'
+        })
+      )
+
       return
     }
 
