@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, makeStyles, Theme } from '@material-ui/core'
+import { Typography, makeStyles, Theme, useMediaQuery } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -65,9 +65,14 @@ export default function GlobalHeader({
   onCreateOpenHouse = noop
 }: GlobalHeaderProps) {
   const classes = useStyles({ noPadding })
+  const isHidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
   const availableActions: ItemType[] = []
 
   const user = useSelector((store: IAppState) => store.user)
+
+  if (isHidden) {
+    return null
+  }
 
   if (hasUserAccessToCrm(user)) {
     availableActions.push('email', 'event', 'contact', 'tour')

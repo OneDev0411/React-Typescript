@@ -1,7 +1,10 @@
-import { SuperAgentRequest } from 'superagent'
-
 import { upload } from '../upload'
 
-type UploadFile = (file: File | IFile) => SuperAgentRequest
+export type UploadOrigin = 'gmail' | 'outlook' | 'mailgun'
 
-export const uploadEmailAttachment: UploadFile = upload('/emails/attachments')
+export function uploadEmailAttachment(
+  file: File | IFile,
+  origin?: UploadOrigin
+): ReturnType<typeof upload> {
+  return upload('/emails/attachments', file, origin && { origin })
+}

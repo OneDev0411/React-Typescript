@@ -2,10 +2,6 @@ import styled, { css } from 'styled-components'
 
 import { Theme } from '@material-ui/core'
 
-import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-
-import { StyledSVGWithProps } from 'utils/ts-utils'
-
 import { Container as ActionsButton } from '../../components/ActionsButton/styled'
 
 import { LastActivity } from './Checklist/TaskRow/Activity/styled'
@@ -57,29 +53,9 @@ export const ItemsContainer = styled.div<{
     `};
 `
 
-type ArrowIconProps = {
-  isOpen?: boolean
-  show?: boolean
-}
-
-export const ArrowIcon: StyledSVGWithProps<ArrowIconProps> = styled(
-  ArrowDownIcon
-)<{
-  isOpen?: boolean
-  show?: boolean
-}>`
-  width: 1.5em;
-  height: 1.5em;
-  margin-right: 0.5rem;
-  cursor: pointer;
-  fill: #000 !important;
-  transform: ${(props: ArrowIconProps) =>
-    props.isOpen ? 'inherit' : 'rotateZ(-90deg)'};
-  opacity: ${(props: ArrowIconProps) => (props.show ? 1 : 0)};
-`
-
 /* item rows */
 export const RowContainer = styled.div<{
+  theme: Theme
   isTaskExpanded: boolean
 }>`
   border-left: 3px solid transparent;
@@ -96,7 +72,7 @@ export const RowContainer = styled.div<{
 
   ${props =>
     props.isTaskExpanded &&
-    css`
+    `
       :nth-child(even) {
         border-left: 3px solid #000;
       }
@@ -137,11 +113,6 @@ export const Row = styled.div`
   padding: 1rem;
 `
 
-export const RowArrowIcon = styled(ArrowIcon)`
-  align-self: flex-start;
-  margin-top: 1px;
-` as typeof ArrowIcon
-
 export const RowTitle = styled.div<{
   clickable: boolean
   theme: Theme
@@ -152,12 +123,12 @@ export const RowTitle = styled.div<{
     font-weight: bold;
 
     ${clickable &&
-    css`
-      :hover {
-        cursor: pointer;
-        color: #0945eb;
-      }
-    `}
+    `
+        :hover {
+          cursor: pointer;
+          color: ${theme.palette.secondary.main};
+        }
+      `}
   `}
 `
 

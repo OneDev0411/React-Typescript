@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react'
 import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
-import { mdiClose } from '@mdi/js'
 
+import { closeIcon } from 'components/SvgIcons/icons'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
@@ -62,13 +62,8 @@ export function PageTitle(props: Props) {
         </Flex>
 
         <Flex alignCenter>
-          <IconButton
-            iconSize="XLarge"
-            inverse
-            isFit
-            onClick={onClickCloseButton}
-          >
-            <SvgIcon path={mdiClose} size={muiIconSizes.large} />
+          <IconButton iconSize="XLarge" inverse onClick={onClickCloseButton}>
+            <SvgIcon path={closeIcon} size={muiIconSizes.xlarge} />
           </IconButton>
         </Flex>
       </Flex>

@@ -1,5 +1,3 @@
-import { AnyAction } from 'redux'
-import { ThunkDispatch } from 'redux-thunk'
 import { addNotification as notify } from 'reapop'
 
 import { createTask, changeNeedsAttention } from 'actions/deals'
@@ -24,9 +22,7 @@ export const createRequestTask = ({
   taskComment,
   notifyMessage,
   taskType
-}: CreateRequestTask) => async (
-  dispatch: ThunkDispatch<any, any, AnyAction>
-) => {
+}: CreateRequestTask) => async dispatch => {
   let task: IDealTask | null
 
   try {

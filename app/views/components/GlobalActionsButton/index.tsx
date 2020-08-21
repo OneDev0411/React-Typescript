@@ -79,9 +79,6 @@ export default function GlobalActionsButton(props: Props) {
       case 'email':
         return selectedItem.render({
           isOpen: true,
-          initialValues: {
-            from: user
-          },
           onClose: handleCloseRenderedItem,
           onSent: handleSubmitEmail
         })

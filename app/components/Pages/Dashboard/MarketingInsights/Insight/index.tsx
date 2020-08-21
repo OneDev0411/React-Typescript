@@ -8,6 +8,7 @@ import {
   mdiCursorDefaultClickOutline,
   mdiAccountMultipleOutline
 } from '@mdi/js'
+import pluralize from 'pluralize'
 import classNames from 'classnames'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
@@ -54,14 +55,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   grow: {
     flexGrow: 1
   },
-  enabledText: {
+  mainText: {
     color: theme.palette.common.black
   },
-  disabledText: {
-    color: theme.palette.action.disabled
-  },
-  activeText: {
-    color: theme.palette.action.active
+  labelText: {
+    color: theme.palette.grey[500]
   },
   sortFieldWrapper: {
     padding: theme.spacing(0.5, 0)
@@ -104,7 +102,7 @@ function Insight({ params: { id } }: Props) {
     value: 'opened',
     ascending: false
   })
-  const [isOpenViewEmail, setOpenViewEmail] = React.useState(false)
+  const [isOpenViewEmail, setOpenViewEmail] = useState(false)
   const { item, isLoading } = useItemData(id)
   const [emailPreview, setEmailPreview] = useState<IEmail<
     IEmailOptionalFields
@@ -137,7 +135,7 @@ function Insight({ params: { id } }: Props) {
   const summaryItems = [
     {
       icon: mdiAccountMultipleOutline,
-      value: `${item.sent} Recipient${item.sent === 1 ? '' : 's'}`,
+      value: pluralize('Recipient', item.sent, true),
       label: 'Total Sent'
     },
     {
@@ -151,9 +149,7 @@ function Insight({ params: { id } }: Props) {
       icon: mdiEyeOutline,
       value: `${item.opened}`,
       label: 'Opens',
-      tooltip: `Email is opened ${item.opened} time${
-        item.opened === 1 ? '' : 's'
-      }`,
+      tooltip: `Email is opened ${pluralize('time', item.opened, true)}`,
       hidden: !pixelTracking
     },
     {
@@ -167,9 +163,7 @@ function Insight({ params: { id } }: Props) {
       icon: mdiCursorDefaultClickOutline,
       value: `${item.clicked}`,
       label: 'Clicks',
-      tooltip: `Email is clicked ${item.clicked} time${
-        item.clicked === 1 ? '' : 's'
-      }`,
+      tooltip: `Email is clicked ${pluralize('time', item.clicked, true)}`,
       hidden: !pixelTracking
     },
     {
@@ -181,7 +175,7 @@ function Insight({ params: { id } }: Props) {
     }
   ]
 
-  const openEmailView = async () => {
+  const openViewEmail = async () => {
     try {
       if (!emailPreview) {
         const email = await getEmailCampaign(id, {
@@ -215,7 +209,8 @@ function Insight({ params: { id } }: Props) {
         <Header
           backUrl="/dashboard/insights"
           title={item.subject}
-          onViewEmail={openEmailView}
+          viewEmailDisabled={!item.emails}
+          onViewEmail={openViewEmail}
         />
         <Dialog
           maxWidth="lg"
@@ -233,7 +228,7 @@ function Insight({ params: { id } }: Props) {
         </Dialog>
         <div className={classes.headerWrapper}>
           <div className={classes.header}>
-            <Typography variant="body2" className={classes.disabledText}>
+            <Typography variant="body2" className={classes.labelText}>
               Sent From&nbsp;&nbsp;
             </Typography>
             <Avatar
@@ -243,13 +238,13 @@ function Insight({ params: { id } }: Props) {
             >
               {sentFromTitle.substring(0, 1).toUpperCase()}
             </Avatar>
-            <Typography variant="body2" className={classes.enabledText}>
+            <Typography variant="body2" className={classes.mainText}>
               &nbsp;&nbsp;{sentFromTitle}
             </Typography>
-            <Typography variant="body2" className={classes.disabledText}>
+            <Typography variant="body2" className={classes.labelText}>
               &nbsp;on
             </Typography>
-            <Typography variant="body2" className={classes.enabledText}>
+            <Typography variant="body2" className={classes.mainText}>
               &nbsp;{formatDate(item.executed_at! * 1000)}
             </Typography>
             <div className={classes.grow} />
@@ -278,7 +273,7 @@ function Insight({ params: { id } }: Props) {
                           variant="subtitle1"
                           display="block"
                           noWrap
-                          className={classes.enabledText}
+                          className={classes.mainText}
                         >
                           {value}
                         </Typography>
@@ -286,7 +281,7 @@ function Insight({ params: { id } }: Props) {
                           variant="caption"
                           display="block"
                           noWrap
-                          className={classes.activeText}
+                          className={classes.labelText}
                         >
                           {label}
                         </Typography>

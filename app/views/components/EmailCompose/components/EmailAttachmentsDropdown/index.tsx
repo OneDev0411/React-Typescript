@@ -6,7 +6,10 @@ import { mdiAttachment, mdiDropbox, mdiProgressUpload } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+import {
+  uploadEmailAttachment,
+  UploadOrigin
+} from 'models/email/upload-email-attachment'
 
 import { DropdownToggleButton } from '../../../DropdownToggleButton'
 import { BaseDropdown } from '../../../BaseDropdown'
@@ -26,17 +29,19 @@ interface Props {
   onChanged?: () => void
   onClickAddDealAttachments?: () => void
   uploadAttachment: typeof uploadEmailAttachment
+  uploadOrigin: UploadOrigin
 }
 
 export function EmailAttachmentsDropdown({
   deal,
   initialAttachments,
   uploadAttachment,
+  uploadOrigin,
   onChanged = () => {},
   onClickAddDealAttachments = () => {}
 }: Props) {
   const attachmentsField = useField('attachments')
-  const [upload] = useUploadAttachment(uploadAttachment)
+  const [upload] = useUploadAttachment(uploadAttachment, uploadOrigin)
 
   const dropboxChooser = useDropboxChooser({
     appKey: config.dropbox.app_key,

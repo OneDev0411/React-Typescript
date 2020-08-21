@@ -12,8 +12,6 @@ import {
 } from '@material-ui/core'
 import pluralize from 'pluralize'
 
-import { useSelector } from 'react-redux'
-
 import QuestionCircleIcon from 'components/SvgIcons/QuestionCircle/QuestionCircleIcon'
 import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
@@ -31,8 +29,6 @@ import {
   EMAIL_FILE,
   EMAIL_FORM
 } from 'deals/components/ActionsButton/data/action-buttons'
-
-import { IAppState } from 'reducers'
 
 import {
   CANCEL,
@@ -83,8 +79,6 @@ export function TaskActions({ deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const [state, dispatch] = useChecklistActionsContext()
-
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
 
   const handleCancel = () => {
     dispatch({
@@ -154,8 +148,8 @@ export function TaskActions({ deal }: Props) {
               )}
               renderMenu={() => (
                 <MenuList>
-                  {state.attachments.map(attachment => (
-                    <MenuItem key={attachment.id}>
+                  {state.attachments.map((attachment, index) => (
+                    <MenuItem key={index}>
                       <Box
                         display="flex"
                         alignItems="center"
@@ -202,7 +196,6 @@ export function TaskActions({ deal }: Props) {
           )
         }
         initialValues={{
-          from: user,
           attachments: state.attachments
         }}
         deal={deal}

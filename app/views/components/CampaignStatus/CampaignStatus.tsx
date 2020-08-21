@@ -2,6 +2,7 @@ import React from 'react'
 import { Chip, ChipProps, Theme, Typography, Tooltip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { mdiEyeOutline, mdiCursorDefaultClickOutline } from '@mdi/js'
+import pluralize from 'pluralize'
 import classNames from 'classnames'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -39,9 +40,11 @@ export default function CampaignStatus({ status, ...others }: Props) {
         <>
           {status.opened !== undefined && (
             <Tooltip
-              title={`Email is opened ${status.opened} time${
-                status.opened === 1 ? '' : 's'
-              }`}
+              title={`Email is opened ${pluralize(
+                'time',
+                status.opened,
+                true
+              )}`}
             >
               <span className={classes.label}>
                 <SvgIcon path={mdiEyeOutline} size={muiIconSizes.small} />
@@ -54,9 +57,11 @@ export default function CampaignStatus({ status, ...others }: Props) {
           )}
           {status.clicked !== undefined && (
             <Tooltip
-              title={`Email is clicked ${status.clicked} time${
-                status.clicked === 1 ? '' : 's'
-              }`}
+              title={`Email is clicked ${pluralize(
+                'time',
+                status.clicked,
+                true
+              )}`}
             >
               <span className={classes.label}>
                 <SvgIcon

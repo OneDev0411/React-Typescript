@@ -152,7 +152,9 @@ const EventCardComponent = ({
             </div>
           </div>
           <footer className={popoverClasses.footer}>
-            {(isDeal || isCelebration) && (
+            {(isDeal ||
+              isCelebration ||
+              rowEvent.object_type === 'contact') && (
               <Button
                 variant="outlined"
                 size="small"
@@ -161,7 +163,7 @@ const EventCardComponent = ({
                   onClose()
                 }}
               >
-                {isCelebration ? 'Send Card' : 'View Deal'}
+                {isCelebration ? 'Send Card' : 'View Details'}
               </Button>
             )}
             {isCRMEvent(rowEvent) && (

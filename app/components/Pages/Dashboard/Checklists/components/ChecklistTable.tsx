@@ -22,15 +22,14 @@ import {
 import classNames from 'classnames'
 
 import { useTheme } from '@material-ui/styles'
+import { mdiDrag, mdiTrashCanOutline } from '@mdi/js'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useDictionary } from 'hooks/use-dictionary'
 
 import { InlineEditableString } from 'components/inline-editable-fields/InlineEditableString'
-import IconDragHandle from 'components/SvgIcons/DragHandle/IconDragHandle'
 
 import { useTableStyles } from '../../../../../styles/table.style'
 import { dealTaskTypeToString } from '../constants'
@@ -144,7 +143,7 @@ export function CheckListTable({
                         }}
                       >
                         <Tooltip title="Drag row to reorder">
-                          <IconDragHandle />
+                          <SvgIcon path={mdiDrag} />
                         </Tooltip>
                       </TableCell>
 
@@ -227,7 +226,7 @@ export function CheckListTable({
                             })
                           }}
                         >
-                          <IconDeleteOutline style={{ fill: 'currentColor' }} />
+                          <SvgIcon path={mdiTrashCanOutline} />
                         </IconButton>
                       </TableCell>
                     </TableRow>

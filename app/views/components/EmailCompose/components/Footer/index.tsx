@@ -6,7 +6,10 @@ import { mdiLayersOutline, mdiTrashCanOutline } from '@mdi/js'
 import ActionButton from 'components/Button/ActionButton'
 import DateTimePicker from 'components/DateTimePicker/next'
 import { formatDate } from 'components/DateTimePicker/helpers'
-import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+import {
+  uploadEmailAttachment,
+  UploadOrigin
+} from 'models/email/upload-email-attachment'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { myDesignIcon } from 'components/SvgIcons/icons'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -35,6 +38,7 @@ interface Props {
   onClickAddDealAttachments?: () => void
   className?: string
   uploadAttachment: typeof uploadEmailAttachment
+  uploadOrigin: UploadOrigin
 }
 
 export function Footer({
@@ -44,6 +48,8 @@ export function Footer({
   setMarketingTemplate,
   hasStaticBody,
   onClickAddDealAttachments = () => {},
+  uploadAttachment,
+  uploadOrigin,
   ...props
 }: Props) {
   const formState = useFormState()
@@ -96,7 +102,8 @@ export function Footer({
           <EmailAttachmentsDropdown
             deal={props.deal}
             onChanged={props.onChanged}
-            uploadAttachment={props.uploadAttachment}
+            uploadAttachment={uploadAttachment}
+            uploadOrigin={uploadOrigin}
             initialAttachments={initialAttachments}
             onClickAddDealAttachments={onClickAddDealAttachments}
           />

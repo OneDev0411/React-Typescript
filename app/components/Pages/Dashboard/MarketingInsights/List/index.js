@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { connect } from 'react-redux'
+import pluralize from 'pluralize'
 import cn from 'classnames'
 
 import { makeStyles, createStyles } from '@material-ui/core'
@@ -128,9 +129,7 @@ function List(props) {
             return (
               <StatsColumn
                 title={`Opens: ${opened}`}
-                details={`Email is opened ${opened} time${
-                  opened === 1 ? '' : 's'
-                }`}
+                details={`Email is opened ${pluralize('time', opened, true)}`}
               />
             )
           }
@@ -160,9 +159,7 @@ function List(props) {
             return (
               <StatsColumn
                 title={`Clicks: ${clicked}`}
-                details={`Email is clicked ${clicked} time${
-                  clicked === 1 ? '' : 's'
-                }`}
+                details={`Email is clicked ${pluralize('time', clicked, true)}`}
               />
             )
           }

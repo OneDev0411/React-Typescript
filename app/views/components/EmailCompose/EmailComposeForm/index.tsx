@@ -1,21 +1,26 @@
-import { Field, Form } from 'react-final-form'
 import React, { useContext, useMemo, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Field, Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import createFocusDecorator from 'final-form-focus'
-
-import { isEqual } from 'lodash'
-
 import { TextField } from 'final-form-material-ui'
-
-import { addNotification as notify } from 'reapop'
-
-import { connect } from 'react-redux'
-
 import { Box, makeStyles, useTheme } from '@material-ui/core'
+import { isEqual } from 'lodash'
+import { addNotification as notify } from 'reapop'
 
 import { ClassesProps } from 'utils/ts-utils'
 
-import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+import {
+  uploadEmailAttachment,
+  UploadOrigin
+} from 'models/email/upload-email-attachment'
+
+import {
+  GOOGLE_CREDENTIAL,
+  MICROSOFT_CREDENTIAL
+} from 'constants/oauth-accounts'
+
+import useTypedSelector from 'hooks/use-typed-selector'
 
 import {
   EmailComposeFormProps,
@@ -55,17 +60,8 @@ export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
  * Right now there are some duplicate code in them, and the added abstraction
  * is not necessarily worth it.
  */
-function EmailComposeForm<T>({
+export default function EmailComposeForm<T>({
   isSubmitDisabled = false,
-  initialValues = {
-    to: [],
-    cc: [],
-    bcc: [],
-    subject: '',
-    body: '',
-    attachments: []
-  },
-  dispatch,
   onCancel,
   onDelete,
   uploadAttachment = uploadEmailAttachment,
@@ -76,8 +72,19 @@ function EmailComposeForm<T>({
   children,
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
-  const hasRecipients =
-    (initialValues.to || []).length > 0 && !!initialValues.from
+  const user = useTypedSelector<IUser>(({ user }) => user)
+
+  const initialValues: Partial<EmailFormValues> = {
+    ...props.initialValues,
+    from: props.initialValues?.from ?? user,
+    to: props.initialValues?.to ?? [],
+    cc: props.initialValues?.cc ?? [],
+    bcc: props.initialValues?.bcc ?? [],
+    subject: props.initialValues?.subject ?? '',
+    body: props.initialValues?.body ?? '',
+    attachments: props.initialValues?.attachments ?? []
+  }
+  const hasRecipients = initialValues.to!.length > 0 && !!initialValues.from
   const hasSubject = !!initialValues.subject
   const autofocusBody = hasRecipients && hasSubject
 
@@ -89,6 +96,8 @@ function EmailComposeForm<T>({
     marketingTemplate,
     setMarketingTemplate
   ] = useState<IMarketingTemplateInstance | null>(null)
+
+  const dispatch = useDispatch()
 
   const selectMarketingTemplate: (
     template: IMarketingTemplateInstance | null,
@@ -251,6 +260,13 @@ function EmailComposeForm<T>({
       keepDirtyOnReinitialize
       render={formProps => {
         const values = formProps.values as EmailFormValues
+        const fromField = values.from
+        const uploadOrigin: UploadOrigin =
+          fromField.type === GOOGLE_CREDENTIAL
+            ? 'gmail'
+            : fromField.type === MICROSOFT_CREDENTIAL
+            ? 'outlook'
+            : 'mailgun'
 
         return (
           <form
@@ -295,12 +311,13 @@ function EmailComposeForm<T>({
                 content={
                   marketingTemplate
                     ? marketingTemplatePreviewHtml
-                    : initialValues.body || ''
+                    : initialValues.body
                 }
-                uploadAttachment={uploadAttachment}
                 attachments={
                   <Field name="attachments" component={AttachmentsList} />
                 }
+                uploadAttachment={uploadAttachment}
+                uploadOrigin={uploadOrigin}
                 editorState={editorState}
                 onChangeEditor={setEditorState}
                 stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
@@ -332,6 +349,7 @@ function EmailComposeForm<T>({
                   : isSubmitDisabled
               }
               uploadAttachment={uploadAttachment}
+              uploadOrigin={uploadOrigin}
               deal={props.deal}
               onCancel={onCancel}
               onDelete={onDelete}
@@ -351,5 +369,3 @@ function EmailComposeForm<T>({
     />
   )
 }
-
-export default connect()(EmailComposeForm)

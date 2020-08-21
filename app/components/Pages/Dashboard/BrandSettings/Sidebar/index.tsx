@@ -9,8 +9,9 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
+import { mdiChevronDown } from '@mdi/js'
 
-import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { SidebarSection, ImageUploadHandler } from '../types'
 import Field from './Field'
@@ -78,7 +79,9 @@ export default function Sidebar({
             elevation={0}
             defaultExpanded={defaultExpandedPanels}
           >
-            <ExpansionPanelSummary expandIcon={<IconKeyboardArrowDown />}>
+            <ExpansionPanelSummary
+              expandIcon={<SvgIcon path={mdiChevronDown} />}
+            >
               <Typography variant="subtitle2">{section.name}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>

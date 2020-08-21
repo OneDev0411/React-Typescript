@@ -58,7 +58,9 @@ export const MenuButton = styled.div`
   `}
 `
 
-export const Container = styled.div`
+export const Container = styled.div<{
+  theme: Theme
+}>`
   ${({ theme }) => css`
     display: flex;
     height: 2.3rem;
@@ -94,7 +96,7 @@ export const MenuItem = styled.div<MenuItemProps>`
 
     ${(props: MenuItemProps) =>
       props.disabled === false &&
-      css`
+      `
         :hover {
           cursor: pointer;
           background-color: ${theme.palette.action.hover};

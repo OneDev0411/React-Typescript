@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
-import { connect } from 'react-redux'
-import { addNotification, Notification } from 'reapop'
+import { useDispatch } from 'react-redux'
+import { addNotification } from 'reapop'
 
 import { Button } from '@material-ui/core'
 
@@ -34,17 +34,12 @@ function getDealCostCenter(deal: IDeal): string | null {
 interface Props {
   deal: IDeal
   user: IUser
-  notify: (notification: Notification) => any
 }
 
-function MyMarketingMatters({
-  deal,
-  user,
-  notify,
-  location
-}: Props & WithRouterProps) {
+function MyMarketingMatters({ deal, user, location }: Props & WithRouterProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [costCenter, setCostCenter] = useState<null | string>(null)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     setCostCenter(getDealCostCenter(deal))
@@ -71,11 +66,13 @@ function MyMarketingMatters({
         newWindow && newWindow.focus()
       }
     } catch (err) {
-      notify({
-        status: 'error',
-        message:
-          'Something went wrong. Please try again or contact Rechat support.'
-      })
+      dispatch(
+        addNotification({
+          status: 'error',
+          message:
+            'Something went wrong. Please try again or contact Rechat support.'
+        })
+      )
       console.error(err)
     }
 
@@ -120,6 +117,4 @@ function MyMarketingMatters({
   )
 }
 
-export default withRouter(
-  connect(null, { notify: addNotification })(MyMarketingMatters)
-)
+export default withRouter(MyMarketingMatters)

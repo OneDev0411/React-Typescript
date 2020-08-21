@@ -2563,7 +2563,7 @@ exports[`Deal MarketingPane component renders with listing 1`] = `
       }
     }
   />
-  <Component
+  <withRouter(MyMarketingMatters)
     deal={
       Object {
         "attention_requested_at": null,
@@ -12812,7 +12812,7 @@ exports[`Deal MarketingPane component renders with listing 1`] = `
 
 exports[`Deal MarketingPane component renders without listing 1`] = `
 <styled__MarketingContainer>
-  <Component
+  <withRouter(MyMarketingMatters)
     deal={
       Object {
         "attention_requested_at": null,

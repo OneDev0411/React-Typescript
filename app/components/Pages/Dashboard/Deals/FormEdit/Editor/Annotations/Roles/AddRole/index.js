@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import ClickOutside from 'react-click-outside'
+import { mdiPlusCircleOutline } from '@mdi/js'
 
 import { isPrimaryAgent } from 'deals/utils/roles'
 import { specialRoles } from 'deals/FormEdit/utils/normalize-role-names'
 import ToolTip from 'components/tooltip'
 import Roles from 'deals/components/Roles'
-
-import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Container, RolesList } from './styled'
 
@@ -65,12 +65,11 @@ export function AddRole(props) {
   return (
     <Container>
       <ToolTip caption={tooltip} placement="top">
-        <IconAdd
+        <SvgIcon
+          path={mdiPlusCircleOutline}
           onClick={handleClick}
-          style={{
-            height: props.style.height,
-            fill: props.style.color
-          }}
+          size={props.style.height}
+          color={props.style.color}
         />
       </ToolTip>
 

@@ -1,13 +1,10 @@
 import React from 'react'
-
-import { plural } from 'utils/plural'
+import pluralize from 'pluralize'
 
 function Title(props) {
-  const isPlural = props.count > 1
-
   return (
     <div className="templates-title">
-      {plural(`${props.count} Design`, isPlural)}
+      {pluralize('Design', props.count, true)}
     </div>
   )
 }
