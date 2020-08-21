@@ -96,6 +96,15 @@ function EmailTemplateSelector({
     setDrawerOpen(true)
   }
 
+  const templateDrawer = (
+    <AddOrEditEmailTemplateDrawer
+      isOpen={isDrawerOpen}
+      onClose={() => setDrawerOpen(false)}
+      emailTemplate={editingTemplate}
+      submitCallback={template => onTemplateSelected(template)}
+    />
+  )
+
   if (templates.length > 0 || isFetching) {
     const items =
       // Show previously loaded items even while loading new items
@@ -162,12 +171,7 @@ function EmailTemplateSelector({
 
     return (
       <>
-        <AddOrEditEmailTemplateDrawer
-          isOpen={isDrawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          emailTemplate={editingTemplate}
-          submitCallback={template => onTemplateSelected(template)}
-        />
+        {templateDrawer}
         <ScrollableArea
           hasThinnerScrollbar
           shadowHeight={20}
@@ -207,16 +211,19 @@ function EmailTemplateSelector({
   }
 
   return (
-    <FooterBottomDrawerZeroState
-      description="There is no email templates. Save your time by creating Email Template with variables for common emails"
-      actions={
-        <>
-          <Button variant="outlined" onClick={openNewTemplateDrawer}>
-            Create an email template
-          </Button>
-        </>
-      }
-    />
+    <>
+      {templateDrawer}
+      <FooterBottomDrawerZeroState
+        description="There is no email templates. Save your time by creating Email Template with variables for common emails"
+        actions={
+          <>
+            <Button variant="outlined" onClick={openNewTemplateDrawer}>
+              Create an email template
+            </Button>
+          </>
+        }
+      />
+    </>
   )
 }
 
