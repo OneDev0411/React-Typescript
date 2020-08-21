@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Tooltip, Typography } from '@material-ui/core'
+import pluralize from 'pluralize'
 
 import { recipientsList } from '../helpers'
 
@@ -9,7 +10,7 @@ interface Props {
 
 function RecipientsColumn({ data }: Props) {
   if (data.executed_at) {
-    return `${data.sent} Recipient${data.sent === 1 ? '' : 's'}`
+    return pluralize('Recipient', data.sent, true)
   }
 
   if (!Array.isArray(data.recipients)) {
@@ -27,9 +28,7 @@ function RecipientsColumn({ data }: Props) {
   const items: string[] = []
 
   if (recipientsCount) {
-    items.push(
-      `${recipientsCount} Recipient${recipientsCount === 1 ? '' : 's'}`
-    )
+    items.push(pluralize('Recipient', recipientsCount, true))
   }
 
   if (listCount) {

@@ -1,5 +1,4 @@
-import React, { ComponentProps, useCallback, useState } from 'react'
-import { OnChange } from 'react-final-form-listeners'
+import React, { ComponentProps, useState, useMemo } from 'react'
 import { Field } from 'react-final-form'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -151,30 +150,22 @@ export function SingleEmailComposeForm({
     )
   }
 
-  const getExpressionsContext = useCallback(
-    (to: IDenormalizedEmailRecipientInput[] | undefined) => {
-      const firstRecipient = (to || [])[0]
+  const initialToFieldValue = initialValues?.to
+  const [toFieldValue, setToFieldValue] = useState(initialToFieldValue)
+  const expressionContext = useMemo(() => {
+    const to = toFieldValue || initialToFieldValue
+    const firstRecipient = (to || [])[0]
 
-      if (firstRecipient && firstRecipient.recipient_type === 'Email') {
-        return {
-          recipient: firstRecipient.contact || {
-            email: firstRecipient.email
-          }
+    if (firstRecipient && firstRecipient.recipient_type === 'Email') {
+      return {
+        recipient: firstRecipient.contact || {
+          email: firstRecipient.email
         }
       }
+    }
 
-      return firstRecipient ? { recipient: {} } : null
-    },
-    []
-  )
-
-  const [expressionContext, setExpressionContext] = useState<object | null>(
-    getExpressionsContext(initialValues && initialValues.to)
-  )
-
-  const updateExpressionContext = (
-    to: IDenormalizedEmailRecipientInput[] | undefined
-  ) => setExpressionContext(getExpressionsContext(to))
+    return firstRecipient ? { recipient: {} } : null
+  }, [initialToFieldValue, toFieldValue])
 
   return (
     // NOTE: if we decided to show the result of the `sender` expressions
@@ -203,7 +194,6 @@ export function SingleEmailComposeForm({
             */}
             <Field name="cc" render={() => null} />
             <Field name="to" render={() => null} />
-            <OnChange name="to">{updateExpressionContext}</OnChange>
 
             <CollapsedEmailRecipients
               to={values.to || []}
@@ -220,9 +210,9 @@ export function SingleEmailComposeForm({
               individualMode={individualMode}
               deal={deal}
               senderAccounts={allAccounts}
+              onToFieldChange={setToFieldValue}
               users={activeBrandUsers}
             />
-            <OnChange name="to">{updateExpressionContext}</OnChange>
           </>
         )}
       />

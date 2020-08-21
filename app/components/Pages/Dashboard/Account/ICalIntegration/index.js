@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import omit from 'lodash/omit'
@@ -17,7 +17,7 @@ import UpdateGenerateUrlInfo from './UpdateGenerateUrlInfo'
 
 import { ICalContainer, PageDescription } from './styled'
 
-class DealTemplates extends React.Component {
+class ICalIntegration extends React.Component {
   state = {
     feedURl: '',
     selectedTypes: [],
@@ -186,7 +186,7 @@ class DealTemplates extends React.Component {
     }
 
     return (
-      <Fragment>
+      <>
         <Helmet>
           <title>Calendar Export | Settings | Rechat</title>
         </Helmet>
@@ -221,11 +221,11 @@ class DealTemplates extends React.Component {
           </Box>
           <UpdateGenerateUrlInfo />
         </ICalContainer>
-      </Fragment>
+      </>
     )
   }
 }
 
 export default connect(({ user }) => ({
   user
-}))(DealTemplates)
+}))(ICalIntegration)

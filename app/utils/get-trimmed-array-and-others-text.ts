@@ -1,4 +1,4 @@
-import { plural } from './plural'
+import pluralize from 'pluralize'
 
 interface Options {
   threshold: number
@@ -10,12 +10,11 @@ export function getTrimmedArrayAndOthersText<T>(
   { threshold = 2, totalCount = items.length }: Options = {} as Options
 ) {
   const otherCount = totalCount - threshold
-  const isPlural = otherCount > 1
 
   return {
     visibleItems: items.slice(0, threshold),
     othersText:
-      totalCount > threshold ? plural(`${otherCount} other`, isPlural) : null,
+      totalCount > threshold ? pluralize('other', otherCount, true) : null,
     otherItems: items.slice(threshold + 1)
   }
 }

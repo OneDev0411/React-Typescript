@@ -1,10 +1,6 @@
-import {
-  GOOGLE_CREDENTIAL,
-  MICROSOFT_CREDENTIAL
-} from 'constants/oauth-accounts'
+import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
 
 import { EmailFormValues } from '../types'
-import { getDefaultSelectedAccount } from './get-default-selected-account'
 
 interface GetInitialValuesParams {
   allAccounts: IOAuthAccount[]
@@ -19,18 +15,17 @@ export const getInitialValues = ({
   defaultUser,
   preferredAccountId = ''
 }: GetInitialValuesParams): Partial<EmailFormValues> => {
-  let from: IUser | IOAuthAccount =
-    (defaultValues && defaultValues.from) || defaultUser
+  let from = defaultValues.from
 
-  if (
-    allAccounts.length > 0 &&
-    [GOOGLE_CREDENTIAL, MICROSOFT_CREDENTIAL].includes(from.type)
-  ) {
-    from = getDefaultSelectedAccount(
-      allAccounts,
-      preferredAccountId || (defaultValues?.from?.id ?? '')
-    )
+  if (preferredAccountId && from && from.type !== 'user') {
+    from = allAccounts.find(({ id }) => id === preferredAccountId) || from
   }
+
+  from =
+    from ??
+    allAccounts.find(({ type }) => type === GOOGLE_CREDENTIAL) ??
+    allAccounts[0] ??
+    defaultUser
 
   return {
     ...defaultValues,

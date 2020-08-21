@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "79.0.6",
+  "version": "80.0.0",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -210,7 +210,6 @@
     "react-facebook": "^6.0.15",
     "react-final-form": "^6.4.0",
     "react-final-form-arrays": "^3.1.1",
-    "react-final-form-listeners": "^1.0.2",
     "react-ga": "^2.5.3",
     "react-helmet": "^6.0.0-beta",
     "react-hook-thunk-reducer": "^0.2.1",

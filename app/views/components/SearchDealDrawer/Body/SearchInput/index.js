@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { mdiMagnify } from '@mdi/js'
 
 import { grey, primary } from 'views/utils/colors'
-import IconSearchBase from 'components/SvgIcons/Search/IconSearch'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const Container = styled.div`
   display: flex;
@@ -50,7 +51,7 @@ const Input = styled.input`
   }
 `
 
-const IconSearch = styled(IconSearchBase)`
+const IconSearch = styled(SvgIcon)`
   path {
     fill: ${grey.A900} !important;
   }
@@ -67,7 +68,7 @@ const propTypes = {
 function SearchInput({ style, inputProps }) {
   return (
     <Container style={{ ...style }}>
-      <IconSearch />
+      <IconSearch path={mdiMagnify} />
       <Input {...inputProps} />
     </Container>
   )

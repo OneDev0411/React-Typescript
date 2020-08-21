@@ -15,7 +15,7 @@ import { ContactsListType } from './types'
 import { hasPixelTracking } from '../List/helpers'
 
 interface ContactsPropsType {
-  item: IEmailCampaign<IEmailCampaignAssociation>
+  item: IEmailCampaign<'from' | 'emails' | 'recipients'>
   sortBy: SortFieldType
   onChangeSort: (field: SortFieldType) => void
 }

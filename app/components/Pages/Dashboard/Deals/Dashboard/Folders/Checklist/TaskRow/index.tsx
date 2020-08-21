@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
 
+import { IconButton } from '@material-ui/core'
+
 import {
   setSelectedTask,
   setExpandTask,
@@ -15,6 +17,8 @@ import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
 
 import { IAppState } from 'reducers'
 
+import { ArrowToggle } from 'deals/components/ArrowToggle'
+
 import { TaskStatus } from './Status'
 
 import ActionsButton from '../../../../components/ActionsButton'
@@ -24,7 +28,7 @@ import TaskNotifications from '../Notification'
 import { EnvelopeStatus } from '../EnvelopeStatus'
 import { Activity } from './Activity'
 
-import { RowContainer, Row, RowTitle, RowArrowIcon } from '../../styled'
+import { RowContainer, Row, RowTitle } from '../../styled'
 
 interface Props {
   deal: IDeal
@@ -146,11 +150,18 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
   return (
     <RowContainer isTaskExpanded={isTaskExpanded}>
       <Row>
-        <RowArrowIcon
+        <IconButton
+          size="small"
+          disabled={!hasRows}
+          style={{
+            alignSelf: 'flex-start',
+            marginTop: '-2px',
+            opacity: hasRows ? 1 : 0
+          }}
           onClick={toggleTaskOpen}
-          show={hasRows}
-          isOpen={isTaskExpanded}
-        />
+        >
+          <ArrowToggle isActive={isTaskExpanded} />
+        </IconButton>
 
         <Flex column style={{ flex: 1 }}>
           <Flex alignCenter justifyBetween>

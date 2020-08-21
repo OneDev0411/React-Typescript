@@ -75,6 +75,4 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
    * non-visual things that read form values like OnChange.
    */
   children?: ReactNode
-
-  dispatch: any // Extending DispatchProps seems to have problems
 }

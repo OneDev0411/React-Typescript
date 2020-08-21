@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { H3 } from 'components/Typography/headings'
 
 import { Card } from '../../styled'
@@ -7,6 +8,7 @@ export const MarketingContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-bottom: 1rem;
 `
 
 export const Container = styled(Card)`

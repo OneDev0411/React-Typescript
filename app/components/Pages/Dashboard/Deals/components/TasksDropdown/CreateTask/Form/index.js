@@ -1,6 +1,6 @@
 import React from 'react'
-import { mdiClose } from '@mdi/js'
 
+import { closeIcon } from 'components/SvgIcons/icons'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -85,7 +85,7 @@ export class CreateTaskForm extends React.Component {
             </ChecklistNewItemSave>
 
             <ChecklistNewItemCancel onClick={onCancel}>
-              <SvgIcon path={mdiClose} size={muiIconSizes.small} />
+              <SvgIcon path={closeIcon} size={muiIconSizes.small} />
             </ChecklistNewItemCancel>
           </ChecklistNewItemInputContainer>
         </ChecklistItemTitle>

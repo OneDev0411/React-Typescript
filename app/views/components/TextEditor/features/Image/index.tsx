@@ -1,4 +1,6 @@
 import React, { useContext } from 'react'
+import { useDispatch } from 'react-redux'
+import { addNotification } from 'reapop'
 import { composeDecorators } from 'draft-js-plugins-editor'
 import createImagePlugin from 'draft-js-image-plugin'
 import 'draft-js-image-plugin/lib/plugin.css'
@@ -41,6 +43,8 @@ interface Props {
 }
 
 export function ImageFeature({ uploadImage, allowGif = true }: Props) {
+  const dispatch = useDispatch()
+
   /**
    * Adds an image to the editor from a URL or dataURL. if it's a dataUrl
    * and `uploadImage` prop is provided, it will be called with a Blob
@@ -81,20 +85,35 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
     // When the upload is finished, we replace the image src with the uploaded
     // file's url.
     if (uploadImage) {
-      // TODO: handle errors and remove the image in this case.
-      const uploadedImageUrl = await uploadImage(file)
+      try {
+        const uploadedImageUrl = await uploadImage(file)
 
-      if (editorRef.current) {
-        const latestState = editorRef.current.getEditorState()
+        if (editorRef.current) {
+          const latestState = editorRef.current.getEditorState()
 
-        setEditorState(
-          updateEntityData(
-            imagePlugin,
-            latestState,
-            data => data.src === dataUrl,
-            { src: uploadedImageUrl, uploading: false }
+          setEditorState(
+            updateEntityData(
+              imagePlugin,
+              latestState,
+              data => data.src === dataUrl,
+              { src: uploadedImageUrl, uploading: false }
+            )
           )
-        )
+        }
+      } catch (error) {
+        // TODO: Remove the image in this case.
+        const message = error?.response?.body?.message
+
+        if (message) {
+          dispatch(
+            addNotification({
+              message,
+              status: 'error'
+            })
+          )
+        }
+
+        console.error(error)
       }
     } else {
       console.warn(

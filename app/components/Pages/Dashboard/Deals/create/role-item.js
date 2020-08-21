@@ -1,10 +1,10 @@
 import React from 'react'
 import cn from 'classnames'
-import { mdiClose } from '@mdi/js'
 import { IconButton } from '@material-ui/core'
 
 import UserAvatar from 'components/UserAvatar'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { closeIcon } from 'components/SvgIcons/icons'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getLegalFullName } from '../utils/roles'
@@ -34,7 +34,7 @@ export default ({ user, onClick, onRemove }) => (
           onRemove(user.id, user)
         }}
       >
-        <SvgIcon path={mdiClose} size={muiIconSizes.small} />
+        <SvgIcon path={closeIcon} size={muiIconSizes.small} />
       </IconButton>
     )}
   </div>

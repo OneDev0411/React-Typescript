@@ -2,6 +2,7 @@ import React from 'react'
 import Input from 'react-text-mask'
 import _ from 'underscore'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+
 import InputErrorMessage from '../components/InputErrorMessage'
 
 function validate(props) {
@@ -37,18 +38,16 @@ export default props => {
   const { value, placeholder, options, ErrorMessageHandler } = props
   const isValid = validate(props)
 
-  const opts = Object.assign(
-    {
-      includeThousandsSeparator: false,
-      allowNegative: false,
-      allowDecimal: false,
-      decimalSymbol: '.',
-      decimalLimit: 2,
-      integerLimit: null,
-      requireDecimal: false
-    },
-    options || {}
-  )
+  const opts = {
+    includeThousandsSeparator: false,
+    allowNegative: false,
+    allowDecimal: false,
+    decimalSymbol: '.',
+    decimalLimit: 2,
+    integerLimit: null,
+    requireDecimal: false,
+    ...(options || {})
+  }
 
   const ErrorMessageComponent = ErrorMessageHandler ? (
     <ErrorMessageHandler message={getErrorMessage(props)} {...props} />

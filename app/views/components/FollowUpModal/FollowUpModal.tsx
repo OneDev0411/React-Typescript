@@ -48,6 +48,7 @@ export default function FollowUpModal({
   const classes = useStyles()
   const dispatch = useDispatch()
   const user = useSelector<IAppState, IUser>(state => state.user)
+  const [creatingFollowUp, setCreatingFollowUp] = useState(false)
   const [isEventDrawerOpen, setIsEventDrawerOpen] = useState(false)
   const { oneDayTimestamp, todayTimestamp, tomorrowTimestamp } = useMemo(
     () => getInitialDate(baseDate),
@@ -59,11 +60,17 @@ export default function FollowUpModal({
     [dictionary, email, tomorrowTimestamp, user]
   )
 
+  const disabled = isEventDrawerOpen || creatingFollowUp
+
   const handleClose = () => {
     onClose()
   }
 
   const setFollowUp = async event => {
+    if (disabled) {
+      return
+    }
+
     let dueDate = tomorrowTimestamp
     const { dueDateType } = event.currentTarget.dataset
 
@@ -81,6 +88,8 @@ export default function FollowUpModal({
     if (dueDateType === 'custom') {
       setIsEventDrawerOpen(true)
     } else {
+      setCreatingFollowUp(true)
+
       const task = await preSaveFormat(
         getFollowUpCrmTask(email, new Date(dueDate), user, dictionary)
       )
@@ -89,6 +98,7 @@ export default function FollowUpModal({
 
       callback(followUpTask)
       onClose()
+      setCreatingFollowUp(false)
 
       dispatch(
         notify({
@@ -117,6 +127,7 @@ export default function FollowUpModal({
           fullWidth
           variant="outlined"
           color="secondary"
+          disabled={disabled}
           onClick={setFollowUp}
           data-due-date-type="day"
           className={classes.optionButton}
@@ -127,6 +138,7 @@ export default function FollowUpModal({
           fullWidth
           variant="outlined"
           color="secondary"
+          disabled={disabled}
           onClick={setFollowUp}
           data-due-date-type="week"
           className={classes.optionButton}
@@ -137,6 +149,7 @@ export default function FollowUpModal({
           fullWidth
           variant="outlined"
           color="secondary"
+          disabled={disabled}
           onClick={setFollowUp}
           data-due-date-type="custom"
           className={classes.optionButton}

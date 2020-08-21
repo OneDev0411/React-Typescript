@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@material-ui/core'
+import pluralize from 'pluralize'
 
 import { searchContacts } from 'models/contacts/search-contacts'
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
@@ -102,8 +103,10 @@ export default function TeamAgents({
     try {
       const response = await searchContacts(user.email)
 
-      contacts = normalizeContactAttribute(response).filter(
-        (contact: IContact) => (contact.emails || []).includes(user.email)
+      contacts = normalizeContactAttribute(
+        response
+      ).filter((contact: IContact) =>
+        (contact.emails || []).includes(user.email)
       )
     } catch (e) {}
 
@@ -149,14 +152,9 @@ export default function TeamAgents({
             disabled={selectedAgents.length === 0}
             onClick={handleMultiSelectAgents}
           >
-            {selectedAgents.length === 0 ? (
-              'No Agent Selected'
-            ) : (
-              <>
-                Select {selectedAgents.length} Agent
-                {selectedAgents.length > 1 && 's'}
-              </>
-            )}
+            {selectedAgents.length === 0
+              ? 'No Agent Selected'
+              : `Select ${pluralize('Agent', selectedAgents.length, true)}`}
           </Button>
         </Drawer.Footer>
       )}

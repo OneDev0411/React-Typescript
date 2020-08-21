@@ -9,13 +9,7 @@ import UploadManager from '../../../UploadManager'
 
 import Files from './Files'
 
-import {
-  FolderContainer,
-  Header,
-  HeaderTitle,
-  ItemsContainer,
-  ArrowIcon
-} from '../styled'
+import { FolderContainer, Header, HeaderTitle, ItemsContainer } from '../styled'
 
 interface Props {
   deal: IDeal
@@ -44,7 +38,6 @@ export function UploadFolder(props: Props) {
           style={{ cursor: 'pointer' }}
           onClick={toggleFolderOpen}
         >
-          <ArrowIcon isOpen={isFolderExpanded} show={hasStashFiles()} />
           <HeaderTitle>Unorganized Files</HeaderTitle>
         </Flex>
 

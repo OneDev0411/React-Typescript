@@ -99,7 +99,6 @@ export default function CtaAction({ contact }: Props) {
         <SingleEmailComposeDrawer
           isOpen
           initialValues={{
-            from: user,
             to: normalizeContactsForEmailCompose([contact])
           }}
           onClose={toggleEmailComposer}

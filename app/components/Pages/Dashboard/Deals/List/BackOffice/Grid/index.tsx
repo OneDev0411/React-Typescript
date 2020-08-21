@@ -16,7 +16,6 @@ import {
   getPrice
 } from 'models/Deal/helpers/context'
 
-import flattenBrand from 'utils/flatten-brand'
 import { sortDealsStatus } from 'utils/sort-deals-status'
 
 import { getGridSort } from 'deals/List/helpers/sorting'
@@ -55,9 +54,17 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
   )
 
   const getOffice = (deal: IDeal) => {
-    const brand = flattenBrand(deal.brand)
+    let brand: IBrand | null = deal.brand
 
-    return brand && brand.messages ? brand.messages.branch_title : 'N/A'
+    do {
+      if (brand.brand_type === 'Office') {
+        return brand.name
+      }
+
+      brand = brand.parent
+    } while (brand)
+
+    return 'N/A'
   }
 
   const getSubmitTime = (attention_requested_at: number): string => {

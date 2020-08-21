@@ -16,26 +16,19 @@ export function viewFile({
   isBackOffice: boolean
 }) {
   const documentEnvelopes = getDocumentEnvelopes(envelopes, file)
+  const envelope = documentEnvelopes.length > 0 ? documentEnvelopes[0] : null
 
   if (!isBackOffice) {
-    const target =
-      documentEnvelopes.length === 0
-        ? file
-        : documentEnvelopes[0].documents.find(doc => doc.file === file.id)
+    const envelopeFile = envelope
+      ? envelope.documents.find(doc => doc.file === file.id)
+      : undefined
 
-    window.open(
-      target ? (target as IDealEnvelopeDocument).pdf.url : file.url,
-      '_blank'
-    )
+    window.open(envelopeFile ? envelopeFile.pdf.url : file.url, '_blank')
 
     return
   }
 
-  const path =
-    documentEnvelopes.length > 0
-      ? `envelope/${documentEnvelopes[0].id}`
-      : `attachment/${file.id}`
-
+  const path = envelope ? `envelope/${envelope.id}` : `attachment/${file.id}`
   const url = `/dashboard/deals/${deal.id}/view/${task.id}/${path}`
 
   browserHistory.push(url)

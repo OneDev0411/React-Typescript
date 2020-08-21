@@ -21,6 +21,7 @@ interface Props {
   EmailRecipientsChipsInputProps?: Partial<
     ComponentProps<typeof EmailRecipientsChipsInput>
   >
+  onToFieldChange?: (to: IDenormalizedEmailRecipientInput[] | undefined) => void
   users: IUser[]
 }
 
@@ -32,6 +33,7 @@ export function EmailRecipientsFields({
   deal,
   senderAccounts,
   EmailRecipientsChipsInputProps = {},
+  onToFieldChange,
   users
 }: Props) {
   const fields = useRecipientFields()
@@ -77,6 +79,7 @@ export function EmailRecipientsFields({
         {...fields.to}
         readOnly={disableAddNewRecipient}
         {...commonProps}
+        onChange={onToFieldChange}
         onFocus={() => setLastFocusedSendType('To')}
       />
       {isCcShown && !individualMode && (
