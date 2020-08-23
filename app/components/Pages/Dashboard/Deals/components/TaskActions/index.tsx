@@ -11,9 +11,10 @@ import {
   MenuItem
 } from '@material-ui/core'
 import pluralize from 'pluralize'
+import { mdiHelpCircleOutline, mdiTrashCanOutline } from '@mdi/js'
 
-import QuestionCircleIcon from 'components/SvgIcons/QuestionCircle/QuestionCircleIcon'
-import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
@@ -142,7 +143,10 @@ export function TaskActions({ deal }: Props) {
                   <Typography variant="body1" className={classes.title}>
                     {pluralize('file', state.attachments.length, true)} selected
                     &nbsp;
-                    <QuestionCircleIcon />
+                    <SvgIcon
+                      path={mdiHelpCircleOutline}
+                      size={muiIconSizes.small}
+                    />
                   </Typography>
                 </Button>
               )}
@@ -172,7 +176,7 @@ export function TaskActions({ deal }: Props) {
                           className={iconClasses.leftMargin}
                           onClick={() => handleRemoveAttachment(attachment)}
                         >
-                          <IconDeleteOutline className={iconClasses.small} />
+                          <SvgIcon path={mdiTrashCanOutline} />
                         </IconButton>
                       </Box>
                     </MenuItem>

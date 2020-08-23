@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography, Theme, Box, Button } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles, useTheme } from '@material-ui/styles'
 
 import { OAuthProvider } from 'constants/contacts'
 
@@ -8,9 +8,9 @@ import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 
 import importEmailsSvg from 'assets/images/dashboard/import-emails.svg'
 
-import { iconSizes } from 'components/SvgIcons/icon-sizes'
+import { outlookIcon } from 'components/SvgIcons/icons'
 import GoogleSigninButton from 'components/GoogleSigninButton'
-import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -31,6 +31,7 @@ const useStyles = makeStyles(
 )
 
 export default function InboxConnectAccount() {
+  const theme = useTheme<Theme>()
   const classes = useStyles()
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
@@ -61,7 +62,11 @@ export default function InboxConnectAccount() {
           onClick={outlook.connect}
           variant="outlined"
         >
-          <IconOutlook size={iconSizes.small} className={classes.marginRight} />
+          <SvgIcon
+            path={outlookIcon}
+            rightMargined
+            color={theme.palette.info.main}
+          />
           <Typography variant="button">Sign in with Outlook</Typography>
         </Button>
       </Box>

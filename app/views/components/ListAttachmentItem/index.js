@@ -2,19 +2,22 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import fecha from 'fecha'
 
-import { IconButton } from '@material-ui/core'
+import { IconButton, useTheme } from '@material-ui/core'
+import { mdiAttachment, mdiClose } from '@mdi/js'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
-import IconAttachment from '../SvgIcons/Attachment/IconAttachment'
+import { SvgIcon } from '../SvgIcons/SvgIcon'
 
 import { DateTime, DeleteIcon, Icon, Item, Title } from './styled'
 
 export function ListAttachmentItem(props) {
+  const theme = useTheme()
+
   return (
     <Item>
       <Icon>
-        <IconAttachment />
+        <SvgIcon path={mdiAttachment} color={theme.palette.common.white} />
       </Icon>
 
       <div>
@@ -38,7 +41,7 @@ export function ListAttachmentItem(props) {
         size="small"
         onClick={() => props.onDelete(props.attachment)}
       >
-        {props.isRemovable && <DeleteIcon />}
+        {props.isRemovable && <DeleteIcon path={mdiClose} />}
       </IconButton>
     </Item>
   )

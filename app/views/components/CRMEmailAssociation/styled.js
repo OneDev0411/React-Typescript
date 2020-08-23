@@ -33,7 +33,7 @@ const Container = styled.div`
       align-items: center;
 
       > svg {
-        fill: ${grey.A900};
+        color: ${grey.A900};
       }
     }
   }

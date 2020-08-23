@@ -9,8 +9,9 @@ import {
 } from '@material-ui/core'
 
 import { useField } from 'react-final-form'
+import { mdiHelpCircleOutline } from '@mdi/js'
 
-import QuestionCircleIcon from 'components/SvgIcons/QuestionCircle/QuestionCircleIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -59,7 +60,7 @@ export function AutoNotify({ disabled }: Props) {
           Auto Notify
         </Typography>
 
-        <QuestionCircleIcon />
+        <SvgIcon path={mdiHelpCircleOutline} />
       </div>
     </Tooltip>
   )

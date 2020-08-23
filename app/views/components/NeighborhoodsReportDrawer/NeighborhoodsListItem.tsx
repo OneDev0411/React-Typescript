@@ -5,8 +5,9 @@ import {
   ListItemAvatar,
   Avatar
 } from '@material-ui/core'
+import { mdiMapMarkerOutline } from '@mdi/js'
 
-import IconMapPinOn from 'components/SvgIcons/MapPinOn/IconMapPinOn'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Neighborhood } from './types'
 
@@ -31,7 +32,7 @@ export default function NeighborhoodsListItem({
     <ListItem button onClick={() => onClick(neighborhood)}>
       <ListItemAvatar>
         <Avatar>
-          <IconMapPinOn />
+          <SvgIcon path={mdiMapMarkerOutline} />
         </Avatar>
       </ListItemAvatar>
       <ListItemText

@@ -9,11 +9,11 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-
-import CloseIcon from '@material-ui/icons/Close'
+import { mdiClose } from '@mdi/js'
 
 import { uppercaseFirstLetter } from 'utils/helpers'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import Badge from 'components/Badge'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
@@ -88,7 +88,7 @@ function Item(props: Props) {
       <ListItemSecondaryAction>
         {item.is_editable && (
           <IconButton size="small" aria-label="delete" onClick={onDelete}>
-            <CloseIcon fontSize="small" />
+            <SvgIcon path={mdiClose} />
           </IconButton>
         )}
       </ListItemSecondaryAction>

@@ -1,13 +1,16 @@
 import React from 'react'
 import { compose, withState, pure } from 'recompose'
 import { connect } from 'react-redux'
+import { mdiMessagePlusOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import Compose from '../Shared/compose-wrapper'
 import {
   createRoom,
   toggleChatbar
 } from '../../../../../store_actions/chatroom'
 import Chatroom from '../Util/chatroom'
-import ComposeIcon from '../../Partials/Svgs/ComposeIcon'
 
 async function createNewRoom(recipients, createRoom, toggleChatbar) {
   // create room
@@ -23,7 +26,7 @@ async function createNewRoom(recipients, createRoom, toggleChatbar) {
 const Button = ({ clickHandler }) => (
   <div className="new-room" onClick={() => clickHandler()}>
     <span className="compose-icon">
-      <ComposeIcon />
+      <SvgIcon path={mdiMessagePlusOutline} />
     </span>
     New Message
   </div>
@@ -32,10 +35,7 @@ const Button = ({ clickHandler }) => (
 const enhance = compose(
   pure,
   withState('creating', 'onCreating', false),
-  connect(
-    null,
-    { createRoom, toggleChatbar }
-  )
+  connect(null, { createRoom, toggleChatbar })
 )
 
 const CreateRoom = ({

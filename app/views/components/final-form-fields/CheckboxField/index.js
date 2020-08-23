@@ -2,9 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Field } from 'react-final-form'
+import { mdiCheck } from '@mdi/js'
+import { useTheme } from '@material-ui/core/styles'
 
 import { primary, grey } from '../../../utils/colors'
-import IconCheck from '../../SvgIcons/Checkmark/IconCheckmark'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 // visually hidden
 const Checkbox = styled.input`
@@ -47,6 +49,7 @@ CheckboxField.defaultProps = {
 }
 
 export function CheckboxField(props) {
+  const theme = useTheme()
   const { id, size } = props
 
   return (
@@ -64,12 +67,10 @@ export function CheckboxField(props) {
               onChange={() => input.onChange(checked ? 'PENDING' : 'DONE')}
             />
             {checked && (
-              <IconCheck
-                style={{
-                  fill: '#fff',
-                  width: size * 0.75,
-                  height: size * 0.75
-                }}
+              <SvgIcon
+                size={size * 0.75}
+                path={mdiCheck}
+                color={theme.palette.common.white}
               />
             )}
           </Label>

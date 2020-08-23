@@ -5,6 +5,7 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Modal } from 'react-bootstrap'
 import Flex from 'styled-flex-component'
+import { mdiClose } from '@mdi/js'
 
 import SuccessModal from './SuccessModal'
 import Recipients from '../../../../../Partials/ShareView'
@@ -14,7 +15,7 @@ import createRecommendation from '../../../../../../models/recommendation/create
 
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import IconButton from '../../../../../../views/components/Button/IconButton'
-import IconClose from '../../../../../../views/components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
 import { H2 } from '../../../../../../views/components/Typography/headings'
 
 const ShareListingModal = ({
@@ -43,7 +44,7 @@ const ShareListingModal = ({
             iconSize="large"
             onClick={isSharing ? () => {} : onHide}
           >
-            <IconClose />
+            <SvgIcon path={mdiClose} />
           </IconButton>
         </Flex>
         <Modal.Body style={{ padding: 0 }}>
@@ -61,10 +62,7 @@ const ShareListingModal = ({
 }
 
 export default compose(
-  connect(
-    null,
-    { createRoom }
-  ),
+  connect(null, { createRoom }),
   withState('recipients', 'setRecipients', {}),
   withState('isSharing', 'setIsSharing', false),
   withState('successModalIsActive', 'setSuccessModalIsActive', false),

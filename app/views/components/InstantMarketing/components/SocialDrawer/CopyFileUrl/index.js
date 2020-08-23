@@ -2,8 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { addNotification as notify } from 'reapop'
+import { mdiLink } from '@mdi/js'
 
-import LinkIcon from 'views/components/SvgIcons/LinkIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 import copy from 'utils/copy-text-to-clipboard'
@@ -33,7 +34,7 @@ function CopyFileUrl(props) {
       }}
       onButtonClick={() => handleCopyUrl(props)}
     >
-      <LinkIcon /> {getDocumentLastState(props.instance)}
+      <SvgIcon path={mdiLink} /> {getDocumentLastState(props.instance)}
     </Section>
   )
 }

@@ -1,7 +1,7 @@
 import styled, { ThemedStyledProps } from 'styled-components'
 import { Theme } from '@material-ui/core'
 
-import IconCheck from '../SvgIcons/Checkmark/IconCheckmark'
+import { SvgIcon } from '../SvgIcons/SvgIcon'
 
 // visually hidden
 export const Input = styled.input`
@@ -53,8 +53,8 @@ export const CheckMarkBox = styled.div<CheckMarkBoxProps>`
   }
 `
 
-export const CheckMark = styled(IconCheck)`
+export const CheckMark = styled(SvgIcon)`
   width: 100%;
   height: 100%;
-  fill: #fff;
+  color: #fff;
 `

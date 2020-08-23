@@ -1,11 +1,12 @@
 import React from 'react'
 import FileSaver from 'file-saver'
 import agent from 'superagent'
+import { mdiFileImageOutline } from '@mdi/js'
 
 import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 import { getFileType } from 'utils/file-utils/get-file-type'
 
-import ImageFileIcon from 'components/SvgIcons/ImageFile/ImageFileIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Button as DownloadButton } from '../components/Section/styled'
 import { Section } from '../components/Section'
@@ -69,7 +70,7 @@ export default class DownloadFile extends React.Component {
           </DownloadButton>
         )}
       >
-        <ImageFileIcon /> {this.FileName}
+        <SvgIcon path={mdiFileImageOutline} /> {this.FileName}
       </Section>
     )
   }

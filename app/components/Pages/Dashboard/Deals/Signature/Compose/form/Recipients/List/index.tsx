@@ -18,15 +18,14 @@ import {
 } from '@material-ui/core'
 
 import { useTheme } from '@material-ui/styles'
+import { mdiClose } from '@mdi/js'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import type { ISignatureRecipient } from 'deals/Signature/types'
 import { getAvatarTitle } from 'deals/utils/get-avatar-title'
 import { roleName, getLegalFullName } from 'deals/utils/roles'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -39,7 +38,6 @@ const useStyles = makeStyles(
 
 export function RecipientsList() {
   const classes = useStyles()
-  const iconClasses = useIconStyles()
   const theme = useTheme<Theme>()
 
   const { input } = useField('recipients')
@@ -209,7 +207,7 @@ export function RecipientsList() {
                       size="medium"
                       onClick={() => handleRemoveRecipient(recipient)}
                     >
-                      <IconClose className={iconClasses.small} />
+                      <SvgIcon path={mdiClose} />
                     </IconButton>
                   </TableCell>
                 </TableRow>

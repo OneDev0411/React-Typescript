@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { Tooltip, IconButton } from '@material-ui/core'
+import { Tooltip, IconButton, useTheme } from '@material-ui/core'
 
-import IconAlignLeft from 'components/SvgIcons/AlignLeft/IconAlignLeft'
-import IconAlignCenter from 'components/SvgIcons/AlignCenter/IconAlignCenter'
-import IconAlignRight from 'components/SvgIcons/AlignRight/IconAlignRight'
-
-import { useIconStyles } from '../../../../../../styles/use-icon-styles'
+import {
+  imageAlignLeft,
+  imageAlignRight,
+  imageAlignCenter
+} from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ItemTitle, ItemContainer } from '../styled'
 import { Row, Column } from './styled'
@@ -23,12 +24,18 @@ export default function TextFormatting({
   value = 'left',
   onChange
 }: Props) {
-  const iconClasses = useIconStyles()
+  const theme = useTheme()
   const [innerValue, setInnerValue] = useState<Alignment>(value)
 
   function handleChange(value: Alignment) {
     setInnerValue(value)
     onChange(value)
+  }
+
+  function getIconColor(alignment: Alignment) {
+    return innerValue.includes(alignment)
+      ? theme.palette.primary.main
+      : 'currentColor'
   }
 
   return (
@@ -44,13 +51,7 @@ export default function TextFormatting({
                 handleChange('left')
               }}
             >
-              <IconAlignLeft
-                className={
-                  innerValue.includes('left')
-                    ? iconClasses.activeOnlyRootSvg
-                    : ''
-                }
-              />
+              <SvgIcon path={imageAlignLeft} color={getIconColor('left')} />
             </IconButton>
           </Tooltip>
         </Column>
@@ -63,13 +64,7 @@ export default function TextFormatting({
                 handleChange('center')
               }}
             >
-              <IconAlignCenter
-                className={
-                  innerValue.includes('center')
-                    ? iconClasses.activeOnlyRootSvg
-                    : ''
-                }
-              />
+              <SvgIcon path={imageAlignCenter} color={getIconColor('center')} />
             </IconButton>
           </Tooltip>
         </Column>
@@ -82,13 +77,7 @@ export default function TextFormatting({
                 handleChange('right')
               }}
             >
-              <IconAlignRight
-                className={
-                  innerValue.includes('right')
-                    ? iconClasses.activeOnlyRootSvg
-                    : ''
-                }
-              />
+              <SvgIcon path={imageAlignRight} color={getIconColor('right')} />
             </IconButton>
           </Tooltip>
         </Column>
