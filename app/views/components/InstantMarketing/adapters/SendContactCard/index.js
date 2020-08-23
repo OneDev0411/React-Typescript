@@ -296,7 +296,7 @@ class SendContactCard extends React.Component {
               user: this.props.user,
               contact: this.state.contact
             }}
-            templateTypes={['Birthday']}
+            templateTypes={this.props.types || ['Birthday']}
             defaultTemplate={this.props.selectedTemplate}
             handleSocialSharing={this.handleSocialSharing}
             isEdit={this.props.isEdit}
