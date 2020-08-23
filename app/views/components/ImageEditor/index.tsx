@@ -1,38 +1,66 @@
-import React, { useRef, useState } from 'react'
+import React, { useState, useRef } from 'react'
+import TuiImageEditor from 'tui-image-editor'
+
 import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
   Box,
-  Typography,
   makeStyles,
   Theme,
-  Button
+  ButtonGroup,
+  Dialog,
+  DialogContent
 } from '@material-ui/core'
 
-import 'tui-image-editor/dist/tui-image-editor.css'
-import Editor from '@toast-ui/react-image-editor'
-
-import { useEffectOnce } from 'react-use'
-
-import { theme } from './theme'
+import { Undo } from './plugins/Undo'
+import { Redo } from './plugins/Redo'
+import { Delete } from './plugins/Delete'
+import { Crop } from './plugins/Crop'
+import { Draw } from './plugins/Draw'
+import { Text } from './plugins/Text'
+import { Rotate } from './plugins/Rotate'
+import { CropActions } from './plugins/Crop/CropActions'
+import { DrawActions } from './plugins/Draw/DrawActions'
+import { TextActions } from './plugins/Text/TextActions'
+import type { Actions, ImageEditor } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      padding: 0,
-      '& .tui-image-editor-header': {
-        display: 'none'
+      border: `1px solid ${theme.palette.divider}`,
+      borderRadius: theme.shape.borderRadius,
+      maxHeight: '85vh',
+      overflow: 'auto'
+    },
+    canvas: {
+      display: 'flex',
+      alignItems: 'center',
+      maxHeight: '100vh',
+      padding: theme.spacing(1, 0),
+      '& .tui-image-editor-canvas-container': {
+        margin: '0 auto'
       },
-      '& .tui-image-editor-main': {
-        top: '0 !important'
+      '& canvas': {
+        borderRadius: theme.shape.borderRadius
       },
-      '& .tui-image-editor-menu': {
-        background: theme.palette.grey[300]
-      },
-      '& .tie-crop-preset-button': {
-        display: 'none !important'
-      }
+      backgroundColor: theme.palette.grey[50]
+    },
+    menu: {
+      padding: theme.spacing(1),
+      borderTop: `1px solid ${theme.palette.divider}`
+    },
+    menuContainer: {
+      position: 'sticky',
+      bottom: 0,
+      background: '#fff'
+    },
+    iconsRow: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flexWrap: 'wrap',
+      marginBottom: theme.spacing(1.25)
+    },
+    horizontalDivider: {
+      margin: theme.spacing(1.5, 0)
     }
   }),
   {
@@ -40,85 +68,158 @@ const useStyles = makeStyles(
   }
 )
 
+const imageWidth = 200
+const imageHeight = 200
+
 interface Props {
   file: IBlobFile
-  onClose?: () => void
 }
 
-export function ImageEditor({ file, onClose }: Props) {
+export function Editor({ file }: Props) {
   const classes = useStyles()
-  const [imageUrl, setImageUrl] = useState<string | ArrayBuffer | null>(null)
-  const editorRef = useRef<{
-    getInstance: () => any
-  } | null>(null)
-  const cropperRatio = useRef<number | null>(null)
+  const ref = useRef<HTMLDivElement | null>(null)
+  const [editor, setEditor] = useState<ImageEditor | null>(null)
+  const [height, setHeight] = useState('0px')
+  const [action, setAction] = useState<Actions | null>(null)
 
-  const getEditorInstance = () => editorRef?.current?.getInstance()!
+  const setActiveAction = (action: Actions | null) => setAction(action)
 
-  useEffectOnce(() => {
-    const reader = new FileReader()
-
-    reader.onload = () => setImageUrl(reader.result)
-    reader.readAsDataURL(file)
-  })
-
-  const handleObjectActivation = data => {
-    if (data.type === 'cropzone' && !cropperRatio.current) {
-      cropperRatio.current = 1
-      getEditorInstance().setCropzoneRect(1)
+  const resizeEditor = () => {
+    if (!ref.current) {
+      return
     }
+
+    const height = getComputedStyle(ref.current, null).getPropertyValue(
+      'max-height'
+    )
+
+    setHeight(height)
   }
 
-  const handleSave = () => {
-    console.log(getEditorInstance().toDataURL())
+  const setupEditor = async () => {
+    const editor = new TuiImageEditor(ref.current!, {
+      selectionStyle: {
+        cornerSize: 20,
+        rotatingPointOffset: 70
+      }
+    })
+
+    setEditor(editor)
+
+    await editor.loadImageFromFile(file as File, file.name)
+
+    resizeEditor()
+
+    editor.clearUndoStack()
+
+    // https://github.com/fabricjs/fabric.js/issues/3695#issuecomment-353360365
+    document
+      .querySelector('#editor-dialog .MuiDialog-container')!
+      .removeAttribute('tabindex')
   }
 
   return (
-    <Dialog open fullScreen onClose={onClose}>
-      <DialogTitle>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Typography variant="h5">Edit Photo</Typography>
-
-          <div>
-            <Button onClick={onClose}>Cancel</Button>
-
-            <Button variant="contained" color="secondary" onClick={handleSave}>
-              Save
-            </Button>
-          </div>
-        </Box>
-      </DialogTitle>
-
-      <DialogContent classes={{ root: classes.root }}>
-        {imageUrl && (
-          <Editor
-            ref={editorRef}
-            onObjectActivated={handleObjectActivation}
-            includeUI={{
-              theme,
-              loadImage: {
-                path: imageUrl,
-                name: file.name
-              },
-              menu: [
-                'crop',
-                'flip',
-                'rotate',
-                'draw',
-                'shape',
-                'icon',
-                'filter'
-              ],
-              initMenu: 'crop',
-              menuBarPosition: 'right'
+    <Dialog
+      open
+      id="editor-dialog"
+      fullWidth
+      maxWidth="lg"
+      onEntered={setupEditor}
+    >
+      <DialogContent>
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+          className={classes.root}
+        >
+          <div
+            ref={ref}
+            className={classes.canvas}
+            style={{
+              height
             }}
-            selectionStyle={{
-              cornerSize: 20,
-              rotatingPointOffset: 70
-            }}
-            usageStatistics={false}
           />
-        )}
+
+          {editor && (
+            <div className={classes.menuContainer}>
+              {action && (
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  className={classes.menu}
+                >
+                  {action === 'crop' && (
+                    <CropActions
+                      editor={editor}
+                      onChangeActiveAction={setActiveAction}
+                      onCrop={resizeEditor}
+                    />
+                  )}
+
+                  {action === 'draw' && (
+                    <DrawActions
+                      editor={editor}
+                      onChangeActiveAction={setActiveAction}
+                    />
+                  )}
+
+                  {action === 'text' && (
+                    <TextActions
+                      editor={editor}
+                      onChangeActiveAction={setActiveAction}
+                    />
+                  )}
+                </Box>
+              )}
+
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                className={classes.menu}
+              >
+                <Box display="flex">
+                  <ButtonGroup size="small">
+                    <Crop
+                      editor={editor}
+                      isActive={action === 'crop'}
+                      width={imageWidth}
+                      height={imageHeight}
+                      onChangeActiveAction={setActiveAction}
+                    />
+
+                    <Rotate
+                      editor={editor}
+                      isActive={action === 'rotate'}
+                      onChangeActiveAction={setActiveAction}
+                      onRotate={resizeEditor}
+                    />
+
+                    <Draw
+                      editor={editor}
+                      isActive={action === 'draw'}
+                      onChangeActiveAction={setActiveAction}
+                    />
+
+                    <Text
+                      editor={editor}
+                      isActive={action === 'text'}
+                      onChangeActiveAction={setActiveAction}
+                    />
+                  </ButtonGroup>
+                </Box>
+
+                <Box display="flex">
+                  <ButtonGroup size="small">
+                    <Redo editor={editor} onRedo={resizeEditor} />
+                    <Undo editor={editor} onUndo={resizeEditor} />
+                    <Delete editor={editor} />
+                  </ButtonGroup>
+                </Box>
+              </Box>
+            </div>
+          )}
+        </Box>
       </DialogContent>
     </Dialog>
   )

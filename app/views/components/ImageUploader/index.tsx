@@ -12,7 +12,7 @@ import {
 import { useDropzone, DropzoneOptions } from 'dropzone'
 import { makeStyles } from '@material-ui/styles'
 
-import { ImageEditor } from 'components/ImageEditor'
+import { Editor } from 'components/ImageEditor'
 
 interface ThemeProps {
   isDragActive: boolean
@@ -86,7 +86,11 @@ export function ImageUploader({
         openDialog: () => setIsOpen(true)
       })}
 
-      <Dialog open={isOpen} maxWidth="md" onClose={() => setIsOpen(false)}>
+      <Dialog
+        open={isOpen && !file}
+        maxWidth="md"
+        onClose={() => setIsOpen(false)}
+      >
         <DialogTitle>Upload Photo</DialogTitle>
         <DialogContent
           classes={{
@@ -131,7 +135,7 @@ export function ImageUploader({
         </DialogContent>
       </Dialog>
 
-      {file && <ImageEditor file={file} onClose={() => setFile(null)} />}
+      {file && <Editor file={file} />}
     </>
   )
 }
