@@ -12,6 +12,7 @@ import { GeneralEvent } from './components/General'
 import { CelebrationEvent } from './components/Celebration'
 import { DealEvent } from './components/Deal'
 import { EventCard } from './components/Card'
+import { CRM_OBJECT_TYPES } from '../FilterEvents/helper'
 
 export interface BaseEventProps {
   event: EventContentArg
@@ -48,7 +49,7 @@ const events: EventsType[] = [
   {
     component: GeneralEvent,
     condition: (event: EventContentArg, rowEvent: ICalendarEvent) =>
-      ['crm_task', 'crm_association', 'contact'].includes(rowEvent.object_type)
+      CRM_OBJECT_TYPES.includes(rowEvent.object_type)
   }
 ]
 
