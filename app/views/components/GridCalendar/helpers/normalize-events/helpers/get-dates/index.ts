@@ -1,5 +1,3 @@
-import { isNegativeTimezone } from 'utils/is-negative-timezone'
-
 interface FullCalendarEventDate {
   start: string
   end?: string
@@ -22,11 +20,37 @@ export const getDates = (event: ICalendarEvent): FullCalendarEventDate => {
   // End Date
   const endObject = new Date(Number(end_date || 0) * 1000)
 
-  // it's kinda hacky but we had to handle this way because of full-calendar pkg bug
-  // TODO: handle it in a better way
-  if (all_day && isNegativeTimezone()) {
-    startObject.setHours(24)
-    endObject.setHours(24)
+  // reset start and end time if is a all_dat event since server send us a utc time for all_day events
+  if (all_day) {
+    const dummyStart = new Date(startObject)
+
+    startObject.setHours(
+      dummyStart.getUTCHours(),
+      dummyStart.getUTCMinutes(),
+      dummyStart.getUTCSeconds(),
+      0
+    )
+    startObject.setFullYear(
+      dummyStart.getUTCFullYear(),
+      dummyStart.getUTCMonth(),
+      dummyStart.getUTCDate()
+    )
+
+    if (end_date) {
+      const dummyEnd = new Date(endObject)
+
+      endObject.setHours(
+        dummyEnd.getUTCHours(),
+        dummyEnd.getUTCMinutes(),
+        dummyEnd.getUTCSeconds(),
+        0
+      )
+      endObject.setFullYear(
+        dummyEnd.getUTCFullYear(),
+        dummyEnd.getUTCMonth(),
+        dummyEnd.getUTCDate()
+      )
+    }
   }
 
   // Check end_date is available
