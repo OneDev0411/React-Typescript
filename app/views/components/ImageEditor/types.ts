@@ -11,13 +11,4 @@ export interface ObjectActivatedData {
 
 export type DRAWING_MODE = 'FREE_DRAWING' | 'LINE_DRAWING'
 
-export type Actions =
-  | 'crop'
-  | 'flip'
-  | 'rotate'
-  | 'mask'
-  | 'draw'
-  | 'text'
-  | 'shape'
-  | 'icon'
-  | 'filter'
+export type Actions = 'crop' | 'draw' | 'text' | 'filter'

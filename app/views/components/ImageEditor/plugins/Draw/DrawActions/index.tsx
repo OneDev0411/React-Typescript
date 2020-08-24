@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 
-import { Box, useTheme, Theme, Button, Divider } from '@material-ui/core'
+import {
+  Box,
+  useTheme,
+  Theme,
+  Button,
+  Divider,
+  makeStyles
+} from '@material-ui/core'
 import { ColorResult } from 'react-color'
 
 import Icon from '@mdi/react'
@@ -10,12 +17,25 @@ import { Slider } from '../../../components/Slider'
 import { ColorPicker } from '../../../components/ColorPicker'
 import { ImageEditor, Actions, DRAWING_MODE } from '../../../types'
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    divider: {
+      height: '50%',
+      margin: theme.spacing(0, 2)
+    }
+  }),
+  {
+    name: 'ImageEditorDrawActions'
+  }
+)
+
 interface Props {
   editor: ImageEditor
   onChangeActiveAction: (action: Actions | null) => void
 }
 
 export function DrawActions({ editor, onChangeActiveAction }: Props) {
+  const classes = useStyles()
   const theme = useTheme<Theme>()
   const [drawingMode, setDrawingMode] = useState<DRAWING_MODE>('FREE_DRAWING')
   const [brushWidth, setBrushWidth] = useState(5)
@@ -71,7 +91,14 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
 
   return (
     <Box display="flex" alignItems="center" width="100%">
-      <Box display="flex" alignItems="center" flexGrow={1}>
+      <Box
+        display="flex"
+        alignItems="center"
+        flexGrow={1}
+        style={{
+          height: theme.spacing(5)
+        }}
+      >
         <Button
           startIcon={<Icon path={mdiDraw} size={1} />}
           color={drawingMode === 'FREE_DRAWING' ? 'secondary' : 'default'}
@@ -86,22 +113,10 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
         >
           Line
         </Button>
-        <Divider
-          orientation="vertical"
-          style={{
-            height: '50%',
-            margin: theme.spacing(0, 2)
-          }}
-        />
+        <Divider orientation="vertical" className={classes.divider} />
         <ColorPicker color={brushColor} onChange={onChangeBrushColor} />
 
-        <Divider
-          orientation="vertical"
-          style={{
-            height: '50%',
-            margin: theme.spacing(0, 2)
-          }}
-        />
+        <Divider orientation="vertical" className={classes.divider} />
 
         <Slider
           min={5}
@@ -115,6 +130,7 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
       <div>
         <Button
           startIcon={<Icon path={mdiCancel} size={0.75} />}
+          size="small"
           onClick={cancel}
         >
           Cancel
@@ -122,9 +138,10 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
 
         <Button
           startIcon={<Icon path={mdiCheckOutline} size={0.75} />}
+          size="small"
           onClick={apply}
         >
-          Finish Drawing
+          Stop Drawing
         </Button>
       </div>
     </Box>

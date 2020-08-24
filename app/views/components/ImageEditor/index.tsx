@@ -19,9 +19,12 @@ import { Text } from './plugins/Text'
 import { Rotate } from './plugins/Rotate'
 import { Image } from './plugins/Image'
 import { Flip } from './plugins/Flip'
+import { Filters } from './plugins/Filters'
 import { CropActions } from './plugins/Crop/CropActions'
 import { DrawActions } from './plugins/Draw/DrawActions'
 import { TextActions } from './plugins/Text/TextActions'
+import { FilterActions } from './plugins/Filters/FilterActions'
+
 import type { Actions, ImageEditor } from './types'
 
 const useStyles = makeStyles(
@@ -101,12 +104,12 @@ export function Editor({ file }: Props) {
   const setupEditor = async () => {
     const editor = new TuiImageEditor(ref.current!, {
       selectionStyle: {
-        cornerSize: 20,
-        rotatingPointOffset: 70
+        cornerSize: 5,
+        rotatingPointOffset: 20
       }
     })
 
-    setEditor(editor)
+    setEditor(editor as ImageEditor)
 
     await editor.loadImageFromFile(file as File, file.name)
 
@@ -172,6 +175,14 @@ export function Editor({ file }: Props) {
                       onChangeActiveAction={setActiveAction}
                     />
                   )}
+
+                  {action === 'filter' && (
+                    <FilterActions
+                      editor={editor}
+                      file={file}
+                      onChangeActiveAction={setActiveAction}
+                    />
+                  )}
                 </Box>
               )}
 
@@ -190,12 +201,7 @@ export function Editor({ file }: Props) {
                       onChangeActiveAction={setActiveAction}
                     />
 
-                    <Rotate
-                      editor={editor}
-                      isActive={action === 'rotate'}
-                      onChangeActiveAction={setActiveAction}
-                      onRotate={resizeEditor}
-                    />
+                    <Rotate editor={editor} onRotate={resizeEditor} />
 
                     <Flip editor={editor} />
 
@@ -212,6 +218,12 @@ export function Editor({ file }: Props) {
                     />
 
                     <Image editor={editor} />
+
+                    <Filters
+                      editor={editor}
+                      isActive={action === 'filter'}
+                      onChangeActiveAction={setActiveAction}
+                    />
                   </ButtonGroup>
                 </Box>
 

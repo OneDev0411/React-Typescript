@@ -8,6 +8,8 @@ import { useEffectOnce } from 'react-use'
 
 import { ColorResult } from 'react-color'
 
+import FontField from '../../../../../../components/Pages/Dashboard/BrandSettings/Sidebar/Field/Font'
+
 import { Slider } from '../../../components/Slider'
 import { ColorPicker } from '../../../components/ColorPicker'
 
@@ -107,6 +109,18 @@ export function TextActions({ editor }: Props) {
     })
   }
 
+  const onChangeFontFamily = async (_: unknown, value: string) => {
+    if (!object.id) {
+      return
+    }
+
+    updateTextStyles({
+      fontFamily: value
+    })
+
+    editor.discardSelection()
+  }
+
   const toggleBold = () => {
     updateTextStyles({
       fontWeight: object.fontWeight === 'bold' ? 'normal' : 'bold'
@@ -147,6 +161,7 @@ export function TextActions({ editor }: Props) {
       pick(data, [
         'fill',
         'fontSize',
+        'fontFamily',
         'fontStyle',
         'fontWeight',
         'textAlign',
@@ -186,6 +201,21 @@ export function TextActions({ editor }: Props) {
       >
         <Icon path={mdiFormatUnderline} size={0.9} />
       </IconButton>
+      <Divider orientation="vertical" className={classes.divider} />
+
+      <div
+        style={{
+          width: '150px'
+        }}
+      >
+        <FontField
+          type="font-family"
+          label="Font Family"
+          names={[]}
+          value={object.fontFamily!}
+          onChange={onChangeFontFamily}
+        />
+      </div>
       <Divider orientation="vertical" className={classes.divider} />
       <ColorPicker color={object.fill} onChange={setTextColor} />
       <Divider orientation="vertical" className={classes.divider} />

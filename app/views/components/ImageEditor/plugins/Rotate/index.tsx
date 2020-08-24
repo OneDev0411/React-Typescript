@@ -3,21 +3,14 @@ import { Button } from '@material-ui/core'
 import Icon from '@mdi/react'
 import { mdiRotateLeft } from '@mdi/js'
 
-import { ImageEditor, Actions } from '../../types'
+import { ImageEditor } from '../../types'
 
 interface Props {
   editor: ImageEditor
-  isActive: boolean
-  onChangeActiveAction: (action: Actions | null) => void
   onRotate: () => void
 }
 
-export function Rotate({
-  editor,
-  isActive,
-  onChangeActiveAction,
-  onRotate
-}: Props) {
+export function Rotate({ editor, onRotate }: Props) {
   const rotate = async () => {
     editor.stopDrawingMode()
     editor.rotate(-45)
@@ -26,11 +19,7 @@ export function Rotate({
   }
 
   return (
-    <Button
-      startIcon={<Icon path={mdiRotateLeft} size={1} />}
-      color={isActive ? 'secondary' : 'default'}
-      onClick={rotate}
-    >
+    <Button startIcon={<Icon path={mdiRotateLeft} size={1} />} onClick={rotate}>
       Rotate
     </Button>
   )

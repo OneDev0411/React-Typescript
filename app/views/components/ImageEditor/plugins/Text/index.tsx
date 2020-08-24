@@ -32,7 +32,7 @@ export function Text({ editor, isActive, onChangeActiveAction }: Props) {
       color={isActive ? 'secondary' : 'default'}
       onClick={toggleCreateText}
     >
-      Add Text
+      Text
     </Button>
   )
 }

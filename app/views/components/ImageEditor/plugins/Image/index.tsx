@@ -38,7 +38,12 @@ export function Image({ editor }: Props) {
         onChange={handleAddImage}
       />
 
-      <label htmlFor="editor-add-image">
+      <label
+        htmlFor="editor-add-image"
+        style={{
+          margin: 0
+        }}
+      >
         <Button
           startIcon={<Icon path={mdiImageOutline} size={1} />}
           // typescript complains when adding component="span" as a normal prop
@@ -46,7 +51,7 @@ export function Image({ editor }: Props) {
             component: 'span'
           }}
         >
-          Add Image
+          Image
         </Button>
       </label>
     </>
