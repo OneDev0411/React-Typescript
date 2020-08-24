@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 import { addNotification } from 'reapop'
-
 import {
   makeStyles,
   Theme,
@@ -15,8 +14,10 @@ import {
   Box,
   Typography,
   Hidden,
+  Button,
   CircularProgress
 } from '@material-ui/core'
+import { mdiPencilOutline } from '@mdi/js'
 
 import { IAppState } from 'reducers'
 import { useListingById } from 'hooks/use-query-param-entities'
@@ -27,6 +28,7 @@ import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
 import { SideNavToggleButton } from 'components/SideNavToggleButton'
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 import PageLayout from 'components/GlobalPageLayout'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
 
@@ -37,6 +39,10 @@ import { useTemplates } from '../hooks/use-templates'
 import { LISTING_TEMPLATE_TYPES, TEMPLATES_PAGE_SIZE } from './constants'
 import CategoriesTabs from './CategoriesTabs'
 import ShareDrawer from './ShareDrawer'
+import EditVariablesDialog from './EditVariablesDialog'
+import { getEditableVariablesSections } from './helpers'
+import { useEntityWithSetter } from './hooks'
+import { TemplateVariable } from './types'
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -47,6 +53,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   appBar: {
     borderBottom: `1px solid ${theme.palette.divider}`
+  },
+  toolbar: {
+    justifyContent: 'space-between'
+  },
+  title: {
+    flexGrow: 1,
+    textAlign: 'center'
   },
   thumbnailPaper: {
     overflow: 'hidden'
@@ -59,9 +72,9 @@ function MarketingWizard(props: WithRouterProps) {
   const classes = useStyles()
 
   const dispatch = useDispatch()
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
-  const activeBrand = getActiveTeamId(user)
-  const brand = getActiveBrand(user)
+  const rawUser = useSelector<IAppState, IUser>(({ user }) => user)
+  const activeBrand = getActiveTeamId(rawUser)
+  const brand = getActiveBrand(rawUser)
 
   const [selectedTemplate, setSelectedTemplate] = useState<
     Nullable<IBrandMarketingTemplate>
@@ -75,6 +88,10 @@ function MarketingWizard(props: WithRouterProps) {
     TEMPLATES_PAGE_SIZE
   )
 
+  const [isEditVariablesDialogOpen, setIsEditVariablesDialogOpen] = useState<
+    boolean
+  >(false)
+
   const {
     templates,
     isLoading: isLoadingTemplates,
@@ -82,10 +99,18 @@ function MarketingWizard(props: WithRouterProps) {
   } = useTemplates(activeBrand, ['Social'], LISTING_TEMPLATE_TYPES)
 
   const {
-    listing,
+    listing: rawListing,
     isLoading: isLoadingListing,
     error: errorListing
   } = useListingById(props.location)
+
+  const [{ user, listing }, setTemplateVariables] = useEntityWithSetter<{
+    user: IUser
+    listing: Nullable<IListing>
+  }>({
+    listing: rawListing,
+    user: rawUser
+  })
 
   const templateTypes = useUniqueTemplateTypes(templates)
 
@@ -94,6 +119,11 @@ function MarketingWizard(props: WithRouterProps) {
       template.template.template_type ===
       (selectedTemplateType ?? templateTypes[0])
   )
+
+  const variablesSections = getEditableVariablesSections(templates, {
+    user,
+    listing
+  })
 
   const loadMoreTemplates = () => {
     if (templatesLimit <= currentTabTemplates.length) {
@@ -108,11 +138,21 @@ function MarketingWizard(props: WithRouterProps) {
     onScrollBottom: loadMoreTemplates
   })
 
-  const openShareDrawer = (template: IBrandMarketingTemplate) => {
+  const handleOpenShareDrawer = (template: IBrandMarketingTemplate) => {
     setSelectedTemplate(template)
   }
+  const handleCloseShareDrawer = () => setSelectedTemplate(null)
 
-  const closeShareDrawer = () => setSelectedTemplate(null)
+  const handleOpenEditVariablesDialog = () => {
+    setIsEditVariablesDialogOpen(true)
+  }
+  const handleCloseEditVariablesDialog = () =>
+    setIsEditVariablesDialogOpen(false)
+
+  const handleSaveVariables = (newVariables: TemplateVariable[]) => {
+    setTemplateVariables(newVariables)
+    handleCloseEditVariablesDialog()
+  }
 
   const handleDownloadClick = async (template: IBrandMarketingTemplate) => {
     if (!listing || !brand) {
@@ -153,7 +193,7 @@ function MarketingWizard(props: WithRouterProps) {
           message: 'Something went wrong. Please try again.'
         })
       )
-      console.error('shit', err)
+      console.error(err)
     }
   }
 
@@ -185,11 +225,19 @@ function MarketingWizard(props: WithRouterProps) {
           elevation={0}
           className={classes.appBar}
         >
-          <Toolbar disableGutters>
+          <Toolbar disableGutters className={classes.toolbar}>
             <SideNavToggleButton />
-            <Typography variant="h6" color="textPrimary" noWrap>
+            <Typography
+              variant="h6"
+              color="textPrimary"
+              noWrap
+              className={classes.title}
+            >
               Browse Templates
             </Typography>
+            <Button onClick={handleOpenEditVariablesDialog}>
+              <SvgIcon path={mdiPencilOutline} />
+            </Button>
           </Toolbar>
           <CategoriesTabs
             types={templateTypes}
@@ -223,7 +271,7 @@ function MarketingWizard(props: WithRouterProps) {
                       user={user}
                       listing={listing!}
                       template={template}
-                      onClick={() => openShareDrawer(template)}
+                      onClick={() => handleOpenShareDrawer(template)}
                     />
                   </Paper>
                 </Box>
@@ -239,8 +287,15 @@ function MarketingWizard(props: WithRouterProps) {
           template={selectedTemplate}
           listing={listing}
           user={user}
-          onClose={closeShareDrawer}
+          onClose={handleCloseShareDrawer}
           onDownloadClick={() => handleDownloadClick(selectedTemplate)}
+        />
+      )}
+      {isEditVariablesDialogOpen && (
+        <EditVariablesDialog
+          sections={variablesSections}
+          onClose={handleCloseEditVariablesDialog}
+          onSave={handleSaveVariables}
         />
       )}
     </PageLayout>

@@ -15,6 +15,7 @@ import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 
 const useStyles = makeStyles((theme: Theme) => ({
   contentContainer: {
+    overflow: 'hidden',
     padding: theme.spacing(3)
   }
 }))
@@ -49,7 +50,7 @@ export default function ShareDrawer({
       }}
     >
       <div className={classes.contentContainer}>
-        <Grid container direction="column">
+        <Grid container>
           <Grid
             container
             item
@@ -66,7 +67,7 @@ export default function ShareDrawer({
               </IconButton>
             </Grid>
           </Grid>
-          <Grid item>
+          <Grid container item>
             <Thumbnail user={user} template={template} listing={listing} />
           </Grid>
           <Grid container item justify="space-between">

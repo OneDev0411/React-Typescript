@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useDeepCompareEffect } from 'react-use'
 
 import { makeStyles } from '@material-ui/core'
 
@@ -56,7 +55,7 @@ export function Thumbnail({
     fetchTemplateMarkup()
   }, [template])
 
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     async function fetchListingIfNeeded() {
       if (receivedListing) {
         setListing(receivedListing)
@@ -66,7 +65,7 @@ export function Thumbnail({
 
       const listing = await getMockListing()
 
-      setListing((listing as any) as IListing)
+      setListing((listing as unknown) as IListing)
     }
 
     fetchListingIfNeeded()
