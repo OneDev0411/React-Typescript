@@ -3,7 +3,8 @@ import { WithRouterProps } from 'react-router'
 
 import GlobalHeader from 'components/GlobalHeader'
 
-import { GridCalendar } from 'components/GridCalendar'
+// import { GridCalendar } from 'components/GridCalendar'
+import { ViewAs } from 'components/ViewAs'
 import { ActionRef } from 'components/GridCalendar/types'
 
 import { useStyles as useCommonStyles } from './use-styles'
@@ -26,10 +27,12 @@ export default function CalendarPage(props: WithRouterProps) {
         onCreateOpenHouse={handleCreateTask}
         onCreateTour={handleCreateTask}
         noPadding
-      />
-      <div className={classes.listContainer}>
+      >
+        <ViewAs />
+      </GlobalHeader>
+      {/* <div className={classes.listContainer}>
         <GridCalendar actionRef={actionRef} />
-      </div>
+      </div> */}
     </div>
   )
 }
