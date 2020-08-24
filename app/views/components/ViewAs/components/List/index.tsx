@@ -1,11 +1,30 @@
 import React, { useState } from 'react'
 import isEqual from 'lodash/isEqual'
 import { useDispatch } from 'react-redux'
-import { Box, Button, List, ListSubheader } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  List,
+  ListSubheader,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 
 import { setViewAsFilter } from '../../../../../store_actions/user/set-view-as-filter'
 
 import { MemberItem } from '../Item'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    root: {
+      minWidth: 250
+    },
+    header: {
+      lineHeight: `${theme.spacing(5)}px`
+    }
+  }),
+  { name: 'ViewAsList' }
+)
 
 interface Props {
   user: IUser
@@ -24,6 +43,7 @@ export const MemberList = ({
   setSelectedMembers,
   initialSelectedMembers
 }: Props) => {
+  const classes = useStyles()
   const dispatch = useDispatch()
   const membersId: Array<string> = teamMembers.map(member => member.id)
   const [isSubmitting, setSubmitting] = useState<boolean>(false)
@@ -61,8 +81,8 @@ export const MemberList = ({
   }
 
   return (
-    <List>
-      <ListSubheader>View as</ListSubheader>
+    <List className={classes.root}>
+      <ListSubheader className={classes.header}>View as</ListSubheader>
       {teamMembers.length > 1 && (
         <MemberItem
           title="Everyone on team"

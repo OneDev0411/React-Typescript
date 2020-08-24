@@ -3,7 +3,7 @@ import {
   Checkbox,
   CheckboxProps,
   ListItem,
-  ListItemText
+  FormControlLabel
 } from '@material-ui/core'
 
 interface Props {
@@ -16,10 +16,17 @@ interface Props {
 export const MemberItem = ({ checked, disabled, onChange, title }: Props) => {
   return (
     <ListItem dense disabled={disabled}>
-      <ListItemText primaryTypographyProps={{ noWrap: true }}>
-        {title}
-      </ListItemText>
-      <Checkbox checked={checked} disabled={disabled} onChange={onChange} />
+      <FormControlLabel
+        control={
+          <Checkbox
+            color="secondary"
+            checked={checked}
+            disabled={disabled}
+            onChange={onChange}
+          />
+        }
+        label={title}
+      />
     </ListItem>
   )
 }
