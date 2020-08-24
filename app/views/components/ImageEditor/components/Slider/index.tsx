@@ -24,10 +24,18 @@ interface Props {
   max: number
   caption: string
   value: number
+  disabled?: boolean
   onChange: (value: number | null) => void
 }
 
-export function Slider({ min, max, caption, value, onChange }: Props) {
+export function Slider({
+  min,
+  max,
+  caption,
+  value,
+  disabled,
+  onChange
+}: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
 
@@ -53,6 +61,7 @@ export function Slider({ min, max, caption, value, onChange }: Props) {
         style={{
           margin: theme.spacing(0, 2)
         }}
+        disabled={disabled}
         value={value}
         color="secondary"
         onChange={(_, value) => onChange(value as number)}
@@ -60,6 +69,7 @@ export function Slider({ min, max, caption, value, onChange }: Props) {
 
       <TextField
         value={value}
+        disabled={disabled}
         variant="outlined"
         size="small"
         inputProps={{

@@ -35,7 +35,7 @@ export function Crop({
     editor.on('objectActivated', onObjectActivated)
 
     return () => {
-      editor.off('objectActivated')
+      editor.off!('objectActivated')
     }
   })
 

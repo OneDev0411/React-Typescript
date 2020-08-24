@@ -17,6 +17,8 @@ import { Crop } from './plugins/Crop'
 import { Draw } from './plugins/Draw'
 import { Text } from './plugins/Text'
 import { Rotate } from './plugins/Rotate'
+import { Image } from './plugins/Image'
+import { Flip } from './plugins/Flip'
 import { CropActions } from './plugins/Crop/CropActions'
 import { DrawActions } from './plugins/Draw/DrawActions'
 import { TextActions } from './plugins/Text/TextActions'
@@ -195,6 +197,8 @@ export function Editor({ file }: Props) {
                       onRotate={resizeEditor}
                     />
 
+                    <Flip editor={editor} />
+
                     <Draw
                       editor={editor}
                       isActive={action === 'draw'}
@@ -206,6 +210,8 @@ export function Editor({ file }: Props) {
                       isActive={action === 'text'}
                       onChangeActiveAction={setActiveAction}
                     />
+
+                    <Image editor={editor} />
                   </ButtonGroup>
                 </Box>
 

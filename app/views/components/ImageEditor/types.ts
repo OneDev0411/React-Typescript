@@ -1,5 +1,5 @@
 export interface ImageEditor extends tuiImageEditor.ImageEditor {
-  off?: (eventName: string) => void
+  off: (eventName: string) => void
 }
 
 export interface ObjectActivatedData {

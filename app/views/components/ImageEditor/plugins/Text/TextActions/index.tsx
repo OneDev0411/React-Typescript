@@ -3,18 +3,15 @@ import { Box, Theme, Divider, IconButton, makeStyles } from '@material-ui/core'
 import debounce from 'lodash/debounce'
 import pick from 'lodash/pick'
 import Icon from '@mdi/react'
-import {
-  mdiFormatBold,
-  mdiFormatItalic,
-  mdiFormatUnderline,
-  mdiFormatAlignLeft,
-  mdiFormatAlignCenter,
-  mdiFormatAlignRight
-} from '@mdi/js'
+import { mdiFormatBold, mdiFormatItalic, mdiFormatUnderline } from '@mdi/js'
 import { useEffectOnce } from 'react-use'
 
+import { ColorResult } from 'react-color'
+
 import { Slider } from '../../../components/Slider'
-import { Actions, IImageEditor } from '../../../types'
+import { ColorPicker } from '../../../components/ColorPicker'
+
+import { Actions, ImageEditor } from '../../../types'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -27,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 const InitialStyle = {
-  fontSize: '30',
+  fontSize: 30,
   fill: '#262626',
   fontWeight: 'normal',
   fontStyle: 'normal',
@@ -35,28 +32,32 @@ const InitialStyle = {
   textDecoration: 'none'
 }
 
+interface TextObjectProps extends tuiImageEditor.IObjectProps {
+  fontFamily: string
+  fontWeight: string
+  fontSize: number
+  fontStyle: string
+  text: string
+  textAlign: string
+  textDecoration: string
+}
+
 interface Props {
-  editor: IImageEditor
+  editor: ImageEditor
   onChangeActiveAction: (action: Actions | null) => void
 }
 
 export function TextActions({ editor }: Props) {
   const classes = useStyles()
-  const [object, setObject] = useState<
-    Partial<
-      tuiImageEditor.ITextObjectProps & {
-        fontWeight: string
-      }
-    >
-  >(InitialStyle)
+  const [object, setObject] = useState<Partial<TextObjectProps>>(InitialStyle)
 
   useEffectOnce(() => {
     const onObjectScaled = debounce(
-      ({ type, fontSize }: { type: string; fontSize: string }) => {
+      ({ type, fontSize }: { type: string; fontSize: number }) => {
         if (type.includes('text')) {
           setObject(state => ({
             ...state,
-            fontSize: parseInt(fontSize, 10).toString()
+            fontSize
           }))
         }
       },
@@ -72,12 +73,18 @@ export function TextActions({ editor }: Props) {
         }
       })
 
-      setObject(text)
+      setObject({
+        ...text,
+        fontSize: Number(text.fontSize)
+      })
     })
 
     editor.on('objectActivated', (data: tuiImageEditor.ITextObjectProps) => {
       if (data.type.includes('text')) {
-        setObject(data)
+        setObject({
+          ...data,
+          fontSize: Number(data.fontSize)
+        })
       }
     })
 
@@ -96,7 +103,7 @@ export function TextActions({ editor }: Props) {
     }
 
     updateTextStyles({
-      fontSize: value.toString()
+      fontSize: value
     })
   }
 
@@ -119,9 +126,9 @@ export function TextActions({ editor }: Props) {
     })
   }
 
-  const setTextAlign = (alignment: 'left' | 'right' | 'center') => {
+  const setTextColor = (color: ColorResult) => {
     updateTextStyles({
-      textAlign: alignment
+      fill: color.hex
     })
   }
 
@@ -180,36 +187,12 @@ export function TextActions({ editor }: Props) {
         <Icon path={mdiFormatUnderline} size={0.9} />
       </IconButton>
       <Divider orientation="vertical" className={classes.divider} />
-      <IconButton
-        disabled={!object.id}
-        size="small"
-        color={object.textAlign === 'left' ? 'secondary' : 'default'}
-        onClick={() => setTextAlign('left')}
-      >
-        <Icon path={mdiFormatAlignLeft} size={0.9} />
-      </IconButton>
-      <IconButton
-        disabled={!object.id}
-        size="small"
-        color={object.textAlign === 'center' ? 'secondary' : 'default'}
-        onClick={() => setTextAlign('center')}
-      >
-        <Icon path={mdiFormatAlignCenter} size={0.9} />
-      </IconButton>
-      <IconButton
-        disabled={!object.id}
-        size="small"
-        color={object.textAlign === 'right' ? 'secondary' : 'default'}
-        onClick={() => setTextAlign('right')}
-      >
-        <Icon path={mdiFormatAlignRight} size={0.9} />
-      </IconButton>
-      <Divider orientation="vertical" className={classes.divider} />
-      Color
+      <ColorPicker color={object.fill} onChange={setTextColor} />
       <Divider orientation="vertical" className={classes.divider} />
       <Slider
         min={10}
-        max={1000}
+        max={200}
+        disabled={!object.id}
         caption="Size"
         value={Number(object.fontSize) || 10}
         onChange={onChangeFontSize}

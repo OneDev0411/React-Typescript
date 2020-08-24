@@ -21,7 +21,7 @@ export function Delete({ editor }: Props) {
     )
 
     return () => {
-      editor.off('undoStackChanged')
+      editor.off!('undoStackChanged')
     }
   })
 
