@@ -74,9 +74,15 @@ export default function TemplateThumbnail({
 
     const widthSpace = ref.current.clientWidth
 
-    ref.current.width = '700px'
+    if (ref.current.srcdoc !== previewMarkup) {
+      ref.current.srcdoc = previewMarkup
+    }
 
-    ref.current.srcdoc = previewMarkup
+    if (ref.current.width !== '100%') {
+      return
+    }
+
+    ref.current.width = '700px'
 
     ref.current.onload = () => {
       if (!ref.current?.contentDocument) {
