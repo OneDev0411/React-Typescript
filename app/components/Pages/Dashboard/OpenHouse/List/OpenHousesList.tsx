@@ -19,6 +19,7 @@ import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
+import { ViewAs } from 'components/ViewAs'
 
 import EmptyState from './EmptyState'
 import Avatar from './columns/Avatar'
@@ -215,7 +216,9 @@ function OpenHousesList() {
         <PageLayout.Header
           title="Open House Registration Pages"
           onCreateOpenHouse={reloadList}
-        />
+        >
+          <ViewAs />
+        </PageLayout.Header>
         <PageLayout.Main>
           <Box>
             {showNotifyOfficeBanner && (

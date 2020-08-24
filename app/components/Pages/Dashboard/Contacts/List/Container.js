@@ -7,6 +7,7 @@ import { Box, IconButton } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 
 import PageLayout from 'components/GlobalPageLayout'
+import { ViewAs } from 'components/ViewAs'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
@@ -730,6 +731,9 @@ class ContactsList extends React.Component {
               {showImportAction && <ImportContactsButton />}
             </Box>
           )}
+          <Box ml={1.5}>
+            <ViewAs />
+          </Box>
         </PageLayout.HeaderWithSearch>
         <PageLayout.Main>
           {this.state.syncStatus === 'pending' && (
