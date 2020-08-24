@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux'
 import { Avatar, Popover, makeStyles, Theme } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 
+import { getContactNameInitials } from 'models/contacts/helpers'
+
 import {
   viewAs,
   isBackOffice,
@@ -58,26 +60,15 @@ export const ViewAs = (props: Props) => {
         className={classes.avatarContainer}
         onClick={handleClick}
       >
-        <Avatar
-          alt="Remy Sharp"
-          src="https://material-ui.com/static/images/avatar/1.jpg"
-        />
-        <Avatar
-          alt="Travis Howard"
-          src="https://material-ui.com/static/images/avatar/2.jpg"
-        />
-        <Avatar
-          alt="Cindy Baker"
-          src="https://material-ui.com/static/images/avatar/3.jpg"
-        />
-        <Avatar
-          alt="Agnes Walker"
-          src="https://material-ui.com/static/images/avatar/4.jpg"
-        />
-        <Avatar
-          alt="Trevor Henderson"
-          src="https://material-ui.com/static/images/avatar/5.jpg"
-        />
+        {teamMembers.map(member => {
+          const src = member.profile_image_url || undefined
+
+          return (
+            <Avatar key={member.id} alt={member.display_name} src={src}>
+              {getContactNameInitials(member)}
+            </Avatar>
+          )
+        })}
       </AvatarGroup>
       <Popover
         id={id}

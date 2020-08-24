@@ -3,7 +3,7 @@ import { WithRouterProps } from 'react-router'
 
 import GlobalHeader from 'components/GlobalHeader'
 
-// import { GridCalendar } from 'components/GridCalendar'
+import { GridCalendar } from 'components/GridCalendar'
 import { ViewAs } from 'components/ViewAs'
 import { ActionRef } from 'components/GridCalendar/types'
 
@@ -30,9 +30,9 @@ export default function CalendarPage(props: WithRouterProps) {
       >
         <ViewAs />
       </GlobalHeader>
-      {/* <div className={classes.listContainer}>
+      <div className={classes.listContainer}>
         <GridCalendar actionRef={actionRef} />
-      </div> */}
+      </div>
     </div>
   )
 }
