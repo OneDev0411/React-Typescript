@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { Avatar, Popover, makeStyles, Theme } from '@material-ui/core'
+import { Avatar, Popover, makeStyles, Theme, Tooltip } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 
 import { getContactNameInitials } from 'models/contacts/helpers'
@@ -19,6 +19,11 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     avatarContainer: {
       cursor: 'pointer'
+    },
+    tooltip: {
+      '& span': {
+        display: 'block'
+      }
     }
   }),
   { name: 'ViewAs' }
@@ -41,6 +46,28 @@ export const ViewAs = (props: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
   const open = Boolean(anchorEl)
   const id = open ? 'viewas-popover' : undefined
+  const tooltipTitle = useMemo(() => {
+    if (selectedMembers.length === 0) {
+      return 'NoOne is slected'
+    }
+
+    let selectedNames: Array<string> = []
+
+    teamMembers.forEach(member => {
+      if (selectedMembers.includes(member.id)) {
+        selectedNames.push(member.display_name)
+      }
+    })
+
+    return (
+      <div className={classes.tooltip}>
+        <span>View As:</span>
+        {selectedNames.map(name => (
+          <span key={name}>{name}</span>
+        ))}
+      </div>
+    )
+  }, [classes.tooltip, selectedMembers, teamMembers])
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -55,21 +82,23 @@ export const ViewAs = (props: Props) => {
 
   return (
     <>
-      <AvatarGroup
-        max={3}
-        className={classes.avatarContainer}
-        onClick={handleClick}
-      >
-        {teamMembers.map(member => {
-          const src = member.profile_image_url || undefined
+      <Tooltip title={tooltipTitle}>
+        <AvatarGroup
+          max={3}
+          className={classes.avatarContainer}
+          onClick={handleClick}
+        >
+          {teamMembers.map(member => {
+            const src = member.profile_image_url || undefined
 
-          return (
-            <Avatar key={member.id} alt={member.display_name} src={src}>
-              {getContactNameInitials(member)}
-            </Avatar>
-          )
-        })}
-      </AvatarGroup>
+            return (
+              <Avatar key={member.id} alt={member.display_name} src={src}>
+                {getContactNameInitials(member)}
+              </Avatar>
+            )
+          })}
+        </AvatarGroup>
+      </Tooltip>
       <Popover
         id={id}
         open={open}
