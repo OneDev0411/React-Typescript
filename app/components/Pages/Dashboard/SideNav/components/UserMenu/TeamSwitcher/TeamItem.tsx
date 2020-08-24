@@ -10,8 +10,6 @@ import {
 import flattenBrand from '../../../../../../../utils/flatten-brand'
 import Loading from '../../../../../../../views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
-import { ViewAsList } from './ViewAsList'
-
 interface Props {
   disabled: boolean
   isSwitching: boolean
@@ -57,7 +55,6 @@ export function TeamItem({
           <Loading style={{ width: '2.25rem', height: '2.25rem' }} />
         )}
       </ListItem>
-      {selected && <ViewAsList team={team} disabled={disabled} />}
     </>
   )
 }
