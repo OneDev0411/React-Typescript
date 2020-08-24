@@ -3,7 +3,7 @@
   https://docs.rechat.com/testing/calendar.html#header-event-types
 */
 
-export const CRM_OBJECT_TYPES = ['crm_task', 'crm_association']
+export const CRM_OBJECT_TYPES = ['crm_task', 'crm_association', 'contact']
 
 // possible values for event_type of a celebration event
 export const CELEBRATION_OBJECT_TYPE = 'contact_attribute'
