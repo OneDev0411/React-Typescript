@@ -80,21 +80,21 @@ const useStyles = makeStyles(
   }
 )
 
-const imageWidth = 200
-const imageHeight = 200
-
 interface Props {
   file: IBlobFile
+  dimensions?: [number, number]
   onClose: () => void
+  onSave: (image: Blob) => void
 }
 
-export function Editor({ file, onClose }: Props) {
+export function Editor({ file, dimensions, onClose, onSave }: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
   const ref = useRef<HTMLDivElement | null>(null)
   const [editor, setEditor] = useState<ImageEditor | null>(null)
   const [height, setHeight] = useState('0px')
   const [action, setAction] = useState<Actions | null>(null)
+  const [blob, setBlob] = useState<IBlobFile | null>(null)
 
   const setActiveAction = (action: Actions | null) => setAction(action)
 
@@ -120,7 +120,12 @@ export function Editor({ file, onClose }: Props) {
 
     setEditor(editor as ImageEditor)
 
-    await editor.loadImageFromFile(file as File, file.name)
+    const blob =
+      typeof file === 'string' ? await imageDataUrlToFile(file) : file
+
+    setBlob(blob)
+
+    await editor.loadImageFromFile(blob as File, file.name)
 
     resizeEditor()
 
@@ -130,6 +135,26 @@ export function Editor({ file, onClose }: Props) {
     document
       .querySelector('#editor-dialog .MuiDialog-container')!
       .removeAttribute('tabindex')
+  }
+
+  const handleSave = async () => {
+    onClose()
+
+    const file = await imageDataUrlToFile(
+      editor!.toDataURL({
+        format: 'jpeg',
+        quality: 1
+      })
+    )
+
+    onSave(file)
+  }
+
+  const imageDataUrlToFile = async (url: string) => {
+    const response = await fetch(url)
+    const bufferData = await response.arrayBuffer()
+
+    return new File([bufferData], 'image.jpg', { type: 'image/jpeg' })
   }
 
   return (
@@ -154,6 +179,7 @@ export function Editor({ file, onClose }: Props) {
               style={{
                 marginLeft: theme.spacing(1)
               }}
+              onClick={handleSave}
             >
               Save
             </Button>
@@ -205,10 +231,10 @@ export function Editor({ file, onClose }: Props) {
                     />
                   )}
 
-                  {action === 'filter' && (
+                  {action === 'filter' && blob && (
                     <FilterActions
                       editor={editor}
-                      file={file}
+                      file={blob}
                       onChangeActiveAction={setActiveAction}
                     />
                   )}
@@ -221,13 +247,15 @@ export function Editor({ file, onClose }: Props) {
                 className={classes.menu}
               >
                 <Box display="flex" className={classes.mainMenu}>
-                  <Crop
-                    editor={editor}
-                    isActive={action === 'crop'}
-                    width={imageWidth}
-                    height={imageHeight}
-                    onChangeActiveAction={setActiveAction}
-                  />
+                  {dimensions && (
+                    <Crop
+                      editor={editor}
+                      isActive={action === 'crop'}
+                      width={dimensions[0]}
+                      height={dimensions[1]}
+                      onChangeActiveAction={setActiveAction}
+                    />
+                  )}
 
                   <Rotate editor={editor} onRotate={resizeEditor} />
 

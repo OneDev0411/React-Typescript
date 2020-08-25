@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ImageUploader } from 'components/ImageUploader'
+import { Editor } from 'components/ImageEditor'
 
 import { Container, CropButton, Image } from './styled'
 import { uploadAsset } from '../helpers'
@@ -63,20 +63,17 @@ export class AssetImage extends React.Component {
     })
 
   onCropImg = async file => {
+    console.log(file)
+
     const { templateId } = await this.props.getTemplateId()
     const response = await uploadAsset(file, templateId)
+
+    console.log(response)
 
     this.onImageSelect({ url: response.body.data.file.url })
     this.setState({
       isCropperOpen: false
     })
-  }
-
-  onCrop = ({ files }) => {
-    const fileName = files.originalFile.split('?')[0].split('/').pop()
-    const file = new File([files.file], fileName)
-
-    return this.onCropImg(file)
   }
 
   render() {
@@ -86,7 +83,6 @@ export class AssetImage extends React.Component {
 
     const image = this.props.model.get('image')
     const targetElement = this.getTargetElement()
-    const imageWithoutCorsIssue = `/api/utils/cors/${image}`
 
     return (
       <Container>
@@ -96,13 +92,14 @@ export class AssetImage extends React.Component {
         </CropButton>
 
         {this.state.isCropperOpen && (
-          <ImageUploader
-            disableChangePhoto
-            file={imageWithoutCorsIssue}
-            width={targetElement.clientWidth * 2}
-            height={targetElement.clientHeight * 2}
-            saveHandler={this.onCrop}
-            closeHandler={this.closeCropper}
+          <Editor
+            file={`/api/utils/cors/${image}`}
+            dimensions={[
+              targetElement.clientWidth * 2,
+              targetElement.clientHeight * 2
+            ]}
+            onSave={this.onCropImg}
+            onClose={this.closeCropper}
           />
         )}
       </Container>

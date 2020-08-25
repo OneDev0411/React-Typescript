@@ -44,29 +44,37 @@ const useStyles = makeStyles(
 
 interface Props {
   children: (props: { openDialog: () => void }) => React.ReactNode
-  options: DropzoneOptions
-  disablePhotoEditor: boolean
-  onDrop: DropzoneOptions['onDrop']
-  onSelectFile: (file: IBlobFile) => void
+  options?: DropzoneOptions
+  disableEditor?: boolean
+  editorOptions?: {
+    dimensions?: [number, number]
+  }
+  onSelectImage: (file: IBlobFile) => void
 }
 
 export function ImageUploader({
-  options,
-  disablePhotoEditor = false,
-  onSelectFile,
+  options = {},
+  editorOptions = {},
+  disableEditor = false,
+  onSelectImage,
   children
 }: Props) {
   const [isOpen, setIsOpen] = useState(false)
   const [file, setFile] = useState<IBlobFile | null>(null)
 
   const onDropFiles = (files: IBlobFile[]) => {
-    if (disablePhotoEditor) {
-      onSelectFile(files[0])
+    if (disableEditor) {
+      onSelectImage(files[0])
 
       return
     }
 
     setFile(files[0])
+  }
+
+  const handleSave = (imageUrl: IBlobFile) => {
+    setIsOpen(false)
+    onSelectImage(imageUrl)
   }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -135,7 +143,14 @@ export function ImageUploader({
         </DialogContent>
       </Dialog>
 
-      {file && <Editor file={file} onClose={() => setFile(null)} />}
+      {file && (
+        <Editor
+          file={file}
+          dimensions={editorOptions.dimensions}
+          onClose={() => setFile(null)}
+          onSave={handleSave}
+        />
+      )}
     </>
   )
 }

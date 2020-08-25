@@ -15,6 +15,8 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ImageUploader } from 'components/ImageUploader'
 import Tooltip from 'components/tooltip'
 
+import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
+
 import Avatar from './Avatar'
 
 const Container = styled.div`
@@ -37,22 +39,6 @@ const ProfileImageActions = styled.div`
 `
 
 class ProfileCatalog extends Component {
-  state = {
-    isOpen: false
-  }
-
-  openModal = () => {
-    this.setState({
-      isOpen: true
-    })
-  }
-
-  closeModal = () => {
-    this.setState({
-      isOpen: false
-    })
-  }
-
   onDelete = async () => {
     this.props.confirmation({
       show: true,
@@ -62,24 +48,6 @@ class ProfileCatalog extends Component {
       description: 'Are you sure you want to delete your profile picture?'
     })
   }
-
-  onAvatarSet = async data => {
-    await this.props.handleOnChange(data)
-    this.closeModal()
-  }
-
-  // renderUploader() {
-  //   return (
-  //     <ImageUploader
-  //       radius="50%"
-  //       // file={this.props.avatar.src} // CORS PROBLEM FOR NOW!
-  //       saveHandler={this.onAvatarSet}
-  //       closeHandler={this.closeModal}
-  //       width={300}
-  //       height={300}
-  //     />
-  //   )
-  // }
 
   getImageUploadButtonText() {
     if (this.props.isUploading) {
@@ -113,7 +81,12 @@ class ProfileCatalog extends Component {
                 </Tooltip>
               </Box>
             )}
-            <ImageUploader>
+            <ImageUploader
+              onSelectImage={this.props.handleOnChange}
+              editorOptions={{
+                dimensions: [300, 300]
+              }}
+            >
               {({ openDialog }) => (
                 <Button
                   variant="outlined"
@@ -125,15 +98,6 @@ class ProfileCatalog extends Component {
                 </Button>
               )}
             </ImageUploader>
-            {/* <Button
-              variant="outlined"
-              disabled={this.props.isUploading}
-              onClick={this.openModal}
-              data-test="profile-avatar-upload-button"
-            >
-              {`${this.getImageUploadButtonText()} Profile Picture`}
-            </Button> */}
-            {/* {this.state.isOpen && this.renderUploader()} */}
           </ProfileImageActions>
         </Container>
         <hr />
@@ -151,28 +115,20 @@ export default compose(
     props => props.user.profile_image_url || null
   ),
   withHandlers({
-    handleOnChange: ({ dispatch, setAvatar, setUploading }) => async data => {
-      const file = data.target ? data.target.files[0] : data.files.file
+    handleOnChange: ({ dispatch, setAvatar, setUploading }) => async file => {
+      try {
+        const dataUrl = await readFileAsDataUrl(file)
 
-      // Create a new FileReader instance
-      // https://developer.mozilla.org/en/docs/Web/API/FileReader
-      let reader = new FileReader()
+        setAvatar(dataUrl)
 
-      // Once a file is successfully readed:
-      reader.addEventListener('load', async () => {
-        try {
-          setAvatar(reader.result)
-          setUploading(true)
-          await dispatch(uploadUserAvatarAction(file))
-        } catch (error) {
-          setAvatar(null)
-          console.log(error)
-        } finally {
-          setUploading(false)
-        }
-      })
-
-      reader.readAsDataURL(file)
+        setUploading(true)
+        await dispatch(uploadUserAvatarAction(file))
+      } catch (error) {
+        setAvatar(null)
+        console.log(error)
+      } finally {
+        setUploading(false)
+      }
     },
     handleOnDelete: ({ setAvatar, dispatch }) => async () => {
       try {

@@ -10,14 +10,8 @@ import {
 } from '@material-ui/core'
 import { mdiDotsVertical, mdiDownload } from '@mdi/js'
 
-import { useDispatch } from 'react-redux'
-
-import { addNotification } from 'reapop'
-
-import { uploadCroppedMedia } from 'models/media-manager'
 import { downloadMedias } from 'models/media-manager'
 
-import { ImageUploader } from 'components/ImageUploader'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { deleteMedias } from 'models/media-manager'
@@ -31,12 +25,7 @@ import { useStyles } from '../../../styles'
 import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
 import type { IMediaItem } from '../../../types'
 
-import {
-  setMediaUploadProgress,
-  deleteMedia as deleteMediaAction,
-  setNewlyUploadedMediaFields,
-  setMediaAsUploaded
-} from '../../../context/actions'
+import { deleteMedia as deleteMediaAction } from '../../../context/actions'
 
 interface Props {
   media: IMediaItem
@@ -46,16 +35,13 @@ interface Props {
 export default function ActionsMenu({ media, deal }: Props) {
   const theme = useTheme()
   const classes = useStyles()
-  const reduxDispatch = useDispatch()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [isCropperOpen, setIsCropperOpen] = useState(false)
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [downloadUrl, setDownloadUrl] = useState('')
   const { dispatch } = useMediaManagerContext()
   const confirmationModal = useContext(ConfirmationModalContext)
-  const { id, src, name } = media
-  const fileExtension = src.substr(src.lastIndexOf('.'), 4)
+  const { id } = media
 
   const handleModalClose = () => {
     setModalIsOpen(false)
@@ -89,48 +75,6 @@ export default function ActionsMenu({ media, deal }: Props) {
         dispatch(deleteMediaAction(id))
       }
     })
-  }
-
-  const hideCropper = () => {
-    setIsCropperOpen(false)
-  }
-
-  const onCrop = ({ files }) => {
-    const fileName = files.originalFile.split('?')[0].split('/').pop()
-    const croppedFile = new File([files.file], fileName)
-
-    upload(croppedFile)
-  }
-
-  const upload = async fileObject => {
-    try {
-      const response = await uploadCroppedMedia(
-        deal.id,
-        media.id,
-        fileObject,
-        `${media.name}.${fileExtension}`,
-        progressEvent => {
-          if (progressEvent.percent) {
-            dispatch(setMediaUploadProgress(id, progressEvent.percent))
-          } else {
-            dispatch(setMediaAsUploaded(id))
-          }
-        }
-      )
-
-      const { preview_url: src } = response
-
-      dispatch(setNewlyUploadedMediaFields(id, id, src))
-    } catch (err) {
-      console.log(err)
-      reduxDispatch(
-        addNotification({
-          status: 'error',
-          message:
-            'Something went wrong while uploading your photo. Please try again.'
-        })
-      )
-    }
   }
 
   return (
@@ -185,16 +129,6 @@ export default function ActionsMenu({ media, deal }: Props) {
             </MenuItem>
           </Menu>
         </div>
-        {isCropperOpen && (
-          <ImageUploader
-            disableChangePhoto
-            file={src}
-            width={287}
-            height={287}
-            saveHandler={onCrop}
-            closeHandler={hideCropper}
-          />
-        )}
       </Box>
       <DownloadModal
         isOpen={modalIsOpen}
