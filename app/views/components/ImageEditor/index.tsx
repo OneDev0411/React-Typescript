@@ -5,9 +5,11 @@ import {
   Box,
   makeStyles,
   Theme,
-  ButtonGroup,
   Dialog,
-  DialogContent
+  DialogContent,
+  DialogTitle,
+  Button,
+  useTheme
 } from '@material-ui/core'
 
 import { Undo } from './plugins/Undo'
@@ -32,7 +34,7 @@ const useStyles = makeStyles(
     root: {
       border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius,
-      maxHeight: '85vh',
+      maxHeight: '75vh',
       overflow: 'auto'
     },
     canvas: {
@@ -52,9 +54,14 @@ const useStyles = makeStyles(
       padding: theme.spacing(1),
       borderTop: `1px solid ${theme.palette.divider}`
     },
+    mainMenu: {
+      '& button': {
+        marginRight: theme.spacing(1)
+      }
+    },
     menuContainer: {
       position: 'sticky',
-      bottom: 0,
+      bottom: '-1px',
       background: '#fff'
     },
     iconsRow: {
@@ -78,10 +85,12 @@ const imageHeight = 200
 
 interface Props {
   file: IBlobFile
+  onClose: () => void
 }
 
-export function Editor({ file }: Props) {
+export function Editor({ file, onClose }: Props) {
   const classes = useStyles()
+  const theme = useTheme<Theme>()
   const ref = useRef<HTMLDivElement | null>(null)
   const [editor, setEditor] = useState<ImageEditor | null>(null)
   const [height, setHeight] = useState('0px')
@@ -131,6 +140,26 @@ export function Editor({ file }: Props) {
       maxWidth="lg"
       onEntered={setupEditor}
     >
+      <DialogTitle>
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          Edit Photo
+          <div>
+            <Button variant="text" onClick={onClose}>
+              Cancel
+            </Button>
+
+            <Button
+              variant="contained"
+              color="secondary"
+              style={{
+                marginLeft: theme.spacing(1)
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        </Box>
+      </DialogTitle>
       <DialogContent>
         <Box
           display="flex"
@@ -191,48 +220,44 @@ export function Editor({ file }: Props) {
                 justifyContent="space-between"
                 className={classes.menu}
               >
-                <Box display="flex">
-                  <ButtonGroup size="small">
-                    <Crop
-                      editor={editor}
-                      isActive={action === 'crop'}
-                      width={imageWidth}
-                      height={imageHeight}
-                      onChangeActiveAction={setActiveAction}
-                    />
+                <Box display="flex" className={classes.mainMenu}>
+                  <Crop
+                    editor={editor}
+                    isActive={action === 'crop'}
+                    width={imageWidth}
+                    height={imageHeight}
+                    onChangeActiveAction={setActiveAction}
+                  />
 
-                    <Rotate editor={editor} onRotate={resizeEditor} />
+                  <Rotate editor={editor} onRotate={resizeEditor} />
 
-                    <Flip editor={editor} />
+                  <Flip editor={editor} />
 
-                    <Draw
-                      editor={editor}
-                      isActive={action === 'draw'}
-                      onChangeActiveAction={setActiveAction}
-                    />
+                  <Draw
+                    editor={editor}
+                    isActive={action === 'draw'}
+                    onChangeActiveAction={setActiveAction}
+                  />
 
-                    <Text
-                      editor={editor}
-                      isActive={action === 'text'}
-                      onChangeActiveAction={setActiveAction}
-                    />
+                  <Text
+                    editor={editor}
+                    isActive={action === 'text'}
+                    onChangeActiveAction={setActiveAction}
+                  />
 
-                    <Image editor={editor} />
+                  <Image editor={editor} />
 
-                    <Filters
-                      editor={editor}
-                      isActive={action === 'filter'}
-                      onChangeActiveAction={setActiveAction}
-                    />
-                  </ButtonGroup>
+                  <Filters
+                    editor={editor}
+                    isActive={action === 'filter'}
+                    onChangeActiveAction={setActiveAction}
+                  />
                 </Box>
 
                 <Box display="flex">
-                  <ButtonGroup size="small">
-                    <Redo editor={editor} onRedo={resizeEditor} />
-                    <Undo editor={editor} onUndo={resizeEditor} />
-                    <Delete editor={editor} />
-                  </ButtonGroup>
+                  <Redo editor={editor} onRedo={resizeEditor} />
+                  <Undo editor={editor} onUndo={resizeEditor} />
+                  <Delete editor={editor} />
                 </Box>
               </Box>
             </div>

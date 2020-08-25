@@ -28,6 +28,8 @@ export function Draw({ editor, onChangeActiveAction, isActive }: Props) {
   return (
     <Button
       startIcon={<Icon path={mdiDraw} size={1} />}
+      size="small"
+      variant="outlined"
       color={isActive ? 'secondary' : 'default'}
       onClick={toggleDrawing}
     >

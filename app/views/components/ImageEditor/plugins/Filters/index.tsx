@@ -25,6 +25,8 @@ export function Filters({ editor, isActive, onChangeActiveAction }: Props) {
   return (
     <Button
       startIcon={<Icon path={mdiImageFilterBlackWhite} size={1} />}
+      size="small"
+      variant="outlined"
       color={isActive ? 'secondary' : 'default'}
       onClick={toggleFilters}
     >

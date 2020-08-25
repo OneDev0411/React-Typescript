@@ -56,6 +56,8 @@ export function Crop({
   return (
     <Button
       startIcon={<Icon path={mdiCrop} size={1} />}
+      size="small"
+      variant="outlined"
       color={isActive ? 'secondary' : 'default'}
       onClick={toggleCropping}
     >

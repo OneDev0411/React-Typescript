@@ -18,6 +18,8 @@ export function Flip({ editor }: Props) {
   return (
     <Button
       startIcon={<Icon path={mdiFlipHorizontal} size={1} />}
+      size="small"
+      variant="outlined"
       onClick={flip}
     >
       Flip

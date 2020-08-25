@@ -135,7 +135,7 @@ export function ImageUploader({
         </DialogContent>
       </Dialog>
 
-      {file && <Editor file={file} />}
+      {file && <Editor file={file} onClose={() => setFile(null)} />}
     </>
   )
 }

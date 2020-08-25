@@ -29,6 +29,8 @@ export function Text({ editor, isActive, onChangeActiveAction }: Props) {
   return (
     <Button
       startIcon={<Icon path={mdiFormatTextbox} size={1} />}
+      size="small"
+      variant="outlined"
       color={isActive ? 'secondary' : 'default'}
       onClick={toggleCreateText}
     >

@@ -19,7 +19,12 @@ export function Rotate({ editor, onRotate }: Props) {
   }
 
   return (
-    <Button startIcon={<Icon path={mdiRotateLeft} size={1} />} onClick={rotate}>
+    <Button
+      startIcon={<Icon path={mdiRotateLeft} size={1} />}
+      size="small"
+      variant="outlined"
+      onClick={rotate}
+    >
       Rotate
     </Button>
   )
