@@ -80,6 +80,17 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
     }
   }, [])
 
+  function showNotificationForUnsupportedImage(
+    unsupportedImageFile: File
+  ): void {
+    dispatch(
+      addNotification({
+        message: `Unable to load the file '${unsupportedImageFile.name}'. File type ${unsupportedImageFile.type} is not a supported image.`,
+        status: 'error'
+      })
+    )
+  }
+
   /**
    * Adds an image to the editor from a URL or dataURL. if it's a dataUrl
    * and `uploadImage` prop is provided, it will be called with a Blob
@@ -98,14 +109,7 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
    */
   const addImage = async (file: File) => {
     if (!isImageFile(file)) {
-      dispatch(
-        addNotification({
-          message: `Unable to load the file '${file.name}'. File type ${file.type} is not a supported image.`,
-          status: 'error'
-        })
-      )
-
-      return
+      return showNotificationForUnsupportedImage(file)
     }
 
     // We first convert image to data url and show it.
@@ -178,8 +182,14 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
     disabled: false,
     accept: props.fileAccept || 'image/*',
     onDrop: (files: File[]) => {
-      if (files && files[0] && isImageFile(files[0])) {
-        return addImageRef.current(files[0])
+      const file = files?.[0]
+
+      if (file) {
+        if (!isImageFile(file)) {
+          return showNotificationForUnsupportedImage(file)
+        }
+
+        return addImageRef.current(file)
       }
 
       if (props.onDrop) {
