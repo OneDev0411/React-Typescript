@@ -32,7 +32,7 @@ interface Props {
   teamMembers: IUser[]
   selectedMembers: UUID[]
   initialSelectedMembers: UUID[]
-  setSelectedMembers(members: UUID[]): void
+  onChangeSelectedMembers(members: UUID[]): void
 }
 
 export const MemberList = ({
@@ -40,32 +40,32 @@ export const MemberList = ({
   teamMembers,
   selectedMembers,
   disabled = false,
-  setSelectedMembers,
+  onChangeSelectedMembers,
   initialSelectedMembers
 }: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const membersId: Array<string> = teamMembers.map(member => member.id)
-  const [isSubmitting, setSubmitting] = useState<boolean>(false)
+  const membersId: string[] = teamMembers.map(member => member.id)
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const onChange = (id: UUID) => {
     if (selectedMembers.includes(id)) {
-      setSelectedMembers(selectedMembers.filter(member => member !== id))
+      onChangeSelectedMembers(selectedMembers.filter(member => member !== id))
 
       return
     }
 
-    setSelectedMembers([...selectedMembers, id])
+    onChangeSelectedMembers([...selectedMembers, id])
   }
 
   const handleSelectAllMembers = () => {
     if (selectedMembers.length === membersId.length) {
-      setSelectedMembers([])
+      onChangeSelectedMembers([])
 
       return
     }
 
-    setSelectedMembers(membersId)
+    onChangeSelectedMembers(membersId)
   }
 
   const onApply = async () => {
@@ -73,7 +73,7 @@ export const MemberList = ({
       return
     }
 
-    setSubmitting(true)
+    setIsSubmitting(true)
 
     await dispatch(setViewAsFilter(user, selectedMembers))
 
@@ -99,7 +99,7 @@ export const MemberList = ({
 
         return (
           <MemberItem
-            key={index}
+            key={memberId}
             title={title}
             disabled={isSubmitting || disabled}
             checked={selectedMembers.includes(memberId)}

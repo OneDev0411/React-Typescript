@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { Avatar, Popover, makeStyles, Theme, Tooltip } from '@material-ui/core'
+import { Avatar, Popover, makeStyles, Tooltip } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 
 import { getContactNameInitials } from 'models/contacts/helpers'
@@ -16,7 +16,7 @@ import { IAppState } from '../../../reducers'
 import { MemberList } from './components/List'
 
 const useStyles = makeStyles(
-  (theme: Theme) => ({
+  () => ({
     avatarContainer: {
       cursor: 'pointer'
     },
@@ -29,9 +29,7 @@ const useStyles = makeStyles(
   { name: 'ViewAs' }
 )
 
-interface Props {}
-
-export const ViewAs = (props: Props) => {
+export const ViewAs = props => {
   const classes = useStyles()
   const user: IUser = useSelector((store: IAppState) => store.user)
   const team: IUserTeam | null = getActiveTeam(user)
@@ -43,15 +41,15 @@ export const ViewAs = (props: Props) => {
   const [selectedMembers, setSelectedMembers] = useState<UUID[]>(
     initialSelectedMembers
   )
-  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const open = Boolean(anchorEl)
   const id = open ? 'viewas-popover' : undefined
   const tooltipTitle = useMemo(() => {
     if (selectedMembers.length === 0) {
-      return 'NoOne is slected'
+      return 'No One is slected'
     }
 
-    let selectedNames: Array<string> = []
+    const selectedNames: string[] = []
 
     teamMembers.forEach(member => {
       if (selectedMembers.includes(member.id)) {
@@ -117,7 +115,7 @@ export const ViewAs = (props: Props) => {
           user={user}
           teamMembers={teamMembers}
           selectedMembers={selectedMembers}
-          setSelectedMembers={setSelectedMembers}
+          onChangeSelectedMembers={setSelectedMembers}
           initialSelectedMembers={initialSelectedMembers}
         />
       </Popover>

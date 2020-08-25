@@ -7,10 +7,10 @@ import {
 } from '@material-ui/core'
 
 interface Props {
+  title: string
   checked: boolean
   disabled: boolean
   onChange: CheckboxProps['onChange']
-  title: string
 }
 
 export const MemberItem = ({ checked, disabled, onChange, title }: Props) => {
