@@ -158,9 +158,7 @@ export default function EmailComposeForm<T>({
       return dispatch(
         notify({
           status: 'error',
-          message:
-            (e.response && e.response.body && e.response.body.message) ||
-            errorMessage
+          message: e.response?.body?.message || errorMessage
         })
       )
     }

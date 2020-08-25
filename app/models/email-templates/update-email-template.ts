@@ -12,6 +12,6 @@ export async function updateEmailTemplate(
 
     return response.body.data
   } catch (error) {
-    throw error.response.body
+    throw error.response?.body ?? error.message
   }
 }
