@@ -33,3 +33,16 @@ export const getDealAvatar = (deal: IDeal): string => {
 
   return `https://unavatar.now.sh/${deal.email}?fallback=false`
 }
+
+/**
+ * return the picture of deal
+ * @param account // User, Contact, Auth Account
+ */
+
+export const getEmailAvatar = (email: IEmailCampaign): string => {
+  if (email.template?.file?.preview_url) {
+    return email.template.file.preview_url
+  }
+
+  return ''
+}

@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
-import { Avatar, Typography, makeStyles } from '@material-ui/core'
+import { Typography, makeStyles } from '@material-ui/core'
 import { mdiCheck } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { Avatar } from 'components/GeneralAvatar'
 
 import { Item } from '../../Dropdown/Item'
 
@@ -33,7 +34,7 @@ export function TeamMember(props) {
 
   return (
     <Container {...props}>
-      <Avatar src={user.profile_image_url} alt={title} />
+      <Avatar user={user} alt={title} />
       <Flex
         column
         style={{

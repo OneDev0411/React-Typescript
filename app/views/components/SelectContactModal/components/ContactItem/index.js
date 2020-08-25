@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import { Avatar } from '@material-ui/core'
+import { Avatar } from 'components/GeneralAvatar'
 
 import { getNameInitials } from 'utils/helpers.js'
 
@@ -32,12 +32,7 @@ const propTypes = {
 function ContactItem(props) {
   const avatarClasses = useAvatarStyles({ size: 40 })
   const { item, onClickHandler } = props
-  const {
-    phone_number,
-    email,
-    profile_image_url,
-    display_name: title
-  } = item.summary
+  const { phone_number, email, display_name: title } = item.summary
   const formatedPhoneNumber = formatPhoneNumber(phone_number)
   const summary =
     props.summary ||
@@ -45,11 +40,7 @@ function ContactItem(props) {
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
-      <Avatar
-        alt={title}
-        src={profile_image_url}
-        className={avatarClasses.avatar}
-      >
+      <Avatar alt={title} contact={item} className={avatarClasses.avatar}>
         {getNameInitials(
           email !== title && phone_number !== title ? title : ''
         )}

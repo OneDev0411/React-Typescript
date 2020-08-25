@@ -1,26 +1,36 @@
 import React, { memo, useMemo } from 'react'
-import { Avatar as MUIAvatar, makeStyles, Theme } from '@material-ui/core'
+import {
+  Avatar as MUIAvatar,
+  AvatarProps,
+  withStyles,
+  Theme
+} from '@material-ui/core'
 
-import { Props } from './type'
+import { BaseProps, Props } from './type'
 import { getSize } from './helpers/getSize'
-import { getAccountAvatar, getDealAvatar } from './helpers/getAvatar'
+import {
+  getAccountAvatar,
+  getDealAvatar,
+  getEmailAvatar
+} from './helpers/getAvatar'
 
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    avatar: (props: Props) => {
-      return {
-        ...getSize(theme, props.size),
-        backgroundColor: theme.palette.divider,
-        color: theme.palette.text.primary
+const BaseAvatar = withStyles((theme: Theme) => ({
+  root: (props: Props) => {
+    return {
+      ...getSize(theme, props.size),
+      backgroundColor: theme.palette.divider,
+      color: theme.palette.text.primary,
+      '& svg': {
+        fill: theme.palette.grey['500'],
+        color: theme.palette.grey['500']
       }
     }
-  }),
-  { name: 'Avatar' }
-)
+  }
+}))((props: AvatarProps & Pick<BaseProps, 'size'>) => <MUIAvatar {...props} />)
 
 const AvatarComponent = (props: Props) => {
-  const classes = useStyles(props)
-  const { user, contact, deal, url } = props
+  // const classes = useStyles(props)
+  const { user, contact, deal, email, url } = props
   const imageSrc = useMemo(() => {
     if (contact) {
       return getAccountAvatar(contact)
@@ -34,12 +44,16 @@ const AvatarComponent = (props: Props) => {
       return getDealAvatar(deal)
     }
 
+    if (email) {
+      getEmailAvatar(email)
+    }
+
     if (url) {
       return url
     }
-  }, [contact, deal, url, user])
+  }, [contact, deal, email, url, user])
 
-  return <MUIAvatar {...props} src={imageSrc} className={classes.avatar} />
+  return <BaseAvatar {...props} src={imageSrc} />
 }
 
 export const Avatar = memo(AvatarComponent)

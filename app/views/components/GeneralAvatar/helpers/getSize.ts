@@ -25,6 +25,9 @@ export const getSize = (
     case 'large':
       imageSize = 6 // 48px
       break
+    case 'xlarge':
+      imageSize = 9 // 72px
+      break
   }
 
   return {

@@ -2,16 +2,15 @@ import React from 'react'
 import {
   Grid,
   Tooltip,
-  Avatar,
   Typography,
   TableCell,
   TableRow
 } from '@material-ui/core'
 
-import { getUserInitials } from 'models/user/helpers/get-user-initials'
-
+import { getContactNameInitials } from 'models/contacts/helpers'
 import ALink from 'components/ALink'
 import { DangerButton } from 'components/Button/DangerButton'
+import { Avatar } from 'components/GeneralAvatar'
 
 interface Props {
   contact: IContact
@@ -24,11 +23,8 @@ export default function Item({ contact, onStop, onClick }: Props) {
     <TableRow>
       <TableCell>
         <Grid container alignItems="center">
-          <Avatar
-            src={contact.summary && contact.summary.profile_image_url}
-            style={{ marginRight: '1rem' }}
-          >
-            {getUserInitials(contact.summary)}
+          <Avatar contact={contact} style={{ marginRight: '1rem' }}>
+            {getContactNameInitials(contact)}
           </Avatar>
           <ALink
             style={{ cursor: 'pointer' }}

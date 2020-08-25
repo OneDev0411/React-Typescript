@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { Dialog, Theme, Typography, Avatar, Tooltip } from '@material-ui/core'
+import {
+  Dialog,
+  Theme,
+  Typography,
+  Tooltip,
+  Avatar as MUIAvatar
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { Helmet } from 'react-helmet'
 import {
@@ -14,9 +20,11 @@ import classNames from 'classnames'
 import { formatDate } from 'components/DateTimePicker/helpers'
 import { EmailThread } from 'components/EmailThread'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { Avatar } from 'components/GeneralAvatar'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
+import { getContactNameInitials } from 'models/contacts/helpers'
 
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
@@ -232,11 +240,11 @@ function Insight({ params: { id } }: Props) {
               Sent From&nbsp;&nbsp;
             </Typography>
             <Avatar
+              url={sentFrom.profile_image_url || ''}
               alt={sentFromTitle}
-              src={sentFrom.profile_image_url || ''}
-              className={classNames(classes.avatar, classes.senderAvatar)}
+              size="small"
             >
-              {sentFromTitle.substring(0, 1).toUpperCase()}
+              {getContactNameInitials(sentFrom)}
             </Avatar>
             <Typography variant="body2" className={classes.mainText}>
               &nbsp;&nbsp;{sentFromTitle}
@@ -260,14 +268,14 @@ function Insight({ params: { id } }: Props) {
                 hidden ? null : (
                   <Tooltip title={tooltip || ''} placement="bottom-start">
                     <div key={index} className={classes.summaryItem}>
-                      <Avatar
+                      <MUIAvatar
                         className={classNames(
                           classes.avatar,
                           classes.summaryItemAvatar
                         )}
                       >
                         <SvgIcon path={icon} />
-                      </Avatar>
+                      </MUIAvatar>
                       <div className={classes.summaryItemInfo}>
                         <Typography
                           variant="subtitle1"
