@@ -3,7 +3,7 @@ import { Avatar as MUIAvatar, makeStyles, Theme } from '@material-ui/core'
 
 import { Props } from './type'
 import { getSize } from './helpers/getSize'
-import { getPersonAvatar } from './helpers/getPersonAvatar'
+import { getAccountAvatar, getDealAvatar } from './helpers/getAvatar'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -20,20 +20,24 @@ const useStyles = makeStyles(
 
 const AvatarComponent = (props: Props) => {
   const classes = useStyles(props)
-  const { user, contact, url } = props
+  const { user, contact, deal, url } = props
   const imageSrc = useMemo(() => {
     if (contact) {
-      return getPersonAvatar(contact)
+      return getAccountAvatar(contact)
     }
 
     if (user) {
-      return getPersonAvatar(user)
+      return getAccountAvatar(user)
+    }
+
+    if (deal) {
+      return getDealAvatar(deal)
     }
 
     if (url) {
       return url
     }
-  }, [contact, url, user])
+  }, [contact, deal, url, user])
 
   return <MUIAvatar {...props} src={imageSrc} className={classes.avatar} />
 }
