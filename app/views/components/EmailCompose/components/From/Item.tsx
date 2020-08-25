@@ -7,11 +7,14 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
 
 import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
 
 import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
-import OutlookIcon from 'components/SvgIcons/Outlook/IconOutlook'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { outlookIcon } from 'components/SvgIcons/icons'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -36,6 +39,7 @@ interface Props {
 }
 
 export function Item({ item }: Props) {
+  const theme = useTheme<Theme>()
   const classes = useStyles()
 
   const renderAvatar = () => {
@@ -54,7 +58,15 @@ export function Item({ item }: Props) {
         }}
         badgeContent={
           <div className={classes.badge}>
-            {item.type === GOOGLE_CREDENTIAL ? <GoogleIcon /> : <OutlookIcon />}
+            {item.type === GOOGLE_CREDENTIAL ? (
+              <GoogleIcon />
+            ) : (
+              <SvgIcon
+                path={outlookIcon}
+                color={theme.palette.info.main}
+                size={muiIconSizes.small}
+              />
+            )}
           </div>
         }
       >
