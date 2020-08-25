@@ -10,6 +10,9 @@ import createResizeablePlugin from 'draft-js-resizeable-plugin'
 import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin'
 import createFocusPlugin from 'draft-js-focus-plugin'
 
+import { getLastAddedImageBlock } from 'components/TextEditor/utils/get-last-added-image-block'
+import { filterBlocks } from 'components/TextEditor/utils/filter-blocks'
+import { blockEquals } from 'components/TextEditor/utils/block-equals'
 import { isImageFile } from 'utils/file-utils/is-image-file'
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
@@ -45,6 +48,38 @@ interface Props {
 export function ImageFeature({ uploadImage, allowGif = true }: Props) {
   const dispatch = useDispatch()
 
+  const { editorState, setEditorState, editorRef } = useContext(EditorContext)
+
+  const { imagePlugin } = useEditorPlugins(() => {
+    const resizeablePlugin = createResizeablePlugin(resizablePluginOptions)
+    const blockDndPlugin = createBlockDndPlugin()
+    const alignmentPlugin = createAlignmentPlugin()
+
+    const focusPlugin = createFocusPlugin({
+      theme: { focused: 'focused', unfocused: 'unfocused' }
+    })
+
+    const imagePlugin = createImagePlugin({
+      decorator: composeDecorators(
+        withUploadingIndicator,
+        resizableBugFixDecorator,
+        resizeablePlugin.decorator,
+        atomicBlockLinkDecorator,
+        alignmentPlugin.decorator,
+        focusPlugin.decorator,
+        blockDndPlugin.decorator
+      )
+    })
+
+    return {
+      blockDndPlugin,
+      focusPlugin,
+      alignmentPlugin,
+      resizeablePlugin,
+      imagePlugin
+    }
+  }, [])
+
   /**
    * Adds an image to the editor from a URL or dataURL. if it's a dataUrl
    * and `uploadImage` prop is provided, it will be called with a Blob
@@ -78,15 +113,16 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
 
     const { bestFit } = getImageSizeOptions(await getImageDimensions(dataUrl))
 
-    setEditorState(
-      removeUnwantedEmptyLineBeforeAtomic(
-        imagePlugin.addImage(
-          editorState,
-          dataUrl,
-          uploadImage ? { uploading: true, ...bestFit } : bestFit
-        )
+    const newEditorState = removeUnwantedEmptyLineBeforeAtomic(
+      imagePlugin.addImage(
+        editorState,
+        dataUrl,
+        uploadImage ? { uploading: true, ...bestFit } : bestFit
       )
     )
+    const imageBlock = getLastAddedImageBlock(editorState, newEditorState)
+
+    setEditorState(newEditorState)
 
     // Then we try to upload it if the uploadImage function is provided.
     // When the upload is finished, we replace the image src with the uploaded
@@ -108,7 +144,6 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
           )
         }
       } catch (error) {
-        // TODO: Remove the image in this case.
         const message = error?.response?.body?.message
 
         if (message) {
@@ -120,6 +155,14 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
           )
         }
 
+        if (editorRef.current) {
+          const latestState = editorRef.current.getEditorState()
+
+          setEditorState(
+            filterBlocks(latestState, block => !blockEquals(block, imageBlock))
+          )
+        }
+
         console.error(error)
       }
     } else {
@@ -128,38 +171,6 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
       )
     }
   }
-
-  const { editorState, setEditorState, editorRef } = useContext(EditorContext)
-
-  const { image: imagePlugin } = useEditorPlugins(() => {
-    const resizeablePlugin = createResizeablePlugin(resizablePluginOptions)
-    const blockDndPlugin = createBlockDndPlugin()
-    const alignmentPlugin = createAlignmentPlugin()
-
-    const focusPlugin = createFocusPlugin({
-      theme: { focused: 'focused', unfocused: 'unfocused' }
-    })
-
-    const imagePlugin = createImagePlugin({
-      decorator: composeDecorators(
-        withUploadingIndicator,
-        resizableBugFixDecorator,
-        resizeablePlugin.decorator,
-        atomicBlockLinkDecorator,
-        alignmentPlugin.decorator,
-        focusPlugin.decorator,
-        blockDndPlugin.decorator
-      )
-    })
-
-    return {
-      blockDndPlugin,
-      focusPlugin,
-      alignmentPlugin,
-      resizeablePlugin,
-      image: imagePlugin
-    }
-  }, [])
 
   const addImageRef = useLatestValueRef(addImage)
 
