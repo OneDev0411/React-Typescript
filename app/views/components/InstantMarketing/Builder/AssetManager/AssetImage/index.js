@@ -63,12 +63,8 @@ export class AssetImage extends React.Component {
     })
 
   onCropImg = async file => {
-    console.log(file)
-
     const { templateId } = await this.props.getTemplateId()
     const response = await uploadAsset(file, templateId)
-
-    console.log(response)
 
     this.onImageSelect({ url: response.body.data.file.url })
     this.setState({
