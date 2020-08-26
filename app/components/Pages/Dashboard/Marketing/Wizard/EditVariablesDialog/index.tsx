@@ -32,12 +32,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   variables: TemplateVariable<TemplateVariableType>[]
   onClose: () => void
+  onUpload: (file: File) => Promise<ITemplateAsset>
   onSave: (updatedVariables: TemplateVariable<TemplateVariableType>[]) => void
 }
 
 export default function EditVariablesDialog({
   variables,
   onClose,
+  onUpload,
   onSave
 }: Props) {
   const classes = useStyles()
@@ -127,6 +129,7 @@ export default function EditVariablesDialog({
                     <Field
                       key={variable.name}
                       variable={possiblyUpdatedVariable}
+                      onUpload={onUpload}
                       onChange={handleChangeVariableValue}
                     />
                   )

@@ -3,19 +3,21 @@ import { Grid, Box, TextField } from '@material-ui/core'
 
 import { TemplateVariableType, TemplateVariable } from '../../types'
 
-import { BaseFieldProps } from './types'
+import { UploadableFieldProps } from './types'
 import Image from './Image'
 import SortableImageList from './SortableImageList'
 
 export default function Field({
   variable,
-  onChange
-}: BaseFieldProps<TemplateVariableType>) {
+  onChange,
+  onUpload
+}: UploadableFieldProps<TemplateVariableType>) {
   if (variable.type === 'image') {
     return (
       <Image
         variable={variable as TemplateVariable<'image'>}
         onChange={onChange}
+        onUpload={onUpload}
       />
     )
   }

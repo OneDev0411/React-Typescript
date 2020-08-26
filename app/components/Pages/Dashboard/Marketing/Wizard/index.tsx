@@ -25,6 +25,8 @@ import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
 
+import uploadAsset from 'models/instant-marketing/upload-asset'
+
 import { SideNavToggleButton } from 'components/SideNavToggleButton'
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 import PageLayout from 'components/GlobalPageLayout'
@@ -141,11 +143,13 @@ function MarketingWizard(props: WithRouterProps) {
   const handleOpenShareDrawer = (template: IBrandMarketingTemplate) => {
     setSelectedTemplate(template)
   }
+
   const handleCloseShareDrawer = () => setSelectedTemplate(null)
 
   const handleOpenEditVariablesDialog = () => {
     setIsEditVariablesDialogOpen(true)
   }
+
   const handleCloseEditVariablesDialog = () =>
     setIsEditVariablesDialogOpen(false)
 
@@ -154,6 +158,10 @@ function MarketingWizard(props: WithRouterProps) {
   ) => {
     setTemplateVariables(newVariables)
     handleCloseEditVariablesDialog()
+  }
+
+  const handleUploadAsset = (file: File) => {
+    return uploadAsset(file, currentTabTemplates[0].template.id)
   }
 
   const handleDownloadClick = async (template: IBrandMarketingTemplate) => {
@@ -178,7 +186,7 @@ function MarketingWizard(props: WithRouterProps) {
         addNotification({
           status: 'success',
           message:
-            'Marketing peace created successfully! You should be prompet to download file in a few seconds!'
+            'Marketing peace created successfully! You should be prompted to download file in a few seconds!'
         })
       )
 
@@ -297,6 +305,7 @@ function MarketingWizard(props: WithRouterProps) {
         <EditVariablesDialog
           variables={editableVariables}
           onClose={handleCloseEditVariablesDialog}
+          onUpload={handleUploadAsset}
           onSave={handleSaveVariables}
         />
       )}

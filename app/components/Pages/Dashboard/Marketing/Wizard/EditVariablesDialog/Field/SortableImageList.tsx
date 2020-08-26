@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import {
   List,
   ListItem,
+  ListItemIcon,
   ListItemSecondaryAction,
   ListItemAvatar,
   Avatar,
@@ -12,6 +13,7 @@ import {
   makeStyles
 } from '@material-ui/core'
 import { mdiDrag, mdiTrashCanOutline, mdiCameraOutline } from '@mdi/js'
+import orderBy from 'lodash/orderBy'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -29,12 +31,24 @@ interface Props extends BaseFieldProps<'sortableImageList'> {}
 export default function SortableImageList({ variable, onChange }: Props) {
   const classes = useStyles()
 
+  const orderedImages = orderBy(variable.images, 'order', 'asc')
+
   return (
     <>
       <List>
-        {variable.images.map(image => (
+        {orderedImages.map(image => (
           <Fragment key={image.name}>
-            <ListItem button divider>
+            <ListItem disableGutters button divider>
+              <ListItemIcon>
+                <Tooltip
+                  title="Drag photo to reorder"
+                  aria-label="Drag photo to reorder"
+                >
+                  <IconButton>
+                    <SvgIcon path={mdiDrag} />
+                  </IconButton>
+                </Tooltip>
+              </ListItemIcon>
               <ListItemAvatar>
                 <Avatar
                   variant="rounded"
@@ -47,14 +61,6 @@ export default function SortableImageList({ variable, onChange }: Props) {
                 <Tooltip title="Delete photo" aria-label="Delete photo">
                   <IconButton>
                     <SvgIcon path={mdiTrashCanOutline} />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip
-                  title="Drag photo to reorder"
-                  aria-label="Drag photo to reorder"
-                >
-                  <IconButton>
-                    <SvgIcon path={mdiDrag} />
                   </IconButton>
                 </Tooltip>
               </ListItemSecondaryAction>
