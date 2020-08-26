@@ -187,7 +187,7 @@ const ListingDesktopView = ({
         : ''
     bathroomBaloonText = bathroomBaloonText || 'Unknown'
     square_feet = numberWithCommas(
-      Math.round(listingUtils.metersToFeet(property.square_meters))
+      Math.floor(listingUtils.metersToFeet(property.square_meters))
     )
 
     if (property.square_meters) {
