@@ -48,7 +48,7 @@ export const MemberList = ({
   const membersId: string[] = teamMembers.map(member => member.id)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
-  const onChange = (id: UUID) => {
+  const handleSelectMember = (id: UUID) => {
     if (selectedMembers.includes(id)) {
       onChangeSelectedMembers(selectedMembers.filter(member => member !== id))
 
@@ -68,7 +68,7 @@ export const MemberList = ({
     onChangeSelectedMembers(membersId)
   }
 
-  const onApply = async () => {
+  const handleApplyChanges = async () => {
     if (isEqual(selectedMembers, initialSelectedMembers)) {
       return
     }
@@ -77,7 +77,7 @@ export const MemberList = ({
 
     await dispatch(setViewAsFilter(user, selectedMembers))
 
-    window.location.reload(true)
+    window.location.reload()
   }
 
   return (
@@ -103,7 +103,7 @@ export const MemberList = ({
             title={title}
             disabled={isSubmitting || disabled}
             checked={selectedMembers.includes(memberId)}
-            onChange={() => onChange(memberId)}
+            onChange={() => handleSelectMember(memberId)}
           />
         )
       })}
@@ -113,7 +113,7 @@ export const MemberList = ({
           variant="outlined"
           color="secondary"
           fullWidth
-          onClick={onApply}
+          onClick={handleApplyChanges}
           disabled={isSubmitting || disabled}
         >
           Apply
