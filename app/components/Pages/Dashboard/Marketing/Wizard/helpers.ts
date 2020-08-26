@@ -1,28 +1,43 @@
 import _get from 'lodash/get'
 
-import { TEMPLATE_VARIABLE_SECTIONS } from './constants'
-import { TemplateVariableSectionWithItems } from './types'
+import { TEMPLATE_VARIABLES } from './constants'
+import { TemplateVariable, TemplateVariableType } from './types'
 
-export function getEditableVariablesSections(
+export function getEditableVariables(
   templates: IBrandMarketingTemplate[],
   data: {
     user: IUser
     listing: Nullable<IListing>
   }
-): TemplateVariableSectionWithItems[] {
-  const templatesVariables = [
+): TemplateVariable<TemplateVariableType>[] {
+  const currentTemplatesVariableNames = [
     ...new Set(templates.flatMap(template => template.template.variables ?? []))
   ]
 
-  return TEMPLATE_VARIABLE_SECTIONS.map(section => {
-    return {
-      ...section,
-      items: section.items
-        .filter(variable => templatesVariables.includes(variable.name))
-        .map(item => ({
-          ...item,
-          value: _get(data, item.name)
-        }))
+  return TEMPLATE_VARIABLES.filter(item => {
+    if (item.type === 'sortableImageList') {
+      return item.images.some(imageItem =>
+        currentTemplatesVariableNames.includes(imageItem.name)
+      )
     }
-  }).filter(section => section.items.length > 0)
+
+    return currentTemplatesVariableNames.includes(item.name)
+  }).map(item => {
+    if (item.type === 'sortableImageList') {
+      return {
+        ...item,
+        images: item.images.map(imageItem => {
+          return {
+            ...imageItem,
+            value: _get(data, imageItem.name)
+          }
+        })
+      }
+    }
+
+    return {
+      ...item,
+      value: _get(data, item.name)
+    }
+  })
 }

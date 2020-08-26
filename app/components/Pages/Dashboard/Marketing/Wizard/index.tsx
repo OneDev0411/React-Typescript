@@ -40,9 +40,9 @@ import { LISTING_TEMPLATE_TYPES, TEMPLATES_PAGE_SIZE } from './constants'
 import CategoriesTabs from './CategoriesTabs'
 import ShareDrawer from './ShareDrawer'
 import EditVariablesDialog from './EditVariablesDialog'
-import { getEditableVariablesSections } from './helpers'
+import { getEditableVariables } from './helpers'
 import { useEntityWithSetter } from './hooks'
-import { TemplateVariable } from './types'
+import { TemplateVariable, TemplateVariableType } from './types'
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -120,7 +120,7 @@ function MarketingWizard(props: WithRouterProps) {
       (selectedTemplateType ?? templateTypes[0])
   )
 
-  const variablesSections = getEditableVariablesSections(templates, {
+  const editableVariables = getEditableVariables(templates, {
     user,
     listing
   })
@@ -149,7 +149,9 @@ function MarketingWizard(props: WithRouterProps) {
   const handleCloseEditVariablesDialog = () =>
     setIsEditVariablesDialogOpen(false)
 
-  const handleSaveVariables = (newVariables: TemplateVariable[]) => {
+  const handleSaveVariables = (
+    newVariables: TemplateVariable<TemplateVariableType>[]
+  ) => {
     setTemplateVariables(newVariables)
     handleCloseEditVariablesDialog()
   }
@@ -293,7 +295,7 @@ function MarketingWizard(props: WithRouterProps) {
       )}
       {isEditVariablesDialogOpen && (
         <EditVariablesDialog
-          sections={variablesSections}
+          variables={editableVariables}
           onClose={handleCloseEditVariablesDialog}
           onSave={handleSaveVariables}
         />
