@@ -2,13 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { Uploader } from 'components/Uploader'
+import uploadAsset from 'models/instant-marketing/upload-asset'
 
 import { AppTheme } from '../../../../../AppTheme'
 
 import { AssetImage } from './AssetImage'
 
 import { loadGrapesjs } from '../utils/load-grapes'
-import { uploadAsset } from './helpers'
 
 export const load = async () => {
   const { Grapesjs, Backbone } = await loadGrapesjs()

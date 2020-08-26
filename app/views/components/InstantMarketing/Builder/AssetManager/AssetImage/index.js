@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { ImageUploader } from 'components/ImageUploader'
+import uploadAsset from 'models/instant-marketing/upload-asset'
 
 import { Container, CropButton, Image } from './styled'
-import { uploadAsset } from '../helpers'
 
 export class AssetImage extends React.Component {
   constructor(props) {
