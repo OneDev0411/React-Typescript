@@ -24,6 +24,7 @@ export class AssetImage extends React.Component {
   onImageSelect = (options = {}) => {
     const url = options.url || this.props.model.get('image')
 
+    const setBgUrl = () => this.props.target.set('background-url', url)
     const setSrc = () => this.props.target.set('src', url)
     const setBg = () => {
       const style = { ...this.props.target.get('style') }
@@ -41,6 +42,7 @@ export class AssetImage extends React.Component {
     const setters = {
       image: setSrc,
       'mj-image': setSrc,
+      'mj-hero': setBgUrl,
       'mj-carousel-image': setCarouselImage,
       cell: setBg,
       text: setBg,
