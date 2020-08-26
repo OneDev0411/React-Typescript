@@ -44,7 +44,9 @@ const useStyles = makeStyles(
       marginRight: theme.spacing(1)
     },
     content: {
-      flexGrow: 1
+      flexGrow: 1,
+      display: 'flex',
+      justifyContent: 'flex-end'
     },
     globalAction: {
       marginLeft: theme.spacing(1)

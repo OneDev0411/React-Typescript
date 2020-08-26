@@ -6,7 +6,7 @@ import { Box } from '@material-ui/core'
 
 import { IAppState } from 'reducers/index'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
-
+import { ViewAs } from 'components/ViewAs'
 import { useGridStyles } from 'components/Grid/Table/styles'
 
 import Table from 'components/Grid/Table'
@@ -163,7 +163,9 @@ function ToursList(props: { user: IUser }) {
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header title="Tours" onCreateTour={reloadList} />
+        <PageLayout.Header title="Tours" onCreateTour={reloadList}>
+          <ViewAs />
+        </PageLayout.Header>
 
         <PageLayout.Main>
           <Box>
