@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import {
   Box,
   Button,
+  Tooltip,
   List,
   ListSubheader,
   makeStyles,
@@ -69,7 +70,10 @@ export const MemberList = ({
   }
 
   const handleApplyChanges = async () => {
-    if (isEqual(selectedMembers, initialSelectedMembers)) {
+    if (
+      isEqual(selectedMembers, initialSelectedMembers) ||
+      selectedMembers.length === 0
+    ) {
       return
     }
 
@@ -108,16 +112,28 @@ export const MemberList = ({
         )
       })}
       <Box px={2} py={1}>
-        <Button
-          size="small"
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          onClick={handleApplyChanges}
-          disabled={isSubmitting || disabled}
+        <Tooltip
+          title={
+            selectedMembers.length === 0
+              ? 'Is not possible to deselect all team member'
+              : ''
+          }
         >
-          Apply
-        </Button>
+          <div>
+            <Button
+              size="small"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              onClick={handleApplyChanges}
+              disabled={
+                isSubmitting || disabled || selectedMembers.length === 0
+              }
+            >
+              Apply
+            </Button>
+          </div>
+        </Tooltip>
       </Box>
     </List>
   )

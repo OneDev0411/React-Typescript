@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, ReactNode } from 'react'
 import { useSelector } from 'react-redux'
-import { Avatar, Popover, makeStyles, Tooltip } from '@material-ui/core'
+import { Avatar, Popover, makeStyles, Tooltip, Theme } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 
 import { getContactNameInitials } from 'models/contacts/helpers'
@@ -16,7 +16,7 @@ import { IAppState } from '../../../reducers'
 import { MemberList } from './components/List'
 
 const useStyles = makeStyles(
-  () => ({
+  (theme: Theme) => ({
     avatarContainer: {
       cursor: 'pointer'
     },
@@ -46,7 +46,7 @@ export const ViewAs = props => {
   const id = open ? 'viewas-popover' : undefined
   const tooltipTitle = useMemo(() => {
     if (selectedMembers.length === 0) {
-      return 'No One is slected'
+      return 'No One is selected'
     }
 
     const selectedNames: string[] = []
@@ -74,6 +74,22 @@ export const ViewAs = props => {
     setAnchorEl(null)
   }
 
+  const renderSelectedAvatar = (): ReactNode => {
+    const selectedTeamMemeber = teamMembers.filter(member =>
+      initialSelectedMembers.includes(member.id)
+    )
+
+    return selectedTeamMemeber.map(member => {
+      const src = member.profile_image_url || undefined
+
+      return (
+        <Avatar key={member.id} alt={member.display_name} src={src}>
+          {getContactNameInitials(member)}
+        </Avatar>
+      )
+    })
+  }
+
   if (isBackOffice(user) || teamMembers.length === 1) {
     return null
   }
@@ -82,19 +98,12 @@ export const ViewAs = props => {
     <>
       <Tooltip title={tooltipTitle}>
         <AvatarGroup
-          max={3}
+          max={4}
           className={classes.avatarContainer}
           onClick={handleClick}
         >
-          {teamMembers.map(member => {
-            const src = member.profile_image_url || undefined
-
-            return (
-              <Avatar key={member.id} alt={member.display_name} src={src}>
-                {getContactNameInitials(member)}
-              </Avatar>
-            )
-          })}
+          {renderSelectedAvatar()}
+          {initialSelectedMembers.length < 4 && <Avatar>+</Avatar>}
         </AvatarGroup>
       </Tooltip>
       <Popover
