@@ -14,7 +14,7 @@ import SearchListings from 'components/SearchListingDrawer'
 import { H2 } from 'components/Typography/headings'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import RequiredIcon from 'components/SvgIcons/Required/IconRequired'
+import RequiredErrorSign from './required-error-sign'
 
 const AddressInput = styled.input`
   border: 1px dashed ${({ theme }) => theme.palette.secondary.main};
@@ -62,7 +62,7 @@ export default function DealAddress(props) {
       <H2 className={cn('hero', { hasError: props.hasError })}>
         What is the address of the subject property?&nbsp;
         {props.isRequired && <span className="required">*</span>}
-        {props.hasError && <RequiredIcon />}
+        {props.hasError && <RequiredErrorSign />}
       </H2>
 
       {props.dealAddress ? (
