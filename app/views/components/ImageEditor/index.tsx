@@ -31,38 +31,29 @@ import type { Actions, ImageEditor } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    root: {
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius,
-      maxHeight: '75vh',
-      overflow: 'auto'
-    },
-    canvas: {
-      display: 'flex',
-      alignItems: 'center',
-      maxHeight: '100vh',
-      padding: theme.spacing(1, 0),
+    canvas: ({ canvasWidth }: { canvasWidth: number }) => ({
+      overflow: 'auto',
+      height: '60vh',
       '& .tui-image-editor-canvas-container': {
-        margin: '0 auto'
+        margin: '0 auto',
+        width: `${canvasWidth}px !important`
       },
       '& canvas': {
         borderRadius: theme.shape.borderRadius
-      },
-      backgroundColor: theme.palette.grey[50]
+      }
+    }),
+    menuContainer: {
+      marginTop: theme.spacing(1)
     },
     menu: {
-      padding: theme.spacing(1),
+      width: '100%',
+      padding: theme.spacing(1, 2),
       borderTop: `1px solid ${theme.palette.divider}`
     },
     mainMenu: {
       '& button': {
         marginRight: theme.spacing(1)
       }
-    },
-    menuContainer: {
-      position: 'sticky',
-      bottom: '-1px',
-      background: '#fff'
     },
     iconsRow: {
       display: 'flex',
@@ -81,20 +72,22 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  file: IBlobFile
+  file: File
   dimensions?: [number, number]
   onClose: () => void
   onSave: (image: Blob) => void
 }
 
 export function Editor({ file, dimensions, onClose, onSave }: Props) {
-  const classes = useStyles()
   const theme = useTheme<Theme>()
   const ref = useRef<HTMLDivElement | null>(null)
   const [editor, setEditor] = useState<ImageEditor | null>(null)
-  const [height, setHeight] = useState('0px')
   const [action, setAction] = useState<Actions | null>(null)
-  const [blob, setBlob] = useState<IBlobFile | null>(null)
+  const [blob, setBlob] = useState<File | null>(null)
+  const [canvasWidth, setCanvasWidth] = useState(0)
+  const classes = useStyles({
+    canvasWidth
+  })
 
   const setActiveAction = (action: Actions | null) => setAction(action)
 
@@ -103,19 +96,30 @@ export function Editor({ file, dimensions, onClose, onSave }: Props) {
       return
     }
 
-    const height = getComputedStyle(ref.current, null).getPropertyValue(
-      'max-height'
-    )
+    const canvas = ref.current.getElementsByTagName('canvas')[0]!
 
-    setHeight(height)
+    const maxHeight = ref.current.clientHeight
+    const ratio =
+      Number(canvas.getAttribute('width')!) /
+      Number(canvas.getAttribute('height')!)
+    const width = maxHeight * ratio
+
+    setCanvasWidth(width)
   }
 
   const setupEditor = async () => {
     const editor = new TuiImageEditor(ref.current!, {
+      usageStatistics: false,
       selectionStyle: {
-        cornerSize: 5,
-        rotatingPointOffset: 20
+        cornerSize: 15,
+        rotatingPointOffset: 35,
+        lineWidth: 5
       }
+    }) as ImageEditor
+
+    editor._graphics.setCropSelectionStyle({
+      cornerColor: theme.palette.secondary.main,
+      cornerSize: 15
     })
 
     setEditor(editor as ImageEditor)
@@ -186,110 +190,110 @@ export function Editor({ file, dimensions, onClose, onSave }: Props) {
           </div>
         </Box>
       </DialogTitle>
-      <DialogContent>
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="space-between"
-          className={classes.root}
-        >
-          <div
-            ref={ref}
-            className={classes.canvas}
-            style={{
-              height
-            }}
-          />
+      <DialogContent
+        style={{
+          padding: 0
+        }}
+      >
+        <Box>
+          <div ref={ref} className={classes.canvas} />
 
-          {editor && (
-            <div className={classes.menuContainer}>
-              {action && (
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+            className={classes.menuContainer}
+          >
+            {editor && (
+              <>
+                {action && (
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    className={classes.menu}
+                  >
+                    {action === 'crop' && (
+                      <CropActions
+                        editor={editor}
+                        onChangeActiveAction={setActiveAction}
+                        onCrop={resizeEditor}
+                      />
+                    )}
+
+                    {action === 'draw' && (
+                      <DrawActions
+                        editor={editor}
+                        onChangeActiveAction={setActiveAction}
+                      />
+                    )}
+
+                    {action === 'text' && (
+                      <TextActions
+                        editor={editor}
+                        onChangeActiveAction={setActiveAction}
+                      />
+                    )}
+
+                    {action === 'filter' && blob && (
+                      <FilterActions
+                        editor={editor}
+                        file={blob}
+                        onChangeActiveAction={setActiveAction}
+                      />
+                    )}
+                  </Box>
+                )}
+
                 <Box
                   display="flex"
                   justifyContent="space-between"
                   className={classes.menu}
                 >
-                  {action === 'crop' && (
-                    <CropActions
-                      editor={editor}
-                      onChangeActiveAction={setActiveAction}
-                      onCrop={resizeEditor}
-                    />
-                  )}
+                  <Box display="flex" className={classes.mainMenu}>
+                    {dimensions && (
+                      <Crop
+                        editor={editor}
+                        isActive={action === 'crop'}
+                        width={dimensions[0]}
+                        height={dimensions[1]}
+                        onChangeActiveAction={setActiveAction}
+                      />
+                    )}
 
-                  {action === 'draw' && (
-                    <DrawActions
-                      editor={editor}
-                      onChangeActiveAction={setActiveAction}
-                    />
-                  )}
+                    <Rotate editor={editor} onRotate={resizeEditor} />
 
-                  {action === 'text' && (
-                    <TextActions
-                      editor={editor}
-                      onChangeActiveAction={setActiveAction}
-                    />
-                  )}
+                    <Flip editor={editor} />
 
-                  {action === 'filter' && blob && (
-                    <FilterActions
+                    <Draw
                       editor={editor}
-                      file={blob}
+                      isActive={action === 'draw'}
                       onChangeActiveAction={setActiveAction}
                     />
-                  )}
+
+                    <Text
+                      editor={editor}
+                      isActive={action === 'text'}
+                      onChangeActiveAction={setActiveAction}
+                    />
+
+                    <Image editor={editor} />
+
+                    <Filters
+                      editor={editor}
+                      isActive={action === 'filter'}
+                      onChangeActiveAction={setActiveAction}
+                    />
+                  </Box>
+
+                  <Box display="flex">
+                    <Redo editor={editor} onRedo={resizeEditor} />
+                    <Undo editor={editor} onUndo={resizeEditor} />
+                    <Delete editor={editor} />
+                  </Box>
                 </Box>
-              )}
-
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                className={classes.menu}
-              >
-                <Box display="flex" className={classes.mainMenu}>
-                  {dimensions && (
-                    <Crop
-                      editor={editor}
-                      isActive={action === 'crop'}
-                      width={dimensions[0]}
-                      height={dimensions[1]}
-                      onChangeActiveAction={setActiveAction}
-                    />
-                  )}
-
-                  <Rotate editor={editor} onRotate={resizeEditor} />
-
-                  <Flip editor={editor} />
-
-                  <Draw
-                    editor={editor}
-                    isActive={action === 'draw'}
-                    onChangeActiveAction={setActiveAction}
-                  />
-
-                  <Text
-                    editor={editor}
-                    isActive={action === 'text'}
-                    onChangeActiveAction={setActiveAction}
-                  />
-
-                  <Image editor={editor} />
-
-                  <Filters
-                    editor={editor}
-                    isActive={action === 'filter'}
-                    onChangeActiveAction={setActiveAction}
-                  />
-                </Box>
-
-                <Box display="flex">
-                  <Redo editor={editor} onRedo={resizeEditor} />
-                  <Undo editor={editor} onUndo={resizeEditor} />
-                  <Delete editor={editor} />
-                </Box>
-              </Box>
-            </div>
-          )}
+              </>
+            )}
+          </Box>
         </Box>
       </DialogContent>
     </Dialog>

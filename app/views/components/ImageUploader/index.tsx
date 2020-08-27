@@ -49,7 +49,7 @@ interface Props {
   editorOptions?: {
     dimensions?: [number, number]
   }
-  onSelectImage: (file: IBlobFile) => void
+  onSelectImage: (file: File) => void
 }
 
 export function ImageUploader({
@@ -60,9 +60,9 @@ export function ImageUploader({
   children
 }: Props) {
   const [isOpen, setIsOpen] = useState(false)
-  const [file, setFile] = useState<IBlobFile | null>(null)
+  const [file, setFile] = useState<File | null>(null)
 
-  const onDropFiles = (files: IBlobFile[]) => {
+  const onDropFiles = (files: File[]) => {
     if (disableEditor) {
       onSelectImage(files[0])
 
@@ -72,7 +72,7 @@ export function ImageUploader({
     setFile(files[0])
   }
 
-  const handleSave = (imageUrl: IBlobFile) => {
+  const handleSave = (imageUrl: File) => {
     setIsOpen(false)
     onSelectImage(imageUrl)
   }

@@ -1,4 +1,5 @@
 export interface ImageEditor extends tuiImageEditor.ImageEditor {
+  _graphics: any
   off: (eventName: string) => void
 }
 

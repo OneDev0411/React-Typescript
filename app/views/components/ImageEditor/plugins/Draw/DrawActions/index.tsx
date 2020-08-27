@@ -11,7 +11,9 @@ import {
 import { ColorResult } from 'react-color'
 
 import Icon from '@mdi/react'
-import { mdiDraw, mdiVectorLine, mdiCheckOutline, mdiCancel } from '@mdi/js'
+import { mdiDraw, mdiVectorLine } from '@mdi/js'
+
+import { useEffectOnce } from 'react-use'
 
 import { Slider } from '../../../components/Slider'
 import { ColorPicker } from '../../../components/ColorPicker'
@@ -38,8 +40,47 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
   const [drawingMode, setDrawingMode] = useState<DRAWING_MODE>('FREE_DRAWING')
+
+  const [
+    activeObject,
+    setActiveObject
+  ] = useState<tuiImageEditor.IGraphicObjectProps | null>(null)
   const [brushWidth, setBrushWidth] = useState(5)
   const [brushColor, setBrushColor] = useState('#000')
+
+  useEffectOnce(() => {
+    const capture = (event: KeyboardEvent) => {
+      if (event.code === 'Enter') {
+        event.stopPropagation()
+
+        if (
+          ['FREE_DRAWING', 'LINE_DRAWING'].includes(editor.getDrawingMode())
+        ) {
+          editor.stopDrawingMode()
+        } else {
+          setActiveObject(null)
+          editor.startDrawingMode(drawingMode, getBrushSettings())
+        }
+      }
+    }
+
+    document.addEventListener('keydown', capture)
+
+    editor.on(
+      'objectActivated',
+      (object: tuiImageEditor.IGraphicObjectProps) => {
+        if (object.type && ['path', 'line'].includes(object.type)) {
+          setActiveObject(object)
+          setBrushWidth(object.strokeWidth as number)
+        }
+      }
+    )
+
+    return () => {
+      document.removeEventListener('keydown', capture)
+      editor.off('objectActivated')
+    }
+  })
 
   const getBrushSettings = () => {
     return {
@@ -59,23 +100,40 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
   }
 
   const onChangeBrushWidth = (value: number | null) => {
-    if (!value || Number(value) < 5 || Number(value) > 30) {
+    if (!value) {
       return
     }
 
     setBrushWidth(value)
 
-    editor.stopDrawingMode()
-    editor.startDrawingMode(drawingMode, {
-      ...getBrushSettings(),
-      width: value
-    })
+    if (activeObject) {
+      updateObject({
+        strokeWidth: value
+      })
+
+      return
+    }
+
+    if (drawingMode) {
+      editor.stopDrawingMode()
+      editor.startDrawingMode(drawingMode, {
+        ...getBrushSettings(),
+        width: value
+      })
+    }
   }
 
   const onChangeBrushColor = (color: ColorResult) => {
     setBrushColor(color.hex)
 
-    // setBrush color not working when changing drawing mode
+    if (activeObject) {
+      updateObject({
+        color: color.hex
+      })
+
+      return
+    }
+
     editor.stopDrawingMode()
     editor.startDrawingMode(drawingMode, {
       ...getBrushSettings(),
@@ -83,67 +141,54 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
     })
   }
 
-  const apply = () => editor.stopDrawingMode()
-  const cancel = () => {
-    editor.stopDrawingMode()
-    onChangeActiveAction(null)
+  const updateObject = (data: Partial<tuiImageEditor.IGraphicObjectProps>) => {
+    if (!activeObject || !activeObject.id) {
+      return
+    }
+
+    setActiveObject({
+      ...activeObject,
+      ...data
+    })
+
+    editor.setObjectProperties(activeObject.id, data)
   }
 
   return (
-    <Box display="flex" alignItems="center" width="100%">
-      <Box
-        display="flex"
-        alignItems="center"
-        flexGrow={1}
-        style={{
-          height: theme.spacing(5)
-        }}
+    <Box
+      display="flex"
+      alignItems="center"
+      style={{
+        width: '100%',
+        height: theme.spacing(5)
+      }}
+    >
+      <Button
+        startIcon={<Icon path={mdiDraw} size={1} />}
+        color={drawingMode === 'FREE_DRAWING' ? 'secondary' : 'default'}
+        onClick={setFreeDrawing}
       >
-        <Button
-          startIcon={<Icon path={mdiDraw} size={1} />}
-          color={drawingMode === 'FREE_DRAWING' ? 'secondary' : 'default'}
-          onClick={setFreeDrawing}
-        >
-          Free
-        </Button>
-        <Button
-          startIcon={<Icon path={mdiVectorLine} size={1} />}
-          color={drawingMode === 'LINE_DRAWING' ? 'secondary' : 'default'}
-          onClick={setStraightDrawing}
-        >
-          Line
-        </Button>
-        <Divider orientation="vertical" className={classes.divider} />
-        <ColorPicker color={brushColor} onChange={onChangeBrushColor} />
+        Free
+      </Button>
+      <Button
+        startIcon={<Icon path={mdiVectorLine} size={1} />}
+        color={drawingMode === 'LINE_DRAWING' ? 'secondary' : 'default'}
+        onClick={setStraightDrawing}
+      >
+        Line
+      </Button>
+      <Divider orientation="vertical" className={classes.divider} />
 
-        <Divider orientation="vertical" className={classes.divider} />
+      <ColorPicker color={brushColor} onChange={onChangeBrushColor} />
+      <Divider orientation="vertical" className={classes.divider} />
 
-        <Slider
-          min={5}
-          max={30}
-          caption="Width"
-          value={brushWidth}
-          onChange={onChangeBrushWidth}
-        />
-      </Box>
-
-      <div>
-        <Button
-          startIcon={<Icon path={mdiCancel} size={0.75} />}
-          size="small"
-          onClick={cancel}
-        >
-          Cancel
-        </Button>
-
-        <Button
-          startIcon={<Icon path={mdiCheckOutline} size={0.75} />}
-          size="small"
-          onClick={apply}
-        >
-          Stop Drawing
-        </Button>
-      </div>
+      <Slider
+        min={5}
+        max={60}
+        caption="Width"
+        value={brushWidth}
+        onChange={onChangeBrushWidth}
+      />
     </Box>
   )
 }

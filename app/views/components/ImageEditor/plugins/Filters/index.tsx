@@ -19,6 +19,7 @@ export function Filters({ editor, isActive, onChangeActiveAction }: Props) {
       return
     }
 
+    editor.stopDrawingMode()
     onChangeActiveAction('filter')
   }
 

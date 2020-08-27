@@ -27,7 +27,7 @@ function AvatarUploader({ contact, attributeDefs }: Props) {
   )
 
   const handleOnChange = useCallback(
-    async (file: IBlobFile) => {
+    async (file: File) => {
       const dataUrl = await readFileAsDataUrl(file)
 
       try {

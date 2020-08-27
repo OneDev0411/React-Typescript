@@ -25,6 +25,7 @@ export function Image({ editor }: Props) {
     const url = await readFileAsDataUrl(files[0])
 
     editor.addImageObject(url)
+    editor.stopDrawingMode()
   }
 
   return (

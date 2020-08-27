@@ -30,21 +30,6 @@ declare interface IMarketingTemplateInstance
   listings: Nullable<IListings[]>
 }
 
-interface File {
-  id: UUID
-  created_at: number
-  updated_at: number
-  deleted_at: null
-  created_by: string
-  path: string
-  name: string
-  public: boolean
-  type: string
-  url: string
-  preview_url: string
-  mime: string
-}
-
 declare enum MarketingTemplateMedium {
   Email = 'Email',
   Social = 'Social',

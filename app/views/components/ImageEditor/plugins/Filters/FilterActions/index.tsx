@@ -54,7 +54,7 @@ const useStyles = makeStyles(
 
 interface Props {
   editor: ImageEditor
-  file: IBlobFile
+  file: File
   onChangeActiveAction: (action: Actions | null) => void
 }
 

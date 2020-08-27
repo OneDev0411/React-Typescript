@@ -3,6 +3,8 @@ import { Button } from '@material-ui/core'
 import Icon from '@mdi/react'
 import { mdiCheckOutline, mdiCancel } from '@mdi/js'
 
+import { useEffectOnce } from 'react-use'
+
 import { ImageEditor, Actions } from '../../../types'
 
 interface Props {
@@ -13,16 +15,38 @@ interface Props {
 
 export function CropActions({ editor, onChangeActiveAction, onCrop }: Props) {
   const crop = async () => {
-    await editor.crop(editor.getCropzoneRect())
-    editor.stopDrawingMode()
-    onCrop()
     onChangeActiveAction(null)
+
+    await editor.crop(editor.getCropzoneRect())
+
+    editor.stopDrawingMode()
+
+    onCrop()
   }
 
   const cancel = () => {
     editor.stopDrawingMode()
     onChangeActiveAction(null)
   }
+
+  useEffectOnce(() => {
+    const capture = (event: KeyboardEvent) => {
+      if (event.code === 'Enter') {
+        event.stopPropagation()
+        crop()
+      }
+
+      if (event.code === 'Escape') {
+        cancel()
+      }
+    }
+
+    document.addEventListener('keydown', capture)
+
+    return () => {
+      document.removeEventListener('keydown', capture)
+    }
+  })
 
   return (
     <div>

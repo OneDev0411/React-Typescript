@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function ProfileAvatar({ onChange, data }: Props) {
   const classes = useStyles()
 
-  const handleOnChange = async (file: IBlobFile) => {
+  const handleOnChange = async (file: File) => {
     const dataUrl = await readFileAsDataUrl(file)
 
     onChange({ src: dataUrl, file })
