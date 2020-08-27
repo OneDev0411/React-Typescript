@@ -72,10 +72,13 @@ export function useEditorState(HTML: string = ''): UseEditorState {
         return ''
       }
 
-      return stateToHTML(
+      const rawHtml = stateToHTML(
         editorStateRef.current.getCurrentContent(),
         stateToHtmlOptions
       )
+      const html = rawHtml.replace(RegExp('&nbsp;', 'g'), '\xA0') // "A0" is the code for non-breaking-space and "20" is the code for regular space.
+
+      return html
     }
     /**
      * returns true if the content includes an image which is being uploaded
