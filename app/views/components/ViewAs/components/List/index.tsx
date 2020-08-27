@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import isEqual from 'lodash/isEqual'
 import { useDispatch } from 'react-redux'
-import { addNotification as notify } from 'reapop'
 import {
   Box,
   Button,
+  Tooltip,
   List,
   ListSubheader,
   makeStyles,
@@ -51,15 +51,6 @@ export const MemberList = ({
 
   const handleSelectMember = (id: UUID) => {
     if (selectedMembers.includes(id)) {
-      if (selectedMembers.length === 1) {
-        return dispatch(
-          notify({
-            message: 'you should select at least one team member or all.',
-            status: 'warning'
-          })
-        )
-      }
-
       onChangeSelectedMembers(selectedMembers.filter(member => member !== id))
 
       return
@@ -70,20 +61,19 @@ export const MemberList = ({
 
   const handleSelectAllMembers = () => {
     if (selectedMembers.length === membersId.length) {
-      return dispatch(
-        notify({
-          message:
-            'Is not possible to deselect all team member, you should select at least one team member or all.',
-          status: 'warning'
-        })
-      )
+      onChangeSelectedMembers([])
+
+      return
     }
 
     onChangeSelectedMembers(membersId)
   }
 
   const handleApplyChanges = async () => {
-    if (isEqual(selectedMembers, initialSelectedMembers)) {
+    if (
+      isEqual(selectedMembers, initialSelectedMembers) ||
+      selectedMembers.length === 0
+    ) {
       return
     }
 
@@ -122,16 +112,28 @@ export const MemberList = ({
         )
       })}
       <Box px={2} py={1}>
-        <Button
-          size="small"
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          onClick={handleApplyChanges}
-          disabled={isSubmitting || disabled}
+        <Tooltip
+          title={
+            selectedMembers.length === 0
+              ? 'Is not possible to deselect all team member'
+              : ''
+          }
         >
-          Apply
-        </Button>
+          <div>
+            <Button
+              size="small"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              onClick={handleApplyChanges}
+              disabled={
+                isSubmitting || disabled || selectedMembers.length === 0
+              }
+            >
+              Apply
+            </Button>
+          </div>
+        </Tooltip>
       </Box>
     </List>
   )

@@ -23,10 +23,6 @@ const useStyles = makeStyles(
     tooltip: {
       '& span': {
         display: 'block'
-      },
-      '& hr': {
-        margin: theme.spacing(1, 0),
-        opacity: '50%'
       }
     }
   }),
@@ -50,7 +46,7 @@ export const ViewAs = props => {
   const id = open ? 'viewas-popover' : undefined
   const tooltipTitle = useMemo(() => {
     if (selectedMembers.length === 0) {
-      return 'No One is slected'
+      return 'No One is selected'
     }
 
     const selectedNames: string[] = []
@@ -67,8 +63,6 @@ export const ViewAs = props => {
         {selectedNames.map(name => (
           <span key={name}>{name}</span>
         ))}
-        <hr />
-        <span>Click to edit</span>
       </div>
     )
   }, [classes.tooltip, selectedMembers, teamMembers])
