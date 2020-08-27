@@ -20,46 +20,55 @@ export const TEMPLATE_VARIABLES = [
   } as TemplateVariable<'number'>,
   {
     section: 'Listing Info',
-    name: 'listing.property.address.city',
-    label: 'City',
-    type: 'string'
-  } as TemplateVariable<'string'>,
-  {
-    section: 'Listing Info',
-    name: 'listing.property.address.full_address',
-    label: 'Full Address',
-    type: 'string'
-  } as TemplateVariable<'string'>,
-  {
-    section: 'Listing Info',
-    name: 'listing.property.address.postal_code',
-    label: 'Postal Code',
-    type: 'string'
-  } as TemplateVariable<'string'>,
-  {
-    section: 'Listing Info',
-    name: 'listing.property.address.state',
-    label: 'State',
-    type: 'string'
-  } as TemplateVariable<'string'>,
-  {
-    section: 'Listing Info',
-    name: 'listing.property.address.street_address',
-    label: 'Street Address',
-    type: 'string'
-  } as TemplateVariable<'string'>,
-  {
-    section: 'Listing Info',
-    name: 'listing.property.address.street_name',
-    label: 'Street Name',
-    type: 'string'
-  } as TemplateVariable<'string'>,
-  {
-    section: 'Listing Info',
-    name: 'listing.property.address.street_number',
-    label: 'Street Number',
-    type: 'string'
-  } as TemplateVariable<'string'>,
+    name: 'listing.property.address',
+    label: 'Address',
+    addressName: 'listingAddress',
+    type: 'address',
+    fields: [
+      {
+        section: 'Listing Info',
+        name: 'listing.property.address.city',
+        label: 'City',
+        type: 'string'
+      } as TemplateVariable<'string'>,
+      {
+        section: 'Listing Info',
+        name: 'listing.property.address.full_address',
+        label: 'Full Address',
+        type: 'string'
+      } as TemplateVariable<'string'>,
+      {
+        section: 'Listing Info',
+        name: 'listing.property.address.postal_code',
+        label: 'Postal Code',
+        type: 'string'
+      } as TemplateVariable<'string'>,
+      {
+        section: 'Listing Info',
+        name: 'listing.property.address.state',
+        label: 'State',
+        type: 'string'
+      } as TemplateVariable<'string'>,
+      {
+        section: 'Listing Info',
+        name: 'listing.property.address.street_address',
+        label: 'Street Address',
+        type: 'string'
+      } as TemplateVariable<'string'>,
+      {
+        section: 'Listing Info',
+        name: 'listing.property.address.street_name',
+        label: 'Street Name',
+        type: 'string'
+      } as TemplateVariable<'string'>,
+      {
+        section: 'Listing Info',
+        name: 'listing.property.address.street_number',
+        label: 'Street Number',
+        type: 'string'
+      } as TemplateVariable<'string'>
+    ]
+  } as TemplateVariable<'address'>,
   {
     section: 'Listing Info',
     name: 'listing.property.bedroom_count',

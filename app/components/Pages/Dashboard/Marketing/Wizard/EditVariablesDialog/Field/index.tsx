@@ -6,6 +6,7 @@ import { TemplateVariableType, TemplateVariable } from '../../types'
 import { UploadableFieldProps } from './types'
 import Image from './Image'
 import SortableImageList from './SortableImageList'
+import Address from './Address'
 
 export default function Field({
   variable,
@@ -26,6 +27,15 @@ export default function Field({
     return (
       <SortableImageList
         variable={variable as TemplateVariable<'sortableImageList'>}
+        onChange={onChange}
+      />
+    )
+  }
+
+  if (variable.type === 'address') {
+    return (
+      <Address
+        variable={variable as TemplateVariable<'address'>}
         onChange={onChange}
       />
     )

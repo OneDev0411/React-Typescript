@@ -18,6 +18,14 @@ export function useEntityWithSetter<T extends object>(
     const newEntity = _clone<T>(innerEntity)
 
     newData.forEach(item => {
+      if (item.type === 'address') {
+        ;(item as TemplateVariable<'address'>).fields.forEach(addressField => {
+          _set<T>(newEntity, addressField.name, addressField.value)
+        })
+
+        return
+      }
+
       _set<T>(newEntity, item.name, item.value)
     })
 
