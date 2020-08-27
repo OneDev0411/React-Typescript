@@ -33,8 +33,8 @@ import PageLayout from 'components/GlobalPageLayout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
-
 import renderBrandedTemplate from 'utils/marketing-center/render-branded-template'
+import { useGoogleMapsPlaces } from 'hooks/use-google-maps-places'
 
 import { useTemplates } from '../hooks/use-templates'
 
@@ -72,6 +72,8 @@ function MarketingWizard(props: WithRouterProps) {
   useTitle('Marketing | Rechat')
 
   const classes = useStyles()
+
+  useGoogleMapsPlaces()
 
   const dispatch = useDispatch()
   const rawUser = useSelector<IAppState, IUser>(({ user }) => user)

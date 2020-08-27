@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface Props extends UploadableFieldProps<'image'> {}
 
-export default function ImageField({ variable, onChange, onUpload }: Props) {
+export default function Image({ variable, onChange, onUpload }: Props) {
   const classes = useStyles()
   const [isUploading, setIsUploading] = useState<boolean>(false)
 

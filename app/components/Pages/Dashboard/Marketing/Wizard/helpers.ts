@@ -21,17 +21,31 @@ export function getEditableVariables(
       )
     }
 
+    if (item.type === 'address') {
+      return item.fields.some(addressField =>
+        currentTemplatesVariableNames.includes(addressField.name)
+      )
+    }
+
     return currentTemplatesVariableNames.includes(item.name)
   }).map(item => {
     if (item.type === 'sortableImageList') {
       return {
         ...item,
-        images: item.images.map(imageItem => {
-          return {
-            ...imageItem,
-            value: _get(data, imageItem.name)
-          }
-        })
+        images: item.images.map(imageItem => ({
+          ...imageItem,
+          value: _get(data, imageItem.name)
+        }))
+      }
+    }
+
+    if (item.type === 'address') {
+      return {
+        ...item,
+        fields: item.fields.map(addressField => ({
+          ...addressField,
+          value: _get(data, addressField.name)
+        }))
       }
     }
 

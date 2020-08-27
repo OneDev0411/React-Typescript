@@ -20,7 +20,7 @@ export interface SortableImageListOptions {
 
 export interface AddressOptions {
   addressName: string
-  variableNames: string[]
+  fields: TemplateVariable<'string'>[]
 }
 
 export type TemplateVariable<T extends TemplateVariableType> = {
