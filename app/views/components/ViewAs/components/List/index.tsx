@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import isEqual from 'lodash/isEqual'
 import { useDispatch } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 import {
   Box,
   Button,
@@ -50,6 +51,15 @@ export const MemberList = ({
 
   const handleSelectMember = (id: UUID) => {
     if (selectedMembers.includes(id)) {
+      if (selectedMembers.length === 1) {
+        return dispatch(
+          notify({
+            message: 'you should select at least one team member or all.',
+            status: 'warning'
+          })
+        )
+      }
+
       onChangeSelectedMembers(selectedMembers.filter(member => member !== id))
 
       return
@@ -60,9 +70,13 @@ export const MemberList = ({
 
   const handleSelectAllMembers = () => {
     if (selectedMembers.length === membersId.length) {
-      onChangeSelectedMembers([])
-
-      return
+      return dispatch(
+        notify({
+          message:
+            'Is not possible to deselect all team member, you should select at least one team member or all.',
+          status: 'warning'
+        })
+      )
     }
 
     onChangeSelectedMembers(membersId)
