@@ -70,7 +70,7 @@ function MiniProfile(props: MiniProfilePropsType) {
       <div className="head">
         <Avatar
           alt={getName(data)}
-          url={data.profile_image_url}
+          contact={data as IContact}
           className={classes.avatar}
         >
           {getNameInitials(getName(data))}

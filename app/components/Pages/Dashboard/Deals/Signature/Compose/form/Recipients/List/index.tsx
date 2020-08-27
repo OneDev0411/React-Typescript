@@ -9,7 +9,6 @@ import {
   IconButton,
   MenuItem,
   MenuList,
-  Avatar,
   Typography,
   Box,
   Theme,
@@ -21,6 +20,7 @@ import { useTheme } from '@material-ui/styles'
 import { mdiClose } from '@mdi/js'
 
 import { BaseDropdown } from 'components/BaseDropdown'
+import { Avatar } from 'components/GeneralAvatar'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import type { ISignatureRecipient } from 'deals/Signature/types'
@@ -143,7 +143,7 @@ export function RecipientsList() {
                     <Box display="flex">
                       <Avatar
                         alt={getAvatarTitle(recipient)}
-                        src={recipient?.user?.profile_image_url ?? undefined}
+                        user={recipient?.user as IUser}
                         style={{
                           width: theme.spacing(4),
                           height: theme.spacing(4),

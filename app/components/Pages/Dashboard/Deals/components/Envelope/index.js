@@ -11,7 +11,7 @@ import { confirmation } from 'actions/confirmation'
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 import Deal from 'models/Deal'
 
-import Avatar from 'components/Avatar'
+import { Avatar } from 'components/GeneralAvatar'
 
 import Tooltip from 'components/tooltip'
 
@@ -159,9 +159,8 @@ class Envelope extends React.Component {
             {areSigned.map((signer, key) => (
               <WhoSignedRow key={key}>
                 <Avatar
-                  title={getLegalFullName(signer.role)}
-                  image={signer.user && signer.user.profile_image_thumbnail_url}
-                  size={30}
+                  alt={getLegalFullName(signer.role)}
+                  user={signer.user}
                 />
 
                 <TitleContainer>
@@ -185,9 +184,8 @@ class Envelope extends React.Component {
             {notSigned.map((signer, key) => (
               <WhoSignedRow key={key}>
                 <Avatar
-                  title={getLegalFullName(signer.role)}
-                  image={signer.user && signer.user.profile_image_thumbnail_url}
-                  size={30}
+                  alt={getLegalFullName(signer.role)}
+                  user={signer.user}
                 />
 
                 <RoleName>{getLegalFullName(signer.role)}</RoleName>
@@ -203,9 +201,8 @@ class Envelope extends React.Component {
             {declineds.map((signer, key) => (
               <WhoSignedRow key={key}>
                 <Avatar
-                  title={getLegalFullName(signer.role)}
-                  image={signer.user && signer.user.profile_image_thumbnail_url}
-                  size={30}
+                  alt={getLegalFullName(signer.role)}
+                  user={signer.user}
                 />
 
                 <RoleName>{getLegalFullName(signer.role)}</RoleName>

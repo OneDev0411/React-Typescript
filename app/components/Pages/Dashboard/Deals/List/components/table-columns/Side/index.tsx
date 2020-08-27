@@ -3,7 +3,7 @@ import React from 'react'
 import { Typography } from '@material-ui/core'
 
 import PopOver from 'components/Popover'
-import Avatar from 'components/Avatar'
+import { Avatar } from 'components/GeneralAvatar'
 import { getSide } from 'models/Deal/helpers/context/get-side'
 
 import { roleName, getLegalFullName } from '../../../../utils/roles'
@@ -47,9 +47,8 @@ export function Side({ deal, roles, rowId, rowsCount }: Props) {
               <div key={`ROLE_${role.id}`} className="item">
                 <div className="avatar">
                   <Avatar
-                    title={`${role.legal_first_name} ${role.legal_last_name}`}
-                    image={role.user ? role.user.profile_image_url : null}
-                    size={40}
+                    alt={`${role.legal_first_name} ${role.legal_last_name}`}
+                    user={role.user}
                   />
                 </div>
                 <div className="info">

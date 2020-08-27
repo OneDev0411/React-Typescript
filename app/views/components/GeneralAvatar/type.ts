@@ -10,4 +10,7 @@ export interface BaseProps extends Omit<AvatarProps, 'src' | 'sizes'> {
   url?: string
 }
 
-export type Props = BaseProps
+export type Props = RequireOnlyOne<
+  BaseProps,
+  'user' | 'contact' | 'deal' | 'email' | 'url'
+>

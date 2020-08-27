@@ -1,7 +1,8 @@
 import React from 'react'
 
-import { Avatar, Theme, makeStyles, createStyles } from '@material-ui/core'
+import { Theme, makeStyles, createStyles } from '@material-ui/core'
 
+import { Avatar } from 'components/GeneralAvatar'
 import Deal from 'models/Deal'
 
 interface Props {
@@ -24,7 +25,7 @@ export function ListingImage({ deal }: Props) {
 
   return (
     <Avatar
-      src={imageUrl || placeholderImageUrl}
+      url={imageUrl || placeholderImageUrl}
       variant="circle"
       className={classes.avatar}
     />

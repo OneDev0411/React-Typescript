@@ -3,7 +3,7 @@ import { makeStyles, Theme, Typography } from '@material-ui/core'
 
 import { mdiHomeOutline } from '@mdi/js'
 
-import Avatar from 'components/Avatar'
+import { Avatar } from 'components/GeneralAvatar'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import ALinkToClosable from 'components/ALinkToClosable'
 import { getField, getEnderType } from 'models/Deal/helpers/context'
@@ -79,7 +79,7 @@ export function Address({
         {notificationsCount > 0 && <Notification count={notificationsCount} />}
 
         {photo ? (
-          <Avatar image={photo} size={32} />
+          <Avatar url={photo} />
         ) : (
           <div className={classes.homeIcon}>
             <SvgIcon path={mdiHomeOutline} />

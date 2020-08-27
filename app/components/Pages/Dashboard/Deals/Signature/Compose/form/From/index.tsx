@@ -1,14 +1,7 @@
 import React, { useMemo } from 'react'
 import uniqBy from 'lodash/uniqBy'
 
-import {
-  Box,
-  Avatar,
-  Typography,
-  MenuList,
-  MenuItem,
-  Theme
-} from '@material-ui/core'
+import { Box, Typography, MenuList, MenuItem, Theme } from '@material-ui/core'
 import { useField } from 'react-final-form'
 
 import { useSelector } from 'react-redux'
@@ -18,6 +11,7 @@ import { useTheme } from '@material-ui/styles'
 import { IAppState } from 'reducers'
 
 import { BaseDropdown } from 'components/BaseDropdown'
+import { Avatar } from 'components/GeneralAvatar'
 import {
   InputContainer,
   InputLabel,
@@ -93,7 +87,7 @@ export function From({ deal }: Props) {
                   <Box display="flex" alignItems="center">
                     <Avatar
                       alt={user.display_name}
-                      src={user.profile_image_url ?? undefined}
+                      user={user}
                       style={{
                         width: theme.spacing(5),
                         height: theme.spacing(5),
