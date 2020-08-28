@@ -80,12 +80,10 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
     }
   }, [])
 
-  function showNotificationForUnsupportedImage(
-    unsupportedImageFile: File
-  ): void {
+  function showNotificationForUnsupportedImage(): void {
     dispatch(
       addNotification({
-        message: `Unable to load the file '${unsupportedImageFile.name}'. File type ${unsupportedImageFile.type} is not a supported image.`,
+        message: 'Only acceptable files are JPG, JPEG, PNG, GIF, and SVG.',
         status: 'error'
       })
     )
@@ -109,7 +107,7 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
    */
   const addImage = async (file: File) => {
     if (!isImageFile(file)) {
-      return showNotificationForUnsupportedImage(file)
+      return showNotificationForUnsupportedImage()
     }
 
     // We first convert image to data url and show it.
@@ -180,13 +178,13 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
 
   useDropzonePropsInterceptor(props => ({
     disabled: false,
-    accept: props.fileAccept || 'image/*',
+    accept: props.fileAccept,
     onDrop: (files: File[]) => {
       const file = files?.[0]
 
       if (file) {
         if (!isImageFile(file)) {
-          return showNotificationForUnsupportedImage(file)
+          return showNotificationForUnsupportedImage()
         }
 
         return addImageRef.current(file)
