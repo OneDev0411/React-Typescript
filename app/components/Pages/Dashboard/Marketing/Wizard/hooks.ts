@@ -26,6 +26,16 @@ export function useEntityWithSetter<T extends object>(
         return
       }
 
+      if (item.type === 'sortableImageList') {
+        ;(item as TemplateVariable<'sortableImageList'>).images.forEach(
+          imageField => {
+            _set<T>(newEntity, imageField.name, imageField.value)
+          }
+        )
+
+        return
+      }
+
       _set<T>(newEntity, item.name, item.value)
     })
 

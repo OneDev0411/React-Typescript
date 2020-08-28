@@ -9,10 +9,6 @@ export type TemplateVariableType =
   | 'sortableImageList'
   | 'sortableImageItem'
 
-export interface SortableImageItemOptions {
-  order: number
-}
-
 export interface SortableImageListOptions {
   sortableName: string
   images: TemplateVariable<'sortableImageItem'>[]
@@ -30,5 +26,4 @@ export type TemplateVariable<T extends TemplateVariableType> = {
   type: T
   value?: string
 } & (T extends 'address' ? AddressOptions : {}) &
-  (T extends 'sortableImageList' ? SortableImageListOptions : {}) &
-  (T extends 'sortableImageItem' ? SortableImageItemOptions : {})
+  (T extends 'sortableImageList' ? SortableImageListOptions : {})
