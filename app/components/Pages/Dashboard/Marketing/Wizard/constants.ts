@@ -133,49 +133,41 @@ export const TEMPLATE_VARIABLES = [
       {
         name: 'listing.gallery_image_urls.0',
         label: 'Listing Photo',
-        order: 1,
         type: 'sortableImageItem'
       } as TemplateVariable<'sortableImageItem'>,
       {
         name: 'listing.gallery_image_urls.1',
         label: 'Listing Photo 2',
-        order: 1,
         type: 'sortableImageItem'
       } as TemplateVariable<'sortableImageItem'>,
       {
         name: 'listing.gallery_image_urls.2',
         label: 'Listing Photo 3',
-        order: 2,
         type: 'sortableImageItem'
       } as TemplateVariable<'sortableImageItem'>,
       {
         name: 'listing.gallery_image_urls.3',
         label: 'Listing Photo 4',
-        order: 3,
         type: 'sortableImageItem'
       } as TemplateVariable<'sortableImageItem'>,
       {
         name: 'listing.gallery_image_urls.4',
         label: 'Listing Photo 5',
-        order: 4,
         type: 'sortableImageItem'
       } as TemplateVariable<'sortableImageItem'>,
       {
         name: 'listing.gallery_image_urls.5',
         label: 'Listing Photo 6',
-        order: 5,
         type: 'sortableImageItem'
       } as TemplateVariable<'sortableImageItem'>,
       {
         name: 'listing.gallery_image_urls.6',
         label: 'Listing Photo 7',
-        order: 6,
         type: 'sortableImageItem'
       } as TemplateVariable<'sortableImageItem'>,
       {
         name: 'listing.gallery_image_urls.7',
         label: 'Listing Photo 8',
-        order: 7,
         type: 'sortableImageItem'
       } as TemplateVariable<'sortableImageItem'>
     ]
