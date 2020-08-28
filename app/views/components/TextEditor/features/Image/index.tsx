@@ -11,11 +11,12 @@ import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin'
 import createFocusPlugin from 'draft-js-focus-plugin'
 
 import { getLastAddedImageBlock } from 'components/TextEditor/utils/get-last-added-image-block'
-import { filterBlocks } from 'components/TextEditor/utils/filter-blocks'
-import { blockEquals } from 'components/TextEditor/utils/block-equals'
 import { isImageFile } from 'utils/file-utils/is-image-file'
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
+
+import { removeBlock } from 'components/TextEditor/modifiers/remove-block'
+import { doesContainBlock } from 'components/TextEditor/utils/does-contain-block'
 
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 import { withUploadingIndicator } from '../../block-decorators/with-uploading-indicator'
@@ -146,26 +147,27 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
           )
         }
       } catch (error) {
-        const message = error?.response?.body?.message
-
-        if (message) {
-          dispatch(
-            addNotification({
-              message,
-              status: 'error'
-            })
-          )
-        }
-
-        if (editorRef.current) {
-          const latestState = editorRef.current.getEditorState()
-
-          setEditorState(
-            filterBlocks(latestState, block => !blockEquals(block, imageBlock))
-          )
-        }
-
         console.error(error)
+
+        if (editorRef.current && imageBlock) {
+          const latestState = editorRef.current.getEditorState()
+          const imageBlockKey = imageBlock.getKey()
+
+          if (doesContainBlock(latestState, imageBlockKey, 'atomic')) {
+            const message = error?.response?.body?.message
+
+            if (message) {
+              dispatch(
+                addNotification({
+                  message,
+                  status: 'error'
+                })
+              )
+            }
+
+            setEditorState(removeBlock(latestState, imageBlockKey))
+          }
+        }
       }
     } else {
       console.warn(
