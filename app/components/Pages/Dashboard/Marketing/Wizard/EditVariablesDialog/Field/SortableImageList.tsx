@@ -124,10 +124,7 @@ export default function SortableImageList({ variable, onChange }: Props) {
                       innerRef={draggableProvided.innerRef}
                       {...draggableProvided.draggableProps}
                       style={{
-                        ...draggableProvided.draggableProps.style,
-                        ...(draggableSnapshot.isDragging
-                          ? { background: 'rgb(235,235,235)' }
-                          : {})
+                        ...draggableProvided.draggableProps.style
                       }}
                     >
                       <Grid item xs={2}>
