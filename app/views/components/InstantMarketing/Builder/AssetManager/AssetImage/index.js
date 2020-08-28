@@ -24,7 +24,12 @@ export class AssetImage extends React.Component {
   onImageSelect = (options = {}) => {
     const url = options.url || this.props.model.get('image')
 
-    const setBgUrl = () => this.props.target.set('background-url', url)
+    const setBgUrl = () => {
+      this.props.target.setAttributes({
+        ...this.props.target.getAttributes(),
+        'background-url': url
+      })
+    }
     const setSrc = () => this.props.target.set('src', url)
     const setBg = () => {
       const style = { ...this.props.target.get('style') }
