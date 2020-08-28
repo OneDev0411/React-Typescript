@@ -64,7 +64,6 @@ function Notifications({ params }: WithRouterProps) {
       case 'UserReactedToEnvelope':
         browserHistory.push(`/dashboard/deals/${notification.objects[0].deal}`)
         break
-
       case 'OpenHouseAvailableListing':
         browserHistory.push(`/dashboard/mls/${notification.objects[0].id}`)
         break
@@ -88,6 +87,11 @@ function Notifications({ params }: WithRouterProps) {
         break
       case 'ListingBecameAvailableUser':
         browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
+        break
+      case 'EmailCampaignReactedToEmailCampaignEmail':
+        browserHistory.push(
+          `/dashboard/insights/${notification.subjects[0].id}`
+        )
         break
       default:
         break
