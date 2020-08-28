@@ -56,7 +56,7 @@ export default function SortableImageList({ variable, onChange }: Props) {
     return reorderedImages
   }
 
-  const onDragEnd = (result: DropResult) => {
+  const handleDragEnd = (result: DropResult) => {
     if (
       !result.destination ||
       result.destination.index === result.source.index
@@ -76,9 +76,24 @@ export default function SortableImageList({ variable, onChange }: Props) {
     })
   }
 
+  const handleDeleteImage = (image: TemplateVariable<'sortableImageItem'>) => {
+    const newVariable: TemplateVariable<'sortableImageList'> = {
+      ...variable,
+      images: variable.images
+        .filter(item => item.name !== image.name)
+        .map((item, index) => ({
+          ...item,
+          name: `${variable.name}.${index}`,
+          label: index === 0 ? variable.label : `${variable.label} ${index + 1}`
+        }))
+    }
+
+    onChange(newVariable)
+  }
+
   return (
     <>
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable
           droppableId="sortable-images-droppable"
           ignoreContainerClipping
@@ -135,7 +150,7 @@ export default function SortableImageList({ variable, onChange }: Props) {
                       </Grid>
                       <Grid item xs={2}>
                         <Tooltip title="Delete photo" aria-label="Delete photo">
-                          <IconButton>
+                          <IconButton onClick={() => handleDeleteImage(image)}>
                             <SvgIcon path={mdiTrashCanOutline} />
                           </IconButton>
                         </Tooltip>
