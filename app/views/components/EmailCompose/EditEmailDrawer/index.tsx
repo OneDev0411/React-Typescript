@@ -100,7 +100,8 @@ export function EditEmailDrawer({
         ? getTemplateInstancePreviewImage(data.template)
         : data.html,
       due_at: data.due_at ? new Date(data.due_at * 1000) : null,
-      to: getRecipientsFromRecipientsEntity('To', data.recipients)
+      to: getRecipientsFromRecipientsEntity('To', data.recipients),
+      templateInstance: data.template
     }
 
     if (!data.individual) {

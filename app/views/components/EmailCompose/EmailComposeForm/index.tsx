@@ -95,7 +95,9 @@ export default function EmailComposeForm<T>({
   const [
     marketingTemplate,
     setMarketingTemplate
-  ] = useState<IMarketingTemplateInstance | null>(null)
+  ] = useState<IMarketingTemplateInstance | null>(
+    initialValues.templateInstance ?? null
+  )
 
   const dispatch = useDispatch()
 
@@ -320,7 +322,7 @@ export default function EmailComposeForm<T>({
                 onChangeEditor={setEditorState}
                 stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
               />
-              {marketingTemplate && (
+              {marketingTemplate && !props.hasStaticBody && (
                 <Callout dense>
                   <Box display="flex" alignItems="center">
                     <Box color={theme.palette.warning.contrastText} flex={1}>

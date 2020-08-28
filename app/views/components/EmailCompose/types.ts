@@ -17,6 +17,7 @@ export interface EmailFormValues {
   from: IUser | IOAuthAccount
   due_at: Date | null
   body: string | undefined
+  templateInstance?: IMarketingTemplateInstance
 }
 
 export interface UrlBasedEmailAttachmentInput {
