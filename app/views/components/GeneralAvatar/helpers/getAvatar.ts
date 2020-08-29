@@ -24,21 +24,6 @@ export const getAccountAvatar = (
  * @param account // User, Contact, Auth Account
  */
 
-export const getDealAvatar = (deal: IDeal): string => {
-  let photoField = 'photo'
-
-  if (deal.context && deal.context.hasOwnProperty('photo')) {
-    return deal.context[photoField]
-  }
-
-  return `https://unavatar.now.sh/${deal.email}?fallback=false`
-}
-
-/**
- * return the picture of deal
- * @param account // User, Contact, Auth Account
- */
-
 export const getEmailAvatar = (email: IEmailCampaign): string => {
   if (email.template?.file?.preview_url) {
     return email.template.file.preview_url

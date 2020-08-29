@@ -8,11 +8,7 @@ import {
 
 import { BaseProps, Props } from './type'
 import { getSize } from './helpers/getSize'
-import {
-  getAccountAvatar,
-  getDealAvatar,
-  getEmailAvatar
-} from './helpers/getAvatar'
+import { getAccountAvatar, getEmailAvatar } from './helpers/getAvatar'
 
 const BaseAvatar = withStyles((theme: Theme) => ({
   root: (props: Props) => {
@@ -29,8 +25,7 @@ const BaseAvatar = withStyles((theme: Theme) => ({
 }))((props: AvatarProps & Pick<BaseProps, 'size'>) => <MUIAvatar {...props} />)
 
 const AvatarComponent = (props: Props) => {
-  // const classes = useStyles(props)
-  const { user, contact, deal, email, url } = props
+  const { user, contact, email, url } = props
   const imageSrc = useMemo(() => {
     if (contact) {
       return getAccountAvatar(contact)
@@ -40,10 +35,6 @@ const AvatarComponent = (props: Props) => {
       return getAccountAvatar(user)
     }
 
-    if (deal) {
-      return getDealAvatar(deal)
-    }
-
     if (email) {
       getEmailAvatar(email)
     }
@@ -51,7 +42,7 @@ const AvatarComponent = (props: Props) => {
     if (url) {
       return url
     }
-  }, [contact, deal, email, url, user])
+  }, [contact, email, url, user])
 
   return <BaseAvatar {...props} src={imageSrc} />
 }
