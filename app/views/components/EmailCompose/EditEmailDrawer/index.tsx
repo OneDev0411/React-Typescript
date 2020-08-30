@@ -123,7 +123,7 @@ export function EditEmailDrawer({
       isOpen,
       getEmail: values => ({
         ...values,
-        html: data.template ? data.html : values.html
+        html: values.template ? '' : values.html
       }),
       onClose,
       onDelete: deleteEmail,
