@@ -115,29 +115,26 @@ export function RichTextFeature({
     <>
       {inlineFormatting && (
         <ToolbarFragment group="inlineFormatting">
-          <>
-            <BoldButton>
-              <ToolbarToggleButton
-                tooltip={getShortcutTooltip('Bold', 'B')}
-                edge="start"
-              >
-                <SvgIcon path={mdiFormatBold} />
-              </ToolbarToggleButton>
-            </BoldButton>
-            <ItalicButton>
-              <ToolbarToggleButton tooltip={getShortcutTooltip('Italic', 'I')}>
-                <SvgIcon path={mdiFormatItalic} />
-              </ToolbarToggleButton>
-            </ItalicButton>
+          <BoldButton>
+            <ToolbarToggleButton
+              tooltip={getShortcutTooltip('Bold', 'B')}
+              edge="start"
+            >
+              <SvgIcon path={mdiFormatBold} />
+            </ToolbarToggleButton>
+          </BoldButton>
 
-            <UnderlineButton>
-              <ToolbarToggleButton
-                tooltip={getShortcutTooltip('Underline', 'U')}
-              >
-                <SvgIcon path={mdiFormatUnderline} />
-              </ToolbarToggleButton>
-            </UnderlineButton>
-          </>
+          <ItalicButton>
+            <ToolbarToggleButton tooltip={getShortcutTooltip('Italic', 'I')}>
+              <SvgIcon path={mdiFormatItalic} />
+            </ToolbarToggleButton>
+          </ItalicButton>
+
+          <UnderlineButton>
+            <ToolbarToggleButton tooltip={getShortcutTooltip('Underline', 'U')}>
+              <SvgIcon path={mdiFormatUnderline} />
+            </ToolbarToggleButton>
+          </UnderlineButton>
         </ToolbarFragment>
       )}
       {lists && (
