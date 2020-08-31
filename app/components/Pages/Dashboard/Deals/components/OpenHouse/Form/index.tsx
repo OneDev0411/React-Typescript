@@ -1,11 +1,15 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import {
+  Box,
   Button,
   createStyles,
   makeStyles,
   Theme,
-  Grid
+  Grid,
+  Checkbox,
+  FormControlLabel,
+  TextField
 } from '@material-ui/core'
 import DayPicker from 'react-day-picker'
 import fecha from 'fecha'
@@ -55,6 +59,9 @@ const useStyles = makeStyles((theme: Theme) => {
     buttonContainer: {
       marginTop: theme.spacing(2)
     },
+    virtualContainer: {
+      margin: theme.spacing(1, 0)
+    },
     flexContainer: {
       display: 'flex'
     },
@@ -81,6 +88,8 @@ function OpenHouseForm(props: Props) {
   const [listing, setListing] = useState<IListing | null>(null)
   const [createdTask, setCreatedTask] = useState<IDealTask | null>(null)
   const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [isVirtual, setIsVirtual] = useState(false)
+  const [virtualUrl, setVirtualUrl] = useState('')
   const [showOHRegistrationDrawer, setShowOHRegistrationDrawer] = useState<
     boolean
   >(false)
@@ -95,6 +104,8 @@ function OpenHouseForm(props: Props) {
       ? new Date(props.defaultEndDate * 1000)
       : new Date(new Date().setHours(12, 0, 0))
   )
+
+  const isFormValid = isVirtual ? virtualUrl.length > 0 : true
 
   useEffect(() => {
     async function fetchLisitng() {
@@ -165,14 +176,16 @@ function OpenHouseForm(props: Props) {
       return
     }
 
+    const taskComment = `Please create an open house for this date:\n${taskTitle}\n${virtualUrl}`
+
     const task = await dispatch(
       createRequestTask({
         checklist,
         userId: user.id,
         dealId: props.deal.id,
         taskType: 'OpenHouse',
-        taskTitle: `Open House: ${taskTitle}`,
-        taskComment: `Please create an open house for this date:\n${taskTitle}`,
+        taskTitle: `${isVirtual ? 'Virtual ' : ''}Open House: ${taskTitle}`,
+        taskComment,
         notifyMessage: 'Back office has been notified'
       })
     )
@@ -268,12 +281,39 @@ function OpenHouseForm(props: Props) {
         </Grid>
       </Grid>
 
+      <Box className={classes.virtualContainer}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={isVirtual}
+              onChange={(_, checked: boolean) => setIsVirtual(checked)}
+              name="virtual"
+              color="primary"
+            />
+          }
+          label="Virtual Open House"
+        />
+
+        <div>
+          {isVirtual && (
+            <TextField
+              value={virtualUrl}
+              label="Url"
+              variant="outlined"
+              size="small"
+              fullWidth
+              onChange={e => setVirtualUrl(e.target.value)}
+            />
+          )}
+        </div>
+      </Box>
+
       <div className={classes.buttonContainer}>
         <Button
           fullWidth
           variant="contained"
           color="secondary"
-          disabled={isSaving}
+          disabled={isSaving || !isFormValid}
           onClick={handleSave}
         >
           {isSaving ? (
