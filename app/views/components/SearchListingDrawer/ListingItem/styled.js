@@ -12,13 +12,11 @@ export const ListItem = styled.div`
     props.isHighlighted ? grey.A100 : 'transparent'};
 
   .delete-icon {
-    width: 16px;
-    height: 16px;
-    fill: rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, 0.2);
     margin-left: 0.5rem;
 
     :hover {
-      fill: #e60000;
+      color: #e60000;
     }
   }
 
