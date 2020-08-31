@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 
-import IconSearchBase from 'components/SvgIcons/Search/IconSearch'
 import IconButtonFlex from 'components/Button/IconButton'
 
 export const Container = styled.div`
@@ -47,15 +46,6 @@ export const TextInput = styled.input`
 
   :focus {
     outline: none;
-  }
-`
-
-export const IconSearch = styled(IconSearchBase)`
-  path {
-    fill: ${({ theme }) => theme.palette.grey[600]} !important;
-  }
-  ${Container}:hover & path {
-    fill: #000000 !important;
   }
 `
 
