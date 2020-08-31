@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { Box, ButtonBase, Theme, useTheme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
+import { mdiCheckCircle } from '@mdi/js'
 
 import { OAuthProvider } from 'constants/contacts'
 import {
@@ -18,10 +19,10 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 
-import { iconSizes } from 'components/SvgIcons/icon-sizes'
-import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { outlookIcon } from 'components/SvgIcons/icons'
 import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
-import CheckIcon from 'components/SvgIcons/CircleCheck/IconCircleCheck'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Header from '../Header'
@@ -60,7 +61,7 @@ const useStyles = makeStyles(
       position: 'absolute',
       top: theme.spacing(1),
       right: theme.spacing(1),
-      fill: theme.palette.primary.main
+      color: theme.palette.primary.main
     }
   }),
   { name: 'OAuthAccounts' }
@@ -115,7 +116,11 @@ export function OAuthAccounts() {
           className={cn(classes.baseButton, classes.googleButton)}
         >
           {isGoogleConnected && (
-            <CheckIcon className={classes.checkIcon} size={iconSizes.large} />
+            <SvgIcon
+              path={mdiCheckCircle}
+              className={classes.checkIcon}
+              size={muiIconSizes.large}
+            />
           )}
           <GoogleIcon className={classes.accountIcon} size={accountIconSize} />
           Connect Google
@@ -130,9 +135,18 @@ export function OAuthAccounts() {
           className={classes.baseButton}
         >
           {isOutlookConnected && (
-            <CheckIcon className={classes.checkIcon} size={iconSizes.large} />
+            <SvgIcon
+              path={mdiCheckCircle}
+              className={classes.checkIcon}
+              size={muiIconSizes.large}
+            />
           )}
-          <IconOutlook className={classes.accountIcon} size={accountIconSize} />
+          <SvgIcon
+            path={outlookIcon}
+            className={classes.accountIcon}
+            size="5rem"
+            color={theme.palette.info.main}
+          />
           Connect Outlook
         </ButtonBase>
       </Box>

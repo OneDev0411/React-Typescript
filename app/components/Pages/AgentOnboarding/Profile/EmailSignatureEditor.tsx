@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box } from '@material-ui/core'
 import { EditorState } from 'draft-js'
+import { mdiEmailOutline } from '@mdi/js'
 
 import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
 
@@ -8,7 +9,7 @@ import { StyledTextEditor } from 'components/EditEmailSignature'
 import { ImageFeature } from 'components/TextEditor/features/Image'
 import { RichTextFeature } from 'components/TextEditor/features/RichText'
 import { EmojiFeature } from 'components/TextEditor/features/Emoji'
-import EmailIcon from 'components/SvgIcons/EmailOutline/IconEmailOutline'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   editorState: EditorState
@@ -26,7 +27,7 @@ export default function EmailSignatureEditor({ editorState, onChange }: Props) {
   return (
     <>
       <Box mb={0.5} display="flex" justifyContent="center" alignItems="center">
-        <EmailIcon />
+        <SvgIcon path={mdiEmailOutline} />
         <span style={{ marginLeft: '0.5rem' }}>Your email signature</span>
       </Box>
       <StyledTextEditor

@@ -5,7 +5,7 @@ import cn from 'classnames'
 import { H2 } from 'components/Typography/headings'
 
 import CrudRole from './crud-role'
-import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+import RequiredErrorSign from './required-error-sign'
 
 const BUYING = 'Buying'
 const SELLING = 'Selling'
@@ -52,7 +52,7 @@ export default props => {
         Enter {sideName === BUYING ? 'buyer' : 'listing'} agent’s
         information.&nbsp;
         {props.isRequired && <span className="required">*</span>}
-        {hasError && <RequiredIcon />}
+        {hasError && <RequiredErrorSign />}
       </H2>
 
       <div className="people-container">

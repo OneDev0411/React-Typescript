@@ -1,10 +1,9 @@
 import React from 'react'
 import { Typography, Box, Button, IconButton } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
 
 import BareModal from 'components/BareModal'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useStyles } from '../../styles'
 
@@ -18,7 +17,6 @@ export default function DownloadModal({
   onClose: () => void
 }) {
   const classes = useStyles()
-  const iconClasses = useIconStyles()
 
   return (
     <BareModal
@@ -30,7 +28,7 @@ export default function DownloadModal({
       <Box padding={6} className={classes.downloadModal}>
         <Box className={classes.modalCloseButton}>
           <IconButton onClick={onClose}>
-            <CloseIcon className={iconClasses.small} />
+            <SvgIcon path={mdiClose} />
           </IconButton>
         </Box>
         <Typography variant="h3" gutterBottom>

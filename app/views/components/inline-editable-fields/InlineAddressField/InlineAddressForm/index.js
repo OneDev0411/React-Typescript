@@ -2,11 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import addressParser from 'parse-address'
+import { mdiTrashCanOutline } from '@mdi/js'
 
 import Tooltip from 'components/tooltip'
 import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
-import IconDelete from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import LoadSaveReinitializeForm from 'views/utils/LoadSaveReinitializeForm'
 
 import {
@@ -173,7 +174,7 @@ export class InlineAddressForm extends React.Component {
                         disabled={isDisabled}
                         onClick={this.delete}
                       >
-                        <IconDelete />
+                        <SvgIcon path={mdiTrashCanOutline} />
                       </IconButton>
                     </Tooltip>
                   )}

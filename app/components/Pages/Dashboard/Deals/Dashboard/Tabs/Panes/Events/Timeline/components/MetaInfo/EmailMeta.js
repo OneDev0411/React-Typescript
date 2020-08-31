@@ -1,23 +1,33 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
+import {
+  mdiEmailOpenOutline,
+  mdiCursorDefaultClickOutline,
+  mdiCloseCircleOutline,
+  mdiMinusCircleOutline
+} from '@mdi/js'
+import { makeStyles } from '@material-ui/core'
 
 import { Divider } from 'components/Divider'
-import { grey, red, yellow } from 'views/utils/colors'
-import ClickedIcon from 'components/SvgIcons/Clicked/IconClicked'
-import OpenedIcon from 'components/SvgIcons/OpenedEmail/IconOpenedEmail'
-import BouncedIcon from 'components/SvgIcons/CircleClose/IconCircleClose'
-import UnsubscriedIcon from 'components/SvgIcons/CircleRemove/IconCircleRemove'
+import { red, yellow } from 'views/utils/colors'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+const useStyles = makeStyles(
+  theme => ({
+    icon: {
+      color: theme.palette.grey['600'],
+      marginRight: theme.spacing(0.5)
+    }
+  }),
+  { name: 'EmailMeta' }
+)
 
 export default function EmailMeta({ bounced, unsubscribed, opened, clicked }) {
+  const classes = useStyles()
   const dividerProps = {
     width: '1px',
     height: '1em',
     margin: '0 0.5em'
-  }
-
-  const iconStyle = {
-    fill: grey.A900,
-    marginRight: '0.25em'
   }
 
   const bouncedColor = red.A100
@@ -28,23 +38,34 @@ export default function EmailMeta({ bounced, unsubscribed, opened, clicked }) {
       <Divider {...dividerProps} />
       {bounced && (
         <React.Fragment>
-          <BouncedIcon style={{ ...iconStyle, fill: bouncedColor }} />
+          <SvgIcon
+            path={mdiCloseCircleOutline}
+            color={bouncedColor}
+            className={classes.icon}
+          />
           <span style={{ color: bouncedColor }}>Bounced</span>
         </React.Fragment>
       )}
       {unsubscribed && (
         <React.Fragment>
-          <UnsubscriedIcon style={{ ...iconStyle, fill: unsubscribedColor }} />
+          <SvgIcon
+            path={mdiMinusCircleOutline}
+            color={unsubscribedColor}
+            className={classes.icon}
+          />
           <span style={{ color: unsubscribedColor }}>Unsubscribed</span>
           <Divider {...dividerProps} />
         </React.Fragment>
       )}
       {!bounced && (
         <React.Fragment>
-          <OpenedIcon style={iconStyle} />
+          <SvgIcon path={mdiEmailOpenOutline} className={classes.icon} />
           {`${opened} Opened`}
           <Divider {...dividerProps} />
-          <ClickedIcon style={iconStyle} />
+          <SvgIcon
+            path={mdiCursorDefaultClickOutline}
+            className={classes.icon}
+          />
           {`${clicked} Clicked`}
         </React.Fragment>
       )}

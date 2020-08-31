@@ -2,16 +2,30 @@ import React from 'react'
 import fecha from 'fecha'
 import idx from 'idx'
 import Flex from 'styled-flex-component'
+import { mdiBellOutline } from '@mdi/js'
+import { makeStyles } from '@material-ui/styles'
 
 import { Divider } from 'components/Divider'
-import IconBell from 'components/SvgIcons/Bell/IconBell'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { getReminderLabel } from 'views/utils/reminder'
 import { eventTypesIcons } from 'views/utils/event-types-icons'
 
 import EmailMeta from './EmailMeta'
 
+const useStyles = makeStyles(
+  theme => ({
+    bellIcon: {
+      marginRight: theme.spacing(0.5),
+      color: theme.palette.text.secondary
+    }
+  }),
+  { name: 'MetaInfo' }
+)
+
 export function MetaInfo(props) {
+  const classes = useStyles()
   const { task } = props
   const { task_type, reminders } = task
   const email = idx(
@@ -52,11 +66,15 @@ export function MetaInfo(props) {
         {showReminder && (
           <Flex
             alignCenter
-            style={{ marginLeft: '1em' }}
+            style={{ marginLeft: '1.5em' }}
             onClick={props.onEdit}
             className="u-cursor--pointer"
           >
-            <IconBell style={{ fill: '#7f7f7f' }} />
+            <SvgIcon
+              path={mdiBellOutline}
+              className={classes.bellIcon}
+              size={muiIconSizes.small}
+            />
             <span>
               {getReminderLabel(
                 task.due_date * 1000,
