@@ -4,12 +4,13 @@ import Flex from 'styled-flex-component'
 
 import { Divider } from 'components/Divider'
 import { primary } from 'views/utils/colors'
-import Icon from 'components/SvgIcons/AutoEmail/IconAutoEmail'
+import { autoEmailIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 export function MetaInfo({ scheduledFor }) {
   return (
     <Flex alignCenter style={{ marginBottom: '2em' }}>
-      <Icon style={{ marginRight: '0.5em', fill: primary }} />
+      <SvgIcon path={autoEmailIcon} rightMargined color={primary} />
       <span>Auto Email</span>
       <Divider margin="0 0.5em" width="1px" height="16px" />
       <span style={{ color: primary, fontWeight: 500 }}>
