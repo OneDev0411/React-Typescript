@@ -23,10 +23,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface Props {
   color?: string
+  colors: string[]
   onChange: (color: ColorResult) => void
 }
 
-export function ColorPicker({ color = '#000', onChange }: Props) {
+export function ColorPicker({ color = '#000', colors, onChange }: Props) {
   const classes = useStyles()
 
   return (
@@ -47,6 +48,7 @@ export function ColorPicker({ color = '#000', onChange }: Props) {
         <div className={classes.picker}>
           <CirclePicker
             color={color}
+            colors={colors}
             onChange={(result: ColorResult) => {
               close()
               onChange(result)

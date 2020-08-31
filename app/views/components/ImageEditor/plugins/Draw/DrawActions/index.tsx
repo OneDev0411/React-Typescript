@@ -6,14 +6,25 @@ import {
   Theme,
   Button,
   Divider,
-  makeStyles
+  makeStyles,
+  IconButton,
+  Tooltip
 } from '@material-ui/core'
 import { ColorResult } from 'react-color'
 
-import Icon from '@mdi/react'
-import { mdiDraw, mdiVectorLine } from '@mdi/js'
+import { mdiDraw, mdiVectorLine, mdiHand } from '@mdi/js'
 
 import { useEffectOnce } from 'react-use'
+
+import { useSelector } from 'react-redux'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+
+import { getBrandByType } from 'utils/user-teams'
+import { IAppState } from 'reducers'
+
+import { getBrandColors } from 'utils/get-brand-colors'
 
 import { Slider } from '../../../components/Slider'
 import { ColorPicker } from '../../../components/ColorPicker'
@@ -39,7 +50,9 @@ interface Props {
 export function DrawActions({ editor, onChangeActiveAction }: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
-  const [drawingMode, setDrawingMode] = useState<DRAWING_MODE>('FREE_DRAWING')
+  const [drawingMode, setDrawingMode] = useState<DRAWING_MODE | null>(
+    'FREE_DRAWING'
+  )
 
   const [
     activeObject,
@@ -48,24 +61,11 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
   const [brushWidth, setBrushWidth] = useState(5)
   const [brushColor, setBrushColor] = useState('#000')
 
+  const brand = useSelector<IAppState, IBrand | null>(({ user }) =>
+    getBrandByType(user, 'Brokerage')
+  )
+
   useEffectOnce(() => {
-    const capture = (event: KeyboardEvent) => {
-      if (event.code === 'Enter') {
-        event.stopPropagation()
-
-        if (
-          ['FREE_DRAWING', 'LINE_DRAWING'].includes(editor.getDrawingMode())
-        ) {
-          editor.stopDrawingMode()
-        } else {
-          setActiveObject(null)
-          editor.startDrawingMode(drawingMode, getBrushSettings())
-        }
-      }
-    }
-
-    document.addEventListener('keydown', capture)
-
     editor.on(
       'objectActivated',
       (object: tuiImageEditor.IGraphicObjectProps) => {
@@ -77,10 +77,14 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
     )
 
     return () => {
-      document.removeEventListener('keydown', capture)
       editor.off('objectActivated')
     }
   })
+
+  const toggleDrawing = () => {
+    editor.stopDrawingMode()
+    setDrawingMode(null)
+  }
 
   const getBrushSettings = () => {
     return {
@@ -134,11 +138,13 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
       return
     }
 
-    editor.stopDrawingMode()
-    editor.startDrawingMode(drawingMode, {
-      ...getBrushSettings(),
-      color: color.hex
-    })
+    if (drawingMode) {
+      editor.stopDrawingMode()
+      editor.startDrawingMode(drawingMode, {
+        ...getBrushSettings(),
+        color: color.hex
+      })
+    }
   }
 
   const updateObject = (data: Partial<tuiImageEditor.IGraphicObjectProps>) => {
@@ -158,37 +164,67 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
     <Box
       display="flex"
       alignItems="center"
+      justifyContent="space-between"
       style={{
-        width: '100%',
-        height: theme.spacing(5)
+        width: '100%'
       }}
     >
-      <Button
-        startIcon={<Icon path={mdiDraw} size={1} />}
-        color={drawingMode === 'FREE_DRAWING' ? 'secondary' : 'default'}
-        onClick={setFreeDrawing}
+      <Box
+        display="flex"
+        alignItems="center"
+        flexGrow={1}
+        style={{
+          height: theme.spacing(5)
+        }}
       >
-        Free
-      </Button>
-      <Button
-        startIcon={<Icon path={mdiVectorLine} size={1} />}
-        color={drawingMode === 'LINE_DRAWING' ? 'secondary' : 'default'}
-        onClick={setStraightDrawing}
-      >
-        Line
-      </Button>
-      <Divider orientation="vertical" className={classes.divider} />
+        <Button
+          startIcon={<SvgIcon path={mdiDraw} size={muiIconSizes.medium} />}
+          color={drawingMode === 'FREE_DRAWING' ? 'secondary' : 'default'}
+          onClick={setFreeDrawing}
+        >
+          Free
+        </Button>
+        <Button
+          startIcon={
+            <SvgIcon path={mdiVectorLine} size={muiIconSizes.medium} />
+          }
+          color={drawingMode === 'LINE_DRAWING' ? 'secondary' : 'default'}
+          onClick={setStraightDrawing}
+        >
+          Line
+        </Button>
+        <Divider orientation="vertical" className={classes.divider} />
 
-      <ColorPicker color={brushColor} onChange={onChangeBrushColor} />
-      <Divider orientation="vertical" className={classes.divider} />
+        {brand && (
+          <ColorPicker
+            color={brushColor}
+            colors={getBrandColors(brand)}
+            onChange={onChangeBrushColor}
+          />
+        )}
 
-      <Slider
-        min={5}
-        max={60}
-        caption="Width"
-        value={brushWidth}
-        onChange={onChangeBrushWidth}
-      />
+        <Divider orientation="vertical" className={classes.divider} />
+
+        <Slider
+          min={5}
+          max={60}
+          caption="Width"
+          value={brushWidth}
+          onChange={onChangeBrushWidth}
+        />
+      </Box>
+
+      <Box>
+        <Tooltip title="Stop Drawing">
+          <IconButton
+            disabled={!drawingMode}
+            color="secondary"
+            onClick={toggleDrawing}
+          >
+            <SvgIcon path={mdiHand} size={muiIconSizes.medium} />
+          </IconButton>
+        </Tooltip>
+      </Box>
     </Box>
   )
 }

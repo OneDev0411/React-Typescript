@@ -1,9 +1,11 @@
 import React from 'react'
-import Icon from '@mdi/react'
 import { mdiCrop } from '@mdi/js'
 import { useEffectOnce } from 'react-use'
 
 import { Button } from '@material-ui/core'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ImageEditor, ObjectActivatedData, Actions } from '../../types'
 
@@ -55,7 +57,7 @@ export function Crop({
 
   return (
     <Button
-      startIcon={<Icon path={mdiCrop} size={1} />}
+      startIcon={<SvgIcon path={mdiCrop} size={muiIconSizes.small} />}
       size="small"
       variant="outlined"
       color={isActive ? 'secondary' : 'default'}

@@ -1,7 +1,9 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
-import Icon from '@mdi/react'
 import { mdiFormatTextbox } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ImageEditor, Actions } from '../../types'
 
@@ -28,7 +30,7 @@ export function Text({ editor, isActive, onChangeActiveAction }: Props) {
 
   return (
     <Button
-      startIcon={<Icon path={mdiFormatTextbox} size={1} />}
+      startIcon={<SvgIcon path={mdiFormatTextbox} size={muiIconSizes.small} />}
       size="small"
       variant="outlined"
       color={isActive ? 'secondary' : 'default'}

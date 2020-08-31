@@ -2,11 +2,20 @@ import React, { useState } from 'react'
 import { Box, Theme, Divider, IconButton, makeStyles } from '@material-ui/core'
 import debounce from 'lodash/debounce'
 import pick from 'lodash/pick'
-import Icon from '@mdi/react'
 import { mdiFormatBold, mdiFormatItalic, mdiFormatUnderline } from '@mdi/js'
 import { useEffectOnce } from 'react-use'
+import FontFaceObserver from 'fontfaceobserver'
 
 import { ColorResult } from 'react-color'
+import { useSelector } from 'react-redux'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+
+import { getBrandByType } from 'utils/user-teams'
+import { IAppState } from 'reducers'
+import { getBrandFontFamilies } from 'utils/get-brand-fonts'
+import { getBrandColors } from 'utils/get-brand-colors'
 
 import FontField from '../../../../../../components/Pages/Dashboard/BrandSettings/Sidebar/Field/Font'
 
@@ -52,6 +61,9 @@ interface Props {
 export function TextActions({ editor }: Props) {
   const classes = useStyles()
   const [object, setObject] = useState<Partial<TextObjectProps>>(InitialStyle)
+  const brand = useSelector<IAppState, IBrand | null>(({ user }) =>
+    getBrandByType(user, 'Brokerage')
+  )
 
   useEffectOnce(() => {
     const onObjectScaled = debounce(
@@ -114,11 +126,11 @@ export function TextActions({ editor }: Props) {
       return
     }
 
-    updateTextStyles({
-      fontFamily: value
+    new FontFaceObserver(value).load().then(() => {
+      updateTextStyles({
+        fontFamily: value
+      })
     })
-
-    editor.discardSelection()
   }
 
   const toggleBold = () => {
@@ -183,7 +195,7 @@ export function TextActions({ editor }: Props) {
         color={object.fontWeight === 'bold' ? 'secondary' : 'default'}
         onClick={toggleBold}
       >
-        <Icon path={mdiFormatBold} size={0.9} />
+        <SvgIcon path={mdiFormatBold} size={muiIconSizes.medium} />
       </IconButton>
       <IconButton
         disabled={!object.id}
@@ -191,7 +203,7 @@ export function TextActions({ editor }: Props) {
         color={object.fontStyle === 'italic' ? 'secondary' : 'default'}
         onClick={toggleItalic}
       >
-        <Icon path={mdiFormatItalic} size={0.9} />
+        <SvgIcon path={mdiFormatItalic} size={muiIconSizes.medium} />
       </IconButton>
       <IconButton
         disabled={!object.id}
@@ -199,25 +211,35 @@ export function TextActions({ editor }: Props) {
         color={object.textDecoration === 'underline' ? 'secondary' : 'default'}
         onClick={toggleUnderline}
       >
-        <Icon path={mdiFormatUnderline} size={0.9} />
+        <SvgIcon path={mdiFormatUnderline} size={muiIconSizes.medium} />
       </IconButton>
       <Divider orientation="vertical" className={classes.divider} />
 
-      <div
-        style={{
-          width: '150px'
-        }}
-      >
-        <FontField
-          type="font-family"
-          label="Font Family"
-          names={[]}
-          value={object.fontFamily!}
-          onChange={onChangeFontFamily}
-        />
-      </div>
+      {brand && (
+        <div
+          style={{
+            width: '150px'
+          }}
+        >
+          <FontField
+            type="font-family"
+            label="Font Family"
+            names={[]}
+            brandFonts={getBrandFontFamilies(brand)}
+            value={object.fontFamily!}
+            onChange={onChangeFontFamily}
+          />
+        </div>
+      )}
+
       <Divider orientation="vertical" className={classes.divider} />
-      <ColorPicker color={object.fill} onChange={setTextColor} />
+      {brand && (
+        <ColorPicker
+          color={object.fill}
+          colors={getBrandColors(brand)}
+          onChange={setTextColor}
+        />
+      )}
       <Divider orientation="vertical" className={classes.divider} />
       <Slider
         min={10}

@@ -1,8 +1,9 @@
 import React from 'react'
-import Icon from '@mdi/react'
 import { mdiDraw } from '@mdi/js'
-
 import { Button } from '@material-ui/core'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ImageEditor, Actions } from '../../types'
 
@@ -27,7 +28,7 @@ export function Draw({ editor, onChangeActiveAction, isActive }: Props) {
 
   return (
     <Button
-      startIcon={<Icon path={mdiDraw} size={1} />}
+      startIcon={<SvgIcon path={mdiDraw} size={muiIconSizes.small} />}
       size="small"
       variant="outlined"
       color={isActive ? 'secondary' : 'default'}

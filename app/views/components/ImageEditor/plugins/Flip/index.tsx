@@ -1,7 +1,10 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
-import Icon from '@mdi/react'
+
 import { mdiFlipHorizontal } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ImageEditor } from '../../types'
 
@@ -17,7 +20,7 @@ export function Flip({ editor }: Props) {
 
   return (
     <Button
-      startIcon={<Icon path={mdiFlipHorizontal} size={1} />}
+      startIcon={<SvgIcon path={mdiFlipHorizontal} size={muiIconSizes.small} />}
       size="small"
       variant="outlined"
       onClick={flip}

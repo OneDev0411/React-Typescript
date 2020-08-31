@@ -1,7 +1,9 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
-import Icon from '@mdi/react'
 import { mdiRotateLeft } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ImageEditor } from '../../types'
 
@@ -13,14 +15,14 @@ interface Props {
 export function Rotate({ editor, onRotate }: Props) {
   const rotate = async () => {
     editor.stopDrawingMode()
-    editor.rotate(-45)
+    editor.rotate(-90)
 
     onRotate()
   }
 
   return (
     <Button
-      startIcon={<Icon path={mdiRotateLeft} size={1} />}
+      startIcon={<SvgIcon path={mdiRotateLeft} size={muiIconSizes.small} />}
       size="small"
       variant="outlined"
       onClick={rotate}

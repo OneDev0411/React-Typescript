@@ -1,7 +1,9 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
-import Icon from '@mdi/react'
 import { mdiImageFilterBlackWhite } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ImageEditor, Actions } from '../../types'
 
@@ -25,7 +27,9 @@ export function Filters({ editor, isActive, onChangeActiveAction }: Props) {
 
   return (
     <Button
-      startIcon={<Icon path={mdiImageFilterBlackWhite} size={1} />}
+      startIcon={
+        <SvgIcon path={mdiImageFilterBlackWhite} size={muiIconSizes.small} />
+      }
       size="small"
       variant="outlined"
       color={isActive ? 'secondary' : 'default'}

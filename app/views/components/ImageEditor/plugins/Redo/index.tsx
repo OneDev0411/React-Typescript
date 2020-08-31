@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 
-import Icon from '@mdi/react'
 import { mdiRedoVariant } from '@mdi/js'
 import { useEffectOnce } from 'react-use'
-
 import { Button } from '@material-ui/core'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ImageEditor } from '../../types'
 
@@ -29,7 +30,7 @@ export function Redo({ editor, onRedo }: Props) {
 
   return (
     <Button
-      startIcon={<Icon path={mdiRedoVariant} size={1} />}
+      startIcon={<SvgIcon path={mdiRedoVariant} size={muiIconSizes.small} />}
       disabled={isDisabled}
       onClick={() => editor.redo()}
     >

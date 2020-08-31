@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { Button } from '@material-ui/core'
-import Icon from '@mdi/react'
 import { mdiUndoVariant } from '@mdi/js'
 import { useEffectOnce } from 'react-use'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ImageEditor } from '../../types'
 
@@ -27,7 +29,7 @@ export function Undo({ editor, onUndo }: Props) {
 
   return (
     <Button
-      startIcon={<Icon path={mdiUndoVariant} size={1} />}
+      startIcon={<SvgIcon path={mdiUndoVariant} size={muiIconSizes.small} />}
       disabled={isDisabled}
       onClick={() => editor.undo()}
     >

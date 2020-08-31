@@ -1,8 +1,10 @@
 import React from 'react'
-import Icon from '@mdi/react'
-import { mdiImageOutline } from '@mdi/js'
 
+import { mdiImageOutline } from '@mdi/js'
 import { Button, useTheme, Theme } from '@material-ui/core'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
@@ -48,7 +50,9 @@ export function Image({ editor }: Props) {
         }}
       >
         <Button
-          startIcon={<Icon path={mdiImageOutline} size={1} />}
+          startIcon={
+            <SvgIcon path={mdiImageOutline} size={muiIconSizes.small} />
+          }
           variant="outlined"
           // typescript complains when adding component="span" as a normal prop
           {...{

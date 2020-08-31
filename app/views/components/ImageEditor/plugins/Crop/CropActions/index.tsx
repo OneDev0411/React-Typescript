@@ -1,9 +1,12 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
-import Icon from '@mdi/react'
+
 import { mdiCheckOutline, mdiCancel } from '@mdi/js'
 
 import { useEffectOnce } from 'react-use'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ImageEditor, Actions } from '../../../types'
 
@@ -51,14 +54,14 @@ export function CropActions({ editor, onChangeActiveAction, onCrop }: Props) {
   return (
     <div>
       <Button
-        startIcon={<Icon path={mdiCheckOutline} size={0.75} />}
+        startIcon={<SvgIcon path={mdiCheckOutline} size={muiIconSizes.small} />}
         onClick={crop}
       >
         Apply
       </Button>
 
       <Button
-        startIcon={<Icon path={mdiCancel} size={0.75} />}
+        startIcon={<SvgIcon path={mdiCancel} size={muiIconSizes.small} />}
         onClick={cancel}
       >
         Cancel

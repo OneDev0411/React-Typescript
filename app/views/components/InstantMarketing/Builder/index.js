@@ -26,9 +26,11 @@ import {
 import { loadJS, unloadJS } from 'utils/load-js'
 import { ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY } from 'constants/user'
 
+import { getBrandFontFamilies } from 'utils/get-brand-fonts'
+import { getBrandColors } from 'utils/get-brand-colors'
+
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
-import { getBrandColors } from '../helpers/get-brand-colors'
 
 import { loadGrapesjs } from './utils/load-grapes'
 import { createGrapesInstance } from './utils/create-grapes-instance'
@@ -58,7 +60,6 @@ import {
   getMjmlTemplateRenderData,
   getNonMjmlTemplateRenderData
 } from './utils/get-template-render-data'
-import { getBrandFontFamilies } from '../helpers/get-brand-font-families'
 
 class Builder extends React.Component {
   constructor(props) {
