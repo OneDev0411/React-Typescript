@@ -11,6 +11,47 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { BaseFieldProps } from './types'
 
+interface AddressVariables {
+  'listing.property.address.street_number': string
+  'listing.property.address.street_name': string
+  'listing.property.address.street_address': string
+  'listing.property.address.city': string
+  'listing.property.address.state': string
+  'listing.property.address.postal_code': string
+  'listing.property.address.full_address': string
+}
+
+function getAddressVariables(address: string): AddressVariables {
+  const parsed = addressParser.parseLocation(address)
+
+  const streetAddressParts = [
+    parsed.number,
+    parsed.prefix,
+    parsed.street,
+    parsed.type,
+    parsed.city,
+    parsed.sec_unit_type,
+    parsed.sec_unit_num
+  ].filter(item => !!item)
+
+  const fullAddressParts = [
+    ...streetAddressParts,
+    parsed.city,
+    parsed.state,
+    parsed.zip
+  ].filter(item => !!item)
+
+  return {
+    'listing.property.address.street_number': parsed.number,
+    'listing.property.address.street_name': parsed.street,
+    'listing.property.address.street_address': streetAddressParts.join(' '),
+    'listing.property.address.city': parsed.city,
+    'listing.property.address.state': parsed.state,
+    'listing.property.address.postal_code': parsed.zip,
+    'listing.property.address.full_address': fullAddressParts.join(' ')
+  }
+}
+
 interface Props extends BaseFieldProps<'address'> {}
 
 export default function Address({ variable, onChange }: Props) {
@@ -74,28 +115,15 @@ export default function Address({ variable, onChange }: Props) {
           return
         }
 
-        const parsed = addressParser.parseLocation(
+        const addressVariables = getAddressVariables(
           selectedSuggestion.description
         )
 
-        const locationPartsToVariablesMapping = {
-          'listing.property.address.street_number': 'number',
-          'listing.property.address.street_name': 'street',
-          'listing.property.address.city': 'city',
-          'listing.property.address.state': 'state',
-          'listing.property.address.postal_code': 'zip',
-          'listing.property.address.full_address': 'description'
-        }
-
-        const finalValue = {
+        const newVariableValue = {
           ...variable,
           fields: variable.fields.map(addressField => {
             const value =
-              parsed[locationPartsToVariablesMapping[addressField.name]] ||
-              selectedSuggestion[
-                locationPartsToVariablesMapping[addressField.name]
-              ] ||
-              addressField.label
+              addressVariables[addressField.name] || addressField.label
 
             return {
               ...addressField,
@@ -104,7 +132,7 @@ export default function Address({ variable, onChange }: Props) {
           })
         }
 
-        onChange(finalValue)
+        onChange(newVariableValue)
       }}
     />
   )
