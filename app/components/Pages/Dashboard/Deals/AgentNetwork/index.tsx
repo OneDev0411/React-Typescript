@@ -246,36 +246,34 @@ export default function AgentNetwork({ location, params }: Props) {
   return (
     <div style={{ margin: theme.spacing(5) }}>
       <GlobalHeader noGlobalActionsButton noPadding>
-        <Flex justifyBetween>
-          <Flex
-            column
+        <Flex
+          column
+          style={{
+            flexGrow: 1
+          }}
+        >
+          <Typography variant="h4">Agent Network</Typography>
+          <Typography
+            variant="body1"
             style={{
-              flexGrow: 1
+              color: theme.palette.grey[600]
             }}
           >
-            <Typography variant="h4">Agent Network</Typography>
-            <Typography
-              variant="body1"
-              style={{
-                color: theme.palette.grey[600]
-              }}
-            >
-              {address}
-            </Typography>
-          </Flex>
-
-          <div>
-            <CloseButton
-              backUrl={`/dashboard/deals/${deal.id}`}
-              buttonProps={{
-                size: 'medium'
-              }}
-              iconProps={{
-                size: muiIconSizes.large
-              }}
-            />
-          </div>
+            {address}
+          </Typography>
         </Flex>
+
+        <div>
+          <CloseButton
+            backUrl={`/dashboard/deals/${deal.id}`}
+            buttonProps={{
+              size: 'medium'
+            }}
+            iconProps={{
+              size: muiIconSizes.large
+            }}
+          />
+        </div>
       </GlobalHeader>
 
       <GridContextProvider>
