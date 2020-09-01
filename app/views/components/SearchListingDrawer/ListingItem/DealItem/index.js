@@ -1,13 +1,9 @@
 import React from 'react'
-
-import { mdiHomeOutline } from '@mdi/js'
+import { mdiHomeOutline, mdiDrag, mdiClose } from '@mdi/js'
 
 import Avatar from 'components/Avatar'
 import Deal from 'models/Deal'
 import { getStatusColor } from 'utils/listing'
-
-import IconDrag from 'components/SvgIcons/Drag/IconDrag'
-import IconDelete from 'components/SvgIcons/Close/CloseIcon'
 
 import ActionButton from 'components/Button/ActionButton'
 
@@ -37,7 +33,7 @@ export function DealItem({ item: deal, showAddButton, ...props }) {
       }}
     >
       <AddressContainer>
-        {props.isDraggable && <IconDrag style={{ marginRight: '0.5rem' }} />}
+        {props.isDraggable && <SvgIcon path={mdiDrag} rightMargined />}
 
         {photo ? (
           <Avatar
@@ -67,7 +63,11 @@ export function DealItem({ item: deal, showAddButton, ...props }) {
       )}
 
       {props.removable && (
-        <IconDelete className="delete-icon" onClick={props.onClickRemove} />
+        <SvgIcon
+          path={mdiClose}
+          className="delete-icon"
+          onClick={props.onClickRemove}
+        />
       )}
     </ListItem>
   )
