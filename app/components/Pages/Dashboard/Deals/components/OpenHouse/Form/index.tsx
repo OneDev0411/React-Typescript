@@ -301,6 +301,7 @@ function OpenHouseForm(props: Props) {
               label="Url"
               variant="outlined"
               size="small"
+              placeholder="Enter URL for virtual open house"
               fullWidth
               onChange={e => setVirtualUrl(e.target.value)}
             />
