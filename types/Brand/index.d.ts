@@ -12,6 +12,7 @@ declare type IPermission =
   | 'Admin'
   | 'Marketing'
   | 'CRM'
+  | 'STORE'
   | 'BetaFeatures'
 
 declare type BrandSettingsPaletteKey =

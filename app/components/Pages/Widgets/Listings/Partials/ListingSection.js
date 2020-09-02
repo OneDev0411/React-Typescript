@@ -49,7 +49,7 @@ class Section extends Component {
       user,
       brand,
       location: {
-        query: { brokerage, agent, brand: brandId }
+        query: { brokerage, agent, brand: brandId, limit }
       }
     } = this.props
 
@@ -58,7 +58,8 @@ class Section extends Component {
       agent,
       type,
       brandId || (brand && brand.id),
-      user
+      user,
+      limit
     )
   }
 
