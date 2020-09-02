@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Grid,
   Tooltip,
@@ -22,20 +22,31 @@ import { mdiArrowUpDown, mdiTrashCanOutline, mdiCameraOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { BaseFieldProps } from './types'
+import { UploadableFieldProps } from './types'
 import { TemplateVariable } from '../../types'
 
 const useStyles = makeStyles((theme: Theme) => ({
   image: {
     width: theme.spacing(10),
     height: theme.spacing(10)
+  },
+  fileInput: {
+    display: 'none !important'
+  },
+  fileLabel: {
+    width: '100%'
   }
 }))
 
-interface Props extends BaseFieldProps<'sortableImageList'> {}
+interface Props extends UploadableFieldProps<'sortableImageList'> {}
 
-export default function SortableImageList({ variable, onChange }: Props) {
+export default function SortableImageList({
+  variable,
+  onChange,
+  onUpload
+}: Props) {
   const classes = useStyles()
+  const [isUploading, setIsUploading] = useState<boolean>(false)
 
   const reorderImages = (
     images: TemplateVariable<'sortableImageItem'>[],
@@ -89,6 +100,38 @@ export default function SortableImageList({ variable, onChange }: Props) {
     }
 
     onChange(newVariable)
+  }
+
+  const handleUploadFile = async (file: File) => {
+    try {
+      setIsUploading(true)
+
+      const uploadedAsset = await onUpload(file)
+
+      const images = [
+        {
+          name: `${variable.name}.0`,
+          label: variable.label,
+          section: variable.section,
+          type: 'sortableImageItem',
+          value: uploadedAsset.file.url
+        } as TemplateVariable<'sortableImageItem'>,
+        ...variable.images.map((item, index) => ({
+          ...item,
+          name: `${variable.name}.${index + 1}`,
+          label: `${variable.label} ${index + 1}`
+        }))
+      ]
+
+      onChange({
+        ...variable,
+        images
+      })
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsUploading(false)
+    }
   }
 
   return (
@@ -163,10 +206,32 @@ export default function SortableImageList({ variable, onChange }: Props) {
       </DragDropContext>
       <Grid item>
         <Box py={2}>
-          <Button fullWidth color="primary" variant="contained">
-            <SvgIcon path={mdiCameraOutline} />
-            &nbsp; Add photo
-          </Button>
+          <input
+            type="file"
+            id="upload-image-item"
+            multiple={false}
+            accept="image/*"
+            className={classes.fileInput}
+            onChange={e => {
+              if (!e.target.files || e.target.files.length === 0) {
+                return
+              }
+
+              handleUploadFile(e.target.files[0])
+            }}
+          />
+          <label htmlFor="upload-image-item" className={classes.fileLabel}>
+            <Button
+              disabled={isUploading}
+              fullWidth
+              color="primary"
+              variant="contained"
+              component="span"
+              startIcon={<SvgIcon path={mdiCameraOutline} />}
+            >
+              Add photo
+            </Button>
+          </label>
         </Box>
       </Grid>
     </>

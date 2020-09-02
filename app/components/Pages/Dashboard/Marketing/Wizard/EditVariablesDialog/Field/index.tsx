@@ -28,6 +28,7 @@ export default function Field({
       <SortableImageList
         variable={variable as TemplateVariable<'sortableImageList'>}
         onChange={onChange}
+        onUpload={onUpload}
       />
     )
   }
