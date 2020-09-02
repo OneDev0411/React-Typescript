@@ -159,6 +159,7 @@ export const ContactsTabs = ({
       {filter.show && (
         <ContactFilters
           contactCount={contactCount}
+          activeSegment={activeSegment}
           onFilterChange={() => handleFilterChange({}, true)}
           users={users}
         />
