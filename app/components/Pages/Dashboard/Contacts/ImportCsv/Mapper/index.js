@@ -1,11 +1,11 @@
-import { CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE } from 'constants/contacts'
-
 import React from 'react'
 import { connect } from 'react-redux'
 import { batchActions } from 'redux-batched-actions'
 
 import CsvParser from 'papaparse'
 import _ from 'underscore'
+
+import { CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE } from 'constants/contacts'
 
 import {
   updateCsvFieldsMap,
@@ -269,13 +269,10 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    updateCsvFieldsMap,
-    updateCsvInfo,
-    updateWizardStep,
-    showMessageModal,
-    setCurrentStepValidation
-  }
-)(Mapper)
+export default connect(mapStateToProps, {
+  updateCsvFieldsMap,
+  updateCsvInfo,
+  updateWizardStep,
+  showMessageModal,
+  setCurrentStepValidation
+})(Mapper)

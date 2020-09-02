@@ -35,7 +35,6 @@ import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
-import { updateTeamSetting } from 'actions/user/update-team-setting'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -49,8 +48,7 @@ import {
   FLOW_FILTER_ID,
   OPEN_HOUSE_FILTER_ID,
   SORT_FIELD_SETTING_KEY,
-  SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
-  SYNCED_CONTACTS_LIST_ID,
+  PARKED_CONTACTS_LIST_ID,
   DUPLICATE_CONTACTS_LIST_ID
 } from './constants'
 import { CalloutSpinner, NavigateDuplicate } from './styled'
@@ -145,6 +143,10 @@ class ContactsList extends React.Component {
       activeSegment.id !== 'default' &&
       this.state.selectedShortcutFilter === null
     ) {
+      if (activeSegment.id === PARKED_CONTACTS_LIST_ID) {
+        return activeSegment.name
+      }
+
       return `List: ${activeSegment.name}`
     }
 
@@ -294,22 +296,11 @@ class ContactsList extends React.Component {
   /**
    * @param {ISavedSegment} savedSegment
    */
-  handleChangeSavedSegment = savedSegment => {
+  handleChangeSavedSegment = () => {
     this.setState({
       selectedShortcutFilter: null
     })
     this.handleFilterChange({}, true)
-
-    if (savedSegment.id === SYNCED_CONTACTS_LIST_ID) {
-      this.updateSyncedContactsSeenDate()
-    }
-  }
-
-  updateSyncedContactsSeenDate() {
-    this.props.updateTeamSetting(
-      SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
-      new Date()
-    )
   }
 
   handleFilterChange = async (
@@ -331,7 +322,8 @@ class ContactsList extends React.Component {
       crmTasks = this.props.crmTasks,
       conditionOperator = this.props.conditionOperator,
       prependResult = false,
-      firstLetter = this.state.firstLetter
+      firstLetter = this.state.firstLetter,
+      parked = false
     } = newFilters || {}
 
     if (resetLoadedRanges) {
@@ -350,6 +342,7 @@ class ContactsList extends React.Component {
         filters,
         start,
         undefined,
+        parked,
         searchInputValue,
         order,
         viewAsUsers,
@@ -525,6 +518,7 @@ class ContactsList extends React.Component {
       this.props.filters,
       start,
       undefined,
+      false,
       this.state.searchInputValue,
       this.order,
       this.props.viewAsUsers,
@@ -757,7 +751,6 @@ class ContactsList extends React.Component {
               handleFilterChange={filters => {
                 this.setState({ syncStatus: null })
                 this.props.getContactsTags()
-                this.updateSyncedContactsSeenDate()
                 this.handleFilterChange({ filters }, true, '-updated_at')
               }}
             />
@@ -860,7 +853,6 @@ export default withRouter(
     confirmation,
     setContactsListTextFilter,
     getContactsTags,
-    updateTeamSetting,
     getUserTeams,
     updateSegment: updateFilterSegment
   })(ContactsList)

@@ -70,7 +70,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     getAttributeDefs: () => dispatch(getAttributeDefs())
   }
 }
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Contacts)
+export default connect(mapStateToProps, mapDispatchToProps)(Contacts)

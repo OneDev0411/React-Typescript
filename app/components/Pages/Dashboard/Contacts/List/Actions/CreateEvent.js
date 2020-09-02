@@ -74,9 +74,6 @@ function mapStateToProps({ user, contacts }, props) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    searchContacts
-  }
-)(CreateEvent)
+export default connect(mapStateToProps, {
+  searchContacts
+})(CreateEvent)
