@@ -14,7 +14,8 @@ import {
 const useStyles = makeStyles(() => ({
   iframe: {
     transformOrigin: '0 0',
-    background: '#fff'
+    background: '#fff',
+    opacity: 0
   }
 }))
 
@@ -102,6 +103,7 @@ export default function TemplateThumbnail({
       const ratio = widthSpace / iframeWidth
 
       ref.current.style.transform = `scale(${ratio})`
+      ref.current.style.opacity = '1'
 
       ref.current.style.width = `${iframeWidth}px`
       ref.current.style.height = `${iframeHeight}px`
