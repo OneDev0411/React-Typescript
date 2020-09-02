@@ -29,6 +29,7 @@ import { scrollableAreaShadowColor } from './variables'
 
 import {
   Sidenav,
+  SidenavBlankLink,
   SideNavItem,
   SidenavListGroup,
   AppNavbarBadge
@@ -140,6 +141,16 @@ export function Menu() {
               </AppNavbarBadge>
             </SideNavLinkItem>
           )}
+
+          <SideNavItem>
+            <SidenavBlankLink
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://help.rechat.com"
+            >
+              Success Center
+            </SidenavBlankLink>
+          </SideNavItem>
 
           <SupportTrigger />
         </SidenavListGroup>
