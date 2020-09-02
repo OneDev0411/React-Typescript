@@ -34,15 +34,22 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     wrapper: {
       display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
+      flexDirection: 'column',
       padding: ({ noPadding }: GlobalHeaderProps) =>
         !noPadding ? theme.spacing(3) : 0,
-      width: '100%'
+      width: '100%',
+      [theme.breakpoints.up('md')]: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }
     },
     title: {
-      marginRight: theme.spacing(1)
+      marginBottom: theme.spacing(3),
+      [theme.breakpoints.up('md')]: {
+        marginBottom: 0,
+        marginRight: theme.spacing(1)
+      }
     },
     content: {
       flexGrow: 1
