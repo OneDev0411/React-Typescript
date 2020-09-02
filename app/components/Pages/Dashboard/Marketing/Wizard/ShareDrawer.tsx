@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Drawer,
   Grid,
   Typography,
   IconButton,
+  Box,
+  Button,
   makeStyles,
   Theme
 } from '@material-ui/core'
@@ -27,7 +29,7 @@ interface Props {
   listing: IListing
 
   onClose: () => void
-  onDownloadClick: () => void
+  onDownloadClick: () => Promise<void>
 }
 
 export default function ShareDrawer({
@@ -39,6 +41,18 @@ export default function ShareDrawer({
   onDownloadClick
 }: Props) {
   const classes = useStyles()
+  const [isDownloading, setIsDownloading] = useState<boolean>(false)
+
+  const handleDownloadClick = async () => {
+    try {
+      setIsDownloading(true)
+      await onDownloadClick()
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsDownloading(false)
+    }
+  }
 
   return (
     <Drawer
@@ -71,25 +85,20 @@ export default function ShareDrawer({
             <Thumbnail user={user} template={template} listing={listing} />
           </Grid>
           <Grid container item justify="space-between">
-            <Grid item>
-              <IconButton size="medium" onClick={onDownloadClick}>
-                <SvgIcon path={mdiDownload} />
-              </IconButton>
-            </Grid>
-            <Grid item>
-              <IconButton size="medium" onClick={onDownloadClick}>
-                <SvgIcon path={mdiDownload} />
-              </IconButton>
-            </Grid>
-            <Grid item>
-              <IconButton size="medium" onClick={onDownloadClick}>
-                <SvgIcon path={mdiDownload} />
-              </IconButton>
-            </Grid>
-            <Grid item>
-              <IconButton size="medium" onClick={onDownloadClick}>
-                <SvgIcon path={mdiDownload} />
-              </IconButton>
+            <Grid item xs>
+              <Box p={2}>
+                <Button
+                  fullWidth
+                  size="medium"
+                  variant="contained"
+                  color="primary"
+                  disabled={isDownloading}
+                  onClick={handleDownloadClick}
+                  startIcon={<SvgIcon path={mdiDownload} />}
+                >
+                  Download
+                </Button>
+              </Box>
             </Grid>
           </Grid>
         </Grid>
