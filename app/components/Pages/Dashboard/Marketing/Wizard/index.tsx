@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import fileSaver from 'file-saver'
+import { saveAs } from 'file-saver'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
@@ -192,12 +192,7 @@ function MarketingWizard(props: WithRouterProps) {
         })
       )
 
-      fileSaver.saveAs(
-        templateInstance.file.url,
-        `listing-${listing.mls_number}.${
-          templateInstance.file.name.split('.')[1]
-        }`
-      )
+      saveAs(templateInstance.file.url)
     } catch (err) {
       dispatch(
         addNotification({
