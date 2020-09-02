@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react'
 import { Box, makeStyles } from '@material-ui/core'
 
+import { appSidenavWidth } from './SideNav/variables'
 import SideNav from './SideNav'
 
 interface Props {
@@ -10,7 +11,7 @@ interface Props {
 const useStyles = makeStyles(() => ({
   main: {
     height: '100vh',
-    width: '100%',
+    width: `calc(100% - ${appSidenavWidth}px)`,
     flexGrow: 1
   }
 }))
