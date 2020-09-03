@@ -7,8 +7,10 @@ import GlobalPageLayout from 'components/GlobalPageLayout'
 const useStyles = makeStyles(theme =>
   createStyles({
     container: {
-      height: theme.spacing(15),
-      display: 'flex'
+      [theme.breakpoints.up('md')]: {
+        height: theme.spacing(15),
+        display: 'flex'
+      }
     },
     subtitle: {
       color: theme.palette.grey['400']
