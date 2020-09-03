@@ -148,7 +148,7 @@ export function Menu() {
               rel="noopener noreferrer"
               href="https://help.rechat.com"
             >
-              Success Center
+              Help Center
             </SidenavBlankLink>
           </SideNavItem>
 
