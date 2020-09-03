@@ -47,9 +47,9 @@ function UploadingAttachmentsList({ input, addNotification, ...props }: Props) {
   return (
     <Box>
       {Array.isArray(input.value) &&
-        (input.value as IUploadingAttachment[]).map((attachment, index) => (
+        (input.value as IUploadingAttachment[]).map(attachment => (
           <UploadingAttachment
-            key={`${index}-${attachment.file.name}`}
+            key={attachment.key}
             attachment={attachment}
             onFinish={file => handleFinish(file, attachment)}
             onDelete={() => handleRemove(attachment)}

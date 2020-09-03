@@ -6,6 +6,7 @@ import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 export interface IUploadingAttachment {
   file: File
   request: SuperAgentRequest
+  key: string | number
 }
 
 export interface EmailFormValues {
