@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { useFormState, useField } from 'react-final-form'
-import { IconButton } from '@material-ui/core'
+import { IconButton, Theme } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
 import { mdiLayersOutline, mdiTrashCanOutline } from '@mdi/js'
+import classNames from 'classnames'
 
 import ActionButton from 'components/Button/ActionButton'
 import DateTimePicker from 'components/DateTimePicker/next'
@@ -15,7 +17,6 @@ import { myDesignIcon } from 'components/SvgIcons/icons'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { isFileAttachment } from '../../helpers/is-file-attachment'
-import { FooterContainer, FooterInnerContainer } from './styled'
 import { textForSubmitButton } from './helpers'
 import SchedulerButton from './SchedulerButton'
 import { EmailAttachmentsDropdown } from '../EmailAttachmentsDropdown'
@@ -25,32 +26,69 @@ import { FooterBottomDrawer } from './FooterBottomDrawer'
 import EmailTemplateSelector from './EmailTemplateSelector'
 import { MarketingTemplateSelector } from './MarketingTemplateSelector'
 
+const useStyles = makeStyles((theme: Theme) => ({
+  footerContainer: {
+    position: 'relative'
+  },
+  footerInnerContainer: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: theme.spacing(1, 2),
+    borderTop: `1px solid ${theme.palette.divider}`,
+    position: 'relative',
+    backgroundColor: theme.palette.background.paper,
+    zIndex: 2, // To be shown over the drawer when it's animating in
+    flex: '0 0 auto'
+  },
+  featuresList: {
+    display: 'flex',
+    flexWrap: 'nowrap'
+  },
+  actionBar: {
+    display: 'flex',
+    alignItems: 'center',
+    '& button': {
+      marginLeft: 2
+    }
+  },
+  scheduledOn: {
+    fontSize: 14,
+    marginRight: theme.spacing(2.5)
+  }
+}))
+
 interface Props {
+  className?: string
+  uploadOrigin: UploadOrigin
   isSubmitDisabled: boolean
   deal?: IDeal
-  onChanged: () => void
   hasStaticBody?: boolean
-  updateBody: (body: string) => void
   disableMarketingTemplates?: boolean
+  uploadAttachment: typeof uploadEmailAttachment
+  updateBody: (body: string) => void
   setMarketingTemplate: (template: IMarketingTemplateInstance | null) => void
+  onChanged: () => void
   onCancel?: () => void
   onDelete?: (values) => void | Promise<any>
   onClickAddDealAttachments?: () => void
-  className?: string
-  uploadAttachment: typeof uploadEmailAttachment
-  uploadOrigin: UploadOrigin
 }
 
 export function Footer({
-  onDelete,
-  updateBody,
-  disableMarketingTemplates = false,
-  setMarketingTemplate,
-  hasStaticBody,
-  onClickAddDealAttachments = () => {},
-  uploadAttachment,
+  className,
   uploadOrigin,
-  ...props
+  isSubmitDisabled,
+  deal,
+  hasStaticBody,
+  disableMarketingTemplates = false,
+  uploadAttachment,
+  updateBody,
+  setMarketingTemplate,
+  onChanged,
+  onCancel,
+  onDelete,
+  onClickAddDealAttachments = () => {}
 }: Props) {
   const formState = useFormState()
   const dueAtField = useField('due_at')
@@ -68,6 +106,8 @@ export function Footer({
 
   const busy = isDeleting || formState.submitting
 
+  const classes = useStyles()
+
   const initialAttachments: IFile[] = (
     formState.initialValues.attachments || []
   ).filter(isFileAttachment)
@@ -84,7 +124,7 @@ export function Footer({
   }
 
   return (
-    <FooterContainer>
+    <div className={classes.footerContainer}>
       <FooterBottomDrawer
         isOpen={isEmailTemplateDrawerOpen || isMCTemplateDrawerOpen}
       >
@@ -97,11 +137,11 @@ export function Footer({
           />
         )}
       </FooterBottomDrawer>
-      <FooterInnerContainer className={props.className}>
-        <div className="features-list">
+      <div className={classNames(classes.footerInnerContainer, className)}>
+        <div className={classes.featuresList}>
           <EmailAttachmentsDropdown
-            deal={props.deal}
-            onChanged={props.onChanged}
+            deal={deal}
+            onChanged={onChanged}
             uploadAttachment={uploadAttachment}
             uploadOrigin={uploadOrigin}
             initialAttachments={initialAttachments}
@@ -137,16 +177,14 @@ export function Footer({
           )}
         </div>
 
-        <div className="action-bar">
+        <div className={classes.actionBar}>
           {isScheduled && (
-            <span className="scheduled-on">Send on {formatDate(dueAt)}</span>
+            <span className={classes.scheduledOn}>
+              Send on {formatDate(dueAt)}
+            </span>
           )}
-          {props.onCancel && (
-            <ActionButton
-              appearance="flat"
-              onClick={props.onCancel}
-              disabled={busy}
-            >
+          {onCancel && (
+            <ActionButton appearance="flat" onClick={onCancel} disabled={busy}>
               Cancel
             </ActionButton>
           )}
@@ -154,7 +192,7 @@ export function Footer({
             appearance="secondary"
             data-test="compose-send-email"
             type="submit"
-            disabled={busy || props.isSubmitDisabled}
+            disabled={busy || isSubmitDisabled}
             leftRounded
           >
             {textForSubmitButton({
@@ -196,7 +234,7 @@ export function Footer({
             </IconButton>
           )}
         </div>
-      </FooterInnerContainer>
-    </FooterContainer>
+      </div>
+    </div>
   )
 }
