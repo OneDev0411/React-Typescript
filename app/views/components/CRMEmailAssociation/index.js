@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { mdiEmailOpenOutline } from '@mdi/js'
 
-import MailAttachmentIcon from 'components/SvgIcons/MailAttachment/IconMailAttachment'
-// import LongArrowRightIcon from 'components/SvgIcons/LongArrowRight/IconLongArrowRight'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Container from './styled'
+import { EmailAssociationController } from './EmailAssociationController'
 
 CRMEmailAssociation.propTypes = {
   association: PropTypes.shape().isRequired,
@@ -16,6 +17,8 @@ CRMEmailAssociation.defaultProps = {
 }
 
 function CRMEmailAssociation({ association, style }) {
+  const [open, setOpen] = useState(false)
+
   if (!association.email) {
     return null
   }
@@ -23,21 +26,28 @@ function CRMEmailAssociation({ association, style }) {
   const { email } = association
 
   return (
-    <Container style={style}>
-      <div
-        className={`cover ${email.img ? 'img' : 'icon'}`}
-        style={{ backgroundImage: email.img && `url(${email.img})` }}
-      >
-        {!email.img && <MailAttachmentIcon />}
-      </div>
-      <div className="details">
-        <div className="subject">
-          <div className="subject__text">{email.subject}</div>
-          {/* <LongArrowRightIcon className="subject__icon" /> */}
+    <>
+      <Container style={style} onClick={() => setOpen(true)}>
+        <div
+          className={`cover ${email.img ? 'img' : 'icon'}`}
+          style={{ backgroundImage: email.img && `url(${email.img})` }}
+        >
+          {!email.img && <SvgIcon path={mdiEmailOpenOutline} />}
         </div>
-        <div className="body">{email.body}</div>
-      </div>
-    </Container>
+        <div className="details">
+          <div className="subject">
+            <div className="subject__text">{email.subject}</div>
+          </div>
+          <div className="body">{email.body}</div>
+        </div>
+      </Container>
+      {open && (
+        <EmailAssociationController
+          email={email.email}
+          onClose={() => setOpen(false)}
+        />
+      )}
+    </>
   )
 }
 

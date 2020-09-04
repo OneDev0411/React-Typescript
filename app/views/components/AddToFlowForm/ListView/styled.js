@@ -12,9 +12,7 @@ export const SettingLink = styled(Link)`
     text-decoration: none;
   }
   & > svg {
-    fill: ${props => props.theme.palette.secondary.main};
-    width: 1em;
-    height: 1em;
+    color: ${props => props.theme.palette.secondary.main};
     margin-right: 0.5em;
   }
 `

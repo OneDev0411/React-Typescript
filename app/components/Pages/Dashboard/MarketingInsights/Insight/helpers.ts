@@ -10,7 +10,7 @@ export function getContactStat(email: IEmailCampaignEmail): EmailStatType {
 }
 
 export function contactsList(
-  item: IEmailCampaign<IEmailCampaignAssociation>
+  item: IEmailCampaign<'emails'>
 ): ContactsListType[] {
   const emails = item.emails
 
@@ -26,6 +26,7 @@ export function contactsList(
     profile_image_url: email.profile_image_url,
     to: email.email_address,
     contact: email.contact,
+    error: email.error,
     ...getContactStat(email)
   }))
 }

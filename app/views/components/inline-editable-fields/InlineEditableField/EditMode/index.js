@@ -2,9 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, IconButton, Box } from '@material-ui/core'
 
+import { mdiTrashCanOutline } from '@mdi/js'
+
 import { noop } from 'utils/helpers'
 import Tooltip from 'components/tooltip'
-import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { EditModeActionBar, EditModeContainer } from '../../styled'
 
@@ -54,7 +56,7 @@ export class EditMode extends React.Component {
                 onClick={this.props.handleDelete}
                 data-test="inline-editable-field-delete"
               >
-                <TrashIcon size="small" />
+                <SvgIcon path={mdiTrashCanOutline} />
               </IconButton>
             </Tooltip>
           )}

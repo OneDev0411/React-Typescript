@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { mdiChevronDown } from '@mdi/js'
 
 import { BasicDropdown } from 'components/BasicDropdown'
-import IconDrop from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { InputContainer, InputLabel, InputRequired } from '../styled'
 
@@ -85,7 +86,7 @@ export function SelectInput(props) {
         buttonRenderer={props => (
           <MenuButton onClick={props.onClick}>
             <span>{props.text}</span>
-            <IconDrop />
+            <SvgIcon path={mdiChevronDown} />
           </MenuButton>
         )}
         selectedItem={selectedItem}

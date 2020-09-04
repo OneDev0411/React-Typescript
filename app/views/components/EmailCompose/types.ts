@@ -6,6 +6,7 @@ import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 export interface IUploadingAttachment {
   file: File
   request: SuperAgentRequest
+  key: string | number
 }
 
 export interface EmailFormValues {
@@ -15,10 +16,9 @@ export interface EmailFormValues {
   bcc?: IDenormalizedEmailRecipientInput[] | undefined
   subject: string
   from: IUser | IOAuthAccount
-  google_credential?: string
-  microsoft_credential?: string
   due_at: Date | null
   body: string | undefined
+  templateInstance?: IMarketingTemplateInstance
 }
 
 export interface UrlBasedEmailAttachmentInput {
@@ -37,6 +37,12 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
    */
   sendEmail: (values: EmailComposeValues) => Promise<EmailType>
   onSent?: (result: EmailType) => void
+  onClose?: () => void
+  onClickAddDealAttachments?: () => void
+  onSelectMarketingTemplate?: (
+    template: IMarketingTemplateInstance | null,
+    values: EmailFormValues
+  ) => boolean | Promise<boolean>
   /**
    * A deal to suggest attachments from it
    */
@@ -45,6 +51,7 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   hasStaticBody?: boolean
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
+  disableMarketingTemplates?: boolean
 
   renderCollapsedFields: (values: EmailFormValues) => ReactNode
   renderFields: (values: EmailFormValues) => ReactNode
@@ -70,6 +77,4 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
    * non-visual things that read form values like OnChange.
    */
   children?: ReactNode
-
-  dispatch: any // Extending DispatchProps seems to have problems
 }

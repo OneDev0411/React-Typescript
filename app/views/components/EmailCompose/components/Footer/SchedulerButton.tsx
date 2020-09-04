@@ -1,8 +1,10 @@
 import React from 'react'
 import { Tooltip } from '@material-ui/core'
 
+import { mdiClockOutline } from '@mdi/js'
+
 import IconButton from 'components/Button/IconButton'
-import TimeIcon from 'components/SvgIcons/Time/IconTime'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 function SchedulerButton(props) {
   return (
@@ -15,7 +17,7 @@ function SchedulerButton(props) {
         appearance="secondary"
         onClick={props.onOpen}
       >
-        <TimeIcon />
+        <SvgIcon path={mdiClockOutline} />
       </IconButton>
     </Tooltip>
   )

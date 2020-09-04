@@ -8,15 +8,16 @@ import {
   ListItemText,
   ListItemIcon,
   makeStyles,
-  Theme
+  Theme,
+  useTheme
 } from '@material-ui/core'
+import { mdiCogOutline } from '@mdi/js'
 
-import { getActiveBrand } from '../../../../../../utils/user-teams'
+import { hasUserAccessToBrandSettings } from '../../../../../../utils/user-teams'
 
 import Acl from '../../../../../../views/components/Acl'
-import { ACL } from '../../../../../../constants/acl'
 import { ScrollableArea } from '../../../../../../views/components/ScrollableArea'
-import SettingsIcon from '../../../../../../views/components/SvgIcons/CogOutline/IconCogOutline'
+import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
 
 import TeamSwitcher from './TeamSwitcher'
 
@@ -49,12 +50,13 @@ export function UserMenuContent({
   showChecklists,
   onClose = () => {}
 }: Props) {
+  const theme = useTheme<Theme>()
   const classes = useStyles()
-  const activeBrand = getActiveBrand(user)
+  const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
 
-  const onClick = page => {
+  const onClick = (path: string) => {
     onClose()
-    browserHistory.push(`/dashboard/${page}`)
+    browserHistory.push(`/dashboard/${path}`)
   }
 
   return (
@@ -70,12 +72,10 @@ export function UserMenuContent({
           {user.teams && user.teams.length > 1 && (
             <ListSubheader>Team Settings</ListSubheader>
           )}
-          {activeBrand && activeBrand.brand_type === 'Brokerage' && (
-            <Acl access={[ACL.ADMIN, ACL.MARKETING]}>
-              <ListItem button onClick={() => onClick('brand-settings')}>
-                Brand
-              </ListItem>
-            </Acl>
+          {hasAccessToBrandSettings && (
+            <ListItem button onClick={() => onClick('brand-settings')}>
+              Brand
+            </ListItem>
           )}
           <ListItem button onClick={() => onClick('teams')}>
             Members
@@ -94,7 +94,7 @@ export function UserMenuContent({
         </Acl.Admin>
         <ListItem divider button onClick={() => onClick('account')}>
           <ListItemIcon>
-            <SettingsIcon />
+            <SvgIcon path={mdiCogOutline} color={theme.palette.common.black} />
           </ListItemIcon>
           <ListItemText>Account Settings</ListItemText>
         </ListItem>

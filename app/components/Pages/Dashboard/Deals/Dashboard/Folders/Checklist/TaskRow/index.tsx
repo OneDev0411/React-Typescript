@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
 
+import { IconButton } from '@material-ui/core'
+
 import {
   setSelectedTask,
   setExpandTask,
@@ -15,6 +17,8 @@ import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
 
 import { IAppState } from 'reducers'
 
+import { ArrowToggle } from 'deals/components/ArrowToggle'
+
 import { TaskStatus } from './Status'
 
 import ActionsButton from '../../../../components/ActionsButton'
@@ -24,7 +28,7 @@ import TaskNotifications from '../Notification'
 import { EnvelopeStatus } from '../EnvelopeStatus'
 import { Activity } from './Activity'
 
-import { RowContainer, Row, RowTitle, RowArrowIcon } from '../../styled'
+import { RowContainer, Row, RowTitle } from '../../styled'
 
 interface Props {
   deal: IDeal
@@ -51,12 +55,12 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
   )[0]
 
   const { attachments } = task.room
-  const file: IFile | undefined = attachments ? attachments[0] : undefined
+  const file = attachments ? attachments[0] : undefined
 
   const getRowsCount = () => {
     let count = 0
 
-    if (task.form) {
+    if (task.submission) {
       count++
     }
 
@@ -67,7 +71,7 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
   }
 
   const toggleTaskOpen = () => {
-    if (!isRowExpandable) {
+    if (getRowsCount() === 0) {
       return
     }
 
@@ -134,7 +138,7 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
     window.open(link, '_blank')
   }
 
-  const isRowExpandable = getRowsCount() > 1 || Boolean(file)
+  const hasRows = getRowsCount() > 0
 
   const actions: ActionButtonId[] = getTaskActions({
     task,
@@ -146,15 +150,25 @@ export function TaskRow({ deal, task, isBackOffice }: Props) {
   return (
     <RowContainer isTaskExpanded={isTaskExpanded}>
       <Row>
-        <RowArrowIcon
+        <IconButton
+          size="small"
+          disabled={!hasRows}
+          style={{
+            alignSelf: 'flex-start',
+            marginTop: '-2px',
+            opacity: hasRows ? 1 : 0
+          }}
           onClick={toggleTaskOpen}
-          show={isRowExpandable}
-          isOpen={isTaskExpanded}
-        />
+        >
+          <ArrowToggle isActive={isTaskExpanded} />
+        </IconButton>
 
         <Flex column style={{ flex: 1 }}>
           <Flex alignCenter justifyBetween>
-            <RowTitle clickable onClick={handleClickTask}>
+            <RowTitle
+              clickable={hasRows || Boolean(task.form)}
+              onClick={handleClickTask}
+            >
               {task.title}
             </RowTitle>
 

@@ -2,14 +2,12 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import cn from 'classnames'
 
-import { Tooltip } from '@material-ui/core'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
+import { Tooltip, IconButton, useTheme } from '@material-ui/core'
+import { mdiPencilOutline } from '@mdi/js'
 
 import { ClassesProps } from 'utils/ts-utils'
 import { isPastDay } from 'utils/date-times/is-past-day'
-
-import EditIcon from 'components/SvgIcons/Edit/EditIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { DateTime } from './DateTime'
 
@@ -39,11 +37,11 @@ export function EventContainer({
   onClick,
   classes: inputClasses
 }: Props & ClassesProps<typeof styles>) {
+  const theme = useTheme()
   const sharedClasses = useSharedStyles({
     pastEvent: isPastDay(new Date(event.timestamp * 1000))
   })
 
-  const iconStyles = useIconStyles()
   const classes = useStyles({
     classes: inputClasses,
     evenRow: event.rowIndex ? event.rowIndex % 2 === 0 : true,
@@ -83,10 +81,12 @@ export function EventContainer({
           <div className={classes.actions}>
             {editable && (
               <Tooltip title="Edit Event" placement="top">
-                <EditIcon
-                  className={cn(iconStyles.small, classes.iconEdit)}
-                  onClick={onClick}
-                />
+                <IconButton onClick={onClick}>
+                  <SvgIcon
+                    path={mdiPencilOutline}
+                    color={theme.palette.grey[400]}
+                  />
+                </IconButton>
               </Tooltip>
             )}
             {actions}

@@ -1,34 +1,30 @@
 import React, { ComponentProps } from 'react'
-import { connect } from 'react-redux'
 
-import { ImagePreviewModal } from 'components/ImagePreviewModal'
 import {
   getTemplateImage,
   navigateBetweenTemplatesUsingKeyboard,
   selectNextTemplate,
   selectPreviousTemplate
 } from 'utils/marketing-center/helpers'
+import { getFileType } from 'utils/file-utils/get-file-type'
 
-import { IAppState } from 'reducers/index'
+import { ImagePreviewModal } from 'components/ImagePreviewModal'
+import { PdfViewerModal } from 'components/PdfViewer/Modal'
 
 interface Props {
   isOpen: boolean
-  selectedTemplate: IMarketingTemplate | IMarketingTemplateInstance
+  selectedTemplate: IBrandMarketingTemplate | IMarketingTemplateInstance
   setSelectedTemplate: (
-    template: IMarketingTemplate | IMarketingTemplateInstance
+    template: IBrandMarketingTemplate | IMarketingTemplateInstance
   ) => void
   type: string // can be improved
-  medium?: string // can be improved
-  templates?: (IMarketingTemplate | IMarketingTemplateInstance)[]
+  medium?: MarketingTemplateMedium
+  templates?: (IBrandMarketingTemplate | IMarketingTemplateInstance)[]
   actions?: React.ReactNode
   onClose?: () => void
 }
 
-interface StateProps {
-  user: IUser
-}
-
-function PreviewModal(props: Props & StateProps) {
+function PreviewModal(props: Props) {
   const { selectedTemplate, templates, medium } = props
 
   if (!selectedTemplate) {
@@ -94,9 +90,26 @@ function PreviewModal(props: Props & StateProps) {
     }
   }
 
-  return <>{props.isOpen && <ImagePreviewModal {...modalProps} />}</>
+  if (!props.isOpen) {
+    return null
+  }
+
+  if (
+    selectedTemplate.type === 'template_instance' &&
+    getFileType(selectedTemplate.file) === 'pdf'
+  ) {
+    return (
+      <PdfViewerModal
+        isOpen
+        title="Preview"
+        url={selectedTemplate.file.url}
+        onClose={props?.onClose}
+        {...modalProps}
+      />
+    )
+  }
+
+  return <ImagePreviewModal {...modalProps} />
 }
 
-export default connect<StateProps>(({ user }: IAppState) => ({ user }))(
-  PreviewModal
-)
+export default PreviewModal

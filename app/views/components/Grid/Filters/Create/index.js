@@ -1,20 +1,19 @@
 import styled from 'styled-components'
 import React from 'react'
 import Downshift from 'downshift'
-
+import { mdiPlus } from '@mdi/js'
 import Button from '@material-ui/core/Button'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { FilterItemToolTip } from './tooltip'
 import { Container, List, ListItem } from './styled'
-import Icon from '../../../SvgIcons/Add/AddIcon'
 
-const IconAdd = styled(Icon)`
-  fill: ${props =>
+const IconAdd = styled(SvgIcon)`
+  color: ${props =>
     !props.disabled
       ? props.theme.palette.secondary.main
       : props.theme.palette.action.disabled};
-  width: 1.3em;
-  height: 1.3em;
 `
 
 export class AddFilter extends React.Component {
@@ -63,7 +62,7 @@ export class AddFilter extends React.Component {
                 onClick={this.toggleMenu}
                 disabled={disabled}
               >
-                <IconAdd disabled={disabled} />
+                <IconAdd path={mdiPlus} disabled={disabled} />
                 <span style={{ fontWight: 500 }}>Add Filter</span>
               </Button>
 

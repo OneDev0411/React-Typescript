@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import IconCheckmark from '../../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
+import { mdiCheck } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const chooseColor = (theme, isSelected) =>
   isSelected ? theme.palette.primary.main : '#000'
@@ -22,14 +24,14 @@ const TagContainer = styled.div`
     background-color: ${props => props.theme.palette.grey[100]};
   }
 `
-const CheckIcon = styled(IconCheckmark)`
+const CheckIcon = styled(SvgIcon)`
   margin-right: 0.5rem;
-  fill: ${props => props.theme.palette.primary.main};
+  color: ${props => props.theme.palette.primary.main};
 `
 
 const Tag = ({ tag, onSelectionChange, tagDataType }) => (
   <TagContainer isSelected={tag.isSelected} onClick={onSelectionChange}>
-    {tag.isSelected && <CheckIcon />}
+    {tag.isSelected && <CheckIcon path={mdiCheck} />}
     {tag[tagDataType]}
   </TagContainer>
 )

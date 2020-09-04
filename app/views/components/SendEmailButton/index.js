@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 
 import { Button } from '@material-ui/core'
 
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import MissingEmailModal from 'components/MissingEmailModal'
 
-function SendEmailButton(props) {
+export default function SendEmailButton(props) {
   const { deal } = props
   const [isOpen, setIsOpen] = useState(false)
   const [isMissingEmailModalOpen, setIsMissingEmailModalOpen] = useState(false)
@@ -68,10 +66,10 @@ function SendEmailButton(props) {
           isOpen={isOpen}
           initialValues={{
             attachments: [],
-            to: props.recipients,
-            from: props.user
+            to: props.recipients
           }}
           deal={deal}
+          onClickAddDealAttachments={() => setIsOpen(false)}
           onClose={() => setIsOpen(false)}
           onSent={() => {
             setIsOpen(false)
@@ -84,23 +82,6 @@ function SendEmailButton(props) {
   )
 }
 
-function mapStateToProps({ user }) {
-  return {
-    user
-  }
-}
-
-SendEmailButton.propTypes = {
-  disabled: PropTypes.bool,
-  deal: PropTypes.object,
-  defaultAttachments: PropTypes.array,
-  recipients: PropTypes.array,
-  appearance: PropTypes.string,
-  size: PropTypes.string,
-  title: PropTypes.string,
-  onSent: PropTypes.func
-}
-
 SendEmailButton.defaultProps = {
   disabled: false,
   deal: null,
@@ -111,5 +92,3 @@ SendEmailButton.defaultProps = {
   title: 'Email',
   onSent: () => {}
 }
-
-export default connect(mapStateToProps)(SendEmailButton)

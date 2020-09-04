@@ -1,8 +1,9 @@
 import { Avatar } from '@material-ui/core'
 
 import React from 'react'
+import { mdiTagOutline } from '@mdi/js'
 
-import TagIcon from '../../SvgIcons/Tag/TagIcon'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 export function tagToSuggestion(
   recipient: IDenormalizedEmailRecipientTagInput
@@ -12,7 +13,7 @@ export function tagToSuggestion(
     subtitle: 'Tag',
     avatar: (
       <Avatar>
-        <TagIcon />
+        <SvgIcon path={mdiTagOutline} />
       </Avatar>
     ),
     data: recipient

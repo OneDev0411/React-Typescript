@@ -77,7 +77,9 @@ describe('BulkEmailComposeForm', () => {
             email: 'deal@role.com'
           }
         ]
-      } as IEmailCampaignInput)
+      } as IEmailCampaignInput),
+      expect.anything(),
+      expect.anything()
     )
   })
 })

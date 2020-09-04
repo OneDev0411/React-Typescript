@@ -8,17 +8,15 @@ import groupBy from 'lodash/groupBy'
 import map from 'lodash/map'
 
 import { useTheme } from '@material-ui/styles'
+import { mdiPencilOutline, mdiNoteTextOutline } from '@mdi/js'
 
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 import { getNotes } from 'models/contacts/helpers/get-notes'
 
 import SanitizedHtml from 'components/SanitizedHtml'
-import EditIcon from 'components/SvgIcons/Edit/EditIcon'
-import IconNote from 'components/SvgIcons/Note/IconNote'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import AddOrEditNoteDrawer from 'components/AddOrEditNoteDrawer/AddOrEditNoteDrawer'
-
-import { useIconStyles } from '../../../../../../../styles/use-icon-styles'
 
 import { styles } from './styles'
 
@@ -32,7 +30,6 @@ export const useStyles = makeStyles(styles)
 export function Notes(props: Props) {
   const theme = useTheme<Theme>()
   const classes = useStyles()
-  const iconClasses = useIconStyles()
   const [selectedNote, setSelectedNote] = useState(undefined)
 
   const handleUpdateNote = async note => {
@@ -104,7 +101,10 @@ export function Notes(props: Props) {
                   </div>
                   <div className={cn(classes.container, classes.title)}>
                     <div className={classes.iconNote}>
-                      <IconNote fill="#6A7589" className={iconClasses.small} />
+                      <SvgIcon
+                        path={mdiNoteTextOutline}
+                        color={theme.palette.grey[600]}
+                      />
                     </div>
                     <SanitizedHtml html={note.text} />
                   </div>
@@ -113,9 +113,9 @@ export function Notes(props: Props) {
                 <div className={classes.actions}>
                   <IconButton onClick={() => setSelectedNote(note)}>
                     <Tooltip title="Edit Note" placement="top">
-                      <EditIcon
-                        className={iconClasses.small}
-                        fillColor={theme.palette.grey[400]}
+                      <SvgIcon
+                        path={mdiPencilOutline}
+                        color={theme.palette.grey[400]}
                       />
                     </Tooltip>
                   </IconButton>

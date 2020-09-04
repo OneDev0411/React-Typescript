@@ -36,7 +36,8 @@ export function CrmStatus({ event, onChange }: Props) {
               task_type: event.event_type,
               title: event.title,
               status: 'DONE',
-              due_date: now.getTime() / 1000
+              due_date: now.getTime() / 1000,
+              end_date: (now.getTime() + 3600000) / 1000 // 1 hour after
             }
           ])
         },

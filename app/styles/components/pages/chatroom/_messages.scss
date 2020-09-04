@@ -294,7 +294,7 @@ $left-w: 44px;
         margin-right: 0.5rem;
 
         svg {
-          fill: #fff;
+          color: #fff;
           width: 1rem;
         }
       }
@@ -516,8 +516,8 @@ $left-w: 44px;
     background-color: #eee;
   }
 
-  i {
-    margin-top: 15px;
+  svg {
+    margin-top: 10px;
     color: rgb(113, 114, 116);
   }
 }

@@ -12,7 +12,7 @@ interface Props extends Pick<ComponentProps<typeof OverlayDrawer>, 'onClose'> {
   onSelect: (deal: IDeal) => void
   user: IUser
   deals: IDeal[]
-  itemRenderer: any
+  itemRenderer?: React.ReactNode
   isOpen: boolean
   title: string
 }

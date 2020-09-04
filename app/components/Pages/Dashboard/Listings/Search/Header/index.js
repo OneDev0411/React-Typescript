@@ -1,10 +1,11 @@
 import React from 'react'
 import { Box, Button, makeStyles } from '@material-ui/core'
-import { useTheme } from '@material-ui/styles'
+
+import { mdiChevronDown } from '@mdi/js'
 
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { BaseDropdown } from 'components/BaseDropdown'
-import IconArrowDown from 'views/components/SvgIcons/ArrowDownKeyboard/IconArrowDownKeyboard'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Filters from '../components/Filters'
 import Autocomplete from '../components/Autocomplete'
@@ -12,15 +13,26 @@ import Autocomplete from '../components/Autocomplete'
 const useStyles = makeStyles(
   theme => ({
     container: {
-      height: theme.spacing(15),
-      display: 'flex'
+      paddingBottom: theme.spacing(3),
+      [theme.breakpoints.up('md')]: {
+        display: 'flex',
+        paddingBottom: 0,
+        height: theme.spacing(15)
+      }
     },
     body: {
-      display: 'flex',
-      justifyContent: 'flex-end'
+      [theme.breakpoints.up('md')]: {
+        display: 'flex',
+        justifyContent: 'flex-end'
+      }
     },
     filtersButton: {
-      marginLeft: theme.spacing(1)
+      display: 'flex',
+      marginTop: theme.spacing(3),
+      [theme.breakpoints.up('md')]: {
+        marginTop: 0,
+        marginLeft: theme.spacing(1)
+      }
     }
   }),
   { name: 'MLSSearchHeader' }
@@ -28,13 +40,13 @@ const useStyles = makeStyles(
 
 export function Header(props) {
   const classes = useStyles()
-  const theme = useTheme()
   const { isFetching, activeView, showGlobalActionsButton } = props
 
   return (
     <Box className={classes.container}>
       <GlobalPageLayout.Header
         title="All Properties"
+        isHiddenOnMobile={false}
         noGlobalActionsButton={!showGlobalActionsButton}
       >
         <Box className={classes.body}>
@@ -49,7 +61,7 @@ export function Header(props) {
                 {...buttonProps}
               >
                 Filters
-                <IconArrowDown fillColor={theme.palette.common.black} />
+                <SvgIcon path={mdiChevronDown} />
               </Button>
             )}
             renderMenu={({ close }) => (

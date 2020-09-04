@@ -16,7 +16,7 @@ import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
 } from '../helpers/agent-sorting'
-import { getGridSortLabel } from '../../helpers/sorting'
+import { getGridSortLabel, getActiveSort } from '../../helpers/sorting'
 
 const BASE_URL = '/dashboard/deals'
 
@@ -53,6 +53,7 @@ interface Props {
 const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const dispatch = useDispatch()
   const user = useSelector(({ user }: IAppState) => user)
+  const activeSort = getActiveSort(user, props.location, SORT_FIELD_SETTING_KEY)
 
   const handleChangeSort = async (column: SortableColumn) => {
     props.router.push(
@@ -100,6 +101,10 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
                   {props.sortableColumns.map((column, index) => (
                     <MenuItem
                       key={index}
+                      selected={
+                        activeSort?.id === column.value &&
+                        activeSort?.ascending === column.ascending
+                      }
                       onClick={() => {
                         toggleMenu()
                         handleChangeSort(column)

@@ -7,16 +7,17 @@ import Fetch from '../../../../services/fetch'
  */
 export async function sendEnvelope(
   deal_id,
+  from,
   subject,
   message,
   attachments,
   recipients,
   auto_notify = false
 ) {
-
   try {
     const response = await new Fetch().post('/envelopes').send({
       deal: deal_id,
+      owner: from,
       title: subject,
       body: message,
       documents: attachments,

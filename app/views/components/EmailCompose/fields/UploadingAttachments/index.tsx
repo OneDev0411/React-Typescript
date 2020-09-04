@@ -32,24 +32,24 @@ function UploadingAttachmentsList({ input, addNotification, ...props }: Props) {
     handleRemove(attachment)
 
     // Elvis!
-    const message = e ? (e.response ? e.response.body.message : null) : null
+    const message = e?.response?.body?.message ?? 'Could not upload file'
 
     if (e && e.code !== 'ABORTED') {
       addNotification({
-        message: message || 'Could not upload file',
+        message,
         status: 'error'
       })
     }
 
-    console.log('error in uploading attachment', e)
+    console.error('error in uploading attachment', e)
   }
 
   return (
     <Box>
       {Array.isArray(input.value) &&
-        (input.value as IUploadingAttachment[]).map((attachment, index) => (
+        (input.value as IUploadingAttachment[]).map(attachment => (
           <UploadingAttachment
-            key={`${index}-${attachment.file.name}`}
+            key={attachment.key}
             attachment={attachment}
             onFinish={file => handleFinish(file, attachment)}
             onDelete={() => handleRemove(attachment)}
@@ -67,7 +67,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   }
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(UploadingAttachmentsList)
+export default connect(null, mapDispatchToProps)(UploadingAttachmentsList)

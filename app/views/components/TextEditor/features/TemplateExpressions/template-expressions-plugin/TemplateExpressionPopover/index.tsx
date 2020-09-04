@@ -1,11 +1,11 @@
 import { makeStyles, Paper, TextField, Typography } from '@material-ui/core'
 import * as React from 'react'
 import { MouseEventHandler, Ref } from 'react'
-import classNames from 'classnames'
+import { mdiInformationOutline } from '@mdi/js'
 
-import { useIconStyles } from 'utils/../styles/use-icon-styles'
 import { ClassesProps } from 'utils/ts-utils'
-import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { ITemplateVariableSuggestion } from 'components/TemplateVariablesButton'
 
 import { styles } from './styles'
@@ -26,16 +26,9 @@ export function TemplateExpressionPopover(
   props: Props & ClassesProps<typeof styles>
 ) {
   const classes = useStyles(props)
-  const iconClasses = useIconStyles()
 
   const { title = props.expressionText, description = '' } =
     props.suggestion || {}
-
-  const iconClass = classNames(
-    iconClasses.rightMargin,
-    iconClasses.small,
-    iconClasses.currentColor
-  )
 
   return (
     <Paper
@@ -46,7 +39,11 @@ export function TemplateExpressionPopover(
     >
       {description && (
         <div className={classes.description}>
-          <IconInfoOutline className={iconClass} />
+          <SvgIcon
+            path={mdiInformationOutline}
+            rightMargined
+            size={muiIconSizes.small}
+          />
           <Typography variant="body2">{description}</Typography>
         </div>
       )}

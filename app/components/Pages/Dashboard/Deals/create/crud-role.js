@@ -1,8 +1,9 @@
 import React from 'react'
 
 import { Button } from '@material-ui/core'
+import { mdiPlus } from '@mdi/js'
 
-import AddIcon from 'components/SvgIcons/Add/AddIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import RoleAgentIntegration from '../components/Roles/AgentIntegration'
 import RoleItem from './role-item'
@@ -40,7 +41,7 @@ class CrudRole extends React.Component {
               onClick={this.showModal}
               className="add-item"
             >
-              <AddIcon className="addIcon" />
+              <SvgIcon path={mdiPlus} rightMargined />
               <span className="text">{ctaTitle}</span>
             </Button>
           </div>

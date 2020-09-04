@@ -43,6 +43,9 @@ const styles = (theme: Theme) =>
       alignItems: 'start',
       '& .MuiFormLabel-root': {
         marginTop: `${theme.spacing(1)}px`
+      },
+      '& > div:first-of-type': {
+        width: '100%'
       }
     },
     inputInput: {
@@ -60,7 +63,7 @@ const styles = (theme: Theme) =>
       alignItems: 'flex-start'
     }
   })
-const useStyles = makeStyles(styles)
+const useStyles = makeStyles(styles, { name: 'ChipsInput' })
 const emptySuggestion$ = of([])
 
 /**

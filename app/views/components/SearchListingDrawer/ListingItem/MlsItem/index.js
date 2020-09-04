@@ -1,18 +1,15 @@
 import React from 'react'
 import fecha from 'fecha'
 import Flex from 'styled-flex-component'
+import { mdiHomeOutline, mdiDrag, mdiClose } from '@mdi/js'
 
 import {
   addressTitle,
   getListingAddressObj,
   getStatusColorClass
 } from 'utils/listing'
-
 import { grey } from 'views/utils/colors'
-
-import IconDrag from 'components/SvgIcons/Drag/IconDrag'
-import IconHome from 'components/SvgIcons/NewHome/IconHome'
-import IconDelete from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   ListItem,
@@ -47,7 +44,7 @@ export function MlsItem({ item, ...props }) {
 
   return (
     <ListItem {...props} className="c-search-listings__mls-item">
-      {props.isDraggable && <IconDrag style={{ marginRight: '0.5rem' }} />}
+      {props.isDraggable && <SvgIcon path={mdiDrag} rightMargined />}
 
       <Flex style={{ width: '100%' }} justifyBetween alignCenter>
         <AddressContainer>
@@ -55,7 +52,7 @@ export function MlsItem({ item, ...props }) {
             <ListItemImage alt="" src={item.cover_image_url} />
           ) : (
             <IconContainer center>
-              <IconHome />
+              <SvgIcon path={mdiHomeOutline} />
             </IconContainer>
           )}
           <ListItemAddress>
@@ -80,7 +77,11 @@ export function MlsItem({ item, ...props }) {
           </Status>
 
           {props.removable && (
-            <IconDelete className="delete-icon" onClick={props.onClickRemove} />
+            <SvgIcon
+              path={mdiClose}
+              className="delete-icon"
+              onClick={props.onClickRemove}
+            />
           )}
         </ListItemStatus>
       </Flex>

@@ -1,9 +1,11 @@
 import React from 'react'
 import _ from 'underscore'
 import cn from 'classnames'
-import CrudRole from './crud-role'
-import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+
 import { H2 } from 'components/Typography/headings'
+
+import CrudRole from './crud-role'
+import RequiredErrorSign from './required-error-sign'
 
 export default ({
   isRequired,
@@ -23,7 +25,7 @@ export default ({
       <H2 className={cn('hero', { hasError })}>
         Do you have Title company and Escrow officer information? &nbsp;
         {isRequired && <span className="required">*</span>}
-        {hasError && <RequiredIcon />}
+        {hasError && <RequiredErrorSign />}
       </H2>
 
       <div className="people-container">

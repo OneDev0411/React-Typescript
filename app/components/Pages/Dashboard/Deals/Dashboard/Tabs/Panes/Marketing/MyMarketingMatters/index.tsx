@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
-import { connect } from 'react-redux'
-import { addNotification, Notification } from 'reapop'
+import { useDispatch } from 'react-redux'
+import { addNotification } from 'reapop'
 
 import { Button } from '@material-ui/core'
-
-import { getActiveTeam } from 'utils/user-teams'
 
 import {
   Container,
@@ -17,14 +15,12 @@ import {
 } from '../styled'
 import { sendPunchOutRequest } from './helpers'
 
-function getUserCostCenter(user: IUser): string | null {
-  const team = getActiveTeam(user)
-
+function getDealCostCenter(deal: IDeal): string | null {
   let costCenter: string | null = null
-  let brand: IBrand | null = team && team.brand
+  let brand: IBrand | null = deal.brand
 
   while (brand) {
-    if (brand && brand.messages && brand.messages.mmm_cost_center) {
+    if (brand.messages?.mmm_cost_center) {
       costCenter = brand.messages.mmm_cost_center
       break
     }
@@ -38,21 +34,16 @@ function getUserCostCenter(user: IUser): string | null {
 interface Props {
   deal: IDeal
   user: IUser
-  notify: (notification: Notification) => any
 }
 
-function MyMarketingMatters({
-  deal,
-  user,
-  notify,
-  location
-}: Props & WithRouterProps) {
+function MyMarketingMatters({ deal, user, location }: Props & WithRouterProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [costCenter, setCostCenter] = useState<null | string>(null)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    setCostCenter(getUserCostCenter(user))
-  }, [user])
+    setCostCenter(getDealCostCenter(deal))
+  }, [deal])
 
   async function onClick() {
     if (!costCenter) {
@@ -75,11 +66,13 @@ function MyMarketingMatters({
         newWindow && newWindow.focus()
       }
     } catch (err) {
-      notify({
-        status: 'error',
-        message:
-          'Something went wrong. Please try again or contact Rechat support.'
-      })
+      dispatch(
+        addNotification({
+          status: 'error',
+          message:
+            'Something went wrong. Please try again or contact Rechat support.'
+        })
+      )
       console.error(err)
     }
 
@@ -124,9 +117,4 @@ function MyMarketingMatters({
   )
 }
 
-export default withRouter(
-  connect(
-    null,
-    { notify: addNotification }
-  )(MyMarketingMatters)
-)
+export default withRouter(MyMarketingMatters)

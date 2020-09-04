@@ -95,14 +95,13 @@ export function EditEmailDrawer({
     const initialValues: Partial<EmailFormValues> = {
       attachments: (data.attachments || []).map(attachment => attachment.file),
       from: data.from,
-      microsoft_credential: data.microsoft_credential || undefined,
-      google_credential: data.google_credential || undefined,
       subject: data.subject,
       body: data.template
         ? getTemplateInstancePreviewImage(data.template)
         : data.html,
       due_at: data.due_at ? new Date(data.due_at * 1000) : null,
-      to: getRecipientsFromRecipientsEntity('To', data.recipients)
+      to: getRecipientsFromRecipientsEntity('To', data.recipients),
+      templateInstance: data.template
     }
 
     if (!data.individual) {
@@ -124,7 +123,7 @@ export function EditEmailDrawer({
       isOpen,
       getEmail: values => ({
         ...values,
-        html: data.template ? data.html : values.html
+        html: values.template ? '' : values.html
       }),
       onClose,
       onDelete: deleteEmail,

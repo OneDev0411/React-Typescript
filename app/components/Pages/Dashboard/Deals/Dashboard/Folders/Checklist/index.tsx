@@ -12,18 +12,12 @@ import { IAppState } from 'reducers'
 import { ChecklistLabels } from './Labels'
 
 import MessageAdmin from './MessageAdmin'
-import Menu from './Menu'
+import { FolderOptionsMenu } from './Menu'
 
 import { TaskRow } from './TaskRow'
 import NewTaskRow from './NewTaskRow'
 
-import {
-  FolderContainer,
-  Header,
-  HeaderTitle,
-  ItemsContainer,
-  ArrowIcon
-} from '../styled'
+import { FolderContainer, Header, HeaderTitle, ItemsContainer } from '../styled'
 
 interface Props {
   deal: IDeal
@@ -70,7 +64,6 @@ export const ChecklistFolder = React.memo(
             style={{ cursor: 'pointer' }}
             onClick={toggleFolderOpen}
           >
-            <ArrowIcon isOpen={isExpanded} />
             <HeaderTitle>
               <TextMiddleTruncate text={title} maxLength={100} />
             </HeaderTitle>
@@ -86,7 +79,7 @@ export const ChecklistFolder = React.memo(
                 checklistName={checklist.title}
               />
 
-              <Menu
+              <FolderOptionsMenu
                 deal={deal}
                 checklist={checklist}
                 isBackOffice={isBackOffice}

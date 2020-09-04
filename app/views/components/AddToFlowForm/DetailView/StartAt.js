@@ -3,9 +3,10 @@ import fecha from 'fecha'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import DatePicker from 'components/DateTimePicker/next.js'
-import Icon from 'components/SvgIcons/Calendar2/IconCalendar'
+import { mdiCalendarOutline } from '@mdi/js'
 
+import DatePicker from 'components/DateTimePicker/next.js'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { borderColor, grey } from 'views/utils/colors'
 
 import { StartAtButton } from './styled'
@@ -47,7 +48,7 @@ export default function StartAt(props) {
         }}
         popUpButton={buttonProps => (
           <Flex alignCenter>
-            <Icon style={{ width: '1em', height: '1em' }} />
+            <SvgIcon path={mdiCalendarOutline} />
             <StartAtButton onClick={buttonProps.toggleOpen}>
               {fecha.format(buttonProps.selectedDate, 'mediumDate')}
             </StartAtButton>

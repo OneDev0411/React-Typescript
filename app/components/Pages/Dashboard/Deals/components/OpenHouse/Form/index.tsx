@@ -1,13 +1,15 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { connect } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
+import { useSelector } from 'react-redux'
 import {
+  Box,
   Button,
   createStyles,
   makeStyles,
   Theme,
-  Grid
+  Grid,
+  Checkbox,
+  FormControlLabel,
+  TextField
 } from '@material-ui/core'
 import DayPicker from 'react-day-picker'
 import fecha from 'fecha'
@@ -16,7 +18,7 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { createTaskComment } from 'deals/utils/create-task-comment'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
-import { updateTask } from 'actions/deals'
+import { updateTask, changeNeedsAttention } from 'actions/deals'
 
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
@@ -31,16 +33,13 @@ import getListing from 'models/listings/listing/get-listing'
 import { addressTitle } from 'utils/listing'
 import { normalizeListing } from 'views/utils/association-normalizers'
 
+import { useReduxDispatch } from 'hooks/use-redux-dispatch'
+
 import { DatePickerContainer } from './styled'
 
 interface StateProps {
   user: IUser
   checklists: IDealChecklist[]
-}
-
-interface DispatchProps {
-  updateTask: IAsyncActionProp<typeof updateTask>
-  createRequestTask: IAsyncActionProp<typeof createRequestTask>
 }
 
 interface Props {
@@ -60,6 +59,9 @@ const useStyles = makeStyles((theme: Theme) => {
     buttonContainer: {
       marginTop: theme.spacing(2)
     },
+    virtualContainer: {
+      margin: theme.spacing(1, 0)
+    },
     flexContainer: {
       display: 'flex'
     },
@@ -69,15 +71,25 @@ const useStyles = makeStyles((theme: Theme) => {
   })
 })
 
-function OpenHouseForm(props: Props & StateProps & DispatchProps) {
+function OpenHouseForm(props: Props) {
   const { listing: listingId } = props.deal
   const classes = useStyles()
+  const dispatch = useReduxDispatch()
+
+  const { user, checklists } = useSelector<IAppState, StateProps>(
+    ({ user, deals }) => ({
+      user,
+      checklists: getDealChecklists(props.deal, deals.checklists)
+    })
+  )
 
   const confirmation = useContext(ConfirmationModalContext)
 
   const [listing, setListing] = useState<IListing | null>(null)
   const [createdTask, setCreatedTask] = useState<IDealTask | null>(null)
   const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [isVirtual, setIsVirtual] = useState(false)
+  const [virtualUrl, setVirtualUrl] = useState('')
   const [showOHRegistrationDrawer, setShowOHRegistrationDrawer] = useState<
     boolean
   >(false)
@@ -92,6 +104,8 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
       ? new Date(props.defaultEndDate * 1000)
       : new Date(new Date().setHours(12, 0, 0))
   )
+
+  const isFormValid = isVirtual ? virtualUrl.length > 0 : true
 
   useEffect(() => {
     async function fetchLisitng() {
@@ -131,7 +145,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
 
     setIsSaving(true)
 
-    const checklist = props.checklists.find(
+    const checklist = checklists.find(
       checklist => checklist.checklist_type === 'Selling'
     )!
 
@@ -143,13 +157,17 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
     if (props.task) {
       createTaskComment(
         props.task,
-        props.user.id,
+        user.id,
         `Please change open house time to:\n ${taskTitle}`
       )
 
-      await props.updateTask(props.task.id, {
-        title: `Update Open House to ${taskTitle}`
-      })
+      await dispatch(
+        updateTask(props.task.id, {
+          title: `Update Open House to ${taskTitle}`
+        })
+      )
+
+      dispatch(changeNeedsAttention(props.deal.id, props.task.id, true))
 
       props.onUpsertTask(props.task)
 
@@ -158,15 +176,19 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
       return
     }
 
-    const task = await props.createRequestTask({
-      checklist,
-      userId: props.user.id,
-      dealId: props.deal.id,
-      taskType: 'OpenHouse',
-      taskTitle: `Open House: ${taskTitle}`,
-      taskComment: `Please create an open house for this date:\n${taskTitle}`,
-      notifyMessage: 'Back office has been notified'
-    })
+    const taskComment = `Please create an open house for this date:\n${taskTitle}\n${virtualUrl}`
+
+    const task = await dispatch(
+      createRequestTask({
+        checklist,
+        userId: user.id,
+        dealId: props.deal.id,
+        taskType: 'OpenHouse',
+        taskTitle: `${isVirtual ? 'Virtual ' : ''}Open House: ${taskTitle}`,
+        taskComment,
+        notifyMessage: 'Back office has been notified'
+      })
+    )
 
     setIsSaving(false)
 
@@ -205,7 +227,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
     // MLS listting is mandatory for creating an open house from its drawer
     if (listing) {
       return {
-        assignees: [props.user],
+        assignees: [user],
         registrants: [],
         endDate,
         dueDate: startDate,
@@ -259,12 +281,40 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
         </Grid>
       </Grid>
 
+      <Box className={classes.virtualContainer}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={isVirtual}
+              onChange={(_, checked: boolean) => setIsVirtual(checked)}
+              name="virtual"
+              color="primary"
+            />
+          }
+          label="Virtual Open House"
+        />
+
+        <div>
+          {isVirtual && (
+            <TextField
+              value={virtualUrl}
+              label="Url"
+              variant="outlined"
+              size="small"
+              placeholder="Enter URL for virtual open house"
+              fullWidth
+              onChange={e => setVirtualUrl(e.target.value)}
+            />
+          )}
+        </div>
+      </Box>
+
       <div className={classes.buttonContainer}>
         <Button
           fullWidth
           variant="contained"
           color="secondary"
-          disabled={isSaving}
+          disabled={isSaving || !isFormValid}
           onClick={handleSave}
         >
           {isSaving ? (
@@ -280,7 +330,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
         <OpenHouseDrawer
           isOpen
           dealNotifyOffice={false}
-          user={props.user}
+          user={user}
           associations={{ deal: props.deal }}
           submitCallback={handleCloseOHRegistrationDrawer}
           onClose={handleCloseOHRegistrationDrawer}
@@ -291,26 +341,4 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   )
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    updateTask: (...args: Parameters<typeof updateTask>) =>
-      dispatch(updateTask(...args)),
-    createRequestTask: (...args: Parameters<typeof createRequestTask>) =>
-      dispatch(createRequestTask(...args))
-  }
-}
-
-function mapStateToProps(
-  { user, deals }: IAppState,
-  ownProps: Props
-): StateProps {
-  return {
-    user,
-    checklists: getDealChecklists(ownProps.deal, deals.checklists)
-  }
-}
-
-export default connect<StateProps, DispatchProps, Props>(
-  mapStateToProps,
-  mapDispatchToProps
-)(OpenHouseForm)
+export default OpenHouseForm

@@ -17,6 +17,7 @@ import {
   getFormattedPrice
 } from 'models/Deal/helpers/context'
 import { getActiveTeamId } from 'utils/user-teams'
+import { sortDealsStatus } from 'utils/sort-deals-status'
 
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 
@@ -28,7 +29,6 @@ import {
 
 import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 import { getGridSort } from '../../helpers/sorting'
-import { sortStatus } from '../../helpers/status-sorting'
 
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
@@ -101,7 +101,8 @@ function AgentGrid(props: Props & WithRouterProps) {
         width: '15%',
         class: 'opaque',
         accessor: (deal: IDeal) => getStatus(deal) || '',
-        sortFn: (rows: IDeal[]) => sortStatus(rows, statuses)
+        render: ({ row: deal }: { row: IDeal }) => getStatus(deal),
+        sortFn: (rows: IDeal[]) => sortDealsStatus(rows, statuses)
       },
       {
         id: 'price',

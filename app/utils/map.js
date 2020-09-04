@@ -103,16 +103,22 @@ export const getBounds = (bounds) => {
   return { nw, sw, se, ne }
 }
 
-export function isLocationInTX(latitude, longitude) {
-  return latitude < 36.5007041 &&
-    latitude > 25.8371638 &&
-    longitude < -93.5080389 &&
-    longitude > -106.6456461
-}
+export function getLocationErrorMessage(error) {
+  let message = error.message
 
-export function isLocationInDallas(latitude, longitude) {
-  return latitude < 33.0237921 &&
-    latitude > 32.617537 &&
-    longitude < -96.4637379 &&
-    longitude > -96.999347
+  switch (error.code) {
+    case error.POSITION_UNAVAILABLE:
+      message = 'Location information is unavailable.'
+      break
+    case error.TIMEOUT:
+      message = 'The request to get user location timed out.'
+      break
+    case error.UNKNOWN_ERROR:
+      message = 'An unknown error occurred.'
+      break
+    default:
+      break
+  }
+
+  return message
 }

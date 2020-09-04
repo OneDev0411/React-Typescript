@@ -11,14 +11,17 @@ import {
 } from '@material-ui/core'
 
 import Flex from 'styled-flex-component'
+import { mdiEmailOutline } from '@mdi/js'
 
 import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 import { putUserSetting } from 'models/user/put-user-setting'
 
 import { Table } from 'components/Grid/Table'
+import type { SortableColumn } from 'components/Grid/Table/types'
+
 import { RenderProps } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
-import IconEmailOutline from 'components/SvgIcons/EmailOutline/IconEmailOutline'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import { SELECTION__TOGGLE_ALL } from 'components/Grid/Table/context/constants'
 import { getNameInitials } from 'utils/helpers'
@@ -121,7 +124,7 @@ export function Grid(props: Props) {
           }
         >
           <Flex alignCenter justifyCenter>
-            <IconEmailOutline />
+            <SvgIcon path={mdiEmailOutline} />
           </Flex>
         </Tooltip>
       )
@@ -203,11 +206,16 @@ export function Grid(props: Props) {
       '-listings'
     )
 
-    return SortableColumns.find(col => col.value === sort.id)
+    return SortableColumns.find(
+      col => col.value === sort.id && col.ascending === sort.ascending
+    )
   }
 
-  const handleChangeSort = async column => {
-    putUserSetting(SORT_FIELD_SETTING_KEY, column.value)
+  const handleChangeSort = async (column: SortableColumn) => {
+    putUserSetting(
+      SORT_FIELD_SETTING_KEY,
+      column.ascending ? column.value : `-${column.value}`
+    )
   }
 
   const toggleAll = () =>

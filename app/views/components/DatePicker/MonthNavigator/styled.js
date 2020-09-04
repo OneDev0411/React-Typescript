@@ -17,14 +17,9 @@ export const Button = styled.span`
   border-radius: 100%;
   border: 1px solid #b8c4cc;
 
-  svg {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
   &:hover {
-    svg > path {
-      fill: ${primary};
+    svg {
+      color: ${primary};
     }
   }
 `

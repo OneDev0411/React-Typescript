@@ -12,4 +12,5 @@ export interface ContactsListType extends EmailStatType {
   to: string
   original_data: IEmailCampaignEmail
   contact: UUID | null
+  error: string | null
 }

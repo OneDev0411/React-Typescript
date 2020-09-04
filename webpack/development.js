@@ -16,7 +16,7 @@ import common from './base'
 const ESBUILD_COMMON_OPTIONS = {
   jsxFactory: 'React.createElement',
   jsxFragment: 'React.Fragment',
-  sourceMap: true
+  sourceMap: false
 }
 
 const postcss = function postcss() {

@@ -2,9 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Col, OverlayTrigger, Popover, Row } from 'react-bootstrap'
 import _ from 'underscore'
-import cn from 'classnames'
 import moment from 'moment'
+import { mdiCheck } from '@mdi/js'
+import { useTheme } from '@material-ui/core/styles'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import UserAvatar from 'components/UserAvatar'
 
 function getAckedUsers(message, room) {
@@ -45,8 +48,8 @@ const RenderList = ({ list, title, className, avatarSize = 30 }) => {
     <div className={`content ${className}`}>
       <div className="title">
         <span>
-          <i className="fa fa-check" />
-          <i className="fa fa-check" />
+          <SvgIcon path={mdiCheck} size={muiIconSizes.small} />
+          <SvgIcon path={mdiCheck} size={muiIconSizes.small} />
         </span>
         {title}
       </div>
@@ -112,12 +115,18 @@ const DeliveryReport = ({
   message,
   placement = 'right'
 }) => {
+  const theme = useTheme()
+
   if (!room || !author || author.id !== user.id) {
     return false
   }
 
   const ackedUsers = getAckedUsers(message, room)
   const deliveredUsers = getDeliveredUsers(message, room)
+  const iconColor =
+    ackedUsers.length > 0
+      ? theme.palette.primary.main
+      : theme.palette.grey['400']
 
   if (ackedUsers.length === 0 && deliveredUsers.length === 0) {
     return false
@@ -147,9 +156,9 @@ const DeliveryReport = ({
       placement={placement}
       overlay={MessageInfo}
     >
-      <span className={cn('delivery-report', { blue: ackedUsers.length > 0 })}>
-        <i className="fa fa-check" />
-        <i className="fa fa-check" />
+      <span className="delivery-report">
+        <SvgIcon path={mdiCheck} size={muiIconSizes.small} color={iconColor} />
+        <SvgIcon path={mdiCheck} size={muiIconSizes.small} color={iconColor} />
       </span>
     </OverlayTrigger>
   )

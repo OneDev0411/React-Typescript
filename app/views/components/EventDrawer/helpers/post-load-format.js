@@ -1,9 +1,13 @@
 import { EditorState } from 'draft-js'
 import { stateFromHTML } from 'draft-js-import-html'
 
+import { isNegativeTimezone } from 'utils/is-negative-timezone'
+
 import { getReminderItem } from 'views/utils/reminder'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
-import { isNegativeTimezone } from 'utils/is-negative-timezone'
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
+
+import { initialValueGenerator } from './initial-value-generator'
 
 /**
  * Format form data for api model
@@ -13,10 +17,7 @@ import { isNegativeTimezone } from 'utils/is-negative-timezone'
  * @returns {Promise} a formated Task
  */
 export async function postLoadFormat(task, owner, defaultAssociation) {
-  let reminder = {
-    title: 'None',
-    value: -1
-  }
+  let reminder = REMINDER_DROPDOWN_OPTIONS[3] // 15 minutes before
 
   const associations = []
 
@@ -33,26 +34,11 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
   }
 
   if (!task) {
-    const initialDueDate = new Date()
-    const initialEndDate = new Date()
-
-    initialDueDate.setHours(0, 0, 0, 0)
-    initialEndDate.setHours(23, 59, 0, 0)
-
-    return {
-      assignees: [owner],
-      associations,
-      description,
-      dueDate: initialDueDate,
-      endDate: initialEndDate,
-      allDay: true,
-      reminder,
-      task_type: { title: 'Call', value: 'Call' }
-    }
+    return initialValueGenerator(owner, associations)
   }
 
   const { reminders, end_date } = task
-  const isAllDayTask = task.metadata?.all_day || false
+  const isAllDayTask = task.all_day || false
 
   const normalizeServerDate = (date, isEndDate = false) => {
     const normalizedDate = new Date(Number(date) * 1000)
@@ -67,7 +53,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
     return normalizedDate
   }
   const dueDate = normalizeServerDate(task.due_date)
-  const endDate = end_date ? normalizeServerDate(end_date, true) : null
+  const endDate = end_date ? normalizeServerDate(end_date, true) : dueDate
 
   if (Array.isArray(reminders) && reminders.length > 0) {
     const { timestamp } = reminders[reminders.length - 1]

@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'underscore'
 import Flex from 'styled-flex-component'
 import { Button, Tooltip } from '@material-ui/core'
 
 import { searchListings } from 'models/Deal/listing'
+import { getMediaGallery } from 'models/media-manager'
 
 import Listing from '../../../models/listings/listing'
 import { attachDealDataToListing } from './helpers/attach-deal-to-listing'
@@ -38,18 +38,52 @@ class SearchListingDrawer extends React.Component {
       const mockedMLSData = mockListings ? await getMockListing() : null
 
       const listings = await Promise.all(
-        _.map(items, item => {
+        Object.keys(items).map(async key => {
+          const item = items[key]
+
           if (item.gallery_image_urls) {
             return item
           }
 
-          const listing = item.type === 'deal' ? item.listing : item.id
+          let listing = item.id
+          const currentDealPhotos = []
 
-          if (mockListings && !listing) {
-            return attachDealDataToListing(item, mockedMLSData)
+          // If a deal is selected
+          if (item.type === 'deal') {
+            listing = item.listing
+
+            const currentDealGallery = await getMediaGallery(item.id)
+
+            currentDealPhotos.push(
+              ...currentDealGallery.map(photo => photo.src)
+            )
           }
 
-          return Listing.getListing(listing)
+          // Handle deals without listing, if mockListings is enabled
+          if (mockListings && !listing) {
+            const mergedDealWithListing = attachDealDataToListing(
+              item,
+              mockedMLSData
+            )
+
+            // Prepend deal photos as listing gallery images
+            mergedDealWithListing.gallery_image_urls = [
+              ...currentDealPhotos,
+              ...mergedDealWithListing.gallery_image_urls
+            ]
+
+            return mergedDealWithListing
+          }
+
+          const selectedListing = await Listing.getListing(listing)
+
+          // Prepend deal photos as listing gallery images
+          selectedListing.gallery_image_urls = [
+            ...currentDealPhotos,
+            ...selectedListing.gallery_image_urls
+          ]
+
+          return selectedListing
         })
       )
 
@@ -155,7 +189,12 @@ SearchListingDrawer.propTypes = {
   mockListings: PropTypes.bool,
   allowedStatuses: PropTypes.array,
   title: PropTypes.string,
-  defaultListTitle: PropTypes.string,
+  defaultLists: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+      items: PropTypes.array
+    })
+  ),
   allowSkip: PropTypes.bool
 }
 
@@ -164,7 +203,7 @@ SearchListingDrawer.defaultProps = {
   mockListings: false,
   allowedStatuses: [],
   title: 'Select a Listing',
-  defaultListTitle: 'Add from your deals',
+  defaultLists: [],
   allowSkip: false
 }
 

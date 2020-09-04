@@ -1,15 +1,10 @@
-declare interface IFile {
-  created_at: number
+declare interface IFile extends IModel<'file'> {
   created_by: UUID
-  deleted_at: null | number
-  id: UUID
   mime: string
   name: string
   path: string
   preview_url: string
   public: boolean
-  type: 'file'
-  updated_at: number
   url: string
 }
 
@@ -18,4 +13,10 @@ declare interface IDealFile extends IFile {
   checklist: UUID | null
   source: 'submission' | 'attachment' | 'envelope' | 'stash'
   internal_url?: string
+}
+
+declare interface IDealEmailFile {
+  id: UUID | null
+  name: string
+  url: string
 }

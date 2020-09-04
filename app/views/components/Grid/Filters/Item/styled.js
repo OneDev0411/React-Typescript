@@ -44,7 +44,7 @@ export const Container = styled.div`
   }
 
   &:hover ${RemoveButton} svg {
-    fill: ${props => props.theme.palette.grey['600']};
+    color: ${props => props.theme.palette.grey['600']};
   }
 `
 

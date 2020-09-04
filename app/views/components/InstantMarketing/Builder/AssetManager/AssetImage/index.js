@@ -24,6 +24,12 @@ export class AssetImage extends React.Component {
   onImageSelect = (options = {}) => {
     const url = options.url || this.props.model.get('image')
 
+    const setBgUrl = () => {
+      this.props.target.setAttributes({
+        ...this.props.target.getAttributes(),
+        'background-url': url
+      })
+    }
     const setSrc = () => this.props.target.set('src', url)
     const setBg = () => {
       const style = { ...this.props.target.get('style') }
@@ -31,10 +37,18 @@ export class AssetImage extends React.Component {
       style['background-image'] = `url(${url})`
       this.props.target.set('style', style)
     }
+    const setCarouselImage = () => {
+      this.props.target.setAttributes({
+        ...this.props.target.getAttributes(),
+        src: url
+      })
+    }
 
     const setters = {
       image: setSrc,
       'mj-image': setSrc,
+      'mj-hero': setBgUrl,
+      'mj-carousel-image': setCarouselImage,
       cell: setBg,
       text: setBg,
       '': setBg
@@ -66,10 +80,7 @@ export class AssetImage extends React.Component {
   }
 
   onCrop = ({ files }) => {
-    const fileName = files.originalFile
-      .split('?')[0]
-      .split('/')
-      .pop()
+    const fileName = files.originalFile.split('?')[0].split('/').pop()
     const file = new File([files.file], fileName)
 
     return this.onCropImg(file)
@@ -82,7 +93,7 @@ export class AssetImage extends React.Component {
 
     const image = this.props.model.get('image')
     const targetElement = this.getTargetElement()
-    const imageWithoutCache = `${image}?${new Date().getTime()}`
+    const imageWithoutCorsIssue = `/api/utils/cors/${image}`
 
     return (
       <Container>
@@ -94,7 +105,7 @@ export class AssetImage extends React.Component {
         {this.state.isCropperOpen && (
           <ImageUploader
             disableChangePhoto
-            file={imageWithoutCache}
+            file={imageWithoutCorsIssue}
             width={targetElement.clientWidth * 2}
             height={targetElement.clientHeight * 2}
             saveHandler={this.onCrop}

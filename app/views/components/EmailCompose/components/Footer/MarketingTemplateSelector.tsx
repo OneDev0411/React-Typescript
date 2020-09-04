@@ -1,16 +1,5 @@
-import * as React from 'react'
-import { useState } from 'react'
-
-import {
-  Box,
-  Button,
-  createStyles,
-  ListItem,
-  ListItemText,
-  makeStyles,
-  Theme
-} from '@material-ui/core'
-import { Link } from 'react-router'
+import React, { useState } from 'react'
+import { Box, Button, Link, makeStyles, Theme } from '@material-ui/core'
 import { range } from 'lodash'
 
 import MarketingTemplateCard, {
@@ -29,16 +18,18 @@ interface Props {
 }
 
 const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      masonry: {
-        paddingTop: theme.spacing(1)
-      },
-      card: {
-        maxHeight: '12.5rem',
-        minHeight: 'auto'
-      }
-    }),
+  (theme: Theme) => ({
+    header: {
+      borderBottom: `1px solid ${theme.palette.divider}`
+    },
+    masonry: {
+      paddingTop: theme.spacing(1)
+    },
+    card: {
+      maxHeight: '12.5rem',
+      minHeight: 'auto'
+    }
+  }),
   { name: 'MarketingTemplateSelector' }
 )
 
@@ -61,16 +52,9 @@ export function MarketingTemplateSelector(props: Props) {
       <FooterBottomDrawerZeroState
         description="There is no saved templates. Your previously used marketing email templates will appear here."
         actions={
-          <>
-            <Button
-              variant="outlined"
-              component={Link}
-              target="_blank"
-              to="/dashboard/marketing"
-            >
-              Open Marketing Center
-            </Button>
-          </>
+          <Link color="secondary" target="_blank" href="/dashboard/marketing">
+            Open Marketing Center
+          </Link>
         }
       />
     )
@@ -107,36 +91,33 @@ export function MarketingTemplateSelector(props: Props) {
   return (
     <>
       <ScrollableArea hasThinnerScrollbar shadowHeight={20} shadowColor="white">
-        <ListItem
-          dense
-          button
-          divider
-          component={Link}
-          target="_blank"
-          to="/dashboard/marketing"
-        >
-          <ListItemText
-            primary={<Box color="primary.main">Open All Designs</Box>}
-          />
-        </ListItem>
-        <MarketingTemplateMasonry
-          breakpointCols={COLUMN_COUNT}
-          className={classes.masonry}
-        >
-          {items}
-        </MarketingTemplateMasonry>
+        <Box px={2} py={1} className={classes.header}>
+          <Link target="_blank" href="/dashboard/marketing" color="secondary">
+            Open All Designs
+          </Link>
+        </Box>
+        <Box pt={1}>
+          <MarketingTemplateMasonry
+            breakpointCols={COLUMN_COUNT}
+            className={classes.masonry}
+          >
+            {items}
+          </MarketingTemplateMasonry>
+        </Box>
       </ScrollableArea>
       <MarketingTemplatePreviewModal
         type="history"
         isOpen={isPreviewModalOpen}
         onClose={() => setPreviewModalOpen(false)}
-        selectedTemplate={selectedTemplate}
-        setSelectedTemplate={setSelectedTemplate}
+        selectedTemplate={selectedTemplate!}
+        setSelectedTemplate={selected =>
+          setSelectedTemplate(selected as IMarketingTemplateInstance)
+        }
         actions={
           <Button
             variant="contained"
             color="primary"
-            onClick={() => props.onTemplateSelected(selectedTemplate)}
+            onClick={() => props.onTemplateSelected(selectedTemplate!)}
           >
             Add
           </Button>

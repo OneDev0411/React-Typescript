@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { mdiPlus } from '@mdi/js'
 
 import Deal from 'models/Deal'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { BasicDropdown } from 'components/BasicDropdown'
-import AddIcon from 'components/SvgIcons/Add/AddIcon'
 
 import { ROLE_NAMES, roleName, isPrimaryAgent } from '../../../utils/roles'
 
@@ -91,7 +92,10 @@ class AddRoleForm extends React.Component {
             items={roleItems}
             itemToString={this.itemToString}
             onChange={this.handleSelectRole}
-            buttonIcon={AddIcon}
+            buttonIcon={() => {
+              // TODO: Remove/Refactor BaseDropdown
+              return <SvgIcon path={mdiPlus} rightMargined />
+            }}
             buttonText="Add a new contact"
             disabled={roleItems.length === 0}
           />

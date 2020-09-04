@@ -184,8 +184,12 @@ export function ChecklistHeader({
           // rendering items
           multipleSelection={false}
           normalizeSelectedItem={i => i}
-          defaultList={forms || []}
-          defaultListTitle=""
+          defaultLists={[
+            {
+              title: '',
+              items: forms || []
+            }
+          ]}
           onClose={() => setFormPickerOpen(false)}
           showLoadingIndicator={formsState === 'pending'}
         />

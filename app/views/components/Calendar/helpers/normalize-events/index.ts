@@ -9,14 +9,9 @@ import { sortEvents } from '../sort-events'
  * returns list of days including their events
  * @param range
  * @param events
- * @param contrariwise
  */
-export function normalizeEvents(
-  events: ICalendarEvent[],
-  range: NumberRange,
-  contrariwise: boolean
-) {
-  const list = getEvents(range, events, contrariwise)
+export function normalizeEvents(events: ICalendarEvent[], range: NumberRange) {
+  const list = getEvents(range, events)
 
   return Object.entries(list).reduce((acc, [month, daysOfMonth]) => {
     return {
@@ -30,12 +25,10 @@ export function normalizeEvents(
  * returns all events including empty days
  * @param range
  * @param events
- * @param contrariwise
  */
 function getEvents(
   range: NumberRange,
-  events: ICalendarEvent[],
-  contrariwise: boolean
+  events: ICalendarEvent[]
 ): ICalendarEventsList {
   const uniqEvents = uniqBy(events, event =>
     event.object_type === 'crm_association' ? event.crm_task : event.id
@@ -57,7 +50,7 @@ function getEvents(
         [dayId]: [...dayEvents, event]
       }
     }
-  }, getDaysInRange(range, contrariwise))
+  }, getDaysInRange(range))
 }
 
 /**
@@ -76,9 +69,8 @@ function getSortedEvents(events: ICalendarMonthEvents) {
 /**
  * returns days ranges based on start and end dates
  * @param range
- * @param contrariwise
  */
-function getDaysInRange(range: NumberRange, contrariwise: boolean) {
+function getDaysInRange(range: NumberRange) {
   const [start, end] = range
 
   // finds the days cound between the start and end date
@@ -87,10 +79,7 @@ function getDaysInRange(range: NumberRange, contrariwise: boolean) {
   // creates a array list of days: [0, 1, 2, 3, ...]
   const listOfDays = new Array(daysCount).fill(null).map((_, index) => index)
 
-  // reverses the previous array list if contrariwise flag is enabled
-  const sortedListOfDays = contrariwise ? listOfDays.reverse() : listOfDays
-
-  return sortedListOfDays.reduce((acc, index) => {
+  return listOfDays.reduce((acc, index) => {
     const date = new Date(start * 1000 + index * 86400000)
     const year = date.getUTCFullYear()
     const month = date.getUTCMonth() + 1
@@ -120,7 +109,7 @@ function getEventIndex(event: ICalendarEvent, range: NumberRange) {
   const from = new Date(start * 1000)
   const to = new Date(end * 1000)
   const eventTime = new Date(event.timestamp * 1000)
-  const isAllDayEvent = event.metadata?.all_day || false
+  const isAllDayEvent = event.all_day || false
 
   if (isAllDayEvent && isNegativeTimezone()) {
     eventTime.setHours(24, 0, 0, 0)

@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Field } from 'react-final-form'
 import { TextField } from 'final-form-material-ui'
 import { connect } from 'react-redux'
@@ -54,6 +53,8 @@ export function AddOrEditEmailTemplateDrawer({
   const [editorState, setEditorState, bodyEditor] = useEditorState(
     (emailTemplate && emailTemplate.body) || ''
   )
+
+  useEffect(() => () => bodyEditor.reset(), [isOpen])
 
   useDeepCompareEffect(() => {
     const template: Partial<IBrandEmailTemplateInput> = emailTemplate || {}

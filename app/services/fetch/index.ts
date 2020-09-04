@@ -145,9 +145,7 @@ export default class Fetch {
     // https://gitlab.com/rechat/web/issues/695
     //
     const isUpgradeToAgentRequest =
-      error.response &&
-      error.response.body &&
-      error.response.body.message === 'Invalid answer to secret question'
+      error.response?.body?.message === 'Invalid answer to secret question'
 
     if (isUpgradeToAgentRequest || this._isServerSide || !this._isLoggedIn) {
       return
@@ -271,9 +269,7 @@ export default class Fetch {
       const elapsed = Date.now() - (this._startTime || Date.now())
 
       console.log(
-        `${status} <${requestId}> (${elapsed}ms) ${request.method} ${
-          request.url
-        }`
+        `${status} <${requestId}> (${elapsed}ms) ${request.method} ${request.url}`
       )
     }
   }

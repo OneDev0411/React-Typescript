@@ -7,12 +7,13 @@ import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
 import { Typography, Theme, IconButton, MenuItem } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/styles'
+import { mdiDotsHorizontal } from '@mdi/js'
 
 import Table from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { BaseDropdown } from 'components/BaseDropdown'
-import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
@@ -166,7 +167,7 @@ function List(props: Props & WithRouterProps) {
                   padding: 0
                 }}
               >
-                <IconHorizontalDots />
+                <SvgIcon path={mdiDotsHorizontal} />
               </IconButton>
             )}
             renderMenu={({ close }) => (
@@ -274,7 +275,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   notify: (...args: Parameters<typeof notify>) => dispatch(notify(...args))
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(List))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(List))

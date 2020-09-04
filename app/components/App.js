@@ -3,6 +3,7 @@ import ReactGA from 'react-ga'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import idx from 'idx'
+import * as Sentry from '@sentry/browser'
 
 import getBrand from '../store_actions/brand'
 import { getUserTeams } from '../store_actions/user/teams'
@@ -10,7 +11,7 @@ import { getUserTeams } from '../store_actions/user/teams'
 import Brand from '../controllers/Brand'
 
 class App extends React.Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.dispatch(getBrand())
 
     if (typeof window !== 'undefined') {
@@ -20,15 +21,6 @@ class App extends React.Component {
 
   componentDidMount() {
     this.initializeApp()
-  }
-
-  componentDidCatch(error, info) {
-    if (window.Raven) {
-      window.Raven.captureException(error)
-      window.Raven.captureMessage('Something happened', {
-        ...info
-      })
-    }
   }
 
   async initializeApp() {
@@ -86,20 +78,17 @@ class App extends React.Component {
   }
 
   setSentryUser(user, brand) {
-    if (window && window.Raven) {
-      const { email, id } = user
-      const userData = {
-        id,
-        email,
+    Sentry.configureScope(scope => {
+      scope.setUser({
+        id: user.id,
+        email: user.email,
         name: user.display_name,
         brand: brand && {
           id: brand.id,
           name: brand.name
         }
-      }
-
-      window.Raven.setUserContext(userData)
-    }
+      })
+    })
   }
 
   render() {

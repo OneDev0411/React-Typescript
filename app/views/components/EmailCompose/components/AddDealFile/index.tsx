@@ -1,28 +1,21 @@
 import React, { MouseEventHandler, useState } from 'react'
 import { useSelector } from 'react-redux'
-
 import { ListItem } from '@material-ui/core'
-
-import { FieldRenderProps } from 'react-final-form'
+import { mdiCurrencyUsdCircle } from '@mdi/js'
 
 import { useDeepMemo } from 'hooks/use-deep-memo'
-
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-
 import { selectDealTasks } from 'reducers/deals/tasks'
-
 import { notUndefined } from 'utils/ts-utils'
-
 import { IAppState } from 'reducers'
 
 import SearchDealDrawer from 'components/SearchDealDrawer'
 import SelectDealFileDrawer from 'components/SelectDealFileDrawer'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getAllDealDocuments } from '../../../SelectDealFileDrawer/helpers/get-all-deal-documents'
 
 import { DealRow } from './DealRow'
-import IconDealFilled from '../../../SvgIcons/Deals/IconDealFilled'
-import { iconSizes } from '../../../SvgIcons/icon-sizes'
 
 interface StateProps {
   checklists: Record<UUID, IDealChecklist>
@@ -30,18 +23,22 @@ interface StateProps {
   envelopes: Record<UUID, IDealEnvelope>
 }
 
-interface Props extends FieldRenderProps<any> {
+interface Props {
   deafultSelectedDeal?: IDeal
   initialAttachments: IFile[]
+  value: IFile[]
   onClick?: MouseEventHandler
-  onChanged?: () => void
+  onChange: (files: IFile[]) => void
+  onClickAddDealAttachments?: () => void
 }
 
 export function AddDealFile({
   initialAttachments,
   deafultSelectedDeal,
-  onChanged = () => {},
-  ...props
+  onChange,
+  onClick,
+  onClickAddDealAttachments = () => {},
+  value = []
 }: Props) {
   const { checklists, tasks, envelopes }: StateProps = useSelector(
     ({ deals: { checklists, tasks, envelopes } }: IAppState) => ({
@@ -55,12 +52,17 @@ export function AddDealFile({
   const [deal, setDeal] = useState<IDeal | null>(deafultSelectedDeal || null)
 
   const handleClick = event => {
+    if (deafultSelectedDeal) {
+      onClick && onClick(event)
+      onClickAddDealAttachments()
+
+      return
+    }
+
     setDealsListOpen(true)
     setDealFilesOpen(false)
 
-    if (props.onClick) {
-      props.onClick(event)
-    }
+    onClick && onClick(event)
   }
 
   const closeDealDrawer = () => setDealsListOpen(false)
@@ -85,7 +87,7 @@ export function AddDealFile({
     setDealFilesOpen(false)
 
     if (deal) {
-      const currentFiles: IFile[] = props.input.value || []
+      const currentFiles: IFile[] = value || []
 
       // Previously selected files which are either non-deal files or
       // deal files that are still selected
@@ -99,8 +101,7 @@ export function AddDealFile({
         preservedFiles.every(aFile => aFile.id !== file.id)
       )
 
-      props.input.onChange([...preservedFiles, ...newDealFiles] as any)
-      onChanged()
+      onChange([...preservedFiles, ...newDealFiles])
     }
   }
 
@@ -122,7 +123,7 @@ export function AddDealFile({
     return allDealFiles.find(document => document.id === file.id)
   }
 
-  const selectedDealFiles: IDealFile[] = (props.input.value || [])
+  const selectedDealFiles: IDealFile[] = (value || [])
     .map((file: IFile) => fileToDealFile(file))
     .filter(notUndefined)
 
@@ -133,10 +134,7 @@ export function AddDealFile({
   return (
     <>
       <ListItem button onClick={handleClick}>
-        <IconDealFilled
-          size={iconSizes.small}
-          style={{ marginRight: '0.5rem' }}
-        />
+        <SvgIcon path={mdiCurrencyUsdCircle} rightMargined />
         Attach from deals
       </ListItem>
 

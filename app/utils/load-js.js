@@ -17,3 +17,10 @@ export function loadJS(src, id, cb) {
 
   return script
 }
+
+export function unloadJS(id) {
+  const element = window.document.getElementById(id)
+  if (element) {
+    element.remove()
+  }
+}

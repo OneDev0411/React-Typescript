@@ -5,6 +5,7 @@ import merge from 'webpack-merge'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
+import SentryCliPlugin from '@sentry/webpack-plugin'
 
 import moment from 'moment'
 
@@ -25,7 +26,7 @@ function postcss() {
   return [require('autoprefixer')()]
 }
 
-webpackConfig.devtool = false
+webpackConfig.devtool = 'source-map'
 
 webpackConfig.output.pathinfo = false
 webpackConfig.output.publicPath = process.env.ASSETS_BASEURL
@@ -52,8 +53,22 @@ webpackConfig.plugins.push(
     minify: {
       collapseWhitespace: false
     }
-  }),
+  })
+)
 
+// SOURCE_VERSION variable only exists in Heroku env
+if (process.env.SOURCE_VERSION) {
+  webpackConfig.plugins.push(
+    new SentryCliPlugin({
+      release: process.env.SOURCE_VERSION, // refers to the latest commit hash
+      include: 'dist/',
+      ignore: ['node_modules'],
+      urlPrefix: process.env.ASSETS_BASEURL
+    })
+  )
+}
+
+webpackConfig.plugins.push(
   new CompressionPlugin({
     algorithm: 'gzip',
     test: /\.js$|\.css$/,
@@ -61,7 +76,7 @@ webpackConfig.plugins.push(
   }),
   new S3Plugin({
     progress: false, // Messes the terminal up
-    exclude: /.*\.html$/,
+    exclude: [/.*\.html$/, /.*\.map$/],
     basePath: 'dist/',
     s3Options: {
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -110,28 +125,9 @@ webpackConfig.plugins.push(
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
         region: 'us-west-1'
       },
-      s3UploadOptions: {
-        Bucket: process.env.ASSETS_BUCKET,
-        Expires: moment()
-          .utc()
-          .add('1', 'month')
-          .toDate(),
-        ContentEncoding(fileName) {
-          if (/\.js|.css/.test(fileName)) {
-            return 'gzip'
-          }
-        },
-
-        ContentType(fileName) {
-          if (/\.js/.test(fileName)) {
-            return 'application/javascript'
-          }
-
-          if (/\.css/.test(fileName)) {
-            return 'text/css'
-          }
-
-          return 'text/plain'
+      ContentType(fileName) {
+        if (/\.js/.test(fileName)) {
+          return 'application/javascript'
         }
 
         if (/\.css/.test(fileName)) {
@@ -149,11 +145,25 @@ webpackConfig.plugins.push(
   })
 )
 
+// SOURCE_VERSION variable only exists in Heroku env
+if (process.env.SOURCE_VERSION) {
+  webpackConfig.plugins.push(
+    new SentryCliPlugin({
+      release: process.env.SOURCE_VERSION, // refers to the latest commit hash
+      include: 'dist/',
+      ignore: ['node_modules'],
+      urlPrefix: '~/dist'
+    })
+  )
+}
+
 webpackConfig.module.rules.push(
   {
     test: /\.(ts|tsx|js)$/,
     loader: 'babel-loader',
-    options: {}
+    options: {
+      compact: false
+    }
   },
   {
     test: /\.css/,

@@ -102,10 +102,7 @@ async function display(file, renderProps) {
       this.log('Render:::getUserTeams:::End')
     }
 
-    renderProps.params.user = {
-      ...store.getState().user,
-      activeTeam: this.cookie['rechat-active-team'] || null
-    }
+    renderProps.params.user = store.getState().user
   }
 
   try {
@@ -135,9 +132,7 @@ async function display(file, renderProps) {
         store_data,
         variables: this.state.variables,
         jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`,
-        jsVendorBundle: `${config.compile.publicPath}/${
-          config.compile.jsVendorBundle
-        }`
+        jsVendorBundle: `${config.compile.publicPath}/${config.compile.jsVendorBundle}`
       })
     }
   } catch (error) {

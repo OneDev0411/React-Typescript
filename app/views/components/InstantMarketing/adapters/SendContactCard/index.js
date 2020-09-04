@@ -80,6 +80,13 @@ class SendContactCard extends React.Component {
       }
     }
 
+    if (props.contact && props.isBuilderOpen) {
+      return {
+        contact: props.contact,
+        isBuilderOpen: true
+      }
+    }
+
     return state
   }
 
@@ -280,17 +287,25 @@ class SendContactCard extends React.Component {
           />
         )}
 
-        <InstantMarketing
-          isOpen={this.state.isBuilderOpen}
-          onClose={this.closeBuilder}
-          handleSave={this.handleSaveMarketingCard}
-          mediums={this.props.mediums}
-          templateData={{ user: this.props.user, contact: this.state.contact }}
-          templateTypes={['Birthday']}
-          defaultTemplate={this.props.selectedTemplate}
-          handleSocialSharing={this.handleSocialSharing}
-          isEdit={this.props.isEdit}
-        />
+        {this.state.isBuilderOpen && (
+          <InstantMarketing
+            onClose={this.closeBuilder}
+            handleSave={this.handleSaveMarketingCard}
+            mediums={this.props.mediums}
+            templateData={{
+              user: this.props.user,
+              contact: this.state.contact
+            }}
+            templateTypes={this.props.types || ['Birthday']}
+            defaultTemplate={this.props.selectedTemplate}
+            handleSocialSharing={this.handleSocialSharing}
+            isEdit={this.props.isEdit}
+            hideTemplatesColumn={this.props.hideTemplatesColumn}
+            isTemplatesColumnHiddenDefault={
+              this.props.isTemplatesColumnHiddenDefault
+            }
+          />
+        )}
 
         <SingleEmailComposeDrawer
           isOpen={this.state.isComposeEmailOpen}
@@ -328,7 +343,6 @@ function mapStateToProps({ user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify, confirmation }
-)(SendContactCard)
+export default connect(mapStateToProps, { notify, confirmation })(
+  SendContactCard
+)

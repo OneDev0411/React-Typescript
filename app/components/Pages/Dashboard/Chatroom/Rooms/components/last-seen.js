@@ -1,6 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { mdiEarth, mdiCellphone } from '@mdi/js'
+import { Box } from '@material-ui/core'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { RelativeTime } from 'components/RelativeTime'
 
 class LastSeen extends React.Component {
@@ -28,14 +32,9 @@ class LastSeen extends React.Component {
     }
 
     const { client_type } = user.last_seen_by
-    const iconName = client_type === 'Mobile' ? 'mobile' : 'globe'
+    const iconName = client_type === 'Mobile' ? mdiCellphone : mdiEarth
 
-    return (
-      <i
-        className={`fa fa-${iconName}`}
-        style={{ fontSize: '16px', marginRight: '5px' }}
-      />
-    )
+    return <SvgIcon path={iconName} size={muiIconSizes.small} rightMargined />
   }
 
   render() {
@@ -43,10 +42,10 @@ class LastSeen extends React.Component {
 
     return (
       <div>
-        <div className="status">
+        <Box display="flex" alignItems="center" className="status">
           {this.getIcon(user)}
           {this.getLastSeenAt(states, user)}
-        </div>
+        </Box>
       </div>
     )
   }

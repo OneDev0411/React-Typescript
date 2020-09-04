@@ -72,5 +72,15 @@ export const SORTABLE_COLUMNS: SortableColumn[] = [
     label: 'Submit Time (Z-A)',
     value: 'submitted-at',
     ascending: false
+  },
+  {
+    label: 'Creation Time (A-Z)',
+    value: 'creation-time',
+    ascending: true
+  },
+  {
+    label: 'Creation Time (Z-A)',
+    value: 'creation-time',
+    ascending: false
   }
 ]

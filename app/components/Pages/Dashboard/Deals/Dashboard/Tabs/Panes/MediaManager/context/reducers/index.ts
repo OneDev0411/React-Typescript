@@ -2,7 +2,7 @@ import arrayMove from 'array-move'
 
 import * as actionTypes from '../actions/action-types'
 
-import { IMediaGallery } from '../../types'
+import type { IMediaGallery } from '../../types'
 
 export const initialState: IMediaGallery = []
 
@@ -32,10 +32,10 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
     }
 
     case actionTypes.TOGGLE_MEDIA_SELECTION: {
-      const { file } = action.payload
+      const { id } = action.payload
 
       const newState = state.map(media => {
-        if (media.file === file && !media.isNew) {
+        if (media.id === id && !media.isUploading) {
           return { ...media, selected: !media.selected }
         }
 
@@ -46,10 +46,10 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
     }
 
     case actionTypes.SET_MEDIA_NAME: {
-      const { file, name } = action.payload
+      const { id, name } = action.payload
 
       const newState = state.map(media => {
-        if (media.file === file) {
+        if (media.id === id) {
           return { ...media, name }
         }
 
@@ -63,7 +63,7 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
       const { selected } = action.payload
 
       const newState = state.map(media => {
-        return { ...media, selected: media.isNew ? false : selected }
+        return { ...media, selected: media.isUploading ? false : selected }
       })
 
       return newState
@@ -73,25 +73,25 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
       const { fileObject, order = 0 } = action.payload
 
       return [
+        ...state,
         {
-          file: fileObject.name,
+          id: fileObject.name,
           src: fileObject.preview,
-          name: 'Description',
+          name: '',
           order,
           selected: false,
-          isNew: true,
+          isUploading: true,
           uploadProgress: 0
-        },
-        ...state
+        }
       ]
     }
 
     case actionTypes.SET_MEDIA_AS_UPLOADED: {
-      const { file } = action.payload
+      const { id } = action.payload
 
       const newState = state.map(media => {
-        if (media.file === file) {
-          return { ...media, isNew: false }
+        if (media.id === id) {
+          return { ...media, isUploading: false }
         }
 
         return media
@@ -101,30 +101,30 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
     }
 
     case actionTypes.DELETE_MEDIA: {
-      const { file } = action.payload
+      const { id } = action.payload
 
       const newState = state.filter(media => {
-        return media.file !== file
+        return media.id !== id
       })
 
       return newState
     }
 
     case actionTypes.DELETE_MEDIAS: {
-      const { files } = action.payload
+      const { ids } = action.payload
 
       const newState = state.filter(media => {
-        return !files.includes(media.file)
+        return !ids.includes(media.id)
       })
 
       return newState
     }
 
     case actionTypes.SET_MEDIA_UPLOAD_PROGRESS: {
-      const { file, progress } = action.payload
+      const { id, progress } = action.payload
 
       const newState = state.map(media => {
-        if (media.file === file) {
+        if (media.id === id) {
           return { ...media, uploadProgress: progress }
         }
 
@@ -148,11 +148,11 @@ export function reducer(state: IMediaGallery, action: any): IMediaGallery {
     }
 
     case actionTypes.SET_NEWLY_UPLOADED_MEDIA_FIELDS: {
-      const { file, newId, src, name } = action.payload
+      const { id, newId, src, name } = action.payload
 
       const newState = state.map(media => {
-        if (media.file === file) {
-          return { ...media, file: newId, src, name }
+        if (media.id === id) {
+          return { ...media, id: newId, src, name }
         }
 
         return media

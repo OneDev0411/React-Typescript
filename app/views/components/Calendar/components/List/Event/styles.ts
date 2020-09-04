@@ -33,6 +33,7 @@ export const sharedStyles = (theme: Theme) =>
     }),
     time: {
       width: '5rem',
+      flexShrink: 0,
       color: theme.palette.grey[500],
       ...theme.typography.caption
     },
@@ -41,6 +42,7 @@ export const sharedStyles = (theme: Theme) =>
     },
     icon: {
       display: 'flex',
+      flexShrink: 0,
       alignItems: 'center',
       justifyContent: 'center',
       width: '2rem',

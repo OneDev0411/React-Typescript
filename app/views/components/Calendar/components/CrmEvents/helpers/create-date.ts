@@ -4,6 +4,7 @@ export function createDueDate(date: Date | null = new Date()): Date {
 
   newDate.setHours(now.getHours())
   newDate.setMinutes(now.getMinutes())
+  newDate.setSeconds(now.getSeconds())
 
   return newDate
 }

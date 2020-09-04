@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Button } from '@material-ui/core'
@@ -33,23 +33,39 @@ export function EmailThreadDrawerByThreadKey({
   const { fetchThread, thread, loading, error } = useEmailThreadLoader(
     threadKey
   )
+  const [markedAsReadThreadId, setMarkAsReadThreadId] = useState<
+    UUID | undefined
+  >(undefined)
   const accounts: IOAuthAccount[] = useSelector((state: IAppState) =>
     selectAllConnectedAccounts(state.contacts.oAuthAccounts)
+  )
+  const hasAccessToModifyMail = useMemo(
+    () =>
+      thread &&
+      hasOAuthAccess(
+        accounts,
+        thread.google_credential || thread.microsoft_credential,
+        'mail.modify'
+      ),
+    [thread, accounts]
   )
 
   useEffect(() => {
     if (
       thread &&
+      thread.id === threadKey &&
       !loading &&
-      hasOAuthAccess(
-        accounts,
-        thread.google_credential || thread.microsoft_credential,
-        'mail.modify'
-      )
+      !thread.is_read &&
+      markedAsReadThreadId !== threadKey &&
+      hasAccessToModifyMail
     ) {
-      setEmailThreadsReadStatus([thread.id], true)
+      setMarkAsReadThreadId(threadKey)
+      setEmailThreadsReadStatus([thread.id], true).catch(reason => {
+        console.error(reason)
+        setMarkAsReadThreadId(undefined)
+      })
     }
-  }, [accounts, loading, thread])
+  }, [threadKey, thread, loading, hasAccessToModifyMail, markedAsReadThreadId])
 
   return (
     <Drawer {...drawerProps}>

@@ -2,9 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Col } from 'react-bootstrap'
 import cn from 'classnames'
+import { mdiClose } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import UserAvatar from 'components/UserAvatar'
-
 import Tooltip from 'components/tooltip'
 
 import Compose from '../Shared/compose-wrapper'
@@ -63,12 +64,12 @@ const ManageMembers = ({
               </Col>
               {hasDeleteMemberIcon && (
                 <Col sm={1} md={1} className="vcenter" style={{ padding: 0 }}>
-                  <i
+                  <SvgIcon
+                    path={mdiClose}
                     onClick={() => {
                       removeMember(room.id, roomMember.id)
                     }}
-                    className="fa fa-times delete-icon"
-                    aria-hidden="true"
+                    className="delete-icon"
                   />
                 </Col>
               )}

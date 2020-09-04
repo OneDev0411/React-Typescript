@@ -16,7 +16,7 @@ import {
   getPrice
 } from 'models/Deal/helpers/context'
 
-import flattenBrand from 'utils/flatten-brand'
+import { sortDealsStatus } from 'utils/sort-deals-status'
 
 import { getGridSort } from 'deals/List/helpers/sorting'
 
@@ -35,7 +35,6 @@ import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
 } from '../helpers/backoffice-sorting'
-import { sortStatus } from '../../helpers/status-sorting'
 
 interface Props {
   searchQuery: SearchQuery
@@ -55,9 +54,17 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
   )
 
   const getOffice = (deal: IDeal) => {
-    const brand = flattenBrand(deal.brand)
+    let brand: IBrand | null = deal.brand
 
-    return brand && brand.messages ? brand.messages.branch_title : 'N/A'
+    do {
+      if (brand.brand_type === 'Office') {
+        return brand.name
+      }
+
+      brand = brand.parent
+    } while (brand)
+
+    return 'N/A'
   }
 
   const getSubmitTime = (attention_requested_at: number): string => {
@@ -88,7 +95,8 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
         id: 'status',
         class: 'opaque',
         accessor: (deal: IDeal) => getStatus(deal) || '',
-        sortFn: (rows: IDeal[]) => sortStatus(rows, props.statuses)
+        render: ({ row: deal }: { row: IDeal }) => getStatus(deal),
+        sortFn: (rows: IDeal[]) => sortDealsStatus(rows, props.statuses)
       },
       {
         id: 'agent-name',
@@ -131,6 +139,10 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
         render: ({ row: deal }: { row: IDeal }) => (
           <div>{getFormattedPrice(getPrice(deal))}</div>
         )
+      },
+      {
+        id: 'creation-time',
+        accessor: (deal: IDeal) => deal.created_at
       }
     ]
   }, [roles, user, props.statuses])

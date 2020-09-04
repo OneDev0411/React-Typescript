@@ -4,8 +4,10 @@ import { withRouter } from 'react-router'
 import _ from 'underscore'
 import Alert from '@material-ui/lab/Alert'
 import { Box, IconButton } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
 
 import PageLayout from 'components/GlobalPageLayout'
+import { ViewAs } from 'components/ViewAs'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
@@ -35,10 +37,8 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
 import { updateTeamSetting } from 'actions/user/update-team-setting'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
-import { goTo } from 'utils/go-to'
-
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import ContactsTabs from './Tabs'
 import Table from './Table'
@@ -601,7 +601,7 @@ class ContactsList extends React.Component {
       return null
     }
 
-    goTo(`/dashboard/contacts/${contact.id}`)
+    this.reloadContacts()
   }
 
   renderTabs = (props = {}) => {
@@ -657,11 +657,12 @@ class ContactsList extends React.Component {
           severity="info"
           action={
             <IconButton
+              size="small"
               aria-label="close"
               color="inherit"
               onClick={this.closeDupicateAlert}
             >
-              <CloseIcon size="small" />
+              <SvgIcon path={mdiClose} />
             </IconButton>
           }
         >
@@ -730,6 +731,9 @@ class ContactsList extends React.Component {
               {showImportAction && <ImportContactsButton />}
             </Box>
           )}
+          <Box ml={1.5}>
+            <ViewAs />
+          </Box>
         </PageLayout.HeaderWithSearch>
         <PageLayout.Main>
           {this.state.syncStatus === 'pending' && (
@@ -848,19 +852,16 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
 }
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    {
-      getContacts,
-      fetchOAuthAccounts,
-      searchContacts,
-      deleteContacts,
-      confirmation,
-      setContactsListTextFilter,
-      getContactsTags,
-      updateTeamSetting,
-      getUserTeams,
-      updateSegment: updateFilterSegment
-    }
-  )(ContactsList)
+  connect(mapStateToProps, {
+    getContacts,
+    fetchOAuthAccounts,
+    searchContacts,
+    deleteContacts,
+    confirmation,
+    setContactsListTextFilter,
+    getContactsTags,
+    updateTeamSetting,
+    getUserTeams,
+    updateSegment: updateFilterSegment
+  })(ContactsList)
 )

@@ -5,6 +5,7 @@ import { makeStyles, Box, Grid } from '@material-ui/core'
 import LoadingComponent from 'components/Spinner'
 
 import ListingCard from '../ListingCard'
+import ZeroState from '../ZeroState'
 
 const CARDS_CONTAINER_WIDTH = '27em'
 const VERTICAL_GAP_FROM_PAGE_TOP = '12em' // It's the page header height
@@ -12,14 +13,19 @@ const VERTICAL_GAP_FROM_PAGE_TOP = '12em' // It's the page header height
 const useStyles = makeStyles(
   theme => ({
     container: {
-      display: 'flex',
-      overflow: 'hidden',
-      height: `calc(100vh - ${VERTICAL_GAP_FROM_PAGE_TOP})`
+      [theme.breakpoints.up('md')]: {
+        display: 'flex',
+        overflow: 'hidden',
+        height: `calc(100vh - ${VERTICAL_GAP_FROM_PAGE_TOP})`
+      }
     },
     mapContainer: {
-      width: `calc(100% - ${CARDS_CONTAINER_WIDTH})`,
+      width: '100%',
       height: '100%',
-      position: 'relative'
+      position: 'relative',
+      [theme.breakpoints.up('md')]: {
+        width: `calc(100% - ${CARDS_CONTAINER_WIDTH})`
+      }
     },
     cardsContainer: {
       width: `${CARDS_CONTAINER_WIDTH}`,
@@ -38,6 +44,10 @@ const MapView = props => {
       return <LoadingComponent />
     }
 
+    if (!props.sortedListings.length) {
+      return <ZeroState />
+    }
+
     return props.sortedListings.map(listing => (
       <Grid key={listing.id} item xs={12}>
         <ListingCard
@@ -52,7 +62,10 @@ const MapView = props => {
   return (
     <Box className={classes.container}>
       <Box className={classes.mapContainer}>{props.Map}</Box>
-      <Box className={cn(classes.cardsContainer, 'u-scrollbar--thinner--self')}>
+      <Box
+        className={cn(classes.cardsContainer, 'u-scrollbar--thinner--self')}
+        display={{ xs: 'none', md: 'block' }}
+      >
         <Grid container spacing={1}>
           {renderCards()}
         </Grid>

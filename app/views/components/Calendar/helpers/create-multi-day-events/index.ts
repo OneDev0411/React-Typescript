@@ -1,7 +1,7 @@
 import { isNegativeTimezone } from 'utils/is-negative-timezone'
 
 function getEndDate(event: ICalendarEvent): Date {
-  const isAllDay = event.metadata?.all_day || false
+  const isAllDay = event.all_day || false
   const endDate = new Date(Number(event.end_date!) * 1000)
 
   if (isAllDay && !isNegativeTimezone()) {
@@ -11,11 +11,15 @@ function getEndDate(event: ICalendarEvent): Date {
   return endDate
 }
 
-function sortItems(a, b) {
-  const dateObjectA = new Date(a[0])
-  const dateObjectB = new Date(b[0])
+function sortItems<T>(list: [string, T][], contrariwise: boolean) {
+  return list.sort((a, b) => {
+    const dateObjectA = new Date(a[0])
+    const dateObjectB = new Date(b[0])
 
-  return dateObjectA < dateObjectB ? -1 : 1
+    const number = dateObjectA < dateObjectB ? -1 : 1
+
+    return contrariwise ? number * -1 : number
+  })
 }
 
 /**
@@ -23,16 +27,21 @@ function sortItems(a, b) {
  * It doesn't mutate the input `events` and creates a new one.
  */
 export default function createMultiDayEvents(
-  events: ICalendarEventsList
+  events: ICalendarEventsList,
+  contrariwise: boolean
 ): ICalendarEventsList {
   const distributedEvents: ICalendarEventsList = {}
   let multiDayEvents: ICalendarEvent[] = []
-  const months = Object.entries(events).sort(sortItems)
+
+  const months = sortItems<ICalendarMonthEvents>(
+    Object.entries(events),
+    contrariwise
+  )
 
   months.forEach(([month, daysOfMonth]) => {
     distributedEvents[month] = {}
 
-    const days = Object.entries(daysOfMonth).sort(sortItems)
+    const days = sortItems(Object.entries(daysOfMonth), contrariwise)
 
     days.forEach(([day, events]) => {
       const dayStart = new Date(day).getTime()

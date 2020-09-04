@@ -1,8 +1,10 @@
 import React from 'react'
 import { Theme, Paper, Grid, Button, Typography } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/styles'
+import { mdiPlusCircleOutline } from '@mdi/js'
 
-import IconAddCircleOutline from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -17,9 +19,6 @@ const useStyles = makeStyles(
     },
     buttonLabel: {
       paddingRight: theme.spacing(0.75)
-    },
-    buttonIcon: {
-      marginRight: theme.spacing(2)
     },
     descriptionContainer: {
       position: 'relative',
@@ -55,10 +54,11 @@ export default function CtaBar({ label, description, onClick }: Props) {
             onClick={onClick}
             classes={{ root: classes.button, label: classes.buttonLabel }}
           >
-            <IconAddCircleOutline
-              size={{ width: 38, height: 38 }}
-              fillColor={theme.palette.primary.main}
-              className={classes.buttonIcon}
+            <SvgIcon
+              path={mdiPlusCircleOutline}
+              size={muiIconSizes.large}
+              color={theme.palette.primary.main}
+              rightMargined
             />
             <Typography variant="subtitle2">{label}</Typography>
           </Button>

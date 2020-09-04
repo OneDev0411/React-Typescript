@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { MenuItem, Popover } from '@material-ui/core'
+import { MenuItem, Popover, useTheme } from '@material-ui/core'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
@@ -20,6 +20,7 @@ const sortOptions = [
 ]
 
 const SortDropdown = ({ onChangeSort, activeSort }) => {
+  const theme = useTheme()
   const [sortDropdownAnchorEl, setSortDropdownAnchorEl] = useState(null)
   const activeSortIndex = sortOptions.findIndex(
     item =>
@@ -67,7 +68,7 @@ const SortDropdown = ({ onChangeSort, activeSort }) => {
           vertical: 'top',
           horizontal: 'left'
         }}
-        style={{ zIndex: 10 }}
+        style={{ zIndex: Number(theme.zIndex.gridAction) + 1 }}
       >
         {sortOptions.map((sortOption, index) => (
           <MenuItem

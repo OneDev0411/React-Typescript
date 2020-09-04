@@ -35,11 +35,10 @@ import EmailVerificationBanner from '../../../views/components/EmailVerification
 import { hasUserAccess, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
 
 import syncOpenHouseData from '../../helpers/sync-open-house-offline-registers'
-
-import SideNav from './SideNav'
+import { DashboardLayout } from './DashboardLayout'
 
 class Dashboard extends Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { user, dispatch } = this.props
 
     if (user) {
@@ -147,11 +146,6 @@ class Dashboard extends Component {
     data.path = location.pathname
     data.location = location
 
-    const children = React.cloneElement(this.props.children, {
-      data,
-      user
-    })
-
     return (
       <CheckBrowser id={this.props.params.id}>
         <Helmet>
@@ -162,11 +156,14 @@ class Dashboard extends Component {
             <EmailVerificationBanner show email={user.email} />
           )}
 
-          <SideNav location={location} />
-
           {user && <InstantChat user={user} rooms={rooms} />}
 
-          <main className="l-app__main">{children}</main>
+          <DashboardLayout>
+            {React.cloneElement(this.props.children, {
+              data,
+              user
+            })}
+          </DashboardLayout>
 
           <Intercom />
         </div>

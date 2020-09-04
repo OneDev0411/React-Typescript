@@ -1,5 +1,8 @@
 import React from 'react'
 import cn from 'classnames'
+import { mdiCheck } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import './styles.scss'
 
@@ -8,7 +11,7 @@ export default class Stepper extends React.Component {
     active: this.props.active
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { active } = nextProps
 
     if (active !== this.state.active) {
@@ -65,21 +68,7 @@ export default class Stepper extends React.Component {
                 >
                   {(key < active ||
                     (key === active && isActiveStageFinished)) && (
-                    <i
-                      className={`fa ${
-                        isProcessing && active === key
-                          ? 'fa-spin fa-spinner'
-                          : 'fa-check'
-                      }`}
-                    />
-                  )}
-
-                  {key === active && !isActiveStageFinished && (
-                    <i
-                      className={`fa ${
-                        isProcessing ? 'fa-spin fa-spinner' : ''
-                      }`}
-                    />
+                    <SvgIcon path={mdiCheck} />
                   )}
                 </span>
               </a>

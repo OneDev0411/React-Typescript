@@ -1,18 +1,23 @@
 import React from 'react'
 import { Box, Tooltip, Typography } from '@material-ui/core'
+import pluralize from 'pluralize'
 
 import { recipientsList } from '../helpers'
 
 interface Props {
-  data: IEmailCampaign
+  data: IEmailCampaign<'recipients'>
 }
 
 function RecipientsColumn({ data }: Props) {
-  if (!Array.isArray(data)) {
+  if (data.executed_at) {
+    return pluralize('Recipient', data.sent, true)
+  }
+
+  if (!Array.isArray(data.recipients)) {
     return null
   }
 
-  const recipients = recipientsList(data)
+  const recipients = recipientsList(data.recipients)
 
   const tagsCount: number = recipients.tags.length || 0
   const listCount: number = recipients.list.length || 0
@@ -23,7 +28,7 @@ function RecipientsColumn({ data }: Props) {
   const items: string[] = []
 
   if (recipientsCount) {
-    items.push(`${recipientsCount} Recipients`)
+    items.push(pluralize('Recipient', recipientsCount, true))
   }
 
   if (listCount) {
@@ -37,7 +42,7 @@ function RecipientsColumn({ data }: Props) {
   if (recipientsCount === 1 && listCount === 0 && tagsCount === 0) {
     // server puts the email on data even it sends to a contact
     // so maybe it confusing at some point that email isn't include the contact itself.
-    const emailAddress = data[0].email
+    const emailAddress = data.recipients[0].email || 'No Email'
 
     return (
       <Tooltip title={emailAddress}>

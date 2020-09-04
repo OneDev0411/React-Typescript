@@ -1,9 +1,9 @@
 import React from 'react'
 import moment from 'moment'
-
 import Lightbox from 'react-images'
+import { mdiAttachment } from '@mdi/js'
 
-import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { PdfViewerModal } from 'components/PdfViewer/Modal'
 
 import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
@@ -117,7 +117,7 @@ class PdfAttachments extends React.Component {
             <a href={file.src} key={`PDF_FILE_${file.id}`} target="_blank">
               <div className="item">
                 <div className="file-attach-icon">
-                  <IconAttachment />
+                  <SvgIcon path={mdiAttachment} />
                 </div>
 
                 <div>
@@ -152,7 +152,7 @@ class PdfAttachments extends React.Component {
             }}
           >
             <div className="file-attach-icon">
-              <IconAttachment />
+              <SvgIcon path={mdiAttachment} />
             </div>
 
             <div>
@@ -187,7 +187,7 @@ const UnknownAttachments = ({ attachments }) => {
         <a href={file.url} key={`UNKNOWN_FILE_${file.id}`} target="_blank">
           <div className="item">
             <div className="file-attach-icon">
-              <IconAttachment />
+              <SvgIcon path={mdiAttachment} />
             </div>
 
             <div>

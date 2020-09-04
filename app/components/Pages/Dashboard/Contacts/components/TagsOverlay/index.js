@@ -56,7 +56,7 @@ class TagsOverlay extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const newTags = this.props.entireMode
       ? this.getAllTags()
       : this.getCommonTags(
@@ -453,14 +453,11 @@ TagsOverlay.propTypes = {
   selectedContactsIds: PropTypes.array
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    upsertAttributesToContacts,
-    deleteAttributesFromContacts,
-    deleteAttributes,
-    getContactsTags,
-    confirmation,
-    updateContact
-  }
-)(TagsOverlay)
+export default connect(mapStateToProps, {
+  upsertAttributesToContacts,
+  deleteAttributesFromContacts,
+  deleteAttributes,
+  getContactsTags,
+  confirmation,
+  updateContact
+})(TagsOverlay)

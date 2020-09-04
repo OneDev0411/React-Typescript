@@ -28,7 +28,7 @@ export const useStyles = makeStyles(
         justifyContent: 'flex-start'
       },
       mediaCard: {
-        width: 287,
+        width: 211,
         padding: theme.spacing(1),
         marginBottom: theme.spacing(2),
         borderRadius: theme.shape.borderRadius,
@@ -57,7 +57,19 @@ export const useStyles = makeStyles(
         '&.selected': {
           '& $selectCheckbox': {
             opacity: 1
+          },
+          '& $mediaThumbnail': {
+            borderColor: theme.palette.secondary.main,
+            borderWidth: '2px',
+            borderStyle: 'solid'
           }
+        }
+      },
+      mediaCardHelper: {
+        zIndex: 2,
+
+        '& $mediaThumbnailContainer': {
+          boxShadow: '5px 5px 15px rgba(0,0,0,0.4)'
         }
       },
       mediaCardUploading: {
@@ -69,7 +81,7 @@ export const useStyles = makeStyles(
         position: 'relative'
       },
       mediaThumbnail: {
-        height: 250,
+        height: 200,
         marginBottom: theme.spacing(1),
         borderRadius: theme.shape.borderRadius,
         transition: '0.2s ease-in opacity',
@@ -88,13 +100,14 @@ export const useStyles = makeStyles(
       },
       selectCheckbox: {
         position: 'absolute',
-        top: 0,
-        left: 0,
+        top: '15px',
+        left: '15px',
         opacity: 0,
-        padding: theme.spacing(1),
         width: 30,
         height: 30,
-        transition: '0.2s ease-in opacity'
+        transition: '0.2s ease-in opacity',
+        backgroundColor: theme.palette.background.paper,
+        borderRadius: theme.shape.borderRadius
       },
 
       sortHandle: {
@@ -106,18 +119,18 @@ export const useStyles = makeStyles(
         width: 30,
         height: 30,
         cursor: 'move',
-        padding: theme.spacing(0.7, 1),
+        padding: theme.spacing(0.4),
         borderRadius: theme.shape.borderRadius
       },
       placeholderCard: {
         display: 'flex',
+        height: 200,
+        width: 195,
         alignItems: 'center',
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: theme.palette.grey['300'],
         background: theme.palette.grey['100'],
-        height: 250,
-        width: 270,
         margin: theme.spacing(1),
         marginBottom: theme.spacing(2),
         borderRadius: theme.shape.borderRadius,
@@ -194,7 +207,7 @@ export const useStyles = makeStyles(
         }
       },
       iconButton: {
-        padding: 5
+        padding: 2
       },
       uploadPlaceholder: {
         position: 'fixed',
@@ -232,6 +245,10 @@ export const useStyles = makeStyles(
         position: 'absolute',
         top: 5,
         right: 5
+      },
+
+      mutedText: {
+        color: theme.palette.grey['500']
       }
     }),
   // Making the class names deterministic by setting theme name starting with `Mui`

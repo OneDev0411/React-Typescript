@@ -2,8 +2,6 @@ import styled from 'styled-components'
 
 import { borderColor, primary } from 'views/utils/colors'
 
-import IconTime from 'components/SvgIcons/Time/IconTime'
-
 export const Container = styled.div`
   display: flex;
   align-items: center;
@@ -17,12 +15,6 @@ export const Label = styled.label<LabelProps>`
   font-size: 1rem;
   font-weight: ${({ bold }) => (bold ? 'bold' : 'normal')};
   margin: 0;
-`
-
-export const Icon = styled(IconTime)`
-  width: 1.2rem;
-  height: 1.2rem;
-  margin-right: 0.5rem;
 `
 
 export const Input = styled.input`

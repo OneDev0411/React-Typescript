@@ -18,9 +18,10 @@ import {
 import { TextFieldProps } from '@material-ui/core/TextField'
 
 import classNames from 'classnames'
+import { mdiPencilOutline } from '@mdi/js'
 
 import { useOnToggledOn } from '../../TextEditor/features/RichText/LinkEditorPopover/hooks/use-on-toggled'
-import EditIcon from '../../SvgIcons/Edit/EditIcon'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 interface Props {
   children?: ReactNode
@@ -172,9 +173,7 @@ export const InlineEditableString = forwardRef(function InlineEditableString(
             >
               Save
             </Button>
-          ) : (
-            undefined
-          )
+          ) : undefined
         }}
         classes={{
           root: classNames(
@@ -182,7 +181,7 @@ export const InlineEditableString = forwardRef(function InlineEditableString(
             (TextFieldProps.classes || {}).root
           )
         }}
-        {...TextFieldProps as any}
+        {...(TextFieldProps as any)}
         value={editingValue}
         disabled={saving}
         autoFocus
@@ -196,7 +195,7 @@ export const InlineEditableString = forwardRef(function InlineEditableString(
   ) : (
     <span className={classes.viewRoot} onClick={edit}>
       {props.children || props.value}{' '}
-      <EditIcon className={classes.editIcon} size={{ width: 16, height: 16 }} />
+      <SvgIcon path={mdiPencilOutline} className={classes.editIcon} />
     </span>
   )
 })

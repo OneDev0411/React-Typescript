@@ -128,6 +128,8 @@ function ContactFilters(props) {
     dispatch({
       type: SELECTION__TOGGLE_ENTIRE_ROWS
     })
+  const defaultSelectAllValue =
+    Number(props.contactCount) === 0 ? false : isAllSelected
 
   return (
     <>
@@ -136,7 +138,8 @@ function ContactFilters(props) {
           <Checkbox
             disableRipple
             className={classes.toggleAll}
-            checked={isAllSelected}
+            disabled={Number(props.contactCount) === 0}
+            checked={defaultSelectAllValue}
             indeterminate={isSomeRowsSelected}
             onChange={toggleAll}
           />

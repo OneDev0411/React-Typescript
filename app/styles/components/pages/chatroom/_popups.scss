@@ -46,8 +46,11 @@
 
     .icons {
       @extend %fix--btn-group;
+      display: flex;
       .icon {
-        margin-left: 15px;
+        margin-left: 10px;
+        height: 16px;
+        align-self: center;
         cursor: pointer;
         opacity: 0.6;
         .bdg {

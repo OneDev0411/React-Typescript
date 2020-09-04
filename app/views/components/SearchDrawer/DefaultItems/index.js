@@ -4,29 +4,38 @@ import { ListContainer, ListTitle } from '../styled'
 import { Body } from '../components/Body'
 
 export function DefaultItems(props) {
+  const hasDefaultListsWithItems = props.defaultLists.some(
+    list => list.items.length > 0
+  )
+
   if (
     (!props.multipleSelection && props.searchResults.length > 0) ||
     props.isLoading ||
-    props.defaultItems.length === 0
+    !hasDefaultListsWithItems
   ) {
-    return false
+    return null
   }
 
   return (
-    <ListContainer
-      style={{
-        marginTop: '1rem'
-      }}
-    >
-      <ListTitle>{props.defaultListTitle}</ListTitle>
+    <>
+      {props.defaultLists.map(list => (
+        <ListContainer
+          key={list.title}
+          style={{
+            marginTop: '1rem'
+          }}
+        >
+          <ListTitle>{list.title}</ListTitle>
 
-      <Body
-        getItemProps={props.getItemProps}
-        list={props.defaultItems}
-        handleSelectItem={props.handleSelectItem}
-        ItemRow={props.ItemRow}
-        showAddButton={props.multipleSelection}
-      />
-    </ListContainer>
+          <Body
+            getItemProps={props.getItemProps}
+            list={list.items}
+            handleSelectItem={props.handleSelectItem}
+            ItemRow={props.ItemRow}
+            showAddButton={props.multipleSelection}
+          />
+        </ListContainer>
+      ))}
+    </>
   )
 }

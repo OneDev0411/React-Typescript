@@ -12,6 +12,7 @@ declare type IPermission =
   | 'Admin'
   | 'Marketing'
   | 'CRM'
+  | 'STORE'
   | 'BetaFeatures'
 
 declare type BrandSettingsPaletteKey =
@@ -72,7 +73,7 @@ declare interface IBrand extends IModel<'brand'> {
   brand_type: IBrandType
   hostnames: string[] | null
   member_count: number
-  messages: IBrandMessage
+  messages: Nullable<IBrandMessage>
   settings:
     | StringMap<any>
     | {

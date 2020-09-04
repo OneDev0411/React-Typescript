@@ -16,6 +16,7 @@ export const styles = (theme: Theme) =>
       alignItems: 'flex-start',
       justifyContent: 'center',
       height: '100%',
+      overflow: 'hidden',
       backgroundColor: (props: StyleProps) =>
         props.evenRow ? theme.palette.grey[50] : theme.palette.common.white,
       cursor: (props: StyleProps) => (props.clickable ? 'pointer' : 'auto'),
@@ -44,13 +45,6 @@ export const styles = (theme: Theme) =>
       },
       '&:hover $actions': {
         opacity: 1
-      }
-    },
-    iconEdit: {
-      marginRight: theme.spacing(2),
-      fill: theme.palette.grey[400],
-      '&:hover': {
-        fill: theme.palette.grey[300]
       }
     },
     actions: {

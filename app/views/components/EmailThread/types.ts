@@ -19,7 +19,7 @@ export type EmailResponseType = 'reply' | 'replyAll' | 'forward'
  * components and functions more succinct.
  */
 export interface EmailThreadEmail {
-  id: string
+  id: UUID
   from: string
   subject: string
   to: string[]
@@ -32,10 +32,15 @@ export interface EmailThreadEmail {
   inBound: boolean
   isRead: boolean
 
-  messageId?: string
-  internetMessageId?: string
-  threadId?: string
+  messageId?: UUID
+  internetMessageId?: UUID
 
-  microsoftId: string | undefined
-  googleId: string | undefined
+  threadId?: UUID
+  thread?: IEmailThread<IEmailThreadAssociations>
+
+  campaignId?: UUID
+  campaign?: IEmailCampaign
+
+  microsoftId: UUID | undefined
+  googleId: UUID | undefined
 }

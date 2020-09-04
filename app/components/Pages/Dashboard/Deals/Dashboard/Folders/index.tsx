@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
-import { Button } from '@material-ui/core'
+import { Button, Theme } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
 
 import { useDeepMemo } from 'hooks/use-deep-memo'
 
@@ -23,12 +24,23 @@ type Checklists = Record<UUID, IDealChecklist>
 
 interface Props {
   deal: IDeal
-  checklists: Checklists
-  tasks: Tasks
   isBackOffice: boolean
 }
 
-function FoldersTab({ deal, checklists, tasks, isBackOffice }: Props) {
+export default function FoldersTab({ deal, isBackOffice }: Props) {
+  const theme = useTheme<Theme>()
+
+  const { tasks, checklists } = useSelector<
+    IAppState,
+    {
+      tasks: Tasks
+      checklists: Checklists
+    }
+  >(({ deals }) => ({
+    tasks: deals.tasks,
+    checklists: deals.checklists
+  }))
+
   const [showTerminatedFolders, setShowTerminatedFolders] = useState<boolean>(
     false
   )
@@ -139,7 +151,7 @@ function FoldersTab({ deal, checklists, tasks, isBackOffice }: Props) {
             color="secondary"
             variant="outlined"
             style={{
-              marginRight: '0.5rem'
+              marginRight: theme.spacing(1)
             }}
           >
             {showTerminatedFolders ? 'Hide' : 'Show'} Terminated
@@ -159,8 +171,3 @@ function FoldersTab({ deal, checklists, tasks, isBackOffice }: Props) {
     </Container>
   )
 }
-
-export default connect(({ deals }: IAppState) => ({
-  checklists: deals.checklists,
-  tasks: deals.tasks
-}))(FoldersTab)

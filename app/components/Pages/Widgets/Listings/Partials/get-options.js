@@ -1,5 +1,6 @@
-export function getOptions(brokerage, agent, type, brandId, user) {
+export function getOptions(brokerage, agent, type, brandId, user, limit = 12) {
   const options = {
+    limit,
     property_types: [
       'Residential',
       'Residential Lease',
@@ -43,7 +44,6 @@ export function getOptions(brokerage, agent, type, brandId, user) {
   }
 
   if (type === 'sold') {
-    options.limit = '12'
     options.listing_statuses = ['Sold', 'Leased']
   } else {
     options.listing_statuses = [

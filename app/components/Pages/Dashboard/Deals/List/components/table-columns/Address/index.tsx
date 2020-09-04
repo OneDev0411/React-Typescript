@@ -1,14 +1,12 @@
 import React from 'react'
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme, Typography } from '@material-ui/core'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
-import IconHome from 'components/SvgIcons/NewHome/IconHome'
+import { mdiHomeOutline } from '@mdi/js'
+
 import Avatar from 'components/Avatar'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import ALinkToClosable from 'components/ALinkToClosable'
-
-import { getField } from 'models/Deal/helpers/context'
-
+import { getField, getEnderType } from 'models/Deal/helpers/context'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import { Side } from '../Side'
@@ -31,6 +29,9 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center'
     },
+    title: {
+      marginLeft: theme.spacing(1)
+    },
     photoContainer: {
       marginRight: theme.spacing(1),
       position: 'relative'
@@ -43,6 +44,9 @@ const useStyles = makeStyles(
       backgroundColor: theme.palette.grey[500]
     },
     side: {
+      color: theme.palette.grey[600]
+    },
+    enderType: {
       color: theme.palette.grey[600]
     }
   }),
@@ -67,7 +71,6 @@ export function Address({
   notificationsCount
 }: Props) {
   const classes = useStyles()
-  const iconClasses = useIconStyles()
   const photo = getField(deal, 'photo')
 
   return (
@@ -79,32 +82,40 @@ export function Address({
           <Avatar image={photo} size={32} />
         ) : (
           <div className={classes.homeIcon}>
-            <IconHome className={iconClasses.small} />
+            <SvgIcon path={mdiHomeOutline} />
           </div>
         )}
       </div>
 
-      <ALinkToClosable
-        className="underline-on-hover"
-        onClick={onDealOpened}
-        to={`/dashboard/deals/${deal.id}`}
-      >
-        <TextMiddleTruncate text={deal.title} maxLength={40} />
-      </ALinkToClosable>
+      <div className={classes.title}>
+        <ALinkToClosable
+          className="underline-on-hover"
+          onClick={onDealOpened}
+          to={`/dashboard/deals/${deal.id}`}
+        >
+          <TextMiddleTruncate text={deal.title} maxLength={40} />
+        </ALinkToClosable>
 
-      {roles && (
-        <>
-          <div className={classes.circle} />
-          <div className={classes.side}>
-            <Side
-              deal={deal}
-              roles={roles}
-              rowId={rowIndex! + 1}
-              rowsCount={totalRows!}
-            />
-          </div>
-        </>
-      )}
+        <div className={classes.container}>
+          <Typography variant="caption" className={classes.enderType}>
+            {getEnderType(deal)}
+          </Typography>
+
+          {roles && (
+            <>
+              <div className={classes.circle} />
+              <div className={classes.side}>
+                <Side
+                  deal={deal}
+                  roles={roles}
+                  rowId={rowIndex! + 1}
+                  rowsCount={totalRows!}
+                />
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

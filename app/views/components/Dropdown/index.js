@@ -1,11 +1,14 @@
 import React from 'react'
 import Downshift from 'downshift'
 import matchSorter from 'match-sorter'
+import { mdiChevronDown } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Card from '../Card'
 import { Item } from './Item'
 import { SearchInput } from './SearchInput'
-import { Icon, Button } from './styles'
+import { Button } from './styles'
 
 export const Dropdown = ({
   items,
@@ -94,7 +97,7 @@ export const Dropdown = ({
                 />
               )}
               {selectedItem && selectedItem.title}
-              <Icon isOpen={isOpen} />
+              <SvgIcon path={mdiChevronDown} rotate={isOpen ? 180 : 0} />
             </Button>
           )}
           <div style={{ position: 'relative' }} {...props}>
@@ -176,4 +179,4 @@ export const Dropdown = ({
   />
 )
 
-export { Icon, Button } from './styles'
+export { Button } from './styles'

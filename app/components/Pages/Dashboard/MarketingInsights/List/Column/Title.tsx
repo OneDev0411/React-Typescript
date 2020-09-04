@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography, Tooltip } from '@material-ui/core'
 
 import { EditEmailButton } from 'components/EditEmailButton'
 
@@ -13,7 +13,7 @@ interface Props {
   reloadList: () => void
 }
 
-function TitleColumn({ data, reloadList }) {
+function TitleColumn({ data, reloadList }: Props) {
   const isFailed: boolean = isEmailFailed(data)
   const isScheduled: boolean = isEmailScheduled(data)
   const isInProgress: boolean = isEmailInProgress(data)
@@ -22,7 +22,7 @@ function TitleColumn({ data, reloadList }) {
   const title = (
     <div className="info-title">
       <Box pr={2} maxWidth="100%">
-        <Typography noWrap>{data.subject}</Typography>
+        <Typography noWrap>{data.subject || '(untitled)'}</Typography>
       </Box>
     </div>
   )
@@ -48,7 +48,11 @@ function TitleColumn({ data, reloadList }) {
       {titleRenderer}
       <Box>
         <Date data={data} />
-        {isFailed && <StyledBadge appearance="red">Failed</StyledBadge>}
+        {isFailed && (
+          <Tooltip title={data.failure || ''}>
+            <StyledBadge appearance="red">Failed</StyledBadge>
+          </Tooltip>
+        )}
         {isInProgress && (
           <StyledBadge appearance="warning">In Progress</StyledBadge>
         )}

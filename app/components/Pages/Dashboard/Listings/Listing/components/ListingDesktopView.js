@@ -17,6 +17,7 @@ import {
   CarouselItem,
   OverlayTrigger
 } from 'react-bootstrap'
+import { mdiClose, mdiArrowLeft, mdiArrowRight } from '@mdi/js'
 
 import { formatPhoneNumber } from '../../../../../../utils/format'
 import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
@@ -26,9 +27,7 @@ import listingUtils from '../../../../../../utils/listing'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import TextIconButton from '../../../../../../views/components/Button/TextIconButton'
 import LinkButton from '../../../../../../views/components/Button/LinkButton'
-import IconClose from '../../../../../../views/components/SvgIcons/Close/CloseIcon'
-import ArrowLeftIcon from '../../../../../../views/components/SvgIcons/ArrowLeft/ArrowLeftIcon'
-import ArrowRightIcon from '../../../../../../views/components/SvgIcons/ArrowRight/ArrowRightIcon'
+import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
 
 import FetchError from './FetchError'
 import MLSNote from './MLSNote'
@@ -131,12 +130,12 @@ const ListingDesktopView = ({
   let bathroom_count
   let prev_icon = (
     <ArrowContainer center left>
-      <ArrowLeftIcon />
+      <SvgIcon path={mdiArrowLeft} />
     </ArrowContainer>
   )
   let next_icon = (
     <ArrowContainer center>
-      <ArrowRightIcon />
+      <SvgIcon path={mdiArrowRight} />
     </ArrowContainer>
   )
   let listing_subtitle
@@ -270,9 +269,7 @@ const ListingDesktopView = ({
       </div>
     ))
 
-    listing_subtitle = `${listing.property.address.city}, ${
-      listing.property.address.state
-    } ${listing.property.address.postal_code}`
+    listing_subtitle = `${listing.property.address.city}, ${listing.property.address.state} ${listing.property.address.postal_code}`
 
     const status_color = listingUtils.getStatusColor(listing.status)
 
@@ -281,9 +278,7 @@ const ListingDesktopView = ({
     if (listing.close_date) {
       const sold_date_obj = friendlyDate(listing.close_date)
 
-      sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${
-        sold_date_obj.year
-      }`
+      sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
     }
 
     const listing_status_indicator = (
@@ -538,10 +533,7 @@ const ListingDesktopView = ({
                       <div style={S('text-center w-50p pull-left')}>
                         <a
                           target="_blank"
-                          href={`http://maps.google.com/?q=${
-                            listing.property.address
-                              .geo_source_formatted_address_google
-                          }`}
+                          href={`http://maps.google.com/?q=${listing.property.address.geo_source_formatted_address_google}`}
                         >
                           Google Maps
                         </a>
@@ -550,12 +542,7 @@ const ListingDesktopView = ({
                       <div style={S('text-center w-50p pull-left')}>
                         <a
                           target="_blank"
-                          href={`http://maps.google.com/?q=${
-                            listing.property.address
-                              .geo_source_formatted_address_google
-                          }&layer=c&cbll=${
-                            listing.property.address.location.latitude
-                          },${listing.property.address.location.longitude}`}
+                          href={`http://maps.google.com/?q=${listing.property.address.geo_source_formatted_address_google}&layer=c&cbll=${listing.property.address.location.latitude},${listing.property.address.location.longitude}`}
                         >
                           Street View
                         </a>
@@ -808,7 +795,7 @@ const ListingDesktopView = ({
       <TextIconButton
         appearance="outline"
         onClick={hideModal}
-        iconLeft={IconClose}
+        iconLeft={() => <SvgIcon path={mdiClose} rightMargined />}
         text="Close"
       />
       {user ? (

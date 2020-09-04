@@ -25,7 +25,7 @@ function ContactInfo({ data }: ContactInfoPropsType) {
         src={data.profile_image_url || ''}
         sizes="32"
         style={{
-          backgroundColor: theme.palette.divider,
+          backgroundColor: theme.palette.grey[200],
           color: theme.palette.text.primary
         }}
       >

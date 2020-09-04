@@ -1,20 +1,19 @@
-import styled from 'styled-components'
-
-import { grey, primary } from 'views/utils/colors'
-import ALink from 'components/ALink'
+import styled, { ThemeProps } from 'styled-components'
+import { Theme } from '@material-ui/core'
 
 export const AccountInfoWrapper = styled.div`
   line-height: 1.5;
+  padding-top: ${({ theme }: ThemeProps<Theme>) => theme.spacing(1.25)}px;
+  min-width: ${({ theme }: ThemeProps<Theme>) => theme.spacing(30)}px;
   .header {
-    font-weight: 600;
+    display: flex;
   }
   .secondary {
-    color: ${grey.A900};
+    display: flex;
+    padding-left: ${({ theme }: ThemeProps<Theme>) => theme.spacing(3.5)}px;
   }
-  .dot {
-    margin: 0 0.8rem;
-  }
-  ${ALink} {
-    color: ${primary};
+  .secondary .settings {
+    position: relative;
+    right: ${({ theme }: ThemeProps<Theme>) => theme.spacing(-1.25)}px;
   }
 `

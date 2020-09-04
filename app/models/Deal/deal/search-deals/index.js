@@ -1,10 +1,6 @@
 import Fetch from '../../../../services/fetch'
 
-import {
-  getActiveTeamId,
-  getActiveTeamACL,
-  viewAs
-} from '../../../../utils/user-teams'
+import { getActiveTeamId, getActiveTeamACL } from '../../../../utils/user-teams'
 
 /**
  * search deals
@@ -43,14 +39,6 @@ export async function searchDeals(
       associations += 'associations[]=deal.created_by'
     } else {
       associations = 'associations[]=deal.brand'
-
-      const users = viewAs(user)
-
-      if (users.length > 0) {
-        payload.role = {
-          user: users
-        }
-      }
 
       payload.$order = order
     }

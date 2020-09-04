@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
+import { mdiPlusCircleOutline } from '@mdi/js'
+import { Button } from '@material-ui/core'
 
 import { selectForms } from 'reducers/deals/forms'
 import { createFormTask } from 'actions/deals'
@@ -7,9 +9,7 @@ import { createFormTask } from 'actions/deals'
 import LoadingContainer from 'components/LoadingContainer'
 import Search from 'components/Grid/Search'
 import OverlayDrawer from 'components/OverlayDrawer'
-import TextIconButton from 'components/Button/TextIconButton'
-import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import CreateCustomTask from './CustomTask'
@@ -65,14 +65,14 @@ class TaskCreate extends React.Component {
   }
 
   renderDrawerHeaderMenu = () => (
-    <TextIconButton
-      onClick={this.toggleCustomTaskDrawer}
-      text="Create New Folder"
-      appearance="outline"
-      iconLeft={AddIcon}
-      iconSize="large"
+    <Button
       disabled={this.state.isSaving}
-    />
+      onClick={this.toggleCustomTaskDrawer}
+      variant="outlined"
+    >
+      <SvgIcon path={mdiPlusCircleOutline} rightMargined />
+      Create New Folder
+    </Button>
   )
 
   render() {

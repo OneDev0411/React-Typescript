@@ -113,7 +113,6 @@ class ShareInstance extends React.Component {
             isOpen
             hasStaticBody
             initialValues={{
-              from: props.user,
               body: getTemplateInstancePreviewImage(props.instance)
             }}
             getEmail={this.getEmail}

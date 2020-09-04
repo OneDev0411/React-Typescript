@@ -2,10 +2,13 @@ import React from 'react'
 
 import { createStyles, makeStyles } from '@material-ui/core'
 
+import { mdiTrashCanOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import ActionButton from '../Button/ActionButton'
 import Tooltip from '../tooltip'
 import IconButton from '../Button/IconButton'
-import DeleteIcon from '../SvgIcons/DeleteOutline/IconDeleteOutline'
 
 interface Props {
   handleEdit: () => void
@@ -21,7 +24,7 @@ const useStyles = makeStyles(
         backgroundColor: 'rgba(0, 0, 0, 0.55)!important',
 
         '& svg': {
-          fill: '#fff!important'
+          color: '#fff!important'
         },
 
         '&:hover': {
@@ -64,7 +67,7 @@ export default function TemplateCardActions({
                 handleDelete()
               }}
             >
-              <DeleteIcon />
+              <SvgIcon path={mdiTrashCanOutline} />
             </IconButton>
           </Tooltip>
         </div>

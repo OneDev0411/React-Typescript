@@ -2,14 +2,14 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-
+import { mdiDotsVertical } from '@mdi/js'
 import fecha from 'fecha'
 
 import LinkButton from 'components/Button/LinkButton'
 
 import Spinner from 'components/Spinner'
 import { BasicDropdown } from 'components/BasicDropdown'
-import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import copy from 'utils/copy-text-to-clipboard'
@@ -109,7 +109,9 @@ class EventsList extends React.Component {
                   fullHeight
                   pullTo="right"
                   selectedItem={null}
-                  buttonRenderer={props => <VerticalDotsIcon {...props} />}
+                  buttonRenderer={props => (
+                    <SvgIcon path={mdiDotsVertical} {...props} />
+                  )}
                   items={this.menuItems}
                   onSelect={item => item.onClick(event)}
                 />
@@ -122,7 +124,4 @@ class EventsList extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  { notify }
-)(EventsList)
+export default connect(null, { notify })(EventsList)

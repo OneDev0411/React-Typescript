@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react'
 import { IconButton, Tooltip } from '@material-ui/core'
+import { mdiTrashCanOutline } from '@mdi/js'
 
 import { TextEditor } from 'components/TextEditor'
 import { TextEditorRef } from 'components/TextEditor/types'
 import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
 import Drawer from 'components/OverlayDrawer'
 import Button from 'components/Button/ActionButton'
-import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
 
@@ -105,7 +106,7 @@ export default function AddOrEditNoteDrawer({ note, ...props }: Props) {
               ) : (
                 <Tooltip title="Delete Note">
                   <IconButton onClick={onDelete} disabled={isSaving}>
-                    <IconDelete size="medium" />
+                    <SvgIcon path={mdiTrashCanOutline} />
                   </IconButton>
                 </Tooltip>
               )}

@@ -6,7 +6,7 @@ import { isBackOffice } from '../utils/user-teams'
 export function useDealsNotificationsNumber(): number {
   const user = useSelector((state: IAppState) => state.user)
   const deals: IDeal[] = useSelector((state: IAppState) =>
-    Object.values(state.deals.list)
+    Object.values(state.deals.list || {})
   )
 
   if (isBackOffice(user)) {

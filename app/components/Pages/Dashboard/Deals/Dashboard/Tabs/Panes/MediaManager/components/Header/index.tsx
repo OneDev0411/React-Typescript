@@ -1,15 +1,16 @@
 import React from 'react'
-import { Typography, Box, Button } from '@material-ui/core'
-import cn from 'classnames'
+import { Typography, Box, Button, useTheme } from '@material-ui/core'
 import pluralize from 'pluralize'
+import { mdiProgressUpload } from '@mdi/js'
 
-import IconUpload from 'components/SvgIcons/Upload/IconUpload'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import CreateSyncTask from './CreateSyncTask'
 
 import { useStyles } from '../../styles'
+
+import useMediaManagerContext from '../../hooks/useMediaManagerContext'
+import { toggleGallerySelection } from '../../context/actions'
 
 interface Props {
   mediasCount: number
@@ -24,11 +25,17 @@ export default function Header({
   deal,
   user
 }: Props) {
+  const theme = useTheme()
   const classes = useStyles()
-  const iconClasses = useIconStyles()
+  const { dispatch } = useMediaManagerContext()
 
   const openBrowse = () => {
     uploaderRef.current.open()
+  }
+
+  const handleSelectAll = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault()
+    dispatch(toggleGallerySelection(true))
   }
 
   return (
@@ -43,7 +50,10 @@ export default function Header({
           color="textSecondary"
           display="inline"
         >
-          (Max 50)
+          {' '}
+          <Button color="secondary" size="large" onClick={handleSelectAll}>
+            Select All
+          </Button>
         </Typography>
       </Box>
       <Box
@@ -53,9 +63,10 @@ export default function Header({
         className={classes.actionButtons}
       >
         <Button variant="contained" color="secondary" onClick={openBrowse}>
-          <IconUpload
-            fillColor="#fff"
-            className={cn(iconClasses.small, iconClasses.rightMargin)}
+          <SvgIcon
+            path={mdiProgressUpload}
+            rightMargined
+            color={theme.palette.common.white}
           />{' '}
           Upload
         </Button>

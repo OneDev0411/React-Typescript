@@ -1,18 +1,9 @@
-import styled from "styled-components"
 import React from 'react'
 import Downshift from 'downshift'
 import PropTypes from 'prop-types'
+import { mdiClose, mdiMagnify, mdiChevronDown } from '@mdi/js'
 
-import IconSearch from '../../../../../../../views/components/SvgIcons/Search/IconSearch'
-import DeleteIcon from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
-import ArrowDownIcon from '../../../../../../../views/components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-
-export const DropIcon = styled(ArrowDownIcon)`
-  width: 2em;
-  height: 2em;
-  fill: #8da2b5;
-  transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'initial')};
-`
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   MenuContainer,
@@ -76,19 +67,16 @@ class DropDown extends React.Component {
                 <div>{selectedField.label || 'Select...'}</div>
                 <div>
                   {selectedField.value && (
-                    <DeleteIcon
+                    <SvgIcon
+                      path={mdiClose}
                       onClick={this.handleUnselectField}
-                      style={{
-                        fill: '#506379',
-                        width: '16px',
-                        height: '16px',
-                        marginBottom: '4px'
-                      }}
+                      color="#506379"
                     />
                   )}
-                  <DropIcon
-                    isOpen={isOpen}
-                    style={{ fill: '#506379', width: '24px', height: '24px' }}
+                  <SvgIcon
+                    path={mdiChevronDown}
+                    rotate={isOpen ? 180 : 0}
+                    color="#506379"
                   />
                 </div>
               </MenuButton>
@@ -96,7 +84,7 @@ class DropDown extends React.Component {
                 <MenuContent style={this.props.contentStyle}>
                   {this.props.showSearchInput && (
                     <SearchInputContainer>
-                      <IconSearch color="#757575" />
+                      <SvgIcon path={mdiMagnify} color="#757575" />
                       <SearchInput
                         autoFocus
                         placeholder="Select a property title"

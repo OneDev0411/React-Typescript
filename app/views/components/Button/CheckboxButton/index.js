@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { func } from 'prop-types'
+import { mdiCheck } from '@mdi/js'
 
 import { blue, grey } from '../../../utils/colors'
-import Checkmark from '../../SvgIcons/Checkmark/IconCheckmark'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 const CheckBox = styled.span`
   width: 16px;
@@ -18,9 +19,7 @@ const CheckBox = styled.span`
   flex-shrink: 0;
 
   svg {
-    path {
-      fill: #ffffff;
-    }
+    color: #ffffff;
   }
 
   :hover {
@@ -39,7 +38,7 @@ export class CheckBoxButton extends React.Component {
     isSelected: this.props.isSelected
   }
 
-  componentWillReceiveProps({ isSelected }) {
+  UNSAFE_componentWillReceiveProps({ isSelected }) {
     if (this.state.isSelected === isSelected) {
       return false
     }
@@ -74,7 +73,7 @@ export class CheckBoxButton extends React.Component {
         isSelected={isSelected}
         isDisabled={this.props.isDisabled}
       >
-        {isSelected && <Checkmark />}
+        {isSelected && <SvgIcon path={mdiCheck} />}
       </CheckBox>
     )
   }

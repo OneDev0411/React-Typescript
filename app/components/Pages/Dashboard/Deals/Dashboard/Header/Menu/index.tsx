@@ -2,15 +2,17 @@ import React from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
 
 import { CloseButton } from 'components/Button/CloseButton'
-import SendEmail from 'components/SendEmailButton'
 
 import YardSign from 'deals/components/YardSign'
 import OpenHouse from 'deals/components/OpenHouse'
 
-import RemoveDraft from './RemoveDraft'
 import DealStatus from '../../../components/DealStatus'
+
+import RemoveDraft from './RemoveDraft'
+import { Email } from './Email'
 
 interface Props {
   deal: IDeal
@@ -28,15 +30,13 @@ const useStyles = makeStyles((theme: Theme) =>
         borderColor: `${theme.palette.divider} !important`, // important fixes safari
         marginLeft: theme.spacing(1)
       }
-    },
-    closeButtonIcon: {
-      fill: theme.palette.grey[600]
     }
   })
 )
 
 export const Menu = withRouter(
   ({ deal, isBackOffice, router, location }: Props & WithRouterProps) => {
+    const theme = useTheme<Theme>()
     const classes = useStyles()
 
     return (
@@ -52,7 +52,7 @@ export const Menu = withRouter(
 
         <YardSign deal={deal} />
 
-        <SendEmail deal={deal} size="small" />
+        <Email />
 
         {deal.deal_type === 'Selling' && !deal.has_active_offer && (
           <Button
@@ -71,11 +71,10 @@ export const Menu = withRouter(
         <CloseButton
           backUrl="/dashboard/deals"
           buttonProps={{
-            size: 'medium'
+            size: 'small'
           }}
           iconProps={{
-            className: classes.closeButtonIcon,
-            size: 'small'
+            color: theme.palette.grey[600]
           }}
         />
       </div>

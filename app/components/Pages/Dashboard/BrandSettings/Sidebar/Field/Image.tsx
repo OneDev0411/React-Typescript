@@ -12,11 +12,9 @@ import {
   Theme
 } from '@material-ui/core'
 import { useDropzone } from 'dropzone'
+import { mdiProgressUpload, mdiTrashCanOutline } from '@mdi/js'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
-
-import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
-import IconUpload from 'components/SvgIcons/Upload/IconUpload'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ImageUploadHandler } from '../../types'
 import { FieldProps } from './types'
@@ -57,7 +55,6 @@ export default function ImageField({
   onChange
 }: Props) {
   const classes = useStyles()
-  const iconClasses = useIconStyles()
   const [isUploading, setIsUploading] = useState<boolean>(false)
 
   const onDrop = useCallback(
@@ -106,7 +103,7 @@ export default function ImageField({
           <Tooltip title="Change Image">
             <div>
               <IconButton disabled={isUploading} size="small" onClick={open}>
-                <IconUpload className={iconClasses.small} />
+                <SvgIcon path={mdiProgressUpload} />
               </IconButton>
             </div>
           </Tooltip>
@@ -117,7 +114,7 @@ export default function ImageField({
                 size="small"
                 onClick={handleDeleteClick}
               >
-                <IconDeleteOutline className={iconClasses.small} />
+                <SvgIcon path={mdiTrashCanOutline} />
               </IconButton>
             </div>
           </Tooltip>

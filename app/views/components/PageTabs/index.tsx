@@ -41,9 +41,7 @@ const useStyles = makeStyles(
       position: 'inherit'
     }
   }),
-  {
-    name: 'PageTabs'
-  }
+  { name: 'PageTabs' }
 )
 
 /**

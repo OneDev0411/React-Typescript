@@ -1,14 +1,8 @@
 import React from 'react'
 
-const simpleField = ({
-  type,
-  input,
-  label,
-  placeholder,
-  meta: { dirty, error },
-  ...inputProps
-}) => {
-  const hasError = dirty && error
+const simpleField = ({ input, label, placeholder, meta, ...rest }) => {
+  const { touched, error } = meta
+  const hasError = touched && error
 
   return (
     <div className={`c-simple-field ${input.name}`}>
@@ -17,8 +11,7 @@ const simpleField = ({
       </label>
       <input
         {...input}
-        {...inputProps}
-        type={type}
+        {...rest}
         id={input.name}
         placeholder={placeholder}
         className="c-simple-field__input"

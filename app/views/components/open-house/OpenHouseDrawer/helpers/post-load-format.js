@@ -1,5 +1,6 @@
 import { addressTitle } from 'utils/listing'
 import { getReminderItem } from 'views/utils/reminder'
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 import {
   normalizeListing,
   normalizeAssociations
@@ -13,10 +14,7 @@ import {
  * @returns {Promise} a formated Task
  */
 export async function postLoadFormat(task, owner, listing) {
-  let reminder = {
-    title: 'None',
-    value: -1
-  }
+  let reminder = REMINDER_DROPDOWN_OPTIONS[5] // One hour before
 
   let location = {
     association_type: 'listing',

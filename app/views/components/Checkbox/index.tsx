@@ -1,5 +1,6 @@
 import React, { CSSProperties, ReactNode } from 'react'
 import classNames from 'classnames'
+import { mdiCheck } from '@mdi/js'
 
 import { useCuid } from 'hooks/use-cuid'
 
@@ -49,14 +50,14 @@ export function Checkbox(props: Props) {
       />
 
       <CheckMarkBox size={size} checked={checked} style={checkboxStyle}>
-        {checked && <CheckMark />}
+        {checked && <CheckMark path={mdiCheck} />}
       </CheckMarkBox>
 
       <div
         style={{
-          width: `calc(100% - ${size / 16}rem - ${(checkboxStyle &&
-            checkboxStyle.marginRight) ||
-            '0'})`
+          width: `calc(100% - ${size / 16}rem - ${
+            (checkboxStyle && checkboxStyle.marginRight) || '0'
+          })`
         }}
       >
         {children}

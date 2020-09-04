@@ -9,6 +9,7 @@ import {
   Theme,
   useTheme
 } from '@material-ui/core'
+import { mdiTrashCanOutline } from '@mdi/js'
 
 import { deleteRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
@@ -16,7 +17,7 @@ import { confirmation } from 'actions/confirmation'
 import { getLegalFullName } from 'deals/utils/roles'
 
 import Spinner from 'components/LoadingContainer'
-import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   role: IDealRole
@@ -75,7 +76,7 @@ export default function DeleteRole(props: Props) {
         onClick={handleRemoveRole}
         {...props.buttonProps}
       >
-        <TrashIcon size="small" fillColor={theme.palette.error.main} />
+        <SvgIcon path={mdiTrashCanOutline} color={theme.palette.error.main} />
       </IconButton>
     </Tooltip>
   )

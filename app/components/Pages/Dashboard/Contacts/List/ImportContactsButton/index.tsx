@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Link as RouterLink } from 'react-router'
-import { Link, MenuItem } from '@material-ui/core'
+import { Link, MenuItem, Box } from '@material-ui/core'
 import Flex from 'styled-flex-component'
+import { mdiFileDelimitedOutline } from '@mdi/js'
 
 import { OAuthProvider } from 'constants/contacts'
 
@@ -10,6 +11,7 @@ import SplitButton from 'components/SplitButton'
 import { IAppState } from 'reducers'
 import { Divider } from 'components/Divider'
 import PopOver from 'components/Popover'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 import { putUserSetting } from 'models/user/put-user-setting'
 
@@ -35,7 +37,9 @@ interface Props {
  * @constructor
  */
 export function ImportContactsButton({ accounts, user }: Props) {
-  const syncing = accounts.some(account => account.sync_status === 'pending')
+  const syncing = accounts.some(account =>
+    (account.jobs || []).some(job => job.status !== 'success')
+  )
 
   const isTooltipOpen =
     !getUserSettingsInActiveTeam(user, IMPORT_TOOLTIP_VISITED_SETTINGS_KEY) &&
@@ -60,27 +64,40 @@ export function ImportContactsButton({ accounts, user }: Props) {
       renderMenu={() => (
         <>
           <MenuItem onClick={outlook.connect} disabled={outlook.connecting}>
-            <OutlookIcon /> Import Outlook contacts
+            <Box paddingTop={1} paddingBottom={0.5}>
+              <OutlookIcon />
+              Import Outlook Contacts
+            </Box>
           </MenuItem>
           <MenuItem
             component={RouterLink}
             style={{ color: 'currentColor' }}
             to="/dashboard/contacts/import/csv"
           >
-            <CsvIcon /> Import from CSV Spreadsheet
+            <Box paddingTop={0.5} paddingBottom={1}>
+              <SvgIcon
+                path={mdiFileDelimitedOutline}
+                style={{ verticalAlign: 'middle', marginRight: '1rem' }}
+              />
+              Import CSV Spreadsheet
+            </Box>
           </MenuItem>
           {accounts.length > 0 && <Divider />}
-          {accounts.map(account => (
-            <MenuItem key={account.id}>
-              <Link
-                component={RouterLink}
-                to="/dashboard/account/connected-accounts"
-                color="inherit"
-                underline="none"
-              >
-                <ConnectedAccount account={account} />
-              </Link>
-            </MenuItem>
+          {accounts.map((account, index) => (
+            <Fragment key={account.id}>
+              <MenuItem>
+                <Link
+                  component={RouterLink}
+                  to="/dashboard/account/connected-accounts"
+                  color="inherit"
+                  underline="none"
+                  style={{ width: '100%' }}
+                >
+                  <ConnectedAccount account={account} />
+                </Link>
+              </MenuItem>
+              {index !== accounts.length - 1 && <Divider />}
+            </Fragment>
           ))}
         </>
       )}

@@ -2,7 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import IconHome from '../../../../../../../views/components/SvgIcons/NewHome/IconHome'
+import { mdiHomeOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import ImageStatus from '../../../../../../../views/components/ImageStatus'
 
 const Container = styled.div`
@@ -34,7 +37,7 @@ export const Avatar = ({ listing }) => (
         <Image src={listing.cover_image_url} alt="a listing" />
       ) : (
         <IconContainer center>
-          <IconHome />
+          <SvgIcon path={mdiHomeOutline} />
         </IconContainer>
       )}
       <ImageStatus statusColor={`#${listing.statusColor}`} />

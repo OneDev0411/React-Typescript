@@ -1,15 +1,21 @@
-import React, { ComponentProps, useCallback, useState } from 'react'
-import { OnChange } from 'react-final-form-listeners'
+import React, { ComponentProps, useState, useMemo } from 'react'
 import { Field } from 'react-final-form'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { createEmailCampaign } from 'models/email/create-email-campaign'
+import { IAppState } from 'reducers'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
+import { createEmailCampaign } from 'models/email/create-email-campaign'
+import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
+import { toEntityAssociation } from 'utils/association-utils'
+
+import { confirmation } from 'actions/confirmation'
 
 import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
+import { getFromData } from './helpers/get-from-data'
 import { normalizeRecipients } from './helpers/normalize-recepients'
 import { getInitialValues } from './helpers/get-initial-values'
 import { hasAccountSendPermission } from './helpers/has-account-send-permission'
-import { EmailFormValues } from './types'
+import { EmailFormValues, EmailComposeFormProps } from './types'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import EmailComposeForm from './EmailComposeForm'
 import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
@@ -37,6 +43,7 @@ interface Props
    * If set, it's used to update an already existing scheduled/draft email
    */
   emailId?: string
+  onClickAddDealAttachments?: () => void
 }
 
 export function SingleEmailComposeForm({
@@ -47,28 +54,36 @@ export function SingleEmailComposeForm({
   preferredAccountId,
   deal,
   headers = {},
+  onClickAddDealAttachments = () => {},
   ...otherProps
 }: Props) {
+  const user = useSelector<IAppState, IUser>(store => store.user)
+  const activeBrand = getActiveBrand(user)
+  const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
+
   const [allAccounts, isLoadingAccounts] = useGetAllOauthAccounts(
     filterAccounts
   )
 
-  const initialValues: Partial<EmailFormValues> = getInitialValues(
+  const initialValues: Partial<EmailFormValues> = getInitialValues({
     allAccounts,
-    preferredAccountId,
-    otherProps.initialValues
-  )
+    defaultValues: otherProps.initialValues,
+    defaultUser: user,
+    preferredAccountId
+  })
+
+  const dispach = useDispatch()
+
+  const [individualMode, setIndividualMode] = useState(false)
 
   const handleSendEmail = async (
     formValue: EmailFormValues & { template: string }
   ) => {
     const emailData = getEmail({
-      from: (formValue.from && formValue.from.id) || '',
-      microsoft_credential: formValue.microsoft_credential,
-      google_credential: formValue.google_credential,
+      ...getFromData(formValue.from, user.id),
       to: normalizeRecipients(formValue.to),
-      cc: normalizeRecipients(formValue.cc),
-      bcc: normalizeRecipients(formValue.bcc),
+      cc: individualMode ? undefined : normalizeRecipients(formValue.cc),
+      bcc: individualMode ? undefined : normalizeRecipients(formValue.bcc),
       subject: (formValue.subject || '').trim(),
       template: formValue.template,
       headers: typeof headers === 'function' ? headers(formValue) : headers,
@@ -81,33 +96,76 @@ export function SingleEmailComposeForm({
 
     return emailId
       ? updateEmailCampaign(emailId, emailData)
-      : createEmailCampaign(emailData)
+      : createEmailCampaign(
+          emailData,
+          {
+            'associations[]': [
+              'email_campaign_recipient.contact',
+              'email_campaign_email.email',
+              ...['emails', 'template', 'from', 'recipients'].map(
+                toEntityAssociation('email_campaign')
+              )
+            ]
+          },
+          individualMode
+        )
   }
 
-  const getExpressionsContext = useCallback(
-    (to: IDenormalizedEmailRecipientInput[] | undefined) => {
-      const firstRecipient = (to || [])[0]
+  const handleSelectMarketingTemplate: EmailComposeFormProps['onSelectMarketingTemplate'] = (
+    template,
+    values
+  ) => {
+    if (!template) {
+      setIndividualMode(false)
 
-      if (firstRecipient && firstRecipient.recipient_type === 'Email') {
-        return {
-          recipient: firstRecipient.contact || {
-            email: firstRecipient.email
-          }
+      return true
+    }
+
+    const ccBcc = [...(values.cc || []), ...(values.bcc || [])]
+
+    if (ccBcc.length === 0) {
+      setIndividualMode(true)
+
+      return true
+    }
+
+    return new Promise(resolve =>
+      dispach(
+        confirmation({
+          message: 'You have recipients in the Cc and Bcc fields',
+          description:
+            'Marketing templates will only be sent individually. Are you willing to send it directly to all of them?',
+          confirmLabel: 'Yes',
+          cancelLabel: 'Cancel',
+          onConfirm: () => {
+            values.to = [...(values.to || []), ...ccBcc]
+            delete values.cc
+            delete values.bcc
+            setIndividualMode(true)
+            resolve(true)
+          },
+          onCancel: () => resolve(false)
+        })
+      )
+    )
+  }
+
+  const initialToFieldValue = initialValues?.to
+  const [toFieldValue, setToFieldValue] = useState(initialToFieldValue)
+  const expressionContext = useMemo(() => {
+    const to = toFieldValue || initialToFieldValue
+    const firstRecipient = (to || [])[0]
+
+    if (firstRecipient && firstRecipient.recipient_type === 'Email') {
+      return {
+        recipient: firstRecipient.contact || {
+          email: firstRecipient.email
         }
       }
+    }
 
-      return firstRecipient ? { recipient: {} } : null
-    },
-    []
-  )
-
-  const [expressionContext, setExpressionContext] = useState<object | null>(
-    getExpressionsContext(initialValues && initialValues.to)
-  )
-
-  const updateExpressionContext = (
-    to: IDenormalizedEmailRecipientInput[] | undefined
-  ) => setExpressionContext(getExpressionsContext(to))
+    return firstRecipient ? { recipient: {} } : null
+  }, [initialToFieldValue, toFieldValue])
 
   return (
     // NOTE: if we decided to show the result of the `sender` expressions
@@ -121,22 +179,21 @@ export function SingleEmailComposeForm({
         deal={deal}
         isSubmitDisabled={isLoadingAccounts}
         sendEmail={handleSendEmail}
+        onClickAddDealAttachments={onClickAddDealAttachments}
+        onSelectMarketingTemplate={handleSelectMarketingTemplate}
         renderCollapsedFields={(values: EmailFormValues) => (
           <>
             {/*
             This is kind of a hack for a behavior in react-final-form.
             When `initialValues` are changed, it updates `values` but only
             those fields that have a corresponding field rendered at that
-            moment. `to`, `cc`, `google_credential` and `microsoft_credential` may
+            moment. `to`, `cc` and `bcc` may
             be updated in initialValues while top fields are collapsed and
             therefore, the changes are never reflected to `values` in this case.
             we render two dummy fields to prevent this issue.
             */}
             <Field name="cc" render={() => null} />
             <Field name="to" render={() => null} />
-            <Field name="google_credential" render={() => null} />
-            <Field name="microsoft_credential" render={() => null} />
-            <OnChange name="to">{updateExpressionContext}</OnChange>
 
             <CollapsedEmailRecipients
               to={values.to || []}
@@ -148,12 +205,14 @@ export function SingleEmailComposeForm({
         renderFields={values => (
           <>
             <EmailRecipientsFields
+              values={values}
+              disableAddNewRecipient={disableAddNewRecipient}
+              individualMode={individualMode}
               deal={deal}
               senderAccounts={allAccounts}
-              disableAddNewRecipient={disableAddNewRecipient}
-              values={values}
+              onToFieldChange={setToFieldValue}
+              users={activeBrandUsers}
             />
-            <OnChange name="to">{updateExpressionContext}</OnChange>
           </>
         )}
       />

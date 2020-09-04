@@ -9,6 +9,9 @@
 
 @import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
 
+// full canlendar styles
+@import 'vendor/fullcalendar/_main.scss';
+
 // Fonts
 @import 'fonts/lato.scss';
 
@@ -35,7 +38,6 @@
 
 // Pages
 @import 'components/pages/oops';
-@import 'components/pages/app';
 @import 'components/pages/dashboard';
 @import 'components/pages/listing';
 @import 'components/pages/listings';

@@ -1,20 +1,34 @@
-import { EmailFormValues } from '../types'
-import { hasSelectedAccount } from './has-selected-account'
-import { getDefaultSelectedAccount } from './get-default-selected-account'
+import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
 
-// If no account is selected and there are more than one account, we set
-// one account by default to push user use one of their accounts for
-// sending emails instead of using out default solution (Mailgun) for
-// sending emails.
-export const getInitialValues = (
-  allAccounts: IOAuthAccount[],
-  preferredAccountId: UUID = '',
-  initialValues: Partial<EmailFormValues> = {}
-): Partial<EmailFormValues> => {
-  return allAccounts.length > 0 && !hasSelectedAccount(initialValues)
-    ? {
-        ...initialValues,
-        ...getDefaultSelectedAccount(allAccounts, preferredAccountId)
-      }
-    : initialValues
+import { EmailFormValues } from '../types'
+
+interface GetInitialValuesParams {
+  allAccounts: IOAuthAccount[]
+  defaultValues?: Partial<EmailFormValues>
+  defaultUser: IUser
+  preferredAccountId?: UUID
+}
+
+export const getInitialValues = ({
+  allAccounts,
+  defaultValues = {},
+  defaultUser,
+  preferredAccountId = ''
+}: GetInitialValuesParams): Partial<EmailFormValues> => {
+  let from = defaultValues.from
+
+  if (preferredAccountId && from && from.type !== 'user') {
+    from = allAccounts.find(({ id }) => id === preferredAccountId) || from
+  }
+
+  from =
+    from ??
+    allAccounts.find(({ type }) => type === GOOGLE_CREDENTIAL) ??
+    allAccounts[0] ??
+    defaultUser
+
+  return {
+    ...defaultValues,
+    from
+  }
 }

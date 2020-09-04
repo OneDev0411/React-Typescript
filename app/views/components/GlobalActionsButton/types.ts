@@ -18,7 +18,7 @@ export type ItemType =
 interface BaseItem<T extends ItemType> {
   title: string
   type: T
-  Icon: React.FC<any>
+  Icon: string
 }
 
 interface EmailItem extends BaseItem<'email'> {

@@ -7,7 +7,7 @@ interface SortSetting {
 
 export function parseSortSetting(user: IUser, key: string, defaultValue = ''): SortSetting {
   const sortSetting =
-    getUserSettingsInActiveTeam(user, key ) || defaultValue
+    getUserSettingsInActiveTeam(user, key) || defaultValue
 
   let id = sortSetting
   let ascending = true

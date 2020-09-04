@@ -5,11 +5,13 @@ import { ThunkDispatch } from 'redux-thunk'
 import { IconButton } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
+import { mdiChatProcessingOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { IAppState } from 'reducers'
 
 import { createRoom } from 'actions/chatroom/room'
-
-import ChatIcon from 'components/SvgIcons/Chat/IconChat'
 
 // Chatroom in Dashboard
 import Chatroom from '../../../Chatroom/Util/chatroom'
@@ -81,9 +83,7 @@ function ChatButton({ contact, render }: Props) {
       disabled={!isChattable || isCreatingRoom}
       onClick={onClick}
     >
-      {/* 
-        // @ts-ignore js component */}
-      <ChatIcon />
+      <SvgIcon path={mdiChatProcessingOutline} />
     </IconButton>
   )
 }

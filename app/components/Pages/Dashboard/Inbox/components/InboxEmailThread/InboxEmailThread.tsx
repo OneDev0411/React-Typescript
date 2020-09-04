@@ -17,7 +17,18 @@ import {
 import { AvatarGroup } from '@material-ui/lab'
 import { makeStyles, useTheme } from '@material-ui/styles'
 import { addNotification } from 'reapop'
+import {
+  mdiEmailOpenOutline,
+  mdiEmailOutline,
+  mdiTrashCanOutline,
+  mdiDotsVertical,
+  mdiReplyAllOutline,
+  mdiReplyOutline,
+  mdiArchiveOutline,
+  mdiClose
+} from '@mdi/js'
 
+import { forwardOutlined } from 'components/SvgIcons/icons'
 import { getEmailThread } from 'models/email/get-email-thread'
 import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
 
@@ -25,14 +36,7 @@ import { normalizeThreadMessageToThreadEmail } from 'components/EmailThread/help
 import { EmailThreadEmails } from 'components/EmailThread'
 import { EmailResponseType } from 'components/EmailThread/types'
 import { EmailResponseComposeForm } from 'components/EmailCompose/EmailResponseComposeForm'
-import IconVerticalDocs from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
-import IconReply from 'components/SvgIcons/Reply/IconReply'
-import IconReplyAll from 'components/SvgIcons/ReplyAll/IconReplyAll'
-import IconForward from 'components/SvgIcons/Forward/IconForward'
-import IconTrash from 'views/components/SvgIcons/Trash/TrashIcon'
-import IconMailRead from 'views/components/SvgIcons/MailRead/IconMailRead'
-import IconMailUnread from 'views/components/SvgIcons/MailUnread/IconMailUnread'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useMenu } from 'hooks/use-menu'
 
@@ -42,10 +46,14 @@ import useEmailThreadEvents from '../../helpers/use-email-thread-events'
 import useEmailThreadReadStatusSetter from '../../helpers/use-email-thread-read-status-setter'
 import useEmailThreadDeleter from '../../helpers/use-email-thread-deleter'
 import NoContentMessage from '../NoContentMessage'
+import useEmailThreadArchiver from '../../helpers/use-email-thread-archiver'
 
 const useStyles = makeStyles((theme: Theme) => ({
   moreMenu: {
     minWidth: '15rem'
+  },
+  icon: {
+    color: theme.palette.common.black
   }
 }))
 
@@ -126,6 +134,10 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
     deleteEmailThread,
     deleteEmailThreadDisabled
   } = useEmailThreadDeleter(emailThreadId!)
+  const {
+    archiveEmailThread,
+    archiveEmailThreadDisabled
+  } = useEmailThreadArchiver(emailThreadId!)
 
   const handleUpdateEmailThreads = useCallback(
     (updatedEmailThreadIds: UUID[]) => {
@@ -168,9 +180,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             const name =
               (contact &&
                 (contact.display_name ||
-                  `${contact.first_name} ${contact.middle_name} ${
-                    contact.last_name
-                  }`)) ||
+                  `${contact.first_name} ${contact.middle_name} ${contact.last_name}`)) ||
               r.name ||
               ''
 
@@ -188,7 +198,10 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   const emails = useMemo(
     () =>
       emailThread
-        ? emailThread.messages.map(normalizeThreadMessageToThreadEmail)
+        ? emailThread.messages.map(message => ({
+            ...normalizeThreadMessageToThreadEmail(message),
+            thread: emailThread
+          }))
         : [],
     [emailThread]
   )
@@ -242,7 +255,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
         )}
         <Tooltip title="More">
           <IconButton {...buttonTriggerProps}>
-            <IconVerticalDocs size="small" />
+            <SvgIcon path={mdiDotsVertical} className={classes.icon} />
           </IconButton>
         </Tooltip>
         <Menu
@@ -262,7 +275,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <IconClose size="small" />
+              <SvgIcon path={mdiClose} className={classes.icon} />
             </ListItemIcon>
             <ListItemText>Close</ListItemText>
           </MenuItem>
@@ -275,7 +288,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <IconReply size="small" />
+              <SvgIcon path={mdiReplyOutline} className={classes.icon} />
             </ListItemIcon>
             <ListItemText>Reply</ListItemText>
           </MenuItem>
@@ -289,7 +302,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
               }}
             >
               <ListItemIcon>
-                <IconReplyAll size="small" />
+                <SvgIcon path={mdiReplyAllOutline} className={classes.icon} />
               </ListItemIcon>
               <ListItemText>Reply All</ListItemText>
             </MenuItem>
@@ -303,7 +316,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <IconForward size="small" />
+              <SvgIcon path={forwardOutlined} className={classes.icon} />
             </ListItemIcon>
             <ListItemText>Forward</ListItemText>
           </MenuItem>
@@ -317,14 +330,27 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
           >
             <ListItemIcon>
               {emailThread.is_read ? (
-                <IconMailUnread size="small" />
+                <SvgIcon path={mdiEmailOutline} className={classes.icon} />
               ) : (
-                <IconMailRead size="small" />
+                <SvgIcon path={mdiEmailOpenOutline} className={classes.icon} />
               )}
             </ListItemIcon>
             <ListItemText>
               Mark as {emailThread.is_read ? 'unread' : 'read'}
             </ListItemText>
+          </MenuItem>
+          <MenuItem
+            disabled={archiveEmailThreadDisabled}
+            dense
+            onClick={() => {
+              archiveEmailThread()
+              closeMenu()
+            }}
+          >
+            <ListItemIcon>
+              <SvgIcon path={mdiArchiveOutline} className={classes.icon} />
+            </ListItemIcon>
+            <ListItemText>Archive</ListItemText>
           </MenuItem>
           <Box marginY={1}>
             <Divider />
@@ -338,7 +364,10 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             }}
           >
             <ListItemIcon>
-              <IconTrash size="small" fillColor={theme.palette.error.main} />
+              <SvgIcon
+                path={mdiTrashCanOutline}
+                color={theme.palette.error.main}
+              />
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{ color: 'error' }}>
               Delete

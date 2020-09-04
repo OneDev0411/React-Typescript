@@ -2,9 +2,11 @@ import React from 'react'
 import { Link } from 'react-router'
 import Flex from 'styled-flex-component'
 
+import { mdiCog, mdiClose } from '@mdi/js'
+
 import ToolTip from 'components/tooltip'
-import IconCog from 'components/SvgIcons/Cog/IconCog'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { Title } from 'components/OverlayDrawer/Header/styled'
 import IconButton from 'components/Button/IconButton'
 
@@ -37,7 +39,7 @@ export default function Header({ title, onClose }: Props) {
           to="/dashboard/account/manage-tags"
         >
           <ToolTip caption="Manage tags" placement="bottom">
-            <IconCog />
+            <SvgIcon path={mdiCog} size={muiIconSizes.small} />
           </ToolTip>
         </Link>
         <IconButton
@@ -47,7 +49,7 @@ export default function Header({ title, onClose }: Props) {
           inverse
           onClick={onClose}
         >
-          <CloseIcon />
+          <SvgIcon path={mdiClose} />
         </IconButton>
       </Flex>
     </HeaderContainer>

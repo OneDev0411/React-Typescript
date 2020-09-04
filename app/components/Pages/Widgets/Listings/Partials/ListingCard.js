@@ -88,7 +88,7 @@ export default class ListingCard extends Component {
     }
 
     const square_feet = numberWithCommas(
-      Math.floor(listingUtils.metersToFeet(property.square_meters))
+      Math.round(listingUtils.metersToFeet(property.square_meters))
     )
     let listing_card_style = S(
       'w-380 h-360 mr-10 ml-10 mb-20 pull-left br-3 pointer relative'

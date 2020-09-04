@@ -1,11 +1,10 @@
 import React from 'react'
 import { Box, Tooltip, Typography } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import classNames from 'classnames'
+import { mdiStarOutline } from '@mdi/js'
 
-import StarIcon from 'components/SvgIcons/Star/StarIcon'
-
-import { useIconStyles } from '../../../../../../../../styles/use-icon-styles'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   is_primary?: boolean
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: props.value ? theme.palette.text.primary : theme.palette.text.hint
     }),
     starIcon: {
-      fill: theme.palette.text.primary
+      color: theme.palette.text.primary
     },
     value: (props: Props) => ({
       textAlign: 'right',
@@ -43,7 +42,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function ViewMode(props: Props) {
   const classes = useStyles(props)
-  const iconClasses = useIconStyles()
 
   const { title } = props
 
@@ -59,12 +57,11 @@ export function ViewMode(props: Props) {
         </Typography>
         {props.is_primary && (
           <Tooltip title="Primary">
-            <StarIcon
-              className={classNames(classes.starIcon, iconClasses.leftMargin)}
-              style={{
-                width: '1rem',
-                height: '1rem'
-              }}
+            <SvgIcon
+              path={mdiStarOutline}
+              leftMargined
+              className={classes.starIcon}
+              size={muiIconSizes.small}
             />
           </Tooltip>
         )}

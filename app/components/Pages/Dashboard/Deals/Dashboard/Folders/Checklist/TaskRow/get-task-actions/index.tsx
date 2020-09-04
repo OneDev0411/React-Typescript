@@ -1,5 +1,6 @@
 import {
   EMAIL_ENVELOPE,
+  EMAIL_FORM,
   VOID_ENVELOPE,
   REVIEW_ENVELOPE,
   VIEW_ENVELOPE,
@@ -52,10 +53,26 @@ export function getTaskActions({
   task.form && !envelope && !file && actions.push(VIEW_FORM)
   task.form && !task.submission && !file && actions.push(DOCUSIGN_FORM)
 
-  file && !task.form && !envelope && actions.push(DOCUSIGN_FILE)
-  file && !task.form && !envelope && actions.push(EMAIL_FILE)
-  file && !task.form && !envelope && actions.push(VIEW_FILE)
-  file && file.mime === 'application/pdf' && actions.push(SPLIT_PDF)
+  const isPdf = file && file.mime === 'application/pdf'
+
+  isPdf &&
+    !envelope &&
+    !actions.includes(DOCUSIGN_FORM) &&
+    actions.push(DOCUSIGN_FILE)
+
+  isPdf && actions.push(SPLIT_PDF)
+
+  file && !actions.includes(EMAIL_ENVELOPE) && actions.push(EMAIL_FILE)
+
+  !actions.includes(EMAIL_ENVELOPE) &&
+    !actions.includes(EMAIL_FILE) &&
+    task.form &&
+    actions.push(EMAIL_FORM)
+
+  file &&
+    !actions.includes(VIEW_ENVELOPE) &&
+    !actions.includes(VIEW_FORM) &&
+    actions.push(VIEW_FILE)
   actions.push(UPLOAD)
 
   actions.push(SHOW_COMMENTS)
@@ -63,7 +80,6 @@ export function getTaskActions({
   isBackOffice && actions.push(APPROVE_TASK)
   isBackOffice && actions.push(DECLINE_TASK)
   isBackOffice && actions.push(REQUIRE_TASK)
-  isBackOffice && actions.push(DELETE_TASK)
 
   actions.push(DELETE_TASK)
 

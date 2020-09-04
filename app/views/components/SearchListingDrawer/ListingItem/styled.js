@@ -12,13 +12,11 @@ export const ListItem = styled.div`
     props.isHighlighted ? grey.A100 : 'transparent'};
 
   .delete-icon {
-    width: 16px;
-    height: 16px;
-    fill: rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, 0.2);
     margin-left: 0.5rem;
 
     :hover {
-      fill: #e60000;
+      color: #e60000;
     }
   }
 
@@ -74,8 +72,6 @@ export const IconContainer = styled(Flex)`
   background-color: ${props => props.theme.palette.grey['200']};
   border-radius: 50%;
   > svg {
-    fill: ${props => props.theme.palette.grey['500']};
-    height: 1rem;
-    width: 1rem;
+    color: ${props => props.theme.palette.grey['500']};
   }
 `

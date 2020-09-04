@@ -1,21 +1,26 @@
-import { Field, Form } from 'react-final-form'
 import React, { useContext, useMemo, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Field, Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import createFocusDecorator from 'final-form-focus'
-
-import { isEqual } from 'lodash'
-
 import { TextField } from 'final-form-material-ui'
-
-import { addNotification as notify } from 'reapop'
-
-import { connect } from 'react-redux'
-
 import { Box, makeStyles, useTheme } from '@material-ui/core'
+import { isEqual } from 'lodash'
+import { addNotification as notify } from 'reapop'
 
 import { ClassesProps } from 'utils/ts-utils'
 
-import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+import {
+  uploadEmailAttachment,
+  UploadOrigin
+} from 'models/email/upload-email-attachment'
+
+import {
+  GOOGLE_CREDENTIAL,
+  MICROSOFT_CREDENTIAL
+} from 'constants/oauth-accounts'
+
+import useTypedSelector from 'hooks/use-typed-selector'
 
 import {
   EmailComposeFormProps,
@@ -32,7 +37,6 @@ import { TextEditorRef } from '../../TextEditor/types'
 import { Callout } from '../../Callout'
 import { DangerButton } from '../../Button/DangerButton'
 import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
-import { isFileAttachment } from '../helpers/is-file-attachment'
 import { useEditorState } from '../../TextEditor/hooks/use-editor-state'
 import { useEmailFormValidator } from './use-email-form-validator'
 
@@ -56,26 +60,31 @@ export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
  * Right now there are some duplicate code in them, and the added abstraction
  * is not necessarily worth it.
  */
-function EmailComposeForm<T>({
+export default function EmailComposeForm<T>({
   isSubmitDisabled = false,
-  initialValues = {
-    to: [],
-    cc: [],
-    bcc: [],
-    subject: '',
-    body: '',
-    attachments: []
-  },
-  dispatch,
   onCancel,
   onDelete,
   uploadAttachment = uploadEmailAttachment,
   onSent = () => {},
+  onClickAddDealAttachments = () => {},
+  onSelectMarketingTemplate,
+  disableMarketingTemplates = false,
   children,
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
-  const hasRecipients =
-    (initialValues.to || []).length > 0 && !!initialValues.from
+  const user = useTypedSelector<IUser>(({ user }) => user)
+
+  const initialValues: Partial<EmailFormValues> = {
+    ...props.initialValues,
+    from: props.initialValues?.from ?? user,
+    to: props.initialValues?.to ?? [],
+    cc: props.initialValues?.cc ?? [],
+    bcc: props.initialValues?.bcc ?? [],
+    subject: props.initialValues?.subject ?? '',
+    body: props.initialValues?.body ?? '',
+    attachments: props.initialValues?.attachments ?? []
+  }
+  const hasRecipients = initialValues.to!.length > 0 && !!initialValues.from
   const hasSubject = !!initialValues.subject
   const autofocusBody = hasRecipients && hasSubject
 
@@ -86,7 +95,24 @@ function EmailComposeForm<T>({
   const [
     marketingTemplate,
     setMarketingTemplate
-  ] = useState<IMarketingTemplateInstance | null>(null)
+  ] = useState<IMarketingTemplateInstance | null>(
+    initialValues.templateInstance ?? null
+  )
+
+  const dispatch = useDispatch()
+
+  const selectMarketingTemplate: (
+    template: IMarketingTemplateInstance | null,
+    values: EmailFormValues
+  ) => void = (template, values) => {
+    const result = onSelectMarketingTemplate?.(template, values)
+
+    if (result === true || result === undefined) {
+      return setMarketingTemplate(template)
+    }
+
+    result && result.then(result => result && setMarketingTemplate(template))
+  }
 
   const marketingTemplatePreviewHtml = useMemo(
     () =>
@@ -134,9 +160,7 @@ function EmailComposeForm<T>({
       return dispatch(
         notify({
           status: 'error',
-          message:
-            (e.response && e.response.body && e.response.body.message) ||
-            errorMessage
+          message: e.response?.body?.message || errorMessage
         })
       )
     }
@@ -191,9 +215,7 @@ function EmailComposeForm<T>({
           confirmLabel: 'Send anyway',
           onCancel: reject,
           onConfirm: () => {
-            handleSendEmail(form)
-              .then(resolve)
-              .catch(reject)
+            handleSendEmail(form).then(resolve).catch(reject)
           }
         })
       })
@@ -221,14 +243,6 @@ function EmailComposeForm<T>({
           {
             name: 'to',
             focus: expandTolFields
-          },
-          {
-            name: 'microsoft_credential',
-            focus: expandTolFields
-          },
-          {
-            name: 'google_credential',
-            focus: expandTolFields
           }
         ]
       })
@@ -245,8 +259,14 @@ function EmailComposeForm<T>({
       initialValuesEqual={isEqual}
       keepDirtyOnReinitialize
       render={formProps => {
-        const { submitting } = formProps
         const values = formProps.values as EmailFormValues
+        const fromField = values.from
+        const uploadOrigin: UploadOrigin =
+          fromField.type === GOOGLE_CREDENTIAL
+            ? 'gmail'
+            : fromField.type === MICROSOFT_CREDENTIAL
+            ? 'outlook'
+            : 'mailgun'
 
         return (
           <form
@@ -286,22 +306,23 @@ function EmailComposeForm<T>({
                 }}
                 autofocus={autofocusBody}
                 hasSignatureByDefault={props.hasSignatureByDefault}
-                hasStaticBody={marketingTemplate || props.hasStaticBody}
+                hasStaticBody={!!marketingTemplate || props.hasStaticBody}
                 hasTemplateVariables={props.hasTemplateVariables}
                 content={
                   marketingTemplate
                     ? marketingTemplatePreviewHtml
-                    : initialValues.body || ''
+                    : initialValues.body
                 }
-                uploadAttachment={uploadAttachment}
                 attachments={
                   <Field name="attachments" component={AttachmentsList} />
                 }
+                uploadAttachment={uploadAttachment}
+                uploadOrigin={uploadOrigin}
                 editorState={editorState}
                 onChangeEditor={setEditorState}
                 stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
               />
-              {marketingTemplate && (
+              {marketingTemplate && !props.hasStaticBody && (
                 <Callout dense>
                   <Box display="flex" alignItems="center">
                     <Box color={theme.palette.warning.contrastText} flex={1}>
@@ -309,7 +330,7 @@ function EmailComposeForm<T>({
                     </Box>
                     <DangerButton
                       onClick={() => {
-                        setMarketingTemplate(null)
+                        selectMarketingTemplate(null, values)
                       }}
                     >
                       Remove
@@ -318,43 +339,29 @@ function EmailComposeForm<T>({
                 </Callout>
               )}
             </div>
+
             {children}
 
-            {/*
-            If react-final-form was up to date, we could use useField instead
-            of nesting footer inside a Field just to be able to update subject.
-            */}
-            <Field
-              name="subject"
-              render={({ input: subjectInput }) => (
-                <Footer
-                  formProps={{ values: formProps.values as EmailFormValues }}
-                  isSubmitting={submitting}
-                  isSubmitDisabled={
-                    typeof isSubmitDisabled === 'function'
-                      ? isSubmitDisabled(values)
-                      : isSubmitDisabled
-                  }
-                  uploadAttachment={uploadAttachment}
-                  initialAttachments={(initialValues.attachments || []).filter(
-                    isFileAttachment
-                  )}
-                  deal={props.deal}
-                  onCancel={onCancel}
-                  onDelete={onDelete}
-                  onChanged={scrollToEnd}
-                  hasStaticBody={props.hasStaticBody}
-                  onEmailTemplateSelected={template => {
-                    subjectInput.onChange(template.subject as any)
-                    setMarketingTemplate(null)
-                    bodyEditor.update(template.body)
-                  }}
-                  onMarketingTemplateSelected={template => {
-                    setMarketingTemplate(template)
-                  }}
-                  className={classes.footer}
-                />
-              )}
+            <Footer
+              isSubmitDisabled={
+                typeof isSubmitDisabled === 'function'
+                  ? isSubmitDisabled(values)
+                  : isSubmitDisabled
+              }
+              uploadAttachment={uploadAttachment}
+              uploadOrigin={uploadOrigin}
+              deal={props.deal}
+              onCancel={onCancel}
+              onDelete={onDelete}
+              onChanged={scrollToEnd}
+              hasStaticBody={props.hasStaticBody}
+              className={classes.footer}
+              updateBody={bodyEditor.update}
+              disableMarketingTemplates={disableMarketingTemplates}
+              setMarketingTemplate={template =>
+                selectMarketingTemplate(template, values)
+              }
+              onClickAddDealAttachments={onClickAddDealAttachments}
             />
           </form>
         )
@@ -362,5 +369,3 @@ function EmailComposeForm<T>({
     />
   )
 }
-
-export default connect()(EmailComposeForm)

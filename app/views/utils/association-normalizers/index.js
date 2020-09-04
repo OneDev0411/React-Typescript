@@ -60,13 +60,14 @@ export function normalizeContact(contact) {
     return null
   }
 
-  const { type, id, summary } = contact
   const {
+    type,
+    id,
     email,
     phone_number,
     display_name,
     profile_image_url: image
-  } = summary
+  } = contact
 
   return {
     id,
@@ -169,7 +170,8 @@ export const normalizeEmail = email => {
     body,
     id: email.id,
     img,
-    subject: email.subject
+    subject: email.subject,
+    email
   }
 }
 

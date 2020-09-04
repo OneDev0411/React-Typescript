@@ -4,6 +4,10 @@ import { FormattedInput, BasicInput } from './styled'
 
 export function TextInput(props) {
   const formattedInputOptions = useMemo(() => {
+    if (!props.context) {
+      return null
+    }
+
     const { data_type, format } = props.context
 
     if (['Number', 'Numeric'].includes(data_type)) {

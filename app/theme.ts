@@ -198,7 +198,8 @@ const theme = createMuiTheme({
   },
   zIndex: {
     modal: 1001,
-    gridAction: 100
+    gridAction: 100,
+    sideNavDrawer: 100
   }
 })
 

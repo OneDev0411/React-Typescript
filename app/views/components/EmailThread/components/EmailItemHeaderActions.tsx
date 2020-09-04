@@ -14,22 +14,23 @@ import {
 } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 import classNames from 'classnames'
+import {
+  mdiDotsVertical,
+  mdiReplyOutline,
+  mdiReplyAllOutline,
+  mdiEmailOutline,
+  mdiEmailOpenOutline
+} from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { forwardOutlined } from 'components/SvgIcons/icons'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
-import useTypedSelector from 'hooks/use-typed-selector'
 import { useMenu } from 'hooks/use-menu'
+import useTypedSelector from 'hooks/use-typed-selector'
 
 import { ClassesProps } from 'utils/ts-utils'
 
-import IconReply from '../../SvgIcons/Reply/IconReply'
-import IconReplyAll from '../../SvgIcons/ReplyAll/IconReplyAll'
-import IconForward from '../../SvgIcons/Forward/IconForward'
-import IconVerticalDocs from '../../SvgIcons/VeriticalDots/VerticalDotsIcon'
-import IconMailRead from '../../SvgIcons/MailRead/IconMailRead'
-import IconMailUnread from '../../SvgIcons/MailUnread/IconMailUnread'
-
-import { iconSizes } from '../../SvgIcons/icon-sizes'
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
 import { EmailThreadEmail } from '../types'
 import { hasOAuthAccess } from '../helpers/has-oauth-access'
@@ -94,18 +95,12 @@ export function EmailItemHeaderActions(
     <Box ml={1} onClick={e => e.stopPropagation()}>
       <Tooltip title="Reply">
         <IconButton onClick={props.onReply}>
-          <IconReply
-            size={iconSizes.small}
-            color={theme.palette.common.black}
-          />
+          <SvgIcon path={mdiReplyOutline} color={theme.palette.common.black} />
         </IconButton>
       </Tooltip>
       <Tooltip title="More">
         <IconButton {...buttonTriggerProps}>
-          <IconVerticalDocs
-            size={iconSizes.small}
-            color={theme.palette.common.black}
-          />
+          <SvgIcon path={mdiDotsVertical} color={theme.palette.common.black} />
         </IconButton>
       </Tooltip>
       <Menu
@@ -117,8 +112,8 @@ export function EmailItemHeaderActions(
       >
         <MenuItem dense onClick={select(props.onReply)}>
           <ListItemIcon>
-            <IconReply
-              size={iconSizes.small}
+            <SvgIcon
+              path={mdiReplyOutline}
               color={theme.palette.common.black}
             />
           </ListItemIcon>
@@ -127,8 +122,8 @@ export function EmailItemHeaderActions(
         {hasReplyAll(props.email) && (
           <MenuItem dense onClick={select(props.onReplyAll)}>
             <ListItemIcon>
-              <IconReplyAll
-                size={iconSizes.small}
+              <SvgIcon
+                path={mdiReplyAllOutline}
                 color={theme.palette.common.black}
               />
             </ListItemIcon>
@@ -137,8 +132,8 @@ export function EmailItemHeaderActions(
         )}
         <MenuItem dense onClick={select(props.onForward)}>
           <ListItemIcon>
-            <IconForward
-              size={iconSizes.small}
+            <SvgIcon
+              path={forwardOutlined}
               color={theme.palette.common.black}
             />
           </ListItemIcon>
@@ -159,16 +154,16 @@ export function EmailItemHeaderActions(
           >
             <ListItemIcon>
               {props.email.isRead ? (
-                <IconMailUnread
-                  size={iconSizes.small}
-                  fillColor={
+                <SvgIcon
+                  path={mdiEmailOutline}
+                  color={
                     hasModifyAccess ? '#000' : theme.palette.action.disabled
                   }
                 />
               ) : (
-                <IconMailRead
-                  size={iconSizes.small}
-                  fillColor={
+                <SvgIcon
+                  path={mdiEmailOpenOutline}
+                  color={
                     hasModifyAccess ? '#000' : theme.palette.action.disabled
                   }
                 />

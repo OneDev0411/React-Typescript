@@ -1,13 +1,17 @@
 import React, { useContext, useState } from 'react'
-import { Typography, Menu, MenuItem, IconButton } from '@material-ui/core'
+import {
+  Typography,
+  Menu,
+  MenuItem,
+  IconButton,
+  useTheme
+} from '@material-ui/core'
 
+import { mdiDotsHorizontal } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { deleteTask } from 'models/tasks/delete-task'
-
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 interface Props {
   onEdit: () => void
@@ -16,7 +20,7 @@ interface Props {
 }
 
 export default function Actions({ onEdit, openHouse, reloadList }: Props) {
-  const iconClasses = useIconStyles()
+  const theme = useTheme()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const confirmation = useContext(ConfirmationModalContext)
@@ -60,7 +64,7 @@ export default function Actions({ onEdit, openHouse, reloadList }: Props) {
   return (
     <>
       <IconButton onClick={handleMenuClick}>
-        <IconHorizontalDots fill="#000" className={iconClasses.medium} />
+        <SvgIcon path={mdiDotsHorizontal} color={theme.palette.common.black} />
       </IconButton>
       <Menu
         anchorEl={anchorEl}

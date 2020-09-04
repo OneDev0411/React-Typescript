@@ -5,12 +5,13 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Button, IconButton, Box } from '@material-ui/core'
+import { mdiTrashCanOutline } from '@mdi/js'
 
 import editUser from 'actions/user/edit'
 import { uploadUserAvatarAction } from 'actions/user/upload-avatar'
 import { confirmation } from 'actions/confirmation'
 
-import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ImageUploader } from 'components/ImageUploader'
 import Tooltip from 'components/tooltip'
 
@@ -96,10 +97,7 @@ class ProfileCatalog extends Component {
     return (
       <React.Fragment>
         <Container>
-          <Avatar
-            user={this.props.user}
-            data-test="profile-avatar-image"
-          />
+          <Avatar user={this.props.user} data-test="profile-avatar-image" />
 
           <ProfileImageActions>
             {this.props.user.profile_image_url && (
@@ -110,7 +108,7 @@ class ProfileCatalog extends Component {
                     onClick={this.onDelete}
                     data-test="profile-avatar-delete-button"
                   >
-                    <TrashIcon />
+                    <SvgIcon path={mdiTrashCanOutline} />
                   </IconButton>
                 </Tooltip>
               </Box>
@@ -173,10 +171,7 @@ export default compose(
       }
     }
   }),
-  connect(
-    null,
-    {
-      confirmation
-    }
-  )
+  connect(null, {
+    confirmation
+  })
 )(ProfileCatalog)

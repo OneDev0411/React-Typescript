@@ -18,11 +18,11 @@ export const parsSortIndex = (sort: string) => {
 }
 
 export const getDefaultSort = (user: IUser) => {
-  return (
-    getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) ||
-    SORT_FIELD_DEFAULT
-  )
+  const sortIndex = getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY)
+
+  return typeof sortIndex === 'string' ? sortIndex : SORT_FIELD_DEFAULT
 }
+
 export const sortByIndex = (
   a: IListing,
   b: IListing,

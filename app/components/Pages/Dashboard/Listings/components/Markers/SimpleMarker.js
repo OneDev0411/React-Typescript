@@ -5,7 +5,7 @@ import ListingMarker from '../ListingMarker'
 
 const setMarkerCssPosition = listing => {
   const position = {
-    position,
+    position: 'absolute',
     top: 0,
     left: 0
   }

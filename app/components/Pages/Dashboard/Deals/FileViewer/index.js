@@ -9,6 +9,7 @@ import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
 
 import { isBackOffice } from 'utils/user-teams'
+import { getFileType } from 'utils/file-utils/get-file-type'
 
 import LoadingContainer from 'components/LoadingContainer'
 
@@ -55,22 +56,6 @@ class FileViewer extends React.Component {
     }
   }
 
-  getFileType(file) {
-    if (file.mime === 'application/pdf') {
-      return 'pdf'
-    }
-
-    if (file.mime === 'text/html') {
-      return 'html'
-    }
-
-    if (file.mime.includes('image/')) {
-      return 'image'
-    }
-
-    return 'unknown'
-  }
-
   get AttachmentFile() {
     const file = getFileById(this.props.params.entityId, {
       deal: this.props.deal,
@@ -84,7 +69,7 @@ class FileViewer extends React.Component {
 
     return {
       id: file.id,
-      type: this.getFileType(file),
+      type: getFileType(file),
       name: file.name,
       url: file.url
     }
@@ -223,7 +208,4 @@ function mapStateToProps({ deals, user }, props) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify, getDeal }
-)(FileViewer)
+export default connect(mapStateToProps, { notify, getDeal })(FileViewer)

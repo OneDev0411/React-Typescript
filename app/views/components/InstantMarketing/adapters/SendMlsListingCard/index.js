@@ -11,7 +11,10 @@ import InstantMarketing from 'components/InstantMarketing'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
+import { byValert } from 'models/listings/search/get-listings'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
+
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
 import { getTemplateTypes } from '../../helpers/get-template-types'
@@ -28,6 +31,7 @@ const defaultProps = {
 class SendMlsListingCard extends React.Component {
   state = {
     listings: [],
+    listingDrawerListings: [],
     isListingsModalOpen: false,
     isEditingListings: false,
     isInstantMarketingBuilderOpen: false,
@@ -48,7 +52,8 @@ class SendMlsListingCard extends React.Component {
         props.isTriggered &&
         !state.isListingsModalOpen &&
         !state.isInstantMarketingBuilderOpen &&
-        !props.isEdit
+        !props.isEdit &&
+        !props.listing
       ) {
         return {
           isListingsModalOpen: true
@@ -56,7 +61,7 @@ class SendMlsListingCard extends React.Component {
       }
 
       // For just closing search drawer through its close CTA
-      if (!props.isTriggered && state.isListingsModalOpen) {
+      if (!props.isTriggered && state.isListingsModalOpen && !props.listing) {
         return {
           isListingsModalOpen: false
         }
@@ -66,10 +71,18 @@ class SendMlsListingCard extends React.Component {
       if (
         !props.isTriggered &&
         state.isListingsModalOpen &&
-        state.isInstantMarketingBuilderOpen
+        state.isInstantMarketingBuilderOpen &&
+        !props.listing
       ) {
         return {
           isListingsModalOpen: false
+        }
+      }
+
+      if (props.listing) {
+        return {
+          listings: [props.listing],
+          isInstantMarketingBuilderOpen: true
         }
       }
     }
@@ -77,12 +90,42 @@ class SendMlsListingCard extends React.Component {
     return state
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (this.props.isEdit && !this.state.isInstantMarketingBuilderOpen) {
       this.setState({
         isInstantMarketingBuilderOpen: true,
         listings: this.props.selectedTemplate.listings || []
       })
+    }
+
+    if (!this.props.isEdit) {
+      const brand = getActiveTeamId(this.props.user)
+
+      try {
+        const vAlertResponse = await byValert({
+          brand,
+          limit: 200,
+          sort_order: ['status'],
+          property_types: ['Residential'],
+          property_subtypes: [
+            'RES-Single Family',
+            'RES-Condo',
+            'RES-Townhouse',
+            'RES-Half Duplex',
+            'RES-Farm/Ranch'
+          ]
+        })
+
+        const listingDrawerListings = Object.keys(
+          vAlertResponse.entities.listings
+        ).map(key => vAlertResponse.entities.listings[key])
+
+        this.setState({ listingDrawerListings })
+      } catch (e) {
+        console.error(e)
+
+        this.setState({ listingDrawerListings: [] })
+      }
     }
   }
 
@@ -236,6 +279,10 @@ class SendMlsListingCard extends React.Component {
   }
 
   get TemplateTypes() {
+    if (this.props.types) {
+      return this.props.types
+    }
+
     return this.props.selectedTemplate
       ? [getTemplateObject(this.props.selectedTemplate).template_type]
       : getTemplateTypes(this.state.listings)
@@ -250,7 +297,7 @@ class SendMlsListingCard extends React.Component {
     )
   }
 
-  get DefaultList() {
+  get DealsDefaultList() {
     return getMlsDrawerInitialDeals(this.props.deals)
   }
 
@@ -294,7 +341,7 @@ class SendMlsListingCard extends React.Component {
     const { user, disabled } = this.props
 
     if (hasMarketingAccess(user) === false) {
-      return false
+      return null
     }
 
     return (
@@ -319,8 +366,16 @@ class SendMlsListingCard extends React.Component {
           }
           title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
-          defaultList={this.DefaultList}
-          defaultListTitle="Add from your deals"
+          defaultLists={[
+            {
+              title: 'Add from your MLS listings',
+              items: this.state.listingDrawerListings
+            },
+            {
+              title: 'Add from your deals',
+              items: this.DealsDefaultList
+            }
+          ]}
           onClose={this.closeListingModal}
           onSelectListingsCallback={this.handleSelectListings}
           multipleSelection={this.IsMultiListing}
@@ -333,20 +388,25 @@ class SendMlsListingCard extends React.Component {
           )}
         />
 
-        <InstantMarketing
-          onBuilderLoad={this.handleLoadInstantMarketing}
-          isOpen={this.state.isInstantMarketingBuilderOpen}
-          onClose={this.closeMarketing}
-          handleSave={this.handleSaveMarketingCard}
-          handleSocialSharing={this.handleSocialSharing}
-          templateData={this.TemplateData}
-          templateTypes={this.TemplateTypes}
-          assets={this.Assets}
-          mediums={this.props.mediums}
-          defaultTemplate={this.props.selectedTemplate}
-          onShowEditListings={this.handleEditListings}
-          isEdit={this.props.isEdit}
-        />
+        {this.state.isInstantMarketingBuilderOpen && (
+          <InstantMarketing
+            onBuilderLoad={this.handleLoadInstantMarketing}
+            onClose={this.closeMarketing}
+            handleSave={this.handleSaveMarketingCard}
+            handleSocialSharing={this.handleSocialSharing}
+            templateData={this.TemplateData}
+            templateTypes={this.TemplateTypes}
+            assets={this.Assets}
+            mediums={this.props.mediums}
+            defaultTemplate={this.props.selectedTemplate}
+            onShowEditListings={this.handleEditListings}
+            isEdit={this.props.isEdit}
+            hideTemplatesColumn={this.props.hideTemplatesColumn}
+            isTemplatesColumnHiddenDefault={
+              this.props.isTemplatesColumnHiddenDefault
+            }
+          />
+        )}
 
         {this.state.isComposeEmailOpen && (
           <BulkEmailComposeDrawer

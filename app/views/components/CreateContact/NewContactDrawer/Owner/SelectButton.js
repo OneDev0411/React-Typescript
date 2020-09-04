@@ -1,6 +1,8 @@
 import React from 'react'
+import { mdiChevronDown } from '@mdi/js'
 
-import { Icon } from '../../../Dropdown'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import ActionButton from '../../../Button/ActionButton'
 
 export function SelectButton(props) {
@@ -18,7 +20,7 @@ export function SelectButton(props) {
       }}
     >
       {props.selectedItem.label}
-      <Icon style={{ marginTop: '0.2em' }} isOpen={props.isOpen} />
+      <SvgIcon path={mdiChevronDown} rotate={props.isOpen ? 180 : 0} />
     </ActionButton>
   )
 }

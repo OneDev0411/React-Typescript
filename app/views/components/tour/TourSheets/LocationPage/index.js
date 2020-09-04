@@ -1,5 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { mdiMapMarkerOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getUserTitle } from '../../../../../models/user/helpers/get-user-title'
 import {
@@ -11,7 +14,6 @@ import {
   getIndexLabel
 } from '../../../../../utils/helpers'
 import { H1 } from '../../../Typography/headings'
-import IconPin from '../../../SvgIcons/MapPinOn/IconMapPinOn'
 import { prepareListingsProperties } from '../../../../../components/Pages/Dashboard/Listings/helpers/prepare-listings-properties'
 
 import { getFormatedDueDate } from '../helpers/get-formated-due-date'
@@ -92,7 +94,7 @@ export function LocationPage(props) {
             className={`${LOCATION_PAGE}__image u-print-bg`}
           >
             <div className={`${LOCATION_PAGE}__location-index u-print-bg`}>
-              <IconPin />
+              <SvgIcon path={mdiMapMarkerOutline} />
               {getIndexLabel(props.index)}
             </div>
           </div>

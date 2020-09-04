@@ -33,7 +33,9 @@ const AsyncSignUp = Load({
 
 const AsyncRegister = Load({
   loader: () =>
-    import('../components/Pages/Auth/Register' /* webpackChunkName: "register" */)
+    import(
+      '../components/Pages/Auth/Register' /* webpackChunkName: "register" */
+    )
 })
 
 const AsyncSignIn = Load({
@@ -43,22 +45,30 @@ const AsyncSignIn = Load({
 
 const AsyncVerifyRequest = Load({
   loader: () =>
-    import('../components/Pages/Verify/Request' /* webpackChunkName: "request_verify" */)
+    import(
+      '../components/Pages/Verify/Request' /* webpackChunkName: "request_verify" */
+    )
 })
 
 const AsyncVerifyConfirm = Load({
   loader: () =>
-    import('../components/Pages/Verify/Confirm' /* webpackChunkName: "confirm_verify" */)
+    import(
+      '../components/Pages/Verify/Confirm' /* webpackChunkName: "confirm_verify" */
+    )
 })
 
 const AsyncForgotPassword = Load({
   loader: () =>
-    import('../components/Pages/Auth/Password/Forgot' /* webpackChunkName: "forgot_password" */)
+    import(
+      '../components/Pages/Auth/Password/Forgot' /* webpackChunkName: "forgot_password" */
+    )
 })
 
 const AsyncResetPassword = Load({
   loader: () =>
-    import('../components/Pages/Auth/Password/Reset' /* webpackChunkName: "reset_password" */)
+    import(
+      '../components/Pages/Auth/Password/Reset' /* webpackChunkName: "reset_password" */
+    )
 })
 
 /* ==================================== */
@@ -67,42 +77,58 @@ const AsyncResetPassword = Load({
 
 const AsyncConfirmAgentId = Load({
   loader: () =>
-    import('../components/Pages/AgentOnboarding/ConfirmAgentId' /* webpackChunkName: "confirm_agent_id" */)
+    import(
+      '../components/Pages/AgentOnboarding/ConfirmAgentId' /* webpackChunkName: "confirm_agent_id" */
+    )
 })
 
 const AsyncOnboardingChooseMls = Load({
   loader: () =>
-    import('../components/Pages/AgentOnboarding/ChooseMls' /* webpackChunkName: "onboarding_choose_mls" */)
+    import(
+      '../components/Pages/AgentOnboarding/ChooseMls' /* webpackChunkName: "onboarding_choose_mls" */
+    )
 })
 
 const AsyncOnboardingSecurityQuestion = Load({
   loader: () =>
-    import('../components/Pages/AgentOnboarding/SecurityQuestion' /* webpackChunkName: "onboarding_security_question" */)
+    import(
+      '../components/Pages/AgentOnboarding/SecurityQuestion' /* webpackChunkName: "onboarding_security_question" */
+    )
 })
 
 const AsyncOnboardingConfigBrand = Load({
   loader: () =>
-    import('../components/Pages/AgentOnboarding/ConfigBrand' /* webpackChunkName: "onboarding_config_brand" */)
+    import(
+      '../components/Pages/AgentOnboarding/ConfigBrand' /* webpackChunkName: "onboarding_config_brand" */
+    )
 })
 
 const AsyncOnboardingPhoneNumber = Load({
   loader: () =>
-    import('../components/Pages/AgentOnboarding/PhoneNumber' /* webpackChunkName: "onboarding_phone_number" */)
+    import(
+      '../components/Pages/AgentOnboarding/PhoneNumber' /* webpackChunkName: "onboarding_phone_number" */
+    )
 })
 
 const AsyncOnboardingVerifyPhoneNumber = Load({
   loader: () =>
-    import('../components/Pages/AgentOnboarding/VerifyPhoneNumber' /* webpackChunkName: "onboarding_verify_phone_number" */)
+    import(
+      '../components/Pages/AgentOnboarding/VerifyPhoneNumber' /* webpackChunkName: "onboarding_verify_phone_number" */
+    )
 })
 
 const AsyncOnboardingOAuthAccounts = Load({
   loader: () =>
-    import('../components/Pages/AgentOnboarding/OAuthAccounts' /* webpackChunkName: "onboarding_oauth_accounts" */)
+    import(
+      '../components/Pages/AgentOnboarding/OAuthAccounts' /* webpackChunkName: "onboarding_oauth_accounts" */
+    )
 })
 
 const AsyncOnboardingProfile = Load({
   loader: () =>
-    import('../components/Pages/AgentOnboarding/Profile' /* webpackChunkName: "onboarding_profile" */)
+    import(
+      '../components/Pages/AgentOnboarding/Profile' /* webpackChunkName: "onboarding_profile" */
+    )
 })
 
 /* ==================================== */
@@ -111,28 +137,38 @@ const AsyncOnboardingProfile = Load({
 
 const AsyncListingsLayout = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Listings' /* webpackChunkName: "listings" */)
+    import(
+      '../components/Pages/Dashboard/Listings' /* webpackChunkName: "listings" */
+    )
 })
 
 const AsyncListingsSearch = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Listings/Search' /* webpackChunkName: "listing_search" */)
+    import(
+      '../components/Pages/Dashboard/Listings/Search' /* webpackChunkName: "listing_search" */
+    )
 })
 // import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
 
 const AsyncMlsSavedSearch = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Listings/SavedSearch' /* webpackChunkName: "alerts" */)
+    import(
+      '../components/Pages/Dashboard/Listings/SavedSearch' /* webpackChunkName: "alerts" */
+    )
 })
 
 const AsyncListingsFavorites = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */)
+    import(
+      '../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */
+    )
 })
 
 const AsyncListingSinglePage = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */)
+    import(
+      '../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */
+    )
 })
 
 /* ==================================== */
@@ -141,42 +177,58 @@ const AsyncListingSinglePage = Load({
 
 const AsyncDealsLayout = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */)
+    import(
+      '../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */
+    )
 })
 
 const AsyncDealCreate = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/create/create-deal' /* webpackChunkName: "deal_c" */)
+    import(
+      '../components/Pages/Dashboard/Deals/create/create-deal' /* webpackChunkName: "deal_c" */
+    )
 })
 
 const AsyncDealCreateOffer = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/create/create-offer' /* webpackChunkName: "deal_co" */)
+    import(
+      '../components/Pages/Dashboard/Deals/create/create-offer' /* webpackChunkName: "deal_co" */
+    )
 })
 
 const AsyncDealsList = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/List' /* webpackChunkName: "deal_l" */)
+    import(
+      '../components/Pages/Dashboard/Deals/List' /* webpackChunkName: "deal_l" */
+    )
 })
 
 const AsyncDealDashboard = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/Dashboard' /* webpackChunkName: "deal_d" */)
+    import(
+      '../components/Pages/Dashboard/Deals/Dashboard' /* webpackChunkName: "deal_d" */
+    )
 })
 
 const AsyncDealFileViewer = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/FileViewer' /* webpackChunkName: "deal_fv" */)
+    import(
+      '../components/Pages/Dashboard/Deals/FileViewer' /* webpackChunkName: "deal_fv" */
+    )
 })
 
 const AsyncDealFormEdit = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/FormEdit' /* webpackChunkName: "deal_fe" */)
+    import(
+      '../components/Pages/Dashboard/Deals/FormEdit' /* webpackChunkName: "deal_fe" */
+    )
 })
 
 const AsyncAgentNetwork = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/AgentNetwork' /* webpackChunkName: "agent-network" */)
+    import(
+      '../components/Pages/Dashboard/Deals/AgentNetwork' /* webpackChunkName: "agent-network" */
+    )
 })
 
 /* ==================================== */
@@ -185,7 +237,9 @@ const AsyncAgentNetwork = Load({
 
 const AsyncCalendar = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Calendar' /* webpackChunkName: "calendar" */)
+    import(
+      '../components/Pages/Dashboard/Calendar' /* webpackChunkName: "calendar" */
+    )
 })
 
 /* ==================================== */
@@ -194,21 +248,29 @@ const AsyncCalendar = Load({
 
 const AsyncContacts = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */)
+    import(
+      '../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */
+    )
 })
 
 const AsyncContactProfile = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Contacts/Profile' /* webpackChunkName: "contact_p" */)
+    import(
+      '../components/Pages/Dashboard/Contacts/Profile' /* webpackChunkName: "contact_p" */
+    )
 })
 
 const AsyncContactsImportCsv = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */)
+    import(
+      '../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */
+    )
 })
 const AsyncDuplicateContacts = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Contacts/List/Duplicates' /* webpackChunkName: "duplicate_contact" */)
+    import(
+      '../components/Pages/Dashboard/Contacts/List/Duplicates' /* webpackChunkName: "duplicate_contact" */
+    )
 })
 /* ==================================== */
 //  CRM FLOWS
@@ -216,12 +278,16 @@ const AsyncDuplicateContacts = Load({
 
 const AsyncFlowsList = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Flows/List' /* webpackChunkName: "flow_list" */)
+    import(
+      '../components/Pages/Dashboard/Flows/List' /* webpackChunkName: "flow_list" */
+    )
 })
 
 const AsyncFlowEdit = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Flows/Edit' /* webpackChunkName: "flow_edit" */)
+    import(
+      '../components/Pages/Dashboard/Flows/Edit' /* webpackChunkName: "flow_edit" */
+    )
 })
 
 /* ==================================== */
@@ -230,7 +296,9 @@ const AsyncFlowEdit = Load({
 
 const AsyncOpenHousesList = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/OpenHouse/List/OpenHousesList' /* webpackChunkName: "oh_list" */)
+    import(
+      '../components/Pages/Dashboard/OpenHouse/List/OpenHousesList' /* webpackChunkName: "oh_list" */
+    )
 })
 
 /* ==================================== */
@@ -239,21 +307,34 @@ const AsyncOpenHousesList = Load({
 
 const AsyncToursList = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Tours/List/ToursList' /* webpackChunkName: "tours_list" */)
+    import(
+      '../components/Pages/Dashboard/Tours/List/ToursList' /* webpackChunkName: "tours_list" */
+    )
 })
 
 /* ==================================== */
 //  Marketing Center
 /* ==================================== */
 
+const AsyncMarketingEditor = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Marketing/Editor' /* webpackChunkName: "marketing_editor" */
+    )
+})
+
 const AsyncMarketing = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Marketing/List' /* webpackChunkName: "marketing" */)
+    import(
+      '../components/Pages/Dashboard/Marketing/List' /* webpackChunkName: "marketing" */
+    )
 })
 
 const AsyncMarketingHistory = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Marketing/History' /* webpackChunkName: "marketing_history" */)
+    import(
+      '../components/Pages/Dashboard/Marketing/History' /* webpackChunkName: "marketing_history" */
+    )
 })
 
 /* ==================================== */
@@ -262,7 +343,9 @@ const AsyncMarketingHistory = Load({
 
 const AsyncInbox = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Inbox' /* webpackChunkName: "inbox" */)
+    import(
+      '../components/Pages/Dashboard/Inbox' /* webpackChunkName: "inbox" */
+    )
 })
 
 /* ==================================== */
@@ -271,12 +354,16 @@ const AsyncInbox = Load({
 
 const AsyncMarketingInsightsList = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/MarketingInsights/List' /* webpackChunkName: "marketing_insights_list" */)
+    import(
+      '../components/Pages/Dashboard/MarketingInsights/List' /* webpackChunkName: "marketing_insights_list" */
+    )
 })
 
 const AsyncMarketingInsight = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/MarketingInsights/Insight' /* webpackChunkName: "email_insight" */)
+    import(
+      '../components/Pages/Dashboard/MarketingInsights/Insight' /* webpackChunkName: "email_insight" */
+    )
 })
 
 /* ==================================== */
@@ -285,13 +372,17 @@ const AsyncMarketingInsight = Load({
 
 const AsyncRecents = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Chatroom' /* webpackChunkName: "chat" */)
+    import(
+      '../components/Pages/Dashboard/Chatroom' /* webpackChunkName: "chat" */
+    )
 })
 
 // Notifications
 const AsyncNotificationsPage = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Notifications' /* webpackChunkName: "notif_p" */)
+    import(
+      '../components/Pages/Dashboard/Notifications' /* webpackChunkName: "notif_p" */
+    )
 })
 
 /* ==================================== */
@@ -300,52 +391,72 @@ const AsyncNotificationsPage = Load({
 
 const AsyncAccountLayout = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account' /* webpackChunkName: "account_layout" */)
+    import(
+      '../components/Pages/Dashboard/Account' /* webpackChunkName: "account_layout" */
+    )
 })
 
 const AsyncProfile = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account/Profile' /* webpackChunkName: "profile" */)
+    import(
+      '../components/Pages/Dashboard/Account/Profile' /* webpackChunkName: "profile" */
+    )
 })
 
 const ExportCalendar = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account/ICalIntegration' /* webpackChunkName: "deal_templates" */)
+    import(
+      '../components/Pages/Dashboard/Account/ICalIntegration' /* webpackChunkName: "deal_templates" */
+    )
 })
 
 const ManageTags = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account/ManageTags' /* webpackChunkName: "manage_tags" */)
+    import(
+      '../components/Pages/Dashboard/Account/ManageTags' /* webpackChunkName: "manage_tags" */
+    )
 })
 
 const ReminderNotifications = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account/ReminderNotifications' /* webpackChunkName: "reminder_notifications" */)
+    import(
+      '../components/Pages/Dashboard/Account/ReminderNotifications' /* webpackChunkName: "reminder_notifications" */
+    )
 })
 
 const EmailSignature = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account/EmailSignature' /* webpackChunkName: "email_signature" */)
+    import(
+      '../components/Pages/Dashboard/Account/EmailSignature' /* webpackChunkName: "email_signature" */
+    )
 })
 
 const EmailTemplatesSettings = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account/EmailTemplates/EmailTemplatesSettings' /* webpackChunkName: "email_templates" */)
+    import(
+      '../components/Pages/Dashboard/Account/EmailTemplates/EmailTemplatesSettings' /* webpackChunkName: "email_templates" */
+    )
 })
 
 const ConnectedAccountsSetting = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account/ConnectedAccounts' /* webpackChunkName: "connected_accounts" */)
+    import(
+      '../components/Pages/Dashboard/Account/ConnectedAccounts' /* webpackChunkName: "connected_accounts" */
+    )
 })
 
 const AsyncUpgradeToAgent = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account/UpgradeToAgent' /* webpackChunkName: "upgrade_to_agent" */)
+    import(
+      '../components/Pages/Dashboard/Account/UpgradeToAgent' /* webpackChunkName: "upgrade_to_agent" */
+    )
 })
 
 const AsyncCSS = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account/CentralizedShowingService' /* webpackChunkName: "centralized_showing_service" */)
+    import(
+      '../components/Pages/Dashboard/Account/CentralizedShowingService' /* webpackChunkName: "centralized_showing_service" */
+    )
 })
 
 /* ==================================== */
@@ -354,11 +465,15 @@ const AsyncCSS = Load({
 
 const WidgetsContainer = Load({
   loader: () =>
-    import('../components/Pages/Widgets' /* webpackChunkName: "widgets_container" */)
+    import(
+      '../components/Pages/Widgets' /* webpackChunkName: "widgets_container" */
+    )
 })
 const AsyncListingsWidget = Load({
   loader: () =>
-    import('../components/Pages/Widgets/Listings' /* webpackChunkName: "listing_w" */)
+    import(
+      '../components/Pages/Widgets/Listings' /* webpackChunkName: "listing_w" */
+    )
 })
 
 const AsyncMapWidget = Load({
@@ -368,12 +483,16 @@ const AsyncMapWidget = Load({
 
 const AsyncMlsSearchFieldWidget = Load({
   loader: () =>
-    import('../components/Pages/Widgets/MlsSearchField' /* webpackChunkName: "search_field" */)
+    import(
+      '../components/Pages/Widgets/MlsSearchField' /* webpackChunkName: "search_field" */
+    )
 })
 
 const AsyncHeroSearchSectionWidget = Load({
   loader: () =>
-    import('../components/Pages/Widgets/HeroSearchSection' /* webpackChunkName: "search_field" */)
+    import(
+      '../components/Pages/Widgets/HeroSearchSection' /* webpackChunkName: "search_field" */
+    )
 })
 
 /* ==================================== */
@@ -382,7 +501,9 @@ const AsyncHeroSearchSectionWidget = Load({
 
 const AsyncWebsitesList = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Websites/List' /* webpackChunkName: "websites_list" */)
+    import(
+      '../components/Pages/Dashboard/Websites/List' /* webpackChunkName: "websites_list" */
+    )
 })
 
 /* ==================================== */
@@ -391,27 +512,37 @@ const AsyncWebsitesList = Load({
 
 const AsyncBrandSettings = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/BrandSettings' /* webpackChunkName: "brand_settings" */)
+    import(
+      '../components/Pages/Dashboard/BrandSettings' /* webpackChunkName: "brand_settings" */
+    )
 })
 
 const AsyncShare = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Marketing/SharePage' /* webpackChunkName: "mc_share_page" */)
+    import(
+      '../components/Pages/Dashboard/Marketing/SharePage' /* webpackChunkName: "mc_share_page" */
+    )
 })
 
 const AsyncTeams = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Teams' /* webpackChunkName: "teams" */)
+    import(
+      '../components/Pages/Dashboard/Teams' /* webpackChunkName: "teams" */
+    )
 })
 
 const AsyncChecklists = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Checklists' /* webpackChunkName: "console_checklists" */)
+    import(
+      '../components/Pages/Dashboard/Checklists' /* webpackChunkName: "console_checklists" */
+    )
 })
 
 const AsyncWebsite = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Website' /* webpackChunkName: "website" */)
+    import(
+      '../components/Pages/Dashboard/Website' /* webpackChunkName: "website" */
+    )
 })
 
 const AsyncForms = Load({
@@ -439,7 +570,9 @@ const AsyncOops = Load({
 
 const AsyncContexts = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Contexts/List' /* webpackChunkName: "deal_context" */)
+    import(
+      '../components/Pages/Dashboard/Contexts/List' /* webpackChunkName: "deal_context" */
+    )
 })
 
 function authenticate(nextState, replace) {
@@ -554,7 +687,8 @@ export default (
         <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
 
         <Route path="marketing" component={AsyncMarketingHistory} />
-        <Route component={AsyncMarketing} path="marketing/:types(/:medium)" />
+        <Route path="marketing/editor" component={AsyncMarketingEditor} />
+        <Route path="marketing/:types(/:medium)" component={AsyncMarketing} />
 
         <Route path="insights">
           <IndexRoute component={AsyncMarketingInsightsList} />

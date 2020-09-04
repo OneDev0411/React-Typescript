@@ -4,10 +4,12 @@ import { connect } from 'react-redux'
 import juice from 'juice'
 import { Button, IconButton, Tooltip } from '@material-ui/core'
 
+import { mdiClose, mdiMenu } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { Portal } from 'components/Portal'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import IconMenu from 'components/SvgIcons/Menu/IconMenu'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import TeamAgents from 'components/TeamAgents'
 import ImageDrawer from 'components/ImageDrawer'
@@ -16,7 +18,13 @@ import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 
-import { isBackOffice, getBrandByType } from 'utils/user-teams'
+import {
+  isBackOffice,
+  getBrandByType,
+  getActiveTeamSettings
+} from 'utils/user-teams'
+import { loadJS, unloadJS } from 'utils/load-js'
+import { ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY } from 'constants/user'
 
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
@@ -31,8 +39,6 @@ import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenter/constants'
 import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
-import { TeamSelector } from './TeamSelector'
-import { createRichTextEditor } from './RichTextEditor'
 
 import {
   Container,
@@ -52,8 +58,7 @@ import {
   getMjmlTemplateRenderData,
   getNonMjmlTemplateRenderData
 } from './utils/get-template-render-data'
-
-const ENABLE_CUSTOM_RTE = false
+import { getBrandFontFamilies } from '../helpers/get-brand-font-families'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -62,11 +67,9 @@ class Builder extends React.Component {
     this.state = {
       originalTemplate: null,
       selectedTemplate: props.defaultTemplate,
-      owner: props.templateData.user,
       isLoading: true,
       isEditorLoaded: false,
-      templateHtmlCss: '',
-      isTemplatesColumnHidden: true,
+      isTemplatesColumnHidden: props.isTemplatesColumnHiddenDefault,
       loadedListingsAssets: [],
       isListingDrawerOpen: false,
       isAgentDrawerOpen: false,
@@ -147,6 +150,9 @@ class Builder extends React.Component {
   }
 
   async componentDidMount() {
+    await this.loadCKEditor()
+    document.body.style.overflow = 'hidden'
+
     const { Grapesjs, GrapesjsMjml } = await loadGrapesjs()
 
     const { load: loadAssetManagerPlugin } = await import('./AssetManager')
@@ -154,6 +160,7 @@ class Builder extends React.Component {
 
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
+    const brandFonts = getBrandFontFamilies(brand)
 
     await Promise.all([
       loadAssetManagerPlugin(),
@@ -166,6 +173,8 @@ class Builder extends React.Component {
 
     this.editor = createGrapesInstance(Grapesjs, {
       assets: [...this.props.assets, ...this.userAssets],
+      colors: brandColors,
+      fontFamilies: brandFonts,
       plugins: [GrapesjsMjml],
       pluginsOpts: {
         [GrapesjsMjml]: {
@@ -186,6 +195,16 @@ class Builder extends React.Component {
 
       iframe.removeEventListener('paste', this.iframePasteHandler)
     }
+
+    document.body.style.overflow = 'unset'
+
+    unloadJS('ckeditor')
+  }
+
+  loadCKEditor = () => {
+    return new Promise(resolve => {
+      loadJS('/static/ckeditor/ckeditor.js', 'ckeditor', resolve)
+    })
   }
 
   static contextType = ConfirmationModalContext
@@ -240,15 +259,6 @@ class Builder extends React.Component {
     })
   }
 
-  setRte = () => {
-    const { enable, disable } = createRichTextEditor(this.editor)
-
-    this.editor.setCustomRte({
-      enable,
-      disable
-    })
-  }
-
   setupGrapesJs = () => {
     this.setState({ isEditorLoaded: true })
 
@@ -260,10 +270,6 @@ class Builder extends React.Component {
     this.removeTextStylesOnPaste()
     this.disableDefaultDeviceManager()
     this.scrollSidebarToTopOnComponentSelect()
-
-    if (ENABLE_CUSTOM_RTE) {
-      this.setRte()
-    }
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       this.registerEmailBlocks()
@@ -286,7 +292,8 @@ class Builder extends React.Component {
     const renderData = getMjmlTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
-    this.blocks = registerEmailBlocks(this.editor, renderData, {
+
+    const emailBlocksOptions = {
       listing: {
         onDrop: () => {
           this.setState({ isListingDrawerOpen: true })
@@ -316,8 +323,17 @@ class Builder extends React.Component {
         onDrop: () => {
           this.setState({ isArticleDrawerOpen: true })
         }
-      },
-      neighborhoods: {
+      }
+    }
+
+    const showNeighborhoodsBlocks = getActiveTeamSettings(
+      this.props.user,
+      ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY,
+      true
+    )
+
+    if (showNeighborhoodsBlocks) {
+      emailBlocksOptions.neighborhoods = {
         onNeighborhoodsDrop: () => {
           this.setState({ isNeighborhoodsReportDrawerOpen: true })
         },
@@ -325,7 +341,13 @@ class Builder extends React.Component {
           this.setState({ isNeighborhoodsGraphsReportDrawerOpen: true })
         }
       }
-    })
+    }
+
+    this.blocks = registerEmailBlocks(
+      this.editor,
+      renderData,
+      emailBlocksOptions
+    )
   }
 
   registerSocialBlocks = () => {
@@ -347,7 +369,9 @@ class Builder extends React.Component {
   singleClickTextEditing = () => {
     this.editor.on('component:selected', selected => {
       const isImageAsset =
-        selected.get('type') === 'image' || selected.get('type') === 'mj-image'
+        selected.get('type') === 'image' ||
+        selected.get('type') === 'mj-image' ||
+        selected.get('type') === 'mj-carousel-image'
 
       if (!selected.view.onActive || isImageAsset) {
         return
@@ -513,7 +537,7 @@ class Builder extends React.Component {
       return
     }
 
-    this.props.onSave(this.getSavedTemplate(), this.state.owner)
+    this.props.onSave(this.getSavedTemplate(), this.props.templateData.user)
   }
 
   handleSocialSharing = socialNetworkName => {
@@ -522,6 +546,14 @@ class Builder extends React.Component {
     }
 
     this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
+  }
+
+  handlePrintableSharing = () => {
+    if (!this.isTemplateMarkupRendered()) {
+      return
+    }
+
+    this.props.onPrintableSharing(this.getSavedTemplate())
   }
 
   generateBrandedTemplate = (templateMarkup, data) => {
@@ -571,9 +603,6 @@ class Builder extends React.Component {
     this.editor.setComponents(html)
     this.lockIn()
     this.deselectAll()
-    this.setState({
-      templateHtmlCss: this.getTemplateHtmlCss()
-    })
     this.resize()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
@@ -618,14 +647,6 @@ class Builder extends React.Component {
     }
   }
 
-  getTemplateHtmlCss = () => {
-    return `${this.editor.getCss()}${this.editor.getHtml()}`
-  }
-
-  isTemplateChanged = () => {
-    return this.getTemplateHtmlCss() !== this.state.templateHtmlCss
-  }
-
   handleSelectTemplate = templateItem => {
     this.setState(
       {
@@ -634,40 +655,10 @@ class Builder extends React.Component {
       },
       () => {
         this.regenerateTemplate({
-          user: this.state.owner
+          user: this.props.templateData.user
         })
       }
     )
-  }
-
-  handleOwnerChange = owner => {
-    if (!this.isTemplateChanged()) {
-      this.setState({
-        owner
-      })
-
-      this.regenerateTemplate({
-        user: owner
-      })
-
-      return
-    }
-
-    this.context.setConfirmationModal({
-      message: 'Change sender?',
-      description:
-        "All the changes you've made to the template will be lost. Are you sure?",
-      confirmLabel: 'Yes, I am sure',
-      onConfirm: () => {
-        this.setState({
-          owner
-        })
-
-        this.regenerateTemplate({
-          user: owner
-        })
-      }
-    })
   }
 
   // This accessor is going to return the template object
@@ -714,17 +705,36 @@ class Builder extends React.Component {
     )
   }
 
+  get isEmailMedium() {
+    if (this.selectedTemplate) {
+      return this.selectedTemplate.medium === 'Email'
+    }
+
+    return false
+  }
+
   get isSocialMedium() {
     if (this.props.templateTypes.includes('CrmOpenHouse')) {
       return false
     }
 
     if (this.selectedTemplate) {
-      return this.selectedTemplate.medium !== 'Email'
+      return (
+        this.selectedTemplate.medium !== 'Email' &&
+        this.selectedTemplate.medium !== 'Letter'
+      )
     }
 
     if (this.props.mediums) {
       return this.props.mediums !== 'Email'
+    }
+
+    return false
+  }
+
+  get isPrintableMedium() {
+    if (this.selectedTemplate) {
+      return this.selectedTemplate.medium === 'Letter'
     }
 
     return false
@@ -812,17 +822,10 @@ class Builder extends React.Component {
       return null
     }
 
-    const isSocialMedium = this.isSocialMedium
-    const socialNetworks = this.socialNetworks
-
     return (
       <Portal root="marketing-center">
         <Container
-          hideBlocks={
-            !this.isMjmlTemplate ||
-            this.isOpenHouseMedium ||
-            this.isSocialMedium
-          }
+          hideBlocks={!this.isMjmlTemplate}
           className="template-builder"
           style={this.props.containerStyle}
         >
@@ -904,28 +907,30 @@ class Builder extends React.Component {
               this.setState({ isArticleDrawerOpen: false })
             }}
           />
-          <NeighborhoodsReportDrawer
-            isOpen={
-              this.state.isNeighborhoodsReportDrawerOpen ||
-              this.state.isNeighborhoodsGraphsReportDrawerOpen
-            }
-            onlyAggregatedReports={
-              this.state.isNeighborhoodsGraphsReportDrawerOpen
-            }
-            onClose={() => {
-              this.setState({
-                isNeighborhoodsReportDrawerOpen: false,
-                isNeighborhoodsGraphsReportDrawerOpen: false
-              })
-            }}
-            onSelect={report => {
-              this.blocks.neighborhoods.selectHandler(report)
-              this.setState({
-                isNeighborhoodsReportDrawerOpen: false,
-                isNeighborhoodsGraphsReportDrawerOpen: false
-              })
-            }}
-          />
+          {this.blocks && this.blocks.neighborhoods && (
+            <NeighborhoodsReportDrawer
+              isOpen={
+                this.state.isNeighborhoodsReportDrawerOpen ||
+                this.state.isNeighborhoodsGraphsReportDrawerOpen
+              }
+              onlyAggregatedReports={
+                this.state.isNeighborhoodsGraphsReportDrawerOpen
+              }
+              onClose={() => {
+                this.setState({
+                  isNeighborhoodsReportDrawerOpen: false,
+                  isNeighborhoodsGraphsReportDrawerOpen: false
+                })
+              }}
+              onSelect={report => {
+                this.blocks.neighborhoods.selectHandler(report)
+                this.setState({
+                  isNeighborhoodsReportDrawerOpen: false,
+                  isNeighborhoodsGraphsReportDrawerOpen: false
+                })
+              }}
+            />
+          )}
           <Header>
             {this.isTemplatesListEnabled() && (
               <>
@@ -937,7 +942,7 @@ class Builder extends React.Component {
                   }
                 >
                   <IconButton onClick={this.toggleTemplatesColumnVisibility}>
-                    <IconMenu />
+                    <SvgIcon path={mdiMenu} />
                   </IconButton>
                 </Tooltip>
 
@@ -957,14 +962,6 @@ class Builder extends React.Component {
                 <DeviceManager editor={this.editor} />
                 <Divider orientation="vertical" />
               </>
-            )}
-
-            {this.state.selectedTemplate && (
-              <TeamSelector
-                templateData={this.props.templateData}
-                owner={this.state.owner}
-                onSelect={this.handleOwnerChange}
-              />
             )}
 
             <Actions>
@@ -989,14 +986,27 @@ class Builder extends React.Component {
                 </Button>
               )}
 
-              {this.state.selectedTemplate && isSocialMedium && (
+              {this.isSocialMedium && (
                 <SocialActions
-                  networks={socialNetworks}
+                  networks={this.socialNetworks}
                   onClick={this.handleSocialSharing}
                 />
               )}
 
-              {this.state.selectedTemplate && !isSocialMedium && (
+              {this.isPrintableMedium && (
+                <Button
+                  style={{
+                    marginLeft: '0.5rem'
+                  }}
+                  variant="contained"
+                  color="primary"
+                  onClick={this.handleSocialSharing}
+                >
+                  Continue
+                </Button>
+              )}
+
+              {this.isEmailMedium && (
                 <Button
                   style={{
                     marginLeft: '0.5rem'
@@ -1013,7 +1023,7 @@ class Builder extends React.Component {
                 onClick={this.props.onClose}
                 style={{ marginLeft: '0.5rem' }}
               >
-                <CloseIcon size="small" />
+                <SvgIcon path={mdiClose} />
               </IconButton>
             </Actions>
           </Header>

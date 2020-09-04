@@ -9,8 +9,9 @@ import {
   CardContent
 } from '@material-ui/core'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { mdiDrag } from '@mdi/js'
 
-import IconDragHandle from 'components/SvgIcons/DragHandle/IconDragHandle'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useRaisedMuiCard from 'hooks/use-raised-mui-card'
 
 import {
@@ -157,7 +158,7 @@ export default function Item({
                         aria-label="drag to reorder step"
                         hidden={disableEdit}
                       >
-                        <IconDragHandle />
+                        <SvgIcon path={mdiDrag} />
                       </Tooltip>
                     </Grid>
 

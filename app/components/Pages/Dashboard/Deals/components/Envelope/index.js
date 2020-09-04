@@ -60,7 +60,7 @@ class Envelope extends React.Component {
 
   requestVoidEnvelope = () =>
     this.props.confirmation({
-      message: 'Once you void this form you cannot edit or send for signatures',
+      message: 'Are you sure you want void this Docusign?',
       confirmLabel: 'Void',
       onConfirm: this.voidEnvelope
     })
@@ -222,7 +222,6 @@ function mapStateToProps({ deals, user }) {
   return { roles: deals.roles, user }
 }
 
-export default connect(
-  mapStateToProps,
-  { voidEnvelope, confirmation, notify }
-)(Envelope)
+export default connect(mapStateToProps, { voidEnvelope, confirmation, notify })(
+  Envelope
+)

@@ -2,6 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
+
+import cn from 'classnames'
+
 import Rooms from './Rooms'
 import Messages from './Messages'
 import ChatNotification from '../../../../services/notification/chat'
@@ -10,13 +13,12 @@ import {
   toggleInstantMode
 } from '../../../../store_actions/chatroom'
 import store from '../../../../stores'
-import cn from 'classnames'
 
 // set rooms container width
 const roomsWidth = '330px'
 
 class Chatroom extends React.Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { activeRoom, params, instantMode } = this.props
     const { rooms } = store.getState().chatroom
 
@@ -33,7 +35,7 @@ class Chatroom extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { isInstant, instantMode } = this.props
 
     if (

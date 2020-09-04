@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FieldArray } from 'react-final-form-arrays'
+import { useTheme } from '@material-ui/core/styles'
+import { mdiPlusCircleOutline, mdiMinusCircleOutline } from '@mdi/js'
 
 import { TextField } from '../TextField'
 import IconButton from '../../Button/IconButton'
-import AddIcon from '../../SvgIcons/AddCircleOutline/IconAddCircleOutline'
-import RemoveIcon from '../../SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 TextFieldArray.propTypes = {
   hint: PropTypes.string,
@@ -26,6 +27,8 @@ TextFieldArray.defaultProps = {
 }
 
 export function TextFieldArray(props) {
+  const theme = useTheme()
+
   return (
     <FieldArray name={props.name}>
       {({ fields }) =>
@@ -55,7 +58,10 @@ export function TextFieldArray(props) {
                   onClick={() => fields.push('')}
                   type="button"
                 >
-                  <AddIcon />
+                  <SvgIcon
+                    color={theme.palette.primary.main}
+                    path={mdiPlusCircleOutline}
+                  />
                 </IconButton>
               ) : (
                 <IconButton
@@ -64,7 +70,10 @@ export function TextFieldArray(props) {
                   onClick={() => fields.remove(index)}
                   type="button"
                 >
-                  <RemoveIcon />
+                  <SvgIcon
+                    color={theme.palette.primary.main}
+                    path={mdiMinusCircleOutline}
+                  />
                 </IconButton>
               )}
             </div>

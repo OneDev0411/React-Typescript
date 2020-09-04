@@ -1,18 +1,15 @@
 import styled, { css } from 'styled-components'
 
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-export const DeleteIcon = styled(IconClose)`
+export const DeleteIcon = styled(SvgIcon)`
   ${({ theme }) => css`
-    fill: ${theme.palette.error.main};
+    color: ${theme.palette.error.main};
     cursor: pointer;
     opacity: 0;
-    width: 16px;
-    height: 16px;
-    margin-left: ${theme.spacing(1)}px;
 
     :hover {
-      fill: ${theme.palette.error.light};
+      color: ${theme.palette.error.light};
     }
   `}
 `
@@ -62,11 +59,6 @@ export const Icon = styled.div`
   justify-content: center;
   background: #000;
   border-radius: 50%;
-  margin-right: 0.25rem;
-
-  svg {
-    width: 1rem;
-    height: 1rem;
-    fill: #fff !important;
-  }
+  width: 1.75rem;
+  height: 1.75rem;
 `

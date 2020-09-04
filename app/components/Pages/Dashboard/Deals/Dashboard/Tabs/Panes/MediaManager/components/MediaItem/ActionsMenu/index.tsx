@@ -5,8 +5,10 @@ import {
   Typography,
   Box,
   Menu,
-  MenuItem
+  MenuItem,
+  useTheme
 } from '@material-ui/core'
+import { mdiDotsVertical, mdiDownload } from '@mdi/js'
 
 import { useDispatch } from 'react-redux'
 
@@ -16,23 +18,19 @@ import { uploadCroppedMedia } from 'models/media-manager'
 import { downloadMedias } from 'models/media-manager'
 
 import { ImageUploader } from 'components/ImageUploader'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { deleteMedias } from 'models/media-manager'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-import MoreVertIcon from 'components/SvgIcons/VeriticalDots/VerticalDotsIcon'
-import IconDownload from 'components/SvgIcons/Download/IconDownload'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import DownloadModal from '../../DownloadModal'
 
 import { useStyles } from '../../../styles'
 
 import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
+import type { IMediaItem } from '../../../types'
 
-import { IMediaItem } from '../../../types'
 import {
   setMediaUploadProgress,
   deleteMedia as deleteMediaAction,
@@ -46,8 +44,8 @@ interface Props {
 }
 
 export default function ActionsMenu({ media, deal }: Props) {
+  const theme = useTheme()
   const classes = useStyles()
-  const iconClasses = useIconStyles()
   const reduxDispatch = useDispatch()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -56,7 +54,7 @@ export default function ActionsMenu({ media, deal }: Props) {
   const [downloadUrl, setDownloadUrl] = useState('')
   const { dispatch } = useMediaManagerContext()
   const confirmationModal = useContext(ConfirmationModalContext)
-  const { file, src, name } = media
+  const { id, src, name } = media
   const fileExtension = src.substr(src.lastIndexOf('.'), 4)
 
   const handleModalClose = () => {
@@ -74,7 +72,7 @@ export default function ActionsMenu({ media, deal }: Props) {
   const handleDownload = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
 
-    const url = await downloadMedias(deal.id, [media.file])
+    const url = await downloadMedias(deal.id, [media.id])
 
     setDownloadUrl(url)
     setModalIsOpen(true)
@@ -87,8 +85,8 @@ export default function ActionsMenu({ media, deal }: Props) {
       description: 'This action can not be undone. Are you sure?',
       confirmLabel: 'Yes, Please',
       onConfirm: () => {
-        deleteMedias(deal.id, [file])
-        dispatch(deleteMediaAction(file))
+        deleteMedias(deal.id, [id])
+        dispatch(deleteMediaAction(id))
       }
     })
   }
@@ -98,10 +96,7 @@ export default function ActionsMenu({ media, deal }: Props) {
   }
 
   const onCrop = ({ files }) => {
-    const fileName = files.originalFile
-      .split('?')[0]
-      .split('/')
-      .pop()
+    const fileName = files.originalFile.split('?')[0].split('/').pop()
     const croppedFile = new File([files.file], fileName)
 
     upload(croppedFile)
@@ -111,21 +106,21 @@ export default function ActionsMenu({ media, deal }: Props) {
     try {
       const response = await uploadCroppedMedia(
         deal.id,
-        media.file,
+        media.id,
         fileObject,
         `${media.name}.${fileExtension}`,
         progressEvent => {
           if (progressEvent.percent) {
-            dispatch(setMediaUploadProgress(file, progressEvent.percent))
+            dispatch(setMediaUploadProgress(id, progressEvent.percent))
           } else {
-            dispatch(setMediaAsUploaded(file))
+            dispatch(setMediaAsUploaded(id))
           }
         }
       )
 
       const { preview_url: src } = response
 
-      dispatch(setNewlyUploadedMediaFields(file, file, src, name))
+      dispatch(setNewlyUploadedMediaFields(id, id, src))
     } catch (err) {
       console.log(err)
       reduxDispatch(
@@ -156,9 +151,10 @@ export default function ActionsMenu({ media, deal }: Props) {
               className={classes.menuButton}
               onClick={handleDownload}
             >
-              <IconDownload
-                fill="#fff"
-                className={(iconClasses.medium, classes.iconButton)}
+              <SvgIcon
+                path={mdiDownload}
+                color={theme.palette.common.white}
+                className={classes.iconButton}
               />
             </Button>
           </Tooltip>
@@ -171,9 +167,10 @@ export default function ActionsMenu({ media, deal }: Props) {
             aria-haspopup="true"
             onClick={handleMenuClick}
           >
-            <MoreVertIcon
-              fill="#fff"
-              className={(iconClasses.medium, classes.iconButton)}
+            <SvgIcon
+              path={mdiDotsVertical}
+              color={theme.palette.common.white}
+              className={classes.iconButton}
             />
           </Button>
           <Menu

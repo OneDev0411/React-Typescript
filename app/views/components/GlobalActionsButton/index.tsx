@@ -50,7 +50,6 @@ export default function GlobalActionsButton(props: Props) {
 
   const handleSubmitContact = (contact: IContact) => {
     props.onCreateContact(contact)
-    handleCloseRenderedItem()
   }
   const handleSubmitEmail = (email: IEmailCampaign) => {
     props.onCreateEmail(email)
@@ -80,9 +79,6 @@ export default function GlobalActionsButton(props: Props) {
       case 'email':
         return selectedItem.render({
           isOpen: true,
-          initialValues: {
-            from: user
-          },
           onClose: handleCloseRenderedItem,
           onSent: handleSubmitEmail
         })

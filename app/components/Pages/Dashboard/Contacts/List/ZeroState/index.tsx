@@ -1,7 +1,14 @@
 import React from 'react'
 import cn from 'classnames'
-import { Box, Button, Typography } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  Typography,
+  useTheme,
+  createStyles,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 
 import { OAuthProvider } from 'constants/contacts'
 
@@ -9,8 +16,8 @@ import GoogleSigninButton from 'components/GoogleSigninButton'
 
 import { Divider } from 'components/Divider'
 import { CreateContact } from 'components/CreateContact'
-import IconCsv from 'components/SvgIcons/Csv/IconCsv'
-import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { outlookIcon, csvIcon } from 'components/SvgIcons/icons'
 
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 
@@ -27,7 +34,7 @@ const useStyles = makeStyles(
         margin: 'auto'
       },
       button: {
-        width: '14.6rem'
+        width: '15.6rem'
       },
       marginBottom: {
         marginBottom: theme.spacing(2)
@@ -47,6 +54,7 @@ const useStyles = makeStyles(
 )
 
 export function ZeroState({ onCreateContact }: Props) {
+  const theme = useTheme<Theme>()
   const classes = useStyles()
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
@@ -84,7 +92,7 @@ export function ZeroState({ onCreateContact }: Props) {
         className={classes.button}
         size="large"
       >
-        <IconOutlook />
+        <SvgIcon path={outlookIcon} color={theme.palette.info.main} />
         <Typography variant="button" className={classes.buttonText}>
           Sign in with Outlook
         </Typography>
@@ -98,13 +106,14 @@ export function ZeroState({ onCreateContact }: Props) {
         href="/dashboard/contacts/import/csv"
         className={cn(classes.button, classes.marginBottom)}
       >
-        <IconCsv />
+        <SvgIcon path={csvIcon} color={theme.palette.common.black} />
         <Typography variant="button" className={classes.buttonText}>
           Import CSV spreadsheet
         </Typography>
       </Button>
 
       <CreateContact
+        showAddAnother={false}
         submitCallback={onCreateContact}
         buttonProps={{ className: classes.button, size: 'large' }}
       />
