@@ -61,4 +61,16 @@ describe('Test deal form normalize-role-names helper', () => {
 
     expect(list).toStrictEqual(['BuyerAgent'])
   })
+
+  it('Should return correct list when there is InternalBuyer and deal is Buying', () => {
+    const list = normalizeRoleNames(liveBuyer as any, ['InternalBuyer'])
+
+    expect(list).toStrictEqual(['Buyer'])
+  })
+
+  it('Should return correct list when there is InternalSeller and deal is Selling', () => {
+    const list = normalizeRoleNames(liveSeller as any, ['InternalSeller'])
+
+    expect(list).toStrictEqual(['Seller'])
+  })
 })
