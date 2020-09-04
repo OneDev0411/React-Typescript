@@ -265,7 +265,7 @@ export default function AgentNetwork({ location, params }: Props) {
 
         <div>
           <CloseButton
-            backUrl={`/dashboard/deals/${deal.id}`}
+            backUrl={`/dashboard/deals/${deal.id}/marketing`}
             buttonProps={{
               size: 'medium'
             }}
