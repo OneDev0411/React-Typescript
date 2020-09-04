@@ -25,7 +25,7 @@ export function normalizeRoleNames(
       return 'Buyer'
     }
 
-    if (name === 'InternalSeller' && deal.deal_type === 'Buying') {
+    if (name === 'InternalSeller' && deal.deal_type === 'Selling') {
       return 'Seller'
     }
 
