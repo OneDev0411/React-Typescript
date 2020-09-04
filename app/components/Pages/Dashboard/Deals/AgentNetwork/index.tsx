@@ -131,7 +131,7 @@ export default function AgentNetwork({ location, params }: Props) {
 
       return response.data
     } catch (error) {
-      console.log(error)
+      console.error(error)
     } finally {
       setIsFetching(false)
     }

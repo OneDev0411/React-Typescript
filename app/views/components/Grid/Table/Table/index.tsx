@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
@@ -20,8 +20,8 @@ import { setActiveSort } from '../context/actions/sorting/set-active-sort'
 
 import { Props } from '..'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     headerContainer: {
       display: 'flex',
       alignItems: 'center',
@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.grey[700]
     },
     tableContainer: {
-      height: '100%'
+      height: '100%',
+      position: 'relative'
     },
     loading: ({ loading }: { loading: LoadingPosition }) => {
       let top: number | string = '50%'
@@ -52,7 +53,8 @@ const useStyles = makeStyles((theme: Theme) =>
         left: 0
       }
     }
-  })
+  }),
+  { name: 'GridTable' }
 )
 
 export function GridTable<Row>({
@@ -120,7 +122,7 @@ export function GridTable<Row>({
         <div className={gridClasses.summary}>{summary(totalRows, state)}</div>
       )}
 
-      <div className="tableContainer">
+      <div className={gridClasses.tableContainer}>
         {rows && rows.length > 0 && (
           <Body<Row>
             columns={newColumns}
