@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useFormState, useField } from 'react-final-form'
-import { IconButton, Theme } from '@material-ui/core'
+import { IconButton, Theme, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { mdiLayersOutline, mdiTrashCanOutline } from '@mdi/js'
 import classNames from 'classnames'
@@ -27,11 +27,18 @@ import EmailTemplateSelector from './EmailTemplateSelector'
 import { MarketingTemplateSelector } from './MarketingTemplateSelector'
 
 const useStyles = makeStyles((theme: Theme) => ({
-  footerContainer: {
+  root: {
     position: 'relative'
   },
-  footerInnerContainer: {
+  container: {
     width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
+    zIndex: 2, // To be shown over the drawer when it's animating in
+    flex: '0 0 auto'
+  },
+  main: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -39,10 +46,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderTop: `1px solid ${theme.palette.divider}`,
     position: 'relative',
     backgroundColor: theme.palette.background.paper,
-    zIndex: 2, // To be shown over the drawer when it's animating in
     flex: '0 0 auto'
   },
-  featuresList: {
+  info: {
+    lineHeight: `${theme.spacing(3)}px`,
+    textAlign: 'center',
+    backgroundColor: theme.palette.info.ultralight,
+    color: theme.palette.info.main
+  },
+  featureList: {
     display: 'flex',
     flexWrap: 'nowrap'
   },
@@ -52,10 +64,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     '& button': {
       marginLeft: 2
     }
-  },
-  scheduledOn: {
-    fontSize: 14,
-    marginRight: theme.spacing(2.5)
   }
 }))
 
@@ -102,7 +110,7 @@ export function Footer({
   const [isEmailTemplateDrawerOpen, setEmailTemplateDrawerOpen] = useState(
     false
   )
-  const [isMCTemplateDrawerOpen, setMCTemplateDrawerOpen] = useState(false)
+  const [isMcTemplateDrawerOpen, setMcTemplateDrawerOpen] = useState(false)
 
   const busy = isDeleting || formState.submitting
 
@@ -119,121 +127,129 @@ export function Footer({
     updateBody(template.body)
   }
   const selectMarketingTemplate = (template: IMarketingTemplateInstance) => {
-    setMCTemplateDrawerOpen(false)
+    setMcTemplateDrawerOpen(false)
     setMarketingTemplate(template)
   }
 
   return (
-    <div className={classes.footerContainer}>
+    <div className={classes.root}>
       <FooterBottomDrawer
-        isOpen={isEmailTemplateDrawerOpen || isMCTemplateDrawerOpen}
+        isOpen={isEmailTemplateDrawerOpen || isMcTemplateDrawerOpen}
       >
         {isEmailTemplateDrawerOpen && (
           <EmailTemplateSelector onTemplateSelected={selectEmailTemplate} />
         )}
-        {isMCTemplateDrawerOpen && !disableMarketingTemplates && (
+        {isMcTemplateDrawerOpen && !disableMarketingTemplates && (
           <MarketingTemplateSelector
             onTemplateSelected={selectMarketingTemplate}
           />
         )}
       </FooterBottomDrawer>
-      <div className={classNames(classes.footerInnerContainer, className)}>
-        <div className={classes.featuresList}>
-          <EmailAttachmentsDropdown
-            deal={deal}
-            onChanged={onChanged}
-            uploadAttachment={uploadAttachment}
-            uploadOrigin={uploadOrigin}
-            initialAttachments={initialAttachments}
-            onClickAddDealAttachments={onClickAddDealAttachments}
-          />
-          {!hasStaticBody && (
-            <DropdownToggleButton
-              isActive={isEmailTemplateDrawerOpen}
-              onClick={() => {
-                setEmailTemplateDrawerOpen(open => !open)
-                setMCTemplateDrawerOpen(open => false)
-              }}
-            >
-              <SvgIcon path={mdiLayersOutline} rightMargined />
-              <span>Templates</span>
-            </DropdownToggleButton>
-          )}
-          {!hasStaticBody && !disableMarketingTemplates && (
-            <DropdownToggleButton
-              isActive={isMCTemplateDrawerOpen}
-              onClick={() => {
-                setMCTemplateDrawerOpen(open => !open)
-                setEmailTemplateDrawerOpen(open => false)
-              }}
-            >
-              <SvgIcon
-                path={myDesignIcon}
-                rightMargined
-                size={muiIconSizes.small}
-              />
-              <span>My Designs</span>
-            </DropdownToggleButton>
-          )}
-        </div>
 
-        <div className={classes.actionBar}>
-          {isScheduled && (
-            <span className={classes.scheduledOn}>
-              Send on {formatDate(dueAt)}
-            </span>
-          )}
-          {onCancel && (
-            <ActionButton appearance="flat" onClick={onCancel} disabled={busy}>
-              Cancel
-            </ActionButton>
-          )}
-          <ActionButton
-            appearance="secondary"
-            data-test="compose-send-email"
-            type="submit"
-            disabled={busy || isSubmitDisabled}
-            leftRounded
-          >
-            {textForSubmitButton({
-              isSubmitting: formState.submitting,
-              isDateSet: isScheduled
-            })}
-          </ActionButton>
-          <DateTimePicker
-            popUpButton={buttonProps => (
-              <SchedulerButton
-                onOpen={buttonProps.toggleOpen}
-                isScheduled={isScheduled}
-              />
+      <div className={classNames(classes.container, className)}>
+        <div className={classes.main}>
+          <div className={classes.featureList}>
+            <EmailAttachmentsDropdown
+              deal={deal}
+              onChanged={onChanged}
+              uploadAttachment={uploadAttachment}
+              uploadOrigin={uploadOrigin}
+              initialAttachments={initialAttachments}
+              onClickAddDealAttachments={onClickAddDealAttachments}
+            />
+            {!hasStaticBody && (
+              <DropdownToggleButton
+                isActive={isEmailTemplateDrawerOpen}
+                onClick={() => {
+                  setEmailTemplateDrawerOpen(open => !open)
+                  setMcTemplateDrawerOpen(false)
+                }}
+              >
+                <SvgIcon path={mdiLayersOutline} rightMargined />
+                <span>Templates</span>
+              </DropdownToggleButton>
             )}
-            disabledDays={{
-              before: new Date()
-            }}
-            popUpPosition="top-right"
-            saveButtonText="Schedule"
-            initialSelectedDate={dueAt}
-            onDone={dueAtField.input.onChange}
-          />
+            {!hasStaticBody && !disableMarketingTemplates && (
+              <DropdownToggleButton
+                isActive={isMcTemplateDrawerOpen}
+                onClick={() => {
+                  setMcTemplateDrawerOpen(open => !open)
+                  setEmailTemplateDrawerOpen(false)
+                }}
+              >
+                <SvgIcon
+                  path={myDesignIcon}
+                  rightMargined
+                  size={muiIconSizes.small}
+                />
+                <span>My Designs</span>
+              </DropdownToggleButton>
+            )}
+          </div>
 
-          {onDelete && (
-            <IconButton
-              onClick={async () => {
-                setDeleting(true)
-
-                try {
-                  await onDelete(formState.values)
-                } finally {
-                  setDeleting(false)
-                }
-              }}
-              disabled={busy}
-              className={buttonClasses.danger}
+          <div className={classes.actionBar}>
+            {onCancel && (
+              <ActionButton
+                appearance="flat"
+                onClick={onCancel}
+                disabled={busy}
+              >
+                Cancel
+              </ActionButton>
+            )}
+            <ActionButton
+              appearance="secondary"
+              data-test="compose-send-email"
+              type="submit"
+              disabled={busy || isSubmitDisabled}
+              leftRounded
             >
-              <SvgIcon path={mdiTrashCanOutline} />
-            </IconButton>
-          )}
+              {textForSubmitButton({
+                isSubmitting: formState.submitting,
+                isDateSet: isScheduled
+              })}
+            </ActionButton>
+            <DateTimePicker
+              popUpButton={buttonProps => (
+                <SchedulerButton
+                  onOpen={buttonProps.toggleOpen}
+                  isScheduled={isScheduled}
+                />
+              )}
+              disabledDays={{
+                before: new Date()
+              }}
+              popUpPosition="top-right"
+              saveButtonText="Schedule"
+              initialSelectedDate={dueAt}
+              onDone={dueAtField.input.onChange}
+            />
+
+            {onDelete && (
+              <IconButton
+                onClick={async () => {
+                  setDeleting(true)
+
+                  try {
+                    await onDelete(formState.values)
+                  } finally {
+                    setDeleting(false)
+                  }
+                }}
+                disabled={busy}
+                className={buttonClasses.danger}
+              >
+                <SvgIcon path={mdiTrashCanOutline} />
+              </IconButton>
+            )}
+          </div>
         </div>
+
+        {isScheduled && (
+          <Typography variant="caption" className={classes.info}>
+            Scheduled to send on <strong>{formatDate(dueAt)}</strong>
+          </Typography>
+        )}
       </div>
     </div>
   )
