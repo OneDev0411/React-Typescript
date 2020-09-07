@@ -5,9 +5,7 @@ import {
   Theme,
   Typography,
   List,
-  ListItem,
-  Switch,
-  FormControlLabel
+  ListItem
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { mdiLayersOutline, mdiTrashCanOutline, mdiDotsVertical } from '@mdi/js'
@@ -34,6 +32,7 @@ import { DropdownToggleButton } from '../../../DropdownToggleButton'
 import { FooterBottomDrawer } from './FooterBottomDrawer'
 import EmailTemplateSelector from './EmailTemplateSelector'
 import { MarketingTemplateSelector } from './MarketingTemplateSelector'
+import EmailNotificationSetting from '../EmailNotificationSetting/EmailNotificationSetting'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -208,19 +207,9 @@ export function Footer({
                     <Field
                       name="notifications_enabled"
                       render={({ input }) => (
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              checked={input.value}
-                              onChange={input.onChange}
-                            />
-                          }
-                          label={
-                            <Typography variant="body2">
-                              Notify when opened or clicked
-                            </Typography>
-                          }
-                          labelPlacement="start"
+                        <EmailNotificationSetting
+                          checked={input.value}
+                          onChange={input.onChange}
                         />
                       )}
                     />
