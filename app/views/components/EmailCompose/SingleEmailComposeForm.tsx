@@ -91,7 +91,8 @@ export function SingleEmailComposeForm({
       attachments: (formValue.attachments || []).map(
         attachmentFormValueToEmailAttachmentInput
       ),
-      due_at: formValue.due_at || new Date()
+      due_at: formValue.due_at || new Date(),
+      notifications_enabled: formValue.notifications_enabled
     })
 
     return emailId

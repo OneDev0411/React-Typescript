@@ -1,8 +1,16 @@
 import React, { useState } from 'react'
-import { useFormState, useField } from 'react-final-form'
-import { IconButton, Theme, Typography } from '@material-ui/core'
+import { useFormState, useField, Field } from 'react-final-form'
+import {
+  IconButton,
+  Theme,
+  Typography,
+  List,
+  ListItem,
+  Switch,
+  FormControlLabel
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
-import { mdiLayersOutline, mdiTrashCanOutline } from '@mdi/js'
+import { mdiLayersOutline, mdiTrashCanOutline, mdiDotsVertical } from '@mdi/js'
 import classNames from 'classnames'
 
 import ActionButton from 'components/Button/ActionButton'
@@ -15,6 +23,7 @@ import {
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { myDesignIcon } from 'components/SvgIcons/icons'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { BaseDropdown } from 'components/BaseDropdown'
 
 import { isFileAttachment } from '../../helpers/is-file-attachment'
 import { textForSubmitButton } from './helpers'
@@ -185,6 +194,40 @@ export function Footer({
                 <span>My Designs</span>
               </DropdownToggleButton>
             )}
+            <BaseDropdown
+              renderDropdownButton={buttonProps => (
+                <DropdownToggleButton {...buttonProps}>
+                  <SvgIcon path={mdiDotsVertical} rightMargined />
+                  <Typography variant="body2">More</Typography>
+                </DropdownToggleButton>
+              )}
+              PopperProps={{ keepMounted: true }}
+              renderMenu={({ close }) => (
+                <List>
+                  <ListItem button>
+                    <Field
+                      name="notifications_enabled"
+                      render={({ input }) => (
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={input.value}
+                              onChange={input.onChange}
+                            />
+                          }
+                          label={
+                            <Typography variant="body2">
+                              Notify when opened or clicked
+                            </Typography>
+                          }
+                          labelPlacement="start"
+                        />
+                      )}
+                    />
+                  </ListItem>
+                </List>
+              )}
+            />
           </div>
 
           <div className={classes.actionBar}>

@@ -82,7 +82,8 @@ export default function EmailComposeForm<T>({
     bcc: props.initialValues?.bcc ?? [],
     subject: props.initialValues?.subject ?? '',
     body: props.initialValues?.body ?? '',
-    attachments: props.initialValues?.attachments ?? []
+    attachments: props.initialValues?.attachments ?? [],
+    notifications_enabled: props.initialValues?.notifications_enabled ?? true
   }
   const hasRecipients = initialValues.to!.length > 0 && !!initialValues.from
   const hasSubject = !!initialValues.subject
