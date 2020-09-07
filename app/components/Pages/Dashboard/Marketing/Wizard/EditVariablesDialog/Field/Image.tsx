@@ -24,27 +24,32 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { UploadableFieldProps } from './types'
 
-const useStyles = makeStyles((theme: Theme) => ({
-  loadingProgress: {
-    display: 'block',
-    margin: theme.spacing(1, 'auto')
-  },
-  image: {
-    maxHeight: '300px'
-  },
-  imageUploadArea: {
-    width: '100%',
-    border: `1px solid ${theme.palette.divider}`,
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.grey[200],
-    height: 100,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer'
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    loadingProgress: {
+      display: 'block',
+      margin: theme.spacing(1, 'auto')
+    },
+    image: {
+      maxHeight: '300px'
+    },
+    imageUploadArea: {
+      width: '100%',
+      border: `1px solid ${theme.palette.divider}`,
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: theme.palette.grey[200],
+      height: 100,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer'
+    }
+  }),
+  {
+    name: 'MarketingWizardImageField'
   }
-}))
+)
 
 interface Props extends UploadableFieldProps<'image'> {}
 

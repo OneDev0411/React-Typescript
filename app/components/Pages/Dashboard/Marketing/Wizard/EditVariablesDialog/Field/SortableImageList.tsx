@@ -25,18 +25,23 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { UploadableFieldProps } from './types'
 import { TemplateVariable } from '../../types'
 
-const useStyles = makeStyles((theme: Theme) => ({
-  image: {
-    width: theme.spacing(10),
-    height: theme.spacing(10)
-  },
-  fileInput: {
-    display: 'none !important'
-  },
-  fileLabel: {
-    width: '100%'
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    image: {
+      width: theme.spacing(10),
+      height: theme.spacing(10)
+    },
+    fileInput: {
+      display: 'none !important'
+    },
+    fileLabel: {
+      width: '100%'
+    }
+  }),
+  {
+    name: 'MarketingWizardSortableImageField'
   }
-}))
+)
 
 interface Props extends UploadableFieldProps<'sortableImageList'> {}
 

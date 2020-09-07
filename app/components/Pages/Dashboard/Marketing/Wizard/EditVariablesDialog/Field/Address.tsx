@@ -11,6 +11,8 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { BaseFieldProps } from './types'
 
+const FULL_ADDRESS_VARIABLE_NAME = 'listing.property.address.full_address'
+
 interface AddressVariables {
   'listing.property.address.street_number': string
   'listing.property.address.street_name': string
@@ -66,9 +68,8 @@ export default function Address({ variable, onChange }: Props) {
 
   useEffectOnce(() => {
     const fullAddress =
-      variable.fields.find(
-        item => item.name === 'listing.property.address.full_address'
-      )?.value ?? ''
+      variable.fields.find(item => item.name === FULL_ADDRESS_VARIABLE_NAME)
+        ?.value ?? ''
 
     setValue(fullAddress, true)
   })

@@ -22,12 +22,17 @@ import { TemplateVariable, TemplateVariableType } from '../types'
 
 import Field from './Field'
 
-const useStyles = makeStyles((theme: Theme) => ({
-  tabs: {
-    width: '100%',
-    borderBottom: `1px solid ${theme.palette.divider}`
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    tabs: {
+      width: '100%',
+      borderBottom: `1px solid ${theme.palette.divider}`
+    }
+  }),
+  {
+    name: 'MarketingWizardEditVariablesDialog'
   }
-}))
+)
 
 interface Props {
   variables: TemplateVariable<TemplateVariableType>[]

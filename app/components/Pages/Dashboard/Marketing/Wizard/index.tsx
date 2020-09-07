@@ -46,27 +46,32 @@ import { getEditableVariables } from './helpers'
 import { useEntityWithSetter } from './hooks'
 import { TemplateVariable, TemplateVariableType } from './types'
 
-const useStyles = makeStyles((theme: Theme) => ({
-  container: {
-    overflow: 'hidden'
-  },
-  loadingContainer: {
-    height: '100vh'
-  },
-  appBar: {
-    borderBottom: `1px solid ${theme.palette.divider}`
-  },
-  toolbar: {
-    justifyContent: 'space-between'
-  },
-  title: {
-    flexGrow: 1,
-    textAlign: 'center'
-  },
-  thumbnailPaper: {
-    overflow: 'hidden'
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      overflow: 'hidden'
+    },
+    loadingContainer: {
+      height: '100vh'
+    },
+    appBar: {
+      borderBottom: `1px solid ${theme.palette.divider}`
+    },
+    toolbar: {
+      justifyContent: 'space-between'
+    },
+    title: {
+      flexGrow: 1,
+      textAlign: 'center'
+    },
+    thumbnailPaper: {
+      overflow: 'hidden'
+    }
+  }),
+  {
+    name: 'MarketingWizard'
   }
-}))
+)
 
 function MarketingWizard(props: WithRouterProps) {
   useTitle('Marketing | Rechat')
