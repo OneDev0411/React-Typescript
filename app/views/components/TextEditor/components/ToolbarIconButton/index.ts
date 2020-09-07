@@ -1,10 +1,9 @@
 import styled, { ThemeProps } from 'styled-components'
-import { IconButton, Theme } from '@material-ui/core'
-import { IconButtonProps } from '@material-ui/core/IconButton'
+import { IconButton, Theme, IconButtonProps } from '@material-ui/core'
 
 export const ToolbarIconButton = styled(IconButton).attrs({
   type: 'button' as string
-})`
+})<ThemeProps<Theme> & IconButtonProps>`
   ${({ theme, color }: ThemeProps<Theme> & IconButtonProps) => {
     if (!color || color === 'default') {
       return ''
