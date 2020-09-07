@@ -10,13 +10,11 @@ export const getAccountAvatar = (
     return account.profile_image_url
   }
 
-  let unavatarId: string = account.display_name
+  let unavatarUrl: string = account.email
+    ? `https://unavatar.now.sh/${account.email}?fallback=false`
+    : ''
 
-  if (account.email) {
-    unavatarId = account.email
-  }
-
-  return `https://unavatar.now.sh/${unavatarId}?fallback=false`
+  return unavatarUrl
 }
 
 /**
@@ -25,9 +23,5 @@ export const getAccountAvatar = (
  */
 
 export const getEmailAvatar = (email: IEmailCampaign): string => {
-  if (email.template?.file?.preview_url) {
-    return email.template.file.preview_url
-  }
-
-  return ''
+  return email.template?.file?.preview_url ?? ''
 }
