@@ -20,8 +20,8 @@ export const getAccountAvatar = (
 }
 
 /**
- * return the picture of deal
- * @param account // User, Contact, Auth Account
+ * return the picture of email campaign
+ * @param email // IEmailCampaign
  */
 
 export const getEmailAvatar = (email: IEmailCampaign): string => {

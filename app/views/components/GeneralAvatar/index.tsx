@@ -7,8 +7,8 @@ import {
 } from '@material-ui/core'
 
 import { BaseProps, Props } from './type'
-import { getSize } from './helpers/getSize'
-import { getAccountAvatar, getEmailAvatar } from './helpers/getAvatar'
+import { getSize } from './helpers/get-size'
+import { getAccountAvatar, getEmailAvatar } from './helpers/get-avatar'
 
 const BaseAvatar = withStyles((theme: Theme) => ({
   root: (props: Props) => {
@@ -36,7 +36,7 @@ const AvatarComponent = (props: Props) => {
     }
 
     if (email) {
-      getEmailAvatar(email)
+      return getEmailAvatar(email)
     }
 
     if (url) {

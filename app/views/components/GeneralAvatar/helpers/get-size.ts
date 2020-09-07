@@ -2,16 +2,16 @@ import { Theme } from '@material-ui/core'
 
 import { Props as AvatarProps } from '../type'
 
-/**
- * return avatar size
- * @param theme
- * @param size
- */
 interface AvatarSize {
   width: number
   height: number
 }
 
+/**
+ * return avatar size
+ * @param theme
+ * @param size
+ */
 export const getSize = (
   theme: Theme,
   size: AvatarProps['size']
