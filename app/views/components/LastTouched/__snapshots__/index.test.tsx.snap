@@ -2,7 +2,7 @@
 
 exports[`Contact profile last touched component renders 1`] = `
 <div
-  class="MuiBox-root MuiBox-root-3 makeStyles-wrapper-1"
+  class="MuiBox-root MuiBox-root-2 makeStyles-wrapper-1"
 >
   <span>
     Last Touch was 
