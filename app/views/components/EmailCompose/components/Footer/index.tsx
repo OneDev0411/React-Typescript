@@ -22,6 +22,7 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { myDesignIcon } from 'components/SvgIcons/icons'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { BaseDropdown } from 'components/BaseDropdown'
+import EmailNotificationSetting from 'components/EmailNotificationSetting'
 
 import { isFileAttachment } from '../../helpers/is-file-attachment'
 import { textForSubmitButton } from './helpers'
@@ -32,7 +33,6 @@ import { DropdownToggleButton } from '../../../DropdownToggleButton'
 import { FooterBottomDrawer } from './FooterBottomDrawer'
 import EmailTemplateSelector from './EmailTemplateSelector'
 import { MarketingTemplateSelector } from './MarketingTemplateSelector'
-import EmailNotificationSetting from '../EmailNotificationSetting/EmailNotificationSetting'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
