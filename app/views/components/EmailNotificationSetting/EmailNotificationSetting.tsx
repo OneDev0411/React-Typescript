@@ -1,15 +1,17 @@
-import React, { ChangeEvent } from 'react'
-import { FormControlLabel, Switch, Typography } from '@material-ui/core'
+import React from 'react'
+import {
+  FormControlLabel,
+  Switch,
+  SwitchProps,
+  Typography
+} from '@material-ui/core'
 
-interface Props {
-  checked?: boolean
-  onChange?(event: ChangeEvent<HTMLInputElement>, checked: boolean): void
-}
+interface Props extends SwitchProps {}
 
-export default function EmailNotificationSetting({ checked, onChange }: Props) {
+export default function EmailNotificationSetting(props: Props) {
   return (
     <FormControlLabel
-      control={<Switch checked={checked} onChange={onChange} />}
+      control={<Switch {...props} />}
       label={
         <Typography variant="body2">Notify when opened or clicked</Typography>
       }

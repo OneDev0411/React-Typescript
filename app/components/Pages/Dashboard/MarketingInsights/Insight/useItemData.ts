@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 
-function useItemData(id) {
+export default function useItemData(emailCampaignId: string) {
   const [isLoading, setLoading] = useState<boolean>(true)
   const [hasError, setError] = useState<boolean>(false)
   const [item, setItem] = useState<IEmailCampaign<
     'from' | 'emails' | 'recipients'
   > | null>(null)
 
-  useEffect(() => {
-    getEmailCampaign(id, {
+  function loadEmailCampaign() {
+    return getEmailCampaign(emailCampaignId, {
       emailCampaignAssociations: ['emails', 'from', 'recipients'],
       emailRecipientsAssociations: [],
       emailCampaignEmailsAssociation: []
@@ -20,17 +20,20 @@ function useItemData(id) {
         setLoading(false)
         setItem(data)
       })
-      .catch(e => {
-        // Todo: Adding error state
-        console.log(e)
+      .catch(error => {
+        // TODO: Add error state
+        console.error(error)
       })
-  }, [id])
+  }
+
+  useEffect(() => {
+    loadEmailCampaign()
+  }, [emailCampaignId])
 
   return {
     item,
     isLoading,
-    hasError
+    hasError,
+    reload: loadEmailCampaign
   }
 }
-
-export default useItemData
