@@ -30,9 +30,13 @@ app.use(async (ctx, next) => {
       /^\/dashboard\/mls\/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/
     ).test(url)
 
+  const isMarketingWizardPage = url =>
+    url.startsWith('/dashboard/marketing/wizard')
+
   if (
     !isDashboard(ctx.url) ||
-    (isDashboard(ctx.url) && isListingPage(ctx.url))
+    (isDashboard(ctx.url) && isListingPage(ctx.url)) ||
+    (isDashboard(ctx.url) && isMarketingWizardPage(ctx.url))
   ) {
     // eslint-disable-next-line
     return next()

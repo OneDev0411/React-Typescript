@@ -1,5 +1,9 @@
 import React from 'react'
-import { StylesProvider, ThemeProvider } from '@material-ui/styles'
+import {
+  StylesProvider,
+  ThemeProvider,
+  responsiveFontSizes
+} from '@material-ui/core'
 import { ThemeProvider as StyledComponentsThemeProvider } from 'styled-components'
 
 import { theme } from './theme'
@@ -12,7 +16,7 @@ export const AppTheme = ({ children }) => (
       {/* Provide theme for material-ui built-in components like buttons */}
       <ThemeProvider theme={theme}>
         {/* Provide theme to be used for our own styled components */}
-        <StyledComponentsThemeProvider theme={theme}>
+        <StyledComponentsThemeProvider theme={responsiveFontSizes(theme)}>
           <>{children}</>
         </StyledComponentsThemeProvider>
       </ThemeProvider>

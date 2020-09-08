@@ -12,7 +12,7 @@ Object {
         tabindex="0"
       >
         <svg
-          class="Icon-rightMargin-17"
+          class="Icon-rightMargin-3"
           role="presentation"
           style="width: 1.5rem; height: 1.5rem;"
           viewBox="0 0 24 24"
@@ -37,7 +37,7 @@ Object {
       tabindex="0"
     >
       <svg
-        class="Icon-rightMargin-17"
+        class="Icon-rightMargin-3"
         role="presentation"
         style="width: 1.5rem; height: 1.5rem;"
         viewBox="0 0 24 24"
