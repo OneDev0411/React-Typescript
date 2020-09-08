@@ -6,6 +6,7 @@ import {
   Theme
 } from '@material-ui/core'
 
+import { Badge } from './components/Badge'
 import { BaseProps, Props } from './type'
 import { getSize } from './helpers/get-size'
 import { getAccountAvatar, getEmailAvatar } from './helpers/get-avatar'
@@ -25,8 +26,17 @@ const BaseAvatar = withStyles((theme: Theme) => ({
 }))((props: AvatarProps & Pick<BaseProps, 'size'>) => <MUIAvatar {...props} />)
 
 const AvatarComponent = (props: Props) => {
-  const { user, contact, email, url } = props
-  const imageSrc = useMemo(() => {
+  const {
+    user,
+    contact,
+    email,
+    url,
+    placeHolderImage,
+    statusColor,
+    showStatus = false,
+    isOnline = false
+  } = props
+  const rawImageSrc = useMemo(() => {
     if (contact) {
       return getAccountAvatar(contact)
     }
@@ -44,7 +54,29 @@ const AvatarComponent = (props: Props) => {
     }
   }, [contact, email, url, user])
 
-  return <BaseAvatar {...props} src={imageSrc} />
+  const imageSrc =
+    !rawImageSrc && placeHolderImage ? placeHolderImage : rawImageSrc
+
+  const avatar = <BaseAvatar {...props} src={imageSrc} />
+
+  if (showStatus) {
+    return (
+      <Badge
+        overlap="circle"
+        isOnline={isOnline}
+        statusColor={statusColor}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
+        variant="dot"
+      >
+        {avatar}
+      </Badge>
+    )
+  }
+
+  return avatar
 }
 
 export const Avatar = memo(AvatarComponent)

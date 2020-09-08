@@ -11,7 +11,7 @@ import useRaisedMuiCard from 'hooks/use-raised-mui-card'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { getIndexLabel } from 'utils/helpers'
 import { red } from 'views/utils/colors'
-import Avatar from 'components/Avatar'
+import { Avatar } from 'components/GeneralAvatar'
 import Button from 'components/Button/IconButton'
 
 import { Container, Listing, Title, Details, CloseIcon } from './styled'
@@ -25,6 +25,8 @@ Location.propTypes = {
 export function Location({ handleRemove, index, location }) {
   const listing = location[location.association_type]
   const { isRaised, raise, stopRaise } = useRaisedMuiCard()
+
+  console.log(listing)
 
   return (
     <Draggable key={listing.id} draggableId={listing.id} index={index}>

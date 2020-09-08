@@ -2,7 +2,7 @@ import React from 'react'
 
 import { getSide } from 'models/Deal/helpers/context'
 
-import Avatar from 'components/Avatar'
+import { Avatar } from 'components/GeneralAvatar'
 
 import { Container } from 'components/SelectContactModal/components/ContactItem'
 

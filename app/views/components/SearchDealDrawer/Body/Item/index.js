@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import { useTheme } from '@material-ui/core'
-
 import {
   getField,
   getStatus,
@@ -12,7 +10,8 @@ import {
   getFormattedPrice
 } from 'models/Deal/helpers/context'
 
-import Avatar from 'components/Avatar'
+import { Avatar } from 'components/GeneralAvatar'
+
 import { Container } from 'components/SelectContactModal/components/ContactItem'
 
 import { Details, Status } from './styled'
@@ -26,7 +25,6 @@ Item.propTypes = {
 export function Item(props) {
   const { item, onClickHandler } = props
   const status = getStatus(item)
-  const theme = useTheme()
 
   if (props.itemRenderer) {
     return props.itemRenderer({
@@ -40,10 +38,7 @@ export function Item(props) {
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
-      <Avatar
-        backgroundColor={theme.palette.grey['400']}
-        {...getAvatarProps(item)}
-      />
+      <Avatar {...getAvatarProps(item)} />
       <div style={{ paddingLeft: '1em' }}>
         <Flex alignCenter>
           <Details>{getPrice(item) || '$0'}</Details>
@@ -60,8 +55,7 @@ export function Item(props) {
 
 function getAvatarProps(deal) {
   return {
-    size: 40,
-    image: getField(deal, 'photo'),
+    url: getField(deal, 'photo'),
     placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
   }
 }
