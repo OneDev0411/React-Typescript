@@ -57,6 +57,7 @@ export function SearchContactDrawer(props) {
             isOpen
             onClose={toggleShowCreateContact}
             submitCallback={contact => props.onSelect(contact)}
+            showAddAnother={false}
           />
         )}
         <Body
