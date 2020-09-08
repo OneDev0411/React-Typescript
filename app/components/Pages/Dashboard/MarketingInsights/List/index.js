@@ -51,19 +51,20 @@ function List(props) {
     : InsightFiltersType.SENT
 
   const [queue, setQueue] = useState(0)
-  const { isLoading, hasError, list, stats } = useListData(
-    props.user,
-    queue,
-    filterType
-  )
   const [isLoadingSpinnerVisible, setIsLoadingSpinnerVisible] = useState(true)
-  const refreshListData = withoutLoadingSpinner => {
+  const reloadList = withoutLoadingSpinner => {
     setIsLoadingSpinnerVisible(!withoutLoadingSpinner)
     setQueue(queue => queue + 1)
   }
+  const { isLoading, hasError, list, stats } = useListData(
+    props.user,
+    queue,
+    filterType,
+    () => setIsLoadingSpinnerVisible(true)
+  )
 
   useEffect(() => {
-    window.socket.on('email_campaign:send', () => refreshListData())
+    window.socket.on('email_campaign:send', () => reloadList())
     // TODO: Shouldn't we simply remove the event listener on component unmounting?
   }, [])
 
@@ -85,7 +86,7 @@ function List(props) {
         verticalAlign: 'center',
         accessor: row => row.due_at,
         render: ({ row }) => (
-          <TitleColumn data={row} reloadList={() => refreshListData()} />
+          <TitleColumn data={row} reloadList={() => reloadList()} />
         )
       },
       {
@@ -183,10 +184,13 @@ function List(props) {
         class: 'actions',
         verticalAlign: 'center',
         width: '2rem',
-        render: ({ row }) =>
-          !row.executed_at && (
-            <Actions data={row} reloadList={() => refreshListData(true)} />
-          )
+        render: ({ row }) => (
+          <Actions
+            data={row}
+            reloadList={() => reloadList(true)}
+            isSent={!!row.executed_at}
+          />
+        )
       }
     ],
     []
@@ -229,7 +233,7 @@ function List(props) {
     <Layout
       sentCount={stats.sent}
       scheduledCount={stats.scheduled}
-      onCreateEmail={() => refreshListData()}
+      onCreateEmail={() => reloadList()}
       renderContent={props => (
         <InsightContainer>{renderContent(props)}</InsightContainer>
       )}

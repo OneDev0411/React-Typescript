@@ -1,3 +1,5 @@
+import { useReducer } from 'react'
+
 import { ListDataTypes, ActionTypes, ActionGeneralTypes } from './types'
 
 export const initialState: ListDataTypes = {
@@ -25,4 +27,6 @@ const reducer = (state: ListDataTypes, action: ActionTypes) => {
   }
 }
 
-export default reducer
+export default function useStateReducer() {
+  return useReducer(reducer, initialState)
+}

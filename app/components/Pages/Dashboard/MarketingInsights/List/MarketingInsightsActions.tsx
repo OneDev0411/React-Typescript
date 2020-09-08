@@ -15,13 +15,13 @@ import EmailNotificationSetting from 'components/EmailNotificationSetting'
 
 import useLabeledSwitchInputHandlers from 'hooks/use-labeled-switch-input-handlers'
 
-interface ActionsPropsType {
+interface Props {
   data: any
+  isSent: boolean
   reloadList: () => void
-  isVisibile: boolean
 }
 
-function Actions(props: ActionsPropsType) {
+function Actions({ data, isSent, reloadList }: Props) {
   const [isEditComposeOpen, setIsEditComposeOpen] = useState(false)
 
   const confirmation = useContext(ConfirmationModalContext)
@@ -29,11 +29,11 @@ function Actions(props: ActionsPropsType) {
   const dispatch = useDispatch()
 
   const emailNotificationSettingHandlers = useLabeledSwitchInputHandlers(
-    props.data?.notifications_enabled,
+    data?.notifications_enabled,
     async checked => {
       try {
-        await setEmailNotificationStatus(props.data.id, checked)
-        props.reloadList()
+        await setEmailNotificationStatus(data.id, checked)
+        reloadList()
       } catch (error) {
         console.error(error)
         dispatch(
@@ -53,12 +53,7 @@ function Actions(props: ActionsPropsType) {
           placement: 'bottom-end'
         }}
         renderDropdownButton={buttonProps => (
-          <IconButton
-            {...buttonProps}
-            style={{
-              padding: 0
-            }}
-          >
+          <IconButton {...buttonProps} style={{ padding: 0 }}>
             <SvgIcon path={mdiDotsHorizontal} />
           </IconButton>
         )}
@@ -71,36 +66,37 @@ function Actions(props: ActionsPropsType) {
               />
             </MenuItem>
 
-            <Divider />
+            {!isSent && (
+              <>
+                <Divider />
 
-            <MenuItem
-              onClick={() => {
-                close()
-                setIsEditComposeOpen(true)
-              }}
-            >
-              Edit
-            </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    close()
+                    setIsEditComposeOpen(true)
+                  }}
+                >
+                  Edit
+                </MenuItem>
 
-            <MenuItem
-              onClick={e => {
-                close()
-                confirmation.setConfirmationModal({
-                  appearance: 'danger',
-                  message: 'Do you want to delete this scheduled email?',
-                  description:
-                    "The email will be deleted and you don't have access to it anymore. Are you sure?",
-                  confirmLabel: 'Yes, Remove it',
-                  onConfirm: async () => {
-                    deleteEmailCampaign(props.data.id).then(() =>
-                      props.reloadList()
-                    )
-                  }
-                })
-              }}
-            >
-              <Typography color="error">Delete</Typography>
-            </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    close()
+                    confirmation.setConfirmationModal({
+                      appearance: 'danger',
+                      message: 'Do you want to delete this scheduled email?',
+                      description:
+                        "The email will be deleted and you don't have access to it anymore. Are you sure?",
+                      confirmLabel: 'Yes, Remove it',
+                      onConfirm: () =>
+                        deleteEmailCampaign(data.id).then(reloadList)
+                    })
+                  }}
+                >
+                  <Typography color="error">Delete</Typography>
+                </MenuItem>
+              </>
+            )}
           </div>
         )}
       />
@@ -108,9 +104,9 @@ function Actions(props: ActionsPropsType) {
         <EditEmailDrawer
           isOpen
           onClose={() => setIsEditComposeOpen(false)}
-          onEdited={() => props.reloadList()}
-          onDeleted={() => props.reloadList()}
-          emailId={props.data.id}
+          onEdited={reloadList}
+          onDeleted={reloadList}
+          emailId={data.id}
         />
       )}
     </>
