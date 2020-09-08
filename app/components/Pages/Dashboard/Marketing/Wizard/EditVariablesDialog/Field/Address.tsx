@@ -54,7 +54,7 @@ function getAddressVariables(address: string): AddressVariables {
   }
 }
 
-interface Props extends BaseFieldProps<'address'> {}
+type Props = BaseFieldProps<'address'>
 
 export default function Address({ variable, onChange }: Props) {
   const {

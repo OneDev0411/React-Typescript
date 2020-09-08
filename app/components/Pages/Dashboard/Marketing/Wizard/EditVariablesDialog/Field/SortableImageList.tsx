@@ -43,7 +43,7 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props extends UploadableFieldProps<'sortableImageList'> {}
+type Props = UploadableFieldProps<'sortableImageList'>
 
 export default function SortableImageList({
   variable,

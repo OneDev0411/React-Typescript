@@ -51,7 +51,7 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props extends UploadableFieldProps<'image'> {}
+type Props = UploadableFieldProps<'image'>
 
 export default function Image({ variable, onChange, onUpload }: Props) {
   const classes = useStyles()
