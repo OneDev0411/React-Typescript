@@ -11,7 +11,7 @@ import { useTheme } from '@material-ui/styles'
 import { IAppState } from 'reducers'
 
 import { BaseDropdown } from 'components/BaseDropdown'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 import {
   InputContainer,
   InputLabel,

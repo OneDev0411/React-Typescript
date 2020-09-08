@@ -11,7 +11,7 @@ import useRaisedMuiCard from 'hooks/use-raised-mui-card'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { getIndexLabel } from 'utils/helpers'
 import { red } from 'views/utils/colors'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 import Button from 'components/Button/IconButton'
 
 import { Container, Listing, Title, Details, CloseIcon } from './styled'

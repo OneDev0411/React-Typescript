@@ -20,7 +20,7 @@ import classNames from 'classnames'
 import { formatDate } from 'components/DateTimePicker/helpers'
 import { EmailThread } from 'components/EmailThread'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'

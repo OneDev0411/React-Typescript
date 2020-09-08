@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import {
   getAttributeFromSummary,

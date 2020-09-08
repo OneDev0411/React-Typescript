@@ -2,7 +2,7 @@ import React from 'react'
 import { Chip, Theme, makeStyles } from '@material-ui/core'
 
 import Link from 'components/ALink'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import { renderWithMiniContact } from './render-with-mini-contact'
 

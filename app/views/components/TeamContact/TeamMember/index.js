@@ -5,7 +5,7 @@ import { Typography, makeStyles } from '@material-ui/core'
 import { mdiCheck } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import { Item } from '../../Dropdown/Item'
 

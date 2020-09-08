@@ -14,7 +14,7 @@ import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { outlookIcon } from 'components/SvgIcons/icons'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

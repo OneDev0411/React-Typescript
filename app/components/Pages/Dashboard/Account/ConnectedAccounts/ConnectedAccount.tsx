@@ -18,7 +18,7 @@ import { OAuthProvider } from 'constants/contacts'
 
 import IconPermission from 'components/SvgIcons/Permission/IconPermission'
 
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatus'
 import { DangerButton } from 'components/Button/DangerButton'
 import { getContactNameInitials } from 'models/contacts/helpers'

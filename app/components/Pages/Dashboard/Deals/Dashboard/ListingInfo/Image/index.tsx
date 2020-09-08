@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Theme, makeStyles, createStyles } from '@material-ui/core'
 
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 import Deal from 'models/Deal'
 
 interface Props {

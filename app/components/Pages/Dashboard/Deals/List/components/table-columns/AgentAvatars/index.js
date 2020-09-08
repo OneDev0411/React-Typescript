@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import Tooltip from 'components/tooltip'
 

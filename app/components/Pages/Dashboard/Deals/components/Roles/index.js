@@ -7,7 +7,7 @@ import Flex from 'styled-flex-component'
 
 import { Button } from '@material-ui/core'
 
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 import { createRoles, deleteRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 import { getContactNameInitials } from 'models/contacts/helpers'

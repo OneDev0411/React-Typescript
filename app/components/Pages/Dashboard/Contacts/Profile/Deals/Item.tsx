@@ -3,7 +3,7 @@ import { Typography, Box } from '@material-ui/core'
 
 import Deal from 'models/Deal'
 import { goTo } from 'utils/go-to'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 import { getAddress } from 'models/Deal/helpers/context'
 import { normalizeDeal } from 'views/utils/association-normalizers'
 

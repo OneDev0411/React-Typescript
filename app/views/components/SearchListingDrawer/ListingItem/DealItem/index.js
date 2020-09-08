@@ -1,7 +1,7 @@
 import React from 'react'
 import { mdiHomeOutline, mdiDrag, mdiClose } from '@mdi/js'
 
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 import Deal from 'models/Deal'
 import { getStatusColor } from 'utils/listing'
 

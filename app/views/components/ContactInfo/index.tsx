@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Tooltip, Theme, useTheme } from '@material-ui/core'
 
 import ContactName from 'components/ContactInfo/ContactName'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 import { getContactNameInitials } from 'models/contacts/helpers'
 
 import { ContactsListType } from '../../../components/Pages/Dashboard/MarketingInsights/Insight/types'

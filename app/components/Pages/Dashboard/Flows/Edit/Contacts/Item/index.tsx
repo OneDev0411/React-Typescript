@@ -10,7 +10,7 @@ import {
 import { getContactNameInitials } from 'models/contacts/helpers'
 import ALink from 'components/ALink'
 import { DangerButton } from 'components/Button/DangerButton'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 interface Props {
   contact: IContact

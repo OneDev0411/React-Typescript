@@ -20,7 +20,7 @@ import { useTheme } from '@material-ui/styles'
 import { mdiClose } from '@mdi/js'
 
 import { BaseDropdown } from 'components/BaseDropdown'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import type { ISignatureRecipient } from 'deals/Signature/types'

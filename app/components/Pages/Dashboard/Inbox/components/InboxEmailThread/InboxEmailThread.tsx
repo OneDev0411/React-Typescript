@@ -36,7 +36,7 @@ import { EmailThreadEmails } from 'components/EmailThread'
 import { EmailResponseType } from 'components/EmailThread/types'
 import { EmailResponseComposeForm } from 'components/EmailCompose/EmailResponseComposeForm'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import { useMenu } from 'hooks/use-menu'
 

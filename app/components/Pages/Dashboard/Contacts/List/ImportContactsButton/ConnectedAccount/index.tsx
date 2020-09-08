@@ -4,7 +4,7 @@ import { Box, Tooltip, IconButton } from '@material-ui/core'
 
 import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatus'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import { AccountInfoWrapper } from './styled'
 

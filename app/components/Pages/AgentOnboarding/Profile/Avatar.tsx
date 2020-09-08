@@ -3,7 +3,7 @@ import { Box, Button, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
 import { ImageUploader } from 'components/ImageUploader'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import { Avatar as AvatarType } from './types'
 

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { mdiClose } from '@mdi/js'
 
 import { getUserTitle } from '../../../../models/user/helpers'
-import { Avatar } from '../../GeneralAvatar'
+import { Avatar } from '../../Avatar'
 import Tooltip from '../../tooltip'
 import IconButton from '../../Button/IconButton'
 import { SvgIcon } from '../../SvgIcons/SvgIcon'

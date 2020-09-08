@@ -10,7 +10,7 @@ import {
   getFormattedPrice
 } from 'models/Deal/helpers/context'
 
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import { Container } from 'components/SelectContactModal/components/ContactItem'
 

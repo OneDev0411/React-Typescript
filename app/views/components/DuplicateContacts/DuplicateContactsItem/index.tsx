@@ -15,7 +15,7 @@ import {
 } from 'models/contacts/helpers'
 
 import MiniContact from 'components/MiniContact'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import Dismiss from './Dismiss'
 

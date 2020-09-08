@@ -4,7 +4,7 @@ import Downshift from 'downshift'
 import Flex from 'styled-flex-component'
 import { mdiChevronDown, mdiChevronUp, mdiClose } from '@mdi/js'
 
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 

@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 
 import Tooltip from '../tooltip'
 import { getUserTitle } from '../../../models/user/helpers'
-import { Avatar } from '../GeneralAvatar'
+import { Avatar } from '../Avatar'
 
 const propTypes = {
   users: PropTypes.array,

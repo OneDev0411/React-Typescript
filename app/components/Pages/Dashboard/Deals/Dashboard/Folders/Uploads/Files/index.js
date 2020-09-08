@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import Tooltip from 'components/tooltip'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import {
   MOVE_FILE,

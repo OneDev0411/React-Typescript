@@ -14,7 +14,7 @@ import { confirmation } from 'actions/confirmation'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ImageUploader } from 'components/ImageUploader'
 import Tooltip from 'components/tooltip'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 const Container = styled.div`
   @media (min-width: 50em) {

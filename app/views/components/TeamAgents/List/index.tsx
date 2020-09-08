@@ -7,7 +7,7 @@ import useDebouncedCallback from 'use-debounce/lib/callback'
 import uniqBy from 'lodash/uniqBy'
 
 import { TextWithHighlights } from 'components/TextWithHighlights'
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 
 import Search from 'components/Grid/Search'
 

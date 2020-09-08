@@ -3,7 +3,7 @@ import { makeStyles, Theme, Typography } from '@material-ui/core'
 
 import { mdiHomeOutline } from '@mdi/js'
 
-import { Avatar } from 'components/GeneralAvatar'
+import { Avatar } from 'components/Avatar'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import ALinkToClosable from 'components/ALinkToClosable'
 import { getField, getEnderType } from 'models/Deal/helpers/context'
