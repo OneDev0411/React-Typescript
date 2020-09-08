@@ -10,7 +10,8 @@ import Menu from './Menu'
 
 interface Props {
   onCreateEvent: (event: IEvent) => void
-  onCreateContact: (contact: IContact) => void
+  onCreateContact?: (contact: IContact) => void
+  onCreateContactAndAddNewContact?: (contact: IContact) => void
   onCreateEmail: (email: IEmailCampaign) => void
   onCreateTour: (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
@@ -48,9 +49,26 @@ export default function GlobalActionsButton(props: Props) {
     handleCloseRenderedItem()
   }
 
-  const handleSubmitContact = (contact: IContact) => {
-    props.onCreateContact(contact)
+  const getCreateContactHandler = () => {
+    if (typeof props.onCreateContact === 'function') {
+      return (contact: IContact) =>
+        // because of TS - Cannot invoke an object which is possibly 'undefined'.ts(2722)
+        props.onCreateContact && props.onCreateContact(contact)
+    }
+
+    return undefined
   }
+
+  const getCreateContactAndAddNewContactHandler = () => {
+    if (typeof props.onCreateContactAndAddNewContact === 'function') {
+      return (contact: IContact) =>
+        props.onCreateContactAndAddNewContact &&
+        props.onCreateContactAndAddNewContact(contact)
+    }
+
+    return undefined
+  }
+
   const handleSubmitEmail = (email: IEmailCampaign) => {
     props.onCreateEmail(email)
     handleCloseRenderedItem()
@@ -96,7 +114,8 @@ export default function GlobalActionsButton(props: Props) {
           user,
           isOpen: true,
           onClose: handleCloseRenderedItem,
-          submitCallback: handleSubmitContact
+          saveCallback: getCreateContactHandler(),
+          saveAndAddNewCallback: getCreateContactAndAddNewContactHandler()
         })
 
       case 'deal':

@@ -56,7 +56,7 @@ export function SearchContactDrawer(props) {
           <NewContactDrawer
             isOpen
             onClose={toggleShowCreateContact}
-            submitCallback={contact => props.onSelect(contact)}
+            saveCallback={contact => props.onSelect(contact)}
             showAddAnother={false}
           />
         )}

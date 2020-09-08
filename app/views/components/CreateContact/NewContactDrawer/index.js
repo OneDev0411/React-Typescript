@@ -26,13 +26,13 @@ import { generateInitialValues } from './helpers/generate-initial-values'
 
 const propTypes = {
   section: PropTypes.string,
-  submitCallback: PropTypes.func,
+  saveCallback: PropTypes.func,
+  saveAndAddNewCallback: PropTypes.func,
   user: PropTypes.shape().isRequired,
   showAddAnother: PropTypes.bool
 }
 const defaultProps = {
   section: '',
-  submitCallback: null,
   showAddAnother: true
 }
 
@@ -52,7 +52,7 @@ class NewContactDrawer extends React.Component {
     formState,
     reInitializeAfterSubmit = false
   ) => {
-    const { submitCallback } = this.props
+    const { saveCallback, saveAndAddNewCallback } = this.props
 
     if (this.state.submitError) {
       this.setState({ submitError: '' })
@@ -86,8 +86,8 @@ class NewContactDrawer extends React.Component {
       this.setState({ isSubmitting: false })
 
       if (reInitializeAfterSubmit) {
-        if (submitCallback) {
-          submitCallback(contact)
+        if (typeof saveAndAddNewCallback === 'function') {
+          saveAndAddNewCallback(contact)
         }
 
         this.props.dispatch(
@@ -101,8 +101,8 @@ class NewContactDrawer extends React.Component {
       } else {
         this.props.onClose()
 
-        if (submitCallback) {
-          submitCallback(contact)
+        if (typeof saveCallback === 'function') {
+          saveCallback(contact)
 
           return
         }
