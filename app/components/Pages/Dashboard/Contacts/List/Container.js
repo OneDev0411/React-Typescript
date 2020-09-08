@@ -514,11 +514,14 @@ class ContactsList extends React.Component {
   }
 
   reloadContacts = async (start = 0) => {
-    await this.props.searchContacts(
+    const { activeSegment, searchContacts } = this.props
+    const isParkedActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
+
+    await searchContacts(
       this.props.filters,
       start,
       undefined,
-      false,
+      isParkedActive,
       this.state.searchInputValue,
       this.order,
       this.props.viewAsUsers,
@@ -766,6 +769,7 @@ class ContactsList extends React.Component {
                   order={this.order}
                   totalRows={props.listInfo.total || 0}
                   listInfo={props.listInfo}
+                  activeSegment={activeSegment}
                   isFetching={isFetchingContacts}
                   isFetchingMore={state.isFetchingMoreContacts}
                   isFetchingMoreBefore={state.isFetchingMoreContactsBefore}

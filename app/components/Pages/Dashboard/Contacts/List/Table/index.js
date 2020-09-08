@@ -17,6 +17,7 @@ import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 
 import { LoadingComponent } from './components/LoadingComponent'
+import { PARKED_CONTACTS_LIST_ID } from '../constants'
 
 import Menu from './columns/Menu'
 import Avatar from './columns/Avatar'
@@ -25,6 +26,7 @@ import CtaAction from './columns/Cta'
 import TagsString from './columns/Tags'
 import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
+import { AddPending } from './columns/AddPending'
 
 const useCustomGridStyles = makeStyles(theme => ({
   row: {
@@ -97,11 +99,20 @@ const ContactsList = props => {
     },
     {
       id: 'tag',
-      width: '34%',
+      width: props.activeSegment.id !== PARKED_CONTACTS_LIST_ID ? '34%' : '22%',
       class: 'opaque tags',
       render: ({ row: contact }) => (
         <TagsString contact={contact} onSelectTagContact={onSelectTagContact} />
       )
+    },
+    {
+      id: 'add-pending',
+      width: props.activeSegment.id === PARKED_CONTACTS_LIST_ID ? '12%' : '0',
+      class: 'opaque',
+      render: ({ row: contact }) =>
+        props.activeSegment.id === PARKED_CONTACTS_LIST_ID ? (
+          <AddPending contactId={contact.id} callback={props.reloadContacts} />
+        ) : null
     },
     {
       id: 'delete-contact',
@@ -140,7 +151,11 @@ const ContactsList = props => {
     }
   }
   const getColumnProps = ({ column }) => {
-    if (['name', 'cta', 'flows', 'tag', 'delete-contact'].includes(column.id)) {
+    if (
+      ['name', 'cta', 'flows', 'tag', 'delete-contact', 'add-pending'].includes(
+        column.id
+      )
+    ) {
       return {
         onClick: e => e.stopPropagation()
       }

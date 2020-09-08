@@ -25,7 +25,9 @@ export function updateContact(contactId, attributes, query) {
 
       const response = await patchContact(contactId, attributes, query)
       const updatedContact = normalizeContactAttribute(response)
-      const { contacts: { list } } = getState()
+      const {
+        contacts: { list }
+      } = getState()
       const contact = selectContact(list, contactId)
       const newContact = {
         ...contact,

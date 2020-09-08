@@ -295,8 +295,9 @@ class SectionWithFields extends React.Component {
           this.props.notify({
             status: 'success',
             dismissAfter: 4000,
-            message: `${attribute.attribute_def.label ||
-              attribute.attribute_def.name} deleted.`
+            message: `${
+              attribute.attribute_def.label || attribute.attribute_def.name
+            } deleted.`
           })
 
           this.updateContact(attribute.attribute_def)
@@ -370,7 +371,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify }
-)(SectionWithFields)
+export default connect(mapStateToProps, { notify })(SectionWithFields)
