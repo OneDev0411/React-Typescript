@@ -43,9 +43,8 @@ export default function InstantMarketing({
   const handleClose = () => {
     if (closeConfirmation) {
       return confirmation.setConfirmationModal({
-        message: 'Not ready to email?',
-        description:
-          'We saved a copy of your email in the My Designs section. Do you want to cancel sending for now?',
+        message: 'Don’t want to market?',
+        description: 'By canceling you will lose any changes you have made.',
         cancelLabel: 'No, don’t cancel',
         confirmLabel: 'Yes, cancel',
         onConfirm: onClose
