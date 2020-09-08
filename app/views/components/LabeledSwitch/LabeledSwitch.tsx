@@ -55,7 +55,7 @@ export default function LabeledSwitch({
       }
       label={
         <Typography {...TypographyProps} variant={variant ?? 'body2'}>
-          {children}
+          {children}&nbsp;&nbsp;&nbsp;
         </Typography>
       }
       labelPlacement="start"
