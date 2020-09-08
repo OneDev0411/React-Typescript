@@ -5,8 +5,7 @@ import {
   makeStyles,
   Theme,
   Typography,
-  Button,
-  Avatar
+  Button
 } from '@material-ui/core'
 import fecha from 'fecha'
 
@@ -16,6 +15,7 @@ import {
 } from 'models/contacts/helpers'
 
 import MiniContact from 'components/MiniContact'
+import { Avatar } from 'components/Avatar'
 
 import Dismiss from './Dismiss'
 
@@ -54,9 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.success.main
     },
     avatar: {
-      marginRight: theme.spacing(1),
-      backgroundColor: theme.palette.divider,
-      color: theme.palette.text.primary
+      marginRight: theme.spacing(1)
     }
   })
 )
@@ -83,8 +81,7 @@ export default function DuplicateContactsListItem({
   const handleSetAsMaster = () => {
     onSetMasterClick(contact.id)
   }
-  const avatarUrl =
-    contact && contact.profile_image_url ? contact.profile_image_url : ''
+
   const displayName =
     contact && contact.display_name ? contact.display_name : ''
 
@@ -94,9 +91,9 @@ export default function DuplicateContactsListItem({
         <MiniContact type="contact" data={contact}>
           <div className={classes.row}>
             <Avatar
-              className={classes.avatar}
+              contact={contact}
               alt={displayName}
-              src={avatarUrl}
+              className={classes.avatar}
             >
               {getContactNameInitials(contact)}
             </Avatar>

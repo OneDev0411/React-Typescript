@@ -1,7 +1,8 @@
 import React from 'react'
-import { Chip, Avatar, Theme, makeStyles } from '@material-ui/core'
+import { Chip, Theme, makeStyles } from '@material-ui/core'
 
 import Link from 'components/ALink'
+import { Avatar } from 'components/Avatar'
 
 import { renderWithMiniContact } from './render-with-mini-contact'
 
@@ -14,10 +15,6 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     margin: theme.spacing(0, 1, 1, 0)
-  },
-  avatar: {
-    backgroundColor: theme.palette.grey['400'],
-    color: theme.palette.grey['500']
   }
 }))
 
@@ -44,12 +41,7 @@ function AssociationItemBase({
         </Link>
       }
       onDelete={isRemovable ? onRemove : undefined}
-      avatar={
-        <Avatar
-          className={classes.avatar}
-          src={avatar.image || avatar.placeHolderImage}
-        />
-      }
+      avatar={<Avatar url={avatar.image || avatar.placeHolderImage} />}
       className={classes.root}
     />
   )

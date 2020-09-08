@@ -1,6 +1,8 @@
 import React from 'react'
-import { Avatar, Box, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+
+import { Avatar } from '../../../../../../views/components/Avatar'
 
 import { DropdownToggleButton } from '../../../../../../views/components/DropdownToggleButton'
 
@@ -60,7 +62,7 @@ export default function ToggleButton(props: Props) {
       }}
     >
       <Box className={classes.wrapper}>
-        <Avatar alt={props.userName} src={props.userAvatar || ''} />
+        <Avatar alt={props.userName} url={props.userAvatar || ''} />
         <div className={classes.userDetails}>
           <Typography noWrap variant="body2">
             {props.userName}

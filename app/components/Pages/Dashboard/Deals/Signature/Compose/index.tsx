@@ -18,7 +18,6 @@ import { From } from './form/From'
 import { Subject } from './form/Subject'
 import { Message } from './form/Message'
 import { Attachments } from './form/Attachments'
-import { AutoNotify } from './form/AutoNotify'
 
 interface Props {
   user: IUser
@@ -157,7 +156,6 @@ export function SignatureComposeDrawer({
                   >
                     {isSubmitting ? 'Please Wait...' : 'Next: View in Docusign'}
                   </Button>
-                  <AutoNotify disabled={isSubmitting} />
                 </Box>
               </div>
             </Drawer.Footer>
