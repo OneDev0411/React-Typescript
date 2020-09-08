@@ -1,21 +1,11 @@
 import React from 'react'
-import {
-  FormControlLabel,
-  Switch,
-  SwitchProps,
-  Typography
-} from '@material-ui/core'
 
-interface Props extends SwitchProps {}
+import LabeledSwitchInput, {
+  LabeledSwitchInputProps
+} from 'components/LabeledSwitchInput/LabeledSwitchInput'
+
+interface Props extends Omit<LabeledSwitchInputProps, 'label'> {}
 
 export default function EmailNotificationSetting(props: Props) {
-  return (
-    <FormControlLabel
-      control={<Switch {...props} />}
-      label={
-        <Typography variant="body2">Notify when opened or clicked</Typography>
-      }
-      labelPlacement="start"
-    />
-  )
+  return <LabeledSwitchInput {...props} label="Notify when opened or clicked" />
 }
