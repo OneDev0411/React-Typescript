@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Avatar,
   Badge,
   ListItemAvatar,
   ListItemText,
@@ -15,6 +14,7 @@ import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { outlookIcon } from 'components/SvgIcons/icons'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { Avatar } from 'components/Avatar'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -43,10 +43,8 @@ export function Item({ item }: Props) {
   const classes = useStyles()
 
   const renderAvatar = () => {
-    const src = item.profile_image_url || ''
-
     if (item.type === 'user') {
-      return <Avatar src={src} />
+      return <Avatar user={item} />
     }
 
     return (
@@ -70,7 +68,7 @@ export function Item({ item }: Props) {
           </div>
         }
       >
-        <Avatar alt={item.display_name} src={src} />
+        <Avatar alt={item.display_name} user={item} />
       </Badge>
     )
   }

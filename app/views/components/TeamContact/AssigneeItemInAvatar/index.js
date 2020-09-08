@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { mdiClose } from '@mdi/js'
 
 import { getUserTitle } from '../../../../models/user/helpers'
-import Avatar from '../../Avatar'
+import { Avatar } from '../../Avatar'
 import Tooltip from '../../tooltip'
 import IconButton from '../../Button/IconButton'
 import { SvgIcon } from '../../SvgIcons/SvgIcon'
@@ -64,7 +64,7 @@ export class AssigneeItemInAvatar extends Component {
     return (
       <Tooltip placeme="top" caption={title}>
         <Button isFit onClick={this.onRemove} type="button">
-          <Avatar image={user.profile_image_url} title={title} size={32} />
+          <Avatar user={user} alt={title} />
           <Icon path={mdiClose} />
         </Button>
       </Tooltip>

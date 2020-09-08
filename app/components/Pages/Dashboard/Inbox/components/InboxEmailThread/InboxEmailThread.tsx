@@ -4,7 +4,6 @@ import {
   Box,
   IconButton,
   Typography,
-  Avatar,
   Tooltip,
   Menu,
   Theme,
@@ -37,6 +36,7 @@ import { EmailThreadEmails } from 'components/EmailThread'
 import { EmailResponseType } from 'components/EmailThread/types'
 import { EmailResponseComposeForm } from 'components/EmailCompose/EmailResponseComposeForm'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { Avatar } from 'components/Avatar'
 
 import { useMenu } from 'hooks/use-menu'
 
@@ -238,18 +238,15 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
         </Box>
         {!!emailThread.contacts && emailThread.contacts.length > 0 && (
           <Box marginX={3} display="flex">
-            <AvatarGroup>
+            <AvatarGroup max={4}>
               {(recipients.length <= 3
                 ? recipients
                 : recipients.slice(0, 2)
               ).map((c, index) => (
-                <Avatar key={index} alt={c.initials} src={c.profileImageUrl}>
+                <Avatar key={index} alt={c.initials} url={c.profileImageUrl}>
                   {c.initials}
                 </Avatar>
               ))}
-              {recipients.length > 3 && (
-                <Avatar>+{recipients.length - 2}</Avatar>
-              )}
             </AvatarGroup>
           </Box>
         )}

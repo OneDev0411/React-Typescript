@@ -3,7 +3,7 @@ import { Typography, Box } from '@material-ui/core'
 
 import Deal from 'models/Deal'
 import { goTo } from 'utils/go-to'
-import Avatar from 'components/Avatar'
+import { Avatar } from 'components/Avatar'
 import { getAddress } from 'models/Deal/helpers/context'
 import { normalizeDeal } from 'views/utils/association-normalizers'
 
@@ -34,7 +34,7 @@ export function DealItem({ deal, contact }: Props) {
 
   return (
     <Container onClick={handleOnClickItem}>
-      <Avatar {...avatar} size={40} />
+      <Avatar {...avatar} />
       <Box ml={1} width="calc(100% - 3rem)">
         {address && <Typography variant="body2">{address}</Typography>}
         <Typography variant="caption" color="textSecondary">

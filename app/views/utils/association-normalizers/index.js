@@ -131,9 +131,8 @@ export const normalizeDeal = (deal, showStatus = true) => {
 
   return {
     avatar: {
-      image: getDealField(deal, 'photo'),
+      url: getDealField(deal, 'photo'),
       isOnline: showStatus,
-      size: 32,
       showStatus,
       statusColor: `#${getStatusColor(getDealStatus(deal))}`,
       placeHolderImage: '/static/icons/associated-deals-place-holder.svg'

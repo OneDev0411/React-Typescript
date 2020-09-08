@@ -9,7 +9,7 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { getUserTitle } from '../../../../models/user/helpers'
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
 
-import Avatar from '../../Avatar'
+import { Avatar } from '../../Avatar'
 import { TeamMember } from '../TeamMember'
 import { BasicDropdown } from '../../BasicDropdown'
 import ActionButton from '../../Button/ActionButton'
@@ -107,9 +107,8 @@ export class TeamContactSelect extends React.Component {
             >
               <Flex alignCenter style={{ width: '100%' }}>
                 <Avatar
-                  size={32}
-                  title={title}
-                  image={buttonProps.selectedItem.value.profile_image_url}
+                  alt={title}
+                  url={buttonProps.selectedItem.value.profile_image_url}
                 />
                 <ButtonText>{title}</ButtonText>
               </Flex>

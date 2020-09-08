@@ -1,7 +1,9 @@
 import React from 'react'
-import { Box, Tooltip, Avatar, Theme, useTheme } from '@material-ui/core'
+import { Box, Tooltip, Theme, useTheme } from '@material-ui/core'
 
 import ContactName from 'components/ContactInfo/ContactName'
+import { Avatar } from 'components/Avatar'
+import { getContactNameInitials } from 'models/contacts/helpers'
 
 import { ContactsListType } from '../../../components/Pages/Dashboard/MarketingInsights/Insight/types'
 
@@ -20,16 +22,8 @@ function ContactInfo({ data }: ContactInfoPropsType) {
 
   return (
     <Box display="flex" alignItems="center" width="100%">
-      <Avatar
-        alt={title}
-        src={data.profile_image_url || ''}
-        sizes="32"
-        style={{
-          backgroundColor: theme.palette.grey[200],
-          color: theme.palette.text.primary
-        }}
-      >
-        {title.substring(0, 1).toUpperCase()}
+      <Avatar alt={title} url={data.profile_image_url || ''}>
+        {getContactNameInitials(data)}
       </Avatar>
       <div
         style={{

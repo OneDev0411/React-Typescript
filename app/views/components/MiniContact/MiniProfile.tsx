@@ -1,18 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {
-  Button,
-  Avatar,
-  makeStyles,
-  createStyles,
-  Theme
-} from '@material-ui/core'
+import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
 import { Link } from 'react-router'
 
 import { getNameInitials } from 'utils/helpers.js'
 
 import CopyButton from 'components/CopyButton'
 import { EmailComposeFormProps } from 'components/EmailCompose'
+import { Avatar } from 'components/Avatar'
 import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
 
@@ -75,7 +70,7 @@ function MiniProfile(props: MiniProfilePropsType) {
       <div className="head">
         <Avatar
           alt={getName(data)}
-          src={data.profile_image_url}
+          contact={data as IContact}
           className={classes.avatar}
         >
           {getNameInitials(getName(data))}
