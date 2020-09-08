@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import pluralize from 'pluralize'
 import cn from 'classnames'
@@ -43,20 +43,28 @@ const useCustomGridStyles = makeStyles(theme =>
 
 function List(props) {
   const customGridClasses = useCustomGridStyles()
-  const [queue, setQueue] = useState(0)
+  const gridClasses = useGridStyles()
+
   const isScheduled = props.route && props.route.path === 'scheduled'
   const filterType = isScheduled
     ? InsightFiltersType.SCHEDULED
     : InsightFiltersType.SENT
+
+  const [queue, setQueue] = useState(0)
   const { isLoading, hasError, list, stats } = useListData(
     props.user,
     queue,
     filterType
   )
-  const gridClasses = useGridStyles()
+  const [isLoadingSpinnerVisible, setIsLoadingSpinnerVisible] = useState(true)
+  const refreshListData = withoutLoadingSpinner => {
+    setIsLoadingSpinnerVisible(!withoutLoadingSpinner)
+    setQueue(queue => queue + 1)
+  }
 
-  React.useEffect(() => {
-    window.socket.on('email_campaign:send', () => setQueue(queue => queue + 1))
+  useEffect(() => {
+    window.socket.on('email_campaign:send', () => refreshListData())
+    // TODO: Shouldn't we simply remove the event listener on component unmounting?
   }, [])
 
   const columns = useMemo(
@@ -77,10 +85,7 @@ function List(props) {
         verticalAlign: 'center',
         accessor: row => row.due_at,
         render: ({ row }) => (
-          <TitleColumn
-            data={row}
-            reloadList={() => setQueue(queue => queue + 1)}
-          />
+          <TitleColumn data={row} reloadList={() => refreshListData()} />
         )
       },
       {
@@ -180,10 +185,7 @@ function List(props) {
         width: '2rem',
         render: ({ row }) =>
           !row.executed_at && (
-            <Actions
-              data={row}
-              reloadList={() => setQueue(queue => queue + 1)}
-            />
+            <Actions data={row} reloadList={() => refreshListData(true)} />
           )
       }
     ],
@@ -191,7 +193,7 @@ function List(props) {
   )
 
   const renderContent = ({ sortBy, onChangeSort }) => {
-    if (isLoading) {
+    if (isLoading && isLoadingSpinnerVisible) {
       return <LoadingComponent />
     }
 
@@ -227,7 +229,7 @@ function List(props) {
     <Layout
       sentCount={stats.sent}
       scheduledCount={stats.scheduled}
-      onCreateEmail={() => setQueue(queue => queue + 1)}
+      onCreateEmail={() => refreshListData()}
       renderContent={props => (
         <InsightContainer>{renderContent(props)}</InsightContainer>
       )}
