@@ -54,7 +54,7 @@ const Listing = ({
             <li>{property.bedroom_count} Beds</li>
             <li>{property.bathroom_count} Baths</li>
             <li>{util.metersToFeet(property.square_meters)} Sqft</li>
-            <li>{property.lot_square_meters.toFixed(0)} Lot</li>
+            <li>{property.lot_size_area} Lot</li>
           </ul>
         </div>
       </div>
