@@ -13,7 +13,7 @@ import { EditEmailDrawer } from 'components/EmailCompose'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import EmailNotificationSetting from 'components/EmailNotificationSetting'
 
-import useLabeledSwitchInputHandlers from 'hooks/use-labeled-switch-input-handlers'
+import useLabeledSwitchHandlers from 'hooks/use-labeled-switch-handlers'
 
 interface Props {
   data: any
@@ -28,7 +28,7 @@ function Actions({ data, isSent, reloadList }: Props) {
 
   const dispatch = useDispatch()
 
-  const emailNotificationSettingHandlers = useLabeledSwitchInputHandlers(
+  const emailNotificationSettingHandlers = useLabeledSwitchHandlers(
     data?.notifications_enabled,
     async checked => {
       try {

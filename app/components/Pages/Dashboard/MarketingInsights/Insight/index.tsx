@@ -25,7 +25,7 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Avatar } from 'components/Avatar'
 import EmailNotificationSetting from 'components/EmailNotificationSetting'
 
-import useLabeledSwitchInputHandlers from 'hooks/use-labeled-switch-input-handlers'
+import useLabeledSwitchHandlers from 'hooks/use-labeled-switch-handlers'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
@@ -130,7 +130,7 @@ function Insight({ params: { id } }: Props) {
 
   const dispatch = useDispatch()
 
-  const emailNotificationSettingHandlers = useLabeledSwitchInputHandlers(
+  const emailNotificationSettingHandlers = useLabeledSwitchHandlers(
     item?.notifications_enabled,
     async checked => {
       if (!item) {

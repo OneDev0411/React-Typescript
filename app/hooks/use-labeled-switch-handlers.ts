@@ -1,11 +1,13 @@
 import { useState } from 'react'
 
-import type { LabeledSwitchInputProps } from 'components/LabeledSwitchInput/LabeledSwitchInput'
+import type { LabeledSwitchProps } from 'components/LabeledSwitch'
 
-export default function useLabeledSwitchInputHandlers(
+type LabeledSwitchHandlers = Pick<LabeledSwitchProps, 'checked' | 'onChange'>
+
+export default function useLabeledSwitchHandlers(
   checked: boolean | undefined,
   onChange: (checked: boolean) => Promise<void>
-): Pick<LabeledSwitchInputProps, 'checked' | 'onChange'> {
+): LabeledSwitchHandlers {
   const [isChanging, setIsChanging] = useState(false)
 
   return {
@@ -20,7 +22,7 @@ export default function useLabeledSwitchInputHandlers(
         await onChange(newChecked)
         setIsChanging(false)
       } catch (error) {
-        // It's supposed to be handled within onChange, not here.
+        // It's usually supposed to be handled within onChange, not here.
         console.error(error)
         setIsChanging(false)
       }

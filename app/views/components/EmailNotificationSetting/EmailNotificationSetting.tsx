@@ -1,15 +1,9 @@
 import React from 'react'
 
-import LabeledSwitchInput, {
-  LabeledSwitchInputProps
-} from 'components/LabeledSwitchInput/LabeledSwitchInput'
+import LabeledSwitch, { LabeledSwitchProps } from 'components/LabeledSwitch'
 
-interface Props extends Omit<LabeledSwitchInputProps, 'children'> {}
+interface Props extends Omit<LabeledSwitchProps, 'children'> {}
 
 export default function EmailNotificationSetting(props: Props) {
-  return (
-    <LabeledSwitchInput {...props}>
-      Notify when opened or clicked
-    </LabeledSwitchInput>
-  )
+  return <LabeledSwitch {...props}>Notify when opened or clicked</LabeledSwitch>
 }

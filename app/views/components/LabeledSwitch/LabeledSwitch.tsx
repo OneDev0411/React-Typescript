@@ -21,7 +21,7 @@ type TypographySettledProps = 'variant'
 type SwitchExposedProps = 'checked' | 'onChange'
 type SwitchSettledProps = 'size'
 
-export interface LabeledSwitchInputProps
+export interface LabeledSwitchProps
   extends Pick<TypographyProps, TypographyExposedProps>,
     Pick<SwitchProps, SwitchExposedProps> {
   TypographyProps?: Partial<
@@ -32,14 +32,14 @@ export interface LabeledSwitchInputProps
   >
 }
 
-export default function LabeledSwitchInput({
+export default function LabeledSwitch({
   variant,
   children,
   TypographyProps,
   checked,
   onChange,
   SwitchProps
-}: LabeledSwitchInputProps) {
+}: LabeledSwitchProps) {
   const classes = useStyles()
 
   return (
