@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 
-// import { getTemplateImage } from 'utils/marketing-center/helpers'
+import { getTemplateImage } from 'utils/marketing-center/helpers'
 import { getFileType } from 'utils/file-utils/get-file-type'
 import { getActiveBrand } from 'utils/user-teams'
 import { loadTemplateHtml } from 'models/instant-marketing'
@@ -12,6 +12,9 @@ import { PdfThumbnail } from 'components/PdfThumbnail'
 import TemplateThumbnail from 'components/TemplateThumbnail'
 
 const useStyles = makeStyles(() => ({
+  image: {
+    width: '100%'
+  },
   templateThumbnailWrapper: {
     margin: '0 auto'
   }
@@ -21,6 +24,7 @@ interface Props {
   user: IUser
   template: IMarketingTemplateInstance | IBrandMarketingTemplate
   listing?: IListing
+  useStaticImage?: boolean
 
   onClick?: React.ComponentProps<typeof TemplateThumbnail>['onClick']
 }
@@ -29,6 +33,7 @@ export function Thumbnail({
   user,
   template,
   listing: receivedListing,
+  useStaticImage,
   onClick
 }: Props) {
   const classes = useStyles()
@@ -82,6 +87,20 @@ export function Thumbnail({
     return null
   }
 
+  if (useStaticImage) {
+    const { thumbnail } = getTemplateImage(template)
+
+    return template.template.video ? (
+      <video src={thumbnail} muted autoPlay />
+    ) : (
+      <img
+        alt={template.template.name}
+        src={thumbnail}
+        className={classes.image}
+      />
+    )
+  }
+
   return (
     <div className={classes.templateThumbnailWrapper}>
       <TemplateThumbnail
@@ -93,14 +112,4 @@ export function Thumbnail({
       />
     </div>
   )
-
-  // const { thumbnail } = getTemplateImage(template)
-
-  // if (template.template.video) {
-  //   return <video src={thumbnail} muted autoPlay />
-  // }
-
-  // return (
-  //   <img alt={template.template.name} src={thumbnail} className={className} />
-  // )
 }
