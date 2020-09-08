@@ -1,4 +1,4 @@
-import React, { useState, ComponentProps } from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
   Dialog,
@@ -24,6 +24,8 @@ import { EmailThread } from 'components/EmailThread'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Avatar } from 'components/Avatar'
 import EmailNotificationSetting from 'components/EmailNotificationSetting'
+
+import useLabeledSwitchInputHandlers from 'hooks/use-labeled-switch-input-handlers'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
@@ -125,12 +127,41 @@ function Insight({ params: { id } }: Props) {
   const [emailPreview, setEmailPreview] = useState<IEmail<
     IEmailOptionalFields
   > | null>(null)
-  const [
-    isEmailNotificationUpdating,
-    setIsEmailNotificationUpdating
-  ] = useState(false)
 
   const dispatch = useDispatch()
+
+  const emailNotificationSettingHandlers = useLabeledSwitchInputHandlers(
+    item?.notifications_enabled,
+    async checked => {
+      if (!item) {
+        return
+      }
+
+      try {
+        await setEmailNotificationStatus(item.id, checked)
+      } catch (error) {
+        console.error(error)
+        dispatch(
+          addNotification({
+            status: 'error',
+            message: 'Unable to change email notification setting.'
+          })
+        )
+      } finally {
+        try {
+          await reload()
+        } catch (error) {
+          console.error(error)
+          dispatch(
+            addNotification({
+              status: 'error',
+              message: 'Unable to refresh the page.'
+            })
+          )
+        }
+      }
+    }
+  )
 
   const classes = useStyles()
 
@@ -220,41 +251,6 @@ function Insight({ params: { id } }: Props) {
 
   const closeEmailView = () => {
     setOpenViewEmail(false)
-  }
-
-  const handleEmailNotificationSettingChange: ComponentProps<
-    typeof EmailNotificationSetting
-  >['onChange'] = async (event, checked) => {
-    if (isEmailNotificationUpdating) {
-      return
-    }
-
-    try {
-      setIsEmailNotificationUpdating(true)
-      await setEmailNotificationStatus(item.id, checked)
-    } catch (error) {
-      console.error(error)
-      dispatch(
-        addNotification({
-          status: 'error',
-          message: 'Unable to change email notification setting.'
-        })
-      )
-    } finally {
-      try {
-        await reload()
-      } catch (error) {
-        console.error(error)
-        dispatch(
-          addNotification({
-            status: 'error',
-            message: 'Unable to refresh the page.'
-          })
-        )
-      }
-
-      setIsEmailNotificationUpdating(false)
-    }
   }
 
   return (
@@ -350,10 +346,7 @@ function Insight({ params: { id } }: Props) {
                 )
             )}
             <div className={classes.settingsContainer}>
-              <EmailNotificationSetting
-                checked={item!.notifications_enabled}
-                onChange={handleEmailNotificationSettingChange}
-              />
+              <EmailNotificationSetting {...emailNotificationSettingHandlers} />
             </div>
           </div>
           <section className="content">
