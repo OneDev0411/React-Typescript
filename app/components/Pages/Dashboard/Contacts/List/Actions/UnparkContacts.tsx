@@ -7,10 +7,15 @@ import { unparkContact } from 'models/contacts/unparak-contact'
 
 interface Props {
   contacts: UUID[]
+  disabled: boolean
   callback(): void
 }
 
-export const UnparkContacts = ({ contacts, callback }: Props) => {
+export const UnparkContacts = ({
+  contacts,
+  callback,
+  disabled = false
+}: Props) => {
   const [isUnParking, setIsUnParking] = useState(false)
   const dispatch = useDispatch()
 
@@ -42,7 +47,7 @@ export const UnparkContacts = ({ contacts, callback }: Props) => {
       variant="outlined"
       size="small"
       onClick={handleAddPending}
-      disabled={isUnParking}
+      disabled={disabled || isUnParking}
     >
       {isUnParking ? 'Adding' : 'Add Contacts'}
     </Button>

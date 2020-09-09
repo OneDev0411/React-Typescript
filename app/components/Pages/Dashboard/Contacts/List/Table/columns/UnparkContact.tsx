@@ -10,11 +10,11 @@ interface Props {
   callback(): void
 }
 
-export const AddPending = ({ contactId, callback }: Props) => {
+export const UnparkContact = ({ contactId, callback }: Props) => {
   const [isUnParking, setIsUnParking] = useState(false)
   const dispatch = useDispatch()
 
-  const handleAddPending = async e => {
+  const handleUnparking = async e => {
     setIsUnParking(true)
 
     try {
@@ -37,7 +37,7 @@ export const AddPending = ({ contactId, callback }: Props) => {
     <Button
       variant="outlined"
       size="small"
-      onClick={handleAddPending}
+      onClick={handleUnparking}
       disabled={isUnParking}
     >
       {isUnParking ? 'Adding' : 'Add to my contacts'}

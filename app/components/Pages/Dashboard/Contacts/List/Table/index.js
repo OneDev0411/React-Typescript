@@ -26,7 +26,7 @@ import CtaAction from './columns/Cta'
 import TagsString from './columns/Tags'
 import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
-import { AddPending } from './columns/AddPending'
+import { UnparkContact } from './columns/UnparkContact'
 
 const useCustomGridStyles = makeStyles(theme => ({
   row: {
@@ -56,6 +56,7 @@ const ContactsList = props => {
   const customGridClasses = useCustomGridStyles()
   const [selectedTagContact, setSelectedTagContact] = useState([])
   const theme = useTheme()
+  const isParkTabActive = props.activeSegment.id === PARKED_CONTACTS_LIST_ID
 
   const onSelectTagContact = selectedTagContact =>
     setSelectedTagContact([selectedTagContact])
@@ -106,12 +107,15 @@ const ContactsList = props => {
       )
     },
     {
-      id: 'add-pending',
-      width: props.activeSegment.id === PARKED_CONTACTS_LIST_ID ? '12%' : '0',
+      id: 'unpark-contact',
+      width: isParkTabActive ? '12%' : '0',
       class: 'opaque',
       render: ({ row: contact }) =>
-        props.activeSegment.id === PARKED_CONTACTS_LIST_ID ? (
-          <AddPending contactId={contact.id} callback={props.reloadContacts} />
+        isParkTabActive ? (
+          <UnparkContact
+            contactId={contact.id}
+            callback={props.reloadContacts}
+          />
         ) : null
     },
     {
@@ -152,9 +156,14 @@ const ContactsList = props => {
   }
   const getColumnProps = ({ column }) => {
     if (
-      ['name', 'cta', 'flows', 'tag', 'delete-contact', 'add-pending'].includes(
-        column.id
-      )
+      [
+        'name',
+        'cta',
+        'flows',
+        'tag',
+        'delete-contact',
+        'unpark-contact'
+      ].includes(column.id)
     ) {
       return {
         onClick: e => e.stopPropagation()

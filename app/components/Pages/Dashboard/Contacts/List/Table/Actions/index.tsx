@@ -114,6 +114,7 @@ export function TableActions({
           <UnparkContacts
             contacts={selectedRowIds}
             callback={deselectAndReload}
+            disabled={isEntireModeDisable}
           />
         </ActionWrapper>
       )}
