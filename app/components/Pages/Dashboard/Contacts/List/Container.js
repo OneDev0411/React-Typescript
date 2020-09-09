@@ -709,7 +709,7 @@ class ContactsList extends React.Component {
         <PageLayout.HeaderWithSearch
           title={title}
           onSearch={this.handleSearch}
-          onCreateContactAndAddNewContact={this.onCreateContact}
+          onCreateAndAddNewContact={this.onCreateContact}
           SearchInputProps={{
             placeholder: 'Search Contacts'
           }}
