@@ -709,7 +709,7 @@ class ContactsList extends React.Component {
         <PageLayout.HeaderWithSearch
           title={title}
           onSearch={this.handleSearch}
-          onCreateContact={this.onCreateContact}
+          onCreateAndAddNewContact={this.onCreateContact}
           SearchInputProps={{
             placeholder: 'Search Contacts'
           }}
@@ -762,7 +762,7 @@ class ContactsList extends React.Component {
               }}
             />
           )}
-          {isZeroState && <ZeroState onCreateContact={this.onCreateContact} />}
+          {isZeroState && <ZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
               {this.renderTabs()}

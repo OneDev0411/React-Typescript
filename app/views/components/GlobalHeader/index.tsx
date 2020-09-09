@@ -21,6 +21,7 @@ export interface GlobalHeaderProps {
   children?: React.ReactNode
   onCreateEvent?: (event: IEvent) => void
   onCreateContact?: (contact: IContact) => void
+  onCreateAndAddNewContact?: (contact: IContact) => void
   onCreateEmail?: (email: IEmailCampaign) => void
   onCreateTour?: (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
@@ -69,7 +70,8 @@ export default function GlobalHeader({
   noGlobalActionsButton,
   children,
   onCreateEvent = noop,
-  onCreateContact = noop,
+  onCreateContact,
+  onCreateAndAddNewContact,
   onCreateEmail = noop,
   onCreateTour = noop,
   onCreateOpenHouse = noop,
@@ -111,6 +113,7 @@ export default function GlobalHeader({
             availableActions={availableActions}
             onCreateEvent={onCreateEvent}
             onCreateContact={onCreateContact}
+            onCreateAndAddNewContact={onCreateAndAddNewContact}
             onCreateEmail={onCreateEmail}
             onCreateTour={onCreateTour}
             onCreateOpenHouse={onCreateOpenHouse}
