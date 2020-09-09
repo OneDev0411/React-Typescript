@@ -193,6 +193,7 @@ const ContactsList = props => {
             totalRowsCount={props.listInfo.total}
             reloadContacts={props.reloadContacts}
             onRequestDelete={props.onRequestDelete}
+            activeSegmentId={props.activeSegment.id}
             handleChangeContactsAttributes={
               props.handleChangeContactsAttributes
             }

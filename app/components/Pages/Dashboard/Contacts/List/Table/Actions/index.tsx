@@ -25,7 +25,9 @@ import ExportContacts from '../../Actions/ExportContactsButton'
 import TagContacts from '../../Actions/TagContacts'
 import CreateEvent from '../../Actions/CreateEvent'
 import AddToFlowAction from '../../Actions/AddToFlow'
+import { UnparkContacts } from '../../Actions/UnparkContacts'
 import { ActionWrapper } from '../components/ActionWrapper'
+import { PARKED_CONTACTS_LIST_ID } from '../../constants'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,6 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Props {
+  activeSegmentId: string
   totalRowsCount: number
   reloadContacts: () => void
   onRequestDelete: () => void
@@ -58,6 +61,7 @@ interface Props {
 export function TableActions({
   filters,
   isFetching,
+  activeSegmentId,
   totalRowsCount,
   reloadContacts,
   onRequestDelete,
@@ -100,6 +104,19 @@ export function TableActions({
 
   return (
     <div className={classes.container}>
+      {activeSegmentId === PARKED_CONTACTS_LIST_ID && (
+        <ActionWrapper
+          atLeast="one"
+          bulkMode={isEntireRowsSelected}
+          action="Add Contacts"
+          disabled={isEntireModeDisable}
+        >
+          <UnparkContacts
+            contacts={selectedRowIds}
+            callback={deselectAndReload}
+          />
+        </ActionWrapper>
+      )}
       <ActionWrapper
         atLeast="one"
         bulkMode={isEntireRowsSelected}

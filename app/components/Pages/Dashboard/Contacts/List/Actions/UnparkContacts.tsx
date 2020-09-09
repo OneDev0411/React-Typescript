@@ -6,24 +6,28 @@ import { Button } from '@material-ui/core'
 import { unparkContact } from 'models/contacts/unparak-contact'
 
 interface Props {
-  contactId: UUID
+  contacts: UUID[]
   callback(): void
 }
 
-export const AddPending = ({ contactId, callback }: Props) => {
+export const UnparkContacts = ({ contacts, callback }: Props) => {
   const [isUnParking, setIsUnParking] = useState(false)
   const dispatch = useDispatch()
 
   const handleAddPending = async e => {
+    if (contacts.length === 0) {
+      return
+    }
+
     setIsUnParking(true)
 
     try {
-      await unparkContact([contactId])
+      await unparkContact(contacts)
       callback()
       dispatch(
         notify({
           status: 'success',
-          message: 'The parked contacts added to your contacts successfuly.'
+          message: `${contacts.length} parked contacts added to your contacts successfuly.`
         })
       )
     } catch (e) {
@@ -40,7 +44,7 @@ export const AddPending = ({ contactId, callback }: Props) => {
       onClick={handleAddPending}
       disabled={isUnParking}
     >
-      {isUnParking ? 'Adding' : 'Add to my contacts'}
+      {isUnParking ? 'Adding' : 'Add Contacts'}
     </Button>
   )
 }
