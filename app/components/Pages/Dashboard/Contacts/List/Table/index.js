@@ -100,7 +100,7 @@ const ContactsList = props => {
     },
     {
       id: 'tag',
-      width: props.activeSegment.id !== PARKED_CONTACTS_LIST_ID ? '34%' : '22%',
+      width: !isParkTabActive ? '34%' : '22%',
       class: 'opaque tags',
       render: ({ row: contact }) => (
         <TagsString contact={contact} onSelectTagContact={onSelectTagContact} />
