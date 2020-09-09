@@ -86,7 +86,7 @@ class NewContactDrawer extends React.Component {
       this.setState({ isSubmitting: false })
 
       if (reInitializeAfterSubmit) {
-        if (typeof saveAndAddNewCallback === 'function') {
+        if (saveAndAddNewCallback) {
           saveAndAddNewCallback(contact)
         }
 
@@ -101,13 +101,11 @@ class NewContactDrawer extends React.Component {
       } else {
         this.props.onClose()
 
-        if (typeof saveCallback === 'function') {
+        if (saveCallback) {
           saveCallback(contact)
-
-          return
+        } else {
+          browserHistory.push(`/dashboard/contacts/${contact.id}`)
         }
-
-        browserHistory.push(`/dashboard/contacts/${contact.id}`)
       }
     } catch (error) {
       this.setState({ isSubmitting: false, submitError: error.message })
