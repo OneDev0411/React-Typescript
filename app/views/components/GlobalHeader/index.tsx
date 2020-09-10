@@ -1,5 +1,11 @@
 import React from 'react'
-import { Typography, makeStyles, Theme, useMediaQuery } from '@material-ui/core'
+import {
+  Typography,
+  makeStyles,
+  Theme,
+  useMediaQuery,
+  createStyles
+} from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -12,27 +18,10 @@ import {
 
 import GlobalActionsButton from 'components/GlobalActionsButton'
 import { ItemType } from 'components/GlobalActionsButton/types'
+import { ClassesProps } from 'utils/ts-utils'
 
-export interface GlobalHeaderProps {
-  title?: string
-  noPadding?: boolean
-  isHiddenOnMobile?: boolean
-  noGlobalActionsButton?: boolean
-  children?: React.ReactNode
-  onCreateEvent?: (event: IEvent) => void
-  onCreateContact?: (contact: IContact) => void
-  onCreateAndAddNewContact?: (contact: IContact) => void
-  onCreateEmail?: (email: IEmailCampaign) => void
-  onCreateTour?: (
-    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-  ) => void
-  onCreateOpenHouse?: (
-    oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-  ) => void
-}
-
-const useStyles = makeStyles(
-  (theme: Theme) => ({
+const styles = (theme: Theme) =>
+  createStyles({
     wrapper: {
       display: 'flex',
       flexDirection: 'column',
@@ -53,20 +42,43 @@ const useStyles = makeStyles(
       }
     },
     content: {
-      flexGrow: 1,
-      display: 'flex',
-      justifyContent: 'flex-end'
+      [theme.breakpoints.up('md')]: {
+        flexGrow: 1,
+        display: 'flex',
+        justifyContent: 'flex-end'
+      }
     },
     globalAction: {
-      marginLeft: theme.spacing(1)
+      marginTop: theme.spacing(2),
+      [theme.breakpoints.up('md')]: {
+        marginTop: 0,
+        marginLeft: theme.spacing(1)
+      }
     }
-  }),
-  { name: 'GlobalHeader' }
-)
+  })
+
+const useStyles = makeStyles(styles, { name: 'GlobalHeader' })
+
+export interface GlobalHeaderProps {
+  title?: string
+  noPadding?: boolean
+  isHiddenOnMobile?: boolean
+  noGlobalActionsButton?: boolean
+  children?: React.ReactNode
+  onCreateEvent?: (event: IEvent) => void
+  onCreateContact?: (contact: IContact) => void
+  onCreateAndAddNewContact?: (contact: IContact) => void
+  onCreateEmail?: (email: IEmailCampaign) => void
+  onCreateTour?: (
+    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => void
+  onCreateOpenHouse?: (
+    oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => void
+}
 
 export default function GlobalHeader({
   title,
-  noPadding,
   noGlobalActionsButton,
   children,
   onCreateEvent = noop,
@@ -75,9 +87,10 @@ export default function GlobalHeader({
   onCreateEmail = noop,
   onCreateTour = noop,
   onCreateOpenHouse = noop,
-  isHiddenOnMobile = true
-}: GlobalHeaderProps) {
-  const classes = useStyles({ noPadding })
+  isHiddenOnMobile = true,
+  ...restProps
+}: GlobalHeaderProps & ClassesProps<typeof styles>) {
+  const classes = useStyles(restProps)
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
   const availableActions: ItemType[] = []
 
