@@ -96,7 +96,11 @@ class ProfileCatalog extends Component {
     return (
       <React.Fragment>
         <Container>
-          <Avatar user={this.props.user} data-test="profile-avatar-image" />
+          <Avatar
+            user={this.props.user}
+            size="xlarge"
+            data-test="profile-avatar-image"
+          />
 
           <ProfileImageActions>
             {this.props.user.profile_image_url && (
