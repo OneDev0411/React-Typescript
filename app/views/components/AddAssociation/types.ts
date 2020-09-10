@@ -1,5 +1,6 @@
 export interface AddAssociationProps {
   title?: string
   disabled: boolean
-  handleAdd: (value: object, callback: () => void) => void
+  multipleSelection?: boolean
+  handleAdd: (value: object, callback?: () => void) => void
 }
