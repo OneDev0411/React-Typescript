@@ -123,10 +123,6 @@ export default function InboxEmailThreadList({
   )
   const handleDeleteEmailThreads = useCallback(
     (deletedEmailThreadIds: UUID[]) => {
-      if (searchQuery) {
-        return
-      }
-
       setEmailThreads(emailThreads =>
         emailThreads.filter(({ id }) => !deletedEmailThreadIds.includes(id))
       )
