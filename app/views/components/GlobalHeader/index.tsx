@@ -53,12 +53,18 @@ const useStyles = makeStyles(
       }
     },
     content: {
-      flexGrow: 1,
-      display: 'flex',
-      justifyContent: 'flex-end'
+      [theme.breakpoints.up('md')]: {
+        flexGrow: 1,
+        display: 'flex',
+        justifyContent: 'flex-end'
+      }
     },
     globalAction: {
-      marginLeft: theme.spacing(1)
+      marginTop: theme.spacing(2),
+      [theme.breakpoints.up('md')]: {
+        marginTop: 0,
+        marginLeft: theme.spacing(1)
+      }
     }
   }),
   { name: 'GlobalHeader' }
