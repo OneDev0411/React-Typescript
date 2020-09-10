@@ -73,7 +73,7 @@ export class AssetImage extends React.Component {
     const { templateId } = await this.props.getTemplateId()
     const response = await uploadAsset(file, templateId)
 
-    this.onImageSelect({ url: response.body.data.file.url })
+    this.onImageSelect({ url: response.file.url })
     this.setState({
       isCropperOpen: false
     })

@@ -55,8 +55,8 @@ export const load = async () => {
                 )
 
                 const uploadedAssets = uploadResponses.map(response => ({
-                  previewUrl: response.body.data.file.preview_url,
-                  url: response.body.data.file.url
+                  previewUrl: response.file.preview_url,
+                  url: response.file.url
                 }))
 
                 const listing =
