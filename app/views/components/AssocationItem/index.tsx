@@ -31,6 +31,7 @@ function AssociationItemBase({
 
   const record = association[association.association_type]
   const { avatar } = record
+
   const onRemove = () => handleRemove(association)
 
   return (
@@ -41,7 +42,7 @@ function AssociationItemBase({
         </Link>
       }
       onDelete={isRemovable ? onRemove : undefined}
-      avatar={<Avatar url={avatar.image || avatar.placeHolderImage} />}
+      avatar={<Avatar {...avatar} />}
       className={classes.root}
     />
   )
