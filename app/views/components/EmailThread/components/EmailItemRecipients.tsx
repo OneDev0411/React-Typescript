@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   detailLabel: {
     width: theme.spacing(9),
+    flexShrink: 0,
     textAlign: 'right',
     marginRight: theme.spacing(3),
     color: theme.palette.grey[500]
