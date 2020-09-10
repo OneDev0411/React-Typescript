@@ -54,8 +54,6 @@ function AvatarUploader({ contact, attributeDefs }: Props) {
           let attribute
           const avatar = getAccountAvatar(contact)
 
-          console.log('avatar', avatar)
-
           if (avatar) {
             attribute = [
               {

@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import { ImageUploader } from 'components/ImageUploader'
@@ -85,11 +85,11 @@ export class AvatarUploader extends Component {
         </Trigger>
         {isUploading && this.renderUploading()}
         {!isUploading && (
-          <Fragment>
+          <>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button id="avatarImage" type="button" onClick={this.openModal} />
             {this.state.isOpen && this.renderUploader()}
-          </Fragment>
+          </>
         )}
       </Container>
     )
