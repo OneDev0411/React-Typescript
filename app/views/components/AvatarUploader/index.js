@@ -1,19 +1,12 @@
-import React, { Fragment, Component } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import { ImageUploader } from 'components/ImageUploader'
+import { Avatar } from 'components/Avatar'
 
 import { getNameInitials } from '../../../utils/helpers'
 
-import {
-  Container,
-  Status,
-  Image,
-  Initials,
-  Loading,
-  Trigger,
-  TriggerText
-} from './styled'
+import { Container, Status, Loading, Trigger, TriggerText } from './styled'
 
 export class AvatarUploader extends Component {
   static propTypes = {
@@ -83,23 +76,20 @@ export class AvatarUploader extends Component {
 
     return (
       <Container size={avatar.size}>
-        {avatar.src ? (
-          <Image src={avatar.src} alt="avatar" />
-        ) : (
-          <Initials>
-            {avatar.initials || getNameInitials(avatar.display_name)}
-          </Initials>
-        )}
+        <Avatar url={avatar.src} size="large">
+          {avatar.initials || getNameInitials(avatar.display_name) || ''}
+        </Avatar>
         {this.props.showStatus && <Status isOnline={isOnline} />}
         <Trigger htmlFor="avatarImage" hasImage={avatar.src}>
           <TriggerText>{avatar.src ? 'Change' : 'Upload'}</TriggerText>
         </Trigger>
         {isUploading && this.renderUploading()}
         {!isUploading && (
-          <Fragment>
+          <>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button id="avatarImage" type="button" onClick={this.openModal} />
             {this.state.isOpen && this.renderUploader()}
-          </Fragment>
+          </>
         )}
       </Container>
     )

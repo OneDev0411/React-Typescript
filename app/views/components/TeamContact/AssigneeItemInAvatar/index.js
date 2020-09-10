@@ -21,10 +21,10 @@ const Icon = styled(SvgIcon)`
 `
 
 const Button = styled(IconButton)`
-  width: 2em;
-  height: 2em;
+  width: ${({ theme }) => theme.spacing(5)}px;
+  height: ${({ theme }) => theme.spacing(5)}px;
   position: relative;
-  margin-right: 0.5em;
+  margin-right: ${({ theme }) => theme.spacing(1)}px;
 
   &:hover {
     &:before {

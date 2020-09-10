@@ -3,16 +3,14 @@ import { connect } from 'react-redux'
 
 import uploadAttachments from 'models/contacts/upload-attachments'
 import { updateContact } from 'models/contacts/update-contact'
-import {
-  getContactAvatar,
-  getContactNameInitials
-} from 'models/contacts/helpers'
+import { getContactNameInitials } from 'models/contacts/helpers'
 
 import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 import { AvatarUploader as Uploader } from 'views/components/AvatarUploader'
+import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
 
 interface Props {
   attributeDefs: IAttributeDefsState
@@ -22,7 +20,7 @@ interface Props {
 function AvatarUploader({ contact, attributeDefs }: Props) {
   const [isUploading, setIsUploading] = useState(false)
   const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(
-    contact.profile_image_url
+    getAccountAvatar(contact)
   )
 
   const handleOnChange = useCallback(
@@ -54,12 +52,12 @@ function AvatarUploader({ contact, attributeDefs }: Props) {
           }
 
           let attribute
-          const avatar = getContactAvatar(contact, attribute_def.id)
+          const avatar = getAccountAvatar(contact)
 
           if (avatar) {
             attribute = [
               {
-                id: avatar.id,
+                id: contact.id,
                 text
               }
             ]
@@ -90,7 +88,7 @@ function AvatarUploader({ contact, attributeDefs }: Props) {
   return (
     <Uploader
       avatar={{
-        size: 56,
+        size: 48,
         src: avatar,
         initials: getContactNameInitials(contact)
       }}

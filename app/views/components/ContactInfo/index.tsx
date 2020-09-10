@@ -3,7 +3,7 @@ import { Box, Tooltip, Theme, useTheme } from '@material-ui/core'
 
 import ContactName from 'components/ContactInfo/ContactName'
 import { Avatar } from 'components/Avatar'
-import { getContactNameInitials } from 'models/contacts/helpers'
+import { getNameInitials } from 'utils/helpers'
 
 import { ContactsListType } from '../../../components/Pages/Dashboard/MarketingInsights/Insight/types'
 
@@ -23,7 +23,7 @@ function ContactInfo({ data }: ContactInfoPropsType) {
   return (
     <Box display="flex" alignItems="center" width="100%">
       <Avatar alt={title} url={data.profile_image_url || ''}>
-        {getContactNameInitials(data)}
+        {getNameInitials(data.display_name || data.to || '')}
       </Avatar>
       <div
         style={{
