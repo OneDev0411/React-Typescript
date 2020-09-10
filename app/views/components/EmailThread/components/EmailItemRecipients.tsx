@@ -143,8 +143,8 @@ export function EmailItemRecipients({ email }: Props) {
           vertical: 'top',
           horizontal: 'left'
         }}
-        onClose={(event: any) => {
-          typeof event.stopPropagation === 'function' && event.stopPropagation()
+        onClose={(event: MouseEvent | KeyboardEvent) => {
+          event.stopPropagation()
           setDetailsAreVisible(false)
         }}
         PaperProps={{
