@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
+import { mdiFileDocumentEdit } from '@mdi/js'
+
 import parseAppearanceString from 'deals/FormEdit/utils/appearance'
 import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 export default React.memo(props => {
   const [value, setValue] = useState(props.defaultValue)
@@ -30,13 +34,17 @@ export default React.memo(props => {
 
   const appearance = parseAppearanceString(props.annotation.defaultAppearance)
   const { rect } = props.annotation
+  const top = rect[1]
+  const left = rect[0]
+  const width = Math.floor(rect[2] - rect[0])
+  const height = Math.floor(rect[3] - rect[1])
 
   const style = {
     position: 'absolute',
-    left: `${rect[0]}px`,
-    top: `${rect[1]}px`,
-    width: `${Math.floor(rect[2] - rect[0])}px`,
-    height: `${Math.floor(rect[3] - rect[1])}px`,
+    left: `${left}px`,
+    top: `${top}px`,
+    width: `${width}px`,
+    height: `${height}px`,
     fontFamily: appearance.font,
     color: appearance.color,
     fontWeight: appearance.bold ? 'bold' : 'normal',
@@ -68,5 +76,21 @@ export default React.memo(props => {
     )
   }
 
-  return <input type="text" {...sharedProps} />
+  return (
+    <>
+      <input type="text" {...sharedProps} />
+
+      <SvgIcon
+        className="icon-default-value"
+        style={{
+          position: 'absolute',
+          left: `${left + width - 16}px`,
+          top: `${top + height / 10}px`,
+          cursor: 'pointer'
+        }}
+        size={10 / height}
+        path={mdiFileDocumentEdit}
+      />
+    </>
+  )
 })

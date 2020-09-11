@@ -1,4 +1,4 @@
-import React, { useMemo, Fragment } from 'react'
+import React, { useMemo } from 'react'
 
 import { FormattedInput, BasicInput } from './styled'
 
@@ -25,7 +25,7 @@ export function TextInput(props) {
   }, [props.context])
 
   return (
-    <Fragment>
+    <>
       {formattedInputOptions ? (
         <FormattedInput
           value={props.defaultValue}
@@ -38,6 +38,6 @@ export function TextInput(props) {
           onChange={props.onChange}
         />
       )}
-    </Fragment>
+    </>
   )
 }

@@ -296,13 +296,10 @@ function mapStateToProps({ deals, user }, props) {
 }
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    {
-      saveSubmission,
-      upsertContexts,
-      notify,
-      confirmation
-    }
-  )(EditDigitalForm)
+  connect(mapStateToProps, {
+    saveSubmission,
+    upsertContexts,
+    notify,
+    confirmation
+  })(EditDigitalForm)
 )
