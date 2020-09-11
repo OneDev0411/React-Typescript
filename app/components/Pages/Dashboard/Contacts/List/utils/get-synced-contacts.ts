@@ -9,7 +9,7 @@ export interface SyncedContacts {
 export const getSyncedContacts = (state: IAppState): SyncedContacts => {
   const accounts = Object.values(state.contacts.oAuthAccounts.list)
     .flat()
-    .filter(account => isDeletedOrRevoked(account))
+    .filter(account => !isDeletedOrRevoked(account))
 
   return {
     accounts: accounts.length
