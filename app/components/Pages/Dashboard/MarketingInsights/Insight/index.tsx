@@ -186,14 +186,15 @@ function Insight({ params: { id } }: Props) {
   const openViewEmail = async () => {
     try {
       if (!emailPreview) {
-        const email = await getEmailCampaign(id, {
-          emailCampaignAssociations: ['emails'],
+        const emailCampaign = await getEmailCampaign(id, {
+          emailCampaignAssociations: ['emails', 'attachments'],
           emailRecipientsAssociations: [],
           emailFields: ['html', 'text'],
           limit: 1
         })
+        const email = getEmailCampaignEmail(emailCampaign)
 
-        setEmailPreview(getEmailCampaignEmail(email))
+        setEmailPreview(email)
       }
     } catch (e) {
       console.error('something went wrong for loading preview')

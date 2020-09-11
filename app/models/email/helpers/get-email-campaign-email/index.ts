@@ -1,10 +1,17 @@
 export function getEmailCampaignEmail(
-  emailCampaign: IEmailCampaign<'emails', any, 'email', IEmailOptionalFields>
+  emailCampaign: IEmailCampaign<
+    'emails' | 'attachments',
+    any,
+    'email',
+    IEmailOptionalFields
+  >
 ): IEmail<IEmailOptionalFields> | null {
-  const emailCampaignEmail = emailCampaign.emails && emailCampaign.emails[0]
+  const emailCampaignEmail = emailCampaign.emails?.[0] ?? null
+  const email = emailCampaignEmail?.email as IEmail<IEmailOptionalFields> | null
 
-  return (
-    emailCampaignEmail &&
-    (emailCampaignEmail.email as IEmail<IEmailOptionalFields>)
-  )
+  if (email) {
+    email.attachments = emailCampaign.attachments
+  }
+
+  return email
 }
