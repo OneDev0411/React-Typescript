@@ -1,13 +1,15 @@
 import React from 'react'
 import cn from 'classnames'
-import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+
 import { H2 } from 'components/Typography/headings'
+
+import RequiredErrorSign from './required-error-sign'
 
 export default ({ buyerName, hasError, onChangeBuyerName }) => (
   <div className="form-section buyer-name">
     <H2 className={cn('hero', { hasError })}>
       What is the buyer name? <span className="required">*</span>
-      {hasError && <RequiredIcon />}
+      {hasError && <RequiredErrorSign />}
     </H2>
 
     <input

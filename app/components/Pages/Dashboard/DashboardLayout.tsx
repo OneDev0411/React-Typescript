@@ -1,8 +1,8 @@
 import React, { createContext, useState } from 'react'
 import { Box, Theme, makeStyles } from '@material-ui/core'
 
-import SideNav from './SideNav'
 import { appSidenavWidth } from './SideNav/variables'
+import SideNav from './SideNav'
 
 interface Props {
   children: React.ReactNode

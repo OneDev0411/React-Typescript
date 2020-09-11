@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
+import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
 import { getFileType } from 'utils/file-utils/get-file-type'
 
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
@@ -31,7 +31,7 @@ class SocialDrawer extends React.Component {
     try {
       const template = getTemplateObject(this.props.template)
 
-      const instance = await getTemplateInstances(template.id, {
+      const instance = await createTemplateInstance(template.id, {
         ...this.props.templateInstanceData,
         html: this.props.template.result
       })

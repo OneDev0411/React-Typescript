@@ -4,10 +4,11 @@ import { IconButton, makeStyles, Theme, Typography } from '@material-ui/core'
 
 import { useTheme } from '@material-ui/styles'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
+import { mdiClose } from '@mdi/js'
 
 import { nl2br } from 'utils/nl2br'
 
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { clearDealNotifications } from 'actions/deals'
 
@@ -83,7 +84,7 @@ export default function Notifications({ deal }: Props) {
         </Typography>
 
         <IconButton size="small" onClick={handleClose}>
-          <CloseIcon fillColor={theme.palette.common.black} size="small" />
+          <SvgIcon path={mdiClose} color={theme.palette.common.black} />
         </IconButton>
       </div>
 

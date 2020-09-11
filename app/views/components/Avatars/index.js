@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 
 import Tooltip from '../tooltip'
 import { getUserTitle } from '../../../models/user/helpers'
-import Avatar from '../Avatar'
+import { Avatar } from '../Avatar'
 
 const propTypes = {
   users: PropTypes.array,
@@ -44,26 +44,21 @@ const AvatarsContainer = styled.div`
 
 const Avatars = ({ users, style, tooltipPlacement }) => (
   <React.Fragment>
-    {Array.isArray(users) &&
-      users.length > 0 && (
-        <AvatarsContainer style={style} avatars={users}>
-          {users.map((user, index) => {
-            const title = getUserTitle(user)
+    {Array.isArray(users) && users.length > 0 && (
+      <AvatarsContainer style={style} avatars={users}>
+        {users.map((user, index) => {
+          const title = getUserTitle(user)
 
-            return (
-              <AvatarContainer key={user.id} index={index}>
-                <Tooltip placement={tooltipPlacement} caption={title}>
-                  <Avatar
-                    image={user.profile_image_url}
-                    size={32}
-                    title={title}
-                  />
-                </Tooltip>
-              </AvatarContainer>
-            )
-          })}
-        </AvatarsContainer>
-      )}
+          return (
+            <AvatarContainer key={user.id} index={index}>
+              <Tooltip placement={tooltipPlacement} caption={title}>
+                <Avatar user={user} title={title} />
+              </Tooltip>
+            </AvatarContainer>
+          )
+        })}
+      </AvatarsContainer>
+    )}
   </React.Fragment>
 )
 

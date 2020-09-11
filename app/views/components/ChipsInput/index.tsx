@@ -28,7 +28,7 @@ import { fromPromise } from 'rxjs/observable/fromPromise'
 import { ClassesProps } from 'utils/ts-utils'
 
 import { ChipsInputProps } from './types'
-import Avatar from '../Avatar'
+import { Avatar } from '../Avatar'
 import { InputWithStartAdornment } from './InputWithStartAdornment'
 import { useChipStyles } from '../../../styles/use-chips-styles'
 

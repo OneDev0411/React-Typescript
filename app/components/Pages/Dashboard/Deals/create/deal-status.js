@@ -7,7 +7,8 @@ import { H2 } from 'components/Typography/headings'
 
 import RadioButton from 'components/RadioButton'
 import { getStatusColorClass } from 'utils/listing'
-import RequiredIcon from 'components/SvgIcons/Required/IconRequired'
+
+import RequiredErrorSign from './required-error-sign'
 
 const LabelBox = styled.span`
   display: inline-block;
@@ -34,7 +35,7 @@ export default ({
       <H2 className={cn('hero', { hasError })}>
         What is the status of the deal?
         {isRequired && <span className="required">*</span>}
-        {hasError && <RequiredIcon />}
+        {hasError && <RequiredErrorSign />}
       </H2>
 
       {statuses.map((name, key) => (

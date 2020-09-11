@@ -4,8 +4,10 @@ import { withRouter } from 'react-router'
 import _ from 'underscore'
 import Alert from '@material-ui/lab/Alert'
 import { Box, IconButton } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
 
 import PageLayout from 'components/GlobalPageLayout'
+import { ViewAs } from 'components/ViewAs'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
@@ -35,9 +37,8 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
 import { updateTeamSetting } from 'actions/user/update-team-setting'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
-
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import ContactsTabs from './Tabs'
 import Table from './Table'
@@ -656,11 +657,12 @@ class ContactsList extends React.Component {
           severity="info"
           action={
             <IconButton
+              size="small"
               aria-label="close"
               color="inherit"
               onClick={this.closeDupicateAlert}
             >
-              <CloseIcon size="small" />
+              <SvgIcon path={mdiClose} />
             </IconButton>
           }
         >
@@ -707,7 +709,7 @@ class ContactsList extends React.Component {
         <PageLayout.HeaderWithSearch
           title={title}
           onSearch={this.handleSearch}
-          onCreateContact={this.onCreateContact}
+          onCreateAndAddNewContact={this.onCreateContact}
           SearchInputProps={{
             placeholder: 'Search Contacts'
           }}
@@ -729,6 +731,9 @@ class ContactsList extends React.Component {
               {showImportAction && <ImportContactsButton />}
             </Box>
           )}
+          <Box ml={1.5}>
+            <ViewAs />
+          </Box>
         </PageLayout.HeaderWithSearch>
         <PageLayout.Main>
           {this.state.syncStatus === 'pending' && (
@@ -757,7 +762,7 @@ class ContactsList extends React.Component {
               }}
             />
           )}
-          {isZeroState && <ZeroState onCreateContact={this.onCreateContact} />}
+          {isZeroState && <ZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
               {this.renderTabs()}

@@ -1,7 +1,14 @@
 import React from 'react'
 import cn from 'classnames'
-import { Box, Button, Typography, useTheme } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  Typography,
+  useTheme,
+  createStyles,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 
 import { OAuthProvider } from 'constants/contacts'
 
@@ -13,10 +20,6 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { outlookIcon, csvIcon } from 'components/SvgIcons/icons'
 
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
-
-interface Props {
-  onCreateContact: (contact: IContact) => void
-}
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -46,7 +49,7 @@ const useStyles = makeStyles(
   { name: 'zeroState' }
 )
 
-export function ZeroState({ onCreateContact }: Props) {
+export function ZeroState() {
   const theme = useTheme<Theme>()
   const classes = useStyles()
   const google = useConnectOAuthAccount(OAuthProvider.Google)
@@ -107,7 +110,6 @@ export function ZeroState({ onCreateContact }: Props) {
 
       <CreateContact
         showAddAnother={false}
-        submitCallback={onCreateContact}
         buttonProps={{ className: classes.button, size: 'large' }}
       />
     </Box>

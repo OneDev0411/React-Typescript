@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { ImageUploader } from 'components/ImageUploader'
+import uploadAsset from 'models/instant-marketing/upload-asset'
 
 import { Container, CropButton, Image } from './styled'
-import { uploadAsset } from '../helpers'
 
 export class AssetImage extends React.Component {
   constructor(props) {
@@ -24,6 +24,12 @@ export class AssetImage extends React.Component {
   onImageSelect = (options = {}) => {
     const url = options.url || this.props.model.get('image')
 
+    const setBgUrl = () => {
+      this.props.target.setAttributes({
+        ...this.props.target.getAttributes(),
+        'background-url': url
+      })
+    }
     const setSrc = () => this.props.target.set('src', url)
     const setBg = () => {
       const style = { ...this.props.target.get('style') }
@@ -41,6 +47,7 @@ export class AssetImage extends React.Component {
     const setters = {
       image: setSrc,
       'mj-image': setSrc,
+      'mj-hero': setBgUrl,
       'mj-carousel-image': setCarouselImage,
       cell: setBg,
       text: setBg,
@@ -66,7 +73,7 @@ export class AssetImage extends React.Component {
     const { templateId } = await this.props.getTemplateId()
     const response = await uploadAsset(file, templateId)
 
-    this.onImageSelect({ url: response.body.data.file.url })
+    this.onImageSelect({ url: response.file.url })
     this.setState({
       isCropperOpen: false
     })

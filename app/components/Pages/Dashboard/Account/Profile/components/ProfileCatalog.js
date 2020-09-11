@@ -14,8 +14,7 @@ import { confirmation } from 'actions/confirmation'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ImageUploader } from 'components/ImageUploader'
 import Tooltip from 'components/tooltip'
-
-import Avatar from './Avatar'
+import { Avatar } from 'components/Avatar'
 
 const Container = styled.div`
   @media (min-width: 50em) {
@@ -97,7 +96,11 @@ class ProfileCatalog extends Component {
     return (
       <React.Fragment>
         <Container>
-          <Avatar user={this.props.user} data-test="profile-avatar-image" />
+          <Avatar
+            user={this.props.user}
+            size="xlarge"
+            data-test="profile-avatar-image"
+          />
 
           <ProfileImageActions>
             {this.props.user.profile_image_url && (

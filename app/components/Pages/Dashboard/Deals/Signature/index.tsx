@@ -44,6 +44,20 @@ export default function Signature({
   }
 
   const handleSubmit = async (form: FormValues) => {
+    dispatch(
+      confirmation({
+        message: 'Notify back office admin?',
+        description:
+          'Once this document is signed, would you like us to submit it to your back office for review?',
+        confirmLabel: 'Notify Office',
+        cancelLabel: 'Do not notify office',
+        onCancel: () => send(form, false),
+        onConfirm: () => send(form, true)
+      })
+    )
+  }
+
+  const send = async (form: FormValues, notifyOffice: boolean) => {
     const attachments = Object.values(form.attachments).map(attachment => {
       return attachment.source === 'submission'
         ? {
@@ -72,7 +86,7 @@ export default function Signature({
         form.message,
         attachments,
         recipients,
-        form.auto_notify
+        notifyOffice
       )
 
       await dispatch(createEnvelope(envelope))

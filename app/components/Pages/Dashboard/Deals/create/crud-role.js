@@ -41,7 +41,7 @@ class CrudRole extends React.Component {
               onClick={this.showModal}
               className="add-item"
             >
-              <SvgIcon path={mdiPlus} className="addIcon" />
+              <SvgIcon path={mdiPlus} rightMargined />
               <span className="text">{ctaTitle}</span>
             </Button>
           </div>

@@ -101,13 +101,27 @@ export interface EditorContextApi {
   addDropzonePropsInterceptor: (interceptor) => () => void
 }
 
+// The main purpose of this is to maintain the order of the toolbar fragment groups:
+export const toolbarFragmentGroups = <const>[
+  'default',
+  'inlineFormatting',
+  'lists',
+  'textSize',
+  'link',
+  'image',
+  'emoji',
+  'templateExpressions',
+  'signature'
+]
+export type ToolbarFragmentGroup = typeof toolbarFragmentGroups[number]
+
 export interface ToolbarFragment {
-  group: string
+  group: ToolbarFragmentGroup
   node: ReactNode
 }
 
 interface ToolbarSegmentApi {
-  update: (node: ReactNode, group?: string) => void
+  update: (node: ReactNode, group?: ToolbarFragmentGroup) => void
   remove: () => void
 }
 

@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
-import cn from 'classnames'
 import { Box, Button, Typography } from '@material-ui/core'
 import { Theme, useTheme } from '@material-ui/core/styles'
+import { mdiPlusCircleOutline } from '@mdi/js'
 
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks.ts'
 
 import Drawer from 'components/OverlayDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 import Loading from 'components/LoadingContainer'
-import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
-
-import { useIconStyles } from '../../../../styles/use-icon-styles'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import TourItem from './TourItem'
 
@@ -25,7 +24,6 @@ interface Props {
 
 export default function CreateTourDrawer(props: Props) {
   const theme = useTheme<Theme>()
-  const iconClasses = useIconStyles()
   const [selectedTour, setSelectedTour] = useState<ICRMTask | null>(null)
   const [isOpenTourDrawer, setIsOpenTourDrawer] = useState<boolean>(false)
   const { list, isFetching, reloadList } = useFilterCRMTasks(
@@ -90,9 +88,11 @@ export default function CreateTourDrawer(props: Props) {
             size="large"
             onClick={() => setIsOpenTourDrawer(true)}
           >
-            <AddIcon
-              fillColor={theme.palette.primary.main}
-              className={cn(iconClasses.rightMargin, iconClasses.small)}
+            <SvgIcon
+              path={mdiPlusCircleOutline}
+              color={theme.palette.primary.main}
+              rightMargined
+              size={muiIconSizes.small}
             />
             Create New Toursheet
           </Button>

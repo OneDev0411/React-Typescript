@@ -2,12 +2,11 @@ import React from 'react'
 
 import { Button, Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
-import cn from 'classnames'
+import { mdiPlusCircleOutline } from '@mdi/js'
 
 import { BaseDropdown } from 'components/BaseDropdown'
-
-import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
-import { useIconStyles } from 'views/../styles/use-icon-styles'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import Roles from 'deals/components/Roles'
 
 interface Props {
@@ -21,7 +20,6 @@ export function AddNewRecipient({
   selectedRoles,
   onAddRecipient
 }: Props) {
-  const iconClasses = useIconStyles()
   const theme = useTheme<Theme>()
 
   const handleAddRecipient = (close: () => void, role: IDealRole) => {
@@ -34,12 +32,10 @@ export function AddNewRecipient({
     <BaseDropdown
       renderDropdownButton={props => (
         <Button color="secondary" {...props}>
-          <IconAdd
-            className={cn(
-              iconClasses.small,
-              iconClasses.rightMargin,
-              iconClasses.currentColor
-            )}
+          <SvgIcon
+            path={mdiPlusCircleOutline}
+            rightMargined
+            size={muiIconSizes.small}
           />
           Add New Recipient
         </Button>
@@ -65,12 +61,7 @@ export function AddNewRecipient({
             }}
             addRoleActionRenderer={props => (
               <Button {...props} color="secondary" variant="outlined">
-                <IconAdd
-                  className={cn(
-                    iconClasses.rightMargin,
-                    iconClasses.currentColor
-                  )}
-                />
+                <SvgIcon path={mdiPlusCircleOutline} rightMargined />
                 Add New Contact
               </Button>
             )}

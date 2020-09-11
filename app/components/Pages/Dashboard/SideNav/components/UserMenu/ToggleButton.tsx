@@ -1,6 +1,8 @@
 import React from 'react'
-import { Avatar, Box, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+
+import { Avatar } from '../../../../../../views/components/Avatar'
 
 import { DropdownToggleButton } from '../../../../../../views/components/DropdownToggleButton'
 
@@ -40,12 +42,11 @@ interface Props {
   onClick: (e) => void
   id: string
   isOpen: boolean
-  userAvatar: string
-  userInfo: string
-  userName: string
+  user: IUser
 }
 
 export default function ToggleButton(props: Props) {
+  const { email, phone_number, display_name } = props.user
   const classes = useStyles()
 
   return (
@@ -60,10 +61,10 @@ export default function ToggleButton(props: Props) {
       }}
     >
       <Box className={classes.wrapper}>
-        <Avatar alt={props.userName} src={props.userAvatar || ''} />
+        <Avatar user={props.user} />
         <div className={classes.userDetails}>
           <Typography noWrap variant="body2">
-            {props.userName}
+            {display_name}
           </Typography>
           <Typography
             noWrap
@@ -71,7 +72,7 @@ export default function ToggleButton(props: Props) {
             display="block"
             className={classes.userInfo}
           >
-            {props.userInfo}
+            {email || phone_number || ''}
           </Typography>
         </div>
       </Box>

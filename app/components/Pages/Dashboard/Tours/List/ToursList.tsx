@@ -6,7 +6,6 @@ import { Box } from '@material-ui/core'
 
 import { IAppState } from 'reducers/index'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
-
 import { useGridStyles } from 'components/Grid/Table/styles'
 
 import Table from 'components/Grid/Table'

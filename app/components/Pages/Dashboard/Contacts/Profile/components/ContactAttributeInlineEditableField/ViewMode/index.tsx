@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Tooltip, Typography } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { mdiStar } from '@mdi/js'
+import { mdiStarOutline } from '@mdi/js'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -58,7 +58,7 @@ export function ViewMode(props: Props) {
         {props.is_primary && (
           <Tooltip title="Primary">
             <SvgIcon
-              path={mdiStar}
+              path={mdiStarOutline}
               leftMargined
               className={classes.starIcon}
               size={muiIconSizes.small}

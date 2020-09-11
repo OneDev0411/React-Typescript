@@ -16,9 +16,7 @@ import {
 } from '@material-ui/core'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
-import classNames from 'classnames'
-
-import { mdiPlusCircleOutline } from '@mdi/js'
+import { mdiPlusCircleOutline, mdiPencilOutline } from '@mdi/js'
 
 import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -31,8 +29,6 @@ import {
 import { ServerError } from 'components/ServerError'
 import { ListSkeleton } from 'components/Skeletons/List'
 import AddOrEditEmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
-import EditOutlineIcon from 'components/SvgIcons/EditOutline/EditOutlineIcon'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useIconStyles } from '../../../../../styles/use-icon-styles'
@@ -96,6 +92,15 @@ function EmailTemplateSelector({
     setDrawerOpen(true)
   }
 
+  const templateDrawer = (
+    <AddOrEditEmailTemplateDrawer
+      isOpen={isDrawerOpen}
+      onClose={() => setDrawerOpen(false)}
+      emailTemplate={editingTemplate}
+      submitCallback={template => onTemplateSelected(template)}
+    />
+  )
+
   if (templates.length > 0 || isFetching) {
     const items =
       // Show previously loaded items even while loading new items
@@ -112,12 +117,7 @@ function EmailTemplateSelector({
                 aria-label="edit"
                 onClick={() => handleEditTemplate(template)}
               >
-                <EditOutlineIcon
-                  className={classNames(
-                    iconClasses.small,
-                    iconClasses.currentColor
-                  )}
-                />
+                <SvgIcon path={mdiPencilOutline} />
               </IconButton>
             </ListItemSecondaryAction>
           )
@@ -162,12 +162,7 @@ function EmailTemplateSelector({
 
     return (
       <>
-        <AddOrEditEmailTemplateDrawer
-          isOpen={isDrawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          emailTemplate={editingTemplate}
-          submitCallback={template => onTemplateSelected(template)}
-        />
+        {templateDrawer}
         <ScrollableArea
           hasThinnerScrollbar
           shadowHeight={20}
@@ -207,16 +202,19 @@ function EmailTemplateSelector({
   }
 
   return (
-    <FooterBottomDrawerZeroState
-      description="There is no email templates. Save your time by creating Email Template with variables for common emails"
-      actions={
-        <>
-          <Button variant="outlined" onClick={openNewTemplateDrawer}>
-            Create an email template
-          </Button>
-        </>
-      }
-    />
+    <>
+      {templateDrawer}
+      <FooterBottomDrawerZeroState
+        description="There is no email templates. Save your time by creating Email Template with variables for common emails"
+        actions={
+          <>
+            <Button variant="outlined" onClick={openNewTemplateDrawer}>
+              Create an email template
+            </Button>
+          </>
+        }
+      />
+    </>
   )
 }
 

@@ -18,9 +18,10 @@ import { OAuthProvider } from 'constants/contacts'
 
 import IconPermission from 'components/SvgIcons/Permission/IconPermission'
 
-import Avatar from 'components/Avatar'
+import { Avatar } from 'components/Avatar'
 import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatus'
 import { DangerButton } from 'components/Button/DangerButton'
+import { getContactNameInitials } from 'models/contacts/helpers'
 
 import {
   oAuthAccountTypeToProvider,
@@ -46,12 +47,9 @@ export default function ConnectedAccount({ account, onSync, onDelete }: Props) {
   return (
     <ConnectedAccountListItem button>
       <ListItemAvatar>
-        <Avatar
-          size={40}
-          style={{ marginRight: '1rem' }}
-          title={account.display_name}
-          image={account.photo}
-        />
+        <Avatar user={account} style={{ marginRight: '1rem' }}>
+          {getContactNameInitials(account)}
+        </Avatar>
       </ListItemAvatar>
       <Grid container>
         <Grid item xs={4}>

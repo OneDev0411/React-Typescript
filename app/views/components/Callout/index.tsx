@@ -1,6 +1,7 @@
 import React, { ReactNode, CSSProperties } from 'react'
 
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { closeIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import RenderWithTooltip from './RenderWithTooltip'
 import { CalloutCloseButton, CalloutContainer, CalloutContent } from './styled'
@@ -35,7 +36,7 @@ export function Callout({
       {onClose && (
         <RenderWithTooltip title={closeButtonTooltip}>
           <CalloutCloseButton iconSize="small" onClick={onClose}>
-            <CloseIcon />
+            <SvgIcon path={closeIcon} />
           </CalloutCloseButton>
         </RenderWithTooltip>
       )}

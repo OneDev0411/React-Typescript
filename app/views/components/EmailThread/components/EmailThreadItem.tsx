@@ -12,17 +12,14 @@ import {
   Typography
 } from '@material-ui/core'
 import fecha from 'fecha'
-import classNames from 'classnames'
 import useBoolean from 'react-use/lib/useBoolean'
-import { mdiReplyAllOutline, mdiReplyOutline } from '@mdi/js'
+import { mdiReplyAllOutline, mdiReplyOutline, mdiAttachment } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { forwardOutlined } from 'components/SvgIcons/icons'
 import { Iframe } from 'components/Iframe'
 import CampaignStatus from 'components/CampaignStatus'
 
-import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
-import { useIconStyles } from '../../../../styles/use-icon-styles'
 import { EmailItemHeaderActions } from './EmailItemHeaderActions'
 import { EmailItemRecipients } from './EmailItemRecipients'
 import { Attachment } from '../../EmailCompose/components/Attachment'
@@ -96,7 +93,6 @@ export function EmailThreadItem({
   onEmailSent = () => {},
   ...props
 }: Props) {
-  const iconClasses = useIconStyles()
   const classes = useStyles(props)
 
   const [isResponseOpen, setIsResponseOpen] = useState(false)
@@ -155,13 +151,7 @@ export function EmailThreadItem({
         <Box alignSelf="start">
           <Box display="flex" alignItems="center" height="1.25rem">
             {hasNonInlineAttachments && (
-              <IconAttachment
-                style={{ transform: 'rotate(90deg)' }}
-                className={classNames(
-                  iconClasses.small,
-                  iconClasses.rightMargin
-                )}
-              />
+              <SvgIcon path={mdiAttachment} rightMargined />
             )}
             {hasCampaignStatus && (
               <CampaignStatus

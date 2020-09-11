@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import { mdiClose } from '@mdi/js'
 
 import IconButton from 'components/Button/IconButton'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { H3 } from 'components/Typography/headings'
 
 const Container = styled.div`
@@ -33,7 +34,7 @@ const Header = ({ title, children, showClose, handleOnClose }) => (
         iconSize="large"
         onClick={handleOnClose}
       >
-        <CloseIcon />
+        <SvgIcon path={mdiClose} />
       </IconButton>
     )}
   </Container>

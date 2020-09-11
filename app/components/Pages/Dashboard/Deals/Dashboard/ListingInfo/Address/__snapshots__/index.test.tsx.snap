@@ -11,7 +11,7 @@ exports[`Deal address component renders with address 1`] = `
     1200 Main St, Dallas, TX, 75202
   </h6>
   <button
-    class="MuiButtonBase-root-74 MuiButton-root-45 MuiButton-text-47 makeStyles-editButton-2 MuiButton-textSecondary-49 MuiButton-textSizeSmall-60 MuiButton-sizeSmall-66"
+    class="MuiButtonBase-root-72 MuiButton-root-45 MuiButton-text-47 makeStyles-editButton-2 MuiButton-textSecondary-49 MuiButton-textSizeSmall-58 MuiButton-sizeSmall-64"
     tabindex="0"
     type="button"
   >
@@ -26,21 +26,21 @@ exports[`Deal address component renders with address 1`] = `
 
 exports[`Deal address component renders without address 1`] = `
 <div
-  class="makeStyles-container-77"
+  class="makeStyles-container-73"
   title=""
 >
   <h6
-    class="MuiTypography-root-91 MuiTypography-h6-101"
+    class="MuiTypography-root-87 MuiTypography-h6-97"
   >
     Some title for a deal without address
   </h6>
   <button
-    class="MuiButtonBase-root-150 MuiButton-root-121 MuiButton-text-123 makeStyles-editButton-78 MuiButton-textSecondary-125 MuiButton-textSizeSmall-136 MuiButton-sizeSmall-142"
+    class="MuiButtonBase-root-144 MuiButton-root-117 MuiButton-text-119 makeStyles-editButton-74 MuiButton-textSecondary-121 MuiButton-textSizeSmall-130 MuiButton-sizeSmall-136"
     tabindex="0"
     type="button"
   >
     <span
-      class="MuiButton-label-122"
+      class="MuiButton-label-118"
     >
       + Add Address
     </span>
