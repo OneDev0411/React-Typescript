@@ -122,14 +122,21 @@ class ContactProfile extends React.Component {
         this.props.params.id,
         updateContactQuery
       )
+      const normalizedContact = normalizeContact(response.data)
 
-      this.setState(state => ({
-        contact: {
-          ...normalizeContact(response.data),
-          deals: state.contact.deals,
-          flows: state.contact.flows
+      this.setState(state => {
+        if (state.contact) {
+          return {
+            contact: {
+              ...normalizedContact,
+              deals: state.contact.deals,
+              flows: state.contact.flows
+            }
+          }
         }
-      }))
+
+        return { contact: normalizedContact }
+      })
     } catch (error) {
       console.error(error)
     }
