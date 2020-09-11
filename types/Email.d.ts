@@ -237,6 +237,7 @@ declare type IEmail<Fields extends IEmailOptionalFields = ''> = {
   microsoft_id: null | string
   tracking_id: UUID
   is_read: boolean
+  attachments?: IEmailCampaignAttachment[] | null
   type: 'email'
 } & Association<'html', string, Fields> &
   Association<'text', string, Fields>

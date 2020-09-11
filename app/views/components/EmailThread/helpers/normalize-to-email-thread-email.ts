@@ -50,9 +50,9 @@ function normalizeEmailToThreadEmail(
     htmlBody: email.html,
     messageId: email.headers && email.headers.message_id,
     date: new Date(email.created_at * 1000),
-    // TODO: FIXME: Abbas said it has some problems in API and hopefully
-    //             will be fixed in future. Now we set attachments to an empty array!
-    attachments: [],
+    attachments: (email.attachments ?? []).map(
+      convertEmailCampaignAttachmentToEmailAttachment
+    ),
     campaignId: email.campaign,
     inBound: false,
     isRead: email.is_read,
@@ -60,5 +60,19 @@ function normalizeEmailToThreadEmail(
     snippet: clip(email.text, 50, { indicator: '' }),
     microsoftId: email.microsoft_id || undefined,
     googleId: email.google_id || undefined
+  }
+}
+
+function convertEmailCampaignAttachmentToEmailAttachment(
+  attachment: IEmailCampaignAttachment
+): IEmailAttachment {
+  return {
+    cid: attachment.content_id ?? '',
+    id: attachment.id,
+    isInline: attachment.is_inline,
+    name: attachment.file.name,
+    contentType: attachment.file.mime,
+    size: 0,
+    url: attachment.file.url
   }
 }
