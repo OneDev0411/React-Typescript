@@ -2,27 +2,27 @@ import nunjucks from 'nunjucks'
 import flattenBrand from 'utils/flatten-brand'
 
 export const BRAND_STYLES_TEMPLATE_MJML = `{% if get('body-font-family') %}
-  <mj-font name="{{get('body-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('body-font-family')}}"></mj-font>
+  <mj-font name="{{get('body-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('body-font-family') | urlEncode}}"></mj-font>
 {% endif %}
 
 {% if get('container-font-family') %}
-  <mj-font name="{{get('container-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('container-font-family')}}"></mj-font>
+  <mj-font name="{{get('container-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('container-font-family') | urlEncode}}"></mj-font>
 {% endif %}
 
 {% if get('h1-font-family') %}
-  <mj-font name="{{get('h1-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('h1-font-family')}}"></mj-font>
+  <mj-font name="{{get('h1-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('h1-font-family') | urlEncode}}"></mj-font>
 {% endif %}
 
 {% if get('h2-font-family') %}
-  <mj-font name="{{get('h2-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('h2-font-family')}}"></mj-font>
+  <mj-font name="{{get('h2-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('h2-font-family') | urlEncode}}"></mj-font>
 {% endif %}
 
 {% if get('h3-font-family') %}
-  <mj-font name="{{get('body-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('h3-font-family')}}"></mj-font>
+  <mj-font name="{{get('body-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('h3-font-family') | urlEncode}}"></mj-font>
 {% endif %}
 
 {% if get('button-font-family') %}
-  <mj-font name="{{get('button-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('button-font-family')}}"></mj-font>
+  <mj-font name="{{get('button-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('button-font-family') | urlEncode}}"></mj-font>
 {% endif %}
 
 <mj-attributes>
