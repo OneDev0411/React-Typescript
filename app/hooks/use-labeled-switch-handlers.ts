@@ -20,10 +20,10 @@ export default function useLabeledSwitchHandlers(
       try {
         setIsChanging(true)
         await onChange(newChecked)
-        setIsChanging(false)
       } catch (error) {
         // It's usually supposed to be handled within onChange, not here.
         console.error(error)
+      } finally {
         setIsChanging(false)
       }
     }

@@ -1,20 +1,27 @@
 import React from 'react'
 import {
+  makeStyles,
+  Theme,
   FormControlLabel,
   Switch,
   SwitchProps,
   Typography,
-  Theme,
   TypographyProps
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import classNames from 'classnames'
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    marginLeft: 0,
-    marginRight: 0
-  }
-}))
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    root: {
+      marginLeft: 0,
+      marginRight: 0
+    },
+    label: {
+      marginRight: theme.spacing(2)
+    }
+  }),
+  { name: 'LabeledSwitch' }
+)
 
 type TypographyExposedProps = 'variant' | 'children'
 type TypographySettledProps = 'variant'
@@ -54,8 +61,12 @@ export default function LabeledSwitch({
         />
       }
       label={
-        <Typography {...TypographyProps} variant={variant ?? 'body2'}>
-          {children}&nbsp;&nbsp;&nbsp;
+        <Typography
+          {...TypographyProps}
+          variant={variant ?? 'body2'}
+          className={classNames(TypographyProps?.className, classes.label)}
+        >
+          {children}
         </Typography>
       }
       labelPlacement="start"

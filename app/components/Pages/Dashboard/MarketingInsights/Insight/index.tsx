@@ -5,9 +5,9 @@ import {
   Theme,
   Typography,
   Tooltip,
+  makeStyles,
   Avatar as MUIAvatar
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
 import { Helmet } from 'react-helmet'
 import {
   mdiCheckAll,
