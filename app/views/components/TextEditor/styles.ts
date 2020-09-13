@@ -4,12 +4,11 @@ import { fade } from '@material-ui/core/styles'
 export const styles = (theme: Theme) =>
   createStyles({
     root: {
-      overflow: 'auto'
+      overflow: 'auto',
+      position: 'relative'
     },
     dropzone: {
-      border: '4px dashed transparent',
       width: 'auto',
-      position: 'relative',
       height: '100%',
       '&, & > div': {
         display: 'flex',
@@ -18,14 +17,14 @@ export const styles = (theme: Theme) =>
       }
     },
     dropzoneActive: {
-      borderColor: fade(theme.palette.grey['500'], 0.5),
       '&::after': {
+        border: `4px dashed ${fade(theme.palette.grey['500'], 0.5)}`,
         content: '"Drop files here"',
         position: 'absolute',
         zIndex: 1,
         left: 0,
         right: 0,
-        top: 0,
+        top: theme.spacing(6),
         bottom: 0,
         background: fade(theme.palette.common.white, 0.8),
         display: 'flex',
