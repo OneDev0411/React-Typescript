@@ -18,7 +18,10 @@ export const styles = (theme: Theme) =>
     },
     dropzoneActive: {
       '&::after': {
-        border: `4px dashed ${fade(theme.palette.grey['500'], 0.5)}`,
+        border: `${theme.spacing(0.5)}px dashed ${fade(
+          theme.palette.grey['500'],
+          0.5
+        )}`,
         content: '"Drop files here"',
         position: 'absolute',
         zIndex: 1,
