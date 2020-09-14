@@ -13,7 +13,7 @@ import { ImageEditor } from '../../types'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     input: {
-      display: 'none'
+      display: 'none !important'
     },
     addImage: {
       margin: theme.spacing(0, 1, 0, 0)
