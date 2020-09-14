@@ -34,7 +34,7 @@ const useStyles = makeStyles(
     dropzone: {
       width: '100%',
       height: '100%',
-      backgroundColor: '#f2f2f2'
+      backgroundColor: theme.palette.grey['500']
     }
   }),
   {

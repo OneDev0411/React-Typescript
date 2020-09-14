@@ -5,19 +5,26 @@ import {
   Box,
   Typography,
   TextField,
-  useTheme,
   Theme,
   makeStyles
 } from '@material-ui/core'
 
-const useStyles = makeStyles((theme: Theme) => ({
-  input: {
-    padding: theme.spacing(0.5, 1.5),
-    width: theme.spacing(9),
-    fontSize: theme.spacing(1.75),
-    textAlign: 'center'
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    input: {
+      padding: theme.spacing(0.5, 1.5),
+      width: theme.spacing(9),
+      fontSize: theme.spacing(1.75),
+      textAlign: 'center'
+    },
+    slider: {
+      margin: theme.spacing(0, 2)
+    }
+  }),
+  {
+    name: 'ImageEditorSlider'
   }
-}))
+)
 
 interface Props {
   min: number
@@ -37,7 +44,6 @@ export function Slider({
   onChange
 }: Props) {
   const classes = useStyles()
-  const theme = useTheme<Theme>()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value)
@@ -58,9 +64,7 @@ export function Slider({
       <BaseSlider
         min={min}
         max={max}
-        style={{
-          margin: theme.spacing(0, 2)
-        }}
+        className={classes.slider}
         disabled={disabled}
         value={value}
         color="secondary"

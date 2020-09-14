@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   divider: {
     height: '50%',
     margin: theme.spacing(0, 2)
+  },
+  fontFamily: {
+    width: '150px'
   }
 }))
 
@@ -216,11 +219,7 @@ export function TextActions({ editor }: Props) {
       <Divider orientation="vertical" className={classes.divider} />
 
       {brand && (
-        <div
-          style={{
-            width: '150px'
-          }}
-        >
+        <div className={classes.fontFamily}>
           <FontField
             type="font-family"
             label="Font Family"

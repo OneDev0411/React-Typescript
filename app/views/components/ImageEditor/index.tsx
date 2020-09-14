@@ -45,6 +45,9 @@ const useStyles = makeStyles(
     menuContainer: {
       marginTop: theme.spacing(1)
     },
+    dialogContent: {
+      padding: 0
+    },
     menu: {
       width: '100%',
       padding: theme.spacing(1, 2),
@@ -64,6 +67,9 @@ const useStyles = makeStyles(
     },
     horizontalDivider: {
       margin: theme.spacing(1.5, 0)
+    },
+    saveButton: {
+      marginLeft: theme.spacing(1)
     }
   }),
   {
@@ -180,9 +186,7 @@ export function Editor({ file, dimensions, onClose, onSave }: Props) {
             <Button
               variant="contained"
               color="secondary"
-              style={{
-                marginLeft: theme.spacing(1)
-              }}
+              className={classes.saveButton}
               onClick={handleSave}
             >
               Save
@@ -190,11 +194,7 @@ export function Editor({ file, dimensions, onClose, onSave }: Props) {
           </div>
         </Box>
       </DialogTitle>
-      <DialogContent
-        style={{
-          padding: 0
-        }}
-      >
+      <DialogContent className={classes.dialogContent}>
         <Box>
           <div ref={ref} className={classes.canvas} />
 

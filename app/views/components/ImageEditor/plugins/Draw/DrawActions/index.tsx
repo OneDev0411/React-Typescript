@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 
 import {
   Box,
-  useTheme,
   Theme,
   Button,
   Divider,
@@ -35,6 +34,12 @@ const useStyles = makeStyles(
     divider: {
       height: '50%',
       margin: theme.spacing(0, 2)
+    },
+    container: {
+      width: '100%'
+    },
+    options: {
+      height: theme.spacing(5)
     }
   }),
   {
@@ -49,7 +54,6 @@ interface Props {
 
 export function DrawActions({ editor, onChangeActiveAction }: Props) {
   const classes = useStyles()
-  const theme = useTheme<Theme>()
   const [drawingMode, setDrawingMode] = useState<DRAWING_MODE | null>(
     'FREE_DRAWING'
   )
@@ -165,17 +169,13 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
       display="flex"
       alignItems="center"
       justifyContent="space-between"
-      style={{
-        width: '100%'
-      }}
+      className={classes.container}
     >
       <Box
         display="flex"
         alignItems="center"
         flexGrow={1}
-        style={{
-          height: theme.spacing(5)
-        }}
+        className={classes.options}
       >
         <Button
           startIcon={<SvgIcon path={mdiDraw} size={muiIconSizes.medium} />}

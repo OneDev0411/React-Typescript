@@ -13,7 +13,7 @@ interface Props {
 }
 
 export function Flip({ editor }: Props) {
-  const flip = async () => {
+  const flip = () => {
     editor.stopDrawingMode()
     editor.flipX()
   }

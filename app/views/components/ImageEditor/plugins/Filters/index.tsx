@@ -14,7 +14,7 @@ interface Props {
 }
 
 export function Filters({ editor, isActive, onChangeActiveAction }: Props) {
-  const toggleFilters = async () => {
+  const toggleFilters = () => {
     if (isActive) {
       onChangeActiveAction(null)
 
