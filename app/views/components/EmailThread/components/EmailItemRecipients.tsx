@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   detailLabel: {
     width: theme.spacing(9),
+    flexShrink: 0,
     textAlign: 'right',
     marginRight: theme.spacing(3),
     color: theme.palette.grey[500]
@@ -122,7 +123,10 @@ export function EmailItemRecipients({ email }: Props) {
             classes.detailsButton,
             detailsAreVisible && classes.detailsButtonActive
           )}
-          onClick={() => setDetailsAreVisible(true)}
+          onClick={event => {
+            event.stopPropagation()
+            setDetailsAreVisible(true)
+          }}
         >
           <SvgIcon path={mdiMenuDown} className={classes.detailsIcon} />
         </div>
@@ -139,7 +143,13 @@ export function EmailItemRecipients({ email }: Props) {
           vertical: 'top',
           horizontal: 'left'
         }}
-        onClose={() => setDetailsAreVisible(false)}
+        onClose={(event: MouseEvent | KeyboardEvent) => {
+          event.stopPropagation()
+          setDetailsAreVisible(false)
+        }}
+        PaperProps={{
+          onClick: event => event.stopPropagation()
+        }}
       >
         {renderDetail('from', true, <EmailRecipient recipient={from} />)}
         {renderDetail('to', to.length > 0, renderRecipients(to))}

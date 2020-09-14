@@ -1,63 +1,82 @@
-import React from 'react'
-import { CSSProperties } from '@material-ui/styles'
+import React, { memo, useMemo } from 'react'
+import {
+  Avatar as MUIAvatar,
+  AvatarProps,
+  withStyles,
+  Theme
+} from '@material-ui/core'
 
-import { getNameInitials } from '../../../utils/helpers'
-import { Container, Image, Status, Initials } from './styled'
+import { Badge } from './components/Badge'
+import { BaseProps, Props } from './type'
+import { getSize } from './helpers/get-size'
+import { getAccountAvatar, getEmailAvatar } from './helpers/get-avatar'
 
-export interface AvatarProps {
-  statusColor?: string
-  showStatus?: boolean
-  isOnline?: boolean
-  size?: number
-  title?: string
-  image?: string | null
-  borderRadius?: number
-  placeHolderImage?: string
-  initials?: string
-  backgroundColor?: string
-  style?: CSSProperties
-}
+const BaseAvatar = withStyles((theme: Theme) => ({
+  root: (props: Props) => {
+    return {
+      ...getSize(theme, props.size),
+      backgroundColor: theme.palette.divider,
+      color: theme.palette.text.primary,
+      '& svg': {
+        fill: theme.palette.grey['500'],
+        color: theme.palette.grey['500']
+      }
+    }
+  }
+}))((props: AvatarProps & Pick<BaseProps, 'size'>) => <MUIAvatar {...props} />)
 
-const Avatar: React.FunctionComponent<AvatarProps> = ({
-  size = 40,
-  image = '',
-  title = '',
-  placeHolderImage = '',
-  borderRadius = 100,
-  isOnline = false,
-  showStatus = false,
-  statusColor = '#35b863',
-  backgroundColor,
-  initials = '',
-  style
-}) => {
-  let imageSrc = ''
+const AvatarComponent = (props: Props) => {
+  const {
+    user,
+    contact,
+    email,
+    url,
+    placeHolderImage,
+    statusColor,
+    showStatus = false,
+    isOnline = false
+  } = props
+  const rawImageSrc = useMemo(() => {
+    if (contact) {
+      return getAccountAvatar(contact)
+    }
 
-  if (image != null && image.length > 1) {
-    imageSrc = image
-  } else if (placeHolderImage && !title) {
-    imageSrc = placeHolderImage
+    if (user) {
+      return getAccountAvatar(user)
+    }
+
+    if (email) {
+      return getEmailAvatar(email)
+    }
+
+    if (url) {
+      return url
+    }
+  }, [contact, email, url, user])
+
+  const imageSrc =
+    !rawImageSrc && placeHolderImage ? placeHolderImage : rawImageSrc
+
+  const avatar = <BaseAvatar {...props} src={imageSrc} />
+
+  if (showStatus) {
+    return (
+      <Badge
+        overlap="circle"
+        isOnline={isOnline}
+        statusColor={statusColor}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
+        variant="dot"
+      >
+        {avatar}
+      </Badge>
+    )
   }
 
-  return (
-    <Container
-      center
-      size={size}
-      borderRadius={borderRadius}
-      backgroundColor={backgroundColor}
-      style={style}
-      title={title}
-    >
-      {imageSrc ? (
-        <Image alt="rechat avatar" src={imageSrc} />
-      ) : (
-        <Initials size={size}>{initials || getNameInitials(title)}</Initials>
-      )}
-      {showStatus && (
-        <Status isOnline={isOnline} size={size} statusColor={statusColor} />
-      )}
-    </Container>
-  )
+  return avatar
 }
 
-export default Avatar
+export const Avatar = memo(AvatarComponent)

@@ -20,6 +20,10 @@ export const permissions: { value: IPermission; label: string }[] = [
     label: 'CRM'
   },
   {
+    value: 'STORE',
+    label: 'STORE'
+  },
+  {
     value: 'BetaFeatures',
     label: 'Beta Features'
   }

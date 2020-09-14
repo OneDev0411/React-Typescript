@@ -1,18 +1,18 @@
 import React from 'react'
+import { mdiChevronLeft, mdiChevronRight } from '@mdi/js'
 
-import IconKeyboardArrowLeft from '../../SvgIcons/KeyboardArrowLeft/IconKeyboardArrowLeft'
-import IconKeyboardArrowRight from '../../SvgIcons/KeyboardArrowRight/IconKeyboardArrowRight'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 import { Container, Button } from './styled'
 
 const Navbar = ({ onPreviousClick, onNextClick }) => (
   <Container>
     <Button onClick={() => onPreviousClick()}>
-      <IconKeyboardArrowLeft />
+      <SvgIcon path={mdiChevronLeft} />
     </Button>
 
     <Button onClick={() => onNextClick()}>
-      <IconKeyboardArrowRight />
+      <SvgIcon path={mdiChevronRight} />
     </Button>
   </Container>
 )

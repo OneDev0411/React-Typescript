@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { Alert } from '@material-ui/lab'
 import { Box, Link, IconButton, Theme, makeStyles } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
 
 import { ACL } from 'constants/acl'
 import { IAppState } from 'reducers'
@@ -16,7 +17,7 @@ import Acl from 'components/Acl'
 import Table from 'components/Grid/Table'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
 import EmptyState from './EmptyState'
@@ -224,11 +225,12 @@ function OpenHousesList() {
                     severity="info"
                     action={
                       <IconButton
+                        size="small"
                         aria-label="close"
                         color="inherit"
                         onClick={() => setAlertToOpen(false)}
                       >
-                        <CloseIcon size="small" />
+                        <SvgIcon path={mdiClose} />
                       </IconButton>
                     }
                   >

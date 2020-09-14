@@ -6,6 +6,7 @@ import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 export interface IUploadingAttachment {
   file: File
   request: SuperAgentRequest
+  key: string | number
 }
 
 export interface EmailFormValues {
@@ -17,6 +18,7 @@ export interface EmailFormValues {
   from: IUser | IOAuthAccount
   due_at: Date | null
   body: string | undefined
+  templateInstance?: IMarketingTemplateInstance
 }
 
 export interface UrlBasedEmailAttachmentInput {

@@ -1,8 +1,9 @@
 import React, { ReactNode } from 'react'
 import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
+import { mdiChevronLeft, mdiClose } from '@mdi/js'
+import { Theme, makeStyles } from '@material-ui/core'
 
-import { closeIcon } from 'components/SvgIcons/icons'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
@@ -10,12 +11,21 @@ import IconButton from '../../Button/IconButton'
 
 import { TextMiddleTruncate } from '../../TextMiddleTruncate'
 
-import BackIcon from '../../SvgIcons/KeyboardArrowLeft/IconKeyboardArrowLeft'
-
 import { H1 } from '../../Typography/headings'
 import { goTo } from '../../../../utils/go-to'
 
 import { Subtitle } from './Subtitle'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    icon: {
+      '&:hover': {
+        color: theme.palette.primary.main
+      }
+    }
+  }),
+  { name: 'PageTitle' }
+)
 
 interface Props {
   backUrl?: string
@@ -33,6 +43,7 @@ PageTitle.defaultProps = {
 }
 
 export function PageTitle(props: Props) {
+  const classes = useStyles()
   const { title = '', subtitle, backUrl = '', onClickCloseButton } = props
 
   function handleOnBack() {
@@ -63,7 +74,11 @@ export function PageTitle(props: Props) {
 
         <Flex alignCenter>
           <IconButton iconSize="XLarge" inverse onClick={onClickCloseButton}>
-            <SvgIcon path={closeIcon} size={muiIconSizes.xlarge} />
+            <SvgIcon
+              className={classes.icon}
+              path={mdiClose}
+              size={muiIconSizes.xlarge}
+            />
           </IconButton>
         </Flex>
       </Flex>
@@ -80,7 +95,11 @@ export function PageTitle(props: Props) {
             isFit
             onClick={props.onClickBackButton || handleOnBack}
           >
-            <BackIcon />
+            <SvgIcon
+              path={mdiChevronLeft}
+              className={classes.icon}
+              size={muiIconSizes.large}
+            />
           </IconButton>
         )}
         <Flex column>

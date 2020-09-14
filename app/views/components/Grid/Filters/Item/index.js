@@ -1,7 +1,8 @@
 import React from 'react'
 import Downshift from 'downshift'
+import { mdiClose } from '@mdi/js'
 
-import IconRemove from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   Container,
@@ -44,7 +45,7 @@ export const FilterItem = props => {
                 {getCurrentValues(isActive, values)}
               </ItemTitle>
               <RemoveButton inverse onClick={onRemove}>
-                <IconRemove />
+                <SvgIcon path={mdiClose} />
               </RemoveButton>
             </TitleContainer>
 

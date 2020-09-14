@@ -1,17 +1,20 @@
 import React from 'react'
 import {
-  Avatar,
   Badge,
   ListItemAvatar,
   ListItemText,
   makeStyles,
   Theme
 } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
 
 import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
 
 import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
-import OutlookIcon from 'components/SvgIcons/Outlook/IconOutlook'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { outlookIcon } from 'components/SvgIcons/icons'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { Avatar } from 'components/Avatar'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -36,13 +39,12 @@ interface Props {
 }
 
 export function Item({ item }: Props) {
+  const theme = useTheme<Theme>()
   const classes = useStyles()
 
   const renderAvatar = () => {
-    const src = item.profile_image_url || ''
-
     if (item.type === 'user') {
-      return <Avatar src={src} />
+      return <Avatar user={item} />
     }
 
     return (
@@ -54,11 +56,19 @@ export function Item({ item }: Props) {
         }}
         badgeContent={
           <div className={classes.badge}>
-            {item.type === GOOGLE_CREDENTIAL ? <GoogleIcon /> : <OutlookIcon />}
+            {item.type === GOOGLE_CREDENTIAL ? (
+              <GoogleIcon />
+            ) : (
+              <SvgIcon
+                path={outlookIcon}
+                color={theme.palette.info.main}
+                size={muiIconSizes.small}
+              />
+            )}
           </div>
         }
       >
-        <Avatar alt={item.display_name} src={src} />
+        <Avatar alt={item.display_name} user={item} />
       </Badge>
     )
   }

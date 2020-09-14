@@ -2,13 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { Uploader } from 'components/Uploader'
+import uploadAsset from 'models/instant-marketing/upload-asset'
 
 import { AppTheme } from '../../../../../AppTheme'
 
 import { AssetImage } from './AssetImage'
 
 import { loadGrapesjs } from '../utils/load-grapes'
-import { uploadAsset } from './helpers'
 
 export const load = async () => {
   const { Grapesjs, Backbone } = await loadGrapesjs()
@@ -55,8 +55,8 @@ export const load = async () => {
                 )
 
                 const uploadedAssets = uploadResponses.map(response => ({
-                  previewUrl: response.body.data.file.preview_url,
-                  url: response.body.data.file.url
+                  previewUrl: response.file.preview_url,
+                  url: response.file.url
                 }))
 
                 const listing =

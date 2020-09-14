@@ -7,11 +7,18 @@ import GlobalPageLayout from 'components/GlobalPageLayout'
 const useStyles = makeStyles(theme =>
   createStyles({
     container: {
-      height: theme.spacing(15),
-      display: 'flex'
+      [theme.breakpoints.up('md')]: {
+        height: theme.spacing(15),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start'
+      }
     },
     subtitle: {
-      color: theme.palette.grey['400']
+      color: theme.palette.grey['400'],
+      [theme.breakpoints.up('md')]: {
+        marginLeft: theme.spacing(2)
+      }
     }
   })
 )
@@ -22,7 +29,7 @@ export function Header(props) {
 
   return (
     <Box className={classes.container}>
-      <GlobalPageLayout.Header>
+      <GlobalPageLayout.Header classes={{ content: classes.container }}>
         <Typography variant="h4">{title}</Typography>
         <Typography variant="h6" className={classes.subtitle}>
           {subtitle}

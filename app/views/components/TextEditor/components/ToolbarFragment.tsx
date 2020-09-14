@@ -1,10 +1,11 @@
 import { ReactNode, useContext, useEffect, useMemo } from 'react'
 
 import { EditorToolbarContext } from '../editor-context'
+import { ToolbarFragmentGroup } from '../types'
 
 interface Props {
   children: ReactNode
-  group?: string
+  group?: ToolbarFragmentGroup
 }
 
 export function ToolbarFragment({ children, group }: Props) {

@@ -11,6 +11,6 @@ export async function createEmailTemplate(
 
     return response.body.data
   } catch (error) {
-    throw error.response.body
+    throw error.response?.body ?? error.message
   }
 }

@@ -4,6 +4,7 @@ import Dropzone from 'react-dropzone'
 import { batchActions } from 'redux-batched-actions'
 import cn from 'classnames'
 import Flex from 'styled-flex-component'
+import { mdiInformationOutline } from '@mdi/js'
 
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 import {
@@ -16,7 +17,7 @@ import { getActiveTeam } from '../../../../../../utils/user-teams'
 import { H1 } from '../../../../../../views/components/Typography/headings'
 import Button from '../../../../../../views/components/Button/ActionButton'
 import { Divider } from '../../../../../../views/components/Divider'
-import InfoIcon from '../../../../../../views/components/SvgIcons/InfoOutline/IconInfoOutline'
+import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
 import Tooltip from '../../../../../../views/components/tooltip'
 import { TeamContactSelect } from '../../../../../../views/components/TeamContact/TeamContactSelect'
 import { primary } from '../../../../../../views/utils/colors'
@@ -120,7 +121,11 @@ class SelectFile extends React.Component {
               placement="right"
               caption="Not the team you want to import these contacts into? No worries. Go to your team switcher to change your team and then try importing again."
             >
-              <InfoIcon style={{ fill: primary, marginLeft: '0.5em' }} />
+              <SvgIcon
+                path={mdiInformationOutline}
+                color={primary}
+                leftMargined
+              />
             </Tooltip>
           </Flex>
           <Divider width="100%" height="1px" margin="0 0 1rem" />
@@ -148,12 +153,9 @@ function mapStateToProps({ user, contacts }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    addCsvFile,
-    updateWizardStep,
-    showMessageModal,
-    setCurrentStepValidation
-  }
-)(SelectFile)
+export default connect(mapStateToProps, {
+  addCsvFile,
+  updateWizardStep,
+  showMessageModal,
+  setCurrentStepValidation
+})(SelectFile)

@@ -65,7 +65,7 @@ export function EmailRecipientsFields({
   return (
     <>
       <From users={users} accounts={senderAccounts}>
-        {individualMode || (
+        {!individualMode && (
           <CcBccButtons
             showCc={!isCcShown}
             showBcc={!isBccShown}
@@ -111,7 +111,9 @@ export function EmailRecipientsFields({
               recipient,
               sendType: IEmailRecipientSendType = lastFocusedSendType
             ) => {
-              const field = fields[sendType.toLowerCase()]
+              const field = individualMode
+                ? fields.to
+                : fields[sendType.toLowerCase()]
 
               field.input.onChange([...(field.input.value || []), recipient])
             }}

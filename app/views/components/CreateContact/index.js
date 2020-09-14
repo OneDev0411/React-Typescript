@@ -30,9 +30,10 @@ export class CreateContact extends React.Component {
         <NewContactDrawer
           isOpen={this.state.isOpen}
           onClose={this.toggleOpen}
-          submitCallback={this.props.submitCallback}
-          user={this.props.user}
+          saveAndAddNewCallback={this.props.saveAndAddNewCallback}
+          saveCallback={this.props.saveCallback}
           showAddAnother={this.props.showAddAnother}
+          user={this.props.user}
         />
       </>
     )

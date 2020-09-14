@@ -47,14 +47,7 @@ export function UserMenu({ user }: { user: IUser }) {
 
   return user ? (
     <>
-      <ToggleButton
-        id={id}
-        isOpen={isOpen}
-        onClick={handleClick}
-        userName={user.display_name}
-        userAvatar={user.profile_image_url || ''}
-        userInfo={user.email || user.phone_number || ''}
-      />
+      <ToggleButton id={id} isOpen={isOpen} onClick={handleClick} user={user} />
       <Popover
         id={id}
         open={isOpen}

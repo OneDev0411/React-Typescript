@@ -266,9 +266,12 @@ $margin: 20px;
   }
 
   .add-item {
-    .addIcon {
+    .add-icon {
       color: #0945eb;
       margin-right: 0.5rem;
+      &.hasError {
+        color: #ec4b35;
+      }
     }
     .icon {
       cursor: pointer;

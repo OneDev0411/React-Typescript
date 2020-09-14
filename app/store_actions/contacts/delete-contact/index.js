@@ -7,6 +7,7 @@ import { searchContacts } from '../search-contacts'
 import { getContacts } from '../get-contacts'
 import { deleteContacts as removeContacts } from '../../../models/contacts/delete-contact'
 import { viewAs } from '../../../utils/user-teams'
+import { PARKED_CONTACTS_LIST_ID } from '../../../components/Pages/Dashboard/Contacts/List/constants'
 
 export function deleteContacts(contactIds) {
   return async (dispatch, getState) => {
@@ -32,10 +33,13 @@ export function deleteContacts(contactIds) {
 }
 
 export async function afterDeleteContactsFetch(dispatch, getState, contactIds) {
-  const { list } = getState().contacts
+  const state = getState()
+  const { list } = state.contacts
   const listInfo = selectContactsInfo(list)
   const fetchedContactsLength = selectContacts(list).length
   const limitFetchContact = contactIds.length > 50 ? 50 : contactIds.length
+  const isParkedContactActive =
+    state.contacts?.filterSegments?.activeSegmentId === PARKED_CONTACTS_LIST_ID
 
   if (fetchedContactsLength < listInfo.total) {
     const startPoint =
@@ -51,9 +55,10 @@ export async function afterDeleteContactsFetch(dispatch, getState, contactIds) {
           listInfo.filter,
           startPoint,
           limitFetchContact,
+          isParkedContactActive,
           listInfo.searchText,
           undefined,
-          viewAs(getState().user)
+          viewAs(state.user)
         )
       )
     }

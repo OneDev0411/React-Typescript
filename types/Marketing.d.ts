@@ -13,8 +13,10 @@ declare interface IMarketingTemplate extends IModel<'template'> {
   template_type: string
   medium: MarketingTemplateMedium
   video: boolean
+  mjml: boolean
   url: string
   variant: string
+  variables: Nullable<string[]>
   inputs: string[]
 }
 
@@ -28,6 +30,14 @@ declare interface IMarketingTemplateInstance
   contacts: Nullable<IContact[]>
   deals: Nullable<IDeal[]>
   listings: Nullable<IListings[]>
+}
+
+declare interface ITemplateAsset extends IModel<'template_asset'> {
+  created_by: UUID
+  template: UUID
+  contact: Nullable<UUID>
+  listing: Nullable<UUID>
+  file: IFile
 }
 
 declare enum MarketingTemplateMedium {

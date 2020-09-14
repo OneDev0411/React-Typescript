@@ -7,7 +7,12 @@ import { EmailThread } from '../../../EmailThread'
 import { DrawerProps } from '../../../OverlayDrawer'
 
 interface Props extends DrawerProps {
-  campaign: IEmailCampaign<'emails', any, 'email', 'html' | 'text'>
+  campaign: IEmailCampaign<
+    'emails' | 'attachments',
+    any,
+    'email',
+    'html' | 'text'
+  >
 }
 
 /**

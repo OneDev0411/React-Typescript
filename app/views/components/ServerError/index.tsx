@@ -10,9 +10,11 @@ import {
 import request, { ResponseError } from 'superagent'
 
 import { ReactNode } from 'react'
+import { mdiAlertOutline } from '@mdi/js'
 
 import { ClassesProps } from 'utils/ts-utils'
-import IconWarning from 'components/SvgIcons/Warning/IconWarning'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 type ErrorResponse = ResponseError & { response?: request.Response }
 
@@ -42,12 +44,6 @@ const styles = (theme: Theme) =>
       alignItems: 'center',
       justifyContent: 'center',
       padding: theme.spacing(2, 1)
-    },
-    icon: {
-      'svg&': {
-        width: '3rem',
-        height: '3rem'
-      }
     },
     errorMessage: {
       margin: theme.spacing(2, 0)
@@ -86,7 +82,7 @@ export function ServerError({
 
   return (
     <div className={classes.root}>
-      <IconWarning className={classes.icon} />
+      <SvgIcon path={mdiAlertOutline} size={muiIconSizes.xlarge} />
       <Typography variant="h6" className={classes.errorMessage}>
         {errorMessage}
       </Typography>

@@ -12,11 +12,12 @@ import classNames from 'classnames'
 import { get } from 'lodash'
 
 import { EditorState, Modifier, SelectionState } from 'draft-js'
+import { mdiAlertOutline } from '@mdi/js'
 
 import { useMenu } from 'hooks/use-menu'
 
 import { defaultTemplateVariableSuggestions } from 'components/EmailCompose/default-template-variable-suggestions'
-import IconWarning from 'components/SvgIcons/Warning/IconWarning'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ITemplateVariableSuggestion } from 'components/TemplateVariablesButton'
 
 import { expressionRegExp } from '../expression-regexp'
@@ -90,7 +91,7 @@ export const TemplateExpression = ({
   const icon = noValue ? (
     <ExpressionIcon />
   ) : (
-    <IconWarning className={classes.icon} />
+    <SvgIcon path={mdiAlertOutline} className={classes.icon} />
   )
 
   const setFallback = (newFallback: string) => {

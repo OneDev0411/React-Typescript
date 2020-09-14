@@ -3,7 +3,7 @@ import cn from 'classnames'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import { Button, useTheme } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
 
 import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
@@ -14,7 +14,7 @@ import SearchListings from 'components/SearchListingDrawer'
 import { H2 } from 'components/Typography/headings'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import RequiredIcon from 'components/SvgIcons/Required/IconRequired'
+import RequiredErrorSign from './required-error-sign'
 
 const AddressInput = styled.input`
   border: 1px dashed ${({ theme }) => theme.palette.secondary.main};
@@ -26,7 +26,6 @@ const AddressInput = styled.input`
 `
 
 export default function DealAddress(props) {
-  const theme = useTheme()
   const [showManualAddress, setShowManualAddress] = useState(false)
   const [showMlsDrawer, setShowMlsDrawer] = useState(false)
 
@@ -63,7 +62,7 @@ export default function DealAddress(props) {
       <H2 className={cn('hero', { hasError: props.hasError })}>
         What is the address of the subject property?&nbsp;
         {props.isRequired && <span className="required">*</span>}
-        {props.hasError && <RequiredIcon />}
+        {props.hasError && <RequiredErrorSign />}
       </H2>
 
       {props.dealAddress ? (
@@ -90,11 +89,7 @@ export default function DealAddress(props) {
                 className="add-item"
                 onClick={toggleMlsDrawer}
               >
-                <SvgIcon
-                  path={mdiPlus}
-                  rightMargined
-                  color={theme.palette.secondary.main}
-                />
+                <SvgIcon path={mdiPlus} rightMargined />
                 <span className="text">Enter MLS #</span>
               </Button>
             </div>
@@ -134,11 +129,7 @@ export default function DealAddress(props) {
                 className="add-item"
                 onClick={toggleManualAddressEntry}
               >
-                <SvgIcon
-                  path={mdiPlus}
-                  rightMargined
-                  color={theme.palette.secondary.main}
-                />
+                <SvgIcon path={mdiPlus} rightMargined />
                 <span className="text">
                   {isBuyingSide ? 'Or manually input' : 'Add address'}
                 </span>

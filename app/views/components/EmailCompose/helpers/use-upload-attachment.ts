@@ -20,7 +20,8 @@ export function useUploadAttachment(
         ...(field.input.value || []),
         {
           file,
-          request: uploader(file, origin)
+          request: uploader(file, origin),
+          key: Date.now() // No multiple file selection to upload, thus it's an unique key among the uploading files.
         }
       ])
     }

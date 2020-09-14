@@ -23,20 +23,24 @@ export function InlineImageToolbar(props: Props) {
   return (
     <DraftJsSelectionPopover
       editorState={props.editorState}
-      blockFilter="atomic"
+      blockFilter={block => {
+        const blockIsAtomic = block.getType() === 'atomic'
+        const { value: firstEntry, done } = block.getData().entries().next()
+        const blockIsNotTheQuotedMessages = done || firstEntry[0] !== 'srcDoc'
+
+        return blockIsAtomic && blockIsNotTheQuotedMessages
+      }}
       placement="top"
     >
-      {({ block, close, entity }: SelectionPopoverRenderProps) => {
-        return (
-          <SelectionPopoverPaper>
-            <ImageToolbar
-              editorState={props.editorState}
-              onChange={props.setEditorState}
-              block={block}
-            />
-          </SelectionPopoverPaper>
-        )
-      }}
+      {({ block, close, entity }: SelectionPopoverRenderProps) => (
+        <SelectionPopoverPaper>
+          <ImageToolbar
+            editorState={props.editorState}
+            onChange={props.setEditorState}
+            block={block}
+          />
+        </SelectionPopoverPaper>
+      )}
     </DraftJsSelectionPopover>
   )
 }

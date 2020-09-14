@@ -1,8 +1,9 @@
 import React from 'react'
-import { Box, Button, Avatar, Typography } from '@material-ui/core'
+import { Box, Button, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
 import { ImageUploader } from 'components/ImageUploader'
+import { Avatar } from 'components/Avatar'
 
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
@@ -17,10 +18,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   container: {
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: `${theme.shape.borderRadius}px`
-  },
-  large: {
-    width: theme.spacing(9),
-    height: theme.spacing(9)
   }
 }))
 
@@ -44,7 +41,7 @@ export default function ProfileAvatar({ onChange, data }: Props) {
         justifyContent="space-between"
       >
         <Box display="flex" alignItems="center">
-          <Avatar className={classes.large} variant="circle" src={data.src} />
+          <Avatar url={data.src} size="xlarge" />
           <Box ml={3} textAlign="left">
             <Typography variant="h6">Your profile image</Typography>
             {data.type && (

@@ -1,9 +1,11 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 import Cookies from 'universal-cookie'
+import { mdiClose } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import CloseButton from '../../../../../../../views/components/Button/IconButton'
-import CloseIcon from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
 import {
   borderColor,
   brandBackground
@@ -44,8 +46,8 @@ export class TipsBanner extends React.Component {
       >
         <Flex alignCenter justifyBetween>
           Adding a custom field will add additional line items to all contacts.
-          <CloseButton isFit iconSize="medium" inverse onClick={this.onClose}>
-            <CloseIcon />
+          <CloseButton isFit iconSize="large" inverse onClick={this.onClose}>
+            <SvgIcon path={mdiClose} />
           </CloseButton>
         </Flex>
       </div>

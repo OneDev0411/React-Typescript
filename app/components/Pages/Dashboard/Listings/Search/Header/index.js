@@ -13,15 +13,26 @@ import Autocomplete from '../components/Autocomplete'
 const useStyles = makeStyles(
   theme => ({
     container: {
-      height: theme.spacing(15),
-      display: 'flex'
+      paddingBottom: theme.spacing(3),
+      [theme.breakpoints.up('md')]: {
+        display: 'flex',
+        paddingBottom: 0,
+        height: theme.spacing(15)
+      }
     },
     body: {
-      display: 'flex',
-      justifyContent: 'flex-end'
+      [theme.breakpoints.up('md')]: {
+        display: 'flex',
+        justifyContent: 'flex-end'
+      }
     },
     filtersButton: {
-      marginLeft: theme.spacing(1)
+      display: 'flex',
+      marginTop: theme.spacing(3),
+      [theme.breakpoints.up('md')]: {
+        marginTop: 0,
+        marginLeft: theme.spacing(1)
+      }
     }
   }),
   { name: 'MLSSearchHeader' }
@@ -35,6 +46,7 @@ export function Header(props) {
     <Box className={classes.container}>
       <GlobalPageLayout.Header
         title="All Properties"
+        isHiddenOnMobile={false}
         noGlobalActionsButton={!showGlobalActionsButton}
       >
         <Box className={classes.body}>

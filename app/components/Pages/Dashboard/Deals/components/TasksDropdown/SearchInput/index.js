@@ -1,8 +1,8 @@
 import React from 'react'
+import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
 
-import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import IconKeyboardArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
 import Loader from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   SearchContainer,
@@ -13,10 +13,10 @@ import {
 } from './styled'
 
 function getIcon(isMenuOpen, isSaving) {
-  let Icon = <IconKeyboardArrowDown />
+  let Icon = <SvgIcon path={mdiChevronDown} />
 
   if (isMenuOpen) {
-    Icon = <IconKeyboardArrowUp />
+    Icon = <SvgIcon path={mdiChevronUp} />
   }
 
   if (isSaving) {

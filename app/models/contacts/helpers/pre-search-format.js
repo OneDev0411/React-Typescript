@@ -10,6 +10,7 @@ function preSearchFormat({
 }) {
   const payload = {}
   const query = removeSpecialCharacters(text)
+  const { parked, ...restQueryParams } = queryParams
 
   if (query.length > 0) {
     payload.query = query
@@ -31,7 +32,11 @@ function preSearchFormat({
     payload.filter = normalizeAttributeFilters(attributeFilters)
   }
 
-  return [payload, queryParams]
+  if (parked) {
+    payload.parked = queryParams.parked
+  }
+
+  return [payload, restQueryParams]
 }
 
 function validArrayFilter(filter) {

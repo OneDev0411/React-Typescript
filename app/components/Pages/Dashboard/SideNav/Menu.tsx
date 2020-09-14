@@ -29,14 +29,11 @@ import { scrollableAreaShadowColor } from './variables'
 
 import {
   Sidenav,
+  SidenavBlankLink,
   SideNavItem,
   SidenavListGroup,
   AppNavbarBadge
 } from './styled'
-
-const hasWebsitePermission = (user?: IUser) => {
-  return user?.user_type === 'Agent' && user.agent?.office_mlsid === 'CSTPP01'
-}
 
 export function Menu() {
   const user = useTypedSelector<IUser>(state => state.user)
@@ -120,7 +117,7 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl>
 
-          <Acl access={hasWebsitePermission}>
+          <Acl access={[ACL.STORE]}>
             <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
           </Acl>
         </SidenavListGroup>
@@ -144,6 +141,16 @@ export function Menu() {
               </AppNavbarBadge>
             </SideNavLinkItem>
           )}
+
+          <SideNavItem>
+            <SidenavBlankLink
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://help.rechat.com"
+            >
+              Help Center
+            </SidenavBlankLink>
+          </SideNavItem>
 
           <SupportTrigger />
         </SidenavListGroup>

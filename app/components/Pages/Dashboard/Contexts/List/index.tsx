@@ -183,7 +183,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   notify: (...args: Parameters<typeof notify>) => dispatch(notify(...args))
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DealContext)
+export default connect(mapStateToProps, mapDispatchToProps)(DealContext)

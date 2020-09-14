@@ -1,10 +1,14 @@
-import * as React from 'react'
+import React, { Fragment } from 'react'
 import { groupBy } from 'lodash'
 
-import { ToolbarFragment } from '../types'
+import {
+  ToolbarFragment,
+  toolbarFragmentGroups,
+  ToolbarFragmentGroup
+} from '../types'
 import { Separator } from '../styled'
 
-type Props = {
+interface Props {
   segments: Record<string, ToolbarFragment>
 }
 
@@ -17,17 +21,21 @@ export function ToolbarFragments({ segments }: Props) {
     'group'
   )
 
-  const groups = Object.entries(segmentsWithKeys)
+  const groups = Object.entries(segmentsWithKeys).sort(
+    ([firstGroup], [secondGroup]) =>
+      toolbarFragmentGroups.indexOf(firstGroup as ToolbarFragmentGroup) -
+      toolbarFragmentGroups.indexOf(secondGroup as ToolbarFragmentGroup)
+  )
 
   return (
     <>
       {groups.map(([groupName, group], index) => (
-        <React.Fragment key={groupName}>
+        <Fragment key={groupName}>
           {group.map(({ key, node }) => (
-            <React.Fragment key={key}>{node}</React.Fragment>
+            <Fragment key={key}>{node}</Fragment>
           ))}
           {index < groups.length - 1 && <Separator />}
-        </React.Fragment>
+        </Fragment>
       ))}
     </>
   )

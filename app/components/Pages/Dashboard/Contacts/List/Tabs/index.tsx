@@ -13,7 +13,7 @@ import {
   SyncedContacts as SyncedContactsTypes
 } from '../utils/get-synced-contacts'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
-import { SYNCED_CONTACTS_LIST_ID } from '../constants'
+import { PARKED_CONTACTS_LIST_ID } from '../constants'
 
 import { SortFields } from '../SortFields'
 import ContactFilters from '../Filters'
@@ -61,7 +61,7 @@ const getActiveTab = ({
   }
 
   if (isSyncedListActive) {
-    return 'synced-contact'
+    return 'parked-contact'
   }
 
   if (isTagListActive) {
@@ -97,18 +97,20 @@ export const ContactsTabs = ({
     )
   }, [activeFilters, activeSegment])
   const isSyncedListActive =
-    activeSegment && activeSegment.id === SYNCED_CONTACTS_LIST_ID
+    activeSegment && activeSegment.id === PARKED_CONTACTS_LIST_ID
+
   const activeTab = getActiveTab({
     isAllContactsActive,
     isSyncedListActive,
     isTagListActive: tagListProps.isActive
   })
+
   const clickHandler = async (type: string) => {
     await dispatch(resetActiveFilters(CONTACTS_SEGMENT_NAME))
     await dispatch(changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type))
 
-    if (type === SYNCED_CONTACTS_LIST_ID) {
-      return handleChangeSavedSegment(activeSegment)
+    if (type === PARKED_CONTACTS_LIST_ID) {
+      return handleFilterChange({ parked: true }, true)
     }
 
     handleFilterChange({ filters: [], flows: [] }, true)
@@ -118,11 +120,11 @@ export const ContactsTabs = ({
   const syncedContactsTab =
     syncedContacts.accounts > 0 ? (
       <Tab
-        key="synced-contact"
-        value="synced-contact"
+        key="parked-contact"
+        value="parked-contact"
         label={
-          <span onClick={() => clickHandler(SYNCED_CONTACTS_LIST_ID)}>
-            Synced Contacts
+          <span onClick={() => clickHandler(PARKED_CONTACTS_LIST_ID)}>
+            Parked Contacts
           </span>
         }
       />
@@ -157,6 +159,7 @@ export const ContactsTabs = ({
       {filter.show && (
         <ContactFilters
           contactCount={contactCount}
+          activeSegment={activeSegment}
           onFilterChange={() => handleFilterChange({}, true)}
           users={users}
         />

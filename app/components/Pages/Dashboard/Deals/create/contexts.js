@@ -12,7 +12,7 @@ import { DateTimePicker } from 'components/DateTimePicker'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Input from '../../../../../views/components/Input'
-import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+import RequiredErrorSign from './required-error-sign'
 
 const ContextValue = ({ name, date, onRemove, onEdit }) => (
   <div className="selected-field">
@@ -55,7 +55,7 @@ export default class extends React.Component {
       <div className="form-section contexts">
         <H2 className={cn('hero', { hasError })}>
           Please provide the following information:&nbsp;
-          {hasError && <RequiredIcon />}
+          {hasError && <RequiredErrorSign />}
         </H2>
 
         {areContextsRequired && (
@@ -137,7 +137,12 @@ export default class extends React.Component {
                           className="add-item"
                           onClick={handleOpen}
                         >
-                          <SvgIcon path={mdiPlus} className="addIcon" />
+                          <SvgIcon
+                            path={mdiPlus}
+                            className={cn('add-icon', {
+                              hasError: hasError && field.mandatory
+                            })}
+                          />
                           <span
                             className={cn('text', {
                               hasError: hasError && field.mandatory

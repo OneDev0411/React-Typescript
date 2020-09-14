@@ -10,7 +10,8 @@ import Menu from './Menu'
 
 interface Props {
   onCreateEvent: (event: IEvent) => void
-  onCreateContact: (contact: IContact) => void
+  onCreateContact?: (contact: IContact) => void
+  onCreateAndAddNewContact?: (contact: IContact) => void
   onCreateEmail: (email: IEmailCampaign) => void
   onCreateTour: (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
@@ -48,9 +49,6 @@ export default function GlobalActionsButton(props: Props) {
     handleCloseRenderedItem()
   }
 
-  const handleSubmitContact = (contact: IContact) => {
-    props.onCreateContact(contact)
-  }
   const handleSubmitEmail = (email: IEmailCampaign) => {
     props.onCreateEmail(email)
     handleCloseRenderedItem()
@@ -96,7 +94,8 @@ export default function GlobalActionsButton(props: Props) {
           user,
           isOpen: true,
           onClose: handleCloseRenderedItem,
-          submitCallback: handleSubmitContact
+          saveCallback: props.onCreateContact,
+          saveAndAddNewCallback: props.onCreateAndAddNewContact
         })
 
       case 'deal':

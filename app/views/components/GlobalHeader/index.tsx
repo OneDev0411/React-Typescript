@@ -1,5 +1,11 @@
 import React from 'react'
-import { Typography, makeStyles, Theme, useMediaQuery } from '@material-ui/core'
+import {
+  Typography,
+  makeStyles,
+  Theme,
+  useMediaQuery,
+  createStyles
+} from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -12,14 +18,56 @@ import {
 
 import GlobalActionsButton from 'components/GlobalActionsButton'
 import { ItemType } from 'components/GlobalActionsButton/types'
+import { ClassesProps } from 'utils/ts-utils'
+
+const styles = (theme: Theme) =>
+  createStyles({
+    wrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+      padding: ({ noPadding }: GlobalHeaderProps) =>
+        !noPadding ? theme.spacing(3) : 0,
+      width: '100%',
+      [theme.breakpoints.up('md')]: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }
+    },
+    title: {
+      marginBottom: theme.spacing(3),
+      [theme.breakpoints.up('md')]: {
+        marginBottom: 0,
+        marginRight: theme.spacing(1)
+      }
+    },
+    content: {
+      [theme.breakpoints.up('md')]: {
+        flexGrow: 1,
+        display: 'flex',
+        justifyContent: 'flex-end'
+      }
+    },
+    globalAction: {
+      marginTop: theme.spacing(2),
+      [theme.breakpoints.up('md')]: {
+        marginTop: 0,
+        marginLeft: theme.spacing(1)
+      }
+    }
+  })
+
+const useStyles = makeStyles(styles, { name: 'GlobalHeader' })
 
 export interface GlobalHeaderProps {
   title?: string
   noPadding?: boolean
+  isHiddenOnMobile?: boolean
   noGlobalActionsButton?: boolean
   children?: React.ReactNode
   onCreateEvent?: (event: IEvent) => void
   onCreateContact?: (contact: IContact) => void
+  onCreateAndAddNewContact?: (contact: IContact) => void
   onCreateEmail?: (email: IEmailCampaign) => void
   onCreateTour?: (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
@@ -29,48 +77,26 @@ export interface GlobalHeaderProps {
   ) => void
 }
 
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    wrapper: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: ({ noPadding }: GlobalHeaderProps) =>
-        !noPadding ? theme.spacing(3) : 0,
-      width: '100%'
-    },
-    title: {
-      marginRight: theme.spacing(1)
-    },
-    content: {
-      flexGrow: 1
-    },
-    globalAction: {
-      marginLeft: theme.spacing(1)
-    }
-  }),
-  { name: 'GlobalHeader' }
-)
-
 export default function GlobalHeader({
   title,
-  noPadding,
   noGlobalActionsButton,
   children,
   onCreateEvent = noop,
-  onCreateContact = noop,
+  onCreateContact,
+  onCreateAndAddNewContact,
   onCreateEmail = noop,
   onCreateTour = noop,
-  onCreateOpenHouse = noop
-}: GlobalHeaderProps) {
-  const classes = useStyles({ noPadding })
-  const isHidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
+  onCreateOpenHouse = noop,
+  isHiddenOnMobile = true,
+  ...restProps
+}: GlobalHeaderProps & ClassesProps<typeof styles>) {
+  const classes = useStyles(restProps)
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
   const availableActions: ItemType[] = []
 
   const user = useSelector((store: IAppState) => store.user)
 
-  if (isHidden) {
+  if (isHiddenOnMobile && isMobile) {
     return null
   }
 
@@ -100,6 +126,7 @@ export default function GlobalHeader({
             availableActions={availableActions}
             onCreateEvent={onCreateEvent}
             onCreateContact={onCreateContact}
+            onCreateAndAddNewContact={onCreateAndAddNewContact}
             onCreateEmail={onCreateEmail}
             onCreateTour={onCreateTour}
             onCreateOpenHouse={onCreateOpenHouse}

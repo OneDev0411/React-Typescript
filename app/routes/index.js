@@ -323,6 +323,13 @@ const AsyncMarketingEditor = Load({
     )
 })
 
+const AsyncMarketingWizard = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Marketing/Wizard' /* webpackChunkName: "marketing_wizard" */
+    )
+})
+
 const AsyncMarketing = Load({
   loader: () =>
     import(
@@ -687,6 +694,7 @@ export default (
         <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
 
         <Route path="marketing" component={AsyncMarketingHistory} />
+        <Route path="marketing/wizard" component={AsyncMarketingWizard} />
         <Route path="marketing/editor" component={AsyncMarketingEditor} />
         <Route path="marketing/:types(/:medium)" component={AsyncMarketing} />
 

@@ -6,8 +6,9 @@ import {
   Typography,
   DialogTitle as MuiDialogTitle
 } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
 
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -44,7 +45,7 @@ function DialogTitle({ children, id, onClose }: Props) {
           className={classes.closeButton}
           onClick={onClose}
         >
-          <CloseIcon />
+          <SvgIcon path={mdiClose} />
         </IconButton>
       ) : null}
     </MuiDialogTitle>

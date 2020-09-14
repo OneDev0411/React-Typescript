@@ -14,7 +14,12 @@ import SaveSegment from 'components/Grid/SavedSegments/Create'
 import { SimpleList } from 'components/Grid/Filters/FilterTypes/SimpleList'
 import { OperatorAndOperandFilter } from 'components/Grid/Filters/FilterTypes/OparatorAndOperand'
 
-import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID, ORIGINS } from '../constants'
+import {
+  FLOW_FILTER_ID,
+  OPEN_HOUSE_FILTER_ID,
+  PARKED_CONTACTS_LIST_ID,
+  ORIGINS
+} from '../constants'
 
 import createFiltersFromSegment from './helpers/create-filters-from-segment'
 import createSegmentFromFilters from './helpers/create-segment-from-filters'
@@ -61,6 +66,9 @@ function ContactFilters(props) {
       selectedRowIds.length > 0 &&
       selectedRowIds.length < props.contactCount) ||
     (isEntireRowsSelected && excludedRows.length > 0)
+
+  const isParkedContactActive =
+    props?.activeSegment?.id === PARKED_CONTACTS_LIST_ID
   const tooltipTitle =
     isAllSelected || isEntireRowsSelected
       ? 'Deselect All Rows'
@@ -146,21 +154,23 @@ function ContactFilters(props) {
         </Tooltip>
         <span className={classes.totalRow}>{getSummeryInfo()}</span>
       </div>
-      <Filters
-        name="contacts"
-        plugins={['segments']}
-        config={getConfig()}
-        createFiltersFromSegment={createFiltersFromSegment}
-        getPredefinedLists={getPredefinedContactLists}
-        onChange={() => props.onFilterChange()}
-        disableConditionOperators={props.disableConditionOperators}
-      >
-        <SaveSegment
-          createSegmentFromFilters={createSegmentFromFilters(
-            props.conditionOperator
-          )}
-        />
-      </Filters>
+      {!isParkedContactActive && (
+        <Filters
+          name="contacts"
+          plugins={['segments']}
+          config={getConfig()}
+          createFiltersFromSegment={createFiltersFromSegment}
+          getPredefinedLists={getPredefinedContactLists}
+          onChange={() => props.onFilterChange()}
+          disableConditionOperators={props.disableConditionOperators}
+        >
+          <SaveSegment
+            createSegmentFromFilters={createSegmentFromFilters(
+              props.conditionOperator
+            )}
+          />
+        </Filters>
+      )}
     </>
   )
 }

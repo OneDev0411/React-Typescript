@@ -1,8 +1,9 @@
 import React from 'react'
 
 import { IconButton, MenuItem, Typography } from '@material-ui/core'
+import { mdiDotsHorizontal } from '@mdi/js'
 
-import IconHorizontalDots from 'components/SvgIcons/HorizontalDots/IconHorizontalDots'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { BaseDropdown } from 'components/BaseDropdown'
 import { EditEmailDrawer } from 'components/EmailCompose'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -31,7 +32,7 @@ function Actions(props: ActionsPropsType) {
               padding: 0
             }}
           >
-            <IconHorizontalDots />
+            <SvgIcon path={mdiDotsHorizontal} />
           </IconButton>
         )}
         renderMenu={({ close }) => (

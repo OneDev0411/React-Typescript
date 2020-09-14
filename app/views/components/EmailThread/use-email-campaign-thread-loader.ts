@@ -105,6 +105,7 @@ export function createEmailFromEmailCampaign(
     subject: campaign.subject,
     cc: cc.map(recipientToString),
     bcc: bcc.map(recipientToString),
-    from: from || ''
+    from: from || '',
+    attachments: campaign.attachments
   }
 }

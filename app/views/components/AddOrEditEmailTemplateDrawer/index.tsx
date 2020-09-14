@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Field } from 'react-final-form'
 import { TextField } from 'final-form-material-ui'
 import { connect } from 'react-redux'
@@ -13,6 +12,7 @@ import { createEmailTemplate } from 'actions/email-templates/create-email-templa
 import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
 import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { InlineInputLabel } from '../InlineInputLabel'
 import EmailBody from '../EmailCompose/components/EmailBody'
@@ -55,6 +55,8 @@ export function AddOrEditEmailTemplateDrawer({
     (emailTemplate && emailTemplate.body) || ''
   )
 
+  useEffect(() => () => bodyEditor.reset(), [isOpen])
+
   useDeepCompareEffect(() => {
     const template: Partial<IBrandEmailTemplateInput> = emailTemplate || {}
 
@@ -67,8 +69,25 @@ export function AddOrEditEmailTemplateDrawer({
     bodyEditor.reset(template.body || '')
   }, [emailTemplate])
 
+  const confirmationModal = useContext(ConfirmationModalContext)
+
   const handleSubmit = async (values: IBrandEmailTemplateInput) => {
-    values = {
+    const bodyText = bodyEditor.getPlainText()
+    const bodyTestIsEmpty = !bodyText || /^[\s\n]*$/.test(bodyText)
+
+    if (bodyTestIsEmpty) {
+      confirmationModal.setConfirmationModal({
+        message: 'Email template body is empty',
+        description:
+          'Email template body can not be empty or consisting from only spaces and new lines.',
+        cancelLabel: 'Ok',
+        needsConfirm: false
+      })
+
+      return
+    }
+
+    const enhancedValues: typeof values = {
       ...values,
       body: bodyEditor.getHtml()
     }
@@ -78,19 +97,19 @@ export function AddOrEditEmailTemplateDrawer({
         ? await updateEmailTemplate(
             emailTemplate.brand,
             emailTemplate.id,
-            values
+            enhancedValues
           )
-        : await createEmailTemplate(activeTeamId, values)
+        : await createEmailTemplate(activeTeamId, enhancedValues)
 
       if (submitCallback) {
         submitCallback(resultEmailTemplate)
       }
 
       onClose()
-    } catch (e) {
-      console.error('[EditTemplate]: ', e)
+    } catch (error) {
+      console.error('[EditTemplate]: ', error)
       addNotification({
-        message: e.message || 'Could not save email template',
+        message: error.message || 'Could not save email template',
         status: 'error'
       })
     }
@@ -130,7 +149,7 @@ export function AddOrEditEmailTemplateDrawer({
             component={TextField}
             margin="dense"
             validate={value =>
-              !(value || '').trim() && 'Template name is required'
+              (!value || !value.trim()) && 'Template name is required'
             }
             required
             fullWidth
@@ -145,6 +164,10 @@ export function AddOrEditEmailTemplateDrawer({
           <Field
             name="subject"
             component={TextField}
+            validate={value =>
+              (!value || !value.trim()) && 'Template subject is required'
+            }
+            required
             fullWidth
             disabled={!editable}
             InputProps={{

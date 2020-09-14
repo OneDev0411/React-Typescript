@@ -54,7 +54,7 @@ export const EventController = ({
       hasExternalTrigger
       contact={event?.people![0] as IContact}
       mediums="Email"
-      types={['Birthday', 'Home Anniversary']}
+      types={['Birthday', 'HomeAnniversary']}
     />
   )
 

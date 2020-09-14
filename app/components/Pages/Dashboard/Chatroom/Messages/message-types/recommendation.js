@@ -49,13 +49,6 @@ const Listing = ({
           </div>
 
           <div className="price">${getPrice()}</div>
-
-          <ul className="details">
-            <li>{property.bedroom_count} Beds</li>
-            <li>{property.bathroom_count} Baths</li>
-            <li>{util.metersToFeet(property.square_meters)} Sqft</li>
-            <li>{property.lot_square_meters.toFixed(0)} Lot</li>
-          </ul>
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 import React from 'react'
 import Downshift from 'downshift'
+import { mdiChevronUp } from '@mdi/js'
 
 import { Item } from 'components/Dropdown/Item'
-import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import IconKeyboardArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { List, ItemsContainer, InputContainer, Input } from './styled'
 
@@ -88,11 +88,7 @@ export class DropDownList extends React.Component {
                     onBlur={() => this.setState({ inputFocused: false })}
                     data-test="open-filters-list"
                   />
-                  {isMenuOpen ? (
-                    <IconKeyboardArrowUp />
-                  ) : (
-                    <IconKeyboardArrowDown />
-                  )}
+                  <SvgIcon path={mdiChevronUp} rotate={isMenuOpen ? 0 : 180} />
                 </InputContainer>
               </ItemsContainer>
 

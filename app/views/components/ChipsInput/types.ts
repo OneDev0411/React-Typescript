@@ -5,7 +5,7 @@ import { Observable } from 'rxjs'
 import { TextField } from '@material-ui/core'
 import { TextField as FinalFormTextField } from 'final-form-material-ui'
 
-import { AvatarProps } from 'components/Avatar'
+import { Props as AvatarProps } from 'components/Avatar/type'
 
 /**
  * Used in {@link ChipsInputProps#itemToChip}. See description there.

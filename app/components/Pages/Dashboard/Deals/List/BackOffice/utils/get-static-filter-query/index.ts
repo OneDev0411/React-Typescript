@@ -13,6 +13,7 @@ export function getStaticFilterQuery(
     return {
       is_draft: false,
       deal_type: ['Selling'],
+      query: searchQuery.term,
       contexts: {
         listing_status: {
           text: statuses
@@ -32,6 +33,7 @@ export function getStaticFilterQuery(
     return {
       is_draft: false,
       deal_type: ['Buying'],
+      query: searchQuery.term,
       contexts: {
         contract_status: {
           text: statuses

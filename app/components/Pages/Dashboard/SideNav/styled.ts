@@ -1,6 +1,6 @@
-import { Link, LinkProps } from 'react-router'
+import { Link as RouterLink, LinkProps } from 'react-router'
 import styled, { ThemeProps, css } from 'styled-components'
-import { Badge } from '@material-ui/core'
+import { Badge, Link } from '@material-ui/core'
 import { Theme, withStyles } from '@material-ui/core/styles'
 
 import { appSidenavWidth, backgroundColor } from './variables'
@@ -57,13 +57,21 @@ interface SidenavLinkPorps extends LinkProps {
   active?: boolean
 }
 
-export const SidenavLink = styled(Link)<SidenavLinkPorps>`
+const linkStyle = css`
   display: inline-block;
   font-size: ${(props: ThemeProps<Theme>) =>
     props.theme.typography.body1.fontSize};
   line-height: ${(props: ThemeProps<Theme>) =>
     props.theme.typography.body1.lineHeight};
   ${itemStyle}
+`
+
+export const SidenavLink = styled(RouterLink)<SidenavLinkPorps>`
+  ${linkStyle}
+`
+
+export const SidenavBlankLink = styled(Link)`
+  ${linkStyle}
 `
 
 export const Avatar = styled.div`
