@@ -27,7 +27,7 @@ const getConfilictMessageText = email =>
   }.`
 
 const getActionRedirectURL = params => {
-  const { action, room, alert, listing, crm_task } = params
+  const { action, room, alert, listing, files, crm_task } = params
 
   if (action === 'RedirectToRoom' && room) {
     return `/dashboard/recents/${room}`
@@ -51,6 +51,18 @@ const getActionRedirectURL = params => {
 
   if (action === 'RedirectToDeal') {
     return `/dashboard/deals/${params.deal}`
+  }
+
+  if (action === 'OpenMarketingWizard') {
+    if (files && files.length) {
+      return `/dashboard/marketing/wizard?imageUrls=${files
+        .map(file => encodeURIComponent(file.url))
+        .join(',')}`
+    }
+
+    if (listing) {
+      return `/dashboard/marketing/wizard?listingId=${listing}`
+    }
   }
 
   return '/dashboard/mls/'
@@ -145,6 +157,39 @@ const redirectHandler = async (
 
       return
     }
+  } else if (actionType === 'OpenMarketingWizard') {
+    const marketingWizardRedirectUrl = getActionRedirectURL(branchData)
+
+    // If the user is wrong, ask him to relogin with the right user
+    if (hasConflict()) {
+      params.redirectTo = marketingWizardRedirectUrl
+      params.messageText = getConfilictMessageText(email)
+      setActiveModal({ name: 'CONFLICT', params })
+
+      return
+    }
+
+    // If it's logged in, just redirect as it's the right user
+    if (loggedInUser) {
+      browserHistory.push(marketingWizardRedirectUrl)
+
+      return
+    }
+
+    // It it's not logged in, login and redirect
+    await dispatch(
+      signin(
+        {
+          refresh_token: branchData.refresh_token.token,
+          grant_type: 'refresh_token',
+          client_id: branchData.refresh_token.client
+        },
+        marketingWizardRedirectUrl,
+        branchData.refresh_token.user
+      )
+    )
+
+    return
   } else if (userInfo && userInfo.is_shadow) {
     console.log('isShadow:', branchData)
     redirect = '/register'
