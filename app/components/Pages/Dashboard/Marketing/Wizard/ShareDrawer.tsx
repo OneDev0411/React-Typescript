@@ -27,9 +27,11 @@ interface Props {
   user: IUser
   template: IBrandMarketingTemplate
   listing: IListing
+  isPrepared: boolean
 
   onClose: () => void
-  onDownloadClick: () => Promise<void>
+  onPrepareClick: () => Promise<void>
+  onDownloadClick: () => void
 }
 
 export default function ShareDrawer({
@@ -37,21 +39,39 @@ export default function ShareDrawer({
   user,
   template,
   listing,
+  isPrepared,
   onClose,
+  onPrepareClick,
   onDownloadClick
 }: Props) {
   const classes = useStyles()
-  const [isDownloading, setIsDownloading] = useState<boolean>(false)
+  const [isPreparing, setIsPreparing] = useState<boolean>(false)
 
-  const handleDownloadClick = async () => {
+  const handlePrepareClick = async () => {
     try {
-      setIsDownloading(true)
-      await onDownloadClick()
+      setIsPreparing(true)
+      await onPrepareClick()
     } catch (err) {
       console.error(err)
     } finally {
-      setIsDownloading(false)
+      setIsPreparing(false)
     }
+  }
+
+  const handleDownloadClick = async () => {
+    onDownloadClick()
+  }
+
+  const getButtonCopy = () => {
+    if (isPreparing) {
+      return 'Loading'
+    }
+
+    if (isPrepared) {
+      return 'Download'
+    }
+
+    return 'Next'
   }
 
   return (
@@ -73,7 +93,7 @@ export default function ShareDrawer({
             justify="space-between"
           >
             <Grid item>
-              <Typography variant="h6">Share to</Typography>
+              <Typography variant="h6">Share</Typography>
             </Grid>
             <Grid item>
               <IconButton onClick={onClose}>
@@ -92,11 +112,17 @@ export default function ShareDrawer({
                   size="medium"
                   variant="contained"
                   color="primary"
-                  disabled={isDownloading}
-                  onClick={handleDownloadClick}
-                  startIcon={<SvgIcon path={mdiDownload} />}
+                  disabled={isPreparing}
+                  onClick={() => {
+                    if (isPrepared) {
+                      return handleDownloadClick()
+                    }
+
+                    handlePrepareClick()
+                  }}
+                  startIcon={isPrepared ? <SvgIcon path={mdiDownload} /> : null}
                 >
-                  Download
+                  {getButtonCopy()}
                 </Button>
               </Box>
             </Grid>
