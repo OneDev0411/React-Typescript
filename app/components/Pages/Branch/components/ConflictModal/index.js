@@ -1,4 +1,5 @@
 import React from 'react'
+import { Grid } from '@material-ui/core'
 
 import RedirectModal from '../RedirectModal'
 import LinkButton from '../../../../../views/components/Button/LinkButton'
@@ -42,22 +43,26 @@ const ConflictModal = ({ params, brandInfo }) => {
         >
           {messageText}
         </p>
-        <div>
-          <LinkButton
-            appearance="outline"
-            to="/dashboard/mls"
-            style={{ marginRight: '1rem' }}
-          >
-            Cancel
-          </LinkButton>
-          {actionButton.href ? (
-            <SigninButton href={actionButton.href}>
-              {actionButton.text}
-            </SigninButton>
-          ) : (
-            <ActionButton {...actionButton}>{actionButton.text}</ActionButton>
-          )}
-        </div>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <LinkButton
+              appearance="outline"
+              to="/dashboard/mls"
+              style={{ marginRight: '1rem' }}
+            >
+              Cancel
+            </LinkButton>
+          </Grid>
+          <Grid item xs={6}>
+            {actionButton.href ? (
+              <SigninButton href={actionButton.href}>
+                {actionButton.text}
+              </SigninButton>
+            ) : (
+              <ActionButton {...actionButton}>{actionButton.text}</ActionButton>
+            )}
+          </Grid>
+        </Grid>
       </div>
     </RedirectModal>
   )
