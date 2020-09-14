@@ -47,6 +47,14 @@ export default function ShareDrawer({
   const classes = useStyles()
   const [isPreparing, setIsPreparing] = useState<boolean>(false)
 
+  const handleDownloadOrPrepareClick = () => {
+    if (isPrepared) {
+      return handleDownloadClick()
+    }
+
+    handlePrepareClick()
+  }
+
   const handlePrepareClick = async () => {
     try {
       setIsPreparing(true)
@@ -58,11 +66,11 @@ export default function ShareDrawer({
     }
   }
 
-  const handleDownloadClick = async () => {
+  const handleDownloadClick = () => {
     onDownloadClick()
   }
 
-  const getButtonCopy = () => {
+  const getDownloadOrPrepareButtonCopy = () => {
     if (isPreparing) {
       return 'Loading'
     }
@@ -113,16 +121,10 @@ export default function ShareDrawer({
                   variant="contained"
                   color="primary"
                   disabled={isPreparing}
-                  onClick={() => {
-                    if (isPrepared) {
-                      return handleDownloadClick()
-                    }
-
-                    handlePrepareClick()
-                  }}
+                  onClick={handleDownloadOrPrepareClick}
                   startIcon={isPrepared ? <SvgIcon path={mdiDownload} /> : null}
                 >
-                  {getButtonCopy()}
+                  {getDownloadOrPrepareButtonCopy()}
                 </Button>
               </Box>
             </Grid>
