@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import {
   Grid,
-  Tooltip,
   IconButton,
   Avatar,
   Button,
@@ -176,14 +175,9 @@ export default function SortableImageList({
                       }}
                     >
                       <Grid item xs={2}>
-                        <Tooltip
-                          title="Drag photo to reorder"
-                          aria-label="Drag photo to reorder"
-                        >
-                          <IconButton {...draggableProvided.dragHandleProps}>
-                            <SvgIcon path={mdiArrowUpDown} />
-                          </IconButton>
-                        </Tooltip>
+                        <IconButton {...draggableProvided.dragHandleProps}>
+                          <SvgIcon path={mdiArrowUpDown} />
+                        </IconButton>
                       </Grid>
                       <Grid item xs={8}>
                         <Avatar
@@ -194,11 +188,9 @@ export default function SortableImageList({
                         />
                       </Grid>
                       <Grid item xs={2}>
-                        <Tooltip title="Delete photo" aria-label="Delete photo">
-                          <IconButton onClick={() => handleDeleteImage(image)}>
-                            <SvgIcon path={mdiTrashCanOutline} />
-                          </IconButton>
-                        </Tooltip>
+                        <IconButton onClick={() => handleDeleteImage(image)}>
+                          <SvgIcon path={mdiTrashCanOutline} />
+                        </IconButton>
                       </Grid>
                     </Grid>
                   )}

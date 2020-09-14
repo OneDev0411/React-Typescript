@@ -93,6 +93,10 @@ function MarketingWizard(props: WithRouterProps) {
     Optional<string>
   >(undefined)
 
+  const [generatedTemplateInstance, setGeneratedTemplateInstance] = useState<
+    Optional<IMarketingTemplateInstance>
+  >(undefined)
+
   const [templatesLimit, setTemplatesLimit] = useState<number>(
     TEMPLATES_PAGE_SIZE
   )
@@ -151,7 +155,10 @@ function MarketingWizard(props: WithRouterProps) {
     setSelectedTemplate(template)
   }
 
-  const handleCloseShareDrawer = () => setSelectedTemplate(null)
+  const handleCloseShareDrawer = () => {
+    setSelectedTemplate(null)
+    setGeneratedTemplateInstance(undefined)
+  }
 
   const handleOpenEditVariablesDialog = () => {
     setIsEditVariablesDialogOpen(true)
@@ -171,7 +178,7 @@ function MarketingWizard(props: WithRouterProps) {
     return uploadAsset(file, currentTabTemplates[0].template.id)
   }
 
-  const handleDownloadClick = async (template: IBrandMarketingTemplate) => {
+  const handlePrepareClick = async (template: IBrandMarketingTemplate) => {
     if (!listing || !brand) {
       return
     }
@@ -189,15 +196,15 @@ function MarketingWizard(props: WithRouterProps) {
         }
       )
 
+      setGeneratedTemplateInstance(templateInstance)
+
       dispatch(
         addNotification({
           status: 'success',
           message:
-            'Marketing peace created successfully! You should be prompted to download file in a few seconds!'
+            'Marketing peace created successfully! You may now download it by clicking on the download button!'
         })
       )
-
-      saveAs(templateInstance.file.url)
     } catch (err) {
       dispatch(
         addNotification({
@@ -207,6 +214,14 @@ function MarketingWizard(props: WithRouterProps) {
       )
       console.error(err)
     }
+  }
+
+  const handleDownloadClick = () => {
+    if (!generatedTemplateInstance) {
+      return
+    }
+
+    saveAs(generatedTemplateInstance.file.url)
   }
 
   if (isLoadingTemplates || isLoadingListing) {
@@ -299,8 +314,10 @@ function MarketingWizard(props: WithRouterProps) {
           template={selectedTemplate}
           listing={listing}
           user={user}
+          isPrepared={!!generatedTemplateInstance}
           onClose={handleCloseShareDrawer}
-          onDownloadClick={() => handleDownloadClick(selectedTemplate)}
+          onPrepareClick={() => handlePrepareClick(selectedTemplate)}
+          onDownloadClick={() => handleDownloadClick()}
         />
       )}
       {isEditVariablesDialogOpen && (
