@@ -1,7 +1,6 @@
-import { FormControl, MenuItem, Select } from '@material-ui/core'
 import React from 'react'
+import { FormControl, MenuItem, Select } from '@material-ui/core'
 import { ContentBlock, EditorState } from 'draft-js'
-
 import { findKey } from 'lodash'
 
 import {

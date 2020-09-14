@@ -1,18 +1,22 @@
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import { ContentBlock, EditorState } from 'draft-js'
 import { getSelectionEntity } from 'draftjs-utils'
-
-import * as React from 'react'
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
-
-import { Grow, Popper, useTheme } from '@material-ui/core'
+import {
+  Grow,
+  Popper,
+  PopperPlacementType,
+  PopperProps,
+  useTheme
+} from '@material-ui/core'
 import { isEqual } from 'lodash'
-
-import usePrevious from 'react-use/lib/usePrevious'
-
-import { PopperPlacementType, PopperProps } from '@material-ui/core/Popper'
-
 import PopperJs from 'popper.js'
-
+import usePrevious from 'react-use/lib/usePrevious'
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
 
 import { getSelectionAnchorElement } from '../../features/RichText/LinkEditorPopover/utils'
@@ -140,6 +144,7 @@ export function DraftJsSelectionPopover({
           placement={placement}
           popperRef={popperRef}
           transition
+          disablePortal
           style={{ zIndex: theme.zIndex.modal }}
         >
           {({ TransitionProps }) => (
