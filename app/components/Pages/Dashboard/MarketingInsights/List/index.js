@@ -1,19 +1,17 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { connect } from 'react-redux'
+import { makeStyles } from '@material-ui/core'
 import pluralize from 'pluralize'
-import cn from 'classnames'
-
-import { makeStyles, createStyles } from '@material-ui/core'
+import classNames from 'classnames'
 
 import Table from 'components/Grid/Table'
-
 import { useGridStyles } from 'components/Grid/Table/styles'
 
-import Layout from './Layout'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import NoSearchResults from '../../../../Partials/no-search-results'
 
+import Layout from './Layout'
 import Actions from './MarketingInsightsActions'
 import ThumbnailColumn from './Column/Thumbnail'
 import TitleColumn from './Column/Title'
@@ -21,11 +19,11 @@ import RecipientsColumn from './Column/Recipients'
 import StatsColumn from './Column/Stats'
 import { InsightContainer } from './styled'
 import useListData from './useListData'
-import { InsightFiltersType } from './types'
+import { InsightFilterType } from './types'
 import { valueAndPercent, hasPixelTracking } from './helpers'
 
-const useCustomGridStyles = makeStyles(theme =>
-  createStyles({
+const useCustomGridStyles = makeStyles(
+  theme => ({
     row: {
       '& td': {
         '&.actions svg': {
@@ -38,25 +36,31 @@ const useCustomGridStyles = makeStyles(theme =>
         }
       }
     }
-  })
+  }),
+  { name: 'InsightList' }
 )
 
 function List(props) {
   const customGridClasses = useCustomGridStyles()
-  const [queue, setQueue] = useState(0)
-  const isScheduled = props.route && props.route.path === 'scheduled'
-  const filterType = isScheduled
-    ? InsightFiltersType.SCHEDULED
-    : InsightFiltersType.SENT
-  const { isLoading, hasError, list, stats } = useListData(
-    props.user,
-    queue,
-    filterType
-  )
   const gridClasses = useGridStyles()
 
-  React.useEffect(() => {
-    window.socket.on('email_campaign:send', () => setQueue(queue => queue + 1))
+  const isScheduled = props.route && props.route.path === 'scheduled'
+  const filterType = isScheduled
+    ? InsightFilterType.SCHEDULED
+    : InsightFilterType.SENT
+
+  const {
+    isLoading,
+    hasError,
+    list,
+    counts,
+    reloadList,
+    reloadItem
+  } = useListData(props.user, filterType)
+
+  useEffect(() => {
+    window.socket.on('email_campaign:send', reloadList)
+    // TODO: Shouldn't we simply remove the event listener on component unmounting?
   }, [])
 
   const columns = useMemo(
@@ -76,12 +80,7 @@ function List(props) {
         width: '32%',
         verticalAlign: 'center',
         accessor: row => row.due_at,
-        render: ({ row }) => (
-          <TitleColumn
-            data={row}
-            reloadList={() => setQueue(queue => queue + 1)}
-          />
-        )
+        render: ({ row }) => <TitleColumn data={row} reloadList={reloadList} />
       },
       {
         header: 'Recipients',
@@ -178,13 +177,14 @@ function List(props) {
         class: 'actions',
         verticalAlign: 'center',
         width: '2rem',
-        render: ({ row }) =>
-          !row.executed_at && (
-            <Actions
-              data={row}
-              reloadList={() => setQueue(queue => queue + 1)}
-            />
-          )
+        render: ({ row }) => (
+          <Actions
+            emailCampaign={row}
+            reloadList={reloadList}
+            reloadItem={reloadItem}
+            isSent={!!row.executed_at}
+          />
+        )
       }
     ],
     []
@@ -217,7 +217,7 @@ function List(props) {
           onChange: onChangeSort
         }}
         classes={{
-          row: cn(gridClasses.row, customGridClasses.row)
+          row: classNames(gridClasses.row, customGridClasses.row)
         }}
       />
     )
@@ -225,9 +225,9 @@ function List(props) {
 
   return (
     <Layout
-      sentCount={stats.sent}
-      scheduledCount={stats.scheduled}
-      onCreateEmail={() => setQueue(queue => queue + 1)}
+      sentCount={counts.sent}
+      scheduledCount={counts.scheduled}
+      onCreateEmail={reloadList}
       renderContent={props => (
         <InsightContainer>{renderContent(props)}</InsightContainer>
       )}

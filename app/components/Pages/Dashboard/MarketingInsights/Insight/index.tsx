@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import {
   Dialog,
   Theme,
@@ -14,6 +15,7 @@ import {
   mdiCursorDefaultClickOutline,
   mdiAccountMultipleOutline
 } from '@mdi/js'
+import { addNotification } from 'reapop'
 import pluralize from 'pluralize'
 import classNames from 'classnames'
 
@@ -21,16 +23,20 @@ import { formatDate } from 'components/DateTimePicker/helpers'
 import { EmailThread } from 'components/EmailThread'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Avatar } from 'components/Avatar'
+import EmailNotificationSetting from 'components/EmailNotificationSetting'
+
+import useLabeledSwitchHandlers from 'hooks/use-labeled-switch-handlers'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
 import { getContactNameInitials } from 'models/contacts/helpers'
+import { setEmailNotificationStatus } from 'models/email/set-email-notification-status'
 
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
 import Loading from '../../../../Partials/Loading'
 import { hasPixelTracking, valueAndPercent } from '../List/helpers'
-import useItemData from './useItemData'
+import { useItemData } from './useItemData'
 import ContactsTable from './ContactsTable'
 import { ContactsListType } from './types'
 import SortField, { SortableColumnsType as SortFieldType } from './SortField'
@@ -95,6 +101,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   summaryItemInfo: {
     width: theme.spacing(16)
+  },
+  settingsContainer: {
+    flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingRight: theme.spacing(3)
   }
 }))
 
@@ -111,10 +123,45 @@ function Insight({ params: { id } }: Props) {
     ascending: false
   })
   const [isOpenViewEmail, setOpenViewEmail] = useState(false)
-  const { item, isLoading } = useItemData(id)
+  const { item, isLoading, reload } = useItemData(id)
   const [emailPreview, setEmailPreview] = useState<IEmail<
     IEmailOptionalFields
   > | null>(null)
+
+  const dispatch = useDispatch()
+
+  const emailNotificationSettingHandlers = useLabeledSwitchHandlers(
+    item?.notifications_enabled,
+    async checked => {
+      if (!item) {
+        return
+      }
+
+      try {
+        await setEmailNotificationStatus(item.id, checked)
+      } catch (error) {
+        console.error(error)
+        dispatch(
+          addNotification({
+            status: 'error',
+            message: 'Unable to change email notification setting.'
+          })
+        )
+      } finally {
+        try {
+          await reload()
+        } catch (error) {
+          console.error(error)
+          dispatch(
+            addNotification({
+              status: 'error',
+              message: 'Unable to refresh the page.'
+            })
+          )
+        }
+      }
+    }
+  )
 
   const classes = useStyles()
 
@@ -135,8 +182,7 @@ function Insight({ params: { id } }: Props) {
     display_name: item.from ? item.from.display_name || '' : '',
     to: item.from ? item.from.email : '',
     profile_image_url: item.from ? item.from.profile_image_url : ''
-    // TODO(mojtaba): fix missing fields either make them optional in type
-    //  definition, or provide them here
+    // TODO(mojtaba): Fix missing fields either make them optional in type definition, or provide them here
   } as ContactsListType
   const sentFromTitle = sentFrom.display_name || sentFrom.to
   const pixelTracking = hasPixelTracking(item)
@@ -196,8 +242,8 @@ function Insight({ params: { id } }: Props) {
 
         setEmailPreview(email)
       }
-    } catch (e) {
-      console.error('something went wrong for loading preview')
+    } catch (error) {
+      console.error(error)
     } finally {
       setOpenViewEmail(true)
     }
@@ -299,6 +345,9 @@ function Insight({ params: { id } }: Props) {
                   </Tooltip>
                 )
             )}
+            <div className={classes.settingsContainer}>
+              <EmailNotificationSetting {...emailNotificationSettingHandlers} />
+            </div>
           </div>
           <section className="content">
             <ContactsTable

@@ -19,6 +19,7 @@ export interface EmailFormValues {
   due_at: Date | null
   body: string | undefined
   templateInstance?: IMarketingTemplateInstance
+  notifications_enabled?: boolean
 }
 
 export interface UrlBasedEmailAttachmentInput {

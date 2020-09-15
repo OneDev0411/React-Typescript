@@ -107,6 +107,7 @@ declare interface IEmailCampaignInputBase {
    * implementation by the API. It should be removed.
    */
   include_signature?: boolean
+  notifications_enabled?: boolean
 }
 
 declare interface IIndividualEmailCampaignInput
@@ -167,6 +168,7 @@ declare type IEmailCampaign<
   stored: number
   text: string
   template?: IMarketingTemplateInstance
+  notifications_enabled: boolean
   type: 'email_campaign'
   sent: number
   failure: string | null
