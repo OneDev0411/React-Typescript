@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react'
-import TuiImageEditor from 'tui-image-editor'
 
 import {
   Box,
@@ -114,6 +113,8 @@ export function Editor({ file, dimensions, onClose, onSave }: Props) {
   }
 
   const setupEditor = async () => {
+    const TuiImageEditor = (await import('tui-image-editor')).default
+
     const editor = new TuiImageEditor(ref.current!, {
       usageStatistics: false,
       selectionStyle: {
