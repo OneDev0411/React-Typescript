@@ -1,18 +1,16 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
+import { Button, makeStyles, Theme } from '@material-ui/core'
 import { Link } from 'react-router'
 
 import { getNameInitials } from 'utils/helpers.js'
 
+import useTypedSelector from 'hooks/use-typed-selector'
+
 import CopyButton from 'components/CopyButton'
 import { EmailComposeFormProps } from 'components/EmailCompose'
 import { Avatar } from 'components/Avatar'
-import { IAppState } from 'reducers'
-import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
 
 import { getName } from './helpers'
-
 import Activity from './Activity'
 import {
   MiniContactType,
@@ -24,45 +22,38 @@ import useProfile from './useProfile'
 import MiniContactActionButton from './MiniContactActionButton'
 import MiniContactSocialMedias from './MiniContactSocialMedias'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    avatar: {
-      width: 72,
-      height: 72,
-      backgroundColor: theme.palette.divider,
-      color: theme.palette.text.primary
-    }
-  })
-)
+const useStyles = makeStyles((theme: Theme) => ({
+  avatar: {
+    width: theme.spacing(9),
+    height: theme.spacing(9),
+    backgroundColor: theme.palette.divider,
+    color: theme.palette.text.primary
+  }
+}))
 
 interface MiniProfilePropsType {
   type: MiniContactType
-  initData: {}
+  initData: any
   actionSettings: ActionSettingsType
-  user: IUser
-  attributeDefs: IAttributeDefsState
   setActionSettings: (items: ActionSettingsType) => void
   onSubmit?(event: IEvent, type: string): void
 }
 
-function MiniProfile(props: MiniProfilePropsType) {
-  const output = useProfile(props.type, props.initData, props.attributeDefs)
+export default function MiniProfile({
+  type,
+  initData,
+  actionSettings,
+  setActionSettings,
+  onSubmit
+}: MiniProfilePropsType) {
+  const user = useTypedSelector<IUser>(({ user }) => user)
+  const attributeDefs = useTypedSelector(
+    ({ contacts }) => contacts.attributeDefs
+  )
+
+  const output = useProfile(type, initData, attributeDefs)
   const data = output.data
-  const emailProps = {
-    type: ActionSettingsNamesType.EMAIL,
-    data: {
-      initialValues: {
-        to: [
-          {
-            recipient_type: 'Email',
-            email: data.email
-          }
-        ]
-      },
-      onClose: () => props.setActionSettings({}),
-      onSent: () => props.setActionSettings({})
-    } as Partial<EmailComposeFormProps>
-  }
+
   const classes = useStyles()
 
   return (
@@ -80,10 +71,10 @@ function MiniProfile(props: MiniProfilePropsType) {
           <MiniContactActionButton
             isLoading={output.contact_status === 'loading'}
             data={output}
-            actionSettings={props.actionSettings}
-            setActionSettings={props.setActionSettings}
-            onSubmit={props.onSubmit}
-            user={props.user}
+            actionSettings={actionSettings}
+            setActionSettings={setActionSettings}
+            onSubmit={onSubmit}
+            user={user}
           />
         </div>
       </div>
@@ -111,7 +102,25 @@ function MiniProfile(props: MiniProfilePropsType) {
             <span>{data.email}</span>
             <Button
               color="primary"
-              onClick={() => props.setActionSettings(emailProps)}
+              onClick={() =>
+                setActionSettings({
+                  type: ActionSettingsNamesType.EMAIL,
+                  data: {
+                    initialValues: {
+                      to: [
+                        {
+                          recipient_type: 'Email',
+                          email: data.email,
+                          contact:
+                            initData.type === 'contact' ? initData : undefined
+                        }
+                      ]
+                    },
+                    onClose: () => setActionSettings({}),
+                    onSent: () => setActionSettings({})
+                  } as Partial<EmailComposeFormProps>
+                })
+              }
             >
               Send Email
             </Button>
@@ -134,12 +143,3 @@ function MiniProfile(props: MiniProfilePropsType) {
     </ProfileContainer>
   )
 }
-
-function mapStateToProps(state: IAppState) {
-  return {
-    user: state.user,
-    attributeDefs: state.contacts.attributeDefs
-  }
-}
-
-export default connect(mapStateToProps)(MiniProfile)
