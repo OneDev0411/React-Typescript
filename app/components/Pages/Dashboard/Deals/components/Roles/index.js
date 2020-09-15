@@ -11,6 +11,7 @@ import { Avatar } from 'components/Avatar'
 import { createRoles, deleteRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 import { getContactNameInitials } from 'models/contacts/helpers'
+import { getNameInitials } from 'utils/helpers'
 
 import DeleteRole from 'components/DealRole/components/DeleteRole'
 
@@ -174,7 +175,9 @@ class Roles extends React.Component {
                 <Flex alignCenter>
                   <RoleAvatar>
                     <Avatar alt={getAvatarTitle(role)} user={role.user}>
-                      {getContactNameInitials(role.user)}
+                      {role.user
+                        ? getContactNameInitials(role.user)
+                        : getNameInitials(getLegalFullName(role), 1)}
                     </Avatar>
                   </RoleAvatar>
 
