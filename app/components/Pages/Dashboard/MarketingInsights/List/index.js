@@ -59,7 +59,7 @@ function List(props) {
   } = useListData(props.user, filterType)
 
   useEffect(() => {
-    window.socket.on('email_campaign:send', () => reloadList())
+    window.socket.on('email_campaign:send', reloadList)
     // TODO: Shouldn't we simply remove the event listener on component unmounting?
   }, [])
 
@@ -80,9 +80,7 @@ function List(props) {
         width: '32%',
         verticalAlign: 'center',
         accessor: row => row.due_at,
-        render: ({ row }) => (
-          <TitleColumn data={row} reloadList={() => reloadList()} />
-        )
+        render: ({ row }) => <TitleColumn data={row} reloadList={reloadList} />
       },
       {
         header: 'Recipients',
@@ -182,8 +180,8 @@ function List(props) {
         render: ({ row }) => (
           <Actions
             emailCampaign={row}
-            reloadList={() => reloadList()}
-            reloadItem={emailCampaignId => reloadItem(emailCampaignId)}
+            reloadList={reloadList}
+            reloadItem={reloadItem}
             isSent={!!row.executed_at}
           />
         )
@@ -229,7 +227,7 @@ function List(props) {
     <Layout
       sentCount={counts.sent}
       scheduledCount={counts.scheduled}
-      onCreateEmail={() => reloadList()}
+      onCreateEmail={reloadList}
       renderContent={props => (
         <InsightContainer>{renderContent(props)}</InsightContainer>
       )}

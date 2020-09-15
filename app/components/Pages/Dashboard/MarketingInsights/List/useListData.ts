@@ -10,17 +10,12 @@ export default function useListData(
   user: IUser,
   filterType: InsightFilterType
 ): InsightState & {
-  reloadList: (callback?: (success: boolean) => void) => Promise<void>
-  reloadItem: (
-    emailCampaignId: UUID,
-    callback?: (success: boolean) => void
-  ) => Promise<void>
+  reloadList: () => Promise<void>
+  reloadItem: (emailCampaignId: UUID) => Promise<void>
 } {
   const [state, dispatch] = useInsightStateReducer()
 
-  const reloadList: ReturnType<
-    typeof useListData
-  >['reloadList'] = async callback => {
+  const reloadList: ReturnType<typeof useListData>['reloadList'] = async () => {
     dispatch({
       type: InsightActionType.FetchListRequest
     })
@@ -33,20 +28,17 @@ export default function useListData(
         allEmailCampaigns,
         filterType
       })
-      callback && callback(true)
     } catch (error) {
       console.error(error)
       dispatch({
         type: InsightActionType.FetchListFailure
       })
-      callback && callback(false)
     }
   }
 
-  const reloadItem: ReturnType<typeof useListData>['reloadItem'] = async (
-    emailCampaignId,
-    callback
-  ) => {
+  const reloadItem: ReturnType<
+    typeof useListData
+  >['reloadItem'] = async emailCampaignId => {
     dispatch({
       type: InsightActionType.FetchItemRequest
     })
@@ -63,13 +55,11 @@ export default function useListData(
         type: InsightActionType.FetchItemSuccess,
         emailCampaign
       })
-      callback && callback(true)
     } catch (error) {
       console.error(error)
       dispatch({
         type: InsightActionType.FetchItemFailure
       })
-      callback && callback(false)
     }
   }
 
