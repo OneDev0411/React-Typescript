@@ -16,12 +16,13 @@ import EmailNotificationSetting from 'components/EmailNotificationSetting'
 import useLabeledSwitchHandlers from 'hooks/use-labeled-switch-handlers'
 
 interface Props {
-  data: any
+  emailCampaign: IEmailCampaign
   isSent: boolean
   reloadList: () => void
+  reloadItem: (emailCampaignId: UUID) => void
 }
 
-function Actions({ data, isSent, reloadList }: Props) {
+function Actions({ emailCampaign, isSent, reloadList, reloadItem }: Props) {
   const [isEditComposeOpen, setIsEditComposeOpen] = useState(false)
 
   const confirmation = useContext(ConfirmationModalContext)
@@ -29,11 +30,11 @@ function Actions({ data, isSent, reloadList }: Props) {
   const dispatch = useDispatch()
 
   const emailNotificationSettingHandlers = useLabeledSwitchHandlers(
-    data?.notifications_enabled,
+    emailCampaign?.notifications_enabled,
     async checked => {
       try {
-        await setEmailNotificationStatus(data.id, checked)
-        reloadList()
+        await setEmailNotificationStatus(emailCampaign.id, checked)
+        reloadItem(emailCampaign.id)
       } catch (error) {
         console.error(error)
         dispatch(
@@ -89,7 +90,7 @@ function Actions({ data, isSent, reloadList }: Props) {
                         "The email will be deleted and you don't have access to it anymore. Are you sure?",
                       confirmLabel: 'Yes, Remove it',
                       onConfirm: () =>
-                        deleteEmailCampaign(data.id).then(reloadList)
+                        deleteEmailCampaign(emailCampaign.id).then(reloadList)
                     })
                   }}
                 >
@@ -106,7 +107,7 @@ function Actions({ data, isSent, reloadList }: Props) {
           onClose={() => setIsEditComposeOpen(false)}
           onEdited={reloadList}
           onDeleted={reloadList}
-          emailId={data.id}
+          emailId={emailCampaign.id}
         />
       )}
     </>

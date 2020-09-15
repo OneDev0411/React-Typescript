@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 
-export default function useItemData(emailCampaignId: string) {
+export function useItemData(emailCampaignId: string) {
   const [isLoading, setLoading] = useState<boolean>(true)
   const [hasError, setError] = useState<boolean>(false)
   const [item, setItem] = useState<IEmailCampaign<
