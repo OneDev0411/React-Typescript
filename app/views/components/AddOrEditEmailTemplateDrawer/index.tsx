@@ -76,15 +76,16 @@ export function AddOrEditEmailTemplateDrawer({
     const bodyTestIsEmpty = !bodyText || /^[\s\n]*$/.test(bodyText)
 
     if (bodyTestIsEmpty) {
-      confirmationModal.setConfirmationModal({
-        message: 'Email template body is empty',
-        description:
-          'Email template body can not be empty or consisting from only spaces and new lines.',
-        cancelLabel: 'Ok',
-        needsConfirm: false
-      })
-
-      return
+      return new Promise((resolve, reject) =>
+        confirmationModal.setConfirmationModal({
+          message: 'Email template body is empty',
+          description:
+            'Email template body can not be empty or only white spaces.',
+          cancelLabel: 'Ok',
+          needsConfirm: false,
+          onCancel: reject
+        })
+      )
     }
 
     const enhancedValues: typeof values = {
