@@ -93,6 +93,7 @@ export function FilterActions({ editor, file, onChangeActiveAction }: Props) {
     return null
   }
 
+  // TODO: refactor filters to make them large and real
   return (
     <Box display="flex" alignItems="center" width="100%">
       {FILTERS.map((filter, index) => (

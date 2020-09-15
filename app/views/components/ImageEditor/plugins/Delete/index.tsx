@@ -28,6 +28,11 @@ export function Delete({ editor }: Props) {
   })
 
   const removeActiveObject = () => {
+    /**
+     * TUI doesn't have any API to figure out there is a removable
+     * object or not. so in this case clicking on remove object causes
+     * unexpected error.
+     */
     try {
       editor.removeActiveObject()
     } catch (e) {}
