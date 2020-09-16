@@ -32,8 +32,7 @@
     "test:update-snapshots": "npm run test:unit -- -u",
     "test:ci": "npm run test:unit",
     "test": "jest --watch",
-    "jest": "jest",
-    "postinstall": "npm i npm install --no-save --no-optional fabric@~3.6.0 && npm remove canvas"
+    "jest": "jest"
   },
   "prettier": {
     "semi": false,
