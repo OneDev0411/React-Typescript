@@ -41,21 +41,12 @@ module.exports = {
       deals: resolvePath('../app/components/Pages/Dashboard/Deals'),
       crm: resolvePath('../app/components/Pages/Dashboard/Contacts'),
       animations: resolvePath('../app/animations'),
-      fixtures: resolvePath('../tests/unit/fixtures'),
-      fabric: 'fabric-pure-browser'
+      fixtures: resolvePath('../tests/unit/fixtures')
     }
   },
   plugins: [new webpack.DefinePlugin(config.globals)],
   externals: {
-    fs: '{}',
-    'canvas-prebuilt': 'undefined',
-    canvas: 'undefined',
-    'jsdom/lib/jsdom/utils': JSON.stringify({ Canvas: null }),
-    'jsdom/lib/jsdom/living/generated/utils': JSON.stringify({
-      implForWrapper: null
-    }),
-    jsdom: 'null',
-    xmldom: JSON.stringify({ DOMParser: null })
+    fs: '{}'
   },
   module: {
     rules: [
