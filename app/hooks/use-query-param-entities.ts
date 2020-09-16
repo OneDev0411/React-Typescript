@@ -24,7 +24,9 @@ export function useListingById(
 
   useDeepCompareEffect(() => {
     async function fetchListing() {
-      const listingId: Optional<UUID> = location.query[field]
+      const listingId: Optional<UUID> = location.query
+        ? location.query[field]
+        : undefined
 
       if (!listingId) {
         setListing(null)
