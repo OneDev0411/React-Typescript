@@ -113,8 +113,7 @@ export function Editor({ file, dimensions, onClose, onSave }: Props) {
   }
 
   const setupEditor = async () => {
-    const TuiImageEditor = (await import('tui-image-editor-pure-browser'))
-      .default
+    const TuiImageEditor = (await import('tui-image-editor')).default
 
     const editor = new TuiImageEditor(ref.current!, {
       usageStatistics: false,
