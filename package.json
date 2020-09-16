@@ -32,7 +32,8 @@
     "test:update-snapshots": "npm run test:unit -- -u",
     "test:ci": "npm run test:unit",
     "test": "jest --watch",
-    "jest": "jest"
+    "jest": "jest",
+    "postinstall": "npm i npm install --no-save --no-optional fabric@~3.6.0"
   },
   "prettier": {
     "semi": false,
@@ -126,7 +127,6 @@
     "emojify.js": "^1.1.0",
     "es6-promise": "^4.1.0",
     "events": "^1.1.1",
-    "fabric-pure-browser": "^3.6.0",
     "fecha": "^2.3.3",
     "file-loader": "^1.1.6",
     "file-saver": "^2.0.2",

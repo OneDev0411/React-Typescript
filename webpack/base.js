@@ -41,8 +41,7 @@ module.exports = {
       deals: resolvePath('../app/components/Pages/Dashboard/Deals'),
       crm: resolvePath('../app/components/Pages/Dashboard/Contacts'),
       animations: resolvePath('../app/animations'),
-      fixtures: resolvePath('../tests/unit/fixtures'),
-      fabric: 'fabric-pure-browser'
+      fixtures: resolvePath('../tests/unit/fixtures')
     }
   },
   plugins: [new webpack.DefinePlugin(config.globals)],
