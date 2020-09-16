@@ -24,7 +24,7 @@ function postcss() {
   return [require('autoprefixer')()]
 }
 
-webpackConfig.devtool = 'source-map'
+webpackConfig.devtool = false
 
 webpackConfig.output.pathinfo = false
 webpackConfig.output.publicPath = process.env.ASSETS_BASEURL
