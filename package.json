@@ -33,7 +33,7 @@
     "test:ci": "npm run test:unit",
     "test": "jest --watch",
     "jest": "jest",
-    "postinstall": "npm i npm install --no-save --no-optional fabric@~3.6.0"
+    "postinstall": "npm i npm install --no-save --no-optional fabric@~3.6.0 && npm remove canvas"
   },
   "prettier": {
     "semi": false,
