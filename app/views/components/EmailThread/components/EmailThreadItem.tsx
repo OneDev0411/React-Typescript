@@ -99,7 +99,7 @@ export function EmailThreadItem({
   const [isResponseOpen, setIsResponseOpen] = useState(false)
   const [trimQuotedContent, toggleTrimQuotedContent] = useBoolean(true)
   const [responseType, setResponseType] = useState<EmailResponseType>('reply')
-  const user: IUser = useSelector((store: IAppState) => store.user)
+  const user = useSelector<IAppState, IUser>(({ user }) => user)
 
   const openResponse = (type: EmailResponseType) => {
     setIsResponseOpen(true)
