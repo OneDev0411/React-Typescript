@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { useDispatch, useStore } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { useEffectOnce } from 'react-use'
-import { addNotification } from 'reapop'
+import { Theme, useTheme } from '@material-ui/core'
 import Flex from 'styled-flex-component'
+import { addNotification } from 'reapop'
 
 import {
   getActiveTeamId,
@@ -35,7 +36,6 @@ import { getDealColumn } from './helpers/get-deal-column'
 import { getContactColumn } from './helpers/get-contact-column'
 import { getSettingsFromColumns } from './helpers/get-settings-from-columns'
 
-// TODO: Upgrade the styling solution:
 export default function ReminderNotifications() {
   const store = useStore<IAppState>()
   const user = useTypedSelector<IUser>(({ user }) => user)
@@ -45,6 +45,10 @@ export default function ReminderNotifications() {
 
   const [isLoading, setIsLoading] = useState(true)
   const [columns, setColumns] = useState<readonly ColumnState[]>([])
+
+  const dispatch = useDispatch()
+
+  const theme = useTheme<Theme>()
 
   useEffectOnce(() => {
     getColumns()
@@ -100,9 +104,7 @@ export default function ReminderNotifications() {
     }
   })
 
-  const dispatch = useDispatch()
-
-  function updateColumn(newColumn: ColumnState): void {
+  function setColumn(newColumn: ColumnState): void {
     setColumns(columns => {
       const newColumns = columns.map(column =>
         column.objectType === newColumn.objectType ? newColumn : column
@@ -132,7 +134,7 @@ export default function ReminderNotifications() {
         {renderForcePushButton && (
           <ActionButton
             appearance="outline"
-            style={{ marginLeft: '2rem' }}
+            style={{ marginLeft: theme.spacing(4) }}
             onClick={() => forcePushReminderNotificationSettings()} // TODO: Handle exceptions, needs to be refactored
           >
             Force Push Notifications
@@ -149,7 +151,7 @@ export default function ReminderNotifications() {
               title={column.title}
               items={column.items}
               onChange={newItem =>
-                updateColumn({
+                setColumn({
                   ...column,
                   items: column.items.map(item =>
                     item.eventType === newItem.eventType ? newItem : item
@@ -157,7 +159,7 @@ export default function ReminderNotifications() {
                 })
               }
               onChangeAll={newItems =>
-                updateColumn({
+                setColumn({
                   ...column,
                   items: newItems
                 })

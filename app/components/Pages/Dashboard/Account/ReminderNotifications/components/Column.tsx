@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { Theme, useTheme } from '@material-ui/core'
 import Flex, { FlexItem } from 'styled-flex-component'
 import { uniq } from 'lodash'
 
@@ -13,8 +14,9 @@ interface Props {
   onChangeAll: (newItems: readonly ItemState[]) => void
 }
 
-// TODO: Upgrade the styling solution:
 export default function ({ title, items, onChange, onChangeAll }: Props) {
+  const theme = useTheme<Theme>()
+
   const allSelected = useMemo(
     () =>
       items.every(({ selected }) => selected) &&
@@ -24,14 +26,8 @@ export default function ({ title, items, onChange, onChangeAll }: Props) {
   const allReminderSeconds = !allSelected ? 0 : items[0].reminderSeconds
 
   return (
-    <Flex
-      full
-      column
-      style={{
-        paddingLeft: '2rem'
-      }}
-    >
-      <h2 style={{ marginBottom: '3rem' }}>{title}</h2>
+    <Flex full column style={{ paddingLeft: theme.spacing(4) }}>
+      <h2 style={{ marginBottom: theme.spacing(6) }}>{title}</h2>
       <FlexItem>
         <Item
           label="All"

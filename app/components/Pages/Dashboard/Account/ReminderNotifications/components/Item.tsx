@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react'
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme, useTheme } from '@material-ui/core'
 import classNames from 'classnames'
 
 import { BasicDropdown } from 'components/BasicDropdown'
@@ -45,26 +45,25 @@ const options = [
   customOption
 ] as const
 
-// TODO: Revise all spacings according to the theme:
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      marginBottom: '2rem'
+      marginBottom: theme.spacing(4)
     },
     checkBoxContainer: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      paddingBottom: '0.5rem',
+      paddingBottom: theme.spacing(1),
       width: 'fit-content',
       cursor: 'pointer',
       '&:last-child': {
-        marginLeft: '0.2rem'
+        marginLeft: theme.spacing(0.5)
       }
     },
     dropButton: {
       paddingLeft: 0,
-      width: '11rem',
+      width: theme.spacing(22),
       fontWeight: 500,
       justifyContent: 'space-between',
       backgroundColor: theme.palette.grey[50],
@@ -79,9 +78,8 @@ const useStyles = makeStyles(
       }
     },
     dropIcon: {
-      margin: '0.25rem 0 0 0.25rem',
-      position: 'relative',
-      marginLeft: '1em'
+      margin: theme.spacing(0.5, 0, 0, 2),
+      position: 'relative'
     },
     dropIconOpened: {
       transform: 'rotateX(180deg)'
@@ -126,6 +124,7 @@ export default function Item({
   }
 
   const classes = useStyles()
+  const theme = useTheme<Theme>()
 
   return (
     <div className={classes.container}>
@@ -147,9 +146,7 @@ export default function Item({
             onChange(selected, option.value as number)
           }
         }}
-        menuStyle={{
-          width: '11rem'
-        }}
+        menuStyle={{ width: theme.spacing(22) }}
         buttonRenderer={props => (
           <LinkButton
             {...props}

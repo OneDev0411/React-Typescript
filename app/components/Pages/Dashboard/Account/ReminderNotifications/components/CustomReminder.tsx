@@ -19,7 +19,6 @@ const weeksOption = {
 } as const
 const options = [daysOption, weeksOption] as const
 
-// TODO: Revise all spacings according to the theme:
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
@@ -27,15 +26,15 @@ const useStyles = makeStyles(
       padding: theme.spacing(2, 0)
     },
     inputContainer: {
-      width: '3rem',
-      marginRight: '1rem',
+      width: theme.spacing(6),
+      marginRight: theme.spacing(2),
       '& .MuiOutlinedInput-input': {
         padding: theme.spacing(1.2, 1),
         textAlign: 'center'
       }
     },
     dropdownContainer: {
-      width: '7rem'
+      width: theme.spacing(14)
     }
   }),
   { name: 'ReminderNotifications-CustomValue' }
