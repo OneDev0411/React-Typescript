@@ -1,5 +1,3 @@
-import { objectTypes } from './constants'
-
 export interface ItemState {
   readonly eventType: string
   readonly label: string
@@ -8,7 +6,7 @@ export interface ItemState {
 }
 
 export interface ColumnState {
-  readonly objectType: typeof objectTypes[number]
+  readonly objectType: string
   readonly title: string
   readonly items: readonly ItemState[]
 }

@@ -4,8 +4,6 @@ export const oneWeekInSeconds = 7 * oneDayInSeconds
 export const dealDateObjectType = 'deal_context'
 export const contactDateObjectType = 'contact_attribute'
 
-export const objectTypes = [dealDateObjectType, contactDateObjectType] as const
-
 export const homeAnniversaryEventType = 'home_anniversary'
 
 export const renderForcePushButton = false
