@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 
 import {
   Button,
-  Avatar,
   Tooltip,
   Theme,
   Checkbox,
@@ -19,6 +18,7 @@ import { putUserSetting } from 'models/user/put-user-setting'
 import { Table } from 'components/Grid/Table'
 import type { SortableColumn } from 'components/Grid/Table/types'
 
+import { Avatar } from 'components/Avatar'
 import { RenderProps } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -275,7 +275,9 @@ export function Grid(props: Props) {
           },
           defaultRender: ({ row }: RenderProps<IDealAgent>) => {
             return (
-              <Avatar alt={row.name}>{getNameInitials(row.name, 1)}</Avatar>
+              <Avatar alt={row.name} url="">
+                {getNameInitials(row.name, 1)}
+              </Avatar>
             )
           },
           showSelectAll: false
