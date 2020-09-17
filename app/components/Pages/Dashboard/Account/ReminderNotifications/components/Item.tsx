@@ -62,24 +62,35 @@ const useStyles = makeStyles(
       }
     },
     dropButton: {
-      paddingLeft: 0,
-      width: theme.spacing(22),
-      fontWeight: 500,
-      justifyContent: 'space-between',
-      backgroundColor: theme.palette.grey[50],
-      color: theme.palette.common.black
+      color: `${theme.palette.common.black} !important`,
+      '&:hover': {
+        color: `${theme.palette.primary.main} !important`,
+        '& svg, & svg path[fill-rule="nonzero"]': {
+          fill: `${theme.palette.primary.main} !important`
+        }
+      }
     },
     dropButtonOpened: {
-      color: theme.palette.primary.main
+      color: `${theme.palette.primary.main} !important`,
+      '& svg, & svg path[fill-rule="nonzero"]': {
+        fill: `${theme.palette.primary.main} !important`
+      }
     },
-    dropButtonEnabled: {
-      ':hover > svg': {
-        fill: theme.palette.primary.main
+    dropButtonDisabled: {
+      color: `${theme.palette.grey[500]} !important`,
+      '& svg, & svg path[fill-rule="nonzero"]': {
+        fill: `${theme.palette.grey[500]} !important`
+      },
+      '&:hover': {
+        color: `${theme.palette.grey[500]} !important`,
+        '& svg, & svg path[fill-rule="nonzero"]': {
+          fill: `${theme.palette.grey[500]} !important`
+        }
       }
     },
     dropIcon: {
-      margin: theme.spacing(0.5, 0, 0, 2),
-      position: 'relative'
+      position: 'relative',
+      marginLeft: theme.spacing(2)
     },
     dropIconOpened: {
       transform: 'rotateX(180deg)'
@@ -146,7 +157,7 @@ export default function Item({
             onChange(selected, option.value as number)
           }
         }}
-        menuStyle={{ width: theme.spacing(22) }}
+        menuStyle={{ width: theme.spacing(25) }}
         buttonRenderer={props => (
           <LinkButton
             {...props}
@@ -154,8 +165,15 @@ export default function Item({
             className={classNames(
               classes.dropButton,
               props.isOpen && classes.dropButtonOpened,
-              !props.disabled && classes.dropButtonEnabled
+              props.disabled && classes.dropButtonDisabled
             )}
+            style={{
+              paddingLeft: 0,
+              width: theme.spacing(25),
+              fontWeight: 500,
+              justifyContent: 'space-between',
+              backgroundColor: theme.palette.grey[50]
+            }}
           >
             <IconBell />
             {option.label}
@@ -164,6 +182,7 @@ export default function Item({
                 classes.dropIcon,
                 props.isOpen && classes.dropIconOpened
               )}
+              style={{ margin: theme.spacing(0.5, 0, 0, 0.5) }}
             />
           </LinkButton>
         )}
