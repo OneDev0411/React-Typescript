@@ -1,3 +1,17 @@
+export const oneDayInSeconds = 86400
+export const oneWeekInSeconds = 7 * oneDayInSeconds
+
+export const dealDateObjectType = 'deal_context'
+export const contactDateObjectType = 'contact_attribute'
+
+export const objectTypes = [dealDateObjectType, contactDateObjectType] as const
+
+export const homeAnniversaryEventType = 'home_anniversary'
+
+export const renderForcePushButton = false
+
+// /////////////////////////////
+
 export const API_URL = '/calendar/settings/notifications'
 export const FORCE_PUSH_API_URL = `${API_URL}/force`
 
@@ -30,5 +44,3 @@ export const DROPDOWN_OPTIONS = [
     value: 1209600
   }
 ]
-
-export const SHOULD_RENDER_FORCEPUSH_BUTTON = false
