@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { useDeepCompareEffect } from 'react-use'
+import { useState, useEffect } from 'react'
 import { WithRouterProps } from 'react-router'
 
 import getListing from 'models/listings/listing/get-listing'
@@ -22,11 +21,9 @@ export function useListingById(
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<Nullable<Error>>(null)
 
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     async function fetchListing() {
-      const listingId: Optional<UUID> = location.query
-        ? location.query[field]
-        : undefined
+      const listingId: Optional<UUID> = location.query[field]
 
       if (!listingId) {
         setListing(null)
@@ -73,7 +70,7 @@ export function useContactById(
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState<Nullable<Error>>(null)
 
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     async function fetchContact() {
       const contactId: Optional<UUID> = location.query[field]
 
