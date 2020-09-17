@@ -42,7 +42,7 @@ export default function ({ title, items, onChange, onChangeAll }: Props) {
               items.map(item => ({
                 ...item,
                 selected,
-                reminderSeconds: reminderSeconds ?? item.reminderSeconds
+                reminderSeconds
               }))
             )
           }
@@ -58,7 +58,7 @@ export default function ({ title, items, onChange, onChangeAll }: Props) {
               onChange({
                 ...item,
                 selected,
-                reminderSeconds: reminderSeconds ?? item.reminderSeconds
+                reminderSeconds
               })
             }
           />

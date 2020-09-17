@@ -67,7 +67,7 @@ const useStyles = makeStyles(
       width: '11rem',
       fontWeight: 500,
       justifyContent: 'space-between',
-      backgroundColor: theme.palette.grey.A100, // TODO: Equivalent to grey.A150 from views/utils/colors
+      backgroundColor: theme.palette.grey[50],
       color: theme.palette.common.black
     },
     dropButtonOpened: {
@@ -94,7 +94,7 @@ interface Props {
   label: string
   selected: boolean
   reminderSeconds: number
-  onChange: (selected: boolean, reminderSeconds?: number) => void
+  onChange: (selected: boolean, reminderSeconds: number) => void
 }
 
 export default function Item({
@@ -121,19 +121,16 @@ export default function Item({
     }
   }, [selected, reminderSeconds])
 
+  function toggleSelected(): void {
+    onChange(!selected, selected ? 0 : reminderSeconds)
+  }
+
   const classes = useStyles()
 
   return (
     <div className={classes.container}>
-      <div
-        className={classes.checkBoxContainer}
-        onClick={() => onChange(!selected)}
-      >
-        <CheckBoxButton
-          onClick={() => onChange(!selected)}
-          isSelected={selected}
-          square
-        />
+      <div className={classes.checkBoxContainer} onClick={toggleSelected}>
+        <CheckBoxButton onClick={toggleSelected} isSelected={selected} square />
         &nbsp;&nbsp;<span>{label}</span>
       </div>
 
