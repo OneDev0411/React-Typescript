@@ -6,11 +6,9 @@ export async function deleteBrandFormTemplateValues(
   field: string
 ) {
   try {
-    const response = await new Fetch().delete(
+    return new Fetch().delete(
       `/brands/${brandId}/forms/templates/${formId}/${field}`
     )
-
-    return response.body.data
   } catch (e) {
     throw e
   }

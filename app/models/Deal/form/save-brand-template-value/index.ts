@@ -4,7 +4,7 @@ export async function saveBrandFormTemplateValues(
   brandId: UUID,
   formId: UUID,
   field: string,
-  value: string
+  value: string | boolean
 ) {
   try {
     const response = await new Fetch()

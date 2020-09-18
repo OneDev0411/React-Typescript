@@ -9,9 +9,14 @@ import { normalizeCheckboxValue } from '../normalize-checkbox-value'
 import { getRoleText } from '../get-roles-text'
 import { formatDate } from '../format-date'
 
-export function populateFormValues(annotations, fields, { deal, roles }) {
+export function populateFormValues(
+  annotations,
+  fields,
+  { deal, roles, defaultValues }
+) {
   return {
     ...fields,
+    ...defaultValues,
     ...getCheckboxes(annotations),
     ...getContexts(annotations, deal, fields),
     ...getRoles(annotations, deal, roles)

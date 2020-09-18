@@ -22,9 +22,11 @@ export async function getBrands(
     associations.push('brand.children')
   }
 
-  return (await new Fetch().get(`/brands/${brandId}`).query({
-    associations
-  })).body
+  return (
+    await new Fetch().get(`/brands/${brandId}`).query({
+      associations
+    })
+  ).body
 }
 
 export async function getChildrenBrands(brandId) {
@@ -53,10 +55,12 @@ export async function addBrand(
     roles
   }
 
-  return (await new Fetch()
-    .post('/brands')
-    .query({ associations: [...defaultAssociations, 'brand.children'] })
-    .send(payload)).body
+  return (
+    await new Fetch()
+      .post('/brands')
+      .query({ associations: [...defaultAssociations, 'brand.children'] })
+      .send(payload)
+  ).body
 }
 
 export async function editBrand(
@@ -66,10 +70,12 @@ export async function editBrand(
     throw new Error('team id is empty')
   }
 
-  return (await new Fetch()
-    .put(`/brands/${brand.id}`)
-    .query({ associations: defaultAssociations })
-    .send(brand)).body
+  return (
+    await new Fetch()
+      .put(`/brands/${brand.id}`)
+      .query({ associations: defaultAssociations })
+      .send(brand)
+  ).body
 }
 
 export async function deleteBrand(brandId: string) {

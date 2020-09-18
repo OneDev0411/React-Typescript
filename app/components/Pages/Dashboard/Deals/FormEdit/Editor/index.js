@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core'
 import PDFPage from './PdfPage'
 import Annotations from './Annotations'
 import { DefaultValues } from './DefaultValues'
+import { DefaultValuesContextProvider } from './DefaultValues/Provider'
 
 const useStyles = makeStyles(
   () => ({
@@ -18,13 +19,13 @@ const useStyles = makeStyles(
       /*
        * only show default value icon when hover overing on the related input
        */
-      '& svg.icon-default-value': {
+      '& .button-default-value': {
         visibility: 'hidden'
       },
-      '& svg.icon-default-value:hover': {
+      '& .button-default-value:hover': {
         visibility: 'visible'
       },
-      '& input:hover + svg.icon-default-value': {
+      '& input:hover + .button-default-value': {
         visibility: 'visible'
       }
     }
@@ -42,27 +43,29 @@ export default function Editor(props) {
   }
 
   return (
-    <div className={classes.root}>
-      {new Array(props.document.numPages).fill(null).map((_, index) => (
-        <div key={index} className={classes.pageContainer}>
-          <PDFPage
-            document={props.document}
-            page={index + 1}
-            scale={props.scale}
-            displayWidth={props.displayWidth}
-          />
+    <DefaultValuesContextProvider>
+      <div className={classes.root}>
+        {new Array(props.document.numPages).fill(null).map((_, index) => (
+          <div key={index} className={classes.pageContainer}>
+            <PDFPage
+              document={props.document}
+              page={index + 1}
+              scale={props.scale}
+              displayWidth={props.displayWidth}
+            />
 
-          <Annotations
-            deal={props.deal}
-            values={props.values}
-            pageIndex={index}
-            annotations={props.annotations}
-            onValueUpdate={props.onValueUpdate}
-          />
-        </div>
-      ))}
+            <Annotations
+              deal={props.deal}
+              values={props.values}
+              pageIndex={index}
+              annotations={props.annotations}
+              onValueUpdate={props.onValueUpdate}
+            />
+          </div>
+        ))}
 
-      <DefaultValues />
-    </div>
+        <DefaultValues formId={props.form.id} />
+      </div>
+    </DefaultValuesContextProvider>
   )
 }
