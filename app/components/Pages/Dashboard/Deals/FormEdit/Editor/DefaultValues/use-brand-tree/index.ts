@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -33,9 +33,18 @@ export function useBrandTree() {
     }
   }, [user])
 
+  const initialExpandedNodes = useMemo(
+    () =>
+      rootTeam
+        ? [rootTeam.id, ...(rootTeam.children || []).map(team => team.id)]
+        : [],
+    [rootTeam]
+  )
+
   return {
     rootTeam,
     isLoading,
-    getChildNodes
+    getChildNodes,
+    initialExpandedNodes
   }
 }
