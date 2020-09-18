@@ -1,8 +1,8 @@
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react'
 
+import { createEmailCampaign as mockCreateEmailCampaign } from 'models/email/create-email-campaign'
 import { updateEmailCampaign as mockUpdateEmailCampaign } from 'models/email/update-email-campaign'
-import { createBulkEmailCampaign as mockCreateBulkEmailCampaign } from 'models/email/create-bulk-email-campaign'
 
 // eslint-disable-next-line import/no-unresolved
 import user from 'fixtures/users/agent.json'
@@ -13,7 +13,7 @@ import templateInstance from 'fixtures/marketing-center/template-instance.json'
 import { TestBed } from '../../../../tests/unit/TestBed'
 import { BulkEmailComposeForm } from './BulkEmailComposeForm'
 
-jest.mock('models/email/create-bulk-email-campaign')
+jest.mock('models/email/create-email-campaign')
 jest.mock('models/email/update-email-campaign')
 jest.mock('models/contacts/search-contacts')
 jest.mock('models/contacts/get-contacts-tags')
@@ -102,7 +102,7 @@ describe('BulkEmailComposeForm', () => {
 
     // TODO: replacing it with waitFor https://testing-library.com/docs/dom-testing-library/api-async#waitfor
     setTimeout(() => {
-      expect(mockCreateBulkEmailCampaign).toHaveBeenCalledWith(
+      expect(mockCreateEmailCampaign).toHaveBeenCalledWith(
         expect.objectContaining({
           from: user.id,
           html: templateInstance.html,
@@ -113,7 +113,8 @@ describe('BulkEmailComposeForm', () => {
               email
             }
           ]
-        })
+        }),
+        expect.anything()
       )
     }, 2000)
   })

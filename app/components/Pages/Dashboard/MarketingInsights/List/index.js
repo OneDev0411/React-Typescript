@@ -60,7 +60,10 @@ function List(props) {
 
   useEffect(() => {
     window.socket.on('email_campaign:send', reloadList)
-    // TODO: Shouldn't we simply remove the event listener on component unmounting?
+
+    return () => {
+      window.socket.off('email_campaign:send', reloadList)
+    }
   }, [])
 
   const columns = useMemo(
