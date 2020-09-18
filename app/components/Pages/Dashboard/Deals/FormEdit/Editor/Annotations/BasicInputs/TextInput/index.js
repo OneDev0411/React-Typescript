@@ -3,14 +3,19 @@ import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { mdiFileDocumentEdit } from '@mdi/js'
 
+import { ButtonBase } from '@material-ui/core'
+
 import parseAppearanceString from 'deals/FormEdit/utils/appearance'
 import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useDefaultValueContext } from 'deals/FormEdit/Editor/DefaultValues/use-default-value-content'
+import { Types } from 'deals/FormEdit/utils/types'
 
 export default React.memo(props => {
   const [value, setValue] = useState(props.defaultValue)
   const [debouncedSetValue] = useDebouncedCallback(setValue, 500)
+  const defaultValueContext = useDefaultValueContext()
 
   const handleValueChange = e => {
     debouncedSetValue(e.target.value)
@@ -34,17 +39,20 @@ export default React.memo(props => {
 
   const appearance = parseAppearanceString(props.annotation.defaultAppearance)
   const { rect } = props.annotation
-  const top = rect[1]
-  const left = rect[0]
-  const width = Math.floor(rect[2] - rect[0])
-  const height = Math.floor(rect[3] - rect[1])
+
+  const box = {
+    top: rect[1],
+    left: rect[0],
+    width: Math.floor(rect[2] - rect[0]),
+    height: Math.floor(rect[3] - rect[1])
+  }
 
   const style = {
     position: 'absolute',
-    left: `${left}px`,
-    top: `${top}px`,
-    width: `${width}px`,
-    height: `${height}px`,
+    left: `${box.left}px`,
+    top: `${box.top}px`,
+    width: `${box.width}px`,
+    height: `${box.height}px`,
     fontFamily: appearance.font,
     color: appearance.color,
     fontWeight: appearance.bold ? 'bold' : 'normal',
@@ -80,17 +88,23 @@ export default React.memo(props => {
     <>
       <input type="text" {...sharedProps} />
 
-      <SvgIcon
-        className="icon-default-value"
+      <ButtonBase
+        className="button-default-value"
         style={{
           position: 'absolute',
-          left: `${left + width - 16}px`,
-          top: `${top + height / 10}px`,
+          left: `${box.left + box.width - 16}px`,
+          top: `${box.top + box.height / 10}px`,
           cursor: 'pointer'
         }}
-        size={10 / height}
-        path={mdiFileDocumentEdit}
-      />
+        onClick={() =>
+          defaultValueContext.setAnnotation(
+            props.annotation,
+            Types.TEXT_ANNOTATION
+          )
+        }
+      >
+        <SvgIcon size={10 / box.height} path={mdiFileDocumentEdit} />
+      </ButtonBase>
     </>
   )
 })
