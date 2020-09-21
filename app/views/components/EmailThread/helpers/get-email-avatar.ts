@@ -20,7 +20,7 @@ const extractEmail = (sender: string): string => {
 export const getEmailAvatar = (sender: string, user: IUser): string => {
   const email = extractEmail(sender)
 
-  if (email === user.email) {
+  if (email === user?.email) {
     return getAccountAvatar(user)
   }
 
