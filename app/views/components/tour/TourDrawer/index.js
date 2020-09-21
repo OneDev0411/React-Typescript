@@ -280,6 +280,7 @@ export class TourDrawer extends React.Component {
                         disabled={isDisabled}
                         type="listing"
                         name="locations"
+                        multipleSelection
                       />
                     </Flex>
                     <Flex alignCenter>

@@ -26,8 +26,6 @@ export function Location({ handleRemove, index, location }) {
   const listing = location[location.association_type]
   const { isRaised, raise, stopRaise } = useRaisedMuiCard()
 
-  console.log(listing)
-
   return (
     <Draggable key={listing.id} draggableId={listing.id} index={index}>
       {(draggableProvided, draggableSnapshot) => (

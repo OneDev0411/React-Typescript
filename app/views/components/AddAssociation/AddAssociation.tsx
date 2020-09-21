@@ -9,6 +9,7 @@ import { AddListingAssociation } from './AddListingAssociations'
 interface Props {
   name?: string
   disabled: boolean
+  isMultipleSelected?: boolean
 
   // tooltip caption
   caption?: string
@@ -20,39 +21,55 @@ export function AddAssociation({
   caption,
   disabled = false,
   name = 'associations',
-  type
+  type,
+  isMultipleSelected
 }: Props) {
   const field = useField(name)
 
-  const onAdd = (associatedObject, handleClose: () => void) => {
-    const { type } = associatedObject
+  const onAdd = (associatedObjects, callback?: () => void) => {
     const associations = field.input.value
+    const isDuplicate = object => {
+      const { type } = object
 
-    if (!type) {
-      return
+      if (!type) {
+        return true
+      }
+
+      return associations.some(
+        association => association[type] && association[type].id === object.id
+      )
     }
 
-    const isDuplicate = associations.some(
-      association =>
-        association[type] && association[type].id === associatedObject.id
-    )
+    let newAssociations
 
-    if (!isDuplicate) {
+    if (Array.isArray(associatedObjects)) {
+      newAssociations = associatedObjects.filter(
+        listing => !isDuplicate(listing)
+      )
+    } else if (!isDuplicate(associatedObjects)) {
+      newAssociations = [associatedObjects]
+    }
+
+    if (Array.isArray(newAssociations)) {
       field.input.onChange([
         ...associations,
-        {
-          [type]: associatedObject,
-          association_type: type
-        }
+        ...newAssociations.map(object => ({
+          [object.type]: object,
+          association_type: object.type
+        }))
       ])
-      handleClose()
+
+      if (callback) {
+        callback()
+      }
     }
   }
 
   const childProps: AddAssociationProps = {
     disabled,
     handleAdd: onAdd,
-    title: caption
+    title: caption,
+    isMultipleSelected
   }
 
   switch (type) {
