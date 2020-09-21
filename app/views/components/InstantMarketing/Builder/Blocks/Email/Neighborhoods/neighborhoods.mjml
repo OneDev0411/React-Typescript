@@ -1,4 +1,4 @@
-<mj-section mj-class="container" padding="20px 20px" rechat-editable="tree">
+<mj-section mj-class="container" padding="20px 0" rechat-editable="tree">
   <mj-column>
     <mj-text mj-class="container" padding="0" align="center" rechat-editable="tree" font-size="24px" line-height="1.5">
       {{report.neighborhood.label}}

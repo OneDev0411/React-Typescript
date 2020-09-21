@@ -1,4 +1,4 @@
-<mj-section mj-class="container" padding="20px 20px" text-align="left" rechat-editable="tree">
+<mj-section mj-class="container" padding="20px 0" text-align="left" rechat-editable="tree">
   <mj-column>
     <mj-image src="{{ users[0].profile_image_url }}" width="250px" padding="4px 25px" rechat-assets="avatar">
     </mj-image>
