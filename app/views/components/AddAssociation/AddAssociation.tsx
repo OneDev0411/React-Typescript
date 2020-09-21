@@ -9,7 +9,7 @@ import { AddListingAssociation } from './AddListingAssociations'
 interface Props {
   name?: string
   disabled: boolean
-  multipleSelection?: boolean
+  isMultipleSelected?: boolean
 
   // tooltip caption
   caption?: string
@@ -22,7 +22,7 @@ export function AddAssociation({
   disabled = false,
   name = 'associations',
   type,
-  multipleSelection
+  isMultipleSelected
 }: Props) {
   const field = useField(name)
 
@@ -69,7 +69,7 @@ export function AddAssociation({
     disabled,
     handleAdd: onAdd,
     title: caption,
-    multipleSelection
+    isMultipleSelected
   }
 
   switch (type) {

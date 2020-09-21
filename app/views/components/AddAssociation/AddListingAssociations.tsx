@@ -10,7 +10,7 @@ import { AddAssociationButton } from './AddAssociationButton'
 export function AddListingAssociation({
   disabled,
   handleAdd,
-  multipleSelection,
+  isMultipleSelected,
   title = 'Attach Property'
 }: AddAssociationProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -36,7 +36,7 @@ export function AddListingAssociation({
           isOpen
           title={title}
           onClose={onClose}
-          multipleSelection={multipleSelection}
+          multipleSelection={isMultipleSelected}
           onSelectListingsCallback={handleSelect}
         />
       )}
