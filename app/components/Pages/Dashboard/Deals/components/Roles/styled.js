@@ -23,7 +23,6 @@ export const RoleActions = styled.div`
 
 export const RoleAvatar = styled.div`
   text-align: center;
-  width: 32px;
 `
 
 export const RoleInfo = styled.div`
