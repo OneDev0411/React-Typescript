@@ -1,4 +1,4 @@
-<mj-section mj-class="container" padding="20px 20px" rechat-editable="tree" direction="rtl">
+<mj-section mj-class="container" padding="20px 0" rechat-editable="tree" direction="rtl">
   <mj-column vertical-align="top">
     <mj-image padding="0" rechat-assets="static" src={{image}}></mj-image>
   </mj-column>
