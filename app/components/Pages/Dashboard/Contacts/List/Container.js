@@ -312,6 +312,9 @@ class ContactsList extends React.Component {
       return
     }
 
+    const isParkedActive =
+      this.props.activeSegment.id === PARKED_CONTACTS_LIST_ID
+
     const {
       filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
@@ -323,7 +326,7 @@ class ContactsList extends React.Component {
       conditionOperator = this.props.conditionOperator,
       prependResult = false,
       firstLetter = this.state.firstLetter,
-      parked = false
+      parked = isParkedActive
     } = newFilters || {}
 
     if (resetLoadedRanges) {
