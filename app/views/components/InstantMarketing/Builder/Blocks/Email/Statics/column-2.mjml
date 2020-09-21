@@ -1,12 +1,12 @@
-<mj-section padding="20px 20px" rechat-editable="tree" background-color="#fff">
+<mj-section mj-class="container" padding="20px 20px" rechat-editable="tree">
   <mj-column>
-    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5">
+    <mj-text mj-class="container" padding="0" rechat-editable="tree" font-size="14px" line-height="1.5">
       Content 1
     </mj-text>
   </mj-column>
 
   <mj-column>
-    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5">
+    <mj-text mj-class="container" padding="0" rechat-editable="tree" font-size="14px" line-height="1.5">
       Content 2
     </mj-text>
   </mj-column>
