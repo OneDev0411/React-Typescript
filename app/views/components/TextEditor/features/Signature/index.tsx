@@ -48,7 +48,8 @@ export function SignatureFeature({
     () => ({
       signaturePlugin: createSignaturePlugin({
         signatureContent: () => signatureRef.current || '',
-        stateFromHtmlOptions
+        stateFromHtmlOptions,
+        prependSignatureWithSeparator: false
       })
     }),
     [stateFromHtmlOptions]
@@ -58,10 +59,7 @@ export function SignatureFeature({
     if (
       hasSignatureByDefault &&
       signature &&
-      editorState
-        .getCurrentContent()
-        .getPlainText()
-        .trim() === ''
+      editorState.getCurrentContent().getPlainText().trim() === ''
     ) {
       setEditorState(signaturePlugin.modifiers.appendSignature(editorState))
     }
