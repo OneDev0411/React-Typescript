@@ -56,7 +56,7 @@ const ContactsList = props => {
   const customGridClasses = useCustomGridStyles()
   const [selectedTagContact, setSelectedTagContact] = useState([])
   const theme = useTheme()
-  const isParkTabActive = props.activeSegment.id === PARKED_CONTACTS_LIST_ID
+  const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
 
   const onSelectTagContact = selectedTagContact =>
     setSelectedTagContact([selectedTagContact])
@@ -202,7 +202,7 @@ const ContactsList = props => {
             totalRowsCount={props.listInfo.total}
             reloadContacts={props.reloadContacts}
             onRequestDelete={props.onRequestDelete}
-            activeSegmentId={props.activeSegment.id}
+            activeSegmentId={props.activeSegment?.id ?? ''}
             handleChangeContactsAttributes={
               props.handleChangeContactsAttributes
             }
