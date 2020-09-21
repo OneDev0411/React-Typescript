@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { saveAs } from 'file-saver'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
@@ -40,8 +39,9 @@ import { useTemplates } from '../hooks/use-templates'
 
 import { LISTING_TEMPLATE_TYPES, TEMPLATES_PAGE_SIZE } from './constants'
 import CategoriesTabs from './CategoriesTabs'
-import ShareDrawer from './ShareDrawer'
 import EditVariablesDialog from './EditVariablesDialog'
+import ShareDrawer from './ShareDrawer'
+import DownladDrawer from './DownloadDrawer'
 import { getEditableVariables } from './helpers'
 import { useEntityWithSetter } from './hooks'
 import { TemplateVariable, TemplateVariableType } from './types'
@@ -93,8 +93,8 @@ function MarketingWizard(props: WithRouterProps) {
     Optional<string>
   >(undefined)
 
-  const [generatedTemplateInstance, setGeneratedTemplateInstance] = useState<
-    Optional<IMarketingTemplateInstance>
+  const [generatedTemplateFile, setGeneratedTemplateFile] = useState<
+    Optional<IFile>
   >(undefined)
 
   const [templatesLimit, setTemplatesLimit] = useState<number>(
@@ -157,7 +157,14 @@ function MarketingWizard(props: WithRouterProps) {
 
   const handleCloseShareDrawer = () => {
     setSelectedTemplate(null)
-    setGeneratedTemplateInstance(undefined)
+  }
+
+  const handleOpenDownloadDrawer = (file: IFile) => {
+    setGeneratedTemplateFile(file)
+  }
+
+  const handleCloseDownloadDrawer = () => {
+    setGeneratedTemplateFile(undefined)
   }
 
   const handleOpenEditVariablesDialog = () => {
@@ -196,15 +203,8 @@ function MarketingWizard(props: WithRouterProps) {
         }
       )
 
-      setGeneratedTemplateInstance(templateInstance)
-
-      dispatch(
-        addNotification({
-          status: 'success',
-          message:
-            'Marketing peace created successfully! You may now download it by clicking on the download button!'
-        })
-      )
+      handleCloseShareDrawer()
+      handleOpenDownloadDrawer(templateInstance.file)
     } catch (err) {
       dispatch(
         addNotification({
@@ -214,14 +214,6 @@ function MarketingWizard(props: WithRouterProps) {
       )
       console.error(err)
     }
-  }
-
-  const handleDownloadClick = () => {
-    if (!generatedTemplateInstance) {
-      return
-    }
-
-    saveAs(generatedTemplateInstance.file.url)
   }
 
   if (isLoadingTemplates || isLoadingListing) {
@@ -310,14 +302,11 @@ function MarketingWizard(props: WithRouterProps) {
 
       {listing && selectedTemplate && (
         <ShareDrawer
-          isOpen
           template={selectedTemplate}
           listing={listing}
           user={user}
-          isPrepared={!!generatedTemplateInstance}
           onClose={handleCloseShareDrawer}
           onPrepareClick={() => handlePrepareClick(selectedTemplate)}
-          onDownloadClick={() => handleDownloadClick()}
         />
       )}
       {isEditVariablesDialogOpen && (
@@ -326,6 +315,12 @@ function MarketingWizard(props: WithRouterProps) {
           onClose={handleCloseEditVariablesDialog}
           onUpload={handleUploadAsset}
           onSave={handleSaveVariables}
+        />
+      )}
+      {generatedTemplateFile && (
+        <DownladDrawer
+          file={generatedTemplateFile}
+          onClose={handleCloseDownloadDrawer}
         />
       )}
     </PageLayout>
