@@ -38,7 +38,7 @@ export const getFormatDate = (event: ICalendarEvent): string => {
         dummyEnd.getUTCSeconds(),
         0
       )
-      startDate.setFullYear(
+      endDate.setFullYear(
         dummyEnd.getUTCFullYear(),
         dummyEnd.getUTCMonth(),
         dummyEnd.getUTCDate()
