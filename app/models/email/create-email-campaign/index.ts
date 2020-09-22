@@ -1,6 +1,6 @@
-import { toEntityAssociation } from 'utils/association-utils'
-
 import Fetch from 'services/fetch'
+
+import { toEntityAssociation } from 'utils/association-utils'
 
 export async function createEmailCampaign(
   email: IEmailCampaignInput | IIndividualEmailCampaignInput

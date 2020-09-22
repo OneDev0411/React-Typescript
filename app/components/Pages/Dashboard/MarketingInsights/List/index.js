@@ -59,16 +59,16 @@ function List(props) {
   } = useListData(props.user, filterType)
 
   useEffect(() => {
-    function handleEmailCampaignSend(event) {
+    function handleEmailCampaignSentEvent(event) {
       const ids = event?.ids ?? []
 
       ids.forEach(reloadItem)
     }
 
-    window.socket.on('email_campaign:send', handleEmailCampaignSend)
+    window.socket.on('email_campaign:send', handleEmailCampaignSentEvent)
 
     return () => {
-      window.socket.off('email_campaign:send', handleEmailCampaignSend)
+      window.socket.off('email_campaign:send', handleEmailCampaignSentEvent)
     }
   }, [reloadItem])
 
