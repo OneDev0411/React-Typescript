@@ -1,5 +1,5 @@
 {% for user in users %}
-<mj-section mj-class="container" padding="20px 0" text-align="left" rechat-editable="tree">
+<mj-section mj-class="container" padding-top="20px" padding-bottom="20px" text-align="left" rechat-editable="tree">
   <mj-column>
     <mj-image src="{{ user.profile_image_url }}" width="250px" padding="4px 25px" rechat-assets="avatar">
     </mj-image>
