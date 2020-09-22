@@ -24,7 +24,10 @@ export function useBrandTree() {
     if (root) {
       getBrands(root.id)
         .then(({ data }) => {
-          const tree = filterTree(user, data, flattenParents(data))
+          const tree = {
+            ...data,
+            children: getChildren(user, data, findParents(data))
+          }
 
           setRootTeam(tree)
           setIsLoading(false)
@@ -56,10 +59,10 @@ export function useBrandTree() {
  * @param user
  * @param brand
  */
-function filterTree(
+function getChildren(
   user: IUser,
   brand: IBrand,
-  parents: ReturnType<typeof flattenParents>
+  parents: ReturnType<typeof findParents>
 ) {
   return brand.children?.filter(child => {
     if (child.children) {
@@ -75,7 +78,7 @@ function filterTree(
  * @param brand
  * @param parents
  */
-function flattenParents(
+function findParents(
   brand: IBrand,
   parents: Record<string, IBrand> = {}
 ): Record<string, IBrand> {
@@ -85,7 +88,7 @@ function flattenParents(
     parents[child.id] = brand
 
     if (child.children) {
-      return flattenParents(child, parents)
+      return findParents(child, parents)
     }
   })
 
@@ -100,7 +103,7 @@ function flattenParents(
 function hasAccessToBrand(
   user: IUser,
   brand: IBrand,
-  parents: ReturnType<typeof flattenParents>
+  parents: ReturnType<typeof findParents>
 ) {
   let currentBrand: IBrand | null = brand
 
