@@ -59,12 +59,18 @@ function List(props) {
   } = useListData(props.user, filterType)
 
   useEffect(() => {
-    window.socket.on('email_campaign:send', reloadList)
+    function handleEmailCampaignSend(event) {
+      const ids = event?.ids ?? []
+
+      ids.forEach(reloadItem)
+    }
+
+    window.socket.on('email_campaign:send', handleEmailCampaignSend)
 
     return () => {
-      window.socket.off('email_campaign:send', reloadList)
+      window.socket.off('email_campaign:send', handleEmailCampaignSend)
     }
-  }, [])
+  }, [reloadItem])
 
   const columns = useMemo(
     () => [

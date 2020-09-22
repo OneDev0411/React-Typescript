@@ -3,7 +3,7 @@ import {
   MICROSOFT_CREDENTIAL
 } from 'constants/oauth-accounts'
 
-import { InsightFilterType, InsightState } from './types'
+import { InsightEmailCampaign, InsightFilterType, InsightState } from './types'
 
 export function hasPixelTracking(campaign: IEmailCampaign): boolean {
   return !!campaign[GOOGLE_CREDENTIAL] || !!campaign[MICROSOFT_CREDENTIAL]
@@ -84,7 +84,7 @@ export function isEmailInProgress(item) {
 }
 
 export function doFilterOnInsightList(
-  list: readonly IEmailCampaign[],
+  list: readonly InsightEmailCampaign[],
   type: InsightFilterType
 ): Pick<InsightState, 'list' | 'counts'> {
   const isSentStatus = type === InsightFilterType.SENT
