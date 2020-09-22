@@ -7,7 +7,7 @@ align="right"
 {% endmacro %}
 
 {% for listingsBatch in listings | batch(2) %}
-<mj-section mj-class="container" padding="20px 0" rechat-editable="tree">
+<mj-section mj-class="container" padding-top="20px" padding-bottom="20px" rechat-editable="tree">
   {% for listing in listingsBatch %}
   <mj-column padding-left={{ "0" if loop.index0 === 0 else "5px" }} padding-right={{ "0" if loop.index0 === 1 else "5px" }}>
     <mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>

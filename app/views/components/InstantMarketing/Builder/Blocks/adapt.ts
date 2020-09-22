@@ -6,11 +6,11 @@ function adapt(parent: any, template: string): string {
   }
 
   if (type === 'mj-wrapper') {
-    return `<mj-section mj-class="container" padding="20px 0" rechat-editable="tree"><mj-column width="100%">${template}</mj-column></mj-section>`
+    return `<mj-section mj-class="container" padding-top="20px" padding-bottom="20px" rechat-editable="tree"><mj-column width="100%">${template}</mj-column></mj-section>`
   }
 
   if (type === 'mj-body') {
-    return `<mj-section mj-class="container" padding="20px 0" rechat-editable="tree"><mj-column width="100%">${template}</mj-column></mj-section>`
+    return `<mj-section mj-class="container" padding-top="20px" padding-bottom="20px" rechat-editable="tree"><mj-column width="100%">${template}</mj-column></mj-section>`
   }
 
   return template

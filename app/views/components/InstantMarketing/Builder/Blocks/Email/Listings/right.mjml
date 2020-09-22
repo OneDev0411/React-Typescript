@@ -1,5 +1,5 @@
 {% for listing in listings %}
-<mj-section mj-class="container" direction="rtl" padding="20px 0" rechat-editable="tree">
+<mj-section mj-class="container" direction="rtl" padding-top="20px" padding-bottom="20px" rechat-editable="tree">
   <mj-column>
     <mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
   </mj-column>
