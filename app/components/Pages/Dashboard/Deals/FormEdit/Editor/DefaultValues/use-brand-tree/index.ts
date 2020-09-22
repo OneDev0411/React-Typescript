@@ -66,7 +66,7 @@ function getChildren(
 ) {
   return brand.children?.filter(child => {
     if (child.children) {
-      return filterTree(user, child, parents)
+      return getChildren(user, child, parents)
     }
 
     return hasAccessToBrand(user, brand, parents)
