@@ -61,22 +61,13 @@ function filterTree(
   brand: IBrand,
   parents: ReturnType<typeof flattenParents>
 ) {
-  const root = {
-    ...brand,
-    children: [] as IBrand[]
-  }
-
-  brand.children?.forEach(child => {
-    if (hasAccessToBrand(user, child, parents)) {
-      root.children.push(child)
-    }
-
+  return brand.children?.filter(child => {
     if (child.children) {
       return filterTree(user, child, parents)
     }
-  })
 
-  return root
+    return hasAccessToBrand(user, brand, parents)
+  })
 }
 
 /**
