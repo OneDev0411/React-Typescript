@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import getCampaings from 'models/insights/emails/get-all-campaigns'
+import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 
 import { InsightActionType, InsightFilterType, InsightState } from './types'
@@ -21,7 +21,11 @@ export default function useListData(
     })
 
     try {
-      const allEmailCampaigns = await getCampaings(user)
+      const allEmailCampaigns = await getEmailCampaigns(user, {
+        emailCampaignAssociations: ['recipients', 'template'],
+        emailCampaignEmailsAssociation: [],
+        emailRecipientsAssociations: ['list']
+      })
 
       dispatch({
         type: InsightActionType.FetchListSuccess,
@@ -45,9 +49,9 @@ export default function useListData(
 
     try {
       const emailCampaign = await getEmailCampaign(emailCampaignId, {
-        emailCampaignAssociations: [],
+        emailCampaignAssociations: ['recipients', 'template'],
         emailCampaignEmailsAssociation: [],
-        emailRecipientsAssociations: [],
+        emailRecipientsAssociations: ['list'],
         emailFields: []
       })
 
