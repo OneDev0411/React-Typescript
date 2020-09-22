@@ -53,7 +53,7 @@ export const getFormatDate = (event: ICalendarEvent): string => {
   const startDateFormat = fecha.format(startDate, startFormatter)
   const endDateFormat = fecha.format(endDate, endFormatter)
 
-  return `${startDateFormat}${!all_day ? ' - ' : ''}${
-    !all_day ? endDateFormat : ''
+  return `${startDateFormat}${
+    !all_day && end_date ? ` - ${endDateFormat}` : ''
   }`
 }
