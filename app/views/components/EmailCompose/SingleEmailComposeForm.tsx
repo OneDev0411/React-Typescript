@@ -91,12 +91,13 @@ export function SingleEmailComposeForm({
         attachmentFormValueToEmailAttachmentInput
       ),
       due_at: formValue.due_at || new Date(),
-      notifications_enabled: formValue.notifications_enabled
+      notifications_enabled: formValue.notifications_enabled,
+      individual: individualMode
     })
 
     return emailId
       ? updateEmailCampaign(emailId, emailData)
-      : createEmailCampaign(emailData, individualMode)
+      : createEmailCampaign(emailData)
   }
 
   const handleSelectMarketingTemplate: EmailComposeFormProps['onSelectMarketingTemplate'] = (

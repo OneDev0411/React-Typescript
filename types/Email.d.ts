@@ -102,12 +102,14 @@ declare interface IEmailCampaignInputBase {
   text?: string
   attachments?: IEmailAttachmentInput[]
   template?: UUID
+  notifications_enabled?: boolean
+  individual: boolean
+
   /**
    * @deprecated, This is not used in practice and is added in initial
    * implementation by the API. It should be removed.
    */
   include_signature?: boolean
-  notifications_enabled?: boolean
 }
 
 declare interface IIndividualEmailCampaignInput

@@ -78,12 +78,13 @@ export function BulkEmailComposeForm({
         attachmentFormValueToEmailAttachmentInput
       ),
       due_at: formValue.due_at || new Date(),
-      notifications_enabled: formValue.notifications_enabled
+      notifications_enabled: formValue.notifications_enabled,
+      individual: true
     })
 
     return emailId
       ? updateEmailCampaign(emailId, emailData)
-      : createEmailCampaign(emailData, true)
+      : createEmailCampaign(emailData)
   }
 
   const renderFields = () => (

@@ -3,8 +3,7 @@ import { toEntityAssociation } from 'utils/association-utils'
 import Fetch from 'services/fetch'
 
 export async function createEmailCampaign(
-  email: IIndividualEmailCampaignInput,
-  individualMode?: boolean
+  email: IEmailCampaignInput | IIndividualEmailCampaignInput
 ): Promise<
   IEmailCampaign<
     'emails' | 'template' | 'from' | 'recipients',
@@ -12,7 +11,7 @@ export async function createEmailCampaign(
     'email'
   >
 > {
-  const path = individualMode ? '/emails/individual' : '/emails'
+  const path = email.individual ? '/emails/individual' : '/emails'
   const response = await new Fetch()
     .post(path)
     .send(email)
