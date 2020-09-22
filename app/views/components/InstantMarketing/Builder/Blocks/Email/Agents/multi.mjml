@@ -5,15 +5,15 @@
   </mj-column>
   <mj-column vertical-align="bottom">
     {% for user in users %}
-    <mj-text mj-class="container" text-transform="uppercase" font-weight="600" font-size="13px" padding="5px 0"  rechat-editable="tree" line-height="1">
+    <mj-text mj-class="h3" text-transform="uppercase" font-weight="600"  padding="5px 0"  rechat-editable="tree" line-height="1">
       {{user.display_name}}
     </mj-text>
-    <mj-text mj-class="container" padding="5px 0" font-size="12px"  rechat-editable="tree" line-height="1">
+    <mj-text mj-class="container" padding="5px 0"  rechat-editable="tree" line-height="1">
       {{user.phone_number | phone}}
     </mj-text>
-    <mj-button border="none"  font-size="12px" inner-padding="0" padding="5px 0 10px 0" href="mailto:{{user.email}}" align="left" text-align="left" text-decoration="none"  rechat-editable="tree" line-height="1">
-      {{user.email}}
-    </mj-button>
+       <mj-text mj-class="container" padding="5px 0"  rechat-editable="tree" line-height="1" href="mailto:{{user.email}}">
+        {{user.email}}
+    </mj-text>
     {% endfor %}
   </mj-column>
 </mj-section>

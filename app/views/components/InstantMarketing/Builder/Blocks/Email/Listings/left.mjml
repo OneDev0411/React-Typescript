@@ -4,29 +4,29 @@
     <mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
   </mj-column>
   <mj-column padding-left="10px">
-    <mj-text mj-class="container" padding="0"  rechat-editable="tree" font-size="20px" line-height="1.5" align="left">
+    <mj-text mj-class="h3" padding="0"  rechat-editable="tree"  line-height="1.5" align="left">
       {{listing.property.address.street_address}}
     </mj-text>
-    <mj-text mj-class="container" padding="0" rechat-editable="tree" font-size="16px" line-height="1.5" align="left">
+    <mj-text mj-class="container" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       <strong>{{ listing.price | currency }}</strong>{% if listing.is_lease %}/mo{% endif %}
     </mj-text>
     {% if listing.property.bedroom_count %}
-    <mj-text mj-class="container" padding="0" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+    <mj-text mj-class="container" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       <span><strong>{{listing.property.bedroom_count}}</strong> Beds</span>
     </mj-text>
     {% endif %}
     {% if listing.property.bathroom_count %}
-    <mj-text mj-class="container" padding="0" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+    <mj-text mj-class="container" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       <span><strong>{{listing.property.bathroom_count}}</strong> Baths</span>
     </mj-text>
     {% endif %}
     {% if listing.property.square_meters %}
-    <mj-text mj-class="container" padding="0" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+    <mj-text mj-class="container" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       <span><strong>{{listing.property.square_meters | area}}</strong> Sqft</span>
     </mj-text>
     {% endif %}
     {% if listing.property.year_built %}
-    <mj-text mj-class="container" padding="0" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+    <mj-text mj-class="container" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       <span>Built in <strong>{{listing.property.year_built}}</strong></span>
     </mj-text>
     {% endif %}
