@@ -1,21 +1,15 @@
 import React, { useState } from 'react'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
-import { mdiFileDocumentEdit } from '@mdi/js'
-
-import { ButtonBase } from '@material-ui/core'
-
 import parseAppearanceString from 'deals/FormEdit/utils/appearance'
 import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useDefaultValueContext } from 'deals/FormEdit/Editor/DefaultValues/use-default-value-content'
 import { Types } from 'deals/FormEdit/utils/types'
+import { EditTemplateButton } from 'deals/FormEdit/components/EditTemplateButton'
 
 export default React.memo(props => {
   const [value, setValue] = useState(props.defaultValue)
   const [debouncedSetValue] = useDebouncedCallback(setValue, 500)
-  const defaultValueContext = useDefaultValueContext()
 
   const handleValueChange = e => {
     debouncedSetValue(e.target.value)
@@ -88,23 +82,14 @@ export default React.memo(props => {
     <>
       <input type="text" {...sharedProps} />
 
-      <ButtonBase
-        className="button-default-value"
+      <EditTemplateButton
         style={{
-          position: 'absolute',
           left: `${box.left + box.width - 16}px`,
-          top: `${box.top + box.height / 10}px`,
-          cursor: 'pointer'
+          top: `${box.top + box.height / 10}px`
         }}
-        onClick={() =>
-          defaultValueContext.setAnnotation(
-            props.annotation,
-            Types.TEXT_ANNOTATION
-          )
-        }
-      >
-        <SvgIcon size={10 / box.height} path={mdiFileDocumentEdit} />
-      </ButtonBase>
+        annotation={props.annotation}
+        type={Types.TEXT_ANNOTATION}
+      />
     </>
   )
 })
