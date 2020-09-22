@@ -4,13 +4,13 @@
   <mj-column padding-left={{ "0" if loop.index0 === 0 else "5px" }} padding-right={{ "0" if loop.index0 === 1 else "5px" }}>
     <mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
      <mj-spacer height="15px"></mj-spacer>
-    <mj-text mj-class="container" padding="0"  rechat-editable="tree" font-size="20px" line-height="1.5" align="left">
+    <mj-text mj-class="h3" padding="0"  rechat-editable="tree" line-height="1.5" align="left">
       {{listing.property.address.street_address}}
     </mj-text>
-    <mj-text mj-class="container" padding="0" rechat-editable="tree" font-size="16px" line-height="1.5" align="left">
+    <mj-text mj-class="container" padding="0" rechat-editable="tree" line-height="1.5" align="left">
       <strong>{{ listing.price | currency }}</strong>{% if listing.is_lease %}/mo{% endif %}
     </mj-text>
-    <mj-text mj-class="container" padding="0" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+    <mj-text mj-class="container" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       {% if listing.property.bedroom_count %}
       <span><strong>{{listing.property.bedroom_count}}</strong> Beds,</span>
       {% endif %}

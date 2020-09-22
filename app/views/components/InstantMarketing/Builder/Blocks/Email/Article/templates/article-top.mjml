@@ -2,11 +2,11 @@
   <mj-column>
     <mj-image padding="0" rechat-assets="static" src="{{image}}"></mj-image>
 
-    <mj-text mj-class="container" padding="0"  align="left" rechat-editable="tree" font-size="20px" line-height="1.5">
+    <mj-text mj-class="h3" padding="0"  align="left" rechat-editable="tree" line-height="1.5">
       {{title}}
     </mj-text>
 
-    <mj-text mj-class="container" padding="0"  align="left" rechat-editable="tree" font-size="14px" line-height="1.5">
+    <mj-text mj-class="container" padding="0"  align="left" rechat-editable="tree" line-height="1.5">
       {{description}}
     </mj-text>
     <mj-spacer height="10px"></mj-spacer>

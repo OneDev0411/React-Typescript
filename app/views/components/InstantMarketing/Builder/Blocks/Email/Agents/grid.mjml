@@ -4,15 +4,15 @@
   <mj-column>
     <mj-image src="{{ user.profile_image_url }}" width="250px" padding="4px 25px" rechat-assets="avatar">
     </mj-image>
-    <mj-text mj-class="container" text-transform="uppercase" align="center" font-weight="600" font-size="17px" padding="5px 0"  rechat-editable="tree" line-height="1">
+    <mj-text mj-class="h3" text-transform="uppercase" align="center" font-weight="600"  padding="5px 0"  rechat-editable="tree" line-height="1">
       {{user.display_name}}
     </mj-text>
-    <mj-text mj-class="container" padding="5px 0" align="center" font-size="16px" rechat-editable="tree" line-height="1">
+    <mj-text mj-class="container" padding="5px 0" align="center" rechat-editable="tree" line-height="1">
       {{user.phone_number | phone}}
     </mj-text>
-    <mj-button border="none" inner-padding="0" padding="5px 0" href="mailto:{{user.email}}" align="center" text-align="center" text-decoration="none"  rechat-editable="tree" font-size="16px" line-height="1">
-      {{user.email}}
-    </mj-button>
+       <mj-text mj-class="container" padding="5px 0" align="center" rechat-editable="tree" line-height="1" href="mailto:{{user.email}}">
+        {{user.email}}
+    </mj-text>
   </mj-column>
   {% endfor %}
 </mj-section>
