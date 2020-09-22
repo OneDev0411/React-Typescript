@@ -166,7 +166,12 @@ export const GridCalendarPresentation = ({
         const fetchedEvents = await getCalendar({
           users: viewAsUsers,
           filter: defaultFilter,
-          associations: ['calendar_event.people', ...associations],
+          associations: [
+            'calendar_event.people',
+            'calendar_event.full_crm_task',
+            'crm_task.reminders',
+            ...associations
+          ],
           ...apiOptions
         })
 
