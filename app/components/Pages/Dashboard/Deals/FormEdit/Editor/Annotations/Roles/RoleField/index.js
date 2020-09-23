@@ -43,8 +43,9 @@ export function RoleField(props) {
       <div
         style={{
           ...props.style,
+          cursor: annotationRoles.length > 0 ? props.style.cursor : 'normal',
           backgroundColor:
-            annotationRoles.length > 0 ? 'transparent' : '#d2e5f2'
+            annotationRoles.length > 0 ? '#d2e5f2' : 'transparent'
         }}
       >
         <Tooltip caption={tooltip}>

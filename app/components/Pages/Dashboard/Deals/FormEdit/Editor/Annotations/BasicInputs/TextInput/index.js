@@ -4,6 +4,9 @@ import useDebouncedCallback from 'use-debounce/lib/callback'
 import parseAppearanceString from 'deals/FormEdit/utils/appearance'
 import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
 
+import { Types } from 'deals/FormEdit/utils/types'
+import { EditTemplateButton } from 'deals/FormEdit/components/EditTemplateButton'
+
 export default React.memo(props => {
   const [value, setValue] = useState(props.defaultValue)
   const [debouncedSetValue] = useDebouncedCallback(setValue, 500)
@@ -31,12 +34,19 @@ export default React.memo(props => {
   const appearance = parseAppearanceString(props.annotation.defaultAppearance)
   const { rect } = props.annotation
 
+  const box = {
+    top: rect[1],
+    left: rect[0],
+    width: Math.floor(rect[2] - rect[0]),
+    height: Math.floor(rect[3] - rect[1])
+  }
+
   const style = {
     position: 'absolute',
-    left: `${rect[0]}px`,
-    top: `${rect[1]}px`,
-    width: `${Math.floor(rect[2] - rect[0])}px`,
-    height: `${Math.floor(rect[3] - rect[1])}px`,
+    left: `${box.left}px`,
+    top: `${box.top}px`,
+    width: `${box.width}px`,
+    height: `${box.height}px`,
     fontFamily: appearance.font,
     color: appearance.color,
     fontWeight: appearance.bold ? 'bold' : 'normal',
@@ -68,5 +78,18 @@ export default React.memo(props => {
     )
   }
 
-  return <input type="text" {...sharedProps} />
+  return (
+    <>
+      <input type="text" {...sharedProps} />
+
+      <EditTemplateButton
+        style={{
+          left: `${box.left + box.width - 16}px`,
+          top: `${box.top + box.height / 10}px`
+        }}
+        annotation={props.annotation}
+        type={Types.TEXT_ANNOTATION}
+      />
+    </>
+  )
 })

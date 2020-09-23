@@ -59,7 +59,7 @@ async function getPageAnnotations(document, pageNumber, options) {
       value: item.annotation.fieldValue
     })),
     annotations: {
-      inputs: info.filter(item => item.type === 'Input'),
+      inputs: normalizeInputs(info, options.defaultValues),
       addresses: normalizeContexts(info, 'Address'),
       contexts: normalizeContexts(info, 'Context'),
       roles: normalizeRoles(info)
@@ -90,17 +90,29 @@ function normalizeRoles(list) {
   return Object.entries(normalized).reduce((current, [context_name]) => {
     current[context_name] = groupBy(normalized[context_name], item => {
       const attrs = [].concat(item.attributes).sort()
-      const role = []
-        .concat(item.role)
-        .sort()
-        .concat(attrs)
-        .join('_')
+      const role = [].concat(item.role).sort().concat(attrs).join('_')
 
       return `${item.group}_${role}`
     })
 
     return current
   }, {})
+}
+
+function normalizeInputs(inputs, defaultValues) {
+  return inputs
+    .filter(item => item.type === 'Input')
+    .map(item => {
+      return {
+        ...item,
+        annotation: {
+          ...item.annotation,
+          fieldValue:
+            item.annotation.fieldValue ||
+            (defaultValues[item.annotation.fieldName] ?? '')
+        }
+      }
+    })
 }
 
 function normalizeContexts(list, type) {

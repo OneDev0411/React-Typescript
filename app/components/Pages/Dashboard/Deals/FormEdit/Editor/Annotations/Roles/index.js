@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { selectDealRoles } from 'reducers/deals/roles'
 import { getRoleText } from 'deals/FormEdit/utils/get-roles-text'
@@ -12,6 +12,10 @@ import { AnnotationWrapper } from '../components/AnnotationWrapper'
 import { RoleField } from './RoleField'
 
 export function Roles(props) {
+  const roles = useSelector(({ deals }) => {
+    return selectDealRoles(deals.roles, props.deal)
+  })
+
   const handleChangeRoles = form => {
     let fields = {}
 
@@ -26,7 +30,7 @@ export function Roles(props) {
       }
 
       const roleText = getRoleText(
-        getAllRoles(props.roles, form),
+        getAllRoles(roles, form),
         props.deal,
         group[0].role,
         group[0]
@@ -48,7 +52,7 @@ export function Roles(props) {
       render={inputProps => (
         <RoleField
           deal={props.deal}
-          roles={props.roles}
+          roles={roles}
           onUpsertRole={handleChangeRoles}
           onDeleteRole={handleChangeRoles}
           {...inputProps}
@@ -76,10 +80,4 @@ function getAllRoles(roles, form) {
   return [...roles, form]
 }
 
-function mapStateToProps({ deals }, props) {
-  return {
-    roles: selectDealRoles(deals.roles, props.deal)
-  }
-}
-
-export default connect(mapStateToProps)(Roles)
+export default Roles
