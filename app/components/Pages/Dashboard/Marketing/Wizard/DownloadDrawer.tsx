@@ -5,63 +5,40 @@ import {
   Typography,
   IconButton,
   Box,
-  Button,
   makeStyles,
-  Theme
+  Theme,
+  CircularProgress
 } from '@material-ui/core'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { closeIcon } from 'components/SvgIcons/icons'
-import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     contentContainer: {
       overflow: 'hidden',
       padding: theme.spacing(3)
+    },
+    image: {
+      width: '100%'
     }
   }),
   {
-    name: 'MarketingWizardShareDrawer'
+    name: 'MarketingWizardDownloadDrawer'
   }
 )
 
 interface Props {
-  user: IUser
-  template: IBrandMarketingTemplate
-  listing: IListing
-
+  file: IFile
   onClose: () => void
-  onPrepareClick: () => Promise<void>
 }
 
-export default function ShareDrawer({
-  user,
-  template,
-  listing,
-  onClose,
-  onPrepareClick
-}: Props) {
+export default function DownloadDrawer({ file, onClose }: Props) {
   const classes = useStyles()
-  const [isPreparing, setIsPreparing] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  const handlePrepareClick = async () => {
-    try {
-      setIsPreparing(true)
-      await onPrepareClick()
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setIsPreparing(false)
-    }
-  }
-
-  const getButtonCopy = () => {
-    if (isPreparing) {
-      return 'Loading'
-    }
-
-    return 'Next'
+  const handleLoadComplete = () => {
+    setIsLoading(false)
   }
 
   return (
@@ -92,21 +69,23 @@ export default function ShareDrawer({
             </Grid>
           </Grid>
           <Grid container item>
-            <Thumbnail user={user} template={template} listing={listing} />
+            <img
+              src={file.url}
+              alt="marketing template"
+              className={classes.image}
+              onLoad={handleLoadComplete}
+            />
           </Grid>
           <Grid container item justify="space-between">
             <Grid item xs>
               <Box p={2}>
-                <Button
-                  fullWidth
-                  size="medium"
-                  variant="contained"
-                  color="primary"
-                  disabled={isPreparing}
-                  onClick={handlePrepareClick}
-                >
-                  {getButtonCopy()}
-                </Button>
+                {isLoading ? (
+                  <CircularProgress />
+                ) : (
+                  <Typography variant="body1" align="center">
+                    Touch and hold the image above to share or download.
+                  </Typography>
+                )}
               </Box>
             </Grid>
           </Grid>
