@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
-import { getRootBrand } from 'utils/user-teams'
+import { getActiveTeamId } from 'utils/user-teams'
 import { getBrands } from 'models/BrandConsole/Brands'
 
 export function useBrandTree() {
@@ -19,10 +19,10 @@ export function useBrandTree() {
   useEffect(() => {
     setIsLoading(true)
 
-    const root = getRootBrand(user)
+    const activeTeamId = getActiveTeamId(user)
 
-    if (root) {
-      getBrands(root.id)
+    if (activeTeamId) {
+      getBrands(activeTeamId)
         .then(({ data }) => {
           const tree = {
             ...data,
