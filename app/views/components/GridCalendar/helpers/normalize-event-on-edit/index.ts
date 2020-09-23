@@ -6,11 +6,15 @@ import _get from 'lodash/get'
  * @param newEnd
  * @param event
  */
+interface Result extends ICalendarEvent {
+  reminders: Pick<ICRMTaskReminder, 'is_relative' | 'timestamp'>[] | null
+}
+
 export function normalizeEventOnEdit(
   newStart: Date,
   newEnd: Date,
   event: ICalendarEvent
-) {
+): Result {
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { associations, ...omittedAssociationsEvent } = event
@@ -36,15 +40,6 @@ export function normalizeEventOnEdit(
   const end = newEnd.getTime() / 1000
   const status = newStart.getTime() <= new Date().getTime() ? 'DONE' : 'PENDING'
 
-  const responseEvent = {
-    ...omittedAssociationsEvent,
-    task_type: event.event_type,
-    timestamp: start,
-    due_date: start,
-    end_date: end,
-    status
-  }
-
   const loadedReminder = _get(
     event,
     'full_crm_task.reminders[0].timestamp',
@@ -53,16 +48,21 @@ export function normalizeEventOnEdit(
   const createdReminder = _get(event, 'reminders[0].timestamp', false)
   const remiderValue = loadedReminder || createdReminder
 
-  if (remiderValue) {
-    const diff = event.timestamp - remiderValue
-
-    // @ts-ignore
-    responseEvent.reminders = [
-      {
-        is_relative: true,
-        timestamp: start - diff
-      }
-    ]
+  let responseEvent = {
+    ...omittedAssociationsEvent,
+    task_type: event.event_type,
+    timestamp: start,
+    due_date: start,
+    end_date: end,
+    reminders: remiderValue
+      ? [
+          {
+            is_relative: true,
+            timestamp: start - (event.timestamp - remiderValue)
+          }
+        ]
+      : [],
+    status
   }
 
   return responseEvent
