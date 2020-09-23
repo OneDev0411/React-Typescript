@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Editor } from 'components/ImageEditor'
+import uploadAsset from 'models/instant-marketing/upload-asset'
 
 import { Container, CropButton, Image } from './styled'
 
