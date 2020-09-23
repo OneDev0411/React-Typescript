@@ -69,6 +69,7 @@ export interface GlobalHeaderProps {
   onCreateContact?: (contact: IContact) => void
   onCreateAndAddNewContact?: (contact: IContact) => void
   onCreateEmail?: (email: IEmailCampaign) => void
+  onCreateEmailFollowUp?: (email: IEvent) => void
   onCreateTour?: (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => void
@@ -85,6 +86,7 @@ export default function GlobalHeader({
   onCreateContact,
   onCreateAndAddNewContact,
   onCreateEmail = noop,
+  onCreateEmailFollowUp = noop,
   onCreateTour = noop,
   onCreateOpenHouse = noop,
   isHiddenOnMobile = true,
@@ -128,6 +130,7 @@ export default function GlobalHeader({
             onCreateContact={onCreateContact}
             onCreateAndAddNewContact={onCreateAndAddNewContact}
             onCreateEmail={onCreateEmail}
+            onCreateEmailFollowUp={onCreateEmailFollowUp}
             onCreateTour={onCreateTour}
             onCreateOpenHouse={onCreateOpenHouse}
           />

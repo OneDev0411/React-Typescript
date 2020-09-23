@@ -23,8 +23,9 @@ export default function CalendarPage(props: WithRouterProps) {
     <div className={classes.container}>
       <GlobalHeader
         title="Calendar"
-        onCreateEvent={handleCreateTask}
         onCreateOpenHouse={handleCreateTask}
+        onCreateEvent={handleCreateTask}
+        onCreateEmailFollowUp={handleCreateTask}
         onCreateTour={handleCreateTask}
         noPadding
       >

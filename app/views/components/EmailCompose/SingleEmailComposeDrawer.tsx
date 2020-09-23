@@ -1,5 +1,7 @@
 import React, { ComponentProps, useState } from 'react'
 
+import { noop } from 'utils/helpers'
+
 import FollowUpModal from '../FollowUpModal'
 import OverlayDrawer from '../OverlayDrawer'
 import { SingleEmailComposeForm } from './SingleEmailComposeForm'
@@ -8,6 +10,7 @@ interface Props extends ComponentProps<typeof SingleEmailComposeForm> {
   isOpen: boolean
   onClose?: () => void
   onClickAddDealAttachments?: () => void
+  followUpCallback?: (e: IEvent) => void
 
   getEmail?: (values: IEmailCampaignInput) => IEmailCampaignInput
   disableAddNewRecipient?: boolean
@@ -20,8 +23,9 @@ interface Props extends ComponentProps<typeof SingleEmailComposeForm> {
 export function SingleEmailComposeDrawer({
   emailId,
   isOpen,
-  onClose = () => {},
-  onClickAddDealAttachments = () => {},
+  onClose = noop,
+  followUpCallback = noop,
+  onClickAddDealAttachments = noop,
   ...otherProps
 }: Props) {
   const [email, setEmail] = useState<IEmailCampaign<
@@ -69,6 +73,7 @@ export function SingleEmailComposeDrawer({
       </OverlayDrawer>
       <FollowUpModal
         email={email}
+        callback={followUpCallback}
         isOpen={followUpModalIsOpen}
         onClose={onCloseFollowUpModal}
       />
