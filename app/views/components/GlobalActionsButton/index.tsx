@@ -13,6 +13,7 @@ interface Props {
   onCreateContact?: (contact: IContact) => void
   onCreateAndAddNewContact?: (contact: IContact) => void
   onCreateEmail: (email: IEmailCampaign) => void
+  onCreateEmailFollowUp: (email: IEvent) => void
   onCreateTour: (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => void
@@ -77,6 +78,7 @@ export default function GlobalActionsButton(props: Props) {
       case 'email':
         return selectedItem.render({
           isOpen: true,
+          followUpCallback: props.onCreateEmailFollowUp,
           onClose: handleCloseRenderedItem,
           onSent: handleSubmitEmail
         })
