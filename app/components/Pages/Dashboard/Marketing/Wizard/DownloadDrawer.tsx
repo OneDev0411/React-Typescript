@@ -73,12 +73,13 @@ export default function DownloadDrawer({ file, onClose }: Props) {
               src={file.url}
               alt="marketing template"
               className={classes.image}
+              hidden={isLoading}
               onLoad={handleLoadComplete}
             />
           </Grid>
           <Grid container item justify="space-between">
             <Grid item xs>
-              <Box p={2}>
+              <Box p={2} textAlign="center">
                 {isLoading ? (
                   <CircularProgress />
                 ) : (
