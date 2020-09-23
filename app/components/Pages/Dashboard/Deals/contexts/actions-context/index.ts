@@ -2,6 +2,8 @@ import { createContext } from 'react'
 
 import { EmailFormValues } from 'components/EmailCompose'
 
+import { FormValues } from 'deals/Signature/types'
+
 import { initialState } from './reducers'
 
 export type DispatchContext = React.Dispatch<any>
@@ -9,7 +11,7 @@ export type DispatchContext = React.Dispatch<any>
 export interface StateContext {
   actions: ActionButtonId[]
   attachments: IDealFile[]
-  form?: EmailFormValues
+  form?: EmailFormValues | FormValues
   isDrawerOpen: boolean
 }
 

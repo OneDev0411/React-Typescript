@@ -1,6 +1,9 @@
 import uniqBy from 'lodash/uniqBy'
 
-import { UrlBasedEmailAttachmentInput } from 'components/EmailCompose'
+import {
+  EmailFormValues,
+  UrlBasedEmailAttachmentInput
+} from 'components/EmailCompose'
 
 import { StateContext } from '..'
 import {
@@ -47,12 +50,15 @@ export function reducer(state = initialState, action: any): StateContext {
         attachments: state.attachments.filter(
           attachment => !areAttachmentsTheSame(attachment, action.attachment)
         ),
-        form: state.form && {
-          ...state.form,
-          attachments: state.form.attachments.filter(
-            attachment => !areAttachmentsTheSame(attachment, action.attachment)
-          )
-        }
+        form:
+          state.form &&
+          ({
+            ...state.form,
+            attachments: state.form.attachments.filter(
+              attachment =>
+                !areAttachmentsTheSame(attachment, action.attachment)
+            )
+          } as EmailFormValues)
       }
 
     case SET_DRAWER_STATUS:

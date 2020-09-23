@@ -90,7 +90,7 @@ export function SignatureComposeDrawer({
 
     if (!initialValues.current && actionsState.form) {
       initialValues.current = {
-        ...(actionsState.form as any),
+        ...(actionsState.form as FormValues),
         attachments
       }
 
