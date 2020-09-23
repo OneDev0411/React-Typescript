@@ -90,7 +90,7 @@ export function SignatureComposeDrawer({
 
     if (!initialValues.current && actionsState.form) {
       initialValues.current = {
-        ...actionsState.form,
+        ...(actionsState.form as any),
         attachments
       }
 
@@ -116,7 +116,7 @@ export function SignatureComposeDrawer({
   const handleClickAddAttachments = () => {
     actionsDispatch({
       type: SET_FORM_META,
-      form: initialValues.current
+      form: initialValues.current ?? undefined
     })
 
     onClickAddAttachments()

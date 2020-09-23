@@ -1,5 +1,7 @@
 import uniqBy from 'lodash/uniqBy'
 
+import { UrlBasedEmailAttachmentInput } from 'components/EmailCompose'
+
 import { StateContext } from '..'
 import {
   ADD_ATTACHMENTS,
@@ -13,10 +15,10 @@ export const initialState: StateContext = {
   isDrawerOpen: false,
   actions: [],
   attachments: [],
-  form: null
+  form: undefined
 }
 
-export function reducer(state = initialState, action: Pick<any, any>) {
+export function reducer(state = initialState, action: any): StateContext {
   switch (action.type) {
     case ADD_ATTACHMENTS:
       return {
@@ -24,21 +26,33 @@ export function reducer(state = initialState, action: Pick<any, any>) {
         actions: action.actions ?? state.actions,
         attachments: action.attachments
           ? uniqBy(
-              [...state.attachments, ...action.attachments],
-              (attachment: IDealFile) =>
-                attachment.id ? attachment.id : attachment.url
+              [...state.attachments, ...(action.attachments || [])],
+              getAttachmentIdentifier
             )
-          : state.attachments
+          : state.attachments,
+        form: state.form && {
+          ...state.form,
+          attachments: action.attachments
+            ? uniqBy(
+                [...state.form.attachments, ...(action.attachments || [])],
+                getAttachmentIdentifier
+              )
+            : state.form.attachments
+        }
       }
 
     case REMOVE_ATTACHMENT:
       return {
         ...state,
-        attachments: state.attachments.filter(attachment =>
-          attachment.id
-            ? attachment.id !== action.attachment.id
-            : attachment.url !== action.attachment.url
-        )
+        attachments: state.attachments.filter(
+          attachment => !areAttachmentsTheSame(attachment, action.attachment)
+        ),
+        form: state.form && {
+          ...state.form,
+          attachments: state.form.attachments.filter(
+            attachment => !areAttachmentsTheSame(attachment, action.attachment)
+          )
+        }
       }
 
     case SET_DRAWER_STATUS:
@@ -50,7 +64,14 @@ export function reducer(state = initialState, action: Pick<any, any>) {
     case SET_FORM_META:
       return {
         ...state,
-        form: action.form
+        form: action.form,
+        attachments: !Array.isArray(action.form.attachments)
+          ? []
+          : state.attachments.filter(attachment =>
+              action.form.attachments.some(formAttachment =>
+                areAttachmentsTheSame(formAttachment, attachment)
+              )
+            )
       }
 
     case CANCEL:
@@ -62,4 +83,22 @@ export function reducer(state = initialState, action: Pick<any, any>) {
     default:
       return state
   }
+}
+
+type Attachment = IFile | IDealFile | UrlBasedEmailAttachmentInput
+
+function getAttachmentIdentifier(
+  attachment: Attachment
+): string | null | undefined {
+  return 'id' in attachment && attachment.id ? attachment.id : attachment.url
+}
+
+function areAttachmentsTheSame(
+  firstAttachment: Attachment,
+  secondAttachment: Attachment
+): boolean {
+  return (
+    getAttachmentIdentifier(firstAttachment) ===
+    getAttachmentIdentifier(secondAttachment)
+  )
 }

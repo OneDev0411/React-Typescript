@@ -96,7 +96,7 @@ export function Footer({
   onChanged,
   onCancel,
   onDelete,
-  onClickAddDealAttachments = () => {}
+  onClickAddDealAttachments
 }: Props) {
   const formState = useFormState()
   const dueAtField = useField('due_at')
