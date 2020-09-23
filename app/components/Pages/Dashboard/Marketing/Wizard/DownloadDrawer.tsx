@@ -30,7 +30,6 @@ const useStyles = makeStyles(
 
 interface Props {
   file: IFile
-
   onClose: () => void
 }
 
