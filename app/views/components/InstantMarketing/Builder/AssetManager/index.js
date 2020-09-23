@@ -1,14 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
 
 import { Uploader } from 'components/Uploader'
 import uploadAsset from 'models/instant-marketing/upload-asset'
 
 import { AppTheme } from '../../../../../AppTheme'
+import store from '../../../../../stores'
+import { loadGrapesjs } from '../utils/load-grapes'
 
 import { AssetImage } from './AssetImage'
-
-import { loadGrapesjs } from '../utils/load-grapes'
 
 export const load = async () => {
   const { Grapesjs, Backbone } = await loadGrapesjs()
@@ -28,11 +29,13 @@ export const load = async () => {
       render() {
         ReactDOM.render(
           <AppTheme>
-            <AssetImage
-              model={this.model}
-              target={target}
-              getTemplateId={() => getStorageData('templateId')}
-            />
+            <Provider store={store}>
+              <AssetImage
+                model={this.model}
+                target={target}
+                getTemplateId={() => getStorageData('templateId')}
+              />
+            </Provider>
           </AppTheme>,
           this.el
         )
