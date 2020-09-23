@@ -10,7 +10,7 @@ interface Props extends ComponentProps<typeof SingleEmailComposeForm> {
   isOpen: boolean
   onClose?: () => void
   onClickAddDealAttachments?: () => void
-  followUpCallback?: (e: IEvent) => void
+  followUpCallback?: (event: IEvent) => void
 
   getEmail?: (values: IEmailCampaignInput) => IEmailCampaignInput
   disableAddNewRecipient?: boolean
