@@ -1,14 +1,19 @@
-import React, { useState, useLayoutEffect } from 'react'
-import { makeStyles, Theme, useTheme } from '@material-ui/core'
-import classNames from 'classnames'
+import React, { useState, useEffect, useCallback } from 'react'
+import {
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  makeStyles,
+  MenuItem,
+  Select,
+  Theme
+} from '@material-ui/core'
+import { mdiBellOutline } from '@mdi/js'
 
-import { BasicDropdown } from 'components/BasicDropdown'
-import { CheckBoxButton } from 'components/Button/CheckboxButton'
-import IconBell from 'components/SvgIcons/Bell/IconBell'
-import LinkButton from 'components/Button/LinkButton'
-import ArrowDropDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
-import { oneDayInSeconds, oneWeekInSeconds } from '../constants'
+import { ONE_DAY_IN_SECONDS, ONE_WEEK_IN_SECONDS } from '../constants'
 
 import CustomReminder from './CustomReminder'
 
@@ -24,23 +29,23 @@ const options = [
   zeroOption,
   {
     label: '1 day before',
-    value: oneDayInSeconds
+    value: ONE_DAY_IN_SECONDS
   },
   {
     label: '2 days before',
-    value: 2 * oneDayInSeconds
+    value: 2 * ONE_DAY_IN_SECONDS
   },
   {
     label: '3 days before',
-    value: 3 * oneDayInSeconds
+    value: 3 * ONE_DAY_IN_SECONDS
   },
   {
     label: '1 week before',
-    value: oneWeekInSeconds
+    value: ONE_WEEK_IN_SECONDS
   },
   {
     label: '2 weeks before',
-    value: 2 * oneWeekInSeconds
+    value: 2 * ONE_WEEK_IN_SECONDS
   },
   customOption
 ] as const
@@ -50,50 +55,11 @@ const useStyles = makeStyles(
     container: {
       marginBottom: theme.spacing(4)
     },
-    checkBoxContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingBottom: theme.spacing(1),
-      width: 'fit-content',
-      cursor: 'pointer',
-      '&:last-child': {
-        marginLeft: theme.spacing(0.5)
-      }
+    select: {
+      width: theme.spacing(25)
     },
-    dropButton: {
-      color: `${theme.palette.common.black} !important`,
-      '&:hover': {
-        color: `${theme.palette.primary.main} !important`,
-        '& svg, & svg path[fill-rule="nonzero"]': {
-          fill: `${theme.palette.primary.main} !important`
-        }
-      }
-    },
-    dropButtonOpened: {
-      color: `${theme.palette.primary.main} !important`,
-      '& svg, & svg path[fill-rule="nonzero"]': {
-        fill: `${theme.palette.primary.main} !important`
-      }
-    },
-    dropButtonDisabled: {
-      color: `${theme.palette.grey[500]} !important`,
-      '& svg, & svg path[fill-rule="nonzero"]': {
-        fill: `${theme.palette.grey[500]} !important`
-      },
-      '&:hover': {
-        color: `${theme.palette.grey[500]} !important`,
-        '& svg, & svg path[fill-rule="nonzero"]': {
-          fill: `${theme.palette.grey[500]} !important`
-        }
-      }
-    },
-    dropIcon: {
-      position: 'relative',
-      marginLeft: theme.spacing(2)
-    },
-    dropIconOpened: {
-      transform: 'rotateX(180deg)'
+    marginedText: {
+      marginLeft: theme.spacing(1.5)
     }
   }),
   { name: 'ReminderNotifications-Item' }
@@ -116,11 +82,11 @@ export default function Item({
     () => options.find(({ value }) => value === reminderSeconds) || customOption
   )
 
-  function getReminderSeconds(): number {
+  const getReminderSeconds = useCallback(() => {
     return option === customOption ? reminderSeconds : (option.value as number)
-  }
+  }, [reminderSeconds, option])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!selected) {
       setOption(zeroOption)
     } else if (reminderSeconds !== getReminderSeconds()) {
@@ -128,71 +94,68 @@ export default function Item({
         options.find(({ value }) => value === reminderSeconds) ?? customOption
       )
     }
-  }, [selected, reminderSeconds])
-
-  function toggleSelected(): void {
-    onChange(!selected, selected ? 0 : reminderSeconds)
-  }
+  }, [selected, reminderSeconds, getReminderSeconds])
 
   const classes = useStyles()
-  const theme = useTheme<Theme>()
 
   return (
-    <div className={classes.container}>
-      <div className={classes.checkBoxContainer} onClick={toggleSelected}>
-        <CheckBoxButton onClick={toggleSelected} isSelected={selected} square />
-        &nbsp;&nbsp;<span>{label}</span>
-      </div>
-
-      <BasicDropdown
-        disabled={!selected}
-        fullHeight
-        items={options}
-        selectedItem={option}
-        buttonIcon={IconBell}
-        onSelect={(option: typeof options[number]) => {
-          setOption(option)
-
-          if (option !== customOption) {
-            onChange(selected, option.value as number)
-          }
-        }}
-        menuStyle={{ width: theme.spacing(25) }}
-        buttonRenderer={props => (
-          <LinkButton
-            {...props}
-            inverse
-            className={classNames(
-              classes.dropButton,
-              props.isOpen && classes.dropButtonOpened,
-              props.disabled && classes.dropButtonDisabled
-            )}
-            style={{
-              paddingLeft: 0,
-              width: theme.spacing(25),
-              fontWeight: 500,
-              justifyContent: 'space-between',
-              backgroundColor: theme.palette.grey[50]
-            }}
-          >
-            <IconBell />
-            {option.label}
-            <ArrowDropDown
-              className={classNames(
-                classes.dropIcon,
-                props.isOpen && classes.dropIconOpened
-              )}
-              style={{ margin: theme.spacing(0.5, 0, 0, 0.5) }}
+    <Grid container direction="column" className={classes.container}>
+      <Grid item>
+        <FormControlLabel
+          label={label}
+          control={
+            <Checkbox
+              checked={selected}
+              onChange={(event, checked) =>
+                onChange(checked, checked ? reminderSeconds : 0)
+              }
             />
-          </LinkButton>
-        )}
-      />
-      {option === customOption && (
-        <CustomReminder
-          seconds={reminderSeconds}
-          onChange={seconds => onChange(selected, seconds)}
+          }
         />
+      </Grid>
+
+      <Grid item>
+        <Select
+          variant="outlined"
+          className={classes.select}
+          disabled={!selected}
+          value={option.value}
+          onChange={({ target: { value } }) => {
+            const option = options.find(option => option.value === value)!
+
+            setOption(option)
+
+            if (option !== customOption) {
+              onChange(selected, option.value as number)
+            }
+          }}
+          renderValue={value => {
+            const option = options.find(option => option.value === value)!
+
+            return (
+              <>
+                <SvgIcon path={mdiBellOutline} size={muiIconSizes.small} />
+                <span className={classes.marginedText}>{option.label}</span>
+              </>
+            )
+          }}
+        >
+          {options.map((option, index) => (
+            <MenuItem key={index} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </Grid>
+
+      {option === customOption && (
+        <Grid item>
+          <CustomReminder
+            seconds={reminderSeconds}
+            onChange={seconds => onChange(selected, seconds)}
+          />
+        </Grid>
       )}
-    </div>
+    </Grid>
   )
 }

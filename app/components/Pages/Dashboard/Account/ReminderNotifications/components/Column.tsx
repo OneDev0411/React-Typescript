@@ -1,11 +1,19 @@
 import React, { useMemo } from 'react'
-import { Theme, useTheme } from '@material-ui/core'
-import Flex, { FlexItem } from 'styled-flex-component'
+import { Theme, makeStyles, Grid } from '@material-ui/core'
 import { uniq } from 'lodash'
 
 import { ItemState } from '../types'
 
 import Item from './Item'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    title: {
+      marginBottom: theme.spacing(6)
+    }
+  }),
+  { name: 'ReminderNotifications-Column' }
+)
 
 interface Props {
   title: string
@@ -14,8 +22,8 @@ interface Props {
   onChangeAll: (newItems: readonly ItemState[]) => void
 }
 
-export default function ({ title, items, onChange, onChangeAll }: Props) {
-  const theme = useTheme<Theme>()
+export default function Column({ title, items, onChange, onChangeAll }: Props) {
+  const classes = useStyles()
 
   const allSelected = useMemo(
     () =>
@@ -23,12 +31,15 @@ export default function ({ title, items, onChange, onChangeAll }: Props) {
       uniq(items.map(({ reminderSeconds }) => reminderSeconds)).length === 1,
     [items]
   )
-  const allReminderSeconds = !allSelected ? 0 : items[0].reminderSeconds
+  const allReminderSeconds = allSelected ? items[0].reminderSeconds : 0
 
   return (
-    <Flex full column style={{ paddingLeft: theme.spacing(4) }}>
-      <h2 style={{ marginBottom: theme.spacing(6) }}>{title}</h2>
-      <FlexItem>
+    <Grid container direction="column">
+      <Grid item>
+        <h2 className={classes.title}>{title}</h2>
+      </Grid>
+
+      <Grid item>
         <Item
           label="All"
           selected={allSelected}
@@ -43,9 +54,10 @@ export default function ({ title, items, onChange, onChangeAll }: Props) {
             )
           }
         />
-      </FlexItem>
+      </Grid>
+
       {items.map(item => (
-        <FlexItem key={item.eventType}>
+        <Grid item key={item.eventType}>
           <Item
             label={item.label}
             selected={item.selected}
@@ -58,8 +70,8 @@ export default function ({ title, items, onChange, onChangeAll }: Props) {
               })
             }
           />
-        </FlexItem>
+        </Grid>
       ))}
-    </Flex>
+    </Grid>
   )
 }

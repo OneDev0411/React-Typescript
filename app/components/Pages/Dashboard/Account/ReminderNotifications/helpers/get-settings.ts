@@ -1,6 +1,9 @@
 import { getReminderNotificationSettings } from 'models/reminder-notifications/get-reminder-notification-settings'
 
-import { contactDateObjectType, homeAnniversaryEventType } from '../constants'
+import {
+  CONTACT_DATE_OBJECT_TYPE,
+  HOME_ANNIVERSARY_EVENT_TYPE
+} from '../constants'
 
 export async function getSettings(): Promise<
   readonly ICalendarReminderNotificationSetting[]
@@ -15,13 +18,13 @@ export async function getSettings(): Promise<
     settings: typeof rawSettings
   ): typeof rawSettings {
     return settings.map(setting => {
-      if (setting.event_type !== homeAnniversaryEventType) {
+      if (setting.event_type !== HOME_ANNIVERSARY_EVENT_TYPE) {
         return setting
       }
 
       return {
         ...setting,
-        object_type: contactDateObjectType
+        object_type: CONTACT_DATE_OBJECT_TYPE
       }
     })
   }

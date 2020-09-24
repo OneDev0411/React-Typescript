@@ -1,4 +1,4 @@
-import { dealDateObjectType } from '../constants'
+import { DEAL_DATE_OBJECT_TYPE } from '../constants'
 
 import { ColumnState, ItemState } from '../types'
 
@@ -14,7 +14,7 @@ export function getDealColumn(
     const eventType = context.key
     const setting = settings.find(
       ({ event_type, object_type }) =>
-        event_type === eventType && object_type === dealDateObjectType
+        event_type === eventType && object_type === DEAL_DATE_OBJECT_TYPE
     )
 
     return {
@@ -26,7 +26,7 @@ export function getDealColumn(
   })
 
   return {
-    objectType: dealDateObjectType,
+    objectType: DEAL_DATE_OBJECT_TYPE,
     title: 'Deals Critical Dates',
     items
   }

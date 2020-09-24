@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useStore } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { useEffectOnce } from 'react-use'
-import { Theme, useTheme } from '@material-ui/core'
-import Flex from 'styled-flex-component'
+import { Grid, Theme, useTheme } from '@material-ui/core'
 import { addNotification } from 'reapop'
 
 import {
@@ -14,7 +13,10 @@ import {
 
 import useTypedSelector from 'hooks/use-typed-selector'
 
-import { updateReminderNotificationSettings } from 'models/reminder-notifications/update-reminder-notification-settings'
+import {
+  ReminderNotificationSetting,
+  updateReminderNotificationSettings
+} from 'models/reminder-notifications/update-reminder-notification-settings'
 import { forcePushReminderNotificationSettings } from 'models/reminder-notifications/force-push-reminder-notification-settings'
 
 import { getContextsByBrand } from 'actions/deals'
@@ -25,7 +27,7 @@ import { selectContextsByBrand } from 'reducers/deals/contexts'
 import ActionButton from 'components/Button/ActionButton'
 import Loading from 'partials/Loading'
 
-import { renderForcePushButton } from './constants'
+import { RENDER_FORCE_PUSH_BUTTON } from './constants'
 
 import Column from './components/Column'
 
@@ -35,6 +37,7 @@ import { getSettings } from './helpers/get-settings'
 import { getDealColumn } from './helpers/get-deal-column'
 import { getContactColumn } from './helpers/get-contact-column'
 import { getSettingsFromColumns } from './helpers/get-settings-from-columns'
+import { updateNewColumnInColumns } from './helpers/update-new-column-in-columns'
 
 export default function ReminderNotifications() {
   const store = useStore<IAppState>()
@@ -51,9 +54,14 @@ export default function ReminderNotifications() {
   const theme = useTheme<Theme>()
 
   useEffectOnce(() => {
-    getColumns()
-      .then(setColumns)
-      .catch(error => {
+    initializeColumns()
+
+    async function initializeColumns(): Promise<void> {
+      try {
+        const columns = await getColumns()
+
+        setColumns(columns)
+      } catch (error) {
         console.error(error)
         dispatch(
           addNotification({
@@ -61,8 +69,10 @@ export default function ReminderNotifications() {
             message: 'Unable to fetch reminder notification settings.'
           })
         )
-      })
-      .finally(() => setIsLoading(false))
+      } finally {
+        setIsLoading(false)
+      }
+    }
 
     async function getColumns(): Promise<readonly ColumnState[]> {
       const settings = await getSettings()
@@ -105,13 +115,18 @@ export default function ReminderNotifications() {
   })
 
   function setColumn(newColumn: ColumnState): void {
-    setColumns(columns => {
-      const newColumns = columns.map(column =>
-        column.objectType === newColumn.objectType ? newColumn : column
-      )
-      const newSettings = getSettingsFromColumns(newColumns)
+    const newColumns = updateNewColumnInColumns(newColumn, columns)
+    const newSettings = getSettingsFromColumns(columns)
 
-      updateReminderNotificationSettings(newSettings).catch(error => {
+    updateReminderNotificationSettingsAndHandleException(newSettings)
+    setColumns(newColumns)
+
+    async function updateReminderNotificationSettingsAndHandleException(
+      newSettings: readonly ReminderNotificationSetting[]
+    ): Promise<void> {
+      try {
+        await updateReminderNotificationSettings(newSettings)
+      } catch (error) {
         console.error(error)
         dispatch(
           addNotification({
@@ -119,10 +134,8 @@ export default function ReminderNotifications() {
             message: 'Unable to update reminder notifications.'
           })
         )
-      })
-
-      return newColumns
-    })
+      }
+    }
   }
 
   return (
@@ -131,7 +144,7 @@ export default function ReminderNotifications() {
         <title>Reminder Notifications | Settings | Rechat</title>
       </Helmet>
       <div>
-        {renderForcePushButton && (
+        {RENDER_FORCE_PUSH_BUTTON && (
           <ActionButton
             appearance="outline"
             style={{ marginLeft: theme.spacing(4) }}
@@ -141,33 +154,34 @@ export default function ReminderNotifications() {
           </ActionButton>
         )}
       </div>
-      <Flex>
-        {isLoading ? (
-          <Loading />
-        ) : (
-          columns.map((column, index) => (
-            <Column
-              key={index}
-              title={column.title}
-              items={column.items}
-              onChange={newItem =>
-                setColumn({
-                  ...column,
-                  items: column.items.map(item =>
-                    item.eventType === newItem.eventType ? newItem : item
-                  )
-                })
-              }
-              onChangeAll={newItems =>
-                setColumn({
-                  ...column,
-                  items: newItems
-                })
-              }
-            />
-          ))
-        )}
-      </Flex>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Grid container justify="space-around" spacing={4}>
+          {columns.map((column, index) => (
+            <Grid item key={index}>
+              <Column
+                title={column.title}
+                items={column.items}
+                onChange={newItem =>
+                  setColumn({
+                    ...column,
+                    items: column.items.map(item =>
+                      item.eventType === newItem.eventType ? newItem : item
+                    )
+                  })
+                }
+                onChangeAll={newItems =>
+                  setColumn({
+                    ...column,
+                    items: newItems
+                  })
+                }
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </>
   )
 }

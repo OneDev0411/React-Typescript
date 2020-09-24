@@ -1,9 +1,14 @@
-import React, { useState, useLayoutEffect } from 'react'
-import { makeStyles, Theme, TextField } from '@material-ui/core'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import {
+  makeStyles,
+  Theme,
+  TextField,
+  Grid,
+  Select,
+  MenuItem
+} from '@material-ui/core'
 
-import { BasicDropdown } from 'components/BasicDropdown'
-
-import { oneDayInSeconds, oneWeekInSeconds } from '../constants'
+import { ONE_DAY_IN_SECONDS, ONE_WEEK_IN_SECONDS } from '../constants'
 
 import { doSecondsRepresentWeeks } from '../helpers/do-seconds-represent-weeks'
 import { getWeeksFromSeconds } from '../helpers/get-weeks-from-seconds'
@@ -11,33 +16,31 @@ import { getDaysFromSeconds } from '../helpers/get-days-from-seconds'
 
 const daysOption = {
   label: 'Days',
-  value: oneDayInSeconds
+  value: ONE_DAY_IN_SECONDS
 } as const
 const weeksOption = {
   label: 'Weeks',
-  value: oneWeekInSeconds
+  value: ONE_WEEK_IN_SECONDS
 } as const
 const options = [daysOption, weeksOption] as const
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
-      display: 'flex',
-      padding: theme.spacing(2, 0)
+    root: {
+      marginTop: theme.spacing(2)
     },
     inputContainer: {
-      width: theme.spacing(6),
-      marginRight: theme.spacing(2),
-      '& .MuiOutlinedInput-input': {
-        padding: theme.spacing(1.2, 1),
-        textAlign: 'center'
-      }
+      width: theme.spacing(9),
+      marginRight: theme.spacing(2)
+    },
+    input: {
+      textAlign: 'center'
     },
     dropdownContainer: {
       width: theme.spacing(14)
     }
   }),
-  { name: 'ReminderNotifications-CustomValue' }
+  { name: 'ReminderNotifications-CustomReminder' }
 )
 
 interface Props {
@@ -46,59 +49,75 @@ interface Props {
 }
 
 export default function CustomReminder({ seconds, onChange }: Props) {
-  const initiallyInWeeks = doSecondsRepresentWeeks(seconds)
-  const initialOption = initiallyInWeeks ? weeksOption : daysOption
-  const initialValue = initiallyInWeeks
-    ? getWeeksFromSeconds(seconds)
-    : getDaysFromSeconds(seconds)
+  const { initialOption, initialValue } = useMemo(() => {
+    const initiallyInWeeks = doSecondsRepresentWeeks(seconds)
+    const initialOption = initiallyInWeeks ? weeksOption : daysOption
+    const initialValue = initiallyInWeeks
+      ? getWeeksFromSeconds(seconds)
+      : getDaysFromSeconds(seconds)
+
+    return { initialOption, initialValue }
+  }, [seconds])
 
   const [option, setOption] = useState(initialOption)
   const [value, setValue] = useState(initialValue)
 
-  function getSeconds(anotherOption?: typeof options[number]): number {
-    const selectedOption = anotherOption ?? option
+  const getSeconds = useCallback<
+    (anotherOption?: typeof options[number]) => number
+  >(
+    anotherOption => {
+      const selectedOption = anotherOption ?? option
 
-    return value * selectedOption.value
-  }
+      return value * selectedOption.value
+    },
+    [option, value]
+  )
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (seconds !== getSeconds()) {
       setOption(initialOption)
       setValue(initialValue)
     }
-  }, [seconds])
+  }, [seconds, initialOption, initialValue, getSeconds])
 
   const classes = useStyles()
 
   return (
-    <div className={classes.container}>
-      <div className={classes.inputContainer}>
+    <Grid container className={classes.root}>
+      <Grid item className={classes.inputContainer}>
         <TextField
           value={String(value)}
           variant="outlined"
-          onChange={event => {
-            const rawValue = event.target.value
-            const isValid = /^\d{0,3}$/.test(rawValue)
+          onChange={({ target: { value } }) => {
+            const isValid = /^\d{0,3}$/.test(value)
 
             if (isValid) {
-              setValue(Number(rawValue))
+              setValue(Number(value))
             }
           }}
           onBlur={() => onChange(getSeconds())}
+          inputProps={{ className: classes.input }}
         />
-      </div>
-      <div className={classes.dropdownContainer}>
-        <BasicDropdown
+      </Grid>
+      <Grid item className={classes.dropdownContainer}>
+        <Select
+          variant="outlined"
           fullWidth
-          fullHeight
-          items={options}
-          selectedItem={option}
-          onSelect={(option: typeof options[number]) => {
+          value={option.value}
+          onChange={({ target: { value } }) => {
+            const option = options.find(option => option.value === value)!
+
             setOption(option)
             onChange(getSeconds(option))
           }}
-        />
-      </div>
-    </div>
+        >
+          {options.map((option, index) => (
+            <MenuItem key={index} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </Grid>
+    </Grid>
   )
 }

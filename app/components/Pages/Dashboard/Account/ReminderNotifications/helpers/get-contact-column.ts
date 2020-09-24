@@ -3,7 +3,7 @@ import {
   selectDefsBySection
 } from 'reducers/contacts/attributeDefs'
 
-import { contactDateObjectType } from '../constants'
+import { CONTACT_DATE_OBJECT_TYPE } from '../constants'
 
 import { ColumnState, ItemState } from '../types'
 
@@ -17,7 +17,7 @@ export function getContactColumn(
     const eventType = def.name || def.label
     const setting = settings.find(
       ({ event_type, object_type }) =>
-        event_type === eventType && object_type === contactDateObjectType
+        event_type === eventType && object_type === CONTACT_DATE_OBJECT_TYPE
     )
 
     return {
@@ -29,7 +29,7 @@ export function getContactColumn(
   })
 
   return {
-    objectType: contactDateObjectType,
+    objectType: CONTACT_DATE_OBJECT_TYPE,
     title: 'Contact Dates',
     items
   }
