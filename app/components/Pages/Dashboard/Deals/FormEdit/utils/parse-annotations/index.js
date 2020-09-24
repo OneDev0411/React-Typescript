@@ -108,8 +108,8 @@ function normalizeInputs(inputs, defaultValues) {
         annotation: {
           ...item.annotation,
           fieldValue:
-            item.annotation.fieldValue ||
-            (defaultValues[item.annotation.fieldName] ?? '')
+            defaultValues[item.annotation.fieldName] ??
+            item.annotation.fieldValue
         }
       }
     })
