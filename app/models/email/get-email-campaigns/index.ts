@@ -3,11 +3,34 @@ import Fetch from 'services/fetch'
 import { toEntityAssociation } from 'utils/association-utils'
 import { getActiveTeamId } from 'utils/user-teams'
 
-import {
-  DEFAULT_EMAIL_ASSOCIATIONS,
-  DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS,
-  DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS
-} from '../get-email-campaign'
+export const DEFAULT_EMAIL_ASSOCIATIONS: IEmailCampaignAssociation[] = [
+  'emails',
+  'template',
+  'from',
+  'recipients',
+  'attachments'
+]
+
+export const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[] = [
+  'contact',
+  'list',
+  'brand',
+  'agent'
+]
+
+export const DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS: IEmailCampaignEmailAssociation[] = [
+  'email'
+]
+
+export interface GetEmailCampaignsAssociations<
+  A1 extends IEmailCampaignAssociation,
+  A2 extends IEmailCampaignRecipientAssociation,
+  A3 extends IEmailCampaignEmailAssociation
+> {
+  emailCampaignAssociations?: A1[]
+  emailRecipientsAssociations?: A2[]
+  emailCampaignEmailsAssociation?: A3[]
+}
 
 export async function getEmailCampaigns<
   A1 extends IEmailCampaignAssociation,
@@ -15,16 +38,14 @@ export async function getEmailCampaigns<
   A3 extends IEmailCampaignEmailAssociation
 >(
   user: IUser,
-  {
+  associations: GetEmailCampaignsAssociations<A1, A2, A3> = {}
+): Promise<IEmailCampaign<A1, A2, A3, never>[]> {
+  const {
     emailCampaignAssociations = DEFAULT_EMAIL_ASSOCIATIONS as A1[],
     emailRecipientsAssociations = DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS as A2[],
     emailCampaignEmailsAssociation = DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS as A3[]
-  }: {
-    emailCampaignAssociations?: A1[]
-    emailRecipientsAssociations?: A2[]
-    emailCampaignEmailsAssociation?: A3[]
-  } = {}
-): Promise<IEmailCampaign<A1, A2, A3, never>[]> {
+  } = associations
+
   const brandId: UUID | null = getActiveTeamId(user)
 
   if (!brandId) {
