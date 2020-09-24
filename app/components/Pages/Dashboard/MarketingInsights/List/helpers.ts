@@ -83,7 +83,7 @@ export function isEmailInProgress(item) {
   return !item.executed_at && !isEmailQueued(item)
 }
 
-export function doFilterOnInsightList(
+export function filterInsightList(
   list: readonly InsightEmailCampaign[],
   type: InsightFilterType
 ): Pick<InsightState, 'list' | 'counts'> {

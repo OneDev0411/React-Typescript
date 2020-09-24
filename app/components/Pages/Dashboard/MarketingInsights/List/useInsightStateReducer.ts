@@ -1,7 +1,7 @@
 import { useReducer } from 'react'
 
 import { InsightAction, InsightActionType, InsightState } from './types'
-import { doFilterOnInsightList } from './helpers'
+import { filterInsightList } from './helpers'
 
 const initialState: InsightState = {
   isLoading: false,
@@ -26,7 +26,7 @@ function reducer(state: InsightState, action: InsightAction): InsightState {
       return {
         ...state,
         isLoading: false,
-        ...doFilterOnInsightList(action.allEmailCampaigns, action.filterType)
+        ...filterInsightList(action.allEmailCampaigns, action.filterType)
       }
 
     case InsightActionType.FetchListFailure:

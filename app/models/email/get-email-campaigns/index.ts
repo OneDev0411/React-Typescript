@@ -31,7 +31,7 @@ export async function getEmailCampaigns<
     throw new Error('This user does not belong to any brand')
   }
 
-  const endpoint = `/brands/${brandId}/emails/campaigns?associations[]=email_campaign.recipients&associations[]=email_campaign_recipient.list&associations[]=email_campaign.template&omit[]=template_instance.html&omit[]=email_campaign.html`
+  const endpoint = `/brands/${brandId}/emails/campaigns`
 
   const response = await new Fetch().get(endpoint).query({
     'associations[]': [
