@@ -29,7 +29,7 @@ export default function Step({ step }: Props) {
   return (
     <StepContainer alignCenter justifyBetween>
       <Box display="flex" alignItems="center" width="70%">
-        <SvgIcon path={icon.icon} size={muiIconSizes.samll} />
+        <SvgIcon path={icon.icon} size={muiIconSizes.small} />
         <Typography
           noWrap
           variant="body2"

@@ -1,15 +1,15 @@
 interface IconSize {
-  width: number,
-  height: number
+  readonly width: number
+  readonly height: number
 }
 
-export const iconSizes: StringMap<IconSize> = {
-  small: { width: 16, height: 16 },
-  medium: { width: 24, height: 24 },
-  large: { width: 32, height: 32 }
+export const iconSizes = {
+  small: { width: 16, height: 16 } as IconSize,
+  medium: { width: 24, height: 24 } as IconSize,
+  large: { width: 32, height: 32 } as IconSize
 }
 
-export const muiIconSizes: StringMap<string> = {
+export const muiIconSizes = {
   xsmall: '0.75rem', // 12px
   small: '1rem', // 16px
   medium: '1.5rem', // 24px
