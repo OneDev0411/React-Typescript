@@ -29,19 +29,18 @@ export function SingleEmailComposeDrawer({
   ...otherProps
 }: Props) {
   const [email, setEmail] = useState<IEmailCampaign<
-    IEmailCampaignAssociation,
-    IEmailCampaignRecipientAssociation,
-    IEmailCampaignEmailAssociation
+    'emails' | 'template' | 'from' | 'recipients',
+    'contact',
+    'email'
   > | null>(null)
   const [followUpModalIsOpen, setFollowUpModalIsOpen] = useState(false)
 
-  const onSent = result => {
-    const email = result.data
-
-    if (email.individual) {
+  const onSent = (sentEmail: NonNullable<typeof email>) => {
+    if (sentEmail.individual) {
       onClose()
+      otherProps.onSent && otherProps.onSent(sentEmail)
     } else {
-      addFollowUp(email)
+      addFollowUp(sentEmail)
     }
   }
 
@@ -53,10 +52,7 @@ export function SingleEmailComposeDrawer({
   const onCloseFollowUpModal = () => {
     setFollowUpModalIsOpen(false)
     onClose()
-
-    if (otherProps?.onSent) {
-      otherProps.onSent(email)
-    }
+    otherProps.onSent && otherProps.onSent(email)
   }
 
   return (

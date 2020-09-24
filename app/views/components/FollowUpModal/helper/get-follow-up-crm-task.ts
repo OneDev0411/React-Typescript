@@ -4,7 +4,7 @@ import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-va
 import { EmailThreadEmail } from 'components/EmailThread/types'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 
-import { FollowUpEmail } from '../types'
+import { FollowUpEmail, FollowUpEmailCampaign } from '../types'
 import { Props as FollowUpProps } from '../FollowUpModal'
 
 // TODO: should drop specific email association and make it general
@@ -45,11 +45,7 @@ export function getFollowUpCrmTask(
 }
 
 function getCrmTaskFromEmailCampaign(
-  email: IEmailCampaign<
-    IEmailCampaignAssociation,
-    IEmailCampaignRecipientAssociation,
-    IEmailCampaignEmailAssociation
-  >,
+  email: FollowUpEmailCampaign,
   dueDate: Date,
   user: IUser,
   dictionary?: FollowUpProps['dictionary']

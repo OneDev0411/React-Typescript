@@ -59,9 +59,18 @@ function List(props) {
   } = useListData(props.user, filterType)
 
   useEffect(() => {
-    window.socket.on('email_campaign:send', reloadList)
-    // TODO: Shouldn't we simply remove the event listener on component unmounting?
-  }, [])
+    function handleEmailCampaignSentEvent(event) {
+      const ids = event?.ids ?? []
+
+      ids.forEach(reloadItem)
+    }
+
+    window.socket.on('email_campaign:send', handleEmailCampaignSentEvent)
+
+    return () => {
+      window.socket.off('email_campaign:send', handleEmailCampaignSentEvent)
+    }
+  }, [reloadItem])
 
   const columns = useMemo(
     () => [

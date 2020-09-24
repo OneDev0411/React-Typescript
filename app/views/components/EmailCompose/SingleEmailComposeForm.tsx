@@ -6,7 +6,6 @@ import { IAppState } from 'reducers'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
-import { toEntityAssociation } from 'utils/association-utils'
 
 import { confirmation } from 'actions/confirmation'
 
@@ -92,24 +91,13 @@ export function SingleEmailComposeForm({
         attachmentFormValueToEmailAttachmentInput
       ),
       due_at: formValue.due_at || new Date(),
-      notifications_enabled: formValue.notifications_enabled
+      notifications_enabled: formValue.notifications_enabled,
+      individual: individualMode
     })
 
     return emailId
       ? updateEmailCampaign(emailId, emailData)
-      : createEmailCampaign(
-          emailData,
-          {
-            'associations[]': [
-              'email_campaign_recipient.contact',
-              'email_campaign_email.email',
-              ...['emails', 'template', 'from', 'recipients'].map(
-                toEntityAssociation('email_campaign')
-              )
-            ]
-          },
-          individualMode
-        )
+      : createEmailCampaign(emailData)
   }
 
   const handleSelectMarketingTemplate: EmailComposeFormProps['onSelectMarketingTemplate'] = (

@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
-import getCampaings from 'models/insights/emails/get-all-campaigns'
+import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 
 import { InsightActionType, InsightFilterType, InsightState } from './types'
@@ -15,13 +15,19 @@ export default function useListData(
 } {
   const [state, dispatch] = useInsightStateReducer()
 
-  const reloadList: ReturnType<typeof useListData>['reloadList'] = async () => {
+  const reloadList = useCallback<
+    ReturnType<typeof useListData>['reloadList']
+  >(async () => {
     dispatch({
       type: InsightActionType.FetchListRequest
     })
 
     try {
-      const allEmailCampaigns = await getCampaings(user)
+      const allEmailCampaigns = await getEmailCampaigns(user, {
+        emailCampaignAssociations: ['recipients', 'template'],
+        emailRecipientsAssociations: ['list'],
+        emailCampaignEmailsAssociation: []
+      })
 
       dispatch({
         type: InsightActionType.FetchListSuccess,
@@ -34,34 +40,39 @@ export default function useListData(
         type: InsightActionType.FetchListFailure
       })
     }
-  }
+  }, [user, filterType])
 
-  const reloadItem: ReturnType<
-    typeof useListData
-  >['reloadItem'] = async emailCampaignId => {
-    dispatch({
-      type: InsightActionType.FetchItemRequest
-    })
-
-    try {
-      const emailCampaign = await getEmailCampaign(emailCampaignId, {
-        emailCampaignAssociations: [],
-        emailCampaignEmailsAssociation: [],
-        emailRecipientsAssociations: [],
-        emailFields: []
-      })
+  const reloadItem = useCallback<ReturnType<typeof useListData>['reloadItem']>(
+    async emailCampaignId => {
+      if (!state.list.some(({ id }) => id === emailCampaignId)) {
+        return
+      }
 
       dispatch({
-        type: InsightActionType.FetchItemSuccess,
-        emailCampaign
+        type: InsightActionType.FetchItemRequest
       })
-    } catch (error) {
-      console.error(error)
-      dispatch({
-        type: InsightActionType.FetchItemFailure
-      })
-    }
-  }
+
+      try {
+        const emailCampaign = await getEmailCampaign(emailCampaignId, {
+          emailCampaignAssociations: ['recipients', 'template'],
+          emailRecipientsAssociations: ['list'],
+          emailCampaignEmailsAssociation: [],
+          emailFields: []
+        })
+
+        dispatch({
+          type: InsightActionType.FetchItemSuccess,
+          emailCampaign
+        })
+      } catch (error) {
+        console.error(error)
+        dispatch({
+          type: InsightActionType.FetchItemFailure
+        })
+      }
+    },
+    [state.list]
+  )
 
   useEffect(() => {
     reloadList()

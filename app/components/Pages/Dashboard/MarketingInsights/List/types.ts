@@ -3,10 +3,15 @@ export enum InsightFilterType {
   SENT = 'sent'
 }
 
+export type InsightEmailCampaign = IEmailCampaign<
+  'recipients' | 'template',
+  'list'
+>
+
 export interface InsightState {
   isLoading: boolean
   hasError: boolean
-  list: IEmailCampaign[]
+  list: InsightEmailCampaign[]
   counts: {
     scheduled: number
     sent: number
@@ -28,7 +33,7 @@ export type InsightAction =
     }
   | {
       type: InsightActionType.FetchListSuccess
-      allEmailCampaigns: readonly IEmailCampaign[]
+      allEmailCampaigns: readonly InsightEmailCampaign[]
       filterType: InsightFilterType
     }
   | {
@@ -39,7 +44,7 @@ export type InsightAction =
     }
   | {
       type: InsightActionType.FetchItemSuccess
-      emailCampaign: IEmailCampaign
+      emailCampaign: InsightEmailCampaign
     }
   | {
       type: InsightActionType.FetchItemFailure
