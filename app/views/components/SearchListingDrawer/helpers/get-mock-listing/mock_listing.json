@@ -1,6 +1,7 @@
 {
+  "isMock": true,
   "type": "listing",
-  "id": "mock",
+  "id": "fb403302-b062-11e8-8aa6-0a95998482ac",
   "property_id": "fb3f066c-b062-11e8-8aa5-0a95998482ac",
   "alerting_agent_id": null,
   "listing_agent_id": null,
