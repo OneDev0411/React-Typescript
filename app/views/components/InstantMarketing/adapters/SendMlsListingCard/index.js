@@ -273,7 +273,7 @@ class SendMlsListingCard extends React.Component {
 
     return {
       listings: this.state.listings
-        .filter(listing => !listing.isMock)
+        .filter(listing => !listing.id === 'mock')
         .map(listing => listing.id)
     }
   }
