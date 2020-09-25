@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { WithRouterProps } from 'react-router'
+import { decode } from 'js-base64'
 
 import getListing from 'models/listings/listing/get-listing'
 import { getContact } from 'models/contacts/get-contact'
@@ -33,7 +34,7 @@ export function useListingById(
         const mockedListing = ((await getMockListing()) as unknown) as IListing
 
         const images: string[] = location.query[LISTING_IMAGES_QUERY_KEY]
-          ? location.query[LISTING_IMAGES_QUERY_KEY].split(',').map(atob)
+          ? location.query[LISTING_IMAGES_QUERY_KEY].split(',').map(decode)
           : []
 
         setListing({
