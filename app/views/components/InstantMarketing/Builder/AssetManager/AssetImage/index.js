@@ -91,7 +91,7 @@ export class AssetImage extends React.Component {
       <Container>
         <Image src={image} onClick={this.onImageSelect} />
         <CropButton data-test="crop-button" onClick={this.showCropper}>
-          Crop and Select
+          Edit
         </CropButton>
 
         {this.state.isCropperOpen && (
