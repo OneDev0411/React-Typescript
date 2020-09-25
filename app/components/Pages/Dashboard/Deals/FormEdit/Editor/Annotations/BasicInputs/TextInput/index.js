@@ -66,21 +66,20 @@ export default React.memo(props => {
     onInput: handleValueChange
   }
 
-  if (props.annotation.multiLine) {
-    return (
-      <textarea
-        {...sharedProps}
-        style={{
-          ...style,
-          resize: 'none'
-        }}
-      />
-    )
-  }
-
   return (
     <>
-      <input type="text" {...sharedProps} />
+      {props.annotation.multiLine ? (
+        <textarea
+          {...sharedProps}
+          className="input-with-template"
+          style={{
+            ...style,
+            resize: 'none'
+          }}
+        />
+      ) : (
+        <input className="input-with-template" type="text" {...sharedProps} />
+      )}
 
       <EditTemplateButton
         style={{

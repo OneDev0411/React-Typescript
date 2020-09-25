@@ -25,7 +25,7 @@ const useStyles = makeStyles(
       '& .button-default-value:hover': {
         visibility: 'visible'
       },
-      '& input:hover + .button-default-value': {
+      '& .input-with-template:hover + .button-default-value': {
         visibility: 'visible'
       }
     }
