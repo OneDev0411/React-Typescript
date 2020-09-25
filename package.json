@@ -153,6 +153,7 @@
     "immutable": "^3.8.2",
     "intercom-client": "^2.11.0",
     "intersection-observer": "^0.5.1",
+    "js-base64": "^3.5.2",
     "js-cookie": "^2.2.0",
     "juice": "^5.2.0",
     "koa": "^2.11.0",
