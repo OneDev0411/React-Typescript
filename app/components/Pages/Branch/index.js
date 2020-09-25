@@ -56,7 +56,7 @@ const getActionRedirectURL = params => {
   if (action === 'OpenMarketingWizard') {
     if (files && files.length) {
       return `/dashboard/marketing/wizard?imageUrls=${files
-        .map(file => encodeURIComponent(file.url))
+        .map(file => btoa(file.url))
         .join(',')}`
     }
 
