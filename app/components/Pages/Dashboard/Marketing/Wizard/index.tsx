@@ -65,7 +65,8 @@ const useStyles = makeStyles(
       textAlign: 'center'
     },
     thumbnailPaper: {
-      overflow: 'hidden'
+      overflow: 'hidden',
+      border: 'none'
     }
   }),
   {
@@ -281,11 +282,7 @@ function MarketingWizard(props: WithRouterProps) {
                 lg={4}
               >
                 <Box my={2} mx={1}>
-                  <Paper
-                    elevation={12}
-                    variant="elevation"
-                    className={classes.thumbnailPaper}
-                  >
+                  <Paper variant="outlined" className={classes.thumbnailPaper}>
                     <Thumbnail
                       user={user}
                       listing={listing!}
