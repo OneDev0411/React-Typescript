@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
@@ -33,7 +33,9 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
 import renderBrandedTemplate from 'utils/marketing-center/render-branded-template'
+import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
 import { useGoogleMapsPlaces } from 'hooks/use-google-maps-places'
+import { useWebShareApi } from 'hooks/use-web-share-api'
 
 import { useTemplates } from '../hooks/use-templates'
 
@@ -98,6 +100,10 @@ function MarketingWizard(props: WithRouterProps) {
     Optional<IFile>
   >(undefined)
 
+  const [generatedFileBlob, setGeneratedFileBlob] = useState<Optional<File>>(
+    undefined
+  )
+
   const [templatesLimit, setTemplatesLimit] = useState<number>(
     TEMPLATES_PAGE_SIZE
   )
@@ -150,6 +156,26 @@ function MarketingWizard(props: WithRouterProps) {
   useInfiniteScroll({
     accuracy: window.innerHeight / 2,
     onScrollBottom: loadMoreTemplates
+  })
+
+  useEffect(() => {
+    async function setFileBlob() {
+      if (!generatedTemplateFile) {
+        setGeneratedFileBlob(undefined)
+
+        return
+      }
+
+      const file = await convertUrlToImageFile(generatedTemplateFile.url)
+
+      setGeneratedFileBlob(file)
+    }
+
+    setFileBlob()
+  }, [generatedTemplateFile])
+
+  const { canShare, share } = useWebShareApi({
+    files: generatedFileBlob ? [generatedFileBlob] : undefined
   })
 
   const handleOpenShareDrawer = (template: IBrandMarketingTemplate) => {
@@ -318,6 +344,7 @@ function MarketingWizard(props: WithRouterProps) {
         <DownladDrawer
           file={generatedTemplateFile}
           onClose={handleCloseDownloadDrawer}
+          onShare={canShare ? share : undefined}
         />
       )}
     </PageLayout>
