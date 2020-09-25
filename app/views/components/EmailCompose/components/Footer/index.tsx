@@ -1,17 +1,8 @@
 import React, { useState } from 'react'
-import { useFormState, useField /* , Field */ } from 'react-final-form'
-import {
-  IconButton,
-  Theme,
-  Typography
-  // List,
-  // ListItem
-} from '@material-ui/core'
+import { useFormState, useField } from 'react-final-form'
+import { IconButton, Theme, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
-import {
-  mdiLayersOutline,
-  mdiTrashCanOutline /* , mdiDotsVertical */
-} from '@mdi/js'
+import { mdiLayersOutline, mdiTrashCanOutline } from '@mdi/js'
 import classNames from 'classnames'
 
 import ActionButton from 'components/Button/ActionButton'
@@ -24,8 +15,6 @@ import {
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { myDesignIcon } from 'components/SvgIcons/icons'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-// import { BaseDropdown } from 'components/BaseDropdown'
-// import EmailNotificationSetting from 'components/EmailNotificationSetting'
 
 import { isFileAttachment } from '../../helpers/is-file-attachment'
 import { textForSubmitButton } from './helpers'
@@ -196,30 +185,6 @@ export function Footer({
                 <span>My Designs</span>
               </DropdownToggleButton>
             )}
-            {/* <BaseDropdown
-              renderDropdownButton={buttonProps => (
-                <DropdownToggleButton {...buttonProps}>
-                  <SvgIcon path={mdiDotsVertical} rightMargined />
-                  <Typography variant="body2">More</Typography>
-                </DropdownToggleButton>
-              )}
-              PopperProps={{ keepMounted: true }}
-              renderMenu={({ close }) => (
-                <List>
-                  <ListItem button>
-                    <Field
-                      name="notifications_enabled"
-                      render={({ input }) => (
-                        <EmailNotificationSetting
-                          checked={input.value}
-                          onChange={input.onChange}
-                        />
-                      )}
-                    />
-                  </ListItem>
-                </List>
-              )}
-            /> */}
           </div>
 
           <div className={classes.actionBar}>
