@@ -4,6 +4,7 @@ import {
   Grid,
   Typography,
   IconButton,
+  Button,
   Box,
   makeStyles,
   Theme,
@@ -30,10 +31,11 @@ const useStyles = makeStyles(
 
 interface Props {
   file: IFile
+  onShare?: () => void
   onClose: () => void
 }
 
-export default function DownloadDrawer({ file, onClose }: Props) {
+export default function DownloadDrawer({ file, onShare, onClose }: Props) {
   const classes = useStyles()
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
@@ -80,13 +82,21 @@ export default function DownloadDrawer({ file, onClose }: Props) {
           <Grid container item justify="space-between">
             <Grid item xs>
               <Box p={2} textAlign="center">
-                {isLoading ? (
-                  <CircularProgress />
-                ) : (
-                  <Typography variant="body1" align="center">
-                    Touch and hold the image above to share or download.
-                  </Typography>
-                )}
+                {isLoading && <CircularProgress />}
+                {!isLoading &&
+                  (onShare ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={onShare}
+                    >
+                      Share
+                    </Button>
+                  ) : (
+                    <Typography variant="body1" align="center">
+                      Touch and hold the image above to share or download.
+                    </Typography>
+                  ))}
               </Box>
             </Grid>
           </Grid>
