@@ -29,6 +29,7 @@ export default React.memo(props => {
     <>
       <CheckboxInput
         type="checkbox"
+        className="input-with-template"
         title={annotation.fieldName}
         id={annotation.fieldName}
         box={box}
