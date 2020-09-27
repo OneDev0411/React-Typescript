@@ -93,7 +93,7 @@ function MarketingWizard(props: WithRouterProps) {
   >(null)
 
   const [selectedTemplateType, setSelectedTemplateType] = useState<
-    Optional<string>
+    Optional<MarketingTemplateType>
   >(undefined)
 
   const [generatedTemplateFile, setGeneratedTemplateFile] = useState<
