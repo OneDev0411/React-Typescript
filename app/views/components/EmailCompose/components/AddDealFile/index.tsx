@@ -24,7 +24,7 @@ interface StateProps {
 }
 
 interface Props {
-  deafultSelectedDeal?: IDeal
+  defaultSelectedDeal?: IDeal
   initialAttachments: IFile[]
   value: IFile[]
   onClick?: MouseEventHandler
@@ -34,10 +34,10 @@ interface Props {
 
 export function AddDealFile({
   initialAttachments,
-  deafultSelectedDeal,
+  defaultSelectedDeal,
   onChange,
   onClick,
-  onClickAddDealAttachments = () => {},
+  onClickAddDealAttachments,
   value = []
 }: Props) {
   const { checklists, tasks, envelopes }: StateProps = useSelector(
@@ -49,12 +49,12 @@ export function AddDealFile({
   )
   const [isDealsListOpen, setDealsListOpen] = useState(false)
   const [isDealFilesOpen, setDealFilesOpen] = useState(false)
-  const [deal, setDeal] = useState<IDeal | null>(deafultSelectedDeal || null)
+  const [deal, setDeal] = useState<IDeal | null>(defaultSelectedDeal || null)
 
   const handleClick = event => {
-    if (deafultSelectedDeal) {
+    if (defaultSelectedDeal) {
       onClick && onClick(event)
-      onClickAddDealAttachments()
+      onClickAddDealAttachments && onClickAddDealAttachments()
 
       return
     }

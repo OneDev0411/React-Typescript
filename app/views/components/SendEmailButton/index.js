@@ -6,7 +6,6 @@ import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import MissingEmailModal from 'components/MissingEmailModal'
 
 export default function SendEmailButton(props) {
-  const { deal } = props
   const [isOpen, setIsOpen] = useState(false)
   const [isMissingEmailModalOpen, setIsMissingEmailModalOpen] = useState(false)
 
@@ -18,17 +17,6 @@ export default function SendEmailButton(props) {
     }
 
     setIsOpen(true)
-  }
-
-  const getEmail = email => {
-    if (deal != null && deal.id) {
-      return {
-        ...email,
-        deal: deal.id
-      }
-    }
-
-    return email
   }
 
   return (
@@ -68,14 +56,11 @@ export default function SendEmailButton(props) {
             attachments: [],
             to: props.recipients
           }}
-          deal={deal}
-          onClickAddDealAttachments={() => setIsOpen(false)}
           onClose={() => setIsOpen(false)}
           onSent={() => {
-            setIsOpen(false)
             props.onSent()
+            setIsOpen(false)
           }}
-          getEmail={getEmail}
         />
       )}
     </>
