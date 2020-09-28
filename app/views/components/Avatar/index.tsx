@@ -5,6 +5,7 @@ import {
   withStyles,
   Theme
 } from '@material-ui/core'
+import LazyLoad from 'react-lazy-load'
 
 import { Badge } from './components/Badge'
 import { BaseProps, Props } from './type'
@@ -57,7 +58,11 @@ const AvatarComponent = (props: Props) => {
   const imageSrc =
     !rawImageSrc && placeHolderImage ? placeHolderImage : rawImageSrc
 
-  const avatar = <BaseAvatar {...props} src={imageSrc} />
+  const avatar = (
+    <LazyLoad>
+      <BaseAvatar {...props} src={imageSrc} />
+    </LazyLoad>
+  )
 
   if (showStatus) {
     return (
