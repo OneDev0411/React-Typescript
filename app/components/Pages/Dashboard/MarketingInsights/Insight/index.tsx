@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import {
   Dialog,
   Theme,
@@ -14,6 +15,7 @@ import {
   mdiCursorDefaultClickOutline,
   mdiAccountMultipleOutline
 } from '@mdi/js'
+import { addNotification } from 'reapop'
 import pluralize from 'pluralize'
 import classNames from 'classnames'
 
@@ -21,10 +23,14 @@ import { formatDate } from 'components/DateTimePicker/helpers'
 import { EmailThread } from 'components/EmailThread'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Avatar } from 'components/Avatar'
+import EmailNotificationSetting from 'components/EmailNotificationSetting'
+
+import useLabeledSwitchHandlers from 'hooks/use-labeled-switch-handlers'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
 import { getContactNameInitials } from 'models/contacts/helpers'
+import { setEmailNotificationStatus } from 'models/email/set-email-notification-status'
 
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
@@ -117,10 +123,45 @@ function Insight({ params: { id } }: Props) {
     ascending: false
   })
   const [isOpenViewEmail, setOpenViewEmail] = useState(false)
-  const { item, isLoading /* , reload */ } = useItemData(id)
+  const { item, isLoading, reload } = useItemData(id)
   const [emailPreview, setEmailPreview] = useState<IEmail<
     IEmailOptionalFields
   > | null>(null)
+
+  const dispatch = useDispatch()
+
+  const emailNotificationSettingHandlers = useLabeledSwitchHandlers(
+    item?.notifications_enabled,
+    async checked => {
+      if (!item) {
+        return
+      }
+
+      try {
+        await setEmailNotificationStatus(item.id, checked)
+      } catch (error) {
+        console.error(error)
+        dispatch(
+          addNotification({
+            status: 'error',
+            message: 'Unable to change email notification setting.'
+          })
+        )
+      } finally {
+        try {
+          await reload()
+        } catch (error) {
+          console.error(error)
+          dispatch(
+            addNotification({
+              status: 'error',
+              message: 'Unable to refresh the page.'
+            })
+          )
+        }
+      }
+    }
+  )
 
   const classes = useStyles()
 
@@ -304,6 +345,9 @@ function Insight({ params: { id } }: Props) {
                   </Tooltip>
                 )
             )}
+            <div className={classes.settingsContainer}>
+              <EmailNotificationSetting {...emailNotificationSettingHandlers} />
+            </div>
           </div>
           <section className="content">
             <ContactsTable
