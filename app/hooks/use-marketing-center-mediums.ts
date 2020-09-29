@@ -24,6 +24,8 @@ export function useMarketingCenterMediums(
 
   useEffect(() => {
     if (!templates || templates.length === 0) {
+      setMediums({})
+
       return
     }
 

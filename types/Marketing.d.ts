@@ -10,7 +10,7 @@ declare interface IBrandMarketingTemplate extends IModel<'brand_template'> {
 declare interface IMarketingTemplate extends IModel<'template'> {
   name: string
   brand: null
-  template_type: string
+  template_type: MarketingTemplateType
   medium: MarketingTemplateMedium
   video: boolean
   mjml: boolean
@@ -48,3 +48,49 @@ declare enum MarketingTemplateMedium {
   FacebookCover = 'FacebookCover',
   InstagramStor = 'InstagramStory'
 }
+
+declare type MarketingTemplateType =
+  | 'Listing'
+  | 'Contact'
+  | 'CrmOpenHouse'
+  | 'Birthday'
+  | 'JustListed'
+  | 'JustSold'
+  | 'OpenHouse'
+  | 'AsSeenIn'
+  | 'PriceImprovement'
+  | 'ComingSoon'
+  | 'Listings'
+  | 'NewYear'
+  | 'Christmas'
+  | 'Brand'
+  | 'NewAgent'
+  | 'Valentines'
+  | 'StPatrick'
+  | 'Easter'
+  | 'OtherHoliday'
+  | 'UnderContract'
+  | 'Layout'
+  | 'ListingLayout'
+  | 'Newsletter'
+  | 'FathersDay'
+  | 'MothersDay'
+  | 'MemorialDay'
+  | 'Passover'
+  | 'ChineseNewYear'
+  | 'LaborDay'
+  | 'Hannukkah'
+  | 'FourthOfJuly'
+  | 'VeteransDay'
+  | 'Thanksgiving'
+  | 'Halloween'
+  | 'MLKDay'
+  | 'IndependenceDay'
+  | 'Diwaly'
+  | 'WomansDay'
+  | 'Kwanzaa'
+  | 'WeddingAnniversary'
+  | 'HomeAnniversary'
+  | 'RoshHashanah'
+  | 'PatriotsDay'
+  | 'BackToSchool'

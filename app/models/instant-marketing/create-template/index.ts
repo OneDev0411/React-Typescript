@@ -3,7 +3,7 @@ import Fetch from '../../../services/fetch'
 interface SaveTemplateArguments {
   name: string
   variant: string
-  templateType: string
+  templateType: MarketingTemplateType
   medium: string
   html: string
   brands: UUID[]
