@@ -177,7 +177,7 @@
     "moment": "^2.23.0",
     "moment-locales-webpack-plugin": "^1.2.0",
     "moment-timezone": "^0.5.23",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "normalizr": "^3.2.4",
     "numeral": "^2.0.6",
     "nunjucks": "^3.2.2",
@@ -399,6 +399,6 @@
     "whatwg-fetch": "^3.0.0"
   },
   "engines": {
-    "node": "10.x"
+    "node": "14.x"
   }
 }
