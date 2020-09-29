@@ -5124,7 +5124,7 @@ exports[`Deal MarketingPane component renders with listing 1`] = `
       }
     }
   />
-  <ConnectFunction
+  <Connect(OpenHouse)
     deal={
       Object {
         "attention_requested_at": null,
