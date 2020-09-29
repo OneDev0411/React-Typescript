@@ -1,11 +1,18 @@
-import IconBirthday from 'components/SvgIcons/Birthday/IconBirthday'
-import IconGraduation from 'components/SvgIcons/Graduation/IconGraduation'
-import IconHome from 'components/SvgIcons/NewHome/IconHome'
+import React from 'react'
+
+import {
+  mdiPaw,
+  mdiRing,
+  mdiCakeVariant,
+  mdiHomeOutline,
+  mdiSchoolOutline,
+  mdiBriefcaseOutline,
+  mdiAccountChildOutline
+} from '@mdi/js'
+
 import IconHomeAnniversary from 'components/SvgIcons/HomeAnniversary/IconHomeAnniversary'
-import IconWork from 'components/SvgIcons/Work/IconWork'
-import IconWedding from 'components/SvgIcons/Wedding/IconWedding'
-import IconChild from 'components/SvgIcons/Child/IconChild'
-import IconPet from 'components/SvgIcons/Pet/IconPet'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 export interface ImportantDatesIcon {
   name: string
@@ -16,17 +23,17 @@ export interface ImportantDatesIcon {
 export const importantDatesIcons = [
   {
     name: 'Birthday',
-    icon: IconBirthday,
+    icon: () => <SvgIcon path={mdiCakeVariant} />,
     color: '#ff6f6f'
   },
   {
     name: 'graduation anniversary',
-    icon: IconGraduation,
+    icon: () => <SvgIcon path={mdiSchoolOutline} />,
     color: '#702283'
   },
   {
     name: 'New Home',
-    icon: IconHome,
+    icon: () => <SvgIcon path={mdiHomeOutline} />,
     color: '#64d9ff'
   },
   {
@@ -36,22 +43,22 @@ export const importantDatesIcons = [
   },
   {
     name: 'Work Anniversary',
-    icon: IconWork,
+    icon: () => <SvgIcon path={mdiBriefcaseOutline} />,
     color: '#804205'
   },
   {
     name: 'Wedding Anniversary',
-    icon: IconWedding,
+    icon: () => <SvgIcon path={mdiRing} />,
     color: '#ef3F61'
   },
   {
     name: 'Child birthday',
-    icon: IconChild,
+    icon: () => <SvgIcon path={mdiAccountChildOutline} />,
     color: '#ffb7b9'
   },
   {
     name: 'Pet',
-    icon: IconPet,
+    icon: () => <SvgIcon path={mdiPaw} />,
     color: '#c57e3e'
   }
 ].reduce((acc, icon) => {

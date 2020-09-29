@@ -1,56 +1,61 @@
-import IconCall from 'components/SvgIcons/CallOutline/IconCallOutline'
-import IconFollowUp from 'components/SvgIcons/FollowUp/IconFollowUp'
-import Text from 'components/SvgIcons/Text/IconText'
-import Chat from 'components/SvgIcons/Chat/IconChat'
-import Email from 'components/SvgIcons/EmailOutline/IconEmailOutline'
-import IconMessage from 'components/SvgIcons/Mail/IconMail'
+import React from 'react'
+
+import {
+  mdiKeyOutline,
+  mdiClockOutline,
+  mdiEmailOutline,
+  mdiPhoneOutline,
+  mdiNoteTextOutline,
+  mdiHomeImportOutline,
+  mdiMessageTextOutline,
+  mdiClipboardCheckOutline,
+  mdiChatProcessingOutline,
+  mdiAccountMultipleOutline,
+  mdiCardAccountMailOutline,
+  mdiAccountArrowLeftOutline,
+  mdiDotsHorizontalCircleOutline
+} from '@mdi/js'
+
 import IconOpenHouseOutline from 'components/SvgIcons/OpenHouseOutline/IconOpenHouseOutline'
 import Tour from 'components/SvgIcons/TourOutline/IconTourOutline'
-import Other from 'components/SvgIcons/MenuRounded/IconMenuRounded'
-import Closing from 'components/SvgIcons/Closing/IconClosing'
-import Note from 'components/SvgIcons/Note/IconNote'
-import IconInPerson from 'components/SvgIcons/InPerson/IconInPerson'
-import IconTodo from 'components/SvgIcons/Todo/IconTodo'
-import IconListingAppointment from 'components/SvgIcons/ListingAppointment/IconListingAppointment'
-import TouchDate from 'components/SvgIcons/Time/IconTime'
 import IconTaskCritical from 'components/SvgIcons/TaskCritical/IconTaskCritical'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 export interface EventTypeIcon {
   name: string
   color: string
   icon: React.FC<any>
 }
-
 // @ts-ignore js component
 export const eventTypesIcons = [
   {
     name: 'Call',
-    icon: IconCall,
+    icon: () => <SvgIcon path={mdiPhoneOutline} />,
     color: '#04c6d9'
   },
   {
     name: 'In-Person Meeting',
-    icon: IconInPerson,
+    icon: () => <SvgIcon path={mdiAccountMultipleOutline} />,
     color: '#f7a700'
   },
   {
     name: 'Text',
-    icon: Text,
+    icon: () => <SvgIcon path={mdiMessageTextOutline} />,
     color: '#000'
   },
   {
     name: 'Chat',
-    icon: Chat,
+    icon: () => <SvgIcon path={mdiChatProcessingOutline} />,
     color: '#ff00bf'
   },
   {
     name: 'Mail',
-    icon: IconMessage,
+    icon: () => <SvgIcon path={mdiCardAccountMailOutline} />,
     color: '#7ed321'
   },
   {
     name: 'Email',
-    icon: Email,
+    icon: () => <SvgIcon path={mdiEmailOutline} />,
     color: '#8f6cf0'
   },
   {
@@ -65,27 +70,27 @@ export const eventTypesIcons = [
   },
   {
     name: 'TouchDate',
-    icon: TouchDate,
+    icon: () => <SvgIcon path={mdiClockOutline} />,
     color: '#f7a700'
   },
   {
     name: 'Closing',
-    icon: Closing,
+    icon: () => <SvgIcon path={mdiKeyOutline} />,
     color: '#287700'
   },
   {
     name: 'Follow Up',
-    icon: IconFollowUp,
+    icon: () => <SvgIcon path={mdiAccountArrowLeftOutline} />,
     color: '#9013fe'
   },
   {
     name: 'Todo',
-    icon: IconTodo,
+    icon: () => <SvgIcon path={mdiClipboardCheckOutline} />,
     color: '#4e709d'
   },
   {
     name: 'ListingAppointment',
-    icon: IconListingAppointment,
+    icon: () => <SvgIcon path={mdiHomeImportOutline} />,
     color: '#8b572a'
   },
   {
@@ -95,12 +100,12 @@ export const eventTypesIcons = [
   },
   {
     name: 'Note',
-    icon: Note,
+    icon: () => <SvgIcon path={mdiNoteTextOutline} />,
     color: '#e6bf00'
   },
   {
     name: 'Other',
-    icon: Other,
+    icon: () => <SvgIcon path={mdiDotsHorizontalCircleOutline} />,
     color: '#9013fe'
   }
 ].reduce((acc, icon) => {
