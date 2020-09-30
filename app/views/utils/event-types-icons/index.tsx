@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {
+  mdiShoePrint,
   mdiKeyOutline,
   mdiClockOutline,
   mdiEmailOutline,
@@ -16,9 +17,11 @@ import {
   mdiDotsHorizontalCircleOutline
 } from '@mdi/js'
 
-import IconOpenHouseOutline from 'components/SvgIcons/OpenHouseOutline/IconOpenHouseOutline'
-import Tour from 'components/SvgIcons/TourOutline/IconTourOutline'
-import IconTaskCritical from 'components/SvgIcons/TaskCritical/IconTaskCritical'
+import {
+  meetingRoomOutlined,
+  importantDateIcon
+} from 'components/SvgIcons/icons'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 export interface EventTypeIcon {
@@ -60,12 +63,12 @@ export const eventTypesIcons = [
   },
   {
     name: 'Open House',
-    icon: IconOpenHouseOutline,
+    icon: () => <SvgIcon path={meetingRoomOutlined} />,
     color: '#50e3c2'
   },
   {
     name: 'Tour',
-    icon: Tour,
+    icon: () => <SvgIcon path={mdiShoePrint} />,
     color: '#bd10e0'
   },
   {
@@ -95,7 +98,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'Task Critical',
-    icon: IconTaskCritical,
+    icon: () => <SvgIcon path={importantDateIcon} />,
     color: '#f5a623'
   },
   {

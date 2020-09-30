@@ -3,14 +3,13 @@ import React from 'react'
 import {
   mdiPaw,
   mdiRing,
+  mdiHomeHeart,
   mdiCakeVariant,
   mdiHomeOutline,
   mdiSchoolOutline,
   mdiBriefcaseOutline,
   mdiAccountChildOutline
 } from '@mdi/js'
-
-import IconHomeAnniversary from 'components/SvgIcons/HomeAnniversary/IconHomeAnniversary'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -38,7 +37,7 @@ export const importantDatesIcons = [
   },
   {
     name: 'Home Anniversary',
-    icon: IconHomeAnniversary,
+    icon: () => <SvgIcon path={mdiHomeHeart} />,
     color: '#ef3f61'
   },
   {
