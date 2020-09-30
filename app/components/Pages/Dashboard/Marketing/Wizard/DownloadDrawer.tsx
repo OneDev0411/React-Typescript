@@ -21,7 +21,11 @@ const useStyles = makeStyles(
       padding: theme.spacing(3)
     },
     image: {
-      width: '100%'
+      width: '100%',
+      height: '100%',
+      objectFit: 'contain',
+      maxWidth: '360px', // In order to keep the thumbnail beautiful
+      margin: '0 auto'
     }
   }),
   {
