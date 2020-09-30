@@ -37,7 +37,12 @@ export function browserStatus(): BrowserStatus {
 
     chrome: `>=${validBrowsers.chrome}`,
 
-    firefox: `>=${validBrowsers.firefox}`
+    firefox: `>=${validBrowsers.firefox}`,
+
+    mobile: {
+      safari: '>=9',
+      'android browser': '>3.10'
+    }
   })
 
   const output = {
@@ -77,9 +82,7 @@ export function getMessage(status: BrowserStatus) {
   }
 
   if (status.isOutdated === true) {
-    output.text = `Your web browser (${status.meta.browserName} ${
-      status.meta.browserVersion
-    }) is out of date.`
+    output.text = `Your web browser (${status.meta.browserName} ${status.meta.browserVersion}) is out of date.`
     output.actionText = 'Upgrade'
     output.actionLink =
       status.meta.browserName === 'Safari'
