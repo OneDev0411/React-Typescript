@@ -93,6 +93,12 @@ export function Menu() {
           <SideNavLinkItem to="/dashboard/mls">Properties</SideNavLinkItem>
 
           <Acl.Marketing>
+            <SideNavLinkItem to="/dashboard/agent-network">
+              Agent Network
+            </SideNavLinkItem>
+          </Acl.Marketing>
+
+          <Acl.Marketing>
             <SideNavLinkItem to="/dashboard/insights">Insight</SideNavLinkItem>
           </Acl.Marketing>
 

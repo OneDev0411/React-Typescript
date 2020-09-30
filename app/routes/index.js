@@ -148,7 +148,6 @@ const AsyncListingsSearch = Load({
       '../components/Pages/Dashboard/Listings/Search' /* webpackChunkName: "listing_search" */
     )
 })
-// import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
 
 const AsyncMlsSavedSearch = Load({
   loader: () =>
@@ -168,6 +167,17 @@ const AsyncListingSinglePage = Load({
   loader: () =>
     import(
       '../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */
+    )
+})
+
+/* ==================================== */
+//  Agent Network
+/* ==================================== */
+
+const AsyncAgentNetworkNew = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/AgentNetwork' /* webpackChunkName: "agent_network" */
     )
 })
 
@@ -697,6 +707,8 @@ export default (
         <Route path="marketing/wizard" component={AsyncMarketingWizard} />
         <Route path="marketing/editor" component={AsyncMarketingEditor} />
         <Route path="marketing/:types(/:medium)" component={AsyncMarketing} />
+
+        <Route path="agent-network" component={AsyncAgentNetworkNew} />
 
         <Route path="insights">
           <IndexRoute component={AsyncMarketingInsightsList} />
