@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 
+import { mdiMapSearchOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import SearchListingsDrawer from '../SearchListingDrawer'
-import IconListing from '../SvgIcons/Properties/IconProperties'
 import { normalizeListing } from '../../utils/association-normalizers'
 
 import { AddAssociationProps } from './types'
@@ -27,7 +30,7 @@ export function AddListingAssociation({
   return (
     <AddAssociationButton
       title={title}
-      Icon={IconListing}
+      Icon={<SvgIcon path={mdiMapSearchOutline} />}
       disabled={disabled}
       onClick={onOpen}
     >

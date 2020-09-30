@@ -3,10 +3,13 @@ import styled from 'styled-components'
 import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
 
+import { mdiChevronDown } from '@mdi/js'
+
 import { Dropdown } from 'components/Dropdown'
 import LinkButton from 'components/Button/LinkButton'
 import { eventTypesIcons } from 'components/../utils/event-types-icons'
-import ArrowDropDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { grey, primary } from 'views/utils/colors'
 
 export const Button = styled(LinkButton)`
@@ -22,8 +25,7 @@ export const Button = styled(LinkButton)`
     }
   }
 `
-
-export const IconArrow = styled(ArrowDropDown)`
+export const IconArrow = styled(SvgIcon)`
   position: relative;
   margin-left: 1em;
   fill: ${({ isOpen }) => (isOpen ? primary : '#000')};
@@ -84,7 +86,7 @@ export function TaskType() {
                 )}
                 {props.value}
               </Flex>
-              <IconArrow isOpen={props.isOpen} />
+              <IconArrow path={mdiChevronDown} isOpen={props.isOpen} />
             </Button>
           )}
         />

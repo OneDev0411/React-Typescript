@@ -1,12 +1,10 @@
 import React, { ReactNode } from 'react'
 import { IconButton, Tooltip } from '@material-ui/core'
 
-import { StyledSVGWithProps } from 'utils/ts-utils'
-
 interface Props {
   children: ReactNode
   disabled: boolean
-  Icon: StyledSVGWithProps<{}>
+  Icon: ReactNode
   onClick: () => void
   title: string
 }
@@ -26,7 +24,7 @@ export function AddAssociationButton({
           onClick={onClick}
           style={{ marginRight: '0.5rem' }}
         >
-          <Icon />
+          {Icon}
         </IconButton>
       </Tooltip>
       {children}
