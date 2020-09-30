@@ -46,9 +46,7 @@ function getNeighborhoodsGraphTemplateReport(
             aggregatedItem => aggregatedItem.label
           )
 
-          const title = `${metric.name} ${metricData.label} in ${
-            selectedReport.neighborhood.label
-          }`
+          const title = `${metric.name} ${metricData.label} in ${selectedReport.neighborhood.label}`
 
           const datasets = [
             {
@@ -148,7 +146,7 @@ export default function registerNeighborhoodsBlocks(
           ? selectedReport
           : getNeighborhoodsGraphTemplateReport(
               selectedReport,
-              renderData.get('body-bg-color')
+              renderData.get('inverted-container-bg-color')
             )
 
       const template = templates[droppedBlockName]
