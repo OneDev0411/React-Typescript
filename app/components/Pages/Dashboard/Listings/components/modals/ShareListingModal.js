@@ -3,9 +3,10 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Modal } from 'react-bootstrap'
 import Flex from 'styled-flex-component'
 import { mdiClose } from '@mdi/js'
+
+import { Modal, ModalFooter } from 'components/Modal'
 
 import SuccessModal from './SuccessModal'
 import Recipients from '../../../../../Partials/ShareView'
@@ -33,8 +34,8 @@ const ShareListingModal = ({
   return (
     <div>
       <Modal
-        show={isActive}
-        onHide={isSharing ? () => {} : onHide}
+        isOpen={isActive}
+        onRequestClose={isSharing ? () => {} : onHide}
         className="c-share-modal"
       >
         <Flex alignCenter justifyBetween style={{ padding: '1em' }}>
@@ -47,14 +48,12 @@ const ShareListingModal = ({
             <SvgIcon path={mdiClose} />
           </IconButton>
         </Flex>
-        <Modal.Body style={{ padding: 0 }}>
-          <Recipients onChangeRecipients={recps => setRecipients(recps)} />
-        </Modal.Body>
-        <Modal.Footer>
+        <Recipients onChangeRecipients={recps => setRecipients(recps)} />
+        <ModalFooter>
           <ActionButton size="small" disabled={disabled} onClick={shareHandler}>
             {isSharing ? 'Sharing...' : 'Share'}
           </ActionButton>
-        </Modal.Footer>
+        </ModalFooter>
       </Modal>
       <SuccessModal text="Listing Shared" isActive={successModalIsActive} />
     </div>
