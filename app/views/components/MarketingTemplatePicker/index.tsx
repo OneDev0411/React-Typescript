@@ -30,7 +30,7 @@ export default function MarketingTemplatePicker({
   )
 
   if (isLoading) {
-    return <LoadingContainer />
+    return <LoadingContainer noPaddings />
   }
 
   return (

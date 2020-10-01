@@ -260,9 +260,7 @@ export function Grid(props: Props) {
         rows={props.data}
         columns={columns}
         totalRows={(props.data || []).length}
-        LoadingStateComponent={() => (
-          <LoadingContainer style={{ padding: 0 }} />
-        )}
+        LoadingStateComponent={() => <LoadingContainer noPaddings />}
         loading={props.isFetching ? 'top' : null}
         sorting={{
           defaultSort: getActiveSort(),

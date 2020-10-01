@@ -77,7 +77,7 @@ export function MlsConnect({ deal }: Props) {
   }
 
   if (isSaving) {
-    return <LoadingContainer size="2rem" style={{ padding: '0' }} />
+    return <LoadingContainer size="2rem" noPaddings />
   }
 
   return (
