@@ -108,6 +108,7 @@ function Timeline(props: Props) {
       <div className={classes.list}>
         {activeFilter === Filters.Events && (
           <List
+            contrariwise
             ref={timelineRef}
             contact={props.contact}
             filter={getFilter()}
