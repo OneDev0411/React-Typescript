@@ -7,10 +7,10 @@
     <mj-text mj-class="h3" text-transform="uppercase" align="center" font-weight="600"  padding="5px 0"  rechat-editable="tree" line-height="1">
       {{user.display_name}}
     </mj-text>
-    <mj-text mj-class="container" padding="5px 0" align="center" rechat-editable="tree" line-height="1">
+    <mj-text mj-class="container-text" padding="5px 0" align="center" rechat-editable="tree" line-height="1">
       {{user.phone_number | phone}}
     </mj-text>
-       <mj-text mj-class="container" padding="5px 0" align="center" rechat-editable="tree" line-height="1" href="mailto:{{user.email}}">
+       <mj-text mj-class="container-text" padding="5px 0" align="center" rechat-editable="tree" line-height="1" href="mailto:{{user.email}}">
         {{user.email}}
     </mj-text>
   </mj-column>

@@ -15,10 +15,10 @@ align="right"
     <mj-text mj-class="h3" padding="0"  rechat-editable="tree" line-height="1.5" {{ alignment(loop.index0) }}>
       {{listing.property.address.street_address}}
     </mj-text>
-    <mj-text mj-class="container" padding="0" rechat-editable="tree" line-height="1.5" {{ alignment(loop.index0) }}>
+    <mj-text mj-class="container-text" padding="0" rechat-editable="tree" line-height="1.5" {{ alignment(loop.index0) }}>
       <strong>{{ listing.price | currency }}</strong>{% if listing.is_lease %}/mo{% endif %}
     </mj-text>
-    <mj-text mj-class="container" padding="0" rechat-editable="tree" line-height="1.5" {{ alignment(loop.index0) }}>
+    <mj-text mj-class="container-text" padding="0" rechat-editable="tree" line-height="1.5" {{ alignment(loop.index0) }}>
       {% if listing.property.bedroom_count %}
       <span><strong>{{listing.property.bedroom_count}}</strong> Beds,</span>
       {% endif %}

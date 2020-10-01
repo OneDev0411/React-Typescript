@@ -6,7 +6,7 @@
       {{title}}
     </mj-text>
 
-    <mj-text mj-class="container" padding="0"  align="left" rechat-editable="tree" line-height="1.5">
+    <mj-text mj-class="container-text" padding="0"  align="left" rechat-editable="tree" line-height="1.5">
       {{description}}
     </mj-text>
     <mj-spacer height="10px"></mj-spacer>

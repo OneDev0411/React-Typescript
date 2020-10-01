@@ -1,20 +1,20 @@
 <mj-section mj-class="container" padding-top="20px" padding-bottom="20px" rechat-editable="tree">
   <mj-column>
-    <mj-text mj-class="container" padding="0" align="center" rechat-editable="tree" font-size="24px" line-height="1.5">
+    <mj-text mj-class="container-text" padding="0" align="center" rechat-editable="tree" font-size="24px" line-height="1.5">
       {{report.neighborhood.label}}
     </mj-text>
 
-    <mj-text mj-class="container" padding="0" align="center" rechat-editable="tree" font-size="20px" line-height="1.5">
+    <mj-text mj-class="container-text" padding="0" align="center" rechat-editable="tree" font-size="20px" line-height="1.5">
       {{report.metrics[0].data[0].label}}
     </mj-text>
 
     <mj-spacer height="10px"></mj-spacer>
 
     {% for metric in report.metrics %}
-    <mj-text mj-class="container" padding="0" align="center" rechat-editable="tree" font-size="20px" font-style="italic" line-height="1.5">
+    <mj-text mj-class="container-text" padding="0" align="center" rechat-editable="tree" font-size="20px" font-style="italic" line-height="1.5">
       <span>{{metric.name}}</span>
     </mj-text>
-    <mj-text mj-class="container" padding="0" align="center" rechat-editable="tree" font-size="36px" line-height="1.5">
+    <mj-text mj-class="container-text" padding="0" align="center" rechat-editable="tree" font-size="36px" line-height="1.5">
       <span>
         {%if metric.type === 'number' and (metric.name.includes('Price') or metric.name.includes('Pay')) %}
         {{metric.data[0].value | currency}}
@@ -23,7 +23,7 @@
         {% endif %}
       </span>
     </mj-text>
-    <mj-text mj-class="container" padding="0"  align="center" rechat-editable="tree" font-size="14px" line-height="1.5">
+    <mj-text mj-class="container-text" padding="0"  align="center" rechat-editable="tree" font-size="14px" line-height="1.5">
       <span>{{metric.description}}</span>
     </mj-text>
     {% if not loop.last %}
