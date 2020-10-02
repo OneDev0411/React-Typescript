@@ -40,12 +40,15 @@ export const BRAND_STYLES_TEMPLATE_MJML = `{% if get('body-font-family') %}
   <mj-class
     name="container"
     background-color="{{get('container-bg-color')}}"
+    padding-left="20px"
+    padding-right="20px"
+  ></mj-class>
+  <mj-class
+    name="container-text"
     color="{{get('container-text-color')}}"
     font-family="{{get('container-font-family')}}"
     font-weight="{{get('container-font-weight')}}"
     font-size="{{get('container-font-size')}}"
-    padding-left="20px"
-    padding-right="20px"
   ></mj-class>
   <mj-class
     name="inverted-container"
