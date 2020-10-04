@@ -10,7 +10,7 @@ import { ThemeProvider as StyledComponentsThemeProvider } from 'styled-component
 
 import { useSelector } from 'react-redux'
 
-import { getBrandTheme } from 'utils/get-brand-theme'
+import { getBrandTheme } from './utils/get-brand-theme'
 
 import { IAppState } from './reducers'
 
