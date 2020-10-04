@@ -2,9 +2,9 @@ import React, { useMemo } from 'react'
 import { makeStyles, Theme } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
-import { getBrandLogo } from 'utils/get-brand-logo'
-
 import { IAppState } from 'reducers'
+
+import { getBrandLogo } from '../../../../../utils/get-brand-logo'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
