@@ -1,7 +1,8 @@
 import React from 'react'
-import { Modal } from 'react-bootstrap'
 import { mdiCheck } from '@mdi/js'
 import { makeStyles } from '@material-ui/styles'
+
+import { Modal } from 'components/Modal'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -38,12 +39,12 @@ const Icon = ({ type }) => {
 }
 
 const SuccessModal = ({ isActive, type, text }) => (
-  <Modal dialogClassName="c-success-modal" show={isActive}>
+  <Modal className="c-success-modal" autoHeight isOpen={isActive}>
     <div className="c-success-modal__body">
       <span className="c-success-modal__icon">
         <Icon type={type} />
       </span>
-      <div style={{ textShadow: '0 2px 6px rgba(0, 0, 0, 0.2)' }}>{text}</div>
+      <div style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.4)' }}>{text}</div>
     </div>
   </Modal>
 )

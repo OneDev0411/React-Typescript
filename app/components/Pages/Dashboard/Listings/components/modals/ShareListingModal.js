@@ -35,6 +35,7 @@ const ShareListingModal = ({
     <div>
       <Modal
         isOpen={isActive}
+        autoHeight
         onRequestClose={isSharing ? () => {} : onHide}
         className="c-share-modal"
       >
