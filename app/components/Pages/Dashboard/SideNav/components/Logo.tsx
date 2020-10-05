@@ -9,7 +9,7 @@ import { getBrandLogo } from '../../../../../utils/get-brand-logo'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     logo: {
-      width: theme.spacing(20),
+      width: theme.spacing(25),
       padding: theme.spacing(5, 3, 3)
     }
   }),
