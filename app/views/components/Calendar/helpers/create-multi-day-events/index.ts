@@ -1,17 +1,27 @@
-import { isNegativeTimezone } from 'utils/is-negative-timezone'
-
 function getEndDate(event: ICalendarEvent): Date {
   const isAllDay = event.all_day || false
   const endDate = new Date(Number(event.end_date!) * 1000)
 
-  if (isAllDay && !isNegativeTimezone()) {
-    endDate.setHours(0, 0, 0, 0)
+  if (isAllDay) {
+    const dummyEndDate = new Date(endDate)
+
+    endDate.setHours(
+      dummyEndDate.getUTCHours(),
+      dummyEndDate.getUTCMinutes(),
+      dummyEndDate.getUTCSeconds(),
+      0
+    )
+    endDate.setFullYear(
+      dummyEndDate.getUTCFullYear(),
+      dummyEndDate.getUTCMonth(),
+      dummyEndDate.getUTCDate()
+    )
   }
 
   return endDate
 }
 
-function sortItems<T>(list: [string, T][], contrariwise: boolean) {
+function sortItems<T>(list: [string, T][], contrariwise: boolean = false) {
   return list.sort((a, b) => {
     const dateObjectA = new Date(a[0])
     const dateObjectB = new Date(b[0])
@@ -33,15 +43,12 @@ export default function createMultiDayEvents(
   const distributedEvents: ICalendarEventsList = {}
   let multiDayEvents: ICalendarEvent[] = []
 
-  const months = sortItems<ICalendarMonthEvents>(
-    Object.entries(events),
-    contrariwise
-  )
+  const months = sortItems<ICalendarMonthEvents>(Object.entries(events))
 
   months.forEach(([month, daysOfMonth]) => {
     distributedEvents[month] = {}
 
-    const days = sortItems(Object.entries(daysOfMonth), contrariwise)
+    const days = sortItems(Object.entries(daysOfMonth))
 
     days.forEach(([day, events]) => {
       const dayStart = new Date(day).getTime()
@@ -66,6 +73,29 @@ export default function createMultiDayEvents(
       })
     })
   })
+
+  if (contrariwise) {
+    const contrariwisedEvents: ICalendarEventsList = {}
+    const contrariwisedMonths = sortItems<ICalendarMonthEvents>(
+      Object.entries(distributedEvents),
+      contrariwise
+    )
+
+    contrariwisedMonths.forEach(([month, daysOfMonth]) => {
+      contrariwisedEvents[month] = {}
+
+      const contrariwisedDays = sortItems(
+        Object.entries(daysOfMonth),
+        contrariwise
+      )
+
+      contrariwisedDays.forEach(([day, events]) => {
+        contrariwisedEvents[month][day] = events
+      })
+    })
+
+    return contrariwisedEvents
+  }
 
   return distributedEvents
 }
