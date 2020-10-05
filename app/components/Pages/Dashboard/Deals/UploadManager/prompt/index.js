@@ -1,13 +1,15 @@
 // todo: the entire file should re-implement
 
 import React, { Fragment } from 'react'
-import { Modal } from 'react-bootstrap'
+// import { Modal } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
 
 import { Button } from '@material-ui/core'
+
+import { Modal, ModalContent, ModalHeader, ModalFooter } from 'components/Modal'
 
 import {
   uploadTaskFile,
@@ -175,10 +177,7 @@ class UploadModal extends React.Component {
   }
 
   getFileExtension(filename) {
-    return `.${filename
-      .split('.')
-      .pop()
-      .toLowerCase()}`
+    return `.${filename.split('.').pop().toLowerCase()}`
   }
 
   getButtonCaption(file) {
@@ -266,14 +265,18 @@ class UploadModal extends React.Component {
     return (
       <React.Fragment>
         <Modal
-          dialogClassName="modal-deal-upload-files"
-          show={filesCount > 0}
-          onHide={() => this.closeModal()}
-          backdrop="static"
+          className="modal-deal-upload-files"
+          isOpen={filesCount > 0}
+          autoHeight
+          onRequestClose={() => this.closeModal()}
         >
-          <Modal.Header closeButton>{filesCount} Documents</Modal.Header>
+          <ModalHeader
+            closeHandler={() => this.closeModal()}
+            className="modal-header"
+            title={`${filesCount} Documents hamed`}
+          />
 
-          <Modal.Body style={this.getModalStyle(filesCount)}>
+          <ModalContent style={this.getModalStyle(filesCount)}>
             <div className="uploads-container">
               {_.map(upload.files, (file, id) => {
                 const selectedTask = this.getSelectedTask(file)
@@ -359,9 +362,9 @@ class UploadModal extends React.Component {
                 )
               })}
             </div>
-          </Modal.Body>
+          </ModalContent>
 
-          <Modal.Footer>
+          <ModalFooter className="modal-footer">
             <ToolTip
               caption={
                 !this.isSplitButtonActive &&
@@ -382,7 +385,7 @@ class UploadModal extends React.Component {
             <ToolTip caption="Create new documents and save them to tasks">
               <div className="help">?</div>
             </ToolTip>
-          </Modal.Footer>
+          </ModalFooter>
         </Modal>
 
         {this.state.splitFiles.length > 0 && (
@@ -407,15 +410,12 @@ function mapStateToProps({ deals, user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    notify,
-    uploadTaskFile,
-    uploadStashFile,
-    resetUploadFiles,
-    setUploadAttributes,
-    setExpandChecklist,
-    changeNeedsAttention
-  }
-)(UploadModal)
+export default connect(mapStateToProps, {
+  notify,
+  uploadTaskFile,
+  uploadStashFile,
+  resetUploadFiles,
+  setUploadAttributes,
+  setExpandChecklist,
+  changeNeedsAttention
+})(UploadModal)

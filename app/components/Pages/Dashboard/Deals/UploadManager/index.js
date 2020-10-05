@@ -150,7 +150,6 @@ function mapStateToProps({ user, deals }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { setUploadFiles, confirmation }
-)(UploadDocument)
+export default connect(mapStateToProps, { setUploadFiles, confirmation })(
+  UploadDocument
+)
