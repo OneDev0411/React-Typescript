@@ -1,7 +1,6 @@
 // todo: the entire file should re-implement
 
 import React, { Fragment } from 'react'
-// import { Modal } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
