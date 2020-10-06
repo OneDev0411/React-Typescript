@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Box, Button, makeStyles, Theme, Tooltip } from '@material-ui/core'
 import pluralize from 'pluralize'
 
-import { useShareAction } from 'components/ShareAction/use-share-action'
+import { useBasket } from 'components/Basket/use-basket'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 
 import { EmailAction } from './Email'
@@ -32,11 +32,11 @@ export function ShareListings() {
   const classes = useStyles()
   const [isListingDrawerOpen, setIsListingDrawerOpen] = useState(false)
 
-  const { selections, reinitialize } = useShareAction()
+  const { selections, reinitialize } = useBasket()
 
   const getDefaultSelectedItems = () => {
     return selections.reduce(
-      (acc, listing) => ({
+      (acc: Record<string, IListing>, listing: IListing) => ({
         ...acc,
         [listing.id]: listing
       }),

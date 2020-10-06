@@ -6,20 +6,20 @@ interface Props {
   children: React.ReactNode
 }
 
-export function ShareAction({ children }: Props) {
-  const [selections, updateSelections] = useState<IListing[]>([])
+export function Basket<T extends IModel<any>>({ children }: Props) {
+  const [selections, updateSelections] = useState<T[]>([])
 
-  const addItem = (item: IListing) => {
+  const addItem = (item: T) => {
     updateSelections([...selections, item])
   }
 
-  const removeItem = (item: IListing) => {
+  const removeItem = (item: T) => {
     updateSelections(selections.filter(selection => selection.id !== item.id))
   }
 
-  const reinitialize = (items: IListing[]) => updateSelections(items)
+  const reinitialize = (items: T[]) => updateSelections(items)
 
-  const toggleItem = (item: IListing) => {
+  const toggleItem = (item: T) => {
     if (selections.some(selection => selection.id === item.id)) {
       removeItem(item)
     } else {

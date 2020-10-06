@@ -2,6 +2,6 @@ import { useContext } from 'react'
 
 import { StateContext } from '../context'
 
-export function useShareAction() {
+export function useBasket() {
   return useContext(StateContext)
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Grid, Box } from '@material-ui/core'
 
-import { useShareAction } from 'components/ShareAction/use-share-action'
+import { useBasket } from 'components/Basket/use-basket'
 
 import LoadingComponent from '../../../../../../views/components/Spinner'
 
@@ -9,7 +9,7 @@ import ListingCard from '../ListingCard'
 import ZeroState from '../ZeroState'
 
 export default function GridView({ isFetching, sortedListings, user }) {
-  const { selections, toggleItem } = useShareAction()
+  const { selections, toggleItem } = useBasket()
 
   const renderContent = () => {
     if (isFetching) {

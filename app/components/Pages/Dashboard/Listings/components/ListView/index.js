@@ -2,22 +2,23 @@ import React from 'react'
 
 import pluralize from 'pluralize'
 
-import { Box, useTheme } from '@material-ui/core'
+import { Box, Checkbox, useTheme } from '@material-ui/core'
 
 import { useGridStyles } from 'components/Grid/Table/styles'
 
+import { useBasket } from 'components/Basket/use-basket'
+
 import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
-import TableActions from '../../Search/components/BulkActions'
 
 import ZeroState from '../ZeroState'
 
 import { Address } from './columns/Address'
-import { Avatar } from './columns/Avatar'
 
-const ListView = ({ sortedListings, listings, isFetching, user }) => {
-  const gridClasses = useGridStyles()
+const ListView = ({ sortedListings, listings, isFetching }) => {
   const theme = useTheme()
+  const gridClasses = useGridStyles()
+  const { selections, toggleItem } = useBasket()
 
   const columns = [
     {
@@ -105,11 +106,11 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
             LoadingStateComponent={LoadingComponent}
             selection={{
               render: ({ row: listing }) => (
-                <div>
-                  +
-                </div>
-              )
-              defaultRender: ({ row: listing }) => <Avatar listing={listing} />,
+                <Checkbox
+                  checked={selections.some(item => item.id === listing.id)}
+                  onChange={() => toggleItem(listing)}
+                />
+              ),
               columnProps: {
                 width: theme.spacing(4)
               }
@@ -117,14 +118,6 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
             classes={{
               row: gridClasses.row
             }}
-            // TableActions={
-            //   <TableActions
-            //     isFetching={isFetching}
-            //     totalRowsCount={listings.info.total}
-            //     listings={listings.data}
-            //     user={user}
-            //   />
-            // }
           />
         </Box>
       )}
