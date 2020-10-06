@@ -11,6 +11,11 @@ export function EmailAction() {
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState(false)
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
+  const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
+    console.log(template)
+    setIsTemplatesModalOpen(false)
+  }
+
   return (
     <>
       <Tooltip title="Send as Email">
@@ -28,7 +33,9 @@ export function EmailAction() {
         <MarketingTemplatePickerModal
           title="Select Template"
           user={user}
-          onSelect={() => {}}
+          mediums={['Email' as MarketingTemplateMedium.Email]}
+          templateTypes={['Listings']}
+          onSelect={handleSelectTemplate}
           onClose={() => setIsTemplatesModalOpen(false)}
         />
       )}

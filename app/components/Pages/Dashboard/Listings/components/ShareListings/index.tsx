@@ -69,6 +69,7 @@ export function ShareListings() {
 
         <Tooltip title="Send as Text">
           <Button
+            disabled
             size="small"
             variant="contained"
             color="secondary"
