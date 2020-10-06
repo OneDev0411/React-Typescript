@@ -1,5 +1,3 @@
-import nunjucks from 'nunjucks'
-
 import { MJML_PALETTE, HTML_PALETTE } from './templates'
 
 const templates = {
@@ -7,17 +5,17 @@ const templates = {
   'palette.html': HTML_PALETTE
 }
 
-const Loader = nunjucks.Loader.extend({
-  getSource: name => {
-    if (!templates[name]) {
-      throw new Error(`Template ${name} not found`)
-    }
+function Loader() {}
 
-    return {
-      src: templates[name],
-      path: name
-    }
+Loader.prototype.getSource = function (name) {
+  if (!templates[name]) {
+    throw new Error(`Template ${name} not found`)
   }
-})
+
+  return {
+    src: templates[name],
+    path: name
+  }
+}
 
 export default Loader
