@@ -104,6 +104,11 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
             loading={isFetching ? 'middle' : null}
             LoadingStateComponent={LoadingComponent}
             selection={{
+              render: ({ row: listing }) => (
+                <div>
+                  +
+                </div>
+              )
               defaultRender: ({ row: listing }) => <Avatar listing={listing} />,
               columnProps: {
                 width: theme.spacing(4)
@@ -112,14 +117,14 @@ const ListView = ({ sortedListings, listings, isFetching, user }) => {
             classes={{
               row: gridClasses.row
             }}
-            TableActions={
-              <TableActions
-                isFetching={isFetching}
-                totalRowsCount={listings.info.total}
-                listings={listings.data}
-                user={user}
-              />
-            }
+            // TableActions={
+            //   <TableActions
+            //     isFetching={isFetching}
+            //     totalRowsCount={listings.info.total}
+            //     listings={listings.data}
+            //     user={user}
+            //   />
+            // }
           />
         </Box>
       )}
