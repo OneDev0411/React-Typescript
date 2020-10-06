@@ -113,6 +113,11 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/WomansDay')
       },
       {
+        title: 'Colombus Day',
+        value: 'ColombusDay',
+        link: urlGenerator('/ColombusDay')
+      },
+      {
         title: 'September 11',
         value: 'PatriotsDay',
         link: urlGenerator('/PatriotsDay')
