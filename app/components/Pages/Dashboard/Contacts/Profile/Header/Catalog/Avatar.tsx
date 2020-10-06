@@ -3,7 +3,10 @@ import { connect } from 'react-redux'
 
 import uploadAttachments from 'models/contacts/upload-attachments'
 import { updateContact } from 'models/contacts/update-contact'
-import { getContactNameInitials } from 'models/contacts/helpers'
+import {
+  getContactAvatar,
+  getContactNameInitials
+} from 'models/contacts/helpers'
 
 import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
@@ -47,12 +50,12 @@ function AvatarUploader({ contact, attributeDefs }: Props) {
         }
 
         let attribute
-        const avatar = getAccountAvatar(contact)
+        const avatar = getContactAvatar(contact, attribute_def.id)
 
         if (avatar) {
           attribute = [
             {
-              id: contact.id,
+              id: avatar.id,
               text
             }
           ]

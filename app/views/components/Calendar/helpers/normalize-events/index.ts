@@ -1,7 +1,5 @@
 import uniqBy from 'lodash/uniqBy'
 
-import { isNegativeTimezone } from 'utils/is-negative-timezone'
-
 import { createDayId } from '../create-day-id'
 import { sortEvents } from '../sort-events'
 
@@ -111,8 +109,20 @@ function getEventIndex(event: ICalendarEvent, range: NumberRange) {
   const eventTime = new Date(event.timestamp * 1000)
   const isAllDayEvent = event.all_day || false
 
-  if (isAllDayEvent && isNegativeTimezone()) {
-    eventTime.setHours(24, 0, 0, 0)
+  if (isAllDayEvent) {
+    const dummyStartDate = new Date(eventTime)
+
+    eventTime.setHours(
+      dummyStartDate.getUTCHours(),
+      dummyStartDate.getUTCMinutes(),
+      dummyStartDate.getUTCSeconds(),
+      0
+    )
+    eventTime.setFullYear(
+      dummyStartDate.getUTCFullYear(),
+      dummyStartDate.getUTCMonth(),
+      dummyStartDate.getUTCDate()
+    )
   }
 
   const convertToUTC =

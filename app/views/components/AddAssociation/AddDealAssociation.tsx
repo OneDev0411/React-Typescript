@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 
-import IconDeal from '../SvgIcons/Deals/IconDeal'
+import { mdiCashUsdOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import SearchDealDrawer from '../SearchDealDrawer'
 import { normalizeDeal } from '../../utils/association-normalizers'
 
@@ -22,7 +25,7 @@ export function AddDealAssociation({
   return (
     <AddAssociationButton
       title={title}
-      Icon={IconDeal}
+      Icon={<SvgIcon path={mdiCashUsdOutline} />}
       disabled={disabled}
       onClick={onOpen}
     >

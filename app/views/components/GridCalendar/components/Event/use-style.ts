@@ -72,13 +72,17 @@ export const usePopoverStyles = makeStyles(
     dealIcon: {
       background: '#f8f8ff',
       '& svg': {
-        fill: '#0945eb'
+        '&, & path': {
+          fill: '#0945eb !important'
+        }
       }
     },
     celebrationIcon: {
       background: '#FFD9EC',
       '& svg': {
-        fill: '#FF0080'
+        '&, & path': {
+          fill: '#FF0080 !important'
+        }
       }
     },
     details: {

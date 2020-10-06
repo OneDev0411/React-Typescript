@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 
+import { mdiCardAccountDetailsOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import { normalizeContact } from '../../utils/association-normalizers'
-import IconContact from '../SvgIcons/Contacts/IconContacts'
+
 import { SearchContactDrawer } from '../SearchContactDrawer'
 
 import { AddAssociationProps } from './types'
@@ -22,7 +26,7 @@ export function AddContactAssociation({
   return (
     <AddAssociationButton
       title={title}
-      Icon={IconContact}
+      Icon={<SvgIcon path={mdiCardAccountDetailsOutline} />}
       disabled={disabled}
       onClick={onOpen}
     >
