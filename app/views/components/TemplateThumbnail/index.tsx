@@ -6,10 +6,7 @@ import { CircularProgress, makeStyles } from '@material-ui/core'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { renderMjml } from 'components/TemplatePreview/helpers'
 
-import {
-  getMjmlTemplateRenderData,
-  getNonMjmlTemplateRenderData
-} from 'components/InstantMarketing/Builder/utils/get-template-render-data'
+import { getTemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 
 const useStyles = makeStyles(
   () => ({
@@ -66,9 +63,7 @@ export default function TemplateThumbnail({
 
   useDeepCompareEffect(() => {
     async function loadTemplate() {
-      const renderData = mjml
-        ? getMjmlTemplateRenderData(brand)
-        : getNonMjmlTemplateRenderData(brand)
+      const renderData = getTemplateRenderData(brand)
 
       const nunjucksRenderedTemplate = nunjucks.renderString(template, {
         ...renderData,

@@ -56,10 +56,7 @@ import { SOCIAL_NETWORKS, BASICS_BLOCK_CATEGORY } from './constants'
 import { registerEmailBlocks } from './Blocks/Email'
 import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
-import {
-  getMjmlTemplateRenderData,
-  getNonMjmlTemplateRenderData
-} from './utils/get-template-render-data'
+import { getTemplateRenderData } from './utils/get-template-render-data'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -290,7 +287,7 @@ class Builder extends React.Component {
     this.emailBlocksRegistered = true
 
     const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getMjmlTemplateRenderData(brand)
+    const renderData = getTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
 
@@ -353,7 +350,7 @@ class Builder extends React.Component {
 
   registerSocialBlocks = () => {
     const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getNonMjmlTemplateRenderData(brand)
+    const renderData = getTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
     this.blocks = registerSocialBlocks(this.editor, renderData)
@@ -559,9 +556,7 @@ class Builder extends React.Component {
 
   generateBrandedTemplate = (templateMarkup, data) => {
     const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = this.isMjmlTemplate
-      ? getMjmlTemplateRenderData(brand)
-      : getNonMjmlTemplateRenderData(brand)
+    const renderData = getTemplateRenderData(brand)
 
     return nunjucks.renderString(templateMarkup, {
       ...data,

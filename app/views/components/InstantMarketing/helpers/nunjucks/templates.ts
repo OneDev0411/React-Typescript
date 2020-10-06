@@ -1,7 +1,4 @@
-import nunjucks from 'nunjucks'
-import flattenBrand from 'utils/flatten-brand'
-
-export const BRAND_STYLES_TEMPLATE_MJML = `{% if get('body-font-family') %}
+export const MJML_PALETTE = `{% if get('body-font-family') %}
   <mj-font name="{{get('body-font-family')}}" href="https://fonts.googleapis.com/css?family={{get('body-font-family') | urlencode}}"></mj-font>
 {% endif %}
 
@@ -114,10 +111,11 @@ export const BRAND_STYLES_TEMPLATE_MJML = `{% if get('body-font-family') %}
     background-color="{{get('inverted-button-bg-color')}}"
     color="{{get('inverted-button-text-color')}}"
   ></mj-class>
-</mj-attribues>
-`
 
-export const BRAND_STYLES_TEMPLATE_NON_MJML = `
+  {{extra_attributes | safe}}
+</mj-attribues>`
+
+export const HTML_PALETTE = `
 {% if get('body-font-family') %}
   <link href="https://fonts.googleapis.com/css2?family={{get('body-font-family')}}" rel="stylesheet"></link>
 {% endif %}
@@ -204,15 +202,3 @@ body {
   color:       {{ get('inverted-h3-text-color') }};
 }
 </style>`
-
-type GetSettings = (key: BrandSettingsPaletteKey) => string
-
-export function getMjmlBrandStyles(brand: IBrand, get: GetSettings): string {
-  const brandData = flattenBrand(brand)
-  return nunjucks.renderString(BRAND_STYLES_TEMPLATE_MJML, { brand: brandData, get })
-}
-
-export function getNonMjmlBrandStyles(brand: IBrand, get: GetSettings): string {
-  const brandData = flattenBrand(brand)
-  return nunjucks.renderString(BRAND_STYLES_TEMPLATE_NON_MJML, { brand: brandData, get })
-}
