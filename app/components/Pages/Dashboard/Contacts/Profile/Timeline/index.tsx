@@ -42,7 +42,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       flex: '0 1 auto'
     },
     list: {
-      flex: '1 1 auto'
+      flex: '1 1 auto',
+      marginBottom: theme.spacing(2),
+      overflow: 'auto'
     }
   })
 )
