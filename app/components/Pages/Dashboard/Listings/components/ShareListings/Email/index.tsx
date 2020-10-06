@@ -1,19 +1,31 @@
 import React, { useState } from 'react'
 
 import { Button, Tooltip } from '@material-ui/core'
-
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
+
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
+import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
+import { useBasket } from 'components/Basket/use-basket'
 
 export function EmailAction() {
+  const { selections } = useBasket()
+
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState(false)
+  const [template, setTemplate] = useState<Nullable<IBrandMarketingTemplate>>(
+    null
+  )
+
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
   const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
-    console.log(template)
     setIsTemplatesModalOpen(false)
+    setTemplate(template)
+  }
+
+  const handleClose = () => {
+    setTemplate(null)
   }
 
   return (
@@ -37,6 +49,17 @@ export function EmailAction() {
           templateTypes={['Listings']}
           onSelect={handleSelectTemplate}
           onClose={() => setIsTemplatesModalOpen(false)}
+        />
+      )}
+
+      {template && (
+        <ListingFlow
+          isTemplatesColumnHiddenDefault={false}
+          handleTrigger={handleClose}
+          isTriggered
+          isMultiListing
+          hasExternalTrigger
+          listings={selections}
         />
       )}
     </>

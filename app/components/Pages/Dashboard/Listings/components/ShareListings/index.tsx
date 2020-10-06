@@ -17,7 +17,6 @@ const useStyles = makeStyles(
       backgroundColor: '#fff',
       height: theme.spacing(10),
       padding: theme.spacing(0, 2),
-      zIndex: theme.zIndex.gridAction,
       '& button': {
         marginRight: theme.spacing(1)
       }
