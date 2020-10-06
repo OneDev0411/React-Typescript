@@ -27,6 +27,10 @@ export function TourSheets(props) {
     agent.teams = props.agent.teams
   }
 
+  if (!agent.teams) {
+    agent.teams = props.agent.teams
+  }
+
   return (
     <BareModal
       isOpen
