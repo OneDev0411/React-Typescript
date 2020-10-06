@@ -1,6 +1,7 @@
 // Brand.js
-import AppStore from '../stores/AppStore'
 import merge from 'merge'
+
+import AppStore from '../stores/AppStore'
 
 class Brand {
   constructor() {

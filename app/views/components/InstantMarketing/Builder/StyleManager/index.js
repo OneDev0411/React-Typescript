@@ -1,8 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+
 import ReactDOMServer from 'react-dom/server'
 
 import { AppTheme } from '../../../../../AppTheme'
+import store from '../../../../../stores'
 
 import { loadGrapesjs } from '../utils/load-grapes'
 
@@ -15,7 +18,12 @@ import WidthPicker from './WidthPicker'
 import PaddingPicker from './PaddingPicker'
 
 function renderWithTheme(node, container) {
-  ReactDOM.render(<AppTheme>{node}</AppTheme>, container)
+  ReactDOM.render(
+    <Provider store={store}>
+      <AppTheme>{node}</AppTheme>
+    </Provider>,
+    container
+  )
 }
 
 export const load = async colors => {

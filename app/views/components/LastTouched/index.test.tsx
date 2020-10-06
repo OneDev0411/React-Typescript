@@ -8,6 +8,8 @@ import mockDate, { RealDate } from 'utils/test-utils/mock-date'
 
 import { AppTheme } from '../../../AppTheme'
 
+import { TestBed } from '../../../../tests/unit/TestBed'
+
 import { LastTouched } from '.'
 
 describe('Contact profile last touched component', () => {
@@ -21,9 +23,11 @@ describe('Contact profile last touched component', () => {
 
   it('renders', () => {
     const wrapper = render(
-      <AppTheme>
-        <LastTouched contact={fullContact as any} />
-      </AppTheme>
+      <TestBed>
+        <AppTheme>
+          <LastTouched contact={fullContact as any} />
+        </AppTheme>
+      </TestBed>
     )
 
     expect(toJson(wrapper)).toMatchSnapshot()
@@ -31,9 +35,11 @@ describe('Contact profile last touched component', () => {
 
   it('renders touch periods without decimal points', () => {
     const wrapper = render(
-      <AppTheme>
-        <LastTouched contact={fullContact as any} />
-      </AppTheme>
+      <TestBed>
+        <AppTheme>
+          <LastTouched contact={fullContact as any} />
+        </AppTheme>
+      </TestBed>
     )
 
     const decimalPointedPeriod =
