@@ -25,7 +25,7 @@ const HOLIDAY_TYPES = [
   'FathersDay',
   'MothersDay',
   'WomansDay',
-  'ColombusDay',
+  'ColumbusDay',
   'PatriotsDay',
   'MemorialDay',
   'LaborDay',
