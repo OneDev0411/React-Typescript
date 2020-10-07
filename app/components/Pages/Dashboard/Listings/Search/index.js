@@ -23,7 +23,7 @@ import Tabs from '../components/Tabs'
 import { loadJS } from '../../../../../utils/load-js'
 import { getBounds, getLocationErrorMessage } from '../../../../../utils/map'
 
-import getPlace from '../../../../../models/listings/search/get-place'
+import { getPlace } from '../../../../../models/listings/search/get-place'
 import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points'
 import { selectListings } from '../../../../../reducers/listings'
 import searchActions from '../../../../../store_actions/listings/search'
