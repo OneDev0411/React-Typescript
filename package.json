@@ -307,6 +307,7 @@
     "@types/google-libphonenumber": "^7.4.17",
     "@types/google-map-react": "^0.23.11",
     "@types/google-maps": "^3.2.1",
+    "@types/googlemaps": "^3.39.13",
     "@types/history": "^3.2.3",
     "@types/intercom-client": "^2.9.5",
     "@types/jest": "^24.0.13",
