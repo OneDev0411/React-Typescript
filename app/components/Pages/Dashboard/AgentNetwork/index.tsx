@@ -2,19 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { withRouter } from 'react-router'
 import { useTitle } from 'react-use'
-import { Box, Grid, Typography } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
-import { ACL } from 'constants/acl'
 import { getActiveTeamId } from 'utils/user-teams'
 import { getBrandListings } from 'models/listings/search/get-brand-listings'
 import { useLoadingEntities } from 'hooks/use-loading'
+import { goTo } from 'utils/go-to'
 
-import Acl from 'components/Acl'
-import PageLayout from 'components/GlobalPageLayout'
-import CompactListingCard from 'components/ListingCards/CompactListingCard'
-import LoadingContainer from 'components/LoadingContainer'
-
+import Layout from './Layout'
+import Info from './Sections/Info'
 import Listings from './Sections/Listings'
 
 export function AgentNetwork() {
@@ -43,36 +39,22 @@ export function AgentNetwork() {
     fetchBrandListings()
   }, [brand, setIsLoading])
 
+  async function handleSelectListing(listing: ICompactListing) {
+    goTo('/dashboard/agent-network/agents', null, {
+      listing: listing.id
+    })
+  }
+
   return (
-    <Acl access={[ACL.MARKETING]}>
-      <PageLayout>
-        <PageLayout.Header title="Agent Network" />
-        <PageLayout.Main>
-          <Listings onSeeAllClick={console.log} />
-          <Box py={2}>
-            <Grid container spacing={3}>
-              {isLoading && (
-                <Grid container item xs alignItems="center" justify="center">
-                  <LoadingContainer noPaddings />
-                </Grid>
-              )}
-              {listings?.map(listing => (
-                <Grid key={listing.id} container item xs={12} sm={6} md={4}>
-                  <CompactListingCard listing={listing} onClick={console.log} />
-                </Grid>
-              ))}
-              {listings?.length === 0 && (
-                <Grid container item xs alignItems="center" justify="center">
-                  <Typography variant="h2">
-                    You don't have any listing to use.
-                  </Typography>
-                </Grid>
-              )}
-            </Grid>
-          </Box>
-        </PageLayout.Main>
-      </PageLayout>
-    </Acl>
+    <Layout>
+      <Info />
+      <Listings
+        isLoading={isLoading}
+        listings={listings}
+        onListingClick={handleSelectListing}
+        onSeeAllClick={console.log}
+      />
+    </Layout>
   )
 }
 

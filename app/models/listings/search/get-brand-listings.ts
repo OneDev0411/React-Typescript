@@ -1,13 +1,18 @@
 import { byValert } from './get-listings'
 
+interface Options {
+  status: IListingStatus[]
+}
+
 export async function getBrandListings(
-  brand: UUID
+  brand: UUID,
+  { status }: Options = { status: ['Active'] }
 ): Promise<ICompactListing[]> {
   const response = await byValert(
     {
       brand,
-      limit: 9,
       sort_order: ['status'],
+      status,
       property_types: ['Residential'],
       property_subtypes: [
         'RES-Single Family',

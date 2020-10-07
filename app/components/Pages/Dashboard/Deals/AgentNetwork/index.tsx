@@ -9,7 +9,7 @@ import { Theme, Typography } from '@material-ui/core'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import { getAddress } from 'models/Deal/helpers/context'
 import { byValert } from 'models/listings/search/get-listings'
-import getPlace from 'models/listings/search/get-place'
+import { getPlace, CompactPlace } from 'models/listings/search/get-place'
 import getListing from 'models/listings/listing/get-listing'
 
 import { IAppState } from 'reducers'
@@ -32,11 +32,6 @@ import { AreaFilter } from './Filters/AreaFilter'
 import { Filter } from './Filters/types'
 import { IDealAgent } from './types'
 
-interface Place {
-  zoom: number
-  center: string
-}
-
 interface Props {
   location: WithRouterProps['location']
   params: WithRouterProps['params']
@@ -46,7 +41,7 @@ export default function AgentNetwork({ location, params }: Props) {
   const [isFetching, setIsFetching] = useState(true)
 
   const [address, setAddress] = useState(location.query.address || '')
-  const [place, setPlace] = useState<Place | null>(null)
+  const [place, setPlace] = useState<CompactPlace | null>(null)
   const [listing, setListing] = useState<IListing | null>(null)
   const [list, setList] = useState<IDealAgent[]>([])
   const previousFilter = useRef<Filter>(DEFAULT_RADIUS_FILTER)
@@ -77,17 +72,18 @@ export default function AgentNetwork({ location, params }: Props) {
     const filter = DEFAULT_RADIUS_FILTER
 
     let query = null
-    let place = null
-    let listing = null
+    let place: Nullable<CompactPlace> = null
+    let listing: Nullable<IListing<'proposed_agent'>> = null
 
     try {
       if (deal) {
-        const address = getAddress(deal)
+        const address: string = getAddress(deal)
 
         place = await getPlace(address)
 
         if (location) {
           if (deal.listing) {
+            // UUID
             listing = await getListing(deal.listing)
           }
 
@@ -139,7 +135,7 @@ export default function AgentNetwork({ location, params }: Props) {
 
   const getQuery = (
     listing: IListing | null,
-    place: Place | null,
+    place: CompactPlace | null,
     filter: Filter
   ) => {
     let query
@@ -169,9 +165,11 @@ export default function AgentNetwork({ location, params }: Props) {
         minimum_bedrooms: property.bedroom_count,
         maximum_bedrooms: property.bedroom_count,
         minimum_bathrooms: property.full_bathroom_count,
-        maximum_bathrooms: property.full_bathroom_count,
-        property_subtype: [property.property_subtype],
-        property_type: [property.property_type]
+        maximum_bathrooms: property.full_bathroom_count
+        // TODO: remove these mamal
+        // add an s in the end
+        // property_subtype: [property.property_subtype],
+        // property_type: [property.property_type]
       }
     } else if (location) {
       query = {

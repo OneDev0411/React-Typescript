@@ -181,6 +181,13 @@ const AsyncAgentNetworkNew = Load({
     )
 })
 
+const AsyncAgentNetworkAgents = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/AgentNetwork/Agents' /* webpackChunkName: "agent_network" */
+    )
+})
+
 /* ==================================== */
 //  Deals
 /* ==================================== */
@@ -709,6 +716,10 @@ export default (
         <Route path="marketing/:types(/:medium)" component={AsyncMarketing} />
 
         <Route path="agent-network" component={AsyncAgentNetworkNew} />
+        <Route
+          path="agent-network/agents"
+          component={AsyncAgentNetworkAgents}
+        />
 
         <Route path="insights">
           <IndexRoute component={AsyncMarketingInsightsList} />
