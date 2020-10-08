@@ -14,8 +14,8 @@ const useStyles = makeStyles(
       position: 'sticky',
       borderTop: `1px solid ${theme.palette.divider}`,
       bottom: 0,
-      backgroundColor: '#fff',
-      height: theme.spacing(10),
+      backgroundColor: theme.palette.common.white,
+      height: theme.spacing(8),
       padding: theme.spacing(0, 2),
       '& button': {
         marginRight: theme.spacing(1)
@@ -65,18 +65,6 @@ export function ShareListings() {
         </Button>
 
         <EmailAction />
-
-        <Tooltip title="Send as Text">
-          <Button
-            disabled
-            size="small"
-            variant="contained"
-            color="secondary"
-            onClick={() => {}}
-          >
-            Text
-          </Button>
-        </Tooltip>
       </Box>
 
       {isListingDrawerOpen && (
