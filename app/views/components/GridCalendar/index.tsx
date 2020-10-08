@@ -21,6 +21,8 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 
+import _map from 'lodash/map'
+
 import { getCalendar, FilterQuery } from 'models/calendar/get-calendar'
 import { updateTask } from 'models/tasks'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
@@ -292,7 +294,6 @@ export const GridCalendarPresentation = ({
     const now = new Date()
 
     date.setHours(now.getHours(), now.getMinutes(), 0, 0)
-    // console.log({ date, dateStr, allDay })
     setSelectedDay(date)
   }
 
@@ -326,10 +327,23 @@ export const GridCalendarPresentation = ({
       event: IEvent | ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>,
       type: CrmEventType
     ) => {
+      let changeType = type
+
+      if (type === 'updated') {
+        const assignees: UUID[] = _map(event.assignees, 'id')
+        const shouldVisible = (viewAsUsers || []).some(userId =>
+          assignees.includes(userId)
+        )
+
+        if (!shouldVisible) {
+          changeType = 'deleted'
+        }
+      }
+
       const nextEvents: ICalendarEvent[] = upsertCrmEvents(
         rowEvents,
         event,
-        type
+        changeType
       )
 
       updateEvents(nextEvents)
