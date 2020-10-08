@@ -4,7 +4,7 @@ import { makeStyles, Box, Grid } from '@material-ui/core'
 
 import LoadingComponent from 'components/Spinner'
 
-import { useBasket } from 'components/Basket/use-basket'
+import { useListSelection } from 'components/ListSelection/use-list-selection'
 
 import ListingCard from '../ListingCard'
 import ZeroState from '../ZeroState'
@@ -41,7 +41,7 @@ const useStyles = makeStyles(
 
 const MapView = props => {
   const classes = useStyles()
-  const { selections, toggleItem } = useBasket()
+  const { selections, toggleItem } = useListSelection()
 
   const renderCards = () => {
     if (props.isFetching) {

@@ -13,9 +13,9 @@ const ListingCard = ({
   isWidget = false,
   listing,
   selected,
+  user = null,
   onClick,
-  onToggleSelection,
-  user = null
+  onToggleSelection = () => {}
 }) => {
   const target = user && !isWidget ? '' : '_blank'
 

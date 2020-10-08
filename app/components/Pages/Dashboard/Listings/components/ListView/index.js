@@ -6,7 +6,7 @@ import { Box, Checkbox, useTheme } from '@material-ui/core'
 
 import { useGridStyles } from 'components/Grid/Table/styles'
 
-import { useBasket } from 'components/Basket/use-basket'
+import { useListSelection } from 'components/ListSelection/use-list-selection'
 
 import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
@@ -18,7 +18,7 @@ import { Address } from './columns/Address'
 const ListView = ({ sortedListings, listings, isFetching }) => {
   const theme = useTheme()
   const gridClasses = useGridStyles()
-  const { selections, toggleItem } = useBasket()
+  const { selections, toggleItem } = useListSelection()
 
   const columns = [
     {

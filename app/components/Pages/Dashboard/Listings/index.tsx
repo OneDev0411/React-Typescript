@@ -3,7 +3,7 @@ import React, { ReactElement, ReactChildren, cloneElement } from 'react'
 import { Box } from '@material-ui/core'
 import { useTitle } from 'react-use'
 
-import { Basket } from 'components/Basket'
+import { ListSelection } from 'components/ListSelection'
 
 import { ShareListings } from './components/ShareListings'
 
@@ -14,10 +14,10 @@ function Listings({ children, ...rest }: Props) {
   useTitle('Properties | Rechat')
 
   return (
-    <Basket<IListing>>
+    <ListSelection<IListing>>
       <Box px={5}>{cloneElement(children, rest)}</Box>
       <ShareListings />
-    </Basket>
+    </ListSelection>
   )
 }
 

@@ -6,7 +6,7 @@ interface Props {
   children: React.ReactNode
 }
 
-export function Basket<T extends IModel<any>>({ children }: Props) {
+export function ListSelection<T extends IModel<any>>({ children }: Props) {
   const [selections, updateSelections] = useState<T[]>([])
 
   const addItem = (item: T) => {

@@ -7,10 +7,10 @@ import { IAppState } from 'reducers'
 
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
-import { useBasket } from 'components/Basket/use-basket'
+import { useListSelection } from 'components/ListSelection/use-list-selection'
 
 export function EmailAction() {
-  const { selections } = useBasket()
+  const { selections } = useListSelection()
 
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState(false)
   const [template, setTemplate] = useState<Nullable<IBrandMarketingTemplate>>(

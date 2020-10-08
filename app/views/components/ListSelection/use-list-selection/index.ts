@@ -2,6 +2,6 @@ import { useContext } from 'react'
 
 import { StateContext } from '../context'
 
-export function useBasket() {
+export function useListSelection() {
   return useContext(StateContext)
 }
