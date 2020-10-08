@@ -10,9 +10,10 @@ import './style.scss'
 import FavoriteHeart from '../FavoriteHeart'
 
 const ListingCard = ({
-  isWidget = false,
   listing,
-  selected,
+  isWidget = false,
+  selectable = true,
+  selected = false,
   user = null,
   onClick,
   onToggleSelection = () => {}
@@ -80,12 +81,14 @@ const ListingCard = ({
           </div>
         )}
 
-        <div className="c-listing-card__selection">
-          <Checkbox
-            checked={selected}
-            onChange={() => onToggleSelection(listing)}
-          />
-        </div>
+        {selectable && (
+          <div className="c-listing-card__selection">
+            <Checkbox
+              checked={selected}
+              onChange={() => onToggleSelection(listing)}
+            />
+          </div>
+        )}
       </div>
     </LazyLoad>
   )
