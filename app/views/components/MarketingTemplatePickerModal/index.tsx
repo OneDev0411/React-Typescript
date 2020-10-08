@@ -23,6 +23,7 @@ export default function MarketingTemplatePickerModal({
   return (
     <Dialog
       open
+      fullWidth
       maxWidth="md"
       scroll="paper"
       {...dialogProps}

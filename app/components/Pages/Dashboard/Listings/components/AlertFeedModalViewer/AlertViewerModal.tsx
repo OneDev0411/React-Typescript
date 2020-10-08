@@ -40,6 +40,7 @@ export default function AlertViewerModal(props: Props) {
             {feed.map(listing => (
               <Card key={listing.id}>
                 <ListingCard
+                  selectable={false}
                   listing={formatListing(listing)}
                   onClick={() => {
                     setSelectedListing(listing)
