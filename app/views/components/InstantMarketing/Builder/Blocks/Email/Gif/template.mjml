@@ -1,1 +1,1 @@
-<mj-image mj-class="container" padding="0" rechat-editable="tree" src="{{url}}"></mj-image>
+<mj-image padding="0" rechat-editable="tree" src="{{url}}"></mj-image>

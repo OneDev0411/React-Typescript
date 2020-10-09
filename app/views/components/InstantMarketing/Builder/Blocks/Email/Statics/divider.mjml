@@ -1,1 +1,1 @@
-<mj-divider mj-class="container" rechat-editable="true" padding="0" border-width="1px" border-color="{{get('container-text-color')}}"></mj-divider>
+<mj-divider rechat-editable="true" padding="0" border-width="1px" border-color="{{get('container-text-color')}}"></mj-divider>
