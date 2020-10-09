@@ -10,6 +10,7 @@ import { ShareListings } from './components/ShareListings'
 interface Props {
   children: ReactElement<ReactChildren>
 }
+
 function Listings({ children, ...rest }: Props) {
   useTitle('Properties | Rechat')
 

@@ -81,7 +81,7 @@ const ListingCard = ({
           </div>
         )}
 
-        {selectable && (
+        {selectable && user && (
           <div className="c-listing-card__selection">
             <Checkbox
               checked={selected}

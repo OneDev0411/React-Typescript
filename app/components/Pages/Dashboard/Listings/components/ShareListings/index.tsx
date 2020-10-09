@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 
-import { Box, Button, makeStyles, Theme, Tooltip } from '@material-ui/core'
+import { Slide, Box, Button, Theme, makeStyles } from '@material-ui/core'
 import pluralize from 'pluralize'
 
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 
 import { EmailAction } from './Email'
+import { CreateTourAction } from './Tour'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -54,18 +55,21 @@ export function ShareListings() {
 
   return (
     <>
-      <Box display="flex" alignItems="center" className={classes.root}>
-        <Button
-          size="small"
-          variant="text"
-          onClick={() => setIsListingDrawerOpen(true)}
-        >
-          {selections.length}&nbsp;{pluralize('Listing', selections.length)}{' '}
-          Selected
-        </Button>
+      <Slide in direction="up">
+        <Box display="flex" alignItems="center" className={classes.root}>
+          <Button
+            size="small"
+            variant="text"
+            onClick={() => setIsListingDrawerOpen(true)}
+          >
+            {selections.length} {pluralize('Listing', selections.length)}{' '}
+            Selected
+          </Button>
 
-        <EmailAction />
-      </Box>
+          <EmailAction />
+          <CreateTourAction />
+        </Box>
+      </Slide>
 
       {isListingDrawerOpen && (
         <SearchListingDrawer

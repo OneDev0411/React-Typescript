@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
 
+import getListing from 'models/listings/listing/get-listing'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
@@ -13,19 +14,28 @@ export function EmailAction() {
   const { selections } = useListSelection()
 
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState(false)
+  const [listings, setListings] = useState<IListing[]>([])
   const [template, setTemplate] = useState<Nullable<IBrandMarketingTemplate>>(
     null
   )
 
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
-  const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
+  const handleSelectTemplate = async (template: IBrandMarketingTemplate) => {
+    const listings = await Promise.all(
+      selections.map(async (selection: IListing) => {
+        return getListing(selection.id)
+      })
+    )
+
     setIsTemplatesModalOpen(false)
+    setListings(listings)
     setTemplate(template)
   }
 
   const handleClose = () => {
     setTemplate(null)
+    setListings([])
   }
 
   return (
@@ -52,14 +62,14 @@ export function EmailAction() {
         />
       )}
 
-      {template && (
+      {template && listings.length > 0 && (
         <ListingFlow
           isTemplatesColumnHiddenDefault={false}
           handleTrigger={handleClose}
           isTriggered
-          isMultiListing
+          isMultiListing={listings.length > 1}
           hasExternalTrigger
-          listings={selections}
+          listings={listings}
         />
       )}
     </>
