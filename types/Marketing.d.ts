@@ -75,6 +75,7 @@ declare type MarketingTemplateType =
   | 'Newsletter'
   | 'FathersDay'
   | 'MothersDay'
+  | 'ColumbusDay'
   | 'MemorialDay'
   | 'Passover'
   | 'ChineseNewYear'

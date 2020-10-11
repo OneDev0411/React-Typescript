@@ -97,6 +97,14 @@
   height: 2rem;
 }
 
+.c-listing-card__selection {
+  position: absolute;
+  left: 0.5em;
+  top: 0.5em;
+  background-color: #eee;
+  border-radius: 6px;
+}
+
 .c-listing-card__alertStatus {
   position: absolute;
   top: 1em;
