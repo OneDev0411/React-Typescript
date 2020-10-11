@@ -7,18 +7,18 @@ align="right"
 {% endmacro %}
 
 {% for listingsBatch in listings | batch(2) %}
-<mj-section padding="20px 20px" rechat-editable="tree" background-color="#fff">
+<mj-section mj-class="container" padding-top="20px" padding-bottom="20px" rechat-editable="tree">
   {% for listing in listingsBatch %}
   <mj-column padding-left={{ "0" if loop.index0 === 0 else "5px" }} padding-right={{ "0" if loop.index0 === 1 else "5px" }}>
     <mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
-    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="20px" line-height="1.5" {{ alignment(loop.index0) }}>
+    <mj-spacer height="15px"></mj-spacer>
+    <mj-text mj-class="h3" padding="0"  rechat-editable="tree" line-height="1.5" {{ alignment(loop.index0) }}>
       {{listing.property.address.street_address}}
     </mj-text>
-    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px" line-height="1.5" {{ alignment(loop.index0) }}>
+    <mj-text mj-class="container-text" padding="0" rechat-editable="tree" line-height="1.5" {{ alignment(loop.index0) }}>
       <strong>{{ listing.price | currency }}</strong>{% if listing.is_lease %}/mo{% endif %}
     </mj-text>
-    <mj-spacer height="10px"></mj-spacer>
-    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" {{ alignment(loop.index0) }}>
+    <mj-text mj-class="container-text" padding="0" rechat-editable="tree" line-height="1.5" {{ alignment(loop.index0) }}>
       {% if listing.property.bedroom_count %}
       <span><strong>{{listing.property.bedroom_count}}</strong> Beds,</span>
       {% endif %}
@@ -33,7 +33,7 @@ align="right"
       {% endif %}
     </mj-text>
     <mj-spacer height="10px"></mj-spacer>
-    <mj-button rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px" font-family="Helvetica, Arial, sans-serif" font-size="14px" line-height="1.5" {{ alignment(loop.index0) }} href="{{getListingUrl(listing)}}">
+    <mj-button rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px" font-size="14px" line-height="1.5" {{ alignment(loop.index0) }} href="{{getListingUrl(listing)}}">
       View Listing
     </mj-button>
   </mj-column>
