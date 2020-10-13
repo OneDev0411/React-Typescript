@@ -31,6 +31,11 @@ declare type IPropertySubtype =
   | 'COM-Sale or Lease (Either)'
   | 'COM-Sale/Leaseback (Both)'
 
+interface IPoint {
+  latitude: number
+  longitude: number
+}
+
 interface ListingAgent extends IModel<'agent'> {
   email: string
   mlsid: string
