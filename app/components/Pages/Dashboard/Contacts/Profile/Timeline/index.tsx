@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import List from 'components/Calendar'
 import { CalendarRef } from 'components/Calendar/types'
@@ -28,8 +28,8 @@ interface Props {
 
 const associations = ['calendar_event.full_thread']
 
-export const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+export const useStyles = makeStyles(
+  (theme: Theme) => ({
     container: {
       display: 'flex',
       flexFlow: 'column',
@@ -43,14 +43,18 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     list: {
       flex: '1 1 auto',
-      marginBottom: theme.spacing(2),
-      overflowY: 'auto',
-      overflowX: 'hidden',
-      '& > div': {
-        overflow: 'auto !important'
-      }
+      marginBottom: theme.spacing(2)
+    },
+    notes: {
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      overflow: 'auto'
     }
-  })
+  }),
+  {
+    name: 'ContactProfileTimeline'
+  }
 )
 
 function Timeline(props: Props) {
@@ -60,7 +64,9 @@ function Timeline(props: Props) {
   const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Events)
 
   const handleReload = (filter = activeFilter) => {
-    timelineRef.current!.refresh(new Date(), getTimelineInitialRange())
+    if (filter === Filters.Events) {
+      timelineRef.current!.refresh(new Date(), getTimelineInitialRange())
+    }
   }
 
   const handleChangeFilter = (value: Filters) => {
@@ -125,7 +131,9 @@ function Timeline(props: Props) {
         )}
 
         {activeFilter === Filters.Notes && (
-          <Notes contact={props.contact} onChange={props.onChangeNote} />
+          <div className={classes.notes}>
+            <Notes contact={props.contact} onChange={props.onChangeNote} />
+          </div>
         )}
       </div>
     </div>
