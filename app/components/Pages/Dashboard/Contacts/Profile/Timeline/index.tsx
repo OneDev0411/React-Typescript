@@ -44,7 +44,11 @@ export const useStyles = makeStyles((theme: Theme) =>
     list: {
       flex: '1 1 auto',
       marginBottom: theme.spacing(2),
-      overflow: 'auto'
+      overflowY: 'auto',
+      overflowX: 'hidden',
+      '& > div': {
+        overflow: 'auto !important'
+      }
     }
   })
 )
