@@ -37,7 +37,7 @@ const useStyles = makeStyles(
 
 interface Props {
   listing: ICompactListing
-  onClick: () => void
+  onClick?: () => void
 }
 
 export default function CompactListingCard({ listing, onClick }: Props) {

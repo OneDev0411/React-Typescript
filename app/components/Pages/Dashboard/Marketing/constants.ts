@@ -1,5 +1,5 @@
 export const MEDIUM_LABEL_MAP: {
-  [key in MarketingTemplateMedium]: string
+  [key in IMarketingTemplateMedium]: string
 } = {
   Email: 'Email',
   Social: 'Social',

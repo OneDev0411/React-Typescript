@@ -85,6 +85,7 @@
     "@mdi/react": "^1.4.0",
     "@mikeljames/draft-js-drag-n-drop-upload-plugin": "^2.0.1",
     "@reach/tabs": "^0.1.5",
+    "@react-google-maps/api": "^1.10.1",
     "@samuelmeuli/font-manager": "^1.4.0",
     "@sentry/browser": "^5.16.1",
     "@sentry/cli": "^1.54.0",

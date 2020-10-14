@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { withRouter } from 'react-router'
-import { useTitle } from 'react-use'
 
 import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -14,8 +13,6 @@ import Info from './Sections/Info'
 import Listings from './Sections/Listings'
 
 export function AgentNetwork() {
-  useTitle('Agent Network | Rechat')
-
   const user = useSelector<IAppState, IUser>(state => state.user)
   const [listings, setListings] = useState<Nullable<ICompactListing[]>>(null)
   const [isLoading, setIsLoading] = useLoadingEntities(listings)
@@ -36,6 +33,7 @@ export function AgentNetwork() {
         console.error(error)
       }
     }
+
     fetchBrandListings()
   }, [brand, setIsLoading])
 

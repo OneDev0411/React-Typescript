@@ -10,8 +10,8 @@ import { useTemplates } from '../../../components/Pages/Dashboard/Marketing/hook
 
 interface Props {
   user: IUser
-  templateTypes?: MarketingTemplateType[]
-  mediums?: MarketingTemplateMedium[]
+  templateTypes?: IMarketingTemplateType[]
+  mediums?: IMarketingTemplateMedium[]
   onSelect: (template: IBrandMarketingTemplate) => void
 }
 

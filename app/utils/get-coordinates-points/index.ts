@@ -1,9 +1,4 @@
-interface Point {
-  latitude: number
-  longitude: number
-}
-
-export function calculatePointsFromBounds(bounds: google.maps.LatLngBounds): Point[] {
+export function calculatePointsFromBounds(bounds: google.maps.LatLngBounds): IPoint[] {
   const sw = bounds.getSouthWest()
   const ne = bounds.getNorthEast()
 
@@ -22,13 +17,13 @@ export function getMapBoundsInCircle(
   center: google.maps.LatLng | google.maps.LatLngLiteral,
   radius?: number,
   returnBounds?: false
-): Point[]
+): IPoint[]
 
 export function getMapBoundsInCircle(
   center: google.maps.LatLng | google.maps.LatLngLiteral,
   radius?: number,
   returnBounds?: true
-): { points: Point[], bounds: google.maps.LatLngBounds }
+): { points: IPoint[], bounds: google.maps.LatLngBounds }
 
 export function getMapBoundsInCircle(
   center: google.maps.LatLng | google.maps.LatLngLiteral,

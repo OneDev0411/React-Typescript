@@ -1,72 +1,107 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
+import { LoadScript } from '@react-google-maps/api'
 
-import { CompactPlace, getPlace } from 'models/listings/search/get-place'
+import config from 'config'
+import { IAppState } from 'reducers'
 import { useLoadingEntities } from 'hooks/use-loading'
-
 import getListing from 'models/listings/listing/get-listing'
 
-import LoadingContainer from 'components/LoadingContainer'
-
 import Layout from '../Layout'
-import { ListingWithProposedAgent } from './types'
+import { ListingWithProposedAgent, AggregatedAgentInfo } from './types'
+import {
+  aggregateListingsAgents,
+  getListingsWithBothSidesAgents,
+  getVAlertFilters
+} from './helpers'
+import AgentsGrid from './Grid'
+
+const GOOGLE_MAPS_LIBRARIES = ['geometry']
 
 function Agents(props: WithRouterProps) {
+  const user = useSelector<IAppState, IUser>(state => state.user)
+  const [isLoadingGoogleMaps, setIsLoadingGoogleMaps] = useState<boolean>(true)
+
   const [listing, setListing] = useState<Nullable<ListingWithProposedAgent>>(
     null
   )
-  const [place, setPlace] = useState<Nullable<CompactPlace>>(null)
-  const [
-    isLoadingListingAndPlace,
-    setIsLoadingListingAndPlace
-  ] = useLoadingEntities(listing)
+  const [isLoadingListing, setIsLoadingListing] = useLoadingEntities(listing)
+
+  const [agents, setAgents] = useState<Nullable<AggregatedAgentInfo[]>>(null)
+  const [isLoadingAgents, setIsLoadingAgents] = useLoadingEntities(agents)
+
+  const [filters, setFilters] = useState<Nullable<AlertFilters>>(null)
+  const [isLoadingFilters, setIsLoadingFilters] = useLoadingEntities(filters)
 
   useEffect(() => {
-    async function fetchListingAndPlace() {
+    async function fetchListingAndFilters() {
+      if (isLoadingGoogleMaps) {
+        return
+      }
+
       const listingId: Optional<string> = props.location.query.listing
 
       if (!listingId) {
         setListing(null)
-        setPlace(null)
-        setIsLoadingListingAndPlace(false)
+        setIsLoadingListing(false)
 
         return
       }
 
       try {
+        // Fetch listing
         const fetchedListing: ListingWithProposedAgent = await getListing(
           listingId
         )
-        const listingPlace = await getPlace(
-          fetchedListing.property.address.full_address
-        )
 
         setListing(fetchedListing)
-        setPlace(listingPlace)
+
+        // Fetch filters
+        const listingBasedFilters = await getVAlertFilters(fetchedListing)
+
+        setFilters(listingBasedFilters)
+
+        // Fetch agents
+        const listingsWithBothAgents = await getListingsWithBothSidesAgents(
+          listingBasedFilters
+        )
+
+        const fetchedAgents = aggregateListingsAgents(listingsWithBothAgents)
+
+        setAgents(fetchedAgents)
       } catch (error) {
-        console.error('Error fetching listing data')
-        setIsLoadingListingAndPlace(false)
+        console.error('Error fetching listing', error)
+        setIsLoadingListing(false)
+        setIsLoadingFilters(false)
+        setIsLoadingAgents(false)
       }
     }
 
-    fetchListingAndPlace()
-  }, [props.location.query.listing, setIsLoadingListingAndPlace])
+    fetchListingAndFilters()
+  }, [
+    isLoadingGoogleMaps,
+    props.location.query.listing,
+    setIsLoadingListing,
+    setIsLoadingFilters,
+    setIsLoadingAgents
+  ])
 
   return (
-    <Layout>
-      <div>
-        <pre>List of agents will be here</pre>
-        <div>
-          {isLoadingListingAndPlace && <LoadingContainer noPaddings />}
-          {!isLoadingListingAndPlace && (
-            <>
-              <pre>{JSON.stringify(listing, null, 2)}</pre>
-              <pre>{JSON.stringify(place, null, 2)}</pre>
-            </>
-          )}
-        </div>
-      </div>
-    </Layout>
+    <LoadScript
+      googleMapsApiKey={config.google.api_key}
+      libraries={GOOGLE_MAPS_LIBRARIES}
+      onLoad={() => setIsLoadingGoogleMaps(false)}
+    >
+      <Layout title={listing?.property.address.full_address}>
+        <AgentsGrid
+          user={user}
+          listing={listing}
+          agents={agents}
+          isLoading={isLoadingAgents}
+        />
+      </Layout>
+    </LoadScript>
   )
 }
 

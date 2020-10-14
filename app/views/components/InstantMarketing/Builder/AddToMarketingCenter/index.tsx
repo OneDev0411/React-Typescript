@@ -58,7 +58,7 @@ export function AddToMarketingCenter({
   notify
 }: Props & ConnectedProps) {
   const [selectedTemplateType, setSelectedTemplateType] = useState<
-    Optional<MarketingTemplateType>
+    Optional<IMarketingTemplateType>
   >(undefined)
   const [isUserTeamsDrawerOpen, setIsUserTeamsDrawerOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -76,7 +76,7 @@ export function AddToMarketingCenter({
     setAnchorEl(null)
   }
 
-  const handleCategoryClick = (selectedCategory: MarketingTemplateType) => {
+  const handleCategoryClick = (selectedCategory: IMarketingTemplateType) => {
     setSelectedTemplateType(selectedCategory)
     setIsUserTeamsDrawerOpen(true)
     handleClosePopover()

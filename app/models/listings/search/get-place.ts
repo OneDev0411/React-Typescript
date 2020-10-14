@@ -5,21 +5,14 @@ export interface CompactPlace {
   center: google.maps.LatLng
 }
 
-export function getPlace(
-  address: string,
-  compact?: true
-): Promise<CompactPlace | null>
+export function getPlace(address: string, compact?: true): Promise<CompactPlace>
 
 export function getPlace(
   address: string,
   compact?: false
-): Promise<google.maps.GeocoderResult | null>
+): Promise<google.maps.GeocoderResult>
 
 export async function getPlace(address: string, compact: boolean = true) {
-  if (!address) {
-    return null
-  }
-
   try {
     const url = `https://maps.googleapis.com/maps/api/geocode/json?key=${config.google.api_key}&address=${address}`
     const response = await fetch(url)
