@@ -1,48 +1,47 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { Grid } from '@material-ui/core'
 
-import { Button } from '@material-ui/core'
-
-import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 
-import { getRecipients } from './get-recipients'
+import { getSelectedAgents } from './get-selected-agents'
 import { AggregatedAgentInfo, ListingWithProposedAgent } from '../../types'
-
-const MEDIUMS: IMarketingTemplateMedium[] = ['Email']
-const TEMPLATE_TYPES: IMarketingTemplateType[] = [
-  'OpenHouse',
-  'JustSold',
-  'ComingSoon',
-  'JustListed',
-  'PriceImprovement'
-]
+import AddToContacts from './AddToContacts'
+import PromoteListing from './PromoteListing'
 
 interface Props {
+  user: IUser
   listing: Nullable<ListingWithProposedAgent>
   agents: Nullable<AggregatedAgentInfo[]>
 }
 
-export function TableActions({ listing, agents }: Props) {
+export function TableActions({ user, listing, agents }: Props) {
   const [state] = useGridContext()
-  const [isMarketingClicked, setIsMarketingClicked] = useState<Nullable<true>>(
-    null
+
+  if (!agents) {
+    return null
+  }
+
+  const selectedAgents = getSelectedAgents(
+    agents,
+    state.selection.selectedRowIds
   )
 
-  console.log({ agents, state })
-
   return (
-    <>
-      <SendMlsListingCard
-        hasExternalTrigger
-        isTriggered={isMarketingClicked}
-        isTemplatesColumnHiddenDefault={false}
-        listing={listing}
-        mediums={MEDIUMS}
-        types={TEMPLATE_TYPES}
-      />
-      <Button variant="outlined" onClick={() => setIsMarketingClicked(true)}>
-        Promote Listing
-      </Button>
-    </>
+    <Grid container justify="space-between">
+      <Grid item>
+        <Grid item>
+          <AddToContacts user={user} agents={selectedAgents} />
+        </Grid>
+      </Grid>
+      {listing && (
+        <Grid item>
+          <PromoteListing
+            user={user}
+            listing={listing}
+            agents={selectedAgents}
+          />
+        </Grid>
+      )}
+    </Grid>
   )
 }

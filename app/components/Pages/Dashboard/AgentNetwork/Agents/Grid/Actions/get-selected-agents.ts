@@ -1,9 +1,9 @@
 import { AggregatedAgentInfo } from '../../types'
 
-export function getRecipients(
+export function getSelectedAgents(
   agentsData: AggregatedAgentInfo[],
   selectedRows: UUID[]
-): IDenormalizedEmailRecipientDealAgentInput[] {
+): IAgent[] {
   if (agentsData.length === 0 || selectedRows.length === 0) {
     return []
   }
@@ -17,8 +17,5 @@ export function getRecipients(
         item.agent.email &&
         selectedRows.includes(item.agent.id)
     )
-    .map(({ agent }) => ({
-      recipient_type: 'Agent',
-      agent
-    }))
+    .map(({ agent }) => agent)
 }

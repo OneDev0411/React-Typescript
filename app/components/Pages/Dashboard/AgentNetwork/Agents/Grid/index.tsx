@@ -193,7 +193,9 @@ export default function AgentsGrid({
           },
           showSelectAll: true
         }}
-        TableActions={<TableActions listing={listing} agents={agents} />}
+        TableActions={
+          <TableActions user={user} listing={listing} agents={agents} />
+        }
       />
 
       {selectedAgentInfo && (

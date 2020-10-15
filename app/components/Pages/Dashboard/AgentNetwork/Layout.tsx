@@ -10,10 +10,7 @@ interface Props {
   children: React.ReactNode
 }
 
-export default function AgentNetworkLayout({
-  title = 'Agent Network',
-  children
-}: Props) {
+export default function AgentNetworkLayout({ title, children }: Props) {
   useTitle('Agent Network | Rechat')
 
   return (

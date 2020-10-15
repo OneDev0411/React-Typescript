@@ -26,16 +26,13 @@ function Agents(props: WithRouterProps) {
   const [listing, setListing] = useState<Nullable<ListingWithProposedAgent>>(
     null
   )
-  const [isLoadingListing, setIsLoadingListing] = useLoadingEntities(listing)
-
   const [agents, setAgents] = useState<Nullable<AggregatedAgentInfo[]>>(null)
   const [isLoadingAgents, setIsLoadingAgents] = useLoadingEntities(agents)
 
   const [filters, setFilters] = useState<Nullable<AlertFilters>>(null)
-  const [isLoadingFilters, setIsLoadingFilters] = useLoadingEntities(filters)
 
   useEffect(() => {
-    async function fetchListingAndFilters() {
+    async function fetchData() {
       if (isLoadingGoogleMaps) {
         return
       }
@@ -44,7 +41,6 @@ function Agents(props: WithRouterProps) {
 
       if (!listingId) {
         setListing(null)
-        setIsLoadingListing(false)
 
         return
       }
@@ -71,21 +67,15 @@ function Agents(props: WithRouterProps) {
 
         setAgents(fetchedAgents)
       } catch (error) {
-        console.error('Error fetching listing', error)
-        setIsLoadingListing(false)
-        setIsLoadingFilters(false)
+        console.error('Error fetching data', error)
         setIsLoadingAgents(false)
       }
     }
 
-    fetchListingAndFilters()
-  }, [
-    isLoadingGoogleMaps,
-    props.location.query.listing,
-    setIsLoadingListing,
-    setIsLoadingFilters,
-    setIsLoadingAgents
-  ])
+    fetchData()
+  }, [isLoadingGoogleMaps, props.location.query.listing, setIsLoadingAgents])
+
+  console.log({ filters })
 
   return (
     <LoadScript

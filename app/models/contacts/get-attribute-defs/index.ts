@@ -1,6 +1,6 @@
 import Fetch from '../../../services/fetch'
 
-export async function getAttributeDefs() {
+export async function getAttributeDefs(): Promise<IContactAttributeDef[]> {
   try {
     const response = await new Fetch().get('/contacts/attribute_defs')
 

@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       marginRight: theme.spacing(5)
     },
+    actionsContainer: {
+      flexGrow: 1
+    },
     summary: {
       fontSize: theme.typography.body2.fontSize,
       color: theme.palette.tertiary.main,
@@ -119,7 +122,9 @@ export function Actions<Row>({
           </div>
         )}
 
-        {TableActions && <div>{TableActions}</div>}
+        {TableActions && (
+          <div className={classes.actionsContainer}>{TableActions}</div>
+        )}
       </div>
     </Slide>
   )

@@ -127,7 +127,7 @@ class SendMlsListingCard extends React.Component {
      *
      * @return {null|IDenormalizedEmailRecipientInput}
      */
-    const mapToEmailRecipientInput = id => {
+    const getRecipientInputByContactId = id => {
       const contact = selectContact(this.props.contacts, id)
 
       if (!contact || !contact.email) {
@@ -141,11 +141,28 @@ class SendMlsListingCard extends React.Component {
       }
     }
 
-    return this.props.selectedRows
-      ? this.props.selectedRows
-          .map(mapToEmailRecipientInput)
-          .filter(recipient => recipient !== null)
-      : []
+    /**
+     *
+     * @return {IDenormalizedEmailRecipientDealAgentInput}
+     */
+    const getRecipientInputByAgent = agent => {
+      return {
+        recipient_type: 'Agent',
+        agent
+      }
+    }
+
+    if (!this.props.selectedRows || this.props.selectedRows.length === 0) {
+      return []
+    }
+
+    if (typeof this.props.selectedRows[0] === 'string') {
+      return this.props.selectedRows
+        .map(getRecipientInputByContactId)
+        .filter(recipient => recipient !== null)
+    }
+
+    return this.props.selectedRows.map(getRecipientInputByAgent)
   }
 
   getEmail = email => {
