@@ -55,6 +55,13 @@ export const MJML_PALETTE = `{% if get('body-font-family') %}
     padding-right="20px"
   ></mj-class>
   <mj-class
+    name="inverted-text"
+    color="{{get('inverted-container-text-color')}}"
+    font-family="{{get('container-font-family')}}"
+    font-weight="{{get('container-font-weight')}}"
+    font-size="{{get('container-font-size')}}"
+  ></mj-class>
+  <mj-class
     name="h1"
     color="{{get('h1-text-color')}}"
     font-family="{{get('h1-font-family')}}"
