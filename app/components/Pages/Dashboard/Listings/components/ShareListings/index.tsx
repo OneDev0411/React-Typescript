@@ -62,7 +62,7 @@ export function ShareListings() {
             variant="text"
             onClick={() => setIsListingDrawerOpen(true)}
           >
-            {selections.length} {pluralize('Listing', selections.length)}{' '}
+            {selections.length}&nbsp;{pluralize('Listing', selections.length)}{' '}
             Selected
           </Button>
 
