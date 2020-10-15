@@ -18,7 +18,7 @@ export function ListingsDrawer({ listings, title, onClose }: Props) {
       <Drawer.Header title={title} />
       <Drawer.Body>
         {listings.map(listing => (
-          <Box mb={2} key={listing.id}>
+          <Box my={1} key={listing.id}>
             <CompactListingCard listing={listing} />
           </Box>
         ))}
