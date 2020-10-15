@@ -1,14 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router'
-import { Modal } from 'react-bootstrap'
+
+import { Modal, ModalContent } from 'components/Modal'
 
 const RedirectModal = ({ children, brandInfo }) => {
   const { siteLogo, siteTitle } = brandInfo
 
   return (
     <div>
-      <Modal show className="c-confirm-modal">
-        <Modal.Body>
+      <Modal isOpen autoHeight className="c-confirm-modal">
+        <ModalContent>
           <header className="c-auth__header">
             {siteLogo && (
               <Link to="/" tabIndex={-1}>
@@ -21,7 +22,7 @@ const RedirectModal = ({ children, brandInfo }) => {
             )}
           </header>
           {children}
-        </Modal.Body>
+        </ModalContent>
       </Modal>
     </div>
   )

@@ -7,7 +7,7 @@ interface Props {
   caption?: ReactNode
   placement?: 'top' | 'bottom' // probably more
   overlayOptions?: {
-    trigger?: ('hover')[]
+    trigger?: 'hover'[]
   }
   popoverStyles?: CSSProperties
   containerStyle?: CSSProperties
