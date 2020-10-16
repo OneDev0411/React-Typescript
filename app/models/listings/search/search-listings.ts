@@ -1,10 +1,9 @@
 import Fetch from '../../../services/fetch'
 
-export const searchListings = async (text, query) => {
-  if (typeof text !== 'string') {
-    throw new Error('The text param should be a string!')
-  }
-
+export async function searchListings(
+  text: string,
+  query: string | object
+): Promise<ApiResponseBody<ICompactListing[]>> {
   try {
     const response = await new Fetch()
       .get('/listings/search')
