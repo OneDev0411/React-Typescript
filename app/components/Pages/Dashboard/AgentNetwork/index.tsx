@@ -50,7 +50,6 @@ export function AgentNetwork() {
         isLoading={isLoading}
         listings={listings}
         onListingClick={handleSelectListing}
-        onSeeAllClick={console.log}
       />
     </Layout>
   )

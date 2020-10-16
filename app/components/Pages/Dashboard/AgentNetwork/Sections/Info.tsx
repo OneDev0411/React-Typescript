@@ -58,7 +58,7 @@ export default function Info() {
       </Grid>
       <Box py={6}>
         <Grid container justify="center" className={classes.stepsContainer}>
-          <Grid item xs md={3}>
+          <Grid item xs={12} md={3}>
             <div>
               <SvgIcon
                 path={mdiHomeSearchOutline}
@@ -71,7 +71,7 @@ export default function Info() {
               Search for an address or MLS# or select from your current listings
             </Typography>
           </Grid>
-          <Hidden xsDown>
+          <Hidden smDown>
             <Grid item md={1}>
               <SvgIcon
                 path={mdiArrowRight}
@@ -80,7 +80,7 @@ export default function Info() {
               />
             </Grid>
           </Hidden>
-          <Grid item xs md={3}>
+          <Grid item xs={12} md={3}>
             <div>
               <SvgIcon
                 path={mdiClipboardListOutline}
@@ -93,7 +93,7 @@ export default function Info() {
               Set filters like price, beds, baths and ... to find better results
             </Typography>
           </Grid>
-          <Hidden xsDown>
+          <Hidden smDown>
             <Grid item md={1}>
               <SvgIcon
                 path={mdiArrowRight}
@@ -102,7 +102,7 @@ export default function Info() {
               />
             </Grid>
           </Hidden>
-          <Grid item xs md={3}>
+          <Grid item xs={12} md={3}>
             <div>
               <SvgIcon
                 path={mdiCheck}
