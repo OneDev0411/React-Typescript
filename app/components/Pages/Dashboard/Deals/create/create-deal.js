@@ -791,7 +791,11 @@ class CreateDeal extends React.Component {
       return []
     }
 
-    return DealContext.getItems(this.ContextsListId, dealSide, dealPropertyType)
+    return DealContext.getItems(
+      this.ContextsListId,
+      dealSide,
+      dealPropertyType
+    ).filter(field => field.mandatory)
   }
 
   /**
@@ -1063,17 +1067,18 @@ class CreateDeal extends React.Component {
                   onRemoveAddress={() => this.setState({ dealAddress: null })}
                 />
 
-                {dealContexts.length > 0 && (
-                  <Contexts
-                    areContextsRequired={requiredFields.includes('contexts')}
-                    hasError={this.hasError('contexts')}
-                    contexts={contexts}
-                    onChangeContext={(field, value) =>
-                      this.changeContext(field, value)
-                    }
-                    fields={dealContexts}
-                  />
-                )}
+                {dealContexts.length > 0 &&
+                  requiredFields.includes('contexts') && (
+                    <Contexts
+                      areContextsRequired={requiredFields.includes('contexts')}
+                      hasError={this.hasError('contexts')}
+                      contexts={contexts}
+                      onChangeContext={(field, value) =>
+                        this.changeContext(field, value)
+                      }
+                      fields={dealContexts}
+                    />
+                  )}
               </div>
             )}
         </div>
