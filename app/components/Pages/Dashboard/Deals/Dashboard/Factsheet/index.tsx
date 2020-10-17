@@ -19,7 +19,8 @@ import {
   Container,
   ItemsContainer,
   SectionTitle,
-  FactsheetDivider
+  FactsheetDivider,
+  TimelineSplitter
 } from './styled'
 
 interface Props {
@@ -93,6 +94,8 @@ export default function Factsheet(props: Props) {
         {props.title && <SectionTitle>{props.title}</SectionTitle>}
 
         <ItemsContainer>
+          {props.section === 'Dates' && <TimelineSplitter />}
+
           {table.map(field => {
             const value = getFieldValue(getValue(props.deal, field))
 

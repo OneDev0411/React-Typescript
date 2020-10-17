@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { Tooltip } from '@material-ui/core'
 import fecha from 'fecha'
+import { mdiCheck } from '@mdi/js'
 
 import { getField } from 'models/Deal/helpers/context/get-field'
 
 import { DateTimePicker } from 'components/DateTimePicker'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { isContextApproved } from '../helpers/is-context-approved'
 
@@ -14,7 +16,14 @@ import { ApproveButton } from '../ActionButtons/Approve'
 
 import { Loading } from '../components/Loading'
 
-import { Item, ItemLabel, ItemValue, ItemActions, EmptyValue } from '../styled'
+import {
+  Item,
+  ItemLabel,
+  ItemValue,
+  ItemActions,
+  EmptyValue,
+  CircleStatus
+} from '../styled'
 
 import { ContextField } from '../types'
 
@@ -38,6 +47,9 @@ export function DateField({
   onApprove
 }: Props) {
   const [isSaving, setIsSaving] = useState<boolean>(false)
+
+  const isPastDate =
+    new Date().getTime() / 1000 > (getField(deal, field.key) ?? Infinity)
 
   const handleSave = async (date: Date): Promise<void> => {
     setIsSaving(true)
@@ -69,7 +81,12 @@ export function DateField({
         }
       >
         <Item>
-          <ItemLabel>{field.label}</ItemLabel>
+          <ItemLabel>
+            <CircleStatus checked={isPastDate}>
+              {isPastDate && <SvgIcon path={mdiCheck} color="#fff" />}
+            </CircleStatus>{' '}
+            {field.label}
+          </ItemLabel>
           <ItemValue>
             {field.getFormattedValue(value) || <EmptyValue>—</EmptyValue>}
           </ItemValue>

@@ -13,6 +13,7 @@ import { ActionContextProvider } from '../contexts/actions-context/provider'
 import { getDealTitle } from '../utils/get-deal-title'
 
 import { PageHeader } from './Header'
+
 import TabSections from './Tabs'
 import TaskView from './TaskView'
 
