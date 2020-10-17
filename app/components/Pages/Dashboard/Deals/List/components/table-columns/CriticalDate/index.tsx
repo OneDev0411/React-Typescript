@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import Flex from 'styled-flex-component'
+import { Paper } from '@material-ui/core'
 
-import PopOver from 'components/Popover'
+import ContentSizeAwarePopper from 'components/ContentSizeAwarePopper'
 
 import DealContext from 'models/Deal/helpers/dynamic-context'
 import { getActiveTeamId } from 'utils/user-teams'
 
+import FactsheetSection from '../../../../Dashboard/Factsheet'
 import { getNextDate, getNextDateValue } from '../../../../utils/critical-dates'
 
 export const getCriticalDateNextValue = (deal: IDeal) => getNextDateValue(deal)
@@ -14,11 +15,11 @@ export const getCriticalDateNextValue = (deal: IDeal) => getNextDateValue(deal)
 interface Props {
   deal: IDeal
   user: IUser
-  rowId: number
-  rowsCount: number
 }
 
-export default function CriticalDate({ deal, user, rowId, rowsCount }: Props) {
+export default function CriticalDate({ deal, user }: Props) {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+
   const activeTeamId = getActiveTeamId(user)
 
   const definitions = DealContext.getFactsheetSection(
@@ -30,38 +31,51 @@ export default function CriticalDate({ deal, user, rowId, rowsCount }: Props) {
   // get next critical date
   const nextDate = getNextDate(deal, activeTeamId)
 
-  if (!nextDate) {
-    return <>No closing date</>
+  const handlePopoverOpen = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    setAnchorEl(event.currentTarget)
   }
 
+  const handlePopoverClose = () => setAnchorEl(null)
+
   return (
-    <PopOver
-      containerStyle={{ display: 'inline-block' }}
-      placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
-      id={`popover-trigger-factsheet-${deal.id}`}
-      caption={
-        <div className="roles">
-          {definitions.map(field => (
-            <Flex
-              key={field.key}
-              justifyBetween
-              style={{ marginBottom: '0.5rem' }}
-            >
-              <div>{field.label}</div>
-              <div>{DealContext.getValue(deal, field)!.value}</div>
-            </Flex>
-          ))}
-        </div>
-      }
-    >
-      <div
-        className="underline-on-hover"
+    <div>
+      <span
         style={{
+          display: 'inline-block',
+          padding: '0.25rem 0',
           cursor: 'help'
         }}
+        aria-owns={anchorEl ? 'critical-date-popover' : undefined}
+        aria-haspopup="true"
+        onMouseEnter={handlePopoverOpen}
+        onMouseLeave={handlePopoverClose}
       >
-        <span className="hoverable">{nextDate}</span>
-      </div>
-    </PopOver>
+        {nextDate || 'No closing date'}
+      </span>
+
+      <ContentSizeAwarePopper
+        id="critical-date-popover"
+        transition
+        placement="bottom-start"
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+      >
+        <Paper
+          style={{
+            minWidth: '300px'
+          }}
+        >
+          <FactsheetSection
+            definitions={definitions}
+            showDivider={false}
+            deal={deal}
+            isBackOffice={false}
+            section="Dates"
+          />
+        </Paper>
+      </ContentSizeAwarePopper>
+    </div>
   )
 }
