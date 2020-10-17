@@ -82,7 +82,7 @@ export const Item = styled.div<{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 1px 0.5rem;
+    margin: 0 0.5rem;
     border-radius: 3px;
     padding: ${theme.spacing(1, 2)};
 
@@ -131,9 +131,11 @@ export const CircleStatus = styled.span<{
 `
 
 export const TimelineSplitter = styled.div`
-  position: absolute;
-  height: 90%;
-  border-right: 2px solid #ccc;
-  left: 10.5%;
-  top: 5%;
+  ${({ theme }) => css`
+    position: absolute;
+    height: calc(100% - ${theme.spacing(3)}px);
+    border-right: 2px solid #ccc;
+    left: ${theme.spacing(4)}px;
+    top: ${theme.spacing(1.5)}px;
+  `}
 `
