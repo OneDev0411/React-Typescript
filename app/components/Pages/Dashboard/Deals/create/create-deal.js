@@ -39,7 +39,6 @@ import DealSide from './deal-side'
 import DealPropertyType from './deal-property-type'
 import DealClients from './deal-clients'
 import DealAgents from './deal-agents'
-import DealReferrals from './deal-referrals'
 import DealStatus from './deal-status'
 import DealAddress from './deal-address'
 import EscrowOfficers from './escrow-officer'
@@ -791,7 +790,11 @@ class CreateDeal extends React.Component {
       return []
     }
 
-    return DealContext.getItems(this.ContextsListId, dealSide, dealPropertyType)
+    return DealContext.getItems(
+      this.ContextsListId,
+      dealSide,
+      dealPropertyType
+    ).filter(field => field.mandatory)
   }
 
   /**
@@ -966,15 +969,6 @@ class CreateDeal extends React.Component {
                   onRemoveClient={id => this.onRemoveRole(id, 'clients')}
                 />
 
-                <DealReferrals
-                  dealSide={dealSide}
-                  referrals={referrals}
-                  onUpsertReferral={form =>
-                    this.onUpsertRole(form, 'referrals')
-                  }
-                  onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
-                />
-
                 <DealAgents
                   isRequired={requiredFields.includes('agents')}
                   hasError={this.hasError('agents')}
@@ -1063,17 +1057,18 @@ class CreateDeal extends React.Component {
                   onRemoveAddress={() => this.setState({ dealAddress: null })}
                 />
 
-                {dealContexts.length > 0 && (
-                  <Contexts
-                    areContextsRequired={requiredFields.includes('contexts')}
-                    hasError={this.hasError('contexts')}
-                    contexts={contexts}
-                    onChangeContext={(field, value) =>
-                      this.changeContext(field, value)
-                    }
-                    fields={dealContexts}
-                  />
-                )}
+                {dealContexts.length > 0 &&
+                  requiredFields.includes('contexts') && (
+                    <Contexts
+                      areContextsRequired={requiredFields.includes('contexts')}
+                      hasError={this.hasError('contexts')}
+                      contexts={contexts}
+                      onChangeContext={(field, value) =>
+                        this.changeContext(field, value)
+                      }
+                      fields={dealContexts}
+                    />
+                  )}
               </div>
             )}
         </div>
