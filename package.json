@@ -285,7 +285,18 @@
     "webpack": "^4.43.0",
     "webpack-bundle-analyzer": "^3.8.0",
     "webpack-s3-plugin": "^1.0.3",
-    "xml2js": "^0.4.22"
+    "xml2js": "^0.4.22",
+    "@visx/curve": "^1.0.0",
+    "@visx/event": "^1.0.0",
+    "@visx/gradient": "^1.0.0",
+    "@visx/grid": "^1.0.0",
+    "@visx/mock-data": "^1.0.0",
+    "@visx/responsive": "^1.0.0",
+    "@visx/scale": "^1.0.0",
+    "@visx/shape": "^1.0.0",
+    "@visx/tooltip": "^1.0.0",
+    "d3-array": "^2.4.0",
+    "d3-time-format": "2.2.3"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.8.7",
