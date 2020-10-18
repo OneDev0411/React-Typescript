@@ -39,7 +39,6 @@ import DealSide from './deal-side'
 import DealPropertyType from './deal-property-type'
 import DealClients from './deal-clients'
 import DealAgents from './deal-agents'
-import DealReferrals from './deal-referrals'
 import DealStatus from './deal-status'
 import DealAddress from './deal-address'
 import EscrowOfficers from './escrow-officer'
@@ -968,15 +967,6 @@ class CreateDeal extends React.Component {
                   clients={clients}
                   onUpsertClient={form => this.onUpsertRole(form, 'clients')}
                   onRemoveClient={id => this.onRemoveRole(id, 'clients')}
-                />
-
-                <DealReferrals
-                  dealSide={dealSide}
-                  referrals={referrals}
-                  onUpsertReferral={form =>
-                    this.onUpsertRole(form, 'referrals')
-                  }
-                  onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
                 />
 
                 <DealAgents
