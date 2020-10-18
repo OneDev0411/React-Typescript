@@ -59,7 +59,7 @@ export function getChecklists() {
 /**
  * return list of section
  */
-export function getFactsheetSection(listId, deal, name) {
+export function getFactsheetSection(listId, deal, section) {
   const items = getItems(
     listId,
     deal.deal_type,
@@ -67,7 +67,19 @@ export function getFactsheetSection(listId, deal, name) {
     getHasActiveOffer(deal)
   )
 
-  return items.filter(item => item.section === name)
+  const list = items.filter(item => item.section === section)
+
+  if (section === 'Dates') {
+    const fieldsWithValue = list
+      .filter(field => !!getField(deal, field.key))
+      .sort((a, b) => getField(deal, a.key) - getField(deal, b.key))
+
+    const fieldsWithoutValue = list.filter(field => !getField(deal, field.key))
+
+    return [...fieldsWithValue, ...fieldsWithoutValue]
+  }
+
+  return list
 }
 
 /**
