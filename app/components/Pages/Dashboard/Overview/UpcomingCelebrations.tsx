@@ -36,7 +36,7 @@ interface ItemProps {
 
 const upcomingCelebrations: ItemProps[] = [
   {
-    title: "Sarah Bloom's 3st Home Anniversary",
+    title: "Sarah Bloom's 3rd Home Anniversary",
     date: 'October 20',
     lastTouch: 'October 18, 2020',
     photo:
@@ -52,7 +52,7 @@ const upcomingCelebrations: ItemProps[] = [
     contact: '3ff913cf-d688-4903-a4bb-df60cee0a9bd'
   },
   {
-    title: "Jennifer Reed's 2st Home Anniversary",
+    title: "Jennifer Reed's 2rd Home Anniversary",
     date: 'October 25',
     lastTouch: 'August 2, 2020',
     photo:
