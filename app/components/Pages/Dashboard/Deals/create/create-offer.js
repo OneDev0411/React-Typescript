@@ -557,15 +557,17 @@ class CreateOffer extends React.Component {
                 onChangeDealStatus={status => this.changeDealStatus(status)}
               />
 
-              <Contexts
-                areContextsRequired={requiredFields.includes('contexts')}
-                hasError={this.hasError('contexts')}
-                contexts={contexts}
-                onChangeContext={(field, value) =>
-                  this.changeContext(field, value)
-                }
-                fields={dealContexts}
-              />
+              {contexts.length > 0 && requiredFields.includes('contexts') && (
+                <Contexts
+                  areContextsRequired={requiredFields.includes('contexts')}
+                  hasError={this.hasError('contexts')}
+                  contexts={contexts}
+                  onChangeContext={(field, value) =>
+                    this.changeContext(field, value)
+                  }
+                  fields={dealContexts}
+                />
+              )}
             </div>
           )}
         </div>
