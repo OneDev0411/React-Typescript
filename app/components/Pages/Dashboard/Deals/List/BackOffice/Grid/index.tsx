@@ -123,12 +123,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
         class: 'opaque',
         accessor: getCriticalDateNextValue,
         render: ({ row: deal, totalRows, rowIndex }) => (
-          <CriticalDate
-            deal={deal}
-            user={user}
-            rowId={rowIndex + 1}
-            rowsCount={totalRows}
-          />
+          <CriticalDate deal={deal} user={user} />
         )
       },
       {
