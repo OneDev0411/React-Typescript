@@ -52,7 +52,7 @@ const upcomingCelebrations: ItemProps[] = [
     contact: '3ff913cf-d688-4903-a4bb-df60cee0a9bd'
   },
   {
-    title: "Jennifer Reed's 2rd Home Anniversary",
+    title: "Jennifer Reed's 2nd Home Anniversary",
     date: 'October 25',
     lastTouch: 'August 2, 2020',
     photo:
