@@ -346,7 +346,7 @@ class CreateOffer extends React.Component {
       'Buying',
       deal.property_type,
       true
-    )
+    ).filter(field => field.mandatory)
   }
 
   backToDeal = () => {
