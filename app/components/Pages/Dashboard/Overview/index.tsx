@@ -39,7 +39,7 @@ function OverviewDashboard() {
       <PageLayout.Main>
         <DatePeriodSwitcher />
         <Greeting />
-        <Box display="flex" mt={8} mb={6}>
+        <Box display="flex" mt={10} mb={10}>
           <Stats title="Production" value="$7,000,250" change={15} />
           <Stats title="Active Deals" value="8" change={20} />
           <Stats title="Pending Deals" value="2" change={-4} />

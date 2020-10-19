@@ -294,6 +294,8 @@
     "@visx/responsive": "^1.0.0",
     "@visx/scale": "^1.0.0",
     "@visx/shape": "^1.0.0",
+    "@visx/marker": "^1.0.0",
+    "@visx/axis": "^1.0.0",
     "@visx/tooltip": "^1.0.0",
     "d3-array": "^2.4.0",
     "d3-time-format": "2.2.3"
