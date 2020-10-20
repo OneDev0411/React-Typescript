@@ -63,7 +63,7 @@ export function Menu() {
         hasThinnerScrollbar
       >
         <SidenavListGroup data-test="side-nav-list">
-          {user.email === 'shayan@rechat.com' && (
+          {user?.email === 'shayan@rechat.com' && (
             <SideNavLinkItem to="/dashboard/overview">
               Dashboard
             </SideNavLinkItem>
