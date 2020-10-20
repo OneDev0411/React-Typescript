@@ -1,6 +1,12 @@
 import React from 'react'
-import { Box, Tooltip, Typography } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import {
+  Box,
+  Tooltip,
+  Typography,
+  createStyles,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 import { mdiStarOutline } from '@mdi/js'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -42,7 +48,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function ViewMode(props: Props) {
   const classes = useStyles(props)
-
   const { title } = props
 
   return (

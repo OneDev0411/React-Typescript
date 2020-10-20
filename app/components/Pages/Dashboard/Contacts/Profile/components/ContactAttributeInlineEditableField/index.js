@@ -250,6 +250,7 @@ class MasterField extends React.Component {
   renderViewMode = () => (
     <ViewMode
       is_primary={this.state.is_primary}
+      name={this.attribute_def.name || ''}
       title={this.title}
       value={formatValue(this.attribute_def, this.state.value)}
     />

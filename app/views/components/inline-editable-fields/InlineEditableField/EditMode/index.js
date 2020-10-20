@@ -20,6 +20,8 @@ export class EditMode extends React.Component {
     render: PropTypes.func.isRequired,
     showDelete: PropTypes.bool,
     isStatic: PropTypes.bool,
+    isEditing: PropTypes.bool,
+    isPopoverMode: PropTypes.bool,
     style: PropTypes.shape()
   }
 
@@ -29,31 +31,38 @@ export class EditMode extends React.Component {
     handleDelete: noop,
     showDelete: false,
     isStatic: false,
+    isPopoverMode: false,
     style: {}
   }
 
   render() {
-    const { isDisabled, showDelete } = this.props
+    const {
+      error,
+      style,
+      isStatic,
+      showDelete,
+      isDisabled,
+      handleSave,
+      handleCancel,
+      handleDelete
+    } = this.props
 
     return (
       <EditModeContainer
-        hasError={!!this.props.error}
-        style={this.props.style}
-        isStatic={this.props.isStatic}
-        className={this.props.isStatic ? 'is-static' : ''}
+        hasError={!!error}
+        style={style}
+        isStatic={isStatic}
+        className={isStatic ? 'is-static' : ''}
         data-test="inline-editable-field-container"
       >
         {this.props.render(this.props)}
-        <EditModeActionBar
-          showDelete={showDelete}
-          isStatic={this.props.isStatic}
-        >
+        <EditModeActionBar showDelete={showDelete} isStatic={isStatic}>
           {showDelete && (
             <Tooltip caption="Delete">
               <IconButton
                 size="small"
                 disabled={isDisabled}
-                onClick={this.props.handleDelete}
+                onClick={handleDelete}
                 data-test="inline-editable-field-delete"
               >
                 <SvgIcon path={mdiTrashCanOutline} />
@@ -62,11 +71,7 @@ export class EditMode extends React.Component {
           )}
           <Box display="flex" alignItems="center">
             <Box marginRight={1}>
-              <Button
-                size="small"
-                disabled={isDisabled}
-                onClick={this.props.handleCancel}
-              >
+              <Button size="small" disabled={isDisabled} onClick={handleCancel}>
                 Cancel
               </Button>
             </Box>
@@ -75,7 +80,7 @@ export class EditMode extends React.Component {
               color="secondary"
               size="small"
               disabled={isDisabled}
-              onClick={this.props.handleSave}
+              onClick={handleSave}
               data-test="inline-editable-field-save"
             >
               {isDisabled ? 'Saving...' : 'Save'}
