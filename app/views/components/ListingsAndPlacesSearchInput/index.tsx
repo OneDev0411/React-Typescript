@@ -42,11 +42,11 @@ interface ListingResult {
   listing: ICompactListing
 }
 
-type SearchResult = PlaceResult | ListingResult
+export type SearchResult = PlaceResult | ListingResult
 
 interface Props {
   placeholder?: string
-  onSelect: (result: Nullable<SearchResult>) => void
+  onSelect: (result: SearchResult) => void
 }
 
 export default function ListingsAndPlacesSearchInput({
@@ -205,8 +205,10 @@ export default function ListingsAndPlacesSearchInput({
       renderInput={renderInput}
       renderOption={renderOption}
       onChange={(event: unknown, newValue: Nullable<SearchResult>) => {
-        setValue(newValue)
-        onSelect(newValue)
+        if (newValue) {
+          setValue(newValue)
+          onSelect(newValue)
+        }
       }}
       onInputChange={(event: unknown, newInputValue: string) => {
         setInputValue(newInputValue)

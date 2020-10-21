@@ -3,19 +3,33 @@ import { Grid, Box, Typography } from '@material-ui/core'
 
 import CompactListingCard from 'components/ListingCards/CompactListingCard'
 import LoadingContainer from 'components/LoadingContainer'
-import ListingsAndPlacesSearchInput from 'components/ListingsAndPlacesSearchInput'
+import ListingsAndPlacesSearchInput, {
+  SearchResult
+} from 'components/ListingsAndPlacesSearchInput'
 
 interface Props {
   isLoading: boolean
   listings: Nullable<ICompactListing[]>
-  onListingClick: (listing: ICompactListing) => void
+  onSelectListing: (listing: ICompactListing) => void
+  onSelectPlace: (place: google.maps.GeocoderResult) => void
 }
 
 export default function Listings({
   isLoading,
   listings,
-  onListingClick
+  onSelectListing,
+  onSelectPlace
 }: Props) {
+  function handleSelectResult(result: SearchResult) {
+    if (result.type === 'listing') {
+      onSelectListing(result.listing)
+    }
+
+    if (result.type === 'place') {
+      onSelectPlace(result.place)
+    }
+  }
+
   return (
     <>
       <Grid container direction="row" justify="space-between">
@@ -32,7 +46,7 @@ export default function Listings({
           </Grid>
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
-          <ListingsAndPlacesSearchInput onSelect={console.log} />
+          <ListingsAndPlacesSearchInput onSelect={handleSelectResult} />
         </Grid>
       </Grid>
       <Box py={2}>
@@ -46,7 +60,7 @@ export default function Listings({
             <Grid key={listing.id} container item xs={12} sm={6} md={4}>
               <CompactListingCard
                 listing={listing}
-                onClick={() => onListingClick(listing)}
+                onClick={() => onSelectListing(listing)}
               />
             </Grid>
           ))}

@@ -2,10 +2,14 @@ import { byValert } from 'models/listings/search/get-listings'
 import { getPlace } from 'models/listings/search/get-place'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 
-import { DEFAULT_SEARCH_RADIUS } from '../constants'
+import {
+  DEFAULT_SEARCH_RADIUS,
+  ALL_PROPERTY_TYPES,
+  ALL_PROPERTY_SUBTYPES
+} from '../constants'
 import { AggregatedAgentInfo, CompactListingWitgBothSideAgents } from './types'
 
-export async function getVAlertFilters(
+export async function getListingVAlertFilters(
   listing: IListing
 ): Promise<AlertFilters> {
   const sixMonthsAgoTimestamp =
@@ -24,7 +28,17 @@ export async function getVAlertFilters(
     points: place
       ? getMapBoundsInCircle(place.center, DEFAULT_SEARCH_RADIUS)
       : null,
-    limit: 100
+    limit: 1000
+  }
+}
+
+export function getLocationVAlertFilters(
+  location: google.maps.LatLngLiteral
+): AlertFilters {
+  return {
+    property_types: ALL_PROPERTY_TYPES,
+    property_subtypes: ALL_PROPERTY_SUBTYPES,
+    points: getMapBoundsInCircle(location, DEFAULT_SEARCH_RADIUS)
   }
 }
 

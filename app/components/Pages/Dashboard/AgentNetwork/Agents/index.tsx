@@ -3,17 +3,23 @@ import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { LoadScript } from '@react-google-maps/api'
 
+import { Button, Divider, Grid, Popover } from '@material-ui/core'
+
 import config from 'config'
 import { IAppState } from 'reducers'
 import { useLoadingEntities } from 'hooks/use-loading'
 import getListing from 'models/listings/listing/get-listing'
+
+import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
+import ListingAlertFilters from 'components/ListingAlertFilters'
 
 import Layout from '../Layout'
 import { ListingWithProposedAgent, AggregatedAgentInfo } from './types'
 import {
   aggregateListingsAgents,
   getListingsWithBothSidesAgents,
-  getVAlertFilters
+  getListingVAlertFilters,
+  getLocationVAlertFilters
 } from './helpers'
 import AgentsGrid from './Grid'
 
@@ -31,8 +37,12 @@ function Agents(props: WithRouterProps) {
 
   const [filters, setFilters] = useState<Nullable<AlertFilters>>(null)
 
+  const [alertFiltersAnchor, setAlertFiltersAnchor] = useState<
+    Nullable<HTMLButtonElement>
+  >(null)
+
   useEffect(() => {
-    async function fetchData() {
+    async function fetchListingBasedData() {
       if (isLoadingGoogleMaps) {
         return
       }
@@ -46,36 +56,87 @@ function Agents(props: WithRouterProps) {
       }
 
       try {
-        // Fetch listing
         const fetchedListing: ListingWithProposedAgent = await getListing(
           listingId
         )
 
         setListing(fetchedListing)
 
-        // Fetch filters
-        const listingBasedFilters = await getVAlertFilters(fetchedListing)
+        const listingBasedFilters = await getListingVAlertFilters(
+          fetchedListing
+        )
 
         setFilters(listingBasedFilters)
+      } catch (error) {
+        console.error('Error fetching listing/listing filters', error)
+      }
+    }
 
-        // Fetch agents
+    fetchListingBasedData()
+  }, [isLoadingGoogleMaps, props.location.query.listing])
+
+  useEffect(() => {
+    async function fetchLocationBasedData() {
+      if (isLoadingGoogleMaps) {
+        return
+      }
+
+      const lat: Optional<string> = props.location.query.lat
+      const lng: Optional<string> = props.location.query.lng
+
+      if (!lat || !lng) {
+        return
+      }
+
+      const placeBasedFilters = getLocationVAlertFilters({
+        lat: Number(lat),
+        lng: Number(lng)
+      })
+
+      setFilters(placeBasedFilters)
+
+      const mockedListing = ((await getMockListing()) as unknown) as ListingWithProposedAgent
+
+      setListing(mockedListing)
+    }
+
+    fetchLocationBasedData()
+  }, [isLoadingGoogleMaps, props.location.query.lat, props.location.query.lng])
+
+  useEffect(() => {
+    async function fetchAgents() {
+      if (!filters) {
+        return
+      }
+
+      try {
         const listingsWithBothAgents = await getListingsWithBothSidesAgents(
-          listingBasedFilters
+          filters
         )
 
         const fetchedAgents = aggregateListingsAgents(listingsWithBothAgents)
 
         setAgents(fetchedAgents)
       } catch (error) {
-        console.error('Error fetching data', error)
+        console.error('Error fetching agents', error)
         setIsLoadingAgents(false)
       }
     }
 
-    fetchData()
-  }, [isLoadingGoogleMaps, props.location.query.listing, setIsLoadingAgents])
+    fetchAgents()
+  }, [filters, setIsLoadingAgents])
 
-  console.log({ filters })
+  function handleShowAlertFiltersDialogClick(
+    event: React.MouseEvent<HTMLButtonElement>
+  ) {
+    setAlertFiltersAnchor(event.currentTarget)
+  }
+
+  function handleCloseAlertFiltersDialog() {
+    setAlertFiltersAnchor(null)
+  }
+
+  const isAlertFiltersDialogOpen = Boolean(alertFiltersAnchor)
 
   return (
     <LoadScript
@@ -83,13 +144,51 @@ function Agents(props: WithRouterProps) {
       libraries={GOOGLE_MAPS_LIBRARIES}
       onLoad={() => setIsLoadingGoogleMaps(false)}
     >
-      <Layout title={listing?.property.address.full_address}>
-        <AgentsGrid
-          user={user}
-          listing={listing}
-          agents={agents}
-          isLoading={isLoadingAgents}
-        />
+      <Layout title="Select Agents">
+        <Grid container direction="column">
+          <Grid container item justify="flex-end">
+            {filters && (
+              <>
+                <Button
+                  variant="outlined"
+                  onClick={handleShowAlertFiltersDialogClick}
+                >
+                  More
+                </Button>
+                <Popover
+                  id="an-alert-filters-popover"
+                  open={isAlertFiltersDialogOpen}
+                  anchorEl={alertFiltersAnchor}
+                  onClose={handleCloseAlertFiltersDialog}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right'
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right'
+                  }}
+                >
+                  <ListingAlertFilters
+                    filters={filters}
+                    onChange={console.log}
+                  />
+                </Popover>
+              </>
+            )}
+          </Grid>
+          <Grid item>
+            <Divider />
+          </Grid>
+          <Grid item>
+            <AgentsGrid
+              user={user}
+              listing={listing}
+              agents={agents}
+              isLoading={isLoadingAgents}
+            />
+          </Grid>
+        </Grid>
       </Layout>
     </LoadScript>
   )

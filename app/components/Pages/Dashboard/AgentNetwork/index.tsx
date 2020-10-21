@@ -43,13 +43,21 @@ export function AgentNetwork() {
     })
   }
 
+  async function handleSelectPlace(place: google.maps.GeocoderResult) {
+    goTo('/dashboard/agent-network/agents', null, {
+      lat: place.geometry.location.lat,
+      lng: place.geometry.location.lng
+    })
+  }
+
   return (
     <Layout>
       <Info />
       <Listings
         isLoading={isLoading}
         listings={listings}
-        onListingClick={handleSelectListing}
+        onSelectListing={handleSelectListing}
+        onSelectPlace={handleSelectPlace}
       />
     </Layout>
   )
