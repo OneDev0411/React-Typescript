@@ -346,7 +346,7 @@ class CreateOffer extends React.Component {
       'Buying',
       deal.property_type,
       true
-    )
+    ).filter(field => field.mandatory)
   }
 
   backToDeal = () => {
@@ -557,15 +557,17 @@ class CreateOffer extends React.Component {
                 onChangeDealStatus={status => this.changeDealStatus(status)}
               />
 
-              <Contexts
-                areContextsRequired={requiredFields.includes('contexts')}
-                hasError={this.hasError('contexts')}
-                contexts={contexts}
-                onChangeContext={(field, value) =>
-                  this.changeContext(field, value)
-                }
-                fields={dealContexts}
-              />
+              {dealContexts.length > 0 && (
+                <Contexts
+                  areContextsRequired={requiredFields.includes('contexts')}
+                  hasError={this.hasError('contexts')}
+                  contexts={contexts}
+                  onChangeContext={(field, value) =>
+                    this.changeContext(field, value)
+                  }
+                  fields={dealContexts}
+                />
+              )}
             </div>
           )}
         </div>
