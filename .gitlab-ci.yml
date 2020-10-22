@@ -83,6 +83,7 @@ start_review:
     - branches
   except:
     - master
+  needs: []
 
 stop_review:
   stage: review
@@ -105,3 +106,4 @@ stop_review:
   except:
     - master
     - staging
+  needs: []
