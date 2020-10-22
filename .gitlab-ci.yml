@@ -4,6 +4,7 @@ stages:
   - build
   - test
   - deploy
+  - review
 
 # This stage is for making sure that build is not broken.
 build:
@@ -68,3 +69,39 @@ deploy_production:
     url: https://rechat.com
   only:
     - master
+
+start_review:
+  stage: review
+  script:
+    - chmod u+x ./start_review_scripts.bash
+    - ./start_review_scripts.bash
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+    url: https://$PROJECT_NAME-$CI_COMMIT_REF_SLUG.herokuapp.com/
+    on_stop: stop_review
+  only:
+    - branches
+  except:
+    - master
+
+stop_review:
+  stage: review
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - >-
+        curl
+        -X DELETE
+        https://api.heroku.com/apps/$PROJECT_NAME-$CI_COMMIT_REF_SLUG
+        -H "Content-Type: application/json"
+        -H "Accept: application/vnd.heroku+json; version=3"
+        -H "Authorization: Bearer $HEROKU_API_KEY"
+  when: manual
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+    action: stop
+  only:
+    - branches
+  except:
+    - master
+    - staging
