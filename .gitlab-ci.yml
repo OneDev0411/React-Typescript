@@ -20,6 +20,7 @@ build:
     - master
 
 test_unit:
+  needs: []
   stage: test
   script:
     - npm i
