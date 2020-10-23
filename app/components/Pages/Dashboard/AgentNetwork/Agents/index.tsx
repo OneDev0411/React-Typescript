@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { LoadScript } from '@react-google-maps/api'
 
-import { Button, Divider, Grid, Popover } from '@material-ui/core'
+import { Box, Button, Divider, Grid, Popover } from '@material-ui/core'
 
 import config from 'config'
 import { IAppState } from 'reducers'
@@ -178,7 +178,9 @@ function Agents(props: WithRouterProps) {
             )}
           </Grid>
           <Grid item>
-            <Divider />
+            <Box py={1}>
+              <Divider />
+            </Box>
           </Grid>
           <Grid item>
             <AgentsGrid

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   List,
   ListItem,
@@ -12,14 +12,15 @@ import {
 import Autocomplete, {
   AutocompleteRenderInputParams
 } from '@material-ui/lab/Autocomplete'
-import throttle from 'lodash/throttle'
+import { useDebouncedCallback } from 'use-debounce'
 import { mdiHomeOutline, mdiMagnify, mdiMapMarkerOutline } from '@mdi/js'
+
+import { addressTitle } from 'utils/listing'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { addressTitle } from 'utils/listing'
-import { getPlaces } from 'models/listings/search/get-places'
-import { searchListings } from 'models/listings/search/search-listings'
+import { searchListinsAndPlaces } from './helpers'
+import { SearchResult } from './types'
 
 const useStyles = makeStyles(
   () => ({
@@ -31,18 +32,6 @@ const useStyles = makeStyles(
     name: 'ListingsAndPlacesSearchInput'
   }
 )
-
-interface PlaceResult {
-  type: 'place'
-  place: google.maps.GeocoderResult
-}
-
-interface ListingResult {
-  type: 'listing'
-  listing: ICompactListing
-}
-
-export type SearchResult = PlaceResult | ListingResult
 
 interface Props {
   placeholder?: string
@@ -61,25 +50,19 @@ export default function ListingsAndPlacesSearchInput({
   const [inputValue, setInputValue] = useState<string>('')
   const [value, setValue] = useState<Nullable<SearchResult>>(null)
 
-  const searchListinsAndPlaces = useMemo(
-    () =>
-      throttle(async (query: string) => {
-        const listingsResponse = await searchListings(query, { limit: 5 })
-        const placesResponse = await getPlaces(query)
-
-        return [
-          ...listingsResponse.data.map<ListingResult>(listing => ({
-            type: 'listing',
-            listing
-          })),
-          ...placesResponse.map<PlaceResult>(place => ({
-            type: 'place',
-            place
-          }))
-        ]
-      }, 200),
-    []
+  const [debouncedHandleInputChange] = useDebouncedCallback(
+    (event: unknown, newInputValue: string) => {
+      setInputValue(newInputValue)
+    },
+    300
   )
+
+  function handleChange(event: unknown, newValue: Nullable<SearchResult>) {
+    if (newValue) {
+      setValue(newValue)
+      onSelect(newValue)
+    }
+  }
 
   useEffect(() => {
     async function fetchListingsAndPlaces() {
@@ -110,7 +93,7 @@ export default function ListingsAndPlacesSearchInput({
     }
 
     fetchListingsAndPlaces()
-  }, [inputValue, searchListinsAndPlaces])
+  }, [inputValue])
 
   function getOptionLabel(option: SearchResult) {
     return option.type === 'listing'
@@ -204,15 +187,8 @@ export default function ListingsAndPlacesSearchInput({
       ListboxComponent={List}
       renderInput={renderInput}
       renderOption={renderOption}
-      onChange={(event: unknown, newValue: Nullable<SearchResult>) => {
-        if (newValue) {
-          setValue(newValue)
-          onSelect(newValue)
-        }
-      }}
-      onInputChange={(event: unknown, newInputValue: string) => {
-        setInputValue(newInputValue)
-      }}
+      onChange={handleChange}
+      onInputChange={debouncedHandleInputChange}
     />
   )
 }

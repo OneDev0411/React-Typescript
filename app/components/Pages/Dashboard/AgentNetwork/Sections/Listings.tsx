@@ -3,9 +3,8 @@ import { Grid, Box, Typography } from '@material-ui/core'
 
 import CompactListingCard from 'components/ListingCards/CompactListingCard'
 import LoadingContainer from 'components/LoadingContainer'
-import ListingsAndPlacesSearchInput, {
-  SearchResult
-} from 'components/ListingsAndPlacesSearchInput'
+import ListingsAndPlacesSearchInput from 'components/ListingsAndPlacesSearchInput'
+import { SearchResult } from 'components/ListingsAndPlacesSearchInput/types'
 
 interface Props {
   isLoading: boolean
