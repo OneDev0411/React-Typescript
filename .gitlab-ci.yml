@@ -6,19 +6,6 @@ stages:
   - deploy
   - review
 
-# This stage is for making sure that build is not broken.
-build:
-  stage: build
-  script:
-    - npm i
-    - npm run build:ci
-  # We don't need to run build for branches that are deployed. if build is broken
-  # deploy also breaks.
-  except:
-    - alpha
-    - stage
-    - master
-
 test_unit:
   needs: []
   stage: test
