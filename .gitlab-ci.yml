@@ -52,7 +52,7 @@ start_review:
     - ./dokku.bash
   environment:
     name: review/$CI_BUILD_REF_NAME
-    url: https://$CI_PROJECT_NAME.rechat.co/
+    url: https://$CI_COMMIT_REF_SLUG.rechat.co/
   only:
     - merge_requests
   except:
