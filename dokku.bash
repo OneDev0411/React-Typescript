@@ -26,7 +26,7 @@ ssh dokku@rechat.co letsencrypt $APP
 git checkout -B $CI_COMMIT_REF_SLUG
 ssh dokku@rechat.co letsencrypt $APP
 ssh dokku@rechat.co apps:unlock $APP
-# git push dokku@rechat.co:$APP $CI_COMMIT_REF_SLUG:master
+git push dokku@rechat.co:$APP $CI_COMMIT_REF_SLUG:master
 
 COMMENT="You can test at [$APP.rechat.co](https://$APP.rechat.co). 😱🦾🕶🏁"
 curl  -H 'Content-Type: application/json' -H "Private-Token: $PRIVATE_TOKEN" https://gitlab.com/api/v4/projects/$CI_MERGE_REQUEST_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes --data "{\"body\":\"$COMMENT\"}"
