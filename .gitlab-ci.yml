@@ -67,7 +67,7 @@ start_review:
     name: review/$CI_BUILD_REF_NAME
     url: https://rechat-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.herokuapp.com/
   only:
-    - branches
+    - merge_requests
   except:
     - master
   needs: []
