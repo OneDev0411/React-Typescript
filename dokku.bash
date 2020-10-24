@@ -6,7 +6,7 @@ echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
 mkdir ~/.ssh
 ssh-keyscan rechat.co >> ~/.ssh/known_hosts
 
-APP=$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+APP=$CI_COMMIT_REF_SLUG
 echo $APP
 
 ssh dokku@rechat.co apps:create $APP || true
