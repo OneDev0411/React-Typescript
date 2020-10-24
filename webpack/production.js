@@ -4,11 +4,18 @@ import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
 import SentryCliPlugin from '@sentry/webpack-plugin'
+import { ESBuildPlugin } from 'esbuild-loader'
 
 import moment from 'moment'
 
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
+
+const ESBUILD_COMMON_OPTIONS = {
+  jsxFactory: 'React.createElement',
+  jsxFragment: 'React.Fragment',
+  sourceMap: false
+}
 
 webpackConfig.mode = 'production'
 
@@ -41,6 +48,7 @@ webpackConfig.entry = {
 }
 
 webpackConfig.plugins.push(
+  new ESBuildPlugin(),
   new webpack.optimize.AggressiveMergingPlugin(),
   new MomentLocalesPlugin(),
   new HtmlWebpackPlugin({
@@ -111,10 +119,22 @@ webpackConfig.plugins.push(
 
 webpackConfig.module.rules.push(
   {
-    test: /\.(ts|tsx|js)$/,
-    loader: 'babel-loader',
-    options: {
-      compact: false
+    test: /\.js$/,
+    exclude: /(node_modules|bower_components)/,
+    use: {
+      loader: 'esbuild-loader',
+      options: {
+        ...ESBUILD_COMMON_OPTIONS,
+        loader: 'jsx'
+      }
+    }
+  },
+  {
+    test: /\.(jsx|tsx?)$/,
+    exclude: /(node_modules|bower_components)/,
+    use: {
+      loader: 'esbuild-loader',
+      options: ESBUILD_COMMON_OPTIONS
     }
   },
   {
