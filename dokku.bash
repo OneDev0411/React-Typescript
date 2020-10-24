@@ -13,7 +13,7 @@ ssh dokku@rechat.co apps:create $APP || true
 curl https://api.heroku.com/apps/rechat-irish/config-vars -H "Accept: application/vnd.heroku+json; version=3" -H "Authorization: Bearer $HEROKU_API_KEY" > /tmp/configs
 KEYS=$(cat /tmp/configs | jq '. | keys[]')
 
-CONFIG=''
+CONFIG='DOKKU_LETSENCRYPT_EMAIL=emil@rechat.com'
 
 for key in $KEYS;
 do
