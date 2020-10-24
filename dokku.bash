@@ -3,6 +3,7 @@
 apt-get update -y && apt install jq -y
 eval $(ssh-agent -s)
 echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+mkdir ~/.ssh
 ssh-keyscan rechat.co >> ~/.ssh/known_hosts
 
 APP=$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
