@@ -1,7 +1,6 @@
 image: node:12
 
 stages:
-  - build
   - test
   - deploy
   - review
@@ -9,24 +8,12 @@ stages:
 test_unit:
   needs: []
   stage: test
+  only:
+    - merge_requests
   script:
     - npm i
     - npm run test:ci -- --coverage
 
-deploy_alpha:
-  stage: deploy
-  image: timbru31/ruby-node:latest
-  before_script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-  script:
-    - dpl --provider=heroku --app=rechat-web-alpha --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
-  environment:
-    name: alpha
-    url: https://alpha.rechat.com
-  only:
-    - alpha
 
 deploy_irish:
   stage: deploy
