@@ -1,4 +1,7 @@
 #!/bin/bash
+
+apt install jq -y
+
 APP=$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
 echo $APP
 
