@@ -8,7 +8,7 @@ APP=$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
 echo $APP
 
 ssh dokku@rechat.co apps:create $APP || true
-curl https://api.heroku.com/apps/rechat-irish/config-vars -H "Accept: application/vnd.heroku+json; version=3" -H "Authorization: Bearer $HEROKU_API_KEY" > /tmp/.configs
+curl https://api.heroku.com/apps/rechat-irish/config-vars -H "Accept: application/vnd.heroku+json; version=3" -H "Authorization: Bearer $HEROKU_API_KEY" > /tmp/configs
 KEYS=$(cat /tmp/configs | jq '. | keys[]')
 
 CONFIG=''
