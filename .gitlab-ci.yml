@@ -79,7 +79,6 @@ start_review:
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: https://rechat-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.herokuapp.com/
-    on_stop: stop_review
   only:
     - branches
   except:
