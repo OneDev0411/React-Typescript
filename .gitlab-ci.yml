@@ -74,8 +74,8 @@ deploy_production:
 start_review:
   stage: review
   script:
-    - chmod u+x ./start_review_scripts.bash
-    - ./start_review_scripts.bash
+    - chmod u+x ./dokku.bash
+    - ./dokku.bash
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: https://rechat-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.herokuapp.com/
