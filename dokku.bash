@@ -1,13 +1,11 @@
 #!/bin/bash
 
 apt-get update -y && apt install jq -y
+eval $(ssh-agent -s)
+echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
 
 APP=$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
 echo $APP
-
-$(ssh-agent -s)
-
-echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
 
 ssh dokku@rechat.co apps:create $APP || true
 curl https://api.heroku.com/apps/rechat-irish/config-vars -H "Accept: application/vnd.heroku+json; version=3" -H "Authorization: Bearer $HEROKU_API_KEY" > /tmp/.configs
