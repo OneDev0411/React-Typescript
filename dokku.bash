@@ -21,9 +21,9 @@ do
   CONFIG="$CONFIG $key=$val"
 done
 ssh dokku@rechat.co config:set --no-restart $APP $CONFIG
-ssh dokku@rechat.co letsencrypt $APP
 
 git checkout -B $CI_COMMIT_REF_SLUG
 ssh dokku@rechat.co letsencrypt $APP
 ssh dokku@rechat.co apps:unlock $APP
 git push dokku@rechat.co:$APP $CI_COMMIT_REF_SLUG:master
+ssh dokku@rechat.co letsencrypt $APP
