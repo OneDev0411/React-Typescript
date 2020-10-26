@@ -3,10 +3,16 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import Flex from 'styled-flex-component'
 import { mdiClose } from '@mdi/js'
 
-import { Modal, ModalFooter } from 'components/Modal'
+// import { Modal, ModalFooter } from 'components/Modal'
+import {
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle
+} from '@material-ui/core'
 
 import SuccessModal from './SuccessModal'
 import Recipients from '../../../../../Partials/ShareView'
@@ -17,7 +23,6 @@ import createRecommendation from '../../../../../../models/recommendation/create
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import IconButton from '../../../../../../views/components/Button/IconButton'
 import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
-import { H2 } from '../../../../../../views/components/Typography/headings'
 
 const ShareListingModal = ({
   onHide,
@@ -32,32 +37,41 @@ const ShareListingModal = ({
   const disabled = isSharing || !hasRecipients(recipients)
 
   return (
-    <div>
-      <Modal
-        isOpen={isActive}
-        autoHeight
-        onRequestClose={isSharing ? () => {} : onHide}
-        className="c-share-modal"
+    <>
+      <Dialog
+        open={isActive}
+        maxWidth="sm"
+        fullWidth
+        onClose={isSharing ? () => {} : onHide}
       >
-        <Flex alignCenter justifyBetween style={{ padding: '1em' }}>
-          <H2>Share Listing</H2>
-          <IconButton
-            isFit
-            iconSize="large"
-            onClick={isSharing ? () => {} : onHide}
+        <DialogTitle>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
           >
-            <SvgIcon path={mdiClose} />
-          </IconButton>
-        </Flex>
-        <Recipients onChangeRecipients={recps => setRecipients(recps)} />
-        <ModalFooter>
+            Share Listing
+            <IconButton
+              isFit
+              iconSize="large"
+              onClick={isSharing ? () => {} : onHide}
+            >
+              <SvgIcon path={mdiClose} />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+
+        <DialogContent>
+          <Recipients onChangeRecipients={recps => setRecipients(recps)} />
+        </DialogContent>
+        <DialogActions>
           <ActionButton size="small" disabled={disabled} onClick={shareHandler}>
             {isSharing ? 'Sharing...' : 'Share'}
           </ActionButton>
-        </ModalFooter>
-      </Modal>
+        </DialogActions>
+      </Dialog>
       <SuccessModal text="Listing Shared" isActive={successModalIsActive} />
-    </div>
+    </>
   )
 }
 
