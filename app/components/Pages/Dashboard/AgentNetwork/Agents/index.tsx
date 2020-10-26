@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { LoadScript } from '@react-google-maps/api'
-
-import { Box, Button, Divider, Grid, Popover } from '@material-ui/core'
+import { Box, Divider, Grid } from '@material-ui/core'
 
 import config from 'config'
 import { IAppState } from 'reducers'
@@ -37,10 +36,6 @@ function Agents(props: WithRouterProps) {
 
   const [filters, setFilters] = useState<
     Nullable<AlertFiltersWithRadiusAndCenter>
-  >(null)
-
-  const [alertFiltersAnchor, setAlertFiltersAnchor] = useState<
-    Nullable<HTMLButtonElement>
   >(null)
 
   useEffect(() => {
@@ -130,22 +125,9 @@ function Agents(props: WithRouterProps) {
     fetchAgents()
   }, [filters, setIsLoadingAgents])
 
-  function handleShowAlertFiltersDialogClick(
-    event: React.MouseEvent<HTMLButtonElement>
-  ) {
-    setAlertFiltersAnchor(event.currentTarget)
-  }
-
-  function handleCloseAlertFiltersDialog() {
-    setAlertFiltersAnchor(null)
-  }
-
   function handleApplyFilters(newFilters: AlertFiltersWithRadiusAndCenter) {
     setFilters(newFilters)
-    handleCloseAlertFiltersDialog()
   }
-
-  const isAlertFiltersDialogOpen = Boolean(alertFiltersAnchor)
 
   return (
     <LoadScript
@@ -157,33 +139,10 @@ function Agents(props: WithRouterProps) {
         <Grid container direction="column">
           <Grid container item justify="flex-end">
             {filters && (
-              <>
-                <Button
-                  variant="outlined"
-                  onClick={handleShowAlertFiltersDialogClick}
-                >
-                  More
-                </Button>
-                <Popover
-                  id="an-alert-filters-popover"
-                  open={isAlertFiltersDialogOpen}
-                  anchorEl={alertFiltersAnchor}
-                  onClose={handleCloseAlertFiltersDialog}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right'
-                  }}
-                >
-                  <ListingAlertFilters
-                    filters={filters}
-                    onApply={handleApplyFilters}
-                  />
-                </Popover>
-              </>
+              <ListingAlertFilters
+                filters={filters}
+                onApply={handleApplyFilters}
+              />
             )}
           </Grid>
           <Grid item>
