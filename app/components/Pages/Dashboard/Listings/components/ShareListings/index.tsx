@@ -91,20 +91,17 @@ export function ShareListings() {
             <Avatar className={classes.avatar}>
               <SvgIcon path={mdiHomeCityOutline} />
             </Avatar>
-
-            <Typography variant="button">
-              <TextTransition
-                duration={0.75}
-                repeat={2}
-                text={`${selections.length} ${pluralize(
-                  'Listing',
-                  selections.length
-                )}
+            <TextTransition
+              variant="button"
+              duration={0.75}
+              repeat={2}
+              text={`${selections.length} ${pluralize(
+                'Listing',
+                selections.length
+              )}
               `}
-              />
-              Selected
-            </Typography>
-
+            />
+            Selected
             <Button
               variant="text"
               color="secondary"
@@ -112,9 +109,7 @@ export function ShareListings() {
             >
               Edit/View
             </Button>
-
             <Divider orientation="vertical" className={classes.divider} />
-
             <EmailAction />
             <CreateTourAction />
           </Box>

@@ -1,5 +1,6 @@
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Typography, TypographyProps } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
+
 import './animations.css'
 
 const useStyles = makeStyles(
@@ -24,7 +25,7 @@ interface Animation {
   'animation-timing-function': React.CSSProperties['animationTimingFunction']
 }
 
-interface Props {
+interface Props extends TypographyProps {
   text: string
   duration?: number
   repeat?: number
@@ -37,7 +38,8 @@ export function TextTransition({
   duration = 1,
   repeat = 1,
   animationName = 'flash',
-  timingFunction = 'linear'
+  timingFunction = 'linear',
+  ...typographyProps
 }: Props) {
   const [animation, setAnimation] = useState<Animation | null>(null)
   const classes = useStyles({ animation })
@@ -55,5 +57,9 @@ export function TextTransition({
     }, duration * repeat * 1000)
   }, [text, animationName, duration, repeat, timingFunction])
 
-  return <span className={classes.container}>{text}</span>
+  return (
+    <Typography {...typographyProps} className={classes.container}>
+      {text}
+    </Typography>
+  )
 }
