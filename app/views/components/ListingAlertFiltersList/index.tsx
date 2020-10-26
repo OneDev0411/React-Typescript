@@ -15,7 +15,7 @@ const ALERT_FILTER_KEY_TO_DATA_MAP: {
 } = {
   radius: {
     label: 'Radius',
-    toString: radius => pluralize('Killometer', radius, true)
+    toString: radius => pluralize('Mile', radius, true)
   }
 }
 
