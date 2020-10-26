@@ -73,24 +73,34 @@ const ALL_SECTIONS: SectionCollection = {
     title: 'Holidays',
     items: [
       {
+        title: 'Back To School',
+        value: 'BackToSchool',
+        link: urlGenerator('/BackToSchool')
+      },
+      {
+        title: 'Chinese New Year',
+        value: 'ChineseNewYear',
+        link: urlGenerator('/ChineseNewYear')
+      },
+      {
         title: 'Christmas',
         value: 'Christmas',
         link: urlGenerator('/Christmas')
       },
       {
-        title: 'New Year',
-        value: 'NewYear',
-        link: urlGenerator('/NewYear')
+        title: 'Columbus Day',
+        value: 'ColumbusDay',
+        link: urlGenerator('/ColumbusDay')
       },
       {
-        title: "Valentine's Day",
-        value: 'Valentines',
-        link: urlGenerator('/Valentines')
+        title: 'Daylight Saving',
+        value: 'DaylightSaving',
+        link: urlGenerator('/DaylightSaving')
       },
       {
-        title: "St. Patrick's Day",
-        value: 'StPatrick',
-        link: urlGenerator('/StPatrick')
+        title: 'Diwali',
+        value: 'Diwaly',
+        link: urlGenerator('/Diwaly')
       },
       {
         title: 'Easter',
@@ -103,9 +113,19 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/FathersDay')
       },
       {
-        title: "Mother's Day",
-        value: 'MothersDay',
-        link: urlGenerator('/MothersDay')
+        title: 'Fourth of July',
+        value: 'FourthOfJuly',
+        link: urlGenerator('/FourthOfJuly')
+      },
+      {
+        title: 'Halloween',
+        value: 'Halloween',
+        link: urlGenerator('/Halloween')
+      },
+      {
+        title: 'Hannukkah',
+        value: 'Hannukkah',
+        link: urlGenerator('/Hannukkah')
       },
       {
         title: "International Women's Day",
@@ -113,19 +133,9 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/WomansDay')
       },
       {
-        title: 'Columbus Day',
-        value: 'ColumbusDay',
-        link: urlGenerator('/ColumbusDay')
-      },
-      {
-        title: 'September 11',
-        value: 'PatriotsDay',
-        link: urlGenerator('/PatriotsDay')
-      },
-      {
-        title: 'Memorial Day',
-        value: 'MemorialDay',
-        link: urlGenerator('/MemorialDay')
+        title: 'Kwanzaa',
+        value: 'Kwanzaa',
+        link: urlGenerator('/Kwanzaa')
       },
       {
         title: 'Labor Day',
@@ -133,14 +143,29 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/LaborDay')
       },
       {
-        title: 'Back To School',
-        value: 'BackToSchool',
-        link: urlGenerator('/BackToSchool')
+        title: 'Martin Luther King Jr. Day',
+        value: 'MLKDay',
+        link: urlGenerator('/MLKDay')
       },
       {
-        title: 'Hannukkah',
-        value: 'Hannukkah',
-        link: urlGenerator('/Hannukkah')
+        title: 'Memorial Day',
+        value: 'MemorialDay',
+        link: urlGenerator('/MemorialDay')
+      },
+      {
+        title: "Mother's Day",
+        value: 'MothersDay',
+        link: urlGenerator('/MothersDay')
+      },
+      {
+        title: 'New Year',
+        value: 'NewYear',
+        link: urlGenerator('/NewYear')
+      },
+      {
+        title: 'Others',
+        value: 'OtherHoliday',
+        link: urlGenerator('/OtherHoliday')
       },
       {
         title: 'Passover',
@@ -153,14 +178,14 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/RoshHashanah')
       },
       {
-        title: 'Fourth of July',
-        value: 'FourthOfJuly',
-        link: urlGenerator('/FourthOfJuly')
+        title: 'September 11',
+        value: 'PatriotsDay',
+        link: urlGenerator('/PatriotsDay')
       },
       {
-        title: 'Veterans Day',
-        value: 'VeteransDay',
-        link: urlGenerator('/VeteransDay')
+        title: "St. Patrick's Day",
+        value: 'StPatrick',
+        link: urlGenerator('/StPatrick')
       },
       {
         title: 'Thanksgiving',
@@ -168,34 +193,14 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/Thanksgiving')
       },
       {
-        title: 'Halloween',
-        value: 'Halloween',
-        link: urlGenerator('/Halloween')
+        title: "Valentine's Day",
+        value: 'Valentines',
+        link: urlGenerator('/Valentines')
       },
       {
-        title: 'Martin Luther King Jr. Day',
-        value: 'MLKDay',
-        link: urlGenerator('/MLKDay')
-      },
-      {
-        title: 'Chinese New Year',
-        value: 'ChineseNewYear',
-        link: urlGenerator('/ChineseNewYear')
-      },
-      {
-        title: 'Diwali',
-        value: 'Diwaly',
-        link: urlGenerator('/Diwaly')
-      },
-      {
-        title: 'Kwanzaa',
-        value: 'Kwanzaa',
-        link: urlGenerator('/Kwanzaa')
-      },
-      {
-        title: 'Others',
-        value: 'OtherHoliday',
-        link: urlGenerator('/OtherHoliday')
+        title: 'Veterans Day',
+        value: 'VeteransDay',
+        link: urlGenerator('/VeteransDay')
       }
     ]
   },
