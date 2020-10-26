@@ -24,9 +24,17 @@ export function useWebShareApi(data: ExtendedShareData): UseWebShareApi {
     setCanShare(navigator.canShare(data))
   }, [data])
 
-  function share() {
+  async function share() {
     if (canShare) {
-      return navigator.share(data)
+      try {
+        await navigator.share(data)
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return
+        }
+
+        throw error
+      }
     }
 
     return Promise.reject(
