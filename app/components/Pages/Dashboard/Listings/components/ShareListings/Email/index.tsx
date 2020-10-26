@@ -54,7 +54,7 @@ export function EmailAction() {
         <MarketingTemplatePickerModal
           title="Select Template"
           user={user}
-          mediums={['Email' as MarketingTemplateMedium.Email]}
+          mediums={['Email']}
           templateTypes={['Listings']}
           onSelect={handleSelectTemplate}
           onClose={() => setIsTemplatesModalOpen(false)}
