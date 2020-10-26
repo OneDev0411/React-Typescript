@@ -15,7 +15,7 @@ import TourItem from './TourItem'
 
 interface Props {
   isOpen: boolean
-  listings: ICompactListing[]
+  listings: (ICompactListing | IListing)[]
   onClose: () => void
   submitCallback?: (tour: ICRMTask) => void
   deleteCallback?: (tour: ICRMTask) => void
