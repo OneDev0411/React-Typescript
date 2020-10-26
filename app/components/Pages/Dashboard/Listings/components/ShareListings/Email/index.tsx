@@ -43,8 +43,7 @@ export function EmailAction() {
       <Tooltip title="Send as Email">
         <Button
           size="small"
-          variant="contained"
-          color="secondary"
+          variant="outlined"
           onClick={() => setIsTemplatesModalOpen(true)}
         >
           Email
