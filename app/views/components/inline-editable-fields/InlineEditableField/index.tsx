@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode, useState } from 'react'
 import ClickOutside from 'react-click-outside'
 
 import { noop } from 'utils/helpers'
@@ -17,9 +17,10 @@ interface Props {
   isDisabled?: boolean
   isEditing: boolean
   isEditModeStatic?: boolean
+  isPopoverMode?: boolean
   label?: string
   renderViewMode?: () => void
-  renderEditMode: (params: any) => void
+  renderEditMode: (props: any) => ReactNode
   showAdd?: boolean
   showEdit?: boolean
   showDelete?: boolean
@@ -38,6 +39,7 @@ export const InlineEditableField = (props: Props) => {
     handleAddNew = noop,
     isDisabled = false,
     isEditModeStatic = false,
+    isPopoverMode = false,
     label = 'Label',
     renderViewMode = noop,
     showAdd = false,
@@ -50,12 +52,16 @@ export const InlineEditableField = (props: Props) => {
     isEditing,
     renderEditMode
   } = props
+  const [ref, setRef] = useState<HTMLElement | null>(null)
 
   const _toggleMode = event => {
     if (event && event.stopPropagation) {
       event.stopPropagation()
     }
 
+    const refValue = isEditing ? event.currentTarget : null
+
+    setRef(refValue)
     toggleMode()
   }
 
@@ -72,6 +78,8 @@ export const InlineEditableField = (props: Props) => {
   }
 
   const _handleCancel = () => {
+    setRef(null)
+
     if (typeof handleCancel === 'function') {
       handleCancel()
     } else {
@@ -97,9 +105,11 @@ export const InlineEditableField = (props: Props) => {
       handleSave,
       isDisabled,
       isStatic: isEditModeStatic,
+      isPopoverMode,
       showDelete,
       style,
       isEditing,
+      viewRef: ref,
       render: renderEditMode
     }
   }
@@ -118,16 +128,27 @@ export const InlineEditableField = (props: Props) => {
       value
     }
   }
+  const ViewModeRenderer = <ViewMode {...viewModeProps()} />
+  const EditModeRenderer = <EditMode {...editModeProps()} />
+
+  if (isPopoverMode) {
+    return (
+      <>
+        {ViewModeRenderer}
+        {EditModeRenderer}
+      </>
+    )
+  }
 
   if (isEditing) {
     return cancelOnOutsideClick ? (
       <ClickOutside onClickOutside={_handleOutsideClick}>
-        <EditMode {...editModeProps()} />
+        {EditModeRenderer}
       </ClickOutside>
     ) : (
-      <EditMode {...editModeProps()} />
+      EditModeRenderer
     )
   }
 
-  return <ViewMode {...viewModeProps()} />
+  return ViewModeRenderer
 }

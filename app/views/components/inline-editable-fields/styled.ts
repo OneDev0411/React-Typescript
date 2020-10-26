@@ -1,12 +1,16 @@
-import styled, { css } from 'styled-components'
-import { fade } from '@material-ui/core/styles'
+import styled, { css, ThemedStyledProps } from 'styled-components'
+import { Theme, fade } from '@material-ui/core'
 
 import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
 import StarIcon from 'components/SvgIcons/Star/StarIcon'
 import ArrowIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
-export const ViewModeContainer = styled.div`
+import { Props as EditModeProps } from './InlineEditableField/EditMode'
+
+export const ViewModeContainer = styled.div<{
+  theme: Theme
+}>`
   position: relative;
   padding: 0.5em;
   border-radius: ${({ theme }) => theme.shape.borderRadius}px;
@@ -37,7 +41,7 @@ export const ViewModeActionBar = styled.div`
   }
 `
 
-export const EditButton = styled(ActionButton)`
+export const EditButton = styled(ActionButton as any)`
   padding: 0;
   height: auto;
   line-height: 1;
@@ -46,11 +50,20 @@ export const EditButton = styled(ActionButton)`
 export const EditModeContainer = styled.div`
   position: relative;
   padding: 0.5em;
-  border-radius: ${({ isStatic, theme }) =>
+  border-radius: ${({
+    isStatic,
+    theme
+  }: ThemedStyledProps<Pick<EditModeProps, 'isStatic'>, Theme>) =>
     isStatic
       ? `${theme.shape.borderRadius}px`
       : `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`};
-  background: ${({ hasError, theme }) =>
+  background: ${({
+    hasError,
+    theme
+  }: ThemedStyledProps<
+    Pick<EditModeProps, 'isStatic' | 'style'> & { hasError: boolean },
+    Theme
+  >) =>
     hasError
       ? fade(theme.palette.error.main, theme.palette.action.hoverOpacity)
       : theme.palette.action.selected};
@@ -89,7 +102,7 @@ export const DropdownButton = styled(LinkButton)`
 export const DropdownArrowIcon = styled(ArrowIcon)`
   position: relative;
   margin-left: 1em;
-  transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
+  transform: ${({ isOpen }: any) => (isOpen ? 'rotateX(180deg)' : 'none')};
 `
 
 export const Input = styled.input`
@@ -106,7 +119,9 @@ export const Input = styled.input`
   }
 `
 
-export const EditModeActionBar = styled.div`
+export const EditModeActionBar = styled.div<
+  ThemedStyledProps<Pick<EditModeProps, 'showDelete' | 'isStatic'>, Theme>
+>`
   display: flex;
   align-items: center;
   justify-content: ${({ showDelete }) =>
