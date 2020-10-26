@@ -19,6 +19,8 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 
+import { TextTransition } from 'components/TextTransition'
+
 import { EmailAction } from './Email'
 import { CreateTourAction } from './Tour'
 
@@ -91,7 +93,15 @@ export function ShareListings() {
             </Avatar>
 
             <Typography variant="button">
-              {selections.length}&nbsp;{pluralize('Listing', selections.length)}{' '}
+              <TextTransition
+                duration={0.75}
+                repeat={2}
+                text={`${selections.length} ${pluralize(
+                  'Listing',
+                  selections.length
+                )}
+              `}
+              />
               Selected
             </Typography>
 
