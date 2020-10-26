@@ -131,6 +131,13 @@ const AsyncOnboardingProfile = Load({
     )
 })
 
+const AsyncDashboardOverview = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
+    )
+})
+
 /* ==================================== */
 //  MLS
 /* ==================================== */
@@ -701,6 +708,7 @@ export default (
       <Route path="share" component={AsyncShare} />
 
       <Route path="dashboard" component={Dashboard}>
+        <Route path="overview" component={AsyncDashboardOverview} />
         <Route path="inbox(/:emailThreadId)" component={AsyncInbox} />
 
         <Route path="calendar(/:id)" component={AsyncCalendar} />
@@ -765,9 +773,8 @@ export default (
           <IndexRoute component={AsyncListingsSearch} />
           <Route path="favorites" component={AsyncListingsFavorites} />
           <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
+          <Route path=":id" component={AsyncListingSinglePage} />
         </Route>
-
-        <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />

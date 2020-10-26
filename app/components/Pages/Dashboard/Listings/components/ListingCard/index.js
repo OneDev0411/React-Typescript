@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router'
 import LazyLoad from 'react-lazy-load'
+import { Checkbox } from '@material-ui/core'
+import cn from 'classnames'
 
 import { isLeaseProperty } from 'utils/listing'
 
@@ -8,7 +10,15 @@ import './style.scss'
 
 import FavoriteHeart from '../FavoriteHeart'
 
-const ListingCard = ({ isWidget = false, listing, onClick, user = null }) => {
+const ListingCard = ({
+  listing,
+  isWidget = false,
+  selectable = true,
+  selected = false,
+  user = null,
+  onClick,
+  onToggleSelection = () => {}
+}) => {
   const target = user && !isWidget ? '' : '_blank'
 
   return (
@@ -69,6 +79,20 @@ const ListingCard = ({ isWidget = false, listing, onClick, user = null }) => {
         {user && (
           <div className="c-listing-card__favorite-heart">
             <FavoriteHeart listing={listing} />
+          </div>
+        )}
+
+        {selectable && user && (
+          <div
+            className={cn('c-listing-card__selection', {
+              visible: selected === true
+            })}
+          >
+            <Checkbox
+              size="small"
+              checked={selected}
+              onChange={() => onToggleSelection(listing)}
+            />
           </div>
         )}
       </div>

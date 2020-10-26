@@ -1,13 +1,18 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Modal } from 'react-bootstrap'
+
+import { Modal, ModalContent } from 'components/Modal'
 
 import ListingDesktopView from '../../Listing/components/ListingDesktopView'
 
 const ListingModalViewer = ({ data, user, show, onHide, listing }) => (
   <div className="c-listing-modal">
-    <Modal show={show} onHide={onHide} dialogClassName="c-listing-modal--box">
-      <Modal.Body>
+    <Modal
+      isOpen={show}
+      onRequestClose={onHide}
+      className="c-listing-modal--box"
+    >
+      <ModalContent>
         <ListingDesktopView
           data={data}
           user={user}
@@ -15,7 +20,7 @@ const ListingModalViewer = ({ data, user, show, onHide, listing }) => (
           listing={listing}
           container="modal"
         />
-      </Modal.Body>
+      </ModalContent>
     </Modal>
   </div>
 )

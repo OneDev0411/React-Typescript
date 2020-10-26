@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 
 import { getValue } from 'models/Deal/helpers/dynamic-context'
@@ -19,14 +19,16 @@ import {
   Container,
   ItemsContainer,
   SectionTitle,
-  FactsheetDivider
+  FactsheetDivider,
+  TimelineSplitter
 } from './styled'
 
 interface Props {
   deal: IDeal
+  definitions?: unknown[]
   isBackOffice: boolean
-  display: boolean
-  title: string
+  display?: boolean
+  title?: string
   section: string
   showDivider: boolean
 }
@@ -34,9 +36,9 @@ interface Props {
 export default function Factsheet(props: Props) {
   const dispatch = useDispatch()
 
-  const table = useMemo(() => {
-    return getFactsheetSection(props.deal.id, props.deal, props.section)
-  }, [props.deal, props.section])
+  const table =
+    props.definitions ||
+    getFactsheetSection(props.deal.id, props.deal, props.section)
 
   if (table.length === 0 || props.display === false) {
     return null
@@ -93,6 +95,8 @@ export default function Factsheet(props: Props) {
         {props.title && <SectionTitle>{props.title}</SectionTitle>}
 
         <ItemsContainer>
+          {props.section === 'Dates' && <TimelineSplitter />}
+
           {table.map(field => {
             const value = getFieldValue(getValue(props.deal, field))
 

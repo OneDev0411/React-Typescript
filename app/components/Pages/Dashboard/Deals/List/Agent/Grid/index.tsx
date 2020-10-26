@@ -119,12 +119,7 @@ function AgentGrid(props: Props & WithRouterProps) {
         class: 'opaque',
         accessor: (deal: IDeal) => getCriticalDateNextValue(deal),
         render: ({ row: deal, totalRows, rowIndex }) => (
-          <CriticalDate
-            deal={deal}
-            user={user}
-            rowId={rowIndex + 1}
-            rowsCount={totalRows}
-          />
+          <CriticalDate deal={deal} user={user} />
         )
       },
       {

@@ -54,7 +54,8 @@ class SendMlsListingCard extends React.Component {
         !state.isListingsModalOpen &&
         !state.isInstantMarketingBuilderOpen &&
         !props.isEdit &&
-        !props.listing
+        !props.listing &&
+        !props.listings
       ) {
         return {
           isListingsModalOpen: true
@@ -62,7 +63,12 @@ class SendMlsListingCard extends React.Component {
       }
 
       // For just closing search drawer through its close CTA
-      if (!props.isTriggered && state.isListingsModalOpen && !props.listing) {
+      if (
+        !props.isTriggered &&
+        state.isListingsModalOpen &&
+        !props.listing &&
+        !props.listings
+      ) {
         return {
           isListingsModalOpen: false
         }
@@ -73,10 +79,18 @@ class SendMlsListingCard extends React.Component {
         !props.isTriggered &&
         state.isListingsModalOpen &&
         state.isInstantMarketingBuilderOpen &&
-        !props.listing
+        !props.listing &&
+        !props.listings
       ) {
         return {
           isListingsModalOpen: false
+        }
+      }
+
+      if (props.listings) {
+        return {
+          listings: props.listings,
+          isInstantMarketingBuilderOpen: true
         }
       }
 

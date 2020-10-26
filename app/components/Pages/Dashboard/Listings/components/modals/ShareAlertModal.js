@@ -4,10 +4,11 @@ import { IconButton } from '@material-ui/core'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Modal } from 'react-bootstrap'
 import Flex from 'styled-flex-component'
 
 import { mdiClose } from '@mdi/js'
+
+import { Modal, ModalFooter } from 'components/Modal'
 
 import { hasRecipients } from 'utils/helpers'
 import { createRoom } from 'actions/chatroom/room'
@@ -37,8 +38,9 @@ const ShareAlertModal = ({
   return (
     <div>
       <Modal
-        show={isActive}
-        onHide={isSharing ? () => {} : onHide}
+        isOpen={isActive}
+        autoHeight
+        onRequestClose={isSharing ? () => {} : onHide}
         className="c-share-modal"
       >
         <Flex alignCenter justifyBetween style={{ padding: '1em' }}>
@@ -47,14 +49,12 @@ const ShareAlertModal = ({
             <SvgIcon path={mdiClose} />
           </IconButton>
         </Flex>
-        <Modal.Body style={{ padding: 0 }}>
-          <Recipients onChangeRecipients={recps => setRecipients(recps)} />
-        </Modal.Body>
-        <Modal.Footer>
+        <Recipients onChangeRecipients={recps => setRecipients(recps)} />
+        <ModalFooter>
           <ActionButton size="small" disabled={disabled} onClick={shareHandler}>
             {isSharing ? 'Save and Sharing...' : 'Save & Share'}
           </ActionButton>
-        </Modal.Footer>
+        </ModalFooter>
       </Modal>
       <SuccessModal
         type="SAVED_ALERT"

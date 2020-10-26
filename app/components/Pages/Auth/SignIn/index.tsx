@@ -6,7 +6,6 @@ import * as Sentry from '@sentry/browser'
 
 import { IAppState } from '../../../../reducers'
 
-import { FETCH_USER_TEAMS_SUCCESS } from '../../../../constants/user'
 import { getTeams } from '../../../../models/user/get-teams'
 
 import * as actionsType from '../../../../constants/auth/signin'
@@ -94,24 +93,19 @@ export default function Signin(props: Props) {
 
       let user: IUser = await signin({ ...values, username })
 
-      dispatch({
-        user,
-        type: actionsType.SIGNIN_SUCCESS
-      })
-
       if (!user.teams) {
         const teams = await getTeams(user)
-
-        dispatch({
-          type: FETCH_USER_TEAMS_SUCCESS,
-          teams
-        })
 
         user = {
           ...user,
           teams
         }
       }
+
+      dispatch({
+        user,
+        type: actionsType.SIGNIN_SUCCESS
+      })
 
       Sentry.configureScope(scope => {
         scope.setUser({
