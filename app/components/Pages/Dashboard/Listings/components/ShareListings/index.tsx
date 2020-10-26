@@ -19,6 +19,8 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 
+import { TextTransition } from 'components/TextTransition'
+
 import { EmailAction } from './Email'
 import { CreateTourAction } from './Tour'
 
@@ -89,12 +91,17 @@ export function ShareListings() {
             <Avatar className={classes.avatar}>
               <SvgIcon path={mdiHomeCityOutline} />
             </Avatar>
-
-            <Typography variant="button">
-              {selections.length}&nbsp;{pluralize('Listing', selections.length)}{' '}
-              Selected
-            </Typography>
-
+            <TextTransition
+              variant="button"
+              duration={0.75}
+              repeat={2}
+              text={`${selections.length} ${pluralize(
+                'Listing',
+                selections.length
+              )}
+              `}
+            />
+            Selected
             <Button
               variant="text"
               color="secondary"
@@ -102,9 +109,7 @@ export function ShareListings() {
             >
               Edit/View
             </Button>
-
             <Divider orientation="vertical" className={classes.divider} />
-
             <EmailAction />
             <CreateTourAction />
           </Box>
