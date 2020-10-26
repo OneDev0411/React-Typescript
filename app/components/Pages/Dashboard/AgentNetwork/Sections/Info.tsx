@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Divider,
   Grid,
   Box,
   Typography,
@@ -39,21 +38,9 @@ export default function Info() {
         <Grid item>
           <Box pb={6}>
             <Typography variant="h4">
-              Market to Top Agents from Any Brokerage
+              One Click Marketing to Agents from Any Brokerage
             </Typography>
           </Box>
-        </Grid>
-        <Grid item xs>
-          <img
-            src="/static/images/dashboard/agent-network/clients.png"
-            alt="clients"
-          />
-          <Box py={4}>
-            <Divider variant="fullWidth" />
-          </Box>
-        </Grid>
-        <Grid>
-          <Typography variant="h4">How It works?</Typography>
         </Grid>
       </Grid>
       <Box py={6}>

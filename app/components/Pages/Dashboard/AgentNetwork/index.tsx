@@ -51,7 +51,7 @@ export function AgentNetwork() {
   }
 
   return (
-    <Layout>
+    <Layout title="Agent Network">
       <Info />
       <Listings
         isLoading={isLoading}

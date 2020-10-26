@@ -2,7 +2,7 @@ import config from '../../../../config/public'
 
 export interface CompactPlace {
   zoom: number
-  center: google.maps.LatLng
+  center: google.maps.LatLngLiteral
 }
 
 export function getPlace(address: string, compact?: true): Promise<CompactPlace>
@@ -34,7 +34,8 @@ export async function getPlace(address: string, compact: boolean = true) {
     if (compact) {
       return {
         zoom: 16,
-        center: result.geometry.location
+        center: (result.geometry
+          .location as unknown) as google.maps.LatLngLiteral
       }
     }
 

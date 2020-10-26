@@ -1,5 +1,7 @@
 export const DEFAULT_SEARCH_RADIUS = 3
 
+export const DEFAULT_SEARCH_RESULT_LIMIT = 1000
+
 export const ALL_PROPERTY_TYPES: IPropertyType[] = [
   'Residential',
   'Residential Lease',

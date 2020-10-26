@@ -32,3 +32,8 @@ declare interface AlertFilters {
   search?: Nullable<string>
   limit?: Nullable<number>
 }
+
+declare interface AlertFiltersWithRadiusAndCenter extends AlertFilters {
+  radius: number
+  center: IPoint
+}

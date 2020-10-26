@@ -35,7 +35,9 @@ function Agents(props: WithRouterProps) {
   const [agents, setAgents] = useState<Nullable<AggregatedAgentInfo[]>>(null)
   const [isLoadingAgents, setIsLoadingAgents] = useLoadingEntities(agents)
 
-  const [filters, setFilters] = useState<Nullable<AlertFilters>>(null)
+  const [filters, setFilters] = useState<
+    Nullable<AlertFiltersWithRadiusAndCenter>
+  >(null)
 
   const [alertFiltersAnchor, setAlertFiltersAnchor] = useState<
     Nullable<HTMLButtonElement>
@@ -110,6 +112,8 @@ function Agents(props: WithRouterProps) {
       }
 
       try {
+        setAgents(null)
+
         const listingsWithBothAgents = await getListingsWithBothSidesAgents(
           filters
         )
@@ -134,6 +138,11 @@ function Agents(props: WithRouterProps) {
 
   function handleCloseAlertFiltersDialog() {
     setAlertFiltersAnchor(null)
+  }
+
+  function handleApplyFilters(newFilters: AlertFiltersWithRadiusAndCenter) {
+    setFilters(newFilters)
+    handleCloseAlertFiltersDialog()
   }
 
   const isAlertFiltersDialogOpen = Boolean(alertFiltersAnchor)
@@ -171,7 +180,7 @@ function Agents(props: WithRouterProps) {
                 >
                   <ListingAlertFilters
                     filters={filters}
-                    onChange={console.log}
+                    onApply={handleApplyFilters}
                   />
                 </Popover>
               </>
