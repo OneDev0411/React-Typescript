@@ -41,7 +41,7 @@ export default function PromoteListing({ user, listing, agents }: Props) {
   }
 
   function handleCloseMarketingEditor() {
-    handleCloseTemplatePickerModal()
+    console.log('CLOSING MC')
     setSelectedTemplate(null)
   }
 
@@ -59,17 +59,19 @@ export default function PromoteListing({ user, listing, agents }: Props) {
           onClose={handleCloseTemplatePickerModal}
         />
       )}
-      <SendMlsListingCard
-        hasExternalTrigger
-        isTemplatesColumnHiddenDefault={false}
-        mediums={MEDIUMS}
-        types={TEMPLATE_TYPES}
-        isTriggered={selectedTemplate ? true : null}
-        listing={listing}
-        selectedTemplate={selectedTemplate}
-        selectedRows={agents}
-        handleTrigger={handleCloseMarketingEditor}
-      />
+      {selectedTemplate && (
+        <SendMlsListingCard
+          hasExternalTrigger
+          isTriggered
+          isTemplatesColumnHiddenDefault={false}
+          mediums={MEDIUMS}
+          types={TEMPLATE_TYPES}
+          listing={listing}
+          selectedTemplate={selectedTemplate}
+          selectedRows={agents}
+          handleTrigger={handleCloseMarketingEditor}
+        />
+      )}
     </>
   )
 }
