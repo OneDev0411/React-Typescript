@@ -29,7 +29,13 @@ const ListingCard = ({
 
   const openListing = e => {
     e.preventDefault()
+    window.history.pushState({}, '', `/dashboard/mls/${listing.id}`)
     setIsListingOpen(true)
+  }
+
+  const closeListing = () => {
+    window.history.pushState({}, '', '/dashboard/mls')
+    setIsListingOpen(false)
   }
 
   return (
@@ -124,7 +130,7 @@ const ListingCard = ({
             params={{
               id: listing.id
             }}
-            onClose={() => setIsListingOpen(false)}
+            onClose={closeListing}
           />
         </Dialog>
       )}
