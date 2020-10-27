@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -75,10 +75,11 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  dealId: UUID
   formId: UUID
 }
 
-export function DefaultValues({ formId }: Props) {
+export function DefaultValues({ dealId, formId }: Props) {
   const classes = useStyles()
   const [inputValue, setInputValue] = useState<string | boolean>('')
   const [isSaving, setIsSaving] = useState(false)
@@ -103,7 +104,7 @@ export function DefaultValues({ formId }: Props) {
 
     const load = async () => {
       try {
-        const values = await getBrandFormTemplateValues(selectedTeam.id, formId)
+        const values = await getBrandFormTemplateValues(dealId, formId)
 
         setBrandTemplateValues(values)
       } catch (e) {
@@ -112,7 +113,7 @@ export function DefaultValues({ formId }: Props) {
     }
 
     load()
-  }, [selectedTeam, formId])
+  }, [selectedTeam, dealId, formId])
 
   useEffect(() => {
     const field = brandTemplateValues.find(

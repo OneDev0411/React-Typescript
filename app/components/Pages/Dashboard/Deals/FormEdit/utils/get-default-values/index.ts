@@ -4,7 +4,7 @@ export async function getDefaultValues(
   deal: IDeal,
   formId: UUID
 ): Promise<Record<string, string>> {
-  const list = await getBrandFormTemplateValues(deal.brand.id, formId)
+  const list = await getBrandFormTemplateValues(deal.id, formId)
 
   return list.reduce((acc, item) => {
     return {
