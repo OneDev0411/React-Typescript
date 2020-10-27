@@ -88,6 +88,7 @@ function Notifications({ params }: WithRouterProps) {
       case 'ListingBecameAvailableUser':
         browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
         break
+      case 'EmailCampaignReactedToEmailCampaign':
       case 'EmailCampaignReactedToEmailCampaignEmail':
         browserHistory.push(
           `/dashboard/insights/${notification.subjects[0].id}`
