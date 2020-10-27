@@ -1,44 +1,18 @@
 image: node:12
 
 stages:
-  - build
   - test
   - deploy
-
-# This stage is for making sure that build is not broken.
-build:
-  stage: build
-  script:
-    - npm i
-    - npm run build:ci
-  # We don't need to run build for branches that are deployed. if build is broken
-  # deploy also breaks.
-  except:
-    - alpha
-    - stage
-    - master
 
 test_unit:
   needs: []
   stage: test
+  only:
+    - merge_requests
   script:
     - npm i
     - npm run test:ci -- --coverage
 
-deploy_alpha:
-  stage: deploy
-  image: timbru31/ruby-node:latest
-  before_script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-  script:
-    - dpl --provider=heroku --app=rechat-web-alpha --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
-  environment:
-    name: alpha
-    url: https://alpha.rechat.com
-  only:
-    - alpha
 
 deploy_irish:
   stage: deploy
@@ -69,3 +43,17 @@ deploy_production:
     url: https://rechat.com
   only:
     - master
+
+start_review:
+  stage: review
+  script:
+    - chmod u+x ./dokku.bash
+    - ./dokku.bash
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+    url: https://$CI_COMMIT_REF_SLUG.rechat.co/
+  only:
+    - merge_requests
+  except:
+    - master
+  needs: []
