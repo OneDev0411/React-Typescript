@@ -6,7 +6,6 @@ import {
   Button,
   Theme,
   makeStyles,
-  Typography,
   Divider,
   Avatar,
   IconButton
@@ -98,10 +97,10 @@ export function ShareListings() {
               text={`${selections.length} ${pluralize(
                 'Listing',
                 selections.length
-              )}
+              )} Selected
               `}
             />
-            Selected
+
             <Button
               variant="text"
               color="secondary"
