@@ -1,7 +1,15 @@
 import React, { ReactNode } from 'react'
-import { Button, IconButton, Box, Popover } from '@material-ui/core'
+import {
+  Button,
+  IconButton,
+  Box,
+  Popover,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 
 import { mdiTrashCanOutline } from '@mdi/js'
+import cn from 'classnames'
 
 import { noop } from 'utils/helpers'
 import Tooltip from 'components/tooltip'
@@ -24,6 +32,21 @@ export interface Props {
   viewRef?: any
 }
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    popoverContainer: {
+      padding: theme.spacing(2),
+      minWidth: '340px',
+      overflow: 'hidden'
+    },
+    editModePopover: {
+      paddingTop: theme.spacing(1),
+      borderTop: `1px solid ${theme.palette.divider}`
+    }
+  }),
+  { name: 'EditModeContactProfile' }
+)
+
 export const EditMode = (props: Props) => {
   const {
     render,
@@ -38,13 +61,18 @@ export const EditMode = (props: Props) => {
     style = {},
     viewRef = null
   } = props
+  const classes = useStyles()
   const open = Boolean(viewRef)
   const id = open ? 'edit-popover' : undefined
 
   const renderBody = (
     <>
       {render(props)}
-      <EditModeActionBar showDelete={showDelete} isStatic={isStatic}>
+      <EditModeActionBar
+        showDelete={showDelete}
+        isStatic={isStatic}
+        className={cn({ [classes.editModePopover]: isPopoverMode })}
+      >
         {showDelete && (
           <Tooltip caption="Delete">
             <IconButton
@@ -94,7 +122,7 @@ export const EditMode = (props: Props) => {
           horizontal: 'center'
         }}
       >
-        {renderBody}
+        <div className={classes.popoverContainer}>{renderBody}</div>
       </Popover>
     )
   }

@@ -15,6 +15,8 @@ import {
 import { EditMode } from './EditMode'
 import { ViewMode } from './ViewMode'
 
+import { TRIGGABLE_ATTRIBUTE } from './constant'
+
 function getCurrentTimestamp() {
   return new Date().getTime()
 }
@@ -105,6 +107,10 @@ class MasterField extends React.Component {
       this.state.isDrity &&
       diffAttributeStateWithProp(this.props.attribute, this.state)
     )
+  }
+
+  get isTriggable() {
+    return TRIGGABLE_ATTRIBUTE.includes(this.attribute_def.name)
   }
 
   toggleMode = () => this.props.handleToggleMode(this.props.attribute)
@@ -276,6 +282,7 @@ class MasterField extends React.Component {
         handleSave={this.save}
         isDisabled={this.state.disabled}
         isEditing={this.props.isActive}
+        isPopoverMode={this.isTriggable}
         isEditModeStatic
         label={this.state.label}
         renderEditMode={this.renderEditMode}
