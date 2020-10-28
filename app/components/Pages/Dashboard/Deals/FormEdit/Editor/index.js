@@ -64,7 +64,7 @@ export default function Editor(props) {
           </div>
         ))}
 
-        <DefaultValues dealId={props.deal.id} formId={props.form.id} />
+        <DefaultValues formId={props.form.id} />
       </div>
     </DefaultValuesContextProvider>
   )

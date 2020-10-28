@@ -1,12 +1,12 @@
 import Fetch from '../../../../services/fetch'
 
-export async function getBrandFormTemplateValues(
-  brandId: UUID,
+export async function getDealFormTemplateValues(
+  dealId: UUID,
   formId: UUID
 ): Promise<IFormTemplateValue[]> {
   try {
     const response = await new Fetch().get(
-      `/brands/${brandId}/forms/templates/${formId}`
+      `/deals/${dealId}/forms/templates/${formId}`
     )
 
     return response.body.data

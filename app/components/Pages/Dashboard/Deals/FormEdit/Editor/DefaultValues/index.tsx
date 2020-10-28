@@ -75,11 +75,10 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  dealId: UUID
   formId: UUID
 }
 
-export function DefaultValues({ dealId, formId }: Props) {
+export function DefaultValues({ formId }: Props) {
   const classes = useStyles()
   const [inputValue, setInputValue] = useState<string | boolean>('')
   const [isSaving, setIsSaving] = useState(false)
@@ -104,7 +103,7 @@ export function DefaultValues({ dealId, formId }: Props) {
 
     const load = async () => {
       try {
-        const values = await getBrandFormTemplateValues(dealId, formId)
+        const values = await getBrandFormTemplateValues(selectedTeam.id, formId)
 
         setBrandTemplateValues(values)
       } catch (e) {
@@ -113,7 +112,7 @@ export function DefaultValues({ dealId, formId }: Props) {
     }
 
     load()
-  }, [selectedTeam, dealId, formId])
+  }, [selectedTeam, formId])
 
   useEffect(() => {
     const field = brandTemplateValues.find(

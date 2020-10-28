@@ -1,10 +1,10 @@
-import { getBrandFormTemplateValues } from 'models/Deal/form'
+import { getDealFormTemplateValues } from 'models/Deal/form'
 
 export async function getDefaultValues(
-  deal: IDeal,
+  dealId: UUID,
   formId: UUID
 ): Promise<Record<string, string>> {
-  const list = await getBrandFormTemplateValues(deal.id, formId)
+  const list = await getDealFormTemplateValues(dealId, formId)
 
   return list.reduce((acc, item) => {
     return {
