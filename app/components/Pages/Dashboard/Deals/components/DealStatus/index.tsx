@@ -8,6 +8,7 @@ import Deal from 'models/Deal'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 import { upsertContexts } from 'actions/deals'
 import { getDealChecklists } from 'reducers/deals/checklists'
+import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 import { useDealStatuses } from 'hooks/use-deal-statuses'
 import DealContext from 'models/Deal/helpers/dynamic-context'
 
@@ -87,23 +88,8 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
    * creates a new generic task and sends a notification to admin
    * @param {String} status the new deal status
    */
-  const notifyAdmin = async (status: string) => {
-    const statusContextName = DealContext.getStatusField(deal)
-    const checklist = checklists.find((checklist: IDealChecklist) => {
-      if (statusContextName === 'listing_status') {
-        return checklist.checklist_type === 'Selling'
-      }
-
-      if (statusContextName === 'contract_status') {
-        return checklist.checklist_type === 'Buying'
-      }
-
-      return null
-    })
-
-    if (!checklist) {
-      return
-    }
+  const notifyAdmin = async status => {
+    const checklist = getActiveChecklist(deal, checklists)
 
     dispatch(
       createRequestTask({
