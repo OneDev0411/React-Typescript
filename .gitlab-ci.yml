@@ -3,6 +3,7 @@ image: node:12
 stages:
   - test
   - deploy
+  - review
 
 test_unit:
   needs: []
