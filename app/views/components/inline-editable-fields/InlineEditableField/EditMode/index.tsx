@@ -37,6 +37,7 @@ const useStyles = makeStyles(
     popoverContainer: {
       padding: theme.spacing(2),
       minWidth: '340px',
+      maxWidth: '340px',
       overflow: 'hidden'
     },
     editModePopover: {
@@ -114,12 +115,12 @@ export const EditMode = (props: Props) => {
         anchorEl={viewRef}
         onClose={handleCancel}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center'
+          vertical: 'center',
+          horizontal: 'right'
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center'
+          vertical: 'center',
+          horizontal: 'left'
         }}
       >
         <div className={classes.popoverContainer}>{renderBody}</div>

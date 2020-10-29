@@ -14,6 +14,7 @@ import {
 
 import { EditMode } from './EditMode'
 import { ViewMode } from './ViewMode'
+import { TriggerField } from './TriggerField'
 
 import { TRIGGABLE_ATTRIBUTE } from './constant'
 
@@ -45,6 +46,10 @@ const getInitialState = attribute => ({
   error: '',
   disabled: false,
   isDrity: false,
+  isTriggerActive: false,
+  triggerSendBefore: '1',
+  triggerSelectedTemplate: null,
+  triggerRenderedSelectedTemplate: null,
   ...getStateFromAttribute(attribute)
 })
 
@@ -126,6 +131,19 @@ class MasterField extends React.Component {
   onChangeValue = value =>
     this.setState({ value, isDrity: true, updated_at: getCurrentTimestamp() })
 
+  toggleTriggerActive = () =>
+    this.setState(prevState => ({
+      isDrity: true,
+      isTriggerActive: !prevState.isTriggerActive
+    }))
+
+  onChangeSendBefore = value =>
+    this.setState({ isDrity: true, triggerSendBefore: value })
+
+  onChangeTemplate = template => {
+    this.setState({ isDrity: true, triggerSelectedTemplate: template })
+  }
+
   onChangePrimary = () =>
     this.setState(state => ({
       is_primary: !state.is_primary,
@@ -157,6 +175,7 @@ class MasterField extends React.Component {
   }
 
   save = async () => {
+    // console.log('save method', this.state)
     const { attribute } = this.props
     const { id, cuid } = attribute
     const { is_primary, label, value } = this.state
@@ -250,7 +269,18 @@ class MasterField extends React.Component {
       onChangeValue={this.onChangeValue}
       onChangePrimary={this.onChangePrimary}
       placeholder={this.placeholder}
-    />
+    >
+      {this.isTriggable ? (
+        <TriggerField
+          isActive={this.state.isTriggerActive}
+          sendBefore={this.state.triggerSendBefore}
+          selectedTemplate={this.state.triggerSelectedTemplate}
+          toggleActive={this.toggleTriggerActive}
+          onChangeSendBefore={this.onChangeSendBefore}
+          onChangeTemplate={this.onChangeTemplate}
+        />
+      ) : null}
+    </EditMode>
   )
 
   renderViewMode = () => (
