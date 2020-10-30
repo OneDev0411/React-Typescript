@@ -3,7 +3,6 @@ import Flex from 'styled-flex-component'
 
 import { grey, primary } from 'views/utils/colors'
 import LinkButton from 'components/Button/LinkButton'
-import ArrowDropDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 export const FormContainer = styled.form`
   width: 100%;
@@ -26,10 +25,4 @@ export const DropButton = styled(LinkButton)`
       fill: ${primary};
     }
   }
-`
-
-export const IconDrop = styled(ArrowDropDown)`
-  position: relative;
-  margin-left: 1em;
-  transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
 `

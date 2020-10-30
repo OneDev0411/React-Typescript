@@ -42,7 +42,6 @@ interface Props
    * If set, it's used to update an already existing scheduled/draft email
    */
   emailId?: string
-  onClickAddDealAttachments?: () => void
 }
 
 export function SingleEmailComposeForm({
@@ -53,7 +52,6 @@ export function SingleEmailComposeForm({
   preferredAccountId,
   deal,
   headers = {},
-  onClickAddDealAttachments = () => {},
   ...otherProps
 }: Props) {
   const user = useSelector<IAppState, IUser>(store => store.user)
@@ -73,7 +71,9 @@ export function SingleEmailComposeForm({
 
   const dispach = useDispatch()
 
-  const [individualMode, setIndividualMode] = useState(false)
+  const [individualMode, setIndividualMode] = useState(
+    !!otherProps.initialValues?.templateInstance
+  )
 
   const handleSendEmail = async (
     formValue: EmailFormValues & { template: string }
@@ -168,7 +168,6 @@ export function SingleEmailComposeForm({
         deal={deal}
         isSubmitDisabled={isLoadingAccounts}
         sendEmail={handleSendEmail}
-        onClickAddDealAttachments={onClickAddDealAttachments}
         onSelectMarketingTemplate={handleSelectMarketingTemplate}
         renderCollapsedFields={(values: EmailFormValues) => (
           <>

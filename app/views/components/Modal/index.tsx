@@ -68,6 +68,9 @@ export const ModalFooter = styled.div`
   padding: 0 1em;
   border-top: 1px solid #d4d4d4;
 `
+export const ModalContent = styled.div`
+  padding: 24px;
+`
 
 interface Props extends ComponentProps<typeof BareModal> {
   Header?: ReactNode

@@ -18,13 +18,13 @@ const StyledButtonGroup = styled(ButtonGroup)`
 `
 
 export default function DatePeriodSwitcher() {
-    return (
-        <Box display="flex" justifyContent="flex-end" mb={6}>
-            <StyledButtonGroup aria-label="overview-period">
-                <Button disabled>Week</Button>
-                <Button disabled>Month</Button>
-                <Button>YTD</Button>
-            </StyledButtonGroup>
-        </Box>
-    )
+  return (
+    <Box display="flex" justifyContent="flex-end" mb={6}>
+      <StyledButtonGroup aria-label="overview-period">
+        <Button disabled>Week</Button>
+        <Button disabled>Month</Button>
+        <Button>YTD</Button>
+      </StyledButtonGroup>
+    </Box>
+  )
 }

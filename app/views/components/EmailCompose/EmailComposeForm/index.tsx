@@ -6,7 +6,7 @@ import createFocusDecorator from 'final-form-focus'
 import { TextField } from 'final-form-material-ui'
 import { Box, makeStyles, useTheme } from '@material-ui/core'
 import { isEqual } from 'lodash'
-import { addNotification as notify } from 'reapop'
+import { addNotification } from 'reapop'
 
 import { ClassesProps } from 'utils/ts-utils'
 
@@ -66,7 +66,7 @@ export default function EmailComposeForm<T>({
   onDelete,
   uploadAttachment = uploadEmailAttachment,
   onSent = () => {},
-  onClickAddDealAttachments = () => {},
+  onClickAddDealAttachments,
   onSelectMarketingTemplate,
   disableMarketingTemplates = false,
   children,
@@ -132,6 +132,41 @@ export default function EmailComposeForm<T>({
     initialValues.body
   )
 
+  function handleClickAddDealAttachments(formValues: EmailFormValues) {
+    const uploadingAttachments = (formValues as any).uploadingAttachments // Temporary form value, not mandatory.
+    const numberOfUploadingAttachments = Array.isArray(uploadingAttachments)
+      ? uploadingAttachments.length
+      : 0
+    const stillUploadingSomeAttachments = numberOfUploadingAttachments > 0
+
+    if (stillUploadingSomeAttachments) {
+      dispatch(
+        addNotification({
+          status: 'warning',
+          message:
+            numberOfUploadingAttachments === 1
+              ? 'There is still one uploading attachment. Please, wait until uploading completes, or remove it.'
+              : 'There are still some uploading attachments. Please, wait until uploading completes, or remove them.'
+        })
+      )
+
+      return
+    }
+
+    const derivedFormValues: EmailFormValues = marketingTemplate
+      ? {
+          ...formValues,
+          body: marketingTemplate.html,
+          templateInstance: marketingTemplate
+        }
+      : {
+          ...formValues,
+          body: bodyEditor.getHtml()
+        }
+
+    onClickAddDealAttachments && onClickAddDealAttachments(derivedFormValues)
+  }
+
   const handleSendEmail = async (formData: EmailFormValues) => {
     const { successMessage, errorMessage } = getSendEmailResultMessages(
       !!formData.due_at
@@ -159,7 +194,7 @@ export default function EmailComposeForm<T>({
       console.error('error in sending email', e)
 
       return dispatch(
-        notify({
+        addNotification({
           status: 'error',
           message: e.response?.body?.message || errorMessage
         })
@@ -167,7 +202,7 @@ export default function EmailComposeForm<T>({
     }
 
     dispatch(
-      notify({
+      addNotification({
         status: 'success',
         message: successMessage
       })
@@ -362,7 +397,9 @@ export default function EmailComposeForm<T>({
               setMarketingTemplate={template =>
                 selectMarketingTemplate(template, values)
               }
-              onClickAddDealAttachments={onClickAddDealAttachments}
+              onClickAddDealAttachments={() =>
+                handleClickAddDealAttachments(values)
+              }
             />
           </form>
         )

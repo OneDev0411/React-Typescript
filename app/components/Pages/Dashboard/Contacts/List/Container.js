@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 import _ from 'underscore'
 import Alert from '@material-ui/lab/Alert'
 import { Box, IconButton } from '@material-ui/core'
-import { mdiClose } from '@mdi/js'
+import { mdiClose, mdiLoading } from '@mdi/js'
 
 import PageLayout from 'components/GlobalPageLayout'
 import { ViewAs } from 'components/ViewAs'
@@ -51,7 +51,7 @@ import {
   PARKED_CONTACTS_LIST_ID,
   DUPLICATE_CONTACTS_LIST_ID
 } from './constants'
-import { CalloutSpinner, NavigateDuplicate } from './styled'
+import { NavigateDuplicate } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
@@ -741,7 +741,11 @@ class ContactsList extends React.Component {
               type="info"
               onClose={() => this.setState({ syncStatus: null })}
             >
-              <CalloutSpinner viewBox="20 20 60 60" />
+              <SvgIcon
+                path={mdiLoading}
+                spin={1}
+                style={{ verticalAlign: 'middle', marginRight: '0.5rem' }}
+              />
               Doing Science! Just a moment for Rechat to complete establishing
               connections and importing your contacts.
             </Callout>

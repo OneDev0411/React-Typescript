@@ -109,18 +109,6 @@ webpackConfig.plugins.push(
   })
 )
 
-// SOURCE_VERSION variable only exists in Heroku env
-if (process.env.SOURCE_VERSION) {
-  webpackConfig.plugins.push(
-    new SentryCliPlugin({
-      release: process.env.SOURCE_VERSION, // refers to the latest commit hash
-      include: 'dist/',
-      ignore: ['node_modules'],
-      urlPrefix: '~/dist'
-    })
-  )
-}
-
 webpackConfig.module.rules.push(
   {
     test: /\.(ts|tsx|js)$/,

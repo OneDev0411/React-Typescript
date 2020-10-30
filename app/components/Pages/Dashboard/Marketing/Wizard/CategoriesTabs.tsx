@@ -4,9 +4,9 @@ import { Tabs, Tab } from '@material-ui/core'
 import { getTemplateTypeToLabelMapping } from 'hooks/use-marketing-center-sections'
 
 interface Props {
-  types: string[]
-  selectedType?: string
-  onChange: (type: string) => void
+  types: MarketingTemplateType[]
+  selectedType?: MarketingTemplateType
+  onChange: (type: MarketingTemplateType) => void
 }
 
 export default function CategoriesTabs({
@@ -16,7 +16,7 @@ export default function CategoriesTabs({
 }: Props) {
   const templateTypeToLabelMapping = useMemo(getTemplateTypeToLabelMapping, [])
 
-  const handleChange = (event: unknown, newValue: string) => {
+  const handleChange = (event: unknown, newValue: MarketingTemplateType) => {
     onChange(newValue)
   }
 

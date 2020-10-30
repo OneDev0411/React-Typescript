@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
@@ -26,22 +26,23 @@ import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
 
 import uploadAsset from 'models/instant-marketing/upload-asset'
 
-import { SideNavToggleButton } from 'components/SideNavToggleButton'
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 import PageLayout from 'components/GlobalPageLayout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
 import renderBrandedTemplate from 'utils/marketing-center/render-branded-template'
+import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
 import { useGoogleMapsPlaces } from 'hooks/use-google-maps-places'
+import { useWebShareApi } from 'hooks/use-web-share-api'
 
 import { useTemplates } from '../hooks/use-templates'
 
 import { LISTING_TEMPLATE_TYPES, TEMPLATES_PAGE_SIZE } from './constants'
 import CategoriesTabs from './CategoriesTabs'
 import EditVariablesDialog from './EditVariablesDialog'
-import ShareDrawer from './ShareDrawer'
-import DownladDrawer from './DownloadDrawer'
+import PreviewDrawer from './PreviewDrawer'
+import DownloadDrawer from './DownloadDrawer'
 import { getEditableVariables } from './helpers'
 import { useEntityWithSetter } from './hooks'
 import { TemplateVariable, TemplateVariableType } from './types'
@@ -61,11 +62,11 @@ const useStyles = makeStyles(
       justifyContent: 'space-between'
     },
     title: {
-      flexGrow: 1,
-      textAlign: 'center'
+      padding: theme.spacing(0, 2)
     },
     thumbnailPaper: {
-      overflow: 'hidden'
+      overflow: 'hidden',
+      border: 'none'
     }
   }),
   {
@@ -90,12 +91,16 @@ function MarketingWizard(props: WithRouterProps) {
   >(null)
 
   const [selectedTemplateType, setSelectedTemplateType] = useState<
-    Optional<string>
+    Optional<MarketingTemplateType>
   >(undefined)
 
   const [generatedTemplateFile, setGeneratedTemplateFile] = useState<
     Optional<IFile>
   >(undefined)
+
+  const [generatedFileBlob, setGeneratedFileBlob] = useState<Optional<File>>(
+    undefined
+  )
 
   const [templatesLimit, setTemplatesLimit] = useState<number>(
     TEMPLATES_PAGE_SIZE
@@ -151,11 +156,31 @@ function MarketingWizard(props: WithRouterProps) {
     onScrollBottom: loadMoreTemplates
   })
 
-  const handleOpenShareDrawer = (template: IBrandMarketingTemplate) => {
+  useEffect(() => {
+    async function setFileBlob() {
+      if (!generatedTemplateFile) {
+        setGeneratedFileBlob(undefined)
+
+        return
+      }
+
+      const file = await convertUrlToImageFile(generatedTemplateFile.url)
+
+      setGeneratedFileBlob(file)
+    }
+
+    setFileBlob()
+  }, [generatedTemplateFile])
+
+  const { canShare, share } = useWebShareApi({
+    files: generatedFileBlob ? [generatedFileBlob] : undefined
+  })
+
+  const handleOpenPreviewDrawer = (template: IBrandMarketingTemplate) => {
     setSelectedTemplate(template)
   }
 
-  const handleCloseShareDrawer = () => {
+  const handleClosePreviewDrawer = () => {
     setSelectedTemplate(null)
   }
 
@@ -203,7 +228,7 @@ function MarketingWizard(props: WithRouterProps) {
         }
       )
 
-      handleCloseShareDrawer()
+      handleClosePreviewDrawer()
       handleOpenDownloadDrawer(templateInstance.file)
     } catch (err) {
       dispatch(
@@ -245,7 +270,6 @@ function MarketingWizard(props: WithRouterProps) {
           className={classes.appBar}
         >
           <Toolbar disableGutters className={classes.toolbar}>
-            <SideNavToggleButton />
             <Typography
               variant="h6"
               color="textPrimary"
@@ -281,16 +305,12 @@ function MarketingWizard(props: WithRouterProps) {
                 lg={4}
               >
                 <Box my={2} mx={1}>
-                  <Paper
-                    elevation={12}
-                    variant="elevation"
-                    className={classes.thumbnailPaper}
-                  >
+                  <Paper variant="outlined" className={classes.thumbnailPaper}>
                     <Thumbnail
                       user={user}
                       listing={listing!}
                       template={template}
-                      onClick={() => handleOpenShareDrawer(template)}
+                      onClick={() => handleOpenPreviewDrawer(template)}
                     />
                   </Paper>
                 </Box>
@@ -301,11 +321,11 @@ function MarketingWizard(props: WithRouterProps) {
       </PageLayout.Main>
 
       {listing && selectedTemplate && (
-        <ShareDrawer
+        <PreviewDrawer
           template={selectedTemplate}
           listing={listing}
           user={user}
-          onClose={handleCloseShareDrawer}
+          onClose={handleClosePreviewDrawer}
           onPrepareClick={() => handlePrepareClick(selectedTemplate)}
         />
       )}
@@ -318,9 +338,10 @@ function MarketingWizard(props: WithRouterProps) {
         />
       )}
       {generatedTemplateFile && (
-        <DownladDrawer
+        <DownloadDrawer
           file={generatedTemplateFile}
           onClose={handleCloseDownloadDrawer}
+          onShare={canShare ? share : undefined}
         />
       )}
     </PageLayout>

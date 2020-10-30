@@ -6,6 +6,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import { browserHistory } from 'react-router'
 import idx from 'idx'
+import { encodeURI } from 'js-base64'
 
 import publicConfig from '../../../../config/public'
 
@@ -56,7 +57,7 @@ const getActionRedirectURL = params => {
   if (action === 'OpenMarketingWizard') {
     if (files && files.length) {
       return `/dashboard/marketing/wizard?imageUrls=${files
-        .map(file => encodeURIComponent(file.url))
+        .map(file => encodeURI(file.url))
         .join(',')}`
     }
 

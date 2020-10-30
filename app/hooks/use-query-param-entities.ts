@@ -1,21 +1,26 @@
 import { useState, useEffect } from 'react'
 import { WithRouterProps } from 'react-router'
+import { decode } from 'js-base64'
 
 import getListing from 'models/listings/listing/get-listing'
 import { getContact } from 'models/contacts/get-contact'
+
+import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 
 interface UseEntityById {
   isLoading: boolean
   error: Nullable<Error>
 }
 
+const LISTING_ID_QUERY_KEY = 'listingId'
+const LISTING_IMAGES_QUERY_KEY = 'imageUrls'
+
 interface UseListingById extends UseEntityById {
   listing: Nullable<IListing>
 }
 
 export function useListingById(
-  location: WithRouterProps['location'],
-  field: string = 'listingId'
+  location: WithRouterProps['location']
 ): UseListingById {
   const [listing, setListing] = useState<Nullable<IListing>>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -23,10 +28,22 @@ export function useListingById(
 
   useEffect(() => {
     async function fetchListing() {
-      const listingId: Optional<UUID> = location.query[field]
+      const listingId: Optional<UUID> = location.query[LISTING_ID_QUERY_KEY]
 
       if (!listingId) {
-        setListing(null)
+        const mockedListing = ((await getMockListing()) as unknown) as IListing
+
+        const images: string[] = location.query[LISTING_IMAGES_QUERY_KEY]
+          ? location.query[LISTING_IMAGES_QUERY_KEY].split(',').map(decode)
+          : []
+
+        setListing({
+          ...mockedListing,
+          gallery_image_urls: images.length
+            ? images
+            : mockedListing.gallery_image_urls
+        })
+
         setIsLoading(false)
         setError(null)
 
@@ -49,7 +66,7 @@ export function useListingById(
     }
 
     fetchListing()
-  }, [location.query, field])
+  }, [location.query])
 
   return {
     listing,

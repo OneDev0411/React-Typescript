@@ -1,0 +1,3 @@
+@keyframes flash {
+  50% { opacity: 0 }
+}

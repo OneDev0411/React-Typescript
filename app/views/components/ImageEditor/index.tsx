@@ -11,6 +11,8 @@ import {
   useTheme
 } from '@material-ui/core'
 
+import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
+
 import { Undo } from './plugins/Undo'
 import { Redo } from './plugins/Redo'
 import { Delete } from './plugins/Delete'
@@ -132,7 +134,7 @@ export function Editor({ file, dimensions, onClose, onSave }: Props) {
     setEditor(editor as ImageEditor)
 
     const blob =
-      typeof file === 'string' ? await imageDataUrlToFile(file) : file
+      typeof file === 'string' ? await convertUrlToImageFile(file) : file
 
     setBlob(blob)
 
@@ -151,7 +153,7 @@ export function Editor({ file, dimensions, onClose, onSave }: Props) {
   const handleSave = async () => {
     onClose()
 
-    const file = await imageDataUrlToFile(
+    const file = await convertUrlToImageFile(
       editor!.toDataURL({
         format: 'jpeg',
         quality: 1
@@ -159,13 +161,6 @@ export function Editor({ file, dimensions, onClose, onSave }: Props) {
     )
 
     onSave(file)
-  }
-
-  const imageDataUrlToFile = async (url: string) => {
-    const response = await fetch(url)
-    const bufferData = await response.arrayBuffer()
-
-    return new File([bufferData], 'image.jpg', { type: 'image/jpeg' })
   }
 
   return (

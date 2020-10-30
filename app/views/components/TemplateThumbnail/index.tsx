@@ -1,23 +1,40 @@
 import React, { useState, useEffect, useRef } from 'react'
 import useDeepCompareEffect from 'use-deep-compare-effect'
 
-import { makeStyles } from '@material-ui/core'
+import { CircularProgress, makeStyles } from '@material-ui/core'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { renderMjml } from 'components/TemplatePreview/helpers'
 
-import {
-  getMjmlTemplateRenderData,
-  getNonMjmlTemplateRenderData
-} from 'components/InstantMarketing/Builder/utils/get-template-render-data'
+import { getTemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 
-const useStyles = makeStyles(() => ({
-  iframe: {
-    transformOrigin: '0 0',
-    background: '#fff',
-    opacity: 0
+const useStyles = makeStyles(
+  () => ({
+    container: {
+      position: 'relative'
+    },
+    loadingContainer: {
+      position: 'absolute',
+      opacity: 0.5,
+      width: '100%',
+      height: '100%',
+      zIndex: 1,
+      top: 0,
+      left: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    iframe: {
+      transformOrigin: '0 0',
+      background: '#fff',
+      opacity: 0
+    }
+  }),
+  {
+    name: 'MarketingTemplateThumbnail'
   }
-}))
+)
 
 interface Props {
   template: string
@@ -42,12 +59,11 @@ export default function TemplateThumbnail({
   const classes = useStyles()
   const ref = useRef<HTMLIFrameElement>(null)
   const [previewMarkup, setPreviewMarkup] = useState<string>('')
+  const [isLoadingPreview, setIsLoadingPreview] = useState<boolean>(true)
 
   useDeepCompareEffect(() => {
     async function loadTemplate() {
-      const renderData = mjml
-        ? getMjmlTemplateRenderData(brand)
-        : getNonMjmlTemplateRenderData(brand)
+      const renderData = getTemplateRenderData(brand)
 
       const nunjucksRenderedTemplate = nunjucks.renderString(template, {
         ...renderData,
@@ -103,20 +119,26 @@ export default function TemplateThumbnail({
       const ratio = widthSpace / iframeWidth
 
       ref.current.style.transform = `scale(${ratio})`
-      ref.current.style.opacity = '1'
-
       ref.current.style.width = `${iframeWidth}px`
       ref.current.style.height = `${iframeHeight}px`
+
+      ref.current.style.opacity = '1'
 
       if (ref.current.parentElement) {
         ref.current.parentElement.style.height = `${ratio * iframeHeight}px`
         ref.current.parentElement.style.width = `${ratio * iframeWidth}px`
+        setIsLoadingPreview(false)
       }
     }
   }, [ref, previewMarkup, onClick])
 
   return (
-    <div>
+    <div className={classes.container}>
+      {isLoadingPreview && (
+        <div className={classes.loadingContainer}>
+          <CircularProgress />
+        </div>
+      )}
       <iframe
         width="100%"
         ref={ref}

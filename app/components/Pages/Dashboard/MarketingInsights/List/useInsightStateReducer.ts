@@ -1,9 +1,7 @@
-import { useReducer } from 'react'
-
 import { InsightAction, InsightActionType, InsightState } from './types'
 import { filterInsightList } from './helpers'
 
-const initialState: InsightState = {
+export const initialState: InsightState = {
   isLoading: false,
   hasError: false,
   list: [],
@@ -13,7 +11,10 @@ const initialState: InsightState = {
   }
 }
 
-function reducer(state: InsightState, action: InsightAction): InsightState {
+export function useInsightStateReducer(
+  state: InsightState,
+  action: InsightAction
+): InsightState {
   switch (action.type) {
     case InsightActionType.FetchListRequest:
       return {
@@ -60,8 +61,4 @@ function reducer(state: InsightState, action: InsightAction): InsightState {
     default:
       return state
   }
-}
-
-export function useInsightStateReducer() {
-  return useReducer(reducer, initialState)
 }
