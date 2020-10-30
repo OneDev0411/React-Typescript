@@ -5,9 +5,9 @@ const endDateValidator = (dueDate, endDate, isAllDay) => {
 
   if (isAllDay) {
     return (
-      endDate.getFullYear() < dueDate.getFullYear() ||
-      endDate.getMonth() < dueDate.getMonth() ||
-      endDate.getDate() < dueDate.getDate()
+      endDate.getUTCFullYear() < dueDate.getUTCFullYear() &&
+      (endDate.getUTCMonth() < dueDate.getUTCMonth() ||
+        endDate.getUTCDate() < dueDate.getUTCDate())
     )
   }
 
