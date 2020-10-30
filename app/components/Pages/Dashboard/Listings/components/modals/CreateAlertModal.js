@@ -3,10 +3,12 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Modal } from 'react-bootstrap'
+
 import Flex from 'styled-flex-component'
 
 import { mdiBell } from '@mdi/js'
+
+import { Modal, ModalFooter } from 'components/Modal'
 
 import createAlert from 'actions/listings/alerts/create-alert'
 import ActionButton from 'components/Button/ActionButton'
@@ -32,11 +34,12 @@ const CreateAlertModal = ({
 }) => (
   <div>
     <Modal
-      show={isActive}
-      onHide={isSaving ? () => {} : onHide}
+      isOpen={isActive}
+      autoHeight
+      onRequestClose={isSaving ? () => {} : onHide}
       className="c-create-alert-modal"
     >
-      <Modal.Body style={{ padding: 0 }}>
+      <>
         <div className="c-create-alert-modal__hero">
           <SvgIcon path={mdiBell} size={muiIconSizes.xlarge} />
           <p style={{ marginBottom: 0 }}>Get new listings faster</p>
@@ -52,15 +55,15 @@ const CreateAlertModal = ({
             onChange={titleInputOnChange}
           />
         </div>
-      </Modal.Body>
-      <Modal.Footer
+      </>
+      <ModalFooter
         style={{
           padding: '0.5em',
           borderRadius: '0 0 3px 3px',
           backgroundColor: '#FFF'
         }}
       >
-        <Flex alignCenter justifyBetween>
+        <Flex alignCenter justifyBetween style={{ width: '100%' }}>
           <ActionButton
             appearance="outline"
             size="small"
@@ -78,7 +81,7 @@ const CreateAlertModal = ({
             Save &amp; Share
           </ActionButton>
         </Flex>
-      </Modal.Footer>
+      </ModalFooter>
     </Modal>
     <SuccessModal
       type="SAVED_ALERT"

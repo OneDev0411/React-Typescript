@@ -63,7 +63,7 @@ export const TEMPLATE = `
 
 
     </mj-style>
-    {{ palette | safe }}
+    {% include 'palette.mjml' %}
  </mj-head>
 
   <mj-body mj-class="body" padding="0">

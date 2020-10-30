@@ -1,5 +1,6 @@
 .modal-deal-upload-files {
-  width: 924px;
+  width: 100% !important;
+  max-width: 924px !important;
 
   .modal-content {
     border: none;
@@ -10,7 +11,7 @@
     @extend %deal-modal-header;
   }
 
-  .modal-body {
+  & .modal-body, & .uploads-container {
     @extend %upload-file-container;
   }
 

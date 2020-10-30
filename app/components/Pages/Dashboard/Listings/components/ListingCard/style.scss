@@ -45,6 +45,10 @@
       background: rgba(0, 0, 0, 0.3);
     }
   }
+
+  &:hover .c-listing-card__selection {
+    visibility: visible;
+  }
 }
 
 .c-listing-card__inner:before {
@@ -97,10 +101,23 @@
   height: 2rem;
 }
 
+.c-listing-card__selection {
+  position: absolute;
+  left: 1em;
+  top: 0.5em;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  visibility: hidden;
+
+  &.visible {
+    visibility: visible;
+  }
+}
+
 .c-listing-card__alertStatus {
   position: absolute;
-  top: 1em;
-  left: 1em;
+  top: 0.5em;
+  right: 4em;
   padding: 0.5em;
   color: #fff;
   border-radius: 3px;

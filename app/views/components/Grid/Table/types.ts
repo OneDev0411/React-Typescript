@@ -55,7 +55,8 @@ export type GridHookPlugin<Row, Options> = (
 
 export interface GridSelectionOptions<Row> {
   columnProps?: Omit<TableColumn<Row>, 'id'>
-  defaultRender?: null | ((rowItem: RenderProps<Row>) => React.ReactNode)
+  render?: ((rowItem: RenderProps<Row>) => React.ReactNode) | null
+  defaultRender?: ((rowItem: RenderProps<Row>) => React.ReactNode) | null
   showSelectAll?: boolean
 }
 

@@ -18,7 +18,10 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-import { SingleEmailComposeDrawer } from 'components/EmailCompose'
+import {
+  EmailFormValues,
+  SingleEmailComposeDrawer
+} from 'components/EmailCompose'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
@@ -34,7 +37,8 @@ import {
 import {
   CANCEL,
   REMOVE_ATTACHMENT,
-  SET_DRAWER_STATUS
+  SET_DRAWER_STATUS,
+  SET_FORM_META
 } from '../../contexts/actions-context/constants'
 import { useChecklistActionsContext } from '../../contexts/actions-context/hooks'
 
@@ -106,6 +110,14 @@ export function TaskActions({ deal }: Props) {
       type: SET_DRAWER_STATUS,
       isDrawerOpen: false
     })
+  }
+
+  const handleClickAddDealAttachments = (formValues: EmailFormValues) => {
+    dispatch({
+      type: SET_FORM_META,
+      form: formValues
+    })
+    handleCloseDrawer()
   }
 
   return (
@@ -199,11 +211,9 @@ export function TaskActions({ deal }: Props) {
             [EMAIL_FORM, EMAIL_ENVELOPE, EMAIL_FORM].includes(id)
           )
         }
-        initialValues={{
-          attachments: state.attachments
-        }}
+        initialValues={state.form}
         deal={deal}
-        onClickAddDealAttachments={handleCloseDrawer}
+        onClickAddDealAttachments={handleClickAddDealAttachments}
         onClose={handleCancel}
         onSent={handleCancel}
       />

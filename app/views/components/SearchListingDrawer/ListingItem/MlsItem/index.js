@@ -39,7 +39,7 @@ export function MlsItem({ item, ...props }) {
   const address = getListingAddressObj(item)
 
   if (!address) {
-    return false
+    return null
   }
 
   return (
@@ -57,12 +57,16 @@ export function MlsItem({ item, ...props }) {
           )}
           <ListItemAddress>
             <Address style={{ fontWeight: '500' }}>
-              {addressTitle(address)}
+              {typeof address === 'string' ? address : addressTitle(address)}
             </Address>
 
             <Address style={{ color: grey.A550 }}>
-              {address.city}, {address.state}, {address.postal_code}, $
-              {item.price.toLocaleString()}
+              {typeof address === 'object' && (
+                <>
+                  {address.city}, {address.state}, {address.postal_code},
+                </>
+              )}{' '}
+              ${item.price.toLocaleString()}
             </Address>
           </ListItemAddress>
         </AddressContainer>

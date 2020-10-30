@@ -1,38 +1,37 @@
 {% for listing in listings %}
-<mj-section direction="rtl" padding="20px 20px" rechat-editable="tree" background-color="#fff">
+<mj-section mj-class="container" direction="rtl" padding-top="20px" padding-bottom="20px" rechat-editable="tree">
   <mj-column>
     <mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
   </mj-column>
   <mj-column padding-right="10px">
-    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="20px" line-height="1.5" align="left">
+    <mj-text mj-class="h3" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       {{listing.property.address.street_address}}
     </mj-text>
-    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="16px" line-height="1.5" align="left">
+    <mj-text mj-class="container-text" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       <strong>{{ listing.price | currency }}</strong>{% if listing.is_lease %}/mo{% endif %}
     </mj-text>
-    <mj-spacer height="5px"></mj-spacer>
     {% if listing.property.bedroom_count %}
-    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+    <mj-text mj-class="container-text" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       <span><strong>{{listing.property.bedroom_count}}</strong> Beds</span>
     </mj-text>
     {% endif %}
     {% if listing.property.bathroom_count %}
-    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+    <mj-text mj-class="container-text" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       <span><strong>{{listing.property.bathroom_count}}</strong> Baths</span>
     </mj-text>
     {% endif %}
     {% if listing.property.square_meters %}
-    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+    <mj-text mj-class="container-text" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       <span><strong>{{listing.property.square_meters | area}}</strong> Sqft</span>
     </mj-text>
     {% endif %}
     {% if listing.property.year_built %}
-    <mj-text padding="0" color="#444" font-family="Helvetica, Arial, sans-serif" rechat-editable="tree" font-size="14px" line-height="1.5" align="left">
+    <mj-text mj-class="container-text" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       <span>Built in <strong>{{listing.property.year_built}}</strong></span>
     </mj-text>
     {% endif %}
     <mj-spacer height="5px"></mj-spacer>
-    <mj-button rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px" font-family="Helvetica, Arial, sans-serif" font-size="14px" line-height="1.5" align="left" href="{{getListingUrl(listing)}}">
+    <mj-button rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px" font-size="14px" line-height="1.5" align="left" href="{{getListingUrl(listing)}}">
       View Listing
     </mj-button>
   </mj-column>

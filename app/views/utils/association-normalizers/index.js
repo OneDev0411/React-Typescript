@@ -95,7 +95,6 @@ export const normalizeListing = (listing, showStatus = true) => {
     avatar: {
       url: listing.cover_image_url,
       isOnline: showStatus,
-      showStatus,
       statusColor: `#${getStatusColor(listing.status)}`,
       placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
@@ -125,7 +124,6 @@ export const normalizeDeal = (deal, showStatus = true) => {
     avatar: {
       url: getDealField(deal, 'photo'),
       isOnline: showStatus,
-      showStatus,
       statusColor: `#${getStatusColor(getDealStatus(deal))}`,
       placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
     },

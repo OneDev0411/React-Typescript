@@ -1,10 +1,10 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useReducer } from 'react'
 
 import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 
 import { InsightActionType, InsightFilterType, InsightState } from './types'
-import { useInsightStateReducer } from './useInsightStateReducer'
+import { useInsightStateReducer, initialState } from './useInsightStateReducer'
 
 export default function useListData(
   user: IUser,
@@ -13,7 +13,7 @@ export default function useListData(
   reloadList: () => Promise<void>
   reloadItem: (emailCampaignId: UUID) => Promise<void>
 } {
-  const [state, dispatch] = useInsightStateReducer()
+  const [state, dispatch] = useReducer(useInsightStateReducer, initialState)
 
   const reloadList = useCallback<
     ReturnType<typeof useListData>['reloadList']
@@ -44,10 +44,6 @@ export default function useListData(
 
   const reloadItem = useCallback<ReturnType<typeof useListData>['reloadItem']>(
     async emailCampaignId => {
-      if (!state.list.some(({ id }) => id === emailCampaignId)) {
-        return
-      }
-
       dispatch({
         type: InsightActionType.FetchItemRequest
       })
@@ -71,12 +67,12 @@ export default function useListData(
         })
       }
     },
-    [state.list]
+    []
   )
 
   useEffect(() => {
     reloadList()
-  }, [user, filterType])
+  }, [user, filterType, reloadList])
 
   return {
     ...state,

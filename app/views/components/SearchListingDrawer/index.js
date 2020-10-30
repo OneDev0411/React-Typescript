@@ -145,6 +145,7 @@ class SearchListingDrawer extends React.Component {
           debounceTime: 700,
           minimumLength: 3
         }}
+        defaultSelectedItems={this.props.defaultSelectedItems}
         ItemRow={ListingItem}
         normalizeSelectedItem={this.normalizeSelectedItem}
         searchFunction={this.searchListing}

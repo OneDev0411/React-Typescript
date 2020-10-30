@@ -10,7 +10,7 @@ declare interface IBrandMarketingTemplate extends IModel<'brand_template'> {
 declare interface IMarketingTemplate extends IModel<'template'> {
   name: string
   brand: null
-  template_type: string
+  template_type: MarketingTemplateType
   medium: MarketingTemplateMedium
   video: boolean
   mjml: boolean

@@ -153,49 +153,51 @@ export default function SortableImageList({
               innerRef={droppableProvided.innerRef}
               {...droppableProvided.droppableProps}
             >
-              {variable.images.map((image, index) => (
-                <Draggable
-                  key={image.name}
-                  draggableId={image.name}
-                  index={index}
-                >
-                  {(
-                    draggableProvided: DraggableProvided,
-                    draggableSnapshot: DraggableStateSnapshot
-                  ) => (
-                    <Grid
-                      container
-                      item
-                      direction="row"
-                      alignItems="center"
-                      innerRef={draggableProvided.innerRef}
-                      {...draggableProvided.draggableProps}
-                      style={{
-                        ...draggableProvided.draggableProps.style
-                      }}
-                    >
-                      <Grid item xs={2}>
-                        <IconButton {...draggableProvided.dragHandleProps}>
-                          <SvgIcon path={mdiArrowUpDown} />
-                        </IconButton>
+              {variable.images
+                .filter(image => image.value !== undefined)
+                .map((image, index) => (
+                  <Draggable
+                    key={image.name}
+                    draggableId={image.name}
+                    index={index}
+                  >
+                    {(
+                      draggableProvided: DraggableProvided,
+                      draggableSnapshot: DraggableStateSnapshot
+                    ) => (
+                      <Grid
+                        container
+                        item
+                        direction="row"
+                        alignItems="center"
+                        innerRef={draggableProvided.innerRef}
+                        {...draggableProvided.draggableProps}
+                        style={{
+                          ...draggableProvided.draggableProps.style
+                        }}
+                      >
+                        <Grid item xs={2}>
+                          <IconButton {...draggableProvided.dragHandleProps}>
+                            <SvgIcon path={mdiArrowUpDown} />
+                          </IconButton>
+                        </Grid>
+                        <Grid item xs={8}>
+                          <Avatar
+                            variant="rounded"
+                            className={classes.image}
+                            alt={image.label}
+                            src={image.value}
+                          />
+                        </Grid>
+                        <Grid item xs={2}>
+                          <IconButton onClick={() => handleDeleteImage(image)}>
+                            <SvgIcon path={mdiTrashCanOutline} />
+                          </IconButton>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={8}>
-                        <Avatar
-                          variant="rounded"
-                          className={classes.image}
-                          alt={image.label}
-                          src={image.value}
-                        />
-                      </Grid>
-                      <Grid item xs={2}>
-                        <IconButton onClick={() => handleDeleteImage(image)}>
-                          <SvgIcon path={mdiTrashCanOutline} />
-                        </IconButton>
-                      </Grid>
-                    </Grid>
-                  )}
-                </Draggable>
-              ))}
+                    )}
+                  </Draggable>
+                ))}
               {droppableProvided.placeholder}
             </Grid>
           )}

@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "81.1.1",
+  "version": "82.0.0",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -32,7 +32,9 @@
     "test:update-snapshots": "npm run test:unit -- -u",
     "test:ci": "npm run test:unit",
     "test": "jest --watch",
-    "jest": "jest"
+    "jest": "jest",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "prettier": {
     "semi": false,
@@ -153,6 +155,7 @@
     "immutable": "^3.8.2",
     "intercom-client": "^2.11.0",
     "intersection-observer": "^0.5.1",
+    "js-base64": "^3.5.2",
     "js-cookie": "^2.2.0",
     "juice": "^5.2.0",
     "koa": "^2.11.0",
@@ -222,7 +225,7 @@
     "react-joyride": "^2.0.0-15",
     "react-lazy-load": "^3.0.13",
     "react-loadable": "^5.4.0",
-    "react-masonry-css": "^1.0.12",
+    "react-masonry-css": "^1.0.14",
     "react-modal": "^3.8.1",
     "react-motion": "^0.5.2",
     "react-progressive-image": "^0.6.0",
@@ -305,6 +308,12 @@
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
     "@commitlint/prompt-cli": "^8.0.0",
+    "@storybook/addon-actions": "^6.0.27",
+    "@storybook/addon-essentials": "^6.0.27",
+    "@storybook/addon-links": "^6.0.27",
+    "@storybook/addons": "^6.0.27",
+    "@storybook/react": "^6.0.27",
+    "@storybook/theming": "^6.0.27",
     "@testing-library/react": "^8.0.1",
     "@types/backbone": "^1.4.1",
     "@types/chart.js": "^2.9.15",
@@ -402,6 +411,8 @@
     "opn": "^6.0.0",
     "prettier": "^2.0.5",
     "raw-loader": "^3.1.0",
+    "react-is": "^17.0.1",
+    "storybook-dark-mode": "^1.0.3",
     "styled-svg": "^2.3.4",
     "ts-jest": "^26.0.0",
     "typescript": "^3.9.2",

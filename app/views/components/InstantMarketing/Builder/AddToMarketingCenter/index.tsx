@@ -57,7 +57,9 @@ export function AddToMarketingCenter({
   getTemplateMarkup,
   notify
 }: Props & ConnectedProps) {
-  const [selectedTemplateType, setSelectedTemplateType] = useState('none')
+  const [selectedTemplateType, setSelectedTemplateType] = useState<
+    Optional<MarketingTemplateType>
+  >(undefined)
   const [isUserTeamsDrawerOpen, setIsUserTeamsDrawerOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const categories = useMarketingCenterCategories()
@@ -74,13 +76,17 @@ export function AddToMarketingCenter({
     setAnchorEl(null)
   }
 
-  const handleCategoryClick = (selectedCategory: string) => {
+  const handleCategoryClick = (selectedCategory: MarketingTemplateType) => {
     setSelectedTemplateType(selectedCategory)
     setIsUserTeamsDrawerOpen(true)
     handleClosePopover()
   }
 
   async function handleSelectTeams(teams: UUID[]) {
+    if (!selectedTemplateType) {
+      return
+    }
+
     const html = getTemplateMarkup()
 
     try {
@@ -169,7 +175,4 @@ export function AddToMarketingCenter({
   )
 }
 
-export default connect(
-  null,
-  { notify: addNotification }
-)(AddToMarketingCenter)
+export default connect(null, { notify: addNotification })(AddToMarketingCenter)

@@ -38,7 +38,7 @@ export function EmailAttachmentsDropdown({
   uploadAttachment,
   uploadOrigin,
   onChanged = () => {},
-  onClickAddDealAttachments = () => {}
+  onClickAddDealAttachments
 }: Props) {
   const attachmentsField = useField('attachments')
   const [upload] = useUploadAttachment(uploadAttachment, uploadOrigin)
@@ -69,7 +69,7 @@ export function EmailAttachmentsDropdown({
       renderMenu={({ close }) => (
         <List>
           <AddDealFile
-            deafultSelectedDeal={deal}
+            defaultSelectedDeal={deal}
             initialAttachments={initialAttachments}
             onChange={files => {
               attachmentsField.input.onChange(files)

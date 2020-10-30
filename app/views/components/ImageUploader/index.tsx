@@ -112,7 +112,7 @@ export function ImageUploader({
             alignItems="center"
             textAlign="center"
             className={classes.container}
-            {...getRootProps()}
+            {...{ ...getRootProps(), css: {} }}
           >
             <input {...getInputProps()} />
 

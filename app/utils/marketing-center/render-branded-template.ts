@@ -1,6 +1,6 @@
 import { loadTemplateHtml } from "models/instant-marketing"
 
-import { getMjmlTemplateRenderData, getNonMjmlTemplateRenderData } from "components/InstantMarketing/Builder/utils/get-template-render-data"
+import { getTemplateRenderData } from "components/InstantMarketing/Builder/utils/get-template-render-data"
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { renderMjml } from "components/TemplatePreview/helpers"
 
@@ -11,9 +11,7 @@ interface TemplateData {
 }
 
 export default async function renderBrandedTemplate(template: IBrandMarketingTemplate, brand: IBrand, data: TemplateData): Promise<string> {
-  const renderData = template.template.mjml
-    ? getMjmlTemplateRenderData(brand)
-    : getNonMjmlTemplateRenderData(brand)
+  const renderData = getTemplateRenderData(brand)
 
   const markup = await loadTemplateHtml(template)
 
