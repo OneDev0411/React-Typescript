@@ -1,7 +1,5 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react'
-import { connect } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
+import { useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
 import {
@@ -20,6 +18,7 @@ import {
   createStyles
 } from '@material-ui/core/styles'
 
+import { getEmailTemplates } from 'models/email-templates/get-email-templates'
 import { getBrandFlow } from 'models/flows/get-brand-flow'
 import { deleteBrandFlowStep } from 'models/flows/delete-brand-flow-step'
 import { editBrandFlowStep } from 'models/flows/edit-brand-flow-step'
@@ -29,9 +28,6 @@ import { editBrandFlow } from 'models/flows/edit-brand-flow'
 import { stopFlow } from 'models/flows/stop-flow'
 
 import { IAppState } from 'reducers'
-import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
-import { selectEmailTemplates } from 'reducers/email-templates'
-
 import { getActiveTeamId } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
 
@@ -74,21 +70,18 @@ const Tabs = withStyles({
   }
 })(MUITabs)
 
-interface Props {
-  brand: UUID
-  emailTemplates: IBrandEmailTemplate[]
-  fetchEmailTemplates: IAsyncActionProp<typeof fetchEmailTemplates>
-}
-
-function Edit({
-  brand,
-  fetchEmailTemplates,
-  ...props
-}: WithRouterProps & Props) {
+function Edit(props: WithRouterProps) {
   const theme = useTheme()
   const classes = useStyles()
+
+  const user = useSelector<IAppState, IUser>(store => store.user)
+  const brand = getActiveTeamId(user) || ''
+
   const [error, setError] = useState('')
   const [flow, setFlow] = useState<IBrandFlow | null>(null)
+  const [emailTemplates, setEmailTemplates] = useState<
+    Nullable<IBrandEmailTemplate[]>
+  >(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isDuplicateModalOpen, setIsDuplicateModalOpen] = useState(false)
   const [
@@ -154,8 +147,18 @@ function Edit({
   }, [brand, getFlow, loadFlowData, props.location.state, props.params.id])
 
   useEffect(() => {
-    fetchEmailTemplates(brand)
-  }, [brand, fetchEmailTemplates])
+    async function fetchEmailTemplates() {
+      if (!brand) {
+        return
+      }
+
+      const fetchedTemplates = await getEmailTemplates(brand)
+
+      setEmailTemplates(fetchedTemplates)
+    }
+
+    fetchEmailTemplates()
+  }, [brand])
 
   const newStepSubmitHandler = useCallback(
     async (step: IBrandFlowStepInput) => {
@@ -384,7 +387,7 @@ function Edit({
         <Box mb={1}>
           <TabPanel>
             {isLoading && <LoadingContainer style={{ padding: '20% 0' }} />}
-            {!isLoading && flow && selectedTabIndex === 0 && (
+            {!isLoading && emailTemplates && flow && selectedTabIndex === 0 && (
               <Steps
                 disableEdit={!flow.is_editable}
                 onNewStepSubmit={newStepSubmitHandler}
@@ -394,7 +397,7 @@ function Edit({
                 onNewEmailTemplateClick={newEmailTemplateClickHandler}
                 onReviewEmailTemplateClick={reviewEmailTemplateClickHandler}
                 items={flow.steps || []}
-                emailTemplates={props.emailTemplates}
+                emailTemplates={emailTemplates}
                 defaultSelectedEmailTemplate={
                   selectedEmailTemplate ? selectedEmailTemplate.id : undefined
                 }
@@ -426,26 +429,4 @@ function Edit({
   )
 }
 
-const mapStateToProps = (state: IAppState) => {
-  const brand = getActiveTeamId(state.user) || ''
-  const { emailTemplates } = state
-
-  return {
-    brand,
-    emailTemplates: selectEmailTemplates(emailTemplates, brand)
-  }
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    fetchEmailTemplates: (...args: Parameters<typeof fetchEmailTemplates>) =>
-      dispatch(fetchEmailTemplates(...args))
-  }
-}
-
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Edit)
-)
+export default withRouter(Edit)

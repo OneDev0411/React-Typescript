@@ -63,12 +63,13 @@ export function EmailAction() {
 
       {template && listings.length > 0 && (
         <ListingFlow
+          isTriggered
+          hasExternalTrigger
           isTemplatesColumnHiddenDefault={false}
           handleTrigger={handleClose}
-          isTriggered
           isMultiListing={listings.length > 1}
-          hasExternalTrigger
           listings={listings}
+          selectedTemplate={template}
         />
       )}
     </>

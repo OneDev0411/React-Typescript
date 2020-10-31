@@ -26,7 +26,6 @@ import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
 
 import uploadAsset from 'models/instant-marketing/upload-asset'
 
-import { SideNavToggleButton } from 'components/SideNavToggleButton'
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 import PageLayout from 'components/GlobalPageLayout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -42,8 +41,8 @@ import { useTemplates } from '../hooks/use-templates'
 import { LISTING_TEMPLATE_TYPES, TEMPLATES_PAGE_SIZE } from './constants'
 import CategoriesTabs from './CategoriesTabs'
 import EditVariablesDialog from './EditVariablesDialog'
-import ShareDrawer from './ShareDrawer'
-import DownladDrawer from './DownloadDrawer'
+import PreviewDrawer from './PreviewDrawer'
+import DownloadDrawer from './DownloadDrawer'
 import { getEditableVariables } from './helpers'
 import { useEntityWithSetter } from './hooks'
 import { TemplateVariable, TemplateVariableType } from './types'
@@ -63,8 +62,7 @@ const useStyles = makeStyles(
       justifyContent: 'space-between'
     },
     title: {
-      flexGrow: 1,
-      textAlign: 'center'
+      padding: theme.spacing(0, 2)
     },
     thumbnailPaper: {
       overflow: 'hidden',
@@ -178,11 +176,11 @@ function MarketingWizard(props: WithRouterProps) {
     files: generatedFileBlob ? [generatedFileBlob] : undefined
   })
 
-  const handleOpenShareDrawer = (template: IBrandMarketingTemplate) => {
+  const handleOpenPreviewDrawer = (template: IBrandMarketingTemplate) => {
     setSelectedTemplate(template)
   }
 
-  const handleCloseShareDrawer = () => {
+  const handleClosePreviewDrawer = () => {
     setSelectedTemplate(null)
   }
 
@@ -230,7 +228,7 @@ function MarketingWizard(props: WithRouterProps) {
         }
       )
 
-      handleCloseShareDrawer()
+      handleClosePreviewDrawer()
       handleOpenDownloadDrawer(templateInstance.file)
     } catch (err) {
       dispatch(
@@ -272,7 +270,6 @@ function MarketingWizard(props: WithRouterProps) {
           className={classes.appBar}
         >
           <Toolbar disableGutters className={classes.toolbar}>
-            <SideNavToggleButton />
             <Typography
               variant="h6"
               color="textPrimary"
@@ -313,7 +310,7 @@ function MarketingWizard(props: WithRouterProps) {
                       user={user}
                       listing={listing!}
                       template={template}
-                      onClick={() => handleOpenShareDrawer(template)}
+                      onClick={() => handleOpenPreviewDrawer(template)}
                     />
                   </Paper>
                 </Box>
@@ -324,11 +321,11 @@ function MarketingWizard(props: WithRouterProps) {
       </PageLayout.Main>
 
       {listing && selectedTemplate && (
-        <ShareDrawer
+        <PreviewDrawer
           template={selectedTemplate}
           listing={listing}
           user={user}
-          onClose={handleCloseShareDrawer}
+          onClose={handleClosePreviewDrawer}
           onPrepareClick={() => handlePrepareClick(selectedTemplate)}
         />
       )}
@@ -341,7 +338,7 @@ function MarketingWizard(props: WithRouterProps) {
         />
       )}
       {generatedTemplateFile && (
-        <DownladDrawer
+        <DownloadDrawer
           file={generatedTemplateFile}
           onClose={handleCloseDownloadDrawer}
           onShare={canShare ? share : undefined}

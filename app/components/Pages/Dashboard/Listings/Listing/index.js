@@ -113,6 +113,7 @@ class Listing extends React.Component {
         errorMessage={errorMessage}
         onClickFollow={this.onClickFollow}
         windowInnerWidth={windowInnerWidth}
+        onClose={this.props.onClose}
       />
     )
 

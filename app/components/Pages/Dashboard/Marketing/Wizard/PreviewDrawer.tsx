@@ -22,7 +22,7 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'MarketingWizardShareDrawer'
+    name: 'MarketingWizardPreviewDrawer'
   }
 )
 
@@ -35,7 +35,7 @@ interface Props {
   onPrepareClick: () => Promise<void>
 }
 
-export default function ShareDrawer({
+export default function PreviewDrawer({
   user,
   template,
   listing,
@@ -83,7 +83,7 @@ export default function ShareDrawer({
             justify="space-between"
           >
             <Grid item>
-              <Typography variant="h6">Share</Typography>
+              <Typography variant="h6">Preview</Typography>
             </Grid>
             <Grid item>
               <IconButton onClick={onClose}>
@@ -99,7 +99,6 @@ export default function ShareDrawer({
               <Box p={2}>
                 <Button
                   fullWidth
-                  size="medium"
                   variant="contained"
                   color="primary"
                   disabled={isPreparing}
