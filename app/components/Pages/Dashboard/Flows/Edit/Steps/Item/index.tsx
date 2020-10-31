@@ -177,7 +177,7 @@ export default function Item({
                           {step.wait_days > 1 && 'days'}
                         </Typography>
                         <Typography variant="subtitle1" color="textSecondary">
-                          {hours}:{minutes} {amPm}
+                          {`${hours}:${minutes} ${amPm}`}
                         </Typography>
                       </Grid>
                       <Grid
