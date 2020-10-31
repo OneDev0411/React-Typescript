@@ -10,14 +10,19 @@ import CreateTourDrawer from 'components/tour/CreateTourDrawer/CreateTourDrawer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 
+import getListing from 'models/listings/listing/get-listing'
+
 export function CreateTourAction() {
   const { selections } = useListSelection()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isLoadingListings, setIsLoadingListings] = useState(false)
+  const [listings, setListings] = useState<IListing[]>([])
+
   const modal = useContext(ConfirmationModalContext)
 
   const user = useSelector<IAppState, IUser>(({ user }) => user)
 
-  const handleOpen = () => {
+  const handleOpen = async () => {
     if (selections.length > 27) {
       modal.setConfirmationModal({
         message: 'Error',
@@ -27,6 +32,22 @@ export function CreateTourAction() {
       })
 
       return
+    }
+
+    setIsLoadingListings(true)
+
+    try {
+      const listings = await Promise.all(
+        selections.map(async (selection: IListing) => {
+          return getListing(selection.id)
+        })
+      )
+
+      setListings(listings)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setIsLoadingListings(false)
     }
 
     setIsDrawerOpen(true)
@@ -41,8 +62,8 @@ export function CreateTourAction() {
       <Tooltip title="Create Tour">
         <Button
           size="small"
-          variant="contained"
-          color="secondary"
+          variant="outlined"
+          disabled={isLoadingListings}
           onClick={handleOpen}
         >
           Tour
@@ -51,7 +72,7 @@ export function CreateTourAction() {
 
       <CreateTourDrawer
         isOpen={isDrawerOpen}
-        listings={selections as ICompactListing[]}
+        listings={listings}
         onClose={() => setIsDrawerOpen(false)}
         submitCallback={onCreate}
         user={user}

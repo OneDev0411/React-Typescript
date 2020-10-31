@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid } from '@material-ui/core'
+import { Grid, makeStyles } from '@material-ui/core'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import LoadingContainer from 'components/LoadingContainer'
@@ -7,6 +7,17 @@ import Masonry from 'components/Masonry'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
 
 import { useTemplates } from '../../../components/Pages/Dashboard/Marketing/hooks/use-templates'
+
+const useStyles = makeStyles(
+  () => ({
+    templateItemCntainer: {
+      cursor: 'pointer'
+    }
+  }),
+  {
+    name: 'MarketingTemplatePicker'
+  }
+)
 
 interface Props {
   user: IUser
@@ -21,6 +32,7 @@ export default function MarketingTemplatePicker({
   mediums = [],
   onSelect
 }: Props) {
+  const classes = useStyles()
   const activeBrand = getActiveTeamId(user)
 
   const { templates, isLoading } = useTemplates(
@@ -30,14 +42,18 @@ export default function MarketingTemplatePicker({
   )
 
   if (isLoading) {
-    return <LoadingContainer />
+    return <LoadingContainer style={{ padding: '20% 0' }} />
   }
 
   return (
     <Grid container>
       <Masonry>
         {templates.map(template => (
-          <div key={template.id} onClick={() => onSelect(template)}>
+          <div
+            key={template.id}
+            className={classes.templateItemCntainer}
+            onClick={() => onSelect(template)}
+          >
             <MarketingTemplateCard template={template} />
           </div>
         ))}

@@ -43,8 +43,7 @@ export function EmailAction() {
       <Tooltip title="Send as Email">
         <Button
           size="small"
-          variant="contained"
-          color="secondary"
+          variant="outlined"
           onClick={() => setIsTemplatesModalOpen(true)}
         >
           Email
@@ -64,12 +63,13 @@ export function EmailAction() {
 
       {template && listings.length > 0 && (
         <ListingFlow
+          isTriggered
+          hasExternalTrigger
           isTemplatesColumnHiddenDefault={false}
           handleTrigger={handleClose}
-          isTriggered
           isMultiListing={listings.length > 1}
-          hasExternalTrigger
           listings={listings}
+          selectedTemplate={template}
         />
       )}
     </>

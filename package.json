@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "81.0.9",
+  "version": "82.0.0",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -32,7 +32,9 @@
     "test:update-snapshots": "npm run test:unit -- -u",
     "test:ci": "npm run test:unit",
     "test": "jest --watch",
-    "jest": "jest"
+    "jest": "jest",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "prettier": {
     "semi": false,
@@ -306,6 +308,12 @@
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
     "@commitlint/prompt-cli": "^8.0.0",
+    "@storybook/addon-actions": "^6.0.27",
+    "@storybook/addon-essentials": "^6.0.27",
+    "@storybook/addon-links": "^6.0.27",
+    "@storybook/addons": "^6.0.27",
+    "@storybook/react": "^6.0.27",
+    "@storybook/theming": "^6.0.27",
     "@testing-library/react": "^8.0.1",
     "@types/backbone": "^1.4.1",
     "@types/chart.js": "^2.9.15",
@@ -403,6 +411,8 @@
     "opn": "^6.0.0",
     "prettier": "^2.0.5",
     "raw-loader": "^3.1.0",
+    "react-is": "^17.0.1",
+    "storybook-dark-mode": "^1.0.3",
     "styled-svg": "^2.3.4",
     "ts-jest": "^26.0.0",
     "typescript": "^3.9.2",
