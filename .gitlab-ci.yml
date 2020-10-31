@@ -48,8 +48,8 @@ deploy_production:
 start_review:
   stage: review
   script:
-    - chmod u+x ./dokku.bash
-    - ./dokku.bash
+    - chmod u+x ./dokku.sh
+    - ./dokku.sh
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: https://$CI_COMMIT_REF_SLUG.rechat.co/
