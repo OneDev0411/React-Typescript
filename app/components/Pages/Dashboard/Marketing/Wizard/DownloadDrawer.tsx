@@ -90,6 +90,7 @@ export default function DownloadDrawer({ file, onShare, onClose }: Props) {
                 {!isLoading &&
                   (onShare ? (
                     <Button
+                      fullWidth
                       variant="contained"
                       color="primary"
                       onClick={onShare}
