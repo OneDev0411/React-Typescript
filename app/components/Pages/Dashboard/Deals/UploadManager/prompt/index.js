@@ -272,7 +272,7 @@ class UploadModal extends React.Component {
           <ModalHeader
             closeHandler={() => this.closeModal()}
             className="modal-header"
-            title={`${filesCount} Documents hamed`}
+            title={`${filesCount} Documents`}
           />
 
           <ModalContent style={this.getModalStyle(filesCount)}>
