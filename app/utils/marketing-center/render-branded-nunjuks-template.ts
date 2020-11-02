@@ -6,6 +6,7 @@ import { renderMjml } from "components/TemplatePreview/helpers"
 
 interface TemplateData {
   contact?: IContact
+  user?: IUser
   listing?: IListing
   listings?: IListing[]
 }

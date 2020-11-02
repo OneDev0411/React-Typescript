@@ -1,7 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
+import { getActiveBrand } from 'utils/user-teams'
 
 import {
   formatValue,
@@ -44,12 +46,11 @@ function getStateFromAttribute(attribute) {
 
 const getInitialState = attribute => ({
   error: '',
+  isDirty: false,
   disabled: false,
-  isDrity: false,
   isTriggerActive: false,
   triggerSendBefore: '1',
   triggerSelectedTemplate: null,
-  triggerRenderedSelectedTemplate: null,
   ...getStateFromAttribute(attribute)
 })
 
@@ -107,9 +108,9 @@ class MasterField extends React.Component {
     return getPlaceholder(this.attribute_def)
   }
 
-  get isDrity() {
+  get isDirty() {
     return (
-      this.state.isDrity &&
+      this.state.isDirty &&
       diffAttributeStateWithProp(this.props.attribute, this.state)
     )
   }
@@ -126,28 +127,31 @@ class MasterField extends React.Component {
   }
 
   onChangeLabel = label =>
-    this.setState({ label, isDrity: true, updated_at: getCurrentTimestamp() })
+    this.setState({ label, isDirty: true, updated_at: getCurrentTimestamp() })
 
   onChangeValue = value =>
-    this.setState({ value, isDrity: true, updated_at: getCurrentTimestamp() })
+    this.setState({ value, isDirty: true, updated_at: getCurrentTimestamp() })
 
   toggleTriggerActive = () =>
     this.setState(prevState => ({
-      isDrity: true,
+      isDirty: true,
       isTriggerActive: !prevState.isTriggerActive
     }))
 
   onChangeSendBefore = value =>
-    this.setState({ isDrity: true, triggerSendBefore: value })
+    this.setState({ isDirty: true, triggerSendBefore: value })
 
   onChangeTemplate = template => {
-    this.setState({ isDrity: true, triggerSelectedTemplate: template })
+    this.setState({
+      isDirty: true,
+      triggerSelectedTemplate: template
+    })
   }
 
   onChangePrimary = () =>
     this.setState(state => ({
       is_primary: !state.is_primary,
-      isDrity: true,
+      isDirty: true,
       updated_at: getCurrentTimestamp()
     }))
 
@@ -162,7 +166,7 @@ class MasterField extends React.Component {
       return
     }
 
-    if (this.isDrity) {
+    if (this.isDirty) {
       this.context.setConfirmationModal({
         message: 'Heads up!',
         confirmLabel: 'Yes, I do',
@@ -180,7 +184,7 @@ class MasterField extends React.Component {
     const { id, cuid } = attribute
     const { is_primary, label, value } = this.state
 
-    if (!this.isDrity) {
+    if (!this.isDirty) {
       return this.setState({ error: id ? 'Update value!' : 'Input something!' })
     }
 
@@ -206,7 +210,7 @@ class MasterField extends React.Component {
 
       this.props.handleSave(attribute, data)
 
-      this.setState({ disabled: false, isDrity: false }, this.toggleMode)
+      this.setState({ disabled: false, isDirty: false }, this.toggleMode)
     } catch (error) {
       console.error(error)
       this.setState({ disabled: false, error: error.message })
@@ -234,7 +238,7 @@ class MasterField extends React.Component {
       description: `You have made changes, are you sure about deleting "${title}" field?`
     }
 
-    if (this.isDrity) {
+    if (this.isDirty) {
       this.context.setConfirmationModal(options)
     } else if (this.props.attribute[this.attribute_def.data_type]) {
       this.context.setConfirmationModal({
@@ -272,6 +276,8 @@ class MasterField extends React.Component {
     >
       {this.isTriggable ? (
         <TriggerField
+          user={this.props.user}
+          brand={this.props.brand}
           isActive={this.state.isTriggerActive}
           sendBefore={this.state.triggerSendBefore}
           selectedTemplate={this.state.triggerSelectedTemplate}
@@ -327,4 +333,11 @@ class MasterField extends React.Component {
   }
 }
 
-export default MasterField
+const mapStateToProps = ({ user }) => {
+  return {
+    user,
+    brand: getActiveBrand(user)
+  }
+}
+
+export default connect(mapStateToProps)(MasterField)

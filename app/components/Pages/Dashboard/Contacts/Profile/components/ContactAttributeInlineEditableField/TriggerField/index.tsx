@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import {
   FormControl,
@@ -11,18 +10,15 @@ import {
   Theme
 } from '@material-ui/core'
 
-import { IAppState } from 'reducers'
-
-// import { noop } from 'utils/helpers'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
 
 interface Props {
+  user: IUser
   isActive: boolean
   sendBefore: string | number
-  selectedTemplate: IBrandMarketingTemplate | null
   toggleActive: () => void
   onChangeSendBefore: (value: string | number) => void
-  onChangeTemplate: (template: IBrandMarketingTemplate | null) => void
+  onChangeTemplate: (template: IBrandMarketingTemplate) => void
 }
 
 const useStyles = makeStyles(
@@ -50,13 +46,13 @@ const useStyles = makeStyles(
     },
     sendBefore: {
       width: '100%',
-      marginTop: theme.spacing(1),
+      marginTop: theme.spacing(2),
       '& .MuiOutlinedInput-input': {
         padding: theme.spacing(1.5, 1.75)
       }
     },
     templateSelectorContainer: {
-      marginTop: theme.spacing(2)
+      marginTop: theme.spacing(1)
     },
     templateSelector: {
       display: 'flex',
@@ -73,15 +69,23 @@ const useStyles = makeStyles(
     },
     templateSelectorPreview: {
       marginTop: theme.spacing(1),
-      minHeight: '150px',
-      maxHeight: '150px',
-      background: theme.palette.divider,
+      minHeight: `${theme.spacing(18.75)}px`,
+      maxHeight: `${theme.spacing(18.75)}px`,
+      background: theme.palette.grey[100],
       borderRadius: `${theme.spacing(2)}px`,
+      textAlign: 'center',
+      color: theme.palette.secondary.main,
       overflow: 'hidden',
+      cursor: 'pointer',
+      ...theme.typography.body2,
       '& img': {
         display: 'block',
         maxWidth: '100%',
         maxHeight: '100%'
+      },
+      '& > span': {
+        display: 'block',
+        marginTop: theme.spacing(7.75)
       }
     }
   }),
@@ -89,14 +93,15 @@ const useStyles = makeStyles(
 )
 
 export const TriggerField = ({
+  user,
   isActive: isActiveProp = false,
   sendBefore: sendBeforeProp = '1',
-  selectedTemplate: selectedTemplateProp = null,
   toggleActive,
   onChangeSendBefore,
   onChangeTemplate
 }: Props) => {
   const classes = useStyles()
+
   const [isActive, setIsActive] = useState(isActiveProp)
   const [sendBefore, setSendBefore] = useState<string | number>(sendBeforeProp)
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState<boolean>(
@@ -105,8 +110,7 @@ export const TriggerField = ({
   const [
     selectedTemplate,
     setSelectedTemplate
-  ] = useState<IBrandMarketingTemplate | null>(selectedTemplateProp)
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
+  ] = useState<IBrandMarketingTemplate | null>(null)
 
   const handleActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsActive(event.target.checked)
@@ -123,10 +127,13 @@ export const TriggerField = ({
   }
 
   const handleSelectTemplate = async (template: IBrandMarketingTemplate) => {
-    console.log(template)
-    setSelectedTemplate(template)
-    onChangeTemplate(template)
-    setIsTemplatesModalOpen(false)
+    try {
+      setSelectedTemplate(template)
+      onChangeTemplate(template)
+      setIsTemplatesModalOpen(false)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -148,6 +155,32 @@ export const TriggerField = ({
       </div>
       {isActive && (
         <>
+          <div className={classes.templateSelectorContainer}>
+            <div className={classes.templateSelector}>
+              <span data-for="title">Template</span>
+              {selectedTemplate && (
+                <span
+                  data-for="picker"
+                  onClick={() => setIsTemplatesModalOpen(true)}
+                >
+                  Change
+                </span>
+              )}
+            </div>
+            <div
+              className={classes.templateSelectorPreview}
+              onClick={() => setIsTemplatesModalOpen(true)}
+            >
+              {selectedTemplate ? (
+                <img
+                  src={selectedTemplate?.preview.preview_url}
+                  alt="Selected Template"
+                />
+              ) : (
+                <span>Select a Template</span>
+              )}
+            </div>
+          </div>
           <FormControl variant="outlined" className={classes.sendBefore}>
             <InputLabel id="trigger-send-before">Send</InputLabel>
             <Select
@@ -163,25 +196,6 @@ export const TriggerField = ({
               <MenuItem value={4}>4 day earlier</MenuItem>
             </Select>
           </FormControl>
-          <div className={classes.templateSelectorContainer}>
-            <div className={classes.templateSelector}>
-              <span data-for="title">Template</span>
-              <span
-                data-for="picker"
-                onClick={() => setIsTemplatesModalOpen(true)}
-              >
-                {selectedTemplate ? 'Change' : 'Select'}
-              </span>
-            </div>
-            {selectedTemplate && (
-              <div className={classes.templateSelectorPreview}>
-                <img
-                  src={selectedTemplate?.preview.preview_url}
-                  alt="Selected Template"
-                />
-              </div>
-            )}
-          </div>
         </>
       )}
       {isTemplatesModalOpen && (
@@ -189,7 +203,7 @@ export const TriggerField = ({
           title="Select Template"
           user={user}
           mediums={['Email' as MarketingTemplateMedium.Email]}
-          templateTypes={['Listings']}
+          templateTypes={['Birthday', 'HomeAnniversary', 'WeddingAnniversary']}
           onSelect={handleSelectTemplate}
           onClose={() => setIsTemplatesModalOpen(false)}
         />
