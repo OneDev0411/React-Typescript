@@ -424,11 +424,8 @@ class CreateDeal extends React.Component {
       },
       contexts: {
         validator: () =>
-          DealContext.validateList(
-            this.ContextsListId,
-            contexts,
-            dealSide,
-            dealPropertyType
+          this.getDealContexts(dealSide, dealPropertyType).every(field =>
+            field.validate(field, contexts[field.key])
           )
       }
     }
@@ -794,7 +791,17 @@ class CreateDeal extends React.Component {
       this.ContextsListId,
       dealSide,
       dealPropertyType
-    ).filter(field => field.mandatory)
+    ).filter(field => {
+      if (!field.mandatory) {
+        return false
+      }
+
+      if (['contract_status', 'listing_status'].includes(field.key)) {
+        return false
+      }
+
+      return true
+    })
   }
 
   /**
@@ -905,7 +912,6 @@ class CreateDeal extends React.Component {
       sellingAgents,
       clients,
       sellingClients,
-      referrals,
       enderType,
       submitError,
       validationErrors

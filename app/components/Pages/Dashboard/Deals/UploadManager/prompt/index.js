@@ -267,6 +267,7 @@ class UploadModal extends React.Component {
           className="modal-deal-upload-files"
           isOpen={filesCount > 0}
           autoHeight
+          offOverflow
           onRequestClose={() => this.closeModal()}
         >
           <ModalHeader
