@@ -346,7 +346,17 @@ class CreateOffer extends React.Component {
       'Buying',
       deal.property_type,
       true
-    ).filter(field => field.mandatory)
+    ).filter(field => {
+      if (!field.mandatory) {
+        return false
+      }
+
+      if (['contract_status', 'listing_status'].includes(field.key)) {
+        return false
+      }
+
+      return true
+    })
   }
 
   backToDeal = () => {
@@ -393,8 +403,6 @@ class CreateOffer extends React.Component {
    * returns list of validators
    */
   get Validators() {
-    const { deal } = this.props
-
     const {
       offerType,
       contexts,
@@ -426,12 +434,8 @@ class CreateOffer extends React.Component {
       },
       deal_status: () => dealStatus.length > 0,
       contexts: () =>
-        DealContext.validateList(
-          deal.id,
-          contexts,
-          'Buying',
-          deal.property_type,
-          DealContext.getHasActiveOffer(deal)
+        this.getDealContexts().every(field =>
+          field.validate(field, contexts[field.key])
         )
     }
   }
