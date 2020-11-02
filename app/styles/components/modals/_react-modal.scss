@@ -46,6 +46,10 @@
   &.c-modal__content--height-auto {
     height: auto;
   }
+
+  &.c-modal__content--off-overflow {
+    overflow: initial;
+  }
   
   &.c-tour-sheets,
   &.c-preview-image-modal,
