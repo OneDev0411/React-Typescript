@@ -132,7 +132,7 @@ class EditDigitalForm extends React.Component {
 
   getAnnotations = async document => {
     const defaultValues = !this.props.task.submission
-      ? await getDefaultValues(this.props.deal, this.props.form.id)
+      ? await getDefaultValues(this.props.deal.id, this.props.form.id)
       : {}
 
     const { annotations, fields } = await parseAnnotations(document, {
