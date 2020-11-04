@@ -297,21 +297,6 @@ const ListingDesktopView = ({
       </div>
     )
 
-    // let number_days_indicator
-    // if (listing.list_date) {
-    //   const days_on_market = listingUtils.getDOM(listing.dom)
-    //   number_days_indicator = (
-    //     <div
-    //       className="pull-left"
-    //       style={S(
-    //         'border-1-solid-263445 br-3 pt-5 pb-5 pl-10 pr-10 mt-3 font-14'
-    //       )}
-    //     >
-    //       {days_on_market} days ago
-    //     </div>
-    //   )
-    // }
-
     const tooltip = <Tooltip id="copied-tooltip">Copied</Tooltip>
 
     let mls_link
@@ -638,11 +623,11 @@ const ListingDesktopView = ({
                   {renderFeatures('Possession', listing.possession)}
                   {renderFeatures(
                     'Days On Market',
-                    listingUtils.getDOM(listing.dom)
+                    listingUtils.getDaysOnMarket(listing)
                   )}
                   {renderFeatures(
                     'Current Days On Market',
-                    listingUtils.getDOM(listing.cdom)
+                    listingUtils.getCurrentDaysOnMarket(listing)
                   )}
                 </div>
                 <div style={{ width: 'calc(33% - 1rem)' }}>

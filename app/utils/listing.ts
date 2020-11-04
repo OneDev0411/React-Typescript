@@ -1,12 +1,10 @@
 import { LEASE_PROPERTY_TYPES } from '../constants/listings/property-types'
 import { LEASE_PROPERTY_SUBTYPES } from '../constants/listings/property-subtypes'
 
-import { round } from './helpers'
-
 const ONE_ACRE_TO_SQUARE_METERS = 4046.86
 const ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT = 10.7639
 
-export const getStatusColor = status => {
+export const getStatusColor = (status: IListingStatus): string => {
   switch (status) {
     case 'Active':
     case 'Lease':
@@ -31,7 +29,7 @@ export const getStatusColor = status => {
   }
 }
 
-export const getStatusColorClass = status => {
+export const getStatusColorClass = (status: IListingStatus): string => {
   switch (status) {
     case 'Active':
     case 'Lease':
@@ -63,52 +61,29 @@ export const getStatusColorClass = status => {
   }
 }
 
-export const metersToAcres = metre => metre / ONE_ACRE_TO_SQUARE_METERS
-export const acresToMeters = acres => acres * ONE_ACRE_TO_SQUARE_METERS
+export const metersToAcres = (metre: number): number => metre / ONE_ACRE_TO_SQUARE_METERS
+export const acresToMeters = (acres: number): number => acres * ONE_ACRE_TO_SQUARE_METERS
 
-export const metersToFeet = metre => metre * ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT
+export const metersToFeet = (metre: number): number => metre * ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT
+export const feetToMeters = (foot: number): number => foot / ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT
 
-export const feetToMeters = foot => foot / ONE_SQUARE_METRE_TO_ONE_SQUARE_FOOT
+export const squareMetersToAcres = (value: number): number => value * 0.000247105
 
-export const localAddress = address =>
+export const localAddress = (address: Address | ICompactAddress): string =>
   `${address.street_number} ${address.street_name} ST ${address.unit_number}`
 
-export const getListingLocation = (listing) => {
-  if (!listing || !listing.type) {
-    return null
-  }
-  
-  switch (listing.type) {
-    case 'compact_listing':
-      return listing.location
-    case 'listing':
-      return listing.property.address.location
-    default:
-      return null
-  }
-}
-
-export const addressTitle = address => {
-  if (!address) {
-    return ''
-  }
-
+export const addressTitle = (address: Address | ICompactAddress): string => {
   const street = [
     address.street_number,
     address.street_name,
     address.street_suffix
   ].filter(a => a).join(' ')
-  
-  return `${street}${
-    address.unit_number ? ` Unit ${address.unit_number}` : ''
-  }`
+
+  return `${street}${address.unit_number ? ` Unit ${address.unit_number}` : ''
+    }`
 }
 
-export const getListingAddressField = (listing, fieldName) => {
-  if (!listing || !listing.type) {
-    return null
-  }
-
+export const getListingAddressField = (listing: IListing | ICompactListing, fieldName: keyof Address | keyof ICompactAddress) => {
   switch (listing.type) {
     case 'compact_listing':
       return listing.address[fieldName]
@@ -119,27 +94,15 @@ export const getListingAddressField = (listing, fieldName) => {
   }
 }
 
-export const getListingAddressObj = (listing) => {
-  if (!listing || !listing.type) {
-    return null
+export const getListingAddressObj = (listingOrProperty: IListing | ICompactListing | Property): Address | ICompactAddress => {
+  if (listingOrProperty.type === 'compact_listing' || listingOrProperty.type === 'property') {
+    return listingOrProperty.address
   }
 
-  switch (listing.type) {
-    case 'compact_listing':
-    case 'property':
-      return listing.address
-    case 'listing':
-      return listing.property.address
-    default:
-      return null
-  }
+  return listingOrProperty.property.address
 }
 
-export const getListingAddress = listing => {
-  if (!listing) {
-    throw new Error('Listing is empty!')
-  }
-
+export const getListingAddress = (listing: IListing | ICompactListing): string => {
   const address = getListingAddressObj(listing)
 
   const { street_number, street_name, street_suffix, unit_number } = address
@@ -155,10 +118,16 @@ export const getListingAddress = listing => {
   return result
 }
 
-export const getDOM = dom => Math.floor(dom)
-// return Math.floor((((new Date()).getTime() / 1000) - dom_seconds) / 86400)
+export const getDaysOnMarket = (listing: IListing | ICompactListing): number => {
+  return Math.floor(listing.dom || 0)
+}
 
-export const getResizeUrl = full_size_url => full_size_url || ''
+export const getCurrentDaysOnMarket = (listing: IListing): number => {
+  return Math.floor(listing.cdom || 0)
+}
+
+// TODO: remove this unfortunate part of code or fix it
+export const getResizeUrl = (full_size_url: OptionalNullable<string>): string => full_size_url || ''
 // if (!full_size_url) { return '' }
 // let image_replace = full_size_url.replace('http://cdn.rechat.co/', '')
 // image_replace = image_replace.replace('http://cdn.rechat.co/', '')
@@ -167,25 +136,20 @@ export const getResizeUrl = full_size_url => full_size_url || ''
 // const imgix_url = `https://rechat.imgix.net/${image_replace}`
 // return imgix_url
 
-export const squareMetersToAcres = value => value * 0.000247105
+export const isLeaseProperty = (listing: IListing | ICompactListing) => {
+  const isLease = (listing: IListing | ICompactListing) => {
+    const unionOfPropertyTypesAndSubtypes = listing.type === 'listing'
+      ? [listing.property.property_type, listing.property.property_subtype]
+      : [listing.compact_property.property_type]
 
-export const isLeaseProperty = listing => {
-  const isLease = property => {
-    const {property_type, property_subtype} = property
-
-    return [property_type, property_subtype]
-      .filter(t => typeof(t) === 'string')
+    return unionOfPropertyTypesAndSubtypes
       .some(t => [
         ...LEASE_PROPERTY_TYPES,
         ...LEASE_PROPERTY_SUBTYPES
       ].includes(t))
   }
 
-  if (listing.type === 'compact_listing') {
-    return isLease(listing.compact_property)
-  }
-
-  return isLease(listing.property)
+  return isLease(listing)
 }
 
 export default {
@@ -195,7 +159,8 @@ export default {
   feetToMeters,
   localAddress,
   addressTitle,
-  getDOM,
+  getDaysOnMarket,
+  getCurrentDaysOnMarket,
   getResizeUrl,
   squareMetersToAcres,
   isLeaseProperty

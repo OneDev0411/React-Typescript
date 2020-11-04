@@ -129,9 +129,7 @@ const ListingMobileView = ({
       />
     ))
 
-    listing_subtitle = `${listing.property.address.city}, ${
-      listing.property.address.state
-    } ${listing.property.address.postal_code}`
+    listing_subtitle = `${listing.property.address.city}, ${listing.property.address.state} ${listing.property.address.postal_code}`
 
     const status_color = listingUtils.getStatusColor(listing.status)
 
@@ -273,9 +271,7 @@ const ListingMobileView = ({
           {showing_instructions}
           <div style={email_style}>
             <a
-              href={`mailto:${
-                listing.list_agent_email
-              }?subject=Your listing on Rechat.com&body=I saw your listing (${listing_title}) on Rechat.com and I'm interested in getting more information.`}
+              href={`mailto:${listing.list_agent_email}?subject=Your listing on Rechat.com&body=I saw your listing (${listing_title}) on Rechat.com and I'm interested in getting more information.`}
               style={S('color-748090')}
             >
               {listing.list_agent_email}
@@ -437,11 +433,11 @@ const ListingMobileView = ({
                 {renderFeatures('Possession', listing.possession)}
                 {renderFeatures(
                   'Days On Market',
-                  listingUtils.getDOM(listing.dom)
+                  listingUtils.getDaysOnMarket(listing)
                 )}
                 {renderFeatures(
                   'Current Days On Market',
-                  listingUtils.getDOM(listing.cdom)
+                  listingUtils.getCurrentDaysOnMarket(listing)
                 )}
               </div>
               <div style={S('pr-20')}>
@@ -554,9 +550,7 @@ const ListingMobileView = ({
       profile_image_area = (
         <div
           style={S(
-            `w-300 h-300 center-block br-300 bg-cover bg-top bg-url(${
-              brand_agent.cover_image_url
-            })`
+            `w-300 h-300 center-block br-300 bg-cover bg-top bg-url(${brand_agent.cover_image_url})`
           )}
         />
       )
