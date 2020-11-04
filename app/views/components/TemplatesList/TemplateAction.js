@@ -22,7 +22,7 @@ const HOLIDAY_TYPES = [
   'Christmas',
   'ColumbusDay',
   'DaylightSaving',
-  'Diwaly',
+  'Diwali',
   'Easter',
   'FathersDay',
   'FourthOfJuly',
