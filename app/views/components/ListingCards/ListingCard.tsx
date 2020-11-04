@@ -6,7 +6,11 @@ import {
   CardContent,
   Typography,
   makeStyles,
-  Theme
+  Theme,
+  Grid,
+  Chip,
+  Box,
+  Badge
 } from '@material-ui/core'
 
 import { getFormattedPrice } from 'models/Deal/helpers/context'
@@ -17,14 +21,26 @@ const useStyles = makeStyles(
       width: '100%',
       borderColor: variant === 'bare' ? 'transparent' : theme.palette.divider
     }),
+    badgeRoot: {
+      display: 'flex',
+      height: '100%',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    badgeDot: {
+      top: 0,
+      right: 0,
+      transform: 'none',
+      position: 'static'
+    },
     cardActionArea: {
       padding: theme.spacing(1)
     },
-    image: ({ listing }: Props) => ({
-      maxHeight: '200px',
+    media: ({ listing }: Props) => ({
+      height: '200px',
       borderRadius: theme.shape.borderRadius,
       backgroundColor: theme.palette.grey[100],
-      objectFit: listing.cover_image_url ? 'cover' : 'contain'
+      backgroundSize: listing.cover_image_url ? 'cover' : 'contain'
     }),
     cardContent: {
       padding: theme.spacing(2, 1)
@@ -70,10 +86,32 @@ export default function ListingCard({
     <Card variant="outlined" className={classes.card} onClick={onClick}>
       <CardActionArea className={classes.cardActionArea}>
         <CardMedia
-          component="img"
-          src={listing.cover_image_url ?? '/static/images/logo--gray.svg'}
-          className={classes.image}
-        />
+          component="div"
+          image={listing.cover_image_url ?? '/static/images/logo--gray.svg'}
+          className={classes.media}
+        >
+          <Grid container justify="flex-end">
+            <Grid item>
+              <Box m={1}>
+                <Chip
+                  label={listing.status}
+                  avatar={
+                    <Box flex>
+                      <Badge
+                        variant="dot"
+                        color="primary"
+                        classes={{
+                          root: classes.badgeRoot,
+                          dot: classes.badgeDot
+                        }}
+                      />
+                    </Box>
+                  }
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </CardMedia>
         <CardContent className={classes.cardContent}>
           <Typography variant="subtitle1">
             {getFormattedPrice(listing.price, 'currency', 0)}
