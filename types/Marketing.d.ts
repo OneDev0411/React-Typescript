@@ -61,7 +61,7 @@ declare type MarketingTemplateType =
   | 'Contact'
   | 'CrmOpenHouse'
   | 'DaylightSaving'
-  | 'Diwaly'
+  | 'Diwali'
   | 'Easter'
   | 'FathersDay'
   | 'FourthOfJuly'
