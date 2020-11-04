@@ -15,7 +15,7 @@ webpackConfig.mode = 'development'
 const ESBUILD_COMMON_OPTIONS = {
   jsxFactory: 'React.createElement',
   jsxFragment: 'React.Fragment',
-  sourceMap: false
+  sourcemap: false
 }
 
 const postcss = function postcss() {
@@ -107,7 +107,7 @@ webpackConfig.plugins.push(
 
 webpackConfig.module.rules.push(
   {
-    test: /\.js$/,
+    test: /\.jsx?$/,
     exclude: /(node_modules|bower_components)/,
     use: {
       loader: 'esbuild-loader',
@@ -118,11 +118,25 @@ webpackConfig.module.rules.push(
     }
   },
   {
-    test: /\.(jsx|tsx?)$/,
+    test: /\.ts$/,
     exclude: /(node_modules|bower_components)/,
     use: {
       loader: 'esbuild-loader',
-      options: ESBUILD_COMMON_OPTIONS
+      options: {
+        ...ESBUILD_COMMON_OPTIONS,
+        loader: 'ts'
+      }
+    }
+  },
+  {
+    test: /\.tsx$/,
+    exclude: /(node_modules|bower_components)/,
+    use: {
+      loader: 'esbuild-loader',
+      options: {
+        ...ESBUILD_COMMON_OPTIONS,
+        loader: 'tsx'
+      }
     }
   },
   {

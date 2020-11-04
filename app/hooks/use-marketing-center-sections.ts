@@ -99,8 +99,8 @@ const ALL_SECTIONS: SectionCollection = {
       },
       {
         title: 'Diwali',
-        value: 'Diwaly',
-        link: urlGenerator('/Diwaly')
+        value: 'Diwali',
+        link: urlGenerator('/Diwali')
       },
       {
         title: 'Easter',
