@@ -13,9 +13,10 @@ import { getFormattedPrice } from 'models/Deal/helpers/context'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    card: {
-      width: '100%'
-    },
+    card: ({ variant }: Props) => ({
+      width: '100%',
+      borderColor: variant === 'bare' ? 'transparent' : theme.palette.divider
+    }),
     cardActionArea: {
       padding: theme.spacing(1)
     },
@@ -39,14 +40,26 @@ interface Props {
    * The listing or compact listing object
    */
   listing: IListing | ICompactListing
+
+  /**
+   * Card variant
+   *
+   * You can pass `bare` for using in more complex scenarios like grids
+   *
+   */
+  variant?: 'bordered' | 'bare'
   /**
    * The click handler of listing card
    */
   onClick?: () => void
 }
 
-export default function ListingCard({ listing, onClick }: Props) {
-  const classes = useStyles({ listing })
+export default function ListingCard({
+  listing,
+  bare = 'bordered',
+  onClick
+}: Props) {
+  const classes = useStyles({ listing, bare })
 
   const address =
     listing.type === 'compact_listing'
@@ -54,7 +67,7 @@ export default function ListingCard({ listing, onClick }: Props) {
       : listing.property.address.full_address
 
   return (
-    <Card onClick={onClick} variant="outlined" className={classes.card}>
+    <Card variant="outlined" className={classes.card} onClick={onClick}>
       <CardActionArea className={classes.cardActionArea}>
         <CardMedia
           component="img"

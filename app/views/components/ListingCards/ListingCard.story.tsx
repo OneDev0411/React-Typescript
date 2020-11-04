@@ -26,3 +26,10 @@ export const CompactListing = Template.bind({})
 CompactListing.args = {
   listing: compactListing
 }
+
+export const Bare = Template.bind({})
+
+Bare.args = {
+  listing,
+  variant: 'bare'
+}
