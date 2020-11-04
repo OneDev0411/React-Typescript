@@ -56,10 +56,10 @@ interface Props {
 
 export default function ListingCard({
   listing,
-  bare = 'bordered',
+  variant = 'bordered',
   onClick
 }: Props) {
-  const classes = useStyles({ listing, bare })
+  const classes = useStyles({ listing, variant })
 
   const address =
     listing.type === 'compact_listing'
