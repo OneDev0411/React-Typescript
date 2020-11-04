@@ -38,8 +38,8 @@ declare interface ISubContact {
   brand?: UUID
   created_at: number
   type: 'sub_contact'
-  sections: Record<UUID, (IContactAttributeWithDef)[]>
-  attributes: Record<UUID, (IContactAttributeWithDef)[]>
+  sections: Record<UUID, IContactAttributeWithDef[]>
+  attributes: Record<UUID, IContactAttributeWithDef[]>
 }
 
 declare interface IContactBase {

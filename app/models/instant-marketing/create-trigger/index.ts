@@ -1,23 +1,91 @@
-// import Fetch from '../../../services/fetch'
-// import { renderBrandedNunjuksTemplate } from 'utils/marketing-center/render-branded-nunjuks-template'
+import { renderBrandedNunjuksTemplate } from 'utils/marketing-center/render-branded-nunjuks-template'
 
-// interface TemplateInstanceInputData {
-//   brand: IBrand
-//   template: IBrandMarketingTemplate
-// }
+import Fetch from '../../../services/fetch'
+
+import { createTemplateInstance } from '../create-template-instance'
+import { createEmailCampaign } from '../../email/create-email-campaign'
+
+interface TemplateData {
+  user?: IUser
+  contact?: IContact
+}
+interface TriggerData {
+  event_type: string
+  wait_for: number
+}
 
 export async function createTrigger(
+  contact: IContact,
+  template: IBrandMarketingTemplate,
   brand: IBrand,
-  template: IBrandMarketingTemplate
+  data: TriggerData,
+  templateData: TemplateData = {}
 ): Promise<any> {
   try {
-    if (!brand || !template) {
-      throw new Error('brand or teplate not provided')
+    if (!contact || !brand || !template) {
+      throw new Error('contact or brand or teplate not provided')
     }
 
-    // const response = await new Fetch()
-    //   .post(`/trigger`)
-    //   .send(data)
+    if (!contact.email) {
+      throw new Error('contact has no email')
+    }
+
+    if (!data.event_type) {
+      throw new Error('event_type not provided')
+    }
+
+    // because the end_point accept a negative value that shows the time before the main date
+    if (!data.wait_for || data.wait_for > 0) {
+      throw new Error('invalid wait_for value')
+    }
+
+    const { template: marketingTemplate } = template
+    // step1: render the template to the nunjuks
+    const html: string = await renderBrandedNunjuksTemplate(
+      template,
+      brand,
+      templateData
+    )
+
+    // step2: create a template instance
+    const templateInstance: IMarketingTemplateInstance = await createTemplateInstance(
+      marketingTemplate.id,
+      {
+        html
+      }
+    )
+
+    // step3: create a email campaign
+    const campaign = await createEmailCampaign({
+      due_at: null,
+      from: (contact.user as IUser).id,
+      to: [
+        {
+          recipient_type: 'Email',
+          email: contact.email,
+          contact: contact.id
+        }
+      ],
+      subject: 'Congratulation!!',
+      html: '',
+      template: templateInstance.id,
+      individual: true,
+      notifications_enabled: true
+    })
+
+    // step4: set a trigger for a field
+    const response = await new Fetch().post('/triggers').send({
+      user: (contact.user as IUser).id,
+      event_type: data.event_type,
+      action: 'schedule_email',
+      wait_for: data.wait_for,
+      campaign: campaign.id,
+      contact: contact.id
+    })
+
+    console.log('response', response)
+
+    return response
   } catch (e) {
     throw e
   }

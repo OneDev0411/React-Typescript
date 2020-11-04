@@ -349,6 +349,7 @@ class SectionWithFields extends React.Component {
         <div style={{ padding: '0 1.5rem' }}>
           {this.state.orderedAttributes.map(attribute => (
             <MasterField
+              contact={this.props?.contact}
               attribute={attribute}
               handleAddNewInstance={this.addShadowAttribute}
               handleDelete={this.deleteHandler}

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 import { getActiveBrand } from 'utils/user-teams'
+import { createTrigger } from 'models/instant-marketing/create-trigger'
 
 import {
   formatValue,
@@ -179,10 +180,20 @@ class MasterField extends React.Component {
   }
 
   save = async () => {
-    // console.log('save method', this.state)
-    const { attribute } = this.props
+    const { user, brand, contact, attribute } = this.props
+    const {
+      is_primary,
+      label,
+      value,
+      isTriggerActive,
+      triggerSendBefore,
+      triggerSelectedTemplate
+    } = this.state
     const { id, cuid } = attribute
-    const { is_primary, label, value } = this.state
+
+    if (this.isTriggable && isTriggerActive && !triggerSelectedTemplate) {
+      return this.setState({ error: 'Select Template' })
+    }
 
     if (!this.isDirty) {
       return this.setState({ error: id ? 'Update value!' : 'Input something!' })
@@ -208,8 +219,24 @@ class MasterField extends React.Component {
         data.is_primary = is_primary
       }
 
-      this.props.handleSave(attribute, data)
+      if (this.isTriggable) {
+        const waitFor = Number(triggerSendBefore) * -86400
 
+        await createTrigger(
+          contact,
+          triggerSelectedTemplate,
+          brand,
+          {
+            event_type: this.attribute_def.name,
+            wait_for: waitFor
+          },
+          {
+            user
+          }
+        )
+      }
+
+      this.props.handleSave(attribute, data)
       this.setState({ disabled: false, isDirty: false }, this.toggleMode)
     } catch (error) {
       console.error(error)
@@ -277,7 +304,6 @@ class MasterField extends React.Component {
       {this.isTriggable ? (
         <TriggerField
           user={this.props.user}
-          brand={this.props.brand}
           isActive={this.state.isTriggerActive}
           sendBefore={this.state.triggerSendBefore}
           selectedTemplate={this.state.triggerSelectedTemplate}
