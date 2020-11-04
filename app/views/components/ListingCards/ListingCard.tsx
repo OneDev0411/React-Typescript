@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core'
 
 import { getFormattedPrice } from 'models/Deal/helpers/context'
+import { getStatusColor } from 'utils/listing'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -21,18 +22,11 @@ const useStyles = makeStyles(
       width: '100%',
       borderColor: variant === 'bare' ? 'transparent' : theme.palette.divider
     }),
-    badgeRoot: {
-      display: 'flex',
-      height: '100%',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    badgeDot: {
-      top: 0,
-      right: 0,
+    badgeDot: ({ listing }: Props) => ({
+      backgroundColor: `#${getStatusColor(listing.status)}`,
       transform: 'none',
       position: 'static'
-    },
+    }),
     cardActionArea: {
       padding: theme.spacing(1)
     },
@@ -92,16 +86,15 @@ export default function ListingCard({
         >
           <Grid container justify="flex-end">
             <Grid item>
-              <Box m={1}>
+              <Box m={1} textAlign="center">
                 <Chip
+                  size="small"
                   label={listing.status}
-                  avatar={
+                  icon={
                     <Box flex>
                       <Badge
                         variant="dot"
-                        color="primary"
                         classes={{
-                          root: classes.badgeRoot,
                           dot: classes.badgeDot
                         }}
                       />

@@ -52,7 +52,7 @@ export const listing: IListing = {
   original_price: 23000000,
   last_price: null,
   low_price: null,
-  status: 'Active',
+  status: 'Pending',
   association_fee: null,
   mls_number: '13927476',
   association_fee_frequency: '',
