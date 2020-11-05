@@ -16,7 +16,7 @@ export async function createTrigger(
   brand: IBrand,
   data: Pick<ITrigger, 'wait_for' | 'event_type'>,
   templateData: TemplateData = {}
-): Promise<any> {
+): Promise<ITrigger> {
   try {
     if (!contact || !brand || !template) {
       throw new Error('contact or brand or teplate not provided')

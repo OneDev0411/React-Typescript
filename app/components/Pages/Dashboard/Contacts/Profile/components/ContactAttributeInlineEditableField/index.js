@@ -5,6 +5,7 @@ import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 import { getActiveBrand } from 'utils/user-teams'
 import { createTrigger } from 'models/instant-marketing/create-trigger'
+import { removeTrigger } from 'models/instant-marketing/remove-trigger'
 
 import {
   formatValue,
@@ -148,11 +149,11 @@ class MasterField extends React.Component {
   onChangeValue = value =>
     this.setState({ value, isDirty: true, updated_at: getCurrentTimestamp() })
 
-  toggleTriggerActive = () =>
-    this.setState(prevState => ({
+  onChangeTriggerActive = value =>
+    this.setState({
       isDirty: true,
-      isTriggerActive: !prevState.isTriggerActive
-    }))
+      isTriggerActive: value
+    })
 
   onChangeSendBefore = value =>
     this.setState({ isDirty: true, triggerSendBefore: value })
@@ -161,6 +162,15 @@ class MasterField extends React.Component {
     this.setState({
       isDirty: true,
       triggerSelectedTemplate: template
+    })
+  }
+
+  resetTrigger = () => {
+    this.setState({
+      currentTrigger: null,
+      isTriggerActive: false,
+      triggerSendBefore: '1',
+      triggerSelectedTemplate: null
     })
   }
 
@@ -200,6 +210,7 @@ class MasterField extends React.Component {
       is_primary,
       label,
       value,
+      currentTrigger,
       isTriggerActive,
       triggerSendBefore,
       triggerSelectedTemplate
@@ -211,7 +222,9 @@ class MasterField extends React.Component {
     }
 
     if (!this.isDirty) {
-      return this.setState({ error: id ? 'Update value!' : 'Input something!' })
+      return this.setState({
+        error: id ? 'Update value!' : 'Change something!'
+      })
     }
 
     const error = await validation(this.attribute_def, value)
@@ -235,20 +248,26 @@ class MasterField extends React.Component {
       }
 
       if (this.isTriggable) {
-        const waitFor = Number(triggerSendBefore) * -86400
-
-        await createTrigger(
-          contact,
-          triggerSelectedTemplate,
-          brand,
-          {
-            event_type: this.attribute_def.name,
-            wait_for: waitFor
-          },
-          {
-            user
+        if (currentTrigger) {
+          if (!isTriggerActive) {
+            await removeTrigger(currentTrigger.id)
           }
-        )
+        } else if (isTriggerActive) {
+          const waitFor = Number(triggerSendBefore) * -86400
+
+          await createTrigger(
+            contact,
+            triggerSelectedTemplate,
+            brand,
+            {
+              event_type: this.attribute_def.name,
+              wait_for: waitFor
+            },
+            {
+              user
+            }
+          )
+        }
       }
 
       this.props.handleSave(attribute, data)
@@ -323,7 +342,7 @@ class MasterField extends React.Component {
           isActive={this.state.isTriggerActive}
           sendBefore={this.state.triggerSendBefore}
           selectedTemplate={this.state.triggerSelectedTemplate}
-          toggleActive={this.toggleTriggerActive}
+          onChangeActive={this.onChangeTriggerActive}
           onChangeSendBefore={this.onChangeSendBefore}
           onChangeTemplate={this.onChangeTemplate}
         />

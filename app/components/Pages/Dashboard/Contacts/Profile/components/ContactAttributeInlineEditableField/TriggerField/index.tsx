@@ -17,7 +17,7 @@ interface Props {
   user: IUser
   isActive: boolean
   sendBefore: string | number
-  toggleActive: () => void
+  onChangeActive: (value: boolean) => void
   onChangeSendBefore: (value: string | number) => void
   onChangeTemplate: (template: IBrandMarketingTemplate) => void
 }
@@ -97,7 +97,7 @@ export const TriggerField = ({
   user,
   isActive: isActiveProp = false,
   sendBefore: sendBeforeProp = '1',
-  toggleActive,
+  onChangeActive,
   onChangeSendBefore,
   onChangeTemplate
 }: Props) => {
@@ -114,8 +114,10 @@ export const TriggerField = ({
   ] = useState<IBrandMarketingTemplate | null>(null)
 
   const handleActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsActive(event.target.checked)
-    toggleActive()
+    const checked = event.target.checked
+
+    setIsActive(checked)
+    onChangeActive(checked)
   }
 
   const handleSendBeforeChange = (
