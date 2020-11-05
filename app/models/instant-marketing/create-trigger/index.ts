@@ -79,8 +79,6 @@ export async function createTrigger(
       contact: contact.id
     })
 
-    console.log('response', response)
-
     return response
   } catch (e) {
     throw e

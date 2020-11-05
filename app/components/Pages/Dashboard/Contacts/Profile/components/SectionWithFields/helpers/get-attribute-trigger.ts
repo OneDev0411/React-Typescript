@@ -7,7 +7,7 @@ export const getAttributeTrigger = (
   contact: ITriggeredContact,
   eventType: TriggerContactEventTypes
 ): ITrigger | null => {
-  if (!contact) {
+  if (!contact || !contact.triggers) {
     return null
   }
 
