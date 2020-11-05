@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import _get from 'lodash/get'
 import {
   FormControl,
   InputLabel,
@@ -94,6 +94,7 @@ const useStyles = makeStyles(
 )
 
 export const TriggerField = ({
+  current,
   user,
   isActive: isActiveProp = false,
   sendBefore: sendBeforeProp = '1',
@@ -139,6 +140,29 @@ export const TriggerField = ({
     }
   }
 
+  const renderTemplatePreview = () => {
+    if (selectedTemplate) {
+      return (
+        <img
+          src={selectedTemplate?.preview.preview_url}
+          alt="Selected Template"
+        />
+      )
+    }
+
+    if (current) {
+      const preview = _get(current, 'campaign.template.file.preview_url', false)
+
+      if (!preview) {
+        return <span>Preivew is not Available</span>
+      }
+
+      return <img src={preview} alt="Selected Template" />
+    }
+
+    return <span>Select a Template</span>
+  }
+
   return (
     <div className={classes.body}>
       <div className={classes.switch}>
@@ -174,14 +198,7 @@ export const TriggerField = ({
               className={classes.templateSelectorPreview}
               onClick={() => setIsTemplatesModalOpen(true)}
             >
-              {selectedTemplate ? (
-                <img
-                  src={selectedTemplate?.preview.preview_url}
-                  alt="Selected Template"
-                />
-              ) : (
-                <span>Select a Template</span>
-              )}
+              {renderTemplatePreview()}
             </div>
           </div>
           <FormControl variant="outlined" className={classes.sendBefore}>
