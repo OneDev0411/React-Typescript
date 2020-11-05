@@ -17,6 +17,7 @@ import {
   orderFields,
   normalizeAttributes
 } from './helpers'
+import { getAttributeTrigger } from './helpers/get-attribute-trigger'
 
 function generateEmptyAttribute(attribute_def, is_partner, order) {
   return {
@@ -351,6 +352,10 @@ class SectionWithFields extends React.Component {
             <MasterField
               contact={this.props?.contact}
               attribute={attribute}
+              trigger={getAttributeTrigger(
+                this.props?.contact,
+                attribute.attribute_def.name
+              )}
               handleAddNewInstance={this.addShadowAttribute}
               handleDelete={this.deleteHandler}
               handleSave={this.save}

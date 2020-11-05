@@ -44,14 +44,29 @@ function getStateFromAttribute(attribute) {
     value: ''
   }
 }
+function getStateFromTrigger(trigger) {
+  if (trigger) {
+    return {
+      currentTrigger: trigger,
+      isTriggerActive: true,
+      triggerSendBefore: `${Math.abs(Number(trigger.wait_for)) / 86400}`,
+      triggerSelectedTemplate: null
+    }
+  }
 
-const getInitialState = attribute => ({
+  return {
+    currentTrigger: null,
+    isTriggerActive: false,
+    triggerSendBefore: '1',
+    triggerSelectedTemplate: null
+  }
+}
+
+const getInitialState = ({ attribute, trigger }) => ({
   error: '',
   isDirty: false,
   disabled: false,
-  isTriggerActive: false,
-  triggerSendBefore: '1',
-  triggerSelectedTemplate: null,
+  ...getStateFromTrigger(trigger),
   ...getStateFromAttribute(attribute)
 })
 
@@ -74,16 +89,16 @@ class MasterField extends React.Component {
     this.attribute_def = attribute_def
     this.showAdd = !attribute_def.singular
     this.type = attribute_def.data_type
-    this.state = getInitialState(props.attribute)
+    this.state = getInitialState(props)
   }
 
-  static getDerivedStateFromProps({ attribute, isActive }, state) {
+  static getDerivedStateFromProps(props, state) {
     if (
-      !isActive &&
-      attribute.updated_at &&
-      attribute.updated_at > state.updated_at
+      !props.isActive &&
+      props.attribute?.updated_at &&
+      props.attribute?.updated_at > state.updated_at
     ) {
-      return getInitialState(attribute)
+      return getInitialState(props)
     }
 
     return null
@@ -124,7 +139,7 @@ class MasterField extends React.Component {
 
   setInitialState = () => {
     this.toggleMode()
-    this.setState(getInitialState(this.props.attribute))
+    this.setState(getInitialState(this.props))
   }
 
   onChangeLabel = label =>
@@ -303,6 +318,7 @@ class MasterField extends React.Component {
     >
       {this.isTriggable ? (
         <TriggerField
+          current={this.state.currentTrigger}
           user={this.props.user}
           isActive={this.state.isTriggerActive}
           sendBefore={this.state.triggerSendBefore}

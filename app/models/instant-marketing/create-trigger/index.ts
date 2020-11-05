@@ -9,16 +9,12 @@ interface TemplateData {
   user?: IUser
   contact?: IContact
 }
-interface TriggerData {
-  event_type: string
-  wait_for: number
-}
 
 export async function createTrigger(
   contact: IContact,
   template: IBrandMarketingTemplate,
   brand: IBrand,
-  data: TriggerData,
+  data: Pick<ITrigger, 'wait_for' | 'event_type'>,
   templateData: TemplateData = {}
 ): Promise<any> {
   try {

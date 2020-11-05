@@ -13,6 +13,7 @@ import {
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
 
 interface Props {
+  current: ITrigger | null
   user: IUser
   isActive: boolean
   sendBefore: string | number
