@@ -1,9 +1,9 @@
 import * as React from 'react'
+import { useSelector } from 'react-redux'
 import { useMemo, useState } from 'react'
 import {
   Box,
   Button,
-  Avatar,
   Link,
   makeStyles,
   Paper,
@@ -15,10 +15,14 @@ import fecha from 'fecha'
 import useBoolean from 'react-use/lib/useBoolean'
 import { mdiReplyAllOutline, mdiReplyOutline, mdiAttachment } from '@mdi/js'
 
+import { IAppState } from 'reducers'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { forwardOutlined } from 'components/SvgIcons/icons'
 import { Iframe } from 'components/Iframe'
 import CampaignStatus from 'components/CampaignStatus'
+import { Avatar } from 'components/Avatar'
+import { getNameInitials } from 'utils/helpers'
 
 import { EmailItemHeaderActions } from './EmailItemHeaderActions'
 import { EmailItemRecipients } from './EmailItemRecipients'
@@ -31,6 +35,7 @@ import { EmailRecipient } from '../../EmailRecipient'
 import { ThreeDotsButton } from '../../ThreeDotsButton'
 import { trimEmailQuotedContent } from '../helpers/trimEmailQuotedContent'
 import { updateEmailReadStatus } from '../helpers/update-email-read-status'
+import { getEmailAvatar } from '../helpers/get-email-avatar'
 import getStatusFromCampaign from '../helpers/get-status-from-campaign'
 
 interface Props {
@@ -74,10 +79,6 @@ const useStyles = makeStyles(
     actionButton: {
       marginRight: `${theme.spacing(1)}px`
     },
-    avatar: {
-      backgroundColor: theme.palette.divider,
-      color: theme.palette.text.primary
-    },
     campaignStatus: {
       marginRight: theme.spacing(1)
     }
@@ -98,7 +99,7 @@ export function EmailThreadItem({
   const [isResponseOpen, setIsResponseOpen] = useState(false)
   const [trimQuotedContent, toggleTrimQuotedContent] = useBoolean(true)
   const [responseType, setResponseType] = useState<EmailResponseType>('reply')
-  // const [followUpModalIsOpen, setFollowUpModalIsOpen] = useState(false)
+  const user = useSelector<IAppState, IUser>(({ user }) => user)
 
   const openResponse = (type: EmailResponseType) => {
     setIsResponseOpen(true)
@@ -122,6 +123,7 @@ export function EmailThreadItem({
     !!email.campaign?.google_credential ||
     !!email.campaign?.microsoft_credential
   const campaignStatus = email.campaign && getStatusFromCampaign(email.campaign)
+  const emailAvatar = getEmailAvatar(email.from, user)
 
   return (
     <div className={classes.root}>
@@ -132,8 +134,8 @@ export function EmailThreadItem({
         onClick={onToggleCollapsed && (() => onToggleCollapsed(!collapsed))}
       >
         <Box mr={2}>
-          <Avatar alt={email.from} sizes="32" className={classes.avatar}>
-            {email.from.substring(0, 1).toUpperCase()}
+          <Avatar alt={email.from} url={emailAvatar}>
+            {getNameInitials(email.from, 1)}
           </Avatar>
         </Box>
         <Box flex={1} mr={2} overflow="hidden">

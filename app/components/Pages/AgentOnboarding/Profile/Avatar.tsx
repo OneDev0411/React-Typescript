@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
-import { Box, Button, Avatar, Typography } from '@material-ui/core'
+import React from 'react'
+import { Box, Button, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
 import { ImageUploader } from 'components/ImageUploader'
+import { Avatar } from 'components/Avatar'
+
+import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
 import { Avatar as AvatarType } from './types'
 
@@ -15,44 +18,20 @@ const useStyles = makeStyles((theme: Theme) => ({
   container: {
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: `${theme.shape.borderRadius}px`
-  },
-  large: {
-    width: theme.spacing(9),
-    height: theme.spacing(9)
   }
 }))
 
 export default function ProfileAvatar({ onChange, data }: Props) {
   const classes = useStyles()
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const handleOnChange = async data => {
-    const file: Blob = data.target ? data.target.files[0] : data.files.file
-    let reader = new FileReader()
+  const handleOnChange = async (file: File) => {
+    const dataUrl = await readFileAsDataUrl(file)
 
-    reader.addEventListener('load', () => {
-      if (typeof reader.result === 'string') {
-        onChange({ src: reader.result, file })
-      }
-    })
-
-    reader.readAsDataURL(file)
+    onChange({ src: dataUrl, file })
   }
 
   return (
     <>
-      {isModalOpen && (
-        <ImageUploader
-          width={300}
-          height={300}
-          radius="50%"
-          saveHandler={data => {
-            handleOnChange(data)
-            setIsModalOpen(false)
-          }}
-          closeHandler={() => setIsModalOpen(false)}
-        />
-      )}
       <Box
         mb={6}
         p={1.5}
@@ -62,21 +41,29 @@ export default function ProfileAvatar({ onChange, data }: Props) {
         justifyContent="space-between"
       >
         <Box display="flex" alignItems="center">
-          <Avatar className={classes.large} variant="circle" src={data.src} />
+          <Avatar url={data.src} size="xlarge" />
           <Box ml={3} textAlign="left">
             <Typography variant="h6">Your profile image</Typography>
             {data.type && (
               <Typography variant="body2">
-                {`To make it easier for you we’ve used your ${
-                  data.type
-                } account's image.`}
+                {`To make it easier for you we’ve used your ${data.type} account's image.`}
               </Typography>
             )}
           </Box>
         </Box>
-        <Button onClick={() => setIsModalOpen(true)} variant="outlined">
-          Change
-        </Button>
+
+        <ImageUploader
+          onSelectImage={handleOnChange}
+          editorOptions={{
+            dimensions: [300, 300]
+          }}
+        >
+          {({ openDialog }) => (
+            <Button onClick={openDialog} variant="outlined">
+              Change
+            </Button>
+          )}
+        </ImageUploader>
       </Box>
     </>
   )

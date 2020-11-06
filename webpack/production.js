@@ -6,11 +6,18 @@ import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
 import SentryCliPlugin from '@sentry/webpack-plugin'
+import { ESBuildPlugin } from 'esbuild-loader'
 
 import moment from 'moment'
 
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
+
+const ESBUILD_COMMON_OPTIONS = {
+  jsxFactory: 'React.createElement',
+  jsxFragment: 'React.Fragment',
+  sourcemap: false
+}
 
 webpackConfig.mode = 'production'
 
@@ -26,7 +33,7 @@ function postcss() {
   return [require('autoprefixer')()]
 }
 
-webpackConfig.devtool = 'source-map'
+webpackConfig.devtool = false
 
 webpackConfig.output.pathinfo = false
 webpackConfig.output.publicPath = process.env.ASSETS_BASEURL
@@ -43,6 +50,7 @@ webpackConfig.entry = {
 }
 
 webpackConfig.plugins.push(
+  new ESBuildPlugin(),
   new webpack.optimize.AggressiveMergingPlugin(),
   new MomentLocalesPlugin(),
   new HtmlWebpackPlugin({
@@ -145,24 +153,38 @@ webpackConfig.plugins.push(
   })
 )
 
-// SOURCE_VERSION variable only exists in Heroku env
-if (process.env.SOURCE_VERSION) {
-  webpackConfig.plugins.push(
-    new SentryCliPlugin({
-      release: process.env.SOURCE_VERSION, // refers to the latest commit hash
-      include: 'dist/',
-      ignore: ['node_modules'],
-      urlPrefix: '~/dist'
-    })
-  )
-}
-
 webpackConfig.module.rules.push(
   {
-    test: /\.(ts|tsx|js)$/,
-    loader: 'babel-loader',
-    options: {
-      compact: false
+    test: /\.jsx?$/,
+    exclude: /(node_modules|bower_components)/,
+    use: {
+      loader: 'esbuild-loader',
+      options: {
+        ...ESBUILD_COMMON_OPTIONS,
+        loader: 'jsx'
+      }
+    }
+  },
+  {
+    test: /\.ts$/,
+    exclude: /(node_modules|bower_components)/,
+    use: {
+      loader: 'esbuild-loader',
+      options: {
+        ...ESBUILD_COMMON_OPTIONS,
+        loader: 'ts'
+      }
+    }
+  },
+  {
+    test: /\.tsx$/,
+    exclude: /(node_modules|bower_components)/,
+    use: {
+      loader: 'esbuild-loader',
+      options: {
+        ...ESBUILD_COMMON_OPTIONS,
+        loader: 'tsx'
+      }
     }
   },
   {

@@ -33,7 +33,7 @@ class SearchDrawer extends React.Component {
     super(props)
     this.state = {
       ...initialState,
-      selectedItems: {}
+      selectedItems: props.defaultSelectedItems || {}
     }
     this.inputRef = createRef()
   }

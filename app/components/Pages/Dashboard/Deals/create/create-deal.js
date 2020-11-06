@@ -39,7 +39,6 @@ import DealSide from './deal-side'
 import DealPropertyType from './deal-property-type'
 import DealClients from './deal-clients'
 import DealAgents from './deal-agents'
-import DealReferrals from './deal-referrals'
 import DealStatus from './deal-status'
 import DealAddress from './deal-address'
 import EscrowOfficers from './escrow-officer'
@@ -425,11 +424,8 @@ class CreateDeal extends React.Component {
       },
       contexts: {
         validator: () =>
-          DealContext.validateList(
-            this.ContextsListId,
-            contexts,
-            dealSide,
-            dealPropertyType
+          this.getDealContexts(dealSide, dealPropertyType).every(field =>
+            field.validate(field, contexts[field.key])
           )
       }
     }
@@ -791,7 +787,21 @@ class CreateDeal extends React.Component {
       return []
     }
 
-    return DealContext.getItems(this.ContextsListId, dealSide, dealPropertyType)
+    return DealContext.getItems(
+      this.ContextsListId,
+      dealSide,
+      dealPropertyType
+    ).filter(field => {
+      if (!field.mandatory) {
+        return false
+      }
+
+      if (['contract_status', 'listing_status'].includes(field.key)) {
+        return false
+      }
+
+      return true
+    })
   }
 
   /**
@@ -902,7 +912,6 @@ class CreateDeal extends React.Component {
       sellingAgents,
       clients,
       sellingClients,
-      referrals,
       enderType,
       submitError,
       validationErrors
@@ -964,15 +973,6 @@ class CreateDeal extends React.Component {
                   clients={clients}
                   onUpsertClient={form => this.onUpsertRole(form, 'clients')}
                   onRemoveClient={id => this.onRemoveRole(id, 'clients')}
-                />
-
-                <DealReferrals
-                  dealSide={dealSide}
-                  referrals={referrals}
-                  onUpsertReferral={form =>
-                    this.onUpsertRole(form, 'referrals')
-                  }
-                  onRemoveReferral={id => this.onRemoveRole(id, 'referrals')}
                 />
 
                 <DealAgents
@@ -1063,17 +1063,18 @@ class CreateDeal extends React.Component {
                   onRemoveAddress={() => this.setState({ dealAddress: null })}
                 />
 
-                {dealContexts.length > 0 && (
-                  <Contexts
-                    areContextsRequired={requiredFields.includes('contexts')}
-                    hasError={this.hasError('contexts')}
-                    contexts={contexts}
-                    onChangeContext={(field, value) =>
-                      this.changeContext(field, value)
-                    }
-                    fields={dealContexts}
-                  />
-                )}
+                {dealContexts.length > 0 &&
+                  requiredFields.includes('contexts') && (
+                    <Contexts
+                      areContextsRequired={requiredFields.includes('contexts')}
+                      hasError={this.hasError('contexts')}
+                      contexts={contexts}
+                      onChangeContext={(field, value) =>
+                        this.changeContext(field, value)
+                      }
+                      fields={dealContexts}
+                    />
+                  )}
               </div>
             )}
         </div>

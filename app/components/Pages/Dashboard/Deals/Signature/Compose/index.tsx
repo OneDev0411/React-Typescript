@@ -18,7 +18,6 @@ import { From } from './form/From'
 import { Subject } from './form/Subject'
 import { Message } from './form/Message'
 import { Attachments } from './form/Attachments'
-import { AutoNotify } from './form/AutoNotify'
 
 interface Props {
   user: IUser
@@ -91,7 +90,7 @@ export function SignatureComposeDrawer({
 
     if (!initialValues.current && actionsState.form) {
       initialValues.current = {
-        ...actionsState.form,
+        ...(actionsState.form as FormValues),
         attachments
       }
 
@@ -117,7 +116,7 @@ export function SignatureComposeDrawer({
   const handleClickAddAttachments = () => {
     actionsDispatch({
       type: SET_FORM_META,
-      form: initialValues.current
+      form: initialValues.current ?? undefined
     })
 
     onClickAddAttachments()
@@ -157,7 +156,6 @@ export function SignatureComposeDrawer({
                   >
                     {isSubmitting ? 'Please Wait...' : 'Next: View in Docusign'}
                   </Button>
-                  <AutoNotify disabled={isSubmitting} />
                 </Box>
               </div>
             </Drawer.Footer>

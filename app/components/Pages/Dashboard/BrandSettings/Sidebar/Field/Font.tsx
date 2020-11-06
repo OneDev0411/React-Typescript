@@ -20,6 +20,7 @@ export default function FontField({
   value = FONT_FAMILY_DEFAULT,
   names,
   label,
+  brandFonts = [],
   onChange
 }: FieldProps) {
   const [status, setStatus] = useState<'loading' | 'failed' | 'succeed'>(
@@ -50,6 +51,7 @@ export default function FontField({
           {
             ...OPTIONS_DEFAULTS,
             filter: fontManagerFilter,
+            families: brandFonts,
             limit: 500
           }
         )
@@ -66,7 +68,7 @@ export default function FontField({
     }
 
     initFontManager()
-  }, [searchQuery])
+  }, [searchQuery, brandFonts])
 
   useEffect(() => {
     if (!fontManager.current) {

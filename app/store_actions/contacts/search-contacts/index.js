@@ -10,6 +10,7 @@ export function searchContacts(
   attributeFilters,
   start = 0,
   limit = 50,
+  parked = false,
   searchInputValue,
   order = '-created_at',
   users,
@@ -38,6 +39,7 @@ export function searchContacts(
         {
           start,
           limit,
+          parked,
           order,
           alphabet,
           filter_type: conditionOperator,

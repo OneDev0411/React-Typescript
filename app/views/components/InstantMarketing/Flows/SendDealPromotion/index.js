@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
+import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
+
 import Listing from 'models/listings/listing'
-import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
@@ -107,7 +108,7 @@ class SendDealPromotion extends React.Component {
 
     const template = getTemplateObject(brandTemplate)
 
-    const instance = await getTemplateInstances(template.id, {
+    const instance = await createTemplateInstance(template.id, {
       ...this.TemplateInstanceData,
       html: brandTemplate.result
     })

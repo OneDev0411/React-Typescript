@@ -6,8 +6,8 @@ import Fuse from 'fuse.js'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 import uniqBy from 'lodash/uniqBy'
 
-import Avatar from 'components/Avatar'
 import { TextWithHighlights } from 'components/TextWithHighlights'
+import { Avatar } from 'components/Avatar'
 
 import Search from 'components/Grid/Search'
 
@@ -112,9 +112,8 @@ export function AgentsList(props: Props) {
                   )}
 
                   <Avatar
-                    size={40}
-                    title={user.display_name}
-                    image={user.profile_image_url || undefined}
+                    alt={user.display_name}
+                    user={user}
                     style={{
                       marginRight: '1rem'
                     }}
@@ -216,12 +215,7 @@ const getSubtitle = memoize(
       currentOffice = currentOffice.parent
     }
 
-    return names.length > 1
-      ? names
-          .reverse()
-          .slice(0, -1)
-          .join(' > ')
-      : ''
+    return names.length > 1 ? names.reverse().slice(0, -1).join(' > ') : ''
   },
   office => office.id
 )

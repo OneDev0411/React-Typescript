@@ -7,6 +7,7 @@ import {
   getStatusColor,
   isLeaseProperty
 } from 'utils/listing'
+import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
 
 /**
  * Normalizing associations
@@ -60,24 +61,16 @@ export function normalizeContact(contact) {
     return null
   }
 
-  const {
-    type,
-    id,
-    email,
-    phone_number,
-    display_name,
-    profile_image_url: image
-  } = contact
+  const { type, id, email, phone_number, display_name } = contact
 
   return {
     id,
     type,
     title: display_name,
     avatar: {
-      image,
-      size: 32,
+      url: getAccountAvatar(contact),
       placeHolderImage: '/static/icons/contact-association-avatar.svg',
-      title:
+      alt:
         email !== display_name && phone_number !== display_name
           ? display_name
           : ''
@@ -100,10 +93,8 @@ export const normalizeListing = (listing, showStatus = true) => {
 
   return {
     avatar: {
-      image: listing.cover_image_url,
+      url: listing.cover_image_url,
       isOnline: showStatus,
-      size: 32,
-      showStatus,
       statusColor: `#${getStatusColor(listing.status)}`,
       placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
@@ -131,10 +122,8 @@ export const normalizeDeal = (deal, showStatus = true) => {
 
   return {
     avatar: {
-      image: getDealField(deal, 'photo'),
+      url: getDealField(deal, 'photo'),
       isOnline: showStatus,
-      size: 32,
-      showStatus,
       statusColor: `#${getStatusColor(getDealStatus(deal))}`,
       placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
     },

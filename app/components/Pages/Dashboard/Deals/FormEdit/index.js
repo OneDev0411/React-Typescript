@@ -24,6 +24,7 @@ import { selectDealRoles } from 'reducers/deals/roles'
 import { selectFormById } from 'reducers/deals/forms'
 
 import { parseAnnotations } from './utils/parse-annotations'
+import { getDefaultValues } from './utils/get-default-values'
 
 import LoadDeal from '../components/LoadDeal'
 import PDFEdit from './Editor'
@@ -130,7 +131,12 @@ class EditDigitalForm extends React.Component {
   }
 
   getAnnotations = async document => {
+    const defaultValues = !this.props.task.submission
+      ? await getDefaultValues(this.props.deal.id, this.props.form.id)
+      : {}
+
     const { annotations, fields } = await parseAnnotations(document, {
+      defaultValues,
       deal: this.props.deal,
       roles: this.props.roles,
       scale: this.scale,
@@ -265,6 +271,7 @@ class EditDigitalForm extends React.Component {
               />
 
               <PDFEdit
+                form={props.form}
                 document={state.pdfDocument}
                 deal={props.deal}
                 scale={this.scale}
@@ -296,13 +303,10 @@ function mapStateToProps({ deals, user }, props) {
 }
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    {
-      saveSubmission,
-      upsertContexts,
-      notify,
-      confirmation
-    }
-  )(EditDigitalForm)
+  connect(mapStateToProps, {
+    saveSubmission,
+    upsertContexts,
+    notify,
+    confirmation
+  })(EditDigitalForm)
 )

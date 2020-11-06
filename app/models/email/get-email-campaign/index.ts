@@ -1,34 +1,20 @@
 import Fetch from 'services/fetch'
+
 import { toEntityAssociation } from 'utils/association-utils'
 
-const DEFAULT_EMAIL_ASSOCIATIONS: IEmailCampaignAssociation[] = [
-  'emails',
-  'template',
-  'from',
-  'recipients',
-  'attachments'
-]
+import {
+  DEFAULT_EMAIL_ASSOCIATIONS,
+  DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS,
+  DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS,
+  GetEmailCampaignsAssociations
+} from '../get-email-campaigns'
 
-const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[] = [
-  'contact',
-  'list',
-  'brand',
-  'agent'
-]
-
-const DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS: IEmailCampaignEmailAssociation[] = [
-  'email'
-]
-
-interface GetEmailCampaignParams<
+interface GetEmailCampaignAssociations<
   A1 extends IEmailCampaignAssociation,
   A2 extends IEmailCampaignRecipientAssociation,
   A3 extends IEmailCampaignEmailAssociation,
   E extends IEmailOptionalFields
-> {
-  emailCampaignAssociations?: A1[]
-  emailRecipientsAssociations?: A2[]
-  emailCampaignEmailsAssociation?: A3[]
+> extends GetEmailCampaignsAssociations<A1, A2, A3> {
   emailFields?: E[]
   /**
    * if passed and `emails` exists in emailCampaignAssociations, association
@@ -47,16 +33,17 @@ export async function getEmailCampaign<
   E extends IEmailOptionalFields
 >(
   id: string,
-  {
+  associations: GetEmailCampaignAssociations<A1, A2, A3, E> = {}
+): Promise<IEmailCampaign<A1, A2, A3, E>> {
+  const {
     emailCampaignAssociations = DEFAULT_EMAIL_ASSOCIATIONS as A1[],
     emailRecipientsAssociations = DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS as A2[],
     emailCampaignEmailsAssociation = DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS as A3[],
     emailFields = [] as E[],
     contactId,
     limit
-  }: GetEmailCampaignParams<A1, A2, A3, E> = {}
-): Promise<IEmailCampaign<A1, A2, A3, E>> {
-  // Association Condition
+  } = associations
+
   const contactIdValue = contactId ? { contact: contactId } : {}
   const limitValue = limit ? { limit } : {}
   const associationCondition =
@@ -78,5 +65,5 @@ export async function getEmailCampaign<
     association_condition: associationCondition
   })
 
-  return response.body.data as IEmailCampaign<A1, A2, A3, E>
+  return response.body.data
 }

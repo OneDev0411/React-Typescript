@@ -63,6 +63,12 @@ export function Menu() {
         hasThinnerScrollbar
       >
         <SidenavListGroup data-test="side-nav-list">
+          {user?.email === 'shayan@rechat.com' && (
+            <SideNavLinkItem to="/dashboard/overview">
+              Dashboard
+            </SideNavLinkItem>
+          )}
+
           <Acl.Crm>
             <SideNavLinkItem to="/dashboard/inbox">
               <AppNavbarBadge
@@ -148,7 +154,7 @@ export function Menu() {
               rel="noopener noreferrer"
               href="https://help.rechat.com"
             >
-              Success Center
+              Help Center
             </SidenavBlankLink>
           </SideNavItem>
 

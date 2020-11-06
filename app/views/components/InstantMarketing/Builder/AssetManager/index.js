@@ -1,14 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
 
 import { Uploader } from 'components/Uploader'
+import uploadAsset from 'models/instant-marketing/upload-asset'
 
 import { AppTheme } from '../../../../../AppTheme'
+import store from '../../../../../stores'
+import { loadGrapesjs } from '../utils/load-grapes'
 
 import { AssetImage } from './AssetImage'
-
-import { loadGrapesjs } from '../utils/load-grapes'
-import { uploadAsset } from './helpers'
 
 export const load = async () => {
   const { Grapesjs, Backbone } = await loadGrapesjs()
@@ -27,13 +28,15 @@ export const load = async () => {
       },
       render() {
         ReactDOM.render(
-          <AppTheme>
-            <AssetImage
-              model={this.model}
-              target={target}
-              getTemplateId={() => getStorageData('templateId')}
-            />
-          </AppTheme>,
+          <Provider store={store}>
+            <AppTheme>
+              <AssetImage
+                model={this.model}
+                target={target}
+                getTemplateId={() => getStorageData('templateId')}
+              />
+            </AppTheme>
+          </Provider>,
           this.el
         )
 
@@ -44,44 +47,50 @@ export const load = async () => {
     const AssetUploadButtonView = Backbone.View.extend({
       render() {
         ReactDOM.render(
-          <Uploader
-            accept="image/*"
-            uploadHandler={async files => {
-              try {
-                const { templateId } = await getStorageData('templateId')
+          <Provider store={store}>
+            <AppTheme>
+              <Uploader
+                accept="image/*"
+                uploadHandler={async files => {
+                  try {
+                    const { templateId } = await getStorageData('templateId')
 
-                const uploadResponses = await Promise.all(
-                  files.map(file => uploadAsset(file, templateId))
-                )
+                    const uploadResponses = await Promise.all(
+                      files.map(file => uploadAsset(file, templateId))
+                    )
 
-                const uploadedAssets = uploadResponses.map(response => ({
-                  previewUrl: response.body.data.file.preview_url,
-                  url: response.body.data.file.url
-                }))
+                    const uploadedAssets = uploadResponses.map(response => ({
+                      previewUrl: response.file.preview_url,
+                      url: response.file.url
+                    }))
 
-                const listing =
-                  target.attributes.attributes['rechat-listing'] || null
-                const isStatic =
-                  target.attributes.attributes['rechat-assets'] != null
+                    const listing =
+                      target.attributes.attributes['rechat-listing'] || null
+                    const isStatic =
+                      target.attributes.attributes['rechat-assets'] != null
 
-                const uploadedAssetsCollection = uploadedAssets.map(asset => ({
-                  image: asset.url,
-                  listing,
-                  static: isStatic,
-                  userFile: true
-                }))
+                    const uploadedAssetsCollection = uploadedAssets.map(
+                      asset => ({
+                        image: asset.url,
+                        listing,
+                        static: isStatic,
+                        userFile: true
+                      })
+                    )
 
-                view.collection.reset([
-                  ...uploadedAssetsCollection,
-                  ...view.collection.models
-                ])
-              } catch (e) {
-                console.error(e)
-              }
-            }}
-          >
-            <>Click or drop images here</>
-          </Uploader>,
+                    view.collection.reset([
+                      ...uploadedAssetsCollection,
+                      ...view.collection.models
+                    ])
+                  } catch (e) {
+                    console.error(e)
+                  }
+                }}
+              >
+                <>Click or drop images here</>
+              </Uploader>
+            </AppTheme>
+          </Provider>,
           this.el
         )
 

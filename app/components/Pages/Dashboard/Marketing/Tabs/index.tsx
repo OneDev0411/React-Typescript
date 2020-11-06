@@ -8,7 +8,7 @@ import MegaMenu from './SectionMegaMenu'
 
 interface Props {
   sections: SectionCollection
-  mediums: { [key: string]: string[] }
+  mediums: { [key: string]: MarketingTemplateMedium[] }
   templateTypes: string
 }
 

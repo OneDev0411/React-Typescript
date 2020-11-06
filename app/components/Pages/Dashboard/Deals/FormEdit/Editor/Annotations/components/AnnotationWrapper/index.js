@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
 
 export function AnnotationWrapper(props) {
   return (
-    <Fragment>
+    <>
       {Object.entries(props.items).map(([, groups]) =>
         Object.entries(groups).map(([, group]) => {
           const annotation = group[0]
@@ -67,7 +67,7 @@ export function AnnotationWrapper(props) {
           })
         })
       )}
-    </Fragment>
+    </>
   )
 }
 

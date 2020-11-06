@@ -19,6 +19,7 @@ export interface EmailFormValues {
   due_at: Date | null
   body: string | undefined
   templateInstance?: IMarketingTemplateInstance
+  notifications_enabled?: boolean
 }
 
 export interface UrlBasedEmailAttachmentInput {
@@ -38,7 +39,7 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   sendEmail: (values: EmailComposeValues) => Promise<EmailType>
   onSent?: (result: EmailType) => void
   onClose?: () => void
-  onClickAddDealAttachments?: () => void
+  onClickAddDealAttachments?: (formValues: EmailFormValues) => void
   onSelectMarketingTemplate?: (
     template: IMarketingTemplateInstance | null,
     values: EmailFormValues

@@ -3,7 +3,7 @@ import { makeStyles, Theme, Typography } from '@material-ui/core'
 
 import { mdiHomeOutline } from '@mdi/js'
 
-import Avatar from 'components/Avatar'
+import { Avatar } from 'components/Avatar'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import ALinkToClosable from 'components/ALinkToClosable'
 import { getField, getEnderType } from 'models/Deal/helpers/context'
@@ -16,15 +16,6 @@ import { Notification } from '../../Notification'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    homeIcon: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: theme.spacing(4),
-      height: theme.spacing(4),
-      borderRadius: '100%',
-      backgroundColor: theme.palette.grey[200]
-    },
     container: {
       display: 'flex',
       alignItems: 'center'
@@ -77,14 +68,9 @@ export function Address({
     <div className={classes.container}>
       <div className={classes.photoContainer}>
         {notificationsCount > 0 && <Notification count={notificationsCount} />}
-
-        {photo ? (
-          <Avatar image={photo} size={32} />
-        ) : (
-          <div className={classes.homeIcon}>
-            <SvgIcon path={mdiHomeOutline} />
-          </div>
-        )}
+        <Avatar url={photo}>
+          <SvgIcon path={mdiHomeOutline} />
+        </Avatar>
       </div>
 
       <div className={classes.title}>

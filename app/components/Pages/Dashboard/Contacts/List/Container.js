@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 import _ from 'underscore'
 import Alert from '@material-ui/lab/Alert'
 import { Box, IconButton } from '@material-ui/core'
-import { mdiClose } from '@mdi/js'
+import { mdiClose, mdiLoading } from '@mdi/js'
 
 import PageLayout from 'components/GlobalPageLayout'
 import { ViewAs } from 'components/ViewAs'
@@ -35,7 +35,6 @@ import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
-import { updateTeamSetting } from 'actions/user/update-team-setting'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -49,11 +48,10 @@ import {
   FLOW_FILTER_ID,
   OPEN_HOUSE_FILTER_ID,
   SORT_FIELD_SETTING_KEY,
-  SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
-  SYNCED_CONTACTS_LIST_ID,
+  PARKED_CONTACTS_LIST_ID,
   DUPLICATE_CONTACTS_LIST_ID
 } from './constants'
-import { CalloutSpinner, NavigateDuplicate } from './styled'
+import { NavigateDuplicate } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
@@ -145,6 +143,10 @@ class ContactsList extends React.Component {
       activeSegment.id !== 'default' &&
       this.state.selectedShortcutFilter === null
     ) {
+      if (activeSegment.id === PARKED_CONTACTS_LIST_ID) {
+        return activeSegment.name
+      }
+
       return `List: ${activeSegment.name}`
     }
 
@@ -294,22 +296,11 @@ class ContactsList extends React.Component {
   /**
    * @param {ISavedSegment} savedSegment
    */
-  handleChangeSavedSegment = savedSegment => {
+  handleChangeSavedSegment = () => {
     this.setState({
       selectedShortcutFilter: null
     })
     this.handleFilterChange({}, true)
-
-    if (savedSegment.id === SYNCED_CONTACTS_LIST_ID) {
-      this.updateSyncedContactsSeenDate()
-    }
-  }
-
-  updateSyncedContactsSeenDate() {
-    this.props.updateTeamSetting(
-      SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
-      new Date()
-    )
   }
 
   handleFilterChange = async (
@@ -321,6 +312,9 @@ class ContactsList extends React.Component {
       return
     }
 
+    const isParkedActive =
+      this.props.activeSegment.id === PARKED_CONTACTS_LIST_ID
+
     const {
       filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
@@ -331,7 +325,8 @@ class ContactsList extends React.Component {
       crmTasks = this.props.crmTasks,
       conditionOperator = this.props.conditionOperator,
       prependResult = false,
-      firstLetter = this.state.firstLetter
+      firstLetter = this.state.firstLetter,
+      parked = isParkedActive
     } = newFilters || {}
 
     if (resetLoadedRanges) {
@@ -350,6 +345,7 @@ class ContactsList extends React.Component {
         filters,
         start,
         undefined,
+        parked,
         searchInputValue,
         order,
         viewAsUsers,
@@ -521,10 +517,14 @@ class ContactsList extends React.Component {
   }
 
   reloadContacts = async (start = 0) => {
-    await this.props.searchContacts(
+    const { activeSegment, searchContacts } = this.props
+    const isParkedActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
+
+    await searchContacts(
       this.props.filters,
       start,
       undefined,
+      isParkedActive,
       this.state.searchInputValue,
       this.order,
       this.props.viewAsUsers,
@@ -709,7 +709,7 @@ class ContactsList extends React.Component {
         <PageLayout.HeaderWithSearch
           title={title}
           onSearch={this.handleSearch}
-          onCreateContact={this.onCreateContact}
+          onCreateAndAddNewContact={this.onCreateContact}
           SearchInputProps={{
             placeholder: 'Search Contacts'
           }}
@@ -741,7 +741,11 @@ class ContactsList extends React.Component {
               type="info"
               onClose={() => this.setState({ syncStatus: null })}
             >
-              <CalloutSpinner viewBox="20 20 60 60" />
+              <SvgIcon
+                path={mdiLoading}
+                spin={1}
+                style={{ verticalAlign: 'middle', marginRight: '0.5rem' }}
+              />
               Doing Science! Just a moment for Rechat to complete establishing
               connections and importing your contacts.
             </Callout>
@@ -757,12 +761,11 @@ class ContactsList extends React.Component {
               handleFilterChange={filters => {
                 this.setState({ syncStatus: null })
                 this.props.getContactsTags()
-                this.updateSyncedContactsSeenDate()
                 this.handleFilterChange({ filters }, true, '-updated_at')
               }}
             />
           )}
-          {isZeroState && <ZeroState onCreateContact={this.onCreateContact} />}
+          {isZeroState && <ZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
               {this.renderTabs()}
@@ -773,6 +776,7 @@ class ContactsList extends React.Component {
                   order={this.order}
                   totalRows={props.listInfo.total || 0}
                   listInfo={props.listInfo}
+                  activeSegment={activeSegment}
                   isFetching={isFetchingContacts}
                   isFetchingMore={state.isFetchingMoreContacts}
                   isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
@@ -860,7 +864,6 @@ export default withRouter(
     confirmation,
     setContactsListTextFilter,
     getContactsTags,
-    updateTeamSetting,
     getUserTeams,
     updateSegment: updateFilterSegment
   })(ContactsList)

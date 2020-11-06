@@ -16,14 +16,15 @@ interface Props {
 export function SvgIcon({
   rightMargined,
   leftMargined,
-  ...restProps
+  ...props
 }: IconProps & Props) {
-    const classes = useIconStyles()
-    const className = cn({
-        [classes.rightMargin]: rightMargined,
-        [classes.leftMargin]: leftMargined
-    }, restProps.className)
-    return (
-        <BaseIcon size={muiIconSizes.medium} {...restProps} className={className} />
-    )
+  const classes = useIconStyles()
+  const className = cn({
+    [classes.rightMargin]: rightMargined,
+    [classes.leftMargin]: leftMargined
+  }, props.className)
+
+  return (
+    <BaseIcon size={muiIconSizes.medium} {...props} className={className} />
+  )
 }

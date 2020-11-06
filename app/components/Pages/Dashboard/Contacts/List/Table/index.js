@@ -17,6 +17,7 @@ import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 
 import { LoadingComponent } from './components/LoadingComponent'
+import { PARKED_CONTACTS_LIST_ID } from '../constants'
 
 import Menu from './columns/Menu'
 import Avatar from './columns/Avatar'
@@ -25,6 +26,7 @@ import CtaAction from './columns/Cta'
 import TagsString from './columns/Tags'
 import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
+import { UnparkContact } from './columns/UnparkContact'
 
 const useCustomGridStyles = makeStyles(theme => ({
   row: {
@@ -54,6 +56,7 @@ const ContactsList = props => {
   const customGridClasses = useCustomGridStyles()
   const [selectedTagContact, setSelectedTagContact] = useState([])
   const theme = useTheme()
+  const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
 
   const onSelectTagContact = selectedTagContact =>
     setSelectedTagContact([selectedTagContact])
@@ -97,11 +100,23 @@ const ContactsList = props => {
     },
     {
       id: 'tag',
-      width: '34%',
+      width: !isParkTabActive ? '34%' : '22%',
       class: 'opaque tags',
       render: ({ row: contact }) => (
         <TagsString contact={contact} onSelectTagContact={onSelectTagContact} />
       )
+    },
+    {
+      id: 'unpark-contact',
+      width: isParkTabActive ? '12%' : '0',
+      class: 'opaque',
+      render: ({ row: contact }) =>
+        isParkTabActive ? (
+          <UnparkContact
+            contactId={contact.id}
+            callback={props.reloadContacts}
+          />
+        ) : null
     },
     {
       id: 'delete-contact',
@@ -140,7 +155,16 @@ const ContactsList = props => {
     }
   }
   const getColumnProps = ({ column }) => {
-    if (['name', 'cta', 'flows', 'tag', 'delete-contact'].includes(column.id)) {
+    if (
+      [
+        'name',
+        'cta',
+        'flows',
+        'tag',
+        'delete-contact',
+        'unpark-contact'
+      ].includes(column.id)
+    ) {
       return {
         onClick: e => e.stopPropagation()
       }
@@ -178,6 +202,7 @@ const ContactsList = props => {
             totalRowsCount={props.listInfo.total}
             reloadContacts={props.reloadContacts}
             onRequestDelete={props.onRequestDelete}
+            activeSegmentId={props.activeSegment?.id ?? ''}
             handleChangeContactsAttributes={
               props.handleChangeContactsAttributes
             }

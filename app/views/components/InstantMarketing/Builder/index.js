@@ -26,9 +26,11 @@ import {
 import { loadJS, unloadJS } from 'utils/load-js'
 import { ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY } from 'constants/user'
 
+import { getBrandFontFamilies } from 'utils/get-brand-fonts'
+import { getBrandColors } from 'utils/get-brand-colors'
+
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
-import { getBrandColors } from '../helpers/get-brand-colors'
 
 import { loadGrapesjs } from './utils/load-grapes'
 import { createGrapesInstance } from './utils/create-grapes-instance'
@@ -54,11 +56,7 @@ import { SOCIAL_NETWORKS, BASICS_BLOCK_CATEGORY } from './constants'
 import { registerEmailBlocks } from './Blocks/Email'
 import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
-import {
-  getMjmlTemplateRenderData,
-  getNonMjmlTemplateRenderData
-} from './utils/get-template-render-data'
-import { getBrandFontFamilies } from '../helpers/get-brand-font-families'
+import { getTemplateRenderData } from './utils/get-template-render-data'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -289,7 +287,7 @@ class Builder extends React.Component {
     this.emailBlocksRegistered = true
 
     const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getMjmlTemplateRenderData(brand)
+    const renderData = getTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
 
@@ -352,7 +350,7 @@ class Builder extends React.Component {
 
   registerSocialBlocks = () => {
     const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getNonMjmlTemplateRenderData(brand)
+    const renderData = getTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
     this.blocks = registerSocialBlocks(this.editor, renderData)
@@ -558,9 +556,7 @@ class Builder extends React.Component {
 
   generateBrandedTemplate = (templateMarkup, data) => {
     const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = this.isMjmlTemplate
-      ? getMjmlTemplateRenderData(brand)
-      : getNonMjmlTemplateRenderData(brand)
+    const renderData = getTemplateRenderData(brand)
 
     return nunjucks.renderString(templateMarkup, {
       ...data,

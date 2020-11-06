@@ -93,17 +93,20 @@ export default function InboxEmailThreadList({
 
   const handleUpdateEmailThreads = useCallback(
     async (updatedEmailThreadIds: UUID[]) => {
-      if (searchQuery) {
-        return
-      }
+      // We don't support including new email threads to the list while searching yet.
+      const toBeUpdatedEmailThreadIds = !searchQuery
+        ? updatedEmailThreadIds
+        : updatedEmailThreadIds.filter(id =>
+            emailThreads.some(emailThread => emailThread.id === id)
+          )
 
       try {
         const updatedEmailThreads = await getEmailThreads(
           {
             selection: ['email_thread.snippet'],
             start: 0,
-            limit: updatedEmailThreadIds.length,
-            ids: updatedEmailThreadIds
+            limit: toBeUpdatedEmailThreadIds.length,
+            ids: toBeUpdatedEmailThreadIds
           },
           ['contacts']
         )
@@ -119,17 +122,19 @@ export default function InboxEmailThreadList({
         )
       }
     },
-    [dispatch, joinEmailThreads, searchQuery]
+    [dispatch, joinEmailThreads, searchQuery, emailThreads]
   )
   const handleDeleteEmailThreads = useCallback(
     (deletedEmailThreadIds: UUID[]) => {
-      if (searchQuery) {
-        return
-      }
+      setEmailThreads(emailThreads => {
+        const newEmailThreads = emailThreads.filter(
+          ({ id }) => !deletedEmailThreadIds.includes(id)
+        )
 
-      setEmailThreads(emailThreads =>
-        emailThreads.filter(({ id }) => !deletedEmailThreadIds.includes(id))
-      )
+        onUpdateEmailThreads && onUpdateEmailThreads(newEmailThreads)
+
+        return newEmailThreads
+      })
     },
     [searchQuery]
   )

@@ -14,8 +14,9 @@ import { confirmation } from 'actions/confirmation'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ImageUploader } from 'components/ImageUploader'
 import Tooltip from 'components/tooltip'
+import { Avatar } from 'components/Avatar'
 
-import Avatar from './Avatar'
+import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
 const Container = styled.div`
   @media (min-width: 50em) {
@@ -37,22 +38,6 @@ const ProfileImageActions = styled.div`
 `
 
 class ProfileCatalog extends Component {
-  state = {
-    isOpen: false
-  }
-
-  openModal = () => {
-    this.setState({
-      isOpen: true
-    })
-  }
-
-  closeModal = () => {
-    this.setState({
-      isOpen: false
-    })
-  }
-
   onDelete = async () => {
     this.props.confirmation({
       show: true,
@@ -61,24 +46,6 @@ class ProfileCatalog extends Component {
       onConfirm: async () => this.props.handleOnDelete(),
       description: 'Are you sure you want to delete your profile picture?'
     })
-  }
-
-  onAvatarSet = async data => {
-    await this.props.handleOnChange(data)
-    this.closeModal()
-  }
-
-  renderUploader() {
-    return (
-      <ImageUploader
-        radius="50%"
-        // file={this.props.avatar.src} // CORS PROBLEM FOR NOW!
-        saveHandler={this.onAvatarSet}
-        closeHandler={this.closeModal}
-        width={300}
-        height={300}
-      />
-    )
   }
 
   getImageUploadButtonText() {
@@ -95,9 +62,13 @@ class ProfileCatalog extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <Container>
-          <Avatar user={this.props.user} data-test="profile-avatar-image" />
+          <Avatar
+            user={this.props.user}
+            size="xlarge"
+            data-test="profile-avatar-image"
+          />
 
           <ProfileImageActions>
             {this.props.user.profile_image_url && (
@@ -113,19 +84,27 @@ class ProfileCatalog extends Component {
                 </Tooltip>
               </Box>
             )}
-            <Button
-              variant="outlined"
-              disabled={this.props.isUploading}
-              onClick={this.openModal}
-              data-test="profile-avatar-upload-button"
+            <ImageUploader
+              onSelectImage={this.props.handleOnChange}
+              editorOptions={{
+                dimensions: [300, 300]
+              }}
             >
-              {`${this.getImageUploadButtonText()} Profile Picture`}
-            </Button>
-            {this.state.isOpen && this.renderUploader()}
+              {({ openDialog }) => (
+                <Button
+                  variant="outlined"
+                  disabled={this.props.isUploading}
+                  onClick={openDialog}
+                  data-test="profile-avatar-upload-button"
+                >
+                  {`${this.getImageUploadButtonText()} Profile Picture`}
+                </Button>
+              )}
+            </ImageUploader>
           </ProfileImageActions>
         </Container>
         <hr />
-      </React.Fragment>
+      </>
     )
   }
 }
@@ -139,28 +118,20 @@ export default compose(
     props => props.user.profile_image_url || null
   ),
   withHandlers({
-    handleOnChange: ({ dispatch, setAvatar, setUploading }) => async data => {
-      const file = data.target ? data.target.files[0] : data.files.file
+    handleOnChange: ({ dispatch, setAvatar, setUploading }) => async file => {
+      try {
+        const dataUrl = await readFileAsDataUrl(file)
 
-      // Create a new FileReader instance
-      // https://developer.mozilla.org/en/docs/Web/API/FileReader
-      let reader = new FileReader()
+        setAvatar(dataUrl)
 
-      // Once a file is successfully readed:
-      reader.addEventListener('load', async () => {
-        try {
-          setAvatar(reader.result)
-          setUploading(true)
-          await dispatch(uploadUserAvatarAction(file))
-        } catch (error) {
-          setAvatar(null)
-          console.log(error)
-        } finally {
-          setUploading(false)
-        }
-      })
-
-      reader.readAsDataURL(file)
+        setUploading(true)
+        await dispatch(uploadUserAvatarAction(file))
+      } catch (error) {
+        setAvatar(null)
+        console.log(error)
+      } finally {
+        setUploading(false)
+      }
     },
     handleOnDelete: ({ setAvatar, dispatch }) => async () => {
       try {

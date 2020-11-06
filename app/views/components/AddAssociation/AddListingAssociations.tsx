@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 
+import { mdiMapSearchOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
 import SearchListingsDrawer from '../SearchListingDrawer'
-import IconListing from '../SvgIcons/Properties/IconProperties'
 import { normalizeListing } from '../../utils/association-normalizers'
 
 import { AddAssociationProps } from './types'
@@ -10,6 +13,7 @@ import { AddAssociationButton } from './AddAssociationButton'
 export function AddListingAssociation({
   disabled,
   handleAdd,
+  isMultipleSelected,
   title = 'Attach Property'
 }: AddAssociationProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -17,12 +21,16 @@ export function AddListingAssociation({
   const onOpen = () => setIsOpen(true)
   const onClose = () => setIsOpen(false)
 
-  const onSelect = listing => handleAdd(normalizeListing(listing), onClose)
+  const handleSelect = (listings: IListing[]) =>
+    handleAdd(
+      listings.map(listing => normalizeListing(listing)),
+      onClose
+    )
 
   return (
     <AddAssociationButton
       title={title}
-      Icon={IconListing}
+      Icon={<SvgIcon path={mdiMapSearchOutline} />}
       disabled={disabled}
       onClick={onOpen}
     >
@@ -31,7 +39,8 @@ export function AddListingAssociation({
           isOpen
           title={title}
           onClose={onClose}
-          onSelectListingsCallback={listings => onSelect(listings[0])}
+          multipleSelection={isMultipleSelected}
+          onSelectListingsCallback={handleSelect}
         />
       )}
     </AddAssociationButton>

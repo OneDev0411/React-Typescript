@@ -1,5 +1,7 @@
 import React, { ComponentProps, useState } from 'react'
 
+import { noop } from 'utils/helpers'
+
 import FollowUpModal from '../FollowUpModal'
 import OverlayDrawer from '../OverlayDrawer'
 import { SingleEmailComposeForm } from './SingleEmailComposeForm'
@@ -7,8 +9,7 @@ import { SingleEmailComposeForm } from './SingleEmailComposeForm'
 interface Props extends ComponentProps<typeof SingleEmailComposeForm> {
   isOpen: boolean
   onClose?: () => void
-  onClickAddDealAttachments?: () => void
-
+  followUpCallback?: (event: IEvent) => void
   getEmail?: (values: IEmailCampaignInput) => IEmailCampaignInput
   disableAddNewRecipient?: boolean
   /**
@@ -20,24 +21,23 @@ interface Props extends ComponentProps<typeof SingleEmailComposeForm> {
 export function SingleEmailComposeDrawer({
   emailId,
   isOpen,
-  onClose = () => {},
-  onClickAddDealAttachments = () => {},
+  onClose = noop,
+  followUpCallback = noop,
   ...otherProps
 }: Props) {
   const [email, setEmail] = useState<IEmailCampaign<
-    IEmailCampaignAssociation,
-    IEmailCampaignRecipientAssociation,
-    IEmailCampaignEmailAssociation
+    'emails' | 'template' | 'from' | 'recipients',
+    'contact',
+    'email'
   > | null>(null)
   const [followUpModalIsOpen, setFollowUpModalIsOpen] = useState(false)
 
-  const onSent = result => {
-    const email = result.data
-
-    if (email.individual) {
+  const onSent = (sentEmail: NonNullable<typeof email>) => {
+    if (sentEmail.individual) {
       onClose()
+      otherProps.onSent && otherProps.onSent(sentEmail)
     } else {
-      addFollowUp(email)
+      addFollowUp(sentEmail)
     }
   }
 
@@ -49,10 +49,7 @@ export function SingleEmailComposeDrawer({
   const onCloseFollowUpModal = () => {
     setFollowUpModalIsOpen(false)
     onClose()
-
-    if (otherProps?.onSent) {
-      otherProps.onSent(email)
-    }
+    otherProps.onSent && otherProps.onSent(email)
   }
 
   return (
@@ -64,11 +61,11 @@ export function SingleEmailComposeDrawer({
           emailId={emailId}
           onClose={onClose}
           onSent={onSent}
-          onClickAddDealAttachments={onClickAddDealAttachments}
         />
       </OverlayDrawer>
       <FollowUpModal
         email={email}
+        callback={followUpCallback}
         isOpen={followUpModalIsOpen}
         onClose={onCloseFollowUpModal}
       />

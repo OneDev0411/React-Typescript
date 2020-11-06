@@ -8,6 +8,7 @@ import attributeDefs from 'fixtures/contacts/attribute-defs'
 import contact from 'fixtures/contacts/full-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import renderWithConfirmationModal from 'utils/test-utils/render-with-confirmation-modal'
+import { TestBed } from '../../../../../../../tests/unit/TestBed'
 
 // mocks
 jest.mock('models/contacts/delete-attributes-bulk-contacts')
@@ -20,12 +21,14 @@ describe('Addresses tests', function() {
       getAllByText,
       queryByTestId
     } = renderWithConfirmationModal(
-      <AppTheme>
-        <Addresses
-          attributeDefs={attributeDefs}
-          contact={normalizeContact(contact)}
-        />
-      </AppTheme>
+      <TestBed>
+        <AppTheme>
+          <Addresses
+            attributeDefs={attributeDefs}
+            contact={normalizeContact(contact)}
+          />
+        </AppTheme>
+      </TestBed>
     )
 
     const editButtons = getAllByText('Edit')

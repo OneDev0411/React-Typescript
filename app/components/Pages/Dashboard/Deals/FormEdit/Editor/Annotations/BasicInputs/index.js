@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import debounce from 'debounce'
 
@@ -10,7 +10,7 @@ import TextInputAnnotation from './TextInput'
 
 export const FormInputs = React.memo(
   props => (
-    <Fragment>
+    <>
       {props.annotations[props.pageIndex].inputs.map((info, index) => {
         const { annotation } = info
 
@@ -45,7 +45,7 @@ export const FormInputs = React.memo(
 
         return <TextInputAnnotation key={index} {...sharedProps} />
       })}
-    </Fragment>
+    </>
   ),
   () => true
 )

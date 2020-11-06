@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { ImageUploader } from 'components/ImageUploader'
+import { Editor } from 'components/ImageEditor'
+import uploadAsset from 'models/instant-marketing/upload-asset'
 
 import { Container, CropButton, Image } from './styled'
-import { uploadAsset } from '../helpers'
 
 export class AssetImage extends React.Component {
   constructor(props) {
@@ -73,17 +73,10 @@ export class AssetImage extends React.Component {
     const { templateId } = await this.props.getTemplateId()
     const response = await uploadAsset(file, templateId)
 
-    this.onImageSelect({ url: response.body.data.file.url })
+    this.onImageSelect({ url: response.file.url })
     this.setState({
       isCropperOpen: false
     })
-  }
-
-  onCrop = ({ files }) => {
-    const fileName = files.originalFile.split('?')[0].split('/').pop()
-    const file = new File([files.file], fileName)
-
-    return this.onCropImg(file)
   }
 
   render() {
@@ -93,23 +86,23 @@ export class AssetImage extends React.Component {
 
     const image = this.props.model.get('image')
     const targetElement = this.getTargetElement()
-    const imageWithoutCorsIssue = `/api/utils/cors/${image}`
 
     return (
       <Container>
         <Image src={image} onClick={this.onImageSelect} />
         <CropButton data-test="crop-button" onClick={this.showCropper}>
-          Crop and Select
+          Edit
         </CropButton>
 
         {this.state.isCropperOpen && (
-          <ImageUploader
-            disableChangePhoto
-            file={imageWithoutCorsIssue}
-            width={targetElement.clientWidth * 2}
-            height={targetElement.clientHeight * 2}
-            saveHandler={this.onCrop}
-            closeHandler={this.closeCropper}
+          <Editor
+            file={`/api/utils/cors/${image}`}
+            dimensions={[
+              targetElement.clientWidth * 2,
+              targetElement.clientHeight * 2
+            ]}
+            onSave={this.onCropImg}
+            onClose={this.closeCropper}
           />
         )}
       </Container>

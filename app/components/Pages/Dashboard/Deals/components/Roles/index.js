@@ -7,9 +7,11 @@ import Flex from 'styled-flex-component'
 
 import { Button } from '@material-ui/core'
 
-import UserAvatar from 'components/Avatar'
+import { Avatar } from 'components/Avatar'
 import { createRoles, deleteRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+import { getContactNameInitials } from 'models/contacts/helpers'
+import { getNameInitials } from 'utils/helpers'
 
 import DeleteRole from 'components/DealRole/components/DeleteRole'
 
@@ -172,12 +174,11 @@ class Roles extends React.Component {
               <RoleItem key={role.id} className="item">
                 <Flex alignCenter>
                   <RoleAvatar>
-                    <UserAvatar
-                      size={32}
-                      color="#000"
-                      title={getAvatarTitle(role)}
-                      image={role.user ? role.user.profile_image_url : null}
-                    />
+                    <Avatar alt={getAvatarTitle(role)} user={role.user}>
+                      {role.user
+                        ? getContactNameInitials(role.user)
+                        : getNameInitials(getLegalFullName(role), 1)}
+                    </Avatar>
                   </RoleAvatar>
 
                   <RoleInfo onClick={() => this.onSelectRole(role)}>

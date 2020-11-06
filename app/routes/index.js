@@ -131,6 +131,13 @@ const AsyncOnboardingProfile = Load({
     )
 })
 
+const AsyncDashboardOverview = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
+    )
+})
+
 /* ==================================== */
 //  MLS
 /* ==================================== */
@@ -320,6 +327,13 @@ const AsyncMarketingEditor = Load({
   loader: () =>
     import(
       '../components/Pages/Dashboard/Marketing/Editor' /* webpackChunkName: "marketing_editor" */
+    )
+})
+
+const AsyncMarketingWizard = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Marketing/Wizard' /* webpackChunkName: "marketing_wizard" */
     )
 })
 
@@ -677,6 +691,7 @@ export default (
       <Route path="share" component={AsyncShare} />
 
       <Route path="dashboard" component={Dashboard}>
+        <Route path="overview" component={AsyncDashboardOverview} />
         <Route path="inbox(/:emailThreadId)" component={AsyncInbox} />
 
         <Route path="calendar(/:id)" component={AsyncCalendar} />
@@ -687,6 +702,7 @@ export default (
         <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
 
         <Route path="marketing" component={AsyncMarketingHistory} />
+        <Route path="marketing/wizard" component={AsyncMarketingWizard} />
         <Route path="marketing/editor" component={AsyncMarketingEditor} />
         <Route path="marketing/:types(/:medium)" component={AsyncMarketing} />
 
@@ -736,7 +752,9 @@ export default (
           <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
         </Route>
 
-        <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
+        <Route path="/dashboard/mls/:id" component={AsyncListingsLayout}>
+          <IndexRoute component={AsyncListingSinglePage} />
+        </Route>
 
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />

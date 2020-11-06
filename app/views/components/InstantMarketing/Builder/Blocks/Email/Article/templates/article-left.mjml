@@ -1,16 +1,16 @@
-<mj-section padding="20px 20px" rechat-editable="tree" background-color="#fff">
+<mj-section mj-class="container" padding-top="20px" padding-bottom="20px" rechat-editable="tree" >
   <mj-column vertical-align="top">
     <mj-image padding="0" rechat-assets="static" src={{image}}></mj-image>
   </mj-column>
   <mj-column vertical-align="top" padding-left="10px">
-    <mj-text padding="0" color="#000" font-family="Helvetica, Arial, sans-serif" align="left" rechat-editable="tree" font-size="20px" line-height="1.5">
+    <mj-text mj-class="h3" padding="0" align="left" rechat-editable="tree"  line-height="1.5">
       {{title}}
     </mj-text>
-    <mj-text padding="0" font-family="Helvetica, Arial, sans-serif" align="left" rechat-editable="tree" font-size="14px" line-height="1.5">
+    <mj-text mj-class="container-text" padding="0" align="left" rechat-editable="tree"  line-height="1.5">
       {{description}}
     </mj-text>
     <mj-spacer height="10px"></mj-spacer>
-    <mj-button href="{{url}}" rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px" font-family="Helvetica, Arial, sans-serif" font-size="14px" line-height="1.5" align="left">
+    <mj-button href="{{url}}" rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px"  line-height="1.5" align="left">
       Read More
     </mj-button>
   </mj-column>

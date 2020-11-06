@@ -58,14 +58,18 @@ export function useRowsSelection<Row>(
               style={{ display: showDefaultValue ? 'none' : 'block' }}
               onClick={e => e.stopPropagation()}
             >
-              <Checkbox
-                checked={isRowSelected<Row>(
-                  state,
-                  rowItem.row,
-                  rowItem.rowIndex
-                )}
-                onChange={() => handleToggleRow(rowItem)}
-              />
+              {options.render ? (
+                options.render(rowItem)
+              ) : (
+                <Checkbox
+                  checked={isRowSelected<Row>(
+                    state,
+                    rowItem.row,
+                    rowItem.rowIndex
+                  )}
+                  onChange={() => handleToggleRow(rowItem)}
+                />
+              )}
             </div>
           </>
         )

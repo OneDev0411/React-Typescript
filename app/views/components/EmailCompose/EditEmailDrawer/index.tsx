@@ -101,7 +101,8 @@ export function EditEmailDrawer({
         : data.html,
       due_at: data.due_at ? new Date(data.due_at * 1000) : null,
       to: getRecipientsFromRecipientsEntity('To', data.recipients),
-      templateInstance: data.template
+      templateInstance: data.template,
+      notifications_enabled: data.notifications_enabled
     }
 
     if (!data.individual) {

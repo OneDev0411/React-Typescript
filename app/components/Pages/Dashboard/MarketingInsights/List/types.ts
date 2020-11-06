@@ -1,43 +1,51 @@
-export enum InsightFiltersType {
+export enum InsightFilterType {
   SCHEDULED = 'scheduled',
   SENT = 'sent'
 }
 
-export enum ActionGeneralTypes {
-  FETCH_REQUEST = 'FETCH_REQUEST',
-  FETCH_SUCCESS = 'FETCH_SUCCESS',
-  FETCH_FAILED = 'FETCH_FAILED'
-}
+export type InsightEmailCampaign = IEmailCampaign<
+  'recipients' | 'template',
+  'list'
+>
 
-type ActionRequestPayload = {
+export interface InsightState {
   isLoading: boolean
-  activeFilter: InsightFiltersType
-}
-type ActionSuccessPayload = {
-  isLoading: boolean
-  list: IEmailCampaign[]
-  stats: {
+  hasError: boolean
+  list: InsightEmailCampaign[]
+  counts: {
     scheduled: number
     sent: number
   }
 }
-type ActionFailedPayload = {
-  isLoading: boolean
-  hasError: boolean
+
+export enum InsightActionType {
+  FetchListRequest = 'FetchListRequest',
+  FetchListSuccess = 'FetchListSuccess',
+  FetchListFailure = 'FetchListFailure',
+  FetchItemRequest = 'FetchItemRequest',
+  FetchItemSuccess = 'FetchItemSuccess',
+  FetchItemFailure = 'FetchItemFailure'
 }
 
-export interface ActionTypes {
-  type: ActionGeneralTypes
-  payload: ActionRequestPayload | ActionSuccessPayload | ActionFailedPayload
-}
-
-export interface ListDataTypes {
-  isLoading: boolean
-  hasError: boolean
-  list: IEmailCampaign[]
-  stats: {
-    scheduled: number
-    sent: number
-  }
-  activeFilter: InsightFiltersType | null
-}
+export type InsightAction =
+  | {
+      type: InsightActionType.FetchListRequest
+    }
+  | {
+      type: InsightActionType.FetchListSuccess
+      allEmailCampaigns: readonly InsightEmailCampaign[]
+      filterType: InsightFilterType
+    }
+  | {
+      type: InsightActionType.FetchListFailure
+    }
+  | {
+      type: InsightActionType.FetchItemRequest
+    }
+  | {
+      type: InsightActionType.FetchItemSuccess
+      emailCampaign: InsightEmailCampaign
+    }
+  | {
+      type: InsightActionType.FetchItemFailure
+    }

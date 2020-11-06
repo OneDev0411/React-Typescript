@@ -152,7 +152,7 @@ class Dashboard extends Component {
           <title>Rechat | Dashboard</title>
         </Helmet>
         <div className="u-scrollbar">
-          {user && !user.email_confirmed && (
+          {user && !user.email_confirmed && !user.fake_email && (
             <EmailVerificationBanner show email={user.email} />
           )}
 

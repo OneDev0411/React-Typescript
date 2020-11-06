@@ -44,12 +44,7 @@ describe('Deal address component', () => {
       </TestBed>
     )
 
-    expect(
-      wrapper
-        .children()
-        .last()
-        .text()
-    ).toBe('Edit Address')
+    expect(wrapper.children().last().text()).toBe('Edit Address')
   })
 
   it('renders button with "+ Add Address" CTA for deals without address', () => {
@@ -61,11 +56,6 @@ describe('Deal address component', () => {
       </TestBed>
     )
 
-    expect(
-      wrapper
-        .children()
-        .last()
-        .text()
-    ).toBe('+ Add Address')
+    expect(wrapper.children().last().text()).toBe('+ Add Address')
   })
 })

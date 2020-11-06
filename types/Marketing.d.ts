@@ -10,11 +10,13 @@ declare interface IBrandMarketingTemplate extends IModel<'brand_template'> {
 declare interface IMarketingTemplate extends IModel<'template'> {
   name: string
   brand: null
-  template_type: string
+  template_type: MarketingTemplateType
   medium: MarketingTemplateMedium
   video: boolean
+  mjml: boolean
   url: string
   variant: string
+  variables: Nullable<string[]>
   inputs: string[]
 }
 
@@ -30,19 +32,12 @@ declare interface IMarketingTemplateInstance
   listings: Nullable<IListings[]>
 }
 
-interface File {
-  id: UUID
-  created_at: number
-  updated_at: number
-  deleted_at: null
-  created_by: string
-  path: string
-  name: string
-  public: boolean
-  type: string
-  url: string
-  preview_url: string
-  mime: string
+declare interface ITemplateAsset extends IModel<'template_asset'> {
+  created_by: UUID
+  template: UUID
+  contact: Nullable<UUID>
+  listing: Nullable<UUID>
+  file: IFile
 }
 
 declare enum MarketingTemplateMedium {
@@ -53,3 +48,51 @@ declare enum MarketingTemplateMedium {
   FacebookCover = 'FacebookCover',
   InstagramStor = 'InstagramStory'
 }
+
+declare type MarketingTemplateType =
+  | 'AsSeenIn'
+  | 'BackToSchool'
+  | 'Birthday'
+  | 'Brand'
+  | 'ChineseNewYear'
+  | 'Christmas'
+  | 'ColumbusDay'
+  | 'ComingSoon'
+  | 'Contact'
+  | 'CrmOpenHouse'
+  | 'DaylightSaving'
+  | 'Diwali'
+  | 'Easter'
+  | 'FathersDay'
+  | 'FourthOfJuly'
+  | 'Halloween'
+  | 'Hannukkah'
+  | 'HomeAnniversary'
+  | 'IndependenceDay'
+  | 'JustListed'
+  | 'JustSold'
+  | 'Kwanzaa'
+  | 'LaborDay'
+  | 'Layout'
+  | 'Listing'
+  | 'ListingLayout'
+  | 'Listings'
+  | 'MLKDay'
+  | 'MemorialDay'
+  | 'MothersDay'
+  | 'NewAgent'
+  | 'NewYear'
+  | 'Newsletter'
+  | 'OpenHouse'
+  | 'OtherHoliday'
+  | 'Passover'
+  | 'PatriotsDay'
+  | 'PriceImprovement'
+  | 'RoshHashanah'
+  | 'StPatrick'
+  | 'Thanksgiving'
+  | 'UnderContract'
+  | 'Valentines'
+  | 'VeteransDay'
+  | 'WeddingAnniversary'
+  | 'WomansDay'

@@ -7,7 +7,7 @@ import { merge } from 'lodash'
 
 import { DeepPartial } from 'redux'
 
-import user from 'fixtures/users/agent.json'
+import user from './fixtures/users/agent.json'
 
 import { IAppState } from '../../app/reducers'
 import store from '../../app/stores'

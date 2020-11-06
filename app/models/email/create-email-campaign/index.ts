@@ -1,12 +1,29 @@
-import Fetch from '../../../services/fetch'
+import Fetch from 'services/fetch'
+
+import { toEntityAssociation } from 'utils/association-utils'
 
 export async function createEmailCampaign(
-  email: IIndividualEmailCampaignInput,
-  query = {},
-  individualMode?: boolean
-) {
-  const path = individualMode ? '/emails/individual' : '/emails'
-  const response = await new Fetch().post(path).send(email).query(query)
+  email: IEmailCampaignInput | IIndividualEmailCampaignInput
+): Promise<
+  IEmailCampaign<
+    'emails' | 'template' | 'from' | 'recipients',
+    'contact',
+    'email'
+  >
+> {
+  const path = email.individual ? '/emails/individual' : '/emails'
+  const response = await new Fetch()
+    .post(path)
+    .send(email)
+    .query({
+      'associations[]': [
+        'email_campaign_recipient.contact',
+        'email_campaign_email.email',
+        ...['emails', 'template', 'from', 'recipients'].map(
+          toEntityAssociation('email_campaign')
+        )
+      ]
+    })
 
-  return response.body
+  return response.body.data
 }

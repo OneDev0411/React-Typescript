@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { IAppState } from 'reducers'
 import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
-import { createBulkEmailCampaign } from 'models/email/create-bulk-email-campaign'
+import { createEmailCampaign } from 'models/email/create-email-campaign'
 
 import { EmailFormValues } from './types'
 import { normalizeRecipients } from './helpers/normalize-recepients'
@@ -77,12 +77,14 @@ export function BulkEmailComposeForm({
       attachments: (formValue.attachments || []).map(
         attachmentFormValueToEmailAttachmentInput
       ),
-      due_at: formValue.due_at || new Date()
+      due_at: formValue.due_at || new Date(),
+      notifications_enabled: formValue.notifications_enabled,
+      individual: true
     })
 
     return emailId
       ? updateEmailCampaign(emailId, emailData)
-      : createBulkEmailCampaign(emailData)
+      : createEmailCampaign(emailData)
   }
 
   const renderFields = () => (

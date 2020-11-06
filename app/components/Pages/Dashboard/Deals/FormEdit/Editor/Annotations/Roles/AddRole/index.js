@@ -3,7 +3,7 @@ import ClickOutside from 'react-click-outside'
 import { mdiPlusCircleOutline } from '@mdi/js'
 
 import { isPrimaryAgent } from 'deals/utils/roles'
-import { specialRoles } from 'deals/FormEdit/utils/normalize-role-names'
+import { dynamicRoles } from 'deals/FormEdit/utils/normalize-role-names'
 import ToolTip from 'components/tooltip'
 import Roles from 'deals/components/Roles'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -13,8 +13,8 @@ import { Container, RolesList } from './styled'
 export function AddRole(props) {
   const [showRolesList, setShowRoles] = useState(false)
 
-  const isSpecialRole = props.annotation.role.some(roleName =>
-    specialRoles.includes(roleName)
+  const isDynamicRole = props.annotation.role.some(roleName =>
+    dynamicRoles.includes(roleName)
   )
 
   const isPrimaryRole = props.annotation.role.some(
@@ -27,7 +27,7 @@ export function AddRole(props) {
     props.annotation.type === 'Role' && props.roles.length > 0
 
   if (
-    isSpecialRole ||
+    isDynamicRole ||
     isPrimaryRole ||
     isSingularRole ||
     (Object.keys(props.values).length > 1 &&

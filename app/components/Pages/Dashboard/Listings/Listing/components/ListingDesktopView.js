@@ -75,6 +75,7 @@ const ListingDesktopView = ({
   data,
   user,
   brand,
+  style,
   onHide,
   listing,
   hideModal,
@@ -892,7 +893,12 @@ const ListingDesktopView = ({
   }
 
   return (
-    <div style={viewer_wrap_style}>
+    <div
+      style={{
+        ...viewer_wrap_style,
+        ...style
+      }}
+    >
       {Header}
       {main_content}
       {brand_agent_footer}
@@ -931,7 +937,13 @@ export default compose(
   withState('galleryModalActiveIndex', 'setGalleryModalActiveIndex', 0),
   withState('galleryModalDirection', 'setGalleryModalDirection', 'next'),
   withHandlers({
-    hideModal: () => () => {
+    hideModal: ({ onClose }) => () => {
+      if (onClose) {
+        onClose()
+
+        return
+      }
+
       const currentLocation = browserHistory.getCurrentLocation()
 
       if (currentLocation.key) {
@@ -972,7 +984,7 @@ export default compose(
       galleryModalActiveIndex,
       setGalleryModalActiveIndex,
       setGalleryModalDirection
-    }) => (selectedIndex, selectedDirection) => {
+    }) => (_, selectedDirection) => {
       const { gallery_image_urls } = listing
       const gallerLength = gallery_image_urls.length - 1
 

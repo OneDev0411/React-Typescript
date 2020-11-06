@@ -1,9 +1,11 @@
 import { isDoubleEnded } from 'deals/utils/get-is-double-ended'
 
-export const specialRoles: string[] = [
+export const dynamicRoles: string[] = [
   'PrimaryAgent',
   'InternalBuyerAgent',
-  'ExternalBuyerAgent'
+  'ExternalBuyerAgent',
+  'InternalBuyer',
+  'InternalSeller'
 ]
 
 export function normalizeRoleNames(
@@ -14,32 +16,38 @@ export function normalizeRoleNames(
     ? roleNames
     : roleNames.split(',')
 
-  return names.map(
-    (name): string => {
-      if (specialRoles.includes(name) === false) {
-        return name
-      }
-
-      if (name === 'PrimaryAgent') {
-        return resolvePrimaryAgent(deal, name)
-      }
-
-      const doubleEnded: boolean = isDoubleEnded(deal)
-
-      if (name === 'InternalBuyerAgent' && doubleEnded) {
-        return 'BuyerAgent'
-      }
-
-      if (name === 'ExternalBuyerAgent' && !doubleEnded) {
-        return 'BuyerAgent'
-      }
-
+  return names.map((name): string => {
+    if (dynamicRoles.includes(name) === false) {
       return name
     }
-  )
+
+    if (name === 'InternalBuyer' && deal.deal_type === 'Buying') {
+      return 'Buyer'
+    }
+
+    if (name === 'InternalSeller' && deal.deal_type === 'Selling') {
+      return 'Seller'
+    }
+
+    if (name === 'PrimaryAgent') {
+      return resolvePrimaryAgent(deal)
+    }
+
+    const doubleEnded: boolean = isDoubleEnded(deal)
+
+    if (name === 'InternalBuyerAgent' && doubleEnded) {
+      return 'BuyerAgent'
+    }
+
+    if (name === 'ExternalBuyerAgent' && !doubleEnded) {
+      return 'BuyerAgent'
+    }
+
+    return name
+  })
 }
 
-function resolvePrimaryAgent(deal: IDeal, name: string): string {
+function resolvePrimaryAgent(deal: IDeal): string {
   if (deal.deal_type === 'Buying') {
     return 'BuyerAgent'
   }

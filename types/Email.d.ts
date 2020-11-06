@@ -102,6 +102,9 @@ declare interface IEmailCampaignInputBase {
   text?: string
   attachments?: IEmailAttachmentInput[]
   template?: UUID
+  notifications_enabled?: boolean
+  individual: boolean
+
   /**
    * @deprecated, This is not used in practice and is added in initial
    * implementation by the API. It should be removed.
@@ -167,6 +170,7 @@ declare type IEmailCampaign<
   stored: number
   text: string
   template?: IMarketingTemplateInstance
+  notifications_enabled: boolean
   type: 'email_campaign'
   sent: number
   failure: string | null
@@ -237,6 +241,7 @@ declare type IEmail<Fields extends IEmailOptionalFields = ''> = {
   microsoft_id: null | string
   tracking_id: UUID
   is_read: boolean
+  attachments?: IEmailCampaignAttachment[] | null
   type: 'email'
 } & Association<'html', string, Fields> &
   Association<'text', string, Fields>

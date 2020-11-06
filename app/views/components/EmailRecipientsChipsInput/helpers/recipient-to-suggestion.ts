@@ -29,7 +29,7 @@ export function recipientToSuggestion(
       subtitle: displayName !== recipient.email ? recipient.email : '',
       defaultAvatarProps: {
         title,
-        image: (recipient.contact && recipient.contact.profile_image_url) || ''
+        url: (recipient.contact && recipient.contact.profile_image_url) || ''
       }
     }
   }

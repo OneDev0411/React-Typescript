@@ -58,14 +58,7 @@ export default class extends React.Component {
           {hasError && <RequiredErrorSign />}
         </H2>
 
-        {areContextsRequired && (
-          <div className="hero-description">
-            Those marked with an <span className="required">*</span> are
-            required.
-          </div>
-        )}
-
-        {_.map(fields, field => (
+        {fields.map(field => (
           <div key={field.key}>
             {field.data_type !== 'Date' && (
               <div className="entity-item string new">

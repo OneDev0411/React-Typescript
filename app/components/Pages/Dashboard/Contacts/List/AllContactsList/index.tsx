@@ -16,7 +16,7 @@ import { changeActiveFilterSegment as changeActiveFilterSegmentAction } from 'ac
 
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
 import {
-  SYNCED_CONTACTS_LIST_ID,
+  PARKED_CONTACTS_LIST_ID,
   DUPLICATE_CONTACTS_LIST_ID
 } from '../constants'
 import { getSyncedContacts, SyncedContacts } from '../utils/get-synced-contacts'
@@ -45,7 +45,7 @@ function AllContactsList({
     )
   }, [activeFilters, activeSegment])
   const isSyncedListSelected =
-    activeSegment && activeSegment.id === SYNCED_CONTACTS_LIST_ID
+    activeSegment && activeSegment.id === PARKED_CONTACTS_LIST_ID
   const isDuplicatesListSelected =
     activeSegment && activeSegment.id === DUPLICATE_CONTACTS_LIST_ID
 
@@ -55,7 +55,7 @@ function AllContactsList({
 
     let selectedSegment: ISavedSegment | null = null
 
-    if (type === SYNCED_CONTACTS_LIST_ID) {
+    if (type === PARKED_CONTACTS_LIST_ID) {
       selectedSegment = activeSegment
     }
 
@@ -88,7 +88,7 @@ function AllContactsList({
       {syncedContacts.accounts > 0 && (
         <ListItem
           isSelected={isSyncedListSelected}
-          onClick={() => clickHandler(SYNCED_CONTACTS_LIST_ID)}
+          onClick={() => clickHandler(PARKED_CONTACTS_LIST_ID)}
         >
           <ListItemName>Synced Contacts</ListItemName>
         </ListItem>

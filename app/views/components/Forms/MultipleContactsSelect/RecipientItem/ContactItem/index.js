@@ -4,7 +4,7 @@ import Downshift from 'downshift'
 import Flex from 'styled-flex-component'
 import { mdiChevronDown, mdiChevronUp, mdiClose } from '@mdi/js'
 
-import UserAvatar from 'components/Avatar'
+import { Avatar } from 'components/Avatar'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
@@ -62,10 +62,9 @@ export default class RecipientItem extends React.Component {
 
     return (
       <Recipient hasMultipleEmails={hasMultipleEmails}>
-        <UserAvatar
-          title={recipient.name}
-          image={recipient.avatar}
-          size={25}
+        <Avatar
+          alt={recipient.name}
+          url={recipient.avatar}
           style={{
             marginRight: '10px'
           }}
