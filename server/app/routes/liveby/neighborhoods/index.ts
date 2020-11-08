@@ -1,7 +1,7 @@
-import { getParsedHeaders } from 'app/utils/parse-headers'
 import { AxiosError, AxiosResponse } from 'axios'
 import { Request, Response, NextFunction } from 'express'
 
+import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
 
 import {

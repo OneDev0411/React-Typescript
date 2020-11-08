@@ -7,10 +7,15 @@ import config from '../../../../../config/private'
 import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
 
-export default async (req: Request, res: Response, next: NextFunction) => {
+import type { RequestWithSession } from '../../../../types'
+
+export default async (
+  req: RequestWithSession,
+  res: Response,
+  next: NextFunction
+) => {
   request({
-    method: 'post',
-    responseType: 'stream',
+    method: 'POST',
     url: '/oauth2/token',
     headers: getParsedHeaders(req),
     data: {
@@ -20,10 +25,18 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   })
     .then((response: AxiosResponse) => {
-      response.data.pipe(res)
+      req.session.user = {
+        access_token: response.data.access_token,
+        refresh_token: response.data.refresh_token,
+        expire_date: new Date().getTime() + response.data.expires_in * 1000
+      }
+
+      console.log(req.session.user)
+
+      res.send(response.data)
     })
     .catch((e: AxiosError) => {
       res.status(e.response?.status || 400)
-      e.response && e.response.data.pipe(res)
+      res.send(e.response?.data)
     })
 }
