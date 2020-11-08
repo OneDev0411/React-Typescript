@@ -5,6 +5,7 @@ import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 import { getActiveBrand } from 'utils/user-teams'
 import { createTrigger } from 'models/instant-marketing/create-trigger'
+import { updateTrigger } from 'models/instant-marketing/update-trigger'
 import { removeTrigger } from 'models/instant-marketing/remove-trigger'
 
 import {
@@ -66,6 +67,7 @@ function getStateFromTrigger(trigger) {
 const getInitialState = ({ attribute, trigger }) => ({
   error: '',
   isDirty: false,
+  isTriggerFieldDirty: false,
   disabled: false,
   ...getStateFromTrigger(trigger),
   ...getStateFromAttribute(attribute)
@@ -152,15 +154,21 @@ class MasterField extends React.Component {
   onChangeTriggerActive = value =>
     this.setState({
       isDirty: true,
+      isTriggerFieldDirty: true,
       isTriggerActive: value
     })
 
   onChangeSendBefore = value =>
-    this.setState({ isDirty: true, triggerSendBefore: value })
+    this.setState({
+      isDirty: true,
+      isTriggerFieldDirty: true,
+      triggerSendBefore: value
+    })
 
   onChangeTemplate = template => {
     this.setState({
       isDirty: true,
+      isTriggerFieldDirty: true,
       triggerSelectedTemplate: template
     })
   }
@@ -211,13 +219,20 @@ class MasterField extends React.Component {
       label,
       value,
       currentTrigger,
+      isTriggerFieldDirty,
       isTriggerActive,
       triggerSendBefore,
       triggerSelectedTemplate
     } = this.state
     const { id, cuid } = attribute
 
-    if (this.isTriggable && isTriggerActive && !triggerSelectedTemplate) {
+    if (
+      this.isTriggable &&
+      isTriggerActive &&
+      isTriggerFieldDirty &&
+      !currentTrigger &&
+      !triggerSelectedTemplate
+    ) {
       return this.setState({ error: 'Select Template' })
     }
 
@@ -247,14 +262,28 @@ class MasterField extends React.Component {
         data.is_primary = is_primary
       }
 
-      if (this.isTriggable) {
+      if (this.isTriggable && isTriggerFieldDirty) {
+        const waitFor = Number(triggerSendBefore) * -86400
+
         if (currentTrigger) {
           if (!isTriggerActive) {
             await removeTrigger(currentTrigger.id)
+          } else {
+            await updateTrigger(
+              currentTrigger,
+              contact,
+              triggerSelectedTemplate,
+              brand,
+              {
+                event_type: this.attribute_def.name,
+                wait_for: waitFor
+              },
+              {
+                user
+              }
+            )
           }
         } else if (isTriggerActive) {
-          const waitFor = Number(triggerSendBefore) * -86400
-
           await createTrigger(
             contact,
             triggerSelectedTemplate,
