@@ -21,12 +21,12 @@
       "es6"
     ],
     "types": [
-      "node",
-      "mocha"
+      "node"
     ],
     "typeRoots": [
       "types",
-      "node_modules/@types"
+      "node_modules/@types",
+      "../types"
     ],
     "paths": {}
   },

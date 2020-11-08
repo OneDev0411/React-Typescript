@@ -1,8 +1,8 @@
 import superagent from 'superagent'
 
-import { Metadata } from './types'
+import config from 'config'
 
-const API_URL = '/api/utils/get-url-metadata'
+import { Metadata } from './types'
 
 interface Response {
   response?: Metadata
@@ -10,7 +10,9 @@ interface Response {
 }
 
 export async function sendUrlMetadataRequest(url: string): Promise<Response> {
-  const response = await superagent.post(API_URL).send({ url })
+  const response = await superagent
+    .post(`${config.proxy.url}/api/utils/get-url-metadata`)
+    .send({ url })
 
   return response.body
 }

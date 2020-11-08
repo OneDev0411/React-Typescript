@@ -1,5 +1,6 @@
 import React from 'react'
 
+import config from 'config'
 import { Editor } from 'components/ImageEditor'
 import uploadAsset from 'models/instant-marketing/upload-asset'
 
@@ -96,7 +97,7 @@ export class AssetImage extends React.Component {
 
         {this.state.isCropperOpen && (
           <Editor
-            file={`/api/utils/cors/${image}`}
+            file={`${config.proxy.url}/api/utils/cors/${image}`}
             dimensions={[
               targetElement.clientWidth * 2,
               targetElement.clientHeight * 2

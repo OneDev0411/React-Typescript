@@ -1,4 +1,7 @@
-import Fetch from '../../../services/fetch'
+import axios from 'axios'
+
+import config from 'config'
+
 import { randomString } from '../../../utils/helpers'
 
 const signupShadow = async email => {
@@ -13,23 +16,22 @@ const signupShadow = async email => {
   }
 
   try {
-    const response = await new Fetch({ proxy: true })
-      .post('/users')
-      .set({ 'x-auth-mode': 'client_id' })
-      .send(user)
+    const response = await axios.post(`${config.proxy.url}/api/users`, user, {
+      headers: { 'x-auth-mode': 'client_id' }
+    })
 
-    const { type, email_confirmed } = response.body.data
+    const { type, email_confirmed } = response.data
 
     if (type === 'user_reference' && !email_confirmed) {
       return 202
     }
 
-    return response.statusCode
+    return response.status
   } catch (error) {
     if (error.http) {
       throw error.http
     } else if (error.response) {
-      throw error.response.statusCode
+      throw error.response.status
     }
 
     throw error

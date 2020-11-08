@@ -18,8 +18,6 @@ export default class Fetch {
 
   private _isProductionEnv: boolean
 
-  private _appUrl: string
-
   private _startTime: null | number
 
   private _isServerSide: boolean
@@ -33,7 +31,7 @@ export default class Fetch {
     const isProductionEnv = process.env.NODE_ENV === 'production'
 
     this.options = {
-      proxy: false,
+      proxy: true,
       progress: null,
       useReferencedFormat: true,
       ...options
@@ -41,8 +39,7 @@ export default class Fetch {
 
     this._middlewares = this.registerMiddlewares(this.options)
     this._isServerSide = isServerSide
-    this._appUrl = isServerSide ? config.app.url : ''
-    this._proxyUrl = `${this._appUrl}/api/proxifier`
+    this._proxyUrl = `${config.proxy.url}/api/proxifier`
     this._isProductionEnv = isProductionEnv
     this._startTime = Date.now()
   }
@@ -64,15 +61,11 @@ export default class Fetch {
 
     this._isLoggedIn = user && user.access_token !== undefined
 
-    let agent: SuperAgent.SuperAgentRequest
-
-    if (useProxy) {
-      agent = SuperAgent.post(this._proxyUrl)
-        .set('X-Method', method)
-        .set('X-Endpoint', endpoint)
-    } else {
-      agent = SuperAgent[method](`${config.api_url}${endpoint}`)
-    }
+    const agent: SuperAgent.SuperAgentRequest = useProxy
+      ? SuperAgent.post(this._proxyUrl)
+          .set('X-Method', method)
+          .set('X-Endpoint', endpoint)
+      : SuperAgent[method](`${config.api_url}${endpoint}`)
 
     if (this.options.useReferencedFormat && !useProxy) {
       agent.set('X-RECHAT-FORMAT', 'references')
@@ -176,7 +169,9 @@ export default class Fetch {
     try {
       const {
         body: { access_token, refresh_token }
-      } = await SuperAgent.post(`${this._appUrl}/api/user/refresh-token`).send({
+      } = await SuperAgent.post(
+        `${this._proxyUrl}/api/user/refresh-token`
+      ).send({
         access_token: user.access_token,
         refresh_token: user.refresh_token
       })

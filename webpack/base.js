@@ -3,6 +3,7 @@ import path from 'path'
 import webpack from 'webpack'
 
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import { ESBuildPlugin } from 'esbuild-loader'
 
 const env = process.env.NODE_ENV || 'development'
 const __DEV__ = env === 'development'
@@ -11,14 +12,20 @@ function resolvePath(dirPath) {
   return path.resolve(__dirname, dirPath)
 }
 
+const ESBUILD_COMMON_OPTIONS = {
+  jsxFactory: 'React.createElement',
+  jsxFragment: 'React.Fragment',
+  sourcemap: false
+}
+
 export default {
   devtool: 'eval-source-map',
   entry: {
-    app: '../app/index.js'
+    app: path.resolve(__dirname, '../app/index.js')
   },
   output: {
     path: path.resolve(__dirname, '../../dist'),
-    filename: __DEV__ ? 'app.js' : '[name].[hash].js',
+    filename: __DEV__ ? '[name].js' : '[name].[hash].js',
     chunkFilename: '[name].[chunkhash].js',
     publicPath: '/',
     globalObject: 'this'
@@ -50,6 +57,7 @@ export default {
     }
   },
   plugins: [
+    new ESBuildPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(env),
@@ -99,6 +107,39 @@ export default {
   },
   module: {
     rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'esbuild-loader',
+          options: {
+            ...ESBUILD_COMMON_OPTIONS,
+            loader: 'jsx'
+          }
+        }
+      },
+      {
+        test: /\.ts$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'esbuild-loader',
+          options: {
+            ...ESBUILD_COMMON_OPTIONS,
+            loader: 'ts'
+          }
+        }
+      },
+      {
+        test: /\.tsx$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'esbuild-loader',
+          options: {
+            ...ESBUILD_COMMON_OPTIONS,
+            loader: 'tsx'
+          }
+        }
+      },
       {
         test: /\.woff(\?.*)?$/,
         use: [

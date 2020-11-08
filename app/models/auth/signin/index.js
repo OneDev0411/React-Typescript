@@ -1,4 +1,6 @@
-import Fetch from '../../../services/fetch'
+import axios from 'axios'
+
+import config from 'config'
 
 const signin = async userInfo => {
   const requestBody = {
@@ -7,11 +9,17 @@ const signin = async userInfo => {
   }
 
   try {
-    const response = await new Fetch({ proxy: true })
-      .post('/oauth2/token')
-      .set({ 'x-auth-mode': 'client_id' })
-      .send(requestBody)
-    const { data, access_token, refresh_token, expires_in } = response.body
+    const response = await axios.post(
+      `${config.proxy.url}/api/oauth2/token`,
+      requestBody,
+      {
+        headers: {
+          'x-auth-mode': 'client_id'
+        }
+      }
+    )
+
+    const { data, access_token, refresh_token, expires_in } = response.data
 
     return {
       ...data,

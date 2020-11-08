@@ -1,8 +1,10 @@
 import superagent from 'superagent'
 
-import { Neighborhood, NeighborhoodsReport } from './types'
+import config from 'config'
 
-const API_URL = '/api/liveby'
+import type { Neighborhood, NeighborhoodsReport } from './types'
+
+const API_URL = `${config.proxy.url}/api/liveby`
 const REQUEST_TIMEOUT_MS = 60000
 
 export async function getNeighborhoods(

@@ -1,6 +1,8 @@
 import superagent from 'superagent'
 
-const API_URL = '/api/my-marketing-matters/punchout'
+import config from 'config'
+
+const API_URL = `${config.proxy.url}/api/my-marketing-matters/punchout`
 
 interface PunchoutResponse {
   response?: {

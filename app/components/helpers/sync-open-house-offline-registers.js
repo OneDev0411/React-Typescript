@@ -1,10 +1,10 @@
 import { addNotification as notify } from 'reapop'
 import pluralize from 'pluralize'
 
-import openHouseStorage from '../../../server/util/pages/openhouse/registration/storage'
-import { onlineSubmitHandler as registerOpenHouse } from '../../../server/util/pages/openhouse/registration/handlers'
+import openHouseStorage from '../../../server/app/routes/openhouse/registration/storage'
+import { onlineSubmitHandler as registerOpenHouse } from '../../../server/app/routes/openhouse/registration/handlers'
 
-export default function (accessToken) {
+export default function syncOpenHouseOfflineRegisters(accessToken) {
   return async dispatch => {
     const allOpenHouseData = openHouseStorage.getAll()
 

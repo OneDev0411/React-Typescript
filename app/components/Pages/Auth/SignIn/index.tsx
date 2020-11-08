@@ -75,12 +75,14 @@ export default function Signin(props: Props) {
         setIsLookingUp(false)
       }
     } catch (error) {
+      console.log(error.response)
+
       setIsLookingUp(false)
 
-      if (error && error.response && error.response.body) {
+      if (error && error.response && error.response.data) {
         setLookUpFormSubmitMsg({
           type: 'error',
-          text: error.response.body.message
+          text: error.response.data.message
         })
       }
     }

@@ -21,6 +21,11 @@
   <meta name="msapplication-TileColor" content="#da532c" />
   <meta name="msapplication-config" content="/static/images/favicons/browserconfig.xml?v=NmbgrbW8Na" />
   <meta name="theme-color" content="#ffffff" />
+</head>
+
+<body class="page">
+
+  <div id="app"></div>
 
   <script>
     window['_fs_debug'] = false
@@ -75,18 +80,6 @@
         }
       })(window, document, window['_fs_namespace'], 'script', 'user')
   </script>
-</head>
-
-<body class="page">
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="app">{{{ body }}}</div>
-  <div class="hidden">
-    {{# store_data }}
-    <script>
-      window.__APPLICATION_STATE__ = '{{ store_data }}'
-    </script>
-    {{/ store_data }}
-  </div>
 
   <script>
     if (!window.INTERCOM_ID) {
@@ -127,7 +120,6 @@
       }
     })()
   </script>
-  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 </body>
 
 </html>

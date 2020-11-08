@@ -3,6 +3,8 @@ import fileSaver from 'file-saver'
 import superagent from 'superagent'
 import { connect } from 'react-redux'
 
+import config from 'config'
+
 import removeSpecialCharacters from 'utils/remove-special-characters'
 import { getActiveTeamId } from 'utils/user-teams'
 
@@ -22,7 +24,7 @@ class ExportContacts extends React.Component {
       conditionOperator: filter_type
     } = this.props
     const activeBrand = getActiveTeamId(user)
-    const url = `/api/contacts/export/outlook/${activeBrand}/`
+    const url = `${config.proxy.url}/api/contacts/export/outlook/${activeBrand}`
 
     const params = {
       type: exportType
