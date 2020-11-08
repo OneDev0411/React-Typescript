@@ -31,8 +31,6 @@ export default async (
         expire_date: new Date().getTime() + response.data.expires_in * 1000
       }
 
-      console.log(req.session.user)
-
       res.send(response.data)
     })
     .catch((e: AxiosError) => {
