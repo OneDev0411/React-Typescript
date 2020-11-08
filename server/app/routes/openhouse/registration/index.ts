@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express'
 import cheerio from 'cheerio'
 
 import config from '../../../../../config/public'
+import { getParsedHeaders } from '../../../utils/parse-headers'
 
 import storage from './storage'
 import { getRegisterationScript } from './inject'
@@ -30,7 +31,8 @@ export default async (
     return false
   }
 
-  const profile = await request(req, res, {
+  const profile = await request({
+    headers: getParsedHeaders(req),
     url: '/users/self'
   })
 
@@ -40,16 +42,18 @@ export default async (
   let openHouse
 
   try {
-    const response = await request(req, res, {
+    const response = await request({
       url: `/crm/tasks/${req.params.id}`,
       headers: {
+        ...getParsedHeaders(req),
         'X-RECHAT-BRAND': brandId
       }
     })
 
     openHouse = response.data
   } catch (e) {
-    next(e)
+    res.status(e.response?.status)
+    res.send(e.response?.data)
 
     return false
   }

@@ -1,11 +1,12 @@
 import path from 'path'
 
-import { AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 
 import { Request, Response, NextFunction } from 'express'
 import nunjucks from 'nunjucks'
 import xml2js from 'xml2js'
 
+import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
 
 import {
@@ -28,13 +29,10 @@ function getFormattedListingPictures(listing) {
   })
 }
 
-async function getFormattedDealMediaPictures(
-  req: Request,
-  res: Response,
-  dealId: string
-) {
+async function getFormattedDealMediaPictures(req: Request, dealId: string) {
   try {
-    const response = await request(req, res, {
+    const response = await request({
+      headers: getParsedHeaders(req),
       url: `/deals/${dealId}?associations[]=deal.gallery`
     })
 
@@ -75,7 +73,6 @@ function getListingAddressField(listing, field, defaultValue = '') {
 
 async function getRequestBody(
   req: Request,
-  res: Response,
   user,
   deal,
   costCenter,
@@ -83,8 +80,9 @@ async function getRequestBody(
 ) {
   const listing = deal.listing
     ? (
-        await request(req, res, {
+        await request({
           url: `/listings/${deal.listing.id}`,
+          headers: getParsedHeaders(req),
           params: {
             associations: ['listing.proposed_agent']
           }
@@ -96,11 +94,7 @@ async function getRequestBody(
 
   const address = getField(deal, 'street_address') || ''
   const description = listing ? listing.property.description : ''
-  const dealMediaPictures = await getFormattedDealMediaPictures(
-    req,
-    res,
-    deal.id
-  )
+  const dealMediaPictures = await getFormattedDealMediaPictures(req, deal.id)
   const pictures = listing
     ? [...getFormattedListingPictures(listing), ...dealMediaPictures]
     : dealMediaPictures
@@ -143,12 +137,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   const { user, deal, costCenter, redirectUrl } = req.body
 
   try {
-    const response = await request(req, res, {
+    const response = await axios({
+      method: 'POST',
       url: API_URL,
       headers: {
-        'Content-Type': 'application/xml'
+        'content-type': 'application/xml'
       },
-      data: await getRequestBody(req, res, user, deal, costCenter, redirectUrl)
+      data: await getRequestBody(req, user, deal, costCenter, redirectUrl)
     })
 
     const parsedResponse = await xml2js.parseStringPromise(response.data)

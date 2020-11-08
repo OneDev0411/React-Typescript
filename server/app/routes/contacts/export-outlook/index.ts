@@ -1,5 +1,7 @@
+import { AxiosError, AxiosResponse } from 'axios'
 import { Request, Response, NextFunction } from 'express'
 
+import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
 
 export default async (req: Request, res: Response, next: NextFunction) => {
@@ -25,14 +27,20 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
   const query = `filter_type=${filterType}&format=csv${usersList}`
 
-  request(req, res, {
+  request({
     responseType: 'stream',
     url: `/analytics/${type}/facts?${query}`,
     headers: {
+      ...getParsedHeaders(req),
       'X-RECHAT-BRAND': req.params.brand
     },
     data
-  }).then(response => response.data.pipe(res))
+  })
+    .then((response: AxiosResponse) => response.data.pipe(res))
+    .catch((e: AxiosError) => {
+      res.status(e.response?.status || 400)
+      e.response && e.response.data.pipe(res)
+    })
 }
 
 /**

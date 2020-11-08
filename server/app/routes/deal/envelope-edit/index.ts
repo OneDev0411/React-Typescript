@@ -1,13 +1,15 @@
 import { AxiosError } from 'axios'
 import { Request, Response } from 'express'
 
+import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
 
 const urlPattern = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi
 
 export default async (req: Request, res: Response) => {
-  await request(req, res, {
-    url: `/envelopes/${req.params.id}/edit`
+  await request({
+    url: `/envelopes/${req.params.id}/edit`,
+    headers: getParsedHeaders(req)
   })
     .then(() => {
       res.send('')

@@ -9,13 +9,14 @@ export default async (req: Request, res: Response) => {
   let totalSize = 0
 
   try {
-    const response = await request(req, res, {
+    const response = await request({
       method: 'HEAD',
       url: pdfUrl || `${config.forms.url}/${form}.pdf`
     })
 
     totalSize = ~~response.headers['content-length']
   } catch (e) {
+    /* nothing */
   } finally {
     res.json({
       total: totalSize

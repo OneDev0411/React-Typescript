@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
-
-import { request } from '../../libs/request'
+import { AxiosResponse } from 'axios'
 
 import config from '../../../../config/private'
+import { request } from '../../libs/request'
 
 import type { Session } from '../../../types'
 
@@ -14,7 +14,7 @@ export default async (
   next: NextFunction
 ) => {
   try {
-    const response = await request(req, res, {
+    const response: AxiosResponse = await request({
       url: '/oauth2/token',
       headers: {
         'x-auth-mode': 'client_id'
@@ -40,6 +40,7 @@ export default async (
       refresh_token
     })
   } catch (e) {
-    next(e)
+    res.status(e.response?.status || 400)
+    res.send(e.response?.data)
   }
 }

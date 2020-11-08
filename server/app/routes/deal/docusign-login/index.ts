@@ -1,13 +1,15 @@
 import { AxiosError } from 'axios'
 import { Request, Response } from 'express'
 
+import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
 
 const urlPattern = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi
 
 export default async (req: Request, res: Response) => {
-  request(req, res, {
+  request({
     url: '/users/self/docusign/auth',
+    headers: getParsedHeaders(req),
     maxRedirects: 0
   })
     .then(() => {

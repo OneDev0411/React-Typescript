@@ -7,7 +7,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       response: await parseUrlMetadata(req.body.url)
     })
   } catch (e) {
-    next(e)
+    res.status(400)
+    res.send('')
   }
 }
 
