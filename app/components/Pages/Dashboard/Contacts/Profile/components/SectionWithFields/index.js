@@ -17,7 +17,7 @@ import {
   orderFields,
   normalizeAttributes
 } from './helpers'
-import { getAttributeTrigger } from './helpers/get-attribute-trigger'
+import { getScheduleEmailTrigger } from './helpers/get-schedule-email-trigger'
 
 function generateEmptyAttribute(attribute_def, is_partner, order) {
   return {
@@ -352,7 +352,7 @@ class SectionWithFields extends React.Component {
             <MasterField
               contact={this.props?.contact}
               attribute={attribute}
-              trigger={getAttributeTrigger(
+              trigger={getScheduleEmailTrigger(
                 this.props?.contact,
                 attribute.attribute_def.name
               )}

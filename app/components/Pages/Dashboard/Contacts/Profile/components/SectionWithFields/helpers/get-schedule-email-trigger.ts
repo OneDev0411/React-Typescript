@@ -3,7 +3,7 @@
  * @param {ITriggeredContact} contact - all attributes definitions
  */
 
-export const getAttributeTrigger = (
+export const getScheduleEmailTrigger = (
   contact: ITriggeredContact,
   eventType: TriggerContactEventTypes
 ): ITrigger | null => {
@@ -12,7 +12,8 @@ export const getAttributeTrigger = (
   }
 
   const trigger = contact.triggers.find(
-    trigger => trigger.event_type === eventType
+    trigger =>
+      trigger.event_type === eventType && trigger.action === 'schedule_email'
   )
 
   return trigger ?? null

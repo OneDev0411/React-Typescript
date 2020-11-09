@@ -264,38 +264,27 @@ class MasterField extends React.Component {
 
       if (this.isTriggable && isTriggerFieldDirty) {
         const waitFor = Number(triggerSendBefore) * -86400
+        const commonParams = [
+          contact,
+          triggerSelectedTemplate,
+          brand,
+          {
+            event_type: this.attribute_def.name,
+            wait_for: waitFor
+          },
+          {
+            user
+          }
+        ]
 
         if (currentTrigger) {
           if (!isTriggerActive) {
             await removeTrigger(currentTrigger.id)
           } else {
-            await updateTrigger(
-              currentTrigger,
-              contact,
-              triggerSelectedTemplate,
-              brand,
-              {
-                event_type: this.attribute_def.name,
-                wait_for: waitFor
-              },
-              {
-                user
-              }
-            )
+            await updateTrigger(currentTrigger, ...commonParams)
           }
         } else if (isTriggerActive) {
-          await createTrigger(
-            contact,
-            triggerSelectedTemplate,
-            brand,
-            {
-              event_type: this.attribute_def.name,
-              wait_for: waitFor
-            },
-            {
-              user
-            }
-          )
+          await createTrigger(...commonParams)
         }
       }
 
