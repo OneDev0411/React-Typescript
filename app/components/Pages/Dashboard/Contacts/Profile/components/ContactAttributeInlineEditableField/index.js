@@ -59,7 +59,7 @@ function getStateFromTrigger(trigger) {
   return {
     currentTrigger: null,
     isTriggerActive: false,
-    triggerSendBefore: '1',
+    triggerSendBefore: '0',
     triggerSelectedTemplate: null
   }
 }

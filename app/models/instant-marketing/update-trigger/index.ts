@@ -28,7 +28,7 @@ export async function updateTrigger(
     }
 
     // because the end_point accept a negative value that shows the time before the main date
-    if (!data.wait_for || data.wait_for > 0) {
+    if (!('wait_for' in data) || data.wait_for > 0) {
       throw new Error('invalid wait_for value')
     }
 

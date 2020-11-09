@@ -9,6 +9,7 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
+import pluralize from 'pluralize'
 
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
 
@@ -97,7 +98,7 @@ export const TriggerField = ({
   current,
   user,
   isActive: isActiveProp = false,
-  sendBefore: sendBeforeProp = '1',
+  sendBefore: sendBeforeProp = '0',
   onChangeActive,
   onChangeSendBefore,
   onChangeTemplate
@@ -210,10 +211,12 @@ export const TriggerField = ({
               onChange={handleSendBeforeChange}
               label="Send"
             >
-              <MenuItem value={1}>1 day earlier</MenuItem>
-              <MenuItem value={2}>2 day earlier</MenuItem>
-              <MenuItem value={3}>3 day earlier</MenuItem>
-              <MenuItem value={4}>4 day earlier</MenuItem>
+              <MenuItem value={0}>Same Day</MenuItem>
+              {[1, 2, 3, 4].map(item => (
+                <MenuItem key={item} value={item}>
+                  {pluralize(`${item} Day`, item)} earlier
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </>

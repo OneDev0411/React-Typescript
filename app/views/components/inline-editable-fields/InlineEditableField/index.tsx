@@ -78,12 +78,22 @@ export const InlineEditableField = (props: Props) => {
   }
 
   const _handleCancel = () => {
-    setRef(null)
+    if (isPopoverMode) {
+      setRef(null)
+    }
 
     if (typeof handleCancel === 'function') {
       handleCancel()
     } else {
       toggleMode()
+    }
+  }
+
+  const _handleSave = async () => {
+    await handleSave()
+
+    if (isPopoverMode) {
+      setRef(null)
     }
   }
 
@@ -101,8 +111,8 @@ export const InlineEditableField = (props: Props) => {
     return {
       error,
       handleCancel: _handleCancel,
+      handleSave: _handleSave,
       handleDelete,
-      handleSave,
       isDisabled,
       isStatic: isEditModeStatic,
       isPopoverMode,
