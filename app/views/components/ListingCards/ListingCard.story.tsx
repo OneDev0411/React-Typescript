@@ -8,7 +8,10 @@ import { compactListing } from 'fixtures/listing/compact_listing'
 export default {
   title: 'Listings/ListingCard',
   component: ListingCard,
-  argTypes: { onClick: { action: 'clicked' } }
+  argTypes: {
+    onClick: { action: 'clicked' },
+    onToggleSelection: { action: 'selection toggle clicked' }
+  }
 } as Meta
 
 const Template: Story<ComponentProps<typeof ListingCard>> = args => (
@@ -32,4 +35,23 @@ export const Bare = Template.bind({})
 Bare.args = {
   listing,
   variant: 'bare'
+}
+
+export const LeaseProperty = Template.bind({})
+
+LeaseProperty.args = {
+  listing: {
+    ...listing,
+    property: {
+      ...listing.property,
+      property_subtype: 'LSE-House'
+    }
+  }
+}
+
+export const WithSelection = Template.bind({})
+
+WithSelection.args = {
+  listing,
+  selected: true
 }

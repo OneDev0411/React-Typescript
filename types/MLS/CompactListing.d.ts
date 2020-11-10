@@ -19,6 +19,7 @@ declare interface ICompactAddress {
 
 declare interface ICompactProperty {
   property_type: string
+  property_subtype: string
   half_bathroom_count: number
   full_bathroom_count: number
   square_meters: number

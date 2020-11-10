@@ -152,6 +152,25 @@ export const isLeaseProperty = (listing: IListing | ICompactListing) => {
   return isLease(listing)
 }
 
+export const getListingFeatures = (listing: IListing | ICompactListing): {
+  bedroomCount: number,
+  bathroomCount: number,
+  areaSqft: number,
+  lotSizeAreaAcre: number | null
+} => {
+
+  const property = listing.type === 'listing' ? listing.property : listing.compact_property
+
+  return {
+    bedroomCount: property.bedroom_count,
+    bathroomCount: property.bathroom_count,
+    areaSqft:
+      Math.round(metersToFeet(property.square_meters))
+    ,
+    lotSizeAreaAcre: property.lot_size_area,
+  }
+}
+
 export default {
   getStatusColor,
   getStatusColorClass,
