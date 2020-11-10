@@ -1,11 +1,25 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import curlirize from 'axios-curlirize'
 
 import config from '../../../config'
 
-export function request(requestConfig: AxiosRequestConfig) {
-  curlirize(axios)
+axios.interceptors.response.use(
+  response => {
+    const method = (response.config.method || 'GET').toUpperCase()
+    const duration =
+      new Date().getTime() - response.config.headers['x-request-time']
 
+    console.log(
+      `(${duration}ms) HTTP\t${response.status} ${response.statusText}\t${method}\t${response.config.url}`
+    )
+
+    return response
+  },
+  error => {
+    return Promise.reject(error)
+  }
+)
+
+export function request(requestConfig: AxiosRequestConfig) {
   return axios({
     ...requestConfig,
     url: `${config.api_url}${requestConfig.url}`
