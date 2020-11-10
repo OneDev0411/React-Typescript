@@ -9,8 +9,6 @@ import { useSelector } from 'react-redux'
 import { useUser } from 'hooks/use-load-user'
 import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 
-import { AnimatedLoader } from 'components/AnimatedLoader'
-
 import { setupGoogleAnalytics } from 'services/google-analytics'
 import { setupFullStory } from 'services/fullstory'
 import { setupSentry } from 'services/sentry'
@@ -23,6 +21,16 @@ import 'offline-js'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
+    '@keyframes pulse': {
+      '0%': {
+        transform: 'scale(0.7)',
+        opacity: 0.9
+      },
+      '100%': {
+        transform: 'scale(1)',
+        opacity: 0.9
+      }
+    },
     loading: {
       background: theme.palette.grey[50],
       height: '100vh',
@@ -30,8 +38,9 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      '& svg': {
-        width: '15%'
+      '& img': {
+        width: '25%',
+        animation: '$pulse 1s'
       }
     }
   }),
@@ -75,7 +84,7 @@ export default function App(props: Props) {
   if (!user?.id && isLoadingUser) {
     return (
       <div className={classes.loading}>
-        <AnimatedLoader />
+        <img src="/static/images/logo.svg" alt="Rechat Loading" />
       </div>
     )
   }
