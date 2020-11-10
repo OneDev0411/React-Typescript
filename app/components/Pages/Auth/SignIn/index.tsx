@@ -75,8 +75,6 @@ export default function Signin(props: Props) {
         setIsLookingUp(false)
       }
     } catch (error) {
-      console.log(error.response)
-
       setIsLookingUp(false)
 
       if (error && error.response && error.response.data) {

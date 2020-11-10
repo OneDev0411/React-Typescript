@@ -1,6 +1,4 @@
-import axios from 'axios'
-
-import config from 'config'
+import Fetch from 'services/fetch'
 
 interface ResponseData {
   type: 'sso_provider'
@@ -37,18 +35,15 @@ interface UserLookup {
 }
 
 export async function lookUpUserByEmail(email: string): Promise<UserLookup> {
-  const response = await axios.post(
-    `${config.app.url}/api/users/lookup`,
-    { email },
-    {
-      headers: { 'x-auth-mode': 'client_id' }
-    }
-  )
+  const response = await new Fetch()
+    .post('/api/users/lookup')
+    .set({ 'x-auth-mode': 'client_id' })
+    .send({ email })
 
   const {
     data,
     info: { password, is_shadow, email_confirmed, phone_confirmed }
-  } = response.data as ResponseBody
+  } = response.body as ResponseBody
 
   if (Array.isArray(data) && data.length === 1) {
     return {

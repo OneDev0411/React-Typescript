@@ -1,6 +1,4 @@
-import axios from 'axios'
-
-import config from 'config'
+import Fetch from 'services/fetch'
 
 import { randomString } from '../../../utils/helpers'
 
@@ -16,11 +14,12 @@ const signupShadow = async email => {
   }
 
   try {
-    const response = await axios.post(`${config.app.url}/api/users`, user, {
-      headers: { 'x-auth-mode': 'client_id' }
-    })
+    const response = await new Fetch()
+      .post('/api/users')
+      .set({ 'x-auth-mode': 'client_id' })
+      .send(user)
 
-    const { type, email_confirmed } = response.data
+    const { type, email_confirmed } = response.body.data
 
     if (type === 'user_reference' && !email_confirmed) {
       return 202

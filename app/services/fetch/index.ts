@@ -20,8 +20,6 @@ export default class Fetch {
 
   private _startTime: null | number
 
-  private _proxyUrl: string
-
   private _isLoggedIn: boolean
 
   constructor(options?: IOptions) {
@@ -35,7 +33,6 @@ export default class Fetch {
     }
 
     this._middlewares = this.registerMiddlewares(this.options)
-    this._proxyUrl = '/api/proxifier'
     this._isProductionEnv = isProductionEnv
     this._startTime = Date.now()
   }
@@ -62,7 +59,7 @@ export default class Fetch {
     if (useProxy) {
       agent = endpoint.startsWith('/api/')
         ? SuperAgent[method](endpoint)
-        : SuperAgent.post(`${this._proxyUrl}?${endpoint}`)
+        : SuperAgent.post(`/api/proxifier?e=${endpoint}`)
             .set('X-Method', method)
             .set('X-Endpoint', endpoint)
     } else {
@@ -171,9 +168,7 @@ export default class Fetch {
     try {
       const {
         body: { access_token, refresh_token }
-      } = await SuperAgent.post(
-        `${this._proxyUrl}/api/user/refresh-token`
-      ).send({
+      } = await SuperAgent.post('/api/user/refresh-token').send({
         access_token: user.access_token,
         refresh_token: user.refresh_token
       })
