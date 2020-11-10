@@ -67,7 +67,7 @@ const config = {
     new CompressionPlugin({
       algorithm: 'gzip',
       test: /\.js$|\.css$/,
-      filename: '[path].gz'
+      filename: '[path]'
     }),
     new ForkTsCheckerWebpackPlugin({
       /**
