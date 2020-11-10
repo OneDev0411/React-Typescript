@@ -28,10 +28,11 @@ export function useUser() {
           body: { data: user }
         } = await new Fetch().get('/api/users/profile')
 
-        dispatch(getUserTeams(user))
-
         dispatch({
-          user,
+          user: {
+            ...user,
+            teams: await dispatch(getUserTeams(user))
+          },
           type: SIGNIN_SUCCESS
         })
       } catch (e) {

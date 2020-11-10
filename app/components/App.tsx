@@ -4,8 +4,9 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce, useTitle } from 'react-use'
 
-import { AnimatedLoader } from 'components/AnimatedLoader'
 import { useUser } from 'hooks/use-load-user'
+
+import { AnimatedLoader } from 'components/AnimatedLoader'
 
 import getBrand from '../store_actions/brand'
 
@@ -18,8 +19,8 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      '& img': {
-        width: '25%'
+      '& svg': {
+        width: '15%'
       }
     }
   }),
@@ -49,12 +50,12 @@ export default function App(props: Props) {
     }
   })
 
-  useEffect(() => {}, [user])
+  // useEffect(() => {}, [user])
 
-  if (!user && isLoadingUser) {
+  if (!user?.id && isLoadingUser) {
     return (
       <div className={classes.loading}>
-        <img src="/static/images/logo.svg" alt="Rechat Loading" />
+        <AnimatedLoader />
       </div>
     )
   }
