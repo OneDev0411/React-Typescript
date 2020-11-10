@@ -167,52 +167,56 @@ class Rooms extends React.Component {
           <SocketStatus />
         </div>
 
-        <div className="list-container u-scrollbar--thinner">
-          <div className="list">
-            {_.chain(rooms)
-              .filter(room => ['Direct', 'Group'].indexOf(room.room_type) > -1)
-              .filter(
-                room =>
-                  room.proposed_title &&
-                  room.proposed_title
-                    .toLowerCase()
-                    .includes(filter.toLowerCase())
-              )
-              .sortBy(room => room.updated_at * -1)
-              .map(room => (
-                <Row
-                  onClick={() => this.props.onSelectRoom(room.id)}
-                  key={`ROOM_CHANNEL_${room.id}`}
-                  className={cn('item', { active: room.id === activeRoom })}
-                >
-                  <Col sm={1} xs={1} className="avatar vcenter">
-                    {this.getRoomAvatar(room)}
-                  </Col>
-                  <Col
-                    sm={9}
-                    xs={9}
-                    className={cn('title vcenter', {
-                      hasNotification: room.new_notifications > 0
-                    })}
+        {showChatbar && (
+          <div className="list-container u-scrollbar--thinner">
+            <div className="list">
+              {_.chain(rooms)
+                .filter(
+                  room => ['Direct', 'Group'].indexOf(room.room_type) > -1
+                )
+                .filter(
+                  room =>
+                    room.proposed_title &&
+                    room.proposed_title
+                      .toLowerCase()
+                      .includes(filter.toLowerCase())
+                )
+                .sortBy(room => room.updated_at * -1)
+                .map(room => (
+                  <Row
+                    onClick={() => this.props.onSelectRoom(room.id)}
+                    key={`ROOM_CHANNEL_${room.id}`}
+                    className={cn('item', { active: room.id === activeRoom })}
                   >
-                    <span>{this.getRoomTitle(room.proposed_title)}</span>
-                    <UserTyping roomId={room.id} />
-                  </Col>
+                    <Col sm={1} xs={1} className="avatar vcenter">
+                      {this.getRoomAvatar(room)}
+                    </Col>
+                    <Col
+                      sm={9}
+                      xs={9}
+                      className={cn('title vcenter', {
+                        hasNotification: room.new_notifications > 0
+                      })}
+                    >
+                      <span>{this.getRoomTitle(room.proposed_title)}</span>
+                      <UserTyping roomId={room.id} />
+                    </Col>
 
-                  <Col sm={1} xs={1} className="notifications vcenter">
-                    {room.new_notifications > 0 && (
-                      <Badge>
-                        {room.new_notifications > 99
-                          ? '99+'
-                          : room.new_notifications}
-                      </Badge>
-                    )}
-                  </Col>
-                </Row>
-              ))
-              .value()}
+                    <Col sm={1} xs={1} className="notifications vcenter">
+                      {room.new_notifications > 0 && (
+                        <Badge>
+                          {room.new_notifications > 99
+                            ? '99+'
+                            : room.new_notifications}
+                        </Badge>
+                      )}
+                    </Col>
+                  </Row>
+                ))
+                .value()}
+            </div>
           </div>
-        </div>
+        )}
 
         <CreateRoom />
       </div>
