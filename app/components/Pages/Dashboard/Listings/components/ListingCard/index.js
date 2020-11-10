@@ -53,7 +53,7 @@ const ListingCard = ({
                 </span>
               </div>
             )}
-            <h4 className="c-listing-card__title">{listing.address}</h4>
+            <h4 className="c-listing-card__title">{listing.addressTitle}</h4>
             <div className="c-listing-card__price">
               $ {listing.price.toLocaleString()}
               {isLeaseProperty(listing) ? '/mo' : ''}
@@ -85,7 +85,7 @@ const ListingCard = ({
               onClick={onClick}
               className="c-listing-card__link"
             >
-              {listing.address}
+              {listing.addressTitle}
             </a>
           ) : (
             <Link
@@ -94,7 +94,7 @@ const ListingCard = ({
               onClick={openListing}
               className="c-listing-card__link"
             >
-              {listing.address}
+              {listing.addressTitle}
             </Link>
           )}
           {user && (

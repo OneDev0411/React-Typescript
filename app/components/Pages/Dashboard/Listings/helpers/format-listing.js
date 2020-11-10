@@ -45,7 +45,7 @@ export const formatListing = (listing, user) => {
     ...listing,
     backgroundImage,
     statusColor,
-    address: addressTitle,
+    addressTitle,
     zipCode,
     beds,
     baths,
