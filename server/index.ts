@@ -1,5 +1,7 @@
 import path from 'path'
+import os from 'os'
 
+import throng from 'throng'
 import express from 'express'
 import compress from 'compression'
 import cookieSession from 'cookie-session'
@@ -35,7 +37,7 @@ const isProduction = process.env.NODE_ENV === 'production'
 const isDevelopment = !isProduction
 
 const app = express()
-const port = process.env.PROXY_PORT || 8080
+const port = process.env.PORT || 8080
 
 const requestLimit = bodyParser.json({
   limit: '10mb'
@@ -142,4 +144,12 @@ if (isProduction) {
   )
 }
 
-app.listen(port, () => console.log(`App is started on 0.0.0.0:${port}`))
+throng({
+  workers: isDevelopment
+    ? 1
+    : process.env.WEB_CONCURRENCY || os.cpus().length || 1,
+  lifetime: Infinity,
+  start: () => {
+    app.listen(port, () => console.log(`App is started on 0.0.0.0:${port}`))
+  }
+})
