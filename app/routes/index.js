@@ -9,7 +9,6 @@ import Dashboard from '../components/Pages/Dashboard'
 
 // Pages
 import Load from '../loader'
-import store from '../stores'
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
 const AsyncAuthenticationLayout = Load({
@@ -589,24 +588,6 @@ const AsyncContexts = Load({
     )
 })
 
-function authenticate(nextState, replace) {
-  const { user } = store.getState()
-  const isLoggedIn = user && user.access_token
-
-  const noAuthList = ['/dashboard/mls', '/dashboard/mls/:id']
-
-  if (nextState.routes.some(route => noAuthList.includes(route.path))) {
-    return true
-  }
-
-  if (typeof window !== 'undefined' && !isLoggedIn) {
-    replace({
-      pathname: '/signin',
-      state: { redirectTo: nextState.location.pathname }
-    })
-  }
-}
-
 export default (
   <Route>
     <Route path="/">
@@ -656,7 +637,7 @@ export default (
       </Route>
     </Route>
 
-    <Route path="/" component={AppLayout} onEnter={authenticate}>
+    <Route path="/" component={AppLayout}>
       <Route
         path="onboarding/confirm-agent-id"
         component={AsyncConfirmAgentId}

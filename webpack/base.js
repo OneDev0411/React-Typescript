@@ -57,6 +57,15 @@ export default {
     }
   },
   plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, '../app/index.html'),
+      hash: false,
+      filename: './index.html',
+      inject: 'body',
+      minify: {
+        collapseWhitespace: false
+      }
+    }),
     new ESBuildPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
@@ -91,15 +100,6 @@ export default {
       NODE_ENV: env,
       __DEBUG__: __DEV__,
       __PROD__: env === 'production'
-    }),
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '../app/index.html'),
-      hash: false,
-      filename: './index.html',
-      inject: 'body',
-      minify: {
-        collapseWhitespace: false
-      }
     })
   ],
   externals: {

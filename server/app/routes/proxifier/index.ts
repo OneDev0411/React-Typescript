@@ -9,6 +9,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     responseType: 'stream',
     method: <AxiosRequestConfig['method']>req.headers['x-method'],
     url: <string>req.headers['x-endpoint'],
+    params: req.query,
     headers: getParsedHeaders(req),
     data: req.body
   })

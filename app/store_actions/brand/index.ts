@@ -2,7 +2,7 @@ import * as actionsType from '../../constants/brand'
 import { getBrandById } from '../../models/brand/get-brand-by-id'
 import { getBrandByHostname } from '../../models/brand/get-brand-by-hostname'
 
-const getBrand = brandId => async (dispatch, getState) => {
+const getBrand = (brandId?: UUID) => async (dispatch, getState) => {
   let brand = getState().brand
 
   if (brand) {

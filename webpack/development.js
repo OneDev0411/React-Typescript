@@ -1,11 +1,10 @@
-import path from 'path'
-
+// @ts-nocheck
 import merge from 'webpack-merge'
 
 import ForkTsCheckerNotifierWebpackPlugin from 'fork-ts-checker-notifier-webpack-plugin'
 import Webpackbar from 'webpackbar'
 
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
+// import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
 import UnusedFilesWebpackPlugin from 'unused-files-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
@@ -27,15 +26,9 @@ const postcss = function postcss() {
 const config = {
   mode: 'development',
   entry: ['@babel/polyfill'],
-  devServer: {
-    port: 8080,
-    compress: true,
-    hot: true,
-    inline: true,
-    historyApiFallback: {
-      disableDotRule: true
-    },
-    contentBase: path.resolve(__dirname, '../app')
+  output: {
+    filename: '[name].bundle.js',
+    publicPath: '/'
   },
   plugins: [
     new UnusedFilesWebpackPlugin({
@@ -82,10 +75,10 @@ const config = {
         ]
       }
     }),
-    new BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      openAnalyzer: false
-    }),
+    // new BundleAnalyzerPlugin({
+    //   analyzerMode: 'static',
+    //   openAnalyzer: false
+    // }),
     new Webpackbar(),
     new ForkTsCheckerNotifierWebpackPlugin({ alwaysNotify: false }),
     new ForkTsCheckerWebpackPlugin({

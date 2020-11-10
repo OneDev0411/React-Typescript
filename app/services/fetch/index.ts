@@ -61,11 +61,17 @@ export default class Fetch {
 
     this._isLoggedIn = user && user.access_token !== undefined
 
-    const agent: SuperAgent.SuperAgentRequest = useProxy
-      ? SuperAgent.post(this._proxyUrl)
-          .set('X-Method', method)
-          .set('X-Endpoint', endpoint)
-      : SuperAgent[method](`${config.api_url}${endpoint}`)
+    let agent: SuperAgent.SuperAgentRequest
+
+    if (useProxy) {
+      agent = endpoint.startsWith('/api/')
+        ? SuperAgent[method](`${config.proxy.url}${endpoint}`)
+        : SuperAgent.post(`${this._proxyUrl}?${endpoint}`)
+            .set('X-Method', method)
+            .set('X-Endpoint', endpoint)
+    } else {
+      agent = SuperAgent[method](`${config.api_url}${endpoint}`)
+    }
 
     if (this.options.useReferencedFormat && !useProxy) {
       agent.set('X-RECHAT-FORMAT', 'references')

@@ -1,10 +1,16 @@
+import path from 'path'
+
 import express from 'express'
 import cookieSession from 'cookie-session'
 import enforce from 'express-sslify'
 import bodyParser from 'body-parser'
-import cors from 'cors'
+
+import webpack from 'webpack'
+import history from 'connect-history-api-fallback'
+import webpackDevMiddleware from 'webpack-dev-middleware'
 
 import proxifierRoute from './app/routes/proxifier'
+import userProfileRoute from './app/routes/user/profile'
 import usersLookupRoute from './app/routes/user/user-lookup'
 import usersOAuthTokenRoute from './app/routes/user/oauth-token'
 import signupRoute from './app/routes/user/signup'
@@ -35,22 +41,17 @@ const requestLimit = bodyParser.json({
 })
 
 if (isProduction) {
+  app.set('trust proxy', 1)
+  app.disable('x-powered-by')
   app.use(enforce.HTTPS())
-}
-
-if (isDevelopment) {
-  app.use(
-    cors({
-      origin: '*'
-    })
-  )
 }
 
 app.use(
   cookieSession({
     name: 'rechat-webapp:session',
     keys: ['r3ch4r0Ks!!!'],
-    maxAge: 365 * 86400 * 1000
+    maxAge: 365 * 86400 * 1000,
+    secure: isProduction
   })
 )
 
@@ -62,6 +63,7 @@ app.post('/api/proxifier', bodyParser.json(), proxifierRoute)
 /**
  * user routes.
  */
+app.get('/api/users/profile', userProfileRoute)
 app.post('/api/users/lookup', bodyParser.json(), usersLookupRoute)
 app.post('/api/oauth2/token', bodyParser.json(), usersOAuthTokenRoute)
 app.post('/api/users', bodyParser.json(), signupRoute)
@@ -114,7 +116,23 @@ app.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)
 app.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
 
 if (isDevelopment) {
-  app.get('/', (_, res) => res.send('Trek is running...'))
+  const config = require('../webpack/development').default
+  const compiler = webpack(config)
+
+  app.use(history())
+  app.use(
+    webpackDevMiddleware(compiler, {
+      publicPath: config.output.publicPath
+    })
+  )
+
+  app.use('/static', express.static(path.resolve(__dirname, '../app/static')))
+}
+
+if (isProduction) {
+  const config = require('../webpack/production').default
+
+  app.use(config.output.publicPath, express.static(config.output.path))
 }
 
 app.listen(port, () => console.log(`App is started on 0.0.0.0:${port}`))
