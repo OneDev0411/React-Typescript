@@ -24,7 +24,7 @@ export default {
     app: path.resolve(__dirname, '../app/index.js')
   },
   output: {
-    path: path.resolve(__dirname, '../../dist'),
+    path: path.resolve(__dirname, '../dist'),
     filename: __DEV__ ? '[name].js' : '[name].[hash].js',
     chunkFilename: '[name].[chunkhash].js',
     publicPath: '/',

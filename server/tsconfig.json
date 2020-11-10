@@ -17,7 +17,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
-    "outDir": "../dist/proxy",
+    "outDir": "../server-dist",
     "lib": [
       "es6"
     ],
@@ -33,7 +33,7 @@
   },
   "include": [
     "app/**/*",
-    "types/**/*"
+    "types/**/*", "index.ts"
   ],
   "exclude": [
     "app/**/*.test.ts"

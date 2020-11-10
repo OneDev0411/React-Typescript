@@ -5,7 +5,6 @@ import webpack from 'webpack'
 import colors from 'colors'
 
 import config from './webpack.config.babel'
-import appConfig from './config/webpack'
 
 async function run() {
   console.log('[ + ] Start compiling')
@@ -17,8 +16,8 @@ async function run() {
   )
 
   fs.copySync(
-    path.join(appConfig.compile.entry, appConfig.compile.publicDirName),
-    path.join(appConfig.compile.output, appConfig.compile.publicDirName)
+    path.join(path.resolve(__dirname, './app'), 'static'),
+    path.join(path.resolve(__dirname, './dist'), 'static')
   )
 
   console.log('[ + ] Static assets are copied'.magenta)
