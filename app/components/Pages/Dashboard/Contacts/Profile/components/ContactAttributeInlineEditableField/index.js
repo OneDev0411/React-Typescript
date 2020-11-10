@@ -51,6 +51,7 @@ function getStateFromTrigger(trigger) {
     return {
       currentTrigger: trigger,
       isTriggerActive: true,
+      triggerSubject: trigger.campaign?.subject ?? 'Congratulation!!',
       triggerSendBefore: `${Math.abs(Number(trigger.wait_for)) / 86400}`,
       triggerSelectedTemplate: null
     }
@@ -59,6 +60,7 @@ function getStateFromTrigger(trigger) {
   return {
     currentTrigger: null,
     isTriggerActive: false,
+    triggerSubject: '',
     triggerSendBefore: '0',
     triggerSelectedTemplate: null
   }
@@ -158,6 +160,13 @@ class MasterField extends React.Component {
       isTriggerActive: value
     })
 
+  onChangeSubject = value =>
+    this.setState({
+      isDirty: true,
+      isTriggerFieldDirty: true,
+      triggerSubject: value
+    })
+
   onChangeSendBefore = value =>
     this.setState({
       isDirty: true,
@@ -221,6 +230,7 @@ class MasterField extends React.Component {
       currentTrigger,
       isTriggerFieldDirty,
       isTriggerActive,
+      triggerSubject,
       triggerSendBefore,
       triggerSelectedTemplate
     } = this.state
@@ -270,7 +280,8 @@ class MasterField extends React.Component {
           brand,
           {
             event_type: this.attribute_def.name,
-            wait_for: waitFor
+            wait_for: waitFor,
+            subject: triggerSubject
           },
           {
             user
@@ -339,34 +350,47 @@ class MasterField extends React.Component {
     }
   }
 
-  renderEditMode = props => (
-    <EditMode
-      {...props}
-      attribute={{
-        ...this.props.attribute,
-        ...this.state,
-        [this.type]: this.state.value
-      }}
-      handleEnterKey={this.handleEnterKey}
-      onChangeLabel={this.onChangeLabel}
-      onChangeValue={this.onChangeValue}
-      onChangePrimary={this.onChangePrimary}
-      placeholder={this.placeholder}
-    >
-      {this.isTriggable ? (
-        <TriggerField
-          current={this.state.currentTrigger}
-          user={this.props.user}
-          isActive={this.state.isTriggerActive}
-          sendBefore={this.state.triggerSendBefore}
-          selectedTemplate={this.state.triggerSelectedTemplate}
-          onChangeActive={this.onChangeTriggerActive}
-          onChangeSendBefore={this.onChangeSendBefore}
-          onChangeTemplate={this.onChangeTemplate}
-        />
-      ) : null}
-    </EditMode>
-  )
+  renderEditMode = props => {
+    const { user, attribute } = this.props
+    const {
+      currentTrigger,
+      isTriggerActive,
+      triggerSubject,
+      triggerSendBefore,
+      triggerSelectedTemplate
+    } = this.state
+
+    return (
+      <EditMode
+        {...props}
+        attribute={{
+          ...attribute,
+          ...this.state,
+          [this.type]: this.state.value
+        }}
+        handleEnterKey={this.handleEnterKey}
+        onChangeLabel={this.onChangeLabel}
+        onChangeValue={this.onChangeValue}
+        onChangePrimary={this.onChangePrimary}
+        placeholder={this.placeholder}
+      >
+        {this.isTriggable ? (
+          <TriggerField
+            current={currentTrigger}
+            user={user}
+            isActive={isTriggerActive}
+            subject={triggerSubject}
+            sendBefore={triggerSendBefore}
+            selectedTemplate={triggerSelectedTemplate}
+            onChangeActive={this.onChangeTriggerActive}
+            onChangeSubject={this.onChangeSubject}
+            onChangeSendBefore={this.onChangeSendBefore}
+            onChangeTemplate={this.onChangeTemplate}
+          />
+        ) : null}
+      </EditMode>
+    )
+  }
 
   renderViewMode = () => (
     <ViewMode

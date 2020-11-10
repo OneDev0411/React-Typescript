@@ -4,6 +4,7 @@ import Fetch from '../../../services/fetch'
 
 import { createTemplateInstance } from '../create-template-instance'
 import { updateEmailCampaign } from '../../email/update-email-campaign'
+import { DataType } from '../create-trigger'
 
 interface TemplateData {
   user?: IUser
@@ -15,7 +16,7 @@ export async function updateTrigger(
   contact: IContact,
   template: IBrandMarketingTemplate | null,
   brand: IBrand,
-  data: Pick<ITrigger, 'wait_for' | 'event_type'>,
+  data: DataType,
   templateData: TemplateData = {}
 ): Promise<ITrigger> {
   try {

@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import _get from 'lodash/get'
 import {
   FormControl,
   InputLabel,
+  TextField,
   MenuItem,
   Select,
   Switch,
@@ -17,8 +18,10 @@ interface Props {
   current: ITrigger | null
   user: IUser
   isActive: boolean
+  subject: string
   sendBefore: string | number
   onChangeActive: (value: boolean) => void
+  onChangeSubject: (value: string) => void
   onChangeSendBefore: (value: string | number) => void
   onChangeTemplate: (template: IBrandMarketingTemplate) => void
 }
@@ -46,12 +49,9 @@ const useStyles = makeStyles(
       ...theme.typography.body2,
       color: theme.palette.grey[500]
     },
-    sendBefore: {
+    inputField: {
       width: '100%',
-      marginTop: theme.spacing(2),
-      '& .MuiOutlinedInput-input': {
-        padding: theme.spacing(1.5, 1.75)
-      }
+      marginTop: theme.spacing(2)
     },
     templateSelectorContainer: {
       marginTop: theme.spacing(1)
@@ -98,14 +98,17 @@ export const TriggerField = ({
   current,
   user,
   isActive: isActiveProp = false,
+  subject: subjectProp = '',
   sendBefore: sendBeforeProp = '0',
   onChangeActive,
+  onChangeSubject,
   onChangeSendBefore,
   onChangeTemplate
 }: Props) => {
   const classes = useStyles()
 
-  const [isActive, setIsActive] = useState(isActiveProp)
+  const [subject, setSubject] = useState<string>(subjectProp)
+  const [isActive, setIsActive] = useState<boolean>(isActiveProp)
   const [sendBefore, setSendBefore] = useState<string | number>(sendBeforeProp)
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState<boolean>(
     false
@@ -115,11 +118,27 @@ export const TriggerField = ({
     setSelectedTemplate
   ] = useState<IBrandMarketingTemplate | null>(null)
 
+  useEffect(() => {
+    return () => {
+      setSubject('')
+      setIsActive(false)
+      setSendBefore('0')
+      setSelectedTemplate(null)
+    }
+  }, [])
+
   const handleActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked
 
     setIsActive(checked)
     onChangeActive(checked)
+  }
+
+  const handleSubjectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+
+    setSubject(value)
+    onChangeSubject(value)
   }
 
   const handleSendBeforeChange = (
@@ -202,7 +221,24 @@ export const TriggerField = ({
               {renderTemplatePreview()}
             </div>
           </div>
-          <FormControl variant="outlined" className={classes.sendBefore}>
+          <TextField
+            id="subject"
+            label="subject"
+            type="text"
+            size="small"
+            defaultValue={subject}
+            InputLabelProps={{
+              shrink: true
+            }}
+            variant="outlined"
+            className={classes.inputField}
+            onChange={handleSubjectChange}
+          />
+          <FormControl
+            variant="outlined"
+            size="small"
+            className={classes.inputField}
+          >
             <InputLabel id="trigger-send-before">Send</InputLabel>
             <Select
               labelId="trigger-send-before"

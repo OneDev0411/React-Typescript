@@ -5,6 +5,10 @@ import Fetch from '../../../services/fetch'
 import { createTemplateInstance } from '../create-template-instance'
 import { createEmailCampaign } from '../../email/create-email-campaign'
 
+export interface DataType extends Pick<ITrigger, 'wait_for' | 'event_type'> {
+  subject: string
+}
+
 interface TemplateData {
   user?: IUser
   contact?: IContact
@@ -14,7 +18,7 @@ export async function createTrigger(
   contact: IContact,
   template: IBrandMarketingTemplate,
   brand: IBrand,
-  data: Pick<ITrigger, 'wait_for' | 'event_type'>,
+  data: DataType,
   templateData: TemplateData = {}
 ): Promise<ITrigger> {
   try {
@@ -62,7 +66,7 @@ export async function createTrigger(
           contact: contact.id
         }
       ],
-      subject: 'Congratulation!!',
+      subject: data?.subject ?? 'Congratulation!!',
       html: '',
       template: templateInstance.id,
       individual: true,
