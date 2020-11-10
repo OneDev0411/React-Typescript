@@ -12,7 +12,7 @@ interface Response {
 
 export async function renderMjml(mjml: string): Promise<Response> {
   const response = await superagent
-    .post(`${config.proxy.url}/api/utils/render-mjml`)
+    .post(`${config.app.url}/api/utils/render-mjml`)
     .send({ mjml })
 
   return response.body

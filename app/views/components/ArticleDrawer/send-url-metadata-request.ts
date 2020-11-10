@@ -11,7 +11,7 @@ interface Response {
 
 export async function sendUrlMetadataRequest(url: string): Promise<Response> {
   const response = await superagent
-    .post(`${config.proxy.url}/api/utils/get-url-metadata`)
+    .post(`${config.app.url}/api/utils/get-url-metadata`)
     .send({ url })
 
   return response.body

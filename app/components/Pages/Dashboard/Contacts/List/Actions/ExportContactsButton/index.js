@@ -24,7 +24,7 @@ class ExportContacts extends React.Component {
       conditionOperator: filter_type
     } = this.props
     const activeBrand = getActiveTeamId(user)
-    const url = `${config.proxy.url}/api/contacts/export/outlook/${activeBrand}`
+    const url = `${config.app.url}/api/contacts/export/outlook/${activeBrand}`
 
     const params = {
       type: exportType

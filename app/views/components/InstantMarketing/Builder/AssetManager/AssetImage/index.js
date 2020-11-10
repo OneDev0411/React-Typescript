@@ -97,7 +97,7 @@ export class AssetImage extends React.Component {
 
         {this.state.isCropperOpen && (
           <Editor
-            file={`${config.proxy.url}/api/utils/cors/${image}`}
+            file={`${config.app.url}/api/utils/cors/${image}`}
             dimensions={[
               targetElement.clientWidth * 2,
               targetElement.clientHeight * 2

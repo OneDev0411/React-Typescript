@@ -10,7 +10,7 @@ const signin = async userInfo => {
 
   try {
     const response = await axios.post(
-      `${config.proxy.url}/api/oauth2/token`,
+      `${config.app.url}/api/oauth2/token`,
       requestBody,
       {
         headers: {

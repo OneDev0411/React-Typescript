@@ -39,7 +39,7 @@ export default class Fetch {
 
     this._middlewares = this.registerMiddlewares(this.options)
     this._isServerSide = isServerSide
-    this._proxyUrl = `${config.proxy.url}/api/proxifier`
+    this._proxyUrl = `${config.app.url}/api/proxifier`
     this._isProductionEnv = isProductionEnv
     this._startTime = Date.now()
   }
@@ -65,7 +65,7 @@ export default class Fetch {
 
     if (useProxy) {
       agent = endpoint.startsWith('/api/')
-        ? SuperAgent[method](`${config.proxy.url}${endpoint}`)
+        ? SuperAgent[method](`${config.app.url}${endpoint}`)
         : SuperAgent.post(`${this._proxyUrl}?${endpoint}`)
             .set('X-Method', method)
             .set('X-Endpoint', endpoint)

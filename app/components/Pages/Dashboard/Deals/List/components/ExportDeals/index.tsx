@@ -47,12 +47,12 @@ export function ExportDeals(props) {
     return [
       {
         label: 'All Deals',
-        url: `${config.proxy.url}/api/deals/export/all/${getActiveTeamId(user)}`
+        url: `${config.app.url}/api/deals/export/all/${getActiveTeamId(user)}`
       },
       {
         label: 'New Listings',
         description: 'Past 7 days',
-        url: `${config.proxy.url}/api/deals/report/${encodeURIComponent(
+        url: `${config.app.url}/api/deals/report/${encodeURIComponent(
           JSON.stringify({
             filter: [
               {
@@ -90,7 +90,7 @@ export function ExportDeals(props) {
       {
         label: 'New Offers',
         description: 'Past 7 days',
-        url: `${config.proxy.url}/api/deals/report/${encodeURIComponent(
+        url: `${config.app.url}/api/deals/report/${encodeURIComponent(
           JSON.stringify({
             filter: [
               {

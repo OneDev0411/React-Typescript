@@ -16,7 +16,7 @@ const signupShadow = async email => {
   }
 
   try {
-    const response = await axios.post(`${config.proxy.url}/api/users`, user, {
+    const response = await axios.post(`${config.app.url}/api/users`, user, {
       headers: { 'x-auth-mode': 'client_id' }
     })
 

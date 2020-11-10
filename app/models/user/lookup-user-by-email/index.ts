@@ -38,7 +38,7 @@ interface UserLookup {
 
 export async function lookUpUserByEmail(email: string): Promise<UserLookup> {
   const response = await axios.post(
-    `${config.proxy.url}/api/users/lookup`,
+    `${config.app.url}/api/users/lookup`,
     { email },
     {
       headers: { 'x-auth-mode': 'client_id' }

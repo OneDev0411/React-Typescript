@@ -8,7 +8,7 @@ import config from 'config'
 export async function getPdfSize(data) {
   try {
     const response = await agent
-      .post(`${config.proxy.url}/api/pdf/get-size`)
+      .post(`${config.app.url}/api/pdf/get-size`)
       .send(data)
 
     return response.body.total
