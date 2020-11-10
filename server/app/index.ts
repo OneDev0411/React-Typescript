@@ -34,7 +34,7 @@ const isProduction = process.env.NODE_ENV === 'production'
 const isDevelopment = !isProduction
 
 const app = express()
-const port = process.env.PROXY_PORT || (isProduction ? 8080 : 8081)
+const port = process.env.PROXY_PORT || 8080
 
 const requestLimit = bodyParser.json({
   limit: '10mb'
@@ -130,8 +130,7 @@ if (isDevelopment) {
 }
 
 if (isProduction) {
-  // const config = require('../../webpack/production').default
-  // app.use(config.output.publicPath, express.static(config.output.path))
+  app.use('/', express.static(path.resolve(__dirname, '../app/dist')))
 }
 
 app.listen(port, () => console.log(`App is started on 0.0.0.0:${port}`))
