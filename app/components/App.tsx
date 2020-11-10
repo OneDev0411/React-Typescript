@@ -18,8 +18,8 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      '& svg': {
-        width: '10%'
+      '& img': {
+        width: '25%'
       }
     }
   }),
@@ -49,14 +49,12 @@ export default function App(props: Props) {
     }
   })
 
-  useEffect(() => {
-    console.log('UsER LOADED')
-  }, [user])
+  useEffect(() => {}, [user])
 
   if (!user && isLoadingUser) {
     return (
       <div className={classes.loading}>
-        <AnimatedLoader />
+        <img src="/static/images/logo.svg" alt="Rechat Loading" />
       </div>
     )
   }
