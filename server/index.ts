@@ -43,6 +43,8 @@ const requestLimit = bodyParser.json({
   limit: '10mb'
 })
 
+app.use(compress())
+
 if (isProduction) {
   app.set('trust proxy', 1)
   app.disable('x-powered-by')
@@ -134,7 +136,6 @@ if (isDevelopment) {
 
 if (isProduction) {
   app.use(history())
-  app.use(compress())
 
   app.use(
     '/',
