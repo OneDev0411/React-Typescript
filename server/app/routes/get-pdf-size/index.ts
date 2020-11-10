@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import config from '../../../../config/public'
+import config from '../../../config'
 import { request } from '../../libs/request'
 
 export default async (req: Request, res: Response) => {
@@ -11,7 +11,7 @@ export default async (req: Request, res: Response) => {
   try {
     const response = await request({
       method: 'HEAD',
-      url: pdfUrl || `${config.forms.url}/${form}.pdf`
+      url: pdfUrl || `${config.forms_url}/${form}.pdf`
     })
 
     totalSize = ~~response.headers['content-length']

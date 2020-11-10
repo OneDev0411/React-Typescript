@@ -1,8 +1,8 @@
-import config from '../../../../../config/private'
+import config from '../../../../config'
 
 export const API_URL = 'https://bfsir.mymarketingmatters.com/PunchoutSetup.asp'
-export const DUNS = config.my_marketing_matters.duns
-export const SHARED_SECRET = config.my_marketing_matters.shared_secret
+export const DUNS = config.my_marketing_matters_duns
+export const SHARED_SECRET = config.my_marketing_matters_shared_secret
 
 export const REQUEST_BODY_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE cXML SYSTEM "http://xml.cXML.org/schemas/cXML/1.2.007/cXML.dtd">

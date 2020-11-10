@@ -9,26 +9,26 @@ import webpack from 'webpack'
 import history from 'connect-history-api-fallback'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 
-import proxifierRoute from './app/routes/proxifier'
-import userProfileRoute from './app/routes/user/profile'
-import usersLookupRoute from './app/routes/user/user-lookup'
-import usersOAuthTokenRoute from './app/routes/user/oauth-token'
-import signupRoute from './app/routes/user/signup'
-import dealDocusignLoginRoute from './app/routes/deal/docusign-login'
-import dealEnvelopeEditRoute from './app/routes/deal/envelope-edit'
-import dealEnvelopeSignRoute from './app/routes/deal/envelope-sign'
-import dealExportRoute from './app/routes/deal/export'
-import dealReportRoute from './app/routes/deal/report'
-import contactsExportOutlookRoute from './app/routes/contacts/export-outlook'
-import livebyReportRoute from './app/routes/liveby/report'
-import livebyNeighborhoodsRoute from './app/routes/liveby/neighborhoods'
-import myMarketingMattersPunchoutRoute from './app/routes/my-marketing-matters/punchout'
-import openHouseRoute from './app/routes/openhouse/registration'
-import getPdfSizeRoute from './app/routes/get-pdf-size'
-import refreshUserTokenRoute from './app/routes/refresh-token'
-import corsRoute from './app/routes/cors'
-import renderMjmlRoute from './app/routes/render-mjml'
-import urlMetadataRoute from './app/routes/url-metadata'
+import proxifierRoute from './routes/proxifier'
+import userProfileRoute from './routes/user/profile'
+import usersLookupRoute from './routes/user/user-lookup'
+import usersOAuthTokenRoute from './routes/user/oauth-token'
+import signupRoute from './routes/user/signup'
+import dealDocusignLoginRoute from './routes/deal/docusign-login'
+import dealEnvelopeEditRoute from './routes/deal/envelope-edit'
+import dealEnvelopeSignRoute from './routes/deal/envelope-sign'
+import dealExportRoute from './routes/deal/export'
+import dealReportRoute from './routes/deal/report'
+import contactsExportOutlookRoute from './routes/contacts/export-outlook'
+import livebyReportRoute from './routes/liveby/report'
+import livebyNeighborhoodsRoute from './routes/liveby/neighborhoods'
+import myMarketingMattersPunchoutRoute from './routes/my-marketing-matters/punchout'
+import openHouseRoute from './routes/openhouse/registration'
+import getPdfSizeRoute from './routes/get-pdf-size'
+import refreshUserTokenRoute from './routes/refresh-token'
+import corsRoute from './routes/cors'
+import renderMjmlRoute from './routes/render-mjml'
+import urlMetadataRoute from './routes/url-metadata'
 
 const isProduction = process.env.NODE_ENV === 'production'
 const isDevelopment = !isProduction
@@ -116,7 +116,7 @@ app.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)
 app.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
 
 if (isDevelopment) {
-  const config = require('../webpack/development').default
+  const config = require('../../webpack/development').default
   const compiler = webpack(config)
 
   app.use(history())
@@ -130,9 +130,8 @@ if (isDevelopment) {
 }
 
 if (isProduction) {
-  const config = require('../webpack/production').default
-
-  app.use(config.output.publicPath, express.static(config.output.path))
+  // const config = require('../../webpack/production').default
+  // app.use(config.output.publicPath, express.static(config.output.path))
 }
 
 app.listen(port, () => console.log(`App is started on 0.0.0.0:${port}`))

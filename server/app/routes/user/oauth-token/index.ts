@@ -1,8 +1,8 @@
-import { Request, Response, NextFunction } from 'express'
+import { Response, NextFunction } from 'express'
 
 import { AxiosError, AxiosResponse } from 'axios'
 
-import config from '../../../../../config/private'
+import config from '../../../../config'
 
 import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
@@ -20,8 +20,8 @@ export default async (
     headers: getParsedHeaders(req),
     data: {
       ...req.body,
-      client_id: config.api.client_id,
-      client_secret: config.api.client_secret
+      client_id: config.client_id,
+      client_secret: config.client_secret
     }
   })
     .then((response: AxiosResponse) => {

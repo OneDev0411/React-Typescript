@@ -1,6 +1,6 @@
 import { Request } from 'express'
 
-import config from '../../../../config/public'
+import config from '../../../config'
 import { getAccessToken } from '../get-access-token'
 
 const ALLOWED_HEADERS = [

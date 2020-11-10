@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 
 import cheerio from 'cheerio'
 
-import config from '../../../../../config/public'
+import config from '../../../../config'
 import { getParsedHeaders } from '../../../utils/parse-headers'
 
 import storage from './storage'

@@ -12,11 +12,12 @@
     "resolveJsonModule": true,
     "removeComments": true,
     "pretty": true,
-    "sourceMap": false,
+    "noEmitHelpers": true,
+    "importHelpers": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
-    "outDir": "dist",
+    "outDir": "../dist/proxy",
     "lib": [
       "es6"
     ],

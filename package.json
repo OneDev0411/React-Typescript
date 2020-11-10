@@ -5,8 +5,9 @@
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
     "commit": "commit",
-    "develop": "cross-env NODE_ENV=development TS_NODE_PROJECT='server/tsconfig.json' nodemon --watch 'server/app/**/*' --watch 'server/types/**/*' -e ts --exec ts-node ./server/index.ts",
+    "develop": "cross-env NODE_ENV=development TS_NODE_PROJECT='server/tsconfig.json' nodemon --watch 'server/app/**/*' --watch 'server/types/**/*' -e ts --exec ts-node ./server/app/index.ts",
     "debug": "ndb npm run develop",
+    "build:server": "cross-env NODE_ENV=production tsc -p server/tsconfig.production.json",
     "build": "rimraf dist && cross-env NODE_ENV=production babel-node --max-old-space-size=2560 ./build.js && rimraf dist/*.js.map",
     "build:stage": "rimraf dist && cross-env NODE_ENV=stage babel-node ./build.js",
     "build:ci": "cross-env NODE_ENV=ci NODE_OPTIONS='--max-old-space-size=8192' babel-node ./build.js",

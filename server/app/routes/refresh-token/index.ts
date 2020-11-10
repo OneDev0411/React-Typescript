@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { AxiosResponse } from 'axios'
 
-import config from '../../../../config/private'
+import config from '../../../config'
 import { request } from '../../libs/request'
 
 import type { Session } from '../../../types'
@@ -22,8 +22,8 @@ export default async (
       data: {
         refresh_token: req.session.user.refresh_token,
         grant_type: 'refresh_token',
-        client_id: config.api.client_id,
-        client_secret: config.api.client_secret
+        client_id: config.client_id,
+        client_secret: config.client_secret
       }
     })
 

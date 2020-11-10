@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import curlirize from 'axios-curlirize'
 
-import config from '../../../../config/public'
+import config from '../../../config'
 
 export function request(requestConfig: AxiosRequestConfig) {
   curlirize(axios)
@@ -10,17 +10,4 @@ export function request(requestConfig: AxiosRequestConfig) {
     ...requestConfig,
     url: `${config.api_url}${requestConfig.url}`
   })
-
-  // request.catch((e: AxiosError) => {
-  //   res.status(e.response?.status || 500)
-
-  //   if (requestConfig.responseType === 'stream') {
-  //     // eslint-disable-next-line
-  //      e.response?.data.pipe(res)
-
-  //     return
-  //   }
-
-  //   throw e
-  // })
 }
