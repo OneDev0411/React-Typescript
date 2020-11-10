@@ -3,7 +3,7 @@ import pv from '../../config/private'
 
 export default {
   app_name: pv.app_name,
-  api_url: pb.api.url,
+  api_url: pb.api_url,
   client_id: pv.api.client_id,
   client_secret: pv.api.client_secret,
   forms_url: pb.forms.url,
