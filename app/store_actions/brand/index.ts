@@ -24,6 +24,8 @@ const getBrand = (brandId?: UUID) => async (dispatch, getState) => {
       brand,
       type: actionsType.BRAND_SUCCESS
     })
+
+    return brand
   } catch (error) {
     dispatch({
       type: actionsType.BRAND_FAILURE

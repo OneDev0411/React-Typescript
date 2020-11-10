@@ -1,14 +1,25 @@
 import { makeStyles, Theme } from '@material-ui/core'
 
 import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+
 import { useEffectOnce, useTitle } from 'react-use'
 
+import { useSelector } from 'react-redux'
+
 import { useUser } from 'hooks/use-load-user'
+import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 
 import { AnimatedLoader } from 'components/AnimatedLoader'
 
+import { setupGoogleAnalytics } from 'services/google-analytics'
+import { setupFullStory } from 'services/fullstory'
+import { setupSentry } from 'services/sentry'
+
+import { IAppState } from 'reducers'
+
 import getBrand from '../store_actions/brand'
+
+import 'offline-js'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -38,19 +49,28 @@ export default function App(props: Props) {
 
   useTitle('Rechat')
 
+  const brand = useSelector<IAppState, IBrand>(({ brand }) => brand)
   const { user, isLoading: isLoadingUser } = useUser()
-  const dispatch = useDispatch()
+  const dispatch = useReduxDispatch()
 
   useEffectOnce(() => {
-    dispatch(getBrand())
+    const loadBrand = async () => {
+      const brand: IBrand = await dispatch(getBrand())
 
-    if (typeof window !== 'undefined') {
-      // @ts-ignore
-      import('offline-js')
+      setupGoogleAnalytics(brand)
     }
+
+    loadBrand()
   })
 
-  // useEffect(() => {}, [user])
+  useEffect(() => {
+    if (!user) {
+      return
+    }
+
+    setupFullStory(user)
+    setupSentry(user, brand)
+  }, [user, brand])
 
   if (!user?.id && isLoadingUser) {
     return (
@@ -62,104 +82,3 @@ export default function App(props: Props) {
 
   return props.children
 }
-
-// class App2 extends React.Component {
-//   UNSAFE_componentWillMount() {
-//     this.props.dispatch(getBrand())
-
-//     if (typeof window !== 'undefined') {
-//       import('offline-js')
-//     }
-//   }
-
-//   componentDidMount() {
-//     this.initializeApp()
-//   }
-
-//   async initializeApp() {
-//     let { user, brand, dispatch } = this.props
-
-//     if (user) {
-//       if (!idx(user, user => user.teams[0].brand.roles)) {
-//         user = {
-//           ...user,
-//           teams: await dispatch(getUserTeams(user))
-//         }
-//       }
-
-//       // set user for full story
-//       this.setFullStoryUser(user)
-
-//       // set user data for sentry
-//       this.setSentryUser(user, brand)
-//     }
-
-//     // google analytics
-//     this.initialGoogleAnalytics(brand)
-//   }
-
-//   initialGoogleAnalytics(brand) {
-//     if (!window) {
-//       return
-//     }
-
-//     const analyticsId = Brand.asset(
-//       'google_analytics_id',
-//       'UA-56150904-2',
-//       brand
-//     )
-
-//     const hostname = idx(brand, b => b.hostnames[0])
-//       ? brand.hostnames[0]
-//       : window.location.hostname
-
-//     const page = window.location.pathname
-
-//     ReactGA.initialize(analyticsId)
-//     ReactGA.ga('create', analyticsId, 'auto', hostname)
-//     ReactGA.set({ page })
-//     ReactGA.pageview(page)
-//   }
-
-//   setFullStoryUser(user) {
-//     if (window && window.FS) {
-//       window.FS.identify(user.id, {
-//         name: user.display_name,
-//         email: user.email
-//       })
-//     }
-//   }
-
-//   setSentryUser(user, brand) {
-//     Sentry.configureScope(scope => {
-//       scope.setUser({
-//         id: user.id,
-//         email: user.email,
-//         name: user.display_name,
-//         brand: brand && {
-//           id: brand.id,
-//           name: brand.name
-//         }
-//       })
-//     })
-//   }
-
-//   render() {
-//     return (
-//       <>
-//         {/* <Helmet>
-//           <title>Rechat</title>
-//         </Helmet>
-//         {this.props.children} */}
-//       </>
-//     )
-//   }
-// }
-
-// function mapStateToProps(state) {
-//   return {
-//     user: state.user
-//   }
-// }
-
-// export default connect(mapStateToProps)(App)

@@ -630,14 +630,6 @@ export default (
     </Route>
 
     <Route path="/" component={AppLayout}>
-      <Route path="dashboard" component={Dashboard}>
-        <Route path="mls" component={AsyncListingsLayout}>
-          <IndexRoute component={AsyncListingsSearch} />
-        </Route>
-      </Route>
-    </Route>
-
-    <Route path="/" component={AppLayout}>
       <Route
         path="onboarding/confirm-agent-id"
         component={AsyncConfirmAgentId}
