@@ -84,12 +84,12 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         default: '#fafafa'
       },
       action: {
-        active: 'rgba(107, 131, 178, 0.54)',
-        hover: 'rgba(107, 131, 178, 0.08)',
+        active: 'rgba(0, 0, 0, 0.54)',
+        hover: 'rgba(0, 0, 0, 0.08)',
         hoverOpacity: 0.08,
-        selected: 'rgba(107, 131, 178, 0.14)',
-        disabled: 'rgba(107, 131, 178, 0.26)',
-        disabledBackground: 'rgba(107, 131, 178, 0.12)'
+        selected: 'rgba(0, 0, 0, 0.14)',
+        disabled: 'rgba(0, 0, 0, 0.26)',
+        disabledBackground: 'rgba(0, 0, 0, 0.12)'
       }
     },
     shape: {
