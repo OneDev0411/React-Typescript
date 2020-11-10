@@ -147,7 +147,7 @@ if (isProduction) {
 throng({
   workers: isDevelopment
     ? 1
-    : process.env.WEB_CONCURRENCY || os.cpus().length || 1,
+    : process.env.WEB_CONCURRENCY || Math.max(os.cpus().length, 8) || 1,
   lifetime: Infinity,
   start: () => {
     app.listen(port, () => console.log(`App is started on 0.0.0.0:${port}`))
