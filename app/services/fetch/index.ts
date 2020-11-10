@@ -20,14 +20,11 @@ export default class Fetch {
 
   private _startTime: null | number
 
-  private _isServerSide: boolean
-
   private _proxyUrl: string
 
   private _isLoggedIn: boolean
 
   constructor(options?: IOptions) {
-    const isServerSide = typeof window === 'undefined'
     const isProductionEnv = process.env.NODE_ENV === 'production'
 
     this.options = {
@@ -38,8 +35,7 @@ export default class Fetch {
     }
 
     this._middlewares = this.registerMiddlewares(this.options)
-    this._isServerSide = isServerSide
-    this._proxyUrl = `${config.app.url}/api/proxifier`
+    this._proxyUrl = '/api/proxifier'
     this._isProductionEnv = isProductionEnv
     this._startTime = Date.now()
   }
@@ -57,7 +53,7 @@ export default class Fetch {
       brandId = brand.id
     }
 
-    const useProxy = this.options.proxy || this._isServerSide
+    const useProxy = this.options.proxy
 
     this._isLoggedIn = user && user.access_token !== undefined
 
@@ -146,7 +142,7 @@ export default class Fetch {
     const isUpgradeToAgentRequest =
       error.response?.body?.message === 'Invalid answer to secret question'
 
-    if (isUpgradeToAgentRequest || this._isServerSide || !this._isLoggedIn) {
+    if (isUpgradeToAgentRequest || !this._isLoggedIn) {
       return
     }
 
