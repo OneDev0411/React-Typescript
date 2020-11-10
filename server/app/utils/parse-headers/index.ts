@@ -4,6 +4,7 @@ import config from '../../../config'
 import { getAccessToken } from '../get-access-token'
 
 const ALLOWED_HEADERS = [
+  'accept-encoding',
   'x-auth-mode',
   'x-real-agent',
   'user-agent',

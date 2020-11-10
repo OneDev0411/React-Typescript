@@ -25,6 +25,7 @@ export default async (req: RequestWithSession, res: Response) => {
     headers: getParsedHeaders(req)
   })
     .then((response: AxiosResponse) => {
+      res.set(response.headers)
       response.data.pipe(res)
     })
     .catch((e: AxiosError) => {

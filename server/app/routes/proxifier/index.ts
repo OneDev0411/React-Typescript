@@ -14,6 +14,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     data: req.body
   })
     .then((response: AxiosResponse) => {
+      res.set(response.headers)
       res.status(response.status)
       response.data.pipe(res)
     })

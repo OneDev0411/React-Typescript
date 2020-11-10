@@ -15,6 +15,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     url: querystring ? `${req.params.url}?${querystring}` : req.params.url
   })
     .then((response: AxiosResponse) => {
+      res.set(response.headers)
       response.data.pipe(res)
     })
     .catch((e: AxiosError) => {

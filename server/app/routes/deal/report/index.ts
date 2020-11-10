@@ -26,6 +26,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     data: { filter: data.filter, project: data.project }
   })
     .then((response: AxiosResponse) => {
+      res.set(response.headers)
       response.data.pipe(res)
     })
     .catch((e: AxiosError) => {

@@ -36,7 +36,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     },
     data
   })
-    .then((response: AxiosResponse) => response.data.pipe(res))
+    .then((response: AxiosResponse) => {
+      res.set(response.headers)
+      response.data.pipe(res)
+    })
     .catch((e: AxiosError) => {
       res.status(e.response?.status || 400)
       e.response && e.response.data.pipe(res)

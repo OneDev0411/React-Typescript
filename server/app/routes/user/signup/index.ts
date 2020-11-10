@@ -19,6 +19,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
   })
     .then((response: AxiosResponse) => {
+      res.set(response.headers)
       response.data.pipe(res)
     })
     .catch((e: AxiosError) => {
