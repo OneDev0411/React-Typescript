@@ -1,8 +1,6 @@
 import { getDefaultList } from 'reducers/filter-segments'
 import { IAppState } from 'reducers'
 
-import { isDeletedOrRevoked } from 'utils/oauth-provider'
-
 import {
   PARKED_CONTACTS_LIST_ID,
   DUPLICATE_CONTACTS_LIST_ID
@@ -19,17 +17,11 @@ export const getPredefinedContactLists = (
     predefinedLists.default = getDefaultList(name)
   }
 
-  const accounts = Object.values(state.contacts.oAuthAccounts.list)
-    .flat()
-    .filter(account => !isDeletedOrRevoked(account))
-
-  if (accounts.length > 0) {
-    predefinedLists.parked = {
-      id: PARKED_CONTACTS_LIST_ID,
-      name: 'Parked Contacts',
-      is_editable: false,
-      filters: []
-    }
+  predefinedLists.parked = {
+    id: PARKED_CONTACTS_LIST_ID,
+    name: 'Parked Contacts',
+    is_editable: false,
+    filters: []
   }
 
   predefinedLists.duplicates = {
