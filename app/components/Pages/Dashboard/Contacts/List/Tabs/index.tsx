@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Chip, useTheme } from '@material-ui/core'
+import { Chip, makeStyles, Theme } from '@material-ui/core'
 
 import { PageTabs, Tab } from 'components/PageTabs'
 import SavedSegments from 'components/Grid/SavedSegments/List'
@@ -16,6 +16,13 @@ import { PARKED_CONTACTS_LIST_ID } from '../constants'
 import { SortFields } from '../SortFields'
 import ContactFilters from '../Filters'
 import TagsList from '../TagsList'
+
+const useStyles = makeStyles((theme: Theme) => ({
+  parkContactCount: {
+    marginLeft: theme.spacing(0.5),
+    cursor: 'pointer'
+  }
+}))
 
 interface Props {
   handleFilterChange: (newFilters: object, resetLoadedRanges: boolean) => void
@@ -83,8 +90,8 @@ export const ContactsTabs = ({
   filter,
   users
 }: Props) => {
+  const classes = useStyles()
   const dispatch = useDispatch()
-  const theme = useTheme()
   const { activeFilters }: Pick<ReduxStateType, 'activeFilters'> = useSelector(
     (state: IAppState) => ({
       activeFilters: selectActiveFilters(state.contacts.filterSegments)
@@ -129,10 +136,7 @@ export const ContactsTabs = ({
               color="primary"
               size="small"
               label={parkedContactsCount}
-              style={{
-                marginLeft: theme.spacing(0.5),
-                cursor: 'pointer'
-              }}
+              className={classes.parkContactCount}
             />
           </span>
         }
