@@ -21,7 +21,7 @@ axios.interceptors.response.use(
 
 export function request(requestConfig: AxiosRequestConfig) {
   return axios({
-    timeout: 3000,
+    timeout: 30000,
     ...requestConfig,
     url: `${config.api_url}${requestConfig.url}`
   })
