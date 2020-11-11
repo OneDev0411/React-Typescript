@@ -4,6 +4,7 @@ import { useGetListing, UseGetListing } from './use-get-listing'
 
 import Header from './Header'
 import Title from './Title'
+import Gallery from './Gallery'
 
 interface Props {
   id: UUID
@@ -15,6 +16,7 @@ function ListingDetails({ id }: Props) {
   return (
     <>
       <Header id={listing?.id} />
+      <Gallery images={listing?.gallery_image_urls} />
       <Title
         title="$329,000"
         subtitle1="5127 Vandelia St Medical District"
