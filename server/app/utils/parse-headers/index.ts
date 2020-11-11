@@ -8,6 +8,7 @@ const ALLOWED_HEADERS = [
   'x-auth-mode',
   'x-real-agent',
   'x-request-time',
+  'x-rechat-brand',
   'user-agent',
   'content-type',
   'authorization'

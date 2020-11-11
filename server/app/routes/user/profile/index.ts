@@ -17,7 +17,6 @@ export default async (req: RequestWithSession, res: Response) => {
 
   request({
     method: 'get',
-    responseType: 'stream',
     url: '/users/self',
     params: {
       associations: ['user.docusign']
@@ -26,7 +25,14 @@ export default async (req: RequestWithSession, res: Response) => {
   })
     .then((response: AxiosResponse) => {
       res.set(response.headers)
-      response.data.pipe(res)
+      res.json({
+        ...response.data,
+        data: {
+          ...response.data.data,
+          access_token: req.session?.user.access_token,
+          refresh_token: req.session?.user.refresh_token
+        }
+      })
     })
     .catch((e: AxiosError) => {
       res.status(e.response?.status || 400)

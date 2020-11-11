@@ -21,23 +21,28 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     ? normalizeIds(ids)
     : createFilters(filters, flows, crmTasks, excludes, searchText)
 
-  const usersList = Array.isArray(users)
-    ? `&users[]=${users.join('&users[]=')}`
-    : `&users[]=${users}`
-
-  const query = `filter_type=${filterType}&format=csv${usersList}`
+  const query = `filter_type=${filterType}&format=csv${getUsersList(users)}`
 
   request({
+    method: 'POST',
     responseType: 'stream',
     url: `/analytics/${type}/facts?${query}`,
     headers: {
       ...getParsedHeaders(req),
-      'X-RECHAT-BRAND': req.params.brand
+      'x-rechat-brand': req.params.brand
     },
     data
   })
     .then((response: AxiosResponse) => {
-      res.set(response.headers)
+      res.set({
+        ...response.headers,
+        'x-rechat-filename': response.headers['content-disposition']
+          .split('"')
+          .join('')
+          .split('filename=')
+          .pop()
+      })
+
       response.data.pipe(res)
     })
     .catch((e: AxiosError) => {
@@ -49,8 +54,25 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 /**
  *
  */
-function normalizeIds(input: string | string[]) {
-  return Array.isArray(input) ? input : [input]
+function getUsersList(users: string | string[] | undefined) {
+  if (Array.isArray(users)) {
+    return `&users[]=${users.join('&users[]=')}`
+  }
+
+  if (typeof users === 'string') {
+    return `&users[]=${users}`
+  }
+
+  return ''
+}
+
+/**
+ *
+ */
+function normalizeIds(ids: string | string[]) {
+  return {
+    ids: Array.isArray(ids) ? ids : [ids]
+  }
 }
 
 /**
@@ -63,11 +85,20 @@ function createFilters(
   excludes: string[] = [],
   searchText: string = ''
 ) {
-  return {
+  return Object.entries({
     filter: Array.isArray(filters) && filters.length ? filters : undefined,
     excludes: Array.isArray(excludes) && excludes.length ? excludes : undefined,
     crmTasks: Array.isArray(crmTasks) && crmTasks.length ? crmTasks : undefined,
     flows: Array.isArray(flows) && flows.length ? flows : undefined,
     query: searchText.length > 0 ? searchText : undefined
-  }
+  }).reduce((acc, [key, value]) => {
+    if (value === undefined) {
+      return acc
+    }
+
+    return {
+      ...acc,
+      [key]: value
+    }
+  }, {})
 }

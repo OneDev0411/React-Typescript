@@ -55,7 +55,7 @@ router.get('/api/deals/report/:data', dealReportRoute)
  */
 router.post(
   '/api/contacts/export/outlook/:brand',
-  bodyParser.json(),
+  requestLimit,
   contactsExportOutlookRoute
 )
 
@@ -83,8 +83,8 @@ router.post('/openhouse/:id/:brand/register', openHouseRoute)
  * utility routes
  */
 router.get('/api/utils/cors/:url(.+)', corsRoute)
-router.post('/api/pdf/get-size', getPdfSizeRoute)
-router.post('/api/user/refresh-token', refreshUserTokenRoute)
+router.post('/api/pdf/get-size', requestLimit, getPdfSizeRoute)
+router.post('/api/user/refresh-token', requestLimit, refreshUserTokenRoute)
 router.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)
 router.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
 

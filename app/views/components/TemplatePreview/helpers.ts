@@ -1,8 +1,6 @@
 import superagent from 'superagent'
 import _get from 'lodash/get'
 
-import config from 'config'
-
 import { TemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 
 interface Response {
@@ -12,7 +10,7 @@ interface Response {
 
 export async function renderMjml(mjml: string): Promise<Response> {
   const response = await superagent
-    .post(`${config.app.url}/api/utils/render-mjml`)
+    .post('/api/utils/render-mjml')
     .send({ mjml })
 
   return response.body

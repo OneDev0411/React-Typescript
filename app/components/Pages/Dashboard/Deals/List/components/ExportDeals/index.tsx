@@ -15,8 +15,6 @@ import {
 import { useSelector } from 'react-redux'
 import { mdiArrowDown } from '@mdi/js'
 
-import config from 'config'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { IAppState } from 'reducers'
 import { BaseDropdown, RenderToggleButtonProps } from 'components/BaseDropdown'
@@ -47,12 +45,12 @@ export function ExportDeals(props) {
     return [
       {
         label: 'All Deals',
-        url: `${config.app.url}/api/deals/export/all/${getActiveTeamId(user)}`
+        url: `/api/deals/export/${getActiveTeamId(user)}`
       },
       {
         label: 'New Listings',
         description: 'Past 7 days',
-        url: `${config.app.url}/api/deals/report/${encodeURIComponent(
+        url: `/api/deals/report/${btoa(
           JSON.stringify({
             filter: [
               {
@@ -90,7 +88,7 @@ export function ExportDeals(props) {
       {
         label: 'New Offers',
         description: 'Past 7 days',
-        url: `${config.app.url}/api/deals/report/${encodeURIComponent(
+        url: `/api/deals/report/${btoa(
           JSON.stringify({
             filter: [
               {

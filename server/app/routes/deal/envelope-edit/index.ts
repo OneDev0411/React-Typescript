@@ -9,7 +9,8 @@ const urlPattern = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi
 export default async (req: Request, res: Response) => {
   await request({
     url: `/envelopes/${req.params.id}/edit`,
-    headers: getParsedHeaders(req)
+    headers: getParsedHeaders(req),
+    maxRedirects: 0
   })
     .then(() => {
       res.send('')
