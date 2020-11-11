@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Badge } from '@material-ui/core'
+import { Chip, useTheme } from '@material-ui/core'
 
 import { PageTabs, Tab } from 'components/PageTabs'
 import SavedSegments from 'components/Grid/SavedSegments/List'
@@ -84,6 +84,7 @@ export const ContactsTabs = ({
   users
 }: Props) => {
   const dispatch = useDispatch()
+  const theme = useTheme()
   const { activeFilters }: Pick<ReduxStateType, 'activeFilters'> = useSelector(
     (state: IAppState) => ({
       activeFilters: selectActiveFilters(state.contacts.filterSegments)
@@ -122,11 +123,18 @@ export const ContactsTabs = ({
         key="parked-contact"
         value="parked-contact"
         label={
-          <Badge badgeContent={parkedContactsCount} color="primary">
-            <span onClick={() => clickHandler(PARKED_CONTACTS_LIST_ID)}>
-              Parked Contacts
-            </span>
-          </Badge>
+          <span onClick={() => clickHandler(PARKED_CONTACTS_LIST_ID)}>
+            Parked Contacts
+            <Chip
+              color="primary"
+              size="small"
+              label={parkedContactsCount}
+              style={{
+                marginLeft: theme.spacing(0.5),
+                cursor: 'pointer'
+              }}
+            />
+          </span>
         }
       />
     ) : null

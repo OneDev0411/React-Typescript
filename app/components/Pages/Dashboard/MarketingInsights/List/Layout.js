@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { browserHistory } from 'react-router'
 
-import { Box, Button } from '@material-ui/core'
+import { Box, Button, Chip, useTheme } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
@@ -19,6 +19,7 @@ function InsightsLayout({
   onCreateEmail,
   renderContent
 }) {
+  const theme = useTheme()
   const [sortField, setSortField] = useState({
     label: 'Newest',
     value: 'title-date',
@@ -27,11 +28,13 @@ function InsightsLayout({
   const currentUrl = window.location.pathname
   const Items = [
     {
-      label: `Sent (${sentCount})`,
+      label: 'Sent',
+      count: sentCount,
       to: urlGenerator()
     },
     {
-      label: `Scheduled (${scheduledCount})`,
+      label: 'Scheduled',
+      count: scheduledCount,
       to: urlGenerator('/scheduled')
     }
   ]
@@ -58,8 +61,26 @@ function InsightsLayout({
         <PageLayout.Main>
           <PageTabs
             defaultValue={currentUrl}
-            tabs={Items.map(({ label, to }, i) => (
-              <TabLink key={i} label={label} to={to} value={to} />
+            tabs={Items.map(({ label, count, to }, i) => (
+              <TabLink
+                key={i}
+                label={
+                  <span>
+                    {label}
+                    <Chip
+                      variant="outlined"
+                      size="small"
+                      label={count}
+                      style={{
+                        marginLeft: theme.spacing(0.5),
+                        cursor: 'pointer'
+                      }}
+                    />
+                  </span>
+                }
+                to={to}
+                value={to}
+              />
             ))}
             actions={[
               <Tab
