@@ -486,7 +486,9 @@ class ContactsList extends React.Component {
   }
 
   handleDeleteContact = async ({ singleSelectedRow }) => {
-    const state = this.props.gridStateContext
+    const { activeSegment, gridStateContext: state } = this.props
+    const isParkedActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
+
     const isSingleContact = singleSelectedRow.length === 1
 
     try {
@@ -520,6 +522,10 @@ class ContactsList extends React.Component {
       this.resetSelectedRows()
     } catch (error) {
       console.log(error)
+    } finally {
+      if (isParkedActive) {
+        this.getParkedContactCount()
+      }
     }
   }
 
