@@ -5,6 +5,7 @@ import { useGetListing, UseGetListing } from './use-get-listing'
 import Header from './Header'
 import Title from './Title'
 import Gallery from './Gallery'
+import MainFeatures from './MainFeatures'
 
 interface Props {
   id: UUID
@@ -22,6 +23,7 @@ function ListingDetails({ id }: Props) {
         subtitle1="5127 Vandelia St Medical District"
         subtitle2="Dallas, Texas 75212 | MLS#: 14430312"
       />
+      <MainFeatures listing={listing} />
     </>
   )
 }
