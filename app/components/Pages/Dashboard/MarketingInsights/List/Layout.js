@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { browserHistory } from 'react-router'
 
-import { Box, Button, Chip, useTheme } from '@material-ui/core'
+import { Box, Button, Chip, makeStyles } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
@@ -13,13 +13,20 @@ import SortField from './SortField'
 
 const urlGenerator = (url = '') => `/dashboard/insights${url}`
 
+const useStyles = makeStyles(theme => ({
+  emailCount: {
+    marginLeft: theme.spacing(0.5),
+    cursor: 'pointer'
+  }
+}))
+
 function InsightsLayout({
   sentCount,
   scheduledCount,
   onCreateEmail,
   renderContent
 }) {
-  const theme = useTheme()
+  const classes = useStyles()
   const [sortField, setSortField] = useState({
     label: 'Newest',
     value: 'title-date',
@@ -71,10 +78,7 @@ function InsightsLayout({
                       variant="outlined"
                       size="small"
                       label={count}
-                      style={{
-                        marginLeft: theme.spacing(0.5),
-                        cursor: 'pointer'
-                      }}
+                      className={classes.emailCount}
                     />
                   </span>
                 }
