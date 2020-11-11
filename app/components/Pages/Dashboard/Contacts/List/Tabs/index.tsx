@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Badge } from '@material-ui/core'
 
 import { PageTabs, Tab } from 'components/PageTabs'
 import SavedSegments from 'components/Grid/SavedSegments/List'
@@ -8,10 +9,7 @@ import { changeActiveFilterSegment } from 'actions/filter-segments/change-active
 import { IAppState } from 'reducers'
 import { selectActiveFilters } from 'reducers/filter-segments'
 
-import {
-  getSyncedContacts,
-  SyncedContacts as SyncedContactsTypes
-} from '../utils/get-synced-contacts'
+import { SyncedContacts as SyncedContactsTypes } from '../utils/get-synced-contacts'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
 import { PARKED_CONTACTS_LIST_ID } from '../constants'
 
@@ -41,6 +39,7 @@ interface Props {
     currentOrder: string
   }
   contactCount: number
+  parkedContactsCount: number
   activeSegment: any
   users: any
   syncedContacts: SyncedContactsTypes
@@ -74,6 +73,7 @@ const getActiveTab = ({
 export const ContactsTabs = ({
   handleResetShortcutFilter,
   handleChangeSavedSegment,
+  parkedContactsCount,
   handleFilterChange,
   savedListProps,
   activeSegment,
@@ -84,10 +84,9 @@ export const ContactsTabs = ({
   users
 }: Props) => {
   const dispatch = useDispatch()
-  const { syncedContacts, activeFilters }: ReduxStateType = useSelector(
+  const { activeFilters }: Pick<ReduxStateType, 'activeFilters'> = useSelector(
     (state: IAppState) => ({
-      activeFilters: selectActiveFilters(state.contacts.filterSegments),
-      syncedContacts: getSyncedContacts(state)
+      activeFilters: selectActiveFilters(state.contacts.filterSegments)
     })
   )
   const isAllContactsActive = useMemo(() => {
@@ -118,14 +117,16 @@ export const ContactsTabs = ({
   }
 
   const syncedContactsTab =
-    syncedContacts.accounts > 0 ? (
+    parkedContactsCount > 0 ? (
       <Tab
         key="parked-contact"
         value="parked-contact"
         label={
-          <span onClick={() => clickHandler(PARKED_CONTACTS_LIST_ID)}>
-            Parked Contacts
-          </span>
+          <Badge badgeContent={parkedContactsCount} color="primary">
+            <span onClick={() => clickHandler(PARKED_CONTACTS_LIST_ID)}>
+              Parked Contacts
+            </span>
+          </Badge>
         }
       />
     ) : null
