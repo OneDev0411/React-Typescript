@@ -84,7 +84,7 @@ export default function App(props: Props) {
   if (!user?.id && isLoadingUser) {
     return (
       <div className={classes.loading}>
-        <img src="/static/images/logo.svg" alt="Rechat Loading" />
+        <img src="/static/images/logo.anim.svg" alt="Rechat Loading" />
       </div>
     )
   }
