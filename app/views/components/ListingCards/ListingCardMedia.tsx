@@ -27,7 +27,7 @@ const useStyles = makeStyles(
 
       // Arrow keys style overrides
       '& button.default-nav': {
-        zIndex: theme.zIndex.sideNavDrawer + 1,
+        zIndex: 3,
         backgroundColor: 'transparent !important',
 
         '&:first-of-type': {
@@ -45,7 +45,7 @@ const useStyles = makeStyles(
     },
     childrenContainer: {
       position: 'absolute',
-      zIndex: theme.zIndex.sideNavDrawer,
+      zIndex: 2,
       width: '100%',
       height: '100%'
     },
