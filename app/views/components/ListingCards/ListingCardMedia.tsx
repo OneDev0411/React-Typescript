@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { CSSProperties, ReactNode } from 'react'
 import { makeStyles, Theme } from '@material-ui/core'
 import { Slide } from 'react-slideshow-image'
 import 'react-slideshow-image/dist/styles.css'
@@ -15,6 +15,18 @@ function getListingImages(listing: IListing | ICompactListing): string[] {
   return listing.gallery_image_urls && listing.gallery_image_urls.length
     ? listing.gallery_image_urls
     : [PLACEHOLDER_IMAGE]
+}
+
+function getListingImageObjectFit(
+  listing: IListing | ICompactListing
+): CSSProperties['objectFit'] {
+  if (listing.type === 'compact_listing') {
+    return listing.cover_image_url ? 'cover' : 'none'
+  }
+
+  return listing.gallery_image_urls && listing.gallery_image_urls.length > 0
+    ? 'cover'
+    : 'none'
 }
 
 const useStyles = makeStyles(
@@ -52,10 +64,9 @@ const useStyles = makeStyles(
     image: ({ listing }: Props) => ({
       height: 200,
       width: '100%',
-      objectFit: 'cover',
+      objectFit: getListingImageObjectFit(listing),
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.grey[100],
-      backgroundSize: listing.cover_image_url ? 'cover' : 'contain'
+      backgroundColor: theme.palette.grey[100]
     })
   }),
   {
@@ -69,9 +80,8 @@ interface Props {
 }
 
 export default function ListingCardMedia({ children, listing }: Props) {
-  const classes = useStyles({ listing })
-
   const images = getListingImages(listing)
+  const classes = useStyles({ listing })
 
   return (
     <div
