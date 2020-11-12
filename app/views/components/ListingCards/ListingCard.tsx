@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Card,
   CardActionArea,
-  CardMedia,
   CardContent,
   Typography,
   Checkbox,
@@ -25,6 +24,8 @@ import {
   getStatusColor,
   isLeaseProperty
 } from 'utils/listing'
+
+import ListingCardMedia from './ListingCardMedia'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -50,12 +51,6 @@ const useStyles = makeStyles(
     statusChip: {
       backgroundColor: theme.palette.common.white
     },
-    media: ({ listing }: Props) => ({
-      height: '200px',
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.grey[100],
-      backgroundSize: listing.cover_image_url ? 'cover' : 'contain'
-    }),
     cardContent: {
       padding: theme.spacing(1)
     },
@@ -129,11 +124,7 @@ export default function ListingCard({
   return (
     <Card variant="outlined" className={classes.card} onClick={onClick}>
       <CardActionArea className={classes.cardActionArea}>
-        <CardMedia
-          component="div"
-          image={listing.cover_image_url ?? '/static/images/logo--gray.svg'}
-          className={classes.media}
-        >
+        <ListingCardMedia listing={listing}>
           <Grid container justify="space-between">
             <Grid item>
               {selected !== undefined && (
@@ -170,7 +161,7 @@ export default function ListingCard({
               </Box>
             </Grid>
           </Grid>
-        </CardMedia>
+        </ListingCardMedia>
         <CardContent className={classes.cardContent}>
           <Grid container direction="column" spacing={1}>
             <Grid container item>
