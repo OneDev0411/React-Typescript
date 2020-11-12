@@ -13,6 +13,7 @@ import StaticMap from './StaticMap'
 import FeaturedImages from './FeaturedImages'
 import AgentInfo from './AgentInfo'
 import AgentContactForm from './AgentContactForm'
+import Description from './Description'
 
 interface Props {
   id: UUID
@@ -51,6 +52,10 @@ function ListingDetails({ id }: Props) {
       />
       <AgentContactForm onSubmit={() => Promise.resolve()} />
       <FeaturedImages images={listing.gallery_image_urls?.slice(8, 11)} />
+      <Description
+        address={listing.property.address.full_address}
+        description={listing.property.description}
+      />
     </>
   )
 }
