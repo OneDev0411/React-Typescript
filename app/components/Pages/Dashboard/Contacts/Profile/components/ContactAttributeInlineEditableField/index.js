@@ -376,6 +376,7 @@ class MasterField extends React.Component {
       >
         {this.isTriggable ? (
           <TriggerField
+            attributeName={this.attribute_def.name || ''}
             current={currentTrigger}
             user={user}
             isActive={isTriggerActive}

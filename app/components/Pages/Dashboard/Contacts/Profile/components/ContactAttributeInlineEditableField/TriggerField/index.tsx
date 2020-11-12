@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, memo } from 'react'
 import _get from 'lodash/get'
 import {
   FormControl,
@@ -14,7 +14,10 @@ import pluralize from 'pluralize'
 
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
 
+import { getTemplateType } from './helpers/get-template-type'
+
 interface Props {
+  attributeName: string
   current: ITrigger | null
   user: IUser
   isActive: boolean
@@ -94,7 +97,8 @@ const useStyles = makeStyles(
   { name: 'TriggerFields' }
 )
 
-export const TriggerField = ({
+const TriggerFieldComponent = ({
+  attributeName,
   current,
   user,
   isActive: isActiveProp = false,
@@ -117,15 +121,6 @@ export const TriggerField = ({
     selectedTemplate,
     setSelectedTemplate
   ] = useState<IBrandMarketingTemplate | null>(null)
-
-  useEffect(() => {
-    return () => {
-      setSubject('')
-      setIsActive(false)
-      setSendBefore('0')
-      setSelectedTemplate(null)
-    }
-  }, [])
 
   const handleActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked
@@ -262,7 +257,7 @@ export const TriggerField = ({
           title="Select Template"
           user={user}
           mediums={['Email' as MarketingTemplateMedium.Email]}
-          templateTypes={['Birthday', 'HomeAnniversary', 'WeddingAnniversary']}
+          templateTypes={getTemplateType(attributeName)}
           onSelect={handleSelectTemplate}
           onClose={() => setIsTemplatesModalOpen(false)}
         />
@@ -270,3 +265,5 @@ export const TriggerField = ({
     </div>
   )
 }
+
+export const TriggerField = memo(TriggerFieldComponent)
