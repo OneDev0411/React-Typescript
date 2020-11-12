@@ -1,5 +1,5 @@
 import React, { CSSProperties, ReactNode } from 'react'
-import { makeStyles, Theme } from '@material-ui/core'
+import { fade, makeStyles, Theme } from '@material-ui/core'
 import { Slide } from 'react-slideshow-image'
 import 'react-slideshow-image/dist/styles.css'
 
@@ -33,8 +33,6 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       position: 'relative',
-      height: 200,
-      borderRadius: theme.shape.borderRadius,
       backgroundColor: theme.palette.grey[100],
 
       // Arrow keys style overrides
@@ -48,6 +46,13 @@ const useStyles = makeStyles(
 
         '&:last-of-type': {
           transform: 'translateX(-8px)'
+        },
+
+        '& svg': {
+          filter: `drop-shadow(0px 1px 4px ${fade(
+            theme.palette.text.primary,
+            0.8
+          )})`
         },
 
         '& path': {
@@ -65,7 +70,6 @@ const useStyles = makeStyles(
       height: 200,
       width: '100%',
       objectFit: getListingImageObjectFit(listing),
-      borderRadius: theme.shape.borderRadius,
       backgroundColor: theme.palette.grey[100]
     })
   }),
