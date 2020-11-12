@@ -49,6 +49,15 @@ LeaseProperty.args = {
   }
 }
 
+export const SingleImage = Template.bind({})
+
+SingleImage.args = {
+  listing: {
+    ...listing,
+    gallery_image_urls: [listing.gallery_image_urls![0]]
+  }
+}
+
 export const WithSelection = Template.bind({})
 
 WithSelection.args = {

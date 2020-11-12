@@ -91,13 +91,19 @@ export default function ListingCardMedia({ children, listing }: Props) {
       }}
     >
       <div className={classes.childrenContainer}>{children}</div>
-      <Slide transitionDuration={200} arrows={images.length > 1}>
-        {images.map(image => (
-          <div key={image}>
-            <img className={classes.image} src={image} alt="listing" />
-          </div>
-        ))}
-      </Slide>
+      {images.length > 1 ? (
+        <Slide transitionDuration={200} autoplay={false}>
+          {images.map(image => (
+            <div key={image}>
+              <img className={classes.image} src={image} alt="listing" />
+            </div>
+          ))}
+        </Slide>
+      ) : (
+        <div>
+          <img className={classes.image} src={images[0]} alt="listing" />
+        </div>
+      )}
     </div>
   )
 }
