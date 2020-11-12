@@ -7,6 +7,7 @@ import Title from './Title'
 import Gallery from './Gallery'
 import MainFeatures from './MainFeatures'
 import StaticMap from './StaticMap'
+import FeaturedImages from './FeaturedImages'
 
 interface Props {
   id: UUID
@@ -30,6 +31,8 @@ function ListingDetails({ id }: Props) {
       />
       <MainFeatures listing={listing} />
       <StaticMap location={listing.property.address.location} />
+      <FeaturedImages images={listing.gallery_image_urls?.slice(5, 8)} />
+      <FeaturedImages images={listing.gallery_image_urls?.slice(8, 11)} />
     </>
   )
 }
