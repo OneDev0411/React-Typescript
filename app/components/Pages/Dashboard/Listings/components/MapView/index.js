@@ -4,7 +4,6 @@ import { Grid, Box, makeStyles } from '@material-ui/core'
 
 import LoadingComponent from 'components/Spinner'
 import ListingCard from 'components/ListingCards/ListingCard'
-
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 
 import ZeroState from '../ZeroState'
@@ -53,7 +52,7 @@ const MapView = props => {
 
     return props.sortedListings.map(listing => (
       <Grid key={listing.id} item xs={12} md={6}>
-        <Box pb={1} px={1}>
+        <Box pb={1} pr={1}>
           <ListingCard
             listing={listing}
             selected={selections.some(item => item.id === listing.id)}

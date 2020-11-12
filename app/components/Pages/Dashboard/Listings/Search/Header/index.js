@@ -43,7 +43,7 @@ export function Header(props) {
   const { isFetching, activeView, showGlobalActionsButton } = props
 
   return (
-    <Box className={classes.container}>
+    <Box px={5} className={classes.container}>
       <GlobalPageLayout.Header
         title="All Properties"
         isHiddenOnMobile={false}
