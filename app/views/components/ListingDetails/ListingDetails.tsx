@@ -1,24 +1,33 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
+
+import { IAppState } from 'reducers'
+import { getActiveBrand } from 'utils/user-teams'
 
 import { useGetListing, UseGetListing } from './use-get-listing'
-
 import Header from './Header'
 import Title from './Title'
 import Gallery from './Gallery'
 import MainFeatures from './MainFeatures'
 import StaticMap from './StaticMap'
 import FeaturedImages from './FeaturedImages'
+import AgentInfo from './AgentInfo'
 
 interface Props {
   id: UUID
 }
 
 function ListingDetails({ id }: Props) {
+  const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
+  const brand = getActiveBrand(user)
+
   const { listing }: UseGetListing = useGetListing(id)
 
   if (!listing) {
     return 'Loading...'
   }
+
+  const agent = listing.list_agent
 
   return (
     <>
@@ -32,6 +41,13 @@ function ListingDetails({ id }: Props) {
       <MainFeatures listing={listing} />
       <StaticMap location={listing.property.address.location} />
       <FeaturedImages images={listing.gallery_image_urls?.slice(5, 8)} />
+      <AgentInfo
+        name={agent.full_name}
+        email={agent.email}
+        image={agent.profile_image_url}
+        tel={agent.phone_number}
+        company={brand?.name}
+      />
       <FeaturedImages images={listing.gallery_image_urls?.slice(8, 11)} />
     </>
   )
