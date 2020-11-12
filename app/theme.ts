@@ -144,13 +144,13 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         fontFamily: 'LatoBold',
         fontWeight: 700,
         fontSize: '1rem',
-        lineHeight: 1.75
+        lineHeight: 1.5
       },
       subtitle2: {
         fontFamily: 'LatoBold',
         fontWeight: 700,
         fontSize: '0.875rem',
-        lineHeight: 1.57
+        lineHeight: 1.42
       },
       body1: {
         fontFamily: 'LatoRegular',
@@ -162,7 +162,7 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         fontFamily: 'LatoRegular',
         fontWeight: 400,
         fontSize: '0.875rem',
-        lineHeight: 1.43
+        lineHeight: 1.42
       },
       button: {
         fontFamily: 'LatoBold',
@@ -210,12 +210,14 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
 
   theme.typography.subtitle3 = {
     ...theme.typography.subtitle2,
-    fontSize: '0.8125rem'
+    fontSize: '0.8125rem',
+    lineHeight: 1.53
   }
 
   theme.typography.body3 = {
     ...theme.typography.body2,
-    fontSize: '0.8125rem'
+    fontSize: '0.8125rem',
+    lineHeight: 1.53
   }
 
   if (process.env.NODE_ENV === 'development') {
