@@ -12,6 +12,9 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
+    logo: {
+      maxWidth: 260
+    },
     button: {
       marginRight: theme.spacing(2)
     },
@@ -54,7 +57,7 @@ function Header({ id, handleFavorite, handleLogin, handleShare }: Props) {
     <Box py={5} px={3}>
       <Grid container>
         <Grid item xs={12} sm={3}>
-          <img alt="logo" src={logo} />
+          <img alt="logo" src={logo} className={classes.logo} />
         </Grid>
         <Grid item xs={12} sm={9}>
           <Box display="flex" className={classes.menuContainer}>
