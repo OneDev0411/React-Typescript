@@ -12,6 +12,7 @@ import MainFeatures from './MainFeatures'
 import StaticMap from './StaticMap'
 import FeaturedImages from './FeaturedImages'
 import AgentInfo from './AgentInfo'
+import AgentContactForm from './AgentContactForm'
 
 interface Props {
   id: UUID
@@ -48,6 +49,7 @@ function ListingDetails({ id }: Props) {
         tel={agent.phone_number}
         company={brand?.name}
       />
+      <AgentContactForm onSubmit={() => Promise.resolve()} />
       <FeaturedImages images={listing.gallery_image_urls?.slice(8, 11)} />
     </>
   )
