@@ -1,6 +1,6 @@
-* [] Product Design
-* [] Development
-* [] Deployment
-* [] Testing
-* [] Documentation
-* [] Announcement
+* [ ] Product Design
+* [ ] Development
+* [ ] Deployment
+* [ ] Testing
+* [ ] Documentation
+* [ ] Announcement
