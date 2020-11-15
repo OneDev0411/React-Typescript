@@ -15,6 +15,7 @@ import AgentInfo from './AgentInfo'
 import AgentContactForm from './AgentContactForm'
 import Description from './Description'
 import FeatureList from './FeatureList'
+import Map from './Map'
 
 interface Props {
   id: UUID
@@ -58,6 +59,7 @@ function ListingDetails({ id }: Props) {
       />
       <FeaturedImages images={listing.gallery_image_urls?.slice(8, 11)} />
       <FeatureList listing={listing} />
+      <Map location={listing.property.address.location} />
     </>
   )
 }
