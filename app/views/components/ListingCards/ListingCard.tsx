@@ -28,6 +28,13 @@ const useStyles = makeStyles(
     card: {
       width: '100%'
     },
+    labelChip: {
+      backgroundColor: theme.palette.common.white,
+      marginLeft: theme.spacing(0.5)
+    },
+    labelChipLabel: {
+      lineHeight: 1
+    },
     statusChip: {
       display: 'flex'
     },
@@ -69,6 +76,11 @@ interface Props {
   listing: IListing | ICompactListing
 
   /**
+   * Shows the passed items in separate chips at the top right of the listing card
+   */
+  tags?: string[]
+
+  /**
    * The card checkbox selection state
    *
    * You should explicitly pass `false` value if you want to make the card selectable
@@ -92,6 +104,7 @@ interface Props {
 
 export default function ListingCard({
   listing,
+  tags,
   selected = undefined,
   onToggleSelection = noop,
   onClick
@@ -126,6 +139,24 @@ export default function ListingCard({
                 </Box>
               )}
             </Grid>
+            {tags && (
+              <Grid item>
+                <Box m={1}>
+                  {tags.map(tag => (
+                    <Chip
+                      key={tag}
+                      label={tag}
+                      size="small"
+                      variant="outlined"
+                      classes={{
+                        root: classes.labelChip,
+                        label: classes.labelChipLabel
+                      }}
+                    />
+                  ))}
+                </Box>
+              </Grid>
+            )}
           </Grid>
         </ListingCardMedia>
         <CardContent className={classes.cardContent}>

@@ -51,6 +51,13 @@ SingleImage.args = {
   }
 }
 
+export const WithTags = Template.bind({})
+
+WithTags.args = {
+  listing,
+  tags: ['Open House', 'New']
+}
+
 export const WithSelection = Template.bind({})
 
 WithSelection.args = {
