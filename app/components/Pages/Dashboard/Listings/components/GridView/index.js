@@ -33,7 +33,7 @@ export default function GridView({ isFetching, sortedListings }) {
   }
 
   return (
-    <Box px={5} py={1}>
+    <Box py={1}>
       <Grid container spacing={2}>
         {renderContent()}
       </Grid>

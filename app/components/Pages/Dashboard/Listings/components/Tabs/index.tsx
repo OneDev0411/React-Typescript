@@ -123,7 +123,7 @@ export const Tabs = ({
   }
 
   return (
-    <Box px={5} display={{ xs: 'none', md: 'flex' }}>
+    <Box display={{ xs: 'none', md: 'flex' }}>
       <Box flexGrow="1">
         <PageTabs
           defaultValue={currentUrl}

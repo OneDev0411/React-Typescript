@@ -52,7 +52,7 @@ const MapView = props => {
 
     return props.sortedListings.map(listing => (
       <Grid key={listing.id} item xs={12} md={6}>
-        <Box pb={1} pr={1}>
+        <Box pb={1} px={1}>
           <ListingCard
             listing={listing}
             tags={listing.new ? [listing.new] : undefined}

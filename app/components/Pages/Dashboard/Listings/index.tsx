@@ -16,7 +16,7 @@ function Listings({ children, ...rest }: Props) {
 
   return (
     <ListSelection<IListing>>
-      <Box>{cloneElement(children, rest)}</Box>
+      <Box px={5}>{cloneElement(children, rest)}</Box>
       <ShareListings />
     </ListSelection>
   )
