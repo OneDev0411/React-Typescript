@@ -4,7 +4,7 @@ import { getTemplateRenderData } from "components/InstantMarketing/Builder/utils
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { renderMjml } from "components/TemplatePreview/helpers"
 
-interface TemplateData {
+export interface TemplateData {
   contact?: IContact
   user?: IUser
   listing?: IListing

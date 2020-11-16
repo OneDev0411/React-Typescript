@@ -4,9 +4,11 @@ import { connect } from 'react-redux'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 import { getActiveBrand } from 'utils/user-teams'
-import { createTrigger } from 'models/instant-marketing/create-trigger'
-import { updateTrigger } from 'models/instant-marketing/update-trigger'
-import { removeTrigger } from 'models/instant-marketing/remove-trigger'
+import {
+  createTrigger,
+  updateTrigger,
+  removeTrigger
+} from 'models/instant-marketing/triggers'
 
 import {
   formatValue,
@@ -276,8 +278,8 @@ class MasterField extends React.Component {
         const waitFor = Number(triggerSendBefore) * -86400
         const commonParams = [
           contact,
-          triggerSelectedTemplate,
           brand,
+          triggerSelectedTemplate,
           {
             event_type: this.attribute_def.name,
             wait_for: waitFor,
