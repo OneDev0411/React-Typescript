@@ -1,6 +1,7 @@
 import React, { MouseEvent, useState } from 'react'
 import cn from 'classnames'
 import Box from '@material-ui/core/Box'
+import Grid from '@material-ui/core/Grid'
 import { makeStyles, Theme } from '@material-ui/core'
 
 import Lightbox from './Lightbox'
@@ -14,9 +15,20 @@ const useStyles = makeStyles(
     mainImage: {
       maxWidth: '100%'
     },
+    thumbnailsWrapper: {
+      maxWidth: '196px',
+      [theme.breakpoints.up('xs')]: {
+        maxWidth: '456px'
+      },
+      [theme.breakpoints.up('sm')]: {
+        maxWidth: '744px'
+      },
+      [theme.breakpoints.up('md')]: {
+        maxWidth: '1000px'
+      }
+    },
     thumbnailImage: {
-      width: '70px',
-      height: '48px'
+      maxWidth: '100%'
     },
     button: {
       background: 'none',
@@ -67,22 +79,27 @@ function Gallery({ images }: Props) {
           <img src={images[0]} alt="listing 1" className={classes.mainImage} />
         </button>
       </Box>
-      <Box px={3}>
-        {images.slice(1, 5).map((src, index) => (
-          <button
-            key={index}
-            type="button"
-            data-image-index={index + 1}
-            className={cn(classes.button, classes.thumbnailBtn)}
-            onClick={openLightbox}
-          >
-            <img
-              src={src}
-              alt={`listing ${index}`}
-              className={classes.thumbnailImage}
-            />
-          </button>
-        ))}
+      <Box display="flex" justifyContent="center" px={3}>
+        <Box className={classes.thumbnailsWrapper}>
+          <Grid container spacing={1}>
+            {images.slice(1, 5).map((src, index) => (
+              <Grid item xs={3} key={index}>
+                <button
+                  type="button"
+                  data-image-index={index + 1}
+                  className={cn(classes.button, classes.thumbnailBtn)}
+                  onClick={openLightbox}
+                >
+                  <img
+                    src={src}
+                    alt={`listing ${index}`}
+                    className={classes.thumbnailImage}
+                  />
+                </button>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       </Box>
       <Lightbox
         images={images}
