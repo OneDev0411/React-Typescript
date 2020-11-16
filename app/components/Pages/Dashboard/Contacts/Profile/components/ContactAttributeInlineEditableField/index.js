@@ -400,7 +400,7 @@ class MasterField extends React.Component {
       title={this.title}
       value={formatValue(this.attribute_def, this.state.value)}
       isTriggerable={this.isTriggerable}
-      hasTrigger={Boolean(this.state.isTriggerActive)}
+      isTriggerActive={Boolean(this.state.isTriggerActive)}
     />
   )
 

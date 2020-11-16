@@ -17,7 +17,7 @@ interface Props {
   title?: string
   value?: string
   isTriggerable: boolean
-  hasTrigger: boolean
+  isTriggerActive: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.primary
     },
     triggerIcon: (props: Props) => ({
-      color: !props.hasTrigger
+      color: !props.isTriggerActive
         ? theme.palette.grey[500]
         : theme.palette.warning.main
     }),
