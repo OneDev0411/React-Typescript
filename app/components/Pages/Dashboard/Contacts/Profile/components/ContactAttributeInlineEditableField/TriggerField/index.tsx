@@ -17,8 +17,8 @@ import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModa
 import { getTemplateType } from './helpers/get-template-type'
 
 interface Props {
-  attributeName: string
-  current: ITrigger | null
+  attributeName: TriggerContactEventTypes
+  currentValue: Nullable<ITrigger>
   user: IUser
   isActive: boolean
   subject: string
@@ -99,7 +99,7 @@ const useStyles = makeStyles(
 
 const TriggerFieldComponent = ({
   attributeName,
-  current,
+  currentValue,
   user,
   isActive: isActiveProp = false,
   subject: subjectProp = '',
@@ -165,8 +165,12 @@ const TriggerFieldComponent = ({
       )
     }
 
-    if (current) {
-      const preview = _get(current, 'campaign.template.file.preview_url', false)
+    if (currentValue) {
+      const preview = _get(
+        currentValue,
+        'campaign.template.file.preview_url',
+        false
+      )
 
       if (!preview) {
         return <span>Preivew is not Available</span>

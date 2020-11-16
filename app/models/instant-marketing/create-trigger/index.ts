@@ -66,7 +66,7 @@ export async function createTrigger(
           contact: contact.id
         }
       ],
-      subject: data?.subject ?? 'Congratulation!!',
+      subject: data?.subject ?? 'Congratulation!',
       html: '',
       template: templateInstance.id,
       individual: true,

@@ -51,7 +51,7 @@ function getStateFromTrigger(trigger) {
     return {
       currentTrigger: trigger,
       isTriggerActive: true,
-      triggerSubject: trigger.campaign?.subject ?? 'Congratulation!!',
+      triggerSubject: trigger.campaign?.subject || 'Congratulation!',
       triggerSendBefore: `${Math.abs(Number(trigger.wait_for)) / 86400}`,
       triggerSelectedTemplate: null
     }

@@ -8,7 +8,6 @@ interface ITriggerBase {
 
 declare type TriggerContactEventTypes =
   | 'birthday'
-  | 'work_anniversary'
   | 'wedding_anniversary'
   | 'home_anniversary'
   | 'child_birthday'

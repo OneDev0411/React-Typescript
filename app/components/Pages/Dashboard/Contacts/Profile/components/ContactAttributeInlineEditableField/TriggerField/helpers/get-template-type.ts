@@ -1,10 +1,10 @@
 /**
  * return the attribute trigger
- * @param {string} attributeName - all attributes definitions
+ * @param {TriggerContactEventTypes} attributeName - all attributes definitions
  */
 
 export const getTemplateType = (
-  attributeName: string
+  attributeName: TriggerContactEventTypes
 ): MarketingTemplateType[] => {
   // birthday attribute
   if (['birthday', 'child_birthday'].includes(attributeName)) {

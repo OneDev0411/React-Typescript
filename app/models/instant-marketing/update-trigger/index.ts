@@ -71,7 +71,7 @@ export async function updateTrigger(
             contact: contact.id
           }
         ],
-        subject: 'Congratulation!!',
+        subject: 'Congratulation!',
         html: '',
         template: templateInstance.id,
         individual: true,
