@@ -24,6 +24,7 @@ export default function GridView({ isFetching, sortedListings }) {
       <Grid key={listing.id} item xs={12} sm={12} md={6} lg={4} xl={3}>
         <ListingCard
           listing={listing}
+          tags={listing.new ? [listing.new] : undefined}
           selected={selections.some(item => item.id === listing.id)}
           onToggleSelection={toggleItem}
         />

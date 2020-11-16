@@ -55,6 +55,7 @@ const MapView = props => {
         <Box pb={1} pr={1}>
           <ListingCard
             listing={listing}
+            tags={listing.new ? [listing.new] : undefined}
             selected={selections.some(item => item.id === listing.id)}
             onToggleSelection={toggleItem}
           />
