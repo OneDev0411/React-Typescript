@@ -1,4 +1,4 @@
-export const TRIGGABLE_ATTRIBUTE = [
+export const TRIGGABLE_ATTRIBUTES = [
   'birthday',
   'child_birthday',
   'home_anniversary',

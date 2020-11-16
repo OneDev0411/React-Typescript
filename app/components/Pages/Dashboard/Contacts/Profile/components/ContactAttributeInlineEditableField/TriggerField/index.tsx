@@ -2,6 +2,7 @@ import React, { useState, memo } from 'react'
 import _get from 'lodash/get'
 import {
   FormControl,
+  Typography,
   InputLabel,
   TextField,
   MenuItem,
@@ -44,12 +45,8 @@ const useStyles = makeStyles(
       alignItems: 'center',
       justifyContent: 'space-between'
     },
-    switchTitle: {
-      ...theme.typography.subtitle2
-    },
     switchDesc: {
       marginTop: theme.spacing(0.5),
-      ...theme.typography.body2,
       color: theme.palette.grey[500]
     },
     inputField: {
@@ -94,7 +91,7 @@ const useStyles = makeStyles(
       }
     }
   }),
-  { name: 'TriggerFields' }
+  { name: 'TriggerField' }
 )
 
 const TriggerFieldComponent = ({
@@ -145,7 +142,7 @@ const TriggerFieldComponent = ({
     onChangeSendBefore(value)
   }
 
-  const handleSelectTemplate = async (template: IBrandMarketingTemplate) => {
+  const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
     try {
       setSelectedTemplate(template)
       onChangeTemplate(template)
@@ -159,7 +156,7 @@ const TriggerFieldComponent = ({
     if (selectedTemplate) {
       return (
         <img
-          src={selectedTemplate?.preview.preview_url}
+          src={selectedTemplate.preview.preview_url}
           alt="Selected Template"
         />
       )
@@ -186,7 +183,9 @@ const TriggerFieldComponent = ({
     <div className={classes.body}>
       <div className={classes.switch}>
         <div className={classes.switchContainer}>
-          <span className={classes.switchTitle}>Automate Email</span>
+          <Typography component="span" variant="subtitle2">
+            Automate Email
+          </Typography>
           <Switch
             checked={isActive}
             onChange={handleActiveChange}
@@ -194,10 +193,14 @@ const TriggerFieldComponent = ({
             size="small"
           />
         </div>
-        <p className={classes.switchDesc}>
+        <Typography
+          component="p"
+          variant="body2"
+          className={classes.switchDesc}
+        >
           Send automate email to this contact and don’t miss any important date
           ever.
-        </p>
+        </Typography>
       </div>
       {isActive && (
         <>

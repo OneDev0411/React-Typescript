@@ -10,7 +10,7 @@ import { Value } from './Value'
 interface Props {
   children: ReactNode
   attribute: IContactAttributeWithDef
-  handleEnterKey?: () => void
+  onEnterKeyPress?: () => void
   onChangeLabel?: () => void
   onChangePrimary?: () => void
   onChangeValue: () => void
@@ -25,7 +25,7 @@ export const EditMode = (props: Props) => {
     children,
     onChangeValue,
     placeholder = '',
-    handleEnterKey = noop,
+    onEnterKeyPress = noop,
     onChangeLabel = noop,
     onChangePrimary = noop
   } = props
@@ -44,7 +44,7 @@ export const EditMode = (props: Props) => {
         attribute={attribute}
         onChange={onChangeValue}
         placeholder={placeholder}
-        handleEnterKey={handleEnterKey}
+        handleEnterKey={onEnterKeyPress}
       />
       {children}
       {error && <Error>{error}</Error>}

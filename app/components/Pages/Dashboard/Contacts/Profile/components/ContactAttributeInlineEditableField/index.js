@@ -23,7 +23,7 @@ import { EditMode } from './EditMode'
 import { ViewMode } from './ViewMode'
 import { TriggerField } from './TriggerField'
 
-import { TRIGGABLE_ATTRIBUTE } from './constant'
+import { TRIGGABLE_ATTRIBUTES } from './constant'
 
 function getCurrentTimestamp() {
   return new Date().getTime()
@@ -139,7 +139,7 @@ class MasterField extends React.Component {
   }
 
   get isTriggerable() {
-    return TRIGGABLE_ATTRIBUTE.includes(this.attribute_def.name)
+    return TRIGGABLE_ATTRIBUTES.includes(this.attribute_def.name)
   }
 
   toggleMode = () => this.props.handleToggleMode(this.props.attribute)
@@ -346,7 +346,7 @@ class MasterField extends React.Component {
     this.props.handleAddNewInstance(this.props.attribute)
   }
 
-  handleEnterKey = event => {
+  onEnterKeyPress = event => {
     if (event.keyCode === 13) {
       this.save()
     }
@@ -370,13 +370,13 @@ class MasterField extends React.Component {
           ...this.state,
           [this.type]: this.state.value
         }}
-        handleEnterKey={this.handleEnterKey}
+        onEnterKeyPress={this.onEnterKeyPress}
         onChangeLabel={this.onChangeLabel}
         onChangeValue={this.onChangeValue}
         onChangePrimary={this.onChangePrimary}
         placeholder={this.placeholder}
       >
-        {this.isTriggerable ? (
+        {this.isTriggerable && (
           <TriggerField
             attributeName={this.attribute_def.name || ''}
             current={currentTrigger}
@@ -390,7 +390,7 @@ class MasterField extends React.Component {
             onChangeSendBefore={this.onChangeSendBefore}
             onChangeTemplate={this.onChangeTemplate}
           />
-        ) : null}
+        )}
       </EditMode>
     )
   }
