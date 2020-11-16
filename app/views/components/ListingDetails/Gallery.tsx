@@ -13,7 +13,7 @@ const useStyles = makeStyles(
       position: 'relative'
     },
     mainImage: {
-      maxWidth: '100%'
+      width: '100%'
     },
     thumbnailsWrapper: {
       maxWidth: '196px',
@@ -33,7 +33,8 @@ const useStyles = makeStyles(
     button: {
       background: 'none',
       padding: 0,
-      border: 'none'
+      border: 'none',
+      width: '100%'
     },
     thumbnailBtn: {
       marginRight: theme.spacing(2),

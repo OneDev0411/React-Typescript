@@ -22,7 +22,7 @@ function Title({ title, subtitle1, subtitle2 }: Props) {
   const classes = useStyles()
 
   return (
-    <Box pt={5} pb={7} px={3}>
+    <Box>
       <Typography color="primary" variant="h5">
         {title}
       </Typography>

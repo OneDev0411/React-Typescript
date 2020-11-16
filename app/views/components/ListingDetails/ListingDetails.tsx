@@ -1,5 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import Box from '@material-ui/core/Box'
+import Grid from '@material-ui/core/Grid'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
 import { getActiveBrand } from 'utils/user-teams'
@@ -17,11 +20,83 @@ import Description from './Description'
 import FeatureList from './FeatureList'
 import Map from './Map'
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    indexWrapper: {
+      [theme.breakpoints.up('md')]: {
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3)
+      }
+    },
+    indexContainer: {
+      [theme.breakpoints.up('md')]: {
+        flexDirection: 'row-reverse'
+      }
+    },
+    galleryWrapper: {
+      marginBottom: theme.spacing(3),
+      [theme.breakpoints.up('md')]: {
+        marginBottom: 0
+      }
+    },
+    indexLeftSideWrapper: {
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+
+      [theme.breakpoints.up('md')]: {
+        paddingLeft: 0
+      }
+    },
+    titleWrapper: {
+      paddingTop: theme.spacing(3),
+      paddingBottom: theme.spacing(3)
+    },
+    mainFeaturesWrapper: {
+      paddingTop: theme.spacing(6)
+    },
+    staticMapWrapper: {
+      paddingTop: theme.spacing(3),
+      paddingBottom: theme.spacing(3)
+    },
+    agentInfoWrapper: {
+      paddingTop: theme.spacing(3),
+      paddingBottom: theme.spacing(3)
+    },
+    featuredImageWrapper: {
+      paddingTop: theme.spacing(3),
+      paddingBottom: theme.spacing(3)
+    },
+    agentAreaWrapper: {
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+
+      [theme.breakpoints.up('md')]: {
+        paddingLeft: 0,
+        paddingRight: 0
+      }
+    },
+    descriptionAreaWrapper: {
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+      paddingTop: theme.spacing(3),
+      paddingBottom: theme.spacing(3),
+
+      [theme.breakpoints.up('md')]: {
+        paddingLeft: 0,
+        paddingRight: 0,
+        flexDirection: 'row-reverse'
+      }
+    }
+  }),
+  { name: 'ListingDetails' }
+)
+
 interface Props {
   id: UUID
 }
 
 function ListingDetails({ id }: Props) {
+  const classes = useStyles()
   const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
   const brand = getActiveBrand(user)
 
@@ -36,28 +111,58 @@ function ListingDetails({ id }: Props) {
   return (
     <>
       <Header id={listing.id} />
-      <Gallery images={listing.gallery_image_urls} />
-      <Title
-        title="$329,000"
-        subtitle1="5127 Vandelia St Medical District"
-        subtitle2="Dallas, Texas 75212 | MLS#: 14430312"
-      />
-      <MainFeatures listing={listing} />
-      <StaticMap location={listing.property.address.location} />
-      <FeaturedImages images={listing.gallery_image_urls?.slice(5, 8)} />
-      <AgentInfo
-        name={agent.full_name}
-        email={agent.email}
-        image={agent.profile_image_url}
-        tel={agent.phone_number}
-        company={brand?.name}
-      />
-      <AgentContactForm onSubmit={() => Promise.resolve()} />
-      <Description
-        address={listing.property.address.full_address}
-        description={listing.property.description}
-      />
-      <FeaturedImages images={listing.gallery_image_urls?.slice(8, 11)} />
+      <Box className={classes.indexWrapper}>
+        <Grid container className={classes.indexContainer}>
+          <Grid item xs={12} md={6} className={classes.galleryWrapper}>
+            <Gallery images={listing.gallery_image_urls} />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Box className={classes.indexLeftSideWrapper}>
+              <Box className={classes.titleWrapper}>
+                <Title
+                  title="$329,000"
+                  subtitle1="5127 Vandelia St Medical District"
+                  subtitle2="Dallas, Texas 75212 | MLS#: 14430312"
+                />
+              </Box>
+              <Box className={classes.mainFeaturesWrapper}>
+                <MainFeatures listing={listing} />
+              </Box>
+              <Box className={classes.staticMapWrapper}>
+                <StaticMap location={listing.property.address.location} />
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+      <Grid container className={classes.agentAreaWrapper}>
+        <Grid item xs={12} md={6} className={classes.featuredImageWrapper}>
+          <FeaturedImages images={listing.gallery_image_urls?.slice(5, 8)} />
+        </Grid>
+        <Grid item xs={12} md={6} className={classes.agentInfoWrapper}>
+          <Box mb={5}>
+            <AgentInfo
+              name={agent.full_name}
+              email={agent.email}
+              image={agent.profile_image_url}
+              tel={agent.phone_number}
+              company={brand?.name}
+            />
+          </Box>
+          <AgentContactForm onSubmit={() => Promise.resolve()} />
+        </Grid>
+      </Grid>
+      <Grid container className={classes.descriptionAreaWrapper}>
+        <Grid item xs={12} md={6}>
+          <Description
+            address={listing.property.address.full_address}
+            description={listing.property.description}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FeaturedImages images={listing.gallery_image_urls?.slice(8, 11)} />
+        </Grid>
+      </Grid>
       <FeatureList listing={listing} />
       <Map location={listing.property.address.location} />
     </>

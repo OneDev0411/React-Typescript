@@ -58,32 +58,25 @@ function AgentContactForm({ onSubmit }: Props) {
       render={({ handleSubmit }) => {
         return (
           <form onSubmit={handleSubmit}>
-            <Box py={5} px={3}>
-              <Box mb={2}>
-                <Field placeholder="Name" name="name" />
-              </Box>
-              <Box mb={2}>
-                <Field placeholder="Email" name="email" />
-              </Box>
-              <Box mb={2}>
-                <Field placeholder="Phone" name="phone" />
-              </Box>
-              <Box mb={2}>
-                <TextAreaField
-                  placeholder="I would like more information..."
-                  name="message"
-                  label="Message"
-                />
-              </Box>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                fullWidth
-              >
-                Send Message
-              </Button>
+            <Box mb={2}>
+              <Field placeholder="Name" name="name" />
             </Box>
+            <Box mb={2}>
+              <Field placeholder="Email" name="email" />
+            </Box>
+            <Box mb={2}>
+              <Field placeholder="Phone" name="phone" />
+            </Box>
+            <Box mb={2}>
+              <TextAreaField
+                placeholder="I would like more information..."
+                name="message"
+                label="Message"
+              />
+            </Box>
+            <Button variant="contained" color="primary" type="submit" fullWidth>
+              Send Message
+            </Button>
           </form>
         )
       }}

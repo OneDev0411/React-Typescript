@@ -7,41 +7,32 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       textAlign: 'center',
-      position: 'relative',
-      padding: theme.spacing(3)
+      position: 'relative'
     },
     mainImage: {
       maxWidth: '100%',
-      [theme.breakpoints.up('sm')]: {
-        maxWidth: '75%'
+      [theme.breakpoints.up('md')]: {
+        maxWidth: '90%'
       }
     },
     subImage: {
       display: 'none',
-      [theme.breakpoints.up('sm')]: {
+      [theme.breakpoints.up('md')]: {
         display: 'block',
         position: 'absolute',
-        width: '30vw',
-        height: '25vh'
-      },
-      [theme.breakpoints.up('md')]: {
-        width: '35vw',
-        height: '30vh'
-      },
-      [theme.breakpoints.up('lg')]: {
-        width: '35vw',
-        height: '40vh'
+        width: '30%',
+        height: '25'
       }
     },
     subImageTop: {
-      [theme.breakpoints.up('sm')]: {
-        top: '-10%',
+      [theme.breakpoints.up('md')]: {
+        top: 0,
         left: '5%'
       }
     },
     subImageBottom: {
-      [theme.breakpoints.up('sm')]: {
-        bottom: '-5%',
+      [theme.breakpoints.up('md')]: {
+        bottom: 0,
         right: '5%'
       }
     }

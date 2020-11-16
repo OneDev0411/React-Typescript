@@ -25,111 +25,109 @@ function Header({ listing }: Props) {
   const lotSizeSqft = '6824'
 
   return (
-    <Box px={3} mb={3}>
-      <Grid container>
-        <Grid item xs={12}>
-          <Box mb={3}>
-            <Grid container>
-              <Grid item xs={4}>
-                <Box mb={1} display="flex" alignItems="center">
-                  <SvgIcon path={mdiBedKingOutline} />
-                  <Box ml={2}>
-                    <Typography variant="subtitle1">{bedroom}</Typography>
-                  </Box>
-                </Box>
-                <Box>
-                  <Typography color="textSecondary">Bedroom</Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={4}>
-                <Box display="flex" justifyContent="center">
-                  <Box display="flex" flexDirection="column">
-                    <Box mb={1} display="flex" alignItems="center">
-                      <SvgIcon path={mdiShower} />
-                      <Box ml={2}>
-                        <Typography variant="subtitle1">{bathrooms}</Typography>
-                      </Box>
-                    </Box>
-                    <Box>
-                      <Typography color="textSecondary">Bathrooms</Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Grid>
-              <Grid item xs={4}>
-                <Box display="flex" justifyContent="flex-end">
-                  <Box display="flex" flexDirection="column">
-                    <Box
-                      mb={1}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="flex-start"
-                    >
-                      <SvgIcon path={mdiVectorSquare} />
-                      <Box ml={2}>
-                        <Typography variant="subtitle1">
-                          {squareFeet.toLocaleString()}
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Box textAlign="left">
-                      <Typography color="textSecondary">Square Feet</Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
+    <Grid container>
+      <Grid item xs={12}>
+        <Box mb={3}>
           <Grid container>
             <Grid item xs={4}>
               <Box mb={1} display="flex" alignItems="center">
-                <SvgIcon path={mdiRelativeScale} />
+                <SvgIcon path={mdiBedKingOutline} />
                 <Box ml={2}>
-                  <Typography variant="subtitle1">
-                    {lotSizeSqft.toLocaleString()}
-                  </Typography>
+                  <Typography variant="subtitle1">{bedroom}</Typography>
                 </Box>
               </Box>
               <Box>
-                <Typography color="textSecondary">Lot Size sqft</Typography>
+                <Typography color="textSecondary">Bedroom</Typography>
               </Box>
             </Grid>
             <Grid item xs={4}>
-              <Box display="flex" flexDirection="column" alignItems="center">
-                <Box mb={1} display="flex" alignItems="center">
-                  <SvgIcon path={mdiCurrencyUsdCircleOutline} />
-                  <Box ml={2}>
-                    <Typography variant="subtitle1">{priceSqft}</Typography>
+              <Box display="flex" justifyContent="center">
+                <Box display="flex" flexDirection="column">
+                  <Box mb={1} display="flex" alignItems="center">
+                    <SvgIcon path={mdiShower} />
+                    <Box ml={2}>
+                      <Typography variant="subtitle1">{bathrooms}</Typography>
+                    </Box>
                   </Box>
-                </Box>
-                <Box>
-                  <Typography color="textSecondary">Price/sqft</Typography>
+                  <Box>
+                    <Typography color="textSecondary">Bathrooms</Typography>
+                  </Box>
                 </Box>
               </Box>
             </Grid>
             <Grid item xs={4}>
               <Box display="flex" justifyContent="flex-end">
                 <Box display="flex" flexDirection="column">
-                  <Box mb={1} display="flex" alignItems="center">
-                    <SvgIcon path={mdiCalendarMonthOutline} />
+                  <Box
+                    mb={1}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="flex-start"
+                  >
+                    <SvgIcon path={mdiVectorSquare} />
                     <Box ml={2}>
                       <Typography variant="subtitle1">
-                        {listing?.property.year_built}
+                        {squareFeet.toLocaleString()}
                       </Typography>
                     </Box>
                   </Box>
-                  <Box>
-                    <Typography color="textSecondary">Built in</Typography>
+                  <Box textAlign="left">
+                    <Typography color="textSecondary">Square Feet</Typography>
                   </Box>
                 </Box>
               </Box>
             </Grid>
           </Grid>
+        </Box>
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container>
+          <Grid item xs={4}>
+            <Box mb={1} display="flex" alignItems="center">
+              <SvgIcon path={mdiRelativeScale} />
+              <Box ml={2}>
+                <Typography variant="subtitle1">
+                  {lotSizeSqft.toLocaleString()}
+                </Typography>
+              </Box>
+            </Box>
+            <Box>
+              <Typography color="textSecondary">Lot Size sqft</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={4}>
+            <Box display="flex" flexDirection="column" alignItems="center">
+              <Box mb={1} display="flex" alignItems="center">
+                <SvgIcon path={mdiCurrencyUsdCircleOutline} />
+                <Box ml={2}>
+                  <Typography variant="subtitle1">{priceSqft}</Typography>
+                </Box>
+              </Box>
+              <Box>
+                <Typography color="textSecondary">Price/sqft</Typography>
+              </Box>
+            </Box>
+          </Grid>
+          <Grid item xs={4}>
+            <Box display="flex" justifyContent="flex-end">
+              <Box display="flex" flexDirection="column">
+                <Box mb={1} display="flex" alignItems="center">
+                  <SvgIcon path={mdiCalendarMonthOutline} />
+                  <Box ml={2}>
+                    <Typography variant="subtitle1">
+                      {listing?.property.year_built}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box>
+                  <Typography color="textSecondary">Built in</Typography>
+                </Box>
+              </Box>
+            </Box>
+          </Grid>
         </Grid>
       </Grid>
-    </Box>
+    </Grid>
   )
 }
 
