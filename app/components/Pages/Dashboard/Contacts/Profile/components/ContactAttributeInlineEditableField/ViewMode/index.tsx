@@ -7,7 +7,7 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { mdiStarOutline } from '@mdi/js'
+import { mdiStarOutline, mdiLightningBoltOutline } from '@mdi/js'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -16,6 +16,8 @@ interface Props {
   is_primary?: boolean
   title?: string
   value?: string
+  isTriggerable: boolean
+  hasTrigger: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
         color: theme.palette.text.primary
       }
     },
-    leftSide: {
+    contentContainer: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center'
@@ -39,6 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
     starIcon: {
       color: theme.palette.text.primary
     },
+    triggerIcon: (props: Props) => ({
+      color: !props.hasTrigger
+        ? theme.palette.grey[500]
+        : theme.palette.warning.main
+    }),
     value: (props: Props) => ({
       textAlign: 'right',
       color: props.value ? theme.palette.text.primary : theme.palette.text.hint
@@ -52,7 +59,7 @@ export function ViewMode(props: Props) {
 
   return (
     <Box className={classes.container}>
-      <Box className={classes.leftSide}>
+      <Box className={classes.contentContainer}>
         <Typography
           variant="body2"
           className={classes.title}
@@ -71,9 +78,19 @@ export function ViewMode(props: Props) {
           </Tooltip>
         )}
       </Box>
-      <Typography variant="body2" className={classes.value}>
-        {props.value || '-'}
-      </Typography>
+      <Box className={classes.contentContainer}>
+        <Typography variant="body2" className={classes.value}>
+          {props.value || '-'}
+        </Typography>
+        {props.isTriggerable && (
+          <SvgIcon
+            path={mdiLightningBoltOutline}
+            leftMargined
+            className={classes.triggerIcon}
+            size={muiIconSizes.small}
+          />
+        )}
+      </Box>
     </Box>
   )
 }

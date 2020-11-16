@@ -136,7 +136,7 @@ class MasterField extends React.Component {
     )
   }
 
-  get isTriggable() {
+  get isTriggerable() {
     return TRIGGABLE_ATTRIBUTE.includes(this.attribute_def.name)
   }
 
@@ -237,7 +237,7 @@ class MasterField extends React.Component {
     const { id, cuid } = attribute
 
     if (
-      this.isTriggable &&
+      this.isTriggerable &&
       isTriggerActive &&
       isTriggerFieldDirty &&
       !currentTrigger &&
@@ -272,7 +272,7 @@ class MasterField extends React.Component {
         data.is_primary = is_primary
       }
 
-      if (this.isTriggable && isTriggerFieldDirty) {
+      if (this.isTriggerable && isTriggerFieldDirty) {
         const waitFor = Number(triggerSendBefore) * -86400
         const commonParams = [
           contact,
@@ -374,7 +374,7 @@ class MasterField extends React.Component {
         onChangePrimary={this.onChangePrimary}
         placeholder={this.placeholder}
       >
-        {this.isTriggable ? (
+        {this.isTriggerable ? (
           <TriggerField
             attributeName={this.attribute_def.name || ''}
             current={currentTrigger}
@@ -399,6 +399,8 @@ class MasterField extends React.Component {
       name={this.attribute_def.name || ''}
       title={this.title}
       value={formatValue(this.attribute_def, this.state.value)}
+      isTriggerable={this.isTriggerable}
+      hasTrigger={Boolean(this.state.isTriggerActive)}
     />
   )
 
@@ -422,7 +424,7 @@ class MasterField extends React.Component {
         handleSave={this.save}
         isDisabled={this.state.disabled}
         isEditing={this.props.isActive}
-        isPopoverMode={this.isTriggable}
+        isPopoverMode={this.isTriggerable}
         isEditModeStatic
         label={this.state.label}
         renderEditMode={this.renderEditMode}
