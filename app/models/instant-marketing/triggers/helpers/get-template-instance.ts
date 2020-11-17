@@ -11,7 +11,7 @@ export const getTemplateInstance = async (
   data: TemplateData
 ): Promise<IMarketingTemplateInstance> => {
   try {
-    // render the template to the nunjuks
+    // render the nunjuks template
     const html: string = await renderBrandedNunjuksTemplate(
       template,
       brand,

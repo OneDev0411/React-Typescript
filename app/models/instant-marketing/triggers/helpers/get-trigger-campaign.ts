@@ -17,6 +17,10 @@ export const getTriggerCampaign = async (
       throw new Error("Contact's email is not available.")
     }
 
+    if (!contact.user) {
+      throw new Error("Contact's owner is not available.")
+    }
+
     const campaign = await createEmailCampaign({
       due_at: null,
       from: (contact.user as IUser).id,

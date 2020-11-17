@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, CSSProperties } from 'react'
 import {
   Button,
   IconButton,
@@ -28,7 +28,7 @@ export interface Props {
   isStatic?: boolean
   isEditing: boolean
   isPopoverMode?: boolean
-  style?: Object
+  style?: CSSProperties
   viewRef?: any
 }
 
@@ -45,7 +45,7 @@ const useStyles = makeStyles(
       borderTop: `1px solid ${theme.palette.divider}`
     }
   }),
-  { name: 'EditModeContactProfile' }
+  { name: 'InlineEditableFieldEditMode' }
 )
 
 export const EditMode = (props: Props) => {

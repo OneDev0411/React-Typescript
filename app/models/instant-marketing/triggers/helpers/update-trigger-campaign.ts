@@ -22,6 +22,10 @@ export const updateTriggerCampaign = async (
       throw new Error("Contact's email is not available.")
     }
 
+    if (!contact.user) {
+      throw new Error("Contact's owner is not available.")
+    }
+
     const template = data.templateId ? { template: data.templateId } : {}
 
     const campaign = await updateEmailCampaign(campaignId, {

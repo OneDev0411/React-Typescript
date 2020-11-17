@@ -1,5 +1,4 @@
 import React, { useState, memo } from 'react'
-import _get from 'lodash/get'
 import {
   FormControl,
   Typography,
@@ -15,6 +14,7 @@ import pluralize from 'pluralize'
 
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
 
+import { TemplateSelector } from './components/TemplateSelector'
 import { getTemplateType } from './helpers/get-template-type'
 
 interface Props {
@@ -52,43 +52,6 @@ const useStyles = makeStyles(
     inputField: {
       width: '100%',
       marginTop: theme.spacing(2)
-    },
-    templateSelectorContainer: {
-      marginTop: theme.spacing(1)
-    },
-    templateSelector: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      '& span[data-for="title"]': {
-        ...theme.typography.subtitle3
-      },
-      '& span[data-for="picker"]': {
-        ...theme.typography.body2,
-        color: theme.palette.secondary.main,
-        cursor: 'pointer'
-      }
-    },
-    templateSelectorPreview: {
-      marginTop: theme.spacing(1),
-      minHeight: `${theme.spacing(18.75)}px`,
-      maxHeight: `${theme.spacing(18.75)}px`,
-      background: theme.palette.grey[100],
-      borderRadius: `${theme.spacing(2)}px`,
-      textAlign: 'center',
-      color: theme.palette.secondary.main,
-      overflow: 'hidden',
-      cursor: 'pointer',
-      ...theme.typography.body2,
-      '& img': {
-        display: 'block',
-        maxWidth: '100%',
-        maxHeight: '100%'
-      },
-      '& > span': {
-        display: 'block',
-        marginTop: theme.spacing(7.75)
-      }
     }
   }),
   { name: 'TriggerField' }
@@ -154,35 +117,6 @@ const TriggerFieldComponent = ({
     }
   }
 
-  const renderTemplatePreview = () => {
-    console.log({ attributeName, selectedTemplate, currentValue })
-
-    if (selectedTemplate) {
-      return (
-        <img
-          src={selectedTemplate.preview.preview_url}
-          alt="Selected Template"
-        />
-      )
-    }
-
-    if (currentValue) {
-      const preview = _get(
-        currentValue,
-        'campaign.template.file.preview_url',
-        false
-      )
-
-      if (!preview) {
-        return <span>Preivew is not Available</span>
-      }
-
-      return <img src={preview} alt="Selected Template" />
-    }
-
-    return <span>Select a Template</span>
-  }
-
   return (
     <div className={classes.body}>
       <div className={classes.switch}>
@@ -208,25 +142,11 @@ const TriggerFieldComponent = ({
       </div>
       {isActive && (
         <>
-          <div className={classes.templateSelectorContainer}>
-            <div className={classes.templateSelector}>
-              <span data-for="title">Template</span>
-              {selectedTemplate && (
-                <span
-                  data-for="picker"
-                  onClick={() => setIsTemplatesModalOpen(true)}
-                >
-                  Change
-                </span>
-              )}
-            </div>
-            <div
-              className={classes.templateSelectorPreview}
-              onClick={() => setIsTemplatesModalOpen(true)}
-            >
-              {renderTemplatePreview()}
-            </div>
-          </div>
+          <TemplateSelector
+            currentValue={currentValue}
+            selectedTemplate={selectedTemplate}
+            handleShowTemplatePicker={() => setIsTemplatesModalOpen(true)}
+          />
           <TextField
             id="subject"
             label="subject"
