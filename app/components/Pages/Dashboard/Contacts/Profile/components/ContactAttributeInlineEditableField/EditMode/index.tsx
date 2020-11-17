@@ -18,18 +18,16 @@ interface Props {
   error?: string
 }
 
-export const EditMode = (props: Props) => {
-  const {
-    error,
-    attribute,
-    children,
-    onChangeValue,
-    placeholder = '',
-    onEnterKeyPress = noop,
-    onChangeLabel = noop,
-    onChangePrimary = noop
-  } = props
-
+export const EditMode = ({
+  error,
+  attribute,
+  children,
+  onChangeValue,
+  placeholder = '',
+  onEnterKeyPress = noop,
+  onChangeLabel = noop,
+  onChangePrimary = noop
+}: Props) => {
   return (
     <>
       <Title attribute={attribute} onChangePrimary={onChangePrimary} />

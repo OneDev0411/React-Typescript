@@ -54,7 +54,7 @@ function getStateFromTrigger(trigger) {
       currentTrigger: trigger,
       isTriggerActive: true,
       triggerSubject: trigger.campaign?.subject || 'Congratulation!',
-      triggerSendBefore: `${Math.abs(Number(trigger.wait_for)) / 86400}`,
+      triggerSendBefore: Math.abs(Number(trigger.wait_for)) / 86400,
       triggerSelectedTemplate: null
     }
   }
@@ -63,7 +63,7 @@ function getStateFromTrigger(trigger) {
     currentTrigger: null,
     isTriggerActive: false,
     triggerSubject: '',
-    triggerSendBefore: '0',
+    triggerSendBefore: 0,
     triggerSelectedTemplate: null
   }
 }
@@ -188,7 +188,7 @@ class MasterField extends React.Component {
     this.setState({
       currentTrigger: null,
       isTriggerActive: false,
-      triggerSendBefore: '1',
+      triggerSendBefore: 0,
       triggerSelectedTemplate: null
     })
   }
@@ -275,14 +275,13 @@ class MasterField extends React.Component {
       }
 
       if (this.isTriggerable && isTriggerFieldDirty) {
-        const waitFor = Number(triggerSendBefore) * -86400
         const commonParams = [
           contact,
           brand,
           triggerSelectedTemplate,
           {
             event_type: this.attribute_def.name,
-            wait_for: waitFor,
+            wait_for: triggerSendBefore,
             subject: triggerSubject
           },
           {
@@ -379,7 +378,7 @@ class MasterField extends React.Component {
         {this.isTriggerable && (
           <TriggerField
             attributeName={this.attribute_def.name || ''}
-            current={currentTrigger}
+            currentValue={currentTrigger}
             user={user}
             isActive={isTriggerActive}
             subject={triggerSubject}

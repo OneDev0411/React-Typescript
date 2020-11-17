@@ -23,10 +23,10 @@ interface Props {
   user: IUser
   isActive: boolean
   subject: string
-  sendBefore: string | number
+  sendBefore: number
   onChangeActive: (value: boolean) => void
   onChangeSubject: (value: string) => void
-  onChangeSendBefore: (value: string | number) => void
+  onChangeSendBefore: (value: number) => void
   onChangeTemplate: (template: IBrandMarketingTemplate) => void
 }
 
@@ -100,7 +100,7 @@ const TriggerFieldComponent = ({
   user,
   isActive: isActiveProp = false,
   subject: subjectProp = '',
-  sendBefore: sendBeforeProp = '0',
+  sendBefore: sendBeforeProp = 0,
   onChangeActive,
   onChangeSubject,
   onChangeSendBefore,
@@ -110,14 +110,13 @@ const TriggerFieldComponent = ({
 
   const [subject, setSubject] = useState<string>(subjectProp)
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
-  const [sendBefore, setSendBefore] = useState<string | number>(sendBeforeProp)
+  const [sendBefore, setSendBefore] = useState<number>(sendBeforeProp)
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState<boolean>(
     false
   )
-  const [
-    selectedTemplate,
-    setSelectedTemplate
-  ] = useState<IBrandMarketingTemplate | null>(null)
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    Nullable<IBrandMarketingTemplate>
+  >(null)
 
   const handleActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked
@@ -134,12 +133,15 @@ const TriggerFieldComponent = ({
   }
 
   const handleSendBeforeChange = (
-    event: React.ChangeEvent<{ value: unknown }>
+    event: React.ChangeEvent<{ value: number }>
   ) => {
-    const value = event.target.value as string
+    const value = event.target.value
+
+    // -86400 number of millisecond of a day
+    const waitFor = Number(value) * -86400
 
     setSendBefore(value)
-    onChangeSendBefore(value)
+    onChangeSendBefore(waitFor)
   }
 
   const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
@@ -153,6 +155,8 @@ const TriggerFieldComponent = ({
   }
 
   const renderTemplatePreview = () => {
+    console.log({ attributeName, selectedTemplate, currentValue })
+
     if (selectedTemplate) {
       return (
         <img
@@ -246,6 +250,7 @@ const TriggerFieldComponent = ({
               labelId="trigger-send-before"
               id="trigger-send-before-select"
               value={sendBefore}
+              defaultValue={0}
               onChange={handleSendBeforeChange}
               label="Send"
             >
@@ -264,7 +269,7 @@ const TriggerFieldComponent = ({
           title="Select Template"
           user={user}
           mediums={['Email' as MarketingTemplateMedium.Email]}
-          templateTypes={getTemplateType(attributeName)}
+          templateTypes={[getTemplateType(attributeName)]}
           onSelect={handleSelectTemplate}
           onClose={() => setIsTemplatesModalOpen(false)}
         />

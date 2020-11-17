@@ -5,21 +5,21 @@
 
 export const getTemplateType = (
   attributeName: TriggerContactEventTypes
-): MarketingTemplateType[] => {
+): MarketingTemplateType => {
   // birthday attribute
   if (['birthday', 'child_birthday'].includes(attributeName)) {
-    return ['Birthday']
+    return 'Birthday'
   }
 
   // wedding attribute
   if (attributeName === 'wedding_anniversary') {
-    return ['WeddingAnniversary']
+    return 'WeddingAnniversary'
   }
 
   // home attribute
   if (attributeName === 'home_anniversary') {
-    return ['HomeAnniversary']
+    return 'HomeAnniversary'
   }
 
-  return ['Contact']
+  return 'Contact'
 }
