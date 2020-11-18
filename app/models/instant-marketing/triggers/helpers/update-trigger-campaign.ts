@@ -8,7 +8,7 @@ interface Data extends Pick<TriggerDataInput, 'subject'> {
 
 export const updateTriggerCampaign = async (
   campaignId: UUID,
-  contact: IContact,
+  contact: IContact & { user: IUser },
   data: Data
 ): Promise<
   IEmailCampaign<
@@ -30,7 +30,7 @@ export const updateTriggerCampaign = async (
 
     const campaign = await updateEmailCampaign(campaignId, {
       due_at: null,
-      from: (contact.user as IUser).id,
+      from: contact.user.id,
       to: [
         {
           recipient_type: 'Email',

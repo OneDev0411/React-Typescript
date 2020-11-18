@@ -6,7 +6,7 @@ import { getTriggerCampaign } from './helpers/get-trigger-campaign'
 import { TriggerDataInput } from './types'
 
 export async function createTrigger(
-  contact: IContact,
+  contact: IContact & { user: IUser },
   brand: IBrand,
   template: IBrandMarketingTemplate,
   triggerData: TriggerDataInput,
@@ -37,7 +37,7 @@ export async function createTrigger(
 
     // step3: setup a trigger for a field
     const response = await new Fetch().post('/triggers').send({
-      user: (contact.user as IUser).id,
+      user: contact.user.id,
       event_type: triggerData.event_type,
       action: triggerData.action || 'schedule_email',
       wait_for: triggerData.wait_for,

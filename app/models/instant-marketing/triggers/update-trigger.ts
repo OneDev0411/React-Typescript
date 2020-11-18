@@ -8,7 +8,7 @@ import { TriggerDataInput } from './types'
 
 export async function updateTrigger(
   current: ITrigger,
-  contact: IContact,
+  contact: IContact & { user: IUser },
   brand: IBrand,
   template: Nullable<IBrandMarketingTemplate>,
   triggerData: TriggerDataInput,
@@ -53,7 +53,7 @@ export async function updateTrigger(
 
     // update trigger
     const response = await new Fetch().patch(`/triggers/${current.id}`).send({
-      user: (contact.user as IUser).id,
+      user: contact.user.id,
       event_type: triggerData.event_type,
       action: triggerData.action || 'schedule_email',
       wait_for: triggerData.wait_for,
