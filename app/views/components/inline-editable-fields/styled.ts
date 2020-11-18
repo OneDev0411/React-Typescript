@@ -47,23 +47,16 @@ export const EditButton = styled(ActionButton as any)`
   line-height: 1;
 `
 
-export const EditModeContainer = styled.div`
+export const EditModeContainer = styled.div<
+  ThemedStyledProps<Pick<EditModeProps, 'isStatic' | 'hasError'>, Theme>
+>`
   position: relative;
   padding: 0.5em;
-  border-radius: ${({
-    isStatic,
-    theme
-  }: ThemedStyledProps<Pick<EditModeProps, 'isStatic'>, Theme>) =>
+  border-radius: ${({ isStatic, theme }) =>
     isStatic
       ? `${theme.shape.borderRadius}px`
       : `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`};
-  background: ${({
-    hasError,
-    theme
-  }: ThemedStyledProps<
-    Pick<EditModeProps, 'isStatic' | 'style'> & { hasError: boolean },
-    Theme
-  >) =>
+  background: ${({ hasError, theme }) =>
     hasError
       ? fade(theme.palette.error.main, theme.palette.action.hoverOpacity)
       : theme.palette.action.selected};

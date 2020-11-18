@@ -20,7 +20,7 @@ interface Props {
   isPopoverMode?: boolean
   label?: string
   renderViewMode?: () => void
-  renderEditMode: (props: EditModeProps) => ReactNode
+  renderEditMode: (props: Pick<EditModeProps, 'error'>) => ReactNode
   showAdd?: boolean
   showEdit?: boolean
   showDelete?: boolean

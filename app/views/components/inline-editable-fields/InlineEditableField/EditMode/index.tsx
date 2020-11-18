@@ -19,6 +19,7 @@ import { EditModeActionBar, EditModeContainer } from '../../styled'
 
 export interface Props {
   error?: string
+  hasError?: boolean
   handleCancel: () => void
   handleDelete?: () => void
   handleSave: () => void
@@ -130,7 +131,6 @@ export const EditMode = (props: Props) => {
 
   return (
     <EditModeContainer
-      //  @ts-ignore
       hasError={!!error}
       style={style}
       isStatic={isStatic}
