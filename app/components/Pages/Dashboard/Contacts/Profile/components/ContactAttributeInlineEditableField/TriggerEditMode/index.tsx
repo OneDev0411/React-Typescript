@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react'
+import React, { ReactNode, useState, memo } from 'react'
 import {
   FormControl,
   Typography,
@@ -18,6 +18,7 @@ import { TemplateSelector } from './components/TemplateSelector'
 import { getTemplateType } from './helpers/get-template-type'
 
 interface Props {
+  renderAttributeFields: () => ReactNode
   attributeName: TriggerContactEventTypes
   currentValue: Nullable<ITrigger>
   user: IUser
@@ -54,16 +55,17 @@ const useStyles = makeStyles(
       marginTop: theme.spacing(2)
     }
   }),
-  { name: 'TriggerField' }
+  { name: 'TriggerEditMode' }
 )
 
-const TriggerFieldComponent = ({
-  attributeName,
-  currentValue,
+const TriggerEditModeComponent = ({
   user,
+  currentValue,
+  attributeName,
+  renderAttributeFields,
   isActive: isActiveProp = false,
-  subject: subjectProp = '',
   sendBefore: sendBeforeProp = 0,
+  subject: subjectProp = '',
   onChangeActive,
   onChangeSubject,
   onChangeSendBefore,
@@ -119,6 +121,7 @@ const TriggerFieldComponent = ({
 
   return (
     <div className={classes.body}>
+      {renderAttributeFields()}
       <div className={classes.switch}>
         <div className={classes.switchContainer}>
           <Typography component="span" variant="subtitle2">
@@ -198,4 +201,4 @@ const TriggerFieldComponent = ({
   )
 }
 
-export const TriggerField = memo(TriggerFieldComponent)
+export const TriggerEditMode = memo(TriggerEditModeComponent)

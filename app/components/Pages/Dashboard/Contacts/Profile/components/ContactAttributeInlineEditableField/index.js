@@ -21,7 +21,7 @@ import {
 
 import { EditMode } from './EditMode'
 import { ViewMode } from './ViewMode'
-import { TriggerField } from './TriggerField'
+import { TriggerEditMode } from './TriggerEditMode'
 
 import { TRIGGABLE_ATTRIBUTES } from './constant'
 
@@ -360,8 +360,7 @@ class MasterField extends React.Component {
       triggerSendBefore,
       triggerSelectedTemplate
     } = this.state
-
-    return (
+    const baseEditMode = (
       <EditMode
         {...props}
         attribute={{
@@ -374,24 +373,29 @@ class MasterField extends React.Component {
         onChangeValue={this.onChangeValue}
         onChangePrimary={this.onChangePrimary}
         placeholder={this.placeholder}
-      >
-        {this.isTriggerable && (
-          <TriggerField
-            attributeName={this.attribute_def.name || ''}
-            currentValue={currentTrigger}
-            user={user}
-            isActive={isTriggerActive}
-            subject={triggerSubject}
-            sendBefore={triggerSendBefore}
-            selectedTemplate={triggerSelectedTemplate}
-            onChangeActive={this.onChangeTriggerActive}
-            onChangeSubject={this.onChangeSubject}
-            onChangeSendBefore={this.onChangeSendBefore}
-            onChangeTemplate={this.onChangeTemplate}
-          />
-        )}
-      </EditMode>
+      />
     )
+
+    if (this.isTriggerable) {
+      return (
+        <TriggerEditMode
+          renderAttributeFields={() => baseEditMode}
+          attributeName={this.attribute_def.name || ''}
+          currentValue={currentTrigger}
+          user={user}
+          isActive={isTriggerActive}
+          subject={triggerSubject}
+          sendBefore={triggerSendBefore}
+          selectedTemplate={triggerSelectedTemplate}
+          onChangeActive={this.onChangeTriggerActive}
+          onChangeSubject={this.onChangeSubject}
+          onChangeSendBefore={this.onChangeSendBefore}
+          onChangeTemplate={this.onChangeTemplate}
+        />
+      )
+    }
+
+    return baseEditMode
   }
 
   renderViewMode = () => (
