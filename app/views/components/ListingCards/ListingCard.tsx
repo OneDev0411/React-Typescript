@@ -5,14 +5,16 @@ import {
   CardContent,
   Typography,
   Checkbox,
-  Theme,
+  Button,
   Grid,
   Chip,
   Box,
   Badge,
+  Theme,
   makeStyles
 } from '@material-ui/core'
 import { noop } from 'lodash'
+import { mdiHeartOutline, mdiHeart } from '@mdi/js'
 
 import { getFormattedPrice } from 'models/Deal/helpers/context'
 import {
@@ -20,6 +22,9 @@ import {
   getStatusColor,
   isLeaseProperty
 } from 'utils/listing'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import ListingCardMedia from './ListingCardMedia'
 
@@ -43,12 +48,21 @@ const useStyles = makeStyles(
       transform: 'none',
       position: 'static'
     }),
-    checkboxContainer: {
+    cardMediaActionContainer: {
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.common.white
+      backgroundColor: theme.palette.common.white,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 24,
+      height: 24
     },
-    checkbox: {
+    selectionCheckbox: {
       padding: theme.spacing(0.5)
+    },
+    likeButton: {
+      minWidth: 'auto',
+      padding: 0
     },
     cardContent: {
       padding: theme.spacing(1)
@@ -96,6 +110,24 @@ interface Props {
    * to `selected` prop in order to use this handler
    */
   onToggleSelection?: (listing: IListing | ICompactListing) => void
+
+  /**
+   * The card heart like state
+   *
+   * You should explicitly pass `false` value if you want to make the card likeable
+   *
+   * If you don't pass anything (undefined actually), the card will not be likeable
+   */
+  liked?: boolean
+
+  /**
+   * Like heart button click handler
+   *
+   * Note that you need to pass `true` or `false` value
+   * to `liked` prop in order to use this handler
+   */
+  onLikeClick?: (listing: IListing | ICompactListing) => void
+
   /**
    * The click handler of listing card
    */
@@ -107,6 +139,8 @@ export default function ListingCard({
   tags,
   selected = undefined,
   onToggleSelection = noop,
+  liked = undefined,
+  onLikeClick = noop,
   onClick
 }: Props) {
   const classes = useStyles({ listing })
@@ -118,26 +152,55 @@ export default function ListingCard({
 
   const listingFeatures = getListingFeatures(listing)
 
+  // We don't want to pass checkbox onClick to the card itself
+  const stopPropagation = (event: React.MouseEvent) => {
+    event.stopPropagation()
+  }
+
+  const handleLikeClick = (event: React.MouseEvent) => {
+    stopPropagation(event)
+
+    onLikeClick(listing)
+  }
+
   return (
     <Card variant="outlined" className={classes.card} onClick={onClick}>
       <CardActionArea>
         <ListingCardMedia listing={listing}>
           <Grid container justify="space-between">
             <Grid item>
-              {selected !== undefined && (
-                <Box m={1}>
-                  <div className={classes.checkboxContainer}>
-                    <Checkbox
-                      size="small"
-                      checked={selected}
-                      className={classes.checkbox}
-                      onChange={() => onToggleSelection(listing)}
-                      // We don't want to pass checkbox onClick to the card itself
-                      onClick={event => event.stopPropagation()}
-                    />
-                  </div>
-                </Box>
-              )}
+              <Grid container item>
+                {selected !== undefined && (
+                  <Box my={1} ml={1}>
+                    <div className={classes.cardMediaActionContainer}>
+                      <Checkbox
+                        size="small"
+                        checked={selected}
+                        className={classes.selectionCheckbox}
+                        onChange={() => onToggleSelection(listing)}
+                        onClick={stopPropagation}
+                      />
+                    </div>
+                  </Box>
+                )}
+                {liked !== undefined && (
+                  <Box my={1} ml={1}>
+                    <div className={classes.cardMediaActionContainer}>
+                      <Button
+                        variant="text"
+                        className={classes.likeButton}
+                        onClick={handleLikeClick}
+                      >
+                        <SvgIcon
+                          color="red"
+                          size={muiIconSizes.small}
+                          path={liked ? mdiHeart : mdiHeartOutline}
+                        />
+                      </Button>
+                    </div>
+                  </Box>
+                )}
+              </Grid>
             </Grid>
             {tags && (
               <Grid item>

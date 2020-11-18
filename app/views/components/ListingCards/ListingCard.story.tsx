@@ -10,7 +10,8 @@ export default {
   component: ListingCard,
   argTypes: {
     onClick: { action: 'clicked' },
-    onToggleSelection: { action: 'selection toggle clicked' }
+    onToggleSelection: { action: 'selection toggle clicked' },
+    onLikeClick: { action: 'like heart button clicked' }
   }
 } as Meta
 
@@ -63,4 +64,20 @@ export const WithSelection = Template.bind({})
 WithSelection.args = {
   listing,
   selected: true
+}
+
+export const WithLikeButton = Template.bind({})
+
+WithLikeButton.args = {
+  listing,
+  liked: true
+}
+
+export const WithEverything = Template.bind({})
+
+WithEverything.args = {
+  listing,
+  tags: ['Open House', 'New'],
+  selected: true,
+  liked: true
 }
