@@ -66,7 +66,7 @@ declare type MarketingTemplateType =
   | 'FathersDay'
   | 'FourthOfJuly'
   | 'Halloween'
-  | 'Hannukkah'
+  | 'Hanukkah'
   | 'HomeAnniversary'
   | 'IndependenceDay'
   | 'JustListed'
