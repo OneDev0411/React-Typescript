@@ -31,30 +31,30 @@ interface Props {
 
 export const InlineEditableField = (props: Props) => {
   const {
-    error = '',
+    handleCancel: onCancel = noop,
+    handleDelete: onDelete = noop,
+    handleAddNew: onAddNew = noop,
+    toggleMode: onToggleMode,
+    renderViewMode = noop,
+    handleSave: onSave,
+    handleOutsideClick: onOutsideClick = null,
     cancelOnOutsideClick = false,
-    handleCancel = null,
-    handleOutsideClick = null,
-    handleDelete = noop,
-    handleAddNew = noop,
-    isDisabled = false,
     isEditModeStatic = false,
+    isDisabled = false,
     isPopoverMode = false,
     label = 'Label',
-    renderViewMode = noop,
     showAdd = false,
     showDelete = true,
     showEdit = true,
     style = {},
     value = '',
-    toggleMode,
-    handleSave,
     isEditing,
+    error = '',
     renderEditMode
   } = props
   const [ref, setRef] = useState<HTMLElement | null>(null)
 
-  const _toggleMode = event => {
+  const handleToggleMode = event => {
     if (event && event.stopPropagation) {
       event.stopPropagation()
     }
@@ -62,57 +62,57 @@ export const InlineEditableField = (props: Props) => {
     const refValue = isEditing ? event.currentTarget : null
 
     setRef(refValue)
-    toggleMode()
+    onToggleMode()
   }
 
-  const _handleAddNew = event => {
+  const handleAddNew = event => {
     event.stopPropagation()
 
-    handleAddNew()
+    onAddNew()
   }
 
-  const _handleDelete = event => {
+  const handleDelete = event => {
     event.stopPropagation()
 
-    handleDelete()
+    onDelete()
   }
 
-  const _handleCancel = () => {
+  const handleCancel = () => {
     if (isPopoverMode) {
       setRef(null)
     }
 
-    if (typeof handleCancel === 'function') {
-      handleCancel()
+    if (typeof onCancel === 'function') {
+      onCancel()
     } else {
-      toggleMode()
+      onToggleMode()
     }
   }
 
-  const _handleSave = async () => {
-    await handleSave()
+  const handleSave = async () => {
+    await onSave()
 
     if (isPopoverMode) {
       setRef(null)
     }
   }
 
-  const _handleOutsideClick = () => {
-    if (typeof handleOutsideClick === 'function') {
-      handleOutsideClick()
-    } else if (typeof handleCancel === 'function') {
-      handleCancel()
+  const handleOutsideClick = () => {
+    if (typeof onOutsideClick === 'function') {
+      onOutsideClick()
+    } else if (typeof onCancel === 'function') {
+      onCancel()
     } else {
-      toggleMode()
+      onToggleMode()
     }
   }
 
   const editModeProps = () => {
     return {
       error,
-      handleCancel: _handleCancel,
-      handleSave: _handleSave,
-      handleDelete,
+      handleCancel,
+      handleSave,
+      handleDelete: onDelete,
       isDisabled,
       isStatic: isEditModeStatic,
       isPopoverMode,
@@ -127,14 +127,14 @@ export const InlineEditableField = (props: Props) => {
   const viewModeProps = () => {
     return {
       label,
-      handleDelete: _handleDelete,
-      handleAddNew: _handleAddNew,
+      handleDelete,
+      handleAddNew,
       renderBody: renderViewMode,
       showAdd,
       showEdit,
       showDelete,
       style,
-      toggleMode: _toggleMode,
+      toggleMode: handleToggleMode,
       value
     }
   }
@@ -152,7 +152,7 @@ export const InlineEditableField = (props: Props) => {
 
   if (isEditing) {
     return cancelOnOutsideClick ? (
-      <ClickOutside onClickOutside={_handleOutsideClick}>
+      <ClickOutside onClickOutside={handleOutsideClick}>
         {EditModeRenderer}
       </ClickOutside>
     ) : (
