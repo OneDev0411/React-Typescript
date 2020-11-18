@@ -4,13 +4,13 @@ import ClickOutside from 'react-click-outside'
 import { noop } from 'utils/helpers'
 
 import { ViewMode } from './ViewMode'
-import { EditMode } from './EditMode'
+import { EditMode, Props as EditModeProps } from './EditMode'
 
 interface Props {
   error?: string
   cancelOnOutsideClick?: boolean
-  handleCancel?: any
-  handleOutsideClick?: any
+  handleCancel?: () => void
+  handleOutsideClick?: () => void
   handleDelete?: () => void
   handleSave: () => void
   handleAddNew?: () => void
@@ -20,7 +20,7 @@ interface Props {
   isPopoverMode?: boolean
   label?: string
   renderViewMode?: () => void
-  renderEditMode: (props: any) => ReactNode
+  renderEditMode: (props: EditModeProps) => ReactNode
   showAdd?: boolean
   showEdit?: boolean
   showDelete?: boolean
@@ -31,13 +31,13 @@ interface Props {
 
 export const InlineEditableField = (props: Props) => {
   const {
-    handleCancel: onCancel = noop,
+    handleOutsideClick: onOutsideClick,
     handleDelete: onDelete = noop,
     handleAddNew: onAddNew = noop,
     toggleMode: onToggleMode,
+    handleCancel: onCancel,
     renderViewMode = noop,
     handleSave: onSave,
-    handleOutsideClick: onOutsideClick = null,
     cancelOnOutsideClick = false,
     isEditModeStatic = false,
     isDisabled = false,
@@ -98,9 +98,9 @@ export const InlineEditableField = (props: Props) => {
   }
 
   const handleOutsideClick = () => {
-    if (typeof onOutsideClick === 'function') {
+    if (onOutsideClick) {
       onOutsideClick()
-    } else if (typeof onCancel === 'function') {
+    } else if (onCancel) {
       onCancel()
     } else {
       onToggleMode()
