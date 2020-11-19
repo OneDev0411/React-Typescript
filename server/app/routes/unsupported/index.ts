@@ -4,7 +4,7 @@ import path from 'path'
 import { Request, Response } from 'express'
 
 const template = fs.readFileSync(
-  path.resolve(__dirname, './template.html'),
+  path.resolve(__dirname, '/layout.html'),
   'utf8'
 )
 
