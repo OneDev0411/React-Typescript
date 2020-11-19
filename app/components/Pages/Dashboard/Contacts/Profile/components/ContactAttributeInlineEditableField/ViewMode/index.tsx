@@ -42,9 +42,9 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.primary
     },
     triggerIcon: (props: Props) => ({
-      color: !props.isTriggerActive
-        ? theme.palette.grey[500]
-        : theme.palette.warning.main
+      color: props.isTriggerActive
+        ? theme.palette.warning.main
+        : theme.palette.grey[500]
     }),
     value: (props: Props) => ({
       textAlign: 'right',

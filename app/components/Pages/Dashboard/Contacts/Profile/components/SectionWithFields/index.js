@@ -67,7 +67,8 @@ class SectionWithFields extends React.Component {
     const orderedAttributes = orderAttributes(allAttributes, props.fieldsOrder)
 
     this.state = {
-      orderedAttributes
+      orderedAttributes,
+      trigger: null
     }
   }
 
@@ -99,8 +100,17 @@ class SectionWithFields extends React.Component {
     const { contact } = this.props
 
     try {
-      const response = await getContact(contact.id)
+      const response = await getContact(contact.id, {
+        associations: [
+          'contact.triggers',
+          'trigger.campaign',
+          'email_campaign.template'
+        ]
+      })
 
+      const trigger = getScheduleEmailTrigger(response.data, attribute_def.name)
+
+      this.setState({ trigger })
       this.props.submitCallback({
         ...normalizeContact(response.data),
         deals: contact.deals
@@ -343,6 +353,7 @@ class SectionWithFields extends React.Component {
   }
 
   render() {
+    const { trigger } = this.state
     const { section } = this.props
 
     return (
@@ -352,10 +363,13 @@ class SectionWithFields extends React.Component {
             <MasterField
               contact={this.props?.contact}
               attribute={attribute}
-              trigger={getScheduleEmailTrigger(
-                this.props?.contact,
-                attribute.attribute_def.name
-              )}
+              trigger={
+                trigger ||
+                getScheduleEmailTrigger(
+                  this.props?.contact,
+                  attribute.attribute_def.name
+                )
+              }
               handleAddNewInstance={this.addShadowAttribute}
               handleDelete={this.deleteHandler}
               handleSave={this.save}

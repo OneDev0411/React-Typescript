@@ -22,6 +22,7 @@ import {
 import { EditMode } from './EditMode'
 import { ViewMode } from './ViewMode'
 import { TriggerEditMode } from './TriggerEditMode'
+import { convertSecondsToDay } from './TriggerEditMode/helpers'
 
 import { TRIGGABLE_ATTRIBUTES } from './constant'
 
@@ -54,7 +55,7 @@ function getStateFromTrigger(trigger) {
       currentTrigger: trigger,
       isTriggerActive: true,
       triggerSubject: trigger.campaign?.subject || 'Congratulation!',
-      triggerSendBefore: Math.abs(Number(trigger.wait_for)) / 86400,
+      triggerSendBefore: convertSecondsToDay(trigger.wait_for),
       triggerSelectedTemplate: null
     }
   }
