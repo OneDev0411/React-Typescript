@@ -6,6 +6,7 @@ import userProfileRoute from './app/routes/user/profile'
 import usersLookupRoute from './app/routes/user/user-lookup'
 import usersOAuthTokenRoute from './app/routes/user/oauth-token'
 import signupRoute from './app/routes/user/signup'
+import signoutRoute from './app/routes/user/signout'
 import dealDocusignLoginRoute from './app/routes/deal/docusign-login'
 import dealEnvelopeEditRoute from './app/routes/deal/envelope-edit'
 import dealEnvelopeSignRoute from './app/routes/deal/envelope-sign'
@@ -21,6 +22,7 @@ import refreshUserTokenRoute from './app/routes/refresh-token'
 import corsRoute from './app/routes/cors'
 import renderMjmlRoute from './app/routes/render-mjml'
 import urlMetadataRoute from './app/routes/url-metadata'
+import unsupportedRoute from './app/routes/unsupported'
 
 const router = express.Router()
 
@@ -40,6 +42,7 @@ router.get('/api/users/profile', userProfileRoute)
 router.post('/api/users/lookup', bodyParser.json(), usersLookupRoute)
 router.post('/api/oauth2/token', bodyParser.json(), usersOAuthTokenRoute)
 router.post('/api/users', bodyParser.json(), signupRoute)
+router.get('/signout', bodyParser.json(), signoutRoute)
 
 /**
  * deals routes.
@@ -82,6 +85,7 @@ router.post('/openhouse/:id/:brand/register', openHouseRoute)
 /**
  * utility routes
  */
+router.get('/unsupported', unsupportedRoute)
 router.get('/api/utils/cors/:url(.+)', corsRoute)
 router.post('/api/pdf/get-size', requestLimit, getPdfSizeRoute)
 router.post('/api/user/refresh-token', requestLimit, refreshUserTokenRoute)

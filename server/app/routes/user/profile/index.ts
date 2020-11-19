@@ -29,8 +29,8 @@ export default async (req: RequestWithSession, res: Response) => {
         ...response.data,
         data: {
           ...response.data.data,
-          access_token: req.session?.user.access_token,
-          refresh_token: req.session?.user.refresh_token
+          access_token: req.session?.user?.access_token,
+          refresh_token: req.session?.user?.refresh_token
         }
       })
     })
