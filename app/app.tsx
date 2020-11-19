@@ -21,6 +21,8 @@ import routes from './routes'
 import store from './stores'
 import { AppTheme } from './AppTheme'
 
+import config from '../config/public'
+
 // history
 const history = syncHistoryWithStore(browserHistory, store)
 
@@ -35,6 +37,10 @@ if ((window as any).Cypress) {
 // smooth scroll polyfill
 if (typeof window !== 'undefined') {
   smoothscroll.polyfill()
+}
+
+if (window) {
+  window.INTERCOM_ID = config.intercom.app_id
 }
 
 const App = () => (
