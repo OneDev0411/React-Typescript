@@ -33,9 +33,17 @@ interface Props {
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    body: {
-      marginTop: theme.spacing(1),
-      paddingTop: theme.spacing(1),
+    container: {
+      display: 'flex',
+      alignItems: 'flex-start'
+    },
+    containerItem: {
+      width: '305px',
+      padding: theme.spacing(0, 1)
+    },
+    triggerFields: {
+      marginTop: theme.spacing(1.5),
+      paddingTop: theme.spacing(1.5),
       borderTop: `1px solid ${theme.palette.divider}`
     },
     switch: {
@@ -120,82 +128,90 @@ const TriggerEditModeComponent = ({
   }
 
   return (
-    <div className={classes.body}>
-      {renderAttributeFields()}
-      <div className={classes.switch}>
-        <div className={classes.switchContainer}>
-          <Typography component="span" variant="subtitle2">
-            Automate Email
-          </Typography>
-          <Switch
-            checked={isActive}
-            onChange={handleActiveChange}
-            color="primary"
-            size="small"
-          />
+    <div className={classes.container}>
+      <div className={classes.containerItem}>
+        {renderAttributeFields()}
+        <div className={classes.triggerFields}>
+          <div className={classes.switch}>
+            <div className={classes.switchContainer}>
+              <Typography component="span" variant="subtitle2">
+                Automate Email
+              </Typography>
+              <Switch
+                checked={isActive}
+                onChange={handleActiveChange}
+                color="primary"
+                size="small"
+              />
+            </div>
+            <Typography
+              component="p"
+              variant="body2"
+              className={classes.switchDesc}
+            >
+              Send automate email to this contact and don’t miss any important
+              date ever.
+            </Typography>
+          </div>
+          {isActive && (
+            <>
+              <TextField
+                id="subject"
+                label="subject"
+                type="text"
+                size="small"
+                defaultValue={subject}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                variant="outlined"
+                className={classes.inputField}
+                onChange={handleSubjectChange}
+              />
+              <FormControl
+                variant="outlined"
+                size="small"
+                className={classes.inputField}
+              >
+                <InputLabel id="trigger-send-before">Send</InputLabel>
+                <Select
+                  labelId="trigger-send-before"
+                  id="trigger-send-before-select"
+                  value={sendBefore}
+                  defaultValue={0}
+                  onChange={handleSendBeforeChange}
+                  label="Send"
+                >
+                  <MenuItem value={0}>Same Day</MenuItem>
+                  {[1, 2, 3, 4].map(item => (
+                    <MenuItem key={item} value={item}>
+                      {pluralize(`${item} Day`, item)} earlier
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </>
+          )}
+          {isTemplatesModalOpen && (
+            <MarketingTemplatePickerModal
+              title="Select Template"
+              user={user}
+              mediums={['Email' as MarketingTemplateMedium.Email]}
+              templateTypes={[getTemplateType(attributeName)]}
+              onSelect={handleSelectTemplate}
+              onClose={() => setIsTemplatesModalOpen(false)}
+            />
+          )}
         </div>
-        <Typography
-          component="p"
-          variant="body2"
-          className={classes.switchDesc}
-        >
-          Send automate email to this contact and don’t miss any important date
-          ever.
-        </Typography>
       </div>
       {isActive && (
-        <>
+        <div className={classes.containerItem}>
           <TemplateSelector
             currentValue={currentValue}
             selectedTemplate={selectedTemplate}
             handleShowTemplatePicker={() => setIsTemplatesModalOpen(true)}
           />
-          <TextField
-            id="subject"
-            label="subject"
-            type="text"
-            size="small"
-            defaultValue={subject}
-            InputLabelProps={{
-              shrink: true
-            }}
-            variant="outlined"
-            className={classes.inputField}
-            onChange={handleSubjectChange}
-          />
-          <FormControl
-            variant="outlined"
-            size="small"
-            className={classes.inputField}
-          >
-            <InputLabel id="trigger-send-before">Send</InputLabel>
-            <Select
-              labelId="trigger-send-before"
-              id="trigger-send-before-select"
-              value={sendBefore}
-              defaultValue={0}
-              onChange={handleSendBeforeChange}
-              label="Send"
-            >
-              <MenuItem value={0}>Same Day</MenuItem>
-              {[1, 2, 3, 4].map(item => (
-                <MenuItem key={item} value={item}>
-                  {pluralize(`${item} Day`, item)} earlier
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </>
-      )}
-      {isTemplatesModalOpen && (
-        <MarketingTemplatePickerModal
-          title="Select Template"
-          user={user}
-          mediums={['Email' as MarketingTemplateMedium.Email]}
-          templateTypes={[getTemplateType(attributeName)]}
-          onSelect={handleSelectTemplate}
-          onClose={() => setIsTemplatesModalOpen(false)}
-        />
+        </div>
       )}
     </div>
   )

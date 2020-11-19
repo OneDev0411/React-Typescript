@@ -1,6 +1,8 @@
 import React, { ReactNode } from 'react'
+import { Box } from '@material-ui/core'
 
 import { noop } from 'utils/helpers'
+import { Checkbox } from 'components/Checkbox'
 
 import { Error } from './Error'
 import { Label } from './Label'
@@ -30,7 +32,7 @@ export const EditMode = ({
 }: Props) => {
   return (
     <>
-      <Title attribute={attribute} onChangePrimary={onChangePrimary} />
+      <Title attribute={attribute} />
       {attribute.attribute_def.has_label && (
         <Label
           attribute={attribute}
@@ -44,7 +46,18 @@ export const EditMode = ({
         placeholder={placeholder}
         handleEnterKey={onEnterKeyPress}
       />
-      {children}
+      {!attribute.attribute_def.singular && (
+        <Box mt={1}>
+          <Checkbox
+            // @ts-ignore
+            id={attribute.id || attribute.cuid}
+            checked={attribute.is_primary || false}
+            onChange={onChangePrimary}
+          >
+            Primary
+          </Checkbox>
+        </Box>
+      )}
       {error && <Error>{error}</Error>}
     </>
   )

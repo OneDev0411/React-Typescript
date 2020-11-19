@@ -37,8 +37,6 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     popoverContainer: {
       padding: theme.spacing(2),
-      minWidth: '340px',
-      maxWidth: '340px',
       overflow: 'hidden'
     },
     editModePopover: {

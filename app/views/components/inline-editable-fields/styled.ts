@@ -62,10 +62,15 @@ export const EditModeContainer = styled.div<
       : theme.palette.action.selected};
 `
 
-export const Label = styled.div`
+export const Label = styled.div<{
+  theme: Theme
+}>`
   display: flex;
   align-items: center;
   margin-bottom: 0.25em;
+  font-family: ${({ theme }) => theme.typography.subtitle2.fontFamily};
+  font-size: ${({ theme }) => theme.typography.subtitle2.fontSize};
+  font-weight: ${({ theme }) => theme.typography.subtitle2.fontWeight};
 `
 
 export const Star = styled(StarIcon)`
@@ -104,10 +109,10 @@ export const Input = styled.input`
   border: none;
   background: transparent;
   background: ${({ theme }) => theme.palette.common.white};
-
+  border-radius: 3px;
+  border: 1px solid ${({ theme }) => theme.palette.divider};
   &:focus {
     outline: none;
-    border-radius: 3px;
     border: 1px solid ${({ theme }) => theme.palette.primary.main};
   }
 `

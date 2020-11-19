@@ -10,9 +10,7 @@ interface Props {
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
-      marginTop: theme.spacing(1)
-    },
+    container: {},
     header: {
       display: 'flex',
       alignItems: 'center',
@@ -25,7 +23,7 @@ const useStyles = makeStyles(
     },
     templatePreview: {
       marginTop: theme.spacing(1),
-      height: theme.spacing(18.75),
+      height: '445px',
       background: theme.palette.grey[100],
       borderRadius: `${theme.spacing(2)}px`,
       textAlign: 'center',
@@ -40,7 +38,7 @@ const useStyles = makeStyles(
     },
     templatePreviewPlaceholder: {
       display: 'block',
-      marginTop: theme.spacing(7.75)
+      lineHeight: '445px'
     }
   }),
   { name: 'TemplateSelector' }
