@@ -31,7 +31,7 @@ export default async (
     return false
   }
 
-  const profile = await request({
+  const { data: profile } = await request({
     headers: getParsedHeaders(req),
     url: '/users/self'
   })
@@ -50,7 +50,7 @@ export default async (
       }
     })
 
-    openHouse = response.data
+    openHouse = response.data.data
   } catch (e) {
     res.status(e.response?.status)
     res.send(e.response?.data)

@@ -33,7 +33,7 @@ const requestLimit = bodyParser.json({
 /**
  * deals routes.
  */
-router.post('/api/proxifier', bodyParser.json(), proxifierRoute)
+router.post('/api/proxifier', requestLimit, proxifierRoute)
 
 /**
  * user routes.
@@ -80,7 +80,7 @@ router.post(
 /**
  * open house routes.
  */
-router.post('/openhouse/:id/:brand/register', openHouseRoute)
+router.get('/openhouse/:id/:brand/register', openHouseRoute)
 
 /**
  * utility routes
