@@ -42,7 +42,7 @@ done
 
 # Also set the new app's URL's
 URL="https://$APP.$REVIEW_HOST"
-CONFIG = "$CONFIG API_HOST_LOCAL=$URL APP_SHARE_URL=$URL APP_SHARE_URL=$URL"
+CONFIG="$CONFIG API_HOST_LOCAL=$URL APP_SHARE_URL=$URL APP_SHARE_URL=$URL"
 
 ssh "dokku@$REVIEW_HOST" config:set --no-restart $APP $CONFIG
 
