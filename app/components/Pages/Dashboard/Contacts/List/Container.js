@@ -29,6 +29,7 @@ import {
 } from 'utils/oauth-provider'
 import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
+import { getParkedContactsCount as getParkedContactCountModel } from 'models/contacts/get-parked-contact-count'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
 import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
@@ -75,7 +76,8 @@ class ContactsList extends React.Component {
       searchInputValue: props.list.textFilter,
       loadedRanges: [],
       showDuplicateClusterAlert: false,
-      duplicateClusterCount: 0
+      duplicateClusterCount: 0,
+      parkedContactCount: 0
     }
 
     this.order = null
@@ -83,6 +85,7 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
+    const { parkedContactsCount } = this.state
     const { user, fetchOAuthAccounts, fetchTags, getContactsTags } = this.props
 
     this.order =
@@ -90,6 +93,10 @@ class ContactsList extends React.Component {
     fetchOAuthAccounts()
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
+
+    if (!parkedContactsCount) {
+      this.getParkedContactCount()
+    }
 
     if (fetchTags) {
       getContactsTags()
@@ -206,6 +213,12 @@ class ContactsList extends React.Component {
     this.setState({
       isFetchingMoreContacts: false
     })
+  }
+
+  getParkedContactCount = async () => {
+    const parkedContactCount = await getParkedContactCountModel()
+
+    this.setState({ parkedContactCount })
   }
 
   getDuplicateClusterCount = async () => {
@@ -473,7 +486,9 @@ class ContactsList extends React.Component {
   }
 
   handleDeleteContact = async ({ singleSelectedRow }) => {
-    const state = this.props.gridStateContext
+    const { activeSegment, gridStateContext: state } = this.props
+    const isParkedActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
+
     const isSingleContact = singleSelectedRow.length === 1
 
     try {
@@ -507,6 +522,10 @@ class ContactsList extends React.Component {
       this.resetSelectedRows()
     } catch (error) {
       console.log(error)
+    } finally {
+      if (isParkedActive) {
+        this.getParkedContactCount()
+      }
     }
   }
 
@@ -605,6 +624,7 @@ class ContactsList extends React.Component {
   }
 
   renderTabs = (props = {}) => {
+    const { parkedContactCount, selectedShortcutFilter } = this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
 
     return (
@@ -626,7 +646,7 @@ class ContactsList extends React.Component {
             })
             this.handleFilterChange({ ...filters, flows: [] }, true)
           },
-          isActive: this.state.selectedShortcutFilter !== null
+          isActive: selectedShortcutFilter !== null
         }}
         savedListProps={{
           name: CONTACTS_SEGMENT_NAME,
@@ -641,6 +661,7 @@ class ContactsList extends React.Component {
           currentOrder: this.order
         }}
         contactCount={listInfo.total || 0}
+        parkedContactsCount={parkedContactCount}
         users={viewAsUsers}
         activeSegment={activeSegment}
         {...props}
