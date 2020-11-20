@@ -32,7 +32,10 @@ KEYS=$(cat /tmp/configs | jq '. | keys[]')
 # We need to copy the configuration fro msource heroku application
 # But we also need ot set the letsencrypt email in the config
 
-CONFIG="DOKKU_LETSENCRYPT_EMAIL=$REVIEW_LETSENCRYPT_EMAIL"
+# Also set the URL's
+
+URL="https://$APP.$REVIEW_HOST"
+CONFIG="DOKKU_LETSENCRYPT_EMAIL=$REVIEW_LETSENCRYPT_EMAIL API_HOST_LOCAL=$URL APP_SHARE_URL=$URL APP_SHARE_URL=$URL"
 
 for key in $KEYS;
 do
