@@ -32,8 +32,16 @@ export default function ConfirmAgentId(props: WithRouterProps) {
   const brand = useSelector((store: IAppState) => store.brand)
 
   const onSubmit = async (values: FormValues) => {
+    const notFoundError = {
+      [FORM_ERROR]: `We were not able to find an agent matching MLS ID (${values.mlsId})). You can go back to try a different number or skip this step for now.`
+    }
+
     try {
       const agents = await searchAgent(values.mlsId)
+
+      if (agents.length === 0) {
+        return notFoundError
+      }
 
       props.router.push({
         pathname: '/onboarding/confirm-agent-id/choose-mls',
@@ -42,11 +50,7 @@ export default function ConfirmAgentId(props: WithRouterProps) {
       })
     } catch (errorCode) {
       if (errorCode === 404) {
-        return {
-          [FORM_ERROR]: `Agent corresponding to this MLS ID (${
-            values.mlsId
-          }) not found!`
-        }
+        return notFoundError
       }
 
       return {
