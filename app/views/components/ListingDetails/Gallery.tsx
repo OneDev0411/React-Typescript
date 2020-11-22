@@ -2,6 +2,7 @@ import React, { MouseEvent, useState } from 'react'
 import cn from 'classnames'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
 import { makeStyles, Theme, useTheme } from '@material-ui/core'
 import { mdiFullscreen } from '@mdi/js'
 
@@ -38,7 +39,8 @@ const useStyles = makeStyles(
       background: 'none',
       padding: 0,
       border: 'none',
-      width: '100%'
+      width: '100%',
+      position: 'relative'
     },
     thumbnailBtn: {
       marginRight: theme.spacing(2),
@@ -48,6 +50,31 @@ const useStyles = makeStyles(
       position: 'absolute',
       left: theme.spacing(4),
       bottom: theme.spacing(2)
+    },
+    photoNumbers: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      color: theme.palette.common.white,
+      zIndex: 1,
+      '&::before': {
+        zIndex: -1,
+        content: "''",
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100%',
+        height: '100%',
+        opacity: 0.5,
+        backgroundColor: theme.palette.common.black
+      }
     }
   }),
   { name: 'Gallery' }
@@ -112,6 +139,13 @@ function Gallery({ images }: Props) {
                     alt={`listing ${index}`}
                     className={classes.thumbnailImage}
                   />
+                  {index === 3 && (
+                    <Box className={classes.photoNumbers}>
+                      <Typography variant="caption">
+                        {`+ ${images.length - 5} Photos`}
+                      </Typography>
+                    </Box>
+                  )}
                 </button>
               </Grid>
             ))}
