@@ -6,6 +6,7 @@ import { makeStyles, Theme } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
 import { getActiveBrand } from 'utils/user-teams'
+import listingUtils from 'utils/listing'
 
 import { useGetListing, UseGetListing } from './use-get-listing'
 import Header from './Header'
@@ -19,6 +20,8 @@ import AgentContactForm from './AgentContactForm'
 import Description from './Description'
 import FeatureList from './FeatureList'
 import Map from './Map'
+import { getPrice } from './get-price'
+import { getSubAddress } from './get-sub-address'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -107,6 +110,9 @@ function ListingDetails({ id }: Props) {
   }
 
   const agent = listing.list_agent
+  const title = getPrice(listing)
+  const subtitle1 = listingUtils.addressTitle(listing.property.address)
+  const subtitle2 = `${getSubAddress(listing)} | MLS#: ${listing.mls_number}`
 
   return (
     <>
@@ -120,9 +126,9 @@ function ListingDetails({ id }: Props) {
             <Box className={classes.indexLeftSideWrapper}>
               <Box className={classes.titleWrapper}>
                 <Title
-                  title="$329,000"
-                  subtitle1="5127 Vandelia St Medical District"
-                  subtitle2="Dallas, Texas 75212 | MLS#: 14430312"
+                  title={title}
+                  subtitle1={subtitle1}
+                  subtitle2={subtitle2}
                 />
               </Box>
               <Box className={classes.mainFeaturesWrapper}>

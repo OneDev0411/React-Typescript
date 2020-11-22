@@ -1,8 +1,5 @@
 import listingUtils from 'utils/listing'
-
-const numberToUSD = (number: number) => {
-  return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
-}
+import { numberToUSD } from 'utils/number-to-usd'
 
 export const valueToString = (
   value,
