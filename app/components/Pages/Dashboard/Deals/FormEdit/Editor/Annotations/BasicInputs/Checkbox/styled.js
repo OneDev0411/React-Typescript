@@ -17,10 +17,19 @@ export const CheckboxInput = styled.input`
   background-color: #d2e5f2;
   cursor: pointer;
   margin: 0 !important;
+  padding: 0;
+  outline: 0 !important;
 
   :checked {
     :before {
-      content: 'X';
+      position: absolute;
+      content: '╳';
+      font-weight: bold;
+      font-size: ${props => props.box.height}px;
+      width: 100%;
+      height: 100%;
+      display: block;
+      text-align: center;
     }
   }
 
