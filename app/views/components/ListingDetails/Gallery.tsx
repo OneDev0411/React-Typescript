@@ -2,7 +2,11 @@ import React, { MouseEvent, useState } from 'react'
 import cn from 'classnames'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme, useTheme } from '@material-ui/core'
+import { mdiFullscreen } from '@mdi/js'
+
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Lightbox from './Lightbox'
 
@@ -39,6 +43,11 @@ const useStyles = makeStyles(
     thumbnailBtn: {
       marginRight: theme.spacing(2),
       marginBottom: theme.spacing(2)
+    },
+    fullscreenIcon: {
+      position: 'absolute',
+      left: theme.spacing(4),
+      bottom: theme.spacing(2)
     }
   }),
   { name: 'Gallery' }
@@ -50,6 +59,7 @@ interface Props {
 
 function Gallery({ images }: Props) {
   const classes = useStyles()
+  const theme = useTheme()
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
@@ -78,6 +88,12 @@ function Gallery({ images }: Props) {
           onClick={openLightbox}
         >
           <img src={images[0]} alt="listing 1" className={classes.mainImage} />
+          <SvgIcon
+            path={mdiFullscreen}
+            size={muiIconSizes.large}
+            className={classes.fullscreenIcon}
+            color={theme.palette.common.white}
+          />
         </button>
       </Box>
       <Box display="flex" justifyContent="center" px={3}>
