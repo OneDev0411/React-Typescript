@@ -2,6 +2,7 @@ import React from 'react'
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
+import Tooltip from '@material-ui/core/Tooltip'
 import {
   mdiBedKingOutline,
   mdiShower,
@@ -12,17 +13,22 @@ import {
 } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import listingUtils from 'utils/listing'
+import { numberToUSD } from 'utils/number-to-usd'
 
 interface Props {
-  listing?: IListing<'proposed_agent'> | null
+  listing: IListing<'proposed_agent'>
 }
 
 function Header({ listing }: Props) {
-  const bedroom = '4'
-  const bathrooms = '3'
-  const squareFeet = '1024'
-  const priceSqft = '$273'
-  const lotSizeSqft = '6824'
+  const property = listing.property
+  const bedroom = property.bedroom_count
+  const bathrooms = property.bathroom_count
+  const squareFeet = Math.floor(
+    listingUtils.metersToFeet(property.square_meters)
+  )
+  const priceSqft = Math.round(listing.price / squareFeet)
+  const lotSize = property.lot_size_area
 
   return (
     <Grid container>
@@ -33,7 +39,9 @@ function Header({ listing }: Props) {
               <Box mb={1} display="flex" alignItems="center">
                 <SvgIcon path={mdiBedKingOutline} />
                 <Box ml={2}>
-                  <Typography variant="subtitle1">{bedroom}</Typography>
+                  <Typography variant="subtitle1">
+                    {getFormattedValue(bedroom)}
+                  </Typography>
                 </Box>
               </Box>
               <Box>
@@ -46,7 +54,11 @@ function Header({ listing }: Props) {
                   <Box mb={1} display="flex" alignItems="center">
                     <SvgIcon path={mdiShower} />
                     <Box ml={2}>
-                      <Typography variant="subtitle1">{bathrooms}</Typography>
+                      <Tooltip title={getBathroomsTooltip(listing)}>
+                        <Typography variant="subtitle1">
+                          {getFormattedValue(bathrooms)}
+                        </Typography>
+                      </Tooltip>
                     </Box>
                   </Box>
                   <Box>
@@ -67,7 +79,7 @@ function Header({ listing }: Props) {
                     <SvgIcon path={mdiVectorSquare} />
                     <Box ml={2}>
                       <Typography variant="subtitle1">
-                        {squareFeet.toLocaleString()}
+                        {getFormattedValue(squareFeet)}
                       </Typography>
                     </Box>
                   </Box>
@@ -87,12 +99,12 @@ function Header({ listing }: Props) {
               <SvgIcon path={mdiRelativeScale} />
               <Box ml={2}>
                 <Typography variant="subtitle1">
-                  {lotSizeSqft.toLocaleString()}
+                  {getFormattedValue(lotSize)}
                 </Typography>
               </Box>
             </Box>
             <Box>
-              <Typography color="textSecondary">Lot Size sqft</Typography>
+              <Typography color="textSecondary">Lot Size</Typography>
             </Box>
           </Grid>
           <Grid item xs={4}>
@@ -100,7 +112,9 @@ function Header({ listing }: Props) {
               <Box mb={1} display="flex" alignItems="center">
                 <SvgIcon path={mdiCurrencyUsdCircleOutline} />
                 <Box ml={2}>
-                  <Typography variant="subtitle1">{priceSqft}</Typography>
+                  <Typography variant="subtitle1">
+                    {numberToUSD(priceSqft)}
+                  </Typography>
                 </Box>
               </Box>
               <Box>
@@ -115,7 +129,7 @@ function Header({ listing }: Props) {
                   <SvgIcon path={mdiCalendarMonthOutline} />
                   <Box ml={2}>
                     <Typography variant="subtitle1">
-                      {listing?.property.year_built}
+                      {listing.property.year_built}
                     </Typography>
                   </Box>
                 </Box>
@@ -132,3 +146,24 @@ function Header({ listing }: Props) {
 }
 
 export default Header
+
+function getBathroomsTooltip(listing: IListing): string {
+  const fullCounts = listing.property.full_bathroom_count
+  const halfCounts = listing.property.half_bathroom_count
+  const fullText = fullCounts != null ? `${fullCounts} Full Bath` : ''
+  const halfText = halfCounts != null ? `${halfCounts} Half Bath` : ''
+
+  return [fullText, halfText].filter(Boolean).join(' + ')
+}
+
+function getFormattedValue(value: string | number | null | undefined): string {
+  if (!value) {
+    return 'N/A'
+  }
+
+  if (typeof value === 'number') {
+    return value.toLocaleString()
+  }
+
+  return value
+}
