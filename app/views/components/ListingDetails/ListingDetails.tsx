@@ -2,7 +2,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles, Theme } from '@material-ui/core'
+import Container from '@material-ui/core/Container'
+import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
 import { getActiveBrand } from 'utils/user-teams'
@@ -16,7 +17,6 @@ import MainFeatures from './MainFeatures'
 import StaticMap from './StaticMap'
 import FeaturedImages from './FeaturedImages'
 import AgentInfo from './AgentInfo'
-import AgentContactForm from './AgentContactForm'
 import Description from './Description'
 import FeatureList from './FeatureList'
 import Map from './Map'
@@ -100,8 +100,10 @@ interface Props {
 
 function ListingDetails({ id }: Props) {
   const classes = useStyles()
+  const theme = useTheme()
   const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
   const brand = getActiveBrand(user)
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const { listing }: UseGetListing = useGetListing(id)
 
@@ -115,7 +117,7 @@ function ListingDetails({ id }: Props) {
   const subtitle2 = `${getSubAddress(listing)} | MLS#: ${listing.mls_number}`
 
   return (
-    <>
+    <Container maxWidth="lg" disableGutters>
       <Header id={listing.id} />
       <Box className={classes.indexWrapper}>
         <Grid container className={classes.indexContainer}>
@@ -146,18 +148,16 @@ function ListingDetails({ id }: Props) {
           <FeaturedImages images={listing.gallery_image_urls?.slice(5, 8)} />
         </Grid>
         <Grid item xs={12} md={6} className={classes.agentInfoWrapper}>
-          <Box mb={5}>
-            <AgentInfo
-              name={agent.full_name}
-              email={agent.email}
-              image={agent.profile_image_url}
-              tel={agent.phone_number}
-              company={brand?.name}
-            />
-          </Box>
-          <AgentContactForm onSubmit={() => Promise.resolve()} />
+          <AgentInfo
+            name={agent.full_name}
+            email={agent.email}
+            image={agent.profile_image_url}
+            tel={agent.phone_number}
+            company={brand?.name}
+          />
         </Grid>
       </Grid>
+      {!isMobile && <FeatureList listing={listing} />}
       <Grid container className={classes.descriptionAreaWrapper}>
         <Grid item xs={12} md={6}>
           <Description
@@ -169,9 +169,9 @@ function ListingDetails({ id }: Props) {
           <FeaturedImages images={listing.gallery_image_urls?.slice(8, 11)} />
         </Grid>
       </Grid>
-      <FeatureList listing={listing} />
+      {isMobile && <FeatureList listing={listing} />}
       <Map location={listing.property.address.location} />
-    </>
+    </Container>
   )
 }
 
