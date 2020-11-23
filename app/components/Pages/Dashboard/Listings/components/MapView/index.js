@@ -3,9 +3,10 @@ import cn from 'classnames'
 import { Grid, Box, makeStyles } from '@material-ui/core'
 
 import LoadingComponent from 'components/Spinner'
-import ListingCard from 'components/ListingCards/ListingCard'
+
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 
+import ListingCard from '../ListingCardWithFavorite'
 import ZeroState from '../ZeroState'
 
 const VERTICAL_GAP_FROM_PAGE_TOP = '12em' // It's the page header height
@@ -57,7 +58,7 @@ const MapView = props => {
             listing={listing}
             tags={listing.new ? [listing.new] : undefined}
             selected={selections.some(item => item.id === listing.id)}
-            onToggleSelection={toggleItem}
+            onToggleSelection={() => toggleItem(listing)}
           />
         </Box>
       </Grid>

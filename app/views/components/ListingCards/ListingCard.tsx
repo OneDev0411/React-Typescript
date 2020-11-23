@@ -46,7 +46,8 @@ const useStyles = makeStyles(
     statusBadgeDot: ({ listing }: Props) => ({
       backgroundColor: `#${getStatusColor(listing.status)}`,
       transform: 'none',
-      position: 'static'
+      position: 'static',
+      zIndex: 0
     }),
     cardMediaActionContainer: {
       borderRadius: theme.shape.borderRadius,
@@ -109,7 +110,7 @@ interface Props {
    * Note that you need to pass `true` or `false` value
    * to `selected` prop in order to use this handler
    */
-  onToggleSelection?: (listing: IListing | ICompactListing) => void
+  onToggleSelection?: () => void
 
   /**
    * The card heart like state
@@ -126,7 +127,7 @@ interface Props {
    * Note that you need to pass `true` or `false` value
    * to `liked` prop in order to use this handler
    */
-  onLikeClick?: (listing: IListing | ICompactListing) => void
+  onLikeClick?: () => void
 
   /**
    * The click handler of listing card
@@ -160,7 +161,7 @@ export default function ListingCard({
   const handleLikeClick = (event: React.MouseEvent) => {
     stopPropagation(event)
 
-    onLikeClick(listing)
+    onLikeClick()
   }
 
   return (
@@ -177,7 +178,7 @@ export default function ListingCard({
                         size="small"
                         checked={selected}
                         className={classes.selectionCheckbox}
-                        onChange={() => onToggleSelection(listing)}
+                        onChange={() => onToggleSelection()}
                         onClick={stopPropagation}
                       />
                     </div>

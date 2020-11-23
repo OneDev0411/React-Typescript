@@ -2,7 +2,8 @@ import React from 'react'
 import { Grid, Box } from '@material-ui/core'
 
 import { useListSelection } from 'components/ListSelection/use-list-selection'
-import ListingCard from 'components/ListingCards/ListingCard'
+
+import ListingCard from '../ListingCardWithFavorite'
 
 import LoadingComponent from '../../../../../../views/components/Spinner'
 
@@ -26,7 +27,7 @@ export default function GridView({ isFetching, sortedListings }) {
           listing={listing}
           tags={listing.new ? [listing.new] : undefined}
           selected={selections.some(item => item.id === listing.id)}
-          onToggleSelection={toggleItem}
+          onToggleSelection={() => toggleItem(listing)}
         />
       </Grid>
     ))

@@ -26,6 +26,7 @@ import { CreateTourAction } from './Tour'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
+      zIndex: 3,
       position: 'sticky',
       borderTop: `1px solid ${theme.palette.divider}`,
       bottom: 0,
