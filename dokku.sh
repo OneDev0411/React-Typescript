@@ -39,6 +39,11 @@ do
   val=$(cat /tmp/configs | jq ".$key")
   CONFIG="$CONFIG $key=$val"
 done
+
+# Also set the new app's URL's
+URL="https://$APP.$REVIEW_HOST"
+CONFIG="$CONFIG API_HOST_LOCAL=$URL APP_SHARE_URL=$URL APP_SHARE_URL=$URL"
+
 ssh "dokku@$REVIEW_HOST" config:set --no-restart $APP $CONFIG
 
 # Checkout the branch we need to deploy
