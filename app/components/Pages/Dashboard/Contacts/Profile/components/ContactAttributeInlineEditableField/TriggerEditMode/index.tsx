@@ -16,6 +16,7 @@ import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModa
 
 import { TemplateSelector } from './components/TemplateSelector'
 import { getTemplateType } from './helpers/get-template-type'
+import { getTriggerSubject } from './helpers/get-trigger-subject'
 
 interface Props {
   renderAttributeFields: () => ReactNode
@@ -81,7 +82,9 @@ const TriggerEditModeComponent = ({
 }: Props) => {
   const classes = useStyles()
 
-  const [subject, setSubject] = useState<string>(subjectProp)
+  const [subject, setSubject] = useState<string>(
+    subjectProp || getTriggerSubject(attributeName)
+  )
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
   const [sendBefore, setSendBefore] = useState<number>(sendBeforeProp)
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState<boolean>(

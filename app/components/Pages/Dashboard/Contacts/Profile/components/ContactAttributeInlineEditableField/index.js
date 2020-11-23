@@ -62,7 +62,7 @@ function getStateFromTrigger(trigger) {
 
   return {
     currentTrigger: null,
-    isTriggerActive: false,
+    isTriggerActive: true,
     triggerSubject: '',
     triggerSendBefore: 0,
     triggerSelectedTemplate: null
@@ -406,7 +406,9 @@ class MasterField extends React.Component {
       title={this.title}
       value={formatValue(this.attribute_def, this.state.value)}
       isTriggerable={this.isTriggerable}
-      isTriggerActive={Boolean(this.state.isTriggerActive)}
+      isTriggerActive={Boolean(
+        this.state.currentTrigger && this.state.isTriggerActive
+      )}
     />
   )
 
