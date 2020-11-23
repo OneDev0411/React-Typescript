@@ -13,7 +13,7 @@ export function FileAttachment({ file, ...props }: Props) {
   return (
     <Attachment {...props}>
       <a href={file.url} target="_blank">
-        {decodeURI(file.name)}
+        {escape(file.name)}
       </a>
     </Attachment>
   )

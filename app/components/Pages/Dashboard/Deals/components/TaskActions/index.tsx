@@ -211,7 +211,10 @@ export function TaskActions({ deal }: Props) {
             [EMAIL_FORM, EMAIL_ENVELOPE, EMAIL_FORM].includes(id)
           )
         }
-        initialValues={state.form}
+        initialValues={{
+          attachments: state.attachments,
+          ...(state.form || {})
+        }}
         deal={deal}
         onClickAddDealAttachments={handleClickAddDealAttachments}
         onClose={handleCancel}
