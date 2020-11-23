@@ -90,10 +90,14 @@ export const InlineEditableField = (props: Props) => {
   }
 
   const handleSave = async () => {
-    await onSave()
+    try {
+      await onSave()
 
-    if (isPopoverMode) {
-      setRef(null)
+      if (isPopoverMode) {
+        setRef(null)
+      }
+    } catch (error) {
+      throw error
     }
   }
 
