@@ -24,7 +24,7 @@ import { ViewMode } from './ViewMode'
 import { TriggerEditMode } from './TriggerEditMode'
 import { convertSecondsToDay } from './TriggerEditMode/helpers'
 
-import { TRIGGABLE_ATTRIBUTES } from './constant'
+import { TRIGGERABLE_ATTRIBUTES } from './constants'
 
 function getCurrentTimestamp() {
   return new Date().getTime()
@@ -140,7 +140,7 @@ class MasterField extends React.Component {
   }
 
   get isTriggerable() {
-    return TRIGGABLE_ATTRIBUTES.includes(this.attribute_def.name)
+    return TRIGGERABLE_ATTRIBUTES.includes(this.attribute_def.name)
   }
 
   toggleMode = () => this.props.handleToggleMode(this.props.attribute)

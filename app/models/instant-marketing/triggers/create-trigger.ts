@@ -1,4 +1,4 @@
-import { TemplateData } from 'utils/marketing-center/render-branded-nunjuks-template'
+import { TemplateData } from 'utils/marketing-center/render-branded-nunjucks-template'
 
 import Fetch from '../../../services/fetch'
 import { getTemplateInstance } from './helpers/get-template-instance'

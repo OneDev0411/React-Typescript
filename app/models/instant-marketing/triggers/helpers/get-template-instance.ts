@@ -1,7 +1,7 @@
 import {
-  renderBrandedNunjuksTemplate,
+  renderBrandedNunjucksTemplate,
   TemplateData
-} from 'utils/marketing-center/render-branded-nunjuks-template'
+} from 'utils/marketing-center/render-branded-nunjucks-template'
 
 import { createTemplateInstance } from '../../create-template-instance'
 
@@ -11,8 +11,8 @@ export const getTemplateInstance = async (
   data: TemplateData
 ): Promise<IMarketingTemplateInstance> => {
   try {
-    // render the nunjuks template
-    const html: string = await renderBrandedNunjuksTemplate(
+    // render the nunjucks template
+    const html: string = await renderBrandedNunjucksTemplate(
       template,
       brand,
       data

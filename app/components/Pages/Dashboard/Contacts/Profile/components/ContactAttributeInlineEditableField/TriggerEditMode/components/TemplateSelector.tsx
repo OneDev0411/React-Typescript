@@ -72,7 +72,7 @@ export const TemplateSelector = ({
       if (!preview) {
         return (
           <span className={classes.templatePreviewPlaceholder}>
-            Preivew is not Available
+            Preview is not available
           </span>
         )
       }
