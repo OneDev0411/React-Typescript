@@ -13,7 +13,6 @@ import {
 import pluralize from 'pluralize'
 
 import { TemplateSelector } from './components/TemplateSelector'
-import { getTriggerSubject } from './helpers/get-trigger-subject'
 
 interface Props {
   renderAttributeFields: () => ReactNode
@@ -79,9 +78,7 @@ const TriggerEditModeComponent = ({
 }: Props) => {
   const classes = useStyles()
 
-  const [subject, setSubject] = useState<string>(
-    subjectProp || getTriggerSubject(attributeName)
-  )
+  const [subject, setSubject] = useState<string>(subjectProp)
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
   const [sendBefore, setSendBefore] = useState<number>(sendBeforeProp)
   const [selectedTemplate, setSelectedTemplate] = useState<

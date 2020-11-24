@@ -22,7 +22,10 @@ import {
 import { EditMode } from './EditMode'
 import { ViewMode } from './ViewMode'
 import { TriggerEditMode } from './TriggerEditMode'
-import { convertSecondsToDay } from './TriggerEditMode/helpers'
+import {
+  convertSecondsToDay,
+  getTriggerSubject
+} from './TriggerEditMode/helpers'
 
 import { TRIGGERABLE_ATTRIBUTES } from './constants'
 
@@ -49,12 +52,15 @@ function getStateFromAttribute(attribute) {
     value: ''
   }
 }
-function getStateFromTrigger(trigger) {
+function getStateFromTrigger(trigger, attribute) {
+  const attributeName = attribute?.attribute_def?.name || ''
+
   if (trigger) {
     return {
       currentTrigger: trigger,
       isTriggerActive: true,
-      triggerSubject: trigger.campaign?.subject || 'Congratulation!',
+      triggerSubject:
+        trigger.campaign?.subject || getTriggerSubject(attributeName),
       triggerSendBefore: convertSecondsToDay(trigger.wait_for),
       triggerSelectedTemplate: null
     }
@@ -63,7 +69,7 @@ function getStateFromTrigger(trigger) {
   return {
     currentTrigger: null,
     isTriggerActive: true,
-    triggerSubject: '',
+    triggerSubject: getTriggerSubject(attributeName),
     triggerSendBefore: 0,
     triggerSelectedTemplate: null
   }
@@ -74,7 +80,7 @@ const getInitialState = ({ attribute, trigger }) => ({
   isDirty: false,
   isTriggerFieldDirty: false,
   disabled: false,
-  ...getStateFromTrigger(trigger),
+  ...getStateFromTrigger(trigger, attribute),
   ...getStateFromAttribute(attribute)
 })
 
@@ -414,9 +420,7 @@ class MasterField extends React.Component {
       title={this.title}
       value={formatValue(this.attribute_def, this.state.value)}
       isTriggerable={this.isTriggerable}
-      isTriggerActive={Boolean(
-        this.state.currentTrigger && this.state.isTriggerActive
-      )}
+      isTriggerActive={Boolean(this.props.g)}
     />
   )
 

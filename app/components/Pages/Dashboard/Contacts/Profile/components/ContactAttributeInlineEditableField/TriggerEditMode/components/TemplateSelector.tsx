@@ -10,7 +10,7 @@ import { getActiveTeamId } from 'utils/user-teams'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
 
-import { getTemplateType } from '../helpers/get-template-type'
+import { getTemplateType } from '../helpers'
 
 interface Props {
   user: IUser
@@ -82,8 +82,6 @@ export const TemplateSelector = ({
         ['Email' as MarketingTemplateMedium.Email]
       )
         .then(templates => {
-          console.log('templates', templates)
-
           if (template.length) {
             onSelectTemplate(templates[0])
           }
