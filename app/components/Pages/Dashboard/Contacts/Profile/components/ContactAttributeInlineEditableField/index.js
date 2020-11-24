@@ -314,6 +314,10 @@ class MasterField extends React.Component {
 
   delete = async () => {
     try {
+      if (this.props.trigger) {
+        await removeTrigger(this.props.trigger.id)
+      }
+
       await this.props.handleDelete(this.props.attribute)
       this.setState({ disabled: false })
     } catch (error) {
@@ -356,7 +360,7 @@ class MasterField extends React.Component {
   }
 
   renderEditMode = props => {
-    const { user, attribute } = this.props
+    const { user, brand, attribute } = this.props
     const {
       currentTrigger,
       isTriggerActive,
@@ -387,6 +391,7 @@ class MasterField extends React.Component {
           attributeName={this.attribute_def.name || ''}
           currentValue={currentTrigger}
           user={user}
+          brand={brand}
           isActive={isTriggerActive}
           subject={triggerSubject}
           sendBefore={triggerSendBefore}

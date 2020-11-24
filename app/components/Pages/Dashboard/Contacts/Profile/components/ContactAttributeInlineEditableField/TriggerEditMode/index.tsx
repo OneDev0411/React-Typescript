@@ -12,10 +12,7 @@ import {
 } from '@material-ui/core'
 import pluralize from 'pluralize'
 
-import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
-
 import { TemplateSelector } from './components/TemplateSelector'
-import { getTemplateType } from './helpers/get-template-type'
 import { getTriggerSubject } from './helpers/get-trigger-subject'
 
 interface Props {
@@ -87,9 +84,6 @@ const TriggerEditModeComponent = ({
   )
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
   const [sendBefore, setSendBefore] = useState<number>(sendBeforeProp)
-  const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState<boolean>(
-    false
-  )
   const [selectedTemplate, setSelectedTemplate] = useState<
     Nullable<IBrandMarketingTemplate>
   >(null)
@@ -124,7 +118,6 @@ const TriggerEditModeComponent = ({
     try {
       setSelectedTemplate(template)
       onChangeTemplate(template)
-      setIsTemplatesModalOpen(false)
     } catch (error) {
       console.error(error)
     }
@@ -160,7 +153,7 @@ const TriggerEditModeComponent = ({
             <>
               <TextField
                 id="subject"
-                label="subject"
+                label="Subject"
                 type="text"
                 size="small"
                 defaultValue={subject}
@@ -176,43 +169,35 @@ const TriggerEditModeComponent = ({
                 size="small"
                 className={classes.inputField}
               >
-                <InputLabel id="trigger-send-before">Send</InputLabel>
+                <InputLabel id="trigger-send-before">Deliver in</InputLabel>
                 <Select
                   labelId="trigger-send-before"
                   id="trigger-send-before-select"
                   value={sendBefore}
                   defaultValue={0}
                   onChange={handleSendBeforeChange}
-                  label="Send"
+                  label="Deliver in"
                 >
                   <MenuItem value={0}>Same Day</MenuItem>
                   {[1, 2, 3, 4].map(item => (
                     <MenuItem key={item} value={item}>
-                      {pluralize(`${item} Day`, item)} earlier
+                      {pluralize('day', item, true)} earlier
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </>
           )}
-          {isTemplatesModalOpen && (
-            <MarketingTemplatePickerModal
-              title="Select Template"
-              user={user}
-              mediums={['Email' as MarketingTemplateMedium.Email]}
-              templateTypes={[getTemplateType(attributeName)]}
-              onSelect={handleSelectTemplate}
-              onClose={() => setIsTemplatesModalOpen(false)}
-            />
-          )}
         </div>
       </div>
       {isActive && (
         <div className={classes.containerItem}>
           <TemplateSelector
+            user={user}
             currentValue={currentValue}
+            attributeName={attributeName}
             selectedTemplate={selectedTemplate}
-            handleShowTemplatePicker={() => setIsTemplatesModalOpen(true)}
+            onSelectTemplate={handleSelectTemplate}
           />
         </div>
       )}

@@ -1,11 +1,23 @@
-import React from 'react'
-import _get from 'lodash/get'
+import React, { useState } from 'react'
 import { makeStyles, Theme, Typography } from '@material-ui/core'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
+
+import { template } from 'underscore'
+
+import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
+
+import { getActiveTeamId } from 'utils/user-teams'
+
+import { getTemplates } from 'models/instant-marketing/get-templates'
+
+import { getTemplateType } from '../helpers/get-template-type'
 
 interface Props {
+  user: IUser
   currentValue: Nullable<ITrigger>
+  attributeName: TriggerContactEventTypes
   selectedTemplate: Nullable<IBrandMarketingTemplate>
-  handleShowTemplatePicker: () => void
+  onSelectTemplate: (template: IBrandMarketingTemplate) => void
 }
 
 const useStyles = makeStyles(
@@ -45,13 +57,56 @@ const useStyles = makeStyles(
 )
 
 export const TemplateSelector = ({
+  user,
   currentValue,
+  attributeName,
   selectedTemplate,
-  handleShowTemplatePicker
+  onSelectTemplate
 }: Props) => {
   const classes = useStyles()
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
+    false
+  )
 
+  useEffectOnce(() => {
+    const brandId = getActiveTeamId(user)
+
+    if (!brandId) {
+      return
+    }
+
+    if (!selectedTemplate && !currentValue) {
+      getTemplates(
+        brandId,
+        [getTemplateType(attributeName)],
+        ['Email' as MarketingTemplateMedium.Email]
+      )
+        .then(templates => {
+          console.log('templates', templates)
+
+          if (template.length) {
+            onSelectTemplate(templates[0])
+          }
+        })
+        .catch(err => console.error(err))
+    }
+  })
+
+  const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
+    try {
+      onSelectTemplate(template)
+      setIsTemplatePickerOpen(false)
+    } catch (error) {
+      console.error(error)
+    }
+  }
   const renderPreview = () => {
+    if (!selectedTemplate && !currentValue) {
+      return (
+        <span className={classes.templatePreviewPlaceholder}>Loading...</span>
+      )
+    }
+
     if (selectedTemplate) {
       return (
         <img
@@ -63,11 +118,7 @@ export const TemplateSelector = ({
     }
 
     if (currentValue) {
-      const preview = _get(
-        currentValue,
-        'campaign.template.file.preview_url',
-        false
-      )
+      const preview = currentValue.campaign?.template?.file?.preview_url
 
       if (!preview) {
         return (
@@ -88,31 +139,43 @@ export const TemplateSelector = ({
 
     return (
       <span className={classes.templatePreviewPlaceholder}>
-        Select a Template
+        Somthing went wrong :(
       </span>
     )
   }
 
   return (
-    <div className={classes.container}>
-      <div className={classes.header}>
-        <span className={classes.headerTitle}>Template</span>
-        {(selectedTemplate || currentValue) && (
-          <Typography
-            variant="body2"
-            className={classes.openTemplatePicker}
-            onClick={handleShowTemplatePicker}
-          >
-            Change
-          </Typography>
-        )}
+    <>
+      <div className={classes.container}>
+        <div className={classes.header}>
+          <span className={classes.headerTitle}>Template</span>
+          {(selectedTemplate || currentValue) && (
+            <Typography
+              variant="body2"
+              className={classes.openTemplatePicker}
+              onClick={() => setIsTemplatePickerOpen(true)}
+            >
+              Change
+            </Typography>
+          )}
+        </div>
+        <div
+          className={classes.templatePreview}
+          onClick={() => setIsTemplatePickerOpen(true)}
+        >
+          {renderPreview()}
+        </div>
       </div>
-      <div
-        className={classes.templatePreview}
-        onClick={handleShowTemplatePicker}
-      >
-        {renderPreview()}
-      </div>
-    </div>
+      {isTemplatePickerOpen && (
+        <MarketingTemplatePickerModal
+          title="Select Template"
+          user={user}
+          mediums={['Email' as MarketingTemplateMedium.Email]}
+          templateTypes={[getTemplateType(attributeName)]}
+          onSelect={handleSelectTemplate}
+          onClose={() => setIsTemplatePickerOpen(false)}
+        />
+      )}
+    </>
   )
 }
