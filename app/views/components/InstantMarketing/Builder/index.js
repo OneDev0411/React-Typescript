@@ -3,11 +3,9 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import juice from 'juice'
 import { Button, IconButton, Tooltip } from '@material-ui/core'
-
 import { mdiClose, mdiMenu } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { Portal } from 'components/Portal'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import SearchListingDrawer from 'components/SearchListingDrawer'
@@ -279,7 +277,7 @@ class Builder extends React.Component {
   }
 
   registerEmailBlocks = () => {
-    // We should not reregister blocks if it's already done!
+    // We should not re-register blocks if it's already done!
     if (this.emailBlocksRegistered) {
       return
     }
@@ -324,13 +322,13 @@ class Builder extends React.Component {
       }
     }
 
-    const showNeighborhoodsBlocks = getActiveTeamSettings(
+    const shouldShowNeighborhoodsBlocks = getActiveTeamSettings(
       this.props.user,
       ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY,
       true
     )
 
-    if (showNeighborhoodsBlocks) {
+    if (shouldShowNeighborhoodsBlocks) {
       emailBlocksOptions.neighborhoods = {
         onNeighborhoodsDrop: () => {
           this.setState({ isNeighborhoodsReportDrawerOpen: true })
@@ -416,7 +414,7 @@ class Builder extends React.Component {
     if (!iframe.contentDocument) {
       console.warn('iframe contentDocument is null')
 
-      return false
+      return
     }
 
     iframe.contentDocument.head.appendChild(style)
@@ -452,10 +450,10 @@ class Builder extends React.Component {
     const updateAll = model => {
       const attributes = model.get('attributes')
 
-      const editable = attributes['rechat-editable']
+      const isEditable = attributes['rechat-editable']
       const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
 
-      if (!editable) {
+      if (!isEditable) {
         model.set({
           editable: false,
           resizable: false,
@@ -473,7 +471,7 @@ class Builder extends React.Component {
         this.editor.select(model)
       }
 
-      if (editable && editable.toLowerCase() === 'tree') {
+      if (isEditable && isEditable.toLowerCase() === 'tree') {
         return
       }
 
@@ -543,7 +541,8 @@ class Builder extends React.Component {
       return
     }
 
-    this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
+    this.props.onSocialSharing &&
+      this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
   }
 
   handlePrintableSharing = () => {
@@ -551,7 +550,8 @@ class Builder extends React.Component {
       return
     }
 
-    this.props.onPrintableSharing(this.getSavedTemplate())
+    this.props.onPrintableSharing &&
+      this.props.onPrintableSharing(this.getSavedTemplate())
   }
 
   generateBrandedTemplate = (templateMarkup, data) => {
@@ -580,8 +580,8 @@ class Builder extends React.Component {
 
     let html = selectedTemplate.markup
 
-    // GrapeJS doesn't support for inline style for body tag, we are making our styles
-    // Inline using juice. so we need to extract them and put them in <head>
+    // GrapeJS doesn't support inline styles for body tag, we are making our styles
+    // inline using juice package. So we need to extract the styles and put them in <head> tag.
     // Note: this is only useful for EDIT mode.
     const regex = /<body.*?(style="(.*?)")+?.*?>/g
     const searchInTemplates = regex.exec(html)
@@ -658,7 +658,7 @@ class Builder extends React.Component {
   }
 
   // This accessor is going to return the template object
-  // which contains all templates fields that we need for different thins
+  // which contains all templates fields that we need for different things
   // The purpose of this accessor is to return the proper object for
   // both brand templates and template instances (my designs)
   get selectedTemplate() {
@@ -693,7 +693,15 @@ class Builder extends React.Component {
     return this.selectedTemplate && this.selectedTemplate.markup
   }
 
-  get showEditListingsButton() {
+  get isBareMode() {
+    return this.props.bareMode === true
+  }
+
+  get shouldShowEditListingsButton() {
+    if (this.isBareMode) {
+      return false
+    }
+
     return (
       this.state.originalTemplate &&
       this.props.templateTypes.includes('Listings') &&
@@ -707,6 +715,14 @@ class Builder extends React.Component {
     }
 
     return false
+  }
+
+  get shouldShowEmailActions() {
+    if (this.isBareMode) {
+      return false
+    }
+
+    return this.isEmailMedium
   }
 
   get isSocialMedium() {
@@ -728,12 +744,28 @@ class Builder extends React.Component {
     return false
   }
 
+  get shouldShowSocialShareActions() {
+    if (this.isBareMode) {
+      return false
+    }
+
+    return this.isSocialMedium
+  }
+
   get isPrintableMedium() {
     if (this.selectedTemplate) {
       return this.selectedTemplate.medium === 'Letter'
     }
 
     return false
+  }
+
+  get shouldShowPrintableActions() {
+    if (this.isBareMode) {
+      return false
+    }
+
+    return this.isPrintableMedium
   }
 
   get isOpenHouseMedium() {
@@ -788,6 +820,10 @@ class Builder extends React.Component {
   }
 
   shouldShowSaveAsTemplateButton = () => {
+    if (this.isBareMode) {
+      return false
+    }
+
     // Only Backoffice users should see this for now
     const isBackofficeUser = isBackOffice(this.props.user)
 
@@ -812,9 +848,7 @@ class Builder extends React.Component {
   }
 
   render() {
-    const { isLoading } = this.state
-
-    if (isLoading) {
+    if (this.state.isLoading) {
       return null
     }
 
@@ -971,7 +1005,7 @@ class Builder extends React.Component {
                 />
               )}
 
-              {this.ShowEditListingsButton && !this.props.isEdit && (
+              {this.shouldShowEditListingsButton && !this.props.isEdit && (
                 <Button
                   style={{ marginLeft: '0.5rem' }}
                   variant="outlined"
@@ -982,14 +1016,14 @@ class Builder extends React.Component {
                 </Button>
               )}
 
-              {this.isSocialMedium && (
+              {this.shouldShowSocialShareActions && (
                 <SocialActions
                   networks={this.socialNetworks}
                   onClick={this.handleSocialSharing}
                 />
               )}
 
-              {this.isPrintableMedium && (
+              {this.shouldShowPrintableActions && (
                 <Button
                   style={{
                     marginLeft: '0.5rem'
@@ -1002,7 +1036,7 @@ class Builder extends React.Component {
                 </Button>
               )}
 
-              {this.isEmailMedium && (
+              {this.shouldShowEmailActions && (
                 <Button
                   style={{
                     marginLeft: '0.5rem'
@@ -1012,6 +1046,19 @@ class Builder extends React.Component {
                   onClick={this.handleSave}
                 >
                   Continue
+                </Button>
+              )}
+
+              {this.isBareMode && (
+                <Button
+                  style={{
+                    marginLeft: '0.5rem'
+                  }}
+                  variant="contained"
+                  color="primary"
+                  onClick={this.handleSave}
+                >
+                  {this.props.saveButtonCopy || 'Save'}
                 </Button>
               )}
 
