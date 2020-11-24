@@ -1058,7 +1058,7 @@ class Builder extends React.Component {
                   color="primary"
                   onClick={this.handleSave}
                 >
-                  {this.props.saveButtonCopy || 'Save'}
+                  {this.props.saveButtonText || 'Save'}
                 </Button>
               )}
 

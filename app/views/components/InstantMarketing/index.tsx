@@ -20,7 +20,7 @@ interface Props {
   containerStyle?: React.CSSProperties
   isTemplatesColumnHiddenDefault?: boolean
   bareMode?: boolean
-  saveButtonCopy?: string
+  saveButtonText?: string
   handleSocialSharing?: (
     template: IBrandMarketingTemplateWithMarkup,
     socialNetworkName: string
@@ -43,7 +43,7 @@ export default function InstantMarketing({
   containerStyle = {},
   isTemplatesColumnHiddenDefault = true,
   bareMode = false,
-  saveButtonCopy,
+  saveButtonText,
   handleSave,
   handleSocialSharing,
   onClose
@@ -75,7 +75,7 @@ export default function InstantMarketing({
       containerStyle={containerStyle}
       isTemplatesColumnHiddenDefault={isTemplatesColumnHiddenDefault}
       bareMode={bareMode}
-      saveButtonCopy={saveButtonCopy}
+      saveButtonText={saveButtonText}
       onClose={handleClose}
       onSave={handleSave}
       onSocialSharing={handleSocialSharing}

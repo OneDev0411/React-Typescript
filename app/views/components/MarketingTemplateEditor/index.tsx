@@ -21,9 +21,9 @@ interface Props {
   templateData?: TemplateData
 
   /**
-   * The save button copy
+   * The save button text/copy
    */
-  saveButtonCopy?: string
+  saveButtonText?: string
 
   /**
    * Save button click handler
@@ -41,14 +41,14 @@ interface Props {
 export default function MarketingTemplateEditor({
   brandTemplate,
   templateData = {},
-  saveButtonCopy = 'Save',
+  saveButtonText = 'Save',
   onSave,
   onClose
 }: Props) {
   return (
     <InstantMarketing
       bareMode
-      saveButtonCopy={saveButtonCopy}
+      saveButtonText={saveButtonText}
       closeConfirmation={false}
       isTemplatesColumnHiddenDefault
       hideTemplatesColumn
