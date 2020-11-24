@@ -56,4 +56,4 @@ ssh "dokku@$REVIEW_HOST" letsencrypt $APP
 ssh "dokku@$REVIEW_HOST" apps:unlock $APP || true
 
 # Deploy
-git push "dokku@$REVIEW_HOST:$APP" $CI_COMMIT_REF_SLUG:master
+git push "dokku@$REVIEW_HOST:$APP" $CI_COMMIT_REF_SLUG:master --force
