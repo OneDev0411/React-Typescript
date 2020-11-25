@@ -19,6 +19,7 @@ import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -115,8 +116,11 @@ export function Address(props: Props) {
           placement="bottom"
         >
           <div className={classes.container} onClick={editAddress}>
-            <Typography variant="h6">
-              {fullAddress || props.deal.title}
+            <Typography variant="subtitle1">
+              <TextMiddleTruncate
+                text={fullAddress || props.deal.title}
+                maxLength={35}
+              />
             </Typography>
 
             {!props.deal.listing && (
@@ -125,7 +129,7 @@ export function Address(props: Props) {
                 size="small"
                 className={classes.editButton}
               >
-                {fullAddress ? 'Edit Address' : '+ Add Address'}
+                {fullAddress ? 'Edit' : '+ Add Address'}
               </Button>
             )}
           </div>
