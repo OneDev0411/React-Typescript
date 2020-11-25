@@ -1,15 +1,17 @@
-import React, { memo } from 'react'
+import React, { useState, useRef, memo } from 'react'
 import cn from 'classnames'
 import { Grid, Box, makeStyles } from '@material-ui/core'
+import { useDeepCompareEffect } from 'react-use'
 
-import LoadingComponent from 'components/Spinner'
-
+import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
+import LoadingComponent from 'components/Spinner'
 
 import ListingCard from '../ListingCardWithFavorite'
 import ZeroState from '../ZeroState'
 
 const VERTICAL_GAP_FROM_PAGE_TOP = '12em' // It's the page header height
+const PAGE_SIZE = 12
 
 const useStyles = makeStyles(
   theme => ({
@@ -42,6 +44,21 @@ const MapView = props => {
   const classes = useStyles()
   const { selections, toggleItem } = useListSelection()
 
+  const cardsContainerRef = useRef()
+  const [limit, setLimit] = useState(PAGE_SIZE)
+  const loadNextPage = () => setLimit(limit => limit + PAGE_SIZE)
+
+  useInfiniteScroll({
+    container: cardsContainerRef,
+    accuracy: 300,
+    debounceTime: 100,
+    onScrollBottom: loadNextPage
+  })
+
+  useDeepCompareEffect(() => {
+    setLimit(PAGE_SIZE)
+  }, [props.sortedListings])
+
   const renderCards = () => {
     if (props.isFetching) {
       return <LoadingComponent />
@@ -51,7 +68,7 @@ const MapView = props => {
       return <ZeroState />
     }
 
-    return props.sortedListings.map(listing => (
+    return props.sortedListings.slice(0, limit).map(listing => (
       <Grid key={listing.id} item xs={12} md={6}>
         <Box pb={1} px={1}>
           <ListingCard
@@ -69,6 +86,8 @@ const MapView = props => {
     <Box className={classes.container}>
       <Box className={classes.mapContainer}>{props.Map}</Box>
       <Box
+        // See: https://github.com/mui-org/material-ui/issues/17010
+        ref={cardsContainerRef} // @ts-ignore
         className={cn(classes.cardsContainer, 'u-scrollbar--thinner--self')}
         display={{ xs: 'none', md: 'block' }}
       >

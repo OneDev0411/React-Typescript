@@ -1,7 +1,6 @@
 import React, { ComponentProps, useCallback, useState, memo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Dialog } from '@material-ui/core'
-import LazyLoad from 'react-lazy-load'
 import { noop } from 'lodash'
 
 import toggleFavorite from 'actions/listings/favorites/toggle-favorite'
@@ -56,17 +55,15 @@ const ListingCardWithFavorite = ({
 
   return (
     <>
-      <LazyLoad>
-        <ListingCard
-          listing={listing}
-          selected={user ? selected : undefined}
-          liked={user ? isFavorited : undefined}
-          tags={tags}
-          onClick={handleClick}
-          onLikeClick={handleLikeClick}
-          onToggleSelection={handleToggleSelection}
-        />
-      </LazyLoad>
+      <ListingCard
+        listing={listing}
+        selected={user ? selected : undefined}
+        liked={user ? isFavorited : undefined}
+        tags={tags}
+        onClick={handleClick}
+        onLikeClick={handleLikeClick}
+        onToggleSelection={handleToggleSelection}
+      />
 
       {isListingOpen && (
         <Dialog open fullScreen>
