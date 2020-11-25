@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import cn from 'classnames'
 import { Grid, Box, makeStyles } from '@material-ui/core'
 
@@ -78,4 +78,4 @@ const MapView = props => {
   )
 }
 
-export default MapView
+export default memo(MapView)

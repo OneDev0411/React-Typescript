@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Grid, Box } from '@material-ui/core'
 
 import { useListSelection } from 'components/ListSelection/use-list-selection'
@@ -9,7 +9,7 @@ import LoadingComponent from '../../../../../../views/components/Spinner'
 
 import ZeroState from '../ZeroState'
 
-export default function GridView({ isFetching, sortedListings }) {
+function GridView({ isFetching, sortedListings }) {
   const { selections, toggleItem } = useListSelection()
 
   const renderContent = () => {
@@ -41,3 +41,5 @@ export default function GridView({ isFetching, sortedListings }) {
     </Box>
   )
 }
+
+export default memo(GridView)

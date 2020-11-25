@@ -164,6 +164,10 @@ export default function ListingCard({
     onLikeClick()
   }
 
+  const handleToggleSelection = () => {
+    onToggleSelection()
+  }
+
   return (
     <Card variant="outlined" className={classes.card} onClick={onClick}>
       <CardActionArea>
@@ -178,7 +182,7 @@ export default function ListingCard({
                         size="small"
                         checked={selected}
                         className={classes.selectionCheckbox}
-                        onChange={() => onToggleSelection()}
+                        onChange={handleToggleSelection}
                         onClick={stopPropagation}
                       />
                     </div>

@@ -1,4 +1,4 @@
-import React, { ComponentProps, useState } from 'react'
+import React, { ComponentProps, useCallback, useState, memo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Dialog } from '@material-ui/core'
 import LazyLoad from 'react-lazy-load'
@@ -30,25 +30,29 @@ const ListingCardWithFavorite = ({
 
   const [isListingOpen, setIsListingOpen] = useState<boolean>(false)
 
-  const openListing = () => {
-    window.history.pushState({}, '', `/dashboard/mls/${listing.id}`)
-    setIsListingOpen(true)
-  }
-
   const closeListing = () => {
     window.history.pushState({}, '', '/dashboard/mls')
     setIsListingOpen(false)
   }
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (onClick) {
       onClick()
 
       return
     }
 
-    openListing()
-  }
+    window.history.pushState({}, '', `/dashboard/mls/${listing.id}`)
+    setIsListingOpen(true)
+  }, [onClick, listing.id])
+
+  const handleToggleSelection = useCallback(onToggleSelection, [
+    onToggleSelection
+  ])
+
+  const handleLikeClick = useCallback(() => {
+    dispatch(toggleFavorite(listing))
+  }, [dispatch, listing])
 
   return (
     <>
@@ -59,8 +63,8 @@ const ListingCardWithFavorite = ({
           liked={user ? isFavorited : undefined}
           tags={tags}
           onClick={handleClick}
-          onLikeClick={() => dispatch(toggleFavorite(listing))}
-          onToggleSelection={onToggleSelection}
+          onLikeClick={handleLikeClick}
+          onToggleSelection={handleToggleSelection}
         />
       </LazyLoad>
 
@@ -83,4 +87,4 @@ const ListingCardWithFavorite = ({
   )
 }
 
-export default ListingCardWithFavorite
+export default memo(ListingCardWithFavorite)
