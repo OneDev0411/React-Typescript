@@ -52,7 +52,7 @@ const ListingCardWithFavorite = ({
 
   return (
     <>
-      <LazyLoad height={310} offsetBottom={1500}>
+      <LazyLoad>
         <ListingCard
           listing={listing}
           selected={user ? selected : undefined}

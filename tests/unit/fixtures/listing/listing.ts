@@ -1,4 +1,4 @@
-export const listing: IListing = {
+export const listing: IListing & any = {
   type: 'listing',
   id: 'fb403302-b062-11e8-8aa6-0a95998482ac',
   property_id: 'fb3f066c-b062-11e8-8aa5-0a95998482ac',
@@ -219,6 +219,7 @@ export const listing: IListing = {
     id: '8e5d0f24-a266-11e5-a8bd-f23c91c841bd',
     email: 'fhalum@briggsfreeman.com',
     mlsid: '0436754',
+    mls: '',
     fax: null,
     full_name: 'Faisal Halum',
     first_name: 'Faisal',
@@ -251,6 +252,7 @@ export const listing: IListing = {
   favorited: false,
   open_houses: null,
   property: {
+    mls: '',
     type: 'property',
     id: 'fb3f066c-b062-11e8-8aa5-0a95998482ac',
     bedroom_count: 6,
@@ -361,6 +363,7 @@ export const listing: IListing = {
     fenced_yard_yn: false,
     block: '5529',
     address: {
+      mls: '',
       title: '',
       subtitle: '',
       street_number: '10210',

@@ -165,7 +165,7 @@ export const getListingFeatures = (listing: IListing | ICompactListing): {
     bedroomCount: property.bedroom_count,
     bathroomCount: property.bathroom_count,
     areaSqft:
-      Math.round(metersToFeet(property.square_meters))
+      Math.floor(metersToFeet(property.square_meters))
     ,
     lotSizeAreaAcre: property.lot_size_area,
   }

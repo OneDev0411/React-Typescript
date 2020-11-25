@@ -106,7 +106,7 @@ export default function ListingCardMedia({ children, listing }: Props) {
     >
       <div className={classes.childrenContainer}>{children}</div>
       {images.length > 1 ? (
-        <Slide transitionDuration={200} autoplay={false}>
+        <Slide canSwipe={false} transitionDuration={200} autoplay={false}>
           {images.map(image => (
             <div key={image}>
               <img className={classes.image} src={image} alt="listing" />

@@ -5,7 +5,8 @@ import Modal from 'components/BareModal'
 import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
 
-import ListingCard from '../ListingCard'
+import ListingCard from 'components/ListingCards/ListingCard'
+
 import ListingModalViewer from '../ListingModalViewer'
 import { formatListing } from '../../helpers/format-listing'
 
@@ -40,7 +41,6 @@ export default function AlertViewerModal(props: Props) {
             {feed.map(listing => (
               <Card key={listing.id}>
                 <ListingCard
-                  selectable={false}
                   listing={formatListing(listing)}
                   onClick={() => {
                     setSelectedListing(listing)
