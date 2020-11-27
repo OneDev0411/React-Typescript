@@ -32,7 +32,7 @@ const useStyles = makeStyles(
     },
     cardsContainer: {
       width: '50%',
-      padding: theme.spacing(0, 0.5, 2, 2),
+      paddingRight: theme.spacing(0.5),
       overflowY: 'scroll',
       borderLeft: `1px solid ${theme.palette.divider}`
     }
@@ -70,7 +70,7 @@ const MapView = props => {
 
     return props.sortedListings.slice(0, limit).map(listing => (
       <Grid key={listing.id} item xs={12} md={6}>
-        <Box pb={1} px={1}>
+        <Box pb={1} pl={1}>
           <ListingCard
             listing={listing}
             tags={listing.new ? [listing.new] : undefined}

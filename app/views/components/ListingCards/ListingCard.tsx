@@ -10,6 +10,7 @@ import {
   Chip,
   Box,
   Badge,
+  fade,
   Theme,
   makeStyles
 } from '@material-ui/core'
@@ -51,7 +52,7 @@ const useStyles = makeStyles(
     }),
     cardMediaActionContainer: {
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.common.white,
+      backgroundColor: fade(theme.palette.common.white, 0.7),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -74,6 +75,9 @@ const useStyles = makeStyles(
     },
     listingFeatureValue: {
       ...theme.typography.body3
+    },
+    addressContainer: {
+      maxWidth: '100%'
     },
     address: {
       ...theme.typography.body3
@@ -305,8 +309,8 @@ export default function ListingCard({
               )}
             </Grid>
             <Grid container item alignItems="center">
-              <Grid item>
-                <Typography variant="body2" className={classes.address}>
+              <Grid item className={classes.addressContainer}>
+                <Typography noWrap variant="body2" className={classes.address}>
                   {address}
                 </Typography>
               </Grid>
