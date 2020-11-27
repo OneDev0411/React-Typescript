@@ -38,7 +38,9 @@ export default function GlobalHeaderWithSearch({
 }: GlobalHeaderWithSearchProps) {
   const classes = useStyles()
 
-  const [searchQueryValue, setSearchQueryValue] = useState('')
+  const [searchQueryValue, setSearchQueryValue] = useState(
+    SearchInputProps?.defaultValue || ''
+  )
 
   const throttledSearchHandler = useRef(
     debounce((value: string) => onSearch(value), 500)
