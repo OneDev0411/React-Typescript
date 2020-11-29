@@ -10,8 +10,9 @@ const useStyles = makeStyles(
       display: 'inline-flex',
       alignItems: 'center',
       padding: theme.spacing(1, 2),
-      backgroundColor: theme.palette.grey['100'],
-      borderRadius: '20px'
+      borderRadius: '20px',
+      color: theme.palette.tertiary.light,
+      backgroundColor: theme.palette.grey['100']
     },
     status: {
       width: 10,

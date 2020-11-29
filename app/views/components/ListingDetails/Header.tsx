@@ -13,12 +13,16 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     logo: {
-      maxWidth: 260
+      height: 40,
+      [theme.breakpoints.up('lg')]: {
+        height: 56
+      }
     },
     button: {
       marginRight: theme.spacing(2)
     },
     menuContainer: {
+      height: '100%',
       marginTop: theme.spacing(3),
       [theme.breakpoints.up('sm')]: {
         marginTop: 0,
@@ -54,41 +58,43 @@ function Header({ id, handleFavorite, handleLogin, handleShare }: Props) {
   )
 
   return (
-    <Box py={5} px={3}>
-      <Grid container>
-        <Grid item xs={12} sm={3}>
-          <img alt="logo" src={logo} className={classes.logo} />
-        </Grid>
-        <Grid item xs={12} sm={9}>
-          <Box display="flex" className={classes.menuContainer}>
-            {user && (
-              <Button
-                variant="outlined"
-                onClick={handleFavorite}
-                startIcon={<SvgIcon path={mdiHeartOutline} />}
-                className={classes.button}
-              >
-                Favorite
-              </Button>
-            )}
-            {user && (
-              <Button
-                variant="outlined"
-                onClick={handleShare}
-                startIcon={<SvgIcon path={mdiExportVariant} />}
-              >
-                Share
-              </Button>
-            )}
-            {!user && (
-              <Button variant="contained" color="primary" onClick={handleLogin}>
-                Login
-              </Button>
-            )}
-          </Box>
-        </Grid>
+    <Grid container>
+      <Grid item xs={12} sm={3}>
+        <img alt="logo" src={logo} className={classes.logo} />
       </Grid>
-    </Box>
+      <Grid item xs={12} sm={9}>
+        <Box
+          display="flex"
+          alignItems="center"
+          className={classes.menuContainer}
+        >
+          {user && (
+            <Button
+              variant="outlined"
+              onClick={handleFavorite}
+              startIcon={<SvgIcon path={mdiHeartOutline} />}
+              className={classes.button}
+            >
+              Favorite
+            </Button>
+          )}
+          {user && (
+            <Button
+              variant="outlined"
+              onClick={handleShare}
+              startIcon={<SvgIcon path={mdiExportVariant} />}
+            >
+              Share
+            </Button>
+          )}
+          {!user && (
+            <Button variant="contained" color="primary" onClick={handleLogin}>
+              Login
+            </Button>
+          )}
+        </Box>
+      </Grid>
+    </Grid>
   )
 }
 

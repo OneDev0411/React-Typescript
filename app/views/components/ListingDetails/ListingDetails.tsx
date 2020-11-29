@@ -26,21 +26,24 @@ import { getSubAddress } from './get-sub-address'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
-      maxWidth: '1440px',
-      margin: '0 auto'
+    header: {
+      padding: theme.spacing(6, 3),
+      [theme.breakpoints.up('lg')]: {
+        padding: theme.spacing(6)
+      }
     },
-    indexWrapper: {
+    heroWrapper: {
       marginBottom: theme.spacing(7),
       [theme.breakpoints.up('sm')]: {
         marginBottom: theme.spacing(10)
       },
       [theme.breakpoints.up('lg')]: {
-        paddingLeft: theme.spacing(3),
-        paddingRight: theme.spacing(3)
+        marginBottom: theme.spacing(25),
+        paddingLeft: theme.spacing(6),
+        paddingRight: theme.spacing(6)
       }
     },
-    indexContainer: {
+    heroContainer: {
       [theme.breakpoints.up('lg')]: {
         flexDirection: 'row-reverse'
       }
@@ -51,19 +54,36 @@ const useStyles = makeStyles(
         marginBottom: 0
       }
     },
-    indexLeftSideWrapper: {
-      paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(3),
+    heroLeftSideWrapper: {
+      padding: theme.spacing(0, 3),
 
       [theme.breakpoints.up('lg')]: {
-        paddingLeft: 0
+        paddingTop: theme.spacing(10)
       }
     },
     titleWrapper: {
-      marginBottom: theme.spacing(5)
+      marginBottom: theme.spacing(3),
+
+      [theme.breakpoints.up('sm')]: {
+        marginBottom: theme.spacing(5)
+      }
     },
     mainFeaturesWrapper: {
-      marginBottom: theme.spacing(3)
+      marginBottom: theme.spacing(4),
+      [theme.breakpoints.up('sm')]: {
+        paddingRight: theme.spacing(3)
+      },
+      [theme.breakpoints.up('lg')]: {
+        padding: 0
+      }
+    },
+    staticMapWrapper: {
+      [theme.breakpoints.up('sm')]: {
+        paddingLeft: theme.spacing(3)
+      },
+      [theme.breakpoints.up('lg')]: {
+        padding: 0
+      }
     },
     featuredImageWrapper: {
       marginBottom: theme.spacing(7),
@@ -130,32 +150,36 @@ function ListingDetails({ id }: Props) {
 
   return (
     <Container maxWidth="xl" disableGutters>
-      <Header id={listing.id} />
-      <Box className={classes.indexWrapper}>
-        <Grid container className={classes.indexContainer}>
-          <Grid item xs={12} lg={6} className={classes.galleryWrapper}>
+      <div className={classes.header}>
+        <Header id={listing.id} />
+      </div>
+      <Box className={classes.heroWrapper}>
+        <Grid container className={classes.heroContainer} spacing={3}>
+          <Grid item xs={12} lg={7} className={classes.galleryWrapper}>
             <Gallery images={listing.gallery_image_urls} />
           </Grid>
-          <Grid item xs={12} lg={6}>
-            <Box className={classes.indexLeftSideWrapper}>
+          <Grid item xs={12} lg={5}>
+            <Box className={classes.heroLeftSideWrapper}>
               <Box className={classes.titleWrapper}>
-                <Box mb={3}>
-                  <Title
-                    title={title}
-                    subtitle1={subtitle1}
-                    subtitle2={subtitle2}
-                  />
-                </Box>
+                <Title
+                  title={title}
+                  subtitle1={subtitle1}
+                  subtitle2={subtitle2}
+                />
+              </Box>
+              <Box mb={5}>
                 <Status status={listing.status} />
               </Box>
-              <Grid container spacing={6}>
-                <Grid item xs={12} sm={6} lg={12}>
+              <Grid container>
+                <Grid item xs={12} sm={6} lg={9}>
                   <Box className={classes.mainFeaturesWrapper}>
                     <MainFeatures listing={listing} />
                   </Box>
                 </Grid>
-                <Grid item xs={12} sm={6} lg={12}>
-                  <StaticMap location={listing.property.address.location} />
+                <Grid item xs={12} sm={6} lg={9}>
+                  <Box className={classes.staticMapWrapper}>
+                    <StaticMap location={listing.property.address.location} />
+                  </Box>
                 </Grid>
               </Grid>
             </Box>
