@@ -2,7 +2,6 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
-import Container from '@material-ui/core/Container'
 import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
@@ -12,6 +11,7 @@ import listingUtils from 'utils/listing'
 import { useGetListing, UseGetListing } from './use-get-listing'
 import Header from './Header'
 import Title from './Title'
+import Status from './Status'
 import Gallery from './Gallery'
 import MainFeatures from './MainFeatures'
 import StaticMap from './StaticMap'
@@ -25,7 +25,12 @@ import { getSubAddress } from './get-sub-address'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
+    container: {
+      maxWidth: '1440px',
+      margin: '0 auto'
+    },
     indexWrapper: {
+      marginBottom: theme.spacing(7),
       [theme.breakpoints.up('md')]: {
         paddingLeft: theme.spacing(3),
         paddingRight: theme.spacing(3)
@@ -37,7 +42,7 @@ const useStyles = makeStyles(
       }
     },
     galleryWrapper: {
-      marginBottom: theme.spacing(3),
+      marginBottom: theme.spacing(5),
       [theme.breakpoints.up('md')]: {
         marginBottom: 0
       }
@@ -51,27 +56,18 @@ const useStyles = makeStyles(
       }
     },
     titleWrapper: {
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(3)
+      marginBottom: theme.spacing(5)
     },
     mainFeaturesWrapper: {
-      paddingTop: theme.spacing(6)
-    },
-    staticMapWrapper: {
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(3)
-    },
-    agentInfoWrapper: {
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(3)
+      marginBottom: theme.spacing(3)
     },
     featuredImageWrapper: {
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(3)
+      marginBottom: theme.spacing(7)
     },
     agentAreaWrapper: {
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3),
+      marginBottom: theme.spacing(7),
 
       [theme.breakpoints.up('md')]: {
         paddingLeft: 0,
@@ -81,8 +77,7 @@ const useStyles = makeStyles(
     descriptionAreaWrapper: {
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3),
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(3),
+      marginBottom: theme.spacing(7),
 
       [theme.breakpoints.up('md')]: {
         paddingLeft: 0,
@@ -104,6 +99,7 @@ function ListingDetails({ id }: Props) {
   const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
   const brand = getActiveBrand(user)
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
 
   const { listing }: UseGetListing = useGetListing(id)
 
@@ -117,37 +113,41 @@ function ListingDetails({ id }: Props) {
   const subtitle2 = `${getSubAddress(listing)} | MLS#: ${listing.mls_number}`
 
   return (
-    <Container maxWidth="lg" disableGutters>
+    <Box className={classes.container}>
       <Header id={listing.id} />
       <Box className={classes.indexWrapper}>
         <Grid container className={classes.indexContainer}>
-          <Grid item xs={12} md={6} className={classes.galleryWrapper}>
+          <Grid item xs={12} lg={6} className={classes.galleryWrapper}>
             <Gallery images={listing.gallery_image_urls} />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} lg={6}>
             <Box className={classes.indexLeftSideWrapper}>
               <Box className={classes.titleWrapper}>
-                <Title
-                  title={title}
-                  subtitle1={subtitle1}
-                  subtitle2={subtitle2}
-                />
+                <Box mb={3}>
+                  <Title
+                    title={title}
+                    subtitle1={subtitle1}
+                    subtitle2={subtitle2}
+                  />
+                </Box>
+                <Status status={listing.status} />
               </Box>
-              <Box className={classes.mainFeaturesWrapper}>
+              <Box
+                className={classes.mainFeaturesWrapper}
+                pr={isDesktop && '20%'}
+              >
                 <MainFeatures listing={listing} />
               </Box>
-              <Box className={classes.staticMapWrapper}>
-                <StaticMap location={listing.property.address.location} />
-              </Box>
+              <StaticMap location={listing.property.address.location} />
             </Box>
           </Grid>
         </Grid>
       </Box>
       <Grid container className={classes.agentAreaWrapper}>
-        <Grid item xs={12} md={6} className={classes.featuredImageWrapper}>
+        <Grid item xs={12} lg={6} className={classes.featuredImageWrapper}>
           <FeaturedImages images={listing.gallery_image_urls?.slice(5, 8)} />
         </Grid>
-        <Grid item xs={12} md={6} className={classes.agentInfoWrapper}>
+        <Grid item xs={12} lg={6}>
           <AgentInfo
             name={agent.full_name}
             email={agent.email}
@@ -159,19 +159,27 @@ function ListingDetails({ id }: Props) {
       </Grid>
       {!isMobile && <FeatureList listing={listing} />}
       <Grid container className={classes.descriptionAreaWrapper}>
-        <Grid item xs={12} md={6}>
-          <Description
-            address={listing.property.address.full_address}
-            description={listing.property.description}
-          />
+        <Grid item xs={12} lg={6}>
+          <Box mb={3}>
+            <Description
+              address={listing.property.address.full_address}
+              description={listing.property.description}
+            />
+          </Box>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} lg={6}>
           <FeaturedImages images={listing.gallery_image_urls?.slice(8, 11)} />
         </Grid>
       </Grid>
-      {isMobile && <FeatureList listing={listing} />}
-      <Map location={listing.property.address.location} />
-    </Container>
+      {isMobile && (
+        <Box mb={4}>
+          <FeatureList listing={listing} />
+        </Box>
+      )}
+      <Box px={3} pb={3}>
+        <Map location={listing.property.address.location} />
+      </Box>
+    </Box>
   )
 }
 

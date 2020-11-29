@@ -1,12 +1,27 @@
 import React from 'react'
-import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles, Theme } from '@material-ui/core'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    grey: {
-      color: theme.palette.grey[700]
+    title: {
+      marginBottom: theme.spacing(1),
+      [theme.breakpoints.up('md')]: {
+        ...theme.typography.h3,
+        marginBottom: theme.spacing(2)
+      }
+    },
+    subtitle1: {
+      [theme.breakpoints.up('md')]: {
+        ...theme.typography.h4,
+        marginBottom: theme.spacing(2)
+      }
+    },
+    subtitle2: {
+      color: theme.palette.grey[700],
+      [theme.breakpoints.up('md')]: {
+        ...theme.typography.h5
+      }
     }
   }),
   { name: 'Title' }
@@ -22,15 +37,17 @@ function Title({ title, subtitle1, subtitle2 }: Props) {
   const classes = useStyles()
 
   return (
-    <Box>
-      <Typography color="primary" variant="h5">
+    <>
+      <Typography color="primary" variant="h5" className={classes.title}>
         {title}
       </Typography>
-      <Typography variant="h6">{subtitle1}</Typography>
-      <Typography variant="subtitle2" className={classes.grey}>
+      <Typography variant="h6" className={classes.subtitle1}>
+        {subtitle1}
+      </Typography>
+      <Typography variant="caption" className={classes.subtitle2}>
         {subtitle2}
       </Typography>
-    </Box>
+    </>
   )
 }
 

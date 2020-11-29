@@ -9,7 +9,7 @@ interface Props {
 
 function Map({ location }: Props) {
   return (
-    <Box py={5} id="map" height="50vh" width="100%">
+    <Box id="map" height="50vh" width="100%">
       <SingleMarkerMap
         id="listingMap"
         location={location}

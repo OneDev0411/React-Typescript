@@ -7,10 +7,15 @@ import { makeStyles, Theme } from '@material-ui/core'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     title: {
-      marginBottom: theme.spacing(2)
+      color: theme.palette.tertiary.light,
+      marginBottom: theme.spacing(2),
+      ...theme.typography.subtitle3,
+      [theme.breakpoints.up('md')]: {
+        ...theme.typography.h5
+      }
     },
     description: {
-      color: theme.palette.grey['500']
+      color: theme.palette.tertiary.light
     }
   }),
   { name: 'Description' }
@@ -29,10 +34,8 @@ function Description({ address, description }: Props) {
   const handleShowMore = () => setIsExpended(state => !state)
 
   return (
-    <Box px={3} py={5}>
-      <Typography variant="h5" className={classes.title}>
-        {address}
-      </Typography>
+    <>
+      <h5 className={classes.title}>{address}</h5>
       <Typography variant="body2" className={classes.description}>
         {isTooLong ? (
           <>
@@ -54,7 +57,7 @@ function Description({ address, description }: Props) {
           </Button>
         </Box>
       )}
-    </Box>
+    </>
   )
 }
 

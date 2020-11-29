@@ -14,14 +14,12 @@ const useStyles = makeStyles(
       }
     },
     label: {
-      ...theme.typography.caption,
-      fontFamily: 'LatoBold',
+      ...theme.typography.subtitle3,
       [theme.breakpoints.up('md')]: {
         ...theme.typography.subtitle1
       }
     },
     value: {
-      ...theme.typography.caption,
       color: theme.palette.grey['800'],
       [theme.breakpoints.up('md')]: {
         ...theme.typography.body1
@@ -38,12 +36,17 @@ function List({ list }: { list: Feature }) {
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <Box px={3} mb={3}>
         <Box py={2}>
-          <Typography className={classes.title}>{list.title}</Typography>
+          <Typography variant="subtitle1" className={classes.title}>
+            {list.title}
+          </Typography>
         </Box>
         <Box>
           {list.items.map((item, index) => (
             <Typography className={classes.label} key={index}>
-              {item.label}: <span className={classes.value}>{item.value}</span>
+              {item.label}:{' '}
+              <Typography variant="caption" className={classes.value}>
+                {item.value}
+              </Typography>
             </Typography>
           ))}
         </Box>
