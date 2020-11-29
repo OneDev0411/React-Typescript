@@ -8,6 +8,8 @@ import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
 import { IAppState } from 'reducers'
 import { getActiveBrand } from 'utils/user-teams'
 import listingUtils from 'utils/listing'
+import LoadingContainer from 'components/LoadingContainer'
+import { useLogUserActivity } from 'hooks/use-log-user-activity'
 
 import { useGetListing, UseGetListing } from './use-get-listing'
 import Header from './Header'
@@ -21,6 +23,7 @@ import AgentInfo from './AgentInfo'
 import Description from './Description'
 import FeatureList from './FeatureList'
 import Map from './Map'
+import { MLSNote } from './MLSNote'
 import { getPrice } from './get-price'
 import { getSubAddress } from './get-sub-address'
 
@@ -136,10 +139,16 @@ function ListingDetails({ id }: Props) {
   const brand = getActiveBrand(user)
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
 
-  const { listing }: UseGetListing = useGetListing(id)
+  const { listing, status, error }: UseGetListing = useGetListing(id)
+
+  useLogUserActivity(listing?.id)
 
   if (!listing) {
-    return 'Loading...'
+    if (status === 'error') {
+      return <div>{error}</div>
+    }
+
+    return <LoadingContainer />
   }
 
   const agent = listing.list_agent
@@ -222,8 +231,11 @@ function ListingDetails({ id }: Props) {
           <FeatureList listing={listing} />
         </Box>
       )}
-      <Box px={3} pb={3}>
+      <Box px={3} mb={5}>
         <Map location={listing.property.address.location} />
+      </Box>
+      <Box p={3}>
+        <MLSNote mls={listing.mls} mlsName={listing.mls_name} />
       </Box>
     </Container>
   )
