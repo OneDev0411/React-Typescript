@@ -11,6 +11,7 @@ import listingUtils from 'utils/listing'
 import LoadingContainer from 'components/LoadingContainer'
 import { useLogUserActivity } from 'hooks/use-log-user-activity'
 
+import ShareModal from '../../../components/Pages/Dashboard/Listings/components/modals/ShareListingModal.js'
 import { useGetListing, UseGetListing } from './use-get-listing'
 import Header from './Header'
 import Title from './Title'
@@ -138,10 +139,13 @@ function ListingDetails({ id }: Props) {
   const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
   const brand = getActiveBrand(user)
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
-
+  const [isShareModalOpen, setIsShareModalOpen] = React.useState(false)
   const { listing, status, error }: UseGetListing = useGetListing(id)
 
   useLogUserActivity(listing?.id)
+
+  const openShareModal = () => setIsShareModalOpen(true)
+  const closeShareModal = () => setIsShareModalOpen(false)
 
   if (!listing) {
     if (status === 'error') {
@@ -159,7 +163,7 @@ function ListingDetails({ id }: Props) {
   return (
     <Container maxWidth="xl" disableGutters>
       <div className={classes.header}>
-        <Header id={listing.id} />
+        <Header id={listing.id} handleShare={openShareModal} />
       </div>
       <Box className={classes.heroWrapper}>
         <Grid container className={classes.heroContainer}>
@@ -237,6 +241,13 @@ function ListingDetails({ id }: Props) {
       <Box p={3}>
         <MLSNote mls={listing.mls} mlsName={listing.mls_name} />
       </Box>
+
+      <ShareModal
+        listing={listing}
+        user={user}
+        isActive={isShareModalOpen}
+        onHide={closeShareModal}
+      />
     </Container>
   )
 }

@@ -36,9 +36,10 @@ const useStyles = makeStyles(
 
 interface Props {
   id?: UUID
+  handleShare: () => void
 }
 
-function Header({ id, params, location }: Props & WithRouterProps) {
+function Header({ handleShare, location }: Props & WithRouterProps) {
   const classes = useStyles()
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
@@ -57,9 +58,11 @@ function Header({ id, params, location }: Props & WithRouterProps) {
 
   const handleLogin = () => {
     const { query } = location
-    const username: string = query.token
-      ? query.email || query.phone_number
-      : ''
+    let username: string = ''
+
+    if (query.token) {
+      username = query.email || query.phone_number || ''
+    }
 
     const url = `/signin?redirectTo=${location.pathname}${
       username ? `&username=${username}` : ''
@@ -69,46 +72,47 @@ function Header({ id, params, location }: Props & WithRouterProps) {
   }
 
   const handleFavorite = () => {}
-  const handleShare = () => {}
 
   return (
-    <Grid container>
-      <Grid item xs={12} sm={3}>
-        <img alt="logo" src={logo} className={classes.logo} />
+    <>
+      <Grid container>
+        <Grid item xs={12} sm={3}>
+          <img alt="logo" src={logo} className={classes.logo} />
+        </Grid>
+        <Grid item xs={12} sm={9}>
+          <Box
+            display="flex"
+            alignItems="center"
+            className={classes.menuContainer}
+          >
+            {user && (
+              <Button
+                variant="outlined"
+                onClick={handleFavorite}
+                startIcon={<SvgIcon path={mdiHeartOutline} />}
+                className={classes.button}
+              >
+                Favorite
+              </Button>
+            )}
+            {user && (
+              <Button
+                variant="outlined"
+                onClick={handleShare}
+                startIcon={<SvgIcon path={mdiExportVariant} />}
+              >
+                Share
+              </Button>
+            )}
+            {!user && (
+              <Button variant="contained" color="primary" onClick={handleLogin}>
+                Login
+              </Button>
+            )}
+          </Box>
+        </Grid>
       </Grid>
-      <Grid item xs={12} sm={9}>
-        <Box
-          display="flex"
-          alignItems="center"
-          className={classes.menuContainer}
-        >
-          {user && (
-            <Button
-              variant="outlined"
-              onClick={handleFavorite}
-              startIcon={<SvgIcon path={mdiHeartOutline} />}
-              className={classes.button}
-            >
-              Favorite
-            </Button>
-          )}
-          {user && (
-            <Button
-              variant="outlined"
-              onClick={handleShare}
-              startIcon={<SvgIcon path={mdiExportVariant} />}
-            >
-              Share
-            </Button>
-          )}
-          {!user && (
-            <Button variant="contained" color="primary" onClick={handleLogin}>
-              Login
-            </Button>
-          )}
-        </Box>
-      </Grid>
-    </Grid>
+    </>
   )
 }
 
