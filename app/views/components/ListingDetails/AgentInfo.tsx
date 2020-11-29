@@ -55,7 +55,7 @@ function AgentInfo({ name, jobTitle, email, company, tel, image }: Props) {
 
   return (
     <Grid container spacing={4}>
-      <Grid item xs={6}>
+      <Grid item xs={6} sm={4}>
         {image ? (
           <img alt={name} src={image} className={classes.photo} />
         ) : (
@@ -66,7 +66,7 @@ function AgentInfo({ name, jobTitle, email, company, tel, image }: Props) {
           </div>
         )}
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={6} sm={8}>
         <Typography variant="subtitle1" component="h3" className={classes.name}>
           {name}
         </Typography>

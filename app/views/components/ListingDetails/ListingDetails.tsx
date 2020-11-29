@@ -58,7 +58,7 @@ const useStyles = makeStyles(
       padding: theme.spacing(0, 3),
 
       [theme.breakpoints.up('lg')]: {
-        paddingTop: theme.spacing(10)
+        padding: theme.spacing(10, 3, 0, 0)
       }
     },
     titleWrapper: {
@@ -89,21 +89,22 @@ const useStyles = makeStyles(
       marginBottom: theme.spacing(7),
       [theme.breakpoints.up('sm')]: {
         marginBottom: theme.spacing(11)
+      },
+      [theme.breakpoints.up('lg')]: {
+        marginBottom: 0
       }
     },
     agentAreaWrapper: {
-      paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(3),
+      padding: theme.spacing(0, 3),
       marginBottom: theme.spacing(7),
 
       [theme.breakpoints.up('lg')]: {
-        paddingLeft: 0,
-        paddingRight: 0
+        padding: theme.spacing(0, 6),
+        marginBottom: theme.spacing(11)
       }
     },
     descriptionAreaWrapper: {
-      paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(3),
+      padding: theme.spacing(0, 3),
       marginBottom: theme.spacing(7),
 
       [theme.breakpoints.up('sm')]: {
@@ -111,9 +112,7 @@ const useStyles = makeStyles(
       },
 
       [theme.breakpoints.up('lg')]: {
-        paddingLeft: 0,
-        paddingRight: 0,
-        flexDirection: 'row-reverse'
+        padding: theme.spacing(0, 6)
       }
     },
     descriptionWrapper: {
@@ -154,7 +153,7 @@ function ListingDetails({ id }: Props) {
         <Header id={listing.id} />
       </div>
       <Box className={classes.heroWrapper}>
-        <Grid container className={classes.heroContainer} spacing={3}>
+        <Grid container className={classes.heroContainer}>
           <Grid item xs={12} lg={7} className={classes.galleryWrapper}>
             <Gallery images={listing.gallery_image_urls} />
           </Grid>
@@ -171,12 +170,12 @@ function ListingDetails({ id }: Props) {
                 <Status status={listing.status} />
               </Box>
               <Grid container>
-                <Grid item xs={12} sm={6} lg={9}>
+                <Grid item xs={12} sm={6} lg={8}>
                   <Box className={classes.mainFeaturesWrapper}>
                     <MainFeatures listing={listing} />
                   </Box>
                 </Grid>
-                <Grid item xs={12} sm={6} lg={9}>
+                <Grid item xs={12} sm={6} lg={8}>
                   <Box className={classes.staticMapWrapper}>
                     <StaticMap location={listing.property.address.location} />
                   </Box>
@@ -187,10 +186,10 @@ function ListingDetails({ id }: Props) {
         </Grid>
       </Box>
       <Grid container className={classes.agentAreaWrapper}>
-        <Grid item xs={12} lg={6} className={classes.featuredImageWrapper}>
+        <Grid item xs={12} lg={7} className={classes.featuredImageWrapper}>
           <FeaturedImages images={listing.gallery_image_urls?.slice(5, 8)} />
         </Grid>
-        <Grid item xs={12} lg={6}>
+        <Grid item xs={12} lg={5}>
           <AgentInfo
             name={agent.full_name}
             email={agent.email}
@@ -200,22 +199,26 @@ function ListingDetails({ id }: Props) {
           />
         </Grid>
       </Grid>
-      {isDesktop && <FeatureList listing={listing} />}
+      {isDesktop && (
+        <Box px={6} mb={20}>
+          <FeatureList listing={listing} />
+        </Box>
+      )}
       <Grid container className={classes.descriptionAreaWrapper}>
-        <Grid item xs={12} lg={6}>
+        <Grid item xs={12} lg={4}>
           <Box className={classes.descriptionWrapper}>
             <Description
-              address={listing.property.address.full_address}
+              address={subtitle1}
               description={listing.property.description}
             />
           </Box>
         </Grid>
-        <Grid item xs={12} lg={6}>
+        <Grid item xs={12} lg={8}>
           <FeaturedImages images={listing.gallery_image_urls?.slice(8, 11)} />
         </Grid>
       </Grid>
       {!isDesktop && (
-        <Box mb={4}>
+        <Box mb={9} px={3}>
           <FeatureList listing={listing} />
         </Box>
       )}

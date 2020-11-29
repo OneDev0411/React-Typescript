@@ -38,7 +38,7 @@ function List({ list }: { list: Feature }) {
 
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
-      <Box px={3} mb={3} className={classes.container}>
+      <Box className={classes.container}>
         <Box py={2}>
           <Typography variant="subtitle1" className={classes.title}>
             {list.title}
@@ -63,7 +63,7 @@ function FeatureLists({ listing }: { listing: IListing }) {
   const lists: Feature[] = getListingFeatures(listing)
 
   return (
-    <Grid container>
+    <Grid container spacing={3}>
       {lists.map((list, index) => (
         <List list={list} key={index} />
       ))}

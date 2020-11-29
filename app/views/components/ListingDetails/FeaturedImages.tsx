@@ -8,7 +8,10 @@ const useStyles = makeStyles(
     container: {
       textAlign: 'center',
       position: 'relative',
-      width: '100%'
+      width: '100%',
+      [theme.breakpoints.up('lg')]: {
+        padding: theme.spacing(5, 0)
+      }
     },
     mainImage: {
       maxWidth: '100%',
@@ -21,12 +24,16 @@ const useStyles = makeStyles(
       [theme.breakpoints.up('sm')]: {
         display: 'block',
         position: 'absolute',
-        width: '250px',
-        height: '150px'
+        width: 250,
+        height: 150
       },
       [theme.breakpoints.up('md')]: {
-        width: '325px',
-        height: '200px'
+        width: 325,
+        height: 200
+      },
+      [theme.breakpoints.up('lg')]: {
+        width: 225,
+        height: 150
       }
     },
     subImageTop: {
@@ -34,6 +41,11 @@ const useStyles = makeStyles(
         top: '-7%',
         left: '5%',
         boxShadow: `-3px -2px 10px ${theme.palette.grey['300']}`
+      },
+      [theme.breakpoints.up('lg')]: {
+        top: 0,
+        left: '10%',
+        boxShadow: 'none'
       }
     },
     subImageBottom: {
@@ -41,6 +53,11 @@ const useStyles = makeStyles(
         bottom: '-7%',
         right: '5%',
         boxShadow: `5px 7px 10px ${theme.palette.grey['300']}`
+      },
+      [theme.breakpoints.up('lg')]: {
+        right: '10%',
+        bottom: 0,
+        boxShadow: 'none'
       }
     }
   }),

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme, useMediaQuery, useTheme } from '@material-ui/core'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -31,8 +31,11 @@ interface Props {
 
 function Description({ address, description }: Props) {
   const classes = useStyles()
-  const showMoreThreshold = 300
-  const isTooLong = description.length > showMoreThreshold
+  const theme = useTheme()
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
+  const showMoreThreshold = isDesktop ? 800 : 400
+  const isTooLong =
+    description.length - showMoreThreshold > showMoreThreshold / 2
   const [isExpended, setIsExpended] = useState(!isTooLong)
   const handleShowMore = () => setIsExpended(state => !state)
 
