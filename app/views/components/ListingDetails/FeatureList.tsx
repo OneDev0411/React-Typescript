@@ -12,20 +12,20 @@ const useStyles = makeStyles(
       color: theme.palette.tertiary.light
     },
     title: {
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
         ...theme.typography.h5
       }
     },
     label: {
       ...theme.typography.subtitle3,
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
         ...theme.typography.subtitle1
       }
     },
     value: {
       color: theme.palette.grey['800'],
       ...theme.typography.body3,
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
         ...theme.typography.body1
       }
     }

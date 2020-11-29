@@ -10,12 +10,15 @@ const useStyles = makeStyles(
       color: theme.palette.tertiary.light,
       marginBottom: theme.spacing(2),
       ...theme.typography.subtitle3,
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
         ...theme.typography.h5
       }
     },
     description: {
-      color: theme.palette.tertiary.light
+      color: theme.palette.tertiary.light,
+      [theme.breakpoints.up('sm')]: {
+        ...theme.typography.body1
+      }
     }
   }),
   { name: 'Description' }

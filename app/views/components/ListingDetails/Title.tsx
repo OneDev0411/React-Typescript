@@ -6,21 +6,21 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     title: {
       marginBottom: theme.spacing(1),
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
         ...theme.typography.h3,
         marginBottom: theme.spacing(2)
       }
     },
     subtitle1: {
       color: theme.palette.tertiary.light,
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
         ...theme.typography.h4,
         marginBottom: theme.spacing(2)
       }
     },
     subtitle2: {
       color: theme.palette.tertiary.light,
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
         ...theme.typography.h5
       }
     }

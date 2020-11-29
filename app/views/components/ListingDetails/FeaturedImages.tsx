@@ -7,33 +7,40 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       textAlign: 'center',
-      position: 'relative'
+      position: 'relative',
+      width: '100%'
     },
     mainImage: {
       maxWidth: '100%',
-      [theme.breakpoints.up('md')]: {
-        maxWidth: '90%'
+      [theme.breakpoints.up('sm')]: {
+        width: '70%'
       }
     },
     subImage: {
       display: 'none',
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
         display: 'block',
         position: 'absolute',
-        width: '30%',
-        height: '25'
+        width: '250px',
+        height: '150px'
+      },
+      [theme.breakpoints.up('md')]: {
+        width: '325px',
+        height: '200px'
       }
     },
     subImageTop: {
-      [theme.breakpoints.up('md')]: {
-        top: 0,
-        left: '5%'
+      [theme.breakpoints.up('sm')]: {
+        top: '-7%',
+        left: '5%',
+        boxShadow: `-3px -2px 10px ${theme.palette.grey['300']}`
       }
     },
     subImageBottom: {
-      [theme.breakpoints.up('md')]: {
-        bottom: 0,
-        right: '5%'
+      [theme.breakpoints.up('sm')]: {
+        bottom: '-7%',
+        right: '5%',
+        boxShadow: `5px 7px 10px ${theme.palette.grey['300']}`
       }
     }
   }),

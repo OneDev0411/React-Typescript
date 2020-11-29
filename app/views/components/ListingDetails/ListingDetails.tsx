@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
+import Container from '@material-ui/core/Container'
 import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
@@ -31,19 +32,22 @@ const useStyles = makeStyles(
     },
     indexWrapper: {
       marginBottom: theme.spacing(7),
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
+        marginBottom: theme.spacing(10)
+      },
+      [theme.breakpoints.up('lg')]: {
         paddingLeft: theme.spacing(3),
         paddingRight: theme.spacing(3)
       }
     },
     indexContainer: {
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('lg')]: {
         flexDirection: 'row-reverse'
       }
     },
     galleryWrapper: {
       marginBottom: theme.spacing(5),
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('lg')]: {
         marginBottom: 0
       }
     },
@@ -51,7 +55,7 @@ const useStyles = makeStyles(
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3),
 
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('lg')]: {
         paddingLeft: 0
       }
     },
@@ -62,14 +66,17 @@ const useStyles = makeStyles(
       marginBottom: theme.spacing(3)
     },
     featuredImageWrapper: {
-      marginBottom: theme.spacing(7)
+      marginBottom: theme.spacing(7),
+      [theme.breakpoints.up('sm')]: {
+        marginBottom: theme.spacing(11)
+      }
     },
     agentAreaWrapper: {
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3),
       marginBottom: theme.spacing(7),
 
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('lg')]: {
         paddingLeft: 0,
         paddingRight: 0
       }
@@ -79,10 +86,20 @@ const useStyles = makeStyles(
       paddingRight: theme.spacing(3),
       marginBottom: theme.spacing(7),
 
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
+        marginBottom: theme.spacing(11)
+      },
+
+      [theme.breakpoints.up('lg')]: {
         paddingLeft: 0,
         paddingRight: 0,
         flexDirection: 'row-reverse'
+      }
+    },
+    descriptionWrapper: {
+      marginBottom: theme.spacing(3),
+      [theme.breakpoints.up('sm')]: {
+        marginBottom: theme.spacing(6)
       }
     }
   }),
@@ -98,8 +115,7 @@ function ListingDetails({ id }: Props) {
   const theme = useTheme()
   const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
   const brand = getActiveBrand(user)
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
 
   const { listing }: UseGetListing = useGetListing(id)
 
@@ -113,7 +129,7 @@ function ListingDetails({ id }: Props) {
   const subtitle2 = `${getSubAddress(listing)} | MLS#: ${listing.mls_number}`
 
   return (
-    <Box className={classes.container}>
+    <Container maxWidth="xl" disableGutters>
       <Header id={listing.id} />
       <Box className={classes.indexWrapper}>
         <Grid container className={classes.indexContainer}>
@@ -132,13 +148,16 @@ function ListingDetails({ id }: Props) {
                 </Box>
                 <Status status={listing.status} />
               </Box>
-              <Box
-                className={classes.mainFeaturesWrapper}
-                pr={isDesktop && '20%'}
-              >
-                <MainFeatures listing={listing} />
-              </Box>
-              <StaticMap location={listing.property.address.location} />
+              <Grid container spacing={6}>
+                <Grid item xs={12} sm={6} lg={12}>
+                  <Box className={classes.mainFeaturesWrapper}>
+                    <MainFeatures listing={listing} />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={6} lg={12}>
+                  <StaticMap location={listing.property.address.location} />
+                </Grid>
+              </Grid>
             </Box>
           </Grid>
         </Grid>
@@ -157,10 +176,10 @@ function ListingDetails({ id }: Props) {
           />
         </Grid>
       </Grid>
-      {!isMobile && <FeatureList listing={listing} />}
+      {isDesktop && <FeatureList listing={listing} />}
       <Grid container className={classes.descriptionAreaWrapper}>
         <Grid item xs={12} lg={6}>
-          <Box mb={3}>
+          <Box className={classes.descriptionWrapper}>
             <Description
               address={listing.property.address.full_address}
               description={listing.property.description}
@@ -171,7 +190,7 @@ function ListingDetails({ id }: Props) {
           <FeaturedImages images={listing.gallery_image_urls?.slice(8, 11)} />
         </Grid>
       </Grid>
-      {isMobile && (
+      {!isDesktop && (
         <Box mb={4}>
           <FeatureList listing={listing} />
         </Box>
@@ -179,7 +198,7 @@ function ListingDetails({ id }: Props) {
       <Box px={3} pb={3}>
         <Map location={listing.property.address.location} />
       </Box>
-    </Box>
+    </Container>
   )
 }
 

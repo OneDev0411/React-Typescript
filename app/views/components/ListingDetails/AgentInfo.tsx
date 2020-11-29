@@ -7,7 +7,10 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     name: {
       marginBottom: theme.spacing(1),
-      color: theme.palette.tertiary.light
+      color: theme.palette.tertiary.light,
+      [theme.breakpoints.up('sm')]: {
+        ...theme.typography.h5
+      }
     },
     photo: {
       maxWidth: '100%'
@@ -28,7 +31,10 @@ const useStyles = makeStyles(
     listItem: {
       marginBottom: theme.spacing(1),
       wordBreak: 'break-all',
-      color: theme.palette.tertiary.light
+      color: theme.palette.tertiary.light,
+      [theme.breakpoints.up('sm')]: {
+        ...theme.typography.body1
+      }
     }
   }),
   { name: 'AgentInfo' }
