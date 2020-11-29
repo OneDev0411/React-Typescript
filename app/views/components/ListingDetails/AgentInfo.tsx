@@ -6,7 +6,8 @@ import { makeStyles, Theme } from '@material-ui/core'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     name: {
-      marginBottom: theme.spacing(1)
+      marginBottom: theme.spacing(1),
+      color: theme.palette.tertiary.light
     },
     photo: {
       maxWidth: '100%'
@@ -26,7 +27,8 @@ const useStyles = makeStyles(
     },
     listItem: {
       marginBottom: theme.spacing(1),
-      wordBreak: 'break-all'
+      wordBreak: 'break-all',
+      color: theme.palette.tertiary.light
     }
   }),
   { name: 'AgentInfo' }

@@ -8,6 +8,9 @@ import { getListingFeatures, Feature } from './get-listing-features'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
+    container: {
+      color: theme.palette.tertiary.light
+    },
     title: {
       [theme.breakpoints.up('md')]: {
         ...theme.typography.h5
@@ -21,6 +24,7 @@ const useStyles = makeStyles(
     },
     value: {
       color: theme.palette.grey['800'],
+      ...theme.typography.body3,
       [theme.breakpoints.up('md')]: {
         ...theme.typography.body1
       }
@@ -34,7 +38,7 @@ function List({ list }: { list: Feature }) {
 
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
-      <Box px={3} mb={3}>
+      <Box px={3} mb={3} className={classes.container}>
         <Box py={2}>
           <Typography variant="subtitle1" className={classes.title}>
             {list.title}
@@ -44,7 +48,7 @@ function List({ list }: { list: Feature }) {
           {list.items.map((item, index) => (
             <Typography className={classes.label} key={index}>
               {item.label}:{' '}
-              <Typography variant="caption" className={classes.value}>
+              <Typography className={classes.value} component="span">
                 {item.value}
               </Typography>
             </Typography>

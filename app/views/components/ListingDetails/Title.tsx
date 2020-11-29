@@ -12,13 +12,14 @@ const useStyles = makeStyles(
       }
     },
     subtitle1: {
+      color: theme.palette.tertiary.light,
       [theme.breakpoints.up('md')]: {
         ...theme.typography.h4,
         marginBottom: theme.spacing(2)
       }
     },
     subtitle2: {
-      color: theme.palette.grey[700],
+      color: theme.palette.tertiary.light,
       [theme.breakpoints.up('md')]: {
         ...theme.typography.h5
       }
