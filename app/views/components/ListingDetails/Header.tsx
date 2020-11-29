@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { withRouter, WithRouterProps, browserHistory } from 'react-router'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
@@ -35,12 +36,9 @@ const useStyles = makeStyles(
 
 interface Props {
   id?: UUID
-  handleFavorite?: () => void
-  handleShare?: () => void
-  handleLogin?: () => void
 }
 
-function Header({ id, handleFavorite, handleLogin, handleShare }: Props) {
+function Header({ id, params, location }: Props & WithRouterProps) {
   const classes = useStyles()
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
@@ -56,6 +54,22 @@ function Header({ id, handleFavorite, handleLogin, handleShare }: Props) {
       ),
     [brand]
   )
+
+  const handleLogin = () => {
+    const { query } = location
+    const username: string = query.token
+      ? query.email || query.phone_number
+      : ''
+
+    const url = `/signin?redirectTo=${location.pathname}${
+      username ? `&username=${username}` : ''
+    }${location.search}`
+
+    browserHistory.push(url)
+  }
+
+  const handleFavorite = () => {}
+  const handleShare = () => {}
 
   return (
     <Grid container>
@@ -98,4 +112,4 @@ function Header({ id, handleFavorite, handleLogin, handleShare }: Props) {
   )
 }
 
-export default Header
+export default withRouter(Header)
