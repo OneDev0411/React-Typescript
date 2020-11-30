@@ -177,7 +177,7 @@ export default function ListingCard({
     onToggleSelection()
   }
 
-  const shouldShowAcres = propertyType !== 'Lots & Acreage'
+  const shouldShowAcres = propertyType === 'Lots & Acreage'
 
   return (
     <Card variant="outlined" className={classes.card} onClick={onClick}>
