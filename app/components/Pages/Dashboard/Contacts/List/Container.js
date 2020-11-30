@@ -732,6 +732,7 @@ class ContactsList extends React.Component {
           onSearch={this.handleSearch}
           onCreateAndAddNewContact={this.onCreateContact}
           SearchInputProps={{
+            defaultValue: this.state.searchInputValue || '',
             placeholder: 'Search Contacts'
           }}
         >

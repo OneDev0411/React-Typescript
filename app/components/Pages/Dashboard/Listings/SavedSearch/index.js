@@ -134,9 +134,7 @@ class SavedSearch extends React.Component {
 
     this.setState({ activeView }, () => {
       browserHistory.push(
-        `/dashboard/mls/saved-searches/${
-          this.props.savedSearch.id
-        }?view=${activeView}`
+        `/dashboard/mls/saved-searches/${this.props.savedSearch.id}?view=${activeView}`
       )
     })
   }
@@ -197,8 +195,6 @@ class SavedSearch extends React.Component {
       case 'map':
         return (
           <MapView
-            user={user}
-            tabName="alerts"
             sortedListings={sortedListings}
             Map={
               <Map
@@ -212,11 +208,7 @@ class SavedSearch extends React.Component {
 
       case 'grid':
         return (
-          <GridView
-            isFetching={isFetching}
-            sortedListings={sortedListings}
-            user={user}
-          />
+          <GridView isFetching={isFetching} sortedListings={sortedListings} />
         )
 
       default:

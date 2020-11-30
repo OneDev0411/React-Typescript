@@ -11,7 +11,7 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import SavedSearchesList from '../../SavedSearchesList'
 import ViewSwitcher from '../GridControllers/ViewSwitcher'
-import SortDrowndown from '../GridControllers/SortDropdown'
+import SortDropdown from '../GridControllers/SortDropdown'
 
 interface Props {
   onChangeView: () => void
@@ -134,7 +134,7 @@ export const Tabs = ({
         />
       </Box>
       <Box className={classes.boxSwitcher}>
-        <SortDrowndown onChangeSort={onChangeSort} activeSort={activeSort} />
+        <SortDropdown onChangeSort={onChangeSort} activeSort={activeSort} />
         {!isWidget && user && (
           <ViewSwitcher onChangeView={onChangeView} activeView={activeView} />
         )}

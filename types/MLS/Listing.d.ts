@@ -1,7 +1,7 @@
 interface ListingAgent extends IModel<'agent'> {
   email: string
   mlsid: string
-  fax: string
+  fax: string | null
   full_name: string
   first_name: string
   last_name: string
@@ -165,7 +165,7 @@ declare type IListing<Associations extends IListingAssociation = ''> = {
   mls_number: string
   association_fee_frequency: string
   association_fee_includes: string
-  unexempt_taxes: number
+  unexempt_taxes: number | null
   financing_proposed: string
   list_office_mui: string
   list_office_mls_id: string

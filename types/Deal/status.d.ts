@@ -5,7 +5,7 @@ declare interface IDealStatus {
   updated_at: number | null
   deleted_at: number | null
   brand: string
-  label: string
+  label: IListingStatus
   is_active: boolean
   is_pending: boolean
   is_archived: boolean
