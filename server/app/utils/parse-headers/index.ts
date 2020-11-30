@@ -34,7 +34,7 @@ export function getParsedHeaders(req: Request) {
 
     return {
       ...acc,
-      [key]: value
+      [key.toLowerCase()]: value
     }
   }, {})
 }
