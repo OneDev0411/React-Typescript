@@ -160,6 +160,12 @@ function ListingDetails({ id }: Props) {
   const title = getPrice(listing)
   const subtitle1 = listingUtils.addressTitle(listing.property.address)
   const subtitle2 = `${getSubAddress(listing)} | MLS#: ${listing.mls_number}`
+  const images = listing.gallery_image_urls || []
+  const getFeaturedImages = (serie: number) => {
+    const start = serie === 1 ? 5 : 8
+
+    return images.slice(start, start + 3)
+  }
 
   return (
     <Container maxWidth="xl" disableGutters>
@@ -169,7 +175,7 @@ function ListingDetails({ id }: Props) {
       <Box className={classes.heroWrapper}>
         <Grid container className={classes.heroContainer}>
           <Grid item xs={12} lg={7} className={classes.galleryWrapper}>
-            <Gallery images={listing.gallery_image_urls || []} />
+            <Gallery images={images} />
           </Grid>
           <Grid item xs={12} lg={5}>
             <Box className={classes.heroLeftSideWrapper}>
@@ -201,7 +207,7 @@ function ListingDetails({ id }: Props) {
       </Box>
       <Grid container className={classes.agentAreaWrapper}>
         <Grid item xs={12} lg={7} className={classes.featuredImageWrapper}>
-          <FeaturedImages images={listing.gallery_image_urls?.slice(5, 8)} />
+          <FeaturedImages images={getFeaturedImages(1)} />
         </Grid>
         <Grid item xs={12} lg={5}>
           <AgentInfo
@@ -228,7 +234,7 @@ function ListingDetails({ id }: Props) {
           </Box>
         </Grid>
         <Grid item xs={12} lg={8}>
-          <FeaturedImages images={listing.gallery_image_urls?.slice(8, 11)} />
+          <FeaturedImages images={getFeaturedImages(2)} />
         </Grid>
       </Grid>
       {!isDesktop && (

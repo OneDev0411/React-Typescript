@@ -10,9 +10,11 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Lightbox from './Lightbox'
+import {
+  PLACEHOLDER_IMAGES_BASE_URL,
+  MAIN_IMAGE_PLACEHOLDER_SRC
+} from './constans'
 
-const PLACEHOLDER_IMAGES_BASE_URL = '/static/images/listing/'
-const MAIN_IMAGE_PLACEHOLDER_SRC = `${PLACEHOLDER_IMAGES_BASE_URL}large.jpg`
 const THUMBNAIL_IMAGES_PLACEHOLDER = Array.from({ length: 4 }, (x, i) => i).map(
   i => `${PLACEHOLDER_IMAGES_BASE_URL}small-0${i + 1}.jpg`
 )

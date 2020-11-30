@@ -3,6 +3,8 @@ import cn from 'classnames'
 import Box from '@material-ui/core/Box'
 import { makeStyles, Theme } from '@material-ui/core'
 
+import { MAIN_IMAGE_PLACEHOLDER_SRC } from './constans'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
@@ -65,29 +67,33 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  images?: string[] | null
+  images: string[]
 }
 
 function FeaturedImages({ images }: Props) {
   const classes = useStyles()
 
-  if (images == null) {
-    return null
-  }
-
   return (
     <Box className={classes.container}>
-      <img src={images[0]} alt="main" className={classes.mainImage} />
       <img
-        src={images[1]}
-        alt="top"
-        className={cn(classes.subImage, classes.subImageTop)}
+        src={images[0] || MAIN_IMAGE_PLACEHOLDER_SRC}
+        alt="main"
+        className={classes.mainImage}
       />
-      <img
-        src={images[2]}
-        alt="bottom"
-        className={cn(classes.subImage, classes.subImageBottom)}
-      />
+      {images[1] && (
+        <img
+          src={images[1]}
+          alt="top"
+          className={cn(classes.subImage, classes.subImageTop)}
+        />
+      )}
+      {images[2] && (
+        <img
+          src={images[2]}
+          alt="bottom"
+          className={cn(classes.subImage, classes.subImageBottom)}
+        />
+      )}
     </Box>
   )
 }
