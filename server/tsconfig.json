@@ -27,13 +27,14 @@
     "typeRoots": [
       "types",
       "node_modules/@types",
-      "../types"
+      "../types/**/*",
     ],
     "paths": {}
   },
   "include": [
     "app/**/*",
-    "types/**/*", "index.ts"
+    "types/**/*",
+    "index.ts"
   ],
   "exclude": [
     "app/**/*.test.ts"
