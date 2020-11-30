@@ -1,12 +1,12 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { useUser } from 'hooks/use-load-user'
+import { useLoadUser } from 'hooks/use-load-user'
 import { AnimatedLoader } from 'components/AnimatedLoader'
 
 function Authentication({ location, children }) {
   const data = useSelector(({ data }) => data)
-  const { user, isLoading: isLoadingUser } = useUser()
+  const { user, isLoading: isLoadingUser } = useLoadUser()
 
   if (!user?.id && isLoadingUser) {
     return <AnimatedLoader />

@@ -4,7 +4,7 @@ import { useEffectOnce, useTitle } from 'react-use'
 
 import { useSelector } from 'react-redux'
 
-import { useUser } from 'hooks/use-load-user'
+import { useLoadUser } from 'hooks/use-load-user'
 import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 
 import { setupGoogleAnalytics } from 'services/google-analytics'
@@ -27,7 +27,7 @@ export default function App(props: Props) {
   useTitle('Rechat')
 
   const brand = useSelector<IAppState, IBrand>(({ brand }) => brand)
-  const { user, isLoading: isLoadingUser } = useUser()
+  const { user, isLoading: isLoadingUser } = useLoadUser()
   const dispatch = useReduxDispatch()
 
   useEffectOnce(() => {

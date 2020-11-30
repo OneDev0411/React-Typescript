@@ -8,7 +8,7 @@ import { getUserTeams } from 'actions/user/teams'
 import { IAppState } from 'reducers'
 import Fetch from 'services/fetch'
 
-export function useUser() {
+export function useLoadUser() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(false)
 
