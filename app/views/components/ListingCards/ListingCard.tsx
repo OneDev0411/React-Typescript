@@ -156,11 +156,6 @@ export default function ListingCard({
       ? listing.address.street_address
       : listing.property.address.street_address
 
-  const propertyType =
-    listing.type === 'compact_listing'
-      ? listing.compact_property.property_type
-      : listing.property.property_type
-
   const listingFeatures = getListingFeatures(listing)
 
   // We don't want to pass checkbox onClick to the card itself
@@ -177,6 +172,11 @@ export default function ListingCard({
   const handleToggleSelection = () => {
     onToggleSelection()
   }
+
+  const propertyType =
+    listing.type === 'compact_listing'
+      ? listing.compact_property.property_type
+      : listing.property.property_type
 
   const shouldShowAcres = propertyType === 'Lots & Acreage'
 
@@ -270,7 +270,7 @@ export default function ListingCard({
               </Grid>
             </Grid>
             <Grid container item alignItems="flex-end">
-              {listingFeatures.bedroomCount && (
+              {listingFeatures.bedroomCount ? (
                 <Grid item>
                   <Box display="flex" alignItems="center" mr={2}>
                     <Typography className={classes.listingFeature}>
@@ -281,8 +281,8 @@ export default function ListingCard({
                     </Typography>
                   </Box>
                 </Grid>
-              )}
-              {listingFeatures.bathroomCount && (
+              ) : null}
+              {listingFeatures.bathroomCount ? (
                 <Grid item>
                   <Box display="flex" alignItems="center" mr={2}>
                     <Typography className={classes.listingFeature}>
@@ -293,8 +293,8 @@ export default function ListingCard({
                     </Typography>
                   </Box>
                 </Grid>
-              )}
-              {!shouldShowAcres && listingFeatures.areaSqft && (
+              ) : null}
+              {listingFeatures.areaSqft && !shouldShowAcres ? (
                 <Grid item>
                   <Box display="flex" alignItems="center" mr={2}>
                     <Typography className={classes.listingFeature}>
@@ -305,8 +305,8 @@ export default function ListingCard({
                     </Typography>
                   </Box>
                 </Grid>
-              )}
-              {shouldShowAcres && listingFeatures.lotSizeAreaAcre && (
+              ) : null}
+              {listingFeatures.lotSizeAreaAcre && shouldShowAcres ? (
                 <Grid item>
                   <Box display="flex" alignItems="center" mr={2}>
                     <Typography
@@ -320,7 +320,7 @@ export default function ListingCard({
                     </Typography>
                   </Box>
                 </Grid>
-              )}
+              ) : null}
             </Grid>
             <Grid container item alignItems="center">
               <Grid item className={classes.addressContainer}>
