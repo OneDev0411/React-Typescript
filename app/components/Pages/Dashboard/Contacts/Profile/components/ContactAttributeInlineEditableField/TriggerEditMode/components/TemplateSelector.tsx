@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { makeStyles, Theme, Typography } from '@material-ui/core'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
-
+import cn from 'classnames'
 import { template } from 'underscore'
 
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
@@ -14,6 +14,7 @@ import { getTemplateType } from '../helpers'
 
 interface Props {
   user: IUser
+  disabled?: boolean
   currentValue: Nullable<ITrigger>
   attributeName: TriggerContactEventTypes
   selectedTemplate: Nullable<IBrandMarketingTemplate>
@@ -51,6 +52,12 @@ const useStyles = makeStyles(
     templatePreviewPlaceholder: {
       display: 'block',
       lineHeight: '445px'
+    },
+    disabled: {
+      opacity: 0.4,
+      '& $openTemplatePicker, & $templatePreview': {
+        cursor: 'default'
+      }
     }
   }),
   { name: 'TemplateSelector' }
@@ -60,6 +67,7 @@ export const TemplateSelector = ({
   user,
   currentValue,
   attributeName,
+  disabled = false,
   selectedTemplate,
   onSelectTemplate
 }: Props) => {
@@ -98,6 +106,23 @@ export const TemplateSelector = ({
       console.error(error)
     }
   }
+
+  const handleOpenTemplatePicker = () => {
+    if (disabled) {
+      return
+    }
+
+    setIsTemplatePickerOpen(true)
+  }
+
+  const handleCloseTemplatePicker = () => {
+    if (disabled) {
+      return
+    }
+
+    setIsTemplatePickerOpen(false)
+  }
+
   const renderPreview = () => {
     if (!selectedTemplate && !currentValue) {
       return (
@@ -144,14 +169,14 @@ export const TemplateSelector = ({
 
   return (
     <>
-      <div className={classes.container}>
+      <div className={cn(classes.container, { [classes.disabled]: disabled })}>
         <div className={classes.header}>
           <span className={classes.headerTitle}>Template</span>
           {(selectedTemplate || currentValue) && (
             <Typography
               variant="body2"
               className={classes.openTemplatePicker}
-              onClick={() => setIsTemplatePickerOpen(true)}
+              onClick={handleOpenTemplatePicker}
             >
               Change
             </Typography>
@@ -159,7 +184,7 @@ export const TemplateSelector = ({
         </div>
         <div
           className={classes.templatePreview}
-          onClick={() => setIsTemplatePickerOpen(true)}
+          onClick={handleOpenTemplatePicker}
         >
           {renderPreview()}
         </div>
@@ -171,7 +196,7 @@ export const TemplateSelector = ({
           mediums={['Email' as MarketingTemplateMedium.Email]}
           templateTypes={[getTemplateType(attributeName)]}
           onSelect={handleSelectTemplate}
-          onClose={() => setIsTemplatePickerOpen(false)}
+          onClose={handleCloseTemplatePicker}
         />
       )}
     </>

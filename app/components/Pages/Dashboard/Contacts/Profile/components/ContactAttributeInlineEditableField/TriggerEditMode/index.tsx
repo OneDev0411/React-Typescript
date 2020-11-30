@@ -146,58 +146,57 @@ const TriggerEditModeComponent = ({
               date ever.
             </Typography>
           </div>
-          {isActive && (
-            <>
-              <TextField
-                id="subject"
-                label="Subject"
-                type="text"
-                size="small"
-                defaultValue={subject}
-                InputLabelProps={{
-                  shrink: true
-                }}
-                variant="outlined"
-                className={classes.inputField}
-                onChange={handleSubjectChange}
-              />
-              <FormControl
-                variant="outlined"
-                size="small"
-                className={classes.inputField}
+          <>
+            <TextField
+              id="subject"
+              label="Subject"
+              type="text"
+              size="small"
+              disabled={!isActive}
+              defaultValue={subject}
+              InputLabelProps={{
+                shrink: true
+              }}
+              variant="outlined"
+              className={classes.inputField}
+              onChange={handleSubjectChange}
+            />
+            <FormControl
+              variant="outlined"
+              size="small"
+              className={classes.inputField}
+              disabled={!isActive}
+            >
+              <InputLabel id="trigger-send-before">Deliver in</InputLabel>
+              <Select
+                labelId="trigger-send-before"
+                id="trigger-send-before-select"
+                value={sendBefore}
+                defaultValue={0}
+                onChange={handleSendBeforeChange}
+                label="Deliver in"
               >
-                <InputLabel id="trigger-send-before">Deliver in</InputLabel>
-                <Select
-                  labelId="trigger-send-before"
-                  id="trigger-send-before-select"
-                  value={sendBefore}
-                  defaultValue={0}
-                  onChange={handleSendBeforeChange}
-                  label="Deliver in"
-                >
-                  <MenuItem value={0}>Same Day</MenuItem>
-                  {[1, 2, 3, 4].map(item => (
-                    <MenuItem key={item} value={item}>
-                      {pluralize('day', item, true)} earlier
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </>
-          )}
+                <MenuItem value={0}>Same Day</MenuItem>
+                {[1, 2, 3, 4].map(item => (
+                  <MenuItem key={item} value={item}>
+                    {pluralize('day', item, true)} earlier
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </>
         </div>
       </div>
-      {isActive && (
-        <div className={classes.containerItem}>
-          <TemplateSelector
-            user={user}
-            currentValue={currentValue}
-            attributeName={attributeName}
-            selectedTemplate={selectedTemplate}
-            onSelectTemplate={handleSelectTemplate}
-          />
-        </div>
-      )}
+      <div className={classes.containerItem}>
+        <TemplateSelector
+          user={user}
+          disabled={!isActive}
+          currentValue={currentValue}
+          attributeName={attributeName}
+          selectedTemplate={selectedTemplate}
+          onSelectTemplate={handleSelectTemplate}
+        />
+      </div>
     </div>
   )
 }

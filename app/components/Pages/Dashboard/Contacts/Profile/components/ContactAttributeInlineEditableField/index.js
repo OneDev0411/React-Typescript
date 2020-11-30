@@ -244,11 +244,11 @@ class MasterField extends React.Component {
       triggerSelectedTemplate
     } = this.state
     const { id, cuid } = attribute
+    const shouldCheckTriggerField =
+      this.isTriggerable && isTriggerActive && isTriggerFieldDirty
 
     if (
-      this.isTriggerable &&
-      isTriggerActive &&
-      isTriggerFieldDirty &&
+      shouldCheckTriggerField &&
       !currentTrigger &&
       !triggerSelectedTemplate
     ) {
@@ -284,7 +284,7 @@ class MasterField extends React.Component {
         data.is_primary = is_primary
       }
 
-      if (this.isTriggerable && isTriggerFieldDirty) {
+      if (shouldCheckTriggerField) {
         const commonParams = [
           contact,
           brand,
