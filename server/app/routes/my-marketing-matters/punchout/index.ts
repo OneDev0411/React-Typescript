@@ -147,8 +147,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     redirectUrl
   )
 
-  console.log('!!!', requestBody)
-
   try {
     const response = await axios.post(API_URL, requestBody, {
       headers: {

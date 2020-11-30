@@ -11,7 +11,7 @@ const useStyles = makeStyles(
       },
       '100%': {
         transform: 'scale(1)',
-        opacity: 0.9
+        opacity: 1
       }
     },
     loading: {

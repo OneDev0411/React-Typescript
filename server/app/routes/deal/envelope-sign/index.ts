@@ -1,10 +1,10 @@
 import { AxiosError } from 'axios'
 import { Request, Response } from 'express'
 
+import { URL_PATTERN } from '../../../constants'
+
 import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
-
-const urlPattern = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi
 
 export default async (req: Request, res: Response) => {
   request({
@@ -18,7 +18,7 @@ export default async (req: Request, res: Response) => {
     .catch((e: AxiosError) => {
       if (e.response?.status === 302) {
         res.redirect(
-          e.response.data.match(urlPattern).map((url: string) => url.trim())
+          e.response.data.match(URL_PATTERN).map((url: string) => url.trim())
         )
       }
 

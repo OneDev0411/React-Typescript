@@ -171,9 +171,7 @@ class Rooms extends React.Component {
           <div className="list-container u-scrollbar--thinner">
             <div className="list">
               {_.chain(rooms)
-                .filter(
-                  room => ['Direct', 'Group'].indexOf(room.room_type) > -1
-                )
+                .filter(room => ['Direct', 'Group'].includes(room.room_type))
                 .filter(
                   room =>
                     room.proposed_title &&

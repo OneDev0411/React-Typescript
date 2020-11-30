@@ -8,9 +8,13 @@ import { getUserTeams } from 'actions/user/teams'
 import { IAppState } from 'reducers'
 import Fetch from 'services/fetch'
 
-export function useLoadUser() {
+export function useLoadUser(): {
+  user: IUser | undefined
+  isLoading: boolean
+  error: Nullable<string>
+} {
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(false)
+  const [error, setError] = useState<Nullable<string>>(null)
 
   const dispatch = useDispatch()
   const user = useSelector<IAppState, IUser | undefined>(({ user }) => user)

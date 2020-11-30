@@ -27,7 +27,7 @@ app.use(
   cookieSession({
     name: 'rechat-webapp:session',
     keys: ['r3ch4r0Ks!!!'],
-    maxAge: 365 * 86400 * 1000,
+    maxAge: 365 * 86400 * 1000, // one year
     secure: isProduction
   })
 )

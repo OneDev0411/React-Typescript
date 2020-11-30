@@ -1,6 +1,6 @@
 import { Response } from 'express'
 
-import { AxiosError, AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 
 import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
@@ -15,27 +15,27 @@ export default async (req: RequestWithSession, res: Response) => {
     return
   }
 
-  request({
-    method: 'get',
-    url: '/users/self',
-    params: {
-      associations: ['user.docusign']
-    },
-    headers: getParsedHeaders(req)
-  })
-    .then((response: AxiosResponse) => {
-      res.set(response.headers)
-      res.json({
-        ...response.data,
-        data: {
-          ...response.data.data,
-          access_token: req.session?.user?.access_token,
-          refresh_token: req.session?.user?.refresh_token
-        }
-      })
+  try {
+    const response: AxiosResponse = await request({
+      method: 'get',
+      url: '/users/self',
+      params: {
+        associations: ['user.docusign']
+      },
+      headers: getParsedHeaders(req)
     })
-    .catch((e: AxiosError) => {
-      res.status(e.response?.status || 400)
-      e.response && e.response.data.pipe(res)
+
+    res.set(response.headers)
+    res.json({
+      ...response.data,
+      data: {
+        ...response.data.data,
+        access_token: req.session?.user?.access_token,
+        refresh_token: req.session?.user?.refresh_token
+      }
     })
+  } catch (e) {
+    res.status(e.response?.status || 400)
+    e.response && e.response.data.pipe(res)
+  }
 }
