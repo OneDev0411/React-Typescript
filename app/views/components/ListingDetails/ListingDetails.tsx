@@ -169,7 +169,7 @@ function ListingDetails({ id }: Props) {
       <Box className={classes.heroWrapper}>
         <Grid container className={classes.heroContainer}>
           <Grid item xs={12} lg={7} className={classes.galleryWrapper}>
-            <Gallery images={listing.gallery_image_urls} />
+            <Gallery images={listing.gallery_image_urls || []} />
           </Grid>
           <Grid item xs={12} lg={5}>
             <Box className={classes.heroLeftSideWrapper}>

@@ -11,6 +11,12 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Lightbox from './Lightbox'
 
+const PLACEHOLDER_IMAGES_BASE_URL = '/static/images/listing/'
+const MAIN_IMAGE_PLACEHOLDER_SRC = `${PLACEHOLDER_IMAGES_BASE_URL}large.jpg`
+const THUMBNAIL_IMAGES_PLACEHOLDER = Array.from({ length: 4 }, (x, i) => i).map(
+  i => `${PLACEHOLDER_IMAGES_BASE_URL}small-0${i + 1}.jpg`
+)
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     mainImageWrapper: {
@@ -81,18 +87,49 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  images?: string[] | null
+  images: string[]
+}
+
+interface Thumbnails {
+  src: string
+  isFake: boolean
 }
 
 function Gallery({ images }: Props) {
-  const classes = useStyles()
   const theme = useTheme()
+  const classes = useStyles()
+  const imagesLength = images.length
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
-  if (!images) {
-    return null
-  }
+  const thumbnails: Thumbnails[] = React.useMemo(() => {
+    if (imagesLength < 2) {
+      return THUMBNAIL_IMAGES_PLACEHOLDER.map(item => ({
+        src: item,
+        isFake: true
+      }))
+    }
+
+    if (imagesLength < 5) {
+      let thumbnailsSrc = []
+
+      for (let i = 1; i < 5; i++) {
+        const src = images[i]
+
+        thumbnails.push({
+          src: src || THUMBNAIL_IMAGES_PLACEHOLDER[i - 1],
+          isFake: !src
+        })
+      }
+
+      return thumbnailsSrc
+    }
+
+    return images.map(src => ({
+      src,
+      isFake: false
+    }))
+  }, [images, imagesLength])
 
   const openLightbox = (evt: MouseEvent<HTMLButtonElement>) => {
     const imageIndex = Number(evt.currentTarget.dataset.imageIndex)
@@ -108,38 +145,51 @@ function Gallery({ images }: Props) {
   return (
     <Box>
       <Box className={classes.mainImageWrapper} mb={3}>
-        <button
-          type="button"
-          data-image-index={0}
-          className={classes.button}
-          onClick={openLightbox}
-        >
-          <img src={images[0]} alt="listing 1" className={classes.mainImage} />
-          <SvgIcon
-            path={mdiFullscreen}
-            size={muiIconSizes.large}
-            className={classes.fullscreenIcon}
-            color={theme.palette.common.white}
+        {images[0] ? (
+          <button
+            type="button"
+            data-image-index={0}
+            className={classes.button}
+            onClick={openLightbox}
+          >
+            <img
+              src={images[0]}
+              alt="listing 1"
+              className={classes.mainImage}
+            />
+            <SvgIcon
+              path={mdiFullscreen}
+              size={muiIconSizes.large}
+              className={classes.fullscreenIcon}
+              color={theme.palette.common.white}
+            />
+          </button>
+        ) : (
+          <img
+            src={MAIN_IMAGE_PLACEHOLDER_SRC}
+            alt="listing 1"
+            className={classes.mainImage}
           />
-        </button>
+        )}
       </Box>
       <Box display="flex" justifyContent="center" px={3}>
         <Box className={classes.thumbnailsWrapper}>
           <Grid container spacing={1}>
-            {images.slice(1, 5).map((src, index) => (
+            {thumbnails.map((item, index) => (
               <Grid item xs={3} key={index}>
                 <button
                   type="button"
+                  disabled={item.isFake}
                   data-image-index={index + 1}
                   className={cn(classes.button, classes.thumbnailBtn)}
-                  onClick={openLightbox}
+                  onClick={item.isFake ? () => false : openLightbox}
                 >
                   <img
-                    src={src}
+                    src={item.src}
                     alt={`listing ${index}`}
                     className={classes.thumbnailImage}
                   />
-                  {index === 3 && (
+                  {index === 3 && imagesLength > 5 && (
                     <Box className={classes.photoNumbers}>
                       <Typography variant="caption">
                         {`+ ${images.length - 5} Photos`}
@@ -152,12 +202,14 @@ function Gallery({ images }: Props) {
           </Grid>
         </Box>
       </Box>
-      <Lightbox
-        images={images}
-        isOpen={isLightboxOpen}
-        selectedImageIndex={selectedImageIndex}
-        handleClose={closeLightbox}
-      />
+      {imagesLength > 0 && (
+        <Lightbox
+          images={images}
+          isOpen={isLightboxOpen}
+          selectedImageIndex={selectedImageIndex}
+          handleClose={closeLightbox}
+        />
+      )}
     </Box>
   )
 }
