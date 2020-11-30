@@ -53,7 +53,7 @@ git checkout -B $CI_COMMIT_REF_SLUG
 ssh "dokku@$REVIEW_HOST" letsencrypt $APP
 
 # Unlck is so previous deployments wont prevent this deployment
-ssh "dokku@$REVIEW_HOST" apps:unlock $APP
+ssh "dokku@$REVIEW_HOST" apps:unlock $APP || true
 
 # Deploy
-git push "dokku@$REVIEW_HOST:$APP" $CI_COMMIT_REF_SLUG:master
+git push "dokku@$REVIEW_HOST:$APP" $CI_COMMIT_REF_SLUG:master --force

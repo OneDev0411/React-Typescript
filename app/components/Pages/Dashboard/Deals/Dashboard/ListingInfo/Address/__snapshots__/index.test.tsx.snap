@@ -6,9 +6,14 @@ exports[`Deal address component renders with address 1`] = `
   title=""
 >
   <h6
-    class="MuiTypography-root-15 MuiTypography-h6-25"
+    class="MuiTypography-root-15 MuiTypography-subtitle1-26"
   >
-    1200 Main St, Dallas, TX, 75202
+    <span
+      class=""
+      title=""
+    >
+      1200 Main St, Dallas, TX, 75202
+    </span>
   </h6>
   <button
     class="MuiButtonBase-root-72 MuiButton-root-45 MuiButton-text-47 makeStyles-editButton-2 MuiButton-textSecondary-49 MuiButton-textSizeSmall-58 MuiButton-sizeSmall-64"
@@ -18,7 +23,7 @@ exports[`Deal address component renders with address 1`] = `
     <span
       class="MuiButton-label-46"
     >
-      Edit Address
+      Edit
     </span>
   </button>
 </div>
@@ -30,9 +35,14 @@ exports[`Deal address component renders without address 1`] = `
   title=""
 >
   <h6
-    class="MuiTypography-root-87 MuiTypography-h6-97"
+    class="MuiTypography-root-87 MuiTypography-subtitle1-98"
   >
-    Some title for a deal without address
+    <span
+      class=""
+      title="Some title for a deal without address"
+    >
+      Some title for a... without address
+    </span>
   </h6>
   <button
     class="MuiButtonBase-root-144 MuiButton-root-117 MuiButton-text-119 makeStyles-editButton-74 MuiButton-textSecondary-121 MuiButton-textSizeSmall-130 MuiButton-sizeSmall-136"

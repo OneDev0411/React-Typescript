@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { Checkbox, Tooltip, createStyles, makeStyles } from '@material-ui/core'
+import cn from 'classnames'
 
 import { selectTags } from 'reducers/contacts/tags'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
@@ -43,6 +44,9 @@ const useStyles = makeStyles(theme =>
       marginRight: theme.spacing(2),
       fontSize: theme.typography.overline.fontSize,
       color: theme.palette.grey['500']
+    },
+    totalRowDisable: {
+      color: theme.palette.text.disabled
     }
   })
 )
@@ -136,8 +140,12 @@ function ContactFilters(props) {
     dispatch({
       type: SELECTION__TOGGLE_ENTIRE_ROWS
     })
+
   const defaultSelectAllValue =
     Number(props.contactCount) === 0 ? false : isAllSelected
+
+  const isSelectAllDisable =
+    Number(props.contactCount) === 0 || isParkedContactActive
 
   return (
     <>
@@ -146,13 +154,19 @@ function ContactFilters(props) {
           <Checkbox
             disableRipple
             className={classes.toggleAll}
-            disabled={Number(props.contactCount) === 0}
+            disabled={isSelectAllDisable}
             checked={defaultSelectAllValue}
             indeterminate={isSomeRowsSelected}
             onChange={toggleAll}
           />
         </Tooltip>
-        <span className={classes.totalRow}>{getSummeryInfo()}</span>
+        <span
+          className={cn(classes.totalRow, {
+            [classes.totalRowDisable]: isSelectAllDisable
+          })}
+        >
+          {getSummeryInfo()}
+        </span>
       </div>
       {!isParkedContactActive && (
         <Filters

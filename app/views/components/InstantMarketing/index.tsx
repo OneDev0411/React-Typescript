@@ -1,26 +1,34 @@
 import React, { useContext } from 'react'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { TemplateData } from 'utils/marketing-center/render-branded-template'
 
 import Builder from './Builder'
+
+interface IBrandMarketingTemplateWithMarkup extends IBrandMarketingTemplate {
+  markup: string
+}
 
 interface Props {
   closeConfirmation?: boolean
   hideTemplatesColumn?: boolean
-  templateData?: {
-    user?: IUser
-    listing?: IListing
-    listings?: IListing[]
-  }
+  templateData?: TemplateData
   templateTypes?: string[]
   mediums?: string
   assets?: string[]
   defaultTemplate?: Nullable<IBrandMarketingTemplate>
   containerStyle?: React.CSSProperties
   isTemplatesColumnHiddenDefault?: boolean
-  handleSave: (markup: string, owner: IUser) => void
-  handleSocialSharing: (markup: string, socialNetworkName: string) => void
-  // handlePrintableSharing: (markup: string) => void
+  bareMode?: boolean
+  saveButtonText?: string
+  handleSocialSharing?: (
+    template: IBrandMarketingTemplateWithMarkup,
+    socialNetworkName: string
+  ) => void
+  handleSave: (
+    template: IBrandMarketingTemplateWithMarkup,
+    owner: IUser
+  ) => void
   onClose: () => void
 }
 
@@ -34,6 +42,8 @@ export default function InstantMarketing({
   defaultTemplate = null,
   containerStyle = {},
   isTemplatesColumnHiddenDefault = true,
+  bareMode = false,
+  saveButtonText,
   handleSave,
   handleSocialSharing,
   onClose
@@ -64,6 +74,8 @@ export default function InstantMarketing({
       defaultTemplate={defaultTemplate}
       containerStyle={containerStyle}
       isTemplatesColumnHiddenDefault={isTemplatesColumnHiddenDefault}
+      bareMode={bareMode}
+      saveButtonText={saveButtonText}
       onClose={handleClose}
       onSave={handleSave}
       onSocialSharing={handleSocialSharing}
