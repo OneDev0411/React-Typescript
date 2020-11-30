@@ -153,8 +153,8 @@ export const isLeaseProperty = (listing: IListing | ICompactListing) => {
 }
 
 export const getListingFeatures = (listing: IListing | ICompactListing): {
-  bedroomCount: number,
-  bathroomCount: number,
+  bedroomCount: number | null,
+  bathroomCount: number | null,
   areaSqft: number,
   lotSizeAreaAcre: number | null
 } => {

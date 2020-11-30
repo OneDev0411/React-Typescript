@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core'
 import { noop } from 'lodash'
 import { mdiHeartOutline, mdiHeart } from '@mdi/js'
+import pluralize from 'pluralize'
 
 import { getFormattedPrice } from 'models/Deal/helpers/context'
 import {
@@ -269,27 +270,31 @@ export default function ListingCard({
               </Grid>
             </Grid>
             <Grid container item alignItems="flex-end">
-              <Grid item>
-                <Box display="flex" alignItems="center" mr={2}>
-                  <Typography className={classes.listingFeature}>
-                    {listingFeatures.bedroomCount}{' '}
-                  </Typography>
-                  <Typography className={classes.listingFeatureValue}>
-                    bd
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item>
-                <Box display="flex" alignItems="center" mr={2}>
-                  <Typography className={classes.listingFeature}>
-                    {listingFeatures.bathroomCount}{' '}
-                  </Typography>
-                  <Typography className={classes.listingFeatureValue}>
-                    ba
-                  </Typography>
-                </Box>
-              </Grid>
-              {!shouldShowAcres && (
+              {listingFeatures.bedroomCount && (
+                <Grid item>
+                  <Box display="flex" alignItems="center" mr={2}>
+                    <Typography className={classes.listingFeature}>
+                      {listingFeatures.bedroomCount}{' '}
+                    </Typography>
+                    <Typography className={classes.listingFeatureValue}>
+                      {pluralize('bed', listingFeatures.bedroomCount)}
+                    </Typography>
+                  </Box>
+                </Grid>
+              )}
+              {listingFeatures.bathroomCount && (
+                <Grid item>
+                  <Box display="flex" alignItems="center" mr={2}>
+                    <Typography className={classes.listingFeature}>
+                      {listingFeatures.bathroomCount}{' '}
+                    </Typography>
+                    <Typography className={classes.listingFeatureValue}>
+                      {pluralize('bath', listingFeatures.bathroomCount)}
+                    </Typography>
+                  </Box>
+                </Grid>
+              )}
+              {!shouldShowAcres && listingFeatures.areaSqft && (
                 <Grid item>
                   <Box display="flex" alignItems="center" mr={2}>
                     <Typography className={classes.listingFeature}>
