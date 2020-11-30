@@ -66,9 +66,31 @@ function getStateFromTrigger(trigger, attribute) {
     }
   }
 
+  // we're checking if date value is already exist
+  // disable the trigger unless enable it
+  let isActive
+
+  if (
+    attribute &&
+    TRIGGERABLE_ATTRIBUTES.includes(attribute.attribute_def?.name)
+  ) {
+    const attributeValue = getValue(attribute)
+
+    if (
+      typeof attributeValue === 'object' &&
+      (!attributeValue.year ||
+        !attributeValue.month?.value ||
+        !attributeValue.day?.value)
+    ) {
+      isActive = true
+    } else {
+      isActive = false
+    }
+  }
+
   return {
     currentTrigger: null,
-    isTriggerActive: true,
+    isTriggerActive: isActive,
     triggerSubject: getTriggerSubject(attributeName),
     triggerSendBefore: 0,
     triggerSelectedTemplate: null

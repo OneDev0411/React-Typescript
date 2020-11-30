@@ -79,7 +79,7 @@ export const TemplateSelector = ({
   useEffectOnce(() => {
     const brandId = getActiveTeamId(user)
 
-    if (!brandId) {
+    if (!brandId || disabled) {
       return
     }
 
@@ -124,6 +124,14 @@ export const TemplateSelector = ({
   }
 
   const renderPreview = () => {
+    if (disabled || (!selectedTemplate && !currentValue)) {
+      return (
+        <span className={classes.templatePreviewPlaceholder}>
+          Select a template
+        </span>
+      )
+    }
+
     if (!selectedTemplate && !currentValue) {
       return (
         <span className={classes.templatePreviewPlaceholder}>Loading...</span>
