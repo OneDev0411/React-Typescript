@@ -41,10 +41,10 @@ export default class Fetch {
 
   private create(
     method: string,
-    endpoint: string
+    endpoint: string,
+    isUploadMethod: boolean = false
   ): SuperAgent.SuperAgentRequest {
     const { user, brand } = store.getState() as IAppState
-    const isProgressive = typeof this.options.progress === 'function'
 
     let brandId
 
@@ -56,7 +56,7 @@ export default class Fetch {
       brandId = brand.id
     }
 
-    const useProxy = this.options.proxy && !isProgressive
+    const useProxy = this.options.proxy && !isUploadMethod
 
     this.isLoggedIn = user && user.access_token !== undefined
 
@@ -129,7 +129,7 @@ export default class Fetch {
       }
     )
 
-    if (isProgressive) {
+    if (typeof this.options.progress === 'function') {
       agent.on('progress', this.options.progress!)
     }
 
@@ -217,7 +217,7 @@ export default class Fetch {
   }
 
   upload(endpoint: string, method = 'post') {
-    return this.create(method, endpoint)
+    return this.create(method, endpoint, true)
   }
 
   registerMiddlewares(options: IOptions): IMiddleware {
