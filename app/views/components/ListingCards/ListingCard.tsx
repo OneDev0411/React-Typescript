@@ -155,6 +155,11 @@ export default function ListingCard({
       ? listing.address.street_address
       : listing.property.address.street_address
 
+  const propertyType =
+    listing.type === 'compact_listing'
+      ? listing.compact_property.property_type
+      : listing.property.property_type
+
   const listingFeatures = getListingFeatures(listing)
 
   // We don't want to pass checkbox onClick to the card itself
@@ -171,6 +176,8 @@ export default function ListingCard({
   const handleToggleSelection = () => {
     onToggleSelection()
   }
+
+  const shouldShowAcres = propertyType !== 'Lots & Acreage'
 
   return (
     <Card variant="outlined" className={classes.card} onClick={onClick}>
@@ -282,17 +289,19 @@ export default function ListingCard({
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item>
-                <Box display="flex" alignItems="center" mr={2}>
-                  <Typography className={classes.listingFeature}>
-                    {listingFeatures.areaSqft.toLocaleString()}{' '}
-                  </Typography>
-                  <Typography className={classes.listingFeatureValue}>
-                    ft<sup>2</sup>
-                  </Typography>
-                </Box>
-              </Grid>
-              {listingFeatures.lotSizeAreaAcre && (
+              {!shouldShowAcres && (
+                <Grid item>
+                  <Box display="flex" alignItems="center" mr={2}>
+                    <Typography className={classes.listingFeature}>
+                      {listingFeatures.areaSqft.toLocaleString()}{' '}
+                    </Typography>
+                    <Typography className={classes.listingFeatureValue}>
+                      ft<sup>2</sup>
+                    </Typography>
+                  </Box>
+                </Grid>
+              )}
+              {shouldShowAcres && listingFeatures.lotSizeAreaAcre && (
                 <Grid item>
                   <Box display="flex" alignItems="center" mr={2}>
                     <Typography
