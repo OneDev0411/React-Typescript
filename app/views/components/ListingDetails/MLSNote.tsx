@@ -14,7 +14,7 @@ interface Props {
   mlsName?: string
 }
 
-export function MLSNote({ mls, mlsName }: Props) {
+export default function MLSNote({ mls, mlsName }: Props) {
   const classes = useStyles()
 
   if (!mlsName && !mls) {

@@ -24,7 +24,8 @@ import AgentInfo from './AgentInfo'
 import Description from './Description'
 import FeatureList from './FeatureList'
 import Map from './Map'
-import { MLSNote } from './MLSNote'
+import MLSNote from './MLSNote'
+import ClaimAccountBanner from './ClaimAccountBanner'
 import { getPrice } from './get-price'
 import { getSubAddress } from './get-sub-address'
 
@@ -248,6 +249,8 @@ function ListingDetails({ id }: Props) {
         isActive={isShareModalOpen}
         onHide={closeShareModal}
       />
+
+      <ClaimAccountBanner />
     </Container>
   )
 }
