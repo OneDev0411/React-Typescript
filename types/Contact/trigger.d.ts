@@ -26,11 +26,9 @@ type IEmailAction = {
   campaign: UUID | IEmailCampaign
 }
 
-declare type ITriggerRaw = ITriggerBase &
-  IContactTrigger &
-  (IEventAction | IEmailAction)
+declare type ITriggerRaw = ITriggerBase & IContactTrigger & IEmailAction
 
 declare type ITrigger = IModel<'trigger'> &
-  IRawTrigger & {
+  ITriggerRaw & {
     executed_at: number
   }

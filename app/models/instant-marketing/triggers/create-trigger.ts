@@ -11,7 +11,7 @@ export async function createTrigger(
   template: IBrandMarketingTemplate,
   triggerData: TriggerDataInput,
   templateData: TemplateData = {}
-): Promise<ITrigger> {
+): Promise<ApiResponseBody<ITrigger>> {
   try {
     if (!triggerData.event_type) {
       throw new Error('event_type not provided')
@@ -45,7 +45,7 @@ export async function createTrigger(
       contact: contact.id
     })
 
-    return response
+    return response.body
   } catch (e) {
     throw e
   }

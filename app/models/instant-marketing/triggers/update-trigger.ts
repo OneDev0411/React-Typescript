@@ -13,7 +13,7 @@ export async function updateTrigger(
   template: Nullable<IBrandMarketingTemplate>,
   triggerData: TriggerDataInput,
   templateData: TemplateData = {}
-): Promise<ITrigger> {
+): Promise<ApiResponseBody<ITrigger>> {
   try {
     if (!triggerData.event_type) {
       throw new Error('event_type not provided')
@@ -36,7 +36,10 @@ export async function updateTrigger(
       alteredTemplate = await getTemplateInstance(template, brand, templateData)
     }
 
-    if (alteredTemplate || current.campaign?.subject !== triggerData.subject) {
+    if (
+      alteredTemplate ||
+      (current.campaign as IEmailCampaign)?.subject !== triggerData.subject
+    ) {
       const templateId = alteredTemplate
         ? { templateId: alteredTemplate.id }
         : {}
@@ -60,7 +63,7 @@ export async function updateTrigger(
       campaign: alteredCampaign ? alteredCampaign.id : currentCampaignId
     })
 
-    return response
+    return response.body
   } catch (e) {
     throw e
   }
