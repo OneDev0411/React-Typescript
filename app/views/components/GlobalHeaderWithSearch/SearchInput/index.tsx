@@ -43,6 +43,7 @@ export const SearchInput = forwardRef(
       onClear,
       isLoading,
       debounceTime = 0,
+      defaultValue,
       onChange = () => {},
       ...others
     }: SearchInputProps,
@@ -50,7 +51,7 @@ export const SearchInput = forwardRef(
   ) => {
     const classes = useStyles()
     const theme = useTheme<Theme>()
-    const [nonEmpty, setNonEmpty] = useState(false)
+    const [nonEmpty, setNonEmpty] = useState(Boolean(defaultValue))
     const inputEl = useRef<HTMLInputElement | null>(null)
     const widthStyle = { width: fullWidth ? '100%' : '360px' } // default width
 
