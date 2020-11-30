@@ -69,7 +69,7 @@ const MapView = props => {
     }
 
     return props.sortedListings.slice(0, limit).map(listing => (
-      <Grid key={listing.id} item xs={12} md={6}>
+      <Grid key={listing.id} item md={12} lg={6}>
         <Box pb={1} pl={1}>
           <ListingCard
             listing={listing}
