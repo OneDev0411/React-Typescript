@@ -5,9 +5,10 @@ import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles, Theme } from '@material-ui/core'
-import { mdiExportVariant, mdiHeartOutline } from '@mdi/js'
+import { mdiExportVariant, mdiHeart, mdiHeartOutline } from '@mdi/js'
 
 import { IAppState } from 'reducers'
+import { useFavorite } from 'hooks/use-favorite'
 import { getBrandLogo } from 'utils/get-brand-logo'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -35,17 +36,18 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  id?: UUID
+  listing: IListing
   handleShare: () => void
 }
 
-function Header({ handleShare, location }: Props & WithRouterProps) {
+function Header({ listing, handleShare, location }: Props & WithRouterProps) {
   const classes = useStyles()
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
   )
   const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
 
+  const { isFavorited, toggleFavorite } = useFavorite(listing)
   const logo = React.useMemo(
     () =>
       getBrandLogo(
@@ -71,7 +73,7 @@ function Header({ handleShare, location }: Props & WithRouterProps) {
     browserHistory.push(url)
   }
 
-  const handleFavorite = () => {}
+  const handleFavorite = event => toggleFavorite()
 
   return (
     <>
@@ -89,7 +91,9 @@ function Header({ handleShare, location }: Props & WithRouterProps) {
               <Button
                 variant="outlined"
                 onClick={handleFavorite}
-                startIcon={<SvgIcon path={mdiHeartOutline} />}
+                startIcon={
+                  <SvgIcon path={isFavorited ? mdiHeart : mdiHeartOutline} />
+                }
                 className={classes.button}
               >
                 Favorite

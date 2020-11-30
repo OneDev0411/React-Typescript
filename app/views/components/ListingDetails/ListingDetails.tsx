@@ -163,7 +163,7 @@ function ListingDetails({ id }: Props) {
   return (
     <Container maxWidth="xl" disableGutters>
       <div className={classes.header}>
-        <Header id={listing.id} handleShare={openShareModal} />
+        <Header listing={listing} handleShare={openShareModal} />
       </div>
       <Box className={classes.heroWrapper}>
         <Grid container className={classes.heroContainer}>
