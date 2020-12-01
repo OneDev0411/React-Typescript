@@ -16,6 +16,7 @@ const useStyles = makeStyles(
       }
     },
     mainImage: {
+      maxHeight: 440,
       maxWidth: '100%',
       [theme.breakpoints.up('sm')]: {
         width: '70%'
