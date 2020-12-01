@@ -3,7 +3,7 @@ import cn from 'classnames'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles, Theme, useTheme } from '@material-ui/core'
+import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
 import { mdiFullscreen } from '@mdi/js'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -28,31 +28,24 @@ const useStyles = makeStyles(
     mainImage: {
       width: '100%'
     },
-    thumbnailsWrapper: {
-      maxWidth: '196px',
-      [theme.breakpoints.up('xs')]: {
-        maxWidth: '456px'
-      },
-      [theme.breakpoints.up('sm')]: {
-        maxWidth: '744px'
-      },
-      [theme.breakpoints.up('md')]: {
-        maxWidth: '1000px'
-      }
-    },
-    thumbnailImage: {
-      maxWidth: '100%'
-    },
     button: {
-      background: 'none',
+      backgroundColor: 'transparent',
       padding: 0,
       border: 'none',
       width: '100%',
       position: 'relative'
     },
     thumbnailBtn: {
-      marginRight: theme.spacing(2),
-      marginBottom: theme.spacing(2)
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center center',
+      backgroundSize: 'cover',
+      height: 56,
+      [theme.breakpoints.up('sm')]: {
+        height: 72
+      },
+      [theme.breakpoints.up('md')]: {
+        height: 96
+      }
     },
     fullscreenIcon: {
       position: 'absolute',
@@ -101,6 +94,7 @@ function Gallery({ images }: Props) {
   const theme = useTheme()
   const classes = useStyles()
   const imagesLength = images.length
+  const isTablet = useMediaQuery(theme.breakpoints.up('sm'))
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
@@ -127,7 +121,7 @@ function Gallery({ images }: Props) {
       return thumbnailsSrc
     }
 
-    return images.map(src => ({
+    return images.slice(1, 5).map(src => ({
       src,
       isFake: false
     }))
@@ -174,35 +168,31 @@ function Gallery({ images }: Props) {
           />
         )}
       </Box>
-      <Box display="flex" justifyContent="center" px={3}>
-        <Box className={classes.thumbnailsWrapper}>
-          <Grid container spacing={1}>
-            {thumbnails.map((item, index) => (
-              <Grid item xs={3} key={index}>
-                <button
-                  type="button"
-                  disabled={item.isFake}
-                  data-image-index={index + 1}
-                  className={cn(classes.button, classes.thumbnailBtn)}
-                  onClick={item.isFake ? () => false : openLightbox}
-                >
-                  <img
-                    src={item.src}
-                    alt={`listing ${index}`}
-                    className={classes.thumbnailImage}
-                  />
-                  {index === 3 && imagesLength > 5 && (
-                    <Box className={classes.photoNumbers}>
-                      <Typography variant="caption">
-                        {`+ ${images.length - 5} Photos`}
-                      </Typography>
-                    </Box>
-                  )}
-                </button>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
+      <Box display="flex" justifyContent="center" px={2}>
+        <Grid container spacing={isTablet ? 2 : 1}>
+          {thumbnails.map((item, index) => (
+            <Grid item xs={3} key={index}>
+              <button
+                type="button"
+                disabled={item.isFake}
+                data-image-index={index + 1}
+                className={cn(classes.button, classes.thumbnailBtn)}
+                onClick={item.isFake ? () => false : openLightbox}
+                style={{
+                  backgroundImage: `url(${item.src})`
+                }}
+              >
+                {index === 3 && imagesLength > 5 && (
+                  <Box className={classes.photoNumbers}>
+                    <Typography variant="caption">
+                      {`+ ${images.length - 5} Photos`}
+                    </Typography>
+                  </Box>
+                )}
+              </button>
+            </Grid>
+          ))}
+        </Grid>
       </Box>
       {imagesLength > 0 && (
         <Lightbox
