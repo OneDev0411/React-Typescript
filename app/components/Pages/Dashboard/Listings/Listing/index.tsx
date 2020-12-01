@@ -4,10 +4,14 @@ import { withRouter, WithRouterProps } from 'react-router'
 
 import { ListingDetails } from '../../../../../views/components/ListingDetails'
 
-const Listing: React.FC<WithRouterProps> = props => {
+interface Props {
+  id: UUID
+}
+
+const Listing: React.FC<Props & WithRouterProps> = props => {
   useTitle('Listing | Rechat')
 
-  return <ListingDetails id={props.params.id} />
+  return <ListingDetails id={props.id || props.params.id} />
 }
 
 export default withRouter(Listing)
