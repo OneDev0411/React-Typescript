@@ -64,8 +64,8 @@ interface Address extends IModel<'address'> {
 }
 
 interface Property extends IModel<'property'> {
-  bedroom_count: number
-  bathroom_count: number
+  bedroom_count: number | null
+  bathroom_count: number | null
   address_id: UUID
   description: string
   square_meters: number

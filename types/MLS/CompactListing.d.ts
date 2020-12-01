@@ -23,8 +23,8 @@ declare interface ICompactProperty {
   half_bathroom_count: number
   full_bathroom_count: number
   square_meters: number
-  bedroom_count: number
-  bathroom_count: number
+  bedroom_count: number | null
+  bathroom_count: number | null
   year_built: number
   number_of_units: null
   lot_size_dimensions: string
