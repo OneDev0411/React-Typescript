@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import pluralize from 'pluralize'
 
@@ -125,4 +125,4 @@ const ListView = ({ sortedListings, listings, isFetching }) => {
   )
 }
 
-export default ListView
+export default memo(ListView)

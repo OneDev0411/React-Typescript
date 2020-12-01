@@ -58,7 +58,7 @@ export default class extends React.Component {
           {hasError && <RequiredErrorSign />}
         </H2>
 
-        {_.map(fields, field => (
+        {fields.map(field => (
           <div key={field.key}>
             {field.data_type !== 'Date' && (
               <div className="entity-item string new">

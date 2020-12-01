@@ -16,6 +16,7 @@ export function normalizeAddress(address) {
     state_code: stateToAbbreviated(address.state),
     full_address: [
       address.street_number || '',
+      address.street_prefix.value ? address.street_prefix.title : '',
       address.street_name || '',
       address.street_suffix || '',
       address.unit_number ? `, Unit ${address.unit_number},` : '',
@@ -29,6 +30,7 @@ export function normalizeAddress(address) {
       .replace(/,,/gi, ','),
     street_address: [
       address.street_number || '',
+      address.street_prefix.value ? address.street_prefix.title : '',
       address.street_name || '',
       address.street_suffix || '',
       address.unit_number ? ` Unit ${address.unit_number}` : ''

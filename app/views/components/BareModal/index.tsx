@@ -8,6 +8,7 @@ if (document.body.querySelector('#app')) {
 
 interface Props extends ReactModalProps {
   autoHeight?: boolean
+  offOverflow?: boolean
   large?: boolean
   children: ReactNode
   className?: string
@@ -15,6 +16,7 @@ interface Props extends ReactModalProps {
 }
 
 export default function BareModal({
+  offOverflow,
   autoHeight,
   children,
   className,
@@ -28,8 +30,10 @@ export default function BareModal({
 
   const baseClassName = 'c-modal__content'
   const autoHeightClassName = `${baseClassName}--height-auto`
+  const offOverflowClassName = `${baseClassName}--off-overflow`
   const largeClassName = `${baseClassName}--large`
   const classes = cn(baseClassName, className, {
+    [offOverflowClassName]: offOverflow,
     [autoHeightClassName]: autoHeight,
     [largeClassName]: large
   })

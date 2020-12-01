@@ -99,8 +99,8 @@ const ALL_SECTIONS: SectionCollection = {
       },
       {
         title: 'Diwali',
-        value: 'Diwaly',
-        link: urlGenerator('/Diwaly')
+        value: 'Diwali',
+        link: urlGenerator('/Diwali')
       },
       {
         title: 'Easter',
@@ -123,9 +123,9 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/Halloween')
       },
       {
-        title: 'Hannukkah',
-        value: 'Hannukkah',
-        link: urlGenerator('/Hannukkah')
+        title: 'Hanukkah',
+        value: 'Hanukkah',
+        link: urlGenerator('/Hanukkah')
       },
       {
         title: "International Women's Day",

@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const Card = styled.div`
   width: 100%;
+  margin-bottom: 1rem;
 
   @media screen and (min-width: 48em) {
     width: calc((100% / 2) - 0.5rem);

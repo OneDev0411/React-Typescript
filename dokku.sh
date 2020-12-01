@@ -32,13 +32,18 @@ KEYS=$(cat /tmp/configs | jq '. | keys[]')
 # We need to copy the configuration fro msource heroku application
 # But we also need ot set the letsencrypt email in the config
 
-CONFIG='DOKKU_LETSENCRYPT_EMAIL=$REVIEW_LETSENCRYPT_EMAIL'
+CONFIG="DOKKU_LETSENCRYPT_EMAIL=$REVIEW_LETSENCRYPT_EMAIL"
 
 for key in $KEYS;
 do
   val=$(cat /tmp/configs | jq ".$key")
   CONFIG="$CONFIG $key=$val"
 done
+
+# Also set the new app's URL's
+URL="https://$APP.$REVIEW_HOST"
+CONFIG="$CONFIG API_HOST_LOCAL=$URL APP_SHARE_URL=$URL APP_SHARE_URL=$URL"
+
 ssh "dokku@$REVIEW_HOST" config:set --no-restart $APP $CONFIG
 
 # Checkout the branch we need to deploy
@@ -48,7 +53,7 @@ git checkout -B $CI_COMMIT_REF_SLUG
 ssh "dokku@$REVIEW_HOST" letsencrypt $APP
 
 # Unlck is so previous deployments wont prevent this deployment
-ssh "dokku@$REVIEW_HOST" apps:unlock $APP
+ssh "dokku@$REVIEW_HOST" apps:unlock $APP || true
 
 # Deploy
-git push "dokku@$REVIEW_HOST:$APP" $CI_COMMIT_REF_SLUG:master
+git push "dokku@$REVIEW_HOST:$APP" $CI_COMMIT_REF_SLUG:master --force

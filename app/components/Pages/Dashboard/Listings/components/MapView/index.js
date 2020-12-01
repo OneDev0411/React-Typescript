@@ -1,16 +1,17 @@
-import React from 'react'
+import React, { useState, useRef, memo } from 'react'
 import cn from 'classnames'
-import { makeStyles, Box, Grid } from '@material-ui/core'
+import { Grid, Box, makeStyles } from '@material-ui/core'
+import { useDeepCompareEffect } from 'react-use'
 
+import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
+import { useListSelection } from 'components/ListSelection/use-list-selection'
 import LoadingComponent from 'components/Spinner'
 
-import { useListSelection } from 'components/ListSelection/use-list-selection'
-
-import ListingCard from '../ListingCard'
+import ListingCard from '../ListingCardWithFavorite'
 import ZeroState from '../ZeroState'
 
-const CARDS_CONTAINER_WIDTH = '27em'
 const VERTICAL_GAP_FROM_PAGE_TOP = '12em' // It's the page header height
+const PAGE_SIZE = 12
 
 const useStyles = makeStyles(
   theme => ({
@@ -26,12 +27,12 @@ const useStyles = makeStyles(
       height: '100%',
       position: 'relative',
       [theme.breakpoints.up('md')]: {
-        width: `calc(100% - ${CARDS_CONTAINER_WIDTH})`
+        width: '50%'
       }
     },
     cardsContainer: {
-      width: `${CARDS_CONTAINER_WIDTH}`,
-      padding: theme.spacing(0, 0.5, 2, 2),
+      width: '50%',
+      paddingRight: theme.spacing(0.5),
       overflowY: 'scroll',
       borderLeft: `1px solid ${theme.palette.divider}`
     }
@@ -43,6 +44,21 @@ const MapView = props => {
   const classes = useStyles()
   const { selections, toggleItem } = useListSelection()
 
+  const cardsContainerRef = useRef()
+  const [limit, setLimit] = useState(PAGE_SIZE)
+  const loadNextPage = () => setLimit(limit => limit + PAGE_SIZE)
+
+  useInfiniteScroll({
+    container: cardsContainerRef,
+    accuracy: 300,
+    debounceTime: 100,
+    onScrollBottom: loadNextPage
+  })
+
+  useDeepCompareEffect(() => {
+    setLimit(PAGE_SIZE)
+  }, [props.sortedListings])
+
   const renderCards = () => {
     if (props.isFetching) {
       return <LoadingComponent />
@@ -52,15 +68,16 @@ const MapView = props => {
       return <ZeroState />
     }
 
-    return props.sortedListings.map(listing => (
-      <Grid key={listing.id} item xs={12}>
-        <ListingCard
-          listing={listing}
-          tabName={props.tabName}
-          user={props.user}
-          selected={selections.some(item => item.id === listing.id)}
-          onToggleSelection={toggleItem}
-        />
+    return props.sortedListings.slice(0, limit).map(listing => (
+      <Grid key={listing.id} item md={12} lg={6}>
+        <Box pb={1} pl={1}>
+          <ListingCard
+            listing={listing}
+            tags={listing.new ? [listing.new] : undefined}
+            selected={selections.some(item => item.id === listing.id)}
+            onToggleSelection={() => toggleItem(listing)}
+          />
+        </Box>
       </Grid>
     ))
   }
@@ -69,15 +86,15 @@ const MapView = props => {
     <Box className={classes.container}>
       <Box className={classes.mapContainer}>{props.Map}</Box>
       <Box
+        // See: https://github.com/mui-org/material-ui/issues/17010
+        ref={cardsContainerRef} // @ts-ignore
         className={cn(classes.cardsContainer, 'u-scrollbar--thinner--self')}
         display={{ xs: 'none', md: 'block' }}
       >
-        <Grid container spacing={1}>
-          {renderCards()}
-        </Grid>
+        <Grid container>{renderCards()}</Grid>
       </Box>
     </Box>
   )
 }
 
-export default MapView
+export default memo(MapView)

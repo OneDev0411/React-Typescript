@@ -39,7 +39,7 @@ interface IPoint {
 interface ListingAgent extends IModel<'agent'> {
   email: string
   mlsid: string
-  fax: string
+  fax: string | null
   full_name: string
   first_name: string
   last_name: string
@@ -102,8 +102,8 @@ interface Address extends IModel<'address'> {
 }
 
 interface Property extends IModel<'property'> {
-  bedroom_count: number
-  bathroom_count: number
+  bedroom_count: number | null
+  bathroom_count: number | null
   address_id: UUID
   description: string
   square_meters: number
@@ -203,7 +203,7 @@ declare type IListing<Associations extends IListingAssociation = ''> = {
   mls_number: string
   association_fee_frequency: string
   association_fee_includes: string
-  unexempt_taxes: number
+  unexempt_taxes: number | null
   financing_proposed: string
   list_office_mui: string
   list_office_mls_id: string
