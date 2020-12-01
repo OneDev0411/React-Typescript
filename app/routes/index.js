@@ -737,9 +737,7 @@ export default (
           <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
         </Route>
 
-        <Route path="/dashboard/mls/:id" component={AsyncListingsLayout}>
-          <IndexRoute component={AsyncListingSinglePage} />
-        </Route>
+        <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />
