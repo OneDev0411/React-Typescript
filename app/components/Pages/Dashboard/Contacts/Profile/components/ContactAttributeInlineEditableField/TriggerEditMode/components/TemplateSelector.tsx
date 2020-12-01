@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { makeStyles, Theme, Typography } from '@material-ui/core'
+import { makeStyles, Theme, Typography, Box } from '@material-ui/core'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import cn from 'classnames'
-import { template } from 'underscore'
 
+import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
 
 import { getActiveTeamId } from 'utils/user-teams'
@@ -30,9 +30,12 @@ const useStyles = makeStyles(
       justifyContent: 'space-between'
     },
     headerTitle: theme.typography.subtitle3,
-    openTemplatePicker: {
+    templateHandler: {
       color: theme.palette.secondary.main,
-      cursor: 'pointer'
+      cursor: 'pointer',
+      '&:not(:last-child)': {
+        marginRight: theme.spacing(1.25)
+      }
     },
     templatePreview: {
       marginTop: theme.spacing(1),
@@ -55,7 +58,7 @@ const useStyles = makeStyles(
     },
     disabled: {
       opacity: 0.4,
-      '& $openTemplatePicker, & $templatePreview': {
+      '& $templateHandler, & $templatePreview': {
         cursor: 'default'
       }
     }
@@ -75,6 +78,10 @@ export const TemplateSelector = ({
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
     false
   )
+  const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
+  const [isSettingDefaultTemplate, setIsSettingDefaultTemplate] = useState<
+    boolean
+  >(false)
 
   useEffectOnce(() => {
     const brandId = getActiveTeamId(user)
@@ -84,17 +91,23 @@ export const TemplateSelector = ({
     }
 
     if (!selectedTemplate && !currentValue) {
+      setIsSettingDefaultTemplate(true)
       getTemplates(
         brandId,
         [getTemplateType(attributeName)],
         ['Email' as MarketingTemplateMedium.Email]
       )
         .then(templates => {
-          if (template.length) {
+          setIsSettingDefaultTemplate(false)
+
+          if (templates.length) {
             onSelectTemplate(templates[0])
           }
         })
-        .catch(err => console.error(err))
+        .catch(err => {
+          setIsSettingDefaultTemplate(false)
+          console.error(err)
+        })
     }
   })
 
@@ -107,34 +120,34 @@ export const TemplateSelector = ({
     }
   }
 
-  const handleOpenTemplatePicker = () => {
+  const handleShowTemplatePicker = (state: boolean = false) => {
     if (disabled) {
       return
     }
 
-    setIsTemplatePickerOpen(true)
+    setIsTemplatePickerOpen(state)
   }
 
-  const handleCloseTemplatePicker = () => {
+  const handleShowBuilder = (state: boolean = false) => {
     if (disabled) {
       return
     }
 
-    setIsTemplatePickerOpen(false)
+    setIsBuilderOpen(state)
   }
 
   const renderPreview = () => {
+    if (isSettingDefaultTemplate) {
+      return (
+        <span className={classes.templatePreviewPlaceholder}>Loading...</span>
+      )
+    }
+
     if (disabled || (!selectedTemplate && !currentValue)) {
       return (
         <span className={classes.templatePreviewPlaceholder}>
           Select a template
         </span>
-      )
-    }
-
-    if (!selectedTemplate && !currentValue) {
-      return (
-        <span className={classes.templatePreviewPlaceholder}>Loading...</span>
       )
     }
 
@@ -181,19 +194,30 @@ export const TemplateSelector = ({
       <div className={cn(classes.container, { [classes.disabled]: disabled })}>
         <div className={classes.header}>
           <span className={classes.headerTitle}>Template</span>
-          {(selectedTemplate || currentValue) && (
-            <Typography
-              variant="body2"
-              className={classes.openTemplatePicker}
-              onClick={handleOpenTemplatePicker}
-            >
-              Change
-            </Typography>
-          )}
+          <Box display="inline-flex">
+            {selectedTemplate && (
+              <Typography
+                variant="body2"
+                className={classes.templateHandler}
+                onClick={() => handleShowBuilder(true)}
+              >
+                Edit
+              </Typography>
+            )}
+            {(selectedTemplate || currentValue) && (
+              <Typography
+                variant="body2"
+                className={classes.templateHandler}
+                onClick={() => handleShowTemplatePicker(true)}
+              >
+                Change
+              </Typography>
+            )}
+          </Box>
         </div>
         <div
           className={classes.templatePreview}
-          onClick={handleOpenTemplatePicker}
+          onClick={() => handleShowTemplatePicker(true)}
         >
           {renderPreview()}
         </div>
@@ -205,7 +229,16 @@ export const TemplateSelector = ({
           mediums={['Email' as MarketingTemplateMedium.Email]}
           templateTypes={[getTemplateType(attributeName)]}
           onSelect={handleSelectTemplate}
-          onClose={handleCloseTemplatePicker}
+          onClose={() => handleShowTemplatePicker(false)}
+        />
+      )}
+      {isBuilderOpen && selectedTemplate && (
+        <MarketingTemplateEditor
+          brandTemplate={selectedTemplate}
+          onSave={t => {
+            console.log('MarketingTemplateEditor', t)
+          }}
+          onClose={() => handleShowBuilder(false)}
         />
       )}
     </>
