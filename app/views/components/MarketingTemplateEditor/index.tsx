@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTheme } from '@material-ui/core'
 
 import InstantMarketing from 'components/InstantMarketing'
 import { TemplateData } from 'utils/marketing-center/render-branded-template'
@@ -45,6 +46,8 @@ export default function MarketingTemplateEditor({
   onSave,
   onClose
 }: Props) {
+  const theme = useTheme()
+
   return (
     <InstantMarketing
       bareMode
@@ -57,7 +60,7 @@ export default function MarketingTemplateEditor({
       mediums=""
       assets={[]}
       defaultTemplate={brandTemplate}
-      containerStyle={{}}
+      containerStyle={{ zIndex: theme.zIndex.modal + 1 }}
       handleSave={template => onSave(template.markup)}
       onClose={onClose}
     />
