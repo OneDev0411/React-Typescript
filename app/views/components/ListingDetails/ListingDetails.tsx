@@ -132,9 +132,10 @@ const useStyles = makeStyles(
 
 interface Props {
   id: UUID
+  onClose?: () => void
 }
 
-function ListingDetails({ id }: Props) {
+function ListingDetails({ id, onClose }: Props) {
   const classes = useStyles()
   const theme = useTheme()
   const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
@@ -169,7 +170,11 @@ function ListingDetails({ id }: Props) {
   return (
     <Container maxWidth="xl" disableGutters>
       <div className={classes.header}>
-        <Header listing={listing} handleShare={openShareModal} />
+        <Header
+          listing={listing}
+          handleShare={openShareModal}
+          handleClose={onClose}
+        />
       </div>
       <Box className={classes.heroWrapper}>
         <Grid container className={classes.heroContainer}>

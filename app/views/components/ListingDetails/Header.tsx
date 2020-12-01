@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles, Theme } from '@material-ui/core'
-import { mdiExportVariant, mdiHeart, mdiHeartOutline } from '@mdi/js'
+import { mdiClose, mdiExportVariant, mdiHeart, mdiHeartOutline } from '@mdi/js'
 
 import { IAppState } from 'reducers'
 import { useFavorite } from 'hooks/use-favorite'
@@ -37,10 +37,16 @@ const useStyles = makeStyles(
 
 interface Props {
   listing: IListing
+  handleClose?: () => void
   handleShare: () => void
 }
 
-function Header({ listing, handleShare, location }: Props & WithRouterProps) {
+function Header({
+  listing,
+  handleShare,
+  location,
+  handleClose
+}: Props & WithRouterProps) {
   const classes = useStyles()
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
@@ -79,7 +85,18 @@ function Header({ listing, handleShare, location }: Props & WithRouterProps) {
     <>
       <Grid container>
         <Grid item xs={12} sm={3}>
-          <img alt="logo" src={logo} className={classes.logo} />
+          {handleClose ? (
+            <Button
+              variant="outlined"
+              onClick={handleClose}
+              startIcon={<SvgIcon path={mdiClose} />}
+              className={classes.button}
+            >
+              Close
+            </Button>
+          ) : (
+            <img alt="logo" src={logo} className={classes.logo} />
+          )}
         </Grid>
         <Grid item xs={12} sm={9}>
           <Box
