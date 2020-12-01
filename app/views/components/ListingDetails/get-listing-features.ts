@@ -155,11 +155,11 @@ export function getListingFeatures(listing: IListing): Feature[] {
         },
         {
           label: 'Days On Market',
-          value: valueToString(listingUtils.getDOM(listing.dom))
+          value: valueToString(listingUtils.getDaysOnMarket(listing))
         },
         {
           label: 'Current Days On Market',
-          value: valueToString(listingUtils.getDOM(listing.cdom))
+          value: valueToString(listingUtils.getCurrentDaysOnMarket(listing))
         }
       ]
     },
