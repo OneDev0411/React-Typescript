@@ -26,7 +26,10 @@ const useStyles = makeStyles(
       position: 'relative'
     },
     mainImage: {
-      width: '100%'
+      width: '100%',
+      [theme.breakpoints.up('lg')]: {
+        maxHeight: 480
+      }
     },
     button: {
       backgroundColor: 'transparent',
