@@ -8,8 +8,7 @@ import { getIsFavorite } from 'reducers/listings/favorites'
 import { IAppState } from 'reducers'
 
 import ListingCard from 'components/ListingCards/ListingCard'
-
-import Listing from '../../Listing'
+import { ListingDetails } from 'components/ListingDetails'
 
 interface Props
   extends Omit<ComponentProps<typeof ListingCard>, 'liked' | 'onLikeClick'> {}
@@ -22,7 +21,6 @@ const ListingCardWithFavorite = ({
   onClick
 }: Props) => {
   const dispatch = useDispatch()
-  const data = useSelector(({ data }) => data)
   const user = useSelector<IAppState, IUser>(({ user }) => user)
   const favorites = useSelector(({ favorites }) => favorites)
   const isFavorited = getIsFavorite(favorites.listings, listing.id)
@@ -67,17 +65,7 @@ const ListingCardWithFavorite = ({
 
       {isListingOpen && (
         <Dialog open fullScreen>
-          <Listing
-            style={{
-              width: '100%',
-              marginLeft: 0
-            }}
-            data={data}
-            params={{
-              id: listing.id
-            }}
-            onClose={closeListing}
-          />
+          <ListingDetails id={listing.id} onClose={closeListing} />
         </Dialog>
       )}
     </>
