@@ -3,7 +3,7 @@ import { searchListings } from 'models/listings/search/search-listings'
 
 import { ListingResult, PlaceResult, SearchResult } from './types'
 
-export async function searchListinsAndPlaces(
+export async function searchListingsAndPlaces(
   query: string
 ): Promise<SearchResult[]> {
   const listingsResponse = await searchListings(query, { limit: 5 })
@@ -14,7 +14,7 @@ export async function searchListinsAndPlaces(
       type: 'listing',
       listing
     })),
-    ...placesResponse.map<PlaceResult>(place => ({
+    ...placesResponse.slice(0, 5).map<PlaceResult>(place => ({
       type: 'place',
       place
     }))

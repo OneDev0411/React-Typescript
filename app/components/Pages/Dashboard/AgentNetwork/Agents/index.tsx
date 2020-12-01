@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
-import { LoadScript } from '@react-google-maps/api'
-import { Box, Divider, Grid } from '@material-ui/core'
+import { LoadScript, LoadScriptProps } from '@react-google-maps/api'
+import { Box, Divider, Grid, Typography } from '@material-ui/core'
 
 import config from 'config'
 import { IAppState } from 'reducers'
@@ -13,6 +13,7 @@ import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-list
 import ListingAlertFilters from 'components/ListingAlertFilters'
 
 import Layout from '../Layout'
+import { openSearchResultPage } from '../helpers'
 import { ListingWithProposedAgent, AggregatedAgentInfo } from './types'
 import {
   aggregateListingsAgents,
@@ -22,7 +23,7 @@ import {
 } from './helpers'
 import AgentsGrid from './Grid'
 
-const GOOGLE_MAPS_LIBRARIES = ['geometry']
+const GOOGLE_MAPS_LIBRARIES: LoadScriptProps['libraries'] = ['geometry']
 
 function Agents(props: WithRouterProps) {
   const user = useSelector<IAppState, IUser>(state => state.user)
@@ -135,15 +136,24 @@ function Agents(props: WithRouterProps) {
       libraries={GOOGLE_MAPS_LIBRARIES}
       onLoad={() => setIsLoadingGoogleMaps(false)}
     >
-      <Layout title="Select Agents">
+      <Layout title="Select Agents" onSelectSearchResult={openSearchResultPage}>
         <Grid container direction="column">
-          <Grid container item justify="flex-end">
-            {filters && (
-              <ListingAlertFilters
-                filters={filters}
-                onApply={handleApplyFilters}
-              />
-            )}
+          <Grid container item alignItems="flex-end" justify="space-between">
+            <Grid item>
+              {props.location.query.title && (
+                <Typography variant="body1">
+                  {props.location.query.title}
+                </Typography>
+              )}
+            </Grid>
+            <Grid item>
+              {filters && (
+                <ListingAlertFilters
+                  filters={filters}
+                  onApply={handleApplyFilters}
+                />
+              )}
+            </Grid>
           </Grid>
           <Grid item>
             <Box py={1}>

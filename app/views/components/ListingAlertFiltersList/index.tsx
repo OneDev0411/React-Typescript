@@ -15,7 +15,7 @@ const ALERT_FILTER_KEY_TO_DATA_MAP: {
 } = {
   radius: {
     label: 'Radius',
-    toString: radius => pluralize('Mile', radius, true)
+    toString: radius => pluralize('mile', radius, true)
   }
 }
 
@@ -65,7 +65,7 @@ export default function ListingAlertFiltersList({
       justify="flex-end"
     >
       {Object.entries(filtersKeyValueMap)
-        .slice(0, limit + 1)
+        .slice(0, limit)
         .map(([key, value]) => (
           <Grid item key={key}>
             <Button variant="outlined" onClick={onClick}>

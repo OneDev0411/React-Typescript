@@ -8,7 +8,7 @@ import {
   ALL_PROPERTY_TYPES,
   ALL_PROPERTY_SUBTYPES
 } from '../constants'
-import { AggregatedAgentInfo, CompactListingWitgBothSideAgents } from './types'
+import { AggregatedAgentInfo, CompactListingWithBothSideAgents } from './types'
 
 function getSixMonthsAgoTimestamp() {
   return (new Date().getTime() - 180 * 24 * 3600000) / 1000
@@ -56,7 +56,7 @@ export function getLocationVAlertFilters(
 
 export async function getListingsWithBothSidesAgents(
   filters: AlertFilters
-): Promise<CompactListingWitgBothSideAgents[]> {
+): Promise<CompactListingWithBothSideAgents[]> {
   const response = await byValert(
     filters,
     {
@@ -72,7 +72,7 @@ export async function getListingsWithBothSidesAgents(
 }
 
 export function aggregateListingsAgents(
-  listings: CompactListingWitgBothSideAgents[]
+  listings: CompactListingWithBothSideAgents[]
 ): AggregatedAgentInfo[] {
   const agentsMap: StringMap<AggregatedAgentInfo> = {}
 

@@ -6,11 +6,11 @@ import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
 import { getBrandListings } from 'models/listings/search/get-brand-listings'
 import { useLoadingEntities } from 'hooks/use-loading'
-import { goTo } from 'utils/go-to'
 
 import Layout from './Layout'
 import Info from './Sections/Info'
 import Listings from './Sections/Listings'
+import { openListingPage, openSearchResultPage } from './helpers'
 
 export function AgentNetwork() {
   const user = useSelector<IAppState, IUser>(state => state.user)
@@ -37,27 +37,13 @@ export function AgentNetwork() {
     fetchBrandListings()
   }, [brand, setIsLoading])
 
-  async function handleSelectListing(listing: ICompactListing) {
-    goTo('/dashboard/agent-network/agents', null, {
-      listing: listing.id
-    })
-  }
-
-  async function handleSelectPlace(place: google.maps.GeocoderResult) {
-    goTo('/dashboard/agent-network/agents', null, {
-      lat: place.geometry.location.lat,
-      lng: place.geometry.location.lng
-    })
-  }
-
   return (
-    <Layout title="Agent Network">
+    <Layout title="Agent Network" onSelectSearchResult={openSearchResultPage}>
       <Info />
       <Listings
         isLoading={isLoading}
         listings={listings}
-        onSelectListing={handleSelectListing}
-        onSelectPlace={handleSelectPlace}
+        onSelectListing={openListingPage}
       />
     </Layout>
   )

@@ -19,7 +19,7 @@ import { addressTitle } from 'utils/listing'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { searchListinsAndPlaces } from './helpers'
+import { searchListingsAndPlaces } from './helpers'
 import { SearchResult } from './types'
 
 const useStyles = makeStyles(
@@ -79,7 +79,7 @@ export default function ListingsAndPlacesSearchInput({
       try {
         setIsLoading(true)
 
-        const fetchedOptions = await searchListinsAndPlaces(inputValue)
+        const fetchedOptions = await searchListingsAndPlaces(inputValue)
 
         setOptions(fetchedOptions)
       } catch (error) {
