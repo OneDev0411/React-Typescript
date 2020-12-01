@@ -47,12 +47,11 @@ const App = () => (
   <AppTheme>
     <ConfirmationModalProvider>
       <Router history={history}>{routes}</Router>
+
       <ConfirmationModal />
+      <ReduxConfirmationModal />
+      <NotificationsSystem theme={notificationTheme} />
     </ConfirmationModalProvider>
-
-    <NotificationsSystem theme={notificationTheme} />
-
-    <ReduxConfirmationModal />
   </AppTheme>
 )
 
