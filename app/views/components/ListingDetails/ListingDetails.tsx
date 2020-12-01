@@ -6,7 +6,6 @@ import Container from '@material-ui/core/Container'
 import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
-import { getActiveBrand } from 'utils/user-teams'
 import listingUtils from 'utils/listing'
 import LoadingContainer from 'components/LoadingContainer'
 import { useLogUserActivity } from 'hooks/use-log-user-activity'
@@ -28,6 +27,7 @@ import MLSNote from './MLSNote'
 import ClaimAccountBanner from './ClaimAccountBanner'
 import { getPrice } from './get-price'
 import { getSubAddress } from './get-sub-address'
+import { getAgentInfo } from './get-agent-info'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -138,7 +138,6 @@ function ListingDetails({ id }: Props) {
   const classes = useStyles()
   const theme = useTheme()
   const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
-  const brand = getActiveBrand(user)
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
   const [isShareModalOpen, setIsShareModalOpen] = React.useState(false)
   const { listing, status, error }: UseGetListing = useGetListing(id)
@@ -156,7 +155,7 @@ function ListingDetails({ id }: Props) {
     return <LoadingContainer />
   }
 
-  const agent = listing.list_agent
+  const agent = getAgentInfo(listing)
   const title = getPrice(listing)
   const subtitle1 = listingUtils.addressTitle(listing.property.address)
   const subtitle2 = `${getSubAddress(listing)} | MLS#: ${listing.mls_number}`
@@ -211,11 +210,11 @@ function ListingDetails({ id }: Props) {
         </Grid>
         <Grid item xs={12} lg={5}>
           <AgentInfo
-            name={agent.full_name}
+            name={agent.name || ''}
             email={agent.email}
-            image={agent.profile_image_url}
-            tel={agent.phone_number}
-            company={brand?.name}
+            image={agent.image}
+            tel={agent.tel}
+            company={agent.company}
           />
         </Grid>
       </Grid>
