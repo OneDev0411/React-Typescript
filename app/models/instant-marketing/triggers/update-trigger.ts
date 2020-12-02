@@ -1,18 +1,14 @@
-import { TemplateData } from 'utils/marketing-center/render-branded-nunjucks-template'
-
 import Fetch from '../../../services/fetch'
 
 import { getTemplateInstance } from './helpers/get-template-instance'
 import { updateTriggerCampaign } from './helpers/update-trigger-campaign'
-import { TriggerDataInput } from './types'
+import { TriggerDataInput, TriggerTemplateInput } from './types'
 
 export async function updateTrigger(
   current: ITrigger,
   contact: IContact & { user: IUser },
-  brand: IBrand,
-  template: Nullable<IBrandMarketingTemplate>,
-  triggerData: TriggerDataInput,
-  templateData: TemplateData = {}
+  template: Nullable<TriggerTemplateInput>,
+  triggerData: TriggerDataInput
 ): Promise<ApiResponseBody<ITrigger>> {
   try {
     if (!triggerData.event_type) {
@@ -33,7 +29,7 @@ export async function updateTrigger(
         : current.campaign
 
     if (template) {
-      alteredTemplate = await getTemplateInstance(template, brand, templateData)
+      alteredTemplate = await getTemplateInstance(template)
     }
 
     if (

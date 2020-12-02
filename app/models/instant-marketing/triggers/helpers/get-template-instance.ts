@@ -1,28 +1,15 @@
-import {
-  renderBrandedNunjucksTemplate,
-  TemplateData
-} from 'utils/marketing-center/render-branded-nunjucks-template'
-
 import { createTemplateInstance } from '../../create-template-instance'
+import { TriggerTemplateInput } from '../types'
 
 export const getTemplateInstance = async (
-  template: IBrandMarketingTemplate,
-  brand: IBrand,
-  data: TemplateData
+  template: TriggerTemplateInput
 ): Promise<IMarketingTemplateInstance> => {
   try {
-    // render the nunjucks template
-    const html: string = await renderBrandedNunjucksTemplate(
-      template,
-      brand,
-      data
-    )
-
     // create a template instance
     const instance: IMarketingTemplateInstance = await createTemplateInstance(
-      template.template.id,
+      template.id,
       {
-        html
+        html: template.markup
       }
     )
 

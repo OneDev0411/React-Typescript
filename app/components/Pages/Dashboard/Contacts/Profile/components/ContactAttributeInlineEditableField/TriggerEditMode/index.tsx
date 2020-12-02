@@ -12,20 +12,21 @@ import {
 } from '@material-ui/core'
 import pluralize from 'pluralize'
 
+import { TriggerTemplateInput } from 'models/instant-marketing/triggers/types'
+
 import { TemplateSelector } from './components/TemplateSelector'
 
 interface Props {
   renderAttributeFields: () => ReactNode
   attributeName: TriggerContactEventTypes
   currentValue: Nullable<ITrigger>
-  user: IUser
   isActive: boolean
   subject: string
   sendBefore: number
   onChangeActive: (value: boolean) => void
   onChangeSubject: (value: string) => void
   onChangeSendBefore: (value: number) => void
-  onChangeTemplate: (template: IBrandMarketingTemplate) => void
+  onChangeTemplate: (template: TriggerTemplateInput) => void
 }
 
 const useStyles = makeStyles(
@@ -64,7 +65,6 @@ const useStyles = makeStyles(
 )
 
 const TriggerEditModeComponent = ({
-  user,
   currentValue,
   attributeName,
   renderAttributeFields,
@@ -82,7 +82,7 @@ const TriggerEditModeComponent = ({
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
   const [sendBefore, setSendBefore] = useState<number>(sendBeforeProp)
   const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
+    Nullable<TriggerTemplateInput>
   >(null)
 
   const handleActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +111,7 @@ const TriggerEditModeComponent = ({
     onChangeSendBefore(waitFor)
   }
 
-  const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
+  const handleSelectTemplate = (template: TriggerTemplateInput) => {
     try {
       setSelectedTemplate(template)
       onChangeTemplate(template)
@@ -189,7 +189,6 @@ const TriggerEditModeComponent = ({
       </div>
       <div className={classes.containerItem}>
         <TemplateSelector
-          user={user}
           disabled={!isActive}
           currentValue={currentValue}
           attributeName={attributeName}

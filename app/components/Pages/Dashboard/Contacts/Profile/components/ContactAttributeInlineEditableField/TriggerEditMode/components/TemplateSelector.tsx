@@ -1,24 +1,28 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { makeStyles, Theme, Typography, Box } from '@material-ui/core'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import cn from 'classnames'
 
+import { IAppState } from 'reducers'
+
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
 
-import { getActiveTeamId } from 'utils/user-teams'
+import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
+import { TriggerTemplateInput } from 'models/instant-marketing/triggers/types'
+import { renderBrandedNunjucksTemplate } from 'utils/marketing-center/render-branded-nunjucks-template'
 
 import { getTemplateType } from '../helpers'
 
 interface Props {
-  user: IUser
   disabled?: boolean
   currentValue: Nullable<ITrigger>
   attributeName: TriggerContactEventTypes
-  selectedTemplate: Nullable<IBrandMarketingTemplate>
-  onSelectTemplate: (template: IBrandMarketingTemplate) => void
+  selectedTemplate: Nullable<TriggerTemplateInput>
+  onSelectTemplate: (template: TriggerTemplateInput) => void
 }
 
 const useStyles = makeStyles(
@@ -67,7 +71,6 @@ const useStyles = makeStyles(
 )
 
 export const TemplateSelector = ({
-  user,
   currentValue,
   attributeName,
   disabled = false,
@@ -75,6 +78,11 @@ export const TemplateSelector = ({
   onSelectTemplate
 }: Props) => {
   const classes = useStyles()
+  const user = useSelector<IAppState, IUser>(store => store.user)
+
+  const [baseTemplate, setBaseTemplate] = useState<
+    Nullable<IBrandMarketingTemplate>
+  >(null)
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
     false
   )
@@ -82,6 +90,54 @@ export const TemplateSelector = ({
   const [isSettingDefaultTemplate, setIsSettingDefaultTemplate] = useState<
     boolean
   >(false)
+
+  const handleSelectTemplate = async (template: IBrandMarketingTemplate) => {
+    try {
+      const brand = getActiveBrand(user)
+
+      if (!brand) {
+        return
+      }
+
+      const templateMarkup = await renderBrandedNunjucksTemplate(
+        template,
+        brand,
+        { user }
+      )
+
+      setBaseTemplate(template)
+      onSelectTemplate({ id: template.template.id, markup: templateMarkup })
+
+      setIsTemplatePickerOpen(false)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleEditTemplate = (markup: string) => {
+    if (!baseTemplate) {
+      return
+    }
+
+    onSelectTemplate({ id: baseTemplate.template.id, markup })
+    setIsBuilderOpen(false)
+  }
+
+  const handleShowTemplatePicker = (state: boolean = false) => {
+    if (disabled) {
+      return
+    }
+
+    setIsTemplatePickerOpen(state)
+  }
+
+  const handleShowBuilder = (state: boolean = false) => {
+    if (disabled) {
+      return
+    }
+
+    setIsBuilderOpen(state)
+  }
 
   useEffectOnce(() => {
     const brandId = getActiveTeamId(user)
@@ -101,7 +157,7 @@ export const TemplateSelector = ({
           setIsSettingDefaultTemplate(false)
 
           if (templates.length) {
-            onSelectTemplate(templates[0])
+            handleSelectTemplate(templates[0])
           }
         })
         .catch(err => {
@@ -111,31 +167,6 @@ export const TemplateSelector = ({
     }
   })
 
-  const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
-    try {
-      onSelectTemplate(template)
-      setIsTemplatePickerOpen(false)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const handleShowTemplatePicker = (state: boolean = false) => {
-    if (disabled) {
-      return
-    }
-
-    setIsTemplatePickerOpen(state)
-  }
-
-  const handleShowBuilder = (state: boolean = false) => {
-    if (disabled) {
-      return
-    }
-
-    setIsBuilderOpen(state)
-  }
-
   const renderPreview = () => {
     if (isSettingDefaultTemplate) {
       return (
@@ -143,7 +174,7 @@ export const TemplateSelector = ({
       )
     }
 
-    if (disabled || (!selectedTemplate && !currentValue)) {
+    if (disabled || (!baseTemplate && !currentValue)) {
       return (
         <span className={classes.templatePreviewPlaceholder}>
           Select a template
@@ -151,10 +182,10 @@ export const TemplateSelector = ({
       )
     }
 
-    if (selectedTemplate) {
+    if (baseTemplate) {
       return (
         <img
-          src={selectedTemplate.preview.preview_url}
+          src={baseTemplate.preview.preview_url}
           alt="Selected Template"
           className={classes.templatePreviewImage}
         />
@@ -232,12 +263,10 @@ export const TemplateSelector = ({
           onClose={() => handleShowTemplatePicker(false)}
         />
       )}
-      {isBuilderOpen && selectedTemplate && (
+      {isBuilderOpen && baseTemplate && (
         <MarketingTemplateEditor
-          brandTemplate={selectedTemplate}
-          onSave={t => {
-            console.log('MarketingTemplateEditor', t)
-          }}
+          brandTemplate={baseTemplate}
+          onSave={handleEditTemplate}
           onClose={() => handleShowBuilder(false)}
         />
       )}

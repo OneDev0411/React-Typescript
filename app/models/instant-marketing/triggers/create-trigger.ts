@@ -1,16 +1,12 @@
-import { TemplateData } from 'utils/marketing-center/render-branded-nunjucks-template'
-
 import Fetch from '../../../services/fetch'
 import { getTemplateInstance } from './helpers/get-template-instance'
 import { getTriggerCampaign } from './helpers/get-trigger-campaign'
-import { TriggerDataInput } from './types'
+import { TriggerDataInput, TriggerTemplateInput } from './types'
 
 export async function createTrigger(
   contact: IContact & { user: IUser },
-  brand: IBrand,
-  template: IBrandMarketingTemplate,
-  triggerData: TriggerDataInput,
-  templateData: TemplateData = {}
+  template: TriggerTemplateInput,
+  triggerData: TriggerDataInput
 ): Promise<ApiResponseBody<ITrigger>> {
   try {
     if (!triggerData.event_type) {
@@ -25,9 +21,7 @@ export async function createTrigger(
 
     // step1: create a template instance
     const templateInstance: IMarketingTemplateInstance = await getTemplateInstance(
-      template,
-      brand,
-      templateData
+      template
     )
 
     // step2: create a email campaign

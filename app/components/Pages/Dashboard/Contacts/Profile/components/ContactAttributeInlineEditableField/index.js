@@ -1,9 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
-import { getActiveBrand } from 'utils/user-teams'
 import {
   createTrigger,
   updateTrigger,
@@ -253,7 +251,7 @@ class MasterField extends React.Component {
   }
 
   save = async () => {
-    const { user, brand, contact, attribute } = this.props
+    const { contact, attribute } = this.props
     const {
       is_primary,
       label,
@@ -309,15 +307,11 @@ class MasterField extends React.Component {
       if (shouldCheckTriggerField) {
         const commonParams = [
           contact,
-          brand,
           triggerSelectedTemplate,
           {
             event_type: this.attribute_def.name,
             wait_for: triggerSendBefore,
             subject: triggerSubject
-          },
-          {
-            user
           }
         ]
 
@@ -388,7 +382,7 @@ class MasterField extends React.Component {
   }
 
   renderEditMode = props => {
-    const { user, brand, attribute } = this.props
+    const { attribute } = this.props
     const {
       currentTrigger,
       isTriggerActive,
@@ -418,8 +412,6 @@ class MasterField extends React.Component {
           renderAttributeFields={() => baseEditMode}
           attributeName={this.attribute_def.name || ''}
           currentValue={currentTrigger}
-          user={user}
-          brand={brand}
           isActive={isTriggerActive}
           subject={triggerSubject}
           sendBefore={triggerSendBefore}
@@ -481,11 +473,4 @@ class MasterField extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user }) => {
-  return {
-    user,
-    brand: getActiveBrand(user)
-  }
-}
-
-export default connect(mapStateToProps)(MasterField)
+export default MasterField
