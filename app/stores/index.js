@@ -6,7 +6,8 @@ import thunk from 'redux-thunk'
 import reducers from '../reducers'
 
 const __DEV__ = process.env.NODE_ENV !== 'production'
-const composer = __DEV__ ? composeWithDevTools : compose
+// const composer = __DEV__ ? composeWithDevTools : compose
+const composer = composeWithDevTools
 
 const store = createStore(
   enableBatching(reducers),
