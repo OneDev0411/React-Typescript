@@ -5,8 +5,8 @@ import { TemplateData } from 'utils/marketing-center/render-branded-template'
 
 import Builder from './Builder'
 
-interface IBrandMarketingTemplateWithMarkup extends IBrandMarketingTemplate {
-  markup: string
+interface IBrandMarketingTemplateWithResult extends IBrandMarketingTemplate {
+  result: string
 }
 
 interface Props {
@@ -22,11 +22,11 @@ interface Props {
   bareMode?: boolean
   saveButtonText?: string
   handleSocialSharing?: (
-    template: IBrandMarketingTemplateWithMarkup,
+    template: IBrandMarketingTemplateWithResult,
     socialNetworkName: string
   ) => void
   handleSave: (
-    template: IBrandMarketingTemplateWithMarkup,
+    template: IBrandMarketingTemplateWithResult,
     owner: IUser
   ) => void
   onClose: () => void
