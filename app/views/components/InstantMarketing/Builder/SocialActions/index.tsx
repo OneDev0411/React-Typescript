@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { Button } from '@material-ui/core'
+import { Button, useTheme, Theme } from '@material-ui/core'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { SocialNetworkShare } from '../types'
 
@@ -10,6 +12,8 @@ interface Props {
 }
 
 export default function SocialActions({ networks, onClick }: Props) {
+  const theme = useTheme<Theme>()
+
   return (
     <>
       {networks.map(network => (
@@ -20,11 +24,10 @@ export default function SocialActions({ networks, onClick }: Props) {
           style={{ marginLeft: '0.5rem' }}
           onClick={() => onClick(network.name)}
         >
-          <i
-            className={network.className}
+          <SvgIcon
+            path={network.icon}
             style={{
-              fontSize: '1.5rem',
-              marginRight: '0.5rem'
+              marginRight: theme.spacing(1)
             }}
           />
           Post to {network.name}
