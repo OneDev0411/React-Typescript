@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 
 import { getContactAddresses } from 'models/contacts/helpers/get-contact-addresses'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'

@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core'
 import { AvatarGroup } from '@material-ui/lab'
 import { makeStyles, useTheme } from '@material-ui/styles'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 import {
   mdiEmailOpenOutline,
   mdiEmailOutline,

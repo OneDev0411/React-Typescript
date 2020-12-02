@@ -3,7 +3,7 @@ import { EDIT_USER_REQUEST, EDIT_USER_SUCCESS } from 'constants/user'
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Form, Field } from 'react-final-form'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 import moment from 'moment-timezone'
 import { Button, Typography, Box } from '@material-ui/core'
 

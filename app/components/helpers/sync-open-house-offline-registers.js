@@ -1,4 +1,4 @@
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 import pluralize from 'pluralize'
 
 import openHouseStorage from '../../../server/app/routes/openhouse/registration/storage'

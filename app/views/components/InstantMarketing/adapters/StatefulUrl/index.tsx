@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 import { useDispatch } from 'react-redux'
 
 import { goTo } from 'utils/go-to'

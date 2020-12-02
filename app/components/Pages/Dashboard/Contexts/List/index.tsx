@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { AnyAction } from 'redux'
-import { connect } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
+import { connect, useDispatch } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
-import { addNotification as notify } from 'reapop'
+
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
+
+import { addNotification as notify } from 'components/notification'
 
 import { IAppState } from 'reducers'
 import createNewContext from 'models/Deal/context/create-context'
@@ -27,21 +27,10 @@ interface Props {
   brandId: UUID
   isFetching: boolean
   list: { [key: string]: Array<IDealBrandContext> }
-  getContextsByBrand: IAsyncActionProp<typeof getContextsByBrand>
-  notify: IAsyncActionProp<typeof notify>
 }
 
-function DealContext({
-  brandId,
-  isFetching,
-  list,
-  getContextsByBrand,
-  notify
-}: Props) {
-  useEffect(() => {
-    getContextsByBrand(brandId)
-  }, [getContextsByBrand, brandId])
-
+function DealContext({ brandId, isFetching, list }: Props) {
+  const dispatch = useDispatch()
   const theme = useTheme<Theme>()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [selectedSection, setSelectedSection] = useState<string | null>(null)
@@ -49,6 +38,10 @@ function DealContext({
     selectedContext,
     setSelectedContext
   ] = useState<IDealBrandContext | null>(null)
+
+  useEffect(() => {
+    dispatch(getContextsByBrand(brandId))
+  }, [brandId, dispatch])
 
   async function contextFormHandler(
     contextData: IDealBrandContext,
@@ -65,11 +58,13 @@ function DealContext({
       }
 
       if (context) {
-        notify({
-          message: !editMode ? 'New Context is Saved!' : 'Context is Edited!',
-          status: 'success'
-        })
-        getContextsByBrand(brandId)
+        dispatch(
+          notify({
+            message: !editMode ? 'New Context is Saved!' : 'Context is Edited!',
+            status: 'success'
+          })
+        )
+        dispatch(getContextsByBrand(brandId))
         setIsModalOpen(false)
 
         if (editMode) {
@@ -78,16 +73,22 @@ function DealContext({
       }
     } catch (err) {
       if (err.status === 409) {
-        return notify({
-          message: 'Context id has already taken!',
-          status: 'error'
-        })
+        dispatch(
+          notify({
+            message: 'Context id has already taken!',
+            status: 'error'
+          })
+        )
+
+        return
       }
 
-      notify({
-        message: 'Unexpected error happened',
-        status: 'error'
-      })
+      dispatch(
+        notify({
+          message: 'Unexpected error happened',
+          status: 'error'
+        })
+      )
       setIsModalOpen(false)
       setSelectedContext(null)
     }
@@ -101,7 +102,7 @@ function DealContext({
           message: 'Context is Deleted!',
           status: 'success'
         })
-        getContextsByBrand(brandId)
+        dispatch(getContextsByBrand(brandId))
       }
     } catch (err) {
       console.error(err)
@@ -178,9 +179,4 @@ const mapStateToProps = ({ deals, user }: IAppState) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
-  getContextsByBrand: brandId => dispatch(getContextsByBrand(brandId)),
-  notify: (...args: Parameters<typeof notify>) => dispatch(notify(...args))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(DealContext)
+export default connect(mapStateToProps)(DealContext)

@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+
 import { Box } from '@material-ui/core'
+
+import { addNotification as notify } from 'components/notification'
 
 import getVerificationCode from '../../../models/verify/request'
 import VerifyPhoneNumber from '../../../models/verify/confirm'

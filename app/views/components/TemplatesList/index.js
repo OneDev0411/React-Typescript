@@ -1,8 +1,10 @@
 import React, { useContext, useState } from 'react'
-import { addNotification as notify } from 'reapop'
+
 import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
 import chunk from 'lodash/chunk'
+
+import { addNotification as notify } from 'components/notification'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { isTemplateInstance } from 'utils/marketing-center/helpers'

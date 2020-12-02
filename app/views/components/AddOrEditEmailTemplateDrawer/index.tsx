@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Field } from 'react-final-form'
 import { TextField } from 'final-form-material-ui'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
-import { addNotification } from 'reapop'
+
+import { addNotification } from 'components/notification'
 
 import { updateEmailTemplate } from 'actions/email-templates/update-email-template'
 import { createEmailTemplate } from 'actions/email-templates/create-email-template'
@@ -29,7 +30,6 @@ interface Props {
   emailTemplate?: IBrandEmailTemplate | null
   updateEmailTemplate: IAsyncActionProp<typeof updateEmailTemplate>
   createEmailTemplate: IAsyncActionProp<typeof createEmailTemplate>
-  addNotification: IAsyncActionProp<typeof addNotification>
 }
 
 export function AddOrEditEmailTemplateDrawer({
@@ -39,7 +39,6 @@ export function AddOrEditEmailTemplateDrawer({
   emailTemplate,
   updateEmailTemplate,
   createEmailTemplate,
-  addNotification,
   activeTeamId
 }: Props) {
   const [formData, setFormData] = useState<
@@ -50,6 +49,7 @@ export function AddOrEditEmailTemplateDrawer({
     goal: '',
     include_signature: false
   })
+  const dispatch = useDispatch()
 
   const [editorState, setEditorState, bodyEditor] = useEditorState(
     (emailTemplate && emailTemplate.body) || ''
@@ -109,10 +109,12 @@ export function AddOrEditEmailTemplateDrawer({
       onClose()
     } catch (error) {
       console.error('[EditTemplate]: ', error)
-      addNotification({
-        message: error.message || 'Could not save email template',
-        status: 'error'
-      })
+      dispatch(
+        addNotification({
+          message: error.message || 'Could not save email template',
+          status: 'error'
+        })
+      )
     }
   }
 
@@ -196,9 +198,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     updateEmailTemplate: (...args: Parameters<typeof updateEmailTemplate>) =>
       dispatch(updateEmailTemplate(...args)),
     createEmailTemplate: (...args: Parameters<typeof createEmailTemplate>) =>
-      dispatch(createEmailTemplate(...args)),
-    addNotification: (...args: Parameters<typeof addNotification>) =>
-      dispatch(addNotification(...args))
+      dispatch(createEmailTemplate(...args))
   }
 }
 

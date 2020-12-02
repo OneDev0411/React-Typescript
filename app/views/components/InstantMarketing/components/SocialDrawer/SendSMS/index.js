@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { isValidPhoneNumber } from 'utils/helpers'
 
@@ -95,7 +95,4 @@ class SendSMS extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  { notify }
-)(SendSMS)
+export default connect(null, { notify })(SendSMS)

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 
 import { getEmailThreads } from 'models/email/get-email-threads'
 import {

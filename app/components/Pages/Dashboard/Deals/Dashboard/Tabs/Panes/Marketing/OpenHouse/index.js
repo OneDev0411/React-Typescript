@@ -1,7 +1,7 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { Button } from '@material-ui/core'
 

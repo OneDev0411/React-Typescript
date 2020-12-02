@@ -1,6 +1,4 @@
 import React from 'react'
-import NotificationsSystem from 'reapop'
-import notificationTheme from 'reapop-theme-wybo'
 import { browserHistory, Router } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import smoothscroll from 'smoothscroll-polyfill'
@@ -12,6 +10,7 @@ import ConfirmationModalProvider from 'components/ConfirmationModal/context/Prov
 import ConfirmationModal from 'components/ConfirmationModal'
 
 // This is a redux-based confirmation and will be deprecate asap.
+
 import ReduxConfirmationModal from './components/Partials/Confirmation'
 // import styles
 import './styles/main.scss'
@@ -22,6 +21,8 @@ import store from './stores'
 import { AppTheme } from './AppTheme'
 
 import config from '../config/public'
+
+import { Notifications } from './Notifications'
 
 // history
 const history = syncHistoryWithStore(browserHistory, store)
@@ -43,16 +44,19 @@ if (window) {
   window.INTERCOM_ID = config.intercom.app_id
 }
 
-const App = () => (
-  <AppTheme>
-    <ConfirmationModalProvider>
-      <Router history={history}>{routes}</Router>
+const App = () => {
+  return (
+    <AppTheme>
+      <ConfirmationModalProvider>
+        <Router history={history}>{routes}</Router>
+        <ConfirmationModal />
+      </ConfirmationModalProvider>
 
-      <ConfirmationModal />
       <ReduxConfirmationModal />
-      <NotificationsSystem theme={notificationTheme} />
-    </ConfirmationModalProvider>
-  </AppTheme>
-)
+
+      <Notifications />
+    </AppTheme>
+  )
+}
 
 export default hot(App)
