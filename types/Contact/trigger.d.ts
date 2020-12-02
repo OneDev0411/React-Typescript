@@ -3,6 +3,7 @@ interface ITriggerBase {
   brand: UUID
   user: UUID
   wait_for: number
+  time: string
   recurring: boolean
 }
 
@@ -23,7 +24,7 @@ interface IEventAction {
 }
 type IEmailAction = {
   action: 'schedule_email'
-  campaign: UUID | IEmailCampaign
+  campaign?: IEmailCampaign
 }
 
 declare type ITriggerRaw = ITriggerBase & IContactTrigger & IEmailAction

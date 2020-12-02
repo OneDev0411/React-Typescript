@@ -15,6 +15,12 @@ export async function updateTrigger(
       throw new Error('event_type not provided')
     }
 
+    /* we need campaign object along side with trigger data
+    if it's not available we're not able to handle updating */
+    if (!current.campaign) {
+      throw new Error('campaign is not available')
+    }
+
     /* because the end_point accept a negative value that
      shows the time before the main date */
     if (!('wait_for' in triggerData) || triggerData.wait_for > 0) {
@@ -23,25 +29,18 @@ export async function updateTrigger(
 
     let alteredCampaign
     let alteredTemplate
-    const currentCampaignId =
-      typeof current.campaign === 'object'
-        ? current.campaign.id
-        : current.campaign
 
     if (template) {
       alteredTemplate = await getTemplateInstance(template)
     }
 
-    if (
-      alteredTemplate ||
-      (current.campaign as IEmailCampaign)?.subject !== triggerData.subject
-    ) {
+    if (alteredTemplate || current.campaign.subject !== triggerData.subject) {
       const templateId = alteredTemplate
         ? { templateId: alteredTemplate.id }
         : {}
 
       alteredCampaign = await updateTriggerCampaign(
-        currentCampaignId,
+        current.campaign.id,
         contact,
         {
           ...templateId,
@@ -56,7 +55,8 @@ export async function updateTrigger(
       event_type: triggerData.event_type,
       action: triggerData.action || 'schedule_email',
       wait_for: triggerData.wait_for,
-      campaign: alteredCampaign ? alteredCampaign.id : currentCampaignId
+      time: triggerData.time,
+      campaign: alteredCampaign ? alteredCampaign.id : current.campaign.id
     })
 
     return response.body

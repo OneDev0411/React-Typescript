@@ -35,6 +35,7 @@ export async function createTrigger(
       event_type: triggerData.event_type,
       action: triggerData.action || 'schedule_email',
       wait_for: triggerData.wait_for,
+      time: triggerData.time,
       campaign: campaign.id,
       contact: contact.id
     })

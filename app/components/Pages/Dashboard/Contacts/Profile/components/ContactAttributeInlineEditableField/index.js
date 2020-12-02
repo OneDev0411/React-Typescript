@@ -264,8 +264,7 @@ class MasterField extends React.Component {
       triggerSelectedTemplate
     } = this.state
     const { id, cuid } = attribute
-    const shouldCheckTriggerField =
-      this.isTriggerable && isTriggerActive && isTriggerFieldDirty
+    const shouldCheckTriggerField = this.isTriggerable && isTriggerFieldDirty
 
     if (
       shouldCheckTriggerField &&
@@ -309,9 +308,10 @@ class MasterField extends React.Component {
           contact,
           triggerSelectedTemplate,
           {
-            event_type: this.attribute_def.name,
+            time: '08:00:00', // it's hard coded base api team comment
+            subject: triggerSubject,
             wait_for: triggerSendBefore,
-            subject: triggerSubject
+            event_type: this.attribute_def.name
           }
         ]
 

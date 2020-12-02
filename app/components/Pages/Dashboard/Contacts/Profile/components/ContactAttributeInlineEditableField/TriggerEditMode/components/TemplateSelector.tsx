@@ -193,8 +193,7 @@ export const TemplateSelector = ({
     }
 
     if (currentValue) {
-      const preview = (currentValue.campaign as IEmailCampaign).template?.file
-        ?.preview_url
+      const preview = currentValue.campaign?.template?.file?.preview_url
 
       if (!preview) {
         return (
