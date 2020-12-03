@@ -10,14 +10,14 @@ import { SearchResult } from 'components/ListingsAndPlacesSearchInput/types'
 
 interface Props {
   title?: string
-  defaultSearchQuery?: string
+  noGlobalActionsButton?: boolean
   onSelectSearchResult: (result: SearchResult) => void
   children: React.ReactNode
 }
 
 export default function AgentNetworkLayout({
   title,
-  defaultSearchQuery,
+  noGlobalActionsButton = false,
   onSelectSearchResult,
   children
 }: Props) {
@@ -26,12 +26,12 @@ export default function AgentNetworkLayout({
   return (
     <Acl access={[ACL.MARKETING]}>
       <PageLayout>
-        <PageLayout.Header title={title}>
+        <PageLayout.Header
+          noGlobalActionsButton={noGlobalActionsButton}
+          title={title}
+        >
           <Box width="100%" maxWidth={360}>
-            <ListingsAndPlacesSearchInput
-              defaultValue={defaultSearchQuery}
-              onSelect={onSelectSearchResult}
-            />
+            <ListingsAndPlacesSearchInput onSelect={onSelectSearchResult} />
           </Box>
         </PageLayout.Header>
         <PageLayout.Main>{children}</PageLayout.Main>

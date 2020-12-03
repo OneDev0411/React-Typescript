@@ -136,7 +136,11 @@ function Agents(props: WithRouterProps) {
       libraries={GOOGLE_MAPS_LIBRARIES}
       onLoad={() => setIsLoadingGoogleMaps(false)}
     >
-      <Layout title="Select Agents" onSelectSearchResult={openSearchResultPage}>
+      <Layout
+        noGlobalActionsButton
+        title="Select Agents"
+        onSelectSearchResult={openSearchResultPage}
+      >
         <Grid container direction="column">
           <Grid container item alignItems="flex-end" justify="space-between">
             <Grid item>
