@@ -264,7 +264,7 @@ export const TemplateSelector = ({
       )}
       {isBuilderOpen && baseTemplate && (
         <MarketingTemplateEditor
-          brandTemplate={baseTemplate}
+          template={baseTemplate}
           onSave={handleEditTemplate}
           onClose={() => handleShowBuilder(false)}
         />
