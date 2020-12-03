@@ -135,6 +135,8 @@ function Agents(props: WithRouterProps) {
       googleMapsApiKey={config.google.api_key}
       libraries={GOOGLE_MAPS_LIBRARIES}
       onLoad={() => setIsLoadingGoogleMaps(false)}
+      // If we don't set it or pass null, it will render `Loading...`!
+      loadingElement={<div />}
     >
       <Layout
         noGlobalActionsButton
