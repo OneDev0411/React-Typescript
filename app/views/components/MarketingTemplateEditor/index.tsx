@@ -1,14 +1,16 @@
 import React from 'react'
 import { useTheme } from '@material-ui/core'
 
-import InstantMarketing from 'components/InstantMarketing'
 import { TemplateData } from 'utils/marketing-center/render-branded-template'
+import { convertToTemplate } from 'utils/marketing-center/helpers'
+
+import InstantMarketing from 'components/InstantMarketing'
 
 interface Props {
   /**
-   * The marketing template to render inside the template editor
+   * The marketing template or template instance to render inside the template editor
    */
-  brandTemplate: IBrandMarketingTemplate
+  template: IBrandMarketingTemplate | IMarketingTemplateInstance
 
   /**
    * The template data needed by selected template to render with nunjucks
@@ -29,7 +31,7 @@ interface Props {
   /**
    * Save button click handler
    *
-   * It will pass the final template edited by user as a string to passed function
+   * It will pass the final edited template by user as a string to this function
    */
   onSave: (markup: string) => void
 
@@ -40,13 +42,19 @@ interface Props {
 }
 
 export default function MarketingTemplateEditor({
-  brandTemplate,
+  template,
   templateData = {},
   saveButtonText = 'Save',
   onSave,
   onClose
 }: Props) {
   const theme = useTheme()
+  // We need to convert template instance to a brand marketing template
+  // Our MC editor is dumb and it only works with brand marketing templates
+  const brandMarketingTemplate: IBrandMarketingTemplate =
+    template.type === 'template_instance'
+      ? convertToTemplate(template)
+      : template
 
   return (
     <InstantMarketing
@@ -59,9 +67,9 @@ export default function MarketingTemplateEditor({
       templateTypes={[]}
       mediums=""
       assets={[]}
-      defaultTemplate={brandTemplate}
+      defaultTemplate={brandMarketingTemplate}
       containerStyle={{ zIndex: theme.zIndex.modal + 1 }}
-      handleSave={template => onSave(template.markup)}
+      handleSave={template => onSave(template.result)}
       onClose={onClose}
     />
   )

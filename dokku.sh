@@ -49,11 +49,11 @@ ssh "dokku@$REVIEW_HOST" config:set --no-restart $APP $CONFIG
 # Checkout the branch we need to deploy
 git checkout -B $CI_COMMIT_REF_SLUG
 
-# Generate Certificates
-ssh "dokku@$REVIEW_HOST" letsencrypt $APP
-
 # Unlck is so previous deployments wont prevent this deployment
 ssh "dokku@$REVIEW_HOST" apps:unlock $APP || true
 
 # Deploy
 git push "dokku@$REVIEW_HOST:$APP" $CI_COMMIT_REF_SLUG:master --force
+
+# Generate Certificates. Due do some race conditions we should do this last.
+ssh "dokku@$REVIEW_HOST" letsencrypt $APP
