@@ -90,6 +90,7 @@ export const TemplateSelector = ({
   const [isSettingDefaultTemplate, setIsSettingDefaultTemplate] = useState<
     boolean
   >(false)
+  const currentTemplate = baseTemplate || currentValue?.campaign?.template
 
   const handleSelectTemplate = async (template: IBrandMarketingTemplate) => {
     try {
@@ -115,11 +116,15 @@ export const TemplateSelector = ({
   }
 
   const handleEditTemplate = (markup: string) => {
-    if (!baseTemplate) {
+    const templateId = baseTemplate
+      ? baseTemplate.template?.id
+      : currentValue?.campaign?.template?.template?.id
+
+    if (!templateId) {
       return
     }
 
-    onSelectTemplate({ id: baseTemplate.template.id, markup })
+    onSelectTemplate({ id: templateId, markup })
     setIsBuilderOpen(false)
   }
 
@@ -225,7 +230,7 @@ export const TemplateSelector = ({
         <div className={classes.header}>
           <span className={classes.headerTitle}>Template</span>
           <Box display="inline-flex">
-            {selectedTemplate && (
+            {currentTemplate && (
               <Typography
                 variant="body2"
                 className={classes.templateHandler}
@@ -262,9 +267,10 @@ export const TemplateSelector = ({
           onClose={() => handleShowTemplatePicker(false)}
         />
       )}
-      {isBuilderOpen && baseTemplate && (
+      {isBuilderOpen && currentTemplate && (
         <MarketingTemplateEditor
-          template={baseTemplate}
+          template={currentTemplate}
+          templateData={{ user }}
           onSave={handleEditTemplate}
           onClose={() => handleShowBuilder(false)}
         />

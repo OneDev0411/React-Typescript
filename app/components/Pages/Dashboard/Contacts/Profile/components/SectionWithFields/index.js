@@ -104,7 +104,8 @@ class SectionWithFields extends React.Component {
         associations: [
           'contact.triggers',
           'trigger.campaign',
-          'email_campaign.template'
+          'email_campaign.template',
+          'template_instance.template'
         ]
       })
 

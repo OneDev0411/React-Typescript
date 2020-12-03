@@ -49,6 +49,7 @@ export default function MarketingTemplateEditor({
   onClose
 }: Props) {
   const theme = useTheme()
+
   // We need to convert template instance to a brand marketing template
   // Our MC editor is dumb and it only works with brand marketing templates
   const brandMarketingTemplate: IBrandMarketingTemplate =
