@@ -27,7 +27,7 @@ const HOLIDAY_TYPES = [
   'FathersDay',
   'FourthOfJuly',
   'Halloween',
-  'Hannukkah',
+  'Hanukkah',
   'Kwanzaa',
   'LaborDay',
   'MemorialDay',
