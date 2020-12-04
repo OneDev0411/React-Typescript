@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { Button } from '@material-ui/core'
 
+import { convertToTemplate } from 'utils/marketing-center/helpers'
+
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
-import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
+import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplateAndTemplateInstancePickerModal'
 
 import { ListingWithProposedAgent } from '../../types'
 
@@ -35,13 +37,21 @@ export default function PromoteListing({ user, listing, agents }: Props) {
     setIsPromoteClicked(false)
   }
 
-  function handleSelectTemplate(template: IBrandMarketingTemplate) {
+  function handleSelectTemplate(
+    template: IBrandMarketingTemplate | IMarketingTemplateInstance
+  ) {
     handleCloseTemplatePickerModal()
+
+    if (template.type === 'template_instance') {
+      setSelectedTemplate(convertToTemplate(template))
+
+      return
+    }
+
     setSelectedTemplate(template)
   }
 
   function handleCloseMarketingEditor() {
-    console.log('CLOSING MC')
     setSelectedTemplate(null)
   }
 
@@ -51,7 +61,7 @@ export default function PromoteListing({ user, listing, agents }: Props) {
         Promote Listing
       </Button>
       {isPromoteClicked && (
-        <MarketingTemplatePickerModal
+        <MarketingTemplateAndTemplateInstancePickerModal
           user={user}
           templateTypes={TEMPLATE_TYPES}
           mediums={MEDIUMS}
