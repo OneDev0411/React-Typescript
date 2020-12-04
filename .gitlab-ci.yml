@@ -15,7 +15,7 @@ test_unit:
     - npm run test:ci -- --coverage
 
 
-deploy_irish:
+deploy_beta:
   stage: deploy
   image: timbru31/ruby-node:latest
   before_script:
@@ -25,8 +25,8 @@ deploy_irish:
   script:
     - dpl --provider=heroku --app=rechat-irish --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
   environment:
-    name: irish
-    url: https://irish.rechat.com
+    name: beta
+    url: https://beta.rechat.com
   only:
     - stage
 
@@ -41,7 +41,7 @@ deploy_production:
     - dpl --provider=heroku --app=rechat-web --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
   environment:
     name: production
-    url: https://rechat.com
+    url: https://app.rechat.com
   only:
     - master
 
