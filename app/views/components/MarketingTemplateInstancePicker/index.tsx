@@ -1,14 +1,13 @@
 import React, { RefObject } from 'react'
-import { Box, Grid, makeStyles } from '@material-ui/core'
+import { Grid, Box, makeStyles } from '@material-ui/core'
 
 import { useInfinitePagination } from 'hooks/use-infinite-pagination'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import LoadingContainer from 'components/LoadingContainer'
 import Masonry from 'components/Masonry'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
 
-import { useTemplates } from '../../../components/Pages/Dashboard/Marketing/hooks/use-templates'
+import { useTemplatesHistory } from '../../../components/Pages/Dashboard/Marketing/hooks/use-templates-history'
 
 const useStyles = makeStyles(
   () => ({
@@ -17,35 +16,31 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'MarketingTemplatePicker'
+    name: 'MarketingTemplateInstancePicker'
   }
 )
 
 interface Props {
-  user: IUser
   templateTypes?: IMarketingTemplateType[]
   mediums?: IMarketingTemplateMedium[]
   containerRef?: RefObject<HTMLElement>
-  onSelect: (template: IBrandMarketingTemplate) => void
+  onSelect: (template: IMarketingTemplateInstance) => void
 }
 
-export default function MarketingTemplatePicker({
-  user,
-  templateTypes = [],
-  mediums = [],
+export default function MarketingTemplateInstancePicker({
+  templateTypes,
+  mediums,
   containerRef,
   onSelect
 }: Props) {
   const classes = useStyles()
-  const activeBrand = getActiveTeamId(user)
 
-  const { templates, isLoading } = useTemplates(
-    activeBrand,
-    mediums,
-    templateTypes
-  )
+  const { templates, isLoading } = useTemplatesHistory({
+    templateTypes,
+    mediums
+  })
 
-  const paginatedTemplates = useInfinitePagination<IBrandMarketingTemplate>({
+  const paginatedTemplates = useInfinitePagination<IMarketingTemplateInstance>({
     items: templates,
     infiniteScrollProps: {
       container: containerRef
