@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import Flex from 'styled-flex-component'
 

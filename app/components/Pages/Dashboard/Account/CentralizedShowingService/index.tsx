@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { addNotification, Notification } from 'reapop'
+
 import Flex from 'styled-flex-component'
 import { Helmet } from 'react-helmet'
+
+import { addNotification, Notification } from 'components/notification'
 
 import { CSSInput, CSSData } from 'models/css/types'
 import connectCSS from 'models/css/connect'
@@ -143,7 +145,6 @@ function CentralizedShowingService({ notify }: Props) {
   )
 }
 
-export default connect(
-  null,
-  { notify: addNotification }
-)(CentralizedShowingService)
+export default connect(null, { notify: addNotification })(
+  CentralizedShowingService
+)

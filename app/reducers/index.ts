@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
-import { reducer as notificationsReducer } from 'reapop'
 import { reducer as reduxFormReducer } from 'redux-form'
+import { reducer as notificationsReducer } from 'reapop'
 
 import data from './data'
 import auth from './auth'
@@ -47,13 +47,7 @@ const appReducer = combineReducers({
   favorites,
 
   /* third party reducers */
-  notifications: notificationsReducer({
-    position: 'br',
-    dismissible: true,
-    dismissAfter: 4000,
-    closeButton: true,
-    allowHTML: true
-  }),
+  notifications: notificationsReducer(),
   form: reduxFormReducer,
   routing: routerReducer
 })

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { mdiDotsVertical } from '@mdi/js'
 import { MenuItem, IconButton, makeStyles, Theme } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 
 import { updateChecklist } from 'actions/deals'
 

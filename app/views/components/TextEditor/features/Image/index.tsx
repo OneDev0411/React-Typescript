@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { useDispatch } from 'react-redux'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 import { composeDecorators } from 'draft-js-plugins-editor'
 import createImagePlugin from 'draft-js-image-plugin'
 import 'draft-js-image-plugin/lib/plugin.css'

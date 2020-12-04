@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 

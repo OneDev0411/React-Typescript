@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNotification } from 'reapop'
 
 import fecha from 'fecha'
 
 import Flex from 'styled-flex-component'
 
 import { Button } from '@material-ui/core'
+
+import { addNotification } from 'components/notification'
 
 import { CheckBoxButton } from 'components/Button/CheckboxButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
@@ -234,7 +235,6 @@ function mapStateToProps({ deals, user }, props: Props) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  () => ({ addNotification })
-)(DocumentRow)
+export default connect(mapStateToProps, () => ({ addNotification }))(
+  DocumentRow
+)

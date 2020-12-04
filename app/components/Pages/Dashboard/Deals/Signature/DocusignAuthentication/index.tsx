@@ -1,7 +1,5 @@
 import React from 'react'
 
-import config from 'config'
-
 import { Container, Button } from './styled'
 
 interface Props {
@@ -35,7 +33,7 @@ export function DocusignAuthentication(props: Props) {
 function loginToDocusign(user: IUser, onAuthorize: () => void) {
   const token = user.access_token
   const login = window.open(
-    `${config.app.url}/api/deals/docusign/login?access_token=${token}`,
+    `/api/deals/docusign/login?access_token=${token}`,
     'sharer',
     'toolbar=0,status=0,width=548,height=325'
   )

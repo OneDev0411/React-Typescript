@@ -50,7 +50,7 @@ export function ExportDeals(props) {
       {
         label: 'New Listings',
         description: 'Past 7 days',
-        url: `/api/deals/report/${encodeURIComponent(
+        url: `/api/deals/report/${btoa(
           JSON.stringify({
             filter: [
               {
@@ -88,7 +88,7 @@ export function ExportDeals(props) {
       {
         label: 'New Offers',
         description: 'Past 7 days',
-        url: `/api/deals/report/${encodeURIComponent(
+        url: `/api/deals/report/${btoa(
           JSON.stringify({
             filter: [
               {

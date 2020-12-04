@@ -1,4 +1,4 @@
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { asyncDeleteFile } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Box, List, ListItem, ListItemText } from '@material-ui/core'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { IAppState } from 'reducers'

@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux'
 import { BRAND_SUCCESS, BRAND_FAILURE } from '../../constants/brand'
 
 const brand = (state = null, action) => {

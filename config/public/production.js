@@ -33,6 +33,9 @@ export default {
   fb: {
     app_id: process.env.FB_APP_ID
   },
+  intercom: {
+    app_id: process.env.INTERCOM_APP_ID
+  },
   tenor: {
     api_key: process.env.TENOR_API_KEY
   },

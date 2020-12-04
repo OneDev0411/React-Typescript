@@ -1,4 +1,4 @@
-import Fetch from '../../../services/fetch'
+import Fetch from 'services/fetch'
 
 const signin = async userInfo => {
   const requestBody = {
@@ -7,10 +7,13 @@ const signin = async userInfo => {
   }
 
   try {
-    const response = await new Fetch({ proxy: true })
-      .post('/oauth2/token')
-      .set({ 'x-auth-mode': 'client_id' })
+    const response = await new Fetch()
+      .post('/api/oauth2/token')
+      .set({
+        'x-auth-mode': 'client_id'
+      })
       .send(requestBody)
+
     const { data, access_token, refresh_token, expires_in } = response.body
 
     return {

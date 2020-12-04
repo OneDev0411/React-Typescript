@@ -1,6 +1,6 @@
 import superagent from 'superagent'
 
-import { Neighborhood, NeighborhoodsReport } from './types'
+import type { Neighborhood, NeighborhoodsReport } from './types'
 
 const API_URL = '/api/liveby'
 const REQUEST_TIMEOUT_MS = 60000

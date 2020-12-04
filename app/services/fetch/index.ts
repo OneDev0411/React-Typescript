@@ -1,5 +1,7 @@
 import SuperAgent from 'superagent'
 
+import { IAppState } from 'reducers'
+
 import store from '../../stores'
 import { updateUser } from '../../store_actions/user'
 
@@ -12,43 +14,37 @@ import { useReferencedFormat } from './middlewares/x-rechat-format'
 import { IOptions, IMiddleware } from './types'
 
 export default class Fetch {
-  private _middlewares: IMiddleware = {}
+  private middlewares: IMiddleware = {}
 
   private options: IOptions
 
-  private _isProductionEnv: boolean
+  private isProductionEnv: boolean
 
-  private _appUrl: string
+  private startTime: null | number
 
-  private _startTime: null | number
-
-  private _isServerSide: boolean
-
-  private _proxyUrl: string
-
-  private _isLoggedIn: boolean
+  private isLoggedIn: boolean
 
   constructor(options?: IOptions) {
-    const isServerSide = typeof window === 'undefined'
     const isProductionEnv = process.env.NODE_ENV === 'production'
 
     this.options = {
-      proxy: false,
+      proxy: true,
       progress: null,
       useReferencedFormat: true,
       ...options
     }
 
-    this._middlewares = this.registerMiddlewares(this.options)
-    this._isServerSide = isServerSide
-    this._appUrl = isServerSide ? config.app.url : ''
-    this._proxyUrl = `${this._appUrl}/api/proxifier`
-    this._isProductionEnv = isProductionEnv
-    this._startTime = Date.now()
+    this.middlewares = this.registerMiddlewares(this.options)
+    this.isProductionEnv = isProductionEnv
+    this.startTime = Date.now()
   }
 
-  _create(method: string, endpoint: string): SuperAgent.SuperAgentRequest {
-    const { user, brand } = store.getState() as any
+  private create(
+    method: string,
+    endpoint: string,
+    isUploadMethod: boolean = false
+  ): SuperAgent.SuperAgentRequest {
+    const { user, brand } = store.getState() as IAppState
 
     let brandId
 
@@ -60,16 +56,18 @@ export default class Fetch {
       brandId = brand.id
     }
 
-    const useProxy = this.options.proxy || this._isServerSide
+    const useProxy = this.options.proxy && !isUploadMethod
 
-    this._isLoggedIn = user && user.access_token !== undefined
+    this.isLoggedIn = user && user.access_token !== undefined
 
     let agent: SuperAgent.SuperAgentRequest
 
     if (useProxy) {
-      agent = SuperAgent.post(this._proxyUrl)
-        .set('X-Method', method)
-        .set('X-Endpoint', endpoint)
+      agent = endpoint.startsWith('/api/')
+        ? SuperAgent[method](endpoint)
+        : SuperAgent.post('/api/proxifier')
+            .set('X-Method', method)
+            .set('X-Endpoint', endpoint)
     } else {
       agent = SuperAgent[method](`${config.api_url}${endpoint}`)
     }
@@ -79,7 +77,7 @@ export default class Fetch {
     }
 
     // auto append access-token
-    if (this._isLoggedIn) {
+    if (this.isLoggedIn) {
       agent.set('Authorization', `Bearer ${user.access_token}`)
     }
 
@@ -132,7 +130,7 @@ export default class Fetch {
     )
 
     if (typeof this.options.progress === 'function') {
-      agent.on('progress', this.options.progress)
+      agent.on('progress', this.options.progress!)
     }
 
     return agent
@@ -147,7 +145,7 @@ export default class Fetch {
     const isUpgradeToAgentRequest =
       error.response?.body?.message === 'Invalid answer to secret question'
 
-    if (isUpgradeToAgentRequest || this._isServerSide || !this._isLoggedIn) {
+    if (isUpgradeToAgentRequest || !this.isLoggedIn) {
       return
     }
 
@@ -176,7 +174,7 @@ export default class Fetch {
     try {
       const {
         body: { access_token, refresh_token }
-      } = await SuperAgent.post(`${this._appUrl}/api/user/refresh-token`).send({
+      } = await SuperAgent.post('/api/user/refresh-token').send({
         access_token: user.access_token,
         refresh_token: user.refresh_token
       })
@@ -199,27 +197,27 @@ export default class Fetch {
   }
 
   get(endpoint: string) {
-    return this._create('get', endpoint)
+    return this.create('get', endpoint)
   }
 
   post(endpoint: string) {
-    return this._create('post', endpoint)
+    return this.create('post', endpoint)
   }
 
   put(endpoint: string) {
-    return this._create('put', endpoint)
+    return this.create('put', endpoint)
   }
 
   patch(endpoint: string) {
-    return this._create('patch', endpoint)
+    return this.create('patch', endpoint)
   }
 
   delete(endpoint: string) {
-    return this._create('delete', endpoint)
+    return this.create('delete', endpoint)
   }
 
   upload(endpoint: string, method = 'post') {
-    return this._create(method, endpoint)
+    return this.create(method, endpoint, true)
   }
 
   registerMiddlewares(options: IOptions): IMiddleware {
@@ -238,19 +236,19 @@ export default class Fetch {
   runMiddlewares(
     response: SuperAgent.Response & { req: SuperAgent.SuperAgentRequest }
   ) {
-    Object.values(this._middlewares).forEach(fn => fn(response))
+    Object.values(this.middlewares).forEach(fn => fn(response))
   }
 
   createErrorLog(
     code: number,
     error: { response?: SuperAgent.Response; message?: string } = {}
   ) {
-    if (!this._isProductionEnv) {
+    if (!this.isProductionEnv) {
       return
     }
 
     const now = Date.now()
-    const diff = now - (this._startTime || now)
+    const diff = now - (this.startTime || now)
 
     console.error(
       `Error ${code}: `,
@@ -262,11 +260,11 @@ export default class Fetch {
   logResponse(
     response: SuperAgent.Response & { req: SuperAgent.SuperAgentRequest }
   ) {
-    if (this._isProductionEnv && response) {
+    if (this.isProductionEnv && response) {
       const requestId = response.header['x-request-id']
       const status = response.status
       const request = response.req
-      const elapsed = Date.now() - (this._startTime || Date.now())
+      const elapsed = Date.now() - (this.startTime || Date.now())
 
       console.log(
         `${status} <${requestId}> (${elapsed}ms) ${request.method} ${request.url}`

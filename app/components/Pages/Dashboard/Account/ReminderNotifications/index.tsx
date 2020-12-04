@@ -3,7 +3,7 @@ import { useDispatch, useStore } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { useEffectOnce } from 'react-use'
 import { Grid, Theme, useTheme } from '@material-ui/core'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 
 import {
   getActiveTeamId,

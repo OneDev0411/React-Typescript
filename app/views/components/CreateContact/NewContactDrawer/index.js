@@ -5,7 +5,8 @@ import arrayMutators from 'final-form-arrays'
 import { Form } from 'react-final-form'
 import { browserHistory } from 'react-router'
 import { Box, Button } from '@material-ui/core'
-import { addNotification as notify } from 'reapop'
+
+import { addNotification as notify } from 'components/notification'
 
 import { createContacts } from 'models/contacts/create-contacts'
 import { defaultQuery } from 'models/contacts/helpers/default-query'

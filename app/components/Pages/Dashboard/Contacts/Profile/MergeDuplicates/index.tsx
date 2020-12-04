@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import { Button } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 import pluralize from 'pluralize'
 
 import { getContactDuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts'

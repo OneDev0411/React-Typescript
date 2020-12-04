@@ -11,7 +11,7 @@ import ClickOutside from 'react-click-outside'
 
 import { SortableHandle } from 'react-sortable-hoc'
 import { useDispatch } from 'react-redux'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 import { mdiPencilOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'

@@ -12,7 +12,7 @@ export async function uploadCroppedMedia(
       progress: uploadProgressCallback,
       useReferencedFormat: true
     })
-      .patch(`/deals/${dealId}/gallery/items/${fileId}/file`)
+      .upload(`/deals/${dealId}/gallery/items/${fileId}/file`, 'patch')
       .attach('file', fileObject, fileName)
 
     return result.body.data.file

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 import _ from 'underscore'
 import moment from 'moment'
 import { Helmet } from 'react-helmet'

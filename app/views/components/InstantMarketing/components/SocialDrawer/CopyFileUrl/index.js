@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 import { mdiLink } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
