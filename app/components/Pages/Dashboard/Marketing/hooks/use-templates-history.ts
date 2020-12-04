@@ -10,7 +10,15 @@ interface TemplatesHistory {
   deleteTemplate: (id: UUID) => Promise<void>
 }
 
-export function useTemplatesHistory(): TemplatesHistory {
+interface TemplatesHistoryOptions {
+  mediums?: IMarketingTemplateMedium[]
+  templateTypes?: IMarketingTemplateType[]
+}
+
+export function useTemplatesHistory({
+  mediums,
+  templateTypes
+}: TemplatesHistoryOptions = {}): TemplatesHistory {
   const [templates, setTemplates] = useState<IMarketingTemplateInstance[]>([])
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -29,7 +37,9 @@ export function useTemplatesHistory(): TemplatesHistory {
             'template_instance.deals',
             'template_instance.contacts',
             'template_instance.listings'
-          ]
+          ],
+          'mediums[]': mediums,
+          'templateTypes[]': templateTypes
         })
 
         // Setting states
