@@ -6,12 +6,6 @@ import 'react-slideshow-image/dist/styles.css'
 const PLACEHOLDER_IMAGE = '/static/images/logo--gray.svg'
 
 function getListingImages(listing: IListing | ICompactListing): string[] {
-  if (listing.type === 'compact_listing') {
-    return listing.cover_image_url
-      ? [listing.cover_image_url]
-      : [PLACEHOLDER_IMAGE]
-  }
-
   return listing.gallery_image_urls && listing.gallery_image_urls.length
     ? listing.gallery_image_urls
     : [PLACEHOLDER_IMAGE]
@@ -20,10 +14,6 @@ function getListingImages(listing: IListing | ICompactListing): string[] {
 function getListingImageObjectFit(
   listing: IListing | ICompactListing
 ): CSSProperties['objectFit'] {
-  if (listing.type === 'compact_listing') {
-    return listing.cover_image_url ? 'cover' : 'none'
-  }
-
   return listing.gallery_image_urls && listing.gallery_image_urls.length > 0
     ? 'cover'
     : 'none'

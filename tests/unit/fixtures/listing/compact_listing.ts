@@ -30,6 +30,7 @@ export const compactListing: ICompactListing = {
     type: 'location'
   },
   cover_image_url: 'http://cdn.rechat.co/58731471.jpg',
+  gallery_image_urls: ['http://cdn.rechat.co/58731471.jpg'],
   address: {
     type: 'compact_address',
     street_number: '4240',
