@@ -5,8 +5,6 @@ import smoothscroll from 'smoothscroll-polyfill'
 
 import { hot } from 'react-hot-loader/root'
 
-import { useCheckBrowser } from 'hooks/use-check-browser'
-
 import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
 // This is our new confirmation modal. use this please.
 import ConfirmationModal from 'components/ConfirmationModal'
@@ -47,8 +45,6 @@ if (window) {
 }
 
 const App = () => {
-  useCheckBrowser()
-
   return (
     <AppTheme>
       <ConfirmationModalProvider>
