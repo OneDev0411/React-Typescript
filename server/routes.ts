@@ -86,7 +86,7 @@ router.get('/openhouse/:id/:brand/register', openHouseRoute)
  * utility routes
  */
 router.get('/unsupported', unsupportedRoute)
-router.get('/api/utils/cors/:url(.+)', corsRoute)
+router.get('/api/utils/cors/:url', corsRoute)
 router.post('/api/pdf/get-size', requestLimit, getPdfSizeRoute)
 router.post('/api/user/refresh-token', requestLimit, refreshUserTokenRoute)
 router.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)

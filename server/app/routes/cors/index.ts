@@ -1,18 +1,15 @@
-import url from 'url'
-
 import { Request, Response, NextFunction } from 'express'
-import { AxiosError, AxiosResponse } from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 
 import { getParsedHeaders } from '../../utils/parse-headers'
-import { request } from '../../libs/request'
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-  const querystring = url.parse(req.url).query
+  const urlAddress = Buffer.from(req.params.url, 'base64').toString('binary')
 
-  request({
+  axios({
     responseType: 'stream',
     headers: getParsedHeaders(req),
-    url: querystring ? `${req.params.url}?${querystring}` : req.params.url
+    url: urlAddress
   })
     .then((response: AxiosResponse) => {
       res.set(response.headers)
