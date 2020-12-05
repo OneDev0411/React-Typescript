@@ -194,7 +194,7 @@ export function ListTable({
       TableActions={
         <TableActions user={user} listing={listing} agents={agents} />
       }
-      ToolbarComponent={<TableToolbar />}
+      ToolbarComponent={<TableToolbar rows={agents ?? []} />}
     />
   )
 }
