@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import { IconButton, MenuItem, Typography, Divider } from '@material-ui/core'
 import { mdiDotsHorizontal } from '@mdi/js'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 
 import { deleteEmailCampaign } from 'models/email/delete-email-campaign'
 import { setEmailNotificationStatus } from 'models/email/set-email-notification-status'

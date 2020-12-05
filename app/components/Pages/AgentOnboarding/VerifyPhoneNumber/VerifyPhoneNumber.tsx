@@ -3,10 +3,12 @@ import { WithRouterProps, Link } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
-import { addNotification as notify } from 'reapop'
+
 import { Box, Button, Typography } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { makeStyles, Theme } from '@material-ui/core'
+
+import { addNotification as notify } from 'components/notification'
 
 import { formatPhoneNumber } from 'utils/format'
 
@@ -109,7 +111,9 @@ export function VerifyPhoneNumber(props: WithRouterProps) {
           status: 'error',
           message:
             'Sorry, something went wrong while sending a new code. Please try again.',
-          dismissAfter: 6000
+          options: {
+            dismissAfter: 6000
+          }
         })
       )
     }

@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 import memoize from 'lodash/memoize'
 import hash from 'object-hash'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { DALLAS_POINTS } from 'constants/listings/dallas-points'
 

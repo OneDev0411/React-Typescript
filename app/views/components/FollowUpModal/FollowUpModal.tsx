@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 import { Button, makeStyles, Theme, Typography } from '@material-ui/core'
 
 import { createTask } from 'models/tasks/create-task'

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 import { Box, Button } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import _ from 'underscore'

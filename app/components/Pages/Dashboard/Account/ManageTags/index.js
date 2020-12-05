@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 import { Helmet } from 'react-helmet'
 
 import { confirmation } from 'actions/confirmation'

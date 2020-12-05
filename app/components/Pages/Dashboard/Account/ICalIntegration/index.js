@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 import omit from 'lodash/omit'
 import { Helmet } from 'react-helmet'
 import { Box, Typography } from '@material-ui/core'

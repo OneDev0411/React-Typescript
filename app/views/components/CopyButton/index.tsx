@@ -1,6 +1,6 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import copy from 'utils/copy-text-to-clipboard'
 

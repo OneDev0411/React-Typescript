@@ -4,7 +4,7 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { Button } from '@material-ui/core'
 

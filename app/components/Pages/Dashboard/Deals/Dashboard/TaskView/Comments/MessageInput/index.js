@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { changeTaskStatus, changeNeedsAttention } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'

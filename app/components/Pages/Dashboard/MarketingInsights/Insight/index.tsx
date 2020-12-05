@@ -15,7 +15,7 @@ import {
   mdiCursorDefaultClickOutline,
   mdiAccountMultipleOutline
 } from '@mdi/js'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 import pluralize from 'pluralize'
 import classNames from 'classnames'
 

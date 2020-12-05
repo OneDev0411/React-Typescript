@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useDispatch } from 'react-redux'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 import {
   Button,
   Typography,

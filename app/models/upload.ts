@@ -15,7 +15,7 @@ export function upload(
   attachment: File | IFile,
   query?: Record<string, string>
 ): SuperAgentRequest {
-  const request = new Fetch().post(path).query(query ?? {})
+  const request = new Fetch().upload(path).query(query ?? {})
 
   if (isExistingFile(attachment)) {
     request.send({ file: attachment.id })

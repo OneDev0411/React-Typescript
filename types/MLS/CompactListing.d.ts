@@ -59,6 +59,7 @@ declare interface ICompactListing extends IModel<'compact_listing'> {
   favorited: boolean
   location: ILocation
   cover_image_url: string
+  gallery_image_urls: null | string[]
   address: ICompactAddress
   open_houses: boolean | null
   compact_property: ICompactProperty

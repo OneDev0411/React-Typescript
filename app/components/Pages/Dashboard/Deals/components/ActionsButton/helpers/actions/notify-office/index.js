@@ -1,4 +1,4 @@
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { changeNeedsAttention } from 'actions/deals'
 

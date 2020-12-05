@@ -16,10 +16,4 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
-const rootEl = document.getElementById('app')
-
-ReactDOM.render(<Provider />, rootEl)
-
-if (window != null) {
-  window.isSet = object => typeof object !== 'undefined'
-}
+ReactDOM.render(<Provider />, document.getElementById('app'))
