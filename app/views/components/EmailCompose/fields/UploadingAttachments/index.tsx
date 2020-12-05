@@ -1,20 +1,21 @@
 import React from 'react'
 import { FieldRenderProps } from 'react-final-form'
 import { Box } from '@material-ui/core'
-import { addNotification } from 'reapop'
-import { connect } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
+
+import { useDispatch } from 'react-redux'
+
+import { addNotification } from 'components/notification'
 
 import { UploadingAttachment } from '../../components/Attachment/UploadingAttachment'
 import { IUploadingAttachment } from '../../types'
 
 interface Props extends FieldRenderProps<any> {
   onFinish: (file: IFile) => void
-  addNotification: IAsyncActionProp<typeof addNotification>
 }
 
-function UploadingAttachmentsList({ input, addNotification, ...props }: Props) {
+function UploadingAttachmentsList({ input, ...props }: Props) {
+  const dispatch = useDispatch()
+
   const handleRemove = (uploadingAttachment: IUploadingAttachment) => {
     const files = (input.value as IUploadingAttachment[]).filter(
       item => item !== uploadingAttachment
@@ -35,10 +36,12 @@ function UploadingAttachmentsList({ input, addNotification, ...props }: Props) {
     const message = e?.response?.body?.message ?? 'Could not upload file'
 
     if (e && e.code !== 'ABORTED') {
-      addNotification({
-        message,
-        status: 'error'
-      })
+      dispatch(
+        addNotification({
+          message,
+          status: 'error'
+        })
+      )
     }
 
     console.error('error in uploading attachment', e)
@@ -60,11 +63,4 @@ function UploadingAttachmentsList({ input, addNotification, ...props }: Props) {
   )
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    addNotification: (...args: Parameters<typeof addNotification>) =>
-      dispatch(addNotification(...args))
-  }
-}
-
-export default connect(null, mapDispatchToProps)(UploadingAttachmentsList)
+export default UploadingAttachmentsList

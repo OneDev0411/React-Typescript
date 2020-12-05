@@ -6,7 +6,7 @@ import createFocusDecorator from 'final-form-focus'
 import { TextField } from 'final-form-material-ui'
 import { Box, makeStyles, useTheme } from '@material-ui/core'
 import { isEqual } from 'lodash'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 
 import { ClassesProps } from 'utils/ts-utils'
 

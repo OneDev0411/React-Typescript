@@ -1,6 +1,6 @@
 import _ from 'underscore'
 
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import Chatroom from '../../models/Chatroom'
 import types from '../../constants/chatroom'

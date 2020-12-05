@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from 'react'
 import { Box, RootRef } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 
 import { uploadMedia } from 'models/media-manager'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'

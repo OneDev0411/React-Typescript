@@ -1,7 +1,5 @@
-import config from './config/webpack'
+const env = process.env.NODE_ENV
 
-// don't show deprecation warning
-process.noDeprecation = true
-
-const filename = config.env === 'stage' ? 'production' : config.env
-export default require('./webpack/' + filename).default
+module.exports = ['production', 'stage'].includes(env)
+  ? require('./webpack/production')
+  : require('./webpack/development')

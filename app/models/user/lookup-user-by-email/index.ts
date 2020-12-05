@@ -1,4 +1,4 @@
-import Fetch from '../../../services/fetch'
+import Fetch from 'services/fetch'
 
 interface ResponseData {
   type: 'sso_provider'
@@ -35,8 +35,8 @@ interface UserLookup {
 }
 
 export async function lookUpUserByEmail(email: string): Promise<UserLookup> {
-  const response = await new Fetch({ proxy: true })
-    .post('/users/lookup')
+  const response = await new Fetch()
+    .post('/api/users/lookup')
     .set({ 'x-auth-mode': 'client_id' })
     .send({ email })
 

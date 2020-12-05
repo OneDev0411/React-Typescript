@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { addNotification, Notification } from 'reapop'
+import { addNotification, Notification } from 'components/notification'
 import {
   Popover,
   Button,

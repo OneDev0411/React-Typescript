@@ -1,17 +1,19 @@
+import { mdiFacebook, mdiInstagram, mdiLinkedin } from '@mdi/js'
+
 import { SocialNetworkShare } from './types'
 
 export const SOCIAL_NETWORKS: SocialNetworkShare[] = [
   {
     name: 'Instagram',
-    className: 'fa fa-instagram'
+    icon: mdiInstagram
   },
   {
     name: 'Facebook',
-    className: 'fa fa-facebook-square'
+    icon: mdiFacebook
   },
   {
     name: 'LinkedIn',
-    className: 'fa fa-linkedin'
+    icon: mdiLinkedin
   }
 ]
 

@@ -1,6 +1,6 @@
 import { normalize } from 'normalizr'
 import { batchActions } from 'redux-batched-actions'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import * as actionTypes from '../../../../constants/deals'
 import Deal from '../../../../models/Deal'

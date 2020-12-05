@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addNotification } from 'reapop'
+
 import { Box, Button } from '@material-ui/core'
+
+import { addNotification } from 'components/notification'
 
 import { IAppState } from 'reducers'
 import editUser from 'actions/user/edit'

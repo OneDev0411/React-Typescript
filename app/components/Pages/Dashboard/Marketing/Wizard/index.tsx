@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 import {
   makeStyles,
   Theme,
