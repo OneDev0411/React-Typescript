@@ -37,14 +37,10 @@ export default function ListingAlertFilters({
 
   return (
     <>
-      <ListingAlertFiltersList
-        filters={filters}
-        limit={limit}
-        onClick={handleShowAlertFiltersDialog}
-      >
+      <ListingAlertFiltersList filters={filters} limit={limit}>
         <Grid item>
           <Button variant="outlined" onClick={handleShowAlertFiltersDialog}>
-            More
+            Change
           </Button>
         </Grid>
       </ListingAlertFiltersList>

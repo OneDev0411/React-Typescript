@@ -68,7 +68,7 @@ export default function ListingAlertFiltersList({
         .slice(0, limit)
         .map(([key, value]) => (
           <Grid item key={key}>
-            <Button variant="outlined" onClick={onClick}>
+            <Button variant="text" onClick={onClick}>
               {key}: {value}
             </Button>
           </Grid>
