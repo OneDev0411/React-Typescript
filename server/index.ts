@@ -12,6 +12,8 @@ import webpack from 'webpack'
 import history from 'connect-history-api-fallback'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 
+import { checkBrowser } from './app/middlewares/check-browser'
+
 import routes from './routes'
 
 const port = process.env.PORT || 8080
@@ -31,6 +33,12 @@ app.use(
     secure: isProduction
   })
 )
+
+/**
+ * checks user-agent and navigates old browsers to
+ * the /unsupported page
+ */
+app.use(checkBrowser)
 
 // setup routes
 app.use('/', routes)
