@@ -16,7 +16,7 @@ export default async (req: RequestWithSession, res: Response) => {
   }
 
   try {
-    const response: AxiosResponse = await request({
+    const response: AxiosResponse = await request(req, {
       method: 'get',
       url: '/users/self',
       params: {
@@ -36,6 +36,6 @@ export default async (req: RequestWithSession, res: Response) => {
     })
   } catch (e) {
     res.status(e.response?.status || 400)
-    e.response && e.response.data.pipe(res)
+    res.send(e?.response.data)
   }
 }

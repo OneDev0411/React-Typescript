@@ -35,7 +35,7 @@ app.use(
 )
 
 /**
- * checks user-agent and navigates old browsers to
+ * Checks user-agent and navigates old browsers to
  * the /unsupported page
  */
 app.use(checkBrowser)
@@ -55,7 +55,6 @@ if (isDevelopment) {
       publicPath: config.output.publicPath
     })
   )
-
   app.use('/static', express.static(path.resolve(__dirname, '../app/static')))
 }
 

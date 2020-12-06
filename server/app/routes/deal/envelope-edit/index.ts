@@ -7,7 +7,7 @@ import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
 
 export default async (req: Request, res: Response) => {
-  await request({
+  await request(req, {
     url: `/envelopes/${req.params.id}/edit`,
     headers: getParsedHeaders(req),
     maxRedirects: 0

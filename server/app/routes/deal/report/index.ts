@@ -15,7 +15,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     'MM-DD-YY'
   )}`
 
-  request({
+  request(req, {
     responseType: 'stream',
     url: `/analytics/deals/facts?order=${data.order}&format=csv`,
     method: 'POST',

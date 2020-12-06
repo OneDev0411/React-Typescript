@@ -31,7 +31,7 @@ function getFormattedListingPictures(listing) {
 
 async function getFormattedDealMediaPictures(req: Request, dealId: string) {
   try {
-    const { data: deal } = await request({
+    const { data: deal } = await request(req, {
       headers: getParsedHeaders(req),
       url: `/deals/${dealId}?associations[]=deal.gallery`
     })
@@ -82,7 +82,7 @@ async function getRequestBody(
 
   if (deal.listing) {
     try {
-      const response = await request({
+      const response = await request(req, {
         url: `/listings/${deal.listing}`,
         headers: getParsedHeaders(req),
         params: {

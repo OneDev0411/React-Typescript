@@ -31,7 +31,7 @@ export default async (
     return false
   }
 
-  const { data: profile } = await request({
+  const { data: profile } = await request(req, {
     headers: getParsedHeaders(req),
     url: '/users/self'
   })
@@ -42,7 +42,7 @@ export default async (
   let openHouse
 
   try {
-    const response = await request({
+    const response = await request(req, {
       url: `/crm/tasks/${req.params.id}`,
       headers: {
         ...getParsedHeaders(req),
