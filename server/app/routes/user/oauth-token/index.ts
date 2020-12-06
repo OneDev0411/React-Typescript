@@ -1,4 +1,4 @@
-import { Response, NextFunction } from 'express'
+import { Response } from 'express'
 
 import { AxiosError, AxiosResponse } from 'axios'
 
@@ -9,12 +9,8 @@ import { request } from '../../../libs/request'
 
 import type { RequestWithSession } from '../../../../types'
 
-export default async (
-  req: RequestWithSession,
-  res: Response,
-  next: NextFunction
-) => {
-  request({
+export default async (req: RequestWithSession, res: Response) => {
+  request(req, {
     method: 'POST',
     url: '/oauth2/token',
     headers: getParsedHeaders(req),

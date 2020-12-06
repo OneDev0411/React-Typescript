@@ -7,7 +7,7 @@ import { request } from '../../libs/request'
 export default async (req: Request, res: Response) => {
   const { form, pdfUrl } = req.body
 
-  request({
+  request(req, {
     method: 'HEAD',
     url: pdfUrl || `${config.forms_url}/${form}.pdf`
   })

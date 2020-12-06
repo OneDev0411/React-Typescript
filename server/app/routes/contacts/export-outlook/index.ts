@@ -23,7 +23,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
   const query = `filter_type=${filterType}&format=csv${getUsersList(users)}`
 
-  request({
+  request(req, {
     method: 'POST',
     responseType: 'stream',
     url: `/analytics/${type}/facts?${query}`,

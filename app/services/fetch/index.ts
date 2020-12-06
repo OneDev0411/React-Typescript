@@ -3,7 +3,6 @@ import SuperAgent from 'superagent'
 import { IAppState } from 'reducers'
 
 import store from '../../stores'
-import { updateUser } from '../../store_actions/user'
 
 import config from '../../../config/public'
 import { getActiveTeamId } from '../../utils/user-teams'
@@ -122,10 +121,6 @@ export default class Fetch {
 
         // create error log
         this.createErrorLog(errorCode, error)
-
-        if (errorCode === 401) {
-          this.handle401Error(error, agent, user)
-        }
       }
     )
 
@@ -134,66 +129,6 @@ export default class Fetch {
     }
 
     return agent
-  }
-
-  handle401Error(error, agent: SuperAgent.SuperAgentRequest, user: IUser) {
-    // server send to client 401 error for invalid answer!
-    // Emil said "we can not change it in server",
-    // so we forced to handle it in here with this dirty way.
-    // https://gitlab.com/rechat/web/issues/695
-    //
-    const isUpgradeToAgentRequest =
-      error.response?.body?.message === 'Invalid answer to secret question'
-
-    if (isUpgradeToAgentRequest || !this.isLoggedIn) {
-      return
-    }
-
-    this.refreshToken(agent, user)
-  }
-
-  /**
-   * tries to refresh the token and retry the request when token is expired
-   */
-  async refreshToken(
-    agent: SuperAgent.SuperAgentRequest & {
-      header?: any
-      _retries?: number
-      _retry?: () => void
-    },
-    user: IUser
-  ) {
-    if (Number(agent._retries) > 0) {
-      agent._retries = 0
-
-      return
-    }
-
-    agent._retries = 1
-
-    try {
-      const {
-        body: { access_token, refresh_token }
-      } = await SuperAgent.post('/api/user/refresh-token').send({
-        access_token: user.access_token,
-        refresh_token: user.refresh_token
-      })
-
-      store.dispatch(
-        updateUser({
-          access_token,
-          refresh_token
-        })
-      )
-
-      // set new token
-      agent.header!.Authorization = `Bearer ${access_token}`
-
-      // retry to previous request with new token
-      agent._retry!()
-    } catch (e) {
-      console.log('[ Fetch ] Can not refresh token')
-    }
   }
 
   get(endpoint: string) {

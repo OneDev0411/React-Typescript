@@ -7,7 +7,7 @@ import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
 
 export default async (req: Request, res: Response) => {
-  request({
+  request(req, {
     url: '/users/self/docusign/auth',
     headers: getParsedHeaders(req),
     maxRedirects: 0

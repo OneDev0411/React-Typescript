@@ -18,7 +18,6 @@ import livebyNeighborhoodsRoute from './app/routes/liveby/neighborhoods'
 import myMarketingMattersPunchoutRoute from './app/routes/my-marketing-matters/punchout'
 import openHouseRoute from './app/routes/openhouse/registration'
 import getPdfSizeRoute from './app/routes/get-pdf-size'
-import refreshUserTokenRoute from './app/routes/refresh-token'
 import corsRoute from './app/routes/cors'
 import renderMjmlRoute from './app/routes/render-mjml'
 import urlMetadataRoute from './app/routes/url-metadata'
@@ -88,7 +87,6 @@ router.get('/openhouse/:id/:brand/register', openHouseRoute)
 router.get('/unsupported', unsupportedRoute)
 router.get('/api/utils/cors/:url', corsRoute)
 router.post('/api/pdf/get-size', requestLimit, getPdfSizeRoute)
-router.post('/api/user/refresh-token', requestLimit, refreshUserTokenRoute)
 router.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)
 router.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
 
