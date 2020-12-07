@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Grid, Checkbox, Tooltip, Typography } from '@material-ui/core'
+import { Grid, Box, Checkbox, Tooltip, Typography } from '@material-ui/core'
 import pluralize from 'pluralize'
 
 import {
@@ -40,8 +40,8 @@ export function TableToolbar({ rows }: Props) {
   const isSomeRowsSelected = !isAllRowsSelected && selectedRowsCount > 0
 
   const tooltipTitle = state.selection.isAllRowsSelected
-    ? 'Deselect All'
-    : 'Select All'
+    ? 'Deselect All Rows'
+    : 'Select All Rows'
 
   const tableSummary =
     selectedRowsCount === 0
@@ -58,13 +58,15 @@ export function TableToolbar({ rows }: Props) {
   return (
     <Grid container alignItems="center">
       <Grid item>
-        <Tooltip title={tooltipTitle}>
-          <Checkbox
-            checked={isAllRowsSelected}
-            indeterminate={isSomeRowsSelected}
-            onChange={handleToggleSelectionClick}
-          />
-        </Tooltip>
+        <Box pl={1}>
+          <Tooltip title={tooltipTitle}>
+            <Checkbox
+              checked={isAllRowsSelected}
+              indeterminate={isSomeRowsSelected}
+              onChange={handleToggleSelectionClick}
+            />
+          </Tooltip>
+        </Box>
       </Grid>
       <Grid item>
         <Typography variant="body2">{tableSummary}</Typography>
