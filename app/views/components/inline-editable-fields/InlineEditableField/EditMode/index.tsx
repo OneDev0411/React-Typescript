@@ -109,6 +109,7 @@ export const EditMode = (props: Props) => {
   if (isPopoverMode) {
     return (
       <Popover
+        disableEnforceFocus
         id={id}
         open={open}
         anchorEl={viewRef}
