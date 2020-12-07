@@ -19,7 +19,6 @@ export function useAppcues() {
       return
     }
 
-    // TODO: Use appcuse method
-    console.log(pathname)
+    window.Appcues.page()
   }, [pathname])
 }
