@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Grid, Box, Typography } from '@material-ui/core'
 
 import { GridProvider } from 'components/Grid/Table'
 
@@ -29,8 +30,33 @@ export default function AgentsGrid({
   >(null)
 
   const onCloseDrawer = () => setSelectedAgentInfo(null)
+
   const onSelectAgentInfo = (info: AggregatedAgentInfo, side: AgentSide) =>
     setSelectedAgentInfo({ info, side })
+
+  if (agents?.length === 0) {
+    return (
+      <Grid
+        container
+        item
+        direction="column"
+        alignItems="center"
+        justify="center"
+      >
+        <Box my={2}>
+          <img
+            src="/static/images/contacts/zero-state.svg"
+            alt="houston"
+            style={{ marginBottom: '1rem' }}
+          />
+        </Box>
+        <Typography variant="h5" align="center">
+          No matching agents found. <br />
+          You can try and search something else or change the filters.
+        </Typography>
+      </Grid>
+    )
+  }
 
   return (
     <GridProvider>
