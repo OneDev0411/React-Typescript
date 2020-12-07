@@ -7,7 +7,7 @@ import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-  request({
+  request(req, {
     method: 'post',
     responseType: 'stream',
     url: '/users',
