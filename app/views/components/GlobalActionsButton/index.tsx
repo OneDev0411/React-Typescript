@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
 
-import { noop } from 'utils/helpers'
 import {
   hasUserAccessToCrm,
   hasUserAccessToDeals,
@@ -11,34 +10,16 @@ import {
 } from 'utils/user-teams'
 
 import { Item, ItemType } from './types'
-import Button from './Button'
-import items from './items'
-import Menu from './Menu'
+import Button from './components/Button'
+import items from './components/items'
+import Menu from './components/Menu'
+import { useGlobalActionContext } from './hooks/use-global-action-context'
 
-interface Props {
-  onCreateEvent?: (event: IEvent) => void
-  onCreateContact?: (contact: IContact) => void
-  onCreateAndAddNewContact?: (contact: IContact) => void
-  onCreateEmail?: (email: IEmailCampaign) => void
-  onCreateEmailFollowUp?: (email: IEvent) => void
-  onCreateTour?: (
-    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-  ) => void
-  onCreateOpenHouse?: (
-    oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-  ) => void
-}
+interface Props {}
 
-export default function GlobalActionsButton({
-  onCreateEvent = noop,
-  onCreateContact = noop,
-  onCreateAndAddNewContact = noop,
-  onCreateEmail = noop,
-  onCreateEmailFollowUp = noop,
-  onCreateTour = noop,
-  onCreateOpenHouse = noop
-}: Props) {
+export const GlobalActionsButton = (props: Props) => {
   const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
+  const [state] = useGlobalActionContext()
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [selectedItem, setSelectedItem] = useState<null | Item>(null)
   const availableItems: Item[] = useMemo(() => {
@@ -77,26 +58,26 @@ export default function GlobalActionsButton({
   }
 
   const handleSubmitEvent = (event: IEvent) => {
-    onCreateEvent(event)
+    state.onCreateEvent(event)
     handleCloseRenderedItem()
   }
 
   const handleSubmitEmail = (email: IEmailCampaign) => {
-    onCreateEmail(email)
+    state.onCreateEmail(email)
     handleCloseRenderedItem()
   }
 
   const handleSubmitTour = (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {
-    onCreateTour(tour)
+    state.onCreateTour(tour)
     handleCloseRenderedItem()
   }
 
   const handleSubmitOpenHouse = (
     oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {
-    onCreateOpenHouse(oh)
+    state.onCreateOpenHouse(oh)
     handleCloseRenderedItem()
   }
 
@@ -109,7 +90,7 @@ export default function GlobalActionsButton({
       case 'email':
         return selectedItem.render({
           isOpen: true,
-          followUpCallback: onCreateEmailFollowUp,
+          followUpCallback: state.onCreateEmailFollowUp,
           onClose: handleCloseRenderedItem,
           onSent: handleSubmitEmail
         })
@@ -127,8 +108,8 @@ export default function GlobalActionsButton({
           user,
           isOpen: true,
           onClose: handleCloseRenderedItem,
-          saveCallback: onCreateContact,
-          saveAndAddNewCallback: onCreateAndAddNewContact
+          saveCallback: state.onCreateContact,
+          saveAndAddNewCallback: state.onCreateAndAddNewContact
         })
 
       case 'deal':

@@ -3,7 +3,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import GlobalActionsButton from 'components/GlobalActionsButton'
+import { GlobalActionsButton } from 'components/GlobalActionsButton'
 
 import { ACL } from '../../../../constants/acl'
 import { selectNotificationNewCount } from '../../../../reducers/notifications'

@@ -3,7 +3,7 @@ import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { mdiPlus } from '@mdi/js'
 
-import { SvgIcon } from '../SvgIcons/SvgIcon'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 interface Props {
   onClick: (event: MouseEvent<HTMLElement>) => void

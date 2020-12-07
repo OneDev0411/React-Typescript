@@ -18,11 +18,11 @@ import { TourDrawer } from 'components/tour/TourDrawer'
 import {
   meetingRoomOutlined,
   permContactCalendarOutlined
-} from '../SvgIcons/icons'
+} from '../../SvgIcons/icons'
 
 import CreateOpenHouse from './OpenHouse'
 
-import { Item } from './types'
+import { Item } from '../types'
 
 const items: Item[] = [
   {
