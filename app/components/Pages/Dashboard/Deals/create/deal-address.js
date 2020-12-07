@@ -47,7 +47,7 @@ export default function DealAddress(props) {
     onCreateAddress({
       id: listings[0].id,
       image: listings[0].cover_image_url,
-      address_components: listings[0].property.address
+      address_components: listings[0].address
     })
 
   const onCreateAddress = address => {
