@@ -180,7 +180,7 @@ const AsyncListingSinglePage = Load({
 //  Agent Network
 /* ==================================== */
 
-const AsyncAgentNetworkNew = Load({
+const AsyncAgentNetwork = Load({
   loader: () =>
     import(
       '../components/Pages/Dashboard/AgentNetwork' /* webpackChunkName: "agent_network" */
@@ -244,13 +244,6 @@ const AsyncDealFormEdit = Load({
   loader: () =>
     import(
       '../components/Pages/Dashboard/Deals/FormEdit' /* webpackChunkName: "deal_fe" */
-    )
-})
-
-const AsyncAgentNetwork = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Deals/AgentNetwork' /* webpackChunkName: "agent-network" */
     )
 })
 
@@ -696,7 +689,7 @@ export default (
         <Route path="marketing/editor" component={AsyncMarketingEditor} />
         <Route path="marketing/:types(/:medium)" component={AsyncMarketing} />
 
-        <Route path="agent-network" component={AsyncAgentNetworkNew} />
+        <Route path="agent-network" component={AsyncAgentNetwork} />
         <Route
           path="agent-network/agents"
           component={AsyncAgentNetworkAgents}
@@ -731,10 +724,6 @@ export default (
           <Route
             path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"
             component={AsyncDealFileViewer}
-          />
-          <Route
-            path="/dashboard/deals/:id/marketing/network"
-            component={AsyncAgentNetwork}
           />
           <Route
             path="/dashboard/deals/:id(/:tab)"
