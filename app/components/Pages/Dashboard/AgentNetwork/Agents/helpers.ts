@@ -103,13 +103,13 @@ export function aggregateListingsAgents(
 
       if (agentsMap[listing.list_agent.id]) {
         agentInfo = agentsMap[listing.list_agent.id]
-        agentInfo.listingsAsSellingAgent.push(listing)
+        agentInfo.listingsAsListAgent.push(listing)
       } else {
         agentInfo = {
           id: listing.list_agent.id,
           agent: listing.list_agent,
-          listingsAsSellingAgent: [listing],
-          listingsAsListAgent: [],
+          listingsAsSellingAgent: [],
+          listingsAsListAgent: [listing],
           stats: {
             totalVolume: 0,
             averagePrice: 0
