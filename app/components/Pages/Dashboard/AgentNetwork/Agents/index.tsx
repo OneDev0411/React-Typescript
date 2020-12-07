@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
-import { LoadScript, LoadScriptProps } from '@react-google-maps/api'
+import { useLoadScript, LoadScriptProps } from '@react-google-maps/api'
 import { Box, Divider, Grid, Typography } from '@material-ui/core'
 
 import config from 'config'
@@ -27,7 +27,10 @@ const GOOGLE_MAPS_LIBRARIES: LoadScriptProps['libraries'] = ['geometry']
 
 function Agents(props: WithRouterProps) {
   const user = useSelector<IAppState, IUser>(state => state.user)
-  const [isLoadingGoogleMaps, setIsLoadingGoogleMaps] = useState<boolean>(true)
+  const { isLoaded: isGoogleMapsLoaded } = useLoadScript({
+    googleMapsApiKey: config.google.api_key,
+    libraries: GOOGLE_MAPS_LIBRARIES
+  })
 
   const [listing, setListing] = useState<Nullable<ListingWithProposedAgent>>(
     null
@@ -41,7 +44,7 @@ function Agents(props: WithRouterProps) {
 
   useEffect(() => {
     async function fetchListingBasedData() {
-      if (isLoadingGoogleMaps) {
+      if (!isGoogleMapsLoaded) {
         return
       }
 
@@ -71,11 +74,11 @@ function Agents(props: WithRouterProps) {
     }
 
     fetchListingBasedData()
-  }, [isLoadingGoogleMaps, props.location.query.listing])
+  }, [isGoogleMapsLoaded, props.location.query.listing])
 
   useEffect(() => {
     async function fetchLocationBasedData() {
-      if (isLoadingGoogleMaps) {
+      if (!isGoogleMapsLoaded) {
         return
       }
 
@@ -99,7 +102,7 @@ function Agents(props: WithRouterProps) {
     }
 
     fetchLocationBasedData()
-  }, [isLoadingGoogleMaps, props.location.query.lat, props.location.query.lng])
+  }, [isGoogleMapsLoaded, props.location.query.lat, props.location.query.lng])
 
   useEffect(() => {
     async function fetchAgents() {
@@ -130,53 +133,49 @@ function Agents(props: WithRouterProps) {
     setFilters(newFilters)
   }
 
+  if (!isGoogleMapsLoaded) {
+    return null
+  }
+
   return (
-    <LoadScript
-      googleMapsApiKey={config.google.api_key}
-      libraries={GOOGLE_MAPS_LIBRARIES}
-      onLoad={() => setIsLoadingGoogleMaps(false)}
-      // If we don't set it or pass null, it will render `Loading...`!
-      loadingElement={<div />}
+    <Layout
+      noGlobalActionsButton
+      title="Select Agents"
+      onSelectSearchResult={openSearchResultPage}
     >
-      <Layout
-        noGlobalActionsButton
-        title="Select Agents"
-        onSelectSearchResult={openSearchResultPage}
-      >
-        <Grid container direction="column">
-          <Grid container item alignItems="flex-end" justify="space-between">
-            <Grid item>
-              {props.location.query.title && (
-                <Typography variant="body1">
-                  {props.location.query.title}
-                </Typography>
-              )}
-            </Grid>
-            <Grid item>
-              {filters && (
-                <ListingAlertFilters
-                  filters={filters}
-                  onApply={handleApplyFilters}
-                />
-              )}
-            </Grid>
+      <Grid container direction="column">
+        <Grid container item alignItems="flex-end" justify="space-between">
+          <Grid item>
+            {props.location.query.title && (
+              <Typography variant="body1">
+                {props.location.query.title}
+              </Typography>
+            )}
           </Grid>
           <Grid item>
-            <Box py={1}>
-              <Divider />
-            </Box>
-          </Grid>
-          <Grid item>
-            <AgentsGrid
-              user={user}
-              listing={listing}
-              agents={agents}
-              isLoading={isLoadingAgents}
-            />
+            {filters && (
+              <ListingAlertFilters
+                filters={filters}
+                onApply={handleApplyFilters}
+              />
+            )}
           </Grid>
         </Grid>
-      </Layout>
-    </LoadScript>
+        <Grid item>
+          <Box py={1}>
+            <Divider />
+          </Box>
+        </Grid>
+        <Grid item>
+          <AgentsGrid
+            user={user}
+            listing={listing}
+            agents={agents}
+            isLoading={isLoadingAgents}
+          />
+        </Grid>
+      </Grid>
+    </Layout>
   )
 }
 

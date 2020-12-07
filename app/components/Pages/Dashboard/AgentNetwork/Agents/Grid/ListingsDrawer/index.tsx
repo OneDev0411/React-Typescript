@@ -1,6 +1,8 @@
 import React from 'react'
 import { Grid, Box } from '@material-ui/core'
 
+import { goTo } from 'utils/go-to'
+
 import Drawer from 'components/OverlayDrawer'
 import ListingCard from 'components/ListingCards/ListingCard'
 
@@ -13,6 +15,10 @@ interface Props {
 }
 
 export function ListingsDrawer({ listings, title, onClose }: Props) {
+  const handleListingClick = (listing: CompactListingWithBothSideAgents) => {
+    goTo(`/dashboard/mls/${listing.id}`)
+  }
+
   return (
     <Drawer open onClose={onClose}>
       <Drawer.Header title={title} />
@@ -21,7 +27,10 @@ export function ListingsDrawer({ listings, title, onClose }: Props) {
           <Grid container spacing={1}>
             {listings.map(listing => (
               <Grid key={listing.id} item md={12} lg={6}>
-                <ListingCard listing={listing} />
+                <ListingCard
+                  listing={listing}
+                  onClick={() => handleListingClick(listing)}
+                />
               </Grid>
             ))}
           </Grid>
