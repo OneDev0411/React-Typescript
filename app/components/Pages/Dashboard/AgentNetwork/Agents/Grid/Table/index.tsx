@@ -55,7 +55,10 @@ export function ListTable({
       width: '20%',
       accessor: (agentData: AggregatedAgentInfo) => agentData.agent.full_name,
       render: ({ row: agentData }: RenderProps<AggregatedAgentInfo>) => (
-        <div>{agentData.agent.full_name}</div>
+        <>
+          <div>{agentData.agent.full_name}</div>
+          <Caption variant="body2">{agentData.officeName}</Caption>
+        </>
       )
     },
     {

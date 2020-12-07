@@ -87,6 +87,7 @@ export function aggregateListingsAgents(
         agentInfo = {
           id: listing.selling_agent.id,
           agent: listing.selling_agent,
+          officeName: listing.selling_office_name ?? null,
           listingsAsSellingAgent: [listing],
           listingsAsListAgent: [],
           stats: {
@@ -108,6 +109,7 @@ export function aggregateListingsAgents(
         agentInfo = {
           id: listing.list_agent.id,
           agent: listing.list_agent,
+          officeName: listing.list_office_name ?? null,
           listingsAsSellingAgent: [],
           listingsAsListAgent: [listing],
           stats: {

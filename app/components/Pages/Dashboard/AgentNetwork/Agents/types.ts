@@ -9,6 +9,7 @@ export type AgentSide = 'selling-agent' | 'list-agent'
 export interface AggregatedAgentInfo {
   id: UUID // We actually need it for grid selection
   agent: IAgent
+  officeName: string | null
   listingsAsSellingAgent: CompactListingWithBothSideAgents[]
   listingsAsListAgent: CompactListingWithBothSideAgents[]
   stats: {
