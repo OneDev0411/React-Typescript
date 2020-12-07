@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 
 import { hot } from 'react-hot-loader/root'
 
-import { IntercomProvider } from 'react-use-intercom'
+import { useAppcues } from 'services/appcues/use-appcues'
 
 import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
 import { GlobalActionsProvider } from 'components/GlobalActionsButton/context/provider'
@@ -48,6 +48,7 @@ if (typeof window !== 'undefined') {
 
 const App = () => {
   const dispatch = useDispatch()
+	useAppcues()
 
   return (
     <AppTheme>
