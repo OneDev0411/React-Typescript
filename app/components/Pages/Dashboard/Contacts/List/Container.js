@@ -725,12 +725,15 @@ class ContactsList extends React.Component {
     const showImportAction = this.shouldShowImportAndCreateActions()
     const activeTag = this.getActiveTag()
 
+    // TODO: update global action btn callback (HeaderWithSearch)
+    /*
+      onCreateAndAddNewContact={this.onCreateContact}
+    */
     return (
       <PageLayout>
         <PageLayout.HeaderWithSearch
           title={title}
           onSearch={this.handleSearch}
-          onCreateAndAddNewContact={this.onCreateContact}
           SearchInputProps={{
             defaultValue: this.state.searchInputValue || '',
             placeholder: 'Search Contacts'

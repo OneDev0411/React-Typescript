@@ -3,6 +3,8 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
+import GlobalActionsButton from 'components/GlobalActionsButton'
+
 import { ACL } from '../../../../constants/acl'
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
 import { selectUnreadEmailThreadsCount } from '../../../../reducers/inbox'
@@ -57,6 +59,7 @@ export function Menu() {
   return (
     <Sidenav>
       <Logo />
+      <GlobalActionsButton />
       <ScrollableArea
         shadowColor={scrollableAreaShadowColor}
         style={{ flex: '1 1' }}

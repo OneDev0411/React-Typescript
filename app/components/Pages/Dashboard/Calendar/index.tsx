@@ -13,22 +13,22 @@ export default function CalendarPage(props: WithRouterProps) {
   const classes = useCommonStyles()
   const actionRef = useRef<ActionRef>(null)
 
+  // TODO: update global action btn callback
+  /*
   const handleCreateTask = (
     event: IEvent | ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {
     actionRef.current!.updateCrmEvents(event, 'created')
   }
-
+ 
+    onCreateOpenHouse={handleCreateTask}
+    onCreateEvent={handleCreateTask}
+    onCreateEmailFollowUp={handleCreateTask}
+    onCreateTour={handleCreateTask}
+  */
   return (
     <div className={classes.container}>
-      <GlobalHeader
-        title="Calendar"
-        onCreateOpenHouse={handleCreateTask}
-        onCreateEvent={handleCreateTask}
-        onCreateEmailFollowUp={handleCreateTask}
-        onCreateTour={handleCreateTask}
-        noPadding
-      >
+      <GlobalHeader title="Calendar" noPadding>
         <ViewAs />
       </GlobalHeader>
       <div className={classes.listContainer}>

@@ -1,7 +1,7 @@
 import React, { MouseEvent } from 'react'
 import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
 
-import { mdiChevronDown } from '@mdi/js'
+import { mdiPlus } from '@mdi/js'
 
 import { SvgIcon } from '../SvgIcons/SvgIcon'
 
@@ -11,8 +11,12 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    container: {
+      padding: theme.spacing(0, 2.5),
+      marginBottom: theme.spacing(3)
+    },
     root: {
-      width: theme.spacing(20)
+      borderRadius: '50px'
     }
   })
 )
@@ -21,17 +25,19 @@ export default function GlobalActionsMenu({ onClick }: Props) {
   const classes = useStyles()
 
   return (
-    <Button
-      variant="contained"
-      color="primary"
-      onClick={onClick}
-      size="large"
-      classes={{
-        root: classes.root
-      }}
-    >
-      Create
-      <SvgIcon path={mdiChevronDown} />
-    </Button>
+    <div className={classes.container}>
+      <Button
+        variant="contained"
+        color="primary"
+        fullWidth
+        onClick={onClick}
+        classes={{
+          root: classes.root
+        }}
+      >
+        <SvgIcon path={mdiPlus} />
+        Create
+      </Button>
+    </div>
   )
 }

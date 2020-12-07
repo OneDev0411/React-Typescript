@@ -245,7 +245,7 @@ export default function AgentNetwork({ location, params }: Props) {
 
   return (
     <div style={{ margin: theme.spacing(5) }}>
-      <GlobalHeader noGlobalActionsButton noPadding>
+      <GlobalHeader noPadding>
         <Flex
           column
           style={{

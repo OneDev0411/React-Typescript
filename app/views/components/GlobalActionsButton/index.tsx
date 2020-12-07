@@ -1,7 +1,14 @@
-import React, { MouseEvent, useState } from 'react'
+import React, { MouseEvent, useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
+
+import { noop } from 'utils/helpers'
+import {
+  hasUserAccessToCrm,
+  hasUserAccessToDeals,
+  hasUserAccessToMarketingCenter
+} from 'utils/user-teams'
 
 import { Item, ItemType } from './types'
 import Button from './Button'
@@ -9,24 +16,48 @@ import items from './items'
 import Menu from './Menu'
 
 interface Props {
-  onCreateEvent: (event: IEvent) => void
+  onCreateEvent?: (event: IEvent) => void
   onCreateContact?: (contact: IContact) => void
   onCreateAndAddNewContact?: (contact: IContact) => void
-  onCreateEmail: (email: IEmailCampaign) => void
-  onCreateEmailFollowUp: (email: IEvent) => void
-  onCreateTour: (
+  onCreateEmail?: (email: IEmailCampaign) => void
+  onCreateEmailFollowUp?: (email: IEvent) => void
+  onCreateTour?: (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => void
-  onCreateOpenHouse: (
+  onCreateOpenHouse?: (
     oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => void
-  availableActions: ItemType[]
 }
 
-export default function GlobalActionsButton(props: Props) {
-  const user = useSelector((state: IAppState) => state.user as IUser)
+export default function GlobalActionsButton({
+  onCreateEvent = noop,
+  onCreateContact = noop,
+  onCreateAndAddNewContact = noop,
+  onCreateEmail = noop,
+  onCreateEmailFollowUp = noop,
+  onCreateTour = noop,
+  onCreateOpenHouse = noop
+}: Props) {
+  const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [selectedItem, setSelectedItem] = useState<null | Item>(null)
+  const availableItems: Item[] = useMemo(() => {
+    let actions: ItemType[] = []
+
+    if (hasUserAccessToCrm(user)) {
+      actions.push('email', 'event', 'contact', 'tour')
+    }
+
+    if (hasUserAccessToDeals(user)) {
+      actions.push('deal')
+    }
+
+    if (hasUserAccessToCrm(user) && hasUserAccessToMarketingCenter(user)) {
+      actions.push('openhouse')
+    }
+
+    return items.filter(item => actions.includes(item.type))
+  }, [user])
 
   const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -46,26 +77,26 @@ export default function GlobalActionsButton(props: Props) {
   }
 
   const handleSubmitEvent = (event: IEvent) => {
-    props.onCreateEvent(event)
+    onCreateEvent(event)
     handleCloseRenderedItem()
   }
 
   const handleSubmitEmail = (email: IEmailCampaign) => {
-    props.onCreateEmail(email)
+    onCreateEmail(email)
     handleCloseRenderedItem()
   }
 
   const handleSubmitTour = (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {
-    props.onCreateTour(tour)
+    onCreateTour(tour)
     handleCloseRenderedItem()
   }
 
   const handleSubmitOpenHouse = (
     oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {
-    props.onCreateOpenHouse(oh)
+    onCreateOpenHouse(oh)
     handleCloseRenderedItem()
   }
 
@@ -78,7 +109,7 @@ export default function GlobalActionsButton(props: Props) {
       case 'email':
         return selectedItem.render({
           isOpen: true,
-          followUpCallback: props.onCreateEmailFollowUp,
+          followUpCallback: onCreateEmailFollowUp,
           onClose: handleCloseRenderedItem,
           onSent: handleSubmitEmail
         })
@@ -96,8 +127,8 @@ export default function GlobalActionsButton(props: Props) {
           user,
           isOpen: true,
           onClose: handleCloseRenderedItem,
-          saveCallback: props.onCreateContact,
-          saveAndAddNewCallback: props.onCreateAndAddNewContact
+          saveCallback: onCreateContact,
+          saveAndAddNewCallback: onCreateAndAddNewContact
         })
 
       case 'deal':
@@ -122,10 +153,6 @@ export default function GlobalActionsButton(props: Props) {
         })
     }
   }
-
-  const availableItems = items.filter(item =>
-    props.availableActions.includes(item.type)
-  )
 
   // If no items are available, we should not render the button at all
   if (availableItems.length === 0) {
