@@ -26,6 +26,10 @@ export function TableActions({ user, listing, agents }: Props) {
     state.selection.selectedRowIds
   )
 
+  const selectedAgentsWithEmailAddress = selectedAgents.filter(
+    agent => !!agent.email
+  )
+
   return (
     <Grid container justify="space-between">
       <Grid item>
@@ -38,7 +42,7 @@ export function TableActions({ user, listing, agents }: Props) {
           <PromoteListing
             user={user}
             listing={listing}
-            agents={selectedAgents}
+            agents={selectedAgentsWithEmailAddress}
           />
         </Grid>
       )}
