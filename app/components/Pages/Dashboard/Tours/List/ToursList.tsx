@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
+import { useEffectOnce } from 'react-use'
 
 import { Box } from '@material-ui/core'
 
@@ -15,6 +16,8 @@ import { TourDrawer } from 'components/tour/TourDrawer'
 import { TourSheets } from 'components/tour/TourSheets'
 
 import { RenderProps } from 'components/Grid/Table/types'
+import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
+import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
 
 import EmptyState from './EmptyState'
 
@@ -27,6 +30,8 @@ import Actions from './columns/Actions'
 type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
 function ToursList(props: { user: IUser }) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [state, dispatch] = useGlobalActionContext()
   const gridClasses = useGridStyles()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
@@ -45,6 +50,15 @@ function ToursList(props: { user: IUser }) {
     CRMTaskAssociation,
     CRMTaskAssociationType
   > | null>(null)
+
+  useEffectOnce(() => {
+    dispatch({
+      type: SET_CREATE_CALLBACK_HANDLER,
+      handlers: {
+        onCreateTour: reloadList
+      }
+    })
+  })
 
   const handleEdit = (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
@@ -162,7 +176,7 @@ function ToursList(props: { user: IUser }) {
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header title="Tours" onCreateTour={reloadList} />
+        <PageLayout.Header title="Tours" />
 
         <PageLayout.Main>
           <Box>

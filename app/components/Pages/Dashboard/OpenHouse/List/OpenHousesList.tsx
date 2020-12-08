@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet'
 import { Alert } from '@material-ui/lab'
 import { Box, Link, IconButton, Theme, makeStyles } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
+import { useEffectOnce } from 'react-use'
 
 import { ACL } from 'constants/acl'
 import { IAppState } from 'reducers'
@@ -19,6 +20,8 @@ import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
+import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
+import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
 
 import EmptyState from './EmptyState'
 import Avatar from './columns/Avatar'
@@ -53,6 +56,8 @@ const useAlertStyles = makeStyles(
 function OpenHousesList() {
   useAlertStyles()
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [state, dispatch] = useGlobalActionContext()
   const gridClasses = useGridStyles()
 
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
@@ -78,6 +83,15 @@ function OpenHousesList() {
     CRMTaskAssociationType
   > | null>(null)
   const [associations, setAssociations] = useState<Associations | null>(null)
+
+  useEffectOnce(() => {
+    dispatch({
+      type: SET_CREATE_CALLBACK_HANDLER,
+      handlers: {
+        onCreateOpenHouse: reloadList
+      }
+    })
+  })
 
   const handleEdit = (
     openHouse: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
@@ -212,10 +226,7 @@ function OpenHousesList() {
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header
-          title="Open House Registration Pages"
-          onCreateOpenHouse={reloadList}
-        />
+        <PageLayout.Header title="Open House Registration Pages" />
         <PageLayout.Main>
           <Box>
             {showNotifyOfficeBanner && (
