@@ -75,7 +75,7 @@ export default function MenuItem({ item, onClick }: Props) {
       </ListItemIcon>
       <ListItemText
         primary={item.title}
-        primaryTypographyProps={{ variant: 'body2' }}
+        primaryTypographyProps={{ variant: 'body1' }}
       />
       <ListItemIcon
         className={cn(

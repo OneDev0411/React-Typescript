@@ -61,11 +61,11 @@ interface SidenavLinkPorps extends LinkProps {
 const linkStyle = css`
   display: inline-block;
   font-size: ${(props: ThemeProps<Theme>) =>
-    props.theme.typography.body2.fontSize};
+    props.theme.typography.body1.fontSize};
   line-height: ${(props: ThemeProps<Theme>) =>
-    props.theme.typography.body2.lineHeight};
+    props.theme.typography.body1.lineHeight};
   font-weight: ${(props: ThemeProps<Theme>) =>
-    props.theme.typography.body2.fontWeight};
+    props.theme.typography.body1.fontWeight};
   ${itemStyle}
 `
 
