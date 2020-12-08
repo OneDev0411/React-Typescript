@@ -16,9 +16,9 @@ export function useAppcues() {
 
   useEffect(() => {
     if (!pathname) {
-      return
     }
 
     window.Appcues.page()
+    window.Appcues.identify('0000', { firstName: 'Mohsen' })
   }, [pathname])
 }
