@@ -41,7 +41,7 @@ class SearchListingDrawer extends React.Component {
         Object.keys(items).map(async key => {
           const item = items[key]
 
-          if (item.gallery_image_urls) {
+          if (item.type === 'listing') {
             return item
           }
 
