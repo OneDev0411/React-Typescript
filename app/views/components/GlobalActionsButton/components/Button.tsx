@@ -29,6 +29,7 @@ export default function GlobalActionsMenu({ onClick }: Props) {
       <Button
         variant="contained"
         color="primary"
+        size="small"
         fullWidth
         onClick={onClick}
         classes={{

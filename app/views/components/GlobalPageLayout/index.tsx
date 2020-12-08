@@ -11,7 +11,7 @@ interface Props extends BoxProps {
   children: React.ReactNode
 }
 
-const GlobalPageLayout = ({ gutter = 5, ...props }: Props) => {
+const GlobalPageLayout = ({ gutter = 4, ...props }: Props) => {
   return <Box p={gutter} {...props} />
 }
 

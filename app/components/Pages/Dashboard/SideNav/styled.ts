@@ -37,7 +37,7 @@ const itemStyle = css`
   border-left: 4px solid transparent;
   color: ${(props: ThemeProps<Theme>) =>
     props.theme.palette.primary.contrastText};
-
+  opacity: 0.7;
   &:hover,
   &:focus {
     text-decoration: none;
@@ -47,6 +47,7 @@ const itemStyle = css`
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>
     active &&
     css`
+      opacity: 1;
       color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.light};
       border-left-color: ${(props: ThemeProps<Theme>) =>
         props.theme.palette.primary.light};
@@ -60,9 +61,11 @@ interface SidenavLinkPorps extends LinkProps {
 const linkStyle = css`
   display: inline-block;
   font-size: ${(props: ThemeProps<Theme>) =>
-    props.theme.typography.body1.fontSize};
+    props.theme.typography.body2.fontSize};
   line-height: ${(props: ThemeProps<Theme>) =>
-    props.theme.typography.body1.lineHeight};
+    props.theme.typography.body2.lineHeight};
+  font-weight: ${(props: ThemeProps<Theme>) =>
+    props.theme.typography.body2.fontWeight};
   ${itemStyle}
 `
 

@@ -12,6 +12,7 @@ import {
 import { mdiPlus } from '@mdi/js'
 
 import { SvgIcon } from '../../SvgIcons/SvgIcon'
+
 import { useIconStyles } from '../../../../styles/use-icon-styles'
 import { Item } from '../types'
 
@@ -74,7 +75,7 @@ export default function MenuItem({ item, onClick }: Props) {
       </ListItemIcon>
       <ListItemText
         primary={item.title}
-        primaryTypographyProps={{ variant: 'body1' }}
+        primaryTypographyProps={{ variant: 'body2' }}
       />
       <ListItemIcon
         className={cn(

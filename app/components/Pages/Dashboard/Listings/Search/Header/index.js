@@ -17,7 +17,7 @@ const useStyles = makeStyles(
       [theme.breakpoints.up('md')]: {
         display: 'flex',
         paddingBottom: 0,
-        height: theme.spacing(15)
+        height: theme.spacing(14)
       }
     },
     body: {

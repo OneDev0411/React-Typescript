@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexFlow: 'column',
       height: '100vh',
       maxHeight: '100vh',
-      padding: theme.spacing(5),
+      padding: theme.spacing(4),
       paddingBottom: 0
     },
     topSide: {
