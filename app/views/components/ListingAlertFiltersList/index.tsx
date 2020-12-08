@@ -1,6 +1,6 @@
 import React, { ReactNode, MouseEvent, useState, useEffect } from 'react'
 import pluralize from 'pluralize'
-import { Button, Grid } from '@material-ui/core'
+import { Button, Grid, Box } from '@material-ui/core'
 import noop from 'lodash/noop'
 
 interface AlertFilterData<T> {
@@ -57,20 +57,16 @@ export default function ListingAlertFiltersList({
   }, [filters])
 
   return (
-    <Grid
-      container
-      spacing={1}
-      direction="row"
-      alignItems="center"
-      justify="flex-end"
-    >
+    <Grid container direction="row" alignItems="center" justify="flex-end">
       {Object.entries(filtersKeyValueMap)
         .slice(0, limit)
         .map(([key, value]) => (
           <Grid item key={key}>
-            <Button variant="text" onClick={onClick}>
-              {key}: {value}
-            </Button>
+            <Box pr={1}>
+              <Button variant="text" onClick={onClick}>
+                {key}: {value}
+              </Button>
+            </Box>
           </Grid>
         ))}
       {children}
