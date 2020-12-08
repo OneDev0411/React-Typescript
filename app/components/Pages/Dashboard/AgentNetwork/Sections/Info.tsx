@@ -69,7 +69,7 @@ export default function Info() {
           </div>
           <Typography variant="h6">Select Top Agents</Typography>
           <Typography variant="body2">
-            Set filters like price, beds, baths to find better results.
+            Set a radius filter to see most relevant results.
           </Typography>
         </Grid>
         <Hidden smDown>
