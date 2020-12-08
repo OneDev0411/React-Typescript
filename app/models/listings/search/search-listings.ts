@@ -2,7 +2,7 @@ import Fetch from '../../../services/fetch'
 
 export async function searchListings(
   text: string,
-  query: string | object
+  query: string | object = {}
 ): Promise<ApiResponseBody<ICompactListing[]>> {
   try {
     const response = await new Fetch()

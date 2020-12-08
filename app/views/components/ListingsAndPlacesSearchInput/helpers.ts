@@ -6,7 +6,7 @@ import { ListingResult, PlaceResult, SearchResult } from './types'
 export async function searchListingsAndPlaces(
   query: string
 ): Promise<SearchResult[]> {
-  const listingsResponse = await searchListings(query, { limit: 5 })
+  const listingsResponse = await searchListings(query, { limit: 10 })
   const placesResponse = await getPlaces(query)
 
   return [
@@ -14,7 +14,7 @@ export async function searchListingsAndPlaces(
       type: 'listing',
       listing
     })),
-    ...placesResponse.slice(0, 5).map<PlaceResult>(place => ({
+    ...placesResponse.slice(0, 10).map<PlaceResult>(place => ({
       type: 'place',
       place
     }))

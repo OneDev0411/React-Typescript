@@ -5,9 +5,10 @@ import {
   ListItemAvatar,
   ListItemText,
   Avatar,
-  makeStyles,
   InputAdornment,
-  TextField
+  TextField,
+  makeStyles,
+  Theme
 } from '@material-ui/core'
 import Autocomplete, {
   AutocompleteRenderInputParams
@@ -22,11 +23,14 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { searchListingsAndPlaces } from './helpers'
 import { SearchResult } from './types'
 
-const useStyles = makeStyles(
+const useStyles = makeStyles<Theme, { inputValue: string }>(
   () => ({
     listBox: {
-      maxHeight: 'initial'
-    }
+      maxHeight: 300
+    },
+    popper: ({ inputValue }) => ({
+      display: inputValue === '' ? 'none' : 'block'
+    })
   }),
   {
     name: 'ListingsAndPlacesSearchInput'
@@ -42,12 +46,12 @@ export default function ListingsAndPlacesSearchInput({
   placeholder = 'Search address or MLS#',
   onSelect
 }: Props) {
-  const classes = useStyles()
+  const [inputValue, setInputValue] = useState<string>('')
+  const classes = useStyles({ inputValue })
 
   const [options, setOptions] = useState<SearchResult[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const [inputValue, setInputValue] = useState<string>('')
   const [value, setValue] = useState<Nullable<SearchResult>>(null)
 
   const [debouncedHandleInputChange] = useDebouncedCallback(
@@ -176,7 +180,8 @@ export default function ListingsAndPlacesSearchInput({
       forcePopupIcon={false}
       noOptionsText="No Results"
       classes={{
-        listbox: classes.listBox
+        listbox: classes.listBox,
+        popper: classes.popper
       }}
       loading={isLoading}
       options={options}
