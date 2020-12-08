@@ -8,8 +8,7 @@ export function getSelectedAgents(
     return []
   }
 
-  // Sometimes an agent can have a null id and email
-  // in this cases we need to make sure filtering them out
+  // Sometimes an agent can have a null id!
   return agentsData
     .filter(item => item.id && selectedRows.includes(item.id))
     .map(({ agent }) => agent)
