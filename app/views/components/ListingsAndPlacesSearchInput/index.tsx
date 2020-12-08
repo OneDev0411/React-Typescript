@@ -184,6 +184,7 @@ export default function ListingsAndPlacesSearchInput({
       getOptionSelected={getOptionSelected}
       groupBy={option => (option.type === 'listing' ? 'Listings' : 'Places')}
       value={value}
+      filterOptions={option => option}
       ListboxComponent={List}
       renderInput={renderInput}
       renderOption={renderOption}
