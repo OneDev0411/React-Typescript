@@ -7,6 +7,9 @@ import { Box, IconButton } from '@material-ui/core'
 import { mdiClose, mdiLoading } from '@mdi/js'
 
 import PageLayout from 'components/GlobalPageLayout'
+import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
+import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
+
 import { ViewAs } from 'components/ViewAs'
 
 import { confirmation } from 'actions/confirmation'
@@ -85,6 +88,10 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
+    const globalButtonDispatch = this.context
+
+    console.log('GlobalButtonDispatch', globalButtonDispatch)
+
     const { parkedContactsCount } = this.state
     const { user, fetchOAuthAccounts, fetchTags, getContactsTags } = this.props
 
@@ -93,6 +100,16 @@ class ContactsList extends React.Component {
     fetchOAuthAccounts()
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
+
+    if (globalButtonDispatch) {
+      globalButtonDispatch({
+        type: SET_CREATE_CALLBACK_HANDLER,
+        handlers: {
+          onCreateContact: this.onCreateContact,
+          onCreateAndAddNewContact: this.onCreateContact
+        }
+      })
+    }
 
     if (!parkedContactsCount) {
       this.getParkedContactCount()
@@ -725,10 +742,6 @@ class ContactsList extends React.Component {
     const showImportAction = this.shouldShowImportAndCreateActions()
     const activeTag = this.getActiveTag()
 
-    // TODO: update global action btn callback (HeaderWithSearch)
-    /*
-      onCreateAndAddNewContact={this.onCreateContact}
-    */
     return (
       <PageLayout>
         <PageLayout.HeaderWithSearch
@@ -879,6 +892,8 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
     viewAsUsers: viewAs(user)
   }
 }
+
+ContactsList.contextType = GlobalButtonDispatch
 
 export default withRouter(
   connect(mapStateToProps, {
