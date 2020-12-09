@@ -4,7 +4,6 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const S3Plugin = require('webpack-s3-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const SentryCliPlugin = require('@sentry/webpack-plugin');
@@ -47,7 +46,6 @@ const config = {
       filename: 'sourcemaps/[name][hash].js.map'
     }),
     new MomentLocalesPlugin(),
-    new MiniCssExtractPlugin(),
     new OptimizeCSSAssetsPlugin(),
     new CompressionPlugin({
       test: /\.js$|\.css$/,
@@ -97,15 +95,14 @@ const config = {
       {
         test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
           'style-loader',
           'css-loader',
-//           {
-//             loader: 'postcss-loader',
-//             options: {
-//               postcssOptions
-//             }
-//           }
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions
+            }
+          }
         ]
       },
       {
