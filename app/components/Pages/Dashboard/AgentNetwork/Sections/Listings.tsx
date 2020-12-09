@@ -58,7 +58,7 @@ export default function Listings({
               </Box>
               <Typography variant="h5" align="center">
                 You don't have any listings. <br />
-                You can try searching an area or a listing.
+                You can try searching an address or a listing.
               </Typography>
             </Grid>
           )}
