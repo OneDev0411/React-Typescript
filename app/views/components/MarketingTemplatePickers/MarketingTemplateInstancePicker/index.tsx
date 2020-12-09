@@ -58,7 +58,7 @@ export default function MarketingTemplateInstancePicker({
         alignItems="center"
         justify="center"
       >
-        <Box my={2}>
+        <Box my={2} pt={10}>
           <img
             src="/static/images/contacts/zero-state.svg"
             alt="houston"
