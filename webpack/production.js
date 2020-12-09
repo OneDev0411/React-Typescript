@@ -97,15 +97,15 @@ const config = {
       {
         test: /\.css$/,
         use: [
-//           MiniCssExtractPlugin.loader,
+          MiniCssExtractPlugin.loader,
           'style-loader',
           'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions
-            }
-          }
+//           {
+//             loader: 'postcss-loader',
+//             options: {
+//               postcssOptions
+//             }
+//           }
         ]
       },
       {
