@@ -97,20 +97,21 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.(sa|sc|c)ss$/,
+        test: /\.css/,
         use: [
-          MiniCssExtractPlugin.loader,
           'style-loader',
           'css-loader',
-          'sass-loader',
           {
             loader: 'postcss-loader',
             options: {
               postcssOptions
             }
-          },
-
+          }
         ]
+      },
+      {
+        test: /\.scss/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
   }
