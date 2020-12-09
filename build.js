@@ -1,10 +1,9 @@
-import path from 'path'
+const path = require('path')
 
-import fs from 'fs-extra'
-import webpack from 'webpack'
-import colors from 'colors'
+const fs = require('fs-extra')
+const webpack = require('webpack')
 
-import config from './webpack.config.babel'
+const config = require('./webpack')
 
 async function run() {
   console.log('[ + ] Start compiling')
@@ -36,14 +35,18 @@ function compile() {
 
       if (jsonStats.errors.length > 0) {
         console.log('[ * ] Webpack compiler encountered errors.'.red)
-        console.log(colors.red(jsonStats.errors.join('\n')))
+        jsonStats.errors.forEach(err => {
+          console.log(err)
+        })
 
         return reject(new Error('Webpack compiler encountered errors'))
       }
 
       if (jsonStats.warnings.length > 0) {
         console.log('[ ! ] Webpack compiler encountered warnings.'.yellow)
-        console.log(colors.yellow(jsonStats.warnings.join('\n')))
+        jsonStats.warnings.forEach(warning => {
+          console.log(warning.message)
+        })
       }
 
       return resolve(jsonStats)
