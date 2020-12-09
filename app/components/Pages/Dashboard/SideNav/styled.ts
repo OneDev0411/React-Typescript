@@ -1,7 +1,7 @@
 import { Link as RouterLink, LinkProps } from 'react-router'
 import styled, { ThemeProps, css } from 'styled-components'
 import { Badge, Link } from '@material-ui/core'
-import { Theme, withStyles } from '@material-ui/core/styles'
+import { Theme, withStyles, fade } from '@material-ui/core/styles'
 
 import { appSidenavWidth, backgroundColor } from './variables'
 
@@ -36,8 +36,7 @@ const itemStyle = css`
   border-radius: 0;
   border-left: 4px solid transparent;
   color: ${(props: ThemeProps<Theme>) =>
-    props.theme.palette.primary.contrastText};
-  opacity: 0.7;
+    fade(props.theme.palette.primary.contrastText, 0.7)};
   &:hover,
   &:focus {
     text-decoration: none;
@@ -47,7 +46,6 @@ const itemStyle = css`
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>
     active &&
     css`
-      opacity: 1;
       color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.light};
       border-left-color: ${(props: ThemeProps<Theme>) =>
         props.theme.palette.primary.light};

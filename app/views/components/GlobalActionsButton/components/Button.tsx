@@ -36,7 +36,7 @@ export default function GlobalActionsMenu({ onClick }: Props) {
           root: classes.root
         }}
       >
-        <SvgIcon path={mdiPlus} />
+        <SvgIcon path={mdiPlus} rightMargined />
         Create
       </Button>
     </div>
