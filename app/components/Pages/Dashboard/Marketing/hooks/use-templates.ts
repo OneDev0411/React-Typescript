@@ -26,7 +26,7 @@ export function useTemplates(
   templateTypes: IMarketingTemplateType[] = []
 ): TemplatesData {
   const [templates, setTemplates] = useState<IBrandMarketingTemplate[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
   useDeepCompareEffect(() => {

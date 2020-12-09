@@ -20,7 +20,7 @@ export function useTemplatesHistory({
   templateTypes
 }: TemplatesHistoryOptions = {}): TemplatesHistory {
   const [templates, setTemplates] = useState<IMarketingTemplateInstance[]>([])
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
