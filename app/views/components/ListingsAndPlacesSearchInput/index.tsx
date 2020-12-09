@@ -52,7 +52,7 @@ export default function ListingsAndPlacesSearchInput({
   const [options, setOptions] = useState<SearchResult[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const [value, setValue] = useState<Nullable<SearchResult>>(null)
+  const [value, setValue] = useState<Optional<SearchResult>>(undefined)
 
   const [debouncedHandleInputChange] = useDebouncedCallback(
     (event: unknown, newInputValue: string) => {
@@ -176,6 +176,7 @@ export default function ListingsAndPlacesSearchInput({
   return (
     <Autocomplete<SearchResult, false, true>
       fullWidth
+      disableClearable
       clearOnBlur={false}
       forcePopupIcon={false}
       noOptionsText="No Results"
