@@ -95,7 +95,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.css/,
+        test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
           'style-loader',
@@ -109,7 +109,7 @@ const config = {
         ]
       },
       {
-        test: /\.scss/,
+        test: /\.scss$/,
         use: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
