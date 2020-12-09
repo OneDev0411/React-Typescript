@@ -23,7 +23,10 @@ const config = {
   devtool: false,
   output: {
     pathinfo: false,
-    publicPath: process.env.ASSETS_BASEURL
+    publicPath: process.env.ASSETS_BASEURL,
+//     chunkFilename: 'chunk_[name].[id].[contenthash][ext]',
+//     filename: 'file_[name].[id].[contenthash][ext]',
+//     assetModuleFilename: 'asset_[id][base]',
   },
   optimization: {
     minimize: true,
@@ -51,45 +54,47 @@ const config = {
     new CompressionPlugin({
       test: /\.(css|js)$/,
       filename: '[path][base]',
-      deleteOriginalAssets: 'keep-source-map'
+      deleteOriginalAssets: 'keep-source-map',
+      minRatio: 0, // S3 Upload Plugin will mark them all as gz
+      threshold: 0 // and expect them all to be gzipped
     }),
-    new SentryCliPlugin({
-      release: process.env.CI_COMMIT_REF_SLUG || 'unknown',
-      include: 'dist/sourcemaps/',
-      urlPrefix: process.env.ASSETS_BASEURL,
-    }),
-    new S3Plugin({
-      progress: false, // Messes the terminal up
-      exclude: /\.(html|map)$/,
-      basePath: 'dist/',
-      s3Options: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        region: process.env.ASSETS_REGION
-      },
-      s3UploadOptions: {
-        Bucket: process.env.ASSETS_BUCKET,
-        Expires: moment().utc().add('1', 'month').toDate(),
-        ContentEncoding(fileName) {
-          if (/\.(css|js)$/.test(fileName)) {
-            return 'gzip'
-          }
-        },
-
-        ContentType(fileName) {
-          if (/\.js$/.test(fileName)) {
-            return 'application/javascript'
-          }
-
-          if (/\.css$/.test(fileName)) {
-            return 'text/css'
-          }
-
-          return 'text/plain'
-        }
-      },
-      noCdnizer: true
-    })
+//     new SentryCliPlugin({
+//       release: process.env.CI_COMMIT_REF_SLUG || 'unknown',
+//       include: 'dist/sourcemaps/',
+//       urlPrefix: process.env.ASSETS_BASEURL,
+//     }),
+//     new S3Plugin({
+//       progress: false, // Messes the terminal up
+//       exclude: /\.(html|map)$/,
+//       basePath: 'dist/',
+//       s3Options: {
+//         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//         region: process.env.ASSETS_REGION
+//       },
+//       s3UploadOptions: {
+//         Bucket: process.env.ASSETS_BUCKET,
+//         Expires: moment().utc().add('1', 'month').toDate(),
+//         ContentEncoding(fileName) {
+//           if (/\.(css|js)$/.test(fileName)) {
+//             return 'gzip'
+//           }
+//         },
+//
+//         ContentType(fileName) {
+//           if (/\.js$/.test(fileName)) {
+//             return 'application/javascript'
+//           }
+//
+//           if (/\.css$/.test(fileName)) {
+//             return 'text/css'
+//           }
+//
+//           return 'text/plain'
+//         }
+//       },
+//       noCdnizer: true
+//     })
   ],
   module: {
     rules: [
