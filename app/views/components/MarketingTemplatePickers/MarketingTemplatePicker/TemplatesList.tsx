@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Grid, makeStyles } from '@material-ui/core'
+import { Box, Grid, Typography, makeStyles } from '@material-ui/core'
 
 import { useInfinitePagination } from 'hooks/use-infinite-pagination'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -55,7 +55,13 @@ export default function TemplatesList({
 
   if (!isLoading && templates.length === 0) {
     return (
-      <Grid container alignItems="center" justify="center">
+      <Grid
+        container
+        item
+        direction="column"
+        alignItems="center"
+        justify="center"
+      >
         <Box my={2}>
           <img
             src="/static/images/contacts/zero-state.svg"
@@ -63,6 +69,9 @@ export default function TemplatesList({
             style={{ marginBottom: '1rem' }}
           />
         </Box>
+        <Typography variant="h5" align="center">
+          You don't have any templates here yet!
+        </Typography>
       </Grid>
     )
   }

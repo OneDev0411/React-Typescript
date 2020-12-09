@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Box, makeStyles } from '@material-ui/core'
+import { Grid, Box, Typography, makeStyles } from '@material-ui/core'
 
 import { useInfinitePagination } from 'hooks/use-infinite-pagination'
 
@@ -51,7 +51,13 @@ export default function MarketingTemplateInstancePicker({
 
   if (!isLoading && templates.length === 0) {
     return (
-      <Grid container alignItems="center" justify="center">
+      <Grid
+        container
+        item
+        direction="column"
+        alignItems="center"
+        justify="center"
+      >
         <Box my={2}>
           <img
             src="/static/images/contacts/zero-state.svg"
@@ -59,6 +65,9 @@ export default function MarketingTemplateInstancePicker({
             style={{ marginBottom: '1rem' }}
           />
         </Box>
+        <Typography variant="h5" align="center">
+          You don't have any templates here yet!
+        </Typography>
       </Grid>
     )
   }
