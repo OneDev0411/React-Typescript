@@ -1,84 +1,31 @@
 // @ts-nocheck
-import merge from 'webpack-merge'
+const { merge } = require('webpack-merge')
+const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
+const Webpackbar = require('webpackbar')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
-import ForkTsCheckerNotifierWebpackPlugin from 'fork-ts-checker-notifier-webpack-plugin'
-import Webpackbar from 'webpackbar'
+const common = require('./base')
 
-// import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
-
-import UnusedFilesWebpackPlugin from 'unused-files-webpack-plugin'
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
-
-import common from './base'
-
-const postcss = function postcss() {
-  return [
-    require('postcss-cssnext')({
-      features: {
-        rem: false
-      }
-    }),
-    require('postcss-browser-reporter')({}),
-    require('postcss-reporter')({})
+const postcssOptions = {
+  plugins: [
+    require('postcss-preset-env')(),
+    require('postcss-browser-reporter')(),
+    require('postcss-reporter')()
   ]
 }
 
 const config = {
   mode: 'development',
-  entry: ['@babel/polyfill'],
   output: {
     filename: '[name].bundle.js',
     publicPath: '/'
   },
   plugins: [
-    new UnusedFilesWebpackPlugin({
-      patterns: ['app/**/*.+(css|js|jsx|ts|tsx)'],
-      globOptions: {
-        ignore: [
-          // Tests
-          // Somehow, it seems the ts test files look unused here
-          'app/**/*.test.+(js|jsx|ts|tsx)',
-
-          // Our TS interface ONLY name convention
-          // It somehow thinks they are unused when they only export interfaces :/
-          'app/**/types.ts',
-
-          // Static directory
-          // This plugin thinks some CSS files there are unused but they aren't
-          'app/static/**',
-
-          // All icons
-          // We got a lot of unused ones
-          // TODO: Do something about icons and remove unused ones
-          'app/views/components/SvgIcons/**',
-
-          // Used in server directory which is out of webpack
-          'app/models/user/get-self/index.js',
-
-          // Mostly bootstrap and other 3rd party stuff
-          // TODO: Get rid of these too if it's possible
-          'app/styles/vendor/**',
-
-          'app/models/contacts/get-contacts-job/index.js',
-          'app/models/contacts/get-duplicates-contacts/index.js',
-          'app/models/contacts/merge-multiple-contatcs/index.js',
-          'app/models/contacts/get-conact-cluster-duplicates/index.js',
-          'app/components/Pages/Dashboard/Contacts/DuplicateContacts/**',
-          'app/components/Pages/Dashboard/Contacts/components/DuplicateContacts/index.js',
-
-          // Flows stuff
-          // TODO: remove them from here when we enabled flows
-          'app/models/flows/**',
-          'app/views/components/AddToFlow/**',
-          'app/components/Pages/Dashboard/Contacts/Profile/Flows/**',
-          'app/components/Pages/Dashboard/Contacts/List/Filters/helpers/get-flows.js'
-        ]
-      }
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false
     }),
-    // new BundleAnalyzerPlugin({
-    //   analyzerMode: 'static',
-    //   openAnalyzer: false
-    // }),
     new Webpackbar(),
     new ForkTsCheckerNotifierWebpackPlugin({ alwaysNotify: false }),
     new ForkTsCheckerWebpackPlugin({
@@ -91,8 +38,13 @@ const config = {
        * Syntactic errors are checked by babel too, so we turn it off for a small
        * performance gain.
        */
-      checkSyntacticErrors: false,
-      useTypescriptIncrementalApi: true
+      typescript: {
+        useTypescriptIncrementalApi: true,
+
+        diagnosticOptions: {
+          syntactic: true
+        }
+      }
     })
   ],
   module: {
@@ -105,27 +57,17 @@ const config = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: postcss
+              postcssOptions
             }
           }
         ]
       },
       {
         test: /\.scss/,
-        use: [
-          'style-loader',
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: postcss
-            }
-          },
-          'sass-loader'
-        ]
+        use: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
   }
 }
 
-export default merge(common, config)
+module.exports = merge(common, config)

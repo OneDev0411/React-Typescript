@@ -47,7 +47,7 @@ app.use(haltOnTimedout)
 app.use(history())
 
 if (isDevelopment) {
-  const config = require('../webpack/development').default
+  const config = require('../webpack/development')
   const compiler = webpack(config)
 
   app.use(

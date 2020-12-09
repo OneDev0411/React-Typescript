@@ -1,9 +1,8 @@
-import path from 'path'
+const path = require('path')
 
-import webpack from 'webpack'
-
-import HtmlWebpackPlugin from 'html-webpack-plugin'
-import { ESBuildPlugin } from 'esbuild-loader'
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { ESBuildPlugin } = require('esbuild-loader')
 
 const env = process.env.NODE_ENV || 'development'
 const __DEV__ = env === 'development'
@@ -18,7 +17,7 @@ const ESBUILD_COMMON_OPTIONS = {
   sourcemap: false
 }
 
-export default {
+module.exports = {
   devtool: 'eval-source-map',
   entry: {
     app: path.resolve(__dirname, '../app/index.js')
@@ -54,7 +53,12 @@ export default {
       crm: resolvePath('../app/components/Pages/Dashboard/Contacts'),
       animations: resolvePath('../app/animations'),
       fixtures: resolvePath('../tests/unit/fixtures')
-    }
+    },
+    fallback: {
+      path: require.resolve('path-browserify'),
+      buffer: require.resolve('buffer')
+    },
+    roots: [resolvePath('../app')]
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -108,6 +112,12 @@ export default {
   },
   module: {
     rules: [
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
@@ -195,7 +205,7 @@ export default {
         ]
       },
       {
-        test: /\.(png|jpg|gif)$/,
+        test: /\.(png|jpg|gif|svg)$/,
         use: [
           {
             loader: 'file-loader'
