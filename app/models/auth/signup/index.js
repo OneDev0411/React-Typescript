@@ -1,4 +1,5 @@
-import Fetch from '../../../services/fetch'
+import Fetch from 'services/fetch'
+
 import { randomString } from '../../../utils/helpers'
 
 const signupShadow = async email => {
@@ -13,8 +14,8 @@ const signupShadow = async email => {
   }
 
   try {
-    const response = await new Fetch({ proxy: true })
-      .post('/users')
+    const response = await new Fetch()
+      .post('/api/users')
       .set({ 'x-auth-mode': 'client_id' })
       .send(user)
 
@@ -24,12 +25,12 @@ const signupShadow = async email => {
       return 202
     }
 
-    return response.statusCode
+    return response.status
   } catch (error) {
     if (error.http) {
       throw error.http
     } else if (error.response) {
-      throw error.response.statusCode
+      throw error.response.status
     }
 
     throw error

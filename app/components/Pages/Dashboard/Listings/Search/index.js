@@ -4,12 +4,27 @@ import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 import memoize from 'lodash/memoize'
 import hash from 'object-hash'
-import { addNotification as notify } from 'reapop'
 
 import { DALLAS_POINTS } from 'constants/listings/dallas-points'
-
 import { putUserSetting } from 'models/user/put-user-setting'
+import getPlace from 'models/listings/search/get-place'
+
+import { loadJS } from 'utils/load-js'
+import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
+import {
+  getBounds,
+  getLocationErrorMessage,
+  normalizeListingLocation
+} from 'utils/map'
+
+import { selectListings } from 'reducers/listings'
+
 import { getUserTeams } from 'actions/user/teams'
+import searchActions from 'actions/listings/search'
+import { setMapProps } from 'actions/listings/map'
+import getListingsByValert from 'actions/listings/search/get-listings/by-valert'
+import { toggleFilterArea } from 'actions/listings/search/filters/toggle-filters-area'
+import { confirmation } from 'actions/confirmation'
 
 import {
   parsSortIndex,
@@ -19,19 +34,6 @@ import {
 } from '../helpers/sort-utils'
 
 import Tabs from '../components/Tabs'
-
-import { loadJS } from '../../../../../utils/load-js'
-import { getBounds, getLocationErrorMessage } from '../../../../../utils/map'
-
-import getPlace from '../../../../../models/listings/search/get-place'
-import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points'
-import { selectListings } from '../../../../../reducers/listings'
-import searchActions from '../../../../../store_actions/listings/search'
-import { setMapProps } from '../../../../../store_actions/listings/map'
-import getListingsByValert from '../../../../../store_actions/listings/search/get-listings/by-valert'
-import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
-import { confirmation } from '../../../../../store_actions/confirmation'
-
 import Map from './components/Map'
 import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
 import MapView from '../components/MapView'
@@ -42,8 +44,6 @@ import {
   addDistanceFromCenterToListing,
   formatListing
 } from '../helpers/format-listing'
-import { normalizeListingLocation } from '../../../../../utils/map'
-
 import { Header } from './Header'
 import CreateTourAction from './components/CreateTourAction'
 
@@ -165,14 +165,10 @@ class Search extends React.Component {
         setOffIsCalculatingLocation()
       },
       error => {
-        this.props.dispatch(
-          notify({
-            message: getLocationErrorMessage(error),
-            status: 'error'
-          })
-        )
+        console.log(getLocationErrorMessage(error))
         setOffIsCalculatingLocation(fetchDallas)
-      }
+      },
+      { timeout: 5000 }
     )
   }
 

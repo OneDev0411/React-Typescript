@@ -1,11 +1,9 @@
-import path from 'path'
+const path = require('path')
 
-import fs from 'fs-extra'
-import webpack from 'webpack'
-import colors from 'colors'
+const fs = require('fs-extra')
+const webpack = require('webpack')
 
-import config from './webpack.config.babel'
-import appConfig from './config/webpack'
+const config = require('./webpack')
 
 async function run() {
   console.log('[ + ] Start compiling')
@@ -17,8 +15,8 @@ async function run() {
   )
 
   fs.copySync(
-    path.join(appConfig.compile.entry, appConfig.compile.publicDirName),
-    path.join(appConfig.compile.output, appConfig.compile.publicDirName)
+    path.join(path.resolve(__dirname, './app'), 'static'),
+    path.join(path.resolve(__dirname, './dist'), 'static')
   )
 
   console.log('[ + ] Static assets are copied'.magenta)
@@ -37,14 +35,18 @@ function compile() {
 
       if (jsonStats.errors.length > 0) {
         console.log('[ * ] Webpack compiler encountered errors.'.red)
-        console.log(colors.red(jsonStats.errors.join('\n')))
+        jsonStats.errors.forEach(err => {
+          console.log(err)
+        })
 
         return reject(new Error('Webpack compiler encountered errors'))
       }
 
       if (jsonStats.warnings.length > 0) {
         console.log('[ ! ] Webpack compiler encountered warnings.'.yellow)
-        console.log(colors.yellow(jsonStats.warnings.join('\n')))
+        jsonStats.warnings.forEach(warning => {
+          console.log(warning.message)
+        })
       }
 
       return resolve(jsonStats)

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useDispatch } from 'react-redux'
-import { addNotification } from 'reapop'
+import { addNotification } from 'components/notification'
 
 import { Button } from '@material-ui/core'
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { Box } from '@material-ui/core'
 

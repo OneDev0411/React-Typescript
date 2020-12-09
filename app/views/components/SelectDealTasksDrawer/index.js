@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
 
 import Flex from 'styled-flex-component'
+
+import { addNotification as notify } from 'components/notification'
 
 import OverlayDrawer from 'components/OverlayDrawer'
 
@@ -193,13 +194,10 @@ function mapStateToProps({ deals, user }, props) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    createFormTask,
-    changeNeedsAttention,
-    moveTaskFile,
-    setExpandChecklist,
-    notify
-  }
-)(TasksDrawer)
+export default connect(mapStateToProps, {
+  createFormTask,
+  changeNeedsAttention,
+  moveTaskFile,
+  setExpandChecklist,
+  notify
+})(TasksDrawer)

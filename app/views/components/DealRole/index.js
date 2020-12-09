@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 import { Form } from 'react-final-form'
 
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'

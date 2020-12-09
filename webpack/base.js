@@ -1,21 +1,32 @@
 const path = require('path')
 
 const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { ESBuildPlugin } = require('esbuild-loader')
 
-const config = require('../config/webpack')
+const env = process.env.NODE_ENV || 'development'
+const __DEV__ = env === 'development'
 
 function resolvePath(dirPath) {
   return path.resolve(__dirname, dirPath)
 }
 
+const ESBUILD_COMMON_OPTIONS = {
+  jsxFactory: 'React.createElement',
+  jsxFragment: 'React.Fragment',
+  sourcemap: false
+}
+
 module.exports = {
   devtool: 'eval-source-map',
-  entry: {},
+  entry: {
+    app: path.resolve(__dirname, '../app/index.js')
+  },
   output: {
-    path: config.compile.output,
-    filename: config.compile.jsBundle,
+    path: path.resolve(__dirname, '../dist'),
+    filename: __DEV__ ? '[name].js' : '[name].[hash].js',
     chunkFilename: '[name].[chunkhash].js',
-    publicPath: config.compile.publicPath,
+    publicPath: '/',
     globalObject: 'this'
   },
   resolve: {
@@ -42,14 +53,104 @@ module.exports = {
       crm: resolvePath('../app/components/Pages/Dashboard/Contacts'),
       animations: resolvePath('../app/animations'),
       fixtures: resolvePath('../tests/unit/fixtures')
-    }
+    },
+    fallback: {
+      path: require.resolve('path-browserify'),
+      buffer: require.resolve('buffer')
+    },
+    roots: [resolvePath('../app')]
   },
-  plugins: [new webpack.DefinePlugin(config.globals)],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, '../app/index.html'),
+      hash: false,
+      filename: './index.html',
+      inject: 'body',
+      minify: {
+        collapseWhitespace: false
+      }
+    }),
+    new ESBuildPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(env),
+        E2E: JSON.stringify(process.env.E2E),
+        APP_URL: JSON.stringify(process.env.APP_URL),
+        RECHAT_API_URL: JSON.stringify(process.env.RECHAT_API_URL),
+        SOCKET_SERVER: JSON.stringify(process.env.SOCKET_SERVER),
+        COSMIC_BUCKET: JSON.stringify(process.env.COSMIC_BUCKET),
+        COSMIC_KEY: JSON.stringify(process.env.COSMIC_KEY),
+        CLOUDFRONT_URL: JSON.stringify(process.env.CLOUDFRONT_URL),
+        IMGIX_URL: JSON.stringify(process.env.IMGIX_URL),
+        BRANCH_KEY: JSON.stringify(process.env.BRANCH_KEY),
+        APP_SHARE_URL: JSON.stringify(process.env.APP_SHARE_URL),
+        GOOGLE_API_KEY: JSON.stringify(process.env.GOOGLE_API_KEY),
+        ITUNES_URL: JSON.stringify(process.env.ITUNES_URL),
+        RECHAT_FORMS_URL: JSON.stringify(process.env.RECHAT_FORMS_URL),
+        RECHAT_STORE_URL: JSON.stringify(process.env.RECHAT_STORE_URL),
+        AWS_ACCESS_KEY: JSON.stringify(process.env.AWS_ACCESS_KEY),
+        AWS_SECRET_ACCESS_KEY: JSON.stringify(
+          process.env.AWS_SECRET_ACCESS_KEY
+        ),
+        ASSETS_BUCKET: JSON.stringify(process.env.ASSETS_BUCKET),
+        ASSETS_BASEURL: JSON.stringify(process.env.ASSETS_BASEURL),
+        FB_APP_ID: JSON.stringify(process.env.FB_APP_ID),
+        RECHAT_SPLITTER_URL: JSON.stringify(process.env.RECHAT_SPLITTER_URL),
+        TENOR_API_KEY: JSON.stringify(process.env.TENOR_API_KEY),
+        UNSPLASH_API_KEY: JSON.stringify(process.env.UNSPLASH_API_KEY),
+        DROPBOX_APP_KEY: JSON.stringify(process.env.DROPBOX_APP_KEY),
+        INTERCOM_APP_ID: JSON.stringify(process.env.INTERCOM_APP_ID)
+      },
+      __DEV__,
+      NODE_ENV: env,
+      __DEBUG__: __DEV__,
+      __PROD__: env === 'production'
+    })
+  ],
   externals: {
     fs: '{}'
   },
   module: {
     rules: [
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'esbuild-loader',
+          options: {
+            ...ESBUILD_COMMON_OPTIONS,
+            loader: 'jsx'
+          }
+        }
+      },
+      {
+        test: /\.ts$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'esbuild-loader',
+          options: {
+            ...ESBUILD_COMMON_OPTIONS,
+            loader: 'ts'
+          }
+        }
+      },
+      {
+        test: /\.tsx$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'esbuild-loader',
+          options: {
+            ...ESBUILD_COMMON_OPTIONS,
+            loader: 'tsx'
+          }
+        }
+      },
       {
         test: /\.woff(\?.*)?$/,
         use: [
@@ -104,7 +205,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|jpg|gif)$/,
+        test: /\.(png|jpg|gif|svg)$/,
         use: [
           {
             loader: 'file-loader'

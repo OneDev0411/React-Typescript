@@ -1,4 +1,4 @@
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { createTask, changeNeedsAttention } from 'actions/deals'
 
@@ -38,9 +38,7 @@ export const createRequestTask = ({
     dispatch(
       notify({
         message: 'Could not finish the request. please try again.',
-        status: 'error',
-        dismissible: true,
-        dismissAfter: 3000
+        status: 'error'
       })
     )
 
@@ -56,9 +54,7 @@ export const createRequestTask = ({
   dispatch(
     notify({
       message: notifyMessage,
-      status: 'success',
-      dismissible: true,
-      dismissAfter: 4000
+      status: 'success'
     })
   )
 

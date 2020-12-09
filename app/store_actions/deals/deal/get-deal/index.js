@@ -1,4 +1,4 @@
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { getById } from '../../../../models/Deal/deal/get-by-id'
 

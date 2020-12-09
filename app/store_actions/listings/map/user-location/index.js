@@ -1,10 +1,9 @@
 import { batchActions } from 'redux-batched-actions'
-import { addNotification as notify } from 'reapop'
 
+import * as types from 'constants/listings/map'
 import { getLocationErrorMessage } from 'utils/map'
-
-import * as types from '../../../../constants/listings/map'
-import { DEFAULT_ZOOM } from '../../../../constants/listings/defaults'
+import { DEFAULT_ZOOM } from 'constants/listings/defaults'
+import { addNotification as notify } from 'components/notification'
 
 import { setMapProps } from '..'
 
@@ -29,17 +28,10 @@ export const getLocation = () => dispatch => {
         ])
       },
       error => {
-        console.log(error)
-        batchActions([
-          dispatch({ type: types.GET_USER_LOCATION_DONE, tabName: 'search' }),
-          dispatch(
-            notify({
-              message: getLocationErrorMessage(error),
-              status: 'error'
-            })
-          )
-        ])
-      }
+        dispatch({ type: types.GET_USER_LOCATION_DONE, tabName: 'search' })
+        console.log(getLocationErrorMessage(error))
+      },
+      { timeout: 5000 }
     )
   } else {
     dispatch(

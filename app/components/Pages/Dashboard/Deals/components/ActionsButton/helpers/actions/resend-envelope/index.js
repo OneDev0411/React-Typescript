@@ -1,4 +1,4 @@
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { confirmation } from 'actions/confirmation'
 import { resendEnvelope as resendEnvelopeDocument } from 'models/Deal/envelope'

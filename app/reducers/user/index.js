@@ -5,6 +5,7 @@ const user = (state = null, action) => {
   switch (action.type) {
     case SIGNIN_SUCCESS:
       return action.user
+
     case actionTypes.FETCH_USER_TEAMS_SUCCESS:
       return {
         ...state,

@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react'
-import { AnyAction } from 'redux'
-import { connect } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
-import { addNotification as notify } from 'reapop'
+
+import { connect, useDispatch } from 'react-redux'
+
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
 import { Typography, Theme, IconButton, MenuItem } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/styles'
 import { mdiDotsHorizontal } from '@mdi/js'
+
+import { addNotification as notify } from 'components/notification'
 
 import Table from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
@@ -66,10 +67,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface Props {
   user: IUser
-  notify: IAsyncActionProp<typeof notify>
 }
 
 function List(props: Props & WithRouterProps) {
+  const dispatch = useDispatch()
   const brand = getActiveTeamId(props.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedFlow, setSelectedFlow] = useState<IBrandFlow | null>(null)
@@ -82,10 +83,12 @@ function List(props: Props & WithRouterProps) {
       const brandId = getActiveTeamId(props.user)
 
       if (brandId === null) {
-        props.notify({
-          message: 'You need to be in a team in order to create a flow',
-          status: 'error'
-        })
+        dispatch(
+          notify({
+            message: 'You need to be in a team in order to create a flow',
+            status: 'error'
+          })
+        )
 
         return
       }
@@ -102,10 +105,12 @@ function List(props: Props & WithRouterProps) {
       })
     } catch (err) {
       console.error(err)
-      props.notify({
-        message: 'Unexpected error happened',
-        status: 'error'
-      })
+      dispatch(
+        notify({
+          message: 'Unexpected error happened',
+          status: 'error'
+        })
+      )
       setIsModalOpen(false)
       setSelectedFlow(null)
     }
@@ -196,10 +201,12 @@ function List(props: Props & WithRouterProps) {
 
                               await deleteBrandFlow(brand, row.id)
                               await reloadFlows()
-                              props.notify({
-                                message: `"${row.name}" Flow deleted.`,
-                                status: 'success'
-                              })
+                              dispatch(
+                                notify({
+                                  message: `"${row.name}" Flow deleted.`,
+                                  status: 'success'
+                                })
+                              )
                             }
                           })
                           break
@@ -271,8 +278,5 @@ function List(props: Props & WithRouterProps) {
 }
 
 const mapStateToProps = ({ user }) => ({ user })
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
-  notify: (...args: Parameters<typeof notify>) => dispatch(notify(...args))
-})
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(List))
+export default connect(mapStateToProps)(withRouter(List))

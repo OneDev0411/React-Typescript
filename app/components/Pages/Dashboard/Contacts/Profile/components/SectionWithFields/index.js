@@ -1,7 +1,7 @@
 import React from 'react'
 import cuid from 'cuid'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 
 import { getContact } from 'models/contacts/get-contact'
 import { addAttributes } from 'models/contacts/add-attributes'

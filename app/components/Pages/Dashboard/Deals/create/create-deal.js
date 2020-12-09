@@ -2,7 +2,7 @@
 
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import { addNotification as notify } from 'components/notification'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import moment from 'moment'

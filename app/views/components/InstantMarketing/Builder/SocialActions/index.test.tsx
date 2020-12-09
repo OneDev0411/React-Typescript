@@ -25,7 +25,7 @@ describe('MC SocialActions component', () => {
     SOCIAL_NETWORKS.map((network, index) => {
       const socialButton = wrapper.childAt(index)
 
-      expect(socialButton.childAt(0).hasClass(network.className)).toBeTruthy()
+      expect(socialButton.childAt(0)).toBeTruthy()
     })
   })
 })
