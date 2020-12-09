@@ -99,6 +99,7 @@ const config = {
       {
         test: /\.css/,
         use: [
+          MiniCssExtractPlugin.loader,
           'style-loader',
           'css-loader',
           {
