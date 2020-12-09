@@ -47,9 +47,7 @@ const config = {
       filename: 'sourcemaps/[name][hash].js.map'
     }),
     new MomentLocalesPlugin(),
-    new MiniCssExtractPlugin({
-      filename: '[name].[hash].css'
-    }),
+    new MiniCssExtractPlugin(),
     new OptimizeCSSAssetsPlugin(),
     new CompressionPlugin({
       test: /\.js$|\.css$/,
