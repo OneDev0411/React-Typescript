@@ -1,4 +1,4 @@
-import React, { RefObject } from 'react'
+import React from 'react'
 import { Box, Grid, makeStyles } from '@material-ui/core'
 
 import { useInfinitePagination } from 'hooks/use-infinite-pagination'
@@ -7,8 +7,9 @@ import { getActiveTeamId } from 'utils/user-teams'
 import LoadingContainer from 'components/LoadingContainer'
 import Masonry from 'components/Masonry'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
+import { MarketingTemplatePickerProps } from 'components/MarketingTemplatePickers/types'
 
-import { useTemplates } from '../../../components/Pages/Dashboard/Marketing/hooks/use-templates'
+import { useTemplates } from '../../../../components/Pages/Dashboard/Marketing/hooks/use-templates'
 
 const useStyles = makeStyles(
   () => ({
@@ -17,25 +18,17 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'MarketingTemplatePicker'
+    name: 'TemplatesList'
   }
 )
 
-interface Props {
-  user: IUser
-  templateTypes?: IMarketingTemplateType[]
-  mediums?: IMarketingTemplateMedium[]
-  containerRef?: RefObject<HTMLElement>
-  onSelect: (template: IBrandMarketingTemplate) => void
-}
-
-export default function MarketingTemplatePicker({
+export default function TemplatesList({
   user,
-  templateTypes = [],
+  templateTypes,
   mediums = [],
   containerRef,
   onSelect
-}: Props) {
+}: MarketingTemplatePickerProps) {
   const classes = useStyles()
   const activeBrand = getActiveTeamId(user)
 
@@ -55,8 +48,20 @@ export default function MarketingTemplatePicker({
   if (isLoading) {
     return (
       <Grid container justify="center">
-        <Box py={10}>
-          <LoadingContainer noPaddings />
+        <LoadingContainer style={{ padding: '20%' }} noPaddings />
+      </Grid>
+    )
+  }
+
+  if (!isLoading && templates.length === 0) {
+    return (
+      <Grid container alignItems="center" justify="center">
+        <Box my={2}>
+          <img
+            src="/static/images/contacts/zero-state.svg"
+            alt="houston"
+            style={{ marginBottom: '1rem' }}
+          />
         </Box>
       </Grid>
     )

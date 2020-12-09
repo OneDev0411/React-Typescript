@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Tabs, Tab } from '@material-ui/core'
 
-import { getTemplateTypeToLabelMapping } from 'hooks/use-marketing-center-sections'
+import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
 
 interface Props {
   types: IMarketingTemplateType[]
@@ -14,8 +14,6 @@ export default function CategoriesTabs({
   selectedType,
   onChange
 }: Props) {
-  const templateTypeToLabelMapping = useMemo(getTemplateTypeToLabelMapping, [])
-
   const handleChange = (event: unknown, newValue: IMarketingTemplateType) => {
     onChange(newValue)
   }
@@ -32,7 +30,7 @@ export default function CategoriesTabs({
         <Tab
           key={templateType}
           value={templateType}
-          label={templateTypeToLabelMapping[templateType] ?? templateType}
+          label={getTemplateTypeLabel(templateType)}
         />
       ))}
     </Tabs>

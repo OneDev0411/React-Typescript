@@ -1,4 +1,4 @@
-import React, { RefObject } from 'react'
+import React from 'react'
 import { Grid, Box, makeStyles } from '@material-ui/core'
 
 import { useInfinitePagination } from 'hooks/use-infinite-pagination'
@@ -6,8 +6,9 @@ import { useInfinitePagination } from 'hooks/use-infinite-pagination'
 import LoadingContainer from 'components/LoadingContainer'
 import Masonry from 'components/Masonry'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
+import { MarketingTemplateInstancePickerProps } from 'components/MarketingTemplatePickers/types'
 
-import { useTemplatesHistory } from '../../../components/Pages/Dashboard/Marketing/hooks/use-templates-history'
+import { useTemplatesHistory } from '../../../../components/Pages/Dashboard/Marketing/hooks/use-templates-history'
 
 const useStyles = makeStyles(
   () => ({
@@ -20,19 +21,12 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props {
-  templateTypes?: IMarketingTemplateType[]
-  mediums?: IMarketingTemplateMedium[]
-  containerRef?: RefObject<HTMLElement>
-  onSelect: (template: IMarketingTemplateInstance) => void
-}
-
 export default function MarketingTemplateInstancePicker({
   templateTypes,
   mediums,
   containerRef,
   onSelect
-}: Props) {
+}: MarketingTemplateInstancePickerProps) {
   const classes = useStyles()
 
   const { templates, isLoading } = useTemplatesHistory({
@@ -50,8 +44,20 @@ export default function MarketingTemplateInstancePicker({
   if (isLoading) {
     return (
       <Grid container justify="center">
-        <Box py={10}>
-          <LoadingContainer noPaddings />
+        <LoadingContainer style={{ padding: '20%' }} noPaddings />
+      </Grid>
+    )
+  }
+
+  if (!isLoading && templates.length === 0) {
+    return (
+      <Grid container alignItems="center" justify="center">
+        <Box my={2}>
+          <img
+            src="/static/images/contacts/zero-state.svg"
+            alt="houston"
+            style={{ marginBottom: '1rem' }}
+          />
         </Box>
       </Grid>
     )

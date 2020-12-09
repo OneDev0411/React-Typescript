@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import {
   useInfiniteScroll,
@@ -26,6 +26,10 @@ export function useInfinitePagination<T>({
 
   const loadNextPage = () =>
     setLoadedItemsCount(loadedItemsCount => loadedItemsCount + pageSize)
+
+  useEffect(() => {
+    setLoadedItemsCount(pageSize)
+  }, [pageSize, items])
 
   useInfiniteScroll({
     ...infiniteScrollProps,

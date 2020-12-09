@@ -3,10 +3,23 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogProps
+  DialogProps,
+  makeStyles
 } from '@material-ui/core'
 
-import MarketingTemplateAndTemplateInstancePicker from 'components/MarketingTemplateAndTemplateInstancePicker'
+import { MarketingTemplateAndTemplateInstancePickerProps } from 'components/MarketingTemplatePickers/types'
+import MarketingTemplateAndTemplateInstancePicker from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePicker'
+
+const useStyles = makeStyles(
+  () => ({
+    dialogPaper: {
+      height: '100%'
+    }
+  }),
+  {
+    name: 'MarketingTemplateAndTemplateInstancePickerModal'
+  }
+)
 
 interface Props {
   title?: string
@@ -19,8 +32,8 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
   dialogProps = {},
   onClose,
   ...pickerProps
-}: Props &
-  React.ComponentProps<typeof MarketingTemplateAndTemplateInstancePicker>) {
+}: MarketingTemplateAndTemplateInstancePickerProps & Props) {
+  const classes = useStyles()
   const dialogRef = useRef<HTMLElement>(null)
 
   return (
@@ -31,6 +44,9 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
       scroll="paper"
       {...dialogProps}
       onClose={onClose}
+      classes={{
+        paper: classes.dialogPaper
+      }}
     >
       <DialogTitle>{title}</DialogTitle>
       <DialogContent ref={dialogRef}>

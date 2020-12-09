@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { IAppState } from 'reducers'
 
 import getListing from 'models/listings/listing/get-listing'
-import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
+import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 

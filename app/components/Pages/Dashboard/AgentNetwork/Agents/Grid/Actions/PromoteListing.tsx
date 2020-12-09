@@ -4,7 +4,7 @@ import { Button } from '@material-ui/core'
 import { convertToTemplate } from 'utils/marketing-center/helpers'
 
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
-import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplateAndTemplateInstancePickerModal'
+import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
 
 import { ListingWithProposedAgent } from '../../types'
 
