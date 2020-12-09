@@ -49,7 +49,7 @@ const config = {
     new MomentLocalesPlugin(),
     new OptimizeCSSAssetsPlugin(),
     new CompressionPlugin({
-      test: /\.js$|\.css$/,
+      test: /\.(css|js)$/,
       filename: '[path][base]',
       deleteOriginalAssets: 'keep-source-map'
     }),
@@ -71,7 +71,7 @@ const config = {
         Bucket: process.env.ASSETS_BUCKET,
         Expires: moment().utc().add('1', 'month').toDate(),
         ContentEncoding(fileName) {
-          if (/\.js$|.css$/.test(fileName)) {
+          if (/\.(css|js)$/.test(fileName)) {
             return 'gzip'
           }
         },
