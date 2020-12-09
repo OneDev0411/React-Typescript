@@ -1,11 +1,11 @@
-import { DALLAS_POINTS } from 'constants/listings/dallas-points'
-
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 import memoize from 'lodash/memoize'
 import hash from 'object-hash'
+
+import { DALLAS_POINTS } from 'constants/listings/dallas-points'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import getPlace from 'models/listings/search/get-place'
@@ -35,18 +35,6 @@ import {
 } from '../helpers/sort-utils'
 
 import Tabs from '../components/Tabs'
-
-import { loadJS } from '../../../../../utils/load-js'
-import { getBounds, getLocationErrorMessage } from '../../../../../utils/map'
-
-import { getPlace } from '../../../../../models/listings/search/get-place'
-import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points'
-import { selectListings } from '../../../../../reducers/listings'
-import searchActions from '../../../../../store_actions/listings/search'
-import { setMapProps } from '../../../../../store_actions/listings/map'
-import getListingsByValert from '../../../../../store_actions/listings/search/get-listings/by-valert'
-import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
-import { confirmation } from '../../../../../store_actions/confirmation'
 
 import Map from './components/Map'
 import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
