@@ -17,6 +17,7 @@ interface Props {
   mediums?: string
   assets?: string[]
   defaultTemplate?: Nullable<IBrandMarketingTemplate>
+  onShowEditListings?: () => void
   containerStyle?: React.CSSProperties
   isTemplatesColumnHiddenDefault?: boolean
   bareMode?: boolean
@@ -40,6 +41,7 @@ export default function InstantMarketing({
   mediums = '',
   assets = [],
   defaultTemplate = null,
+  onShowEditListings,
   containerStyle = {},
   isTemplatesColumnHiddenDefault = true,
   bareMode = false,
@@ -72,6 +74,7 @@ export default function InstantMarketing({
       mediums={mediums}
       assets={assets}
       defaultTemplate={defaultTemplate}
+      onShowEditListings={onShowEditListings}
       containerStyle={containerStyle}
       isTemplatesColumnHiddenDefault={isTemplatesColumnHiddenDefault}
       bareMode={bareMode}
