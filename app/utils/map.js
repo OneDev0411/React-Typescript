@@ -114,7 +114,7 @@ export function getLocationErrorMessage(error) {
       message = 'The request to get user location timed out.'
       break
     case error.UNKNOWN_ERROR:
-      message = 'An unknown error occurred.'
+      message = 'Location Service: An unknown error occurred.'
       break
     default:
       break

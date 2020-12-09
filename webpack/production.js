@@ -1,21 +1,21 @@
-import path from 'path'
+const webpack = require('webpack')
+const { merge } = require('webpack-merge')
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
+const S3Plugin = require('webpack-s3-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const SentryCliPlugin = require('@sentry/webpack-plugin');
 
-import webpack from 'webpack'
-import merge from 'webpack-merge'
-import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
-import CompressionPlugin from 'compression-webpack-plugin'
-import S3Plugin from 'webpack-s3-plugin'
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
-import TerserPlugin from 'terser-webpack-plugin'
+const moment = require('moment')
 
-import moment from 'moment'
+const common = require('./base')
 
-import common from './base'
-
-function postcss() {
-  return [require('autoprefixer')()]
+const postcssOptions = {
+  plugins: [
+    require('postcss-preset-env')()
+  ]
 }
 
 const config = {
@@ -25,24 +25,6 @@ const config = {
     pathinfo: false,
     publicPath: process.env.ASSETS_BASEURL
   },
-  performance: {
-    hints: 'warning',
-    maxAssetSize: 200 * 1024,
-    maxEntrypointSize: 300 * 1024
-  },
-  entry: {
-    app: [path.resolve(__dirname, '../app')],
-    vendor: [
-      'react',
-      'react-dom',
-      'react-router',
-      'react-redux',
-      'moment',
-      'lodash',
-      'underscore',
-      'offline-js'
-    ]
-  },
   optimization: {
     minimize: true,
     splitChunks: {
@@ -50,40 +32,34 @@ const config = {
     },
     minimizer: [
       new TerserPlugin({
-        cache: true,
+        terserOptions: {
+          sourceMap: true
+        },
         parallel: true,
-        sourceMap: true,
         exclude: /grapesjs/
       })
     ]
   },
   plugins: [
     new webpack.optimize.AggressiveMergingPlugin(),
-    new MomentLocalesPlugin(),
-    new MiniCssExtractPlugin({
-      filename: '[name].[hash].css'
+    new webpack.SourceMapDevToolPlugin({
+      filename: 'sourcemaps/[name][hash].js.map'
     }),
+    new MomentLocalesPlugin(),
     new OptimizeCSSAssetsPlugin(),
     new CompressionPlugin({
-      algorithm: 'gzip',
       test: /\.js$|\.css$/,
-      filename: '[path]'
+      filename: '[path][base]',
+      deleteOriginalAssets: 'keep-source-map'
     }),
-    new ForkTsCheckerWebpackPlugin({
-      /**
-       * We want build to fail if there is a ts error
-       */
-      async: false,
-      /**
-       * react-scripts also sets this to true and the overhead is negligible
-       * with respect to production build time
-       */
-      checkSyntacticErrors: true,
-      useTypescriptIncrementalApi: true
+    new SentryCliPlugin({
+      release: process.env.CI_COMMIT_REF_SLUG || 'unknown',
+      include: 'dist/sourcemaps/',
+      urlPrefix: process.env.ASSETS_BASEURL,
     }),
     new S3Plugin({
       progress: false, // Messes the terminal up
-      exclude: /.*\.html$/,
+      exclude: /\.(html|map)$/,
       basePath: 'dist/',
       s3Options: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -117,21 +93,24 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.(sa|sc|c)ss$/,
+        test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          'style-loader',
           'css-loader',
           {
             loader: 'postcss-loader',
             options: {
-              plugins: postcss
+              postcssOptions
             }
-          },
-          'sass-loader'
+          }
         ]
+      },
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
   }
 }
 
-export default merge(common, config)
+module.exports = merge(common, config)

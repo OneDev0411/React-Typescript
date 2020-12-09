@@ -26,10 +26,11 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "import/extensions": [".js", ".jsx", ".ts", ".tsx", ".json"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".json"]
       },
       "webpack": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx", ".json"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".json"],
+        "config": "./webpack/base"
       }
     }
   },
