@@ -29,7 +29,7 @@ const useStyles = makeStyles<Theme, { inputValue: string }>(
       maxHeight: 300
     },
     popper: ({ inputValue }) => ({
-      display: inputValue === '' ? 'none' : 'block'
+      display: inputValue.length < 3 ? 'none' : 'block'
     })
   }),
   {
@@ -174,7 +174,7 @@ export default function ListingsAndPlacesSearchInput({
   }
 
   return (
-    <Autocomplete<SearchResult>
+    <Autocomplete<SearchResult, false, true>
       fullWidth
       clearOnBlur={false}
       forcePopupIcon={false}
