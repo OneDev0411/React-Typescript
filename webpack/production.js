@@ -70,17 +70,17 @@ const config = {
         Bucket: process.env.ASSETS_BUCKET,
         Expires: moment().utc().add('1', 'month').toDate(),
         ContentEncoding(fileName) {
-          if (/\.js|.css/.test(fileName)) {
+          if (/\.js$|.css$/.test(fileName)) {
             return 'gzip'
           }
         },
 
         ContentType(fileName) {
-          if (/\.js/.test(fileName)) {
+          if (/\.js$/.test(fileName)) {
             return 'application/javascript'
           }
 
-          if (/\.css/.test(fileName)) {
+          if (/\.css$/.test(fileName)) {
             return 'text/css'
           }
 
