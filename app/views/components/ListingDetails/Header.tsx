@@ -109,7 +109,10 @@ function Header({
                 variant="outlined"
                 onClick={handleFavorite}
                 startIcon={
-                  <SvgIcon path={isFavorited ? mdiHeart : mdiHeartOutline} />
+                  <SvgIcon
+                    color={isFavorited ? 'red' : 'black'}
+                    path={isFavorited ? mdiHeart : mdiHeartOutline}
+                  />
                 }
                 className={classes.button}
               >
