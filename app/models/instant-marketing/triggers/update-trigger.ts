@@ -1,13 +1,12 @@
 import Fetch from '../../../services/fetch'
 
-import { getTemplateInstance } from './helpers/get-template-instance'
 import { updateTriggerCampaign } from './helpers/update-trigger-campaign'
-import { TriggerDataInput, TriggerTemplateInput } from './types'
+import { TriggerDataInput } from './types'
 
 export async function updateTrigger(
   current: ITrigger,
   contact: IContact & { user: IUser },
-  template: Nullable<TriggerTemplateInput>,
+  templateInstance: Nullable<IMarketingTemplateInstance>,
   triggerData: TriggerDataInput
 ): Promise<ApiResponseBody<ITrigger>> {
   try {
@@ -28,15 +27,10 @@ export async function updateTrigger(
     }
 
     let alteredCampaign
-    let alteredTemplate
 
-    if (template) {
-      alteredTemplate = await getTemplateInstance(template)
-    }
-
-    if (alteredTemplate || current.campaign.subject !== triggerData.subject) {
-      const templateId = alteredTemplate
-        ? { templateId: alteredTemplate.id }
+    if (templateInstance || current.campaign.subject !== triggerData.subject) {
+      const templateId = templateInstance
+        ? { templateId: templateInstance.id }
         : {}
 
       alteredCampaign = await updateTriggerCampaign(
@@ -55,6 +49,7 @@ export async function updateTrigger(
       event_type: triggerData.event_type,
       action: triggerData.action || 'schedule_email',
       wait_for: triggerData.wait_for,
+      recurring: triggerData.recurring,
       time: triggerData.time,
       campaign: alteredCampaign ? alteredCampaign.id : current.campaign.id
     })

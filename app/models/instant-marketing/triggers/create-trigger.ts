@@ -1,11 +1,10 @@
 import Fetch from '../../../services/fetch'
-import { getTemplateInstance } from './helpers/get-template-instance'
 import { getTriggerCampaign } from './helpers/get-trigger-campaign'
-import { TriggerDataInput, TriggerTemplateInput } from './types'
+import { TriggerDataInput } from './types'
 
 export async function createTrigger(
   contact: IContact & { user: IUser },
-  template: TriggerTemplateInput,
+  templateInstance: IMarketingTemplateInstance,
   triggerData: TriggerDataInput
 ): Promise<ApiResponseBody<ITrigger>> {
   try {
@@ -19,22 +18,18 @@ export async function createTrigger(
       throw new Error('invalid wait_for value')
     }
 
-    // step1: create a template instance
-    const templateInstance: IMarketingTemplateInstance = await getTemplateInstance(
-      template
-    )
-
-    // step2: create a email campaign
+    // step1: create a email campaign
     const campaign = await getTriggerCampaign(contact, templateInstance.id, {
       subject: triggerData.subject
     })
 
-    // step3: setup a trigger for a field
+    // step2: setup a trigger for a field
     const response = await new Fetch().post('/triggers').send({
       user: contact.user.id,
       event_type: triggerData.event_type,
       action: triggerData.action || 'schedule_email',
       wait_for: triggerData.wait_for,
+      recurring: triggerData.recurring,
       time: triggerData.time,
       campaign: campaign.id,
       contact: contact.id

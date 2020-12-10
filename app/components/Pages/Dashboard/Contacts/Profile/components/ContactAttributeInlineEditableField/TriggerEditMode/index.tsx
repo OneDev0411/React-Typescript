@@ -12,8 +12,6 @@ import {
 } from '@material-ui/core'
 import pluralize from 'pluralize'
 
-import { TriggerTemplateInput } from 'models/instant-marketing/triggers/types'
-
 import { TemplateSelector } from './components/TemplateSelector'
 
 interface Props {
@@ -26,7 +24,7 @@ interface Props {
   onChangeActive: (value: boolean) => void
   onChangeSubject: (value: string) => void
   onChangeSendBefore: (value: number) => void
-  onChangeTemplate: (template: TriggerTemplateInput) => void
+  onChangeTemplate: (templateInstance: IMarketingTemplateInstance) => void
 }
 
 const useStyles = makeStyles(
@@ -82,7 +80,7 @@ const TriggerEditModeComponent = ({
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
   const [sendBefore, setSendBefore] = useState<number>(sendBeforeProp)
   const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<TriggerTemplateInput>
+    Nullable<IMarketingTemplateInstance>
   >(null)
 
   const handleActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,10 +109,12 @@ const TriggerEditModeComponent = ({
     onChangeSendBefore(waitFor)
   }
 
-  const handleSelectTemplate = (template: TriggerTemplateInput) => {
+  const handleSelectTemplate = (
+    templateInstance: IMarketingTemplateInstance
+  ) => {
     try {
-      setSelectedTemplate(template)
-      onChangeTemplate(template)
+      setSelectedTemplate(templateInstance)
+      onChangeTemplate(templateInstance)
     } catch (error) {
       console.error(error)
     }

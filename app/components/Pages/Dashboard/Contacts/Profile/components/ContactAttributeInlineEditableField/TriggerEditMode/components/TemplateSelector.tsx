@@ -12,7 +12,7 @@ import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModa
 import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
-import { TriggerTemplateInput } from 'models/instant-marketing/triggers/types'
+import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
 import { renderBrandedNunjucksTemplate } from 'utils/marketing-center/render-branded-nunjucks-template'
 
 import { getTemplateType } from '../helpers'
@@ -21,8 +21,8 @@ interface Props {
   disabled?: boolean
   currentValue: Nullable<ITrigger>
   attributeName: TriggerContactEventTypes
-  selectedTemplate: Nullable<TriggerTemplateInput>
-  onSelectTemplate: (template: TriggerTemplateInput) => void
+  selectedTemplate: Nullable<IMarketingTemplateInstance>
+  onSelectTemplate: (template: IMarketingTemplateInstance) => void
 }
 
 const useStyles = makeStyles(
@@ -79,53 +79,68 @@ export const TemplateSelector = ({
 }: Props) => {
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(store => store.user)
-
-  const [baseTemplate, setBaseTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(null)
+  const [brand] = useState<Nullable<IBrand>>(getActiveBrand(user))
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
     false
   )
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
-  const [isSettingDefaultTemplate, setIsSettingDefaultTemplate] = useState<
-    boolean
-  >(false)
-  const currentTemplate = baseTemplate || currentValue?.campaign?.template
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const currentTemplate = selectedTemplate || currentValue?.campaign?.template
 
   const handleSelectTemplate = async (template: IBrandMarketingTemplate) => {
     try {
-      const brand = getActiveBrand(user)
+      setIsTemplatePickerOpen(false)
+      setIsLoading(true)
 
       if (!brand) {
         return
       }
 
-      const templateMarkup = await renderBrandedNunjucksTemplate(
+      // render the nunjuks template
+      const templateMarkup: string = await renderBrandedNunjucksTemplate(
         template,
         brand,
         { user }
       )
 
-      setBaseTemplate(template)
-      onSelectTemplate({ id: template.template.id, markup: templateMarkup })
+      const templateInstance = await getTemplateInstance(
+        template.template.id,
+        templateMarkup
+      )
 
-      setIsTemplatePickerOpen(false)
+      if (templateInstance) {
+        onSelectTemplate(templateInstance)
+      }
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  const handleEditTemplate = (markup: string) => {
-    const templateId = baseTemplate
-      ? baseTemplate.template?.id
-      : currentValue?.campaign?.template?.template?.id
+  const handleEditTemplate = async (markup: string) => {
+    try {
+      const templateId = selectedTemplate
+        ? selectedTemplate.template?.id
+        : currentValue?.campaign?.template?.template?.id
 
-    if (!templateId) {
-      return
+      if (!templateId) {
+        return
+      }
+
+      setIsLoading(true)
+      setIsBuilderOpen(false)
+
+      const templateInstance = await getTemplateInstance(templateId, markup)
+
+      if (templateInstance) {
+        onSelectTemplate(templateInstance)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
     }
-
-    onSelectTemplate({ id: templateId, markup })
-    setIsBuilderOpen(false)
   }
 
   const handleShowTemplatePicker = (state: boolean = false) => {
@@ -152,34 +167,32 @@ export const TemplateSelector = ({
     }
 
     if (!selectedTemplate && !currentValue) {
-      setIsSettingDefaultTemplate(true)
+      setIsLoading(true)
       getTemplates(
         brandId,
         [getTemplateType(attributeName)],
         ['Email' as MarketingTemplateMedium.Email]
       )
         .then(templates => {
-          setIsSettingDefaultTemplate(false)
-
           if (templates.length) {
             handleSelectTemplate(templates[0])
           }
         })
         .catch(err => {
-          setIsSettingDefaultTemplate(false)
+          setIsLoading(false)
           console.error(err)
         })
     }
   })
 
   const renderPreview = () => {
-    if (isSettingDefaultTemplate) {
+    if (isLoading) {
       return (
         <span className={classes.templatePreviewPlaceholder}>Loading...</span>
       )
     }
 
-    if (disabled || (!baseTemplate && !currentValue)) {
+    if (disabled || (!selectedTemplate && !currentValue)) {
       return (
         <span className={classes.templatePreviewPlaceholder}>
           Select a template
@@ -187,10 +200,10 @@ export const TemplateSelector = ({
       )
     }
 
-    if (baseTemplate) {
+    if (selectedTemplate) {
       return (
         <img
-          src={baseTemplate.preview.preview_url}
+          src={selectedTemplate.file.preview_url}
           alt="Selected Template"
           className={classes.templatePreviewImage}
         />

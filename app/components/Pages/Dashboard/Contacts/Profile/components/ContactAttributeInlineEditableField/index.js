@@ -312,6 +312,7 @@ class MasterField extends React.Component {
           contact,
           triggerSelectedTemplate,
           {
+            recurring: true,
             time: '08:00:00', // it's hard coded base api team comment
             subject: triggerSubject,
             wait_for: triggerSendBefore,

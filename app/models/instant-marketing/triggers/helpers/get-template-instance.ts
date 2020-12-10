@@ -1,15 +1,15 @@
 import { createTemplateInstance } from '../../create-template-instance'
-import { TriggerTemplateInput } from '../types'
 
 export const getTemplateInstance = async (
-  template: TriggerTemplateInput
+  templateId: UUID,
+  templateMarkup: string
 ): Promise<IMarketingTemplateInstance> => {
   try {
     // create a template instance
     const instance: IMarketingTemplateInstance = await createTemplateInstance(
-      template.id,
+      templateId,
       {
-        html: template.markup
+        html: templateMarkup
       }
     )
 
