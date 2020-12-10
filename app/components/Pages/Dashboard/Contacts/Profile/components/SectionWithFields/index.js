@@ -1,9 +1,11 @@
 import React from 'react'
 import cuid from 'cuid'
 import { connect } from 'react-redux'
+
 import { addNotification as notify } from 'components/notification'
 
 import { getContact } from 'models/contacts/get-contact'
+import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { addAttributes } from 'models/contacts/add-attributes'
 import { updateAttribute } from 'models/contacts/update-attribute'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
@@ -17,6 +19,7 @@ import {
   orderFields,
   normalizeAttributes
 } from './helpers'
+import { getContactTriggers } from './helpers/get-contact-triggers'
 import { getScheduleEmailTrigger } from './helpers/get-schedule-email-trigger'
 
 function generateEmptyAttribute(attribute_def, is_partner, order) {
@@ -65,10 +68,11 @@ class SectionWithFields extends React.Component {
     ]
 
     const orderedAttributes = orderAttributes(allAttributes, props.fieldsOrder)
+    const triggers = getContactTriggers(props.contact)
 
     this.state = {
       orderedAttributes,
-      trigger: null
+      triggers
     }
   }
 
@@ -102,6 +106,7 @@ class SectionWithFields extends React.Component {
     try {
       const response = await getContact(contact.id, {
         associations: [
+          ...updateContactQuery.associations,
           'contact.triggers',
           'trigger.campaign',
           'email_campaign.template',
@@ -111,7 +116,13 @@ class SectionWithFields extends React.Component {
 
       const trigger = getScheduleEmailTrigger(response.data, attribute_def.name)
 
-      this.setState({ trigger })
+      this.setState(prevState => ({
+        triggers: {
+          ...prevState.triggers,
+          [attribute_def.name]: trigger
+        }
+      }))
+
       this.props.submitCallback({
         ...normalizeContact(response.data),
         deals: contact.deals
@@ -264,17 +275,27 @@ class SectionWithFields extends React.Component {
     const { isPrimary } = this.props
     const isShadowField = !attribute.id
 
+    const triggers = state.triggers[attribute.attribute_def?.name]
+      ? { ...state.triggers, [attribute.attribute_def.name]: null }
+      : state.triggers
+
     if (this.isNotOnlyNonSingularInstanceOf(attribute, state)) {
-      return {
+      const f = {
+        triggers,
         orderedAttributes: state.orderedAttributes
           .filter(a =>
             isShadowField ? a.cuid !== attribute.cuid : a.id !== attribute.id
           )
           .map((a, order) => ({ ...a, order }))
       }
+
+      console.log({ f })
+
+      return f
     }
 
-    return {
+    const h = {
+      triggers,
       orderedAttributes: state.orderedAttributes.map(a => {
         const emptyAttribute = generateEmptyAttribute(
           attribute.attribute_def,
@@ -289,6 +310,10 @@ class SectionWithFields extends React.Component {
         return a.id === attribute.id ? emptyAttribute : a
       })
     }
+
+    console.log({ h })
+
+    return h
   }
 
   deleteFromApi = attribute => {
@@ -354,7 +379,7 @@ class SectionWithFields extends React.Component {
   }
 
   render() {
-    const { trigger } = this.state
+    const { triggers } = this.state
     const { section } = this.props
 
     return (
@@ -364,13 +389,7 @@ class SectionWithFields extends React.Component {
             <MasterField
               contact={this.props?.contact}
               attribute={attribute}
-              trigger={
-                trigger ||
-                getScheduleEmailTrigger(
-                  this.props?.contact,
-                  attribute.attribute_def.name
-                )
-              }
+              trigger={triggers[attribute.attribute_def.name] || null}
               handleAddNewInstance={this.addShadowAttribute}
               handleDelete={this.deleteHandler}
               handleSave={this.save}
