@@ -38,6 +38,30 @@ export function RoleField(props) {
     props.annotation.type === 'Roles'
   )
 
+  if (props.annotation.attributes?.includes?.('stamp')) {
+    console.log(annotationRoles)
+
+    return (
+      <div
+        style={{
+          ...props.style,
+          whiteSpace: 'pre'
+        }}
+      >
+        {annotationRoles.map((role, index) => (
+          <Fragment key={index}>
+            {role?.agent?.office?.name}
+            {'   '}
+            {role?.agent?.office?.address}
+            {'    '}Phone: {role?.agent?.office?.phone}
+            <br />
+            {role.legal_full_name}
+          </Fragment>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <Fragment>
       <div

@@ -19,7 +19,7 @@ export function AnnotationWrapper(props) {
           )
 
           return rects.map((rect, key) => {
-            const style = {
+            let style = {
               position: 'absolute',
               left: `${rect.left}px`,
               top: `${rect.top}px`,
@@ -35,19 +35,13 @@ export function AnnotationWrapper(props) {
             }
 
             if (annotation.readonly) {
-              return (
-                <div
-                  key={key}
-                  style={{
-                    ...style,
-                    padding: 0,
-                    backgroundColor: 'transparent',
-                    border: 'none'
-                  }}
-                >
-                  {values[key]}
-                </div>
-              )
+              style = {
+                ...style,
+                cursor: 'default',
+                padding: 0,
+                backgroundColor: 'transparent',
+                border: 'none'
+              }
             }
 
             return props.render({
