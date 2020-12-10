@@ -27,8 +27,15 @@ const useStyles = makeStyles(
     },
     mainImage: {
       width: '100%',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center center',
+      height: 224,
+      [theme.breakpoints.up('sm')]: {
+        height: 356
+      },
       [theme.breakpoints.up('lg')]: {
-        maxHeight: 480
+        height: 520
       }
     },
     button: {
@@ -144,32 +151,22 @@ function Gallery({ images }: Props) {
   return (
     <Box>
       <Box className={classes.mainImageWrapper} mb={3}>
-        {images[0] ? (
-          <button
-            type="button"
-            data-image-index={0}
-            className={classes.button}
-            onClick={openLightbox}
-          >
-            <img
-              src={images[0]}
-              alt="listing 1"
-              className={classes.mainImage}
-            />
-            <SvgIcon
-              path={mdiFullscreen}
-              size={muiIconSizes.large}
-              className={classes.fullscreenIcon}
-              color={theme.palette.common.white}
-            />
-          </button>
-        ) : (
-          <img
-            src={MAIN_IMAGE_PLACEHOLDER_SRC}
-            alt="listing 1"
-            className={classes.mainImage}
+        <button
+          type="button"
+          data-image-index={0}
+          className={cn(classes.button, classes.mainImage)}
+          onClick={openLightbox}
+          style={{
+            backgroundImage: `url(${images[0] || MAIN_IMAGE_PLACEHOLDER_SRC})`
+          }}
+        >
+          <SvgIcon
+            path={mdiFullscreen}
+            size={muiIconSizes.large}
+            className={classes.fullscreenIcon}
+            color={theme.palette.common.white}
           />
-        )}
+        </button>
       </Box>
       <Box display="flex" justifyContent="center" px={2}>
         <Grid container spacing={isTablet ? 2 : 1}>
