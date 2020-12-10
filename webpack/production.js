@@ -53,7 +53,7 @@ const config = {
       filename: '[path][base]',
       deleteOriginalAssets: 'keep-source-map',
       threshold: 0, // S3 plugin expects all js assets to be gzipped
-      minRatio: 0   // Therefore it adds a content-encoding to them all
+      minRatio: 1   // Therefore it adds a content-encoding to them all
     }),
     new SentryCliPlugin({
       release: process.env.CI_COMMIT_REF_SLUG || 'unknown',
