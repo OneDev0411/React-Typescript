@@ -90,8 +90,6 @@ class ContactsList extends React.Component {
   componentDidMount() {
     const globalButtonDispatch = this.context
 
-    console.log('GlobalButtonDispatch', globalButtonDispatch)
-
     const { parkedContactsCount } = this.state
     const { user, fetchOAuthAccounts, fetchTags, getContactsTags } = this.props
 
