@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import fecha from 'fecha'
 
-import Masked from 'react-text-mask'
+import Masked, { conformToMask } from 'react-text-mask'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 import DatePicker from 'components/DatePicker'
@@ -15,6 +15,20 @@ const numberMask = createNumberMask({
   allowNegative: true,
   allowLeadingZeroes: true
 })
+
+const optionalNumberMask = rawValue => {
+  const mask = numberMask(rawValue)
+
+  const { conformedValue } = conformToMask(rawValue, mask, {
+    guide: false
+  })
+
+  if (conformedValue) {
+    return mask
+  }
+
+  return false
+}
 
 interface Bounds {
   top: number
@@ -108,7 +122,7 @@ export function MaskedInput({
   }
 
   if (type === 'Number' && format === 'Currency') {
-    return <Masked {...sharedProps} mask={numberMask} />
+    return <Masked {...sharedProps} mask={optionalNumberMask} />
   }
 
   if (type === 'Date') {
