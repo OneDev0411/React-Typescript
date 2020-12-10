@@ -150,7 +150,8 @@ export function Menu() {
               </AppNavbarBadge>
             </SideNavLinkItem>
           )}
-
+        </SidenavListGroup>
+        <SidenavListGroup>
           <SideNavItem>
             <SidenavBlankLink
               target="_blank"
