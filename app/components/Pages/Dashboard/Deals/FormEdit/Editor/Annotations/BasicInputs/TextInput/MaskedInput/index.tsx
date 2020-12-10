@@ -16,6 +16,16 @@ const numberMask = createNumberMask({
   allowLeadingZeroes: true
 })
 
+/*
+ * For number fields, we want to offer automatic masking.
+ * However, we don't want to force numbers. They may want to enter N/A or whatever.
+ *
+ * So, we try to mask it using conformToValue. If it works, that means its a proper number
+ * that could be formatted. So we return the mask, which means the masking will work.
+ *
+ * If conformToValue doesn't work (returns false) means the input wasn't a number
+ * (eg it was 'N/A'). So we return false, which means no masking.
+ */
 const optionalNumberMask = rawValue => {
   const mask = numberMask(rawValue)
 
