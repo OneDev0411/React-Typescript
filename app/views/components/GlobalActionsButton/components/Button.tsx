@@ -32,11 +32,11 @@ export default function GlobalActionsMenu({ onClick }: Props) {
         size="small"
         fullWidth
         onClick={onClick}
+        startIcon={<SvgIcon path={mdiPlus} />}
         classes={{
           root: classes.root
         }}
       >
-        <SvgIcon path={mdiPlus} rightMargined />
         Create
       </Button>
     </div>

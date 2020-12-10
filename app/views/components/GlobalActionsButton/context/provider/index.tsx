@@ -8,7 +8,7 @@ interface Props {
   children: ReactNode
 }
 
-export const GlobalActionProvider = ({ children }: Props) => {
+export const GlobalActionsProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   return (

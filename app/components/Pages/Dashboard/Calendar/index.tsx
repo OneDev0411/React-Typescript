@@ -15,8 +15,7 @@ import { useStyles as useCommonStyles } from './use-styles'
 export default function CalendarPage(props: WithRouterProps) {
   const classes = useCommonStyles()
   const actionRef = useRef<ActionRef>(null)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [state, dispatch] = useGlobalActionContext()
+  const [, dispatch] = useGlobalActionContext()
   const handleCreateTask = (
     event: IEvent | ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {

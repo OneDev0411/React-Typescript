@@ -6,7 +6,7 @@ import smoothscroll from 'smoothscroll-polyfill'
 import { hot } from 'react-hot-loader/root'
 
 import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
-import { GlobalActionProvider } from 'components/GlobalActionsButton/context/provider'
+import { GlobalActionsProvider } from 'components/GlobalActionsButton/context/provider'
 // This is our new confirmation modal. use this please.
 import ConfirmationModal from 'components/ConfirmationModal'
 
@@ -48,7 +48,7 @@ if (window) {
 const App = () => {
   return (
     <AppTheme>
-      <GlobalActionProvider>
+      <GlobalActionsProvider>
         <ConfirmationModalProvider>
           <Router history={history}>{routes}</Router>
           <ConfirmationModal />
@@ -57,7 +57,7 @@ const App = () => {
         <ReduxConfirmationModal />
 
         <Notifications />
-      </GlobalActionProvider>
+      </GlobalActionsProvider>
     </AppTheme>
   )
 }

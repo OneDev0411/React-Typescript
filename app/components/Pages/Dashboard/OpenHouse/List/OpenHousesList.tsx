@@ -56,8 +56,7 @@ const useAlertStyles = makeStyles(
 function OpenHousesList() {
   useAlertStyles()
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [state, dispatch] = useGlobalActionContext()
+  const [, dispatch] = useGlobalActionContext()
   const gridClasses = useGridStyles()
 
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(

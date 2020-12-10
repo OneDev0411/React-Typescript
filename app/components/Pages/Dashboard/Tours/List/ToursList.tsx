@@ -30,8 +30,7 @@ import Actions from './columns/Actions'
 type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
 function ToursList(props: { user: IUser }) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [state, dispatch] = useGlobalActionContext()
+  const [, dispatch] = useGlobalActionContext()
   const gridClasses = useGridStyles()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {

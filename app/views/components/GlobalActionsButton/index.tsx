@@ -23,7 +23,7 @@ export const GlobalActionsButton = (props: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [selectedItem, setSelectedItem] = useState<null | Item>(null)
   const availableItems: Item[] = useMemo(() => {
-    let actions: ItemType[] = []
+    const actions: ItemType[] = []
 
     if (hasUserAccessToCrm(user)) {
       actions.push('email', 'event', 'contact', 'tour')
