@@ -25,7 +25,7 @@ function StaticMap({ location }: Props) {
   )
 
   return (
-    <a href="#map">
+    <a href="#listing-map">
       <img alt="logo" src={image} style={{ width: '100%' }} />
     </a>
   )

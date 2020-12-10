@@ -12,7 +12,7 @@ function Map({ location }: Props) {
   const isWindowTall = useMediaQuery('(min-height:800px)')
 
   return (
-    <Box id="map" height={isWindowTall ? '20vh' : '50vh'} width="100%">
+    <Box id="listing-map" height={isWindowTall ? '20vh' : '50vh'} width="100%">
       <SingleMarkerMap
         id="listingMap"
         location={location}
