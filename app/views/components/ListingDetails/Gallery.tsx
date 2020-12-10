@@ -110,12 +110,12 @@ function Gallery({ images }: Props) {
     }
 
     if (imagesLength < 5) {
-      let thumbnailsSrc = []
+      let thumbnailsSrc: Thumbnails[] = []
 
       for (let i = 1; i < 5; i++) {
         const src = images[i]
 
-        thumbnails.push({
+        thumbnailsSrc.push({
           src: src || THUMBNAIL_IMAGES_PLACEHOLDER[i - 1],
           isFake: !src
         })
