@@ -240,7 +240,7 @@
     "throng": "^5.0.0",
     "timeago.js": "^3.0.2",
     "ts-node": "^8.5.4",
-    "tui-image-editor": "^3.10.0",
+    "tui-image-editor": "github:emilsedgh/tui.image-editor#62807f5a6015f4b62e453eb09672fc1ea7952a15",
     "underscore": "^1.9.1",
     "underscore.get": "^0.2.9",
     "unfurl.js": "^5.0.1",
