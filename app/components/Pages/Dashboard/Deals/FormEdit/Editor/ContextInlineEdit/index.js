@@ -29,7 +29,7 @@ function getPosition(bounds, width = 400) {
 
 export function ContextInlineEdit(props) {
   if (!props.isOpen) {
-    return false
+    return null
   }
 
   return (
