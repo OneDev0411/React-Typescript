@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Location } from 'history'
-import * as Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/react'
 
 import { IAppState } from '../../../../reducers'
 

@@ -3,19 +3,16 @@ const { merge } = require('webpack-merge')
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const S3Plugin = require('webpack-s3-plugin')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const SentryCliPlugin = require('@sentry/webpack-plugin');
+const SentryCliPlugin = require('@sentry/webpack-plugin')
 
 const moment = require('moment')
 
 const common = require('./base')
 
 const postcssOptions = {
-  plugins: [
-    require('postcss-preset-env')()
-  ]
+  plugins: [require('postcss-preset-env')()]
 }
 
 const config = {
@@ -43,19 +40,23 @@ const config = {
   plugins: [
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.SourceMapDevToolPlugin({
-      filename: 'sourcemaps/[name][hash].js.map'
+      filename: 'sourcemaps/[name][hash].js.map',
+      append: false
     }),
     new MomentLocalesPlugin(),
     new OptimizeCSSAssetsPlugin(),
     new CompressionPlugin({
-      test: /\.js$|\.css$/,
+      test: /\.(css|js)$/,
       filename: '[path][base]',
-      deleteOriginalAssets: 'keep-source-map'
+      deleteOriginalAssets: 'keep-source-map',
+      threshold: 0, // S3 plugin expects all js assets to be gzipped
+      minRatio: 1 // Therefore it adds a content-encoding to them all
     }),
     new SentryCliPlugin({
-      release: process.env.CI_COMMIT_REF_SLUG || 'unknown',
+      release:
+        process.env.CI_COMMIT_REF_SLUG || process.env.SOURCE_VERSION || '',
       include: 'dist/sourcemaps/',
-      urlPrefix: process.env.ASSETS_BASEURL,
+      urlPrefix: process.env.ASSETS_BASEURL
     }),
     new S3Plugin({
       progress: false, // Messes the terminal up
@@ -64,23 +65,23 @@ const config = {
       s3Options: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        region: 'us-west-1'
+        region: process.env.ASSETS_REGION
       },
       s3UploadOptions: {
         Bucket: process.env.ASSETS_BUCKET,
         Expires: moment().utc().add('1', 'month').toDate(),
         ContentEncoding(fileName) {
-          if (/\.js|.css/.test(fileName)) {
+          if (/\.(css|js)$/.test(fileName)) {
             return 'gzip'
           }
         },
 
         ContentType(fileName) {
-          if (/\.js/.test(fileName)) {
+          if (/\.js$/.test(fileName)) {
             return 'application/javascript'
           }
 
-          if (/\.css/.test(fileName)) {
+          if (/\.css$/.test(fileName)) {
             return 'text/css'
           }
 
