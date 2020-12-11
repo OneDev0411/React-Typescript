@@ -1,6 +1,6 @@
 import { browserHistory } from 'react-router'
 
-import * as Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/react'
 
 import signin from '../../models/auth/signin'
 import getUser from '../../models/user/get-user'
