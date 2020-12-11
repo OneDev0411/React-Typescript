@@ -210,18 +210,24 @@ function ListingDetails({ id, onClose }: Props) {
         </Grid>
       </Box>
       <Grid container className={classes.agentAreaWrapper}>
-        <Grid item xs={12} lg={7} className={classes.featuredImageWrapper}>
+        <Grid
+          item
+          xs={12}
+          lg={agent ? 7 : 12}
+          className={classes.featuredImageWrapper}
+        >
           <FeaturedImages images={getFeaturedImages(1)} />
         </Grid>
-        <Grid item xs={12} lg={5}>
-          <AgentInfo
-            name={agent.name || ''}
-            email={agent.email}
-            image={agent.image}
-            tel={agent.tel}
-            company={agent.company}
-          />
-        </Grid>
+        {agent && (
+          <Grid item xs={12} lg={5}>
+            <AgentInfo
+              name={agent.name}
+              email={agent.email}
+              image={agent.image}
+              tel={agent.tel}
+            />
+          </Grid>
+        )}
       </Grid>
       {isDesktop && (
         <Box px={6} mb={20}>

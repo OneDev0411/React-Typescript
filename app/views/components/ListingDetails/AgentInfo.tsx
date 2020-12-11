@@ -42,14 +42,21 @@ const useStyles = makeStyles(
 
 interface Props {
   name: string
-  jobTitle?: string
-  email?: string
-  company?: string
-  tel?: string
-  image?: string | null
+  jobTitle: string
+  email: string
+  company: string
+  tel: string
+  image: string | null
 }
 
-function AgentInfo({ name, jobTitle, email, company, tel, image }: Props) {
+function AgentInfo({
+  name,
+  jobTitle,
+  email,
+  company,
+  tel,
+  image
+}: Partial<Props>) {
   const classes = useStyles()
   const items = [jobTitle, email, company, tel].filter(Boolean)
 

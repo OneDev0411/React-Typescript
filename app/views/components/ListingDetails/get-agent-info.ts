@@ -3,25 +3,21 @@ interface AgentInfo {
   email?: string
   image?: string | null
   tel?: string
-  company?: string
 }
 
-export function getAgentInfo(listing: IListing<'proposed_agent'>): AgentInfo {
-  const listAgent = listing.list_agent
+export function getAgentInfo(
+  listing: IListing<'proposed_agent'>
+): AgentInfo | null {
+  const proposedAgent = listing.proposed_agent
 
-  if (listAgent) {
+  if (proposedAgent) {
     return {
-      name: listAgent.full_name,
-      email: listAgent.email,
-      image: listAgent.profile_image_url,
-      tel: listAgent.phone_number
+      email: proposedAgent.email,
+      tel: proposedAgent.phone_number,
+      image: proposedAgent.profile_image_url,
+      name: `${proposedAgent.first_name} ${proposedAgent.last_name}`.trim()
     }
   }
 
-  return {
-    name: listing.list_agent_full_name,
-    email: listing.list_agent_email,
-    tel: listing.list_agent_direct_work_phone,
-    company: listing.list_office_name
-  }
+  return null
 }
