@@ -59,7 +59,7 @@ function Description({ address, description }: Props) {
       {isTooLong && (
         <Box display="flex" justifyContent="center" mt={2}>
           <Button color="secondary" onClick={handleShowMore}>
-            Show More
+            {isExpended ? 'Show Less' : 'Show More'}
           </Button>
         </Box>
       )}

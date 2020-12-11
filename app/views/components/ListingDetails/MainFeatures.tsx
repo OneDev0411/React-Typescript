@@ -41,7 +41,7 @@ function MainFeatures({ listing }: Props) {
   const squareFeet = Math.floor(
     listingUtils.metersToFeet(property.square_meters)
   )
-  const priceSqft = Math.round(listing.price / squareFeet)
+  const priceSqft = squareFeet > 0 ? Math.round(listing.price / squareFeet) : 0
   const lotSize = property.lot_size_area
 
   return (
@@ -93,29 +93,25 @@ function MainFeatures({ listing }: Props) {
                 </Box>
               </Box>
             </Grid>
+
             <Grid item xs={4}>
               <Box display="flex" justifyContent="flex-end">
                 <Box display="flex" flexDirection="column">
-                  <Box
-                    mb={1}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="flex-start"
-                  >
-                    <SvgIcon path={mdiVectorSquare} />
+                  <Box mb={1} display="flex" alignItems="center">
+                    <SvgIcon path={mdiCalendarMonthOutline} />
                     <Box ml={1}>
                       <Typography variant="button" className={classes.value}>
-                        {getFormattedValue(squareFeet)}
+                        {listing.property.year_built || 'N/A'}
                       </Typography>
                     </Box>
                   </Box>
-                  <Box textAlign="left">
+                  <Box>
                     <Typography
                       color="textSecondary"
                       variant="caption"
                       className={classes.label}
                     >
-                      Square Feet
+                      Built in
                     </Typography>
                   </Box>
                 </Box>
@@ -146,23 +142,25 @@ function MainFeatures({ listing }: Props) {
             </Box>
           </Grid>
           <Grid item xs={4}>
-            <Box display="flex" flexDirection="column" alignItems="center">
-              <Box mb={1} display="flex" alignItems="center">
-                <SvgIcon path={mdiCurrencyUsdCircleOutline} />
-                <Box ml={1}>
-                  <Typography variant="button" className={classes.value}>
-                    {numberToUSD(priceSqft)}
+            <Box display="flex" justifyContent="center">
+              <Box display="flex" flexDirection="column">
+                <Box mb={1} display="flex" alignItems="center">
+                  <SvgIcon path={mdiVectorSquare} />
+                  <Box ml={1}>
+                    <Typography variant="button" className={classes.value}>
+                      {getFormattedValue(squareFeet)}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box textAlign="left">
+                  <Typography
+                    color="textSecondary"
+                    variant="caption"
+                    className={classes.label}
+                  >
+                    Square Feet
                   </Typography>
                 </Box>
-              </Box>
-              <Box>
-                <Typography
-                  color="textSecondary"
-                  variant="caption"
-                  className={classes.label}
-                >
-                  Price/sqft
-                </Typography>
               </Box>
             </Box>
           </Grid>
@@ -170,10 +168,10 @@ function MainFeatures({ listing }: Props) {
             <Box display="flex" justifyContent="flex-end">
               <Box display="flex" flexDirection="column">
                 <Box mb={1} display="flex" alignItems="center">
-                  <SvgIcon path={mdiCalendarMonthOutline} />
+                  <SvgIcon path={mdiCurrencyUsdCircleOutline} />
                   <Box ml={1}>
                     <Typography variant="button" className={classes.value}>
-                      {listing.property.year_built}
+                      {priceSqft > 0 ? numberToUSD(priceSqft) : 'N/A'}
                     </Typography>
                   </Box>
                 </Box>
@@ -183,7 +181,7 @@ function MainFeatures({ listing }: Props) {
                     variant="caption"
                     className={classes.label}
                   >
-                    Built in
+                    Price/sqft
                   </Typography>
                 </Box>
               </Box>

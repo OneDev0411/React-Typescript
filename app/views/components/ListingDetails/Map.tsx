@@ -1,22 +1,35 @@
 import React from 'react'
 import Box from '@material-ui/core/Box'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import { SingleMarkerMap } from 'components/maps/SingleMarkerMap'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    box: {
+      width: '100%',
+      height: 230,
+      [theme.breakpoints.up('lg')]: {
+        height: 600
+      }
+    }
+  }),
+  { name: 'Map' }
+)
 
 interface Props {
   location: ILocation
 }
 
 function Map({ location }: Props) {
-  const isWindowTall = useMediaQuery('(min-height:800px)')
+  const classes = useStyles()
 
   return (
-    <Box id="listing-map" height={isWindowTall ? '20vh' : '50vh'} width="100%">
+    <Box id="listing-map" className={classes.box}>
       <SingleMarkerMap
         id="listingMap"
         location={location}
-        options={{ zoom: 18 }}
+        options={{ zoom: 16 }}
       />
     </Box>
   )

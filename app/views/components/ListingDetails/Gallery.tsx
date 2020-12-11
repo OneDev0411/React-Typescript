@@ -168,7 +168,7 @@ function Gallery({ images }: Props) {
           />
         </button>
       </Box>
-      <Box display="flex" justifyContent="center" px={2}>
+      <Box display="flex" justifyContent="center" px={isTablet ? 0 : 2}>
         <Grid container spacing={isTablet ? 2 : 1}>
           {thumbnails.map((item, index) => (
             <Grid item xs={3} key={index}>

@@ -7,7 +7,7 @@ export const valueToString = (
   formatNumber = true
 ) => {
   if (value == null || value.length === 0) {
-    return 'N/A'
+    return ''
   }
 
   if (typeof value === 'number' && value > 0) {
@@ -21,7 +21,7 @@ export const valueToString = (
   }
 
   if (Array.isArray(value)) {
-    return value.length > 0 ? value.join(', ') : 'N/A'
+    return value.length > 0 ? value.join(', ') : ''
   }
 
   if (typeof value === 'boolean') {
@@ -50,13 +50,16 @@ export function getListingFeatures(listing: IListing): Feature[] {
       items: [
         {
           label: 'Price/sqt',
-          value: valueToString(
-            listing.price /
-              Math.floor(
-                listingUtils.metersToFeet(listing.property.square_meters)
-              ),
-            true
-          )
+          value:
+            property.square_meters > 0
+              ? valueToString(
+                  listing.price /
+                    Math.floor(
+                      listingUtils.metersToFeet(property.square_meters)
+                    ),
+                  true
+                )
+              : ''
         },
         {
           label: 'Unexempt Taxes',

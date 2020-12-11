@@ -16,13 +16,13 @@ const useStyles = makeStyles(
         ...theme.typography.h5
       }
     },
-    label: {
+    value: {
       ...theme.typography.subtitle3,
       [theme.breakpoints.up('sm')]: {
         ...theme.typography.subtitle1
       }
     },
-    value: {
+    label: {
       color: theme.palette.grey['800'],
       ...theme.typography.body3,
       [theme.breakpoints.up('sm')]: {
@@ -36,6 +36,10 @@ const useStyles = makeStyles(
 function List({ list }: { list: Feature }) {
   const classes = useStyles()
 
+  if (list.items.every(item => !item.value)) {
+    return null
+  }
+
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <Box className={classes.container}>
@@ -45,14 +49,20 @@ function List({ list }: { list: Feature }) {
           </Typography>
         </Box>
         <Box>
-          {list.items.map((item, index) => (
-            <Typography className={classes.label} key={index}>
-              {item.label}:{' '}
-              <Typography className={classes.value} component="span">
-                {item.value}
+          {list.items.map((item, index) => {
+            if (!item.value) {
+              return null
+            }
+
+            return (
+              <Typography className={classes.label} key={index}>
+                {item.label}:{' '}
+                <Typography className={classes.value} component="span">
+                  {item.value}
+                </Typography>
               </Typography>
-            </Typography>
-          ))}
+            )
+          })}
         </Box>
       </Box>
     </Grid>
