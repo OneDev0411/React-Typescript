@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState, useMemo } from 'react'
+import React, { MouseEvent, useState, useMemo, memo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -17,7 +17,7 @@ import { useGlobalActionContext } from './hooks/use-global-action-context'
 
 interface Props {}
 
-export const GlobalActionsButton = (props: Props) => {
+export const GlobalActions = (props: Props) => {
   const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
   const [state] = useGlobalActionContext()
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -154,3 +154,5 @@ export const GlobalActionsButton = (props: Props) => {
     </>
   )
 }
+
+export const GlobalActionsButton = memo(GlobalActions)
