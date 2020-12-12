@@ -1,7 +1,11 @@
 import React from 'react'
-import Grid from '@material-ui/core/Grid'
+import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles, Theme } from '@material-ui/core'
+import { mdiAccount } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -12,16 +16,15 @@ const useStyles = makeStyles(
         ...theme.typography.h5
       }
     },
-    photo: {
-      maxWidth: '100%'
-    },
-    photoPlacehlder: {
-      height: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: theme.spacing(1),
-      backgroundColor: theme.palette.grey['100']
+    photoWrapper: {
+      width: 150,
+      height: 150,
+      marginRight: theme.spacing(2),
+      backgroundColor: theme.palette.grey['500'],
+      '& > img': {
+        width: '100%',
+        height: '100%'
+      }
     },
     list: {
       listStyle: 'none',
@@ -61,19 +64,25 @@ function AgentInfo({
   const items = [jobTitle, email, company, tel].filter(Boolean)
 
   return (
-    <Grid container spacing={4}>
-      <Grid item xs={6} sm={4}>
+    <Box display="flex">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        className={classes.photoWrapper}
+      >
         {image ? (
-          <img alt={name} src={image} className={classes.photo} />
+          <img alt={name} src={image} />
         ) : (
-          <div className={classes.photoPlacehlder}>
-            <Typography variant="caption" color="textSecondary">
-              The agent's photo is not available!
-            </Typography>
-          </div>
+          <SvgIcon
+            path={mdiAccount}
+            size={muiIconSizes.xxlarge}
+            color="white"
+          />
         )}
-      </Grid>
-      <Grid item xs={6} sm={8}>
+      </Box>
+
+      <div>
         <Typography variant="subtitle1" component="h3" className={classes.name}>
           {name}
         </Typography>
@@ -89,8 +98,8 @@ function AgentInfo({
             </Typography>
           ))}
         </ul>
-      </Grid>
-    </Grid>
+      </div>
+    </Box>
   )
 }
 
