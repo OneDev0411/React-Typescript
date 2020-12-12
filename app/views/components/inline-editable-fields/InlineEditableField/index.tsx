@@ -53,6 +53,7 @@ export const InlineEditableField = (props: Props) => {
     renderEditMode
   } = props
   const [ref, setRef] = useState<HTMLElement | null>(null)
+  const [isSaving, setIsSaving] = useState<boolean>(false)
 
   const handleToggleMode = event => {
     event.stopPropagation()
@@ -90,6 +91,7 @@ export const InlineEditableField = (props: Props) => {
 
   const handleSave = async () => {
     try {
+      setIsSaving(true)
       await onSave()
 
       if (isPopoverMode) {
@@ -97,6 +99,8 @@ export const InlineEditableField = (props: Props) => {
       }
     } catch (error) {
       throw error
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -122,6 +126,7 @@ export const InlineEditableField = (props: Props) => {
       showDelete,
       style,
       isEditing,
+      isSaving,
       viewRef: ref,
       render: renderEditMode,
       onClosePopover: () => setRef(null)

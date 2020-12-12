@@ -15,6 +15,7 @@ import pluralize from 'pluralize'
 import { TemplateSelector } from './components/TemplateSelector'
 
 interface Props {
+  disabled?: boolean
   renderAttributeFields: () => ReactNode
   attributeName: TriggerContactEventTypes
   currentValue: Nullable<ITrigger>
@@ -63,6 +64,7 @@ const useStyles = makeStyles(
 )
 
 const TriggerEditModeComponent = ({
+  disabled = false,
   currentValue,
   attributeName,
   renderAttributeFields,
@@ -132,6 +134,7 @@ const TriggerEditModeComponent = ({
               </Typography>
               <Switch
                 checked={isActive}
+                disabled={disabled}
                 onChange={handleActiveChange}
                 color="primary"
                 size="small"
@@ -152,7 +155,7 @@ const TriggerEditModeComponent = ({
               label="Subject"
               type="text"
               size="small"
-              disabled={!isActive}
+              disabled={disabled || !isActive}
               defaultValue={subject}
               InputLabelProps={{
                 shrink: true
@@ -165,7 +168,7 @@ const TriggerEditModeComponent = ({
               variant="outlined"
               size="small"
               className={classes.inputField}
-              disabled={!isActive}
+              disabled={disabled || !isActive}
             >
               <InputLabel id="trigger-send-before">Deliver in</InputLabel>
               <Select
@@ -189,7 +192,7 @@ const TriggerEditModeComponent = ({
       </div>
       <div className={classes.containerItem}>
         <TemplateSelector
-          disabled={!isActive}
+          disabled={disabled || !isActive}
           currentValue={currentValue}
           attributeName={attributeName}
           selectedTemplate={selectedTemplate}

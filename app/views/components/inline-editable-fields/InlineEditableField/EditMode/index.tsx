@@ -29,6 +29,7 @@ export interface Props {
   showDelete?: boolean
   isStatic?: boolean
   isEditing: boolean
+  isSaving: boolean
   isPopoverMode?: boolean
   style?: CSSProperties
   viewRef?: any
@@ -53,6 +54,7 @@ export const EditMode = (props: Props) => {
     render,
     error = '',
     isDisabled = false,
+    isSaving,
     handleSave,
     handleCancel,
     handleDelete = noop,
@@ -101,7 +103,7 @@ export const EditMode = (props: Props) => {
             onClick={handleSave}
             data-test="inline-editable-field-save"
           >
-            {isDisabled ? 'Saving...' : 'Save'}
+            {isSaving ? 'Saving...' : 'Save'}
           </Button>
         </Box>
       </EditModeActionBar>

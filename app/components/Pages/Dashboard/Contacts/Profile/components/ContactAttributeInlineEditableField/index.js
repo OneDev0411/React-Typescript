@@ -95,8 +95,24 @@ function getStateFromTrigger(trigger, attribute) {
   }
 }
 
-const getInitialState = ({ attribute, trigger }) => ({
-  error: '',
+function getInitialErrorMessage(contact) {
+  if (!contact) {
+    return ''
+  }
+
+  if (!contact.email) {
+    return "You should provide contact's email to be able to use trigger feature."
+  }
+
+  if (!contact.user) {
+    return "You should set an contact's owner to be able to use trigger feature."
+  }
+
+  return ''
+}
+
+const getInitialState = ({ contact, attribute, trigger }) => ({
+  error: getInitialErrorMessage(contact),
   isDirty: false,
   isTriggerFieldDirty: false,
   disabled: false,
@@ -384,7 +400,7 @@ class MasterField extends React.Component {
   }
 
   renderEditMode = props => {
-    const { attribute } = this.props
+    const { contact, attribute } = this.props
     const {
       currentTrigger,
       isTriggerActive,
@@ -422,6 +438,7 @@ class MasterField extends React.Component {
           onChangeSubject={this.onChangeSubject}
           onChangeSendBefore={this.onChangeSendBefore}
           onChangeTemplate={this.onChangeTemplate}
+          disabled={!contact?.email}
         />
       )
     }
@@ -441,6 +458,8 @@ class MasterField extends React.Component {
   )
 
   render() {
+    const { disabled, isDirty, label, error } = this.state
+
     if (!this.attribute_def.editable) {
       return (
         <div style={{ margin: '0 -0.5em', padding: '0.5em' }}>
@@ -451,18 +470,18 @@ class MasterField extends React.Component {
 
     return (
       <InlineEditableField
-        error={this.state.error}
+        error={error}
         cancelOnOutsideClick
         handleAddNew={this.addInstance}
         handleCancel={this.cancel}
         handleDelete={this.handleDelete}
         handleOutsideClick={this.handleOutsideClick}
         handleSave={this.save}
-        isDisabled={this.state.disabled}
+        isDisabled={disabled || !isDirty}
         isEditing={this.props.isActive}
         isPopoverMode={this.isTriggerable}
         isEditModeStatic
-        label={this.state.label}
+        label={label}
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
         showAdd={this.showAdd}
