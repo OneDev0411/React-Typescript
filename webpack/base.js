@@ -99,7 +99,12 @@ module.exports = {
         TENOR_API_KEY: JSON.stringify(process.env.TENOR_API_KEY),
         UNSPLASH_API_KEY: JSON.stringify(process.env.UNSPLASH_API_KEY),
         DROPBOX_APP_KEY: JSON.stringify(process.env.DROPBOX_APP_KEY),
-        INTERCOM_APP_ID: JSON.stringify(process.env.INTERCOM_APP_ID)
+        INTERCOM_APP_ID: JSON.stringify(process.env.INTERCOM_APP_ID),
+        SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
+        SENTRY_ENVIRONMENT: JSON.stringify(process.env.SENTRY_ENVIRONMENT),
+        SOURCE_VERSION: JSON.stringify(
+          process.env.CI_COMMIT_REF_SLUG || process.env.SOURCE_VERSION
+        )
       },
       __DEV__,
       NODE_ENV: env,
