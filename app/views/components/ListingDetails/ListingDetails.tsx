@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
 import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
 
@@ -17,7 +18,6 @@ import Title from './Title'
 import Status from './Status'
 import Gallery from './Gallery'
 import MainFeatures from './MainFeatures'
-import StaticMap from './StaticMap'
 import FeaturedImages from './FeaturedImages'
 import AgentInfo from './AgentInfo'
 import Description from './Description'
@@ -82,7 +82,10 @@ const useStyles = makeStyles(
         padding: 0
       }
     },
-    staticMapWrapper: {
+    showOnMapWrapper: {
+      '& > a:hover, & > a:focus': {
+        color: theme.palette.common.white
+      },
       [theme.breakpoints.up('sm')]: {
         paddingLeft: theme.spacing(3)
       },
@@ -200,8 +203,16 @@ function ListingDetails({ id, onClose }: Props) {
                   </Box>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={8}>
-                  <Box className={classes.staticMapWrapper}>
-                    <StaticMap location={listing.property.address.location} />
+                  <Box className={classes.showOnMapWrapper}>
+                    <Button
+                      href="#listing-map"
+                      color="primary"
+                      fullWidth
+                      size="large"
+                      variant="contained"
+                    >
+                      Show on Map
+                    </Button>
                   </Box>
                 </Grid>
               </Grid>
