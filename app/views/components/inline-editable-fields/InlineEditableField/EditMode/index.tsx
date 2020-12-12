@@ -22,6 +22,7 @@ export interface Props {
   hasError?: boolean
   handleCancel: () => void
   handleDelete?: () => void
+  onClosePopover?: () => void
   handleSave: () => void
   isDisabled?: boolean
   render: (props: any) => ReactNode
@@ -55,6 +56,7 @@ export const EditMode = (props: Props) => {
     handleSave,
     handleCancel,
     handleDelete = noop,
+    onClosePopover = noop,
     showDelete = false,
     isStatic = false,
     isPopoverMode = false,
@@ -114,6 +116,7 @@ export const EditMode = (props: Props) => {
         open={open}
         anchorEl={viewRef}
         onClose={handleCancel}
+        onExited={onClosePopover}
         anchorOrigin={{
           vertical: 'center',
           horizontal: 'right'

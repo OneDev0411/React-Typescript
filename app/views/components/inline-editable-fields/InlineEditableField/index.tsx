@@ -55,13 +55,12 @@ export const InlineEditableField = (props: Props) => {
   const [ref, setRef] = useState<HTMLElement | null>(null)
 
   const handleToggleMode = event => {
-    if (event && event.stopPropagation) {
-      event.stopPropagation()
+    event.stopPropagation()
+
+    if (isPopoverMode) {
+      setRef(event.currentTarget)
     }
 
-    const refValue = isEditing ? event.currentTarget : null
-
-    setRef(refValue)
     onToggleMode()
   }
 
@@ -124,7 +123,8 @@ export const InlineEditableField = (props: Props) => {
       style,
       isEditing,
       viewRef: ref,
-      render: renderEditMode
+      render: renderEditMode,
+      onClosePopover: () => setRef(null)
     }
   }
 

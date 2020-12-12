@@ -276,21 +276,18 @@ class MasterField extends React.Component {
       !triggerSelectedTemplate
     ) {
       this.setState({ error: 'Select Template' })
-      throw new Error('Select Template')
     }
 
     if (!this.isDirty) {
       const error = id ? 'Update value!' : 'Change something!'
 
       this.setState({ error })
-      throw new Error(error)
     }
 
     const error = await validation(this.attribute_def, value)
 
     if (error) {
       this.setState({ error })
-      throw new Error(error)
     }
 
     try {
