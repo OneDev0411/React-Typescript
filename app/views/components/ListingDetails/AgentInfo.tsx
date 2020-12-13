@@ -17,13 +17,17 @@ const useStyles = makeStyles(
       }
     },
     photoWrapper: {
-      width: 150,
-      height: 150,
+      width: 120,
+      height: 120,
       marginRight: theme.spacing(2),
       backgroundColor: theme.palette.grey['500'],
       '& > img': {
         width: '100%',
         height: '100%'
+      },
+      [theme.breakpoints.up('sm')]: {
+        width: 150,
+        height: 150
       }
     },
     list: {
