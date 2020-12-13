@@ -9,7 +9,6 @@ import { mdiClose, mdiExportVariant, mdiHeart, mdiHeartOutline } from '@mdi/js'
 
 import { IAppState } from 'reducers'
 import { useFavorite } from 'hooks/use-favorite'
-import { getBrandLogo } from 'utils/get-brand-logo'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
@@ -48,21 +47,9 @@ function Header({
   handleClose
 }: Props & WithRouterProps) {
   const classes = useStyles()
-  const brand = useSelector<IAppState, IBrand>(
-    (state: IAppState) => state.brand
-  )
   const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
 
   const { isFavorited, toggleFavorite } = useFavorite(listing)
-  const logo = React.useMemo(
-    () =>
-      getBrandLogo(
-        brand,
-        'inverted-logo-wide',
-        '/static/images/logo--type.svg'
-      ),
-    [brand]
-  )
 
   const handleLogin = () => {
     const { query } = location
@@ -85,7 +72,7 @@ function Header({
     <>
       <Grid container>
         <Grid item xs={12} sm={3}>
-          {handleClose ? (
+          {handleClose && (
             <Button
               variant="outlined"
               onClick={handleClose}
@@ -94,8 +81,6 @@ function Header({
             >
               Close
             </Button>
-          ) : (
-            <img alt="logo" src={logo} className={classes.logo} />
           )}
         </Grid>
         <Grid item xs={12} sm={9}>
