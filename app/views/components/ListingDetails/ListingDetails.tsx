@@ -223,12 +223,14 @@ function ListingDetails({ id, onClose }: Props) {
         </Grid>
         {agent && (
           <Grid item xs={12} lg={4}>
-            <AgentInfo
-              name={agent.name}
-              email={agent.email}
-              image={agent.image}
-              tel={agent.tel}
-            />
+            <Container maxWidth="xs" disableGutters>
+              <AgentInfo
+                name={agent.name}
+                email={agent.email}
+                image={agent.image}
+                tel={agent.tel}
+              />
+            </Container>
           </Grid>
         )}
       </Grid>
