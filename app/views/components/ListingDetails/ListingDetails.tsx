@@ -164,11 +164,6 @@ function ListingDetails({ id, onClose }: Props) {
   const subtitle1 = listingUtils.addressTitle(listing.property.address)
   const subtitle2 = `${getSubAddress(listing)} | MLS#: ${listing.mls_number}`
   const images = listing.gallery_image_urls || []
-  const getFeaturedImages = (serie: number) => {
-    const start = serie === 1 ? 5 : 8
-
-    return images.slice(start, start + 3)
-  }
 
   return (
     <Container maxWidth="xl" disableGutters>
@@ -227,7 +222,7 @@ function ListingDetails({ id, onClose }: Props) {
           lg={agent ? 7 : 12}
           className={classes.featuredImageWrapper}
         >
-          <FeaturedImages images={getFeaturedImages(1)} />
+          <FeaturedImages images={images} serie={1} />
         </Grid>
         {agent && (
           <Grid item xs={12} lg={5}>
@@ -255,7 +250,7 @@ function ListingDetails({ id, onClose }: Props) {
           </Box>
         </Grid>
         <Grid item xs={12} lg={8}>
-          <FeaturedImages images={getFeaturedImages(2)} />
+          <FeaturedImages images={images} serie={2} />
         </Grid>
       </Grid>
       {!isDesktop && (
