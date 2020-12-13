@@ -1,5 +1,8 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router'
+import React from 'react'
+import ButtonBase from '@material-ui/core/ButtonBase'
+import { Dialog } from '@material-ui/core'
+
+import { ListingDetails } from 'components/ListingDetails'
 
 import ListingMarker from '../ListingMarker'
 
@@ -23,20 +26,41 @@ const setMarkerCssPosition = listing => {
   return position
 }
 
-const SimpleMarker = ({ user, listing, isWidget }) => {
-  const [isHoverd, setIsHoverd] = useState(false)
+const SimpleMarker = ({ listing }) => {
+  const [isHoverd, setIsHoverd] = React.useState(false)
+  const [isListingOpen, setIsListingOpen] = React.useState(false)
+
+  const closeListing = () => {
+    window.history.replaceState({}, '', '/dashboard/mls')
+    setIsListingOpen(false)
+  }
+
+  const handleClick = React.useCallback(() => {
+    window.history.replaceState({}, '', `/dashboard/mls/${listing.id}`)
+    setIsListingOpen(true)
+  }, [listing.id])
 
   return (
-    <Link
-      className="single-marker"
-      onMouseLeave={() => setIsHoverd(false)}
-      onMouseEnter={() => setIsHoverd(true)}
-      to={`/dashboard/mls/${listing.id}`}
-      style={setMarkerCssPosition(listing)}
-      target={user && !isWidget ? '' : '_blank'}
-    >
-      <ListingMarker context="map" listing={listing} popupIsActive={isHoverd} />
-    </Link>
+    <>
+      <ButtonBase
+        className="single-marker"
+        onMouseLeave={() => setIsHoverd(false)}
+        onMouseEnter={() => setIsHoverd(true)}
+        onClick={handleClick}
+        style={setMarkerCssPosition(listing)}
+      >
+        <ListingMarker
+          context="map"
+          listing={listing}
+          popupIsActive={isHoverd}
+        />
+      </ButtonBase>
+      {isListingOpen && (
+        <Dialog open fullScreen>
+          <ListingDetails id={listing.id} onClose={closeListing} />
+        </Dialog>
+      )}
+    </>
   )
 }
 export default SimpleMarker
