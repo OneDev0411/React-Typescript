@@ -101,7 +101,7 @@ function MainFeatures({ listing }: Props) {
                     <SvgIcon path={mdiCalendarMonthOutline} />
                     <Box ml={1}>
                       <Typography variant="button" className={classes.value}>
-                        {listing.property.year_built || 'N/A'}
+                        {listing.property.year_built || '--'}
                       </Typography>
                     </Box>
                   </Box>
@@ -171,7 +171,7 @@ function MainFeatures({ listing }: Props) {
                   <SvgIcon path={mdiCurrencyUsdCircleOutline} />
                   <Box ml={1}>
                     <Typography variant="button" className={classes.value}>
-                      {priceSqft > 0 ? numberToUSD(priceSqft) : 'N/A'}
+                      {priceSqft > 0 ? numberToUSD(priceSqft) : '--'}
                     </Typography>
                   </Box>
                 </Box>
@@ -206,7 +206,7 @@ function getBathroomsTooltip(listing: IListing): string {
 
 function getFormattedValue(value: string | number | null | undefined): string {
   if (!value) {
-    return 'N/A'
+    return '--'
   }
 
   if (typeof value === 'number') {
