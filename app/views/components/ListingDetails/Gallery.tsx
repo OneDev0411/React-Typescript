@@ -104,7 +104,8 @@ function Gallery({ images }: Props) {
   const theme = useTheme()
   const classes = useStyles()
   const imagesLength = images.length
-  const isTablet = useMediaQuery(theme.breakpoints.up('sm'))
+  const isUpSmallBreakPoint = useMediaQuery(theme.breakpoints.up('sm'))
+  const isUpLargeBreakPoint = useMediaQuery(theme.breakpoints.up('lg'))
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
@@ -168,8 +169,12 @@ function Gallery({ images }: Props) {
           />
         </button>
       </Box>
-      <Box display="flex" justifyContent="center" px={isTablet ? 0 : 2}>
-        <Grid container spacing={isTablet ? 2 : 1}>
+      <Box
+        display="flex"
+        justifyContent="center"
+        px={isUpLargeBreakPoint ? 0 : 2}
+      >
+        <Grid container spacing={isUpSmallBreakPoint ? 2 : 1}>
           {thumbnails.map((item, index) => (
             <Grid item xs={3} key={index}>
               <button

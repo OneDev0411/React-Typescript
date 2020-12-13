@@ -12,7 +12,11 @@ const useStyles = makeStyles(
       padding: theme.spacing(1, 2),
       borderRadius: '20px',
       color: theme.palette.tertiary.light,
-      backgroundColor: theme.palette.grey['100']
+      backgroundColor: theme.palette.grey['100'],
+      [theme.breakpoints.up('sm')]: {
+        borderRadius: '30px',
+        padding: theme.spacing(1.5, 2.5)
+      }
     },
     status: {
       width: 10,
@@ -20,7 +24,16 @@ const useStyles = makeStyles(
       borderRadius: '100%',
       marginRight: theme.spacing(1),
       backgroundColor: (props: Props) =>
-        `#${listingUtils.getStatusColor(props.status)}`
+        `#${listingUtils.getStatusColor(props.status)}`,
+      [theme.breakpoints.up('sm')]: {
+        width: 16,
+        height: 16
+      }
+    },
+    text: {
+      [theme.breakpoints.up('sm')]: {
+        ...theme.typography.h6
+      }
     }
   }),
   { name: 'Status' }
@@ -36,7 +49,9 @@ function Title({ status }: Props) {
   return (
     <div className={classes.container}>
       <div className={classes.status} />
-      <Typography variant="button">{status}</Typography>
+      <Typography variant="button" className={classes.text}>
+        {status}
+      </Typography>
     </div>
   )
 }

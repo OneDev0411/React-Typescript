@@ -73,24 +73,20 @@ const useStyles = makeStyles(
         marginBottom: theme.spacing(5)
       }
     },
-    mainFeaturesWrapper: {
-      marginBottom: theme.spacing(4),
-      [theme.breakpoints.up('sm')]: {
-        paddingRight: theme.spacing(3)
+    mainFeaturesAndShowOnMapBtnWrapper: {
+      margin: '0 auto',
+      maxWidth: '320px',
+      [theme.breakpoints.between('sm', 'xl')]: {
+        maxWidth: '380px'
       },
-      [theme.breakpoints.up('lg')]: {
-        padding: 0
+      [theme.breakpoints.up('xl')]: {
+        maxWidth: 'auto',
+        margin: 0
       }
     },
-    showOnMapWrapper: {
-      '& > a:hover, & > a:focus': {
+    showOnMapButton: {
+      '&:hover, &:focus': {
         color: theme.palette.common.white
-      },
-      [theme.breakpoints.up('sm')]: {
-        paddingLeft: theme.spacing(3)
-      },
-      [theme.breakpoints.up('lg')]: {
-        padding: 0
       }
     },
     featuredImageWrapper: {
@@ -191,26 +187,27 @@ function ListingDetails({ id, onClose }: Props) {
               <Box mb={5}>
                 <Status status={listing.status} />
               </Box>
-              <Grid container>
-                <Grid item xs={12} sm={6} lg={8}>
-                  <Box className={classes.mainFeaturesWrapper}>
-                    <MainFeatures listing={listing} />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={6} lg={8}>
-                  <Box className={classes.showOnMapWrapper}>
+              <Box className={classes.mainFeaturesAndShowOnMapBtnWrapper}>
+                <Grid container>
+                  <Grid item xs={12} lg={9}>
+                    <Box mb={4}>
+                      <MainFeatures listing={listing} />
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} lg={9}>
                     <Button
                       href="#listing-map"
                       color="primary"
                       fullWidth
                       size="large"
                       variant="contained"
+                      className={classes.showOnMapButton}
                     >
                       Show on Map
                     </Button>
-                  </Box>
+                  </Grid>
                 </Grid>
-              </Grid>
+              </Box>
             </Box>
           </Grid>
         </Grid>

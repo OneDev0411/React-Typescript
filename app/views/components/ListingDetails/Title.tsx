@@ -20,7 +20,10 @@ const useStyles = makeStyles(
     },
     subtitle2: {
       color: theme.palette.tertiary.light,
-      [theme.breakpoints.up('sm')]: {
+      [theme.breakpoints.up('md')]: {
+        ...theme.typography.body1
+      },
+      [theme.breakpoints.up('lg')]: {
         ...theme.typography.h5
       }
     }
