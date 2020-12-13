@@ -216,13 +216,13 @@ function ListingDetails({ id, onClose }: Props) {
         <Grid
           item
           xs={12}
-          lg={agent ? 7 : 12}
+          lg={agent ? 8 : 12}
           className={classes.featuredImageWrapper}
         >
           <FeaturedImages images={images} serie={1} />
         </Grid>
         {agent && (
-          <Grid item xs={12} lg={5}>
+          <Grid item xs={12} lg={4}>
             <AgentInfo
               name={agent.name}
               email={agent.email}
