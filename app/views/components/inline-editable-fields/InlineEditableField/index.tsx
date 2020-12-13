@@ -94,7 +94,7 @@ export const InlineEditableField = (props: Props) => {
       setIsSaving(true)
       await onSave()
 
-      if (isPopoverMode) {
+      if (isPopoverMode && !error) {
         setRef(null)
       }
     } catch (error) {

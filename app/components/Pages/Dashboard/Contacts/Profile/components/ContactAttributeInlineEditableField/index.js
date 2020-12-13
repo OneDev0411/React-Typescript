@@ -14,7 +14,8 @@ import {
   getValue,
   parseValue,
   getPlaceholder,
-  validation
+  validation,
+  validateTriggerFields
 } from './helpers'
 
 import { EditMode } from './EditMode'
@@ -286,24 +287,32 @@ class MasterField extends React.Component {
     const { id, cuid } = attribute
     const shouldCheckTriggerField = this.isTriggerable && isTriggerFieldDirty
 
-    if (
-      shouldCheckTriggerField &&
-      !currentTrigger &&
-      !triggerSelectedTemplate
-    ) {
-      this.setState({ error: 'Select Template' })
+    if (shouldCheckTriggerField) {
+      const error = validateTriggerFields(
+        {
+          template: triggerSelectedTemplate,
+          wait_for: triggerSendBefore,
+          subject: triggerSubject,
+          event_type: this.attribute_def.name
+        },
+        currentTrigger
+      )
+
+      if (error) {
+        return this.setState({ error })
+      }
     }
 
     if (!this.isDirty) {
       const error = id ? 'Update value!' : 'Change something!'
 
-      this.setState({ error })
+      return this.setState({ error })
     }
 
     const error = await validation(this.attribute_def, value)
 
     if (error) {
-      this.setState({ error })
+      return this.setState({ error })
     }
 
     try {
