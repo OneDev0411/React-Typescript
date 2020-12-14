@@ -11,9 +11,10 @@ import {
 
 import { mdiPlus } from '@mdi/js'
 
-import { SvgIcon } from '../SvgIcons/SvgIcon'
-import { useIconStyles } from '../../../styles/use-icon-styles'
-import { Item } from './types'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
+
+import { useIconStyles } from '../../../../styles/use-icon-styles'
+import { Item } from '../types'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
