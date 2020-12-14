@@ -1,8 +1,7 @@
 import React from 'react'
 import ButtonBase from '@material-ui/core/ButtonBase'
-import { Dialog } from '@material-ui/core'
 
-import { ListingDetails } from 'components/ListingDetails'
+import { ListingDetailsModal } from 'components/ListingDetailsModal'
 
 import ListingMarker from '../ListingMarker'
 
@@ -55,11 +54,11 @@ const SimpleMarker = ({ listing }) => {
           popupIsActive={isHoverd}
         />
       </ButtonBase>
-      {isListingOpen && (
-        <Dialog open fullScreen>
-          <ListingDetails id={listing.id} onClose={closeListing} />
-        </Dialog>
-      )}
+      <ListingDetailsModal
+        isOpen={isListingOpen}
+        listingId={listing.id}
+        closeHandler={closeListing}
+      />
     </>
   )
 }

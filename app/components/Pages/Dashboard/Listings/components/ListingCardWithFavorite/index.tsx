@@ -1,6 +1,5 @@
 import React, { ComponentProps, useCallback, useState, memo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Dialog } from '@material-ui/core'
 import { noop } from 'lodash'
 
 import toggleFavorite from 'actions/listings/favorites/toggle-favorite'
@@ -8,7 +7,7 @@ import { getIsFavorite } from 'reducers/listings/favorites'
 import { IAppState } from 'reducers'
 
 import ListingCard from 'components/ListingCards/ListingCard'
-import { ListingDetails } from 'components/ListingDetails'
+import { ListingDetailsModal } from 'components/ListingDetailsModal'
 
 interface Props
   extends Omit<ComponentProps<typeof ListingCard>, 'liked' | 'onLikeClick'> {}
@@ -24,7 +23,6 @@ const ListingCardWithFavorite = ({
   const user = useSelector<IAppState, IUser>(({ user }) => user)
   const favorites = useSelector(({ favorites }) => favorites)
   const isFavorited = getIsFavorite(favorites.listings, listing.id)
-
   const [isListingOpen, setIsListingOpen] = useState<boolean>(false)
 
   const closeListing = () => {
@@ -63,11 +61,11 @@ const ListingCardWithFavorite = ({
         onToggleSelection={handleToggleSelection}
       />
 
-      {isListingOpen && (
-        <Dialog open fullScreen>
-          <ListingDetails id={listing.id} onClose={closeListing} />
-        </Dialog>
-      )}
+      <ListingDetailsModal
+        isOpen={isListingOpen}
+        listingId={listing.id}
+        closeHandler={closeListing}
+      />
     </>
   )
 }
