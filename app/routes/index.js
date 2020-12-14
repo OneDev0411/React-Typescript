@@ -154,7 +154,6 @@ const AsyncListingsSearch = Load({
       '../components/Pages/Dashboard/Listings/Search' /* webpackChunkName: "listing_search" */
     )
 })
-// import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
 
 const AsyncMlsSavedSearch = Load({
   loader: () =>
@@ -174,6 +173,24 @@ const AsyncListingSinglePage = Load({
   loader: () =>
     import(
       '../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */
+    )
+})
+
+/* ==================================== */
+//  Agent Network
+/* ==================================== */
+
+const AsyncAgentNetwork = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/AgentNetwork' /* webpackChunkName: "agent_network" */
+    )
+})
+
+const AsyncAgentNetworkAgents = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/AgentNetwork/Agents' /* webpackChunkName: "agent_network" */
     )
 })
 
@@ -227,13 +244,6 @@ const AsyncDealFormEdit = Load({
   loader: () =>
     import(
       '../components/Pages/Dashboard/Deals/FormEdit' /* webpackChunkName: "deal_fe" */
-    )
-})
-
-const AsyncAgentNetwork = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Deals/AgentNetwork' /* webpackChunkName: "agent-network" */
     )
 })
 
@@ -679,6 +689,12 @@ export default (
         <Route path="marketing/editor" component={AsyncMarketingEditor} />
         <Route path="marketing/:types(/:medium)" component={AsyncMarketing} />
 
+        <Route path="agent-network" component={AsyncAgentNetwork} />
+        <Route
+          path="agent-network/agents"
+          component={AsyncAgentNetworkAgents}
+        />
+
         <Route path="insights">
           <IndexRoute component={AsyncMarketingInsightsList} />
           <Route path="scheduled" component={AsyncMarketingInsightsList} />
@@ -708,10 +724,6 @@ export default (
           <Route
             path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"
             component={AsyncDealFileViewer}
-          />
-          <Route
-            path="/dashboard/deals/:id/marketing/network"
-            component={AsyncAgentNetwork}
           />
           <Route
             path="/dashboard/deals/:id(/:tab)"

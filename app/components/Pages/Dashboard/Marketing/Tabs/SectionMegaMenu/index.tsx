@@ -8,7 +8,7 @@ import Item from './components/Item'
 
 interface Props {
   data: Section
-  mediums: { [key: string]: MarketingTemplateMedium[] }
+  mediums: { [key: string]: IMarketingTemplateMedium[] }
   onClose: () => void
 }
 

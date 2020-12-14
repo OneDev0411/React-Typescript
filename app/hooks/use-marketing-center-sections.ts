@@ -8,6 +8,7 @@ import {
   Section,
   SectionItem
 } from 'components/PageSideNav/types'
+import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
 
 interface ExtendedSection extends Section {
   key: string
@@ -39,7 +40,7 @@ const ALL_SECTIONS: SectionCollection = {
     title: 'Newsletters',
     items: [
       {
-        title: 'Newsletters',
+        title: getTemplateTypeLabel('Newsletter'),
         value: 'Newsletter',
         link: urlGenerator('/Newsletter')
       }
@@ -51,17 +52,17 @@ const ALL_SECTIONS: SectionCollection = {
     title: 'Celebrations',
     items: [
       {
-        title: 'Birthday',
+        title: getTemplateTypeLabel('Birthday'),
         value: 'Birthday',
         link: urlGenerator('/Birthday')
       },
       {
-        title: 'Home Anniversary',
+        title: getTemplateTypeLabel('HomeAnniversary'),
         value: 'HomeAnniversary',
         link: urlGenerator('/HomeAnniversary')
       },
       {
-        title: 'Wedding Anniversary',
+        title: getTemplateTypeLabel('WeddingAnniversary'),
         value: 'WeddingAnniversary',
         link: urlGenerator('/WeddingAnniversary')
       }
@@ -73,132 +74,132 @@ const ALL_SECTIONS: SectionCollection = {
     title: 'Holidays',
     items: [
       {
-        title: 'Back To School',
+        title: getTemplateTypeLabel('BackToSchool'),
         value: 'BackToSchool',
         link: urlGenerator('/BackToSchool')
       },
       {
-        title: 'Chinese New Year',
+        title: getTemplateTypeLabel('ChineseNewYear'),
         value: 'ChineseNewYear',
         link: urlGenerator('/ChineseNewYear')
       },
       {
-        title: 'Christmas',
+        title: getTemplateTypeLabel('Christmas'),
         value: 'Christmas',
         link: urlGenerator('/Christmas')
       },
       {
-        title: 'Columbus Day',
+        title: getTemplateTypeLabel('ColumbusDay'),
         value: 'ColumbusDay',
         link: urlGenerator('/ColumbusDay')
       },
       {
-        title: 'Daylight Saving',
+        title: getTemplateTypeLabel('DaylightSaving'),
         value: 'DaylightSaving',
         link: urlGenerator('/DaylightSaving')
       },
       {
-        title: 'Diwali',
+        title: getTemplateTypeLabel('Diwali'),
         value: 'Diwali',
         link: urlGenerator('/Diwali')
       },
       {
-        title: 'Easter',
+        title: getTemplateTypeLabel('Easter'),
         value: 'Easter',
         link: urlGenerator('/Easter')
       },
       {
-        title: "Father's Day",
+        title: getTemplateTypeLabel('FathersDay'),
         value: 'FathersDay',
         link: urlGenerator('/FathersDay')
       },
       {
-        title: 'Fourth of July',
+        title: getTemplateTypeLabel('FourthOfJuly'),
         value: 'FourthOfJuly',
         link: urlGenerator('/FourthOfJuly')
       },
       {
-        title: 'Halloween',
+        title: getTemplateTypeLabel('Halloween'),
         value: 'Halloween',
         link: urlGenerator('/Halloween')
       },
       {
-        title: 'Hanukkah',
+        title: getTemplateTypeLabel('Hanukkah'),
         value: 'Hanukkah',
         link: urlGenerator('/Hanukkah')
       },
       {
-        title: "International Women's Day",
+        title: getTemplateTypeLabel('WomansDay'),
         value: 'WomansDay',
         link: urlGenerator('/WomansDay')
       },
       {
-        title: 'Kwanzaa',
+        title: getTemplateTypeLabel('Kwanzaa'),
         value: 'Kwanzaa',
         link: urlGenerator('/Kwanzaa')
       },
       {
-        title: 'Labor Day',
+        title: getTemplateTypeLabel('LaborDay'),
         value: 'LaborDay',
         link: urlGenerator('/LaborDay')
       },
       {
-        title: 'Martin Luther King Jr. Day',
+        title: getTemplateTypeLabel('MLKDay'),
         value: 'MLKDay',
         link: urlGenerator('/MLKDay')
       },
       {
-        title: 'Memorial Day',
+        title: getTemplateTypeLabel('MemorialDay'),
         value: 'MemorialDay',
         link: urlGenerator('/MemorialDay')
       },
       {
-        title: "Mother's Day",
+        title: getTemplateTypeLabel('MothersDay'),
         value: 'MothersDay',
         link: urlGenerator('/MothersDay')
       },
       {
-        title: 'New Year',
+        title: getTemplateTypeLabel('NewYear'),
         value: 'NewYear',
         link: urlGenerator('/NewYear')
       },
       {
-        title: 'Others',
+        title: getTemplateTypeLabel('OtherHoliday'),
         value: 'OtherHoliday',
         link: urlGenerator('/OtherHoliday')
       },
       {
-        title: 'Passover',
+        title: getTemplateTypeLabel('Passover'),
         value: 'Passover',
         link: urlGenerator('/Passover')
       },
       {
-        title: 'Rosh Hashanah',
+        title: getTemplateTypeLabel('RoshHashanah'),
         value: 'RoshHashanah',
         link: urlGenerator('/RoshHashanah')
       },
       {
-        title: 'September 11',
+        title: getTemplateTypeLabel('PatriotsDay'),
         value: 'PatriotsDay',
         link: urlGenerator('/PatriotsDay')
       },
       {
-        title: "St. Patrick's Day",
+        title: getTemplateTypeLabel('StPatrick'),
         value: 'StPatrick',
         link: urlGenerator('/StPatrick')
       },
       {
-        title: 'Thanksgiving',
+        title: getTemplateTypeLabel('Thanksgiving'),
         value: 'Thanksgiving',
         link: urlGenerator('/Thanksgiving')
       },
       {
-        title: "Valentine's Day",
+        title: getTemplateTypeLabel('Valentines'),
         value: 'Valentines',
         link: urlGenerator('/Valentines')
       },
       {
-        title: 'Veterans Day',
+        title: getTemplateTypeLabel('VeteransDay'),
         value: 'VeteransDay',
         link: urlGenerator('/VeteransDay')
       }
@@ -210,12 +211,12 @@ const ALL_SECTIONS: SectionCollection = {
     title: 'Brand',
     items: [
       {
-        title: 'Brand Campaigns',
+        title: getTemplateTypeLabel('Brand'),
         value: 'Brand',
         link: urlGenerator('/Brand')
       },
       {
-        title: 'New Agent',
+        title: getTemplateTypeLabel('NewAgent'),
         value: 'NewAgent',
         link: urlGenerator('/NewAgent')
       }
@@ -228,42 +229,42 @@ const ALL_SECTIONS: SectionCollection = {
     title: 'Properties',
     items: [
       {
-        title: 'As Seen In',
+        title: getTemplateTypeLabel('AsSeenIn'),
         value: 'AsSeenIn',
         link: urlGenerator('/AsSeenIn')
       },
       {
-        title: 'Open House',
+        title: getTemplateTypeLabel('OpenHouse'),
         value: 'OpenHouse',
         link: urlGenerator('/OpenHouse')
       },
       {
-        title: 'Coming Soon',
+        title: getTemplateTypeLabel('ComingSoon'),
         value: 'ComingSoon',
         link: urlGenerator('/ComingSoon')
       },
       {
-        title: 'Just Listed',
+        title: getTemplateTypeLabel('JustListed'),
         value: 'JustListed',
         link: urlGenerator('/JustListed')
       },
       {
-        title: 'New Price',
+        title: getTemplateTypeLabel('PriceImprovement'),
         value: 'PriceImprovement',
         link: urlGenerator('/PriceImprovement')
       },
       {
-        title: 'Under Contract',
+        title: getTemplateTypeLabel('UnderContract'),
         value: 'UnderContract',
         link: urlGenerator('/UnderContract')
       },
       {
-        title: 'Just Sold',
+        title: getTemplateTypeLabel('JustSold'),
         value: 'JustSold',
         link: urlGenerator('/JustSold')
       },
       {
-        title: 'Multi Properties',
+        title: getTemplateTypeLabel('Listings'),
         value: 'Listings',
         link: urlGenerator('/Listings')
       }
@@ -275,12 +276,12 @@ const ALL_SECTIONS: SectionCollection = {
     title: 'Blank Layouts',
     items: [
       {
-        title: 'Blank Layouts',
+        title: getTemplateTypeLabel('Layout'),
         value: 'Layout',
         link: urlGenerator('/Layout')
       },
       {
-        title: 'Blank Listing Layouts',
+        title: getTemplateTypeLabel('ListingLayout'),
         value: 'ListingLayout',
         link: urlGenerator('/ListingLayout')
       }
@@ -344,28 +345,4 @@ export function useMarketingCenterSections({ types }): SectionCollection {
   })
 
   return newSections
-}
-
-export function getTemplateTypeToLabelMapping(): StringMap<string> {
-  const sectionKeys = Object.keys(ALL_SECTIONS)
-
-  const templateTypeToLabelMapping: StringMap<string> = {}
-
-  sectionKeys.forEach(sectionKey => {
-    const currentSection = ALL_SECTIONS[sectionKey]
-
-    currentSection.items.forEach(item => {
-      if (!item.value) {
-        return
-      }
-
-      const templateTypeValue = Array.isArray(item.value)
-        ? item.value.join(',')
-        : item.value
-
-      templateTypeToLabelMapping[templateTypeValue] = item.title
-    })
-  })
-
-  return templateTypeToLabelMapping
 }

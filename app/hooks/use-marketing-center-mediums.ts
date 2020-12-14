@@ -5,7 +5,7 @@ import { onlyUnique, sortAlphabetically } from 'utils/helpers'
 
 function getFormattedUniqueMediums(
   templates: IBrandMarketingTemplate[]
-): MarketingTemplateMedium[] {
+): IMarketingTemplateMedium[] {
   return templates
     .map(t => t.template.medium)
     .filter(onlyUnique)
@@ -14,7 +14,7 @@ function getFormattedUniqueMediums(
 }
 
 type TemplateTypeToMediumsMap = {
-  [key: string]: MarketingTemplateMedium[]
+  [key: string]: IMarketingTemplateMedium[]
 }
 
 export function useMarketingCenterMediums(

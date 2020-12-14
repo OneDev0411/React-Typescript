@@ -11,10 +11,11 @@ import InstantMarketing from 'components/InstantMarketing'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
-import { byValert } from 'models/listings/search/get-listings'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
 import { getActiveTeamId } from 'utils/user-teams'
+
+import { getBrandListings } from 'models/listings/search/get-brand-listings'
 
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
 import { getTemplateTypes } from '../../helpers/get-template-types'
@@ -116,23 +117,7 @@ class SendMlsListingCard extends React.Component {
       const brand = getActiveTeamId(this.props.user)
 
       try {
-        const vAlertResponse = await byValert({
-          brand,
-          limit: 200,
-          sort_order: ['status'],
-          property_types: ['Residential'],
-          property_subtypes: [
-            'RES-Single Family',
-            'RES-Condo',
-            'RES-Townhouse',
-            'RES-Half Duplex',
-            'RES-Farm/Ranch'
-          ]
-        })
-
-        const listingDrawerListings = Object.keys(
-          vAlertResponse.entities.listings
-        ).map(key => vAlertResponse.entities.listings[key])
+        const listingDrawerListings = await getBrandListings(brand)
 
         this.setState({ listingDrawerListings })
       } catch (e) {
@@ -156,7 +141,7 @@ class SendMlsListingCard extends React.Component {
      *
      * @return {null|IDenormalizedEmailRecipientInput}
      */
-    const mapToEmailRecipientInput = id => {
+    const getRecipientInputByContactId = id => {
       const contact = selectContact(this.props.contacts, id)
 
       if (!contact || !contact.email) {
@@ -170,11 +155,28 @@ class SendMlsListingCard extends React.Component {
       }
     }
 
-    return this.props.selectedRows
-      ? this.props.selectedRows
-          .map(mapToEmailRecipientInput)
-          .filter(recipient => recipient !== null)
-      : []
+    /**
+     *
+     * @return {IDenormalizedEmailRecipientDealAgentInput}
+     */
+    const getRecipientInputByAgent = agent => {
+      return {
+        recipient_type: 'Agent',
+        agent
+      }
+    }
+
+    if (!this.props.selectedRows || this.props.selectedRows.length === 0) {
+      return []
+    }
+
+    if (typeof this.props.selectedRows[0] === 'string') {
+      return this.props.selectedRows
+        .map(getRecipientInputByContactId)
+        .filter(recipient => recipient !== null)
+    }
+
+    return this.props.selectedRows.map(getRecipientInputByAgent)
   }
 
   getEmail = email => {

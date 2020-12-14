@@ -3,8 +3,8 @@ import { useDeepCompareEffect } from 'react-use'
 
 export function useUniqueTemplateTypes(
   templates: IBrandMarketingTemplate[]
-): MarketingTemplateType[] {
-  const [types, setTypes] = useState<MarketingTemplateType[]>([])
+): IMarketingTemplateType[] {
+  const [types, setTypes] = useState<IMarketingTemplateType[]>([])
 
   useDeepCompareEffect(() => {
     const allTypes = templates.map(item => item.template.template_type)

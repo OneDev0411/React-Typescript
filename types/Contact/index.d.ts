@@ -22,6 +22,7 @@ declare interface IContactAttributeDef {
   editable: boolean
   singular: boolean
   searchable: boolean
+  required: boolean
   has_label: boolean
   labels: string[] | null
   enum_values: string[] | null
@@ -38,8 +39,8 @@ declare interface ISubContact {
   brand?: UUID
   created_at: number
   type: 'sub_contact'
-  sections: Record<UUID, (IContactAttributeWithDef)[]>
-  attributes: Record<UUID, (IContactAttributeWithDef)[]>
+  sections: Record<UUID, IContactAttributeWithDef[]>
+  attributes: Record<UUID, IContactAttributeWithDef[]>
 }
 
 declare interface IContactBase {

@@ -27,7 +27,7 @@ export interface Props<Row> {
   loading?: LoadingPosition
   summary?: ((total: number, state: StateContext) => React.ReactText) | null
   TableActions?: React.ReactNode | null
-  ToolbarComponent?: React.ReactType<any> | null
+  ToolbarComponent?: React.ReactNode | null
   EmptyStateComponent?: React.ReactType<any> | null
   LoadingStateComponent?: React.ReactType<any> | null
   getTrProps?: (data: TrProps<Row>) => object

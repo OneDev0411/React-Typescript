@@ -13,5 +13,6 @@ app/views/components/SvgIcons/**/*.*
 *.json
 *.sql
 *.scss
+*.css
 *.svg
 *.png
