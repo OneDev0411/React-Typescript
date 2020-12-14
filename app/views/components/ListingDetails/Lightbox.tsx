@@ -70,6 +70,8 @@ export default function Lightbox({
           <SvgIcon path={mdiClose} color="white" size={muiIconSizes.xlarge} />
         </IconButton>
         <ImageGallery
+          lazyLoad
+          showFullscreenButton={false}
           additionalClass={classes.lightbox}
           startIndex={selectedImageIndex}
           items={images.map(url => ({
