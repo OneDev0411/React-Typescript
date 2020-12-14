@@ -1,32 +1,44 @@
-import React, { MouseEvent, useState } from 'react'
+import React, { MouseEvent, useState, useMemo, memo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
 
+import {
+  hasUserAccessToCrm,
+  hasUserAccessToDeals,
+  hasUserAccessToMarketingCenter
+} from 'utils/user-teams'
+
 import { Item, ItemType } from './types'
-import Button from './Button'
-import items from './items'
-import Menu from './Menu'
+import Button from './components/Button'
+import items from './components/items'
+import Menu from './components/Menu'
+import { useGlobalActionContext } from './hooks/use-global-action-context'
 
-interface Props {
-  onCreateEvent: (event: IEvent) => void
-  onCreateContact?: (contact: IContact) => void
-  onCreateAndAddNewContact?: (contact: IContact) => void
-  onCreateEmail: (email: IEmailCampaign) => void
-  onCreateEmailFollowUp: (email: IEvent) => void
-  onCreateTour: (
-    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-  ) => void
-  onCreateOpenHouse: (
-    oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
-  ) => void
-  availableActions: ItemType[]
-}
+interface Props {}
 
-export default function GlobalActionsButton(props: Props) {
-  const user = useSelector((state: IAppState) => state.user as IUser)
+export const GlobalActions = (props: Props) => {
+  const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
+  const [state] = useGlobalActionContext()
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [selectedItem, setSelectedItem] = useState<null | Item>(null)
+  const availableItems: Item[] = useMemo(() => {
+    const actions: ItemType[] = []
+
+    if (hasUserAccessToCrm(user)) {
+      actions.push('email', 'event', 'contact', 'tour')
+    }
+
+    if (hasUserAccessToDeals(user)) {
+      actions.push('deal')
+    }
+
+    if (hasUserAccessToCrm(user) && hasUserAccessToMarketingCenter(user)) {
+      actions.push('openhouse')
+    }
+
+    return items.filter(item => actions.includes(item.type))
+  }, [user])
 
   const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -46,26 +58,26 @@ export default function GlobalActionsButton(props: Props) {
   }
 
   const handleSubmitEvent = (event: IEvent) => {
-    props.onCreateEvent(event)
+    state.onCreateEvent(event)
     handleCloseRenderedItem()
   }
 
   const handleSubmitEmail = (email: IEmailCampaign) => {
-    props.onCreateEmail(email)
+    state.onCreateEmail(email)
     handleCloseRenderedItem()
   }
 
   const handleSubmitTour = (
     tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {
-    props.onCreateTour(tour)
+    state.onCreateTour(tour)
     handleCloseRenderedItem()
   }
 
   const handleSubmitOpenHouse = (
     oh: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {
-    props.onCreateOpenHouse(oh)
+    state.onCreateOpenHouse(oh)
     handleCloseRenderedItem()
   }
 
@@ -78,7 +90,7 @@ export default function GlobalActionsButton(props: Props) {
       case 'email':
         return selectedItem.render({
           isOpen: true,
-          followUpCallback: props.onCreateEmailFollowUp,
+          followUpCallback: state.onCreateEmailFollowUp,
           onClose: handleCloseRenderedItem,
           onSent: handleSubmitEmail
         })
@@ -96,8 +108,8 @@ export default function GlobalActionsButton(props: Props) {
           user,
           isOpen: true,
           onClose: handleCloseRenderedItem,
-          saveCallback: props.onCreateContact,
-          saveAndAddNewCallback: props.onCreateAndAddNewContact
+          saveCallback: state.onCreateContact,
+          saveAndAddNewCallback: state.onCreateAndAddNewContact
         })
 
       case 'deal':
@@ -123,10 +135,6 @@ export default function GlobalActionsButton(props: Props) {
     }
   }
 
-  const availableItems = items.filter(item =>
-    props.availableActions.includes(item.type)
-  )
-
   // If no items are available, we should not render the button at all
   if (availableItems.length === 0) {
     return null
@@ -146,3 +154,5 @@ export default function GlobalActionsButton(props: Props) {
     </>
   )
 }
+
+export const GlobalActionsButton = memo(GlobalActions)

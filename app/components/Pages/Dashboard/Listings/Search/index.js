@@ -415,7 +415,6 @@ class Search extends React.Component {
           activeView={this.state.activeView}
           onChangeView={this.onChangeView}
           hasData={this.props.listings.data.length > 0}
-          showGlobalActionsButton={user && !isWidget}
         />
         <Tabs
           user={user}
