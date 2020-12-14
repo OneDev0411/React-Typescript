@@ -149,6 +149,7 @@ function ListingDetails({ id, onClose }: Props) {
 
   if (!listing) {
     if (status === 'error') {
+      // TODO - Error view - blocked by design
       return <div>{error}</div>
     }
 
@@ -277,3 +278,5 @@ function ListingDetails({ id, onClose }: Props) {
 }
 
 export default ListingDetails
+
+// TODO: Adding ClaimAccountBanner - Blocked by server server#1656
