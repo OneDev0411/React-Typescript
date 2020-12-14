@@ -28,7 +28,8 @@ export default function AgentNetworkPane({ deal }) {
           color="secondary"
           onClick={() =>
             goTo('/dashboard/agent-network/agents', null, {
-              listing: deal.listing
+              listing: deal.listing,
+              title: deal.title
             })
           }
         >
