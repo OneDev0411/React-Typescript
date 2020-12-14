@@ -41,6 +41,7 @@ export const GlobalActions = (props: Props) => {
   }, [user])
 
   const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
+    setSelectedItem(null)
     setAnchorEl(event.currentTarget)
   }
 
