@@ -3,7 +3,7 @@ import ImageGallery from 'react-image-gallery'
 import Modal from '@material-ui/core/Modal'
 import IconButton from '@material-ui/core/IconButton'
 import { mdiClose } from '@mdi/js'
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, useTheme, Theme } from '@material-ui/core'
 import 'react-image-gallery/styles/css/image-gallery.css'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -48,6 +48,7 @@ export default function Lightbox({
   isOpen,
   selectedImageIndex = 0
 }: Props) {
+  const theme: Theme = useTheme()
   const classes = useStyles()
 
   return (
@@ -60,6 +61,9 @@ export default function Lightbox({
       }}
       aria-labelledby="lightbox-modal"
       aria-describedby="lighbox-image-gallery-modal"
+      style={{
+        zIndex: theme.zIndex.modal + 2
+      }}
     >
       <div>
         <IconButton onClick={handleClose} className={classes.closeBtn}>
