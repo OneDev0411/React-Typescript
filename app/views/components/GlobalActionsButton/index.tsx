@@ -41,6 +41,7 @@ export const GlobalActions = (props: Props) => {
   }, [user])
 
   const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
+    setSelectedItem(null)
     setAnchorEl(event.currentTarget)
   }
 
@@ -113,6 +114,7 @@ export const GlobalActions = (props: Props) => {
         })
 
       case 'deal':
+        setSelectedItem(null)
         selectedItem.redirectTo('/dashboard/deals/create')
 
         return null
