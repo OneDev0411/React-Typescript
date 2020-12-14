@@ -44,12 +44,15 @@ done
 URL="https://$APP.$REVIEW_HOST"
 CONFIG="$CONFIG API_HOST_LOCAL=$URL APP_SHARE_URL=$URL APP_SHARE_URL=$URL"
 
+# This is used for Sentry's "release" parameter. Heroku sents this env automatically.
+CONFIG="$CONFIG SOURCE_VERSION=$APP"
+
 ssh "dokku@$REVIEW_HOST" config:set --no-restart $APP $CONFIG
 
 # Checkout the branch we need to deploy
 git checkout -B $CI_COMMIT_REF_SLUG
 
-# Unlck is so previous deployments wont prevent this deployment
+# Unlock is so previous deployments wont prevent this deployment
 ssh "dokku@$REVIEW_HOST" apps:unlock $APP || true
 
 # Deploy
