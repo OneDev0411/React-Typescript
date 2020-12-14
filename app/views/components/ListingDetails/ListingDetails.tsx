@@ -152,7 +152,7 @@ function ListingDetails({ id, onClose }: Props) {
       return <div>{error}</div>
     }
 
-    return <LoadingContainer />
+    return <LoadingContainer style={{ paddingTop: '15%' }} />
   }
 
   const agent = getAgentInfo(listing)
