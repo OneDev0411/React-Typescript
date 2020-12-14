@@ -1,10 +1,6 @@
 import React, { MouseEvent } from 'react'
 import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
 
-import { mdiPlus } from '@mdi/js'
-
-import { SvgIcon } from '../../SvgIcons/SvgIcon'
-
 interface Props {
   onClick: (event: MouseEvent<HTMLElement>) => void
 }
@@ -32,7 +28,6 @@ export default function GlobalActionsMenu({ onClick }: Props) {
         size="small"
         fullWidth
         onClick={onClick}
-        startIcon={<SvgIcon path={mdiPlus} />}
         classes={{
           root: classes.root
         }}

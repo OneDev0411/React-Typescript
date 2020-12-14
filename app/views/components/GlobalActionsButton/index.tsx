@@ -114,6 +114,7 @@ export const GlobalActions = (props: Props) => {
         })
 
       case 'deal':
+        setSelectedItem(null)
         selectedItem.redirectTo('/dashboard/deals/create')
 
         return null
