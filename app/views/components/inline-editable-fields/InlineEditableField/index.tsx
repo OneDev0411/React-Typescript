@@ -12,7 +12,7 @@ interface Props {
   handleCancel?: () => void
   handleOutsideClick?: () => void
   handleDelete?: () => void
-  handleSave: () => void
+  handleSave: (callback: () => void) => void
   handleAddNew?: () => void
   isDisabled?: boolean
   isEditing: boolean
@@ -92,11 +92,7 @@ export const InlineEditableField = (props: Props) => {
   const handleSave = async () => {
     try {
       setIsSaving(true)
-      await onSave()
-
-      if (isPopoverMode && !error) {
-        setRef(null)
-      }
+      await onSave(() => setRef(null))
     } catch (error) {
       throw error
     } finally {

@@ -8,6 +8,8 @@ import {
   removeTrigger
 } from 'models/instant-marketing/triggers'
 
+import { noop } from 'utils/helpers'
+
 import {
   formatValue,
   getTitle,
@@ -271,7 +273,7 @@ class MasterField extends React.Component {
     }
   }
 
-  save = async () => {
+  save = async (callback = noop) => {
     const { contact, attribute } = this.props
     const {
       is_primary,
@@ -355,6 +357,7 @@ class MasterField extends React.Component {
 
       this.props.handleSave(attribute, data)
       this.setState({ disabled: false, isDirty: false }, this.toggleMode)
+      callback()
     } catch (error) {
       console.error(error)
       this.setState({ disabled: false, error: error.message })
