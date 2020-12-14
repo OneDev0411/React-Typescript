@@ -18,7 +18,7 @@ export default function Loading() {
 
   return (
     <div className={classes.container}>
-      <LoadingContainer style={{ padding: 0 }} />
+      <LoadingContainer noPaddings />
     </div>
   )
 }

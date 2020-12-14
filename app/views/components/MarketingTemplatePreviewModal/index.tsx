@@ -18,7 +18,7 @@ interface Props {
     template: IBrandMarketingTemplate | IMarketingTemplateInstance
   ) => void
   type: string // can be improved
-  medium?: MarketingTemplateMedium
+  medium?: IMarketingTemplateMedium
   templates?: (IBrandMarketingTemplate | IMarketingTemplateInstance)[]
   actions?: React.ReactNode
   onClose?: () => void

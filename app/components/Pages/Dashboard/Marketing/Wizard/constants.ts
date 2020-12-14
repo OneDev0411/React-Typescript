@@ -1,6 +1,6 @@
 import { TemplateVariable } from './types'
 
-export const LISTING_TEMPLATE_TYPES: MarketingTemplateType[] = [
+export const LISTING_TEMPLATE_TYPES: IMarketingTemplateType[] = [
   'OpenHouse',
   'JustSold',
   'ComingSoon',

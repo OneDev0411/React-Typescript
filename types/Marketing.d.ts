@@ -10,8 +10,8 @@ declare interface IBrandMarketingTemplate extends IModel<'brand_template'> {
 declare interface IMarketingTemplate extends IModel<'template'> {
   name: string
   brand: null
-  template_type: MarketingTemplateType
-  medium: MarketingTemplateMedium
+  template_type: IMarketingTemplateType
+  medium: IMarketingTemplateMedium
   video: boolean
   mjml: boolean
   url: string
@@ -40,16 +40,15 @@ declare interface ITemplateAsset extends IModel<'template_asset'> {
   file: IFile
 }
 
-declare enum MarketingTemplateMedium {
-  Email = 'Email',
-  Social = 'Social',
-  Letter = 'Letter',
-  LinkedInCover = 'LinkedInCover',
-  FacebookCover = 'FacebookCover',
-  InstagramStor = 'InstagramStory'
-}
+declare type IMarketingTemplateMedium =
+  | 'Email'
+  | 'Social'
+  | 'Letter'
+  | 'LinkedInCover'
+  | 'FacebookCover'
+  | 'InstagramStory'
 
-declare type MarketingTemplateType =
+declare type IMarketingTemplateType =
   | 'AsSeenIn'
   | 'BackToSchool'
   | 'Birthday'
