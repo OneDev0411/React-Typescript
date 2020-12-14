@@ -17,7 +17,7 @@ const useStyles = makeStyles(
       [theme.breakpoints.up('md')]: {
         display: 'flex',
         paddingBottom: 0,
-        height: theme.spacing(15)
+        height: theme.spacing(14)
       }
     },
     body: {
@@ -40,15 +40,11 @@ const useStyles = makeStyles(
 
 export function Header(props) {
   const classes = useStyles()
-  const { isFetching, activeView, showGlobalActionsButton } = props
+  const { isFetching, activeView } = props
 
   return (
     <Box className={classes.container}>
-      <GlobalPageLayout.Header
-        title="All Properties"
-        isHiddenOnMobile={false}
-        noGlobalActionsButton={!showGlobalActionsButton}
-      >
+      <GlobalPageLayout.Header title="All Properties" isHiddenOnMobile={false}>
         <Box className={classes.body}>
           <Autocomplete activeView={activeView} />
           <BaseDropdown

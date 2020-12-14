@@ -11,6 +11,10 @@ import { isAddressField } from '../helpers/address'
  * @param {Array} labels - all possible options of selected field
  */
 function getAllOptions(labels) {
+  if (!Array.isArray(labels)) {
+    return []
+  }
+
   return labels.map(name => ({
     value: name,
     label: name

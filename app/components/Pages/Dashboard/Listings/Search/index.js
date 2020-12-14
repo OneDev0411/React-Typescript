@@ -8,7 +8,7 @@ import hash from 'object-hash'
 import { DALLAS_POINTS } from 'constants/listings/dallas-points'
 
 import { putUserSetting } from 'models/user/put-user-setting'
-import getPlace from 'models/listings/search/get-place'
+import { getPlace } from 'models/listings/search/get-place'
 
 import { loadJS } from 'utils/load-js'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
@@ -417,7 +417,6 @@ class Search extends React.Component {
           activeView={this.state.activeView}
           onChangeView={this.onChangeView}
           hasData={this.props.listings.data.length > 0}
-          showGlobalActionsButton={user && !isWidget}
         />
         <Tabs
           user={user}

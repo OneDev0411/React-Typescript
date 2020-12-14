@@ -7,7 +7,7 @@ import {
   List
 } from '@material-ui/core'
 
-import { Item } from './types'
+import { Item } from '../types'
 import MenuItem from './MenuItem'
 
 const useStyles = makeStyles((theme: Theme) =>

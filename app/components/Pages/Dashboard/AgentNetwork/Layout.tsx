@@ -26,10 +26,7 @@ export default function AgentNetworkLayout({
   return (
     <Acl access={[ACL.MARKETING]}>
       <PageLayout>
-        <PageLayout.Header
-          noGlobalActionsButton={noGlobalActionsButton}
-          title={title}
-        >
+        <PageLayout.Header title={title}>
           <Box width="100%" maxWidth={360}>
             <ListingsAndPlacesSearchInput onSelect={onSelectSearchResult} />
           </Box>
