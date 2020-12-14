@@ -14,6 +14,7 @@ declare type IPermission =
   | 'CRM'
   | 'STORE'
   | 'BetaFeatures'
+  | 'AgentNetwork'
 
 declare type BrandSettingsPaletteKey =
   | 'body-bg-color'
