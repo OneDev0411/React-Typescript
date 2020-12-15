@@ -1,5 +1,5 @@
 import * as getListings from './get-listings'
-import getPlace from './get-place'
+import { getPlace } from './get-place'
 import getSchools from './get-schools'
 import getCounties from './get-counties'
 import { getMlsAreas } from './get-mls-areas'

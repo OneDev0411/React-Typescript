@@ -10,7 +10,6 @@ const DEFAULT_QUERY = {
 /**
  * Create a new contacts.
  * @param {Array} contacts - Array of new contacts object.
- * @returns {Array} Returns new contacts.
  */
 
 export async function createContacts(contacts, query = DEFAULT_QUERY) {

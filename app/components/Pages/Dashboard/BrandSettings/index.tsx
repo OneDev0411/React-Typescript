@@ -122,7 +122,7 @@ Are you sure?`,
       </Helmet>
 
       <PageLayout>
-        <PageLayout.Header title="Brand Settings" noGlobalActionsButton>
+        <PageLayout.Header title="Brand Settings">
           <Grid container justify="flex-end" spacing={2}>
             <Grid item>
               <Button

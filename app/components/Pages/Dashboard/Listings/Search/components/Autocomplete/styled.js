@@ -12,7 +12,7 @@ export const ListContainer = styled(Card)`
   position: absolute;
   top: calc(100% + 0.5rem);
   left: 0;
-  z-index: 2;
+  z-index: 4;
 `
 
 export const ListTitle = styled.div`

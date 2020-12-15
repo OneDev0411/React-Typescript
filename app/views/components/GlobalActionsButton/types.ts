@@ -5,7 +5,7 @@ import { EventDrawer } from 'components/EventDrawer'
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 
-import CreateOpenHouse from './OpenHouse'
+import CreateOpenHouse from './components/OpenHouse'
 
 export type ItemType =
   | 'email'

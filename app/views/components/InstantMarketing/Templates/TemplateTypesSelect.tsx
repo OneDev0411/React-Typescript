@@ -42,7 +42,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  items: MarketingTemplateType[]
+  items: IMarketingTemplateType[]
   value: string
   onSelect: (value: string) => void
 }

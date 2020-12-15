@@ -7,7 +7,7 @@ import { batchActions } from 'redux-batched-actions'
 
 import { SearchInput } from 'components/GlobalHeaderWithSearch/SearchInput'
 
-import getPlace from 'models/listings/search/get-place'
+import { getPlace } from 'models/listings/search/get-place'
 import { searchListings } from 'models/listings/search/search-listings'
 
 import { getBounds } from 'utils/map'

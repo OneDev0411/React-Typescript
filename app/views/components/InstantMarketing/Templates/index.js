@@ -84,11 +84,11 @@ class Templates extends React.Component {
           )
         ]
 
-        currentTemplatesTypes.sort()
-
         const selectedTemplateType = currentTemplatesTypes.length
           ? currentTemplatesTypes[0]
           : null
+
+        currentTemplatesTypes.sort()
 
         this.setState(
           {

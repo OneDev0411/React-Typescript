@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   data: SectionItem
-  mediums: MarketingTemplateMedium[]
+  mediums: IMarketingTemplateMedium[]
   onClose: () => void
 }
 

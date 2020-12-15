@@ -22,6 +22,7 @@ declare interface IContactAttributeDef {
   editable: boolean
   singular: boolean
   searchable: boolean
+  required: boolean
   has_label: boolean
   labels: string[] | null
   enum_values: string[] | null

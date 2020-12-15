@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "82.1.2",
+  "version": "82.1.3",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -59,6 +59,7 @@
     "@mdi/js": "^5.2.45",
     "@mdi/react": "^1.4.0",
     "@reach/tabs": "^0.1.5",
+    "@react-google-maps/api": "^1.10.1",
     "@samuelmeuli/font-manager": "^1.4.0",
     "@sentry/cli": "^1.54.0",
     "@sentry/react": "^5.29.0",
@@ -283,6 +284,7 @@
     "@types/google-libphonenumber": "^7.4.17",
     "@types/google-map-react": "^0.23.11",
     "@types/google-maps": "^3.2.1",
+    "@types/googlemaps": "^3.39.13",
     "@types/history": "^3.2.3",
     "@types/intercom-client": "^2.9.5",
     "@types/jest": "^24.0.13",
