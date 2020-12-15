@@ -89,7 +89,7 @@ export function MaskedInput({
    * @param date
    */
   const handleChangeDate = (date: Date) => {
-    const value = fecha.format(date, format || 'YYYY/MM/DD')
+    const value = fecha.format(date, format || 'DD MMMM, YYYY')
 
     setValue(value)
     onChange(value)
