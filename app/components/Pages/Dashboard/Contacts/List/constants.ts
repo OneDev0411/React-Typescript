@@ -52,5 +52,10 @@ export const ORIGINS = [
     label: 'Google',
     description: 'Imported from Google',
     value: 'Google'
+  },
+  {
+    label: 'Agent Network',
+    description: 'Imported from Agent Network',
+    value: 'AgentNetwork'
   }
 ]

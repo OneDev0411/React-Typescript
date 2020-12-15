@@ -26,7 +26,12 @@ export default function AgentNetworkPane({ deal }) {
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => goTo(`/dashboard/deals/${deal.id}/marketing/network`)}
+          onClick={() =>
+            goTo('/dashboard/agent-network/agents', null, {
+              listing: deal.listing,
+              title: deal.title
+            })
+          }
         >
           View Network
         </Button>

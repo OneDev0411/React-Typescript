@@ -1,3 +1,41 @@
+declare type IPropertyType =
+  | 'Residential'
+  | 'Residential Lease'
+  | 'Multi-Family'
+  | 'Commercial'
+  | 'Lots & Acreage'
+
+declare type IPropertySubtype =
+  | 'MUL-Apartment/5Plex+'
+  | 'MUL-Fourplex'
+  | 'MUL-Full Duplex'
+  | 'MUL-Multiple Single Units'
+  | 'MUL-Triplex'
+  | 'LSE-Apartment'
+  | 'LSE-Condo/Townhome'
+  | 'LSE-Duplex'
+  | 'LSE-Fourplex'
+  | 'LSE-House'
+  | 'LSE-Mobile'
+  | 'LSE-Triplex'
+  | 'LND-Commercial'
+  | 'LND-Farm/Ranch'
+  | 'LND-Residential'
+  | 'RES-Condo'
+  | 'RES-Farm/Ranch'
+  | 'RES-Half Duplex'
+  | 'RES-Single Family'
+  | 'RES-Townhouse'
+  | 'COM-Lease'
+  | 'COM-Sale'
+  | 'COM-Sale or Lease (Either)'
+  | 'COM-Sale/Leaseback (Both)'
+
+interface IPoint {
+  latitude: number
+  longitude: number
+}
+
 interface ListingAgent extends IModel<'agent'> {
   email: string
   mlsid: string
@@ -70,8 +108,8 @@ interface Property extends IModel<'property'> {
   description: string
   square_meters: number
   matrix_unique_id: number
-  property_type: string
-  property_subtype: string
+  property_type: IPropertyType
+  property_subtype: IPropertySubtype
   lot_square_meters: number
   year_built: number
   exterior_features: string[]

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
@@ -82,5 +82,5 @@ function MarketingTemplateCard(
 export { MarketingTemplateCardSkeleton } from './MarketingTemplateCardSkeleton'
 
 export default connect<StateProps>(({ user }: IAppState) => ({ user }))(
-  MarketingTemplateCard
+  memo(MarketingTemplateCard)
 )

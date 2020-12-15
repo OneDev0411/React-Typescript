@@ -94,5 +94,8 @@ export default Object.assign(ConnectedAcl, {
   ),
   Marketing: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.MARKETING] })(
     ConnectedAcl
-  )
+  ),
+  AgentNetwork: withProps<Pick<Props, 'access'>, {}>({
+    access: [ACL.AGENT_NETWORK]
+  })(ConnectedAcl)
 })

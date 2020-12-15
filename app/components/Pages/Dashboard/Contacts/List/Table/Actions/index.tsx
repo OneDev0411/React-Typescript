@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
       '& > *:not(:last-child)': {
         marginRight: theme.spacing(1)
       }

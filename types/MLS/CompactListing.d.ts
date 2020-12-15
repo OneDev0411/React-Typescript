@@ -36,7 +36,16 @@ declare interface ICompactProperty {
   type: 'compact_property'
 }
 
-declare interface ICompactListing extends IModel<'compact_listing'> {
+declare type ICompactListingAssociation = 'list_agent' | 'selling_agent'
+
+declare type ICompactListing<
+  Associations extends ICompactListingAssociation = ''
+> = {
+  type: 'compact_listing'
+  id: UUID
+  created_at: number
+  updated_at: number
+  deleted_at: number | null
   close_date: number | null
   price: number
   close_price: number | null
@@ -57,7 +66,7 @@ declare interface ICompactListing extends IModel<'compact_listing'> {
   selling_agent_direct_work_phone: string
   co_selling_agent_mls_id: string
   favorited: boolean
-  location: ILocation
+  location: ILocation | null
   cover_image_url: string
   gallery_image_urls: null | string[]
   address: ICompactAddress
@@ -65,4 +74,5 @@ declare interface ICompactListing extends IModel<'compact_listing'> {
   compact_property: ICompactProperty
   user_listing_notification_setting: null
   dom: number | null
-}
+} & Association<'list_agent', Nullable<IAgent>, Associations> &
+  Association<'selling_agent', Nullable<IAgent>, Associations>

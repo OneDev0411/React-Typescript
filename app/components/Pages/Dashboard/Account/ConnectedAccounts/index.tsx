@@ -53,7 +53,7 @@ function ConnectedAccounts({
 
       {loading ? (
         <Box margin={2}>
-          <LoadingContainer style={{}} />
+          <LoadingContainer noPaddings />
         </Box>
       ) : accounts.length === 0 ? (
         <ConnectAccount />
@@ -120,7 +120,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ConnectedAccounts)
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectedAccounts)
