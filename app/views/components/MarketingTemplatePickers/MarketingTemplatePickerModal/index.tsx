@@ -7,6 +7,7 @@ import {
   makeStyles
 } from '@material-ui/core'
 
+import { MarketingTemplatePickerProps } from 'components/MarketingTemplatePickers/types'
 import MarketingTemplatePicker from 'components/MarketingTemplatePickers/MarketingTemplatePicker'
 
 const useStyles = makeStyles(
@@ -31,7 +32,7 @@ export default function MarketingTemplatePickerModal({
   dialogProps = {},
   onClose,
   ...marketingTemplatePickerProps
-}: Props & React.ComponentProps<typeof MarketingTemplatePicker>) {
+}: MarketingTemplatePickerProps & Props) {
   const classes = useStyles()
   const dialogRef = useRef<HTMLElement>(null)
 
