@@ -4,10 +4,10 @@ import { makeStyles, Theme, Typography, Box } from '@material-ui/core'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import cn from 'classnames'
 
+import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
 import { IAppState } from 'reducers'
 
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
-import MarketingTemplatePickerModal from 'components/MarketingTemplatePickerModal'
 
 import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 
@@ -168,11 +168,7 @@ export const TemplateSelector = ({
 
     if (!selectedTemplate && !currentValue) {
       setIsLoading(true)
-      getTemplates(
-        brandId,
-        [getTemplateType(attributeName)],
-        ['Email' as MarketingTemplateMedium.Email]
-      )
+      getTemplates(brandId, [getTemplateType(attributeName)], ['Email'])
         .then(templates => {
           if (templates.length) {
             handleSelectTemplate(templates[0])
@@ -274,7 +270,7 @@ export const TemplateSelector = ({
         <MarketingTemplatePickerModal
           title="Select Template"
           user={user}
-          mediums={['Email' as MarketingTemplateMedium.Email]}
+          mediums={['Email']}
           templateTypes={[getTemplateType(attributeName)]}
           onSelect={handleSelectTemplate}
           onClose={() => handleShowTemplatePicker(false)}

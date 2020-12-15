@@ -5,7 +5,7 @@
 
 export const getTemplateType = (
   attributeName: TriggerContactEventTypes
-): MarketingTemplateType => {
+): IMarketingTemplateType => {
   // birthday attribute
   if (['birthday', 'child_birthday'].includes(attributeName)) {
     return 'Birthday'
