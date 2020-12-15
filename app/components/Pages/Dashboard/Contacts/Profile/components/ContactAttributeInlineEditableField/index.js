@@ -146,10 +146,6 @@ class MasterField extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    // if (props.trigger && props.trigger?.event_type == 'birthday') {
-    //   console.log('getDerivedStateFromProps', props.trigger)
-    // }
-
     if (
       !props.isActive &&
       props.attribute?.updated_at &&

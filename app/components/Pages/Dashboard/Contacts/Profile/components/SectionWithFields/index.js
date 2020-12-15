@@ -280,7 +280,7 @@ class SectionWithFields extends React.Component {
       : state.triggers
 
     if (this.isNotOnlyNonSingularInstanceOf(attribute, state)) {
-      const f = {
+      return {
         triggers,
         orderedAttributes: state.orderedAttributes
           .filter(a =>
@@ -288,13 +288,9 @@ class SectionWithFields extends React.Component {
           )
           .map((a, order) => ({ ...a, order }))
       }
-
-      console.log({ f })
-
-      return f
     }
 
-    const h = {
+    return {
       triggers,
       orderedAttributes: state.orderedAttributes.map(a => {
         const emptyAttribute = generateEmptyAttribute(
@@ -310,10 +306,6 @@ class SectionWithFields extends React.Component {
         return a.id === attribute.id ? emptyAttribute : a
       })
     }
-
-    console.log({ h })
-
-    return h
   }
 
   deleteFromApi = attribute => {
