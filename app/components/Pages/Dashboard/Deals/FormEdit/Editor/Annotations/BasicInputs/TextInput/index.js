@@ -7,15 +7,17 @@ import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
 import { Types } from 'deals/FormEdit/utils/types'
 import { EditTemplateButton } from 'deals/FormEdit/components/EditTemplateButton'
 
+import { MaskedInput } from './MaskedInput'
+
 export default React.memo(props => {
   const [value, setValue] = useState(props.defaultValue)
   const [debouncedSetValue] = useDebouncedCallback(setValue, 500)
 
-  const handleValueChange = e => {
-    debouncedSetValue(e.target.value)
+  const onChange = value => {
+    debouncedSetValue(value)
 
     props.onChange({
-      [props.annotation.fieldName]: e.target.value
+      [props.annotation.fieldName]: value
     })
   }
 
@@ -34,11 +36,18 @@ export default React.memo(props => {
   const appearance = parseAppearanceString(props.annotation.defaultAppearance)
   const { rect } = props.annotation
 
-  const box = {
+  const bounds = {
     top: rect[1],
     left: rect[0],
-    width: Math.floor(rect[2] - rect[0]),
-    height: Math.floor(rect[3] - rect[1])
+    right: rect[2],
+    bottom: rect[3]
+  }
+
+  const box = {
+    top: bounds.top,
+    left: bounds.left,
+    width: Math.floor(bounds.right - bounds.left),
+    height: Math.floor(bounds.bottom - bounds.top)
   }
 
   const style = {
@@ -59,27 +68,18 @@ export default React.memo(props => {
     fontSize: getFontSize()
   }
 
-  const sharedProps = {
-    style,
-    id: props.annotation.fieldName,
-    defaultValue: props.defaultValue,
-    onInput: handleValueChange
-  }
-
   return (
     <>
-      {props.annotation.multiLine ? (
-        <textarea
-          {...sharedProps}
-          className="input-with-template"
-          style={{
-            ...style,
-            resize: 'none'
-          }}
-        />
-      ) : (
-        <input className="input-with-template" type="text" {...sharedProps} />
-      )}
+      <MaskedInput
+        id={props.annotation.fieldName}
+        isMultiLine={props.annotation.multiLine}
+        type={props.type}
+        bounds={bounds}
+        format={props.format}
+        defaultValue={props.defaultValue}
+        style={style}
+        onChange={onChange}
+      />
 
       <EditTemplateButton
         style={{

@@ -40,9 +40,11 @@ export function AnnotationWrapper(props) {
                   key={key}
                   style={{
                     ...style,
+                    cursor: 'default',
                     padding: 0,
                     backgroundColor: 'transparent',
-                    border: 'none'
+                    border: 'none',
+                    whiteSpace: 'pre'
                   }}
                 >
                   {values[key]}
