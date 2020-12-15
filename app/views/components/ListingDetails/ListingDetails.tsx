@@ -76,11 +76,11 @@ const useStyles = makeStyles(
     mainFeaturesAndShowOnMapBtnWrapper: {
       margin: '0 auto',
       maxWidth: '320px',
-      [theme.breakpoints.between('sm', 'xl')]: {
+      [theme.breakpoints.only('md')]: {
         maxWidth: '380px'
       },
-      [theme.breakpoints.up('xl')]: {
-        maxWidth: 'auto',
+      [theme.breakpoints.up('lg')]: {
+        maxWidth: 'initial',
         margin: 0
       }
     },
