@@ -12,6 +12,8 @@ declare interface IFormAnnotation {
     verticalCornerRadius: number
   }
   id: string
+  type: string
+  number: number
   alternativeText: string
   annotationFlags: number
   annotationType: number
@@ -32,6 +34,7 @@ declare interface IFormAnnotation {
   rect: [number, number, number, number]
   textAlignment: Nullable<string>
   subtype: string
+  attributes: string[]
 }
 
 declare interface IFormTemplateValue extends IModel<'form_template'> {

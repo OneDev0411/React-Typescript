@@ -101,7 +101,7 @@ function normalizeRoles(list) {
 
 function normalizeInputs(inputs, defaultValues) {
   return inputs
-    .filter(item => item.type === 'Input')
+    .filter(item => ['Input', 'Date', 'Number'].includes(item.type))
     .map(item => {
       return {
         ...item,

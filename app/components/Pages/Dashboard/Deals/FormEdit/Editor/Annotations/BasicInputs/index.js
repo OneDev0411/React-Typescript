@@ -25,6 +25,8 @@ export const FormInputs = React.memo(
 
         const sharedProps = {
           annotation,
+          type: info.type,
+          format: info.format,
           defaultValue: annotation.fieldValue,
           onChange: debounce(props.onValueUpdate, 1000)
         }

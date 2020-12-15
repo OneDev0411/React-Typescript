@@ -10,8 +10,8 @@ describe('Test deal form get-role-names helper', () => {
       ['SellerAgent', 'Seller'],
       {
         type: 'Roles',
-        attribute: 'legal_full_name'
-      }
+        attributes: ['legal_full_name']
+      } as any
     )
 
     expect(names).toBe('Mr Ramin Mousavi, Shayan Hamidi')
@@ -24,8 +24,8 @@ describe('Test deal form get-role-names helper', () => {
       ['SellerAgent', 'Seller'],
       {
         type: 'Roles',
-        attribute: 'legal_first_name'
-      }
+        attributes: ['legal_first_name']
+      } as any
     )
 
     expect(names).toBe('Ramin, Shayan')
@@ -38,8 +38,8 @@ describe('Test deal form get-role-names helper', () => {
       ['SellerAgent', 'Seller'],
       {
         type: 'Roles',
-        attribute: 'user.display_name'
-      }
+        attributes: ['user.display_name']
+      } as any
     )
 
     expect(names).toBe('ramin@rechat.com')
@@ -52,9 +52,9 @@ describe('Test deal form get-role-names helper', () => {
       ['SellerAgent', 'Seller'],
       {
         type: 'Role',
-        attribute: 'legal_first_name',
+        attributes: ['legal_first_name'],
         number: 1
-      }
+      } as any
     )
 
     expect(names).toBe('Shayan')
