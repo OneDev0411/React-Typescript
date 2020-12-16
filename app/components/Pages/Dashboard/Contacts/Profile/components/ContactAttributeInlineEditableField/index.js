@@ -23,10 +23,7 @@ import {
 import { EditMode } from './EditMode'
 import { ViewMode } from './ViewMode'
 import { TriggerEditMode } from './TriggerEditMode'
-import {
-  convertSecondsToDay,
-  getTriggerSubject
-} from './TriggerEditMode/helpers'
+import { getTriggerSubject } from './TriggerEditMode/helpers'
 
 import { TRIGGERABLE_ATTRIBUTES } from './constants'
 
@@ -62,7 +59,7 @@ function getStateFromTrigger(trigger, attribute) {
       isTriggerActive: true,
       triggerSubject:
         trigger.campaign?.subject || getTriggerSubject(attributeName),
-      triggerSendBefore: convertSecondsToDay(trigger.wait_for),
+      triggerSendBefore: trigger.wait_for || 0,
       triggerSelectedTemplate: null
     }
   }
@@ -227,15 +224,6 @@ class MasterField extends React.Component {
       isDirty: true,
       isTriggerFieldDirty: true,
       triggerSelectedTemplate: template
-    })
-  }
-
-  resetTrigger = () => {
-    this.setState({
-      currentTrigger: null,
-      isTriggerActive: false,
-      triggerSendBefore: 0,
-      triggerSelectedTemplate: null
     })
   }
 

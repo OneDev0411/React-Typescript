@@ -13,6 +13,7 @@ import {
 import pluralize from 'pluralize'
 
 import { TemplateSelector } from './components/TemplateSelector'
+import { convertSecondsToDay } from './helpers'
 
 interface Props {
   disabled?: boolean
@@ -77,10 +78,11 @@ const TriggerEditModeComponent = ({
   onChangeTemplate
 }: Props) => {
   const classes = useStyles()
-
   const [subject, setSubject] = useState<string>(subjectProp)
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
-  const [sendBefore, setSendBefore] = useState<number>(sendBeforeProp)
+  const [sendBefore, setSendBefore] = useState<number>(
+    convertSecondsToDay(sendBeforeProp)
+  )
   const [selectedTemplate, setSelectedTemplate] = useState<
     Nullable<IMarketingTemplateInstance>
   >(null)
