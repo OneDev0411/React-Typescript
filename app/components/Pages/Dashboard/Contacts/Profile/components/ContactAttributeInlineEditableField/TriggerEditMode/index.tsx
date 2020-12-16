@@ -21,6 +21,7 @@ interface Props {
   attributeName: TriggerContactEventTypes
   currentValue: Nullable<ITrigger>
   isActive: boolean
+  isSaving?: boolean
   subject: string
   sendBefore: number
   onChangeActive: (value: boolean) => void
@@ -66,6 +67,7 @@ const useStyles = makeStyles(
 
 const TriggerEditModeComponent = ({
   disabled = false,
+  isSaving = false,
   currentValue,
   attributeName,
   renderAttributeFields,
@@ -157,7 +159,7 @@ const TriggerEditModeComponent = ({
               label="Subject"
               type="text"
               size="small"
-              disabled={disabled || !isActive}
+              disabled={disabled || !isActive || isSaving}
               defaultValue={subject}
               InputLabelProps={{
                 shrink: true
@@ -170,7 +172,7 @@ const TriggerEditModeComponent = ({
               variant="outlined"
               size="small"
               className={classes.inputField}
-              disabled={disabled || !isActive}
+              disabled={disabled || !isActive || isSaving}
             >
               <InputLabel id="trigger-send-before">Deliver in</InputLabel>
               <Select

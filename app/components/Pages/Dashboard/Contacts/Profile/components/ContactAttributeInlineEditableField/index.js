@@ -115,6 +115,7 @@ const getInitialState = ({ contact, attribute, trigger }) => ({
   error: getInitialErrorMessage(contact),
   isDirty: false,
   isTriggerFieldDirty: false,
+  isTriggerSaving: false,
   disabled: false,
   ...getStateFromTrigger(trigger, attribute),
   ...getStateFromAttribute(attribute)
@@ -316,6 +317,8 @@ class MasterField extends React.Component {
       }
 
       if (shouldCheckTriggerField) {
+        this.setState({ isTriggerSaving: true })
+
         const commonParams = [
           contact,
           triggerSelectedTemplate,
@@ -340,7 +343,10 @@ class MasterField extends React.Component {
       }
 
       this.props.handleSave(attribute, data)
-      this.setState({ disabled: false, isDirty: false }, this.toggleMode)
+      this.setState(
+        { disabled: false, isDirty: false, isTriggerSaving: false },
+        this.toggleMode
+      )
       callback()
     } catch (error) {
       console.error(error)
@@ -400,6 +406,7 @@ class MasterField extends React.Component {
     const {
       currentTrigger,
       isTriggerActive,
+      isTriggerSaving,
       triggerSubject,
       triggerSendBefore,
       triggerSelectedTemplate
@@ -427,6 +434,7 @@ class MasterField extends React.Component {
           attributeName={this.attribute_def.name || ''}
           currentValue={currentTrigger}
           isActive={isTriggerActive}
+          isSaving={isTriggerSaving}
           subject={triggerSubject}
           sendBefore={triggerSendBefore}
           selectedTemplate={triggerSelectedTemplate}
