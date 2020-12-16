@@ -183,7 +183,10 @@ class MasterField extends React.Component {
   }
 
   get isTriggerable() {
-    return TRIGGERABLE_ATTRIBUTES.includes(this.attribute_def.name)
+    return (
+      TRIGGERABLE_ATTRIBUTES.includes(this.attribute_def.name) &&
+      !this.props.attribute?.is_partner
+    )
   }
 
   toggleMode = () => this.props.handleToggleMode(this.props.attribute)
