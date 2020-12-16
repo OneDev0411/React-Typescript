@@ -5,7 +5,7 @@ import { useTheme, Theme } from '@material-ui/core/styles'
 import { ListingDetails } from '../ListingDetails'
 
 interface Props {
-  listingId: UUID
+  listingId: UUID | null
   isOpen: boolean
   closeHandler: () => void
 }
@@ -15,7 +15,7 @@ function ListingDetailsModal({ listingId, isOpen, closeHandler }: Props) {
 
   return (
     <Dialog open={isOpen} fullScreen style={{ zIndex: theme.zIndex.modal + 1 }}>
-      <ListingDetails id={listingId} onClose={closeHandler} />
+      {listingId && <ListingDetails id={listingId} onClose={closeHandler} />}
     </Dialog>
   )
 }
