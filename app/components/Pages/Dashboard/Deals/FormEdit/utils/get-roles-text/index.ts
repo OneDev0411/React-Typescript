@@ -10,7 +10,7 @@ export function getRoleText(
   const validRoles: string[] = normalizeRoleNames(deal, roleNames)
   const list: IDealRole[] = roles.filter(role => validRoles.includes(role.role))
 
-  if (annotation.attributes.includes('stamp')) {
+  if (annotation.attributes?.includes?.('stamp')) {
     const role = list[0]
 
     return `${role.agent?.office?.name}\t\t${role.agent?.office?.address}\t\tPhone: ${role.agent?.office?.phone}\n${role.legal_full_name}`
