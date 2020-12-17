@@ -25,13 +25,12 @@ export function getRegisterationScript({
         const API_URL = '${API_URL}';
         const LOCAL_STORAGE_REGISTERATION_KEY = '${LOCAL_STORAGE_REGISTERATION_KEY}';
         const storage = {
-          getAll: ${storage.getAll},
-          setAll: ${storage.setAll},
-          get: ${storage.get},
-          set: ${storage.set},
-          remove: ${storage.remove},
-          append: ${storage.append},
-          get: ${storage.get}
+          ${storage.getAll},
+          ${storage.setAll},
+          ${storage.get},
+          ${storage.set},
+          ${storage.remove},
+          ${storage.append}
         };
         const brandId = '${brandId}';
 
