@@ -52,14 +52,20 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+const getCoverSrc = (rate: number) =>
+  `/static/images/marketing/my-designs/empty-state${
+    rate > 0 ? `@${rate}x` : ''
+  }.png`
+
+const srcSet = `
+${getCoverSrc(0)} 1x,
+${getCoverSrc(2)} 2x,
+${getCoverSrc(3)} 3x
+`
 export default function EmptyState() {
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   const isDesktop = useMediaQuery('(min-width:1440px)')
   const classes = useStyles({ isDesktop })
-  const getCoverSrc = (rate: number) =>
-    `/static/images/marketing/my-designs/empty-state${
-      rate > 0 ? `@${rate}x` : ''
-    }.png`
   const user = useSelector(({ user }: IAppState) => user)
   const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
 
@@ -108,15 +114,7 @@ export default function EmptyState() {
             Learn More
           </Button>
         </div>
-        <img
-          alt="empty-state"
-          className={classes.coverImage}
-          srcSet={`
-          ${getCoverSrc(0)} 1x,
-          ${getCoverSrc(2)} 2x,
-          ${getCoverSrc(3)} 3x
-        `}
-        />
+        <img alt="empty-state" className={classes.coverImage} srcSet={srcSet} />
       </Box>
     </>
   )
