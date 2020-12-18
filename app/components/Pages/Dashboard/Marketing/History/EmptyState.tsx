@@ -98,7 +98,7 @@ export default function EmptyState() {
           <Button
             color="primary"
             target="blank"
-            href="https://help.rechat.com/en/collections/1969137-marketing"
+            href="https://help.rechat.com/marketing/overview"
           >
             <SvgIcon
               path={mdiPlayCircleOutline}
