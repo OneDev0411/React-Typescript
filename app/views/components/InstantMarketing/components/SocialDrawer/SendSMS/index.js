@@ -26,7 +26,10 @@ class SendSMS extends React.Component {
   }
 
   init = async () => {
-    const isValidPhone = await isValidPhoneNumber(this.props.user.phone_number)
+    const { phone_number } = this.props.user
+    const isValidPhone = phone_number
+      ? await isValidPhoneNumber(phone_number)
+      : false
 
     this.setState({ isValidPhone })
   }
