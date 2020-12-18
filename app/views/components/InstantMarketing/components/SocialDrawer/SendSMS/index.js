@@ -92,7 +92,11 @@ class SendSMS extends React.Component {
           }
         }}
       >
-        <input value={this.state.phone} onChange={this.handleChangePhone} />
+        <input
+          value={this.state.phone}
+          onChange={this.handleChangePhone}
+          placeholder="Add phone number"
+        />
       </Section>
     )
   }
