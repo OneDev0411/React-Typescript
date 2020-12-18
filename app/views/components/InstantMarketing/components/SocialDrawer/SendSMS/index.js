@@ -85,7 +85,7 @@ class SendSMS extends React.Component {
           disabled: this.state.isSending || this.state.isValidPhone === false
         }}
         onButtonClick={this.handleSend}
-        description="Send image to yourself and post to instagram and facebook directly from your phone."
+        description="Send image to yourself and post to Instagram and Facebook directly from your phone."
         styles={{
           info: {
             padding: 0
