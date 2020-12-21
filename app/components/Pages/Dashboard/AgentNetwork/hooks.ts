@@ -18,9 +18,14 @@ export function useBrandListings(
         return
       }
 
-      const brandListings = await getBrandListings(brand)
+      try {
+        const brandListings = await getBrandListings(brand)
 
-      setListings(brandListings)
+        setListings(brandListings)
+      } catch (error) {
+        console.error('error fetching brand listings', error)
+        setListings([])
+      }
     }
 
     fetchBrandListings()
@@ -60,11 +65,16 @@ export function useDealsListings(
         )
         .map(deal => deal.listing)
 
-      const dealsListings = await Promise.all(
-        uniqDealListingIds.map(listingId => getListing(listingId))
-      )
+      try {
+        const dealsListings = await Promise.all(
+          uniqDealListingIds.map(listingId => getListing(listingId))
+        )
 
-      setListings(dealsListings)
+        setListings(dealsListings)
+      } catch (error) {
+        console.error('error fetching deals listings', error)
+        setListings([])
+      }
     }
 
     fetchDealsListings()
