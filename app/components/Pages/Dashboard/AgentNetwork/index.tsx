@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { withRouter } from 'react-router'
 
-import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
 import { getBrandListings } from 'models/listings/search/get-brand-listings'
 import { useLoadingEntities } from 'hooks/use-loading'
+
+import { selectUser } from 'selectors/user'
 
 import Layout from './Layout'
 import Info from './Sections/Info'
@@ -13,7 +14,7 @@ import Listings from './Sections/Listings'
 import { openListingPage, openSearchResultPage } from './helpers'
 
 export function AgentNetwork() {
-  const user = useSelector<IAppState, IUser>(state => state.user)
+  const user = useSelector(selectUser)
   const [listings, setListings] = useState<Nullable<ICompactListing[]>>(null)
   const [isLoading, setIsLoading] = useLoadingEntities(listings)
   const brand = getActiveTeamId(user)

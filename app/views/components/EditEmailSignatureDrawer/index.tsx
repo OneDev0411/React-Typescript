@@ -5,9 +5,10 @@ import { Box, Button } from '@material-ui/core'
 
 import { addNotification } from 'components/notification'
 
-import { IAppState } from 'reducers'
 import editUser from 'actions/user/edit'
 import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
+
+import { selectUserEmailSignature } from 'selectors/user'
 
 import { ImageFeature } from '../TextEditor/features/Image'
 import { RichTextFeature } from '../TextEditor/features/RichText'
@@ -24,11 +25,11 @@ interface Props {
 
 export function EditEmailSignatureDrawer({ isOpen, onClose }: Props) {
   const dispatch = useDispatch()
-  const user = useSelector((state: IAppState) => state.user)
+  const userEmailSignature = useSelector(selectUserEmailSignature)
 
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [editorState, setEditorState, signatureEditor] = useEditorState(
-    user.email_signature != null ? user.email_signature : ''
+    userEmailSignature || ''
   )
 
   const onSave = async () => {

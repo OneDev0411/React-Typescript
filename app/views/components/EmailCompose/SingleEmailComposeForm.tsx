@@ -2,12 +2,13 @@ import React, { ComponentProps, useState, useMemo } from 'react'
 import { Field } from 'react-final-form'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { IAppState } from 'reducers'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
 
 import { confirmation } from 'actions/confirmation'
+
+import { selectUser } from 'selectors/user'
 
 import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
 import { getFromData } from './helpers/get-from-data'
@@ -54,7 +55,7 @@ export function SingleEmailComposeForm({
   headers = {},
   ...otherProps
 }: Props) {
-  const user = useSelector<IAppState, IUser>(store => store.user)
+  const user = useSelector(selectUser)
   const activeBrand = getActiveBrand(user)
   const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
 

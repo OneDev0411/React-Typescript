@@ -1,9 +1,11 @@
 import React from 'react'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { GlobalActionsButton } from 'components/GlobalActionsButton'
+
+import { selectUserUnsafe } from 'selectors/user'
 
 import { ACL } from '../../../../constants/acl'
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
@@ -38,7 +40,7 @@ import {
 } from './styled'
 
 export function Menu() {
-  const user = useTypedSelector<IUser>(state => state.user)
+  const user = useSelector(selectUserUnsafe)
   const appNotifications = useTypedSelector(state =>
     selectNotificationNewCount(state.globalNotifications)
   )

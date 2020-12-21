@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { MenuItem } from '@material-ui/core'
 
-import { IAppState } from 'reducers'
-
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
 
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
+
+import { selectUser } from 'selectors/user'
 
 import {
   SORTABLE_COLUMNS,
@@ -52,7 +52,7 @@ interface Props {
 
 const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const dispatch = useDispatch()
-  const user = useSelector(({ user }: IAppState) => user)
+  const user = useSelector(selectUser)
   const activeSort = getActiveSort(user, props.location, SORT_FIELD_SETTING_KEY)
 
   const handleChangeSort = async (column: SortableColumn) => {

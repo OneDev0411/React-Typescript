@@ -10,6 +10,8 @@ import CopyButton from 'components/CopyButton'
 import { EmailComposeFormProps } from 'components/EmailCompose'
 import { Avatar } from 'components/Avatar'
 
+import { selectUser } from 'selectors/user'
+
 import { getName } from './helpers'
 import Activity from './Activity'
 import {
@@ -46,7 +48,7 @@ export default function MiniProfile({
   setActionSettings,
   onSubmit
 }: MiniProfilePropsType) {
-  const user = useTypedSelector<IUser>(({ user }) => user)
+  const user = useTypedSelector(selectUser)
   const attributeDefs = useTypedSelector(
     ({ contacts }) => contacts.attributeDefs
   )

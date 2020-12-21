@@ -1,6 +1,7 @@
+import { IUserState } from 'reducers/user'
 import { hasUserAccess } from './user-teams'
 
-export function getUserDefaultHomepage(user?: IUser): string {
+export function getUserDefaultHomepage(user?: IUserState): string {
   const dashboardBaseUrl = '/dashboard/'
   let defaultHomepage = `${dashboardBaseUrl}mls`
 
@@ -16,10 +17,7 @@ export function getUserDefaultHomepage(user?: IUser): string {
     return `${dashboardBaseUrl}contacts`
   }
 
-  if (
-    hasUserAccess(user, 'Deals') ||
-    hasUserAccess(user, 'BackOffice')
-  ) {
+  if (hasUserAccess(user, 'Deals') || hasUserAccess(user, 'BackOffice')) {
     return `${dashboardBaseUrl}deals`
   }
 

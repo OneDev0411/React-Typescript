@@ -20,6 +20,8 @@ import { sortDealsStatus } from 'utils/sort-deals-status'
 
 import { getGridSort } from 'deals/List/helpers/sorting'
 
+import { selectUser } from 'selectors/user'
+
 import { SearchQuery } from '../types'
 
 import { getPrimaryAgentName } from '../../../utils/roles'
@@ -44,14 +46,12 @@ interface Props {
 function BackOfficeGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
 
-  const { isFetchingDeals, deals, user, roles } = useSelector(
-    ({ user, deals }: IAppState) => ({
-      isFetchingDeals: deals.properties.isFetchingDeals,
-      deals: deals.list,
-      user,
-      roles: deals.roles
-    })
+  const isFetchingDeals = useSelector(
+    ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
+  const deals = useSelector(({ deals }: IAppState) => deals.list)
+  const roles = useSelector(({ deals }: IAppState) => deals.roles)
+  const user = useSelector(selectUser)
 
   const getOffice = (deal: IDeal) => {
     let brand: IBrand | null = deal.brand

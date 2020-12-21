@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux'
 
-import { IAppState } from 'reducers'
 import { hasUserAccess } from 'utils/user-teams'
 
 import {
@@ -9,6 +8,7 @@ import {
   SectionItem
 } from 'components/PageSideNav/types'
 import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
+import { selectUser } from 'selectors/user'
 
 interface ExtendedSection extends Section {
   key: string
@@ -311,7 +311,7 @@ function getSerializedValue(value?: string | string[]): string {
 }
 
 export function useMarketingCenterSections({ types }): SectionCollection {
-  const user = useSelector<IAppState, IUser>(state => state.user)
+  const user = useSelector(selectUser)
 
   const newSections: SectionCollection = {}
   const sectionKeys = Object.keys(ALL_SECTIONS)

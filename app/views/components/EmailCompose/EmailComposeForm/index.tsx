@@ -6,6 +6,7 @@ import createFocusDecorator from 'final-form-focus'
 import { TextField } from 'final-form-material-ui'
 import { Box, makeStyles, useTheme } from '@material-ui/core'
 import { isEqual } from 'lodash'
+
 import { addNotification } from 'components/notification'
 
 import { ClassesProps } from 'utils/ts-utils'
@@ -21,6 +22,8 @@ import {
 } from 'constants/oauth-accounts'
 
 import useTypedSelector from 'hooks/use-typed-selector'
+
+import { selectUser } from 'selectors/user'
 
 import {
   EmailComposeFormProps,
@@ -72,7 +75,7 @@ export default function EmailComposeForm<T>({
   children,
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
-  const user = useTypedSelector<IUser>(({ user }) => user)
+  const user = useTypedSelector(selectUser)
 
   const initialValues: Partial<EmailFormValues> = {
     ...props.initialValues,

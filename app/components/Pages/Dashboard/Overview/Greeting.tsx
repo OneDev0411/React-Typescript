@@ -4,7 +4,7 @@ import Box from '@material-ui/core/Box'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
-import { IAppState } from 'reducers'
+import { selectUser } from 'selectors/user'
 import { Avatar } from 'components/Avatar'
 
 const useStyles = makeStyles(
@@ -19,7 +19,7 @@ const useStyles = makeStyles(
 
 export default function Greeting() {
   const classes = useStyles()
-  const user: IUser = useSelector((state: IAppState) => state.user)
+  const user = useSelector(selectUser)
 
   return (
     <Box display="flex">

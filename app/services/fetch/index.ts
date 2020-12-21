@@ -57,7 +57,7 @@ export default class Fetch {
 
     const useProxy = this.options.proxy && !isUploadMethod
 
-    this.isLoggedIn = user && user.access_token !== undefined
+    this.isLoggedIn = !!user && user.access_token !== undefined
 
     let agent: SuperAgent.SuperAgentRequest
 
@@ -77,7 +77,7 @@ export default class Fetch {
 
     // auto append access-token
     if (this.isLoggedIn) {
-      agent.set('Authorization', `Bearer ${user.access_token}`)
+      agent.set('Authorization', `Bearer ${user?.access_token}`)
     }
 
     // We currently have problems in using any environment other than development
