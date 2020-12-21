@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch, useStore } from 'react-redux'
+import { useDispatch, useStore, useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { useEffectOnce } from 'react-use'
 import { Grid, Theme, useTheme } from '@material-ui/core'
@@ -44,7 +44,7 @@ import { updateNewColumnInColumns } from './helpers/update-new-column-in-columns
 
 export default function ReminderNotifications() {
   const store = useStore<IAppState>()
-  const user = useTypedSelector(selectUser)
+  const user = useSelector(selectUser)
   const contactsAttributeDefs = useTypedSelector(
     ({ contacts }) => contacts.attributeDefs
   )
