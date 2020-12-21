@@ -57,6 +57,9 @@ export function PhoneNumber({ location }: WithRouterProps) {
 
       if (typeof error === 'string') {
         message = error
+      } else if (error.message === 'Conflict') {
+        message =
+          'This number is verified by a current user, please check your number and try again.'
       } else if (error.message) {
         message = error.message
       }
