@@ -58,10 +58,7 @@ export function useDealsListings(
         deal => deal.listing
       )
         .filter(
-          deal =>
-            deal.deal_type === 'Selling' &&
-            deal.listing &&
-            !listingIdsToExclude.includes(deal.listing)
+          deal => deal.listing && !listingIdsToExclude.includes(deal.listing)
         )
         .map(deal => deal.listing)
 
