@@ -22,7 +22,7 @@ import CampaignStatus from 'components/CampaignStatus'
 import { Avatar } from 'components/Avatar'
 import { getNameInitials } from 'utils/helpers'
 
-import { selectUser } from 'selectors/user'
+import { selectUserUnsafe } from 'selectors/user'
 
 import { EmailItemHeaderActions } from './EmailItemHeaderActions'
 import { EmailItemRecipients } from './EmailItemRecipients'
@@ -99,7 +99,7 @@ export function EmailThreadItem({
   const [isResponseOpen, setIsResponseOpen] = useState(false)
   const [trimQuotedContent, toggleTrimQuotedContent] = useBoolean(true)
   const [responseType, setResponseType] = useState<EmailResponseType>('reply')
-  const user = useSelector(selectUser)
+  const user = useSelector(selectUserUnsafe)
 
   const openResponse = (type: EmailResponseType) => {
     setIsResponseOpen(true)
