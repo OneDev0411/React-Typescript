@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Field, Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import createFocusDecorator from 'final-form-focus'
@@ -20,8 +20,6 @@ import {
   GOOGLE_CREDENTIAL,
   MICROSOFT_CREDENTIAL
 } from 'constants/oauth-accounts'
-
-import useTypedSelector from 'hooks/use-typed-selector'
 
 import { selectUser } from 'selectors/user'
 
@@ -75,7 +73,7 @@ export default function EmailComposeForm<T>({
   children,
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
-  const user = useTypedSelector(selectUser)
+  const user = useSelector(selectUser)
 
   const initialValues: Partial<EmailFormValues> = {
     ...props.initialValues,

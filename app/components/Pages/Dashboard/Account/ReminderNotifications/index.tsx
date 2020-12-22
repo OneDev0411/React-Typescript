@@ -12,8 +12,6 @@ import {
   hasUserAccessToDeals
 } from 'utils/user-teams'
 
-import useTypedSelector from 'hooks/use-typed-selector'
-
 import {
   ReminderNotificationSetting,
   updateReminderNotificationSettings
@@ -45,8 +43,8 @@ import { updateNewColumnInColumns } from './helpers/update-new-column-in-columns
 export default function ReminderNotifications() {
   const store = useStore<IAppState>()
   const user = useSelector(selectUser)
-  const contactsAttributeDefs = useTypedSelector(
-    ({ contacts }) => contacts.attributeDefs
+  const contactsAttributeDefs = useSelector(
+    ({ contacts }: IAppState) => contacts.attributeDefs
   )
 
   const [isLoading, setIsLoading] = useState(true)

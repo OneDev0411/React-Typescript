@@ -7,21 +7,23 @@ import { GlobalActionsButton } from 'components/GlobalActionsButton'
 
 import { selectUserUnsafe } from 'selectors/user'
 
-import { ACL } from '../../../../constants/acl'
-import { selectNotificationNewCount } from '../../../../reducers/notifications'
-import { selectUnreadEmailThreadsCount } from '../../../../reducers/inbox'
-import { InboxAction } from '../../../../reducers/inbox/types'
+import { ACL } from 'constants/acl'
+import { selectNotificationNewCount } from 'reducers/notifications'
+import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
+import { InboxAction } from 'reducers/inbox/types'
 
-import { fetchUnreadEmailThreadsCount } from '../../../../store_actions/inbox'
+import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 
-import { useDealsNotificationsNumber } from '../../../../hooks/use-deals-notifications-number'
-import { useChatRoomsNotificationsNumber } from '../../../../hooks/use-chat-rooms-notifications-number'
-import useTypedSelector from '../../../../hooks/use-typed-selector'
+import { useDealsNotificationsNumber } from 'hooks/use-deals-notifications-number'
+import { useChatRoomsNotificationsNumber } from 'hooks/use-chat-rooms-notifications-number'
+
+import Acl from 'views/components/Acl'
+
+import { ScrollableArea } from 'views/components/ScrollableArea'
+
+import { IAppState } from 'reducers'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
-
-import Acl from '../../../../views/components/Acl'
-import { ScrollableArea } from '../../../../views/components/ScrollableArea'
 
 import Logo from './components/Logo'
 import { UserMenu } from './components/UserMenu'
@@ -41,10 +43,10 @@ import {
 
 export function Menu() {
   const user = useSelector(selectUserUnsafe)
-  const appNotifications = useTypedSelector(state =>
+  const appNotifications = useSelector((state: IAppState) =>
     selectNotificationNewCount(state.globalNotifications)
   )
-  const inboxNotificationNumber = useTypedSelector(state =>
+  const inboxNotificationNumber = useSelector((state: IAppState) =>
     selectUnreadEmailThreadsCount(state.inbox)
   )
   const dealsNotificationsNumber = useDealsNotificationsNumber()
