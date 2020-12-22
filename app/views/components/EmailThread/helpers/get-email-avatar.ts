@@ -1,4 +1,5 @@
 import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
+import { IUserState } from 'reducers/user'
 
 /**
  * extract the sender email that created by mail server
@@ -17,7 +18,7 @@ const extractEmail = (sender: string): string => {
  * @param sender
  * @param user
  */
-export const getEmailAvatar = (sender: string, user: IUser): string => {
+export const getEmailAvatar = (sender: string, user: IUserState): string => {
   const email = extractEmail(sender)
 
   if (email === user?.email) {

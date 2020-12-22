@@ -2,13 +2,17 @@ import React from 'react'
 import { Button, makeStyles, Theme } from '@material-ui/core'
 import { Link } from 'react-router'
 
-import { getNameInitials } from 'utils/helpers.js'
+import { useSelector } from 'react-redux'
 
-import useTypedSelector from 'hooks/use-typed-selector'
+import { getNameInitials } from 'utils/helpers.js'
 
 import CopyButton from 'components/CopyButton'
 import { EmailComposeFormProps } from 'components/EmailCompose'
 import { Avatar } from 'components/Avatar'
+
+import { selectUser } from 'selectors/user'
+
+import { IAppState } from 'reducers'
 
 import { getName } from './helpers'
 import Activity from './Activity'
@@ -46,9 +50,9 @@ export default function MiniProfile({
   setActionSettings,
   onSubmit
 }: MiniProfilePropsType) {
-  const user = useTypedSelector<IUser>(({ user }) => user)
-  const attributeDefs = useTypedSelector(
-    ({ contacts }) => contacts.attributeDefs
+  const user = useSelector(selectUser)
+  const attributeDefs = useSelector(
+    ({ contacts }: IAppState) => contacts.attributeDefs
   )
 
   const output = useProfile(type, initData, attributeDefs)

@@ -27,7 +27,6 @@ import { createStep } from 'models/flows/create-step'
 import { editBrandFlow } from 'models/flows/edit-brand-flow'
 import { stopFlow } from 'models/flows/stop-flow'
 
-import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
 
@@ -35,6 +34,8 @@ import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { Callout } from 'components/Callout'
 import LoadingContainer from 'components/LoadingContainer'
 import EmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
+
+import { selectUser } from 'selectors/user'
 
 import { getFlowEditUrl, createFlow } from '../helpers'
 import New from '../New'
@@ -74,7 +75,7 @@ function Edit(props: WithRouterProps) {
   const theme = useTheme()
   const classes = useStyles()
 
-  const user = useSelector<IAppState, IUser>(store => store.user)
+  const user = useSelector(selectUser)
   const brand = getActiveTeamId(user) || ''
 
   const [error, setError] = useState('')

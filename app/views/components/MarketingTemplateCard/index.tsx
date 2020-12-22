@@ -1,18 +1,15 @@
 import React, { memo } from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 
 import { itemDateText } from 'utils/marketing-center/helpers'
 import { ClassesProps } from 'utils/ts-utils'
-import { IAppState } from 'reducers/index'
+
+import { selectUser } from 'selectors/user'
 
 import { marketingTemplateCardStyles } from './styles'
 import { Thumbnail } from './Thumbnail'
-
-interface StateProps {
-  user: IUser
-}
 
 interface Props {
   template: IMarketingTemplateInstance | IBrandMarketingTemplate
@@ -27,10 +24,11 @@ const useStyles = makeStyles(marketingTemplateCardStyles, {
 })
 
 function MarketingTemplateCard(
-  props: Props & StateProps & ClassesProps<typeof marketingTemplateCardStyles>
+  props: Props & ClassesProps<typeof marketingTemplateCardStyles>
 ) {
   const { template } = props
   const classes = useStyles({ classes: props.classes })
+  const user = useSelector(selectUser)
 
   const isInstance = template.type === 'template_instance'
 
@@ -62,7 +60,7 @@ function MarketingTemplateCard(
         data-card="true"
         data-test="marketing-template"
       >
-        <Thumbnail useStaticImage template={template} user={props.user} />
+        <Thumbnail useStaticImage template={template} user={user} />
         <div className={classes.actions}>{props.actions}</div>
       </div>
       {isInstance && (
@@ -81,6 +79,4 @@ function MarketingTemplateCard(
 
 export { MarketingTemplateCardSkeleton } from './MarketingTemplateCardSkeleton'
 
-export default connect<StateProps>(({ user }: IAppState) => ({ user }))(
-  memo(MarketingTemplateCard)
-)
+export default memo(MarketingTemplateCard)

@@ -1,11 +1,12 @@
 import React, { useContext, useMemo, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Field, Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import createFocusDecorator from 'final-form-focus'
 import { TextField } from 'final-form-material-ui'
 import { Box, makeStyles, useTheme } from '@material-ui/core'
 import { isEqual } from 'lodash'
+
 import { addNotification } from 'components/notification'
 
 import { ClassesProps } from 'utils/ts-utils'
@@ -20,7 +21,7 @@ import {
   MICROSOFT_CREDENTIAL
 } from 'constants/oauth-accounts'
 
-import useTypedSelector from 'hooks/use-typed-selector'
+import { selectUser } from 'selectors/user'
 
 import {
   EmailComposeFormProps,
@@ -72,7 +73,7 @@ export default function EmailComposeForm<T>({
   children,
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
-  const user = useTypedSelector<IUser>(({ user }) => user)
+  const user = useSelector(selectUser)
 
   const initialValues: Partial<EmailFormValues> = {
     ...props.initialValues,

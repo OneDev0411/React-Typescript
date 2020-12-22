@@ -2,9 +2,9 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { withRouter } from 'react-router'
 
-import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
 import { useLoadingEntities } from 'hooks/use-loading'
+import { selectUser } from 'selectors/user'
 
 import Layout from './Layout'
 import Info from './Sections/Info'
@@ -13,7 +13,7 @@ import { openListingPage, openSearchResultPage } from './helpers'
 import { useBrandListings, useDealsListings } from './hooks'
 
 export function AgentNetwork() {
-  const user = useSelector<IAppState, IUser>(state => state.user)
+  const user = useSelector(selectUser)
 
   const brand = getActiveTeamId(user)
   const brandListings = useBrandListings(brand)

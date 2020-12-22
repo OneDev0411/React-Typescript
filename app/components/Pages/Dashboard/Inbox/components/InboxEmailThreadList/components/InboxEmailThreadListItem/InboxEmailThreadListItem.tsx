@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useSelector } from 'react-redux'
 import { Paper, Typography, IconButton, Tooltip } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
@@ -12,7 +13,7 @@ import {
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
-import useTypedSelector from 'hooks/use-typed-selector'
+import { selectUser } from 'selectors/user'
 
 import { useInboxEmailThreadListItemStyles } from './styles'
 import getRecipientNamesText from './helpers/get-recipient-names-text'
@@ -29,7 +30,7 @@ export default function InboxEmailThreadListItem({
   emailThread,
   selected
 }: Props) {
-  const user = useTypedSelector<IUser>(state => state.user)
+  const user = useSelector(selectUser)
 
   const recipients = useMemo(() => getRecipientNamesText(user, emailThread), [
     user,
