@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { isSelling } from 'models/Deal/helpers/context'
+import { hasUserAccessToAgentNetwork } from 'utils/user-teams'
 
 import AgentNetwork from './AgentNetwork'
 import MyMarketingMatters from './MyMarketingMatters'
@@ -18,7 +19,9 @@ interface Props {
 export default function MarketingPane({ deal, user }: Props) {
   return (
     <MarketingContainer>
-      {deal.listing && <AgentNetwork deal={deal} />}
+      {hasUserAccessToAgentNetwork(user) && deal.listing && (
+        <AgentNetwork deal={deal} />
+      )}
       <MyMarketingMatters user={user} deal={deal} />
       {isSelling(deal) && deal.listing && <OpenHouse deal={deal} user={user} />}
       <EmailMarketing deal={deal} user={user} />

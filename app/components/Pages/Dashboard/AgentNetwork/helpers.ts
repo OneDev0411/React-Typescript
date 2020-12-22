@@ -1,10 +1,15 @@
 import { goTo } from 'utils/go-to'
 import { SearchResult } from 'components/ListingsAndPlacesSearchInput/types'
 
-export function openListingPage(listing: ICompactListing): void {
+export function openListingPage(listing: ICompactListing | IListing): void {
+  const listingAddress =
+    listing.type === 'compact_listing'
+      ? listing.address
+      : listing.property.address
+
   goTo('/dashboard/agent-network/agents', null, {
     listing: listing.id,
-    title: listing.address.street_address
+    title: listingAddress.street_address
   })
 }
 

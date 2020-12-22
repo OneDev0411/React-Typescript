@@ -17,14 +17,13 @@ interface Props {
 
 export default function AgentNetworkLayout({
   title,
-  noGlobalActionsButton = false,
   onSelectSearchResult,
   children
 }: Props) {
   useTitle('Agent Network | Rechat')
 
   return (
-    <Acl access={[ACL.MARKETING]}>
+    <Acl access={[ACL.AGENT_NETWORK]} fallbackUrl="/dashboard/mls">
       <PageLayout>
         <PageLayout.Header title={title}>
           <Box width="100%" maxWidth={360}>

@@ -6,8 +6,8 @@ import LoadingContainer from 'components/LoadingContainer'
 
 interface Props {
   isLoading: boolean
-  listings: Nullable<ICompactListing[]>
-  onSelectListing: (listing: ICompactListing) => void
+  listings: Nullable<(ICompactListing | IListing)[]>
+  onSelectListing: (listing: ICompactListing | IListing) => void
 }
 
 export default function Listings({
