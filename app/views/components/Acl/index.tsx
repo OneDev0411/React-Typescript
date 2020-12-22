@@ -1,14 +1,11 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { withProps } from 'recompose'
 import { browserHistory } from 'react-router'
-
-import { selectUserHasAccess } from 'selectors/acl'
-import { IAppState } from 'reducers'
 
 import { ACL } from '../../../constants/acl'
 
 import { Access } from './types'
+import { useAcl } from './use-acl'
 
 interface Props {
   access: Access | Access[]
@@ -43,9 +40,7 @@ function Acl({
   accessControlPolicy,
   children
 }: Props) {
-  const userHasAccess = useSelector((state: IAppState) =>
-    selectUserHasAccess(state, access, accessControlPolicy)
-  )
+  const userHasAccess = useAcl(access, { accessControlPolicy })
 
   if (!userHasAccess && fallbackUrl) {
     browserHistory.push('/dashboard/mls')
