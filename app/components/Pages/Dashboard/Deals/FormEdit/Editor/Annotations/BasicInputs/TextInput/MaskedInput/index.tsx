@@ -27,7 +27,12 @@ const numberMask = createNumberMask({
  * (eg it was 'N/A'). So we return false, which means no masking.
  */
 const optionalNumberMask = rawValue => {
-  const mask = numberMask(rawValue)
+  const mask = numberMask(rawValue).filter(val => val != '[]')
+  /*
+   * The filter is here due to this bug: https://github.com/text-mask/text-mask/issues/641
+   * Basically text-mask (which is unmaintained) adds [] to the mask sometimes.
+   * Nobody knows why but removing it seems to be OK.
+   */
 
   const { conformedValue } = conformToMask(rawValue, mask, {
     guide: false
