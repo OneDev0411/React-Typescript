@@ -25,14 +25,14 @@ describe('Deal MarketingPane component', () => {
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
-  it('renders email, social, agent network, mmm and open house for deals with listing', () => {
+  it('renders email, social, mmm and open house for deals with listing', () => {
     const wrapper = shallow(<Marketing deal={liveDealWithListing} />)
 
-    expect(wrapper.children()).toHaveLength(5)
+    expect(wrapper.children()).toHaveLength(4)
     expect(wrapper.find(EmailMarketing)).toHaveLength(1)
     expect(wrapper.find(MyMarketingMatters)).toHaveLength(1)
     expect(wrapper.find(SocialMarketing)).toHaveLength(1)
-    expect(wrapper.find(AgentNetwork)).toHaveLength(1)
+    expect(wrapper.find(AgentNetwork)).toHaveLength(0)
     expect(wrapper.find(OpenHouse)).toHaveLength(1)
   })
 
