@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { Button } from '@material-ui/core'
 
 import { goTo } from 'utils/go-to'
@@ -13,7 +12,11 @@ import {
   Image
 } from '../styled'
 
-export default function AgentNetworkPane({ deal }) {
+interface Props {
+  deal: IDeal
+}
+
+export default function AgentNetworkPane({ deal }: Props) {
   return (
     <Container style={{ marginBottom: '1.5rem' }}>
       <LeftColumn>
