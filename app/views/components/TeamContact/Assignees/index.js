@@ -20,14 +20,9 @@ import { AssigneeItemInAvatar } from '../AssigneeItemInAvatar'
 
 const propTypes = {
   assignees: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  buttonText: PropTypes.string,
   onChangeHandler: PropTypes.func.isRequired,
   onRemoveHandler: PropTypes.func.isRequired,
   owner: PropTypes.PropTypes.shape().isRequired
-}
-
-const defaultProps = {
-  buttonText: 'Assignee'
 }
 
 export class Assignees extends React.Component {
@@ -79,6 +74,17 @@ export class Assignees extends React.Component {
 
     return (
       <Flex alignCenter>
+        {this.props.assignees.length > 0 && (
+          <Flex>
+            {this.props.assignees.map(user => (
+              <AssigneeItemInAvatar
+                user={user}
+                removeHandler={this.props.onRemoveHandler}
+                key={user.id}
+              />
+            ))}
+          </Flex>
+        )}
         <BasicDropdown
           {...this.props}
           items={items}
@@ -89,7 +95,6 @@ export class Assignees extends React.Component {
           buttonRenderer={buttonProps => (
             <Button {...buttonProps} variant="text" type="button">
               <SvgIcon path={mdiPlus} size={muiIconSizes.small} />
-              {this.props.buttonText}
             </Button>
           )}
           itemRenderer={({ item, ...itemProps }) => (
@@ -105,21 +110,9 @@ export class Assignees extends React.Component {
             />
           )}
         />
-        {this.props.assignees.length > 0 && (
-          <Flex style={{ marginLeft: '1em' }}>
-            {this.props.assignees.map(user => (
-              <AssigneeItemInAvatar
-                user={user}
-                removeHandler={this.props.onRemoveHandler}
-                key={user.id}
-              />
-            ))}
-          </Flex>
-        )}
       </Flex>
     )
   }
 }
 
 Assignees.propTypes = propTypes
-Assignees.defaultProps = defaultProps

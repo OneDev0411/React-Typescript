@@ -6,7 +6,10 @@ import { SvgIcon, Props as SvgIconProps } from 'components/SvgIcons/SvgIcon'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      display: 'flex'
+      display: 'flex',
+      '&:not(:last-child)': {
+        marginBottom: theme.spacing(2)
+      }
     },
     icon: {
       width: theme.spacing(3)

@@ -298,63 +298,56 @@ class EventDrawerContainer extends Component {
                           )}
                         </EventField>
                         {/* <Description placeholder="Add a description" /> */}
-                        <EventType />
-                        <Box mb={4}>
-                          <FieldContainer
-                            alignCenter
-                            justifyBetween
-                            style={{ marginBottom: '0.5em' }}
-                          >
-                            <DateTimeField
-                              name="dueDate"
-                              selectedDate={values.dueDate}
-                              showTimePicker={!values.allDay}
-                            />
-
-                            <EndDateTimeField
-                              selectedDate={values.endDate || values.dueDate}
-                              showTimePicker={!values.allDay}
-                            />
-                          </FieldContainer>
-
-                          <Field
-                            name="allDay"
-                            render={({ input }) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={input.value}
-                                    onChange={e =>
-                                      input.onChange(e.target.checked)
-                                    }
-                                    name="allDay"
-                                    color="primary"
-                                  />
-                                }
-                                label="All Day Event"
+                        {/* EventType /> */}
+                        <EventField
+                          name="date"
+                          iconProps={{
+                            path: mdiCheckCircle
+                          }}
+                        >
+                          <Box>
+                            <FieldContainer alignCenter justifyBetween>
+                              <DateTimeField
+                                name="dueDate"
+                                selectedDate={values.dueDate}
+                                showTimePicker={!values.allDay}
                               />
-                            )}
-                          />
-                          <FieldError
-                            name="endDate"
-                            style={{ fontSize: '1rem', marginBottom: '0.5em' }}
-                          />
-                          <Reminder dueDate={values.dueDate} />
-                        </Box>
-                        <AssigneesField name="assignees" owner={user} />
-                        <Divider margin="2em 0" />
-                        <AssociationsList
-                          name="associations"
-                          showDefaultAssociation
-                          associations={values.associations}
-                          defaultAssociation={defaultAssociation}
-                        />
-                        <ItemChangelog
-                          item={values}
-                          style={{ marginTop: '2em' }}
-                        />
-                      </FormContainer>
-                      <Footer justifyBetween alignCenter>
+
+                              <EndDateTimeField
+                                selectedDate={values.endDate || values.dueDate}
+                                showTimePicker={!values.allDay}
+                              />
+                            </FieldContainer>
+
+                            <Field
+                              name="allDay"
+                              render={({ input }) => (
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={input.value}
+                                      onChange={e =>
+                                        input.onChange(e.target.checked)
+                                      }
+                                      name="allDay"
+                                      color="primary"
+                                    />
+                                  }
+                                  label="All Day Event"
+                                />
+                              )}
+                            />
+                            <FieldError
+                              name="endDate"
+                              style={{
+                                fontSize: '1rem',
+                                marginBottom: '0.5em'
+                              }}
+                            />
+                            <Reminder dueDate={values.dueDate} />
+                          </Box>
+                        </EventField>
+                        {/* assosiations */}
                         <Flex alignCenter>
                           {!this.isNew && (
                             <>
@@ -383,6 +376,21 @@ class EventDrawerContainer extends Component {
                           />
                           <AddAssociation disabled={isDisabled} type="deal" />
                         </Flex>
+                        {/* end assosations */}
+                        <Divider margin="2em 0" />
+                        <AssociationsList
+                          name="associations"
+                          showDefaultAssociation
+                          associations={values.associations}
+                          defaultAssociation={defaultAssociation}
+                        />
+                        <ItemChangelog
+                          item={values}
+                          style={{ marginTop: '2em' }}
+                        />
+                      </FormContainer>
+                      <Footer justifyBetween alignCenter>
+                        <AssigneesField name="assignees" owner={user} />
                         <ActionButton
                           appearance="secondary"
                           type="button"

@@ -12,8 +12,8 @@ export const FormContainer = styled.form`
 `
 export const FieldContainer = styled(Flex)`
   height: 2.5rem;
-  border-radius: 3px;
-  background-color: ${({ theme }: Props) => theme.palette.grey['50']};
+  border-radius: 4px;
+  border: 1px solid ${({ theme }: Props) => theme.palette.divider};
 `
 
 export const Footer = styled(Flex)`
