@@ -7,6 +7,8 @@ import { Box, IconButton, FormControlLabel, Checkbox } from '@material-ui/core'
 
 import { Field } from 'react-final-form'
 
+import { mdiCheckCircle } from '@mdi/js'
+
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
@@ -45,7 +47,7 @@ import { Description } from './components/Description/RichText'
 import { EventType } from './components/EventType'
 import { NotifyGuests } from './components/NotifyGuests'
 import { FutureEventDoneConfirmation } from './components/FutureEventDoneConfirmation'
-
+import { EventField } from './components/EventField'
 import { FormContainer, FieldContainer, Footer } from './styled'
 
 const propTypes = {
@@ -275,7 +277,12 @@ class EventDrawerContainer extends Component {
                         id="event-drawer-form"
                       >
                         {!this.isNew && <FutureEventDoneConfirmation />}
-                        <Flex style={{ marginBottom: '1rem' }}>
+                        <EventField
+                          name="title"
+                          iconProps={{
+                            path: mdiCheckCircle
+                          }}
+                        >
                           {this.isNew ? (
                             <Title fullWidth />
                           ) : (
@@ -289,12 +296,9 @@ class EventDrawerContainer extends Component {
                               <Title />
                             </>
                           )}
-                        </Flex>
-
-                        <Description placeholder="Add a description about this event" />
-
+                        </EventField>
+                        {/* <Description placeholder="Add a description" /> */}
                         <EventType />
-
                         <Box mb={4}>
                           <FieldContainer
                             alignCenter
@@ -337,18 +341,14 @@ class EventDrawerContainer extends Component {
                           />
                           <Reminder dueDate={values.dueDate} />
                         </Box>
-
                         <AssigneesField name="assignees" owner={user} />
-
                         <Divider margin="2em 0" />
-
                         <AssociationsList
                           name="associations"
                           showDefaultAssociation
                           associations={values.associations}
                           defaultAssociation={defaultAssociation}
                         />
-
                         <ItemChangelog
                           item={values}
                           style={{ marginTop: '2em' }}

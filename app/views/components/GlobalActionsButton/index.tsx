@@ -1,6 +1,8 @@
 import React, { MouseEvent, useState, useMemo, memo } from 'react'
 import { useSelector } from 'react-redux'
 
+import { mdiCalendarOutline } from '@mdi/js'
+
 import { IAppState } from 'reducers'
 
 import {
@@ -8,6 +10,8 @@ import {
   hasUserAccessToDeals,
   hasUserAccessToMarketingCenter
 } from 'utils/user-teams'
+
+import { EventDrawer } from 'components/EventDrawer'
 
 import { Item, ItemType } from './types'
 import Button from './components/Button'
@@ -21,7 +25,15 @@ export const GlobalActions = (props: Props) => {
   const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
   const [state] = useGlobalActionContext()
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-  const [selectedItem, setSelectedItem] = useState<null | Item>(null)
+  // TODO: remove this (initial value for better development)
+  const [selectedItem, setSelectedItem] = useState<null | Item>({
+    title: 'Event',
+    type: 'event',
+    Icon: mdiCalendarOutline,
+    render: props => {
+      return <EventDrawer {...props} />
+    }
+  })
   const availableItems: Item[] = useMemo(() => {
     const actions: ItemType[] = []
 
