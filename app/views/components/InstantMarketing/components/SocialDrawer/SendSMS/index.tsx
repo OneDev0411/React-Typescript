@@ -1,5 +1,6 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react'
+import React, { useState, ChangeEvent, FormEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useEffectOnce } from 'react-use'
 
 import {
   selectUserDisplayName,
@@ -24,7 +25,7 @@ function SendSMS({ instance }: SendSMSProps) {
   const [isSending, setIsSending] = useState(false)
   const [isValidPhone, setIsValidPhone] = useState(false)
 
-  useEffect(() => {
+  useEffectOnce(() => {
     async function initValidPhoneValue() {
       if (phoneNumber) {
         setIsValidPhone(await isValidPhoneNumber(phoneNumber))
@@ -32,8 +33,7 @@ function SendSMS({ instance }: SendSMSProps) {
     }
 
     initValidPhoneValue()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  })
 
   const handleChangePhone = async (e: ChangeEvent<HTMLInputElement>) => {
     setIsValidPhone(await isValidPhoneNumber(e.target.value))
@@ -50,12 +50,10 @@ function SendSMS({ instance }: SendSMSProps) {
     setIsSending(true)
 
     try {
-      console.log(`Sending SMS to ${phone}`)
-
       await shareInstance(
         instance.id,
         [phone],
-        `${displayName} sent you this image! Tap on the link and press share on Instagram or Facebook`
+        `${displayName} sent you this image! Tap on the link and press share on Instagram or Facebook.`
       )
 
       dispatch(
@@ -65,7 +63,7 @@ function SendSMS({ instance }: SendSMSProps) {
         })
       )
     } catch (e) {
-      console.log(e)
+      console.error(e)
     } finally {
       setIsSending(false)
     }

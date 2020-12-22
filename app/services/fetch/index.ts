@@ -76,8 +76,8 @@ export default class Fetch {
     }
 
     // auto append access-token
-    if (this.isLoggedIn) {
-      agent.set('Authorization', `Bearer ${user?.access_token}`)
+    if (this.isLoggedIn && user) {
+      agent.set('Authorization', `Bearer ${user.access_token}`)
     }
 
     // We currently have problems in using any environment other than development
