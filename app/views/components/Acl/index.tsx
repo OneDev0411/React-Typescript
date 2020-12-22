@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { withProps } from 'recompose'
 import { browserHistory } from 'react-router'
 
-import { hasUserAccess } from '../../../utils/user-teams'
+import { selectUserHasAccess } from 'selectors/acl'
+import { IAppState } from 'reducers'
 
 import { ACL } from '../../../constants/acl'
 
-type Access = IPermission | ((user: IUser) => boolean) | { oneOf: Access[] }
+import { Access } from './types'
 
 interface Props {
   access: Access | Access[]
@@ -15,11 +16,6 @@ interface Props {
   children: React.ReactNode
   fallbackUrl?: string | null
   accessControlPolicy?: IAccessControlPolicy
-  user: IUser
-}
-
-interface StateProps {
-  user: IUser
 }
 
 /**
@@ -31,7 +27,6 @@ interface StateProps {
  * - A function of the form (user, acl) => boolean
  * @param {React.ReactNode} fallback something to be rendered if access is denied. Defaults to null
  * @param {React.ReactNode} children
- * @param user
  *
  * @example
  * ```
@@ -46,56 +41,30 @@ function Acl({
   fallback = null,
   fallbackUrl = null,
   accessControlPolicy,
-  children,
-  user
+  children
 }: Props) {
-  const userHasAccess = ([] as Access[]).concat(access).every(hasAccess)
+  const userHasAccess = useSelector((state: IAppState) =>
+    selectUserHasAccess(state, access, accessControlPolicy)
+  )
 
-  useEffect(() => {
-    if (!userHasAccess && fallbackUrl) {
-      browserHistory.push('/dashboard/mls')
-    }
-    // eslint-disable-next-line
-  }, [])
+  if (!userHasAccess && fallbackUrl) {
+    browserHistory.push('/dashboard/mls')
+  }
 
   return <>{userHasAccess ? children : fallback}</>
-
-  function hasAccess(requiredAccess: Access) {
-    if (typeof requiredAccess === 'function') {
-      return requiredAccess(user)
-    }
-
-    if (typeof requiredAccess === 'string') {
-      return hasUserAccess(user, requiredAccess, accessControlPolicy)
-    }
-
-    if (requiredAccess.oneOf) {
-      return ([] as Access[]).concat(requiredAccess.oneOf).some(hasAccess)
-    }
-  }
 }
 
-const ConnectedAcl = connect(({ user }: StateProps) => ({
-  user
-}))(Acl)
-
-export default Object.assign(ConnectedAcl, {
-  Crm: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.CRM] })(
-    ConnectedAcl
-  ),
-  Admin: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.ADMIN] })(
-    ConnectedAcl
-  ),
+export default Object.assign(Acl, {
+  Crm: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.CRM] })(Acl),
+  Admin: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.ADMIN] })(Acl),
   BackOffice: withProps<Pick<Props, 'access'>, {}>({
     access: [ACL.BACK_OFFICE]
-  })(ConnectedAcl),
-  Deals: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.DEALS] })(
-    ConnectedAcl
-  ),
+  })(Acl),
+  Deals: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.DEALS] })(Acl),
   Marketing: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.MARKETING] })(
-    ConnectedAcl
+    Acl
   ),
   AgentNetwork: withProps<Pick<Props, 'access'>, {}>({
     access: [ACL.AGENT_NETWORK]
-  })(ConnectedAcl)
+  })(Acl)
 })
