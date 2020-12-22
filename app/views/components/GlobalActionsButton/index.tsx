@@ -1,13 +1,13 @@
 import React, { MouseEvent, useState, useMemo, memo } from 'react'
 import { useSelector } from 'react-redux'
 
-import { IAppState } from 'reducers'
-
 import {
   hasUserAccessToCrm,
   hasUserAccessToDeals,
   hasUserAccessToMarketingCenter
 } from 'utils/user-teams'
+
+import { selectUserUnsafe } from 'selectors/user'
 
 import { Item, ItemType } from './types'
 import Button from './components/Button'
@@ -18,7 +18,7 @@ import { useGlobalActionContext } from './hooks/use-global-action-context'
 interface Props {}
 
 export const GlobalActions = (props: Props) => {
-  const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
+  const user = useSelector(selectUserUnsafe)
   const [state] = useGlobalActionContext()
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [selectedItem, setSelectedItem] = useState<null | Item>(null)

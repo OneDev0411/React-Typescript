@@ -18,6 +18,7 @@ import {
   InputRequired
 } from 'components/Forms/styled'
 import { selectDealRoles } from 'reducers/deals/roles'
+import { selectUser } from 'selectors/user'
 
 interface Props {
   deal: IDeal
@@ -26,18 +27,10 @@ interface Props {
 export function From({ deal }: Props) {
   const field = useField('owner')
   const theme = useTheme<Theme>()
-  const { dealRoles, user } = useSelector<
-    IAppState,
-    {
-      dealRoles: IDealRole[]
-      user: IUser
-    }
-  >(({ deals, user }) => {
-    return {
-      user,
-      dealRoles: selectDealRoles(deals.roles, deal)
-    }
-  })
+  const dealRoles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
+    selectDealRoles(deals.roles, deal)
+  )
+  const user = useSelector(selectUser)
 
   const users = useMemo(() => {
     return uniqBy(

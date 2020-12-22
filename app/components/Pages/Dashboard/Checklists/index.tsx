@@ -5,10 +5,11 @@ import { browserHistory, RouteComponentProps } from 'react-router'
 import { Box } from '@material-ui/core'
 
 import { Container, Content } from 'components/SlideMenu'
-import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
 
 import Acl from 'components/Acl'
+
+import { selectUser } from 'selectors/user'
 
 import { CheckListTable } from './components/ChecklistTable'
 import { ChecklistHeader } from './components/ChecklistHeader'
@@ -25,7 +26,7 @@ export function ChecklistsPage({ location }: Props) {
   const dealType = location.query.deal_type
   const propertyType = location.query.property_type
 
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
+  const user = useSelector(selectUser)
 
   // If dealType and propertyType are not specified or are invalid, redirect
   // to the first item

@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react'
 import { Button, Tooltip } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
-import { IAppState } from 'reducers'
+import { selectUser } from 'selectors/user'
 
 import CreateTourDrawer from 'components/tour/CreateTourDrawer/CreateTourDrawer'
 
@@ -20,7 +20,7 @@ export function CreateTourAction() {
 
   const modal = useContext(ConfirmationModalContext)
 
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
+  const user = useSelector(selectUser)
 
   const handleOpen = async () => {
     if (selections.length > 27) {

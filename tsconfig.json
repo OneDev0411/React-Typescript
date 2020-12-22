@@ -45,15 +45,12 @@
       "services/*": ["app/services/*"],
       "utils/*": ["app/utils/*"],
       "views/*": ["app/views/*"],
+      "selectors/*": ["app/selectors/*"],
       "deals/*": ["app/components/Pages/Dashboard/Deals/*"],
       "crm/*": ["app/components/Pages/Dashboard/Contacts/*"],
       "fixtures/*": ["tests/unit/fixtures/*"],
       "types/*": ["types/*"]
     }
   },
-  "include": [
-    "app/**/*.ts",
-    "app/**/*.tsx",
-    "types/**/*.ts"
-  ]
+  "include": ["app/**/*.ts", "app/**/*.tsx", "types/**/*.ts"]
 }

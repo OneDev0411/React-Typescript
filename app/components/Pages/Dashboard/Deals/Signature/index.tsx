@@ -6,8 +6,7 @@ import { createEnvelope } from 'actions/deals'
 
 import Deal from 'models/Deal'
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
-
-import { IAppState } from 'reducers'
+import { selectUser } from 'selectors/user'
 
 import { SignatureComposeDrawer } from './Compose'
 import { DocusignAuthentication } from './DocusignAuthentication'
@@ -33,7 +32,7 @@ export default function Signature({
   const [formData, setFormData] = useState<FormValues | null>(null)
 
   const dispatch = useDispatch()
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
+  const user = useSelector(selectUser)
 
   const openDocusign = (envelope: IDealEnvelope) => {
     const url = getEnvelopeEditLink(envelope.id, user.access_token)

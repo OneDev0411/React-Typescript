@@ -9,7 +9,7 @@ import { mdiChatProcessingOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { IAppState } from 'reducers'
+import { selectUser } from 'selectors/user'
 
 import { createRoom } from 'actions/chatroom/room'
 
@@ -34,7 +34,7 @@ interface Props {
 
 function ChatButton({ contact, render }: Props) {
   const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
-  const user: IUser = useSelector((state: IAppState) => state.user)
+  const user = useSelector(selectUser)
   const classes = useStyles()
   const { email, phone_number, users } = contact
   const [isCreatingRoom, setIsCreatingRoom] = useState<boolean>(false)

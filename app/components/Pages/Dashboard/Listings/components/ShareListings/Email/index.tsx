@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Button, Tooltip } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
-import { IAppState } from 'reducers'
+import { selectUser } from 'selectors/user'
 
 import getListing from 'models/listings/listing/get-listing'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
@@ -19,7 +19,7 @@ export function EmailAction() {
     null
   )
 
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
+  const user = useSelector(selectUser)
 
   const handleSelectTemplate = async (template: IBrandMarketingTemplate) => {
     const listings = await Promise.all(

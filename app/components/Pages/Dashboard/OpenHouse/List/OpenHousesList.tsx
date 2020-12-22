@@ -7,7 +7,6 @@ import { mdiClose } from '@mdi/js'
 import { useEffectOnce } from 'react-use'
 
 import { ACL } from 'constants/acl'
-import { IAppState } from 'reducers'
 import { OPEN_HOUSE_REQUESTS_SETTINGS_KEY } from 'constants/user'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { getActiveTeamId, getActiveTeamSettings } from 'utils/user-teams'
@@ -22,6 +21,8 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
 import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
+
+import { selectUser } from 'selectors/user'
 
 import EmptyState from './EmptyState'
 import Avatar from './columns/Avatar'
@@ -69,7 +70,7 @@ function OpenHousesList() {
     }
   )
 
-  const user = useSelector<IAppState, IUser>(store => store.user)
+  const user = useSelector(selectUser)
   const activeBrandId = getActiveTeamId(user) || ''
   const activeBrandSettings = getActiveTeamSettings(user, '', true)
   const showNotifyOfficeBanner =

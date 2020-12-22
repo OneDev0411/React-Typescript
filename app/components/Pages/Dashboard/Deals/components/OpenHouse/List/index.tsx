@@ -18,6 +18,7 @@ import { IAppState } from 'reducers/index'
 import { selectDealTasks } from 'reducers/deals/tasks'
 import { Divider } from 'components/Divider'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { selectUser } from 'selectors/user'
 
 interface StateProps {
   user: IUser
@@ -139,10 +140,14 @@ function List(props: Props & StateProps) {
   )
 }
 
-function mapStateToProps({ user, deals }: IAppState, props: Props): StateProps {
+function mapStateToProps(state: IAppState, props: Props): StateProps {
   return {
-    user,
-    tasks: selectDealTasks(props.deal, deals.checklists, deals.tasks)
+    user: selectUser(state),
+    tasks: selectDealTasks(
+      props.deal,
+      state.deals.checklists,
+      state.deals.tasks
+    )
   }
 }
 

@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
-import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
 import { getBrands } from 'models/BrandConsole/Brands'
+import { selectUser } from 'selectors/user'
 
 export function useBrandTree() {
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
+  const user = useSelector(selectUser)
 
   const [rootTeam, setRootTeam] = useState<IBrand | null>(null)
   const [isLoading, setIsLoading] = useState(false)

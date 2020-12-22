@@ -5,11 +5,13 @@ import { Options as ImportOptions } from 'draft-js-import-html'
 
 import { TextEditor } from 'components/TextEditor'
 import Loading from 'components/LoadingContainer'
-import { IAppState } from 'reducers'
+
 import {
   uploadEmailAttachment,
   UploadOrigin
 } from 'models/email/upload-email-attachment'
+
+import { selectUserEmailSignature } from 'selectors/user'
 
 import { useUploadAttachment } from '../../helpers/use-upload-attachment'
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
@@ -54,9 +56,7 @@ const EmailBody = ({
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
   const [upload] = useUploadAttachment(uploadAttachment, uploadOrigin)
 
-  const signature = useSelector<IAppState, string>(
-    state => state.user.email_signature
-  )
+  const signature = useSelector(selectUserEmailSignature)
 
   const uploadImage = useCallback(
     async file => {
@@ -102,7 +102,7 @@ const EmailBody = ({
           <EmailEditorFeatures
             uploadImage={uploadImage}
             hasTemplateVariables={hasTemplateVariables}
-            signature={signature}
+            signature={signature || ''}
             hasSignatureByDefault={hasSignatureByDefault}
             stateFromHtmlOptions={stateFromHtmlOptions}
             onEditSignature={() => setSignatureEditorVisible(true)}
