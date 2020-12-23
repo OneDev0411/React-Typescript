@@ -90,7 +90,7 @@ export default function Inbox({ params }: WithRouterProps) {
   const classes = useStyles()
 
   return (
-    <Acl.Crm fallbackUrl="/dashboard">
+    <Acl.Crm fallbackUrl="/dashboard/mls">
       <GlobalPageLayout className={classes.layout}>
         <Helmet>
           <title>

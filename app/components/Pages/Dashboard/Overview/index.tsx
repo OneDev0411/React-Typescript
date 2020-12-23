@@ -38,7 +38,7 @@ function OverviewDashboard() {
   const classes = useStyles()
 
   return (
-    <Acl access={access} fallbackUrl="/dashboard">
+    <Acl access={access} fallbackUrl="/dashboard/mls">
       <PageLayout>
         <PageLayout.Header title="Dashboard" />
         <PageLayout.Main>

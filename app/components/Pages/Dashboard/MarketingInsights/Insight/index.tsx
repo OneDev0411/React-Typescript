@@ -258,7 +258,7 @@ function Insight({ params: { id } }: Props) {
   }
 
   return (
-    <Acl.Marketing fallbackUrl="/dashboard">
+    <Acl.Marketing fallbackUrl="/dashboard/mls">
       <Helmet>
         <title>{`${
           item.subject ? `${item.subject} | ` : ''

@@ -17,7 +17,7 @@ const Store = () => {
   const brand = getActiveBrand(user)
 
   return (
-    <Acl access={ACL.STORE} fallbackUrl="/dashboard">
+    <Acl access={ACL.STORE} fallbackUrl="/dashboard/mls">
       <main>
         <iframe
           title="Store Builder"

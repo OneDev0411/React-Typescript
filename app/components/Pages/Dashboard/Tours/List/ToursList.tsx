@@ -171,7 +171,7 @@ function ToursList(props: { user: IUser }) {
   }
 
   return (
-    <Acl.Crm fallbackUrl="/dashboard">
+    <Acl.Crm fallbackUrl="/dashboard/mls">
       <Helmet>
         <title>Tours | Rechat</title>
       </Helmet>

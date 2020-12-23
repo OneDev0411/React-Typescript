@@ -37,7 +37,7 @@ export default function CalendarPage(props: WithRouterProps) {
   })
 
   return (
-    <Acl.Crm fallbackUrl="/dashboard">
+    <Acl.Crm fallbackUrl="/dashboard/mls">
       <div className={classes.container}>
         <GlobalHeader title="Calendar" noPadding>
           <ViewAs />

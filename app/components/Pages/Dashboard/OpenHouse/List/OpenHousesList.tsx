@@ -222,7 +222,7 @@ function OpenHousesList() {
   }
 
   return (
-    <Acl access={access} fallbackUrl="/dashboard">
+    <Acl access={access} fallbackUrl="/dashboard/mls">
       <Helmet>
         <title>Open House Registration Pages | Rechat</title>
       </Helmet>

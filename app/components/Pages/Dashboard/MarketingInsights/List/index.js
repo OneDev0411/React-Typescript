@@ -235,7 +235,7 @@ function List(props) {
   }
 
   return (
-    <Acl.Marketing fallbackUrl="/dashboard">
+    <Acl.Marketing fallbackUrl="/dashboard/mls">
       <Layout
         sentCount={counts.sent}
         scheduledCount={counts.scheduled}
