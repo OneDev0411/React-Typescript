@@ -55,7 +55,7 @@ const config = {
       release:
         process.env.CI_COMMIT_REF_SLUG || process.env.SOURCE_VERSION || '',
       include: 'dist/sourcemaps/',
-      urlPrefix: `${process.env.ASSETS_BASEURL}/sourcemaps/`
+      urlPrefix: `${process.env.ASSETS_BASEURL}sourcemaps/`
     }),
     new S3Plugin({
       progress: false, // Messes the terminal up
