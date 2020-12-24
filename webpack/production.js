@@ -40,8 +40,7 @@ const config = {
   plugins: [
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.SourceMapDevToolPlugin({
-      filename: 'sourcemaps/[name][hash].js.map',
-      append: false
+      filename: 'sourcemaps/[name][hash].js.map'
     }),
     new MomentLocalesPlugin(),
     new OptimizeCSSAssetsPlugin(),
