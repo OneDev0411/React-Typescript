@@ -40,8 +40,7 @@ const config = {
   plugins: [
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.SourceMapDevToolPlugin({
-      filename: 'sourcemaps/[name][hash].js.map',
-      append: false
+      filename: 'sourcemaps/[name][hash].js.map'
     }),
     new MomentLocalesPlugin(),
     new OptimizeCSSAssetsPlugin(),
@@ -56,7 +55,7 @@ const config = {
       release:
         process.env.CI_COMMIT_REF_SLUG || process.env.SOURCE_VERSION || '',
       include: 'dist/sourcemaps/',
-      urlPrefix: process.env.ASSETS_BASEURL
+      urlPrefix: `${process.env.ASSETS_BASEURL}sourcemaps/`
     }),
     new S3Plugin({
       progress: false, // Messes the terminal up
