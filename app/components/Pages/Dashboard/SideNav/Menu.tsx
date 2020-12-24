@@ -41,6 +41,9 @@ import {
   AppNavbarBadge
 } from './styled'
 
+const openHouseAccess = [ACL.CRM, ACL.MARKETING]
+const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
+
 export function Menu() {
   const user = useSelector(selectUserUnsafe)
   const appNotifications = useSelector((state: IAppState) =>
@@ -119,13 +122,13 @@ export function Menu() {
             <SideNavLinkItem to="/dashboard/tours">Tours</SideNavLinkItem>
           </Acl.Crm>
 
-          <Acl access={[ACL.CRM, ACL.MARKETING]}>
+          <Acl access={openHouseAccess}>
             <SideNavLinkItem to="/dashboard/open-house">
               Open House
             </SideNavLinkItem>
           </Acl>
 
-          <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
+          <Acl access={dealsAccess}>
             <SideNavLinkItem to="/dashboard/deals">
               <AppNavbarBadge
                 badgeContent={dealsNotificationsNumber}
@@ -136,7 +139,7 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl>
 
-          <Acl access={[ACL.STORE]}>
+          <Acl access={ACL.STORE}>
             <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
           </Acl>
         </SidenavListGroup>
