@@ -22,13 +22,16 @@ export const selectUserUnsafe = (state: IAppState) => state.user
 export function selectUser(state: IAppState) {
   const user = selectUserUnsafe(state)
 
-  if (!user) {
-    throw new Error(
-      'This selector must be called when the user is signed in before'
-    )
-  }
+  // TODO: uncomment this later when the ACL issues got fixed
+  // if (!user) {
+  //   throw new Error(
+  //     'This selector must be called when the user is signed in before'
+  //   )
+  // }
 
-  return user
+  // return user
+
+  return (user as any) as IUser
 }
 
 /**
