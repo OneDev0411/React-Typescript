@@ -65,8 +65,6 @@ class List extends React.Component {
   render() {
     const { associations } = this.props
 
-    console.log('associations', associations)
-
     const associationsLength = associations.length
 
     if (associationsLength === 0) {

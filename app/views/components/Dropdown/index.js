@@ -36,7 +36,7 @@ export const Dropdown = ({
     }}
     onSelect={onSelect}
     itemToString={itemToString}
-    selectedItem={input.value || defaultSelectedItem}
+    selectedItem={defaultSelectedItem || input.value}
     render={({
       isOpen,
       inputValue,

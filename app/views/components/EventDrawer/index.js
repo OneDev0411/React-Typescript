@@ -14,10 +14,12 @@ import {
 import { Field } from 'react-final-form'
 
 import {
-  mdiCheckCircle,
-  mdiCardAccountDetailsOutline,
-  mdiCashUsdOutline,
-  mdiMapSearchOutline
+  mdiBellOutline,
+  mdiNoteTextOutline,
+  mdiAccountPlusOutline,
+  mdiClockTimeFourOutline,
+  mdiHomeSearchOutline,
+  mdiCashUsdOutline
 } from '@mdi/js'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
@@ -301,16 +303,17 @@ class EventDrawerContainer extends Component {
                         id="event-drawer-form"
                       >
                         {!this.isNew && <FutureEventDoneConfirmation />}
+                        <EventType />
                         <EventField
                           name="title"
                           iconProps={{
-                            path: mdiCheckCircle
+                            path: mdiNoteTextOutline
                           }}
                         >
                           {this.isNew ? (
                             <Title fullWidth />
                           ) : (
-                            <>
+                            <Box>
                               <Flex alignCenter style={{ height: '2.25rem' }}>
                                 <CheckboxField
                                   name="status"
@@ -318,7 +321,7 @@ class EventDrawerContainer extends Component {
                                 />
                               </Flex>
                               <Title />
-                            </>
+                            </Box>
                           )}
                           <Box mt={1}>
                             {shouldShowDescription ? (
@@ -333,11 +336,10 @@ class EventDrawerContainer extends Component {
                             )}
                           </Box>
                         </EventField>
-                        {/* EventType /> */}
                         <EventField
                           name="date"
                           iconProps={{
-                            path: mdiCheckCircle
+                            path: mdiClockTimeFourOutline
                           }}
                         >
                           <Box>
@@ -372,6 +374,7 @@ class EventDrawerContainer extends Component {
                                 />
                               )}
                             />
+                            <Reminder dueDate={values.dueDate} />
                             <FieldError
                               name="endDate"
                               style={{
@@ -381,14 +384,14 @@ class EventDrawerContainer extends Component {
                             />
                           </Box>
                         </EventField>
-                        <EventField
-                          name="title"
+                        {/* <EventField
+                          name="reminder"
                           iconProps={{
-                            path: mdiCheckCircle
+                            path: mdiBellOutline
                           }}
                         >
-                          <Reminder dueDate={values.dueDate} />
-                        </EventField>
+                         
+                        </EventField> */}
 
                         <Flex alignCenter>
                           {!this.isNew && (
@@ -413,7 +416,7 @@ class EventDrawerContainer extends Component {
                         <EventField
                           name="contact-associations"
                           iconProps={{
-                            path: mdiCardAccountDetailsOutline
+                            path: mdiAccountPlusOutline
                           }}
                         >
                           <AssosiationContainer>
@@ -434,7 +437,7 @@ class EventDrawerContainer extends Component {
                         <EventField
                           name="listing-associations"
                           iconProps={{
-                            path: mdiMapSearchOutline
+                            path: mdiHomeSearchOutline
                           }}
                         >
                           <AssosiationContainer>
