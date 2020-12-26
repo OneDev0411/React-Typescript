@@ -14,7 +14,7 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    margin: theme.spacing(0, 1, 1, 0)
+    margin: theme.spacing(0.5)
   }
 }))
 
@@ -43,6 +43,7 @@ function AssociationItemBase({
       }
       onDelete={isRemovable ? onRemove : undefined}
       avatar={<Avatar {...avatar} />}
+      size="small"
       className={classes.root}
     />
   )

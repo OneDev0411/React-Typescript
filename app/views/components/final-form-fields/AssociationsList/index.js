@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
@@ -64,6 +64,9 @@ class List extends React.Component {
 
   render() {
     const { associations } = this.props
+
+    console.log('associations', associations)
+
     const associationsLength = associations.length
 
     if (associationsLength === 0) {
@@ -93,15 +96,10 @@ class List extends React.Component {
     return (
       <React.Fragment>
         {emailAssociation && (
-          <EmailAssociation
-            association={emailAssociation}
-            style={{
-              marginBottom: hasOtherAssociations ? '1.5em' : 0
-            }}
-          />
+          <EmailAssociation association={emailAssociation} />
         )}
         {hasOtherAssociations && (
-          <Flex wrap style={{ marginTop: emailAssociation ? '1.5em' : '2em' }}>
+          <Flex wrap>
             {otherAssociations.slice(0, 6).map(association => (
               <AssociationItem
                 isRemovable
@@ -149,6 +147,31 @@ AssociationsList.defaultProps = {
   showDefaultAssociation: false
 }
 
-export function AssociationsList(props) {
-  return <Field {...props} component={List} />
+export function AssociationsList({
+  associations = [],
+  defaultAssociation = [],
+  filterType,
+  ...props
+}) {
+  const [list, defaultValues] = useMemo(() => {
+    if (!filterType) {
+      return [associations, defaultAssociation]
+    }
+
+    const list = associations.filter(i => i.association_type === filterType)
+    const defaultValues = defaultAssociation.filter(
+      i => i.association_type === filterType
+    )
+
+    return [list, defaultValues]
+  }, [associations, defaultAssociation, filterType])
+
+  return (
+    <Field
+      {...props}
+      associations={list}
+      defaultAssociation={defaultValues}
+      component={List}
+    />
+  )
 }

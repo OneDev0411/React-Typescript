@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import uniqBy from 'lodash/uniqBy'
-import { Button } from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
 
 import { mdiPlus } from '@mdi/js'
 
@@ -87,15 +87,21 @@ export class Assignees extends React.Component {
         )}
         <BasicDropdown
           {...this.props}
+          upsideDown
           items={items}
           isFetching={isFetching}
           onChange={this.props.onChangeHandler}
           itemToString={getUserTitle}
           style={{ display: 'inline-flex' }}
           buttonRenderer={buttonProps => (
-            <Button {...buttonProps} variant="text" type="button">
+            <IconButton
+              {...buttonProps}
+              size="small"
+              variant="text"
+              type="button"
+            >
               <SvgIcon path={mdiPlus} size={muiIconSizes.small} />
-            </Button>
+            </IconButton>
           )}
           itemRenderer={({ item, ...itemProps }) => (
             <TeamMember

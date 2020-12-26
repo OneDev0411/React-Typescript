@@ -16,6 +16,16 @@ export const FieldContainer = styled(Flex)`
   border: 1px solid ${({ theme }: Props) => theme.palette.divider};
 `
 
+export const AssosiationContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: ${({ theme }: Props) => theme.spacing(0.25)}px;
+  min-height: 40px;
+  border: 1px solid ${({ theme }: Props) => theme.palette.divider};
+  border-radius: ${({ theme }: Props) => theme.shape.borderRadius}px;
+`
+
 export const Footer = styled(Flex)`
   position: absolute;
   bottom: 0;

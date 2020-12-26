@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { IconButton, Tooltip } from '@material-ui/core'
+import { ButtonBase, Tooltip } from '@material-ui/core'
 
 interface Props {
   children: ReactNode
@@ -19,13 +19,9 @@ export function AddAssociationButton({
   return (
     <div>
       <Tooltip title={title}>
-        <IconButton
-          disabled={disabled}
-          onClick={onClick}
-          style={{ marginRight: '0.5rem' }}
-        >
+        <ButtonBase disabled={disabled} onClick={onClick}>
           {Icon}
-        </IconButton>
+        </ButtonBase>
       </Tooltip>
       {children}
     </div>

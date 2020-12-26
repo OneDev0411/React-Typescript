@@ -3,7 +3,13 @@ import { connect } from 'react-redux'
 
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Box, IconButton, FormControlLabel, Checkbox } from '@material-ui/core'
+import {
+  Box,
+  IconButton,
+  Button,
+  FormControlLabel,
+  Checkbox
+} from '@material-ui/core'
 
 import { Field } from 'react-final-form'
 
@@ -48,7 +54,12 @@ import { EventType } from './components/EventType'
 import { NotifyGuests } from './components/NotifyGuests'
 import { FutureEventDoneConfirmation } from './components/FutureEventDoneConfirmation'
 import { EventField } from './components/EventField'
-import { FormContainer, FieldContainer, Footer } from './styled'
+import {
+  FormContainer,
+  FieldContainer,
+  Footer,
+  AssosiationContainer
+} from './styled'
 
 const propTypes = {
   ...Drawer.propTypes,
@@ -92,7 +103,8 @@ class EventDrawerContainer extends Component {
       isDeleting: false,
       event: props.event,
       currentEvent: null,
-      shouldShowNotify: false
+      shouldShowNotify: false,
+      shouldShowDescription: false
     }
 
     this.isNew =
@@ -224,14 +236,21 @@ class EventDrawerContainer extends Component {
     this.props.onClose()
   }
 
+  showDescriptionField = () => {
+    this.setState(() => ({
+      shouldShowDescription: true
+    }))
+  }
+
   render() {
     const {
-      isDisabled,
       error,
       isSaving,
       isDeleting,
+      isDisabled,
+      currentEvent,
       shouldShowNotify,
-      currentEvent
+      shouldShowDescription
     } = this.state
     const { defaultAssociation, user, isOpen } = this.props
 
@@ -296,8 +315,19 @@ class EventDrawerContainer extends Component {
                               <Title />
                             </>
                           )}
+                          <Box mt={1}>
+                            {shouldShowDescription ? (
+                              <Description placeholder="Add a description" />
+                            ) : (
+                              <Button
+                                color="secondary"
+                                onClick={this.showDescriptionField}
+                              >
+                                Add Description
+                              </Button>
+                            )}
+                          </Box>
                         </EventField>
-                        {/* <Description placeholder="Add a description" /> */}
                         {/* EventType /> */}
                         <EventField
                           name="date"
@@ -344,10 +374,17 @@ class EventDrawerContainer extends Component {
                                 marginBottom: '0.5em'
                               }}
                             />
-                            <Reminder dueDate={values.dueDate} />
                           </Box>
                         </EventField>
-                        {/* assosiations */}
+                        <EventField
+                          name="title"
+                          iconProps={{
+                            path: mdiCheckCircle
+                          }}
+                        >
+                          <Reminder dueDate={values.dueDate} />
+                        </EventField>
+
                         <Flex alignCenter>
                           {!this.isNew && (
                             <>
@@ -366,24 +403,66 @@ class EventDrawerContainer extends Component {
                               />
                             </>
                           )}
-                          <AddAssociation
-                            disabled={isDisabled}
-                            type="contact"
-                          />
-                          <AddAssociation
-                            disabled={isDisabled}
-                            type="listing"
-                          />
-                          <AddAssociation disabled={isDisabled} type="deal" />
                         </Flex>
+                        {/* assosiations */}
+                        <EventField
+                          name="contact-associations"
+                          iconProps={{
+                            path: mdiCheckCircle
+                          }}
+                        >
+                          <AssosiationContainer>
+                            <AssociationsList
+                              name="associations"
+                              showDefaultAssociation
+                              associations={values.associations}
+                              defaultAssociation={defaultAssociation}
+                              filterType="contact"
+                            />
+                            <AddAssociation
+                              disabled={isDisabled}
+                              type="contact"
+                            />
+                          </AssosiationContainer>
+                        </EventField>
+                        <EventField
+                          name="listing-associations"
+                          iconProps={{
+                            path: mdiCheckCircle
+                          }}
+                        >
+                          <AssosiationContainer>
+                            <AssociationsList
+                              name="associations"
+                              showDefaultAssociation
+                              associations={values.associations}
+                              defaultAssociation={defaultAssociation}
+                              filterType="listing"
+                            />
+                            <AddAssociation
+                              disabled={isDisabled}
+                              type="listing"
+                            />
+                          </AssosiationContainer>
+                        </EventField>
+                        <EventField
+                          name="deal-associations"
+                          iconProps={{
+                            path: mdiCheckCircle
+                          }}
+                        >
+                          <AssosiationContainer>
+                            <AssociationsList
+                              name="associations"
+                              showDefaultAssociation
+                              associations={values.associations}
+                              defaultAssociation={defaultAssociation}
+                              filterType="deal"
+                            />
+                            <AddAssociation disabled={isDisabled} type="deal" />
+                          </AssosiationContainer>
+                        </EventField>
                         {/* end assosations */}
-                        <Divider margin="2em 0" />
-                        <AssociationsList
-                          name="associations"
-                          showDefaultAssociation
-                          associations={values.associations}
-                          defaultAssociation={defaultAssociation}
-                        />
                         <ItemChangelog
                           item={values}
                           style={{ marginTop: '2em' }}
