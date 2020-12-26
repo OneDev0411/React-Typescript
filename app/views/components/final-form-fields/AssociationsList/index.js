@@ -108,17 +108,17 @@ class List extends React.Component {
                 handleRemove={this.removeHandler}
               />
             ))}
+            {otherAssociations.length > 6 && (
+              <Button
+                appearance="link"
+                onClick={this.openMoreDrawer}
+                size="small"
+                type="button"
+              >
+                View All Associations
+              </Button>
+            )}
           </Flex>
-        )}
-        {otherAssociations.length > 6 && (
-          <Button
-            appearance="link"
-            onClick={this.openMoreDrawer}
-            size="large"
-            type="button"
-          >
-            View All Associations
-          </Button>
         )}
         {this.state.isOpenMoreDrawer && (
           <AssociationsDrawer

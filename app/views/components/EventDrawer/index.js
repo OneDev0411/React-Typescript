@@ -13,7 +13,12 @@ import {
 
 import { Field } from 'react-final-form'
 
-import { mdiCheckCircle } from '@mdi/js'
+import {
+  mdiCheckCircle,
+  mdiCardAccountDetailsOutline,
+  mdiCashUsdOutline,
+  mdiMapSearchOutline
+} from '@mdi/js'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
@@ -408,7 +413,7 @@ class EventDrawerContainer extends Component {
                         <EventField
                           name="contact-associations"
                           iconProps={{
-                            path: mdiCheckCircle
+                            path: mdiCardAccountDetailsOutline
                           }}
                         >
                           <AssosiationContainer>
@@ -420,6 +425,7 @@ class EventDrawerContainer extends Component {
                               filterType="contact"
                             />
                             <AddAssociation
+                              showTitle
                               disabled={isDisabled}
                               type="contact"
                             />
@@ -428,7 +434,7 @@ class EventDrawerContainer extends Component {
                         <EventField
                           name="listing-associations"
                           iconProps={{
-                            path: mdiCheckCircle
+                            path: mdiMapSearchOutline
                           }}
                         >
                           <AssosiationContainer>
@@ -440,6 +446,7 @@ class EventDrawerContainer extends Component {
                               filterType="listing"
                             />
                             <AddAssociation
+                              showTitle
                               disabled={isDisabled}
                               type="listing"
                             />
@@ -448,7 +455,7 @@ class EventDrawerContainer extends Component {
                         <EventField
                           name="deal-associations"
                           iconProps={{
-                            path: mdiCheckCircle
+                            path: mdiCashUsdOutline
                           }}
                         >
                           <AssosiationContainer>
@@ -459,7 +466,11 @@ class EventDrawerContainer extends Component {
                               defaultAssociation={defaultAssociation}
                               filterType="deal"
                             />
-                            <AddAssociation disabled={isDisabled} type="deal" />
+                            <AddAssociation
+                              showTitle
+                              disabled={isDisabled}
+                              type="deal"
+                            />
                           </AssosiationContainer>
                         </EventField>
                         {/* end assosations */}

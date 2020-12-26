@@ -13,6 +13,7 @@ import { AddAssociationButton } from './AddAssociationButton'
 export function AddDealAssociation({
   disabled,
   handleAdd,
+  showTitle = false,
   title = 'Attach Deal'
 }: AddAssociationProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -27,6 +28,7 @@ export function AddDealAssociation({
       title={title}
       Icon={<SvgIcon path={mdiCashUsdOutline} />}
       disabled={disabled}
+      showTitle={showTitle}
       onClick={onOpen}
     >
       {isOpen && (
