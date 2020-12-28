@@ -327,7 +327,7 @@ class EventDrawerContainer extends Component {
                             </Box>
                           )}
                           <Box mt={1}>
-                            {shouldShowDescription ? (
+                            {shouldShowDescription || values?.hasDescription ? (
                               <Description placeholder="Add a description" />
                             ) : (
                               <Button

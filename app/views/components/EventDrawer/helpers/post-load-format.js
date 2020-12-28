@@ -90,6 +90,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
   return {
     ...task,
     description,
+    hasDescription: !!task.description,
     reminder,
     dueDate,
     endDate,
