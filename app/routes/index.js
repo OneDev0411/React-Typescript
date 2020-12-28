@@ -446,22 +446,24 @@ const AsyncInbox = withAcl.crm(
 //  Insights
 /* ==================================== */
 
-const AsyncMarketingInsightsList = withAcl.marketing(
+const AsyncMarketingInsightsList = withAcl(
   Load({
     loader: () =>
       import(
         '../components/Pages/Dashboard/MarketingInsights/List' /* webpackChunkName: "marketing_insights_list" */
       )
-  })
+  }),
+  { oneOf: [ACL.MARKETING, ACL.CRM] }
 )
 
-const AsyncMarketingInsight = withAcl.marketing(
+const AsyncMarketingInsight = withAcl(
   Load({
     loader: () =>
       import(
         '../components/Pages/Dashboard/MarketingInsights/Insight' /* webpackChunkName: "email_insight" */
       )
-  })
+  }),
+  { oneOf: [ACL.MARKETING, ACL.CRM] }
 )
 
 /* ==================================== */
@@ -796,7 +798,6 @@ export default (
           component={AsyncAgentNetworkAgents}
         />
 
-        {/* TODO: Marketing (Ok) and CRM (Ask Emil about triggers) */}
         <Route path="insights">
           <IndexRoute component={AsyncMarketingInsightsList} />
           <Route path="scheduled" component={AsyncMarketingInsightsList} />
@@ -890,12 +891,10 @@ export default (
           <IndexRoute component={AsyncBrandSettings} />
         </Route>
 
-        {/* TODO: Store - Ask Emil about website access */}
+        {/* TODO: Store for now but it is a part of Marketing so we have to fix it for the new website builder */}
         <Route path="websites">
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
-
-        {/* TODO: Store - Ask Emil about website access */}
         <Route path="website" component={AsyncWebsite} />
       </Route>
     </Route>
