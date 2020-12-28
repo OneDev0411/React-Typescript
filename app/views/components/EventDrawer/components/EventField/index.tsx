@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
       }
     },
     icon: {
+      marginTop: theme.spacing(1),
       width: theme.spacing(3)
     },
     field: {
@@ -22,19 +23,21 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Props {
-  name: string
+  title: string
   children: ReactNode
-  iconProps: SvgIconProps
+  iconProps?: SvgIconProps
 }
 
-export const EventField = ({ children, iconProps }: Props) => {
+export const EventField = ({ title, children, iconProps }: Props) => {
   const classes = useStyles()
 
   return (
     <div className={classes.container}>
-      <div className={classes.icon}>
-        <SvgIcon {...iconProps} />
-      </div>
+      {iconProps && (
+        <div className={classes.icon}>
+          <SvgIcon {...iconProps} />
+        </div>
+      )}
       <div className={classes.field}>{children}</div>
     </div>
   )

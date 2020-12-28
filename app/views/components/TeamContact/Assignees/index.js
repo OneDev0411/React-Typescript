@@ -2,16 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import uniqBy from 'lodash/uniqBy'
-import { IconButton } from '@material-ui/core'
-
-import { mdiPlus } from '@mdi/js'
+import { Button } from '@material-ui/core'
 
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
 import { getUserTitle } from '../../../../models/user/helpers'
 
 import { TeamMember } from '../TeamMember'
-import { muiIconSizes } from '../../SvgIcons/icon-sizes'
-import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 import { BasicDropdown } from '../../BasicDropdown'
 
@@ -94,14 +90,14 @@ export class Assignees extends React.Component {
           itemToString={getUserTitle}
           style={{ display: 'inline-flex' }}
           buttonRenderer={buttonProps => (
-            <IconButton
+            <Button
               {...buttonProps}
               size="small"
-              variant="text"
+              color="secondary"
               type="button"
             >
-              <SvgIcon path={mdiPlus} size={muiIconSizes.small} />
-            </IconButton>
+              Add Assignee
+            </Button>
           )}
           itemRenderer={({ item, ...itemProps }) => (
             <TeamMember

@@ -14,7 +14,7 @@ import {
 import { Field } from 'react-final-form'
 
 import {
-  mdiBellOutline,
+  // mdiBellOutline,
   mdiNoteTextOutline,
   mdiAccountPlusOutline,
   mdiClockTimeFourOutline,
@@ -303,9 +303,12 @@ class EventDrawerContainer extends Component {
                         id="event-drawer-form"
                       >
                         {!this.isNew && <FutureEventDoneConfirmation />}
-                        <EventType />
+
+                        <Box ml={4} mb={1}>
+                          <EventType />
+                        </Box>
                         <EventField
-                          name="title"
+                          title="title"
                           iconProps={{
                             path: mdiNoteTextOutline
                           }}
@@ -337,7 +340,7 @@ class EventDrawerContainer extends Component {
                           </Box>
                         </EventField>
                         <EventField
-                          name="date"
+                          title="date"
                           iconProps={{
                             path: mdiClockTimeFourOutline
                           }}
@@ -385,7 +388,7 @@ class EventDrawerContainer extends Component {
                           </Box>
                         </EventField>
                         {/* <EventField
-                          name="reminder"
+                          title="reminder"
                           iconProps={{
                             path: mdiBellOutline
                           }}
@@ -414,7 +417,7 @@ class EventDrawerContainer extends Component {
                         </Flex>
                         {/* assosiations */}
                         <EventField
-                          name="contact-associations"
+                          title="contact-associations"
                           iconProps={{
                             path: mdiAccountPlusOutline
                           }}
@@ -435,7 +438,7 @@ class EventDrawerContainer extends Component {
                           </AssosiationContainer>
                         </EventField>
                         <EventField
-                          name="listing-associations"
+                          title="listing-associations"
                           iconProps={{
                             path: mdiHomeSearchOutline
                           }}
@@ -456,7 +459,7 @@ class EventDrawerContainer extends Component {
                           </AssosiationContainer>
                         </EventField>
                         <EventField
-                          name="deal-associations"
+                          title="deal-associations"
                           iconProps={{
                             path: mdiCashUsdOutline
                           }}
