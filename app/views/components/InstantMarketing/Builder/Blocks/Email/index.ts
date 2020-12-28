@@ -6,7 +6,7 @@ import registerListingBlocks, { Options as ListingOptions } from './Listings'
 import registerAgentBlocks, { Options as AgentOptions } from './Agents'
 import registerStaticBlocks from './Statics'
 import registerImageBlock, { Options as ImageOptions } from './Image'
-import registerGifBlock, { Options as GifOptions } from './Gif'
+// import registerGifBlock, { Options as GifOptions } from './Gif'
 import registerVideoBlock, { Options as ArticleOptions } from './Video'
 import registerArticleBlock, { Options as VideoOptions } from './Article'
 import registerNeighborhoodsBlocks, {
@@ -19,7 +19,6 @@ interface Options {
   listing: ListingOptions
   agent: AgentOptions & BlockOptions
   image: ImageOptions
-  gif: GifOptions
   video: VideoOptions
   article: ArticleOptions
   neighborhoods?: NeighborhoodsOptions
@@ -28,7 +27,7 @@ interface Options {
 export function registerEmailBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  { listing, agent, image, gif, video, article, neighborhoods }: Options
+  { listing, agent, image, video, article, neighborhoods }: Options
 ) {
   const draggable =
     '[data-gjs-type=mj-column],[data-gjs-type=mj-wrapper],[data-gjs-type=mj-body]'
@@ -49,7 +48,7 @@ export function registerEmailBlocks(
     listing: ReturnType<typeof registerListingBlocks>
     agent: ReturnType<typeof registerAgentBlocks>
     image: ReturnType<typeof registerImageBlock>
-    gif: ReturnType<typeof registerGifBlock>
+    // gif: ReturnType<typeof registerGifBlock>
     video: ReturnType<typeof registerVideoBlock>
     article: ReturnType<typeof registerArticleBlock>
     neighborhoods?: ReturnType<typeof registerNeighborhoodsBlocks>
@@ -57,7 +56,7 @@ export function registerEmailBlocks(
     listing: registerListingBlocks(editor, renderData, listing),
     agent: registerAgentBlocks(editor, renderData, agent),
     image: registerImageBlock(editor, image),
-    gif: registerGifBlock(editor, gif),
+    // gif: registerGifBlock(editor, gif),
     video: registerVideoBlock(editor, renderData, video),
     article: registerArticleBlock(editor, renderData, article)
   }
