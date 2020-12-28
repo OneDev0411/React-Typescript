@@ -17,7 +17,7 @@ export interface Options {
 }
 
 interface ImageBlock {
-  selectHandler: (selectedImage?: Image) => void
+  selectHandler: (selectedImageUrl?: Image) => void
 }
 
 export default function registerImageBlock(
@@ -34,16 +34,16 @@ export default function registerImageBlock(
 
   let modelHandle: any
 
-  const selectHandler = (selectedImage?: Image) => {
+  const selectHandler = (selectedImageUrl?: Image) => {
     if (!modelHandle) {
       return
     }
 
     const parent = modelHandle.parent()
 
-    if (selectedImage) {
+    if (selectedImageUrl) {
       const mjml = nunjucks.renderString(adapt(parent, template), {
-        image: selectedImage.url
+        image: selectedImageUrl
       })
 
       parent.append(mjml, { at: modelHandle.opt.at })

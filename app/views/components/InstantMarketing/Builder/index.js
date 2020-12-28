@@ -10,8 +10,7 @@ import { Portal } from 'components/Portal'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import TeamAgents from 'components/TeamAgents'
-import ImageDrawer from 'components/ImageDrawer'
-import GifDrawer from 'components/GifDrawer'
+import ImageSelectDialog from 'components/ImageSelectDialog'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
@@ -69,8 +68,7 @@ class Builder extends React.Component {
       loadedListingsAssets: [],
       isListingDrawerOpen: false,
       isAgentDrawerOpen: false,
-      isImageDrawerOpen: false,
-      isGifDrawerOpen: false,
+      isImageSelectDialogOpen: false,
       isVideoDrawerOpen: false,
       isArticleDrawerOpen: false,
       isNeighborhoodsReportDrawerOpen: false,
@@ -302,12 +300,7 @@ class Builder extends React.Component {
       },
       image: {
         onDrop: () => {
-          this.setState({ isImageDrawerOpen: true })
-        }
-      },
-      gif: {
-        onDrop: () => {
-          this.setState({ isGifDrawerOpen: true })
+          this.setState({ isImageSelectDialogOpen: true })
         }
       },
       video: {
@@ -893,28 +886,18 @@ class Builder extends React.Component {
               }}
             />
           )}
-          <ImageDrawer
-            isOpen={this.state.isImageDrawerOpen}
-            onClose={() => {
-              this.blocks.image.selectHandler()
-              this.setState({ isImageDrawerOpen: false })
-            }}
-            onSelect={imageItem => {
-              this.blocks.image.selectHandler(imageItem)
-              this.setState({ isImageDrawerOpen: false })
-            }}
-          />
-          <GifDrawer
-            isOpen={this.state.isGifDrawerOpen}
-            onClose={() => {
-              this.blocks.gif.selectHandler()
-              this.setState({ isGifDrawerOpen: false })
-            }}
-            onSelect={gifItem => {
-              this.blocks.gif.selectHandler(gifItem)
-              this.setState({ isGifDrawerOpen: false })
-            }}
-          />
+          {this.state.isImageSelectDialogOpen && (
+            <ImageSelectDialog
+              onClose={() => {
+                this.blocks.image.selectHandler()
+                this.setState({ isImageSelectDialogOpen: false })
+              }}
+              onSelect={imageUrl => {
+                this.blocks.image.selectHandler(imageUrl)
+                this.setState({ isImageSelectDialogOpen: false })
+              }}
+            />
+          )}
           <VideoDrawer
             isOpen={this.state.isVideoDrawerOpen}
             onClose={() => {
