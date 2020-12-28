@@ -532,7 +532,7 @@ const ReminderNotifications = withAcl(
         '../components/Pages/Dashboard/Account/ReminderNotifications' /* webpackChunkName: "reminder_notifications" */
       )
   }),
-  { oneOf: [ACL.CRM, ACL.DEALS, ACL.BACK_OFFICE] }
+  { oneOf: [ACL.CRM, ACL.DEALS] }
 )
 
 const EmailSignature = withAcl.crm(
