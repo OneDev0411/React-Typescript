@@ -19,7 +19,7 @@ export function useAcl(
 }
 
 export function useAclRedirect(
-  access: Access,
+  access: Access | Access[],
   fallbackUrl: string = '/dashboard/mls',
   options?: UseAclOptions
 ): boolean {

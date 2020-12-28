@@ -36,14 +36,14 @@ interface Props {
 function Acl({
   access,
   fallback = null,
-  fallbackUrl = null,
+  fallbackUrl = '/dashboard/mls',
   accessControlPolicy,
   children
 }: Props) {
   const userHasAccess = useAcl(access, { accessControlPolicy })
 
   if (!userHasAccess && fallbackUrl) {
-    browserHistory.push('/dashboard/mls')
+    browserHistory.push(fallbackUrl)
   }
 
   return <>{userHasAccess ? children : fallback}</>
