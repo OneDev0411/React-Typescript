@@ -1,11 +1,13 @@
 import React, { ComponentType } from 'react'
 
+import { ACL } from 'constants/acl'
+
 import { useAclRedirect } from './use-acl'
 import { Access } from './types'
 
 function withAcl<T = {}>(
   Component: ComponentType<T>,
-  access: Access,
+  access: Access | Access[],
   fallbackUrl = '/dashboard/mls'
 ) {
   return function AclComponent(props: T) {
@@ -15,4 +17,20 @@ function withAcl<T = {}>(
   }
 }
 
-export default withAcl
+function generateWithAcl(access: Access | Access[]) {
+  return function withAclDefault<T>(
+    Component: ComponentType<T>,
+    fallbackUrl?: string
+  ) {
+    return withAcl<T>(Component, access, fallbackUrl)
+  }
+}
+
+export default Object.assign(withAcl, {
+  crm: generateWithAcl([ACL.CRM]),
+  admin: generateWithAcl([ACL.ADMIN]),
+  backOffice: generateWithAcl([ACL.BACK_OFFICE]),
+  deals: generateWithAcl([ACL.DEALS]),
+  marketing: generateWithAcl([ACL.MARKETING]),
+  agentNetwork: generateWithAcl([ACL.AGENT_NETWORK])
+})
