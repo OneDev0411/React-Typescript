@@ -13,7 +13,7 @@ import Dashboard from '../components/Pages/Dashboard'
 
 // Pages
 import Load from '../loader'
-import UserIsNotAuthenticated from './userIsNotAuthenticated'
+import { withGuest, withSignedInUser } from './hoc'
 
 const AsyncAuthenticationLayout = Load({
   loader: () =>
@@ -29,22 +29,28 @@ const AsyncBranch = Load({
     import('../components/Pages/Branch' /* webpackChunkName: "branch" */)
 })
 
-const AsyncSignUp = Load({
-  loader: () =>
-    import('../components/Pages/Auth/SignUp' /* webpackChunkName: "signup" */)
-})
+const AsyncSignUp = withGuest(
+  Load({
+    loader: () =>
+      import('../components/Pages/Auth/SignUp' /* webpackChunkName: "signup" */)
+  })
+)
 
-const AsyncRegister = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Auth/Register' /* webpackChunkName: "register" */
-    )
-})
+const AsyncRegister = withGuest(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Auth/Register' /* webpackChunkName: "register" */
+      )
+  })
+)
 
-const AsyncSignIn = Load({
-  loader: () =>
-    import('../components/Pages/Auth/SignIn' /* webpackChunkName: "signin" */)
-})
+const AsyncSignIn = withGuest(
+  Load({
+    loader: () =>
+      import('../components/Pages/Auth/SignIn' /* webpackChunkName: "signin" */)
+  })
+)
 
 const AsyncVerifyRequest = Load({
   loader: () =>
@@ -60,12 +66,14 @@ const AsyncVerifyConfirm = Load({
     )
 })
 
-const AsyncForgotPassword = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Auth/Password/Forgot' /* webpackChunkName: "forgot_password" */
-    )
-})
+const AsyncForgotPassword = withGuest(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Auth/Password/Forgot' /* webpackChunkName: "forgot_password" */
+      )
+  })
+)
 
 const AsyncResetPassword = Load({
   loader: () =>
@@ -432,12 +440,14 @@ const AsyncNotificationsPage = Load({
 //  Account settings
 /* ==================================== */
 
-const AsyncAccountLayout = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Account' /* webpackChunkName: "account_layout" */
-    )
-})
+const AsyncAccountLayout = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Account' /* webpackChunkName: "account_layout" */
+      )
+  })
+)
 
 const AsyncProfile = Load({
   loader: () =>
@@ -631,21 +641,15 @@ export default (
       <Route path="branch" component={AsyncBranch} />
       <Route path="share" component={AsyncShare} />
 
-      <Route
-        path="register"
-        component={UserIsNotAuthenticated(AsyncRegister)}
-      />
+      <Route path="register" component={AsyncRegister} />
 
-      <Route path="signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
-      <Route path="signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
+      <Route path="signin" component={AsyncSignIn} />
+      <Route path="signup" component={AsyncSignUp} />
 
       <Route path="verify/confirm/:verifyType" component={AsyncVerifyConfirm} />
       <Route path="verify/request/:verifyType" component={AsyncVerifyRequest} />
 
-      <Route
-        path="password/forgot"
-        component={UserIsNotAuthenticated(AsyncForgotPassword)}
-      />
+      <Route path="password/forgot" component={AsyncForgotPassword} />
       <Route path="password/reset" component={AsyncResetPassword} />
 
       <Route path="mobile" component={AsyncMobile} />
