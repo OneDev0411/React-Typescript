@@ -1,6 +1,10 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
 
+import withAcl from 'components/Acl/with-acl'
+
+import { ACL } from 'constants/acl'
+
 import GoToDashboard from '../views/components/GoToDashboard'
 
 // Containers
@@ -130,12 +134,15 @@ const AsyncOnboardingProfile = Load({
     )
 })
 
-const AsyncDashboardOverview = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
-    )
-})
+const AsyncDashboardOverview = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
+      )
+  }),
+  user => user.email === 'shayan@rechat.com'
+)
 
 /* ==================================== */
 //  MLS
@@ -251,12 +258,14 @@ const AsyncDealFormEdit = Load({
 //  Calendar
 /* ==================================== */
 
-const AsyncCalendar = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Calendar' /* webpackChunkName: "calendar" */
-    )
-})
+const AsyncCalendar = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Calendar' /* webpackChunkName: "calendar" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Contacts
@@ -310,23 +319,28 @@ const AsyncFlowEdit = Load({
 //  CRM Open Houses
 /* ==================================== */
 
-const AsyncOpenHousesList = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/OpenHouse/List/OpenHousesList' /* webpackChunkName: "oh_list" */
-    )
-})
+const AsyncOpenHousesList = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/OpenHouse/List/OpenHousesList' /* webpackChunkName: "oh_list" */
+      )
+  }),
+  [ACL.CRM, ACL.MARKETING]
+)
 
 /* ==================================== */
 //  CRM Tours List
 /* ==================================== */
 
-const AsyncToursList = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Tours/List/ToursList' /* webpackChunkName: "tours_list" */
-    )
-})
+const AsyncToursList = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Tours/List/ToursList' /* webpackChunkName: "tours_list" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Marketing Center
@@ -364,30 +378,36 @@ const AsyncMarketingHistory = Load({
 //  Inbox
 /* ==================================== */
 
-const AsyncInbox = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Inbox' /* webpackChunkName: "inbox" */
-    )
-})
+const AsyncInbox = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Inbox' /* webpackChunkName: "inbox" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Insights
 /* ==================================== */
 
-const AsyncMarketingInsightsList = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/MarketingInsights/List' /* webpackChunkName: "marketing_insights_list" */
-    )
-})
+const AsyncMarketingInsightsList = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/MarketingInsights/List' /* webpackChunkName: "marketing_insights_list" */
+      )
+  })
+)
 
-const AsyncMarketingInsight = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/MarketingInsights/Insight' /* webpackChunkName: "email_insight" */
-    )
-})
+const AsyncMarketingInsight = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/MarketingInsights/Insight' /* webpackChunkName: "email_insight" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Chatroom
@@ -561,12 +581,14 @@ const AsyncChecklists = Load({
     )
 })
 
-const AsyncWebsite = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Website' /* webpackChunkName: "website" */
-    )
-})
+const AsyncWebsite = withAcl.store(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Website' /* webpackChunkName: "website" */
+      )
+  })
+)
 
 const AsyncForms = Load({
   loader: () =>

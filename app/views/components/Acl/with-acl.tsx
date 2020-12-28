@@ -32,5 +32,6 @@ export default Object.assign(withAcl, {
   backOffice: generateWithAcl([ACL.BACK_OFFICE]),
   deals: generateWithAcl([ACL.DEALS]),
   marketing: generateWithAcl([ACL.MARKETING]),
-  agentNetwork: generateWithAcl([ACL.AGENT_NETWORK])
+  agentNetwork: generateWithAcl([ACL.AGENT_NETWORK]),
+  store: generateWithAcl([ACL.STORE])
 })

@@ -5,8 +5,6 @@ import ParentSize from '@visx/responsive/lib/components/ParentSize'
 
 import PageLayout from 'components/GlobalPageLayout'
 
-import Acl from 'components/Acl'
-
 import Greeting from './Greeting'
 import Stats from './Stats'
 import Chart from './Chart'
@@ -32,63 +30,57 @@ const useStyles = makeStyles(
   { name: 'OverviewDashboard' }
 )
 
-const access = (user: IUser) => user.email === 'shayan@rechat.com'
-
 function OverviewDashboard() {
   const classes = useStyles()
 
   return (
-    <Acl access={access} fallbackUrl="/dashboard/mls">
-      <PageLayout>
-        <PageLayout.Header title="Dashboard" />
-        <PageLayout.Main>
-          <DatePeriodSwitcher />
-          <Greeting />
-          <Box display="flex" mt={10} mb={10}>
-            <Stats title="Production" value="$7,000,250" change={15} />
-            <Stats title="Active Deals" value="8" change={20} />
-            <Stats title="Pending Deals" value="2" change={-4} />
-            <Stats title="Closed Deals" value="12" change={12} />
-          </Box>
-          <Box display="flex">
-            <Box className={classes.widgetContainer}>
-              <Typography variant="body2">
-                Your deals history.{' '}
-                <Link href="/dashboard/deals" color="secondary">
-                  Go to deals
-                </Link>
-              </Typography>
-              <Box
-                width="100%"
-                height="250px"
-                className={classes.widgetInnerContainer}
-              >
-                <ParentSize>
-                  {({ width, height }) => (
-                    <Chart width={width} height={height} />
-                  )}
-                </ParentSize>
-              </Box>
-            </Box>
-            <Box className={classes.widgetContainer}>
-              <Typography variant="body2">
-                Upcoming Celebrations.{' '}
-                <Link href="/dashboard/calendar" color="secondary">
-                  See more events
-                </Link>
-              </Typography>
-              <Box
-                width="100%"
-                height="250px"
-                className={classes.widgetInnerContainer}
-              >
-                <UpcomingCelebrations />
-              </Box>
+    <PageLayout>
+      <PageLayout.Header title="Dashboard" />
+      <PageLayout.Main>
+        <DatePeriodSwitcher />
+        <Greeting />
+        <Box display="flex" mt={10} mb={10}>
+          <Stats title="Production" value="$7,000,250" change={15} />
+          <Stats title="Active Deals" value="8" change={20} />
+          <Stats title="Pending Deals" value="2" change={-4} />
+          <Stats title="Closed Deals" value="12" change={12} />
+        </Box>
+        <Box display="flex">
+          <Box className={classes.widgetContainer}>
+            <Typography variant="body2">
+              Your deals history.{' '}
+              <Link href="/dashboard/deals" color="secondary">
+                Go to deals
+              </Link>
+            </Typography>
+            <Box
+              width="100%"
+              height="250px"
+              className={classes.widgetInnerContainer}
+            >
+              <ParentSize>
+                {({ width, height }) => <Chart width={width} height={height} />}
+              </ParentSize>
             </Box>
           </Box>
-        </PageLayout.Main>
-      </PageLayout>
-    </Acl>
+          <Box className={classes.widgetContainer}>
+            <Typography variant="body2">
+              Upcoming Celebrations.{' '}
+              <Link href="/dashboard/calendar" color="secondary">
+                See more events
+              </Link>
+            </Typography>
+            <Box
+              width="100%"
+              height="250px"
+              className={classes.widgetInnerContainer}
+            >
+              <UpcomingCelebrations />
+            </Box>
+          </Box>
+        </Box>
+      </PageLayout.Main>
+    </PageLayout>
   )
 }
 
