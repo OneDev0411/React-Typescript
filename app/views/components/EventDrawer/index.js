@@ -396,25 +396,6 @@ class EventDrawerContainer extends Component {
                          
                         </EventField> */}
 
-                        <Flex alignCenter>
-                          {!this.isNew && (
-                            <>
-                              <Tooltip placement="top" caption="Delete">
-                                <IconButton
-                                  disabled={isDisabled}
-                                  onClick={this.handleDelete}
-                                >
-                                  <IconDelete size="medium" />
-                                </IconButton>
-                              </Tooltip>
-                              <Divider
-                                margin="0 1rem"
-                                width="1px"
-                                height="2rem"
-                              />
-                            </>
-                          )}
-                        </Flex>
                         {/* assosiations */}
                         <EventField
                           title="contact-associations"
@@ -486,7 +467,26 @@ class EventDrawerContainer extends Component {
                         />
                       </FormContainer>
                       <Footer justifyBetween alignCenter>
-                        <AssigneesField name="assignees" owner={user} />
+                        <Flex alignCenter>
+                          {!this.isNew && (
+                            <Flex alignCenter>
+                              <Tooltip placement="top" caption="Delete">
+                                <IconButton
+                                  disabled={isDisabled}
+                                  onClick={this.handleDelete}
+                                >
+                                  <IconDelete size="medium" />
+                                </IconButton>
+                              </Tooltip>
+                              <Divider
+                                margin="0 0.5rem 0 0.25rem"
+                                width="1px"
+                                height="1rem"
+                              />
+                            </Flex>
+                          )}
+                          <AssigneesField name="assignees" owner={user} />
+                        </Flex>
                         <ActionButton
                           appearance="secondary"
                           type="button"

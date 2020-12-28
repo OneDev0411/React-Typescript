@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 import cn from 'classnames'
 
-import { mdiDotsVertical } from '@mdi/js'
+import { mdiDotsVertical, mdiChevronDown } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -135,6 +135,7 @@ export function Selector({ input }: Props) {
               <SvgIcon path={mdiDotsVertical} size={muiIconSizes.small} />
             )
           }
+          endIcon={<SvgIcon path={mdiChevronDown} size={muiIconSizes.small} />}
           onClick={handleOpenMore}
           className={cn({
             [classes.isTypeActive]: isMoreActive
