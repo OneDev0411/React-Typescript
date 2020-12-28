@@ -650,7 +650,7 @@ const AsyncShare = withAcl.marketing(
   })
 )
 
-const AsyncTeams = withAcl.backOffice(
+const AsyncTeams = withAcl.admin(
   Load({
     loader: () =>
       import(
@@ -659,7 +659,7 @@ const AsyncTeams = withAcl.backOffice(
   })
 )
 
-const AsyncChecklists = withAcl.backOffice(
+const AsyncChecklists = withAcl.admin(
   Load({
     loader: () =>
       import(
@@ -695,7 +695,7 @@ const AsyncOops = Load({
 //  CRM Deal Context
 /* ==================================== */
 
-const AsyncContexts = withAcl.backOffice(
+const AsyncContexts = withAcl.admin(
   Load({
     loader: () =>
       import(
@@ -775,7 +775,6 @@ export default (
       <Route path="share" component={AsyncShare} />
 
       <Route path="dashboard" component={Dashboard}>
-        {/* TODO: Ask Shayan about this route */}
         <Route path="overview" component={AsyncDashboardOverview} />
         <Route path="inbox(/:emailThreadId)" component={AsyncInbox} />
 
