@@ -6,10 +6,6 @@ export function getGifUrl(item: GifObject): string {
   return item.media[0].gif.url ?? ''
 }
 
-export function getGifThumbnailUrl(item: GifObject): string {
-  return item.media[0].gif.preview ?? ''
-}
-
 export function getTenorApiRequestUrl(
   api: string,
   queryParams: string[] = []
