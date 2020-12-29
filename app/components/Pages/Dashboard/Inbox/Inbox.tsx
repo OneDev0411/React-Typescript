@@ -15,8 +15,6 @@ import GlobalPageLayout from 'components/GlobalPageLayout'
 
 import { IAppState } from 'reducers'
 
-import Acl from 'components/Acl'
-
 import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
 import InboxConnectAccount from './components/InboxConnectAccount'
 import InboxEmailThreadList from './components/InboxEmailThreadList'
@@ -90,78 +88,72 @@ export default function Inbox({ params }: WithRouterProps) {
   const classes = useStyles()
 
   return (
-    <Acl.Crm fallbackUrl="/dashboard/mls">
-      <GlobalPageLayout className={classes.layout}>
-        <Helmet>
-          <title>
-            Inbox{' '}
-            {unreadEmailThreadsCount ? `(${unreadEmailThreadsCount}) ` : ''}|
-            Rechat
-          </title>
-        </Helmet>
+    <GlobalPageLayout className={classes.layout}>
+      <Helmet>
+        <title>
+          Inbox {unreadEmailThreadsCount ? `(${unreadEmailThreadsCount}) ` : ''}
+          | Rechat
+        </title>
+      </Helmet>
 
-        <Box paddingLeft={5} flex="0 1 auto">
-          {initializing || noConnectedAccounts ? (
-            <GlobalPageLayout.Header title="Inbox" />
-          ) : (
-            <GlobalPageLayout.HeaderWithSearch
-              title="Inbox"
-              onSearch={
-                query =>
-                  setSearchQuery(searchQuery => query || (searchQuery && query)) // Keep it undefined until there are actually some query.
-              }
-              SearchInputProps={{
-                placeholder: 'Search emails',
-                isLoading: searchStatus
-              }}
-            />
-          )}
+      <Box paddingLeft={5} flex="0 1 auto">
+        {initializing || noConnectedAccounts ? (
+          <GlobalPageLayout.Header title="Inbox" />
+        ) : (
+          <GlobalPageLayout.HeaderWithSearch
+            title="Inbox"
+            onSearch={
+              query =>
+                setSearchQuery(searchQuery => query || (searchQuery && query)) // Keep it undefined until there are actually some query.
+            }
+            SearchInputProps={{
+              placeholder: 'Search emails',
+              isLoading: searchStatus
+            }}
+          />
+        )}
+      </Box>
+
+      <GlobalPageLayout.Main
+        height={0}
+        flex="1 1 auto"
+        display="flex"
+        flexDirection="column"
+      >
+        <Box paddingLeft={5}>
+          <Divider />
         </Box>
-
-        <GlobalPageLayout.Main
-          height={0}
-          flex="1 1 auto"
-          display="flex"
-          flexDirection="column"
-        >
-          <Box paddingLeft={5}>
-            <Divider />
-          </Box>
-          {initializing ? null : noConnectedAccounts ? (
-            <InboxConnectAccount />
-          ) : (
-            <Grid container spacing={0} className={classes.body}>
-              <Grid
-                item
-                className={classNames(classes.list, classes.fullHeight)}
-              >
-                <InboxEmailThreadList
-                  selectedEmailThreadId={selectedEmailThreadId}
-                  onSelectEmailThread={setSelectedEmailThreadId}
-                  searchQuery={searchQuery}
-                  onSearchStatusChange={setSearchStatus}
-                  onUpdateEmailThreads={handleEmailThreadsUpdate}
-                />
-              </Grid>
-              <Grid
-                item
-                xs
-                className={classNames(
-                  classes.conversation,
-                  emailThreadCount === 0 && classes.conversationHidden,
-                  classes.fullHeight
-                )}
-              >
-                <InboxEmailThread
-                  key={selectedEmailThreadId}
-                  emailThreadId={selectedEmailThreadId}
-                  onClose={handleInboxEmailThreadClose}
-                />
-              </Grid>
+        {initializing ? null : noConnectedAccounts ? (
+          <InboxConnectAccount />
+        ) : (
+          <Grid container spacing={0} className={classes.body}>
+            <Grid item className={classNames(classes.list, classes.fullHeight)}>
+              <InboxEmailThreadList
+                selectedEmailThreadId={selectedEmailThreadId}
+                onSelectEmailThread={setSelectedEmailThreadId}
+                searchQuery={searchQuery}
+                onSearchStatusChange={setSearchStatus}
+                onUpdateEmailThreads={handleEmailThreadsUpdate}
+              />
             </Grid>
-          )}
-        </GlobalPageLayout.Main>
-      </GlobalPageLayout>
-    </Acl.Crm>
+            <Grid
+              item
+              xs
+              className={classNames(
+                classes.conversation,
+                emailThreadCount === 0 && classes.conversationHidden,
+                classes.fullHeight
+              )}
+            >
+              <InboxEmailThread
+                key={selectedEmailThreadId}
+                emailThreadId={selectedEmailThreadId}
+                onClose={handleInboxEmailThreadClose}
+              />
+            </Grid>
+          </Grid>
+        )}
+      </GlobalPageLayout.Main>
+    </GlobalPageLayout>
   )
 }
