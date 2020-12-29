@@ -15,6 +15,7 @@ export function AddListingAssociation({
   handleAdd,
   isMultipleSelected,
   showTitle = false,
+  isPrimary = false,
   title = 'Attach Property'
 }: AddAssociationProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -34,6 +35,7 @@ export function AddListingAssociation({
       Icon={<SvgIcon path={mdiMapSearchOutline} />}
       disabled={disabled}
       showTitle={showTitle}
+      isPrimary={isPrimary}
       onClick={onOpen}
     >
       {isOpen && (

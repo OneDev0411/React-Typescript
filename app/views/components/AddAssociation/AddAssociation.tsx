@@ -11,6 +11,7 @@ interface Props {
   disabled: boolean
   isMultipleSelected?: boolean
   showTitle?: boolean
+  isPrimary?: boolean
 
   // tooltip caption
   caption?: string
@@ -22,6 +23,7 @@ export function AddAssociation({
   caption,
   disabled = false,
   showTitle = false,
+  isPrimary = false,
   name = 'associations',
   type,
   isMultipleSelected
@@ -70,6 +72,7 @@ export function AddAssociation({
   const childProps: AddAssociationProps = {
     disabled,
     showTitle,
+    isPrimary,
     handleAdd: onAdd,
     title: caption,
     isMultipleSelected

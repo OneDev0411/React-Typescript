@@ -9,6 +9,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
     whiteSpace: 'nowrap',
     color: theme.palette.action.active,
     ...theme.typography.body1
+  },
+  isPrimary: {
+    color: theme.palette.secondary.main
   }
 }))
 
@@ -16,6 +19,7 @@ interface Props {
   children: ReactNode
   disabled: boolean
   showTitle?: boolean
+  isPrimary?: boolean
   Icon: ReactNode
   onClick: () => void
   title: string
@@ -27,7 +31,8 @@ export function AddAssociationButton({
   Icon,
   onClick,
   title,
-  showTitle = false
+  showTitle = false,
+  isPrimary = false
 }: Props) {
   const classes = useStyles()
 
@@ -37,7 +42,10 @@ export function AddAssociationButton({
         <ButtonBase
           disabled={disabled}
           onClick={onClick}
-          className={cn({ [classes.button]: showTitle })}
+          className={cn({
+            [classes.button]: showTitle,
+            [classes.isPrimary]: isPrimary
+          })}
         >
           {showTitle ? title : Icon}
         </ButtonBase>
