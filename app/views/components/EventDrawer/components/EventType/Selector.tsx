@@ -64,6 +64,10 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   isTypeActive: {
     background: theme.palette.grey[300]
+  },
+  otherItemIcon: {
+    minWidth: 'unset',
+    marginRight: theme.spacing(2)
   }
 }))
 
@@ -165,7 +169,7 @@ export function Selector({ input }: Props) {
                 handleCloseMore()
               }}
             >
-              <ListItemIcon>
+              <ListItemIcon className={classes.otherItemIcon}>
                 {eventTypesIcons[type.title].icon({ size: muiIconSizes.small })}
               </ListItemIcon>
               <ListItemText primary={type.title} />
