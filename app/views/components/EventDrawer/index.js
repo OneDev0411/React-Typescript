@@ -3,7 +3,13 @@ import { connect } from 'react-redux'
 
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Box, IconButton, FormControlLabel, Checkbox } from '@material-ui/core'
+import {
+  Box,
+  IconButton,
+  FormControlLabel,
+  Checkbox,
+  Tooltip
+} from '@material-ui/core'
 
 import { Field } from 'react-final-form'
 
@@ -29,7 +35,6 @@ import {
   EndDateTimeField,
   FieldError
 } from '../final-form-fields'
-import Tooltip from '../tooltip'
 import AddAssociation from '../AddAssociation'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
@@ -358,7 +363,7 @@ class EventDrawerContainer extends Component {
                         <Flex alignCenter>
                           {!this.isNew && (
                             <>
-                              <Tooltip placement="top" caption="Delete">
+                              <Tooltip placement="top" title="Delete">
                                 <IconButton
                                   disabled={isDisabled}
                                   onClick={this.handleDelete}

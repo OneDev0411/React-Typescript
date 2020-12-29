@@ -5,11 +5,12 @@ import _ from 'underscore'
 import cn from 'classnames'
 import { mdiChevronDoubleLeft, mdiArrowExpand } from '@mdi/js'
 
+import { Tooltip } from '@material-ui/core'
+
 import UserAvatar from 'components/UserAvatar'
 
 import Badge from 'components/Badge'
 
-import Tooltip from 'components/tooltip'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
@@ -133,7 +134,7 @@ class Rooms extends React.Component {
             onChange={filter => this.onChangeFilter(filter)}
             style={{ width: showChatbar ? 190 : 240 }}
           />
-          <Tooltip placement="bottom" caption="Close chat panel">
+          <Tooltip placement="bottom" title="Close chat panel">
             <div className="toggle-sidebar">
               <button
                 type="button"
@@ -151,7 +152,7 @@ class Rooms extends React.Component {
             </div>
           </Tooltip>
           {showChatbar && (
-            <Tooltip placement="bottom" caption="Expand Fullscreen">
+            <Tooltip placement="bottom" title="Expand Fullscreen">
               <div className="toggle-sidebar">
                 <button
                   type="button"

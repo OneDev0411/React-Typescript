@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
-import { Box, Button, IconButton } from '@material-ui/core'
+import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
 
 import { mdiTrashCanOutline } from '@mdi/js'
 
@@ -38,7 +38,6 @@ import {
 } from '../../final-form-fields'
 import AddAssociation from '../../AddAssociation'
 import { AssociationsList, EndTimeField } from '../../final-form-fields'
-import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 import { Section } from '../../tour/TourDrawer/components/Section'
 
@@ -522,7 +521,7 @@ class OpenHouseDrawerInternal extends React.Component {
                             <>
                               <Tooltip
                                 placement="top"
-                                caption="Delete Registration Page"
+                                title="Delete Registration Page"
                               >
                                 <IconButton
                                   disabled={isDisabled}

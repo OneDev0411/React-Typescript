@@ -4,9 +4,10 @@ import PropTypes from 'prop-types'
 
 import { mdiClose } from '@mdi/js'
 
+import { Tooltip } from '@material-ui/core'
+
 import { getUserTitle } from '../../../../models/user/helpers'
 import { Avatar } from '../../Avatar'
-import Tooltip from '../../tooltip'
 import IconButton from '../../Button/IconButton'
 import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
@@ -62,7 +63,7 @@ export class AssigneeItemInAvatar extends Component {
     const title = getUserTitle(user)
 
     return (
-      <Tooltip placeme="top" caption={title}>
+      <Tooltip placeme="top" title={title}>
         <Button isFit onClick={this.onRemove} type="button">
           <Avatar user={user} alt={title} />
           <Icon path={mdiClose} />

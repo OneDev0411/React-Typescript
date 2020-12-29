@@ -4,9 +4,10 @@ import { Col } from 'react-bootstrap'
 import cn from 'classnames'
 import { mdiClose } from '@mdi/js'
 
+import { Tooltip } from '@material-ui/core'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import UserAvatar from 'components/UserAvatar'
-import Tooltip from 'components/tooltip'
 
 import Compose from '../Shared/compose-wrapper'
 import MembersIcon from '../../Partials/Svgs/MembersIcon'
@@ -29,7 +30,7 @@ const ManageMembers = ({
   const canAddMember = room.room_type !== 'Direct'
 
   const Button = ({ clickHandler }) => (
-    <Tooltip placement={isFullScreen ? 'bottom' : 'top'} caption="Members">
+    <Tooltip placement={isFullScreen ? 'bottom' : 'top'} title="Members">
       <span className="icon members" onClick={() => clickHandler()}>
         <MembersIcon width={iconSize} height={iconSize} />
         <span className="bdg">{room.users && room.users.length}</span>

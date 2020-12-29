@@ -2,17 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 import { mdiLogout } from '@mdi/js'
-import { Box } from '@material-ui/core'
+import { Box, Tooltip } from '@material-ui/core'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import Chatroom from '../Util/chatroom'
 import MoreIcon from '../../Partials/Svgs/MoreIcon'
-import Tooltip from '../../../../../views/components/tooltip'
 
 const RoomSettings = ({ user, room, iconSize = 17 }) => (
-  <Tooltip placement="bottom" caption="More Items">
+  <Tooltip placement="bottom" title="More Items">
     <DropdownButton
       id="drp-room-settings"
       className="room-settings"

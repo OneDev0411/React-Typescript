@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
-import Tooltip from '../tooltip'
+import { Tooltip } from '@material-ui/core'
+
 import { getUserTitle } from '../../../models/user/helpers'
 import { Avatar } from '../Avatar'
 
@@ -51,7 +52,7 @@ const Avatars = ({ users, style, tooltipPlacement }) => (
 
           return (
             <AvatarContainer key={user.id} index={index}>
-              <Tooltip placement={tooltipPlacement} caption={title}>
+              <Tooltip placement={tooltipPlacement} title={title}>
                 <Avatar user={user} title={title} />
               </Tooltip>
             </AvatarContainer>

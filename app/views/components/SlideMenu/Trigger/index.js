@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Tooltip from '../../tooltip'
+import { Tooltip } from '@material-ui/core'
+
 import Button from '../../Button/IconButton'
 import IconNav from '../../SvgIcons/NavMenu/IconNav'
 
@@ -28,7 +29,7 @@ export const Trigger = props => {
   }
 
   return (
-    <Tooltip caption={tooltip} placement="bottom">
+    <Tooltip title={tooltip} placement="bottom">
       <Button
         isFit
         onClick={props.onClick}

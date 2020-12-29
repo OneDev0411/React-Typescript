@@ -6,6 +6,8 @@ import cn from 'classnames'
 import Flex from 'styled-flex-component'
 import { mdiInformationOutline } from '@mdi/js'
 
+import { Tooltip } from '@material-ui/core'
+
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 import {
   addCsvFile,
@@ -18,7 +20,6 @@ import { H1 } from '../../../../../../views/components/Typography/headings'
 import Button from '../../../../../../views/components/Button/ActionButton'
 import { Divider } from '../../../../../../views/components/Divider'
 import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
-import Tooltip from '../../../../../../views/components/tooltip'
 import { TeamContactSelect } from '../../../../../../views/components/TeamContact/TeamContactSelect'
 import { primary } from '../../../../../../views/utils/colors'
 
@@ -117,9 +118,8 @@ class SelectFile extends React.Component {
                 this.activeTeam.brand.name}
             </H1>
             <Tooltip
-              leftAlign
               placement="right"
-              caption="Not the team you want to import these contacts into? No worries. Go to your team switcher to change your team and then try importing again."
+              title="Not the team you want to import these contacts into? No worries. Go to your team switcher to change your team and then try importing again."
             >
               <SvgIcon
                 path={mdiInformationOutline}
