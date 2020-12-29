@@ -25,7 +25,28 @@ const getReminderDropdownItems = () => {
   return items
 }
 
+const getShorthandReminderItems = () => {
+  const shortHandItems = [NONE_OPTION]
+  const otherItems = []
+
+  Object.keys(REMINDER_ITEMS).forEach(value => {
+    const item = {
+      title: REMINDER_ITEMS[value],
+      value: Number(value)
+    }
+
+    if (item.value >= 900000 && item.value <= 1800000) {
+      shortHandItems.push(item)
+    } else {
+      otherItems.push(item)
+    }
+  })
+
+  return { shortHandItems, otherItems }
+}
+
 export const REMINDER_DROPDOWN_OPTIONS = getReminderDropdownItems()
+export const REMINDER_SHORTHAND_OPTIONS = getShorthandReminderItems()
 
 /**
  *

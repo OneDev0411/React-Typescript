@@ -14,7 +14,6 @@ import {
 import { Field } from 'react-final-form'
 
 import {
-  // mdiBellOutline,
   mdiNoteTextOutline,
   mdiAccountPlusOutline,
   mdiClockTimeFourOutline,
@@ -377,7 +376,6 @@ class EventDrawerContainer extends Component {
                                 />
                               )}
                             />
-                            <Reminder dueDate={values.dueDate} />
                             <FieldError
                               name="endDate"
                               style={{
@@ -387,16 +385,8 @@ class EventDrawerContainer extends Component {
                             />
                           </Box>
                         </EventField>
-                        {/* <EventField
-                          title="reminder"
-                          iconProps={{
-                            path: mdiBellOutline
-                          }}
-                        >
-                         
-                        </EventField> */}
-
-                        {/* assosiations */}
+                        <Reminder dueDate={values.dueDate} />
+                        {/* Assosiations Fields:Start */}
                         <EventField
                           title="contact-associations"
                           iconProps={{
@@ -460,7 +450,7 @@ class EventDrawerContainer extends Component {
                             />
                           </AssosiationContainer>
                         </EventField>
-                        {/* end assosations */}
+                        {/* Assosiations Fields:End */}
                         <ItemChangelog
                           item={values}
                           style={{ marginTop: '2em' }}

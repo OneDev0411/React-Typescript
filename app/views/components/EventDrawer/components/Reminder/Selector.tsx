@@ -6,56 +6,21 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon,
   makeStyles,
   Theme
 } from '@material-ui/core'
 import cn from 'classnames'
-
-import { mdiDotsVertical, mdiChevronDown } from '@mdi/js'
+import { mdiChevronDown } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { eventTypesIcons } from 'views/utils/event-types-icons'
-
-const SHORTHAND_ITEMS = [
-  {
-    title: 'Call',
-    value: 'Call'
-  },
-  {
-    title: 'In-Person Meeting',
-    value: 'In-Person Meeting'
-  }
-]
-
-const OTHER_ITEMS = [
-  {
-    title: 'Text',
-    value: 'Text'
-  },
-  {
-    title: 'Chat',
-    value: 'Chat'
-  },
-  {
-    title: 'Mail',
-    value: 'Mail'
-  },
-  {
-    title: 'Email',
-    value: 'Email'
-  },
-  {
-    title: 'Other',
-    value: 'Other'
-  }
-]
+import { REMINDER_SHORTHAND_OPTIONS } from 'views/utils/reminder'
 
 export const useStyles = makeStyles((theme: Theme) => ({
   container: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   shorthandType: {
     '& .MuiButton-root:not(:last-child)': {
@@ -64,7 +29,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   isTypeActive: {
     background: theme.palette.grey[300]
-  }
+  },
+  otherType: {}
 }))
 
 interface Props {
@@ -78,7 +44,7 @@ export function Selector({ input }: Props) {
   const [isMoreActive, setIsMoreActive] = useState<boolean>(false)
 
   useEffect(() => {
-    const isOtherTypeSelected = OTHER_ITEMS.some(
+    const isOtherTypeSelected = REMINDER_SHORTHAND_OPTIONS.otherItems?.some(
       type => value.value === type.value
     )
 
@@ -104,14 +70,11 @@ export function Selector({ input }: Props) {
   return (
     <div className={classes.container}>
       <div className={classes.shorthandType}>
-        {SHORTHAND_ITEMS.map(type => (
+        {REMINDER_SHORTHAND_OPTIONS.shortHandItems?.map(type => (
           <Button
             variant="outlined"
             size="small"
             key={type.value}
-            startIcon={eventTypesIcons[type.title].icon({
-              size: muiIconSizes.small
-            })}
             onClick={() => handleOnChange(type)}
             className={cn({
               [classes.isTypeActive]: value?.value === type.value
@@ -120,18 +83,11 @@ export function Selector({ input }: Props) {
             {type.title}
           </Button>
         ))}
+      </div>
+      <div className={classes.otherType}>
         <Button
           variant="outlined"
           size="small"
-          startIcon={
-            isMoreActive ? (
-              eventTypesIcons[value.title].icon({
-                size: muiIconSizes.small
-              })
-            ) : (
-              <SvgIcon path={mdiDotsVertical} size={muiIconSizes.small} />
-            )
-          }
           endIcon={<SvgIcon path={mdiChevronDown} size={muiIconSizes.small} />}
           onClick={handleOpenMore}
           className={cn({
@@ -156,7 +112,7 @@ export function Selector({ input }: Props) {
         }}
       >
         <List dense>
-          {OTHER_ITEMS.map(type => (
+          {REMINDER_SHORTHAND_OPTIONS.otherItems.map(type => (
             <ListItem
               button
               key={type.value}
@@ -165,9 +121,6 @@ export function Selector({ input }: Props) {
                 handleCloseMore()
               }}
             >
-              <ListItemIcon>
-                {eventTypesIcons[type.title].icon({ size: muiIconSizes.small })}
-              </ListItemIcon>
               <ListItemText primary={type.title} />
             </ListItem>
           ))}
