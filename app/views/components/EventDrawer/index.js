@@ -470,6 +470,7 @@ class EventDrawerContainer extends Component {
                             <Flex alignCenter>
                               <Tooltip placement="top" caption="Delete">
                                 <IconButton
+                                  size="small"
                                   disabled={isDisabled}
                                   onClick={this.handleDelete}
                                 >
@@ -477,7 +478,7 @@ class EventDrawerContainer extends Component {
                                 </IconButton>
                               </Tooltip>
                               <Divider
-                                margin="0 0.5rem 0 0.25rem"
+                                margin="0 0.5rem"
                                 width="1px"
                                 height="1rem"
                               />
