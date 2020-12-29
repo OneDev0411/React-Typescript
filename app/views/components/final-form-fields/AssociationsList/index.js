@@ -157,9 +157,11 @@ export function AssociationsList({
     }
 
     const list = associations.filter(i => i.association_type === filterType)
-    const defaultValues = defaultAssociation.filter(
-      i => i.association_type === filterType
-    )
+    let defaultValues = Array.isArray(defaultAssociation)
+      ? defaultAssociation
+      : [defaultAssociation]
+
+    defaultValues = defaultValues.filter(i => i.association_type === filterType)
 
     return [list, defaultValues]
   }, [associations, defaultAssociation, filterType])
