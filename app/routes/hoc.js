@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-use'
 import { connectedRouterRedirect } from 'redux-auth-wrapper/history3/redirect'
@@ -23,8 +23,8 @@ export const withGuest = connectedRouterRedirect({
   wrapperDisplayName: 'UserIsNotAuthenticated'
 })
 
-export function withSignedInUser() {
-  return ({ children }) => {
+export function withSignedInUser(C) {
+  return props => {
     const isSignedIn = useSelector(selectUserIsSignedIn)
     const location = useLocation()
     const redirectTo = `/signIn?redirectTo=${location.pathname}`
@@ -35,6 +35,6 @@ export function withSignedInUser() {
       }
     }, [isSignedIn, redirectTo])
 
-    return isSignedIn ? children : null
+    return isSignedIn ? <C {...props} /> : null
   }
 }

@@ -502,14 +502,12 @@ const AsyncAccountLayout = withSignedInUser(
   })
 )
 
-const AsyncProfile = withSignedInUser(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Account/Profile' /* webpackChunkName: "profile" */
-      )
-  })
-)
+const AsyncProfile = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Account/Profile' /* webpackChunkName: "profile" */
+    )
+})
 
 const ExportCalendar = withAcl.crm(
   Load({
@@ -566,14 +564,12 @@ const ConnectedAccountsSetting = withAcl.crm(
   })
 )
 
-const AsyncUpgradeToAgent = withSignedInUser(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Account/UpgradeToAgent' /* webpackChunkName: "upgrade_to_agent" */
-      )
-  })
-)
+const AsyncUpgradeToAgent = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Account/UpgradeToAgent' /* webpackChunkName: "upgrade_to_agent" */
+    )
+})
 
 // const AsyncCSS = Load({
 //   loader: () =>
