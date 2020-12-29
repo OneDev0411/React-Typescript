@@ -244,7 +244,7 @@ const AsyncDealsLayout = withAcl(
         '../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */
       )
   }),
-  [ACL.DEALS, ACL.BACK_OFFICE]
+  { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
 )
 
 const AsyncDealCreate = Load({
