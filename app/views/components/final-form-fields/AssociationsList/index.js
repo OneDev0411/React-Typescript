@@ -19,7 +19,7 @@ class List extends React.Component {
 
   removeHandler = association => {
     this.props.input.onChange(
-      this.props.associations.filter(a => {
+      (this.props?.originalAssociations || []).filter(a => {
         if (association.id) {
           return a.id !== association.id
         }
@@ -169,6 +169,7 @@ export function AssociationsList({
   return (
     <Field
       {...props}
+      originalAssociations={associations}
       associations={list}
       defaultAssociation={defaultValues}
       component={List}
