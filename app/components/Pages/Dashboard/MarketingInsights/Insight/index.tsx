@@ -15,9 +15,11 @@ import {
   mdiCursorDefaultClickOutline,
   mdiAccountMultipleOutline
 } from '@mdi/js'
-import { addNotification } from 'components/notification'
+
 import pluralize from 'pluralize'
 import classNames from 'classnames'
+
+import { addNotification } from 'components/notification'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
 import { EmailThread } from 'components/EmailThread'
@@ -31,6 +33,8 @@ import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
 import { getContactNameInitials } from 'models/contacts/helpers'
 import { setEmailNotificationStatus } from 'models/email/set-email-notification-status'
+
+import Acl from 'components/Acl'
 
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
@@ -254,7 +258,7 @@ function Insight({ params: { id } }: Props) {
   }
 
   return (
-    <>
+    <Acl.Marketing fallbackUrl="/dashboard/mls">
       <Helmet>
         <title>{`${
           item.subject ? `${item.subject} | ` : ''
@@ -358,7 +362,7 @@ function Insight({ params: { id } }: Props) {
           </section>
         </div>
       </div>
-    </>
+    </Acl.Marketing>
   )
 }
 

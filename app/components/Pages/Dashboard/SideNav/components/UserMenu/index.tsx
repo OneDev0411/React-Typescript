@@ -2,6 +2,8 @@ import React from 'react'
 import usePromise from 'react-use-promise'
 import { Popover } from '@material-ui/core'
 
+import { IUserState } from 'reducers/user'
+
 import { getActiveTeamId } from '../../../../../../utils/user-teams'
 import { getBrandChecklists } from '../../../../../../models/BrandConsole/Checklists'
 
@@ -9,7 +11,7 @@ import ToggleButton from './ToggleButton'
 
 import { UserMenuContent } from './UserMenuContent'
 
-export function UserMenu({ user }: { user: IUser }) {
+export function UserMenu({ user }: { user: IUserState }) {
   /**
    * We need to show checklists link only if users has access to it.
    * Right now, the logic for access is like this:

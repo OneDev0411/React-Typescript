@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { useDispatch, useStore } from 'react-redux'
+import { useDispatch, useStore, useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { useEffectOnce } from 'react-use'
 import { Grid, Theme, useTheme } from '@material-ui/core'
+
 import { addNotification } from 'components/notification'
 
 import {
@@ -10,8 +11,6 @@ import {
   hasUserAccessToCrm,
   hasUserAccessToDeals
 } from 'utils/user-teams'
-
-import useTypedSelector from 'hooks/use-typed-selector'
 
 import {
   ReminderNotificationSetting,
@@ -27,6 +26,8 @@ import { selectContextsByBrand } from 'reducers/deals/contexts'
 import ActionButton from 'components/Button/ActionButton'
 import Loading from 'partials/Loading'
 
+import { selectUser } from 'selectors/user'
+
 import { RENDER_FORCE_PUSH_BUTTON } from './constants'
 
 import Column from './components/Column'
@@ -41,9 +42,9 @@ import { updateNewColumnInColumns } from './helpers/update-new-column-in-columns
 
 export default function ReminderNotifications() {
   const store = useStore<IAppState>()
-  const user = useTypedSelector<IUser>(({ user }) => user)
-  const contactsAttributeDefs = useTypedSelector(
-    ({ contacts }) => contacts.attributeDefs
+  const user = useSelector(selectUser)
+  const contactsAttributeDefs = useSelector(
+    ({ contacts }: IAppState) => contacts.attributeDefs
   )
 
   const [isLoading, setIsLoading] = useState(true)

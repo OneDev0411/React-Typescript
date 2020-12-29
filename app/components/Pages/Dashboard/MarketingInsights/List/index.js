@@ -7,6 +7,8 @@ import classNames from 'classnames'
 import Table from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
 
+import Acl from 'components/Acl'
+
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import NoSearchResults from '../../../../Partials/no-search-results'
@@ -233,14 +235,16 @@ function List(props) {
   }
 
   return (
-    <Layout
-      sentCount={counts.sent}
-      scheduledCount={counts.scheduled}
-      onCreateEmail={reloadList}
-      renderContent={props => (
-        <InsightContainer>{renderContent(props)}</InsightContainer>
-      )}
-    />
+    <Acl.Marketing fallbackUrl="/dashboard/mls">
+      <Layout
+        sentCount={counts.sent}
+        scheduledCount={counts.scheduled}
+        onCreateEmail={reloadList}
+        renderContent={props => (
+          <InsightContainer>{renderContent(props)}</InsightContainer>
+        )}
+      />
+    </Acl.Marketing>
   )
 }
 

@@ -117,6 +117,10 @@ export function hasUserAccessToMarketingCenter(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.MARKETING)
 }
 
+export function hasUserAccessToAgentNetwork(user: IUser | null): boolean {
+  return hasUserAccess(user, ACL.AGENT_NETWORK)
+}
+
 export function isBackOffice(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.BACK_OFFICE)
 }

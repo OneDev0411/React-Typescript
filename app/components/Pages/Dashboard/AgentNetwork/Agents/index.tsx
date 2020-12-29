@@ -5,12 +5,13 @@ import { useLoadScript, LoadScriptProps } from '@react-google-maps/api'
 import { Box, Divider, Grid, Typography } from '@material-ui/core'
 
 import config from 'config'
-import { IAppState } from 'reducers'
 import { useLoadingEntities } from 'hooks/use-loading'
 import getListing from 'models/listings/listing/get-listing'
 
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import ListingAlertFilters from 'components/ListingAlertFilters'
+
+import { selectUser } from 'selectors/user'
 
 import Layout from '../Layout'
 import { openSearchResultPage } from '../helpers'
@@ -26,7 +27,7 @@ import AgentsGrid from './Grid'
 const GOOGLE_MAPS_LIBRARIES: LoadScriptProps['libraries'] = ['geometry']
 
 function Agents(props: WithRouterProps) {
-  const user = useSelector<IAppState, IUser>(state => state.user)
+  const user = useSelector(selectUser)
   const { isLoaded: isGoogleMapsLoaded } = useLoadScript({
     googleMapsApiKey: config.google.api_key,
     libraries: GOOGLE_MAPS_LIBRARIES

@@ -1,7 +1,10 @@
 import { SIGNIN_SUCCESS } from '../../constants/auth/signin'
 import * as actionTypes from '../../constants/user'
 
-const user = (state = null, action) => {
+export type IUserState = Nullable<IUser>
+
+// TODO: the second parameter needs to be type safe later
+const userReducer = (state: IUserState = null, action) => {
   switch (action.type) {
     case SIGNIN_SUCCESS:
       return action.user
@@ -26,17 +29,23 @@ const user = (state = null, action) => {
       }
 
     case actionTypes.SET_USER_BRAND_MEMBERS:
-      const teamIndex = state.teams.findIndex(
+      const teams = state?.teams
+
+      if (!teams) {
+        return null
+      }
+
+      const teamIndex = teams.findIndex(
         team => team.brand.id === action.brand.id
       )
 
       return {
         ...state,
-        teams: state.teams.map((team, index) =>
+        teams: teams.map((team, index) =>
           index !== teamIndex
             ? team
             : {
-                ...state.teams[teamIndex],
+                ...teams[teamIndex],
                 brand: action.brand
               }
         )
@@ -56,6 +65,6 @@ const user = (state = null, action) => {
   }
 }
 
-export default user
+export default userReducer
 
 export const isFetchingSelectedTeam = state => state.is_fetching_teams

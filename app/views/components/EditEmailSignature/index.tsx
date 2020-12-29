@@ -6,9 +6,10 @@ import styled, { css, ThemeProps } from 'styled-components'
 
 import { addNotification } from 'components/notification'
 
-import { IAppState } from 'reducers'
 import editUser from 'actions/user/edit'
 import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
+
+import { selectUserEmailSignature } from 'selectors/user'
 
 import { TextEditor } from '../TextEditor'
 import { ImageFeature } from '../TextEditor/features/Image'
@@ -33,11 +34,11 @@ export default function EditEmailSignature({
   showActions = true
 }: Props) {
   const dispatch = useDispatch()
-  const user = useSelector((state: IAppState) => state.user)
+  const userEmailSignature = useSelector(selectUserEmailSignature)
 
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [editorState, setEditorState, signatureEditor] = useEditorState(
-    user.email_signature != null ? user.email_signature : ''
+    userEmailSignature || ''
   )
 
   const onSave = async () => {

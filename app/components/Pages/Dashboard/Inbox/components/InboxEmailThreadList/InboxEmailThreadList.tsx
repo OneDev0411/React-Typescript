@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { addNotification } from 'components/notification'
 
 import { getEmailThreads } from 'models/email/get-email-threads'
@@ -8,11 +9,11 @@ import {
   SearchEmailThreadsNext
 } from 'models/email/search-email-threads'
 
-import useTypedSelector from 'hooks/use-typed-selector'
-
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
+
+import { IAppState } from 'reducers'
 
 import InfiniteScrollList from '../InfiniteScrollList'
 import InboxEmailThreadListItem from './components/InboxEmailThreadListItem'
@@ -221,7 +222,7 @@ export default function InboxEmailThreadList({
     }
   }
 
-  const accounts = useTypedSelector(({ contacts }) =>
+  const accounts = useSelector(({ contacts }: IAppState) =>
     selectAllConnectedAccounts(contacts.oAuthAccounts)
   )
   const synchronizingEmails = accounts.some(({ jobs, type }) =>

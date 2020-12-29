@@ -11,6 +11,7 @@ import {
 import fecha from 'fecha'
 
 import { IAppState } from 'reducers/index'
+import { selectUser } from 'selectors/user'
 
 import { selectDealTasks } from 'reducers/deals/tasks'
 
@@ -85,13 +86,14 @@ function List(props: Props & StateProps) {
   )
 }
 
-function mapStateToProps(
-  { user, deals }: IAppState,
-  ownProps: Props
-): StateProps {
+function mapStateToProps(state: IAppState, ownProps: Props): StateProps {
   return {
-    user,
-    tasks: selectDealTasks(ownProps.deal, deals.checklists, deals.tasks)
+    user: selectUser(state),
+    tasks: selectDealTasks(
+      ownProps.deal,
+      state.deals.checklists,
+      state.deals.tasks
+    )
   }
 }
 
