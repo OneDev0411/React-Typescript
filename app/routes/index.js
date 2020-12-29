@@ -493,12 +493,14 @@ const AsyncNotificationsPage = withSignedInUser(
 //  Account settings
 /* ==================================== */
 
-const AsyncAccountLayout = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Account' /* webpackChunkName: "account_layout" */
-    )
-})
+const AsyncAccountLayout = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Account' /* webpackChunkName: "account_layout" */
+      )
+  })
+)
 
 const AsyncProfile = withSignedInUser(
   Load({
