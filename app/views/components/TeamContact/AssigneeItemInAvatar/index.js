@@ -65,7 +65,7 @@ export class AssigneeItemInAvatar extends Component {
     return (
       <Tooltip placeme="top" caption={title}>
         <Button isFit onClick={this.onRemove} type="button">
-          <Avatar user={user} alt={title} size="small" />
+          <Avatar user={user} alt={title} size="small" disableLazyLoad />
           <Icon path={mdiClose} size={muiIconSizes.small} />
         </Button>
       </Tooltip>
