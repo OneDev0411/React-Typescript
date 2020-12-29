@@ -395,11 +395,11 @@ class EventDrawerContainer extends Component {
                         >
                           <AssosiationContainer>
                             <AssociationsList
+                              filterType="contact"
                               name="associations"
                               showDefaultAssociation
                               associations={values.associations}
                               defaultAssociation={defaultAssociation}
-                              filterType="contact"
                             />
                             <AddAssociation
                               showTitle
@@ -416,11 +416,11 @@ class EventDrawerContainer extends Component {
                         >
                           <AssosiationContainer>
                             <AssociationsList
+                              filterType="listing"
                               name="associations"
                               showDefaultAssociation
                               associations={values.associations}
                               defaultAssociation={defaultAssociation}
-                              filterType="listing"
                             />
                             <AddAssociation
                               showTitle
@@ -437,11 +437,11 @@ class EventDrawerContainer extends Component {
                         >
                           <AssosiationContainer>
                             <AssociationsList
+                              filterType="deal"
                               name="associations"
                               showDefaultAssociation
                               associations={values.associations}
                               defaultAssociation={defaultAssociation}
-                              filterType="deal"
                             />
                             <AddAssociation
                               showTitle
@@ -450,6 +450,14 @@ class EventDrawerContainer extends Component {
                             />
                           </AssosiationContainer>
                         </EventField>
+                        <AssociationsList
+                          filterType="email"
+                          name="associations"
+                          showDefaultAssociation
+                          associations={values.associations}
+                          defaultAssociation={defaultAssociation}
+                        />
+
                         {/* Assosiations Fields:End */}
                         <ItemChangelog
                           item={values}
