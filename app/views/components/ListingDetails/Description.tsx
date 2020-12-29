@@ -27,9 +27,10 @@ const useStyles = makeStyles(
 interface Props {
   address: string
   description: string
+  officeName: string
 }
 
-function Description({ address, description }: Props) {
+function Description({ address, description, officeName }: Props) {
   const classes = useStyles()
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
@@ -63,6 +64,11 @@ function Description({ address, description }: Props) {
           </Button>
         </Box>
       )}
+      <Box pt={2}>
+        <Typography variant="body1">
+          Listing Courtesy of {officeName}
+        </Typography>
+      </Box>
     </>
   )
 }

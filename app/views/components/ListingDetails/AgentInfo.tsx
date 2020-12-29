@@ -7,6 +7,8 @@ import { mdiAccount } from '@mdi/js'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
+import { formatPhoneNumber } from 'utils/format'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     name: {
@@ -65,7 +67,6 @@ function AgentInfo({
   image
 }: Partial<Props>) {
   const classes = useStyles()
-  const items = [jobTitle, email, company, tel].filter(Boolean)
 
   return (
     <Box display="flex">
@@ -87,20 +88,53 @@ function AgentInfo({
       </Box>
 
       <div>
-        <Typography variant="subtitle1" component="h3" className={classes.name}>
-          {name}
-        </Typography>
         <ul className={classes.list}>
-          {items.map((item, index) => (
+          <Typography
+            variant="subtitle1"
+            component="h3"
+            className={classes.name}
+          >
+            {name}
+          </Typography>
+          {jobTitle ? (
             <Typography
-              className={classes.listItem}
-              key={index}
               variant="caption"
+              className={classes.listItem}
               component="li"
             >
-              {item}
+              {jobTitle}
             </Typography>
-          ))}
+          ) : null}
+
+          {email ? (
+            <Typography
+              variant="caption"
+              className={classes.listItem}
+              component="li"
+            >
+              {email}
+            </Typography>
+          ) : null}
+
+          {company ? (
+            <Typography
+              variant="caption"
+              className={classes.listItem}
+              component="li"
+            >
+              {company}
+            </Typography>
+          ) : null}
+
+          {tel ? (
+            <Typography
+              variant="caption"
+              className={classes.listItem}
+              component="li"
+            >
+              {formatPhoneNumber(tel)}
+            </Typography>
+          ) : null}
         </ul>
       </div>
     </Box>

@@ -246,6 +246,7 @@ function ListingDetails({ id, onClose }: Props) {
             <Description
               address={subtitle1}
               description={listing.property.description}
+              officeName={listing.list_office_name}
             />
           </Box>
         </Grid>
