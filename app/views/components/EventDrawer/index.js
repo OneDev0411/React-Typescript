@@ -305,6 +305,14 @@ class EventDrawerContainer extends Component {
 
                         <Box ml={4} mb={1}>
                           <EventType />
+                          {!this.isNew && (
+                            <Box mt={1}>
+                              <CheckboxField
+                                name="status"
+                                id="event-drawer__status-field"
+                              />
+                            </Box>
+                          )}
                         </Box>
                         <EventField
                           title="title"
@@ -312,19 +320,8 @@ class EventDrawerContainer extends Component {
                             path: mdiNoteTextOutline
                           }}
                         >
-                          {this.isNew ? (
-                            <Title fullWidth />
-                          ) : (
-                            <Box>
-                              <Flex alignCenter style={{ height: '2.25rem' }}>
-                                <CheckboxField
-                                  name="status"
-                                  id="event-drawer__status-field"
-                                />
-                              </Flex>
-                              <Title />
-                            </Box>
-                          )}
+                          <Title fullWidth />
+
                           <Box mt={1}>
                             {shouldShowDescription || values?.hasDescription ? (
                               <Description placeholder="Add a description" />
