@@ -1,11 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Col, Row } from 'react-bootstrap'
 import _ from 'underscore'
 import cn from 'classnames'
 import { mdiChevronDoubleLeft, mdiArrowExpand } from '@mdi/js'
 
-import { Tooltip } from '@material-ui/core'
+import { Tooltip, Grid } from '@material-ui/core'
 
 import UserAvatar from 'components/UserAvatar'
 
@@ -182,15 +181,18 @@ class Rooms extends React.Component {
                 )
                 .sortBy(room => room.updated_at * -1)
                 .map(room => (
-                  <Row
+                  <Grid
+                    container
                     onClick={() => this.props.onSelectRoom(room.id)}
                     key={`ROOM_CHANNEL_${room.id}`}
                     className={cn('item', { active: room.id === activeRoom })}
+                    alignItems="center"
                   >
-                    <Col sm={1} xs={1} className="avatar vcenter">
+                    <Grid item sm={1} xs={1} className="avatar vcenter">
                       {this.getRoomAvatar(room)}
-                    </Col>
-                    <Col
+                    </Grid>
+                    <Grid
+                      item
                       sm={9}
                       xs={9}
                       className={cn('title vcenter', {
@@ -199,9 +201,9 @@ class Rooms extends React.Component {
                     >
                       <span>{this.getRoomTitle(room.proposed_title)}</span>
                       <UserTyping roomId={room.id} />
-                    </Col>
+                    </Grid>
 
-                    <Col sm={1} xs={1} className="notifications vcenter">
+                    <Grid item sm={1} xs={1} className="notifications vcenter">
                       {room.new_notifications > 0 && (
                         <Badge>
                           {room.new_notifications > 99
@@ -209,8 +211,8 @@ class Rooms extends React.Component {
                             : room.new_notifications}
                         </Badge>
                       )}
-                    </Col>
-                  </Row>
+                    </Grid>
+                  </Grid>
                 ))
                 .value()}
             </div>

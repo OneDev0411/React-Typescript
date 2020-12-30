@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col } from 'react-bootstrap'
 
-import { Tooltip } from '@material-ui/core'
+import { Tooltip, Grid } from '@material-ui/core'
 
 import { toggleInstantMode } from '../../../../../store_actions/chatroom'
 import Members from './members'
@@ -10,12 +9,12 @@ import RoomSettings from './settings'
 import ExitFullscreenIcon from '../../Partials/Svgs/ExitFullscreenIcon'
 
 const MessagesToolbar = ({ toggleInstantMode, instantMode, room }) => (
-  <Row className="toolbar">
-    <Col md={9} lg={9} sm={9} xs={9} className="title">
+  <Grid container className="toolbar">
+    <Grid item md={9} lg={9} sm={9} xs={9} className="title">
       {room.proposed_title}
-    </Col>
+    </Grid>
 
-    <Col md={3} lg={3} sm={3} xs={3} className="buttons">
+    <Grid item md={3} lg={3} sm={3} xs={3} className="buttons">
       <Members room={room} isFullScreen />
       <RoomSettings room={room} />
 
@@ -26,8 +25,8 @@ const MessagesToolbar = ({ toggleInstantMode, instantMode, room }) => (
           </span>
         </Tooltip>
       )}
-    </Col>
-  </Row>
+    </Grid>
+  </Grid>
 )
 
 function mapStateToProps({ chatroom }, ownProps) {

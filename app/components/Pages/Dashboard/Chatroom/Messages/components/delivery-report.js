@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Col, OverlayTrigger, Popover, Row } from 'react-bootstrap'
+import { OverlayTrigger, Popover } from 'react-bootstrap'
 import _ from 'underscore'
 import moment from 'moment'
 import { mdiCheck } from '@mdi/js'
 import { useTheme } from '@material-ui/core/styles'
+import { Grid } from '@material-ui/core'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -56,8 +57,8 @@ const RenderList = ({ list, title, className, avatarSize = 30 }) => {
 
       <div className="report">
         {list.map(({ user, info }) => (
-          <Row className="item" key={user.id}>
-            <Col xs={2}>
+          <Grid container className="item" key={user.id}>
+            <Grid item xs={2}>
               <UserAvatar
                 style={{ float: 'left' }}
                 size={avatarSize}
@@ -67,9 +68,9 @@ const RenderList = ({ list, title, className, avatarSize = 30 }) => {
                 image={user.profile_image_url}
                 showStateIndicator={false}
               />
-            </Col>
+            </Grid>
 
-            <Col xs={6} className="name-section">
+            <Grid item xs={6} className="name-section">
               <div
                 className="name"
                 style={!info ? { lineHeight: `${avatarSize}px` } : {}}
@@ -84,9 +85,9 @@ const RenderList = ({ list, title, className, avatarSize = 30 }) => {
                   {info.delivery_type.replace('airship', 'mobile notification')}
                 </div>
               )}
-            </Col>
+            </Grid>
 
-            <Col xs={4} className="date-section">
+            <Grid item xs={4} className="date-section">
               {info && (
                 <span className="date-day">
                   {moment(info.created_at).format('ddd')}
@@ -97,8 +98,8 @@ const RenderList = ({ list, title, className, avatarSize = 30 }) => {
                   {moment(info.created_at).format('HH:mm')}
                 </span>
               )}
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         ))}
       </div>
     </div>

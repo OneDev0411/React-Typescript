@@ -1,10 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Col } from 'react-bootstrap'
 import cn from 'classnames'
 import { mdiClose } from '@mdi/js'
 
-import { Tooltip } from '@material-ui/core'
+import { Tooltip, Grid } from '@material-ui/core'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import UserAvatar from 'components/UserAvatar'
@@ -46,11 +45,18 @@ const ManageMembers = ({
             room.users.length > 2 && roomMember.id !== user.id
 
           return (
-            <div
+            <Grid
+              container
               key={`MEMBER_${roomMember.id}`}
               className={cn('item', { 'group-members': hasDeleteMemberIcon })}
             >
-              <Col sm={1} md={1} className="vcenter" style={{ padding: 0 }}>
+              <Grid
+                item
+                sm={1}
+                md={1}
+                className="vcenter"
+                style={{ padding: 0 }}
+              >
                 <UserAvatar
                   userId={roomMember.id}
                   name={roomMember.display_name}
@@ -58,13 +64,25 @@ const ManageMembers = ({
                   size={30}
                   color="#000000"
                 />
-              </Col>
-              <Col sm={10} md={10} className="vcenter" style={{ padding: 0 }}>
+              </Grid>
+              <Grid
+                item
+                sm={10}
+                md={10}
+                className="vcenter"
+                style={{ padding: 0 }}
+              >
                 <div className="title">{roomMember.display_name}</div>
                 <LastSeen user={roomMember} />
-              </Col>
+              </Grid>
               {hasDeleteMemberIcon && (
-                <Col sm={1} md={1} className="vcenter" style={{ padding: 0 }}>
+                <Grid
+                  item
+                  sm={1}
+                  md={1}
+                  className="vcenter"
+                  style={{ padding: 0 }}
+                >
                   <SvgIcon
                     path={mdiClose}
                     onClick={() => {
@@ -72,9 +90,9 @@ const ManageMembers = ({
                     }}
                     className="delete-icon"
                   />
-                </Col>
+                </Grid>
               )}
-            </div>
+            </Grid>
           )
         })}
       </div>
