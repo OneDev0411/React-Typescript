@@ -27,7 +27,7 @@ export default function App(props: Props) {
   useTitle('Rechat')
 
   const brand = useSelector<IAppState, IBrand>(({ brand }) => brand)
-  const { user, isLoading: isLoadingUser } = useLoadUser()
+  const { user, isGuest } = useLoadUser()
   const dispatch = useReduxDispatch()
 
   useEffectOnce(() => {
@@ -49,7 +49,7 @@ export default function App(props: Props) {
     setupSentry(user, brand)
   }, [user, brand])
 
-  if (!user?.id && isLoadingUser) {
+  if (!user?.id && !isGuest) {
     return <AnimatedLoader />
   }
 

@@ -4,7 +4,7 @@ import { noop } from 'lodash'
 
 import toggleFavorite from 'actions/listings/favorites/toggle-favorite'
 import { getIsFavorite } from 'reducers/listings/favorites'
-import { IAppState } from 'reducers'
+import { selectUserUnsafe } from 'selectors/user'
 
 import ListingCard from 'components/ListingCards/ListingCard'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
@@ -20,7 +20,7 @@ const ListingCardWithFavorite = ({
   onClick
 }: Props) => {
   const dispatch = useDispatch()
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
+  const user = useSelector(selectUserUnsafe)
   const favorites = useSelector(({ favorites }) => favorites)
   const isFavorited = getIsFavorite(favorites.listings, listing.id)
   const [isListingOpen, setIsListingOpen] = useState<boolean>(false)

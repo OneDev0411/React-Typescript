@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
-import { addNotification } from 'components/notification'
+
 import {
   makeStyles,
   Theme,
@@ -16,9 +16,11 @@ import {
   Button,
   CircularProgress
 } from '@material-ui/core'
+
 import { mdiPencilOutline } from '@mdi/js'
 
-import { IAppState } from 'reducers'
+import { addNotification } from 'components/notification'
+
 import { useListingById } from 'hooks/use-query-param-entities'
 import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
@@ -35,6 +37,8 @@ import renderBrandedTemplate from 'utils/marketing-center/render-branded-templat
 import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
 import { useGoogleMapsPlaces } from 'hooks/use-google-maps-places'
 import { useWebShareApi } from 'hooks/use-web-share-api'
+
+import { selectUser } from 'selectors/user'
 
 import { useTemplates } from '../hooks/use-templates'
 
@@ -82,7 +86,7 @@ function MarketingWizard(props: WithRouterProps) {
   useGoogleMapsPlaces()
 
   const dispatch = useDispatch()
-  const rawUser = useSelector<IAppState, IUser>(({ user }) => user)
+  const rawUser = useSelector(selectUser)
   const activeBrand = getActiveTeamId(rawUser)
   const brand = getActiveBrand(rawUser)
 

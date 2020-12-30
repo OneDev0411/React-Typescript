@@ -22,14 +22,17 @@ import {
   mdiEmailOpenOutline
 } from '@mdi/js'
 
+import { useSelector } from 'react-redux'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { forwardOutlined } from 'components/SvgIcons/icons'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { useMenu } from 'hooks/use-menu'
-import useTypedSelector from 'hooks/use-typed-selector'
 
 import { ClassesProps } from 'utils/ts-utils'
+
+import { IAppState } from 'reducers'
 
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
 import { EmailThreadEmail } from '../types'
@@ -65,7 +68,7 @@ export function EmailItemHeaderActions(
   props: Props & ClassesProps<typeof styles>
 ) {
   const { menuProps, buttonTriggerProps, onClose } = useMenu()
-  const accounts: IOAuthAccount[] = useTypedSelector(state =>
+  const accounts = useSelector((state: IAppState) =>
     selectAllConnectedAccounts(state.contacts.oAuthAccounts)
   )
 

@@ -22,7 +22,9 @@ export async function createTemplateInstance(
       data.listings = data.listings.filter(id => id !== MOCK_LISTING_ID)
     }
 
-    const response = await new Fetch()
+    const response = await new Fetch({
+      proxy: false
+    })
       .post(`/templates/${templateId}/instances`)
       .send(data)
 

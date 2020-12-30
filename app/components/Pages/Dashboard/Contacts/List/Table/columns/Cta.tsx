@@ -11,7 +11,6 @@ import {
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { IAppState } from 'reducers'
 import { EventDrawer } from 'components/EventDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
@@ -19,6 +18,8 @@ import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 import MissingEmailModal from 'components/MissingEmailModal'
 import { normalizeContact } from 'views/utils/association-normalizers'
+
+import { selectUser } from 'selectors/user'
 
 import ChatButton from '../../../components/ChatButton'
 
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export default function CtaAction({ contact }: Props) {
-  const user: IUser = useSelector((state: IAppState) => state.user)
+  const user = useSelector(selectUser)
   const [showEmailComposer, setShowEmailComposer] = useState<boolean>(false)
   const [showEventDrawer, setShowEventDrawer] = useState<boolean>(false)
   const [showMissingEmailModal, setShowMissingEmailModal] = useState<boolean>(

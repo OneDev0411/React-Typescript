@@ -1,6 +1,8 @@
+import { IUserState } from 'reducers/user'
+
 export interface StateProps {
   viewAsUsers: UUID[]
-  user: IUser
+  user: IUserState
 }
 
 export interface SocketUpdate {

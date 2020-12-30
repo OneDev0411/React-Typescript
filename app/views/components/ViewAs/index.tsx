@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux'
 import { Avatar, Popover, makeStyles, Tooltip, Theme } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 
+import { selectUser } from 'selectors/user'
+
 import { getContactNameInitials } from 'models/contacts/helpers'
 
 import {
@@ -11,7 +13,6 @@ import {
   getActiveTeam,
   getTeamAvailableMembers
 } from '../../../utils/user-teams'
-import { IAppState } from '../../../reducers'
 
 import { MemberList } from './components/List'
 
@@ -31,7 +32,7 @@ const useStyles = makeStyles(
 
 export const ViewAs = props => {
   const classes = useStyles()
-  const user: IUser = useSelector((store: IAppState) => store.user)
+  const user: IUser = useSelector(selectUser)
   const team: IUserTeam | null = getActiveTeam(user)
   const teamMembers: IUser[] = getTeamAvailableMembers(team)
   const initialSelectedMembers: UUID[] = useMemo(() => viewAs(user, team), [

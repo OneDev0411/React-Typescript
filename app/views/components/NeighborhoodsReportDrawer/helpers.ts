@@ -4,12 +4,11 @@ import {
   NeighborhoodReportMetric
 } from './types'
 
-function sum(arr: number[]) {
+function sum(arr: number[]): number {
   return arr.reduce((a, b) => a + b, 0)
 }
-
-function avg(arr: number[]) {
-  return sum(arr) / arr.length
+function avg(arr: number[]): number {
+  return Number((sum(arr) / arr.length).toFixed(2))
 }
 
 function getAggregatedDataOfPastMonths(

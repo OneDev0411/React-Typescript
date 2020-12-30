@@ -48,6 +48,7 @@ module.exports = {
       utils: resolvePath('../app/utils'),
       views: resolvePath('../app/views'),
       config: resolvePath('../config/public'),
+      selectors: resolvePath('../app/selectors'),
       /* components */
       deals: resolvePath('../app/components/Pages/Dashboard/Deals'),
       crm: resolvePath('../app/components/Pages/Dashboard/Contacts'),

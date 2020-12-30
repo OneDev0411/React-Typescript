@@ -3,14 +3,14 @@ import { useSelector, useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
-import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
-
 import { IAppState } from 'reducers'
 
 import { searchDeals, getDeals } from 'actions/deals'
-import { viewAsEveryoneOnTeam, viewAs } from 'utils/user-teams'
+import { viewAsEveryoneOnTeam } from 'utils/user-teams'
 
 import PageLayout from 'components/GlobalPageLayout'
+
+import { selectUser } from 'selectors/user'
 
 import { DebouncedSearchInput } from '../components/SearchInput'
 
@@ -41,13 +41,11 @@ export default function AgentTable(props: WithRouterProps) {
   const classes = useStyles()
 
   const dispatch = useDispatch()
-  const { deals, user, isFetchingDeals } = useSelector(
-    ({ deals, user }: IAppState) => ({
-      user,
-      deals: deals.list,
-      isFetchingDeals: deals.properties.isFetchingDeals
-    })
+  const deals = useSelector(({ deals }: IAppState) => deals.list)
+  const isFetchingDeals = useSelector(
+    ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
+  const user = useSelector(selectUser)
 
   const handleQueryChange = value => {
     if (isFetchingDeals) {

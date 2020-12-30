@@ -1,14 +1,17 @@
 import React, { useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
+
 import { Button, makeStyles, Theme, Typography } from '@material-ui/core'
+
+import { addNotification as notify } from 'components/notification'
 
 import { createTask } from 'models/tasks/create-task'
 import { EventDrawer } from 'components/EventDrawer'
 import { preSaveFormat } from 'components/EventDrawer/helpers/pre-save-format'
 import Dialog from 'components/Dialog'
-import { IAppState } from 'reducers'
 import { noop } from 'utils/helpers'
+
+import { selectUser } from 'selectors/user'
 
 import { FollowUpEmail } from './types'
 import { getFollowUpCrmTask } from './helper/get-follow-up-crm-task'
@@ -47,7 +50,7 @@ export default function FollowUpModal({
 }: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const user = useSelector<IAppState, IUser>(state => state.user)
+  const user = useSelector(selectUser)
   const [creatingFollowUp, setCreatingFollowUp] = useState(false)
   const [isEventDrawerOpen, setIsEventDrawerOpen] = useState(false)
   const { oneDayTimestamp, todayTimestamp, tomorrowTimestamp } = useMemo(

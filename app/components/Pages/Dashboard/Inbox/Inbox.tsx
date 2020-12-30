@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { Grid, Theme, Divider, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
@@ -11,9 +11,9 @@ import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
-import useTypedSelector from 'hooks/use-typed-selector'
-
 import GlobalPageLayout from 'components/GlobalPageLayout'
+
+import { IAppState } from 'reducers'
 
 import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
 import InboxConnectAccount from './components/InboxConnectAccount'
@@ -54,11 +54,11 @@ const useStyles = makeStyles(
 export default function Inbox({ params }: WithRouterProps) {
   const selectedEmailThreadId: UUID | undefined = params.emailThreadId
 
-  const unreadEmailThreadsCount = useTypedSelector(state =>
+  const unreadEmailThreadsCount = useSelector((state: IAppState) =>
     selectUnreadEmailThreadsCount(state.inbox)
   )
 
-  const accounts = useTypedSelector(({ contacts: { oAuthAccounts } }) =>
+  const accounts = useSelector(({ contacts: { oAuthAccounts } }: IAppState) =>
     selectAllConnectedAccounts(oAuthAccounts)
   )
   const noConnectedAccounts = accounts.length === 0

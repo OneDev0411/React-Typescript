@@ -17,6 +17,7 @@ import { createTaskComment } from 'deals/utils/create-task-comment'
 
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
+import { selectUser } from 'selectors/user'
 
 const ITEMS = [
   'Coming soon',
@@ -149,13 +150,10 @@ function Form(props: Props & StateProps & DispatchProps) {
   )
 }
 
-function mapStateToProps(
-  { user, deals }: IAppState,
-  ownProps: Props
-): StateProps {
+function mapStateToProps(state: IAppState, ownProps: Props): StateProps {
   return {
-    user,
-    checklists: getDealChecklists(ownProps.deal, deals.checklists)
+    user: selectUser(state),
+    checklists: getDealChecklists(ownProps.deal, state.deals.checklists)
   }
 }
 
@@ -166,7 +164,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Form)
+export default connect(mapStateToProps, mapDispatchToProps)(Form)

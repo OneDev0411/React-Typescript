@@ -1,7 +1,5 @@
 import React from 'react'
 
-import PropTypes from 'prop-types'
-
 import {
   SectionContainer,
   Container,
@@ -31,10 +29,6 @@ export function Section(props) {
       </Description>
     </SectionContainer>
   )
-}
-
-Section.propTypes = {
-  styles: PropTypes.object
 }
 
 Section.defaultProps = {

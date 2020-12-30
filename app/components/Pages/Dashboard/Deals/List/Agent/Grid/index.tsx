@@ -27,6 +27,8 @@ import {
   isPendingDeal
 } from 'deals/List/helpers/statuses'
 
+import { selectUser } from 'selectors/user'
+
 import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 import { getGridSort } from '../../helpers/sorting'
 
@@ -67,14 +69,12 @@ const Filters = {
 function AgentGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
 
-  const { isFetchingDeals, deals, roles, user } = useSelector(
-    ({ deals, user }: IAppState) => ({
-      isFetchingDeals: deals.properties.isFetchingDeals,
-      deals: deals.list,
-      roles: deals.roles,
-      user
-    })
+  const isFetchingDeals = useSelector(
+    ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
+  const deals = useSelector(({ deals }: IAppState) => deals.list)
+  const roles = useSelector(({ deals }: IAppState) => deals.roles)
+  const user = useSelector(selectUser)
 
   const statuses = useBrandStatuses(getActiveTeamId(user)!)
 

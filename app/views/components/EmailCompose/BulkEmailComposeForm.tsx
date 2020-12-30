@@ -3,10 +3,11 @@ import { Field } from 'react-final-form'
 import { TextFieldProps } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
-import { IAppState } from 'reducers'
 import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
+
+import { selectUser } from 'selectors/user'
 
 import { EmailFormValues } from './types'
 import { normalizeRecipients } from './helpers/normalize-recepients'
@@ -53,7 +54,7 @@ export function BulkEmailComposeForm({
   filterAccounts = hasAccountSendPermission,
   ...otherProps
 }: Props) {
-  const user = useSelector<IAppState, IUser>(store => store.user)
+  const user = useSelector(selectUser)
   const activeBrand = getActiveBrand(user)
   const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
   const [allAccounts, isLoadingAccounts] = useGetAllOauthAccounts(

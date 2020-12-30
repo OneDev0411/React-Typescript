@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
-import { selectAllConnectedAccounts } from '../../../../../reducers/contacts/oAuthAccounts'
-import useTypedSelector from '../../../../../hooks/use-typed-selector'
+import { IAppState } from 'reducers'
+
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { EmailThreadChangeEvent } from '../types'
 import skipEmailThreadChangeEvent from './skip-email-thread-change-event'
@@ -10,7 +12,7 @@ export default function useEmailThreadEvents(
   handleUpdateEmailThreads: (updatedEmailThreadIds: UUID[]) => void,
   handleDeleteEmailThreads: (deletedEmailThreadIds: UUID[]) => void
 ) {
-  const allConnectedAccounts = useTypedSelector(state =>
+  const allConnectedAccounts = useSelector((state: IAppState) =>
     selectAllConnectedAccounts(state.contacts.oAuthAccounts)
   )
 
