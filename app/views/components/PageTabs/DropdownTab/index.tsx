@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 
-import { Popover, makeStyles, createStyles, Theme } from '@material-ui/core'
+import {
+  Popover,
+  makeStyles,
+  createStyles,
+  Theme,
+  Tooltip,
+  TooltipProps
+} from '@material-ui/core'
 import { PopoverProps } from '@material-ui/core/Popover'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
@@ -16,6 +23,7 @@ interface RenderProps {
 interface Props {
   title: string
   popoverOptions?: PopoverProps
+  tooltipOptions?: Omit<TooltipProps, 'children'>
   children: (renderProps: RenderProps) => React.ReactNode
 }
 
@@ -44,7 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export function DropdownTab({ title, children, popoverOptions }: Props) {
+export function DropdownTab({
+  title,
+  children,
+  tooltipOptions,
+  popoverOptions
+}: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const classes = useStyles({
     isOpen: Boolean(anchorEl)
@@ -63,17 +76,24 @@ export function DropdownTab({ title, children, popoverOptions }: Props) {
       setAnchorEl(event.currentTarget)
     }
   }
+  const baseButton = (
+    <DropdownToggleButton
+      isActive={Boolean(anchorEl)}
+      size="small"
+      onClick={toggleMenu}
+      className={classes.button}
+    >
+      {title}
+    </DropdownToggleButton>
+  )
 
   return (
     <>
-      <DropdownToggleButton
-        isActive={Boolean(anchorEl)}
-        size="small"
-        onClick={toggleMenu}
-        className={classes.button}
-      >
-        {title}
-      </DropdownToggleButton>
+      {tooltipOptions ? (
+        <Tooltip {...tooltipOptions}>{baseButton}</Tooltip>
+      ) : (
+        baseButton
+      )}
 
       <Popover
         id={anchorEl ? 'tabs-dropdown-popover' : undefined}
