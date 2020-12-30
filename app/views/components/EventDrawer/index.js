@@ -60,6 +60,7 @@ import { EventType } from './components/EventType'
 import { NotifyGuests } from './components/NotifyGuests'
 import { FutureEventDoneConfirmation } from './components/FutureEventDoneConfirmation'
 import { EventField } from './components/EventField'
+import { DueDateWatcher } from './components/DueDateWatcher'
 import {
   FormContainer,
   FieldContainer,
@@ -352,6 +353,11 @@ class EventDrawerContainer extends Component {
                               <EndDateTimeField
                                 selectedDate={values.endDate || values.dueDate}
                                 showTimePicker={!values.allDay}
+                              />
+
+                              <DueDateWatcher
+                                dueDate={values.dueDate}
+                                endDate={values.endDate}
                               />
                             </FieldContainer>
 
