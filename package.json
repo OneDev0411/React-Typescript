@@ -190,6 +190,7 @@
     "react-helmet": "^6.0.0-beta",
     "react-hook-thunk-reducer": "^0.2.1",
     "react-hot-loader": "^4.12.21",
+    "react-image-gallery": "^1.0.8",
     "react-images": "^0.5.11",
     "react-input-mask": "^1.1.0",
     "react-intercom": "^1.0.15",

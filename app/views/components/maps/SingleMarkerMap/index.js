@@ -24,13 +24,11 @@ export class SingleMarkerMap extends React.Component {
   componentDidMount() {
     const { id } = this.props
 
-    window[`${id}`] = this.initMap
+    window[id] = this.initMap
 
     if (!window.google) {
       loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${
-          config.google.api_key
-        }&callback=${id}`
+        `https://maps.googleapis.com/maps/api/js?key=${config.google.api_key}&callback=${id}`
       )
     } else {
       this.initMap()

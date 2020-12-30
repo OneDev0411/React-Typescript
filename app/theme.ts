@@ -6,6 +6,15 @@ const white = '#fff'
 const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
   const defaultValue: ThemeOptions = {
     // Temporary theme based on our current colors, until design team provides the theme values
+    breakpoints: {
+      values: {
+        xs: 320,
+        sm: 768,
+        md: 1024,
+        lg: 1280,
+        xl: 1440
+      }
+    },
     palette: {
       type: 'light',
       primary: {

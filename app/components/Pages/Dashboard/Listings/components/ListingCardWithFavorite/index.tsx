@@ -1,6 +1,5 @@
 import React, { ComponentProps, useCallback, useState, memo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Dialog } from '@material-ui/core'
 import { noop } from 'lodash'
 
 import toggleFavorite from 'actions/listings/favorites/toggle-favorite'
@@ -8,8 +7,7 @@ import { getIsFavorite } from 'reducers/listings/favorites'
 import { selectUserUnsafe } from 'selectors/user'
 
 import ListingCard from 'components/ListingCards/ListingCard'
-
-import Listing from '../../Listing'
+import { ListingDetailsModal } from 'components/ListingDetailsModal'
 
 interface Props
   extends Omit<ComponentProps<typeof ListingCard>, 'liked' | 'onLikeClick'> {}
@@ -22,11 +20,9 @@ const ListingCardWithFavorite = ({
   onClick
 }: Props) => {
   const dispatch = useDispatch()
-  const data = useSelector(({ data }) => data)
   const user = useSelector(selectUserUnsafe)
   const favorites = useSelector(({ favorites }) => favorites)
   const isFavorited = getIsFavorite(favorites.listings, listing.id)
-
   const [isListingOpen, setIsListingOpen] = useState<boolean>(false)
 
   const closeListing = () => {
@@ -65,21 +61,11 @@ const ListingCardWithFavorite = ({
         onToggleSelection={handleToggleSelection}
       />
 
-      {isListingOpen && (
-        <Dialog open fullScreen>
-          <Listing
-            style={{
-              width: '100%',
-              marginLeft: 0
-            }}
-            data={data}
-            params={{
-              id: listing.id
-            }}
-            onClose={closeListing}
-          />
-        </Dialog>
-      )}
+      <ListingDetailsModal
+        isOpen={isListingOpen}
+        listingId={listing.id}
+        closeHandler={closeListing}
+      />
     </>
   )
 }

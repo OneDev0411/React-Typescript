@@ -1,7 +1,22 @@
 import React from 'react'
 import fecha from 'fecha'
+import { makeStyles, Theme } from '@material-ui/core'
 
-export default function MLSNote({ mls, mlsName }) {
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    color: theme.palette.text.secondary,
+    ...theme.typography.caption
+  }
+}))
+
+interface Props {
+  mls?: string
+  mlsName?: string
+}
+
+export default function MLSNote({ mls, mlsName }: Props) {
+  const classes = useStyles()
+
   if (!mlsName && !mls) {
     return null
   }
@@ -9,8 +24,8 @@ export default function MLSNote({ mls, mlsName }) {
   const lastUpdateDate = getLastUpdateDate()
 
   return (
-    <div style={{ maxWidth: '60em', marginTop: '2em', color: '#aaa' }}>
-      <p>
+    <div className={classes.container}>
+      <div>
         {mlsName && (
           <span>{`Listing information provided in part by the ${mlsName}, for personal, non-commercial use by viewers of
         this site and may not be reproduced or redistributed. All information is
@@ -24,17 +39,17 @@ export default function MLSNote({ mls, mlsName }) {
             )}.`}
           </span>
         )}
-      </p>
+      </div>
 
       {mlsName && (
-        <p>{`The data relating to real estate for sale on this website appears in part through the ${mlsName} Internet Data Exchange program, a voluntary cooperative exchange of property listing data between licensed real estate brokerage firms in which participates, and is provided by ${mlsName} through a licensing agreement.`}</p>
+        <div>{`The data relating to real estate for sale on this website appears in part through the ${mlsName} Internet Data Exchange program, a voluntary cooperative exchange of property listing data between licensed real estate brokerage firms in which participates, and is provided by ${mlsName} through a licensing agreement.`}</div>
       )}
 
-      <p>
+      <div>
         Some properties which appear for sale on this website may no longer be
         available because they are under contract, have Closed or are no longer
         being offered for sale.
-      </p>
+      </div>
     </div>
   )
 }

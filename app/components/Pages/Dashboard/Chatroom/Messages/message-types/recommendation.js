@@ -3,8 +3,8 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import util from '../../../../../../utils/listing'
-import ListingModalViewer from '../../../Listings/components/ListingModalViewer'
+import util from 'utils/listing'
+import { ListingDetailsModal } from 'components/ListingDetailsModal'
 
 /**
  * renders a recommendation(== listing) message
@@ -17,7 +17,6 @@ const Listing = ({
   toggleModal,
   showListingModal
 }) => {
-  // get listing
   const { listing } = recommendation
   const { property, status } = listing
 
@@ -26,10 +25,10 @@ const Listing = ({
       <strong style={{ color: '#9b9a9b' }}>Shared a listing:</strong>
       <div>{comment}</div>
 
-      <ListingModalViewer
-        listing={listing}
-        show={showListingModal}
-        onHide={() => toggleModal(false)}
+      <ListingDetailsModal
+        isOpen={showListingModal}
+        closeHandler={() => toggleModal(false)}
+        listingId={listing.id}
       />
 
       <div className="listing" onClick={() => toggleModal(true)}>
