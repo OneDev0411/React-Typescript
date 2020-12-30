@@ -535,7 +535,7 @@ class OpenHouseDrawerInternal extends React.Component {
                           <AssosiationContainer>
                             <AssociationsList
                               filterType="contact"
-                              name="associations"
+                              name="registrants"
                               showDefaultAssociation
                               associations={values.registrants}
                             />
