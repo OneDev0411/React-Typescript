@@ -70,17 +70,6 @@ export class Assignees extends React.Component {
 
     return (
       <Flex alignCenter>
-        {this.props.assignees.length > 0 && (
-          <Flex>
-            {this.props.assignees.map(user => (
-              <AssigneeItemInAvatar
-                user={user}
-                removeHandler={this.props.onRemoveHandler}
-                key={user.id}
-              />
-            ))}
-          </Flex>
-        )}
         <BasicDropdown
           {...this.props}
           upsideDown
@@ -88,7 +77,7 @@ export class Assignees extends React.Component {
           isFetching={isFetching}
           onChange={this.props.onChangeHandler}
           itemToString={getUserTitle}
-          style={{ display: 'inline-flex' }}
+          style={{ marginRight: '0.5rem', display: 'inline-flex' }}
           buttonRenderer={buttonProps => (
             <Button
               {...buttonProps}
@@ -112,6 +101,17 @@ export class Assignees extends React.Component {
             />
           )}
         />
+        {this.props.assignees.length > 0 && (
+          <Flex>
+            {this.props.assignees.map(user => (
+              <AssigneeItemInAvatar
+                user={user}
+                removeHandler={this.props.onRemoveHandler}
+                key={user.id}
+              />
+            ))}
+          </Flex>
+        )}
       </Flex>
     )
   }

@@ -25,7 +25,10 @@ const Button = styled(IconButton)`
   width: ${({ theme }) => theme.spacing(3)}px;
   height: ${({ theme }) => theme.spacing(3)}px;
   position: relative;
-  margin-right: ${({ theme }) => theme.spacing(1)}px;
+
+  &:not(:last-of-type) {
+    margin-right: ${({ theme }) => theme.spacing(1)}px;
+  }
 
   &:hover {
     &:before {
