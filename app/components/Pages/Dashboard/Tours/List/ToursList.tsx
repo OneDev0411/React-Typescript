@@ -19,8 +19,6 @@ import { RenderProps } from 'components/Grid/Table/types'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
 import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
 
-import Acl from 'components/Acl'
-
 import EmptyState from './EmptyState'
 
 import DueDate from './columns/DueDate'
@@ -171,7 +169,7 @@ function ToursList(props: { user: IUser }) {
   }
 
   return (
-    <Acl.Crm fallbackUrl="/dashboard/mls">
+    <>
       <Helmet>
         <title>Tours | Rechat</title>
       </Helmet>
@@ -215,7 +213,7 @@ function ToursList(props: { user: IUser }) {
           </Box>
         </PageLayout.Main>
       </PageLayout>
-    </Acl.Crm>
+    </>
   )
 }
 

@@ -11,7 +11,8 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle
+  DialogTitle,
+  useTheme
 } from '@material-ui/core'
 
 import SuccessModal from './SuccessModal'
@@ -34,6 +35,7 @@ const ShareListingModal = ({
   setRecipients,
   successModalIsActive
 }) => {
+  const theme = useTheme()
   const disabled = isSharing || !hasRecipients(recipients)
 
   return (
@@ -43,6 +45,7 @@ const ShareListingModal = ({
         maxWidth="sm"
         fullWidth
         onClose={isSharing ? () => {} : onHide}
+        style={{ zIndex: theme.zIndex.modal + 2 }}
       >
         <DialogTitle>
           <Box

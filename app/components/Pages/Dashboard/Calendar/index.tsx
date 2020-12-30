@@ -10,8 +10,6 @@ import { ActionRef } from 'components/GridCalendar/types'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
 import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
 
-import Acl from 'components/Acl'
-
 import { useStyles as useCommonStyles } from './use-styles'
 
 export default function CalendarPage(props: WithRouterProps) {
@@ -37,15 +35,13 @@ export default function CalendarPage(props: WithRouterProps) {
   })
 
   return (
-    <Acl.Crm fallbackUrl="/dashboard/mls">
-      <div className={classes.container}>
-        <GlobalHeader title="Calendar" noPadding>
-          <ViewAs />
-        </GlobalHeader>
-        <div className={classes.listContainer}>
-          <GridCalendar actionRef={actionRef} />
-        </div>
+    <div className={classes.container}>
+      <GlobalHeader title="Calendar" noPadding>
+        <ViewAs />
+      </GlobalHeader>
+      <div className={classes.listContainer}>
+        <GridCalendar actionRef={actionRef} />
       </div>
-    </Acl.Crm>
+    </div>
   )
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { withProps } from 'recompose'
 import { browserHistory } from 'react-router'
 
@@ -11,7 +11,7 @@ interface Props {
   access: Access | Access[]
   fallback?: React.ReactNode
   children: React.ReactNode
-  fallbackUrl?: string | null
+  fallbackUrl?: string
   accessControlPolicy?: IAccessControlPolicy
 }
 
@@ -36,15 +36,17 @@ interface Props {
 function Acl({
   access,
   fallback = null,
-  fallbackUrl = null,
+  fallbackUrl,
   accessControlPolicy,
   children
 }: Props) {
   const userHasAccess = useAcl(access, { accessControlPolicy })
 
-  if (!userHasAccess && fallbackUrl) {
-    browserHistory.push('/dashboard/mls')
-  }
+  useEffect(() => {
+    if (!userHasAccess && fallbackUrl) {
+      browserHistory.push(fallbackUrl)
+    }
+  }, [userHasAccess, fallbackUrl])
 
   return <>{userHasAccess ? children : fallback}</>
 }

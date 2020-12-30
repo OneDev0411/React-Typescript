@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
 import { batchActions } from 'redux-batched-actions'
@@ -25,6 +24,7 @@ import resetAreasOptions from 'actions/listings/search/reset-areas-options'
 import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
 
 import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
+import { ListingDetailsModal } from 'components/ListingDetailsModal'
 
 import {
   SEARCH_BY_GOOGLE_SUGGESTS,
@@ -42,7 +42,9 @@ class MlsAutocompleteSearch extends Component {
     listings: [],
     input: '',
     // eslint-disable-next-line
-    isDrity: false
+    isDrity: false,
+    selectedListingId: null,
+    isListingDetailsModalOpen: false
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -216,7 +218,19 @@ class MlsAutocompleteSearch extends Component {
   handleItemToString = item => (item == null ? '' : item.description)
 
   handleSelectedListing = item => {
-    browserHistory.push(`/dashboard/mls/${item.id}`)
+    window.history.replaceState({}, '', `/dashboard/mls/${item.id}`)
+    this.setState({
+      isListingDetailsModalOpen: true,
+      selectedListingId: item.id
+    })
+  }
+
+  closeListingDetailsModal = () => {
+    window.history.replaceState({}, '', '/dashboard/mls')
+    this.setState({
+      isListingDetailsModalOpen: false,
+      selectedListingId: null
+    })
   }
 
   handleClose = () => this.setState({ isOpen: false })
@@ -289,73 +303,80 @@ class MlsAutocompleteSearch extends Component {
 
   render() {
     return (
-      <SearchContainer>
-        <Downshift
-          isOpen={this.state.isOpen}
-          onSelect={this.handleSelectedItem}
-          itemToString={this.handleItemToString}
-          onOuterClick={this.handleClose}
-          render={props => {
-            const { getItemProps, isOpen, highlightedIndex } = props
+      <>
+        <SearchContainer>
+          <Downshift
+            isOpen={this.state.isOpen}
+            onSelect={this.handleSelectedItem}
+            itemToString={this.handleItemToString}
+            onOuterClick={this.handleClose}
+            render={props => {
+              const { getItemProps, isOpen, highlightedIndex } = props
 
-            return (
-              <div>
-                <SearchInput
-                  ref={this.inputRef}
-                  value={this.state.input}
-                  onChange={this.handleChangeInput}
-                  onKeyDown={this.handleKeyDownInput}
-                  onFocus={this.handleInputFocus}
-                  onBlur={this.handleInputBlur}
-                  placeholder="Search location or MLS number"
-                  onClear={this.onClear}
-                  isLoading={this.state.isLoading}
-                />
-                {isOpen && (
-                  <ListContainer>
-                    {this.state.listings.length > 0 && (
-                      <div
-                        style={{
-                          marginBottom: '0.5rem'
-                        }}
-                      >
-                        <ListTitle>Listings</ListTitle>
-                        {this.state.listings.map(item => (
-                          <MlsItem
-                            item={item}
-                            key={item.id}
-                            onClick={() => this.handleSelectedItem(item)}
-                            style={{
-                              padding: '0.5em 0.75em',
-                              borderBottom: '1px solid #d4d4d4'
-                            }}
-                          />
-                        ))}
-                      </div>
-                    )}
-                    {this.state.places.length > 0 && (
-                      <div>
-                        <ListTitle>Places</ListTitle>
-                        {this.state.places.map((item, index) => (
-                          <Item
-                            key={index}
-                            {...getItemProps({
-                              item,
-                              isHighlighted: highlightedIndex === index
-                            })}
-                          >
-                            {this.renderPlacesItem(item)}
-                          </Item>
-                        ))}
-                      </div>
-                    )}
-                  </ListContainer>
-                )}
-              </div>
-            )
-          }}
+              return (
+                <div>
+                  <SearchInput
+                    ref={this.inputRef}
+                    value={this.state.input}
+                    onChange={this.handleChangeInput}
+                    onKeyDown={this.handleKeyDownInput}
+                    onFocus={this.handleInputFocus}
+                    onBlur={this.handleInputBlur}
+                    placeholder="Search location or MLS number"
+                    onClear={this.onClear}
+                    isLoading={this.state.isLoading}
+                  />
+                  {isOpen && (
+                    <ListContainer>
+                      {this.state.listings.length > 0 && (
+                        <div
+                          style={{
+                            marginBottom: '0.5rem'
+                          }}
+                        >
+                          <ListTitle>Listings</ListTitle>
+                          {this.state.listings.map(item => (
+                            <MlsItem
+                              item={item}
+                              key={item.id}
+                              onClick={() => this.handleSelectedItem(item)}
+                              style={{
+                                padding: '0.5em 0.75em',
+                                borderBottom: '1px solid #d4d4d4'
+                              }}
+                            />
+                          ))}
+                        </div>
+                      )}
+                      {this.state.places.length > 0 && (
+                        <div>
+                          <ListTitle>Places</ListTitle>
+                          {this.state.places.map((item, index) => (
+                            <Item
+                              key={index}
+                              {...getItemProps({
+                                item,
+                                isHighlighted: highlightedIndex === index
+                              })}
+                            >
+                              {this.renderPlacesItem(item)}
+                            </Item>
+                          ))}
+                        </div>
+                      )}
+                    </ListContainer>
+                  )}
+                </div>
+              )
+            }}
+          />
+        </SearchContainer>
+        <ListingDetailsModal
+          isOpen={this.state.isListingDetailsModalOpen}
+          listingId={this.state.selectedListingId}
+          closeHandler={this.closeListingDetailsModal}
         />
-      </SearchContainer>
+      </>
     )
   }
 }
