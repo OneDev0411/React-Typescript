@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles, Theme } from '@material-ui/core'
 import { mdiClose, mdiExportVariant, mdiHeart, mdiHeartOutline } from '@mdi/js'
 
-import { IAppState } from 'reducers'
+import { selectUserUnsafe } from 'selectors/user'
 import { useFavorite } from 'hooks/use-favorite'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -47,7 +47,7 @@ function Header({
   handleClose
 }: Props & WithRouterProps) {
   const classes = useStyles()
-  const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
+  const user = useSelector(selectUserUnsafe)
 
   const { isFavorited, toggleFavorite } = useFavorite(listing)
 

@@ -6,10 +6,10 @@ import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
 import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
 
-import { IAppState } from 'reducers'
 import listingUtils from 'utils/listing'
 import LoadingContainer from 'components/LoadingContainer'
 import { useLogUserActivity } from 'hooks/use-log-user-activity'
+import { selectUserUnsafe } from 'selectors/user'
 
 import ShareModal from '../../../components/Pages/Dashboard/Listings/components/modals/ShareListingModal.js'
 import { useGetListing, UseGetListing } from './use-get-listing'
@@ -137,7 +137,7 @@ interface Props {
 function ListingDetails({ id, onClose }: Props) {
   const classes = useStyles()
   const theme = useTheme()
-  const user = useSelector<IAppState, IUser>((state: IAppState) => state.user)
+  const user = useSelector(selectUserUnsafe)
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
   const [isShareModalOpen, setIsShareModalOpen] = React.useState(false)
   const { listing, status, error }: UseGetListing = useGetListing(id)
