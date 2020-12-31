@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import { SvgIcon, Props as SvgIconProps } from 'components/SvgIcons/SvgIcon'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     container: {
       display: 'flex',
       '&:not(:last-child)': {
@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       paddingLeft: theme.spacing(1)
     }
-  })
+  }),
+  { name: 'EventField' }
 )
 
 interface Props {

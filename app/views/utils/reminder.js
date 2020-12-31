@@ -35,6 +35,7 @@ const getShorthandReminderItems = () => {
       value: Number(value)
     }
 
+    // 15 and 30 Minutes Before are shorthands
     if (item.value >= 900000 && item.value <= 1800000) {
       shortHandItems.push(item)
     } else {

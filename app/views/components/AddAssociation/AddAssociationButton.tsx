@@ -2,18 +2,21 @@ import React, { ReactNode } from 'react'
 import { ButtonBase, Tooltip, makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 
-export const useStyles = makeStyles((theme: Theme) => ({
-  button: {
-    margin: theme.spacing(0, 0.5),
-    verticalAlign: 'text-bottom',
-    whiteSpace: 'nowrap',
-    color: theme.palette.action.active,
-    ...theme.typography.body1
-  },
-  isPrimary: {
-    color: theme.palette.secondary.main
-  }
-}))
+export const useStyles = makeStyles(
+  (theme: Theme) => ({
+    button: {
+      margin: theme.spacing(0, 0.5),
+      verticalAlign: 'text-bottom',
+      whiteSpace: 'nowrap',
+      color: theme.palette.action.active,
+      ...theme.typography.body1
+    },
+    isPrimary: {
+      color: theme.palette.secondary.main
+    }
+  }),
+  { name: 'AddAssociationButton' }
+)
 
 interface Props {
   children: ReactNode

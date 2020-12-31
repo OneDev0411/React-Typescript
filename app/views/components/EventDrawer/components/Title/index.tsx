@@ -1,9 +1,9 @@
 import React, { CSSProperties } from 'react'
 import { Field } from 'react-final-form'
-import { InputBase, createStyles, makeStyles, Theme } from '@material-ui/core'
+import { InputBase, makeStyles, Theme } from '@material-ui/core'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     input: {
       padding: theme.spacing(0.5, 1),
       width: '100%',
@@ -17,7 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
         color: theme.palette.grey[500]
       }
     }
-  })
+  }),
+  { name: 'EventTitle' }
 )
 
 interface Props {
