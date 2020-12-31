@@ -15,7 +15,7 @@ export function QuestionForm({ children }: Props) {
   return (
     <div
       style={{
-        marginLeft: '20%'
+        margin: '5% 20%'
       }}
     >
       {typeof children === 'function'

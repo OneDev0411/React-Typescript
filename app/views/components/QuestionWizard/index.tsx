@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { Context } from '../context'
+import { Context } from './context'
 
 interface Props {
   children: boolean | React.ReactNode | React.ReactNode
@@ -77,20 +77,21 @@ export function QuestionWizard({ children, defaultStep = 0 }: Props) {
               ref={el => (refs.current[step] = el as HTMLDivElement)}
               onClick={() => gotoStep(step)}
             >
-              {React.cloneElement(section as React.ReactElement, { step })}
+              {React.cloneElement(section as React.ReactElement<any>, { step })}
             </div>
           ))}
       </div>
 
       {showLoading && (
         <div>
-          <img
+          [ A BEAUTIFUL LOADING GOES HERE ]
+          {/* <img
             src="/loading.svg"
             alt=""
             style={{
               height: '16px'
             }}
-          />
+          /> */}
         </div>
       )}
     </Context.Provider>
@@ -99,3 +100,7 @@ export function QuestionWizard({ children, defaultStep = 0 }: Props) {
 
 const wait = (delay: number) =>
   new Promise(resolve => setTimeout(resolve, delay))
+
+export * from './QuestionSection'
+export * from './QuestionForm'
+export * from './QuestionTitle'

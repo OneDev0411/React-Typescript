@@ -208,16 +208,16 @@ const AsyncDealsLayout = Load({
 const AsyncDealCreate = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Deals/create/create-deal' /* webpackChunkName: "deal_c" */
+      '../components/Pages/Dashboard/Deals/Create' /* webpackChunkName: "deal_create" */
     )
 })
 
-const AsyncDealCreateOffer = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Deals/create/create-offer' /* webpackChunkName: "deal_co" */
-    )
-})
+// const AsyncDealCreateOffer = Load({
+//   loader: () =>
+//     import(
+//       '../components/Pages/Dashboard/Deals/create/create-offer' /* webpackChunkName: "deal_co" */
+//     )
+// })
 
 const AsyncDealsList = Load({
   loader: () =>
@@ -717,10 +717,10 @@ export default (
             path="/dashboard/deals/:id/form-edit/:taskId"
             component={AsyncDealFormEdit}
           />
-          <Route
+          {/* <Route
             path="/dashboard/deals/:id/create-offer"
             component={AsyncDealCreateOffer}
-          />
+          /> */}
           <Route
             path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"
             component={AsyncDealFileViewer}
