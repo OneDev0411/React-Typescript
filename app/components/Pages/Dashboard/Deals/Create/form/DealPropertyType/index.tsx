@@ -15,14 +15,16 @@ import { RadioGroup } from '../../components/RadioGroup'
 
 interface Props {
   step?: number
+  onChange: (dealPropertyType: string) => void
 }
 
-export function DealPropertyType({ step }: Props) {
+export function DealPropertyType({ step, onChange }: Props) {
   const wizard = useWizardForm()
   const theme = useTheme<Theme>()
 
   const handleChange = (value: string) => {
     wizard.next()
+    onChange(value)
   }
 
   return (

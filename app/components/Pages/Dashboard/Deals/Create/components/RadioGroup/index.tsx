@@ -29,7 +29,7 @@ const useStyles = makeStyles(
       backgroundColor: theme.palette.grey['50'],
       border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius,
-      padding: theme.spacing(2),
+      padding: theme.spacing(1),
       marginBottom: theme.spacing(2),
       cursor: 'pointer'
     },
