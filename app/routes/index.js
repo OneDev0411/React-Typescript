@@ -618,7 +618,7 @@ const AsyncHeroSearchSectionWidget = Load({
 //  Websites
 /* ==================================== */
 
-const AsyncWebsitesList = withAcl.store(
+const AsyncWebsitesList = withAcl.marketing(
   Load({
     loader: () =>
       import(
@@ -668,7 +668,7 @@ const AsyncChecklists = withAcl.admin(
   })
 )
 
-const AsyncWebsite = withAcl.store(
+const AsyncWebsite = withAcl.marketing(
   Load({
     loader: () =>
       import(
@@ -887,10 +887,11 @@ export default (
           <IndexRoute component={AsyncBrandSettings} />
         </Route>
 
-        {/* TODO: Store for now but it is a part of Marketing so we have to fix it for the new website builder */}
         <Route path="websites(/:tab(agents|properties))">
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
+
+        {/* TODO: Remove this after implementing new the website builder */}
         <Route path="website" component={AsyncWebsite} />
       </Route>
     </Route>
