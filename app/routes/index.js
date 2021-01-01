@@ -622,7 +622,7 @@ const AsyncWebsitesList = withAcl.store(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Websites/List' /* webpackChunkName: "websites_list" */
+        '../components/Pages/Dashboard/Websites/pages/WebsiteList' /* webpackChunkName: "websites_list" */
       )
   })
 )
@@ -888,7 +888,7 @@ export default (
         </Route>
 
         {/* TODO: Store for now but it is a part of Marketing so we have to fix it for the new website builder */}
-        <Route path="websites">
+        <Route path="websites(/:tab(agents|properties))">
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
         <Route path="website" component={AsyncWebsite} />
