@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Helmet } from 'react-helmet'
+
+import { useTitle } from 'react-use'
 
 import PageSideNav from 'components/PageSideNav'
 import { Container, Content } from 'components/SlideMenu'
@@ -15,31 +16,27 @@ export default function WebsitesPage() {
 
   const toggleSideNav = () => setIsSideNavOpen(!isSideNavOpen)
 
+  useTitle('Websites | Rechat')
+
   return (
-    <>
-      <Helmet>
-        <title>Websites | Rechat</title>
-      </Helmet>
+    <Container isOpen={isSideNavOpen}>
+      <PageSideNav isOpen={isSideNavOpen}>
+        <Sidenav />
+      </PageSideNav>
+      <Content isSideMenuOpen={isSideNavOpen}>
+        <Header onToggleSidenav={toggleSideNav} />
 
-      <Container isOpen={isSideNavOpen}>
-        <PageSideNav isOpen={isSideNavOpen}>
-          <Sidenav />
-        </PageSideNav>
-        <Content isSideMenuOpen={isSideNavOpen}>
-          <Header onToggleSidenav={toggleSideNav} />
-
-          <ListContainer>
-            <SiteCardItem />
-            <SiteCardItem />
-            <SiteCardItem />
-            <SiteCardItem />
-            <SiteCardItem />
-            <SiteCardItem />
-            <SiteCardItem />
-            <SiteCardItem />
-          </ListContainer>
-        </Content>
-      </Container>
-    </>
+        <ListContainer>
+          <SiteCardItem />
+          <SiteCardItem />
+          <SiteCardItem />
+          <SiteCardItem />
+          <SiteCardItem />
+          <SiteCardItem />
+          <SiteCardItem />
+          <SiteCardItem />
+        </ListContainer>
+      </Content>
+    </Container>
   )
 }
