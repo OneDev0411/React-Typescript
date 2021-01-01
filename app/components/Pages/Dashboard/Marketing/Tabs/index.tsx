@@ -64,7 +64,7 @@ const MarketingTabs = ({ sections, mediums, templateTypes }: Props) => {
         if (section.type === SectionsEnum.Link) {
           return section.items.map(linkItem => (
             <TabLink
-              key={linkItem.value}
+              key={linkItem.value as string}
               to={linkItem.link}
               value={section.key}
               label={linkItem.title}
