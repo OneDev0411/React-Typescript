@@ -9,6 +9,7 @@ import { Avatar } from '../../Avatar'
 import Tooltip from '../../tooltip'
 import IconButton from '../../Button/IconButton'
 import { SvgIcon } from '../../SvgIcons/SvgIcon'
+import { muiIconSizes } from '../../SvgIcons/icon-sizes'
 
 const Icon = styled(SvgIcon)`
   position: absolute;
@@ -21,10 +22,13 @@ const Icon = styled(SvgIcon)`
 `
 
 const Button = styled(IconButton)`
-  width: ${({ theme }) => theme.spacing(5)}px;
-  height: ${({ theme }) => theme.spacing(5)}px;
+  width: ${({ theme }) => theme.spacing(3)}px;
+  height: ${({ theme }) => theme.spacing(3)}px;
   position: relative;
-  margin-right: ${({ theme }) => theme.spacing(1)}px;
+
+  &:not(:last-of-type) {
+    margin-right: ${({ theme }) => theme.spacing(1)}px;
+  }
 
   &:hover {
     &:before {
@@ -64,8 +68,8 @@ export class AssigneeItemInAvatar extends Component {
     return (
       <Tooltip placeme="top" caption={title}>
         <Button isFit onClick={this.onRemove} type="button">
-          <Avatar user={user} alt={title} />
-          <Icon path={mdiClose} />
+          <Avatar user={user} alt={title} size="small" disableLazyLoad />
+          <Icon path={mdiClose} size={muiIconSizes.small} />
         </Button>
       </Tooltip>
     )

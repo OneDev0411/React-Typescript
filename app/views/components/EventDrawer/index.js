@@ -3,9 +3,23 @@ import { connect } from 'react-redux'
 
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Box, IconButton, FormControlLabel, Checkbox } from '@material-ui/core'
+import {
+  Box,
+  IconButton,
+  Button,
+  FormControlLabel,
+  Checkbox
+} from '@material-ui/core'
 
 import { Field } from 'react-final-form'
+
+import {
+  mdiNoteTextOutline,
+  mdiAccountPlusOutline,
+  mdiClockTimeFourOutline,
+  mdiHomeSearchOutline,
+  mdiCashUsdOutline
+} from '@mdi/js'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
@@ -45,8 +59,14 @@ import { Description } from './components/Description/RichText'
 import { EventType } from './components/EventType'
 import { NotifyGuests } from './components/NotifyGuests'
 import { FutureEventDoneConfirmation } from './components/FutureEventDoneConfirmation'
-
-import { FormContainer, FieldContainer, Footer } from './styled'
+import { EventField } from './components/EventField'
+import { DueDateWatcher } from './components/DueDateWatcher'
+import {
+  FormContainer,
+  FieldContainer,
+  Footer,
+  AssosiationContainer
+} from './styled'
 
 const propTypes = {
   ...Drawer.propTypes,
@@ -90,7 +110,8 @@ class EventDrawerContainer extends Component {
       isDeleting: false,
       event: props.event,
       currentEvent: null,
-      shouldShowNotify: false
+      shouldShowNotify: false,
+      shouldShowDescription: false
     }
 
     this.isNew =
@@ -222,14 +243,21 @@ class EventDrawerContainer extends Component {
     this.props.onClose()
   }
 
+  showDescriptionField = () => {
+    this.setState(() => ({
+      shouldShowDescription: true
+    }))
+  }
+
   render() {
     const {
-      isDisabled,
       error,
       isSaving,
       isDeleting,
+      isDisabled,
+      currentEvent,
       shouldShowNotify,
-      currentEvent
+      shouldShowDescription
     } = this.state
     const { defaultAssociation, user, isOpen } = this.props
 
@@ -275,80 +303,165 @@ class EventDrawerContainer extends Component {
                         id="event-drawer-form"
                       >
                         {!this.isNew && <FutureEventDoneConfirmation />}
-                        <Flex style={{ marginBottom: '1rem' }}>
-                          {this.isNew ? (
-                            <Title fullWidth />
-                          ) : (
-                            <>
-                              <Flex alignCenter style={{ height: '2.25rem' }}>
-                                <CheckboxField
-                                  name="status"
-                                  id="event-drawer__status-field"
-                                />
-                              </Flex>
-                              <Title />
-                            </>
-                          )}
-                        </Flex>
 
-                        <Description placeholder="Add a description about this event" />
-
-                        <EventType />
-
-                        <Box mb={4}>
-                          <FieldContainer
-                            alignCenter
-                            justifyBetween
-                            style={{ marginBottom: '0.5em' }}
-                          >
-                            <DateTimeField
-                              name="dueDate"
-                              selectedDate={values.dueDate}
-                              showTimePicker={!values.allDay}
-                            />
-
-                            <EndDateTimeField
-                              selectedDate={values.endDate || values.dueDate}
-                              showTimePicker={!values.allDay}
-                            />
-                          </FieldContainer>
-
-                          <Field
-                            name="allDay"
-                            render={({ input }) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={input.value}
-                                    onChange={e =>
-                                      input.onChange(e.target.checked)
-                                    }
-                                    name="allDay"
-                                    color="primary"
-                                  />
-                                }
-                                label="All Day Event"
+                        <Box ml={4} mb={1}>
+                          <EventType />
+                          {!this.isNew && (
+                            <Box mt={1}>
+                              <CheckboxField
+                                name="status"
+                                id="event-drawer__status-field"
                               />
-                            )}
-                          />
-                          <FieldError
-                            name="endDate"
-                            style={{ fontSize: '1rem', marginBottom: '0.5em' }}
-                          />
-                          <Reminder dueDate={values.dueDate} />
+                            </Box>
+                          )}
                         </Box>
+                        <EventField
+                          title="title"
+                          iconProps={{
+                            path: mdiNoteTextOutline
+                          }}
+                        >
+                          <Title fullWidth />
 
-                        <AssigneesField name="assignees" owner={user} />
+                          <Box mt={1}>
+                            {shouldShowDescription || values?.hasDescription ? (
+                              <Description placeholder="Add a description" />
+                            ) : (
+                              <Button
+                                color="secondary"
+                                onClick={this.showDescriptionField}
+                              >
+                                Add Description
+                              </Button>
+                            )}
+                          </Box>
+                        </EventField>
+                        <EventField
+                          title="date"
+                          iconProps={{
+                            path: mdiClockTimeFourOutline
+                          }}
+                        >
+                          <Box>
+                            <FieldContainer alignCenter justifyBetween>
+                              <DateTimeField
+                                name="dueDate"
+                                selectedDate={values.dueDate}
+                                showTimePicker={!values.allDay}
+                              />
 
-                        <Divider margin="2em 0" />
+                              <EndDateTimeField
+                                selectedDate={values.endDate || values.dueDate}
+                                showTimePicker={!values.allDay}
+                              />
 
+                              <DueDateWatcher
+                                dueDate={values.dueDate}
+                                endDate={values.endDate}
+                              />
+                            </FieldContainer>
+
+                            <Field
+                              name="allDay"
+                              render={({ input }) => (
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={input.value}
+                                      onChange={e =>
+                                        input.onChange(e.target.checked)
+                                      }
+                                      name="allDay"
+                                      color="primary"
+                                    />
+                                  }
+                                  label="All Day Event"
+                                />
+                              )}
+                            />
+                            <FieldError
+                              name="endDate"
+                              style={{
+                                fontSize: '1rem',
+                                marginBottom: '0.5em'
+                              }}
+                            />
+                          </Box>
+                        </EventField>
+                        <Reminder dueDate={values.dueDate} />
+                        {/* Assosiations Fields:Start */}
+                        <EventField
+                          title="contact-associations"
+                          iconProps={{
+                            path: mdiAccountPlusOutline
+                          }}
+                        >
+                          <AssosiationContainer>
+                            <AssociationsList
+                              filterType="contact"
+                              name="associations"
+                              showDefaultAssociation
+                              associations={values.associations}
+                              defaultAssociation={defaultAssociation}
+                            />
+                            <AddAssociation
+                              showTitle
+                              disabled={isDisabled}
+                              type="contact"
+                            />
+                          </AssosiationContainer>
+                        </EventField>
+                        <EventField
+                          title="listing-associations"
+                          iconProps={{
+                            path: mdiHomeSearchOutline
+                          }}
+                        >
+                          <AssosiationContainer>
+                            <AssociationsList
+                              filterType="listing"
+                              name="associations"
+                              showDefaultAssociation
+                              associations={values.associations}
+                              defaultAssociation={defaultAssociation}
+                            />
+                            <AddAssociation
+                              showTitle
+                              disabled={isDisabled}
+                              type="listing"
+                            />
+                          </AssosiationContainer>
+                        </EventField>
+                        <EventField
+                          title="deal-associations"
+                          iconProps={{
+                            path: mdiCashUsdOutline
+                          }}
+                        >
+                          <AssosiationContainer>
+                            <AssociationsList
+                              filterType="deal"
+                              name="associations"
+                              showDefaultAssociation
+                              associations={values.associations}
+                              defaultAssociation={defaultAssociation}
+                            />
+                            <AddAssociation
+                              showTitle
+                              disabled={isDisabled}
+                              type="deal"
+                            />
+                          </AssosiationContainer>
+                        </EventField>
                         <AssociationsList
+                          filterType="email"
                           name="associations"
                           showDefaultAssociation
                           associations={values.associations}
                           defaultAssociation={defaultAssociation}
                         />
 
+                        {/* Assosiations Fields:End */}
                         <ItemChangelog
                           item={values}
                           style={{ marginTop: '2em' }}
@@ -357,9 +470,10 @@ class EventDrawerContainer extends Component {
                       <Footer justifyBetween alignCenter>
                         <Flex alignCenter>
                           {!this.isNew && (
-                            <>
+                            <Flex alignCenter>
                               <Tooltip placement="top" caption="Delete">
                                 <IconButton
+                                  size="small"
                                   disabled={isDisabled}
                                   onClick={this.handleDelete}
                                 >
@@ -367,21 +481,13 @@ class EventDrawerContainer extends Component {
                                 </IconButton>
                               </Tooltip>
                               <Divider
-                                margin="0 1rem"
+                                margin="0 0.5rem"
                                 width="1px"
-                                height="2rem"
+                                height="1rem"
                               />
-                            </>
+                            </Flex>
                           )}
-                          <AddAssociation
-                            disabled={isDisabled}
-                            type="contact"
-                          />
-                          <AddAssociation
-                            disabled={isDisabled}
-                            type="listing"
-                          />
-                          <AddAssociation disabled={isDisabled} type="deal" />
+                          <AssigneesField name="assignees" owner={user} />
                         </Flex>
                         <ActionButton
                           appearance="secondary"

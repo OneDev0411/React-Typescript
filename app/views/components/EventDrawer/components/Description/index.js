@@ -9,11 +9,12 @@ import { grey } from '../../../../utils/colors'
 
 const TextArea = styled(TextareaAutosize)`
   width: 100%;
+  padding: ${({ theme }) => theme.spacing(1)}px;
   min-height: 6rem;
   max-height: 10rem;
   display: block;
-  margin-bottom: 1rem;
-  border: none;
+  border: 1px solid ${({ theme }) => theme.palette.divider};
+  border-radius: ${({ theme }) => theme.shape.borderRadius}px;
   resize: none;
   overflow: auto;
 
