@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import cn from 'classnames'
 
-import { Typography, Button } from '@material-ui/core'
+import { Typography, Button, Grid } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
@@ -29,65 +29,69 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export function SiteCardItem() {
+function SiteCardItem() {
   const siteTitleRef = useRef<TitleRef>(null)
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
   return (
-    <Container>
-      <ArtContainer>
-        <Art src="/static/images/websites/art.jpg" alt="" />
+    <Grid item xs={12} sm={6} md={4}>
+      <Container>
+        <ArtContainer>
+          <Art src="/static/images/websites/art.jpg" alt="" />
 
-        <Actions>
-          <div>
-            <Button
-              color="primary"
-              variant="contained"
-              size="small"
-              className={cn(classes.button, classes.linkButton)}
-              href="https://rechat.com"
-              target="_blank"
-            >
-              <SiteLinkIcon
-                fillColor="#fff"
-                className={cn(iconClasses.small, iconClasses.rightMargin)}
-              />
-              Go To Site
-            </Button>
+          <Actions>
+            <div>
+              <Button
+                color="primary"
+                variant="contained"
+                size="small"
+                className={cn(classes.button, classes.linkButton)}
+                href="https://rechat.com"
+                target="_blank"
+              >
+                <SiteLinkIcon
+                  fillColor="#fff"
+                  className={cn(iconClasses.small, iconClasses.rightMargin)}
+                />
+                Go To Site
+              </Button>
 
-            <Button
-              color="secondary"
-              variant="contained"
-              size="small"
-              className={classes.transparentButton}
-              onClick={() =>
-                siteTitleRef.current && siteTitleRef.current.edit()
-              }
-            >
-              <EditIcon
-                fill="#fff"
-                className={cn(iconClasses.small, iconClasses.rightMargin)}
-              />
-              Edit
-            </Button>
-          </div>
+              <Button
+                color="secondary"
+                variant="contained"
+                size="small"
+                className={classes.transparentButton}
+                onClick={() =>
+                  siteTitleRef.current && siteTitleRef.current.edit()
+                }
+              >
+                <EditIcon
+                  fill="#fff"
+                  className={cn(iconClasses.small, iconClasses.rightMargin)}
+                />
+                Edit
+              </Button>
+            </div>
 
-          <SiteMenu />
-        </Actions>
-      </ArtContainer>
+            <SiteMenu />
+          </Actions>
+        </ArtContainer>
 
-      <SiteTitle ref={siteTitleRef} />
+        <SiteTitle ref={siteTitleRef} />
 
-      <Link>
-        <Typography variant="subtitle2">
-          <a href="https://rechat.com" target="_blank">
-            https://apple-juice.rechat.com/main
-          </a>
-        </Typography>
-      </Link>
+        <Link>
+          <Typography variant="subtitle2">
+            <a href="https://rechat.com" target="_blank">
+              https://apple-juice.rechat.com/main
+            </a>
+          </Typography>
+        </Link>
 
-      <SiteStatus />
-    </Container>
+        <SiteStatus />
+      </Container>
+    </Grid>
   )
 }
+
+export default SiteCardItem
