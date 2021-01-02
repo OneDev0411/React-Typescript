@@ -14,17 +14,13 @@ function WebsiteListInstanceProvider({
   children
 }: WebsiteListInstanceProviderProps) {
   const addWebsiteInstance = (instance: IWebsiteTemplateInstance) => {
-    console.log('addWebsiteInstance', instance)
+    setData(instances => [...instances, instance])
   }
 
-  type A = Parameters<typeof setData>
-
   const deleteWebsiteInstance = (websiteId: UUID) => {
-    // setData([] as IWebsiteTemplateInstance[])
     setData(instances =>
       instances.filter(instance => instance.id !== websiteId)
     )
-    // console.log('deleteWebsiteInstance', websiteId)
   }
 
   return (

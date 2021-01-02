@@ -4,12 +4,12 @@ async function createWebsite(userId: UUID) {
   return (
     await new Fetch().post('/websites').send({
       template: 'light',
-      title: 'Website Title Test 2',
+      title: 'New Website Title',
       template_instance: null,
       attributes: {},
       user: userId
     })
-  ).body.data
+  ).body.data as IWebsiteTemplateInstance
 }
 
 export default createWebsite

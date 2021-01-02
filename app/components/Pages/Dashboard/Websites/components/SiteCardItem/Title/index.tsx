@@ -11,8 +11,11 @@ import React, {
 import { TextField, Typography } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 
+import { useSelector } from 'react-redux'
+
 import useAsync from 'hooks/use-async'
 import updateWebsite from 'models/website/update-website'
+import { selectUserId } from 'selectors/user'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -37,6 +40,7 @@ function SiteTitle(props: Props) {
   const [title, setTitle] = useState<string>(props.initialValue)
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const classes = useStyles()
+  const userId = useSelector(selectUserId)
   const { isLoading: isWorking, run } = useAsync()
 
   const toggleEditing = () => {
@@ -49,16 +53,25 @@ function SiteTitle(props: Props) {
     }, 100)
   }
 
+  const saveTitle = () => {
+    if (inputRef.current) {
+      const value = inputRef.current.value
+
+      run(async () => updateWebsite(userId, props.websiteId, { title: value }))
+    }
+  }
+
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       setIsEditing(false)
 
-      if (inputRef.current) {
-        const value = inputRef.current.value
-
-        run(async () => updateWebsite(props.websiteId, { title: value }))
-      }
+      saveTitle()
     }
+  }
+
+  const handleBlur = () => {
+    saveTitle()
+    toggleEditing()
   }
 
   useImperativeHandle(props.titleRef, () => ({
@@ -73,7 +86,7 @@ function SiteTitle(props: Props) {
           label="Site Title"
           defaultValue={title}
           className={classes.input}
-          onBlur={toggleEditing}
+          onBlur={handleBlur}
           onKeyPress={handleKeyPress}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setTitle(e.target.value)

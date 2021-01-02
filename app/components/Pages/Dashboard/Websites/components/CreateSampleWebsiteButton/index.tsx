@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { Grid, Box } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 
 import { selectUserId } from 'selectors/user'
 
@@ -10,19 +10,25 @@ import createWebsite from 'models/website/create-website'
 import Button from 'components/Button/AButton'
 import useAsync from 'hooks/use-async'
 
+import useWebsiteListInstanceActions from '../WebsiteListInstanceProvider/use-website-list-instance-actions'
+
 function CreateSampleWebsiteButton() {
   const userId = useSelector(selectUserId)
+  const { addWebsiteInstance } = useWebsiteListInstanceActions()
 
-  const { run } = useAsync()
+  const { run, isLoading } = useAsync<IWebsiteTemplateInstance>()
 
-  const handleClick = () => run(async () => createWebsite(userId))
+  const handleClick = () => {
+    run(async () => createWebsite(userId)).then(instance =>
+      addWebsiteInstance(instance)
+    )
+  }
 
   return (
     <Grid item xs={12}>
-      <Button onClick={handleClick}>Create a sample website</Button>
-      <Box display="inline-block" marginLeft={1}>
-        You need to refresh to page to see the new item
-      </Box>
+      <Button onClick={handleClick} disabled={isLoading}>
+        Create a sample website
+      </Button>
     </Grid>
   )
 }
