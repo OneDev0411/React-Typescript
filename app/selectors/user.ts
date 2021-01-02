@@ -68,3 +68,9 @@ export const selectUserEmailSignature = (state: IAppState) =>
  */
 export const selectUserIsSignedIn = (state: IAppState) =>
   !!selectUserUnsafe(state)?.id
+
+/**
+ * Returns the user id
+ * @param state The app state
+ */
+export const selectUserId = (state: IAppState) => selectUser(state).id
