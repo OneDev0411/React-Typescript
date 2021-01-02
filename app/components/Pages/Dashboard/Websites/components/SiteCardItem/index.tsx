@@ -48,6 +48,12 @@ function SiteCardItem({ id, title, hostnames }: SiteCardItemProps) {
     run(async () => deleteWebsite(id)).then(() => deleteWebsiteInstance(id))
   }
 
+  const handleEdit = () => {
+    if (siteTitleRef.current) {
+      siteTitleRef.current.edit()
+    }
+  }
+
   if (isWorking || isSuccess) {
     return null
   }
@@ -80,9 +86,7 @@ function SiteCardItem({ id, title, hostnames }: SiteCardItemProps) {
                 variant="contained"
                 size="small"
                 className={classes.transparentButton}
-                onClick={() =>
-                  siteTitleRef.current && siteTitleRef.current.edit()
-                }
+                onClick={handleEdit}
                 type="button"
               >
                 <EditIcon
@@ -93,7 +97,7 @@ function SiteCardItem({ id, title, hostnames }: SiteCardItemProps) {
               </Button>
             </div>
 
-            <SiteMenu onDelete={handleDelete} />
+            <SiteMenu onDelete={handleDelete} onEdit={handleEdit} />
           </Actions>
         </ArtContainer>
 

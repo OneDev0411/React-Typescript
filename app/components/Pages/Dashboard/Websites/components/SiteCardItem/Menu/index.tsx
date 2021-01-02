@@ -17,9 +17,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface SiteMenuProps {
   onDelete: () => void
+  onEdit: () => void
 }
 
-export function SiteMenu({ onDelete }: SiteMenuProps) {
+export function SiteMenu({ onDelete, onEdit }: SiteMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const classes = useStyles()
@@ -35,6 +36,11 @@ export function SiteMenu({ onDelete }: SiteMenuProps) {
 
   const handleDelete = () => {
     onDelete()
+    handleClose()
+  }
+
+  const handleEdit = () => {
+    onEdit()
     handleClose()
   }
 
@@ -57,7 +63,7 @@ export function SiteMenu({ onDelete }: SiteMenuProps) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Edit Site</MenuItem>
+        <MenuItem onClick={handleEdit}>Edit Site</MenuItem>
         <MenuItem onClick={handleDelete}>Delete Site</MenuItem>
       </Menu>
     </div>
