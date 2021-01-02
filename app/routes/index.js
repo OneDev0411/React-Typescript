@@ -887,7 +887,7 @@ export default (
           <IndexRoute component={AsyncBrandSettings} />
         </Route>
 
-        <Route path="websites(/:tab(agents|properties))">
+        <Route path="websites(/templates/:type(Agents|Properties))">
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
 

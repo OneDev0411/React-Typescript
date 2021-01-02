@@ -4,7 +4,7 @@ import { useTitle } from 'react-use'
 
 import { RouteComponentProps } from 'react-router'
 
-import { Box } from '@material-ui/core'
+import { Box, Grid } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
@@ -12,25 +12,32 @@ import WebsiteListTabs, {
   WebsiteListTabsProps
 } from '../../components/WebsiteListTabs'
 
-import WebsiteListItems from '../../components/WebsiteListItems'
+import WebsiteListInstances from '../../components/WebsiteListInstances'
+import WebsiteListTemplates from '../../components/WebsiteListTemplates'
 
 type WebsiteListProps = RouteComponentProps<
-  { tab?: WebsiteListTabsProps['tab'] },
+  { type?: WebsiteListTabsProps['type'] },
   {}
 >
 
 function WebsiteList({ params }: WebsiteListProps) {
   useTitle('Websites | Rechat')
 
-  const tab = params.tab || 'mine'
+  const type = params.type || 'MyWebsites'
 
   return (
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.Header title="Website Builder" />
       <PageLayout.Main>
-        <WebsiteListTabs tab={tab} />
+        <WebsiteListTabs type={type} />
         <Box paddingLeft={1} paddingRight={1} paddingTop={3}>
-          <WebsiteListItems />
+          <Grid container spacing={2}>
+            {type === 'MyWebsites' ? (
+              <WebsiteListInstances />
+            ) : (
+              <WebsiteListTemplates type={type} />
+            )}
+          </Grid>
         </Box>
       </PageLayout.Main>
     </PageLayout>
