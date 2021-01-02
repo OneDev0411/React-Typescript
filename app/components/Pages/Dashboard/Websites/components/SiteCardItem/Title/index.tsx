@@ -11,6 +11,9 @@ import React, {
 import { TextField, Typography } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 
+import useAsync from 'hooks/use-async'
+import updateWebsite from 'models/website/update-website'
+
 const useStyles = makeStyles(() =>
   createStyles({
     input: {
@@ -24,14 +27,17 @@ export interface TitleRef {
 }
 
 interface Props {
+  websiteId: UUID
+  initialValue: string
   titleRef?: RefObject<TitleRef>
 }
 
 function SiteTitle(props: Props) {
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const [title, setTitle] = useState<string>('Your Site Logo Goes Here')
+  const [title, setTitle] = useState<string>(props.initialValue)
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const classes = useStyles()
+  const { isLoading: isWorking, run } = useAsync()
 
   const toggleEditing = () => {
     setIsEditing(!isEditing)
@@ -46,6 +52,12 @@ function SiteTitle(props: Props) {
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       setIsEditing(false)
+
+      if (inputRef.current) {
+        const value = inputRef.current.value
+
+        run(async () => updateWebsite(props.websiteId, { title: value }))
+      }
     }
   }
 
@@ -55,7 +67,7 @@ function SiteTitle(props: Props) {
 
   return (
     <>
-      {isEditing ? (
+      {isEditing || isWorking ? (
         <TextField
           inputRef={inputRef}
           label="Site Title"
@@ -66,6 +78,7 @@ function SiteTitle(props: Props) {
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setTitle(e.target.value)
           }
+          disabled={isWorking}
         />
       ) : (
         <Typography variant="subtitle2" onClick={toggleEditing}>
