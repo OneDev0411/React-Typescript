@@ -1,4 +1,11 @@
-import { useRef, useReducer, useCallback, Reducer } from 'react'
+import {
+  useRef,
+  useReducer,
+  useCallback,
+  Reducer,
+  Dispatch,
+  SetStateAction
+} from 'react'
 
 import useSafeDispatch from './use-safe-dispatch'
 
@@ -15,26 +22,35 @@ interface ReducerState<T, U> extends ReducerStateBase<U> {
   data: T
 }
 
+type InitialReducerState<T, U> = Partial<ReducerState<T, U>> &
+  Pick<ReducerState<T, U>, 'data'>
+
+type ReducerAction<T, U> =
+  | Partial<ReducerState<T, U>>
+  | ((state: ReducerState<T, U>) => Partial<ReducerState<T, U>>)
+
 interface UseAsyncReturnTypeBase<T, U> {
   // using the same names that react-query uses for convenience
   isIdle: boolean
   isLoading: boolean
   isError: boolean
   isSuccess: boolean
-  setData: (data: T) => void
   setError: (error: U) => void
-  run: (func: () => Promise<T>) => void
+  run: (func: () => Promise<T>) => Promise<T>
   reset: () => void
 }
 
-type UseAsyncReturnTypeNullable<T, U> = UseAsyncReturnTypeBase<T, U> &
-  ReducerStateNullable<T, U>
+export interface UseAsyncReturnTypeNullable<T, U = unknown>
+  extends UseAsyncReturnTypeBase<T, U>,
+    ReducerStateNullable<T, U> {
+  setData: Dispatch<SetStateAction<Nullable<T>>>
+}
 
-type UseAsyncReturnType<T, U> = UseAsyncReturnTypeBase<T, U> &
-  ReducerState<T, U>
-
-type InitialReducerState<T, U> = Partial<ReducerState<T, U>> &
-  Pick<ReducerState<T, U>, 'data'>
+export interface UseAsyncReturnType<T, U = unknown>
+  extends UseAsyncReturnTypeBase<T, U>,
+    ReducerState<T, U> {
+  setData: Dispatch<SetStateAction<T>>
+}
 
 const defaultInitialState: ReducerState<any, any> = {
   status: 'idle',
@@ -53,19 +69,24 @@ function useAsync<T = unknown, U = unknown>(
 
 function useAsync<T = unknown, U = unknown>(
   initialState?: InitialReducerState<T, U>
-): UseAsyncReturnType<T, U> {
+) {
   const initialStateRef = useRef<ReducerState<T, U>>({
     ...defaultInitialState,
     ...initialState
   })
 
+  //
+
   const [{ status, data, error }, setState] = useReducer<
-    Reducer<ReducerState<T, U>, Partial<ReducerState<T, U>>>
-  >((s, a) => ({ ...s, ...a }), initialStateRef.current)
+    Reducer<ReducerState<T, U>, ReducerAction<T, U>>
+  >(
+    (s, a) => ({ ...s, ...(typeof a === 'function' ? a(s) : a) }),
+    initialStateRef.current
+  )
 
   const safeSetState = useSafeDispatch(setState)
 
-  const run = useCallback<(func: () => Promise<T>) => void>(
+  const run = useCallback<(func: () => Promise<T>) => Promise<T>>(
     func => {
       safeSetState({ status: 'pending' })
 
@@ -85,9 +106,16 @@ function useAsync<T = unknown, U = unknown>(
     [safeSetState]
   )
 
-  const setData = useCallback((data: T) => safeSetState({ data }), [
-    safeSetState
-  ])
+  const setData = useCallback(
+    (data: (s: T) => T) => {
+      if (typeof data === 'function') {
+        safeSetState(oldState => ({ data: data(oldState.data) }))
+      } else {
+        safeSetState({ data })
+      }
+    },
+    [safeSetState]
+  )
   const setError = useCallback((error: U) => safeSetState({ error }), [
     safeSetState
   ])
