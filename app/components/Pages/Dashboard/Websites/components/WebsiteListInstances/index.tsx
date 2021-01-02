@@ -5,31 +5,31 @@ import getWebsiteList from 'models/website/get-my-websites'
 
 import SiteCardItem from '../SiteCardItem'
 import CreateSampleWebsiteButton from '../CreateSampleWebsiteButton'
+import WebsiteListState from '../WebsiteListState'
 
 const defaultData: IWebsiteTemplateInstance[] = []
 
 function WebsiteListInstances() {
-  const { run, error } = useAsync({ data: defaultData })
+  const { data: instances, run, isLoading } = useAsync({
+    data: defaultData,
+    status: 'pending'
+  })
+  const isEmpty = !isLoading && instances.length === 0
 
   useEffect(() => {
     run(getWebsiteList)
   }, [run])
 
-  if (error) {
-    throw error
+  if (isLoading || isEmpty) {
+    return <WebsiteListState isLoading={isLoading} isEmpty={isEmpty} />
   }
 
   return (
     <>
       <CreateSampleWebsiteButton />
-      <SiteCardItem />
-      <SiteCardItem />
-      <SiteCardItem />
-      <SiteCardItem />
-      <SiteCardItem />
-      <SiteCardItem />
-      <SiteCardItem />
-      <SiteCardItem />
+      {instances.map(instance => (
+        <SiteCardItem key={instance.id} />
+      ))}
     </>
   )
 }

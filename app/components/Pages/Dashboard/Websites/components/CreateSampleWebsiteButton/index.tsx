@@ -13,7 +13,7 @@ import useAsync from 'hooks/use-async'
 function CreateSampleWebsiteButton() {
   const userId = useSelector(selectUserId)
 
-  const { run } = useAsync({})
+  const { run } = useAsync()
 
   const handleClick = () => run(async () => createWebsite(userId))
 
