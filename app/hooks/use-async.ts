@@ -2,15 +2,20 @@ import { useRef, useReducer, useCallback, Reducer } from 'react'
 
 import useSafeDispatch from './use-safe-dispatch'
 
-interface ReducerState<T, U> {
+interface ReducerStateBase<U> {
   status: 'idle' | 'pending' | 'resolved' | 'rejected'
-  data: Nullable<T>
   error: Nullable<U>
 }
 
-type InitialReducerState<T, U> = Partial<ReducerState<T, U>>
+interface ReducerStateNullable<T, U> extends ReducerStateBase<U> {
+  data: Nullable<T>
+}
 
-interface UseAsyncReturnType<T, U> extends ReducerState<T, U> {
+interface ReducerState<T, U> extends ReducerStateBase<U> {
+  data: T
+}
+
+interface UseAsyncReturnTypeBase<T, U> {
   // using the same names that react-query uses for convenience
   isIdle: boolean
   isLoading: boolean
@@ -22,6 +27,15 @@ interface UseAsyncReturnType<T, U> extends ReducerState<T, U> {
   reset: () => void
 }
 
+type UseAsyncReturnTypeNullable<T, U> = UseAsyncReturnTypeBase<T, U> &
+  ReducerStateNullable<T, U>
+
+type UseAsyncReturnType<T, U> = UseAsyncReturnTypeBase<T, U> &
+  ReducerState<T, U>
+
+type InitialReducerState<T, U> = Partial<ReducerState<T, U>> &
+  Pick<ReducerState<T, U>, 'data'>
+
 const defaultInitialState: ReducerState<any, any> = {
   status: 'idle',
   data: null,
@@ -32,8 +46,13 @@ const defaultInitialState: ReducerState<any, any> = {
  * A helper hook to call and get data from async functions.
  * @param initialState
  */
+function useAsync<T = unknown, U = unknown>(): UseAsyncReturnTypeNullable<T, U>
 function useAsync<T = unknown, U = unknown>(
-  initialState: InitialReducerState<T, U> = {}
+  initialState: InitialReducerState<T, U>
+): UseAsyncReturnType<T, U>
+
+function useAsync<T = unknown, U = unknown>(
+  initialState?: InitialReducerState<T, U>
 ): UseAsyncReturnType<T, U> {
   const initialStateRef = useRef<ReducerState<T, U>>({
     ...defaultInitialState,
@@ -41,7 +60,7 @@ function useAsync<T = unknown, U = unknown>(
   })
 
   const [{ status, data, error }, setState] = useReducer<
-    Reducer<ReducerState<T, U>, InitialReducerState<T, U>>
+    Reducer<ReducerState<T, U>, Partial<ReducerState<T, U>>>
   >((s, a) => ({ ...s, ...a }), initialStateRef.current)
 
   const safeSetState = useSafeDispatch(setState)
