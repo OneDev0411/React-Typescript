@@ -9,11 +9,16 @@ import { useIconStyles } from 'views/../styles/use-icon-styles'
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 import SiteLinkIcon from 'components/SvgIcons/SiteLink/SiteLinkIcon'
 
+import useAsync from 'hooks/use-async'
+
+import deleteWebsite from 'models/website/delete-website'
+
 import { SiteStatus } from './Status'
 import { SiteMenu } from './Menu'
 import SiteTitle, { TitleRef } from './Title'
 
 import { Container, Actions, ArtContainer, Art, Link } from './styled'
+import useWebsiteListInstanceActions from '../WebsiteListInstanceProvider/use-website-list-instance-actions'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,10 +34,23 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-function SiteCardItem() {
+type SiteCardItemProps = IWebsiteTemplateInstance
+
+function SiteCardItem({ id, title, hostnames }: SiteCardItemProps) {
   const siteTitleRef = useRef<TitleRef>(null)
   const classes = useStyles()
   const iconClasses = useIconStyles()
+  const { deleteWebsiteInstance } = useWebsiteListInstanceActions()
+
+  const { isLoading: isWorking, run, isSuccess } = useAsync()
+
+  const handleDelete = () => {
+    run(async () => deleteWebsite(id)).then(() => deleteWebsiteInstance(id))
+  }
+
+  if (isWorking || isSuccess) {
+    return null
+  }
 
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
@@ -47,7 +65,7 @@ function SiteCardItem() {
                 variant="contained"
                 size="small"
                 className={cn(classes.button, classes.linkButton)}
-                href="https://rechat.com"
+                href={`http://${hostnames[0]}`}
                 target="_blank"
               >
                 <SiteLinkIcon
@@ -65,6 +83,7 @@ function SiteCardItem() {
                 onClick={() =>
                   siteTitleRef.current && siteTitleRef.current.edit()
                 }
+                type="button"
               >
                 <EditIcon
                   fill="#fff"
@@ -74,17 +93,19 @@ function SiteCardItem() {
               </Button>
             </div>
 
-            <SiteMenu />
+            <SiteMenu onDelete={handleDelete} />
           </Actions>
         </ArtContainer>
 
-        <SiteTitle ref={siteTitleRef} />
+        <SiteTitle ref={siteTitleRef} initialValue={title} websiteId={id} />
 
         <Link>
           <Typography variant="subtitle2">
-            <a href="https://rechat.com" target="_blank">
-              https://apple-juice.rechat.com/main
-            </a>
+            {hostnames.map(hostname => (
+              <a href={`http://${hostname}`} target="_blank" key={hostname}>
+                {hostname}
+              </a>
+            ))}
           </Typography>
         </Link>
 

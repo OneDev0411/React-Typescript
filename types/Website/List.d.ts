@@ -1,6 +1,7 @@
 declare type IWebsiteTemplateType = 'Agents' | 'Properties'
 
 declare interface IWebsiteTemplateInstance extends IModel<'website'> {
+  title: string
   user: IUser
   brand: Nullable<IBrand>
   template: IWebsiteTemplateType

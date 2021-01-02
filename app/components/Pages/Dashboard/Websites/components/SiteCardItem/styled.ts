@@ -40,7 +40,6 @@ export const Link = styled.div<ThemeProps<Theme>>`
 export const Container = styled.div<ThemeProps<Theme>>`
   display: flex;
   flex-direction: column;
-  min-height: 22rem;
   border-radius: 4px;
   padding: ${props => props.theme.spacing(1)}px;
   margin-bottom: ${props => props.theme.spacing(1.5)}px;

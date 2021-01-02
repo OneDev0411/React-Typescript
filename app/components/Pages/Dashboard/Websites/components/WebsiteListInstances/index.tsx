@@ -6,11 +6,12 @@ import getWebsiteList from 'models/website/get-my-websites'
 import SiteCardItem from '../SiteCardItem'
 import CreateSampleWebsiteButton from '../CreateSampleWebsiteButton'
 import WebsiteListState from '../WebsiteListState'
+import WebsiteListInstanceProvider from '../WebsiteListInstanceProvider'
 
 const defaultData: IWebsiteTemplateInstance[] = []
 
 function WebsiteListInstances() {
-  const { data: instances, run, isLoading } = useAsync({
+  const { data: instances, run, isLoading, setData } = useAsync({
     data: defaultData,
     status: 'pending'
   })
@@ -25,12 +26,12 @@ function WebsiteListInstances() {
   }
 
   return (
-    <>
+    <WebsiteListInstanceProvider setData={setData}>
       <CreateSampleWebsiteButton />
       {instances.map(instance => (
-        <SiteCardItem key={instance.id} />
+        <SiteCardItem key={instance.id} {...instance} />
       ))}
-    </>
+    </WebsiteListInstanceProvider>
   )
 }
 
