@@ -13,7 +13,6 @@ import useAsync from 'hooks/use-async'
 
 import deleteWebsite from 'models/website/delete-website'
 
-import { SiteStatus } from './Status'
 import { SiteMenu } from './Menu'
 import SiteTitle, { TitleRef } from './Title'
 
@@ -112,8 +111,6 @@ function SiteCardItem({ id, title, hostnames }: SiteCardItemProps) {
             ))}
           </Typography>
         </Link>
-
-        <SiteStatus />
       </Container>
     </Grid>
   )
