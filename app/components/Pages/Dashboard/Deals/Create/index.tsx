@@ -12,14 +12,14 @@ import { selectUser } from 'selectors/user'
 import { DealType } from './form/DealType'
 import { DealSide } from './form/DealSide'
 import { DealPropertyType } from './form/DealPropertyType'
+import { DealAgent } from './form/DealAgent'
+import { DealAddress } from './form/DealAddress'
 
 const useStyles = makeStyles(
   () => ({
     root: {
       width: '80%',
-      height: '100vh',
-      paddingTop: '10%',
-      margin: '0 auto'
+      margin: '15% auto'
     }
   }),
   {
@@ -30,8 +30,8 @@ const useStyles = makeStyles(
 export default function CreateDeal() {
   const classes = useStyles()
   const [deal, setDeal] = useState<IDeal | null>(null)
-  const [dealType, setDealType] = useState('')
-  const [dealSide, setDealSide] = useState('')
+  const [dealType, setDealType] = useState<string>('')
+  const [dealSide, setDealSide] = useState<Nullable<'Buying' | 'Selling'>>(null)
 
   const user = useSelector<IAppState, IUser>(state => selectUser(state))
 
@@ -56,6 +56,25 @@ export default function CreateDeal() {
       <QuestionWizard defaultStep={0}>
         <DealType onChange={setDealType} />
         <DealSide onChange={setDealSide} />
+
+        {dealSide === 'Buying' && (
+          <DealAgent type="primary" title="Enter buyer agent’s information" />
+        )}
+
+        {dealSide === 'Buying' && (
+          <DealAgent
+            type="co-agent"
+            title="Got it! Enter buyer co-agent’s information"
+          />
+        )}
+
+        <DealAgent type="primary" title="Enter listing agent’s information" />
+        <DealAgent
+          type="co-agent"
+          title="Got it! Enter listing co-agent’s information"
+        />
+
+        <DealAddress />
         <DealPropertyType onChange={createDraftDeal} />
       </QuestionWizard>
     </Box>

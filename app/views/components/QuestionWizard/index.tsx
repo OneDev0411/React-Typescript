@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+import { Box, Theme, useTheme } from '@material-ui/core'
+
 import { Context } from './context'
+
+import Loading from './Loading'
 
 interface Props {
   children: boolean | React.ReactNode | React.ReactNode
@@ -9,6 +13,9 @@ interface Props {
 
 export function QuestionWizard({ children, defaultStep = 0 }: Props) {
   const refs = useRef<HTMLDivElement[]>([])
+  const loadingRef = useRef<SVGSVGElement>(null)
+
+  const theme = useTheme<Theme>()
 
   const [currentStep, setCurrentStep] = useState(defaultStep)
   const [lastVisitedStep, setLastVisitedStep] = useState(defaultStep)
@@ -53,6 +60,15 @@ export function QuestionWizard({ children, defaultStep = 0 }: Props) {
     })
   }, [currentStep, lastVisitedStep])
 
+  useEffect(() => {
+    showLoading &&
+      loadingRef.current?.scrollIntoView({
+        block: 'center',
+        inline: 'center',
+        behavior: 'smooth'
+      })
+  }, [showLoading])
+
   return (
     <Context.Provider
       value={{
@@ -83,16 +99,17 @@ export function QuestionWizard({ children, defaultStep = 0 }: Props) {
       </div>
 
       {showLoading && (
-        <div>
-          [ A BEAUTIFUL LOADING GOES HERE ]
-          {/* <img
-            src="/loading.svg"
-            alt=""
-            style={{
-              height: '16px'
-            }}
-          /> */}
-        </div>
+        <Box
+          style={{
+            marginBottom: theme.spacing(4)
+          }}
+        >
+          <Loading
+            ref={loadingRef}
+            width={60}
+            fill={theme.palette.secondary.main}
+          />
+        </Box>
       )}
     </Context.Provider>
   )

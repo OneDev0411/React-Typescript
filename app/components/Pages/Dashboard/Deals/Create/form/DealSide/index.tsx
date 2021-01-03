@@ -12,13 +12,13 @@ import { RadioGroup } from '../../components/RadioGroup'
 
 interface Props {
   step?: number
-  onChange: (dealSide: string) => void
+  onChange: (dealSide: 'Selling' | 'Buying') => void
 }
 
 export function DealSide({ step, onChange }: Props) {
   const wizard = useWizardForm()
 
-  const handleChange = (value: string) => {
+  const handleChange = (value: 'Selling' | 'Buying') => {
     wizard.next()
     onChange(value)
   }
