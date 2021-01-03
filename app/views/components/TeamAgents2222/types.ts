@@ -6,10 +6,3 @@ export interface AgentItem {
   agent: IUserWithBrand
   contacts: IContact[]
 }
-
-export interface NormalizedBrand {
-  id?: UUID
-  name?: string
-  subtitle?: string
-  users: IUser[]
-}
