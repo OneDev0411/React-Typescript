@@ -72,5 +72,6 @@ export const selectUserIsSignedIn = (state: IAppState) =>
 /**
  * Returns the user id
  * @param state The app state
+ * @returns The current user id
  */
 export const selectUserId = (state: IAppState) => selectUser(state).id
