@@ -394,7 +394,7 @@ class ContactsList extends React.Component {
   handleSearch = value => {
     this.setState({ searchInputValue: value, firstLetter: null }, () => {
       this.setQueryParam('letter', '')
-      this.handleFilterChange({}, true)
+      this.handleFilterChange({ parked: Boolean(value) }, true)
     })
   }
 
