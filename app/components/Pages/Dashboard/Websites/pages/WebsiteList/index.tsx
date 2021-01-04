@@ -4,8 +4,6 @@ import { useTitle } from 'react-use'
 
 import { RouteComponentProps } from 'react-router'
 
-import { Box, Grid } from '@material-ui/core'
-
 import PageLayout from 'components/GlobalPageLayout'
 
 import WebsiteListTabs, {
@@ -30,15 +28,11 @@ function WebsiteList({ params }: WebsiteListProps) {
       <PageLayout.Header title="Website Builder" />
       <PageLayout.Main>
         <WebsiteListTabs type={type} />
-        <Box paddingLeft={1} paddingRight={1} paddingTop={3}>
-          <Grid container spacing={2}>
-            {type === 'MyWebsites' ? (
-              <WebsiteListInstances />
-            ) : (
-              <WebsiteListTemplates type={type} />
-            )}
-          </Grid>
-        </Box>
+        {type === 'MyWebsites' ? (
+          <WebsiteListInstances />
+        ) : (
+          <WebsiteListTemplates type={type} />
+        )}
       </PageLayout.Main>
     </PageLayout>
   )

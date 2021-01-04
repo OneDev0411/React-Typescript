@@ -1,9 +1,9 @@
-// import Fetch from 'services/fetch'
+import Fetch from 'services/fetch'
 
-async function getWebsiteTemplates(type: IWebsiteTemplateType) {
-  // TODO: get the website templates from server
-  // return (await new Fetch().get('/templates')).body.data
-  return [] as IWebsiteTemplate[]
+async function getWebsiteTemplates(brandId: UUID) {
+  return (
+    await new Fetch().get(`/brands/${brandId}/templates?mediums[]=Website`)
+  ).body.data as IWebsiteTemplate[]
 }
 
 export default getWebsiteTemplates

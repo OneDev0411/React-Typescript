@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 
+import { Box, Grid } from '@material-ui/core'
+
 import useAsync from 'hooks/use-async'
 import getWebsiteList from 'models/website/get-my-websites'
 
@@ -26,12 +28,16 @@ function WebsiteListInstances() {
   }
 
   return (
-    <WebsiteListInstanceProvider setData={setData}>
-      <CreateSampleWebsiteButton />
-      {instances.map(instance => (
-        <SiteCardItem key={instance.id} {...instance} />
-      ))}
-    </WebsiteListInstanceProvider>
+    <Box paddingLeft={2} paddingRight={2} paddingTop={3}>
+      <Grid container spacing={2}>
+        <WebsiteListInstanceProvider setData={setData}>
+          <CreateSampleWebsiteButton />
+          {instances.map(instance => (
+            <SiteCardItem key={instance.id} {...instance} />
+          ))}
+        </WebsiteListInstanceProvider>
+      </Grid>
+    </Box>
   )
 }
 
