@@ -32,9 +32,8 @@ function preSearchFormat({
     payload.filter = normalizeAttributeFilters(attributeFilters)
   }
 
-  if (parked) {
-    payload.parked = queryParams.parked
-  }
+  // we're doing this because we want to check parked field is exist or not
+  payload.parked = typeof parked !== 'undefined' ? parked : false
 
   return [payload, restQueryParams]
 }
