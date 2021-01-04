@@ -5,6 +5,8 @@ import juice from 'juice'
 import { Button, IconButton, Tooltip } from '@material-ui/core'
 import { mdiClose, mdiMenu } from '@mdi/js'
 
+import uploadAsset from 'models/instant-marketing/upload-asset'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Portal } from 'components/Portal'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -818,6 +820,7 @@ class Builder extends React.Component {
     }
 
     // Only Backoffice users should see this for now
+    //
     const isBackofficeUser = isBackOffice(this.props.user)
 
     return (
@@ -895,6 +898,12 @@ class Builder extends React.Component {
               onSelect={imageUrl => {
                 this.blocks.image.selectHandler(imageUrl)
                 this.setState({ isImageSelectDialogOpen: false })
+              }}
+              onUpload={async file => {
+                const templateId = this.selectedTemplate.id
+                const uploadedFile = await uploadAsset(file, templateId)
+
+                return uploadedFile.file.url
               }}
             />
           )}

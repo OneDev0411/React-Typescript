@@ -1,21 +1,19 @@
-import React, { useEffect } from 'react'
-import { Box } from '@material-ui/core'
+import React from 'react'
 
 import LoadingContainer from 'components/LoadingContainer'
 import Masonry from 'components/Masonry'
 
 import NoResults from '../../NoResults'
-import Image from '../../Image'
-import { ImagesTabProps } from '../../types'
+import ImageThumbnail from '../../ImageThumbnail'
+import { SearchableImageTabProps } from '../../types'
 import { useGifLibrary } from './hooks'
 import { getGifUrl } from './helpers'
 
-export default function GifLibrary({ query, onSelect }: ImagesTabProps) {
-  const { isLoading, results, search } = useGifLibrary()
-
-  useEffect(() => {
-    search(query)
-  }, [search, query])
+export default function GifLibrary({
+  query,
+  onSelect
+}: SearchableImageTabProps) {
+  const { isLoading, results } = useGifLibrary(query)
 
   if (isLoading) {
     return <LoadingContainer style={{ padding: '20%' }} noPaddings />
@@ -31,9 +29,12 @@ export default function GifLibrary({ query, onSelect }: ImagesTabProps) {
         const gifUrl = getGifUrl(item)
 
         return (
-          <Box p={1} onClick={() => onSelect(gifUrl)} key={item.id}>
-            <Image src={gifUrl} alt={item.title} />
-          </Box>
+          <ImageThumbnail
+            key={item.id}
+            onClick={() => onSelect(gifUrl)}
+            src={gifUrl}
+            alt={item.title}
+          />
         )
       })}
     </Masonry>
