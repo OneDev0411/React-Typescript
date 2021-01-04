@@ -79,13 +79,13 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  file: File
+  file: File | string
   dimensions?: [number, number]
   onClose: () => void
   onSave: (image: Blob) => void
 }
 
-export function Editor({ file, dimensions, onClose, onSave }: Props) {
+export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
   const theme = useTheme<Theme>()
   const ref = useRef<HTMLDivElement | null>(null)
   const [editor, setEditor] = useState<ImageEditor | null>(null)
@@ -133,12 +133,14 @@ export function Editor({ file, dimensions, onClose, onSave }: Props) {
 
     setEditor(editor as ImageEditor)
 
-    const blob =
-      typeof file === 'string' ? await convertUrlToImageFile(file) : file
+    const [blob, fileName] =
+      typeof file === 'string'
+        ? [await convertUrlToImageFile(file), undefined]
+        : [file, file.name]
 
     setBlob(blob)
 
-    await editor.loadImageFromFile(blob as File, file.name)
+    await editor.loadImageFromFile(blob as File, fileName)
 
     resizeEditor()
 
@@ -151,8 +153,6 @@ export function Editor({ file, dimensions, onClose, onSave }: Props) {
   }
 
   const handleSave = async () => {
-    onClose()
-
     const file = await convertUrlToImageFile(
       editor!.toDataURL({
         format: 'jpeg',

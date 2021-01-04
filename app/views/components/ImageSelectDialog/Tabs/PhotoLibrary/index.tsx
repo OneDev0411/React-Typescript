@@ -1,20 +1,27 @@
-import React, { useEffect } from 'react'
-import { Box } from '@material-ui/core'
+import React from 'react'
 
 import LoadingContainer from 'components/LoadingContainer'
 import Masonry from 'components/Masonry'
 
 import NoResults from '../../NoResults'
-import Image from '../../Image'
-import { ImagesTabProps } from '../../types'
+import ImageThumbnail from '../../ImageThumbnail'
+import { SearchableImageTabProps } from '../../types'
 import { usePhotoLibrary } from './hooks'
 
-export default function PhotoLibrary({ query, onSelect }: ImagesTabProps) {
-  const { isLoading, results, search } = usePhotoLibrary()
+export default function PhotoLibrary({
+  query,
+  onSelect,
+  onEdit
+}: SearchableImageTabProps) {
+  const { isLoading, results } = usePhotoLibrary(query)
 
-  useEffect(() => {
-    search(query)
-  }, [search, query])
+  const handleEdit = async (imageUrl: string) => {
+    if (!onEdit) {
+      return
+    }
+
+    onEdit(imageUrl)
+  }
 
   if (isLoading) {
     return <LoadingContainer style={{ padding: '20%' }} noPaddings />
@@ -28,9 +35,13 @@ export default function PhotoLibrary({ query, onSelect }: ImagesTabProps) {
     <Masonry>
       {results.map(item => {
         return (
-          <Box p={1} onClick={() => onSelect(item.url)} key={item.id}>
-            <Image src={item.thumbnail ?? item.url} alt={item.id} />
-          </Box>
+          <ImageThumbnail
+            key={item.id}
+            onEditClick={onEdit ? () => handleEdit(item.url) : undefined}
+            onClick={() => onSelect(item.url)}
+            src={item.url}
+            alt={item.id}
+          />
         )
       })}
     </Masonry>

@@ -6,12 +6,10 @@ import { Image } from './types'
 interface UsePhotoLibrary {
   results: Image[]
   isLoading: boolean
-  search: (q: string) => void
 }
 
-export function usePhotoLibrary(): UsePhotoLibrary {
+export function usePhotoLibrary(searchQuery: string): UsePhotoLibrary {
   const [results, setResults] = useState<Image[]>([])
-  const [searchQuery, setSearchQuery] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
@@ -50,9 +48,5 @@ export function usePhotoLibrary(): UsePhotoLibrary {
     }
   }, [searchQuery])
 
-  function search(query: string) {
-    setSearchQuery(query)
-  }
-
-  return { results, isLoading, search }
+  return { results, isLoading }
 }

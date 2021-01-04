@@ -6,12 +6,10 @@ import { GifObject, TenorResponse } from './types'
 interface UseGifLibrary {
   results: GifObject[]
   isLoading: boolean
-  search: (q: string) => void
 }
 
-export function useGifLibrary(): UseGifLibrary {
+export function useGifLibrary(searchQuery: string): UseGifLibrary {
   const [results, setResults] = useState<GifObject[]>([])
-  const [searchQuery, setSearchQuery] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
@@ -56,9 +54,5 @@ export function useGifLibrary(): UseGifLibrary {
     }
   }, [searchQuery])
 
-  function search(query: string) {
-    setSearchQuery(query)
-  }
-
-  return { results, isLoading, search }
+  return { results, isLoading }
 }
