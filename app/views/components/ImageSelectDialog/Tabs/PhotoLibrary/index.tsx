@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import LoadingContainer from 'components/LoadingContainer'
 import Masonry from 'components/Masonry'
@@ -8,11 +8,7 @@ import ImageThumbnail from '../../ImageThumbnail'
 import { SearchableImageTabProps } from '../../types'
 import { usePhotoLibrary } from './hooks'
 
-export default function PhotoLibrary({
-  query,
-  onSelect,
-  onEdit
-}: SearchableImageTabProps) {
+function PhotoLibrary({ query, onSelect, onEdit }: SearchableImageTabProps) {
   const { isLoading, results } = usePhotoLibrary(query)
 
   const handleEdit = async (imageUrl: string) => {
@@ -47,3 +43,5 @@ export default function PhotoLibrary({
     </Masonry>
   )
 }
+
+export default memo(PhotoLibrary)

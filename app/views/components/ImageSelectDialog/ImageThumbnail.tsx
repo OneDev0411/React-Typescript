@@ -7,6 +7,7 @@ const useStyles = makeStyles(
       cursor: 'pointer',
       transition: 'all 0.5s',
       position: 'relative',
+      background: theme.palette.grey[100],
       '&:hover': {
         background: theme.palette.grey[300],
 
@@ -55,7 +56,7 @@ export default function ImageThumbnail({
   }
 
   return (
-    <Box p={1} className={classes.container} onClick={onClick}>
+    <Box m={1} p={1} className={classes.container} onClick={onClick}>
       <img alt={alt} src={src} {...otherImgProps} className={classes.image} />
       {onEditClick && (
         <Button

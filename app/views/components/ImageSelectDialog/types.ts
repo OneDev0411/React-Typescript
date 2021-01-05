@@ -1,6 +1,10 @@
 import { DialogProps } from '@material-ui/core'
 
-export type TabValue = 'upload-photo' | 'photo-library' | 'gif-library'
+export type TabValue =
+  | 'upload-photo'
+  | 'team-library'
+  | 'photo-library'
+  | 'gif-library'
 
 export interface ImageSelectDialogProps {
   onSelect: (imageUrl: string) => void
