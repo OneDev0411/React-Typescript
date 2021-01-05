@@ -340,7 +340,7 @@ class ContactsList extends React.Component {
       return
     }
 
-    const isParkedActive =
+    const isParkedTabActive =
       this.props.activeSegment.id === PARKED_CONTACTS_LIST_ID
 
     const {
@@ -354,7 +354,7 @@ class ContactsList extends React.Component {
       conditionOperator = this.props.conditionOperator,
       prependResult = false,
       firstLetter = this.state.firstLetter,
-      parked = isParkedActive
+      parked = isParkedTabActive
     } = newFilters || {}
 
     /*
@@ -363,7 +363,8 @@ class ContactsList extends React.Component {
       when user searches for contact we should show all contact
       in order to doing this, we have to send undefined for parked param
     */
-    const shouldShowParked = searchInputValue ? undefined : parked
+    const shouldShowParked =
+      Boolean(searchInputValue) && !isParkedTabActive ? undefined : parked
 
     if (resetLoadedRanges) {
       this.setState({ loadedRanges: [] })
