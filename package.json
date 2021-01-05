@@ -185,6 +185,7 @@
     "react-dropzone": "github:izadmehr/react-dropzone#eb84dc41f26c6d02698b321fe3c42f3114495674",
     "react-final-form": "^6.4.0",
     "react-final-form-arrays": "^3.1.1",
+    "react-final-form-listeners": "^1.0.2",
     "react-ga": "^2.5.3",
     "react-helmet": "^6.0.0-beta",
     "react-hook-thunk-reducer": "^0.2.1",

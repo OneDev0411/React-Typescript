@@ -14,6 +14,7 @@ export function getContactSuggestions(
     ? fromPromise(
         searchContacts(searchTerm, undefined, {
           associations: [],
+          parked: true,
           order: '-created_at'
         })
       ).pipe(

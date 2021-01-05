@@ -1,10 +1,11 @@
 import React from 'react'
 import _findIndex from 'lodash/findIndex'
-import { MenuItem } from '@material-ui/core'
+import { MenuItem, Tooltip } from '@material-ui/core'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 
 import { BaseDropdown } from 'components/BaseDropdown'
+import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 import { SORT_FIELD_SETTING_KEY } from '../constants'
 
@@ -35,7 +36,15 @@ export const SortFields = ({ onChange, currentOrder }: Props) => {
 
   return (
     <BaseDropdown
-      buttonLabel={buttonLabel}
+      renderDropdownButton={props => {
+        return (
+          <Tooltip title="Sort by" placement="top">
+            <DropdownToggleButton {...props}>
+              {buttonLabel}
+            </DropdownToggleButton>
+          </Tooltip>
+        )
+      }}
       renderMenu={({ close }) => (
         <div>
           {sortableColumns.map((c, index) => (

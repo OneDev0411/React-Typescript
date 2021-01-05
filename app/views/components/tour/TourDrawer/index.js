@@ -4,6 +4,12 @@ import Flex from 'styled-flex-component'
 import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 
+import {
+  mdiNoteTextOutline,
+  mdiAccountPlusOutline,
+  mdiClockTimeFourOutline
+} from '@mdi/js'
+
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { isSoloActiveTeam } from 'utils/user-teams'
@@ -17,7 +23,13 @@ import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
 import Reminder from '../../EventDrawer/components/Reminder/Reminder'
-import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
+import { EventField } from '../../EventDrawer/components/EventField'
+import {
+  FormContainer,
+  FieldContainer,
+  AssosiationContainer
+} from '../../EventDrawer/styled'
+
 import AddAssociation from '../../AddAssociation'
 import {
   AssigneesField,
@@ -33,7 +45,6 @@ import { preSaveFormat } from './helpers/pre-save-format'
 import { prePreviewFormat } from './helpers/pre-preview-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
-import { Section } from './components/Section'
 import { Locations } from './components/Locations'
 import { PreviewTourSheets } from '../PreviewTourSheets'
 
@@ -76,6 +87,7 @@ export class TourDrawer extends React.Component {
     this.state = {
       isDisabled: false,
       isSaving: false,
+      shouldShowDescription: false,
       tour: props.tour
     }
 
@@ -165,9 +177,15 @@ export class TourDrawer extends React.Component {
       .dispatchEvent(new Event('submit', { cancelable: true }))
   }
 
+  showDescriptionField = () => {
+    this.setState(() => ({
+      shouldShowDescription: true
+    }))
+  }
+
   render() {
     const { user } = this.props
-    const { isDisabled } = this.state
+    const { isDisabled, shouldShowDescription } = this.state
 
     return (
       <Drawer open={this.props.isOpen} onClose={this.props.onClose}>
@@ -193,66 +211,93 @@ export class TourDrawer extends React.Component {
                     id="tour-drawer-form"
                     onSubmit={formProps.handleSubmit}
                   >
-                    <Title
-                      fullWidth
-                      placeholder="Untitled tour"
-                      style={{ marginBottom: '1.5rem' }}
-                    />
-                    <Description placeholder="Enter any general notes for your clients" />
-
-                    <Section label="Itinerary Date">
-                      <Box mb={4}>
-                        <FieldContainer
-                          alignCenter
-                          justifyBetween
-                          style={{ marginBottom: '0.5em' }}
-                        >
-                          <DateTimeField
-                            name="dueDate"
-                            selectedDate={values.dueDate}
-                            datePickerModifiers={{
-                              disabled: {
-                                before: new Date()
-                              }
-                            }}
-                          />
-
-                          <EndTimeField dueDate={values.dueDate} />
-                        </FieldContainer>
-
-                        <FieldError
-                          name="endDate"
-                          style={{ fontSize: '1rem', marginBottom: '0.5em' }}
+                    <EventField
+                      title="title"
+                      iconProps={{
+                        path: mdiNoteTextOutline
+                      }}
+                    >
+                      <Title fullWidth placeholder="Untitled tour" />
+                      <Box mt={1}>
+                        {shouldShowDescription || values?.description ? (
+                          <Description placeholder="Enter any general notes for your clients" />
+                        ) : (
+                          <Button
+                            color="secondary"
+                            onClick={this.showDescriptionField}
+                          >
+                            Add Description
+                          </Button>
+                        )}
+                      </Box>
+                    </EventField>
+                    <EventField
+                      title="date"
+                      iconProps={{
+                        path: mdiClockTimeFourOutline
+                      }}
+                    >
+                      <FieldContainer
+                        alignCenter
+                        justifyBetween
+                        style={{ marginBottom: '0.5em' }}
+                      >
+                        <DateTimeField
+                          name="dueDate"
+                          selectedDate={values.dueDate}
+                          datePickerModifiers={{
+                            disabled: {
+                              before: new Date()
+                            }
+                          }}
                         />
 
-                        <Reminder dueDate={values.dueDate} />
-                      </Box>
-                    </Section>
+                        <EndTimeField dueDate={values.dueDate} />
+                      </FieldContainer>
 
-                    <Section label="Properties">
+                      <FieldError
+                        name="endDate"
+                        style={{ fontSize: '1rem', marginBottom: '0.5em' }}
+                      />
+                    </EventField>
+                    <Reminder dueDate={values.dueDate} />
+
+                    <Box ml={4} mb={2}>
                       <Locations
                         locations={values.locations}
                         handleDelete={this.handleDeleteAssociation}
                       />
-                    </Section>
-
-                    {!isSoloActiveTeam(user) && (
-                      <Section label="Agents">
-                        <AssigneesField
-                          buttonText="Assignee"
-                          name="assignees"
-                          owner={user}
+                      <Box mt={0.5}>
+                        <AddAssociation
+                          showTitle
+                          isPrimary
+                          disabled={isDisabled}
+                          type="listing"
+                          name="locations"
+                          isMultipleSelected
                         />
-                      </Section>
-                    )}
-
-                    <Section label="Clients">
-                      <AssociationsList
-                        name="clients"
-                        associations={values.clients}
-                      />
-                    </Section>
-
+                      </Box>
+                    </Box>
+                    <EventField
+                      title="contact-associations"
+                      iconProps={{
+                        path: mdiAccountPlusOutline
+                      }}
+                    >
+                      <AssosiationContainer>
+                        <AssociationsList
+                          filterType="contact"
+                          name="clients"
+                          associations={values.clients}
+                        />
+                        <AddAssociation
+                          showTitle
+                          disabled={isDisabled}
+                          type="contact"
+                          name="clients"
+                        />
+                      </AssosiationContainer>
+                    </EventField>
                     <ItemChangelog item={values} style={{ marginTop: '2em' }} />
                   </FormContainer>
                   <Footer justifyBetween>
@@ -261,26 +306,27 @@ export class TourDrawer extends React.Component {
                         <>
                           <Tooltip placement="top" title="Delete">
                             <IconButton
+                              size="small"
                               disabled={isDisabled}
                               onClick={this.onDelete}
                             >
                               <SvgIcon path={mdiTrashCanOutline} />
                             </IconButton>
                           </Tooltip>
-                          <Divider margin="0 1rem" width="1px" height="2rem" />
+                          <Divider
+                            margin="0 0.5rem"
+                            width="1px"
+                            height="1rem"
+                          />
                         </>
                       )}
-                      <AddAssociation
-                        disabled={isDisabled}
-                        type="contact"
-                        name="clients"
-                      />
-                      <AddAssociation
-                        disabled={isDisabled}
-                        type="listing"
-                        name="locations"
-                        isMultipleSelected
-                      />
+                      {!isSoloActiveTeam(user) && (
+                        <AssigneesField
+                          buttonText="Assignee"
+                          name="assignees"
+                          owner={user}
+                        />
+                      )}
                     </Flex>
                     <Flex alignCenter>
                       <Tooltip title="Preview and print tour sheets">

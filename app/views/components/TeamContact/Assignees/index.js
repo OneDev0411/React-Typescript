@@ -4,14 +4,10 @@ import Flex from 'styled-flex-component'
 import uniqBy from 'lodash/uniqBy'
 import { Button } from '@material-ui/core'
 
-import { mdiPlus } from '@mdi/js'
-
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
 import { getUserTitle } from '../../../../models/user/helpers'
 
 import { TeamMember } from '../TeamMember'
-import { muiIconSizes } from '../../SvgIcons/icon-sizes'
-import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 import { BasicDropdown } from '../../BasicDropdown'
 
@@ -20,14 +16,9 @@ import { AssigneeItemInAvatar } from '../AssigneeItemInAvatar'
 
 const propTypes = {
   assignees: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  buttonText: PropTypes.string,
   onChangeHandler: PropTypes.func.isRequired,
   onRemoveHandler: PropTypes.func.isRequired,
   owner: PropTypes.PropTypes.shape().isRequired
-}
-
-const defaultProps = {
-  buttonText: 'Assignee'
 }
 
 export class Assignees extends React.Component {
@@ -81,15 +72,20 @@ export class Assignees extends React.Component {
       <Flex alignCenter>
         <BasicDropdown
           {...this.props}
+          upsideDown
           items={items}
           isFetching={isFetching}
           onChange={this.props.onChangeHandler}
           itemToString={getUserTitle}
-          style={{ display: 'inline-flex' }}
+          style={{ marginRight: '0.5rem', display: 'inline-flex' }}
           buttonRenderer={buttonProps => (
-            <Button {...buttonProps} variant="text" type="button">
-              <SvgIcon path={mdiPlus} size={muiIconSizes.small} />
-              {this.props.buttonText}
+            <Button
+              {...buttonProps}
+              size="small"
+              color="secondary"
+              type="button"
+            >
+              Add Assignee
             </Button>
           )}
           itemRenderer={({ item, ...itemProps }) => (
@@ -106,7 +102,7 @@ export class Assignees extends React.Component {
           )}
         />
         {this.props.assignees.length > 0 && (
-          <Flex style={{ marginLeft: '1em' }}>
+          <Flex>
             {this.props.assignees.map(user => (
               <AssigneeItemInAvatar
                 user={user}
@@ -122,4 +118,3 @@ export class Assignees extends React.Component {
 }
 
 Assignees.propTypes = propTypes
-Assignees.defaultProps = defaultProps

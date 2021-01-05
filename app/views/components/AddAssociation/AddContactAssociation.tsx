@@ -14,6 +14,8 @@ import { AddAssociationButton } from './AddAssociationButton'
 export function AddContactAssociation({
   disabled,
   handleAdd,
+  showTitle = false,
+  isPrimary = false,
   title = 'Attach Client'
 }: AddAssociationProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -28,6 +30,8 @@ export function AddContactAssociation({
       title={title}
       Icon={<SvgIcon path={mdiCardAccountDetailsOutline} />}
       disabled={disabled}
+      showTitle={showTitle}
+      isPrimary={isPrimary}
       onClick={onOpen}
     >
       {isOpen && (

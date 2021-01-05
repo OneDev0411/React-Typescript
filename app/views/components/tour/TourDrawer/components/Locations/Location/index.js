@@ -34,10 +34,11 @@ export function Location({ handleRemove, index, location }) {
           {...draggableProvided.draggableProps}
           style={{
             ...draggableProvided.draggableProps.style,
-            marginBottom: '1em'
+            marginBottom: '0.5em'
           }}
         >
           <Card
+            variant="outlined"
             onMouseOver={raise}
             onFocus={raise}
             onMouseOut={stopRaise}

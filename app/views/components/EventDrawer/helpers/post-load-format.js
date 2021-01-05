@@ -18,7 +18,6 @@ import { initialValueGenerator } from './initial-value-generator'
  */
 export async function postLoadFormat(task, owner, defaultAssociation) {
   let reminder = REMINDER_DROPDOWN_OPTIONS[3] // 15 minutes before
-
   const associations = []
 
   const description = EditorState.createWithContent(
@@ -57,22 +56,23 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
 
   if (Array.isArray(reminders) && reminders.length > 0) {
     const { timestamp } = reminders[reminders.length - 1]
-    const rowReminder = new Date(timestamp * 1000)
 
-    if (isAllDayTask) {
-      rowReminder.setDate(rowReminder.getUTCDate())
-      rowReminder.setMonth(rowReminder.getUTCMonth())
-      rowReminder.setHours(
-        rowReminder.getUTCHours(),
-        rowReminder.getUTCMinutes(),
-        0,
-        0
-      )
-    }
+    if (timestamp) {
+      const rowReminder = new Date(timestamp * 1000)
 
-    const reminderTimestamp = rowReminder.getTime()
+      if (isAllDayTask) {
+        rowReminder.setDate(rowReminder.getUTCDate())
+        rowReminder.setMonth(rowReminder.getUTCMonth())
+        rowReminder.setHours(
+          rowReminder.getUTCHours(),
+          rowReminder.getUTCMinutes(),
+          0,
+          0
+        )
+      }
 
-    if (timestamp && reminderTimestamp > new Date().getTime()) {
+      const reminderTimestamp = rowReminder.getTime()
+
       reminder = getReminderItem(dueDate, reminderTimestamp)
     }
   }
@@ -90,6 +90,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
   return {
     ...task,
     description,
+    hasDescription: !!task.description,
     reminder,
     dueDate,
     endDate,

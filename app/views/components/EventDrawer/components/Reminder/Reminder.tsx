@@ -1,11 +1,31 @@
 import React from 'react'
 
-import { ReminderField } from 'components/final-form-fields'
+import { Field } from 'react-final-form'
+import { mdiBellOutline } from '@mdi/js'
 
-export default function Reminder(props: { dueDate: Date }) {
-  if (props.dueDate.getTime() < Date.now() - 1) {
+import { EventField } from '../EventField'
+import { Selector } from './Selector'
+
+interface Props {
+  dueDate: Date
+}
+
+export default function Reminder({ dueDate }: Props) {
+  if (dueDate.getTime() < Date.now() - 1) {
     return null
   }
 
-  return <ReminderField dueDate={props.dueDate} />
+  return (
+    <EventField
+      title="reminder"
+      iconProps={{
+        path: mdiBellOutline
+      }}
+    >
+      <Field
+        name="reminder"
+        render={({ input }) => <Selector input={input} />}
+      />
+    </EventField>
+  )
 }
