@@ -1,11 +1,12 @@
 import * as React from 'react'
 import { mdiPlusCircleOutline } from '@mdi/js'
 
+import { Tooltip } from '@material-ui/core'
+
 import { TextWithHighlights } from 'components/TextWithHighlights'
 import UserIcon from 'components/SvgIcons/InPerson/IconInPerson'
 
 import IconButton from 'components/Button/IconButton'
-import Tooltip from 'components/tooltip'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getBrandUsers } from 'utils/user-teams'
@@ -47,7 +48,7 @@ export function TeamName({ team, searchTerm, onAddChild }: Props) {
           team.name
         )}
       </TeamLink>
-      <Tooltip caption="Add New Team" placement="bottom">
+      <Tooltip title="Add New Team" placement="bottom">
         <IconButton
           inverse
           iconSize="large"

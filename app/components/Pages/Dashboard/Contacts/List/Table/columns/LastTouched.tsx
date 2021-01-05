@@ -1,8 +1,6 @@
 import React from 'react'
 import timeago from 'timeago.js'
-import { makeStyles, createStyles, Theme } from '@material-ui/core'
-
-import Tooltip from 'components/tooltip'
+import { makeStyles, createStyles, Theme, Tooltip } from '@material-ui/core'
 
 interface Props {
   contact: IContact
@@ -36,10 +34,7 @@ export default function LastTouched({ contact }: Props) {
     <div>
       {nextTouch ? (
         <Tooltip
-          captionIsHTML
-          isCustom={false}
-          multiline
-          caption={
+          title={
             <span>
               You wanted to be in touch
               <br />

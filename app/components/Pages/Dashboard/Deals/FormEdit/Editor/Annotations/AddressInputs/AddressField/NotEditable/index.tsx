@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Tooltip from 'components/tooltip'
+import { Tooltip } from '@material-ui/core'
 
 interface Props {
   style: React.CSSProperties
@@ -16,11 +16,7 @@ export function NotEditable({ style, value }: Props) {
       }}
     >
       <Tooltip
-        captionIsHTML
-        isCustom={false}
-        placement="bottom"
-        multiline
-        caption={
+        title={
           <>
             <img src="/static/images/deals/lock.svg" alt="locked" />
             <div>

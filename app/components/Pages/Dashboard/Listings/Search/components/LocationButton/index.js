@@ -3,11 +3,12 @@ import { connect } from 'react-redux'
 
 import { mdiCrosshairsGps } from '@mdi/js'
 
+import { Tooltip } from '@material-ui/core'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getLocation } from '../../../../../../../store_actions/listings/map/user-location'
 import { getUserLocationIsFetching } from '../../../../../../../reducers/listings/map/user-location'
-import Tooltip from '../../../../../../../views/components/tooltip'
 
 import { Button } from './styled'
 
@@ -20,7 +21,7 @@ class LocationButton extends React.Component {
 
   render() {
     return (
-      <Tooltip caption="Get your exact location on the map">
+      <Tooltip title="Get your exact location on the map">
         <Button
           isFit
           inverse

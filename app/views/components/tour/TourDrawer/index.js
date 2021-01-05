@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Box, Button, IconButton } from '@material-ui/core'
+import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 
 import {
@@ -38,7 +38,6 @@ import {
   EndTimeField,
   FieldError
 } from '../../final-form-fields'
-import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 
 import { validate } from './helpers/validate'
@@ -305,7 +304,7 @@ export class TourDrawer extends React.Component {
                     <Flex alignCenter>
                       {!this.isNew && (
                         <>
-                          <Tooltip placement="top" caption="Delete">
+                          <Tooltip placement="top" title="Delete">
                             <IconButton
                               size="small"
                               disabled={isDisabled}
@@ -330,7 +329,7 @@ export class TourDrawer extends React.Component {
                       )}
                     </Flex>
                     <Flex alignCenter>
-                      <Tooltip caption="Preview and print tour sheets">
+                      <Tooltip title="Preview and print tour sheets">
                         <PreviewTourSheets
                           agent={user}
                           disabled={isDisabled}

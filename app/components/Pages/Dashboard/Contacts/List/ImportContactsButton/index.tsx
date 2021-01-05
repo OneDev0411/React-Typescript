@@ -106,7 +106,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
       <PopOver
         placement="bottom"
         show={isTooltipOpen}
-        popoverStyles={{ width: '350px', marginTop: '1.5rem' }}
+        width={350}
         caption={
           <div>
             <div style={{ marginTop: '0.5rem' }}>

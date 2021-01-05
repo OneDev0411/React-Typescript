@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { FilterItemToolTip } from './tooltip'
+import { FilterItemTooltip } from './tooltip'
 import { Container, List, ListItem } from './styled'
 
 const IconAdd = styled(SvgIcon)`
@@ -69,7 +69,7 @@ export class AddFilter extends React.Component {
               {isOpen && (
                 <List depth={3}>
                   {config.map((item, index) => (
-                    <FilterItemToolTip key={index} item={item}>
+                    <FilterItemTooltip key={index} item={item}>
                       <ListItem
                         data-test={`add-filter-item-${item.label}`}
                         {...getItemProps({
@@ -79,7 +79,7 @@ export class AddFilter extends React.Component {
                       >
                         {item.label}
                       </ListItem>
-                    </FilterItemToolTip>
+                    </FilterItemTooltip>
                   ))}
                 </List>
               )}

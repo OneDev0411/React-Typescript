@@ -2,8 +2,9 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 import moment from 'moment'
 
+import { Tooltip } from '@material-ui/core'
+
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-import Tooltip from 'components/tooltip'
 import { Avatar } from 'components/Avatar'
 
 import {
@@ -82,7 +83,7 @@ class Files extends React.Component {
                       <FileDate>
                         <Tooltip
                           placement="bottom"
-                          caption={moment
+                          title={moment
                             .unix(file.created_at)
                             .format('MMM DD, YYYY, hh:mm A')}
                         >

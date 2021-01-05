@@ -1,13 +1,15 @@
 import React from 'react'
 import cn from 'classnames'
-import ToolTip from '../tooltip'
+
+import { Tooltip } from '@material-ui/core'
+
 import Checkmark from '../../../components/Pages/Dashboard/Partials/Svgs/Checkmark'
 
 export default ({
   square = false,
   selected,
   title,
-  tooltip = null,
+  tooltip = '',
   disabled = false,
   className,
   onClick = () => null,
@@ -18,7 +20,7 @@ export default ({
     style={style}
     onClick={onClick}
   >
-    <ToolTip caption={tooltip}>
+    <Tooltip title={tooltip}>
       <div className="inline">
         <span className={cn('radio-button', { selected, square, disabled })}>
           <Checkmark color={selected ? '#fff' : 'transparent'} />
@@ -31,6 +33,6 @@ export default ({
           {title}
         </span>
       </div>
-    </ToolTip>
+    </Tooltip>
   </div>
 )

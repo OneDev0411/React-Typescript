@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 
+import { Tooltip } from '@material-ui/core'
+
 import { blue } from 'views/utils/colors'
-import ToolTip from 'views/components/tooltip'
 
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 
@@ -44,11 +45,11 @@ class Index extends React.Component {
 
   render() {
     return (
-      <ToolTip caption="Duplicate Contacts" placement="right">
+      <Tooltip title="Duplicate Contacts" placement="right">
         <ListItem isSelected={this.isSelected()}>
           <ListItemName onClick={this.onClick}>Duplicate Contacts</ListItemName>
         </ListItem>
-      </ToolTip>
+      </Tooltip>
     )
   }
 }
@@ -59,9 +60,6 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    changeActiveFilterSegment
-  }
-)(Index)
+export default connect(mapStateToProps, {
+  changeActiveFilterSegment
+})(Index)
