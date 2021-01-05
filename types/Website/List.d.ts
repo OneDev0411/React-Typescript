@@ -1,4 +1,6 @@
-declare type IWebsiteTemplateType = 'Agents' | 'Properties'
+declare type IWebsiteTemplateType = 'Agent' | 'Listing'
+
+declare type IWebsiteTemplateMedium = 'Website'
 
 declare interface IWebsiteTemplateInstance extends IModel<'website'> {
   title: string

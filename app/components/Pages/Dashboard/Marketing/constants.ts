@@ -6,5 +6,6 @@ export const MEDIUM_LABEL_MAP: {
   Letter: 'Print Flyer',
   FacebookCover: 'Facebook Covers',
   InstagramStory: 'Instagram Stories',
-  LinkedInCover: 'LinkedIn Covers'
+  LinkedInCover: 'LinkedIn Covers',
+  Website: 'Website'
 }

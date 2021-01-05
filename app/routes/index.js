@@ -5,6 +5,8 @@ import withAcl from 'components/Acl/with-acl'
 
 import { ACL } from 'constants/acl'
 
+import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
+
 import GoToDashboard from '../views/components/GoToDashboard'
 
 // Containers
@@ -887,7 +889,11 @@ export default (
           <IndexRoute component={AsyncBrandSettings} />
         </Route>
 
-        <Route path="websites(/templates/:type(Agents|Properties))">
+        <Route
+          path={`websites(/templates/:type(${Object.keys(websiteTabs).join(
+            '|'
+          )}))`}
+        >
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
 
