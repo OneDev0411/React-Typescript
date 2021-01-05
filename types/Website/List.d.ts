@@ -6,7 +6,7 @@ declare interface IWebsiteTemplateInstance extends IModel<'website'> {
   title: string
   user: IUser
   brand: Nullable<IBrand>
-  template: IWebsiteTemplateType
+  template: IWebsiteTemplate
   attributes: Record<string, string>
   hostnames: string[]
 }

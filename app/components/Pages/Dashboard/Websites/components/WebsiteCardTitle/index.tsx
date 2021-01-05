@@ -4,7 +4,8 @@ import React, {
   useRef,
   useEffect,
   KeyboardEvent,
-  ChangeEvent
+  ChangeEvent,
+  useCallback
 } from 'react'
 
 import { useSelector } from 'react-redux'
@@ -21,24 +22,21 @@ import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actio
 
 interface WebsiteCardTitleProps {
   title: string
-  editable: boolean
-  onEditStart: () => void
-  onEditEnd: () => void
   websiteId: UUID
 }
 
 function WebsiteCardTitle({
   title: initialTitle,
-  editable,
-  onEditStart,
-  onEditEnd,
   websiteId
 }: WebsiteCardTitleProps) {
   const [title, setTitle] = useState(initialTitle || 'No Title')
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { updateItem } = useWebsiteListActions()
   const userId = useSelector(selectUserId)
+  const [editable, setEditable] = useState(false)
   const { isLoading: isSaving, run } = useAsync()
+  const handleEditStart = useCallback(() => setEditable(true), [])
+  const handleEditEnd = useCallback(() => setEditable(false), [])
 
   useEffect(() => {
     inputRef.current?.select()
@@ -51,7 +49,7 @@ function WebsiteCardTitle({
       })
     }
 
-    onEditEnd()
+    handleEditEnd()
   }
 
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -76,7 +74,7 @@ function WebsiteCardTitle({
           disabled={isSaving}
         />
       ) : (
-        <Typography variant="subtitle2" onClick={onEditStart}>
+        <Typography variant="subtitle2" onClick={handleEditStart}>
           {title}
         </Typography>
       )}

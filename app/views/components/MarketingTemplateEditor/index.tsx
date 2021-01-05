@@ -9,7 +9,10 @@ interface Props {
   /**
    * The marketing template or template instance to render inside the template editor
    */
-  template: IBrandMarketingTemplate | IMarketingTemplateInstance
+  template:
+    | IBrandMarketingTemplate
+    | IMarketingTemplateInstance
+    | IWebsiteTemplate
 
   /**
    * The template data needed by selected template to render with nunjucks
