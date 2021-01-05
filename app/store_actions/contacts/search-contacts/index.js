@@ -10,7 +10,7 @@ export function searchContacts(
   attributeFilters,
   start = 0,
   limit = 50,
-  parked = false,
+  parked = undefined,
   searchInputValue,
   order = '-created_at',
   users,
