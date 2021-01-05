@@ -5,7 +5,7 @@ import { Box, Grid } from '@material-ui/core'
 import useAsync from 'hooks/use-async'
 import getWebsiteList from 'models/website/get-my-websites'
 
-import SiteCardItem from '../SiteCardItem'
+import WebsiteCard from '../WebsiteCard'
 import CreateSampleWebsiteButton from '../CreateSampleWebsiteButton'
 import WebsiteListState from '../WebsiteListState'
 import WebsiteListInstanceProvider from '../WebsiteListInstanceProvider'
@@ -33,7 +33,7 @@ function WebsiteListInstances() {
         <WebsiteListInstanceProvider setData={setData}>
           <CreateSampleWebsiteButton />
           {instances.map(instance => (
-            <SiteCardItem key={instance.id} {...instance} />
+            <WebsiteCard key={instance.id} {...instance} />
           ))}
         </WebsiteListInstanceProvider>
       </Grid>

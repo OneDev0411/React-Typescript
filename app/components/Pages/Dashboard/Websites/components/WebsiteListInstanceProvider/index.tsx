@@ -23,11 +23,23 @@ function WebsiteListInstanceProvider({
     )
   }
 
+  const updateWebsiteInstance = (
+    websiteId: UUID,
+    update: Partial<Omit<IWebsiteTemplateInstance, 'id'>>
+  ) => {
+    setData(instances =>
+      instances.map(instance =>
+        instance.id === websiteId ? { ...instance, ...update } : instance
+      )
+    )
+  }
+
   return (
     <WebsiteListInstanceActionsContext.Provider
       value={{
         addWebsiteInstance,
-        deleteWebsiteInstance
+        deleteWebsiteInstance,
+        updateWebsiteInstance
       }}
     >
       {children}

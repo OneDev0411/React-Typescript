@@ -1,26 +1,18 @@
 import React from 'react'
 import { Button, Menu, MenuItem } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import MoreVertIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    menuButton: {
-      minWidth: 'auto',
-      backgroundColor: theme.palette.action.active
-    }
-  })
-)
+import useStyles from './styles'
 
-export interface SiteMenuProps {
+export interface WebsiteCardMenuProps {
   onDelete: () => void
   onEdit: () => void
 }
 
-export function SiteMenu({ onDelete, onEdit }: SiteMenuProps) {
+export function WebsiteCardMenu({ onDelete, onEdit }: WebsiteCardMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const classes = useStyles()
@@ -51,7 +43,7 @@ export function SiteMenu({ onDelete, onEdit }: SiteMenuProps) {
         variant="contained"
         size="small"
         onClick={handleClick}
-        className={classes.menuButton}
+        className={classes.button}
       >
         <MoreVertIcon fill="#fff" className={iconClasses.medium} />
       </Button>
