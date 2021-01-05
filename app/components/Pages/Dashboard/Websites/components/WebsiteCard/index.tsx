@@ -8,7 +8,7 @@ import useAsync from 'hooks/use-async'
 
 import deleteWebsite from 'models/website/delete-website'
 
-import useWebsiteListInstanceActions from '../WebsiteListInstanceProvider/use-website-list-instance-actions'
+import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 import WebsiteCardImage from '../WebsiteCardImage'
 import WebsiteCardTitle from '../WebsiteCardTitle'
 import WebsiteCardActions from '../WebsiteCardActions'
@@ -28,10 +28,10 @@ function WebsiteCard({ id, title, hostnames }: WebsiteCardProps) {
   const handleEditEnd = useCallback(() => setEditMode(false), [])
 
   const { isLoading: isWorking, run, isSuccess } = useAsync()
-  const { deleteWebsiteInstance } = useWebsiteListInstanceActions()
+  const { deleteItem } = useWebsiteListActions()
 
   const handleDelete = () => {
-    run(async () => deleteWebsite(id)).then(() => deleteWebsiteInstance(id))
+    run(async () => deleteWebsite(id)).then(() => deleteItem(id))
   }
 
   if (isWorking || isSuccess) {

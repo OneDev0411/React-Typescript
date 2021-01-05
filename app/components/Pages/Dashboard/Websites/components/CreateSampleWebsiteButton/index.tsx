@@ -10,18 +10,16 @@ import createWebsite from 'models/website/create-website'
 import Button from 'components/Button/AButton'
 import useAsync from 'hooks/use-async'
 
-import useWebsiteListInstanceActions from '../WebsiteListInstanceProvider/use-website-list-instance-actions'
+import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 
 function CreateSampleWebsiteButton() {
   const userId = useSelector(selectUserId)
-  const { addWebsiteInstance } = useWebsiteListInstanceActions()
+  const { addItem } = useWebsiteListActions()
 
   const { run, isLoading } = useAsync<IWebsiteTemplateInstance>()
 
   const handleClick = () => {
-    run(async () => createWebsite(userId)).then(instance =>
-      addWebsiteInstance(instance)
-    )
+    run(async () => createWebsite(userId)).then(instance => addItem(instance))
   }
 
   return (

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { PageTabs, TabLink } from 'components/PageTabs'
 
-export interface WebsiteListTabsProps {
+export interface WebsiteTabsProps {
   type: IWebsiteTemplateType | 'MyWebsites'
 }
 
@@ -27,8 +27,8 @@ const tabs = [
   />
 ]
 
-function WebsiteListTabs({ type }: WebsiteListTabsProps) {
+function WebsiteTabs({ type }: WebsiteTabsProps) {
   return <PageTabs defaultValue={type} hasMegaMenu tabs={tabs} />
 }
 
-export default WebsiteListTabs
+export default WebsiteTabs

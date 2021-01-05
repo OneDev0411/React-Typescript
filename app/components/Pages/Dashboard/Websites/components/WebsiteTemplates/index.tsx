@@ -8,13 +8,13 @@ import TemplatesList from 'components/TemplatesList'
 import getWebsiteTemplates from 'models/website/get-website-templates'
 import { selectActiveBrandId } from 'selectors/brand'
 
-export interface WebsiteListTemplatesProps {
+export interface WebsiteTemplatesProps {
   type: IWebsiteTemplateType
 }
 
 const defaultData: IWebsiteTemplate[] = []
 
-function WebsiteListTemplates({ type }: WebsiteListTemplatesProps) {
+function WebsiteTemplates({ type }: WebsiteTemplatesProps) {
   const brandId = useSelector(selectActiveBrandId)
   const { run, data: items, isLoading } = useAsync({ data: defaultData })
 
@@ -35,4 +35,4 @@ function WebsiteListTemplates({ type }: WebsiteListTemplatesProps) {
   )
 }
 
-export default WebsiteListTemplates
+export default WebsiteTemplates

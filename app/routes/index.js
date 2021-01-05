@@ -622,7 +622,7 @@ const AsyncWebsitesList = withAcl.marketing(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Websites/pages/WebsiteList' /* webpackChunkName: "websites_list" */
+        '../components/Pages/Dashboard/Websites/pages/Website' /* webpackChunkName: "websites_list" */
       )
   })
 )

@@ -17,7 +17,7 @@ import { selectUserId } from 'selectors/user'
 
 import updateWebsite from 'models/website/update-website'
 
-import useWebsiteListInstanceActions from '../WebsiteListInstanceProvider/use-website-list-instance-actions'
+import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 
 interface WebsiteCardTitleProps {
   title: string
@@ -36,7 +36,7 @@ function WebsiteCardTitle({
 }: WebsiteCardTitleProps) {
   const [title, setTitle] = useState(initialTitle || 'No Title')
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const { updateWebsiteInstance } = useWebsiteListInstanceActions()
+  const { updateItem } = useWebsiteListActions()
   const userId = useSelector(selectUserId)
   const { isLoading: isSaving, run } = useAsync()
 
@@ -47,7 +47,7 @@ function WebsiteCardTitle({
   const handleSave = () => {
     if (initialTitle !== title) {
       run(async () => updateWebsite(userId, websiteId, { title })).then(() => {
-        updateWebsiteInstance(websiteId, { title })
+        updateItem(websiteId, { title })
       })
     }
 

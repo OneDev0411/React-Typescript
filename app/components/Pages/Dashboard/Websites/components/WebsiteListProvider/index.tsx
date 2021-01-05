@@ -2,28 +2,25 @@ import React, { ReactNode, memo } from 'react'
 
 import type { UseAsyncReturnType } from 'hooks/use-async'
 
-import WebsiteListInstanceActionsContext from './WebsiteListInstanceActionsContext'
+import WebsiteListActionsContext from './WebsiteListActionsContext'
 
-interface WebsiteListInstanceProviderProps
+interface WebsiteListProviderProps
   extends Pick<UseAsyncReturnType<IWebsiteTemplateInstance[]>, 'setData'> {
   children: ReactNode
 }
 
-function WebsiteListInstanceProvider({
-  setData,
-  children
-}: WebsiteListInstanceProviderProps) {
-  const addWebsiteInstance = (instance: IWebsiteTemplateInstance) => {
+function WebsiteListProvider({ setData, children }: WebsiteListProviderProps) {
+  const addItem = (instance: IWebsiteTemplateInstance) => {
     setData(instances => [...instances, instance])
   }
 
-  const deleteWebsiteInstance = (websiteId: UUID) => {
+  const deleteItem = (websiteId: UUID) => {
     setData(instances =>
       instances.filter(instance => instance.id !== websiteId)
     )
   }
 
-  const updateWebsiteInstance = (
+  const updateItem = (
     websiteId: UUID,
     update: Partial<Omit<IWebsiteTemplateInstance, 'id'>>
   ) => {
@@ -35,16 +32,16 @@ function WebsiteListInstanceProvider({
   }
 
   return (
-    <WebsiteListInstanceActionsContext.Provider
+    <WebsiteListActionsContext.Provider
       value={{
-        addWebsiteInstance,
-        deleteWebsiteInstance,
-        updateWebsiteInstance
+        addItem,
+        deleteItem,
+        updateItem
       }}
     >
       {children}
-    </WebsiteListInstanceActionsContext.Provider>
+    </WebsiteListActionsContext.Provider>
   )
 }
 
-export default memo(WebsiteListInstanceProvider)
+export default memo(WebsiteListProvider)
