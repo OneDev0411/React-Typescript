@@ -593,6 +593,10 @@ class ContactsList extends React.Component {
   }
 
   shouldShowFilters = () => {
+    if (this.props?.activeSegment?.id === PARKED_CONTACTS_LIST_ID) {
+      return false
+    }
+
     return this.state.selectedShortcutFilter === null
   }
 
