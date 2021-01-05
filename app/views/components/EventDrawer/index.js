@@ -8,7 +8,8 @@ import {
   IconButton,
   Button,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Tooltip
 } from '@material-ui/core'
 
 import { Field } from 'react-final-form'
@@ -43,7 +44,6 @@ import {
   EndDateTimeField,
   FieldError
 } from '../final-form-fields'
-import Tooltip from '../tooltip'
 import AddAssociation from '../AddAssociation'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
@@ -471,7 +471,7 @@ class EventDrawerContainer extends Component {
                         <Flex alignCenter>
                           {!this.isNew && (
                             <Flex alignCenter>
-                              <Tooltip placement="top" caption="Delete">
+                              <Tooltip placement="top" title="Delete">
                                 <IconButton
                                   size="small"
                                   disabled={isDisabled}

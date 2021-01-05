@@ -3,10 +3,11 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import IconButton from '@material-ui/core/IconButton'
+import Tooltip from '@material-ui/core/Tooltip'
+
 import { mdiTrashCanOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import Tooltip from 'components/tooltip'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 interface Props {
@@ -23,7 +24,7 @@ function ContextItem({ name, onSelect, onDelete }: Props) {
     <ListItem>
       <ListItemText primary={name} onClick={onSelect} />
       <ListItemSecondaryAction>
-        <Tooltip caption="Delete">
+        <Tooltip title="Delete">
           <IconButton
             size="small"
             aria-label="delete"

@@ -3,10 +3,11 @@ import { connect } from 'react-redux'
 import Downshift from 'downshift'
 import { mdiChevronDown } from '@mdi/js'
 
+import { Tooltip } from '@material-ui/core'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { setSelectedTask } from 'actions/deals'
 import { isBackOffice } from 'utils/user-teams'
-import Tooltip from 'components/tooltip'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
 import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
@@ -392,10 +393,10 @@ class ActionsButton extends React.Component<
                     >
                       <Tooltip
                         placement="left"
-                        caption={
+                        title={
                           button.disabled && button.tooltip
                             ? button.tooltip
-                            : null
+                            : ''
                         }
                       >
                         <span>{this.getButtonLabel(button)}</span>

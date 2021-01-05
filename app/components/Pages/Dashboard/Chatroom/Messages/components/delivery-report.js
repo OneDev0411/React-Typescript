@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { Col, OverlayTrigger, Popover, Row } from 'react-bootstrap'
 import _ from 'underscore'
 import moment from 'moment'
 import { mdiCheck } from '@mdi/js'
 import { useTheme } from '@material-ui/core/styles'
+import { Grid, Popover, Box } from '@material-ui/core'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -56,8 +56,8 @@ const RenderList = ({ list, title, className, avatarSize = 30 }) => {
 
       <div className="report">
         {list.map(({ user, info }) => (
-          <Row className="item" key={user.id}>
-            <Col xs={2}>
+          <Grid container className="item" key={user.id} alignItems="center">
+            <Grid item xs={2}>
               <UserAvatar
                 style={{ float: 'left' }}
                 size={avatarSize}
@@ -67,9 +67,9 @@ const RenderList = ({ list, title, className, avatarSize = 30 }) => {
                 image={user.profile_image_url}
                 showStateIndicator={false}
               />
-            </Col>
+            </Grid>
 
-            <Col xs={6} className="name-section">
+            <Grid item xs={6} className="name-section">
               <div
                 className="name"
                 style={!info ? { lineHeight: `${avatarSize}px` } : {}}
@@ -84,9 +84,9 @@ const RenderList = ({ list, title, className, avatarSize = 30 }) => {
                   {info.delivery_type.replace('airship', 'mobile notification')}
                 </div>
               )}
-            </Col>
+            </Grid>
 
-            <Col xs={4} className="date-section">
+            <Grid item xs={4} className="date-section">
               {info && (
                 <span className="date-day">
                   {moment(info.created_at).format('ddd')}
@@ -97,8 +97,8 @@ const RenderList = ({ list, title, className, avatarSize = 30 }) => {
                   {moment(info.created_at).format('HH:mm')}
                 </span>
               )}
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         ))}
       </div>
     </div>
@@ -116,6 +116,7 @@ const DeliveryReport = ({
   placement = 'right'
 }) => {
   const theme = useTheme()
+  const [anchorEl, setAnchorEl] = useState(null)
 
   if (!room || !author || author.id !== user.id) {
     return false
@@ -128,39 +129,52 @@ const DeliveryReport = ({
       ? theme.palette.primary.main
       : theme.palette.grey['400']
 
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const open = Boolean(anchorEl)
+  const id = open ? 'popover-delivery-report' : undefined
+
   if (ackedUsers.length === 0 && deliveredUsers.length === 0) {
     return false
   }
 
-  const MessageInfo = (
-    <Popover
-      id="popover-delivery-report"
-      className="pop-over pop-over--light"
-      title=""
-      style={{ maxWidth: '340px' }}
-    >
-      <RenderList list={ackedUsers} className="read-by" title="READ BY" />
-
-      <RenderList
-        list={deliveredUsers}
-        className="delivered-to"
-        title="DELIVERED TO"
-      />
-    </Popover>
-  )
-
   return (
-    <OverlayTrigger
-      trigger="click"
-      rootClose
-      placement={placement}
-      overlay={MessageInfo}
-    >
-      <span className="delivery-report">
+    <>
+      <span className="delivery-report" onClick={handleClick}>
         <SvgIcon path={mdiCheck} size={muiIconSizes.small} color={iconColor} />
         <SvgIcon path={mdiCheck} size={muiIconSizes.small} color={iconColor} />
       </span>
-    </OverlayTrigger>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        placement={placement}
+        anchorOrigin={{
+          vertical: 'center',
+          horizontal: 'right'
+        }}
+        transformOrigin={{
+          vertical: 'center',
+          horizontal: 'left'
+        }}
+      >
+        <Box width={340}>
+          <RenderList list={ackedUsers} className="read-by" title="READ BY" />
+          <RenderList
+            list={deliveredUsers}
+            className="delivered-to"
+            title="DELIVERED TO"
+          />
+        </Box>
+      </Popover>
+    </>
   )
 }
 

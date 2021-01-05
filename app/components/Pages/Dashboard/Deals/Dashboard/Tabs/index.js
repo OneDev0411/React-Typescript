@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ToolTip from 'components/tooltip'
+import { Tooltip } from '@material-ui/core'
 
 import { Container, NavBar, NavItem, TabContent } from './styled'
 
@@ -44,7 +44,7 @@ export default class Tabs extends React.Component {
       return tab.tooltipWhenDisabled
     }
 
-    return tab.tooltip || null
+    return tab.tooltip || ''
   }
 
   render() {
@@ -57,9 +57,9 @@ export default class Tabs extends React.Component {
             const isTabDisabled = tab.isDisabled(this.props.deal)
 
             return (
-              <ToolTip
+              <Tooltip
                 key={tab.id}
-                caption={this.getTabTooltip(tab, isTabDisabled)}
+                title={this.getTabTooltip(tab, isTabDisabled)}
                 placement="bottom"
               >
                 <NavItem
@@ -73,7 +73,7 @@ export default class Tabs extends React.Component {
                 >
                   {tab.label}
                 </NavItem>
-              </ToolTip>
+              </Tooltip>
             )
           })}
         </NavBar>

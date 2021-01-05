@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { mdiCommentOutline } from '@mdi/js'
 
-import Tooltip from 'components/tooltip'
+import { Tooltip } from '@material-ui/core'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import IconButton from 'components/Button/IconButton'
 
@@ -17,7 +18,7 @@ function Notification(props) {
   const { new_notifications } = room
 
   return (
-    <Tooltip caption={props.tooltip} placement={props.tooltipPlacement}>
+    <Tooltip tooltip={props.tooltip || ''} placement={props.tooltipPlacement}>
       <Container
         hasNotification={new_notifications > 0}
         style={props.style}

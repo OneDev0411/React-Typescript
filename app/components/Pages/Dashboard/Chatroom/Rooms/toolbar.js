@@ -1,31 +1,32 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col } from 'react-bootstrap'
+
+import { Tooltip, Grid } from '@material-ui/core'
+
 import { toggleInstantMode } from '../../../../../store_actions/chatroom'
 import Members from './members'
 import RoomSettings from './settings'
 import ExitFullscreenIcon from '../../Partials/Svgs/ExitFullscreenIcon'
-import Tooltip from '../../../../../views/components/tooltip'
 
 const MessagesToolbar = ({ toggleInstantMode, instantMode, room }) => (
-  <Row className="toolbar">
-    <Col md={9} lg={9} sm={9} xs={9} className="title">
+  <Grid container className="toolbar">
+    <Grid item md={9} lg={9} sm={9} xs={9} className="title">
       {room.proposed_title}
-    </Col>
+    </Grid>
 
-    <Col md={3} lg={3} sm={3} xs={3} className="buttons">
+    <Grid item md={3} lg={3} sm={3} xs={3} className="buttons">
       <Members room={room} isFullScreen />
       <RoomSettings room={room} />
 
       {instantMode && (
-        <Tooltip placement="bottom" caption="Exit Fullscreen">
+        <Tooltip placement="bottom" title="Exit Fullscreen">
           <span onClick={() => toggleInstantMode()} className="exit-fullscreen">
             <ExitFullscreenIcon />
           </span>
         </Tooltip>
       )}
-    </Col>
-  </Row>
+    </Grid>
+  </Grid>
 )
 
 function mapStateToProps({ chatroom }, ownProps) {
@@ -38,7 +39,4 @@ function mapStateToProps({ chatroom }, ownProps) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { toggleInstantMode }
-)(MessagesToolbar)
+export default connect(mapStateToProps, { toggleInstantMode })(MessagesToolbar)
