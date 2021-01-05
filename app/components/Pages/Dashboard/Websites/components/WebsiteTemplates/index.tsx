@@ -1,26 +1,15 @@
-import React, { useEffect } from 'react'
-
-import { useSelector } from 'react-redux'
-
-import useAsync from 'hooks/use-async'
+import React from 'react'
 
 import TemplatesList from 'components/TemplatesList'
-import getWebsiteTemplates from 'models/website/get-website-templates'
-import { selectActiveBrandId } from 'selectors/brand'
+
+import useWebsiteTemplates from '../../hooks/use-website-templates'
 
 export interface WebsiteTemplatesProps {
   type: IWebsiteTemplateType
 }
 
-const defaultData: IWebsiteTemplate[] = []
-
 function WebsiteTemplates({ type }: WebsiteTemplatesProps) {
-  const brandId = useSelector(selectActiveBrandId)
-  const { run, data: items, isLoading } = useAsync({ data: defaultData })
-
-  useEffect(() => {
-    run(async () => getWebsiteTemplates(brandId))
-  }, [type, run, brandId])
+  const { templates: items, isLoading } = useWebsiteTemplates(type)
 
   const handleDelete = () => console.log('on template delete')
 

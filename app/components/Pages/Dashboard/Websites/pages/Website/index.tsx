@@ -10,23 +10,24 @@ import WebsiteTabs, { WebsiteTabsProps } from '../../components/WebsiteTabs'
 
 import WebsiteList from '../../components/WebsiteList'
 import WebsiteTemplates from '../../components/WebsiteTemplates'
+import { websiteTabs } from '../../constants'
 
 type WebsiteProps = RouteComponentProps<{ type?: WebsiteTabsProps['type'] }, {}>
 
 function Website({ params }: WebsiteProps) {
   useTitle('Websites | Rechat')
 
-  const type = params.type || 'MyWebsites'
+  const type = params.type || websiteTabs.MyWebsites
 
   return (
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.Header title="Website Builder" />
       <PageLayout.Main>
         <WebsiteTabs type={type} />
-        {type === 'MyWebsites' ? (
+        {type === websiteTabs.MyWebsites ? (
           <WebsiteList />
         ) : (
-          <WebsiteTemplates type={type} />
+          <WebsiteTemplates type={type as IWebsiteTemplateType} />
         )}
       </PageLayout.Main>
     </PageLayout>
