@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+
+import { Button, Tooltip, makeStyles, Theme } from '@material-ui/core'
+
 import { addNotification as notify } from 'components/notification'
-import { Button } from '@material-ui/core'
 
 import { unparkContact } from 'models/contacts/unparak-contact'
 
@@ -10,7 +12,17 @@ interface Props {
   callback(): void
 }
 
+export const useStyles = makeStyles(
+  (theme: Theme) => ({
+    unpark: {
+      whiteSpace: 'nowrap'
+    }
+  }),
+  { name: 'UnparkContact' }
+)
+
 export const UnparkContact = ({ contactId, callback }: Props) => {
+  const classes = useStyles()
   const [isUnParking, setIsUnParking] = useState(false)
   const dispatch = useDispatch()
 
@@ -34,13 +46,16 @@ export const UnparkContact = ({ contactId, callback }: Props) => {
   }
 
   return (
-    <Button
-      variant="outlined"
-      size="small"
-      onClick={handleUnparking}
-      disabled={isUnParking}
-    >
-      {isUnParking ? 'Adding' : 'Add to my contacts'}
-    </Button>
+    <Tooltip title="It's a parked contact, add to the contacts by clicking on this">
+      <Button
+        variant="outlined"
+        size="small"
+        onClick={handleUnparking}
+        disabled={isUnParking}
+        className={classes.unpark}
+      >
+        {isUnParking ? 'Adding' : 'Add to my contacts'}
+      </Button>
+    </Tooltip>
   )
 }

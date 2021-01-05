@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { Box } from '@material-ui/core'
 
 import { Map } from '../../../Map'
 import { Location } from './Location'
@@ -27,43 +28,41 @@ function LocationsComponent({ locations, input: { onChange } }) {
 
   return (
     <>
-      <div
-        style={{
-          height: '15rem',
-          marginBottom: '1rem'
-        }}
-      >
+      <Box height="12rem" borderRadius="4px" overflow="hidden">
         <Map
           id="tour-direction-map"
           listings={locations.map(l => l.listing.original)}
         />
-      </div>
+      </Box>
+      {(locations || []).length >= 1 && (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="locations-droppable">
+            {droppableProvided => (
+              <Box
+                mt={1}
+                zIndex={1}
+                position="relative"
+                ref={droppableProvided.innerRef}
+              >
+                {locations.map((location, index) => {
+                  if (!location || !location.association_type) {
+                    return null
+                  }
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="locations-droppable">
-          {droppableProvided => (
-            <div
-              style={{ zIndex: 1, position: 'relative' }}
-              ref={droppableProvided.innerRef}
-            >
-              {locations.map((location, index) => {
-                if (!location || !location.association_type) {
-                  return null
-                }
-
-                return (
-                  <Location
-                    index={index}
-                    location={location}
-                    key={`location_${index}`}
-                    handleRemove={removeHandler}
-                  />
-                )
-              })}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+                  return (
+                    <Location
+                      index={index}
+                      location={location}
+                      key={`location_${index}`}
+                      handleRemove={removeHandler}
+                    />
+                  )
+                })}
+              </Box>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
     </>
   )
 }

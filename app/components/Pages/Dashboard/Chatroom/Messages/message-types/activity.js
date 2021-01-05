@@ -2,9 +2,8 @@ import React from 'react'
 import moment from 'moment'
 import Flex from 'styled-flex-component'
 import { mdiBellOutline } from '@mdi/js'
-import { useTheme, makeStyles } from '@material-ui/core'
+import { useTheme, makeStyles, Tooltip } from '@material-ui/core'
 
-import Tooltip from 'components/tooltip'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
@@ -33,7 +32,7 @@ export default ({ message }) => {
       </Flex>
 
       <Tooltip
-        caption={moment.unix(message.created_at).format('MMM DD, YYYY h:mmA')}
+        title={moment.unix(message.created_at).format('MMM DD, YYYY h:mmA')}
         placement="left"
       >
         <span>{moment.unix(message.created_at).fromNow()}</span>

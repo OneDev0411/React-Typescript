@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import ClickOutside from 'react-click-outside'
 import { mdiPlusCircleOutline } from '@mdi/js'
 
+import { Tooltip } from '@material-ui/core'
+
 import { isPrimaryAgent } from 'deals/utils/roles'
 import { dynamicRoles } from 'deals/FormEdit/utils/normalize-role-names'
-import ToolTip from 'components/tooltip'
 import Roles from 'deals/components/Roles'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -64,14 +65,14 @@ export function AddRole(props) {
 
   return (
     <Container>
-      <ToolTip caption={tooltip} placement="top">
+      <Tooltip title={tooltip || ''} placement="top">
         <SvgIcon
           path={mdiPlusCircleOutline}
           onClick={handleClick}
           size={props.style.height}
           color={props.style.color}
         />
-      </ToolTip>
+      </Tooltip>
 
       {showRolesList && (
         <ClickOutside onClickOutside={handleClickOutside}>

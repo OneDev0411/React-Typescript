@@ -10,11 +10,9 @@ export const CloseIcon = styled(SvgIcon)`
 `
 
 export const Container = styled.div`
-  background-color: ${grey.A100};
-
   &:hover {
     cursor: move;
-    background-color: ${grey.A250};
+    background-color: ${grey.A100};
 
     ${CloseIcon} {
       color: #000 !important;

@@ -4,9 +4,10 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
-import { addNotification as notify } from 'components/notification'
 
-import { Button } from '@material-ui/core'
+import { Button, Tooltip } from '@material-ui/core'
+
+import { addNotification as notify } from 'components/notification'
 
 import { Modal, ModalContent, ModalHeader, ModalFooter } from 'components/Modal'
 
@@ -19,7 +20,6 @@ import {
   setExpandChecklist
 } from 'actions/deals'
 
-import ToolTip from 'components/tooltip'
 import Checkbox from 'components/CheckmarkButton'
 
 import Deal from 'models/Deal'
@@ -365,10 +365,11 @@ class UploadModal extends React.Component {
           </ModalContent>
 
           <ModalFooter className="modal-footer">
-            <ToolTip
-              caption={
-                !this.isSplitButtonActive &&
-                'You can split files as soon as upload them'
+            <Tooltip
+              title={
+                this.isSplitButtonActive
+                  ? 'You can split files as soon as upload them'
+                  : ''
               }
             >
               <Button
@@ -380,11 +381,11 @@ class UploadModal extends React.Component {
               >
                 Split PDF
               </Button>
-            </ToolTip>
+            </Tooltip>
 
-            <ToolTip caption="Create new documents and save them to tasks">
+            <Tooltip title="Create new documents and save them to tasks">
               <div className="help">?</div>
-            </ToolTip>
+            </Tooltip>
           </ModalFooter>
         </Modal>
 

@@ -6,9 +6,8 @@ import { useIconStyles } from '../../../styles/use-icon-styles'
 
 import { muiIconSizes } from './icon-sizes'
 
-type IconProps = ComponentProps<typeof BaseIcon>
 
-interface Props {
+export interface Props extends ComponentProps<typeof BaseIcon> {
   rightMargined?: boolean
   leftMargined?: boolean
 }
@@ -17,7 +16,7 @@ export function SvgIcon({
   rightMargined,
   leftMargined,
   ...props
-}: IconProps & Props) {
+}: Props) {
   const classes = useIconStyles()
   const className = cn({
     [classes.rightMargin]: rightMargined,

@@ -1,9 +1,9 @@
 import React from 'react'
 
-import ToolTip from 'components/tooltip'
+import { Tooltip } from '@material-ui/core'
 
 interface SideNavTooltipProps {
-  text?: string | string[]
+  text?: string
   children: any
 }
 
@@ -12,18 +12,10 @@ function SideNavTooltip(props: SideNavTooltipProps) {
     return props.children
   }
 
-  let tooltipText = props.text
-  let multiline = false
-
-  if (Array.isArray(props.text)) {
-    tooltipText = props.text.join('<br />')
-    multiline = true
-  }
-
   return (
-    <ToolTip multiline={multiline} caption={tooltipText} placement="right">
+    <Tooltip title={props.text} placement="right">
       {props.children}
-    </ToolTip>
+    </Tooltip>
   )
 }
 

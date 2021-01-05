@@ -22,7 +22,7 @@ import {
   importantDateIcon
 } from 'components/SvgIcons/icons'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { SvgIcon, Props as SvgIconProps } from 'components/SvgIcons/SvgIcon'
 
 export interface EventTypeIcon {
   name: string
@@ -33,82 +33,110 @@ export interface EventTypeIcon {
 export const eventTypesIcons = [
   {
     name: 'Call',
-    icon: () => <SvgIcon path={mdiPhoneOutline} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiPhoneOutline} />
+    ),
     color: '#04c6d9'
   },
   {
     name: 'In-Person Meeting',
-    icon: () => <SvgIcon path={mdiAccountMultipleOutline} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiAccountMultipleOutline} />
+    ),
     color: '#f7a700'
   },
   {
     name: 'Text',
-    icon: () => <SvgIcon path={mdiMessageTextOutline} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiMessageTextOutline} />
+    ),
     color: '#000'
   },
   {
     name: 'Chat',
-    icon: () => <SvgIcon path={mdiChatProcessingOutline} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiChatProcessingOutline} />
+    ),
     color: '#ff00bf'
   },
   {
     name: 'Mail',
-    icon: () => <SvgIcon path={mdiCardAccountMailOutline} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiCardAccountMailOutline} />
+    ),
     color: '#7ed321'
   },
   {
     name: 'Email',
-    icon: () => <SvgIcon path={mdiEmailOutline} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiEmailOutline} />
+    ),
     color: '#8f6cf0'
   },
   {
     name: 'Open House',
-    icon: () => <SvgIcon path={meetingRoomOutlined} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={meetingRoomOutlined} />
+    ),
     color: '#50e3c2'
   },
   {
     name: 'Tour',
-    icon: () => <SvgIcon path={mdiShoePrint} />,
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiShoePrint} />,
     color: '#bd10e0'
   },
   {
     name: 'TouchDate',
-    icon: () => <SvgIcon path={mdiClockOutline} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiClockOutline} />
+    ),
     color: '#f7a700'
   },
   {
     name: 'Closing',
-    icon: () => <SvgIcon path={mdiKeyOutline} />,
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiKeyOutline} />,
     color: '#287700'
   },
   {
     name: 'Follow Up',
-    icon: () => <SvgIcon path={mdiAccountArrowLeftOutline} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiAccountArrowLeftOutline} />
+    ),
     color: '#9013fe'
   },
   {
     name: 'Todo',
-    icon: () => <SvgIcon path={mdiClipboardCheckOutline} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiClipboardCheckOutline} />
+    ),
     color: '#4e709d'
   },
   {
     name: 'ListingAppointment',
-    icon: () => <SvgIcon path={mdiHomeImportOutline} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiHomeImportOutline} />
+    ),
     color: '#8b572a'
   },
   {
     name: 'Task Critical',
-    icon: () => <SvgIcon path={importantDateIcon} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={importantDateIcon} />
+    ),
     color: '#f5a623'
   },
   {
     name: 'Note',
-    icon: () => <SvgIcon path={mdiNoteTextOutline} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiNoteTextOutline} />
+    ),
     color: '#e6bf00'
   },
   {
     name: 'Other',
-    icon: () => <SvgIcon path={mdiDotsHorizontalCircleOutline} />,
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiDotsHorizontalCircleOutline} />
+    ),
     color: '#9013fe'
   }
 ].reduce((acc, icon) => {

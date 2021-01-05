@@ -3,14 +3,13 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Button, IconButton, Box, useTheme } from '@material-ui/core'
+import { Button, IconButton, Box, useTheme, Tooltip } from '@material-ui/core'
 import { mdiAccount, mdiTrashCanOutline } from '@mdi/js'
 
 import editUser from 'actions/user/edit'
 import uploadCoverImage from 'actions/user/upload-cover-image'
 
 import FormCard from 'components/FormCard'
-import Tooltip from 'components/tooltip'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const MAX_SIZE = 256
@@ -67,9 +66,7 @@ const CoverImage = ({
               {((coverImage && !isUploading) ||
                 (!coverImage && isDeleting)) && (
                 <Box marginRight={2}>
-                  <Tooltip
-                    caption={isDeleting ? 'Deleting...' : 'Delete Cover'}
-                  >
+                  <Tooltip title={isDeleting ? 'Deleting...' : 'Delete Cover'}>
                     <IconButton
                       onClick={deleteHandler}
                       disabled={isDeleting || isUploading}

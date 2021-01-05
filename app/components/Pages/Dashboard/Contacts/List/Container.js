@@ -340,7 +340,7 @@ class ContactsList extends React.Component {
       return
     }
 
-    const isParkedActive =
+    const isParkedTabActive =
       this.props.activeSegment.id === PARKED_CONTACTS_LIST_ID
 
     const {
@@ -354,8 +354,17 @@ class ContactsList extends React.Component {
       conditionOperator = this.props.conditionOperator,
       prependResult = false,
       firstLetter = this.state.firstLetter,
-      parked = isParkedActive
+      parked = isParkedTabActive
     } = newFilters || {}
+
+    /*
+      I knew it's not a good idea ((:
+      But We're doing this because of the API mechanism,
+      when user searches for contact we should show all contact
+      in order to doing this, we have to send undefined for parked param
+    */
+    const shouldShowParked =
+      Boolean(searchInputValue) && !isParkedTabActive ? undefined : parked
 
     if (resetLoadedRanges) {
       this.setState({ loadedRanges: [] })
@@ -373,7 +382,7 @@ class ContactsList extends React.Component {
         filters,
         start,
         undefined,
-        parked,
+        shouldShowParked,
         searchInputValue,
         order,
         viewAsUsers,
@@ -394,7 +403,7 @@ class ContactsList extends React.Component {
   handleSearch = value => {
     this.setState({ searchInputValue: value, firstLetter: null }, () => {
       this.setQueryParam('letter', '')
-      this.handleFilterChange({}, true)
+      this.handleFilterChange({ parked: undefined }, true)
     })
   }
 
@@ -584,6 +593,10 @@ class ContactsList extends React.Component {
   }
 
   shouldShowFilters = () => {
+    if (this.props?.activeSegment?.id === PARKED_CONTACTS_LIST_ID) {
+      return false
+    }
+
     return this.state.selectedShortcutFilter === null
   }
 

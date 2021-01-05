@@ -2,10 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 
+import { Tooltip } from '@material-ui/core'
+
 import { Dropdown } from '../../Dropdown'
 import { Container, Label, LabelNote, ErrorMessage } from '../styled'
 import { Item } from '../../Dropdown/Item'
-import Tooltip from '../../tooltip'
 
 Select.propTypes = {
   format: PropTypes.func,
@@ -69,7 +70,7 @@ export function Select(props) {
               style={{ margin: 0 }}
               buttonStyle={{ padding: 0 }}
               itemRenderer={(props, item) => (
-                <Tooltip caption={item.hint} placement="left" key={item.value}>
+                <Tooltip title={item.hint} placement="left" key={item.value}>
                   <Item
                     {...props}
                     data-test={`${input.name}-select-option-${item.value}`}

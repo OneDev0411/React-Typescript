@@ -1,9 +1,6 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useSelector } from 'react-redux'
-import Box from '@material-ui/core/Box'
-import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
-import Container from '@material-ui/core/Container'
+import { Box, Grid, Button, Container, RootRef } from '@material-ui/core'
 import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
 
 import listingUtils from 'utils/listing'
@@ -141,6 +138,11 @@ function ListingDetails({ id, onClose }: Props) {
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
   const [isShareModalOpen, setIsShareModalOpen] = React.useState(false)
   const { listing, status, error }: UseGetListing = useGetListing(id)
+  const mapSection = useRef<HTMLDivElement>(null)
+
+  const scrollToMap = () => {
+    mapSection.current?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   useLogUserActivity(listing?.id)
 
@@ -197,12 +199,12 @@ function ListingDetails({ id, onClose }: Props) {
                   </Grid>
                   <Grid item xs={12} lg={9}>
                     <Button
-                      href="#listing-map"
                       color="primary"
                       fullWidth
                       size="large"
                       variant="contained"
                       className={classes.showOnMapButton}
+                      onClick={scrollToMap}
                     >
                       Show on Map
                     </Button>
@@ -260,7 +262,9 @@ function ListingDetails({ id, onClose }: Props) {
         </Box>
       )}
       <Box px={3} mb={5}>
-        <Map location={listing.property.address.location} />
+        <RootRef rootRef={mapSection}>
+          <Map location={listing.property.address.location} />
+        </RootRef>
       </Box>
       <Box p={3}>
         <MLSNote mls={listing.mls} mlsName={listing.mls_name} />
