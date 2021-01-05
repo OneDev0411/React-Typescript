@@ -15,11 +15,16 @@ import { EditorDialog } from 'components/ImageEditor'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { ImageSelectDialogProps, TabValue } from './types'
-import GifLibrary from './Tabs/GifLibrary'
-import PhotoLibrary from './Tabs/PhotoLibrary'
 import Upload from './Tabs/Upload'
+import TeamLibrary from './Tabs/TeamLibrary'
+import PhotoLibrary from './Tabs/PhotoLibrary'
+import GifLibrary from './Tabs/GifLibrary'
 
-const SEARCHABLE_IMAGE_TABS: TabValue[] = ['photo-library', 'gif-library']
+const SEARCHABLE_IMAGE_TABS: TabValue[] = [
+  'team-library',
+  'photo-library',
+  'gif-library'
+]
 
 function isSearchableTab(value: TabValue): boolean {
   return SEARCHABLE_IMAGE_TABS.includes(value)
@@ -111,6 +116,7 @@ export default function ImageSelectDialog({
               }
             >
               {onUpload && <Tab value="upload-photo" label="Upload" />}
+              <Tab value="team-library" label="Team Library" />
               <Tab value="photo-library" label="Photo Library" />
               <Tab value="gif-library" label="GIF Library" />
             </Tabs>
@@ -129,6 +135,13 @@ export default function ImageSelectDialog({
       </DialogTitle>
       <DialogContent>
         {selectedTab === 'upload-photo' && <Upload onSelectFile={handleEdit} />}
+        {selectedTab === 'team-library' && (
+          <TeamLibrary
+            onEdit={handleEdit}
+            onSelect={onSelect}
+            query={debouncedSearchQuery}
+          />
+        )}
         {selectedTab === 'photo-library' && (
           <PhotoLibrary
             onEdit={handleEdit}

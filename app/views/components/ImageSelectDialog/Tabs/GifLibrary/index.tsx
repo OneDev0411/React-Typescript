@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import LoadingContainer from 'components/LoadingContainer'
 import Masonry from 'components/Masonry'
@@ -9,10 +9,7 @@ import { SearchableImageTabProps } from '../../types'
 import { useGifLibrary } from './hooks'
 import { getGifUrl } from './helpers'
 
-export default function GifLibrary({
-  query,
-  onSelect
-}: SearchableImageTabProps) {
+function GifLibrary({ query, onSelect }: SearchableImageTabProps) {
   const { isLoading, results } = useGifLibrary(query)
 
   if (isLoading) {
@@ -40,3 +37,5 @@ export default function GifLibrary({
     </Masonry>
   )
 }
+
+export default memo(GifLibrary)
