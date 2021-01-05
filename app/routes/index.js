@@ -164,14 +164,13 @@ const AsyncOnboardingProfile = withSignedInUser(
 //  Overview Page
 /* ==================================== */
 
-const AsyncDashboardOverview = withAcl(
+const AsyncDashboardOverview = withSignedInUser(
   Load({
     loader: () =>
       import(
         '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
       )
-  }),
-  user => user.email === 'shayan@rechat.com'
+  })
 )
 
 /* ==================================== */
