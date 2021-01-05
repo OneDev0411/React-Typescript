@@ -35,6 +35,7 @@ const AvatarComponent = (props: Props) => {
     placeHolderImage,
     statusColor,
     showStatus = false,
+    disableLazyLoad = false,
     isOnline = false
   } = props
   const rawImageSrc = useMemo(() => {
@@ -58,10 +59,11 @@ const AvatarComponent = (props: Props) => {
   const imageSrc =
     !rawImageSrc && placeHolderImage ? placeHolderImage : rawImageSrc
 
-  const avatar = (
-    <LazyLoad>
-      <BaseAvatar {...props} src={imageSrc} />
-    </LazyLoad>
+  const baseAvatar = <BaseAvatar {...props} src={imageSrc} />
+  const avatar = !disableLazyLoad ? (
+    <LazyLoad>{baseAvatar}</LazyLoad>
+  ) : (
+    baseAvatar
   )
 
   if (showStatus) {

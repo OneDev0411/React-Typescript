@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
+import { Grid } from '@material-ui/core'
 import cn from 'classnames'
 import _ from 'underscore'
 
@@ -50,7 +50,6 @@ export default ({
       <div
         className={cn('suggestions', { dropdown: dropDownBox === true })}
         style={getStyles()}
-        tabIndex="1"
         onBlur={() => onBlurDropDownBox()}
       >
         {searching && (
@@ -62,12 +61,14 @@ export default ({
         )}
 
         {_.map(viewList, recp => (
-          <Row
+          <Grid
+            container
             key={`RECP_SUG_${recp.id}`}
             className="item"
             onClick={() => onAdd(recp)}
           >
-            <Col
+            <Grid
+              item
               sm={1}
               xs={1}
               md={1}
@@ -81,13 +82,13 @@ export default ({
                 size={36}
                 color="#000000"
               />
-            </Col>
+            </Grid>
 
-            <Col sm={8} xs={8} md={8} className="vcenter">
+            <Grid item sm={8} xs={8} md={8} className="vcenter">
               <strong className="suggestions__name">{recp.display_name}</strong>
               <div style={{ color: '#9b9a9b' }}>{getSubTitle(recp)}</div>
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         ))}
       </div>
     </div>

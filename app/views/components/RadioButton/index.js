@@ -4,9 +4,10 @@ import styled, { css } from 'styled-components'
 import { mdiRadioboxBlank, mdiRadioboxMarked } from '@mdi/js'
 import { useTheme } from '@material-ui/core/styles'
 
+import { Tooltip } from '@material-ui/core'
+
 import { grey } from 'views/utils/colors'
 
-import ToolTip from '../tooltip'
 import { SvgIcon } from '../SvgIcons/SvgIcon'
 
 const LabelContainer = styled.div`
@@ -27,7 +28,7 @@ const Caption = styled.div`
 export default ({
   selected,
   title,
-  tooltip = null,
+  tooltip = '',
   disabled = false,
   onClick = () => {},
   style = {},
@@ -37,7 +38,7 @@ export default ({
 
   return (
     <Flex justifyStart style={style} onClick={onClick}>
-      <ToolTip caption={tooltip}>
+      <Tooltip title={tooltip}>
         <Flex alignStart style={{ cursor: 'pointer' }}>
           {selected ? (
             <SvgIcon
@@ -53,7 +54,7 @@ export default ({
             {caption && <Caption>{caption}</Caption>}
           </LabelContainer>
         </Flex>
-      </ToolTip>
+      </Tooltip>
     </Flex>
   )
 }

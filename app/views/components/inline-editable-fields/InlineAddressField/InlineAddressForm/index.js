@@ -4,7 +4,8 @@ import Flex from 'styled-flex-component'
 import addressParser from 'parse-address'
 import { mdiTrashCanOutline } from '@mdi/js'
 
-import Tooltip from 'components/tooltip'
+import { Tooltip } from '@material-ui/core'
+
 import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -166,7 +167,7 @@ export class InlineAddressForm extends React.Component {
               <Footer>
                 <Flex alignCenter>
                   {this.props.showDeleteButton && (
-                    <Tooltip placement="top" caption="Delete">
+                    <Tooltip placement="top" title="Delete">
                       <IconButton
                         isFit
                         inverse

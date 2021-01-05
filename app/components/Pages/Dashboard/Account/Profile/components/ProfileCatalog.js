@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Button, IconButton, Box } from '@material-ui/core'
+import { Button, IconButton, Box, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 
 import editUser from 'actions/user/edit'
@@ -13,7 +13,6 @@ import { confirmation } from 'actions/confirmation'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ImageUploader } from 'components/ImageUploader'
-import Tooltip from 'components/tooltip'
 import { Avatar } from 'components/Avatar'
 
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
@@ -73,7 +72,7 @@ class ProfileCatalog extends Component {
           <ProfileImageActions>
             {this.props.user.profile_image_url && (
               <Box marginRight={2}>
-                <Tooltip caption="Delete Profile Picture">
+                <Tooltip title="Delete Profile Picture">
                   <IconButton
                     disabled={this.props.isUploading}
                     onClick={this.onDelete}

@@ -2,9 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
-import { Box, Button, IconButton } from '@material-ui/core'
+import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
 
 import { mdiTrashCanOutline } from '@mdi/js'
+
+import {
+  mdiNoteTextOutline,
+  mdiAccountPlusOutline,
+  mdiClockTimeFourOutline
+} from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { confirmation } from 'actions/confirmation'
@@ -31,6 +37,8 @@ import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import Reminder from '../../EventDrawer/components/Reminder/Reminder'
+import { EventField } from '../../EventDrawer/components/EventField'
+import { AssosiationContainer } from '../../EventDrawer/styled'
 import {
   AssigneesField,
   DateTimeField,
@@ -38,9 +46,7 @@ import {
 } from '../../final-form-fields'
 import AddAssociation from '../../AddAssociation'
 import { AssociationsList, EndTimeField } from '../../final-form-fields'
-import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
-import { Section } from '../../tour/TourDrawer/components/Section'
 
 import { validate } from './helpers/validate'
 import { preSaveFormat } from './helpers/pre-save-format'
@@ -91,7 +97,8 @@ class OpenHouseDrawerInternal extends React.Component {
       template: '',
       rawTemplate: '',
       openHouse: props.openHouse,
-      isLoadingTemplate: false
+      isLoadingTemplate: false,
+      shouldShowDescription: false
     }
 
     this.isNew =
@@ -405,9 +412,15 @@ class OpenHouseDrawerInternal extends React.Component {
     return saveButtonText
   }
 
+  showDescriptionField = () => {
+    this.setState(() => ({
+      shouldShowDescription: true
+    }))
+  }
+
   render() {
     const { user } = this.props
-    const { isDisabled, error } = this.state
+    const { isDisabled, error, shouldShowDescription } = this.state
 
     return (
       <Drawer
@@ -454,13 +467,32 @@ class OpenHouseDrawerInternal extends React.Component {
                         id="open-house-drawer-form"
                         onSubmit={formProps.handleSubmit}
                       >
-                        <Title
-                          fullWidth
-                          placeholder="Untitled Open House"
-                          style={{ marginBottom: '1.5rem' }}
-                        />
-                        <Description placeholder="Enter any general notes for your clients" />
-                        <Box mb={4}>
+                        <EventField
+                          title="title"
+                          iconProps={{
+                            path: mdiNoteTextOutline
+                          }}
+                        >
+                          <Title fullWidth placeholder="Untitled Open House" />
+                          <Box mt={1}>
+                            {shouldShowDescription || values?.description ? (
+                              <Description placeholder="Enter any general notes for your clients" />
+                            ) : (
+                              <Button
+                                color="secondary"
+                                onClick={this.showDescriptionField}
+                              >
+                                Add Description
+                              </Button>
+                            )}
+                          </Box>
+                        </EventField>
+                        <EventField
+                          title="date"
+                          iconProps={{
+                            path: mdiClockTimeFourOutline
+                          }}
+                        >
                           <FieldContainer
                             alignCenter
                             justifyBetween
@@ -483,33 +515,38 @@ class OpenHouseDrawerInternal extends React.Component {
                             name="endDate"
                             style={{ fontSize: '1rem', marginBottom: '0.5em' }}
                           />
+                        </EventField>
+                        <Reminder dueDate={values.dueDate} />
 
-                          <Reminder dueDate={values.dueDate} />
-                        </Box>
-
-                        <Section label="Event Location">
+                        <Box ml={4} mb={1}>
                           <Location
                             location={values.location}
                             handleDelete={this.handleDeleteAssociation}
                           />
-                        </Section>
+                        </Box>
 
-                        {!isSoloActiveTeam(user) && (
-                          <Section label="Agents">
-                            <AssigneesField
-                              buttonText="Assignee"
-                              name="assignees"
-                              owner={user}
+                        <EventField
+                          title="contact-associations"
+                          iconProps={{
+                            path: mdiAccountPlusOutline
+                          }}
+                        >
+                          <AssosiationContainer>
+                            <AssociationsList
+                              filterType="contact"
+                              name="registrants"
+                              showDefaultAssociation
+                              associations={values.registrants}
                             />
-                          </Section>
-                        )}
-
-                        <Section label="Registrants">
-                          <AssociationsList
-                            name="registrants"
-                            associations={values.registrants}
-                          />
-                        </Section>
+                            <AddAssociation
+                              showTitle
+                              disabled={isDisabled}
+                              type="contact"
+                              name="registrants"
+                              caption="Attach Contact"
+                            />
+                          </AssosiationContainer>
+                        </EventField>
 
                         <ItemChangelog
                           item={values}
@@ -522,9 +559,10 @@ class OpenHouseDrawerInternal extends React.Component {
                             <>
                               <Tooltip
                                 placement="top"
-                                caption="Delete Registration Page"
+                                title="Delete Registration Page"
                               >
                                 <IconButton
+                                  size="small"
                                   disabled={isDisabled}
                                   onClick={this.onDelete}
                                 >
@@ -532,18 +570,19 @@ class OpenHouseDrawerInternal extends React.Component {
                                 </IconButton>
                               </Tooltip>
                               <Divider
-                                margin="0 1rem"
+                                margin="0 0.5rem"
                                 width="1px"
-                                height="2rem"
+                                height="1rem"
                               />
                             </>
                           )}
-                          <AddAssociation
-                            disabled={isDisabled}
-                            type="contact"
-                            name="registrants"
-                            caption="Attach Contact"
-                          />
+                          {!isSoloActiveTeam(user) && (
+                            <AssigneesField
+                              buttonText="Assignee"
+                              name="assignees"
+                              owner={user}
+                            />
+                          )}
                         </Flex>
                         <Flex alignCenter>
                           <Button
