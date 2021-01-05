@@ -1,4 +1,4 @@
-import React, { ReactNode, memo } from 'react'
+import React, { ReactNode, memo, useMemo } from 'react'
 
 import type { UseAsyncReturnType } from 'hooks/use-async'
 
@@ -10,35 +10,32 @@ interface WebsiteListProviderProps
 }
 
 function WebsiteListProvider({ setData, children }: WebsiteListProviderProps) {
-  const addItem = (instance: IWebsiteTemplateInstance) => {
-    setData(instances => [...instances, instance])
-  }
-
-  const deleteItem = (websiteId: UUID) => {
-    setData(instances =>
-      instances.filter(instance => instance.id !== websiteId)
-    )
-  }
-
-  const updateItem = (
-    websiteId: UUID,
-    update: Partial<Omit<IWebsiteTemplateInstance, 'id'>>
-  ) => {
-    setData(instances =>
-      instances.map(instance =>
-        instance.id === websiteId ? { ...instance, ...update } : instance
-      )
-    )
-  }
+  const contextValue = useMemo(
+    () => ({
+      addItem: (instance: IWebsiteTemplateInstance) => {
+        setData(instances => [...instances, instance])
+      },
+      deleteItem: (websiteId: UUID) => {
+        setData(instances =>
+          instances.filter(instance => instance.id !== websiteId)
+        )
+      },
+      updateItem: (
+        websiteId: UUID,
+        update: Partial<Omit<IWebsiteTemplateInstance, 'id'>>
+      ) => {
+        setData(instances =>
+          instances.map(instance =>
+            instance.id === websiteId ? { ...instance, ...update } : instance
+          )
+        )
+      }
+    }),
+    [setData]
+  )
 
   return (
-    <WebsiteListActionsContext.Provider
-      value={{
-        addItem,
-        deleteItem,
-        updateItem
-      }}
-    >
+    <WebsiteListActionsContext.Provider value={contextValue}>
       {children}
     </WebsiteListActionsContext.Provider>
   )
