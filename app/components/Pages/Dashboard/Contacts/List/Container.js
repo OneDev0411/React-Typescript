@@ -357,6 +357,14 @@ class ContactsList extends React.Component {
       parked = isParkedActive
     } = newFilters || {}
 
+    /*
+      I knew it's not a good idea ((:
+      But We're doing this because of the API mechanism,
+      when user searches for contact we should show all contact
+      in order to doing this, we have to send undefined for parked param
+    */
+    const shouldShowParked = searchInputValue ? undefined : parked
+
     if (resetLoadedRanges) {
       this.setState({ loadedRanges: [] })
     }
@@ -373,7 +381,7 @@ class ContactsList extends React.Component {
         filters,
         start,
         undefined,
-        parked,
+        shouldShowParked,
         searchInputValue,
         order,
         viewAsUsers,
@@ -394,7 +402,7 @@ class ContactsList extends React.Component {
   handleSearch = value => {
     this.setState({ searchInputValue: value, firstLetter: null }, () => {
       this.setQueryParam('letter', '')
-      this.handleFilterChange({ parked: Boolean(value) }, true)
+      this.handleFilterChange({ parked: undefined }, true)
     })
   }
 
