@@ -24,7 +24,7 @@ export default function Menu({ contactId, handleOnDelete }: Props) {
         placement: 'bottom-end'
       }}
       renderDropdownButton={buttonProps => (
-        <IconButton {...buttonProps}>
+        <IconButton {...buttonProps} size="small">
           <SvgIcon path={mdiDotsHorizontal} />
         </IconButton>
       )}
