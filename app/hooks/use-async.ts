@@ -90,18 +90,19 @@ function useAsync<T = unknown, U = unknown>(
     func => {
       safeSetState({ status: 'pending' })
 
-      return func().then(
-        data => {
-          safeSetState({ data, status: 'resolved' })
+      return new Promise<T>((resolve, reject) => {
+        func().then(
+          data => {
+            safeSetState({ data, status: 'resolved' })
+            resolve(data)
+          },
+          error => {
+            safeSetState({ status: 'rejected', error })
 
-          return data
-        },
-        error => {
-          safeSetState({ status: 'rejected', error })
-
-          return error
-        }
-      )
+            reject(error)
+          }
+        )
+      })
     },
     [safeSetState]
   )
