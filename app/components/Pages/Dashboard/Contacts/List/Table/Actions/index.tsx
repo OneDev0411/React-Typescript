@@ -36,6 +36,14 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       '& > *:not(:last-child)': {
         marginRight: theme.spacing(1)
+      },
+      /*
+      since we don't have button with white background in material,
+      instead of applying this style to all btn in the component,
+      I decided to handle it in this way.
+      */
+      '& .MuiButton-root': {
+        background: theme.palette.background.paper
       }
     },
     moreActionContainer: {
@@ -193,6 +201,12 @@ export function TableActions({
         users={filters.users}
         disabled={isFetching}
       />
+      <MergeContacts
+        isEntireMode={isEntireRowsSelected}
+        disabled={isMergeDisable}
+        selectedRows={selectedRowIds}
+        submitCallback={deselectAndReload}
+      />
       <Button
         aria-describedby={moreActionID}
         size="small"
@@ -219,12 +233,6 @@ export function TableActions({
               </ListItemText>
             </ActionWrapper>
           </ListItem>
-          <MergeContacts
-            isEntireMode={isEntireRowsSelected}
-            disabled={isMergeDisable}
-            selectedRows={selectedRowIds}
-            submitCallback={deselectAndReload}
-          />
         </List>
       </Popper>
     </div>
