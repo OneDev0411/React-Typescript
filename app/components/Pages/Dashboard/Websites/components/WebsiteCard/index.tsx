@@ -1,4 +1,5 @@
 import React, { memo, useState } from 'react'
+import classNames from 'classnames'
 
 import { Grid, Box, Typography } from '@material-ui/core'
 
@@ -30,7 +31,11 @@ function WebsiteCard({ id, title, hostnames, template }: WebsiteCardProps) {
   const { deleteItem } = useWebsiteListActions()
 
   const handleDelete = () => {
-    run(async () => deleteWebsite(id)).then(() => deleteItem(id))
+    run(async () => deleteWebsite(id)).then(a => {
+      if (isSuccess) {
+        deleteItem(id)
+      }
+    })
   }
 
   const openEditor = () => setIsEditorOpen(true)
@@ -41,14 +46,14 @@ function WebsiteCard({ id, title, hostnames, template }: WebsiteCardProps) {
     alert('This feature is not implemented yet')
   }
 
-  if (isWorking || isSuccess) {
+  if (isSuccess) {
     return null
   }
 
   return (
     <>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <Box className={classes.root}>
+        <Box className={classNames(classes.root, isWorking && classes.busy)}>
           <WebsiteCardImage
             className={classes.image}
             src="/static/images/websites/art.jpg"

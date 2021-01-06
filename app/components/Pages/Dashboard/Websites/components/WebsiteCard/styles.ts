@@ -28,5 +28,9 @@ export default makeStyles(theme => ({
     opacity: 0,
     transition: theme.transitions.create('opacity')
   },
-  image: { transition: theme.transitions.create('opacity') }
+  image: { transition: theme.transitions.create('opacity') },
+  busy: {
+    opacity: 0.6,
+    pointerEvents: 'none'
+  }
 }))
