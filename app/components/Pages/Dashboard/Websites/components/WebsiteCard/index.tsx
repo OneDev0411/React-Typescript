@@ -12,7 +12,10 @@ import deleteWebsite from 'models/website/delete-website'
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 
 import usePublishWebsite from 'hooks/use-publish-website'
-import { convertToTemplate } from 'utils/marketing-center/helpers'
+import {
+  convertToTemplate,
+  getTemplateImage
+} from 'utils/marketing-center/helpers'
 
 import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 import WebsiteCardImage from '../WebsiteCardImage'
@@ -33,6 +36,8 @@ function WebsiteCard({
 }: WebsiteCardProps) {
   const classes = useStyles()
   const [isEditorOpen, setIsEditorOpen] = useState(false)
+
+  const { thumbnail } = getTemplateImage(template_instance)
 
   const hostname = hostnames[0]
   const link = `http://${hostname}`
@@ -83,11 +88,11 @@ function WebsiteCard({
 
   return (
     <>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Grid item xs={12} sm={6} md={4} xl={3}>
         <Box className={classNames(classes.root, isWorking && classes.busy)}>
           <WebsiteCardImage
             className={classes.image}
-            src="/static/images/websites/art.jpg"
+            src={thumbnail}
             alt={`${title} website`}
           >
             <WebsiteCardActions
@@ -105,7 +110,6 @@ function WebsiteCard({
           </Typography>
         </Box>
       </Grid>
-      {console.log('template_instance', template_instance)}
       {isEditorOpen && (
         <MarketingTemplateEditor
           template={template_instance}
