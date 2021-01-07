@@ -5,11 +5,12 @@ import { TemplateData } from 'utils/marketing-center/render-branded-template'
 
 import Builder from './Builder'
 
-interface IBrandMarketingTemplateWithResult extends IBrandMarketingTemplate {
+export interface IBrandMarketingTemplateWithResult
+  extends IBrandMarketingTemplate {
   result: string
 }
 
-interface Props {
+export interface InstantMarketingProps {
   closeConfirmation?: boolean
   hideTemplatesColumn?: boolean
   templateData?: TemplateData
@@ -31,6 +32,7 @@ interface Props {
     owner: IUser
   ) => void
   onClose: () => void
+  actionButtonsDisabled?: boolean
 }
 
 export default function InstantMarketing({
@@ -48,8 +50,9 @@ export default function InstantMarketing({
   saveButtonText,
   handleSave,
   handleSocialSharing,
-  onClose
-}: Props) {
+  onClose,
+  actionButtonsDisabled = false
+}: InstantMarketingProps) {
   const confirmation = useContext(ConfirmationModalContext)
 
   const handleClose = () => {
@@ -83,6 +86,7 @@ export default function InstantMarketing({
       onSave={handleSave}
       onSocialSharing={handleSocialSharing}
       onPrintableSharing={handleSocialSharing}
+      actionButtonsDisabled={actionButtonsDisabled}
     />
   )
 }

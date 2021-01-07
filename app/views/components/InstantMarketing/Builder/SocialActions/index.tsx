@@ -9,9 +9,14 @@ import { SocialNetworkShare } from '../types'
 interface Props {
   networks: SocialNetworkShare[]
   onClick: (networkName: string) => void
+  disabled?: boolean
 }
 
-export default function SocialActions({ networks, onClick }: Props) {
+export default function SocialActions({
+  networks,
+  onClick,
+  disabled = false
+}: Props) {
   const theme = useTheme<Theme>()
 
   return (
@@ -23,6 +28,7 @@ export default function SocialActions({ networks, onClick }: Props) {
           color="primary"
           style={{ marginLeft: '0.5rem' }}
           onClick={() => onClick(network.name)}
+          disabled={disabled}
         >
           <SvgIcon
             path={network.icon}

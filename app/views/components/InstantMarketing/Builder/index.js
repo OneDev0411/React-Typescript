@@ -1002,6 +1002,7 @@ class Builder extends React.Component {
                   mjml={this.selectedTemplate.mjml}
                   user={this.props.user}
                   getTemplateMarkup={this.getTemplateMarkup.bind(this)}
+                  disabled={this.props.actionButtonsDisabled}
                 />
               )}
 
@@ -1011,6 +1012,7 @@ class Builder extends React.Component {
                   variant="outlined"
                   color="secondary"
                   onClick={this.props.onShowEditListings}
+                  disabled={this.props.actionButtonsDisabled}
                 >
                   Edit Listings ({this.props.templateData.listings.length})
                 </Button>
@@ -1020,6 +1022,7 @@ class Builder extends React.Component {
                 <SocialActions
                   networks={this.socialNetworks}
                   onClick={this.handleSocialSharing}
+                  disabled={this.props.actionButtonsDisabled}
                 />
               )}
 
@@ -1031,6 +1034,7 @@ class Builder extends React.Component {
                   variant="contained"
                   color="primary"
                   onClick={this.handleSocialSharing}
+                  disabled={this.props.actionButtonsDisabled}
                 >
                   Continue
                 </Button>
@@ -1044,6 +1048,7 @@ class Builder extends React.Component {
                   variant="contained"
                   color="primary"
                   onClick={this.handleSave}
+                  disabled={this.props.actionButtonsDisabled}
                 >
                   Continue
                 </Button>
@@ -1057,6 +1062,7 @@ class Builder extends React.Component {
                   variant="contained"
                   color="primary"
                   onClick={this.handleSave}
+                  disabled={this.props.actionButtonsDisabled}
                 >
                   {this.props.saveButtonText || 'Save'}
                 </Button>
@@ -1065,6 +1071,7 @@ class Builder extends React.Component {
               <IconButton
                 onClick={this.props.onClose}
                 style={{ marginLeft: '0.5rem' }}
+                disabled={this.props.actionButtonsDisabled}
               >
                 <SvgIcon path={mdiClose} />
               </IconButton>

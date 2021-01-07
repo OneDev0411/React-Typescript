@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { addNotification, Notification } from 'components/notification'
+
 import {
   Popover,
   Button,
@@ -11,6 +11,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import uuidv4 from 'uuid/v4'
 import { connect } from 'react-redux'
+
+import { addNotification, Notification } from 'components/notification'
 
 import UserTeams from 'components/UserTeams'
 
@@ -44,6 +46,7 @@ interface Props {
   user: IUser
   mjml: boolean
   getTemplateMarkup: () => string
+  disabled?: boolean
 }
 
 interface ConnectedProps {
@@ -55,7 +58,8 @@ export function AddToMarketingCenter({
   user,
   mjml,
   getTemplateMarkup,
-  notify
+  notify,
+  disabled = false
 }: Props & ConnectedProps) {
   const [selectedTemplateType, setSelectedTemplateType] = useState<
     Optional<IMarketingTemplateType>
@@ -134,7 +138,11 @@ export function AddToMarketingCenter({
         />
       )}
       <div className={classes.container}>
-        <Button variant="outlined" onClick={handleClickButton}>
+        <Button
+          variant="outlined"
+          onClick={handleClickButton}
+          disabled={disabled}
+        >
           Add To Marketing Center
         </Button>
         <Popover
