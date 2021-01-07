@@ -64,7 +64,11 @@ function usePublishWebsite(
     )
   }
 
-  return { publishWebsite, isPublishing }
+  return {
+    publishWebsite,
+    isPublishing,
+    publishButtonLabel: isPublishing ? 'Publishing...' : 'Publish'
+  }
 }
 
 export default usePublishWebsite

@@ -40,7 +40,11 @@ function PublishWebsite({
     !isEdit && templateType === 'Listing'
   )
 
-  const { publishWebsite, isPublishing } = usePublishWebsite(result => {
+  const {
+    publishWebsite,
+    isPublishing,
+    publishButtonLabel
+  } = usePublishWebsite(result => {
     setWebsiteData(result.website)
 
     if (!websiteData) {
@@ -97,7 +101,7 @@ function PublishWebsite({
           handleSave={handleSaveBuilder}
           bareMode
           hideTemplatesColumn
-          saveButtonText={isPublishing ? 'Publishing...' : 'Publish'}
+          saveButtonText={publishButtonLabel}
           actionButtonsDisabled={isPublishing}
         />
       )}
