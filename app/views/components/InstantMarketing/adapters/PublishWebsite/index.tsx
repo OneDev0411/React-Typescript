@@ -3,7 +3,13 @@ import React, { useState } from 'react'
 import { Button } from '@material-ui/core'
 
 import SearchListingDrawer from 'components/SearchListingDrawer'
-import InstantMarketing from 'components/InstantMarketing'
+import InstantMarketing, {
+  IBrandMarketingTemplateWithResult
+} from 'components/InstantMarketing'
+
+import DomainManagementDrawer from 'components/DomainManagementDrawer'
+
+import usePublishWebsite from 'hooks/use-publish-website'
 
 import useLoadListingsData from './use-load-listings-data'
 
@@ -22,7 +28,9 @@ function PublishWebsite({
   onFinish
 }: PublishWebsiteProps) {
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
-  const [selectedListing, setSelectedListing] = useState([])
+  const [isDomainManagementOpen, setIsDomainManagementOpen] = useState(false)
+  const [selectedListing, setSelectedListing] = useState<IListing[]>([])
+  const [websiteData, setWebsiteData] = useState<IWebsite | null>(null)
 
   const isAgentTriggered = isTriggered && templateType === 'Agent'
   const isListingTriggered =
@@ -32,13 +40,43 @@ function PublishWebsite({
     !isEdit && templateType === 'Listing'
   )
 
+  const { publishWebsite, isPublishing } = usePublishWebsite(result => {
+    setWebsiteData(result.website)
+
+    if (!websiteData) {
+      setIsDomainManagementOpen(true)
+    }
+  })
+
   const handleCloseBuilder = () => {
     setIsBuilderOpen(false)
     onFinish()
   }
 
-  const handleSaveBuilder = () => {
-    alert('this feature is not implemented yet')
+  const handleSaveBuilder = async (
+    template: IBrandMarketingTemplateWithResult
+  ) => {
+    publishWebsite(
+      websiteData?.id,
+      template,
+      {
+        ...(selectedListing?.length
+          ? { listings: selectedListing.map(listing => listing.id) }
+          : {}),
+        html: template.result
+      },
+      websiteData
+        ? {
+            title: websiteData.title,
+            attributes: websiteData.attributes,
+            template: websiteData.template
+          }
+        : {
+            title: 'New Website Title',
+            attributes: {},
+            template: 'light'
+          }
+    )
   }
 
   const handleListingDrawerClose = () => onFinish()
@@ -48,16 +86,19 @@ function PublishWebsite({
     setIsBuilderOpen(true)
   }
 
-  console.log('selectedListing', selectedListing)
+  const handleCloseDomainManagement = () => setIsDomainManagementOpen(false)
 
   return (
     <>
       {(isAgentTriggered || isBuilderOpen) && (
         <InstantMarketing
+          templateData={{ listing: selectedListing[0] }}
           onClose={handleCloseBuilder}
           handleSave={handleSaveBuilder}
           bareMode
           hideTemplatesColumn
+          saveButtonText={isPublishing ? 'Publishing...' : 'Publish'}
+          actionButtonsDisabled={isPublishing}
         />
       )}
       <SearchListingDrawer
@@ -84,6 +125,15 @@ function PublishWebsite({
           </Button>
         )}
       />
+      {websiteData && (
+        <DomainManagementDrawer
+          open={isDomainManagementOpen}
+          onClose={handleCloseDomainManagement}
+          websiteId={websiteData.id}
+          websiteTitle={websiteData.title}
+          websiteHostnames={websiteData.hostnames}
+        />
+      )}
     </>
   )
 }
