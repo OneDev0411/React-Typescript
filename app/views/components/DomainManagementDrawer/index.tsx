@@ -4,7 +4,7 @@ import { Box } from '@material-ui/core'
 
 import Drawer, { OverlayDrawerProps } from 'components/OverlayDrawer'
 
-interface DomainManagementDrawerProps extends OverlayDrawerProps {
+export interface DomainManagementDrawerProps extends OverlayDrawerProps {
   websiteId: IWebsite['id']
   websiteTitle: IWebsite['title']
   websiteHostnames: IWebsite['hostnames']
@@ -13,6 +13,7 @@ interface DomainManagementDrawerProps extends OverlayDrawerProps {
 function DomainManagementDrawer({
   open,
   onClose,
+  websiteTitle,
   websiteHostnames
 }: DomainManagementDrawerProps) {
   return (
@@ -20,6 +21,8 @@ function DomainManagementDrawer({
       <Drawer.Header title="Domain Management" />
       <Drawer.Body>
         <Box marginTop={3} marginBottom={3}>
+          Website: {websiteTitle}
+          <br />
           You current domains:
           <ul>
             {websiteHostnames.map(hostname => (

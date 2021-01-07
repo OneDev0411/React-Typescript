@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import cn from 'classnames'
 
 import { Button } from '@material-ui/core'
@@ -7,21 +7,22 @@ import { useIconStyles } from 'views/../styles/use-icon-styles'
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 import SiteLinkIcon from 'components/SvgIcons/SiteLink/SiteLinkIcon'
 
-import { WebsiteCardMenu } from '../WebsiteCardMenu'
 import useStyles from './styles'
 
 interface WebsiteCardActionsProps {
   className?: string
   link: string
-  onEditClick: () => void
-  onDeleteClick: () => void
+  onEdit: () => void
+  onDelete: () => void
+  children: ReactNode
 }
 
 function WebsiteCardActions({
   className,
   link,
-  onEditClick,
-  onDeleteClick
+  onEdit,
+  onDelete,
+  children
 }: WebsiteCardActionsProps) {
   const iconClasses = useIconStyles()
   const classes = useStyles()
@@ -49,7 +50,7 @@ function WebsiteCardActions({
           variant="contained"
           size="small"
           className={classes.transparentButton}
-          onClick={onEditClick}
+          onClick={onEdit}
           type="button"
         >
           <EditIcon
@@ -60,7 +61,7 @@ function WebsiteCardActions({
         </Button>
       </div>
 
-      <WebsiteCardMenu onDelete={onDeleteClick} onEdit={onEditClick} />
+      {children}
     </div>
   )
 }

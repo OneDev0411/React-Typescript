@@ -1,9 +1,10 @@
 import React, { memo, useState } from 'react'
+
 import classNames from 'classnames'
 
-import { Grid, Box, Typography } from '@material-ui/core'
-
 import { Link } from 'react-router'
+
+import { Grid, Box, Typography } from '@material-ui/core'
 
 import useAsync from 'hooks/use-async'
 
@@ -23,6 +24,7 @@ import WebsiteCardTitle from '../WebsiteCardTitle'
 import WebsiteCardActions from '../WebsiteCardActions'
 
 import useStyles from './styles'
+import { WebsiteCardMenu } from '../WebsiteCardMenu'
 
 type WebsiteCardProps = IWebsite
 
@@ -98,9 +100,17 @@ function WebsiteCard({
             <WebsiteCardActions
               className={classes.actions}
               link={link}
-              onEditClick={openEditor}
-              onDeleteClick={handleDelete}
-            />
+              onEdit={openEditor}
+              onDelete={handleDelete}
+            >
+              <WebsiteCardMenu
+                onEdit={openEditor}
+                onDelete={handleDelete}
+                websiteId={id}
+                websiteTitle={title}
+                websiteHostnames={hostnames}
+              />
+            </WebsiteCardActions>
           </WebsiteCardImage>
           <WebsiteCardTitle websiteId={id} title={title} />
           <Typography variant="subtitle2" noWrap className={classes.footer}>
