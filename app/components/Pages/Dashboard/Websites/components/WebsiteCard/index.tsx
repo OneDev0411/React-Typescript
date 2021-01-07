@@ -11,6 +11,9 @@ import deleteWebsite from 'models/website/delete-website'
 
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 
+import usePublishWebsite from 'hooks/use-publish-website'
+import { convertToTemplate } from 'utils/marketing-center/helpers'
+
 import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 import WebsiteCardImage from '../WebsiteCardImage'
 import WebsiteCardTitle from '../WebsiteCardTitle'
@@ -24,7 +27,9 @@ function WebsiteCard({
   id,
   title,
   hostnames,
-  template_instance
+  template_instance,
+  attributes,
+  template
 }: WebsiteCardProps) {
   const classes = useStyles()
   const [isEditorOpen, setIsEditorOpen] = useState(false)
@@ -33,7 +38,7 @@ function WebsiteCard({
   const link = `http://${hostname}`
 
   const { isLoading: isWorking, run, isSuccess } = useAsync()
-  const { deleteItem } = useWebsiteListActions()
+  const { deleteItem, updateItem } = useWebsiteListActions()
 
   const handleDelete = () => {
     run(async () => deleteWebsite(id)).then(() => deleteItem(id))
@@ -43,8 +48,33 @@ function WebsiteCard({
 
   const closeEditor = () => setIsEditorOpen(false)
 
+  const {
+    publishWebsite,
+    isPublishing,
+    publishButtonLabel
+  } = usePublishWebsite(result =>
+    updateItem(id, {
+      template_instance: {
+        ...result.instance,
+        template: template_instance.template
+      }
+    })
+  )
+
   const handleSave = html => {
-    console.log('This feature is not implemented yet', html)
+    const newInstance = {
+      ...template_instance,
+      listings: undefined,
+      deals: undefined,
+      contacts: undefined,
+      html
+    }
+
+    publishWebsite(id, convertToTemplate(template_instance), newInstance, {
+      title,
+      attributes,
+      template
+    })
   }
 
   if (isSuccess) {
@@ -81,6 +111,8 @@ function WebsiteCard({
           template={template_instance}
           onSave={handleSave}
           onClose={closeEditor}
+          saveButtonText={publishButtonLabel}
+          actionButtonsDisabled={isPublishing}
         />
       )}
     </>

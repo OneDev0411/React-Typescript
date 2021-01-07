@@ -3,9 +3,11 @@ import React from 'react'
 import { TemplateData } from 'utils/marketing-center/render-branded-template'
 import { convertToTemplate } from 'utils/marketing-center/helpers'
 
-import InstantMarketing from 'components/InstantMarketing'
+import InstantMarketing, {
+  InstantMarketingProps
+} from 'components/InstantMarketing'
 
-interface Props {
+interface Props extends Pick<InstantMarketingProps, 'actionButtonsDisabled'> {
   /**
    * The marketing template or template instance to render inside the template editor
    */
@@ -48,7 +50,8 @@ export default function MarketingTemplateEditor({
   templateData = {},
   saveButtonText = 'Save',
   onSave,
-  onClose
+  onClose,
+  actionButtonsDisabled
 }: Props) {
   // We need to convert template instance to a brand marketing template
   // Our MC editor is dumb and it only works with brand marketing templates
@@ -72,6 +75,7 @@ export default function MarketingTemplateEditor({
       containerStyle={{}}
       handleSave={template => onSave(template.result)}
       onClose={onClose}
+      actionButtonsDisabled={actionButtonsDisabled}
     />
   )
 }

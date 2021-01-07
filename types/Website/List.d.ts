@@ -7,7 +7,7 @@ declare interface IWebsite extends IModel<'website'> {
   user: IUser | UUID
   brand: Nullable<IBrand>
   template: string
-  template_instance: IWebsiteTemplate
+  template_instance: IMarketingTemplateInstance
   attributes: Record<string, string>
   hostnames: string[]
 }
