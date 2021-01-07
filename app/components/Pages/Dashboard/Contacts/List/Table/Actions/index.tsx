@@ -1,5 +1,12 @@
 import React from 'react'
-import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  Typography,
+  createStyles,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
@@ -22,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       '& > *:not(:last-child)': {
-        marginRight: theme.spacing(1)
+        marginRight: theme.spacing(0.75)
       },
       /*
       since we don't have button with white background in material,
@@ -37,6 +44,9 @@ const useStyles = makeStyles((theme: Theme) =>
           borderColor: theme.palette.secondary.main,
           color: theme.palette.secondary.contrastText
         }
+      },
+      '& $summery': {
+        marginRight: theme.spacing(2)
       }
     },
     moreActionContainer: {
@@ -44,6 +54,13 @@ const useStyles = makeStyles((theme: Theme) =>
       zIndex: 1100,
       borderRadius: theme.shape.borderRadius,
       boxShadow: `0 0 5px 0 ${theme.palette.text.hint}`
+    },
+    summery: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    selectedCount: {
+      marginRight: theme.spacing(0.5)
     }
   })
 )
@@ -89,7 +106,28 @@ export function TableActions({
   const isMergeDisable = !(!isAllRowsSelected
     ? isAllRowsSelected || isTwoSelected
     : isAllRowsSelected && isTwoSelected)
+  const getSummeryInfo = () => {
+    let selectedCount
 
+    if (isEntireRowsSelected) {
+      selectedCount = totalRowsCount - excludedRows.length
+    } else if (selectedRowIds.length > 0) {
+      selectedCount = selectedRowIds.length
+    }
+
+    if (selectedCount) {
+      return (
+        <Box className={classes.summery}>
+          <Typography variant="subtitle2" className={classes.selectedCount}>
+            {selectedCount}
+          </Typography>
+          <Typography variant="body2">Contacts selected</Typography>
+        </Box>
+      )
+    }
+
+    return null
+  }
   const deselectRows = () => dispatch(resetRows())
   const deselectAndReload = () => {
     deselectRows()
@@ -98,6 +136,7 @@ export function TableActions({
 
   return (
     <div className={classes.container}>
+      {getSummeryInfo()}
       {activeSegmentId === PARKED_CONTACTS_LIST_ID && (
         <ActionWrapper
           atLeast="one"
