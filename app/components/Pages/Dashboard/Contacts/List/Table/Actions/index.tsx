@@ -1,23 +1,10 @@
-import React, { useState } from 'react'
-import {
-  Button,
-  Popper,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-  createStyles,
-  makeStyles,
-  Theme
-} from '@material-ui/core'
-
-import { mdiDotsHorizontal } from '@mdi/js'
+import React from 'react'
+import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Email from '../../Actions/Email'
 import MergeContacts from '../../Actions/MergeContacts'
@@ -39,11 +26,17 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       /*
       since we don't have button with white background in material,
-      instead of applying this style to all btn in the component,
+      instead of applying this style to all btn in this component,
       I decided to handle it in this way.
       */
       '& .MuiButton-root': {
-        background: theme.palette.background.paper
+        background: theme.palette.background.paper,
+        borderColor: theme.palette.grey[300],
+        '&:not(:disabled):first-of-type': {
+          background: theme.palette.secondary.main,
+          borderColor: theme.palette.secondary.main,
+          color: theme.palette.secondary.contrastText
+        }
       }
     },
     moreActionContainer: {
@@ -76,11 +69,7 @@ export function TableActions({
 }: Props) {
   const [state, dispatch] = useGridContext()
   const classes = useStyles()
-  const [moreActionEl, setMoreActionEl] = useState<null | HTMLElement>(null)
 
-  const toggleMoreAction = (event: React.MouseEvent<HTMLElement>) => {
-    setMoreActionEl(moreActionEl ? null : event.currentTarget)
-  }
   const {
     selection: {
       selectedRowIds,
@@ -89,8 +78,6 @@ export function TableActions({
       isEntireRowsSelected
     }
   } = state
-  const isMoreActionOpen = Boolean(moreActionEl)
-  const moreActionID = isMoreActionOpen ? 'more-action-popper' : undefined
 
   const isAllDisable = !(
     isEntireRowsSelected ||
@@ -126,6 +113,34 @@ export function TableActions({
         </ActionWrapper>
       )}
       <ActionWrapper
+        bulkMode={isEntireRowsSelected}
+        atLeast="one"
+        action="tagging"
+        disabled={isAllDisable}
+      >
+        <TagContacts
+          disabled={isAllDisable}
+          entireMode={isEntireRowsSelected}
+          totalRowsCount={totalRowsCount}
+          excludedRows={excludedRows}
+          selectedRows={selectedRowIds}
+          filters={filters.attributeFilters}
+          searchText={filters.query}
+          conditionOperator={filters.filter_type}
+          users={filters.users}
+          resetSelectedRows={deselectRows}
+          handleChangeContactsAttributes={handleChangeContactsAttributes}
+        />
+      </ActionWrapper>
+      <AddToFlowAction
+        entireMode={isEntireRowsSelected}
+        excludedRows={excludedRows}
+        selectedRows={selectedRowIds}
+        filters={filters}
+        resetSelectedRows={deselectRows}
+        reloadContacts={reloadContacts}
+      />
+      <ActionWrapper
         atLeast="one"
         bulkMode={isEntireRowsSelected}
         action="sending an email"
@@ -149,27 +164,6 @@ export function TableActions({
       </ActionWrapper>
 
       <ActionWrapper
-        bulkMode={isEntireRowsSelected}
-        atLeast="one"
-        action="tagging"
-        disabled={isAllDisable}
-      >
-        <TagContacts
-          disabled={isAllDisable}
-          entireMode={isEntireRowsSelected}
-          totalRowsCount={totalRowsCount}
-          excludedRows={excludedRows}
-          selectedRows={selectedRowIds}
-          filters={filters.attributeFilters}
-          searchText={filters.query}
-          conditionOperator={filters.filter_type}
-          users={filters.users}
-          resetSelectedRows={deselectRows}
-          handleChangeContactsAttributes={handleChangeContactsAttributes}
-        />
-      </ActionWrapper>
-
-      <ActionWrapper
         atLeast="one"
         bulkMode={isEntireRowsSelected}
         action="creating an event"
@@ -182,14 +176,6 @@ export function TableActions({
         />
       </ActionWrapper>
 
-      <AddToFlowAction
-        entireMode={isEntireRowsSelected}
-        excludedRows={excludedRows}
-        selectedRows={selectedRowIds}
-        filters={filters}
-        resetSelectedRows={deselectRows}
-        reloadContacts={reloadContacts}
-      />
       <ExportContacts
         excludedRows={excludedRows}
         exportIds={selectedRowIds}
@@ -207,34 +193,21 @@ export function TableActions({
         selectedRows={selectedRowIds}
         submitCallback={deselectAndReload}
       />
-      <Button
-        aria-describedby={moreActionID}
-        size="small"
-        onClick={toggleMoreAction}
+      <ActionWrapper
+        bulkMode={isEntireRowsSelected}
+        atLeast="one"
+        action="delete"
+        disabled={isAllDisable}
       >
-        <SvgIcon path={mdiDotsHorizontal} />
-      </Button>
-      <Popper
-        id={moreActionID}
-        open={isMoreActionOpen}
-        anchorEl={moreActionEl}
-        className={classes.moreActionContainer}
-      >
-        <List>
-          <ListItem button disabled={isAllDisable} onClick={onRequestDelete}>
-            <ActionWrapper
-              bulkMode={isEntireRowsSelected}
-              atLeast="one"
-              action="delete"
-              disabled={isAllDisable}
-            >
-              <ListItemText>
-                <Typography color="error">Delete</Typography>
-              </ListItemText>
-            </ActionWrapper>
-          </ListItem>
-        </List>
-      </Popper>
+        <Button
+          variant="outlined"
+          size="small"
+          disabled={isAllDisable}
+          onClick={onRequestDelete}
+        >
+          Delete
+        </Button>
+      </ActionWrapper>
     </div>
   )
 }
