@@ -2,11 +2,11 @@ import { createContext } from 'react'
 
 const WebsiteListActionsContext = createContext<
   | {
-      addItem: (instance: IWebsiteTemplateInstance) => void
+      addItem: (instance: IWebsite) => void
       deleteItem: (websiteId: UUID) => void
       updateItem: (
         websiteId: UUID,
-        update: Partial<Omit<IWebsiteTemplateInstance, 'id'>>
+        update: Partial<Omit<IWebsite, 'id'>>
       ) => void
     }
   | undefined

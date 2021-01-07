@@ -18,9 +18,14 @@ import WebsiteCardActions from '../WebsiteCardActions'
 
 import useStyles from './styles'
 
-type WebsiteCardProps = IWebsiteTemplateInstance
+type WebsiteCardProps = IWebsite
 
-function WebsiteCard({ id, title, hostnames, template }: WebsiteCardProps) {
+function WebsiteCard({
+  id,
+  title,
+  hostnames,
+  template_instance
+}: WebsiteCardProps) {
   const classes = useStyles()
   const [isEditorOpen, setIsEditorOpen] = useState(false)
 
@@ -31,19 +36,15 @@ function WebsiteCard({ id, title, hostnames, template }: WebsiteCardProps) {
   const { deleteItem } = useWebsiteListActions()
 
   const handleDelete = () => {
-    run(async () => deleteWebsite(id)).then(a => {
-      if (isSuccess) {
-        deleteItem(id)
-      }
-    })
+    run(async () => deleteWebsite(id)).then(() => deleteItem(id))
   }
 
   const openEditor = () => setIsEditorOpen(true)
 
   const closeEditor = () => setIsEditorOpen(false)
 
-  const handleSave = () => {
-    alert('This feature is not implemented yet')
+  const handleSave = html => {
+    console.log('This feature is not implemented yet', html)
   }
 
   if (isSuccess) {
@@ -74,9 +75,10 @@ function WebsiteCard({ id, title, hostnames, template }: WebsiteCardProps) {
           </Typography>
         </Box>
       </Grid>
+      {console.log('template_instance', template_instance)}
       {isEditorOpen && (
         <MarketingTemplateEditor
-          template={template}
+          template={template_instance}
           onSave={handleSave}
           onClose={closeEditor}
         />

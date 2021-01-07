@@ -6,11 +6,11 @@ import useAsync from 'hooks/use-async'
 import getWebsiteList from 'models/website/get-my-websites'
 
 import WebsiteCard from '../WebsiteCard'
-import CreateSampleWebsiteButton from '../CreateSampleWebsiteButton'
 import WebsiteListState from '../WebsiteListState'
 import WebsiteListProvider from '../WebsiteListProvider'
+import WebsiteCardProvider from '../WebsiteCardProvider'
 
-const defaultData: IWebsiteTemplateInstance[] = []
+const defaultData: IWebsite[] = []
 
 function WebsiteList() {
   const { data: instances, run, isLoading, setData } = useAsync({
@@ -31,9 +31,10 @@ function WebsiteList() {
     <Box paddingLeft={2} paddingRight={2} paddingTop={3}>
       <Grid container spacing={2}>
         <WebsiteListProvider setData={setData}>
-          <CreateSampleWebsiteButton />
           {instances.map(instance => (
-            <WebsiteCard key={instance.id} {...instance} />
+            <WebsiteCardProvider key={instance.id} website={instance}>
+              <WebsiteCard {...instance} />
+            </WebsiteCardProvider>
           ))}
         </WebsiteListProvider>
       </Grid>

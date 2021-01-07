@@ -2,15 +2,14 @@ declare type IWebsiteTemplateType = 'Agent' | 'Listing'
 
 declare type IWebsiteTemplateMedium = 'Website'
 
-declare interface IWebsiteTemplateInstance extends IModel<'website'> {
+declare interface IWebsite extends IModel<'website'> {
   title: string
-  user: IUser
+  user: IUser | UUID
   brand: Nullable<IBrand>
-  template: IWebsiteTemplate
+  template: string
+  template_instance: IWebsiteTemplate
   attributes: Record<string, string>
   hostnames: string[]
 }
 
-declare interface IWebsiteTemplate extends IModel<'template'> {
-  name: string
-}
+declare type IWebsiteTemplate = IMarketingTemplate

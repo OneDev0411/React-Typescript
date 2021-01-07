@@ -19,6 +19,7 @@ import { selectUserId } from 'selectors/user'
 import updateWebsite from 'models/website/update-website'
 
 import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
+import useWebsiteCardData from '../WebsiteCardProvider/use-website-card-data'
 
 interface WebsiteCardTitleProps {
   title: string
@@ -37,6 +38,7 @@ function WebsiteCardTitle({
   const { isLoading: isSaving, run } = useAsync()
   const handleEditStart = useCallback(() => setEditable(true), [])
   const handleEditEnd = useCallback(() => setEditable(false), [])
+  const website = useWebsiteCardData()
 
   useEffect(() => {
     inputRef.current?.select()
@@ -44,7 +46,15 @@ function WebsiteCardTitle({
 
   const handleSave = () => {
     if (initialTitle !== title) {
-      run(async () => updateWebsite(userId, websiteId, { title })).then(() => {
+      run(async () =>
+        updateWebsite(websiteId, {
+          attributes: website.attributes,
+          template: website.template,
+          template_instance: website.template_instance.id,
+          title,
+          user: userId
+        })
+      ).then(() => {
         updateItem(websiteId, { title })
       })
     }

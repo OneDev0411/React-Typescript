@@ -5,7 +5,7 @@ import Fetch from '../../../services/fetch'
 // it will cause performance issues
 const MOCK_LISTING_ID: UUID = 'fb403302-b062-11e8-8aa6-0a95998482ac'
 
-interface TemplateInstanceInputData {
+export interface CreateTemplateInstanceData {
   html: string
   deals?: UUID[]
   listings?: UUID[]
@@ -14,7 +14,7 @@ interface TemplateInstanceInputData {
 
 export async function createTemplateInstance(
   templateId: UUID,
-  data: TemplateInstanceInputData
+  data: CreateTemplateInstanceData
 ): Promise<IMarketingTemplateInstance> {
   try {
     // We should never send our mock listing id to API

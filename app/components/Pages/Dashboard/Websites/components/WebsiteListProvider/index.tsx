@@ -5,14 +5,14 @@ import type { UseAsyncReturnType } from 'hooks/use-async'
 import WebsiteListActionsContext from './WebsiteListActionsContext'
 
 interface WebsiteListProviderProps
-  extends Pick<UseAsyncReturnType<IWebsiteTemplateInstance[]>, 'setData'> {
+  extends Pick<UseAsyncReturnType<IWebsite[]>, 'setData'> {
   children: ReactNode
 }
 
 function WebsiteListProvider({ setData, children }: WebsiteListProviderProps) {
   const contextValue = useMemo(
     () => ({
-      addItem: (instance: IWebsiteTemplateInstance) => {
+      addItem: (instance: IWebsite) => {
         setData(instances => [...instances, instance])
       },
       deleteItem: (websiteId: UUID) => {
@@ -20,10 +20,7 @@ function WebsiteListProvider({ setData, children }: WebsiteListProviderProps) {
           instances.filter(instance => instance.id !== websiteId)
         )
       },
-      updateItem: (
-        websiteId: UUID,
-        update: Partial<Omit<IWebsiteTemplateInstance, 'id'>>
-      ) => {
+      updateItem: (websiteId: UUID, update: Partial<Omit<IWebsite, 'id'>>) => {
         setData(instances =>
           instances.map(instance =>
             instance.id === websiteId ? { ...instance, ...update } : instance
