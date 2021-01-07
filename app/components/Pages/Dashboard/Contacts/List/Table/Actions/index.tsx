@@ -7,6 +7,7 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
+import pluralize from 'pluralize'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
@@ -122,7 +123,9 @@ const RawTableActions = ({
           <Typography variant="subtitle2" className={classes.selectedCount}>
             {selectedCount}
           </Typography>
-          <Typography variant="body2">Contacts selected</Typography>
+          <Typography variant="body2">
+            {pluralize('Contact', selectedCount)} selected
+          </Typography>
         </Box>
       )
     }
