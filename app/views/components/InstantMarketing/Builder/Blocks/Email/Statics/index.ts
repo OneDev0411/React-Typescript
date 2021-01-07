@@ -13,7 +13,6 @@ import Headline2 from './headline-2.mjml'
 import Column1 from './column-1.mjml'
 import Column2 from './column-2.mjml'
 import Column3 from './column-3.mjml'
-import Image from './image.mjml'
 import Button from './button.mjml'
 import Text from './text.mjml'
 import Divider from './divider.mjml'
@@ -28,7 +27,6 @@ export const column3ElementBlockName = 'column-3'
 export const textElementBlockName = 'text'
 export const dividerBlockName = 'divider'
 export const spacerBlockName = 'spacer'
-export const imageBlockName = 'mj-image'
 export const buttonBlockName = 'mj-button'
 export const socialGroupBlockName = 'mj-social-group'
 
@@ -45,7 +43,6 @@ templates[textElementBlockName] = Text
 templates[dividerBlockName] = Divider
 templates[spacerBlockName] = Spacer
 
-templates[imageBlockName] = Image
 templates[buttonBlockName] = Button
 templates[socialGroupBlockName] = SocialGroup
 
@@ -66,14 +63,6 @@ export default function registerStaticBlocks(
     category: BASICS_BLOCK_CATEGORY,
     blockName: headline2BlockName,
     template: templates[headline2BlockName],
-    adaptive: true
-  })
-
-  registerBlock(editor, {
-    label: 'Photo/GIF Upload',
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: imageBlockName,
-    template: templates[imageBlockName],
     adaptive: true
   })
 
