@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { Box, FormControlLabel, Checkbox } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { withStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import MuiAccordion from '@material-ui/core/Accordion'
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
-import Greeting from './Greeting'
+import Greeting from './Greetings'
 import HappyPaths from './HappyPaths'
+import ProgressBar from '../components/ProgressBar'
 
 // Customizing MUI accordion styles
 const Accordion = withStyles((theme: Theme) => ({
@@ -23,13 +24,6 @@ const Accordion = withStyles((theme: Theme) => ({
 const AccordionSummary = withStyles((theme: Theme) => ({
   root: {
     borderBottom: `1px solid ${theme.palette.grey[300]}`
-  },
-  content: {
-    display: 'flex',
-    justifyContent: 'flex-end'
-  },
-  expanded: {
-    // margin: `${theme.spacing(1)}px 0`
   }
 }))(MuiAccordionSummary)
 
@@ -45,16 +39,29 @@ const useStyles = makeStyles(
     main: {
       display: 'flex',
       width: '100%',
-      height: '400px'
+      height: '60vh'
     },
     body: {
-      flexBasis: '70%',
-      padding: theme.spacing(4)
+      height: '100%',
+      flexFlow: 'column',
+      display: 'flex'
+    },
+    content: {
+      padding: theme.spacing(4),
+      flex: '1 1 auto'
+    },
+    banners: {
+      flex: '0 1 auto',
+      display: 'flex'
+    },
+    banner: {
+      flexGrow: 1
     },
     sidebar: {
       background: theme.palette.grey[100],
       borderLeft: `1px solid ${theme.palette.grey[300]}`,
-      flexBasis: '30%'
+      flexBasis: '50%',
+      overflow: 'scroll'
     }
   }),
   { name: 'WelcomeBox' }
@@ -62,26 +69,49 @@ const useStyles = makeStyles(
 
 function OverviewDashboard() {
   const classes = useStyles()
+  const [accordionExpanded, setAccordionExpanded] = useState<boolean>(true)
 
   return (
-    <Accordion defaultExpanded>
+    <Accordion expanded={accordionExpanded}>
       <AccordionSummary
+        onClick={() => setAccordionExpanded(!accordionExpanded)}
         expandIcon={<ExpandMoreIcon />}
         aria-controls="welcome-content"
         id="welcome-header"
       >
-        <FormControlLabel
-          aria-label="collapse"
-          onClick={event => event.stopPropagation()}
-          onFocus={event => event.stopPropagation()}
-          control={<Checkbox />}
-          label="Keep this collapsed"
-        />
+        {!accordionExpanded && (
+          <Box display="flex" flexGrow={1}>
+            <Box mx={2}>
+              <Typography>Your onboarding progress:</Typography>
+            </Box>
+            <Box width={300} display="flex" alignItems="center" flexGrow={1}>
+              <ProgressBar value={14} determinate />
+            </Box>
+          </Box>
+        )}
       </AccordionSummary>
       <AccordionDetails>
         <Box className={classes.main}>
           <Box className={classes.body}>
-            <Greeting />
+            <Box className={classes.content}>
+              <Greeting />
+            </Box>
+            <Box className={classes.banners}>
+              <Box className={classes.banner}>
+                <img
+                  src="/static/images/overview/intro-video.jpg"
+                  alt="2 Minute Intro Video"
+                  height="200"
+                />
+              </Box>
+              <Box>
+                <img
+                  src="/static/images/overview/ios-app.jpg"
+                  alt="Download iOS App"
+                  height="200"
+                />
+              </Box>
+            </Box>
           </Box>
           <Box className={classes.sidebar}>
             <HappyPaths />

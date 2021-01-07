@@ -25,7 +25,7 @@ export default function Greeting() {
   const classes = useStyles()
   const user = useSelector(selectUser)
 
-  const playIntroVideo = () => {}
+  //  const playIntroVideo = () => {}
 
   return (
     <Box>
@@ -34,9 +34,9 @@ export default function Greeting() {
         <Typography
           variant="h4"
           className={classes.headline}
-        >{`Welcome to Rechat, ${user.first_name}.`}</Typography>
+        >{`Welcome, ${user.first_name}.`}</Typography>
         <Typography variant="h6">Let's get started!</Typography>
-        <ol className={classes.stepsList}>
+        {/* <ol className={classes.stepsList}>
           <li>
             Watch our{' '}
             <Link href="#" onClick={playIntroVideo}>
@@ -57,7 +57,11 @@ export default function Greeting() {
           <li>
             Follow some of our basic tasks to learn how to work with Rechat.
           </li>
-        </ol>
+        </ol> */}
+        <Typography variant="body1">
+          We have prepared some basic tasks for you to get you started on
+          working with Rechat.
+        </Typography>
       </Box>
     </Box>
   )
