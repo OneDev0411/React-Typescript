@@ -164,7 +164,7 @@ const AsyncOnboardingProfile = withSignedInUser(
 //  Overview Page
 /* ==================================== */
 
-const AsyncDashboardOverview = withSignedInUser(
+const AsyncDashboardOverview = withAcl.beta(
   Load({
     loader: () =>
       import(
