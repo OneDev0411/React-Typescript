@@ -1,17 +1,14 @@
 import Fetch from 'services/fetch'
 
-async function updateWebsite(
-  userId: UUID,
-  instanceId: UUID,
-  data: Pick<IWebsiteTemplateInstance, 'title'>
-) {
-  await new Fetch().put(`/websites/${instanceId}`).send({
-    template: 'light',
-    template_instance: null,
-    attributes: {},
-    user: userId,
-    ...data
-  })
+export interface UpdateWebsiteData
+  extends Pick<IWebsite, 'template' | 'attributes' | 'title'> {
+  user: UUID
+  template_instance: UUID
+}
+
+async function updateWebsite(instanceId: UUID, data: UpdateWebsiteData) {
+  return (await new Fetch().put(`/websites/${instanceId}`).send(data)).body
+    .data as IWebsite
 }
 
 export default updateWebsite

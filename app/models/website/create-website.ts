@@ -1,15 +1,11 @@
 import Fetch from 'services/fetch'
 
-async function createWebsite(userId: UUID) {
-  return (
-    await new Fetch().post('/websites').send({
-      template: 'light',
-      title: 'New Website Title',
-      template_instance: null,
-      attributes: {},
-      user: userId
-    })
-  ).body.data as IWebsiteTemplateInstance
+import { UpdateWebsiteData } from './update-website'
+
+export type CreateWebsiteData = UpdateWebsiteData
+
+async function createWebsite(data: CreateWebsiteData) {
+  return (await new Fetch().post('/websites').send(data)).body.data as IWebsite
 }
 
 export default createWebsite
