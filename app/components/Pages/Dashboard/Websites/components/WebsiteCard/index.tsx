@@ -4,7 +4,7 @@ import classNames from 'classnames'
 
 import { Link } from 'react-router'
 
-import { Grid, Box, Typography } from '@material-ui/core'
+import { Grid, Box, Typography, Button } from '@material-ui/core'
 
 import useAsync from 'hooks/use-async'
 
@@ -18,13 +18,16 @@ import {
   getTemplateImage
 } from 'utils/marketing-center/helpers'
 
+import DomainManagementDrawer from 'components/DomainManagementDrawer'
+
 import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 import WebsiteCardImage from '../WebsiteCardImage'
 import WebsiteCardTitle from '../WebsiteCardTitle'
 import WebsiteCardActions from '../WebsiteCardActions'
 
+import WebsiteCardMenu from '../WebsiteCardMenu'
+
 import useStyles from './styles'
-import { WebsiteCardMenu } from '../WebsiteCardMenu'
 
 type WebsiteCardProps = IWebsite
 
@@ -84,6 +87,14 @@ function WebsiteCard({
     })
   }
 
+  const [isDomainManagementOpen, setIsDomainManagementOpen] = useState(false)
+
+  const openDomainManagement = () => {
+    setIsDomainManagementOpen(true)
+  }
+
+  const closeDomainManagement = () => setIsDomainManagementOpen(false)
+
   if (isSuccess) {
     return null
   }
@@ -106,9 +117,7 @@ function WebsiteCard({
               <WebsiteCardMenu
                 onEdit={openEditor}
                 onDelete={handleDelete}
-                websiteId={id}
-                websiteTitle={title}
-                websiteHostnames={hostnames}
+                onManageDomains={openDomainManagement}
               />
             </WebsiteCardActions>
           </WebsiteCardImage>
@@ -127,8 +136,26 @@ function WebsiteCard({
           onClose={closeEditor}
           saveButtonText={publishButtonLabel}
           actionButtonsDisabled={isPublishing}
+          customActions={
+            <Button
+              type="button"
+              variant="outlined"
+              disabled={isPublishing}
+              onClick={openDomainManagement}
+            >
+              Manage Domains
+            </Button>
+          }
         />
       )}
+
+      <DomainManagementDrawer
+        open={isDomainManagementOpen}
+        onClose={closeDomainManagement}
+        websiteId={id}
+        websiteTitle={title}
+        websiteHostnames={hostnames}
+      />
     </>
   )
 }

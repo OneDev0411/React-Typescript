@@ -7,7 +7,11 @@ import InstantMarketing, {
   InstantMarketingProps
 } from 'components/InstantMarketing'
 
-interface Props extends Pick<InstantMarketingProps, 'actionButtonsDisabled'> {
+interface Props
+  extends Pick<
+    InstantMarketingProps,
+    'actionButtonsDisabled' | 'customActions'
+  > {
   /**
    * The marketing template or template instance to render inside the template editor
    */
@@ -51,7 +55,8 @@ export default function MarketingTemplateEditor({
   saveButtonText = 'Save',
   onSave,
   onClose,
-  actionButtonsDisabled
+  actionButtonsDisabled,
+  customActions
 }: Props) {
   // We need to convert template instance to a brand marketing template
   // Our MC editor is dumb and it only works with brand marketing templates
@@ -76,6 +81,7 @@ export default function MarketingTemplateEditor({
       handleSave={template => onSave(template.result)}
       onClose={onClose}
       actionButtonsDisabled={actionButtonsDisabled}
+      customActions={customActions}
     />
   )
 }

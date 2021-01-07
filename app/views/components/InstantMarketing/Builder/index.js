@@ -995,6 +995,8 @@ class Builder extends React.Component {
             )}
 
             <Actions>
+              {this.props.customActions}
+
               {this.shouldShowSaveAsTemplateButton() && (
                 <AddToMarketingCenter
                   medium={this.selectedTemplate.medium}

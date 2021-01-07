@@ -40,6 +40,10 @@ function PublishWebsite({
     !isEdit && templateType === 'Listing'
   )
 
+  const openDomainManagement = () => setIsDomainManagementOpen(true)
+
+  const closeDomainManagement = () => setIsDomainManagementOpen(false)
+
   const {
     publishWebsite,
     isPublishing,
@@ -48,7 +52,7 @@ function PublishWebsite({
     setWebsiteData(result.website)
 
     if (!websiteData) {
-      setIsDomainManagementOpen(true)
+      openDomainManagement()
     }
   })
 
@@ -90,8 +94,6 @@ function PublishWebsite({
     setIsBuilderOpen(true)
   }
 
-  const handleCloseDomainManagement = () => setIsDomainManagementOpen(false)
-
   return (
     <>
       {(isAgentTriggered || isBuilderOpen) && (
@@ -103,6 +105,18 @@ function PublishWebsite({
           hideTemplatesColumn
           saveButtonText={publishButtonLabel}
           actionButtonsDisabled={isPublishing}
+          customActions={
+            !!websiteData && (
+              <Button
+                type="button"
+                variant="outlined"
+                disabled={isPublishing}
+                onClick={openDomainManagement}
+              >
+                Manage Domains
+              </Button>
+            )
+          }
         />
       )}
       <SearchListingDrawer
@@ -132,7 +146,7 @@ function PublishWebsite({
       {websiteData && (
         <DomainManagementDrawer
           open={isDomainManagementOpen}
-          onClose={handleCloseDomainManagement}
+          onClose={closeDomainManagement}
           websiteId={websiteData.id}
           websiteTitle={websiteData.title}
           websiteHostnames={websiteData.hostnames}

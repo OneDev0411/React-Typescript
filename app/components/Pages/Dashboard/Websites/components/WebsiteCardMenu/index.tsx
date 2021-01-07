@@ -5,32 +5,23 @@ import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import MoreVertIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 
-import DomainManagementDrawer, {
-  DomainManagementDrawerProps
-} from 'components/DomainManagementDrawer'
-
 import useStyles from './styles'
 
-export interface WebsiteCardMenuProps
-  extends Pick<
-    DomainManagementDrawerProps,
-    'websiteId' | 'websiteTitle' | 'websiteHostnames'
-  > {
+export interface WebsiteCardMenuProps {
   onDelete: () => void
   onEdit: () => void
+  onManageDomains: () => void
 }
 
-export function WebsiteCardMenu({
+function WebsiteCardMenu({
   onDelete,
   onEdit,
-  ...otherProps
+  onManageDomains
 }: WebsiteCardMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const classes = useStyles()
   const iconClasses = useIconStyles()
-
-  const [isDomainManagementOpen, setIsDomainManagementOpen] = useState(false)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -50,12 +41,10 @@ export function WebsiteCardMenu({
     handleClose()
   }
 
-  const openDomainManagement = () => {
-    setIsDomainManagementOpen(true)
+  const handleManageDomains = () => {
+    onManageDomains()
     handleClose()
   }
-
-  const closeDomainManagement = () => setIsDomainManagementOpen(false)
 
   return (
     <div>
@@ -76,16 +65,12 @@ export function WebsiteCardMenu({
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={openDomainManagement}>Manage Domains</MenuItem>
+        <MenuItem onClick={handleManageDomains}>Manage Domains</MenuItem>
         <MenuItem onClick={handleEdit}>Edit Website</MenuItem>
         <MenuItem onClick={handleDelete}>Delete Website</MenuItem>
       </Menu>
-
-      <DomainManagementDrawer
-        open={isDomainManagementOpen}
-        onClose={closeDomainManagement}
-        {...otherProps}
-      />
     </div>
   )
 }
+
+export default WebsiteCardMenu

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, ReactNode } from 'react'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { TemplateData } from 'utils/marketing-center/render-branded-template'
@@ -33,6 +33,7 @@ export interface InstantMarketingProps {
   ) => void
   onClose: () => void
   actionButtonsDisabled?: boolean
+  customActions?: ReactNode
 }
 
 export default function InstantMarketing({
@@ -51,7 +52,8 @@ export default function InstantMarketing({
   handleSave,
   handleSocialSharing,
   onClose,
-  actionButtonsDisabled = false
+  actionButtonsDisabled = false,
+  customActions
 }: InstantMarketingProps) {
   const confirmation = useContext(ConfirmationModalContext)
 
@@ -87,6 +89,7 @@ export default function InstantMarketing({
       onSocialSharing={handleSocialSharing}
       onPrintableSharing={handleSocialSharing}
       actionButtonsDisabled={actionButtonsDisabled}
+      customActions={customActions}
     />
   )
 }
