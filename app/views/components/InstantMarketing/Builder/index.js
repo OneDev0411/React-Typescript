@@ -18,7 +18,7 @@ import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 
 import {
-  isBackOffice,
+  isAdmin,
   getBrandByType,
   getActiveTeamSettings
 } from 'utils/user-teams'
@@ -819,13 +819,10 @@ class Builder extends React.Component {
       return false
     }
 
-    // Only Backoffice users should see this for now
-    //
-    const isBackofficeUser = isBackOffice(this.props.user)
+    // Only admin users should see this for now
+    const isAdminUser = isAdmin(this.props.user)
 
-    return (
-      isBackofficeUser && this.state.selectedTemplate && !this.isOpenHouseMedium
-    )
+    return isAdminUser && this.state.selectedTemplate && !this.isOpenHouseMedium
   }
 
   isTemplatesListEnabled = () => {
