@@ -4,6 +4,7 @@ exports[`MC SocialActions component renders 1`] = `
 <Fragment>
   <WithStyles(ForwardRef(Button))
     color="primary"
+    disabled={false}
     key="Instagram"
     onClick={[Function]}
     style={
@@ -26,6 +27,7 @@ exports[`MC SocialActions component renders 1`] = `
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
     color="primary"
+    disabled={false}
     key="Facebook"
     onClick={[Function]}
     style={
@@ -48,6 +50,7 @@ exports[`MC SocialActions component renders 1`] = `
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
     color="primary"
+    disabled={false}
     key="LinkedIn"
     onClick={[Function]}
     style={
