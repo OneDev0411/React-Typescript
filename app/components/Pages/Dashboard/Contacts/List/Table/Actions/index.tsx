@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
@@ -38,12 +38,6 @@ const useStyles = makeStyles((theme: Theme) =>
           color: theme.palette.secondary.contrastText
         }
       }
-    },
-    moreActionContainer: {
-      background: theme.palette.background.paper,
-      zIndex: 1100,
-      borderRadius: theme.shape.borderRadius,
-      boxShadow: `0 0 5px 0 ${theme.palette.text.hint}`
     }
   })
 )
@@ -58,7 +52,7 @@ interface Props {
   handleChangeContactsAttributes: any
 }
 
-export function TableActions({
+const RawTableActions = ({
   filters,
   isFetching,
   activeSegmentId,
@@ -66,7 +60,7 @@ export function TableActions({
   reloadContacts,
   onRequestDelete,
   handleChangeContactsAttributes
-}: Props) {
+}: Props) => {
   const [state, dispatch] = useGridContext()
   const classes = useStyles()
 
@@ -89,6 +83,7 @@ export function TableActions({
   const isMergeDisable = !(!isAllRowsSelected
     ? isAllRowsSelected || isTwoSelected
     : isAllRowsSelected && isTwoSelected)
+  const isParkedActive = activeSegmentId === PARKED_CONTACTS_LIST_ID
 
   const deselectRows = () => dispatch(resetRows())
   const deselectAndReload = () => {
@@ -98,7 +93,7 @@ export function TableActions({
 
   return (
     <div className={classes.container}>
-      {activeSegmentId === PARKED_CONTACTS_LIST_ID && (
+      {isParkedActive && (
         <ActionWrapper
           atLeast="one"
           bulkMode={isEntireRowsSelected}
@@ -140,41 +135,47 @@ export function TableActions({
         resetSelectedRows={deselectRows}
         reloadContacts={reloadContacts}
       />
-      <ActionWrapper
-        atLeast="one"
-        bulkMode={isEntireRowsSelected}
-        action="sending an email"
-        disabled={isEntireModeDisable}
-      >
-        <Email disabled={isEntireModeDisable} selectedRows={selectedRowIds} />
-      </ActionWrapper>
-
-      <ActionWrapper
-        atLeast="one"
-        bulkMode={isEntireRowsSelected}
-        action="marketing"
-        disabled={isEntireModeDisable}
-      >
-        <SendMlsListingCard
+      {!isParkedActive && (
+        <ActionWrapper
+          atLeast="one"
+          bulkMode={isEntireRowsSelected}
+          action="sending an email"
           disabled={isEntireModeDisable}
-          selectedRows={selectedRowIds}
         >
-          Marketing
-        </SendMlsListingCard>
-      </ActionWrapper>
+          <Email disabled={isEntireModeDisable} selectedRows={selectedRowIds} />
+        </ActionWrapper>
+      )}
 
-      <ActionWrapper
-        atLeast="one"
-        bulkMode={isEntireRowsSelected}
-        action="creating an event"
-        disabled={isEntireModeDisable}
-      >
-        <CreateEvent
+      {!isParkedActive && (
+        <ActionWrapper
+          atLeast="one"
+          bulkMode={isEntireRowsSelected}
+          action="marketing"
           disabled={isEntireModeDisable}
-          selectedRows={selectedRowIds}
-          submitCallback={deselectAndReload}
-        />
-      </ActionWrapper>
+        >
+          <SendMlsListingCard
+            disabled={isEntireModeDisable}
+            selectedRows={selectedRowIds}
+          >
+            Marketing
+          </SendMlsListingCard>
+        </ActionWrapper>
+      )}
+
+      {!isParkedActive && (
+        <ActionWrapper
+          atLeast="one"
+          bulkMode={isEntireRowsSelected}
+          action="creating an event"
+          disabled={isEntireModeDisable}
+        >
+          <CreateEvent
+            disabled={isEntireModeDisable}
+            selectedRows={selectedRowIds}
+            submitCallback={deselectAndReload}
+          />
+        </ActionWrapper>
+      )}
 
       <ExportContacts
         excludedRows={excludedRows}
@@ -211,3 +212,5 @@ export function TableActions({
     </div>
   )
 }
+
+export const TableActions = memo(RawTableActions)
