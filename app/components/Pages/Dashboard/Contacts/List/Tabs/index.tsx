@@ -169,14 +169,13 @@ export const ContactsTabs = ({
         ]}
         actions={[<Tab key="sort" label={<SortFields {...sortProps} />} />]}
       />
-      {filter.show && (
-        <ContactFilters
-          contactCount={contactCount}
-          activeSegment={activeSegment}
-          onFilterChange={() => handleFilterChange({}, true)}
-          users={users}
-        />
-      )}
+      <ContactFilters
+        show={filter?.show}
+        contactCount={contactCount}
+        activeSegment={activeSegment}
+        onFilterChange={() => handleFilterChange({}, true)}
+        users={users}
+      />
     </>
   )
 }

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Avatar } from 'components/Avatar'
+import { Tooltip } from '@material-ui/core'
 
-import Tooltip from 'components/tooltip'
+import { Avatar } from 'components/Avatar'
 
 const AgentAvatars = ({ agent }) => {
   if (!agent) {
@@ -10,7 +10,7 @@ const AgentAvatars = ({ agent }) => {
   }
 
   return (
-    <Tooltip placement="bottom" caption={agent.legal_full_name}>
+    <Tooltip placement="bottom" title={agent.legal_full_name || ''}>
       <Avatar alt={agent.legal_full_name} user={agent.user} />
     </Tooltip>
   )

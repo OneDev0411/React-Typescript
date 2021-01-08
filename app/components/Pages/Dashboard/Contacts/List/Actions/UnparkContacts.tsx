@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
+
 import { Button } from '@material-ui/core'
+
+import { addNotification as notify } from 'components/notification'
 
 import { unparkContact } from 'models/contacts/unparak-contact'
 

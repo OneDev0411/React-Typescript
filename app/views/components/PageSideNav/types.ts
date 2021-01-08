@@ -45,7 +45,7 @@ export interface SideNavItemProps {
   link?: string
   badge?: number
   isSelected?: boolean
-  tooltip?: string | string[]
+  tooltip?: string
   onDelete?: () => void
 }
 
