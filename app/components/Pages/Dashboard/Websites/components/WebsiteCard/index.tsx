@@ -148,7 +148,6 @@ function WebsiteCard({
           }
         />
       )}
-
       <DomainManagementDrawer
         open={isDomainManagementOpen}
         onClose={closeDomainManagement}

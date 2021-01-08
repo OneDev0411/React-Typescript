@@ -61,9 +61,7 @@ function PublishWebsite({
     onFinish()
   }
 
-  const handleSaveBuilder = async (
-    template: IBrandMarketingTemplateWithResult
-  ) => {
+  const handleSaveBuilder = (template: IBrandMarketingTemplateWithResult) => {
     publishWebsite(
       websiteData?.id,
       template,
