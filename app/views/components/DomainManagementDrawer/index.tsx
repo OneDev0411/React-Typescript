@@ -3,18 +3,21 @@ import React from 'react'
 import { Box } from '@material-ui/core'
 
 import Drawer, { OverlayDrawerProps } from 'components/OverlayDrawer'
+import DomainManagement, {
+  DomainManagementProps
+} from 'components/DomainManagement'
 
-export interface DomainManagementDrawerProps extends OverlayDrawerProps {
-  websiteId: IWebsite['id']
+export interface DomainManagementDrawerProps
+  extends OverlayDrawerProps,
+    DomainManagementProps {
   websiteTitle: IWebsite['title']
-  websiteHostnames: IWebsite['hostnames']
 }
 
 function DomainManagementDrawer({
   open,
   onClose,
   websiteTitle,
-  websiteHostnames
+  ...otherProps
 }: DomainManagementDrawerProps) {
   return (
     <Drawer open={open} onClose={onClose}>
@@ -23,12 +26,7 @@ function DomainManagementDrawer({
         <Box marginTop={3} marginBottom={3}>
           Website: {websiteTitle}
           <br />
-          You current domains:
-          <ul>
-            {websiteHostnames.map(hostname => (
-              <li key={hostname}>{hostname}</li>
-            ))}
-          </ul>
+          <DomainManagement {...otherProps} />
         </Box>
       </Drawer.Body>
     </Drawer>
