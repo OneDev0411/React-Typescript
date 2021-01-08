@@ -17,7 +17,7 @@ interface PublishWebsiteProps {
   isEdit: boolean
   isTriggered: boolean
   templateType: IWebsiteTemplateType
-  selectedTemplate: IWebsiteTemplate
+  selectedTemplate: IMarketingTemplate
   onFinish: () => {}
 }
 

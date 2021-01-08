@@ -11,5 +11,3 @@ declare interface IWebsite extends IModel<'website'> {
   attributes: Record<string, string>
   hostnames: string[]
 }
-
-declare type IWebsiteTemplate = IMarketingTemplate
