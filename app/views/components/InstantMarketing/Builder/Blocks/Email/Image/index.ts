@@ -36,10 +36,14 @@ export default function registerImageBlock(
 
   const selectHandler = (selectedImageUrl?: Image) => {
     if (!modelHandle) {
-      return
+      return false
     }
 
     const parent = modelHandle.parent()
+
+    if (!parent) {
+      return false
+    }
 
     if (selectedImageUrl) {
       const mjml = nunjucks.renderString(adapt(parent, template), {
@@ -50,6 +54,8 @@ export default function registerImageBlock(
     }
 
     modelHandle.remove()
+
+    return true
   }
 
   editor.on('block:drag:stop', (model: Model, block: any) => {

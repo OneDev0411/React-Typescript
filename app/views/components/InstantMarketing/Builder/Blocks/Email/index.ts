@@ -6,7 +6,6 @@ import registerListingBlocks, { Options as ListingOptions } from './Listings'
 import registerAgentBlocks, { Options as AgentOptions } from './Agents'
 import registerStaticBlocks from './Statics'
 import registerImageBlock, { Options as ImageOptions } from './Image'
-// import registerGifBlock, { Options as GifOptions } from './Gif'
 import registerVideoBlock, { Options as ArticleOptions } from './Video'
 import registerArticleBlock, { Options as VideoOptions } from './Article'
 import registerNeighborhoodsBlocks, {
@@ -48,7 +47,6 @@ export function registerEmailBlocks(
     listing: ReturnType<typeof registerListingBlocks>
     agent: ReturnType<typeof registerAgentBlocks>
     image: ReturnType<typeof registerImageBlock>
-    // gif: ReturnType<typeof registerGifBlock>
     video: ReturnType<typeof registerVideoBlock>
     article: ReturnType<typeof registerArticleBlock>
     neighborhoods?: ReturnType<typeof registerNeighborhoodsBlocks>
@@ -56,7 +54,6 @@ export function registerEmailBlocks(
     listing: registerListingBlocks(editor, renderData, listing),
     agent: registerAgentBlocks(editor, renderData, agent),
     image: registerImageBlock(editor, image),
-    // gif: registerGifBlock(editor, gif),
     video: registerVideoBlock(editor, renderData, video),
     article: registerArticleBlock(editor, renderData, article)
   }
