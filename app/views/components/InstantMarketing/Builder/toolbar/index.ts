@@ -45,7 +45,7 @@ export function registerToolbarButtons(
         name: CHANGE_IMAGE_TOOLBAR_BUTTON_NAME,
         // label: 'Change Photo',
         // attributes: { class: '', style: 'width:auto;' },
-        attributes: { class: 'fa fa-upload', title: 'Change Photo' },
+        attributes: { class: 'fa fa-image', title: 'Change Photo' },
         command: () => editor.runCommand('call-fn', { fn: onChangeImageClick })
       }
     )
