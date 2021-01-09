@@ -7,16 +7,12 @@ import DomainManagement, {
   DomainManagementProps
 } from 'components/DomainManagement'
 
-export interface DomainManagementDrawerProps
-  extends OverlayDrawerProps,
-    DomainManagementProps {
-  websiteTitle: IWebsite['title']
-}
+export type DomainManagementDrawerProps = OverlayDrawerProps &
+  DomainManagementProps
 
 function DomainManagementDrawer({
   open,
   onClose,
-  websiteTitle,
   ...otherProps
 }: DomainManagementDrawerProps) {
   return (
@@ -24,8 +20,6 @@ function DomainManagementDrawer({
       <Drawer.Header title="Domain Management" />
       <Drawer.Body>
         <Box marginTop={3} marginBottom={3}>
-          Website: {websiteTitle}
-          <br />
           <DomainManagement {...otherProps} />
         </Box>
       </Drawer.Body>

@@ -1,19 +1,26 @@
 import React from 'react'
+import { Button } from '@material-ui/core'
 
-export interface DomainManagementProps {
-  websiteId: IWebsite['id']
-  websiteHostnames: IWebsite['hostnames']
+import DomainManagementList, {
+  DomainManagementListProps
+} from './DomainManagementList'
+import DomainManagementTitle from './DomainManagementTitle'
+
+export interface DomainManagementProps extends DomainManagementListProps {
+  websiteTitle?: IWebsite['title']
 }
 
-function DomainManagement({ websiteHostnames }: DomainManagementProps) {
+function DomainManagement({
+  websiteTitle,
+  ...otherProps
+}: DomainManagementProps) {
   return (
     <div>
-      You current domains:
-      <ul>
-        {websiteHostnames.map(hostname => (
-          <li key={hostname}>{hostname}</li>
-        ))}
-      </ul>
+      {websiteTitle && <DomainManagementTitle title={websiteTitle} />}
+      <DomainManagementList {...otherProps} />
+      <Button variant="contained" color="primary" fullWidth size="large">
+        Add New Domain
+      </Button>
     </div>
   )
 }

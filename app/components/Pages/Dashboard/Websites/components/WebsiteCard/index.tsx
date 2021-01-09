@@ -20,6 +20,8 @@ import {
 
 import DomainManagementDrawer from 'components/DomainManagementDrawer'
 
+import { generateWebsiteUrl } from 'utils/website'
+
 import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 import WebsiteCardImage from '../WebsiteCardImage'
 import WebsiteCardTitle from '../WebsiteCardTitle'
@@ -45,7 +47,8 @@ function WebsiteCard({
   const { thumbnail } = getTemplateImage(template_instance)
 
   const hostname = hostnames[0]
-  const link = `http://${hostname}`
+
+  const link = generateWebsiteUrl(hostname)
 
   const { isLoading: isWorking, run, isSuccess } = useAsync()
   const { deleteItem, updateItem } = useWebsiteListActions()
@@ -152,7 +155,7 @@ function WebsiteCard({
         open={isDomainManagementOpen}
         onClose={closeDomainManagement}
         websiteId={id}
-        websiteTitle={title}
+        websiteTitle={!isEditorOpen ? title : undefined}
         websiteHostnames={hostnames}
       />
     </>

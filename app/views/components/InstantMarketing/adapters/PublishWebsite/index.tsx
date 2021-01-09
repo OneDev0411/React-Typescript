@@ -146,7 +146,6 @@ function PublishWebsite({
           open={isDomainManagementOpen}
           onClose={closeDomainManagement}
           websiteId={websiteData.id}
-          websiteTitle={websiteData.title}
           websiteHostnames={websiteData.hostnames}
         />
       )}
