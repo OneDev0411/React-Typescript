@@ -950,11 +950,17 @@ class Builder extends React.Component {
           {this.state.isImageSelectDialogOpen && (
             <ImageSelectDialog
               onClose={() => {
-                this.blocks.image.selectHandler()
+                this.blocks &&
+                  this.blocks.image &&
+                  this.blocks.image.selectHandler()
                 this.setState({ isImageSelectDialogOpen: false })
               }}
               onSelect={imageUrl => {
-                if (!this.blocks.image.selectHandler(imageUrl)) {
+                if (
+                  !this.blocks ||
+                  !this.blocks.image ||
+                  !this.blocks.image.selectHandler(imageUrl)
+                ) {
                   this.editor.runCommand('set-attribute', {
                     attribute: 'src',
                     value: imageUrl
