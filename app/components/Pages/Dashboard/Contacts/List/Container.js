@@ -189,7 +189,7 @@ class ContactsList extends React.Component {
       return `Flow: ${activeFilters[0].values[0].label}`
     }
 
-    return 'All Contacts'
+    return 'Contacts'
   }
 
   updateSyncState(provider, oAuthAccounts = this.props.oAuthAccounts) {

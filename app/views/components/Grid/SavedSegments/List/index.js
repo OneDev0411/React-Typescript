@@ -91,7 +91,7 @@ class SegmentsList extends React.Component {
 
     return (
       <BaseDropdownWithMore
-        buttonLabel="Saved List"
+        buttonLabel="Lists"
         DropdownToggleButtonProps={{
           disabled: props.isFetching || props.list.length === 0,
           className: classes.dropdownBtn
@@ -140,14 +140,11 @@ function mapStateToProps(state, { name, getPredefinedLists }) {
   }
 }
 
-const ConnectedSegmentsList = connect(
-  mapStateToProps,
-  {
-    changeActiveFilterSegment,
-    deleteFilterSegment,
-    getSavedSegments
-  }
-)(SegmentsList)
+const ConnectedSegmentsList = connect(mapStateToProps, {
+  changeActiveFilterSegment,
+  deleteFilterSegment,
+  getSavedSegments
+})(SegmentsList)
 
 ConnectedSegmentsList.defaultProps = {
   getPredefinedLists: name => ({ default: getDefaultList(name) })
