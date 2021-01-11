@@ -98,6 +98,20 @@ function WebsiteCard({
 
   const closeDomainManagement = () => setIsDomainManagementOpen(false)
 
+  const handleDomainAdd = (domainName: string, isDefault: boolean) => {
+    updateItem(id, {
+      hostnames: isDefault
+        ? [domainName, ...hostnames]
+        : [...hostnames, domainName]
+    })
+  }
+
+  const handleDomainDelete = (domainName: string) => {
+    updateItem(id, {
+      hostnames: hostnames.filter(hostname => hostname !== domainName)
+    })
+  }
+
   if (isSuccess) {
     return null
   }
@@ -154,6 +168,8 @@ function WebsiteCard({
       <DomainManagementDrawer
         open={isDomainManagementOpen}
         onClose={closeDomainManagement}
+        onDomainAdd={handleDomainAdd}
+        onDomainDelete={handleDomainDelete}
         websiteId={id}
         websiteTitle={!isEditorOpen ? title : undefined}
         websiteHostnames={hostnames}

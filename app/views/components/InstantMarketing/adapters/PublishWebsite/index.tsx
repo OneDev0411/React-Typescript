@@ -85,6 +85,32 @@ function PublishWebsite({
     )
   }
 
+  const handleDomainAdd = (domainName: string, isDefault: boolean) => {
+    setWebsiteData(oldWebsiteData =>
+      oldWebsiteData
+        ? {
+            ...oldWebsiteData,
+            hostnames: isDefault
+              ? [domainName, ...oldWebsiteData.hostnames]
+              : [...oldWebsiteData?.hostnames, domainName]
+          }
+        : null
+    )
+  }
+
+  const handleDomainDelete = (domainName: string) => {
+    setWebsiteData(oldWebsiteData =>
+      oldWebsiteData
+        ? {
+            ...oldWebsiteData,
+            hostnames: oldWebsiteData.hostnames.filter(
+              hostname => hostname !== domainName
+            )
+          }
+        : null
+    )
+  }
+
   const handleListingDrawerClose = () => onFinish()
 
   const handleSelectListings = listings => {
@@ -147,6 +173,8 @@ function PublishWebsite({
           onClose={closeDomainManagement}
           websiteId={websiteData.id}
           websiteHostnames={websiteData.hostnames}
+          onDomainAdd={handleDomainAdd}
+          onDomainDelete={handleDomainDelete}
         />
       )}
     </>

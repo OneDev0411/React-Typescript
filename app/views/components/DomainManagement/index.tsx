@@ -1,26 +1,59 @@
-import React from 'react'
-import { Button } from '@material-ui/core'
+import React, { useState } from 'react'
+import { makeStyles } from '@material-ui/core'
 
 import DomainManagementList, {
   DomainManagementListProps
 } from './DomainManagementList'
-import DomainManagementTitle from './DomainManagementTitle'
+import DomainManagementNewDomain, {
+  DomainManagementNewDomainProps
+} from './DomainManagementNewDomain'
 
-export interface DomainManagementProps extends DomainManagementListProps {
-  websiteTitle?: IWebsite['title']
-}
+export type DomainManagementProps = Omit<
+  DomainManagementListProps,
+  'onNewDomainClick' | 'className'
+> &
+  Pick<DomainManagementNewDomainProps, 'onDomainAdd'>
+
+const useStyles = makeStyles(
+  {
+    fadeIn: {
+      opacity: 0,
+      animation: '$fadeIn 0.3s ease',
+      animationFillMode: 'forwards'
+    },
+    '@keyframes fadeIn': { '100%': { opacity: 1 } }
+  },
+  { name: 'DomainManagement' }
+)
 
 function DomainManagement({
-  websiteTitle,
+  websiteId,
+  onDomainAdd,
   ...otherProps
 }: DomainManagementProps) {
+  const classes = useStyles()
+  const [isNewDomainOpen, setIsNewDomainOpen] = useState(false)
+
+  const openNewDomainForm = () => setIsNewDomainOpen(true)
+  const closeNewDomainForm = () => setIsNewDomainOpen(false)
+
   return (
     <div>
-      {websiteTitle && <DomainManagementTitle title={websiteTitle} />}
-      <DomainManagementList {...otherProps} />
-      <Button variant="contained" color="primary" fullWidth size="large">
-        Add New Domain
-      </Button>
+      {isNewDomainOpen ? (
+        <DomainManagementNewDomain
+          className={classes.fadeIn}
+          websiteId={websiteId}
+          onBack={closeNewDomainForm}
+          onDomainAdd={onDomainAdd}
+        />
+      ) : (
+        <DomainManagementList
+          {...otherProps}
+          websiteId={websiteId}
+          className={classes.fadeIn}
+          onNewDomainClick={openNewDomainForm}
+        />
+      )}
     </div>
   )
 }

@@ -25,23 +25,34 @@ export function QuestionWizard({ children, defaultStep = 0 }: Props) {
   const sections = Array.isArray(children) ? children : [children]
 
   const gotoStep = (step: number) => {
-    if (step === currentStep) {
+    if (step === currentStep || showLoading) {
       return
     }
 
     setCurrentStep(step)
   }
 
-  const gotoNext = async (delay: number = 700) => {
+  const gotoNext = async (
+    delay: number | ((resolve: () => void, reject: () => void) => void) = 700
+  ) => {
     const nextStep = Math.min(currentStep + 1, sections.length)
+    let success = true
 
     if (nextStep > lastVisitedStep) {
       setShowLoading(true)
-      await wait(delay)
+
+      if (typeof delay === 'number') {
+        await wait(delay)
+      } else {
+        await new Promise<void>(delay).catch(() => (success = false))
+      }
     }
 
     setShowLoading(false)
-    setCurrentStep(nextStep)
+
+    if (success) {
+      setCurrentStep(nextStep)
+    }
   }
 
   const gotoPrevious = () => {

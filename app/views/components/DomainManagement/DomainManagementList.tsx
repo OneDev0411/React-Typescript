@@ -1,19 +1,18 @@
 import React from 'react'
-import {
-  Box,
-  Typography,
-  Link,
-  makeStyles,
-  IconButton
-} from '@material-ui/core'
-import { Close } from '@material-ui/icons'
+import { Button, Box, makeStyles } from '@material-ui/core'
 
 import { H4 } from 'components/Typography/headings'
-import { isWebsiteOnSubdomain, generateWebsiteUrl } from 'utils/website'
+
+import DomainManagementTitle from './DomainManagementTitle'
+import DomainManagementListItem from './DomainManagementListItem'
 
 export interface DomainManagementListProps {
+  className: string
   websiteId: IWebsite['id']
+  websiteTitle?: IWebsite['title']
   websiteHostnames: IWebsite['hostnames']
+  onNewDomainClick: () => void
+  onDomainDelete: (domainName: string) => void
 }
 
 const useStyles = makeStyles(
@@ -22,62 +21,47 @@ const useStyles = makeStyles(
       listStyle: 'none',
       padding: theme.spacing(0, 1),
       margin: theme.spacing(1, 0, 0, 0)
-    },
-    li: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: theme.spacing(0, 1),
-      height: theme.spacing(5.5),
-      borderRadius: theme.shape.borderRadius,
-      transition: theme.transitions.create('background-color'),
-      '&:hover': { backgroundColor: theme.palette.grey[100] },
-      '&:hover $action': { opacity: 1 }
-    },
-    action: {
-      opacity: 0,
-      transition: theme.transitions.create('opacity'),
-      marginLeft: theme.spacing(1),
-      '& svg': {
-        color: theme.palette.text.secondary,
-        fontSize: 22
-      }
     }
   }),
   { name: 'DomainManagementList' }
 )
 
-function DomainManagementList({ websiteHostnames }: DomainManagementListProps) {
+function DomainManagementList({
+  className,
+  websiteHostnames,
+  websiteTitle,
+  onNewDomainClick,
+  onDomainDelete,
+  websiteId
+}: DomainManagementListProps) {
   const classes = useStyles()
 
-  // @TODO: implement the delete host API call here
-  const handleDeleteHostname = (hostname: string) => {}
-
   return (
-    <Box marginBottom={2}>
-      <H4>Domain List:</H4>
-      <ul className={classes.ul}>
-        {websiteHostnames.map(hostname => (
-          <li className={classes.li} key={hostname}>
-            <Typography variant="body1" noWrap>
-              <Link href={generateWebsiteUrl(hostname)} target="_blank">
-                {hostname}
-              </Link>
-            </Typography>
-            {!isWebsiteOnSubdomain(hostname) && (
-              <IconButton
-                className={classes.action}
-                size="small"
-                color="inherit"
-                onClick={() => handleDeleteHostname(hostname)}
-              >
-                <Close />
-              </IconButton>
-            )}
-          </li>
-        ))}
-      </ul>
-    </Box>
+    <div className={className}>
+      {websiteTitle && <DomainManagementTitle title={websiteTitle} />}
+      <Box marginBottom={2}>
+        <H4>Domain List:</H4>
+        <ul className={classes.ul}>
+          {websiteHostnames.map(hostname => (
+            <DomainManagementListItem
+              key={hostname}
+              hostname={hostname}
+              websiteId={websiteId}
+              onDelete={onDomainDelete}
+            />
+          ))}
+        </ul>
+      </Box>
+      <Button
+        variant="contained"
+        color="primary"
+        fullWidth
+        size="large"
+        onClick={onNewDomainClick}
+      >
+        Add New Domain
+      </Button>
+    </div>
   )
 }
 

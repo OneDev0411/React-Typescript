@@ -5,7 +5,9 @@ export interface IContextState {
   lastVisitedStep: number
   totalSteps: number
   goto: (step: number) => void
-  next: (delay?: number) => void
+  next: (
+    delay?: number | ((resolve: () => void, reject: () => void) => void)
+  ) => void
   previous: () => void
   first: () => void
   last: () => void
