@@ -2,9 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
-import Alert from '@material-ui/lab/Alert'
-import { Box, IconButton } from '@material-ui/core'
-import { mdiClose, mdiLoading } from '@mdi/js'
+import { Box } from '@material-ui/core'
+import { mdiLoading } from '@mdi/js'
 
 import PageLayout from 'components/GlobalPageLayout'
 import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
@@ -18,6 +17,8 @@ import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
 import { updateFilterSegment } from 'actions/filter-segments'
 import { getUserTeams } from 'actions/user/teams'
+import { resetActiveFilters } from 'actions/filter-segments/active-filters'
+import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import {
@@ -30,6 +31,7 @@ import {
   clearImportingGoogleContacts,
   getNewConnectedGoogleAccount
 } from 'utils/oauth-provider'
+import { goTo } from 'utils/go-to'
 import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
 import { getParkedContactsCount as getParkedContactCountModel } from 'models/contacts/get-parked-contact-count'
@@ -47,6 +49,7 @@ import ContactsTabs from './Tabs'
 import Table from './Table'
 import ImportContactsButton from './ImportContactsButton'
 import TouchReminder from './TouchReminder'
+import { OtherContactsBadge } from './OtherContactsBadge'
 
 import {
   FLOW_FILTER_ID,
@@ -55,7 +58,6 @@ import {
   PARKED_CONTACTS_LIST_ID,
   DUPLICATE_CONTACTS_LIST_ID
 } from './constants'
-import { NavigateDuplicate } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
@@ -78,7 +80,6 @@ class ContactsList extends React.Component {
       isRowsUpdating: false,
       searchInputValue: props.list.textFilter,
       loadedRanges: [],
-      showDuplicateClusterAlert: false,
       duplicateClusterCount: 0,
       parkedContactCount: 0
     }
@@ -243,19 +244,12 @@ class ContactsList extends React.Component {
 
       if (clusterCount > 0) {
         this.setState(() => ({
-          showDuplicateClusterAlert: true,
           duplicateClusterCount: clusterCount
         }))
       }
     } catch (e) {
       console.log('fetch duplicate cluster error: ', e)
     }
-  }
-
-  closeDupicateAlert = () => {
-    this.setState(() => ({
-      showDuplicateClusterAlert: false
-    }))
   }
 
   scrollToSelector(selector) {
@@ -529,7 +523,6 @@ class ContactsList extends React.Component {
 
         await deleteContactsBulk(bulkDeleteParams)
         this.setState(() => ({
-          showDuplicateClusterAlert: false,
           duplicateClusterCount: 0
         }))
         await this.reloadContacts()
@@ -651,6 +644,48 @@ class ContactsList extends React.Component {
     this.reloadContacts()
   }
 
+  renderOtherContactsBadge = () => {
+    const { resetActiveFilters, changeActiveFilterSegment } = this.props
+    const { parkedContactCount, duplicateClusterCount } = this.state
+
+    console.log('renderOtherContactsBadge', {
+      parkedContactCount,
+      duplicateClusterCount
+    })
+
+    if (!parkedContactCount && !duplicateClusterCount) {
+      return null
+    }
+
+    return (
+      <Box>
+        {parkedContactCount > 0 && (
+          <Box mr={duplicateClusterCount > 0 ? 1 : 0}>
+            <OtherContactsBadge
+              title="New contacts to review and add"
+              count={parkedContactCount}
+              onClick={async () => {
+                await resetActiveFilters(CONTACTS_SEGMENT_NAME)
+                await changeActiveFilterSegment(
+                  CONTACTS_SEGMENT_NAME,
+                  PARKED_CONTACTS_LIST_ID
+                )
+                this.handleFilterChange({ parked: true }, true)
+              }}
+            />
+          </Box>
+        )}
+        {duplicateClusterCount > 0 && (
+          <OtherContactsBadge
+            title="Duplicate Contacts"
+            count={duplicateClusterCount}
+            onClick={() => goTo('/dashboard/contacts/duplicates')}
+          />
+        )}
+      </Box>
+    )
+  }
+
   renderTabs = (props = {}) => {
     const { parkedContactCount, selectedShortcutFilter } = this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
@@ -694,35 +729,6 @@ class ContactsList extends React.Component {
         activeSegment={activeSegment}
         {...props}
       />
-    )
-  }
-
-  renderDuplicateAlert = () => {
-    const { duplicateClusterCount } = this.state
-
-    return (
-      <Box mt={1.5}>
-        <Alert
-          severity="info"
-          action={
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={this.closeDupicateAlert}
-            >
-              <SvgIcon path={mdiClose} />
-            </IconButton>
-          }
-        >
-          <Box>
-            You currently have {duplicateClusterCount} duplicate contacts,{' '}
-            <NavigateDuplicate href="/dashboard/contacts/duplicates">
-              manage them here.
-            </NavigateDuplicate>
-          </Box>
-        </Alert>
-      </Box>
     )
   }
 
@@ -817,8 +823,8 @@ class ContactsList extends React.Component {
           {isZeroState && <ZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
+              {this.renderOtherContactsBadge()}
               {this.renderTabs()}
-              {state.showDuplicateClusterAlert && this.renderDuplicateAlert()}
               <Box mt={2}>
                 <Table
                   data={contacts}
@@ -916,6 +922,8 @@ export default withRouter(
     setContactsListTextFilter,
     getContactsTags,
     getUserTeams,
+    resetActiveFilters,
+    changeActiveFilterSegment,
     updateSegment: updateFilterSegment
   })(ContactsList)
 )
