@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
 import {
+  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -9,8 +10,10 @@ import {
   Tab,
   makeStyles
 } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
 import { useDebounce } from 'use-debounce'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { EditorDialog } from 'components/ImageEditor'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
@@ -121,16 +124,19 @@ export default function ImageSelectDialog({
               <Tab value="gif-library" label="GIF Library" />
             </Tabs>
           </Grid>
-          {isSerchableTabActive && (
-            <Grid item>
+          <Grid item>
+            {isSerchableTabActive && (
               <TextField
                 label="Search"
                 value={searchQuery}
                 color="primary"
                 onChange={event => setSearchQuery(event.target.value)}
               />
-            </Grid>
-          )}
+            )}
+            <IconButton onClick={onClose}>
+              <SvgIcon path={mdiClose} />
+            </IconButton>
+          </Grid>
         </Grid>
       </DialogTitle>
       <DialogContent>
