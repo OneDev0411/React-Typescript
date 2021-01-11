@@ -14,6 +14,7 @@ import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
 import { getActiveTeamId } from 'utils/user-teams'
+import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
 
 import { getBrandListings } from 'models/listings/search/get-brand-listings'
 
@@ -344,10 +345,18 @@ class SendMlsListingCard extends React.Component {
   get TemplateData() {
     const data = { user: this.props.user }
 
+    const listings = this.state.listings.map(listing => ({
+      ...listing,
+      gallery_image_urls: getArrayWithFallbackAccessor(
+        listing.gallery_image_urls,
+        'https://images.unsplash.com/photo-1450101499163-c8848c66ca85'
+      )
+    }))
+
     if (this.IsMultiListing) {
-      data.listings = this.state.listings
+      data.listings = listings
     } else {
-      data.listing = this.state.listings[0]
+      data.listing = listings[0]
     }
 
     return data
