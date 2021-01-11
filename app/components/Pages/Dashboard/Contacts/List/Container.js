@@ -648,17 +648,12 @@ class ContactsList extends React.Component {
     const { resetActiveFilters, changeActiveFilterSegment } = this.props
     const { parkedContactCount, duplicateClusterCount } = this.state
 
-    console.log('renderOtherContactsBadge', {
-      parkedContactCount,
-      duplicateClusterCount
-    })
-
     if (!parkedContactCount && !duplicateClusterCount) {
       return null
     }
 
     return (
-      <Box>
+      <Box display="flex" alignItems="center">
         {parkedContactCount > 0 && (
           <Box mr={duplicateClusterCount > 0 ? 1 : 0}>
             <OtherContactsBadge
@@ -687,7 +682,7 @@ class ContactsList extends React.Component {
   }
 
   renderTabs = (props = {}) => {
-    const { parkedContactCount, selectedShortcutFilter } = this.state
+    const { selectedShortcutFilter } = this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
 
     return (
@@ -724,7 +719,6 @@ class ContactsList extends React.Component {
           currentOrder: this.order
         }}
         contactCount={listInfo.total || 0}
-        parkedContactsCount={parkedContactCount}
         users={viewAsUsers}
         activeSegment={activeSegment}
         {...props}
