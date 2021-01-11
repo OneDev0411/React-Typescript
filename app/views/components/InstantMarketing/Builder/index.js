@@ -260,6 +260,40 @@ class Builder extends React.Component {
     })
   }
 
+  setupImageDoubleClickHandler = () => {
+    const components = this.editor.DomComponents
+    const image = components.getType('image')
+    const mjImage = components.getType('mj-image')
+    const mjCarouselImage = components.getType('mj-carousel-image')
+
+    const imageComponents = [
+      {
+        name: 'image',
+        component: image
+      },
+      {
+        name: 'mj-image',
+        component: mjImage
+      },
+      {
+        name: 'mj-carousel-image',
+        component: mjCarouselImage
+      }
+    ]
+
+    imageComponents.forEach(({ name, component }) => {
+      components.addType(name, {
+        view: component.view.extend({
+          events: {
+            dblclick: () => {
+              this.setState({ isImageSelectDialogOpen: true })
+            }
+          }
+        })
+      })
+    })
+  }
+
   setupGrapesJs = () => {
     registerCommands(this.editor)
     registerToolbarButtons(
@@ -277,7 +311,6 @@ class Builder extends React.Component {
         this.setState({ imageToEdit })
       }
     )
-
     this.setState({ isEditorLoaded: true })
 
     this.lockIn()
@@ -292,6 +325,8 @@ class Builder extends React.Component {
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       this.registerEmailBlocks()
     }
+
+    this.setupImageDoubleClickHandler()
 
     this.props.onBuilderLoad({
       regenerateTemplate: this.regenerateTemplate
