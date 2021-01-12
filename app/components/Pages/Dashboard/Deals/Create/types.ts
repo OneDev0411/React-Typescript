@@ -1,3 +1,5 @@
+import { TYPE_COMPANY } from 'components/DealRole/constants/role-types'
+
 export type Address = {
   city: string
   full: string
@@ -15,24 +17,13 @@ export interface Form {
   side: IDealType
   propertyType: IDealPropertyType
   enderType: IDealEnderType
-  primaryAgents: Record<number, IDealFormPrimaryAgent>
+  primaryAgents: Record<number, IDealFormRole>
 }
 
-export interface IDealFormPrimaryAgent {
-  id: number
+export type IDealFormRole = IDealRole & {
+  id: number | string
+  brand?: UUID | null
   agent: Nullable<IAgent>
   contact?: IContact
-  brand: Nullable<UUID>
-  commission_dollar: number | null
-  commission_percentage: number | null
-  company_title: string
-  email: string
-  legal_prefix?: string
-  legal_first_name?: Nullable<string>
-  legal_last_name?: Nullable<string>
-  legal_middle_name?: string
-  phone_number?: string
-  role: string
-  current_address: Address
-  role_type: 'Person' | 'Company'
+  current_address: Address | string | null
 }

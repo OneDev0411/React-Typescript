@@ -5,15 +5,20 @@ import {
   TextField,
   Theme,
   Typography,
+  Button,
   Avatar
 } from '@material-ui/core'
-
+import { useDispatch, useSelector } from 'react-redux'
 import cn from 'classnames'
 import { useDebounce, useAsync } from 'react-use'
 
 import { mdiPlus } from '@mdi/js'
 
+import { deleteRole } from 'actions/deals'
 import { searchContacts } from 'models/contacts/search-contacts'
+
+import { IAppState } from 'reducers'
+import { selectDealRoles } from 'reducers/deals/roles'
 
 import {
   QuestionSection,
@@ -23,14 +28,14 @@ import {
 
 import { useWizardForm } from 'components/QuestionWizard/use-context'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { DealRole } from 'components/DealRole'
+import DealRole from 'components/DealRole'
 
 import { RoleCard } from '../../components/RoleCard'
 
 import { useFormContext } from '../../context/use-form-context'
 import { convertContactToRole } from '../../../utils/roles'
 
-import type { IDealFormPrimaryAgent } from '../../types'
+import type { IDealFormRole } from '../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -81,9 +86,10 @@ export function DealClient({ step, side, title }: Props) {
   const classes = useStyles()
   const wizard = useWizardForm()
   const context = useFormContext()
+  const dispatch = useDispatch()
 
   const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormPrimaryAgent>>
+    Nullable<Partial<IDealFormRole>>
   >(null)
 
   const [contacts, setContacts] = useState<IContact[]>([])
@@ -111,11 +117,22 @@ export function DealClient({ step, side, title }: Props) {
     setContacts(contacts)
   }, [debouncedSearchCriteria])
 
-  if (!context.form.side) {
-    return null
-  }
-
   const allowedRoles = getRoles(context.form.side)
+
+  const roles = useSelector<IAppState, IDealRole[]>(({ deals }) => {
+    return context.deal
+      ? (selectDealRoles(
+          deals.roles,
+          context.deal
+        ).filter((client: IDealRole) =>
+          allowedRoles.includes(client.role)
+        ) as IDealRole[])
+      : []
+  })
+
+  const handleRemoveRole = async (role: IDealRole) => {
+    await dispatch(deleteRole(context.deal!.id, role.id))
+  }
 
   const createNewContact = () => {
     const name = debouncedSearchCriteria.split(' ')
@@ -126,8 +143,8 @@ export function DealClient({ step, side, title }: Props) {
     })
   }
 
-  const handleUpsert = (client: IDealFormPrimaryAgent) => {
-    console.log('>>>', client)
+  if (wizard.lastVisitedStep < step!) {
+    return null
   }
 
   return (
@@ -138,24 +155,24 @@ export function DealClient({ step, side, title }: Props) {
         <Box mt={1}>
           <DealRole
             isOpen
+            deal={context.deal}
             user={context.user}
             dealSide={context.form.side}
             form={selectedRole}
             allowedRoles={allowedRoles}
-            onUpsertRole={handleUpsert}
             onClose={() => setSelectedRole(null)}
           />
         </Box>
       ) : (
         <Box display="flex" flexWrap="wrap">
-          {/* {[].map(agent => (
+          {roles.map(client => (
             <RoleCard
-              key={agent.id}
-              agent={agent}
-              onClickEdit={() => setSelectedRole(agent)}
-              onClickRemove={() => handleRemove(agent)}
+              key={client.id}
+              role={client}
+              onClickEdit={() => setSelectedRole(client)}
+              onClickRemove={() => handleRemoveRole(client)}
             />
-          ))} */}
+          ))}
         </Box>
       )}
 
@@ -215,12 +232,25 @@ export function DealClient({ step, side, title }: Props) {
             </Box>
           ))}
         </Box>
+
+        <Button
+          variant="contained"
+          color="secondary"
+          // className={classes.continueButton}
+          onClick={() => wizard.next()}
+        >
+          Continue
+        </Button>
       </QuestionForm>
     </QuestionSection>
   )
 }
 
-function getRoles(type: IDealType) {
+function getRoles(type?: IDealType) {
+  if (!type) {
+    return []
+  }
+
   if (type === 'Buying') {
     return ['Buyer', 'BuyerPowerOfAttorney', 'Tenant', 'TenantPowerOfAttorney']
   }

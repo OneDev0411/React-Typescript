@@ -57,6 +57,7 @@ declare interface IDealRole {
   created_by: UUID
   deal: UUID
   deleted_at: number | null
+  current_address: string | null
   email: string
   id: UUID
   legal_first_name: string
@@ -67,7 +68,7 @@ declare interface IDealRole {
   mlsid: string | null
   phone_number: string
   role: string
-  role_type: string
+  role_type: 'Person' | 'Company'
   type: string
   office_phone?: string | null
   office_email?: string | null

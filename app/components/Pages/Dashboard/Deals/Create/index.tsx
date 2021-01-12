@@ -27,7 +27,7 @@ import { DealEnderType } from './form/DealEnderType'
 
 import { Context } from './context'
 
-import type { Form, IDealFormPrimaryAgent } from './types'
+import type { Form, IDealFormRole } from './types'
 
 const useStyles = makeStyles(
   () => ({
@@ -78,9 +78,7 @@ export default function CreateDeal() {
    *
    * @param agents - The list of primary agents [BuyerAgent, SellerAgent]
    */
-  const createInitialDeal = async (
-    agents: Record<number, IDealFormPrimaryAgent>
-  ) => {
+  const createInitialDeal = async (agents: Record<number, IDealFormRole>) => {
     const primaryAgent = Object.values(agents).find(agent =>
       ['SellerAgent', 'BuyerAgent'].includes(agent.role)
     )!
@@ -136,6 +134,8 @@ export default function CreateDeal() {
             />
           )}
 
+          <DealAddress />
+
           {form.side === 'Buying' && (
             <DealCoAgent
               agentSide="Buying"
@@ -151,8 +151,6 @@ export default function CreateDeal() {
               title="Enter Listing Co-Agent’s information"
             />
           )}
-
-          <DealAddress />
 
           {form.side === 'Buying' && (
             <DealClient

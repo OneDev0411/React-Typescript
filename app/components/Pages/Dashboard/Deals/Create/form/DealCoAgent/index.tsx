@@ -18,7 +18,7 @@ import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
 import { UserRow } from '../../components/UserRow'
 import { RoleCard } from '../../components/RoleCard'
 
-import type { IDealFormPrimaryAgent } from '../../types'
+import type { IDealFormRole } from '../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -65,7 +65,7 @@ export function DealCoAgent({
   const context = useFormContext()
 
   const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormPrimaryAgent>>
+    Nullable<Partial<IDealFormRole>>
   >(null)
   const [searchCriteria, setSearchCriteria] = useState<string>('')
 
@@ -77,9 +77,9 @@ export function DealCoAgent({
 
   const allowedRoles = getAllowedRoles(agentSide)
 
-  const handleUpsert = async (agent: IDealFormPrimaryAgent) => {}
+  const handleUpsert = async (agent: IDealFormRole) => {}
 
-  const handleRemove = (agent: IDealFormPrimaryAgent) => {}
+  const handleRemove = (agent: IDealFormRole) => {}
 
   const handleContinue = () => {
     wizard.next()

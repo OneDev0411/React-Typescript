@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   Box,
@@ -16,7 +16,7 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { getLegalFullName } from '../../../utils/roles'
 
-import type { IDealFormPrimaryAgent } from '../../types'
+import type { IDealFormRole } from '../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -39,32 +39,42 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  agent: IDealFormPrimaryAgent
+  role: IDealFormRole
   onClickEdit: () => void
-  onClickRemove: () => void
+  onClickRemove: (() => void) | (() => Promise<void>)
 }
 
-export function RoleCard({ agent, onClickEdit, onClickRemove }: Props) {
+export function RoleCard({ role, onClickEdit, onClickRemove }: Props) {
   const classes = useStyles()
+  const [isRemoving, setIsRemoving] = useState(false)
+
+  const address =
+    typeof role.current_address === 'string'
+      ? role.current_address
+      : role.current_address?.full
+
+  const handleRemove = async () => {
+    setIsRemoving(true)
+    await onClickRemove()
+    setIsRemoving(false)
+  }
 
   return (
     <Box display="flex" alignItems="flex-start" className={classes.root}>
       <Box flex={2} className={classes.avatarContainer}>
-        <Avatar alt={getLegalFullName(agent)} />
+        <Avatar alt={getLegalFullName(role)} />
       </Box>
       <Box flex={6}>
-        <Typography variant="body2">{getLegalFullName(agent)}</Typography>
-        {agent.email && (
+        <Typography variant="body2">{getLegalFullName(role)}</Typography>
+        {role.email && (
           <Typography variant="body2" className={classes.detail}>
-            {agent.email}
+            {role.email}
           </Typography>
         )}
 
-        {agent.current_address && (
+        {role.current_address && (
           <Box my={1}>
-            <Typography variant="caption">
-              {agent.current_address.full}
-            </Typography>
+            <Typography variant="caption">{address}</Typography>
           </Box>
         )}
       </Box>
@@ -77,7 +87,7 @@ export function RoleCard({ agent, onClickEdit, onClickRemove }: Props) {
         </Box>
 
         <Box>
-          <IconButton size="medium" onClick={onClickRemove}>
+          <IconButton size="medium" onClick={handleRemove}>
             <SvgIcon path={mdiDeleteOutline} size={muiIconSizes.medium} />
           </IconButton>
         </Box>

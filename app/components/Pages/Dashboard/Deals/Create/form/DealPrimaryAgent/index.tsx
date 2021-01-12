@@ -18,7 +18,7 @@ import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
 import { UserRow } from '../../components/UserRow'
 import { RoleCard } from '../../components/RoleCard'
 
-import type { IDealFormPrimaryAgent } from '../../types'
+import type { IDealFormRole } from '../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -51,7 +51,7 @@ interface Props {
   title: string
   agentSide: IDealType
   isCommissionRequired: boolean
-  finishStepCallback?: (agents: IDealFormPrimaryAgent[]) => Promise<void>
+  finishStepCallback?: (agents: IDealFormRole[]) => Promise<void>
 }
 
 export function DealPrimaryAgent({
@@ -66,7 +66,7 @@ export function DealPrimaryAgent({
   const context = useFormContext()
 
   const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormPrimaryAgent>>
+    Nullable<Partial<IDealFormRole>>
   >(null)
 
   if (wizard.lastVisitedStep < step!) {
@@ -79,7 +79,7 @@ export function DealPrimaryAgent({
     allowedRoles.includes(agent.role)
   )
 
-  const handleUpsert = async (agent: IDealFormPrimaryAgent) => {
+  const handleUpsert = async (agent: IDealFormRole) => {
     const agents = {
       ...list,
       [agent.id]: agent
@@ -100,7 +100,7 @@ export function DealPrimaryAgent({
     }
   }
 
-  const handleRemove = (agent: IDealFormPrimaryAgent) => {
+  const handleRemove = (agent: IDealFormRole) => {
     context.updateForm({
       primaryAgents: Object.entries(list).reduce((acc, [id, item]) => {
         if (item.id === agent.id) {
@@ -137,7 +137,7 @@ export function DealPrimaryAgent({
           {list.map(agent => (
             <RoleCard
               key={agent.id}
-              agent={agent}
+              role={agent}
               onClickEdit={() => setSelectedRole(agent)}
               onClickRemove={() => handleRemove(agent)}
             />
