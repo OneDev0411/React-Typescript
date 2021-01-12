@@ -12,6 +12,7 @@ import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
+import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
@@ -349,7 +350,7 @@ class SendMlsListingCard extends React.Component {
       ...listing,
       gallery_image_urls: getArrayWithFallbackAccessor(
         listing.gallery_image_urls,
-        'https://images.unsplash.com/photo-1450101499163-c8848c66ca85'
+        PLACEHOLDER_IMAGE_URL
       )
     }))
 
