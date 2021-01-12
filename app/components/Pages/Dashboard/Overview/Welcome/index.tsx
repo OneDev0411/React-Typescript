@@ -44,7 +44,8 @@ const useStyles = makeStyles(
     body: {
       height: '100%',
       flexFlow: 'column',
-      display: 'flex'
+      display: 'flex',
+      flexGrow: 1
     },
     content: {
       padding: theme.spacing(4),
@@ -61,7 +62,8 @@ const useStyles = makeStyles(
       background: theme.palette.grey[100],
       borderLeft: `1px solid ${theme.palette.grey[300]}`,
       flexBasis: '50%',
-      overflow: 'scroll'
+      overflow: 'scroll',
+      flexGrow: 1
     }
   }),
   { name: 'WelcomeBox' }
