@@ -9,9 +9,14 @@ import Loading from './Loading'
 interface Props {
   children: boolean | React.ReactNode | React.ReactNode
   defaultStep?: number
+  onFinish?: () => void
 }
 
-export function QuestionWizard({ children, defaultStep = 0 }: Props) {
+export function QuestionWizard({
+  children,
+  defaultStep = 0,
+  onFinish = () => {}
+}: Props) {
   const refs = useRef<HTMLDivElement[]>([])
   const loadingRef = useRef<SVGSVGElement>(null)
 
@@ -22,7 +27,7 @@ export function QuestionWizard({ children, defaultStep = 0 }: Props) {
 
   const [showLoading, setShowLoading] = useState(false)
 
-  const sections = Array.isArray(children) ? children : [children]
+  const sections = Array.isArray(children) ? children.flat() : [children]
 
   const gotoStep = (step: number) => {
     if (step === currentStep) {
@@ -33,6 +38,12 @@ export function QuestionWizard({ children, defaultStep = 0 }: Props) {
   }
 
   const gotoNext = async (delay: number = 700) => {
+    if (currentStep + 1 > sections.length) {
+      onFinish()
+
+      return
+    }
+
     const nextStep = Math.min(currentStep + 1, sections.length)
 
     if (nextStep > lastVisitedStep) {
@@ -64,8 +75,7 @@ export function QuestionWizard({ children, defaultStep = 0 }: Props) {
     showLoading &&
       loadingRef.current?.scrollIntoView({
         block: 'center',
-        inline: 'center',
-        behavior: 'smooth'
+        inline: 'center'
       })
   }, [showLoading])
 
@@ -74,6 +84,7 @@ export function QuestionWizard({ children, defaultStep = 0 }: Props) {
       value={{
         currentStep,
         lastVisitedStep,
+        setShowLoading,
         totalSteps: sections.length,
         goto: gotoStep,
         next: gotoNext,

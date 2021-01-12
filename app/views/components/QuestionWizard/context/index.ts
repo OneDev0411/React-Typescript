@@ -9,6 +9,7 @@ export interface IContextState {
   previous: () => void
   first: () => void
   last: () => void
+  setShowLoading: (state: boolean) => void
 }
 
 export const Context = React.createContext<IContextState | undefined>(undefined)

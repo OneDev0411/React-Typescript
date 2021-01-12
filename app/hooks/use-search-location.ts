@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import addressParser from 'parse-address'
 
 import { searchListings } from 'models/listings/search/search-listings'
 
@@ -9,13 +10,16 @@ export function useSearchLocation(
 ): {
   places: google.maps.places.AutocompletePrediction[]
   listings: ICompactListing[]
+  getParsedPlace: (
+    place: google.maps.places.AutocompletePrediction
+  ) => Promise<unknown>
 } {
+  useGoogleMapsPlaces()
+
   const [places, setPlaces] = useState<
     google.maps.places.AutocompletePrediction[]
   >([])
   const [listings, setListings] = useState<ICompactListing[]>([])
-
-  useGoogleMapsPlaces()
 
   useEffect(() => {
     const searchPlaces = () => {
@@ -62,8 +66,39 @@ export function useSearchLocation(
     search()
   }, [criteria])
 
+  /**
+   *
+   * @param place
+   */
+  const getParsedPlace = (place: google.maps.places.AutocompletePrediction) => {
+    return new Promise((resolve, reject) => {
+      const service = new window.google.maps.places.PlacesService(
+        document.createElement('div')
+      )
+
+      service.getDetails(
+        {
+          placeId: place!.place_id,
+          fields: ['name', 'formatted_address', 'place_id', 'geometry']
+        },
+        async (place, status) => {
+          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            const parsedAddress = await addressParser.parseLocation(
+              place.formatted_address
+            )
+
+            resolve(parsedAddress)
+          } else {
+            reject()
+          }
+        }
+      )
+    })
+  }
+
   return {
     places,
-    listings
+    listings,
+    getParsedPlace
   }
 }

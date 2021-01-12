@@ -1,8 +1,10 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
+
 import { Form } from 'react-final-form'
+
+import { addNotification as notify } from 'components/notification'
 
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
@@ -19,7 +21,7 @@ import {
   getContactChangedAttributes
 } from 'deals/utils/roles'
 
-import { AgentForm } from './Form/Agent'
+import { RoleForm } from './Form/Role'
 import { OfficeForm } from './Form/Office'
 
 import { TYPE_PERSON } from './constants/role-types'
@@ -265,6 +267,8 @@ export class DealRole extends React.Component {
       })
     )
 
+    // console.log('ERR' errors)
+
     return errors
   }
 
@@ -291,7 +295,6 @@ export class DealRole extends React.Component {
       office_fax: `Fax ${INVALID_PHONE}`,
       commission: 'Invalid Commission value',
       current_address: INVALID_ADDRESS,
-      future_address: INVALID_ADDRESS,
       office_address: INVALID_ADDRESS
     }
   }
@@ -337,11 +340,11 @@ export class DealRole extends React.Component {
 
     changeValue(state, 'legal_first_name', () => user.first_name || '')
     changeValue(state, 'legal_last_name', () => user.last_name || '')
+    changeValue(state, 'legal_middle_name', () => user.middle_name || '')
     changeValue(state, 'email', () => user.email || '')
     changeValue(state, 'company_title', () => user.company || '')
     changeValue(state, 'mls_id', () => user.mlsid || '')
     changeValue(state, 'agent', () => (user.mlsid ? user.id : null))
-    changeValue(state, 'future_address', () => user.future_address || {})
     changeValue(state, 'current_address', () => user.current_address || {})
     changeValue(state, 'legal_prefix', () =>
       user.title && LEGAL_PREFIXES.includes(user.title) ? user.title : null
@@ -378,55 +381,55 @@ export class DealRole extends React.Component {
     }
 
     return (
-      <BareModal
-        className="deal-role-form-modal"
-        isOpen
-        style={{
-          content: { top: '40%', height: 'auto', overflow: 'initial' }
+      // <BareModal
+      //   className="deal-role-form-modal"
+      //   isOpen
+      //   style={{
+      //     content: { top: '40%', height: 'auto', overflow: 'initial' }
+      //   }}
+      // >
+      <Form
+        validate={this.validate}
+        onSubmit={this.onSubmit}
+        initialValues={this.getInitialValues()}
+        mutators={{
+          populateRole: this.populateRole
         }}
-      >
-        <Form
-          validate={this.validate}
-          onSubmit={this.onSubmit}
-          initialValues={this.getInitialValues()}
-          mutators={{
-            populateRole: this.populateRole
-          }}
-          render={formProps => {
-            const { visibleFields, requiredFields } = this.getFormProperties(
-              formProps.values
-            )
+        render={formProps => {
+          const { visibleFields, requiredFields } = this.getFormProperties(
+            formProps.values
+          )
 
-            const sharedProps = {
-              ...formProps,
-              initialValues: this.formObject,
-              deal: this.props.deal,
-              isSubmitting: this.state.isSaving,
-              onSubmit: this.handleSubmit,
-              onClose: this.handleClose
-            }
+          const sharedProps = {
+            ...formProps,
+            initialValues: this.formObject,
+            deal: this.props.deal,
+            isSubmitting: this.state.isSaving,
+            onSubmit: this.handleSubmit,
+            onClose: this.handleClose
+          }
 
-            return (
-              <Fragment>
-                {this.props.showBrokerageFields ? (
-                  <OfficeForm {...sharedProps} />
-                ) : (
-                  <AgentForm
-                    {...sharedProps}
-                    isNewRecord={this.isNewRecord}
-                    isRoleRemovable={this.props.isRoleRemovable}
-                    requiredFields={requiredFields}
-                    visibleFields={visibleFields}
-                    isAllowedRole={this.isAllowedRole}
-                    userEmail={this.props.user.email}
-                    onDeleteRole={this.handleDeleteRole}
-                  />
-                )}
-              </Fragment>
-            )
-          }}
-        />
-      </BareModal>
+          return (
+            <>
+              {this.props.showBrokerageFields ? (
+                <OfficeForm {...sharedProps} />
+              ) : (
+                <RoleForm
+                  {...sharedProps}
+                  isNewRecord={this.isNewRecord}
+                  isRoleRemovable={this.props.isRoleRemovable}
+                  requiredFields={requiredFields}
+                  visibleFields={visibleFields}
+                  isAllowedRole={this.isAllowedRole}
+                  userEmail={this.props.user.email}
+                  onDeleteRole={this.handleDeleteRole}
+                />
+              )}
+            </>
+          )
+        }}
+      />
+      // </BareModal>
     )
   }
 }
@@ -441,12 +444,9 @@ function mapStateToProps({ user, contacts }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    notify,
-    updateRole,
-    createRoles,
-    confirmation
-  }
-)(DealRole)
+export default connect(mapStateToProps, {
+  notify,
+  updateRole,
+  createRoles,
+  confirmation
+})(DealRole)

@@ -107,7 +107,8 @@ export function TextField({
               autoFocus
               maxLength={15}
               value={fieldValue}
-              placeholder={field.label}
+              mask={field.properties.mask}
+              placeholder={field.properties.placeholder || field.label}
               onKeyPress={handleKeyPress}
               onChange={(
                 e: React.FormEvent<HTMLInputElement>,
@@ -121,7 +122,6 @@ export function TextField({
                     : (e.target as HTMLInputElement).value
                 )
               }
-              {...field.properties}
             />
 
             <Button

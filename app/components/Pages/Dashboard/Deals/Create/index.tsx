@@ -1,19 +1,33 @@
 import React, { useState } from 'react'
 import { Box, makeStyles } from '@material-ui/core'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useTitle } from 'react-use'
+import omit from 'lodash/omit'
 
 import Deal from 'models/Deal'
+
+import { createDeal, createRoles } from 'actions/deals'
 
 import { QuestionWizard } from 'components/QuestionWizard'
 
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 
+import { getDealContexts } from './helpers/get-deal-contexts'
+
+import { DealVisibility } from './form/DealVisibility'
 import { DealType } from './form/DealType'
-import { DealSide } from './form/DealSide'
 import { DealPropertyType } from './form/DealPropertyType'
-import { DealAgent } from './form/DealAgent'
+import { DealPrimaryAgent } from './form/DealPrimaryAgent'
+import { DealCoAgent } from './form/DealCoAgent'
 import { DealAddress } from './form/DealAddress'
+import { DealClient } from './form/DealClient'
+import { DealContext } from './form/DealContext'
+import { DealEnderType } from './form/DealEnderType'
+
+import { Context } from './context'
+
+import type { Form, IDealFormPrimaryAgent } from './types'
 
 const useStyles = makeStyles(
   () => ({
@@ -28,55 +42,137 @@ const useStyles = makeStyles(
 )
 
 export default function CreateDeal() {
+  useTitle('Create New Deal | Deals | Rechat')
+
   const classes = useStyles()
-  const [deal, setDeal] = useState<IDeal | null>(null)
-  const [dealType, setDealType] = useState<string>('')
-  const [dealSide, setDealSide] = useState<Nullable<'Buying' | 'Selling'>>(null)
 
+  const [dealId, setDealId] = useState<UUID | null>(null)
+  const [form, setForm] = useState<Partial<Form>>({
+    primaryAgents: {}
+  })
+
+  const dispatch = useDispatch()
   const user = useSelector<IAppState, IUser>(state => selectUser(state))
+  const deal = useSelector<IAppState, IDeal | null>(({ deals }) =>
+    dealId ? deals.list[dealId] : null
+  )
 
-  const createDraftDeal = async (propertyType: string) => {
-    if (deal || !dealSide) {
-      return
-    }
+  console.log('!!!!!', deal)
 
-    const data = await Deal.create(user, {
-      property_type: propertyType,
-      deal_type: dealSide,
+  const dealContexts = getDealContexts(user, form.side, form.propertyType)
+
+  const updateForm = (data: Partial<Form>) => {
+    setForm({
+      ...form,
+      ...data
+    })
+  }
+
+  const isDoubleEnded = form.enderType
+    ? ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(form.enderType)
+    : false
+
+  /**
+   * Creates the initial deal as soon as possible and updates
+   * the created deal on every step change
+   *
+   * @param agents - The list of primary agents [BuyerAgent, SellerAgent]
+   */
+  const createInitialDeal = async (
+    agents: Record<number, IDealFormPrimaryAgent>
+  ) => {
+    const primaryAgent = Object.values(agents).find(agent =>
+      ['SellerAgent', 'BuyerAgent'].includes(agent.role)
+    )!
+
+    const deal = await Deal.create(user, {
+      brand: primaryAgent.brand,
+      property_type: form.propertyType,
+      deal_type: form.side,
       is_draft: false
     })
 
-    console.log(data)
+    dispatch(createDeal(deal))
+    setDealId(deal.id)
 
-    setDeal(data)
+    const primaryAgents = Object.values(agents).map(agent =>
+      omit(agent, ['id', 'contact'])
+    )
+
+    dispatch(createRoles(deal.id, primaryAgents))
   }
 
   return (
-    <Box className={classes.root}>
-      <QuestionWizard defaultStep={0}>
-        <DealType onChange={setDealType} />
-        <DealSide onChange={setDealSide} />
+    <Context.Provider
+      value={{
+        form,
+        deal,
+        user,
+        updateForm
+      }}
+    >
+      <Box className={classes.root}>
+        <QuestionWizard defaultStep={0}>
+          <DealVisibility />
+          <DealType />
+          <DealPropertyType />
 
-        {dealSide === 'Buying' && (
-          <DealAgent type="primary" title="Enter buyer agent’s information" />
-        )}
+          {form.side === 'Buying' && <DealEnderType />}
 
-        {dealSide === 'Buying' && (
-          <DealAgent
-            type="co-agent"
-            title="Got it! Enter buyer co-agent’s information"
-          />
-        )}
+          {form.side === 'Buying' && (
+            <DealPrimaryAgent
+              agentSide="Buying"
+              isCommissionRequired={isDoubleEnded}
+              title="Enter Buyer Primary Agent’s information"
+            />
+          )}
 
-        <DealAgent type="primary" title="Enter listing agent’s information" />
-        <DealAgent
-          type="co-agent"
-          title="Got it! Enter listing co-agent’s information"
-        />
+          {form.side && (
+            <DealPrimaryAgent
+              isCommissionRequired
+              agentSide="Selling"
+              title="Enter Listing Primary Agent’s information"
+              finishStepCallback={createInitialDeal}
+            />
+          )}
 
-        <DealAddress />
-        <DealPropertyType onChange={createDraftDeal} />
-      </QuestionWizard>
-    </Box>
+          {form.side === 'Buying' && (
+            <DealCoAgent
+              agentSide="Buying"
+              isCommissionRequired={isDoubleEnded}
+              title="Enter Buyer Co-Agent’s information"
+            />
+          )}
+
+          {form.side && (
+            <DealCoAgent
+              isCommissionRequired
+              agentSide="Selling"
+              title="Enter Listing Co-Agent’s information"
+            />
+          )}
+
+          <DealAddress />
+
+          {form.side === 'Buying' && (
+            <DealClient
+              side="Buying"
+              title="Enter buyer information as shown on offer"
+            />
+          )}
+
+          {form.side === 'Selling' && (
+            <DealClient
+              side="Selling"
+              title="Enter the seller’s legal information"
+            />
+          )}
+
+          {dealContexts.map((context: IDealBrandContext) => (
+            <DealContext key={context.id} context={context} />
+          ))}
+        </QuestionWizard>
+      </Box>
+    </Context.Provider>
   )
 }

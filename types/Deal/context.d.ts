@@ -10,6 +10,7 @@ declare interface IDealBrandContext {
   key: string
   type: 'brand_context'
   label: string
+  mandatory: boolean
   short_label: string | null
   section: IContextSection
   needs_approval: boolean | null
@@ -23,4 +24,8 @@ declare interface IDealBrandContext {
   triggers_brokerwolf: boolean
   order: number
   deleted_at?: number | null
+  properties: {
+    placeholder: string
+    mask: string[]
+  }
 }

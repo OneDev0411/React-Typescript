@@ -8,6 +8,8 @@ declare type IDealPropertyType =
   | 'Commercial Lease'
   | 'Active Offer'
 
+declare type IDealVisibility = 'draft' | 'visible'
+declare type IDealEnderType = 'AgentDoubleEnder' | 'OfficeDoubleEnder' | null
 declare interface IDeal extends IModel<'deal'> {
   title: string
   deal_type: 'Selling' | 'Buying'

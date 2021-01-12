@@ -8,39 +8,39 @@ import {
 
 import { useWizardForm } from 'components/QuestionWizard/use-context'
 
-import { RadioGroup } from '../../components/RadioGroup'
+import { RadioGroup } from 'components/RadioGroup'
+
+import { useFormContext } from '../../context/use-form-context'
 
 interface Props {
   step?: number
-  onChange: (dealType: string) => void
 }
 
-export function DealType({ step, onChange }: Props) {
+export function DealType({ step }: Props) {
   const wizard = useWizardForm()
+  const context = useFormContext()
 
-  const handleChange = (value: string) => {
-    onChange(value)
+  const handleChange = (value: IDealType) => {
     wizard.next()
+    context.updateForm({
+      side: value
+    })
   }
 
   return (
     <QuestionSection step={step}>
-      <QuestionTitle>What is the stage of this deal?</QuestionTitle>
+      <QuestionTitle>Who are you repersenting?</QuestionTitle>
       <QuestionForm>
         <RadioGroup
           name="DealType"
           options={[
             {
-              label: 'Visible To Admin',
-              value: 'visible',
-              description:
-                'This deal is ready and I want to start submitting paperwork'
+              label: 'Buyer (or Tenant)',
+              value: 'Buying'
             },
             {
-              label: 'NOT Visible To Admin',
-              value: 'draft',
-              description:
-                'This deal is in an early stage and paperwork has just started'
+              label: 'Seller (or Landlord)',
+              value: 'Selling'
             }
           ]}
           onChange={handleChange}

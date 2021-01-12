@@ -10,26 +10,29 @@ import {
 import { propertyTypes } from 'deals/utils/property-types'
 
 import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { RadioGroup } from 'components/RadioGroup'
 
-import { RadioGroup } from '../../components/RadioGroup'
+import { useFormContext } from '../../context/use-form-context'
 
 interface Props {
   step?: number
-  onChange: (dealPropertyType: string) => void
 }
 
-export function DealPropertyType({ step, onChange }: Props) {
+export function DealPropertyType({ step }: Props) {
   const wizard = useWizardForm()
+  const context = useFormContext()
   const theme = useTheme<Theme>()
 
-  const handleChange = (value: string) => {
+  const handleChange = (value: IDealPropertyType) => {
     wizard.next()
-    onChange(value)
+    context.updateForm({
+      propertyType: value
+    })
   }
 
   return (
     <QuestionSection step={step}>
-      <QuestionTitle>Who are you repersenting?</QuestionTitle>
+      <QuestionTitle>What is the property type?</QuestionTitle>
       <QuestionForm>
         <RadioGroup
           name="DealPropertyType"
