@@ -323,7 +323,10 @@
     color: #0945eb;
   }
 
-  .gjs-badge,
+  .gjs-badge {
+    display: none !important;
+  }
+
   .gjs-toolbar {
     background-color: #0945eb;
   }
