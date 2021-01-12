@@ -2,7 +2,9 @@ import _ from 'underscore'
 
 import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID } from 'crm/List/constants'
 
-export function normalizeAttributeFilters(filters: StringMap<IActiveFilter>) {
+export const normalizeAttributeFilters = (
+  filters: StringMap<IActiveFilter>
+): IContactAttributeFilter[] => {
   const criteria: IContactAttributeFilter[] = []
 
   _.each(filters, filter => {
