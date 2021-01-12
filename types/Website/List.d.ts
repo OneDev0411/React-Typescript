@@ -11,3 +11,12 @@ declare interface IWebsite extends IModel<'website'> {
   attributes: Record<string, string>
   hostnames: string[]
 }
+
+declare interface IDomainSuggest {
+  available: boolean
+  domain: string
+  definitive: boolean
+  price: number
+  currency: 'USD'
+  period: number
+}

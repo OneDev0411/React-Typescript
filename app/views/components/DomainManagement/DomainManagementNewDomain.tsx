@@ -19,6 +19,8 @@ import DomainName from './DomainName'
 import DomainSetAsDefault, {
   DomainSetAsDefaultType
 } from './DomainSetAsDefault'
+import DomainSearch from './DomainSearch'
+import DomainAgreement from './DomainAgreement'
 
 export interface DomainManagementNewDomainProps {
   className: string
@@ -37,10 +39,15 @@ function DomainManagementNewDomain({
   const theme = useTheme()
   const { isLoading: isWorking, run } = useAsync()
 
-  const [, setDomainStatus] = useState<DomainStatusType>(
+  const [domainStatus, setDomainStatus] = useState<DomainStatusType>(
     DomainStatusType.Existing
   )
   const [domainName, setDomainName] = useState('')
+
+  const handleDomainStatusChange = (domainStatus: DomainStatusType) => {
+    setDomainStatus(domainStatus)
+    setDomainName('')
+  }
 
   const handleAddDomain = (domainName: string, isDefault: boolean) => {
     onDomainAdd(domainName, isDefault)
@@ -83,6 +90,8 @@ function DomainManagementNewDomain({
     })
   }
 
+  const isNew = domainStatus === DomainStatusType.New
+
   return (
     <div className={className}>
       <Box marginBottom={3} color={theme.palette.grey[600]}>
@@ -98,12 +107,26 @@ function DomainManagementNewDomain({
       </Box>
       <Box marginLeft={2}>
         <QuestionWizard defaultStep={0}>
-          <DomainStatus onChange={setDomainStatus} disabled={isWorking} />
-          <DomainName onChange={setDomainName} disabled={isWorking} />
-          <DomainSetAsDefault
-            onChange={handleAddExistingDomain}
+          <DomainStatus
+            onChange={handleDomainStatusChange}
             disabled={isWorking}
           />
+          {isNew ? (
+            <DomainSearch
+              domainName={domainName}
+              onDomainNameChange={setDomainName}
+              disabled={isWorking}
+            />
+          ) : (
+            <DomainName onChange={setDomainName} disabled={isWorking} />
+          )}
+          {isNew && <DomainAgreement />}
+          {domainName && (
+            <DomainSetAsDefault
+              onChange={handleAddExistingDomain}
+              disabled={isWorking}
+            />
+          )}
         </QuestionWizard>
       </Box>
     </div>
