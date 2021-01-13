@@ -76,7 +76,9 @@ const ContactsList = props => {
       primary: true,
       width: '12%',
       class: 'visible-on-hover',
-      render: ({ row: contact }) => <CtaAction contact={contact} />
+      render: ({ row: contact }) => {
+        return !contact?.parked ? <CtaAction contact={contact} /> : null
+      }
     },
     {
       id: 'last_touched',
