@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, makeStyles } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
@@ -6,12 +6,14 @@ import omit from 'lodash/omit'
 
 import Deal from 'models/Deal'
 
-import { createDeal, createRoles } from 'actions/deals'
+import { createDeal, createRoles, getContextsByDeal } from 'actions/deals'
 
 import { QuestionWizard } from 'components/QuestionWizard'
 
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
+
+import { goTo } from 'utils/go-to'
 
 import { getDealContexts } from './helpers/get-deal-contexts'
 
@@ -46,7 +48,9 @@ export default function CreateDeal() {
 
   const classes = useStyles()
 
-  const [dealId, setDealId] = useState<UUID | null>(null)
+  const [dealId, setDealId] = useState<UUID | null>(
+    'a28f1720-caad-11ea-b4f3-027d31a1f7a0'
+  )
   const [form, setForm] = useState<Partial<Form>>({
     primaryAgents: {}
   })
@@ -57,9 +61,17 @@ export default function CreateDeal() {
     dealId ? deals.list[dealId] : null
   )
 
-  console.log('!!!!!', deal)
+  useEffect(() => {
+    console.log('[ + ] Loading Deal Statuses')
 
-  const dealContexts = getDealContexts(user, form.side, form.propertyType)
+    dealId && dispatch(getContextsByDeal(dealId))
+  }, [dealId, dispatch])
+
+  const dealContexts = getDealContexts(
+    user,
+    deal ? deal.deal_type : form.side,
+    deal ? deal.property_type : form.propertyType
+  )
 
   const updateForm = (data: Partial<Form>) => {
     setForm({
@@ -112,6 +124,7 @@ export default function CreateDeal() {
       <Box className={classes.root}>
         <QuestionWizard defaultStep={0}>
           <DealVisibility />
+
           <DealType />
           <DealPropertyType />
 
@@ -166,9 +179,10 @@ export default function CreateDeal() {
             />
           )}
 
-          {dealContexts.map((context: IDealBrandContext) => (
-            <DealContext key={context.id} context={context} />
-          ))}
+          {deal &&
+            dealContexts.map((context: IDealBrandContext) => (
+              <DealContext key={context.id} context={context} />
+            ))}
         </QuestionWizard>
       </Box>
     </Context.Provider>

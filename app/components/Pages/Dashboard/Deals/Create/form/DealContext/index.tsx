@@ -7,7 +7,7 @@ import {
   InputAdornment,
   Theme
 } from '@material-ui/core'
-
+import fecha from 'fecha'
 import { useDispatch } from 'react-redux'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
@@ -63,8 +63,10 @@ export function DealContext({ step, context }: Props) {
       return
     }
 
-    setInputValue(date)
-    handleSave()
+    const value = fecha.format(date, 'YYYY-MM-DD')
+
+    setInputValue(value)
+    handleSave(value)
   }
 
   const handleChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,9 +78,13 @@ export function DealContext({ step, context }: Props) {
     setInputValue(value.toString())
   }
 
-  const handleSave = () => {
+  const handleSave = (value = inputValue) => {
     try {
-      const data = createUpsertObject(deal, context.key, inputValue, false)
+      const data = createUpsertObject(deal, context.key, value, false)
+
+      if (!data) {
+        throw new Error(`context ${context.key} is null`)
+      }
 
       dispatch(upsertContexts(deal!.id, [data]))
     } catch (e) {
