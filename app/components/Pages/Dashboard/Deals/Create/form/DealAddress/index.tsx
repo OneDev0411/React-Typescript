@@ -138,43 +138,36 @@ export function DealAddress({ step }: Props) {
             </Box>
 
             <Box>
-              {context.form.side === 'Buying' && (
-                <>
-                  {listings.length > 0 && (
-                    <Typography variant="body1" className={classes.subtitle}>
-                      Listings
-                    </Typography>
-                  )}
-
-                  {listings.map(listing => (
-                    <Box
-                      key={listing.mls_number}
-                      display="flex"
-                      className={classes.resultItem}
-                      onClick={() => setListing(listing)}
-                    >
-                      <Avatar
-                        src={listing.cover_image_url}
-                        alt={listing.mls_number}
-                      />
-
-                      <div className={classes.resultItemContent}>
-                        <Typography variant="body2">
-                          {listing.address.street_address}
-                        </Typography>
-
-                        <Typography
-                          variant="body2"
-                          className={classes.lightText}
-                        >
-                          ${listing.price} . {listing.address.city},{' '}
-                          {listing.address.state}, {listing.mls_number}
-                        </Typography>
-                      </div>
-                    </Box>
-                  ))}
-                </>
+              {listings.length > 0 && (
+                <Typography variant="body1" className={classes.subtitle}>
+                  Listings
+                </Typography>
               )}
+
+              {listings.map(listing => (
+                <Box
+                  key={listing.mls_number}
+                  display="flex"
+                  className={classes.resultItem}
+                  onClick={() => setListing(listing)}
+                >
+                  <Avatar
+                    src={listing.cover_image_url}
+                    alt={listing.mls_number}
+                  />
+
+                  <div className={classes.resultItemContent}>
+                    <Typography variant="body2">
+                      {listing.address.street_address}
+                    </Typography>
+
+                    <Typography variant="body2" className={classes.lightText}>
+                      ${listing.price} . {listing.address.city},{' '}
+                      {listing.address.state}, {listing.mls_number}
+                    </Typography>
+                  </div>
+                </Box>
+              ))}
 
               {places.length > 0 && (
                 <Typography variant="body1" className={classes.subtitle}>

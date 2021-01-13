@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, makeStyles, Theme } from '@material-ui/core'
+import { Box, CircularProgress, makeStyles, Theme } from '@material-ui/core'
 
 import {
   QuestionSection,
@@ -154,7 +154,9 @@ export function DealPrimaryAgent({
         >
           <TeamAgents flattenTeams isPrimaryAgent>
             {({ teams, isLoading }) =>
-              !isLoading && (
+              isLoading ? (
+                <CircularProgress disableShrink />
+              ) : (
                 <div className={classes.root}>
                   {teams.map((team, index) => (
                     <div key={index}>

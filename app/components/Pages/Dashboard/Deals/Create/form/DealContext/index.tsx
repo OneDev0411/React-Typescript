@@ -8,7 +8,11 @@ import {
   Theme
 } from '@material-ui/core'
 
+import { useDispatch } from 'react-redux'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+
+import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
+import { upsertContexts } from 'actions/deals'
 
 import {
   QuestionSection,
@@ -20,6 +24,9 @@ import DatePicker from 'components/DatePicker'
 import { MaskedInput } from 'components/MaskedInput'
 
 import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { getField } from 'models/Deal/helpers/context'
+
+import { useFormContext } from '../../context/use-form-context'
 
 interface Props {
   step?: number
@@ -33,11 +40,6 @@ const useStyles = makeStyles(
     },
     continueButton: {
       marginTop: theme.spacing(2)
-    },
-    datePicker: {
-      padding: theme.spacing(2, 0),
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius
     }
   }),
   {
@@ -48,7 +50,11 @@ const useStyles = makeStyles(
 export function DealContext({ step, context }: Props) {
   const wizard = useWizardForm()
   const classes = useStyles()
-  const [inputValue, setInputValue] = useState('')
+  const { deal } = useFormContext()
+  const dispatch = useDispatch()
+
+  const defaultValue = deal ? getField(deal, context.key) : ''
+  const [inputValue, setInputValue] = useState(defaultValue)
 
   const contextType = context.data_type
 
@@ -57,7 +63,8 @@ export function DealContext({ step, context }: Props) {
       return
     }
 
-    wizard.next()
+    setInputValue(date)
+    handleSave()
   }
 
   const handleChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,8 +76,22 @@ export function DealContext({ step, context }: Props) {
     setInputValue(value.toString())
   }
 
-  const handleContinue = () => {
+  const handleSave = () => {
+    try {
+      const data = createUpsertObject(deal, context.key, inputValue, false)
+
+      dispatch(upsertContexts(deal!.id, [data]))
+    } catch (e) {
+      console.log(e)
+    }
+
     wizard.next()
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === 13) {
+      handleSave()
+    }
   }
 
   const getMask = () => {
@@ -109,9 +130,10 @@ export function DealContext({ step, context }: Props) {
       <QuestionForm>
         <Box>
           {contextType === 'Date' && (
-            <Box className={classes.datePicker}>
-              <DatePicker onChange={handleSelectDate} />
-            </Box>
+            <DatePicker
+              selectedDate={new Date(defaultValue * 1000)}
+              onChange={handleSelectDate}
+            />
           )}
 
           {['Text', 'Number'].includes(contextType!) && (
@@ -132,7 +154,8 @@ export function DealContext({ step, context }: Props) {
                   placeholder: context.properties?.placeholder ?? '',
                   inputComponent: MaskedInput,
                   value: inputValue,
-                  onChange: handleChangeInputValue
+                  onChange: handleChangeInputValue,
+                  onKeyDown: handleKeyDown
                 }}
               />
             </Box>
@@ -144,7 +167,7 @@ export function DealContext({ step, context }: Props) {
               color="secondary"
               disabled={!inputValue}
               className={classes.continueButton}
-              onClick={handleContinue}
+              onClick={handleSave}
             >
               Continue
             </Button>

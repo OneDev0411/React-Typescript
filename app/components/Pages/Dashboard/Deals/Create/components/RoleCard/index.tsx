@@ -39,7 +39,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  role: IDealFormRole
+  role: IDealFormRole | IDealRole
   onClickEdit: () => void
   onClickRemove: (() => void) | (() => Promise<void>)
 }

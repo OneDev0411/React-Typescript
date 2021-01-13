@@ -131,7 +131,7 @@ export function DealClient({ step, side, title }: Props) {
   })
 
   const handleRemoveRole = async (role: IDealRole) => {
-    await dispatch(deleteRole(context.deal!.id, role.id))
+    return dispatch(deleteRole(context.deal!.id, role.id))
   }
 
   const createNewContact = () => {

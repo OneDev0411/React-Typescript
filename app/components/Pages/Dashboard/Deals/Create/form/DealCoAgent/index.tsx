@@ -1,5 +1,18 @@
 import React, { useState } from 'react'
-import { Box, Button, makeStyles, TextField, Theme } from '@material-ui/core'
+import {
+  Box,
+  CircularProgress,
+  Button,
+  makeStyles,
+  TextField,
+  Theme
+} from '@material-ui/core'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { IAppState } from 'reducers'
+import { selectDealRoles } from 'reducers/deals/roles'
+
+import { deleteRole } from 'actions/deals'
 
 import {
   QuestionSection,
@@ -63,26 +76,36 @@ export function DealCoAgent({
   const classes = useStyles()
   const wizard = useWizardForm()
   const context = useFormContext()
+  const dispatch = useDispatch()
 
   const [selectedRole, setSelectedRole] = useState<
     Nullable<Partial<IDealFormRole>>
   >(null)
   const [searchCriteria, setSearchCriteria] = useState<string>('')
 
-  // const list = []
-
-  if (wizard.lastVisitedStep < step!) {
-    return null
-  }
-
   const allowedRoles = getAllowedRoles(agentSide)
 
-  const handleUpsert = async (agent: IDealFormRole) => {}
+  const roles = useSelector<IAppState, IDealRole[]>(({ deals }) => {
+    return context.deal
+      ? (selectDealRoles(
+          deals.roles,
+          context.deal
+        ).filter((client: IDealRole) =>
+          allowedRoles.includes(client.role)
+        ) as IDealRole[])
+      : []
+  })
 
-  const handleRemove = (agent: IDealFormRole) => {}
+  const handleRemove = async (role: IDealRole) => {
+    return dispatch(deleteRole(context.deal!.id, role.id))
+  }
 
   const handleContinue = () => {
     wizard.next()
+  }
+
+  if (wizard.lastVisitedStep < step!) {
+    return null
   }
 
   return (
@@ -93,25 +116,25 @@ export function DealCoAgent({
         <Box mt={1}>
           <DealRole
             isOpen
+            deal={context.deal}
             user={context.user}
             dealSide={context.form.side}
             form={selectedRole}
             allowedRoles={allowedRoles}
             isCommissionRequired={isCommissionRequired}
-            onUpsertRole={handleUpsert}
             onClose={() => setSelectedRole(null)}
           />
         </Box>
       ) : (
         <Box display="flex" flexWrap="wrap">
-          {/* {list.map(agent => (
+          {roles.map(agent => (
             <RoleCard
               key={agent.id}
-              agent={agent}
+              role={agent}
               onClickEdit={() => setSelectedRole(agent)}
               onClickRemove={() => handleRemove(agent)}
             />
-          ))} */}
+          ))}
         </Box>
       )}
 
@@ -127,7 +150,9 @@ export function DealCoAgent({
             criteria={searchCriteria}
           >
             {({ teams, isLoading }) =>
-              !isLoading && (
+              isLoading ? (
+                <CircularProgress disableShrink />
+              ) : (
                 <div className={classes.root}>
                   <TextField
                     fullWidth
