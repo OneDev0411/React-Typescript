@@ -48,10 +48,14 @@ const useStyles = makeStyles((theme: Theme) =>
     infoContainer: {
       display: 'flex',
       alignItems: 'center',
-      marginRight: theme.spacing(5)
+      marginRight: theme.spacing(4)
     },
     actionsContainer: {
       flexGrow: 1
+    },
+    toggleAll: {
+      padding: 0,
+      marginRight: theme.spacing(1)
     },
     summary: {
       fontSize: theme.typography.body2.fontSize,
@@ -124,6 +128,7 @@ export function Actions<Row>({
                 tooltipTitle={tooltipTitle}
                 indeterminate={isSomeRowsSelected}
                 onChange={toggleAll}
+                className={classes.toggleAll}
               />
             </Tooltip>
 
