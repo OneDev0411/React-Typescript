@@ -38,7 +38,7 @@ const useStyles = makeStyles(
     label: {
       color: theme.palette.primary.main
     },
-    continueButton: {
+    saveButton: {
       marginTop: theme.spacing(2)
     }
   }),
@@ -172,10 +172,10 @@ export function DealContext({ step, context }: Props) {
               variant="contained"
               color="secondary"
               disabled={!inputValue}
-              className={classes.continueButton}
+              className={classes.saveButton}
               onClick={handleSave}
             >
-              Continue
+              Save
             </Button>
           )}
         </Box>

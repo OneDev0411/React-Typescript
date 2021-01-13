@@ -13,8 +13,6 @@ import { QuestionWizard } from 'components/QuestionWizard'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 
-import { goTo } from 'utils/go-to'
-
 import { getDealContexts } from './helpers/get-deal-contexts'
 
 import { DealVisibility } from './form/DealVisibility'
@@ -48,9 +46,7 @@ export default function CreateDeal() {
 
   const classes = useStyles()
 
-  const [dealId, setDealId] = useState<UUID | null>(
-    'a28f1720-caad-11ea-b4f3-027d31a1f7a0'
-  )
+  const [dealId, setDealId] = useState<UUID | null>(null)
   const [form, setForm] = useState<Partial<Form>>({
     primaryAgents: {}
   })

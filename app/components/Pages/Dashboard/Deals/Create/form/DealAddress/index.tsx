@@ -10,7 +10,9 @@ import {
 } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import cn from 'classnames'
-import { mdiMapMarker } from '@mdi/js'
+import { mdiMapMarker, mdiHome } from '@mdi/js'
+
+import ListingCard from 'components/ListingCards/ListingCard'
 
 import {
   QuestionSection,
@@ -22,7 +24,7 @@ import { useWizardForm } from 'components/QuestionWizard/use-context'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { updateListing, upsertContexts } from 'actions/deals'
-import { addressTitle } from 'utils/listing'
+
 import { useSearchLocation } from 'hooks/use-search-location'
 
 import { useFormContext } from '../../context/use-form-context'
@@ -57,9 +59,6 @@ const useStyles = makeStyles(
       margin: theme.spacing(2, 1),
       color: theme.palette.grey[500]
     },
-    submit: {
-      marginTop: theme.spacing(2)
-    },
     searchInput: {
       padding: theme.spacing(1.5)
     }
@@ -89,6 +88,12 @@ export function DealAddress({ step }: Props) {
     const { value } = e.target
 
     setSearchCriteria(value)
+  }
+
+  const handleRemove = () => {
+    setPlace(null)
+    setListing(null)
+    setSearchCriteria('')
   }
 
   const handleSubmit = async () => {
@@ -201,34 +206,41 @@ export function DealAddress({ step }: Props) {
           </Box>
         )}
 
-        {listing && (
-          <Box display="flex" alignItems="center">
-            <Box mr={1}>
-              <Avatar src={listing.cover_image_url} />
-            </Box>
-            <Typography variant="subtitle1">
-              {addressTitle(listing.address)}
-            </Typography>
-          </Box>
-        )}
+        {listing && <ListingCard listing={listing} />}
 
         {place && (
           <Box display="flex" alignItems="center">
             <Box mr={1}>
-              <Avatar title="P" />
+              <Avatar title="P">
+                <SvgIcon path={mdiHome} />
+              </Avatar>
             </Box>
-            <Typography variant="subtitle1">
-              {place.structured_formatting.main_text}
-            </Typography>
+            <Box>
+              <Typography variant="subtitle1">
+                {place.structured_formatting.main_text}
+              </Typography>
+
+              <Typography variant="subtitle2" className={classes.lightText}>
+                {place.structured_formatting.secondary_text}
+              </Typography>
+            </Box>
           </Box>
         )}
 
         {(listing || place) && (
-          <Box mt={4}>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-end"
+            mt={2}
+          >
+            <Box mr={1}>
+              <Button onClick={handleRemove}>Change Property</Button>
+            </Box>
+
             <Button
               variant="contained"
               color="secondary"
-              className={classes.submit}
               onClick={handleSubmit}
             >
               Continue
