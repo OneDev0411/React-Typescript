@@ -1,9 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
+
 import moment from 'moment'
 
-import { Button } from '@material-ui/core'
+import { Button, Tooltip } from '@material-ui/core'
+
+import { addNotification as notify } from 'components/notification'
 
 import { voidEnvelope } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
@@ -12,8 +14,6 @@ import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 import Deal from 'models/Deal'
 
 import { Avatar } from 'components/Avatar'
-
-import Tooltip from 'components/tooltip'
 
 import { getLegalFullName } from '../../utils/roles'
 
@@ -139,10 +139,8 @@ class Envelope extends React.Component {
               onClick={this.requestVoidEnvelope}
             >
               <Tooltip
-                caption={
-                  isVoidable
-                    ? null
-                    : 'You are not allowed to void this docusign'
+                title={
+                  isVoidable ? '' : 'You are not allowed to void this docusign'
                 }
                 placement="left"
               >

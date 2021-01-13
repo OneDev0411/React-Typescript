@@ -133,6 +133,10 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
                 props.location,
                 SORT_FIELD_SETTING_KEY
               )}
+              tooltipOptions={{
+                title: 'Sort by',
+                placement: 'top'
+              }}
             >
               {({ toggleMenu }) => (
                 <>

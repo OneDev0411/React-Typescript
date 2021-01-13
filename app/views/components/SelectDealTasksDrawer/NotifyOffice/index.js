@@ -1,8 +1,9 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 
+import { Tooltip } from '@material-ui/core'
+
 import { CheckBoxButton } from 'components/Button/CheckboxButton'
-import Tooltip from 'components/tooltip'
 
 import { Label } from './styled'
 
@@ -21,7 +22,7 @@ export function NotifyOffice(props) {
 
       <Tooltip
         placement="left"
-        caption={
+        title={
           props.checklist.is_deactivated
             ? 'You can not Notify Office for Backup offers'
             : null

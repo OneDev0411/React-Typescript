@@ -1,22 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
+import { Box } from '@material-ui/core'
 
 import { Map } from '../../../tour/Map'
 import { AssociationItem } from '../../../AssocationItem'
 
 function LocationComponent({ location }) {
   return (
-    <div style={{ marginBottom: '2.5rem' }}>
-      <div style={{ height: '12rem', marginBottom: '0.5rem' }}>
+    <Box mb={2.5}>
+      <Box mb={1} height="12rem" borderRadius="4px" overflow="hidden">
         <Map
           id="tour-direction-map"
           listings={[location.listing.original]}
           showDirection={false}
         />
-      </div>
+      </Box>
       <AssociationItem association={location} isRemovable={false} />
-    </div>
+    </Box>
   )
 }
 

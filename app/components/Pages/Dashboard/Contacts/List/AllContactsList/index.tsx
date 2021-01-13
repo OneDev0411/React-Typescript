@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
 
+import { Tooltip } from '@material-ui/core'
+
 import { IAppState } from 'reducers'
 import { resetActiveFilters as resetActiveFiltersAction } from 'actions/filter-segments/active-filters'
 import { selectActiveFilters } from 'reducers/filter-segments'
 
-import ToolTip from 'components/tooltip'
 import {
   ListTitle,
   ListItem,
@@ -77,14 +78,14 @@ function AllContactsList({
         <span>Contacts</span>
       </ListTitle>
 
-      <ToolTip caption="All my contacts" placement="right">
+      <Tooltip title="All my contacts" placement="right">
         <ListItem
           isSelected={isAllContactsSelected}
           onClick={() => clickHandler('default')}
         >
           <ListItemName>All Contacts</ListItemName>
         </ListItem>
-      </ToolTip>
+      </Tooltip>
       {syncedContacts.accounts > 0 && (
         <ListItem
           isSelected={isSyncedListSelected}

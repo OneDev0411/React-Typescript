@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, IconButton, Box } from '@material-ui/core'
+import { Button, IconButton, Box, Tooltip } from '@material-ui/core'
 
 import { mdiTrashCanOutline } from '@mdi/js'
 
 import { noop } from 'utils/helpers'
-import Tooltip from 'components/tooltip'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { EditModeActionBar, EditModeContainer } from '../../styled'
@@ -49,7 +48,7 @@ export class EditMode extends React.Component {
           isStatic={this.props.isStatic}
         >
           {showDelete && (
-            <Tooltip caption="Delete">
+            <Tooltip title="Delete">
               <IconButton
                 size="small"
                 disabled={isDisabled}

@@ -108,15 +108,15 @@ const ContactsList = props => {
     },
     {
       id: 'unpark-contact',
-      width: isParkTabActive ? '12%' : '0',
       class: 'opaque',
-      render: ({ row: contact }) =>
-        isParkTabActive ? (
+      render: ({ row: contact }) => {
+        return contact?.parked ? (
           <UnparkContact
             contactId={contact.id}
             callback={props.reloadContacts}
           />
         ) : null
+      }
     },
     {
       id: 'delete-contact',

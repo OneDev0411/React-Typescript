@@ -1,6 +1,10 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
 
+import withAcl from 'components/Acl/with-acl'
+
+import { ACL } from 'constants/acl'
+
 import GoToDashboard from '../views/components/GoToDashboard'
 
 // Containers
@@ -9,7 +13,7 @@ import Dashboard from '../components/Pages/Dashboard'
 
 // Pages
 import Load from '../loader'
-import UserIsNotAuthenticated from './userIsNotAuthenticated'
+import { withGuest, withSignedInUser } from './hoc'
 
 const AsyncAuthenticationLayout = Load({
   loader: () =>
@@ -25,22 +29,28 @@ const AsyncBranch = Load({
     import('../components/Pages/Branch' /* webpackChunkName: "branch" */)
 })
 
-const AsyncSignUp = Load({
-  loader: () =>
-    import('../components/Pages/Auth/SignUp' /* webpackChunkName: "signup" */)
-})
+const AsyncSignUp = withGuest(
+  Load({
+    loader: () =>
+      import('../components/Pages/Auth/SignUp' /* webpackChunkName: "signup" */)
+  })
+)
 
-const AsyncRegister = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Auth/Register' /* webpackChunkName: "register" */
-    )
-})
+const AsyncRegister = withGuest(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Auth/Register' /* webpackChunkName: "register" */
+      )
+  })
+)
 
-const AsyncSignIn = Load({
-  loader: () =>
-    import('../components/Pages/Auth/SignIn' /* webpackChunkName: "signin" */)
-})
+const AsyncSignIn = withGuest(
+  Load({
+    loader: () =>
+      import('../components/Pages/Auth/SignIn' /* webpackChunkName: "signin" */)
+  })
+)
 
 const AsyncVerifyRequest = Load({
   loader: () =>
@@ -56,12 +66,14 @@ const AsyncVerifyConfirm = Load({
     )
 })
 
-const AsyncForgotPassword = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Auth/Password/Forgot' /* webpackChunkName: "forgot_password" */
-    )
-})
+const AsyncForgotPassword = withGuest(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Auth/Password/Forgot' /* webpackChunkName: "forgot_password" */
+      )
+  })
+)
 
 const AsyncResetPassword = Load({
   loader: () =>
@@ -74,68 +86,91 @@ const AsyncResetPassword = Load({
 //  Agent On-boarding Wizard
 /* ==================================== */
 
-const AsyncConfirmAgentId = Load({
-  loader: () =>
-    import(
-      '../components/Pages/AgentOnboarding/ConfirmAgentId' /* webpackChunkName: "confirm_agent_id" */
-    )
-})
+const AsyncConfirmAgentId = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/AgentOnboarding/ConfirmAgentId' /* webpackChunkName: "confirm_agent_id" */
+      )
+  })
+)
 
-const AsyncOnboardingChooseMls = Load({
-  loader: () =>
-    import(
-      '../components/Pages/AgentOnboarding/ChooseMls' /* webpackChunkName: "onboarding_choose_mls" */
-    )
-})
+const AsyncOnboardingChooseMls = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/AgentOnboarding/ChooseMls' /* webpackChunkName: "onboarding_choose_mls" */
+      )
+  })
+)
 
-const AsyncOnboardingSecurityQuestion = Load({
-  loader: () =>
-    import(
-      '../components/Pages/AgentOnboarding/SecurityQuestion' /* webpackChunkName: "onboarding_security_question" */
-    )
-})
+const AsyncOnboardingSecurityQuestion = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/AgentOnboarding/SecurityQuestion' /* webpackChunkName: "onboarding_security_question" */
+      )
+  })
+)
 
-const AsyncOnboardingConfigBrand = Load({
-  loader: () =>
-    import(
-      '../components/Pages/AgentOnboarding/ConfigBrand' /* webpackChunkName: "onboarding_config_brand" */
-    )
-})
+const AsyncOnboardingConfigBrand = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/AgentOnboarding/ConfigBrand' /* webpackChunkName: "onboarding_config_brand" */
+      )
+  })
+)
 
-const AsyncOnboardingPhoneNumber = Load({
-  loader: () =>
-    import(
-      '../components/Pages/AgentOnboarding/PhoneNumber' /* webpackChunkName: "onboarding_phone_number" */
-    )
-})
+const AsyncOnboardingPhoneNumber = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/AgentOnboarding/PhoneNumber' /* webpackChunkName: "onboarding_phone_number" */
+      )
+  })
+)
 
-const AsyncOnboardingVerifyPhoneNumber = Load({
-  loader: () =>
-    import(
-      '../components/Pages/AgentOnboarding/VerifyPhoneNumber' /* webpackChunkName: "onboarding_verify_phone_number" */
-    )
-})
+const AsyncOnboardingVerifyPhoneNumber = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/AgentOnboarding/VerifyPhoneNumber' /* webpackChunkName: "onboarding_verify_phone_number" */
+      )
+  })
+)
 
-const AsyncOnboardingOAuthAccounts = Load({
-  loader: () =>
-    import(
-      '../components/Pages/AgentOnboarding/OAuthAccounts' /* webpackChunkName: "onboarding_oauth_accounts" */
-    )
-})
+const AsyncOnboardingOAuthAccounts = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/AgentOnboarding/OAuthAccounts' /* webpackChunkName: "onboarding_oauth_accounts" */
+      )
+  })
+)
 
-const AsyncOnboardingProfile = Load({
-  loader: () =>
-    import(
-      '../components/Pages/AgentOnboarding/Profile' /* webpackChunkName: "onboarding_profile" */
-    )
-})
+const AsyncOnboardingProfile = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/AgentOnboarding/Profile' /* webpackChunkName: "onboarding_profile" */
+      )
+  })
+)
 
-const AsyncDashboardOverview = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
-    )
-})
+/* ==================================== */
+//  Overview Page
+/* ==================================== */
+
+const AsyncDashboardOverview = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
+      )
+  }),
+  user => user.email === 'shayan@rechat.com'
+)
 
 /* ==================================== */
 //  MLS
@@ -180,30 +215,37 @@ const AsyncListingSinglePage = Load({
 //  Agent Network
 /* ==================================== */
 
-const AsyncAgentNetwork = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/AgentNetwork' /* webpackChunkName: "agent_network" */
-    )
-})
+const AsyncAgentNetwork = withAcl.agentNetwork(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/AgentNetwork' /* webpackChunkName: "agent_network" */
+      )
+  })
+)
 
-const AsyncAgentNetworkAgents = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/AgentNetwork/Agents' /* webpackChunkName: "agent_network" */
-    )
-})
+const AsyncAgentNetworkAgents = withAcl.agentNetwork(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/AgentNetwork/Agents' /* webpackChunkName: "agent_network" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Deals
 /* ==================================== */
 
-const AsyncDealsLayout = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */
-    )
-})
+const AsyncDealsLayout = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */
+      )
+  }),
+  { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
+)
 
 const AsyncDealCreate = Load({
   loader: () =>
@@ -251,173 +293,214 @@ const AsyncDealFormEdit = Load({
 //  Calendar
 /* ==================================== */
 
-const AsyncCalendar = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Calendar' /* webpackChunkName: "calendar" */
-    )
-})
+const AsyncCalendar = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Calendar' /* webpackChunkName: "calendar" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Contacts
 /* ==================================== */
 
-const AsyncContacts = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */
-    )
-})
+const AsyncContacts = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */
+      )
+  })
+)
 
-const AsyncContactProfile = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Contacts/Profile' /* webpackChunkName: "contact_p" */
-    )
-})
+const AsyncContactProfile = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Contacts/Profile' /* webpackChunkName: "contact_p" */
+      )
+  })
+)
 
-const AsyncContactsImportCsv = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */
-    )
-})
-const AsyncDuplicateContacts = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Contacts/List/Duplicates' /* webpackChunkName: "duplicate_contact" */
-    )
-})
+const AsyncContactsImportCsv = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */
+      )
+  })
+)
+const AsyncDuplicateContacts = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Contacts/List/Duplicates' /* webpackChunkName: "duplicate_contact" */
+      )
+  })
+)
 /* ==================================== */
 //  CRM FLOWS
 /* ==================================== */
 
-const AsyncFlowsList = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Flows/List' /* webpackChunkName: "flow_list" */
-    )
-})
+const AsyncFlowsList = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Flows/List' /* webpackChunkName: "flow_list" */
+      )
+  })
+)
 
-const AsyncFlowEdit = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Flows/Edit' /* webpackChunkName: "flow_edit" */
-    )
-})
+const AsyncFlowEdit = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Flows/Edit' /* webpackChunkName: "flow_edit" */
+      )
+  })
+)
 
 /* ==================================== */
 //  CRM Open Houses
 /* ==================================== */
 
-const AsyncOpenHousesList = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/OpenHouse/List/OpenHousesList' /* webpackChunkName: "oh_list" */
-    )
-})
+const AsyncOpenHousesList = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/OpenHouse/List/OpenHousesList' /* webpackChunkName: "oh_list" */
+      )
+  }),
+  [ACL.CRM, ACL.MARKETING]
+)
 
 /* ==================================== */
 //  CRM Tours List
 /* ==================================== */
 
-const AsyncToursList = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Tours/List/ToursList' /* webpackChunkName: "tours_list" */
-    )
-})
+const AsyncToursList = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Tours/List/ToursList' /* webpackChunkName: "tours_list" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Marketing Center
 /* ==================================== */
 
-const AsyncMarketingEditor = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Marketing/Editor' /* webpackChunkName: "marketing_editor" */
-    )
-})
+const AsyncMarketingEditor = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Marketing/Editor' /* webpackChunkName: "marketing_editor" */
+      )
+  })
+)
 
-const AsyncMarketingWizard = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Marketing/Wizard' /* webpackChunkName: "marketing_wizard" */
-    )
-})
+const AsyncMarketingWizard = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Marketing/Wizard' /* webpackChunkName: "marketing_wizard" */
+      )
+  })
+)
 
-const AsyncMarketing = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Marketing/List' /* webpackChunkName: "marketing" */
-    )
-})
+const AsyncMarketing = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Marketing/List' /* webpackChunkName: "marketing" */
+      )
+  })
+)
 
-const AsyncMarketingHistory = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Marketing/History' /* webpackChunkName: "marketing_history" */
-    )
-})
+const AsyncMarketingHistory = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Marketing/History' /* webpackChunkName: "marketing_history" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Inbox
 /* ==================================== */
 
-const AsyncInbox = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Inbox' /* webpackChunkName: "inbox" */
-    )
-})
+const AsyncInbox = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Inbox' /* webpackChunkName: "inbox" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Insights
 /* ==================================== */
 
-const AsyncMarketingInsightsList = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/MarketingInsights/List' /* webpackChunkName: "marketing_insights_list" */
-    )
-})
+const AsyncMarketingInsightsList = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/MarketingInsights/List' /* webpackChunkName: "marketing_insights_list" */
+      )
+  }),
+  { oneOf: [ACL.MARKETING, ACL.CRM] }
+)
 
-const AsyncMarketingInsight = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/MarketingInsights/Insight' /* webpackChunkName: "email_insight" */
-    )
-})
+const AsyncMarketingInsight = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/MarketingInsights/Insight' /* webpackChunkName: "email_insight" */
+      )
+  }),
+  { oneOf: [ACL.MARKETING, ACL.CRM] }
+)
 
 /* ==================================== */
 //  Chatroom
 /* ==================================== */
 
-const AsyncRecents = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Chatroom' /* webpackChunkName: "chat" */
-    )
-})
+const AsyncRecents = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Chatroom' /* webpackChunkName: "chat" */
+      )
+  })
+)
 
 // Notifications
-const AsyncNotificationsPage = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Notifications' /* webpackChunkName: "notif_p" */
-    )
-})
+const AsyncNotificationsPage = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Notifications' /* webpackChunkName: "notif_p" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Account settings
 /* ==================================== */
 
-const AsyncAccountLayout = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Account' /* webpackChunkName: "account_layout" */
-    )
-})
+const AsyncAccountLayout = withSignedInUser(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Account' /* webpackChunkName: "account_layout" */
+      )
+  })
+)
 
 const AsyncProfile = Load({
   loader: () =>
@@ -426,47 +509,60 @@ const AsyncProfile = Load({
     )
 })
 
-const ExportCalendar = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Account/ICalIntegration' /* webpackChunkName: "deal_templates" */
-    )
-})
+const ExportCalendar = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Account/ICalIntegration' /* webpackChunkName: "deal_templates" */
+      )
+  })
+)
 
-const ManageTags = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Account/ManageTags' /* webpackChunkName: "manage_tags" */
-    )
-})
+const ManageTags = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Account/ManageTags' /* webpackChunkName: "manage_tags" */
+      )
+  })
+)
 
-const ReminderNotifications = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Account/ReminderNotifications' /* webpackChunkName: "reminder_notifications" */
-    )
-})
+const ReminderNotifications = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Account/ReminderNotifications' /* webpackChunkName: "reminder_notifications" */
+      )
+  }),
+  { oneOf: [ACL.CRM, ACL.DEALS] }
+)
 
-const EmailSignature = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Account/EmailSignature' /* webpackChunkName: "email_signature" */
-    )
-})
+const EmailSignature = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Account/EmailSignature' /* webpackChunkName: "email_signature" */
+      )
+  })
+)
 
-const EmailTemplatesSettings = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Account/EmailTemplates/EmailTemplatesSettings' /* webpackChunkName: "email_templates" */
-    )
-})
+const EmailTemplatesSettings = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Account/EmailTemplates/EmailTemplatesSettings' /* webpackChunkName: "email_templates" */
+      )
+  })
+)
 
-const ConnectedAccountsSetting = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Account/ConnectedAccounts' /* webpackChunkName: "connected_accounts" */
-    )
-})
+const ConnectedAccountsSetting = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Account/ConnectedAccounts' /* webpackChunkName: "connected_accounts" */
+      )
+  })
+)
 
 const AsyncUpgradeToAgent = Load({
   loader: () =>
@@ -475,12 +571,12 @@ const AsyncUpgradeToAgent = Load({
     )
 })
 
-const AsyncCSS = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Account/CentralizedShowingService' /* webpackChunkName: "centralized_showing_service" */
-    )
-})
+// const AsyncCSS = Load({
+//   loader: () =>
+//     import(
+//       '../components/Pages/Dashboard/Account/CentralizedShowingService' /* webpackChunkName: "centralized_showing_service" */
+//     )
+// })
 
 /* ==================================== */
 //  Widgets
@@ -522,56 +618,64 @@ const AsyncHeroSearchSectionWidget = Load({
 //  Websites
 /* ==================================== */
 
-const AsyncWebsitesList = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Websites/List' /* webpackChunkName: "websites_list" */
-    )
-})
+const AsyncWebsitesList = withAcl.store(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Websites/List' /* webpackChunkName: "websites_list" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Other Pages
 /* ==================================== */
 
-const AsyncBrandSettings = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/BrandSettings' /* webpackChunkName: "brand_settings" */
-    )
-})
+const AsyncBrandSettings = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/BrandSettings' /* webpackChunkName: "brand_settings" */
+      )
+  }),
+  [ACL.MARKETING, ACL.ADMIN]
+)
 
-const AsyncShare = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Marketing/SharePage' /* webpackChunkName: "mc_share_page" */
-    )
-})
+const AsyncShare = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Marketing/SharePage' /* webpackChunkName: "mc_share_page" */
+      )
+  })
+)
 
-const AsyncTeams = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Teams' /* webpackChunkName: "teams" */
-    )
-})
+const AsyncTeams = withAcl.admin(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Teams' /* webpackChunkName: "teams" */
+      )
+  })
+)
 
-const AsyncChecklists = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Checklists' /* webpackChunkName: "console_checklists" */
-    )
-})
+const AsyncChecklists = withAcl.admin(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Checklists' /* webpackChunkName: "console_checklists" */
+      )
+  })
+)
 
-const AsyncWebsite = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Website' /* webpackChunkName: "website" */
-    )
-})
-
-const AsyncForms = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Forms' /* webpackChunkName: "form" */)
-})
+const AsyncWebsite = withAcl.store(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Website' /* webpackChunkName: "website" */
+      )
+  })
+)
 
 const AsyncMobile = Load({
   loader: () =>
@@ -591,12 +695,14 @@ const AsyncOops = Load({
 //  CRM Deal Context
 /* ==================================== */
 
-const AsyncContexts = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Contexts/List' /* webpackChunkName: "deal_context" */
-    )
-})
+const AsyncContexts = withAcl.admin(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Contexts/List' /* webpackChunkName: "deal_context" */
+      )
+  })
+)
 
 export default (
   <Route>
@@ -609,21 +715,15 @@ export default (
       <Route path="branch" component={AsyncBranch} />
       <Route path="share" component={AsyncShare} />
 
-      <Route
-        path="register"
-        component={UserIsNotAuthenticated(AsyncRegister)}
-      />
+      <Route path="register" component={AsyncRegister} />
 
-      <Route path="signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
-      <Route path="signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
+      <Route path="signin" component={AsyncSignIn} />
+      <Route path="signup" component={AsyncSignUp} />
 
       <Route path="verify/confirm/:verifyType" component={AsyncVerifyConfirm} />
       <Route path="verify/request/:verifyType" component={AsyncVerifyRequest} />
 
-      <Route
-        path="password/forgot"
-        component={UserIsNotAuthenticated(AsyncForgotPassword)}
-      />
+      <Route path="password/forgot" component={AsyncForgotPassword} />
       <Route path="password/reset" component={AsyncResetPassword} />
 
       <Route path="mobile" component={AsyncMobile} />
@@ -670,6 +770,7 @@ export default (
       />
       <Route path="onboarding/profile" component={AsyncOnboardingProfile} />
 
+      {/* these two routes have the same components with none dashboard path */}
       <Route path="branch" component={AsyncBranch} />
       <Route path="share" component={AsyncShare} />
 
@@ -737,9 +838,7 @@ export default (
           <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
         </Route>
 
-        <Route path="/dashboard/mls/:id" component={AsyncListingsLayout}>
-          <IndexRoute component={AsyncListingSinglePage} />
-        </Route>
+        <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />
@@ -766,7 +865,7 @@ export default (
             path="connected-accounts"
             component={ConnectedAccountsSetting}
           />
-          <Route path="css" component={AsyncCSS} />
+          {/* <Route path="css" component={AsyncCSS} /> */}
 
           <Route path="flows" component={AsyncFlowsList} />
           <Route path="flows/:id" component={AsyncFlowEdit} />
@@ -788,12 +887,11 @@ export default (
           <IndexRoute component={AsyncBrandSettings} />
         </Route>
 
+        {/* TODO: Store for now but it is a part of Marketing so we have to fix it for the new website builder */}
         <Route path="websites">
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
-
         <Route path="website" component={AsyncWebsite} />
-        <Route path="forms" component={AsyncForms} />
       </Route>
     </Route>
 

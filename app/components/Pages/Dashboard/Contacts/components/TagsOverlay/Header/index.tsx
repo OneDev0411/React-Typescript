@@ -4,7 +4,8 @@ import Flex from 'styled-flex-component'
 
 import { mdiCog, mdiClose } from '@mdi/js'
 
-import ToolTip from 'components/tooltip'
+import { Tooltip } from '@material-ui/core'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { Title } from 'components/OverlayDrawer/Header/styled'
@@ -38,9 +39,9 @@ export default function Header({ title, onClose }: Props) {
           }}
           to="/dashboard/account/manage-tags"
         >
-          <ToolTip caption="Manage tags" placement="bottom">
+          <Tooltip title="Manage tags" placement="bottom">
             <SvgIcon path={mdiCog} size={muiIconSizes.small} />
-          </ToolTip>
+          </Tooltip>
         </Link>
         <IconButton
           type="button"

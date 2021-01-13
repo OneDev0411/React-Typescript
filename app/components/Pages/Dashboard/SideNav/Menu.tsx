@@ -43,6 +43,7 @@ import {
 
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
+const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
 
 export function Menu() {
   const user = useSelector(selectUserUnsafe)
@@ -114,9 +115,9 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl.AgentNetwork>
 
-          <Acl.Marketing>
+          <Acl access={insightAccess}>
             <SideNavLinkItem to="/dashboard/insights">Insight</SideNavLinkItem>
-          </Acl.Marketing>
+          </Acl>
 
           <Acl.Crm>
             <SideNavLinkItem to="/dashboard/tours">Tours</SideNavLinkItem>

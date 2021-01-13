@@ -9,8 +9,8 @@ import { getBrandLogo } from '../../../../../utils/get-brand-logo'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     logo: {
-      width: theme.spacing(17.5),
-      padding: theme.spacing(5, 3, 2.5)
+      width: '100%',
+      padding: theme.spacing(5, 2, 2.5)
     }
   }),
   { name: 'Logo' }
@@ -26,7 +26,7 @@ export default function Logo() {
       getBrandLogo(
         brand,
         'inverted-logo-wide',
-        '/static/images/logo--white.svg'
+        '/static/images/logo--white--padded.svg'
       ),
     [brand]
   )

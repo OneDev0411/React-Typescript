@@ -13,6 +13,8 @@ import {
 import classNames from 'classnames'
 import { mdiTrashCanOutline } from '@mdi/js'
 
+import { Tooltip } from '@material-ui/core'
+
 import { IAppState } from 'reducers'
 import {
   selectEmailTemplates,
@@ -26,7 +28,6 @@ import { getActiveTeamId } from 'utils/user-teams'
 
 import Table from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
-import Tooltip from 'components/tooltip'
 import LoadingContainer from 'components/LoadingContainer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -154,7 +155,7 @@ function EmailTemplatesList({
           </Typography>
           <div className={classes.actions}>
             <Tooltip
-              caption={
+              title={
                 !row.editable
                   ? "You can't delete default templates."
                   : isTemplateDeleting(row.id)

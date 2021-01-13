@@ -1,13 +1,14 @@
 import React, { useState, useMemo, Fragment } from 'react'
 import { mdiPencilOutline } from '@mdi/js'
 
+import { Tooltip } from '@material-ui/core'
+
 import { normalizeRoleNames } from 'deals/FormEdit/utils/normalize-role-names'
 import { getRoleTooltip } from 'deals/FormEdit/utils/get-role-tooltip'
 import { getRolesList } from 'deals/FormEdit/utils/get-roles-list'
 import { isBrokerageField } from 'deals/FormEdit/utils/is-brokerage-field'
 import { isPrimaryAgent } from 'deals/utils/roles'
 
-import Tooltip from 'components/tooltip'
 import DealRole from 'components/DealRole'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -48,7 +49,7 @@ export function RoleField(props) {
             annotationRoles.length > 0 ? '#d2e5f2' : 'transparent'
         }}
       >
-        <Tooltip caption={tooltip}>
+        <Tooltip title={tooltip}>
           <div
             style={{
               display: 'inline-block'

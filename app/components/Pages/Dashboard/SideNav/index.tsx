@@ -8,7 +8,7 @@ import { Menu } from './Menu'
 
 const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: appSidenavWidth,
       flexShrink: 0
     },
@@ -29,7 +29,7 @@ export default function AppSideNav({ isMenuOpen, onDrawerToggle }: Props) {
 
   return (
     <nav className={classes.drawer} aria-label="menu">
-      <Hidden smUp implementation="css">
+      <Hidden mdUp implementation="css">
         <Drawer
           container={document.body}
           variant="temporary"
@@ -47,7 +47,7 @@ export default function AppSideNav({ isMenuOpen, onDrawerToggle }: Props) {
         </Drawer>
       </Hidden>
 
-      <Hidden xsDown implementation="css">
+      <Hidden smDown implementation="css">
         <Drawer
           classes={{
             paper: classes.drawerPaper

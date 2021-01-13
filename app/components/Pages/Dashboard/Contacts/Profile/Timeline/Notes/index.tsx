@@ -73,58 +73,71 @@ export function Notes(props: Props) {
 
   return (
     <>
-      {map(noteGroups, (group, date) => (
-        <Fragment key={date}>
-          <div className={classes.header}>
-            {fecha.format(new Date(date), 'dddd, MMMM Do, YYYY')}
-          </div>
+      {map(noteGroups, (group, date) => {
+        /*
+        we're adding this because the {date} value is just date, sth lile 2021-01-09
+        not time so the Date class will parse the value in UTC (GMT) at midnight
+        which cause 1 day off, so we need to add time like this
+        */
+        const header = fecha.format(
+          new Date(`${date}T00:00:00`),
+          'dddd, MMMM Do, YYYY'
+        )
 
-          {group.map((note, index) => (
-            <div
-              key={note.id}
-              className={cn(classes.root, {
-                [classes.dark]: index % 2 === 0
-              })}
-            >
-              <button
-                type="button"
-                className={classes.buttonContainer}
-                onClick={() => setSelectedNote(note)}
+        return (
+          <Fragment key={date}>
+            <div className={classes.header}>{header}</div>
+
+            {group.map((note, index) => (
+              <div
+                key={note.id}
+                className={cn(classes.root, {
+                  [classes.dark]: index % 2 === 0
+                })}
               >
-                Note
-              </button>
+                <button
+                  type="button"
+                  className={classes.buttonContainer}
+                  onClick={() => setSelectedNote(note)}
+                >
+                  Note
+                </button>
 
-              <div className={classes.row}>
-                <div className={classes.container}>
-                  <div className={classes.time}>
-                    {fecha.format(new Date(note.created_at * 1000), 'hh:mm A')}
-                  </div>
-                  <div className={cn(classes.container, classes.title)}>
-                    <div className={classes.iconNote}>
-                      <SvgIcon
-                        path={mdiNoteTextOutline}
-                        color={theme.palette.grey[600]}
-                      />
+                <div className={classes.row}>
+                  <div className={classes.container}>
+                    <div className={classes.time}>
+                      {fecha.format(
+                        new Date(note.created_at * 1000),
+                        'hh:mm A'
+                      )}
                     </div>
-                    <SanitizedHtml html={note.text} />
+                    <div className={cn(classes.container, classes.title)}>
+                      <div className={classes.iconNote}>
+                        <SvgIcon
+                          path={mdiNoteTextOutline}
+                          color={theme.palette.grey[600]}
+                        />
+                      </div>
+                      <SanitizedHtml html={note.text} />
+                    </div>
                   </div>
-                </div>
 
-                <div className={classes.actions}>
-                  <IconButton onClick={() => setSelectedNote(note)}>
-                    <Tooltip title="Edit Note" placement="top">
-                      <SvgIcon
-                        path={mdiPencilOutline}
-                        color={theme.palette.grey[400]}
-                      />
-                    </Tooltip>
-                  </IconButton>
+                  <div className={classes.actions}>
+                    <IconButton onClick={() => setSelectedNote(note)}>
+                      <Tooltip title="Edit Note" placement="top">
+                        <SvgIcon
+                          path={mdiPencilOutline}
+                          color={theme.palette.grey[400]}
+                        />
+                      </Tooltip>
+                    </IconButton>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </Fragment>
-      ))}
+            ))}
+          </Fragment>
+        )
+      })}
 
       {selectedNote && (
         <AddOrEditNoteDrawer

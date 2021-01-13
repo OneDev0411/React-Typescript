@@ -34,7 +34,9 @@ export default function Signin(props: Props) {
     window.decodeURIComponent(props.location.query.username || '')
   )
   const { siteLogo, siteTitle, siteColor } = getBrandInfo(brand)
-  const { redirectTo } = props.location.state || props.location.query
+
+  const redirectTo =
+    props.location.state?.redirectTo || props.location.query?.redirectTo
 
   const [isLookinUp, setIsLookingUp] = useState<boolean>(false)
   const [

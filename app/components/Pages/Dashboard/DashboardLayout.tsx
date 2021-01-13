@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     minHeight: '100vh',
     flexGrow: 1,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${appSidenavWidth}px)`
     }
   }

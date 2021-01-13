@@ -54,8 +54,6 @@ const useAlertStyles = makeStyles(
   { name: 'MuiAlert' }
 )
 
-const access = [ACL.CRM, ACL.MARKETING]
-
 function OpenHousesList() {
   useAlertStyles()
 
@@ -222,7 +220,7 @@ function OpenHousesList() {
   }
 
   return (
-    <Acl access={access} fallbackUrl="/dashboard/mls">
+    <>
       <Helmet>
         <title>Open House Registration Pages | Rechat</title>
       </Helmet>
@@ -273,7 +271,7 @@ function OpenHousesList() {
           </Box>
         </PageLayout.Main>
       </PageLayout>
-    </Acl>
+    </>
   )
 }
 

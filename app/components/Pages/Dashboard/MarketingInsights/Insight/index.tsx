@@ -34,8 +34,6 @@ import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-e
 import { getContactNameInitials } from 'models/contacts/helpers'
 import { setEmailNotificationStatus } from 'models/email/set-email-notification-status'
 
-import Acl from 'components/Acl'
-
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
 import Loading from '../../../../Partials/Loading'
@@ -258,7 +256,7 @@ function Insight({ params: { id } }: Props) {
   }
 
   return (
-    <Acl.Marketing fallbackUrl="/dashboard/mls">
+    <>
       <Helmet>
         <title>{`${
           item.subject ? `${item.subject} | ` : ''
@@ -362,7 +360,7 @@ function Insight({ params: { id } }: Props) {
           </section>
         </div>
       </div>
-    </Acl.Marketing>
+    </>
   )
 }
 

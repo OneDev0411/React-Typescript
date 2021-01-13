@@ -1,8 +1,7 @@
 import React from 'react'
-import { IconButton } from '@material-ui/core'
+import { IconButton, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 
-import Tooltip from 'components/tooltip'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Container, Title } from './styled'
@@ -28,7 +27,7 @@ export class ViewMode extends React.Component {
             <LoadingIcon />
           </div>
         ) : (
-          <Tooltip caption="Delete tag">
+          <Tooltip title="Delete tag">
             <IconButton size="small" onClick={this.onDeleteClick}>
               <SvgIcon path={mdiTrashCanOutline} />
             </IconButton>

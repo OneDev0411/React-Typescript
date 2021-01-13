@@ -2,10 +2,9 @@ import React, { Fragment } from 'react'
 
 import Flex from 'styled-flex-component'
 
-import { Button } from '@material-ui/core'
+import { Button, Tooltip } from '@material-ui/core'
 import { mdiClose, mdiCheck, mdiCircleOutline } from '@mdi/js'
 
-import ToolTip from 'views/components/tooltip'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import RequiredAction from './RequiredAction'
@@ -30,7 +29,7 @@ export default function BackOffice(props) {
       <div>
         {!isSaving ? (
           <Fragment>
-            <ToolTip caption={isDeclined ? 'Declined' : 'Decline'}>
+            <Tooltip title={isDeclined ? 'Declined' : 'Decline'}>
               <StatusButton
                 button="decline"
                 isActive={isDeclined}
@@ -40,9 +39,9 @@ export default function BackOffice(props) {
               >
                 <SvgIcon path={mdiClose} />
               </StatusButton>
-            </ToolTip>
+            </Tooltip>
 
-            <ToolTip caption={isApproved ? 'Approved' : 'Approve'}>
+            <Tooltip title={isApproved ? 'Approved' : 'Approve'}>
               <StatusButton
                 button="approve"
                 isActive={isApproved}
@@ -52,9 +51,9 @@ export default function BackOffice(props) {
               >
                 <SvgIcon path={mdiCheck} />
               </StatusButton>
-            </ToolTip>
+            </Tooltip>
 
-            <ToolTip caption="Not Reviewed">
+            <Tooltip title="Not Reviewed">
               <StatusButton
                 button="reset"
                 isActive={isNotReviewed && attention_requested !== true}
@@ -67,7 +66,7 @@ export default function BackOffice(props) {
               >
                 <SvgIcon path={mdiCircleOutline} />
               </StatusButton>
-            </ToolTip>
+            </Tooltip>
           </Fragment>
         ) : (
           <Loading>Saving ...</Loading>

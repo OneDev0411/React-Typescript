@@ -2,8 +2,9 @@ import React from 'react'
 
 import moment from 'moment'
 
+import { Tooltip } from '@material-ui/core'
+
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-import Tooltip from 'components/tooltip'
 
 import { LastActivity } from './styled'
 
@@ -23,7 +24,7 @@ export function Activity({ task, onClick }: Props) {
     <LastActivity onClick={onClick}>
       <Tooltip
         placement="bottom"
-        caption={moment
+        title={moment
           .unix(latestActivity.created_at)
           .format('MMM DD, YYYY, hh:mm A')}
       >

@@ -5,7 +5,7 @@ import fecha from 'fecha'
 
 import Flex from 'styled-flex-component'
 
-import { Button } from '@material-ui/core'
+import { Button, Tooltip } from '@material-ui/core'
 
 import { addNotification } from 'components/notification'
 
@@ -16,8 +16,6 @@ import Search from 'components/Grid/Search'
 import { selectDealTasks } from 'reducers/deals/tasks'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getChecklistById } from 'reducers/deals/checklists'
-
-import Tooltip from 'components/tooltip'
 
 import TasksDrawer from 'components/SelectDealTasksDrawer'
 
@@ -156,9 +154,10 @@ export class DocumentRow extends React.Component<Props & StateProps, State> {
             <DocumentItem key={index} id={document.id}>
               <Flex alignCenter>
                 <Tooltip
-                  caption={
-                    noChecklistError &&
-                    'You have to move this document to a checklist first'
+                  title={
+                    noChecklistError
+                      ? 'You have to move this document to a checklist first'
+                      : ''
                   }
                 >
                   <CheckBoxButton
