@@ -6,6 +6,8 @@ export default {
   api_url: pb.api_url,
   client_id: pv.api.client_id,
   client_secret: pv.api.client_secret,
+  crypto_key: pv.crypto.key,
+  crypto_iv: pv.crypto.iv,
   forms_url: pb.forms.url,
   live_by_api_url: pv.live_by.api_url,
   live_by_api_client_id: pv.live_by.api_client_id,
