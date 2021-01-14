@@ -24,6 +24,7 @@ import { DealAddress } from './form/DealAddress'
 import { DealClient } from './form/DealClient'
 import { DealContext } from './form/DealContext'
 import { DealEnderType } from './form/DealEnderType'
+import { DealCard } from './form/DealCard'
 
 import { Context } from './context'
 
@@ -91,7 +92,7 @@ export default function CreateDeal() {
       ['SellerAgent', 'BuyerAgent'].includes(agent.role)
     )!
 
-    const deal = await Deal.create(user, {
+    const deal: IDeal = await Deal.create(user, {
       brand: primaryAgent.brand,
       property_type: form.propertyType,
       deal_type: form.side,
@@ -106,6 +107,13 @@ export default function CreateDeal() {
     )
 
     dispatch(createRoles(deal.id, primaryAgents))
+
+    Deal.createChecklist(deal.id, {
+      conditions: {
+        deal_type: deal.deal_type,
+        property_type: deal.property_type
+      }
+    })
   }
 
   return (
@@ -120,8 +128,8 @@ export default function CreateDeal() {
       <Box className={classes.root}>
         <QuestionWizard defaultStep={0}>
           <DealVisibility />
-
           <DealType />
+
           <DealPropertyType />
 
           {form.side === 'Buying' && <DealEnderType />}
@@ -179,6 +187,8 @@ export default function CreateDeal() {
             dealContexts.map((context: IDealBrandContext) => (
               <DealContext key={context.id} context={context} />
             ))}
+
+          <DealCard />
         </QuestionWizard>
       </Box>
     </Context.Provider>

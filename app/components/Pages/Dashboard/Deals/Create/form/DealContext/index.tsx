@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Button,
   Box,
@@ -54,9 +54,17 @@ export function DealContext({ step, context }: Props) {
   const dispatch = useDispatch()
 
   const defaultValue = deal ? getField(deal, context.key) : ''
+
   const [inputValue, setInputValue] = useState(defaultValue)
 
   const contextType = context.data_type
+
+  useEffect(() => {
+    if (defaultValue && !inputValue) {
+      setInputValue(defaultValue)
+    }
+    // eslint-disable-next-line
+  }, [defaultValue])
 
   const handleSelectDate = (date: Date, type: 'day' | 'month' | 'year') => {
     if (type !== 'day') {
@@ -126,6 +134,10 @@ export function DealContext({ step, context }: Props) {
     return []
   }
 
+  if (wizard.lastVisitedStep < step!) {
+    return null
+  }
+
   return (
     <QuestionSection step={step}>
       <QuestionTitle>
@@ -137,7 +149,9 @@ export function DealContext({ step, context }: Props) {
         <Box>
           {contextType === 'Date' && (
             <DatePicker
-              selectedDate={new Date(defaultValue * 1000)}
+              selectedDate={
+                defaultValue ? new Date(defaultValue * 1000) : new Date()
+              }
               onChange={handleSelectDate}
             />
           )}
@@ -156,7 +170,6 @@ export function DealContext({ step, context }: Props) {
                     context.format === 'Currency' ? (
                       <InputAdornment position="start">$</InputAdornment>
                     ) : null,
-
                   placeholder: context.properties?.placeholder ?? '',
                   inputComponent: MaskedInput,
                   value: inputValue,
