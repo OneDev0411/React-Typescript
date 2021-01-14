@@ -14,6 +14,8 @@ import { IContextState } from 'components/QuestionWizard/context'
 
 import addHostnameToWebsite from 'models/website/add-hostname-to-website'
 
+import purchaseDomain from 'models/domains/purchase-domain'
+
 import DomainStatus, { DomainStatusType } from './DomainStatus'
 import DomainName from './DomainName'
 import DomainSetAsDefault, {
@@ -21,6 +23,7 @@ import DomainSetAsDefault, {
 } from './DomainSetAsDefault'
 import DomainSearch from './DomainSearch'
 import DomainAgreement from './DomainAgreement'
+import DomainPayment from './DomainPayment'
 
 export interface DomainManagementNewDomainProps {
   className: string
@@ -43,6 +46,8 @@ function DomainManagementNewDomain({
     DomainStatusType.Existing
   )
   const [domainName, setDomainName] = useState('')
+
+  const [domainAgreementKeys, setDomainAgreementKeys] = useState<string[]>([])
 
   const handleDomainStatusChange = (domainStatus: DomainStatusType) => {
     setDomainStatus(domainStatus)
@@ -90,7 +95,18 @@ function DomainManagementNewDomain({
     })
   }
 
+  const handleDomainNameChange = (domainName: string) => {
+    setDomainAgreementKeys([])
+    setDomainName(domainName)
+  }
+
   const isNew = domainStatus === DomainStatusType.New
+
+  const handlePurchase = (stripeCustomerId: string, wizard: IContextState) => {
+    run(async () =>
+      purchaseDomain(stripeCustomerId, domainName, domainAgreementKeys)
+    ).then(() => wizard.next())
+  }
 
   return (
     <div className={className}>
@@ -114,13 +130,21 @@ function DomainManagementNewDomain({
           {isNew ? (
             <DomainSearch
               domainName={domainName}
-              onDomainNameChange={setDomainName}
+              onDomainNameChange={handleDomainNameChange}
               disabled={isWorking}
             />
           ) : (
             <DomainName onChange={setDomainName} disabled={isWorking} />
           )}
-          {isNew && <DomainAgreement />}
+          {isNew && domainName && (
+            <DomainAgreement
+              domainName={domainName}
+              onNextClick={setDomainAgreementKeys}
+            />
+          )}
+          {isNew && domainName && domainAgreementKeys.length && (
+            <DomainPayment onPurchase={handlePurchase} disabled={isWorking} />
+          )}
           {domainName && (
             <DomainSetAsDefault
               onChange={handleAddExistingDomain}
