@@ -7,7 +7,7 @@ import {
 } from 'components/QuestionWizard'
 import { useWizardForm } from 'components/QuestionWizard/use-context'
 import useAsync from 'hooks/use-async'
-import suggestDomainName from 'models/website/suggest-domain-name'
+import suggestDomainName from 'models/domains/suggest-domain-name'
 
 import DomainSearchResults from './DomainSearchResults'
 import DomainSearchForm from './DomainSearchForm'

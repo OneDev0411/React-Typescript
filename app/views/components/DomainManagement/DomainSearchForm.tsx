@@ -50,7 +50,7 @@ function DomainSearchForm({
         <Box marginLeft={1}>
           <Button
             className={classes.button}
-            variant="contained"
+            variant="outlined"
             color="secondary"
             disabled={!search.length || disabled}
             type="submit"
