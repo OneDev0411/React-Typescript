@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { TextField } from '@material-ui/core'
+import { TextField, ChipProps } from '@material-ui/core'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import Autocomplete, {
   createFilterOptions
@@ -18,12 +18,17 @@ const filter = createFilterOptions<SelectorOption>({
   trim: true
 })
 
-interface Props {
+export interface Props {
   value: SelectorOption[]
   onChange: (tags: SelectorOption[]) => void
+  chipProps?: ChipProps
 }
 
-export const BaseTagSelector = ({ value = [], onChange }: Props) => {
+export const BaseTagSelector = ({
+  value = [],
+  onChange,
+  chipProps = {}
+}: Props) => {
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
   const [availableTags, setAvailableTags] = useState<SelectorOption[]>([])
   const { existingTags } = useSelector((store: IAppState) => ({
@@ -62,6 +67,7 @@ export const BaseTagSelector = ({ value = [], onChange }: Props) => {
       selectOnFocus
       handleHomeEndKeys
       filterSelectedOptions
+      ChipProps={chipProps}
       options={availableTags}
       value={selectedTags}
       id="multiple-crm-tags"
