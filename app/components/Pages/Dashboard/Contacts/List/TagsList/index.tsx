@@ -1,11 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-
+import cn from 'classnames'
 import {
   ListItem,
   ListItemText,
   createStyles,
   makeStyles,
+  fade,
   Theme
 } from '@material-ui/core'
 
@@ -57,6 +58,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     item: {
       display: 'inline-block'
+    },
+    untag: {
+      borderBottom: `1px solid ${fade(theme.palette.tertiary.dark, 0.12)}`
     }
   })
 )
@@ -93,6 +97,35 @@ export const TagsList = (props: Props) => {
     })
   }
 
+  const handleShowUnTagContacts = async () => {
+    await props.changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, 'default')
+    props.resetActiveFilters('contacts')
+
+    props.updateActiveFilter('contacts', 'untag', {
+      id: tagDefinitionId,
+      values: [{ value: null, label: 'Un-Tagged' }],
+      operator: {
+        name: 'is',
+        invert: false
+      }
+    })
+
+    /*
+    API Doc.
+    If we send null for {tagDefinitionId} value,
+    server response us untag contacts
+    */
+    const untagFilter: IContactAttributeFilter = {
+      attribute_def: tagDefinitionId,
+      value: null,
+      invert: false
+    }
+
+    props.onFilterChange({
+      filters: [untagFilter]
+    })
+  }
+
   const checkSelected = text => {
     return (
       Object.keys(props.activeFilters).length === 1 &&
@@ -105,6 +138,7 @@ export const TagsList = (props: Props) => {
       )
     )
   }
+  const isUnTagSelected = props.activeFilters.hasOwnProperty('untag')
 
   return (
     <BaseDropdownWithMore
@@ -120,32 +154,56 @@ export const TagsList = (props: Props) => {
         count: 5,
         textContainer: ({ children }) => (
           <ListItem button className={classes.item}>
-            {children}
+            <ListItemText
+              primaryTypographyProps={{ variant: 'body2', noWrap: true }}
+            >
+              {children}
+            </ListItemText>
           </ListItem>
         )
       }}
-      renderMenu={({ close }) =>
-        existingTags.map((item, index) => {
-          const isSelected = checkSelected(item.text)
-
-          return (
-            <ListItem
-              button
-              className={classes.item}
-              key={index}
-              selected={isSelected}
-              onClick={() => {
-                onSelectList(item)
-                close()
-              }}
+      renderMenu={({ close }) => {
+        return [
+          <ListItem
+            button
+            key="untag"
+            className={cn(classes.item, classes.untag)}
+            selected={isUnTagSelected}
+            onClick={() => {
+              handleShowUnTagContacts()
+              close()
+            }}
+          >
+            <ListItemText
+              primaryTypographyProps={{ variant: 'body2', noWrap: true }}
             >
-              <ListItemText primaryTypographyProps={{ noWrap: true }}>
-                {item.text}
-              </ListItemText>
-            </ListItem>
-          )
-        })
-      }
+              Has No Tag
+            </ListItemText>
+          </ListItem>,
+          ...existingTags.map((item, index) => {
+            const isSelected = checkSelected(item.text)
+
+            return (
+              <ListItem
+                button
+                className={classes.item}
+                key={index}
+                selected={isSelected}
+                onClick={() => {
+                  onSelectList(item)
+                  close()
+                }}
+              >
+                <ListItemText
+                  primaryTypographyProps={{ variant: 'body2', noWrap: true }}
+                >
+                  {item.text}
+                </ListItemText>
+              </ListItem>
+            )
+          })
+        ]
+      }}
     />
   )
 }
@@ -176,11 +234,8 @@ function mapStateToProps(state: {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    updateActiveFilter,
-    resetActiveFilters,
-    changeActiveFilterSegment
-  }
-)(TagsList)
+export default connect(mapStateToProps, {
+  updateActiveFilter,
+  resetActiveFilters,
+  changeActiveFilterSegment
+})(TagsList)
