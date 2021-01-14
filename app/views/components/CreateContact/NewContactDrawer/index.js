@@ -152,6 +152,10 @@ class NewContactDrawer extends React.Component {
             onSubmit={this.onSubmit}
           >
             {formProps => {
+              console.log('New Comtact Drawer', {
+                formProps: formProps?.values?.tags
+              })
+
               return (
                 <form
                   style={{

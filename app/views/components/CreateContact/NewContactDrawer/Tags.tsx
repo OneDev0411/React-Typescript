@@ -61,6 +61,8 @@ export function Tags() {
       <Field
         name="tags"
         render={({ input }) => {
+          console.log('Autocomplete', { input })
+
           return (
             <Autocomplete
               multiple
