@@ -47,12 +47,14 @@ const useStyles = makeStyles(
       borderRadius: theme.shape.borderRadius,
       margin: theme.spacing(1, 0.5, 0.5, 0)
     },
-
+    searchInputContainer: {
+      backgroundColor: '#fff',
+      position: 'sticky',
+      top: 0,
+      zIndex: 1
+    },
     searchInput: {
       padding: theme.spacing(1.5)
-    },
-    continueButton: {
-      margin: theme.spacing(2, 0)
     }
   }),
   {
@@ -98,10 +100,6 @@ export function DealCoAgent({
 
   const handleRemove = async (role: IDealRole) => {
     return dispatch(deleteRole(context.deal!.id, role.id))
-  }
-
-  const handleContinue = () => {
-    wizard.next()
   }
 
   if (wizard.lastVisitedStep < step!) {
@@ -154,13 +152,15 @@ export function DealCoAgent({
                 <CircularProgress disableShrink />
               ) : (
                 <div className={classes.root}>
-                  <TextField
-                    fullWidth
-                    onChange={e => setSearchCriteria(e.target.value)}
-                    placeholder="Search Agents"
-                    size="medium"
-                    className={classes.searchInput}
-                  />
+                  <Box className={classes.searchInputContainer}>
+                    <TextField
+                      fullWidth
+                      onChange={e => setSearchCriteria(e.target.value)}
+                      placeholder="Search Agents"
+                      size="medium"
+                      className={classes.searchInput}
+                    />
+                  </Box>
 
                   {teams.map((team, index) => (
                     <div key={index}>
@@ -183,14 +183,30 @@ export function DealCoAgent({
           </TeamAgents>
         </Box>
 
-        <Button
-          variant="contained"
-          color="secondary"
-          className={classes.continueButton}
-          onClick={handleContinue}
-        >
-          Continue
-        </Button>
+        {!selectedRole && (
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-end"
+            mt={4}
+          >
+            <Button variant="outlined" onClick={() => wizard.next()}>
+              Skip
+            </Button>
+
+            {roles.length > 0 && (
+              <Box ml={2}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => wizard.next()}
+                >
+                  Continue
+                </Button>
+              </Box>
+            )}
+          </Box>
+        )}
       </QuestionForm>
     </QuestionSection>
   )

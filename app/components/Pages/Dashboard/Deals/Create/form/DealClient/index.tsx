@@ -233,14 +233,30 @@ export function DealClient({ step, side, title }: Props) {
           ))}
         </Box>
 
-        <Button
-          variant="contained"
-          color="secondary"
-          // className={classes.continueButton}
-          onClick={() => wizard.next()}
-        >
-          Continue
-        </Button>
+        {!selectedRole && (
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-end"
+            mt={4}
+          >
+            <Button variant="outlined" onClick={() => wizard.next()}>
+              Skip
+            </Button>
+
+            {roles.length > 0 && (
+              <Box ml={2}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => wizard.next()}
+                >
+                  Continue
+                </Button>
+              </Box>
+            )}
+          </Box>
+        )}
       </QuestionForm>
     </QuestionSection>
   )
