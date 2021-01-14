@@ -23,8 +23,9 @@ interface Props {
   onChange: (tags: SelectorOption[]) => void
 }
 
-export const BaseTagSelector = ({ value, onChange }: Props) => {
-  const [tags, setTags] = useState<SelectorOption[]>([])
+export const BaseTagSelector = ({ value = [], onChange }: Props) => {
+  const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
+  const [availableTags, setAvailableTags] = useState<SelectorOption[]>([])
   const { existingTags } = useSelector((store: IAppState) => ({
     existingTags: selectTags(store.contacts.tags)
   }))
@@ -40,7 +41,7 @@ export const BaseTagSelector = ({ value, onChange }: Props) => {
       try {
         const response = await getContactsTags()
 
-        setTags(normalizeTags(response.data))
+        setAvailableTags(normalizeTags(response.data))
       } catch (error) {
         console.log(error)
       }
@@ -49,7 +50,7 @@ export const BaseTagSelector = ({ value, onChange }: Props) => {
     if (existingTags.length === 0) {
       fetchTags()
     } else {
-      setTags(normalizeTags(existingTags))
+      setAvailableTags(normalizeTags(existingTags))
     }
   })
 
@@ -61,15 +62,15 @@ export const BaseTagSelector = ({ value, onChange }: Props) => {
       selectOnFocus
       handleHomeEndKeys
       filterSelectedOptions
-      options={tags}
-      value={value}
+      options={availableTags}
+      value={selectedTags}
       id="multiple-crm-tags"
       renderOption={option => option.title}
       renderInput={params => (
         <TextField {...params} placeholder="Type a tag name" />
       )}
       onChange={(event, value: SelectorOption[]) => {
-        let newValue = [...value]
+        let newValue: SelectorOption[] = [...value]
 
         if (newValue.length > 0) {
           // get last item as new value
@@ -97,7 +98,8 @@ export const BaseTagSelector = ({ value, onChange }: Props) => {
           }
         }
 
-        onChange(newValue as any)
+        setSelectedTags(newValue)
+        onChange(newValue)
       }}
       filterOptions={(options, params) => {
         const filtered = filter(options, params)

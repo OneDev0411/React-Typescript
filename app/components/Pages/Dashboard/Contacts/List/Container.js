@@ -42,6 +42,7 @@ import { Callout } from 'components/Callout'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { BaseTagSelector } from 'components/TagSelector'
 
 import ContactsTabs from './Tabs'
 import Table from './Table'
@@ -815,6 +816,7 @@ class ContactsList extends React.Component {
             />
           )}
           {isZeroState && <ZeroState />}
+          <BaseTagSelector value={[{ title: 'dd', value: 'dd' }]} />
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
               {this.renderTabs()}
