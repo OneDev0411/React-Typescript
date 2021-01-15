@@ -46,6 +46,7 @@ function DomainSearchForm({
           disabled={disabled}
           size="medium"
           name="domain"
+          autoFocus
         />
         <Box marginLeft={1}>
           <Button

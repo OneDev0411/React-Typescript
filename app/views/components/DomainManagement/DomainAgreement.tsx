@@ -13,7 +13,7 @@ import getDomainAgreements from 'models/domains/get-domain-agreements'
 const useStyles = makeStyles(
   theme => ({
     agreement: {
-      maxHeight: 10 * 19,
+      maxHeight: theme.spacing(30),
       overflowX: 'hidden',
       overflowY: 'auto',
       marginBottom: theme.spacing(2),

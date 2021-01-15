@@ -1,6 +1,6 @@
 import type {
   Stripe,
-  StripeCardNumberElement,
+  StripeCardElement,
   StripeError,
   Token
 } from '@stripe/stripe-js'
@@ -17,13 +17,10 @@ export interface CreateStripeToken {
 
 async function createStripeToken(
   stripe: Stripe,
-  cardNumberElement: StripeCardNumberElement,
-  name: string,
+  cardElement: StripeCardElement,
   lastPaymentId?: string
 ): Promise<CreateStripeToken> {
-  const result = await stripe.createToken(cardNumberElement, {
-    name
-  })
+  const result = await stripe.createToken(cardElement)
 
   if (result.error || !result.token) {
     return result

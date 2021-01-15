@@ -43,6 +43,7 @@ function DomainName({ onChange, disabled, step }: DomainNameProps) {
             type="text"
             disabled={disabled}
             size="medium"
+            autoFocus
           />
           <Box marginTop={3}>
             <Button

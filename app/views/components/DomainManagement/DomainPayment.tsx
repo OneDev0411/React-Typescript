@@ -17,14 +17,20 @@ import DomainPaymentForm from './DomainPaymentForm'
 import DomainPaymentLastCard from './DomainPaymentLastCard'
 
 interface DomainPaymentProps {
-  onPurchase: (stripeCustomerId: string, wizard: IContextState) => void
+  domainPrice: string
+  onPayClick: (stripeCustomerId: string, wizard: IContextState) => void
   disabled: boolean
   step?: number // TODO: Remove this
 }
 
 const defaultCustomers: IStripeCustomer[] = []
 
-function DomainPayment({ step, onPurchase, disabled }: DomainPaymentProps) {
+function DomainPayment({
+  step,
+  domainPrice,
+  onPayClick,
+  disabled
+}: DomainPaymentProps) {
   const [showForm, setShowForm] = useState(false)
   const wizard = useWizardForm()
 
@@ -43,7 +49,7 @@ function DomainPayment({ step, onPurchase, disabled }: DomainPaymentProps) {
   const handleCancelClick = () => setShowForm(false)
 
   const handlePayClick = (stripeCustomerId: string) => {
-    onPurchase(stripeCustomerId, wizard)
+    onPayClick(stripeCustomerId, wizard)
   }
 
   const lastPayment = customers.length
@@ -52,12 +58,13 @@ function DomainPayment({ step, onPurchase, disabled }: DomainPaymentProps) {
 
   return (
     <QuestionSection step={step}>
-      <QuestionTitle>Payment</QuestionTitle>
+      <QuestionTitle>Payment Information</QuestionTitle>
       <QuestionForm>
         {isLoadingCustomers ? (
           'loading...'
         ) : lastPayment && !showForm ? (
           <DomainPaymentLastCard
+            domainPrice={domainPrice}
             lastPayment={lastPayment}
             onUpdateClick={handleUpdateClick}
             onPayClick={handlePayClick}
@@ -65,6 +72,7 @@ function DomainPayment({ step, onPurchase, disabled }: DomainPaymentProps) {
           />
         ) : (
           <DomainPaymentForm
+            domainPrice={domainPrice}
             lastPaymentId={lastPayment?.id}
             onCancelClick={lastPayment ? handleCancelClick : undefined}
             onPayClick={handlePayClick}

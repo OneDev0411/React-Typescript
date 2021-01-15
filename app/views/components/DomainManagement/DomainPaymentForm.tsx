@@ -1,21 +1,19 @@
 import React, { FormEvent } from 'react'
 
-import { Button, Grid } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 
-import {
-  useStripe,
-  useElements,
-  CardNumberElement,
-  CardExpiryElement,
-  CardCvcElement
-} from '@stripe/react-stripe-js'
+import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js'
 
 import createStripeToken, {
   CreateStripeToken
 } from 'models/payments/create-stripe-token'
 import useAsync from 'hooks/use-async'
 
+import DomainPaymentActions from './DomainPaymentActions'
+import DomainPaymentFormCardField from './DomainPaymentFormCardField'
+
 interface DomainPaymentFormProps {
+  domainPrice: string
   lastPaymentId?: string
   onCancelClick?: () => void
   onPayClick: (stripeCustomerId: string) => void
@@ -23,6 +21,7 @@ interface DomainPaymentFormProps {
 }
 
 function DomainPaymentForm({
+  domainPrice,
   lastPaymentId,
   onCancelClick,
   onPayClick,
@@ -30,7 +29,7 @@ function DomainPaymentForm({
 }: DomainPaymentFormProps) {
   const stripe = useStripe()
   const elements = useElements()
-  const { run, data, error, isLoading } = useAsync<CreateStripeToken>()
+  const { run, data, setData, isLoading } = useAsync<CreateStripeToken>()
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -39,99 +38,50 @@ function DomainPaymentForm({
       return
     }
 
-    const cardNumberElement = elements.getElement(CardNumberElement)
+    const cardElement = elements.getElement(CardElement)
 
-    if (!cardNumberElement) {
+    if (!cardElement) {
       return
     }
 
-    const firstName = (event.currentTarget.elements.namedItem(
-      'firstName'
-    ) as HTMLInputElement).value
-    const lastName = (event.currentTarget.elements.namedItem(
-      'lastName'
-    ) as HTMLInputElement).value
+    setData(null)
 
-    run(async () =>
-      createStripeToken(
-        stripe,
-        cardNumberElement,
-        `${firstName} ${lastName}`,
-        lastPaymentId
-      )
-    ).then(result => {
-      if (result.customer) {
-        onPayClick(result.customer.id)
+    run(async () => createStripeToken(stripe, cardElement, lastPaymentId)).then(
+      result => {
+        if (result.customer) {
+          onPayClick(result.customer.id)
+        }
       }
-    })
-
-    // const { error, token } = await stripe.createToken(cardNumberElement, {
-    //   name: `${firstName} ${lastName}`
-    // })
-
-    // if (error) {
-    //   setError(error)
-
-    //   return
-    // }
-
-    // if (!token) {
-    //   return
-    // }
-
-    // if (lastPaymentId) {
-    //   await deleteStripeCustomer(lastPaymentId)
-    // }
-
-    // const newStripeCustomer = await createStripeCustomer(token.id)
-
-    // onPayClick(newStripeCustomer.id)
+    )
   }
+
+  const fieldErrorText = data?.error?.message
 
   return (
     <form onSubmit={handleSubmit}>
-      <Grid container>
-        <Grid item xs={12}>
-          <CardNumberElement />
-        </Grid>
-        <Grid item xs={6}>
-          First name:
-          <input name="firstName" />
-        </Grid>
-        <Grid item xs={6}>
-          Last name:
-          <input name="lastName" />
-        </Grid>
-        <Grid item xs={6}>
-          <CardExpiryElement />
-        </Grid>
-        <Grid item xs={6}>
-          <CardCvcElement />
-        </Grid>
-        <Grid item xs={12}>
-          {onCancelClick && (
-            <Button
-              type="button"
-              color="secondary"
-              variant="outlined"
-              onClick={onCancelClick}
-              disabled={isLoading || disabled}
-            >
-              Cancel
-            </Button>
-          )}
+      <DomainPaymentFormCardField
+        fullWidth
+        error={!!fieldErrorText}
+        helperText={fieldErrorText}
+        disabled={isLoading || disabled}
+      />
+
+      <DomainPaymentActions
+        disabled={!stripe || isLoading || disabled}
+        domainPrice={domainPrice}
+      >
+        {onCancelClick && (
           <Button
-            type="submit"
+            type="button"
             color="secondary"
-            variant="contained"
-            disabled={!stripe || isLoading || disabled}
+            variant="outlined"
+            onClick={onCancelClick}
+            disabled={isLoading || disabled}
           >
-            Submit
+            Cancel
           </Button>
-        </Grid>
-      </Grid>
-      {data?.error?.message}
-      {error}
+        )}
+      </DomainPaymentActions>
     </form>
   )
 }

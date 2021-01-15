@@ -14,7 +14,7 @@ import DomainSearchForm from './DomainSearchForm'
 
 interface DomainSearchProps {
   domainName: string
-  onSelectDomainName: (value: string) => void
+  onSelectDomainName: (domainName: string, price: string) => void
   disabled: boolean
   step?: number // TODO: Remove this
 }
@@ -33,13 +33,13 @@ function DomainSearch({
     data: defaultSearchResult
   })
 
-  const handleSelectDomain = (domainName: string) => {
-    onSelectDomainName(domainName)
+  const handleSelectDomain = (domainName: string, price: string) => {
+    onSelectDomainName(domainName, price)
     wizard.next()
   }
 
   const handleSearch = (search: string) => {
-    onSelectDomainName('')
+    onSelectDomainName('', '')
     run(async () => suggestDomainName(search))
   }
 

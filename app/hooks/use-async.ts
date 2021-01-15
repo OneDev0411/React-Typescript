@@ -75,8 +75,6 @@ function useAsync<T = unknown, U = unknown>(
     ...initialState
   })
 
-  //
-
   const [{ status, data, error }, setState] = useReducer<
     Reducer<ReducerState<T, U>, ReducerAction<T, U>>
   >(

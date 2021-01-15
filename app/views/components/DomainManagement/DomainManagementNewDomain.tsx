@@ -43,6 +43,7 @@ function DomainManagementNewDomain({
     DomainStatusType.Existing
   )
   const [domainName, setDomainName] = useState('')
+  const [domainPrice, setDomainPrice] = useState('')
 
   const [domainAgreementKeys, setDomainAgreementKeys] = useState<string[]>([])
 
@@ -64,33 +65,31 @@ function DomainManagementNewDomain({
         hostname: domainName,
         is_default: true
       })
+    ).then(
+      () => {
+        handleAddDomain(domainName, true)
+        dispatch(
+          notify({
+            message: 'The domain added successfully',
+            status: 'success'
+          })
+        )
+      },
+      () => {
+        dispatch(
+          notify({
+            message: 'An error occurred on adding the domain, please try again',
+            status: 'error'
+          })
+        )
+      }
     )
-      .then(
-        () => {
-          handleAddDomain(domainName, true)
-          dispatch(
-            notify({
-              message: 'The domain added successfully',
-              status: 'success'
-            })
-          )
-        },
-        () => {
-          dispatch(
-            notify({
-              message:
-                'An error occurred on adding the domain, please try again',
-              status: 'error'
-            })
-          )
-        }
-      )
-      .finally(() => wizard.setShowLoading(false))
   }
 
-  const handleSelectDomainName = (domainName: string) => {
+  const handleSelectDomainName = (domainName: string, price: string) => {
     setDomainAgreementKeys([])
     setDomainName(domainName)
+    setDomainPrice(price)
   }
 
   const isNew = domainStatus === DomainStatusType.New
@@ -138,7 +137,11 @@ function DomainManagementNewDomain({
             />
           )}
           {isNew && domainName && domainAgreementKeys.length && (
-            <DomainPayment onPurchase={handlePurchase} disabled={isWorking} />
+            <DomainPayment
+              domainPrice={domainPrice}
+              onPayClick={handlePurchase}
+              disabled={isWorking}
+            />
           )}
         </QuestionWizard>
       </Box>
