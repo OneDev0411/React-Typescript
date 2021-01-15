@@ -65,13 +65,15 @@ function DomainManagementNewDomain({
   ) => {
     const isDefaultValue = isDefault === DomainSetAsDefaultType.Yes
 
-    wizard.next((resolve, reject) => {
-      run(async () =>
-        addHostnameToWebsite(websiteId, {
-          hostname: domainName,
-          is_default: isDefaultValue
-        })
-      ).then(
+    wizard.setShowLoading(true)
+
+    run(async () =>
+      addHostnameToWebsite(websiteId, {
+        hostname: domainName,
+        is_default: isDefaultValue
+      })
+    )
+      .then(
         () => {
           handleAddDomain(domainName, isDefaultValue)
           dispatch(
@@ -82,7 +84,6 @@ function DomainManagementNewDomain({
           )
         },
         () => {
-          reject()
           dispatch(
             notify({
               message:
@@ -92,7 +93,7 @@ function DomainManagementNewDomain({
           )
         }
       )
-    })
+      .finally(() => wizard.setShowLoading(false))
   }
 
   const handleDomainNameChange = (domainName: string) => {
