@@ -1,4 +1,5 @@
 import React from 'react'
+import { Box } from '@material-ui/core'
 
 import { useWizardForm } from '../use-context'
 import { IContextState } from '../context'
@@ -13,16 +14,14 @@ export function QuestionForm({ children }: Props) {
   const context = useWizardForm()
 
   return (
-    <div
-      style={{
-        margin: '5% 20%'
-      }}
-    >
-      {typeof children === 'function'
-        ? children({
-            wizard: context
-          })
-        : children}
-    </div>
+    <Box mt={8} display="flex" flexDirection="column" alignItems="flex-end">
+      <Box width="50%">
+        {typeof children === 'function'
+          ? children({
+              wizard: context
+            })
+          : children}
+      </Box>
+    </Box>
   )
 }

@@ -5,12 +5,11 @@ export interface IContextState {
   lastVisitedStep: number
   totalSteps: number
   goto: (step: number) => void
-  next: (
-    delay?: number | ((resolve: () => void, reject: () => void) => void)
-  ) => void
+  next: (delay?: number) => void
   previous: () => void
   first: () => void
   last: () => void
+  setShowLoading: (state: boolean) => void
 }
 
 export const Context = React.createContext<IContextState | undefined>(undefined)
