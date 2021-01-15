@@ -8,6 +8,8 @@ import {
   Typography
 } from '@material-ui/core'
 
+import DomainLoading from './DomainLoading'
+
 const useStyles = makeStyles(
   theme => ({
     label: {
@@ -31,22 +33,21 @@ interface DomainSearchResultsProps {
   onSelectDomain: (domainName: string, price: string) => void
   domainName: string
   disabled: boolean
+  isLoading: boolean
 }
 
 function DomainSearchResults({
   items,
   domainName,
   onSelectDomain,
-  disabled
+  disabled,
+  isLoading
 }: DomainSearchResultsProps) {
   const classes = useStyles()
 
-  if (!items.length) {
-    return null
-  }
-
   return (
     <Box marginBottom={3}>
+      {isLoading && !items.length && <DomainLoading />}
       <RadioGroup aria-label="Domain Name" name="domainName" value={domainName}>
         {items.map(item => {
           const price =
@@ -71,7 +72,7 @@ function DomainSearchResults({
                   </Typography>
                 </Box>
               }
-              disabled={disabled}
+              disabled={disabled || isLoading}
               onChange={() => onSelectDomain(item.domain, price)}
             />
           )

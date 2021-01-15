@@ -10,6 +10,8 @@ import {
 import useAsync from 'hooks/use-async'
 import getDomainAgreements from 'models/domains/get-domain-agreements'
 
+import DomainLoading from './DomainLoading'
+
 const useStyles = makeStyles(
   theme => ({
     agreement: {
@@ -68,7 +70,7 @@ function DomainAgreement({
       <QuestionTitle>Domain Registration Agreement</QuestionTitle>
       <QuestionForm>
         {isLoading ? (
-          'loading...'
+          <DomainLoading />
         ) : (
           <>
             {agreements.map(agreement => (

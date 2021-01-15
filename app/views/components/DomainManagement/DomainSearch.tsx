@@ -56,7 +56,8 @@ function DomainSearch({
           items={searchResults}
           onSelectDomain={handleSelectDomain}
           domainName={domainName}
-          disabled={disabled || isLoading}
+          disabled={disabled}
+          isLoading={isLoading}
         />
       </QuestionForm>
     </QuestionSection>

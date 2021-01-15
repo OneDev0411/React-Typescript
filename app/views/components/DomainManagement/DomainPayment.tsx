@@ -15,6 +15,7 @@ import { IContextState } from 'components/QuestionWizard/context'
 
 import DomainPaymentForm from './DomainPaymentForm'
 import DomainPaymentLastCard from './DomainPaymentLastCard'
+import DomainLoading from './DomainLoading'
 
 interface DomainPaymentProps {
   domainPrice: string
@@ -61,7 +62,7 @@ function DomainPayment({
       <QuestionTitle>Payment Information</QuestionTitle>
       <QuestionForm>
         {isLoadingCustomers ? (
-          'loading...'
+          <DomainLoading />
         ) : lastPayment && !showForm ? (
           <DomainPaymentLastCard
             domainPrice={domainPrice}
