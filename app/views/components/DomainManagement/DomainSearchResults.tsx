@@ -1,7 +1,6 @@
-import React, { ChangeEvent, FormEvent } from 'react'
+import React, { ChangeEvent } from 'react'
 import {
   Box,
-  Button,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -27,7 +26,6 @@ interface DomainSearchResultsProps {
   items: IDomainSuggest[]
   onSelectDomain: (domainName: string) => void
   domainName: string
-  onCheckoutClick: () => void
   disabled: boolean
 }
 
@@ -35,7 +33,6 @@ function DomainSearchResults({
   items,
   domainName,
   onSelectDomain,
-  onCheckoutClick,
   disabled
 }: DomainSearchResultsProps) {
   const classes = useStyles()
@@ -44,61 +41,41 @@ function DomainSearchResults({
     onSelectDomain(event.target.value)
   }
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault()
-
-    if (domainName) {
-      onCheckoutClick()
-    }
-  }
-
   if (!items.length) {
     return null
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Box marginBottom={3}>
-        <RadioGroup
-          aria-label="Domain Name"
-          name="domainName"
-          onChange={handleChange}
-          value={domainName}
-        >
-          {items.map(item => (
-            <FormControlLabel
-              key={item.domain}
-              value={item.domain}
-              control={<Radio />}
-              classes={{ label: classes.label }}
-              label={
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Box>{item.domain}</Box>
-                  <Typography className={classes.price} variant="caption">
-                    {item.price / 1000000} {item.currency}
-                  </Typography>
-                </Box>
-              }
-              disabled={disabled}
-            />
-          ))}
-        </RadioGroup>
-      </Box>
-      <Box>
-        <Button
-          variant="contained"
-          color="secondary"
-          disabled={!domainName || disabled}
-          type="submit"
-        >
-          Continue to checkout
-        </Button>
-      </Box>
-    </form>
+    <Box marginBottom={3}>
+      <RadioGroup
+        aria-label="Domain Name"
+        name="domainName"
+        onChange={handleChange}
+        value={domainName}
+      >
+        {items.map(item => (
+          <FormControlLabel
+            key={item.domain}
+            value={item.domain}
+            control={<Radio />}
+            classes={{ label: classes.label }}
+            label={
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Box>{item.domain}</Box>
+                <Typography className={classes.price} variant="caption">
+                  {item.price / 1000000} {item.currency}
+                </Typography>
+              </Box>
+            }
+            disabled={disabled}
+          />
+        ))}
+      </RadioGroup>
+    </Box>
   )
 }
 

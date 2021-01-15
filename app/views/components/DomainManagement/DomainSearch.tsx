@@ -33,7 +33,8 @@ function DomainSearch({
     data: defaultSearchResult
   })
 
-  const handleCheckout = () => {
+  const handleSelectDomain = (domainName: string) => {
+    onSelectDomainName(domainName)
     wizard.next()
   }
 
@@ -53,9 +54,8 @@ function DomainSearch({
         />
         <DomainSearchResults
           items={searchResults}
-          onSelectDomain={onSelectDomainName}
+          onSelectDomain={handleSelectDomain}
           domainName={domainName}
-          onCheckoutClick={handleCheckout}
           disabled={disabled || isLoading}
         />
       </QuestionForm>

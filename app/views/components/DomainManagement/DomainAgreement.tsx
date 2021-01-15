@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Box, Button, makeStyles } from '@material-ui/core'
+import React, { ChangeEvent, useEffect, useState } from 'react'
+import { Box, Checkbox, FormControlLabel, makeStyles } from '@material-ui/core'
 
 import { useWizardForm } from 'components/QuestionWizard/use-context'
 import {
@@ -43,19 +43,22 @@ function DomainAgreement({
 }: DomainAgreementProps) {
   const classes = useStyles()
   const wizard = useWizardForm()
+  const [checked, setChecked] = useState(false)
   const { run, data: agreements, isLoading } = useAsync({
     data: defaultAgreementList
   })
 
   useEffect(() => {
+    setChecked(false)
     run(async () => getDomainAgreements(domainName))
   }, [run, domainName])
 
-  const handleNext = () => {
-    if (!agreements.length) {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!agreements.length || !event.currentTarget.checked) {
       return
     }
 
+    setChecked(true)
     onNextClick(agreements.map(agreement => agreement.agreementKey))
     wizard.next()
   }
@@ -68,24 +71,21 @@ function DomainAgreement({
           'loading...'
         ) : (
           <>
-            <Box>
-              {agreements.map(agreement => (
-                <div
-                  key={agreement.agreementKey}
-                  className={classes.agreement}
-                  dangerouslySetInnerHTML={{ __html: agreement.content }}
-                />
-              ))}
-            </Box>
+            {agreements.map(agreement => (
+              <div
+                key={agreement.agreementKey}
+                className={classes.agreement}
+                dangerouslySetInnerHTML={{ __html: agreement.content }}
+              />
+            ))}
             <Box marginTop={3}>
-              <Button
-                onClick={handleNext}
-                variant="contained"
-                color="secondary"
+              <FormControlLabel
+                control={<Checkbox />}
+                label="I agree to the agreements"
                 disabled={disabled}
-              >
-                Next
-              </Button>
+                onChange={handleChange}
+                checked={checked}
+              />
             </Box>
           </>
         )}
