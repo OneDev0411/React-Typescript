@@ -50,15 +50,13 @@ function DomainPayment({ step, onPurchase, disabled }: DomainPaymentProps) {
     ? customers[customers.length - 1]
     : undefined
 
-  if (isLoadingCustomers) {
-    return null
-  }
-
   return (
     <QuestionSection step={step}>
       <QuestionTitle>Payment</QuestionTitle>
       <QuestionForm>
-        {lastPayment && !showForm ? (
+        {isLoadingCustomers ? (
+          'loading...'
+        ) : lastPayment && !showForm ? (
           <DomainPaymentLastCard
             lastPayment={lastPayment}
             onUpdateClick={handleUpdateClick}

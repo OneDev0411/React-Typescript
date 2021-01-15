@@ -36,7 +36,7 @@ const useStyles = makeStyles(
       }
     },
     inactive: {
-      opacity: 0.5,
+      opacity: 0.3,
       pointerEvents: 'none'
     }
   }),
@@ -95,6 +95,7 @@ function DomainManagementListItem({
           size="small"
           color="inherit"
           onClick={() => handleDeleteHostname(hostname)}
+          disabled={isWorking}
         >
           <Close />
         </IconButton>

@@ -92,7 +92,7 @@ function DomainSearchResults({
         <Button
           variant="contained"
           color="secondary"
-          disabled={!domainName}
+          disabled={!domainName || disabled}
           type="submit"
         >
           Continue to checkout

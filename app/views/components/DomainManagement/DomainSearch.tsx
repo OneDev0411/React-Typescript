@@ -14,7 +14,7 @@ import DomainSearchForm from './DomainSearchForm'
 
 interface DomainSearchProps {
   domainName: string
-  onDomainNameChange: (value: string) => void
+  onSelectDomainName: (value: string) => void
   disabled: boolean
   step?: number // TODO: Remove this
 }
@@ -23,7 +23,7 @@ const defaultSearchResult: IDomainSuggest[] = []
 
 function DomainSearch({
   domainName,
-  onDomainNameChange,
+  onSelectDomainName,
   disabled,
   step
 }: DomainSearchProps) {
@@ -38,7 +38,7 @@ function DomainSearch({
   }
 
   const handleSearch = (search: string) => {
-    onDomainNameChange('')
+    onSelectDomainName('')
     run(async () => suggestDomainName(search))
   }
 
@@ -53,7 +53,7 @@ function DomainSearch({
         />
         <DomainSearchResults
           items={searchResults}
-          onSelectDomain={onDomainNameChange}
+          onSelectDomain={onSelectDomainName}
           domainName={domainName}
           onCheckoutClick={handleCheckout}
           disabled={disabled || isLoading}
