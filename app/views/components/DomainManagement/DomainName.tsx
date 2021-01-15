@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useState } from 'react'
 
 import { Box, Button, TextField } from '@material-ui/core'
 
@@ -8,9 +8,10 @@ import {
   QuestionTitle
 } from 'components/QuestionWizard'
 import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { IContextState } from 'components/QuestionWizard/context'
 
 interface DomainNameProps {
-  onChange: (value: string) => void
+  onChange: (value: string, wizard: IContextState) => void
   disabled: boolean
   step?: number // TODO: Remove this
 }
@@ -23,16 +24,16 @@ function DomainName({ onChange, disabled, step }: DomainNameProps) {
     setDomainName(event.target.value)
   }
 
-  const handleClick = () => {
-    onChange(domainName)
-    wizard.next()
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    onChange(domainName, wizard)
   }
 
   return (
     <QuestionSection step={step}>
       <QuestionTitle>Please enter the domain name</QuestionTitle>
       <QuestionForm>
-        <Box>
+        <form onSubmit={handleSubmit}>
           <TextField
             aria-label="Domain Name"
             label="Domain Name"
@@ -45,15 +46,15 @@ function DomainName({ onChange, disabled, step }: DomainNameProps) {
           />
           <Box marginTop={3}>
             <Button
+              type="submit"
               variant="contained"
               color="secondary"
               disabled={!domainName.length || disabled}
-              onClick={handleClick}
             >
               Continue
             </Button>
           </Box>
-        </Box>
+        </form>
       </QuestionForm>
     </QuestionSection>
   )
