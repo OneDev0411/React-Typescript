@@ -9,6 +9,8 @@ import createStripeToken, {
 } from 'models/payments/create-stripe-token'
 import useAsync from 'hooks/use-async'
 
+import { useWizardForm } from 'components/QuestionWizard/use-context'
+
 import DomainPaymentActions from './DomainPaymentActions'
 import DomainPaymentFormCardField from './DomainPaymentFormCardField'
 
@@ -29,6 +31,7 @@ function DomainPaymentForm({
 }: DomainPaymentFormProps) {
   const stripe = useStripe()
   const elements = useElements()
+  const wizard = useWizardForm()
   const { run, data, setData, isLoading } = useAsync<CreateStripeToken>()
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -46,12 +49,15 @@ function DomainPaymentForm({
 
     setData(null)
 
+    wizard.setShowLoading(true)
+
     run(async () => createStripeToken(stripe, cardElement, lastPaymentId)).then(
       result => {
         if (result.customer) {
           onPayClick(result.customer.id)
         }
-      }
+      },
+      () => wizard.setShowLoading(false)
     )
   }
 

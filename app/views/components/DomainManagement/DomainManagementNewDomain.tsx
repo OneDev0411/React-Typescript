@@ -82,6 +82,7 @@ function DomainManagementNewDomain({
             status: 'error'
           })
         )
+        wizard.setShowLoading(false)
       }
     )
   }
@@ -98,7 +99,10 @@ function DomainManagementNewDomain({
     wizard.setShowLoading(true)
     run(async () =>
       purchaseDomain(stripeCustomerId, domainName, domainAgreementKeys)
-    ).then(() => handleAddDomainToHost(domainName, wizard))
+    ).then(
+      () => handleAddDomainToHost(domainName, wizard),
+      () => wizard.setShowLoading(false)
+    )
   }
 
   return (
