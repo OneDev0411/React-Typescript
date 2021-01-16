@@ -19,7 +19,11 @@ import DomainLoading from './DomainLoading'
 
 interface DomainPaymentProps {
   domainPrice: string
-  onPayClick: (stripeCustomerId: string, wizard: IContextState) => void
+  onPayClick: (
+    stripeCustomerId: string,
+    wizard: IContextState,
+    done?: () => void
+  ) => void
   disabled: boolean
   step?: number // TODO: Remove this
 }
@@ -49,8 +53,8 @@ function DomainPayment({
 
   const handleCancelClick = () => setShowForm(false)
 
-  const handlePayClick = (stripeCustomerId: string) => {
-    onPayClick(stripeCustomerId, wizard)
+  const handlePayClick = (stripeCustomerId: string, done?: () => void) => {
+    onPayClick(stripeCustomerId, wizard, done)
   }
 
   const lastPayment = customers.length

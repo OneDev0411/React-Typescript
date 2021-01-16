@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react'
+import React, { FormEvent, useState } from 'react'
 
 import { Button } from '@material-ui/core'
 
@@ -11,6 +11,8 @@ import useAsync from 'hooks/use-async'
 
 import { useWizardForm } from 'components/QuestionWizard/use-context'
 
+import useSafeDispatch from 'hooks/use-safe-dispatch'
+
 import DomainPaymentActions from './DomainPaymentActions'
 import DomainPaymentFormCardField from './DomainPaymentFormCardField'
 
@@ -18,7 +20,7 @@ interface DomainPaymentFormProps {
   domainPrice: string
   lastPaymentId?: string
   onCancelClick?: () => void
-  onPayClick: (stripeCustomerId: string) => void
+  onPayClick: (stripeCustomerId: string, done: () => void) => void
   disabled: boolean
 }
 
@@ -32,7 +34,14 @@ function DomainPaymentForm({
   const stripe = useStripe()
   const elements = useElements()
   const wizard = useWizardForm()
+  // Two requests needed to complete the buying process and the text field
+  // blinks after the first request and before starting the next one.
+  // So we need to have a disabled state and handle it manually to avoid
+  // this issue
+  const [fieldDisabled, setFieldDisabled] = useState(false)
   const { run, data, setData, isLoading } = useAsync<CreateStripeToken>()
+
+  const setFieldDisabledSafe = useSafeDispatch(setFieldDisabled)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -51,13 +60,20 @@ function DomainPaymentForm({
 
     wizard.setShowLoading(true)
 
+    setFieldDisabled(true)
+
+    const done = () => setFieldDisabledSafe(false)
+
     run(async () => createStripeToken(stripe, cardElement, lastPaymentId)).then(
       result => {
         if (result.customer) {
-          onPayClick(result.customer.id)
+          onPayClick(result.customer.id, done)
         }
       },
-      () => wizard.setShowLoading(false)
+      () => {
+        wizard.setShowLoading(false)
+        done()
+      }
     )
   }
 
@@ -69,7 +85,7 @@ function DomainPaymentForm({
         fullWidth
         error={!!fieldErrorText}
         helperText={fieldErrorText}
-        disabled={isLoading || disabled}
+        disabled={isLoading || disabled || fieldDisabled}
       />
 
       <DomainPaymentActions

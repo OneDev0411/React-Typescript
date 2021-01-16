@@ -95,14 +95,20 @@ function DomainManagementNewDomain({
 
   const isNew = domainStatus === DomainStatusType.New
 
-  const handlePurchase = (stripeCustomerId: string, wizard: IContextState) => {
+  const handlePurchase = (
+    stripeCustomerId: string,
+    wizard: IContextState,
+    done?: () => void
+  ) => {
     wizard.setShowLoading(true)
     run(async () =>
       purchaseDomain(stripeCustomerId, domainName, domainAgreementKeys)
-    ).then(
-      () => handleAddDomainToHost(domainName, wizard),
-      () => wizard.setShowLoading(false)
     )
+      .then(
+        () => handleAddDomainToHost(domainName, wizard),
+        () => wizard.setShowLoading(false)
+      )
+      .finally(() => done?.())
   }
 
   return (
