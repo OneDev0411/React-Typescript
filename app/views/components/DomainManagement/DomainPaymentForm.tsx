@@ -4,6 +4,10 @@ import { Button } from '@material-ui/core'
 
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js'
 
+import { useDispatch } from 'react-redux'
+
+import { addNotification as notify } from 'components/notification'
+
 import createStripeToken, {
   CreateStripeToken
 } from 'models/payments/create-stripe-token'
@@ -40,6 +44,7 @@ function DomainPaymentForm({
   // this issue
   const [fieldDisabled, setFieldDisabled] = useState(false)
   const { run, data, setData, isLoading } = useAsync<CreateStripeToken>()
+  const dispatch = useDispatch()
 
   const setFieldDisabledSafe = useSafeDispatch(setFieldDisabled)
 
@@ -73,6 +78,13 @@ function DomainPaymentForm({
       () => {
         wizard.setShowLoading(false)
         done()
+        dispatch(
+          notify({
+            message:
+              'An error happened on sending data to stripe, please try again',
+            status: 'error'
+          })
+        )
       }
     )
   }
