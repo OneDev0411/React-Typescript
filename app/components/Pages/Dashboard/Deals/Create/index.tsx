@@ -6,7 +6,12 @@ import omit from 'lodash/omit'
 
 import Deal from 'models/Deal'
 
-import { createDeal, createRoles, getContextsByDeal } from 'actions/deals'
+import {
+  createDeal,
+  createRoles,
+  getContextsByDeal,
+  createChecklist
+} from 'actions/deals'
 
 import { QuestionWizard } from 'components/QuestionWizard'
 
@@ -99,6 +104,7 @@ export default function CreateDeal() {
       is_draft: false
     })
 
+    console.log({ deal })
     dispatch(createDeal(deal))
     setDealId(deal.id)
 
@@ -108,12 +114,14 @@ export default function CreateDeal() {
 
     dispatch(createRoles(deal.id, primaryAgents))
 
-    Deal.createChecklist(deal.id, {
-      conditions: {
-        deal_type: deal.deal_type,
-        property_type: deal.property_type
-      }
-    })
+    dispatch(
+      createChecklist(deal.id, {
+        conditions: {
+          deal_type: deal.deal_type,
+          property_type: deal.property_type
+        }
+      })
+    )
   }
 
   return (

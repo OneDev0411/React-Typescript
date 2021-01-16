@@ -186,7 +186,7 @@ export function DealContext({ step, context }: Props) {
               color="secondary"
               disabled={!inputValue}
               className={classes.saveButton}
-              onClick={handleSave}
+              onClick={() => handleSave()}
             >
               Save
             </Button>
