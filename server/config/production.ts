@@ -3,6 +3,8 @@ export default {
   api_url: process.env.RECHAT_API_URL!,
   client_id: process.env.RECHAT_CLIENT_ID!,
   client_secret: process.env.RECHAT_CLIENT_SECRET!,
+  crypto_key: process.env.CRYPTO_KEY,
+  crypto_iv: process.env.CRYPTO_IV,
   forms_url: process.env.RECHAT_FORMS_URL!,
   live_by_api_url: process.env.LIVE_BY_API_URL!,
   live_by_api_client_id: process.env.LIVE_BY_API_CLIENT_ID!,
