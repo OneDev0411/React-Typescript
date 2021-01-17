@@ -140,14 +140,11 @@ function mapStateToProps(state, { name, getPredefinedLists }) {
   }
 }
 
-const ConnectedSegmentsList = connect(
-  mapStateToProps,
-  {
-    changeActiveFilterSegment,
-    deleteFilterSegment,
-    getSavedSegments
-  }
-)(SegmentsList)
+const ConnectedSegmentsList = connect(mapStateToProps, {
+  changeActiveFilterSegment,
+  deleteFilterSegment,
+  getSavedSegments
+})(SegmentsList)
 
 ConnectedSegmentsList.defaultProps = {
   getPredefinedLists: name => ({ default: getDefaultList(name) })
