@@ -104,7 +104,6 @@ export default function CreateDeal() {
       is_draft: false
     })
 
-    console.log({ deal })
     dispatch(createDeal(deal))
     setDealId(deal.id)
 

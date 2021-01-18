@@ -102,6 +102,12 @@ export function DealCoAgent({
     return dispatch(deleteRole(context.deal!.id, role.id))
   }
 
+  const handleNext = () => {
+    if (wizard.currentStep === step) {
+      wizard.next()
+    }
+  }
+
   if (wizard.lastVisitedStep < step!) {
     return null
   }
@@ -190,7 +196,7 @@ export function DealCoAgent({
             justifyContent="flex-end"
             mt={4}
           >
-            <Button variant="outlined" onClick={() => wizard.next()}>
+            <Button variant="outlined" onClick={handleNext}>
               Skip
             </Button>
 
@@ -199,7 +205,7 @@ export function DealCoAgent({
                 <Button
                   variant="contained"
                   color="secondary"
-                  onClick={() => wizard.next()}
+                  onClick={handleNext}
                 >
                   Continue
                 </Button>

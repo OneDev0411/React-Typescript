@@ -24,7 +24,10 @@ export function DealPropertyType({ step }: Props) {
   const theme = useTheme<Theme>()
 
   const handleChange = (value: IDealPropertyType) => {
-    wizard.next()
+    if (wizard.currentStep === step) {
+      wizard.next()
+    }
+
     context.updateForm({
       propertyType: value
     })

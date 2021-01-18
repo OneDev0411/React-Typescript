@@ -38,12 +38,6 @@ export function QuestionWizard({
   }
 
   const gotoNext = async (delay: number = 700) => {
-    if (currentStep + 1 > sections.length) {
-      onFinish()
-
-      return
-    }
-
     const nextStep = Math.min(currentStep + 1, sections.length)
 
     if (nextStep > lastVisitedStep) {

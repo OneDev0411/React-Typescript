@@ -21,7 +21,10 @@ export function DealEnderType({ step }: Props) {
   const context = useFormContext()
 
   const handleChange = (value: IDealEnderType) => {
-    wizard.next()
+    if (wizard.currentStep === step) {
+      wizard.next()
+    }
+
     context.updateForm({
       enderType: value
     })

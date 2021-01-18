@@ -96,9 +96,15 @@ export function DealPrimaryAgent({
 
       wizard.setShowLoading(false)
 
-      wizard.next(0)
+      handleNext(0)
     } else {
-      wizard.next()
+      handleNext()
+    }
+  }
+
+  const handleNext = (delay?: number) => {
+    if (wizard.currentStep === step) {
+      wizard.next(delay)
     }
   }
 

@@ -20,7 +20,10 @@ export function DealVisibility({ step }: Props) {
   const context = useFormContext()
 
   const handleChange = (value: 'draft' | 'visible') => {
-    wizard.next()
+    if (wizard.currentStep === step) {
+      wizard.next()
+    }
+
     context.updateForm({
       visibility: value
     })

@@ -99,7 +99,9 @@ export function DealContext({ step, context }: Props) {
       console.log(e)
     }
 
-    wizard.next()
+    if (wizard.currentStep === step) {
+      wizard.next()
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

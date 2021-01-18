@@ -112,7 +112,9 @@ export function DealAddress({ step }: Props) {
       dispatch(updateListing(context.deal.id, listing.id))
     }
 
-    wizard.next()
+    if (wizard.currentStep === step) {
+      wizard.next()
+    }
   }
 
   if (wizard.lastVisitedStep < step!) {
