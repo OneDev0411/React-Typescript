@@ -155,7 +155,7 @@ export default function CreateDeal() {
               isCommissionRequired
               agentSide="Selling"
               title="Enter Listing Primary Agent’s information"
-              finishStepCallback={createInitialDeal}
+              onFinishStep={createInitialDeal}
             />
           )}
 

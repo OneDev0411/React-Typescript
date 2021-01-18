@@ -51,7 +51,7 @@ interface Props {
   title: string
   agentSide: IDealType
   isCommissionRequired: boolean
-  finishStepCallback?: (agents: IDealFormRole[]) => Promise<void>
+  onFinishStep?: (agents: Record<number, IDealFormRole>) => Promise<void>
 }
 
 export function DealPrimaryAgent({
@@ -59,7 +59,7 @@ export function DealPrimaryAgent({
   title,
   agentSide,
   isCommissionRequired,
-  finishStepCallback
+  onFinishStep
 }: Props) {
   const classes = useStyles()
   const wizard = useWizardForm()
@@ -81,7 +81,7 @@ export function DealPrimaryAgent({
 
   const handleUpsert = async (agent: IDealFormRole) => {
     const agents = {
-      ...list,
+      ...context.form.primaryAgents,
       [agent.id]: agent
     }
 
@@ -89,9 +89,11 @@ export function DealPrimaryAgent({
       primaryAgents: agents
     })
 
-    if (finishStepCallback) {
+    if (onFinishStep) {
       wizard.setShowLoading(true)
-      await finishStepCallback(agents)
+
+      await onFinishStep(agents)
+
       wizard.setShowLoading(false)
 
       wizard.next(0)

@@ -1,5 +1,3 @@
-import { TYPE_COMPANY } from 'components/DealRole/constants/role-types'
-
 export type Address = {
   city: string
   full: string

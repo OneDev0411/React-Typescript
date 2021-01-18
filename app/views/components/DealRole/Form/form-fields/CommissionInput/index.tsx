@@ -42,6 +42,7 @@ export function CommissionInput({ isVisible, isRequired }: Props) {
             }}
             groupStyle={{
               width: `calc(50% - ${theme.spacing(1)}px`,
+              height: theme.spacing(7),
               marginRight: theme.spacing(1)
             }}
           />
