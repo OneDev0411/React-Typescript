@@ -7,6 +7,7 @@ import usersLookupRoute from './app/routes/user/user-lookup'
 import usersOAuthTokenRoute from './app/routes/user/oauth-token'
 import signupRoute from './app/routes/user/signup'
 import signoutRoute from './app/routes/user/signout'
+import resetPasswordRoute from './app/routes/user/reset-password'
 import dealDocusignLoginRoute from './app/routes/deal/docusign-login'
 import dealEnvelopeEditRoute from './app/routes/deal/envelope-edit'
 import dealEnvelopeSignRoute from './app/routes/deal/envelope-sign'
@@ -41,6 +42,7 @@ router.get('/api/users/profile', userProfileRoute)
 router.post('/api/users/lookup', bodyParser.json(), usersLookupRoute)
 router.post('/api/oauth2/token', bodyParser.json(), usersOAuthTokenRoute)
 router.post('/api/users', bodyParser.json(), signupRoute)
+router.get('/reset_password', bodyParser.json(), resetPasswordRoute)
 router.get('/signout', bodyParser.json(), signoutRoute)
 
 /**
