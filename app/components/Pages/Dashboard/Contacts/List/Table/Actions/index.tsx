@@ -171,7 +171,7 @@ const RawTableActions = ({
           searchText={filters.query}
           conditionOperator={filters.filter_type}
           users={filters.users}
-          resetSelectedRows={deselectRows}
+          resetSelectedRows={deselectAndReload}
           handleChangeContactsAttributes={handleChangeContactsAttributes}
         />
       </ActionWrapper>

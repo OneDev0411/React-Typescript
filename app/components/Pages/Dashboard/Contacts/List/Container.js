@@ -557,8 +557,13 @@ class ContactsList extends React.Component {
   }
 
   reloadContacts = async (start = 0) => {
+    const { parkedContactCount } = this.state
     const { activeSegment, searchContacts } = this.props
     const isParkedActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
+
+    if (parkedContactCount > 0) {
+      this.getParkedContactCount()
+    }
 
     await searchContacts(
       this.props.filters,
