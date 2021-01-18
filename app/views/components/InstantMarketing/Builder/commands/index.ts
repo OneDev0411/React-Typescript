@@ -1,5 +1,7 @@
 import { Editor } from 'grapesjs'
 
+import { setImage, getImage } from '../utils/helpers'
+
 interface CallFunctionCommandOptions {
   fn: Function
 }
@@ -26,6 +28,28 @@ export function registerCommands(editor: Editor) {
       targetModel.set(attribute, value)
     }
   )
+
+  // @ts-ignore
+  editor.Commands.add('set-image', (ed, sender, { model, value }) => {
+    const targetModel = model || editor.getSelected()
+
+    if (!targetModel) {
+      return
+    }
+
+    setImage(targetModel, value)
+  })
+
+  // @ts-ignore
+  editor.Commands.add('get-image', (ed, sender, { model }) => {
+    const targetModel = model || editor.getSelected()
+
+    if (!targetModel) {
+      return
+    }
+
+    return getImage(targetModel)
+  })
 
   // @ts-ignore
   editor.Commands.add('get-attribute', (ed, sender, { model, attribute }) => {

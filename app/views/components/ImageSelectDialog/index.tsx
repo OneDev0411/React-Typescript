@@ -6,6 +6,7 @@ import {
   DialogContent,
   TextField,
   Grid,
+  Box,
   Tabs,
   Tab,
   makeStyles
@@ -106,7 +107,7 @@ export default function ImageSelectDialog({
         paper: classes.dialogPaper
       }}
     >
-      <DialogTitle>
+      <DialogTitle disableTypography>
         <Grid container direction="row" justify="space-between">
           <Grid item>
             <Tabs
@@ -126,12 +127,16 @@ export default function ImageSelectDialog({
           </Grid>
           <Grid item>
             {isSerchableTabActive && (
-              <TextField
-                label="Search"
-                value={searchQuery}
-                color="primary"
-                onChange={event => setSearchQuery(event.target.value)}
-              />
+              <Box component="span" pr={1}>
+                <TextField
+                  label="Search"
+                  variant="outlined"
+                  size="small"
+                  value={searchQuery}
+                  color="primary"
+                  onChange={event => setSearchQuery(event.target.value)}
+                />
+              </Box>
             )}
             <IconButton onClick={onClose}>
               <SvgIcon path={mdiClose} />

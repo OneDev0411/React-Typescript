@@ -303,9 +303,7 @@ class Builder extends React.Component {
       },
       () => {
         const imageToEdit = `/api/utils/cors/${btoa(
-          this.editor.runCommand('get-attribute', {
-            attribute: 'src'
-          })
+          this.editor.runCommand('get-image')
         )}`
 
         this.setState({ imageToEdit })
@@ -961,8 +959,7 @@ class Builder extends React.Component {
                   !this.blocks.image ||
                   !this.blocks.image.selectHandler(imageUrl)
                 ) {
-                  this.editor.runCommand('set-attribute', {
-                    attribute: 'src',
+                  this.editor.runCommand('set-image', {
                     value: imageUrl
                   })
                 }
@@ -987,8 +984,7 @@ class Builder extends React.Component {
                 const templateId = this.selectedTemplate.id
                 const uploadedAsset = await uploadAsset(file, templateId)
 
-                this.editor.runCommand('set-attribute', {
-                  attribute: 'src',
+                this.editor.runCommand('set-image', {
                   value: uploadedAsset.file.url
                 })
                 this.setState({ imageToEdit: null })

@@ -1,33 +1,42 @@
 import { Editor } from 'grapesjs'
+import { Model } from 'backbone'
 
-const IMAGE_TOOLBAR_BUTTONS_PREFIX = 'rechat'
-const EDIT_IMAGE_TOOLBAR_BUTTON_NAME = `${IMAGE_TOOLBAR_BUTTONS_PREFIX}-image-edit`
-const CHANGE_IMAGE_TOOLBAR_BUTTON_NAME = `${IMAGE_TOOLBAR_BUTTONS_PREFIX}-image-change`
+import {
+  EDIT_IMAGE_TOOLBAR_BUTTON_NAME,
+  CHANGE_IMAGE_TOOLBAR_BUTTON_NAME
+} from '../constants'
+
+import {
+  isImage,
+  isBackgroundImageAllowed,
+  isBackgroundUrlAllowed,
+  hasToolbarImageButtons
+} from '../utils/helpers'
 
 export function registerToolbarButtons(
   editor: Editor,
   onChangeImageClick: () => void,
   onEditImageClick: () => void
 ) {
-  editor.on('component:selected', selected => {
+  editor.on('component:selected', (selected?: Model) => {
     if (!selected) {
       return
     }
 
-    const selectedType = selected.get('type')
-    const isImageElement =
-      selectedType === 'image' ||
-      selectedType === 'mj-image' ||
-      selectedType === 'mj-carousel-image'
+    const isImageElement = isImage(selected)
+    const isBackgroundImageAllowedElement = isBackgroundImageAllowed(selected)
+    const isBackgroundUrlAllowedElement = isBackgroundUrlAllowed(selected)
 
-    if (!isImageElement) {
+    if (
+      !isImageElement &&
+      !isBackgroundImageAllowedElement &&
+      !isBackgroundUrlAllowedElement
+    ) {
       return
     }
 
     const toolbar: any[] = selected.get('toolbar')
-    const hasImageButtons = toolbar.some(
-      item => item.name && item.name.startsWith(IMAGE_TOOLBAR_BUTTONS_PREFIX)
-    )
+    const hasImageButtons = hasToolbarImageButtons(selected)
 
     if (hasImageButtons) {
       return
