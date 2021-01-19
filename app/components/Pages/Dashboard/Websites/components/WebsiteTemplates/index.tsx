@@ -11,6 +11,7 @@ export interface WebsiteTemplatesProps {
 function WebsiteTemplates({ type }: WebsiteTemplatesProps) {
   const { templates: items, isLoading } = useWebsiteTemplates(type)
 
+  // TODO: implement this
   const handleDelete = () => console.log('on template delete')
 
   return (

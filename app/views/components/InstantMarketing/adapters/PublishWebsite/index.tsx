@@ -17,7 +17,7 @@ interface PublishWebsiteProps {
   isEdit: boolean
   isTriggered: boolean
   templateType: IWebsiteTemplateType
-  selectedTemplate: IMarketingTemplate
+  selectedTemplate: IBrandMarketingTemplate
   onFinish: () => {}
 }
 
@@ -25,7 +25,8 @@ function PublishWebsite({
   isTriggered,
   isEdit,
   templateType,
-  onFinish
+  onFinish,
+  selectedTemplate
 }: PublishWebsiteProps) {
   const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const [isDomainManagementOpen, setIsDomainManagementOpen] = useState(false)
@@ -122,6 +123,7 @@ function PublishWebsite({
     <>
       {(isAgentTriggered || isBuilderOpen) && (
         <InstantMarketing
+          defaultTemplate={selectedTemplate}
           templateData={{ listing: selectedListing[0] }}
           onClose={handleCloseBuilder}
           handleSave={handleSaveBuilder}

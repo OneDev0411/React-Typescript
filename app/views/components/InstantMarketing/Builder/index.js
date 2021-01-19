@@ -271,6 +271,10 @@ class Builder extends React.Component {
       this.registerEmailBlocks()
     }
 
+    if (this.isWebsiteTemplate) {
+      this.registerWebsiteBlocks()
+    }
+
     this.props.onBuilderLoad({
       regenerateTemplate: this.regenerateTemplate
     })
@@ -352,6 +356,10 @@ class Builder extends React.Component {
 
     removeUnusedBlocks(this.editor)
     this.blocks = registerSocialBlocks(this.editor, renderData)
+  }
+
+  registerWebsiteBlocks = () => {
+    console.log('register website blocks')
   }
 
   disableAssetManager = () => {
@@ -689,6 +697,10 @@ class Builder extends React.Component {
     return this.selectedTemplate && this.selectedTemplate.mjml
   }
 
+  get isWebsiteTemplate() {
+    return this.selectedTemplate && this.selectedTemplate.medium === 'Website'
+  }
+
   get isTemplateLoaded() {
     return this.selectedTemplate && this.selectedTemplate.markup
   }
@@ -847,6 +859,10 @@ class Builder extends React.Component {
     return true
   }
 
+  get hasBlocks() {
+    return this.isMjmlTemplate || this.isWebsiteTemplate
+  }
+
   render() {
     if (this.state.isLoading) {
       return null
@@ -855,7 +871,7 @@ class Builder extends React.Component {
     return (
       <Portal root="marketing-center">
         <Container
-          hideBlocks={!this.isMjmlTemplate}
+          hideBlocks={!this.hasBlocks}
           className="template-builder"
           style={this.props.containerStyle}
         >
