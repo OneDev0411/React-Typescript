@@ -9,11 +9,9 @@ export const Tags = () => (
     <Label>Tags</Label>
     <Field
       name="tags"
-      render={({ input }) => {
-        console.log('Autocomplete', { input })
-
-        return <BaseTagSelector value={input.value} onChange={input.onChange} />
-      }}
+      render={({ input }) => (
+        <BaseTagSelector value={input.value} onChange={input.onChange} />
+      )}
     />
   </Container>
 )

@@ -1,2 +1,2 @@
 export * from './components/BaseTagSelector'
-export * from './components/PopoverTagSelector'
+export * from './components/PopoverContactTagSelector'

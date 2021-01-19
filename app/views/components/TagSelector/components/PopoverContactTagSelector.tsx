@@ -1,4 +1,4 @@
-import React, { ReactNode, MouseEvent, useState } from 'react'
+import React, { ReactNode, MouseEvent, useState, memo } from 'react'
 import {
   Box,
   Button,
@@ -9,10 +9,14 @@ import {
   Theme
 } from '@material-ui/core'
 
+import { useSelector } from 'react-redux'
+
+import { IAppState } from 'reducers'
+
 import {
-  BaseTagSelector,
-  Props as BaseTagSelectorProps
-} from './BaseTagSelector'
+  BaseContactTagSelector,
+  Props as BaseContactTagSelectorProps
+} from './BaseContactTagSelector'
 import { SelectorOption } from '../type'
 
 const useStyles = makeStyles(
@@ -30,27 +34,33 @@ const useStyles = makeStyles(
       direction: 'rtl'
     }
   }),
-  { name: 'PopoverTagSelector' }
+  { name: 'PopoverContactTagSelector' }
 )
 
-interface Props extends Omit<BaseTagSelectorProps, 'onChange'> {
-  anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
-  onSave: (tags: SelectorOption[]) => void
+interface Props extends Omit<BaseContactTagSelectorProps, 'onChange'> {
   popoverProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
+  anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
+  callback: (tags: SelectorOption[]) => void
 }
 
-export const PopoverTagSelector = ({
+export const PopoverContactTagSelectorContainer = ({
   anchorRenderer,
   popoverProps = {},
   value = [],
-  onSave,
+  callback,
   ...props
 }: Props) => {
   const classes = useStyles()
   const [isDirty, setIsDirty] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
+  const { attributeDefs } = useSelector((store: IAppState) => {
+    const { attributeDefs } = store.contacts
 
+    return {
+      attributeDefs
+    }
+  })
   const handleClick = (e: MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget)
   }
@@ -70,7 +80,9 @@ export const PopoverTagSelector = ({
       setIsDirty(false)
     }
 
-    onSave(selectedTags)
+    console.log('handleSave', selectedTags)
+
+    callback(selectedTags)
   }
   const open = Boolean(anchorEl)
   const id = open ? 'popover-tag-selector' : undefined
@@ -94,14 +106,18 @@ export const PopoverTagSelector = ({
         {...popoverProps}
       >
         <Box className={classes.container}>
-          <BaseTagSelector {...props} value={value} onChange={handleChange} />
+          <BaseContactTagSelector
+            {...props}
+            value={selectedTags}
+            onChange={handleChange}
+          />
           <Box className={classes.actions}>
             <Box>
               <Button
                 variant="contained"
                 color="secondary"
                 size="small"
-                disabled={!isDirty}
+                // disabled={!isDirty}
                 onClick={handleSave}
               >
                 Done
@@ -118,3 +134,7 @@ export const PopoverTagSelector = ({
     </>
   )
 }
+
+export const PopoverContactTagSelector = memo(
+  PopoverContactTagSelectorContainer
+)

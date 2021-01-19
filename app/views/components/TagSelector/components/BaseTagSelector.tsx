@@ -20,8 +20,8 @@ const filter = createFilterOptions<SelectorOption>({
 
 export interface Props {
   value: SelectorOption[]
-  onChange: (tags: SelectorOption[]) => void
   chipProps?: ChipProps
+  onChange: (tags: SelectorOption[]) => void
 }
 
 export const BaseTagSelector = ({
@@ -58,6 +58,12 @@ export const BaseTagSelector = ({
       setAvailableTags(normalizeTags(existingTags))
     }
   })
+
+  // useEffect(() => {
+  //   console.log('use effect in base')
+  //   setSelectedTags(value)
+  //   onChange(value)
+  // }, [onChange, value])
 
   return (
     <Autocomplete
@@ -103,6 +109,8 @@ export const BaseTagSelector = ({
             ]
           }
         }
+
+        console.log({ newValue })
 
         setSelectedTags(newValue)
         onChange(newValue)
