@@ -177,6 +177,10 @@ class ContactsList extends React.Component {
       filters.length === 1 &&
       this.state.selectedShortcutFilter !== null
     ) {
+      if (filters[0].value === null) {
+        return 'Contacts(un-Tagged)'
+      }
+
       return `Tag: ${filters[0].value}`
     }
 

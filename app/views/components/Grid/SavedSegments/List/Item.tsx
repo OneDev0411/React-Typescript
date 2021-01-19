@@ -38,7 +38,8 @@ const useStyles = makeStyles((theme: Theme) =>
     textItem: {
       overflow: 'hidden',
       whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis'
+      textOverflow: 'ellipsis',
+      ...theme.typography.body2
     }
   })
 )
