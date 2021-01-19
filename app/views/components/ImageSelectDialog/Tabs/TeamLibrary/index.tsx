@@ -1,10 +1,12 @@
 import React, { memo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
+  Grid,
   Box,
   Typography,
   Divider,
   Button,
+  Chip,
   Theme,
   makeStyles,
   useTheme
@@ -30,6 +32,9 @@ const useStyles = makeStyles(
         outline: 'none'
       }
     },
+    tagsContainer: {
+      padding: theme.spacing(0, 2)
+    },
     uploadContainer: {
       textAlign: 'center',
       border: `1px solid ${theme.palette.divider}`,
@@ -46,15 +51,23 @@ const useStyles = makeStyles(
   }
 )
 
-function TeamLibrary({ query, onSelect, onEdit }: SearchableImageTabProps) {
+function TeamLibrary({
+  query,
+  setQuery,
+  onSelect,
+  onEdit
+}: SearchableImageTabProps) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
   const activeBrandId = getActiveTeamId(user) as UUID
-  const { isLoading, results, deleteAsset, uploadAsset } = useTeamLibrary(
-    activeBrandId,
-    query
-  )
+  const {
+    isLoading,
+    results,
+    labels,
+    deleteAsset,
+    uploadAsset
+  } = useTeamLibrary(activeBrandId, query)
 
   const theme = useTheme()
 
@@ -109,6 +122,14 @@ function TeamLibrary({ query, onSelect, onEdit }: SearchableImageTabProps) {
         }
       })
     )
+  }
+
+  const handleChipClick = (label: string) => {
+    if (!setQuery) {
+      return
+    }
+
+    setQuery(label)
   }
 
   if (isLoading) {
@@ -169,43 +190,65 @@ function TeamLibrary({ query, onSelect, onEdit }: SearchableImageTabProps) {
         </Box>
       )}
       {results.length > 0 && (
-        <Masonry>
-          <Box
-            className={classes.uploadContainer}
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-            m={1}
-            onClick={open}
+        <Grid container direction="column">
+          <Grid
+            container
+            item
+            direction="row"
+            spacing={1}
+            className={classes.tagsContainer}
           >
-            <input {...getInputProps()} />
-            <Typography variant="body2">Click Here To Upload</Typography>
-            <Box py={1}>
-              <Button variant="contained" color="secondary">
-                Upload
-              </Button>
-            </Box>
-          </Box>
-          {results.map(item => {
-            const imageUrl = item.file.url
+            {labels.map(label => (
+              <Grid key={label} item>
+                <Chip
+                  variant="outlined"
+                  color={query === label ? 'primary' : 'default'}
+                  label={label}
+                  onClick={() => handleChipClick(label)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          <Grid container item>
+            <Masonry>
+              <Box
+                className={classes.uploadContainer}
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+                m={1}
+                onClick={open}
+              >
+                <input {...getInputProps()} />
+                <Typography variant="body2">Click Here To Upload</Typography>
+                <Box py={1}>
+                  <Button variant="contained" color="secondary">
+                    Upload
+                  </Button>
+                </Box>
+              </Box>
+              {results.map(item => {
+                const imageUrl = item.file.url
 
-            return (
-              <ImageThumbnail
-                key={item.id}
-                onEditClick={
-                  onEdit
-                    ? () => handleEdit(`/api/utils/cors/${btoa(imageUrl)}`)
-                    : undefined
-                }
-                onDeleteClick={() => handleDelete(item)}
-                onClick={() => onSelect(imageUrl)}
-                src={imageUrl}
-                alt={item.label}
-              />
-            )
-          })}
-        </Masonry>
+                return (
+                  <ImageThumbnail
+                    key={item.id}
+                    onEditClick={
+                      onEdit
+                        ? () => handleEdit(`/api/utils/cors/${btoa(imageUrl)}`)
+                        : undefined
+                    }
+                    onDeleteClick={() => handleDelete(item)}
+                    onClick={() => onSelect(imageUrl)}
+                    src={imageUrl}
+                    alt={item.label}
+                  />
+                )
+              })}
+            </Masonry>
+          </Grid>
+        </Grid>
       )}
     </Box>
   )

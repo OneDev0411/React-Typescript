@@ -5,7 +5,8 @@ import CSSMasonry from 'react-masonry-css'
 const useStyles = makeStyles(
   theme => ({
     masonryGrid: {
-      display: 'flex'
+      display: 'flex',
+      width: '100%'
     },
     masonryColumn: {
       margin: theme.spacing(1)

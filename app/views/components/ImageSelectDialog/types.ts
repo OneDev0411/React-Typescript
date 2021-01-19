@@ -16,6 +16,7 @@ export interface ImageSelectDialogProps {
 export interface SearchableImageTabProps {
   onSelect: ImageSelectDialogProps['onSelect']
   onEdit?: (file: File | string) => void
+  setQuery?: (query: string) => void
   query: string
 }
 

@@ -152,6 +152,7 @@ export default function ImageSelectDialog({
             onEdit={handleEdit}
             onSelect={onSelect}
             query={debouncedSearchQuery}
+            setQuery={setSearchQuery}
           />
         )}
         {selectedTab === 'photo-library' && (

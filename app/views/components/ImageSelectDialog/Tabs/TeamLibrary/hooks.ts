@@ -6,6 +6,7 @@ import { uploadBrandAsset } from 'models/brand/upload-asset'
 
 interface UseTeamLibrary {
   results: IBrandAsset[]
+  labels: string[]
   isLoading: boolean
   deleteAsset: (assetId: UUID) => Promise<void>
   uploadAsset: (file: File, label: string) => Promise<IBrandAsset>
@@ -17,6 +18,7 @@ export function useTeamLibrary(
 ): UseTeamLibrary {
   const [brandAssets, setBrandAssets] = useState<Nullable<IBrandAsset[]>>(null)
   const [results, setResults] = useState<IBrandAsset[]>([])
+  const [labels, setLabels] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const deleteAsset = async (assetId: UUID): Promise<void> => {
@@ -86,5 +88,17 @@ export function useTeamLibrary(
     searchBrandAssets()
   }, [searchQuery, brandAssets])
 
-  return { results, isLoading, deleteAsset, uploadAsset }
+  useEffect(() => {
+    if (!brandAssets) {
+      setLabels([])
+
+      return
+    }
+
+    const newLabels = [...new Set(brandAssets.map(asset => asset.label))]
+
+    setLabels(newLabels)
+  }, [brandAssets])
+
+  return { isLoading, results, labels, deleteAsset, uploadAsset }
 }
