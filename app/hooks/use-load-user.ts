@@ -5,19 +5,16 @@ import { useEffectOnce } from 'react-use'
 import { SIGNIN_SUCCESS } from 'constants/auth/signin'
 import { getUserTeams } from 'actions/user/teams'
 
-import { IAppState } from 'reducers'
 import Fetch from 'services/fetch'
+import { selectUserUnsafe } from 'selectors/user'
 
-export function useLoadUser(): {
-  user: IUser | undefined
-  isLoading: boolean
-  error: Nullable<string>
-} {
+export function useLoadUser() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Nullable<string>>(null)
+  const [isGuest, setIsGuest] = useState(false)
 
   const dispatch = useDispatch()
-  const user = useSelector<IAppState, IUser | undefined>(({ user }) => user)
+  const user = useSelector(selectUserUnsafe)
 
   useEffectOnce(() => {
     if (user) {
@@ -26,6 +23,7 @@ export function useLoadUser(): {
 
     const loadUser = async () => {
       setIsLoading(true)
+      setIsGuest(false)
 
       try {
         const {
@@ -41,6 +39,7 @@ export function useLoadUser(): {
         })
       } catch (e) {
         setError(e.response.data)
+        setIsGuest(e.status === 404)
       } finally {
         setIsLoading(false)
       }
@@ -52,6 +51,7 @@ export function useLoadUser(): {
   return {
     user,
     error,
-    isLoading
+    isLoading,
+    isGuest
   }
 }

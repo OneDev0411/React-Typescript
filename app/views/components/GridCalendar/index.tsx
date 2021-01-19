@@ -84,7 +84,7 @@ interface Props {
 export const GridCalendarPresentation = ({
   user,
   actionRef,
-  viewAsUsers,
+  viewAsUsers = [],
   initialRange,
   contrariwise = false,
   associations = []
@@ -329,9 +329,9 @@ export const GridCalendarPresentation = ({
     ) => {
       let changeType = type
 
-      if (type === 'updated') {
+      if (type === 'updated' && viewAsUsers?.length > 1) {
         const assignees: UUID[] = _map(event.assignees, 'id')
-        const shouldVisible = (viewAsUsers || []).some(userId =>
+        const shouldVisible = viewAsUsers.some(userId =>
           assignees.includes(userId)
         )
 
@@ -350,7 +350,7 @@ export const GridCalendarPresentation = ({
       setSelectedEvent(null)
       setSelectedDay(null)
     },
-    [rowEvents, updateEvents]
+    [rowEvents, updateEvents, viewAsUsers]
   )
 
   /**

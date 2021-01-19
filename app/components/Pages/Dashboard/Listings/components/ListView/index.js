@@ -1,31 +1,50 @@
-import React, { memo } from 'react'
-
+import React, { useCallback, memo, useState } from 'react'
 import pluralize from 'pluralize'
-
 import { Box, Checkbox, useTheme } from '@material-ui/core'
 
+import Table from 'components/Grid/Table'
+import LoadingComponent from 'components/Spinner'
 import { useGridStyles } from 'components/Grid/Table/styles'
-
+import { ListingDetailsModal } from 'components/ListingDetailsModal'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 
-import Table from '../../../../../../views/components/Grid/Table'
-import LoadingComponent from '../../../../../../views/components/Spinner'
-
 import ZeroState from '../ZeroState'
-
 import { Address } from './columns/Address'
+
+const BASE_URL = '/dashboard/mls'
 
 const ListView = ({ sortedListings, listings, isFetching }) => {
   const theme = useTheme()
   const gridClasses = useGridStyles()
   const { selections, toggleItem } = useListSelection()
+  const [selectedListingId, setSelectedListingId] = useState(null)
+  const [isListingDetailsModalOpen, setIsListingDetailsModalOpen] = useState(
+    false
+  )
+
+  const closeListingDetailsModal = useCallback(() => {
+    window.history.replaceState({}, '', BASE_URL)
+    setIsListingDetailsModalOpen(false)
+    setSelectedListingId(null)
+  }, [])
+
+  const openListingDetailsModal = useCallback(id => {
+    window.history.replaceState({}, '', `${BASE_URL}/${id}`)
+    setIsListingDetailsModalOpen(true)
+    setSelectedListingId(id)
+  }, [])
 
   const columns = [
     {
       header: 'Address',
       id: 'address',
       width: '20%',
-      render: ({ row: listing }) => <Address listing={listing} />
+      render: ({ row: listing }) => (
+        <Address
+          address={listing.addressTitle}
+          onClick={() => openListingDetailsModal(listing.id)}
+        />
+      )
     },
     {
       header: 'Status',
@@ -118,6 +137,11 @@ const ListView = ({ sortedListings, listings, isFetching }) => {
             classes={{
               row: gridClasses.row
             }}
+          />
+          <ListingDetailsModal
+            isOpen={isListingDetailsModalOpen}
+            listingId={selectedListingId}
+            closeHandler={closeListingDetailsModal}
           />
         </Box>
       )}

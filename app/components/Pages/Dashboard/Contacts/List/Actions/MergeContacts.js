@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { ListItem, ListItemText } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 
 import { ActionWrapper } from '../Table/components/ActionWrapper'
 import { mergeContact } from '../../../../../../store_actions/contacts'
@@ -25,24 +25,26 @@ class MergeContacts extends React.Component {
 
   render() {
     return (
-      <ListItem button disabled={this.props.disabled} onClick={this.onClick}>
-        <ActionWrapper
-          bulkMode={this.props.isEntireMode}
-          action="merging"
-          atLeast="two"
+      <ActionWrapper
+        bulkMode={this.props.isEntireMode}
+        action="merging"
+        atLeast="two"
+        disabled={this.props.disabled}
+      >
+        <Button
+          variant="outlined"
+          size="small"
           disabled={this.props.disabled}
+          onClick={this.onClick}
         >
-          <ListItemText primary="Merge" />
-        </ActionWrapper>
-      </ListItem>
+          Merge
+        </Button>
+      </ActionWrapper>
     )
   }
 }
 
-export default connect(
-  null,
-  {
-    mergeContact,
-    confirmation
-  }
-)(MergeContacts)
+export default connect(null, {
+  mergeContact,
+  confirmation
+})(MergeContacts)

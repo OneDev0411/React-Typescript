@@ -4,10 +4,9 @@ import { Box, Typography } from '@material-ui/core'
 import Modal from 'components/BareModal'
 import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
-
 import ListingCard from 'components/ListingCards/ListingCard'
+import { ListingDetailsModal } from 'components/ListingDetailsModal'
 
-import ListingModalViewer from '../ListingModalViewer'
 import { formatListing } from '../../helpers/format-listing'
 
 import { Card } from './styled'
@@ -22,7 +21,10 @@ interface Props {
 export default function AlertViewerModal(props: Props) {
   const pageTitle = 'Shared Listings'
   const { isOpen, onClose, feed } = props
-  const [selectedListing, setSelectedListing] = useState(null)
+  const [
+    selectedListing,
+    setSelectedListing
+  ] = useState<ICompactListing | null>(null)
   const [showListingModal, setShowListingModal] = useState(false)
 
   if (!isOpen) {
@@ -36,26 +38,19 @@ export default function AlertViewerModal(props: Props) {
 
     if (feed.length > 0) {
       return (
-        <>
-          <Box display="flex" flexWrap="wrap" px={3}>
-            {feed.map(listing => (
-              <Card key={listing.id}>
-                <ListingCard
-                  listing={formatListing(listing)}
-                  onClick={() => {
-                    setSelectedListing(listing)
-                    setShowListingModal(true)
-                  }}
-                />
-              </Card>
-            ))}
-          </Box>
-          <ListingModalViewer
-            show={showListingModal}
-            listing={selectedListing}
-            onHide={() => setShowListingModal(false)}
-          />
-        </>
+        <Box display="flex" flexWrap="wrap" px={3}>
+          {feed.map(listing => (
+            <Card key={listing.id}>
+              <ListingCard
+                listing={formatListing(listing)}
+                onClick={() => {
+                  setSelectedListing(listing)
+                  setShowListingModal(true)
+                }}
+              />
+            </Card>
+          ))}
+        </Box>
       )
     }
 
@@ -75,13 +70,19 @@ export default function AlertViewerModal(props: Props) {
       isOpen={isOpen}
       onRequestClose={onClose}
     >
-      <>
-        <PageHeader
-          onClickCloseButton={onClose}
-          title={`${pageTitle}${feedLength}`}
+      <PageHeader
+        onClickCloseButton={onClose}
+        title={`${pageTitle}${feedLength}`}
+      />
+      {renderContent()}
+
+      {showListingModal && selectedListing && (
+        <ListingDetailsModal
+          isOpen
+          listingId={selectedListing.id}
+          closeHandler={() => setShowListingModal(false)}
         />
-        {renderContent()}
-      </>
+      )}
     </Modal>
   )
 }

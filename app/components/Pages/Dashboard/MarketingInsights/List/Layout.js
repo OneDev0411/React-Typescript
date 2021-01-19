@@ -7,7 +7,6 @@ import { Box, Button, Chip, makeStyles } from '@material-ui/core'
 import PageLayout from 'components/GlobalPageLayout'
 
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
-import Tooltip from 'components/tooltip'
 
 import SortField from './SortField'
 
@@ -54,15 +53,13 @@ function InsightsLayout({
       <PageLayout>
         <PageLayout.Header title="Email Insight" onCreateEmail={onCreateEmail}>
           <Box textAlign="right">
-            <Tooltip placement="bottom">
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={() => browserHistory.push('/dashboard/marketing')}
-              >
-                Visit Marketing Center
-              </Button>
-            </Tooltip>
+            <Button
+              variant="outlined"
+              size="large"
+              onClick={() => browserHistory.push('/dashboard/marketing')}
+            >
+              Visit Marketing Center
+            </Button>
           </Box>
         </PageLayout.Header>
         <PageLayout.Main>

@@ -3,6 +3,8 @@ import isEqual from 'lodash/isEqual'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Button, List, ListSubheader, makeStyles } from '@material-ui/core'
 
+import { selectUser } from 'selectors/user'
+
 import {
   viewAs,
   isBackOffice,
@@ -10,8 +12,6 @@ import {
 } from '../../../../../../../utils/user-teams'
 
 import { setViewAsFilter } from '../../../../../../../store_actions/user/set-view-as-filter'
-
-import { IAppState } from '../../../../../../../reducers'
 
 import { ViewAsMember } from './ViewAsMember'
 
@@ -32,7 +32,7 @@ interface Props {
 export function ViewAsList({ disabled, team }: Props) {
   const classes = useStyle()
   const dispatch = useDispatch()
-  const user = useSelector((store: IAppState) => store.user)
+  const user = useSelector(selectUser)
   const brandMembers = getTeamAvailableMembers(team)
   const allMembersId = brandMembers.map(m => m.id)
   const initialSelectedMembers = useMemo(() => viewAs(user, team), [user, team])

@@ -12,8 +12,18 @@ export const FormContainer = styled.form`
 `
 export const FieldContainer = styled(Flex)`
   height: 2.5rem;
-  border-radius: 3px;
-  background-color: ${({ theme }: Props) => theme.palette.grey['50']};
+  border-radius: 4px;
+  border: 1px solid ${({ theme }: Props) => theme.palette.divider};
+`
+
+export const AssosiationContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: ${({ theme }: Props) => theme.spacing(0.25)}px;
+  min-height: 40px;
+  border: 1px solid ${({ theme }: Props) => theme.palette.divider};
+  border-radius: ${({ theme }: Props) => theme.shape.borderRadius}px;
 `
 
 export const Footer = styled(Flex)`

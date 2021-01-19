@@ -168,7 +168,7 @@ function ContactFilters(props) {
           {getSummeryInfo()}
         </span>
       </div>
-      {!isParkedContactActive && (
+      {props?.show && (
         <Filters
           name="contacts"
           plugins={['segments']}

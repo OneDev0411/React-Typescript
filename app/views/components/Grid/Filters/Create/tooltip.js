@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import ToolTip from '../../../tooltip'
+
+import { Tooltip } from '@material-ui/core'
 
 const Title = styled.div`
   font-size: 17px;
@@ -14,12 +15,10 @@ const Text = styled.div`
 
 const customStyle = { textAlign: 'left', padding: '8px 0' }
 
-export const FilterItemToolTip = ({ item, children }) => (
-  <ToolTip
-    captionIsHTML
-    isCustom={false}
+export const FilterItemTooltip = ({ item, children }) => (
+  <Tooltip
     placement="right"
-    caption={
+    title={
       <div style={customStyle}>
         <Title>{item.label}</Title>
         <Text>{item.tooltip}</Text>
@@ -27,27 +26,23 @@ export const FilterItemToolTip = ({ item, children }) => (
     }
   >
     {children}
-  </ToolTip>
+  </Tooltip>
 )
 
-export const MissingValueToolTip = ({ enabled, children }) => (
-  <ToolTip
-    captionIsHTML
-    isCustom={false}
-    placement="right"
-    type="error"
-    caption={
+export const MissingValueTooltip = ({ enabled, children }) => (
+  <Tooltip
+    title={
       enabled && (
         <div style={customStyle}>
           <Title>You have missed a filter</Title>
           <Text>
-            One of your filters is missing a value.<br /> Finish editing that
-            before adding a new one.
+            One of your filters is missing a value.
+            <br /> Finish editing that before adding a new one.
           </Text>
         </div>
       )
     }
   >
     {children}
-  </ToolTip>
+  </Tooltip>
 )

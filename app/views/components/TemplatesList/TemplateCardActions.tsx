@@ -4,10 +4,11 @@ import { createStyles, makeStyles } from '@material-ui/core'
 
 import { mdiTrashCanOutline } from '@mdi/js'
 
+import { Tooltip } from '@material-ui/core'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import ActionButton from '../Button/ActionButton'
-import Tooltip from '../tooltip'
 import IconButton from '../Button/IconButton'
 
 interface Props {
@@ -59,7 +60,7 @@ export default function TemplateCardActions({
       </div>
       {handleDelete && (
         <div>
-          <Tooltip caption="Delete">
+          <Tooltip title="Delete">
             <IconButton
               iconSize="large"
               className={classes.iconButton}

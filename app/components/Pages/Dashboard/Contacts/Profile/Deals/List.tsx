@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
-import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
 import { sortDealsStatus } from 'utils/sort-deals-status'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { ShowMoreLess } from 'components/ShowMoreLess'
+
+import { selectUser } from 'selectors/user'
 
 import { DealItem } from './Item'
 
@@ -15,7 +16,7 @@ interface Props {
 }
 
 export function List({ deals, contact }: Props) {
-  const user = useSelector<IAppState, IUser>(store => store.user)
+  const user = useSelector(selectUser)
   const statuses = useBrandStatuses(getActiveTeamId(user) || '')
   const sortedDealsByStatus = useMemo(() => sortDealsStatus(deals, statuses), [
     deals,

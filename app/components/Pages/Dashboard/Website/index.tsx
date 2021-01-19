@@ -2,14 +2,15 @@ import React from 'react'
 
 import { useSelector } from 'react-redux'
 
-import { IAppState } from '../../../../reducers'
+import { selectUser } from 'selectors/user'
+
 import config from '../../../../../config/public'
 import { getActiveBrand } from '../../../../utils/user-teams'
 
 const API_URL = config.store.url
 
 const Store = () => {
-  const user = useSelector<IAppState, IUser>(store => store.user)
+  const user = useSelector(selectUser)
   const brand = getActiveBrand(user)
 
   return (

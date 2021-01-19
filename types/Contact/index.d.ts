@@ -294,6 +294,7 @@ declare interface IFetchContactQuery {
   associations?: string[] // TODO: use TContactAssociation[]
   order?: string
   filter_type?: TContactFilterType
+  parked?: boolean
 }
 
 declare interface TGetContactFunc<A extends string> {

@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
 
 import { Button, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
+
+import { addNotification as notify } from 'components/notification'
 
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
@@ -12,6 +13,7 @@ import { confirmation } from 'actions/confirmation'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 
 import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
+import { selectUser } from 'selectors/user'
 
 interface Props {
   deal: IDeal
@@ -37,10 +39,10 @@ export default function DeleteDeal(props: Props) {
   const dispatch = useDispatch()
   const classes = useStyles()
 
-  const { user, checklists } = useSelector(({ deals, user }: IAppState) => ({
-    user,
-    checklists: getDealChecklists(props.deal, deals.checklists)
-  }))
+  const checklists = useSelector(({ deals }: IAppState) =>
+    getDealChecklists(props.deal, deals.checklists)
+  )
+  const user = useSelector(selectUser)
 
   const handleClick = () => {
     if (!props.isBackOffice && !props.deal.is_draft) {

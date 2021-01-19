@@ -15,9 +15,11 @@ import {
   mdiCursorDefaultClickOutline,
   mdiAccountMultipleOutline
 } from '@mdi/js'
-import { addNotification } from 'components/notification'
+
 import pluralize from 'pluralize'
 import classNames from 'classnames'
+
+import { addNotification } from 'components/notification'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
 import { EmailThread } from 'components/EmailThread'

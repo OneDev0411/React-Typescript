@@ -13,11 +13,12 @@ import { addBrand } from 'models/BrandConsole/Brands'
 import getVerificationCode from 'models/verify/request'
 import { putUserSetting } from 'models/user/put-user-setting'
 
-import { IAppState } from 'reducers'
 import { updateUser } from 'actions/user'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+
+import { selectUser } from 'selectors/user'
 
 import Header from '../Header'
 import NextButton from '../NextButton'
@@ -34,7 +35,7 @@ export function ConfigBrand() {
 
   const dispatch = useDispatch()
   const commonClasses = useCommonStyles()
-  const user: IUser = useSelector((store: IAppState) => store.user)
+  const user = useSelector(selectUser)
   const activeBrand = getActiveBrand(user)
 
   const getNextStep = useCallback(() => {

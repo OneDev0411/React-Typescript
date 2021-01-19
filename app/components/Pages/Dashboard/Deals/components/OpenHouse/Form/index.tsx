@@ -35,12 +35,9 @@ import { normalizeListing } from 'views/utils/association-normalizers'
 
 import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 
-import { DatePickerContainer } from './styled'
+import { selectUser } from 'selectors/user'
 
-interface StateProps {
-  user: IUser
-  checklists: IDealChecklist[]
-}
+import { DatePickerContainer } from './styled'
 
 interface Props {
   deal: IDeal
@@ -76,12 +73,10 @@ function OpenHouseForm(props: Props) {
   const classes = useStyles()
   const dispatch = useReduxDispatch()
 
-  const { user, checklists } = useSelector<IAppState, StateProps>(
-    ({ user, deals }) => ({
-      user,
-      checklists: getDealChecklists(props.deal, deals.checklists)
-    })
+  const checklists = useSelector<IAppState, IDealChecklist[]>(({ deals }) =>
+    getDealChecklists(props.deal, deals.checklists)
   )
+  const user = useSelector(selectUser)
 
   const confirmation = useContext(ConfirmationModalContext)
 

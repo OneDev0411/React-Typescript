@@ -1,25 +1,29 @@
 import React from 'react'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { GlobalActionsButton } from 'components/GlobalActionsButton'
 
-import { ACL } from '../../../../constants/acl'
-import { selectNotificationNewCount } from '../../../../reducers/notifications'
-import { selectUnreadEmailThreadsCount } from '../../../../reducers/inbox'
-import { InboxAction } from '../../../../reducers/inbox/types'
+import { selectUserUnsafe } from 'selectors/user'
 
-import { fetchUnreadEmailThreadsCount } from '../../../../store_actions/inbox'
+import { ACL } from 'constants/acl'
+import { selectNotificationNewCount } from 'reducers/notifications'
+import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
+import { InboxAction } from 'reducers/inbox/types'
 
-import { useDealsNotificationsNumber } from '../../../../hooks/use-deals-notifications-number'
-import { useChatRoomsNotificationsNumber } from '../../../../hooks/use-chat-rooms-notifications-number'
-import useTypedSelector from '../../../../hooks/use-typed-selector'
+import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
+
+import { useDealsNotificationsNumber } from 'hooks/use-deals-notifications-number'
+import { useChatRoomsNotificationsNumber } from 'hooks/use-chat-rooms-notifications-number'
+
+import Acl from 'views/components/Acl'
+
+import { ScrollableArea } from 'views/components/ScrollableArea'
+
+import { IAppState } from 'reducers'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
-
-import Acl from '../../../../views/components/Acl'
-import { ScrollableArea } from '../../../../views/components/ScrollableArea'
 
 import Logo from './components/Logo'
 import { UserMenu } from './components/UserMenu'
@@ -37,12 +41,16 @@ import {
   AppNavbarBadge
 } from './styled'
 
+const openHouseAccess = [ACL.CRM, ACL.MARKETING]
+const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
+const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
+
 export function Menu() {
-  const user = useTypedSelector<IUser>(state => state.user)
-  const appNotifications = useTypedSelector(state =>
+  const user = useSelector(selectUserUnsafe)
+  const appNotifications = useSelector((state: IAppState) =>
     selectNotificationNewCount(state.globalNotifications)
   )
-  const inboxNotificationNumber = useTypedSelector(state =>
+  const inboxNotificationNumber = useSelector((state: IAppState) =>
     selectUnreadEmailThreadsCount(state.inbox)
   )
   const dealsNotificationsNumber = useDealsNotificationsNumber()
@@ -107,21 +115,21 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl.AgentNetwork>
 
-          <Acl.Marketing>
+          <Acl access={insightAccess}>
             <SideNavLinkItem to="/dashboard/insights">Insight</SideNavLinkItem>
-          </Acl.Marketing>
+          </Acl>
 
           <Acl.Crm>
             <SideNavLinkItem to="/dashboard/tours">Tours</SideNavLinkItem>
           </Acl.Crm>
 
-          <Acl access={[ACL.CRM, ACL.MARKETING]}>
+          <Acl access={openHouseAccess}>
             <SideNavLinkItem to="/dashboard/open-house">
               Open House
             </SideNavLinkItem>
           </Acl>
 
-          <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
+          <Acl access={dealsAccess}>
             <SideNavLinkItem to="/dashboard/deals">
               <AppNavbarBadge
                 badgeContent={dealsNotificationsNumber}
@@ -132,7 +140,7 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl>
 
-          <Acl access={[ACL.STORE]}>
+          <Acl access={ACL.STORE}>
             <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
           </Acl>
         </SidenavListGroup>

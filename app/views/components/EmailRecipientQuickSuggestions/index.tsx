@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Box, List, ListItem, ListItemText } from '@material-ui/core'
-import { addNotification } from 'components/notification'
+
 import useEffectOnce from 'react-use/lib/useEffectOnce'
+
+import { addNotification } from 'components/notification'
 
 import { IAppState } from 'reducers'
 import { selectDealRoles } from 'reducers/deals/roles'
@@ -13,6 +15,8 @@ import { getBrands } from 'models/BrandConsole/Brands'
 import Loading from 'partials/Loading'
 import { QuickSuggestion } from 'components/EmailRecipientsChipsInput/types'
 import { BaseDropdown } from 'components/BaseDropdown'
+
+import { selectUser } from 'selectors/user'
 
 import { areRecipientsEqual } from './helpers/are-recipients-equal'
 import { dealRoleToSuggestion } from './helpers/deal-role-to-suggestion'
@@ -45,7 +49,7 @@ export function EmailRecipientQuickSuggestions({
   currentRecipients = [],
   onSelect
 }: Props) {
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
+  const user = useSelector(selectUser)
   const dealRoles = useSelector<IAppState, IDealRole[]>(
     ({ deals: { roles } }) => selectDealRoles(roles, deal)
   )

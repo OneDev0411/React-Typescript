@@ -15,6 +15,7 @@ import DealContext from 'models/Deal/helpers/dynamic-context'
 import { getStatusColorClass } from 'utils/listing'
 
 import { BaseDropdown } from 'components/BaseDropdown'
+import { selectUser } from 'selectors/user'
 
 interface Props {
   deal: IDeal
@@ -39,10 +40,10 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
   const statuses = useDealStatuses(deal.id)
 
   const dispatch = useDispatch()
-  const { user, checklists } = useSelector(({ user, deals }: IAppState) => ({
-    user,
-    checklists: getDealChecklists(deal, deals.checklists)
-  }))
+  const checklists = useSelector(({ deals }: IAppState) =>
+    getDealChecklists(deal, deals.checklists)
+  )
+  const user = useSelector(selectUser)
 
   /**
    * updates listing_status context

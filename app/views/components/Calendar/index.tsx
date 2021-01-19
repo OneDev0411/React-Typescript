@@ -21,6 +21,8 @@ import { viewAs } from 'utils/user-teams'
 
 import { LoadingPosition, VirtualListRef } from 'components/VirtualList'
 
+import { IUserState } from 'reducers/user'
+
 import {
   CalendarRef,
   ApiOptions,
@@ -56,7 +58,7 @@ interface Props {
 
 interface StateProps {
   viewAsUsers: UUID[]
-  user: IUser
+  user: IUserState
 }
 
 interface SocketUpdate {

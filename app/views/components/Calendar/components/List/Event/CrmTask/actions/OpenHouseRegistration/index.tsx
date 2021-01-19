@@ -3,16 +3,16 @@ import { useSelector } from 'react-redux'
 
 import Button from '@material-ui/core/Button'
 
-import { IAppState } from 'reducers/index'
-
 import { getActiveTeamId } from 'utils/user-teams'
+
+import { selectUser } from 'selectors/user'
 
 interface Props {
   event: ICalendarEvent
 }
 
 export function OpenHouseRegistration({ event }: Props) {
-  const user = useSelector<IAppState, IUser>(({ user }) => user)
+  const user = useSelector(selectUser)
 
   if (event.event_type !== 'Open House') {
     return null

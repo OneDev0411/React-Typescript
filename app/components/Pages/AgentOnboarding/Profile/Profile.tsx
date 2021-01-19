@@ -19,6 +19,8 @@ import { getUserDefaultHomepage } from 'utils/get-default-home-page'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
 
+import { selectUserUnsafe } from 'selectors/user'
+
 import Header from '../Header'
 import SkipButton from '../SkipButton'
 import NextButton from '../NextButton'
@@ -49,7 +51,7 @@ export function Profile() {
 
   const classes = useStyles()
   const dispatch = useDispatch()
-  const user = useSelector((store: IAppState) => store.user)
+  const user = useSelector(selectUserUnsafe)
   const brand = useSelector((store: IAppState) => store.brand)
 
   const [editorState, setEditorState, signatureEditor] = useEditorState('')

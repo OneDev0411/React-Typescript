@@ -23,6 +23,8 @@ import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { getActiveTeamId } from 'utils/user-teams'
 
+import { selectUser } from 'selectors/user'
+
 import List from './List'
 import Form from './Form'
 
@@ -41,13 +43,14 @@ function OpenHouses({
 }: Props & WithRouterProps) {
   const dispatch = useDispatch()
 
-  const { user, activeTeamId, checklists } = useSelector(
+  const { activeTeamId, checklists } = useSelector(
     ({ user, deals }: IAppState) => ({
       user,
       activeTeamId: getActiveTeamId(user),
       checklists: getDealChecklists(deal, deals.checklists)
     })
   )
+  const user = useSelector(selectUser)
 
   const activeBrandSettings = getActiveTeamSettings(user, '', true)
   const showOpenHouse = activeBrandSettings[OPEN_HOUSE_REQUESTS_SETTINGS_KEY]
