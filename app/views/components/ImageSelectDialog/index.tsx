@@ -99,6 +99,7 @@ export default function ImageSelectDialog({
     <Dialog
       open
       fullWidth
+      disableEnforceFocus
       maxWidth="md"
       scroll="paper"
       {...dialogProps}

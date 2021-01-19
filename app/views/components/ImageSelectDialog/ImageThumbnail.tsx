@@ -1,6 +1,8 @@
 import React, { ImgHTMLAttributes } from 'react'
 import { Box, Button, Theme, makeStyles } from '@material-ui/core'
 
+import { DangerButton } from 'components/Button/DangerButton'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
@@ -11,7 +13,7 @@ const useStyles = makeStyles(
       '&:hover': {
         background: theme.palette.grey[300],
 
-        '& $editButton': {
+        '& $actionsContainer': {
           visibility: 'visible'
         }
       }
@@ -20,11 +22,16 @@ const useStyles = makeStyles(
       width: '100%',
       height: 'auto'
     },
-    editButton: {
+    actionsContainer: {
+      width: '100%',
+      padding: theme.spacing(0, 1),
       position: 'absolute',
       bottom: theme.spacing(2),
-      left: theme.spacing(2),
+      left: 0,
       visibility: 'hidden'
+    },
+    actionButton: {
+      margin: theme.spacing(0, 0.5)
     }
   }),
   {
@@ -35,11 +42,13 @@ const useStyles = makeStyles(
 interface Props extends ImgHTMLAttributes<HTMLImageElement> {
   onClick: () => void
   onEditClick?: () => void
+  onDeleteClick?: () => void
 }
 
 export default function ImageThumbnail({
   onClick,
   onEditClick,
+  onDeleteClick,
   alt,
   src,
   ...otherImgProps
@@ -55,20 +64,45 @@ export default function ImageThumbnail({
     onEditClick()
   }
 
+  const handleDelete = (e: React.MouseEvent) => {
+    if (!onDeleteClick) {
+      return
+    }
+
+    e.stopPropagation()
+    onDeleteClick()
+  }
+
   return (
     <Box m={1} p={1} className={classes.container} onClick={onClick}>
       <img alt={alt} src={src} {...otherImgProps} className={classes.image} />
-      {onEditClick && (
-        <Button
-          size="small"
-          variant="contained"
-          color="secondary"
-          onClick={handleEdit}
-          className={classes.editButton}
-        >
-          Edit
-        </Button>
-      )}
+      <Box
+        display="flex"
+        flexDirection="row"
+        className={classes.actionsContainer}
+      >
+        {onEditClick && (
+          <Button
+            size="small"
+            variant="contained"
+            className={classes.actionButton}
+            color="secondary"
+            onClick={handleEdit}
+          >
+            Edit
+          </Button>
+        )}
+        {onDeleteClick && (
+          <DangerButton
+            size="small"
+            variant="contained"
+            className={classes.actionButton}
+            onClick={handleDelete}
+          >
+            Delete
+          </DangerButton>
+        )}
+      </Box>
     </Box>
   )
 }

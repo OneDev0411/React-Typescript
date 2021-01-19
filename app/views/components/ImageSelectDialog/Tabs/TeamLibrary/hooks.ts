@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
 
 import { getBrandAssets } from 'models/brand/get-brand-assets'
+import { deleteBrandAsset } from 'models/brand/delete-brand-asset'
+import { uploadBrandAsset } from 'models/brand/upload-asset'
 
 interface UseTeamLibrary {
   results: IBrandAsset[]
   isLoading: boolean
+  deleteAsset: (assetId: UUID) => Promise<void>
+  uploadAsset: (file: File, label: string) => Promise<IBrandAsset>
 }
 
 export function useTeamLibrary(
@@ -14,6 +18,35 @@ export function useTeamLibrary(
   const [brandAssets, setBrandAssets] = useState<Nullable<IBrandAsset[]>>(null)
   const [results, setResults] = useState<IBrandAsset[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
+
+  const deleteAsset = async (assetId: UUID): Promise<void> => {
+    if (!brandAssets) {
+      return
+    }
+
+    const newBrandAssets = brandAssets.filter(asset => asset.id !== assetId)
+
+    setBrandAssets(newBrandAssets)
+
+    await deleteBrandAsset(brandId, assetId)
+  }
+
+  const uploadAsset = async (
+    file: File,
+    label: string
+  ): Promise<IBrandAsset> => {
+    setIsLoading(true)
+
+    const currentBrandAssets = brandAssets ?? []
+
+    const newUploadedAsset = await uploadBrandAsset(brandId, file, label)
+
+    setBrandAssets([...currentBrandAssets, newUploadedAsset])
+
+    setIsLoading(false)
+
+    return newUploadedAsset
+  }
 
   useEffect(() => {
     async function fetchBrandAssets() {
@@ -53,5 +86,5 @@ export function useTeamLibrary(
     searchBrandAssets()
   }, [searchQuery, brandAssets])
 
-  return { results, isLoading }
+  return { results, isLoading, deleteAsset, uploadAsset }
 }
