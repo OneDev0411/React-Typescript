@@ -82,7 +82,10 @@ const TagsString = ({ contact, callback = noop }) => {
           </Box>
         </Tooltip>
       )}
-      selectedContactsIds={[contact.id]}
+      contact={contact}
+      filter={{
+        selectedIds: [contact.id]
+      }}
       callback={callback}
     />
   )

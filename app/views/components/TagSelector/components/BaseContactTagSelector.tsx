@@ -17,11 +17,11 @@ import { SelectorOption } from '../type'
 
 export interface Props extends BaseTagSelectorProps {
   contact?: IContact
-  selectedContactsIds?: UUID[]
+  selectedIds?: UUID[]
 }
 
 export const BaseContactTagSelector = ({
-  selectedContactsIds = [],
+  selectedIds = [],
   contact,
   value = [],
   ...props
@@ -41,11 +41,11 @@ export const BaseContactTagSelector = ({
   useEffectOnce(() => {
     const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
 
-    if (selectedContactsIds.length === 0 || !attribute_def) {
+    if (selectedIds.length === 0 || !attribute_def) {
       return
     }
 
-    const contactsTags = selectedContactsIds.map(contactId => {
+    const contactsTags = selectedIds.map(contactId => {
       const contactObject =
         contact && contact.id === contactId
           ? contact

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import cn from 'classnames'
 import { makeStyles, useTheme } from '@material-ui/core'
@@ -13,7 +13,6 @@ import { goTo } from 'utils/go-to'
 
 import { TableActions } from './Actions'
 
-import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 
 import { LoadingComponent } from './components/LoadingComponent'
@@ -54,14 +53,8 @@ const useCustomGridStyles = makeStyles(theme => ({
 const ContactsList = props => {
   const gridClasses = useGridStyles()
   const customGridClasses = useCustomGridStyles()
-  const [selectedTagContact, setSelectedTagContact] = useState([])
   const theme = useTheme()
   const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
-
-  const onSelectTagContact = selectedTagContact =>
-    setSelectedTagContact([selectedTagContact])
-
-  const closeTagsOverlay = () => setSelectedTagContact([])
 
   const columns = [
     {
@@ -214,13 +207,6 @@ const ContactsList = props => {
         EmptyStateComponent={() => (
           <NoSearchResults description="Try typing another name, email, phone or tag." />
         )}
-      />
-
-      <TagsOverlay
-        closeOverlay={closeTagsOverlay}
-        isOpen={selectedTagContact.length > 0}
-        selectedContactsIds={selectedTagContact}
-        handleChangeContactsAttributes={props.handleChangeContactsAttributes}
       />
     </>
   )

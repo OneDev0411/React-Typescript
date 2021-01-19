@@ -10,6 +10,10 @@ import {
 } from '@material-ui/core'
 
 import { bulkTag } from 'models/contacts/bulk-tag'
+import {
+  generateContactFilters,
+  ContactFilterGenerator
+} from 'models/contacts/bulk-tag/utils/generate-contact-filters'
 import { noop } from 'utils/helpers'
 
 // import { useSelector } from 'react-redux'
@@ -40,7 +44,9 @@ const useStyles = makeStyles(
   { name: 'PopoverContactTagSelector' }
 )
 
-interface Props extends Omit<BaseContactTagSelectorProps, 'onChange'> {
+interface Props
+  extends Omit<BaseContactTagSelectorProps, 'selectedIds' | 'onChange'> {
+  filter: ContactFilterGenerator
   popoverProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
   callback?: (tags: SelectorOption[]) => void
@@ -51,6 +57,7 @@ export const PopoverContactTagSelectorContainer = ({
   popoverProps = {},
   value = [],
   callback = noop,
+  filter,
   ...props
 }: Props) => {
   const classes = useStyles()
@@ -88,8 +95,8 @@ export const PopoverContactTagSelectorContainer = ({
       setIsSaving(true)
 
       const tags = selectedTags.map(tag => tag.title)
-
-      const response = await bulkTag(tags, { ids: props.selectedContactsIds })
+      const bulkFilter = generateContactFilters(filter)
+      const response = await bulkTag(tags, bulkFilter)
 
       console.log(response)
     } catch (err) {
@@ -127,6 +134,7 @@ export const PopoverContactTagSelectorContainer = ({
         <Box className={classes.container}>
           <BaseContactTagSelector
             {...props}
+            selectedIds={filter.selectedIds || []}
             value={selectedTags}
             onChange={handleChange}
           />
