@@ -42,7 +42,6 @@ import { Callout } from 'components/Callout'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { PopoverContactTagSelector } from 'components/TagSelector'
 
 import ContactsTabs from './Tabs'
 import Table from './Table'
@@ -820,14 +819,6 @@ class ContactsList extends React.Component {
             />
           )}
           {isZeroState && <ZeroState />}
-          <PopoverContactTagSelector
-            anchorRenderer={onClick => <span onClick={onClick}>test</span>}
-            value={[{ title: 'dd', value: 'dd' }]}
-            selectedContactsIds={[
-              '382301ed-7507-459f-a3b4-403f921e6ce9',
-              '9d48978d-5ded-427b-b8f3-a16c17ac7cb3'
-            ]}
-          />
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
               {this.renderTabs()}

@@ -103,7 +103,10 @@ const ContactsList = props => {
       width: !isParkTabActive ? '34%' : '22%',
       class: 'opaque tags',
       render: ({ row: contact }) => (
-        <TagsString contact={contact} onSelectTagContact={onSelectTagContact} />
+        <TagsString
+          contact={contact}
+          callback={props.handleChangeContactsAttributes}
+        />
       )
     },
     {

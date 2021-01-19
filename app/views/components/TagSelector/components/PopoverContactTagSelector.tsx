@@ -9,9 +9,12 @@ import {
   Theme
 } from '@material-ui/core'
 
-import { useSelector } from 'react-redux'
+import { bulkTag } from 'models/contacts/bulk-tag'
+import { noop } from 'utils/helpers'
 
-import { IAppState } from 'reducers'
+// import { useSelector } from 'react-redux'
+
+// import { IAppState } from 'reducers'
 
 import {
   BaseContactTagSelector,
@@ -40,27 +43,28 @@ const useStyles = makeStyles(
 interface Props extends Omit<BaseContactTagSelectorProps, 'onChange'> {
   popoverProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
-  callback: (tags: SelectorOption[]) => void
+  callback?: (tags: SelectorOption[]) => void
 }
 
 export const PopoverContactTagSelectorContainer = ({
   anchorRenderer,
   popoverProps = {},
   value = [],
-  callback,
+  callback = noop,
   ...props
 }: Props) => {
   const classes = useStyles()
   const [isDirty, setIsDirty] = useState<boolean>(false)
+  const [isSaving, setIsSaving] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
-  const { attributeDefs } = useSelector((store: IAppState) => {
-    const { attributeDefs } = store.contacts
+  // const { attributeDefs } = useSelector((store: IAppState) => {
+  //   const { attributeDefs } = store.contacts
 
-    return {
-      attributeDefs
-    }
-  })
+  //   return {
+  //     attributeDefs
+  //   }
+  // })
   const handleClick = (e: MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget)
   }
@@ -75,9 +79,24 @@ export const PopoverContactTagSelectorContainer = ({
 
     setSelectedTags(tags)
   }
-  const handleSave = () => {
+  const handleSave = async () => {
     if (isDirty) {
       setIsDirty(false)
+    }
+
+    try {
+      setIsSaving(true)
+
+      const tags = selectedTags.map(tag => tag.title)
+
+      const response = await bulkTag(tags, { ids: props.selectedContactsIds })
+
+      console.log(response)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsSaving(false)
+      setAnchorEl(null)
     }
 
     console.log('handleSave', selectedTags)
@@ -117,10 +136,10 @@ export const PopoverContactTagSelectorContainer = ({
                 variant="contained"
                 color="secondary"
                 size="small"
-                // disabled={!isDirty}
+                disabled={!isDirty || isSaving}
                 onClick={handleSave}
               >
-                Done
+                {isSaving ? 'Saving' : 'Done'}
               </Button>
             </Box>
             <Box mr={0.5}>

@@ -1,7 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import _ from 'underscore'
 import { Box, Tooltip, Chip, makeStyles, createStyles } from '@material-ui/core'
+
+import { PopoverContactTagSelector } from 'components/TagSelector'
+import { noop } from 'utils/helpers'
 
 import { getContactTags } from '../../../../../../../models/contacts/helpers'
 
@@ -24,7 +26,7 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-const TagsString = ({ contact, onSelectTagContact }) => {
+const TagsString = ({ contact, callback = noop }) => {
   const classes = useStyles()
   const tags = getContactTags(contact)
 
@@ -44,48 +46,46 @@ const TagsString = ({ contact, onSelectTagContact }) => {
   const invisibleTagsCount = tagsCount - showingTags.length
 
   return (
-    <Tooltip title="Click to edit">
-      <Box
-        className={classes.container}
-        onClick={event => {
-          event.stopPropagation()
-          onSelectTagContact(contact.id)
-        }}
-      >
-        {tagsCount === 0 ? (
-          <span className={classes.noTag}>Add Tags</span>
-        ) : (
-          <>
-            <span className={classes.tagLabel}>TAGS:</span>
-            {showingTags.map(tag => (
+    <PopoverContactTagSelector
+      anchorRenderer={onClick => (
+        <Tooltip title="Click to edit">
+          <Box
+            className={classes.container}
+            onClick={event => {
+              event.stopPropagation()
+              onClick(event)
+            }}
+          >
+            {tagsCount === 0 ? (
+              <span className={classes.noTag}>Add Tags</span>
+            ) : (
+              <Box>
+                <span className={classes.tagLabel}>TAGS:</span>
+                {showingTags.map(tag => (
+                  <Chip
+                    key={tag}
+                    variant="outlined"
+                    size="small"
+                    className={classes.chip}
+                    label={tag}
+                  />
+                ))}
+              </Box>
+            )}
+            {invisibleTagsCount > 0 && (
               <Chip
-                key={tag}
                 variant="outlined"
                 size="small"
-                className={classes.chip}
-                label={tag}
+                label={`+ ${invisibleTagsCount}`}
               />
-            ))}
-          </>
-        )}
-        {invisibleTagsCount > 0 && (
-          <Chip
-            variant="outlined"
-            size="small"
-            label={`+ ${invisibleTagsCount}`}
-          />
-        )}
-      </Box>
-    </Tooltip>
+            )}
+          </Box>
+        </Tooltip>
+      )}
+      selectedContactsIds={[contact.id]}
+      callback={callback}
+    />
   )
 }
 
-function mapStateToProps(state) {
-  const {
-    contacts: { attributeDefs }
-  } = state
-
-  return { attributeDefs }
-}
-
-export default connect(mapStateToProps)(TagsString)
+export default TagsString
