@@ -98,7 +98,17 @@ function TeamLibrary({ query, onSelect, onEdit }: SearchableImageTabProps) {
   }
 
   const handleDelete = (asset: IBrandAsset) => {
-    deleteAsset(asset.id)
+    dispatch(
+      confirmation({
+        message: 'Delete photo',
+        description: 'Are your sure about deleting this photo?',
+        confirmLabel: 'Yes, I do',
+        appearance: 'danger',
+        onConfirm: () => {
+          deleteAsset(asset.id)
+        }
+      })
+    )
   }
 
   if (isLoading) {
