@@ -9,6 +9,7 @@ const useStyles = makeStyles(
       cursor: 'pointer',
       transition: 'all 0.5s',
       position: 'relative',
+      borderRadius: theme.shape.borderRadius,
       background: theme.palette.grey[100],
       '&:hover': {
         background: theme.palette.grey[300],
