@@ -64,7 +64,6 @@ export const BaseContactTagSelector = ({
     }))
 
     setCurrentTags([...currentTags, ...filteredTags])
-    console.log('PopoverTagSelector', filteredTags)
   })
 
   return <BaseTagSelector {...props} value={currentTags} />

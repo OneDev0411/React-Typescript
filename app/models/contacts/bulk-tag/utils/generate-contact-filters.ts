@@ -8,7 +8,22 @@ export interface ContactFilterGenerator {
   searchText?: string
   crm_tasks?: UUID[]
   flows?: UUID[]
-  conditionOperator?: string
+  conditionOperator?: TContactFilterType
+  attributes: IContactAttributeFilter[]
+  parked?: boolean | undefined
+}
+
+const isValidArrayFilter = (filter: any[]) => Array.isArray(filter) && filter.length > 0
+
+const normalizeAttributeFilters = (filters: IContactAttributeFilter[]) => {
+  return filters
+    .filter(({ attribute_def }) => attribute_def)
+    .map(({ attribute_def, invert, operator, value }) => ({
+      attribute_def,
+      invert,
+      operator,
+      value
+    }))
 }
 
 export const generateContactFilters = ({
@@ -16,16 +31,45 @@ export const generateContactFilters = ({
   users = [],
   searchText = '',
   conditionOperator = 'and',
-  // filters = [],
-  excludes = []
+  attributes = [],
+  excludes = [],
+  crm_tasks = [],
+  flows = [],
+  parked = undefined
 }: ContactFilterGenerator): Filters => {
-  const filters: Filters = {}
+  const payload: Filters = {}
 
   if (selectedIds.length > 0) {
-    filters.ids = selectedIds
+    payload.ids = selectedIds
 
-    return filters
+    return payload
+  }
+  if (isValidArrayFilter(flows)) {
+    payload.flows = flows
   }
 
-  return filters
+  if (isValidArrayFilter(crm_tasks)) {
+    payload.crm_tasks = crm_tasks
+  }
+
+  if (isValidArrayFilter(users)) {
+    payload.users = users
+  }
+
+  if (isValidArrayFilter(excludes)) {
+    payload.excludes = excludes
+  }
+
+  if (isValidArrayFilter(attributes)) {
+    payload.attributes = normalizeAttributeFilters(attributes)
+  }
+
+  // we're doing this because we want to check parked field is exist or not
+  if (typeof parked !== 'undefined' && searchText === '') {
+    payload.parked = parked
+  }
+
+  payload.filter_type = conditionOperator
+
+  return payload
 }

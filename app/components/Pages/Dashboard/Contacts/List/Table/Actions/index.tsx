@@ -107,6 +107,8 @@ export function TableActions({
   const isMergeDisable = !(!isAllRowsSelected
     ? isAllRowsSelected || isTwoSelected
     : isAllRowsSelected && isTwoSelected)
+  const isParkedTabActive = activeSegmentId === PARKED_CONTACTS_LIST_ID
+
   const getSummeryInfo = () => {
     let selectedCount
 
@@ -140,7 +142,7 @@ export function TableActions({
   return (
     <div className={classes.container}>
       {getSummeryInfo()}
-      {activeSegmentId === PARKED_CONTACTS_LIST_ID && (
+      {isParkedTabActive && (
         <ActionWrapper
           atLeast="one"
           bulkMode={isEntireRowsSelected}
@@ -163,13 +165,10 @@ export function TableActions({
         <TagContacts
           disabled={isAllDisable}
           entireMode={isEntireRowsSelected}
-          totalRowsCount={totalRowsCount}
+          isParkedActive={isParkedTabActive}
           excludedRows={excludedRows}
           selectedRows={selectedRowIds}
-          filters={filters.attributeFilters}
-          searchText={filters.query}
-          conditionOperator={filters.filter_type}
-          users={filters.users}
+          filters={filters}
           resetSelectedRows={deselectRows}
           handleChangeContactsAttributes={handleChangeContactsAttributes}
         />

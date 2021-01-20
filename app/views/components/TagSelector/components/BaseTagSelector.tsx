@@ -110,8 +110,6 @@ export const BaseTagSelector = ({
           }
         }
 
-        console.log({ newValue })
-
         setSelectedTags(newValue)
         onChange(newValue)
       }}

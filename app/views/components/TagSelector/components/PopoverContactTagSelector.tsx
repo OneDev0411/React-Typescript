@@ -16,10 +16,6 @@ import {
 } from 'models/contacts/bulk-tag/utils/generate-contact-filters'
 import { noop } from 'utils/helpers'
 
-// import { useSelector } from 'react-redux'
-
-// import { IAppState } from 'reducers'
-
 import {
   BaseContactTagSelector,
   Props as BaseContactTagSelectorProps
@@ -65,13 +61,6 @@ export const PopoverContactTagSelectorContainer = ({
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
-  // const { attributeDefs } = useSelector((store: IAppState) => {
-  //   const { attributeDefs } = store.contacts
-
-  //   return {
-  //     attributeDefs
-  //   }
-  // })
   const handleClick = (e: MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget)
   }
@@ -87,6 +76,7 @@ export const PopoverContactTagSelectorContainer = ({
     setSelectedTags(tags)
   }
   const handleSave = async () => {
+    return console.log('handleSave',{filter, payload: generateContactFilters(filter)})
     if (isDirty) {
       setIsDirty(false)
     }
@@ -144,7 +134,7 @@ export const PopoverContactTagSelectorContainer = ({
                 variant="contained"
                 color="secondary"
                 size="small"
-                disabled={!isDirty || isSaving}
+                // disabled={!isDirty || isSaving}
                 onClick={handleSave}
               >
                 {isSaving ? 'Saving' : 'Done'}

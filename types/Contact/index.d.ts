@@ -214,6 +214,7 @@ declare interface IContactFilterOptions {
   lists?: UUID[]
   users?: UUID[]
   filter_type?: TContactFilterType
+  parked?: boolean
 }
 
 declare interface ICSVImporterMappingDef {
