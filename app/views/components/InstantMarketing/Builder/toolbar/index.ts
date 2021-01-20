@@ -45,16 +45,14 @@ export function registerToolbarButtons(
     toolbar.unshift(
       {
         name: EDIT_IMAGE_TOOLBAR_BUTTON_NAME,
-        // label: 'Edit Photo',
-        // attributes: { class: '', style: 'width:auto;' },
-        attributes: { class: 'fa fa-edit', title: 'Edit Photo' },
+        label: 'Edit Photo',
+        attributes: { style: 'width: auto;' },
         command: () => editor.runCommand('call-fn', { fn: onEditImageClick })
       },
       {
         name: CHANGE_IMAGE_TOOLBAR_BUTTON_NAME,
-        // label: 'Change Photo',
-        // attributes: { class: '', style: 'width:auto;' },
-        attributes: { class: 'fa fa-image', title: 'Change Photo' },
+        label: 'Change Photo',
+        attributes: { style: 'width: auto;' },
         command: () => editor.runCommand('call-fn', { fn: onChangeImageClick })
       }
     )
