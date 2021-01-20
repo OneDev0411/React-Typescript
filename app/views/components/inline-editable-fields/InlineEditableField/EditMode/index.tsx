@@ -3,6 +3,7 @@ import {
   Button,
   IconButton,
   Box,
+  Tooltip,
   Popover,
   makeStyles,
   Theme
@@ -12,7 +13,6 @@ import { mdiTrashCanOutline } from '@mdi/js'
 import cn from 'classnames'
 
 import { noop } from 'utils/helpers'
-import Tooltip from 'components/tooltip'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { EditModeActionBar, EditModeContainer } from '../../styled'
@@ -78,7 +78,7 @@ export const EditMode = (props: Props) => {
         className={cn({ [classes.editModePopover]: isPopoverMode })}
       >
         {showDelete && (
-          <Tooltip caption="Delete">
+          <Tooltip title="Delete">
             <IconButton
               size="small"
               disabled={isDisabled}
