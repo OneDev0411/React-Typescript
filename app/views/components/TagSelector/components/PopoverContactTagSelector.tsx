@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Popover,
+  Typography,
   PopoverProps,
   makeStyles,
   fade,
@@ -27,6 +28,10 @@ const useStyles = makeStyles(
     container: {
       padding: theme.spacing(1),
       width: '320px'
+    },
+    label: {
+      display: 'inline-block',
+      marginBottom: theme.spacing(0.5)
     },
     actions: {
       marginTop: theme.spacing(2),
@@ -122,9 +127,14 @@ export const PopoverContactTagSelectorContainer = ({
         {...popoverProps}
       >
         <Box className={classes.container}>
+          <Typography variant="caption" className={classes.label}>Tags</Typography>
           <BaseContactTagSelector
             {...props}
             selectedIds={filter.selectedIds || []}
+            chipProps={{
+              variant: 'outlined',
+              size: 'small'
+            }}
             value={selectedTags}
             onChange={handleChange}
           />
