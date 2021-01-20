@@ -1,4 +1,4 @@
-import React, { ReactNode, MouseEvent, useState, memo } from 'react'
+import React, { ReactNode, MouseEvent, useState } from 'react'
 import {
   Box,
   Button,
@@ -18,9 +18,9 @@ import {
 import { noop } from 'utils/helpers'
 
 import {
-  BaseContactTagSelector,
-  Props as BaseContactTagSelectorProps
-} from './BaseContactTagSelector'
+  BaseTagSelector,
+  Props as BaseTagSelectorProps
+} from './BaseTagSelector'
 import { SelectorOption } from '../type'
 
 const useStyles = makeStyles(
@@ -51,15 +51,14 @@ const useStyles = makeStyles(
   { name: 'PopoverContactTagSelector' }
 )
 
-interface Props
-  extends Omit<BaseContactTagSelectorProps, 'selectedIds' | 'onChange'> {
+interface Props extends Omit<BaseTagSelectorProps, 'onChange'> {
   filter: ContactFilterGenerator
   popoverProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
   callback?: (tags: SelectorOption[]) => void
 }
 
-export const PopoverContactTagSelectorContainer = ({
+export const PopoverContactTagSelector = ({
   anchorRenderer,
   popoverProps = {},
   value = [],
@@ -72,6 +71,7 @@ export const PopoverContactTagSelectorContainer = ({
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
+
   const handleClick = (e: MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget)
   }
@@ -87,7 +87,8 @@ export const PopoverContactTagSelectorContainer = ({
     setSelectedTags(tags)
   }
   const handleSave = async () => {
-    return console.log('handleSave', {
+    console.log('handleSave', {
+      selectedTags,
       filter,
       payload: generateContactFilters(filter)
     })
@@ -109,8 +110,6 @@ export const PopoverContactTagSelectorContainer = ({
       setIsSaving(false)
       setAnchorEl(null)
     }
-
-    console.log('handleSave', selectedTags)
 
     callback(selectedTags)
   }
@@ -139,9 +138,8 @@ export const PopoverContactTagSelectorContainer = ({
           <Typography variant="caption" className={classes.label}>
             Tags
           </Typography>
-          <BaseContactTagSelector
+          <BaseTagSelector
             {...props}
-            selectedIds={filter.selectedIds || []}
             chipProps={{
               variant: 'outlined',
               size: 'small'
@@ -150,7 +148,7 @@ export const PopoverContactTagSelectorContainer = ({
               variant: 'outlined',
               className: classes.textField
             }}
-            value={selectedTags}
+            value={value}
             onChange={handleChange}
           />
           <Box className={classes.actions}>
@@ -176,7 +174,3 @@ export const PopoverContactTagSelectorContainer = ({
     </>
   )
 }
-
-export const PopoverContactTagSelector = memo(
-  PopoverContactTagSelectorContainer
-)
