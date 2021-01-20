@@ -227,6 +227,14 @@ module.exports = {
         ]
       },
       {
+        test: /\.(njk)$/,
+        use: [
+          {
+            loader: 'raw-loader'
+          }
+        ]
+      },
+      {
         test: /\.(html)$/,
         use: [
           {
