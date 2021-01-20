@@ -13,15 +13,15 @@ export interface ContactFilterGenerator {
   parked?: boolean | undefined
 }
 
-const isValidArrayFilter = (filter: any[]) => Array.isArray(filter) && filter.length > 0
+const isValidArrayFilter = (filter: any[]) =>
+  Array.isArray(filter) && filter.length > 0
 
 const normalizeAttributeFilters = (filters: IContactAttributeFilter[]) => {
   return filters
     .filter(({ attribute_def }) => attribute_def)
-    .map(({ attribute_def, invert, operator, value }) => ({
+    .map(({ attribute_def, invert, value }) => ({
       attribute_def,
       invert,
-      operator,
       value
     }))
 }
@@ -44,6 +44,7 @@ export const generateContactFilters = ({
 
     return payload
   }
+
   if (isValidArrayFilter(flows)) {
     payload.flows = flows
   }

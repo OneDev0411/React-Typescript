@@ -33,6 +33,12 @@ const useStyles = makeStyles(
       display: 'inline-block',
       marginBottom: theme.spacing(0.5)
     },
+    textField: {
+      '& .MuiAutocomplete-inputRoot': {
+        padding: theme.spacing(0.5),
+        ...theme.typography.body2
+      }
+    },
     actions: {
       marginTop: theme.spacing(2),
       paddingTop: theme.spacing(1),
@@ -81,7 +87,11 @@ export const PopoverContactTagSelectorContainer = ({
     setSelectedTags(tags)
   }
   const handleSave = async () => {
-    return console.log('handleSave',{filter, payload: generateContactFilters(filter)})
+    console.log('handleSave', {
+      filter,
+      payload: generateContactFilters(filter)
+    })
+
     if (isDirty) {
       setIsDirty(false)
     }
@@ -91,9 +101,8 @@ export const PopoverContactTagSelectorContainer = ({
 
       const tags = selectedTags.map(tag => tag.title)
       const bulkFilter = generateContactFilters(filter)
-      const response = await bulkTag(tags, bulkFilter)
 
-      console.log(response)
+      await bulkTag(tags, bulkFilter)
     } catch (err) {
       console.error(err)
     } finally {
@@ -127,13 +136,19 @@ export const PopoverContactTagSelectorContainer = ({
         {...popoverProps}
       >
         <Box className={classes.container}>
-          <Typography variant="caption" className={classes.label}>Tags</Typography>
+          <Typography variant="caption" className={classes.label}>
+            Tags
+          </Typography>
           <BaseContactTagSelector
             {...props}
             selectedIds={filter.selectedIds || []}
             chipProps={{
               variant: 'outlined',
               size: 'small'
+            }}
+            textFiledProps={{
+              variant: 'outlined',
+              className: classes.textField
             }}
             value={selectedTags}
             onChange={handleChange}
@@ -144,7 +159,7 @@ export const PopoverContactTagSelectorContainer = ({
                 variant="contained"
                 color="secondary"
                 size="small"
-                // disabled={!isDirty || isSaving}
+                disabled={!isDirty || isSaving}
                 onClick={handleSave}
               >
                 {isSaving ? 'Saving' : 'Done'}

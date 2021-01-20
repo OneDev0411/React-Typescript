@@ -1,11 +1,8 @@
 import React from 'react'
-import _ from 'underscore'
 import { Box, Tooltip, Chip, makeStyles, createStyles } from '@material-ui/core'
 
 import { PopoverContactTagSelector } from 'components/TagSelector'
 import { noop } from 'utils/helpers'
-
-import { getContactTags } from '../../../../../../../models/contacts/helpers'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -28,19 +25,19 @@ const useStyles = makeStyles(theme =>
 
 const TagsString = ({ contact, callback = noop }) => {
   const classes = useStyles()
-  const tags = getContactTags(contact)
+  const tags = contact?.tags || []
 
-  const tagsCount = _.size(tags)
+  const tagsCount = tags.length
   const showingTags = []
-
-  _.every(tags, item => {
+  const currentTags = tags.map(tag => {
     if (showingTags.length < 2) {
-      showingTags.push(item.text)
-
-      return true
+      showingTags.push(tag)
     }
 
-    return false
+    return {
+      title: tag,
+      value: tag
+    }
   })
 
   const invisibleTagsCount = tagsCount - showingTags.length
@@ -82,6 +79,7 @@ const TagsString = ({ contact, callback = noop }) => {
           </Box>
         </Tooltip>
       )}
+      value={currentTags}
       contact={contact}
       filter={{
         selectedIds: [contact.id]
