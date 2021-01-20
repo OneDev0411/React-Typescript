@@ -2,8 +2,10 @@ import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import { Button } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
-import { addNotification } from 'components/notification'
+
 import pluralize from 'pluralize'
+
+import { addNotification } from 'components/notification'
 
 import { getContactDuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts'
 import { mergeContact } from 'models/contacts/merge-contact'
@@ -137,9 +139,7 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
           dispatch(
             addNotification({
               status: 'success',
-              message: `${
-                duplicateContacts.contacts.length
-              } contacts merged successfully.`
+              message: `${duplicateContacts.contacts.length} contacts merged successfully.`
             })
           )
           setIsContactsListDrawerOpen(false)

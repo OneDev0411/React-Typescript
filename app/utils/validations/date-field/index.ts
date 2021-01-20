@@ -21,7 +21,7 @@ export function validateDateField(
   const { day, month, year } = values
 
   if (day.value == null || month.value == null) {
-    return 'Day and Month fields are required.'
+    return 'Month and Day fields are required.'
   }
 
 

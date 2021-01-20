@@ -150,7 +150,11 @@ class ContactProfile extends React.Component {
           'contact.deals',
           'contact.flows',
           'flow_step.email',
-          'flow_step.crm_task'
+          'contact.triggers',
+          'trigger.campaign',
+          'flow_step.crm_task',
+          'email_campaign.template',
+          'template_instance.template'
         ]
       })
 
