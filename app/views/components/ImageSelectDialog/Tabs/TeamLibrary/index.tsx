@@ -24,6 +24,7 @@ import NoResults from '../../NoResults'
 import ImageThumbnail from '../../ImageThumbnail'
 import { SearchableImageTabProps } from '../../types'
 import { useTeamLibrary } from './hooks'
+import { DEFAULT_ASSET_LABEL } from './constants'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -81,7 +82,7 @@ function TeamLibrary({
         description: 'Please add a label for this photo.',
         needsUserEntry: true,
         multilineEntry: false,
-        inputDefaultValue: 'Photo label',
+        inputPlaceholder: 'Photo label',
         inputStyle: {
           height: '3rem'
         },
@@ -89,7 +90,11 @@ function TeamLibrary({
         onConfirm: (label: string) => {
           const file = acceptedFiles[0]
 
-          uploadAsset(file, label || 'Photo label')
+          const trimmedLabel = label.trim()
+          const finalLabel =
+            trimmedLabel === '' ? DEFAULT_ASSET_LABEL : trimmedLabel
+
+          uploadAsset(file, finalLabel)
         }
       })
     )
@@ -129,7 +134,10 @@ function TeamLibrary({
       return
     }
 
-    setQuery(label)
+    // A simple toggle behavior for labels
+    const nextQuery = label === query ? '' : label
+
+    setQuery(nextQuery)
   }
 
   if (isLoading) {

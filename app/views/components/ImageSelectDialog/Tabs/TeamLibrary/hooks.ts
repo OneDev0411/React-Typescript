@@ -4,6 +4,8 @@ import { getBrandAssets } from 'models/brand/get-brand-assets'
 import { deleteBrandAsset } from 'models/brand/delete-brand-asset'
 import { uploadBrandAsset } from 'models/brand/upload-asset'
 
+import { DEFAULT_ASSET_LABEL } from './constants'
+
 interface UseTeamLibrary {
   results: IBrandAsset[]
   labels: string[]
@@ -95,7 +97,18 @@ export function useTeamLibrary(
       return
     }
 
-    const newLabels = [...new Set(brandAssets.map(asset => asset.label))]
+    const newLabels = [...new Set(brandAssets.map(asset => asset.label))].sort(
+      (a, b) => {
+        if (a === DEFAULT_ASSET_LABEL) {
+          return -1
+        }
+
+        const loweredA = a.toLowerCase()
+        const loweredB = b.toLowerCase()
+
+        return loweredA.localeCompare(loweredB)
+      }
+    )
 
     setLabels(newLabels)
   }, [brandAssets])
