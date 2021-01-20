@@ -19,7 +19,7 @@ const filter = createFilterOptions<SelectorOption>({
 })
 
 export interface Props {
-  value: SelectorOption[]
+  value?: SelectorOption[]
   chipProps?: ChipProps
   textFiledProps?: TextFieldProps
   onChange: (tags: SelectorOption[]) => void

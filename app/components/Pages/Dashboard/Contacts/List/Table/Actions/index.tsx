@@ -168,7 +168,12 @@ export function TableActions({
           isParkedActive={isParkedTabActive}
           excludedRows={excludedRows}
           selectedRows={selectedRowIds}
-          filters={filters}
+          attributeFilters={filters?.attributeFilters}
+          searchText={filters?.text}
+          conditionOperator={filters?.filter_type}
+          users={filters?.users}
+          crm_tasks={filters?.crm_tasks}
+          flows={filters?.flows}
           resetSelectedRows={deselectRows}
           handleChangeContactsAttributes={handleChangeContactsAttributes}
         />

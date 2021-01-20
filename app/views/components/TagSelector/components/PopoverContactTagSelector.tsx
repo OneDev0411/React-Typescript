@@ -87,7 +87,7 @@ export const PopoverContactTagSelectorContainer = ({
     setSelectedTags(tags)
   }
   const handleSave = async () => {
-    console.log('handleSave', {
+    return console.log('handleSave', {
       filter,
       payload: generateContactFilters(filter)
     })
