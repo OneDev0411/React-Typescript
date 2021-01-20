@@ -5,7 +5,7 @@ import { isComponent } from '../utils'
 export const typeRow = 'ws-row'
 export const typeColumn = 'ws-column'
 
-const column = (editor: Editor) => {
+export default (editor: Editor) => {
   editor.DomComponents.addType(typeRow, {
     isComponent: isComponent(typeRow),
     model: {
@@ -29,5 +29,3 @@ const column = (editor: Editor) => {
     view: { tagName: 'div' }
   })
 }
-
-export default column

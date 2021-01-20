@@ -4,7 +4,7 @@ import { isComponent } from '../utils'
 
 export const typeText = 'ws-text'
 
-const text = (editor: Editor) => {
+export default (editor: Editor) => {
   editor.DomComponents.addType(typeText, {
     isComponent: isComponent(typeText),
     extend: 'text',
@@ -18,5 +18,3 @@ const text = (editor: Editor) => {
     view: { tagName: 'div' }
   })
 }
-
-export default text
