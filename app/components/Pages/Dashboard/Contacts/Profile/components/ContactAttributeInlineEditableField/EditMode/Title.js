@@ -2,12 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Box } from '@material-ui/core'
 
-import { Checkbox } from 'components/Checkbox'
 import { Label } from 'components/inline-editable-fields/styled'
 
 Title.propTypes = {
-  attribute: PropTypes.shape().isRequired,
-  onChangePrimary: PropTypes.func
+  attribute: PropTypes.shape().isRequired
 }
 
 export function Title(props) {
@@ -18,15 +16,6 @@ export function Title(props) {
       <Label style={{ marginRight: '1rem' }}>
         {attribute.attribute_def.label}
       </Label>
-      {!attribute.attribute_def.singular && (
-        <Checkbox
-          id={attribute.id || attribute.cuid}
-          checked={attribute.is_primary || false}
-          onChange={props.onChangePrimary}
-        >
-          Primary
-        </Checkbox>
-      )}
     </Box>
   )
 }

@@ -18,7 +18,7 @@ const useStyles = makeStyles(
     createStyles({
       // The any type is because of the important word.
       modal: (props: StyleProps): any => ({
-        zIndex: `${props.zIndex}!important`
+        zIndex: `${props.zIndex ?? theme.zIndex.modal + 1} !important`
       }),
       paper: (props: StyleProps) => ({
         width: '100%', // fullwidth on small devices
