@@ -38,6 +38,9 @@ const useStyles = makeStyles(
   () => ({
     dialogPaper: {
       height: '100%'
+    },
+    dialogContentContainer: {
+      height: '100%'
     }
   }),
   {
@@ -146,25 +149,29 @@ export default function ImageSelectDialog({
         </Grid>
       </DialogTitle>
       <DialogContent>
-        {selectedTab === 'upload-photo' && <Upload onSelectFile={handleEdit} />}
-        {selectedTab === 'team-library' && (
-          <TeamLibrary
-            onEdit={handleEdit}
-            onSelect={onSelect}
-            query={debouncedSearchQuery}
-            setQuery={setSearchQuery}
-          />
-        )}
-        {selectedTab === 'photo-library' && (
-          <PhotoLibrary
-            onEdit={handleEdit}
-            onSelect={onSelect}
-            query={debouncedSearchQuery}
-          />
-        )}
-        {selectedTab === 'gif-library' && (
-          <GifLibrary onSelect={onSelect} query={debouncedSearchQuery} />
-        )}
+        <Grid container className={classes.dialogContentContainer}>
+          {selectedTab === 'upload-photo' && (
+            <Upload onSelectFile={handleEdit} />
+          )}
+          {selectedTab === 'team-library' && (
+            <TeamLibrary
+              onEdit={handleEdit}
+              onSelect={onSelect}
+              query={debouncedSearchQuery}
+              setQuery={setSearchQuery}
+            />
+          )}
+          {selectedTab === 'photo-library' && (
+            <PhotoLibrary
+              onEdit={handleEdit}
+              onSelect={onSelect}
+              query={debouncedSearchQuery}
+            />
+          )}
+          {selectedTab === 'gif-library' && (
+            <GifLibrary onSelect={onSelect} query={debouncedSearchQuery} />
+          )}
+        </Grid>
       </DialogContent>
     </Dialog>
   )

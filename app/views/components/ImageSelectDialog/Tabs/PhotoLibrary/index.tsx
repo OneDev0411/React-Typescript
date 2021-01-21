@@ -1,8 +1,8 @@
 import React, { memo } from 'react'
 
-import LoadingContainer from 'components/LoadingContainer'
 import Masonry from 'components/Masonry'
 
+import Loading from '../../Loading'
 import NoResults from '../../NoResults'
 import ImageThumbnail from '../../ImageThumbnail'
 import { SearchableImageTabProps } from '../../types'
@@ -20,7 +20,7 @@ function PhotoLibrary({ query, onSelect, onEdit }: SearchableImageTabProps) {
   }
 
   if (isLoading) {
-    return <LoadingContainer style={{ padding: '20%' }} noPaddings />
+    return <Loading />
   }
 
   if (results.length === 0) {

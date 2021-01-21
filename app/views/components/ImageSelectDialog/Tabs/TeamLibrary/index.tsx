@@ -17,10 +17,10 @@ import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
 import { confirmation } from 'actions/confirmation'
 
-import LoadingContainer from 'components/LoadingContainer'
 import Masonry from 'components/Masonry'
 
 import NoResults from '../../NoResults'
+import Loading from '../../Loading'
 import ImageThumbnail from '../../ImageThumbnail'
 import { SearchableImageTabProps } from '../../types'
 import { useTeamLibrary } from './hooks'
@@ -141,7 +141,7 @@ function TeamLibrary({
   }
 
   if (isLoading) {
-    return <LoadingContainer style={{ padding: '20%' }} noPaddings />
+    return <Loading />
   }
 
   if (query && results.length === 0) {
@@ -151,6 +151,7 @@ function TeamLibrary({
   return (
     <Box
       minHeight="100%"
+      width="100%"
       className={classes.container}
       bgcolor={
         isDragActive ? theme.palette.grey[400] : theme.palette.common.white
@@ -164,6 +165,7 @@ function TeamLibrary({
           justifyContent="center"
           alignItems="center"
           height="100%"
+          width="100%"
           onClick={open}
         >
           <input {...getInputProps()} />

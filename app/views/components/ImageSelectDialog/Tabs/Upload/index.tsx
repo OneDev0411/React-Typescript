@@ -28,6 +28,7 @@ export default function Upload({ onSelectFile }: UploadableImageTabProps) {
       justifyContent="center"
       alignItems="center"
       height="100%"
+      width="100%"
       bgcolor={
         isDragActive ? theme.palette.grey[400] : theme.palette.common.white
       }
