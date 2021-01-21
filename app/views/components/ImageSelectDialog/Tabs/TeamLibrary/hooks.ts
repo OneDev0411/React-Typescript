@@ -10,6 +10,7 @@ interface UseTeamLibrary {
   results: IBrandAsset[]
   labels: string[]
   isLoading: boolean
+  isUploading: boolean
   deleteAsset: (assetId: UUID) => Promise<void>
   uploadAsset: (file: File, label: string) => Promise<IBrandAsset>
 }
@@ -22,6 +23,7 @@ export function useTeamLibrary(
   const [results, setResults] = useState<IBrandAsset[]>([])
   const [labels, setLabels] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isUploading, setIsUploading] = useState<boolean>(false)
 
   const deleteAsset = async (assetId: UUID): Promise<void> => {
     if (!brandAssets) {
@@ -39,15 +41,15 @@ export function useTeamLibrary(
     file: File,
     label: string
   ): Promise<IBrandAsset> => {
-    setIsLoading(true)
+    setIsUploading(true)
 
     const currentBrandAssets = brandAssets ?? []
 
     const newUploadedAsset = await uploadBrandAsset(brandId, file, label)
 
-    setBrandAssets([...currentBrandAssets, newUploadedAsset])
+    setBrandAssets([newUploadedAsset, ...currentBrandAssets])
 
-    setIsLoading(false)
+    setIsUploading(false)
 
     return newUploadedAsset
   }
@@ -103,6 +105,10 @@ export function useTeamLibrary(
           return -1
         }
 
+        if (b === DEFAULT_ASSET_LABEL) {
+          return 1
+        }
+
         const loweredA = a.toLowerCase()
         const loweredB = b.toLowerCase()
 
@@ -113,5 +119,5 @@ export function useTeamLibrary(
     setLabels(newLabels)
   }, [brandAssets])
 
-  return { isLoading, results, labels, deleteAsset, uploadAsset }
+  return { isLoading, isUploading, results, labels, deleteAsset, uploadAsset }
 }

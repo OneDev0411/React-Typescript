@@ -7,6 +7,7 @@ import {
   Divider,
   Button,
   Chip,
+  CircularProgress,
   Theme,
   makeStyles,
   useTheme
@@ -64,6 +65,7 @@ function TeamLibrary({
   const activeBrandId = getActiveTeamId(user) as UUID
   const {
     isLoading,
+    isUploading,
     results,
     labels,
     deleteAsset,
@@ -140,12 +142,47 @@ function TeamLibrary({
     setQuery(nextQuery)
   }
 
+  const handleUploadClick = () => {
+    if (isUploading) {
+      return
+    }
+
+    open()
+  }
+
+  const renderLabels = () => {
+    return (
+      <Grid
+        container
+        item
+        direction="row"
+        spacing={1}
+        className={classes.tagsContainer}
+      >
+        {labels.map(label => (
+          <Grid key={label} item>
+            <Chip
+              variant="outlined"
+              color={query === label ? 'primary' : 'default'}
+              label={label}
+              onClick={() => handleChipClick(label)}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    )
+  }
+
   if (isLoading) {
     return <Loading />
   }
 
   if (query && results.length === 0) {
-    return <NoResults />
+    return (
+      <NoResults>
+        <Box py={2}>{renderLabels()}</Box>
+      </NoResults>
+    )
   }
 
   return (
@@ -166,7 +203,7 @@ function TeamLibrary({
           alignItems="center"
           height="100%"
           width="100%"
-          onClick={open}
+          onClick={handleUploadClick}
         >
           <input {...getInputProps()} />
 
@@ -201,24 +238,7 @@ function TeamLibrary({
       )}
       {results.length > 0 && (
         <Grid container direction="column">
-          <Grid
-            container
-            item
-            direction="row"
-            spacing={1}
-            className={classes.tagsContainer}
-          >
-            {labels.map(label => (
-              <Grid key={label} item>
-                <Chip
-                  variant="outlined"
-                  color={query === label ? 'primary' : 'default'}
-                  label={label}
-                  onClick={() => handleChipClick(label)}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          {renderLabels()}
           <Grid container item>
             <Masonry>
               <Box
@@ -228,15 +248,29 @@ function TeamLibrary({
                 justifyContent="center"
                 alignItems="center"
                 m={1}
-                onClick={open}
+                onClick={handleUploadClick}
               >
-                <input {...getInputProps()} />
-                <Typography variant="body2">Click Here To Upload</Typography>
-                <Box py={1}>
-                  <Button variant="contained" color="secondary">
-                    Upload
-                  </Button>
-                </Box>
+                {isUploading ? (
+                  <>
+                    <Typography variant="body2">Uploading</Typography>
+                    <Box py={1}>
+                      <CircularProgress />
+                    </Box>
+                  </>
+                ) : (
+                  <>
+                    <input {...getInputProps()} />
+
+                    <Typography variant="body2">
+                      Click Here To Upload
+                    </Typography>
+                    <Box py={1}>
+                      <Button variant="contained" color="secondary">
+                        Upload
+                      </Button>
+                    </Box>
+                  </>
+                )}
               </Box>
               {results.map(item => {
                 const imageUrl = item.file.url
