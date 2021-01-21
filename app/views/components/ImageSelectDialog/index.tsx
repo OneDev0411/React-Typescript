@@ -39,8 +39,8 @@ const useStyles = makeStyles(
     dialogPaper: {
       height: '100%'
     },
-    dialogContentContainer: {
-      height: '100%'
+    dialogContent: {
+      display: 'flex'
     }
   }),
   {
@@ -148,8 +148,8 @@ export default function ImageSelectDialog({
           </Grid>
         </Grid>
       </DialogTitle>
-      <DialogContent>
-        <Grid container className={classes.dialogContentContainer}>
+      <DialogContent className={classes.dialogContent}>
+        <Grid container>
           {selectedTab === 'upload-photo' && (
             <Upload onSelectFile={handleEdit} />
           )}
