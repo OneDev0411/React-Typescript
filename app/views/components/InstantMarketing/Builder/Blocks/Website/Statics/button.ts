@@ -1,10 +1,10 @@
 import { Editor } from 'grapesjs'
 
-import { isComponent } from '../utils'
+import { baseView, isComponent } from '../utils'
 
 export const typeButton = 'ws-button'
 
-export default (editor: Editor) => {
+export default (editor: Editor, blockClassNames: string = '') => {
   editor.DomComponents.addType(typeButton, {
     isComponent: isComponent(typeButton),
     extend: 'link',
@@ -13,12 +13,11 @@ export default (editor: Editor) => {
       defaults: {
         name: 'Button',
         attributes: {
-          className: typeButton,
+          class: typeButton,
           href: ''
-        },
-        traits: ['href']
+        }
       }
     },
-    view: { tagName: 'a' }
+    view: { ...baseView(blockClassNames, 'a') }
   })
 }

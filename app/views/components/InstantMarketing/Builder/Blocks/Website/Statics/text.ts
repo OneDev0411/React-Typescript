@@ -1,10 +1,10 @@
 import { Editor } from 'grapesjs'
 
-import { isComponent } from '../utils'
+import { baseView, isComponent } from '../utils'
 
 export const typeText = 'ws-text'
 
-export default (editor: Editor) => {
+export default (editor: Editor, blockClassNames: string = '') => {
   editor.DomComponents.addType(typeText, {
     isComponent: isComponent(typeText),
     extend: 'text',
@@ -12,9 +12,9 @@ export default (editor: Editor) => {
     model: {
       defaults: {
         name: 'Text',
-        attributes: { className: typeText }
+        attributes: { class: typeText }
       }
     },
-    view: { tagName: 'div' }
+    view: { ...baseView(blockClassNames) }
   })
 }
