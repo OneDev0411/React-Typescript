@@ -131,7 +131,7 @@ export default function ImageSelectDialog({
           </Grid>
           <Grid item>
             {isSerchableTabActive && (
-              <Box component="span" pr={1}>
+              <Box component="span" display="inline-flex" pr={1}>
                 <TextField
                   label="Search"
                   variant="outlined"
