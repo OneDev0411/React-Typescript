@@ -1,27 +1,11 @@
 import { Editor } from 'grapesjs'
 
 import { baseView, isComponent } from '../utils'
+import { typeRow } from './row'
 
-export const typeRow = 'ws-row'
 export const typeColumn = 'ws-column'
 
-export default (
-  editor: Editor,
-  rowBlockClassNames: string = '',
-  columnBlockClassNames: string = ''
-) => {
-  editor.DomComponents.addType(typeRow, {
-    isComponent: isComponent(typeRow),
-    model: {
-      defaults: {
-        name: 'Row',
-        attributes: { class: typeRow },
-        traits: ['href']
-      }
-    },
-    view: { ...baseView(rowBlockClassNames) }
-  })
-
+export default (editor: Editor, blockClassNames: string = '') => {
   editor.DomComponents.addType(typeColumn, {
     isComponent: isComponent(typeColumn),
     model: {
@@ -31,6 +15,6 @@ export default (
         attributes: { class: typeColumn }
       }
     },
-    view: { ...baseView(columnBlockClassNames) }
+    view: { ...baseView(blockClassNames) }
   })
 }
