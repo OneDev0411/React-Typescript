@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import { getActiveTeamId } from 'utils/user-teams'
 import { getBrandAssets } from 'models/brand/get-brand-assets'
 import { deleteBrandAsset } from 'models/brand/delete-brand-asset'
 import { uploadBrandAsset } from 'models/brand/upload-asset'
@@ -11,12 +12,14 @@ interface UseTeamLibrary {
   labels: string[]
   isLoading: boolean
   isUploading: boolean
+  hasDeleteAccess: (assetId: UUID) => boolean
   deleteAsset: (assetId: UUID) => Promise<void>
   uploadAsset: (file: File, label: string) => Promise<IBrandAsset>
 }
 
 export function useTeamLibrary(
   brandId: UUID,
+  user: IUser,
   searchQuery: string
 ): UseTeamLibrary {
   const [brandAssets, setBrandAssets] = useState<Nullable<IBrandAsset[]>>(null)
@@ -25,8 +28,24 @@ export function useTeamLibrary(
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isUploading, setIsUploading] = useState<boolean>(false)
 
+  const activeBrandId = getActiveTeamId(user)
+
+  const hasDeleteAccess = (assetId: UUID) => {
+    if (!brandAssets || !activeBrandId) {
+      return false
+    }
+
+    const asset = brandAssets.find(asset => asset.id === assetId)
+
+    if (!asset) {
+      return false
+    }
+
+    return asset.brand === activeBrandId
+  }
+
   const deleteAsset = async (assetId: UUID): Promise<void> => {
-    if (!brandAssets) {
+    if (!brandAssets || !hasDeleteAccess(assetId)) {
       return
     }
 
@@ -119,5 +138,13 @@ export function useTeamLibrary(
     setLabels(newLabels)
   }, [brandAssets])
 
-  return { isLoading, isUploading, results, labels, deleteAsset, uploadAsset }
+  return {
+    results,
+    labels,
+    isLoading,
+    isUploading,
+    hasDeleteAccess,
+    deleteAsset,
+    uploadAsset
+  }
 }

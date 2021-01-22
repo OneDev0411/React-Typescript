@@ -64,13 +64,14 @@ function TeamLibrary({
   const user = useSelector(selectUser)
   const activeBrandId = getActiveTeamId(user) as UUID
   const {
-    isLoading,
-    isUploading,
     results,
     labels,
+    isLoading,
+    isUploading,
+    hasDeleteAccess,
     deleteAsset,
     uploadAsset
-  } = useTeamLibrary(activeBrandId, query)
+  } = useTeamLibrary(activeBrandId, user, query)
 
   const theme = useTheme()
 
@@ -274,6 +275,7 @@ function TeamLibrary({
               </Box>
               {results.map(item => {
                 const imageUrl = item.file.url
+                const canDelete = hasDeleteAccess(item.id)
 
                 return (
                   <ImageThumbnail
@@ -283,7 +285,9 @@ function TeamLibrary({
                         ? () => handleEdit(`/api/utils/cors/${btoa(imageUrl)}`)
                         : undefined
                     }
-                    onDeleteClick={() => handleDelete(item)}
+                    onDeleteClick={
+                      canDelete ? () => handleDelete(item) : undefined
+                    }
                     onClick={() => onSelect(imageUrl)}
                     src={imageUrl}
                     alt={item.label}
