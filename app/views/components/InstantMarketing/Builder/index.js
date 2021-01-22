@@ -55,6 +55,7 @@ import { registerEmailBlocks } from './Blocks/Email'
 import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
 import { getTemplateRenderData } from './utils/get-template-render-data'
+import { registerWebsiteBlocks, websiteBlocksTraits } from './Blocks/Website'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -141,7 +142,9 @@ class Builder extends React.Component {
           label: 'Link',
           name: 'href'
         }
-      ]
+      ],
+
+      ...websiteBlocksTraits
     }
   }
 
@@ -171,7 +174,7 @@ class Builder extends React.Component {
       assets: [...this.props.assets, ...this.userAssets],
       colors: brandColors,
       fontFamilies: brandFonts,
-      plugins: [GrapesjsMjml],
+      plugins: this.isWebsiteTemplate ? [] : [GrapesjsMjml],
       pluginsOpts: {
         [GrapesjsMjml]: {
           columnsPadding: false,
@@ -359,7 +362,21 @@ class Builder extends React.Component {
   }
 
   registerWebsiteBlocks = () => {
-    console.log('register website blocks')
+    // We should not re-register blocks if it's already done!
+    if (this.websiteBlocksRegistered) {
+      return
+    }
+
+    this.websiteBlocksRegistered = true
+
+    const brand = getBrandByType(this.props.user, 'Brokerage')
+    const renderData = getTemplateRenderData(brand)
+
+    removeUnusedBlocks(this.editor)
+
+    const blockTemplates = {} // TODO: read this from the template config
+
+    this.blocks = registerWebsiteBlocks(this.editor, renderData, blockTemplates)
   }
 
   disableAssetManager = () => {
@@ -458,34 +475,54 @@ class Builder extends React.Component {
     const updateAll = model => {
       const attributes = model.get('attributes')
 
-      const isEditable = attributes['rechat-editable']
-      const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
+      if (!this.isWebsiteTemplate) {
+        const isEditable = attributes['rechat-editable']
+        const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
 
-      if (!isEditable) {
-        model.set({
-          editable: false,
-          resizable: false,
-          draggable: false,
-          hoverable: isRechatAsset,
-          selectable: isRechatAsset
+        if (!isEditable) {
+          model.set({
+            editable: false,
+            resizable: false,
+            draggable: false,
+            hoverable: isRechatAsset,
+            selectable: isRechatAsset
+          })
+        }
+
+        if (
+          shouldSelectImage &&
+          attributes['rechat-assets'] === 'listing-image'
+        ) {
+          shouldSelectImage = false
+          this.editor.select(model)
+        }
+
+        if (isEditable && isEditable.toLowerCase() === 'tree') {
+          return
+        }
+
+        model.get('components').each(model => {
+          updateAll(model, shouldSelectImage)
+        })
+      } else {
+        // TODO: we need to decide about editable blocks, now all the blocks are
+        // disabled expect the blocks with data-type property
+        const isEditable = !!attributes['data-type']
+
+        if (!isEditable) {
+          model.set({
+            editable: false,
+            resizable: false,
+            draggable: false,
+            hoverable: false,
+            selectable: false
+          })
+        }
+
+        model.get('components').each(model => {
+          updateAll(model)
         })
       }
-
-      if (
-        shouldSelectImage &&
-        attributes['rechat-assets'] === 'listing-image'
-      ) {
-        shouldSelectImage = false
-        this.editor.select(model)
-      }
-
-      if (isEditable && isEditable.toLowerCase() === 'tree') {
-        return
-      }
-
-      model.get('components').each(model => {
-        updateAll(model, shouldSelectImage)
-      })
     }
 
     updateAll(this.editor.DomComponents.getWrapper())
