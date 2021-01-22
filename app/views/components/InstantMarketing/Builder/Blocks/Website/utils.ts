@@ -1,5 +1,5 @@
-export const isComponent = (type: string) => (el: Element) =>
-  el.tagName === type.toUpperCase()
+export const isComponent = (type: string) => (el: HTMLElement) =>
+  el.dataset?.type === type
 
 export const baseView = (blockClassNames: string, tagName: string = 'div') => ({
   tagName,
