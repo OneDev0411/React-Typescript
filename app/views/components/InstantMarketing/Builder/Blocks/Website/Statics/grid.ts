@@ -40,7 +40,8 @@ export default (
     isComponent: isComponent(typeGridRow),
     model: {
       defaults: {
-        name: 'Row'
+        name: 'Row',
+        droppable: `[data-gjs-type="${typeGridColumn}"]`
       }
     },
     view: { ...baseView(gridRowClassNames) }
