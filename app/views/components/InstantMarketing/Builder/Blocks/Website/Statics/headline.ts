@@ -1,38 +1,92 @@
 import { Editor } from 'grapesjs'
 
-import { baseView, isComponent } from '../utils'
+import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
 
-export const typeHeadline1 = 'ws-h1'
-export const typeHeadline2 = 'ws-h2'
+import Headline1Icon from 'assets/images/marketing/editor/blocks/h1.png'
+import Headline2Icon from 'assets/images/marketing/editor/blocks/h2.png'
 
-interface HeadlineOptions {
-  h1BlockClassNames?: string
-  h2BlockClassNames?: string
+import { isComponent } from '../utils'
+
+import Headline1 from './headline1.njk'
+import Headline2 from './headline2.njk'
+
+import registerBlock from '../../registerBlock'
+
+const typeHeadline = 'headline'
+export const headline1BlockName = `${typeHeadline}-1`
+export const headline2BlockName = `${typeHeadline}-2`
+
+export interface HeadlineBlockOptions {
+  headline1ClassNames?: string
+  headline2ClassNames?: string
+  headline1Block?: string
+  headline2Block?: string
 }
+
+const headlineNumberRegex = /[^\d](\d)$/
 
 export default (
   editor: Editor,
-  { h1BlockClassNames = '', h2BlockClassNames = '' }: HeadlineOptions
+  {
+    headline1Block,
+    headline2Block,
+    headline1ClassNames,
+    headline2ClassNames
+  }: HeadlineBlockOptions
 ) => {
-  editor.DomComponents.addType(typeHeadline1, {
-    isComponent: isComponent(typeHeadline1),
+  editor.DomComponents.addType(typeHeadline, {
+    isComponent: isComponent(typeHeadline),
+    extend: 'text',
     model: {
       defaults: {
-        name: 'Headline 1',
-        attributes: { class: typeHeadline1 }
+        name: 'Headline',
+        number: ''
+      },
+      init() {
+        const tagName: string = this.attributes.tagName
+        const matches = tagName.match(headlineNumberRegex)
+
+        if (matches) {
+          const headlineNumber = matches[1]
+
+          this.set('number', headlineNumber)
+          this.set('name', `${this.get('name')} ${headlineNumber}`)
+        }
       }
     },
-    view: { ...baseView(h1BlockClassNames, 'h1') }
+    view: {
+      init({ model }) {
+        const headlineNumber = model.get('number')
+
+        if (headlineNumber === '1' && headline1ClassNames) {
+          model.addClass(headline1ClassNames)
+        } else if (headlineNumber === '2' && headline2ClassNames) {
+          model.addClass(headline2ClassNames)
+        }
+      }
+    }
   })
 
-  editor.DomComponents.addType(typeHeadline2, {
-    isComponent: isComponent(typeHeadline2),
-    model: {
-      defaults: {
-        name: 'Headline 2',
-        attributes: { class: typeHeadline2 }
-      }
-    },
-    view: { ...baseView(h2BlockClassNames, 'h2') }
+  const headlineBlocks = {
+    [headline1BlockName]: headline1Block || Headline1,
+    [headline2BlockName]: headline2Block || Headline2
+  }
+
+  registerBlock(editor, {
+    label: 'Headline 1',
+    icon: Headline1Icon,
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: headline1BlockName,
+    template: headlineBlocks[headline1BlockName]
   })
+
+  registerBlock(editor, {
+    label: 'Headline 2',
+    icon: Headline2Icon,
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: headline2BlockName,
+    template: headlineBlocks[headline2BlockName]
+  })
+
+  return headlineBlocks
 }
