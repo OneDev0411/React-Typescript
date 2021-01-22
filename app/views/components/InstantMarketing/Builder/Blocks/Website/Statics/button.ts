@@ -1,23 +1,52 @@
 import { Editor } from 'grapesjs'
 
+import ButtonIcon from 'assets/images/marketing/editor/blocks/button.png'
+
+import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
+
 import { baseView, isComponent } from '../utils'
+import registerBlock from '../../registerBlock'
 
-export const typeButton = 'ws-button'
+import Button from './button.njk'
 
-export default (editor: Editor, blockClassNames: string = '') => {
+const typeButton = 'button'
+const buttonBlockName = typeButton
+
+export interface ButtonBlockOptions {
+  buttonClassNames?: string
+  buttonBlock?: string
+}
+
+export default (
+  editor: Editor,
+  { buttonClassNames, buttonBlock }: ButtonBlockOptions
+) => {
   editor.DomComponents.addType(typeButton, {
     isComponent: isComponent(typeButton),
     extend: 'link',
-    extendView: 'link',
     model: {
       defaults: {
         name: 'Button',
         attributes: {
-          class: typeButton,
-          href: ''
+          href: '',
+          target: '_blank'
         }
       }
     },
-    view: { ...baseView(blockClassNames, 'a') }
+    view: { ...baseView(buttonClassNames) }
   })
+
+  const buttonBlocks = {
+    [buttonBlockName]: buttonBlock || Button
+  }
+
+  registerBlock(editor, {
+    label: 'Button',
+    icon: ButtonIcon,
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: buttonBlockName,
+    template: buttonBlocks[buttonBlockName]
+  })
+
+  return buttonBlocks
 }
