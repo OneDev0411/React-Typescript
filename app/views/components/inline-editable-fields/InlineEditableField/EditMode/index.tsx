@@ -32,7 +32,8 @@ export interface Props {
   isSaving: boolean
   isPopoverMode?: boolean
   style?: CSSProperties
-  viewRef?: any
+  viewRef?: Nullable<HTMLElement>
+  popoverContainerRef: Nullable<HTMLDivElement>
 }
 
 const useStyles = makeStyles(
@@ -63,11 +64,12 @@ export const EditMode = (props: Props) => {
     isStatic = false,
     isPopoverMode = false,
     style = {},
-    viewRef = null
+    viewRef = null,
+    popoverContainerRef = null
   } = props
   const classes = useStyles()
   const open = Boolean(viewRef)
-  const id = open ? 'edit-popover' : undefined
+  const id = open ? 'inline-editfield-popover' : undefined
 
   const renderBody = (
     <>
@@ -119,6 +121,7 @@ export const EditMode = (props: Props) => {
         anchorEl={viewRef}
         onClose={handleCancel}
         onExited={onClosePopover}
+        container={popoverContainerRef}
         anchorOrigin={{
           vertical: 'center',
           horizontal: 'right'
