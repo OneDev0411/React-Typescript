@@ -41,7 +41,8 @@ export default (
     model: {
       defaults: {
         name: 'Row',
-        droppable: `[data-gjs-type="${typeGridColumn}"]`
+        droppable: `[data-gjs-type="${typeGridColumn}"]`,
+        attributes: { style: 'display: flex' } // TODO: remove this style later
       }
     },
     view: { ...baseView(gridRowClassNames) }
@@ -52,7 +53,8 @@ export default (
     model: {
       defaults: {
         name: 'Column',
-        draggable: `[data-gjs-type="${typeGridRow}"]`
+        draggable: `[data-gjs-type="${typeGridRow}"]`,
+        attributes: { style: 'flex-basis: 100%; min-height: 50px' } // TODO: remove this style later
       }
     },
     view: { ...baseView(gridColumnClassNames) }
