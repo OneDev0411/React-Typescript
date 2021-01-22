@@ -475,54 +475,34 @@ class Builder extends React.Component {
     const updateAll = model => {
       const attributes = model.get('attributes')
 
-      if (!this.isWebsiteTemplate) {
-        const isEditable = attributes['rechat-editable']
-        const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
+      const isEditable = attributes['rechat-editable']
+      const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
 
-        if (!isEditable) {
-          model.set({
-            editable: false,
-            resizable: false,
-            draggable: false,
-            hoverable: isRechatAsset,
-            selectable: isRechatAsset
-          })
-        }
-
-        if (
-          shouldSelectImage &&
-          attributes['rechat-assets'] === 'listing-image'
-        ) {
-          shouldSelectImage = false
-          this.editor.select(model)
-        }
-
-        if (isEditable && isEditable.toLowerCase() === 'tree') {
-          return
-        }
-
-        model.get('components').each(model => {
-          updateAll(model, shouldSelectImage)
-        })
-      } else {
-        // TODO: we need to decide about editable blocks, now all the blocks are
-        // disabled expect the blocks with data-type property
-        const isEditable = !!attributes['data-type']
-
-        if (!isEditable) {
-          model.set({
-            editable: false,
-            resizable: false,
-            draggable: false,
-            hoverable: false,
-            selectable: false
-          })
-        }
-
-        model.get('components').each(model => {
-          updateAll(model)
+      if (!isEditable) {
+        model.set({
+          editable: false,
+          resizable: false,
+          draggable: false,
+          hoverable: isRechatAsset,
+          selectable: isRechatAsset
         })
       }
+
+      if (
+        shouldSelectImage &&
+        attributes['rechat-assets'] === 'listing-image'
+      ) {
+        shouldSelectImage = false
+        this.editor.select(model)
+      }
+
+      if (isEditable && isEditable.toLowerCase() === 'tree') {
+        return
+      }
+
+      model.get('components').each(model => {
+        updateAll(model, shouldSelectImage)
+      })
     }
 
     updateAll(this.editor.DomComponents.getWrapper())
