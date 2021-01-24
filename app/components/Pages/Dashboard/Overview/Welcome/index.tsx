@@ -61,7 +61,7 @@ const useStyles = makeStyles(
     sidebar: {
       background: theme.palette.grey[100],
       borderLeft: `1px solid ${theme.palette.grey[300]}`,
-      flexBasis: '50%',
+      // flexBasis: '50%',
       overflow: 'scroll',
       flexGrow: 1
     }
@@ -75,7 +75,7 @@ function OverviewDashboard() {
 
   return (
     <Accordion expanded={accordionExpanded}>
-      <AccordionSummary
+      {/* <AccordionSummary
         onClick={() => setAccordionExpanded(!accordionExpanded)}
         expandIcon={<ExpandMoreIcon />}
         aria-controls="welcome-content"
@@ -91,14 +91,14 @@ function OverviewDashboard() {
             </Box>
           </Box>
         )}
-      </AccordionSummary>
+      </AccordionSummary> */}
       <AccordionDetails>
         <Box className={classes.main}>
           <Box className={classes.body}>
             <Box className={classes.content}>
               <Greeting />
             </Box>
-            <Box className={classes.banners}>
+            {/* <Box className={classes.banners}>
               <Box className={classes.banner}>
                 <img
                   src="/static/images/overview/intro-video.jpg"
@@ -113,11 +113,11 @@ function OverviewDashboard() {
                   height="200"
                 />
               </Box>
-            </Box>
+            </Box> */}
           </Box>
-          <Box className={classes.sidebar}>
+          {/* <Box className={classes.sidebar}>
             <HappyPaths />
-          </Box>
+          </Box> */}
         </Box>
       </AccordionDetails>
     </Accordion>
