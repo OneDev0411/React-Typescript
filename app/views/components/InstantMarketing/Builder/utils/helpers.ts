@@ -8,19 +8,19 @@ import {
 } from '../constants'
 
 export function isImage(model: Model): boolean {
-  const elementType = model.get('type')
+  const elementType = model.get('type') || model.get('tagName') || ''
 
   return IMAGE_ELEMENT_TYPES.includes(elementType)
 }
 
 export function isBackgroundImageAllowed(model: Model): boolean {
-  const elementType = model.get('type')
+  const elementType = model.get('type') || model.get('tagName') || ''
 
   return BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES.includes(elementType)
 }
 
 export function isBackgroundUrlAllowed(model: Model): boolean {
-  const elementType = model.get('type')
+  const elementType = model.get('type') || model.get('tagName') || ''
 
   return BACKGROUND_URL_ALLOWED_ELEMENT_TYPES.includes(elementType)
 }
@@ -81,10 +81,11 @@ export function getImage(model: Model): string {
   const isBackgroundImageAllowedElement = isBackgroundImageAllowed(model)
 
   if (isBackgroundImageAllowedElement) {
-    const elementStyle = model.get('style')
+    // @ts-ignore
+    const elementStyle = getComputedStyle(model.getEl())
 
-    const bgImage: string = elementStyle['background-image']
-    const matches = bgImage.match(/^url\((.+)\)$/)
+    const bgImage = elementStyle.backgroundImage
+    const matches = bgImage.match(/(?:\(['"]?)(.*?)(?:['"]?\))/)
 
     if (!matches) {
       return ''
