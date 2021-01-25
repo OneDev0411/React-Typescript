@@ -1,8 +1,7 @@
 import { Editor } from 'grapesjs'
 
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
-
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
+import { handleBlockDragStopEvent } from '../utils'
 
 import loadButton, { ButtonBlockOptions } from './button'
 import loadGrid, { GridBlockOptions } from './grid'
@@ -65,23 +64,5 @@ export default function registerStaticBlocks(
   //   template: templates[spacerBlockName]
   // })
 
-  editor.on('block:drag:stop', (model: any, block: any) => {
-    if (!model) {
-      return
-    }
-
-    if (!templates[block.id]) {
-      return
-    }
-
-    const parent = model.parent()
-
-    const template = templates[model.attributes.attributes['data-block']]
-    const njk = nunjucks.renderString(template, {
-      ...renderData
-    })
-
-    parent.append(njk, { at: model.opt.at })
-    model.remove()
-  })
+  handleBlockDragStopEvent(editor, templates, renderData)
 }
