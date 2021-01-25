@@ -360,6 +360,8 @@
       }
 
       .fa-arrow-up {
+        display: none;
+
         &::after {
           content: 'Select Parent';
         }
