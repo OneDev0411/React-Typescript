@@ -11,6 +11,7 @@ export const PARKED_CONTACTS_LAST_SEEN_SETTINGS_KEY =
 export const PARKED_CONTACTS_LIST_ID = 'parked'
 
 export const DUPLICATE_CONTACTS_LIST_ID = 'duplicates'
+export const CONTACT_CHUNK_COUNT = 50
 
 export const ORIGINS = [
   {
