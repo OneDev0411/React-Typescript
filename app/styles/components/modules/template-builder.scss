@@ -328,7 +328,73 @@
   }
 
   .gjs-toolbar {
-    background-color: #0945eb;
+    display: flex;
+    background-color: #E7E9EC;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    color: #000;
+    padding: 0.2rem;
+    border-radius: 4px;
+
+    > div {
+      display: flex;
+      align-items: center;
+
+      .gjs-toolbar-item {
+        width: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin: 0.1rem;
+        height: 100%;
+        border-radius: 4px;
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.08);
+        }
+        
+        &::after {
+          font-family: 'LatoRegular';
+          padding-top: 0.6rem;
+        }
+      }
+
+      .fa-arrow-up {
+        &::after {
+          content: 'Select Parent';
+        }
+      }
+
+      .fa-arrows {
+        &::after {
+          content: 'Move';
+        }
+      }
+
+      .fa-clone {
+        &::after {
+          content: 'Duplicate';
+        }
+      }
+
+      .fa-trash-o {
+        &::after {
+          content: 'Delete';
+        }
+      }
+
+      .fa-image {
+        &::after {
+          content: 'Change Photo';
+        }
+      }
+
+      .fa-pencil {
+        &::after {
+          content: 'Edit Photo';
+        }
+      }
+    }
   }
 
   .gjs-pn-views,
