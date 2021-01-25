@@ -16,7 +16,7 @@ export const staticBlocksTraits = {
   ...socialGroupBlockTraits
 }
 
-export interface StaticBlockOptions
+export interface StaticBlocksOptions
   extends HeadlineBlockOptions,
     TextBlockOptions,
     ButtonBlockOptions,
@@ -26,14 +26,14 @@ export interface StaticBlockOptions
 export default function registerStaticBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  blockOptions: StaticBlockOptions
+  blocksOptions: StaticBlocksOptions
 ): void {
   const templates = {
-    ...loadHeadline(editor, blockOptions),
-    ...loadText(editor, blockOptions),
-    ...loadButton(editor, blockOptions),
-    ...loadGrid(editor, blockOptions),
-    ...loadSocialGroup(editor, blockOptions)
+    ...loadHeadline(editor, blocksOptions),
+    ...loadText(editor, blocksOptions),
+    ...loadButton(editor, blocksOptions),
+    ...loadGrid(editor, blocksOptions),
+    ...loadSocialGroup(editor, blocksOptions)
   }
 
   // registerBlock(editor, {
@@ -41,13 +41,6 @@ export default function registerStaticBlocks(
   //   category: BASICS_BLOCK_CATEGORY,
   //   blockName: imageBlockName,
   //   template: templates[imageBlockName]
-  // })
-
-  // registerBlock(editor, {
-  //   label: 'Video',
-  //   category: BASICS_BLOCK_CATEGORY,
-  //   blockName: videoBlockName,
-  //   template: templates[videoBlockName]
   // })
 
   // registerBlock(editor, {

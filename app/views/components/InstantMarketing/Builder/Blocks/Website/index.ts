@@ -4,21 +4,12 @@ import { TemplateRenderData } from '../../utils/get-template-render-data'
 import { collapseBlockCategories } from '../Email/utils'
 
 import registerStaticBlocks, {
-  StaticBlockOptions,
+  StaticBlocksOptions,
   staticBlocksTraits
 } from './Statics'
+import registerVideoBlock, { VideoBlockOptions } from './Video'
 
-type BlockOptions = StaticBlockOptions
-
-interface Options {
-  // listing: ListingOptions
-  // agent: AgentOptions & BlockOptions
-  // image: ImageOptions
-  // gif: GifOptions
-  // video: VideoOptions
-  // article: ArticleOptions
-  // neighborhoods?: NeighborhoodsOptions
-}
+interface BlocksOptions extends StaticBlocksOptions, VideoBlockOptions {}
 
 export const websiteBlocksTraits = {
   ...staticBlocksTraits
@@ -27,12 +18,12 @@ export const websiteBlocksTraits = {
 export function registerWebsiteBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  blockOptions: BlockOptions
-  // {}: Options
+  blocksOptions: BlocksOptions
 ) {
-  registerStaticBlocks(editor, renderData, blockOptions)
+  registerStaticBlocks(editor, renderData, blocksOptions)
 
-  const dynamicBlocks: {
+  const dynamicBlocks =
+    // : {
     // listing: ReturnType<typeof registerListingBlocks>
     // agent: ReturnType<typeof registerAgentBlocks>
     // image: ReturnType<typeof registerImageBlock>
@@ -40,14 +31,15 @@ export function registerWebsiteBlocks(
     // video: ReturnType<typeof registerVideoBlock>
     // article: ReturnType<typeof registerArticleBlock>
     // neighborhoods?: ReturnType<typeof registerNeighborhoodsBlocks>
-  } = {
-    // listing: registerListingBlocks(editor, renderData, listing),
-    // agent: registerAgentBlocks(editor, renderData, agent),
-    // image: registerImageBlock(editor, image),
-    // gif: registerGifBlock(editor, gif),
-    // video: registerVideoBlock(editor, renderData, video),
-    // article: registerArticleBlock(editor, renderData, article)
-  }
+    // }
+    {
+      // listing: registerListingBlocks(editor, renderData, listing),
+      // agent: registerAgentBlocks(editor, renderData, agent),
+      // image: registerImageBlock(editor, image),
+      // gif: registerGifBlock(editor, gif),
+      video: registerVideoBlock(editor, renderData, blocksOptions)
+      // article: registerArticleBlock(editor, renderData, article)
+    }
 
   // if (neighborhoods) {
   //   dynamicBlocks.neighborhoods = registerNeighborhoodsBlocks(

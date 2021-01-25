@@ -283,20 +283,8 @@ class Builder extends React.Component {
     })
   }
 
-  registerEmailBlocks = () => {
-    // We should not re-register blocks if it's already done!
-    if (this.emailBlocksRegistered) {
-      return
-    }
-
-    this.emailBlocksRegistered = true
-
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
-
-    removeUnusedBlocks(this.editor)
-
-    const emailBlocksOptions = {
+  getBlocksOptions() {
+    const blocksOptions = {
       listing: {
         onDrop: () => {
           this.setState({ isListingDrawerOpen: true })
@@ -336,7 +324,7 @@ class Builder extends React.Component {
     )
 
     if (shouldShowNeighborhoodsBlocks) {
-      emailBlocksOptions.neighborhoods = {
+      blocksOptions.neighborhoods = {
         onNeighborhoodsDrop: () => {
           this.setState({ isNeighborhoodsReportDrawerOpen: true })
         },
@@ -345,6 +333,24 @@ class Builder extends React.Component {
         }
       }
     }
+
+    return blocksOptions
+  }
+
+  registerEmailBlocks = () => {
+    // We should not re-register blocks if it's already done!
+    if (this.emailBlocksRegistered) {
+      return
+    }
+
+    this.emailBlocksRegistered = true
+
+    const brand = getBrandByType(this.props.user, 'Brokerage')
+    const renderData = getTemplateRenderData(brand)
+
+    removeUnusedBlocks(this.editor)
+
+    const emailBlocksOptions = this.getBlocksOptions()
 
     this.blocks = registerEmailBlocks(
       this.editor,
@@ -372,11 +378,12 @@ class Builder extends React.Component {
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const renderData = getTemplateRenderData(brand)
 
-    removeUnusedBlocks(this.editor)
+    const dynamicBlocksOptions = this.getBlocksOptions()
+    const blocksOptions = {
+      onVideoDrop: dynamicBlocksOptions.video.onDrop
+    } // TODO: read this from the template config
 
-    const blockTemplates = {} // TODO: read this from the template config
-
-    this.blocks = registerWebsiteBlocks(this.editor, renderData, blockTemplates)
+    this.blocks = registerWebsiteBlocks(this.editor, renderData, blocksOptions)
   }
 
   disableAssetManager = () => {
