@@ -39,7 +39,12 @@ export default function registerVideoBlock(
 ): VideoBlock {
   editor.DomComponents.addType(typeVideoLink, {
     isComponent: isComponent(typeVideoLink),
-    model: { defaults: { name: 'Video' } },
+    model: {
+      defaults: {
+        name: 'Video',
+        droppable: false
+      }
+    },
     view: { ...baseView(videoLinkClassNames) }
   })
 

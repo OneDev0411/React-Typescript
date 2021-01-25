@@ -8,8 +8,12 @@ import registerStaticBlocks, {
   staticBlocksTraits
 } from './Statics'
 import registerVideoBlock, { VideoBlockOptions } from './Video'
+import registerImageBlock, { ImageBlockOptions } from './Image'
 
-interface BlocksOptions extends StaticBlocksOptions, VideoBlockOptions {}
+interface BlocksOptions
+  extends StaticBlocksOptions,
+    VideoBlockOptions,
+    ImageBlockOptions {}
 
 export const websiteBlocksTraits = {
   ...staticBlocksTraits
@@ -35,7 +39,7 @@ export function registerWebsiteBlocks(
     {
       // listing: registerListingBlocks(editor, renderData, listing),
       // agent: registerAgentBlocks(editor, renderData, agent),
-      // image: registerImageBlock(editor, image),
+      image: registerImageBlock(editor, renderData, blocksOptions),
       // gif: registerGifBlock(editor, gif),
       video: registerVideoBlock(editor, renderData, blocksOptions)
       // article: registerArticleBlock(editor, renderData, article)
