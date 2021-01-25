@@ -39,7 +39,7 @@ const useStyles = makeStyles(
     main: {
       display: 'flex',
       width: '100%',
-      height: '60vh'
+      height: '84vh'
     },
     body: {
       height: '100%',
@@ -48,8 +48,12 @@ const useStyles = makeStyles(
       flexGrow: 1
     },
     content: {
+      background: 'url(/static/images/overview/dashboard-bg.png) no-repeat 0 0',
       padding: theme.spacing(4),
-      flex: '1 1 auto'
+      flex: '1 1 auto',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
     },
     banners: {
       flex: '0 1 auto',

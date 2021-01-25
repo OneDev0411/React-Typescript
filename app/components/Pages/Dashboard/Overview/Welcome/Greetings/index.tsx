@@ -4,6 +4,8 @@ import { Box, Link } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
+import fecha from 'fecha'
+
 import { selectUser } from 'selectors/user'
 import { Avatar } from 'components/Avatar'
 
@@ -28,15 +30,18 @@ export default function Greeting() {
   //  const playIntroVideo = () => {}
 
   return (
-    <Box>
-      <Avatar size="xlarge" user={user} />
+    <Box justifyContent="center">
+      <Avatar size="xlarge" user={user} disableLazyLoad />
       <Box>
         <Typography
-          variant="h4"
+          variant="h3"
           className={classes.headline}
         >{`Welcome, ${user.first_name}.`}</Typography>
-        <Typography variant="h6">Let's get started!</Typography>
-        {/* <ol className={classes.stepsList}>
+        <Typography variant="body2">
+          Today is {fecha.format(new Date(), 'dddd, MMMM Do, YYYY')}
+        </Typography>
+        {/* <Typography variant="h6">Let's get started!</Typography>
+        <ol className={classes.stepsList}>
           <li>
             Watch our{' '}
             <Link href="#" onClick={playIntroVideo}>
@@ -57,11 +62,11 @@ export default function Greeting() {
           <li>
             Follow some of our basic tasks to learn how to work with Rechat.
           </li>
-        </ol> */}
+        </ol> 
         <Typography variant="body1">
           We have prepared some basic tasks for you to get you started on
           working with Rechat.
-        </Typography>
+        </Typography> */}
       </Box>
     </Box>
   )
