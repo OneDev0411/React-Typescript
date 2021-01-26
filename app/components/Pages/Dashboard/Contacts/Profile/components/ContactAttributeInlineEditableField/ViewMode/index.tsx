@@ -1,7 +1,13 @@
 import React from 'react'
-import { Box, Tooltip, Typography } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { mdiStarOutline } from '@mdi/js'
+import {
+  Box,
+  Tooltip,
+  Typography,
+  createStyles,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
+import { mdiStarOutline, mdiLightningBoltOutline } from '@mdi/js'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -10,6 +16,8 @@ interface Props {
   is_primary?: boolean
   title?: string
   value?: string
+  isTriggerable: boolean
+  isTriggerActive: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -22,10 +30,14 @@ const useStyles = makeStyles((theme: Theme) =>
         color: theme.palette.text.primary
       }
     },
-    leftSide: {
+    contentContainer: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center'
+    },
+    triggerIndicator: {
+      width: theme.spacing(2),
+      height: theme.spacing(2)
     },
     title: (props: Props) => ({
       color: props.value ? theme.palette.text.primary : theme.palette.text.hint
@@ -33,7 +45,13 @@ const useStyles = makeStyles((theme: Theme) =>
     starIcon: {
       color: theme.palette.text.primary
     },
+    triggerIcon: (props: Props) => ({
+      color: props.isTriggerActive
+        ? theme.palette.warning.main
+        : theme.palette.grey[500]
+    }),
     value: (props: Props) => ({
+      minWidth: theme.spacing(10.5),
       textAlign: 'right',
       color: props.value ? theme.palette.text.primary : theme.palette.text.hint
     })
@@ -42,12 +60,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function ViewMode(props: Props) {
   const classes = useStyles(props)
-
   const { title } = props
 
   return (
     <Box className={classes.container}>
-      <Box className={classes.leftSide}>
+      <Box className={classes.contentContainer}>
         <Typography
           variant="body2"
           className={classes.title}
@@ -66,9 +83,22 @@ export function ViewMode(props: Props) {
           </Tooltip>
         )}
       </Box>
-      <Typography variant="body2" className={classes.value}>
-        {props.value || '-'}
-      </Typography>
+      <Box className={classes.contentContainer}>
+        <Box className={classes.value}>
+          <Typography variant="body2">{props.value || '-'}</Typography>
+        </Box>
+
+        {props.isTriggerable && (
+          <Box>
+            <SvgIcon
+              path={mdiLightningBoltOutline}
+              leftMargined
+              className={classes.triggerIcon}
+              size={muiIconSizes.small}
+            />
+          </Box>
+        )}
+      </Box>
     </Box>
   )
 }

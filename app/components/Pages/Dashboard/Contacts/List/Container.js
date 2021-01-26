@@ -53,6 +53,7 @@ import { OtherContactsBadge } from './OtherContactsBadge'
 
 import {
   FLOW_FILTER_ID,
+  CONTACT_CHUNK_COUNT,
   OPEN_HOUSE_FILTER_ID,
   SORT_FIELD_SETTING_KEY,
   PARKED_CONTACTS_LIST_ID,
@@ -132,7 +133,7 @@ class ContactsList extends React.Component {
     const nextStart = nextProps.location.query.s
 
     if (prevStart !== undefined && nextStart === undefined) {
-      window.location.reload()
+      this.setQueryParam('s', prevStart)
     }
   }
 
@@ -428,7 +429,8 @@ class ContactsList extends React.Component {
     const { total } = this.props.listInfo
     const totalLoadedCount = this.props.list.ids.length
     const prevStart = parseInt(this.getQueryParam('s'), 10) || 0
-    const start = Math.max(prevStart, ...this.state.loadedRanges) + 50
+    const start =
+      Math.max(prevStart, ...this.state.loadedRanges) + CONTACT_CHUNK_COUNT
 
     if (
       this.state.isFetchingMoreContacts ||
@@ -457,12 +459,12 @@ class ContactsList extends React.Component {
       this.state.isFetchingMoreContacts ||
       this.state.isFetchingMoreContactsBefore ||
       totalLoadedCount === total ||
-      prevStart < 50
+      prevStart < CONTACT_CHUNK_COUNT
     ) {
       return false
     }
 
-    const start = prevStart - 50
+    const start = prevStart - CONTACT_CHUNK_COUNT
 
     if (this.state.loadedRanges.includes(start)) {
       return false
