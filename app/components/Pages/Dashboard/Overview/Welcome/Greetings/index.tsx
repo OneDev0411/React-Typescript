@@ -36,7 +36,7 @@ export default function Greeting() {
         <Typography
           variant="h3"
           className={classes.headline}
-        >{`Welcome, ${user.first_name}.`}</Typography>
+        >{`Hello, ${user.first_name}.`}</Typography>
         <Typography variant="body2">
           Today is {fecha.format(new Date(), 'dddd, MMMM Do, YYYY')}
         </Typography>
