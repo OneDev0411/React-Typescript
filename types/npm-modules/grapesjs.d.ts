@@ -200,6 +200,8 @@ declare module 'grapesjs' {
 
   export interface DomComponents {
     addType(type: string, methods: object): object
+    removeType(type: string): object
+    getType(type: string): { model: object; view: object } | undefined
   }
 
   export interface AssetManager {

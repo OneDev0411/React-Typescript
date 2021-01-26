@@ -11,15 +11,12 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
 import { baseView, handleBlockDragStopEvent, isComponent } from '../utils'
 import template from './template.njk'
+import { generateEmbedVideoUrl } from './utils'
 
-const typeVideoLink = 'video-link'
-const typeVideoThumbnail = 'video-thumbnail'
-const blockName = typeVideoLink
-
+const typeEmbedVideo = 'embed-video'
+const embedVideoBlockName = typeEmbedVideo
 export interface VideoBlockOptions {
-  videoLinkClassNames?: string
-  videoThumbnailClassNames?: string
-  videoLinkBlock?: string
+  embedVideoClassNames?: string
   onVideoDrop: (model: Model) => void
 }
 
@@ -30,55 +27,36 @@ interface VideoBlock {
 export default function registerVideoBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  {
-    videoLinkClassNames,
-    videoThumbnailClassNames,
-    videoLinkBlock,
-    onVideoDrop
-  }: VideoBlockOptions
+  { embedVideoClassNames, onVideoDrop }: VideoBlockOptions
 ): VideoBlock {
-  editor.DomComponents.addType(typeVideoLink, {
-    isComponent: isComponent(typeVideoLink),
-    model: {
-      defaults: {
-        name: 'Video',
-        droppable: false
-      }
-    },
-    view: { ...baseView(videoLinkClassNames) }
-  })
+  const dType = editor.DomComponents.getType('video')!
+  const dModel = dType.model
+  const dView = dType.view
 
-  editor.DomComponents.addType(typeVideoThumbnail, {
-    isComponent: isComponent(typeVideoThumbnail),
-    model: {
-      defaults: {
-        selectable: false,
-        hoverable: false,
-        layerable: false,
-        droppable: false,
-        draggable: false
-      }
-    },
-    view: { ...baseView(videoThumbnailClassNames) }
+  editor.DomComponents.addType(typeEmbedVideo, {
+    isComponent: isComponent(typeEmbedVideo),
+    model: dModel,
+    view: (dView as any).extend({
+      ...baseView(embedVideoClassNames)
+    })
   })
 
   registerBlock(editor, {
     label: 'Video',
     icon: VideoIcon,
     category: BASICS_BLOCK_CATEGORY,
-    blockName,
+    blockName: embedVideoBlockName,
     template
   })
 
   return handleBlockDragStopEvent(
     editor,
     {
-      [blockName]: videoLinkBlock || template
+      [embedVideoBlockName]: template
     },
     (selectedVideo: Video) => ({
       ...renderData,
-      url: selectedVideo.url,
-      image: selectedVideo.thumbnail
+      url: generateEmbedVideoUrl(selectedVideo.url)
     }),
     onVideoDrop
   )

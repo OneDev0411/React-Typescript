@@ -11,7 +11,11 @@ function registerBlock(
   const document = domParser.parseFromString(template, 'text/html')
   const { tagName } = document.body.children[0]
 
-  const elementName = adaptive ? 'mj-adaptive' : tagName
+  const elementName = adaptive
+    ? 'mj-adaptive'
+    : tagName === 'IFRAME'
+    ? 'DIV'
+    : tagName
 
   editor.BlockManager.add(blockName, {
     category,
