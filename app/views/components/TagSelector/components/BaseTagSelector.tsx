@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { TextField, TextFieldProps, ChipProps } from '@material-ui/core'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -61,12 +61,6 @@ export const BaseTagSelector = ({
     }
   })
 
-  // useEffect(() => {
-  //   console.log('use effect in base')
-  //   setSelectedTags(value)
-  //   onChange(value)
-  // }, [onChange, value])
-
   return (
     <Autocomplete
       multiple
@@ -123,7 +117,7 @@ export const BaseTagSelector = ({
         const filtered = filter(options, params)
 
         // Suggest the creation of a new value
-        if (params.inputValue !== '' && filtered.length === 0) {
+        if (params.inputValue !== '') {
           filtered.push({
             inputValue: params.inputValue,
             title: `Add "${params.inputValue}"`
