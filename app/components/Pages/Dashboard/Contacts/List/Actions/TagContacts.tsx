@@ -93,6 +93,16 @@ export const TagContacts = ({
           Tag
         </Button>
       )}
+      popoverProps={{
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'left'
+        },
+        transformOrigin: {
+          vertical: 'bottom',
+          horizontal: 'left'
+        }
+      }}
       filter={{
         selectedIds: selectedRows,
         excludes: excludedRows,
