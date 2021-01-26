@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTheme } from '@material-ui/core'
 
 import { TemplateData } from 'utils/marketing-center/render-branded-template'
 import { convertToTemplate } from 'utils/marketing-center/helpers'
@@ -48,8 +47,6 @@ export default function MarketingTemplateEditor({
   onSave,
   onClose
 }: Props) {
-  const theme = useTheme()
-
   // We need to convert template instance to a brand marketing template
   // Our MC editor is dumb and it only works with brand marketing templates
   const brandMarketingTemplate: IBrandMarketingTemplate =
@@ -69,7 +66,6 @@ export default function MarketingTemplateEditor({
       mediums=""
       assets={[]}
       defaultTemplate={brandMarketingTemplate}
-      containerStyle={{ zIndex: theme.zIndex.modal + 1 }}
       handleSave={template => onSave(template.result)}
       onClose={onClose}
     />

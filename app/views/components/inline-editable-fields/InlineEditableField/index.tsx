@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useState, useRef } from 'react'
 import ClickOutside from 'react-click-outside'
 
 import { noop } from 'utils/helpers'
@@ -52,7 +52,8 @@ export const InlineEditableField = (props: Props) => {
     error = '',
     renderEditMode
   } = props
-  const [ref, setRef] = useState<HTMLElement | null>(null)
+  const popoverEditContainerRef = useRef<Nullable<HTMLDivElement>>(null)
+  const [ref, setRef] = useState<Nullable<HTMLElement>>(null)
   const [isSaving, setIsSaving] = useState<boolean>(false)
 
   const handleToggleMode = event => {
@@ -125,6 +126,7 @@ export const InlineEditableField = (props: Props) => {
       isSaving,
       viewRef: ref,
       render: renderEditMode,
+      popoverContainerRef: popoverEditContainerRef?.current,
       onClosePopover: () => setRef(null)
     }
   }
@@ -148,10 +150,10 @@ export const InlineEditableField = (props: Props) => {
 
   if (isPopoverMode) {
     return (
-      <>
+      <div ref={popoverEditContainerRef}>
         {ViewModeRenderer}
         {EditModeRenderer}
-      </>
+      </div>
     )
   }
 
