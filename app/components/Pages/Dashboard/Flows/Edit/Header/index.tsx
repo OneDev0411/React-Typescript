@@ -22,7 +22,6 @@ const useStyles = makeStyles(
     container: {
       display: 'flex',
       alignItems: 'center',
-      padding: theme.spacing(3),
       width: '100%'
     },
     titleContainer: {

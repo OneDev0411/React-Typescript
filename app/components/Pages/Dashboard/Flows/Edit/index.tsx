@@ -9,14 +9,11 @@ import {
   Tab,
   Tabs as MUITabs,
   Chip,
-  useTheme
-} from '@material-ui/core'
-import {
+  useTheme,
   Theme,
   makeStyles,
-  withStyles,
-  createStyles
-} from '@material-ui/core/styles'
+  withStyles
+} from '@material-ui/core'
 
 import { getEmailTemplates } from 'models/email-templates/get-email-templates'
 import { getBrandFlow } from 'models/flows/get-brand-flow'
@@ -51,28 +48,32 @@ import {
 } from './helpers'
 import { PageContainer, TabPanel } from './styled'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     chip: {
       margin: theme.spacing(0, 1)
     },
-    tab: {
-      fontSize: theme.typography.body1.fontSize
-    }
-  })
+    tabContainer: {
+      marginBottom: theme.spacing(1),
+      border: `1px solid ${theme.palette.divider}`,
+      borderRadius: theme.shape.borderRadius
+    },
+    tab: theme.typography.body1
+  }),
+  { name: 'FlowEditPage' }
 )
 
-const Tabs = withStyles({
+const Tabs = withStyles((theme: Theme) => ({
   root: {
-    padding: '0 25%'
+    padding: '0 30%'
   },
   indicator: {
-    height: '3px'
+    height: `${theme.spacing(0.5)}px`
   }
-})(MUITabs)
+}))(MUITabs)
 
 function Edit(props: WithRouterProps) {
-  const theme = useTheme()
+  const theme = useTheme<Theme>()
   const classes = useStyles()
 
   const user = useSelector(selectUser)
@@ -347,32 +348,30 @@ function Edit(props: WithRouterProps) {
         />
       )}
       <PageContainer style={!flow ? { paddingTop: '8.9375rem' } : {}}>
-        <Box mb={1}>
-          <Paper>
-            <Tabs
-              value={selectedTabIndex}
-              onChange={(_, newTabIndex) => setSelectedTabIndex(newTabIndex)}
-              textColor="primary"
-              indicatorColor="primary"
-              variant="fullWidth"
-              centered
-            >
-              <Tab disabled={isLoading} className={classes.tab} label="Steps" />
-              <Tab
-                disabled={isLoading}
-                className={classes.tab}
-                label={
-                  <Grid container alignItems="center" justify="center">
-                    <span>Contacts</span>
-                    <Chip
-                      className={classes.chip}
-                      label={flow ? flow.active_flows : 0}
-                    />
-                  </Grid>
-                }
-              />
-            </Tabs>
-          </Paper>
+        <Box className={classes.tabContainer}>
+          <Tabs
+            value={selectedTabIndex}
+            onChange={(_, newTabIndex) => setSelectedTabIndex(newTabIndex)}
+            textColor="primary"
+            indicatorColor="primary"
+            variant="fullWidth"
+            centered
+          >
+            <Tab disabled={isLoading} className={classes.tab} label="Steps" />
+            <Tab
+              disabled={isLoading}
+              className={classes.tab}
+              label={
+                <Grid container alignItems="center" justify="center">
+                  <span>Contacts</span>
+                  <Chip
+                    className={classes.chip}
+                    label={flow ? flow.active_flows : 0}
+                  />
+                </Grid>
+              }
+            />
+          </Tabs>
         </Box>
         {warning && (
           <Box mb={1}>

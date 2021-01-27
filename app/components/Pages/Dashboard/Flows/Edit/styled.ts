@@ -1,12 +1,15 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import { Theme } from '@material-ui/core'
 
-import { brandBackground } from 'views/utils/colors'
-
-export const PageContainer = styled.div`
-  padding: 0 1.5rem 4.5rem;
-  height: auto;
-  min-height: 100vh;
-  background: ${brandBackground};
+export const PageContainer = styled.div<{
+  theme: Theme
+}>`
+  ${({ theme }) => css`
+    margin-top: ${theme.spacing(3)}px;
+    padding-bottom: ${theme.spacing(2)}px;
+    height: auto;
+    min-height: 100vh;
+  `}
 `
 
 export const TabPanel = styled.div`

@@ -77,8 +77,8 @@ export default function Field(props: Props) {
         )}
         {!props.disabled && (
           <Typography
-            style={props.value ? { marginLeft: theme.spacing(2) } : {}}
-            variant="subtitle2"
+            style={props.value ? { marginLeft: theme.spacing(1) } : {}}
+            variant="body2"
             color="secondary"
           >
             {props.value ? 'Edit' : `Add ${props.name}`}
