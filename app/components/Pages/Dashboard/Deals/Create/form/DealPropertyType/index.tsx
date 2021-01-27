@@ -9,18 +9,15 @@ import {
 
 import { propertyTypes } from 'deals/utils/property-types'
 
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+
 import { RadioGroup } from 'components/RadioGroup'
 
-import { useFormContext } from '../../context/use-form-context'
+export function DealPropertyType() {
+  const wizard = useWizardContext()
+  const { step } = useSectionContext()
 
-interface Props {
-  step?: number
-}
-
-export function DealPropertyType({ step }: Props) {
-  const wizard = useWizardForm()
-  const context = useFormContext()
   const theme = useTheme<Theme>()
 
   const handleChange = (value: IDealPropertyType) => {
@@ -28,13 +25,13 @@ export function DealPropertyType({ step }: Props) {
       wizard.next()
     }
 
-    context.updateForm({
-      propertyType: value
-    })
+    // context.updateForm!({
+    //   propertyType: value
+    // })
   }
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>What is the property type?</QuestionTitle>
       <QuestionForm>
         <RadioGroup

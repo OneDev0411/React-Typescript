@@ -23,9 +23,10 @@ import {
 import DealRole from 'components/DealRole'
 
 import TeamAgents from 'components/TeamAgents'
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
-import { useFormContext } from '../../context/use-form-context'
+import { useCreationContext } from '../../context/use-creation-context'
 import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
 
 import { UserRow } from '../../components/UserRow'
@@ -63,21 +64,24 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  step?: number
   title: string
-  agentSide: IDealType
+  side: IDealType
+  roles: IDealRole[]
   isCommissionRequired: boolean
+  onChange: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
 }
 
 export function DealCoAgent({
-  step,
   title,
-  agentSide,
-  isCommissionRequired
+  side,
+  roles,
+  isCommissionRequired,
+  onChange
 }: Props) {
   const classes = useStyles()
-  const wizard = useWizardForm()
-  const context = useFormContext()
+  const wizard = useWizardContext()
+  const { step } = useSectionContext()
+  const { deal, user } = useCreationContext()
   const dispatch = useDispatch()
 
   const [selectedRole, setSelectedRole] = useState<
@@ -85,21 +89,25 @@ export function DealCoAgent({
   >(null)
   const [searchCriteria, setSearchCriteria] = useState<string>('')
 
-  const allowedRoles = getAllowedRoles(agentSide)
+  const allowedRoles = getAllowedRoles(side)
+  const agentRoles = roles.filter(client => allowedRoles.includes(client.role))
 
-  const roles = useSelector<IAppState, IDealRole[]>(({ deals }) => {
-    return context.deal
-      ? (selectDealRoles(
-          deals.roles,
-          context.deal
-        ).filter((client: IDealRole) =>
-          allowedRoles.includes(client.role)
-        ) as IDealRole[])
-      : []
-  })
+  const handleUpsertRole = (role: IDealRole, type: 'create' | 'update') => {
+    if (role.deal) {
+      return
+    }
 
-  const handleRemove = async (role: IDealRole) => {
-    return dispatch(deleteRole(context.deal!.id, role.id))
+    onChange?.(role, type)
+  }
+
+  const handleDeleteRole = (role: IDealRole) => {
+    if (role.deal) {
+      dispatch(deleteRole(deal!.id, role.id))
+
+      return
+    }
+
+    onChange?.(role, 'delete')
   }
 
   const handleNext = () => {
@@ -108,35 +116,38 @@ export function DealCoAgent({
     }
   }
 
-  if (wizard.lastVisitedStep < step!) {
+  if (wizard.lastVisitedStep < step) {
     return null
   }
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
       {selectedRole ? (
         <Box mt={1}>
           <DealRole
             isOpen
-            deal={context.deal}
-            user={context.user}
-            dealSide={context.form.side}
+            deal={deal}
+            user={user}
+            dealSide={side}
             form={selectedRole}
             allowedRoles={allowedRoles}
             isCommissionRequired={isCommissionRequired}
+            onUpsertRole={handleUpsertRole}
+            onDeleteRole={handleDeleteRole}
             onClose={() => setSelectedRole(null)}
           />
         </Box>
       ) : (
         <Box display="flex" flexWrap="wrap">
-          {roles.map(agent => (
+          {agentRoles.map(role => (
             <RoleCard
-              key={agent.id}
-              role={agent}
-              onClickEdit={() => setSelectedRole(agent)}
-              onClickRemove={() => handleRemove(agent)}
+              key={role.id}
+              role={role}
+              readonly={!deal && !!role.deal}
+              onClickEdit={() => setSelectedRole(role)}
+              onClickRemove={() => handleDeleteRole(role)}
             />
           ))}
         </Box>

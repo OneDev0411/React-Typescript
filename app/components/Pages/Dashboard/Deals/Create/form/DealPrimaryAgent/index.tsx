@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, CircularProgress, makeStyles, Theme } from '@material-ui/core'
+
+import { useDispatch } from 'react-redux'
 
 import {
   QuestionSection,
@@ -10,9 +12,12 @@ import {
 import DealRole from 'components/DealRole'
 
 import TeamAgents from 'components/TeamAgents'
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
-import { useFormContext } from '../../context/use-form-context'
+import { deleteRole } from 'models/Deal/role'
+
+import { useCreationContext } from '../../context/use-creation-context'
 import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
 
 import { UserRow } from '../../components/UserRow'
@@ -47,107 +52,89 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  step?: number
   title: string
-  agentSide: IDealType
+  side: IDealType
   isCommissionRequired: boolean
-  onFinishStep?: (agents: Record<number, IDealFormRole>) => Promise<void>
+  roles: IDealRole[]
+  onChange: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
 }
 
 export function DealPrimaryAgent({
-  step,
   title,
-  agentSide,
+  side,
+  roles,
   isCommissionRequired,
-  onFinishStep
+  onChange
 }: Props) {
   const classes = useStyles()
-  const wizard = useWizardForm()
-  const context = useFormContext()
+  const wizard = useWizardContext()
+  const { step } = useSectionContext()
+  const { deal, user } = useCreationContext()
+
+  const dispatch = useDispatch()
 
   const [selectedRole, setSelectedRole] = useState<
     Nullable<Partial<IDealFormRole>>
   >(null)
 
-  if (wizard.lastVisitedStep < step!) {
+  const allowedRoles = getRoles(side)
+  const agentRoles = roles.filter(client => allowedRoles.includes(client.role))
+
+  useEffect(() => {
+    if (agentRoles.length > 0 && wizard.currentStep === step) {
+      wizard.next()
+    }
+  }, [step, wizard, agentRoles])
+
+  const handleUpsertRole = async (
+    role: IDealFormRole,
+    type: 'create' | 'update'
+  ) => {
+    onChange(role, type)
+  }
+
+  const handleDeleteRole = (role: IDealFormRole) => {
+    if (deal) {
+      dispatch(deleteRole(deal!.id, role.id))
+
+      return
+    }
+
+    onChange?.(role, 'delete')
+  }
+
+  if (wizard.lastVisitedStep < step) {
     return null
   }
 
-  const allowedRoles = getAllowedRoles(agentSide)
-
-  const list = Object.values(context.form.primaryAgents ?? {}).filter(agent =>
-    allowedRoles.includes(agent.role)
-  )
-
-  const handleUpsert = async (agent: IDealFormRole) => {
-    const agents = {
-      ...context.form.primaryAgents,
-      [agent.id]: agent
-    }
-
-    context.updateForm({
-      primaryAgents: agents
-    })
-
-    if (onFinishStep) {
-      wizard.setShowLoading(true)
-
-      await onFinishStep(agents)
-
-      wizard.setShowLoading(false)
-
-      handleNext(0)
-    } else {
-      handleNext()
-    }
-  }
-
-  const handleNext = (delay?: number) => {
-    if (wizard.currentStep === step) {
-      wizard.next(delay)
-    }
-  }
-
-  const handleRemove = (agent: IDealFormRole) => {
-    context.updateForm({
-      primaryAgents: Object.entries(list).reduce((acc, [id, item]) => {
-        if (item.id === agent.id) {
-          return acc
-        }
-
-        return {
-          ...acc,
-          [id]: item
-        }
-      }, {})
-    })
-  }
-
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
       {selectedRole ? (
         <Box mt={1}>
           <DealRole
             isOpen
-            user={context.user}
-            dealSide={context.form.side}
+            deal={deal}
+            user={user}
+            dealSide={side}
             form={selectedRole}
             allowedRoles={allowedRoles}
             isCommissionRequired={isCommissionRequired}
-            onUpsertRole={handleUpsert}
+            onUpsertRole={handleUpsertRole}
+            onDeleteRole={handleDeleteRole}
             onClose={() => setSelectedRole(null)}
           />
         </Box>
       ) : (
         <Box display="flex" flexWrap="wrap">
-          {list.map(agent => (
+          {agentRoles.map(role => (
             <RoleCard
-              key={agent.id}
-              role={agent}
-              onClickEdit={() => setSelectedRole(agent)}
-              onClickRemove={() => handleRemove(agent)}
+              key={role.id}
+              role={role}
+              readonly={!deal && !!role.deal}
+              onClickEdit={() => setSelectedRole(role)}
+              onClickRemove={() => handleDeleteRole(role)}
             />
           ))}
         </Box>
@@ -156,8 +143,7 @@ export function DealPrimaryAgent({
       <QuestionForm>
         <Box
           style={{
-            display:
-              Object.keys(list).length === 0 && !selectedRole ? 'block' : 'none'
+            display: agentRoles.length === 0 && !selectedRole ? 'block' : 'none'
           }}
         >
           <TeamAgents flattenTeams isPrimaryAgent>
@@ -191,7 +177,7 @@ export function DealPrimaryAgent({
   )
 }
 
-function getAllowedRoles(type: IDealType): string[] {
+function getRoles(type: IDealType): string[] {
   if (type === 'Buying') {
     return ['BuyerAgent']
   }

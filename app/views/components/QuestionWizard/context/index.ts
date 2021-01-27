@@ -1,6 +1,6 @@
 import React from 'react'
 
-export interface IContextState {
+export interface IWizardState {
   currentStep: number
   lastVisitedStep: number
   totalSteps: number
@@ -12,4 +12,14 @@ export interface IContextState {
   setShowLoading: (state: boolean) => void
 }
 
-export const Context = React.createContext<IContextState | undefined>(undefined)
+export interface IWizardSectionState {
+  step: number
+}
+
+export const WizardContext = React.createContext<IWizardState | undefined>(
+  undefined
+)
+
+export const SectionContext = React.createContext<
+  IWizardSectionState | undefined
+>(undefined)

@@ -40,11 +40,17 @@ const useStyles = makeStyles(
 
 interface Props {
   role: IDealFormRole | IDealRole
+  readonly?: boolean
   onClickEdit: () => void
   onClickRemove: (() => void) | (() => Promise<void>)
 }
 
-export function RoleCard({ role, onClickEdit, onClickRemove }: Props) {
+export function RoleCard({
+  role,
+  readonly = false,
+  onClickEdit,
+  onClickRemove
+}: Props) {
   const classes = useStyles()
   const [isRemoving, setIsRemoving] = useState(false)
 
@@ -59,6 +65,10 @@ export function RoleCard({ role, onClickEdit, onClickRemove }: Props) {
     setIsRemoving(false)
   }
 
+  if (isRemoving) {
+    return null
+  }
+
   return (
     <Box display="flex" alignItems="flex-start" className={classes.root}>
       <Box flex={2} className={classes.avatarContainer}>
@@ -66,11 +76,10 @@ export function RoleCard({ role, onClickEdit, onClickRemove }: Props) {
       </Box>
       <Box flex={6}>
         <Typography variant="body2">{getLegalFullName(role)}</Typography>
-        {role.email && (
-          <Typography variant="body2" className={classes.detail}>
-            {role.email}
-          </Typography>
-        )}
+
+        <Typography variant="body2" className={classes.detail}>
+          {role.role}
+        </Typography>
 
         {role.current_address && (
           <Box my={1}>
@@ -81,13 +90,13 @@ export function RoleCard({ role, onClickEdit, onClickRemove }: Props) {
 
       <Box display="flex" flex={2}>
         <Box pl={2}>
-          <IconButton size="medium" onClick={onClickEdit}>
+          <IconButton size="medium" disabled={readonly} onClick={onClickEdit}>
             <SvgIcon path={mdiAccountEditOutline} size={muiIconSizes.medium} />
           </IconButton>
         </Box>
 
         <Box>
-          <IconButton size="medium" onClick={handleRemove}>
+          <IconButton size="medium" disabled={readonly} onClick={handleRemove}>
             <SvgIcon path={mdiDeleteOutline} size={muiIconSizes.medium} />
           </IconButton>
         </Box>

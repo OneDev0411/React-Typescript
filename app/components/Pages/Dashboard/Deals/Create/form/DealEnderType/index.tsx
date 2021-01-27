@@ -1,4 +1,5 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 
 import {
   QuestionSection,
@@ -6,32 +7,44 @@ import {
   QuestionForm
 } from 'components/QuestionWizard'
 
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+
+import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
 import { RadioGroup } from 'components/RadioGroup'
 
-import { useFormContext } from '../../context/use-form-context'
+import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
+import { upsertContexts } from 'actions/deals'
+
+import { useCreationContext } from '../../context/use-creation-context'
 
 interface Props {
-  step?: number
+  onChange: (value: IDealEnderType) => void
 }
 
-export function DealEnderType({ step }: Props) {
-  const wizard = useWizardForm()
-  const context = useFormContext()
+export function DealEnderType({ onChange }: Props) {
+  const wizard = useWizardContext()
+  const { step } = useSectionContext()
+  const { deal } = useCreationContext()
+
+  const dispatch = useDispatch()
 
   const handleChange = (value: IDealEnderType) => {
+    if (deal) {
+      const data = createUpsertObject(deal, 'ender_type', value, false)
+
+      dispatch(upsertContexts(deal!.id, [data]))
+    } else {
+      onChange(value)
+    }
+
     if (wizard.currentStep === step) {
       wizard.next()
     }
-
-    context.updateForm({
-      enderType: value
-    })
   }
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>Who are you repersenting?</QuestionTitle>
       <QuestionForm>
         <RadioGroup

@@ -49,7 +49,7 @@ declare interface IDealRole {
   brokerwolf_contact_type: string | null
   brokerwolf_id: string | null
   brokerwolf_row_version: string | null
-  checklist: unknown
+  checklist: UUID
   commission_dollar: number | null
   commission_percentage: number | null
   company_title: string

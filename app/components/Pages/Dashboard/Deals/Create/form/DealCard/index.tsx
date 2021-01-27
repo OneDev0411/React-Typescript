@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   Box,
-  Avatar,
   Chip,
   Typography,
   Button,
@@ -21,7 +20,7 @@ import {
 import { goTo } from 'utils/go-to'
 import { getStatusColorClass } from 'utils/listing'
 
-import { useFormContext } from '../../context/use-form-context'
+import { useCreationContext } from '../../context/use-creation-context'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -50,7 +49,7 @@ interface Props {
 }
 
 export function DealCard({ step }: Props) {
-  const { deal } = useFormContext()
+  const { deal } = useCreationContext()
   const classes = useStyles()
 
   const openDeal = () => goTo(`/dashboard/deals/${deal!.id}`)

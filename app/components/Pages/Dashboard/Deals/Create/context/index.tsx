@@ -1,12 +1,9 @@
 import React from 'react'
 
-import type { Form } from '../types'
-
 export interface IContextState {
-  form: Partial<Form>
-  deal: Nullable<IDeal>
+  deal?: Nullable<IDeal>
+  checklist?: Nullable<IDealChecklist>
   user: IUser
-  updateForm: (data: Partial<Form>) => void
 }
 
 export const Context = React.createContext<IContextState | undefined>(undefined)

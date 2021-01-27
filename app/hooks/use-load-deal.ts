@@ -7,16 +7,21 @@ import { getDeal, getContextsByDeal, getForms } from 'actions/deals'
 import { selectContextsByDeal } from 'reducers/deals/contexts'
 import { IAppState } from 'reducers'
 
+import { selectDealById } from 'reducers/deals/list'
+
 import { useReduxDispatch } from './use-redux-dispatch'
 
 /**
  * returns full dump of deal inclduing its forms and contexts
  * @param id - the deal id
- * @param deal - the minimal version of the deal
  */
-export function useLoadFullDeal(id: string, deal: IDeal) {
-  const deals = useSelector((state: IAppState) => state.deals)
+export function useLoadFullDeal(id: UUID) {
   const dispatch = useReduxDispatch()
+
+  const deals = useSelector((state: IAppState) => state.deals)
+  const deal = useSelector<IAppState, IDeal>(({ deals }) =>
+    selectDealById(deals.list, id)
+  )
 
   const { contexts, forms } = useMemo(() => {
     return {
@@ -25,7 +30,7 @@ export function useLoadFullDeal(id: string, deal: IDeal) {
     }
   }, [deals.contexts, deals.forms, id])
 
-  const [dealWithChecklists, setDeal] = useState<IDeal>(deal)
+  const [dealWithChecklists, setDeal] = useState<IDeal | undefined>(deal)
   const [isFetchingCompleted, setIsFetchingCompleted] = useState<boolean>(false)
 
   const [isFetchingDeal, setIsFetchingDeal] = useState<boolean>(

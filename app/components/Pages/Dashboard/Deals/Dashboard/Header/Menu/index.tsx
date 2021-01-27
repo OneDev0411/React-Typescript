@@ -58,9 +58,7 @@ export const Menu = withRouter(
           <Button
             size="small"
             variant="outlined"
-            onClick={() =>
-              router.push(`/dashboard/deals/${deal.id}/create-offer`)
-            }
+            onClick={() => router.push(`/dashboard/deals/${deal.id}/offer`)}
           >
             Add Offer
           </Button>

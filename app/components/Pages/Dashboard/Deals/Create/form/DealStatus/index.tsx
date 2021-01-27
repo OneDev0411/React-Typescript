@@ -1,4 +1,5 @@
 import React from 'react'
+import { CircularProgress } from '@material-ui/core'
 
 import {
   QuestionSection,
@@ -7,44 +8,47 @@ import {
 } from 'components/QuestionWizard'
 
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
 import { RadioGroup } from 'components/RadioGroup'
 
-export function DealVisibility() {
+interface Props {
+  list: IDealStatus[]
+  onChange: (value: string) => void
+}
+
+export function DealStatus({ list, onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
 
-  const handleChange = (value: 'draft' | 'visible') => {
+  const handleChange = (value: string) => {
+    onChange(value)
+
     if (wizard.currentStep === step) {
       wizard.next()
     }
+  }
 
-    // context.updateForm!({
-    //   visibility: value
-    // })
+  if (wizard.lastVisitedStep < step) {
+    return null
+  }
+
+  if (list.length === 0) {
+    return <CircularProgress />
   }
 
   return (
     <QuestionSection>
-      <QuestionTitle>What is the stage of this deal?</QuestionTitle>
+      <QuestionTitle>What is the status of the deal?</QuestionTitle>
+
       <QuestionForm>
         <RadioGroup
           name="DealType"
-          options={[
-            {
-              label: 'Visible To Admin',
-              value: 'visible',
-              description:
-                'This deal is ready and I want to start submitting paperwork'
-            },
-            {
-              label: 'NOT Visible To Admin',
-              value: 'draft',
-              description:
-                'This deal is in an early stage and paperwork has just started'
-            }
-          ]}
+          options={list.map(status => ({
+            label: status.label,
+            value: status.label
+          }))}
           onChange={handleChange}
         />
       </QuestionForm>

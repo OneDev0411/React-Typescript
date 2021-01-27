@@ -10,7 +10,7 @@ import { useWizardForm } from 'components/QuestionWizard/use-context'
 
 import { RadioGroup } from 'components/RadioGroup'
 
-import { useFormContext } from '../../context/use-form-context'
+import { useCreationContext } from '../../context/use-creation-context'
 
 interface Props {
   step?: number
@@ -18,14 +18,14 @@ interface Props {
 
 export function DealType({ step }: Props) {
   const wizard = useWizardForm()
-  const context = useFormContext()
+  const context = useCreationContext()
 
   const handleChange = (value: IDealType) => {
     if (wizard.currentStep === step) {
       wizard.next()
     }
 
-    context.updateForm({
+    context.updateForm!({
       side: value
     })
   }

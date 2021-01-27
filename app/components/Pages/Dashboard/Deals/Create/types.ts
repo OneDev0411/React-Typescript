@@ -10,13 +10,13 @@ export type Address = {
   unit?: string
 }
 
-export interface Form {
-  visibility: IDealVisibility
-  side: IDealType
-  propertyType: IDealPropertyType
-  enderType: IDealEnderType
-  primaryAgents: Record<number, IDealFormRole>
-}
+// export interface Form {
+//   visibility: IDealVisibility
+//   side: IDealType
+//   propertyType: IDealPropertyType
+//   enderType: IDealEnderType
+//   primaryAgents: Record<number, IDealFormRole>
+// }
 
 export type IDealFormRole = IDealRole & {
   id: number | string

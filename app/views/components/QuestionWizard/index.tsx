@@ -2,19 +2,19 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { Box, Theme, useTheme } from '@material-ui/core'
 
-import { Context } from './context'
+import { WizardContext, SectionContext } from './context'
 
 import Loading from './Loading'
 
 interface Props {
   children: boolean | React.ReactNode | React.ReactNode
   defaultStep?: number
-  onFinish?: () => void
+  onFinish?: () => void | Promise<void>
 }
 
 export function QuestionWizard({
   children,
-  defaultStep = 0,
+  defaultStep = 1,
   onFinish = () => {}
 }: Props) {
   const refs = useRef<HTMLDivElement[]>([])
@@ -38,6 +38,12 @@ export function QuestionWizard({
   }
 
   const gotoNext = async (delay: number = 700) => {
+    if (currentStep + 1 > sections.length) {
+      onFinish()
+
+      return
+    }
+
     const nextStep = Math.min(currentStep + 1, sections.length)
 
     if (nextStep > lastVisitedStep) {
@@ -50,7 +56,7 @@ export function QuestionWizard({
   }
 
   const gotoPrevious = () => {
-    setCurrentStep(Math.max(currentStep - 1, 0))
+    setCurrentStep(Math.max(currentStep - 1, 1))
   }
 
   useEffect(() => {
@@ -74,7 +80,7 @@ export function QuestionWizard({
   }, [showLoading])
 
   return (
-    <Context.Provider
+    <WizardContext.Provider
       value={{
         currentStep,
         lastVisitedStep,
@@ -83,8 +89,8 @@ export function QuestionWizard({
         goto: gotoStep,
         next: gotoNext,
         previous: gotoPrevious,
-        first: () => gotoStep(0),
-        last: () => gotoStep(sections.length - 1)
+        first: () => gotoStep(1),
+        last: () => gotoStep(sections.length)
       }}
     >
       <div>
@@ -92,15 +98,25 @@ export function QuestionWizard({
           .filter(section => {
             return !!section
           })
-          .map((section, step) => (
-            <div
-              key={step}
-              ref={el => (refs.current[step] = el as HTMLDivElement)}
-              onClick={() => gotoStep(step)}
-            >
-              {React.cloneElement(section as React.ReactElement<any>, { step })}
-            </div>
-          ))}
+          .map((section, index) => {
+            const step = index + 1
+
+            return (
+              <div
+                key={step}
+                ref={el => (refs.current[step] = el as HTMLDivElement)}
+                onClick={() => gotoStep(step)}
+              >
+                <SectionContext.Provider
+                  value={{
+                    step
+                  }}
+                >
+                  {section}
+                </SectionContext.Provider>
+              </div>
+            )
+          })}
       </div>
 
       {showLoading && (
@@ -116,7 +132,7 @@ export function QuestionWizard({
           />
         </Box>
       )}
-    </Context.Provider>
+    </WizardContext.Provider>
   )
 }
 

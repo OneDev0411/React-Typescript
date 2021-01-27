@@ -8,7 +8,7 @@ import {
   Button,
   Avatar
 } from '@material-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import cn from 'classnames'
 import { useDebounce, useAsync } from 'react-use'
 
@@ -17,22 +17,21 @@ import { mdiPlus } from '@mdi/js'
 import { deleteRole } from 'actions/deals'
 import { searchContacts } from 'models/contacts/search-contacts'
 
-import { IAppState } from 'reducers'
-import { selectDealRoles } from 'reducers/deals/roles'
-
 import {
   QuestionSection,
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
 
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import DealRole from 'components/DealRole'
 
 import { RoleCard } from '../../components/RoleCard'
 
-import { useFormContext } from '../../context/use-form-context'
+import { useCreationContext } from '../../context/use-creation-context'
 import { convertContactToRole } from '../../../utils/roles'
 
 import type { IDealFormRole } from '../../types'
@@ -77,16 +76,27 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  step?: number
   title: string
   side: IDealType
+  roles: IDealRole[]
+  onChange: (role: IDealRole, type: 'update' | 'create' | 'delete') => void
 }
 
-export function DealClient({ step, side, title }: Props) {
+export function DealClient({ side, title, roles, onChange }: Props) {
   const classes = useStyles()
-  const wizard = useWizardForm()
-  const context = useFormContext()
+
+  const { deal, user, checklist } = useCreationContext()
+  const wizard = useWizardContext()
+  const { step } = useSectionContext()
+
   const dispatch = useDispatch()
+
+  const allowedRoles = getRoles(side)
+  const clientRoles = roles.filter(client => allowedRoles.includes(client.role))
+
+  /**
+   * list of all existence roles
+   */
 
   const [selectedRole, setSelectedRole] = useState<
     Nullable<Partial<IDealFormRole>>
@@ -99,6 +109,9 @@ export function DealClient({ step, side, title }: Props) {
     string
   >('')
 
+  /**
+   * debounce search criteria to don't search contacts on input change
+   */
   useDebounce(
     () => {
       setDebouncedSearchCriteria(searchCriteria)
@@ -107,6 +120,9 @@ export function DealClient({ step, side, title }: Props) {
     [searchCriteria]
   )
 
+  /**
+   * Search for contacts when the search criteria changes
+   */
   useAsync(async () => {
     if (searchCriteria.length < 3) {
       return
@@ -117,23 +133,9 @@ export function DealClient({ step, side, title }: Props) {
     setContacts(contacts)
   }, [debouncedSearchCriteria])
 
-  const allowedRoles = getRoles(context.form.side)
-
-  const roles = useSelector<IAppState, IDealRole[]>(({ deals }) => {
-    return context.deal
-      ? (selectDealRoles(
-          deals.roles,
-          context.deal
-        ).filter((client: IDealRole) =>
-          allowedRoles.includes(client.role)
-        ) as IDealRole[])
-      : []
-  })
-
-  const handleRemoveRole = async (role: IDealRole) => {
-    return dispatch(deleteRole(context.deal!.id, role.id))
-  }
-
+  /**
+   * Starts creating a new contact based on the given name
+   */
   const createNewContact = () => {
     const name = debouncedSearchCriteria.split(' ')
 
@@ -149,34 +151,59 @@ export function DealClient({ step, side, title }: Props) {
     }
   }
 
-  if (wizard.lastVisitedStep < step!) {
+  const handleUpsertRole = (role: IDealRole, type: 'create' | 'update') => {
+    if (role.deal) {
+      return
+    }
+
+    onChange?.(role, type)
+  }
+
+  const handleDeleteRole = (role: IDealRole) => {
+    if (role.deal) {
+      dispatch(deleteRole(deal!.id, role.id))
+
+      return
+    }
+
+    onChange?.(role, 'delete')
+  }
+
+  if (wizard.lastVisitedStep < step) {
     return null
   }
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
       {selectedRole ? (
         <Box mt={1}>
           <DealRole
             isOpen
-            deal={context.deal}
-            user={context.user}
-            dealSide={context.form.side}
+            user={user}
+            deal={deal}
+            checklist={checklist}
+            dealSide={side}
             form={selectedRole}
             allowedRoles={allowedRoles}
+            onUpsertRole={handleUpsertRole}
+            onDeleteRole={handleDeleteRole}
             onClose={() => setSelectedRole(null)}
           />
         </Box>
       ) : (
         <Box display="flex" flexWrap="wrap">
-          {roles.map(client => (
+          {clientRoles.map(role => (
             <RoleCard
-              key={client.id}
-              role={client}
-              onClickEdit={() => setSelectedRole(client)}
-              onClickRemove={() => handleRemoveRole(client)}
+              key={role.id}
+              role={role}
+              /* readonly prop only is valid in Create Offer flow
+               * and makes readonly the roles that have been already created
+               */
+              readonly={!deal && !!role.deal}
+              onClickEdit={() => setSelectedRole(role)}
+              onClickRemove={() => handleDeleteRole(role)}
             />
           ))}
         </Box>
@@ -192,11 +219,11 @@ export function DealClient({ step, side, title }: Props) {
           }}
         >
           <TextField
+            fullWidth
             onChange={e => setSearchCriteria(e.target.value)}
             placeholder="Search name or office"
             size="medium"
             className={classes.searchInput}
-            fullWidth
           />
 
           {debouncedSearchCriteria && (
@@ -250,7 +277,7 @@ export function DealClient({ step, side, title }: Props) {
               Skip
             </Button>
 
-            {roles.length > 0 && (
+            {clientRoles.length > 0 && (
               <Box ml={2}>
                 <Button
                   variant="contained"

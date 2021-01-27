@@ -20,19 +20,17 @@ import {
   QuestionForm
 } from 'components/QuestionWizard'
 
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { updateListing, upsertContexts } from 'actions/deals'
 
 import { useSearchLocation } from 'hooks/use-search-location'
 
-import { useFormContext } from '../../context/use-form-context'
+import { useCreationContext } from '../../context/use-creation-context'
 import { createAddressContext } from '../../../utils/create-address-context'
-
-interface Props {
-  step?: number
-}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -68,9 +66,11 @@ const useStyles = makeStyles(
   }
 )
 
-export function DealAddress({ step }: Props) {
-  const wizard = useWizardForm()
-  const context = useFormContext()
+export function DealAddress() {
+  const wizard = useWizardContext()
+  const { step } = useSectionContext()
+
+  const { deal } = useCreationContext()
 
   const classes = useStyles()
 
@@ -97,19 +97,19 @@ export function DealAddress({ step }: Props) {
   }
 
   const handleSubmit = async () => {
-    if (!context.deal) {
+    if (!deal) {
       return
     }
 
     if (place) {
       const address = await getParsedPlace(place!)
-      const contexts = createAddressContext(context.deal, address)
+      const contexts = createAddressContext(deal, address)
 
-      dispatch(upsertContexts(context.deal.id, contexts))
+      dispatch(upsertContexts(deal.id, contexts))
     }
 
     if (listing) {
-      dispatch(updateListing(context.deal.id, listing.id))
+      dispatch(updateListing(deal.id, listing.id))
     }
 
     if (wizard.currentStep === step) {
@@ -117,12 +117,12 @@ export function DealAddress({ step }: Props) {
     }
   }
 
-  if (wizard.lastVisitedStep < step!) {
+  if (wizard.lastVisitedStep < step) {
     return null
   }
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>
         What is the address of the subject property?
       </QuestionTitle>

@@ -75,6 +75,8 @@ export default function CreateDeal() {
     deal ? deal.property_type : form.propertyType
   )
 
+  const dealSide = deal ? deal.deal_type : form.side
+
   const updateForm = (data: Partial<Form>) => {
     setForm({
       ...form,
@@ -123,13 +125,13 @@ export default function CreateDeal() {
     )
   }
 
+  return null
+
   return (
     <Context.Provider
       value={{
-        form,
         deal,
-        user,
-        updateForm
+        user
       }}
     >
       <Box className={classes.root}>
@@ -139,9 +141,9 @@ export default function CreateDeal() {
 
           <DealPropertyType />
 
-          {form.side === 'Buying' && <DealEnderType />}
+          {dealSide === 'Buying' && <DealEnderType />}
 
-          {form.side === 'Buying' && (
+          {dealSide === 'Buying' && (
             <DealPrimaryAgent
               agentSide="Buying"
               isCommissionRequired={isDoubleEnded}
@@ -149,7 +151,7 @@ export default function CreateDeal() {
             />
           )}
 
-          {form.side && (
+          {dealSide && (
             <DealPrimaryAgent
               isCommissionRequired
               agentSide="Selling"
@@ -160,7 +162,7 @@ export default function CreateDeal() {
 
           <DealAddress />
 
-          {form.side === 'Buying' && (
+          {dealSide === 'Buying' && (
             <DealCoAgent
               agentSide="Buying"
               isCommissionRequired={isDoubleEnded}
@@ -168,7 +170,7 @@ export default function CreateDeal() {
             />
           )}
 
-          {form.side && (
+          {dealSide && (
             <DealCoAgent
               isCommissionRequired
               agentSide="Selling"
@@ -176,14 +178,14 @@ export default function CreateDeal() {
             />
           )}
 
-          {form.side === 'Buying' && (
+          {dealSide === 'Buying' && (
             <DealClient
               side="Buying"
               title="Enter buyer information as shown on offer"
             />
           )}
 
-          {form.side === 'Selling' && (
+          {dealSide === 'Selling' && (
             <DealClient
               side="Selling"
               title="Enter the seller’s legal information"

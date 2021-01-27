@@ -23,14 +23,16 @@ import {
 import DatePicker from 'components/DatePicker'
 import { MaskedInput } from 'components/MaskedInput'
 
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+
 import { getField } from 'models/Deal/helpers/context'
 
-import { useFormContext } from '../../context/use-form-context'
+import { useCreationContext } from '../../context/use-creation-context'
 
 interface Props {
-  step?: number
   context: IDealBrandContext
+  onChange: (value: string | number) => void
 }
 
 const useStyles = makeStyles(
@@ -47,11 +49,13 @@ const useStyles = makeStyles(
   }
 )
 
-export function DealContext({ step, context }: Props) {
-  const wizard = useWizardForm()
+export function DealContext({ context, onChange }: Props) {
   const classes = useStyles()
-  const { deal } = useFormContext()
   const dispatch = useDispatch()
+
+  const wizard = useWizardContext()
+  const { step } = useSectionContext()
+  const { deal } = useCreationContext()
 
   const defaultValue = deal ? getField(deal, context.key) : ''
 
@@ -66,14 +70,27 @@ export function DealContext({ step, context }: Props) {
     // eslint-disable-next-line
   }, [defaultValue])
 
+  const getContextDate = () => {
+    if (!inputValue) {
+      return new Date()
+    }
+
+    if (typeof inputValue === 'number') {
+      return new Date(inputValue * 1000)
+    }
+
+    return new Date(inputValue)
+  }
+
   const handleSelectDate = (date: Date, type: 'day' | 'month' | 'year') => {
     if (type !== 'day') {
       return
     }
 
+    setInputValue(date)
+
     const value = fecha.format(date, 'YYYY-MM-DD')
 
-    setInputValue(value)
     handleSave(value)
   }
 
@@ -87,16 +104,16 @@ export function DealContext({ step, context }: Props) {
   }
 
   const handleSave = (value = inputValue) => {
-    try {
-      const data = createUpsertObject(deal, context.key, value, false)
+    if (deal) {
+      try {
+        const data = createUpsertObject(deal, context.key, value, false)
 
-      if (!data) {
-        throw new Error(`context ${context.key} is null`)
+        dispatch(upsertContexts(deal!.id, [data]))
+      } catch (e) {
+        console.log(e)
       }
-
-      dispatch(upsertContexts(deal!.id, [data]))
-    } catch (e) {
-      console.log(e)
+    } else {
+      onChange(value)
     }
 
     if (wizard.currentStep === step) {
@@ -136,12 +153,12 @@ export function DealContext({ step, context }: Props) {
     return []
   }
 
-  if (wizard.lastVisitedStep < step!) {
+  if (wizard.lastVisitedStep < step) {
     return null
   }
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>
         {contextType === 'Date' ? 'When' : 'What'} is the{' '}
         <span className={classes.label}>{context.label}</span> for this deal?
@@ -151,9 +168,7 @@ export function DealContext({ step, context }: Props) {
         <Box>
           {contextType === 'Date' && (
             <DatePicker
-              selectedDate={
-                defaultValue ? new Date(defaultValue * 1000) : new Date()
-              }
+              selectedDate={getContextDate()}
               onChange={handleSelectDate}
             />
           )}
@@ -162,6 +177,7 @@ export function DealContext({ step, context }: Props) {
             <Box>
               <TextField
                 fullWidth
+                size="small"
                 variant="outlined"
                 label={context.label}
                 InputProps={{
@@ -182,17 +198,19 @@ export function DealContext({ step, context }: Props) {
             </Box>
           )}
 
-          {contextType !== 'Date' && (
-            <Button
-              variant="contained"
-              color="secondary"
-              disabled={!inputValue}
-              className={classes.saveButton}
-              onClick={() => handleSave()}
-            >
-              Save
-            </Button>
-          )}
+          <Box textAlign="right">
+            {contextType !== 'Date' && (
+              <Button
+                variant="contained"
+                color="secondary"
+                disabled={!inputValue}
+                className={classes.saveButton}
+                onClick={() => handleSave()}
+              >
+                Save
+              </Button>
+            )}
+          </Box>
         </Box>
       </QuestionForm>
     </QuestionSection>

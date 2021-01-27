@@ -32,7 +32,8 @@ export function normalizeForm(values) {
     'office_license_number',
     'office_mls_id',
     'office_name',
-    'office_address'
+    'office_address',
+    'checklist'
   ]
 
   if (values.agent instanceof Object && values.agent.id) {

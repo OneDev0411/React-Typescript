@@ -2,7 +2,8 @@ import React from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 
-import { useWizardForm } from '../use-context'
+import { useWizardContext } from '../hooks/use-wizard-context'
+import { useSectionContext } from '../hooks/use-section-context'
 
 interface StyleProps {
   step: number
@@ -11,7 +12,6 @@ interface StyleProps {
 }
 
 interface Props {
-  step?: number
   children: React.ReactNode
 }
 
@@ -29,12 +29,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   })
 }))
 
-export function QuestionSection({ children, step }: Props) {
-  const context = useWizardForm()
+export function QuestionSection({ children }: Props) {
+  const { currentStep, lastVisitedStep } = useWizardContext()
+  const { step } = useSectionContext()
+
   const classes = useStyles({
-    step: step!,
-    currentStep: context.currentStep,
-    lastVisitedStep: context.lastVisitedStep
+    step,
+    currentStep,
+    lastVisitedStep
   })
 
   return <div className={classes.root}>{children}</div>

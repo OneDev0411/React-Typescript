@@ -35,6 +35,7 @@ const propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   deal: PropTypes.object,
+  checklist: PropTypes.object,
   form: PropTypes.object,
   allowedRoles: PropTypes.array,
   isRoleRemovable: PropTypes.bool,
@@ -46,6 +47,7 @@ const propTypes = {
 
 const defaultProps = {
   form: null,
+  checklist: null,
   isRoleRemovable: false,
   isCommissionRequired: true,
   showBrokerageFields: false,
@@ -68,7 +70,7 @@ export class DealRole extends React.Component {
       return this.formObject
     }
 
-    const { form } = this.props
+    const { form, checklist } = this.props
 
     this.formObject = {
       saveRoleInContacts: true,
@@ -76,6 +78,7 @@ export class DealRole extends React.Component {
       ...this.PreselectRole,
       ...getCommissionAttributes(form),
       role_type: this.getRoleType(),
+      checklist: checklist ? checklist.id : undefined,
       mls_id: form && form.agent ? form.agent.mlsid : ''
     }
 
@@ -210,15 +213,18 @@ export class DealRole extends React.Component {
     if (this.props.deal) {
       const newRoles = await this.props.createRoles(this.props.deal.id, [form])
 
-      this.props.onUpsertRole(newRoles[0])
+      this.props.onUpsertRole(newRoles[0], 'create')
 
       return
     }
 
-    this.props.onUpsertRole({
-      id: new Date().getTime(),
-      ...form
-    })
+    this.props.onUpsertRole(
+      {
+        id: new Date().getTime(),
+        ...form
+      },
+      'create'
+    )
   }
 
   updateRole = async form => {
@@ -226,7 +232,7 @@ export class DealRole extends React.Component {
       ? await this.props.updateRole(this.props.deal.id, form)
       : form
 
-    this.props.onUpsertRole(updatedRole)
+    this.props.onUpsertRole(updatedRole, 'update')
   }
 
   validate = async values => {

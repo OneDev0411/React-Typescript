@@ -4,7 +4,8 @@ import { getActiveTeamId } from 'utils/user-teams'
 export function getDealContexts(
   user: IUser,
   dealType?: IDealType,
-  dealPropertyType?: IDealPropertyType
+  dealPropertyType?: IDealPropertyType,
+  hasActiveOffer = false
 ): IDealBrandContext[] {
   if (!dealType || !dealPropertyType) {
     return []
@@ -12,7 +13,7 @@ export function getDealContexts(
 
   const id = getActiveTeamId(user)
 
-  return getItems(id, dealType, dealPropertyType).filter(
+  return getItems(id, dealType, dealPropertyType, hasActiveOffer).filter(
     (field: IDealBrandContext) => {
       if (!field.mandatory) {
         return false
