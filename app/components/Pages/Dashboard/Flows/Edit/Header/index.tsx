@@ -1,14 +1,43 @@
 import React from 'react'
-import { Button, Tooltip, Box } from '@material-ui/core'
+import {
+  Button,
+  IconButton,
+  Tooltip,
+  Box,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 
-import PageHeader from 'components/PageHeader'
-import { CloseButton } from 'components/Button/CloseButton'
-import { Divider } from 'components/Divider'
+import { mdiClose } from '@mdi/js'
 
-import { brandBackground } from 'views/utils/colors'
+import { goTo } from 'utils/go-to'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { nameValidate, descriptionValidate } from './helpers'
 import Field from './Field'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      display: 'flex',
+      alignItems: 'center',
+      padding: theme.spacing(3),
+      width: '100%'
+    },
+    titleContainer: {
+      width: 0,
+      flexGrow: 1,
+      marginRight: theme.spacing(3),
+      display: 'flex',
+      flexDirection: 'column'
+    },
+    duplicateBtn: {
+      marginRight: theme.spacing(1)
+    }
+  }),
+  { name: 'FlowHeader' }
+)
 
 interface Props {
   disableEdit?: boolean
@@ -25,23 +54,13 @@ export default function Header({
   onChange,
   onDuplicateClick
 }: Props) {
+  const classes = useStyles()
+
   return (
-    <Box
-      width="100%"
-      padding={3}
-      style={{ backgroundColor: brandBackground }}
-      display="flex"
-      alignItems="flex-start"
-    >
-      <Box
-        width={0}
-        flexGrow={1}
-        marginRight={3}
-        display="flex"
-        flexDirection="column"
-      >
+    <Box className={classes.container}>
+      <Box className={classes.titleContainer}>
         <Field
-          variant="h5"
+          variant="h6"
           name="name"
           value={name}
           disabled={disableEdit}
@@ -49,7 +68,7 @@ export default function Header({
           onChange={value => onChange({ name: value })}
         />
         <Field
-          variant="subtitle1"
+          variant="body2"
           name="description"
           value={description}
           disabled={disableEdit}
@@ -57,20 +76,24 @@ export default function Header({
           onChange={value => onChange({ description: value })}
         />
       </Box>
-      <PageHeader.Menu>
+      <Box>
         <Tooltip title="Duplicate this Flow">
-          <Button variant="outlined" onClick={onDuplicateClick}>
+          <Button
+            variant="outlined"
+            size="small"
+            className={classes.duplicateBtn}
+            onClick={onDuplicateClick}
+          >
             Duplicate
           </Button>
         </Tooltip>
-        <Divider vertical height="1.5rem" margin="0 1.5rem" />
-        <CloseButton
-          isFit
-          iconSize="large"
-          inverse
-          defaultBackUrl="/dashboard/account/flows"
-        />
-      </PageHeader.Menu>
+        <IconButton
+          size="small"
+          onClick={() => goTo('/dashboard/account/flows')}
+        >
+          <SvgIcon path={mdiClose} />
+        </IconButton>
+      </Box>
     </Box>
   )
 }

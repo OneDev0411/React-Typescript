@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Typography from '@material-ui/core/Typography'
+import { Typography, useTheme, Theme } from '@material-ui/core'
 import { Variant } from '@material-ui/core/styles/createTypography'
 
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
@@ -17,6 +17,7 @@ interface Props {
 }
 
 export default function Field(props: Props) {
+  const theme = useTheme<Theme>()
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [value, setValue] = useState(props.value || '')
@@ -64,15 +65,21 @@ export default function Field(props: Props) {
     return (
       <Container>
         {props.value && (
-          <Typography variant={props.variant} noWrap>
+          <Typography
+            variant={props.variant}
+            noWrap
+            color={
+              props.name === 'description' ? 'textSecondary' : 'textPrimary'
+            }
+          >
             {props.value}
           </Typography>
         )}
         {!props.disabled && (
           <Typography
-            style={props.value ? { marginLeft: '1rem' } : {}}
+            style={props.value ? { marginLeft: theme.spacing(2) } : {}}
             variant="subtitle2"
-            color="primary"
+            color="secondary"
           >
             {props.value ? 'Edit' : `Add ${props.name}`}
           </Typography>
@@ -87,8 +94,8 @@ export default function Field(props: Props) {
         value={value}
         placeholder={`Flow's ${[props.name]}`}
         style={
-          props.variant === 'h5'
-            ? { fontSize: '1.5rem', fontFamily: 'Merriweather' }
+          props.name === 'name'
+            ? { fontSize: theme.typography.h6.fontSize }
             : {}
         }
         onChange={setValue}
