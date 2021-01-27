@@ -1,15 +1,9 @@
 import React, { useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
-import {
-  Box,
-  Grid,
-  Tooltip,
-  Typography,
-  Card,
-  CardContent
-} from '@material-ui/core'
+import { Box, Grid, Tooltip, Typography } from '@material-ui/core'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { mdiDrag } from '@mdi/js'
+import cn from 'classnames'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useRaisedMuiCard from 'hooks/use-raised-mui-card'
@@ -29,10 +23,15 @@ import ScheduledEmailForm from '../New/ScheduledEmailForm'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    cardContent: {
-      '&:last-child': {
-        paddingBottom: `${theme.spacing(2)}px`
-      }
+    itemContent: {
+      background: theme.palette.background.paper,
+      margin: theme.spacing(2),
+      border: `1px solid ${theme.palette.divider}`,
+      borderRadius: theme.shape.borderRadius
+    },
+    viewStepContainer: {
+      padding: theme.spacing(1),
+      cursor: 'pointer'
     }
   })
 )
@@ -63,6 +62,7 @@ export default function Item({
   onReviewEmailTemplateClick
 }: Props) {
   const classes = useStyles()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { isRaised, raise, stopRaise } = useRaisedMuiCard()
   const [isEditing, setIsEditing] = useState(false)
 
@@ -79,35 +79,31 @@ export default function Item({
     return (
       <Grid item xs={12} style={{ position: 'relative' }}>
         <StepIndex>{index + 1}</StepIndex>
-        <Box m={2}>
-          <Card>
-            <CardContent className={classes.cardContent}>
-              <Grid container item alignItems="center" xs={12}>
-                {step.event && (
-                  <EventForm
-                    onCancel={() => setIsEditing(false)}
-                    onSubmit={onUpdate}
-                    onDelete={() => onDelete(step)}
-                    step={step}
-                    startFrom={getNextStepStartFrom(prevStep)}
-                  />
-                )}
-                {step.email && (
-                  <ScheduledEmailForm
-                    onCancel={() => setIsEditing(false)}
-                    onSubmit={onUpdate}
-                    onDelete={() => onDelete(step)}
-                    step={step}
-                    templates={emailTemplates}
-                    defaultSelectedTemplate={defaultSelectedEmailTemplate}
-                    startFrom={getNextStepStartFrom(prevStep)}
-                    onNewTemplateClick={onNewEmailTemplateClick}
-                    onReviewTemplateClick={onReviewEmailTemplateClick}
-                  />
-                )}
-              </Grid>
-            </CardContent>
-          </Card>
+        <Box className={classes.itemContent}>
+          <Grid container item alignItems="center" xs={12}>
+            {step.event && (
+              <EventForm
+                onCancel={() => setIsEditing(false)}
+                onSubmit={onUpdate}
+                onDelete={() => onDelete(step)}
+                step={step}
+                startFrom={getNextStepStartFrom(prevStep)}
+              />
+            )}
+            {step.email && (
+              <ScheduledEmailForm
+                onCancel={() => setIsEditing(false)}
+                onSubmit={onUpdate}
+                onDelete={() => onDelete(step)}
+                step={step}
+                templates={emailTemplates}
+                defaultSelectedTemplate={defaultSelectedEmailTemplate}
+                startFrom={getNextStepStartFrom(prevStep)}
+                onNewTemplateClick={onNewEmailTemplateClick}
+                onReviewTemplateClick={onReviewEmailTemplateClick}
+              />
+            )}
+          </Grid>
         </Box>
       </Grid>
     )
@@ -127,95 +123,91 @@ export default function Item({
             {...draggableProvided.draggableProps}
           >
             <StepIndex>{index + 1}</StepIndex>
-            <Box m={2} style={{ cursor: 'pointer' }}>
-              <Card
-                onMouseOver={raise}
-                onFocus={raise}
-                onMouseOut={stopRaise}
-                onBlur={stopRaise}
-                raised={isRaised || draggableSnapshot.isDragging}
-                style={{ borderRadius: '8px' }}
-                onClick={() => {
-                  if (disableEdit) {
-                    return
-                  }
+            <Box
+              className={cn(classes.itemContent, classes.viewStepContainer)}
+              onMouseOver={raise}
+              onFocus={raise}
+              onMouseOut={stopRaise}
+              onBlur={stopRaise}
+              // raised={isRaised || draggableSnapshot.isDragging}
+              onClick={() => {
+                if (disableEdit) {
+                  return
+                }
 
-                  return setIsEditing(true)
-                }}
-              >
-                <CardContent className={classes.cardContent}>
-                  <Grid container item xs={12}>
-                    <Grid
-                      container
-                      item
-                      alignItems="center"
-                      justify="center"
-                      xs={1}
-                      {...draggableProvided.dragHandleProps}
-                    >
-                      <Tooltip
-                        title="Drag step to reorder"
-                        aria-label="drag to reorder step"
-                        hidden={disableEdit}
-                      >
-                        <SvgIcon path={mdiDrag} />
-                      </Tooltip>
-                    </Grid>
+                return setIsEditing(true)
+              }}
+            >
+              <Grid container item xs={12}>
+                <Grid
+                  container
+                  item
+                  alignItems="center"
+                  justify="center"
+                  xs={1}
+                  {...draggableProvided.dragHandleProps}
+                >
+                  <Tooltip
+                    title="Drag step to reorder"
+                    aria-label="drag to reorder step"
+                    hidden={disableEdit}
+                  >
+                    <SvgIcon path={mdiDrag} />
+                  </Tooltip>
+                </Grid>
 
-                    <Grid container justify="space-between" item xs={11}>
-                      <Grid
-                        container
-                        item
-                        alignItems="flex-end"
-                        direction="column"
-                        xs={4}
-                      >
-                        <Typography variant="subtitle1" color="textSecondary">
-                          {step.wait_days === 0 && 'The same day'}
-                          {step.wait_days > 0 && `Wait for ${step.wait_days} `}
-                          {step.wait_days === 1 && 'day'}
-                          {step.wait_days > 1 && 'days'}
-                        </Typography>
-                        <Typography variant="subtitle1" color="textSecondary">
-                          {`${hours}:${minutes} ${amPm}`}
-                        </Typography>
-                      </Grid>
-                      <Grid
-                        container
-                        item
-                        alignItems="flex-start"
-                        direction="column"
-                        xs={6}
-                      >
-                        <DescriptionRow>
-                          <DescriptionColumn>
-                            <Icon
-                              type={step.event ? step.event.task_type : 'Email'}
-                            />
-                          </DescriptionColumn>
-                          <DescriptionColumn>
-                            <DescriptionColumn>
-                              <Typography variant="subtitle1">
-                                {step.event && step.event.task_type}
-                                {step.email && 'Scheduled Email'}
-                              </Typography>
-                            </DescriptionColumn>
-                            <DescriptionColumn>
-                              <Typography
-                                variant="subtitle1"
-                                color="textSecondary"
-                                noWrap
-                              >
-                                {step.title}
-                              </Typography>
-                            </DescriptionColumn>
-                          </DescriptionColumn>
-                        </DescriptionRow>
-                      </Grid>
-                    </Grid>
+                <Grid container justify="space-between" item xs={11}>
+                  <Grid
+                    container
+                    item
+                    alignItems="flex-end"
+                    direction="column"
+                    xs={4}
+                  >
+                    <Typography variant="subtitle1" color="textSecondary">
+                      {step.wait_days === 0 && 'The same day'}
+                      {step.wait_days > 0 && `Wait for ${step.wait_days} `}
+                      {step.wait_days === 1 && 'day'}
+                      {step.wait_days > 1 && 'days'}
+                    </Typography>
+                    <Typography variant="subtitle1" color="textSecondary">
+                      {`${hours}:${minutes} ${amPm}`}
+                    </Typography>
                   </Grid>
-                </CardContent>
-              </Card>
+                  <Grid
+                    container
+                    item
+                    alignItems="flex-start"
+                    direction="column"
+                    xs={6}
+                  >
+                    <DescriptionRow>
+                      <DescriptionColumn>
+                        <Icon
+                          type={step.event ? step.event.task_type : 'Email'}
+                        />
+                      </DescriptionColumn>
+                      <DescriptionColumn>
+                        <DescriptionColumn>
+                          <Typography variant="subtitle1">
+                            {step.event && step.event.task_type}
+                            {step.email && 'Scheduled Email'}
+                          </Typography>
+                        </DescriptionColumn>
+                        <DescriptionColumn>
+                          <Typography
+                            variant="subtitle1"
+                            color="textSecondary"
+                            noWrap
+                          >
+                            {step.title}
+                          </Typography>
+                        </DescriptionColumn>
+                      </DescriptionColumn>
+                    </DescriptionRow>
+                  </Grid>
+                </Grid>
+              </Grid>
             </Box>
           </div>
         )}
