@@ -180,7 +180,8 @@ class Builder extends React.Component {
           columnsPadding: false,
           categoryLabel: BASICS_BLOCK_CATEGORY
         }
-      }
+      },
+      detectComponentByType: this.isWebsiteTemplate
     })
 
     this.initLoadedListingsAssets()
@@ -606,7 +607,8 @@ class Builder extends React.Component {
   refreshEditor = selectedTemplate => {
     const config = this.editor.getConfig()
 
-    config.avoidInlineStyle = !this.isMjmlTemplate
+    // TODO: ask Emil about the styling strategies
+    config.avoidInlineStyle = false //! this.isMjmlTemplate
     config.forceClass = !this.isMjmlTemplate
 
     const components = this.editor.DomComponents
@@ -636,6 +638,8 @@ class Builder extends React.Component {
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       this.registerEmailBlocks()
+    } else if (this.isWebsiteTemplate) {
+      this.registerWebsiteBlocks()
     }
   }
 
