@@ -107,30 +107,28 @@ export default function Item({
       <Box className={classes.stepContainer} position="relative">
         <Box className={classes.stepIndex}>{index + 1}</Box>
         <Box className={classes.itemContent}>
-          <Grid container item alignItems="center" xs={12}>
-            {step.event && (
-              <EventForm
-                onCancel={() => setIsEditing(false)}
-                onSubmit={onUpdate}
-                onDelete={() => onDelete(step)}
-                step={step}
-                startFrom={getNextStepStartFrom(prevStep)}
-              />
-            )}
-            {step.email && (
-              <ScheduledEmailForm
-                onCancel={() => setIsEditing(false)}
-                onSubmit={onUpdate}
-                onDelete={() => onDelete(step)}
-                step={step}
-                templates={emailTemplates}
-                defaultSelectedTemplate={defaultSelectedEmailTemplate}
-                startFrom={getNextStepStartFrom(prevStep)}
-                onNewTemplateClick={onNewEmailTemplateClick}
-                onReviewTemplateClick={onReviewEmailTemplateClick}
-              />
-            )}
-          </Grid>
+          {step.event && (
+            <EventForm
+              onCancel={() => setIsEditing(false)}
+              onSubmit={onUpdate}
+              onDelete={() => onDelete(step)}
+              step={step}
+              startFrom={getNextStepStartFrom(prevStep)}
+            />
+          )}
+          {step.email && (
+            <ScheduledEmailForm
+              onCancel={() => setIsEditing(false)}
+              onSubmit={onUpdate}
+              onDelete={() => onDelete(step)}
+              step={step}
+              templates={emailTemplates}
+              defaultSelectedTemplate={defaultSelectedEmailTemplate}
+              startFrom={getNextStepStartFrom(prevStep)}
+              onNewTemplateClick={onNewEmailTemplateClick}
+              onReviewTemplateClick={onReviewEmailTemplateClick}
+            />
+          )}
         </Box>
       </Box>
     )

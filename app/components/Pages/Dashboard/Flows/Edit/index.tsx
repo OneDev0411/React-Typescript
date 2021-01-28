@@ -9,7 +9,6 @@ import {
   Tab,
   Tabs as MUITabs,
   Chip,
-  useTheme,
   Theme,
   makeStyles,
   withStyles
@@ -64,6 +63,11 @@ const useStyles = makeStyles(
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(1)
     },
+    warnContainer: {
+      margin: theme.spacing(1, 0, 0, 0),
+      color: theme.palette.warning.contrastText,
+      ...theme.typography.body2
+    },
     tab: theme.typography.body1
   }),
   { name: 'FlowEditPage' }
@@ -79,7 +83,6 @@ const Tabs = withStyles((theme: Theme) => ({
 }))(MUITabs)
 
 function Edit(props: WithRouterProps) {
-  const theme = useTheme<Theme>()
   const classes = useStyles()
 
   const user = useSelector(selectUser)
@@ -380,15 +383,13 @@ function Edit(props: WithRouterProps) {
           </Tabs>
         </Box>
         {warning && (
-          <Box mb={1}>
-            <Callout
-              type="warn"
-              style={{ margin: 0, color: theme.palette.warning.contrastText }}
-              onClose={() => setWarning(null)}
-            >
-              {warning}
-            </Callout>
-          </Box>
+          <Callout
+            type="warn"
+            className={classes.warnContainer}
+            onClose={() => setWarning(null)}
+          >
+            {warning}
+          </Callout>
         )}
         <Box className={classes.contentContainer}>
           <TabPanel>

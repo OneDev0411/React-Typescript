@@ -1,13 +1,13 @@
 import React from 'react'
 import { Form, Field } from 'react-final-form'
-import { Grid, Box, Button, Divider, Typography } from '@material-ui/core'
+import { Grid, Box, Typography } from '@material-ui/core'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 
 import { TaskType } from 'components/NewEvent/components/TaskType'
-import { DangerButton } from 'components/Button/DangerButton'
 
 import { MAX_STEP_TITLE_LENGTH } from '../../../../constants'
+import { ActionFooter } from '../components/ActionFooter'
 
 import {
   timeToSeconds,
@@ -199,46 +199,12 @@ export default function EventForm({
                 </Box>
               </Grid>
             </Grid>
-
-            <Divider />
-
-            <Grid container item xs={12} style={{ marginTop: '1rem' }}>
-              <Grid container item xs={6} justify="flex-start">
-                {step && onDelete && (
-                  <DangerButton
-                    variant="text"
-                    disabled={submitting}
-                    onClick={async event => {
-                      event.stopPropagation()
-                      onDelete(step)
-                    }}
-                  >
-                    Delete
-                  </DangerButton>
-                )}
-              </Grid>
-              <Grid container item xs={6} justify="flex-end">
-                <Button
-                  variant="text"
-                  disabled={submitting}
-                  style={{ marginRight: '1rem' }}
-                  onClick={event => {
-                    event.stopPropagation()
-                    onCancel()
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={submitting}
-                  type="submit"
-                >
-                  {submitting ? 'Saving' : 'Save'}
-                </Button>
-              </Grid>
-            </Grid>
+            <ActionFooter
+              step={step || null}
+              isSubmiting={submitting}
+              onDelete={onDelete}
+              onCancel={onCancel}
+            />
           </form>
         )
       }}

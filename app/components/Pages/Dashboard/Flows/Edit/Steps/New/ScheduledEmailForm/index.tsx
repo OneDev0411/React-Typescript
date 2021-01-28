@@ -4,9 +4,9 @@ import { Grid, Box, Button, Typography, Tooltip } from '@material-ui/core'
 
 import { SelectInput } from 'components/Forms/SelectInput'
 import { MUITextInput } from 'components/Forms/MUITextInput'
-import { DangerButton } from 'components/Button/DangerButton'
 import { Divider } from 'components/Divider'
 
+import { ActionFooter } from '../components/ActionFooter'
 import { MAX_STEP_TITLE_LENGTH } from '../../../../constants'
 
 import {
@@ -272,45 +272,12 @@ export default function ScheduledEmailForm({
               </Grid>
             </Grid>
 
-            <Divider />
-
-            <Grid container item xs={12} style={{ marginTop: '1rem' }}>
-              <Grid container item xs={6} justify="flex-start">
-                {step && onDelete && (
-                  <DangerButton
-                    variant="text"
-                    disabled={submitting}
-                    onClick={async event => {
-                      event.stopPropagation()
-                      onDelete(step)
-                    }}
-                  >
-                    Delete
-                  </DangerButton>
-                )}
-              </Grid>
-              <Grid container item xs={6} justify="flex-end">
-                <Button
-                  variant="text"
-                  disabled={submitting}
-                  style={{ marginRight: '1rem' }}
-                  onClick={event => {
-                    event.stopPropagation()
-                    onCancel()
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={submitting}
-                  type="submit"
-                >
-                  {submitting ? 'Saving' : 'Save'}
-                </Button>
-              </Grid>
-            </Grid>
+            <ActionFooter
+              step={step || null}
+              isSubmiting={submitting}
+              onDelete={onDelete}
+              onCancel={onCancel}
+            />
           </form>
         )
       }}
