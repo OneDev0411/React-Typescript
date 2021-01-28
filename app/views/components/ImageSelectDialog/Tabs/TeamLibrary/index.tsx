@@ -110,14 +110,6 @@ function TeamLibrary({
     accept: 'image/*'
   })
 
-  const handleEdit = async (imageUrl: string) => {
-    if (!onEdit) {
-      return
-    }
-
-    onEdit(imageUrl)
-  }
-
   const handleDelete = (asset: IBrandAsset) => {
     dispatch(
       confirmation({
@@ -282,7 +274,7 @@ function TeamLibrary({
                     key={item.id}
                     onEditClick={
                       onEdit
-                        ? () => handleEdit(`/api/utils/cors/${btoa(imageUrl)}`)
+                        ? () => onEdit(`/api/utils/cors/${btoa(imageUrl)}`)
                         : undefined
                     }
                     onDeleteClick={

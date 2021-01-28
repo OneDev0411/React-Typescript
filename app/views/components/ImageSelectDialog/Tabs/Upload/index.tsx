@@ -31,7 +31,8 @@ export default function Upload({ onSelectFile }: UploadableImageTabProps) {
       bgcolor={
         isDragActive ? theme.palette.grey[400] : theme.palette.common.white
       }
-      {...{ ...getRootProps(), css: {} }}
+      {...getRootProps()}
+      css={{}}
     >
       <input {...getInputProps()} />
 

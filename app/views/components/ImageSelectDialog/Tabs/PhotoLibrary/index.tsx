@@ -11,14 +11,6 @@ import { usePhotoLibrary } from './hooks'
 function PhotoLibrary({ query, onSelect, onEdit }: SearchableImageTabProps) {
   const { isLoading, results } = usePhotoLibrary(query)
 
-  const handleEdit = async (imageUrl: string) => {
-    if (!onEdit) {
-      return
-    }
-
-    onEdit(imageUrl)
-  }
-
   if (isLoading) {
     return <Loading />
   }
@@ -33,7 +25,7 @@ function PhotoLibrary({ query, onSelect, onEdit }: SearchableImageTabProps) {
         return (
           <ImageThumbnail
             key={item.id}
-            onEditClick={onEdit ? () => handleEdit(item.url) : undefined}
+            onEditClick={onEdit ? () => onEdit(item.url) : undefined}
             onClick={() => onSelect(item.url)}
             src={item.url}
             alt={item.id}

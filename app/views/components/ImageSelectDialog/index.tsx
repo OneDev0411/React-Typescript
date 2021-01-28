@@ -63,7 +63,7 @@ export default function ImageSelectDialog({
     Nullable<File | string>
   >(null)
 
-  const isSerchableTabActive = isSearchableTab(selectedTab)
+  const isSearchableTabActive = isSearchableTab(selectedTab)
 
   const handleCloseImageEditor = () => {
     confirmation.setConfirmationModal({
@@ -130,7 +130,7 @@ export default function ImageSelectDialog({
             </Tabs>
           </Grid>
           <Grid item>
-            {isSerchableTabActive && (
+            {isSearchableTabActive && (
               <Box component="span" display="inline-flex" pr={1}>
                 <TextField
                   label="Search"
