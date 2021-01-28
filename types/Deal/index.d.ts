@@ -79,4 +79,5 @@ declare interface IDealRole {
   office_address?: string | null
   updated_at: number
   user: IUser
+  brand: UUID | null
 }

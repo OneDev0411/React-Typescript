@@ -14,20 +14,22 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 
 import { RadioGroup } from 'components/RadioGroup'
 
-export function DealPropertyType() {
+interface Props {
+  onChange: (value: IDealPropertyType) => void
+}
+
+export function DealPropertyType({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
 
   const theme = useTheme<Theme>()
 
   const handleChange = (value: IDealPropertyType) => {
+    onChange(value)
+
     if (wizard.currentStep === step) {
       wizard.next()
     }
-
-    // context.updateForm!({
-    //   propertyType: value
-    // })
   }
 
   return (

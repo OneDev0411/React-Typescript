@@ -6,32 +6,29 @@ import {
   QuestionForm
 } from 'components/QuestionWizard'
 
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
 import { RadioGroup } from 'components/RadioGroup'
 
-import { useCreationContext } from '../../context/use-creation-context'
-
 interface Props {
-  step?: number
+  onChange: (value: IDealType) => void
 }
 
-export function DealType({ step }: Props) {
-  const wizard = useWizardForm()
-  const context = useCreationContext()
+export function DealType({ onChange }: Props) {
+  const wizard = useWizardContext()
+  const { step } = useSectionContext()
 
   const handleChange = (value: IDealType) => {
+    onChange(value)
+
     if (wizard.currentStep === step) {
       wizard.next()
     }
-
-    context.updateForm!({
-      side: value
-    })
   }
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>Who are you repersenting?</QuestionTitle>
       <QuestionForm>
         <RadioGroup

@@ -7,10 +7,7 @@ import {
   TextField,
   Theme
 } from '@material-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
-
-import { IAppState } from 'reducers'
-import { selectDealRoles } from 'reducers/deals/roles'
+import { useDispatch } from 'react-redux'
 
 import { deleteRole } from 'actions/deals'
 
@@ -68,7 +65,7 @@ interface Props {
   side: IDealType
   roles: IDealRole[]
   isCommissionRequired: boolean
-  onChange: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
+  onChange?: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
 }
 
 export function DealCoAgent({

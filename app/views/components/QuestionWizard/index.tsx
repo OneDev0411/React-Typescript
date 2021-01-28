@@ -9,12 +9,14 @@ import Loading from './Loading'
 interface Props {
   children: boolean | React.ReactNode | React.ReactNode
   defaultStep?: number
+  onStepChange?: (step: number) => void
   onFinish?: () => void | Promise<void>
 }
 
 export function QuestionWizard({
   children,
   defaultStep = 1,
+  onStepChange = () => {},
   onFinish = () => {}
 }: Props) {
   const refs = useRef<HTMLDivElement[]>([])
@@ -64,6 +66,10 @@ export function QuestionWizard({
   }, [currentStep, lastVisitedStep])
 
   useEffect(() => {
+    onStepChange(currentStep)
+  }, [currentStep, onStepChange])
+
+  useEffect(() => {
     refs.current[currentStep]?.scrollIntoView({
       block: 'center',
       inline: 'center',
@@ -84,11 +90,12 @@ export function QuestionWizard({
       value={{
         currentStep,
         lastVisitedStep,
-        setShowLoading,
         totalSteps: sections.length,
         goto: gotoStep,
         next: gotoNext,
         previous: gotoPrevious,
+        isLoading: showLoading,
+        setLoading: setShowLoading,
         first: () => gotoStep(1),
         last: () => gotoStep(sections.length)
       }}

@@ -32,7 +32,7 @@ import { useCreationContext } from '../../context/use-creation-context'
 
 interface Props {
   context: IDealBrandContext
-  onChange: (value: string | number) => void
+  onChange?: (value: string | number) => void
 }
 
 const useStyles = makeStyles(
@@ -49,7 +49,7 @@ const useStyles = makeStyles(
   }
 )
 
-export function DealContext({ context, onChange }: Props) {
+export function DealContext({ context, onChange = () => {} }: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
 

@@ -27,6 +27,7 @@ import Deal from 'models/Deal'
 import { getDefinitionId } from 'models/Deal/helpers/dynamic-context'
 
 import { getDealContexts } from './helpers/get-deal-contexts'
+import { getChangedRoles } from './helpers/get-changed-roles'
 
 import { DealClient } from './form/DealClient'
 import { DealEnderType } from './form/DealEnderType'
@@ -75,24 +76,6 @@ export default function CreateOffer({ params }: Props) {
   const roles = useDealRoles(deal)
 
   const statusList = useStatusList(deal)
-
-  const handleRoleChange = (
-    roles: IDealRole[],
-    role: IDealRole,
-    type: 'create' | 'update' | 'delete'
-  ) => {
-    if (type === 'create') {
-      return roles.concat(role)
-    }
-
-    if (type === 'delete') {
-      return roles.filter(item => item.id !== role.id)
-    }
-
-    return roles.map(item => {
-      return item.id === role.id ? role : item
-    })
-  }
 
   const dealContexts = deal
     ? getDealContexts(user, 'Buying', deal.property_type, true)
@@ -212,7 +195,7 @@ export default function CreateOffer({ params }: Props) {
                 title="Enter buyer information as shown on offer"
                 roles={roles.concat(value)}
                 onChange={(role, type) =>
-                  onChange(handleRoleChange(value, role, type))
+                  onChange(getChangedRoles(value, role, type))
                 }
               />
             )}
@@ -234,7 +217,7 @@ export default function CreateOffer({ params }: Props) {
                 title="Enter Buyer Primary Agent’s information"
                 roles={roles.concat(value)}
                 onChange={(role, type) =>
-                  onChange(handleRoleChange(value, role, type))
+                  onChange(getChangedRoles(value, role, type))
                 }
               />
             )}
@@ -250,7 +233,7 @@ export default function CreateOffer({ params }: Props) {
                 title="Enter Buyer Co-Agent’s information"
                 roles={roles.concat(value)}
                 onChange={(role, type) =>
-                  onChange(handleRoleChange(value, role, type))
+                  onChange(getChangedRoles(value, role, type))
                 }
               />
             )}

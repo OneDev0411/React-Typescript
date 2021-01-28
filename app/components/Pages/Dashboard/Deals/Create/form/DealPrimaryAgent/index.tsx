@@ -55,16 +55,18 @@ interface Props {
   title: string
   side: IDealType
   isCommissionRequired: boolean
-  roles: IDealRole[]
+  roles?: IDealRole[]
   onChange: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
+  onFinishStep?: () => Promise<void>
 }
 
 export function DealPrimaryAgent({
   title,
   side,
-  roles,
+  roles = [],
   isCommissionRequired,
-  onChange
+  onFinishStep,
+  onChange = () => {}
 }: Props) {
   const classes = useStyles()
   const wizard = useWizardContext()
@@ -81,7 +83,11 @@ export function DealPrimaryAgent({
   const agentRoles = roles.filter(client => allowedRoles.includes(client.role))
 
   useEffect(() => {
-    if (agentRoles.length > 0 && wizard.currentStep === step) {
+    if (
+      agentRoles.length > 0 &&
+      wizard.currentStep === step &&
+      wizard.isLoading === false
+    ) {
       wizard.next()
     }
   }, [step, wizard, agentRoles])
@@ -90,7 +96,13 @@ export function DealPrimaryAgent({
     role: IDealFormRole,
     type: 'create' | 'update'
   ) => {
+    wizard.setLoading(true)
+
     onChange(role, type)
+
+    onFinishStep && (await onFinishStep())
+
+    wizard.setLoading(false)
   }
 
   const handleDeleteRole = (role: IDealFormRole) => {

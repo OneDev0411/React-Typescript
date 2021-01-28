@@ -11,18 +11,20 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 
 import { RadioGroup } from 'components/RadioGroup'
 
-export function DealVisibility() {
+interface Props {
+  onChange: (value: 'draft' | 'live') => void
+}
+
+export function DealVisibility({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
 
-  const handleChange = (value: 'draft' | 'visible') => {
+  const handleChange = (value: 'draft' | 'live') => {
+    onChange(value)
+
     if (wizard.currentStep === step) {
       wizard.next()
     }
-
-    // context.updateForm!({
-    //   visibility: value
-    // })
   }
 
   return (
@@ -34,7 +36,7 @@ export function DealVisibility() {
           options={[
             {
               label: 'Visible To Admin',
-              value: 'visible',
+              value: 'live',
               description:
                 'This deal is ready and I want to start submitting paperwork'
             },

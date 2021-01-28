@@ -79,7 +79,7 @@ interface Props {
   title: string
   side: IDealType
   roles: IDealRole[]
-  onChange: (role: IDealRole, type: 'update' | 'create' | 'delete') => void
+  onChange?: (role: IDealRole, type: 'update' | 'create' | 'delete') => void
 }
 
 export function DealClient({ side, title, roles, onChange }: Props) {

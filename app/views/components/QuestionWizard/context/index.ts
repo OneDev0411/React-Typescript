@@ -4,12 +4,13 @@ export interface IWizardState {
   currentStep: number
   lastVisitedStep: number
   totalSteps: number
+  isLoading: boolean
   goto: (step: number) => void
   next: (delay?: number) => void
+  setLoading: (status: boolean) => void
   previous: () => void
   first: () => void
   last: () => void
-  setShowLoading: (state: boolean) => void
 }
 
 export interface IWizardSectionState {
