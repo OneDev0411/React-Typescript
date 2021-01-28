@@ -14,6 +14,8 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 
 import { RadioGroup } from 'components/RadioGroup'
 
+import { useCreationContext } from '../../context/use-creation-context'
+
 interface Props {
   onChange: (value: IDealPropertyType) => void
 }
@@ -21,6 +23,7 @@ interface Props {
 export function DealPropertyType({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
+  const { deal } = useCreationContext()
 
   const theme = useTheme<Theme>()
 
@@ -33,7 +36,7 @@ export function DealPropertyType({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection>
+    <QuestionSection disabled={!!deal}>
       <QuestionTitle>What is the property type?</QuestionTitle>
       <QuestionForm>
         <RadioGroup

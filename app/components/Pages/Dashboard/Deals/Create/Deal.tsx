@@ -178,7 +178,7 @@ export default function CreateDeal() {
                   side="Buying"
                   isCommissionRequired={isDoubleEnded}
                   title="Enter Buyer Primary Agent’s information"
-                  roles={deal ? roles : value}
+                  roles={value}
                   onChange={(role, type) =>
                     onChange(getChangedRoles(value, role, type))
                   }
@@ -195,7 +195,7 @@ export default function CreateDeal() {
                 isCommissionRequired
                 side="Selling"
                 title="Enter Listing Primary Agent’s information"
-                roles={deal ? roles : value}
+                roles={value}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))
                 }

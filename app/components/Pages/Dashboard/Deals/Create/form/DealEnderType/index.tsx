@@ -44,7 +44,7 @@ export function DealEnderType({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection>
+    <QuestionSection disabled={!!deal}>
       <QuestionTitle>Who are you repersenting?</QuestionTitle>
       <QuestionForm>
         <RadioGroup
