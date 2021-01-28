@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Editor } from 'components/ImageEditor'
+import { EditorDialog } from 'components/ImageEditor'
 import uploadAsset from 'models/instant-marketing/upload-asset'
 
 import { Container, CropButton, Image } from './styled'
@@ -95,7 +95,7 @@ export class AssetImage extends React.Component {
         </CropButton>
 
         {this.state.isCropperOpen && (
-          <Editor
+          <EditorDialog
             file={`/api/utils/cors/${btoa(image)}`}
             dimensions={[
               targetElement.clientWidth * 2,

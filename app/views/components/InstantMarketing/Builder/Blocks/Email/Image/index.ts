@@ -17,7 +17,7 @@ export interface Options {
 }
 
 interface ImageBlock {
-  selectHandler: (selectedImage?: Image) => void
+  selectHandler: (selectedImageUrl?: Image) => void
 }
 
 export default function registerImageBlock(
@@ -25,7 +25,7 @@ export default function registerImageBlock(
   { onDrop }: Options
 ): ImageBlock {
   registerBlock(editor, {
-    label: 'Image Library',
+    label: 'Image/GIF',
     category: BASICS_BLOCK_CATEGORY,
     blockName,
     template,
@@ -34,22 +34,28 @@ export default function registerImageBlock(
 
   let modelHandle: any
 
-  const selectHandler = (selectedImage?: Image) => {
+  const selectHandler = (selectedImageUrl?: Image) => {
     if (!modelHandle) {
-      return
+      return false
     }
 
     const parent = modelHandle.parent()
 
-    if (selectedImage) {
+    if (!parent) {
+      return false
+    }
+
+    if (selectedImageUrl) {
       const mjml = nunjucks.renderString(adapt(parent, template), {
-        image: selectedImage.url
+        image: selectedImageUrl
       })
 
       parent.append(mjml, { at: modelHandle.opt.at })
     }
 
     modelHandle.remove()
+
+    return true
   }
 
   editor.on('block:drag:stop', (model: Model, block: any) => {
