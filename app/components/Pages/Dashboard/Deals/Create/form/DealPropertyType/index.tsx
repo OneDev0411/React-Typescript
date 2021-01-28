@@ -45,14 +45,6 @@ export function DealPropertyType({ onChange }: Props) {
             value: propertyType,
             label: propertyType
           }))}
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap'
-          }}
-          groupStyle={{
-            width: `calc(50% - ${theme.spacing(1)}px)`,
-            margin: theme.spacing(0, 1, 1, 0)
-          }}
           onChange={handleChange}
         />
       </QuestionForm>
