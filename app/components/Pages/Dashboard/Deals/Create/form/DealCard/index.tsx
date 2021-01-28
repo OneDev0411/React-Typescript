@@ -44,11 +44,7 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props {
-  step?: number
-}
-
-export function DealCard({ step }: Props) {
+export function DealCard() {
   const { deal } = useCreationContext()
   const classes = useStyles()
 
@@ -64,7 +60,7 @@ export function DealCard({ step }: Props) {
   const status = getStatus(deal)
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>Congrats! It's all set.</QuestionTitle>
       <QuestionForm>
         <Box textAlign="center">
