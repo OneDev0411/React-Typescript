@@ -29,8 +29,8 @@ const useStyles = makeStyles(
       backgroundColor: theme.palette.grey['50'],
       border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius,
-      padding: theme.spacing(0, 0.75),
-      marginBottom: theme.spacing(2),
+      padding: theme.spacing(0.25, 0.75),
+      marginBottom: theme.spacing(1),
       cursor: 'pointer'
     },
     content: {
@@ -109,7 +109,7 @@ export function RadioGroup({
                 onClick={() => handleChange(item.value)}
               >
                 <Typography variant="body1">{item.label}</Typography>
-                <Typography variant="caption" className={classes.description}>
+                <Typography variant="body2" className={classes.description}>
                   {item.description}
                 </Typography>
               </Box>
