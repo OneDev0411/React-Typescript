@@ -1,22 +1,11 @@
 import React from 'react'
-import { Box, Button, IconButton, makeStyles, Theme } from '@material-ui/core'
+import { Box, Button, IconButton } from '@material-ui/core'
 
 import { mdiTrashCanOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    container: {
-      padding: theme.spacing(1),
-      borderTop: `1px solid ${theme.palette.divider}`,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-end'
-    }
-  }),
-  { name: 'ActionFooter' }
-)
+import { useCommonStyles } from '../styles'
 
 interface Props {
   step: Nullable<IBrandFlowStep>
@@ -31,7 +20,7 @@ export const ActionFooter = ({
   onCancel,
   onDelete
 }: Props) => {
-  const classes = useStyles()
+  const classes = useCommonStyles()
 
   const handleDelete = async event => {
     event.stopPropagation()
@@ -44,7 +33,7 @@ export const ActionFooter = ({
   }
 
   return (
-    <Box className={classes.container}>
+    <Box className={classes.footer}>
       {step && onDelete && (
         <Box mr={2}>
           <IconButton

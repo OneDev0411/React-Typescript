@@ -44,13 +44,13 @@ const useStyles = makeStyles(
       alignItems: 'center'
     },
     itemContent: {
-      background: theme.palette.background.paper,
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius,
       flexGrow: 1
     },
     viewStepContainer: {
       padding: theme.spacing(1),
+      background: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.divider}`,
+      borderRadius: theme.shape.borderRadius,
       cursor: 'pointer',
       '&:hover': {
         background: theme.palette.grey[100]

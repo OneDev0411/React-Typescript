@@ -8,7 +8,7 @@ import { TaskType } from 'components/NewEvent/components/TaskType'
 
 import { MAX_STEP_TITLE_LENGTH } from '../../../../constants'
 import { ActionFooter } from '../components/ActionFooter'
-
+import { useCommonStyles } from '../styles'
 import {
   timeToSeconds,
   ONE_DAY_IN_SECONDS,
@@ -47,6 +47,8 @@ export default function EventForm({
   onCancel,
   onDelete
 }: Props) {
+  const commonClasses = useCommonStyles()
+
   function getInitialValues(stepData?: IBrandFlowStep): FormData {
     if (!stepData || !stepData.event) {
       return {
@@ -105,107 +107,111 @@ export default function EventForm({
       initialValues={getInitialValues(step)}
       render={({ handleSubmit, submitting }) => {
         return (
-          <form style={{ width: '100%' }} onSubmit={handleSubmit} noValidate>
-            <Grid item xs={12}>
-              <Box mb={2}>
-                <TaskType />
+          <Box className={commonClasses.container}>
+            <form style={{ width: '100%' }} onSubmit={handleSubmit} noValidate>
+              <Box className={commonClasses.content}>
+                <Grid item xs={12}>
+                  <Box mb={2}>
+                    <TaskType />
+                  </Box>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Box mb={2}>
+                    <Field
+                      autoFocus
+                      validate={value =>
+                        validateStringInput(
+                          value,
+                          'event title',
+                          MAX_STEP_TITLE_LENGTH
+                        )
+                      }
+                      name="title"
+                      label="Title"
+                      variant="outlined"
+                      margin="dense"
+                      autoComplete="off"
+                      fullWidth
+                      required
+                      component={MUITextInput}
+                    />
+                  </Box>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Box mb={2}>
+                    <Field
+                      name="description"
+                      label="Description"
+                      variant="outlined"
+                      margin="dense"
+                      autoComplete="off"
+                      fullWidth
+                      multiline
+                      component={MUITextInput}
+                    />
+                  </Box>
+                </Grid>
+
+                <Grid container item xs={12}>
+                  <Grid container item xs={3}>
+                    <Box mb={2}>
+                      <Field
+                        name="wait_for"
+                        label="Wait for"
+                        type="number"
+                        min="1"
+                        max="365"
+                        variant="outlined"
+                        margin="dense"
+                        autoComplete="off"
+                        required
+                        validate={value =>
+                          validateInput(value, 'wait days', () => {
+                            return value >= 0 && value <= 365
+                          })
+                        }
+                        component={MUITextInput}
+                      />
+                    </Box>
+                  </Grid>
+
+                  <Grid container item alignItems="flex-start" xs={5}>
+                    <Box mb={2} pt={2} pl={1}>
+                      <Typography variant="subtitle2" color="textSecondary">
+                        days after{' '}
+                        {startFrom === 0 ? 'Flow start' : 'previous step'}
+                      </Typography>
+                    </Box>
+                  </Grid>
+
+                  <Grid container item xs={4} justify="flex-end">
+                    <Box mb={2}>
+                      <Field
+                        name="at"
+                        label="At"
+                        margin="dense"
+                        autoComplete="off"
+                        type="time"
+                        variant="outlined"
+                        required
+                        InputLabelProps={{ shrink: true }}
+                        validate={validateTimeInput}
+                        component={MUITextInput}
+                      />
+                    </Box>
+                  </Grid>
+                </Grid>
               </Box>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Box mb={2}>
-                <Field
-                  autoFocus
-                  validate={value =>
-                    validateStringInput(
-                      value,
-                      'event title',
-                      MAX_STEP_TITLE_LENGTH
-                    )
-                  }
-                  name="title"
-                  label="Title"
-                  variant="outlined"
-                  margin="dense"
-                  autoComplete="off"
-                  fullWidth
-                  required
-                  component={MUITextInput}
-                />
-              </Box>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Box mb={2}>
-                <Field
-                  name="description"
-                  label="Description"
-                  variant="outlined"
-                  margin="dense"
-                  autoComplete="off"
-                  fullWidth
-                  multiline
-                  component={MUITextInput}
-                />
-              </Box>
-            </Grid>
-
-            <Grid container item xs={12}>
-              <Grid container item xs={3}>
-                <Box mb={2}>
-                  <Field
-                    name="wait_for"
-                    label="Wait for"
-                    type="number"
-                    min="1"
-                    max="365"
-                    variant="outlined"
-                    margin="dense"
-                    autoComplete="off"
-                    required
-                    validate={value =>
-                      validateInput(value, 'wait days', () => {
-                        return value >= 0 && value <= 365
-                      })
-                    }
-                    component={MUITextInput}
-                  />
-                </Box>
-              </Grid>
-
-              <Grid container item alignItems="flex-start" xs={5}>
-                <Box mb={2} pt={2} pl={1}>
-                  <Typography variant="subtitle2" color="textSecondary">
-                    days after{' '}
-                    {startFrom === 0 ? 'Flow start' : 'previous step'}
-                  </Typography>
-                </Box>
-              </Grid>
-
-              <Grid container item xs={4} justify="flex-end">
-                <Box mb={2}>
-                  <Field
-                    name="at"
-                    label="At"
-                    margin="dense"
-                    autoComplete="off"
-                    type="time"
-                    variant="outlined"
-                    required
-                    InputLabelProps={{ shrink: true }}
-                    validate={validateTimeInput}
-                    component={MUITextInput}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-            <ActionFooter
-              step={step || null}
-              isSubmiting={submitting}
-              onDelete={onDelete}
-              onCancel={onCancel}
-            />
-          </form>
+              <ActionFooter
+                step={step || null}
+                isSubmiting={submitting}
+                onDelete={onDelete}
+                onCancel={onCancel}
+              />
+            </form>
+          </Box>
         )
       }}
     />
