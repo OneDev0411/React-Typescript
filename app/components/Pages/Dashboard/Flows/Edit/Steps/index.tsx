@@ -1,10 +1,22 @@
 import React from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import { Grid } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 
 import Item from './Item'
 import New from './New'
 import { getNextStepStartFrom } from '../helpers'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      display: 'flex',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      width: '100%'
+    }
+  }),
+  { name: 'Steps' }
+)
 
 interface Props {
   disableEdit: boolean
@@ -31,6 +43,7 @@ export default function Steps({
   onNewEmailTemplateClick,
   onReviewEmailTemplateClick
 }: Props) {
+  const classes = useStyles()
   const startFromSeconds = items.length
     ? getNextStepStartFrom(items[items.length - 1])
     : 0
@@ -44,7 +57,7 @@ export default function Steps({
         )
       }
     >
-      <Grid container item justify="center" xs={11} md={8}>
+      <Box className={classes.container}>
         <Droppable droppableId="flow-steps-droppable">
           {droppableProvided => (
             <div style={{ width: '100%' }} ref={droppableProvided.innerRef}>
@@ -82,7 +95,7 @@ export default function Steps({
             onReviewEmailTemplateClick={onReviewEmailTemplateClick}
           />
         )}
-      </Grid>
+      </Box>
     </DragDropContext>
   )
 }

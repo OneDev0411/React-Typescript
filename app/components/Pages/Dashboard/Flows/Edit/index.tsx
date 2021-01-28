@@ -58,6 +58,12 @@ const useStyles = makeStyles(
       border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius
     },
+    contentContainer: {
+      display: 'inline-bloce',
+      width: '100%',
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(1)
+    },
     tab: theme.typography.body1
   }),
   { name: 'FlowEditPage' }
@@ -384,7 +390,7 @@ function Edit(props: WithRouterProps) {
             </Callout>
           </Box>
         )}
-        <Box mb={1}>
+        <Box className={classes.contentContainer}>
           <TabPanel>
             {isLoading && <LoadingContainer style={{ padding: '20% 0' }} />}
             {!isLoading && emailTemplates && flow && selectedTabIndex === 0 && (

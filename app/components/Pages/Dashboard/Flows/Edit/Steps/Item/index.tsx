@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
-import { Box, Grid, Tooltip, Typography } from '@material-ui/core'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import {
+  Box,
+  Grid,
+  Tooltip,
+  Typography,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 import { mdiDrag } from '@mdi/js'
 import cn from 'classnames'
 
@@ -15,25 +21,47 @@ import {
 } from '../../helpers'
 import EventForm from '../New/EventForm'
 
-import { StepIndex } from '../styled'
-
 import Icon from './Icon'
 import { DescriptionRow, DescriptionColumn } from './styled'
 import ScheduledEmailForm from '../New/ScheduledEmailForm'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    stepContainer: {
+      display: 'flex',
+      width: '100%',
+      marginBottom: theme.spacing(2)
+    },
+    stepIndex: {
+      width: theme.spacing(5),
+      height: theme.spacing(5),
+      marginRight: theme.spacing(1),
+      borderRadius: '50%',
+      color: theme.palette.text.secondary,
+      border: `1px solid ${theme.palette.divider}`,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
     itemContent: {
       background: theme.palette.background.paper,
-      margin: theme.spacing(2),
       border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius
+      borderRadius: theme.shape.borderRadius,
+      flexGrow: 1
     },
     viewStepContainer: {
       padding: theme.spacing(1),
-      cursor: 'pointer'
+      cursor: 'pointer',
+      '&:hover': {
+        background: theme.palette.grey[100]
+      }
+    },
+    raised: {
+      background: theme.palette.grey[100],
+      boxShadow: theme.shadows[3]
     }
-  })
+  }),
+  { name: 'StepItem' }
 )
 
 interface Props {
@@ -62,8 +90,7 @@ export default function Item({
   onReviewEmailTemplateClick
 }: Props) {
   const classes = useStyles()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { isRaised, raise, stopRaise } = useRaisedMuiCard()
+  const { raise, stopRaise } = useRaisedMuiCard()
   const [isEditing, setIsEditing] = useState(false)
 
   const humanizedDiff = humanizeSeconds(step.due_in)
@@ -77,8 +104,8 @@ export default function Item({
 
   if (isEditing) {
     return (
-      <Grid item xs={12} style={{ position: 'relative' }}>
-        <StepIndex>{index + 1}</StepIndex>
+      <Box className={classes.stepContainer} position="relative">
+        <Box className={classes.stepIndex}>{index + 1}</Box>
         <Box className={classes.itemContent}>
           <Grid container item alignItems="center" xs={12}>
             {step.event && (
@@ -105,12 +132,12 @@ export default function Item({
             )}
           </Grid>
         </Box>
-      </Grid>
+      </Box>
     )
   }
 
   return (
-    <Grid item xs={12} style={{ position: 'relative' }}>
+    <Box position="relative">
       <Draggable
         isDragDisabled={disableEdit}
         key={step.id}
@@ -121,15 +148,14 @@ export default function Item({
           <div
             ref={draggableProvided.innerRef}
             {...draggableProvided.draggableProps}
+            className={classes.stepContainer}
           >
-            <StepIndex>{index + 1}</StepIndex>
+            <Box className={classes.stepIndex}>{index + 1}</Box>
             <Box
-              className={cn(classes.itemContent, classes.viewStepContainer)}
               onMouseOver={raise}
               onFocus={raise}
               onMouseOut={stopRaise}
               onBlur={stopRaise}
-              // raised={isRaised || draggableSnapshot.isDragging}
               onClick={() => {
                 if (disableEdit) {
                   return
@@ -137,6 +163,9 @@ export default function Item({
 
                 return setIsEditing(true)
               }}
+              className={cn(classes.itemContent, classes.viewStepContainer, {
+                [classes.raised]: draggableSnapshot.isDragging
+              })}
             >
               <Grid container item xs={12}>
                 <Grid
@@ -212,6 +241,6 @@ export default function Item({
           </div>
         )}
       </Draggable>
-    </Grid>
+    </Box>
   )
 }
