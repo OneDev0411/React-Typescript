@@ -10,12 +10,14 @@ import registerStaticBlocks, {
 import registerVideoBlock, { VideoBlockOptions } from './Video'
 import registerImageBlock, { ImageBlockOptions } from './Image'
 import registerAgentBlocks, { AgentBlocksOptions } from './Agents'
+import registerArticleBlocks, { ArticleBlocksOptions } from './Articles'
 
 interface BlocksOptions
   extends StaticBlocksOptions,
     VideoBlockOptions,
     ImageBlockOptions,
-    AgentBlocksOptions {}
+    AgentBlocksOptions,
+    ArticleBlocksOptions {}
 
 export const websiteBlocksTraits = {
   ...staticBlocksTraits
@@ -28,24 +30,12 @@ export function registerWebsiteBlocks(
 ) {
   registerStaticBlocks(editor, renderData, blocksOptions)
 
-  const dynamicBlocks =
-    // : {
-    // listing: ReturnType<typeof registerListingBlocks>
-    // agent: ReturnType<typeof registerAgentBlocks>
-    // image: ReturnType<typeof registerImageBlock>
-    // gif: ReturnType<typeof registerGifBlock>
-    // video: ReturnType<typeof registerVideoBlock>
-    // article: ReturnType<typeof registerArticleBlock>
-    // neighborhoods?: ReturnType<typeof registerNeighborhoodsBlocks>
-    // }
-    {
-      // listing: registerListingBlocks(editor, renderData, listing),
-      agent: registerAgentBlocks(editor, renderData, blocksOptions),
-      image: registerImageBlock(editor, renderData, blocksOptions),
-      // gif: registerGifBlock(editor, gif),
-      video: registerVideoBlock(editor, renderData, blocksOptions)
-      // article: registerArticleBlock(editor, renderData, article)
-    }
+  const dynamicBlocks = {
+    agent: registerAgentBlocks(editor, renderData, blocksOptions),
+    image: registerImageBlock(editor, renderData, blocksOptions),
+    video: registerVideoBlock(editor, renderData, blocksOptions),
+    article: registerArticleBlocks(editor, renderData, blocksOptions)
+  }
 
   // if (neighborhoods) {
   //   dynamicBlocks.neighborhoods = registerNeighborhoodsBlocks(

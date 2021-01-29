@@ -433,7 +433,8 @@ class Builder extends React.Component {
     const blocksOptions = {
       onVideoDrop: dynamicBlocksOptions.video.onDrop,
       onImageDrop: dynamicBlocksOptions.image.onDrop,
-      onAgentDrop: dynamicBlocksOptions.agent.onDrop
+      onAgentDrop: dynamicBlocksOptions.agent.onDrop,
+      onArticleDrop: dynamicBlocksOptions.article.onDrop
     } // TODO: read this from the template config
 
     this.blocks = registerWebsiteBlocks(this.editor, renderData, blocksOptions)
