@@ -33,7 +33,7 @@ export interface AgentBlocksOptions {
 }
 
 interface AgentBlocks {
-  selectHandler: (selectedImage?: AgentItem[]) => void
+  selectHandler: (selectedAgents?: AgentItem[]) => void
 }
 
 export default function registerAgentBlocks(
@@ -74,12 +74,17 @@ export default function registerAgentBlocks(
     view: { ...baseView(agentItemClassNames) }
   })
 
+  const agentBlocks = {
+    [agentLeftBlockName]: agentLeftBlock || AgentLeft,
+    [agentGridBlockName]: agentGridBlock || AgentGrid
+  }
+
   registerBlock(editor, {
     label: 'Image Left',
     icon: AgentLeftIcon,
     category: AGENTS_BLOCK_CATEGORY,
     blockName: agentLeftBlockName,
-    template: AgentLeft
+    template: agentBlocks[agentLeftBlockName]
   })
 
   registerBlock(editor, {
@@ -87,15 +92,12 @@ export default function registerAgentBlocks(
     icon: DualIcon,
     category: AGENTS_BLOCK_CATEGORY,
     blockName: agentGridBlockName,
-    template: AgentGrid
+    template: agentBlocks[agentGridBlockName]
   })
 
   return handleBlockDragStopEvent(
     editor,
-    {
-      [agentLeftBlockName]: agentLeftBlock || AgentLeft,
-      [agentGridBlockName]: agentGridBlock || AgentGrid
-    },
+    agentBlocks,
     (agents: AgentItem[]) => ({
       ...renderData,
       users: agents.map(item => {

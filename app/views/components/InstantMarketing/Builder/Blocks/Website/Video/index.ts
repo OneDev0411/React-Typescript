@@ -41,19 +41,21 @@ export default function registerVideoBlock(
     })
   })
 
+  const videoBlocks = {
+    [embedVideoBlockName]: template
+  }
+
   registerBlock(editor, {
     label: 'Video',
     icon: VideoIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: embedVideoBlockName,
-    template
+    template: videoBlocks[embedVideoBlockName]
   })
 
   return handleBlockDragStopEvent(
     editor,
-    {
-      [embedVideoBlockName]: template
-    },
+    videoBlocks,
     (selectedVideo: Video) => ({
       ...renderData,
       url: generateEmbedVideoUrl(selectedVideo.url)

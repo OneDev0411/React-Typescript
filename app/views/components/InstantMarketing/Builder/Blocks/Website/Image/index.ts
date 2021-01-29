@@ -46,19 +46,21 @@ export default function registerImageBlock(
     view: { ...baseView(imageClassNames) }
   })
 
+  const imageBlocks = {
+    [blockName]: imageBlock || template
+  }
+
   registerBlock(editor, {
     label: 'Image/GIF',
     icon: ImageIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName,
-    template
+    template: imageBlocks[blockName]
   })
 
   return handleBlockDragStopEvent(
     editor,
-    {
-      [blockName]: imageBlock || template
-    },
+    imageBlocks,
     (selectedImage: Image) => ({
       ...renderData,
       url: selectedImage.url,
