@@ -50,8 +50,8 @@ declare module 'grapesjs' {
     addComponents(components: Array<object>): Array<object>
     getStyle(): object
     setStyle(style: Array<object> | object | string): Editor
-    getSelected(): Array<Selection>
-    getSelectedAll(): Array<Selection>
+    getSelected(): Model
+    getSelectedAll(): Array<Model>
     getSelectedToStyle(): object | undefined
     select(el: object | HTMLElement): Editor
     selectAdd(

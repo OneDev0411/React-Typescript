@@ -5,19 +5,20 @@ import juice from 'juice'
 import { Button, IconButton, Tooltip } from '@material-ui/core'
 import { mdiClose, mdiMenu } from '@mdi/js'
 
+import uploadAsset from 'models/instant-marketing/upload-asset'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Portal } from 'components/Portal'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import TeamAgents from 'components/TeamAgents'
-import ImageDrawer from 'components/ImageDrawer'
-import GifDrawer from 'components/GifDrawer'
+import ImageSelectDialog from 'components/ImageSelectDialog'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 
 import {
-  isBackOffice,
+  isAdmin,
   getBrandByType,
   getActiveTeamSettings
 } from 'utils/user-teams'
@@ -26,6 +27,8 @@ import { ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY } from 'constants/user'
 
 import { getBrandFontFamilies } from 'utils/get-brand-fonts'
 import { getBrandColors } from 'utils/get-brand-colors'
+
+import { EditorDialog } from 'components/ImageEditor'
 
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
@@ -56,6 +59,8 @@ import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
 import { getTemplateRenderData } from './utils/get-template-render-data'
 import { registerWebsiteBlocks, websiteBlocksTraits } from './Blocks/Website'
+import { registerCommands } from './commands'
+import { registerToolbarButtons } from './toolbar'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -70,8 +75,8 @@ class Builder extends React.Component {
       loadedListingsAssets: [],
       isListingDrawerOpen: false,
       isAgentDrawerOpen: false,
-      isImageDrawerOpen: false,
-      isGifDrawerOpen: false,
+      isImageSelectDialogOpen: false,
+      imageToEdit: null,
       isVideoDrawerOpen: false,
       isArticleDrawerOpen: false,
       isNeighborhoodsReportDrawerOpen: false,
@@ -259,7 +264,55 @@ class Builder extends React.Component {
     })
   }
 
+  setupImageDoubleClickHandler = () => {
+    const components = this.editor.DomComponents
+    const image = components.getType('image')
+    const mjImage = components.getType('mj-image')
+    const mjCarouselImage = components.getType('mj-carousel-image')
+
+    const imageComponents = [
+      {
+        name: 'image',
+        component: image
+      },
+      {
+        name: 'mj-image',
+        component: mjImage
+      },
+      {
+        name: 'mj-carousel-image',
+        component: mjCarouselImage
+      }
+    ]
+
+    imageComponents.forEach(({ name, component }) => {
+      components.addType(name, {
+        view: component.view.extend({
+          events: {
+            dblclick: () => {
+              this.setState({ isImageSelectDialogOpen: true })
+            }
+          }
+        })
+      })
+    })
+  }
+
   setupGrapesJs = () => {
+    registerCommands(this.editor)
+    registerToolbarButtons(
+      this.editor,
+      () => {
+        this.setState({ isImageSelectDialogOpen: true })
+      },
+      () => {
+        const imageToEdit = `/api/utils/cors/${btoa(
+          this.editor.runCommand('get-image')
+        )}`
+
+        this.setState({ imageToEdit })
+      }
+    )
     this.setState({ isEditorLoaded: true })
 
     this.lockIn()
@@ -278,6 +331,8 @@ class Builder extends React.Component {
     if (this.isWebsiteTemplate) {
       this.registerWebsiteBlocks()
     }
+
+    this.setupImageDoubleClickHandler()
 
     this.props.onBuilderLoad({
       regenerateTemplate: this.regenerateTemplate
@@ -298,12 +353,7 @@ class Builder extends React.Component {
       },
       image: {
         onDrop: () => {
-          this.setState({ isImageDrawerOpen: true })
-        }
-      },
-      gif: {
-        onDrop: () => {
-          this.setState({ isGifDrawerOpen: true })
+          this.setState({ isImageSelectDialogOpen: true })
         }
       },
       video: {
@@ -403,7 +453,11 @@ class Builder extends React.Component {
         selected.get('type') === 'mj-image' ||
         selected.get('type') === 'mj-carousel-image'
 
-      if (!selected.view.onActive || isImageAsset) {
+      if (isImageAsset) {
+        return
+      }
+
+      if (!selected.view || !selected.view.onActive) {
         return
       }
 
@@ -865,12 +919,10 @@ class Builder extends React.Component {
       return false
     }
 
-    // Only Backoffice users should see this for now
-    const isBackofficeUser = isBackOffice(this.props.user)
+    // Only admin users should see this for now
+    const isAdminUser = isAdmin(this.props.user)
 
-    return (
-      isBackofficeUser && this.state.selectedTemplate && !this.isOpenHouseMedium
-    )
+    return isAdminUser && this.state.selectedTemplate && !this.isOpenHouseMedium
   }
 
   isTemplatesListEnabled = () => {
@@ -938,28 +990,52 @@ class Builder extends React.Component {
               }}
             />
           )}
-          <ImageDrawer
-            isOpen={this.state.isImageDrawerOpen}
-            onClose={() => {
-              this.blocks.image.selectHandler()
-              this.setState({ isImageDrawerOpen: false })
-            }}
-            onSelect={imageItem => {
-              this.blocks.image.selectHandler(imageItem)
-              this.setState({ isImageDrawerOpen: false })
-            }}
-          />
-          <GifDrawer
-            isOpen={this.state.isGifDrawerOpen}
-            onClose={() => {
-              this.blocks.gif.selectHandler()
-              this.setState({ isGifDrawerOpen: false })
-            }}
-            onSelect={gifItem => {
-              this.blocks.gif.selectHandler(gifItem)
-              this.setState({ isGifDrawerOpen: false })
-            }}
-          />
+          {this.state.isImageSelectDialogOpen && (
+            <ImageSelectDialog
+              onClose={() => {
+                this.blocks &&
+                  this.blocks.image &&
+                  this.blocks.image.selectHandler()
+                this.setState({ isImageSelectDialogOpen: false })
+              }}
+              onSelect={imageUrl => {
+                if (
+                  !this.blocks ||
+                  !this.blocks.image ||
+                  !this.blocks.image.selectHandler(imageUrl)
+                ) {
+                  this.editor.runCommand('set-image', {
+                    value: imageUrl
+                  })
+                }
+
+                this.setState({ isImageSelectDialogOpen: false })
+              }}
+              onUpload={async file => {
+                const templateId = this.selectedTemplate.id
+                const uploadedAsset = await uploadAsset(file, templateId)
+
+                return uploadedAsset.file.url
+              }}
+            />
+          )}
+          {this.state.imageToEdit && (
+            <EditorDialog
+              file={this.state.imageToEdit}
+              onClose={() => {
+                this.setState({ imageToEdit: null })
+              }}
+              onSave={async file => {
+                const templateId = this.selectedTemplate.id
+                const uploadedAsset = await uploadAsset(file, templateId)
+
+                this.editor.runCommand('set-image', {
+                  value: uploadedAsset.file.url
+                })
+                this.setState({ imageToEdit: null })
+              }}
+            />
+          )}
           <VideoDrawer
             isOpen={this.state.isVideoDrawerOpen}
             onClose={() => {
