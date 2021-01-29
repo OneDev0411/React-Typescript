@@ -47,7 +47,7 @@ export default function registerImageBlock(
   })
 
   registerBlock(editor, {
-    label: 'Image Library',
+    label: 'Image/GIF',
     icon: ImageIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName,
