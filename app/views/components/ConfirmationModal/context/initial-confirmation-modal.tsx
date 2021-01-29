@@ -11,6 +11,7 @@ export interface ConfirmationModalConfig {
   needsUserEntry?: boolean
   inputDefaultValue?: string
   inputPlaceholder?: string
+  inputStyle?: React.CSSProperties
 
   // Cancel Button
   onCancel?: null | (() => any)
@@ -38,6 +39,7 @@ export const initialConfirmationModal: ConfirmationModalConfig & {
   needsUserEntry: false,
   inputDefaultValue: '',
   inputPlaceholder: '',
+  inputStyle: {},
 
   // Cancel Button
   onCancel: null,
