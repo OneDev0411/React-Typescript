@@ -52,7 +52,8 @@ export function useAppcues() {
 
         const userData = {
           firstName: user.first_name,
-          lastName: user.last_name,
+          fullName: user.display_name,
+          email: user.email,
           userType: user.user_type,
           accountAgeInDays:
             accountAge.days() +
@@ -69,9 +70,10 @@ export function useAppcues() {
           aclAgentNetworkAccess: userAccess[7]
         }
 
+        console.log(user)
         // Normally what we should be doing here is to call Appcues.Page(), but
-        // behind the scenes, Appcues.identify() also invokes that function, so..
-        // More: https://docs.appcues.com/article/161-javascript-api
+        // behind the scenes, Appcues.identify() also invokes that function.
+        // Reac more: https://docs.appcues.com/article/161-javascript-api
         window.Appcues.identify(user.id, userData)
       }
     })()
