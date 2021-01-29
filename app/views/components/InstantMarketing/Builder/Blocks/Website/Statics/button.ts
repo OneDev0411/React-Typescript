@@ -30,7 +30,8 @@ export default (
         attributes: {
           href: '',
           target: '_blank'
-        }
+        },
+        style: { display: 'inline-block' }
       }
     },
     view: { ...baseView(buttonClassNames) }
