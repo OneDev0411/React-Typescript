@@ -262,7 +262,7 @@ class MasterField extends React.Component {
   }
 
   save = async (callback = noop) => {
-    const { contact, attribute } = this.props
+    const { contact, attribute, trigger: triggerFromParent } = this.props
     const {
       is_primary,
       label,
@@ -274,6 +274,8 @@ class MasterField extends React.Component {
       triggerSendBefore,
       triggerSelectedTemplate
     } = this.state
+
+    const trigger = triggerFromParent || currentTrigger
     const { id, cuid } = attribute
     const shouldCheckTriggerField = this.isTriggerable && isTriggerFieldDirty
 
@@ -285,7 +287,7 @@ class MasterField extends React.Component {
           subject: triggerSubject,
           event_type: this.attribute_def.name
         },
-        currentTrigger
+        trigger
       )
 
       if (error) {
@@ -334,11 +336,11 @@ class MasterField extends React.Component {
           }
         ]
 
-        if (currentTrigger) {
+        if (trigger) {
           if (!isTriggerActive) {
-            await removeTrigger(currentTrigger.id)
+            await removeTrigger(trigger.id)
           } else {
-            await updateTrigger(currentTrigger, ...commonParams)
+            await updateTrigger(trigger, ...commonParams)
           }
         } else if (isTriggerActive) {
           await createTrigger(...commonParams)
@@ -359,8 +361,12 @@ class MasterField extends React.Component {
 
   delete = async () => {
     try {
-      if (this.props.trigger) {
-        await removeTrigger(this.props.trigger.id)
+      const { currentTrigger } = this.state
+      const { trigger: triggerFromParent } = this.props
+      const trigger = triggerFromParent || currentTrigger
+
+      if (trigger) {
+        await removeTrigger(trigger.id)
       }
 
       await this.props.handleDelete(this.props.attribute)
@@ -405,7 +411,7 @@ class MasterField extends React.Component {
   }
 
   renderEditMode = props => {
-    const { contact, attribute } = this.props
+    const { trigger: triggerFromParent, contact, attribute } = this.props
     const {
       currentTrigger,
       isTriggerActive,
@@ -431,11 +437,13 @@ class MasterField extends React.Component {
     )
 
     if (this.isTriggerable) {
+      const trigger = triggerFromParent || currentTrigger
+
       return (
         <TriggerEditMode
           renderAttributeFields={() => baseEditMode}
           attributeName={this.attribute_def.name || ''}
-          currentValue={currentTrigger}
+          currentValue={trigger}
           isActive={isTriggerActive}
           isSaving={isTriggerSaving}
           subject={triggerSubject}
@@ -453,16 +461,22 @@ class MasterField extends React.Component {
     return baseEditMode
   }
 
-  renderViewMode = () => (
-    <ViewMode
-      is_primary={this.state.is_primary}
-      name={this.attribute_def.name || ''}
-      title={this.title}
-      value={formatValue(this.attribute_def, this.state.value)}
-      isTriggerable={this.isTriggerable}
-      isTriggerActive={Boolean(this.props.trigger)}
-    />
-  )
+  renderViewMode = () => {
+    const { currentTrigger } = this.state
+    const { trigger: triggerFromParent } = this.props
+    const trigger = triggerFromParent || currentTrigger
+
+    return (
+      <ViewMode
+        is_primary={this.state.is_primary}
+        name={this.attribute_def.name || ''}
+        title={this.title}
+        value={formatValue(this.attribute_def, this.state.value)}
+        isTriggerable={this.isTriggerable}
+        isTriggerActive={Boolean(trigger)}
+      />
+    )
+  }
 
   render() {
     const { disabled, isDirty, label, error } = this.state
