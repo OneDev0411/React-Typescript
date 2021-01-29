@@ -9,11 +9,13 @@ import registerStaticBlocks, {
 } from './Statics'
 import registerVideoBlock, { VideoBlockOptions } from './Video'
 import registerImageBlock, { ImageBlockOptions } from './Image'
+import registerAgentBlocks, { AgentBlocksOptions } from './Agents'
 
 interface BlocksOptions
   extends StaticBlocksOptions,
     VideoBlockOptions,
-    ImageBlockOptions {}
+    ImageBlockOptions,
+    AgentBlocksOptions {}
 
 export const websiteBlocksTraits = {
   ...staticBlocksTraits
@@ -38,7 +40,7 @@ export function registerWebsiteBlocks(
     // }
     {
       // listing: registerListingBlocks(editor, renderData, listing),
-      // agent: registerAgentBlocks(editor, renderData, agent),
+      agent: registerAgentBlocks(editor, renderData, blocksOptions),
       image: registerImageBlock(editor, renderData, blocksOptions),
       // gif: registerGifBlock(editor, gif),
       video: registerVideoBlock(editor, renderData, blocksOptions)

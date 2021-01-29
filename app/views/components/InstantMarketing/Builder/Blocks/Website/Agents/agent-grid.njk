@@ -1,0 +1,20 @@
+<div data-type="agent-group" data-agent="grid">
+  {% for usersBatch in users | batch(2) %}
+    <div data-type="agent-list">
+      {% for user in usersBatch %}
+        <div data-type="agent-item">
+          <img data-type="agent-avatar" src="{{ user.profile_image_url }}" rechat-assets="avatar"/>
+          <h3 data-type="text">
+            {{user.display_name}}
+          </h3>
+          <div data-type="text">
+            {{user.phone_number | phone}}
+          </div>
+          <a data-type="text" href="mailto:{{user.email}}">
+            {{user.email}}
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
