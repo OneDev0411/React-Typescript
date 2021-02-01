@@ -482,16 +482,18 @@ class ContactsList extends React.Component {
   handleOnDelete = (e, options) => {
     const singleSelectedRow =
       options && options.singleSelectedRow ? options.singleSelectedRow : []
-    const state = this.props.gridStateContext
-    const entireMode = state.selection.isEntireRowsSelected
+    const gridState = this.props.gridStateContext
+    const {
+      selection: { isEntireRowsSelected, selectedRowIds, excludedRows }
+    } = gridState
 
-    const selectedRowsLength = entireMode
-      ? this.props.listInfo.total - state.selection.excludedRows.length
-      : state.selection.selectedRowIds.length
+    const selectedRowsLength = isEntireRowsSelected
+      ? this.props.listInfo.total - excludedRows.length
+      : selectedRowIds.length
     const isSingleContact = singleSelectedRow.length === 1
     const isManyContacts = isSingleContact
       ? false
-      : entireMode || selectedRowsLength > 1
+      : isEntireRowsSelected || selectedRowsLength > 1
 
     this.props.confirmation({
       confirmLabel: 'Delete',
@@ -510,7 +512,10 @@ class ContactsList extends React.Component {
   }
 
   handleDeleteContact = async ({ singleSelectedRow }) => {
-    const { activeSegment, gridStateContext: state } = this.props
+    const { activeSegment, gridStateContext } = this.props
+    const {
+      selection: { isEntireRowsSelected, selectedRowIds, excludedRows }
+    } = gridStateContext
     const isParkedActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
 
     const isSingleContact = singleSelectedRow.length === 1
@@ -518,13 +523,14 @@ class ContactsList extends React.Component {
     try {
       this.rowsUpdating(true)
 
-      if (state.selection.isEntireRowsSelected && !isSingleContact) {
+      if (isEntireRowsSelected && !isSingleContact) {
         const bulkDeleteParams = {
           users: this.props.viewAsUsers,
           searchText: this.state.searchInputValue,
           conditionOperator: this.props.conditionOperator,
           filters: this.props.filters,
-          excludes: state.selection.excludedRows
+          excludes: excludedRows,
+          parked: isParkedActive
         }
 
         await deleteContactsBulk(bulkDeleteParams)
@@ -534,8 +540,8 @@ class ContactsList extends React.Component {
         await this.reloadContacts()
       } else {
         const rows =
-          state.selection.selectedRowIds.length > 0 && !isSingleContact
-            ? state.selection.selectedRowIds
+          selectedRowIds.length > 0 && !isSingleContact
+            ? selectedRowIds
             : singleSelectedRow
 
         await this.props.deleteContacts(rows)
