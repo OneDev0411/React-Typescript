@@ -179,6 +179,7 @@ const RawTableActions = ({
         entireMode={isEntireRowsSelected}
         excludedRows={excludedRows}
         selectedRows={selectedRowIds}
+        isParkedActive={isParkedActive}
         filters={filters}
         resetSelectedRows={deselectRows}
         reloadContacts={reloadContacts}

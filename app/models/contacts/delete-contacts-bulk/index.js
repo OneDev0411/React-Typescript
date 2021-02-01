@@ -26,14 +26,15 @@ export async function deleteContactsBulk({
         operator,
         value
       })),
-      excludes,
-      // we're doing this because when we have search
-      // value we show all type of contact
-      parked: cleanedSearchText.length > 0 ? undefined : parked
+      excludes
     }
 
     if (cleanedSearchText.length > 0) {
       payload.query = cleanedSearchText
+    } else {
+      // we're doing this because when we have search
+      // value we show all type of contact
+      payload.parked = parked
     }
 
     if (users.length > 0) {
