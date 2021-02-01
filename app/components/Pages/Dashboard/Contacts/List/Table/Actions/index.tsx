@@ -179,7 +179,7 @@ const RawTableActions = ({
         entireMode={isEntireRowsSelected}
         excludedRows={excludedRows}
         selectedRows={selectedRowIds}
-        isParkedActive={isParkedActive}
+        parked={isParkedActive}
         filters={filters}
         resetSelectedRows={deselectRows}
         reloadContacts={reloadContacts}
@@ -235,6 +235,7 @@ const RawTableActions = ({
         searchText={filters.text}
         conditionOperator={filters.filter_type}
         users={filters.users}
+        parked={isParkedActive}
         disabled={isFetching}
       />
       <MergeContacts

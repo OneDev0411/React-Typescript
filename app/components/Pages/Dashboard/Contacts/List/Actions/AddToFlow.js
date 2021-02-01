@@ -9,7 +9,7 @@ import AddToFlowButton from 'components/AddToFlowButton'
 import { ActionWrapper } from '../Table/components/ActionWrapper'
 
 function AddToFlow(props) {
-  const { entireMode, selectedRows, filters, isParkedActive } = props
+  const { entireMode, selectedRows, filters, parked } = props
 
   const disabled = !entireMode && selectedRows.length === 0
 
@@ -29,7 +29,7 @@ function AddToFlow(props) {
       queryParams: {
         filter_type: filters.filter_type,
         alphabet: filters.alphabet,
-        parked: isParkedActive
+        parked
       }
     })
 
