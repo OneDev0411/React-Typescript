@@ -4,6 +4,9 @@ import Fetch from '../../../services/fetch'
 // We're not importing the mock listing itself because it's a very big file and
 // it will cause performance issues
 const MOCK_LISTING_ID: UUID = 'fb403302-b062-11e8-8aa6-0a95998482ac'
+const DEFAULT_QUERY = {
+  'associations[]': ['template_instance.template']
+}
 
 interface TemplateInstanceInputData {
   html: string
@@ -14,7 +17,8 @@ interface TemplateInstanceInputData {
 
 export async function createTemplateInstance(
   templateId: UUID,
-  data: TemplateInstanceInputData
+  data: TemplateInstanceInputData,
+  query: object = DEFAULT_QUERY
 ): Promise<IMarketingTemplateInstance> {
   try {
     // We should never send our mock listing id to API
@@ -26,6 +30,7 @@ export async function createTemplateInstance(
       proxy: false
     })
       .post(`/templates/${templateId}/instances`)
+      .query(query)
       .send(data)
 
     return response.body.data

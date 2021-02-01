@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { Children } from 'react'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import CSSMasonry from 'react-masonry-css'
 
 const useStyles = makeStyles(
   theme => ({
     masonryGrid: {
-      display: 'flex'
+      display: 'flex',
+      width: '100%'
     },
     masonryColumn: {
       margin: theme.spacing(1)
@@ -39,7 +40,7 @@ export default function Masonry({ children }: Props) {
       className={classes.masonryGrid}
       columnClassName={classes.masonryColumn}
     >
-      {children}
+      {Children.toArray(children).flat()}
     </CSSMasonry>
   )
 }
