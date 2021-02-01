@@ -84,3 +84,12 @@ export function handleBlockDragStopEvent<T>(
     selectHandler
   }
 }
+
+export function reorderBlocks(editor: Editor, blockNames: string[]) {
+  blockNames.forEach(blockName => {
+    const block = editor.BlockManager.get(blockName)
+
+    editor.BlockManager.remove(blockName)
+    editor.BlockManager.add(blockName, block as any)
+  })
+}

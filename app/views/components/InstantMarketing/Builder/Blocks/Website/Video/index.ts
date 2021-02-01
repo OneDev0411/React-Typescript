@@ -14,7 +14,7 @@ import template from './template.njk'
 import { generateEmbedVideoUrl } from './utils'
 
 const typeEmbedVideo = 'embed-video'
-const embedVideoBlockName = typeEmbedVideo
+export const embedVideoBlockName = typeEmbedVideo
 export interface VideoBlockOptions {
   embedVideoClassNames?: string
   onVideoDrop: (model: Model) => void

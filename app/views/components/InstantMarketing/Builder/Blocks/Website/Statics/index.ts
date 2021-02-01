@@ -36,26 +36,19 @@ export default function registerStaticBlocks(
     ...loadSocialGroup(editor, blocksOptions)
   }
 
-  // registerBlock(editor, {
-  //   label: 'Image/GIF',
-  //   category: BASICS_BLOCK_CATEGORY,
-  //   blockName: imageBlockName,
-  //   template: templates[imageBlockName]
-  // })
-
-  // registerBlock(editor, {
-  //   label: 'Divider',
-  //   category: BASICS_BLOCK_CATEGORY,
-  //   blockName: dividerBlockName,
-  //   template: templates[dividerBlockName]
-  // })
-
-  // registerBlock(editor, {
-  //   label: 'Spacer',
-  //   category: BASICS_BLOCK_CATEGORY,
-  //   blockName: spacerBlockName,
-  //   template: templates[spacerBlockName]
-  // })
-
   handleBlockDragStopEvent(editor, templates, renderData)
 }
+
+export { buttonBlockName } from './button'
+
+export {
+  gridColumn1BlockName,
+  gridColumn2BlockName,
+  gridColumn3BlockName
+} from './grid'
+
+export { textBlockName } from './text'
+
+export { headline1BlockName, headline2BlockName } from './headline'
+
+export { socialGroupBlockName } from './social-group'

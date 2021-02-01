@@ -13,7 +13,7 @@ import { baseView, handleBlockDragStopEvent, isComponent } from '../utils'
 import template from './template.njk'
 
 const typeImage = 'image'
-const blockName = typeImage
+export const imageBlockName = typeImage
 
 export interface ImageBlockOptions {
   imageClassNames?: string
@@ -47,15 +47,15 @@ export default function registerImageBlock(
   })
 
   const imageBlocks = {
-    [blockName]: imageBlock || template
+    [imageBlockName]: imageBlock || template
   }
 
   registerBlock(editor, {
     label: 'Image/GIF',
     icon: ImageIcon,
     category: BASICS_BLOCK_CATEGORY,
-    blockName,
-    template: imageBlocks[blockName]
+    blockName: imageBlockName,
+    template: imageBlocks[imageBlockName]
   })
 
   return handleBlockDragStopEvent(

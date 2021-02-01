@@ -19,9 +19,9 @@ import ArticleRight from './article-right.njk'
 
 const typeArticle = 'article'
 
-const articleTopBlockName = `${typeArticle}-top`
-const articleLeftBlockName = `${typeArticle}-left`
-const articleRightBlockName = `${typeArticle}-right`
+export const articleTopBlockName = `${typeArticle}-top`
+export const articleLeftBlockName = `${typeArticle}-left`
+export const articleRightBlockName = `${typeArticle}-right`
 
 export interface ArticleBlocksOptions {
   articleClassNames?: string

@@ -12,7 +12,7 @@ const typeSocialGroup = 'social-group'
 const typeSocialLink = 'social-link'
 const typeSocialIcon = 'social-icon'
 
-const socialGroupBlockName = typeSocialGroup
+export const socialGroupBlockName = typeSocialGroup
 
 const socialImages = {
   Facebook: 'https://i.ibb.co/qr5rZym/facebook.png',

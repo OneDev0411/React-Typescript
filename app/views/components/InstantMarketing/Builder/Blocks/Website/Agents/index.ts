@@ -20,8 +20,8 @@ const typeAgentGroup = 'agent-group'
 const typeAgentList = 'agent-list'
 const typeAgentItem = 'agent-item'
 
-const agentLeftBlockName = 'agent-left'
-const agentGridBlockName = 'agent-grid'
+export const agentLeftBlockName = 'agent-left'
+export const agentGridBlockName = 'agent-grid'
 
 export interface AgentBlocksOptions {
   agentGroupClassNames?: string

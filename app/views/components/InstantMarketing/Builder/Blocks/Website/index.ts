@@ -5,12 +5,51 @@ import { collapseBlockCategories } from '../Email/utils'
 
 import registerStaticBlocks, {
   StaticBlocksOptions,
-  staticBlocksTraits
+  staticBlocksTraits,
+  gridColumn1BlockName,
+  gridColumn2BlockName,
+  gridColumn3BlockName,
+  headline1BlockName,
+  headline2BlockName,
+  textBlockName,
+  buttonBlockName,
+  socialGroupBlockName
 } from './Statics'
-import registerVideoBlock, { VideoBlockOptions } from './Video'
-import registerImageBlock, { ImageBlockOptions } from './Image'
-import registerAgentBlocks, { AgentBlocksOptions } from './Agents'
-import registerArticleBlocks, { ArticleBlocksOptions } from './Articles'
+import registerVideoBlock, {
+  VideoBlockOptions,
+  embedVideoBlockName
+} from './Video'
+import registerImageBlock, { ImageBlockOptions, imageBlockName } from './Image'
+import registerAgentBlocks, {
+  AgentBlocksOptions,
+  agentLeftBlockName,
+  agentGridBlockName
+} from './Agents'
+import registerArticleBlocks, {
+  ArticleBlocksOptions,
+  articleTopBlockName,
+  articleLeftBlockName,
+  articleRightBlockName
+} from './Articles'
+import { reorderBlocks } from './utils'
+
+const BLOCK_BUTTONS_ORDER = [
+  imageBlockName,
+  embedVideoBlockName,
+  gridColumn1BlockName,
+  gridColumn2BlockName,
+  gridColumn3BlockName,
+  headline1BlockName,
+  headline2BlockName,
+  textBlockName,
+  buttonBlockName,
+  socialGroupBlockName,
+  articleTopBlockName,
+  articleLeftBlockName,
+  articleRightBlockName,
+  agentLeftBlockName,
+  agentGridBlockName
+]
 
 interface BlocksOptions
   extends StaticBlocksOptions,
@@ -37,15 +76,7 @@ export function registerWebsiteBlocks(
     article: registerArticleBlocks(editor, renderData, blocksOptions)
   }
 
-  // if (neighborhoods) {
-  //   dynamicBlocks.neighborhoods = registerNeighborhoodsBlocks(
-  //     editor,
-  //     renderData,
-  //     neighborhoods
-  //   )
-  // }
-
-  // reorderBlocksWithCustomLabels(editor)
+  reorderBlocks(editor, BLOCK_BUTTONS_ORDER)
   collapseBlockCategories(editor)
 
   return dynamicBlocks

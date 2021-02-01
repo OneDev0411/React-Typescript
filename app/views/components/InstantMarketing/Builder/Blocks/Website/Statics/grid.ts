@@ -14,9 +14,9 @@ import GridColumn3 from './grid-column-3.njk'
 
 const typeGridRow = 'grid-row'
 const typeGridColumn = 'grid-column'
-const gridColumn1BlockName = `${typeGridColumn}-1`
-const gridColumn2BlockName = `${typeGridColumn}-2`
-const gridColumn3BlockName = `${typeGridColumn}-3`
+export const gridColumn1BlockName = `${typeGridColumn}-1`
+export const gridColumn2BlockName = `${typeGridColumn}-2`
+export const gridColumn3BlockName = `${typeGridColumn}-3`
 
 export interface GridBlockOptions {
   gridRowClassNames?: string

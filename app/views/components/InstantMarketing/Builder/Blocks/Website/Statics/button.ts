@@ -10,7 +10,7 @@ import registerBlock from '../../registerBlock'
 import Button from './button.njk'
 
 const typeButton = 'button'
-const buttonBlockName = typeButton
+export const buttonBlockName = typeButton
 
 export interface ButtonBlockOptions {
   buttonClassNames?: string

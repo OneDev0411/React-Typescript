@@ -9,7 +9,7 @@ import Text from './text.njk'
 import registerBlock from '../../registerBlock'
 
 const typeText = 'text'
-const textBlockName = typeText
+export const textBlockName = typeText
 
 export interface TextBlockOptions {
   textClassNames?: string
