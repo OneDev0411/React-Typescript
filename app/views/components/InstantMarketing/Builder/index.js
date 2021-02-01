@@ -283,7 +283,7 @@ class Builder extends React.Component {
         name: 'mj-carousel-image',
         component: mjCarouselImage
       }
-    ]
+    ].filter(image => !!image.component)
 
     imageComponents.forEach(({ name, component }) => {
       components.addType(name, {
