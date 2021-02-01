@@ -24,7 +24,8 @@ const useStyles = makeStyles(
       padding: theme.spacing(1),
       border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius,
-      margin: theme.spacing(1, 1, 1, 0)
+      width: '100%',
+      marginBottom: theme.spacing(1)
     },
     avatarContainer: {
       paddingRight: theme.spacing(2)

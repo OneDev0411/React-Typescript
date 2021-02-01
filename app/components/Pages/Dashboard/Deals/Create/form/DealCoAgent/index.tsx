@@ -121,36 +121,36 @@ export function DealCoAgent({
     <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
-      {selectedRole ? (
-        <Box mt={1}>
-          <DealRole
-            isOpen
-            deal={deal}
-            user={user}
-            dealSide={side}
-            form={selectedRole}
-            allowedRoles={allowedRoles}
-            isCommissionRequired={isCommissionRequired}
-            onUpsertRole={handleUpsertRole}
-            onDeleteRole={handleDeleteRole}
-            onClose={() => setSelectedRole(null)}
-          />
-        </Box>
-      ) : (
-        <Box display="flex" flexWrap="wrap">
-          {agentRoles.map(role => (
-            <RoleCard
-              key={role.id}
-              role={role}
-              readonly={!deal && !!role.deal}
-              onClickEdit={() => setSelectedRole(role)}
-              onClickRemove={() => handleDeleteRole(role)}
-            />
-          ))}
-        </Box>
-      )}
-
       <QuestionForm>
+        {selectedRole ? (
+          <Box mt={1}>
+            <DealRole
+              isOpen
+              deal={deal}
+              user={user}
+              dealSide={side}
+              form={selectedRole}
+              allowedRoles={allowedRoles}
+              isCommissionRequired={isCommissionRequired}
+              onUpsertRole={handleUpsertRole}
+              onDeleteRole={handleDeleteRole}
+              onClose={() => setSelectedRole(null)}
+            />
+          </Box>
+        ) : (
+          <Box display="flex" flexWrap="wrap">
+            {agentRoles.map(role => (
+              <RoleCard
+                key={role.id}
+                role={role}
+                readonly={!deal && !!role.deal}
+                onClickEdit={() => setSelectedRole(role)}
+                onClickRemove={() => handleDeleteRole(role)}
+              />
+            ))}
+          </Box>
+        )}
+
         <Box
           style={{
             display: !selectedRole ? 'block' : 'none'
@@ -204,7 +204,11 @@ export function DealCoAgent({
             justifyContent="flex-end"
             mt={4}
           >
-            <Button variant="outlined" onClick={handleNext}>
+            <Button
+              variant="outlined"
+              disabled={agentRoles.length > 0}
+              onClick={handleNext}
+            >
               Skip
             </Button>
 

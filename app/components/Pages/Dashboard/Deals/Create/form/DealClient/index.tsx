@@ -152,6 +152,9 @@ export function DealClient({ side, title, roles, onChange }: Props) {
   }
 
   const handleUpsertRole = (role: IDealRole, type: 'create' | 'update') => {
+    setSearchCriteria('')
+    setContacts([])
+
     if (role.deal) {
       return
     }
@@ -177,39 +180,39 @@ export function DealClient({ side, title, roles, onChange }: Props) {
     <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
-      {selectedRole ? (
-        <Box mt={1}>
-          <DealRole
-            isOpen
-            user={user}
-            deal={deal}
-            checklist={checklist}
-            dealSide={side}
-            form={selectedRole}
-            allowedRoles={allowedRoles}
-            onUpsertRole={handleUpsertRole}
-            onDeleteRole={handleDeleteRole}
-            onClose={() => setSelectedRole(null)}
-          />
-        </Box>
-      ) : (
-        <Box display="flex" flexWrap="wrap">
-          {clientRoles.map(role => (
-            <RoleCard
-              key={role.id}
-              role={role}
-              /* readonly prop only is valid in Create Offer flow
-               * and makes readonly the roles that have been already created
-               */
-              readonly={!deal && !!role.deal}
-              onClickEdit={() => setSelectedRole(role)}
-              onClickRemove={() => handleDeleteRole(role)}
-            />
-          ))}
-        </Box>
-      )}
-
       <QuestionForm>
+        {selectedRole ? (
+          <Box mt={1}>
+            <DealRole
+              isOpen
+              user={user}
+              deal={deal}
+              checklist={checklist}
+              dealSide={side}
+              form={selectedRole}
+              allowedRoles={allowedRoles}
+              onUpsertRole={handleUpsertRole}
+              onDeleteRole={handleDeleteRole}
+              onClose={() => setSelectedRole(null)}
+            />
+          </Box>
+        ) : (
+          <Box display="flex" flexWrap="wrap" width="100%">
+            {clientRoles.map(role => (
+              <RoleCard
+                key={role.id}
+                role={role}
+                /* readonly prop only is valid in Create Offer flow
+                 * and makes readonly the roles that have been already created
+                 */
+                readonly={!deal && !!role.deal}
+                onClickEdit={() => setSelectedRole(role)}
+                onClickRemove={() => handleDeleteRole(role)}
+              />
+            ))}
+          </Box>
+        )}
+
         <Box
           className={cn(classes.root, {
             'has-border': contacts.length > 0
@@ -220,6 +223,7 @@ export function DealClient({ side, title, roles, onChange }: Props) {
         >
           <TextField
             fullWidth
+            value={searchCriteria}
             onChange={e => setSearchCriteria(e.target.value)}
             placeholder="Search name or office"
             size="medium"
@@ -273,7 +277,11 @@ export function DealClient({ side, title, roles, onChange }: Props) {
             justifyContent="flex-end"
             mt={4}
           >
-            <Button variant="outlined" onClick={handleNext}>
+            <Button
+              variant="outlined"
+              disabled={clientRoles.length > 0}
+              onClick={handleNext}
+            >
               Skip
             </Button>
 

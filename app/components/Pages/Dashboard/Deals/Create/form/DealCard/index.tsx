@@ -5,7 +5,8 @@ import {
   Typography,
   Button,
   makeStyles,
-  Theme
+  Theme,
+  Dialog
 } from '@material-ui/core'
 
 import { getField } from 'models/Deal/helpers/context'
@@ -19,6 +20,9 @@ import {
 
 import { goTo } from 'utils/go-to'
 import { getStatusColorClass } from 'utils/listing'
+
+import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
 import { useCreationContext } from '../../context/use-creation-context'
 
@@ -46,6 +50,9 @@ const useStyles = makeStyles(
 
 export function DealCard() {
   const { deal } = useCreationContext()
+  const { step } = useSectionContext()
+  const wizard = useWizardContext()
+
   const classes = useStyles()
 
   const openDeal = () => goTo(`/dashboard/deals/${deal!.id}`)
@@ -54,58 +61,53 @@ export function DealCard() {
     return null
   }
 
-  const imageUrl =
-    getField(deal, 'photo') || '/static/images/deals/group-146.svg'
-
+  const image = getField(deal, 'photo')
   const status = getStatus(deal)
 
   return (
-    <QuestionSection>
-      <QuestionTitle>Congrats! It's all set.</QuestionTitle>
-      <QuestionForm>
-        <Box textAlign="center">
-          <Typography variant="h6">
-            Congratulation!{' '}
-            <span role="img" aria-label="congrats">
-              🎉
-            </span>
-          </Typography>
+    <Dialog open={wizard.currentStep === step} fullWidth maxWidth="sm">
+      <Box textAlign="center" p={2}>
+        <Typography variant="h6">
+          Congratulation!{' '}
+          <span role="img" aria-label="congrats">
+            🎉
+          </span>
+        </Typography>
 
-          <Typography variant="subtitle1">
-            your deal has been created successfuly
-          </Typography>
+        <Typography variant="subtitle1">
+          your deal has been created successfuly
+        </Typography>
 
-          <Box my={4} className={classes.card} textAlign="left">
-            <img src={imageUrl} alt="" className={classes.cardPhoto} />
+        <Box my={4} className={classes.card} textAlign="left">
+          {image && <img src={image} alt="" className={classes.cardPhoto} />}
 
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              my={2}
-            >
-              <Typography variant="subtitle1">{deal.title}</Typography>
-              <div>
-                <Chip
-                  avatar={
-                    <span
-                      className={classes.status}
-                      style={{
-                        backgroundColor: getStatusColorClass(status)
-                      }}
-                    />
-                  }
-                  label={status}
-                />
-              </div>
-            </Box>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            my={2}
+          >
+            <Typography variant="subtitle1">{deal?.title}</Typography>
+            <div>
+              <Chip
+                avatar={
+                  <span
+                    className={classes.status}
+                    style={{
+                      backgroundColor: getStatusColorClass(status)
+                    }}
+                  />
+                }
+                label={status}
+              />
+            </div>
           </Box>
-
-          <Button variant="contained" color="secondary" onClick={openDeal}>
-            Open Deal
-          </Button>
         </Box>
-      </QuestionForm>
-    </QuestionSection>
+
+        <Button variant="contained" color="secondary" onClick={openDeal}>
+          Open Deal
+        </Button>
+      </Box>
+    </Dialog>
   )
 }

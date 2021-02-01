@@ -59,6 +59,11 @@ const useStyles = makeStyles(
     },
     searchInput: {
       padding: theme.spacing(1.5)
+    },
+    place: {
+      border: `1px solid ${theme.palette.divider}`,
+      padding: theme.spacing(1),
+      borderRadius: theme.shape.borderRadius
     }
   }),
   {
@@ -211,7 +216,7 @@ export function DealAddress() {
         {listing && <ListingCard listing={listing} />}
 
         {place && (
-          <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" className={classes.place}>
             <Box mr={1}>
               <Avatar title="P">
                 <SvgIcon path={mdiHome} />
