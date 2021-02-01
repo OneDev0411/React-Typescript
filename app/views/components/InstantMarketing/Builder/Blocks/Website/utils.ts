@@ -50,7 +50,7 @@ export function handleBlockDragStopEvent<T>(
 
   const selectHandler = (selectedItem?: T) => {
     if (!modelHandle) {
-      return
+      return false
     }
 
     if (selectedItem) {
@@ -58,9 +58,13 @@ export function handleBlockDragStopEvent<T>(
         modelHandle,
         typeof renderData === 'function' ? renderData(selectedItem) : renderData
       )
+    } else {
+      modelHandle.remove()
     }
 
     modelHandle = null
+
+    return true
   }
 
   editor.on('block:drag:stop', (model: Model, block: any) => {

@@ -12,7 +12,7 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import { baseView, handleBlockDragStopEvent, isComponent } from '../utils'
 import template from './template.njk'
 
-const typeImage = 'rechat-image'
+const typeImage = 'image'
 const blockName = typeImage
 
 export interface ImageBlockOptions {
@@ -63,8 +63,7 @@ export default function registerImageBlock(
     imageBlocks,
     (selectedImage: Image) => ({
       ...renderData,
-      url: selectedImage.url,
-      image: selectedImage.thumbnail
+      image: selectedImage
     }),
     onImageDrop
   )
