@@ -1,7 +1,6 @@
 import { Editor } from 'grapesjs'
 
 // Basic
-import GifIcon from 'assets/images/marketing/editor/blocks/gif.png'
 import VideoIcon from 'assets/images/marketing/editor/blocks/video.png'
 import OneColIcon from 'assets/images/marketing/editor/blocks/col-1.png'
 import TwoColIcon from 'assets/images/marketing/editor/blocks/col-2.png'
@@ -12,7 +11,6 @@ import TextIcon from 'assets/images/marketing/editor/blocks/text.png'
 import DividerIcon from 'assets/images/marketing/editor/blocks/divider.png'
 import SpacerIcon from 'assets/images/marketing/editor/blocks/spacer.png'
 import ImageIcon from 'assets/images/marketing/editor/blocks/image.png'
-import PhotoGifIcon from 'assets/images/marketing/editor/blocks/photo-gif.png'
 import ButtonIcon from 'assets/images/marketing/editor/blocks/button.png'
 import ShareIcon from 'assets/images/marketing/editor/blocks/share.png'
 
@@ -81,7 +79,6 @@ const BLOCK_IDS_TO_REMOVE = [
 ]
 
 const BLOCK_BUTTON_ICONS = {
-  'rechat-gif': GifIcon,
   'rechat-video': VideoIcon,
   [rechatImageBlockName]: ImageIcon,
   'column-1': OneColIcon,
@@ -92,7 +89,6 @@ const BLOCK_BUTTON_ICONS = {
   text: TextIcon,
   [dividerBlockName]: DividerIcon,
   [spacerBlockName]: SpacerIcon,
-  'mj-image': PhotoGifIcon,
   'mj-button': ButtonIcon,
   'mj-social-group': ShareIcon,
 
@@ -114,10 +110,8 @@ const BLOCK_BUTTON_ICONS = {
 }
 
 const BLOCK_BUTTONS_ORDER = [
-  'rechat-gif',
-  'rechat-video',
   rechatImageBlockName,
-  'mj-image',
+  'rechat-video',
   'column-1',
   'column-2',
   'column-3',
