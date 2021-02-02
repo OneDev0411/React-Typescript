@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'flex-start',
       padding: theme.spacing(0, 2),
       background: theme.palette.grey[100],
-      border: `1px solid ${fade(theme.palette.common.black, 0.12)}`,
+      border: `1px solid ${theme.palette.divider}`,
       borderTopLeftRadius: `${theme.shape.borderRadius}px`,
       borderTopRightRadius: `${theme.shape.borderRadius}px`,
       boxShadow: `0 ${theme.spacing(-0.5)}px ${theme.spacing(2)}px ${fade(

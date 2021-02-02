@@ -1,12 +1,5 @@
 import React from 'react'
-import {
-  Box,
-  Chip,
-  Typography,
-  makeStyles,
-  fade,
-  Theme
-} from '@material-ui/core'
+import { Box, Chip, Typography, makeStyles, Theme } from '@material-ui/core'
 
 import { noop } from 'utils/helpers'
 
@@ -16,7 +9,7 @@ const useStyles = makeStyles(
       display: 'inline-flex',
       alignItems: 'baseline',
       padding: theme.spacing(1),
-      border: `1px solid ${fade(theme.palette.tertiary.dark, 0.12)}`,
+      border: `1px solid ${theme.palette.divider}`,
       borderRadius: `${theme.shape.borderRadius}px`,
       cursor: 'pointer'
     },
