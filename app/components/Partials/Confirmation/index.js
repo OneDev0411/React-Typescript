@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 
 import { hideConfirmation } from '../../../store_actions/confirmation'
@@ -30,6 +30,7 @@ class Confirmation extends React.Component {
     const sharedProps = {
       defaultValue: confirmation.inputDefaultValue,
       placeholder: confirmation.inputPlaceholder || '',
+      style: confirmation.inputStyle || {},
       ref: ref => (this.input = ref)
     }
 

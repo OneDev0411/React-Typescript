@@ -1,12 +1,16 @@
-import styled, { css } from 'styled-components'
-import { fade } from '@material-ui/core/styles'
+import styled, { css, ThemedStyledProps } from 'styled-components'
+import { Theme, fade } from '@material-ui/core'
 
 import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
 import StarIcon from 'components/SvgIcons/Star/StarIcon'
 import ArrowIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
-export const ViewModeContainer = styled.div`
+import { Props as EditModeProps } from './InlineEditableField/EditMode'
+
+export const ViewModeContainer = styled.div<{
+  theme: Theme
+}>`
   position: relative;
   padding: 0.5em;
   border-radius: ${({ theme }) => theme.shape.borderRadius}px;
@@ -37,13 +41,15 @@ export const ViewModeActionBar = styled.div`
   }
 `
 
-export const EditButton = styled(ActionButton)`
+export const EditButton = styled(ActionButton as any)`
   padding: 0;
   height: auto;
   line-height: 1;
 `
 
-export const EditModeContainer = styled.div`
+export const EditModeContainer = styled.div<
+  ThemedStyledProps<Pick<EditModeProps, 'isStatic' | 'hasError'>, Theme>
+>`
   position: relative;
   padding: 0.5em;
   border-radius: ${({ isStatic, theme }) =>
@@ -56,10 +62,15 @@ export const EditModeContainer = styled.div`
       : theme.palette.action.selected};
 `
 
-export const Label = styled.div`
+export const Label = styled.div<{
+  theme: Theme
+}>`
   display: flex;
   align-items: center;
   margin-bottom: 0.25em;
+  font-family: ${({ theme }) => theme.typography.subtitle2.fontFamily};
+  font-size: ${({ theme }) => theme.typography.subtitle2.fontSize};
+  font-weight: ${({ theme }) => theme.typography.subtitle2.fontWeight};
 `
 
 export const Star = styled(StarIcon)`
@@ -89,7 +100,7 @@ export const DropdownButton = styled(LinkButton)`
 export const DropdownArrowIcon = styled(ArrowIcon)`
   position: relative;
   margin-left: 1em;
-  transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
+  transform: ${({ isOpen }: any) => (isOpen ? 'rotateX(180deg)' : 'none')};
 `
 
 export const Input = styled.input`
@@ -98,15 +109,17 @@ export const Input = styled.input`
   border: none;
   background: transparent;
   background: ${({ theme }) => theme.palette.common.white};
-
+  border-radius: 3px;
+  border: 1px solid ${({ theme }) => theme.palette.divider};
   &:focus {
     outline: none;
-    border-radius: 3px;
     border: 1px solid ${({ theme }) => theme.palette.primary.main};
   }
 `
 
-export const EditModeActionBar = styled.div`
+export const EditModeActionBar = styled.div<
+  ThemedStyledProps<Pick<EditModeProps, 'showDelete' | 'isStatic'>, Theme>
+>`
   display: flex;
   align-items: center;
   justify-content: ${({ showDelete }) =>

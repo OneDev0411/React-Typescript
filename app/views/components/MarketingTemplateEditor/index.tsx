@@ -66,7 +66,6 @@ export default function MarketingTemplateEditor({
       mediums=""
       assets={[]}
       defaultTemplate={brandMarketingTemplate}
-      containerStyle={{}}
       handleSave={template => onSave(template.result)}
       onClose={onClose}
     />
