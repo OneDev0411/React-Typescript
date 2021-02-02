@@ -237,7 +237,8 @@ class ContactsList extends React.Component {
   }
 
   getParkedContactCount = async () => {
-    const parkedContactCount = await getParkedContactCountModel()
+    const { viewAsUsers } = this.props
+    const parkedContactCount = await getParkedContactCountModel(viewAsUsers)
 
     this.setState({ parkedContactCount })
   }
