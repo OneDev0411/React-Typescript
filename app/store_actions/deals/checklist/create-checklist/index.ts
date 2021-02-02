@@ -11,8 +11,8 @@ import * as schema from '../../schema'
 
 interface Options {
   conditions: {
-    deal_type: IDealType
-    property_type: IDealPropertyType
+    checklist_type: IDealChecklistType
+    property_type: UUID
   }
 }
 

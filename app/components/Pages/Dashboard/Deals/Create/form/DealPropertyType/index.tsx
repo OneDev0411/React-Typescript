@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTheme, Theme } from '@material-ui/core'
 
 import {
   QuestionSection,
@@ -7,7 +6,8 @@ import {
   QuestionForm
 } from 'components/QuestionWizard'
 
-import { propertyTypes } from 'deals/utils/property-types'
+import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
@@ -17,17 +17,17 @@ import { RadioGroup } from 'components/RadioGroup'
 import { useCreationContext } from '../../context/use-creation-context'
 
 interface Props {
-  onChange: (value: IDealPropertyType) => void
+  onChange: (value: UUID) => void
 }
 
 export function DealPropertyType({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal } = useCreationContext()
+  const { deal, user } = useCreationContext()
 
-  const theme = useTheme<Theme>()
+  const propertyTypes = useBrandPropertyTypes(getActiveTeamId(user)!)
 
-  const handleChange = (value: IDealPropertyType) => {
+  const handleChange = (value: UUID) => {
     onChange(value)
 
     if (wizard.currentStep === step) {
@@ -41,9 +41,9 @@ export function DealPropertyType({ onChange }: Props) {
       <QuestionForm>
         <RadioGroup
           name="DealPropertyType"
-          options={propertyTypes.map(propertyType => ({
-            value: propertyType,
-            label: propertyType
+          options={propertyTypes.map(item => ({
+            value: item.id,
+            label: item.label
           }))}
           onChange={handleChange}
         />

@@ -89,8 +89,6 @@ export default function CreateDeal() {
    * @param agents - The list of primary agents [BuyerAgent, SellerAgent]
    */
   const createInitialDeal = async () => {
-    console.log('>>>>', deal)
-
     if (deal) {
       return
     }
@@ -126,8 +124,8 @@ export default function CreateDeal() {
       dispatch(
         createChecklist(newDeal.id, {
           conditions: {
-            deal_type: newDeal.deal_type,
-            property_type: newDeal.property_type
+            checklist_type: newDeal.deal_type,
+            property_type: newDeal.property_type.id
           }
         })
       )
