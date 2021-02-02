@@ -139,7 +139,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
           </div>
         }
       >
-        <Flex alignCenter>
+        <Flex data-tour-id="connect-gmail-outlook" alignCenter>
           <GoogleIcon size={iconSizes.small} />
           <ButtonText>
             {google.connecting

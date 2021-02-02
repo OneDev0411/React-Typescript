@@ -96,6 +96,7 @@ const MarketingTabs = ({
             key={section.key}
             value={section.key}
             label={section.title}
+            data-tour-id={`tab-${section.title?.toLowerCase()}`}
             render={({ close }) => (
               <MegaMenu data={section} mediums={mediums} onClose={close} />
             )}
