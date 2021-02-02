@@ -16,7 +16,7 @@ import useRaisedMuiCard from 'hooks/use-raised-mui-card'
 
 import { humanizeSeconds, formatTimeDigits } from '../../../helpers'
 
-import Icon from '../Icon'
+import { StepTypeIcon } from './StepTypeIcon'
 import { useCommonStyles } from '../styles'
 
 export const useStyles = makeStyles(
@@ -40,6 +40,9 @@ export const useStyles = makeStyles(
     dragBtn: {
       display: 'flex',
       margin: theme.spacing(0, 2)
+    },
+    stepTypeContainer: {
+      marginRight: theme.spacing(2)
     },
     descriptionContainer: {}
   }),
@@ -130,20 +133,18 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
                   alignItems="center"
                   justify="flex-start"
                 >
-                  <Grid item>
-                    <Icon type={step.event ? step.event.task_type : 'Email'} />
+                  <Grid item className={classes.stepTypeContainer}>
+                    <StepTypeIcon
+                      type={step.event ? step.event.task_type : 'Email'}
+                    />
                   </Grid>
                   <Grid item xs={12}>
                     <Box className={classes.descriptionContainer}>
-                      <Typography variant="subtitle1">
+                      <Typography variant="body2">
                         {step.event && step.event.task_type}
                         {step.email && 'Scheduled Email'}
                       </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        noWrap
-                      >
+                      <Typography variant="body2" color="textSecondary" noWrap>
                         {step.title}
                       </Typography>
                     </Box>
@@ -152,17 +153,17 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
                 <Grid
                   container
                   item
-                  alignItems="flex-end"
+                  alignItems="flex-start"
                   direction="column"
                   xs={4}
                 >
-                  <Typography variant="subtitle1" color="textSecondary">
+                  {/* <Typography variant="subtitle1" color="textSecondary">
                     {step.wait_days === 0 && 'The same day'}
                     {step.wait_days > 0 && `Wait for ${step.wait_days} `}
                     {step.wait_days === 1 && 'day'}
                     {step.wait_days > 1 && 'days'}
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
+              </Typography> */}
+                  <Typography variant="body2" color="textSecondary">
                     {`${hours}:${minutes} ${amPm}`}
                   </Typography>
                 </Grid>
