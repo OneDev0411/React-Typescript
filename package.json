@@ -229,7 +229,7 @@
     "rimraf": "^2.6.3",
     "rxjs": "^5.5.11",
     "sanitize-html": "^2.2.0",
-    "sass-loader": "^10.1.0",
+    "sass-loader": "^10.1.1",
     "shorti": "^1.2.6",
     "simplebar": "https://emilsedgh:09c4811f0d62635f7f777cab41c228352c2b2235@github.com/izadmehr/simplebar#35b9bf51a13adf85e705c972a3d4a5e6e0df5fbd",
     "smoothscroll-polyfill": "^0.4.4",
