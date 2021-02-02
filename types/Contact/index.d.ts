@@ -95,6 +95,10 @@ declare interface INormalizedContact extends IContact {
   sub_contacts: ISubContact[]
 }
 
+declare interface ITriggeredContact extends IContact {
+  triggers: ITrigger[]
+}
+
 declare interface IContactAttribute {
   id: UUID
   created_at: number
