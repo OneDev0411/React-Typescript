@@ -13,6 +13,7 @@ import {
   makeStyles,
   withStyles
 } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
 
 import { getEmailTemplates } from 'models/email-templates/get-email-templates'
 import { getBrandFlow } from 'models/flows/get-brand-flow'
@@ -27,7 +28,6 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { Callout } from 'components/Callout'
 import LoadingContainer from 'components/LoadingContainer'
 import EmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
 
@@ -64,7 +64,7 @@ const useStyles = makeStyles(
       marginBottom: theme.spacing(1)
     },
     warnContainer: {
-      margin: theme.spacing(1, 0, 0, 0),
+      marginTop: theme.spacing(2),
       color: theme.palette.warning.contrastText,
       ...theme.typography.body2
     },
@@ -383,13 +383,13 @@ function Edit(props: WithRouterProps) {
           </Tabs>
         </Box>
         {warning && (
-          <Callout
-            type="warn"
+          <Alert
+            severity="warning"
             className={classes.warnContainer}
             onClose={() => setWarning(null)}
           >
             {warning}
-          </Callout>
+          </Alert>
         )}
         <Box className={classes.contentContainer}>
           <TabPanel>
