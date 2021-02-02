@@ -1,12 +1,5 @@
 import React from 'react'
-import {
-  Box,
-  Tooltip,
-  Typography,
-  createStyles,
-  makeStyles,
-  Theme
-} from '@material-ui/core'
+import { Box, Tooltip, Typography, makeStyles, Theme } from '@material-ui/core'
 import { mdiStarOutline, mdiLightningBoltOutline } from '@mdi/js'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -20,8 +13,8 @@ interface Props {
   isTriggerActive: boolean
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     container: {
       display: 'flex',
       alignItems: 'center',
@@ -40,7 +33,8 @@ const useStyles = makeStyles((theme: Theme) =>
       height: theme.spacing(2)
     },
     title: (props: Props) => ({
-      color: props.value ? theme.palette.text.primary : theme.palette.text.hint
+      color: props.value ? theme.palette.text.primary : theme.palette.text.hint,
+      wordBreak: 'break-word'
     }),
     starIcon: {
       color: theme.palette.text.primary
@@ -55,7 +49,8 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'right',
       color: props.value ? theme.palette.text.primary : theme.palette.text.hint
     })
-  })
+  }),
+  { name: 'InlineEditFieldViewMode' }
 )
 
 export function ViewMode(props: Props) {

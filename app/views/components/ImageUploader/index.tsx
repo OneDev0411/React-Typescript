@@ -12,7 +12,7 @@ import {
 import { useDropzone, DropzoneOptions } from 'dropzone'
 import { makeStyles } from '@material-ui/styles'
 
-import { Editor } from 'components/ImageEditor'
+import { EditorDialog } from 'components/ImageEditor'
 
 interface ThemeProps {
   isDragActive: boolean
@@ -144,7 +144,7 @@ export function ImageUploader({
       </Dialog>
 
       {file && (
-        <Editor
+        <EditorDialog
           file={file}
           dimensions={editorOptions.dimensions}
           onClose={() => setFile(null)}
