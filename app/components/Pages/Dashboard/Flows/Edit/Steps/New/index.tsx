@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Grid, Box } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import EventForm from './EventForm'
 import ScheduledEmailForm from './ScheduledEmailForm'
-import AddButton from './AddButton'
+import { AddButton } from './AddButton'
 import { useCommonStyles } from '../Item/styles'
 
 interface Props {
@@ -85,20 +85,18 @@ export const NewStep = ({
 
   function renderAddNewStep() {
     return (
-      <Grid item xs={12}>
-        <Box m={2}>
-          <AddButton
-            onNewEventClick={() => {
-              setIsNewScheduledEmailFormOpen(false)
-              setIsNewEventFormOpen(true)
-            }}
-            onNewScheduledEmailClick={() => {
-              setIsNewEventFormOpen(false)
-              setIsNewScheduledEmailFormOpen(true)
-            }}
-          />
-        </Box>
-      </Grid>
+      <Box mt={1}>
+        <AddButton
+          onNewEventClick={() => {
+            setIsNewScheduledEmailFormOpen(false)
+            setIsNewEventFormOpen(true)
+          }}
+          onNewScheduledEmailClick={() => {
+            setIsNewEventFormOpen(false)
+            setIsNewScheduledEmailFormOpen(true)
+          }}
+        />
+      </Box>
     )
   }
 

@@ -12,7 +12,7 @@ export const useCommonStyles = makeStyles(
       height: theme.spacing(5),
       marginRight: theme.spacing(1),
       borderRadius: '50%',
-      color: theme.palette.text.secondary,
+      color: theme.palette.grey[800],
       border: `1px solid ${theme.palette.divider}`,
       display: 'flex',
       justifyContent: 'center',
