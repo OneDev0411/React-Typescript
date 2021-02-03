@@ -3,7 +3,7 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { Box, makeStyles, Theme } from '@material-ui/core'
 
 import Item from './Item'
-import New from './New'
+import { NewStep } from './New'
 import { getNextStepStartFrom } from '../helpers'
 
 const useStyles = makeStyles(
@@ -49,53 +49,57 @@ export default function Steps({
     : 0
 
   return (
-    <DragDropContext
-      onDragEnd={result =>
-        onStepMove(
-          result.source.index,
-          result.destination ? result.destination.index : result.source.index
-        )
-      }
-    >
-      <Box className={classes.container}>
-        <Droppable droppableId="flow-steps-droppable">
-          {droppableProvided => (
-            <div style={{ width: '100%' }} ref={droppableProvided.innerRef}>
-              {items.map((item, index) => {
-                const prevStep = index > 0 ? items[index - 1] : undefined
+    <>
+      <DragDropContext
+        onDragEnd={result =>
+          onStepMove(
+            result.source.index,
+            result.destination ? result.destination.index : result.source.index
+          )
+        }
+      >
+        <Box className={classes.container}>
+          <Droppable droppableId="flow-steps-droppable">
+            {droppableProvided => (
+              <div style={{ width: '100%' }} ref={droppableProvided.innerRef}>
+                {items.map((item, index) => {
+                  const prevStep = index > 0 ? items[index - 1] : undefined
 
-                return (
-                  <Item
-                    index={index}
-                    disableEdit={disableEdit}
-                    onUpdate={onStepUpdate}
-                    onDelete={onStepDelete}
-                    key={item.id}
-                    step={item}
-                    prevStep={prevStep}
-                    emailTemplates={emailTemplates}
-                    defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
-                    onNewEmailTemplateClick={onNewEmailTemplateClick}
-                    onReviewEmailTemplateClick={onReviewEmailTemplateClick}
-                  />
-                )
-              })}
-            </div>
-          )}
-        </Droppable>
-        {!disableEdit && (
-          <New
-            index={items.length + 1}
-            startFrom={startFromSeconds}
-            emailTemplates={emailTemplates}
-            defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
-            onSubmit={onNewStepSubmit}
-            isNewEventFormOpen={items.length === 0}
-            onNewEmailTemplateClick={onNewEmailTemplateClick}
-            onReviewEmailTemplateClick={onReviewEmailTemplateClick}
-          />
-        )}
-      </Box>
-    </DragDropContext>
+                  return (
+                    <Item
+                      index={index}
+                      disableEdit={disableEdit}
+                      onUpdate={onStepUpdate}
+                      onDelete={onStepDelete}
+                      key={item.id}
+                      step={item}
+                      prevStep={prevStep}
+                      emailTemplates={emailTemplates}
+                      defaultSelectedEmailTemplate={
+                        defaultSelectedEmailTemplate
+                      }
+                      onNewEmailTemplateClick={onNewEmailTemplateClick}
+                      onReviewEmailTemplateClick={onReviewEmailTemplateClick}
+                    />
+                  )
+                })}
+              </div>
+            )}
+          </Droppable>
+        </Box>
+      </DragDropContext>
+      {!disableEdit && (
+        <NewStep
+          index={items.length + 1}
+          startFrom={startFromSeconds}
+          emailTemplates={emailTemplates}
+          defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
+          onSubmit={onNewStepSubmit}
+          isNewEventFormOpen={items.length === 0}
+          onNewEmailTemplateClick={onNewEmailTemplateClick}
+          onReviewEmailTemplateClick={onReviewEmailTemplateClick}
+        />
+      )}
+    </>
   )
 }

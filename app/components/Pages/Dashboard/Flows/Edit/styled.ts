@@ -11,8 +11,3 @@ export const PageContainer = styled.div<{
     min-height: 100vh;
   `}
 `
-
-export const TabPanel = styled.div`
-  display: flex;
-  justify-content: center;
-`

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Grid, Box, Card, CardContent } from '@material-ui/core'
+import { Grid, Box } from '@material-ui/core'
 
 import EventForm from './EventForm'
-import { StepIndex } from '../styled'
 import ScheduledEmailForm from './ScheduledEmailForm'
 import AddButton from './AddButton'
+import { useCommonStyles } from '../Item/styles'
 
 interface Props {
   index: number
@@ -17,7 +17,7 @@ interface Props {
   onReviewEmailTemplateClick: (template: IBrandEmailTemplate) => void
 }
 
-export default function New({
+export const NewStep = ({
   isNewEventFormOpen: passedIsNewEventFormOpen,
   index,
   startFrom,
@@ -26,7 +26,8 @@ export default function New({
   onSubmit,
   onNewEmailTemplateClick,
   onReviewEmailTemplateClick
-}: Props) {
+}: Props) => {
+  const commonClasses = useCommonStyles()
   const [isNewEventFormOpen, setIsNewEventFormOpen] = useState(
     passedIsNewEventFormOpen || false
   )
@@ -50,49 +51,35 @@ export default function New({
     setIsNewScheduledEmailFormOpen(false)
   }
 
-  function renderNewEventForm() {
-    return (
-      <Grid item xs={12} style={{ position: 'relative' }}>
-        <StepIndex>{index}</StepIndex>
-        <Box m={2}>
-          <Card>
-            <CardContent>
-              <Grid container item alignItems="center" xs={12}>
-                <EventForm
-                  startFrom={startFrom}
-                  onCancel={cancelHandler}
-                  onSubmit={submitHandler}
-                />
-              </Grid>
-            </CardContent>
-          </Card>
-        </Box>
-      </Grid>
-    )
-  }
+  const renderNewStep = () => {
+    if (!isNewScheduledEmailFormOpen && !isNewEventFormOpen) {
+      return null
+    }
 
-  function renderNewScheduledEmailForm() {
     return (
-      <Grid item xs={12} style={{ position: 'relative' }}>
-        <StepIndex>{index}</StepIndex>
-        <Box m={2}>
-          <Card>
-            <CardContent>
-              <Grid container item alignItems="center" xs={12}>
-                <ScheduledEmailForm
-                  startFrom={startFrom}
-                  templates={emailTemplates}
-                  defaultSelectedTemplate={defaultSelectedEmailTemplate}
-                  onCancel={cancelHandler}
-                  onSubmit={submitHandler}
-                  onNewTemplateClick={onNewEmailTemplateClick}
-                  onReviewTemplateClick={onReviewEmailTemplateClick}
-                />
-              </Grid>
-            </CardContent>
-          </Card>
+      <Box className={commonClasses.stepContainer} position="relative">
+        <Box className={commonClasses.stepIndex}>{index}</Box>
+        <Box className={commonClasses.itemContent}>
+          {isNewEventFormOpen && (
+            <EventForm
+              startFrom={startFrom}
+              onCancel={cancelHandler}
+              onSubmit={submitHandler}
+            />
+          )}
+          {isNewScheduledEmailFormOpen && (
+            <ScheduledEmailForm
+              startFrom={startFrom}
+              templates={emailTemplates}
+              defaultSelectedTemplate={defaultSelectedEmailTemplate}
+              onCancel={cancelHandler}
+              onSubmit={submitHandler}
+              onNewTemplateClick={onNewEmailTemplateClick}
+              onReviewTemplateClick={onReviewEmailTemplateClick}
+            />
+          )}
         </Box>
-      </Grid>
+      </Box>
     )
   }
 
@@ -117,8 +104,7 @@ export default function New({
 
   return (
     <>
-      {isNewEventFormOpen && renderNewEventForm()}
-      {isNewScheduledEmailFormOpen && renderNewScheduledEmailForm()}
+      {renderNewStep()}
       {renderAddNewStep()}
     </>
   )

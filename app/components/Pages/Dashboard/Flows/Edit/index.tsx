@@ -45,7 +45,7 @@ import {
   updateStepsDue,
   getUpdatedStepsOnMove
 } from './helpers'
-import { PageContainer, TabPanel } from './styled'
+import { PageContainer } from './styled'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -58,7 +58,7 @@ const useStyles = makeStyles(
       borderRadius: theme.shape.borderRadius
     },
     contentContainer: {
-      display: 'inline-bloce',
+      display: 'inline-block',
       width: '100%',
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(1)
@@ -392,34 +392,32 @@ function Edit(props: WithRouterProps) {
           </Alert>
         )}
         <Box className={classes.contentContainer}>
-          <TabPanel>
-            {isLoading && <LoadingContainer style={{ padding: '20% 0' }} />}
-            {!isLoading && emailTemplates && flow && selectedTabIndex === 0 && (
-              <Steps
-                disableEdit={!flow.is_editable}
-                onNewStepSubmit={newStepSubmitHandler}
-                onStepDelete={stepDeleteHandler}
-                onStepUpdate={stepUpdateHandler}
-                onStepMove={stepMoveHandler}
-                onNewEmailTemplateClick={newEmailTemplateClickHandler}
-                onReviewEmailTemplateClick={reviewEmailTemplateClickHandler}
-                items={flow.steps || []}
-                emailTemplates={emailTemplates}
-                defaultSelectedEmailTemplate={
-                  selectedEmailTemplate ? selectedEmailTemplate.id : undefined
-                }
-              />
-            )}
-            {!isLoading && flow && selectedTabIndex === 1 && (
-              <Contacts
-                onStop={flowStopHandler}
-                onContactClick={contactId =>
-                  props.router.push(`/dashboard/contacts/${contactId}`)
-                }
-                flowId={flow.id}
-              />
-            )}
-          </TabPanel>
+          {isLoading && <LoadingContainer style={{ padding: '20% 0' }} />}
+          {!isLoading && emailTemplates && flow && selectedTabIndex === 0 && (
+            <Steps
+              disableEdit={!flow.is_editable}
+              onNewStepSubmit={newStepSubmitHandler}
+              onStepDelete={stepDeleteHandler}
+              onStepUpdate={stepUpdateHandler}
+              onStepMove={stepMoveHandler}
+              onNewEmailTemplateClick={newEmailTemplateClickHandler}
+              onReviewEmailTemplateClick={reviewEmailTemplateClickHandler}
+              items={flow.steps || []}
+              emailTemplates={emailTemplates}
+              defaultSelectedEmailTemplate={
+                selectedEmailTemplate ? selectedEmailTemplate.id : undefined
+              }
+            />
+          )}
+          {!isLoading && flow && selectedTabIndex === 1 && (
+            <Contacts
+              onStop={flowStopHandler}
+              onContactClick={contactId =>
+                props.router.push(`/dashboard/contacts/${contactId}`)
+              }
+              flowId={flow.id}
+            />
+          )}
         </Box>
       </PageContainer>
       <EmailTemplateDrawer
