@@ -16,6 +16,7 @@ import {
 } from '../../../helpers'
 import { validateInput, validateTimeInput } from '../../../../helpers'
 import { Title } from '../components/Title'
+import { Description } from '../components/Description'
 
 interface FormData {
   email_template: UUID
@@ -192,16 +193,7 @@ export default function ScheduledEmailForm({
 
                 <Grid item xs={12}>
                   <Box mb={2}>
-                    <Field
-                      name="description"
-                      label="Description"
-                      variant="outlined"
-                      margin="dense"
-                      autoComplete="off"
-                      fullWidth
-                      multiline
-                      component={MUITextInput}
-                    />
+                    <Description />
                   </Box>
                 </Grid>
 
