@@ -1,5 +1,6 @@
 // import removeSpecialCharacters from '../../../utils/remove-special-characters'
 import { Filters } from '../index'
+import removeSpecialCharacters from '../../../../utils/remove-special-characters'
 
 export interface ContactFilterGenerator {
   selectedIds?: UUID[]
@@ -37,6 +38,7 @@ export const generateContactFilters = ({
   flows = [],
   parked = undefined
 }: ContactFilterGenerator): Filters => {
+  const text = removeSpecialCharacters(searchText)
   const payload: Filters = {}
 
   if (selectedIds.length > 0) {
@@ -61,12 +63,16 @@ export const generateContactFilters = ({
     payload.excludes = excludes
   }
 
+  if (text.length > 0) {
+    payload.query = text
+  }
+
   if (isValidArrayFilter(attributes)) {
     payload.attributes = normalizeAttributeFilters(attributes)
   }
 
   // we're doing this because we want to check parked field is exist or not
-  if (typeof parked !== 'undefined' && searchText === '') {
+  if (typeof parked !== 'undefined' && text.length === 0) {
     payload.parked = parked
   }
 
