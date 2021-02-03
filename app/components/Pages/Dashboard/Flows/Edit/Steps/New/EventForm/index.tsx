@@ -4,7 +4,7 @@ import { Grid, Box, Typography } from '@material-ui/core'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 
-import { TaskType } from 'components/NewEvent/components/TaskType'
+import { EventType } from 'components/EventDrawer/components/EventType'
 
 import { ActionFooter } from '../components/ActionFooter'
 import { useCommonStyles } from '../styles'
@@ -110,7 +110,7 @@ export default function EventForm({
               <Box className={commonClasses.content}>
                 <Grid item xs={12}>
                   <Box mb={2}>
-                    <TaskType />
+                    <EventType />
                   </Box>
                 </Grid>
 
