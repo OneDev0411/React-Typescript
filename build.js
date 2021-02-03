@@ -55,6 +55,6 @@ function compile() {
 }
 
 run().catch(e => {
-  console.error('error in build:', e)
+  console.trace('error in build:', e)
   process.exit(1)
 })
