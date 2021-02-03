@@ -14,9 +14,10 @@ import {
   humanizeSeconds,
   formatTimeDigits
 } from '../../../helpers'
-import { validateInput, validateTimeInput } from '../../../../helpers'
+import { validateInput } from '../../../../helpers'
 import { Title } from '../components/Title'
 import { Description } from '../components/Description'
+import { Time } from '../components/Time'
 
 interface FormData {
   task_type: {
@@ -159,18 +160,7 @@ export default function EventForm({
 
                   <Grid container item xs={4} justify="flex-end">
                     <Box mb={2}>
-                      <Field
-                        name="at"
-                        label="At"
-                        margin="dense"
-                        autoComplete="off"
-                        type="time"
-                        variant="outlined"
-                        required
-                        InputLabelProps={{ shrink: true }}
-                        validate={validateTimeInput}
-                        component={MUITextInput}
-                      />
+                      <Time />
                     </Box>
                   </Grid>
                 </Grid>
