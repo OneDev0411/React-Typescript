@@ -28,6 +28,8 @@ function compile() {
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
       if (err) {
+        console.trace('Run error', err)
+
         return reject(err)
       }
 
