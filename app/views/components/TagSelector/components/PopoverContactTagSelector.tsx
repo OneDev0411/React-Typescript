@@ -6,7 +6,6 @@ import {
   Typography,
   PopoverProps,
   makeStyles,
-  fade,
   Theme
 } from '@material-ui/core'
 
@@ -44,7 +43,7 @@ const useStyles = makeStyles(
       paddingTop: theme.spacing(1),
       display: 'flex',
       alignItems: 'center',
-      borderTop: `1px solid ${fade(theme.palette.tertiary.dark, 0.12)}`,
+      borderTop: `1px solid ${theme.palette.divider}`,
       direction: 'rtl'
     }
   }),

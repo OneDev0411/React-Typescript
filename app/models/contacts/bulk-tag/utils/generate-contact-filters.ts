@@ -1,4 +1,3 @@
-// import removeSpecialCharacters from '../../../utils/remove-special-characters'
 import { Filters } from '../index'
 import removeSpecialCharacters from '../../../../utils/remove-special-characters'
 
