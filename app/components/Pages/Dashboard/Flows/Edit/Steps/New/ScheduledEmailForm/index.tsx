@@ -7,7 +7,6 @@ import { MUITextInput } from 'components/Forms/MUITextInput'
 import { Divider } from 'components/Divider'
 
 import { ActionFooter } from '../components/ActionFooter'
-import { MAX_STEP_TITLE_LENGTH } from '../../../../constants'
 import { useCommonStyles } from '../styles'
 import {
   timeToSeconds,
@@ -15,11 +14,8 @@ import {
   humanizeSeconds,
   formatTimeDigits
 } from '../../../helpers'
-import {
-  validateStringInput,
-  validateInput,
-  validateTimeInput
-} from '../../../../helpers'
+import { validateInput, validateTimeInput } from '../../../../helpers'
+import { Title } from '../components/Title'
 
 interface FormData {
   email_template: UUID
@@ -190,24 +186,7 @@ export default function ScheduledEmailForm({
 
                 <Grid item xs={12}>
                   <Box mb={2}>
-                    <Field
-                      autoFocus
-                      validate={value =>
-                        validateStringInput(
-                          value,
-                          'event title',
-                          MAX_STEP_TITLE_LENGTH
-                        )
-                      }
-                      name="title"
-                      label="Title"
-                      variant="outlined"
-                      margin="dense"
-                      autoComplete="off"
-                      fullWidth
-                      required
-                      component={MUITextInput}
-                    />
+                    <Title />
                   </Box>
                 </Grid>
 

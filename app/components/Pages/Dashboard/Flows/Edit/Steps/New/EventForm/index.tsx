@@ -6,7 +6,6 @@ import { MUITextInput } from 'components/Forms/MUITextInput'
 
 import { TaskType } from 'components/NewEvent/components/TaskType'
 
-import { MAX_STEP_TITLE_LENGTH } from '../../../../constants'
 import { ActionFooter } from '../components/ActionFooter'
 import { useCommonStyles } from '../styles'
 import {
@@ -15,11 +14,8 @@ import {
   humanizeSeconds,
   formatTimeDigits
 } from '../../../helpers'
-import {
-  validateStringInput,
-  validateInput,
-  validateTimeInput
-} from '../../../../helpers'
+import { validateInput, validateTimeInput } from '../../../../helpers'
+import { Title } from '../components/Title'
 
 interface FormData {
   task_type: {
@@ -118,24 +114,7 @@ export default function EventForm({
 
                 <Grid item xs={12}>
                   <Box mb={2}>
-                    <Field
-                      autoFocus
-                      validate={value =>
-                        validateStringInput(
-                          value,
-                          'event title',
-                          MAX_STEP_TITLE_LENGTH
-                        )
-                      }
-                      name="title"
-                      label="Title"
-                      variant="outlined"
-                      margin="dense"
-                      autoComplete="off"
-                      fullWidth
-                      required
-                      component={MUITextInput}
-                    />
+                    <Title />
                   </Box>
                 </Grid>
 
