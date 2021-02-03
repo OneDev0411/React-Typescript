@@ -3,6 +3,8 @@ import { Editor } from 'grapesjs'
 import { TemplateRenderData } from '../../utils/get-template-render-data'
 import { collapseBlockCategories } from '../Email/utils'
 
+import { reorderBlocks } from './utils'
+
 import registerStaticBlocks, {
   StaticBlocksOptions,
   staticBlocksTraits,
@@ -31,7 +33,11 @@ import registerArticleBlocks, {
   articleLeftBlockName,
   articleRightBlockName
 } from './Articles'
-import { reorderBlocks } from './utils'
+import registerMatterportBlock, {
+  MatterportBlockOptions,
+  embedMatterportBlockName,
+  matterportBlockTraits
+} from './Matterport'
 
 const BLOCK_BUTTONS_ORDER = [
   imageBlockName,
@@ -48,7 +54,8 @@ const BLOCK_BUTTONS_ORDER = [
   articleLeftBlockName,
   articleRightBlockName,
   agentLeftBlockName,
-  agentGridBlockName
+  agentGridBlockName,
+  embedMatterportBlockName
 ]
 
 interface BlocksOptions
@@ -56,10 +63,12 @@ interface BlocksOptions
     VideoBlockOptions,
     ImageBlockOptions,
     AgentBlocksOptions,
-    ArticleBlocksOptions {}
+    ArticleBlocksOptions,
+    MatterportBlockOptions {}
 
 export const websiteBlocksTraits = {
-  ...staticBlocksTraits
+  ...staticBlocksTraits,
+  ...matterportBlockTraits
 }
 
 export function registerWebsiteBlocks(
@@ -73,7 +82,8 @@ export function registerWebsiteBlocks(
     agent: registerAgentBlocks(editor, renderData, blocksOptions),
     image: registerImageBlock(editor, renderData, blocksOptions),
     video: registerVideoBlock(editor, renderData, blocksOptions),
-    article: registerArticleBlocks(editor, renderData, blocksOptions)
+    article: registerArticleBlocks(editor, renderData, blocksOptions),
+    matterport: registerMatterportBlock(editor, renderData, blocksOptions)
   }
 
   reorderBlocks(editor, BLOCK_BUTTONS_ORDER)

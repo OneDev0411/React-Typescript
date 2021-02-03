@@ -15,6 +15,7 @@ import { generateEmbedVideoUrl } from './utils'
 
 const typeEmbedVideo = 'embed-video'
 export const embedVideoBlockName = typeEmbedVideo
+
 export interface VideoBlockOptions {
   embedVideoClassNames?: string
   onVideoDrop: (model: Model) => void
