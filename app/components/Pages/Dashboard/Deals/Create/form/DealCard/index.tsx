@@ -30,7 +30,7 @@ export function DealCard() {
         </Typography>
 
         <Typography variant="subtitle1">
-          your deal has been created successfuly
+          Your deal has been created successfuly
         </Typography>
 
         <Box mt={2}>
