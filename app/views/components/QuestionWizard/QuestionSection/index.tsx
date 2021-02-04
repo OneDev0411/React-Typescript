@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: step > lastVisitedStep ? 'none' : 'block',
     marginBottom: theme.spacing(4),
     opacity: step !== currentStep ? 0.3 : 1,
-    filter: disabled ? 'blur(1px)' : 'none',
+    filter: disabled ? 'none' : 'none', // TODO: BLOCKED BY PRODUCT
     '& .only-visible-in-step': {
       display: step === currentStep ? 'inherit' : 'none'
     },

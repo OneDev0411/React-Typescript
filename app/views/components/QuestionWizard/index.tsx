@@ -39,7 +39,7 @@ export function QuestionWizard({
     setCurrentStep(step)
   }
 
-  const gotoNext = async (delay: number = 700) => {
+  const gotoNext = async (delay: number = 0) => {
     if (currentStep + 1 > sections.length) {
       onFinish()
 
