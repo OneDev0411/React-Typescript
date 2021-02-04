@@ -7,11 +7,16 @@ import Toolbar from './Toolbar'
 
 import { Container } from './styled'
 
-const initialState = {
-  currentDate: new Date()
-}
-
 export default class DatePicker extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      currentDate:
+        props.selectedDate !== undefined ? props.selectedDate : new Date()
+    }
+  }
+
   static propTypes = {
     onChange: PropTypes.func.isRequired,
     fixedWeeks: PropTypes.bool,
@@ -24,8 +29,6 @@ export default class DatePicker extends React.Component {
     modifiers: {},
     selectedDate: null
   }
-
-  state = initialState
 
   componentDidMount() {
     this.setDate(this.props)
@@ -106,8 +109,8 @@ export default class DatePicker extends React.Component {
           captionElement={({ date, localeUtils }) => (
             <Toolbar
               date={date}
-              year={this.Date.getFullYear()}
-              month={this.Date.getMonth()}
+              year={this.Date?.getFullYear()}
+              month={this.Date?.getMonth()}
               localeUtils={localeUtils}
               onDateChange={this.handleDateChange}
               onPreviousClick={this.handlePreviousMonth}
