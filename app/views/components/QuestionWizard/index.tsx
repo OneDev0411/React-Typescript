@@ -48,12 +48,6 @@ export function QuestionWizard({
 
     const nextStep = Math.min(currentStep + 1, sections.length)
 
-    if (nextStep > lastVisitedStep) {
-      setShowLoading(true)
-      await wait(delay)
-    }
-
-    setShowLoading(false)
     setCurrentStep(nextStep)
   }
 
