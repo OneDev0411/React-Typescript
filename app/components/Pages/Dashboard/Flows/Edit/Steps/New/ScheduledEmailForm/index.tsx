@@ -1,10 +1,8 @@
-import React, { FunctionComponent } from 'react'
+import React from 'react'
 import { Form, Field } from 'react-final-form'
-import { Grid, Box, Button, Typography, Tooltip } from '@material-ui/core'
+import { Grid, Box, Typography } from '@material-ui/core'
 
-import { SelectInput } from 'components/Forms/SelectInput'
 import { MUITextInput } from 'components/Forms/MUITextInput'
-import { Divider } from 'components/Divider'
 
 import { ActionFooter } from '../components/ActionFooter'
 import { useCommonStyles } from '../styles'
@@ -18,6 +16,7 @@ import { validateInput } from '../../../../helpers'
 import { Title } from '../components/Title'
 import { Description } from '../components/Description'
 import { Time } from '../components/Time'
+import { EmailTemplate } from '../components/EmailTemplate'
 
 interface FormData {
   email_template: UUID
@@ -81,17 +80,6 @@ export default function ScheduledEmailForm({
     }
   }
 
-  const emailTemplatesDropdownItems = [
-    {
-      label: 'Select a template',
-      value: null
-    },
-    ...templates.map(template => ({
-      label: template.name,
-      value: template.id
-    }))
-  ]
-
   return (
     <Form
       onSubmit={(data: FormData) => {
@@ -123,66 +111,13 @@ export default function ScheduledEmailForm({
               <Box className={commonClasses.content}>
                 <Grid container item xs={12} alignItems="center">
                   <Grid item xs={6}>
-                    <Field
-                      isRequired
-                      name="email_template"
-                      label="Email Template"
-                      text="Select an email template"
-                      items={emailTemplatesDropdownItems}
-                      dropdownOptions={{
-                        fullWidth: true
-                      }}
-                      validate={value => {
-                        if (value) {
-                          return
-                        }
-
-                        return 'No email template selected'
-                      }}
-                      component={SelectInput as FunctionComponent}
-                    />
-                  </Grid>
-                  <Grid container item xs={6} style={{ paddingLeft: '1rem' }}>
-                    {values.email_template && (
-                      <>
-                        <Tooltip title="Review or edit selected email template">
-                          <Button
-                            variant="text"
-                            color="primary"
-                            disabled={submitting}
-                            onClick={event => {
-                              event.stopPropagation()
-
-                              const selectedTemplate = templates.find(
-                                ({ id }) => id === values.email_template
-                              )
-
-                              if (!selectedTemplate) {
-                                return
-                              }
-
-                              onReviewTemplateClick(selectedTemplate)
-                            }}
-                          >
-                            Review
-                          </Button>
-                        </Tooltip>
-
-                        <Divider vertical height="auto" margin="0.5rem" />
-                      </>
-                    )}
-
-                    <Button
-                      variant="text"
-                      color="primary"
+                    <EmailTemplate
+                      templates={templates}
+                      currentTemplateId={values.email_template}
                       disabled={submitting}
-                      onClick={event => {
-                        event.stopPropagation()
-                        onNewTemplateClick()
-                      }}
-                    >
-                      Create a New Email Template
-                    </Button>
+                      onNewTemplateClick={onNewTemplateClick}
+                      onReviewTemplateClick={onReviewTemplateClick}
+                    />
                   </Grid>
                 </Grid>
 

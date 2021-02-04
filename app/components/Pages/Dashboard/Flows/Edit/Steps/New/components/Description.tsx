@@ -27,6 +27,9 @@ export const Description = () => {
       variant="outlined"
       margin="dense"
       autoComplete="off"
+      FormHelperTextProps={{
+        variant: 'standard'
+      }}
       component={MUITextInput}
     />
   )

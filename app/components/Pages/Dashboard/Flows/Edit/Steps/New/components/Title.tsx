@@ -19,6 +19,9 @@ export const Title = () => {
       margin="dense"
       autoComplete="off"
       component={MUITextInput}
+      FormHelperTextProps={{
+        variant: 'standard'
+      }}
       validate={value =>
         validateStringInput(value, 'event title', MAX_STEP_TITLE_LENGTH)
       }
