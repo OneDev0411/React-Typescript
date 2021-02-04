@@ -7,7 +7,6 @@ import { useSectionContext } from '../hooks/use-section-context'
 
 interface StyleProps {
   step: number
-  disabled: boolean
   currentStep: number
   lastVisitedStep: number
 }
@@ -15,15 +14,15 @@ interface StyleProps {
 interface Props {
   children: React.ReactNode
   disabled?: boolean
+  hidden?: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: ({ step, disabled, currentStep, lastVisitedStep }: StyleProps) => ({
+  root: ({ step, currentStep, lastVisitedStep }: StyleProps) => ({
     position: 'relative',
     display: step > lastVisitedStep ? 'none' : 'block',
     marginBottom: theme.spacing(4),
     opacity: step !== currentStep ? 0.3 : 1,
-    filter: disabled ? 'none' : 'none', // TODO: BLOCKED BY PRODUCT
     '& .only-visible-in-step': {
       display: step === currentStep ? 'inherit' : 'none'
     },
@@ -33,6 +32,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   }),
   disabled: {
     position: 'absolute',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    borderRadius: theme.shape.borderRadius,
     top: 0,
     left: 0,
     bottom: 0,
@@ -41,16 +42,23 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-export function QuestionSection({ children, disabled = false }: Props) {
+export function QuestionSection({
+  children,
+  hidden = false,
+  disabled = false
+}: Props) {
   const { currentStep, lastVisitedStep } = useWizardContext()
   const { step } = useSectionContext()
 
   const classes = useStyles({
     step,
-    disabled,
     currentStep,
     lastVisitedStep
   })
+
+  if (hidden) {
+    return null
+  }
 
   return (
     <div className={classes.root}>

@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTheme, Theme } from '@material-ui/core'
 
 import {
   QuestionSection,
@@ -25,8 +24,6 @@ export function DealPropertyType({ onChange }: Props) {
   const { step } = useSectionContext()
   const { deal } = useCreationContext()
 
-  const theme = useTheme<Theme>()
-
   const handleChange = (value: IDealPropertyType) => {
     onChange(value)
 
@@ -36,7 +33,7 @@ export function DealPropertyType({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection disabled={!!deal}>
+    <QuestionSection hidden={!!deal}>
       <QuestionTitle>What is the property type?</QuestionTitle>
       <QuestionForm>
         <RadioGroup
