@@ -28,7 +28,7 @@ function compile() {
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
       if (err) {
-        console.trace('Run error', err)
+        console.trace('Run error', err.stack)
 
         return reject(err)
       }
