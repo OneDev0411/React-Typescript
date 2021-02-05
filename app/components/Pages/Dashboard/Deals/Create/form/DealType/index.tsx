@@ -14,14 +14,15 @@ import { RadioGroup } from 'components/RadioGroup'
 import { useCreationContext } from '../../context/use-creation-context'
 
 interface Props {
-  propertyType: IDealPropertyType
+  propertyTypeId: UUID
   onChange: (value: IDealType) => void
 }
 
-export function DealType({ propertyType, onChange }: Props) {
+export function DealType({ propertyTypeId, onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal } = useCreationContext()
+  const { deal, propertyTypes } = useCreationContext()
+  const propertyType = propertyTypes?.find(item => item.id === propertyTypeId)
 
   const handleChange = (value: IDealType) => {
     onChange(value)
@@ -39,11 +40,11 @@ export function DealType({ propertyType, onChange }: Props) {
           name="DealType"
           options={[
             {
-              label: propertyType?.includes('Lease') ? 'Tenant' : 'Buyer',
+              label: propertyType?.is_lease ? 'Tenant' : 'Buyer',
               value: 'Buying'
             },
             {
-              label: propertyType?.includes('Lease') ? 'Landlord' : 'Seller',
+              label: propertyType?.is_lease ? 'Landlord' : 'Seller',
               value: 'Selling'
             }
           ]}

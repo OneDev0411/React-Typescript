@@ -6,9 +6,6 @@ import {
   QuestionForm
 } from 'components/QuestionWizard'
 
-import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
-import { getActiveTeamId } from 'utils/user-teams'
-
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
@@ -23,9 +20,7 @@ interface Props {
 export function DealPropertyType({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal, user } = useCreationContext()
-
-  const propertyTypes = useBrandPropertyTypes(getActiveTeamId(user)!)
+  const { deal, propertyTypes } = useCreationContext()
 
   const handleChange = (value: UUID) => {
     onChange(value)
@@ -41,7 +36,7 @@ export function DealPropertyType({ onChange }: Props) {
       <QuestionForm>
         <RadioGroup
           name="DealPropertyType"
-          options={propertyTypes.map(item => ({
+          options={(propertyTypes || []).map(item => ({
             value: item.id,
             label: item.label
           }))}

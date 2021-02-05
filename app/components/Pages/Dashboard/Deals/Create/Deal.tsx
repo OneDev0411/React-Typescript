@@ -19,6 +19,9 @@ import { QuestionWizard } from 'components/QuestionWizard'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 
+import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
+import { getActiveTeamId } from 'utils/user-teams'
+
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { getChangedRoles } from './helpers/get-changed-roles'
 
@@ -78,6 +81,7 @@ export default function CreateDeal() {
   }, [dealId, dispatch])
 
   const dealContexts = getDealContexts(user, dealType, propertyType)
+  const brandPropertyTypes = useBrandPropertyTypes(getActiveTeamId(user)!)
 
   const isDoubleEnded = ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(
     enderType || ''
@@ -137,7 +141,8 @@ export default function CreateDeal() {
     <Context.Provider
       value={{
         deal,
-        user
+        user,
+        propertyTypes: brandPropertyTypes
       }}
     >
       <Box className={classes.root}>
@@ -158,7 +163,7 @@ export default function CreateDeal() {
             name="deal_type"
             control={control}
             render={({ onChange }) => (
-              <DealType propertyType={propertyType} onChange={onChange} />
+              <DealType propertyTypeId={propertyType} onChange={onChange} />
             )}
           />
 
