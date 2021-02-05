@@ -39,7 +39,7 @@ export function QuestionWizard({
     setCurrentStep(step)
   }
 
-  const gotoNext = async (delay: number = 700) => {
+  const gotoNext = async (delay: number = 0) => {
     if (currentStep + 1 > sections.length) {
       onFinish()
 
@@ -48,12 +48,6 @@ export function QuestionWizard({
 
     const nextStep = Math.min(currentStep + 1, sections.length)
 
-    if (nextStep > lastVisitedStep) {
-      setShowLoading(true)
-      await wait(delay)
-    }
-
-    setShowLoading(false)
     setCurrentStep(nextStep)
   }
 

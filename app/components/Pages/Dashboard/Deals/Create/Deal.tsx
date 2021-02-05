@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, makeStyles } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
 
@@ -38,9 +38,10 @@ import { useDealRoles } from './hooks/use-deal-roles'
 import { Context } from './context'
 
 const useStyles = makeStyles(
-  () => ({
+  (theme: Theme) => ({
     root: {
       width: '80%',
+      maxWidth: '800px',
       margin: '15% auto'
     }
   }),
@@ -148,15 +149,17 @@ export default function CreateDeal() {
           />
 
           <Controller
-            name="deal_type"
-            control={control}
-            render={({ onChange }) => <DealType onChange={onChange} />}
-          />
-
-          <Controller
             name="property_type"
             control={control}
             render={({ onChange }) => <DealPropertyType onChange={onChange} />}
+          />
+
+          <Controller
+            name="deal_type"
+            control={control}
+            render={({ onChange }) => (
+              <DealType propertyType={propertyType} onChange={onChange} />
+            )}
           />
 
           {dealType === 'Buying' && (

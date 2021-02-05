@@ -72,7 +72,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
 
   const getContextDate = () => {
     if (!inputValue) {
-      return new Date()
+      return undefined
     }
 
     if (typeof inputValue === 'number') {
@@ -118,12 +118,6 @@ export function DealContext({ context, onChange = () => {} }: Props) {
 
     if (wizard.currentStep === step) {
       wizard.next()
-    }
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode === 13) {
-      handleSave()
     }
   }
 
@@ -191,8 +185,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
                   placeholder: context.properties?.placeholder ?? '',
                   inputComponent: MaskedInput,
                   value: inputValue,
-                  onChange: handleChangeInputValue,
-                  onKeyDown: handleKeyDown
+                  onChange: handleChangeInputValue
                 }}
               />
             </Box>

@@ -250,16 +250,16 @@ const AsyncDealsLayout = withAcl(
 const AsyncDealCreate = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Deals/Create' /* webpackChunkName: "deal_create" */
+      '../components/Pages/Dashboard/Deals/Create/Deal' /* webpackChunkName: "deal_create" */
     )
 })
 
-// const AsyncDealCreateOffer = Load({
-//   loader: () =>
-//     import(
-//       '../components/Pages/Dashboard/Deals/create/create-offer' /* webpackChunkName: "deal_co" */
-//     )
-// })
+const AsyncDealCreateOffer = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Deals/Create/Offer' /* webpackChunkName: "deal_co" */
+    )
+})
 
 const AsyncDealsList = Load({
   loader: () =>

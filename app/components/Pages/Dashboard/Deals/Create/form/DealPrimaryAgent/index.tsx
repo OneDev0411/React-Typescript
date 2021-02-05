@@ -120,7 +120,7 @@ export function DealPrimaryAgent({
   }
 
   return (
-    <QuestionSection disabled={!!deal}>
+    <QuestionSection hidden={!!deal}>
       <QuestionTitle>{title}</QuestionTitle>
 
       <QuestionForm>
