@@ -44,7 +44,7 @@ const styles = makeStyles(
   { name: 'progressBar' }
 )
 
-export default function ProgressBar({ value, determinate = false }: Props) {
+export function ProgressBar({ value, determinate = false }: Props) {
   const classes = styles()
 
   return (

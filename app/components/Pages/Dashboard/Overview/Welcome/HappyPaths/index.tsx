@@ -39,7 +39,7 @@ const styles = makeStyles(
   { name: 'HappyPaths' }
 )
 
-export default function HappyPaths() {
+export function HappyPaths() {
   const classes = styles()
   const theme = useTheme<Theme>()
 
