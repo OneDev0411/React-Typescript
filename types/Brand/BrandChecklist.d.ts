@@ -1,13 +1,16 @@
 declare interface IBrandChecklist extends IModel<'brand_checklist'> {
   brand: UUID
   title: string
-  deal_type: 'Buying' | 'Selling'
+  checklist_type: 'Buying' | 'Selling' | 'Offer'
   is_deactivatable: boolean
   is_terminatable: boolean
   order: number
   property_type: string // it's actually enum
   tab_name: string
   tasks: IBrandChecklistTask[] | null
+  optional_contexts: any // TODO
+  required_contexts: any // TODO
+  statuses: any // TODO
 }
 
 declare interface IBrandChecklistTask {

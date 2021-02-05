@@ -9,7 +9,7 @@ declare type IDealPropertyTypes =
 
 declare interface IDealPropertyType extends IModel<'brand_property_type'> {
   brand: UUID
-  checklists: Nullable<IDealChecklist[]>
+  checklists: Nullable<IBrandChecklist[]>
   is_lease: boolean
   label: IDealPropertyTypes
 }

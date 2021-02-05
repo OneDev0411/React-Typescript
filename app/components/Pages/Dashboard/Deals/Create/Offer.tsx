@@ -36,8 +36,8 @@ import { DealCoAgent } from './form/DealCoAgent'
 import { DealStatus } from './form/DealStatus'
 import { DealContext } from './form/DealContext'
 
+import { getStatusList } from './helpers/get-status-list'
 import { useDealRoles } from './hooks/use-deal-roles'
-import { useStatusList } from './hooks/use-status-list'
 
 import { Context } from './context'
 
@@ -74,8 +74,7 @@ export default function CreateOffer({ params }: Props) {
   )
 
   const roles = useDealRoles(deal)
-
-  const statusList = useStatusList(deal)
+  const statusList = getStatusList(deal, 'Offer')
 
   const dealContexts = deal
     ? getDealContexts(user, 'Buying', deal.property_type, true)
@@ -239,13 +238,15 @@ export default function CreateOffer({ params }: Props) {
             )}
           />
 
-          <Controller
-            name="context:status"
-            control={control}
-            render={({ onChange }) => (
-              <DealStatus list={statusList} onChange={onChange} />
-            )}
-          />
+          {statusList.length > 0 && (
+            <Controller
+              name="context:status"
+              control={control}
+              render={({ onChange }) => (
+                <DealStatus list={statusList} onChange={onChange} />
+              )}
+            />
+          )}
 
           {dealContexts.map((context: IDealBrandContext) => (
             <Controller

@@ -4,7 +4,7 @@ import { Divider, createStyles, makeStyles, Theme } from '@material-ui/core'
 
 import MlsConnect from './MlsConnect'
 import Side from './Side'
-import PropertyType from './PropertyType'
+import { PropertyType } from './PropertyType'
 
 interface Props {
   deal: IDeal

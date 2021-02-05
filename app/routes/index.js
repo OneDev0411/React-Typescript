@@ -818,10 +818,10 @@ export default (
             path="/dashboard/deals/:id/form-edit/:taskId"
             component={AsyncDealFormEdit}
           />
-          {/* <Route
-            path="/dashboard/deals/:id/create-offer"
+          <Route
+            path="/dashboard/deals/:id/offer"
             component={AsyncDealCreateOffer}
-          /> */}
+          />
           <Route
             path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"
             component={AsyncDealFileViewer}
