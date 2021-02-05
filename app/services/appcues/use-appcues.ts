@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux'
 
 import moment from 'moment'
 
+import { selectUserHasAccess } from 'selectors/acl'
+
 import { selectUserUnsafe } from 'selectors/user'
 
 import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
@@ -10,7 +12,6 @@ import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
 import { IAppState } from 'reducers'
 import { OAuthProvider } from 'constants/contacts'
 
-import { useAcl } from 'components/Acl/use-acl'
 import { ACL } from 'constants/acl'
 
 interface Location {
@@ -18,16 +19,16 @@ interface Location {
 }
 
 export function useAppcues() {
-  const userAccess: boolean[] = []
+  const accessList = useSelector((state: IAppState) =>
+    Object.keys(ACL).reduce((acc, access) => {
+      const hasAccess = selectUserHasAccess(state, ACL[access])
 
-  userAccess[0] = useAcl(ACL.CRM)
-  userAccess[1] = useAcl(ACL.ADMIN)
-  userAccess[2] = useAcl(ACL.DEALS)
-  userAccess[3] = useAcl(ACL.BACK_OFFICE)
-  userAccess[4] = useAcl(ACL.MARKETING)
-  userAccess[5] = useAcl(ACL.STORE)
-  userAccess[6] = useAcl(ACL.BETA)
-  userAccess[7] = useAcl(ACL.AGENT_NETWORK)
+      return {
+        ...acc,
+        [`has${ACL[access]}Access`]: hasAccess
+      }
+    }, {})
+  )
 
   const location = useSelector<IAppState, Location | null>(
     state => state.data.location
@@ -60,22 +61,14 @@ export function useAppcues() {
             accountAge.months() * 30 +
             accountAge.years() * 365,
           gmailOrOutlookSynced: Boolean(google.length || outlook.length),
-          aclCRMAccess: userAccess[0],
-          aclAdminAccess: userAccess[1],
-          aclDealsAccess: userAccess[2],
-          aclBackOfficeAccess: userAccess[3],
-          aclMarketingAccess: userAccess[4],
-          aclStoreAccess: userAccess[5],
-          aclBetaAccess: userAccess[6],
-          aclAgentNetworkAccess: userAccess[7]
+          ...accessList
         }
 
-        // console.log(user)
         // Normally what we should be doing here is to call Appcues.Page(), but
         // behind the scenes, Appcues.identify() also invokes that function.
         // Reac more: https://docs.appcues.com/article/161-javascript-api
         window.Appcues.identify(user.id, userData)
       }
     })()
-  }, [pathname, user, userAccess])
+  }, [pathname, user, accessList])
 }

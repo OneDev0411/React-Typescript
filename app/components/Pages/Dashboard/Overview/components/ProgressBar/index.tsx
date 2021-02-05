@@ -13,37 +13,34 @@ interface Props {
   determinate: boolean
 }
 
-const LinearProgress = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      height: 18,
-      borderRadius: theme.shape.borderRadius
-    },
-    colorPrimary: {
-      backgroundColor: theme.palette.grey[200]
-    },
-    bar: {
-      borderRadius: 5,
-      backgroundColor: theme.palette.primary.main
-    }
-  })
-)(MuiLinearProgress)
+const LinearProgress = withStyles((theme: Theme) => ({
+  root: {
+    height: 18,
+    borderRadius: theme.shape.borderRadius
+  },
+  colorPrimary: {
+    backgroundColor: theme.palette.grey[200]
+  },
+  bar: {
+    borderRadius: 5,
+    backgroundColor: theme.palette.primary.main
+  }
+}))(MuiLinearProgress)
 
 const styles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      progressContainer: {
-        display: 'flex',
-        width: '100%'
-      },
-      progressPercentage: {
-        width: '50px',
-        textAlign: 'right'
-      },
-      progressBar: {
-        flexGrow: 1
-      }
-    }),
+  (theme: Theme) => ({
+    progressContainer: {
+      display: 'flex',
+      width: '100%'
+    },
+    progressPercentage: {
+      width: '50px',
+      textAlign: 'right'
+    },
+    progressBar: {
+      flexGrow: 1
+    }
+  }),
   { name: 'progressBar' }
 )
 

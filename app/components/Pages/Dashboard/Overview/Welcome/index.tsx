@@ -9,7 +9,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import Greeting from './Greetings'
 import HappyPaths from './HappyPaths'
-import ProgressBar from '../components/ProgressBar'
+import { ProgressBar } from '../components/ProgressBar'
 
 // Customizing MUI accordion styles
 const Accordion = withStyles((theme: Theme) => ({
@@ -39,7 +39,7 @@ const useStyles = makeStyles(
     main: {
       display: 'flex',
       width: '100%',
-      height: '84vh'
+      height: '84vh' // we need dashboard container to be the same height as screen and this is the only way
     },
     body: {
       height: '100%',

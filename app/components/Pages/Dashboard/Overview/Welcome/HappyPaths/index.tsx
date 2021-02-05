@@ -20,25 +20,22 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 // TODO: Replace this new module with the already exisitng one in global components
 import ProgressBar from '../../components/ProgressBar'
 
-const ListItem = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      borderStyle: 'solid',
-      borderColor: theme.palette.grey[300],
-      borderTop: '1px',
-      borderBottom: '1px'
-    }
-  })
-)(MuiListItem)
+const ListItem = withStyles((theme: Theme) => ({
+  root: {
+    borderStyle: 'solid',
+    borderColor: theme.palette.grey[300],
+    borderTop: '1px',
+    borderBottom: '1px'
+  }
+}))(MuiListItem)
 
 const styles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      heading: {
-        padding: `0 ${theme.spacing(4)}px`,
-        marginTop: theme.spacing(2)
-      }
-    }),
+  (theme: Theme) => ({
+    heading: {
+      padding: `0 ${theme.spacing(4)}px`,
+      marginTop: theme.spacing(2)
+    }
+  }),
   { name: 'HappyPaths' }
 )
 
