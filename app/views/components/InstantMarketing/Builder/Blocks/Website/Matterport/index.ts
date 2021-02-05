@@ -1,8 +1,6 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
-// import { Matterport } from 'components/MatterportDrawer/types'
-type Matterport = any
 // import MatterportIcon from 'assets/images/marketing/editor/blocks/matterport.png'
 
 import registerBlock from '../../registerBlock'
@@ -11,7 +9,6 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
 import { baseView, handleBlockDragStopEvent, isComponent } from '../utils'
 import template from './template.njk'
-// import { generateEmbedMatterportUrl } from './utils'
 
 const typeEmbedMatterport = 'embed-matterport'
 export const embedMatterportBlockName = typeEmbedMatterport
@@ -29,11 +26,12 @@ export const matterportBlockTraits = {
 export interface MatterportBlockOptions {
   embedMatterportClassNames?: string
   onMatterportDrop: (model: Model) => void
+  onEmptyMatterportSelected: (model: Model) => void
 }
 
-// interface MatterportBlock {
-//   selectHandler: (selectedMatterport?: Matterport) => void
-// }
+interface MatterportBlock {
+  selectHandler: (modelId?: string) => void
+}
 
 const isMatterportComponent = isComponent(typeEmbedMatterport)
 
@@ -43,8 +41,12 @@ const svgAttrs =
 export default function registerMatterportBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  { embedMatterportClassNames, onMatterportDrop }: MatterportBlockOptions
-): any {
+  {
+    embedMatterportClassNames,
+    onMatterportDrop,
+    onEmptyMatterportSelected
+  }: MatterportBlockOptions
+): MatterportBlock {
   const ImageModel = editor.DomComponents.getType('image')!.model as any
   const ImageView = editor.DomComponents.getType('image')!.view as any
   const BaseView = editor.DomComponents.getType('default')!.view as any
@@ -181,14 +183,21 @@ export default function registerMatterportBlock(
     template: matterportBlocks[embedMatterportBlockName]
   })
 
-  handleBlockDragStopEvent(
+  editor.on('component:selected', model => {
+    if (model.get('type') !== typeEmbedMatterport || model.get('modelId')) {
+      return
+    }
+
+    onEmptyMatterportSelected(model)
+  })
+
+  return handleBlockDragStopEvent(
     editor,
     matterportBlocks,
-    renderData
-    // (selectedMatterport: Matterport) => ({
-    //   ...renderData
-    //   // url: generateEmbedMatterportUrl(selectedMatterport.url)
-    // })
-    // onMatterportDrop
+    (modelId: string) => ({
+      ...renderData,
+      src: `https://my.matterport.com/show/?m=${modelId}`
+    }),
+    onMatterportDrop
   )
 }

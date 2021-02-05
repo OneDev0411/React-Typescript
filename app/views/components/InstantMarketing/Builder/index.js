@@ -30,6 +30,8 @@ import { getBrandColors } from 'utils/get-brand-colors'
 
 import { EditorDialog } from 'components/ImageEditor'
 
+import MatterportDrawer from 'components/MatterportDrawer'
+
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
 
@@ -79,6 +81,7 @@ class Builder extends React.Component {
       imageToEdit: null,
       isVideoDrawerOpen: false,
       isArticleDrawerOpen: false,
+      isMatterportDrawerOpen: false,
       isNeighborhoodsReportDrawerOpen: false,
       isNeighborhoodsGraphsReportDrawerOpen: false
     }
@@ -365,6 +368,11 @@ class Builder extends React.Component {
         onDrop: () => {
           this.setState({ isArticleDrawerOpen: true })
         }
+      },
+      matterport: {
+        onDrop: () => {
+          this.setState({ isMatterportDrawerOpen: true })
+        }
       }
     }
 
@@ -434,7 +442,12 @@ class Builder extends React.Component {
       onVideoDrop: dynamicBlocksOptions.video.onDrop,
       onImageDrop: dynamicBlocksOptions.image.onDrop,
       onAgentDrop: dynamicBlocksOptions.agent.onDrop,
-      onArticleDrop: dynamicBlocksOptions.article.onDrop
+      onArticleDrop: dynamicBlocksOptions.article.onDrop,
+      onMatterportDrop: dynamicBlocksOptions.matterport.onDrop,
+      onEmptyMatterportSelected: () => {
+        console.log('!!!!!!!!!!!!!!!######')
+        this.setState({ isMatterportDrawerOpen: true })
+      }
     } // TODO: read this from the template config
 
     this.blocks = registerWebsiteBlocks(this.editor, renderData, blocksOptions)
@@ -1084,6 +1097,17 @@ class Builder extends React.Component {
               }}
             />
           )}
+          <MatterportDrawer
+            isOpen={this.state.isMatterportDrawerOpen}
+            onClose={() => {
+              this.blocks.matterport.selectHandler()
+              this.setState({ isMatterportDrawerOpen: false })
+            }}
+            onSelect={matterportModelId => {
+              this.blocks.matterport.selectHandler(matterportModelId)
+              this.setState({ isMatterportDrawerOpen: false })
+            }}
+          />
           <Header>
             {this.isTemplatesListEnabled() && (
               <>
