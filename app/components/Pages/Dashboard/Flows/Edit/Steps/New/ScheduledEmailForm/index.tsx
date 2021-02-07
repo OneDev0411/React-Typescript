@@ -1,8 +1,6 @@
 import React from 'react'
-import { Form, Field } from 'react-final-form'
-import { Grid, Box, Typography } from '@material-ui/core'
-
-import { MUITextInput } from 'components/Forms/MUITextInput'
+import { Form } from 'react-final-form'
+import { Grid, Box } from '@material-ui/core'
 
 import { ActionFooter } from '../components/ActionFooter'
 import { useCommonStyles } from '../styles'
@@ -12,7 +10,6 @@ import {
   humanizeSeconds,
   formatTimeDigits
 } from '../../../helpers'
-import { validateInput } from '../../../../helpers'
 import { Title } from '../components/Title'
 import { Description } from '../components/Description'
 import { Time } from '../components/Time'
@@ -134,37 +131,6 @@ export default function ScheduledEmailForm({
                 </Grid>
 
                 <Grid container item xs={12}>
-                  <Grid container item xs={3}>
-                    <Box mb={2}>
-                      <Field
-                        name="wait_for"
-                        label="Wait for"
-                        type="number"
-                        min="1"
-                        max="365"
-                        variant="outlined"
-                        margin="dense"
-                        autoComplete="off"
-                        required
-                        validate={value =>
-                          validateInput(value, 'wait days', () => {
-                            return value >= 0 && value <= 365
-                          })
-                        }
-                        component={MUITextInput}
-                      />
-                    </Box>
-                  </Grid>
-
-                  <Grid container item alignItems="flex-start" xs={5}>
-                    <Box mb={2} pt={2} pl={1}>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        days after{' '}
-                        {startFrom === 0 ? 'Flow start' : 'previous step'}
-                      </Typography>
-                    </Box>
-                  </Grid>
-
                   <Grid container item xs={4} justify="flex-end">
                     <Box mb={2}>
                       <Time />

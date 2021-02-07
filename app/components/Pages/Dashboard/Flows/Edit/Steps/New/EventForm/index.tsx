@@ -1,8 +1,6 @@
 import React from 'react'
-import { Form, Field } from 'react-final-form'
+import { Form } from 'react-final-form'
 import { Grid, Box, Typography } from '@material-ui/core'
-
-import { MUITextInput } from 'components/Forms/MUITextInput'
 
 import { EventType } from 'components/EventDrawer/components/EventType'
 
@@ -14,7 +12,6 @@ import {
   humanizeSeconds,
   formatTimeDigits
 } from '../../../helpers'
-import { validateInput } from '../../../../helpers'
 import { Title } from '../components/Title'
 import { Description } from '../components/Description'
 import { Time } from '../components/Time'
@@ -108,60 +105,39 @@ export default function EventForm({
           <Box className={commonClasses.container}>
             <form style={{ width: '100%' }} onSubmit={handleSubmit} noValidate>
               <Box className={commonClasses.content}>
-                <Grid item xs={12}>
-                  <Box mb={2}>
-                    <EventType />
-                  </Box>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Box mb={2}>
-                    <Title />
-                  </Box>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Box mb={2}>
-                    <Description />
-                  </Box>
-                </Grid>
-
-                <Grid container item xs={12}>
-                  <Grid container item xs={3}>
+                <Typography variant="subtitle1" className={commonClasses.title}>
+                  Add a reminder for
+                </Typography>
+                <Grid
+                  container
+                  direction="row"
+                  justify="flex-start"
+                  alignItems="flex-start"
+                >
+                  <Grid item xl={4} lg={4} md={6} sm={7} xs={12}>
                     <Box mb={2}>
-                      <Field
-                        name="wait_for"
-                        label="Wait for"
-                        type="number"
-                        min="1"
-                        max="365"
-                        variant="outlined"
-                        margin="dense"
-                        autoComplete="off"
-                        required
-                        validate={value =>
-                          validateInput(value, 'wait days', () => {
-                            return value >= 0 && value <= 365
-                          })
-                        }
-                        component={MUITextInput}
-                      />
+                      <EventType />
                     </Box>
-                  </Grid>
-
-                  <Grid container item alignItems="flex-start" xs={5}>
-                    <Box mb={2} pt={2} pl={1}>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        days after{' '}
-                        {startFrom === 0 ? 'Flow start' : 'previous step'}
-                      </Typography>
+                    <Box mb={1}>
+                      <Title />
                     </Box>
-                  </Grid>
-
-                  <Grid container item xs={4} justify="flex-end">
-                    <Box mb={2}>
+                    <Box mb={1}>
+                      <Description />
+                    </Box>
+                    <Box>
                       <Time />
                     </Box>
+                  </Grid>
+                  <Grid
+                    item
+                    xl={3}
+                    lg={3}
+                    md={5}
+                    sm={5}
+                    xs={12}
+                    className={commonClasses.extraItems}
+                  >
+                    fd
                   </Grid>
                 </Grid>
               </Box>
