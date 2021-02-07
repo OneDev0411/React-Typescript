@@ -9,7 +9,7 @@ export const useCommonStyles = makeStyles(
       borderRadius: theme.shape.borderRadius
     },
     title: {
-      marginBottom: theme.spacing(1.5)
+      marginBottom: theme.spacing(2)
     },
     content: {
       padding: theme.spacing(2, 2)

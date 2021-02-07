@@ -8,13 +8,14 @@ import { validateTimeInput } from '../../../../helpers'
 export const Time = () => {
   return (
     <Field
+      required
       name="at"
       label="At"
-      margin="dense"
-      autoComplete="off"
       type="time"
+      size="small"
+      margin="none"
       variant="outlined"
-      required
+      autoComplete="off"
       InputLabelProps={{ shrink: true }}
       validate={validateTimeInput}
       component={MUITextInput}

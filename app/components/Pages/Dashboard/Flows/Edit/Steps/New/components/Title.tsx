@@ -10,13 +10,14 @@ import { validateStringInput } from '../../../../helpers'
 export const Title = () => {
   return (
     <Field
-      autoFocus
       required
+      autoFocus
       fullWidth
+      size="small"
       name="title"
       label="Title"
+      margin="none"
       variant="outlined"
-      margin="dense"
       autoComplete="off"
       component={MUITextInput}
       FormHelperTextProps={{

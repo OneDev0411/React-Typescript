@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form } from 'react-final-form'
-import { Grid, Box } from '@material-ui/core'
+import { Grid, Box, Typography } from '@material-ui/core'
 
 import { ActionFooter } from '../components/ActionFooter'
 import { useCommonStyles } from '../styles'
@@ -106,8 +106,35 @@ export default function ScheduledEmailForm({
           <Box className={commonClasses.container}>
             <form style={{ width: '100%' }} onSubmit={handleSubmit} noValidate>
               <Box className={commonClasses.content}>
-                <Grid container item xs={12} alignItems="center">
-                  <Grid item xs={6}>
+                <Typography variant="subtitle1" className={commonClasses.title}>
+                  Send A Marketing Email
+                </Typography>
+                <Grid
+                  container
+                  direction="row"
+                  justify="flex-start"
+                  alignItems="flex-start"
+                >
+                  <Grid item xl={4} lg={4} md={6} sm={7} xs={12}>
+                    <Box mb={2}>
+                      <Title />
+                    </Box>
+                    <Box mb={2}>
+                      <Description />
+                    </Box>
+                    <Box>
+                      <Time />
+                    </Box>
+                  </Grid>
+                  <Grid
+                    item
+                    xl={3}
+                    lg={3}
+                    md={5}
+                    sm={5}
+                    xs={12}
+                    className={commonClasses.extraItems}
+                  >
                     <EmailTemplate
                       templates={templates}
                       currentTemplateId={values.email_template}
@@ -115,26 +142,6 @@ export default function ScheduledEmailForm({
                       onNewTemplateClick={onNewTemplateClick}
                       onReviewTemplateClick={onReviewTemplateClick}
                     />
-                  </Grid>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Box mb={2}>
-                    <Title />
-                  </Box>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Box mb={2}>
-                    <Description />
-                  </Box>
-                </Grid>
-
-                <Grid container item xs={12}>
-                  <Grid container item xs={4} justify="flex-end">
-                    <Box mb={2}>
-                      <Time />
-                    </Box>
                   </Grid>
                 </Grid>
               </Box>

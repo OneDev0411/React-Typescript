@@ -115,29 +115,18 @@ export default function EventForm({
                   alignItems="flex-start"
                 >
                   <Grid item xl={4} lg={4} md={6} sm={7} xs={12}>
-                    <Box mb={2}>
+                    <Box mb={2.5}>
                       <EventType />
                     </Box>
-                    <Box mb={1}>
+                    <Box mb={2}>
                       <Title />
                     </Box>
-                    <Box mb={1}>
+                    <Box mb={2}>
                       <Description />
                     </Box>
                     <Box>
                       <Time />
                     </Box>
-                  </Grid>
-                  <Grid
-                    item
-                    xl={3}
-                    lg={3}
-                    md={5}
-                    sm={5}
-                    xs={12}
-                    className={commonClasses.extraItems}
-                  >
-                    fd
                   </Grid>
                 </Grid>
               </Box>

@@ -22,11 +22,12 @@ export const Description = () => {
     <Field
       fullWidth
       multiline
+      size="small"
+      margin="none"
+      variant="outlined"
+      autoComplete="off"
       name="description"
       label="Description"
-      variant="outlined"
-      margin="dense"
-      autoComplete="off"
       FormHelperTextProps={{
         variant: 'standard'
       }}
