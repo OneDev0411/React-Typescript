@@ -9,6 +9,7 @@ import { useCommonStyles } from '../styles'
 import { Title } from '../components/Title'
 import { Description } from '../components/Description'
 import { Time } from '../components/Time'
+import { TemplateInctance } from '../components/TemplateInctance'
 import { WaitFor } from '../components/WaitFor'
 import { defaultWaitForValue } from '../components/WaitFor/Fields'
 import {
@@ -111,7 +112,7 @@ export default function MarketingEmailForm({
                     xs={12}
                     className={commonClasses.extraItems}
                   >
-                    sdfsd
+                    <TemplateInctance />
                   </Grid>
                 </Grid>
               </Box>
