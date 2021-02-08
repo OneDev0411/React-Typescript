@@ -445,7 +445,6 @@ class Builder extends React.Component {
       onArticleDrop: dynamicBlocksOptions.article.onDrop,
       onMatterportDrop: dynamicBlocksOptions.matterport.onDrop,
       onEmptyMatterportSelected: () => {
-        console.log('!!!!!!!!!!!!!!!######')
         this.setState({ isMatterportDrawerOpen: true })
       }
     } // TODO: read this from the template config
