@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { Box } from '@material-ui/core'
 
 import EventForm from './EventForm'
-import ScheduledEmailForm from './ScheduledEmailForm'
+import BasicEmailForm from './BasicEmailForm'
+import MarketingEmailForm from './MarketingEmailForm'
 import { AddButton } from './AddButton'
 import { useCommonStyles } from '../Item/styles'
 
@@ -10,14 +11,14 @@ interface Props {
   index: number
   emailTemplates: IBrandEmailTemplate[]
   defaultSelectedEmailTemplate?: UUID
-  isNewEventFormOpen?: boolean
+  shouldShowDefaultForm?: boolean
   onSubmit: (data: IBrandFlowStepInput) => Promise<any>
   onNewEmailTemplateClick: () => void
   onReviewEmailTemplateClick: (template: IBrandEmailTemplate) => void
 }
 
 export const NewStep = ({
-  isNewEventFormOpen: passedIsNewEventFormOpen,
+  shouldShowDefaultForm,
   index,
   emailTemplates,
   defaultSelectedEmailTemplate,
@@ -26,13 +27,9 @@ export const NewStep = ({
   onReviewEmailTemplateClick
 }: Props) => {
   const commonClasses = useCommonStyles()
-  const [isNewEventFormOpen, setIsNewEventFormOpen] = useState(
-    passedIsNewEventFormOpen || false
-  )
-  const [
-    isNewScheduledEmailFormOpen,
-    setIsNewScheduledEmailFormOpen
-  ] = useState(false)
+  const [openForm, setOpenForm] = useState<
+    Nullable<'event' | 'basic_email' | 'marketing_email'>
+  >(shouldShowDefaultForm ? 'event' : null)
 
   async function submitHandler(data: IBrandFlowStepInput) {
     const step: IBrandFlowStepInput = {
@@ -40,42 +37,60 @@ export const NewStep = ({
     }
 
     await onSubmit(step)
-    setIsNewEventFormOpen(false)
+    setOpenForm(null)
   }
 
   function cancelHandler() {
-    setIsNewEventFormOpen(false)
-    setIsNewScheduledEmailFormOpen(false)
+    setOpenForm(null)
+  }
+
+  const renderEventForm = () => (
+    <EventForm
+      index={index}
+      onCancel={cancelHandler}
+      onSubmit={submitHandler}
+    />
+  )
+
+  const rebderBasicEmailForm = () => (
+    <BasicEmailForm
+      index={index}
+      templates={emailTemplates}
+      defaultSelectedTemplate={defaultSelectedEmailTemplate}
+      onCancel={cancelHandler}
+      onSubmit={submitHandler}
+      onNewTemplateClick={onNewEmailTemplateClick}
+      onReviewTemplateClick={onReviewEmailTemplateClick}
+    />
+  )
+  const rebderTemplateEmailForm = () => (
+    <MarketingEmailForm
+      index={index}
+      onCancel={cancelHandler}
+      onSubmit={submitHandler}
+    />
+  )
+
+  const renderForm = () => {
+    switch (openForm) {
+      case 'event':
+        return renderEventForm()
+      case 'basic_email':
+        return rebderBasicEmailForm()
+      case 'marketing_email':
+        return rebderTemplateEmailForm()
+    }
   }
 
   const renderNewStep = () => {
-    if (!isNewScheduledEmailFormOpen && !isNewEventFormOpen) {
+    if (!openForm) {
       return null
     }
 
     return (
       <Box className={commonClasses.stepContainer} position="relative">
         <Box className={commonClasses.stepIndex}>{index}</Box>
-        <Box className={commonClasses.itemContent}>
-          {isNewEventFormOpen && (
-            <EventForm
-              index={index}
-              onCancel={cancelHandler}
-              onSubmit={submitHandler}
-            />
-          )}
-          {isNewScheduledEmailFormOpen && (
-            <ScheduledEmailForm
-              index={index}
-              templates={emailTemplates}
-              defaultSelectedTemplate={defaultSelectedEmailTemplate}
-              onCancel={cancelHandler}
-              onSubmit={submitHandler}
-              onNewTemplateClick={onNewEmailTemplateClick}
-              onReviewTemplateClick={onReviewEmailTemplateClick}
-            />
-          )}
-        </Box>
+        <Box className={commonClasses.itemContent}>{renderForm()}</Box>
       </Box>
     )
   }
@@ -84,14 +99,9 @@ export const NewStep = ({
     return (
       <Box mt={1}>
         <AddButton
-          onNewEventClick={() => {
-            setIsNewScheduledEmailFormOpen(false)
-            setIsNewEventFormOpen(true)
-          }}
-          onNewScheduledEmailClick={() => {
-            setIsNewEventFormOpen(false)
-            setIsNewScheduledEmailFormOpen(true)
-          }}
+          onNewEventClick={() => setOpenForm('event')}
+          onNewMarketingEmailClick={() => setOpenForm('marketing_email')}
+          onNewBasicEmailClick={() => setOpenForm('basic_email')}
         />
       </Box>
     )

@@ -33,12 +33,14 @@ export const useStyles = makeStyles(
 
 interface Props {
   onNewEventClick: () => any
-  onNewScheduledEmailClick: () => any
+  onNewMarketingEmailClick: () => any
+  onNewBasicEmailClick: () => any
 }
 
 export const AddButton = ({
   onNewEventClick,
-  onNewScheduledEmailClick
+  onNewMarketingEmailClick,
+  onNewBasicEmailClick
 }: Props) => {
   const commonClasses = useCommonStyles()
   const classes = useStyles()
@@ -61,7 +63,16 @@ export const AddButton = ({
           color="secondary"
           size="small"
           className={classes.btn}
-          onClick={onNewScheduledEmailClick}
+          onClick={onNewMarketingEmailClick}
+        >
+          Add Marketing Email
+        </Button>
+        <Button
+          variant="outlined"
+          color="secondary"
+          size="small"
+          className={classes.btn}
+          onClick={onNewBasicEmailClick}
         >
           Add Basic Email
         </Button>

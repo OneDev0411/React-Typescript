@@ -91,11 +91,10 @@ export default function Steps({
       {!disableEdit && (
         <NewStep
           index={items.length + 1}
-          // startFrom={startFromSeconds}
+          shouldShowDefaultForm={items.length === 0}
           emailTemplates={emailTemplates}
           defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
           onSubmit={onNewStepSubmit}
-          isNewEventFormOpen={items.length === 0}
           onNewEmailTemplateClick={onNewEmailTemplateClick}
           onReviewEmailTemplateClick={onReviewEmailTemplateClick}
         />

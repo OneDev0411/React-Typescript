@@ -5,7 +5,7 @@ import EventForm from '../New/EventForm'
 
 import { useCommonStyles } from './styles'
 import { View } from './Components/View'
-import ScheduledEmailForm from '../New/ScheduledEmailForm'
+import BasicEmailForm from '../New/BasicEmailForm'
 
 interface Props {
   disableEdit: boolean
@@ -50,7 +50,7 @@ export default function Item({
             />
           )}
           {step.email && (
-            <ScheduledEmailForm
+            <BasicEmailForm
               onCancel={() => setIsEditing(false)}
               onSubmit={onUpdate}
               onDelete={() => onDelete(step)}

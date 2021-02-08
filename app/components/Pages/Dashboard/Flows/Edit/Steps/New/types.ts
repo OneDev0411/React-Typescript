@@ -1,9 +1,12 @@
-type BaseFormData = Pick<IBrandFlowStepInput, 'title' | 'description' | 'time'>
-
 export type RawWaitFor = {
   value: number
   unit: WaitForField
   triggerAt: 'after' | 'before'
+}
+
+interface BaseFormData
+  extends Pick<IBrandFlowStepInput, 'title' | 'description' | 'time'> {
+  wait_for: RawWaitFor
 }
 
 export interface EventFormData extends BaseFormData {
@@ -11,10 +14,12 @@ export interface EventFormData extends BaseFormData {
     title: string
     value: TTaskType
   }
-  wait_for: RawWaitFor
 }
 
-export interface ScheduledFormData extends BaseFormData {
-  wait_for: RawWaitFor
+export interface BasicEmailFormData extends BaseFormData {
   email_template: UUID
+}
+
+export interface MarketingEmailFormData extends BaseFormData {
+  template_instance: UUID
 }
