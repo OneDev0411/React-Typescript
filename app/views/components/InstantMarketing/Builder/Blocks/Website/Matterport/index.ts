@@ -48,9 +48,10 @@ export default function registerMatterportBlock(
     onEmptyMatterportSelected
   }: MatterportBlockOptions
 ): MatterportBlock {
-  const ImageModel = editor.DomComponents.getType('image')!.model as any
-  const ImageView = editor.DomComponents.getType('image')!.view as any
-  const BaseView = editor.DomComponents.getType('default')!.view as any
+  const ImageComponent = editor.DomComponents.getType('image')
+  const ImageModel = ImageComponent!.model
+  const ImageView = ImageComponent!.view
+  const BaseView = editor.DomComponents.getType('default')!.view
 
   editor.DomComponents.addType(typeEmbedMatterport, {
     model: ImageModel.extend(

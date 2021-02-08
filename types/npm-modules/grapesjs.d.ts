@@ -198,10 +198,17 @@ declare module 'grapesjs' {
     force?: boolean
   }
 
+  interface BackboneObject {
+    prototype: any
+    extend: Function
+  }
+
   export interface DomComponents {
     addType(type: string, methods: object): object
     removeType(type: string): object
-    getType(type: string): { model: object; view: object } | undefined
+    getType(
+      type: string
+    ): { model: BackboneObject; view: BackboneObject } | undefined
   }
 
   export interface AssetManager {
