@@ -36,11 +36,15 @@ export default function registerImageBlock(
     extendView: 'image',
     model: {
       defaults: {
-        name: 'Image',
-        style: {
-          display: 'block',
-          width: '100%'
-        }
+        resizable: {
+          tl: 0,
+          tr: 0,
+          bl: 0,
+          br: 0,
+          cl: 0,
+          cr: 0
+        },
+        name: 'Image'
       }
     },
     view: { ...baseView(imageClassNames) }

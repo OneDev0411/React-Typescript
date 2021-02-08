@@ -61,6 +61,14 @@ export default function registerMatterportBlock(
           type: typeEmbedMatterport,
           tagName: 'iframe',
           void: 0,
+          resizable: {
+            tl: 0,
+            tr: 0,
+            bl: 0,
+            br: 0,
+            cl: 0,
+            cr: 0
+          },
           modelId: '',
           // the icon downloaded from this address:
           // https://www.flaticon.com/free-icon/3d_420952

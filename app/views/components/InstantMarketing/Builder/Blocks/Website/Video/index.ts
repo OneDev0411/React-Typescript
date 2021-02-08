@@ -30,14 +30,39 @@ export default function registerVideoBlock(
   renderData: TemplateRenderData,
   { embedVideoClassNames, onVideoDrop }: VideoBlockOptions
 ): VideoBlock {
-  const dType = editor.DomComponents.getType('video')!
-  const dModel = dType.model
-  const dView = dType.view
+  const VideoComponent = editor.DomComponents.getType('video')!
+  const VideoModel = VideoComponent.model
+  const VideoView = VideoComponent.view
+
+  const isComponentVideo = (el: HTMLElement) => {
+    if (isComponent(typeEmbedVideo)(el)) {
+      return {
+        ...(VideoModel as any).isComponent(el),
+        type: typeEmbedVideo
+      }
+    }
+  }
 
   editor.DomComponents.addType(typeEmbedVideo, {
-    isComponent: isComponent(typeEmbedVideo),
-    model: dModel,
-    view: (dView as any).extend({
+    model: VideoModel.extend(
+      {
+        defaults: {
+          ...VideoModel.prototype.defaults,
+          resizable: {
+            tl: 0,
+            tr: 0,
+            bl: 0,
+            br: 0,
+            cl: 0,
+            cr: 0
+          }
+        }
+      },
+      {
+        isComponent: isComponentVideo
+      }
+    ),
+    view: VideoView.extend({
       ...baseView(embedVideoClassNames)
     })
   })
