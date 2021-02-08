@@ -21,7 +21,6 @@ export function QuestionWizard({
 }: Props) {
   const refs = useRef<HTMLDivElement[]>([])
   const loadingRef = useRef<SVGSVGElement>(null)
-
   const theme = useTheme<Theme>()
 
   const [currentStep, setCurrentStep] = useState(defaultStep)
@@ -39,7 +38,7 @@ export function QuestionWizard({
     setCurrentStep(step)
   }
 
-  const gotoNext = async (delay: number = 0) => {
+  const gotoNext = async () => {
     if (currentStep + 1 > sections.length) {
       onFinish()
 
@@ -65,8 +64,8 @@ export function QuestionWizard({
 
   useEffect(() => {
     refs.current[currentStep]?.scrollIntoView({
-      block: 'center',
-      inline: 'center',
+      block: 'start',
+      inline: 'start',
       behavior: 'smooth'
     })
   }, [currentStep, lastVisitedStep])
@@ -94,7 +93,11 @@ export function QuestionWizard({
         last: () => gotoStep(sections.length)
       }}
     >
-      <div>
+      <div
+        style={{
+          paddingBottom: '50%'
+        }}
+      >
         {sections
           .filter(section => {
             return !!section
@@ -136,9 +139,6 @@ export function QuestionWizard({
     </WizardContext.Provider>
   )
 }
-
-const wait = (delay: number) =>
-  new Promise(resolve => setTimeout(resolve, delay))
 
 export * from './QuestionSection'
 export * from './QuestionForm'

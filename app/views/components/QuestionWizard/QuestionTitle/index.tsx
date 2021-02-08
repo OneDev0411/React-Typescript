@@ -12,7 +12,7 @@ const useStyles = makeStyles(
       borderRadius: theme.spacing(2, 2, 2, 0),
       display: 'inline-block',
       padding: theme.spacing(2, 4),
-      maxWidth: '50%'
+      maxWidth: '65%'
     }
   }),
   {

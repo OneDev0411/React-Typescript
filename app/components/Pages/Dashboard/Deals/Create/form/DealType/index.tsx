@@ -32,8 +32,8 @@ export function DealType({ propertyType, onChange }: Props) {
   }
 
   return (
-    <QuestionSection hidden={!!deal}>
-      <QuestionTitle>Who are you repersenting?</QuestionTitle>
+    <QuestionSection disabled={!!deal}>
+      <QuestionTitle>Which side are you representing?</QuestionTitle>
       <QuestionForm>
         <RadioGroup
           name="DealType"
@@ -45,6 +45,10 @@ export function DealType({ propertyType, onChange }: Props) {
             {
               label: propertyType?.includes('Lease') ? 'Landlord' : 'Seller',
               value: 'Selling'
+            },
+            {
+              label: 'Both',
+              value: 'Both'
             }
           ]}
           onChange={handleChange}

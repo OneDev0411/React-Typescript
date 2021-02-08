@@ -8,7 +8,6 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
 import cn from 'classnames'
 import { mdiMapMarker, mdiHome } from '@mdi/js'
 
@@ -25,12 +24,12 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { updateListing, upsertContexts } from 'actions/deals'
-
 import { useSearchLocation } from 'hooks/use-search-location'
 
-import { useCreationContext } from '../../context/use-creation-context'
-import { createAddressContext } from '../../../utils/create-address-context'
+export interface PropertyAddress {
+  type: 'Place' | 'Listing'
+  address: string | unknown
+}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -71,15 +70,15 @@ const useStyles = makeStyles(
   }
 )
 
-export function DealAddress() {
+interface Props {
+  onChange: (address: PropertyAddress) => void
+}
+
+export function DealAddress({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
 
-  const { deal } = useCreationContext()
-
   const classes = useStyles()
-
-  const dispatch = useDispatch()
 
   const [place, setPlace] = useState<
     Nullable<google.maps.places.AutocompletePrediction>
@@ -102,19 +101,20 @@ export function DealAddress() {
   }
 
   const handleSubmit = async () => {
-    if (!deal) {
-      return
-    }
-
     if (place) {
       const address = await getParsedPlace(place!)
-      const contexts = createAddressContext(deal, address)
 
-      dispatch(upsertContexts(deal.id, contexts))
+      onChange({
+        type: 'Place',
+        address
+      })
     }
 
     if (listing) {
-      dispatch(updateListing(deal.id, listing.id))
+      onChange({
+        type: 'Listing',
+        address: listing.id
+      })
     }
 
     if (wizard.currentStep === step) {

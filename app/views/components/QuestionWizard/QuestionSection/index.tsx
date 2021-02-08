@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }),
   disabled: {
     position: 'absolute',
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     borderRadius: theme.shape.borderRadius,
     top: 0,
     left: 0,

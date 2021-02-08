@@ -22,11 +22,9 @@ import { selectUser } from 'selectors/user'
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { getChangedRoles } from './helpers/get-changed-roles'
 
-import { DealVisibility } from './form/DealVisibility'
 import { DealType } from './form/DealType'
 import { DealPropertyType } from './form/DealPropertyType'
 import { DealPrimaryAgent } from './form/DealPrimaryAgent'
-import { DealCoAgent } from './form/DealCoAgent'
 import { DealAddress } from './form/DealAddress'
 import { DealClient } from './form/DealClient'
 import { DealContext } from './form/DealContext'
@@ -66,7 +64,6 @@ export default function CreateDeal() {
 
   const roles = useDealRoles(deal)
 
-  const visibility = watch('visibility')
   const dealType = watch('deal_type')
   const propertyType = watch('property_type')
   const enderType = watch('ender_type')
@@ -95,6 +92,11 @@ export default function CreateDeal() {
     }
 
     const values = control.getValues()
+
+    console.log(values)
+
+    return
+
     const agents = [].concat(
       values.buying_primary_agent || [],
       values.selling_primary_agent || []
@@ -108,7 +110,7 @@ export default function CreateDeal() {
       brand: primaryAgent.brand,
       property_type: propertyType,
       deal_type: dealType,
-      is_draft: visibility === 'draft'
+      is_draft: true
     })
 
     dispatch(createDeal(newDeal))
@@ -143,9 +145,9 @@ export default function CreateDeal() {
       <Box className={classes.root}>
         <QuestionWizard>
           <Controller
-            name="visibility"
+            name="address"
             control={control}
-            render={({ onChange }) => <DealVisibility onChange={onChange} />}
+            render={({ onChange }) => <DealAddress onChange={onChange} />}
           />
 
           <Controller
@@ -178,7 +180,7 @@ export default function CreateDeal() {
                 <DealPrimaryAgent
                   side="Buying"
                   isCommissionRequired={isDoubleEnded}
-                  title="Enter Buyer Primary Agent’s information"
+                  title="Enter Buyer Agent’s information"
                   roles={value}
                   onChange={(role, type) =>
                     onChange(getChangedRoles(value, role, type))
@@ -195,7 +197,7 @@ export default function CreateDeal() {
               <DealPrimaryAgent
                 isCommissionRequired
                 side="Selling"
-                title="Enter Listing Primary Agent’s information"
+                title="Enter Listing Agent’s information"
                 roles={value}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))
@@ -204,26 +206,6 @@ export default function CreateDeal() {
               />
             )}
           />
-
-          <DealAddress />
-
-          {dealType === 'Buying' && (
-            <DealCoAgent
-              side="Buying"
-              isCommissionRequired={isDoubleEnded}
-              roles={roles}
-              title="Enter Buyer Co-Agent’s information"
-            />
-          )}
-
-          {dealType && (
-            <DealCoAgent
-              isCommissionRequired
-              side="Selling"
-              title="Enter Listing Co-Agent’s information"
-              roles={roles}
-            />
-          )}
 
           {dealType === 'Buying' && (
             <DealClient
