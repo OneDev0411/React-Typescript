@@ -1,7 +1,7 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
-// import MatterportIcon from 'assets/images/marketing/editor/blocks/matterport.png'
+import MatterportIcon from 'assets/images/marketing/editor/blocks/matterport.png'
 
 import registerBlock from '../../registerBlock'
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
@@ -18,7 +18,8 @@ export const matterportBlockTraits = {
     {
       label: 'Model Id',
       name: 'modelId',
-      changeProp: 1
+      changeProp: 1,
+      placeholder: 'eg. uRGXgoiYk9f'
     }
   ]
 }
@@ -177,7 +178,7 @@ export default function registerMatterportBlock(
 
   registerBlock(editor, {
     label: 'Matterport',
-    // icon: MatterportIcon,
+    icon: MatterportIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: embedMatterportBlockName,
     template: matterportBlocks[embedMatterportBlockName]
