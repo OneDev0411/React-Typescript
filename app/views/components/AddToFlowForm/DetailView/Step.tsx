@@ -39,12 +39,12 @@ export default function Step({ step }: Props) {
           {step.title}
         </Typography>
       </Box>
-      <div>
+      {/* <div>
         {step.wait_days === 0 && 'The same day'}
         {step.wait_days > 0 && `Wait for ${step.wait_days} `}
         {step.wait_days === 1 && 'day'}
         {step.wait_days > 1 && 'days'}
-      </div>
+      </div> */}
     </StepContainer>
   )
 }

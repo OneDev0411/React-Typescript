@@ -4,27 +4,21 @@ import { Grid, Box, Typography } from '@material-ui/core'
 
 import { ActionFooter } from '../components/ActionFooter'
 import { useCommonStyles } from '../styles'
-import {
-  timeToSeconds,
-  ONE_DAY_IN_SECONDS,
-  humanizeSeconds,
-  formatTimeDigits
-} from '../../../helpers'
 import { Title } from '../components/Title'
 import { Description } from '../components/Description'
 import { Time } from '../components/Time'
 import { EmailTemplate } from '../components/EmailTemplate'
 
-interface FormData {
+interface FormData
+  extends Pick<
+    IBrandFlowStepInput,
+    'title' | 'description' | 'wait_for' | 'time'
+  > {
   email_template: UUID
-  title: string
-  description?: string
-  wait_for: number
-  at: string
 }
 
 interface Props {
-  startFrom?: number
+  index: number
   step?: IBrandFlowStep
   defaultSelectedTemplate?: UUID
   templates: IBrandEmailTemplate[]
@@ -36,7 +30,7 @@ interface Props {
 }
 
 export default function ScheduledEmailForm({
-  startFrom = 0,
+  index,
   step,
   templates,
   defaultSelectedTemplate,
@@ -55,16 +49,12 @@ export default function ScheduledEmailForm({
           (templates.find(({ id }) => id === defaultSelectedTemplate) || {})
             .id || '',
         title: '',
-        wait_for: 1,
-        at: '08:00'
+        wait_for: {
+          days: 33
+        },
+        time: '08:00'
       }
     }
-
-    const { days } = humanizeSeconds(stepData.due_in - startFrom)
-    const { hours, minutes } = humanizeSeconds(
-      stepData.due_in - days * ONE_DAY_IN_SECONDS
-    )
-    const at = `${formatTimeDigits(hours)}:${formatTimeDigits(minutes)}`
 
     return {
       email_template:
@@ -72,24 +62,26 @@ export default function ScheduledEmailForm({
         stepData.email.id,
       title: stepData.title,
       description: stepData.description,
-      wait_for: days,
-      at
+      wait_for: {
+        days: 234
+      },
+      time: stepData.time
     }
   }
 
   return (
     <Form
       onSubmit={(data: FormData) => {
-        const dueIn =
-          data.wait_for * ONE_DAY_IN_SECONDS +
-          timeToSeconds(data.at) +
-          startFrom
-
         const newStep: IBrandFlowStepInput = {
+          order: index,
           title: data.title,
           description: data.description,
-          due_in: dueIn,
-          email: data.email_template
+          email: data.email_template,
+          time: data.time,
+          event_type: 'last_step_date',
+          wait_for: {
+            days: 1
+          }
         }
 
         // Update step

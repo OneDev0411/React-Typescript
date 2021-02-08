@@ -9,8 +9,8 @@ export const Time = () => {
   return (
     <Field
       required
-      name="at"
-      label="At"
+      name="time"
+      label="Time"
       type="time"
       size="small"
       margin="none"

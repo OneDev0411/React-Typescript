@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Box } from '@material-ui/core'
 
-import { getNextStepStartFrom } from '../../helpers'
 import EventForm from '../New/EventForm'
 
 import { useCommonStyles } from './styles'
@@ -25,7 +24,7 @@ export default function Item({
   disableEdit,
   index,
   step,
-  prevStep,
+  // prevStep,
   emailTemplates,
   defaultSelectedEmailTemplate,
   onDelete,
@@ -47,7 +46,7 @@ export default function Item({
               onSubmit={onUpdate}
               onDelete={() => onDelete(step)}
               step={step}
-              startFrom={getNextStepStartFrom(prevStep)}
+              index={index}
             />
           )}
           {step.email && (
@@ -58,7 +57,7 @@ export default function Item({
               step={step}
               templates={emailTemplates}
               defaultSelectedTemplate={defaultSelectedEmailTemplate}
-              startFrom={getNextStepStartFrom(prevStep)}
+              index={index}
               onNewTemplateClick={onNewEmailTemplateClick}
               onReviewTemplateClick={onReviewEmailTemplateClick}
             />

@@ -19,7 +19,7 @@ import { getEmailTemplates } from 'models/email-templates/get-email-templates'
 import { getBrandFlow } from 'models/flows/get-brand-flow'
 import { deleteBrandFlowStep } from 'models/flows/delete-brand-flow-step'
 import { editBrandFlowStep } from 'models/flows/edit-brand-flow-step'
-import { editBrandFlowSteps } from 'models/flows/edit-brand-flow-steps'
+// import { editBrandFlowSteps } from 'models/flows/edit-brand-flow-steps'
 import { createStep } from 'models/flows/create-step'
 import { editBrandFlow } from 'models/flows/edit-brand-flow'
 import { stopFlow } from 'models/flows/stop-flow'
@@ -40,11 +40,11 @@ import Header from './Header'
 import Steps from './Steps'
 import Contacts from './Contacts'
 
-import {
-  shouldUpdateNextSteps,
-  updateStepsDue,
-  getUpdatedStepsOnMove
-} from './helpers'
+// import {
+//   shouldUpdateNextSteps,
+//   updateStepsDue,
+//   getUpdatedStepsOnMove
+// } from './helpers'
 import { PageContainer } from './styled'
 
 const useStyles = makeStyles(
@@ -195,15 +195,15 @@ function Edit(props: WithRouterProps) {
         description: `Are you sure about deleting "${step.title}" step?`,
         confirmLabel: 'Yes, I am sure',
         onConfirm: async () => {
-          const [
-            shouldUpdateSteps,
-            stepDueDiff,
-            stepsToUpdate
-          ] = shouldUpdateNextSteps(flow, step.id, step, true)
+          // const [
+          //   shouldUpdateSteps,
+          //   stepDueDiff,
+          //   stepsToUpdate
+          // ] = shouldUpdateNextSteps(flow, step.id, step, true)
 
-          if (shouldUpdateSteps) {
-            await updateStepsDue(brand, flow.id, stepsToUpdate, stepDueDiff)
-          }
+          // if (shouldUpdateSteps) {
+          //   await updateStepsDue(brand, flow.id, stepsToUpdate, stepDueDiff)
+          // }
 
           await deleteBrandFlowStep(brand, flow.id, step.id)
           loadFlowData(true)
@@ -219,15 +219,15 @@ function Edit(props: WithRouterProps) {
         return
       }
 
-      const [
-        shouldUpdateSteps,
-        stepDueDiff,
-        stepsToUpdate
-      ] = shouldUpdateNextSteps(flow, stepId, step)
+      // const [
+      //   shouldUpdateSteps,
+      //   stepDueDiff,
+      //   stepsToUpdate
+      // ] = shouldUpdateNextSteps(flow, stepId, step)
 
-      if (shouldUpdateSteps) {
-        await updateStepsDue(brand, flow.id, stepsToUpdate, stepDueDiff)
-      }
+      // if (shouldUpdateSteps) {
+      //   await updateStepsDue(brand, flow.id, stepsToUpdate, stepDueDiff)
+      // }
 
       await editBrandFlowStep(brand, flow.id, stepId, step)
 
@@ -236,26 +236,25 @@ function Edit(props: WithRouterProps) {
     [brand, flow, loadFlowData]
   )
 
-  const stepMoveHandler = useCallback(
-    async (source: number, destination) => {
-      if (!flow || !brand || !flow.steps) {
-        return
-      }
+  const stepMoveHandler = useCallback(async (source: number, destination) => {
+    console.log('stepMoveHandler', { source, destination })
 
-      if (source === destination) {
-        return
-      }
+    // if (!flow || !brand || !flow.steps) {
+    //   return
+    // }
 
-      const newSteps = getUpdatedStepsOnMove(flow.steps, source, destination)
+    // if (source === destination) {
+    //   return
+    // }
 
-      setIsLoading(true)
+    // const newSteps = getUpdatedStepsOnMove(flow.steps, source, destination)
 
-      await editBrandFlowSteps(brand, flow.id, newSteps)
+    // setIsLoading(true)
 
-      loadFlowData(true)
-    },
-    [brand, flow, loadFlowData]
-  )
+    // await editBrandFlowSteps(brand, flow.id, newSteps)
+
+    // loadFlowData(true)
+  }, [])
 
   const flowUpdateHandler = useCallback(
     async data => {

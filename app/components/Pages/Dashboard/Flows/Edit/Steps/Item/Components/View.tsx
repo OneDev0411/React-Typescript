@@ -14,8 +14,6 @@ import cn from 'classnames'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useRaisedMuiCard from 'hooks/use-raised-mui-card'
 
-import { humanizeSeconds, formatTimeDigits } from '../../../helpers'
-
 import { StepTypeIcon } from './StepTypeIcon'
 import { useCommonStyles } from '../styles'
 
@@ -61,15 +59,6 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
   const commonClasses = useCommonStyles()
   const classes = useStyles()
   const { raise, stopRaise } = useRaisedMuiCard()
-
-  const humanizedDiff = humanizeSeconds(step.due_in)
-
-  const hours =
-    humanizedDiff.hours >= 12
-      ? formatTimeDigits(humanizedDiff.hours - 12)
-      : formatTimeDigits(humanizedDiff.hours)
-  const minutes = formatTimeDigits(humanizedDiff.minutes)
-  const amPm = humanizedDiff.hours >= 12 ? 'PM' : 'AM'
 
   return (
     <Box position="relative">
@@ -163,9 +152,6 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
                     {step.wait_days === 1 && 'day'}
                     {step.wait_days > 1 && 'days'}
               </Typography> */}
-                  <Typography variant="body2" color="textSecondary">
-                    {`${hours}:${minutes} ${amPm}`}
-                  </Typography>
                 </Grid>
               </Grid>
             </Box>

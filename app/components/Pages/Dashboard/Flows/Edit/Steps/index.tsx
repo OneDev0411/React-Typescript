@@ -4,7 +4,7 @@ import { Box, makeStyles, Theme } from '@material-ui/core'
 
 import Item from './Item'
 import { NewStep } from './New'
-import { getNextStepStartFrom } from '../helpers'
+// import { getNextStepStartFrom } from '../helpers'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -44,9 +44,9 @@ export default function Steps({
   onReviewEmailTemplateClick
 }: Props) {
   const classes = useStyles()
-  const startFromSeconds = items.length
-    ? getNextStepStartFrom(items[items.length - 1])
-    : 0
+  // const startFromSeconds = items.length
+  //   ? getNextStepStartFrom(items[items.length - 1])
+  //   : 0
 
   return (
     <>
@@ -91,7 +91,7 @@ export default function Steps({
       {!disableEdit && (
         <NewStep
           index={items.length + 1}
-          startFrom={startFromSeconds}
+          // startFrom={startFromSeconds}
           emailTemplates={emailTemplates}
           defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
           onSubmit={onNewStepSubmit}

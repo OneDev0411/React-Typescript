@@ -8,7 +8,6 @@ import { useCommonStyles } from '../Item/styles'
 
 interface Props {
   index: number
-  startFrom: number
   emailTemplates: IBrandEmailTemplate[]
   defaultSelectedEmailTemplate?: UUID
   isNewEventFormOpen?: boolean
@@ -20,7 +19,6 @@ interface Props {
 export const NewStep = ({
   isNewEventFormOpen: passedIsNewEventFormOpen,
   index,
-  startFrom,
   emailTemplates,
   defaultSelectedEmailTemplate,
   onSubmit,
@@ -38,8 +36,7 @@ export const NewStep = ({
 
   async function submitHandler(data: IBrandFlowStepInput) {
     const step: IBrandFlowStepInput = {
-      ...data,
-      due_in: data.due_in
+      ...data
     }
 
     await onSubmit(step)
@@ -62,14 +59,14 @@ export const NewStep = ({
         <Box className={commonClasses.itemContent}>
           {isNewEventFormOpen && (
             <EventForm
-              startFrom={startFrom}
+              index={index}
               onCancel={cancelHandler}
               onSubmit={submitHandler}
             />
           )}
           {isNewScheduledEmailFormOpen && (
             <ScheduledEmailForm
-              startFrom={startFrom}
+              index={index}
               templates={emailTemplates}
               defaultSelectedTemplate={defaultSelectedEmailTemplate}
               onCancel={cancelHandler}

@@ -6,29 +6,23 @@ import { EventType } from 'components/EventDrawer/components/EventType'
 
 import { ActionFooter } from '../components/ActionFooter'
 import { useCommonStyles } from '../styles'
-import {
-  timeToSeconds,
-  ONE_DAY_IN_SECONDS,
-  humanizeSeconds,
-  formatTimeDigits
-} from '../../../helpers'
 import { Title } from '../components/Title'
 import { Description } from '../components/Description'
 import { Time } from '../components/Time'
 
-interface FormData {
+interface FormData
+  extends Pick<
+    IBrandFlowStepInput,
+    'title' | 'description' | 'wait_for' | 'time'
+  > {
   task_type: {
     title: string
     value: TTaskType
   }
-  title: string
-  description?: string
-  wait_for: number
-  at: string
 }
 
 interface Props {
-  startFrom?: number
+  index: number
   step?: IBrandFlowStep
   onDelete?: (data: IBrandFlowStep) => Promise<any>
   onSubmit: (data: IBrandFlowStepInput, stepId?: UUID) => Promise<any>
@@ -36,7 +30,7 @@ interface Props {
 }
 
 export default function EventForm({
-  startFrom = 0,
+  index,
   step,
   onSubmit,
   onCancel,
@@ -52,13 +46,12 @@ export default function EventForm({
           title: 'Call'
         },
         title: '',
-        wait_for: 1,
-        at: '08:00'
+        wait_for: {
+          days: 1
+        },
+        time: '08:00'
       }
     }
-
-    const { hours, minutes } = humanizeSeconds(stepData.due_in)
-    const at = `${formatTimeDigits(hours)}:${formatTimeDigits(minutes)}`
 
     return {
       task_type: {
@@ -67,27 +60,29 @@ export default function EventForm({
       },
       title: stepData.title,
       description: stepData.description,
-      wait_for: stepData.wait_days,
-      at
+      time: stepData.time,
+      wait_for: {
+        days: 3434
+      }
     }
   }
 
   return (
     <Form
       onSubmit={(data: FormData) => {
-        const dueIn =
-          data.wait_for * ONE_DAY_IN_SECONDS +
-          timeToSeconds(data.at) +
-          startFrom
-
         const newStep: IBrandFlowStepInput = {
+          order: index,
           title: data.title,
           description: data.description,
-          due_in: dueIn,
+          event_type: 'last_step_date',
           event: {
             title: data.title,
             description: data.description,
             task_type: data.task_type.value
+          },
+          time: data.time,
+          wait_for: {
+            days: 1
           }
         }
 

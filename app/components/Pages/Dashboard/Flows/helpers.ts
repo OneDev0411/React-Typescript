@@ -77,9 +77,12 @@ export function convertStepToStepInput(
   step: IBrandFlowStep
 ): IBrandFlowStepInput {
   const resultStep: IBrandFlowStepInput = {
+    order: step.order,
     title: step.title,
     description: step.description,
-    due_in: step.due_in
+    event_type: step.event_type,
+    wait_for: step.wait_for,
+    time: step.time
   }
 
   if (step.email) {
