@@ -2,20 +2,20 @@ import React from 'react'
 import { Form } from 'react-final-form'
 import { Grid, Box, Typography } from '@material-ui/core'
 
+import { ScheduledFormData } from '../types'
 import { ActionFooter } from '../components/ActionFooter'
 import { useCommonStyles } from '../styles'
+
 import { Title } from '../components/Title'
 import { Description } from '../components/Description'
 import { Time } from '../components/Time'
 import { EmailTemplate } from '../components/EmailTemplate'
-
-interface FormData
-  extends Pick<
-    IBrandFlowStepInput,
-    'title' | 'description' | 'wait_for' | 'time'
-  > {
-  email_template: UUID
-}
+import { WaitFor } from '../components/WaitFor'
+import { defaultWaitForValue } from '../components/WaitFor/Fields'
+import {
+  convertToWebInput,
+  convertToServerInput
+} from '../components/WaitFor/helpers'
 
 interface Props {
   index: number
@@ -42,16 +42,14 @@ export default function ScheduledEmailForm({
 }: Props) {
   const commonClasses = useCommonStyles()
 
-  function getInitialValues(stepData?: IBrandFlowStep): FormData {
+  function getInitialValues(stepData?: IBrandFlowStep): ScheduledFormData {
     if (!stepData || !stepData.email) {
       return {
         email_template:
           (templates.find(({ id }) => id === defaultSelectedTemplate) || {})
             .id || '',
         title: '',
-        wait_for: {
-          days: 33
-        },
+        wait_for: defaultWaitForValue,
         time: '08:00'
       }
     }
@@ -62,16 +60,14 @@ export default function ScheduledEmailForm({
         stepData.email.id,
       title: stepData.title,
       description: stepData.description,
-      wait_for: {
-        days: 234
-      },
+      wait_for: convertToWebInput(stepData.wait_for),
       time: stepData.time
     }
   }
 
   return (
     <Form
-      onSubmit={(data: FormData) => {
+      onSubmit={(data: ScheduledFormData) => {
         const newStep: IBrandFlowStepInput = {
           order: index,
           title: data.title,
@@ -79,9 +75,7 @@ export default function ScheduledEmailForm({
           email: data.email_template,
           time: data.time,
           event_type: 'last_step_date',
-          wait_for: {
-            days: 1
-          }
+          wait_for: convertToServerInput(data.wait_for)
         }
 
         // Update step
@@ -113,6 +107,9 @@ export default function ScheduledEmailForm({
                     </Box>
                     <Box mb={2}>
                       <Description />
+                    </Box>
+                    <Box mb={2}>
+                      <WaitFor />
                     </Box>
                     <Box>
                       <Time />

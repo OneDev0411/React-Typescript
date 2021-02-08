@@ -4,22 +4,18 @@ import { Grid, Box, Typography } from '@material-ui/core'
 
 import { EventType } from 'components/EventDrawer/components/EventType'
 
+import { EventFormData } from '../types'
 import { ActionFooter } from '../components/ActionFooter'
 import { useCommonStyles } from '../styles'
 import { Title } from '../components/Title'
 import { Description } from '../components/Description'
 import { Time } from '../components/Time'
-
-interface FormData
-  extends Pick<
-    IBrandFlowStepInput,
-    'title' | 'description' | 'wait_for' | 'time'
-  > {
-  task_type: {
-    title: string
-    value: TTaskType
-  }
-}
+import { WaitFor } from '../components/WaitFor'
+import { defaultWaitForValue } from '../components/WaitFor/Fields'
+import {
+  convertToWebInput,
+  convertToServerInput
+} from '../components/WaitFor/helpers'
 
 interface Props {
   index: number
@@ -38,7 +34,7 @@ export default function EventForm({
 }: Props) {
   const commonClasses = useCommonStyles()
 
-  function getInitialValues(stepData?: IBrandFlowStep): FormData {
+  function getInitialValues(stepData?: IBrandFlowStep): EventFormData {
     if (!stepData || !stepData.event) {
       return {
         task_type: {
@@ -46,9 +42,7 @@ export default function EventForm({
           title: 'Call'
         },
         title: '',
-        wait_for: {
-          days: 1
-        },
+        wait_for: defaultWaitForValue,
         time: '08:00'
       }
     }
@@ -61,15 +55,13 @@ export default function EventForm({
       title: stepData.title,
       description: stepData.description,
       time: stepData.time,
-      wait_for: {
-        days: 3434
-      }
+      wait_for: convertToWebInput(stepData.wait_for)
     }
   }
 
   return (
     <Form
-      onSubmit={(data: FormData) => {
+      onSubmit={(data: EventFormData) => {
         const newStep: IBrandFlowStepInput = {
           order: index,
           title: data.title,
@@ -81,9 +73,7 @@ export default function EventForm({
             task_type: data.task_type.value
           },
           time: data.time,
-          wait_for: {
-            days: 1
-          }
+          wait_for: convertToServerInput(data.wait_for)
         }
 
         // Update step
@@ -118,6 +108,9 @@ export default function EventForm({
                     </Box>
                     <Box mb={2}>
                       <Description />
+                    </Box>
+                    <Box mb={2}>
+                      <WaitFor />
                     </Box>
                     <Box>
                       <Time />

@@ -1,10 +1,9 @@
+declare type WaitForField = 'hours' | 'days' | 'weeks' | 'months' | 'years'
 declare interface IBaseBrandFlowStep {
   title: string
   description?: string
   order: number
-  wait_for: Partial<
-    Record<'hours' | 'days' | 'weeks' | 'months' | 'years', number>
-  >
+  wait_for: Partial<Record<WaitForField, number>>
   time: string
   event_type: string
 }
