@@ -68,7 +68,7 @@ function MatterportDrawer({ isOpen, onClose = () => {}, onSelect }: Props) {
       <OverlayDrawer.Body>
         <Search
           onChange={handleChange}
-          placeholder="Paste your Matterport link here https://my.matterport.com/show/?m=xxxxxxxxxxx"
+          placeholder="Paste your Matterport link here"
           isSearching={isLoading}
           debounceTime={500}
           className={classes.searchInput}
