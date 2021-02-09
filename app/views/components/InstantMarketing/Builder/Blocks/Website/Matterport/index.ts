@@ -133,7 +133,7 @@ export default function registerMatterportBlock(
           // You can see all the available URL parameters here:
           // https://support.matterport.com/hc/en-us/articles/209980967-URL-Parameters
           return [
-            'http://my.matterport.com/show/?',
+            'https://my.matterport.com/show/?',
             `m=${this.get('modelId')}`, // Model Id
             '&mls=2', // Make the model MLS friendly and remove the about panel
             '&nt=1' // Opens the model in a new browser tab on mobile devices
