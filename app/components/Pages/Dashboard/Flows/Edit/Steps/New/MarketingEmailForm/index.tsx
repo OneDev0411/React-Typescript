@@ -11,6 +11,7 @@ import { Description } from '../components/Description'
 import { Time } from '../components/Time'
 import { TemplateInctance } from '../components/TemplateInctance'
 import { WaitFor } from '../components/WaitFor'
+import { EventType } from '../components/EventType'
 import { defaultWaitForValue } from '../components/WaitFor/Fields'
 import {
   convertToWebInput,
@@ -100,6 +101,9 @@ export default function MarketingEmailForm({
                     </Box>
                     <Box mb={2}>
                       <WaitFor />
+                    </Box>
+                    <Box mb={2}>
+                      <EventType />
                     </Box>
                     <Box>
                       <Time />

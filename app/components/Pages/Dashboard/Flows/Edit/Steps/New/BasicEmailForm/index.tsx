@@ -11,6 +11,7 @@ import { Description } from '../components/Description'
 import { Time } from '../components/Time'
 import { EmailTemplate } from '../components/EmailTemplate'
 import { WaitFor } from '../components/WaitFor'
+import { EventType } from '../components/EventType'
 import { defaultWaitForValue } from '../components/WaitFor/Fields'
 import {
   convertToWebInput,
@@ -112,6 +113,9 @@ export default function BasicEmailForm({
                     </Box>
                     <Box mb={2}>
                       <WaitFor />
+                    </Box>
+                    <Box mb={2}>
+                      <EventType />
                     </Box>
                     <Box>
                       <Time />
