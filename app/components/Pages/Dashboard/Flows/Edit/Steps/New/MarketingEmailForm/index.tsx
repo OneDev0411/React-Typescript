@@ -36,9 +36,9 @@ export default function MarketingEmailForm({
   const commonClasses = useCommonStyles()
 
   function getInitialValues(stepData?: IBrandFlowStep): MarketingEmailFormData {
-    if (!stepData || !stepData.email) {
+    if (!stepData) {
       return {
-        template_instance: 'ddadas',
+        template: null,
         title: '',
         wait_for: defaultWaitForValue,
         time: '08:00',
@@ -47,7 +47,7 @@ export default function MarketingEmailForm({
     }
 
     return {
-      template_instance: 'dsdfsd',
+      template: null,
       title: stepData.title,
       description: stepData.description,
       wait_for: convertToWebInput(stepData.wait_for),
@@ -59,14 +59,18 @@ export default function MarketingEmailForm({
   return (
     <Form
       onSubmit={(data: MarketingEmailFormData) => {
+        const template = data.template?.isInstance
+          ? { template_instance: data.template?.id }
+          : { brand_template: data.template?.id }
+
         const newStep: IBrandFlowStepInput = {
           order: index,
           title: data.title,
           description: data.description,
-          template_instance: 'asas',
           time: data.time,
           event_type: data.event_type,
-          wait_for: convertToServerInput(data.wait_for)
+          wait_for: convertToServerInput(data.wait_for),
+          ...template
         }
 
         // Update step
@@ -118,7 +122,10 @@ export default function MarketingEmailForm({
                     xs={12}
                     className={commonClasses.extraItems}
                   >
-                    <TemplateInctance />
+                    <TemplateInctance
+                      currentBrandTemplate={step?.template || null}
+                      currentTemplateInstance={step?.template_instance || null}
+                    />
                   </Grid>
                 </Grid>
               </Box>

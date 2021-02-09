@@ -15,6 +15,8 @@ declare interface IBrandFlowStep
   event: Nullable<IBrandEvent>
   email: Nullable<IBrandEmailTemplate>
   is_automated: boolean
+  template: Nullable<IBrandMarketingTemplate>
+  template_instance: Nullable<IMarketingTemplateInstance>
   // virtual (calculated) fields
   // wait_days: number
 }
@@ -22,7 +24,7 @@ declare interface IBrandFlowStep
 declare interface IBrandFlowStepInput extends IBaseBrandFlowStep {
   event?: IBrandEventInput
   email?: UUID
-  template?: UUID
+  brand_template?: UUID
   template_instance?: UUID
 }
 

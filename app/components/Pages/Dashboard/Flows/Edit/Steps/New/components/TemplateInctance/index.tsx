@@ -3,12 +3,27 @@ import { Field } from 'react-final-form'
 
 import { TemplateSelector } from './Selector'
 
-export const TemplateInctance = () => {
+interface Props {
+  currentBrandTemplate?: Nullable<IBrandMarketingTemplate>
+  currentTemplateInstance?: Nullable<IMarketingTemplateInstance>
+}
+
+export const TemplateInctance = ({
+  currentBrandTemplate = null,
+  currentTemplateInstance = null
+}: Props) => {
   return (
     <Field
-      name="marketing_email"
-      label="marketing_email"
-      render={({ input: { onChange, value } }) => <TemplateSelector />}
+      name="template"
+      label="template"
+      render={({ input: { onChange, value } }) => (
+        <TemplateSelector
+          value={value}
+          currentBrandTemplate={currentBrandTemplate}
+          currentTemplateInstance={currentTemplateInstance}
+          onChange={onChange}
+        />
+      )}
     />
   )
 }

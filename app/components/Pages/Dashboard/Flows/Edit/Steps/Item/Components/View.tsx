@@ -60,6 +60,18 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
   const classes = useStyles()
   const { raise, stopRaise } = useRaisedMuiCard()
 
+  const getTitle = () => {
+    if (step.event) {
+      return step.event.task_type
+    }
+
+    if (step.email) {
+      return 'Basic Email'
+    }
+
+    return 'Marketing Email'
+  }
+
   return (
     <Box position="relative">
       <Draggable
@@ -129,10 +141,7 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
                   </Grid>
                   <Grid item xs={12}>
                     <Box className={classes.descriptionContainer}>
-                      <Typography variant="body2">
-                        {step.event && step.event.task_type}
-                        {step.email && 'Scheduled Email'}
-                      </Typography>
+                      <Typography variant="body2">{getTitle()}</Typography>
                       <Typography variant="body2" color="textSecondary" noWrap>
                         {step.title}
                       </Typography>

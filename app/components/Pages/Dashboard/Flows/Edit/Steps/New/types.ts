@@ -24,5 +24,8 @@ export interface BasicEmailFormData extends BaseFormData {
 }
 
 export interface MarketingEmailFormData extends BaseFormData {
-  template_instance: UUID
+  template: Nullable<{
+    id: UUID
+    isInstance: boolean
+  }>
 }

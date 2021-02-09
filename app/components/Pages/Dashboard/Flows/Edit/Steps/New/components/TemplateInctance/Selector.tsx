@@ -16,11 +16,16 @@ import { getActiveBrand } from 'utils/user-teams'
 
 // import { getTemplates } from 'models/instant-marketing/get-templates'
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
+
 // import { renderBrandedNunjucksTemplate } from 'utils/marketing-center/render-branded-nunjucks-template'
+import { MarketingEmailFormData } from '../../types'
 
 interface Props {
   disabled?: boolean
-  currentValue?: Nullable<IBrandFlowStep>
+  currentBrandTemplate?: Nullable<IBrandMarketingTemplate>
+  currentTemplateInstance?: Nullable<IMarketingTemplateInstance>
+  value: MarketingEmailFormData['template']
+  onChange: (value: MarketingEmailFormData['template']) => void
 }
 
 const useStyles = makeStyles(
@@ -68,7 +73,13 @@ const useStyles = makeStyles(
   { name: 'FlowTemplateSelector' }
 )
 
-export const TemplateSelector = ({ currentValue, disabled = false }: Props) => {
+export const TemplateSelector = ({
+  value,
+  disabled = false,
+  currentBrandTemplate = null,
+  currentTemplateInstance = null,
+  onChange
+}: Props) => {
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(selectUser)
   const [brand] = useState<Nullable<IBrand>>(getActiveBrand(user))
@@ -77,10 +88,13 @@ export const TemplateSelector = ({ currentValue, disabled = false }: Props) => {
   )
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [selectedTemplate, setSelectedTemplate] = useState<
+  const [selectedBrandTemplate, setSelectedBrandTemplate] = useState<
     Nullable<IBrandMarketingTemplate>
-  >(null)
-  const currentTemplate = selectedTemplate // || currentValue?.campaign?.template
+  >(currentBrandTemplate)
+  const [selectedTemplateInstance, setSelectedTemplateInstace] = useState<
+    Nullable<IMarketingTemplateInstance>
+  >(currentTemplateInstance)
+  const currentTemplate = selectedBrandTemplate || selectedTemplateInstance
 
   const handleSelectTemplate = async (template: IBrandMarketingTemplate) => {
     try {
@@ -91,19 +105,11 @@ export const TemplateSelector = ({ currentValue, disabled = false }: Props) => {
         return
       }
 
-      setSelectedTemplate(template)
-
-      // render the nunjuks template
-      // const templateMarkup: string = await renderBrandedNunjucksTemplate(
-      //   template,
-      //   brand,
-      //   { user }
-      // )
-
-      // const templateInstance = await getTemplateInstance(
-      //   template.template.id,
-      //   templateMarkup
-      // )
+      setSelectedBrandTemplate(template)
+      onChange({
+        isInstance: false,
+        id: template.id
+      })
 
       console.log('handleSelectTemplate', { template })
     } catch (error) {
@@ -115,8 +121,8 @@ export const TemplateSelector = ({ currentValue, disabled = false }: Props) => {
 
   const handleEditTemplate = async (markup: string) => {
     try {
-      const templateId = selectedTemplate
-        ? selectedTemplate.template?.id
+      const templateId = selectedBrandTemplate
+        ? selectedBrandTemplate.template?.id
         : 'ads'
 
       if (!templateId) {
@@ -128,6 +134,11 @@ export const TemplateSelector = ({ currentValue, disabled = false }: Props) => {
 
       const templateInstance = await getTemplateInstance(templateId, markup)
 
+      setSelectedTemplateInstace(templateInstance)
+      onChange({
+        isInstance: true,
+        id: templateInstance.id
+      })
       console.log('handleEditTemplate', { templateInstance })
     } catch (error) {
       console.error(error)
@@ -152,28 +163,6 @@ export const TemplateSelector = ({ currentValue, disabled = false }: Props) => {
     setIsBuilderOpen(state)
   }
 
-  // useEffectOnce(() => {
-  //   const brandId = getActiveTeamId(user)
-
-  //   if (!brandId || disabled) {
-  //     return
-  //   }
-
-  //   if (!selectedTemplate && !currentValue) {
-  //     setIsLoading(true)
-  //     getTemplates(brandId, [], ['Email'])
-  //       .then(templates => {
-  //         if (templates.length) {
-  //           handleSelectTemplate(templates[0])
-  //         }
-  //       })
-  //       .catch(err => {
-  //         setIsLoading(false)
-  //         console.error(err)
-  //       })
-  //   }
-  // })
-
   const renderPreview = () => {
     if (isLoading) {
       return (
@@ -181,7 +170,7 @@ export const TemplateSelector = ({ currentValue, disabled = false }: Props) => {
       )
     }
 
-    if (disabled || (!selectedTemplate && !currentValue)) {
+    if (disabled || (!selectedBrandTemplate && !selectedTemplateInstance)) {
       return (
         <span className={classes.templatePreviewPlaceholder}>
           Select a template
@@ -189,35 +178,25 @@ export const TemplateSelector = ({ currentValue, disabled = false }: Props) => {
       )
     }
 
-    if (selectedTemplate) {
+    if (selectedTemplateInstance) {
       return (
         <img
-          src={selectedTemplate.preview.preview_url}
+          src={selectedTemplateInstance.file.preview_url}
           alt="Selected Template"
           className={classes.templatePreviewImage}
         />
       )
     }
 
-    // if (currentValue) {
-    //   const preview = currentValue.campaign?.template?.file?.preview_url
-
-    //   if (!preview) {
-    //     return (
-    //       <span className={classes.templatePreviewPlaceholder}>
-    //         Preview is not available
-    //       </span>
-    //     )
-    //   }
-
-    //   return (
-    //     <img
-    //       src={preview}
-    //       alt="Selected Template"
-    //       className={classes.templatePreviewImage}
-    //     />
-    //   )
-    // }
+    if (selectedBrandTemplate) {
+      return (
+        <img
+          src={selectedBrandTemplate.preview.preview_url}
+          alt="Selected Template"
+          className={classes.templatePreviewImage}
+        />
+      )
+    }
 
     return (
       <span className={classes.templatePreviewPlaceholder}>
@@ -241,7 +220,7 @@ export const TemplateSelector = ({ currentValue, disabled = false }: Props) => {
                 Edit
               </Typography>
             )}
-            {(selectedTemplate || currentValue) && (
+            {(selectedBrandTemplate || selectedTemplateInstance) && (
               <Typography
                 variant="body2"
                 className={classes.templateHandler}
