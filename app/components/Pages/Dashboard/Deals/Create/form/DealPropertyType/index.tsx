@@ -34,7 +34,7 @@ export function DealPropertyType({ onChange }: Props) {
 
   return (
     <QuestionSection disabled={!!deal}>
-      <QuestionTitle>What is the property type?</QuestionTitle>
+      <QuestionTitle>What type of property is this?</QuestionTitle>
       <QuestionForm>
         <RadioGroup
           name="DealPropertyType"

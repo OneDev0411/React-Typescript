@@ -128,9 +128,7 @@ export function DealAddress({ onChange }: Props) {
 
   return (
     <QuestionSection>
-      <QuestionTitle>
-        What is the address of the subject property?
-      </QuestionTitle>
+      <QuestionTitle>What is the address for the property?</QuestionTitle>
       <QuestionForm>
         {!listing && !place && (
           <Box

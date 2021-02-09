@@ -176,7 +176,7 @@ export default function CreateDeal() {
             />
           )}
 
-          {dealType === 'Buying' && (
+          {['Buying', 'Both'].includes(dealType) && (
             <Controller
               name="buying_primary_agent"
               control={control}
@@ -184,7 +184,7 @@ export default function CreateDeal() {
                 <DealPrimaryAgent
                   side="Buying"
                   isCommissionRequired={isDoubleEnded}
-                  title="Enter Buyer Agent’s information"
+                  title="Who is the buyer agent?"
                   roles={value}
                   onChange={(role, type) =>
                     onChange(getChangedRoles(value, role, type))
@@ -201,7 +201,7 @@ export default function CreateDeal() {
               <DealPrimaryAgent
                 isCommissionRequired
                 side="Selling"
-                title="Enter Listing Agent’s information"
+                title="Who is the seller agent?"
                 roles={value}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))
@@ -211,18 +211,18 @@ export default function CreateDeal() {
             )}
           />
 
-          {dealType === 'Buying' && (
+          {['Buying', 'Both'].includes(dealType) && (
             <DealClient
               side="Buying"
-              title="Enter buyer information as shown on offer"
+              title="What's the buyers's legal name?"
               roles={roles}
             />
           )}
 
-          {dealType === 'Selling' && (
+          {['Selling', 'Both'].includes(dealType) && (
             <DealClient
               side="Selling"
-              title="Enter the seller’s legal information"
+              title="What's the seller's legal name?"
               roles={roles}
             />
           )}
