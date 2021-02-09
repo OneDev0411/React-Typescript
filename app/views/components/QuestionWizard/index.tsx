@@ -63,9 +63,20 @@ export function QuestionWizard({
   }, [currentStep, onStepChange])
 
   useEffect(() => {
-    refs.current[currentStep]?.scrollIntoView({
-      block: 'start',
-      inline: 'start',
+    if (currentStep === 1) {
+      refs.current[currentStep]?.scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth'
+      })
+
+      return
+    }
+
+    window.scrollTo({
+      top:
+        refs.current[currentStep].getBoundingClientRect().top +
+        window.pageYOffset -
+        50,
       behavior: 'smooth'
     })
   }, [currentStep, lastVisitedStep])
