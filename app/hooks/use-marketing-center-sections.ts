@@ -23,14 +23,25 @@ function urlGenerator(url: string | string[]): string {
 }
 
 const ALL_SECTIONS: SectionCollection = {
-  marketingCenter: {
+  overview: {
     type: SectionsEnum.Link,
-    key: 'marketingCenter',
-    title: 'Marketing Center',
+    key: 'overview',
+    title: 'Overview',
+    items: [
+      {
+        title: 'Overview',
+        link: urlGenerator('/')
+      }
+    ]
+  },
+  designs: {
+    type: SectionsEnum.Link,
+    key: 'designs',
+    title: 'Designs',
     items: [
       {
         title: 'My Designs',
-        link: urlGenerator('/')
+        link: urlGenerator('/designs')
       }
     ]
   },
