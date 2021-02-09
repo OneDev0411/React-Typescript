@@ -5,7 +5,10 @@ export type RawWaitFor = {
 }
 
 interface BaseFormData
-  extends Pick<IBrandFlowStepInput, 'title' | 'description' | 'time'> {
+  extends Pick<
+    IBrandFlowStepInput,
+    'title' | 'description' | 'time' | 'event_type'
+  > {
   wait_for: RawWaitFor
 }
 

@@ -40,7 +40,8 @@ export default function MarketingEmailForm({
         template_instance: 'ddadas',
         title: '',
         wait_for: defaultWaitForValue,
-        time: '08:00'
+        time: '08:00',
+        event_type: ''
       }
     }
 
@@ -49,6 +50,7 @@ export default function MarketingEmailForm({
       title: stepData.title,
       description: stepData.description,
       wait_for: convertToWebInput(stepData.wait_for),
+      event_type: stepData.event_type,
       time: stepData.time
     }
   }
@@ -62,7 +64,7 @@ export default function MarketingEmailForm({
           description: data.description,
           template_instance: 'asas',
           time: data.time,
-          event_type: 'last_step_date',
+          event_type: data.event_type,
           wait_for: convertToServerInput(data.wait_for)
         }
 

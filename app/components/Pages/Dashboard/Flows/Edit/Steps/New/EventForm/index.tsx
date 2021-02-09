@@ -9,6 +9,7 @@ import { ActionFooter } from '../components/ActionFooter'
 import { useCommonStyles } from '../styles'
 import { Title } from '../components/Title'
 import { Description } from '../components/Description'
+import { EventType as TriggerType } from '../components/EventType'
 import { Time } from '../components/Time'
 import { WaitFor } from '../components/WaitFor'
 import { defaultWaitForValue } from '../components/WaitFor/Fields'
@@ -42,6 +43,7 @@ export default function EventForm({
           title: 'Call'
         },
         title: '',
+        event_type: '',
         wait_for: defaultWaitForValue,
         time: '08:00'
       }
@@ -55,6 +57,7 @@ export default function EventForm({
       title: stepData.title,
       description: stepData.description,
       time: stepData.time,
+      event_type: stepData.event_type,
       wait_for: convertToWebInput(stepData.wait_for)
     }
   }
@@ -66,7 +69,7 @@ export default function EventForm({
           order: index,
           title: data.title,
           description: data.description,
-          event_type: 'last_step_date',
+          event_type: data.event_type,
           event: {
             title: data.title,
             description: data.description,
@@ -111,6 +114,9 @@ export default function EventForm({
                     </Box>
                     <Box mb={2}>
                       <WaitFor />
+                    </Box>
+                    <Box mb={2}>
+                      <TriggerType />
                     </Box>
                     <Box>
                       <Time />

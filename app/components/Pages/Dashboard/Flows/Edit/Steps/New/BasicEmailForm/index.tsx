@@ -50,7 +50,8 @@ export default function BasicEmailForm({
             .id || '',
         title: '',
         wait_for: defaultWaitForValue,
-        time: '08:00'
+        time: '08:00',
+        event_type: ''
       }
     }
 
@@ -61,6 +62,7 @@ export default function BasicEmailForm({
       title: stepData.title,
       description: stepData.description,
       wait_for: convertToWebInput(stepData.wait_for),
+      event_type: stepData.event_type,
       time: stepData.time
     }
   }
@@ -74,7 +76,7 @@ export default function BasicEmailForm({
           description: data.description,
           email: data.email_template,
           time: data.time,
-          event_type: 'last_step_date',
+          event_type: data.event_type,
           wait_for: convertToServerInput(data.wait_for)
         }
 
