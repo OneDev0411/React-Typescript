@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, makeStyles, Theme } from '@material-ui/core'
+import { Typography, Box, makeStyles, Theme } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
 
@@ -93,10 +93,6 @@ export default function CreateDeal() {
 
     const values = control.getValues()
 
-    console.log(values)
-
-    return
-
     const agents = [].concat(
       values.buying_primary_agent || [],
       values.selling_primary_agent || []
@@ -133,6 +129,8 @@ export default function CreateDeal() {
         })
       )
     ])
+
+    // const propertyAddress = values.address as
   }
 
   return (
@@ -143,9 +141,15 @@ export default function CreateDeal() {
       }}
     >
       <Box className={classes.root}>
+        <Box my={4}>
+          <Typography variant="h6">
+            Congrats! 🎉 Let's get started 💪
+          </Typography>
+        </Box>
+
         <QuestionWizard>
           <Controller
-            name="address"
+            name="property_address"
             control={control}
             render={({ onChange }) => <DealAddress onChange={onChange} />}
           />
