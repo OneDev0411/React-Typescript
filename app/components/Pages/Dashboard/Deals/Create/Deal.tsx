@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Box, makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
 
@@ -24,6 +24,7 @@ import { selectUser } from 'selectors/user'
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { getChangedRoles } from './helpers/get-changed-roles'
 
+import { CreateDealIntro } from './form/Intro'
 import { DealType } from './form/DealType'
 import { DealPropertyType } from './form/DealPropertyType'
 import { DealPrimaryAgent } from './form/DealPrimaryAgent'
@@ -162,20 +163,8 @@ export default function CreateDeal() {
       }}
     >
       <Box className={classes.root}>
-        <Box my={4}>
-          <Typography variant="h6">
-            Congrats! 🎉 Let's get started 💪
-          </Typography>
-        </Box>
-
         <QuestionWizard>
-          <Controller
-            name="deal_type"
-            control={control}
-            render={({ onChange }) => (
-              <DealType propertyType={propertyType} onChange={onChange} />
-            )}
-          />
+          <CreateDealIntro />
 
           <Controller
             name="property_address"
@@ -230,7 +219,7 @@ export default function CreateDeal() {
               <DealPrimaryAgent
                 isCommissionRequired
                 side="Selling"
-                title="Who is the seller agent?"
+                title="Who is the listing agent?"
                 roles={value}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))

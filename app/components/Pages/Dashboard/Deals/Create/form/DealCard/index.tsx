@@ -22,9 +22,9 @@ export function DealCard({ dealType }: Props) {
   const openDeal = () => goTo(`/dashboard/deals/${deal!.id}`)
   const createOffer = () => goTo(`/dashboard/deals/${deal!.id}/create-offer`)
 
-  // if (!deal) {
-  //   return null
-  // }
+  if (!deal) {
+    return null
+  }
 
   return (
     <Dialog open={wizard.currentStep === step} fullWidth maxWidth="xs">
