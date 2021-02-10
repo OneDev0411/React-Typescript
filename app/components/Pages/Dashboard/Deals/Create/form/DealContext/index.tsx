@@ -40,6 +40,11 @@ const useStyles = makeStyles(
     label: {
       color: theme.palette.primary.main
     },
+    datePickerContainer: {
+      border: `1px solid ${theme.palette.divider}`,
+      padding: theme.spacing(1),
+      borderRadius: theme.shape.borderRadius
+    },
     saveButton: {
       marginTop: theme.spacing(2)
     }
@@ -87,11 +92,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
       return
     }
 
-    setInputValue(date)
-
-    const value = fecha.format(date, 'YYYY-MM-DD')
-
-    handleSave(value)
+    setInputValue(fecha.format(date, 'YYYY-MM-DD'))
   }
 
   const handleChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,17 +104,17 @@ export function DealContext({ context, onChange = () => {} }: Props) {
     setInputValue(value.toString())
   }
 
-  const handleSave = (value = inputValue) => {
+  const handleSave = () => {
     if (deal) {
       try {
-        const data = createUpsertObject(deal, context.key, value, false)
+        const data = createUpsertObject(deal, context.key, inputValue, false)
 
         dispatch(upsertContexts(deal!.id, [data]))
       } catch (e) {
         console.log(e)
       }
     } else {
-      onChange(value)
+      onChange(inputValue)
     }
 
     if (wizard.currentStep === step) {
@@ -161,10 +162,12 @@ export function DealContext({ context, onChange = () => {} }: Props) {
       <QuestionForm>
         <Box>
           {contextType === 'Date' && (
-            <DatePicker
-              selectedDate={getContextDate()}
-              onChange={handleSelectDate}
-            />
+            <Box className={classes.datePickerContainer}>
+              <DatePicker
+                selectedDate={getContextDate()}
+                onChange={handleSelectDate}
+              />
+            </Box>
           )}
 
           {['Text', 'Number'].includes(contextType!) && (
@@ -192,17 +195,15 @@ export function DealContext({ context, onChange = () => {} }: Props) {
           )}
 
           <Box textAlign="right">
-            {contextType !== 'Date' && (
-              <Button
-                variant="contained"
-                color="secondary"
-                disabled={!inputValue}
-                className={classes.saveButton}
-                onClick={() => handleSave()}
-              >
-                Save
-              </Button>
-            )}
+            <Button
+              variant="contained"
+              color="secondary"
+              disabled={!inputValue}
+              className={classes.saveButton}
+              onClick={() => handleSave()}
+            >
+              {defaultValue ? 'Looks Good' : 'Save'}
+            </Button>
           </Box>
         </Box>
       </QuestionForm>
