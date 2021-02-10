@@ -132,21 +132,21 @@ export function QuestionWizard({
               </div>
             )
           })}
-      </div>
 
-      {showLoading && (
-        <Box
-          style={{
-            marginBottom: theme.spacing(4)
-          }}
-        >
-          <Loading
-            ref={loadingRef}
-            width={60}
-            fill={theme.palette.secondary.main}
-          />
-        </Box>
-      )}
+        {showLoading && (
+          <Box
+            style={{
+              margin: theme.spacing(2)
+            }}
+          >
+            <Loading
+              ref={loadingRef}
+              width={60}
+              fill={theme.palette.secondary.main}
+            />
+          </Box>
+        )}
+      </div>
     </WizardContext.Provider>
   )
 }
