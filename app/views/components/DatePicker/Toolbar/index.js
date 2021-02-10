@@ -1,14 +1,12 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import YearMonthList from '../YearMonthList'
 import MonthNavigator from '../MonthNavigator'
 
 const Toolbar = props => (
-  <Fragment>
-    <YearMonthList {...props}>
-      <MonthNavigator />
-    </YearMonthList>
-  </Fragment>
+  <YearMonthList {...props}>
+    <MonthNavigator />
+  </YearMonthList>
 )
 
 export default Toolbar
