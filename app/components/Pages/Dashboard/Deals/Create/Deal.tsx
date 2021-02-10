@@ -11,7 +11,9 @@ import {
   createDeal,
   createRoles,
   getContextsByDeal,
-  createChecklist
+  createChecklist,
+  updateListing,
+  upsertContexts
 } from 'actions/deals'
 
 import { QuestionWizard } from 'components/QuestionWizard'
@@ -25,13 +27,15 @@ import { getChangedRoles } from './helpers/get-changed-roles'
 import { DealType } from './form/DealType'
 import { DealPropertyType } from './form/DealPropertyType'
 import { DealPrimaryAgent } from './form/DealPrimaryAgent'
-import { DealAddress } from './form/DealAddress'
+import { DealAddress, PropertyAddress } from './form/DealAddress'
 import { DealClient } from './form/DealClient'
 import { DealContext } from './form/DealContext'
 import { DealEnderType } from './form/DealEnderType'
 import { DealCard } from './form/DealCard'
 
 import { useDealRoles } from './hooks/use-deal-roles'
+
+import { createAddressContext } from '../utils/create-address-context'
 
 import { Context } from './context'
 
@@ -130,7 +134,22 @@ export default function CreateDeal() {
       )
     ])
 
-    // const propertyAddress = values.address as
+    savePropertyAddress(newDeal, values.property_address)
+  }
+
+  const savePropertyAddress = async (
+    deal: IDeal,
+    property: PropertyAddress
+  ) => {
+    if (property.type === 'Place') {
+      const contexts = createAddressContext(deal, property.address)
+
+      dispatch(upsertContexts(deal.id, contexts))
+    }
+
+    if (property.type === 'Listing') {
+      dispatch(updateListing(deal.id, property.address))
+    }
   }
 
   return (
