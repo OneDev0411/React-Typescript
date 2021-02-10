@@ -39,6 +39,8 @@ import { createAddressContext } from '../utils/create-address-context'
 
 import { Context } from './context'
 
+import type { IDealType } from './types'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
@@ -68,7 +70,7 @@ export default function CreateDeal() {
 
   const roles = useDealRoles(deal)
 
-  const dealType = watch('deal_type')
+  const dealType = watch('deal_type') as IDealType
   const propertyType = watch('property_type')
   const enderType = watch('ender_type')
 
@@ -168,6 +170,14 @@ export default function CreateDeal() {
 
         <QuestionWizard>
           <Controller
+            name="deal_type"
+            control={control}
+            render={({ onChange }) => (
+              <DealType propertyType={propertyType} onChange={onChange} />
+            )}
+          />
+
+          <Controller
             name="property_address"
             control={control}
             render={({ onChange }) => <DealAddress onChange={onChange} />}
@@ -251,7 +261,7 @@ export default function CreateDeal() {
               <DealContext key={context.id} context={context} />
             ))}
 
-          <DealCard />
+          <DealCard dealType={dealType} />
         </QuestionWizard>
       </Box>
     </Context.Provider>
