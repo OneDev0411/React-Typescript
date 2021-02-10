@@ -105,9 +105,10 @@ export function DealClient({ side, title, roles, onChange }: Props) {
   const [contacts, setContacts] = useState<IContact[]>([])
 
   const [searchCriteria, setSearchCriteria] = useState<string>('')
-  const [debouncedSearchCriteria, setDebouncedSearchCriteria] = useState<
-    string
-  >('')
+  const [
+    debouncedSearchCriteria,
+    setDebouncedSearchCriteria
+  ] = useState<string>('')
 
   /**
    * debounce search criteria to don't search contacts on input change
@@ -225,7 +226,7 @@ export function DealClient({ side, title, roles, onChange }: Props) {
             fullWidth
             value={searchCriteria}
             onChange={e => setSearchCriteria(e.target.value)}
-            placeholder="Search name or office"
+            placeholder="Search contact name"
             size="medium"
             className={classes.searchInput}
           />
