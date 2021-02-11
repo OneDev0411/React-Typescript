@@ -18,7 +18,7 @@ import { mdiCheckboxMarkedCircle } from '@mdi/js'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 // TODO: Replace this new module with the already exisitng one in global components
-import ProgressBar from '../../components/ProgressBar'
+import { ProgressBar } from '../../components/ProgressBar'
 
 const ListItem = withStyles((theme: Theme) => ({
   root: {

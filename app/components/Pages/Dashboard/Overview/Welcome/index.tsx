@@ -8,7 +8,7 @@ import MuiAccordionDetails from '@material-ui/core/AccordionDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import Greeting from './Greetings'
-import HappyPaths from './HappyPaths'
+import { HappyPaths } from './HappyPaths'
 import { ProgressBar } from '../components/ProgressBar'
 
 // Customizing MUI accordion styles
