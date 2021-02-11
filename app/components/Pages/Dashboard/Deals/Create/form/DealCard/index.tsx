@@ -1,10 +1,16 @@
 import React from 'react'
-import { Box, Typography, Button, Dialog } from '@material-ui/core'
+import { Box, Typography, Button } from '@material-ui/core'
 
 import { goTo } from 'utils/go-to'
 
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+
+import {
+  QuestionSection,
+  QuestionTitle,
+  QuestionForm
+} from 'components/QuestionWizard'
 
 import { useCreationContext } from '../../context/use-creation-context'
 
@@ -22,40 +28,38 @@ export function DealCard({ dealType }: Props) {
   const openDeal = () => goTo(`/dashboard/deals/${deal!.id}`)
   const createOffer = () => goTo(`/dashboard/deals/${deal!.id}/create-offer`)
 
-  if (!deal) {
+  if (wizard.currentStep !== step) {
     return null
   }
 
   return (
-    <Dialog open={wizard.currentStep === step} fullWidth maxWidth="xs">
-      <Box textAlign="center" p={2}>
-        <Typography variant="h5">
-          Congratulation!{' '}
-          <span role="img" aria-label="congrats">
-            🎉
-          </span>
-        </Typography>
-
-        <Box my={1}>
-          <Typography variant="subtitle1">
+    <QuestionSection>
+      <QuestionTitle>Congratulation! 🎉</QuestionTitle>
+      <QuestionForm>
+        <Box textAlign="center" p={2}>
+          <Typography variant="h5">
             Your deal has been created successfuly
           </Typography>
-        </Box>
 
-        <Box mt={4} display="flex" justifyContent="center">
-          <Box mr={2}>
+          <Box mt={4} display="flex" justifyContent="center">
             <Button variant="contained" color="secondary" onClick={openDeal}>
               Open Deal
             </Button>
-          </Box>
 
-          {dealType === 'Both' && (
-            <Button variant="outlined" color="secondary" onClick={createOffer}>
-              Create Offer
-            </Button>
-          )}
+            {dealType === 'Both' && (
+              <Box ml={2}>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={createOffer}
+                >
+                  Create Offer
+                </Button>
+              </Box>
+            )}
+          </Box>
         </Box>
-      </Box>
-    </Dialog>
+      </QuestionForm>
+    </QuestionSection>
   )
 }
