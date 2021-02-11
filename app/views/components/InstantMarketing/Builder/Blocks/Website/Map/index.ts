@@ -17,6 +17,10 @@ declare const mapboxgl: any
 
 const themes = [
   {
+    label: 'Streets',
+    id: 'mapbox/streets-v11'
+  },
+  {
     label: 'Standard',
     id: 'emilsedgh/ckky6owqc0r7r17s7pq5j7fhi'
   },
