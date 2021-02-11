@@ -10,4 +10,12 @@ export type Address = {
   unit?: string
 }
 
+export type IDealFormRole = IDealRole & {
+  id: number | string
+  brand?: UUID | null
+  agent: Nullable<IAgent>
+  contact?: IContact
+  current_address: Address | string | null
+}
+
 export type IDealType = 'Selling' | 'Buying' | 'Both'
