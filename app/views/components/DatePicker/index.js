@@ -61,7 +61,7 @@ export default class DatePicker extends React.Component {
   setDate({ selectedDate }) {
     const { currentDate } = this.state
 
-    if (selectedDate && selectedDate.toString() !== currentDate.toString()) {
+    if (selectedDate && selectedDate.toString() !== currentDate?.toString()) {
       this.setState(
         {
           currentDate: selectedDate
