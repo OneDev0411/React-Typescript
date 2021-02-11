@@ -17,12 +17,12 @@ declare const mapboxgl: any
 
 const themes = [
   {
-    label: 'Decimal',
-    id: 'emilsedgh/ckky6ivy30r5217qiq7okzbkf'
-  },
-  {
     label: 'Standard',
     id: 'emilsedgh/ckky6owqc0r7r17s7pq5j7fhi'
+  },
+  {
+    label: 'Decimal',
+    id: 'emilsedgh/ckky6ivy30r5217qiq7okzbkf'
   },
   {
     label: 'Blue Print',
@@ -168,8 +168,6 @@ export default function registerMapBlock(
         attrKeys.forEach(attrKey => {
           attr[`data-${attrKey}`] = this.get(attrKey)
         })
-
-        console.log('attr', attr)
 
         return attr
       }
