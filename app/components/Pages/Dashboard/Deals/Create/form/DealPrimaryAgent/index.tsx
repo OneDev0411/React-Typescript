@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Box, CircularProgress, makeStyles, Theme } from '@material-ui/core'
+import {
+  Box,
+  TextField,
+  CircularProgress,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 
 import { useDispatch } from 'react-redux'
 
@@ -33,7 +39,6 @@ const useStyles = makeStyles(
       maxHeight: '40vh',
       overflow: 'auto'
     },
-
     selectedAgent: {
       border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius,
@@ -44,6 +49,12 @@ const useStyles = makeStyles(
     },
     continueButton: {
       margin: theme.spacing(2, 0)
+    },
+    searchInputContainer: {
+      backgroundColor: '#fff',
+      position: 'sticky',
+      top: 0,
+      zIndex: 1
     }
   }),
   {
@@ -72,6 +83,8 @@ export function DealPrimaryAgent({
   const wizard = useWizardContext()
   const { step } = useSectionContext()
   const { deal, user } = useCreationContext()
+
+  const [searchCriteria, setSearchCriteria] = useState<string>('')
 
   const dispatch = useDispatch()
 
@@ -158,12 +171,22 @@ export function DealPrimaryAgent({
             display: agentRoles.length === 0 && !selectedRole ? 'block' : 'none'
           }}
         >
-          <TeamAgents flattenTeams isPrimaryAgent>
+          <TeamAgents flattenTeams isPrimaryAgent criteria={searchCriteria}>
             {({ teams, isLoading }) =>
               isLoading ? (
                 <CircularProgress disableShrink />
               ) : (
                 <div className={classes.root}>
+                  <Box className={classes.searchInputContainer}>
+                    <TextField
+                      fullWidth
+                      onChange={e => setSearchCriteria(e.target.value)}
+                      placeholder="Search Agents"
+                      size="medium"
+                      className={classes.searchInput}
+                    />
+                  </Box>
+
                   {teams.map((team, index) => (
                     <div key={index}>
                       {team.users.map(agent => (
