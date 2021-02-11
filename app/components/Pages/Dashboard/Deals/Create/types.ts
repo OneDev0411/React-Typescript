@@ -18,4 +18,4 @@ export type IDealFormRole = IDealRole & {
   current_address: Address | string | null
 }
 
-export type IDealType = 'Selling' | 'Buying' | 'Both'
+export type IDealSide = 'Selling' | 'Buying' | 'Both'

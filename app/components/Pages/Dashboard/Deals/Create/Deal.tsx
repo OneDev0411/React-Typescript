@@ -40,7 +40,7 @@ import { createAddressContext } from '../utils/create-address-context'
 
 import { Context } from './context'
 
-import type { IDealType } from './types'
+import type { IDealSide } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -71,7 +71,8 @@ export default function CreateDeal() {
 
   const roles = useDealRoles(deal)
 
-  const dealType = watch('deal_type') as IDealType
+  const dealSide = watch('deal_side') as IDealSide
+  const dealType: IDealType = dealSide === 'Buying' ? 'Buying' : 'Selling'
   const propertyType = watch('property_type')
   const enderType = watch('ender_type')
 
@@ -83,9 +84,8 @@ export default function CreateDeal() {
 
   const dealContexts = getDealContexts(user, dealType, propertyType)
 
-  const isDoubleEnded = ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(
-    enderType || ''
-  )
+  const isAgentDoubleEnded = dealSide === 'Both'
+  const isOfficeDoubleEnded = enderType === 'OfficeDoubleEnder'
 
   /**
    * Creates the initial deal as soon as possible and updates
@@ -194,14 +194,16 @@ export default function CreateDeal() {
             />
           )}
 
-          {['Buying', 'Both'].includes(dealType) && (
+          {dealType === 'Buying' && (
             <Controller
               name="buying_primary_agent"
               control={control}
               render={({ value = [], onChange }) => (
                 <DealPrimaryAgent
                   side="Buying"
-                  isCommissionRequired={isDoubleEnded}
+                  isCommissionRequired={
+                    isAgentDoubleEnded || isOfficeDoubleEnded
+                  }
                   title="Who is the buyer agent?"
                   roles={value}
                   onChange={(role, type) =>
@@ -229,7 +231,7 @@ export default function CreateDeal() {
             )}
           />
 
-          {['Buying', 'Both'].includes(dealType) && (
+          {dealType === 'Buying' && (
             <DealClient
               side="Buying"
               title="What's the buyers's legal name?"
@@ -237,7 +239,7 @@ export default function CreateDeal() {
             />
           )}
 
-          {['Selling', 'Both'].includes(dealType) && (
+          {dealSide === 'Selling' && (
             <DealClient
               side="Selling"
               title="What's the seller's legal name?"
