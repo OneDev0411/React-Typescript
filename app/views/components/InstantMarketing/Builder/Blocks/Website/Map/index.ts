@@ -21,24 +21,80 @@ const themes = [
     id: 'mapbox/streets-v11'
   },
   {
+    label: 'Outdoors',
+    id: 'mapbox/outdoors-v11'
+  },
+  {
+    label: 'Light',
+    id: 'mapbox/light-v10'
+  },
+  {
+    label: 'Dark',
+    id: 'mapbox/dark-v10'
+  },
+  {
+    label: 'Satellite',
+    id: 'mapbox/satellite-v9'
+  },
+  {
+    label: 'Satellite Streets',
+    id: 'mapbox/satellite-streets-v11'
+  },
+  {
+    label: 'Navigation Preview Day',
+    id: 'mapbox/navigation-preview-day-v4'
+  },
+  {
+    label: 'Navigation Preview Night',
+    id: 'mapbox/navigation-preview-night-v4'
+  },
+  {
+    label: 'Navigation Guidance Day',
+    id: 'mapbox/navigation-guidance-day-v4'
+  },
+  {
+    label: 'Navigation Guidance Night',
+    id: 'mapbox/navigation-guidance-night-v4'
+  },
+  {
     label: 'Standard',
-    id: 'emilsedgh/ckky6owqc0r7r17s7pq5j7fhi'
+    id: 'mapbox-map-design/ck40e3qu90uvj1cmvb8fov36r'
   },
   {
     label: 'Decimal',
-    id: 'emilsedgh/ckky6ivy30r5217qiq7okzbkf'
+    id: 'mapbox-map-design/ck4014y110wt61ctt07egsel6'
   },
   {
     label: 'Blue Print',
-    id: 'emilsedgh/ckky6qxab18dj17ppb9wxu9fy'
+    id: 'mapbox-map-design/ck40ed2go56yr1cp7bbsalr1c'
   },
   {
     label: 'Frank',
-    id: 'emilsedgh/ckky6s2q16kx417pgico1g416'
+    id: 'mapbox-map-design/ck3zxbv499umj1cscx9sbymev'
   },
   {
-    label: 'Mapbox Japan',
-    id: 'emilsedgh/ckky6sw6x5vq218mhelo85ouc'
+    label: 'Minimo',
+    id: 'mapbox/cjku6bhmo15oz2rs8p2n9s2hm'
+  },
+  {
+    label: 'Lè Shine',
+    id: 'mapbox/cjcunv5ae262f2sm9tfwg8i0w'
+  },
+  {
+    label: 'Ice Cream',
+    id: 'mapbox/cj7t3i5yj0unt2rmt3y4b5e32'
+  },
+  {
+    label: 'North Star',
+    id: 'mapbox/cj44mfrt20f082snokim4ungi'
+  },
+  {
+    label: 'Moonlight',
+    id: 'mapbox/cj3kbeqzo00022smj7akz3o1e'
+  },
+  {
+    label: 'Mineral',
+    id: 'mapbox/cjtep62gq54l21frr1whf27ak'
   }
 ]
 
