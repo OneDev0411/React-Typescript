@@ -278,25 +278,16 @@ export function DealClient({ side, title, roles, onChange }: Props) {
             justifyContent="flex-end"
             mt={4}
           >
-            <Button
-              variant="outlined"
-              disabled={clientRoles.length > 0}
-              onClick={handleNext}
-            >
-              Skip
-            </Button>
-
-            {clientRoles.length > 0 && (
-              <Box ml={2}>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleNext}
-                >
-                  Continue
-                </Button>
-              </Box>
-            )}
+            <Box ml={2}>
+              <Button
+                variant="contained"
+                color="secondary"
+                disabled={clientRoles.length === 0}
+                onClick={handleNext}
+              >
+                Continue
+              </Button>
+            </Box>
           </Box>
         )}
       </QuestionForm>
