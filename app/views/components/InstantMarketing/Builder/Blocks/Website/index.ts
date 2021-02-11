@@ -38,6 +38,11 @@ import registerMatterportBlock, {
   embedMatterportBlockName,
   matterportBlockTraits
 } from './Matterport'
+import registerMapBlock, {
+  MapBlockOptions,
+  embedMapBlockName,
+  mapBlockTraits
+} from './Map'
 
 const BLOCK_BUTTONS_ORDER = [
   imageBlockName,
@@ -55,7 +60,8 @@ const BLOCK_BUTTONS_ORDER = [
   articleRightBlockName,
   agentLeftBlockName,
   agentGridBlockName,
-  embedMatterportBlockName
+  embedMatterportBlockName,
+  embedMapBlockName
 ]
 
 interface BlocksOptions
@@ -64,11 +70,13 @@ interface BlocksOptions
     ImageBlockOptions,
     AgentBlocksOptions,
     ArticleBlocksOptions,
-    MatterportBlockOptions {}
+    MatterportBlockOptions,
+    MapBlockOptions {}
 
 export const websiteBlocksTraits = {
   ...staticBlocksTraits,
-  ...matterportBlockTraits
+  ...matterportBlockTraits,
+  ...mapBlockTraits
 }
 
 export function registerWebsiteBlocks(
@@ -83,7 +91,8 @@ export function registerWebsiteBlocks(
     image: registerImageBlock(editor, renderData, blocksOptions),
     video: registerVideoBlock(editor, renderData, blocksOptions),
     article: registerArticleBlocks(editor, renderData, blocksOptions),
-    matterport: registerMatterportBlock(editor, renderData, blocksOptions)
+    matterport: registerMatterportBlock(editor, renderData, blocksOptions),
+    map: registerMapBlock(editor, renderData, blocksOptions)
   }
 
   reorderBlocks(editor, BLOCK_BUTTONS_ORDER)
