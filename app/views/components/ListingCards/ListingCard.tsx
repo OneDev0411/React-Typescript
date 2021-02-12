@@ -101,6 +101,11 @@ interface Props {
   tags?: string[]
 
   /**
+   * Hide features of listing to have a minimal card
+   */
+  hideFeatures?: boolean
+
+  /**
    * The card checkbox selection state
    *
    * You should explicitly pass `false` value if you want to make the card selectable
@@ -143,6 +148,7 @@ interface Props {
 export default function ListingCard({
   listing,
   tags,
+  hideFeatures = false,
   selected = undefined,
   onToggleSelection = noop,
   liked = undefined,
@@ -179,6 +185,9 @@ export default function ListingCard({
       : listing.property.property_type
 
   const shouldShowAcres = propertyType === 'Lots & Acreage'
+  const shouldRenderListingFeaturesRow =
+    !hideFeatures &&
+    Object.keys(listingFeatures).some(key => !!listingFeatures[key])
 
   return (
     <Card variant="outlined" className={classes.card} onClick={onClick}>
@@ -269,66 +278,74 @@ export default function ListingCard({
                 </Box>
               </Grid>
             </Grid>
-            <Grid container item alignItems="flex-end">
-              {listingFeatures.bedroomCount ? (
-                <Grid item>
-                  <Box display="flex" alignItems="center" mr={2}>
-                    <Typography className={classes.listingFeature}>
-                      {listingFeatures.bedroomCount}{' '}
-                    </Typography>
-                    <Typography className={classes.listingFeatureValue}>
-                      {pluralize('bed', listingFeatures.bedroomCount)}
-                    </Typography>
-                  </Box>
-                </Grid>
-              ) : null}
-              {listingFeatures.bathroomCount ? (
-                <Grid item>
-                  <Box display="flex" alignItems="center" mr={2}>
-                    <Typography className={classes.listingFeature}>
-                      {listingFeatures.bathroomCount}{' '}
-                    </Typography>
-                    <Typography className={classes.listingFeatureValue}>
-                      {pluralize('bath', listingFeatures.bathroomCount)}
-                    </Typography>
-                  </Box>
-                </Grid>
-              ) : null}
-              {listingFeatures.areaSqft && !shouldShowAcres ? (
-                <Grid item>
-                  <Box display="flex" alignItems="center" mr={2}>
-                    <Typography className={classes.listingFeature}>
-                      {listingFeatures.areaSqft.toLocaleString()}{' '}
-                    </Typography>
-                    <Typography className={classes.listingFeatureValue}>
-                      ft<sup>2</sup>
-                    </Typography>
-                  </Box>
-                </Grid>
-              ) : null}
-              {listingFeatures.lotSizeAreaAcre && shouldShowAcres ? (
-                <Grid item>
-                  <Box display="flex" alignItems="center" mr={2}>
-                    <Typography
-                      variant="subtitle2"
-                      className={classes.listingFeature}
-                    >
-                      {listingFeatures.lotSizeAreaAcre.toLocaleString()}{' '}
-                    </Typography>
-                    <Typography className={classes.listingFeatureValue}>
-                      acres
-                    </Typography>
-                  </Box>
-                </Grid>
-              ) : null}
-            </Grid>
-            <Grid container item alignItems="center">
-              <Grid item className={classes.addressContainer}>
-                <Typography noWrap variant="body2" className={classes.address}>
-                  {address}
-                </Typography>
+            {shouldRenderListingFeaturesRow && (
+              <Grid container item alignItems="flex-end">
+                {listingFeatures.bedroomCount ? (
+                  <Grid item>
+                    <Box display="flex" alignItems="center" mr={2}>
+                      <Typography className={classes.listingFeature}>
+                        {listingFeatures.bedroomCount}{' '}
+                      </Typography>
+                      <Typography className={classes.listingFeatureValue}>
+                        {pluralize('bed', listingFeatures.bedroomCount)}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                ) : null}
+                {listingFeatures.bathroomCount ? (
+                  <Grid item>
+                    <Box display="flex" alignItems="center" mr={2}>
+                      <Typography className={classes.listingFeature}>
+                        {listingFeatures.bathroomCount}{' '}
+                      </Typography>
+                      <Typography className={classes.listingFeatureValue}>
+                        {pluralize('bath', listingFeatures.bathroomCount)}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                ) : null}
+                {listingFeatures.areaSqft && !shouldShowAcres ? (
+                  <Grid item>
+                    <Box display="flex" alignItems="center" mr={2}>
+                      <Typography className={classes.listingFeature}>
+                        {listingFeatures.areaSqft.toLocaleString()}{' '}
+                      </Typography>
+                      <Typography className={classes.listingFeatureValue}>
+                        ft<sup>2</sup>
+                      </Typography>
+                    </Box>
+                  </Grid>
+                ) : null}
+                {listingFeatures.lotSizeAreaAcre && shouldShowAcres ? (
+                  <Grid item>
+                    <Box display="flex" alignItems="center" mr={2}>
+                      <Typography
+                        variant="subtitle2"
+                        className={classes.listingFeature}
+                      >
+                        {listingFeatures.lotSizeAreaAcre.toLocaleString()}{' '}
+                      </Typography>
+                      <Typography className={classes.listingFeatureValue}>
+                        acres
+                      </Typography>
+                    </Box>
+                  </Grid>
+                ) : null}
               </Grid>
-            </Grid>
+            )}
+            {address && (
+              <Grid container item alignItems="center">
+                <Grid item className={classes.addressContainer}>
+                  <Typography
+                    noWrap
+                    variant="body2"
+                    className={classes.address}
+                  >
+                    {address}
+                  </Typography>
+                </Grid>
+              </Grid>
+            )}
           </Grid>
         </CardContent>
       </CardActionArea>
