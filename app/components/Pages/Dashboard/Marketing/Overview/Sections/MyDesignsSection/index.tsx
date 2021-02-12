@@ -1,7 +1,7 @@
 import React from 'react'
-import { Grid, Box, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 
-import LoadingContainer from 'components/LoadingContainer'
+import CardSkeleton from 'components/CardSkeleton'
 import MyDesignCard from 'components/MyDesignCard'
 
 import { useTemplatesHistory } from '../../../hooks/use-templates-history'
@@ -10,14 +10,6 @@ import LinkSectionAction from '../LinkSectionAction'
 
 export default function MyDesignsSection() {
   const { templates, isLoading } = useTemplatesHistory()
-
-  if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" flexGrow="1">
-        <LoadingContainer noPaddings />
-      </Box>
-    )
-  }
 
   return (
     <SectionLayout
@@ -33,14 +25,25 @@ export default function MyDesignsSection() {
       }}
     >
       <>
-        {templates.length === 0 && (
+        {isLoading && (
+          <>
+            <Grid item xs sm={6}>
+              <CardSkeleton />
+            </Grid>
+            <Grid item xs sm={6}>
+              <CardSkeleton />
+            </Grid>
+          </>
+        )}
+        {!isLoading && templates.length === 0 && (
           <Typography variant="h6">No designs to show</Typography>
         )}
-        {templates?.slice(0, 2).map(template => (
-          <Grid key={template.id} item xs sm={6}>
-            <MyDesignCard templateInstance={template} />
-          </Grid>
-        ))}
+        {!isLoading &&
+          templates?.slice(0, 2).map(template => (
+            <Grid key={template.id} item xs sm={6}>
+              <MyDesignCard templateInstance={template} />
+            </Grid>
+          ))}
       </>
     </SectionLayout>
   )
