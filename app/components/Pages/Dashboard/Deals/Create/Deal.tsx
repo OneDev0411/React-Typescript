@@ -253,7 +253,7 @@ export default function CreateDeal() {
               <DealContext key={context.id} context={context} />
             ))}
 
-          <DealCard dealType={dealType} />
+          <DealCard dealSide={dealSide} />
         </QuestionWizard>
       </Box>
     </Context.Provider>

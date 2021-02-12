@@ -14,13 +14,13 @@ import {
 
 import { useCreationContext } from '../../context/use-creation-context'
 
-import type { IDealType } from '../../types'
+import type { IDealSide } from '../../types'
 
 interface Props {
-  dealType: IDealType
+  dealSide: IDealSide
 }
 
-export function DealCard({ dealType }: Props) {
+export function DealCard({ dealSide }: Props) {
   const { deal } = useCreationContext()
   const { step } = useSectionContext()
   const wizard = useWizardContext()
@@ -46,7 +46,7 @@ export function DealCard({ dealType }: Props) {
               Open Deal
             </Button>
 
-            {dealType === 'Both' && (
+            {dealSide === 'Both' && (
               <Box ml={2}>
                 <Button
                   variant="outlined"
