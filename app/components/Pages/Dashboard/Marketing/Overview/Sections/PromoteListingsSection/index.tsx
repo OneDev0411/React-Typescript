@@ -2,13 +2,13 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Grid } from '@material-ui/core'
 
+import { goTo } from 'utils/go-to'
 import { getActiveTeamId } from 'utils/user-teams'
 import { useLoadingEntities } from 'hooks/use-loading'
 import { useBrandListings, useDealsListings } from 'hooks/use-listings'
 import { selectUser } from 'selectors/user'
 
 import CardSkeleton from 'components/CardSkeleton'
-import Link from 'components/ALink'
 import ListingCard from 'components/ListingCards/ListingCard'
 
 import LinkSectionAction from '../LinkSectionAction'
@@ -64,12 +64,15 @@ export default function PromoteListingsSection() {
 
           return (
             <Grid key={listing.id} item md={3}>
-              <Link
-                noStyle
-                to={`/dashboard/agent-network/agents?listing=${listing.id}&title=${listingAddress.street_address}`}
-              >
-                <ListingCard hideFeatures listing={listing} />
-              </Link>
+              <ListingCard
+                hideFeatures
+                listing={listing}
+                onClick={() => {
+                  goTo(
+                    `/dashboard/agent-network/agents?listing=${listing.id}&title=${listingAddress.street_address}`
+                  )
+                }}
+              />
             </Grid>
           )
         })}
