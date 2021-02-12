@@ -42,7 +42,10 @@ export default function SentEmailsSection() {
           .slice(0, 2)
           .map(campaign => (
             <Grid key={campaign.id} item xs sm={6}>
-              <Link noStyle to={`/dashboard/insights/${campaign.id}`}>
+              <Link
+                noStyle
+                to={`/dashboard/insights/${campaign.id}?backUrl=/dashboard/marketing`}
+              >
                 <EmailInsightCard campaign={campaign} />
               </Link>
             </Grid>
