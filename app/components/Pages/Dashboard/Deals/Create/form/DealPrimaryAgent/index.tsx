@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Box,
-  TextField,
-  CircularProgress,
-  makeStyles,
-  Theme
-} from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import { useDispatch } from 'react-redux'
 
@@ -17,55 +11,26 @@ import {
 
 import DealRole from 'components/DealRole'
 
-import TeamAgents from 'components/TeamAgents'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
 import { deleteRole } from 'models/Deal/role'
 
 import { useCreationContext } from '../../context/use-creation-context'
-import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
 
-import { UserRow } from '../../components/UserRow'
 import { RoleCard } from '../../components/RoleCard'
+import { ContactRoles } from '../../components/ContactRoles'
+
+import { AgentsList } from './AgentsList'
 
 import type { IDealFormRole } from '../../types'
-
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    root: {
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius,
-      maxHeight: '40vh',
-      overflow: 'auto'
-    },
-    selectedAgent: {
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius,
-      margin: theme.spacing(1, 0.5, 0.5, 0)
-    },
-    searchInput: {
-      padding: theme.spacing(1.5)
-    },
-    continueButton: {
-      margin: theme.spacing(2, 0)
-    },
-    searchInputContainer: {
-      backgroundColor: '#fff',
-      position: 'sticky',
-      top: 0,
-      zIndex: 1
-    }
-  }),
-  {
-    name: 'CreateDeal-PrimaryAgent'
-  }
-)
 
 interface Props {
   title: string
   side: IDealType
   isCommissionRequired: boolean
+  isDoubleEnded: boolean
+  dealType: IDealType
   roles?: IDealRole[]
   onChange: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
   onFinishStep?: () => Promise<void>
@@ -74,17 +39,16 @@ interface Props {
 export function DealPrimaryAgent({
   title,
   side,
-  roles = [],
+  dealType,
+  isDoubleEnded,
   isCommissionRequired,
   onFinishStep,
+  roles = [],
   onChange = () => {}
 }: Props) {
-  const classes = useStyles()
   const wizard = useWizardContext()
   const { step } = useSectionContext()
   const { deal, user } = useCreationContext()
-
-  const [searchCriteria, setSearchCriteria] = useState<string>('')
 
   const dispatch = useDispatch()
 
@@ -171,41 +135,11 @@ export function DealPrimaryAgent({
             display: agentRoles.length === 0 && !selectedRole ? 'block' : 'none'
           }}
         >
-          <TeamAgents flattenTeams isPrimaryAgent criteria={searchCriteria}>
-            {({ teams, isLoading }) =>
-              isLoading ? (
-                <CircularProgress disableShrink />
-              ) : (
-                <div className={classes.root}>
-                  <Box className={classes.searchInputContainer}>
-                    <TextField
-                      fullWidth
-                      onChange={e => setSearchCriteria(e.target.value)}
-                      placeholder="Search Agents"
-                      size="medium"
-                      className={classes.searchInput}
-                    />
-                  </Box>
-
-                  {teams.map((team, index) => (
-                    <div key={index}>
-                      {team.users.map(agent => (
-                        <UserRow
-                          key={agent.id}
-                          name={agent.display_name}
-                          email={agent.email}
-                          avatarUrl={agent.profile_image_url!}
-                          onClick={() =>
-                            setSelectedRole(convertUserAgentToRole(agent))
-                          }
-                        />
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              )
-            }
-          </TeamAgents>
+          {dealType === 'Buying' && side === 'Selling' && !isDoubleEnded ? (
+            <ContactRoles onSelectRole={setSelectedRole} />
+          ) : (
+            <AgentsList onSelectRole={setSelectedRole} />
+          )}
         </Box>
       </QuestionForm>
     </QuestionSection>

@@ -86,6 +86,7 @@ export default function CreateDeal() {
 
   const isAgentDoubleEnded = dealSide === 'Both'
   const isOfficeDoubleEnded = enderType === 'OfficeDoubleEnder'
+  const isDoubleEnded = isAgentDoubleEnded || isOfficeDoubleEnded
 
   /**
    * Creates the initial deal as soon as possible and updates
@@ -179,7 +180,7 @@ export default function CreateDeal() {
           />
 
           <Controller
-            name="deal_type"
+            name="deal_side"
             control={control}
             render={({ onChange }) => (
               <DealType propertyType={propertyType} onChange={onChange} />
@@ -201,9 +202,7 @@ export default function CreateDeal() {
               render={({ value = [], onChange }) => (
                 <DealPrimaryAgent
                   side="Buying"
-                  isCommissionRequired={
-                    isAgentDoubleEnded || isOfficeDoubleEnded
-                  }
+                  isCommissionRequired={isDoubleEnded}
                   title="Who is the buyer agent?"
                   roles={value}
                   onChange={(role, type) =>
@@ -220,6 +219,8 @@ export default function CreateDeal() {
             render={({ value = [], onChange }) => (
               <DealPrimaryAgent
                 isCommissionRequired
+                isDoubleEnded={isDoubleEnded}
+                dealType={dealType}
                 side="Selling"
                 title="Who is the listing agent?"
                 roles={value}
