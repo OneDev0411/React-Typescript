@@ -38,7 +38,7 @@ export default function PromoteListingsSection() {
       actionNode={
         <LinkSectionAction
           title="View all your listings"
-          url="/dashboard/marketing/designs"
+          url="/dashboard/agent-network"
         />
       }
     >
