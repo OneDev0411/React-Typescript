@@ -9,7 +9,7 @@ import SectionLayout from '../SectionLayout'
 import LinkSectionAction from '../LinkSectionAction'
 import { useEmailCampaigns } from './hooks'
 
-export default function SentEmails() {
+export default function SentEmailsSection() {
   const { isLoading, campaigns } = useEmailCampaigns()
 
   if (isLoading) {

@@ -8,7 +8,7 @@ import { useTemplatesHistory } from '../../../hooks/use-templates-history'
 import SectionLayout from '../SectionLayout'
 import LinkSectionAction from '../LinkSectionAction'
 
-export default function MyDesigns() {
+export default function MyDesignsSection() {
   const { templates, isLoading } = useTemplatesHistory()
 
   if (isLoading) {
