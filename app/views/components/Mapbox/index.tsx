@@ -13,6 +13,9 @@ export interface InitialMapboxOptions
   extends Omit<MapboxOptions, 'container' | 'center'>,
     Required<Pick<MapboxOptions, 'center'>> {}
 
+export type CenterChangeEvent = MapEventType['moveend']
+export type ZoomChangeEvent = MapEventType['zoomend']
+
 export interface MapboxProps extends StyleProps {
   className?: string
   initialOptions: InitialMapboxOptions
@@ -21,8 +24,8 @@ export interface MapboxProps extends StyleProps {
   theme?: MapboxOptions['style']
   center?: MapboxOptions['center']
   zoom?: MapboxOptions['zoom']
-  onCenterChange?: (event: MapEventType['moveend']) => void
-  onZoomChange?: (event: MapEventType['zoomend']) => void
+  onCenterChange?: (event: CenterChangeEvent) => void
+  onZoomChange?: (event: ZoomChangeEvent) => void
   hasCenterMarker?: boolean
 }
 
