@@ -1127,6 +1127,7 @@ class Builder extends React.Component {
           />
           <MapEditorDialog
             open={!!this.state.mapToEdit}
+            map={this.state.mapToEdit}
             onClose={this.closeMapEditorDialog}
             onConfirm={this.onMapEditorDialogConfirm}
           />

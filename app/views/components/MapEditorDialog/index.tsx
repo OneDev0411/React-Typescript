@@ -8,6 +8,8 @@ import {
   Button
 } from '@material-ui/core'
 
+import type { Model } from 'backbone'
+
 import LazyMapbox from 'components/LazyMapbox'
 import type { CenterChangeEvent, ZoomChangeEvent } from 'components/Mapbox'
 
@@ -23,13 +25,24 @@ export interface MapInfo {
 }
 
 export interface MapEditorDialogProps extends DialogProps {
+  map: Model | null
   onConfirm: (info: MapInfo) => void
 }
 
-function MapEditorDialog({ onConfirm, ...otherProps }: MapEditorDialogProps) {
-  const centerRef = useRef<CenterPoint>({ lng: -107.7910942, lat: 50.2867731 })
-  const themeRef = useRef('mapbox://styles/mapbox/streets-v11')
-  const zoomRef = useRef(15)
+function MapEditorDialog({
+  onConfirm,
+  map,
+  ...otherProps
+}: MapEditorDialogProps) {
+  const centerRef = useRef<CenterPoint>(
+    map
+      ? { lng: map.get('longitude'), lat: map.get('latitude') }
+      : { lng: -107.7910942, lat: 50.2867731 }
+  )
+  const themeRef = useRef(
+    map ? map.get('theme') : 'mapbox://styles/mapbox/streets-v11'
+  )
+  const zoomRef = useRef(map ? map.get('zoom') : 15)
 
   const handleCenterChange = (event: CenterChangeEvent) => {
     const center = event.target.getCenter()
@@ -45,6 +58,13 @@ function MapEditorDialog({ onConfirm, ...otherProps }: MapEditorDialogProps) {
   }
 
   const handleConfirm = () => {
+    if (map) {
+      map.set('longitude', centerRef.current.lng)
+      map.set('latitude', centerRef.current.lat)
+      map.set('zoom', zoomRef.current)
+      map.set('theme', themeRef.current)
+    }
+
     onConfirm({
       center: centerRef.current,
       theme: themeRef.current,
