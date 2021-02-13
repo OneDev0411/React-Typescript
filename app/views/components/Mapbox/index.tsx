@@ -48,7 +48,6 @@ function Mapbox({
 
   useEffectOnce(() => {
     if (divRef.current) {
-      console.log('config', config)
       mapboxgl.accessToken = config.mapbox.access_token
 
       mapRef.current = new mapboxgl.Map({
