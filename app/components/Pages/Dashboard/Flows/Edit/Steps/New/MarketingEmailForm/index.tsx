@@ -61,7 +61,7 @@ export default function MarketingEmailForm({
       onSubmit={(data: MarketingEmailFormData) => {
         const template = data.template?.isInstance
           ? { template_instance: data.template?.id }
-          : { brand_template: data.template?.id }
+          : { template: data.template?.id }
 
         const newStep: IBrandFlowStepInput = {
           order: index,

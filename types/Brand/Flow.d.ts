@@ -24,7 +24,7 @@ declare interface IBrandFlowStep
 declare interface IBrandFlowStepInput extends IBaseBrandFlowStep {
   event?: IBrandEventInput
   email?: UUID
-  brand_template?: UUID
+  template?: UUID
   template_instance?: UUID
 }
 
