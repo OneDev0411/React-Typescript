@@ -91,7 +91,7 @@ export default function EventForm({
       render={({ handleSubmit, submitting }) => {
         return (
           <Box className={commonClasses.container}>
-            <form style={{ width: '100%' }} onSubmit={handleSubmit} noValidate>
+            <form onSubmit={handleSubmit} noValidate>
               <Box className={commonClasses.content}>
                 <Typography variant="subtitle1" className={commonClasses.title}>
                   Add a reminder for

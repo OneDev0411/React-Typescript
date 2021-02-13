@@ -17,6 +17,7 @@ import {
   convertToWebInput,
   convertToServerInput
 } from '../components/WaitFor/helpers'
+import { getInitialTemplateValue } from './helpers'
 
 interface Props {
   index: number
@@ -47,7 +48,7 @@ export default function MarketingEmailForm({
     }
 
     return {
-      template: null,
+      template: getInitialTemplateValue(stepData),
       title: stepData.title,
       description: stepData.description,
       wait_for: convertToWebInput(stepData.wait_for),
@@ -85,7 +86,7 @@ export default function MarketingEmailForm({
       render={({ handleSubmit, submitting, values }) => {
         return (
           <Box className={commonClasses.container}>
-            <form style={{ width: '100%' }} onSubmit={handleSubmit} noValidate>
+            <form onSubmit={handleSubmit} noValidate>
               <Box className={commonClasses.content}>
                 <Typography variant="subtitle1" className={commonClasses.title}>
                   Send A Marketing Email

@@ -93,7 +93,7 @@ export default function BasicEmailForm({
       render={({ handleSubmit, submitting, values }) => {
         return (
           <Box className={commonClasses.container}>
-            <form style={{ width: '100%' }} onSubmit={handleSubmit} noValidate>
+            <form onSubmit={handleSubmit} noValidate>
               <Box className={commonClasses.content}>
                 <Typography variant="subtitle1" className={commonClasses.title}>
                   Send A Marketing Email

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { makeStyles, Theme, Typography, Box } from '@material-ui/core'
-// import useEffectOnce from 'react-use/lib/useEffectOnce'
 import cn from 'classnames'
 
 import { selectUser } from 'selectors/user'
@@ -11,13 +10,10 @@ import { IAppState } from 'reducers'
 
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 
-// import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 import { getActiveBrand } from 'utils/user-teams'
 
-// import { getTemplates } from 'models/instant-marketing/get-templates'
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
 
-// import { renderBrandedNunjucksTemplate } from 'utils/marketing-center/render-branded-nunjucks-template'
 import { MarketingEmailFormData } from '../../types'
 
 interface Props {
@@ -105,13 +101,15 @@ export const TemplateSelector = ({
         return
       }
 
+      if (selectedTemplateInstance) {
+        setSelectedTemplateInstace(null)
+      }
+
       setSelectedBrandTemplate(template)
       onChange({
         isInstance: false,
         id: template.id
       })
-
-      console.log('handleSelectTemplate', { template })
     } catch (error) {
       console.error(error)
     } finally {
@@ -123,7 +121,7 @@ export const TemplateSelector = ({
     try {
       const templateId = selectedBrandTemplate
         ? selectedBrandTemplate.template?.id
-        : 'ads'
+        : selectedTemplateInstance?.id
 
       if (!templateId) {
         return
@@ -139,7 +137,6 @@ export const TemplateSelector = ({
         isInstance: true,
         id: templateInstance.id
       })
-      console.log('handleEditTemplate', { templateInstance })
     } catch (error) {
       console.error(error)
     } finally {

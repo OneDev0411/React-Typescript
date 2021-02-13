@@ -36,8 +36,6 @@ export default function Item({
   const commonClasses = useCommonStyles()
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
-  console.log('Item', { step })
-
   const renderEditForm = () => {
     if (step.event) {
       return (
