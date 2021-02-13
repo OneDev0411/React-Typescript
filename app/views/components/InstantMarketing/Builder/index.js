@@ -32,6 +32,8 @@ import { EditorDialog } from 'components/ImageEditor'
 
 import MatterportDrawer from 'components/MatterportDrawer'
 
+import MapEditorDialog from 'components/MapEditorDialog'
+
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
 
@@ -83,7 +85,8 @@ class Builder extends React.Component {
       isArticleDrawerOpen: false,
       isMatterportDrawerOpen: false,
       isNeighborhoodsReportDrawerOpen: false,
-      isNeighborhoodsGraphsReportDrawerOpen: false
+      isNeighborhoodsGraphsReportDrawerOpen: false,
+      mapToEdit: null
     }
 
     this.emailBlocksRegistered = false
@@ -446,10 +449,25 @@ class Builder extends React.Component {
       onMatterportDrop: dynamicBlocksOptions.matterport.onDrop,
       onEmptyMatterportSelected: () => {
         this.setState({ isMatterportDrawerOpen: true })
-      }
+      },
+      onMapDoubleClick: this.openMapEditorDialog,
+      onMapDrop: this.openMapEditorDialog
     } // TODO: read this from the template config
 
     this.blocks = registerWebsiteBlocks(this.editor, renderData, blocksOptions)
+  }
+
+  openMapEditorDialog = model => {
+    this.setState({ mapToEdit: model })
+  }
+
+  onMapEditorDialogConfirm = (...args) => {
+    this.closeMapEditorDialog()
+    this.blocks.map.selectHandler(...args)
+  }
+
+  closeMapEditorDialog = () => {
+    this.setState({ mapToEdit: null })
   }
 
   disableAssetManager = () => {
@@ -1106,6 +1124,11 @@ class Builder extends React.Component {
               this.blocks.matterport.selectHandler(matterportModelId)
               this.setState({ isMatterportDrawerOpen: false })
             }}
+          />
+          <MapEditorDialog
+            open={!!this.state.mapToEdit}
+            onClose={this.closeMapEditorDialog}
+            onConfirm={this.onMapEditorDialogConfirm}
           />
           <Header>
             {this.isTemplatesListEnabled() && (
