@@ -35,5 +35,8 @@ export default {
   },
   stripe: {
     public_key: process.env.STRIPE_PUBLIC_KEY
+  },
+  mapbox: {
+    access_token: process.env.MAPBOX_ACCESS_TOKEN
   }
 }
