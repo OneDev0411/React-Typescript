@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Chip, makeStyles, Theme } from '@material-ui/core'
 
 import { PageTabs, Tab } from 'components/PageTabs'
 import SavedSegments from 'components/Grid/SavedSegments/List'
@@ -16,13 +15,6 @@ import { PARKED_CONTACTS_LIST_ID } from '../constants'
 import { SortFields } from '../SortFields'
 import ContactFilters from '../Filters'
 import TagsList from '../TagsList'
-
-const useStyles = makeStyles((theme: Theme) => ({
-  parkContactCount: {
-    marginLeft: theme.spacing(0.5),
-    cursor: 'pointer'
-  }
-}))
 
 interface Props {
   handleFilterChange: (newFilters: object, resetLoadedRanges: boolean) => void
@@ -46,9 +38,8 @@ interface Props {
     currentOrder: string
   }
   contactCount: number
-  parkedContactsCount: number
   activeSegment: any
-  users: any
+  users: UUID[]
   syncedContacts: SyncedContactsTypes
 }
 
@@ -59,14 +50,14 @@ interface ReduxStateType {
 
 const getActiveTab = ({
   isAllContactsActive,
-  isSyncedListActive,
+  isParkFilterActive,
   isTagListActive
 }) => {
   if (isAllContactsActive) {
     return 'all-contact'
   }
 
-  if (isSyncedListActive) {
+  if (isParkFilterActive) {
     return 'parked-contact'
   }
 
@@ -80,7 +71,6 @@ const getActiveTab = ({
 export const ContactsTabs = ({
   handleResetShortcutFilter,
   handleChangeSavedSegment,
-  parkedContactsCount,
   handleFilterChange,
   savedListProps,
   activeSegment,
@@ -90,7 +80,6 @@ export const ContactsTabs = ({
   filter,
   users
 }: Props) => {
-  const classes = useStyles()
   const dispatch = useDispatch()
   const { activeFilters }: Pick<ReduxStateType, 'activeFilters'> = useSelector(
     (state: IAppState) => ({
@@ -103,12 +92,12 @@ export const ContactsTabs = ({
       (!activeSegment || activeSegment.id === 'default')
     )
   }, [activeFilters, activeSegment])
-  const isSyncedListActive =
+  const isParkFilterActive =
     activeSegment && activeSegment.id === PARKED_CONTACTS_LIST_ID
 
   const activeTab = getActiveTab({
     isAllContactsActive,
-    isSyncedListActive,
+    isParkFilterActive,
     isTagListActive: tagListProps.isActive
   })
 
@@ -116,32 +105,9 @@ export const ContactsTabs = ({
     await dispatch(resetActiveFilters(CONTACTS_SEGMENT_NAME))
     await dispatch(changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type))
 
-    if (type === PARKED_CONTACTS_LIST_ID) {
-      return handleFilterChange({ parked: true }, true)
-    }
-
     handleFilterChange({ filters: [], flows: [] }, true)
     handleResetShortcutFilter()
   }
-
-  const syncedContactsTab =
-    parkedContactsCount > 0 ? (
-      <Tab
-        key="parked-contact"
-        value="parked-contact"
-        label={
-          <span onClick={() => clickHandler(PARKED_CONTACTS_LIST_ID)}>
-            Parked Contacts
-            <Chip
-              color="primary"
-              size="small"
-              label={parkedContactsCount}
-              className={classes.parkContactCount}
-            />
-          </span>
-        }
-      />
-    ) : null
 
   return (
     <>
@@ -155,7 +121,6 @@ export const ContactsTabs = ({
               <span onClick={() => clickHandler('default')}>All Contacts</span>
             }
           />,
-          syncedContactsTab,
           <Tab
             key="saved-list"
             value="saved-list"

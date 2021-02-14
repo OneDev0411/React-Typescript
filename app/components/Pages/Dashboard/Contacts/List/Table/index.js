@@ -7,7 +7,9 @@ import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import { Table } from 'components/Grid/Table'
 
+import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import { useGridStyles } from 'components/Grid/Table/styles'
+import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
 import { goTo } from 'utils/go-to'
 
@@ -51,10 +53,24 @@ const useCustomGridStyles = makeStyles(theme => ({
 }))
 
 const ContactsList = props => {
+  const [state, dispatch] = useGridContext()
   const gridClasses = useGridStyles()
   const customGridClasses = useCustomGridStyles()
   const theme = useTheme()
   const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
+  const resetSelectedRow = () => {
+    const {
+      selection: { selectedRowIds, isAllRowsSelected, isEntireRowsSelected }
+    } = state
+
+    if (
+      selectedRowIds.length > 0 ||
+      isAllRowsSelected ||
+      isEntireRowsSelected
+    ) {
+      dispatch(resetRows())
+    }
+  }
 
   const columns = [
     {
@@ -69,7 +85,9 @@ const ContactsList = props => {
       primary: true,
       width: '12%',
       class: 'visible-on-hover',
-      render: ({ row: contact }) => <CtaAction contact={contact} />
+      render: ({ row: contact }) => {
+        return !contact?.parked ? <CtaAction contact={contact} /> : null
+      }
     },
     {
       id: 'last_touched',
@@ -86,7 +104,10 @@ const ContactsList = props => {
       render: ({ row: contact }) => (
         <FlowCell
           contactId={contact.id}
-          callback={props.reloadContacts}
+          callback={() => {
+            resetSelectedRow()
+            props.reloadContacts()
+          }}
           flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
         />
       )
@@ -109,7 +130,10 @@ const ContactsList = props => {
         return contact?.parked ? (
           <UnparkContact
             contactId={contact.id}
-            callback={props.reloadContacts}
+            callback={() => {
+              resetSelectedRow()
+              props.reloadContacts()
+            }}
           />
         ) : null
       }
