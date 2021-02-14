@@ -29,6 +29,10 @@ export interface MapEditorDialogProps extends DialogProps {
   onConfirm: (info: MapInfo) => void
 }
 
+const defaultCenter = { lng: -107.7910942, lat: 50.2867731 }
+const defaultTheme = 'mapbox://styles/mapbox/streets-v11'
+const defaultZoom = 15
+
 function MapEditorDialog({
   onConfirm,
   map,
@@ -37,12 +41,10 @@ function MapEditorDialog({
   const centerRef = useRef<CenterPoint>(
     map
       ? { lng: map.get('longitude'), lat: map.get('latitude') }
-      : { lng: -107.7910942, lat: 50.2867731 }
+      : defaultCenter
   )
-  const themeRef = useRef(
-    map ? map.get('theme') : 'mapbox://styles/mapbox/streets-v11'
-  )
-  const zoomRef = useRef(map ? map.get('zoom') : 15)
+  const themeRef = useRef(map ? map.get('theme') : defaultTheme)
+  const zoomRef = useRef(map ? map.get('zoom') : defaultZoom)
 
   const handleCenterChange = (event: CenterChangeEvent) => {
     const center = event.target.getCenter()
