@@ -87,7 +87,7 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         disabled: 'rgba(0, 0, 0, 0.38)',
         hint: 'rgba(0, 0, 0, 0.38)'
       },
-      divider: '#d4d4d4',
+      divider: 'rgba(0, 0, 0, 0.12)',
       background: {
         paper: white,
         default: '#fafafa'

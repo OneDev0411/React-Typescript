@@ -33,7 +33,7 @@ function preSearchFormat({
   }
 
   // we're doing this because we want to check parked field is exist or not
-  if (typeof parked !== 'undefined') {
+  if (typeof parked !== 'undefined' && query.length === 0) {
     payload.parked = parked
   }
 

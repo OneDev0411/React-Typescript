@@ -2,9 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
-import Alert from '@material-ui/lab/Alert'
-import { Box, IconButton } from '@material-ui/core'
-import { mdiClose, mdiLoading } from '@mdi/js'
+import { Box } from '@material-ui/core'
+import { mdiLoading } from '@mdi/js'
 
 import PageLayout from 'components/GlobalPageLayout'
 import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
@@ -18,6 +17,8 @@ import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
 import { updateFilterSegment } from 'actions/filter-segments'
 import { getUserTeams } from 'actions/user/teams'
+import { resetActiveFilters } from 'actions/filter-segments/active-filters'
+import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import {
@@ -30,6 +31,7 @@ import {
   clearImportingGoogleContacts,
   getNewConnectedGoogleAccount
 } from 'utils/oauth-provider'
+import { goTo } from 'utils/go-to'
 import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
 import { getParkedContactsCount as getParkedContactCountModel } from 'models/contacts/get-parked-contact-count'
@@ -47,6 +49,7 @@ import ContactsTabs from './Tabs'
 import Table from './Table'
 import ImportContactsButton from './ImportContactsButton'
 import TouchReminder from './TouchReminder'
+import { OtherContactsBadge } from './OtherContactsBadge'
 
 import {
   FLOW_FILTER_ID,
@@ -56,7 +59,6 @@ import {
   PARKED_CONTACTS_LIST_ID,
   DUPLICATE_CONTACTS_LIST_ID
 } from './constants'
-import { NavigateDuplicate } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
@@ -79,7 +81,6 @@ class ContactsList extends React.Component {
       isRowsUpdating: false,
       searchInputValue: props.list.textFilter,
       loadedRanges: [],
-      showDuplicateClusterAlert: false,
       duplicateClusterCount: 0,
       parkedContactCount: 0
     }
@@ -193,7 +194,7 @@ class ContactsList extends React.Component {
       return `Flow: ${activeFilters[0].values[0].label}`
     }
 
-    return 'All Contacts'
+    return 'Contacts'
   }
 
   updateSyncState(provider, oAuthAccounts = this.props.oAuthAccounts) {
@@ -236,7 +237,8 @@ class ContactsList extends React.Component {
   }
 
   getParkedContactCount = async () => {
-    const parkedContactCount = await getParkedContactCountModel()
+    const { viewAsUsers } = this.props
+    const parkedContactCount = await getParkedContactCountModel(viewAsUsers)
 
     this.setState({ parkedContactCount })
   }
@@ -248,19 +250,12 @@ class ContactsList extends React.Component {
 
       if (clusterCount > 0) {
         this.setState(() => ({
-          showDuplicateClusterAlert: true,
           duplicateClusterCount: clusterCount
         }))
       }
     } catch (e) {
       console.log('fetch duplicate cluster error: ', e)
     }
-  }
-
-  closeDupicateAlert = () => {
-    this.setState(() => ({
-      showDuplicateClusterAlert: false
-    }))
   }
 
   scrollToSelector(selector) {
@@ -488,16 +483,18 @@ class ContactsList extends React.Component {
   handleOnDelete = (e, options) => {
     const singleSelectedRow =
       options && options.singleSelectedRow ? options.singleSelectedRow : []
-    const state = this.props.gridStateContext
-    const entireMode = state.selection.isEntireRowsSelected
+    const gridState = this.props.gridStateContext
+    const {
+      selection: { isEntireRowsSelected, selectedRowIds, excludedRows }
+    } = gridState
 
-    const selectedRowsLength = entireMode
-      ? this.props.listInfo.total - state.selection.excludedRows.length
-      : state.selection.selectedRowIds.length
+    const selectedRowsLength = isEntireRowsSelected
+      ? this.props.listInfo.total - excludedRows.length
+      : selectedRowIds.length
     const isSingleContact = singleSelectedRow.length === 1
     const isManyContacts = isSingleContact
       ? false
-      : entireMode || selectedRowsLength > 1
+      : isEntireRowsSelected || selectedRowsLength > 1
 
     this.props.confirmation({
       confirmLabel: 'Delete',
@@ -516,7 +513,10 @@ class ContactsList extends React.Component {
   }
 
   handleDeleteContact = async ({ singleSelectedRow }) => {
-    const { activeSegment, gridStateContext: state } = this.props
+    const { activeSegment, gridStateContext } = this.props
+    const {
+      selection: { isEntireRowsSelected, selectedRowIds, excludedRows }
+    } = gridStateContext
     const isParkedActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
 
     const isSingleContact = singleSelectedRow.length === 1
@@ -524,25 +524,25 @@ class ContactsList extends React.Component {
     try {
       this.rowsUpdating(true)
 
-      if (state.selection.isEntireRowsSelected && !isSingleContact) {
+      if (isEntireRowsSelected && !isSingleContact) {
         const bulkDeleteParams = {
           users: this.props.viewAsUsers,
           searchText: this.state.searchInputValue,
           conditionOperator: this.props.conditionOperator,
           filters: this.props.filters,
-          excludes: state.selection.excludedRows
+          excludes: excludedRows,
+          parked: isParkedActive
         }
 
         await deleteContactsBulk(bulkDeleteParams)
         this.setState(() => ({
-          showDuplicateClusterAlert: false,
           duplicateClusterCount: 0
         }))
         await this.reloadContacts()
       } else {
         const rows =
-          state.selection.selectedRowIds.length > 0 && !isSingleContact
-            ? state.selection.selectedRowIds
+          selectedRowIds.length > 0 && !isSingleContact
+            ? selectedRowIds
             : singleSelectedRow
 
         await this.props.deleteContacts(rows)
@@ -566,8 +566,13 @@ class ContactsList extends React.Component {
   }
 
   reloadContacts = async (start = 0) => {
+    const { parkedContactCount } = this.state
     const { activeSegment, searchContacts } = this.props
     const isParkedActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
+
+    if (parkedContactCount > 0) {
+      this.getParkedContactCount()
+    }
 
     await searchContacts(
       this.props.filters,
@@ -657,8 +662,45 @@ class ContactsList extends React.Component {
     this.reloadContacts()
   }
 
+  renderOtherContactsBadge = () => {
+    const { resetActiveFilters, changeActiveFilterSegment } = this.props
+    const { parkedContactCount, duplicateClusterCount } = this.state
+
+    if (!parkedContactCount && !duplicateClusterCount) {
+      return null
+    }
+
+    return (
+      <Box display="flex" alignItems="center">
+        {parkedContactCount > 0 && (
+          <Box mr={duplicateClusterCount > 0 ? 1 : 0}>
+            <OtherContactsBadge
+              title="New contacts to review and add"
+              count={parkedContactCount}
+              onClick={async () => {
+                await resetActiveFilters(CONTACTS_SEGMENT_NAME)
+                await changeActiveFilterSegment(
+                  CONTACTS_SEGMENT_NAME,
+                  PARKED_CONTACTS_LIST_ID
+                )
+                this.handleFilterChange({ parked: true }, true)
+              }}
+            />
+          </Box>
+        )}
+        {duplicateClusterCount > 0 && (
+          <OtherContactsBadge
+            title="Duplicate Contacts"
+            count={duplicateClusterCount}
+            onClick={() => goTo('/dashboard/contacts/duplicates')}
+          />
+        )}
+      </Box>
+    )
+  }
+
   renderTabs = (props = {}) => {
-    const { parkedContactCount, selectedShortcutFilter } = this.state
+    const { selectedShortcutFilter } = this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
 
     return (
@@ -695,40 +737,10 @@ class ContactsList extends React.Component {
           currentOrder: this.order
         }}
         contactCount={listInfo.total || 0}
-        parkedContactsCount={parkedContactCount}
         users={viewAsUsers}
         activeSegment={activeSegment}
         {...props}
       />
-    )
-  }
-
-  renderDuplicateAlert = () => {
-    const { duplicateClusterCount } = this.state
-
-    return (
-      <Box mt={1.5}>
-        <Alert
-          severity="info"
-          action={
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={this.closeDupicateAlert}
-            >
-              <SvgIcon path={mdiClose} />
-            </IconButton>
-          }
-        >
-          <Box>
-            You currently have {duplicateClusterCount} duplicate contacts,{' '}
-            <NavigateDuplicate href="/dashboard/contacts/duplicates">
-              manage them here.
-            </NavigateDuplicate>
-          </Box>
-        </Alert>
-      </Box>
     )
   }
 
@@ -823,8 +835,8 @@ class ContactsList extends React.Component {
           {isZeroState && <ZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
+              {this.renderOtherContactsBadge()}
               {this.renderTabs()}
-              {state.showDuplicateClusterAlert && this.renderDuplicateAlert()}
               <Box mt={2}>
                 <Table
                   data={contacts}
@@ -922,6 +934,8 @@ export default withRouter(
     setContactsListTextFilter,
     getContactsTags,
     getUserTeams,
+    resetActiveFilters,
+    changeActiveFilterSegment,
     updateSegment: updateFilterSegment
   })(ContactsList)
 )
