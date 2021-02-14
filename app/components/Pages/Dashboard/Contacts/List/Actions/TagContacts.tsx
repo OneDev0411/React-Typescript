@@ -6,14 +6,13 @@ import { Button } from '@material-ui/core'
 
 import { selectContact } from 'reducers/contacts/list'
 
-import { IAppState } from 'reducers'
-
 import { PopoverContactTagSelector } from 'components/TagSelector'
 import { SelectorOption } from 'components/TagSelector/type'
+import { selectContactListStore } from 'selectors/contacts'
 
 interface Props {
-  disabled: boolean
-  entireMode: boolean
+  disabled?: boolean
+  entireMode?: boolean
   selectedRows: UUID[]
   excludedRows: UUID[]
   attributeFilters?: IContactAttributeFilter[]
@@ -43,13 +42,7 @@ export const TagContacts = ({
   handleChangeContactsAttributes
 }: Props) => {
   const [currentTags, setCurrentTags] = useState<SelectorOption[]>([])
-  const { contactListStore } = useSelector((store: IAppState) => {
-    const { list: contactListStore } = store.contacts
-
-    return {
-      contactListStore
-    }
-  })
+  const contactListStore = useSelector(selectContactListStore)
 
   const getCommonTags = () => {
     if (selectedRows.length === 0 || entireMode) {

@@ -7,9 +7,7 @@ import Autocomplete, {
 } from '@material-ui/lab/Autocomplete'
 
 import { getContactsTags } from 'models/contacts/get-contacts-tags'
-
-import { IAppState } from 'reducers'
-import { selectTags } from 'reducers/contacts/tags'
+import { selectExistingTags } from 'selectors/contacts'
 
 import { SelectorOption } from '../type'
 
@@ -33,9 +31,7 @@ export const BaseTagSelector = ({
 }: Props) => {
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
   const [availableTags, setAvailableTags] = useState<SelectorOption[]>([])
-  const { existingTags } = useSelector((store: IAppState) => ({
-    existingTags: selectTags(store.contacts.tags)
-  }))
+  const existingTags = useSelector(selectExistingTags)
 
   useEffectOnce(() => {
     const normalizeTags = tags =>
