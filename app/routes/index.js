@@ -261,6 +261,13 @@ const AsyncDealCreateOffer = Load({
     )
 })
 
+const AsyncDealPublish = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Deals/Create/Publish' /* webpackChunkName: "deal_publish" */
+    )
+})
+
 const AsyncDealsList = Load({
   loader: () =>
     import(
@@ -821,6 +828,10 @@ export default (
           <Route
             path="/dashboard/deals/:id/create-offer"
             component={AsyncDealCreateOffer}
+          />
+          <Route
+            path="/dashboard/deals/:id/publish"
+            component={AsyncDealPublish}
           />
           <Route
             path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"
