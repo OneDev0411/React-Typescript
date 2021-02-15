@@ -38,11 +38,7 @@ import registerMatterportBlock, {
   embedMatterportBlockName,
   matterportBlockTraits
 } from './Matterport'
-import registerMapBlock, {
-  MapBlockOptions,
-  embedMapBlockName,
-  mapBlockTraits
-} from './Map'
+import registerMapBlock, { MapBlockOptions, embedMapBlockName } from './Map'
 
 const BLOCK_BUTTONS_ORDER = [
   imageBlockName,
@@ -75,8 +71,7 @@ interface BlocksOptions
 
 export const websiteBlocksTraits = {
   ...staticBlocksTraits,
-  ...matterportBlockTraits,
-  ...mapBlockTraits
+  ...matterportBlockTraits
 }
 
 export function registerWebsiteBlocks(

@@ -32,7 +32,7 @@ import { EditorDialog } from 'components/ImageEditor'
 
 import MatterportDrawer from 'components/MatterportDrawer'
 
-import MapEditorDialog from 'components/MapEditorDialog'
+import MapDrawer from 'components/MapDrawer'
 
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
@@ -450,24 +450,12 @@ class Builder extends React.Component {
       onEmptyMatterportSelected: () => {
         this.setState({ isMatterportDrawerOpen: true })
       },
-      onMapDoubleClick: this.openMapEditorDialog,
-      onMapDrop: this.openMapEditorDialog
+      onMapDrop: model => {
+        this.setState({ mapToEdit: model })
+      }
     } // TODO: read this from the template config
 
     this.blocks = registerWebsiteBlocks(this.editor, renderData, blocksOptions)
-  }
-
-  openMapEditorDialog = model => {
-    this.setState({ mapToEdit: model })
-  }
-
-  onMapEditorDialogConfirm = (...args) => {
-    this.closeMapEditorDialog()
-    this.blocks.map.selectHandler(...args)
-  }
-
-  closeMapEditorDialog = () => {
-    this.setState({ mapToEdit: null })
   }
 
   disableAssetManager = () => {
@@ -1125,11 +1113,16 @@ class Builder extends React.Component {
               this.setState({ isMatterportDrawerOpen: false })
             }}
           />
-          <MapEditorDialog
-            open={!!this.state.mapToEdit}
+          <MapDrawer
+            isOpen={!!this.state.mapToEdit}
             map={this.state.mapToEdit}
-            onClose={this.closeMapEditorDialog}
-            onConfirm={this.onMapEditorDialogConfirm}
+            onClose={() => {
+              this.setState({ mapToEdit: null })
+            }}
+            onSelect={(...args) => {
+              this.blocks.map.selectHandler(...args)
+              this.setState({ mapToEdit: null })
+            }}
           />
           <Header>
             {this.isTemplatesListEnabled() && (

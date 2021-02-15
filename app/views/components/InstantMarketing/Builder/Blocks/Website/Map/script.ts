@@ -8,7 +8,7 @@ function script({ token, theme, longitude, latitude, zoom }) {
 
     const map = new mapboxgl.Map({
       container: element,
-      style: theme,
+      style: `mapbox://styles/${theme}`,
       center: [longitude, latitude],
       zoom
     })

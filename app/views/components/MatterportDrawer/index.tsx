@@ -4,8 +4,6 @@ import { Button, CircularProgress } from '@material-ui/core'
 import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
 
-// import { getVideoThumbnailUrl } from './helpers'
-// import { Video } from './types'
 import useStyles from './styles'
 
 interface Props {
