@@ -1282,6 +1282,10 @@ class Builder extends React.Component {
             </div>
           </BuilderContainer>
         </Container>
+        <link
+          href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css"
+          rel="stylesheet"
+        />
       </Portal>
     )
   }

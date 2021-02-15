@@ -1,17 +1,16 @@
 declare const mapboxgl: any
 
 function script({ token, theme, longitude, latitude, zoom }) {
-  const element = this
+  const element: HTMLElement = this
 
   function initMap() {
     mapboxgl.accessToken = token
 
     const map = new mapboxgl.Map({
-      container: element.id,
+      container: element,
       style: theme,
       center: [longitude, latitude],
-      zoom,
-      interactive: false
+      zoom
     })
 
     new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map)

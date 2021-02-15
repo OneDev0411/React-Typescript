@@ -1,5 +1,7 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
+import mapboxgl, { Map, Marker } from 'mapbox-gl'
+import { debounce } from 'underscore'
 
 import config from 'config'
 
@@ -144,7 +146,7 @@ interface MapBlock {
 export default function registerMapBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  { embedMapClassNames, onMapDrop, onMapDoubleClick }: MapBlockOptions
+  { embedMapClassNames, onMapDrop }: MapBlockOptions
 ): MapBlock {
   const ComponentModel = editor.DomComponents.getType('default')!.model
 
@@ -154,7 +156,7 @@ export default function registerMapBlock(
     isComponent: isComponent(typeEmbedMap),
     model: {
       defaults: {
-        script,
+        'script-export': script,
         'script-props': attrKeys,
         resizable: {
           tl: 0,
@@ -168,7 +170,8 @@ export default function registerMapBlock(
         theme: themes[0].id,
         longitude: '',
         latitude: '',
-        zoom: 15
+        zoom: 15,
+        draggable: false
       },
       init() {
         const attrs = this.getAttributes()
@@ -198,13 +201,62 @@ export default function registerMapBlock(
     },
     view: {
       ...baseView(embedMapClassNames),
-      events: {
-        dblclick() {
-          onMapDoubleClick(this.model)
-        }
+      onRender() {
+        mapboxgl.accessToken = config.mapbox.access_token
+
+        const center: [number, number] = [
+          this.model.get('longitude'),
+          this.model.get('latitude')
+        ]
+
+        const map = new Map({
+          container: this.el,
+          style: this.model.get('theme'),
+          center,
+          zoom: this.model.get('zoom')
+        })
+
+        const marker = new Marker().setLngLat(center).addTo(map)
+
+        map.on('move', event => {
+          marker.setLngLat(event.target.getCenter())
+        })
+
+        map.on('moveend', event => {
+          const center = event.target.getCenter()
+
+          this.model.set(
+            {
+              longitude: center.lng,
+              latitude: center.lat
+            },
+            { silent: true }
+          )
+        })
+
+        map.on('zoomend', event => {
+          this.model.set('zoom', event.target.getZoom(), { silent: true })
+        })
+
+        map.on('load', map.resize)
+
+        // TODO: Optimize this by finding a better event because now the callback
+        // call for all height change
+        this.listenTo(
+          this.em,
+          'styleable:change:height',
+          this.handleChangeHeight
+        )
+
+        this.mapInstance = map
+        this.markerInstance = marker
       },
-      init(...args) {
-        baseView(embedMapClassNames).init.apply(this, args)
+      handleChangeHeight: debounce(function handleChangeHeight() {
+        this.mapInstance.resize()
+      }, 200),
+      removed() {
+        this.mapInstance?.remove()
+        this.markerInstance?.remove()
       }
     }
   })
