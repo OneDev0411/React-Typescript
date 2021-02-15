@@ -100,25 +100,35 @@ export function DealAddress({ onChange }: Props) {
     setSearchCriteria('')
   }
 
-  const handleSubmit = async () => {
-    if (place) {
-      const address = await getParsedPlace(place!)
+  const handleSelectPlace = async (
+    place: google.maps.places.AutocompletePrediction
+  ) => {
+    setPlace(place)
 
-      onChange({
-        type: 'Place',
-        address
-      })
-    }
+    const address = await getParsedPlace(place!)
 
-    if (listing) {
-      onChange({
-        type: 'Listing',
-        address: listing.id
-      })
-    }
+    onChange({
+      type: 'Place',
+      address
+    })
 
+    goNext()
+  }
+
+  const handleSelectListing = (listing: ICompactListing) => {
+    setListing(listing)
+
+    onChange({
+      type: 'Listing',
+      address: listing.id
+    })
+
+    goNext()
+  }
+
+  const goNext = () => {
     if (wizard.currentStep === step) {
-      wizard.next()
+      setTimeout(() => wizard.next(), 700)
     }
   }
 
@@ -159,7 +169,7 @@ export function DealAddress({ onChange }: Props) {
                   key={listing.mls_number}
                   display="flex"
                   className={classes.resultItem}
-                  onClick={() => setListing(listing)}
+                  onClick={() => handleSelectListing(listing)}
                 >
                   <Avatar
                     src={listing.cover_image_url}
@@ -190,7 +200,7 @@ export function DealAddress({ onChange }: Props) {
                   key={place.id || index}
                   display="flex"
                   className={classes.resultItem}
-                  onClick={() => setPlace(place)}
+                  onClick={() => handleSelectPlace(place)}
                 >
                   <SvgIcon path={mdiMapMarker} />
                   <Typography
@@ -239,17 +249,7 @@ export function DealAddress({ onChange }: Props) {
             justifyContent="flex-end"
             mt={2}
           >
-            <Box mr={1}>
-              <Button onClick={handleRemove}>Change Property</Button>
-            </Box>
-
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleSubmit}
-            >
-              Continue
-            </Button>
+            <Button onClick={handleRemove}>Change Property</Button>
           </Box>
         )}
       </QuestionForm>
