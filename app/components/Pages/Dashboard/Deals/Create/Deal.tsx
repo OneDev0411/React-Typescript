@@ -203,7 +203,11 @@ export default function CreateDeal() {
                 <DealPrimaryAgent
                   side="Buying"
                   isCommissionRequired={isDoubleEnded}
-                  title="Who is the buyer agent?"
+                  isDoubleEnded={isDoubleEnded}
+                  dealType={dealType}
+                  title={`Who is the ${
+                    propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+                  } agent?`}
                   roles={value}
                   onChange={(role, type) =>
                     onChange(getChangedRoles(value, role, type))
@@ -222,7 +226,9 @@ export default function CreateDeal() {
                 isDoubleEnded={isDoubleEnded}
                 dealType={dealType}
                 side="Selling"
-                title="Who is the listing agent?"
+                title={`Who is the ${
+                  propertyType?.includes('Lease') ? 'landlord' : 'seller'
+                } agent?`}
                 roles={value}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))
@@ -235,16 +241,22 @@ export default function CreateDeal() {
           {dealType === 'Buying' && (
             <DealClient
               side="Buying"
-              title="What's the buyers's legal name?"
+              title={`What's the ${
+                propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+              }'s legal name?`}
               roles={roles}
+              skippable
             />
           )}
 
-          {dealSide === 'Selling' && (
+          {dealType === 'Selling' && (
             <DealClient
               side="Selling"
-              title="What's the seller's legal name?"
+              title={`What's the ${
+                propertyType?.includes('Lease') ? 'landlord' : 'seller'
+              }'s legal name?`}
               roles={roles}
+              skippable
             />
           )}
 

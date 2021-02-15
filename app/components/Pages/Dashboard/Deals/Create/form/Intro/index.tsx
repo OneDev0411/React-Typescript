@@ -10,7 +10,7 @@ export function CreateDealIntro() {
   const wizard = useWizardContext()
 
   useEffectOnce(() => {
-    setTimeout(() => wizard.next(), 1500)
+    setTimeout(() => wizard.next(), 500)
   })
 
   return (

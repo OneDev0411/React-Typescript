@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography, Button } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import { goTo } from 'utils/go-to'
 
@@ -34,30 +34,27 @@ export function DealCard({ dealSide }: Props) {
 
   return (
     <QuestionSection>
-      <QuestionTitle>Congratulation! 🎉</QuestionTitle>
+      <QuestionTitle>
+        <div>Congratulation! 🎉</div>I am done create the deal for you
+      </QuestionTitle>
+
       <QuestionForm>
-        <Box textAlign="center" p={2}>
-          <Typography variant="h5">
-            Your deal has been created successfuly
-          </Typography>
+        <Box display="flex" justifyContent="flex-end">
+          <Button variant="contained" color="secondary" onClick={openDeal}>
+            View Deal
+          </Button>
 
-          <Box mt={4} display="flex" justifyContent="center">
-            <Button variant="contained" color="secondary" onClick={openDeal}>
-              Open Deal
-            </Button>
-
-            {dealSide === 'Both' && (
-              <Box ml={2}>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={createOffer}
-                >
-                  Create Offer
-                </Button>
-              </Box>
-            )}
-          </Box>
+          {dealSide == 'Both' && (
+            <Box ml={2}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={createOffer}
+              >
+                Create Offer
+              </Button>
+            </Box>
+          )}
         </Box>
       </QuestionForm>
     </QuestionSection>

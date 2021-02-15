@@ -20,6 +20,7 @@ import { RoleCard } from '../../components/RoleCard'
 import { useCreationContext } from '../../context/use-creation-context'
 
 import { ContactRoles } from '../../components/ContactRoles'
+import { BUYER_ROLES, SELLER_ROLES } from '../../helpers/roles'
 
 import type { IDealFormRole } from '../../types'
 
@@ -27,10 +28,17 @@ interface Props {
   title: string
   side: IDealType
   roles: IDealRole[]
+  skippable?: boolean
   onChange?: (role: IDealRole, type: 'update' | 'create' | 'delete') => void
 }
 
-export function DealClient({ side, title, roles, onChange }: Props) {
+export function DealClient({
+  side,
+  title,
+  roles,
+  skippable = false,
+  onChange
+}: Props) {
   const { deal, user, checklist } = useCreationContext()
   const wizard = useWizardContext()
   const { step } = useSectionContext()
@@ -128,6 +136,18 @@ export function DealClient({ side, title, roles, onChange }: Props) {
             justifyContent="flex-end"
             mt={4}
           >
+            {skippable && (
+              <Box mr={1}>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={handleNext}
+                >
+                  Skip
+                </Button>
+              </Box>
+            )}
+
             <Button
               variant="contained"
               color="secondary"
@@ -149,16 +169,11 @@ function getRoles(type?: IDealType) {
   }
 
   if (type === 'Buying') {
-    return ['Buyer', 'BuyerPowerOfAttorney', 'Tenant', 'TenantPowerOfAttorney']
+    return BUYER_ROLES
   }
 
   if (type === 'Selling') {
-    return [
-      'Seller',
-      'SellerPowerOfAttorney',
-      'Landlord',
-      'LandlordPowerOfAttorney'
-    ]
+    return SELLER_ROLES
   }
 
   return []
