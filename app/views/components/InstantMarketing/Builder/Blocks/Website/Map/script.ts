@@ -10,10 +10,14 @@ function script({ token, theme, longitude, latitude, zoom }) {
       container: element,
       style: `mapbox://styles/${theme}`,
       center: [longitude, latitude],
-      zoom
+      zoom,
+      scrollZoom: false
     })
 
     new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map)
+
+    // Add zoom and rotation controls to the map.
+    map.addControl(new mapboxgl.NavigationControl())
   }
 
   if (typeof mapboxgl == 'undefined') {
