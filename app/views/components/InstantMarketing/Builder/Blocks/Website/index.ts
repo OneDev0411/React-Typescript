@@ -43,6 +43,8 @@ import registerMapBlock, { MapBlockOptions, embedMapBlockName } from './Map'
 const BLOCK_BUTTONS_ORDER = [
   imageBlockName,
   embedVideoBlockName,
+  embedMatterportBlockName,
+  embedMapBlockName,
   gridColumn1BlockName,
   gridColumn2BlockName,
   gridColumn3BlockName,
@@ -55,9 +57,7 @@ const BLOCK_BUTTONS_ORDER = [
   articleLeftBlockName,
   articleRightBlockName,
   agentLeftBlockName,
-  agentGridBlockName,
-  embedMatterportBlockName,
-  embedMapBlockName
+  agentGridBlockName
 ]
 
 interface BlocksOptions
