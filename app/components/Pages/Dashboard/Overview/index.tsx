@@ -43,7 +43,7 @@ function OverviewDashboard() {
               href="#"
               onClick={window.Appcues.show('-MS8gpnxn97d4ezvV_7q')}
             >
-              Show execises
+              Show Exercises
             </Link>
           </Box>
         </Box>
