@@ -73,13 +73,13 @@ export function RadioGroup({
             key={index}
             className={classes.group}
             style={{
-              ...groupStyle,
               borderColor: isChecked
                 ? theme.palette.primary.main
                 : theme.palette.divider,
               background: isChecked
                 ? theme.palette.success.ultralight
-                : 'inherit'
+                : 'inherit',
+              ...groupStyle
             }}
           >
             <Box

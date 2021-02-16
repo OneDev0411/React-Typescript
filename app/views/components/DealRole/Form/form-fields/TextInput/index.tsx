@@ -24,6 +24,7 @@ export function TextInput({
   return (
     <TextField
       {...input}
+      size="small"
       error={meta.submitFailed && meta.error}
       helperText={meta.error}
       name={name}

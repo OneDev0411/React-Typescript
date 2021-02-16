@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Button } from '@material-ui/core'
+import { Box, Button, makeStyles, Theme } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
 import { deleteRole } from 'actions/deals'
@@ -13,7 +13,7 @@ import {
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
-import DealRoleForm from 'components/DealRole'
+import DealRoleForm from 'components/DealRole/Form'
 
 import { RoleCard } from '../../components/RoleCard'
 
@@ -23,6 +23,21 @@ import { ContactRoles } from '../../components/ContactRoles'
 import { BUYER_ROLES, SELLER_ROLES } from '../../helpers/roles'
 
 import type { IDealFormRole } from '../../types'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    roleContainer: {
+      border: `1px solid ${theme.palette.divider}`,
+      borderRadius: theme.shape.borderRadius,
+      borderBottomRightRadius: 0,
+      padding: theme.spacing(2),
+      marginTop: theme.spacing(1)
+    }
+  }),
+  {
+    name: 'CreateDeal-CreateClient'
+  }
+)
 
 interface Props {
   title: string
@@ -44,6 +59,7 @@ export function DealClient({
   const { step } = useSectionContext()
 
   const dispatch = useDispatch()
+  const classes = useStyles()
 
   const allowedRoles = getRoles(side)
   const clientRoles = roles.filter(client => allowedRoles.includes(client.role))
@@ -88,9 +104,9 @@ export function DealClient({
     <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
-      <QuestionForm>
+      <QuestionForm width={selectedRole ? '80%' : '50%'}>
         {selectedRole ? (
-          <Box mt={1}>
+          <div className={classes.roleContainer}>
             <DealRoleForm
               isOpen
               user={user}
@@ -103,7 +119,7 @@ export function DealClient({
               onDeleteRole={handleDeleteRole}
               onClose={() => setSelectedRole(null)}
             />
-          </Box>
+          </div>
         ) : (
           <Box display="flex" flexWrap="wrap" width="100%">
             {clientRoles.map(role => (

@@ -20,7 +20,7 @@ export function TitleInput({ isVisible, input }: Props) {
   }
 
   return (
-    <FormControl variant="outlined" fullWidth>
+    <FormControl variant="outlined" size="small" fullWidth>
       <InputLabel id="create-role--role-type">Title</InputLabel>
       <Select
         labelId="create-role--role-type"

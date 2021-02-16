@@ -1,9 +1,7 @@
 import React from 'react'
 
-import { useTheme, Theme } from '@material-ui/core'
+import { Box, RadioGroup, Radio, FormControlLabel } from '@material-ui/core'
 import { Field } from 'react-final-form'
-
-import { RadioGroup } from 'components/RadioGroup'
 
 import { TYPE_PERSON, TYPE_COMPANY } from '../../../constants/role-types'
 
@@ -14,34 +12,29 @@ interface Props {
 }
 
 export function TypeInput(props: Props) {
-  const theme = useTheme<Theme>()
-
   return (
     <Field
       name={props.name}
       render={({ input }) => (
         <RadioGroup
-          defaultValue={TYPE_PERSON}
-          options={[
-            {
-              label: 'Person',
-              value: TYPE_PERSON
-            },
-            {
-              label: 'Company / Trust',
-              value: TYPE_COMPANY
-            }
-          ]}
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between'
-          }}
-          groupStyle={{
-            width: `calc(50% - ${theme.spacing(1)}px)`
-          }}
-          onChange={input.onChange}
-          {...props}
-        />
+          aria-label="commission"
+          name="commission"
+          value={input.value || TYPE_PERSON}
+          onChange={(_, value) => input.onChange(value)}
+        >
+          <Box display="flex">
+            <FormControlLabel
+              value={TYPE_PERSON}
+              control={<Radio color="primary" />}
+              label="Person"
+            />
+            <FormControlLabel
+              value={TYPE_COMPANY}
+              control={<Radio color="primary" />}
+              label="Company / Trust"
+            />
+          </Box>
+        </RadioGroup>
       )}
     />
   )

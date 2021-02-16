@@ -51,7 +51,13 @@ export function Roles({ input, isAllowedRole, isRequired }: Props) {
   }, [isAllowedRole, role])
 
   return (
-    <FormControl variant="outlined" fullWidth>
+    <FormControl
+      variant="outlined"
+      size="small"
+      style={{
+        width: '49%'
+      }}
+    >
       <InputLabel id="create-role--role-type">Role</InputLabel>
       <Select
         labelId="create-role--role-type"

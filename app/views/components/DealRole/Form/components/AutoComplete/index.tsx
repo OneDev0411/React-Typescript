@@ -102,12 +102,14 @@ export function AutoComplete({
       renderInput={params => (
         <TextField
           {...params}
+          size="small"
           label={label}
           variant="outlined"
           error={!!error}
           helperText={error}
           InputProps={{
             ...params.InputProps,
+            autoComplete: 'new-password',
             endAdornment: (
               <>
                 {isLoading ? (

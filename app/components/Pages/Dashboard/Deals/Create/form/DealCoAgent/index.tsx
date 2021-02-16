@@ -17,7 +17,7 @@ import {
   QuestionForm
 } from 'components/QuestionWizard'
 
-import DealRole from 'components/DealRole'
+import DealRole from 'components/DealRole/Form'
 
 import TeamAgents from 'components/TeamAgents'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
@@ -39,7 +39,6 @@ const useStyles = makeStyles(
       maxHeight: '40vh',
       overflow: 'auto'
     },
-
     selectedAgent: {
       border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius,
@@ -53,6 +52,13 @@ const useStyles = makeStyles(
     },
     searchInput: {
       padding: theme.spacing(1.5)
+    },
+    roleContainer: {
+      border: `1px solid ${theme.palette.divider}`,
+      borderRadius: theme.shape.borderRadius,
+      borderBottomRightRadius: 0,
+      padding: theme.spacing(2),
+      marginTop: theme.spacing(1)
     }
   }),
   {
@@ -121,9 +127,9 @@ export function DealCoAgent({
     <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
-      <QuestionForm>
+      <QuestionForm width={selectedRole ? '80%' : '50%'}>
         {selectedRole ? (
-          <Box mt={1}>
+          <div className={classes.roleContainer}>
             <DealRole
               isOpen
               deal={deal}
@@ -136,7 +142,7 @@ export function DealCoAgent({
               onDeleteRole={handleDeleteRole}
               onClose={() => setSelectedRole(null)}
             />
-          </Box>
+          </div>
         ) : (
           <Box display="flex" flexWrap="wrap">
             {agentRoles.map(role => (
