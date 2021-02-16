@@ -7,8 +7,9 @@ import { noop } from 'utils/helpers'
 const useStyles = makeStyles(theme =>
   createStyles({
     container: {
-      display: 'inline-block',
-      cursor: 'pointer'
+      display: 'inline-flex',
+      cursor: 'pointer',
+      flexWrap: 'nowrap'
     },
     noTag: {
       fontSize: theme.typography.caption.fontSize

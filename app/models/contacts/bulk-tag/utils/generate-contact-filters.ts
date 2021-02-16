@@ -9,7 +9,7 @@ export interface ContactFilterGenerator {
   crm_tasks?: UUID[]
   flows?: UUID[]
   conditionOperator?: TContactFilterType
-  attributes: IContactAttributeFilter[]
+  attributes?: IContactAttributeFilter[]
   parked?: boolean | undefined
 }
 
