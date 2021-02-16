@@ -19,20 +19,23 @@ export interface MapInfo {
 export interface MapEditorDialogProps {
   isOpen: boolean
   map: Model | null
+  initialCenter?: CenterPoint
   onClose?: () => void
   onSelect: (info: MapInfo) => void
 }
 
-const defaultCenter = { lng: -107.7910942, lat: 50.2867731 }
+const defaultCenterFallback = { longitude: -107.7910942, latitude: 50.2867731 }
 
 function MapEditorDialog({
   isOpen,
   onClose,
   onSelect,
-  map
+  map,
+  initialCenter
 }: MapEditorDialogProps) {
-  const modelLng = (map?.get('longitude') as number) || defaultCenter.lng
-  const modelLat = (map?.get('latitude') as number) || defaultCenter.lat
+  const defaultCenter = initialCenter ?? defaultCenterFallback
+  const modelLng = (map?.get('longitude') as number) || defaultCenter.longitude
+  const modelLat = (map?.get('latitude') as number) || defaultCenter.latitude
   const modelTheme = map?.get('theme') ?? mapThemes[0].style
 
   const [center, setCenter] = useState<CenterPoint>(defaultCenter)
@@ -40,8 +43,8 @@ function MapEditorDialog({
 
   useEffect(() => {
     setCenter({
-      lng: modelLng,
-      lat: modelLat
+      longitude: modelLng,
+      latitude: modelLat
     })
   }, [modelLng, modelLat])
 
@@ -51,8 +54,8 @@ function MapEditorDialog({
 
   const handleConfirm = () => {
     map?.trigger('change:map:info', {
-      longitude: center.lng,
-      latitude: center.lat,
+      longitude: center.longitude,
+      latitude: center.latitude,
       theme
     })
     onSelect({

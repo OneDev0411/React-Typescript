@@ -75,7 +75,7 @@ function MapThemeItem({
       <div className={classes.space} />
       <img
         className={classNames(classes.item, classes.image)}
-        src={`https://api.mapbox.com/styles/v1/${theme}/static/${center.lng},${center.lat},12,0,0/200x200?access_token=${config.mapbox.access_token}&logo=false&attribution=false`}
+        src={`https://api.mapbox.com/styles/v1/${theme}/static/${center.longitude},${center.latitude},12,0,0/200x200?access_token=${config.mapbox.access_token}&logo=false&attribution=false`}
         alt={name}
       />
       <div className={classNames(classes.item, classes.name)}>{name}</div>

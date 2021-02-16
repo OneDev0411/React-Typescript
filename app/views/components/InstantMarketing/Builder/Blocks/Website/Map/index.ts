@@ -195,8 +195,8 @@ export default function registerMapBlock(
     mapBlocks,
     (mapInfo: MapInfo) => ({
       ...renderData,
-      longitude: mapInfo.center.lng,
-      latitude: mapInfo.center.lat,
+      longitude: mapInfo.center.longitude,
+      latitude: mapInfo.center.latitude,
       zoom: mapInfo.zoom,
       theme: mapInfo.theme
     }),

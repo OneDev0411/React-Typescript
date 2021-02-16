@@ -1119,6 +1119,9 @@ class Builder extends React.Component {
           <MapDrawer
             isOpen={!!this.state.mapToEdit}
             map={this.state.mapToEdit}
+            initialCenter={
+              this.props.templateData.listing?.property.address.location
+            }
             onClose={() => {
               this.setState({ mapToEdit: null })
             }}

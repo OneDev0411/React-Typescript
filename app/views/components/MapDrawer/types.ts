@@ -1,4 +1,4 @@
 export interface CenterPoint {
-  lng: number
-  lat: number
+  longitude: number
+  latitude: number
 }
