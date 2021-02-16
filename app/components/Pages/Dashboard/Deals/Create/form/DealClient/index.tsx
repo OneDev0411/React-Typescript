@@ -157,6 +157,7 @@ export function DealClient({
                 <Button
                   variant="outlined"
                   color="secondary"
+                  disabled={clientRoles.length > 0}
                   onClick={handleNext}
                 >
                   Skip
