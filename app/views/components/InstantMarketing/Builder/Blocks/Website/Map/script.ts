@@ -16,7 +16,6 @@ function script({ token, theme, longitude, latitude, zoom }) {
 
     new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map)
 
-    // Add zoom and rotation controls to the map.
     map.addControl(new mapboxgl.NavigationControl())
   }
 

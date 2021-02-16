@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Button } from '@material-ui/core'
 
@@ -31,19 +31,30 @@ function MapEditorDialog({
   onSelect,
   map
 }: MapEditorDialogProps) {
-  const [center] = useState<CenterPoint>(
-    map
-      ? {
-          lng: map.get('longitude') as number,
-          lat: map.get('latitude') as number
-        }
-      : defaultCenter
-  )
-  const [theme, setTheme] = useState<string>(
-    map?.get('theme') ?? mapThemes[0].style
-  )
+  const modelLng = (map?.get('longitude') as number) || defaultCenter.lng
+  const modelLat = (map?.get('latitude') as number) || defaultCenter.lat
+  const modelTheme = map?.get('theme') ?? mapThemes[0].style
+
+  const [center, setCenter] = useState<CenterPoint>(defaultCenter)
+  const [theme, setTheme] = useState<string>(modelTheme)
+
+  useEffect(() => {
+    setCenter({
+      lng: modelLng,
+      lat: modelLat
+    })
+  }, [modelLng, modelLat])
+
+  useEffect(() => {
+    setTheme(modelTheme)
+  }, [modelTheme])
 
   const handleConfirm = () => {
+    map?.trigger('change:map:info', {
+      longitude: center.lng,
+      latitude: center.lat,
+      theme
+    })
     onSelect({
       center,
       theme,
@@ -58,12 +69,7 @@ function MapEditorDialog({
         <MapThemeList theme={theme} onChange={setTheme} center={center} />
       </OverlayDrawer.Body>
       <OverlayDrawer.Footer rowReverse>
-        <Button
-          // disabled={!modelId}
-          color="primary"
-          variant="contained"
-          onClick={handleConfirm}
-        >
+        <Button color="primary" variant="contained" onClick={handleConfirm}>
           Confirm
         </Button>
       </OverlayDrawer.Footer>

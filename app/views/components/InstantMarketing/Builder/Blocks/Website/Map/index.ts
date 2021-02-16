@@ -35,7 +35,7 @@ interface MapBlock {
 export default function registerMapBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  { embedMapClassNames, onMapDrop }: MapBlockOptions
+  { embedMapClassNames, onMapDrop, onMapDoubleClick }: MapBlockOptions
 ): MapBlock {
   const ComponentModel = editor.DomComponents.getType('default')!.model
 
@@ -89,6 +89,11 @@ export default function registerMapBlock(
       }
     },
     view: {
+      events: {
+        dblclick() {
+          onMapDoubleClick(this.model)
+        }
+      },
       ...baseView(embedMapClassNames),
       onRender() {
         mapboxgl.accessToken = config.mapbox.access_token
@@ -102,7 +107,8 @@ export default function registerMapBlock(
           container: this.el,
           style: `mapbox://styles/${this.model.get('theme')}`,
           center,
-          zoom: this.model.get('zoom')
+          zoom: this.model.get('zoom'),
+          doubleClickZoom: false
         })
 
         const marker = new Marker().setLngLat(center).addTo(map)
@@ -137,12 +143,34 @@ export default function registerMapBlock(
           this.handleChangeHeight
         )
 
+        this.listenTo(this.model, 'change:map:info', this.handleChangeMapProps)
+
         this.mapInstance = map
         this.markerInstance = marker
       },
       handleChangeHeight: debounce(function handleChangeHeight() {
         this.mapInstance.resize()
       }, 200),
+      handleChangeMapProps({ longitude, latitude, theme }) {
+        if (longitude && latitude) {
+          this.model.set(
+            {
+              longitude,
+              latitude
+            },
+            { silent: true }
+          )
+          this.mapInstance?.setCenter({
+            lon: longitude,
+            lat: latitude
+          })
+        }
+
+        if (theme) {
+          this.model.set({ theme }, { silent: true })
+          this.mapInstance?.setStyle(`mapbox://styles/${theme}`)
+        }
+      },
       removed() {
         this.mapInstance?.remove()
         this.markerInstance?.remove()

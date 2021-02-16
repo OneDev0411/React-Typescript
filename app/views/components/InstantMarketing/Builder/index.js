@@ -452,6 +452,9 @@ class Builder extends React.Component {
       },
       onMapDrop: model => {
         this.setState({ mapToEdit: model })
+      },
+      onMapDoubleClick: model => {
+        this.setState({ mapToEdit: model })
       }
     } // TODO: read this from the template config
 
