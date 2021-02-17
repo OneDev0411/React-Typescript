@@ -89,10 +89,5 @@ export const mapThemes = [
     name: 'Moonlight',
     style: 'mapbox/cj3kbeqzo00022smj7akz3o1e',
     marked: true
-  },
-  {
-    name: 'Mineral',
-    style: 'mapbox/cjtep62gq54l21frr1whf27ak',
-    marked: true
   }
 ]

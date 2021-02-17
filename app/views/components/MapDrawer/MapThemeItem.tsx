@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { ButtonBase, makeStyles, fade } from '@material-ui/core'
+import { ButtonBase, Box, makeStyles, fade } from '@material-ui/core'
 
 import config from 'config'
 
@@ -9,7 +9,6 @@ import { CenterPoint } from './types'
 const useStyles = makeStyles(
   theme => ({
     root: {
-      margin: theme.spacing(0.5),
       border: `${theme.spacing(0.5)}px solid white`,
       borderRadius: theme.shape.borderRadius,
       transition: theme.transitions.create('border-color'),
@@ -65,21 +64,23 @@ function MapThemeItem({
   const classes = useStyles()
 
   return (
-    <ButtonBase
-      onClick={onClick}
-      className={classNames(
-        classes.root,
-        selected ? classes.selected : undefined
-      )}
-    >
-      <div className={classes.space} />
-      <img
-        className={classNames(classes.item, classes.image)}
-        src={`https://api.mapbox.com/styles/v1/${theme}/static/${center.longitude},${center.latitude},12,0,0/200x200?access_token=${config.mapbox.access_token}&logo=false&attribution=false`}
-        alt={name}
-      />
-      <div className={classNames(classes.item, classes.name)}>{name}</div>
-    </ButtonBase>
+    <Box m={0.5}>
+      <ButtonBase
+        onClick={onClick}
+        className={classNames(
+          classes.root,
+          selected ? classes.selected : undefined
+        )}
+      >
+        <div className={classes.space} />
+        <img
+          className={classNames(classes.item, classes.image)}
+          src={`https://api.mapbox.com/styles/v1/${theme}/static/${center.longitude},${center.latitude},12,0,0/200x200?access_token=${config.mapbox.access_token}&logo=false&attribution=false`}
+          alt={name}
+        />
+        <div className={classNames(classes.item, classes.name)}>{name}</div>
+      </ButtonBase>
+    </Box>
   )
 }
 
