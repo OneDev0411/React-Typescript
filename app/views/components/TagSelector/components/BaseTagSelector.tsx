@@ -20,7 +20,7 @@ export interface Props {
   value?: SelectorOption[]
   chipProps?: ChipProps
   textFiledProps?: TextFieldProps
-  onChange: (tags: SelectorOption[]) => void
+  onChange: (tags: SelectorOption[], hasNewTag: boolean) => void
 }
 
 export const BaseTagSelector = ({
@@ -85,10 +85,16 @@ export const BaseTagSelector = ({
       )}
       onChange={(event, value: SelectorOption[]) => {
         let newValue: SelectorOption[] = [...value]
+        let hasNewTag = false
 
         if (newValue.length > 0) {
           // get last item as new value
           const lastValue: SelectorOption = newValue[newValue.length - 1]
+
+          if (lastValue.isNewTag) {
+            hasNewTag = true
+          }
+
           let normalizedLastValue: SelectorOption | null = null
 
           if (typeof lastValue === 'string') {
@@ -113,7 +119,7 @@ export const BaseTagSelector = ({
         }
 
         setSelectedTags(newValue)
-        onChange(newValue)
+        onChange(newValue, hasNewTag)
       }}
       filterOptions={(options, params) => {
         const filtered = filter(options, params)
@@ -122,7 +128,8 @@ export const BaseTagSelector = ({
         if (params.inputValue !== '') {
           filtered.push({
             inputValue: params.inputValue,
-            title: `Add "${params.inputValue}"`
+            title: `Add "${params.inputValue}"`,
+            isNewTag: true
           })
         }
 

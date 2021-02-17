@@ -8,12 +8,15 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
+import { useDispatch } from 'react-redux'
 
 import { bulkTag } from 'models/contacts/bulk-tag'
 import {
   generateContactFilters,
   ContactFilterGenerator
 } from 'models/contacts/bulk-tag/utils/generate-contact-filters'
+import { getContactsTags } from 'actions/contacts'
+
 import { noop } from 'utils/helpers'
 
 import {
@@ -66,6 +69,8 @@ export const PopoverContactTagSelector = ({
   ...props
 }: Props) => {
   const classes = useStyles()
+  const dispatch = useDispatch()
+  const [hasNewTag, setHasNewTag] = useState<boolean>(false)
   const [isDirty, setIsDirty] = useState<boolean>(false)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
@@ -78,9 +83,13 @@ export const PopoverContactTagSelector = ({
   const handleClose = () => {
     setAnchorEl(null)
   }
-  const handleChange = (tags: SelectorOption[]) => {
+  const handleChange = (tags: SelectorOption[], newTag: boolean) => {
     if (!isDirty) {
       setIsDirty(true)
+    }
+
+    if (newTag !== hasNewTag) {
+      setHasNewTag(newTag)
     }
 
     setSelectedTags(tags)
@@ -97,6 +106,10 @@ export const PopoverContactTagSelector = ({
       const bulkFilter = generateContactFilters(filter)
 
       await bulkTag(tags, bulkFilter)
+
+      if (hasNewTag) {
+        dispatch(getContactsTags())
+      }
     } catch (err) {
       console.error(err)
     } finally {
