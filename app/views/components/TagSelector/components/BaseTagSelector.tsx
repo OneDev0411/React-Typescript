@@ -1,6 +1,11 @@
 import React, { useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { TextField, TextFieldProps, ChipProps } from '@material-ui/core'
+import {
+  Typography,
+  TextField,
+  TextFieldProps,
+  ChipProps
+} from '@material-ui/core'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import Autocomplete, {
   createFilterOptions
@@ -75,7 +80,9 @@ export const BaseTagSelector = ({
       options={autocompleteOptions}
       value={selectedTags}
       id="multiple-crm-tags"
-      renderOption={option => option.title}
+      renderOption={option => (
+        <Typography variant="body2">+ {option.title}</Typography>
+      )}
       renderInput={params => (
         <TextField
           {...textFiledProps}
