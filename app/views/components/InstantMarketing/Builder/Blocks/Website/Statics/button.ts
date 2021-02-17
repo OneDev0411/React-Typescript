@@ -17,6 +17,16 @@ export interface ButtonBlockOptions {
   buttonBlock?: string
 }
 
+export const buttonBlockTraits = {
+  [typeButton]: [
+    {
+      type: 'text',
+      label: 'Link',
+      name: 'href'
+    }
+  ]
+}
+
 export default (
   editor: Editor,
   { buttonClassNames, buttonBlock }: ButtonBlockOptions

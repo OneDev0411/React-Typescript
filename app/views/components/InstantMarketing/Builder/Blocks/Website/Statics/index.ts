@@ -3,7 +3,7 @@ import { Editor } from 'grapesjs'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import { handleBlockDragStopEvent } from '../utils'
 
-import loadButton, { ButtonBlockOptions } from './button'
+import loadButton, { ButtonBlockOptions, buttonBlockTraits } from './button'
 import loadGrid, { GridBlockOptions } from './grid'
 import loadText, { TextBlockOptions } from './text'
 import loadHeadline, { HeadlineBlockOptions } from './headline'
@@ -13,7 +13,8 @@ import loadSocialGroup, {
 } from './social-group'
 
 export const staticBlocksTraits = {
-  ...socialGroupBlockTraits
+  ...socialGroupBlockTraits,
+  ...buttonBlockTraits
 }
 
 export interface StaticBlocksOptions
