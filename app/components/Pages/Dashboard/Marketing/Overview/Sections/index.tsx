@@ -8,7 +8,7 @@ import { hasUserAccessToAgentNetwork } from 'utils/user-teams'
 import SentEmailsSection from './SentEmailsSection'
 import MyDesignsSection from './MyDesignsSection'
 import PromoteListingsSection from './PromoteListingsSection'
-// import NewsletterBannerSection from './NewsletterBannerSection'
+import NewsletterBannerSection from './NewsletterBannerSection'
 // import UpcomingCelebrationsSection from './UpcomingCelebrationsSection'
 
 export default function Sections() {
@@ -21,7 +21,7 @@ export default function Sections() {
         <SentEmailsSection />
         <MyDesignsSection />
         {/* <UpcomingCelebrationsSection /> */}
-        {/* <NewsletterBannerSection /> */}
+        <NewsletterBannerSection />
         {hasAgentNetworkAccess && <PromoteListingsSection />}
       </Grid>
     </Grid>

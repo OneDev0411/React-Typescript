@@ -1,10 +1,15 @@
 import React from 'react'
-import { Grid, Typography, Theme, makeStyles } from '@material-ui/core'
+import { Grid, Box, Theme, makeStyles } from '@material-ui/core'
+
+import Link from 'components/ALink'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      backgroundColor: theme.palette.warning.light
+      width: '100%'
+    },
+    image: {
+      borderRadius: theme.shape.borderRadius
     }
   }),
   {
@@ -16,26 +21,16 @@ export default function NewsletterBannerSection() {
   const classes = useStyles()
 
   return (
-    <Grid
-      container
-      item
-      direction="row"
-      alignItems="center"
-      justify="space-between"
-      className={classes.container}
-    >
-      <Grid item>
-        <Typography variant="h4">Make A Newsletter</Typography>
-        <Typography variant="body1">
-          Using our powerful yet easy to use block editor.
-        </Typography>
-      </Grid>
-      <Grid item>
-        <img
-          alt="newsletter"
-          src="/static/images/marketing/overview/newsletter-banner.png"
-        />
-      </Grid>
+    <Grid item>
+      <Box my={2}>
+        <Link noStyle to="/dashboard/marketing/Newsletter">
+          <img
+            alt="newsletter"
+            src="/static/images/marketing/overview/newsletter-banner.png"
+            className={classes.image}
+          />
+        </Link>
+      </Box>
     </Grid>
   )
 }
