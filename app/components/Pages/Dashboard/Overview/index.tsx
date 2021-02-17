@@ -41,7 +41,7 @@ function OverviewDashboard() {
             The id can be found in url while checklist is being edited.  */}
             <Link
               href="#"
-              onClick={window.Appcues.show('-MS8gpnxn97d4ezvV_7q')}
+              onClick={window.Appcues.show('-MTiikrxqIJB4mjqucN8')}
             >
               Show Exercises
             </Link>
