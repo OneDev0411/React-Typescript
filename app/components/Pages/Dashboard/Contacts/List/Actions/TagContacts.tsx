@@ -69,6 +69,7 @@ export const TagContacts = ({
 
   return (
     <PopoverContactTagSelector
+      label="Bulk Tagging"
       value={currentTags}
       anchorRenderer={onClick => (
         <Button

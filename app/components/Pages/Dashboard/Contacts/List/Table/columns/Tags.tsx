@@ -63,6 +63,7 @@ const TagsString = ({ contact: contactProp }) => {
 
   return (
     <PopoverContactTagSelector
+      label={`${contact.display_name}'s Tag`}
       anchorRenderer={onClick => (
         <Tooltip title="Click to edit">
           <Box

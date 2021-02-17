@@ -54,6 +54,7 @@ const useStyles = makeStyles(
 )
 
 interface Props extends Omit<BaseTagSelectorProps, 'onChange'> {
+  label?: string
   filter: ContactFilterGenerator
   popoverProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
@@ -66,6 +67,7 @@ export const PopoverContactTagSelector = ({
   value = [],
   callback = noop,
   filter,
+  label,
   ...props
 }: Props) => {
   const classes = useStyles()
@@ -142,7 +144,7 @@ export const PopoverContactTagSelector = ({
       >
         <Box className={classes.container}>
           <Typography variant="caption" className={classes.label}>
-            Tags
+            {label || 'Tags'}
           </Typography>
           <BaseTagSelector
             {...props}
