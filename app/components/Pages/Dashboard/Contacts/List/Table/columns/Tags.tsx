@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState, memo } from 'react'
 import { Box, Tooltip, Chip, makeStyles, createStyles } from '@material-ui/core'
 
+import { getContact } from 'models/contacts/get-contact'
+
 import { PopoverContactTagSelector } from 'components/TagSelector'
-import { noop } from 'utils/helpers'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -24,12 +25,17 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-const TagsString = ({ contact, callback = noop }) => {
+interface Props {
+  contact: IContact
+}
+
+const TagsString = ({ contact: contactProp }) => {
   const classes = useStyles()
+  const [contact, setContact] = useState<IContact>(contactProp)
   const tags = contact?.tags || []
 
   const tagsCount = tags.length
-  const showingTags = []
+  const showingTags: string[] = []
   const currentTags = tags.map(tag => {
     if (showingTags.length < 2) {
       showingTags.push(tag)
@@ -42,6 +48,18 @@ const TagsString = ({ contact, callback = noop }) => {
   })
 
   const invisibleTagsCount = tagsCount - showingTags.length
+
+  const handleChangeTag = async () => {
+    try {
+      const response = await getContact(contact.id, {
+        associations: []
+      })
+
+      setContact(response.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <PopoverContactTagSelector
@@ -81,13 +99,12 @@ const TagsString = ({ contact, callback = noop }) => {
         </Tooltip>
       )}
       value={currentTags}
-      contact={contact}
       filter={{
         selectedIds: [contact.id]
       }}
-      callback={callback}
+      callback={handleChangeTag}
     />
   )
 }
 
-export default TagsString
+export default memo(TagsString)
