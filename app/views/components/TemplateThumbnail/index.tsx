@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import useDeepCompareEffect from 'use-deep-compare-effect'
+import { makeStyles } from '@material-ui/core'
 
-import { CircularProgress, makeStyles } from '@material-ui/core'
-
+import CardSkeleton from 'components/CardSkeleton'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { renderMjml } from 'components/TemplatePreview/helpers'
 
@@ -136,7 +136,7 @@ export default function TemplateThumbnail({
     <div className={classes.container}>
       {isLoadingPreview && (
         <div className={classes.loadingContainer}>
-          <CircularProgress />
+          <CardSkeleton style={{ padding: '0 1rem', width: '100%' }} />
         </div>
       )}
       <iframe
