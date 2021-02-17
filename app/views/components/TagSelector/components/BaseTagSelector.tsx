@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { TextField, TextFieldProps, ChipProps } from '@material-ui/core'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -57,6 +57,12 @@ export const BaseTagSelector = ({
     }
   })
 
+  const autocompleteOptions = useMemo(() => {
+    const currentTags = selectedTags.map(tag => tag.title)
+
+    return availableTags.filter(tag => !currentTags.includes(tag.title))
+  }, [availableTags, selectedTags])
+
   return (
     <Autocomplete
       multiple
@@ -66,7 +72,7 @@ export const BaseTagSelector = ({
       handleHomeEndKeys
       filterSelectedOptions
       ChipProps={chipProps}
-      options={availableTags}
+      options={autocompleteOptions}
       value={selectedTags}
       id="multiple-crm-tags"
       renderOption={option => option.title}
