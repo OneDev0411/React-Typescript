@@ -9,6 +9,7 @@ const useStyles = makeStyles(
       width: '100%'
     },
     image: {
+      width: '100%',
       borderRadius: theme.shape.borderRadius
     }
   }),
@@ -21,7 +22,7 @@ export default function NewsletterBannerSection() {
   const classes = useStyles()
 
   return (
-    <Grid item>
+    <Grid item className={classes.container}>
       <Box my={2}>
         <Link noStyle to="/dashboard/marketing/Newsletter">
           <img
