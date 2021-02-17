@@ -56,26 +56,17 @@ export default function PromoteListingsSection() {
         </>
       )}
       {!isLoading &&
-        listings?.slice(0, 4).map(listing => {
-          const listingAddress =
-            listing.type === 'compact_listing'
-              ? listing.address
-              : listing.property.address
-
-          return (
-            <Grid key={listing.id} item md={3}>
-              <ListingCard
-                hideFeatures
-                listing={listing}
-                onClick={() => {
-                  goTo(
-                    `/dashboard/agent-network/agents?listing=${listing.id}&title=${listingAddress.street_address}`
-                  )
-                }}
-              />
-            </Grid>
-          )
-        })}
+        listings?.slice(0, 4).map(listing => (
+          <Grid key={listing.id} item md={3}>
+            <ListingCard
+              hideFeatures
+              listing={listing}
+              onClick={() => {
+                goTo(`/dashboard/marketing/wizard?listingId=${listing.id}`)
+              }}
+            />
+          </Grid>
+        ))}
     </SectionLayout>
   )
 }
