@@ -21,20 +21,17 @@ export default function SentEmailsSection() {
           url="/dashboard/insights"
         />
       }
+      gridProps={{
+        sm: 6
+      }}
     >
       <>
         {isLoading && (
           <>
-            <Grid item xs sm={6} md={3}>
+            <Grid item xs sm={6}>
               <CardSkeleton />
             </Grid>
-            <Grid item xs sm={6} md={3}>
-              <CardSkeleton />
-            </Grid>
-            <Grid item xs sm={6} md={3}>
-              <CardSkeleton />
-            </Grid>
-            <Grid item xs sm={6} md={3}>
+            <Grid item xs sm={6}>
               <CardSkeleton />
             </Grid>
           </>
@@ -45,9 +42,9 @@ export default function SentEmailsSection() {
         {!isLoading &&
           campaigns
             ?.filter(campaign => !!campaign.template && !!campaign.executed_at)
-            .slice(0, 4)
+            .slice(0, 2)
             .map(campaign => (
-              <Grid key={campaign.id} item xs sm={6} md={3}>
+              <Grid key={campaign.id} item xs sm={6}>
                 <Link
                   noStyle
                   to={`/dashboard/insights/${campaign.id}?backUrl=/dashboard/marketing`}
