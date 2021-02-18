@@ -1,8 +1,8 @@
 import React from 'react'
 import {
+  Box,
   Card,
   CardActionArea,
-  CardActions,
   CardMedia,
   CardContent,
   Typography,
@@ -10,6 +10,10 @@ import {
   makeStyles
 } from '@material-ui/core'
 import timeago from 'timeago.js'
+
+import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
+
+import { MEDIUM_LABEL_MAP } from '../../../components/Pages/Dashboard/Marketing/constants'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -36,6 +40,8 @@ interface Props {
 export default function MyDesignCard({ templateInstance, onClick }: Props) {
   const classes = useStyles()
 
+  console.log({ MEDIUM_LABEL_MAP, templateInstance })
+
   return (
     <Card variant="outlined" className={classes.card} onClick={onClick}>
       <CardActionArea>
@@ -50,12 +56,14 @@ export default function MyDesignCard({ templateInstance, onClick }: Props) {
         <Typography variant="body2" color="textSecondary">
           Created {timeago().format(templateInstance.created_at * 1000)}
         </Typography>
+        <Box pt={3}>
+          <Typography variant="body2" color="textSecondary">
+            {getTemplateTypeLabel(templateInstance.template.template_type)} &gt;{' '}
+            {MEDIUM_LABEL_MAP[templateInstance.template.medium] ??
+              templateInstance.template.medium}
+          </Typography>
+        </Box>
       </CardContent>
-      <CardActions>
-        <Typography variant="body2" color="textSecondary">
-          New Year &gt; Facebook Cover
-        </Typography>
-      </CardActions>
     </Card>
   )
 }
