@@ -116,7 +116,13 @@ const ContactsList = props => {
       id: 'tag',
       width: !isParkTabActive ? '34%' : '22%',
       class: 'opaque tags',
-      render: ({ row: contact }) => <TagsString contact={contact} />
+      render: ({ row: contact }) => (
+        <TagsString
+          contact={contact}
+          reloadContacts={props.reloadContacts}
+          isParkTabActive={isParkTabActive}
+        />
+      )
     },
     {
       id: 'unpark-contact',

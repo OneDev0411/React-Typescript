@@ -27,9 +27,15 @@ const useStyles = makeStyles(theme =>
 
 interface Props {
   contact: IContact
+  isParkTabActive: boolean
+  reloadContacts: () => void
 }
 
-const TagsString = ({ contact: contactProp }) => {
+const TagsString = ({
+  contact: contactProp,
+  isParkTabActive,
+  reloadContacts
+}: Props) => {
   const classes = useStyles()
   const [contact, setContact] = useState<IContact>(contactProp)
   const tags = contact?.tags || []
@@ -51,11 +57,15 @@ const TagsString = ({ contact: contactProp }) => {
 
   const handleChangeTag = async () => {
     try {
-      const response = await getContact(contact.id, {
-        associations: []
-      })
+      if (isParkTabActive) {
+        reloadContacts()
+      } else {
+        const response = await getContact(contact.id, {
+          associations: []
+        })
 
-      setContact(response.data)
+        setContact(response.data)
+      }
     } catch (error) {
       console.error(error)
     }
