@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import addressParser from 'parse-address'
 
 import { searchListings } from 'models/listings/search/search-listings'
