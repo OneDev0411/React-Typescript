@@ -1,5 +1,28 @@
 import React, { ReactNode } from 'react'
-import { Grid, Typography, GridProps } from '@material-ui/core'
+import {
+  Grid,
+  Typography,
+  GridProps,
+  Theme,
+  makeStyles
+} from '@material-ui/core'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      paddingBottom: theme.spacing(3)
+    },
+    headerContainer: {
+      paddingBottom: theme.spacing(2)
+    },
+    titleContainer: {
+      paddingRight: theme.spacing(2)
+    }
+  }),
+  {
+    name: 'MarketingOverviewSectionLayout'
+  }
+)
 
 interface Props {
   title: string
@@ -14,10 +37,24 @@ export default function SectionLayout({
   children,
   gridProps = {}
 }: Props) {
+  const classes = useStyles()
+
   return (
-    <Grid container item spacing={2} direction="column" {...gridProps}>
-      <Grid container item spacing={2} alignItems="center" direction="row">
-        <Grid item>
+    <Grid
+      container
+      item
+      direction="column"
+      className={classes.container}
+      {...gridProps}
+    >
+      <Grid
+        container
+        item
+        alignItems="center"
+        direction="row"
+        className={classes.headerContainer}
+      >
+        <Grid item className={classes.titleContainer}>
           <Typography variant="h5">{title}</Typography>
         </Grid>
         <Grid item>{actionNode}</Grid>

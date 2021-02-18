@@ -27,6 +27,7 @@ const useStyles = makeStyles(
     },
     iframe: {
       transformOrigin: '0 0',
+      height: 300,
       background: '#fff',
       opacity: 0
     }

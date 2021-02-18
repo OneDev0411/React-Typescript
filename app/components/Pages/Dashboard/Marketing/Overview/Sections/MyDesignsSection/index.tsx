@@ -20,17 +20,20 @@ export default function MyDesignsSection() {
           url="/dashboard/marketing/designs"
         />
       }
-      gridProps={{
-        sm: 6
-      }}
     >
       <>
         {isLoading && (
           <>
-            <Grid item xs sm={6}>
+            <Grid item xs sm={6} md={3}>
               <CardSkeleton />
             </Grid>
-            <Grid item xs sm={6}>
+            <Grid item xs sm={6} md={3}>
+              <CardSkeleton />
+            </Grid>
+            <Grid item xs sm={6} md={3}>
+              <CardSkeleton />
+            </Grid>
+            <Grid item xs sm={6} md={3}>
               <CardSkeleton />
             </Grid>
           </>
@@ -39,8 +42,8 @@ export default function MyDesignsSection() {
           <Typography variant="h6">No designs to show</Typography>
         )}
         {!isLoading &&
-          templates?.slice(0, 2).map(template => (
-            <Grid key={template.id} item xs sm={6}>
+          templates?.slice(0, 4).map(template => (
+            <Grid key={template.id} item xs sm={6} md={3}>
               <MyDesignCard templateInstance={template} />
             </Grid>
           ))}
