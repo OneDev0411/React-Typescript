@@ -30,15 +30,14 @@ const useStyles = makeStyles(
 
 interface Props {
   templateInstance: IMarketingTemplateInstance
+  onClick?: () => void
 }
 
-export default function MyDesignCard({ templateInstance }: Props) {
+export default function MyDesignCard({ templateInstance, onClick }: Props) {
   const classes = useStyles()
 
-  console.log({ templateInstance })
-
   return (
-    <Card variant="outlined" className={classes.card}>
+    <Card variant="outlined" className={classes.card} onClick={onClick}>
       <CardActionArea>
         <CardMedia
           component="img"
