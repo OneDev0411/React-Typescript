@@ -44,9 +44,6 @@ function MapEditorDialog({
   // The search field is required if there is no location in the template
   const hasSearchField = !initialCenter
 
-  // The type prop is undefined when a new block is dropped into the editor
-  const isNewBlock = !map?.get('type')
-
   const [center, setCenter] = useState<CenterPoint>(defaultCenter)
   const [theme, setTheme] = useState<string>(modelTheme)
 
@@ -63,11 +60,20 @@ function MapEditorDialog({
 
   const handleSearch = (result: SearchResult) => {
     if (result.type === 'listing') {
-      // @TODO: implement this when the related API error is fixed
-      console.log('############', result.listing.address)
+      const location = result.listing.location
+
+      if (location) {
+        setCenter({
+          longitude: location.longitude,
+          latitude: location.latitude
+        })
+      }
     } else if (result.type === 'place') {
       const location = result.place.geometry.location
 
+      // @TODO: there is a typescript definition issue here
+      // I don't know why the location.lng is a function instead
+      // of a solid number
       setCenter({
         longitude: location.lng as any,
         latitude: location.lat as any
@@ -97,7 +103,7 @@ function MapEditorDialog({
       <OverlayDrawer.Header title="Insert a Map block" />
       <OverlayDrawer.Body>
         <Box marginTop={3}>
-          {hasSearchField && isNewBlock && (
+          {hasSearchField && (
             <ListingsAndPlacesSearchInput onSelect={handleSearch} />
           )}
           <MapThemeList theme={theme} onChange={setTheme} center={center} />
