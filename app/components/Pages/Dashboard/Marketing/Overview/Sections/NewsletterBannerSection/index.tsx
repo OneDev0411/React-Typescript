@@ -1,12 +1,13 @@
 import React from 'react'
-import { Grid, Box, Theme, makeStyles } from '@material-ui/core'
+import { Grid, Theme, makeStyles } from '@material-ui/core'
 
 import Link from 'components/ALink'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      width: '100%'
+      width: '100%',
+      marginBottom: theme.spacing(4)
     },
     image: {
       width: '100%',
@@ -23,15 +24,13 @@ export default function NewsletterBannerSection() {
 
   return (
     <Grid item className={classes.container}>
-      <Box my={2}>
-        <Link noStyle to="/dashboard/marketing/Newsletter">
-          <img
-            alt="newsletter"
-            src="/static/images/marketing/overview/newsletter-banner.png"
-            className={classes.image}
-          />
-        </Link>
-      </Box>
+      <Link noStyle to="/dashboard/marketing/Newsletter">
+        <img
+          alt="newsletter"
+          src="/static/images/marketing/overview/newsletter-banner.png"
+          className={classes.image}
+        />
+      </Link>
     </Grid>
   )
 }

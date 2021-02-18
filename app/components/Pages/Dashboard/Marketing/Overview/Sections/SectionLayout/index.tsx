@@ -10,7 +10,7 @@ import {
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      paddingBottom: theme.spacing(3)
+      marginBottom: theme.spacing(4)
     },
     headerContainer: {
       paddingBottom: theme.spacing(2)
