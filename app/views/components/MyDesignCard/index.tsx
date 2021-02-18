@@ -40,8 +40,6 @@ interface Props {
 export default function MyDesignCard({ templateInstance, onClick }: Props) {
   const classes = useStyles()
 
-  console.log({ MEDIUM_LABEL_MAP, templateInstance })
-
   return (
     <Card variant="outlined" className={classes.card} onClick={onClick}>
       <CardActionArea>
@@ -56,7 +54,7 @@ export default function MyDesignCard({ templateInstance, onClick }: Props) {
         <Typography variant="body2" color="textSecondary">
           Created {timeago().format(templateInstance.created_at * 1000)}
         </Typography>
-        <Box pt={3}>
+        <Box pt={6}>
           <Typography variant="body2" color="textSecondary">
             {getTemplateTypeLabel(templateInstance.template.template_type)} &gt;{' '}
             {MEDIUM_LABEL_MAP[templateInstance.template.medium] ??
