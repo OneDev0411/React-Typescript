@@ -18,10 +18,6 @@ const useStyles = makeStyles(
       margin: theme.spacing(1, 1, 4),
       padding: theme.spacing(0, 4)
     },
-    image: {
-      width: '100%',
-      borderRadius: theme.shape.borderRadius
-    },
     title: {
       color: theme.palette.common.white
     },
