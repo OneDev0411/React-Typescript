@@ -1,7 +1,6 @@
 @import '../../../../node_modules/grapesjs/dist/css/grapes.min.css';
 
 .template-builder {
-
   .gjs-sm-header {
     display: none !important;
   }
@@ -106,7 +105,6 @@
         background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAITgAACE4AUWWMWAAAAAHdElNRQfkAwYPHDWYUgh7AAADtElEQVRYw82XW0gUURjHf+PMmrc10coumAkFFVgZJELY3Qj1LRIigsqiy0MUUVEEFfQQvUT1EAQhJF2ooKCn7hCVUlBQ1stSm5cizC5WWuusOz145uzs7IzO5hh952HOfN93vv/5LvOdM/APSBm2hRKWkWezo9DNTcJ+bXIs1/iFnjR+c5cpfoFU0IPhOHRqTaW0YYJ8ps1FYpBlTrVhgrxhK2sYjYFBDpXk+hUiO40ilxzGc4xeS7j6qPPmSQZTGIfGR97y21UrQoRMNrGNTGcFd5A0KthIGWPQ6CTMcx7SQrcjWDY72Es2AN+APG8hSGcLrQnVEuUrLTSyhUqKEgomi4P8FFrv2MoTe7jcvFhHp0tpGnziAaeoZxYZaEzkiIToYBXjeOwNpIY2We3vCEsj1tFDK/c5RxMRwWmnDsinyUviZ7OfIgB6Oct5YkxnDqWUUWBpH1lMZrJlVQe7uEq8UQ3asIq4J4vwhEyhynjmsY4GXvAJPcmvdupEnoJcx8DgB4vcIPI5SVQsvER+kjxAIVXs4SLPZEPp5ja1shQUlvOAEEcJIlmJJnZzQFR7E5t56epvDpOYykyCfOMVLby3yBSKySNMt9NCldV0id29poKhSUFN9bCo4q2A6GRtaku9UimPBEQvO1FHAmISN+SXfZox/hof+E5y2U214NzgMF02rUIKSbfx+mjnq3cglUOyST9hrk2qUM0tuuizjc9cZr53kPl0CIg2FiZJS3nu2sXuiM7ggbaL7tPJRoeCXEXMFSTCEq85aeYN0/nOcRoxHDQGgHW+WEJYgAqkezu+NeApG1hOiGtEBtF8TS26mGdzhxJw2JIriEEzzUNq6nwkKkH6bdIM6TGAQdR6gqZyW4kbSbxIadSwnhkWrkGIq1ymJ3UQN1rKaSbYeNOoJMIFpz39HdUkQQAEWWu64Icn8SY0UAhmWMeaMz9ATGqkgQA6VeyzQPoMEuK+zTMbSAV1TJDYCn084wofUgJRbTZtIMs4Q4lNspoV1KcI40JpwCjqkyAgwBJW+hPHNCDAHEdZOlP9AdEARUaxkRAq/dRSLrfgE4hJBg2iPgoEiE+UuNeAePp8jfApIP8diHlexCxPk2fIIwt0+dlGibePfpsVSdbEK5QDGlGKBaeYBZSJ+Wiq5fJM8eumUE6MiYI7jcUE0OWKBAoSkleDGLGEi0PiPD4G0zDfnpqFZO8zyiDvzlfroTVETkYm/dKqBsQIE0+2X6TSanVQIWtEfOmnd0Qi5Ex/ACxDjGkaZxaMAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIwLTAzLTA2VDE1OjI3OjIzKzAwOjAwtQZkggAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMC0wMy0wNlQxNToyNzoyMCswMDowMPWzxqMAAAAASUVORK5CYII=');
       }
     }
-
 
     &:first-of-type {
       border-top: 1px solid #ddd;
@@ -329,7 +327,7 @@
 
   .gjs-toolbar {
     display: flex;
-    background-color: #E7E9EC;
+    background-color: #e7e9ec;
     border: 2px solid rgba(0, 0, 0, 0.08);
     color: #000;
     padding: 0.2rem;
@@ -352,7 +350,7 @@
         &:hover {
           background: rgba(0, 0, 0, 0.08);
         }
-        
+
         &::after {
           font-family: 'LatoRegular';
           padding-top: 0.6rem;
@@ -391,9 +389,15 @@
         }
       }
 
-      .fa-pencil {
+      .fa-pencil.image {
         &::after {
           content: 'Edit Photo';
+        }
+      }
+
+      .fa-pencil.map {
+        &::after {
+          content: 'Change Theme';
         }
       }
     }

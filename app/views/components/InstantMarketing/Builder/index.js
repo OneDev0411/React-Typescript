@@ -306,19 +306,19 @@ class Builder extends React.Component {
 
   setupGrapesJs = () => {
     registerCommands(this.editor)
-    registerToolbarButtons(
-      this.editor,
-      () => {
+    registerToolbarButtons(this.editor, {
+      onChangeImageClick: () => {
         this.setState({ isImageSelectDialogOpen: true })
       },
-      () => {
+      onEditImageClick: () => {
         const imageToEdit = `/api/utils/cors/${btoa(
           this.editor.runCommand('get-image')
         )}`
 
         this.setState({ imageToEdit })
-      }
-    )
+      },
+      onChangeThemeClick: this.openMapDrawer
+    })
     this.setState({ isEditorLoaded: true })
 
     this.lockIn()
@@ -450,15 +450,15 @@ class Builder extends React.Component {
       onEmptyMatterportSelected: () => {
         this.setState({ isMatterportDrawerOpen: true })
       },
-      onMapDrop: model => {
-        this.setState({ mapToEdit: model })
-      },
-      onMapDoubleClick: model => {
-        this.setState({ mapToEdit: model })
-      }
+      onMapDrop: this.openMapDrawer,
+      onMapDoubleClick: this.openMapDrawer
     } // TODO: read this from the template config
 
     this.blocks = registerWebsiteBlocks(this.editor, renderData, blocksOptions)
+  }
+
+  openMapDrawer = model => {
+    this.setState({ mapToEdit: model })
   }
 
   disableAssetManager = () => {

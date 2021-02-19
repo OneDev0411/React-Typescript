@@ -19,7 +19,7 @@ import { baseView, handleBlockDragStopEvent, isComponent } from '../utils'
 import template from './template.njk'
 import script from './script'
 
-const typeEmbedMap = 'embed-map'
+export const typeEmbedMap = 'embed-map'
 export const embedMapBlockName = typeEmbedMap
 
 export interface MapBlockOptions {
