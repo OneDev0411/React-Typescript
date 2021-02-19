@@ -15,7 +15,7 @@ const useStyles = makeStyles(
     container: {
       backgroundColor: theme.palette.tertiary.main,
       borderRadius: theme.shape.borderRadius,
-      margin: theme.spacing(4, 1),
+      margin: theme.spacing(1, 1, 4),
       padding: theme.spacing(0, 4)
     },
     image: {
