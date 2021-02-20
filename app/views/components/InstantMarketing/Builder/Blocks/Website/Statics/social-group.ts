@@ -83,8 +83,7 @@ export default (
       defaults: {
         name: 'Social Link',
         draggable: `[data-gjs-type="${typeSocialGroup}"]`,
-        droppable: false,
-        style: { display: 'inline-block' }
+        droppable: false
       },
       init() {
         this.on('change:attributes:title', this.handleTitleChange)
