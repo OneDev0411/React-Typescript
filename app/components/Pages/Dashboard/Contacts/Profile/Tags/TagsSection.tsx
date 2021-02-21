@@ -37,6 +37,7 @@ function Tags({ contact, onChange }: Props) {
       <Box px={3} display="flex" flexWrap="wrap">
         {hasTags && tags.map(tag => <Tag key={tag} text={tag} />)}
         <PopoverContactTagSelector
+          label={`${contact.display_name}'s Tags`}
           anchorRenderer={onClick => (
             <Chip
               label={hasTags ? 'Edit' : 'Add Tag'}

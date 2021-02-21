@@ -8,6 +8,7 @@ import { PopoverContactTagSelector } from 'components/TagSelector'
 const useStyles = makeStyles(theme =>
   createStyles({
     container: {
+      maxWidth: '100%',
       display: 'inline-flex',
       cursor: 'pointer',
       flexWrap: 'nowrap'
@@ -20,6 +21,7 @@ const useStyles = makeStyles(theme =>
       marginRight: theme.spacing(0.5)
     },
     chip: {
+      maxWidth: '100%',
       marginRight: theme.spacing(0.25)
     }
   })
@@ -86,7 +88,7 @@ const TagsString = ({
             {tagsCount === 0 ? (
               <span className={classes.noTag}>Add Tags</span>
             ) : (
-              <Box>
+              <Box maxWidth="100%">
                 <span className={classes.tagLabel}>TAGS:</span>
                 {showingTags.map(tag => (
                   <Chip
@@ -97,14 +99,14 @@ const TagsString = ({
                     label={tag}
                   />
                 ))}
+                {invisibleTagsCount > 0 && (
+                  <Chip
+                    variant="outlined"
+                    size="small"
+                    label={`+ ${invisibleTagsCount}`}
+                  />
+                )}
               </Box>
-            )}
-            {invisibleTagsCount > 0 && (
-              <Chip
-                variant="outlined"
-                size="small"
-                label={`+ ${invisibleTagsCount}`}
-              />
             )}
           </Box>
         </Tooltip>

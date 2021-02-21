@@ -6,6 +6,7 @@ const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       chip: {
+        maxWidth: '100%',
         marginRight: theme.spacing(0.5),
         marginBottom: theme.spacing(0.5)
       }
