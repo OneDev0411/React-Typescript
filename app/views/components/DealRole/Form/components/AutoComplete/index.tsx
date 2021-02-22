@@ -14,7 +14,7 @@ export interface Option {
 
 interface Props {
   label: string
-  noOptionsText: string
+  noOptionsText?: string
   options: Option[] | ((value: string) => Promise<Option[]>)
   isLoading?: boolean
   value?: string
@@ -94,32 +94,42 @@ export function AutoComplete({
       getOptionLabel={getOptionLabel}
       options={items}
       loading={isLoading}
-      groupBy={option => option.label.charAt(0)}
+      groupBy={option => option.label.charAt(0).toLowerCase()}
       noOptionsText={noOptionsText}
       inputValue={inputValue}
       onChange={handleChange}
       onInputChange={handleInputChange}
-      renderInput={params => (
-        <TextField
-          {...params}
-          size="small"
-          label={label}
-          variant="outlined"
-          error={!!error}
-          helperText={error}
-          InputProps={{
-            ...params.InputProps,
-            autoComplete: 'new-password',
-            endAdornment: (
-              <>
-                {isLoading ? (
-                  <CircularProgress color="inherit" size={15} />
-                ) : null}
-              </>
-            )
-          }}
-        />
-      )}
+      renderInput={params => {
+        const props = {
+          ...params,
+          inputProps: {
+            ...params.inputProps,
+            autoComplete: 'no-auto'
+          }
+        }
+
+        return (
+          <TextField
+            {...props}
+            autoComplete="new-password"
+            size="small"
+            label={label}
+            variant="outlined"
+            error={!!error}
+            helperText={error}
+            InputProps={{
+              ...props.InputProps,
+              endAdornment: (
+                <>
+                  {isLoading ? (
+                    <CircularProgress color="inherit" size={15} />
+                  ) : null}
+                </>
+              )
+            }}
+          />
+        )
+      }}
     />
   )
 }
