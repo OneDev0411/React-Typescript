@@ -49,9 +49,6 @@ import Contacts from './Contacts'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    chip: {
-      margin: theme.spacing(0, 1)
-    },
     headerContainer: {
       padding: theme.spacing(2, 4, 0)
     },
@@ -70,6 +67,9 @@ const useStyles = makeStyles(
       marginTop: theme.spacing(2),
       color: theme.palette.warning.contrastText,
       ...theme.typography.body2
+    },
+    chip: {
+      marginLeft: theme.spacing(1)
     },
     tab: theme.typography.body1
   }),
@@ -361,6 +361,7 @@ function Edit(props: WithRouterProps) {
                   <Grid container alignItems="center" justify="center">
                     <span>Contacts</span>
                     <Chip
+                      size="small"
                       className={classes.chip}
                       label={flow ? flow.active_flows : 0}
                     />
