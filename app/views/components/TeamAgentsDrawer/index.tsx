@@ -20,6 +20,7 @@ interface Props {
   withRelatedContacts?: boolean
   flattened?: boolean
   isPrimaryAgent?: boolean
+  isDrawerOpen?: boolean
   onClose: () => void
   onSelectAgents(agents: AgentItem[]): void
 }
@@ -30,6 +31,7 @@ export function TeamAgentsDrawer({
   withRelatedContacts = true,
   flattened = false,
   isPrimaryAgent = false,
+  isDrawerOpen = true,
   onClose,
   onSelectAgents
 }: Props) {
@@ -96,7 +98,7 @@ export function TeamAgentsDrawer({
   }
 
   return (
-    <Drawer open onClose={onClose}>
+    <Drawer open={isDrawerOpen} onClose={onClose}>
       <Drawer.Header title={title} />
 
       <Drawer.Body>

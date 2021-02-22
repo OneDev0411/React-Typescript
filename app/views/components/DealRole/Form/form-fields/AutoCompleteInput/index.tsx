@@ -30,7 +30,6 @@ export function AutoCompleteInput({
       error={meta.submitFailed && meta.error}
       value={input.value}
       options={options}
-      noOptionsText=""
       onChange={option => input.onChange(option.value)}
       onInputChange={input.onChange}
     />
