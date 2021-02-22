@@ -7,13 +7,14 @@ import {
   Box,
   Paper,
   Tab,
-  Tabs as MUITabs,
+  Tabs,
   Chip,
   Theme,
-  makeStyles,
-  withStyles
+  makeStyles
 } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
+
+import PageLayout from 'components/GlobalPageLayout'
 
 import { getEmailTemplates } from 'models/email-templates/get-email-templates'
 import { getBrandFlow } from 'models/flows/get-brand-flow'
@@ -45,23 +46,25 @@ import Contacts from './Contacts'
 //   updateStepsDue,
 //   getUpdatedStepsOnMove
 // } from './helpers'
-import { PageContainer } from './styled'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     chip: {
       margin: theme.spacing(0, 1)
     },
+    headerContainer: {
+      padding: theme.spacing(2, 4, 0)
+    },
     tabContainer: {
-      marginBottom: theme.spacing(1),
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius
+      marginTop: theme.spacing(2),
+      borderBottom: `1px solid ${theme.palette.divider}`
     },
     contentContainer: {
-      display: 'inline-block',
       width: '100%',
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(1)
+      height: 'auto',
+      minHeight: '100vh',
+      padding: theme.spacing(4),
+      background: theme.palette.grey[50]
     },
     warnContainer: {
       marginTop: theme.spacing(2),
@@ -72,15 +75,6 @@ const useStyles = makeStyles(
   }),
   { name: 'FlowEditPage' }
 )
-
-const Tabs = withStyles((theme: Theme) => ({
-  root: {
-    padding: '0 30%'
-  },
-  indicator: {
-    height: `${theme.spacing(0.5)}px`
-  }
-}))(MUITabs)
 
 function Edit(props: WithRouterProps) {
   const classes = useStyles()
@@ -325,7 +319,11 @@ function Edit(props: WithRouterProps) {
   }, [brand, flow])
 
   if (error) {
-    return <PageContainer>{error && <Paper>{error}</Paper>}</PageContainer>
+    return (
+      <Box className={classes.contentContainer}>
+        {error && <Paper>{error}</Paper>}
+      </Box>
+    )
   }
 
   return (
@@ -335,62 +333,54 @@ function Edit(props: WithRouterProps) {
           {flow ? `${flow.name} | Flows | Rechat` : 'Flow | Rechat'}
         </title>
       </Helmet>
-      {flow && isDuplicateModalOpen && (
-        <New
-          onClose={() => {
-            setIsDuplicateModalOpen(false)
-          }}
-          onSubmit={duplicateFlowHandler}
-          flow={flow}
-        />
-      )}
-      {flow && (
-        <Header
-          name={flow.name}
-          onDuplicateClick={() => {
-            setIsDuplicateModalOpen(true)
-          }}
-          description={flow.description}
-          onChange={flowUpdateHandler}
-          disableEdit={!flow.is_editable}
-        />
-      )}
-      <PageContainer style={!flow ? { paddingTop: '8.9375rem' } : {}}>
-        <Box className={classes.tabContainer}>
-          <Tabs
-            value={selectedTabIndex}
-            onChange={(_, newTabIndex) => setSelectedTabIndex(newTabIndex)}
-            textColor="primary"
-            indicatorColor="primary"
-            variant="fullWidth"
-            centered
-          >
-            <Tab disabled={isLoading} className={classes.tab} label="Steps" />
-            <Tab
-              disabled={isLoading}
-              className={classes.tab}
-              label={
-                <Grid container alignItems="center" justify="center">
-                  <span>Contacts</span>
-                  <Chip
-                    className={classes.chip}
-                    label={flow ? flow.active_flows : 0}
-                  />
-                </Grid>
-              }
+      <PageLayout gutter={0}>
+        <Box className={classes.headerContainer}>
+          {flow && (
+            <Header
+              name={flow.name}
+              onDuplicateClick={() => {
+                setIsDuplicateModalOpen(true)
+              }}
+              description={flow.description}
+              onChange={flowUpdateHandler}
+              disableEdit={!flow.is_editable}
             />
-          </Tabs>
+          )}
+          <Box className={classes.tabContainer}>
+            <Tabs
+              value={selectedTabIndex}
+              onChange={(_, newTabIndex) => setSelectedTabIndex(newTabIndex)}
+              textColor="primary"
+              indicatorColor="primary"
+            >
+              <Tab disabled={isLoading} className={classes.tab} label="Steps" />
+              <Tab
+                disabled={isLoading}
+                className={classes.tab}
+                label={
+                  <Grid container alignItems="center" justify="center">
+                    <span>Contacts</span>
+                    <Chip
+                      className={classes.chip}
+                      label={flow ? flow.active_flows : 0}
+                    />
+                  </Grid>
+                }
+              />
+            </Tabs>
+          </Box>
         </Box>
-        {warning && (
-          <Alert
-            severity="warning"
-            className={classes.warnContainer}
-            onClose={() => setWarning(null)}
-          >
-            {warning}
-          </Alert>
-        )}
-        <Box className={classes.contentContainer}>
+
+        <PageLayout.Main mt={0} className={classes.contentContainer}>
+          {warning && (
+            <Alert
+              severity="warning"
+              className={classes.warnContainer}
+              onClose={() => setWarning(null)}
+            >
+              {warning}
+            </Alert>
+          )}
           {isLoading && <LoadingContainer style={{ padding: '20% 0' }} />}
           {!isLoading && emailTemplates && flow && selectedTabIndex === 0 && (
             <Steps
@@ -417,8 +407,18 @@ function Edit(props: WithRouterProps) {
               flowId={flow.id}
             />
           )}
-        </Box>
-      </PageContainer>
+        </PageLayout.Main>
+      </PageLayout>
+
+      {flow && isDuplicateModalOpen && (
+        <New
+          onClose={() => {
+            setIsDuplicateModalOpen(false)
+          }}
+          onSubmit={duplicateFlowHandler}
+          flow={flow}
+        />
+      )}
       <EmailTemplateDrawer
         isOpen={isEmailTemplateDrawerOpen}
         onClose={() => {

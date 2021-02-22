@@ -868,8 +868,9 @@ export default (
           {/* <Route path="css" component={AsyncCSS} /> */}
 
           <Route path="flows" component={AsyncFlowsList} />
-          <Route path="flows/:id" component={AsyncFlowEdit} />
         </Route>
+
+        <Route path="account/flows/:id" component={AsyncFlowEdit} />
 
         <Route path="teams(/:id)">
           <IndexRoute component={AsyncTeams} />
