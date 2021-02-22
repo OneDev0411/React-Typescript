@@ -6,17 +6,17 @@ import { BasicEmailFormData } from '../types'
 import { ActionFooter } from '../components/ActionFooter'
 import { useCommonStyles } from '../styles'
 
-import { Title } from '../components/Title'
-import { Description } from '../components/Description'
-import { Time } from '../components/Time'
-import { EmailTemplate } from '../components/EmailTemplate'
-import { WaitFor } from '../components/WaitFor'
-import { EventType } from '../components/EventType'
-import { defaultWaitForValue } from '../components/WaitFor/Fields'
+import { Title } from '../components/BaseFields/Title'
+import { Description } from '../components/BaseFields/Description'
+import { Time } from '../components/BaseFields/Time'
+import { EmailTemplate } from '../components/BaseFields/EmailTemplate'
+import { WaitFor } from '../components/BaseFields/WaitFor'
+import { EventType } from '../components/BaseFields/EventType'
+import { defaultWaitForValue } from '../components/BaseFields/WaitFor/Fields'
 import {
   convertToWebInput,
   convertToServerInput
-} from '../components/WaitFor/helpers'
+} from '../components/BaseFields/WaitFor/helpers'
 
 interface Props {
   index: number

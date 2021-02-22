@@ -3,9 +3,9 @@ import { Field } from 'react-final-form'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 
-import { MAX_STEP_TITLE_LENGTH } from '../../../../constants'
+import { MAX_STEP_TITLE_LENGTH } from '../../../../../constants'
 
-import { validateStringInput } from '../../../../helpers'
+import { validateStringInput } from '../../../../../helpers'
 
 export const Title = () => {
   return (

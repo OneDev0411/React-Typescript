@@ -4,7 +4,7 @@ import { Box } from '@material-ui/core'
 import EventForm from './EventForm'
 import BasicEmailForm from './BasicEmailForm'
 import MarketingEmailForm from './MarketingEmailForm'
-import { AddButton } from './AddButton'
+import { AddButton } from './components/AddButtons'
 import { useCommonStyles } from '../Item/styles'
 
 interface Props {

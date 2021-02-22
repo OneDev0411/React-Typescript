@@ -1,4 +1,4 @@
-import { RawWaitFor } from '../../types'
+import { RawWaitFor } from '../../../types'
 
 export const convertToServerInput = ({
   value,

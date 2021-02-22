@@ -14,7 +14,7 @@ import { getActiveBrand } from 'utils/user-teams'
 
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
 
-import { MarketingEmailFormData } from '../../types'
+import { MarketingEmailFormData } from '../../../types'
 
 interface Props {
   disabled?: boolean

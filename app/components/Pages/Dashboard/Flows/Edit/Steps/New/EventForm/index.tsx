@@ -7,16 +7,17 @@ import { EventType } from 'components/EventDrawer/components/EventType'
 import { EventFormData } from '../types'
 import { ActionFooter } from '../components/ActionFooter'
 import { useCommonStyles } from '../styles'
-import { Title } from '../components/Title'
-import { Description } from '../components/Description'
-import { EventType as TriggerType } from '../components/EventType'
-import { Time } from '../components/Time'
-import { WaitFor } from '../components/WaitFor'
-import { defaultWaitForValue } from '../components/WaitFor/Fields'
+import { BaseFormLayout } from '../components/BaseFormLayout'
+import { Title } from '../components/BaseFields/Title'
+import { Description } from '../components/BaseFields/Description'
+import { EventType as TriggerType } from '../components/BaseFields/EventType'
+import { Time } from '../components/BaseFields/Time'
+import { WaitFor } from '../components/BaseFields/WaitFor'
+import { defaultWaitForValue } from '../components/BaseFields/WaitFor/Fields'
 import {
   convertToWebInput,
   convertToServerInput
-} from '../components/WaitFor/helpers'
+} from '../components/BaseFields/WaitFor/helpers'
 
 interface Props {
   index: number
@@ -89,6 +90,17 @@ export default function EventForm({
       }}
       initialValues={getInitialValues(step)}
       render={({ handleSubmit, submitting }) => {
+        return (
+          <BaseFormLayout
+            index={index}
+            title="Reminder"
+            submitting={submitting}
+            handleSubmit={handleSubmit}
+          >
+            sdfsd
+          </BaseFormLayout>
+        )
+
         return (
           <Box className={commonClasses.container}>
             <form onSubmit={handleSubmit} noValidate>

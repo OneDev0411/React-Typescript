@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Box, makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 
-import { useCommonStyles } from '../../Item/styles'
+import { useCommonStyles } from '../../../Item/styles'
 
 export const useStyles = makeStyles(
   (theme: Theme) => ({

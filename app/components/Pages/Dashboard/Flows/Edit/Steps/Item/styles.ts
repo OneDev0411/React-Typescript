@@ -5,7 +5,8 @@ export const useCommonStyles = makeStyles(
     stepContainer: {
       display: 'flex',
       width: '100%',
-      marginBottom: theme.spacing(2)
+      maxWidth: '730px',
+      margin: theme.spacing(0, 'auto', 2)
     },
     stepIndex: {
       width: theme.spacing(5),

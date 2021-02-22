@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 import pluralize from 'pluralize'
 
-import { RawWaitFor } from '../../types'
+import { RawWaitFor } from '../../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
