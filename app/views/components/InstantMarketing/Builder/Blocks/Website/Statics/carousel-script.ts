@@ -5,6 +5,12 @@ function script() {
   const element: HTMLElement = this
   const elementId = element.id
 
+  const imagesEl = Array.from(
+    element.querySelectorAll<HTMLImageElement>(
+      'img.splide__image[data-large-src]'
+    )
+  )
+
   function initCarousel() {
     const slider = new Splide(
       element instanceof Element ? element : `#${elementId}`,
@@ -14,6 +20,7 @@ function script() {
           left: 0,
           right: '6rem'
         },
+        keyboard: 'focused',
         height: '600px',
         classes: {
           arrows: 'splide__arrows',
@@ -90,18 +97,12 @@ function script() {
       `,
       () => {
         if (typeof SimpleLightbox !== 'undefined') {
-          const imagesEl = Array.from(
-            element.querySelectorAll<HTMLImageElement>(
-              'img.splide__image[data-src]'
-            )
-          )
-
           const gallery = new SimpleLightbox(imagesEl, {
-            sourceAttr: 'data-src',
+            sourceAttr: 'data-large-src',
             history: false
           })
 
-          gallery.open()
+          gallery.open(imagesEl[slider.index])
         }
       }
     )
@@ -177,6 +178,7 @@ function script() {
         padding: 0;
         opacity: .7;
         background: #ccc;
+        cursor: pointer;
       }
       
       .splide__arrow--prev {
@@ -226,6 +228,7 @@ function script() {
         border: 0;
         background: transparent;
         outline: none;
+        cursor: pointer;
       }
       
       .splide__pagination__arrow svg {
@@ -245,7 +248,8 @@ function script() {
         background: lightgray;
         border: 0;
         margin: 0 2px;
-        outline: none;
+        outline: none;        
+        cursor: pointer;
       }
       
       .splide__pagination__page.is-active {
@@ -263,6 +267,7 @@ function script() {
         top: 1rem;
         right: 1rem;
         z-index: 1;
+        cursor: pointer;
       }
 
       .splide__lightbox svg {
