@@ -2,7 +2,7 @@ import { Editor } from 'grapesjs'
 
 import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
 
-import OneColIcon from 'assets/images/marketing/editor/blocks/col-1.png'
+import CarouselIcon from 'assets/images/marketing/editor/blocks/carousel.png'
 
 import registerBlock from '../../registerBlock'
 import { baseView, isComponent } from '../utils'
@@ -43,7 +43,7 @@ export default (
 
   registerBlock(editor, {
     label: 'Carousel',
-    icon: OneColIcon,
+    icon: CarouselIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: carouselBlockName,
     template: gridColumnBlocks[carouselBlockName]
