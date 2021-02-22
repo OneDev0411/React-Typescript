@@ -92,7 +92,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
       return
     }
 
-    setInputValue(fecha.format(date, 'YYYY-MM-DD'))
+    setInputValue(date)
   }
 
   const handleChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,16 +105,21 @@ export function DealContext({ context, onChange = () => {} }: Props) {
   }
 
   const handleSave = () => {
+    const value =
+      contextType === 'Date'
+        ? fecha.format(inputValue, 'YYYY-MM-DD')
+        : inputValue
+
     if (deal) {
       try {
-        const data = createUpsertObject(deal, context.key, inputValue, false)
+        const data = createUpsertObject(deal, context.key, value, false)
 
         dispatch(upsertContexts(deal!.id, [data]))
       } catch (e) {
         console.log(e)
       }
     } else {
-      onChange(inputValue)
+      onChange(value)
     }
 
     if (wizard.currentStep === step) {
