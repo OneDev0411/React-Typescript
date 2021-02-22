@@ -826,7 +826,7 @@ export default (
             component={AsyncDealFormEdit}
           />
           <Route
-            path="/dashboard/deals/:id/create-offer"
+            path="/dashboard/deals/:id/offer"
             component={AsyncDealCreateOffer}
           />
           <Route

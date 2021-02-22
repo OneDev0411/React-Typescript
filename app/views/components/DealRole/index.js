@@ -6,7 +6,7 @@ import DealRole from './Form'
 
 export default function DealRoleModal(props) {
   return (
-    <Dialog open fullWidth maxWidth="sm">
+    <Dialog open={props.isOpen} fullWidth maxWidth="sm">
       <DialogContent>
         <DealRole {...props} />
       </DialogContent>
