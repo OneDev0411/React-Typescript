@@ -15,7 +15,8 @@ import registerStaticBlocks, {
   headline2BlockName,
   textBlockName,
   buttonBlockName,
-  socialGroupBlockName
+  socialGroupBlockName,
+  carouselBlockName
 } from './Statics'
 import registerVideoBlock, {
   VideoBlockOptions,
@@ -57,7 +58,8 @@ const BLOCK_BUTTONS_ORDER = [
   articleLeftBlockName,
   articleRightBlockName,
   agentLeftBlockName,
-  agentGridBlockName
+  agentGridBlockName,
+  carouselBlockName
 ]
 
 interface BlocksOptions
