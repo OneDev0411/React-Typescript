@@ -2,6 +2,9 @@ import { makeStyles, Theme } from '@material-ui/core'
 
 export const useStyles = makeStyles(
   (theme: Theme) => ({
+    form: {
+      width: '100%'
+    },
     container: {
       width: '100%',
       background: theme.palette.background.paper,
@@ -16,8 +19,21 @@ export const useStyles = makeStyles(
     title: {
       // marginBottom: theme.spacing(2)
     },
-    content: {
-      padding: theme.spacing(2, 2)
+    dragBtn: {
+      display: 'flex',
+      marginRight: theme.spacing(1.5)
+    },
+    commonFieldsContainer: {
+      padding: theme.spacing(2.5, 5),
+      borderBottom: `1px solid ${theme.palette.divider}`
+    },
+    commonFieldsTitle: {
+      marginBottom: theme.spacing(2)
+    },
+    commonFields: {
+      display: 'flex',
+      alignItems: 'center',
+      flexWrap: 'nowrap'
     }
   }),
   { name: 'BaseFormLayout' }

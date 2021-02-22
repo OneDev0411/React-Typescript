@@ -4,7 +4,6 @@ import {
   OutlinedInput,
   MenuItem,
   Select,
-  Typography,
   makeStyles,
   Theme
 } from '@material-ui/core'
@@ -14,11 +13,7 @@ import { RawWaitFor } from '../../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {},
-    title: {
-      marginBottom: theme.spacing(1.5)
-    },
-    fieldsContainer: {
+    container: {
       display: 'flex',
       alignItems: 'center',
       flexWrap: 'nowrap'
@@ -100,60 +95,55 @@ export const WaitForFields = ({
 
   return (
     <Box className={classes.container}>
-      <Typography variant="subtitle1" className={classes.title}>
-        When should this step start?
-      </Typography>
-      <Box className={classes.fieldsContainer}>
-        <Box width={70}>
-          <OutlinedInput
-            id="value"
-            type="number"
-            labelWidth={0}
-            defaultValue={value}
-            inputProps={{
-              min: '1'
-            }}
-            classes={{
-              input: classes.outlinedPadding
-            }}
-            onChange={handleValueChange}
-          />
-        </Box>
-        <Box width={130} px={0.75}>
-          <Select
-            fullWidth
-            labelId="event-unit"
-            id="event-unit-select"
-            variant="outlined"
-            classes={{
-              outlined: classes.outlinedPadding
-            }}
-            value={unit}
-            onChange={handleUnitChange}
-          >
-            {unitOptions.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {pluralize(option.title, value)}
-              </MenuItem>
-            ))}
-          </Select>
-        </Box>
-        <Box flexGrow={1}>
-          <Select
-            fullWidth
-            labelId="trigger-at"
-            id="trigger-at-select"
-            variant="outlined"
-            value={triggerAt}
-            classes={{
-              outlined: classes.outlinedPadding
-            }}
-            onChange={handleTriggerAtChange}
-          >
-            <MenuItem value="after">After</MenuItem>
-            <MenuItem value="before">Before</MenuItem>
-          </Select>
-        </Box>
+      <Box width={70}>
+        <OutlinedInput
+          id="value"
+          type="number"
+          labelWidth={0}
+          defaultValue={value}
+          inputProps={{
+            min: '1'
+          }}
+          classes={{
+            input: classes.outlinedPadding
+          }}
+          onChange={handleValueChange}
+        />
+      </Box>
+      <Box width={120} px={0.75}>
+        <Select
+          fullWidth
+          labelId="event-unit"
+          id="event-unit-select"
+          variant="outlined"
+          classes={{
+            outlined: classes.outlinedPadding
+          }}
+          value={unit}
+          onChange={handleUnitChange}
+        >
+          {unitOptions.map(option => (
+            <MenuItem key={option.value} value={option.value}>
+              {pluralize(option.title, value)}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
+      <Box flexGrow={1}>
+        <Select
+          fullWidth
+          labelId="trigger-at"
+          id="trigger-at-select"
+          variant="outlined"
+          value={triggerAt}
+          classes={{
+            outlined: classes.outlinedPadding
+          }}
+          onChange={handleTriggerAtChange}
+        >
+          <MenuItem value="after">After</MenuItem>
+          <MenuItem value="before">Before</MenuItem>
+        </Select>
       </Box>
     </Box>
   )
