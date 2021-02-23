@@ -42,6 +42,8 @@ export const BaseFormLayout = ({
 }: Props) => {
   const classes = useStyles()
 
+  console.log({ step })
+
   return (
     <form onSubmit={onSubmit} className={classes.form} noValidate>
       <Box className={classes.container}>

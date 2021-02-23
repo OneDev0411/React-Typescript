@@ -3,7 +3,6 @@ import { Box } from '@material-ui/core'
 
 import EventForm from '../New/EventForm'
 
-import { useCommonStyles } from './styles'
 // import { View } from './Components/View'
 import BasicEmailForm from '../New/BasicEmailForm'
 import MarketingEmailForm from '../New/MarketingEmailForm'
@@ -33,9 +32,6 @@ export default function Item({
   onNewEmailTemplateClick,
   onReviewEmailTemplateClick
 }: Props) {
-  const commonClasses = useCommonStyles()
-  // const [isEditing, setIsEditing] = useState<boolean>(false)
-
   const renderEditForm = () => {
     if (!step) {
       return null
@@ -82,7 +78,7 @@ export default function Item({
     }
   }
 
-  return <Box className={commonClasses.stepContainer}>{renderEditForm()}</Box>
+  return <Box mb={2}>{renderEditForm()}</Box>
   // if (isEditing) {
   //   return (
   //     <Box className={commonClasses.stepContainer} position="relative">

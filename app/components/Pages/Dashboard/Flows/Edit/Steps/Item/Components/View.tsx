@@ -15,7 +15,7 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useRaisedMuiCard from 'hooks/use-raised-mui-card'
 
 import { StepTypeIcon } from './StepTypeIcon'
-import { useCommonStyles } from '../styles'
+// import { useCommonStyles } from '../styles'
 
 export const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -56,7 +56,6 @@ interface Props {
 }
 
 export function View({ disableEdit, index, step, setIsEditing }: Props) {
-  const commonClasses = useCommonStyles()
   const classes = useStyles()
   const { raise, stopRaise } = useRaisedMuiCard()
 
@@ -84,9 +83,9 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
           <div
             ref={draggableProvided.innerRef}
             {...draggableProvided.draggableProps}
-            className={commonClasses.stepContainer}
+            // className={commonClasses.stepContainer}
           >
-            <Box className={commonClasses.stepIndex}>{index + 1}</Box>
+            <Box /* className={commonClasses.stepIndex} */>{index + 1}</Box>
             <Box
               onMouseOver={raise}
               onFocus={raise}
@@ -100,7 +99,7 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
                 return setIsEditing(true)
               }}
               className={cn(
-                commonClasses.itemContent,
+                // commonClasses.itemContent,
                 classes.viewStepContainer,
                 {
                   [classes.raised]: draggableSnapshot.isDragging

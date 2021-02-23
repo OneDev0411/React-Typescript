@@ -4,8 +4,7 @@ import { Box } from '@material-ui/core'
 import EventForm from './EventForm'
 import BasicEmailForm from './BasicEmailForm'
 import MarketingEmailForm from './MarketingEmailForm'
-import { AddButton } from './components/AddButtons'
-import { useCommonStyles } from '../Item/styles'
+import { AddButtons } from './components/AddButtons'
 
 interface Props {
   index: number
@@ -26,17 +25,12 @@ export const NewStep = ({
   onNewEmailTemplateClick,
   onReviewEmailTemplateClick
 }: Props) => {
-  const commonClasses = useCommonStyles()
   const [openForm, setOpenForm] = useState<
     Nullable<'event' | 'basic_email' | 'marketing_email'>
   >(shouldShowDefaultForm ? 'event' : null)
 
   async function submitHandler(data: IBrandFlowStepInput) {
-    const step: IBrandFlowStepInput = {
-      ...data
-    }
-
-    await onSubmit(step)
+    await onSubmit(data)
     setOpenForm(null)
   }
 
@@ -74,18 +68,13 @@ export const NewStep = ({
       return null
     }
 
-    return (
-      <Box className={commonClasses.stepContainer} position="relative">
-        <Box className={commonClasses.stepIndex}>{index}</Box>
-        <Box className={commonClasses.itemContent}>{renderForm()}</Box>
-      </Box>
-    )
+    return renderForm()
   }
 
   function renderAddNewStep() {
     return (
       <Box mt={1}>
-        <AddButton
+        <AddButtons
           onNewEventClick={() => setOpenForm('event')}
           onNewMarketingEmailClick={() => setOpenForm('marketing_email')}
           onNewBasicEmailClick={() => setOpenForm('basic_email')}
