@@ -9,15 +9,15 @@ interface Props {
 export default function CardSkeleton({ style }: Props) {
   return (
     <Card variant="outlined" style={{ height: '350px', ...style }}>
-      <Skeleton animation="wave" variant="rect" height={200} />
+      <Skeleton animation="wave" variant="rect" height="60%" />
       <CardContent>
         <Skeleton
           variant="text"
           animation="wave"
-          height={25}
+          height="10%"
           style={{ marginBottom: 6 }}
         />
-        <Skeleton variant="text" animation="wave" height={20} width="80%" />
+        <Skeleton variant="text" animation="wave" height="10%" width="80%" />
       </CardContent>
     </Card>
   )

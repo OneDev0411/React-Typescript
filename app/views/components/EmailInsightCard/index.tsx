@@ -37,8 +37,6 @@ interface Props {
 export default function EmailInsightCard({ campaign }: Props) {
   const classes = useStyles()
 
-  console.log({ campaign })
-
   return (
     <Card variant="outlined" className={classes.card}>
       <CardActionArea>

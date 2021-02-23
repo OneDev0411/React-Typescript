@@ -51,6 +51,7 @@ export default function SectionLayout({
         container
         item
         alignItems="center"
+        justify="space-between"
         direction="row"
         className={classes.headerContainer}
       >

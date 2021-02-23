@@ -265,7 +265,7 @@ export default function ListingCard({
                     variant="outlined"
                     className={classes.statusChip}
                     icon={
-                      <Box flex>
+                      <Box display="flex">
                         <Badge
                           variant="dot"
                           classes={{
