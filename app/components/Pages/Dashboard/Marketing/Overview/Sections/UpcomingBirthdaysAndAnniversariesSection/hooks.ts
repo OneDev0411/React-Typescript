@@ -29,7 +29,7 @@ export function useBirthdaysAndAnniversaries(): UseBirthdaysAndAnniversaries {
             'child_birthday',
             'home_anniversary'
           ],
-          'object_types[]': ['contact_attribute', 'contact']
+          'object_types[]': ['contact_attribute', 'contact', 'deal_context']
         },
         associations: ['calendar_event.people'] // , 'calendar_event.full_thread'
       })

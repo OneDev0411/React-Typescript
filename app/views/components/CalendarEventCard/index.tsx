@@ -4,6 +4,7 @@ import {
   Grid,
   Box,
   Button,
+  Tooltip,
   CardContent,
   Typography,
   makeStyles
@@ -12,6 +13,9 @@ import timeago from 'timeago.js'
 
 import Link from 'components/ALink'
 import { Avatar } from 'components/Avatar'
+import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
+
+import { getEventMarketingTemplateTypes } from './helpers'
 
 const useStyles = makeStyles(
   () => ({
@@ -34,13 +38,9 @@ const useStyles = makeStyles(
 
 interface Props {
   event: ICalendarEvent
-  onSendGiftCardClick?: () => void
 }
 
-export default function CalendarEventCard({
-  event,
-  onSendGiftCardClick
-}: Props) {
+export default function CalendarEventCard({ event }: Props) {
   const classes = useStyles()
 
   const contact =
@@ -50,6 +50,8 @@ export default function CalendarEventCard({
       ? event.people[0]
       : null
 
+  const cardTemplateTypes = getEventMarketingTemplateTypes(event)
+
   return (
     <Card variant="outlined" className={classes.card}>
       <CardContent className={classes.cardContent}>
@@ -58,7 +60,11 @@ export default function CalendarEventCard({
             <Grid container item justify="center">
               <Link noStyle to={`/dashboard/contacts/${contact.id}`}>
                 <Box pb={1}>
-                  <Avatar size="large" contact={contact} />
+                  <Tooltip placement="top" title={contact.display_name}>
+                    <div>
+                      <Avatar size="xlarge" contact={contact} />
+                    </div>
+                  </Tooltip>
                 </Box>
               </Link>
             </Grid>
@@ -73,16 +79,24 @@ export default function CalendarEventCard({
               </Typography>
             </Box>
           </Grid>
-          {onSendGiftCardClick && (
+          {cardTemplateTypes && (
             <Grid container item>
-              <Button
-                fullWidth
-                variant="outlined"
-                color="secondary"
-                onClick={onSendGiftCardClick}
-              >
-                Send Gift Card
-              </Button>
+              <SendContactCard
+                contact={contact}
+                mediums="Email"
+                types={cardTemplateTypes}
+                buttonRenderrer={({ disabled, onClick }) => (
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    color="secondary"
+                    disabled={disabled}
+                    onClick={onClick}
+                  >
+                    Send Gift Card
+                  </Button>
+                )}
+              />
             </Grid>
           )}
         </Grid>

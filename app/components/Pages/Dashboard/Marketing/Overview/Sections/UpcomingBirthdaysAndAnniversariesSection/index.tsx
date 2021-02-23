@@ -42,10 +42,7 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
       {!isLoading &&
         events.slice(0, 4).map(event => (
           <Grid key={event.id} item md={3}>
-            <CalendarEventCard
-              event={event}
-              onSendGiftCardClick={console.log}
-            />
+            <CalendarEventCard event={event} />
           </Grid>
         ))}
     </SectionLayout>
