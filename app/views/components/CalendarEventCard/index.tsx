@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core'
 import timeago from 'timeago.js'
 
+import Link from 'components/ALink'
 import { Avatar } from 'components/Avatar'
 
 const useStyles = makeStyles(
@@ -55,9 +56,11 @@ export default function CalendarEventCard({
         <Grid container direction="column">
           {contact && (
             <Grid container item justify="center">
-              <Box pb={1}>
-                <Avatar size="large" contact={contact} />
-              </Box>
+              <Link noStyle to={`/dashboard/contacts/${contact.id}`}>
+                <Box pb={1}>
+                  <Avatar size="large" contact={contact} />
+                </Box>
+              </Link>
             </Grid>
           )}
           <Grid item>
