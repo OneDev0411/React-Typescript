@@ -40,16 +40,8 @@ export const NewStep = ({
     setOpenForm(null)
   }
 
-  function cancelHandler() {
-    setOpenForm(null)
-  }
-
   const renderEventForm = () => (
-    <EventForm
-      index={index}
-      onCancel={cancelHandler}
-      onSubmit={submitHandler}
-    />
+    <EventForm index={index} onSubmit={submitHandler} />
   )
 
   const rebderBasicEmailForm = () => (
@@ -57,18 +49,13 @@ export const NewStep = ({
       index={index}
       templates={emailTemplates}
       defaultSelectedTemplate={defaultSelectedEmailTemplate}
-      onCancel={cancelHandler}
       onSubmit={submitHandler}
       onNewTemplateClick={onNewEmailTemplateClick}
       onReviewTemplateClick={onReviewEmailTemplateClick}
     />
   )
   const rebderTemplateEmailForm = () => (
-    <MarketingEmailForm
-      index={index}
-      onCancel={cancelHandler}
-      onSubmit={submitHandler}
-    />
+    <MarketingEmailForm index={index} onSubmit={submitHandler} />
   )
 
   const renderForm = () => {

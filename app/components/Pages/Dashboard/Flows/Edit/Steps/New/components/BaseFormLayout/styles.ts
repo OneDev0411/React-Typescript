@@ -14,26 +14,30 @@ export const useStyles = makeStyles(
     header: {
       padding: theme.spacing(1.5, 3),
       background: theme.palette.grey[100],
-      borderRadius: `${theme.shape.borderRadius}px 0 0 ${theme.shape.borderRadius}px`
-    },
-    title: {
-      // marginBottom: theme.spacing(2)
+      borderRadius: `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`
     },
     dragBtn: {
       display: 'flex',
       marginRight: theme.spacing(1.5)
     },
+    moreBtn: {
+      color: theme.palette.grey[500]
+    },
     commonFieldsContainer: {
       padding: theme.spacing(2.5, 5),
       borderBottom: `1px solid ${theme.palette.divider}`
     },
+
     commonFieldsTitle: {
       marginBottom: theme.spacing(2)
     },
     commonFields: {
       display: 'flex',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       flexWrap: 'nowrap'
+    },
+    otherFieldsContainer: {
+      padding: theme.spacing(2.5, 5)
     }
   }),
   { name: 'BaseFormLayout' }

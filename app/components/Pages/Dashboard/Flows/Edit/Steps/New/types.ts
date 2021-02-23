@@ -4,6 +4,14 @@ export type RawWaitFor = {
   triggerAt: 'after' | 'before'
 }
 
+export interface BaseFormProps {
+  index: number
+  disableEdit?: boolean
+  step?: IBrandFlowStep
+  onDelete?: (data: IBrandFlowStep) => Promise<any>
+  onSubmit: (data: IBrandFlowStepInput, stepId?: UUID) => Promise<any>
+}
+
 interface BaseFormData
   extends Pick<
     IBrandFlowStepInput,

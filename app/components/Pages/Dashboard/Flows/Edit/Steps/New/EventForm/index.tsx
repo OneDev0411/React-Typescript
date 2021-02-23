@@ -1,41 +1,26 @@
 import React from 'react'
 import { Form } from 'react-final-form'
-import { Grid, Box, Typography } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import { EventType } from 'components/EventDrawer/components/EventType'
 
-import { EventFormData } from '../types'
-import { ActionFooter } from '../components/ActionFooter'
-import { useCommonStyles } from '../styles'
+import { BaseFormProps, EventFormData } from '../types'
 import { BaseFormLayout } from '../components/BaseFormLayout'
 import { Title } from '../components/BaseFields/Title'
 import { Description } from '../components/BaseFields/Description'
-import { EventType as TriggerType } from '../components/BaseFields/EventType'
-import { Time } from '../components/BaseFields/Time'
-import { WaitFor } from '../components/BaseFields/WaitFor'
 import { defaultWaitForValue } from '../components/BaseFields/WaitFor/Fields'
 import {
   convertToWebInput,
   convertToServerInput
 } from '../components/BaseFields/WaitFor/helpers'
 
-interface Props {
-  index: number
-  step?: IBrandFlowStep
-  onDelete?: (data: IBrandFlowStep) => Promise<any>
-  onSubmit: (data: IBrandFlowStepInput, stepId?: UUID) => Promise<any>
-  onCancel: () => void
-}
-
 export default function EventForm({
   index,
   step,
+  disableEdit = false,
   onSubmit,
-  onCancel,
   onDelete
-}: Props) {
-  const commonClasses = useCommonStyles()
-
+}: BaseFormProps) {
   function getInitialValues(stepData?: IBrandFlowStep): EventFormData {
     if (!stepData || !stepData.event) {
       return {
@@ -94,56 +79,22 @@ export default function EventForm({
           <BaseFormLayout
             index={index}
             title="Reminder"
+            step={step || null}
+            disableEdit={disableEdit}
             submitting={submitting}
-            handleSubmit={handleSubmit}
+            onSubmit={handleSubmit}
+            onDelete={onDelete}
           >
-            sdfsd
+            <Box mb={2.5}>
+              <EventType />
+            </Box>
+            <Box mb={2}>
+              <Title />
+            </Box>
+            <Box mb={2}>
+              <Description />
+            </Box>
           </BaseFormLayout>
-        )
-
-        return (
-          <Box className={commonClasses.container}>
-            <form onSubmit={handleSubmit} noValidate>
-              <Box className={commonClasses.content}>
-                <Typography variant="subtitle1" className={commonClasses.title}>
-                  Add a reminder for
-                </Typography>
-                <Grid
-                  container
-                  direction="row"
-                  justify="flex-start"
-                  alignItems="flex-start"
-                >
-                  <Grid item xl={4} lg={4} md={6} sm={7} xs={12}>
-                    <Box mb={2.5}>
-                      <EventType />
-                    </Box>
-                    <Box mb={2}>
-                      <Title />
-                    </Box>
-                    <Box mb={2}>
-                      <Description />
-                    </Box>
-                    <Box mb={2}>
-                      <WaitFor />
-                    </Box>
-                    <Box mb={2}>
-                      <TriggerType />
-                    </Box>
-                    <Box>
-                      <Time />
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Box>
-              <ActionFooter
-                step={step || null}
-                isSubmiting={submitting}
-                onDelete={onDelete}
-                onCancel={onCancel}
-              />
-            </form>
-          </Box>
         )
       }}
     />

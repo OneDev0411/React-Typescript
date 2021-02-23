@@ -5,12 +5,14 @@ import {
   Grid,
   Button,
   Tooltip,
-  IconButton
+  IconButton,
+  MenuItem
 } from '@material-ui/core'
 
-import { mdiDrag } from '@mdi/js'
+import { mdiDotsVertical, mdiDrag } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { BaseDropdown } from 'components/BaseDropdown'
 
 import { WaitFor } from '../BaseFields/WaitFor'
 import { EventType } from '../BaseFields/EventType'
@@ -19,24 +21,29 @@ import { useStyles } from './styles'
 
 interface Props {
   index: number
-  title?: string
-  step?: IBrandFlowStep
+  title: string
+  step?: Nullable<IBrandFlowStep>
+  disableEdit: boolean
   submitting: boolean
   children: ReactNode
-  handleSubmit: () => void
+  onSubmit: () => void
+  onDelete?: (data: IBrandFlowStep) => Promise<any>
 }
 
 export const BaseFormLayout = ({
   index,
-  title = 'Step',
+  step,
+  title,
   children,
   submitting,
-  handleSubmit
+  disableEdit,
+  onSubmit,
+  onDelete
 }: Props) => {
   const classes = useStyles()
 
   return (
-    <form onSubmit={handleSubmit} className={classes.form} noValidate>
+    <form onSubmit={onSubmit} className={classes.form} noValidate>
       <Box className={classes.container}>
         <Box className={classes.header}>
           <Grid container alignItems="center" justify="space-between">
@@ -45,13 +52,13 @@ export const BaseFormLayout = ({
                 <Tooltip
                   title="Drag step to reorder"
                   aria-label="drag to reorder step"
-                  // hidden={disableEdit}
+                  hidden={disableEdit}
                 >
                   <SvgIcon path={mdiDrag} />
                 </Tooltip>
               </Box>
-              <Typography variant="body1" className={classes.title}>
-                {index}. {title}
+              <Typography variant="body1">
+                {index}. {title} {!step && '[Draft]'}
               </Typography>
             </Grid>
             <Grid container xs={6} justify="flex-end">
@@ -64,6 +71,35 @@ export const BaseFormLayout = ({
               >
                 {submitting ? 'Saving' : 'Save'}
               </Button>
+              {step && onDelete && (
+                <Box ml={1}>
+                  <BaseDropdown
+                    PopperProps={{
+                      placement: 'bottom-end'
+                    }}
+                    renderDropdownButton={buttonProps => (
+                      <IconButton {...buttonProps} size="small">
+                        <SvgIcon
+                          path={mdiDotsVertical}
+                          className={classes.moreBtn}
+                        />
+                      </IconButton>
+                    )}
+                    renderMenu={({ close }) => (
+                      <div>
+                        <MenuItem
+                          onClick={e => {
+                            close()
+                            onDelete(step)
+                          }}
+                        >
+                          <Typography color="error">Delete</Typography>
+                        </MenuItem>
+                      </div>
+                    )}
+                  />
+                </Box>
+              )}
             </Grid>
           </Grid>
         </Box>
@@ -83,7 +119,7 @@ export const BaseFormLayout = ({
             </Box>
           </Box>
         </Box>
-        {children}
+        <Box className={classes.otherFieldsContainer}>{children}</Box>
       </Box>
     </form>
   )

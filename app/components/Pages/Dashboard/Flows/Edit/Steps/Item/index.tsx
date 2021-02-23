@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box } from '@material-ui/core'
 
 import EventForm from '../New/EventForm'
@@ -34,8 +34,7 @@ export default function Item({
   onReviewEmailTemplateClick
 }: Props) {
   const commonClasses = useCommonStyles()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isEditing, setIsEditing] = useState<boolean>(false)
+  // const [isEditing, setIsEditing] = useState<boolean>(false)
 
   const renderEditForm = () => {
     if (!step) {
@@ -47,7 +46,7 @@ export default function Item({
         <EventForm
           index={index}
           step={step}
-          onCancel={() => setIsEditing(false)}
+          disableEdit={disableEdit}
           onSubmit={onUpdate}
           onDelete={() => onDelete(step)}
         />
@@ -59,10 +58,10 @@ export default function Item({
         <BasicEmailForm
           index={index}
           step={step}
-          onCancel={() => setIsEditing(false)}
+          disableEdit={disableEdit}
+          templates={emailTemplates}
           onSubmit={onUpdate}
           onDelete={() => onDelete(step)}
-          templates={emailTemplates}
           defaultSelectedTemplate={defaultSelectedEmailTemplate}
           onNewTemplateClick={onNewEmailTemplateClick}
           onReviewTemplateClick={onReviewEmailTemplateClick}
@@ -74,10 +73,10 @@ export default function Item({
       return (
         <MarketingEmailForm
           index={index}
-          onCancel={() => setIsEditing(false)}
+          step={step}
+          disableEdit={disableEdit}
           onSubmit={onUpdate}
           onDelete={() => onDelete(step)}
-          step={step}
         />
       )
     }
