@@ -32,7 +32,8 @@ export const CHANGE_IMAGE_TOOLBAR_BUTTON_NAME = `${IMAGE_TOOLBAR_BUTTONS_PREFIX}
 export const IMAGE_ELEMENT_TYPES: string[] = [
   'image',
   'mj-image',
-  'mj-carousel-image'
+  'mj-carousel-image',
+  'carousel-slide'
 ]
 
 export const BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES: string[] = [
