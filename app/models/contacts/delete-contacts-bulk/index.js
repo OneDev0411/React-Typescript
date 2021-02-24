@@ -7,7 +7,8 @@ export async function deleteContactsBulk({
   searchText = '',
   conditionOperator = 'and',
   filters = [],
-  excludes = []
+  excludes = [],
+  parked = true
 }) {
   try {
     const request = new Fetch().delete('/contacts/')
@@ -15,6 +16,8 @@ export async function deleteContactsBulk({
     request.query({
       filter_type: conditionOperator
     })
+
+    const cleanedSearchText = removeSpecialCharacters(searchText)
 
     const payload = {
       filters: filters.map(({ attribute_def, invert, operator, value }) => ({
@@ -25,10 +28,13 @@ export async function deleteContactsBulk({
       })),
       excludes
     }
-    const cleanedSearchText = removeSpecialCharacters(searchText)
 
     if (cleanedSearchText.length > 0) {
       payload.query = cleanedSearchText
+    } else {
+      // we're doing this because when we have search
+      // value we show all type of contact
+      payload.parked = parked
     }
 
     if (users.length > 0) {
