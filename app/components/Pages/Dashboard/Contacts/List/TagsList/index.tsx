@@ -6,7 +6,6 @@ import {
   ListItemText,
   createStyles,
   makeStyles,
-  fade,
   Theme
 } from '@material-ui/core'
 
@@ -60,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'inline-block'
     },
     untag: {
-      borderBottom: `1px solid ${fade(theme.palette.tertiary.dark, 0.12)}`
+      borderBottom: `1px solid ${theme.palette.divider}`
     }
   })
 )
