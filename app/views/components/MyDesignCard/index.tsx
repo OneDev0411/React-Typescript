@@ -17,14 +17,26 @@ import { MEDIUM_LABEL_MAP } from '../../../components/Pages/Dashboard/Marketing/
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
+    '@keyframes scrollPositionAnimation': {
+      from: {
+        objectPosition: '0 0%'
+      },
+      to: {
+        objectPosition: '0 100%'
+      }
+    },
     card: {
       minHeight: 350
     },
     media: {
       height: 200,
       width: '100%',
-      objectFit: 'contain',
-      background: theme.palette.grey[100]
+      objectFit: 'cover',
+      objectPosition: '0 0',
+      background: theme.palette.grey[100],
+      '&:hover': {
+        animation: '10s linear infinite alternate $scrollPositionAnimation'
+      }
     }
   }),
   {
