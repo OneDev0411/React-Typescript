@@ -3,9 +3,10 @@ import { Grid } from '@material-ui/core'
 
 import SentEmailsSection from './SentEmailsSection'
 import MyDesignsSection from './MyDesignsSection'
+import UpcomingBirthdaysAndAnniversariesSection from './UpcomingBirthdaysAndAnniversariesSection'
 import PromoteListingsSection from './PromoteListingsSection'
 import NewsletterBannerSection from './NewsletterBannerSection'
-import UpcomingBirthdaysAndAnniversariesSection from './UpcomingBirthdaysAndAnniversariesSection'
+import SomethingToShareSection from './SomethingToShareSection'
 
 export default function Sections() {
   return (
@@ -14,8 +15,9 @@ export default function Sections() {
         <SentEmailsSection />
         <MyDesignsSection />
         <UpcomingBirthdaysAndAnniversariesSection />
-        <NewsletterBannerSection />
         <PromoteListingsSection />
+        <NewsletterBannerSection />
+        <SomethingToShareSection />
       </Grid>
     </Grid>
   )

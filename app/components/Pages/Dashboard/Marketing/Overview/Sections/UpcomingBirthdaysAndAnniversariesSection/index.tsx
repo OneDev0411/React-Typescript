@@ -11,8 +11,6 @@ import { useBirthdaysAndAnniversaries } from './hooks'
 export default function UpcomingBirthdaysAndAnniversariesSection() {
   const { isLoading, events } = useBirthdaysAndAnniversaries()
 
-  console.log({ events })
-
   return (
     <SectionLayout
       title="Upcoming Birthdays and Anniversaries"
