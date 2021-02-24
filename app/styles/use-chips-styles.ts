@@ -12,7 +12,7 @@ export const useChipStyles = makeStyles(
       },
       dark: {
         '&.MuiChip-root': {
-          backgroundColor: fade(theme.palette.common.black, 0.12)
+          backgroundColor: theme.palette.divider
         },
         '& .MuiChip-deleteIcon': {
           color: theme.palette.grey[600],

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import cn from 'classnames'
 import { makeStyles, useTheme } from '@material-ui/core'
@@ -7,13 +7,14 @@ import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import { Table } from 'components/Grid/Table'
 
+import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import { useGridStyles } from 'components/Grid/Table/styles'
+import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
 import { goTo } from 'utils/go-to'
 
 import { TableActions } from './Actions'
 
-import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 
 import { LoadingComponent } from './components/LoadingComponent'
@@ -52,16 +53,24 @@ const useCustomGridStyles = makeStyles(theme => ({
 }))
 
 const ContactsList = props => {
+  const [state, dispatch] = useGridContext()
   const gridClasses = useGridStyles()
   const customGridClasses = useCustomGridStyles()
-  const [selectedTagContact, setSelectedTagContact] = useState([])
   const theme = useTheme()
   const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
+  const resetSelectedRow = () => {
+    const {
+      selection: { selectedRowIds, isAllRowsSelected, isEntireRowsSelected }
+    } = state
 
-  const onSelectTagContact = selectedTagContact =>
-    setSelectedTagContact([selectedTagContact])
-
-  const closeTagsOverlay = () => setSelectedTagContact([])
+    if (
+      selectedRowIds.length > 0 ||
+      isAllRowsSelected ||
+      isEntireRowsSelected
+    ) {
+      dispatch(resetRows())
+    }
+  }
 
   const columns = [
     {
@@ -76,7 +85,9 @@ const ContactsList = props => {
       primary: true,
       width: '12%',
       class: 'visible-on-hover',
-      render: ({ row: contact }) => <CtaAction contact={contact} />
+      render: ({ row: contact }) => {
+        return !contact?.parked ? <CtaAction contact={contact} /> : null
+      }
     },
     {
       id: 'last_touched',
@@ -93,7 +104,10 @@ const ContactsList = props => {
       render: ({ row: contact }) => (
         <FlowCell
           contactId={contact.id}
-          callback={props.reloadContacts}
+          callback={() => {
+            resetSelectedRow()
+            props.reloadContacts()
+          }}
           flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
         />
       )
@@ -103,7 +117,11 @@ const ContactsList = props => {
       width: !isParkTabActive ? '34%' : '22%',
       class: 'opaque tags',
       render: ({ row: contact }) => (
-        <TagsString contact={contact} onSelectTagContact={onSelectTagContact} />
+        <TagsString
+          contact={contact}
+          reloadContacts={props.reloadContacts}
+          isParkTabActive={isParkTabActive}
+        />
       )
     },
     {
@@ -113,7 +131,10 @@ const ContactsList = props => {
         return contact?.parked ? (
           <UnparkContact
             contactId={contact.id}
-            callback={props.reloadContacts}
+            callback={() => {
+              resetSelectedRow()
+              props.reloadContacts()
+            }}
           />
         ) : null
       }
@@ -211,13 +232,6 @@ const ContactsList = props => {
         EmptyStateComponent={() => (
           <NoSearchResults description="Try typing another name, email, phone or tag." />
         )}
-      />
-
-      <TagsOverlay
-        closeOverlay={closeTagsOverlay}
-        isOpen={selectedTagContact.length > 0}
-        selectedContactsIds={selectedTagContact}
-        handleChangeContactsAttributes={props.handleChangeContactsAttributes}
       />
     </>
   )
