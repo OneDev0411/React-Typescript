@@ -46,8 +46,10 @@ class Dashboard extends Component {
     }
 
     if (typeof window !== 'undefined') {
-      window.Intercom &&
+      if (window.Intercom) {
+        window.Intercom('hide')
         window.Intercom('onShow', () => dispatch(activeIntercom()))
+      }
 
       if (!('WebkitAppearance' in document.documentElement.style)) {
         import('simplebar')
