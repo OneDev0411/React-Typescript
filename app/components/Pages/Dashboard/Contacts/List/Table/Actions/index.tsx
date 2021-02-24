@@ -17,7 +17,7 @@ import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import Email from '../../Actions/Email'
 import MergeContacts from '../../Actions/MergeContacts'
 import ExportContacts from '../../Actions/ExportContactsButton'
-import TagContacts from '../../Actions/TagContacts'
+import { TagContacts } from '../../Actions/TagContacts'
 import CreateEvent from '../../Actions/CreateEvent'
 import AddToFlowAction from '../../Actions/AddToFlow'
 import { UnparkContacts } from '../../Actions/UnparkContacts'
@@ -108,30 +108,28 @@ const RawTableActions = ({
     ? isAllRowsSelected || isTwoSelected
     : isAllRowsSelected && isTwoSelected)
   const isParkedActive = activeSegmentId === PARKED_CONTACTS_LIST_ID
+
   const getSummeryInfo = () => {
-    let selectedCount
+    const selectedCount = isEntireRowsSelected
+      ? totalRowsCount - excludedRows.length
+      : selectedRowIds.length
 
-    if (isEntireRowsSelected) {
-      selectedCount = totalRowsCount - excludedRows.length
-    } else if (selectedRowIds.length > 0) {
-      selectedCount = selectedRowIds.length
+    if (selectedCount === 0) {
+      return null
     }
 
-    if (selectedCount) {
-      return (
-        <Box className={classes.summery}>
-          <Typography variant="subtitle2" className={classes.selectedCount}>
-            {selectedCount}
-          </Typography>
-          <Typography variant="body2">
-            {pluralize('Contact', selectedCount)} selected
-          </Typography>
-        </Box>
-      )
-    }
-
-    return null
+    return (
+      <Box className={classes.summery}>
+        <Typography variant="subtitle2" className={classes.selectedCount}>
+          {selectedCount}
+        </Typography>
+        <Typography variant="body2">
+          {pluralize('Contact', selectedCount)} selected
+        </Typography>
+      </Box>
+    )
   }
+
   const deselectRows = () => dispatch(resetRows())
   const deselectAndReload = () => {
     deselectRows()
@@ -164,14 +162,16 @@ const RawTableActions = ({
         <TagContacts
           disabled={isAllDisable}
           entireMode={isEntireRowsSelected}
-          totalRowsCount={totalRowsCount}
+          isParkedActive={isParkedActive}
           excludedRows={excludedRows}
           selectedRows={selectedRowIds}
-          filters={filters.attributeFilters}
-          searchText={filters.query}
-          conditionOperator={filters.filter_type}
-          users={filters.users}
-          resetSelectedRows={deselectAndReload}
+          attributeFilters={filters?.attributeFilters}
+          searchText={filters?.text}
+          conditionOperator={filters?.filter_type}
+          users={filters?.users}
+          crm_tasks={filters?.crm_tasks}
+          flows={filters?.flows}
+          resetSelectedRows={deselectRows}
           handleChangeContactsAttributes={handleChangeContactsAttributes}
         />
       </ActionWrapper>

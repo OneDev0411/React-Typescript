@@ -80,6 +80,7 @@ declare interface IContact extends IContactBase {
   partner_last_name: string | null
   partner_name: string | null
 
+  tags: Nullable<string[]>
   attributes?: IContactAttribute[]
   users: IUser[]
   deals?: IDeal[]
@@ -218,6 +219,8 @@ declare interface IContactFilterOptions {
   lists?: UUID[]
   users?: UUID[]
   filter_type?: TContactFilterType
+  parked?: boolean
+  query?: string
 }
 
 declare interface ICSVImporterMappingDef {
