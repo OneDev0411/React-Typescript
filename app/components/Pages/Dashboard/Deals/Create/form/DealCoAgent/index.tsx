@@ -52,13 +52,6 @@ const useStyles = makeStyles(
     },
     searchInput: {
       padding: theme.spacing(1.5)
-    },
-    roleContainer: {
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius,
-      borderBottomRightRadius: 0,
-      padding: theme.spacing(2),
-      marginTop: theme.spacing(1)
     }
   }),
   {
@@ -129,20 +122,19 @@ export function DealCoAgent({
 
       <QuestionForm width={selectedRole ? '80%' : '50%'}>
         {selectedRole ? (
-          <div className={classes.roleContainer}>
-            <DealRole
-              isOpen
-              deal={deal}
-              user={user}
-              dealSide={side}
-              form={selectedRole}
-              allowedRoles={allowedRoles}
-              isCommissionRequired={isCommissionRequired}
-              onUpsertRole={handleUpsertRole}
-              onDeleteRole={handleDeleteRole}
-              onClose={() => setSelectedRole(null)}
-            />
-          </div>
+          <DealRole
+            isOpen
+            compact
+            deal={deal}
+            user={user}
+            dealSide={side}
+            form={selectedRole}
+            allowedRoles={allowedRoles}
+            isCommissionRequired={isCommissionRequired}
+            onUpsertRole={handleUpsertRole}
+            onDeleteRole={handleDeleteRole}
+            onClose={() => setSelectedRole(null)}
+          />
         ) : (
           <Box display="flex" flexWrap="wrap">
             {agentRoles.map(role => (

@@ -1,7 +1,9 @@
 import React from 'react'
 
-import { Box, RadioGroup, Radio, FormControlLabel } from '@material-ui/core'
+import { Tabs } from '@material-ui/core'
 import { Field } from 'react-final-form'
+
+import { Tab } from 'components/PageTabs/Tab'
 
 import { TYPE_PERSON, TYPE_COMPANY } from '../../../constants/role-types'
 
@@ -16,25 +18,16 @@ export function TypeInput(props: Props) {
     <Field
       name={props.name}
       render={({ input }) => (
-        <RadioGroup
-          aria-label="commission"
-          name="commission"
+        <Tabs
           value={input.value || TYPE_PERSON}
+          indicatorColor="primary"
+          textColor="primary"
           onChange={(_, value) => input.onChange(value)}
+          aria-label="disabled tabs example"
         >
-          <Box display="flex">
-            <FormControlLabel
-              value={TYPE_PERSON}
-              control={<Radio color="primary" />}
-              label="Person"
-            />
-            <FormControlLabel
-              value={TYPE_COMPANY}
-              control={<Radio color="primary" />}
-              label="Company / Trust"
-            />
-          </Box>
-        </RadioGroup>
+          <Tab label="Person" value={TYPE_PERSON} />
+          <Tab label="Company / Trust" value={TYPE_COMPANY} />
+        </Tabs>
       )}
     />
   )

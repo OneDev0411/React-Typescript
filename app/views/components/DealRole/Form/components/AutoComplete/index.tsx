@@ -87,6 +87,7 @@ export function AutoComplete({
   return (
     <Autocomplete
       disableClearable
+      freeSolo
       open={isOpen}
       onOpen={() => setIsOpen(true)}
       onClose={() => setIsOpen(false)}
@@ -116,7 +117,6 @@ export function AutoComplete({
             label={label}
             variant="outlined"
             error={!!error}
-            helperText={error}
             InputProps={{
               ...props.InputProps,
               endAdornment: (

@@ -41,6 +41,7 @@ const propTypes = {
   isRoleRemovable: PropTypes.bool,
   isCommissionRequired: PropTypes.bool,
   showBrokerageFields: PropTypes.bool,
+  compact: PropTypes.bool,
   onUpsertRole: PropTypes.func,
   onDeleteRole: PropTypes.func
 }
@@ -51,6 +52,7 @@ const defaultProps = {
   isRoleRemovable: false,
   isCommissionRequired: true,
   showBrokerageFields: false,
+  compact: false,
   allowedRoles: [],
   onUpsertRole: () => null,
   onDeleteRole: () => null
@@ -271,8 +273,6 @@ export class DealRole extends React.Component {
       })
     )
 
-    // console.log('ERR' errors)
-
     return errors
   }
 
@@ -401,6 +401,7 @@ export class DealRole extends React.Component {
             ...formProps,
             initialValues: this.formObject,
             deal: this.props.deal,
+            compact: this.props.compact,
             isSubmitting: this.state.isSaving,
             onSubmit: this.handleSubmit,
             onClose: this.handleClose

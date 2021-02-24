@@ -2,6 +2,7 @@ import React from 'react'
 import { Field } from 'react-final-form'
 
 import {
+  Grid,
   Box,
   TextField,
   Radio,
@@ -12,16 +13,17 @@ import {
 interface Props {
   isVisible: boolean
   isRequired: boolean
+  compact: boolean
 }
 
-export function CommissionInput({ isVisible, isRequired }: Props) {
+export function CommissionInput({ isVisible, isRequired, compact }: Props) {
   if (!isVisible) {
     return null
   }
 
   return (
-    <Box display="flex">
-      <Box width="49%" mr="2%">
+    <>
+      <Grid item xs={12} md={compact ? 12 : true}>
         <Field
           name="commission"
           parse={value => (!value ? value : value.replace(/[^0-9.]/g, ''))}
@@ -30,8 +32,7 @@ export function CommissionInput({ isVisible, isRequired }: Props) {
               {...input}
               fullWidth
               size="small"
-              error={meta.error}
-              helperText={meta.error}
+              error={meta.error || (isRequired && !input.value)}
               label={`Commission${isRequired ? ' *' : ''}`}
               variant="outlined"
               autoComplete="off"
@@ -42,9 +43,9 @@ export function CommissionInput({ isVisible, isRequired }: Props) {
             />
           )}
         />
-      </Box>
+      </Grid>
 
-      <Box width="49%">
+      <Grid item xs={12} md={compact ? 12 : true}>
         <Field
           name="commission_type"
           render={({ input }) => (
@@ -69,7 +70,7 @@ export function CommissionInput({ isVisible, isRequired }: Props) {
             </RadioGroup>
           )}
         />
-      </Box>
-    </Box>
+      </Grid>
+    </>
   )
 }

@@ -27,7 +27,7 @@ export function AutoCompleteInput({
   return (
     <AutoComplete
       label={`${label}${isRequired ? ' *' : ''}`}
-      error={meta.submitFailed && meta.error}
+      error={meta.error || (isRequired && !input.value)}
       value={input.value}
       options={options}
       onChange={option => input.onChange(option.value)}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Theme, makeStyles } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import { useDispatch } from 'react-redux'
 
@@ -24,20 +24,6 @@ import { ContactRoles } from '../../components/ContactRoles'
 import { AgentsList } from './AgentsList'
 
 import type { IDealFormRole } from '../../types'
-
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    roleContainer: {
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius,
-      borderBottomRightRadius: 0,
-      padding: theme.spacing(2)
-    }
-  }),
-  {
-    name: 'CreateDeal-PrimaryAgent'
-  }
-)
 
 interface Props {
   title: string
@@ -65,7 +51,6 @@ export function DealPrimaryAgent({
   const { deal, user } = useCreationContext()
 
   const dispatch = useDispatch()
-  const classes = useStyles()
 
   const [selectedRole, setSelectedRole] = useState<
     Nullable<Partial<IDealFormRole>>
@@ -115,22 +100,21 @@ export function DealPrimaryAgent({
     <QuestionSection disabled={!!deal}>
       <QuestionTitle>{title}</QuestionTitle>
 
-      <QuestionForm width={selectedRole ? '80%' : '50%'}>
+      <QuestionForm>
         {selectedRole ? (
-          <Box mt={1} className={classes.roleContainer}>
-            <DealRole
-              isOpen
-              deal={deal}
-              user={user}
-              dealSide={side}
-              form={selectedRole}
-              allowedRoles={allowedRoles}
-              isCommissionRequired={isCommissionRequired}
-              onUpsertRole={handleUpsertRole}
-              onDeleteRole={handleDeleteRole}
-              onClose={() => setSelectedRole(null)}
-            />
-          </Box>
+          <DealRole
+            isOpen
+            compact
+            deal={deal}
+            user={user}
+            dealSide={side}
+            form={selectedRole}
+            allowedRoles={allowedRoles}
+            isCommissionRequired={isCommissionRequired}
+            onUpsertRole={handleUpsertRole}
+            onDeleteRole={handleDeleteRole}
+            onClose={() => setSelectedRole(null)}
+          />
         ) : (
           <Box display="flex" flexWrap="wrap">
             {agentRoles.map(role => (

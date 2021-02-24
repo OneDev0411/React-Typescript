@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 
 import {
   Box,
+  Grid as MuiGrid,
   Button as MuiButton,
   Divider,
-  Typography
+  Typography,
+  Hidden
 } from '@material-ui/core'
 import { spacing } from '@material-ui/system'
 import { styled } from '@material-ui/core/styles'
@@ -40,12 +42,7 @@ import { getAutocompleteOptions } from '../helpers/get-autocomplete-options'
 import { TYPE_PERSON } from '../constants/role-types'
 
 const Button = styled(MuiButton)(spacing)
-
-const ICON_CONTAINER_SIZE = 1
-const FIELDS_CONTAINER_SIZE = 12
-const ROW_MARGIN = 3
-const COLUMN_GUTTER = '2%'
-const COLUMN_WIDTH = '49%'
+const Grid = styled(MuiGrid)(spacing)
 
 export function RoleForm(props) {
   const [showNameDetails, setShowNameDetails] = useState(false)
@@ -59,30 +56,87 @@ export function RoleForm(props) {
 
   const selectedRole = props.values.role
   const roleType = props.values.role_type
+  const compact = props.compact
 
   return (
-    <>
-      <Typography variant="h6">
-        Add {selectedRole ? roleName(selectedRole) : ' New Role'}
-      </Typography>
+    <Grid
+      container
+      style={{
+        flexGrow: 1
+      }}
+      spacing={2}
+    >
+      <Grid item xs={12}>
+        <Typography variant="h6">
+          Add {selectedRole ? roleName(selectedRole) : ' New Role'}
+        </Typography>
+      </Grid>
 
-      <Box display="flex" mt={ROW_MARGIN}>
-        <Box flex={ICON_CONTAINER_SIZE} />
+      <Grid item xs={12} mt={1} mb={1}>
+        <TypeInput
+          name="role_type"
+          label="Type"
+          selectedValue={props.values.role_type}
+        />
+      </Grid>
 
-        <Box flex={FIELDS_CONTAINER_SIZE}>
-          <TypeInput
-            name="role_type"
-            label="Type"
-            selectedValue={props.values.role_type}
-          />
-        </Box>
-      </Box>
+      {roleType === TYPE_PERSON && (
+        <>
+          {showNameDetails ? (
+            <Grid container xs spacing={2} alignItems="center" mt={1}>
+              {!compact && (
+                <Hidden smDown>
+                  <Grid item md={1}>
+                    <SvgIcon path={mdiAccountCircleOutline} />
+                  </Grid>
+                </Hidden>
+              )}
 
-      <Box display="flex" mt={ROW_MARGIN}>
-        <Box display="flex" flex={ICON_CONTAINER_SIZE} alignItems="center">
-          <SvgIcon path={mdiFormatListChecks} />
-        </Box>
-        <Box flex={FIELDS_CONTAINER_SIZE}>
+              <Grid item md={compact ? 12 : true} xs={12}>
+                <Field
+                  name="legal_prefix"
+                  component={TitleInput}
+                  isVisible={isVisible('title')}
+                />
+              </Grid>
+              <Grid item md={compact ? 12 : true} xs={12}>
+                <Field
+                  name="legal_middle_name"
+                  label="Mid. Name"
+                  isVisible={isVisible('legal_middle_name')}
+                  component={TextInput}
+                />
+              </Grid>
+            </Grid>
+          ) : (
+            <Grid container xs spacing={2} alignItems="center">
+              {!compact && (
+                <Hidden smDown>
+                  <Grid item md={1}>
+                    &nbsp;
+                  </Grid>
+                </Hidden>
+              )}
+              <Grid item md xs={12}>
+                <MuiButton onClick={() => setShowNameDetails(true)}>
+                  Add title and middle name
+                </MuiButton>
+              </Grid>
+            </Grid>
+          )}
+        </>
+      )}
+
+      <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
+        {!compact && (
+          <Hidden smDown>
+            <Grid item md={1}>
+              <SvgIcon path={mdiFormatListChecks} />
+            </Grid>
+          </Hidden>
+        )}
+
+        <Grid item md={compact ? 12 : true} xs={12}>
           <Field
             name="role"
             label="Role"
@@ -90,174 +144,143 @@ export function RoleForm(props) {
             isAllowedRole={props.isAllowedRole}
             component={Roles}
           />
-        </Box>
-      </Box>
+        </Grid>
+
+        <Grid item md={compact ? 12 : true} xs={12} />
+      </Grid>
 
       {roleType === TYPE_PERSON && (
-        <Box display="flex" mt={ROW_MARGIN}>
-          <Box display="flex" flex={ICON_CONTAINER_SIZE} alignItems="center">
-            <SvgIcon path={mdiAccountCircleOutline} />
-          </Box>
+        <Grid container xs spacing={2} alignItems="center" mt={1}>
+          {!compact && (
+            <Hidden smDown>
+              <Grid item md={1}>
+                <SvgIcon path={mdiAccountCircleOutline} />
+              </Grid>
+            </Hidden>
+          )}
 
-          <Box display="flex" flex={FIELDS_CONTAINER_SIZE}>
-            <Box width={COLUMN_WIDTH} mr={COLUMN_GUTTER}>
-              <Field
-                name="legal_first_name"
-                searchFieldValue="first_name"
-                searchFieldLabel="display_name"
-                label="First Name"
-                isVisible={isVisible('legal_first_name')}
-                isRequired={isRequired('legal_first_name')}
-                crmSearch={!isVisible('mls_id')}
-                mutators={props.form.mutators}
-                component={NameInput}
-              />
-            </Box>
+          <Grid item md={compact ? 12 : true} xs={12}>
+            <Field
+              name="legal_first_name"
+              searchFieldValue="first_name"
+              searchFieldLabel="display_name"
+              label="First Name"
+              isVisible={isVisible('legal_first_name')}
+              isRequired={isRequired('legal_first_name')}
+              crmSearch={!isVisible('mls_id')}
+              mutators={props.form.mutators}
+              component={NameInput}
+            />
+          </Grid>
 
-            <Box width={COLUMN_WIDTH}>
-              <Field
-                name="legal_last_name"
-                searchFieldValue="last_name"
-                searchFieldLabel="display_name"
-                label="Last Name"
-                isVisible={isVisible('legal_last_name')}
-                isRequired={isRequired('legal_last_name')}
-                crmSearch={!isVisible('mls_id')}
-                component={NameInput}
-                mutators={props.form.mutators}
-              />
-            </Box>
-          </Box>
-        </Box>
+          <Grid item md={compact ? 12 : true} xs={12}>
+            <Field
+              name="legal_last_name"
+              searchFieldValue="last_name"
+              searchFieldLabel="display_name"
+              label="Last Name"
+              isVisible={isVisible('legal_last_name')}
+              isRequired={isRequired('legal_last_name')}
+              crmSearch={!isVisible('mls_id')}
+              component={NameInput}
+              mutators={props.form.mutators}
+            />
+          </Grid>
+        </Grid>
       )}
 
-      <Box mt={roleType === TYPE_PERSON ? ROW_MARGIN : 0}>
-        {showNameDetails ? (
-          <Box display="flex">
-            <Box display="flex" flex={ICON_CONTAINER_SIZE} alignItems="center">
-              <SvgIcon path={mdiAccountCircleOutline} />
-            </Box>
-
-            <Box display="flex" flex={FIELDS_CONTAINER_SIZE}>
-              <Box width={COLUMN_WIDTH} mr={COLUMN_GUTTER}>
-                <Field
-                  name="legal_prefix"
-                  component={TitleInput}
-                  isVisible={isVisible('title')}
-                />
-              </Box>
-
-              <Box width={COLUMN_WIDTH}>
-                <Field
-                  name="legal_middle_name"
-                  label="Mid. Name"
-                  isVisible={isVisible('legal_middle_name')}
-                  component={TextInput}
-                />
-              </Box>
-            </Box>
-          </Box>
-        ) : (
-          <Box display="flex">
-            <Box flex={ICON_CONTAINER_SIZE} />
-            <Box flex={FIELDS_CONTAINER_SIZE}>
-              <MuiButton
-                color="secondary"
-                onClick={() => setShowNameDetails(true)}
-              >
-                Add title and middle name
-              </MuiButton>
-            </Box>
-          </Box>
-        )}
-      </Box>
-
       {(isVisible('company_title') || isVisible('mls_id')) && (
-        <Box display="flex" mt={ROW_MARGIN}>
-          <Box display="flex" flex={ICON_CONTAINER_SIZE} alignItems="center">
-            <SvgIcon path={mdiHomeCityOutline} />
-          </Box>
+        <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
+          {!compact && (
+            <Hidden smDown>
+              <Grid item md={1}>
+                <SvgIcon path={mdiHomeCityOutline} />
+              </Grid>
+            </Hidden>
+          )}
 
-          <Box display="flex" flex={FIELDS_CONTAINER_SIZE}>
-            <Box width={COLUMN_WIDTH} mr={COLUMN_GUTTER}>
-              <Field
-                name="company_title"
-                label="Company / Trust"
-                searchFieldValue="company"
-                searchFieldLabel="company"
-                isVisible={isVisible('company_title')}
-                isRequired={isRequired('company_title')}
-                component={NameInput}
-                crmSearch // always search company in crm contacts
-                mutators={props.form.mutators}
-              />
-            </Box>
-
-            <Box width={COLUMN_WIDTH}>
-              <Field
-                name="mls_id"
-                label="MLS ID"
-                isVisible={isVisible('mls_id')}
-                mutators={props.form.mutators}
-                component={MlsInput}
-              />
-            </Box>
-          </Box>
-        </Box>
+          <Grid item md={compact ? 12 : true} xs={12}>
+            <Field
+              name="company_title"
+              label="Company / Trust"
+              searchFieldValue="company"
+              searchFieldLabel="company"
+              isVisible={isVisible('company_title')}
+              isRequired={isRequired('company_title')}
+              component={NameInput}
+              crmSearch // always search company in crm contacts
+              mutators={props.form.mutators}
+            />
+          </Grid>
+          <Grid item md={compact ? 12 : true} xs={12}>
+            <Field
+              name="mls_id"
+              label="MLS ID"
+              isVisible={isVisible('mls_id')}
+              mutators={props.form.mutators}
+              component={MlsInput}
+            />
+          </Grid>
+        </Grid>
       )}
 
       {(isVisible('email') || isVisible('phone_number')) && (
-        <Box display="flex" mt={ROW_MARGIN}>
-          <Box display="flex" flex={ICON_CONTAINER_SIZE} alignItems="center">
-            <SvgIcon path={mdiCardAccountMailOutline} />
-          </Box>
+        <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
+          {!compact && (
+            <Hidden smDown>
+              <Grid item md={1}>
+                <SvgIcon path={mdiCardAccountMailOutline} />
+              </Grid>
+            </Hidden>
+          )}
 
-          <Box display="flex" flex={FIELDS_CONTAINER_SIZE}>
-            <Box width={COLUMN_WIDTH} mr={COLUMN_GUTTER}>
-              <Field
-                name="email"
-                label="Email"
-                isVisible={isVisible('email')}
-                isRequired={isRequired('email')}
-                options={getAutocompleteOptions(props.values, 'emails')}
-                component={AutoCompleteInput}
-              />
-            </Box>
-
-            <Box width={COLUMN_WIDTH}>
-              <Field
-                name="phone_number"
-                label="Phone"
-                isVisible={isVisible('phone_number')}
-                isRequired={isRequired('phone_number')}
-                component={AutoCompleteInput}
-                options={getAutocompleteOptions(props.values, 'phone_numbers')}
-              />
-            </Box>
-          </Box>
-        </Box>
+          <Grid item md={compact ? 12 : true} xs={12}>
+            <Field
+              name="email"
+              label="Email"
+              isVisible={isVisible('email')}
+              isRequired={isRequired('email')}
+              options={getAutocompleteOptions(props.values, 'emails')}
+              component={AutoCompleteInput}
+            />
+          </Grid>
+          <Grid item md={compact ? 12 : true} xs={12}>
+            <Field
+              name="phone_number"
+              label="Phone"
+              isVisible={isVisible('phone_number')}
+              isRequired={isRequired('phone_number')}
+              component={AutoCompleteInput}
+              options={getAutocompleteOptions(props.values, 'phone_numbers')}
+            />
+          </Grid>
+        </Grid>
       )}
 
       {isVisible('current_address') && (
-        <Box display="flex" mt={ROW_MARGIN}>
-          <Box display="flex" flex={ICON_CONTAINER_SIZE} alignItems="center">
-            <SvgIcon path={mdiMapMarkerOutline} />
-          </Box>
+        <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
+          {!compact && (
+            <Hidden smDown>
+              <Grid item md={1}>
+                <SvgIcon path={mdiMapMarkerOutline} />
+              </Grid>
+            </Hidden>
+          )}
 
-          <Box flex={FIELDS_CONTAINER_SIZE}>
+          <Grid item md={compact ? 12 : true} xs={12}>
             <Field
               name="current_address"
               label="Current Address"
               isVisible={isVisible('current_address')}
               component={Address}
             />
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
       )}
 
       {isVisible('commission') && (
         <>
-          <Box my={2}>
+          <Box mt={2}>
             {selectedRole && (
               <Typography variant="h6">
                 {roleName(selectedRole)}'s Commission
@@ -265,78 +288,83 @@ export function RoleForm(props) {
             )}
           </Box>
 
-          <Box display="flex" mt={ROW_MARGIN}>
-            <Box display="flex" flex={ICON_CONTAINER_SIZE} alignItems="center">
-              <SvgIcon path={mdiTicketPercentOutline} />
-            </Box>
+          <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
+            {!compact && (
+              <Hidden smDown>
+                <Grid item md={1}>
+                  <SvgIcon path={mdiTicketPercentOutline} />
+                </Grid>
+              </Hidden>
+            )}
 
-            <Box flex={FIELDS_CONTAINER_SIZE}>
-              <CommissionInput
-                isVisible={isVisible('commission')}
-                isRequired={isRequired('commission')}
-              />
-            </Box>
-          </Box>
+            <CommissionInput
+              compact={compact}
+              isVisible={isVisible('commission')}
+              isRequired={isRequired('commission')}
+            />
+          </Grid>
         </>
       )}
 
-      <Box my={2}>
+      <Grid item xs={12} mt={1}>
         <Divider />
-      </Box>
+      </Grid>
 
-      <Box display="flex" justifyContent="space-between">
-        <Box display="flex">
-          {props.isRoleRemovable && (
-            <DeleteRole
-              deal={props.deal}
-              role={props.initialValues}
-              onDeleteRole={props.onDeleteRole}
-            />
-          )}
+      <Grid item xs={12} mt={1}>
+        <Box display="flex" justifyContent="space-between">
+          <Box display="flex">
+            {props.isRoleRemovable && (
+              <DeleteRole
+                deal={props.deal}
+                role={props.initialValues}
+                onDeleteRole={props.onDeleteRole}
+              />
+            )}
 
-          {props.values.contact && (
-            <Button
-              href={`/dashboard/contacts/${props.values.contact.id}`}
-              target="_blank"
-            >
-              Open Contact Profile
-            </Button>
-          )}
-        </Box>
-
-        <Box alignCenter textAlign="right">
-          <Button onClick={props.onClose}>Cancel</Button>
-
-          {props.isSubmitting ? (
-            <Button>{props.isNewRecord ? 'Saving...' : 'Updating...'}</Button>
-          ) : (
-            <>
+            {props.values.contact && (
               <Button
-                ml={1}
-                variant={showSaveContactButton ? 'outlined' : 'contained'}
-                color={showSaveContactButton ? 'secondary' : 'primary'}
-                onClick={() => props.onSubmit(props.form, false)}
+                href={`/dashboard/contacts/${props.values.contact.id}`}
+                target="_blank"
               >
-                Save
+                Open Contact Profile
               </Button>
+            )}
+          </Box>
 
-              {showSaveContactButton && (
+          <Box alignCenter textAlign="right">
+            <Button onClick={props.onClose}>Cancel</Button>
+
+            {props.isSubmitting ? (
+              <Button>{props.isNewRecord ? 'Saving...' : 'Updating...'}</Button>
+            ) : (
+              <>
                 <Button
                   ml={1}
-                  variant="contained"
-                  color="primary"
-                  onClick={() => props.onSubmit(props.form, true)}
+                  variant={showSaveContactButton ? 'outlined' : 'contained'}
+                  color={showSaveContactButton ? 'secondary' : 'primary'}
+                  onClick={() => props.onSubmit(props.form, false)}
                 >
-                  Save &{' '}
-                  {props.values.contact
-                    ? 'Update Contact'
-                    : 'Add to My Contacts'}
+                  Save
                 </Button>
-              )}
-            </>
-          )}
+
+                {showSaveContactButton && (
+                  <Button
+                    ml={1}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => props.onSubmit(props.form, true)}
+                  >
+                    Save &{' '}
+                    {props.values.contact
+                      ? 'Update Contact'
+                      : 'Add to My Contacts'}
+                  </Button>
+                )}
+              </>
+            )}
+          </Box>
         </Box>
-      </Box>
-    </>
+      </Grid>
+    </Grid>
   )
 }

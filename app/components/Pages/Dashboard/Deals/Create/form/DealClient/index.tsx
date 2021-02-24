@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Button, makeStyles, Theme } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
 import { deleteRole } from 'actions/deals'
@@ -24,21 +24,6 @@ import { BUYER_ROLES, SELLER_ROLES } from '../../helpers/roles'
 
 import type { IDealFormRole } from '../../types'
 
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    roleContainer: {
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius,
-      borderBottomRightRadius: 0,
-      padding: theme.spacing(2),
-      marginTop: theme.spacing(1)
-    }
-  }),
-  {
-    name: 'CreateDeal-CreateClient'
-  }
-)
-
 interface Props {
   title: string
   side: IDealType
@@ -59,7 +44,6 @@ export function DealClient({
   const { step } = useSectionContext()
 
   const dispatch = useDispatch()
-  const classes = useStyles()
 
   const allowedRoles = getRoles(side)
   const clientRoles = roles.filter(client => allowedRoles.includes(client.role))
@@ -106,20 +90,19 @@ export function DealClient({
 
       <QuestionForm width={selectedRole ? '80%' : '50%'}>
         {selectedRole ? (
-          <div className={classes.roleContainer}>
-            <DealRoleForm
-              isOpen
-              user={user}
-              deal={deal}
-              checklist={checklist}
-              dealSide={side}
-              form={selectedRole}
-              allowedRoles={allowedRoles}
-              onUpsertRole={handleUpsertRole}
-              onDeleteRole={handleDeleteRole}
-              onClose={() => setSelectedRole(null)}
-            />
-          </div>
+          <DealRoleForm
+            isOpen
+            compact
+            user={user}
+            deal={deal}
+            checklist={checklist}
+            dealSide={side}
+            form={selectedRole}
+            allowedRoles={allowedRoles}
+            onUpsertRole={handleUpsertRole}
+            onDeleteRole={handleDeleteRole}
+            onClose={() => setSelectedRole(null)}
+          />
         ) : (
           <Box display="flex" flexWrap="wrap" width="100%">
             {clientRoles.map(role => (

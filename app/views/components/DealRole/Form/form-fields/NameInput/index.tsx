@@ -115,7 +115,7 @@ export function NameInput({
     <AutoComplete
       label={`${label}${isRequired ? ' *' : ''}`}
       value={input.value}
-      error={meta.submitFailed && meta.error}
+      error={meta.error || (isRequired && !input.value)}
       noOptionsText={getNoOptionsText()}
       isLoading={isSearching}
       options={searchByName}
