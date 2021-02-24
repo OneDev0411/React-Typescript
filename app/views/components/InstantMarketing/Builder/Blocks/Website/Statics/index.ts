@@ -11,7 +11,6 @@ import loadSocialGroup, {
   SocialGroupBlockOptions,
   socialGroupBlockTraits
 } from './social-group'
-import loadCarousel, { CarouselBlockOptions } from './carousel'
 
 export const staticBlocksTraits = {
   ...socialGroupBlockTraits,
@@ -23,8 +22,7 @@ export interface StaticBlocksOptions
     TextBlockOptions,
     ButtonBlockOptions,
     GridBlockOptions,
-    SocialGroupBlockOptions,
-    CarouselBlockOptions {}
+    SocialGroupBlockOptions {}
 
 export default function registerStaticBlocks(
   editor: Editor,
@@ -36,8 +34,7 @@ export default function registerStaticBlocks(
     ...loadText(editor, blocksOptions),
     ...loadButton(editor, blocksOptions),
     ...loadGrid(editor, blocksOptions),
-    ...loadSocialGroup(editor, blocksOptions),
-    ...loadCarousel(editor, blocksOptions)
+    ...loadSocialGroup(editor, blocksOptions)
   }
 
   handleBlockDragStopEvent(editor, templates, renderData)
@@ -56,5 +53,3 @@ export { textBlockName } from './text'
 export { headline1BlockName, headline2BlockName } from './headline'
 
 export { socialGroupBlockName } from './social-group'
-
-export { carouselBlockName } from './carousel'

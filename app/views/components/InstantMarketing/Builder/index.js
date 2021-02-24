@@ -86,7 +86,8 @@ class Builder extends React.Component {
       isMatterportDrawerOpen: false,
       isNeighborhoodsReportDrawerOpen: false,
       isNeighborhoodsGraphsReportDrawerOpen: false,
-      mapToEdit: null
+      mapToEdit: null,
+      imageSelectDialogOwner: null
     }
 
     this.emailBlocksRegistered = false
@@ -275,6 +276,7 @@ class Builder extends React.Component {
     const image = components.getType('image')
     const mjImage = components.getType('mj-image')
     const mjCarouselImage = components.getType('mj-carousel-image')
+    const carouselImage = components.getType('carousel-image')
 
     const imageComponents = [
       {
@@ -288,6 +290,10 @@ class Builder extends React.Component {
       {
         name: 'mj-carousel-image',
         component: mjCarouselImage
+      },
+      {
+        name: 'carousel-image',
+        component: carouselImage
       }
     ].filter(image => !!image.component)
 
@@ -359,7 +365,10 @@ class Builder extends React.Component {
       },
       image: {
         onDrop: () => {
-          this.setState({ isImageSelectDialogOpen: true })
+          this.setState({
+            isImageSelectDialogOpen: true,
+            imageSelectDialogOwner: 'image'
+          })
         }
       },
       video: {
@@ -451,7 +460,13 @@ class Builder extends React.Component {
         this.setState({ isMatterportDrawerOpen: true })
       },
       onMapDrop: this.openMapDrawer,
-      onMapDoubleClick: this.openMapDrawer
+      onMapDoubleClick: this.openMapDrawer,
+      onCarouselImageDrop: () => {
+        this.setState({
+          isImageSelectDialogOpen: true,
+          imageSelectDialogOwner: 'carouselImage'
+        })
+      }
     } // TODO: read this from the template config
 
     this.blocks = registerWebsiteBlocks(this.editor, renderData, blocksOptions)
@@ -1016,23 +1031,39 @@ class Builder extends React.Component {
           {this.state.isImageSelectDialogOpen && (
             <ImageSelectDialog
               onClose={() => {
-                this.blocks &&
-                  this.blocks.image &&
-                  this.blocks.image.selectHandler()
-                this.setState({ isImageSelectDialogOpen: false })
+                if (this.state.imageSelectDialogOwner === 'image') {
+                  this.blocks?.image?.selectHandler()
+                } else if (
+                  this.state.imageSelectDialogOwner === 'carouselImage'
+                ) {
+                  this.blocks?.carousel?.selectHandler()
+                }
+
+                this.setState({
+                  isImageSelectDialogOpen: false,
+                  imageSelectDialogOwner: null
+                })
               }}
               onSelect={imageUrl => {
                 if (
-                  !this.blocks ||
-                  !this.blocks.image ||
-                  !this.blocks.image.selectHandler(imageUrl)
+                  !(
+                    this.state.imageSelectDialogOwner === 'image' &&
+                    this.blocks?.image?.selectHandler(imageUrl)
+                  ) &&
+                  !(
+                    this.state.imageSelectDialogOwner === 'carouselImage' &&
+                    this.blocks?.carousel?.selectHandler(imageUrl)
+                  )
                 ) {
                   this.editor.runCommand('set-image', {
                     value: imageUrl
                   })
                 }
 
-                this.setState({ isImageSelectDialogOpen: false })
+                this.setState({
+                  isImageSelectDialogOpen: false,
+                  imageSelectDialogOwner: null
+                })
               }}
               onUpload={async file => {
                 const templateId = this.selectedTemplate.id

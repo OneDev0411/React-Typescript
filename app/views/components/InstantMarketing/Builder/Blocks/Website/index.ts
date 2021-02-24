@@ -15,8 +15,7 @@ import registerStaticBlocks, {
   headline2BlockName,
   textBlockName,
   buttonBlockName,
-  socialGroupBlockName,
-  carouselBlockName
+  socialGroupBlockName
 } from './Statics'
 import registerVideoBlock, {
   VideoBlockOptions,
@@ -40,6 +39,11 @@ import registerMatterportBlock, {
   matterportBlockTraits
 } from './Matterport'
 import registerMapBlock, { MapBlockOptions, embedMapBlockName } from './Map'
+import registerCarouselBlock, {
+  CarouselBlockOptions,
+  carouselBlockName,
+  carouselImageBlockName
+} from './Carousel'
 
 const BLOCK_BUTTONS_ORDER = [
   imageBlockName,
@@ -59,7 +63,8 @@ const BLOCK_BUTTONS_ORDER = [
   articleRightBlockName,
   agentLeftBlockName,
   agentGridBlockName,
-  carouselBlockName
+  carouselBlockName,
+  carouselImageBlockName
 ]
 
 interface BlocksOptions
@@ -69,7 +74,8 @@ interface BlocksOptions
     AgentBlocksOptions,
     ArticleBlocksOptions,
     MatterportBlockOptions,
-    MapBlockOptions {}
+    MapBlockOptions,
+    CarouselBlockOptions {}
 
 export const websiteBlocksTraits = {
   ...staticBlocksTraits,
@@ -89,7 +95,8 @@ export function registerWebsiteBlocks(
     video: registerVideoBlock(editor, renderData, blocksOptions),
     article: registerArticleBlocks(editor, renderData, blocksOptions),
     matterport: registerMatterportBlock(editor, renderData, blocksOptions),
-    map: registerMapBlock(editor, renderData, blocksOptions)
+    map: registerMapBlock(editor, renderData, blocksOptions),
+    carousel: registerCarouselBlock(editor, renderData, blocksOptions)
   }
 
   reorderBlocks(editor, BLOCK_BUTTONS_ORDER)
