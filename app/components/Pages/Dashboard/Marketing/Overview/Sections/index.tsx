@@ -6,6 +6,7 @@ import MyDesignsSection from './MyDesignsSection'
 import UpcomingBirthdaysAndAnniversariesSection from './UpcomingBirthdaysAndAnniversariesSection'
 import PromoteListingsSection from './PromoteListingsSection'
 import NewsletterBannerSection from './NewsletterBannerSection'
+import WhatsNewInMCSection from './WhatsNewInMCSection'
 import SomethingToShareSection from './SomethingToShareSection'
 
 export default function Sections() {
@@ -17,6 +18,7 @@ export default function Sections() {
         <UpcomingBirthdaysAndAnniversariesSection />
         <PromoteListingsSection />
         <NewsletterBannerSection />
+        <WhatsNewInMCSection />
         <SomethingToShareSection />
       </Grid>
     </Grid>
