@@ -137,30 +137,6 @@ function getEventIndex(event: ICalendarEvent, range: NumberRange) {
     return createDayId(eventTime, convertToUTC)
   }
 
-  if (event.title === "James's Home Anniversary") {
-    console.log({
-      event,
-      eventTimeMonthRaw: eventTime.getMonth(),
-      eventTimeMonthUTC: eventTime.getUTCMonth()
-    })
-    console.log({
-      'from.getUTCFullYear() === to.getUTCFullYear()':
-        from.getUTCFullYear() === to.getUTCFullYear(),
-      'eventTime.getUTCMonth() >= from.getUTCMonth()':
-        eventTime.getUTCMonth() >= from.getUTCMonth()
-    })
-    console.log({
-      from,
-      ufrom: from.getUTCFullYear(),
-      rfrom: from.getFullYear()
-    })
-    console.log({
-      to,
-      uto: to.getUTCFullYear(),
-      rto: to.getFullYear()
-    })
-  }
-
   const year =
     from.getUTCFullYear() === to.getUTCFullYear() &&
     eventTime.getUTCMonth() >= from.getUTCMonth()
