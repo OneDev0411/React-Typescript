@@ -54,7 +54,7 @@ export function AddressPopover({
           horizontal: 'left'
         }}
         style={{
-          zIndex: 1002,
+          zIndex: 1004,
           ...formStyle
         }}
       >

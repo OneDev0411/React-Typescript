@@ -7,7 +7,6 @@ import {
   DELETE_ATTRIBUTES_FROM_CONTACTS_SUCCESS
 } from '../../../constants/contacts'
 import { deleteAttributesFromContacts as fetchDeleteAttributesFromContacts } from '../../../models/contacts/delete-attributes-bulk-contacts'
-import { normalizeContacts } from '../helpers/normalize-contacts'
 import { selectContact } from '../../../reducers/contacts/list'
 
 export function deleteAttributesFromContacts(ids, attributes, attribute_def) {

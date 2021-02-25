@@ -397,6 +397,12 @@ class ContactsList extends React.Component {
       )
     } catch (e) {
       console.log('fetch search error: ', e)
+    } finally {
+      const { parkedContactCount } = this.state
+
+      if (parkedContactCount > 0) {
+        this.getParkedContactCount()
+      }
     }
   }
 
@@ -517,7 +523,7 @@ class ContactsList extends React.Component {
     const {
       selection: { isEntireRowsSelected, selectedRowIds, excludedRows }
     } = gridStateContext
-    const isParkedActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
+    const isParkedTabActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
 
     const isSingleContact = singleSelectedRow.length === 1
 
@@ -531,7 +537,7 @@ class ContactsList extends React.Component {
           conditionOperator: this.props.conditionOperator,
           filters: this.props.filters,
           excludes: excludedRows,
-          parked: isParkedActive
+          parked: isParkedTabActive
         }
 
         await deleteContactsBulk(bulkDeleteParams)
@@ -553,7 +559,7 @@ class ContactsList extends React.Component {
     } catch (error) {
       console.log(error)
     } finally {
-      if (isParkedActive) {
+      if (isParkedTabActive) {
         this.getParkedContactCount()
       }
     }
@@ -568,7 +574,7 @@ class ContactsList extends React.Component {
   reloadContacts = async (start = 0) => {
     const { parkedContactCount } = this.state
     const { activeSegment, searchContacts } = this.props
-    const isParkedActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
+    const isParkedTabActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
 
     if (parkedContactCount > 0) {
       this.getParkedContactCount()
@@ -578,7 +584,7 @@ class ContactsList extends React.Component {
       this.props.filters,
       start,
       undefined,
-      isParkedActive,
+      isParkedTabActive,
       this.state.searchInputValue,
       this.order,
       this.props.viewAsUsers,

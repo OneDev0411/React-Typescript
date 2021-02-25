@@ -6,9 +6,9 @@ const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       chip: {
-        marginRight: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-        fontWeight: theme.typography.fontWeightBold
+        maxWidth: '100%',
+        marginRight: theme.spacing(0.5),
+        marginBottom: theme.spacing(0.5)
       }
     }),
   { name: 'crmTag' }
