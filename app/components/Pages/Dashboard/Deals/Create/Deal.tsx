@@ -189,6 +189,7 @@ export default function CreateDeal() {
 
           {dealType === 'Buying' && (
             <Controller
+              key="ender_type"
               name="ender_type"
               control={control}
               render={({ onChange }) => <DealEnderType onChange={onChange} />}
@@ -197,6 +198,7 @@ export default function CreateDeal() {
 
           {dealType === 'Buying' && (
             <Controller
+              key="buying_primary_agent"
               name="buying_primary_agent"
               control={control}
               render={({ value = [], onChange }) => (
@@ -240,6 +242,7 @@ export default function CreateDeal() {
 
           {dealType === 'Buying' && (
             <DealClient
+              key="deal-client-buying"
               side="Buying"
               title={`What's the ${
                 propertyType?.includes('Lease') ? 'tenant' : 'buyer'
@@ -251,6 +254,7 @@ export default function CreateDeal() {
 
           {dealType === 'Selling' && (
             <DealClient
+              key="deal-client-selling"
               side="Selling"
               title={`What's the ${
                 propertyType?.includes('Lease') ? 'landlord' : 'seller'

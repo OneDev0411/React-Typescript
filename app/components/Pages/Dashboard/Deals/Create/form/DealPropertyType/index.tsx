@@ -33,7 +33,10 @@ export function DealPropertyType({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection disabled={!!deal}>
+    <QuestionSection
+      disabled={!!deal}
+      disableMessage="You need to discard the form to be able edit the property"
+    >
       <QuestionTitle>What type of property is this?</QuestionTitle>
       <QuestionForm>
         <RadioGroup

@@ -28,7 +28,7 @@ export function DealCard({ dealSide }: Props) {
   const openDeal = () => goTo(`/dashboard/deals/${deal!.id}`)
   const createOffer = () => goTo(`/dashboard/deals/${deal!.id}/offer`)
 
-  if (wizard.currentStep !== step) {
+  if (wizard.currentStep !== step || !deal) {
     return null
   }
 

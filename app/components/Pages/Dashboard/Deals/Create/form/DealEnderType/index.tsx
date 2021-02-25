@@ -44,7 +44,10 @@ export function DealEnderType({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection disabled={!!deal}>
+    <QuestionSection
+      disabled={!!deal}
+      disableMessage="You need to discard the form to be able edit the side"
+    >
       <QuestionTitle>
         Is another agent from your office on the other side of this deal?
       </QuestionTitle>

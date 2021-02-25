@@ -120,7 +120,6 @@ export function QuestionWizard({
               <div
                 key={step}
                 ref={el => (refs.current[step] = el as HTMLDivElement)}
-                onClick={() => gotoStep(step)}
               >
                 <SectionContext.Provider
                   value={{

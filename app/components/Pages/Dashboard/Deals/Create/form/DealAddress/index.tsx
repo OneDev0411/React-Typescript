@@ -26,6 +26,8 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useSearchLocation } from 'hooks/use-search-location'
 
+import { useCreationContext } from '../../context/use-creation-context'
+
 export interface PropertyAddress {
   type: 'Place' | 'Listing'
   address: string | unknown
@@ -77,6 +79,7 @@ interface Props {
 export function DealAddress({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
+  const { deal } = useCreationContext()
 
   const classes = useStyles()
 
@@ -137,7 +140,10 @@ export function DealAddress({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection>
+    <QuestionSection
+      disabled={!!deal}
+      disableMessage="You will be able to edit the address inside the deal"
+    >
       <QuestionTitle>What is the address for the property?</QuestionTitle>
       <QuestionForm>
         {!listing && !place && (

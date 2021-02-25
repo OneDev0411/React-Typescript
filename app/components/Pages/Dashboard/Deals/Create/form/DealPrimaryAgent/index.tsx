@@ -97,7 +97,10 @@ export function DealPrimaryAgent({
   }
 
   return (
-    <QuestionSection disabled={!!deal}>
+    <QuestionSection
+      disabled={!!deal}
+      disableMessage="You will be able to replace the agent inside the deal"
+    >
       <QuestionTitle>{title}</QuestionTitle>
 
       <QuestionForm>
