@@ -35,12 +35,12 @@ const useStyles = makeStyles(
       objectPosition: '0 0',
       background: theme.palette.grey[100],
       '&:hover': {
-        animation: '10s linear infinite alternate $scrollPositionAnimation'
+        animation: '8s linear infinite alternate $scrollPositionAnimation'
       }
     }
   }),
   {
-    name: 'MyDesignCard'
+    name: 'TemplateInstanceCard'
   }
 )
 
@@ -49,7 +49,10 @@ interface Props {
   onClick?: () => void
 }
 
-export default function MyDesignCard({ templateInstance, onClick }: Props) {
+export default function TemplateInstanceCard({
+  templateInstance,
+  onClick
+}: Props) {
   const classes = useStyles()
 
   return (

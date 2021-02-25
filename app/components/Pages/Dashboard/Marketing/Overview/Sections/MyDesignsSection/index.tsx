@@ -1,15 +1,27 @@
 import React, { useState } from 'react'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography, makeStyles } from '@material-ui/core'
 
 import CardSkeleton from 'components/CardSkeleton'
-import MyDesignCard from 'components/MyDesignCard'
+import TemplateInstanceCard from 'components/TemplateInstanceCard'
 import TemplateAction from 'components/TemplatesList/TemplateAction'
 
 import { useTemplatesHistory } from '../../../hooks/use-templates-history'
 import SectionLayout from '../SectionLayout'
 import LinkSectionAction from '../LinkSectionAction'
 
+const useStyles = makeStyles(
+  () => ({
+    cardContainer: {
+      cursor: 'pointer'
+    }
+  }),
+  {
+    name: 'MarketingMyDesignsSection'
+  }
+)
+
 export default function MyDesignsSection() {
+  const classes = useStyles()
   const { templates, isLoading } = useTemplatesHistory()
   const [isTemplateInstanceClicked, setIsTemplateInstanceClicked] = useState<
     boolean
@@ -54,8 +66,14 @@ export default function MyDesignsSection() {
           )}
           {!isLoading &&
             templates?.slice(0, 2).map(template => (
-              <Grid key={template.id} item xs sm={6}>
-                <MyDesignCard
+              <Grid
+                key={template.id}
+                item
+                xs
+                sm={6}
+                className={classes.cardContainer}
+              >
+                <TemplateInstanceCard
                   templateInstance={template}
                   onClick={() => handleTemplateInstanceClick(template)}
                 />

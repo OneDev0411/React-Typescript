@@ -62,7 +62,7 @@ export default function CalendarEventCard({ event }: Props) {
                 <Box pb={1}>
                   <Tooltip placement="top" title={contact.display_name}>
                     <div>
-                      <Avatar size="xlarge" contact={contact} />
+                      <Avatar disableLazyLoad size="xlarge" contact={contact} />
                     </div>
                   </Tooltip>
                 </Box>

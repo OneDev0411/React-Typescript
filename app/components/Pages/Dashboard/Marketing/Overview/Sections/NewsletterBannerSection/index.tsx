@@ -15,7 +15,7 @@ const useStyles = makeStyles(
     container: {
       backgroundColor: theme.palette.tertiary.main,
       borderRadius: theme.shape.borderRadius,
-      margin: theme.spacing(1, 1, 4),
+      margin: theme.spacing(1, 1, 8),
       padding: theme.spacing(0, 4)
     },
     title: {

@@ -10,7 +10,7 @@ import {
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      marginBottom: theme.spacing(4)
+      marginBottom: theme.spacing(8)
     },
     headerContainer: {
       paddingBottom: theme.spacing(2)
@@ -26,15 +26,15 @@ const useStyles = makeStyles(
 
 interface Props {
   title: string
-  actionNode: ReactNode
   children: ReactNode
+  actionNode?: ReactNode
   gridProps?: GridProps
 }
 
 export default function SectionLayout({
   title,
-  actionNode,
   children,
+  actionNode,
   gridProps = {}
 }: Props) {
   const classes = useStyles()
@@ -58,7 +58,7 @@ export default function SectionLayout({
         <Grid item className={classes.titleContainer}>
           <Typography variant="h5">{title}</Typography>
         </Grid>
-        <Grid item>{actionNode}</Grid>
+        {actionNode && <Grid item>{actionNode}</Grid>}
       </Grid>
       <Grid container item spacing={1} direction="row">
         {children}

@@ -40,7 +40,7 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'MarketingOverviewSomethingToShareSection'
+    name: 'MarketingSomethingToShareSection'
   }
 )
 
