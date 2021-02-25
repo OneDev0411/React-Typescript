@@ -13,7 +13,7 @@ export const Button = styled(IconButton)`
   bottom: 0.5em;
   width: 48px;
   height: 48px;
-  z-index: 1002;
+  z-index: 1004;
   border-radius: 100%;
   opacity: 0;
   transform: translateY(1rem);
