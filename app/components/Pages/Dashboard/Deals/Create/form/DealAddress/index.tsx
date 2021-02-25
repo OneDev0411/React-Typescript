@@ -9,6 +9,7 @@ import {
   makeStyles
 } from '@material-ui/core'
 import cn from 'classnames'
+import { useDebounce } from 'react-use'
 import { mdiMapMarker, mdiHome } from '@mdi/js'
 
 import ListingCard from 'components/ListingCards/ListingCard'
@@ -21,6 +22,7 @@ import {
 
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+import { Callout } from 'components/Callout'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -89,7 +91,25 @@ export function DealAddress({ onChange }: Props) {
   const [listing, setListing] = useState<Nullable<ICompactListing>>(null)
 
   const [searchCriteria, setSearchCriteria] = useState('')
-  const { listings, places, getParsedPlace } = useSearchLocation(searchCriteria)
+  const [
+    debouncedSearchCriteria,
+    setDebouncedSearchCriteria
+  ] = useState<string>('')
+
+  /**
+   * debounce search criteria to don't search contacts on input change
+   */
+  useDebounce(
+    () => {
+      setDebouncedSearchCriteria(searchCriteria)
+    },
+    700,
+    [searchCriteria]
+  )
+
+  const { listings, places, getParsedPlace } = useSearchLocation(
+    debouncedSearchCriteria
+  )
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -223,6 +243,19 @@ export function DealAddress({ onChange }: Props) {
                   </Typography>
                 </Box>
               ))}
+
+              {debouncedSearchCriteria.length > 0 &&
+                listings.length === 0 &&
+                places.length === 0 && (
+                  <Callout
+                    type="error"
+                    style={{
+                      margin: 0
+                    }}
+                  >
+                    Nothing found
+                  </Callout>
+                )}
             </Box>
           </Box>
         )}
