@@ -37,6 +37,9 @@ export function CommissionInput({ isVisible, isRequired, compact }: Props) {
               variant="outlined"
               autoComplete="off"
               placeholder="Enter agent commission"
+              inputProps={{
+                maxLength: 8
+              }}
               style={{
                 flex: 5
               }}
