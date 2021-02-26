@@ -138,7 +138,7 @@ function getEventIndex(event: ICalendarEvent, range: NumberRange) {
   }
 
   const year =
-    from.getUTCFullYear() === to.getUTCFullYear() ||
+    from.getUTCFullYear() === to.getUTCFullYear() &&
     eventTime.getUTCMonth() >= from.getUTCMonth()
       ? from.getUTCFullYear()
       : to.getUTCFullYear()

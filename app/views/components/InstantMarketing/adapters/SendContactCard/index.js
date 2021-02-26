@@ -1,8 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
+
 import idx from 'idx'
 import { Button } from '@material-ui/core'
+
+import { addNotification as notify } from 'components/notification'
 
 import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
@@ -33,7 +35,6 @@ class SendContactCard extends React.Component {
       isComposeEmailOpen: false,
       isSearchDrawerOpen: false,
       isSocialDrawerOpen: false,
-      socialNetworkName: '',
       owner: this.props.user,
       emailBody: '',
       templateInstance: null,
@@ -164,7 +165,7 @@ class SendContactCard extends React.Component {
       }
     )
 
-  handleSaveMarketingCard = async (template, owner) => {
+  handleSaveMarketingCard = (template, owner) => {
     this.generatePreviewImage(template)
 
     this.setState({
@@ -216,11 +217,10 @@ class SendContactCard extends React.Component {
     })
   }
 
-  handleSocialSharing = (template, socialNetworkName) =>
+  handleSocialSharing = template =>
     this.setState({
       htmlTemplate: template,
-      isSocialDrawerOpen: true,
-      socialNetworkName
+      isSocialDrawerOpen: true
     })
 
   get TemplateInstanceData() {
@@ -328,7 +328,6 @@ class SendContactCard extends React.Component {
           <SocialDrawer
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
-            socialNetworkName={this.state.socialNetworkName}
             onClose={this.closeSocialDrawer}
           />
         )}
