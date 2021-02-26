@@ -28,6 +28,8 @@ export function DealType({ propertyType, onChange }: Props) {
 
     if (wizard.currentStep === step) {
       wizard.next()
+    } else {
+      wizard.setStep(step + 1)
     }
   }
 

@@ -54,6 +54,11 @@ export function QuestionWizard({
     setCurrentStep(Math.max(currentStep - 1, 1))
   }
 
+  const setStep = (step: number) => {
+    setCurrentStep(step)
+    setLastVisitedStep(step)
+  }
+
   useEffect(() => {
     setLastVisitedStep(Math.max(currentStep, lastVisitedStep))
   }, [currentStep, lastVisitedStep])
@@ -94,6 +99,7 @@ export function QuestionWizard({
       value={{
         currentStep,
         lastVisitedStep,
+        setStep,
         totalSteps: sections.length,
         goto: gotoStep,
         next: gotoNext,

@@ -7,6 +7,7 @@ export interface IWizardState {
   isLoading: boolean
   goto: (step: number) => void
   next: (delay?: number) => void
+  setStep: (step: number) => void
   setLoading: (status: boolean) => void
   previous: () => void
   first: () => void

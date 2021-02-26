@@ -180,6 +180,7 @@ export default function CreateDeal() {
           />
 
           <Controller
+            key="deal_side"
             name="deal_side"
             control={control}
             render={({ onChange }) => (
