@@ -225,8 +225,8 @@ class SendMlsListingCard extends React.Component {
     }
   }
 
-  handleSaveMarketingCard = async (template, owner) => {
-    await this.generatePreviewImage(template)
+  handleSaveMarketingCard = (template, owner) => {
+    this.generatePreviewImage(template)
 
     this.setState({
       owner,

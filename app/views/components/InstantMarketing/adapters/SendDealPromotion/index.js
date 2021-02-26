@@ -62,8 +62,8 @@ class SendDealPromotion extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  handleSaveMarketingCard = async (template, owner) => {
-    await this.generatePreviewImage(template)
+  handleSaveMarketingCard = (template, owner) => {
+    this.generatePreviewImage(template)
 
     this.setState({
       owner,

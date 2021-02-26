@@ -582,15 +582,12 @@ class Builder extends React.Component {
     return this.editor.getHtml().trim() !== ''
   }
 
-  handleSave = async () => {
+  handleSave = () => {
     if (!this.isTemplateMarkupRendered()) {
       return
     }
 
-    await this.props.onSave(
-      this.getSavedTemplate(),
-      this.props.templateData.user
-    )
+    this.props.onSave(this.getSavedTemplate(), this.props.templateData.user)
 
     // We do not want to notify in bareMode or notify for OH mediums
     if (this.shouldNotifyUserAboutSaveInMyDesigns) {
