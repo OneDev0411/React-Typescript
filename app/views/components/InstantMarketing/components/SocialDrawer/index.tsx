@@ -25,7 +25,7 @@ interface Props {
 
 export default function SocialDrawer({
   template,
-  instance,
+  instance: passedInstance,
   templateInstanceData = {},
   onClose
 }: Props) {
@@ -33,7 +33,7 @@ export default function SocialDrawer({
 
   const [templateInstance, setTemplateInstance] = useState<
     Optional<IMarketingTemplateInstance>
-  >(instance)
+  >(passedInstance)
   const [errorMessage, setErrorMessage] = useState<Nullable<string>>(null)
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function SocialDrawer({
   }, [dispatch, template, templateInstance, templateInstanceData])
 
   const getActions = () => {
-    if (instance && getFileType(instance.file) === 'pdf') {
+    if (templateInstance && getFileType(templateInstance.file) === 'pdf') {
       return [DownloadFile, CopyFileUrl]
     }
 
@@ -79,12 +79,12 @@ export default function SocialDrawer({
     <Drawer open onClose={onClose}>
       <Drawer.Header title="How would you like to share?" />
       <Drawer.Body>
-        <PreviewFile instance={instance} error={errorMessage} />
+        <PreviewFile instance={templateInstance} error={errorMessage} />
 
-        {instance && (
+        {templateInstance && (
           <>
             {getActions().map((Component, index) => (
-              <Component key={index} instance={instance} />
+              <Component key={index} instance={templateInstance} />
             ))}
           </>
         )}
