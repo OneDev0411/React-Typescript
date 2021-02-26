@@ -53,7 +53,7 @@ function SendSMS({ instance }: SendSMSProps) {
       await shareInstance(
         instance.id,
         [phone],
-        `${displayName} sent you this image! Tap on the link and press share on Instagram or Facebook.`
+        `${displayName} sent you this image! Tap on the link and press share on Instagram, Facebook, or LinkedIn.`
       )
 
       dispatch(
@@ -78,7 +78,7 @@ function SendSMS({ instance }: SendSMSProps) {
           type: 'submit',
           disabled: isSending || isValidPhone === false
         }}
-        description="Send image to yourself and post to Instagram and Facebook directly from your phone."
+        description="Send image to yourself and post it directly from your phone."
         styles={{
           info: {
             padding: 0
