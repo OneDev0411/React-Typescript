@@ -18,7 +18,6 @@ class General extends React.Component {
     isComposeEmailOpen: false,
     isSocialDrawerOpen: false,
     htmlTemplate: '',
-    socialNetworkName: '',
     owner: this.props.user,
     emailBody: '',
     templateInstance: null,
@@ -77,11 +76,10 @@ class General extends React.Component {
     }
   }
 
-  handleSocialSharing = (template, socialNetworkName) => {
+  handleSocialSharing = template => {
     this.setState({
       htmlTemplate: template,
-      isSocialDrawerOpen: true,
-      socialNetworkName
+      isSocialDrawerOpen: true
     })
   }
 
@@ -91,7 +89,7 @@ class General extends React.Component {
     })
 
   handleSaveMarketingCard = async (template, owner) => {
-    this.generatePreviewImage(template)
+    await this.generatePreviewImage(template)
 
     this.setState({
       owner,
@@ -174,7 +172,6 @@ class General extends React.Component {
 
         {this.state.isSocialDrawerOpen && (
           <SocialDrawer
-            socialNetworkName={this.state.socialNetworkName}
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
             onClose={this.closeSocialDrawer}

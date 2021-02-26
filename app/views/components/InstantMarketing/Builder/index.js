@@ -7,6 +7,7 @@ import { mdiClose, mdiMenu } from '@mdi/js'
 
 import uploadAsset from 'models/instant-marketing/upload-asset'
 
+import { addNotification } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Portal } from 'components/Portal'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -52,8 +53,7 @@ import {
   Divider
 } from './styled'
 
-import SocialActions from './SocialActions'
-import { SOCIAL_NETWORKS, BASICS_BLOCK_CATEGORY } from './constants'
+import { BASICS_BLOCK_CATEGORY } from './constants'
 import { registerEmailBlocks } from './Blocks/Email'
 import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
@@ -582,21 +582,32 @@ class Builder extends React.Component {
     return this.editor.getHtml().trim() !== ''
   }
 
-  handleSave = () => {
+  handleSave = async () => {
     if (!this.isTemplateMarkupRendered()) {
       return
     }
 
-    this.props.onSave(this.getSavedTemplate(), this.props.templateData.user)
+    await this.props.onSave(
+      this.getSavedTemplate(),
+      this.props.templateData.user
+    )
+
+    // We do not want to notify in bareMode or notify for OH mediums
+    if (this.shouldNotifyUserAboutSaveInMyDesigns) {
+      this.props.notify({
+        status: 'success',
+        message: 'Saved! You can find it in My Designs section.'
+      })
+    }
   }
 
-  handleSocialSharing = socialNetworkName => {
+  handleSocialSharing = () => {
     if (!this.isTemplateMarkupRendered()) {
       return
     }
 
     this.props.onSocialSharing &&
-      this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
+      this.props.onSocialSharing(this.getSavedTemplate())
   }
 
   handlePrintableSharing = () => {
@@ -826,6 +837,14 @@ class Builder extends React.Component {
     return this.props.templateTypes.includes('CrmOpenHouse')
   }
 
+  get shouldNotifyUserAboutSaveInMyDesigns() {
+    if (this.isBareMode || this.isOpenHouseMedium) {
+      return false
+    }
+
+    return true
+  }
+
   get userAssets() {
     return ['profile_image_url', 'cover_image_url']
       .filter(attr => this.props.user[attr])
@@ -833,20 +852,6 @@ class Builder extends React.Component {
         image: this.props.user[attr],
         avatar: true
       }))
-  }
-
-  get socialNetworks() {
-    const selectedTemplate = this.selectedTemplate
-
-    if (!selectedTemplate) {
-      return []
-    }
-
-    if (selectedTemplate.medium === 'LinkedInCover') {
-      return SOCIAL_NETWORKS.filter(({ name }) => name === 'LinkedIn')
-    }
-
-    return SOCIAL_NETWORKS.filter(({ name }) => name !== 'LinkedIn')
   }
 
   regenerateTemplate = newData => {
@@ -1092,14 +1097,8 @@ class Builder extends React.Component {
                 </Button>
               )}
 
-              {this.shouldShowSocialShareActions && (
-                <SocialActions
-                  networks={this.socialNetworks}
-                  onClick={this.handleSocialSharing}
-                />
-              )}
-
-              {this.shouldShowPrintableActions && (
+              {(this.shouldShowPrintableActions ||
+                this.shouldShowSocialShareActions) && (
                 <Button
                   style={{
                     marginLeft: '0.5rem'
@@ -1198,4 +1197,4 @@ function mapStateToProps({ user }) {
   }
 }
 
-export default connect(mapStateToProps)(Builder)
+export default connect(mapStateToProps, { notify: addNotification })(Builder)
