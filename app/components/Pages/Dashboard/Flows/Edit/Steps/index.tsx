@@ -9,9 +9,14 @@ import { NewStep } from './New'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
+      margin: 'auto',
       display: 'flex',
       justifyContent: 'center',
       flexWrap: 'wrap',
+      width: '100%',
+      maxWidth: '730px' // From figma
+    },
+    droppableProvider: {
       width: '100%'
     }
   }),
@@ -61,7 +66,10 @@ export default function Steps({
         <Box className={classes.container}>
           <Droppable droppableId="flow-steps-droppable">
             {droppableProvided => (
-              <div style={{ width: '100%' }} ref={droppableProvided.innerRef}>
+              <div
+                className={classes.droppableProvider}
+                ref={droppableProvided.innerRef}
+              >
                 {items.map((item, index) => {
                   const prevStep = index > 0 ? items[index - 1] : undefined
 
@@ -89,15 +97,17 @@ export default function Steps({
         </Box>
       </DragDropContext>
       {!disableEdit && (
-        <NewStep
-          index={items.length + 1}
-          shouldShowDefaultForm={items.length === 0}
-          emailTemplates={emailTemplates}
-          defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
-          onSubmit={onNewStepSubmit}
-          onNewEmailTemplateClick={onNewEmailTemplateClick}
-          onReviewEmailTemplateClick={onReviewEmailTemplateClick}
-        />
+        <Box className={classes.container}>
+          <NewStep
+            index={items.length + 1}
+            shouldShowDefaultForm={items.length === 0}
+            emailTemplates={emailTemplates}
+            defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
+            onSubmit={onNewStepSubmit}
+            onNewEmailTemplateClick={onNewEmailTemplateClick}
+            onReviewEmailTemplateClick={onReviewEmailTemplateClick}
+          />
+        </Box>
       )}
     </>
   )

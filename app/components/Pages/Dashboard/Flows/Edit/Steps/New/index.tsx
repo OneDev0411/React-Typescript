@@ -68,12 +68,16 @@ export const NewStep = ({
       return null
     }
 
-    return renderForm()
+    return (
+      <Box width="100%" mb={2}>
+        {renderForm()}
+      </Box>
+    )
   }
 
   function renderAddNewStep() {
     return (
-      <Box mt={1}>
+      <Box width="100%">
         <AddButtons
           onNewEventClick={() => setOpenForm('event')}
           onNewMarketingEmailClick={() => setOpenForm('marketing_email')}

@@ -18,7 +18,6 @@ export const TemplateInctance = ({
       label="template"
       render={({ input: { onChange, value } }) => (
         <TemplateSelector
-          value={value}
           currentBrandTemplate={currentBrandTemplate}
           currentTemplateInstance={currentTemplateInstance}
           onChange={onChange}
