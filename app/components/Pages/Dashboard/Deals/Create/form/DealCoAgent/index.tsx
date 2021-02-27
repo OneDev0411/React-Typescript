@@ -120,7 +120,7 @@ export function DealCoAgent({
     <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
-      <QuestionForm width={selectedRole ? '80%' : '50%'}>
+      <QuestionForm>
         {selectedRole ? (
           <DealRole
             isOpen

@@ -51,7 +51,7 @@ const useStyles = makeStyles(
       color: theme.palette.grey[500]
     },
     searchInput: {
-      padding: theme.spacing(1.5)
+      padding: theme.spacing(1, 0)
     }
   }),
   {
@@ -119,17 +119,14 @@ export function ContactRoles({ onSelectRole }: Props) {
   }
 
   return (
-    <Box
-      className={cn(classes.root, {
-        'has-border': contacts.length > 0
-      })}
-    >
+    <Box className={classes.root}>
       <TextField
         fullWidth
+        variant="outlined"
+        size="small"
         value={searchCriteria}
         onChange={e => setSearchCriteria(e.target.value)}
         placeholder="Search contact name"
-        size="medium"
         className={classes.searchInput}
       />
 

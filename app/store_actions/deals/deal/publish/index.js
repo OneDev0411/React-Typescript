@@ -1,10 +1,10 @@
 import * as actionTypes from '../../../../constants/deals'
 import Deal from '../../../../models/Deal'
 
-export function ejectDraftMode(dealId) {
+export function publishDeal(dealId) {
   return async dispatch => {
     try {
-      await Deal.ejectDraftMode(dealId)
+      await Deal.publish(dealId)
 
       dispatch({
         type: actionTypes.EJECT_DRAFT_MODE,

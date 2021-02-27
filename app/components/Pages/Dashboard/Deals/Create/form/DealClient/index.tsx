@@ -29,6 +29,7 @@ interface Props {
   side: IDealType
   roles: IDealRole[]
   skippable?: boolean
+  submitButtonLabel?: string
   onChange?: (role: IDealRole, type: 'update' | 'create' | 'delete') => void
 }
 
@@ -37,6 +38,7 @@ export function DealClient({
   title,
   roles,
   skippable = false,
+  submitButtonLabel = 'Continue',
   onChange
 }: Props) {
   const { deal, user, checklist } = useCreationContext()
@@ -88,7 +90,7 @@ export function DealClient({
     <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
-      <QuestionForm width={selectedRole ? '80%' : '50%'}>
+      <QuestionForm>
         {selectedRole ? (
           <DealRoleForm
             isOpen
@@ -151,10 +153,10 @@ export function DealClient({
             <Button
               variant="contained"
               color="secondary"
-              disabled={clientRoles.length === 0}
+              disabled={clientRoles.filter(role => !role.deal).length === 0}
               onClick={handleNext}
             >
-              Continue
+              {clientRoles.length === 0 ? 'Continue ' : submitButtonLabel}
             </Button>
           </Box>
         )}
