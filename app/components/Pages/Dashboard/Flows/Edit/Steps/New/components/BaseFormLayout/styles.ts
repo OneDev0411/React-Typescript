@@ -9,7 +9,8 @@ export const useStyles = makeStyles(
       width: '100%',
       background: theme.palette.background.paper,
       border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius
+      borderRadius: theme.shape.borderRadius,
+      position: 'relative'
     },
     header: {
       padding: theme.spacing(1.5, 3),
@@ -19,6 +20,10 @@ export const useStyles = makeStyles(
     dragBtn: {
       display: 'flex',
       marginRight: theme.spacing(1.5)
+    },
+    raised: {
+      background: theme.palette.grey[100],
+      boxShadow: theme.shadows[3]
     },
     moreBtn: {
       color: theme.palette.grey[500]

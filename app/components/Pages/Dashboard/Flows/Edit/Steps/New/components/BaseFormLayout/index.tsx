@@ -8,8 +8,11 @@ import {
   IconButton,
   MenuItem
 } from '@material-ui/core'
-
+import { Draggable, DraggableProvided } from 'react-beautiful-dnd'
+import cn from 'classnames'
 import { mdiDotsVertical, mdiDrag } from '@mdi/js'
+
+import useRaisedMuiCard from 'hooks/use-raised-mui-card'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { BaseDropdown } from 'components/BaseDropdown'
@@ -41,24 +44,30 @@ export const BaseFormLayout = ({
   onDelete
 }: Props) => {
   const classes = useStyles()
+  const { raise, stopRaise } = useRaisedMuiCard()
 
-  console.log({ step })
+  const renderForm = (props: { draggableProvided?: DraggableProvided }) => {
+    const { draggableProvided } = props
+    const dragHandleProps = draggableProvided
+      ? draggableProvided.dragHandleProps
+      : {}
 
-  return (
-    <form onSubmit={onSubmit} className={classes.form} noValidate>
-      <Box className={classes.container}>
+    return (
+      <form onSubmit={onSubmit} className={classes.form} noValidate>
         <Box className={classes.header}>
           <Grid container alignItems="center" justify="space-between">
             <Grid container alignItems="center" xs={6}>
-              <Box className={classes.dragBtn}>
-                <Tooltip
-                  title="Drag step to reorder"
-                  aria-label="drag to reorder step"
-                  hidden={disableEdit}
-                >
-                  <SvgIcon path={mdiDrag} />
-                </Tooltip>
-              </Box>
+              {step && (
+                <Box className={classes.dragBtn} {...dragHandleProps}>
+                  <Tooltip
+                    title="Drag step to reorder"
+                    aria-label="drag to reorder step"
+                    hidden={disableEdit}
+                  >
+                    <SvgIcon path={mdiDrag} />
+                  </Tooltip>
+                </Box>
+              )}
               <Typography variant="body1">
                 {index}. {title} {!step && '[Draft]'}
               </Typography>
@@ -122,7 +131,39 @@ export const BaseFormLayout = ({
           </Box>
         </Box>
         <Box className={classes.otherFieldsContainer}>{children}</Box>
-      </Box>
-    </form>
-  )
+      </form>
+    )
+  }
+
+  if (step) {
+    return (
+      <Draggable
+        isDragDisabled={disableEdit}
+        key={step.id}
+        draggableId={step.id}
+        index={index}
+      >
+        {(draggableProvided, draggableSnapshot) => (
+          <div
+            ref={draggableProvided.innerRef}
+            {...draggableProvided.draggableProps}
+          >
+            <Box
+              onMouseOver={raise}
+              onFocus={raise}
+              onMouseOut={stopRaise}
+              onBlur={stopRaise}
+              className={cn(classes.container, {
+                [classes.raised]: draggableSnapshot.isDragging
+              })}
+            >
+              {renderForm({ draggableProvided })}
+            </Box>
+          </div>
+        )}
+      </Draggable>
+    )
+  }
+
+  return <Box className={classes.container}>{renderForm({})}</Box>
 }
