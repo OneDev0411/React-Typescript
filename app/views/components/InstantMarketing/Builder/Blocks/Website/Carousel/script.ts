@@ -1,18 +1,12 @@
 declare const Splide: any
 declare const SimpleLightbox: any
 
-function script() {
+function script({ heightRatio }) {
   const element: HTMLElement = this
   const elementId = element.id
 
-  const imagesEl = Array.from(
-    element.querySelectorAll<HTMLImageElement>(
-      'img.splide__image[data-large-src]'
-    )
-  )
-
   function initCarousel() {
-    const slider = new Splide(
+    const splide = new Splide(
       element instanceof Element ? element : `#${elementId}`,
       {
         type: 'loop',
@@ -21,17 +15,23 @@ function script() {
           right: '6rem'
         },
         keyboard: 'focused',
-        height: '600px',
+        heightRatio,
         classes: {
           arrows: 'splide__arrows',
           arrow: 'splide__arrow',
           prev: 'splide__arrow--prev',
           next: 'splide__arrow--next'
-        }
+        },
+        arrowPath:
+          'M 11.058594 0.253906 C 10.714844 -0.078125 10.164062 -0.0703125 9.828125 0.277344 C 9.503906 0.613281 9.503906 1.148438 9.828125 1.484375 L 28.339844 19.996094 L 9.828125 38.503906 C 9.480469 38.839844 9.472656 39.390625 9.804688 39.734375 C 10.140625 40.078125 10.691406 40.089844 11.035156 39.757812 C 11.042969 39.75 11.050781 39.742188 11.054688 39.734375 L 30.183594 20.609375 C 30.519531 20.269531 30.519531 19.71875 30.183594 19.378906 Z M 11.058594 0.253906'
       }
-    ).mount()
+    )
 
-    const sliderRoot = slider.root as HTMLDivElement
+    element.dispatchEvent(
+      new CustomEvent('splide:init', { detail: { splide } })
+    )
+
+    const splideRoot = splide.root as HTMLDivElement
 
     function createButton(
       className: string,
@@ -49,8 +49,6 @@ function script() {
     }
 
     // Customize the pagination
-    const sliderPagination = sliderRoot.querySelector('.splide__pagination')
-
     function createControlButton(
       className: string,
       label: string,
@@ -64,25 +62,33 @@ function script() {
       return liEl
     }
 
-    if (sliderPagination) {
-      const arrows = slider.Components.Arrows.arrows
+    const addPaginationPrevNextButtons = () => {
+      const splidePagination = splideRoot.querySelector('.splide__pagination')
 
-      const prevButtonEl = createControlButton(
-        'splide__pagination__arrow splide__pagination__prev',
-        arrows.prev.innerHTML,
-        () => slider.go('<')
-      )
+      if (splidePagination) {
+        const arrows = splide.Components.Arrows.arrows
 
-      sliderPagination.prepend(prevButtonEl)
+        const prevButtonEl = createControlButton(
+          'splide__pagination__arrow splide__pagination__prev',
+          arrows.prev.innerHTML,
+          () => splide.go('<')
+        )
 
-      const nextButtonEl = createControlButton(
-        'splide__pagination__arrow splide__pagination__next',
-        arrows.next.innerHTML,
-        () => slider.go('>')
-      )
+        splidePagination.prepend(prevButtonEl)
 
-      sliderPagination.append(nextButtonEl)
+        const nextButtonEl = createControlButton(
+          'splide__pagination__arrow splide__pagination__next',
+          arrows.next.innerHTML,
+          () => splide.go('>')
+        )
+
+        splidePagination.append(nextButtonEl)
+      }
     }
+
+    splide.on('pagination:mounted', addPaginationPrevNextButtons)
+
+    splide.mount()
 
     // Add light-box
     const lightboxButtonEl = createButton(
@@ -96,18 +102,22 @@ function script() {
       </svg>
       `,
       () => {
+        const imagesEl = splide.Components.Elements.getSlides().map(slide =>
+          slide.slide.querySelector('img')
+        )
+
         if (typeof SimpleLightbox !== 'undefined') {
           const gallery = new SimpleLightbox(imagesEl, {
-            sourceAttr: 'data-large-src',
+            sourceAttr: 'src',
             history: false
           })
 
-          gallery.open(imagesEl[slider.index])
+          gallery.open(imagesEl[splide.index])
         }
       }
     )
 
-    sliderRoot.append(lightboxButtonEl)
+    splideRoot.append(lightboxButtonEl)
   }
 
   function loadScript(src: string, onLoad?: () => void) {
@@ -130,17 +140,75 @@ function script() {
     document.body.appendChild(style)
   }
 
-  if (typeof Splide == 'undefined') {
+  if (typeof Splide === 'undefined') {
     loadScript(
       'https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js',
       initCarousel
     )
 
-    // 'https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css'
     loadCSS(
       'https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide-core.min.css'
     )
 
+    // Add management styles
+    const customStyles = document.createElement('style')
+
+    customStyles.type = 'text/css'
+    customStyles.appendChild(
+      document.createTextNode(`
+      .splide__slide.is-active {
+        z-index: 1
+      }
+      .splide__add_button {
+        position: absolute;
+        top: 50%;
+        right: -20px;
+        width: 40px;
+        height: 40px;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        font-size: 32px;
+        border: 0;
+        outline: 0;
+        background-color: #00B286;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity .3s, background-color .3s;
+        z-index: 1;
+      }
+      .splide__add_button:hover {
+        background-color: #008060;
+      }
+      .splide__slide.is-active::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 2px;
+        height: 100%;
+        background-color: #00B286;
+        opacity: 0;
+        transition: opacity .3s;
+      }
+      .splide__slide.is-active:hover::after {        
+        opacity: 1;
+      }
+      .splide__slide.is-active:hover .splide__add_button {
+        opacity: 1;
+      }
+    `)
+    )
+
+    document.body.appendChild(customStyles)
+  } else {
+    initCarousel()
+  }
+
+  if (typeof SimpleLightbox === 'undefined') {
     loadScript(
       'https://cdn.jsdelivr.net/npm/simplelightbox@2.7.0/dist/simple-lightbox.js'
     )
@@ -148,138 +216,6 @@ function script() {
     loadCSS(
       'https://cdn.jsdelivr.net/npm/simplelightbox@2.7.0/dist/simple-lightbox.min.css'
     )
-
-    // custom style for test
-    const customStyle = document.createElement('style')
-
-    customStyle.type = 'text/css'
-    customStyle.appendChild(
-      document.createTextNode(`
-      :root {
-        --splide-pagination-height: 60px;
-      }
-      
-      .splide {
-        margin-bottom: var(--splide-pagination-height);
-      }
-      
-      .splide__arrow {
-        position: absolute;
-        z-index: 1;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 2em;
-        height: 2em;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        padding: 0;
-        opacity: .7;
-        background: #ccc;
-        cursor: pointer;
-      }
-      
-      .splide__arrow--prev {
-        left: 1em;
-      }
-      
-      .splide__arrow--next {
-        right: 1em;
-      }
-      
-      .splide__arrow--prev svg, .splide__pagination__prev svg {
-        transform: scaleX(-1);
-      }
-      
-      .splide__pagination {
-        counter-reset: pslide-counter 0;
-        display: inline-flex;
-        align-items: center;
-        width: 95%;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin: 0;
-        position: absolute;
-        z-index: 1;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 0;
-        bottom: calc(-1 * var(--splide-pagination-height));
-        height: var(--splide-pagination-height);          
-      }
-      
-      .splide__pagination .splide__pagination__page {
-        counter-increment: pslide-counter;
-      }
-      
-      .splide__pagination li:first-child:after {
-        content: "01";
-      }
-      
-      .splide__pagination li:last-child:before {
-        content: counter(pslide-counter, decimal-leading-zero);
-      }
-      
-      
-      .splide__pagination__arrow {
-        margin: 0 10px;
-        border: 0;
-        background: transparent;
-        outline: none;
-        cursor: pointer;
-      }
-      
-      .splide__pagination__arrow svg {
-        width: 1em;
-        height: 1em;
-        font-size: 20px;
-      }
-      
-      .splide__pagination li.splide__pagination__control {
-        display: flex;
-        align-items: center;
-      }
-      
-      .splide__pagination__page {
-        width: 30px;
-        height: 6px;
-        background: lightgray;
-        border: 0;
-        margin: 0 2px;
-        outline: none;        
-        cursor: pointer;
-      }
-      
-      .splide__pagination__page.is-active {
-        background: cadetblue;
-      }
-      
-      .splide__image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .splide__lightbox {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        z-index: 1;
-        cursor: pointer;
-      }
-
-      .splide__lightbox svg {
-        width: 1em;
-        height: 1em;
-        font-size: 24px;
-      }
-    `)
-    )
-    document.body.appendChild(customStyle)
-  } else {
-    initCarousel()
   }
 }
 
