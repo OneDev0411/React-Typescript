@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, memo } from 'react'
 import {
   Box,
   Typography,
@@ -27,17 +27,19 @@ interface Props {
   title: string
   step?: Nullable<IBrandFlowStep>
   disableEdit: boolean
+  pristine: boolean
   submitting: boolean
   children: ReactNode
   onSubmit: () => void
   onDelete?: (data: IBrandFlowStep) => Promise<any>
 }
 
-export const BaseFormLayout = ({
+const Layout = ({
   index,
   step,
   title,
   children,
+  pristine,
   submitting,
   disableEdit,
   onSubmit,
@@ -73,15 +75,18 @@ export const BaseFormLayout = ({
               </Typography>
             </Grid>
             <Grid container xs={6} justify="flex-end">
-              <Button
-                variant="contained"
-                color="secondary"
-                disabled={submitting}
-                type="submit"
-                size="small"
-              >
-                {submitting ? 'Saving' : 'Save'}
-              </Button>
+              {!pristine && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  disabled={submitting}
+                  type="submit"
+                  size="small"
+                >
+                  {submitting ? 'Saving' : 'Save'}
+                </Button>
+              )}
+
               {step && onDelete && (
                 <Box ml={1}>
                   <BaseDropdown
@@ -167,3 +172,5 @@ export const BaseFormLayout = ({
 
   return <Box className={classes.container}>{renderForm({})}</Box>
 }
+
+export const BaseFormLayout = memo(Layout)

@@ -69,7 +69,7 @@ export default function MarketingEmailForm({
         return onSubmit(newStep)
       }}
       initialValues={getInitialValues(step)}
-      render={({ handleSubmit, submitting }) => {
+      render={({ handleSubmit, submitting, pristine }) => {
         return (
           <BaseFormLayout
             index={index}
@@ -77,6 +77,7 @@ export default function MarketingEmailForm({
             step={step || null}
             disableEdit={disableEdit}
             submitting={submitting}
+            pristine={pristine}
             onSubmit={handleSubmit}
             onDelete={onDelete}
           >

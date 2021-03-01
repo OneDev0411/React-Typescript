@@ -39,7 +39,7 @@ export const useStyles = makeStyles(
     commonFields: {
       display: 'flex',
       alignItems: 'flex-start',
-      flexWrap: 'nowrap'
+      flexWrap: 'wrap'
     },
     otherFieldsContainer: {
       padding: theme.spacing(2.5, 5)

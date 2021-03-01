@@ -77,7 +77,7 @@ export default function BasicEmailForm({
         return onSubmit(newStep)
       }}
       initialValues={getInitialValues(step)}
-      render={({ handleSubmit, submitting, values }) => {
+      render={({ handleSubmit, submitting, values, pristine }) => {
         return (
           <BaseFormLayout
             index={index}
@@ -85,6 +85,7 @@ export default function BasicEmailForm({
             step={step || null}
             disableEdit={disableEdit}
             submitting={submitting}
+            pristine={pristine}
             onSubmit={handleSubmit}
             onDelete={onDelete}
           >
