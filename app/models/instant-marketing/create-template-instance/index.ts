@@ -8,7 +8,7 @@ const DEFAULT_QUERY = {
   'associations[]': ['template_instance.template']
 }
 
-interface TemplateInstanceInputData {
+export interface TemplateInstanceInputData {
   html: string
   deals?: UUID[]
   listings?: UUID[]
