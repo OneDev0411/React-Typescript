@@ -1,6 +1,7 @@
 import React, { ReactNode, memo } from 'react'
 import {
   Box,
+  Chip,
   Typography,
   Grid,
   Button,
@@ -71,7 +72,15 @@ const Layout = ({
                 </Box>
               )}
               <Typography variant="body1">
-                {index}. {title} {!step && '[Draft]'}
+                {index}. {title}{' '}
+                {!step && (
+                  <Chip
+                    label="Draft"
+                    variant="outlined"
+                    color="secondary"
+                    size="small"
+                  />
+                )}
               </Typography>
             </Grid>
             <Grid container xs={6} justify="flex-end">

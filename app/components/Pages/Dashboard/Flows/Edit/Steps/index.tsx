@@ -8,8 +8,26 @@ import { NewStep } from './New'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
+    timeline: {
       margin: 'auto',
+      display: 'flex',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      width: '100%',
+      maxWidth: '730px', // From figma
+      position: 'relative',
+      '&::after': {
+        position: 'absolute',
+        top: '0',
+        content: "''",
+        width: '1px',
+        height: '100%',
+        background: theme.palette.divider,
+        zIndex: 0
+      }
+    },
+    NewStepContainer: {
+      margin: theme.spacing(2, 'auto', 0),
       display: 'flex',
       justifyContent: 'center',
       flexWrap: 'wrap',
@@ -17,7 +35,8 @@ const useStyles = makeStyles(
       maxWidth: '730px' // From figma
     },
     droppableProvider: {
-      width: '100%'
+      width: '100%',
+      zIndex: 1
     }
   }),
   { name: 'Steps' }
@@ -47,9 +66,6 @@ export default function Steps({
   onNewEmailTemplateClick
 }: Props) {
   const classes = useStyles()
-  // const startFromSeconds = items.length
-  //   ? getNextStepStartFrom(items[items.length - 1])
-  //   : 0
 
   return (
     <>
@@ -61,31 +77,49 @@ export default function Steps({
           )
         }
       >
-        <Box className={classes.container}>
+        <Box className={classes.timeline}>
           <Droppable droppableId="flow-steps-droppable">
-            {droppableProvided => (
+            {(droppableProvided, draggableSnapshot) => (
               <div
                 className={classes.droppableProvider}
                 ref={droppableProvided.innerRef}
               >
                 {items.map((item, index) => {
-                  const prevStep = index > 0 ? items[index - 1] : undefined
+                  const stepOrder = index + 1
+                  const isLastItem = stepOrder === items.length
 
                   return (
-                    <Item
-                      index={index}
-                      disableEdit={disableEdit}
-                      onUpdate={onStepUpdate}
-                      onDelete={onStepDelete}
-                      key={item.id}
-                      step={item}
-                      prevStep={prevStep}
-                      emailTemplates={emailTemplates}
-                      defaultSelectedEmailTemplate={
-                        defaultSelectedEmailTemplate
-                      }
-                      onNewEmailTemplateClick={onNewEmailTemplateClick}
-                    />
+                    <>
+                      <Box mb={draggableSnapshot.isDraggingOver ? 3 : 0}>
+                        <Item
+                          index={stepOrder}
+                          disableEdit={disableEdit}
+                          onUpdate={onStepUpdate}
+                          onDelete={onStepDelete}
+                          key={item.id}
+                          step={item}
+                          emailTemplates={emailTemplates}
+                          defaultSelectedEmailTemplate={
+                            defaultSelectedEmailTemplate
+                          }
+                          onNewEmailTemplateClick={onNewEmailTemplateClick}
+                        />
+                      </Box>
+                      {!isLastItem && !draggableSnapshot.isDraggingOver && (
+                        <Box width="100%" my={3}>
+                          <NewStep
+                            miniMode
+                            index={stepOrder + 1}
+                            emailTemplates={emailTemplates}
+                            defaultSelectedEmailTemplate={
+                              defaultSelectedEmailTemplate
+                            }
+                            onSubmit={onNewStepSubmit}
+                            onNewEmailTemplateClick={onNewEmailTemplateClick}
+                          />
+                        </Box>
+                      )}
+                    </>
                   )
                 })}
               </div>
@@ -94,7 +128,7 @@ export default function Steps({
         </Box>
       </DragDropContext>
       {!disableEdit && (
-        <Box className={classes.container}>
+        <Box className={classes.NewStepContainer}>
           <NewStep
             index={items.length + 1}
             shouldShowDefaultForm={items.length === 0}

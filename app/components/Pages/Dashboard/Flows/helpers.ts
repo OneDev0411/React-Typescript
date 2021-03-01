@@ -85,6 +85,14 @@ export function convertStepToStepInput(
     time: step.time
   }
 
+  if (step.template) {
+    resultStep.template = step.template.id
+  }
+
+  if (step.template_instance) {
+    resultStep.template_instance = step.template_instance.id
+  }
+
   if (step.email) {
     resultStep.email = step.email.id
   }

@@ -1,9 +1,7 @@
 import React from 'react'
-import { Box } from '@material-ui/core'
 
 import EventForm from '../New/EventForm'
 
-// import { View } from './Components/View'
 import BasicEmailForm from '../New/BasicEmailForm'
 import MarketingEmailForm from '../New/MarketingEmailForm'
 
@@ -11,7 +9,6 @@ interface Props {
   disableEdit: boolean
   index: number
   step: IBrandFlowStep
-  prevStep?: IBrandFlowStep
   emailTemplates: IBrandEmailTemplate[]
   defaultSelectedEmailTemplate?: UUID
   onDelete: (step: IBrandFlowStep) => Promise<any>
@@ -23,7 +20,6 @@ export default function Item({
   disableEdit,
   index,
   step,
-  // prevStep,
   emailTemplates,
   defaultSelectedEmailTemplate,
   onDelete,
@@ -75,23 +71,5 @@ export default function Item({
     }
   }
 
-  return <Box mb={2}>{renderEditForm()}</Box>
-  // if (isEditing) {
-  //   return (
-  //     <Box className={commonClasses.stepContainer} position="relative">
-  //       <Box className={commonClasses.stepIndex}>{index + 1}</Box>
-  //       <Box className={commonClasses.itemContent}>{renderEditForm()}</Box>
-  //     </Box>
-  //   )
-  // }
-
-  // return (
-  //   <View
-  //     step={step}
-  //     disableEdit={disableEdit}
-  //     isEditing={isEditing}
-  //     setIsEditing={setIsEditing}
-  //     index={index}
-  //   />
-  // )
+  return <>{renderEditForm()}</>
 }
