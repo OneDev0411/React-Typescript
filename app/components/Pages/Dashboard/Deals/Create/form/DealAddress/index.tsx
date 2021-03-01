@@ -107,7 +107,7 @@ export function DealAddress({ onChange }: Props) {
     [searchCriteria]
   )
 
-  const { listings, places, getParsedPlace } = useSearchLocation(
+  const { isSearching, listings, places, getParsedPlace } = useSearchLocation(
     debouncedSearchCriteria
   )
 
@@ -244,7 +244,8 @@ export function DealAddress({ onChange }: Props) {
                 </Box>
               ))}
 
-              {debouncedSearchCriteria.length > 0 &&
+              {!isSearching &&
+                debouncedSearchCriteria.length > 0 &&
                 listings.length === 0 &&
                 places.length === 0 && (
                   <Callout

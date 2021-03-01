@@ -8,6 +8,7 @@ import { useGoogleMapsPlaces } from './use-google-maps-places'
 export function useSearchLocation(
   criteria: string
 ): {
+  isSearching: boolean
   places: google.maps.places.AutocompletePrediction[]
   listings: ICompactListing[]
   getParsedPlace: (
@@ -20,6 +21,7 @@ export function useSearchLocation(
     google.maps.places.AutocompletePrediction[]
   >([])
   const [listings, setListings] = useState<ICompactListing[]>([])
+  const [isSearching, setIsSearching] = useState(false)
 
   useEffect(() => {
     const searchPlaces = () => {
@@ -59,8 +61,11 @@ export function useSearchLocation(
         return
       }
 
-      searchPlaces()
-      searchMls()
+      setIsSearching(true)
+
+      await Promise.all([searchPlaces(), searchMls()])
+
+      setIsSearching(false)
     }
 
     search()
@@ -97,6 +102,7 @@ export function useSearchLocation(
   }
 
   return {
+    isSearching,
     places,
     listings,
     getParsedPlace

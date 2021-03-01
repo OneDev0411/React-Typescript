@@ -150,8 +150,6 @@ export class RoleAgentIntegration extends React.Component {
   }
 
   render() {
-    console.log(this.state.isAgentDrawerOpen)
-
     return (
       <>
         {this.state.isAgentDrawerOpen && (

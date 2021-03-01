@@ -40,12 +40,8 @@ export function DealCard({ dealSide }: Props) {
 
       <QuestionForm>
         <Box display="flex" justifyContent="flex-end">
-          <Button variant="contained" color="secondary" onClick={openDeal}>
-            View Deal
-          </Button>
-
           {dealSide == 'Both' && (
-            <Box ml={2}>
+            <Box mr={2}>
               <Button
                 variant="outlined"
                 color="secondary"
@@ -55,6 +51,10 @@ export function DealCard({ dealSide }: Props) {
               </Button>
             </Box>
           )}
+
+          <Button variant="contained" color="secondary" onClick={openDeal}>
+            View Deal
+          </Button>
         </Box>
       </QuestionForm>
     </QuestionSection>

@@ -9,7 +9,6 @@ import {
 } from '@material-ui/core'
 import fecha from 'fecha'
 import { useDispatch } from 'react-redux'
-import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 import { upsertContexts } from 'actions/deals'
@@ -25,6 +24,7 @@ import { MaskedInput } from 'components/MaskedInput'
 
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+import { getContextInputMask } from 'deals/utils/get-context-mask'
 
 import { getField } from 'models/Deal/helpers/context'
 
@@ -127,32 +127,6 @@ export function DealContext({ context, onChange = () => {} }: Props) {
     }
   }
 
-  const getMask = () => {
-    if (context.properties?.mask) {
-      return context.properties.mask
-    }
-
-    if (context.format === 'Currency') {
-      return createNumberMask({
-        prefix: '',
-        allowNegative: false,
-        allowLeadingZeroes: true,
-        allowDecimal: true
-      })
-    }
-
-    if (contextType === 'Number') {
-      return createNumberMask({
-        prefix: '',
-        allowNegative: true,
-        allowLeadingZeroes: false,
-        allowDecimal: true
-      })
-    }
-
-    return []
-  }
-
   if (wizard.lastVisitedStep < step) {
     return null
   }
@@ -184,7 +158,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
                 label={context.label}
                 InputProps={{
                   inputProps: {
-                    mask: getMask()
+                    mask: getContextInputMask(context)
                   },
                   startAdornment:
                     context.format === 'Currency' ? (
@@ -207,7 +181,9 @@ export function DealContext({ context, onChange = () => {} }: Props) {
               className={classes.saveButton}
               onClick={() => handleSave()}
             >
-              {defaultValue ? 'Looks Good' : 'Save'}
+              {defaultValue && defaultValue === inputValue
+                ? 'Looks Good'
+                : 'Save'}
             </Button>
           </Box>
         </Box>
