@@ -197,7 +197,8 @@ export default function CreateOffer({ params }: Props) {
                 title={`Enter ${
                   propertyType?.includes('Lease') ? 'tenant' : 'buyer'
                 } information as shown on offer`}
-                roles={roles.concat(value)}
+                predefinedRoles={roles}
+                roles={value}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))
                 }

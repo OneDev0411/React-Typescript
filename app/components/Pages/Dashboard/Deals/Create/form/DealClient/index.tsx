@@ -28,6 +28,7 @@ interface Props {
   title: string
   side: IDealType
   roles: IDealRole[]
+  predefinedRoles?: IDealRole[]
   skippable?: boolean
   submitButtonLabel?: string
   onChange?: (role: IDealRole, type: 'update' | 'create' | 'delete') => void
@@ -37,6 +38,7 @@ export function DealClient({
   side,
   title,
   roles,
+  predefinedRoles = [],
   skippable = false,
   submitButtonLabel = 'Continue',
   onChange
@@ -49,6 +51,9 @@ export function DealClient({
 
   const allowedRoles = getRoles(side)
   const clientRoles = roles.filter(client => allowedRoles.includes(client.role))
+  const predefinedClientRoles = predefinedRoles.filter(client =>
+    allowedRoles.includes(client.role)
+  )
 
   /**
    * list of all existence roles
@@ -107,14 +112,14 @@ export function DealClient({
           />
         ) : (
           <Box display="flex" flexWrap="wrap" width="100%">
+            {predefinedClientRoles.map(role => (
+              <RoleCard key={role.id} role={role} readonly />
+            ))}
+
             {clientRoles.map(role => (
               <RoleCard
                 key={role.id}
                 role={role}
-                /* readonly prop only is valid in Create Offer flow
-                 * and makes readonly the roles that have been already created
-                 */
-                readonly={!deal && !!role.deal}
                 onClickEdit={() => setSelectedRole(role)}
                 onClickRemove={() => handleDeleteRole(role)}
               />
@@ -153,7 +158,7 @@ export function DealClient({
             <Button
               variant="contained"
               color="secondary"
-              disabled={clientRoles.filter(role => !role.deal).length === 0}
+              disabled={clientRoles.length === 0}
               onClick={handleNext}
             >
               {clientRoles.length === 0 ? 'Continue ' : submitButtonLabel}
