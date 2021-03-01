@@ -34,6 +34,8 @@ import MatterportDrawer from 'components/MatterportDrawer'
 
 import MapDrawer from 'components/MapDrawer'
 
+import CarouselDrawer from 'components/CarouselDrawer'
+
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
 
@@ -87,7 +89,7 @@ class Builder extends React.Component {
       isNeighborhoodsReportDrawerOpen: false,
       isNeighborhoodsGraphsReportDrawerOpen: false,
       mapToEdit: null,
-      imageSelectDialogOwner: null
+      carouselToEdit: null
     }
 
     this.emailBlocksRegistered = false
@@ -276,7 +278,6 @@ class Builder extends React.Component {
     const image = components.getType('image')
     const mjImage = components.getType('mj-image')
     const mjCarouselImage = components.getType('mj-carousel-image')
-    const carouselImage = components.getType('carousel-image')
 
     const imageComponents = [
       {
@@ -290,10 +291,6 @@ class Builder extends React.Component {
       {
         name: 'mj-carousel-image',
         component: mjCarouselImage
-      },
-      {
-        name: 'carousel-image',
-        component: carouselImage
       }
     ].filter(image => !!image.component)
 
@@ -323,7 +320,8 @@ class Builder extends React.Component {
 
         this.setState({ imageToEdit })
       },
-      onChangeThemeClick: this.openMapDrawer
+      onChangeThemeClick: this.openMapDrawer,
+      onManageCarouselClick: this.openCarouselDrawer
     })
     this.setState({ isEditorLoaded: true })
 
@@ -365,10 +363,7 @@ class Builder extends React.Component {
       },
       image: {
         onDrop: () => {
-          this.setState({
-            isImageSelectDialogOpen: true,
-            imageSelectDialogOwner: 'image'
-          })
+          this.setState({ isImageSelectDialogOpen: true })
         }
       },
       video: {
@@ -461,15 +456,14 @@ class Builder extends React.Component {
       },
       onMapDrop: this.openMapDrawer,
       onMapDoubleClick: this.openMapDrawer,
-      onCarouselImageDrop: () => {
-        this.setState({
-          isImageSelectDialogOpen: true,
-          imageSelectDialogOwner: 'carouselImage'
-        })
-      }
+      onCarouselDoubleClick: this.openCarouselDrawer
     } // TODO: read this from the template config
 
     this.blocks = registerWebsiteBlocks(this.editor, renderData, blocksOptions)
+  }
+
+  openCarouselDrawer = model => {
+    this.setState({ carouselToEdit: model })
   }
 
   openMapDrawer = model => {
@@ -1031,39 +1025,18 @@ class Builder extends React.Component {
           {this.state.isImageSelectDialogOpen && (
             <ImageSelectDialog
               onClose={() => {
-                if (this.state.imageSelectDialogOwner === 'image') {
-                  this.blocks?.image?.selectHandler()
-                } else if (
-                  this.state.imageSelectDialogOwner === 'carouselImage'
-                ) {
-                  this.blocks?.carousel?.selectHandler()
-                }
+                this.blocks?.image?.selectHandler()
 
-                this.setState({
-                  isImageSelectDialogOpen: false,
-                  imageSelectDialogOwner: null
-                })
+                this.setState({ isImageSelectDialogOpen: false })
               }}
               onSelect={imageUrl => {
-                if (
-                  !(
-                    this.state.imageSelectDialogOwner === 'image' &&
-                    this.blocks?.image?.selectHandler(imageUrl)
-                  ) &&
-                  !(
-                    this.state.imageSelectDialogOwner === 'carouselImage' &&
-                    this.blocks?.carousel?.selectHandler(imageUrl)
-                  )
-                ) {
+                if (!this.blocks?.image?.selectHandler(imageUrl)) {
                   this.editor.runCommand('set-image', {
                     value: imageUrl
                   })
                 }
 
-                this.setState({
-                  isImageSelectDialogOpen: false,
-                  imageSelectDialogOwner: null
-                })
+                this.setState({ isImageSelectDialogOpen: false })
               }}
               onUpload={async file => {
                 const templateId = this.selectedTemplate.id
@@ -1159,6 +1132,20 @@ class Builder extends React.Component {
             onSelect={(...args) => {
               this.blocks.map.selectHandler(...args)
               this.setState({ mapToEdit: null })
+            }}
+          />
+          <CarouselDrawer
+            isOpen={!!this.state.carouselToEdit}
+            carousel={this.state.carouselToEdit}
+            initialCenter={
+              this.props.templateData.listing?.property.address.location
+            }
+            onClose={() => {
+              this.setState({ carouselToEdit: null })
+            }}
+            onSelect={(...args) => {
+              this.blocks.carousel.selectHandler(...args)
+              this.setState({ carouselToEdit: null })
             }}
           />
           <Header>
@@ -1312,10 +1299,6 @@ class Builder extends React.Component {
             </div>
           </BuilderContainer>
         </Container>
-        <link
-          href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css"
-          rel="stylesheet"
-        />
       </Portal>
     )
   }
