@@ -32,8 +32,7 @@ export const CHANGE_IMAGE_TOOLBAR_BUTTON_NAME = `${IMAGE_TOOLBAR_BUTTONS_PREFIX}
 export const IMAGE_ELEMENT_TYPES: string[] = [
   'image',
   'mj-image',
-  'mj-carousel-image',
-  'carousel-slide'
+  'mj-carousel-image'
 ]
 
 export const BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES: string[] = [
@@ -45,4 +44,7 @@ export const BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES: string[] = [
 export const BACKGROUND_URL_ALLOWED_ELEMENT_TYPES: string[] = ['mj-hero']
 
 export const MAP_TOOLBAR_BUTTONS_PREFIX = `${TOOLBAR_BUTTONS_PREFIX}-map`
-export const CHANGE_MAP_THEME_TOOLBAR_BUTTONS_PREFIX = `${MAP_TOOLBAR_BUTTONS_PREFIX}-change-theme`
+export const CHANGE_MAP_THEME_TOOLBAR_BUTTON_NAME = `${MAP_TOOLBAR_BUTTONS_PREFIX}-change-theme`
+
+export const CAROUSEL_TOOLBAR_BUTTONS_PREFIX = `${TOOLBAR_BUTTONS_PREFIX}-carousel`
+export const MANAGE_CAROUSEL_TOOLBAR_BUTTON_NAME = `${CAROUSEL_TOOLBAR_BUTTONS_PREFIX}-manage`

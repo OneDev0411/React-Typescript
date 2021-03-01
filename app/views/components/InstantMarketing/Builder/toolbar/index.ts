@@ -4,7 +4,8 @@ import { Model } from 'backbone'
 import {
   EDIT_IMAGE_TOOLBAR_BUTTON_NAME,
   CHANGE_IMAGE_TOOLBAR_BUTTON_NAME,
-  CHANGE_MAP_THEME_TOOLBAR_BUTTONS_PREFIX
+  CHANGE_MAP_THEME_TOOLBAR_BUTTON_NAME,
+  MANAGE_CAROUSEL_TOOLBAR_BUTTON_NAME
 } from '../constants'
 
 import {
@@ -13,7 +14,9 @@ import {
   isBackgroundUrlAllowed,
   hasToolbarImageButtons,
   isMap,
-  hasToolbarMapButtons
+  hasToolbarMapButtons,
+  isCarousel,
+  hasToolbarCarouselButtons
 } from '../utils/helpers'
 
 interface RegisterImageToolbarButtonsOptions {
@@ -82,7 +85,7 @@ function registerMapToolbarButtons(
   }
 
   toolbar.unshift({
-    name: CHANGE_MAP_THEME_TOOLBAR_BUTTONS_PREFIX,
+    name: CHANGE_MAP_THEME_TOOLBAR_BUTTON_NAME,
     attributes: { class: 'fa fa-pencil map' },
     command: () =>
       editor.runCommand('call-fn', {
@@ -93,8 +96,42 @@ function registerMapToolbarButtons(
   })
 }
 
+interface RegisterCarouselToolbarButtonsOptions {
+  onManageCarouselClick: (model: Model) => void
+}
+
+function registerCarouselToolbarButtons(
+  editor: Editor,
+  selected: Model,
+  { onManageCarouselClick }: RegisterCarouselToolbarButtonsOptions
+) {
+  const isCarouselElement = isCarousel(selected)
+
+  if (!isCarouselElement) {
+    return
+  }
+
+  const toolbar: any[] = selected.get('toolbar')
+  const hasCarouselButtons = hasToolbarCarouselButtons(selected)
+
+  if (hasCarouselButtons) {
+    return
+  }
+
+  toolbar.unshift({
+    name: MANAGE_CAROUSEL_TOOLBAR_BUTTON_NAME,
+    attributes: { class: 'fa fa-pencil carousel' },
+    command: () =>
+      editor.runCommand('call-fn', {
+        fn() {
+          onManageCarouselClick(selected)
+        }
+      })
+  })
+}
 type RegisterToolbarButtonsOptions = RegisterImageToolbarButtonsOptions &
-  RegisterMapToolbarButtonsOptions
+  RegisterMapToolbarButtonsOptions &
+  RegisterCarouselToolbarButtonsOptions
 
 export function registerToolbarButtons(
   editor: Editor,
@@ -108,5 +145,7 @@ export function registerToolbarButtons(
     registerImageToolbarButtons(editor, selected, options)
 
     registerMapToolbarButtons(editor, selected, options)
+
+    registerCarouselToolbarButtons(editor, selected, options)
   })
 }

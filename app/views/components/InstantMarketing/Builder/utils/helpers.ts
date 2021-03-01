@@ -1,13 +1,15 @@
 import { Model } from 'backbone'
 
 import { typeEmbedMap } from '../Blocks/Website/Map'
+import { typeCarousel } from '../Blocks/Website/Carousel'
 
 import {
   IMAGE_TOOLBAR_BUTTONS_PREFIX,
   IMAGE_ELEMENT_TYPES,
   BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES,
   BACKGROUND_URL_ALLOWED_ELEMENT_TYPES,
-  MAP_TOOLBAR_BUTTONS_PREFIX
+  MAP_TOOLBAR_BUTTONS_PREFIX,
+  CAROUSEL_TOOLBAR_BUTTONS_PREFIX
 } from '../constants'
 
 export function isImage(model: Model): boolean {
@@ -114,4 +116,12 @@ export function isMap(model: Model): boolean {
 
 export function hasToolbarMapButtons(model: Model): boolean {
   return hasToolbarButtons(model, MAP_TOOLBAR_BUTTONS_PREFIX)
+}
+
+export function isCarousel(model: Model): boolean {
+  return model.get('type') === typeCarousel
+}
+
+export function hasToolbarCarouselButtons(model: Model): boolean {
+  return hasToolbarButtons(model, CAROUSEL_TOOLBAR_BUTTONS_PREFIX)
 }

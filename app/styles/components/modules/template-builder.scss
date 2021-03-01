@@ -400,6 +400,12 @@
           content: 'Change Theme';
         }
       }
+
+      .fa-pencil.carousel {
+        &::after {
+          content: 'Manage';
+        }
+      }
     }
   }
 
