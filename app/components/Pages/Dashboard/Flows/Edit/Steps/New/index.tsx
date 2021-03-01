@@ -13,7 +13,6 @@ interface Props {
   shouldShowDefaultForm?: boolean
   onSubmit: (data: IBrandFlowStepInput) => Promise<any>
   onNewEmailTemplateClick: () => void
-  onReviewEmailTemplateClick: (template: IBrandEmailTemplate) => void
 }
 
 export const NewStep = ({
@@ -22,8 +21,7 @@ export const NewStep = ({
   emailTemplates,
   defaultSelectedEmailTemplate,
   onSubmit,
-  onNewEmailTemplateClick,
-  onReviewEmailTemplateClick
+  onNewEmailTemplateClick
 }: Props) => {
   const [openForm, setOpenForm] = useState<
     Nullable<'event' | 'basic_email' | 'marketing_email'>
@@ -45,7 +43,6 @@ export const NewStep = ({
       defaultSelectedTemplate={defaultSelectedEmailTemplate}
       onSubmit={submitHandler}
       onNewTemplateClick={onNewEmailTemplateClick}
-      onReviewTemplateClick={onReviewEmailTemplateClick}
     />
   )
   const rebderTemplateEmailForm = () => (

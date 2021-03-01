@@ -17,7 +17,6 @@ interface Props {
   onDelete: (step: IBrandFlowStep) => Promise<any>
   onUpdate: (step: IBrandFlowStepInput, stepId: UUID) => Promise<any>
   onNewEmailTemplateClick: () => void
-  onReviewEmailTemplateClick: (template: IBrandEmailTemplate) => void
 }
 
 export default function Item({
@@ -29,8 +28,7 @@ export default function Item({
   defaultSelectedEmailTemplate,
   onDelete,
   onUpdate,
-  onNewEmailTemplateClick,
-  onReviewEmailTemplateClick
+  onNewEmailTemplateClick
 }: Props) {
   const renderEditForm = () => {
     if (!step) {
@@ -60,7 +58,6 @@ export default function Item({
           onDelete={() => onDelete(step)}
           defaultSelectedTemplate={defaultSelectedEmailTemplate}
           onNewTemplateClick={onNewEmailTemplateClick}
-          onReviewTemplateClick={onReviewEmailTemplateClick}
         />
       )
     }

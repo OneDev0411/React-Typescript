@@ -3,12 +3,14 @@ import { Field } from 'react-final-form'
 import {
   Box,
   Button,
-  Tooltip,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  FormHelperText
+  Typography,
+  Theme,
+  FormHelperText,
+  makeStyles
 } from '@material-ui/core'
 
 interface Props {
@@ -16,17 +18,36 @@ interface Props {
   currentTemplateId?: Nullable<UUID>
   disabled: boolean
   onNewTemplateClick: () => void
-  onReviewTemplateClick: (template: IBrandEmailTemplate) => void
 }
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    reviewContainer: {
+      marginTop: theme.spacing(2),
+      padding: theme.spacing(2),
+      background: theme.palette.grey[100],
+      borderRadius: '8px'
+    },
+    reviewContainerHeader: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: theme.spacing(1.5),
+      paddingBottom: theme.spacing(1.5),
+      borderBottom: `1px solid ${theme.palette.divider}`
+    }
+  }),
+  { name: 'FlowEmailTemplate' }
+)
 
 export const EmailTemplate = ({
   templates,
   currentTemplateId,
   disabled,
-  onNewTemplateClick,
-  onReviewTemplateClick
+  onNewTemplateClick
 }: Props) => {
-  const emailTemplates = useMemo(() => {
+  const classes = useStyles()
+  const emailTemplatesOptions = useMemo(() => {
     return [
       {
         label: 'Select a template',
@@ -40,10 +61,10 @@ export const EmailTemplate = ({
   }, [templates])
 
   const selectedItem = useMemo(() => {
-    const defaultValue = emailTemplates[0]
+    const defaultValue = emailTemplatesOptions[0]
 
     if (currentTemplateId) {
-      const template = emailTemplates.find(
+      const template = emailTemplatesOptions.find(
         item => item.value === currentTemplateId
       )
 
@@ -51,7 +72,23 @@ export const EmailTemplate = ({
     }
 
     return defaultValue
-  }, [currentTemplateId, emailTemplates])
+  }, [currentTemplateId, emailTemplatesOptions])
+
+  const reviewTemplateData = useMemo(() => {
+    if (!currentTemplateId) {
+      return null
+    }
+
+    const selectedTemplate = templates.find(
+      ({ id }) => id === currentTemplateId
+    )
+
+    if (!selectedTemplate) {
+      return null
+    }
+
+    return selectedTemplate
+  }, [currentTemplateId, templates])
 
   const handleValidation = value => {
     if (value) {
@@ -61,20 +98,6 @@ export const EmailTemplate = ({
     return 'No email template selected'
   }
 
-  const handleReviewTemplate = e => {
-    e.stopPropagation()
-
-    const selectedTemplate = templates.find(
-      ({ id }) => id === currentTemplateId
-    )
-
-    if (!selectedTemplate) {
-      return
-    }
-
-    onReviewTemplateClick(selectedTemplate)
-  }
-
   return (
     <Box>
       <Field
@@ -82,62 +105,74 @@ export const EmailTemplate = ({
         name="email_template"
         label="Email Template"
         text="Select an email template"
-        items={emailTemplates}
+        items={emailTemplatesOptions}
         validate={handleValidation}
         render={({ input: { name, onChange, value }, meta }) => {
           const showError = Boolean(meta.submitFailed && meta.error)
 
           return (
-            <FormControl variant="outlined" size="small" error={showError}>
-              <InputLabel id="email_template">Template</InputLabel>
-              <Select
-                labelId="email_template"
-                id="email_template-select"
-                name={name}
-                value={selectedItem.value}
-                onChange={(event: ChangeEvent<{ value: string | number }>) => {
-                  const value = event.target.value
-
-                  onChange(value)
-                }}
-                label="Template"
+            <Box>
+              <FormControl
+                fullWidth
+                variant="outlined"
+                size="small"
+                color="secondary"
+                error={showError}
               >
-                {emailTemplates.map(item => (
-                  <MenuItem key={item.value} value={item.value}>
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </Select>
-              {showError && (
-                <FormHelperText variant="standard">{meta.error}</FormHelperText>
+                <InputLabel id="email_template">Template</InputLabel>
+                <Select
+                  labelId="email_template"
+                  id="email_template-select"
+                  name={name}
+                  value={selectedItem.value}
+                  onChange={(
+                    event: ChangeEvent<{ value: string | number }>
+                  ) => {
+                    const value = event.target.value
+
+                    onChange(value)
+                  }}
+                  label="Template"
+                >
+                  {emailTemplatesOptions.map(item => (
+                    <MenuItem key={item.value} value={item.value}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {showError && (
+                  <FormHelperText variant="standard">
+                    {meta.error}
+                  </FormHelperText>
+                )}
+              </FormControl>
+              {reviewTemplateData && (
+                <Box className={classes.reviewContainer}>
+                  <Box className={classes.reviewContainerHeader}>
+                    <Typography variant="body2">
+                      Subject: {reviewTemplateData.subject}
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      disabled={disabled}
+                      onClick={event => {
+                        event.stopPropagation()
+                        onNewTemplateClick()
+                      }}
+                    >
+                      Create a New Template
+                    </Button>
+                  </Box>
+                  <Typography variant="body2">
+                    {reviewTemplateData.text}
+                  </Typography>
+                </Box>
               )}
-            </FormControl>
+            </Box>
           )
         }}
       />
-      {Boolean(currentTemplateId) && (
-        <Tooltip title="Review or edit selected email template">
-          <Button
-            variant="text"
-            color="primary"
-            disabled={disabled}
-            onClick={handleReviewTemplate}
-          >
-            Review
-          </Button>
-        </Tooltip>
-      )}
-      <Button
-        variant="text"
-        color="primary"
-        disabled={disabled}
-        onClick={event => {
-          event.stopPropagation()
-          onNewTemplateClick()
-        }}
-      >
-        Create a New Email Template
-      </Button>
     </Box>
   )
 }

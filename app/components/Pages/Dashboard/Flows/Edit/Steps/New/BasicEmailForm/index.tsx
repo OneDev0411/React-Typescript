@@ -18,7 +18,6 @@ interface Props extends BaseFormProps {
   defaultSelectedTemplate?: UUID
   templates: IBrandEmailTemplate[]
   onNewTemplateClick: () => void
-  onReviewTemplateClick: (template: IBrandEmailTemplate) => void
 }
 
 export default function BasicEmailForm({
@@ -29,8 +28,7 @@ export default function BasicEmailForm({
   defaultSelectedTemplate,
   onSubmit,
   onDelete,
-  onNewTemplateClick,
-  onReviewTemplateClick
+  onNewTemplateClick
 }: Props) {
   function getInitialValues(stepData?: IBrandFlowStep): BasicEmailFormData {
     if (!stepData || !stepData.email) {
@@ -102,7 +100,6 @@ export default function BasicEmailForm({
                 currentTemplateId={values.email_template}
                 disabled={submitting}
                 onNewTemplateClick={onNewTemplateClick}
-                onReviewTemplateClick={onReviewTemplateClick}
               />
             </Box>
           </BaseFormLayout>

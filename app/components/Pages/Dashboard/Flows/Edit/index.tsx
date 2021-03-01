@@ -298,18 +298,6 @@ function Edit(props: WithRouterProps) {
     [brand, flow]
   )
 
-  const reviewEmailTemplateClickHandler = useCallback(
-    (emailTemplate: IBrandEmailTemplate) => {
-      if (!brand || !flow) {
-        return
-      }
-
-      setSelectedEmailTemplate(emailTemplate)
-      setIsEmailTemplateDrawerOpen(true)
-    },
-    [brand, flow]
-  )
-
   const newEmailTemplateClickHandler = useCallback(() => {
     if (!brand || !flow) {
       return
@@ -391,7 +379,6 @@ function Edit(props: WithRouterProps) {
               onStepUpdate={stepUpdateHandler}
               onStepMove={stepMoveHandler}
               onNewEmailTemplateClick={newEmailTemplateClickHandler}
-              onReviewEmailTemplateClick={reviewEmailTemplateClickHandler}
               items={flow.steps || []}
               emailTemplates={emailTemplates}
               defaultSelectedEmailTemplate={

@@ -70,6 +70,7 @@ export const EventType = props => {
             fullWidth
             variant="outlined"
             size="small"
+            color="secondary"
             error={showError}
           >
             <InputLabel id="email_template">Trigger</InputLabel>

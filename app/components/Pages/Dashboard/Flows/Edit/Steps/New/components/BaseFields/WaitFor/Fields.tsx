@@ -116,6 +116,7 @@ export const WaitForFields = ({
           labelId="event-unit"
           id="event-unit-select"
           variant="outlined"
+          color="secondary"
           classes={{
             outlined: classes.outlinedPadding
           }}
@@ -135,6 +136,7 @@ export const WaitForFields = ({
           labelId="trigger-at"
           id="trigger-at-select"
           variant="outlined"
+          color="secondary"
           value={triggerAt}
           classes={{
             outlined: classes.outlinedPadding

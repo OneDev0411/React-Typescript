@@ -33,7 +33,6 @@ interface Props {
   onStepUpdate: (step: IBrandFlowStepInput, stepId: UUID) => Promise<any>
   onStepMove: (sourceIndex: number, destinationIndex: number) => Promise<any>
   onNewEmailTemplateClick: () => void
-  onReviewEmailTemplateClick: (template: IBrandEmailTemplate) => void
 }
 
 export default function Steps({
@@ -45,8 +44,7 @@ export default function Steps({
   onStepDelete,
   onStepUpdate,
   onStepMove,
-  onNewEmailTemplateClick,
-  onReviewEmailTemplateClick
+  onNewEmailTemplateClick
 }: Props) {
   const classes = useStyles()
   // const startFromSeconds = items.length
@@ -87,7 +85,6 @@ export default function Steps({
                         defaultSelectedEmailTemplate
                       }
                       onNewEmailTemplateClick={onNewEmailTemplateClick}
-                      onReviewEmailTemplateClick={onReviewEmailTemplateClick}
                     />
                   )
                 })}
@@ -105,7 +102,6 @@ export default function Steps({
             defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
             onSubmit={onNewStepSubmit}
             onNewEmailTemplateClick={onNewEmailTemplateClick}
-            onReviewEmailTemplateClick={onReviewEmailTemplateClick}
           />
         </Box>
       )}
