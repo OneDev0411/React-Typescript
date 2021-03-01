@@ -5,24 +5,12 @@ import {
   Grid as MuiGrid,
   Button as MuiButton,
   Divider,
-  Typography,
-  Hidden
+  Typography
 } from '@material-ui/core'
 import { spacing } from '@material-ui/system'
 import { styled } from '@material-ui/core/styles'
 
-import {
-  mdiTicketPercentOutline,
-  mdiCardAccountMailOutline,
-  mdiHomeCityOutline,
-  mdiAccountCircleOutline,
-  mdiFormatListChecks,
-  mdiMapMarkerOutline
-} from '@mdi/js'
-
 import { roleName } from 'deals/utils/roles'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import DeleteRole from '../components/DeleteRole'
 
@@ -84,14 +72,6 @@ export function RoleForm(props) {
         <>
           {showNameDetails ? (
             <Grid container xs spacing={2} alignItems="center" mt={1}>
-              {!compact && (
-                <Hidden smDown>
-                  <Grid item md={1}>
-                    <SvgIcon path={mdiAccountCircleOutline} />
-                  </Grid>
-                </Hidden>
-              )}
-
               <Grid item md={compact ? 12 : true} xs={12}>
                 <Field
                   name="legal_prefix"
@@ -110,13 +90,6 @@ export function RoleForm(props) {
             </Grid>
           ) : (
             <Grid container xs spacing={2} alignItems="center">
-              {!compact && (
-                <Hidden smDown>
-                  <Grid item md={1}>
-                    &nbsp;
-                  </Grid>
-                </Hidden>
-              )}
               <Grid item md xs={12}>
                 <MuiButton onClick={() => setShowNameDetails(true)}>
                   Add title and middle name
@@ -128,14 +101,6 @@ export function RoleForm(props) {
       )}
 
       <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
-        {!compact && (
-          <Hidden smDown>
-            <Grid item md={1}>
-              <SvgIcon path={mdiFormatListChecks} />
-            </Grid>
-          </Hidden>
-        )}
-
         <Grid item md={compact ? 12 : true} xs={12}>
           <Field
             name="role"
@@ -151,14 +116,6 @@ export function RoleForm(props) {
 
       {roleType === TYPE_PERSON && (
         <Grid container xs spacing={2} alignItems="center" mt={1}>
-          {!compact && (
-            <Hidden smDown>
-              <Grid item md={1}>
-                <SvgIcon path={mdiAccountCircleOutline} />
-              </Grid>
-            </Hidden>
-          )}
-
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field
               name="legal_first_name"
@@ -189,51 +146,8 @@ export function RoleForm(props) {
         </Grid>
       )}
 
-      {(isVisible('company_title') || isVisible('mls_id')) && (
-        <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
-          {!compact && (
-            <Hidden smDown>
-              <Grid item md={1}>
-                <SvgIcon path={mdiHomeCityOutline} />
-              </Grid>
-            </Hidden>
-          )}
-
-          <Grid item md={compact ? 12 : true} xs={12}>
-            <Field
-              name="company_title"
-              label="Company / Trust"
-              searchFieldValue="company"
-              searchFieldLabel="company"
-              isVisible={isVisible('company_title')}
-              isRequired={isRequired('company_title')}
-              component={NameInput}
-              crmSearch // always search company in crm contacts
-              mutators={props.form.mutators}
-            />
-          </Grid>
-          <Grid item md={compact ? 12 : true} xs={12}>
-            <Field
-              name="mls_id"
-              label="MLS ID"
-              isVisible={isVisible('mls_id')}
-              mutators={props.form.mutators}
-              component={MlsInput}
-            />
-          </Grid>
-        </Grid>
-      )}
-
       {(isVisible('email') || isVisible('phone_number')) && (
         <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
-          {!compact && (
-            <Hidden smDown>
-              <Grid item md={1}>
-                <SvgIcon path={mdiCardAccountMailOutline} />
-              </Grid>
-            </Hidden>
-          )}
-
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field
               name="email"
@@ -257,16 +171,40 @@ export function RoleForm(props) {
         </Grid>
       )}
 
+      {isVisible('company_title') && (
+        <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
+          <Grid item md={compact ? 12 : true} xs={12}>
+            <Field
+              name="company_title"
+              label="Company / Trust"
+              searchFieldValue="company"
+              searchFieldLabel="company"
+              isVisible={isVisible('company_title')}
+              isRequired={isRequired('company_title')}
+              component={NameInput}
+              crmSearch // always search company in crm contacts
+              mutators={props.form.mutators}
+            />
+          </Grid>
+        </Grid>
+      )}
+
+      {isVisible('mls_id') && (
+        <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
+          <Grid item md={compact ? 12 : true} xs={12}>
+            <Field
+              name="mls_id"
+              label="MLS ID"
+              isVisible={isVisible('mls_id')}
+              mutators={props.form.mutators}
+              component={MlsInput}
+            />
+          </Grid>
+        </Grid>
+      )}
+
       {isVisible('current_address') && (
         <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
-          {!compact && (
-            <Hidden smDown>
-              <Grid item md={1}>
-                <SvgIcon path={mdiMapMarkerOutline} />
-              </Grid>
-            </Hidden>
-          )}
-
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field
               name="current_address"
@@ -289,14 +227,6 @@ export function RoleForm(props) {
           </Box>
 
           <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
-            {!compact && (
-              <Hidden smDown>
-                <Grid item md={1}>
-                  <SvgIcon path={mdiTicketPercentOutline} />
-                </Grid>
-              </Hidden>
-            )}
-
             <CommissionInput
               compact={compact}
               isVisible={isVisible('commission')}
