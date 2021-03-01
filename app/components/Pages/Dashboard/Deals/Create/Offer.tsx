@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Box,
   CircularProgress,
@@ -35,6 +35,7 @@ import { DealPrimaryAgent } from './form/DealPrimaryAgent'
 import { DealCoAgent } from './form/DealCoAgent'
 import { DealStatus } from './form/DealStatus'
 import { DealContext } from './form/DealContext'
+import { Header } from './components/Header'
 
 import { useDealRoles } from './hooks/use-deal-roles'
 import { useStatusList } from './hooks/use-status-list'
@@ -73,6 +74,10 @@ export default function CreateOffer({ params }: Props) {
   const deal = useSelector<IAppState, IDeal>(({ deals }) =>
     selectDealById(deals.list, params.id)
   )
+
+  useEffect(() => {
+    deal?.has_active_offer && goTo(`/dashboard/deals/${deal.id}`)
+  }, [deal?.has_active_offer, deal?.id])
 
   const propertyType = deal?.property_type
   const roles = useDealRoles(deal)
@@ -152,12 +157,6 @@ export default function CreateOffer({ params }: Props) {
     }
   }
 
-  if (deal?.has_active_offer) {
-    goTo(`/dashboard/deals/${deal.id}`)
-
-    return null
-  }
-
   if (isCreatingOffer || !isFetchingCompleted) {
     return (
       <Box
@@ -186,6 +185,11 @@ export default function CreateOffer({ params }: Props) {
         user
       }}
     >
+      <Header
+        confirmationMessage="Cancel offer creation?"
+        onClose={() => goTo(`/dashboard/deals/${deal.id}`)}
+      />
+
       <Box className={classes.root}>
         <QuestionWizard onFinish={createOfferChecklist}>
           <Controller

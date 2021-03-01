@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Box, makeStyles, Theme } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
+import { browserHistory } from 'react-router'
 
 import { useForm, Controller } from 'react-hook-form'
 
@@ -13,7 +14,8 @@ import {
   getContextsByDeal,
   createChecklist,
   updateListing,
-  upsertContexts
+  upsertContexts,
+  deleteDeal
 } from 'actions/deals'
 
 import { QuestionWizard } from 'components/QuestionWizard'
@@ -39,6 +41,8 @@ import { useDealRoles } from './hooks/use-deal-roles'
 import { createAddressContext } from '../utils/create-address-context'
 
 import { Context } from './context'
+
+import { Header } from './components/Header'
 
 import type { IDealSide } from './types'
 
@@ -156,6 +160,14 @@ export default function CreateDeal() {
     }
   }
 
+  const handleCancel = async () => {
+    if (deal) {
+      dispatch(deleteDeal(deal.id))
+    }
+
+    browserHistory.goBack()
+  }
+
   return (
     <Context.Provider
       value={{
@@ -163,6 +175,11 @@ export default function CreateDeal() {
         user
       }}
     >
+      <Header
+        confirmationMessage="Cancel deal creation?"
+        onClose={handleCancel}
+      />
+
       <Box className={classes.root}>
         <QuestionWizard>
           <CreateDealIntro />

@@ -28,6 +28,7 @@ import { getDealContexts } from './helpers/get-deal-contexts'
 
 import { DealContext } from './form/DealContext'
 import { DealClient } from './form/DealClient'
+import { Header } from './components/Header'
 
 import { Context } from './context'
 
@@ -132,6 +133,11 @@ export default function Publish({ params }: Props) {
         user
       }}
     >
+      <Header
+        confirmationMessage="Cancel deal publish?"
+        onClose={() => goTo(`/dashboard/deals/${deal.id}`)}
+      />
+
       <Box className={classes.root}>
         <QuestionWizard onFinish={handlePublish}>
           <DealClient
