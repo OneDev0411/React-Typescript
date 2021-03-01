@@ -149,61 +149,6 @@ function script({ heightRatio }) {
     loadCSS(
       'https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide-core.min.css'
     )
-
-    // Add management styles
-    const customStyles = document.createElement('style')
-
-    customStyles.type = 'text/css'
-    customStyles.appendChild(
-      document.createTextNode(`
-      .splide__slide.is-active {
-        z-index: 1
-      }
-      .splide__add_button {
-        position: absolute;
-        top: 50%;
-        right: -20px;
-        width: 40px;
-        height: 40px;
-        transform: translateY(-50%);
-        border-radius: 50%;
-        font-size: 32px;
-        border: 0;
-        outline: 0;
-        background-color: #00B286;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity .3s, background-color .3s;
-        z-index: 1;
-      }
-      .splide__add_button:hover {
-        background-color: #008060;
-      }
-      .splide__slide.is-active::after {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 2px;
-        height: 100%;
-        background-color: #00B286;
-        opacity: 0;
-        transition: opacity .3s;
-      }
-      .splide__slide.is-active:hover::after {        
-        opacity: 1;
-      }
-      .splide__slide.is-active:hover .splide__add_button {
-        opacity: 1;
-      }
-    `)
-    )
-
-    document.body.appendChild(customStyles)
   } else {
     initCarousel()
   }

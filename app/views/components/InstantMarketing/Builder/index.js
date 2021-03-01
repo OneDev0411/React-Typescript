@@ -456,6 +456,7 @@ class Builder extends React.Component {
       },
       onMapDrop: this.openMapDrawer,
       onMapDoubleClick: this.openMapDrawer,
+      onCarouselDrop: this.openCarouselDrawer,
       onCarouselDoubleClick: this.openCarouselDrawer
     } // TODO: read this from the template config
 
@@ -1147,6 +1148,9 @@ class Builder extends React.Component {
               this.blocks.carousel.selectHandler(...args)
               this.setState({ carouselToEdit: null })
             }}
+            suggestedImages={
+              this.props.templateData.listing?.gallery_image_urls
+            }
           />
           <Header>
             {this.isTemplatesListEnabled() && (

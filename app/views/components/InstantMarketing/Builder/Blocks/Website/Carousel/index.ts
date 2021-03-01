@@ -2,41 +2,43 @@ import { Editor } from 'grapesjs'
 
 import { Model } from 'backbone'
 
+import {
+  isUndefined,
+  isFunction,
+  isObject,
+  isBoolean,
+  isString
+} from 'underscore'
+
 import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
 
 import CarouselIcon from 'assets/images/marketing/editor/blocks/carousel.png'
-import CarouselImageIcon from 'assets/images/marketing/editor/blocks/image.png'
 
 import { TemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 
-import { Image } from 'components/ImageDrawer/types'
-
 import registerBlock from '../../registerBlock'
 import { baseView, handleBlockDragStopEvent, isComponent } from '../utils'
-import Carousel from './carousel.njk'
-import CarouselImage from './carousel-image.njk'
+import Carousel from './template.njk'
 
 import script from './script'
-import { applyStyle, carouselBaseView } from './helpers'
 
-const typeCarousel = 'carousel'
+export const typeCarousel = 'carousel'
 const typeCarouselTrack = `${typeCarousel}-track`
 const typeCarouselList = `${typeCarousel}-list`
 const typeCarouselSlide = `${typeCarousel}-slide`
 const typeCarouselImage = `${typeCarousel}-image`
 
 export const carouselBlockName = typeCarousel
-export const carouselImageBlockName = typeCarouselSlide
 
 export interface CarouselBlockOptions {
   carouselClassNames?: string
   carouselBlock?: string
-  carouselSlideBlock?: string
-  onCarouselImageDrop: (model: Model) => void
+  onCarouselDoubleClick: (model: Model) => void
+  onCarouselDrop: (model: Model) => void
 }
 
 interface CarouselBlock {
-  selectHandler: (selectedImage?: Image) => void
+  selectHandler: (selectedImages?: string[]) => void
 }
 
 export default function registerCarouselBlock(
@@ -45,132 +47,170 @@ export default function registerCarouselBlock(
   {
     carouselClassNames,
     carouselBlock,
-    carouselSlideBlock,
-    onCarouselImageDrop
+    onCarouselDrop,
+    onCarouselDoubleClick
   }: CarouselBlockOptions
 ): CarouselBlock {
+  const DefaultComponent = editor.DomComponents.getType('default')
+  const DefaultModel = DefaultComponent!.model
+
   editor.DomComponents.addType(typeCarousel, {
-    isComponent: isComponent(typeCarousel),
+    isComponent: isComponent(typeCarousel, el => ({
+      images: Array.from(el.querySelectorAll('img')).map(img => img.src)
+    })),
     model: {
       defaults: {
         name: 'Carousel',
         droppable: false,
-        'script-export': script
+        script,
+        'script-props': ['heightRatio'],
+        heightRatio: 0.4
+      },
+      initialize(...args: any[]) {
+        const attrs = this.getAttributes()
+        const heightRatioAttr = parseFloat(attrs['data-height-ratio'])
+
+        // eslint-disable-next-line no-restricted-globals
+        if (!isNaN(heightRatioAttr)) {
+          this.set('heightRatio', heightRatioAttr)
+        }
+
+        DefaultModel.prototype.initialize.apply(this, args)
+      },
+      toHTML(opts: any = {}) {
+        const model = this
+        const attrs: string[] = []
+        const customTag = opts.tag
+        const tag = customTag || model.get('tagName')
+        const sTag = model.get('void')
+        const customAttr = opts.attributes
+        let attributes = this.getAttrToHTML()
+
+        delete opts.tag
+
+        // Get custom attributes if requested
+        if (customAttr) {
+          if (isFunction(customAttr)) {
+            attributes = customAttr(model, attributes) || {}
+          } else if (isObject(customAttr)) {
+            attributes = customAttr
+          }
+        }
+
+        // eslint-disable-next-line no-restricted-syntax, guard-for-in
+        for (let attr in attributes) {
+          const val = attributes[attr]
+          const value = isString(val) ? val.replace(/"/g, '&quot;') : val
+
+          if (!isUndefined(value)) {
+            if (isBoolean(value)) {
+              value && attrs.push(attr)
+            } else {
+              attrs.push(`${attr}="${value}"`)
+            }
+          }
+        }
+
+        const comps = model.get('components')
+        const content = !comps.length ? model.get('content') : ''
+        const attrString = attrs.length ? ` ${attrs.join(' ')}` : ''
+        let code = `<${tag}${attrString}${sTag ? '/' : ''}>${content}`
+
+        code += `
+          <div data-type="carousel-track" class="splide__track">
+          <ul data-type="carousel-list" class="splide__list">
+        `
+
+        code += model
+          .get('images')
+          .map(
+            image =>
+              `
+                <li data-type="carousel-slide" class="splide__slide">
+                  <img data-type="carousel-image" class="splide__image" src="${image}"/>
+                </li>
+              `
+          )
+          .join('')
+
+        code += `
+          </ul>
+        </div>
+        `
+
+        !sTag && (code += `</${tag}>`)
+
+        console.log('generated code is:', code)
+
+        return code
       }
     },
     view: {
+      events: {
+        dblclick() {
+          onCarouselDoubleClick(this.model)
+        }
+      },
       ...baseView(carouselClassNames),
-      onRender() {
-        carouselBaseView.onRender.apply(this)
-
-        applyStyle(this.el, {
-          padding: '12px',
-          backgroundColor: 'rgba(0,0,0,0.1)'
+      init() {
+        this.el.addEventListener('splide:init', (event: CustomEvent) => {
+          this.splideInstance = event.detail.splide
         })
+
+        this.listenTo(this.model, 'change:images', this.handleImagesChange)
+      },
+      handleImagesChange() {
+        if (!this.splideInstance) {
+          return
+        }
+
+        while (this.splideInstance.length) {
+          this.splideInstance.remove(this.splideInstance.length - 1)
+        }
+
+        this.model.get('images').forEach(image => {
+          this.splideInstance.add(
+            `<li data-type="carousel-slide" class="splide__slide"><img data-type="carousel-image" class="splide__image" src="${image}"/></li>`
+          )
+        })
+      },
+      removed() {
+        delete this.splideInstance
       }
     }
   })
 
+  const ReadonlyModel = {
+    defaults: {
+      droppable: false,
+      draggable: false,
+      selectable: false,
+      hoverable: false
+    }
+  }
+
   editor.DomComponents.addType(typeCarouselTrack, {
     isComponent: isComponent(typeCarouselTrack),
-    model: {
-      defaults: {
-        name: 'Carousel Track',
-        droppable: false,
-        draggable: false,
-        selectable: false,
-        hoverable: false
-      }
-    },
-    view: { ...carouselBaseView }
+    model: ReadonlyModel
   })
 
   editor.DomComponents.addType(typeCarouselList, {
     isComponent: isComponent(typeCarouselList),
-    model: {
-      defaults: {
-        name: 'Carousel List',
-        droppable: `[data-gjs-type="${typeCarouselSlide}"]`,
-        draggable: false,
-        selectable: false,
-        hoverable: false
-      }
-    },
-    view: {
-      ...carouselBaseView,
-      onRender() {
-        carouselBaseView.onRender.apply(this)
-
-        applyStyle(this.el, {
-          listStyleType: 'none',
-          padding: '0',
-          margin: '0',
-          minHeight: '150px'
-        })
-      }
-    }
+    model: ReadonlyModel
   })
 
   editor.DomComponents.addType(typeCarouselSlide, {
     isComponent: isComponent(typeCarouselSlide),
-    model: {
-      defaults: {
-        name: 'Carousel Slide',
-        droppable: false,
-        draggable: `[data-gjs-type="${typeCarouselList}"]`
-      }
-    },
-    view: {
-      ...carouselBaseView,
-      onRender() {
-        carouselBaseView.onRender.apply(this)
-
-        applyStyle(this.el, {
-          display: 'inline-block',
-          width: 'calc(20% - 8px)',
-          overflow: 'hidden',
-          position: 'relative',
-          margin: '4px',
-          border: '1px solid lightgray'
-        })
-
-        const aspectRatioEl = document.createElement('div')
-
-        aspectRatioEl.style.paddingTop = '75%'
-
-        this.el.appendChild(aspectRatioEl)
-      }
-    }
+    model: ReadonlyModel
   })
 
   editor.DomComponents.addType(typeCarouselImage, {
     isComponent: isComponent(typeCarouselImage),
-    model: {
-      defaults: {
-        name: 'Carousel Image',
-        droppable: false,
-        draggable: false,
-        selectable: false,
-        hoverable: false
-      }
-    },
-    view: {
-      ...carouselBaseView,
-      onRender() {
-        carouselBaseView.onRender.apply(this)
-
-        applyStyle(this.el, {
-          position: 'absolute',
-          width: '100%',
-          height: '100%'
-        })
-      }
-    }
+    model: ReadonlyModel
   })
 
   const carouselBlocks = {
-    [carouselBlockName]: carouselBlock || Carousel,
-    [carouselImageBlockName]: carouselSlideBlock || CarouselImage
+    [carouselBlockName]: carouselBlock || Carousel
   }
 
   registerBlock(editor, {
@@ -181,31 +221,13 @@ export default function registerCarouselBlock(
     template: carouselBlocks[carouselBlockName]
   })
 
-  registerBlock(editor, {
-    label: 'Carousel Image',
-    icon: CarouselImageIcon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: carouselImageBlockName,
-    template: carouselBlocks[carouselImageBlockName]
-  })
-
-  handleBlockDragStopEvent(
-    editor,
-    {
-      [carouselBlockName]: carouselBlocks[carouselBlockName]
-    },
-    renderData
-  )
-
   return handleBlockDragStopEvent(
     editor,
-    {
-      [carouselImageBlockName]: carouselBlocks[carouselImageBlockName]
-    },
-    (selectedImage: Image) => ({
+    carouselBlocks,
+    (selectedImages: string[]) => ({
       ...renderData,
-      image: selectedImage
+      images: selectedImages
     }),
-    onCarouselImageDrop
+    onCarouselDrop
   )
 }

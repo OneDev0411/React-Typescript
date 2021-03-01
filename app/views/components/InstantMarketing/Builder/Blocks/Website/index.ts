@@ -41,8 +41,7 @@ import registerMatterportBlock, {
 import registerMapBlock, { MapBlockOptions, embedMapBlockName } from './Map'
 import registerCarouselBlock, {
   CarouselBlockOptions,
-  carouselBlockName,
-  carouselImageBlockName
+  carouselBlockName
 } from './Carousel'
 
 const BLOCK_BUTTONS_ORDER = [
@@ -63,8 +62,7 @@ const BLOCK_BUTTONS_ORDER = [
   articleRightBlockName,
   agentLeftBlockName,
   agentGridBlockName,
-  carouselBlockName,
-  carouselImageBlockName
+  carouselBlockName
 ]
 
 interface BlocksOptions
