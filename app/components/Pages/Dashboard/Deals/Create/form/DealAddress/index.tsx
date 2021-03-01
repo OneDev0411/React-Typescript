@@ -6,9 +6,9 @@ import {
   Avatar,
   Typography,
   Theme,
-  makeStyles
+  makeStyles,
+  CircularProgress
 } from '@material-ui/core'
-import cn from 'classnames'
 import { useDebounce } from 'react-use'
 import { mdiMapMarker, mdiHome } from '@mdi/js'
 
@@ -60,9 +60,6 @@ const useStyles = makeStyles(
       margin: theme.spacing(2, 1),
       color: theme.palette.grey[500]
     },
-    searchInput: {
-      padding: theme.spacing(1.5)
-    },
     place: {
       border: `1px solid ${theme.palette.divider}`,
       padding: theme.spacing(1),
@@ -107,9 +104,13 @@ export function DealAddress({ onChange }: Props) {
     [searchCriteria]
   )
 
-  const { isSearching, listings, places, getParsedPlace } = useSearchLocation(
-    debouncedSearchCriteria
-  )
+  const {
+    isEmptyState,
+    isSearching,
+    listings,
+    places,
+    getParsedPlace
+  } = useSearchLocation(debouncedSearchCriteria)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -167,21 +168,24 @@ export function DealAddress({ onChange }: Props) {
       <QuestionTitle>What is the address for the property?</QuestionTitle>
       <QuestionForm>
         {!listing && !place && (
-          <Box
-            className={cn(classes.root, {
-              'has-border': listings.length > 0 || places.length > 0
-            })}
-          >
+          <Box className={classes.root}>
             <Box mb={3}>
               <TextField
                 fullWidth
+                variant="outlined"
+                size="small"
                 autoComplete="no"
                 placeholder="Enter MLS# or Address"
                 value={searchCriteria}
-                className={classes.searchInput}
                 onChange={handleChange}
               />
             </Box>
+
+            {isSearching && (
+              <Box my={1}>
+                <CircularProgress />
+              </Box>
+            )}
 
             <Box>
               {listings.length > 0 && (
@@ -194,13 +198,16 @@ export function DealAddress({ onChange }: Props) {
                 <Box
                   key={listing.mls_number}
                   display="flex"
+                  alignItems="center"
                   className={classes.resultItem}
                   onClick={() => handleSelectListing(listing)}
                 >
-                  <Avatar
-                    src={listing.cover_image_url}
-                    alt={listing.mls_number}
-                  />
+                  <Box width="32px" mr={1}>
+                    <Avatar
+                      src={listing.cover_image_url}
+                      alt={listing.mls_number}
+                    />
+                  </Box>
 
                   <div className={classes.resultItemContent}>
                     <Typography variant="body2">
@@ -225,38 +232,48 @@ export function DealAddress({ onChange }: Props) {
                 <Box
                   key={place.id || index}
                   display="flex"
+                  alignItems="center"
                   className={classes.resultItem}
                   onClick={() => handleSelectPlace(place)}
                 >
-                  <SvgIcon path={mdiMapMarker} />
-                  <Typography
-                    variant="body2"
-                    className={classes.resultItemContent}
+                  <Box
+                    width="32px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    mr={1}
                   >
-                    <strong>{place.structured_formatting.main_text}</strong>{' '}
-                    <span className={classes.lightText}>
-                      {place.structured_formatting.secondary_text.replace(
-                        ', USA',
-                        ''
-                      )}
-                    </span>
-                  </Typography>
+                    <SvgIcon path={mdiMapMarker} />
+                  </Box>
+                  <Box>
+                    <Typography
+                      variant="body2"
+                      className={classes.resultItemContent}
+                    >
+                      <div>
+                        <strong>{place.structured_formatting.main_text}</strong>
+                      </div>
+                      <span className={classes.lightText}>
+                        {place.structured_formatting.secondary_text.replace(
+                          ', USA',
+                          ''
+                        )}
+                      </span>
+                    </Typography>
+                  </Box>
                 </Box>
               ))}
 
-              {!isSearching &&
-                debouncedSearchCriteria.length > 0 &&
-                listings.length === 0 &&
-                places.length === 0 && (
-                  <Callout
-                    type="error"
-                    style={{
-                      margin: 0
-                    }}
-                  >
-                    Nothing found
-                  </Callout>
-                )}
+              {isEmptyState && (
+                <Callout
+                  type="error"
+                  style={{
+                    margin: 0
+                  }}
+                >
+                  Nothing found
+                </Callout>
+              )}
             </Box>
           </Box>
         )}
