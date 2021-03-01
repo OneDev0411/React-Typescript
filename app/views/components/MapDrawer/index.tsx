@@ -19,7 +19,7 @@ export interface MapInfo {
   zoom: number
 }
 
-export interface MapEditorDialogProps {
+export interface MapDrawerProps {
   isOpen: boolean
   map: Model | null
   initialCenter?: CenterPoint
@@ -29,13 +29,13 @@ export interface MapEditorDialogProps {
 
 const defaultCenterFallback = { longitude: -107.7910942, latitude: 50.2867731 }
 
-function MapEditorDialog({
+function MapDrawer({
   isOpen,
   onClose,
   onSelect,
   map,
   initialCenter
-}: MapEditorDialogProps) {
+}: MapDrawerProps) {
   const defaultCenter = initialCenter ?? defaultCenterFallback
   const modelLng = (map?.get('longitude') as number) || defaultCenter.longitude
   const modelLat = (map?.get('latitude') as number) || defaultCenter.latitude
@@ -118,4 +118,4 @@ function MapEditorDialog({
   )
 }
 
-export default MapEditorDialog
+export default MapDrawer
