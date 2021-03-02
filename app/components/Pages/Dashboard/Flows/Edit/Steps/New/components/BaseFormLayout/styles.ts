@@ -13,13 +13,17 @@ export const useStyles = makeStyles(
       position: 'relative'
     },
     header: {
-      padding: theme.spacing(1.5, 3),
+      padding: theme.spacing(1.5, 2),
       background: theme.palette.grey[100],
       borderRadius: `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`
     },
     dragBtn: {
       display: 'flex',
-      marginRight: theme.spacing(1.5)
+      marginRight: theme.spacing(1.25)
+    },
+    stepTypeIcon: {
+      display: 'flex',
+      marginRight: theme.spacing(1)
     },
     raised: {
       background: theme.palette.grey[100],

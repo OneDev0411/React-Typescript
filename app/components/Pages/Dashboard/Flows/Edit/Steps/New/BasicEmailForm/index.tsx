@@ -2,9 +2,10 @@ import React from 'react'
 import { Form } from 'react-final-form'
 import { Box } from '@material-ui/core'
 
+import { mdiScriptTextOutline } from '@mdi/js'
+
 import { BaseFormProps, BasicEmailFormData } from '../types'
 import { BaseFormLayout } from '../components/BaseFormLayout'
-
 import { Title } from '../components/BaseFields/Title'
 import { Description } from '../components/BaseFields/Description'
 import { EmailTemplate } from '../components/BaseFields/EmailTemplate'
@@ -82,6 +83,7 @@ export default function BasicEmailForm({
           <BaseFormLayout
             index={index}
             title="Automated Simple Email"
+            stepIcon={mdiScriptTextOutline}
             step={step || null}
             disableEdit={disableEdit}
             submitting={submitting}

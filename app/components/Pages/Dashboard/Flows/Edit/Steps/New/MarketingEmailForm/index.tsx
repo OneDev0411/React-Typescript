@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form } from 'react-final-form'
 import { Box } from '@material-ui/core'
+import { mdiNewspaperVariantOutline } from '@mdi/js'
 
 import { BaseFormProps, MarketingEmailFormData } from '../types'
 import { BaseFormLayout } from '../components/BaseFormLayout'
@@ -73,6 +74,7 @@ export default function MarketingEmailForm({
         return (
           <BaseFormLayout
             index={index}
+            stepIcon={mdiNewspaperVariantOutline}
             title="Automated Marketing Email"
             step={step || null}
             disableEdit={disableEdit}

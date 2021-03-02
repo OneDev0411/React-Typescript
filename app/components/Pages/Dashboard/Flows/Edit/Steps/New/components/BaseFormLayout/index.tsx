@@ -26,6 +26,7 @@ import { useStyles } from './styles'
 interface Props {
   index: number
   title: string
+  stepIcon: string
   step?: Nullable<IBrandFlowStep>
   disableEdit: boolean
   pristine: boolean
@@ -40,6 +41,7 @@ const Layout = ({
   step,
   title,
   children,
+  stepIcon,
   pristine,
   submitting,
   disableEdit,
@@ -71,6 +73,7 @@ const Layout = ({
                   </Tooltip>
                 </Box>
               )}
+              <SvgIcon path={stepIcon} className={classes.stepTypeIcon} />
               <Typography variant="body1">
                 {index}. {title}{' '}
                 {!step && (

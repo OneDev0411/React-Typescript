@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form } from 'react-final-form'
 import { Box } from '@material-ui/core'
+import { mdiCalendarMonthOutline } from '@mdi/js'
 
 import { EventType } from 'components/EventDrawer/components/EventType'
 
@@ -79,6 +80,7 @@ export default function EventForm({
           <BaseFormLayout
             index={index}
             title="Reminder"
+            stepIcon={mdiCalendarMonthOutline}
             step={step || null}
             disableEdit={disableEdit}
             submitting={submitting}

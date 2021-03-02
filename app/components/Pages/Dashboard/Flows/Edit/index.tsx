@@ -189,16 +189,6 @@ function Edit(props: WithRouterProps) {
         description: `Are you sure about deleting "${step.title}" step?`,
         confirmLabel: 'Yes, I am sure',
         onConfirm: async () => {
-          // const [
-          //   shouldUpdateSteps,
-          //   stepDueDiff,
-          //   stepsToUpdate
-          // ] = shouldUpdateNextSteps(flow, step.id, step, true)
-
-          // if (shouldUpdateSteps) {
-          //   await updateStepsDue(brand, flow.id, stepsToUpdate, stepDueDiff)
-          // }
-
           await deleteBrandFlowStep(brand, flow.id, step.id)
           loadFlowData(true)
         }
@@ -212,16 +202,6 @@ function Edit(props: WithRouterProps) {
       if (!flow || !brand) {
         return
       }
-
-      // const [
-      //   shouldUpdateSteps,
-      //   stepDueDiff,
-      //   stepsToUpdate
-      // ] = shouldUpdateNextSteps(flow, stepId, step)
-
-      // if (shouldUpdateSteps) {
-      //   await updateStepsDue(brand, flow.id, stepsToUpdate, stepDueDiff)
-      // }
 
       await editBrandFlowStep(brand, flow.id, stepId, step)
 
