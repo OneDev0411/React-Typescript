@@ -5,7 +5,8 @@ import {
   TextField,
   makeStyles,
   Theme,
-  CircularProgress
+  CircularProgress,
+  Typography
 } from '@material-ui/core'
 
 import TeamAgents from 'components/TeamAgents'
@@ -19,18 +20,13 @@ import { IDealFormRole } from '../../types'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius,
-      maxHeight: '40vh',
+      maxHeight: '70vh',
       overflow: 'auto'
     },
     selectedAgent: {
       border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius,
       margin: theme.spacing(1, 0.5, 0.5, 0)
-    },
-    searchInput: {
-      padding: theme.spacing(1.5)
     },
     continueButton: {
       margin: theme.spacing(2, 0)
@@ -39,7 +35,8 @@ const useStyles = makeStyles(
       backgroundColor: '#fff',
       position: 'sticky',
       top: 0,
-      zIndex: 1
+      zIndex: 1,
+      marginBottom: theme.spacing(2)
     }
   }),
   {
@@ -66,15 +63,22 @@ export function AgentsList({ onSelectRole }: Props) {
             <Box className={classes.searchInputContainer}>
               <TextField
                 fullWidth
+                variant="outlined"
                 onChange={e => setSearchCriteria(e.target.value)}
                 placeholder="Search Agents"
-                size="medium"
-                className={classes.searchInput}
+                size="small"
               />
             </Box>
 
             {teams.map((team, index) => (
               <div key={index}>
+                {teams.length > 1 && (
+                  <Box ml={1} my={1}>
+                    <Typography variant="subtitle2">{team.name}</Typography>
+                    <Typography variant="caption">{team.subtitle}</Typography>
+                  </Box>
+                )}
+
                 {team.users.map(agent => (
                   <UserRow
                     key={agent.id}

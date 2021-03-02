@@ -5,6 +5,16 @@ import { searchListings } from 'models/listings/search/search-listings'
 
 import { useGoogleMapsPlaces } from './use-google-maps-places'
 
+interface Address {
+  city: string
+  number: string
+  state: string
+  street: string
+  type: string
+  zip: string
+  unit: string
+}
+
 export function useSearchLocation(
   criteria: string
 ): {
@@ -14,7 +24,7 @@ export function useSearchLocation(
   listings: ICompactListing[]
   getParsedPlace: (
     place: google.maps.places.AutocompletePrediction
-  ) => Promise<unknown>
+  ) => Promise<Address>
 } {
   useGoogleMapsPlaces()
 

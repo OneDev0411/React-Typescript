@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Box, makeStyles, Theme } from '@material-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
 import { browserHistory } from 'react-router'
 
@@ -22,6 +22,7 @@ import { QuestionWizard } from 'components/QuestionWizard'
 
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
+import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { getChangedRoles } from './helpers/get-changed-roles'
@@ -67,7 +68,7 @@ export default function CreateDeal() {
 
   const [dealId, setDealId] = useState<UUID | null>(null)
 
-  const dispatch = useDispatch()
+  const dispatch = useReduxDispatch()
   const user = useSelector<IAppState, IUser>(state => selectUser(state))
   const deal = useSelector<IAppState, IDeal | null>(({ deals }) =>
     dealId ? deals.list[dealId] : null
@@ -130,7 +131,7 @@ export default function CreateDeal() {
       contact: undefined
     }))
 
-    await Promise.all([
+    const [, checklist] = await Promise.all([
       dispatch(createRoles(newDeal.id, primaryAgents)),
       dispatch(
         createChecklist(newDeal.id, {
@@ -141,6 +142,8 @@ export default function CreateDeal() {
         })
       )
     ])
+
+    newDeal.checklists = [checklist.id]
 
     savePropertyAddress(newDeal, values.property_address)
   }

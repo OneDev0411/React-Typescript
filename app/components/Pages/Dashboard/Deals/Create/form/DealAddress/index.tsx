@@ -133,7 +133,14 @@ export function DealAddress({ onChange }: Props) {
 
     onChange({
       type: 'Place',
-      address
+      address: {
+        city: address.city,
+        postal_code: address.zip,
+        state: address.state,
+        street_name: address.street,
+        street_number: address.number,
+        unit_number: address.unit
+      }
     })
 
     goNext()

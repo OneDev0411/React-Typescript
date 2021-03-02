@@ -5,6 +5,7 @@ import {
   Button,
   makeStyles,
   TextField,
+  Typography,
   Theme
 } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
@@ -34,9 +35,7 @@ import type { IDealFormRole } from '../../types'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius,
-      maxHeight: '40vh',
+      maxHeight: '70vh',
       overflow: 'auto'
     },
     selectedAgent: {
@@ -48,10 +47,8 @@ const useStyles = makeStyles(
       backgroundColor: '#fff',
       position: 'sticky',
       top: 0,
-      zIndex: 1
-    },
-    searchInput: {
-      padding: theme.spacing(1.5)
+      zIndex: 1,
+      marginBottom: theme.spacing(2)
     }
   }),
   {
@@ -167,15 +164,26 @@ export function DealCoAgent({
                   <Box className={classes.searchInputContainer}>
                     <TextField
                       fullWidth
+                      variant="outlined"
                       onChange={e => setSearchCriteria(e.target.value)}
                       placeholder="Search Agents"
-                      size="medium"
-                      className={classes.searchInput}
+                      size="small"
                     />
                   </Box>
 
                   {teams.map((team, index) => (
                     <div key={index}>
+                      {teams.length > 1 && (
+                        <Box ml={1} my={1}>
+                          <Typography variant="subtitle2">
+                            {team.name}
+                          </Typography>
+                          <Typography variant="caption">
+                            {team.subtitle}
+                          </Typography>
+                        </Box>
+                      )}
+
                       {team.users.map(agent => (
                         <UserRow
                           key={agent.id}
@@ -183,7 +191,12 @@ export function DealCoAgent({
                           email={agent.email}
                           avatarUrl={agent.profile_image_url!}
                           onClick={() =>
-                            setSelectedRole(convertUserAgentToRole(agent))
+                            onSelectRole(
+                              convertUserAgentToRole({
+                                ...agent,
+                                brand_id: team.id
+                              })
+                            )
                           }
                         />
                       ))}
