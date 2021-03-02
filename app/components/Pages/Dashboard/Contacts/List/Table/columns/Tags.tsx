@@ -4,6 +4,7 @@ import { Box, Tooltip, Chip, makeStyles, createStyles } from '@material-ui/core'
 import { getContact } from 'models/contacts/get-contact'
 
 import { PopoverContactTagSelector } from 'components/TagSelector'
+import { SelectorOption } from 'components/TagSelector/type'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -30,11 +31,13 @@ const useStyles = makeStyles(theme =>
 interface Props {
   contact: IContact
   isParkTabActive: boolean
+  hasAttributeFilters: boolean
   reloadContacts: () => void
 }
 
 const TagsString = ({
   contact: contactProp,
+  hasAttributeFilters,
   isParkTabActive,
   reloadContacts
 }: Props) => {
@@ -57,17 +60,17 @@ const TagsString = ({
 
   const invisibleTagsCount = tagsCount - showingTags.length
 
-  const handleChangeTag = async () => {
+  const handleChangeTag = async (tags: SelectorOption[] = []) => {
     try {
-      if (isParkTabActive) {
-        reloadContacts()
-      } else {
-        const response = await getContact(contact.id, {
-          associations: []
-        })
-
-        setContact(response.data)
+      if (isParkTabActive || (hasAttributeFilters && tags.length === 0)) {
+        return reloadContacts()
       }
+
+      const response = await getContact(contact.id, {
+        associations: []
+      })
+
+      setContact(response.data)
     } catch (error) {
       console.error(error)
     }
