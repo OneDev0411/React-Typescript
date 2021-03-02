@@ -49,6 +49,7 @@ const BLOCK_BUTTONS_ORDER = [
   embedVideoBlockName,
   embedMatterportBlockName,
   embedMapBlockName,
+  carouselBlockName,
   gridColumn1BlockName,
   gridColumn2BlockName,
   gridColumn3BlockName,
@@ -61,8 +62,7 @@ const BLOCK_BUTTONS_ORDER = [
   articleLeftBlockName,
   articleRightBlockName,
   agentLeftBlockName,
-  agentGridBlockName,
-  carouselBlockName
+  agentGridBlockName
 ]
 
 interface BlocksOptions
