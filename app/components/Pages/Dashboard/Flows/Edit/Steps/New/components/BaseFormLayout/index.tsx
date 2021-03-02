@@ -142,7 +142,7 @@ const Layout = ({
             <Box flexGrow={1} px={0.75}>
               <EventType />
             </Box>
-            <Box>
+            <Box width={140}>
               <Time />
             </Box>
           </Box>
