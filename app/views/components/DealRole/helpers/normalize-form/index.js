@@ -41,10 +41,12 @@ export function normalizeForm(values) {
   }
 
   if (commission_type === 'commission_dollar') {
-    normalized.commission_dollar = parseFloat(commission)
+    normalized.commission_dollar =
+      commission != null && commission !== '' ? parseFloat(commission) : ''
     normalized.commission_percentage = null
   } else if (commission_type === 'commission_percentage') {
-    normalized.commission_percentage = parseFloat(commission)
+    normalized.commission_percentage =
+      commission != null && commission !== '' ? parseFloat(commission) : ''
     normalized.commission_dollar = null
   }
 

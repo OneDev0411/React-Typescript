@@ -190,14 +190,14 @@ export function DealCoAgent({
                           name={agent.display_name}
                           email={agent.email}
                           avatarUrl={agent.profile_image_url!}
-                          onClick={() =>
-                            onSelectRole(
+                          onClick={() => {
+                            setSelectedRole(
                               convertUserAgentToRole({
                                 ...agent,
                                 brand_id: team.id
                               })
                             )
-                          }
+                          }}
                         />
                       ))}
                     </div>
