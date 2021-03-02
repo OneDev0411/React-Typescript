@@ -57,7 +57,7 @@ export function AgentsList({ onSelectRole }: Props) {
   const [searchCriteria, setSearchCriteria] = useState<string>('')
 
   return (
-    <TeamAgents flattenTeams isPrimaryAgent criteria={searchCriteria}>
+    <TeamAgents flattenTeams={false} isPrimaryAgent criteria={searchCriteria}>
       {({ teams, isLoading }) =>
         isLoading ? (
           <CircularProgress disableShrink />
@@ -81,7 +81,14 @@ export function AgentsList({ onSelectRole }: Props) {
                     name={agent.display_name}
                     email={agent.email}
                     avatarUrl={agent.profile_image_url!}
-                    onClick={() => onSelectRole(convertUserAgentToRole(agent))}
+                    onClick={() =>
+                      onSelectRole(
+                        convertUserAgentToRole({
+                          ...agent,
+                          brand_id: team.id
+                        })
+                      )
+                    }
                   />
                 ))}
               </div>

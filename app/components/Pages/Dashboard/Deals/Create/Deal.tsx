@@ -110,8 +110,8 @@ export default function CreateDeal() {
       values.selling_primary_agent || []
     ) as IDealRole[]
 
-    const primaryAgent = agents.find(agent =>
-      ['SellerAgent', 'BuyerAgent'].includes(agent.role)
+    const primaryAgent = agents.find(
+      agent => ['SellerAgent', 'BuyerAgent'].includes(agent.role) && agent.brand
     )!
 
     const newDeal: IDeal = await Deal.create(user, {
