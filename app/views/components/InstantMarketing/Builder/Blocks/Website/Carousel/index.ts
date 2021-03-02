@@ -77,6 +77,10 @@ export default function registerCarouselBlock(
 
         DefaultModel.prototype.initialize.apply(this, args)
       },
+      /**
+       * Borrowed this method from Component.js to generate the
+       * required code using the updated images prop
+       */
       toHTML(opts: any = {}) {
         const model = this
         const attrs: string[] = []
@@ -139,8 +143,6 @@ export default function registerCarouselBlock(
         `
 
         !sTag && (code += `</${tag}>`)
-
-        console.log('generated code is:', code)
 
         return code
       }

@@ -977,6 +977,10 @@ class Builder extends React.Component {
     return this.isMjmlTemplate || this.isWebsiteTemplate
   }
 
+  getListingInfo = () => {
+    return this.props.templateData.listing || this.selectedTemplate.listings[0]
+  }
+
   render() {
     if (this.state.isLoading) {
       return null
@@ -1124,9 +1128,7 @@ class Builder extends React.Component {
           <MapDrawer
             isOpen={!!this.state.mapToEdit}
             map={this.state.mapToEdit}
-            initialCenter={
-              this.props.templateData.listing?.property.address.location
-            }
+            initialCenter={this.getListingInfo()?.property.address.location}
             onClose={() => {
               this.setState({ mapToEdit: null })
             }}
@@ -1138,9 +1140,7 @@ class Builder extends React.Component {
           <CarouselDrawer
             isOpen={!!this.state.carouselToEdit}
             carousel={this.state.carouselToEdit}
-            initialCenter={
-              this.props.templateData.listing?.property.address.location
-            }
+            initialCenter={this.getListingInfo()?.property.address.location}
             onClose={() => {
               this.setState({ carouselToEdit: null })
             }}
@@ -1148,9 +1148,7 @@ class Builder extends React.Component {
               this.blocks.carousel.selectHandler(...args)
               this.setState({ carouselToEdit: null })
             }}
-            suggestedImages={
-              this.props.templateData.listing?.gallery_image_urls
-            }
+            suggestedImages={this.getListingInfo()?.gallery_image_urls}
           />
           <Header>
             {this.isTemplatesListEnabled() && (
