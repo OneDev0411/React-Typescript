@@ -1,5 +1,5 @@
 import React from 'react'
-import { AddCircleOutline } from '@material-ui/icons'
+import { Add } from '@material-ui/icons'
 
 import CarouselImageItem, { CarouselImageItemProps } from './CarouselImageItem'
 
@@ -21,7 +21,7 @@ function CarouselSuggestedImageItem({
     <CarouselImageItem
       {...otherProps}
       src={src}
-      label={<AddCircleOutline />}
+      label={<Add />}
       onClick={handleClick}
     />
   )

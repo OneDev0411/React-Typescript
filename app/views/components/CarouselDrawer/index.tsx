@@ -4,10 +4,16 @@ import { Button, Box } from '@material-ui/core'
 
 import type { Model } from 'backbone'
 
+import { DragDropContextProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
+
+import { createChildContext } from 'react-dnd/lib/cjs/DragDropContext'
+
 import OverlayDrawer from 'components/OverlayDrawer'
 
 import CarouselSelectedImageList from './CarouselSelectedImageList'
 import CarouselSuggestedImageList from './CarouselSuggestedImageList'
+import { CarouselImageItemEdge } from './types'
 
 export interface CarouselDrawerProps {
   isOpen: boolean
@@ -16,6 +22,8 @@ export interface CarouselDrawerProps {
   onSelect: (images: string[]) => void
   suggestedImages?: string[]
 }
+
+const { dragDropManager } = createChildContext(HTML5Backend)
 
 function CarouselDrawer({
   isOpen,
@@ -48,12 +56,10 @@ function CarouselDrawer({
   )
 
   const handleAdd = (src: string) => {
-    console.log('add', src)
     setSelectedImages(images => [...images, src])
   }
 
   const handleRemove = (src: string) => {
-    console.log('remove', src)
     setSelectedImages(images => images.filter(image => image !== src))
   }
 
@@ -66,21 +72,52 @@ function CarouselDrawer({
     onClose?.()
   }
 
+  const handleImageDrop = (
+    src: string,
+    target: string,
+    edge: CarouselImageItemEdge
+  ) => {
+    setSelectedImages(images => {
+      const newImages = [...images]
+
+      // remove the src from the images list
+      const srcIndex = newImages.indexOf(src)
+
+      if (srcIndex > -1) {
+        newImages.splice(srcIndex, 1)
+      }
+
+      // insert the src near the target
+      const targetIndex = newImages.indexOf(target)
+
+      if (edge === CarouselImageItemEdge.BEFORE) {
+        newImages.splice(targetIndex, 0, src)
+      } else {
+        newImages.splice(targetIndex + 1, 0, src)
+      }
+
+      return newImages
+    })
+  }
+
   return (
     <OverlayDrawer open={isOpen} onClose={handleClose}>
       <OverlayDrawer.Header title="Manage Carousel" />
       <OverlayDrawer.Body>
         <Box marginTop={3}>
-          <CarouselSelectedImageList
-            images={selectedImages}
-            onRemove={handleRemove}
-          />
-          {!!remainingImages.length && (
-            <CarouselSuggestedImageList
-              images={remainingImages}
-              onAdd={handleAdd}
+          <DragDropContextProvider manager={dragDropManager}>
+            <CarouselSelectedImageList
+              images={selectedImages}
+              onRemove={handleRemove}
+              onImageDrop={handleImageDrop}
             />
-          )}
+            {!!remainingImages.length && (
+              <CarouselSuggestedImageList
+                images={remainingImages}
+                onAdd={handleAdd}
+              />
+            )}
+          </DragDropContextProvider>
         </Box>
       </OverlayDrawer.Body>
       <OverlayDrawer.Footer rowReverse>

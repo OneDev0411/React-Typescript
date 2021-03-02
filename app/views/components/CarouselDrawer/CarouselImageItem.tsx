@@ -2,11 +2,15 @@ import React, { ReactNode } from 'react'
 import classNames from 'classnames'
 import { Box, makeStyles, fade, Grid } from '@material-ui/core'
 
+import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
+
+import { CAROUSEL_IMAGE_ITEM_TYPE } from './constants'
+import { CarouselImageItemEdge, ImageDragObject } from './types'
+
 const useStyles = makeStyles(
   theme => ({
-    root: {
-      border: `${theme.spacing(0.5)}px solid ${theme.palette.common.white}`,
-      borderRadius: theme.shape.borderRadius,
+    root: { margin: theme.spacing(1) },
+    wrapper: {
       transition: theme.transitions.create('border-color'),
       display: 'block',
       width: '100%',
@@ -35,27 +39,86 @@ const useStyles = makeStyles(
       alignItems: 'center',
       justifyContent: 'center',
       opacity: 0,
-      transition: theme.transitions.create('opacity')
+      transition: theme.transitions.create('opacity'),
+      '& > svg': { fontSize: 32 }
     },
-    button: { cursor: 'pointer' }
+    button: { cursor: 'pointer' },
+    edge: {
+      position: 'absolute',
+      top: 0,
+      height: '100%',
+      width: '50%',
+      zIndex: 1
+    },
+    edgeLeft: {
+      left: 0,
+      borderLeft: '4px solid transparent'
+    },
+    edgeRight: {
+      right: 0,
+      borderRight: '4px solid transparent'
+    },
+    edgeLeftOver: { borderLeftColor: theme.palette.primary.main },
+    edgeRightOver: { borderRightColor: theme.palette.primary.main },
+    dragging: { opacity: 0.5 }
   }),
   { name: 'CarouselImageItem' }
 )
-
 export interface CarouselImageItemProps {
   src: string
   label: ReactNode
   onClick?: () => void
+  droppable?: boolean
+  onImageDrop?: (
+    src: string,
+    target: string,
+    edge: CarouselImageItemEdge
+  ) => void
 }
 
-function CarouselImageItem<T>({ src, label, onClick }: CarouselImageItemProps) {
+const propSharedParams = {
+  accept: CAROUSEL_IMAGE_ITEM_TYPE,
+  collect: (monitor: DropTargetMonitor) => ({ isOver: monitor.isOver() })
+}
+
+function CarouselImageItem({
+  src,
+  label,
+  onClick,
+  droppable,
+  onImageDrop
+}: CarouselImageItemProps) {
   const classes = useStyles()
 
+  const [{ isDragging }, dragRef] = useDrag({
+    item: { type: CAROUSEL_IMAGE_ITEM_TYPE, src },
+    collect: monitor => ({ isDragging: monitor.isDragging() })
+  })
+
+  const [{ isOver }, blockRef] = useDrop(propSharedParams)
+
+  const [{ isOver: isEdgeLeftOver }, dropBeforeRef] = useDrop({
+    ...propSharedParams,
+    drop: (item: ImageDragObject) =>
+      onImageDrop?.(item.src, src, CarouselImageItemEdge.BEFORE)
+  })
+
+  const [{ isOver: isEdgeRightOver }, dropAfterRef] = useDrop({
+    ...propSharedParams,
+    drop: (item: ImageDragObject) =>
+      onImageDrop?.(item.src, src, CarouselImageItemEdge.AFTER)
+  })
+
   return (
-    <Grid item xs={3}>
-      <Box m={0.5}>
+    <Grid
+      item
+      xs={3}
+      className={isDragging ? classes.dragging : undefined}
+      innerRef={blockRef}
+    >
+      <div className={classes.root} ref={dragRef}>
         <Box
-          className={classNames(classes.root, onClick && classes.button)}
+          className={classNames(classes.wrapper, onClick && classes.button)}
           onClick={onClick}
         >
           <div className={classes.space} />
@@ -65,8 +128,28 @@ function CarouselImageItem<T>({ src, label, onClick }: CarouselImageItemProps) {
             alt=""
           />
           <div className={classNames(classes.item, classes.name)}>{label}</div>
+          {droppable && !isDragging && isOver && (
+            <>
+              <div
+                className={classNames(
+                  classes.edge,
+                  classes.edgeLeft,
+                  isEdgeLeftOver && classes.edgeLeftOver
+                )}
+                ref={dropBeforeRef}
+              />
+              <div
+                className={classNames(
+                  classes.edge,
+                  classes.edgeRight,
+                  isEdgeRightOver && classes.edgeRightOver
+                )}
+                ref={dropAfterRef}
+              />
+            </>
+          )}
         </Box>
-      </Box>
+      </div>
     </Grid>
   )
 }

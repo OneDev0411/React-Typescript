@@ -3,27 +3,27 @@ import { Box, Grid } from '@material-ui/core'
 
 import { H3 } from 'components/Typography/headings'
 
-import CarouselSelectedImageItem from './CarouselSelectedImageItem'
+import CarouselSelectedImageItem, {
+  CarouselSelectedImageItemProps
+} from './CarouselSelectedImageItem'
 
-interface CarouselSelectedImageListProps {
+interface CarouselSelectedImageListProps
+  extends Required<
+    Pick<CarouselSelectedImageItemProps, 'onRemove' | 'onImageDrop'>
+  > {
   images: string[]
-  onRemove: (src: string) => void
 }
 
 function CarouselSelectedImageList({
   images,
-  onRemove
+  ...otherProps
 }: CarouselSelectedImageListProps) {
   return (
     <Box>
       <H3>Selected Items:</H3>
       <Grid container>
         {images.map(image => (
-          <CarouselSelectedImageItem
-            key={image}
-            src={image}
-            onRemove={onRemove}
-          />
+          <CarouselSelectedImageItem key={image} src={image} {...otherProps} />
         ))}
       </Grid>
     </Box>
